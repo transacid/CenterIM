@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.51 2001/12/07 11:06:14 konst Exp $
+* $Id: centericq.cc,v 1.52 2001/12/07 12:34:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -582,6 +582,11 @@ void centericq::readevents(const imcontact &cont) {
 				fin = true;
 				break;
 
+			    case icqface::open:
+				if(const imurl *m = static_cast<const imurl *>(*iev))
+				    conf.openurl(m->geturl());
+				break;
+
 			    case icqface::accept:
 				em.store(imauthorization(cont,
 				    imevent::outgoing, true, "accepted"));
@@ -615,6 +620,7 @@ void centericq::history(const imcontact &cont) {
     vector<imevent *> events;
     icqface::eventviewresult r;
     imevent *im;
+    bool enough;
 
     events = em.getevents(cont, 0);
 
@@ -622,23 +628,39 @@ void centericq::history(const imcontact &cont) {
 	face.histmake(events);
 
 	while(face.histexec(im)) {
-	    r = face.eventview(im);
+	    enough = false;
 
-	    switch(r) {
-		case icqface::forward:
-		case icqface::reply:
-		    sendevent(*im, r);
-		    break;
+	    while(!enough) {
+		r = face.eventview(im);
 
-		case icqface::accept:
-		    em.store(imauthorization(cont, imevent::outgoing,
-			true, "accepted"));
-		    break;
+		switch(r) {
+		    case icqface::forward:
+		    case icqface::reply:
+			sendevent(*im, r);
+			break;
 
-		case icqface::reject:
-		    em.store(imauthorization(cont, imevent::outgoing,
-			false, "rejected"));
-		    break;
+		    case icqface::accept:
+			enough = true;
+			em.store(imauthorization(cont, imevent::outgoing,
+			    true, "accepted"));
+			break;
+
+		    case icqface::reject:
+			enough = true;
+			em.store(imauthorization(cont, imevent::outgoing,
+			    false, "rejected"));
+			break;
+
+		    case icqface::cancel:
+		    case icqface::ok:
+			enough = true;
+			break;
+
+		    case icqface::open:
+			if(const imurl *m = static_cast<const imurl *>(im))
+			    conf.openurl(m->geturl());
+			break;
+		}
 	    }
 	}
     } else {
