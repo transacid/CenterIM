@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.39 2001/11/16 14:00:18 konst Exp $
+* $Id: icqface.cc,v 1.40 2001/11/20 17:08:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -911,7 +911,6 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
-    imstatus currentstatus;
 
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,
 	WORKAREA_Y1+9, conf.getcolor(cp_main_text)));
@@ -954,13 +953,7 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
 	for(im = mst.begin(); im != mst.end(); im++) {
 	    m.additem(0, *im, statustext[im-mst.begin()]);
-
-	    switch(pname) {
-		case icq: currentstatus = ihook.getstatus(); break;
-		case yahoo: currentstatus = yhook.getstatus(); break;
-	    }
-
-	    if(currentstatus == *im) {
+	    if(gethook(pname).getstatus() == *im) {
 		m.setpos(m.getcount()-1);
 	    }
 	}

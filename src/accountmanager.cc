@@ -110,14 +110,7 @@ void accountmanager::exec() {
 		    imcontrol.updateinfo(account);
 		    break;
 		case 8:
-		    proceed = true;
-
-		    switch(pname) {
-			case icq: proceed = !ihook.online(); break;
-			case yahoo: proceed = !yhook.online(); break;
-		    }
-
-		    if(proceed) {
+		    if(!gethook(pname).online()) {
 			account = icqconf::imaccount(pname);
 		    } else {
 			face.status(_("You have to disconnect the service first!"));

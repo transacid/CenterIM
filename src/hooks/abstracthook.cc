@@ -1,4 +1,21 @@
 #include "abstracthook.h"
+#include "icqhook.h"
+#include "yahoohook.h"
+
+void abstracthook::connect() {
+}
+
+void abstracthook::disconnect() {
+}
+
+void abstracthook::exectimers() {
+}
+
+void abstracthook::setautostatus(imstatus st) {
+}
+
+void abstracthook::setstatus(imstatus st) {
+}
 
 int abstracthook::getsockfd() const {
     return 0;
@@ -32,10 +49,14 @@ imstatus abstracthook::getstatus() const {
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {
-    switch(pname) {
-	case icq: return ihook; break;
-	case yahoo: return yhook; break;
-    }
+    static abstracthook ahook;
 
-    return abstracthook();
+    switch(pname) {
+	case icq:
+	    return ihook;
+	case yahoo:
+	    return yhook;
+	default:
+	    return ahook;
+    }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.13 2001/11/15 16:46:55 konst Exp $
+* $Id: icqoffline.cc,v 1.14 2001/11/20 17:08:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -62,9 +62,10 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext, FILE *of = 0
 		lst.erase(lst.begin());
 	    }
 
-	    switch(cinfo.pname) {
-		case icq: seq = ihook.sendmessage(c, text); break;
-		case yahoo: seq = yhook.logged() ? yhook.sendmessage(c, text) : 0; break;
+	    if(gethook(cinfo.pname).logged()) {
+		seq = gethook(cinfo.pname).sendmessage(c, text);
+	    } else {
+		seq = 0;
 	    }
 
 	    fprintf(f, "\f\nMSG\n");

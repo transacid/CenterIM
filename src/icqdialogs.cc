@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.26 2001/11/16 14:00:18 konst Exp $
+* $Id: icqdialogs.cc,v 1.27 2001/11/20 17:08:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,20 +37,13 @@
 bool icqface::finddialog(searchparameters &s) {
     int n, b, i;
     int nuin, ninfo, nloc, nwork, nonl;
-    bool finished, ret, proceed;
+    bool finished, ret;
     dialogbox db;
     vector<protocolname> penabled;
     vector<protocolname>::iterator ipname;
 
     for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
-	proceed = false;
-
-	switch(apname) {
-	    case icq: proceed = ihook.online(); break;
-	    case yahoo: proceed = yhook.online(); break;
-	}
-
-	if(proceed) {
+	if(gethook(apname).online()) {
 	    penabled.push_back(apname);
 	}
     }

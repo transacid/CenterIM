@@ -26,6 +26,7 @@ enum imstatus {
     occupied,
     notavail,
     away,
+/*
     berightback,
     outtolunch,
     steppedout,
@@ -35,7 +36,7 @@ enum imstatus {
     notatdesk,
     notinoffice,
     onvacation,
-    
+*/
     imstatus_size
 };
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.35 2001/11/19 20:12:39 konst Exp $
+* $Id: centericq.cc,v 1.36 2001/11/20 17:08:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -244,11 +244,7 @@ void centericq::changestatus() {
     protocolname pname;
 
     if(face.changestatus(pname, st)) {
-	switch(pname) {
-	    case icq: ihook.setstatus(st); break;
-	    case yahoo: yhook.setstatus(st); break;
-	}
-
+	gethook(pname).setstatus(st);
 	face.update();
     }
 }
@@ -683,6 +679,7 @@ bool centericq::idle(int options = 0) {
 void centericq::setauto(imstatus astatus) {
     protocolname pname;
     imstatus stcurrent;
+    static bool autoset = false;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	abstracthook &hook = gethook(pname);
@@ -695,51 +692,55 @@ void centericq::setauto(imstatus astatus) {
 		break;
 
 	    default:
-		if(astatus == away && stcurrent == notavail)
-		    break;
+		if(astatus == available && autoset) {
+		    face.log(_("+ the user is back"));
+		    autoset = false;
+		} else {
+		    if(astatus == away && stcurrent == notavail)
+			break;
 
-		if(astatus != stcurrent) {
-		    hook.setautostatus(astatus);
-		    face.log(_("+ [%s] automatically set %s"),
-			conf.getprotocolname(pname).c_str(),
-			astatus == away ? _("away") : _("n/a"));
+		    if(astatus != stcurrent) {
+			hook.setautostatus(astatus);
+			autoset = true;
+
+			face.log(_("+ [%s] automatically set %s"),
+			    conf.getprotocolname(pname).c_str(),
+			    astatus == away ? _("away") : _("n/a"));
+		    }
 		}
 		break;
 	}
     }
-
-    face.update();
 }
+
+#define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
 
 void centericq::exectimers() {
     time_t timer_current = time(0);
+    protocolname pname;
     int paway, pna;
 
-    if(!conf.getourid(icq).empty()) ihook.exectimers();
-    if(!conf.getourid(yahoo).empty()) yhook.exectimers();
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	if(!conf.getourid(pname).empty()) {
+	    gethook(pname).exectimers();
+	}
+    }
 
     conf.getauto(paway, pna);
 
-    if(paway && (timer_current-cicq.getkeypress() > paway*60)) {
-	setauto(away);
-    } else if(na && (timer_current-cicq.getkeypress() > pna*60)) {
-	setauto(notavail);
+    if(paway || pna) {
+	if(paway && (timer_current-timer_keypress > paway*60))
+	    setauto(away);
+
+	if(pna && (timer_current-timer_keypress > pna*60))
+	    setauto(notavail);
+
+	if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
+	    setauto(available);
     }
 
-/*
-    else  &&
-    (timer_current-cicq.getkeypress() < MINCK0(away, na)*60)) {
-	icq_ChangeStatus(&icql, manualstatus);
-	face.log(_("+ [icq] the user is back"));
-	face.update();
-    }
-*/
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	cicq.checkmail();
 	time(&timer_checkmail);
     }
-}
-
-time_t centericq::getkeypress() const {
-    return timer_keypress;
 }

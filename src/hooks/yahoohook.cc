@@ -199,6 +199,17 @@ bool yahoohook::enabled() const {
 }
 
 void yahoohook::setautostatus(imstatus st) {
+    static int stat2int[imstatus_size] = {
+	0,
+	YAHOO_STATUS_AVAILABLE,
+	YAHOO_STATUS_INVISIBLE,
+	YAHOO_STATUS_CUSTOM,
+	YAHOO_STATUS_BUSY,
+	YAHOO_STATUS_BUSY,
+	YAHOO_STATUS_NOTATHOME,
+	YAHOO_STATUS_IDLE
+    };
+
     if(st == offline) {
 	if(getstatus() != offline) {
 	    disconnect();
@@ -207,6 +218,17 @@ void yahoohook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
+	    ourstatus = stat2int[st];
+
+	    if(st == available) {
+		yahoo_cmd_set_back_mode(yahoo, ourstatus, "available");
+	    } else {
+		if(ourstatus == YAHOO_STATUS_IDLE) {
+		    yahoo_cmd_idle(yahoo);
+		} else {
+		    yahoo_cmd_set_away_mode(yahoo, ourstatus, "away");
+		}
+	    }
 	}
     }
 }

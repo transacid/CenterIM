@@ -55,7 +55,6 @@ class centericq {
 
 	bool idle(int options = 0);
 	void exectimers();
-	time_t getkeypress() const;
 };
 
 extern centericq cicq;

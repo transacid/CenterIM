@@ -1,12 +1,14 @@
 #ifndef __ABSTRACTHOOK_H__
 #define __ABSTRACTHOOK_H__
 
+#include "icqcontact.h"
+
 class abstracthook {
     protected:
     public:
-	virtual void connect() = 0;
-	virtual void disconnect() = 0;
-	virtual void exectimers() = 0;
+	virtual void connect();
+	virtual void disconnect();
+	virtual void exectimers();
 
 	virtual int getsockfd() const;
 	virtual bool online() const;
@@ -17,8 +19,8 @@ class abstracthook {
 	virtual unsigned long sendmessage(const icqcontact *c,
 	    const string text);
 
-	virtual void setautostatus(imstatus st) = 0;
-	virtual void setstatus(imstatus st) = 0;
+	virtual void setautostatus(imstatus st);
+	virtual void setstatus(imstatus st);
 	virtual imstatus getstatus() const;
 };
 

@@ -27,8 +27,8 @@
 #define HIDL_SOCKEXIT   2
 
 static char status2char[imstatus_size] = {
-    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a', 'a',
-    'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'
+    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a'/*, 'a',
+    'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'*/
 };
 
 struct icqfileassociation {

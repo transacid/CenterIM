@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.8 2001/11/19 20:12:40 konst Exp $
+* $Id: icqhook.cc,v 1.1 2001/11/20 17:08:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -119,8 +119,8 @@ void icqhook::connect() {
     }
 
     connecting = true;
-    face.update();
-    icq_Disconnect(&icql);
+//    face.update();
+//    icq_Disconnect(&icql);
     face.log(_("+ [icq] connecting to the server"));
 
     if(icq_Connect(&icql, acc.server.c_str(), acc.port) != -1) {
@@ -129,7 +129,7 @@ void icqhook::connect() {
 	face.log(_("+ [icq] unable to connect to the server"));
 	icql.icq_Status = (unsigned int) STATUS_OFFLINE;
 	connecting = false;
-	face.update();
+//        face.update();
     }
 
     time(&timer_reconnect);
@@ -200,7 +200,7 @@ void icqhook::disconnected(struct icq_link *link, int reason) {
     int i;
     icqcontact *c;
 
-    link->icq_UDPSok = -1;
+//    link->icq_UDPSok = -1;
     link->icq_Status = (long unsigned int) STATUS_OFFLINE;
 
     ihook.flogged = ihook.connecting = false;
@@ -617,8 +617,6 @@ unsigned int icqhook::getfinduin(int pos) {
     if(pos > 0 && pos <= founduins.size()) r = founduins[pos-1]; else r = 0;
     return r;
 }
-
-#define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
 
 void icqhook::exectimers() {
     time_t timer_current = time(0);
