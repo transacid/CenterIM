@@ -8,6 +8,13 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/socket.h>
 
+#ifdef HAVE_OPENSSL
+
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
+#endif
+
 int cw_connect(int sockfd, const struct sockaddr *serv_addr,
     int addrlen, int ssl);
 
