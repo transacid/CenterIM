@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.3 2002/03/14 14:15:51 konst Exp $
+* $Id: aimhook.cc,v 1.4 2002/03/14 15:15:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -435,15 +435,7 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
     char *message = va_arg(ap, char *);
     va_end(ap);
 
-    imcontact ic(sender, aim);
-    em.store(immessage(ic, imevent::incoming, rusconv("wk", message)));
-
-    icqcontact *c = clist.get(ic);
-
-    if(c)
-    if(c->getstatus() == offline) {
-	c->setstatus(available);
-    }
+    em.store(immessage(imcontact(sender, aim), imevent::incoming, rusconv("wk", message)));
 }
 
 void aimhook::userstatus(const string &nickname, imstatus st) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.30 2002/03/14 11:53:30 konst Exp $
+* $Id: icqcontacts.cc,v 1.31 2002/03/14 15:15:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,7 +43,6 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist = true) {
 	case icq:
 	    c->setnick(i2str(cinfo.uin));
 	    c->setdispnick(i2str(cinfo.uin));
-	    gethook(icq).sendnewuser(c->getdesc());
 	    break;
 
 	case yahoo:
@@ -75,6 +74,7 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist = true) {
 	    break;
     }
 
+    gethook(cinfo.pname).sendnewuser(cinfo);
     c->save();
     add(c);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.28 2002/03/14 11:53:32 konst Exp $
+* $Id: yahoohook.cc,v 1.29 2002/03/14 15:15:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -365,12 +365,6 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 
 	if(strlen(msg)) {
 	    em.store(immessage(ic, imevent::incoming, rusconv("wk", msg)));
-	    icqcontact *c = clist.get(ic);
-
-	    if(c)
-	    if(c->getstatus() == offline) {
-		c->setstatus(available);
-	    }
 	}
     }
 }
