@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.6\n"
-"POT-Creation-Date: 2003-12-10 00:52+0200\n"
+"POT-Creation-Date: 2003-12-13 16:46+0200\n"
 "PO-Revision-Date: 2003-08-30 12:26+0100\n"
 "Last-Translator: Stefan Ilivanov <bg-team@top.bg>\n"
 "Language-Team: Bulgarian <ilivanov@top.bg>\n"
@@ -62,105 +62,110 @@ msgstr "'няма ме' съобщение"
 msgid "! support for %s was disabled at build time"
 msgstr "! поддръжката за %s е била изключена при компилирането"
 
-#: src/centericq.cc:658 src/centericq.cc:710
+#: src/centericq.cc:662 src/centericq.cc:717
+#, fuzzy, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] нова поща пристигна, %d съобщения"
+
+#: src/centericq.cc:664 src/centericq.cc:719
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] нова поща пристигна, %d съобщения"
 
-#: src/centericq.cc:661 src/centericq.cc:713
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ последно съобщение от %s"
 
-#: src/centericq.cc:754
+#: src/centericq.cc:763
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ конфигурацията %s е променена, презареждане"
 
-#: src/centericq.cc:808
+#: src/centericq.cc:817
 msgid "! another running copy of centericq detected"
 msgstr "! друго стартирано копие на centericq е открито"
 
-#: src/centericq.cc:809
+#: src/centericq.cc:818
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! това може да създаде проблем. pid %lu"
 
-#: src/centericq.cc:962
+#: src/centericq.cc:971
 msgid "Mobile number: "
 msgstr "Мобилен телефон: "
 
-#: src/centericq.cc:1106
+#: src/centericq.cc:1115
 msgid "directory to save the file(s) to: "
 msgstr "директория за запис на файл(ове)): "
 
-#: src/centericq.cc:1113
+#: src/centericq.cc:1122
 msgid "The specified directory is not writable"
 msgstr "В указаната директория неможе да се записва"
 
-#: src/centericq.cc:1117
+#: src/centericq.cc:1126
 msgid "The specified directory does not exist"
 msgstr "Указаната директория не съществува"
 
-#: src/centericq.cc:1252
+#: src/centericq.cc:1261
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ няма предишни съобщения за %s"
 
-#: src/centericq.cc:1278
+#: src/centericq.cc:1287
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ потребител %s вече е в листата ви"
 
-#: src/centericq.cc:1284
+#: src/centericq.cc:1293
 msgid "Select a group to add the user to"
 msgstr "Избери група в която да добавите контакта"
 
-#: src/centericq.cc:1313
+#: src/centericq.cc:1322
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s бе добавен в списъка"
 
-#: src/centericq.cc:1384
+#: src/centericq.cc:1393
 msgid "+ the user is back"
 msgstr "+ потребителя се върна"
 
-#: src/centericq.cc:1400
+#: src/centericq.cc:1409
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус възтановен"
 
-#: src/centericq.cc:1415
+#: src/centericq.cc:1424
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматичен преход в %s"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "away"
 msgstr "няма ме"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1544
+#: src/centericq.cc:1553
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободното място на диска е под 10к, изключване"
 
-#: src/centericq.cc:1545
+#: src/centericq.cc:1554
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе може да се изгубят събития и промени"
 
-#: src/centericq.cc:1589
+#: src/centericq.cc:1598
 msgid "Invite to conference.."
 msgstr "Покана за чат"
 
-#: src/centericq.cc:1609
+#: src/centericq.cc:1618
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Изберете контакти които да добавите в листата"
 
-#: src/centericq.cc:1612
+#: src/centericq.cc:1621
 msgid "Mass move selected users to.."
 msgstr ""
 
@@ -300,7 +305,7 @@ msgstr "+ [yahoo] система: %s"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] ГРЕШКА: %s"
 
-#: src/hooks/yahoohook.cc:1064
+#: src/hooks/yahoohook.cc:1065
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] изключен"

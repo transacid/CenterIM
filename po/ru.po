@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.8\n"
-"POT-Creation-Date: 2003-12-10 00:52+0200\n"
+"POT-Creation-Date: 2003-12-13 16:46+0200\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -62,105 +62,110 @@ msgstr "away-сообщение"
 msgid "! support for %s was disabled at build time"
 msgstr "! поддержка %s была выключена при сборке"
 
-#: src/centericq.cc:658 src/centericq.cc:710
+#: src/centericq.cc:662 src/centericq.cc:717
+#, fuzzy, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
+
+#: src/centericq.cc:664 src/centericq.cc:719
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
 
-#: src/centericq.cc:661 src/centericq.cc:713
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ последнее сообщение от %s"
 
-#: src/centericq.cc:754
+#: src/centericq.cc:763
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ конфигурация %s изменена, перечитываем"
 
-#: src/centericq.cc:808
+#: src/centericq.cc:817
 msgid "! another running copy of centericq detected"
 msgstr "! обнаружена работающая копия centericq"
 
-#: src/centericq.cc:809
+#: src/centericq.cc:818
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! это может вызвать проблемы. pid %lu"
 
-#: src/centericq.cc:962
+#: src/centericq.cc:971
 msgid "Mobile number: "
 msgstr "Номер мобильного телефона: "
 
-#: src/centericq.cc:1106
+#: src/centericq.cc:1115
 msgid "directory to save the file(s) to: "
 msgstr "директория для файл(ов): "
 
-#: src/centericq.cc:1113
+#: src/centericq.cc:1122
 msgid "The specified directory is not writable"
 msgstr "Не хватает прав на запись для указанного каталога"
 
-#: src/centericq.cc:1117
+#: src/centericq.cc:1126
 msgid "The specified directory does not exist"
 msgstr "Указанный каталог не существует"
 
-#: src/centericq.cc:1252
+#: src/centericq.cc:1261
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ история для %s пуста"
 
-#: src/centericq.cc:1278
+#: src/centericq.cc:1287
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s уже есть в списке"
 
-#: src/centericq.cc:1284
+#: src/centericq.cc:1293
 msgid "Select a group to add the user to"
 msgstr "Выберите группу для контакта"
 
-#: src/centericq.cc:1313
+#: src/centericq.cc:1322
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s добавлен в список"
 
-#: src/centericq.cc:1384
+#: src/centericq.cc:1393
 msgid "+ the user is back"
 msgstr "+ пользователь вернулся"
 
-#: src/centericq.cc:1400
+#: src/centericq.cc:1409
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус восстановлен"
 
-#: src/centericq.cc:1415
+#: src/centericq.cc:1424
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматический переход в %s"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "away"
 msgstr ""
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1544
+#: src/centericq.cc:1553
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободного места на диске осталось < 10k, рассоединение"
 
-#: src/centericq.cc:1545
+#: src/centericq.cc:1554
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе мы можем терять события и глючить"
 
-#: src/centericq.cc:1589
+#: src/centericq.cc:1598
 msgid "Invite to conference.."
 msgstr "Пригласить на конференцию.."
 
-#: src/centericq.cc:1609
+#: src/centericq.cc:1618
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Выберите контакты для добавления в список"
 
-#: src/centericq.cc:1612
+#: src/centericq.cc:1621
 msgid "Mass move selected users to.."
 msgstr ""
 
@@ -299,7 +304,7 @@ msgstr "+ [yahoo] система: %s"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1064
+#: src/hooks/yahoohook.cc:1065
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] прямое соединение не удалось"
 

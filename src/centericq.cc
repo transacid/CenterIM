@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.178 2003/12/05 00:39:43 konst Exp $
+* $Id: centericq.cc,v 1.179 2004/01/15 01:04:38 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -620,6 +620,9 @@ void centericq::checkmail() {
     static int fsize = -1;
     static int oldcount = -1;
 
+    bool lts, lo;
+    conf.getlogoptions(lts, lo);
+
     if(conf.getmailcheck())
     if(!stat(fname.c_str(), &st)) 
     if(st.st_size != fsize && (st.st_mode & S_IFREG)) {
@@ -655,6 +658,9 @@ void centericq::checkmail() {
 
 		lt = localtime(&timer_current);
 
+		if (lts)
+		face.log(_("+ new mail arrived, %d messages"), mcount);
+		else
 		face.log(_("+ [%02d:%02d:%02d] new mail arrived, %d messages"),
 		    lt->tm_hour, lt->tm_min, lt->tm_sec, mcount);
 
@@ -707,6 +713,9 @@ void centericq::checkmail() {
 		const struct tm *lt;
 		lt = localtime(&timer_current);
 
+		if (lts)
+		face.log(_("+ new mail arrived, %d messages"), mcount);
+		else
 		face.log(_("+ [%02d:%02d:%02d] new mail arrived, %d messages"),
 		    lt->tm_hour, lt->tm_min, lt->tm_sec, mcount);
 
@@ -1004,6 +1013,22 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
     } else if(ev.gettype() == imevent::file) {
 	sendev = new imfile(ev);
+
+    } else if(ev.gettype() == imevent::notification) {
+	const imnotification *m = dynamic_cast<const imnotification *>(&ev);
+	text = m->gettext();
+
+	if(r == icqface::reply) {
+	    if(conf.getquote()) text = quotemsg(text);
+		else text = "";
+
+	} else if(r == icqface::forward) {
+	    text = fwdnote + text;
+	}
+
+	if(!sendev) {
+	    sendev = new immessage(m->getcontact(), imevent::outgoing, text);
+	}
 
     }
 

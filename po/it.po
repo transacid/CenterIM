@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.13.3\n"
-"POT-Creation-Date: 2003-12-10 00:52+0200\n"
+"POT-Creation-Date: 2003-12-13 16:46+0200\n"
 "PO-Revision-Date: 2001-07-08 05:03+02:00\n"
 "Last-Translator: Leandro Noferini <lnoferin@cybervalley.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -75,118 +75,124 @@ msgid "! support for %s was disabled at build time"
 msgstr ""
 
 # src/centericq.cc:549
-#: src/centericq.cc:658 src/centericq.cc:710
+#: src/centericq.cc:662 src/centericq.cc:717
+#, fuzzy, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ è arrivata nuova posta, %d messaggi"
+
+# src/centericq.cc:549
+#: src/centericq.cc:664 src/centericq.cc:719
 #, fuzzy, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ è arrivata nuova posta, %d messaggi"
 
 # src/centericq.cc:550
-#: src/centericq.cc:661 src/centericq.cc:713
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ l'ultimo messaggio da %s"
 
-#: src/centericq.cc:754
+#: src/centericq.cc:763
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:808
+#: src/centericq.cc:817
 msgid "! another running copy of centericq detected"
 msgstr ""
 
-#: src/centericq.cc:809
+#: src/centericq.cc:818
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr ""
 
 # src/icqdialogs.cc:561
-#: src/centericq.cc:962
+#: src/centericq.cc:971
 #, fuzzy
 msgid "Mobile number: "
 msgstr "nome file: "
 
-#: src/centericq.cc:1106
+#: src/centericq.cc:1115
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:1113
+#: src/centericq.cc:1122
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:1117
+#: src/centericq.cc:1126
 msgid "The specified directory does not exist"
 msgstr ""
 
 # src/icqface.cc:1613
-#: src/centericq.cc:1252
+#: src/centericq.cc:1261
 #, fuzzy, c-format
 msgid "+ no history items for %s"
 msgstr "+ nessun elemento di storia per %s, %lu"
 
 # src/icqface.cc:1151
-#: src/centericq.cc:1278
+#: src/centericq.cc:1287
 #, fuzzy, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %lu è stato aggiunto alla lista"
 
 # src/icqface.cc:1682
-#: src/centericq.cc:1284
+#: src/centericq.cc:1293
 #, fuzzy
 msgid "Select a group to add the user to"
 msgstr "Seleziona i contatti da aggiungere alla lista"
 
 # src/icqface.cc:1151
-#: src/centericq.cc:1313
+#: src/centericq.cc:1322
 #, fuzzy, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %lu è stato aggiunto alla lista"
 
 # src/icqhook.cc:594
-#: src/centericq.cc:1384
+#: src/centericq.cc:1393
 msgid "+ the user is back"
 msgstr "+ l'utente è tornato"
 
-#: src/centericq.cc:1400
+#: src/centericq.cc:1409
 #, c-format
 msgid "+ [%s] status restored"
 msgstr ""
 
 # src/icqhook.cc:587
-#: src/centericq.cc:1415
+#: src/centericq.cc:1424
 #, fuzzy, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ imposta automaticamente N/A"
 
 # src/icqface.cc:874
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 #, fuzzy
 msgid "away"
 msgstr "Assente"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1544
+#: src/centericq.cc:1553
 msgid "! free disk space is less than 10k, going offline"
 msgstr ""
 
-#: src/centericq.cc:1545
+#: src/centericq.cc:1554
 msgid "! otherwise we can lose events and configuration"
 msgstr ""
 
-#: src/centericq.cc:1589
+#: src/centericq.cc:1598
 msgid "Invite to conference.."
 msgstr ""
 
 # src/icqface.cc:1682
-#: src/centericq.cc:1609
+#: src/centericq.cc:1618
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Seleziona i contatti da aggiungere alla lista"
 
-#: src/centericq.cc:1612
+#: src/centericq.cc:1621
 msgid "Mass move selected users to.."
 msgstr ""
 
@@ -348,7 +354,7 @@ msgid "+ [yahoo] error: %s"
 msgstr "+ connessione al server icq"
 
 # src/icqhook.cc:145
-#: src/hooks/yahoohook.cc:1064
+#: src/hooks/yahoohook.cc:1065
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ disconnesso"

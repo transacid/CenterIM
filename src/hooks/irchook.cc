@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.74 2003/11/05 09:07:42 konst Exp $
+* $Id: irchook.cc,v 1.75 2004/01/15 01:04:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -272,6 +272,9 @@ bool irchook::send(const imevent &ev) {
 
 	    } else if(cmd == "DEOP") {
 		text = (string) "mode " + c->getdesc().nickname + " -o " + text;
+
+	    } else if(cmd == "RAW") {
+		// leave text intact
 
 	    } else {
 		text.insert(0, cmd + " ");
@@ -888,7 +891,7 @@ void irchook::getmessage(void *conn, void *cli, ...) {
 	}
 
 	em.store(immessage(imcontact(sender, irc),
-	    imevent::incoming, irhook.rushtmlconv("wk", cuthtml(message, true))));
+	    imevent::incoming, irhook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))));
     }
 
     DLOG("getmessage");
@@ -907,7 +910,7 @@ void irchook::getaction(void *conn, void *cli, ...) {
     if(strlen(sender) && strlen(message)) {
 	em.store(immessage(imcontact(sender, irc), imevent::incoming, 
 	    ((string) "* " + sender + " " + 
-		irhook.rushtmlconv("wk", cuthtml(message, true))).c_str()));
+		irhook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))).c_str()));
     }
     
     DLOG("getaction");
@@ -1150,7 +1153,7 @@ void irchook::chataction(void *connection, void *cli, ...) {
     if(clist.get(imcontact(room, irc))) {
 	em.store(immessage(imcontact(room, irc), imevent::incoming,
 	    ((string) "* " + from + " " +
-		irhook.rushtmlconv("wk", cuthtml(msg, true))).c_str()));
+		irhook.rushtmlconv("wk", cuthtml(msg, chCutBR | chLeaveLinks))).c_str()));
     }
 }
 
@@ -1429,6 +1432,7 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
 
 	if(reason)
 	if(strlen(reason)) {
+	    if(strlen(reason) > 450) reason[450] = 0;
 	    sprintf(buf, _("reason: %s"), reason);
 	    text += (string) "; " + buf + ".";
 	}

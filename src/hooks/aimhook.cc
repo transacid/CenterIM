@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.37 2003/12/11 22:41:32 konst Exp $
+* $Id: aimhook.cc,v 1.38 2004/01/15 01:04:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -414,7 +414,7 @@ void aimhook::gotinfo(void *conn, void *cli, ...) {
 	icqcontact *c = clist.get(imcontact(nick, aim));
 
 	if(c) {
-	    c->setabout(cuthtml(info, true));
+	    c->setabout(cuthtml(info, chCutBR | chLeaveLinks));
 	    if(c->getabout().empty())
 		c->setabout(_("The user has no profile information."));
 	}
@@ -435,7 +435,7 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
 	em.store(immessage(imcontact(sender, aim),
-	    imevent::incoming, ahook.rushtmlconv("wk", cuthtml(message, true))));
+	    imevent::incoming, ahook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))));
     }
 
     DLOG("getmessage");

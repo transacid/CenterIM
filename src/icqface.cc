@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.204 2003/11/25 23:53:38 konst Exp $
+* $Id: icqface.cc,v 1.205 2004/01/15 01:04:38 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2531,11 +2531,11 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	|| ev->gettype() == imevent::notification
 	|| ev->gettype() == imevent::xml) {
 	    actions.push_back(forward);
-
+/*
 	    if(ev->getdirection() == imevent::incoming)
 	    if(ev->getcontact().pname != rss || islivejournal(ev->getcontact()))
 		actions.push_back(reply);
-
+*/
 	} else if(ev->gettype() == imevent::url) {
 	    actions.push_back(forward);
 	    actions.push_back(open);

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.7\n"
-"POT-Creation-Date: 2003-12-10 00:52+0200\n"
+"POT-Creation-Date: 2003-12-13 16:46+0200\n"
 "PO-Revision-Date: 2002-11-05 03:52-0500\n"
 "Last-Translator: Leonardo Boshell <p@kapcoweb.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -65,105 +65,110 @@ msgstr "mensaje de ausencia"
 msgid "! support for %s was disabled at build time"
 msgstr ""
 
-#: src/centericq.cc:658 src/centericq.cc:710
+#: src/centericq.cc:662 src/centericq.cc:717
+#, fuzzy, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] llegó nuevo correo, %d mensajes"
+
+#: src/centericq.cc:664 src/centericq.cc:719
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] llegó nuevo correo, %d mensajes"
 
-#: src/centericq.cc:661 src/centericq.cc:713
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ ultimo mensaje de: %s"
 
-#: src/centericq.cc:754
+#: src/centericq.cc:763
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ la configuración de %s fue modificada, cargada de nuevo"
 
-#: src/centericq.cc:808
+#: src/centericq.cc:817
 msgid "! another running copy of centericq detected"
 msgstr "! se detectó otra copia de centericq ejecutándose"
 
-#: src/centericq.cc:809
+#: src/centericq.cc:818
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! esto puede ocasionar problemas. pid %lu"
 
-#: src/centericq.cc:962
+#: src/centericq.cc:971
 msgid "Mobile number: "
 msgstr "Número de dispositivo móvil: "
 
-#: src/centericq.cc:1106
+#: src/centericq.cc:1115
 msgid "directory to save the file(s) to: "
 msgstr "directorio en donde guardar archivos: "
 
-#: src/centericq.cc:1113
+#: src/centericq.cc:1122
 msgid "The specified directory is not writable"
 msgstr "El directorio especificado no se puede escribir"
 
-#: src/centericq.cc:1117
+#: src/centericq.cc:1126
 msgid "The specified directory does not exist"
 msgstr "El directorio especificado no existe"
 
-#: src/centericq.cc:1252
+#: src/centericq.cc:1261
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ no hay ítems en el historial para %s"
 
-#: src/centericq.cc:1278
+#: src/centericq.cc:1287
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ el usuario %s ya se encuentra en la lista"
 
-#: src/centericq.cc:1284
+#: src/centericq.cc:1293
 msgid "Select a group to add the user to"
 msgstr "Seleccione un grupo en donde agregar al usuario"
 
-#: src/centericq.cc:1313
+#: src/centericq.cc:1322
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s ha sido agregado(a) a la lista"
 
-#: src/centericq.cc:1384
+#: src/centericq.cc:1393
 msgid "+ the user is back"
 msgstr "+ el usuario ha vuelto"
 
-#: src/centericq.cc:1400
+#: src/centericq.cc:1409
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ Status [%s] retomado"
 
-#: src/centericq.cc:1415
+#: src/centericq.cc:1424
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] automáticamente estableció %s"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "away"
 msgstr "ausente"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "n/a"
 msgstr "n/d"
 
-#: src/centericq.cc:1544
+#: src/centericq.cc:1553
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! el espacio libre en disco es menos de 10k, desconectándose"
 
-#: src/centericq.cc:1545
+#: src/centericq.cc:1554
 msgid "! otherwise we can lose events and configuration"
 msgstr "! de otro modo pueden perderse eventos y datos de configuración"
 
-#: src/centericq.cc:1589
+#: src/centericq.cc:1598
 msgid "Invite to conference.."
 msgstr "Invitar a conferencia.."
 
-#: src/centericq.cc:1609
+#: src/centericq.cc:1618
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Seleccionar contactos para agregar a la lista"
 
-#: src/centericq.cc:1612
+#: src/centericq.cc:1621
 msgid "Mass move selected users to.."
 msgstr ""
 
@@ -305,7 +310,7 @@ msgstr "+ [yahoo] sistema: %s"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] error: %s"
 
-#: src/hooks/yahoohook.cc:1064
+#: src/hooks/yahoohook.cc:1065
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] desconectado"

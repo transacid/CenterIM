@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.9\n"
-"POT-Creation-Date: 2003-12-10 00:52+0200\n"
+"POT-Creation-Date: 2003-12-13 16:46+0200\n"
 "PO-Revision-Date: 2003-11-30 17:44+0200\n"
 "Last-Translator: Piotr KUCHARSKI <chopin@sgh.waw.pl>\n"
 "Language-Team: Polish\n"
@@ -64,105 +64,110 @@ msgstr "powód nieobecno¶ci"
 msgid "! support for %s was disabled at build time"
 msgstr "! wsparcie dla %s zosta³o usuniête w trakcie kompilacji"
 
-#: src/centericq.cc:658 src/centericq.cc:710
+#: src/centericq.cc:662 src/centericq.cc:717
+#, fuzzy, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] otrzymano now± pocztê, %d wiadomo¶ci"
+
+#: src/centericq.cc:664 src/centericq.cc:719
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] otrzymano now± pocztê, %d wiadomo¶ci"
 
-#: src/centericq.cc:661 src/centericq.cc:713
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ ostatnia wiadomo¶æ od %s"
 
-#: src/centericq.cc:754
+#: src/centericq.cc:763
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ konfiguracja %s zmieni³a siê, od¶wie¿ono"
 
-#: src/centericq.cc:808
+#: src/centericq.cc:817
 msgid "! another running copy of centericq detected"
 msgstr "! inna kopia centericq jest ju¿ uruchomiona"
 
-#: src/centericq.cc:809
+#: src/centericq.cc:818
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! mo¿e to powodowaæ problemy. pid %lu"
 
-#: src/centericq.cc:962
+#: src/centericq.cc:971
 msgid "Mobile number: "
 msgstr "Komórka: "
 
-#: src/centericq.cc:1106
+#: src/centericq.cc:1115
 msgid "directory to save the file(s) to: "
 msgstr "katalog, w którym zostan± nagrane pliki: "
 
-#: src/centericq.cc:1113
+#: src/centericq.cc:1122
 msgid "The specified directory is not writable"
 msgstr "W danym katalogu nie mo¿na zapisywaæ"
 
-#: src/centericq.cc:1117
+#: src/centericq.cc:1126
 msgid "The specified directory does not exist"
 msgstr "Dany katalog nie istnieje"
 
-#: src/centericq.cc:1252
+#: src/centericq.cc:1261
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ brak historii dla %s"
 
-#: src/centericq.cc:1278
+#: src/centericq.cc:1287
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ u¿ytkownik %s jest ju¿ na li¶cie"
 
-#: src/centericq.cc:1284
+#: src/centericq.cc:1293
 msgid "Select a group to add the user to"
 msgstr "Wybierz grupê, do której chcesz dodaæ u¿ytkownika"
 
-#: src/centericq.cc:1313
+#: src/centericq.cc:1322
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s zosta³ dodany do listy"
 
-#: src/centericq.cc:1384
+#: src/centericq.cc:1393
 msgid "+ the user is back"
 msgstr "+ u¿ytkownik powróci³"
 
-#: src/centericq.cc:1400
+#: src/centericq.cc:1409
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status odtworzony"
 
-#: src/centericq.cc:1415
+#: src/centericq.cc:1424
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] automatycznie oznacz jako %s"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "away"
 msgstr "Nieobecny"
 
-#: src/centericq.cc:1417
+#: src/centericq.cc:1426
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1544
+#: src/centericq.cc:1553
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! wolne miejsce na dysku poni¿ej 10k, roz³±czono"
 
-#: src/centericq.cc:1545
+#: src/centericq.cc:1554
 msgid "! otherwise we can lose events and configuration"
 msgstr "! w przeciwnym wypadku mo¿na utraciæ wiadomo¶ci i konfiguracjê"
 
-#: src/centericq.cc:1589
+#: src/centericq.cc:1598
 msgid "Invite to conference.."
 msgstr "Zaproszenie do konferencji"
 
-#: src/centericq.cc:1609
+#: src/centericq.cc:1618
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Wybierz kontakty, które chcesz dodaæ do listy"
 
-#: src/centericq.cc:1612
+#: src/centericq.cc:1621
 msgid "Mass move selected users to.."
 msgstr ""
 
@@ -301,7 +306,7 @@ msgstr "+ [yahoo] system: %s"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] b³±d: %s"
 
-#: src/hooks/yahoohook.cc:1064
+#: src/hooks/yahoohook.cc:1065
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] bezpo¶rednie po³±czenie nie powiod³o siê"
 

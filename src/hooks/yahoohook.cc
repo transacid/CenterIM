@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.99 2003/12/11 22:41:34 konst Exp $
+* $Id: yahoohook.cc,v 1.100 2004/01/15 01:04:40 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -44,6 +44,8 @@
 #include <netinet/in.h>
 
 #define PERIOD_REFRESH          60
+
+int yahoohook::yfd::connection_tags = 0;
 
 char pager_host[255], pager_port[255], filetransfer_host[255],
     filetransfer_port[255], webcam_host[255], webcam_port[255],
@@ -761,7 +763,7 @@ void yahoohook::status_changed(int id, char *who, int stat, char *msg, int away)
 
 void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8) {
     imcontact ic(who, yahoo);
-    string text = cuthtml(msg, true);
+    string text = cuthtml(msg, chCutBR | chLeaveLinks);
 
     yhook.checkinlist(ic);
     text = yhook.decode(text, utf8);
@@ -928,7 +930,7 @@ void yahoohook::conf_userleave(int id, char *who, char *room) {
 void yahoohook::conf_message(int id, char *who, char *room, char *msg, int utf8) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
 
-    string text = (string) who + ": " + cuthtml(msg, true);
+    string text = (string) who + ": " + cuthtml(msg, chCutBR | chLeaveLinks);
     text = yhook.decode(text, utf8);
 
     if(c) em.store(immessage(c, imevent::incoming, text));
@@ -991,21 +993,31 @@ void yahoohook::error(int id, char *err, int fatal) {
     }
 }
 
-void yahoohook::add_handler(int id, int fd, yahoo_input_condition cond, void *data) {
+int yahoohook::add_handler(int id, int fd, yahoo_input_condition cond, void *data) {
+    int tag = -1;
+
     switch(cond) {
-	case YAHOO_INPUT_READ: yhook.rfds.push_back(yfd(fd, data)); break;
-	case YAHOO_INPUT_WRITE: yhook.wfds.push_back(yfd(fd, data)); break;
+	case YAHOO_INPUT_READ:
+	    yhook.rfds.push_back(yfd(fd, data));
+	    tag = yhook.rfds.back().tag;
+	    break;
+	case YAHOO_INPUT_WRITE:
+	    yhook.wfds.push_back(yfd(fd, data));
+	    tag = yhook.wfds.back().tag;
+	    break;
     }
+
+    return tag;
 }
 
-void yahoohook::remove_handler(int id, int fd) {
+void yahoohook::remove_handler(int tag) {
     vector<yfd>::iterator i;
 
-    i = find(yhook.rfds.begin(), yhook.rfds.end(), fd);
+    i = find(yhook.rfds.begin(), yhook.rfds.end(), tag);
     if(i != yhook.rfds.end())
 	yhook.rfds.erase(i);
 
-    i = find(yhook.wfds.begin(), yhook.wfds.end(), fd);
+    i = find(yhook.wfds.begin(), yhook.wfds.end(), tag);
     if(i != yhook.wfds.end())
 	yhook.wfds.erase(i);
 }
@@ -1046,6 +1058,7 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
 	ccd->id = id;
 
 	yhook.wfds.push_back(yfd(servfd, ccd, true));
+	ccd->tag = yhook.wfds.back().tag;
 	return 1;
     } else {
 	close(servfd);
@@ -1055,11 +1068,12 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
 
 void yahoohook::connect_complete(void *data, int source) {
     connect_callback_data *ccd = (connect_callback_data *) data;
-    int error, err_size = sizeof(error);
+    char error;
+    socklen_t err_size = sizeof(error);
 
-    remove_handler(-1, source);
+    remove_handler(ccd->tag);
 
-    if(getsockopt(source, SOL_SOCKET, SO_ERROR, &error, (socklen_t *) &err_size) == -1 || error != 0) {
+    if(getsockopt(source, SOL_SOCKET, SO_ERROR, &error, &err_size) == -1 || error != 0) {
 	if(yhook.logged())
 	    face.log(_("+ [yahoo] direct connection failed"));
 
@@ -1096,7 +1110,7 @@ void yahoohook::chat_message(int id, char *who, char *room, char *msg, int msgty
 void yahoohook::rejected(int id, char *who, char *msg) {
 }
 
-void yahoohook::got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
+void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
 }
 
 void yahoohook::webcam_invite(int id, char *from) {

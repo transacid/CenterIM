@@ -19,17 +19,21 @@ class yahoohook: public abstracthook {
 	struct connect_callback_data {
 	    yahoo_connect_callback callback;
 	    void *callback_data;
-	    int id;
+	    int id, tag;
 	};
 
 	struct yfd {
-	    int fd;
+	    int fd, tag;
 	    void *data;
 	    bool isconnect;
-	    yfd(int afd, void *adata, bool aisconnect = false): fd(afd), data(adata), isconnect(aisconnect) {}
 
-	    bool operator == (int afd) const { return fd == afd; }
-	    bool operator != (int afd) const { return fd != afd; }
+	    static int connection_tags;
+
+	    yfd(int afd, void *adata, bool aisconnect = false)
+		: tag(connection_tags++), fd(afd), data(adata), isconnect(aisconnect) {}
+
+	    bool operator == (int atag) const { return tag == atag; }
+	    bool operator != (int atag) const { return tag != atag; }
 	};
 
 	vector<yfd> rfds, wfds;
@@ -74,7 +78,7 @@ class yahoohook: public abstracthook {
 	static void chat_userleave(int id, char *room, char *who);
 	static void chat_message(int id, char *who, char *room, char *msg, int msgtype, int utf8);
 	static void rejected(int id, char *who, char *msg);
-	static void got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
+	static void got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
 	static void webcam_invite(int id, char *from);
 	static void webcam_invite_reply(int id, char *from, int accept);
 	static void webcam_closed(int id, char *who, int reason);
@@ -82,8 +86,8 @@ class yahoohook: public abstracthook {
 	static void webcam_data_request(int id, int send);
 	static int log(char *fmt, ...);
 
-	static void add_handler(int id, int fd, yahoo_input_condition cond, void *data);
-	static void remove_handler(int id, int fd);
+	static int add_handler(int id, int fd, yahoo_input_condition cond, void *data);
+	static void remove_handler(int tag);
 	static int connect_async(int id, char *host, int port, yahoo_connect_callback callback, void *data);
 
 	static void get_fd(int id, int fd, int error, void *data);

@@ -106,6 +106,15 @@ AC_CHECK_LIB(nsl, gethostbyname)
 AC_CHECK_LIB(ncurses, initscr,,
     [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
 
+AC_TRY_COMPILE([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+],[ socklen_t foo; ], ac_cv_c_socklen_t=yes, ac_cv_c_socklen_t=no)
+
+if test $ac_cv_c_socklen_t = no; then
+  AC_DEFINE(socklen_t, int, [Define type of socklen_t for systems missing it])
+fi
+
 AC_LANG_RESTORE
 
 case "$host_os" in
