@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.45 2002/07/17 16:24:28 konst Exp $
+* $Id: yahoohook.cc,v 1.46 2002/07/29 14:52:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -234,11 +234,18 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 void yahoohook::removeuser(const imcontact &ic) {
     if(logged()) {
 	auto_ptr<char> who(strdup(ic.nickname.c_str()));
-	auto_ptr<char> group(strdup("centericq"));
 
 	if(!ischannel(ic)) {
 	    face.log(_("+ [yahoo] removing %s from the contacts"), ic.nickname.c_str());
-	    yahoo_remove_buddy(cid, who.get(), group.get());
+
+	    struct yahoo_buddy **buddies = get_buddylist(cid), **bud;
+
+	    for(bud = buddies; *bud; bud++) {
+		if(!strcmp((*bud)->id, who.get())) {
+		    yahoo_remove_buddy(cid, who.get(), (*bud)->group);
+		}
+	    }
+
 	    yahoo_refresh(cid);
 	} else {
 	    face.log(_("+ [yahoo] leaving the %s conference"), ic.nickname.c_str());

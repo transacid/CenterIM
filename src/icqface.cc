@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.125 2002/07/17 12:18:11 konst Exp $
+* $Id: icqface.cc,v 1.126 2002/07/29 14:52:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2151,7 +2151,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'r':
 	case 'R':
-	    if(!ischannel(c))
+	    if(!ischannel(c) && c)
 		face.extk = ACT_RENAME;
 	    break;
 
