@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.7 2004/04/13 21:19:55 konst Exp $
+* $Id: gaduhook.cc,v 1.8 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,7 +94,7 @@ gaduhook::gaduhook(): abstracthook(gadu), flogged(false), sess(0) {
     fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changedetails);
-    fcapabs.insert(hookcapab::ssl);
+//    fcapabs.insert(hookcapab::ssl);
 }
 
 gaduhook::~gaduhook() {
@@ -343,10 +343,10 @@ void gaduhook::setautostatus(imstatus st) {
 imstatus gaduhook::getstatus() const {
     if(!sess) return offline;
 
-    if(GG_S_A(sess->status)) return available; else
     if(GG_S_NA(sess->status)) return notavail; else
     if(GG_S_B(sess->status)) return occupied; else
-    if(GG_S_I(sess->status)) return invisible;
+    if(GG_S_I(sess->status)) return invisible; else
+	return available;
 }
 
 void gaduhook::requestinfo(const imcontact &c) {

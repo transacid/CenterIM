@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.76 2004/03/07 13:44:41 konst Exp $
+* $Id: msnhook.cc,v 1.77 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,14 +36,14 @@
 #include "connwrap.h"
 #include "icqgroups.h"
 
-#include "msn_bittybits.h"
-
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+
+#define PERIOD_PING     60
 
 msnhook mhook;
 
@@ -99,7 +99,7 @@ static const char *stat2name(imstatus st) {
 
 // ----------------------------------------------------------------------------
 
-msnhook::msnhook(): abstracthook(msn) {
+msnhook::msnhook(): abstracthook(msn), conn(0) {
     ourstatus = offline;
     fonline = false;
 
@@ -122,19 +122,30 @@ void msnhook::connect() {
     readinfo = flogged = false;
     fonline = true;
 
-    msn_init(&conn, nicknormalize(account.nickname).c_str(), account.password.c_str());
-    msn_connect(&conn, account.server.c_str(), account.port);
+    if(conn) delete conn;
 
-    if(conn.ready) {
-	fonline = flogged = true;
+    try {
+	conn = new MSN::NotificationServerConnection(nicknormalize(account.nickname), account.password);
+	conn->connect(account.server, account.port);
+    } catch(...) {
     }
 }
 
 void msnhook::disconnect() {
-    msn_clean_up(&conn);
+    delete conn;
+    conn = 0;
 }
 
 void msnhook::exectimers() {
+    if(logged()) {
+	if(timer_current-timer_ping > PERIOD_PING) {
+	    try {
+		conn->sendPing();
+		timer_ping = timer_current;
+	    } catch(...) {
+	    }
+	}
+    }
 }
 
 void msnhook::main() {
@@ -142,22 +153,34 @@ void msnhook::main() {
     fd_set rs, ws, es;
     struct timeval tv;
     int hsock = 0;
+    MSN::Connection *c;
 
     getsockets(rs, ws, es, hsock);
     tv.tv_sec = tv.tv_usec = 0;
 
-    if(select(hsock+1, &rs, &ws, &es, &tv) > 0) {
-	for(i = rfds.begin(); i != rfds.end(); ++i)
-	    if(FD_ISSET(*i, &rs)) {
-		msn_handle_incoming(*i, 1, 0);
-		return;
-	    }
+    try {
+	if(select(hsock+1, &rs, &ws, &es, &tv) > 0) {
+	    for(i = rfds.begin(); i != rfds.end(); ++i)
+		if(FD_ISSET(*i, &rs)) {
+		    c = conn->connectionWithSocket(*i);
+		    c->dataArrivedOnSocket();
+		    return;
+		}
 
-	for(i = wfds.begin(); i != wfds.end(); ++i)
-	    if(FD_ISSET(*i, &ws)) {
-		msn_handle_incoming(*i, 0, 1);
-		return;
-	    }
+	    for(i = wfds.begin(); i != wfds.end(); ++i)
+		if(FD_ISSET(*i, &ws)) {
+		    c = conn->connectionWithSocket(*i);
+
+		    if(!c->isConnected()) {
+			c->socketConnectionCompleted();
+		    } else {
+			c->socketIsWritable();
+		    }
+
+		    return;
+		}
+	}
+    } catch(...) {
     }
 }
 
@@ -223,15 +246,15 @@ bool msnhook::send(const imevent &ev) {
 
 	for(ir = files.begin(); ir != files.end(); ++ir) {
 	    imfile::record r;
-	    invitation_ftp *p;
+	    MSN::FileTransferInvitation *p;
 
 	    r.fname = ir->fname;
 	    r.size = ir->size;
 
 	    imfile fr(ev.getcontact(), imevent::outgoing, "", vector<imfile::record>(1, r));
-
+/*
 	    if(p = msn_filetrans_send(&conn, ir->fname.c_str()))
-		transferinfo[fr].first = p;
+		transferinfo[fr].first = p;*/
 	}
 
 	return true;
@@ -242,7 +265,13 @@ bool msnhook::send(const imevent &ev) {
 
     if(c)
     if(c->getstatus() != offline || !c->inlist()) {
-	msn_send_IM(&conn, nicknormalize(ev.getcontact().nickname).c_str(), text.c_str());
+	string rcpt = nicknormalize(ev.getcontact().nickname);
+
+	try {
+	    conn->sendMessage(rcpt, text);
+	} catch(...) {
+	}
+
 	return true;
     }
 
@@ -286,10 +315,13 @@ void msnhook::sendnewuser(const imcontact &ic) {
 
 	gid = findgroup(ic, gname);
 
-	if(gid != -1) {
-	    msn_add_to_list(&conn, "FL", nicknormalize(ic.nickname).c_str(), gid);
-	} else {
-	    msn_add_group(&conn, gname.c_str());
+	try {
+	    if(gid != -1) {
+		conn->addToGroup(nicknormalize(ic.nickname), gid);
+	    } else {
+		conn->addGroup(gname);
+	    }
+	} catch(...) {
 	}
     }
 
@@ -298,11 +330,14 @@ void msnhook::sendnewuser(const imcontact &ic) {
 
 void msnhook::setautostatus(imstatus st) {
     if(st != offline) {
-	if(getstatus() == offline) {
+	if(!logged()) {
 	    connect();
 	} else {
 	    logger.putourstatus(msn, ourstatus, st);
-	    msn_set_state(&conn, stat2name(ourstatus = st));
+	    try {
+		conn->setState(stat2name(ourstatus = st));
+	    } catch(...) {
+	    }
 	}
     } else {
 	if(getstatus() != offline) {
@@ -328,18 +363,19 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 	if(report)
 	    log(logContactRemove, ic.nickname.c_str());
 
-	msn_del_from_list(&conn, "FL",
-	    nicknormalize(ic.nickname).c_str(),
-	    ib->gid);
+	try {
+	    conn->removeFromGroup(nicknormalize(ic.nickname), ib->gid);
 
-	for(i = 0, found = false; i < clist.count && !found; i++) {
-	    icqcontact *c = (icqcontact *) clist.at(i);
-	    found = c->getdesc().pname == msn
-		&& groups.getname(c->getgroupid()) == mgroups[ib->gid];
+	    for(i = 0, found = false; i < clist.count && !found; i++) {
+		icqcontact *c = (icqcontact *) clist.at(i);
+		found = c->getdesc().pname == msn
+		    && groups.getname(c->getgroupid()) == mgroups[ib->gid];
+	    }
+
+	    if(!found)
+		conn->removeGroup(ib->gid);
+	} catch(...) {
 	}
-
-	if(!found)
-	    msn_del_group(&conn, ib->gid);
     }
 }
 
@@ -403,7 +439,10 @@ vector<icqcontact *> msnhook::getneedsync() {
 }
 
 void msnhook::sendupdateuserinfo(const icqcontact &c) {
-    msn_set_friendlyname(&conn, c.getnick().c_str());
+    try {
+	conn->setFriendlyName(c.getnick());
+    } catch(...) {
+    }
 }
 
 void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool forcefetch) {
@@ -440,17 +479,17 @@ void msnhook::replytransfer(const imfile &fr, bool accept, const string &localpa
 	    transferinfo[fr].second += "/";
 
 	transferinfo[fr].second += justfname(fr.getfiles().begin()->fname);
-	msn_filetrans_accept(transferinfo[fr].first, transferinfo[fr].second.c_str());
+//        msn_filetrans_accept(transferinfo[fr].first, transferinfo[fr].second.c_str());
 
     } else {
-	msn_filetrans_reject(transferinfo[fr].first);
+//        msn_filetrans_reject(transferinfo[fr].first);
 	transferinfo.erase(fr);
 
     }
 }
 
 void msnhook::aborttransfer(const imfile &fr) {
-    msn_filetrans_reject(transferinfo[fr].first);
+//    msn_filetrans_reject(transferinfo[fr].first);
 
     face.transferupdate(fr.getfiles().begin()->fname, fr,
 	icqface::tsCancel, 0, 0);
@@ -458,8 +497,8 @@ void msnhook::aborttransfer(const imfile &fr) {
     transferinfo.erase(fr);
 }
 
-bool msnhook::getfevent(invitation_ftp *fhandle, imfile &fr) {
-    map<imfile, pair<invitation_ftp *, string> >::const_iterator i = transferinfo.begin();
+bool msnhook::getfevent(MSN::FileTransferInvitation *fhandle, imfile &fr) {
+    map<imfile, pair<MSN::FileTransferInvitation *, string> >::const_iterator i = transferinfo.begin();
 
     while(i != transferinfo.end()) {
 	if(i->second.first == fhandle) {
@@ -478,7 +517,11 @@ void msnhook::updatecontact(icqcontact *c) {
 
     if(ib != slst["FL"].end() && logged() && conf.getgroupmode() != icqconf::nogroups)
     if(mhook.findgroup(c->getdesc(), gname) != ib->gid) {
-	msn_del_from_list(&conn, "FL", nick.c_str());
+	try {
+	    conn->removeFromList("FL", nick.c_str());
+	} catch(...) {
+	}
+
 	sendnewuser(c->getdesc());
     }
 }
@@ -488,7 +531,11 @@ void msnhook::renamegroup(const string &oldname, const string &newname) {
 	map<int, string>::const_iterator im = mgroups.begin();
 	while(im != mgroups.end()) {
 	    if(im->second == oldname) {
-		msn_rename_group(&conn, im->first, newname.c_str());
+		try {
+		    conn->renameGroup(im->first, newname);
+		} catch(...) {
+		}
+
 		break;
 	    }
 	    ++im;
@@ -504,19 +551,19 @@ static void log(const string &s) {
 #endif
 }
 
-int ext_debug(char *str) {
-    log(str);
-    return 0;
+void MSN::ext::log(int writing, const char* buf) {
+    string pref = writing ? "OUT" : "IN";
+    ::log((string) "[" + pref + "] " + buf);
 }
 
-void ext_register_sock(int s, int reading, int writing) {
-    log("ext_register_sock");
+void MSN::ext::registerSocket(int s, int reading, int writing) {
+    ::log("MSN::ext::registerSocket");
     if(reading) mhook.rfds.push_back(s);
     if(writing) mhook.wfds.push_back(s);
 }
 
-void ext_unregister_sock(int s) {
-    log("ext_unregister_sock");
+void MSN::ext::unregisterSocket(int s) {
+    ::log("MSN::ext::unregisterSocket");
     vector<int>::iterator i;
 
     i = find(mhook.rfds.begin(), mhook.rfds.end(), s);
@@ -526,101 +573,100 @@ void ext_unregister_sock(int s) {
     if(i != mhook.wfds.end()) mhook.wfds.erase(i);
 }
 
-void ext_got_friendlyname(msnconn * conn, const char * friendlyname) {
-    log("ext_got_friendlyname");
-
-    if(friendlyname)
-    if(strlen(friendlyname))
+void MSN::ext::gotFriendlyName(MSN::Connection * conn, string friendlyname) {
+    ::log("MSN::ext::gotFriendlyName");
+    if(!friendlyname.empty())
 	mhook.friendlynicks[conf.getourid(msn).nickname] = friendlyname;
 }
 
-void ext_got_info(msnconn *conn, syncinfo *info) {
-    log("ext_got_info");
-
-    userdata *ud;
-    llist *lst, *pl;
+void MSN::ext::gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data) {
+    ::log("MSN::ext::gotBuddyListInfo");
     imcontact ic;
     bool found;
 
     mhook.readinfo = true;
 
-    for(pl = info->grp, mhook.mgroups.clear(); pl; pl = pl->next) {
-	groupdata *gd = (groupdata *) pl->data;
-	mhook.mgroups[gd->number] = gd->title;
+    std::map<int, MSN::Group>::iterator ig;
+
+    for(ig = data->groups.begin(); ig != data->groups.end(); ig++) {
+	mhook.mgroups[ig->second.groupID] = ig->second.name;
     }
 
-    for(lst = info->fl; lst; lst = lst->next) {
-	ud = (userdata *) lst->data;
+    std::list<MSN::Buddy> &lst = data->forwardList;
+    std::list<MSN::Buddy>::iterator i;
 
-	mhook.slst["FL"].push_back(msnbuddy(ud->username, ud->friendlyname, ud->grp));
+    for(i = lst.begin(); i != lst.end(); i++) {
+	int gid = 0;
+	if(!i->groups.empty()) gid = (*i->groups.begin())->groupID;
+	mhook.slst["FL"].push_back(msnbuddy(i->userName, i->friendlyName, gid));
 
-	ic = imcontact(nicktodisp(ud->username), msn);
+	ic = imcontact(nicktodisp(i->userName), msn);
 	icqcontact *c = clist.get(ic);
 	if(!c) c = clist.addnew(ic, false);
 
 	icqcontact::basicinfo bi = c->getbasicinfo();
 	icqcontact::workinfo wi = c->getworkinfo();
 
-	for(pl = ud->phone; pl; pl = pl->next) {
-	    phonedata *pd = (phonedata *) pl->data;
-	    string title = pd->title ? pd->title : "";
-
-	    if(pd->number)
-	    if(strlen(pd->number)) {
-		if(title == "PHH") bi.phone = pd->number; else
-		if(title == "PHW") wi.phone = pd->number; else
-		if(title == "PHM") bi.cellular = pd->number;
-	    }
+	list<MSN::Buddy::PhoneNumber>::iterator ip = i->phoneNumbers.begin();
+	for(; ip != i->phoneNumbers.end(); ip++) {
+	    if(ip->title == "PHH") bi.phone = ip->number; else
+	    if(ip->title == "PHW") wi.phone = ip->number; else
+	    if(ip->title == "PHM") bi.cellular = ip->number;
 	}
 
 	c->setbasicinfo(bi);
 	c->setworkinfo(wi);
 
-	for(found = false, pl = info->grp; pl && !found; pl = pl->next) {
-	    groupdata *gd = (groupdata *) pl->data;
-	    found = gd->number == ud->grp;
-	    if(found) clist.updateEntry(ic, gd->title);
+	for(found = false, ig = data->groups.begin(); ig != data->groups.end() && !found; ++ig) {
+	    found = ig->second.groupID == gid;
+	    if(found) clist.updateEntry(ic, ig->second.name);
 	}
     }
 
-    for(lst = info->rl; lst; lst = lst->next) {
-	ud = (userdata *) lst->data;
-	mhook.slst["RL"].push_back(msnbuddy(ud->username, ud->friendlyname));
-    }
+    for(lst = data->reverseList, i = lst.begin(); i != lst.end(); ++i)
+	mhook.slst["RL"].push_back(msnbuddy(i->userName, i->friendlyName));
 
-    mhook.setautostatus(mhook.ourstatus);
     mhook.readinfo = false;
+    mhook.flogged = true;
+
+    mhook.setautostatus(mhook.manualstatus);
+    mhook.timer_ping = timer_current;
+    mhook.log(abstracthook::logLogged);
+    face.update();
 }
 
-void ext_latest_serial(msnconn * conn, int serial) {
-    log("ext_latest_serial");
+void MSN::ext::gotLatestListSerial(MSN::Connection * conn, int serial) {
+    ::log("MSN::ext::gotLatestListSerial");
 }
 
-void ext_got_GTC(msnconn * conn, char c) {
-    log("ext_got_GTC");
+void MSN::ext::gotGTC(MSN::Connection * conn, char c) {
+    ::log("MSN::ext::gotGTC");
 }
 
-void ext_got_BLP(msnconn * conn, char c) {
-    log("ext_got_BLP");
+void MSN::ext::gotBLP(MSN::Connection * conn, char c) {
+    ::log("MSN::ext::gotBLP");
 }
 
-void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname) {
-    log("ext_new_RL_entry");
-    msn_add_to_list(&mhook.conn, "AL", username);
+void MSN::ext::gotNewReverseListEntry(MSN::Connection * conn, string username, string friendlyname) {
+    ::log("MSN::ext::gotNewReverseListEntry");
+
+    try {
+	mhook.conn->addToList("AL", username);
+    } catch(...) {
+    }
 
     imcontact ic(nicktodisp(username), msn);
     mhook.checkinlist(ic);
     em.store(imnotification(ic, _("The user has added you to his/her contact list")));
 }
 
-void ext_new_list_entry(msnconn *conn, const char *lst, const char *username, const char *friendlyname, int gid) {
-    log("ext_new_list_entry");
-    mhook.slst[lst].push_back(msnbuddy(username, friendlyname, gid));
+void MSN::ext::addedListEntry(MSN::Connection * conn, string lst, string username, int groupID) {
+    ::log("MSN::ext::addedListEntry");
+    mhook.slst[lst].push_back(msnbuddy(username, "", groupID));
 }
 
-void ext_del_list_entry(msnconn *conn, const char *lst, const char *username) {
-    log("ext_del_list_entry");
-
+void MSN::ext::removedListEntry(MSN::Connection * conn, string lst, string username, int groupID) {
+    ::log("MSN::ext::removedListEntry");
     vector<msnbuddy>::iterator i = mhook.slst[lst].begin();
     while(i != mhook.slst[lst].end()) {
 	if(i->nick == username) {
@@ -632,13 +678,12 @@ void ext_del_list_entry(msnconn *conn, const char *lst, const char *username) {
     }
 }
 
-void ext_show_error(msnconn * conn, const char * msg) {
-    log("ext_show_error");
-    log(msg);
+void MSN::ext::showError(MSN::Connection * conn, string msg) {
+    ::log(msg);
 }
 
-void ext_buddy_set(msnconn * conn, const char * buddy, const char * friendlyname, const char * status) {
-    log("ext_buddy_set");
+void MSN::ext::buddyChangedStatus(MSN::Connection * conn, string buddy, string friendlyname, string state) {
+    ::log("MSN::ext::buddyChangedStatus");
     imcontact ic(nicktodisp(buddy), msn);
     icqcontact *c = clist.get(ic);
     bool forcefetch;
@@ -646,73 +691,69 @@ void ext_buddy_set(msnconn * conn, const char * buddy, const char * friendlyname
     if(forcefetch = !c)
 	c = clist.addnew(ic, false);
 
-    if(friendlyname)
+    if(!friendlyname.empty())
 	mhook.checkfriendly(c, friendlyname, forcefetch);
 
-    logger.putonline(ic, c->getstatus(), msn2imstatus(status));
-    c->setstatus(msn2imstatus(status));
+    logger.putonline(ic, c->getstatus(), msn2imstatus(state));
+    c->setstatus(msn2imstatus(state));
 }
 
-void ext_buddy_offline(msnconn * conn, const char * buddy) {
-    log("ext_buddy_offline");
-    ext_buddy_set(conn, buddy, 0, "FLN");
+void MSN::ext::buddyOffline(MSN::Connection * conn, string buddy) {
+    buddyChangedStatus(conn, buddy, "", "FLN");
 }
 
-void ext_got_SB(msnconn * conn, void * tag) {
-    log("ext_got_SB");
+void MSN::ext::gotSwitchboard(MSN::Connection * conn, void * tag) {
+    ::log("MSN::ext::gotSwitchboard");
 }
 
-void ext_user_joined(msnconn *conn, const char *username, const char *friendlyname, int is_initial) {
-    log("ext_user_joined");
+void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, string username, string friendlyname, int is_initial) {
+    ::log("MSN::ext::buddyJoinedConversation");
 }
 
-void ext_user_left(msnconn *conn, const char *username) {
-    log("ext_user_left");
+void MSN::ext::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, string username) {
+    ::log("MSN::ext::buddyLeftConversation");
 }
 
-void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, message *msg) {
-    log("ext_got_IM");
+void MSN::ext::gotInstantMessage(MSN::SwitchboardServerConnection * conn, string username, string friendlyname, MSN::Message * msg) {
+    ::log("MSN::ext::gotInstantMessage");
     imcontact ic(nicktodisp(username), msn);
 
     mhook.checkinlist(ic);
 
-    string text = mhook.rusconv("uk", msg->body);
+    string text = mhook.rusconv("uk", msg->getBody());
     em.store(immessage(ic, imevent::incoming, text));
 }
 
-void ext_IM_failed(msnconn *conn) {
-    log("ext_IM_failed");
+void MSN::ext::failedSendingMessage(MSN::Connection * conn) {
+    ::log("MSN::ext::failedSendingMessage");
 }
 
-void ext_typing_user(msnconn *conn, const char *username, const char *friendlyname) {
-    log("ext_typing_user");
+void MSN::ext::buddyTyping(MSN::Connection * conn, string username, string friendlyname) {
+    ::log("MSN::ext::buddyTyping");
     icqcontact *c = clist.get(imcontact(nicktodisp(username), msn));
     if(c) c->setlasttyping(timer_current);
 }
 
-void ext_initial_email(msnconn *conn, int unread_inbox, int unread_folders) {
-    log("ext_initial_email");
-
+void MSN::ext::gotInitialEmailNotification(MSN::Connection * conn, int unread_inbox, int unread_folders) {
+    ::log("MSN::ext::gotInitialEmailNotification");
     face.log(_("+ [msn] unread e-mail: %d in inbox, %d in folders"),
 	unread_inbox, unread_folders);
 }
 
-void ext_new_mail_arrived(msnconn *conn, const char *from, const char *subject) {
-    log("ext_new_mail_arrived");
-
-    face.log(_("+ [msn] e-mail from %s, %s"), from, subject);
+void MSN::ext::gotNewEmailNotification(MSN::Connection * conn, string from, string subject) {
+    ::log("MSN::ext::gotNewEmailNotification");
+    face.log(_("+ [msn] e-mail from %s, %s"), from.c_str(), subject.c_str());
     clist.get(contactroot)->playsound(imevent::email);
 }
 
-void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv) {
-    log("ext_filetrans_invite");
-
+void MSN::ext::gotFileTransferInvitation(MSN::Connection * conn, string username, string friendlyname, MSN::FileTransferInvitation * inv) {
+    ::log("MSN::ext::gotFileTransferInvitation");
     if(!mhook.fcapabs.count(hookcapab::files))
 	return;
 
     imfile::record r;
-    r.fname = inv->filename;
-    r.size = inv->filesize;
+    r.fname = inv->fileName;
+    r.size = inv->fileSize;
 
     imcontact ic(nicktodisp(username), msn);
     mhook.checkinlist(ic);
@@ -722,21 +763,21 @@ void ext_filetrans_invite(msnconn *conn, const char *username, const char *frien
     mhook.transferinfo[fr].first = inv;
     em.store(fr);
 
-    face.transferupdate(inv->filename, fr, icqface::tsInit, inv->filesize, 0);
+    face.transferupdate(inv->fileName, fr, icqface::tsInit, inv->fileSize, 0);
 }
 
-void ext_filetrans_progress(invitation_ftp *inv, const char *status, unsigned long sent, unsigned long total) {
-    log("ext_filetrans_progress");
+void MSN::ext::fileTransferProgress(MSN::FileTransferInvitation * inv, string status, unsigned long recv, unsigned long total) {
+    ::log("MSN::ext::fileTransferProgress");
     imfile fr;
 
     if(mhook.getfevent(inv, fr)) {
 	face.transferupdate(fr.getfiles().begin()->fname, fr,
-	    icqface::tsProgress, total, sent);
+	    icqface::tsProgress, total, recv);
     }
 }
 
-void ext_filetrans_failed(invitation_ftp *inv, int error, const char *message) {
-    log("ext_filetrans_failed");
+void MSN::ext::fileTransferFailed(MSN::FileTransferInvitation * inv, int error, string message) {
+    ::log("MSN::ext::fileTransferFailed");
     imfile fr;
 
     if(mhook.getfevent(inv, fr)) {
@@ -745,8 +786,8 @@ void ext_filetrans_failed(invitation_ftp *inv, int error, const char *message) {
     }
 }
 
-void ext_filetrans_success(invitation_ftp *inv) {
-    log("ext_filetrans_success");
+void MSN::ext::fileTransferSucceeded(MSN::FileTransferInvitation * inv) {
+    ::log("MSN::ext::fileTransferSucceeded");
     imfile fr;
 
     if(mhook.getfevent(inv, fr)) {
@@ -755,21 +796,16 @@ void ext_filetrans_success(invitation_ftp *inv) {
     }
 }
 
-void ext_new_connection(msnconn *conn) {
-    log("ext_new_connection");
-    if(conn->type == CONN_NS) {
-	msn_sync_lists(conn, 0);
-	logger.putourstatus(msn, offline, mhook.ourstatus = mhook.manualstatus);
-	mhook.flogged = true;
-	mhook.log(abstracthook::logLogged);
-	face.update();
-    }
+void MSN::ext::gotNewConnection(MSN::Connection * conn) {
+    ::log("MSN::ext::gotNewConnection");
+    if(dynamic_cast<MSN::NotificationServerConnection *>(conn))
+	dynamic_cast<MSN::NotificationServerConnection *>(conn)->synchronizeLists();
 }
 
-void ext_closing_connection(msnconn *conn) {
-    log("ext_closing_connection");
+void MSN::ext::closingConnection(MSN::Connection * conn) {
+    ::log("MSN::ext::closingConnection");
 
-    if(conn->type == CONN_NS) {
+    if(conn == mhook.conn) {
 	mhook.rfds.clear();
 	mhook.wfds.clear();
 	logger.putourstatus(msn, mhook.getstatus(), mhook.ourstatus = offline);
@@ -781,17 +817,18 @@ void ext_closing_connection(msnconn *conn) {
     }
 }
 
-void ext_changed_state(msnconn *conn, const char *state) {
-    log("ext_changed_state");
+void MSN::ext::changedStatus(MSN::Connection * conn, string state) {
+    ::log("MSN::ext::changedStatus");
 }
 
-int ext_do_connect_socket(const char *hostname, int port, int ssl) {
+int MSN::ext::connectToServer(string server, int port, bool *connected) {
+    ::log("MSN::ext::connectToServer");
     struct sockaddr_in sa;
     struct hostent *hp;
     int a, s;
     string msgerr = _("+ [msn] cannot connect: ");
 
-    hp = gethostbyname(hostname);
+    hp = gethostbyname(server.c_str());
     if(!hp) {
 	face.log(msgerr + _("could not resolve hostname"));
 	errno = ECONNREFUSED;
@@ -806,27 +843,26 @@ int ext_do_connect_socket(const char *hostname, int port, int ssl) {
     if((s = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
 	return -1;
 
-    if(cw_connect(s, (struct sockaddr *) &sa, sizeof(sa), ssl) < 0) {
-	face.log(msgerr + _("verify the hostname and port"));
-	close(s);
-	return -1;
+    int oldfdArgs = fcntl(s, F_GETFL, 0);
+    fcntl(s, F_SETFL, oldfdArgs | O_NONBLOCK);
+
+    if(connect(s,(struct sockaddr *)&sa,sizeof sa) < 0) {
+	if(errno != EINPROGRESS) { 
+	    face.log(msgerr + _("verify the hostname and port"));
+	    close(s);
+	    return -1;
+	}
+
+	*connected = false;
+    } else {
+	*connected = true;
     }
 
     return s;
 }
 
-int ext_connect_socket_ssl(const char *hostname, int port) {
-    log("ext_connect_socket_ssl");
-    return ext_do_connect_socket(hostname, port, 1);
-}
-
-int ext_connect_socket(const char *hostname, int port) {
-    log("ext_connect_socket");
-    return ext_do_connect_socket(hostname, port, 0);
-}
-
-int ext_server_socket(int port) {
-    log("ext_server_socket");
+int MSN::ext::listenOnPort(int port) {
+    ::log("MSN::ext::listenOnPort");
     int s;
     struct sockaddr_in addr;
 
@@ -845,8 +881,8 @@ int ext_server_socket(int port) {
     return s;
 }
 
-char *ext_get_IP() {
-    log("ext_get_IP");
+string MSN::ext::getOurIP() {
+    ::log("MSN::ext::getOurIP");
     struct hostent *hn;
     char buf2[1024];
 
@@ -856,24 +892,22 @@ char *ext_get_IP() {
     return inet_ntoa(*((struct in_addr*) hn->h_addr));
 }
 
-void ext_protocol_log(const char *buf, int readev, int writeev) {
-    if(readev) {
-	log(string("[IN] ") + buf);
-    } else if(writeev) {
-	log(string("[OUT] ") + buf);
-    }
+string MSN::ext::getSecureHTTPProxy() {
+    ::log("MSN::ext::getSecureHTTPProxy");
+    return "";
 }
 
-void ext_new_group(msnconn * conn, const char * name, int id) {
+void MSN::ext::addedGroup(MSN::Connection * conn, string groupName, int groupID) {
+    ::log("MSN::ext::addedGroup");
     int i;
     icqcontact *c;
 
-    mhook.mgroups[id] = name;
+    mhook.mgroups[groupID] = groupName;
 
     vector<icqgroup>::const_iterator ig = groups.begin();
 
     while(ig != groups.end()) {
-	if(ig->getname() == name) {
+	if(ig->getname() == groupName) {
 	    for(i = 0; i < clist.count; i++) {
 		c = (icqcontact *) clist.at(i);
 		if(c->getgroupid() == ig->getid())
@@ -885,12 +919,14 @@ void ext_new_group(msnconn * conn, const char * name, int id) {
     }
 }
 
-void ext_renamed_group(msnconn * conn, const char * name, int id) {
-    mhook.mgroups[id] = name;
+void MSN::ext::renamedGroup(MSN::Connection * conn, int groupID, string newGroupName) {
+    ::log("MSN::ext::renamedGroup");
+    mhook.mgroups[groupID] = newGroupName;
 }
 
-void ext_del_group(msnconn * conn, const char * name, int id) {
-    mhook.mgroups.erase(id);
+void MSN::ext::removedGroup(MSN::Connection * conn, int groupID) {
+    ::log("MSN::ext::removedGroup");
+    mhook.mgroups.erase(groupID);
 }
 
 #endif

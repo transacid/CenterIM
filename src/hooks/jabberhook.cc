@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.70 2004/04/13 10:37:50 konst Exp $
+* $Id: jabberhook.cc,v 1.71 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -150,6 +150,11 @@ void jabberhook::main() {
     xmlnode x, z;
     char *cid;
 
+    if (jc && jc->state == JCONN_STATE_CONNECTING){
+	jab_start(jc);
+	return;
+    }
+    
     jab_poll(jc, 0);
 
     if(jstate == STATE_CONNECTING) {
@@ -183,13 +188,18 @@ void jabberhook::main() {
 
 void jabberhook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
     if(jc) {
-	FD_SET(jc->fd, &rfds);
+	if (jc->cw_state & CW_CONNECT_WANT_READ)
+	    FD_SET(jc->fd, &rfds);
+	else if (jc->cw_state & CW_CONNECT_WANT_WRITE)
+	    FD_SET(jc->fd, &wfds);
+	else
+	    FD_SET(jc->fd, &rfds);
 	hsocket = max(jc->fd, hsocket);
     }
 }
 
 bool jabberhook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
-    if(jc) return FD_ISSET(jc->fd, &rfds);
+    if(jc) return FD_ISSET(jc->fd, &rfds) || FD_ISSET(jc->fd, &wfds);
     return false;
 }
 

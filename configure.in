@@ -108,6 +108,7 @@ LIBS="$LIBS $LIBICONV"
 
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
+AC_CHECK_LIB(curl, curl_easy_init,, [have_curl=no])
 
 AC_CHECK_LIB(ncurses, initscr,,
     [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
@@ -186,8 +187,8 @@ if test "$build_gg" = "yes"; then
 fi
 
 if test "$build_msn" = "yes"; then
-    if test "$with_ssl" = "no"; then
-	AC_MSG_ERROR([MSN cannot be built with SSL support turned off, use --disable-msn])
+    if test "$have_curl" = "no"; then
+	AC_MSG_ERROR([MSN cannot be built without the curl library, use --disable-msn])
     else
 	AC_DEFINE(BUILD_MSN, 1, [build with MSN support])
     fi

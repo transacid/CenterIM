@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.150 2004/04/11 16:32:28 konst Exp $
+* $Id: icqhook.cc,v 1.151 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,8 @@
 
 #include "accountmanager.h"
 #include "eventmanager.h"
+
+#include "src/Capabilities.h"
 
 #define PERIOD_ICQPOLL  5
 #define PERIOD_RESOLVE  10
@@ -995,7 +997,7 @@ void icqhook::renamegroup(const string &oldname, const string &newname) {
 void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
-    time(&timer_poll);
+    timer_poll = timer_current;
     timer_resolve = timer_poll-PERIOD_RESOLVE+3;
 
     logger.putourstatus(icq, offline, manualstatus);
@@ -1064,12 +1066,18 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
 void icqhook::messaged_cb(MessageEvent *ev) {
     imcontact ic;
     time_t t;
+    string text;
 
     ic = imcontact(ev->getContact()->getUIN(), icq);
 
     if(ev->getType() == MessageEvent::Normal) {
 	NormalMessageEvent *r = static_cast<NormalMessageEvent *>(ev);
-	em.store(immessage(ic, imevent::incoming, rusconv("wk", r->getMessage()), r->getTime()));
+
+	text = r->getMessage();
+	if(text.substr(0, 6) == "{\\rtf1")
+	    text = striprtf(text);
+
+	em.store(immessage(ic, imevent::incoming, rusconv("wk", text), r->getTime()));
 
     } else if(ev->getType() == MessageEvent::URL) {
 	URLMessageEvent *r = static_cast<URLMessageEvent *>(ev);

@@ -69,8 +69,6 @@ using namespace std;
 #define PERIOD_ATONCE           5
 #define MAX_ATONCE              10
 
-#define DEFAULT_CHARSET "ISO-8859-1"
-
 /*
 *
 * Several helper routines

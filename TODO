@@ -4,21 +4,50 @@
 *
 */
 
+national chars problems fixed
+
+gg segfault
+
+new cool MSN library by Mark Rowe
+
+jab ssl connection hang fix by iulica
+
+patch from Daniel Lublin (see mail) - keep postponed msgs
+
+icq rtf messages (msg from Sergei Dolmatov) - now both cyrillic and latin chars are seen
+
 /*
 *
 * BUGS
 *
 */
 
-ssl connect hangs
-
 http://www.dotgnu.org/index.rdf
+
+2. При попытке изменить личные данные в jabber, centericq зачем-то лезет
+на jabber.com, в то время, как сервер крутится в локалке и не имеет
+выхода в нет. Прога зависает на "Fetching user details". Все юзера в нем
+локальные. vCard поднят локально тоже.
+ 
+3. Невозможность в jabber добавить юзеров типа
+"jabber.host.com/announce/motd", которые нужны как воздух в случае
+админского логина ;)
 
 /*
 *
 * TODO
 *
 */
+
+msn other users' joins to the conversation
+
+another login detected -> don't connect anymore
+
+apply http://centericq.de/phpBB2/viewtopic.php?t=280
+
+local and remote charsets. ability to specify only one
+
+LJ RSS with auth so that friends-only records can also be seen
 
 commandline user-add, sending to non-list users
 
@@ -100,4 +129,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.508 2004/04/13 21:19:53 konst Exp $
+$Id: TODO,v 1.509 2004/06/10 19:13:12 konst Exp $

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.106 2004/03/22 21:10:18 konst Exp $
+* $Id: yahoohook.cc,v 1.107 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,7 @@
 #include "eventmanager.h"
 
 #include "yahoo2.h"
+#include "connwrap.h"
 
 #include <netdb.h>
 #include <sys/socket.h>
@@ -1045,7 +1046,7 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
     int f = fcntl(servfd, F_GETFL);
     fcntl(servfd, F_SETFL, f | O_NONBLOCK);
 
-    error = ::connect(servfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
+    error = cw_connect(servfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr), 0);
 
     if(!error) {
 	callback(servfd, 0, data);

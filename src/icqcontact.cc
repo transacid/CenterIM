@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.95 2004/04/11 16:32:27 konst Exp $
+* $Id: icqcontact.cc,v 1.96 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -136,6 +136,7 @@ void icqcontact::save() {
     string lrname = getdirname() + "lastread";
     string infoname = getdirname() + "info";
     string aboutname = getdirname() + "about";
+    string postponedname = getdirname() + "postponed";
 
     string dname = getdirname();
     dname.erase(dname.size()-1);
@@ -143,7 +144,8 @@ void icqcontact::save() {
     modified = modified
 	|| access(lrname.c_str(), F_OK)
 	|| access(infoname.c_str(), F_OK)
-	|| access(aboutname.c_str(), F_OK);
+	|| access(aboutname.c_str(), F_OK)
+	|| access(postponedname.c_str(), F_OK);
 
     if(modified && conf.enoughdiskspace()) {
 	mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
@@ -222,6 +224,13 @@ void icqcontact::save() {
 	    f.open(aboutname.c_str());
 	    if(f.is_open()) {
 		f << about;
+		f.close();
+		f.clear();
+	    }
+
+	    f.open(postponedname.c_str());
+	    if(f.is_open()) {
+		f << postponed;
 		f.close();
 		f.clear();
 	    }
@@ -321,6 +330,15 @@ void icqcontact::load() {
 	    freads(f, buf, 512);
 	    if(about.size()) about += '\n';
 	    about += buf;
+	}
+	fclose(f);
+    }
+
+    if(f = fopen((fn = tname + "/postponed").c_str(), "r")) {
+	while(!feof(f)) {
+	    freads(f, buf, 512);
+	    if(postponed.size()) postponed += '\n';
+	    postponed += buf;
 	}
 	fclose(f);
     }

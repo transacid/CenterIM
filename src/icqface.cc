@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.222 2004/04/11 16:32:28 konst Exp $
+* $Id: icqface.cc,v 1.223 2004/06/10 19:13:13 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -675,13 +675,14 @@ void icqface::fillcontactlist() {
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
 		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, "%s%s ", c->hasevents() ? "#" : " ", dnick.c_str());
+		c, "%s%s%s ", c->hasevents() ? "#" : " ",
+		c->getpostponed().empty() ? "" : ">", dnick.c_str());
 
 	} else {
-	    char *fmt = "%s[%c] %s ";
+	    char *fmt = "%s[%c]%s%s ";
 
-	    if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c> %s "; else
-	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c} %s ";
+	    if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
+	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c}%s%s ";
 
 	    char shortstatus = c->getshortstatus();
 
@@ -692,7 +693,8 @@ void icqface::fillcontactlist() {
 
 	    mcontacts->addleaff(nnode,
 		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, fmt, c->hasevents() ? "#" : " ", shortstatus, dnick.c_str());
+		c, fmt, c->hasevents() ? "#" : " ", shortstatus,
+		c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
 	}
     }
