@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.69 2002/01/22 11:59:16 konst Exp $
+* $Id: icqface.cc,v 1.70 2002/01/22 13:53:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -393,6 +393,9 @@ void icqface::fillcontactlist() {
 			    n = 0;
 			}
 			break;
+		    default:
+			n = 0;
+			break;
 		}
 
 		if(n != -1) {
@@ -418,7 +421,8 @@ void icqface::fillcontactlist() {
 		    nonline = nnode;
 		}
 
-		if(conf.getgroupmode() == icqconf::group2) {
+		if(conf.getgroupmode() == icqconf::group2)
+		if(sc != '!') {
 		    ADDGROUP(nonline);
 		    nnode = ngroup;
 		}
