@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.17 2002/10/06 12:15:12 konst Exp $
+* $Id: cmenus.cc,v 1.18 2003/07/22 21:50:35 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -454,8 +454,10 @@ int horizontalmenu::menu_otherkeys(verticalmenu &ref, int k) {
 	case KEY_LEFT  : return HM_LEFT;
 	case KEY_F(10) : return HM_CLOSE;
 	default:
-	    currenthmenu->finished = currenthmenu->otherkeys(*currenthmenu, k);
-	    return currenthmenu->finished ? 0 : -1;
+	    if(currenthmenu->otherkeys) {
+		currenthmenu->finished = currenthmenu->otherkeys(*currenthmenu, k);
+		return currenthmenu->finished ? 0 : -1;
+	    }
     }
 
     return -1;
