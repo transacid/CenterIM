@@ -164,6 +164,16 @@ struct yahoo_data {
 
 	char  *rawbuddylist;
 	char  *ignorelist;
+
+	int   lsearch_type;
+	char  *lsearch_text;
+	int   lsearch_gender;
+	int   lsearch_agerange;
+	int   lsearch_photo;
+	int   lsearch_yahoo_only;
+	int   lsearch_nstart;
+	int   lsearch_nfound;
+	int   lsearch_ntotal;
 };
 
 struct yab {
@@ -187,8 +197,8 @@ struct yahoo_buddy {
 
 enum yahoo_search_type {
 	YAHOO_SEARCH_KEYWORD = 0,
-	YAHOO_SEARCH_NAME,
-	YAHOO_SEARCH_YID
+	YAHOO_SEARCH_YID,
+	YAHOO_SEARCH_NAME
 };
 
 enum yahoo_search_gender {
@@ -202,7 +212,7 @@ enum yahoo_search_agerange {
 };
 
 struct yahoo_search_result {
-	int found, total;
+	int found, start, total;
 	YList *contacts;
 };
 

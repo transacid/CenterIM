@@ -363,6 +363,7 @@ static void yahoo_free_data(struct yahoo_data *yd)
 	FREE(yd->cookie_c);
 	FREE(yd->login_cookie);
 	FREE(yd->login_id);
+	FREE(yd->lsearch_text);
 
 	yahoo_free_buddies(yd->buddies);
 	yahoo_free_buddies(yd->ignore);
@@ -2710,12 +2711,12 @@ int yahoo_write_ready(int id, int fd, void *data)
 
 static void yahoo_process_pager_connection(struct yahoo_input_data *yid, int over)
 {
-	if(over)
-	    return;
-
 	struct yahoo_packet *pkt;
 	struct yahoo_data *yd = yid->yd;
 	int id = yd->client_id;
+
+	if(over)
+	    return;
 
 	while (find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER) 
 			&& (pkt = yahoo_getdata(yid)) != NULL) {
@@ -2798,8 +2799,9 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 	    p++;
 	    n = atoi(p);
 	    switch(k) {
-		case 0: yr->found = n; break;
-		case 3: yr->total = n; break;
+		case 0: yr->found = yid->yd->lsearch_nfound = n; break;
+		case 2: yr->start = yid->yd->lsearch_nstart = n; break;
+		case 3: yr->total = yid->yd->lsearch_ntotal = n; break;
 	    }
 	}
 
@@ -2809,7 +2811,7 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 	    cp = p;
 	    np = strchr(p, 4);
 
-	    if(!np) np = p+strlen(p)+1;
+	    if(!np) break;
 	    *np = 0;
 	    p = np+1;
 
@@ -2827,7 +2829,7 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 		    break;
 		case 3: yct->gender = cp; break;
 		case 4: yct->age = atoi(cp); break;
-		case 5: yct->location = cp; k = 0; break;
+		case 5: if(cp != "\005") yct->location = cp; k = 0; break;
 	    }
 	}
     }
@@ -3968,7 +3970,7 @@ void yahoo_webcam_invite(int id, const char *who)
 	yahoo_packet_free(pkt);
 }
 
-void yahoo_search(int id, int t, const char *text, int g, int ar, int photos, int yahoo_only)
+static void yahoo_search_internal(int id, int t, const char *text, int g, int ar, int photo, int yahoo_only, int startpos, int total)
 {
 	struct yahoo_data *yd = find_conn_by_id(id);
 	struct yahoo_input_data *yid;
@@ -3982,11 +3984,51 @@ void yahoo_search(int id, int t, const char *text, int g, int ar, int photos, in
 	yid->yd = yd;
 	yid->type = YAHOO_CONNECTION_SEARCH;
 
-	snprintf(url, 1024, "http://members.yahoo.com/interests?.oc=m&.kw=%s&.sb=0&.g=%d&.ar=0&.pg=y", text, g);
+	/*
+	age range
+	.ar=1 - 13-18, 2 - 18-25, 3 - 25-35, 4 - 35-50, 5 - 50-70, 6 - 70+
+	*/
+
+	snprintf(buff, sizeof(buff), "&.sq=%20&.tt=%d&.ss=%d", total, startpos);
+	snprintf(url, 1024, "http://members.yahoo.com/interests?.oc=m&.kw=%s&.sb=%d&.g=%d&.ar=0%s%s%s",
+	    text, t, g, photo ? "&.p=y" : "", yahoo_only ? "&.pg=y" : "",
+	    startpos ? buff : "");
+
 	snprintf(buff, sizeof(buff), "Y=%s; T=%s", yd->cookie_y, yd->cookie_t);
 
 	inputs = y_list_prepend(inputs, yid);
 	yahoo_http_get(yid->yd->client_id, url, buff, _yahoo_http_connected, yid);
+}
+
+void yahoo_search(int id, int t, const char *text, int g, int ar, int photo, int yahoo_only)
+{
+	struct yahoo_data *yd = find_conn_by_id(id);
+
+	if(!yd)
+	    return;
+
+	FREE(yd->lsearch_text);
+	yd->lsearch_type = t;
+	yd->lsearch_text = strdup(text);
+	yd->lsearch_gender = g;
+	yd->lsearch_agerange = ar;
+	yd->lsearch_photo = photo;
+	yd->lsearch_yahoo_only = yahoo_only;
+
+	yahoo_search_internal(id, t, text, g, ar, photo, yahoo_only, 0, 0);
+}
+
+void yahoo_search_again(int id)
+{
+	struct yahoo_data *yd = find_conn_by_id(id);
+
+	if(!yd)
+	    return;
+
+	yahoo_search_internal(id, yd->lsearch_type, yd->lsearch_text,
+	    yd->lsearch_gender, yd->lsearch_agerange, yd->lsearch_photo,
+	    yd->lsearch_yahoo_only, yd->lsearch_nstart+yd->lsearch_nfound,
+	    yd->lsearch_ntotal);
 }
 
 struct send_file_data {

@@ -126,7 +126,9 @@ void yahoo_send_file(int id, const char *who, const char *msg, const char *name,
 		yahoo_get_fd_callback callback, void *data);
 
 void yahoo_search(int id, int t, const char *text, int g, int ar,
-		int photos, int yahoo_only);
+		int photo, int yahoo_only);
+
+void yahoo_search_again(int id);
 
 /* returns a socket fd to a url for downloading a file. */
 void yahoo_get_url_handle(int id, const char *url, 
