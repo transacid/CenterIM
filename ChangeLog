@@ -961,3 +961,23 @@ IRC search only by e-mail without channel specification was added.
 
 A segfault was fixed in the MSN part. It happened when a hotmail box was
 cleared entirely through their web interface.
+
+4.7.7
+-----
+
+Centericq now compiles well with the new 3.1 version of GCC compiler.
+
+Fixed a bug resulted into incorrect recipient choosing after performing
+mass history message forward from the chat mode.
+
+The "Channel manager" dialog was extended so that it allowed to chat on
+IRC channels. To add a channel to the list you have to set "Show on the
+contact list" for it.
+
+ICQ events sent to users with status "Occupied" or "DND" were lost.
+Fixed.
+
+The cicqsync script now refuses to work with CVS version <= 1.10
+
+Bugs in the Yahoo! engine were fixed. They resulted into adding contacts
+with strange names to the list.
