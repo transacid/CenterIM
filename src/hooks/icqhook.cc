@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.134 2003/07/07 18:51:01 konst Exp $
+* $Id: icqhook.cc,v 1.135 2003/07/19 08:35:10 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -170,6 +170,7 @@ void icqhook::connect() {
 
 void icqhook::disconnect() {
     cli.setStatus(STATUS_OFFLINE);
+    fonline = flogged = false;
 }
 
 void icqhook::resolve() {

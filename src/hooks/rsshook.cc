@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.7 2003/07/18 00:40:01 konst Exp $
+* $Id: rsshook.cc,v 1.8 2003/07/19 08:35:10 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -260,7 +260,7 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 
     if(!rev) return;
 
-    int i, k;
+    int i, k, n;
     icqcontact *c;
     time_t tcurrent = time(0);
 

@@ -27,7 +27,7 @@ class centericq {
 	    time_t timer;
 	    int period;
 
-	    reconnectInfo(): timer(0), period(40) {}
+	    reconnectInfo(): timer(0), period(30) {}
 	};
 
 	time_t timer_checkmail, timer_keypress, timer_update, timer_resend;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.162 2003/07/18 00:39:59 konst Exp $
+* $Id: centericq.cc,v 1.163 2003/07/19 08:35:09 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1240,7 +1240,7 @@ bool centericq::idle(int options ) {
 	    }
 	}
 
-	tv.tv_sec = face.updaterequested() ? 1 : 30;
+	tv.tv_sec = face.updaterequested() ? 1 : 20;
 	tv.tv_usec = 0;
 
 	select(hsockfd+1, &rfds, &wfds, &efds, &tv);
