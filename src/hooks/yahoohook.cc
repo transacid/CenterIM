@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.18 2002/01/18 16:04:03 konst Exp $
+* $Id: yahoohook.cc,v 1.19 2002/01/24 15:11:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -162,14 +162,20 @@ struct tm *yahoohook::timestamp() {
 
 bool yahoohook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
-    const immessage *m;
+    string text;
+    string::iterator is;
 
-    if(c)
-    if(ev.gettype() == imevent::message)
-    if(m = static_cast<const immessage *>(&ev)) {
-	string text = rusconv("kw", m->gettext());
-	string::iterator is;
+    if(c) {
+	if(ev.gettype() == imevent::message) {
+	    const immessage *m = static_cast<const immessage *>(&ev);
+	    if(m) text = rusconv("kw", m->gettext());
+	} else if(ev.gettype() == imevent::url) {
+	    const imurl *m = static_cast<const imurl *>(&ev);
+	    if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+	}
+    }
 
+    if(!text.empty()) {
 	for(is = text.begin(); is != text.end(); is++)
 	    if((unsigned) *is < 32) *is = ' ';
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.43 2002/01/23 16:31:23 konst Exp $
+* $Id: icqhook.cc,v 1.44 2002/01/24 15:11:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -496,7 +496,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     home.phone = rusconv("kw", cbinfo.phone);
     home.fax = rusconv("kw", cbinfo.fax);
     home.street = rusconv("kw", cbinfo.street);
-    home.cellular = rusconv("kw", cbinfo.cellular);
+    home.setMobileNo(rusconv("kw", cbinfo.cellular));
 
     home.zip = i2str(cbinfo.zip);
     home.country = cbinfo.country;
@@ -771,8 +771,8 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cbinfo.street = rusconv("wk", home.street);
 		cbinfo.requiresauth = ic->getAuthReq();
 
-		if(!home.cellular.empty())
-		    cbinfo.cellular = rusconv("wk", home.cellular);
+		if(!home.getMobileNo().empty())
+		    cbinfo.cellular = rusconv("wk", home.getMobileNo());
 
 		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
 		cbinfo.country = home.country;
