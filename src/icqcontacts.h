@@ -20,11 +20,12 @@
 *
 */
 
-#define SORT_CONTACTS   "#fiodcan_!N"
+#define SORT_CONTACTS   "#fodcan_!N"
 
 #define SORTCHAR(c) ( \
     c->getmsgcount() ? '#' : \
     !c->inlist() ? '!' : \
+    c->getstatus() == invisible ? 'o' : \
     c->getshortstatus() \
 )
 

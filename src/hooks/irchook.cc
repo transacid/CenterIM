@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.61 2002/12/09 12:05:29 konst Exp $
+* $Id: irchook.cc,v 1.62 2002/12/10 13:16:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -246,7 +246,7 @@ bool irchook::send(const imevent &ev) {
 		    vector<imfile::record>(1, r));
 
 		firetalk_file_offer(handle, c->getdesc().nickname.c_str(),
-		    ir->fname.c_str(), &irhook.transferinfo[fr].first);
+		    ir->fname.c_str(), &transferinfo[fr].first);
 	    }
 
 	    return true;

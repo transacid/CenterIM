@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.48 2002/12/09 16:01:50 konst Exp $
+* $Id: msnhook.cc,v 1.49 2002/12/10 13:16:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,6 +52,7 @@ msnhook::msnhook() {
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::directadd);
+//    fcapabs.insert(hookcapab::files);
 }
 
 msnhook::~msnhook() {
@@ -167,9 +168,30 @@ bool msnhook::send(const imevent &ev) {
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *>(&ev);
 	if(m) text = m->gettext();
+
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *>(&ev);
 	if(m) text = m->geturl() + "\n\n" + m->getdescription();
+
+    } else if(ev.gettype() == imevent::file) {
+	const imfile *m = static_cast<const imfile *>(&ev);
+	vector<imfile::record> files = m->getfiles();
+	vector<imfile::record>::const_iterator ir;
+
+	for(ir = files.begin(); ir != files.end(); ++ir) {
+	    imfile::record r;
+	    invitation_ftp *p;
+
+	    r.fname = ir->fname;
+	    r.size = ir->size;
+
+	    imfile fr(ev.getcontact(), imevent::outgoing, "", vector<imfile::record>(1, r));
+
+	    if(p = msn_filetrans_send(&conn, ir->fname.c_str()))
+		transferinfo[fr].first = p;
+	}
+
+	return true;
     }
 
     icqcontact *c = clist.get(ev.getcontact());
@@ -184,12 +206,12 @@ bool msnhook::send(const imevent &ev) {
     return false;
 }
 
-void msnhook::sendnewuser(const imcontact &c) {
+void msnhook::sendnewuser(const imcontact &ic) {
     if(logged()) {
-	msn_add_to_list(&conn, "FL", c.nickname.c_str());
+	msn_add_to_list(&conn, "FL", ic.nickname.c_str());
     }
 
-    requestinfo(c);
+    requestinfo(ic);
 }
 
 void msnhook::setautostatus(imstatus st) {
@@ -233,19 +255,11 @@ void msnhook::requestinfo(const imcontact &ic) {
     }
 
     icqcontact::moreinfo m = c->getmoreinfo();
-    icqcontact::basicinfo b = c->getbasicinfo();
-
-    b.email = ic.nickname;
-    if(b.email.find("@") == -1) b.email += "@hotmail.com";
-    m.homepage = "http://members.msn.com/" + b.email;
-
-    if(!friendlynicks[ic.nickname].empty()) {
-	c->setdispnick(friendlynicks[ic.nickname]);
-	b.fname = friendlynicks[ic.nickname];
-    }
-
-    c->setbasicinfo(b);
+    m.homepage = "http://members.msn.com/" + ic.nickname;
     c->setmoreinfo(m);
+
+    if(!friendlynicks[ic.nickname].empty())
+	c->setabout(friendlynicks[ic.nickname]);
 
     face.relaxedupdate();
 }
@@ -303,7 +317,7 @@ void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool force
     friendlynicks[c->getdesc().nickname] = newnick;
 
     if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick || c->getdispnick() == c->getdesc().nickname))
-	requestinfo(c);
+	c->setdispnick(newnick);
 }
 
 void msnhook::checkinlist(imcontact ic) {
@@ -322,6 +336,36 @@ void msnhook::checkinlist(imcontact ic) {
     if(c) {
 	c->setstatus(available);
     }
+}
+
+bool msnhook::knowntransfer(const imfile &fr) const {
+    return transferinfo.find(fr) != transferinfo.end();
+}
+
+void msnhook::replytransfer(const imfile &fr, bool accept, const string &localpath) {
+    if(accept) {
+	transferinfo[fr].second = localpath;
+
+	if(transferinfo[fr].second.substr(transferinfo[fr].second.size()-1) != "/")
+	    transferinfo[fr].second += "/";
+
+	transferinfo[fr].second += justfname(fr.getfiles().begin()->fname);
+	msn_filetrans_accept(transferinfo[fr].first, transferinfo[fr].second.c_str());
+
+    } else {
+	msn_filetrans_reject(transferinfo[fr].first);
+	transferinfo.erase(fr);
+
+    }
+}
+
+void msnhook::aborttransfer(const imfile &fr) {
+    msn_filetrans_reject(transferinfo[fr].first);
+
+    face.transferupdate(fr.getfiles().begin()->fname, fr,
+	icqface::tsCancel, 0, 0);
+
+    transferinfo.erase(fr);
 }
 
 // ----------------------------------------------------------------------------
@@ -505,6 +549,20 @@ void ext_new_mail_arrived(msnconn *conn, const char *from, const char *subject) 
 
 void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv) {
     log("ext_filetrans_invite");
+
+    imfile::record r;
+    r.fname = inv->filename;
+    r.size = inv->filesize;
+
+    imcontact ic(username, msn);
+    mhook.checkinlist(ic);
+
+    imfile fr(ic, imevent::incoming, "", vector<imfile::record>(1, r));
+
+    mhook.transferinfo[fr].first = inv;
+    em.store(fr);
+
+    face.transferupdate(inv->filename, fr, icqface::tsInit, inv->filesize, 0);
 }
 
 void ext_filetrans_progress(invitation_ftp *inv, const char *status, unsigned long sent, unsigned long total) {
