@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.48 2003/06/25 20:59:59 konst Exp $
+* $Id: jabberhook.cc,v 1.49 2003/07/05 12:41:39 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -161,11 +161,8 @@ void jabberhook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsock
 }
 
 bool jabberhook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
-    if(jc) {
-	return FD_ISSET(jc->fd, &rfds);
-    } else {
-	return false;
-    }
+    if(jc) return FD_ISSET(jc->fd, &rfds);
+    return false;
 }
 
 bool jabberhook::online() const {
@@ -952,7 +949,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 
 void jabberhook::gotmessage(const string &type, const string &from, const string &abody) {
     string body(abody);
-    imcontact ic, chic;
+    imcontact ic(jidtodisp(from), proto), chic;
 
     if(clist.get(chic = imcontact((string) "#" + from, proto)))
 	ic = chic;
@@ -1185,7 +1182,7 @@ string jabberhook::getourjid() {
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
-    static int previous_state = JCONN_STATE_OFF;
+    static int previous_state = -1;
 
     switch(state) {
 	case JCONN_STATE_OFF:
