@@ -1,7 +1,7 @@
 /*
 *
 * kkfsys file system related routines
-* $Id: kkfsys.cc,v 1.6 2002/03/04 15:27:27 konst Exp $
+* $Id: kkfsys.cc,v 1.7 2002/07/03 14:38:58 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -129,7 +129,7 @@ int stubnftw(const char *dir, int (*fn)(const char *file, const struct stat *sb,
     return stopwalk;
 }
 
-string pathfind(const string &name, const string &path, int amode = F_OK) {
+string pathfind(const string &name, const string &path, int amode) {
     string token, current, buf = path;
 
     while(!(token = getword(buf, ":")).empty()) {
@@ -191,7 +191,7 @@ bool samefile(const string &fname1, const string &fname2) {
     if((mode & m) && !regexec(&r, fname.c_str(), 0, 0, 0)) \
 	lst.push_back(fname);
 
-vector<string> filefind(const string &mask, const string &aroot, int mode = FFIND_FILE) {
+vector<string> filefind(const string &mask, const string &aroot, int mode) {
     vector<string> lst, rlst;
     vector<string>::iterator is;
     regex_t r;
