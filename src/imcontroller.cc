@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.55 2004/07/08 23:52:48 konst Exp $
+* $Id: imcontroller.cc,v 1.56 2004/07/20 22:16:40 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -277,10 +277,6 @@ void imcontroller::msnupdateprofile() {
 	    icqcontact *c = clist.get(contactroot);
 	    c->setnick(tmp);
 	    mhook.sendupdateuserinfo(*c);
-
-	    char buf[512];
-	    sprintf(buf, _("Your friendly nickname has been changed to %s"), tmp.c_str());
-	    face.status(buf);
 	}
     } else {
 	face.status(_("You must be logged to the MSN network to update the friendly nick"));

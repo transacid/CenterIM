@@ -20,6 +20,10 @@ hang on start
 
 yahoo cyrillic
 
+xterm/putty window headers like in emerge
+
+GG patch from shaky on the list (statuses with descriptions)
+
 /*
 *
 * BUGS
@@ -35,8 +39,6 @@ http://www.spiegel.de/schlagzeilen/rss/0,5291,,00.xml
 
 check for ssl support in libcurl
 
-cannot send to contacts with "@" in nicknames
-
 hi, does centericq support 'external' file for rss (and it's not listed in the
 readme) or not?
 
@@ -48,21 +50,7 @@ aim: xoagray/Charger
 *
 */
 
-GG patch from shaky on the list
-
 XML console
-
-xterm/putty window headers like in emerge
-def xtermTitle(mystr):
-    if havecolor and dotitles and os.environ.has_key("TERM"):
-                myt=os.environ["TERM"]
-                if myt in ["xterm","Eterm","aterm","rxvt","screen"]:
-                    sys.stderr.write("\x1b]1;\x07\x1b]2;"+str(mystr)+"\x07")
-
-def xtermTitleReset():
-    if havecolor and dotitles and os.environ.has_key("TERM"):
-    myt=os.environ["TERM"]
-    xtermTitle(os.environ["TERM"])
 
 msn file transfers
 
@@ -143,4 +131,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.523 2004/07/20 06:51:05 konst Exp $
+$Id: TODO,v 1.524 2004/07/20 22:16:40 konst Exp $

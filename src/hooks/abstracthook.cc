@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.56 2004/04/11 16:32:28 konst Exp $
+* $Id: abstracthook.cc,v 1.57 2004/07/20 22:16:40 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -358,6 +358,7 @@ void abstracthook::log(logevent ev, ...) {
     va_end(ap);
 
     face.log((string) "+ [" + conf.getprotocolname(proto)  + "] " + buf);
+    face.xtermtitle((string) "[" + conf.getprotocolname(proto)  + "] " + buf);
 }
 
 const unsigned short abstracthook::Country_table_size = 243;

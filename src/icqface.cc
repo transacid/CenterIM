@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.227 2004/07/18 21:59:40 konst Exp $
+* $Id: icqface.cc,v 1.228 2004/07/20 22:16:40 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -3336,12 +3336,26 @@ void icqface::redraw() {
 }
 
 void icqface::xtermtitle(const string &text) {
+    string term = getenv("TERM") ? getenv("TERM") : "";
+
+    if(term == "xterm" || term == "Eterm" || term == "aterm"
+    || term == "rxvt" || term == "screen")
+	cout << "\x1b]1;\x07\x1b]2;" << "centericq: " << text << "\x07" << flush;
 }
 
 void icqface::xtermtitle(const char *fmt, ...) {
+    va_list ap;
+    char buf[1024];
+
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    xtermtitle((string) buf);
+    va_end(ap);
 }
 
 void icqface::xtermtitlereset() {
+    const char *p = getenv("TERM");
+    if(p) xtermtitle((string) p);
 }
 
 // ----------------------------------------------------------------------------

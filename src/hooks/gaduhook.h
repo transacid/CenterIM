@@ -12,9 +12,10 @@ class gaduhook: public abstracthook {
 	time_t timer_ping;
 	struct gg_session *sess;
 	bool flogged;
+	map<long unsigned int, string> awaymsgs;
 
 	void searchdone(void *p);
-	void userstatuschange(unsigned int uin, int status);
+	void userstatuschange(unsigned int uin, int status, const char *desc);
 	void userlistsend();
 	void usernotify(unsigned int uin, int status, const char *desc,
 	    unsigned int ip, int port, int version);
@@ -51,7 +52,7 @@ class gaduhook: public abstracthook {
 	imstatus getstatus() const;
 
 	void requestinfo(const imcontact &c);
-	void requestawaymsg(const imcontact &c);
+	void requestawaymsg(const imcontact &ic);
 
 	bool regconnect(const string &aserv);
 	bool regattempt(unsigned int &auin, const string &apassword, const string &email);

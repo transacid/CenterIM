@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.9 2004/07/08 23:52:48 konst Exp $
+* $Id: gaduhook.cc,v 1.10 2004/07/20 22:16:40 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,36 +46,55 @@ extern "C" {
 
 #define PERIOD_PING  50
 
-imstatus gg2imstatus(int st) {
+static imstatus gg2imstatus(int st) {
     imstatus imst;
 
     switch(st) {
-	case GG_STATUS_INVISIBLE: imst = invisible; break;
-	case GG_STATUS_BUSY: imst = occupied; break;
-	case GG_STATUS_NOT_AVAIL: imst = offline; break;
-	default: imst = available; break;
+	case GG_STATUS_INVISIBLE:
+	case GG_STATUS_INVISIBLE_DESCR:
+	    imst = invisible;
+	    break;
+
+	case GG_STATUS_BUSY:
+	case GG_STATUS_BUSY_DESCR:
+	    imst = occupied;
+	    break;
+
+	case GG_STATUS_NOT_AVAIL:
+	case GG_STATUS_NOT_AVAIL_DESCR:
+	    imst = offline;
+	    break;
+
+	default:
+	    imst = available;
+	    break;
     }
 
     return imst;
 }
 
-int imstatus2gg(imstatus st) {
+static int imstatus2gg(imstatus st, const string &desc = "") {
     int gst;
 
     switch(st) {
 	case invisible:
-	    gst = GG_STATUS_INVISIBLE;
+	    gst = desc.empty() ?
+		GG_STATUS_INVISIBLE : GG_STATUS_INVISIBLE_DESCR;
 	    break;
+
 	case dontdisturb:
 	case occupied:
 	case notavail:
 	case away:
-	    gst = GG_STATUS_BUSY;
+	    gst = desc.empty() ?
+		GG_STATUS_BUSY : GG_STATUS_BUSY_DESCR;
 	    break;
+
 	case freeforchat:
 	case available:
 	default:
-	    gst = GG_STATUS_AVAIL;
+	    gst = desc.empty() ?
+		GG_STATUS_AVAIL : GG_STATUS_AVAIL_DESCR;
 	    break;
     }
 
@@ -92,7 +111,9 @@ gaduhook::gaduhook(): abstracthook(gadu), flogged(false), sess(0) {
     fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changedetails);
-//    fcapabs.insert(hookcapab::ssl);
+    fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::fetchaway);
+    fcapabs.insert(hookcapab::ssl);
 }
 
 gaduhook::~gaduhook() {
@@ -120,7 +141,13 @@ void gaduhook::connect() {
 	lp.uin = acc.uin;
 	lp.password = pass.get();
 	lp.async = 1;
-	lp.status = imstatus2gg(manualstatus);
+
+	static auto_ptr<char> descr(strdup(rusconv("kw", conf.getawaymsg(proto)).c_str()));
+
+	lp.status_descr = descr.get();
+	lp.status = imstatus2gg(manualstatus, descr.get());
+
+	lp.tls = acc.additional["ssl"] == "1" ? 1 : 0;
 
 	sess = gg_login(&lp);
 	log(logConnecting);
@@ -219,11 +246,11 @@ void gaduhook::main() {
 		break;
 
 	    case GG_EVENT_STATUS:
-		userstatuschange(e->event.status.uin, e->event.status.status);
+		userstatuschange(e->event.status.uin, e->event.status.status, e->event.status.descr);
 		break;
 
 	    case GG_EVENT_STATUS60:
-		userstatuschange(e->event.status60.uin, e->event.status60.status);
+		userstatuschange(e->event.status60.uin, e->event.status60.status, e->event.status60.descr);
 		break;
 
 	    case GG_EVENT_ACK:
@@ -331,7 +358,7 @@ void gaduhook::setautostatus(imstatus st) {
 
     } else {
 	if(getstatus() != offline) {
-	    gg_change_status(sess, imstatus2gg(st));
+	    gg_change_status_descr(sess, imstatus2gg(st, conf.getawaymsg(proto)), conf.getawaymsg(proto).c_str());
 	    logger.putourstatus(proto, getstatus(), st);
 	} else {
 	    connect();
@@ -357,7 +384,19 @@ void gaduhook::requestinfo(const imcontact &c) {
     gg_pubdir50(sess, ireq);
 }
 
-void gaduhook::requestawaymsg(const imcontact &c) {
+void gaduhook::requestawaymsg(const imcontact &ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(c) {
+	string am = awaymsgs[ic.uin];
+
+	if(!am.empty()) {
+	    em.store(imnotification(ic, (string) _("Away message:") + "\n\n" + am));
+	} else {
+	    face.log(_("+ [jgg] no away message from %s, %s"),
+		c->getdispnick().c_str(), ic.totext().c_str());
+	}
+    }
 }
 
 bool gaduhook::regconnect(const string &aserv) {
@@ -530,10 +569,17 @@ void gaduhook::searchdone(void *p) {
     }
 }
 
-void gaduhook::userstatuschange(unsigned int uin, int status) {
+void gaduhook::userstatuschange(unsigned int uin, int status, const char *desc) {
     icqcontact *c = clist.get(imcontact(uin, gadu));
     if(c) {
-	c->setstatus(gg2imstatus(status));
+	imstatus ust = gg2imstatus(status);
+	logger.putonline(c, c->getstatus(), ust);
+	c->setstatus(ust);
+	
+	if(desc)
+	    awaymsgs[uin] = rusconv("wk", desc);
+	else
+	    awaymsgs[uin] = "";
     }
 }
 
@@ -571,9 +617,17 @@ unsigned int ip, int port, int version) {
 	char *p = inet_ntoa(addr);
 	if(p) c->setlastip(p);
 
-	c->setstatus(gg2imstatus(status));
+	imstatus ust = gg2imstatus(status);
+	logger.putonline(c, c->getstatus(), ust);
+	c->setstatus(ust);
+
+	if(desc)
+	    awaymsgs[ic.uin] = rusconv("wk", desc);
+	else
+	    awaymsgs[ic.uin] = "";
     }
 }
+
 
 // ----------------------------------------------------------------------------
 

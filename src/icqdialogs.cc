@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.143 2004/04/01 08:01:13 konst Exp $
+* $Id: icqdialogs.cc,v 1.144 2004/07/20 22:16:40 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1189,8 +1189,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	    tmp += conf.getprotocolname(pname) + " ";
 
 	t.addleaff(i, 0, 26, _(" Switch to language preset : %s "), iconvlang->c_str());
-	t.addleaff(i, 0, 27, _(" Convert from : %s "), convertfrom.c_str());
-	t.addleaff(i, 0, 28, _(" Convert to : %s "), convertto.c_str());
+	t.addleaff(i, 0, 27, _(" Remote charset : %s "), convertfrom.c_str());
+	t.addleaff(i, 0, 28, _(" Local charset : %s "), convertto.c_str());
 
 	if(hasany) {
 	    t.addleaff(i, 0,  3, _(" For protocols : %s"), tmp.c_str());
