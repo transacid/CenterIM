@@ -70,11 +70,11 @@ class icqcontact {
 	imstatus status;
 
 	int fupdated, groupid, fhistoffset;
-	bool finlist, congratulated, modified, fhasevents;
+	bool finlist, congratulated, modified, fhasevents, usepgpkey;
 	time_t lastread, lastseen, lasttyping;
 
 	string sound[imevent::imeventtype_size];
-	string nick, about, dispnick, postponed, lastip;
+	string nick, about, dispnick, postponed, lastip, pgpkey;
 
 	basicinfo binfo;
 	moreinfo minfo;
@@ -164,6 +164,12 @@ class icqcontact {
 
 	time_t getlasttyping() const { return lasttyping; }
 	void setlasttyping(time_t t) { lasttyping = t; }
+
+	string getpgpkey() const;
+	void setpgpkey(const string &key);
+
+	bool getusepgpkey() const;
+	void setusepgpkey(bool usekey);
 };
 
 #endif

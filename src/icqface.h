@@ -273,6 +273,8 @@ class icqface {
 
 	void transfermonitor();
 	void userinfoexternal(const imcontact &ic);
+
+	bool selectpgpkey(string &keyid, bool secretonly = false);
 };
 
 extern icqface face;

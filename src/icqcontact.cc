@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.101 2005/01/18 23:20:17 konst Exp $
+* $Id: icqcontact.cc,v 1.102 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -112,7 +112,7 @@ string icqcontact::getdirname() const {
 void icqcontact::clear() {
     fupdated = groupid = fhistoffset = lasttyping = 0;
     finlist = true;
-    modified = false;
+    modified = usepgpkey = false;
     cdesc = contactroot;
 
     binfo = basicinfo();
@@ -659,6 +659,23 @@ void icqcontact::setlastip(const string &flastip) {
     lastip = flastip;
     fupdated++;
     modified = true;
+}
+
+string icqcontact::getpgpkey() const {
+    return pgpkey;
+}
+
+void icqcontact::setpgpkey(const string &key) {
+    pgpkey = key;
+    usepgpkey = true;
+}
+
+bool icqcontact::getusepgpkey() const {
+    return usepgpkey;
+}
+
+void icqcontact::setusepgpkey(bool usekey) {
+    usepgpkey = usekey;
 }
 
 string icqcontact::getabout() const {

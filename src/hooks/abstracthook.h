@@ -31,7 +31,8 @@ struct hookcapab {
 	ssl,
 	channelpasswords,
 	groupchatservices,
-	nochat
+	nochat,
+	pgp
     };
 };
 
@@ -123,6 +124,9 @@ class abstracthook {
 
 	virtual void setstatus(imstatus st);
 	virtual imstatus getstatus() const;
+
+	virtual imstatus getmanualstatus() const
+	    { return manualstatus; }
 
 	virtual bool isdirectopen(const imcontact &c) const;
 	virtual void requestinfo(const imcontact &c);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.146 2004/11/09 23:49:59 konst Exp $
+* $Id: icqdialogs.cc,v 1.147 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,7 @@
 #include "icqgroups.h"
 #include "abstracthook.h"
 #include "ljhook.h"
+#include "impgp.h"
 
 #include <libicq2000/constants.h>
 
@@ -1961,6 +1962,62 @@ bool icqface::setljparams(imxmlevent *ev) {
 
     db.close();
     unblockmainscreen();
+
+#endif
+
+    return r;
+}
+
+bool icqface::selectpgpkey(string &keyid, bool secretonly) {
+    bool r = false;
+    int n, b;
+    dialogbox db;
+    bool msb;
+
+#ifdef HAVE_GPGME
+
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    w.set_title(conf.getcolor(cp_dialog_highlight), _(" Select PGP key to use "));
+    db.setwindow(&w, false);
+
+    db.setmenu(new verticalmenu(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected)));
+
+    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), _("Select"), 0));
+
+    db.addautokeys();
+    db.idle = &dialogidle;
+    verticalmenu &m = *db.getmenu();
+
+    if(!(msb = mainscreenblock)) blockmainscreen();
+
+    vector<string> keys = pgp.getkeys(true);
+    vector<string>::const_iterator i = keys.begin();
+
+    m.additemf(0, 0, _(" Use no key"));
+
+    while(i != keys.end()) {
+	m.additem(0, 0, (string) " " + pgp.getkeyinfo(*i, true));
+	if(*i == keyid) m.setpos(m.getcount()-1);
+	++i;
+    }
+
+    keys.insert(keys.begin(), "");
+
+    for(bool fin = false; !fin && !r; ) {
+	fin = !db.open(n, b);
+
+	if(!fin) {
+	    if(!b) {
+		keyid = keys[n-1];
+		r = fin = true;
+	    }
+	}
+    }
+
+    db.close();
+    if(!msb) unblockmainscreen();
 
 #endif
 

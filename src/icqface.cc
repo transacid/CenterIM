@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.237 2004/12/24 23:42:45 konst Exp $
+* $Id: icqface.cc,v 1.238 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@
 #include "imlogger.h"
 #include "irchook.h"
 #include "imexternal.h"
+#include "impgp.h"
 
 const char *stryesno(bool b) {
     return b ? _("yes") : _("no");
@@ -1422,19 +1423,9 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	mst.push_back(freeforchat);
 	mst.push_back(invisible);
 
-	static string statustext[8] = {
-	    _(" [o] Online"),
-	    _(" [_] Offline"),
-	    _(" [a] Away"),
-	    _(" [d] Do not disturb"),
-	    _(" [n] Not available"),
-	    _(" [c] Occupied"),
-	    _(" [f] Free for chat"),
-	    _(" [i] Invisible")
-	};
-
 	for(im = mst.begin(); im != mst.end(); ++im) {
-	    m.additem(0, *im, statustext[im-mst.begin()]);
+	    string sst = (string) " [" + imstatus2char[*im] + "] " + imstatus2str(*im);
+	    m.additem(0, *im, sst);
 
 	    if(pnames.size() == 1)
 	    if(gethook(pnames.front()).getstatus() == *im)
@@ -1944,7 +1935,6 @@ void icqface::status(const string &text) {
 
     attrset(conf.getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
-
     kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", t.c_str());
 }
 
@@ -2540,6 +2530,28 @@ void icqface::renderchathistory() {
 	    count++;
 	}
     }
+
+    text = conf.getprotocolname(passinfo.pname) + " " + c->getdispnick();
+    int maxsize = sizeWArea.x2-sizeWArea.x1-10;
+
+    if(text.size() > maxsize) {
+	text.erase(maxsize);
+	text += "..";
+    }
+
+    bool pgpon = pgp.enabled(passinfo);
+    if(pgpon) text += string(4, ' ');
+    text = (string) "[ " + text + " ]";
+
+    workarealine(sizeWArea.y1+chatlines+1);
+
+    kwriteatf(sizeWArea.x2-text.size()-1, sizeWArea.y1+chatlines+1,
+	conf.getcolor(cp_main_text), "%s", text.c_str());
+
+    if(pgpon) {
+	kwriteatf(sizeWArea.x2-6, sizeWArea.y1+chatlines+1,
+	    conf.getcolor(cp_main_highlight), "PGP");
+    }
 }
 
 void icqface::chat(const imcontact &ic) {
@@ -2561,7 +2573,7 @@ void icqface::chat(const imcontact &ic) {
     muins.push_back(passinfo);
 
     chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.75);
-    workarealine(sizeWArea.y1+chatlines+1);
+//    workarealine(sizeWArea.y1+chatlines+1);
 
     editor.addscheme(cp_main_text, cp_main_text, 0, 0);
     editor.otherkeys = &editmsgkeys;

@@ -59,7 +59,7 @@ class jabberhook: public abstracthook {
 
 	vector<pair<string, string> > getservparams(const string &agentname, agent::param_type pt) const;
 
-	void setjabberstatus(imstatus st, const string &msg);
+	void setjabberstatus(imstatus st, string msg);
 	void sendvisibility();
 
 	void sendnewuser(const imcontact &c, bool report);
@@ -71,7 +71,7 @@ class jabberhook: public abstracthook {
 	void postlogin();
 	void gotroster(xmlnode x);
 	void gotvcard(const imcontact &ic, xmlnode v);
-	void gotmessage(const string &type, const string &from, const string &body);
+	void gotmessage(const string &type, const string &from, const string &body, const string &enc);
 	void gotversion(const imcontact &ic, xmlnode x);
 
 	bool isourid(const string &jid);

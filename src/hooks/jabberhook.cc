@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.76 2004/11/11 13:42:05 konst Exp $
+* $Id: jabberhook.cc,v 1.77 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,7 @@
 #include "imlogger.h"
 #include "eventmanager.h"
 #include "icqgroups.h"
+#include "impgp.h"
 
 #define DEFAULT_CONFSERV "conference.jabber.org"
 #define PERIOD_KEEPALIVE 30
@@ -94,6 +95,7 @@ jabberhook::jabberhook(): abstracthook(jabber), jc(0), flogged(false), fonline(f
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changeabout);
     fcapabs.insert(hookcapab::version);
+    fcapabs.insert(hookcapab::pgp);
 }
 
 jabberhook::~jabberhook() {
@@ -222,8 +224,7 @@ bool jabberhook::enabled() const {
 
 bool jabberhook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
-
-    string text, cname;
+    string text, cname, enc;
 
     if(c) {
 	if(ev.gettype() == imevent::message) {
@@ -261,16 +262,28 @@ bool jabberhook::send(const imevent &ev) {
 
 	text = rusconv("ku", text);
 
+#ifdef HAVE_GPGME
+	if(pgp.enabled(ev.getcontact())) {
+	    enc = pgp.encrypt(text, c->getpgpkey());
+	    text = "This message is encrypted.";
+	}
+#endif
+
 	auto_ptr<char> cjid(strdup(jidnormalize(c->getdesc().nickname).c_str()));
 	auto_ptr<char> ctext(strdup(text.c_str()));
 
-	xmlnode x;
-	x = jutil_msgnew(TMSG_CHAT, cjid.get(), 0, ctext.get());
+	xmlnode x = jutil_msgnew(TMSG_CHAT, cjid.get(), 0, ctext.get());
 
 	if(ischannel(c)) {
 	    xmlnode_put_attrib(x, "type", "groupchat");
 	    if(!(cname = c->getdesc().nickname.substr(1)).empty())
 		xmlnode_put_attrib(x, "to", cname.c_str());
+	}
+
+	if(!enc.empty()) {
+	    xmlnode xenc = xmlnode_insert_tag(x, "x");
+	    xmlnode_put_attrib(xenc, "xmlns", "jabber:x:encrypted");
+	    xmlnode_insert_cdata(xenc, enc.c_str(), (unsigned) -1);
 	}
 
 	jab_send(jc, x);
@@ -545,7 +558,7 @@ const string &serv, string &err) {
     return regdone;
 }
 
-void jabberhook::setjabberstatus(imstatus st, const string &msg) {
+void jabberhook::setjabberstatus(imstatus st, string msg) {
     xmlnode x = jutil_presnew(JPACKET__UNKNOWN, 0, 0);
 
     switch(st) {
@@ -571,13 +584,27 @@ void jabberhook::setjabberstatus(imstatus st, const string &msg) {
 	    break;
     }
 
-    if(!conf.getourid(proto).additional["prio"].empty())
-	xmlnode_insert_cdata(xmlnode_insert_tag(x, "priority"),
-	    conf.getourid(proto).additional["prio"].c_str(), (unsigned) -1);
+    map<string, string> add = conf.getourid(proto).additional;
 
-    if(!msg.empty())
-	xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
-	    rusconv("ku", msg).c_str(), (unsigned) -1);
+    if(!add["prio"].empty())
+	xmlnode_insert_cdata(xmlnode_insert_tag(x, "priority"),
+	    add["prio"].c_str(), (unsigned) -1);
+
+    if(msg.empty())
+	msg = imstatus2str(st);
+
+    xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
+	rusconv("ku", msg).c_str(), (unsigned) -1);
+
+#ifdef HAVE_GPGME
+
+    if(!add["pgpkey"].empty()) {
+	xmlnode sign = xmlnode_insert_tag(x, "x");
+	xmlnode_put_attrib(sign, "xmlns", "jabber:x:signed");
+	xmlnode_insert_cdata(sign, pgp.sign(msg, add["pgpkey"]).c_str(), (unsigned) -1);
+    }
+
+#endif
 
     jab_send(jc, x);
     xmlnode_free(x);
@@ -1043,7 +1070,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
     }
 }
 
-void jabberhook::gotmessage(const string &type, const string &from, const string &abody) {
+void jabberhook::gotmessage(const string &type, const string &from, const string &abody, const string &enc) {
     string u, h, r, body(abody);
     jidsplit(from, u, h, r);
 
@@ -1053,6 +1080,20 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
 	ic = chic;
 	if(!r.empty()) body.insert(0, r + ": ");
     }
+
+#ifdef HAVE_GPGME
+    icqcontact *c = clist.get(ic);
+
+    if(c) {
+	if(!enc.empty()) {
+	    c->setusepgpkey(true);
+	    if(pgp.enabled(ic)) body = pgp.decrypt(enc);
+		else c->setusepgpkey(false);
+	} else {
+	    c->setusepgpkey(false);
+	}
+    }
+#endif
 
     em.store(immessage(ic, imevent::incoming, rusconv("uk", body)));
 }
@@ -1296,7 +1337,7 @@ void jabberhook::statehandler(jconn conn, int state) {
 void jabberhook::packethandler(jconn conn, jpacket packet) {
     char *p;
     xmlnode x, y;
-    string from, type, body, ns, id, u, h, s;
+    string from, type, body, enc, ns, id, u, h, s;
     imstatus ust;
     int npos;
     bool isagent;
@@ -1316,8 +1357,15 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		body = (string) xmlnode_get_data (x) + ": " + body;
 	    }
 
+	    if(x = xmlnode_get_tag(packet->x, "x"))
+	    if(p = xmlnode_get_attrib(x, "xmlns"))
+	    if((string) p == "jabber:x:encrypted")
+	    if(p = xmlnode_get_data(x))
+		enc = p;
+
 	    if(!body.empty())
-		jhook.gotmessage(type, from, body);
+		jhook.gotmessage(type, from, body, enc);
+
 	    break;
 
 	case JPACKET_IQ:
@@ -1520,6 +1568,17 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    if(x = xmlnode_get_tag(packet->x, "status"))
 		    if(p = xmlnode_get_data(x))
 			jhook.awaymsgs[ic.nickname] = p;
+
+		    c->setpgpkey("");
+
+#ifdef HAVE_GPGME
+		    if(x = xmlnode_get_tag(packet->x, "x"))
+		    if(p = xmlnode_get_attrib(x, "xmlns"))
+		    if((string) p == "jabber:x:signed")
+		    if(p = xmlnode_get_data(x))
+			c->setpgpkey(pgp.verify(p, jhook.awaymsgs[ic.nickname]));
+#endif
+
 		}
 	    }
 	    break;

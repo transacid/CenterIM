@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.193 2004/11/09 23:49:59 konst Exp $
+* $Id: centericq.cc,v 1.194 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1515,7 +1515,7 @@ void centericq::exectimers() {
 		    if(hook.online()) {
 			hook.disconnect();
 
-		    } else if(conf.getstatus(pname) != offline) {
+		    } else if(hook.getmanualstatus() != offline) {
 			if(conf.enoughdiskspace() && !manager.isopen()) {
 			    hook.connect();
 			}

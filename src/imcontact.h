@@ -65,5 +65,6 @@ extern imcontact contactroot;
 bool ischannel(const imcontact &cont);
 bool islivejournal(const icqcontact *c);
 bool islivejournal(const imcontact &cont);
+string imstatus2str(imstatus st);
 
 #endif

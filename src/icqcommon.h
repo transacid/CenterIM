@@ -49,7 +49,6 @@
 
 #endif
 
-
 #ifdef __KTOOL_USE_NAMESPACES
 #define __CENTERICQ_USE_NAMESPACES
 #endif

@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.39 2004/12/20 00:54:01 konst Exp $
+* $Id: accountmanager.cc,v 1.40 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,7 @@
 #include "yahoohook.h"
 #include "imcontroller.h"
 #include "icqcontacts.h"
+#include "impgp.h"
 
 #define getcolor(c)     conf.getcolor(c)
 
@@ -137,6 +138,13 @@ void accountmanager::exec() {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 
 		} else {
+#ifdef HAVE_GPGME
+		    if(capab.count(hookcapab::pgp))
+			t.addleaff(n, 0, citem+15, _(" OpenPGP key: %s "),
+			    account.additional["pgpkey"].empty() ? "none"
+				: account.additional["pgpkey"].c_str());
+#endif
+
 		    if(capab.count(hookcapab::changedetails))
 			t.addnode(n, 0, citem+7,
 			    pname == msn ?
@@ -258,6 +266,10 @@ void accountmanager::exec() {
 		    if(i2str(atoi(tmp.c_str())) == tmp)
 			account.additional["prio"] = tmp;
 
+		    break;
+
+		case 15:
+		    face.selectpgpkey(account.additional["pgpkey"], true);
 		    break;
 	    }
 

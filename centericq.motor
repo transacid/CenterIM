@@ -2,7 +2,7 @@
 # of a project. For more information visit http://thekonst.net/motor
 
 %version
-4.14.0
+4.15.0
 %template
 terminal program/C++
 %vcsname
@@ -12,7 +12,7 @@ CVS
 %vcsmodule
 centericq
 %arguments
--b ~/.centericq_tst/ -o
+-b ~/.centericq_tst/ -o -d
 %cflags
 
 %lflags
@@ -79,6 +79,8 @@ automake
 1
 %file fsource src/hooks/msnhook.cc
 1
+%file fsource src/impgp.cc
+1
 %file fheader src/icqmlist.h
 1
 %file fheader src/imcontroller.h
@@ -134,6 +136,8 @@ automake
 %file fheader src/hooks/gaduhook.h
 1
 %file fheader src/hooks/msnhook.h
+1
+%file fheader src/impgp.h
 1
 %file fdoc po/ChangeLog
 1
@@ -322,12 +326,9 @@ default	1
 %file dlib /home/konst/devel/libmsn
 1
 %editor
+/home/konst/devel/centericq/src/hooks/jabberhook.cc	0	1098
 %breakpoints
 %watch
-r
-x
-y
-z
 %desktop
 ncurses_watchactive	0
 distdir	/home/konst/devel

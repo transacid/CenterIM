@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.14.0)
+AM_INIT_AUTOMAKE(centericq, 4.15.0)
 
 AC_CANONICAL_HOST
 
@@ -123,6 +123,19 @@ fi
 
 AC_LANG_RESTORE
 
+# Check for GPGME
+
+AC_ARG_WITH(gpgme,
+    [  --with-gpgme=[DIR]    gpgme-config in DIR],
+    [ if test "$withval" = "no"; then GPGME_CONFIG=""; else GPGME_CONFIG="$withval"; fi ],
+    [ AC_PATH_PROG(GPGME_CONFIG,
+	gpgme-config)])
+
+if test ! -z "$GPGME_CONFIG"; then
+    CXXFLAGS="$CXXFLAGS `$GPGME_CONFIG --cflags`"
+    LIBS="`$GPGME_CONFIG --libs` $LIBS"
+fi
+
 # Check for curl.
 
 AC_ARG_WITH(curl,
@@ -132,7 +145,7 @@ AC_ARG_WITH(curl,
 	curl-config)])
 
 if test ! -z "$CURL_CONFIG"; then
-    CFLAGS="$CFLAGS `$CURL_CONFIG --cflags`"
+    CXXFLAGS="$CXXFLAGS `$CURL_CONFIG --cflags`"
     LIBS="`$CURL_CONFIG --libs` $LIBS"
 fi
 
@@ -175,6 +188,11 @@ if test "$build_irc" = "yes"; then
 fi
 
 if test "$build_jabber" = "yes"; then
+    if test -z "$GPGME_CONFIG"; then
+	AC_MSG_WARN([No GPG support in Jabber, since there was no GPGME library found])
+    else
+	AC_DEFINE(HAVE_GPGME, 1, [has GPGME library])
+    fi
     AC_DEFINE(BUILD_JABBER, 1, [build with jabber support])
 fi
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contact basic info class
-* $Id: imcontact.cc,v 1.20 2003/11/05 09:07:41 konst Exp $
+* $Id: imcontact.cc,v 1.21 2005/01/23 13:21:46 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,4 +88,22 @@ string imcontact::totext() const {
     else r = "[" + conf.getprotocolname(pname) + "] " + nickname;
 
     return r;
+}
+
+string imstatus2str(imstatus st) {
+    static map<imstatus, string> mst;
+
+    if(mst.empty()) {
+	mst[offline] = _("Offline");
+	mst[available] = _("Online");
+	mst[invisible] = _("Invisible");
+	mst[freeforchat] = _("Free for chat");
+	mst[dontdisturb] = _("Do not disturb");
+	mst[occupied] = _("Occupied");
+	mst[notavail] = _("Not available");
+	mst[away] = _("Away");
+	mst[imstatus_size] = "";
+    }
+
+    return mst[st];
 }
