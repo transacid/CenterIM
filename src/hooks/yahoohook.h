@@ -87,7 +87,7 @@ class yahoohook: public abstracthook {
 	static int ylog(char *fmt, ...);
 
 	static int add_handler(int id, int fd, yahoo_input_condition cond, void *data);
-	static void remove_handler(int tag);
+	static void remove_handler(int id, int tag);
 	static int connect_async(int id, char *host, int port, yahoo_connect_callback callback, void *data);
 
 	static void get_fd(int id, int fd, int error, void *data);

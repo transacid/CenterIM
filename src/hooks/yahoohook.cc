@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.108 2004/06/19 13:17:57 konst Exp $
+* $Id: yahoohook.cc,v 1.109 2004/06/28 12:49:16 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -256,6 +256,9 @@ void yahoohook::disconnect() {
 
 void yahoohook::disconnected() {
     if(logged()) {
+	rfds.clear();
+	wfds.clear();
+
 	logger.putourstatus(proto, getstatus(), ourstatus = offline);
 	clist.setoffline(proto);
 	fonline = false;
@@ -368,7 +371,7 @@ void yahoohook::sendnewuser(const imcontact &ic, bool report) {
 		if(report) log(logContactAdd, ic.nickname.c_str());
 		vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(ic)->getgroupid());
 		if(ig != groups.end()) {
-		    yahoo_add_buddy(cid, ic.nickname.c_str(), ig->getname().c_str());
+		    yahoo_add_buddy(cid, ic.nickname.c_str(), ig->getname().c_str(), "");
 		}
 	    }
 	}
@@ -1011,7 +1014,7 @@ int yahoohook::add_handler(int id, int fd, yahoo_input_condition cond, void *dat
     return tag;
 }
 
-void yahoohook::remove_handler(int tag) {
+void yahoohook::remove_handler(int id, int tag) {
     vector<yfd>::iterator i;
 
     i = find(yhook.rfds.begin(), yhook.rfds.end(), tag);
@@ -1072,7 +1075,7 @@ void yahoohook::connect_complete(void *data, int source) {
     char error;
     socklen_t err_size = sizeof(error);
 
-    remove_handler(ccd->tag);
+    remove_handler(0, ccd->tag);
 
     if(getsockopt(source, SOL_SOCKET, SO_ERROR, &error, &err_size) == -1 || error != 0) {
 	if(yhook.logged())
