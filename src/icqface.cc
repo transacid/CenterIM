@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.170 2002/12/18 18:05:39 konst Exp $
+* $Id: icqface.cc,v 1.171 2002/12/27 12:30:00 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2337,6 +2337,7 @@ vector<eventviewresult> abuttons) {
 	    break;
     }
 
+    passevent = 0;
     return r;
 }
 
