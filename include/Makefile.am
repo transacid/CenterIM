@@ -1,1 +1,1 @@
-EXTRA_DIST = kkiproc.h kkfsys.h conf.h
+EXTRA_DIST = conf.h kkfsys.h kkiproc.h
