@@ -8,19 +8,17 @@ extern "C" {
 }
 
 class irchook: public abstracthook {
-    private:
-	struct roomInfo {
+    public:
+	struct channelInfo {
 	    string name;
+	    bool joined, fetched;
 	    vector<string> nicks;
-	    bool fetched;
 
-	    roomInfo(const string &aname): name(aname), fetched(false) {}
+	    channelInfo(const string &aname):
+		name(aname), joined(false), fetched(false) {}
 
 	    bool operator != (const string &aname) const;
 	    bool operator == (const string &aname) const;
-
-	    bool operator != (const bool &afetched) const;
-	    bool operator == (const bool &afetched) const;
 	};
 
     protected:
@@ -29,7 +27,8 @@ class irchook: public abstracthook {
 	imstatus ourstatus;
 
 	vector<char *> userlist;
-	vector<roomInfo> rooms;
+	vector<channelInfo> channels;
+	vector<string> searchchannels;
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
@@ -81,6 +80,9 @@ class irchook: public abstracthook {
 	void sendupdateuserinfo(icqcontact &c, const string &newpass);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
+
+	vector<channelInfo> getautochannels() const;
+	void setautochannels(vector<channelInfo> &achannels);
 };
 
 extern irchook irhook;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.4 2002/04/05 16:06:03 konst Exp $
+* $Id: irchook.cc,v 1.5 2002/04/06 15:59:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,8 +34,6 @@
 #else
 #define DLOG(s)
 #endif
-
-const string onchannels = _("On channels: ");
 
 irchook irhook;
 
@@ -246,33 +244,64 @@ void irchook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
 }
 
 void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
-    string channels = params.room, room;
+    vector<channelInfo>::iterator ic;
+    string rooms = params.room, room;
+    bool ready = true;
 
     searchdest = &dest;
-
-    rooms.clear();
+    searchchannels.clear();
 
     while(!userlist.empty()) {
 	delete userlist.back();
 	userlist.pop_back();
     }
 
-    while(!(room = getword(channels)).empty()) {
-	firetalk_chat_join(handle, room.c_str());
-	rooms.push_back(roomInfo(room));
+    while(!(room = getword(rooms)).empty()) {
+	searchchannels.push_back(room);
+	ic = find(channels.begin(), channels.end(), room);
+
+	if(ic == channels.end()) {
+	    channels.push_back(channelInfo(room));
+	    ic = channels.end()-1;
+	}
+
+	if(!ic->joined) {
+	    firetalk_chat_join(handle, room.c_str());
+	}
+
+	if(ic->fetched) {
+	    ic->nicks.clear();
+	    firetalk_chat_listmembers(handle, room.c_str());
+	} else {
+	    ready = false;
+	}
+    }
+
+    if(ready) {
+	processnicks();
     }
 }
 
 void irchook::processnicks() {
     char *nick;
+    vector<string> foundnicks;
     vector<string>::iterator in, isn;
-    vector<roomInfo>::iterator ir, iroot;
+    vector<channelInfo>::iterator ir;
 
-    iroot = rooms.begin();
+    ir = find(channels.begin(), channels.end(), *searchchannels.begin());
 
-    if(rooms.size() > 1) {
-	for(in = iroot->nicks.begin(); in != iroot->nicks.end(); in++)
-	for(ir = iroot+1; ir != rooms.end(); ir++) {
+    foundnicks = ir->nicks;
+    sort(foundnicks.begin(), foundnicks.end());
+
+    if(searchchannels.size() > 1) {
+	for(in = foundnicks.begin(); in != foundnicks.end(); in++)
+	for(ir = channels.begin(); ir != channels.end(); ir++) {
+	    if(find(searchchannels.begin(), searchchannels.end(), ir->name) == searchchannels.end())
+		continue;
+
+	    if(ir->name == *searchchannels.begin())
+		continue;
+
 	    if(find(ir->nicks.begin(), ir->nicks.end(), *in) == ir->nicks.end()) {
 		/*
 		*
@@ -281,21 +310,81 @@ void irchook::processnicks() {
 		*
 		*/
 
-		iroot->nicks.erase(in);
-		in = iroot->nicks.begin();
+		foundnicks.erase(in);
+		in = foundnicks.begin();
 	    }
 	}
     }
 
-    for(in = iroot->nicks.begin(); in != iroot->nicks.end(); in++) {
+    for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
 	userlist.push_back(nick = strdup(in->c_str()));
 	searchdest->additem(0, nick, (string) " " + nick);
     }
 
-    face.log(_("+ [irc] channel list fetching finished, %d found"),
+    face.log(_("+ [irc] channel members list fetching finished, %d found"),
 	userlist.size());
 
     searchdest->redraw();
+}
+
+vector<irchook::channelInfo> irchook::getautochannels() const {
+    vector<channelInfo> r;
+    vector<channelInfo>::const_iterator ic;
+
+    for(ic = channels.begin(); ic != channels.end(); ic++) {
+	if(find(searchchannels.begin(), searchchannels.end(), ic->name) != searchchannels.end())
+	    if(!ic->joined)
+		// A channel used for search
+		continue;
+
+	r.push_back(*ic);
+    }
+
+    return r;
+}
+
+void irchook::setautochannels(vector<channelInfo> &achannels) {
+    bool r;
+    vector<channelInfo>::iterator ic, iac;
+
+    /*
+    *
+    * First, let's leave the channels we are not on anymore.
+    *
+    */
+
+    for(ic = channels.begin(); ic != channels.end(); ic++) {
+	if(ic->joined) {
+	    iac = find(achannels.begin(), achannels.end(), ic->name);
+	    r = iac == achannels.end();
+	    if(!r) r = !iac->joined;
+
+	    if(r) {
+		firetalk_chat_part(irhook.handle, ic->name.c_str());
+	    }
+	}
+    }
+
+    /*
+    *
+    * Now, let's see if there are any new channels we
+    * gotta join to.
+    *
+    */
+
+    for(iac = achannels.begin(); iac != achannels.end(); iac++) {
+	if(iac->joined) {
+	    ic = find(channels.begin(), channels.end(), iac->name);
+	    r = ic == channels.end();
+	    if(!r) r = !ic->joined;
+
+	    if(r) {
+		firetalk_chat_join(irhook.handle, iac->name.c_str());
+	    }
+	}
+    }
+
+    channels = achannels;
 }
 
 // ----------------------------------------------------------------------------
@@ -326,6 +415,7 @@ void irchook::connected(void *conn, void *cli, ...) {
     face.update();
 
     int i;
+    vector<channelInfo>::iterator ic;
     icqcontact *c;
 
     for(i = 0; i < clist.count; i++) {
@@ -336,14 +426,12 @@ void irchook::connected(void *conn, void *cli, ...) {
 	}
     }
 
+    for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ic++) {
+	firetalk_chat_join(irhook.handle, ic->name.c_str());
+    }
+
     irhook.ourstatus = available;
     irhook.setautostatus(irhook.manualstatus);
-
-//    irhook.loadprofile();
-//    firetalk_set_info(irhook.handle, irhook.profile.info.c_str());
-
-//    irhook.resolve();
-//    DLOG("connected");
 }
 
 void irchook::disconnected(void *conn, void *cli, ...) {
@@ -419,12 +507,16 @@ void irchook::gotinfo(void *conn, void *cli, ...) {
 	}
 
 	cbinfo.email = email;
-	c->setnick(nick);
-	c->setabout(about);
-	c->setbasicinfo(cbinfo);
 
-	if(c->getabout().empty())
-	    c->setabout(_("The user has no profile information."));
+	if((pos = about.find(" ")) != -1) {
+	    cbinfo.lname = about.substr(pos+1);
+	    about.erase(pos);
+	}
+
+	cbinfo.fname = about;
+
+	c->setnick(nick);
+	c->setbasicinfo(cbinfo);
     }
 
     DLOG("gotinfo");
@@ -441,14 +533,11 @@ void irchook::gotchannels(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(nick && channels)
-    if(strlen(nick) && strlen(channels))
-    if(c = clist.get(imcontact(nick, irc))) {
-	info = c->getabout();
+    if(strlen(nick) && strlen(channels)) {
+	c = clist.get(imcontact(nick, irc));
+	if(!c) c = clist.get(contactroot);
 
-	if(info.find(onchannels) == -1) {
-	    info += (string) "\n\n" + onchannels + channels;
-	    c->setabout(info);
-	}
+	c->setabout((string) _("On channels: ") + channels);
     }
 
     DLOG("gotchannels");
@@ -544,7 +633,7 @@ void irchook::buddynickchanged(void *conn, void *cli, ...) {
 
 void irchook::listmember(void *connection, void *cli, ...) {
     va_list ap;
-    vector<roomInfo>::iterator ir;
+    vector<channelInfo>::iterator ir;
 
     va_start(ap, cli);
     char *room = va_arg(ap, char *);
@@ -552,11 +641,11 @@ void irchook::listmember(void *connection, void *cli, ...) {
     int opped = va_arg(ap, int);
     va_end(ap);
 
-    if(irhook.searchdest && membername)
+    if(membername)
     if(strlen(membername)) {
-	ir = find(irhook.rooms.begin(), irhook.rooms.end(), string(room));
+	ir = find(irhook.channels.begin(), irhook.channels.end(), room);
 
-	if(ir != irhook.rooms.end()) {
+	if(ir != irhook.channels.end()) {
 	    ir->nicks.push_back(/*(string) (opped ? "@": "") +*/ membername);
 	}
     }
@@ -574,61 +663,60 @@ void irchook::log(void *connection, void *cli, ...) {
 
 void irchook::chatnames(void *connection, void *cli, ...) {
     va_list ap;
-    vector<roomInfo>::iterator ir;
+    vector<channelInfo>::iterator ic;
+    vector<string>::iterator is;
+    bool ready = true;
 
     va_start(ap, cli);
     char *croom = va_arg(ap, char *);
     va_end(ap);
 
-    if(irhook.searchdest) {
-	ir = find(irhook.rooms.begin(), irhook.rooms.end(), string(croom));
+    ic = find(irhook.channels.begin(), irhook.channels.end(), croom);
 
-	if(ir != irhook.rooms.end()) {
-	    firetalk_chat_listmembers(irhook.handle, croom);
+    if(ic != irhook.channels.end()) {
+	ic->fetched = true;
+	ic->nicks.clear();
+
+	firetalk_chat_listmembers(irhook.handle, croom);
+
+	if(!ic->joined) {
 	    firetalk_chat_part(irhook.handle, croom);
+	}
+    }
 
-	    ir->fetched = true;
-	    sort(ir->nicks.begin(), ir->nicks.end());
+    if(irhook.searchdest) {
+	for(is = irhook.searchchannels.begin(); is != irhook.searchchannels.end(); is++) {
+	    ic = find(irhook.channels.begin(), irhook.channels.end(), *is);
 
-	    if(find(irhook.rooms.begin(), irhook.rooms.end(), false) == irhook.rooms.end()) {
-		/*
-		*
-		* Finished fetching users from all the channels.
-		*
-		*/
-
-		irhook.processnicks();
+	    if(ic != irhook.channels.end())
+	    if(!ic->fetched) {
+		ready = false;
+		break;
 	    }
+	}
+
+	if(ready) {
+	    irhook.processnicks();
 	}
     }
 }
 
 // ----------------------------------------------------------------------------
 
-bool irchook::roomInfo::operator != (const string &aname) const {
+static string up(string s) {
     int k;
-    string nick1, nick2;
+    string r;
 
-    for(k = 0; k < name.size(); k++) nick1 += name[k];
-    for(k = 0; k < aname.size(); k++) nick2 += aname[k];
+    for(k = 0; k < s.size(); k++)
+	r += s[k];
 
-    return nick1 != nick2;
+    return r;
 }
 
-bool irchook::roomInfo::operator == (const string &aname) const {
-    int k;
-    string nick1, nick2;
-
-    for(k = 0; k < name.size(); k++) nick1 += name[k];
-    for(k = 0; k < aname.size(); k++) nick2 += aname[k];
-
-    return nick1 == nick2;
+bool irchook::channelInfo::operator != (const string &aname) const {
+    return up(aname) != up(name);
 }
 
-bool irchook::roomInfo::operator != (const bool &afetched) const {
-    return fetched != afetched;
-}
-
-bool irchook::roomInfo::operator == (const bool &afetched) const {
-    return fetched == afetched;
+bool irchook::channelInfo::operator == (const string &aname) const {
+    return up(aname) == up(name);
 }
