@@ -8,6 +8,9 @@
 #include "icqmlist.h"
 #include "centericq.h"
 
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #define TIMESTAMP ihook.maketm(hour, minute, day, month, year)
 
 icqhook::icqhook(): flogged(false), newuin(0), finddest(0),
@@ -266,14 +269,24 @@ void icqhook::useronline(struct icq_link *link, unsigned long uin,
 unsigned long status, unsigned long ip, unsigned short port,
 unsigned long real_ip, unsigned char tcp_flag) {
     icqcontact *c = clist.get(uin);
-    unsigned char *bip = (unsigned char *)(&ip);
     time_t curtime = time(0);
 
-    string lastip =
-	i2str(bip[3]) + "." +
-	i2str(bip[2]) + "." +
-	i2str(bip[1]) + "." +
-	i2str(bip[0]);
+    string lastip, sip, srip, sip_rev;
+    unsigned char *bip = (unsigned char *) &ip;
+    unsigned char *brip = (unsigned char *) &real_ip;
+    string::reverse_iterator ch;
+
+    sip = i2str(bip[3]) + "." + i2str(bip[2]) + "." + i2str(bip[1]) + "." + i2str(bip[0]);
+    srip = i2str(brip[3]) + "." + i2str(brip[2]) + "." + i2str(brip[1]) + "." + i2str(brip[0]);
+
+    for(ch = sip.rbegin(); ch != sip.rend(); ch++)
+	sip_rev += *ch;
+
+    if(sip != "0.0.0.0") lastip = sip;
+    if(srip != "0.0.0.0" && srip != sip && srip != sip_rev) {
+	if(!lastip.empty()) lastip += " ";
+	lastip += srip;
+    }
 
     if(c) {
 	c->setstatus(status);

@@ -29,7 +29,7 @@ class icqcontact {
 	string nick, firstname, lastname, primemail, secemail, oldemail;
 	string city, state, phone, fax, street, cellular, wcity, wstate;
 	string wphone, wfax, waddress, company, department, job, whomepage;
-	string homepage, lastip, about, dispnick;
+	string homepage, lastip, about, dispnick, postponed;
 	string faf[4], fbg[4], fint[4];
 
 	unsigned char lang1, lang2, lang3, bday, bmonth, byear, age, gender;
@@ -137,6 +137,9 @@ class icqcontact {
 
 	int getinfotryn();
 	void incinfotryn();
+
+	void setpostponed(const string apostponed);
+	string getpostponed();
 };
 
 #endif

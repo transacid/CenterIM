@@ -565,11 +565,11 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
     if(c->getstatus() == STATUS_OFFLINE) {
-	char buf[64];
 	time_t ls = c->getlastseen();
 
 	mainw.write(WORKAREA_X1+2, WORKAREA_Y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
-	mainw.write(WORKAREA_X1+14, WORKAREA_Y1+14, conf.getcolor(cp_main_text), ls ? time2str(&ls, "DD.MM.YY hh:mm", buf) : _("Never"));
+	mainw.write(WORKAREA_X1+14, WORKAREA_Y1+14, conf.getcolor(cp_main_text),
+	    ls ? strdateandtime(ls) : _("Never"));
     }
 }
 
@@ -685,7 +685,7 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 }
 
 void icqface::infoabout(dialogbox &db, icqcontact *c) {
-    db.getbrowser()->setbuf(c->getabout().c_str());
+    db.getbrowser()->setbuf(c->getabout());
 }
 
 void commacat(string &text, string sub, bool nocomma = false) {
@@ -745,7 +745,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 	}
     }
 
-    db.getbrowser()->setbuf(text.c_str());
+    db.getbrowser()->setbuf(text);
 }
 
 void icqface::userinfo(unsigned int uin, bool nonicq, unsigned int realuin) {
@@ -1054,7 +1054,7 @@ bool icqface::editurl(unsigned int uin, string &url, string &text) {
 	passuin = uin;
 	status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
 
-	se->load(text.c_str(), strdup(""));
+	se->load(text, strdup(""));
 	se->open();
 
 	if(editdone) {
@@ -1086,6 +1086,7 @@ bool icqface::editurl(unsigned int uin, string &url, string &text) {
 bool icqface::editmsg(unsigned int uin, string &text) {
     char *ctext;
     texteditor *se = new texteditor;
+    icqcontact *c = clist.get(uin);
 
     editdone = false;
     saveworkarea();
@@ -1108,12 +1109,13 @@ bool icqface::editmsg(unsigned int uin, string &text) {
     se->idle = &editidle;
     se->wrap = true;
 
-    se->load(text.c_str(), strdup(""));
+    se->load(text.empty() ? c->getpostponed() : text, strdup(""));
     se->open();
     ctext = se->save("\r\n");
     text = ctext;
 
     if(muins.empty()) muins.push_back(uin);
+    c->setpostponed(editdone ? "" : text);
 
     delete se;
     delete ctext;
@@ -1208,7 +1210,7 @@ int icqface::showicq(unsigned int uin, string text, char imt, int options = 0) {
 	workarealine(WORKAREA_Y1+2);
 	workarealine(WORKAREA_Y2-2);
 
-	db.getbrowser()->setbuf(text.c_str());
+	db.getbrowser()->setbuf(text);
 	if(!db.open(i, b)) b = -1;
 	db.close();
     }
@@ -1318,21 +1320,21 @@ struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false) {
     }
 
     if(inout == HIST_MSG_IN) {
-	char srecv[64], ssent[64];
-
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
 	_("Message from %s, %lu"), c->getdispnick().c_str(), uin);
 
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
 	    conf.getcolor(cp_main_highlight), _("%s, rcvd on %s"),
-	    time2str(&(t = mktime(&senttm)), "DD.MM.YY hh:mm", ssent),
-	    time2str(&(t = mktime(&recvtm)), "DD.MM.YY hh:mm", srecv));
+	    strdateandtime(&senttm).c_str(), strdateandtime(&recvtm).c_str());
     } else {
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("Message to %s, %lu"), c->getdispnick().c_str(), uin);
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
+	    conf.getcolor(cp_main_highlight),
+	    _("Message to %s, %lu"),
+	    c->getdispnick().c_str(), uin);
 
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1, conf.getcolor(cp_main_highlight),
-	_("Sent on %s"), time2str(&(t = mktime(&recvtm)), "DD.MM.YY hh:mm", buf));
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
+	    conf.getcolor(cp_main_highlight),
+	    _("Sent on %s"), strdateandtime(&recvtm).c_str());
     }
 
     db.otherkeys = &userinfokeys;
@@ -1343,7 +1345,7 @@ struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false) {
     workarealine(WORKAREA_Y1+3);
     workarealine(WORKAREA_Y2-2);
 
-    db.getbrowser()->setbuf(text.c_str());
+    db.getbrowser()->setbuf(text);
     if(!db.open(i, b)) b = -1;
     db.close();
 
@@ -1367,18 +1369,22 @@ bool inhistory = false) {
 	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     if(inout == HIST_MSG_IN) {
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("URL from %s, %lu"), c->getdispnick().c_str(), uin);
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
+	    conf.getcolor(cp_main_highlight),
+	    _("URL from %s, %lu"), c->getdispnick().c_str(), uin);
 
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1, conf.getcolor(cp_main_highlight), _("%s, rcvd on %s"),
-	time2str(&(t = mktime(&recvtm)), "DD.MM.YY hh:mm", buf),
-	time2str(&(t = mktime(&senttm)), "DD.MM.YY hh:mm", buf));
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
+	    conf.getcolor(cp_main_highlight), _("%s, rcvd on %s"),
+	    strdateandtime(&recvtm).c_str(),
+	    strdateandtime(&senttm).c_str());
     } else {
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("URL to %s, %lu"), c->getdispnick().c_str(), uin);
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
+	    conf.getcolor(cp_main_highlight),
+	    _("URL to %s, %lu"), c->getdispnick().c_str(), uin);
 
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1, conf.getcolor(cp_main_highlight),
-	_("Sent on %s"), time2str(&(t = mktime(&recvtm)), "DD.MM.YY hh:mm", buf));
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
+	    conf.getcolor(cp_main_highlight),
+	    _("Sent on %s"), strdateandtime(&recvtm).c_str());
     }
 
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+3, conf.getcolor(cp_main_text), url);
@@ -1400,7 +1406,7 @@ bool inhistory = false) {
     workarealine(WORKAREA_Y1+5);
     workarealine(WORKAREA_Y2-2);
 
-    db.getbrowser()->setbuf(text.c_str());
+    db.getbrowser()->setbuf(text);
     if(!db.open(i, b)) b = -1;
     db.close();
     restoreworkarea();
@@ -1438,7 +1444,7 @@ bool inhistory = false) {
     workarealine(WORKAREA_Y2-2);
 
     db.idle = &dialogidle;
-    db.getbrowser()->setbuf(fname.c_str());
+    db.getbrowser()->setbuf(fname);
     if(!db.open(i, b)) b = -1;
     db.close();
 
@@ -1543,15 +1549,19 @@ void icqface::refusefile(unsigned int uin, unsigned long seq) {
 }
 
 void icqface::history(unsigned int uin) {
-    int k, savepos, b;
+    int k, savepos, b, n, i;
     icqcontact *c = clist.get(uin);
     dialogbox db;
+    static string sub;
+    time_t lr;
 
     db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
 	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_text),
 	conf.getcolor(cp_main_selected)));
+
     db.idle = &dialogidle;
+    db.otherkeys = &historykeys;
 
     hist.fillmenu(uin, db.getmenu());
 
@@ -1570,11 +1580,30 @@ void icqface::history(unsigned int uin) {
 	    _("ICQ system messages history"));
 	}
 
-	while(db.open(k, b)) {
-	    int n = (int) db.getmenu()->getref(k-1);
-	    time_t lr;
-	    hist.setpos(n);
-	    showevent(uin, HIST_MSG_IN | HIST_MSG_OUT | HIST_HISTORYMODE, lr);
+	while(1) {
+	    status(_("S search, L again, ESC cancel"));
+	    if(!db.open(k, b)) break;
+	    n = (int) db.getmenu()->getref(db.getmenu()->getpos());
+
+	    if(k <= -2) {
+		if(k == -2) sub = face.inputstr(_("search for: "), sub);
+
+		if(!sub.empty()) {
+		    if((n = hist.find(sub, savepos = n)) != -1) {
+			for(i = k-1; i < db.getmenu()->getcount(); i++)
+			if((int) db.getmenu()->getref(i) == n) {
+			    db.getmenu()->setpos(i);
+			    break;
+			}
+		    } else {
+			log(_("+ search string not found"));
+			hist.setpos(savepos);
+		    }
+		}
+	    } else {
+		hist.setpos(n);
+		showevent(uin, HIST_MSG_IN | HIST_MSG_OUT | HIST_HISTORYMODE, lr);
+	    }
 	}
 
 	hist.closecontact();
@@ -2010,6 +2039,21 @@ int icqface::multiplekeys(verticalmenu *m, int k) {
     return -1;
 }
 
+int icqface::historykeys(dialogbox *db, int k) {
+    static string sub;
+
+    switch(k) {
+	case 's':
+	case 'S':
+	    return -2;
+	case 'l':
+	case 'L':
+	    return -3;
+    }
+
+    return -1;
+}
+
 int icqface::editmsgkeys(texteditor *e, int k) {
     char *p;
 
@@ -2074,7 +2118,7 @@ void icqprogress::show(string title = "") {
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
     }
 
-    w->set_title(conf.getcolor(cp_dialog_highlight), title.c_str());
+    w->set_title(conf.getcolor(cp_dialog_highlight), title);
     w->open();
 }
 

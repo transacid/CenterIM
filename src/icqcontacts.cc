@@ -90,13 +90,13 @@ void icqcontacts::send() {
 	if(!c->isnonicq())
 	if(c->getuin()) {
 	    icq_ContactAdd(&icql, c->getuin());
-	    if(lst.inlist(c->getuin(), csvisible)) {
-		icq_ContactSetVis(&icql, c->getuin(), 1);
-	    }
+	    icq_ContactSetVis(&icql, c->getuin(),
+		lst.inlist(c->getuin(), csvisible) ? 1 : 0);
 	}
     }
 
     icq_SendContactList(&icql);
+    icq_SendVisibleList(&icql);
 }
 
 void icqcontacts::remove(unsigned int uin, bool nonicq = false) {

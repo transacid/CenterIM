@@ -96,6 +96,7 @@ class icqface {
 	static int editaboutkeys(texteditor *e, int k);
 	static int contactskeys(verticalmenu *m, int k);
 	static int multiplekeys(verticalmenu *m, int k);
+	static int historykeys(dialogbox *m, int k);
 	static int userinfokeys(dialogbox *db, int k);
 
 	static void editidle(texteditor *e);

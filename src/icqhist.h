@@ -26,45 +26,46 @@
 
 class icqhistory {
     protected:
-        class histentry { public:
-            string text;
-            int lastread, color;
-        };      // for fillmenu
+	class histentry { public:
+	    string text;
+	    int lastread, color;
+	};      // for fillmenu
 
-        class storedopen {
-            public:
-                storedopen(FILE *nf) { f = nf; rn = 0; }
-                FILE *f;
-                int rn;
+	class storedopen {
+	    public:
+		storedopen(FILE *nf) { f = nf; rn = 0; }
+		FILE *f;
+		int rn;
 		vector<string> lastevent;
-        };
+	};
 
-        FILE *open(unsigned int uin, const char *mode);
-        linkedlist opens;
+	FILE *open(unsigned int uin, const char *mode);
+	linkedlist opens;
 
     public:
-        icqhistory();
-        ~icqhistory();
-        
-        void putmessage(unsigned int uin, string text, int dir, struct tm *timestamp);
-        void puturl(unsigned int uin, string url, string desc, int dir, struct tm *timestamp);
-        void putfile(unsigned int uin, unsigned long seq, string fname, int fsize, int dir, struct tm *timestamp);
-        void putmail(string nick, string email, string msg, int mailt, struct tm *timestamp);
-        void putcontact(unsigned int uin, icqcontactmsg *cont, int dir, struct tm *timestamp);
+	icqhistory();
+	~icqhistory();
+	
+	void putmessage(unsigned int uin, string text, int dir, struct tm *timestamp);
+	void puturl(unsigned int uin, string url, string desc, int dir, struct tm *timestamp);
+	void putfile(unsigned int uin, unsigned long seq, string fname, int fsize, int dir, struct tm *timestamp);
+	void putmail(string nick, string email, string msg, int mailt, struct tm *timestamp);
+	void putcontact(unsigned int uin, icqcontactmsg *cont, int dir, struct tm *timestamp);
 
-        bool opencontact(unsigned int uin, time_t lastread = 0);
-        int setpos(int n);
-        int setposlastread(time_t lr);
-        int readevent(int &event, time_t &lastread, struct tm &sent, int &dir);
-        void getmessage(string &text);
-        void geturl(string &url, string &text);
-        void getfile(unsigned long &seq, string &fname, int &fsize);
-        void getcontact(icqcontactmsg **cont);
-        void closecontact();
+	bool opencontact(unsigned int uin, time_t lastread = 0);
+	int setpos(int n);
+	int setposlastread(time_t lr);
+	int find(const string sub, int pos = 0);
+	int readevent(int &event, time_t &lastread, struct tm &sent, int &dir);
+	void getmessage(string &text);
+	void geturl(string &url, string &text);
+	void getfile(unsigned long &seq, string &fname, int &fsize);
+	void getcontact(icqcontactmsg **cont);
+	void closecontact();
 
-        int getpos();
+	int getpos();
 
-        void fillmenu(unsigned int uin, verticalmenu *m);
+	void fillmenu(unsigned int uin, verticalmenu *m);
 };
 
 extern icqhistory hist;

@@ -693,3 +693,11 @@ bool icqcontact::operator > (const icqcontact &acontact) const {
     if(acontact.lastread != lastread) return acontact.lastread > lastread;
     else return acontact.uin > uin;
 }
+
+void icqcontact::setpostponed(const string apostponed) {
+    postponed = apostponed;
+}
+
+string icqcontact::getpostponed() {
+    return postponed;
+}

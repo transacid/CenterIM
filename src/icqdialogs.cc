@@ -300,7 +300,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     if(!c->getuin()) {
 	w.set_title(conf.getcolor(cp_dialog_highlight), _(" Your ICQ details "));
     } else {
-	w.set_title(conf.getcolor(cp_dialog_highlight), _(" %s's ICQ details "), c->getdispnick().c_str());
+	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s's ICQ details "), c->getdispnick().c_str());
     }
 
     db.setwindow(&w, false);
@@ -502,7 +502,7 @@ void icqface::editabout(string &fabout) {
     se.otherkeys = &editaboutkeys;
     se.wrap = true;
 
-    se.load(fabout.c_str(), strdup(""));
+    se.load(fabout, strdup(""));
     se.open();
 
     if(editdone) {
@@ -526,7 +526,7 @@ bool icqface::sendfiles(unsigned int uin, string &msg, linkedlist &flist) {
     blockmainscreen();
 
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" Send file(s) to %s, %lu "), clist.get(uin)->getdispnick().c_str(), uin);
+    w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" Send file(s) to %s, %lu "), clist.get(uin)->getdispnick().c_str(), uin);
 
     db.setwindow(&w, false);
     db.settree(new treeview(conf.getcolor(cp_dialog_text),

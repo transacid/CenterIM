@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.5 2001/05/05 07:37:31 konst Exp $
+* $Id: centericq.cc,v 1.6 2001/05/11 19:27:04 konst Exp $
 *
 */
 
@@ -254,6 +254,8 @@ void centericq::mainloop() {
 		    lst.add(new icqlistitem(c->getdispnick(), c->getuin(), csvisible));
 		    face.log(_("+ %s has been added to the visible list"), c->getdispnick().c_str());
 		}
+
+		clist.send();
 		break;
 
 	    case ACT_FILE: if(c->getstatus() != STATUS_OFFLINE) sendfiles(c->getuin()); break;

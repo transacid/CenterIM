@@ -139,7 +139,33 @@ int icqhistory::setposlastread(time_t lr) {
     return so->rn;
 }
 
-int icqhistory::readevent(int &event, time_t &lastread, struct tm &sent, int &dir) {
+int icqhistory::find(const string sub, int pos = 0) {
+    int evt, dir, n, lastfound = -1;
+    time_t lr;
+    struct tm tsent;
+    string text, url;
+
+    setpos(0);
+
+    while(((n = readevent(evt, lr, tsent, dir)) != -1) && (n < pos)) {
+	switch(evt) {
+	    case EVT_MSG:
+		getmessage(text);
+		break;
+	    case EVT_URL:
+		geturl(url, text);
+		text += " " + url;
+		break;
+	}
+
+	if(text.find(sub) != -1) lastfound = n;
+    }
+
+    return lastfound;
+}
+
+int icqhistory::readevent(int &event, time_t &lastread, struct tm &sent,
+int &dir) {
     int ml = 1, thisevent, thisdir;
     char buf[512];
     bool finished, mread = false;
