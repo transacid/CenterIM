@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.24 2003/01/19 01:33:46 konst Exp $
+* $Id: imexternal.cc,v 1.25 2003/01/20 02:20:16 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -274,6 +274,8 @@ int imexternal::action::execscript() {
 		setenv("SENDER_UIN", getenv("CONTACT_UIN"), 1);
 		setenv("SENDER_NICK", getenv("CONTACT_NICK"), 1);
 		setenv("SENDER_INFODIR", getenv("CONTACT_INFODIR"), 1);
+
+		c->save();
 	    }
 
 	    if(options & aonowait) {
