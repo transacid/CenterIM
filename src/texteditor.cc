@@ -75,21 +75,29 @@ texteditor::~texteditor() {
     delete files;
 }
 
-int texteditor::load(string buf, const string id) {
+int texteditor::load(const string abuf, const string id) {
     int newfn = addwindow(strdup(id.c_str())), k;
+    string buf = abuf;
+    string::iterator is;
     vector<string> lst;
     vector<string>::iterator i;
 
     setfnum(newfn);
-    while((k = buf.find("\r")) != -1) buf.replace(k, 1, "");
+
+    is = buf.begin();
+    while((is = ::find(buf.begin(), buf.end(), '\r')) != buf.end()) {
+	buf.erase(is);
+	is++;
+    }
+
     breakintolines(buf, lst, wrap ? x2-x1 : 0);
 
     curfile->lines->empty();
     for(i = lst.begin(); i != lst.end(); i++) {
 	curfile->lines->add(strdup(i->c_str()));
     }
-
     curfile->lines->add(strdup(""));
+
     return newfn;
 }
 
@@ -532,9 +540,22 @@ void texteditor::insert(FILE *f) {
 void texteditor::insert(const string abuf) {
     CHECKLOADED;
 
-    if(!abuf.empty()) {
+    string sbuf;
+    vector<string> lst;
+    vector<string>::iterator is;
+
+    sbuf = abuf;
+
+    if(sbuf.find_first_of("\n\t") != -1) {
+	breakintolines(sbuf, lst, 0);
+	for(sbuf = "", is = lst.begin(); is != lst.end(); is++) {
+	    sbuf += *is + "\n";
+	}
+    }
+
+    if(!sbuf.empty()) {
 	char *sl = strdup(CURSTRING), *el = strdup(CURSTRING+CURCOL), buf[1024], *s;
-	const char *curpos = abuf.c_str();
+	const char *curpos = sbuf.c_str();
 	bool firstpass = true;
 	int line = 0;
 
@@ -565,7 +586,7 @@ void texteditor::insert(const string abuf) {
 	delete el;
 	delete sl;
 
-	modification(uinsblock, abuf);
+	modification(uinsblock, sbuf);
     }
 }
 
@@ -638,7 +659,7 @@ void texteditor::scancomments(bool visible) {
 
 		if(tb) rsub = strstr(sub, rc.c_str());
 		else rsub = strqstr(sub, rc.c_str(), colors.synt_quote.c_str());
-		
+
 		if(rsub && (((rsub < lsub) && lsub) || !lsub)) {
 		    sub = rsub;
 		    if(!tb) {
