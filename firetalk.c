@@ -1219,6 +1219,8 @@ void firetalk_callback_chat_user_kicked(client_t c, const char * const room, con
 	conn = firetalk_find_handle(c);
 	if (conn == NULL)
 		return;
+	if (firetalk_chat_internal_remove_member(conn,room,who) != FE_SUCCESS)
+		return;
 	if (conn->callbacks[FC_CHAT_USER_KICKED])
 		conn->callbacks[FC_CHAT_USER_KICKED](conn,conn->clientstruct,room,who,by,reason);
 	return;
