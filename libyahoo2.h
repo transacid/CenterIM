@@ -1,121 +1,157 @@
-#ifndef LIBYAHOO2_H
-#define LIBYAHOO2_H
+/*
+ * libyahoo2: yahoo2.h
+ *
+ * Copyright (C) 2002, Philip S Tellis <philip . tellis AT gmx . net>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
 
-enum yahoo_status {
-	YAHOO_STATUS_AVAILABLE = 0,
-	YAHOO_STATUS_BRB,
-	YAHOO_STATUS_BUSY,
-	YAHOO_STATUS_NOTATHOME,
-	YAHOO_STATUS_NOTATDESK,
-	YAHOO_STATUS_NOTINOFFICE,
-	YAHOO_STATUS_ONPHONE,
-	YAHOO_STATUS_ONVACATION,
-	YAHOO_STATUS_OUTTOLUNCH,
-	YAHOO_STATUS_STEPPEDOUT,
-	YAHOO_STATUS_INVISIBLE = 12,
-	YAHOO_STATUS_CUSTOM = 99,
-	YAHOO_STATUS_IDLE = 999,
-	YAHOO_STATUS_OFFLINE = 0x5a55aa56, /* don't ask */
-	YAHOO_STATUS_TYPING = 0x16
-};
-#define YAHOO_STATUS_GAME	0x2 		/* Games don't fit into the regular status model */
-#define YAHOO_STATUS_AWAY 	0x80000000	/* OR'ed with YAHOO_STATUS_CUSTOM if away */
-#define YAHOO_STATUS_AVAILABLE	0x00000000	/* OR'ed with YAHOO_STATUS_CUSTOM if available */
+#ifndef YAHOO2_H
+#define YAHOO2_H
 
-enum yahoo_login_status {
-	YAHOO_LOGIN_OK = 0,
-	YAHOO_LOGIN_PASSWD = 13,
-	YAHOO_LOGIN_LOCK = 14
-};
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* Yahoo style/color directives */
-#define YAHOO_COLOR_BLACK "\033[30m"
-#define YAHOO_COLOR_BLUE "\033[31m"
-#define YAHOO_COLOR_LIGHTBLUE "\033[32m"
-#define YAHOO_COLOR_GRAY "\033[33m"
-#define YAHOO_COLOR_GREEN "\033[34m"
-#define YAHOO_COLOR_PINK "\033[35m"
-#define YAHOO_COLOR_PURPLE "\033[36m"
-#define YAHOO_COLOR_ORANGE "\033[37m"
-#define YAHOO_COLOR_RED "\033[38m"
-#define YAHOO_COLOR_OLIVE "\033[39m"
-#define YAHOO_STYLE_ITALICON "\033[2m"
-#define YAHOO_STYLE_ITALICOFF "\033[x2m"
-#define YAHOO_STYLE_BOLDON "\033[1m"
-#define YAHOO_STYLE_BOLDOFF "\033[x1m"
-#define YAHOO_STYLE_UNDERLINEON "\033[4m"
-#define YAHOO_STYLE_UNDERLINEOFF "\033[x4m"
-#define YAHOO_STYLE_URLON "\033[lm"
-#define YAHOO_STYLE_URLOFF "\033[xlm"
+#include "yahoo2_types.h"
 
-struct yahoo_data {
-	char *user;
-	char *password;
+/* returns the socket descriptor for a given pager connection. shouldn't be needed */
+int  yahoo_get_fd(int id);
 
-	char *cookie_y;
-	char *cookie_t;
-	char *login_cookie;
+/* says how much logging to do */
+/* see yahoo2_types.h for the different values */
+int  yahoo_set_log_level(enum yahoo_log_level level);
 
-	struct yahoo_buddy **buddies;
-	char **identities;
-	char *login_id;
+/* these functions should be self explanatory */
+/* who always means the buddy you're acting on */
+/* id is the successful value returned by yahoo_init */
 
-	int fd;
-	unsigned char *rxqueue;
-	int rxlen;
-	unsigned char *rawbuddylist;
 
-	GHashTable *hash;
-	GHashTable *games;
-	int current_status;
-	int initial_status;
-	gboolean logged_in;
+/* init returns a connection id used to identify the connection hereon */
+/* or 0 on failure */
+/* you must call init before calling any other function */
+int  yahoo_init(const char *username, const char *password);
+/* release all resources held by this session */
+/* you need to call yahoo_close for a session only if
+ * yahoo_logoff is never called for it (ie, it was never logged in) */
+void yahoo_close(int id);
+/* login logs in to the server */
+/* initial is of type enum yahoo_status.  see yahoo2_types.h */
+void yahoo_login(int id, int initial);
+void yahoo_logoff(int id);
+/* reloads status of all buddies */
+void yahoo_refresh(int id);
+/* activates/deactivates an identity */
+void yahoo_set_identity_status(int id, const char * identity, int active);
+/* regets the entire buddy list from the server */
+void yahoo_get_list(int id);
+/* download buddy contact information from your yahoo addressbook */
+void yahoo_get_yab(int id);
+/* add/modify an address book entry.  if yab->dbid is set, it will */
+/* modify that entry else it creates a new entry */
+void yahoo_set_yab(int id, struct yab * yab);
+void yahoo_keepalive(int id);
 
-	guint32 id;
+/* from is the identity you're sending from.  if NULL, the default is used */
+/* utf8 is whether msg is a utf8 string or not. */
+void yahoo_send_im(int id, const char *from, const char *who, const char *msg, int utf8);
+/* if type is true, send typing notice, else send stopped typing notice */
+void yahoo_send_typing(int id, const char *from, const char *who, int typ);
 
-	guint32 client_id;
-};
+/* used to set away/back status. */
+/* away says whether the custom message is an away message or a sig */
+void yahoo_set_away(int id, enum yahoo_status state, const char *msg, int away);
 
-struct yahoo_buddy {
-	char *group;
-	char *id;
-	char *real_name;
-};
+void yahoo_add_buddy(int id, const char *who, const char *group);
+void yahoo_remove_buddy(int id, const char *who, const char *group);
+void yahoo_reject_buddy(int id, const char *who, const char *msg);
+/* if unignore is true, unignore, else ignore */
+void yahoo_ignore_buddy(int id, const char *who, int unignore);
+void yahoo_change_buddy_group(int id, const char *who, const char *old_group, const char *new_group);
+void yahoo_group_rename(int id, const char *old_group, const char *new_group);
 
-int  yahoo_connect(char *host, int port);
-int  yahoo_get_fd(guint32 id);
+void yahoo_conference_invite(int id, const char * from, YList *who, const char *room, const char *msg);
+void yahoo_conference_addinvite(int id, const char * from, const char *who, const char *room, const YList * members, const char *msg);
+void yahoo_conference_decline(int id, const char * from, YList *who, const char *room, const char *msg);
+void yahoo_conference_message(int id, const char * from, YList *who, const char *room, const char *msg, int utf8);
+void yahoo_conference_logon(int id, const char * from, YList *who, const char *room);
+void yahoo_conference_logoff(int id, const char * from, YList *who, const char *room);
 
-guint32 yahoo_login(char *username, char *password, int initial);
-void yahoo_logoff(guint32 id);
-void yahoo_refresh(guint32 id);
-void yahoo_keepalive(guint32 id);
+/* Get a list of chatrooms */
+void yahoo_get_chatrooms(int id,int chatroomid);
+/* join room with specified roomname and roomid */
+void yahoo_chat_logon(int id, const char *from, const char *room, const char *roomid);
+/* Send message "msg" to room with specified roomname, msgtype is 1-normal message or 2-/me mesage */
+void yahoo_chat_message(int id, const char *from, const char *room, const char *msg, const int msgtype, const int utf8);
+/* Log off chat */
+void yahoo_chat_logoff(int id, const char *from);
 
-void yahoo_send_im(guint32 id, char *who, char *what, int len);
-void yahoo_send_typing(guint32 id, char *who, int typ);
+/* requests a webcam feed */
+/* who is the person who's webcam you would like to view */
+void yahoo_webcam_get_feed(int id, const char *who);
+void yahoo_webcam_close_feed(int id, const char *who);
 
-void yahoo_set_away(guint32 id, enum yahoo_status state, char *msg, int away);
+/* sends an image when uploading */
+/* image points to a JPEG-2000 image, lenght is the length of the image */
+/* in bytes. The timestamp is the time in milliseconds since we started the */
+/* webcam. */
+void yahoo_webcam_send_image(int id, unsigned char *image, unsigned int length, unsigned int timestamp);
 
-void yahoo_add_buddy(guint32 id, char *who, char *group);
-void yahoo_remove_buddy(guint32 id, char *who, char *group);
+/* this function should be called if we want to allow a user to watch the */
+/* webcam. Who is the user we want to accept. */
+/* Accept user (accept = 1), decline user (accept = 0) */
+void yahoo_webcam_accept_viewer(int id, const char* who, int accept);
 
-void yahoo_conference_invite(guint32 id, char **who, char *room, char *msg);
-void yahoo_conference_addinvite(guint32 id, char *who, char *room, char *msg);
-void yahoo_conference_decline(guint32 id, char **who, char *room, char *msg);
-void yahoo_conference_message(guint32 id, char **who, char *room, char *msg);
-void yahoo_conference_logon(guint32 id, char **who, char *room);
-void yahoo_conference_logoff(guint32 id, char **who, char *room);
+/* send an invitation to a user to view your webcam */
+void yahoo_webcam_invite(int id, const char *who);
 
-void yahoo_send_file(guint32 id, char *who, char *msg, char *name, long size, int datafd);
+/* will set up a connection and initiate file transfer.
+ * callback will be called with the fd that you should write
+ * the file data to
+ */
+void yahoo_send_file(int id, const char *who, const char *msg, const char *name, unsigned long size,
+		yahoo_get_fd_callback callback, void *data);
 
-void yahoo_pending(guint32 id, int fd);
+/* returns a socket fd to a url for downloading a file. */
+void yahoo_get_url_handle(int id, const char *url, 
+		yahoo_get_url_handle_callback callback, void *data);
 
-enum yahoo_status yahoo_current_status(guint32 id);
-struct yahoo_buddy **get_buddylist(guint32 id);
-char **get_identities(guint32 id);
-char *get_cookie(guint32 id, char *which);
+/* these should be called when input is available on a fd */
+/* registered by ext_yahoo_add_handler */
+/* if these return negative values, errno may be set */
+int  yahoo_read_ready(int id, int fd, void *data);
+int  yahoo_write_ready(int id, int fd, void *data);
 
-int yahoo_get_url_handle(guint32 id, char *url);
+/* utility functions. these do not hit the server */
+enum yahoo_status yahoo_current_status(int id);
+const YList * yahoo_get_buddylist(int id);
+const YList * yahoo_get_ignorelist(int id);
+const YList * yahoo_get_identities(int id);
+/* 'which' could be y, t, c or login.  This may change in later versions. */
+const char  * yahoo_get_cookie(int id, const char *which);
+
+/* returns the url used to get user profiles - you must append the user id */
+/* as of now this is http://profiles.yahoo.com/ */
+/* You'll have to do urlencoding yourself, but see yahoo_httplib.h first */
+const char  * yahoo_get_profile_url( void );
 
 #include "yahoo_httplib.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * libyahoo2: yahoo_httplib.h
+ * libyahoo2: yahoo_debug.h
  *
  * Copyright (C) 2002, Philip S Tellis <philip . tellis AT gmx . net>
  *
@@ -19,30 +19,20 @@
  *
  */
 
-#ifndef YAHOO_HTTPLIB_H
-#define YAHOO_HTTPLIB_H
+extern int yahoo_log_message(char *fmt, ...);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define NOTICE(x) if(log_level >= YAHOO_LOG_NOTICE) { yahoo_log_message x; yahoo_log_message("\n"); }
 
-#include "yahoo2_types.h"
+#define LOG(x) if(log_level >= YAHOO_LOG_INFO) { yahoo_log_message("%s:%d: ", __FILE__, __LINE__); \
+	yahoo_log_message x; \
+	yahoo_log_message("\n"); }
 
-char *yahoo_urlencode(const char *instr);
-char *yahoo_urldecode(const char *instr);
-char *yahoo_xmldecode(const char *instr);
+#define WARNING(x) if(log_level >= YAHOO_LOG_WARNING) { yahoo_log_message("%s:%d: warning: ", __FILE__, __LINE__); \
+	yahoo_log_message x; \
+	yahoo_log_message("\n"); }
 
-int yahoo_tcp_readline(char *ptr, int maxlen, int fd);
-void yahoo_http_post(int id, const char *url, const char *cookies, long size,
-		yahoo_get_fd_callback callback, void *data);
-void yahoo_http_get(int id, const char *url, const char *cookies,
-		yahoo_get_fd_callback callback, void *data);
-void yahoo_get_url_fd(int id, const char *url, const struct yahoo_data *yd,
-		yahoo_get_url_handle_callback callback, void *data);
+#define DEBUG_MSG(x) if(log_level >= YAHOO_LOG_DEBUG) { yahoo_log_message("%s:%d: debug: ", __FILE__, __LINE__); \
+	yahoo_log_message x; \
+	yahoo_log_message("\n"); }
 
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif
