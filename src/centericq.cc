@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.118 2002/09/01 11:03:11 konst Exp $
+* $Id: centericq.cc,v 1.119 2002/09/09 11:03:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -850,6 +850,7 @@ void centericq::readevents(const imcontact cont) {
 
     if(c) {
 	fin = false;
+	face.saveworkarea();
 
 	while(c->getmsgcount() && !fin) {
 	    events = em.getevents(cont, c->getlastread());
@@ -874,6 +875,7 @@ void centericq::readevents(const imcontact cont) {
 	}
 
 	c->save();
+	face.restoreworkarea();
 	face.update();
     }
 }
@@ -884,17 +886,22 @@ void centericq::history(const imcontact &cont) {
     bool enough;
     vector<imevent *> events;
     vector<imevent *>::iterator i;
+    vector<icqface::eventviewresult> buttons;
+
+    buttons.push_back(icqface::prev);
+    buttons.push_back(icqface::next);
 
     events = em.getevents(cont, 0);
 
     if(!events.empty()) {
+	face.saveworkarea();
 	face.histmake(events);
 
 	while(face.histexec(im)) {
 	    enough = false;
 
 	    while(!enough) {
-		r = readevent(*im, vector<icqface::eventviewresult>(1, icqface::next));
+		r = readevent(*im, buttons);
 
 		switch(r) {
 		    case icqface::cancel:
@@ -911,10 +918,21 @@ void centericq::history(const imcontact &cont) {
 			    im = *i;
 			}
 			break;
+
+		    case icqface::prev:
+			i = ::find(events.begin(), events.end(), im);
+			enough = i == events.end()-1;
+
+			if(!enough) {
+			    i++;
+			    im = *i;
+			}
+			break;
 		}
 	    }
 	}
 
+	face.restoreworkarea();
 	face.status("");
 
 	while(!events.empty()) {

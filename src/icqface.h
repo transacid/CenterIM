@@ -57,8 +57,8 @@ extern class centericq cicq;
 class icqface {
     public:
 	enum eventviewresult {
-	    ok, next, cancel, forward, reply, open,
-	    accept, reject, info, add, eventviewresult_size
+	    ok, next, cancel, forward, reply, open, accept, reject, info,
+	    add, prev, eventviewresult_size
 	};
 
 	class icqprogress {
@@ -133,9 +133,6 @@ class icqface {
 	void selectagerange(ICQ2000::AgeRange &r);
 	void selectrandomgroup(unsigned short &f);
 
-	void saveworkarea();
-	void restoreworkarea();
-	void clearworkarea();
 	void workarealine(int l, chtype c = HLINE);
 
 	void showextractedurls();
@@ -162,6 +159,10 @@ class icqface {
 	void draw();
 	void update();
 	void showtopbar();
+
+	void clearworkarea();
+	void saveworkarea();
+	void restoreworkarea();
 
 	void relaxedupdate();
 	bool updaterequested();
@@ -267,7 +268,7 @@ static const char *eventviewresultnames[icqface::eventviewresult_size] = {
     _("Fwd"), _("Reply"),
     _("Open"), _("Accept"),
     _("Reject"), _("User info"),
-    _("Add")
+    _("Add"), _("Prev")
 };
 
 #endif

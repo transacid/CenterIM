@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.136 2002/09/04 14:33:46 konst Exp $
+* $Id: icqface.cc,v 1.137 2002/09/09 11:03:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1983,7 +1983,6 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     actions.push_back(ok);
     copy(abuttons.begin(), abuttons.end(), back_inserter(actions));
 
-    saveworkarea();
     clearworkarea();
 
     db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+3, sizeWArea.x2,
@@ -2062,9 +2061,6 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 	    extk = elem;
 	    break;
     }
-
-    db.close();
-    restoreworkarea();
 
     return r;
 }
