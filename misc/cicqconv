@@ -1,36 +1,152 @@
 #!/usr/bin/perl
 
 #
-# Centericq specific functions
+# Contact list, history and other stuff conversion script from
+# various flavours of icq client software to centericq format.
+#
+# by Konstantin Klyagin <konst@konst.org.ua>
+# 2001
+#
+
+my $ourUIN = 0;
+
+#
+# cicq_adduser
+#
+# Adds a user to contact list.
+# One arguments: user's UIN.
 #
 
 sub cicq_adduser {
-    $uin = shift;
+    local ($uin) = @_;
     system("mkdir -p $ENV{HOME}/.centericq/$uin");
 }
 
+#
+# cicq_addhistoryitem
+#
+# Adds a message to a user's events history.
+# Requires the following parameters to be passed:
+#
+# to_UIN
+#	Uin of the receiver.
+# from_UIN
+#	Sender's uin.
+# timestamp
+#	UNIX timestamp (seconds since 1980).
+# text
+#	Message text.
+#
+
 sub cicq_addhistoryitem {
-    my ($touin, $fromuin, $timestamp, $text) = (shift, shift, shift, shift);
-    print "$touin, $fromuin, $timestamp\n$text\n";
+    local ($touin, $fromuin, $timestamp, $text) = @_;
+
+    if($ourUIN) {
+	$histuin = ($touin == $ourUIN) ? $fromuin : $touin;
+
+	if(open(UF, '>>', "$ENV{HOME}/.centericq/$histuin/history")) {
+	    print UF "\f\n";
+	    print UF ($touin == $ourUIN) ? "IN" : "OUT", "\nMSG\n";
+	    print UF "$timestamp\n$timestamp\n";
+	    print UF "$text\n\n";
+	    close UF;
+	}
+    }
 }
 
 #
 # Other icq clients related functions
 #
 
+sub licq_conv_history {
+    local ($uin) = @_;
+
+    local $uto = 0;
+    local $ufrom = 0;
+    local $utimestamp = 0;
+    local $text = "";
+
+    if(open(HF, '<', "$ENV{HOME}/.licq/history/$uin.history")) {
+	while(<HF>) {
+	    chomp;
+	    $buf = $_;
+
+	    if($buf =~ m/\[ (.?) .+ ([0-9]+) \]$/) {
+		if($text ne "") {
+		    cicq_addhistoryitem($uto, $ufrom, $timestamp, $text);
+		    $text = "";
+		}
+
+		$timestamp = $2;
+
+		if($1 eq "R") {
+		    $ufrom = $uin;
+		    $uto = $ourUIN;
+		} elsif($1 eq "S") {
+		    $ufrom = $ourUIN;
+		    $uto = $uin;
+		}
+	    } else {
+		$buf = substr($buf, 1) if substr($buf, 0, 1) eq ":";
+		$text .= $buf;
+	    }
+	}
+
+	cicq_addhistoryitem($uto, $ufrom, $timestamp, $text)
+	    if $text ne "";
+
+	close HF;
+    }
+}
+
 sub licq {
-    open(F, '<', "$ENV{HOME}/.licq/users.conf") or die "cannot find licq users file";
+    if(open(F, '<', "$ENV{HOME}/.licq/owner.uin")) {
+	while(<F>) {
+	    chomp; $buf = $_;
+
+	    if($buf =~ m/^Uin = ([0-9]+)$/) {
+		$ourUIN = $1;
+		last;
+	    }
+	}
+
+	close F;
+    }
+
+    open(F, '<', "$ENV{HOME}/.licq/users.conf")
+	or die "cannot find licq users file";
 
     while(<F>) {
-	chomp;
-	$buf = $_;
+	chomp; $buf = $_;
 
 	if($buf =~ m/^User[0-9]+ = ([0-9]+)$/) {
 	    cicq_adduser($1);
+	    licq_conv_history($1);
 	}
     }
 
     close F;
 }
 
-licq
+sub usage {
+
+    print <<EOF
+Centericq contact list and history convertor usage:
+    $0 <client>
+
+Where <client> is the name of program you can to convert from.
+Can be: licq.
+
+EOF
+
+}
+
+my $flavour = $ARGV[0];
+
+if($flavour eq "licq") {
+    print "Converting from Licq.. ";
+    licq
+    print "done.\n";
+} else {
+    usage
+}

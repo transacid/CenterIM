@@ -526,8 +526,14 @@ http://imagic.weizmann.ac.il/~dov/freesw/FriBidi
 4.0.0
 ------
 
-Fixed some compilation problems centericq caused with C++ compilers
-that have no support for namespaces.
+Ok. I'm glad this release is finally ready. I tried hard to add some
+features I needed myself and was asked to make a zillon times. Though
+now I need to arrange my life in another country I recently moved to, I
+couldn't help keeping on coding one of my favourite developments :)
+Thus, read on.
+
+Fixed some problems centericq source had with C++ compilers that have no
+support for namespaces.
 
 Applied patch by Pavel Gubin <pg@cedar.ie.tusur.ru> which fixes the bug
 causing centericq not to return from autoAway/autoNA mode when only one
@@ -540,8 +546,8 @@ words hadn't worked.
 useful when you have an old version of libc with twisted iscntrl(), but
 still need to be able to see Chinese characters :)
 
-The previous version didn't respect prefix setting. Share and locale
-directories pointed into /usr/local/share/ anyway. Fixed.
+The previous version didn't respect "prefix" autoconf setting. Share and
+locale directories always pointed into /usr/local/share/. Fixed.
 
 The centericq man page hadn't been installed along with other stuff.
 Fixed.
@@ -551,20 +557,19 @@ Now centericq is able to react on xterm window resize event.
 The program is not compatible with GCC >= 3.0.0. You can easily use the
 new compiler to build it.
 
-The following items were added to the "Config options" dialog.
-    - "Send all events through server"
-    - "Arrange contacts into groups"
+An ability to send all events through server added. You can turn it on
+with corresponding item of the "Config options" dialog.
 
-The last item means I have finally implemented support for contact
-groups. Waahaa.
+Contact groups support was added at last. I enjoy it a lot now :) It's
+off by default. To enable it go to the "Config options" dialog.
 
 Spanish PO along with docs in this language was added.
 
 "Next" button in incoming contacts window didn't work properly
 sometimes. Fixed.
 
-It's now possible to update information in "Work" section. Had to patch
-icqlib.
+It's now possible to update information in the "Work" section. Had to
+patch icqlib.
 
 Since I was dealing with icqlib, I couldn't help making other useful
 modifications. For example, I implemented White page search support. You
@@ -582,6 +587,9 @@ Contacts sending feature was implemented.
 
 Offline contacts show/hide command now has a hotkey - F5.
 
-Now centericq (my branch of icqlib to be exact) sets user's timezone
-properly. And also it's now possible to view user's local time in "user
-info" dialog.
+Now centericq (my own branch of icqlib to be exact) sets user's timezone
+properly. And also it's now possible to view user's local time in the
+"user info" dialog.
+
+A first version of contact list and history converting perl script was
+included into distribution. Now only licq is supported.

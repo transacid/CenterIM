@@ -164,9 +164,6 @@ class icqhook {
 	static void wpfound(struct icq_link *link, unsigned short seq2,
 	    unsigned long uin, const char *nick, const char *first,
 	    const char *last, const char *email, char auth, char status);
-	static void wpfound(struct icq_link *link, unsigned long uin,
-	    const char *nick, const char *first, const char *last,
-	    const char *email, char auth, char status);
 	static void searchdone(struct icq_link *link);
 	static void requestnotify(struct icq_link *link, unsigned long id,
 	    int result, unsigned int length, void *data);
