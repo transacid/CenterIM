@@ -1,4 +1,4 @@
-/* $Id: common.c,v 1.2 2004/04/11 16:35:02 konst Exp $ */
+/* $Id: common.c,v 1.3 2004/07/31 10:47:20 konst Exp $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -257,7 +257,7 @@ int gg_connect(void *addr, int port, int async)
 	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = a->s_addr;
 	
-	if (connect(sock, (struct sockaddr*) &sin, sizeof(sin)) == -1) {
+	if(cw_connect(sock, (struct sockaddr*) &sin, sizeof(sin), 0) == -1) {
 		if (errno && (!async || errno != EINPROGRESS)) {
 			gg_debug(GG_DEBUG_MISC, "// gg_connect() connect() failed (errno=%d, %s)\n", errno, strerror(errno));
 			close(sock);
@@ -265,7 +265,7 @@ int gg_connect(void *addr, int port, int async)
 		}
 		gg_debug(GG_DEBUG_MISC, "// gg_connect() connect() in progress\n");
 	}
-	
+
 	return sock;
 }
 
