@@ -720,6 +720,24 @@ you need. You can call any kind of external scripts and programs. Please
 note that the message text (when "stdin" option is specified for an
 action) can be read with cat command or something similar.
 
+Every time something is to be executed the "%exec" section's contents
+are copied to a temporary file, and the latter is processed with the
+default shell. But it doesn't mean those code parts are default shell
+dependent. You can easily specify your favourite one with the first line
+like this:
+
+#!/usr/bin/perl
+
+for example. Though, anyway this code piece's aim is just to perpare
+arguments, perform initial checks, and then execute something for
+further processing.
+
+Another point to be explained is multiple actions with the same or
+similar parameters (event, proto, and status). If an event matches
+several actions, all of them are executed. If there is a need only in
+one, you can always perform necessary checks in "%exec" so that only one
+sends a reply.
+
 
 9.2.1. Elizatalk: making fun with your friends
 ----------------------------------------------

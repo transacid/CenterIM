@@ -30,6 +30,13 @@ remove trash from mobile addr helps to send SMSes (?)
 
 MSN: 3rd person invitation from other party -> centericq segfault
 
+When somebody with a "real" msn client closes my message window, my
+centericq shows that user as being offline. (because msn sends a "bye"
+command when closing the message window). After going offline and online
+again, the user is back. This happens every time, and my current solution
+is to ask the other site NOT to close their window but minimize it. (very
+frustrating to explain why this is neccesary to the avarage windows user ;-)
+
 /*
 *
 * TODO
@@ -83,4 +90,4 @@ so when I press F2 it just opens another screen and CenterICQ doesn't crash.
 
 -------------------------------------------------------------------------------
 
-$Id: TODO,v 1.124 2002/02/20 17:11:32 konst Exp $
+$Id: TODO,v 1.125 2002/02/21 10:30:05 konst Exp $
