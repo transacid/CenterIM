@@ -35,6 +35,25 @@ struct imsearchparams {
     bool load(const string &prname);
 };
 
+struct ljparams {
+    enum ljsecurity {
+	sPublic = 0,
+	sPrivate
+    };
+
+    string journal, subj, mood, music, picture;
+    bool noformat, nocomments, backdated, noemail;
+    ljsecurity security;
+
+    ljparams()
+	: noformat(false), nocomments(false), backdated(false),
+	  noemail(false), security(sPublic) { }
+
+    bool empty() {
+	return subj.empty() && mood.empty() && music.empty() && picture.empty();
+    }
+};
+
 class imcontroller {
     protected:
 	unsigned int ruin;

@@ -43,6 +43,12 @@ class HTTPRequestEvent : public MessageEvent {
 
 	vector<pair<string, string> >::const_iterator pbegin() const { return params.begin(); }
 	vector<pair<string, string> >::const_iterator pend() const { return params.end(); }
+
+	bool operator == (HTTPRequestEvent &ev) const
+	    { return m_url == ev.m_url && params == ev.params && method == ev.method; }
+
+	bool operator != (HTTPRequestEvent &ev) const
+	    { return !(*this == ev); }
 };
 
 class HTTPClient : public SocketClient {

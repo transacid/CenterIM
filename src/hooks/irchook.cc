@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.72 2003/10/15 23:40:19 konst Exp $
+* $Id: irchook.cc,v 1.73 2003/10/19 23:24:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -253,23 +253,22 @@ bool irchook::send(const imevent &ev) {
 	    return true;
 	}
 
-	if(text.substr(0, 4) == "/me " || text.substr(0, 4) == "/Me " ||
-	    text.substr(0, 4) == "/ME " || text.substr(0, 4) == "/mE ") {
-	    text = text.substr(4);
+	if(up(text.substr(0, 4)) == "/ME ") {
+	    text.erase(0, 4);
 	    if (ischannel(c)) {
-	        return firetalk_chat_send_action(handle,
-                    c->getdesc().nickname.c_str(),
-                        text.c_str(), 0) == FE_SUCCESS;
+		return firetalk_chat_send_action(handle,
+		    c->getdesc().nickname.c_str(),
+			text.c_str(), 0) == FE_SUCCESS;
 	    } else {
-	        return firetalk_im_send_action(handle,
-	            c->getdesc().nickname.c_str(),
-                        text.c_str(), 0) == FE_SUCCESS;
+		return firetalk_im_send_action(handle,
+		    c->getdesc().nickname.c_str(),
+			text.c_str(), 0) == FE_SUCCESS;
 	    }
-	}
 
-	if(text.substr(0, 1) == "/") {
+	} else if(text.substr(0, 1) == "/") {
 	    rawcommand(text.substr(1));
 	    return true;
+
 	}
 
 	if(ischannel(c)) {
@@ -896,9 +895,9 @@ void irchook::getaction(void *conn, void *cli, ...) {
     
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
-        em.store(immessage(imcontact(sender, irc), imevent::incoming, 
+	em.store(immessage(imcontact(sender, irc), imevent::incoming, 
 	    ((string) "* " + sender + " " + 
-	        irhook.rushtmlconv("wk", cuthtml(message, true))).c_str()));
+		irhook.rushtmlconv("wk", cuthtml(message, true))).c_str()));
     }
     
     DLOG("getaction");
@@ -1139,9 +1138,9 @@ void irchook::chataction(void *connection, void *cli, ...) {
     if(from && msg)
     if(strlen(from) && strlen(msg))
     if(clist.get(imcontact(room, irc))) {
-        em.store(immessage(imcontact(room, irc), imevent::incoming,
+	em.store(immessage(imcontact(room, irc), imevent::incoming,
 	    ((string) "* " + from + " " +
-	        irhook.rushtmlconv("wk", cuthtml(msg, true))).c_str()));
+		irhook.rushtmlconv("wk", cuthtml(msg, true))).c_str()));
     }
 }
 
@@ -1497,7 +1496,9 @@ void irchook::chatopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[512];
-    sprintf(buf, _("%s has opped us."), by);
+    if(by) sprintf(buf, _("%s has opped us."), by);
+	else strcpy(buf, _("you are an op here"));
+
     em.store(imnotification(imcontact(room, irc), buf));
 }
 

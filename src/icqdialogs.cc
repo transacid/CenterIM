@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.128 2003/10/15 23:40:18 konst Exp $
+* $Id: icqdialogs.cc,v 1.129 2003/10/19 23:24:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 #include "abstracthook.h"
+#include "ljhook.h"
 
 #include <libicq2000/userinfohelpers.h>
 #include <libicq2000/constants.h>
@@ -1659,4 +1660,148 @@ transferstatus st, int btotal, int bdone) {
     if(btotal) i->btotal = btotal;
     if(bdone) i->bdone = bdone;
     i->status = st;
+}
+
+void icqface::invokelist(string &s, vector<string> &v, const string &def, textwindow *w) {
+    int delems = (int) ((w->y2-w->y1)/2);
+    int vmax = v.size() > delems ? delems : v.size();
+    if(vmax < 2) return;
+    vmax++;
+
+    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(w->x1, w->y2-vmax, w->x1+30, w->y2, conf.getcolor(cp_dialog_menu)));
+    m.idle = &menuidle;
+
+    vector<string>::const_iterator iv = v.begin();
+    while(iv != v.end()) {
+	string cs = *iv;
+	if(cs.empty()) cs = def;
+	m.additem((string) " " + cs);
+	if(cs == s) m.setpos(iv-v.begin());
+	++iv;
+    }
+
+    int i = m.open();
+    m.close();
+
+    if(i) s = v[i-1];
+}
+
+bool icqface::setljparams() {
+    bool r = false;
+
+#ifdef BUILD_LJ
+    int i, n, b;
+    dialogbox db;
+
+    vector<string> journals, moods, pictures;
+    vector<string>::iterator is, im;
+    string tmp;
+    bool custmood;
+
+    static vector<string> snames;
+
+    journals = lhook.getjournals();
+    pictures = lhook.getpictures();
+    moods = lhook.getmoods();
+
+    if(ljp.empty()) {
+	if(!journals.empty()) ljp.journal = journals.front();
+	if(!moods.empty()) ljp.mood = moods.front();
+	if(!pictures.empty()) ljp.picture = pictures.front();
+    }
+
+    if(snames.empty()) {
+	snames.push_back(_("public (visible to all)"));
+	snames.push_back(_("private (friends only)"));
+    }
+
+    if((int) ljp.security < snames.size())
+	is = snames.begin()+(int) ljp.security;
+
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    w.set_title(conf.getcolor(cp_dialog_highlight), _(" LiveJournal posting: attributes "));
+    db.setwindow(&w, false);
+
+    db.settree(new treeview(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
+	conf.getcolor(cp_dialog_text)));
+
+    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+	_("Change"), _("Detect music"), _("Post"), _("cAncel"), 0));
+
+    db.addautokeys();
+    db.idle = &dialogidle;
+
+    blockmainscreen();
+    treeview &t = *db.gettree();
+
+    for(bool fin = false; !fin && !r; ) {
+	t.clear();
+
+	i = t.addnode(_(" General "));
+	t.addleaff(i, 0, 10, _(" Post to journal : %s "), ljp.journal.c_str());
+	t.addleaff(i, 0, 11, _(" Subject : %s "), ljp.subj.c_str());
+	t.addleaff(i, 0, 12, _(" Security : %s "), is->c_str());
+
+	i = t.addnode(_(" Fancy stuff "));
+
+	custmood = find(moods.begin(), moods.end(), ljp.mood) == moods.end() || ljp.mood.empty();
+	t.addleaff(i, 0, 20, _(" Mood : %s "), custmood ? _("(none/custom)") : ljp.mood.c_str());
+	if(custmood) t.addleaff(i, 0, 23, _(" Custom mood : %s "), ljp.mood.c_str());
+
+	t.addleaff(i, 0, 21, _(" Music : %s "), ljp.music.c_str());
+	t.addleaff(i, 0, 22, _(" Picture : %s "), ljp.picture.empty() ? _("(default)") : ljp.picture.c_str());
+
+	i = t.addnode(_(" Options "));
+	t.addleaff(i, 0, 30, _(" Disable auto-formatting : %s "), stryesno(ljp.noformat));
+	t.addleaff(i, 0, 31, _(" Disable sending comments by e-mail : %s "), stryesno(ljp.noemail));
+	t.addleaff(i, 0, 32, _(" Disallow comments : %s "), stryesno(ljp.nocomments));
+	t.addleaff(i, 0, 33, _(" Backdated entry : %s "), stryesno(ljp.backdated));
+
+	fin = !db.open(n, b, (void **) &n);
+
+	if(!fin) {
+	    if(b == 0) {
+		switch(n) {
+		    case 10: invokelist(ljp.journal, journals, "", db.getwindow()); break;
+		    case 11: ljp.subj = inputstr(_("Posting subject: "), ljp.subj); break;
+		    case 12:
+			tmp = *is;
+			invokelist(tmp, snames, "", db.getwindow());
+			is = find(snames.begin(), snames.end(), tmp);
+			if(is == snames.end()) is = snames.begin();
+			ljp.security = (ljparams::ljsecurity) (is-snames.begin());
+			break;
+		    case 20: invokelist(ljp.mood, moods, _("(none/custom)"), db.getwindow()); break;
+		    case 21: ljp.music = inputstr(_("Currently playing: "), ljp.music); break;
+		    case 22: invokelist(ljp.picture, pictures, _("(default)"), db.getwindow()); break;
+		    case 23: ljp.mood = inputstr(_("Current mood: "), ljp.mood); break;
+		    case 30: ljp.noformat = !ljp.noformat; break;
+		    case 31: ljp.noemail = !ljp.noemail; break;
+		    case 32: ljp.nocomments = !ljp.nocomments; break;
+		    case 33: ljp.backdated = !ljp.backdated; break;
+		}
+
+	    } else if(b == 1) {
+		ljp.music = conf.execaction("detectmusic");
+
+	    } else if(b == 2) {
+		r = true;
+		lhook.setpostparams(ljp);
+
+	    } else if(b == 3) {
+		r = false;
+		fin = true;
+
+	    }
+	}
+    }
+
+    db.close();
+    unblockmainscreen();
+
+#endif
+
+    return r;
 }

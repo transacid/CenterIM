@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.8 2003/10/01 23:01:52 konst Exp $
+* $Id: HTTPClient.cc,v 1.9 2003/10/19 23:24:35 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -96,6 +96,17 @@ void HTTPClient::Connect() {
 	SignalLog(LogEvent::WARN, "Uncaught HTTP connect exception");
 	Disconnect();
 
+    }
+
+    if(m_state == NOT_CONNECTED) {
+	MessageEvent *ev = *m_queue.begin();
+	ev->setDelivered(false);
+	ev->setFinished(true);
+	ev->setDeliveryFailureReason(MessageEvent::Failed);
+	messageack.emit(ev);
+
+	delete ev;
+	m_queue.pop_front();
     }
 }
 
@@ -207,6 +218,7 @@ void HTTPClient::SendRequest() {
 	    ++ip;
 	}
 
+	len--;
 	b.Pack((string) "Content-length: " + i2str(len) + "\r\n\r\n");
 
 	for(ip = ev->pbegin(); ip != ev->pend(); ++ip) {
@@ -299,6 +311,15 @@ void HTTPClient::clearoutMessagesPoll() {
 void HTTPClient::SendEvent(MessageEvent* ev) {
     HTTPRequestEvent *rev = dynamic_cast<HTTPRequestEvent*>(ev);
     if(rev) {
+	list<HTTPRequestEvent *>::const_iterator ir = m_queue.begin();
+	while(ir != m_queue.end()) {
+	    if(**ir == *rev) {
+		delete ev;
+		return;
+	    }
+	    ++ir;
+	}
+
 	m_queue.push_back(rev);
 
 	if(m_state == NOT_CONNECTED) {

@@ -13,7 +13,7 @@ class jabberhook: public abstracthook {
 	jconn jc;
 	int id;
 
-	bool flogged, regmode, regdone;
+	bool flogged, fonline, regmode, regdone;
 	string regerr;
 
 	vector<string> roster;
@@ -75,8 +75,9 @@ class jabberhook: public abstracthook {
 	void gotmessage(const string &type, const string &from, const string &body);
 	void gotversion(const imcontact &ic, xmlnode x);
 
-	static bool isourid(const string &jid);
+	bool isourid(const string &jid);
 	static string getourjid();
+	string jidnormalize(const string &jid) const;
 
     public:
 	jabberhook();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.196 2003/10/15 23:40:18 konst Exp $
+* $Id: icqface.cc,v 1.197 2003/10/19 23:24:34 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -912,7 +912,7 @@ void icqface::infolivejournal(dialogbox &db, icqcontact *c) {
     icqcontact::moreinfo mi = c->getmoreinfo();
 
     workarealine(sizeWArea.y1+5);
-    workarealine(sizeWArea.y1+12);
+    workarealine(sizeWArea.y1+7);
 
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Name"));
@@ -922,8 +922,8 @@ void icqface::infolivejournal(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), mi.homepage);
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("This is your LiveJournal account."));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Use it to post new entries to your journal."));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("This is your LiveJournal account. Use it to"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("post new entries to your journal."));
 }
 
 void icqface::infofriends(dialogbox &db, icqcontact *c) {
@@ -2035,7 +2035,7 @@ void icqface::showextractedurls() {
 	    m.additem(" " + *i);
 
 	if(n = m.open())
-	    conf.openurl(extractedurls[n-1]);
+	    conf.execaction("openurl", extractedurls[n-1]);
 
 	restoreworkarea();
     }
@@ -2116,19 +2116,30 @@ bool icqface::eventedit(imevent &ev) {
     showeventbottom(ev.getcontact());
 
     if(ev.gettype() == imevent::message) {
-	immessage *m = static_cast<immessage *>(&ev);
-
+	ljp = ljparams();
 	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
-	editor.load(msg = m->gettext(), "");
-	editor.open();
 
-	r = editdone;
+	while(1) {
+	    immessage *m = static_cast<immessage *>(&ev);
+	    editor.load(msg = m->gettext(), "");
 
-	auto_ptr<char> p(editor.save("\r\n"));
-	*m = immessage(ev.getcontact(), imevent::outgoing, p.get());
+	    editdone = false;
+	    editor.open();
+	    r = editdone;
 
-	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
-	    c->setpostponed(r ? "" : p.get());
+	    auto_ptr<char> p(editor.save("\r\n"));
+	    *m = immessage(ev.getcontact(), imevent::outgoing, p.get());
+
+	    if(r)
+	    if(ev.getcontact().pname == livejournal)
+	    if(!setljparams())
+		continue;
+
+	    if((c = clist.get(ev.getcontact())) && (msg != p.get()))
+		c->setpostponed(r ? "" : p.get());
+
+	    break;
+	}
 
     } else if(ev.gettype() == imevent::url) {
 	static textinputline urlinp;

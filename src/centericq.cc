@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.170 2003/10/11 14:28:10 konst Exp $
+* $Id: centericq.cc,v 1.171 2003/10/19 23:24:34 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,7 @@
 
 centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
-      timer_autosave(/*time(0)*/0), regmode(false)
+      timer_autosave(0), regmode(false)
 {
 }
 
@@ -999,7 +999,7 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, b
 
 	case icqface::open:
 	    if(const imurl *m = static_cast<const imurl *>(&ev))
-		conf.openurl(m->geturl());
+		conf.execaction("openurl", m->geturl());
 	    break;
 
 	case icqface::accept:

@@ -32,7 +32,8 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 
 	map<HTTPRequestEvent *, RequestType> sent;
 	vector<icqcontact *> foundguys;
-	vector<string> friendof;
+	vector<string> friendof, journals, moods, pictures;
+	ljparams ljp;
 
 	void socket_cb(SocketEvent *ev);
 	void messageack_cb(MessageEvent *ev);
@@ -81,6 +82,12 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	void ouridchanged(const icqconf::imaccount &ia);
 
 	void updatecontact(icqcontact *c);
+
+	vector<string> getjournals() const { return journals; }
+	vector<string> getmoods() const { return moods; }
+	vector<string> getpictures() const { return pictures; }
+
+	void setpostparams(const ljparams &aljp) { ljp = aljp; }
 };
 
 extern ljhook lhook;

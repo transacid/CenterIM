@@ -88,8 +88,10 @@ class icqconf {
 	bool chatmode[protocolname_size], russian[protocolname_size],
 	    entersends[protocolname_size];
 
-	string sockshost, socksuser, sockspass, openurlcommand, basedir,
-	    argv0, smtphost, bindhost, httpproxyhost, defcharset;
+	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
+	    bindhost, httpproxyhost, defcharset;
+
+	map<string, string> actions;
 
 	regsound rs;
 	regcolor rc;
@@ -189,7 +191,7 @@ class icqconf {
 	void getpeertopeer(int &min, int &max) const { min = ptpmin; max = ptpmax; }
 	void setpeertopeer(int min, int max) { ptpmin = min; ptpmax = max; }
 
-	void openurl(const string &url);
+	string execaction(const string &action, const string &param = "");
 
 	imstatus getstatus(protocolname pname);
 	void savestatus(protocolname pname, imstatus st);

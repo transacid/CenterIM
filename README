@@ -13,14 +13,13 @@ Contents
 2. IM accounts registration
     2.1. ICQ accounts
     2.2. Yahoo! accounts
-    2.3. MSN accounts
-    2.4. AIM accounts
-    2.5. IRC accounts
-	2.5.1. IRC channels
-    2.6. Jabber accounts
+    2.3. AIM accounts
+    2.4. IRC accounts
+	2.4.1. IRC channels
+    2.5. Jabber accounts
 	2.6.1. Jabber groupchat conferences
-    2.7. LiveJournal
-    2.8. Updating details
+    2.6. LiveJournal
+    2.7. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -36,11 +35,10 @@ Contents
     4.5. Hostnames and port numbers (for crazy firewall admins)
 	4.5.1. ICQ
 	4.5.2. Yahoo!
-	4.5.3. MSN
-	4.5.4. AIM TOC
-	4.5.5. IRC
-	4.5.6. Jabber
-	4.5.7. LiveJournal
+	4.5.3. AIM TOC
+	4.5.4. IRC
+	4.5.5. Jabber
+	4.5.6. LiveJournal
     4.6. Binding to various IP addresses
 5. Online status
     5.1. "Auto Away" and "Auto N/A"
@@ -104,7 +102,7 @@ Contents
 ---------------
 
   Centericq is a text mode menu- and window-driven IM interface. ICQ,
-Yahoo!, MSN, AIM TOC, IRC and Jabber protocols are now supported. It
+Yahoo!, AIM TOC, IRC and Jabber protocols are now supported. It
 allows you to send, receive, and forward messages, URLs, SMSes and,
 contacts, mass message send, search for users (including extended
 "whitepages search"), view users' details, maintain your contact list
@@ -160,7 +158,7 @@ lot in it.
 
   Centericq's ICQ module has almost all the functionality including
 extended issues that Mirabilis client has. Speaking of other protocols,
-it has quite full support for features of Yahoo!, MSN, AIM, IRC and
+it has quite full support for features of Yahoo!, AIM, IRC and
 Jabber.
 
   Beside simple things like sending and receiving messages, changing
@@ -253,15 +251,7 @@ http://messenger.yahoo.com/ and select the "Acct info" link in the top
 right corner.
 
 
-2.3. MSN accounts
------------------
-
-  An account for MSN can also be registered through a web interface at
-http://chat.msn.com/ though it seems that they block access from Linux
-based web browsers.
-
-
-2.4. AIM accounts
+2.3. AIM accounts
 -----------------
 
   AIM accounts can be created with the AOL's web interface at
@@ -270,7 +260,7 @@ forget to set your profile information with "Update your details" item
 in the Account manager dialog.
 
 
-2.5. IRC accounts
+2.4. IRC accounts
 -----------------
 
   This service is completely different from others supported by
@@ -286,7 +276,7 @@ Centericq does support this too, providing a non-obligatory password
 field.
 
 
-2.5.1. IRC channels
+2.4.1. IRC channels
 -------------------
 
   IRC channels behave theirselves like usual contacts, though the set of
@@ -297,7 +287,7 @@ it on your contact list. As soon as a channel is deleted, you leave it
 automatically.
 
 
-2.6. Jabber accounts
+2.5. Jabber accounts
 --------------------
 
   Jabber is the most advanced open source and free instant messaging
@@ -306,13 +296,13 @@ to its being open and developed by the wide community, centericq can
 register new nicknames in it very easily.
 
 
-2.6.1. Jabber groupchat conferences
+2.5.1. Jabber groupchat conferences
 -----------------------------------
 
    Like IRC channels, they're controlled like usual contacts, too.
 
 
-2.7. LiveJournal
+2.6. LiveJournal
 ----------------
 
   Though LiveJournal is not actually an IM service, but I hope you
@@ -325,7 +315,7 @@ get it. If you don't like the rules, you can always download their
 server software and install it on your own. Long live open source!
 
 
-2.8. Updating details
+2.7. Updating details
 ---------------------
 
   If you have just registered on the ICQ network only basic fields of
@@ -578,21 +568,14 @@ to 21 or whatever is not restricted by firewall and it will work :)
   Port: 5050
 
 
-4.5.3. MSN
-----------
-
-  Hostname: messenger.hotmail.com
-  Port: 1863
-
-
-4.5.4. AIM TOC
+4.5.3. AIM TOC
 --------------
 
   Hostname: toc.oscar.aol.com
   Port: 9898
 
 
-4.5.5. IRC
+4.5.4. IRC
 ----------
 
   For this network you gotta choose a server yourself, because the
@@ -603,7 +586,7 @@ choice. However, by default, centericq sets the following parameters:
   Port: 6667
 
 
-4.5.6. Jabber
+4.5.5. Jabber
 -------------
 
   There are many Jabber servers in the world, also the solution is
@@ -615,7 +598,7 @@ open to the public is the following:
   Port: 5222
 
 
-4.5.7. LiveJournal
+4.5.6. LiveJournal
 ------------------
 
   Since LiveJournal, despite of its being not an IM network, is also a
@@ -701,7 +684,7 @@ just type in a first name ("Konstantin") and fill in the "last name" field
 with "Klyag*". The same trick can be done with other fields: "city",
 "nickname", "company", etc..
 
-  The Yahoo!, MSN, AIM, IRC and Jabber networks support in centericq
+  The Yahoo!, AIM, IRC and Jabber networks support in centericq
 does only allow to add users by nicknames.
 
   With IRC it's possible to get users from channels. For more info on
@@ -724,9 +707,6 @@ commands to add a user (depends on an IM type):
 
     $ mkdir ~/.centericq/y<nickname>
 	For Yahoo!
-
-    $ mkdir ~/.centericq/m<nickname>
-	For MSN
 
     $ mkdir ~/.centericq/a<nickname>
 	For AIM
@@ -917,7 +897,7 @@ sends a file to you.
 ----------------------------
 
   This kind of events is ICQ specific. There is no way to receive them
-with Yahoo!, MSN or other protocols. E-mail express is a service
+with Yahoo! or other protocols. E-mail express is a service
 provided by Mirabilis to make it possible to send messages through
 e-mail to logged in ICQ users. A gate, indeed.
 
@@ -1070,7 +1050,7 @@ outgoing queue:
 -p or --proto <protocol type>
 
     This one specifies to which IM network the destination contact
-    belongs to. Can be either "icq", "yahoo", "msn", "aim", "irc" or
+    belongs to. Can be either "icq", "yahoo", "aim", "irc" or
     "jabber".
 
 -t or --to
@@ -1125,7 +1105,7 @@ engine is to be affected.
 -p or --protocol <protocol name>
 
     This one specifies to which IM network the destination contact
-    belongs to. Can be either "icq", "yahoo", "msn", "aim", "irc" or
+    belongs to. Can be either "icq", "yahoo", "aim", "irc" or
     "jabber".
 
 Examples:
@@ -1171,7 +1151,7 @@ recommended just cut'n'paste the following text.
 #
 # proto
 # -----
-# Can be "icq", "yahoo", "msn", "aim", "irc" or "jabber". Or combination
+# Can be "icq", "yahoo", "aim", "irc" or "jabber". Or combination
 # of these words. "all" can be used as a synonim for all of them.
 #
 # status
@@ -1264,7 +1244,7 @@ EVENT_TYPE
 EVENT_NETWORK
 
     The IM network name through which the event was received. Can be
-    "icq", "msn", "yahoo", "aim", "irc" or "jabber".
+    "icq", "yahoo", "aim", "irc" or "jabber".
 
 CONTACT_UIN
 
@@ -1687,8 +1667,6 @@ IM protocols support in centericq.
   for icq2000 protocol and a GTK+ based ICQ client for UNIX.
   http://ickle.sourceforge.net/
 
-  Meredydd Luff's <m_luff@wincoll.ac.uk>, for his MSN library.
-
   The whole team of
     Mark Spencer <markster@marko.net>,
     Adam Fritzler <afritz@marko.net>,
@@ -1804,4 +1782,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.88 2003/10/11 14:28:10 konst Exp $
+$Id: README,v 1.89 2003/10/19 23:24:32 konst Exp $

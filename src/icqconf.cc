@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.119 2003/10/11 14:28:10 konst Exp $
+* $Id: icqconf.cc,v 1.120 2003/10/19 23:24:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,7 @@
 */
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <dirent.h>
 #include <fstream>
 
@@ -513,13 +514,18 @@ void icqconf::loadactions() {
 	if(of.is_open()) {
 	    of << "# This file contains external actions configuration for centericq" << endl;
 	    of << "# Every line should look like: <action> <command>" << endl;
-	    of << "# Possible actions are: openurl" << endl << endl;
+	    of << "# Possible actions are: openurl, detectmusic" << endl << endl;
 
 	    of << "openurl \\" << endl;
 	    of << "    (if test ! -z \"`ps x | grep /" << browser << " | grep -v grep`\"; \\" << endl;
 	    of << "\tthen DISPLAY=0:0 " << browser << " -remote 'openURL($url$, new-window)'; \\" << endl;
 	    of << "\telse DISPLAY=0:0 " << browser << " \"$url$\"; \\" << endl;
 	    of << "    fi) >/dev/null 2>&1 &" << endl;
+
+	    of << "detectmusic \\" << endl;
+	    of << "     if test ! -z \"`ps x | grep orpheus | grep -v grep`\"; \\" << endl;
+	    of << "\tthen cat ~/.orpheus/currently_playing; \\" << endl;
+	    of << "     fi" << endl;
 
 	    of.close();
 	}
@@ -528,23 +534,19 @@ void icqconf::loadactions() {
     f.open(fname.c_str());
 
     if(f.is_open()) {
-	openurlcommand = "";
+	actions.clear();
 	cont = false;
 
 	while(!f.eof()) {
 	    getstring(f, buf);
+	    if(!cont) name = getword(buf);
 
-	    if(!cont) {
-		name = getword(buf);
-	    }
+	    if(name == "openurl" || name == "detectmusic") {
+		if(!buf.empty())
+		if(cont = buf.substr(buf.size()-1, 1) == "\\")
+		    buf.erase(buf.size()-1, 1);
 
-	    if(name == "openurl") {
-		if(!buf.empty()) {
-		    if(cont = buf.substr(buf.size()-1, 1) == "\\")
-			buf.erase(buf.size()-1, 1);
-		}
-
-		openurlcommand += buf;
+		actions[name] += buf;
 	    }
 	}
 
@@ -676,16 +678,60 @@ void icqconf::setrussian(protocolname pname, bool frussian) {
     russian[pname] = frussian;
 }
 
-void icqconf::openurl(const string &url) {
-    int npos;
-    string torun = openurlcommand;
+string icqconf::execaction(const string &name, const string &param) {
+    int inpipe[2], outpipe[2], pid, npos;
+    struct sigaction sact, osact;
+    string torun = actions[name], out;
+    fd_set rfds;
+    char ch;
 
+    if(name == "openurl")
     while((npos = torun.find("$url$")) != -1)
-	torun.replace(npos, 5, url);
+	torun.replace(npos, 5, param);
 
-    system(torun.c_str());
+    if(!pipe(inpipe) && !pipe(outpipe)) {
+	memset(&sact, 0, sizeof(sact));
+	sigaction(SIGCHLD, &sact, &osact);
+	pid = fork();
 
-    face.log(_("+ launched the openurl command"));
+	if(!pid) {
+	    dup2(inpipe[1], STDOUT_FILENO);
+	    dup2(outpipe[0], STDIN_FILENO);
+
+	    close(inpipe[1]);
+	    close(inpipe[0]);
+	    close(outpipe[0]);
+	    close(outpipe[1]);
+
+	    execl("/bin/sh", "/bin/sh", "-c", torun.c_str(), 0);
+	    _exit(0);
+	} else {
+	    close(outpipe[0]);
+	    close(inpipe[1]);
+
+	    while(1) {
+		FD_ZERO(&rfds);
+		FD_SET(inpipe[0], &rfds);
+
+		if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
+		    if(FD_ISSET(inpipe[0], &rfds)) {
+			if(read(inpipe[0], &ch, 1) != 1) break; else {
+			    out += ch;
+			}
+		    }
+		}
+	    }
+
+	    waitpid(pid, 0, 0);
+	    close(inpipe[0]);
+	    close(outpipe[1]);
+	}
+
+	sigaction(SIGCHLD, &osact, 0);
+    }
+
+    face.log(_("+ launched the %s action command"), name.c_str());
+    return out;
 }
 
 string icqconf::getprotocolname(protocolname pname) const {

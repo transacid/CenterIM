@@ -92,6 +92,8 @@ class icqface {
 	imcontact passinfo;
 	const imevent *passevent;
 
+	ljparams ljp;
+
 	struct filetransferitem {
 	    string fname;
 	    int btotal, bdone;
@@ -155,6 +157,9 @@ class icqface {
 	void renderchathistory();
 	bool sprofmanager(string &name, string &act);
 	void showeventbottom(const imcontact &ic);
+
+	void invokelist(string &s, vector<string> &v, const string &def, textwindow *w);
+	bool setljparams();
 
     public:
 	int extk;

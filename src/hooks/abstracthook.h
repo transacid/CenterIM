@@ -32,7 +32,7 @@ struct hookcapab {
 	ssl,
 	channelpasswords,
 	groupchatservices,
-	nochat
+	nochat,
     };
 };
 

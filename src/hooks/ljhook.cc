@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.12 2003/10/15 23:40:20 konst Exp $
+* $Id: ljhook.cc,v 1.13 2003/10/19 23:24:36 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -69,6 +69,8 @@ void ljhook::connect() {
     ev->addParam("mode", "login");
     ev->addParam("user", username = acc.nickname);
     ev->addParam("hpassword", md5pass);
+    ev->addParam("getmoods", "1");
+    ev->addParam("getpickws", "1");
 
     struct utsname un;
     string clientver;
@@ -85,6 +87,9 @@ void ljhook::connect() {
     fonline = true;
     httpcli.SendEvent(ev);
     sent[ev] = reqLogin;
+
+    moods = vector<string>(1, "");
+    pictures = vector<string>(1, "");
 }
 
 void ljhook::disconnect() {
@@ -232,7 +237,20 @@ bool ljhook::send(const imevent &ev) {
 	ev->addParam("min", i2str(tm->tm_min));
 
 	ev->addParam("lineendings", "unix");
-	ev->addParam("subject", "");
+	ev->addParam("security",
+	    ljp.security == ljparams::sPublic ? "public" :
+	    ljp.security == ljparams::sPrivate ? "private" : "");
+
+	if(!ljp.journal.empty()) ev->addParam("usejournal", ljp.journal);
+	if(!ljp.subj.empty()) ev->addParam("subject", KOI2UTF(ljp.subj));
+	if(!ljp.mood.empty()) ev->addParam("prop_current_mood", KOI2UTF(ljp.mood));
+	if(!ljp.music.empty()) ev->addParam("prop_current_music", KOI2UTF(ljp.music));
+	if(!ljp.picture.empty()) ev->addParam("prop_picture_keyword", ljp.picture);
+
+	if(ljp.noformat) ev->addParam("prop_opt_preformatted", "1");
+	if(ljp.nocomments) ev->addParam("prop_opt_nocomments", "1");
+	if(ljp.backdated) ev->addParam("prop_opt_backdated", "1");
+	if(ljp.noemail) ev->addParam("prop_opt_noemail", "1");
 
 	httpcli.SendEvent(ev);
 	sent[ev] = reqPost;
@@ -399,7 +417,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
     if(ie == sent.end()) return;
 
-    int npos;
+    int npos, count, i, k;
     string content = rev->getContent(), pname;
     map<string, string> params;
     icqcontact *c;
@@ -444,6 +462,16 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		requestinfo(self);
 	    }
 
+	    count = atoi(params["mood_count"].c_str());
+	    for(i = 1; i < count; i++)
+		moods.push_back(params[(string) "mood_" + i2str(i) + "_name"]);
+
+	    count = atoi(params["pickw_count"].c_str());
+	    for(i = 1; i < count; i++)
+		pictures.push_back(params[(string) "pickw_" + i2str(i)]);
+
+	    sort(moods.begin()+1, moods.end());
+
 	    icqcontact::basicinfo bi = c->getbasicinfo();
 	    c->setstatus(available);
 
@@ -469,12 +497,14 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
     } else if(ie->second == reqGetFriends) {
 	if(params["success"] == "OK") {
-	    int fcount = atoi(params["friend_count"].c_str()), i, k;
+	    journals = vector<string>(1, username);
+
+	    count = atoi(params["friend_count"].c_str());
 	    string username, name, birthday, bd;
 	    icqcontact::moreinfo mi;
 	    icqcontact::basicinfo bi;
 
-	    for(i = 1; i <= fcount; i++) {
+	    for(i = 1; i <= count; i++) {
 		username = params[(string) "friend_" + i2str(i) + "_user"];
 		name = UTF2KOI(params[(string) "friend_" + i2str(i) + "_name"]);
 		birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
@@ -521,9 +551,12 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
 		c->setmoreinfo(mi);
 		c->setbasicinfo(bi);
+
+		if(params[(string) "friend_" + i2str(i) + "_type"] == "community")
+		    journals.push_back(username);
 	    }
 
-	    fcount = atoi(params["friendof_count"].c_str());
+	    count = atoi(params["friendof_count"].c_str());
 	    bool foempty = friendof.empty();
 
 	    map<string, string> nfriendof;
@@ -531,7 +564,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    vector<string>::iterator il;
 	    char buf[512];
 
-	    for(i = 1; i <= fcount; i++) {
+	    for(i = 1; i <= count; i++) {
 		username = params[(string) "friendof_" + i2str(i) + "_user"];
 		name = UTF2KOI(params[(string) "friendof_" + i2str(i) + "_name"]);
 		nfriendof[username] = name;
