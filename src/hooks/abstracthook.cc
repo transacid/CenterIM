@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.51 2004/02/01 17:52:09 konst Exp $
+* $Id: abstracthook.cc,v 1.52 2004/02/03 23:11:06 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,7 @@
 #include "rsshook.h"
 #include "ljhook.h"
 #include "gaduhook.h"
+#include "msnhook.h"
 
 #include "icqface.h"
 
@@ -383,6 +384,9 @@ abstracthook &gethook(protocolname pname) {
 #endif
 #ifdef BUILD_GADU
 	case gadu: return ghook;
+#endif
+#ifdef BUILD_MSN
+	case msn: return mhook;
 #endif
     }
 
