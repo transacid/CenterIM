@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: centericq 4.9.8\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"Project-Id-Version: centericq 4.9.10\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -63,9 +63,9 @@ msgid "! support for %s was disabled at build time"
 msgstr "! поддержка %s была выключена при сборке"
 
 #: src/centericq.cc:662 src/centericq.cc:717
-#, fuzzy, c-format
+#, c-format
 msgid "+ new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
+msgstr "+ получена новая почта, %d сообщений"
 
 #: src/centericq.cc:664 src/centericq.cc:719
 #, c-format
@@ -161,13 +161,12 @@ msgid "Invite to conference.."
 msgstr "Пригласить на конференцию.."
 
 #: src/centericq.cc:1634
-#, fuzzy
 msgid "Select contacts to move"
-msgstr "Выберите контакты для добавления в список"
+msgstr "Выберите контакты для перемещения"
 
 #: src/centericq.cc:1637
 msgid "Mass move selected users to.."
-msgstr ""
+msgstr "Переместить выбранные контакты.."
 
 #: src/hooks/yahoohook.cc:148
 msgid "+ [yahoo] connecting to the server"
@@ -247,64 +246,68 @@ msgstr "+ чтобы реактивировать его, посетите %s"
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] кто-то еще вошел под этим ником"
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+msgid "+ [yahoo] server closed socket"
+msgstr "+ [yahoo] сервер закрыл соединение"
+
+#: src/hooks/yahoohook.cc:840
 #, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ [yahoo] поиск закончен, %d найдено"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Пользователь %s пригласил вас в конференцию %s, тема: %s"
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr "Участники конференции: "
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr "Авто-вход в конференцию состоялся"
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Пользователь %s ответил отказом на приглашение к конференции"
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Пользователь %s вошел в конференцию"
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Пользователь %s покинул конференцию"
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 msgid "The user has added you to his/her contact list"
 msgstr "Пользователь добавил вас в свой список контактов"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 msgid "the message was: "
 msgstr "сообщение:"
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail от %s, %s"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] система: %s"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] прямое соединение не удалось"
 
@@ -1816,14 +1819,14 @@ msgid " Password : %s "
 msgstr " Пароль : %s "
 
 #: src/accountmanager.cc:120
-#, fuzzy, c-format
+#, c-format
 msgid " Priority : %s "
-msgstr " Город : %s "
+msgstr " Приоритет : %s "
 
 #: src/accountmanager.cc:125
-#, fuzzy, c-format
+#, c-format
 msgid " Import friend list : %s "
-msgstr " Отдел : %s "
+msgstr " Добавить друзей в контакт-лист : %s "
 
 #: src/accountmanager.cc:131
 msgid " Register "
@@ -1918,9 +1921,8 @@ msgid "Password must be entered"
 msgstr "Пароль должен быть указан"
 
 #: src/imcontroller.cc:114
-#, fuzzy
 msgid "Password must be at least 6 chars long"
-msgstr "Пароль должен быть указан"
+msgstr "Пароль должен быть как минимум 6 символов длиной"
 
 #: src/imcontroller.cc:132 src/imcontroller.cc:193
 msgid " Registration progress "
@@ -2352,9 +2354,8 @@ msgid " Feed information       ?"
 msgstr " Информация о подписке  ?"
 
 #: src/icqface.cc:301
-#, fuzzy
 msgid " Force check            c"
-msgstr " Игнорировать подписку  i"
+msgstr " Проверить сейчас       c"
 
 #: src/icqface.cc:304
 msgid " Unset ignore feed      i"
@@ -2422,7 +2423,7 @@ msgstr " Управление группами контактов"
 
 #: src/icqface.cc:426
 msgid " Mass group move.."
-msgstr ""
+msgstr " Массовое перемещение.."
 
 #: src/icqface.cc:755 src/icqface.cc:759 src/icqface.cc:1648
 msgid "Details"
@@ -2993,51 +2994,3 @@ msgstr "+ [lj] добавление в список друзей не удалось"
 #, c-format
 msgid "+ [lj] %s was added to friends"
 msgstr "+ [lj] %s добавлен в список друзей"
-
-#~ msgid " Force check"
-#~ msgstr " Проверить сейчас"
-
-#~ msgid " Synchronize contact list "
-#~ msgstr " Снихронизировать список контактов "
-
-#~ msgid "You must be logged in to preform the synchronization"
-#~ msgstr "Вы должны войти в сеть прежде чем сможете произвести синхронизацию"
-
-#~ msgid " Contact list synchronization "
-#~ msgstr " Синхронизация списка контактов "
-
-#~ msgid "Starting the synchronization process"
-#~ msgstr "Начало процесса синхронизации списка"
-
-#~ msgid "Attempt #%d"
-#~ msgstr "Попытка #%d"
-
-#~ msgid ".. %d already synchronized, %d contacts to be stored"
-#~ msgstr ".. %d синхронизированы, осталось %d контактов"
-
-#~ msgid "Finished"
-#~ msgstr "Завершено"
-
-#~ msgid "Too many attempts, gave up"
-#~ msgstr "Слишком много попыток, хватит"
-
-#~ msgid " Uploading buddies "
-#~ msgstr " Сохранение списка контактов "
-
-#~ msgid "No contacts to be synchronized"
-#~ msgstr "Все контакты уже синхронизированы"
-
-#~ msgid ".. all of them are already stored server-side"
-#~ msgstr ".. на сервере присутствуют все из вашего списка"
-
-#~ msgid "%d contacts are do be stored server-side. Add them now?"
-#~ msgstr "%d контактов будут сохранены на сервере. Продолжить?"
-
-#~ msgid ".. adding %s"
-#~ msgstr ".. добавляем %s"
-
-#~ msgid "Cancelled"
-#~ msgstr "Отменено"
-
-#~ msgid "Timed out"
-#~ msgstr "Таймаут"

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.9.4\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2003-05-14 11:12+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -252,64 +252,69 @@ msgstr "+ 重新檢視 %s"
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] 無法連線 : "
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+#, fuzzy
+msgid "+ [yahoo] server closed socket"
+msgstr "+ [yahoo] 錯誤 : %s"
+
+#: src/hooks/yahoohook.cc:840
 #, fuzzy, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ [jab] 搜尋結束, 找到 %d 筆資料"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "使用者 %s 邀請你加入 %s 會議, 主題是 : %s"
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr "目前參加會議的成員有 : "
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr "自動加入會議"
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "使用者 %s 婉拒了你的會議邀請"
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "使用者 %s 加入會議中"
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "使用者 %s 離開會議了"
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 msgid "The user has added you to his/her contact list"
 msgstr "該使用者己經將你加入他的好友名單中"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 msgid "the message was: "
 msgstr "訊息是 : "
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] 從 %s, %s 寄來的 e-mail"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] 系統訊息 : %s"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] 錯誤 : %s"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] 連線中斷"

@@ -19,7 +19,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.4\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2002-01-01 01:01+0020\n"
 "Last-Translator: Thomas Nemeth <tnemeth@free.fr>\n"
 "Language-Team: fr <fr@li.org>\n"
@@ -266,64 +266,69 @@ msgstr "+ pour le réactiver, allez sur %s"
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] impossible de se connecter : "
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+#, fuzzy
+msgid "+ [yahoo] server closed socket"
+msgstr "+ [yahoo] erreur : %s"
+
+#: src/hooks/yahoohook.cc:840
 #, fuzzy, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ [jab] recherche terminée, %d réponse(s)"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "L'utilisateur %s vous a invité à la conférence %s, pour parler de : %s"
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr "Les membres actuels de la conférence sont : "
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr "Connexion automatique à la conférence"
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "L'utilisateur %s a décliné votre invitation à rejoindre la conférence"
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "L'utilisateur %s a rejoint la conférence"
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "L'utilisateur %s a quitté la conférence"
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 msgid "The user has added you to his/her contact list"
 msgstr "L'utilisateur vous a ajouté à sa liste de contacts"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 msgid "the message was: "
 msgstr "message : "
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail de %s, %s"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] système : %s"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] erreur : %s"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] déconnecté"

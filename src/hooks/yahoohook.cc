@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.100 2004/01/15 01:04:40 konst Exp $
+* $Id: yahoohook.cc,v 1.101 2004/01/16 21:43:49 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -738,6 +738,7 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    break;
 
 	case YAHOO_LOGIN_SOCK:
+	    face.log(_("+ [yahoo] server closed socket"));
 	    yhook.disconnected();
 	    break;
     }

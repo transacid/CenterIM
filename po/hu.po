@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 2.0.0\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2004-01-12 20:47+0100\n"
 "Last-Translator: Mihály Gyulai <gyulai@fbi.hu>\n"
 "Language-Team: hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -247,64 +247,69 @@ msgstr "+ engedélyezés itt: %s"
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] már van egy kapcsolódás a szerverhez"
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+#, fuzzy
+msgid "+ [yahoo] server closed socket"
+msgstr "+ [yahoo] hiba: %s"
+
+#: src/hooks/yahoohook.cc:840
 #, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ [yahoo] a keresés befejezõdött, %d találat van"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "%s meghívja a(z) %s konferenciára, téma: %s"
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr "A konferencián résztvevõk:"
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr "Automatikusan belépve a konferenciára"
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "%s nem akar csatlakozni a konferenciához"
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "%s csatlakozott a konferenciához"
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "%s elhagyta a konferenciát"
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 msgid "The user has added you to his/her contact list"
 msgstr "A felhasználó felvette az azonosítónkat a kapcsolataihoz"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 msgid "the message was: "
 msgstr "az üzenet:"
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail innen: %s, %s"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] rendszer: %s"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] hiba: %s"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] közvetlen kapcsolat nem sikerült"
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
@@ -253,66 +253,71 @@ msgstr ""
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] %s in contacten toevoegen"
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+#, fuzzy
+msgid "+ [yahoo] server closed socket"
+msgstr "+ [yahoo] teruggekeerd bericht"
+
+#: src/hooks/yahoohook.cc:840
 #, fuzzy, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ [icq] whitepages zoektocht gereed, %d gevonden"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr ""
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "* De gebruiker heeft je toegevoegd"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 #, fuzzy
 msgid "the message was: "
 msgstr "* Afwezigheidsbericht:"
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, fuzzy, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [msn] e-mail van %s <%s>, %s"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, fuzzy, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] teruggekeerd bericht"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, fuzzy, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] teruggekeerd bericht"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [icq] verbinding verbroken"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.13.3\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2001-02-10 20:50+0100\n"
 "Last-Translator: Florian Mueller <me@flo.s-s-f.de>\n"
 "Language-Team: German <???>\n"
@@ -260,66 +260,71 @@ msgstr ""
 msgid "+ [yahoo] another logon detected"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+#, fuzzy
+msgid "+ [yahoo] server closed socket"
+msgstr "+ Verbinde mit dem ICQ-Server"
+
+#: src/hooks/yahoohook.cc:840
 #, fuzzy, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr ""
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "Hat dich in ihre/seine Kontaktliste aufgenommen"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 #, fuzzy
 msgid "the message was: "
 msgstr "Homepage"
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, fuzzy, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, fuzzy, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, fuzzy, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ nicht verbunden"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.6\n"
-"POT-Creation-Date: 2004-01-15 23:09+0200\n"
+"POT-Creation-Date: 2004-01-16 21:22+0200\n"
 "PO-Revision-Date: 2003-08-30 12:26+0100\n"
 "Last-Translator: Stefan Ilivanov <bg-team@top.bg>\n"
 "Language-Team: Bulgarian <ilivanov@top.bg>\n"
@@ -248,64 +248,69 @@ msgstr "+ за да активирате, посетете %s"
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] невъзможно свързване: "
 
-#: src/hooks/yahoohook.cc:839
+#: src/hooks/yahoohook.cc:741
+#, fuzzy
+msgid "+ [yahoo] server closed socket"
+msgstr "+ [yahoo] ГРЕШКА: %s"
+
+#: src/hooks/yahoohook.cc:840
 #, fuzzy, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ [jab] търсенето завърши, %d намерени"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Потребител %s Ви кани на чат %s, Темата е: %s"
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr "Участници в чат: "
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr "Автоматично влизане в чат"
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Потребител %s отказа покана за чат"
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Потребител %s влезе в чат"
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Потребител %s излезе от чат"
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1066
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1066
 msgid "The user has added you to his/her contact list"
 msgstr "Потребителят ви добави към нейната/неговата листа"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 msgid "the message was: "
 msgstr "съобщение:"
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail от %s, %s"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] система: %s"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] ГРЕШКА: %s"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] изключен"
