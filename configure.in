@@ -32,6 +32,12 @@ if test -n "$with_openssl" -a "$with_openssl" != "no"; then
     AC_MSG_RESULT([found in $with_openssl])
 else
     AC_MSG_RESULT([not found or disabled])
+
+    AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
+	CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
+	LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
+	AC_DEFINE(HAVE_GNUTLS)
+    ])
 fi
 
 AC_OUTPUT(Makefile)

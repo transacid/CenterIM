@@ -5,6 +5,15 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
+#elif HAVE_GNUTLS
+
+#include <gnutls/openssl.h>
+#define HAVE_OPENSSL
+
+#endif
+
+#ifdef HAVE_OPENSSL
+
 static SSL_CTX *ctx = 0;
 
 typedef struct { int fd; SSL *ssl; } sslsock;
@@ -32,7 +41,7 @@ static sslsock *addsock(int fd) {
 	SSL_library_init();
 	SSL_load_error_strings();
 	OpenSSL_add_all_algorithms();
-	ctx = SSL_CTX_new(SSLv23_method());
+	ctx = SSL_CTX_new(SSLv23_client_method());
     }
 
     p->ssl = SSL_new(ctx);
