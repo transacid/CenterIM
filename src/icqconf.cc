@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.43 2002/02/25 17:08:30 konst Exp $
+* $Id: icqconf.cc,v 1.44 2002/02/26 17:01:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -243,19 +243,18 @@ void icqconf::loadcolors() {
 		fprintf(f, "status\tblack/white\n");
 		fprintf(f, "dialog_text\tblack/white\n");
 		fprintf(f, "dialog_menu\tblack/white\n");
-		fprintf(f, "dialog_selected\twhite/black\tbold\n");
+		fprintf(f, "dialog_selected\twhite/transparent\tbold\n");
 		fprintf(f, "dialog_highlight\tred/white\n");
 		fprintf(f, "dialog_frame\tblue/white\n");
-		fprintf(f, "main_text\tcyan/black\n");
-		fprintf(f, "main_menu\tgreen/black\n");
+		fprintf(f, "main_text\tcyan/transparent\n");
+		fprintf(f, "main_menu\tgreen/transparent\n");
 		fprintf(f, "main_selected\tblack/white\n");
-		fprintf(f, "main_highlight\tyellow/black\tbold\n");
-		fprintf(f, "main_frame\tblue/black\tbold\n");
-		fprintf(f, "clist_icq\tgreen/black\n");
-		fprintf(f, "clist_msn\tcyan/black\n");
-		fprintf(f, "clist_yahoo\tmagenta/black\n");
-		fprintf(f, "clist_infocard\twhite/black\n");
-		fprintf(f, "clist_root\tred/black\tbold\n");
+		fprintf(f, "main_highlight\tyellow/transparent\tbold\n");
+		fprintf(f, "main_frame\tblue/transparent\tbold\n");
+		fprintf(f, "clist_icq\tgreen/transparent\n");
+		fprintf(f, "clist_msn\tcyan/transparent\n");
+		fprintf(f, "clist_yahoo\tmagenta/transparent\n");
+		fprintf(f, "clist_infocard\twhite/transparent\n");
 
 		break;
 	    case rcblue:
@@ -274,7 +273,6 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_yahoo\tmagenta/blue\n");
 		fprintf(f, "clist_msn\tcyan/blue\n");
 		fprintf(f, "clist_infocard\twhite/blue\n");
-		fprintf(f, "clist_root\tred/blue\tbold\n");
 		break;
 	}
 	fclose(f);
@@ -310,7 +308,6 @@ void icqconf::loadcolors() {
 	    if(tname == "clist_yahoo") npair = cp_clist_yahoo; else
 	    if(tname == "clist_msn") npair = cp_clist_msn; else
 	    if(tname == "clist_infocard") npair = cp_clist_infocard; else
-	    if(tname == "clist_root") npair = cp_clist_root; else
 	    continue;
 
 	    init_pair(npair, nfg, nbg);
@@ -489,7 +486,6 @@ void icqconf::initpairs() {
     boldcolors.push_back(cp_dialog_selected);
     boldcolors.push_back(cp_main_highlight);
     boldcolors.push_back(cp_main_frame);
-    boldcolors.push_back(cp_clist_root);
 
     init_pair(cp_status, COLOR_BLACK, COLOR_WHITE);
 
@@ -509,7 +505,6 @@ void icqconf::initpairs() {
     init_pair(cp_clist_msn, COLOR_CYAN, COLOR_BLACK);
     init_pair(cp_clist_yahoo, COLOR_YELLOW, COLOR_BLACK);
     init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
-    init_pair(cp_clist_root, COLOR_RED, COLOR_BLACK);
 }
 
 void icqconf::setauto(int away, int na) {

@@ -29,8 +29,7 @@
 #define cp_clist_icq            12
 #define cp_clist_yahoo          13
 #define cp_clist_infocard       14
-#define cp_clist_root           15
-#define cp_clist_msn            16
+#define cp_clist_msn            15
 
 class icqconf {
     public:
