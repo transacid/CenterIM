@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.20 2001/12/08 22:59:20 konst Exp $
+* $Id: icqhook.cc,v 1.21 2001/12/09 11:04:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -215,33 +215,41 @@ bool icqhook::enabled() const {
 }
 
 bool icqhook::send(const imevent &ev) {
-    Contact ic(ev.getcontact().uin);
+    unsigned int uin = ev.getcontact().uin;
+    Contact ic(uin);
 
-    if(ev.gettype() == imevent::message) {
-	const immessage *m = static_cast<const immessage *> (&ev);
-	cli.SendEvent(new NormalMessageEvent(&ic, rusconv("kw", m->gettext())));
+    if(busy.find(uin) == busy.end()) {
+//        busy.insert(uin);
 
-    } else if(ev.gettype() == imevent::url) {
-	const imurl *m = static_cast<const imurl *> (&ev);
-	cli.SendEvent(new URLMessageEvent(&ic,
-	    rusconv("kw", m->getdescription()),
-	    rusconv("kw", m->geturl())));
+	if(ev.gettype() == imevent::message) {
+	    const immessage *m = static_cast<const immessage *> (&ev);
+	    cli.SendEvent(new NormalMessageEvent(&ic, rusconv("kw", m->gettext())));
 
-    } else if(ev.gettype() == imevent::sms) {
-	const imsms *m = static_cast<const imsms *> (&ev);
-	ic.setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
-	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
+	} else if(ev.gettype() == imevent::url) {
+	    const imurl *m = static_cast<const imurl *> (&ev);
+	    cli.SendEvent(new URLMessageEvent(&ic,
+		rusconv("kw", m->getdescription()),
+		rusconv("kw", m->geturl())));
 
-    } else if(ev.gettype() == imevent::authorization) {
-	const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	cli.SendEvent(new AuthAckEvent(&ic,
-	    rusconv("kw", m->gettext()), m->getgranted()));
+	} else if(ev.gettype() == imevent::sms) {
+	    const imsms *m = static_cast<const imsms *> (&ev);
+	    ic.setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
+	    cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
 
-    } else if(ev.gettype() == imevent::sms) {
-	const imsms *m = static_cast<const imsms *> (&ev);
-	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()),
-	    true));
+	} else if(ev.gettype() == imevent::authorization) {
+	    const imauthorization *m = static_cast<const imauthorization *> (&ev);
+	    cli.SendEvent(new AuthAckEvent(&ic,
+		rusconv("kw", m->gettext()), m->getgranted()));
 
+	} else if(ev.gettype() == imevent::sms) {
+	    const imsms *m = static_cast<const imsms *> (&ev);
+	    cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()),
+		true));
+
+	} else {
+	    busy.erase(uin);
+	    return false;
+	}
     } else {
 	return false;
     }
@@ -380,6 +388,8 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     };
 
     fds.clear();
+    busy.clear();
+
     clist.setoffline(icq);
     fonline = false;
 
@@ -468,6 +478,15 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 }
 
 void icqhook::messageack_cb(MessageEvent *ev) {
+    Contact *ic;
+
+    if(ev->isFinished() && ev->isDelivered()) {
+	if(ev->getType() != MessageEvent::AwayMessage) {
+	    if(ic = ev->getContact()) {
+		busy.erase(ic->getUIN());
+	    }
+	}
+    }
 }
 
 void icqhook::contactlist_cb(ContactListEvent *ev) {

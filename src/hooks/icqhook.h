@@ -9,7 +9,10 @@ using namespace ICQ2000;
 class icqhook: public abstracthook, public SigC::Object {
     protected:
 	Client cli;
+
 	set<int> fds;
+	set<unsigned int> busy;
+
 	time_t timer_reconnect, timer_ping, timer_resolve;
 	bool fonline, flogged;
 	unsigned int reguin;
