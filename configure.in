@@ -11,10 +11,6 @@ AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
 
 if test "$build_msn" = "yes"; then
     # Checks for libraries.
-    CURL_CONFIG=
-    curl_CFLAGS=""
-    curl_LIBS=""
-
     AC_ARG_WITH(curl,
 	[  --with-curl=[DIR]    curl-config in DIR],
 	[CURL_CONFIG=$withval],
@@ -22,13 +18,8 @@ if test "$build_msn" = "yes"; then
 	    curl-config,
 	    AC_MSG_ERROR(curl-config not found))])
 
-    curl_LIBS="$curl_LIBS `$CURL_CONFIG --libs`"
-    curl_CFLAGS="$curl_CFLAGS `$CURL_CONFIG --cflags`"
+    CFLAGS="$CFLAGS `$CURL_CONFIG --cflags`"
     LDFLAGS="$LDFLAGS `$CURL_CONFIG --libs`"
-    AC_SUBST(curl_LIBS)
-    AC_SUBST(curl_CFLAGS)
-
-    AC_CHECK_LIB([curl], [curl_easy_init], , [AC_ERROR([curl not found])])
 
     # Checks for header files.
     AC_HEADER_STDC

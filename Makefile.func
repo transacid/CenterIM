@@ -19,21 +19,21 @@ PROJVER = 0.1
 INCLDIRS = msn/.. ../connwrap ../connwrap-0.1 
 DIST_TARGZ := $(PROJNAME)-$(PROJVER).tar.gz
 LIB = liblibmsn.a
-WANT = WANT_AUTOCONF=2.1 WANT_AUTOMAKE=1.4
+WANT = WANT_AUTOCONF=2.1 WANT_AUTOMAKE=1.4 CFLAGS="-O0 -g" CXXFLAGS="-O0 -g"
 
 # Motor specific targets
 
 # Executed every time there is a need to compile the stuff
 
 build: ready
-	$(WANT) CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" $(MAKE)
+	$(WANT) $(MAKE)
 
 ready: makesure
 	@if test ! -f Makefile.am; then $(MAKE) -f Makefile.func automake; fi
 	@if test ! -f Makefile.in; then $(WANT) automake; fi
 	@if test ! -f configure; then $(WANT) autoconf; fi
 	@if test ! -f Makefile; then \
-	    CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" ./configure; \
+	    $(WANT) ./configure; \
 	fi
 
 # Invoked for cleaning up
@@ -52,7 +52,7 @@ start: automake makesure
 # Executed on project modification
 
 update: automake
-	rm -f config.cache && CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" ./configure
+	rm -f config.cache && $(WANT) ./configure
 
 dist: makesure automake
 	@if test ! -f Makefile; then ./configure; fi
@@ -143,6 +143,7 @@ automake:
 		echo "$$param = $$val" >>$$fname; \
 	    else \
 		pat="s&$$pat.*\$$&$$param = $$val&"; \
+		echo "sedding $$pat"; \
 		sed "$$pat" $$fname >$$fname.motor.tmp; \
 		mv $$fname.motor.tmp $$fname; \
 	    fi; \
@@ -260,7 +261,7 @@ tags:
 	if test ! -z "$$TFILES"; then ctags --excmd=number -f - $$TFILES; fi
 
 target: ready
-	@CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" $(MAKE) `cat .maketarget && rm -f .maketarget`
+	@$(WANT) $(MAKE) `cat .maketarget && rm -f .maketarget`
 
 gnudoc:
 	touch INSTALL NEWS README COPYING AUTHORS ChangeLog

@@ -64,8 +64,6 @@ MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
-curl_CFLAGS = @curl_CFLAGS@
-curl_LIBS = @curl_LIBS@
 
 EXTRA_DIST = libmsn.motor NEWS README AUTHORS INSTALL ChangeLog COPYING
 SUBDIRS = msn
@@ -73,10 +71,10 @@ INCLUDES = -I$(top_srcdir)/msn/.. -I$(top_srcdir)/../connwrap -I$(top_srcdir)/..
 CPPFLAGS = 
 noinst_LIBRARIES = liblibmsn.a
 AUTOMAKE_OPTIONS = foreign
+liblibmsn_a_SOURCES = 
 
 @BUILD_MSN_TRUE@liblibmsn_a_LIBADD = msn/message.o msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o
-
-@BUILD_MSN_FALSE@liblibmsn_a_SOURCES = 
+@BUILD_MSN_FALSE@liblibmsn_a_LIBADD = msn/message.o msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
@@ -91,7 +89,12 @@ LIBS = @LIBS@
 @BUILD_MSN_TRUE@msn/switchboardserver.o msn/invitation.o \
 @BUILD_MSN_TRUE@msn/notificationserver.o msn/filetransfer.o msn/buddy.o \
 @BUILD_MSN_TRUE@msn/connection.o msn/util.o msn/passport.o
-@BUILD_MSN_FALSE@liblibmsn_a_OBJECTS = 
+@BUILD_MSN_FALSE@liblibmsn_a_DEPENDENCIES =  msn/message.o \
+@BUILD_MSN_FALSE@msn/authdata.o msn/switchboardserver.o \
+@BUILD_MSN_FALSE@msn/invitation.o msn/notificationserver.o \
+@BUILD_MSN_FALSE@msn/filetransfer.o msn/buddy.o msn/connection.o \
+@BUILD_MSN_FALSE@msn/util.o msn/passport.o
+liblibmsn_a_OBJECTS = 
 AR = ar
 DIST_COMMON =  README ./stamp-h.in AUTHORS COPYING ChangeLog INSTALL \
 Makefile.am Makefile.in NEWS aclocal.m4 config.h.in configure \
