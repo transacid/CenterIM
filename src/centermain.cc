@@ -1,3 +1,10 @@
+/*
+*
+* centericq main() function
+* $Id: centermain.cc,v 1.2 2001/04/08 07:14:07 konst Exp $
+*
+*/
+
 #include "centericq.h"
 #include "icqhook.h"
 #include "icqface.h"
@@ -25,13 +32,13 @@ int main(int argc, char **argv) {
 
     try {
 
-        string localedir = conf.getsharedir() + "/locale";
-        setlocale(LC_ALL, "");
-        bindtextdomain("centericq", localedir.c_str());
-        textdomain("centericq");
+	string localedir = conf.getsharedir() + "/locale";
+	setlocale(LC_ALL, "");
+	bindtextdomain("centericq", localedir.c_str());
+	textdomain("centericq");
 
-        cicq.commandline(argc, argv);
-        cicq.exec();
+	cicq.commandline(argc, argv);
+	cicq.exec();
 
     } catch(int errcode) {
     }

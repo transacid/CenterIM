@@ -1,8 +1,7 @@
 /*
 *
 * centericq core routines
-*
-* $Id: centericq.cc,v 1.2 2001/04/07 10:22:40 konst Exp $
+* $Id: centericq.cc,v 1.3 2001/04/08 07:14:07 konst Exp $
 *
 */
 
