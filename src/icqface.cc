@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.56 2001/12/07 18:11:01 konst Exp $
+* $Id: icqface.cc,v 1.57 2001/12/08 10:18:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -157,7 +157,8 @@ void icqface::update() {
 
 int icqface::contextmenu(icqcontact *c) {
     int ret = 0, i, capab;
-    static int elem = 0;
+    /*static */int elem = 0;
+    imcontact cont;
 
     verticalmenu m(conf.getcolor(cp_main_text),
 	conf.getcolor(cp_main_selected));
@@ -166,53 +167,42 @@ int icqface::contextmenu(icqcontact *c) {
 	WORKAREA_Y1+6, conf.getcolor(cp_main_text)));
 
     if(!c) return 0;
-    capab = gethook(c->getdesc().pname).getcapabilities();
 
-    if(c->getdesc() == contactroot) {
-	m.additem(0, ACT_HISTORY, _(" Events history         h"));
+    cont = c->getdesc();
+    capab = gethook(cont.pname).getcapabilities();
+
+    if(cont != contactroot) {
+	if(cont.pname != infocard) {
+	    m.additem(0, ACT_MSG, _(" Send a message     enter"));
+	}
+
+	if(capab & hoptCanSendURL) {
+	    m.additem(0, ACT_URL, _(" Send an URL            u"));
+	}
+
+	if(capab & hoptCanSendSMS) {
+	    m.additem(0, ACT_SMS, _(" Send an SMS"));
+	}
+
+	m.addline();
+
+	m.additem(0, ACT_INFO, _(" User's details         ?"));
+	m.additem(0, ACT_EDITUSER, _(" Edit details"));
     }
 
-    if(m.empty())
-    if(c->inlist())
-    switch(c->getdesc().pname) {
-	case infocard:
-	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
-	    break;
+    m.additem(0, ACT_HISTORY, _(" Events history         h"));
 
-	default:
-	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
+    if(cont != contactroot) {
+	m.addline();
 
-	    if(capab & hoptCanSendURL)
-		m.additem(0, ACT_URL,      _(" Send an URL            u"));
-
-	    if(capab & hoptCanSendSMS)
-		m.additem(0, ACT_SMS,      _(" Send an SMS"));
-/*
-	    m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
-	    m.additem(0, ACT_FILE,     _(" Send a file            f"));
-*/
-	    m.addline();
-	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
-	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
-	    m.addline();
-	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
-	    break;
-    }
-
-    if(m.empty()) {
-	if(!c->inlist()) {
-	    m.additem(0, ACT_MSG,       _(" Send a message     enter"));
-	    m.addline();
-	    m.additem(0, ACT_ADD,       _(" Add to list            a"));
-	    m.addline();
-	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
-	    m.additem(0, ACT_HISTORY,   _(" Events history         h"));
-	    m.additem(0, ACT_IGNORE,    _(" Ignore user"));
+	if(c->inlist()) {
+	    m.additem(0, ACT_IGNORE, _(" Ignore user"));
+	} else {
+	    m.additem(0, ACT_ADD, _(" Add to list            a"));
 	}
     }
 
     if(c->getdesc() != contactroot) {
-	m.additem(0, ACT_EDITUSER, _(" Edit details"));
 	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
 	m.additem(0, ACT_RENAME, _(" Rename contact         r"));
 	if(conf.getusegroups())
@@ -1444,31 +1434,43 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
     if(ev->gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *>(ev);
 	text = m->gettext();
+
 	actions.push_back(forward);
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
 	actions.push_back(ok);
+
     } else if(ev->gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *>(ev);
 	text = m->geturl() + "\n\n" + m->getdescription();
+
 	actions.push_back(forward);
 	actions.push_back(open);
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
 	actions.push_back(ok);
+
     } else if(ev->gettype() == imevent::sms) {
+	const imsms *m = static_cast<const imsms *>(ev);
+	text = m->gettext();
+
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
 	actions.push_back(ok);
+
     } else if(ev->gettype() == imevent::authorization) {
+	const imauthorization *m = static_cast<const imauthorization *>(ev);
+	text = m->gettext();
+
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(accept);
 	    actions.push_back(reject);
 	}
 	actions.push_back(ok);
+
     }
 
     saveworkarea();
@@ -1554,6 +1556,9 @@ void icqface::histmake(const vector<imevent *> &hist) {
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
 	    text += m->geturl() + " " + m->getdescription();
+	} else if(ev.gettype() == imevent::sms) {
+	    const imsms *m = static_cast<const imsms *>(&ev);
+	    text += m->gettext();
 	}
 
 	if(ev.getdirection() == imevent::incoming) {
@@ -1823,7 +1828,8 @@ void icqface::termresize(void) {
 
 // ----------------------------------------------------------------------------
 
-icqface::icqprogress::icqprogress(): curline(0), w(0) {
+icqface::icqprogress::icqprogress() {
+    w = 0;
 }
 
 icqface::icqprogress::~icqprogress() {
@@ -1854,6 +1860,8 @@ void icqface::icqprogress::show(const string title = "") {
 
     w->set_title(conf.getcolor(cp_dialog_highlight), title);
     w->open();
+
+    curline = 0;
 }
 
 void icqface::icqprogress::hide() {

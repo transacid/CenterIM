@@ -10,7 +10,7 @@ class icqhook: public abstracthook, public SigC::Object {
     protected:
 	Client cli;
 	set<int> fds;
-	time_t timer_reconnect, timer_ping;
+	time_t timer_reconnect, timer_ping, timer_resolve;
 	bool fonline, flogged;
 	unsigned int reguin;
 
@@ -18,7 +18,6 @@ class icqhook: public abstracthook, public SigC::Object {
 	void disconnected_cb(DisconnectedEvent *ev);
 	bool messaged_cb(MessageEvent *ev);
 	void messageack_cb(MessageEvent *ev);
-	void away_message_cb(AwayMsgEvent *ev);
 	void contactlist_cb(ContactListEvent *ev);
 	void newuin_cb(NewUINEvent *ev);
 	void rate_cb(RateInfoChangeEvent *ev);
@@ -28,6 +27,8 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	imstatus icq2imstatus(const Status st) const;
 	const string getcountryname(int code) const;
+
+	void resolve();
 
     public:
 	icqhook();

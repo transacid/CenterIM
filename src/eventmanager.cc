@@ -100,6 +100,7 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 	    case offline:
 		fname = c->getdirname() + "offline";
 		unsent++;
+		face.relaxedupdate();
 		break;
 	}
 

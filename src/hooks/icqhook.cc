@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.18 2001/12/07 18:11:02 konst Exp $
+* $Id: icqhook.cc,v 1.19 2001/12/08 10:18:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,6 +35,17 @@
 
 icqhook ihook;
 
+static const Status stat2int[imstatus_size] = {
+    STATUS_OFFLINE,
+    STATUS_ONLINE,
+    STATUS_ONLINE, /* invisible */
+    STATUS_FREEFORCHAT,
+    STATUS_DND,
+    STATUS_OCCUPIED,
+    STATUS_NA,
+    STATUS_AWAY
+};
+
 icqhook::icqhook() {
     timer_reconnect = 0;
     fonline = false;
@@ -46,7 +57,6 @@ icqhook::icqhook() {
     cli.socket.connect(slot(this, &icqhook::socket_cb));
     cli.messaged.connect(slot(this, &icqhook::messaged_cb));
     cli.messageack.connect(slot(this, &icqhook::messageack_cb));
-    cli.away_message.connect(slot(this, &icqhook::away_message_cb));
     cli.contactlist.connect(slot(this, &icqhook::contactlist_cb));
     cli.newuin.connect(slot(this, &icqhook::newuin_cb));
     cli.rate.connect(slot(this, &icqhook::rate_cb));
@@ -64,7 +74,6 @@ icqhook::~icqhook() {
     cli.socket.clear();
     cli.messaged.clear();
     cli.messageack.clear();
-    cli.away_message.clear();
     cli.contactlist.clear();
     cli.newuin.clear();
     cli.rate.clear();
@@ -93,7 +102,9 @@ void icqhook::connect() {
     cli.setPassword(acc.password);
 
     face.log(_("+ [icq] connecting to the server"));
-    cli.Connect();
+
+    cli.setInvisible(manualstatus == invisible);
+    cli.setStatus(stat2int[manualstatus]);
 
     time(&timer_reconnect);
     fonline = true;
@@ -101,7 +112,23 @@ void icqhook::connect() {
 }
 
 void icqhook::disconnect() {
-    cli.Disconnect();
+    cli.setStatus(STATUS_OFFLINE);
+}
+
+void icqhook::resolve() {
+    int i;
+    icqcontact *c;
+    imcontact cont;
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+	cont = c->getdesc();
+
+	if(cont.pname == icq)
+	if(c->getdispnick() == i2str(c->getdesc().uin)) {
+	    requestinfo(cont);
+	}
+    }
 }
 
 void icqhook::exectimers() {
@@ -111,6 +138,9 @@ void icqhook::exectimers() {
 	if(tcurrent-timer_ping > PERIOD_ICQPING) {
 	    cli.PingServer();
 	    time(&timer_ping);
+	} else if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
+	    resolve();
+	    time(&timer_resolve);
 	}
     } else {
 	if(tcurrent-timer_reconnect > PERIOD_RECONNECT) {
@@ -228,17 +258,6 @@ void icqhook::sendnewuser(const imcontact c) {
 }
 
 void icqhook::setautostatus(imstatus st) {
-    static Status stat2int[imstatus_size] = {
-	STATUS_OFFLINE,
-	STATUS_ONLINE,
-	 STATUS_OFFLINE,
-	STATUS_FREEFORCHAT,
-	STATUS_DND,
-	STATUS_OCCUPIED,
-	STATUS_NA,
-	STATUS_AWAY
-    };
-
     if(st != offline) {
 	if(getstatus() == offline) {
 	    connect();
@@ -338,7 +357,9 @@ const string icqhook::getcountryname(int code) const {
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
+
     time(&timer_ping);
+    timer_resolve = time(0)-PERIOD_RESOLVE+2;
 
     face.log(_("+ [icq] logged in"));
     face.update();
@@ -405,6 +426,7 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 		icqcontact::basicinfo b = c->getbasicinfo();
 		b.cellular = r->getSender();
 		c->setbasicinfo(b);
+		c->setnick(b.cellular);
 	    }
 
 	    if(c) {
@@ -446,9 +468,6 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 }
 
 void icqhook::messageack_cb(MessageEvent *ev) {
-}
-
-void icqhook::away_message_cb(AwayMsgEvent *ev) {
 }
 
 void icqhook::contactlist_cb(ContactListEvent *ev) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.31 2001/12/06 16:56:32 konst Exp $
+* $Id: icqcontact.cc,v 1.32 2001/12/08 10:18:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -301,7 +301,11 @@ void icqcontact::load() {
 
     finlist = stat((fn = tname + "/excluded").c_str(), &st);
 
-    if(nick.empty()) nick = i2str(cdesc.uin);
+    if(nick.empty()) {
+	if(cdesc.uin) nick = i2str(cdesc.uin);
+	else nick = cdesc.nickname;
+    }
+
     if(dispnick.empty()) dispnick = nick;
 
     if(conf.getusegroups())

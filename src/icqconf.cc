@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.28 2001/12/07 18:11:00 konst Exp $
+* $Id: icqconf.cc,v 1.29 2001/12/08 10:18:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -270,10 +270,19 @@ void icqconf::loadcolors() {
 
 void icqconf::loadsounds() {
     string tname = getconfigfname("sounds"), buf, suin, skey;
-    int n, ffuin;
+    int n, ffuin, i;
     icqcontact *c;
-    int i;
     imevent::imeventtype it;
+
+    typedef pair<imevent::imeventtype, string> eventsound;
+    vector<eventsound> soundnames;
+    vector<eventsound>::iterator isn;
+
+    soundnames.push_back(eventsound(imevent::message, "msg"));
+    soundnames.push_back(eventsound(imevent::sms, "sms"));
+    soundnames.push_back(eventsound(imevent::url, "url"));
+    soundnames.push_back(eventsound(imevent::online, "online"));
+    soundnames.push_back(eventsound(imevent::email, "email"));
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
@@ -296,25 +305,27 @@ void icqconf::loadsounds() {
 	    fo << "# yahoo_<nickname>\tfor yahoo" << endl;
 	    fo << "# msn_<nickname>\tmsn contacts" << endl << "#" << endl;
 
-	    fo << "# <event>\tcan be either msg, url, online or email" << endl;
-	    fo << "# <command>\tcommand line to be executed to play a sound" << endl << endl;
+	    fo << "# <event>\tcan be: ";
+	    for(isn = soundnames.begin(); isn != soundnames.end(); isn++) {
+		if(isn != soundnames.begin()) fo << ", ";
+		fo << isn->second;
+	    }
+
+	    fo << endl << "# <command>\tcommand line to be executed to play a sound" << endl << endl;
 
 	    switch(rs) {
 		case rscard:
 		    fo << "*\tmsg\tplay " << SHARE_DIR << "/msg.wav" << endl;
 		    fo << "*\turl\tplay " << SHARE_DIR << "/url.wav" << endl;
-		    fo << "*\tfile\tplay " << SHARE_DIR << "/file.wav" << endl;
-		    fo << "*\tchat\tplay " << SHARE_DIR << "/chat.wav" << endl;
 		    fo << "*\temail\tplay " << SHARE_DIR << "/email.wav" << endl;
 		    fo << "*\tonline\tplay " << SHARE_DIR << "/online.wav" << endl;
-		    fo << "*\tcont\tplay " << SHARE_DIR << "/cont.wav" << endl;
+		    fo << "*\tsms\tplay " << SHARE_DIR << "/sms.wav" << endl;
 		    break;
 
 		case rsspeaker:
 		    fo << "*\tmsg\t!spk1" << endl;
 		    fo << "*\turl\t!spk2" << endl;
-		    fo << "*\tfile\t!spk3" << endl;
-		    fo << "*\tchat\t!spk4" << endl;
+		    fo << "*\tsms\t!spk3" << endl;
 		    fo << "*\temail\t!spk5" << endl;
 		    break;
 	    }
@@ -332,10 +343,14 @@ void icqconf::loadsounds() {
 	    suin = getword(buf);
 	    skey = getword(buf);
 
-	    if(skey == "msg") it = imevent::message; else
-	    if(skey == "url") it = imevent::url; else
-	    if(skey == "email") it = imevent::email; else
-	    if(skey == "online") it = imevent::online; else
+	    it = imevent::imeventtype_size;
+	    isn = soundnames.begin();
+
+	    for(; (isn != soundnames.end()) && (it == imevent::imeventtype_size); isn++)
+		if(skey == isn->second)
+		    it = isn->first;
+
+	    if(isn == soundnames.end())
 		continue;
 
 	    if(suin != "*") {

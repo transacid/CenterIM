@@ -213,8 +213,6 @@ void imurl::write(ofstream &f) const {
 }
 
 void imurl::read(ifstream &f) {
-    string rdbuf;
-
     getstring(f, url);
     description = readblock(f);
 }

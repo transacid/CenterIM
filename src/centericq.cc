@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.54 2001/12/07 18:10:59 konst Exp $
+* $Id: centericq.cc,v 1.55 2001/12/08 10:18:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -264,8 +264,11 @@ void centericq::mainloop() {
 		if(c->getmsgcount()) {
 		    readevents(c->getdesc());
 		} else {
-		    sendevent(immessage(c->getdesc(), imevent::outgoing,
-			c->getpostponed()), icqface::ok);
+		    if(c->getdesc() != contactroot)
+		    if(c->getdesc().pname != infocard) {
+			sendevent(immessage(c->getdesc(), imevent::outgoing,
+			    c->getpostponed()), icqface::ok);
+		    }
 		}
 		break;
 	}
