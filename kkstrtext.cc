@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.11 2002/02/20 17:18:43 konst Exp $
+* $Id: kkstrtext.cc,v 1.12 2002/02/23 11:34:07 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -950,23 +950,26 @@ int hex2int(const string ahex) {
     return r;
 }
 
-bool getconf(string &st, string &buf, ifstream &f) {
+bool getconf(string &st, string &buf, ifstream &f, bool passemptylines = false) {
     bool ret = false;
     static string sect;
 
     while(!f.eof() && !ret) {
 	getstring(f, buf);
 
-	if(buf.size())
-	switch(buf[0]) {
-	    case '%':
-		sect = buf.substr(1);
-		break;
-	    case '#':
-		if(buf[1] != '!') break;
-	    default:
-		ret = buf.size();
-		break;
+	if(buf.size()) {
+	    switch(buf[0]) {
+		case '%':
+		    sect = buf.substr(1);
+		    break;
+		case '#':
+		    if(buf[1] != '!') break;
+		default:
+		    ret = buf.size();
+		    break;
+	    }
+	} else if(passemptylines) {
+	    ret = 1;
 	}
     }
 

@@ -87,7 +87,7 @@ const string textscreen(const string text);
 const string i2str(int i);
 const string ui2str(int i);
 
-bool getconf(string &st, string &buf, ifstream &f);
+bool getconf(string &st, string &buf, ifstream &f, bool passemptylines = false);
 bool getstring(istream &f, string &buf);
 
 const string unmime(const string text);
