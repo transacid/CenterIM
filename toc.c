@@ -1209,13 +1209,13 @@ got_data_start:
 			/* cycle through list of buddies */
 			tempchr2[0] = '\0';
 			if (args[2][0] == 'T')
-				firetalk_callback_chat_user_joined(c,tempchr3,tempchr1);
+				firetalk_callback_chat_user_joined(c,tempchr3,tempchr1,0);
 			else
 				firetalk_callback_chat_user_left(c,tempchr3,tempchr1,NULL);
 			tempchr1 = tempchr2 + 1;
 		}
 		if (args[2][0] == 'T')
-			firetalk_callback_chat_user_joined(c,tempchr3,tempchr1);
+			firetalk_callback_chat_user_joined(c,tempchr3,tempchr1,0);
 		else
 			firetalk_callback_chat_user_left(c,tempchr3,tempchr1,NULL);
 	} else if (strcmp(arg0,"ADMIN_NICK_STATUS") == 0) {

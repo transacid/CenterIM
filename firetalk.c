@@ -42,6 +42,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "irc.h"
 #include "aim.h"
 #include "safestring.h"
+#include "connwrap.h"
 
 typedef void (*ptrtotoc)(void *, ...);
 typedef void (*sighandler_t)(int);
@@ -401,7 +402,7 @@ ipv6fail:
 			goto ipv4fail;
 		if (fcntl(s, F_SETFL, O_NONBLOCK))
 			goto ipv4fail;
-		i = connect(s,(const struct sockaddr *)inet4_ip,sizeof(struct sockaddr_in));
+		i = cw_connect(s,(const struct sockaddr *)inet4_ip,sizeof(struct sockaddr_in), 0);
 		if (i != 0 && errno != EINPROGRESS)
 			goto ipv4fail;
 		return s;
@@ -1078,7 +1079,7 @@ void firetalk_callback_chat_invited(client_t c, const char * const room, const c
 	return;
 }
 
-void firetalk_callback_chat_user_joined(client_t c, const char * const room, const char * const who) {
+void firetalk_callback_chat_user_joined(client_t c, const char * const room, const char * const who, const char * const email) {
 	struct s_firetalk_handle *conn;
 	conn = firetalk_find_handle(c);
 	if (conn == NULL)
@@ -1086,7 +1087,7 @@ void firetalk_callback_chat_user_joined(client_t c, const char * const room, con
 	if (firetalk_chat_internal_add_member(conn,room,who) != FE_SUCCESS)
 		return;
 	if (conn->callbacks[FC_CHAT_USER_JOINED])
-		conn->callbacks[FC_CHAT_USER_JOINED](conn,conn->clientstruct,room,who);
+		conn->callbacks[FC_CHAT_USER_JOINED](conn,conn->clientstruct,room,who,email);
 	return;
 }
 

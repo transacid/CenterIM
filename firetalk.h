@@ -104,7 +104,7 @@ enum firetalk_callback {
 	FC_CHAT_DEOPPED,
 		/* void *connection, void *clientstruct, char *room, char *by */
 	FC_CHAT_USER_JOINED,
-		/* void *connection, void *clientstruct, char *room, char *who */
+		/* void *connection, void *clientstruct, char *room, char *who, char *email */
 	FC_CHAT_USER_LEFT,
 		/* void *connection, void *clientstruct, char *room, char *who, char *reason */
 	FC_CHAT_GOTTOPIC,

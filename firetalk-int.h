@@ -228,7 +228,7 @@ void firetalk_callback_chat_kicked(client_t c, const char * const room, const ch
 void firetalk_callback_chat_getmessage(client_t c, const char * const room, const char * const from, const int automessage, const char * const message);
 void firetalk_callback_chat_getaction(client_t c, const char * const room, const char * const from, const int automessage, const char * const message);
 void firetalk_callback_chat_invited(client_t c, const char * const room, const char * const from, const char * const message);
-void firetalk_callback_chat_user_joined(client_t c, const char * const room, const char * const who);
+void firetalk_callback_chat_user_joined(client_t c, const char * const room, const char * const who, const char * const email);
 void firetalk_callback_chat_user_left(client_t c, const char * const room, const char * const who, const char * const reason);
 void firetalk_callback_chat_user_quit(client_t c, const char * const who, const char * const reason);
 void firetalk_callback_chat_gottopic(client_t c, const char * const room, const char * const topic, const char * const author);

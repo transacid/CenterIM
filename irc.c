@@ -362,6 +362,21 @@ static char *irc_get_nickname(const char * const hostmask) {
 	return data;
 }
 
+static char *irc_get_email(const char * const hostmask) {
+	static char data[512];
+	char *tempchr;
+	data[0] = 0;
+	tempchr = strchr(hostmask,'!');
+
+	if(tempchr) {
+	    int nc;
+	    nc = tempchr-hostmask;
+	    strcpy(data, hostmask+nc+1);
+	}
+
+	return data;
+}
+
 enum firetalk_error irc_set_nickname(client_t c, const char * const nickname) {
 	return irc_send_printf(c,"NICK %s",nickname);
 }
@@ -483,7 +498,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 						}
 					}
 				} else
-					firetalk_callback_chat_user_joined(c,args[2],irc_get_nickname(args[0]));
+					firetalk_callback_chat_user_joined(c,args[2],irc_get_nickname(args[0]),irc_get_email(args[0]));
 			} else if (strcmp(args[1],"PART") == 0) {
 				if (irc_compare_nicks(c->nickname,irc_get_nickname(args[0])) == 0)
 					firetalk_callback_chat_left(c,args[2]);
@@ -820,7 +835,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 					if (tempchr2[0] == '\0')
 						break;
 					if (tempchr2[0] == '@' || tempchr2[0] == '+') {
-						firetalk_callback_chat_user_joined(c,args[4],&tempchr2[1]);
+//                                                firetalk_callback_chat_user_joined(c,args[4],&tempchr2[1],0);
 						firetalk_callback_im_buddyonline(c,&tempchr2[1],1);
 						if (tempchr2[0] == '@') {
 							firetalk_callback_chat_user_opped(c,args[4],&tempchr2[1],NULL);
@@ -828,7 +843,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 								firetalk_callback_chat_opped(c,args[4],NULL);
 						}
 					} else {
-						firetalk_callback_chat_user_joined(c,args[4],tempchr2);
+//                                                firetalk_callback_chat_user_joined(c,args[4],tempchr2,0);
 						firetalk_callback_im_buddyonline(c,tempchr2,1);
 					}
 					if (tempchr == NULL)
