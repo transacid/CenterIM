@@ -12,6 +12,9 @@ AM_CONFIG_HEADER(config.h)
 
 AM_PATH_GLIB(1.2.0, [ CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS" ], AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
 
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
 ###     use option --enable-locales-fix to fix problems with double-byte
 ###     encodings on systems with broken locale, iscntrl()
 
@@ -81,27 +84,6 @@ fi
 
 ###     OpenSSL end
 
-AC_CHECK_HEADERS(iconv.h)
-
-AC_CHECK_LIB(iconv, iconv,,
-    [AC_CHECK_LIB(c, iconv,, AC_MSG_WARN(libiconv not found - Russian codepages translation in MSN and Jabber will not work))])
-
-AC_CHECK_LIB(socket, socket)
-AC_CHECK_LIB(nsl, gethostbyname)
-
-AC_CHECK_LIB(ncurses, main,,
-    [AC_CHECK_LIB(curses, main,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
-
-case "$host_os" in
-	darwin*)
-	    LIBS="$LIBS -L/sw/lib -flat_namespace"
-	    CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
-	;;
-esac
-
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-
 AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator exception utility],,
   AC_MSG_ERROR([You need to have the libstdc++ headers installed]))
 
@@ -113,7 +95,25 @@ AC_CHECK_HEADERS(ext/hash_map,,
 AC_CHECK_HEADERS(sstream,,
   AC_CHECK_HEADERS(strstream,, AC_MSG_ERROR([Your libstdc++ doesn't have the sstream or strstream classes])))
 
+AC_CHECK_HEADERS(iconv.h)
+
+AC_CHECK_LIB(iconv, iconv,,
+    [AC_CHECK_LIB(c, iconv,, AC_MSG_WARN(libiconv not found - Russian codepages translation in MSN and Jabber will not work))])
+
+AC_CHECK_LIB(socket, socket)
+AC_CHECK_LIB(nsl, gethostbyname)
+
+AC_CHECK_LIB(ncurses, initscr,,
+    [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
+
 AC_LANG_RESTORE
+
+case "$host_os" in
+	darwin*)
+	    LIBS="$LIBS -L/sw/lib -flat_namespace"
+	    CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
+	;;
+esac
 
 AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.4.0 firetalk-0.1 libyahoo2-0.1 libjabber-0.1 connwrap-0.1 blip-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
