@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.46 2002/07/29 14:52:51 konst Exp $
+* $Id: yahoohook.cc,v 1.47 2002/08/08 13:42:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -562,10 +562,13 @@ void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
 void yahoohook::typing_notify(guint32 id, char *who, int stat) {
     icqcontact *c = clist.get(imcontact(who, yahoo));
 
-    if(c)
-    if(c->getstatus() == offline) {
-	c->setstatus(available);
-	face.relaxedupdate();
+    if(c) {
+	face.log(stat ? _("+ [yahoo] %s: started typing") : _("+ [yahoo] %s: stopped typing"), who);
+
+	if(c->getstatus() == offline) {
+	    c->setstatus(available);
+	    face.relaxedupdate();
+	}
     }
 }
 
