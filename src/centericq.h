@@ -74,5 +74,6 @@ extern centericq cicq;
 
 string rusconv(const string &tdir, const string &text);
 string rushtmlconv(const string &tdir, const string &text);
+string ruscrlfconv(const string &tdir, const string &text);
 
 #endif

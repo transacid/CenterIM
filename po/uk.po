@@ -6,130 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.6.5\n"
-"POT-Creation-Date: 2002-04-21 11:21+0300\n"
+"POT-Creation-Date: 2002-04-22 11:14+0300\n"
 "PO-Revision-Date: 2002-03-12 21:22+0200\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: src/centericq.cc:121
-msgid "password: "
-msgstr "пароль: "
-
-#: src/centericq.cc:157
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M меню користувача, F3/S зм╕на статусу, F4/G головне меню, Q вих╕д"
-
-#: src/centericq.cc:211
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "╤гнорувати пов╕домлення в╕д %s?"
-
-#: src/centericq.cc:250
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Справд╕ видалити %s?"
-
-#: src/centericq.cc:258
-msgid "New nickname to show: "
-msgstr "Показувати п╕д такою Кличкою: "
-
-#: src/centericq.cc:266
-msgid "Select a group to move the user to"
-msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
-
-#: src/centericq.cc:283
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ не можу витягти автопов╕домлення, коли не п╕дключен╕ до серверу"
-
-#: src/accountmanager.cc:166 src/centericq.cc:332
-msgid "away message"
-msgstr "автопов╕домлення"
-
-#: src/centericq.cc:507
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] нова пошта! %d лист╕в"
-
-#: src/centericq.cc:510
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ останн╓ пов╕домлення в╕д %s"
-
-#: src/centericq.cc:547
-msgid "! another running copy of centericq detected"
-msgstr "! запущено ще одна коп╕я centericq"
-
-#: src/centericq.cc:548
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! це може призвести до проблем. номер процесу %lu"
-
-#: src/centericq.cc:636
-msgid "Mobile number: "
-msgstr "Номер моб╕ли: "
-
-#: src/centericq.cc:834
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ ╕стор╕я замовчу╓ про %s"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s вже у контакт-л╕ст╕"
-
-#: src/centericq.cc:866
-msgid "Select a group to add the user to"
-msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
-
-#: src/centericq.cc:873
-msgid "Notify the user he/she has been added?"
-msgstr "Пов╕домити користувача, що його/╖╖ додано?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:876
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ в╕дслано опов╕щення для %lu"
-
-#: src/centericq.cc:887
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s додано у контакт-л╕ст"
-
-#: src/centericq.cc:958
-msgid "+ the user is back"
-msgstr "+ користувач повернувся"
-
-#: src/centericq.cc:974
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] статус в╕дновлено"
-
-#: src/centericq.cc:989
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] авто зм╕на статусу: %s"
-
-#: src/centericq.cc:991
-msgid "away"
-msgstr "в╕д╕йшoв"
-
-#: src/centericq.cc:991
-msgid "n/a"
-msgstr "н/д"
-
-#: src/centericq.cc:1114
-msgid "! free disk space is less than 10k, going offline"
-msgstr ""
-
-#: src/centericq.cc:1115
-msgid "! otherwise we can lose events and configuration"
-msgstr ""
 
 #: src/icqconf.cc:124
 #, fuzzy, c-format
@@ -1137,7 +1020,7 @@ msgstr "S Пошук, L знову, ESC - скасувати"
 msgid "search for: "
 msgstr "шукати:"
 
-#: src/icqgroups.cc:40
+#: src/icqgroups.cc:42
 msgid "General"
 msgstr "Загальне"
 
@@ -1209,6 +1092,10 @@ msgstr "Спочатку треба в╕д'╓днатися в╕д серв╕су!"
 #: src/accountmanager.cc:151
 msgid " server address: "
 msgstr " адреса серверу: "
+
+#: src/accountmanager.cc:166 src/centericq.cc:332
+msgid "away message"
+msgstr "автопов╕домлення"
 
 #: src/imcontroller.cc:32
 msgid " Register on ICQ network "
@@ -1374,7 +1261,7 @@ msgstr "* Користувач додав Вас до свого контакт-л╕ста"
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] невдача в╕дсилання SMS до %s, %s"
 
-#: src/hooks/icqhook.cc:909 src/hooks/irchook.cc:416
+#: src/hooks/icqhook.cc:909 src/hooks/irchook.cc:414
 msgid "* Away message:"
 msgstr "* Автопов╕домлення:"
 
@@ -1432,6 +1319,119 @@ msgstr "+ [yahoo] в╕д'╓днано в╕д мереж╕"
 #: src/hooks/yahoohook.cc:373
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] пов╕домлення не принято"
+
+#: src/centericq.cc:121
+msgid "password: "
+msgstr "пароль: "
+
+#: src/centericq.cc:157
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M меню користувача, F3/S зм╕на статусу, F4/G головне меню, Q вих╕д"
+
+#: src/centericq.cc:211
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "╤гнорувати пов╕домлення в╕д %s?"
+
+#: src/centericq.cc:250
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Справд╕ видалити %s?"
+
+#: src/centericq.cc:258
+msgid "New nickname to show: "
+msgstr "Показувати п╕д такою Кличкою: "
+
+#: src/centericq.cc:266
+msgid "Select a group to move the user to"
+msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
+
+#: src/centericq.cc:283
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ не можу витягти автопов╕домлення, коли не п╕дключен╕ до серверу"
+
+#: src/centericq.cc:507
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] нова пошта! %d лист╕в"
+
+#: src/centericq.cc:510
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ останн╓ пов╕домлення в╕д %s"
+
+#: src/centericq.cc:547
+msgid "! another running copy of centericq detected"
+msgstr "! запущено ще одна коп╕я centericq"
+
+#: src/centericq.cc:548
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! це може призвести до проблем. номер процесу %lu"
+
+#: src/centericq.cc:636
+msgid "Mobile number: "
+msgstr "Номер моб╕ли: "
+
+#: src/centericq.cc:834
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ ╕стор╕я замовчу╓ про %s"
+
+#: src/centericq.cc:860
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s вже у контакт-л╕ст╕"
+
+#: src/centericq.cc:866
+msgid "Select a group to add the user to"
+msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
+
+#: src/centericq.cc:873
+msgid "Notify the user he/she has been added?"
+msgstr "Пов╕домити користувача, що його/╖╖ додано?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:876
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ в╕дслано опов╕щення для %lu"
+
+#: src/centericq.cc:887
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s додано у контакт-л╕ст"
+
+#: src/centericq.cc:958
+msgid "+ the user is back"
+msgstr "+ користувач повернувся"
+
+#: src/centericq.cc:974
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] статус в╕дновлено"
+
+#: src/centericq.cc:989
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] авто зм╕на статусу: %s"
+
+#: src/centericq.cc:991
+msgid "away"
+msgstr "в╕д╕йшoв"
+
+#: src/centericq.cc:991
+msgid "n/a"
+msgstr "н/д"
+
+#: src/centericq.cc:1114
+msgid "! free disk space is less than 10k, going offline"
+msgstr ""
+
+#: src/centericq.cc:1115
+msgid "! otherwise we can lose events and configuration"
+msgstr ""
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"
@@ -1594,37 +1594,27 @@ msgstr "+ [icq] п╕д'╓днання до серверу"
 msgid "+ [irc] unable to connect to the server"
 msgstr "+ [msn] не можу законектитися"
 
-#: src/hooks/irchook.cc:194
-#, fuzzy, c-format
-msgid "+ [irc] adding %s to the contacts"
-msgstr "+ [yahoo] дода╓мо %s в контакти"
-
-#: src/hooks/irchook.cc:202
-#, fuzzy, c-format
-msgid "+ [irc] removing %s from the contacts"
-msgstr "+ [msn] видаля╓мо %s з контакт╕в"
-
-#: src/hooks/irchook.cc:347
+#: src/hooks/irchook.cc:345
 #, fuzzy, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
 msgstr "+ [icq] пошук завершено, знайдено %d користувач╕в"
 
-#: src/hooks/irchook.cc:478
+#: src/hooks/irchook.cc:476
 #, fuzzy
 msgid "+ [irc] logged in"
 msgstr "+ [icq] законектилися"
 
-#: src/hooks/irchook.cc:507
+#: src/hooks/irchook.cc:505
 #, fuzzy
 msgid "+ [irc] disconnected from the network"
 msgstr "+ [yahoo] в╕д'╓днано в╕д мереж╕"
 
-#: src/hooks/irchook.cc:521
+#: src/hooks/irchook.cc:519
 #, fuzzy, c-format
 msgid "+ [irc] connect failed: %s"
 msgstr "+ [msn] п╕д'╓днання до %s"
 
-#: src/hooks/irchook.cc:605
+#: src/hooks/irchook.cc:603
 msgid "On channels: "
 msgstr ""
 
@@ -1727,6 +1717,14 @@ msgstr "авторизац╕я"
 #: src/imlogger.h:41
 msgid "e-mail"
 msgstr "e-mail"
+
+#, fuzzy
+#~ msgid "+ [irc] adding %s to the contacts"
+#~ msgstr "+ [yahoo] дода╓мо %s в контакти"
+
+#, fuzzy
+#~ msgid "+ [irc] removing %s from the contacts"
+#~ msgstr "+ [msn] видаля╓мо %s з контакт╕в"
 
 #, fuzzy
 #~ msgid "You must be logged to the AIM network to update your profile"

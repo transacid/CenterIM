@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.95 2002/04/18 09:05:25 konst Exp $
+* $Id: centericq.cc,v 1.96 2002/04/22 09:30:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1165,6 +1165,17 @@ string rushtmlconv(const string &tdir, const string &text) {
 	    if(r.substr(pos+1, 2) == "gt;") r.replace(pos, 4, ">"); 
 	    pos++;
 	}
+    }
+
+    return r;
+}
+
+string ruscrlfconv(const string &tdir, const string &text) {
+    string r = rusconv(tdir, text);
+    int pos;
+
+    for(pos = 0; (pos = r.find("\r")) != -1; pos++) {
+	r.erase(pos, 1);
     }
 
     return r;

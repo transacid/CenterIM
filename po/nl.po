@@ -6,131 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2002-04-21 11:21+0300\n"
+"POT-Creation-Date: 2002-04-22 11:14+0300\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: src/centericq.cc:121
-msgid "password: "
-msgstr "wachtwoord: "
-
-#: src/centericq.cc:157
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M huidig contact menu, F3/S status veranderen, F4/G globaal menu, Q einde"
-
-#: src/centericq.cc:211
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Alles van %s negeren?"
-
-#: src/centericq.cc:250
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Weet je zeker dat je %s wil verwijderen?"
-
-#: src/centericq.cc:258
-msgid "New nickname to show: "
-msgstr "Nieuwe naam om te tonen: "
-
-#: src/centericq.cc:266
-msgid "Select a group to move the user to"
-msgstr "Selecteer een groep om de gebruiker naartoe te verplaatsen"
-
-#: src/centericq.cc:283
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ kan de 'ben weg' berichten niet ophalen als je 'offline' bent"
-
-#: src/accountmanager.cc:166 src/centericq.cc:332
-msgid "away message"
-msgstr "Afwezigheidsbericht"
-
-#: src/centericq.cc:507
-#, fuzzy, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ nieuwe mail binnengekomen, %d berichten"
-
-#: src/centericq.cc:510
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ laatste bericht van %s"
-
-#: src/centericq.cc:547
-msgid "! another running copy of centericq detected"
-msgstr "! er draait al een centericq"
-
-#: src/centericq.cc:548
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! dit kan problemen veroorzaken. PID %lu"
-
-#: src/centericq.cc:636
-msgid "Mobile number: "
-msgstr "GSM nummer: "
-
-#: src/centericq.cc:834
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ geen geschiedenis van %s"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ gebruiker %s staat al in je lijst"
-
-#: src/centericq.cc:866
-msgid "Select a group to add the user to"
-msgstr "Selecteer een groep"
-
-#: src/centericq.cc:873
-msgid "Notify the user he/she has been added?"
-msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:876
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ het bericht is verzonden naar %lu"
-
-#: src/centericq.cc:887
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s is toegevoegd aan je lijst"
-
-#: src/centericq.cc:958
-msgid "+ the user is back"
-msgstr "+ de gebruiker is terug"
-
-#: src/centericq.cc:974
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] status hersteld"
-
-#: src/centericq.cc:989
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] automatisch op %s gezet"
-
-#: src/centericq.cc:991
-msgid "away"
-msgstr "weg"
-
-#: src/centericq.cc:991
-msgid "n/a"
-msgstr "niet ber."
-
-#: src/centericq.cc:1114
-msgid "! free disk space is less than 10k, going offline"
-msgstr ""
-
-#: src/centericq.cc:1115
-msgid "! otherwise we can lose events and configuration"
-msgstr ""
 
 #: src/icqconf.cc:124
 #, fuzzy, c-format
@@ -1140,7 +1022,7 @@ msgstr "S zoek, L opnieuw, ESC stop"
 msgid "search for: "
 msgstr "zoeken naar: "
 
-#: src/icqgroups.cc:40
+#: src/icqgroups.cc:42
 msgid "General"
 msgstr "Algemeen"
 
@@ -1212,6 +1094,10 @@ msgstr "Eerst service ontkoppelen! (disconnect)"
 #: src/accountmanager.cc:151
 msgid " server address: "
 msgstr " server adres: "
+
+#: src/accountmanager.cc:166 src/centericq.cc:332
+msgid "away message"
+msgstr "Afwezigheidsbericht"
 
 #: src/imcontroller.cc:32
 msgid " Register on ICQ network "
@@ -1377,7 +1263,7 @@ msgstr "* De gebruiker heeft je toegevoegd"
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] gefaald SMS naar %s, %s"
 
-#: src/hooks/icqhook.cc:909 src/hooks/irchook.cc:416
+#: src/hooks/icqhook.cc:909 src/hooks/irchook.cc:414
 msgid "* Away message:"
 msgstr "* Afwezigheidsbericht:"
 
@@ -1435,6 +1321,120 @@ msgstr "+ [yahoo] disconnected van het netwerk"
 #: src/hooks/yahoohook.cc:373
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] teruggekeerd bericht"
+
+#: src/centericq.cc:121
+msgid "password: "
+msgstr "wachtwoord: "
+
+#: src/centericq.cc:157
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M huidig contact menu, F3/S status veranderen, F4/G globaal menu, Q einde"
+
+#: src/centericq.cc:211
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Alles van %s negeren?"
+
+#: src/centericq.cc:250
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Weet je zeker dat je %s wil verwijderen?"
+
+#: src/centericq.cc:258
+msgid "New nickname to show: "
+msgstr "Nieuwe naam om te tonen: "
+
+#: src/centericq.cc:266
+msgid "Select a group to move the user to"
+msgstr "Selecteer een groep om de gebruiker naartoe te verplaatsen"
+
+#: src/centericq.cc:283
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ kan de 'ben weg' berichten niet ophalen als je 'offline' bent"
+
+#: src/centericq.cc:507
+#, fuzzy, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ nieuwe mail binnengekomen, %d berichten"
+
+#: src/centericq.cc:510
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ laatste bericht van %s"
+
+#: src/centericq.cc:547
+msgid "! another running copy of centericq detected"
+msgstr "! er draait al een centericq"
+
+#: src/centericq.cc:548
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! dit kan problemen veroorzaken. PID %lu"
+
+#: src/centericq.cc:636
+msgid "Mobile number: "
+msgstr "GSM nummer: "
+
+#: src/centericq.cc:834
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ geen geschiedenis van %s"
+
+#: src/centericq.cc:860
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ gebruiker %s staat al in je lijst"
+
+#: src/centericq.cc:866
+msgid "Select a group to add the user to"
+msgstr "Selecteer een groep"
+
+#: src/centericq.cc:873
+msgid "Notify the user he/she has been added?"
+msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:876
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ het bericht is verzonden naar %lu"
+
+#: src/centericq.cc:887
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s is toegevoegd aan je lijst"
+
+#: src/centericq.cc:958
+msgid "+ the user is back"
+msgstr "+ de gebruiker is terug"
+
+#: src/centericq.cc:974
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] status hersteld"
+
+#: src/centericq.cc:989
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] automatisch op %s gezet"
+
+#: src/centericq.cc:991
+msgid "away"
+msgstr "weg"
+
+#: src/centericq.cc:991
+msgid "n/a"
+msgstr "niet ber."
+
+#: src/centericq.cc:1114
+msgid "! free disk space is less than 10k, going offline"
+msgstr ""
+
+#: src/centericq.cc:1115
+msgid "! otherwise we can lose events and configuration"
+msgstr ""
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"
@@ -1597,37 +1597,27 @@ msgstr "+ [icq] verbinden met server"
 msgid "+ [irc] unable to connect to the server"
 msgstr "+ [msn] kan niet met de server verbinden"
 
-#: src/hooks/irchook.cc:194
-#, fuzzy, c-format
-msgid "+ [irc] adding %s to the contacts"
-msgstr "+ [yahoo] %s in contacten toevoegen"
-
-#: src/hooks/irchook.cc:202
-#, fuzzy, c-format
-msgid "+ [irc] removing %s from the contacts"
-msgstr "+ [msn] %s verwijderen van contactlijst"
-
-#: src/hooks/irchook.cc:347
+#: src/hooks/irchook.cc:345
 #, fuzzy, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
 msgstr "+ [icq] whitepages zoektocht gereed, %d gevonden"
 
-#: src/hooks/irchook.cc:478
+#: src/hooks/irchook.cc:476
 #, fuzzy
 msgid "+ [irc] logged in"
 msgstr "+ [icq] ingelogd"
 
-#: src/hooks/irchook.cc:507
+#: src/hooks/irchook.cc:505
 #, fuzzy
 msgid "+ [irc] disconnected from the network"
 msgstr "+ [yahoo] disconnected van het netwerk"
 
-#: src/hooks/irchook.cc:521
+#: src/hooks/irchook.cc:519
 #, fuzzy, c-format
 msgid "+ [irc] connect failed: %s"
 msgstr "+ [msn] verbinden met %s"
 
-#: src/hooks/irchook.cc:605
+#: src/hooks/irchook.cc:603
 msgid "On channels: "
 msgstr ""
 
@@ -1730,6 +1720,14 @@ msgstr "authorisatie"
 #: src/imlogger.h:41
 msgid "e-mail"
 msgstr "e-mail"
+
+#, fuzzy
+#~ msgid "+ [irc] adding %s to the contacts"
+#~ msgstr "+ [yahoo] %s in contacten toevoegen"
+
+#, fuzzy
+#~ msgid "+ [irc] removing %s from the contacts"
+#~ msgstr "+ [msn] %s verwijderen van contactlijst"
 
 #, fuzzy
 #~ msgid "You must be logged to the AIM network to update your profile"

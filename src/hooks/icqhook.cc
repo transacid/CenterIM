@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.82 2002/04/17 16:01:26 konst Exp $
+* $Id: icqhook.cc,v 1.83 2002/04/22 09:30:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -327,13 +327,13 @@ bool icqhook::send(const imevent &ev) {
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
-	cli.SendEvent(new NormalMessageEvent(ic, rusconv("kw", m->gettext())));
+	cli.SendEvent(new NormalMessageEvent(ic, ruscrlfconv("kw", m->gettext())));
 
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *> (&ev);
 	cli.SendEvent(new URLMessageEvent(ic,
-	    rusconv("kw", m->getdescription()),
-	    rusconv("kw", m->geturl())));
+	    ruscrlfconv("kw", m->getdescription()),
+	    ruscrlfconv("kw", m->geturl())));
 
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = static_cast<const imsms *> (&ev);
@@ -349,12 +349,12 @@ bool icqhook::send(const imevent &ev) {
 	    ic->setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
 	}
 
-	cli.SendEvent(new SMSMessageEvent(ic, rusconv("kw", m->gettext()), true));
+	cli.SendEvent(new SMSMessageEvent(ic, ruscrlfconv("kw", m->gettext()), true));
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
 	cli.SendEvent(new AuthAckEvent(ic,
-	    rusconv("kw", m->gettext()), m->getgranted()));
+	    ruscrlfconv("kw", m->gettext()), m->getgranted()));
 
     } else {
 	return false;
