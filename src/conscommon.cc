@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.25 2002/12/15 15:45:43 konst Exp $
+* $Id: conscommon.cc,v 1.26 2003/01/19 02:14:50 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -166,7 +166,7 @@ int kwherey() {
 }
 
 void kwriteatf(int x, int y, int c, const char *fmt, ...) {
-    char buf[10240];
+    char buf[65535];
     va_list ap;
     
     va_start(ap, fmt);    
