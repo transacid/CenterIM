@@ -46,7 +46,7 @@ struct s_irc_connection {
 	struct s_irc_whois *whois_head;
 	int passchange;                                      /* whether we are currently changing our pass */
 	int usesilence;                                      /* are we on a network that understands SILENCE */
-	int identified;					/* are we identified */
+	int identified;                                 /* are we identified */
 };
 
 typedef struct s_irc_connection * client_t;
@@ -389,10 +389,21 @@ client_t irc_create_handle() {
 }
 
 enum firetalk_error irc_signon(client_t c, const char * const nickname) {
-	if (irc_send_printf(c,"USER %s %s %s :%s",nickname,nickname,nickname,nickname) != FE_SUCCESS)
+	const char *username, *hostname, *servername, *realname;
+	struct s_firetalk_handle *conn;
+
+	conn = firetalk_find_handle(c);
+
+	username = getenv("USER");
+	hostname = getenv("HOSTNAME");
+
+	if(!hostname) hostname = nickname;
+	if(!username) username = nickname;
+
+	if(irc_send_printf(c, "USER %s %s %s :%s", username, hostname, conn->server, nickname) != FE_SUCCESS)
 		return FE_PACKET;
 
-	if (irc_send_printf(c,"NICK %s",nickname) != FE_SUCCESS)
+	if(irc_send_printf(c, "NICK %s", nickname) != FE_SUCCESS)
 		return FE_PACKET;
 
 	c->nickname = safe_strdup(nickname);

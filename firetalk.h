@@ -47,6 +47,8 @@ enum firetalk_callback {
 		/* void *connection, void *clientstruct, char *nickname */
 	FC_ERROR,
 		/* void *connection, void *clientstruct, int error, char *roomoruser (room or user that error applies to, null if none) */
+	FC_LOG,
+		/* void *connection, void *clientstruct, char *message */
 	FC_DISCONNECT,
 		/* void *connection, void *clientstruct, int error */
 	FC_SETIDLE,
@@ -230,7 +232,8 @@ enum firetalk_error firetalk_set_nickname(firetalk_t conn, const char * const ni
 enum firetalk_error firetalk_set_password(firetalk_t conn, const char * const oldpass, const char * const newpass);
 enum firetalk_error firetalk_select();
 enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_write, fd_set *fd_except, struct timeval *timeout);
-enum firetalk_error firetalk_getsockets(int **r, int **w, int **e);
+
+enum firetalk_error firetalk_getsockets(const enum firetalk_protocol prot, int **r, int **w, int **e);
 
 #ifndef FIRETALK
 extern enum firetalk_error firetalkerror;

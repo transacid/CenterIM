@@ -292,11 +292,15 @@ enum firetalk_error firetalk_im_internal_add_deny(firetalk_t conn, const char * 
 
 int firetalk_internal_resolve4(const char * const host, struct in_addr *inet4_ip) {
 	struct hostent *he;
+/*
 	if (firetalk_set_timeout(5) != FE_SUCCESS)
 		return FE_TIMEOUT;
-
+*/
+	he = 0;
 	he = gethostbyname(host);
-	if (he && he->h_addr_list) {
+
+	if (he)
+	if (he->h_addr_list) {
 		memcpy(&inet4_ip->s_addr,he->h_addr_list[0],4);
 		firetalk_clear_timeout();
 		return FE_SUCCESS;
@@ -345,7 +349,7 @@ int firetalk_internal_connect_host(const char * const host, const uint16_t port)
 	struct sockaddr_in6 *sendinet6 = NULL;
 #endif
 
-#ifdef _FC_USE_IPV6	
+#ifdef _FC_USE_IPV6     
 	if (firetalk_internal_resolve6(host,&myinet6.sin6_addr) == FE_SUCCESS) {
 		myinet6.sin6_port = htons(port);
 		myinet6.sin6_family = AF_INET6;
@@ -1534,9 +1538,9 @@ const char *firetalk_strerror(const enum firetalk_error e) {
 		case FE_DUPEROOM:
 			return "Room already in list";
 		case FE_IOERROR:
-        		return "Input/output error";
+			return "Input/output error";
 		case FE_BADHANDLE:
-        		return "Invalid handle";
+			return "Invalid handle";
 		case FE_TIMEOUT:
 			return "Operation timed out";
 		default:
@@ -1625,8 +1629,6 @@ enum firetalk_error firetalk_signon(firetalk_t conn, const char * const server, 
 	if (conn->connected != FCS_NOTCONNECTED)
 		return FE_CONNECT;
 	
-	conn->username = safe_strdup(username);
-
 	if (server == NULL)
 		realserver = defaultserver[conn->protocol];
 	else
@@ -1637,7 +1639,10 @@ enum firetalk_error firetalk_signon(firetalk_t conn, const char * const server, 
 	else
 		realport = port;
 
-#ifdef _FC_USE_IPV6	
+	conn->username = safe_strdup(username);
+	conn->server = safe_strdup(realserver);
+
+#ifdef _FC_USE_IPV6     
 	if (firetalk_internal_resolve6(realserver,&conn->remote_addr6.sin6_addr) == FE_SUCCESS) {
 		conn->remote_addr6.sin6_port = htons(realport);
 		conn->remote_addr6.sin6_family = AF_INET6;
@@ -1705,6 +1710,14 @@ void firetalk_callback_connected(client_t c) {
 
 	if (conn->callbacks[FC_CONNECTED])
 		conn->callbacks[FC_CONNECTED](conn,conn->clientstruct);
+}
+
+void firetalk_callback_log(client_t c, char *log) {
+    firetalk_t conn;
+    conn = firetalk_find_handle(c);
+
+    if (conn->callbacks[FC_LOG])
+	    conn->callbacks[FC_LOG](conn,conn->clientstruct,log);
 }
 
 enum firetalk_error firetalk_handle_file_synack(firetalk_t conn, struct s_firetalk_file *file) {
@@ -2538,6 +2551,9 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 				firetalk_callback_disconnect(fchandle->handle,FE_DISCONNECT);
 			else {
 				fchandle->bufferpos += length;
+
+				firetalk_callback_log(fchandle->handle,fchandle->buffer);
+
 				if (fchandle->connected == FCS_ACTIVE)
 					protocol_functions[fchandle->protocol].got_data(fchandle->handle,fchandle->buffer,&fchandle->bufferpos);
 				else
@@ -2598,7 +2614,7 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 	return FE_SUCCESS;
 }
 
-enum firetalk_error firetalk_getsockets(int **r, int **w, int **e) {
+enum firetalk_error firetalk_getsockets(const enum firetalk_protocol prot, int **r, int **w, int **e) {
     struct s_firetalk_handle *fchandle;
     struct s_firetalk_file *fileiter;
     int rs, ws, es, *pr, *pw, *pe;
@@ -2613,7 +2629,8 @@ enum firetalk_error firetalk_getsockets(int **r, int **w, int **e) {
     fchandle = handle_head;
 
     while(fchandle) {
-	if(fchandle->connected == FCS_NOTCONNECTED) {
+	if((fchandle->connected == FCS_NOTCONNECTED)
+	|| (fchandle->protocol != prot)) {
 	    fchandle = fchandle->next;
 
 	} else {

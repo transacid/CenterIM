@@ -126,7 +126,7 @@ struct s_firetalk_handle {
 #endif
 	unsigned long localip;
 	int protocol;
-	char *username;
+	char *username, *server;
 	int fd;
 	ptrtofnct callbacks[FC_MAX];
 	unsigned char *buffer;
@@ -230,6 +230,7 @@ void firetalk_callback_subcode_request(client_t c, const char * const from, cons
 void firetalk_callback_subcode_reply(client_t c, const char * const from, const char * const command, const char * const args);
 void firetalk_callback_file_offer(client_t c, const char * const from, const char * const filename, const long size, const char * const ipstring, const char * const ip6string, const uint16_t port, const int type);
 void firetalk_callback_needpass(client_t c, char *pass, const int size);
+void firetalk_callback_log(client_t c, char *log);
 
 firetalk_t firetalk_find_handle(client_t c);
 
