@@ -110,6 +110,7 @@ void textinputline::exec() {
     vector<string> sel;
     vector<string>::iterator isel;
 
+    position = 0;
     screenbuffer.save(x1, y1, x2, y2);
     firstiter = true;
 
