@@ -60,7 +60,7 @@ class jabberhook: public abstracthook {
 	void gotloggedin();
 	void postlogin();
 	void gotroster(xmlnode x);
-	void gotvcard(xmlnode x);
+	void gotvcard(const imcontact &ic, xmlnode v);
 	void gotmessage(const string &type, const string &from, const string &body);
 
     public:

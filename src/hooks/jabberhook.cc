@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.29 2002/12/11 15:40:27 konst Exp $
+* $Id: jabberhook.cc,v 1.30 2002/12/11 18:47:32 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -892,67 +892,46 @@ void jabberhook::updatecontact(icqcontact *c) {
     }
 }
 
-void jabberhook::gotvcard(xmlnode x) {
-    xmlnode v, ad, n;
+void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
+    xmlnode ad, n;
     icqcontact *c;
-    const char *p = xmlnode_get_attrib(x, "from");
+    char *p;
 
-    if(p)
-    if(v = xmlnode_get_tag(x, "vCard"))
-    if(c = clist.get(imcontact(jidtodisp(p), jabber))) {
+    if(c = clist.get(ic)) {
 	icqcontact::basicinfo bi = c->getbasicinfo();
 	icqcontact::moreinfo mi = c->getmoreinfo();
 	icqcontact::workinfo wi = c->getworkinfo();
 
-	if(n = xmlnode_get_tag(v, "NICKNAME"))
-	    if(p = xmlnode_get_data(n)) c->setnick(p);
+	if(p = xmlnode_get_tag_data(v, "NICKNAME")) c->setnick(p);
+	if(p = xmlnode_get_tag_data(v, "DESC")) c->setabout(p);
+	if(p = xmlnode_get_tag_data(v, "EMAIL")) bi.email = p;
+	if(p = xmlnode_get_tag_data(v, "URL")) mi.homepage = p;
+	if(p = xmlnode_get_tag_data(v, "TITLE")) wi.position = p;
+	if(p = xmlnode_get_tag_data(v, "AGE")) mi.age = atoi(p);
+	if(p = xmlnode_get_tag_data(v, "HOMECELL")) bi.cellular = p;
 
-	if(n = xmlnode_get_tag(v, "DESC"))
-	    if(p = xmlnode_get_data(n)) c->setabout(p);
+	if(p = xmlnode_get_tag_data(v, "ROLE"))
+	if(!wi.position.empty()) wi.position += (string) " / " + p;
 
-	if(n = xmlnode_get_tag(v, "EMAIL"))
-	    if(p = xmlnode_get_data(n)) bi.email = p;
-
-	if(n = xmlnode_get_tag(v, "URL"))
-	    if(p = xmlnode_get_data(n)) mi.homepage = p;
-
-	if(n = xmlnode_get_tag(v, "TITLE"))
-	    if(p = xmlnode_get_data(n)) wi.position = p;
-
-	if(n = xmlnode_get_tag(v, "ROLE"))
-	    if(p = xmlnode_get_data(n))
-	    if(!wi.position.empty())
-		wi.position += (string) " / " + p;
-
-	if(n = xmlnode_get_tag(v, "FN"))
-	if(p = xmlnode_get_data(n)) {
+	if(p = xmlnode_get_tag_data(v, "FN")) {
 	    string buf = p;
 	    bi.fname = getword(buf);
 	    bi.lname = buf;
 	}
 
 	if(ad = xmlnode_get_tag(v, "ORG")) {
-	    if(n = xmlnode_get_tag(ad, "ORGNAME"))
-		if(p = xmlnode_get_data(n)) wi.company = p;
-
-	    if(n = xmlnode_get_tag(ad, "ORGUNIT"))
-		if(p = xmlnode_get_data(n)) wi.dept = p;
+	    if(p = xmlnode_get_tag_data(ad, "ORGNAME")) wi.company = p;
+	    if(p = xmlnode_get_tag_data(ad, "ORGUNIT")) wi.dept = p;
 	}
 
 	if(ad = xmlnode_get_tag(v, "TEL")) {
-	    if(n = xmlnode_get_tag(ad, "VOICE"))
-		if(p = xmlnode_get_data(n)) bi.phone = p;
-
-	    if(n = xmlnode_get_tag(ad, "HOME"))
-		if(p = xmlnode_get_data(n)) bi.fax = p;
+	    if(p = xmlnode_get_tag_data(ad, "VOICE")) bi.phone = p;
+	    if(p = xmlnode_get_tag_data(ad, "HOME")) bi.fax = p;
 	}
 
 	if(ad = xmlnode_get_tag(v, "ADR")) {
-	    if(n = xmlnode_get_tag(ad, "STREET"))
-		if(p = xmlnode_get_data(n)) bi.street = p;
-
-	    if(n = xmlnode_get_tag(ad, "LOCALITY"))
-		if(p = xmlnode_get_data(n)) bi.state = p;
+	    if(p = xmlnode_get_tag_data(ad, "STREET")) bi.street = p;
+	    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) bi.state = p;
 	}
 
 	c->setbasicinfo(bi);
@@ -1097,8 +1076,10 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    }
 		}
 
-		if(xmlnode_get_tag(packet->x, "vCard"))
-		    jhook.gotvcard(packet->x);
+		if(x = xmlnode_get_firstchild(packet->x))
+		if(p = xmlnode_get_name(x))
+		if(!strcasecmp(p, "vcard"))
+		    jhook.gotvcard(ic, x);
 
 	    } else if(type == "set") {
 	    } else if(type == "error") {
