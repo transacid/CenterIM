@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.49 2001/12/06 18:30:55 konst Exp $
+* $Id: centericq.cc,v 1.50 2001/12/07 10:53:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -315,12 +315,7 @@ void centericq::userinfo(const imcontact cinfo) {
 	c = clist.get(contactroot);
 	realuin = contactroot;
 	c->clear();
-
-	switch(cinfo.pname) {
-	    case icq:
-//                if(ihook.online()) ihook.sendinforeq(c, cinfo.uin);
-		break;
-	}
+	gethook(cinfo.pname).requestinfo(cinfo);
     }
 
     if(c) {
@@ -676,7 +671,6 @@ const string centericq::quotemsg(const string text) {
 icqcontact *centericq::addcontact(const imcontact ic) {
     icqcontact *c;
     int groupid = 0;
-    bool notify;
 
     if(c = clist.get(ic)) {
 	if(c->inlist()) {
@@ -690,7 +684,7 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	if(!groupid) return 0;
     }
 
-    abstracthook &hook = gethook(c->getdesc().pname);
+    abstracthook &hook = gethook(ic.pname);
 
     if(hook.getcapabilities() & hoptCanNotify) {
 	if(face.ask(_("Notify the user he/she has been added?"),

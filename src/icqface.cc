@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.51 2001/12/06 18:30:55 konst Exp $
+* $Id: icqface.cc,v 1.52 2001/12/07 10:53:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1022,7 +1022,7 @@ void icqface::modelist(contactstatus cs) {
 
     while(db.open(i, b)) {
 	if(!lst.size() && b != 1) continue;
-	it = lst.menuat(i-1);
+	if(b != 1) it = lst.menuat(i-1);
 
 	switch(b) {
 	    case 0:
@@ -1039,6 +1039,7 @@ void icqface::modelist(contactstatus cs) {
 
 		    lst.fillmenu(db.getmenu(), cs);
 		    db.getmenu()->redraw();
+		    face.update();
 		}
 		break;
 	    case 2:
@@ -1410,7 +1411,7 @@ bool icqface::eventedit(imevent &ev) {
 }
 
 icqface::eventviewresult icqface::eventview(const imevent *ev) {
-    string extractfrom, title_event, title_timestamp, text;
+    string title_event, title_timestamp, text;
     horizontalbar *bar;
     dialogbox db;
     int mitem, baritem;
@@ -1490,6 +1491,8 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
     db.idle = &dialogidle;
     db.redraw();
     db.getbrowser()->setbuf(text);
+
+    extracturls(text);
 
     workarealine(WORKAREA_Y1+3);
     workarealine(WORKAREA_Y2-2);

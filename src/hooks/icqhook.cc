@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.15 2001/12/06 18:30:56 konst Exp $
+* $Id: icqhook.cc,v 1.16 2001/12/07 10:53:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,7 +36,6 @@
 icqhook ihook;
 
 icqhook::icqhook() {
-    fcapabilities = hoptCanNotify;
     timer_reconnect = 0;
     fonline = false;
 
@@ -209,8 +208,11 @@ bool icqhook::send(const imevent &ev) {
 }
 
 void icqhook::sendnewuser(const imcontact c) {
-    Contact ic(c.uin);
-    cli.addContact(ic);
+    if(logged()) {
+	Contact ic(c.uin);
+	cli.addContact(ic);
+	cli.fetchSimpleContactInfo(&ic);
+    }
 }
 
 void icqhook::setautostatus(imstatus st) {
@@ -304,6 +306,7 @@ imstatus icqhook::icq2imstatus(const Status st) const {
 void icqhook::requestinfo(const imcontact c) {
     if(logged()) {
 	Contact ic(c.uin);
+	cli.addContact(ic);
 	cli.fetchSimpleContactInfo(&ic);
     }
 }
@@ -323,9 +326,11 @@ const string icqhook::getcountryname(int code) const {
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
-    face.log(_("+ [icq] logged in"));
     flogged = true;
     time(&timer_ping);
+
+    face.log(_("+ [icq] logged in"));
+    face.update();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {
@@ -353,6 +358,7 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     }
 
     face.log(msg);
+    face.update();
 }
 
 bool icqhook::messaged_cb(MessageEvent *ev) {
@@ -452,15 +458,21 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 		string nick = rusconv("wk", ic->getAlias());
 
-		if((c->getnick() == c->getdispnick())
-		|| (c->getdispnick() == i2str(ev->getUIN()))) {
-		    c->setdispnick(nick);
+		if(!c) {
+		    c = clist.get(contactroot);
 		}
 
-		c->setnick(nick);
-		c->setbasicinfo(cbinfo);
-		c->setmoreinfo(cminfo);
-		c->setabout(ic->getAboutInfo());
+		if(c) {
+		    if((c->getnick() == c->getdispnick())
+		    || (c->getdispnick() == i2str(ev->getUIN()))) {
+			c->setdispnick(nick);
+		    }
+
+		    c->setnick(nick);
+		    c->setbasicinfo(cbinfo);
+		    c->setmoreinfo(cminfo);
+		    c->setabout(ic->getAboutInfo());
+		}
 
 		face.relaxedupdate();
 	    }
