@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.69 2002/05/07 22:48:00 konst Exp $
+* $Id: icqconf.cc,v 1.70 2002/05/14 07:31:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -792,7 +792,7 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 	    if(getprotocolname(pname) == proto)
 		break;
 
-	for(imst = available; imst != imstatus_size; (int) imst += 1)
+	for(imst = offline; imst != imstatus_size; (int) imst += 1)
 	    if(imstatus2char[imst] == st)
 		break;
 
