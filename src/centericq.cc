@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.67 2002/02/06 16:36:06 konst Exp $
+* $Id: centericq.cc,v 1.68 2002/02/07 17:33:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -267,7 +267,15 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_FETCHAWAY:
-		gethook(c->getdesc().pname).requestawaymsg(c->getdesc());
+		{
+		    abstracthook &hook = gethook(c->getdesc().pname);
+
+		    if(hook.getstatus() != offline) {
+			hook.requestawaymsg(c->getdesc());
+		    } else {
+			face.log(_("+ cannot fetch away messages being offline"));
+		    }
+		}
 		break;
 
 	    case ACT_MSG:

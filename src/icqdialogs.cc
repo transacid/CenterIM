@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.49 2002/02/06 16:36:07 konst Exp $
+* $Id: icqdialogs.cc,v 1.50 2002/02/07 17:33:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -594,17 +594,16 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno[antispam]);
 	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno[quote]);
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno[mailcheck]);
-//        t.addleaff(i, 0, 16, _(" Send all events through server : %s "), stryesno[serveronly]);
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno[savepwd]);
-
+/*
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
-
+*/
 	i = t.addnode(_(" Miscellaneous "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno[makelog]);
-
+/*
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);
 	    i = t.addnode(_(" SOCKS proxy settings "));
@@ -612,7 +611,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	    t.addleaff(i, 0, 11, _(" Proxy user name : %s "), socksuser.c_str());
 	    t.addleaff(i, 0, 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
 	}
-
+*/
 	void *p;
 	finished = !db.open(n, b, &p);
 	i = (int) p;
