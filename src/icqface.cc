@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.76 2002/02/01 18:05:31 konst Exp $
+* $Id: icqface.cc,v 1.77 2002/02/05 10:41:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -664,7 +664,7 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     x += 10;
     mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_text), bi.street);
     mainw.write(x, WORKAREA_Y1+3, conf.getcolor(cp_main_text), bi.city);
-    mainw.write(x, WORKAREA_Y1+4, conf.getcolor(cp_main_text), bi.zip ? i2str(bi.zip) : "");
+    mainw.write(x, WORKAREA_Y1+4, conf.getcolor(cp_main_text), bi.zip);
     mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_text), bi.phone);
     mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_text), bi.fax);
     mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_text), bi.cellular);
@@ -708,7 +708,7 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), wi.street);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), wi.city);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), wi.zip ? i2str(wi.zip) : "");
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), wi.zip);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), wi.company);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+7, conf.getcolor(cp_main_text), wi.dept);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), wi.position);

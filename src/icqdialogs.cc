@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.45 2002/01/23 16:31:23 konst Exp $
+* $Id: icqdialogs.cc,v 1.46 2002/02/05 10:41:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -195,7 +195,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     tree->addleaff(i, 0, 18, _(" State : %s "), bi.state.c_str());
     tree->addleaff(i, 0, 19, _(" Country : %s "), strcountry(bi.country));
     tree->addleaff(i, 0, 20, _(" Street address : %s "), bi.street.c_str());
-    tree->addleaff(i, 0, 21, _(" Zip code : %s "), strint(bi.zip));
+    tree->addleaff(i, 0, 21, _(" Zip code : %s "), bi.zip.c_str());
     tree->addleaff(i, 0, 22, _(" Phone : %s "), bi.phone.c_str());
     tree->addleaff(i, 0, 23, _(" Fax : %s "), bi.fax.c_str());
     tree->addleaff(i, 0, 24, _(" Cellular phone : %s "), bi.cellular.c_str());
@@ -329,7 +329,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 		case 18: bi.state = inputstr(_("State: "), bi.state); break;
 		case 19: selectcountry(bi.country); break;
 		case 20: bi.street = inputstr(_("Street address: "), bi.street); break;
-		case 21: bi.zip = strtoul(inputstr(_("Zip code: "), strint(bi.zip)).c_str(), 0, 0); break;
+		case 21: bi.zip = inputstr(_("Zip code: "), bi.zip); break;
 		case 22: bi.phone = inputstr(_("Phone: "), bi.phone); break;
 		case 23: bi.fax = inputstr(_("Fax: "), bi.fax); break;
 		case 24: bi.cellular = inputstr(_("Cellular phone: "), bi.cellular); break;

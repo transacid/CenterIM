@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.42 2002/01/26 14:01:37 konst Exp $
+* $Id: icqcontact.cc,v 1.43 2002/02/05 10:41:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -240,14 +240,14 @@ void icqcontact::load() {
 		case  9: binfo.fax = buf; break;
 		case 10: binfo.street = buf; break;
 		case 11: binfo.cellular = buf; break;
-		case 12: binfo.zip = strtoul(buf, 0, 0); break;
+		case 12: binfo.zip = buf; break;
 		case 13: binfo.country = strtoul(buf, 0, 0); break;
 		case 14: winfo.city = buf; break;
 		case 15: winfo.state = buf; break;
 		case 16: winfo.phone = buf; break;
 		case 17: winfo.fax = buf; break;
 		case 18: winfo.street = buf; break;
-		case 19: winfo.zip = strtoul(buf, 0, 0); break;
+		case 19: winfo.zip = buf; break;
 		case 20: winfo.country = strtoul(buf, 0, 0); break;
 		case 21: winfo.company = buf; break;
 		case 22: winfo.dept = buf; break;
@@ -395,6 +395,9 @@ void icqcontact::scanhistory() {
 
 void icqcontact::setstatus(imstatus fstatus) {
     if(status != fstatus) {
+	if(status == offline)
+	    playsound(imevent::online);
+
 	status = fstatus;
 	face.relaxedupdate();
     }

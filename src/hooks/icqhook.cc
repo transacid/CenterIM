@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.49 2002/01/30 17:25:41 konst Exp $
+* $Id: icqhook.cc,v 1.50 2002/02/05 10:41:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -464,7 +464,8 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     !params.city.empty() || !params.state.empty() ||
     !params.company.empty() || !params.department.empty() ||
     !params.position.empty() || params.onlineonly ||
-    params.country || params.language || (sex != ICQ2000::SEX_UNSPECIFIED)) {
+    params.country || params.minage || params.maxage ||
+    params.language || (sex != ICQ2000::SEX_UNSPECIFIED)) {
 	searchevent = cli.searchForContacts(params.nick, params.firstname,
 	    params.lastname, params.email, params.minage, params.maxage,
 	    sex, params.language, params.city, params.state, params.country,
@@ -504,7 +505,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     home.street = rusconv("kw", cbinfo.street);
     home.setMobileNo(rusconv("kw", cbinfo.cellular));
 
-    home.zip = i2str(cbinfo.zip);
+    home.zip = cbinfo.zip;
     home.country = cbinfo.country;
     home.timezone = UserInfoHelpers::getSystemTimezone();
 
@@ -536,7 +537,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     work.company_position = rusconv("kw", cwinfo.position);
     work.company_web = rusconv("kw", cwinfo.homepage);
 
-    work.zip = i2str(cwinfo.zip);
+    work.zip = cwinfo.zip;
     work.country = cwinfo.country;
 
     ic->setMainHomeInfo(home);
@@ -822,7 +823,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		if(!home.getMobileNo().empty())
 		    cbinfo.cellular = rusconv("wk", home.getMobileNo());
 
-		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
+		cbinfo.zip = home.zip;
 		cbinfo.country = home.country;
 
 		/* more information */
@@ -855,7 +856,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cwinfo.position = rusconv("wk", work.company_position);
 		cwinfo.homepage = rusconv("wk", work.company_web);
 
-		cwinfo.zip = strtoul(work.zip.c_str(), 0, 0);
+		cwinfo.zip = work.zip;
 		cwinfo.country = work.country;
 
 		/* personal interests */
