@@ -27,7 +27,6 @@ AC_MSG_CHECKING(for OpenSSL)
 
 if test -n "$with_openssl" -a "$with_openssl" != "no"; then
     if test "$with_openssl" = "yes"; then with_openssl="/usr"; fi
-    LIBS="$LIBS -lssl -L${with_openssl}"
     CFLAGS="$CFLAGS -I${with_openssl}"
     AC_DEFINE(HAVE_OPENSSL)
     AC_MSG_RESULT([found in $with_openssl])
