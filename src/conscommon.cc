@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.13 2002/03/04 15:27:26 konst Exp $
+* $Id: conscommon.cc,v 1.14 2002/03/05 10:33:52 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -232,7 +232,8 @@ int string2key(const string &adef) {
 	for(ic = d.begin(); ic != d.end(); *ic = toupper(*ic), ic++);
 
 	if(d == "CTRL") r = CTRL(r); else
-	if(d == "ALT") r = ALT(r);
+	if(d == "ALT") r = ALT(r); else
+	    r = 0;
     }
 
     return r ? r : -1;

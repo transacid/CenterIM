@@ -146,7 +146,7 @@ class texteditor: public abstractuicontrol {
 	void (*idle)(texteditor &caller);
 
 	texteditor();
-	~texteditor();
+	virtual ~texteditor();
 
 	int load(const string buf, const string id);
 	int load(FILE *f, const string id);
