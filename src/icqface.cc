@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.35 2001/11/14 16:18:15 konst Exp $
+* $Id: icqface.cc,v 1.36 2001/11/14 16:21:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -242,6 +242,7 @@ int icqface::contextmenu(icqcontact *c) {
     }
 
     if(c->getdesc().pname != infocard)
+    if(c->getdesc() != contactroot)
     if(conf.getusegroups()) {
 	m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
     }
