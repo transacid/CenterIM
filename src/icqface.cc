@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.220 2004/03/28 11:38:03 konst Exp $
+* $Id: icqface.cc,v 1.221 2004/04/04 19:57:03 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1718,7 +1718,7 @@ void icqface::modelist(contactstatus cs) {
 bool icqface::multicontacts(const string &ahead,
 const set<protocolname> &protos, contactstatus cs) {
 
-    int i, savefirst, saveelem;
+    int i, savefirst, saveelem, prevgid;
     bool ret = true, finished = false;
     string head = ahead;
 
@@ -1740,14 +1740,21 @@ const set<protocolname> &protos, contactstatus cs) {
     if(!head.size()) head = _("Event recipients");
     mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), head);
 
-    for(i = 0; i < clist.count; i++) {
-	icqcontact *c = (icqcontact *) clist.at(i);
-	imcontact desc = c->getdesc();
+    vector<icqgroup>::iterator ig = groups.begin();
 
-	if(!desc.empty())
-	if(protos.empty() || protos.count(desc.pname))
-	if(!lst.inlist(desc, cs))
-	    mlst.push_back(desc);
+    while(ig != groups.end()) {
+	for(i = 0; i < clist.count; i++) {
+	    icqcontact *c = (icqcontact *) clist.at(i);
+	    imcontact desc = c->getdesc();
+
+	    if(!desc.empty())
+	    if(c->getgroupid() == ig->getid())
+	    if(protos.empty() || protos.count(desc.pname))
+	    if(!lst.inlist(desc, cs))
+		mlst.push_back(desc);
+	}
+
+	ig++;
     }
 
     m.idle = &menuidle;
@@ -1757,33 +1764,26 @@ const set<protocolname> &protos, contactstatus cs) {
 	m.getpos(saveelem, savefirst);
 	m.clear();
 
-	vector<icqgroup>::iterator ig = groups.begin();
+	int prevgid = -1;
 
-	while(ig != groups.end()) {
-	    bool headadded = conf.getgroupmode() == icqconf::nogroups;
+	for(c = mlst.begin(); c != mlst.end(); ++c) {
+	    cont = (icqcontact *) clist.get(*c);
 
-	    for(c = mlst.begin(); c != mlst.end(); ++c) {
-		cont = (icqcontact *) clist.get(*c);
+	    if(conf.getgroupmode() != icqconf::nogroups)
+	    if(cont->getgroupid() != prevgid) {
+		prevgid = cont->getgroupid();
 
-		if(cont->getgroupid() == ig->getid()) {
-		    if(!headadded) {
-			if(groupcheck.find(ig->getid()) == groupcheck.end())
-			    groupcheck[ig->getid()] = false;
+		if(groupcheck.find(prevgid) == groupcheck.end())
+		    groupcheck[prevgid] = false;
 
-			m.additemf(conf.getcolor(cp_main_highlight), 0, "\002[%c]\002\002 %s",
-			    groupcheck[ig->getid()] ? 'x' : ' ',
-			    ig->getname().c_str());
-
-			headadded = true;
-		    }
-
-		    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
-			find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
-			cont->getdispnick().c_str());
-		}
+		m.additemf(conf.getcolor(cp_main_highlight), 0, "\002[%c]\002\002 %s",
+		    groupcheck[prevgid] ? 'x' : ' ',
+		    groups.getname(prevgid).c_str());
 	    }
 
-	    ++ig;
+	    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
+		find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
+		cont->getdispnick().c_str());
 	}
 
 	m.setpos(saveelem, savefirst);
@@ -1801,6 +1801,7 @@ const set<protocolname> &protos, contactstatus cs) {
 		    groupcheck[cont->getgroupid()] = false;
 
 		} else {
+		    bool been = false;
 		    int gid = ((icqcontact *) m.getref(m.getpos()+1))->getgroupid();
 		    groupcheck[gid] = !groupcheck[gid];
 
@@ -1808,6 +1809,7 @@ const set<protocolname> &protos, contactstatus cs) {
 			cont = (icqcontact *) clist.get(*c);
 
 			if(cont->getgroupid() == gid) {
+			    been = true;
 			    cc = find(muins.begin(), muins.end(), *c);
 
 			    if(groupcheck[gid] && cc == muins.end()) {
@@ -1815,7 +1817,7 @@ const set<protocolname> &protos, contactstatus cs) {
 			    } else if(!groupcheck[gid] && cc != muins.end()) {
 				muins.erase(cc);
 			    }
-			}
+			} else if(been) break;
 		    }
 		}
 		break;
@@ -2700,9 +2702,9 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	extracturls(text);
 
 	status(_("%s to URLs, %s to full-screenize, %s close"),
-	    getstatkey(key_show_urls, section_info).c_str(),
-	    getstatkey(key_fullscreen, section_editor).c_str(),
-	    getstatkey(key_quit, section_editor).c_str());
+	    getstatkey(key_show_urls, section_history).c_str(),
+	    getstatkey(key_fullscreen, section_history).c_str(),
+	    getstatkey(key_quit, section_history).c_str());
     }
 
     db.redraw();
@@ -2852,7 +2854,7 @@ bool icqface::histexec(imevent *&im) {
 	status(_("%s search, %s again, %s cancel"),
 	    getstatkey(key_search, section_history).c_str(),
 	    getstatkey(key_search_again, section_history).c_str(),
-	    getstatkey(key_quit, section_editor).c_str());
+	    getstatkey(key_quit, section_history).c_str());
 
 	while(!fin) {
 	    if(db.open(k)) {
@@ -2869,6 +2871,10 @@ bool icqface::histexec(imevent *&im) {
 				break;
 			    }
 			}
+			break;
+		    case -4:
+			r = false;
+			fin = true;
 			break;
 
 		    default:
@@ -3178,6 +3184,8 @@ int icqface::historykeys(dialogbox &db, int k) {
 	    return -2;
 	case key_search_again:
 	    return -3;
+	case key_quit:
+	    return -4;
     }
 
     return -1;
@@ -3186,10 +3194,14 @@ int icqface::historykeys(dialogbox &db, int k) {
 int icqface::editmsgkeys(texteditor &e, int k) {
     char *p;
 
+    if(k == '\r' && conf.getentersends(face.passinfo.pname)) {
+	p = e.save("");
+	face.editdone = strlen(p);
+	delete p;
+	if(face.editdone) return -1; else return 0;
+    }
+
     switch(face.key2action(k, section_editor)) {
-	case '\r':
-	    if(!conf.getentersends(face.passinfo.pname))
-		break;
 	case key_send_message:
 	    p = e.save("");
 	    face.editdone = strlen(p);
@@ -3234,6 +3246,8 @@ int icqface::eventviewkeys(dialogbox &db, int k) {
 	case key_fullscreen:
 	    face.fullscreenize(face.passevent);
 	    break;
+	case key_quit:
+	    return 0;
     }
 
     return -1;
