@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 client_t toc_create_handle();
 void toc_destroy_handle(client_t c);
 
+enum firetalk_error toc_compare_nicks(const char * const nick1, const char * const nick2);
 enum firetalk_error toc_disconnect(client_t c);
 enum firetalk_error toc_signon(client_t c, const char * const username);
 

@@ -29,9 +29,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <time.h>
 #include <errno.h>
 
-#define MAXSTACK 15
-#define MODES_PER_LINE 3
-
 struct s_irc_whois {
 	struct s_irc_whois *next;
 	char *nickname;
@@ -40,19 +37,10 @@ struct s_irc_whois {
 	long idle;
 };
 
-struct s_irc_mode {
-	char *nickname;
-	char *room;
-	int sign;
-	char mode;
-};
-
 struct s_irc_connection {
 	char *nickname;
 	char *password;
 	char buffer[513];
-	int modecount;
-	struct s_irc_mode modestack[MAXSTACK];
 	time_t lasttime;                                     /* last time we set idles */
 	int isons;                                           /* number of ISON's we're waiting on replies to */
 	struct s_irc_whois *whois_head;
@@ -73,24 +61,6 @@ typedef struct s_irc_connection * client_t;
 #define IRC_PORT 6667
 #define ROOMSTARTS "#+&"
 
-static const int ansirgb[][3] = {
-	{ 0x00, 0x00, 0x00 },  /* black */
-	{ 0xcc, 0x00, 0x00 },  /* red */
-	{ 0x00, 0xcc, 0x00 },  /* green */
-	{ 0x00, 0x00, 0xcc },  /* blue */
-	{ 0x00, 0xcc, 0xcc },  /* cyan */
-	{ 0xcc, 0x00, 0xcc },  /* purple */
-	{ 0xcc, 0xcc, 0x00 },  /* brown */
-	{ 0xcc, 0xcc, 0xcc },  /* white */
-	{ 0x33, 0x33, 0x33 },  /* gray */
-	{ 0xff, 0x00, 0x00 },  /* bright red */
-	{ 0x00, 0xff, 0x00 },  /* bright green */
-	{ 0x00, 0x00, 0xff },  /* bright blue */
-	{ 0x00, 0xff, 0xff },  /* bright cyan */
-	{ 0xff, 0x00, 0xff },  /* bright purple */
-	{ 0xff, 0xff, 0x00 },  /* yellow */
-	{ 0xff, 0xff, 0xff }   /* white */
-};
 
 
 static char *irc_html_to_irc(const char * const string);
@@ -98,7 +68,6 @@ static char *irc_irc_to_html(const char * const string);
 static int irc_send_printf(client_t c, const char * const format, ...);
 static int irc_internal_disconnect(client_t c, const int error);
 static char **irc_recv_parse(client_t c, unsigned char *buffer, unsigned short *bufferpos);
-enum firetalk_error irc_flush_modes(client_t c);
 
 /*
 
@@ -127,12 +96,6 @@ static char *irc_html_to_irc(const char * const string) {
 				} else if (!strncasecmp(&string[i],"&lt;",4)) {
 					output[o++] = '<';
 					i += 4;
-				} else if (!strncasecmp(&string[i],"&nbsp;",6)) {
-					output[o++] = ' ';
-					i += 6;
-				} else if (!strncasecmp(&string[i],"&quot;",6)) {
-					output[o++] = '"';
-					i += 6;
 				} else
 					output[o++] = string[i++];
 				break;
@@ -379,60 +342,6 @@ static char **irc_recv_parse(client_t c, unsigned char *buffer, unsigned short *
 	return args;
 }
 
-enum firetalk_error irc_flush_modes(client_t c) {
-	int i,j,sign;
-	int linecount;
-	int index[MODES_PER_LINE];
-	char outstring[512]; /* go over this and someone is insane */
-	char tempstring[2];
-
-	tempstring[1] = '\0';
-	i = c->modecount;
-	while (i != 0) {
-		linecount = 0;
-		for (j = 0; j < MODES_PER_LINE; j++) {
-			if (j == 0)
-				index[j] = 0;
-			else
-				index[j] = index[j-1] + 1;
-			for (; index[j] < c->modecount; index[j]++)
-				if (c->modestack[index[j]].sign != 0)
-					if (j == 0 || irc_compare_nicks(c->modestack[index[0]].room,c->modestack[index[j]].room) == FE_SUCCESS) {
-						linecount++;
-						break;
-					}
-		}
-		safe_strncpy(outstring,"MODE ",512);
-		safe_strncat(outstring,c->modestack[index[0]].room,512);
-		safe_strncat(outstring," ",512);
-		sign = 0;
-		for (j = 0; j < linecount; j++) {
-			if (c->modestack[index[j]].sign != sign) {
-				sign = c->modestack[index[j]].sign;
-				if (sign == 1)
-					safe_strncat(outstring,"+",512);
-				else
-					safe_strncat(outstring,"-",512);
-			}
-			tempstring[0] = c->modestack[index[j]].mode;
-			safe_strncat(outstring,tempstring,512);
-		}
-		for (j = 0; j < linecount; j++) {
-			safe_strncat(outstring," ",512);
-			safe_strncat(outstring,c->modestack[index[j]].nickname,512);
-			free(c->modestack[index[j]].nickname);
-			free(c->modestack[index[j]].room);
-			c->modestack[index[j]].sign = 0;
-			i--;
-		}
-		j = irc_send_printf(c,"%s",outstring);
-		if (j != FE_SUCCESS) /* TODO: Fix this */
-			return j;
-	}
-	c->modecount = 0;
-	return FE_SUCCESS;
-}
-
 static char *irc_get_nickname(const char * const hostmask) {
 	static char data[512];
 	char *tempchr;
@@ -475,7 +384,6 @@ client_t irc_create_handle() {
 	c->passchange = 0;
 	c->usesilence = 1;
 	c->identified = 0;
-	c->modecount = 0;
 
 	return c;
 }
@@ -497,8 +405,6 @@ enum firetalk_error irc_save_config(client_t c) {
 }
 
 enum firetalk_error irc_preselect(client_t c, fd_set *read, fd_set *write, fd_set *except, int *n) {
-	if (c->modecount > 0)
-		irc_flush_modes(c);
 	return FE_SUCCESS;
 }
 
@@ -1048,23 +954,11 @@ enum firetalk_error irc_chat_set_topic(client_t c, const char * const room, cons
 }
 
 enum firetalk_error irc_chat_op(client_t c, const char * const room, const char * const who) {
-	c->modestack[c->modecount].sign = 1;
-	c->modestack[c->modecount].mode = 'o';
-	c->modestack[c->modecount].nickname = safe_strdup(who);
-	c->modestack[c->modecount].room = safe_strdup(room);
-	if (++c->modecount >= MAXSTACK)
-		return irc_flush_modes(c);
-	return FE_SUCCESS;
+	return irc_send_printf(c,"MODE %s +o %s",room,who);
 }
 
 enum firetalk_error irc_chat_deop(client_t c, const char * const room, const char * const who) {
-	c->modestack[c->modecount].sign = -1;
-	c->modestack[c->modecount].mode = 'o';
-	c->modestack[c->modecount].nickname = safe_strdup(who);
-	c->modestack[c->modecount].room = safe_strdup(room);
-	if (++c->modecount >= MAXSTACK)
-		return irc_flush_modes(c);
-	return FE_SUCCESS;
+	return irc_send_printf(c,"MODE %s -o %s",room,who);
 }
 
 enum firetalk_error irc_chat_kick(client_t c, const char * const room, const char * const who, const char * const reason) {
@@ -1209,14 +1103,6 @@ enum firetalk_error irc_subcode_send_reply(client_t c, const char * const to, co
 			return FE_PACKET;
 		}
 	}
-	return FE_SUCCESS;
-}
-
-enum firetalk_error irc_file_handle_custom(client_t c, const int fd, char *buffer, long *bufferpos, const char * const cookie) {
-	return FE_SUCCESS;
-}
-
-enum firetalk_error irc_file_complete_custom(client_t c, const int fd, void *customdata) {
 	return FE_SUCCESS;
 }
 

@@ -69,7 +69,7 @@ void safe_strncat(char * const to, const char * const from, const size_t size) {
 
 void safe_snprintf(char *out, const size_t size, char * const format, ...) {
 	va_list ap;
-	char numbuf[64]; /* stores strings for printing */
+	char numbuf[10]; /* stores shorts for printing */
 	size_t f,o = 0,fl,tl,ml;
 	char *tempchr;
 	int b = 0;
@@ -91,38 +91,8 @@ void safe_snprintf(char *out, const size_t size, char * const format, ...) {
 						out += tl;
 					}
 					break;
-				case 'd': /* signed int */
+				case 'd':
 					sprintf(numbuf,"%d",va_arg(ap,int));
-					tl = strlen(numbuf);
-					if (tl + o >= ml)
-						b = 1;
-					else {
-						memcpy(&out[o],numbuf,tl);
-						out += tl;
-					}
-					break;
-				case 'l': /* signed long */
-					sprintf(numbuf,"%ld",va_arg(ap,long));
-					tl = strlen(numbuf);
-					if (tl + o >= ml)
-						b = 1;
-					else {
-						memcpy(&out[o],numbuf,tl);
-						out += tl;
-					}
-					break;
-				case 'u': /* unsigned int */
-					sprintf(numbuf,"%u",va_arg(ap,unsigned int));
-					tl = strlen(numbuf);
-					if (tl + o >= ml)
-						b = 1;
-					else {
-						memcpy(&out[o],numbuf,tl);
-						out += tl;
-					}
-					break;
-				case 'y': /* unsigned long */
-					sprintf(numbuf,"%lu",va_arg(ap,unsigned long));
 					tl = strlen(numbuf);
 					if (tl + o >= ml)
 						b = 1;

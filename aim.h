@@ -24,10 +24,5 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 char *aim_interpolate_variables(const char * const input, const char * const nickname);
 const char * const aim_normalize_room_name(const char * const name);
 char *aim_handle_ect(void *conn, const char * const from, char * message, const int reply);
-enum firetalk_error aim_file_handle_custom(client_t c, const int fd, char *buffer, long *bufferpos, const char * const cookie);
-enum firetalk_error aim_file_complete_custom(client_t c, const int fd, void *customdata);
-enum firetalk_error aim_compare_nicks(const char * const nick1, const char * const nick2);
-unsigned char aim_debase64(const char c);
-
 
 #endif

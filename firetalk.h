@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <unistd.h>
 #include <netinet/in.h>
 
-#define LIBFIRETALK_VERSION "0.1.0-pre21"
+#define LIBFIRETALK_VERSION "0.1.0-pre20"
 #define LIBFIRETALK_HOMEPAGE "http://www.penguinhosting.net/~ian/firetalk/"
 
 #ifndef _HAVE_FIRETALK_T
@@ -41,8 +41,6 @@ enum firetalk_protocol {
 enum firetalk_callback {
 	FC_CONNECTED,
 		/* void *connection, void *clientstruct */
-	FC_GOTIP,
-		/* void *connection, void *clientstruct, char *ipstring */
 	FC_CONNECTFAILED,
 		/* void *connection, void *clientstruct, int error, char *reason */
 	FC_DOINIT,
@@ -170,8 +168,7 @@ enum firetalk_error {
 	FE_DUPEROOM,
 	FE_IOERROR,
 	FE_BADHANDLE,
-	FE_TIMEOUT,
-	FE_NOTDONE
+	FE_TIMEOUT
 };
 
 
@@ -208,7 +205,6 @@ enum firetalk_error firetalk_chat_op(firetalk_t conn, const char * const room, c
 enum firetalk_error firetalk_chat_deop(firetalk_t conn, const char * const room, const char * const who);
 enum firetalk_error firetalk_chat_kick(firetalk_t conn, const char * const room, const char * const who, const char * const reason);
 enum firetalk_error firetalk_chat_listmembers(firetalk_t conn, const char * const room);
-const char *firetalk_chat_get_topic(firetalk_t conn, const char * const room);
 
 enum firetalk_error firetalk_im_internal_add_buddy(firetalk_t conn, const char * const nickname);
 enum firetalk_error firetalk_im_internal_add_deny(firetalk_t conn, const char * const nickname);
@@ -238,6 +234,8 @@ enum firetalk_error firetalk_getsockets(int **r, int **w, int **e);
 
 #ifndef FIRETALK
 extern enum firetalk_error firetalkerror;
+/* internal function, exported because dan reed is lazy */
+int firetalk_internal_connect_host(const char * const host, const uint16_t port);
 #endif
 
 #define FF_SUBSTANDARD                  0x0001

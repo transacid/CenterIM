@@ -65,7 +65,4 @@ enum firetalk_error irc_im_evil(client_t c, const char * const who);
 enum firetalk_error irc_subcode_send_request(client_t c, const char * const to, const char * const command, const char * const args);
 enum firetalk_error irc_subcode_send_reply(client_t c, const char * const to, const char * const command, const char * const args);
 
-enum firetalk_error irc_file_handle_custom(client_t c, const int fd, char *buffer, long *bufferpos, const char * const cookie);
-enum firetalk_error irc_file_complete_custom(client_t c, const int fd, void *customdata);
-
 #endif

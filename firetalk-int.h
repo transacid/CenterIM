@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <firedns.h>
 
 typedef struct s_firetalk_handle * firetalk_t;
 #define _HAVE_FIRETALK_T
@@ -70,8 +69,6 @@ struct s_firetalk_room {
 	struct s_firetalk_member *member_head;
 	int admin;
 	char *name;
-	char *topic;
-	char *author;
 };
 
 struct s_firetalk_file {
@@ -79,7 +76,7 @@ struct s_firetalk_file {
 	char *who;
 	char *filename;
 	struct in_addr inet_ip;
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
 	struct in6_addr inet6_ip;
 	int tryinet6;
 #endif
@@ -97,16 +94,10 @@ struct s_firetalk_file {
 	int direction;
 #define FF_TYPE_DCC            0
 #define FF_TYPE_RAW            1
-#define FF_TYPE_CUSTOM         2
-#define FF_TYPE_CUSTOM_RAW     3
 	int type;
-#define FF_INITBUFFER_MAXLEN 256
-	char initbuffer[FF_INITBUFFER_MAXLEN];
 	int sockfd;
 	int filefd;
 	void *clientfilestruct;
-	char *cookie;
-	void *customdata;
 };
 
 struct s_firetalk_subcode_callback {
@@ -127,10 +118,9 @@ struct s_firetalk_handle {
 	void *handle;
 	void *clientstruct;
 	int connected;
-	char *remotehost;
 	struct sockaddr_in remote_addr;
 	struct in_addr local_addr;
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
 	struct sockaddr_in6 remote_addr6;
 	struct in6_addr local_addr6;
 #endif
@@ -191,8 +181,6 @@ struct s_firetalk_protocol_functions {
 	enum firetalk_error (*chat_send_action)(client_t, const char * const, const char * const, const int);
 	enum firetalk_error (*subcode_send_request)(client_t, const char * const, const char * const, const char * const);
 	enum firetalk_error (*subcode_send_reply)(client_t, const char * const, const char * const, const char * const);
-	enum firetalk_error (*file_handle_custom)(client_t, const int, char *, long *, const char * const);
-	enum firetalk_error (*file_complete_custom)(client_t, const int, void *);
 	const char * const (*room_normalize)(const char * const);
 	client_t (*create_handle)();
 	void (*destroy_handle)(client_t);
@@ -201,10 +189,6 @@ struct s_firetalk_protocol_functions {
 
 enum firetalk_connectstate {
 	FCS_NOTCONNECTED,
-#ifdef FIRETALK_USE_IPV6
-	FCS_WAITING_DNS6,
-#endif
-	FCS_WAITING_DNS4,
 	FCS_WAITING_SYNACK,
 	FCS_WAITING_SIGNON,
 	FCS_ACTIVE
@@ -217,7 +201,6 @@ void firetalk_callback_im_buddyonline(client_t c, const char * const nickname, c
 void firetalk_callback_im_buddyaway(client_t c,  const char * const nickname, const int away);
 void firetalk_callback_error(client_t c, const int error, const char * const roomoruser, const char * const description);
 void firetalk_callback_connectfailed(client_t c, const int error, const char * const description);
-void firetalk_callback_gotip(firetalk_t c, const char *ipstring);
 void firetalk_callback_connected(client_t c);
 void firetalk_callback_disconnect(client_t c, const int error);
 void firetalk_callback_gotinfo(client_t c, const char * const nickname, const char * const info, const int warning, const long idle, const int flags);
@@ -245,7 +228,7 @@ void firetalk_callback_chat_deopped(client_t c, const char * const room, const c
 void firetalk_callback_chat_user_kicked(client_t c, const char * const room, const char * const who, const char * const by, const char * const reason);
 void firetalk_callback_subcode_request(client_t c, const char * const from, const char * const command, char *args);
 void firetalk_callback_subcode_reply(client_t c, const char * const from, const char * const command, const char * const args);
-void firetalk_callback_file_offer(client_t c, const char * const from, const char * const filename, const long size, const char * const ipstring, const char * const ip6string, const uint16_t port, const int type, const char *cookie);
+void firetalk_callback_file_offer(client_t c, const char * const from, const char * const filename, const long size, const char * const ipstring, const char * const ip6string, const uint16_t port, const int type);
 void firetalk_callback_needpass(client_t c, char *pass, const int size);
 
 firetalk_t firetalk_find_handle(client_t c);
@@ -262,21 +245,25 @@ void firetalk_handle_receive(struct s_firetalk_handle * c, struct s_firetalk_fil
 
 void firetalk_internal_send_data(struct s_firetalk_handle * c, const char * const data, const int length, const int urgent);
 
+int firetalk_internal_connect_host(const char * const host, const uint16_t port);
 int firetalk_internal_connect(struct sockaddr_in *inet4_ip
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
 		, struct sockaddr_in6 *inet6_ip
 #endif
 		);
+int firetalk_internal_resolve4(const char * const host, struct in_addr *inet4_ip);
 struct sockaddr_in *firetalk_internal_remotehost4(client_t c);
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
+int firetalk_internal_resolve6(const char * const host, struct in_addr6 *inet6_ip);
 struct sockaddr_in6 *firetalk_internal_remotehost6(client_t c);
 #endif
 enum firetalk_connectstate firetalk_internal_get_connectstate(client_t c);
 void firetalk_internal_set_connectstate(client_t c, enum firetalk_connectstate fcs);
-void firetalk_internal_file_register_customdata(client_t c, int fd, void *customdata);
 
 #ifdef DEBUG
 enum firetalk_error firetalk_check_handle(struct s_firetalk_handle *c);
 #endif
+enum firetalk_error firetalk_set_timeout(unsigned int seconds);
+enum firetalk_error firetalk_clear_timeout();
 
 #endif

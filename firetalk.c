@@ -33,7 +33,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <setjmp.h>
 #include <signal.h>
 #include <fcntl.h>
-#include <firedns.h>
 
 #define FIRETALK
 
@@ -68,7 +67,7 @@ static const double firetalkrates[][4] = {
 };
 
 static const char *defaultserver[] = {
-	"toc.oscar.aol.com",
+	"toc-m01.blue.aol.com",
 	"irc.openprojects.net"
 };
 
@@ -89,7 +88,7 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		toc_postselect,
 		toc_got_data,
 		toc_got_data_connecting,
-		aim_compare_nicks,
+		toc_compare_nicks,
 		toc_disconnect,
 		toc_signon,
 		toc_save_config,
@@ -118,8 +117,6 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		toc_chat_send_action,
 		toc_subcode_send_request,
 		toc_subcode_send_reply,
-		aim_file_handle_custom,
-		aim_file_complete_custom,
 		aim_normalize_room_name,
 		toc_create_handle,
 		toc_destroy_handle
@@ -159,8 +156,6 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		irc_chat_send_action,
 		irc_subcode_send_request,
 		irc_subcode_send_reply,
-		irc_file_handle_custom,
-		irc_file_complete_custom,
 		irc_normalize_room_name,
 		irc_create_handle,
 		irc_destroy_handle
@@ -172,6 +167,26 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 /* firetalk_find_by_toc searches the firetalk handle list for the toc handle passed, and returns the firetalk handle */
 void firetalk_timeout_handler(int signal) {
 	longjmp(buf,1);
+}
+
+enum firetalk_error firetalk_set_timeout(unsigned int seconds) {
+	if (setjmp(buf)) {
+		/* we timed out */
+		return FE_TIMEOUT;
+	}
+
+	alarm(0);
+	oldhandler = signal(SIGALRM,firetalk_timeout_handler);
+	alarm(seconds);
+
+	return FE_SUCCESS;
+}
+
+enum firetalk_error firetalk_clear_timeout() {
+	alarm(0);
+	signal(SIGALRM,oldhandler);
+
+	return FE_SUCCESS;
 }
 
 firetalk_t firetalk_find_handle(client_t c) {
@@ -275,29 +290,90 @@ enum firetalk_error firetalk_im_internal_add_deny(firetalk_t conn, const char * 
 	return FE_SUCCESS;
 }
 
+int firetalk_internal_resolve4(const char * const host, struct in_addr *inet4_ip) {
+	struct hostent *he;
+	if (firetalk_set_timeout(5) != FE_SUCCESS)
+		return FE_TIMEOUT;
+
+	he = gethostbyname(host);
+	if (he && he->h_addr_list) {
+		memcpy(&inet4_ip->s_addr,he->h_addr_list[0],4);
+		firetalk_clear_timeout();
+		return FE_SUCCESS;
+	}
+
+	firetalk_clear_timeout();
+	return FE_NOTFOUND;
+}
+
 struct sockaddr_in *firetalk_internal_remotehost4(client_t c) {
 	struct s_firetalk_handle *conn;
 	conn = firetalk_find_handle(c);
 	return &conn->remote_addr;
 }
 
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
+int firetalk_internal_resolve6(const char * const host, struct in_addr6 *inet6_ip) {
+	struct hostent *he;
+	if (firetalk_set_timeout(5) != FE_SUCCESS)
+		return FE_TIMEOUT;
+
+	he = getipnodebyname(host, AF_INET6, AI_ADDRCONFIG, &result);
+	if (he && he->h_addr_list) {
+		memcpy(&inet6_ip->s6_addr,he->h_addr_list[0],16);
+		firetalk_clear_timeout();
+		return FE_SUCCESS;
+	}
+
+	firetalk_clear_timeout();
+	return FE_NOTFOUND;
+}
+
 struct sockaddr_in6 *firetalk_internal_remotehost6(client_t c) {
 	struct s_firetalk_handle *conn;
 	conn = firetalk_find_handle(c);
 	return &conn->remote_addr6;
 }
+
 #endif
 
+int firetalk_internal_connect_host(const char * const host, const uint16_t port) {
+	struct sockaddr_in myinet4;
+	struct sockaddr_in *sendinet4 = NULL;
+#ifdef _FC_USE_IPV6
+	struct sockaddr_in6 myinet6;
+	struct sockaddr_in6 *sendinet6 = NULL;
+#endif
+
+#ifdef _FC_USE_IPV6	
+	if (firetalk_internal_resolve6(host,&myinet6.sin6_addr) == FE_SUCCESS) {
+		myinet6.sin6_port = htons(port);
+		myinet6.sin6_family = AF_INET6;
+		sendinet6 = &myinet6;
+	}
+#endif
+	if (firetalk_internal_resolve4(host,&myinet4.sin_addr) == FE_SUCCESS) {
+		myinet4.sin_port = htons(port);
+		myinet4.sin_family = AF_INET;
+		sendinet4 = &myinet4;
+	}
+
+	return firetalk_internal_connect(sendinet4
+#ifdef _FC_USE_IPV6
+	   , sendinet6
+#endif
+	   );
+}
+
 int firetalk_internal_connect(struct sockaddr_in *inet4_ip
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
 		, struct sockaddr_in6 *inet6_ip
 #endif
 		) {
 	int s,i;
 
-#ifdef FIRETALK_USE_IPV6
-	if (inet6_ip != NULL) {
+#ifdef _FC_USE_IPV6
+	if (inet6_ip) {
 		s = socket(PF_INET6, SOCK_STREAM, 0);
 		if (s == -1)
 			goto ipv6fail;
@@ -311,7 +387,7 @@ int firetalk_internal_connect(struct sockaddr_in *inet4_ip
 ipv6fail:
 #endif
 
-	if (inet4_ip != NULL) {
+	if (inet4_ip) {
 		s = socket(PF_INET, SOCK_STREAM, 0);
 		if (s == -1)
 			goto ipv4fail;
@@ -340,25 +416,11 @@ void firetalk_internal_set_connectstate(client_t c, enum firetalk_connectstate f
 	conn->connected = fcs;
 }
 
-void firetalk_internal_file_register_customdata(client_t c, int fd, void *customdata) {
-	firetalk_t conn;
-	struct s_firetalk_file *fileiter;
-
-	conn = firetalk_find_handle(c);
-	fileiter = conn->file_head;
-	while (fileiter) {
-		if (fileiter->sockfd == fd) {
-			fileiter->customdata = customdata;
-			return;
-		}
-	}
-}
-
 void firetalk_internal_send_data(firetalk_t c, const char * const data, const int length, const int urgent) {
 	if (c->connected == FCS_NOTCONNECTED || c->connected == FCS_WAITING_SYNACK)
 		return;
 
-	if (send(c->fd,data,length,0) != length) {
+	if (send(c->fd,data,length,MSG_DONTWAIT) != length) {
 		/* disconnect client (we probably overran the queue, or the other end is gone) */
 		firetalk_callback_disconnect(c->handle,FE_PACKET);
 	}
@@ -388,8 +450,6 @@ enum firetalk_error firetalk_chat_internal_add_room(firetalk_t conn, const char 
 	conn->room_head->name = safe_strdup(name);
 	conn->room_head->member_head = NULL;
 	conn->room_head->admin = 0;
-	conn->room_head->topic = NULL;
-	conn->room_head->author = NULL;
 
 	return FE_SUCCESS;
 }
@@ -511,10 +571,6 @@ enum firetalk_error firetalk_chat_internal_remove_room(firetalk_t conn, const ch
 				free(memberiter);
 				memberiter = memberiter2;
 			}
-			if (iter->topic != NULL)
-				free(iter->topic);
-			if (iter->author != NULL)
-				free(iter->author);
 			if (iter2)
 				iter2->next = iter->next;
 			else
@@ -722,15 +778,6 @@ void firetalk_callback_connectfailed(client_t c, const int error, const char * c
 	conn->connected = FCS_NOTCONNECTED;
 	if (conn->callbacks[FC_CONNECTFAILED])
 		conn->callbacks[FC_CONNECTFAILED](conn,conn->clientstruct,error,description);
-	return;
-}
-
-void firetalk_callback_gotip(firetalk_t conn, const char *ipstring) {
-	if (conn->connected == FCS_NOTCONNECTED)
-		return;
-
-	if (conn->callbacks[FC_GOTIP])
-		conn->callbacks[FC_GOTIP](conn,conn->clientstruct,ipstring);
 	return;
 }
 
@@ -1043,22 +1090,9 @@ void firetalk_callback_chat_user_quit(client_t c, const char * const who, const 
 
 void firetalk_callback_chat_gottopic(client_t c, const char * const room, const char * const topic, const char * const author) {
 	struct s_firetalk_handle *conn;
-	struct s_firetalk_room *r;
 	conn = firetalk_find_handle(c);
 	if (conn == NULL)
 		return;
-	r = firetalk_find_room(conn,room);
-	if (r == NULL)
-		return;
-	if (r->topic != NULL)
-		free(r->topic);
-	if (r->author != NULL) {
-		free(r->author);
-		r->author = NULL;
-	}
-	r->topic = safe_strdup(topic);
-	if (author != NULL)
-		r->author = safe_strdup(author);
 	if (conn->callbacks[FC_CHAT_GOTTOPIC])
 		conn->callbacks[FC_CHAT_GOTTOPIC](conn,conn->clientstruct,room,topic,author);
 	return;
@@ -1205,7 +1239,8 @@ void firetalk_callback_subcode_request(client_t c, const char * const from, cons
 		long size = -1;
 		uint16_t port;
 		char **myargs;
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
+		struct in6_addr addr6;
 		struct in6_addr *sendaddr6 = NULL;
 #endif
 		myargs = firetalk_parse_subcode_args(&args[5]);
@@ -1213,10 +1248,11 @@ void firetalk_callback_subcode_request(client_t c, const char * const from, cons
 			/* valid dcc send */
 			if (myargs[3]) {
 				size = atol(myargs[3]);
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
 				if (myargs[4]) {
 					/* ipv6-enabled dcc */
-					sendaddr6 = firedns_aton6(myargs[4]);
+					inet_pton(AF_INET6,myargs[4],&addr6);
+					sendaddr6 = &addr6;
 				}
 #endif
 			}
@@ -1224,7 +1260,7 @@ void firetalk_callback_subcode_request(client_t c, const char * const from, cons
 			ip = htonl(ip);
 			memcpy(&addr.s_addr,&ip,4);
 			port = (uint16_t) atoi(myargs[2]);
-			firetalk_callback_file_offer(c,from,myargs[0],size,inet_ntoa(addr),NULL,port,FF_TYPE_DCC,NULL);
+			firetalk_callback_file_offer(c,from,myargs[0],size,inet_ntoa(addr),NULL,port,FF_TYPE_DCC);
 		}
 	} else if (conn->subcode_request_default != NULL)
 		conn->subcode_request_default->callback(conn,conn->clientstruct,from,command,args);
@@ -1255,10 +1291,9 @@ void firetalk_callback_subcode_reply(client_t c, const char * const from, const 
 }
 
 /* size may be -1 if unknown (0 is valid) */
-void firetalk_callback_file_offer(client_t c, const char * const from, const char * const filename, const long size, const char * const ipstring, const char * const ip6string, const uint16_t port, const int type, const char *cookie) {
+void firetalk_callback_file_offer(client_t c, const char * const from, const char * const filename, const long size, const char * const ipstring, const char * const ip6string, const uint16_t port, const int type) {
 	struct s_firetalk_handle *conn;
 	struct s_firetalk_file *iter;
-	void *m;
 	conn = firetalk_find_handle(c);
 	if (conn == NULL)
 		return;
@@ -1278,26 +1313,15 @@ void firetalk_callback_file_offer(client_t c, const char * const from, const cha
 	conn->file_head->type = type;
 	conn->file_head->next = iter;
 	conn->file_head->clientfilestruct = NULL;
-	conn->file_head->customdata = NULL;
-	if (type == FF_TYPE_CUSTOM && cookie != NULL)
-		conn->file_head->cookie = safe_strdup(cookie);
-	else
-		conn->file_head->cookie = NULL;
-	m = firedns_aton4(ipstring);
-	if (m == NULL) {
+	if (inet_pton(AF_INET,ipstring,&conn->file_head->inet_ip) == 0) {
 		firetalk_file_cancel(c,conn->file_head);
 		return;
-	} else
-		memcpy(&conn->file_head->inet_ip,m,sizeof(struct in_addr));
-#ifdef FIRETALK_USE_IPV6
-	conn->file_head->tryinet6 = 0;
-	if (ip6string) {
-		m = firedns_aton6(ipstring);
-		if (m != NULL) {
-			memcpy(&conn->file_head->inet6_ip,m,sizeof(struct in6_addr));
-			conn->file_head->tryinet6 = 1;
-		}
 	}
+#ifdef _FC_USE_IPV6
+	conn->file_head->tryinet6 = 0;
+	if (ip6string)
+		if (inet_pton(AF_INET6,ip6string,&conn->file_head->inet6_ip) != 0)
+			conn->file_head->tryinet6 = 1;
 #endif
 	if (conn->callbacks[FC_FILE_OFFER])
 		conn->callbacks[FC_FILE_OFFER](conn,conn->clientstruct,(void *)conn->file_head,from,filename,size);
@@ -1310,35 +1334,7 @@ void firetalk_handle_receive(struct s_firetalk_handle * c, struct s_firetalk_fil
 	unsigned long netbytes;
 	ssize_t s;
 
-	if (filestruct->type == FF_TYPE_CUSTOM) {
-		int r;
-		s = recv(filestruct->sockfd,&filestruct->initbuffer[filestruct->bytes],FF_INITBUFFER_MAXLEN - filestruct->bytes,0);
-		if (s <= 0) {
-			if (c->callbacks[FC_FILE_ERROR])
-				c->callbacks[FC_FILE_ERROR](c,c->clientstruct,filestruct,filestruct->clientfilestruct,FE_IOERROR);
-			firetalk_file_cancel(c,filestruct);
-			return;
-		}
-		filestruct->bytes += s;
-		r = protocol_functions[c->protocol].file_handle_custom(c->handle,filestruct->sockfd,filestruct->initbuffer,&filestruct->bytes,filestruct->cookie);
-		if (r == FE_SUCCESS) {
-			filestruct->type = FF_TYPE_CUSTOM_RAW;
-			if (write(filestruct->filefd,filestruct->initbuffer,filestruct->bytes) != filestruct->bytes) {
-				if (c->callbacks[FC_FILE_ERROR])
-					c->callbacks[FC_FILE_ERROR](c,c->clientstruct,filestruct,filestruct->clientfilestruct,FE_IOERROR);
-				firetalk_file_cancel(c,filestruct);
-				return;
-			}
-		} else if (r != FE_NOTDONE) {
-			if (c->callbacks[FC_FILE_ERROR])
-				c->callbacks[FC_FILE_ERROR](c,c->clientstruct,filestruct,filestruct->clientfilestruct,FE_IOERROR);
-			firetalk_file_cancel(c,filestruct);
-			return;
-		}
-		return;
-	}
-
-	while ((s = recv(filestruct->sockfd,buffer,4096,0)) == 4096) {
+	while ((s = recv(filestruct->sockfd,buffer,4096,MSG_DONTWAIT)) == 4096) {
 		if (write(filestruct->filefd,buffer,4096) != 4096) {
 			if (c->callbacks[FC_FILE_ERROR])
 				c->callbacks[FC_FILE_ERROR](c,c->clientstruct,filestruct,filestruct->clientfilestruct,FE_IOERROR);
@@ -1347,7 +1343,7 @@ void firetalk_handle_receive(struct s_firetalk_handle * c, struct s_firetalk_fil
 		}
 		filestruct->bytes += 4096;
 	}
-	if (s > 0) {
+	if (s != -1) {
 		if (write(filestruct->filefd,buffer,(size_t) s) != s) {
 			if (c->callbacks[FC_FILE_ERROR])
 				c->callbacks[FC_FILE_ERROR](c,c->clientstruct,filestruct,filestruct->clientfilestruct,FE_IOERROR);
@@ -1355,11 +1351,6 @@ void firetalk_handle_receive(struct s_firetalk_handle * c, struct s_firetalk_fil
 			return;
 		}
 		filestruct->bytes += s;
-	} else if (s == 0 && errno != EAGAIN) {
-		if (c->callbacks[FC_FILE_ERROR])
-			c->callbacks[FC_FILE_ERROR](c,c->clientstruct,filestruct,filestruct->clientfilestruct,FE_IOERROR);
-		firetalk_file_cancel(c,filestruct);
-		return;
 	}
 	if (filestruct->type == FF_TYPE_DCC) {
 		netbytes = htonl((uint32_t) filestruct->bytes);
@@ -1373,8 +1364,6 @@ void firetalk_handle_receive(struct s_firetalk_handle * c, struct s_firetalk_fil
 	if (c->callbacks[FC_FILE_PROGRESS])
 		c->callbacks[FC_FILE_PROGRESS](c,c->clientstruct,filestruct,filestruct->clientfilestruct,filestruct->bytes,filestruct->size);
 	if (filestruct->bytes == filestruct->size) {
-		if (filestruct->type == FF_TYPE_CUSTOM_RAW)
-			protocol_functions[c->protocol].file_complete_custom(c->handle,filestruct->sockfd,filestruct->customdata);
 		if (c->callbacks[FC_FILE_FINISH])
 			c->callbacks[FC_FILE_FINISH](c,c->clientstruct,filestruct,filestruct->clientfilestruct,filestruct->size);
 		firetalk_file_cancel(c,filestruct);
@@ -1388,7 +1377,7 @@ void firetalk_handle_send(struct s_firetalk_handle * c, struct s_firetalk_file *
 	ssize_t s;
 
 	while ((s = read(filestruct->filefd,buffer,4096)) == 4096) {
-		if ((s = send(filestruct->sockfd,buffer,4096,0)) != 4096) {
+		if ((s = send(filestruct->sockfd,buffer,4096,MSG_DONTWAIT)) != 4096) {
 			lseek(filestruct->filefd,-(4096 - s),SEEK_CUR);
 			filestruct->bytes += s;
 			if (c->callbacks[FC_FILE_PROGRESS])
@@ -1399,7 +1388,7 @@ void firetalk_handle_send(struct s_firetalk_handle * c, struct s_firetalk_file *
 		if (c->callbacks[FC_FILE_PROGRESS])
 			c->callbacks[FC_FILE_PROGRESS](c,c->clientstruct,filestruct,filestruct->clientfilestruct,filestruct->bytes,filestruct->size);
 		if (filestruct->type == FF_TYPE_DCC) {
-			while (recv(filestruct->sockfd,&acked,4,0) == 4)
+			while (recv(filestruct->sockfd,&acked,4,MSG_DONTWAIT) == 4)
 				filestruct->acked = ntohl(acked);
 		}
 	}
@@ -1545,13 +1534,11 @@ const char *firetalk_strerror(const enum firetalk_error e) {
 		case FE_DUPEROOM:
 			return "Room already in list";
 		case FE_IOERROR:
-			return "Input/output error";
+        		return "Input/output error";
 		case FE_BADHANDLE:
-			return "Invalid handle";
+        		return "Invalid handle";
 		case FE_TIMEOUT:
 			return "Operation timed out";
-		case FE_NOTDONE:
-			return "Operation incomplete";
 		default:
 			return "Invalid error number";
 	}
@@ -1587,7 +1574,6 @@ firetalk_t firetalk_create_handle(const int protocol, void *clientstruct) {
 	handle_head->datatail = NULL;
 	handle_head->connected = FCS_NOTCONNECTED;
 	handle_head->protocol = protocol;
-	handle_head->remotehost = NULL;
 	handle_head->handle = protocol_functions[protocol].create_handle();
 	return handle_head;
 }
@@ -1598,15 +1584,13 @@ void firetalk_destroy_handle(firetalk_t conn) {
 		return;
 #endif
 	free(conn->buffer);
-	if (conn->remotehost != NULL)
-		free(conn->remotehost);
-	if (conn->prev != NULL)
+	if (conn->prev)
 		conn->prev->next = conn->next;
 	else
 		handle_head = conn->next;
-	if (conn->next != NULL)
+	if (conn->next)
 		conn->next->prev = conn->prev;
-	if (conn->handle != NULL)
+	if (conn->handle)
 		protocol_functions[conn->protocol].destroy_handle(conn->handle);
 
 	free(conn);
@@ -1626,6 +1610,10 @@ enum firetalk_error firetalk_disconnect(firetalk_t conn) {
 }
 
 enum firetalk_error firetalk_signon(firetalk_t conn, const char * const server, const short port, const char * const username) {
+	struct sockaddr_in *realremote4 = NULL;
+#ifdef _FC_USE_IPV6
+	struct sockaddr_in6 *realremote6 = NULL;
+#endif
 	short realport;
 	const char * realserver;
 
@@ -1649,26 +1637,29 @@ enum firetalk_error firetalk_signon(firetalk_t conn, const char * const server, 
 	else
 		realport = port;
 
-	if (conn->remotehost != NULL)
-		free(conn->remotehost);
-	conn->remotehost = safe_strdup(realserver);
-
-#ifdef FIRETALK_USE_IPV6        
-	conn->fd = firedns_getip6(realserver);
-	if (conn->fd != -1) {
-		conn->connected = FCS_WAITING_DNS6;
+#ifdef _FC_USE_IPV6	
+	if (firetalk_internal_resolve6(realserver,&conn->remote_addr6.sin6_addr) == FE_SUCCESS) {
 		conn->remote_addr6.sin6_port = htons(realport);
-		return FE_SUCCESS;
+		conn->remote_addr6.sin6_family = AF_INET6;
+		realremote6 = &conn->remote_addr6;
 	}
 #endif
-	conn->fd = firedns_getip4(realserver);
-	if (conn->fd != -1) {
-		conn->connected = FCS_WAITING_DNS4;
+	if (firetalk_internal_resolve4(realserver,&conn->remote_addr.sin_addr) == FE_SUCCESS) {
 		conn->remote_addr.sin_port = htons(realport);
-		return FE_SUCCESS;
+		conn->remote_addr.sin_family = AF_INET;
+		realremote4 = &conn->remote_addr;
 	}
 
-	return FE_NOTFOUND;
+	conn->fd = firetalk_internal_connect(realremote4
+#ifdef _FC_USE_IPV6
+			realremote6
+#endif
+			);
+	if (conn->fd != -1) {
+		conn->connected = FCS_WAITING_SYNACK;
+		return FE_SUCCESS;
+	} else
+		return firetalkerror;
 }
 
 enum firetalk_error firetalk_handle_synack(firetalk_t conn) {
@@ -1699,52 +1690,6 @@ enum firetalk_error firetalk_handle_synack(firetalk_t conn) {
 	return FE_SUCCESS;
 }
 
-enum firetalk_error firetalk_handle_dnsresult(firetalk_t conn) {
-	void *m;
-	m = firedns_getresult(conn->fd);
-	if (m == NULL) {
-#ifdef FIRETALK_USE_IPV6
-		if (conn->connected == FCS_WAITING_DNS6) {
-ipv4fallback:
-			conn->fd = firedns_getip4(conn->remotehost);
-			if (conn->fd != -1) {
-				conn->connected = FCS_WAITING_DNS4;
-				conn->remote_addr.sin_port = conn->remote_addr6.sin6_port;
-				return FE_SUCCESS;
-			}
-		}
-#endif
-		firetalk_callback_connectfailed(conn,FE_NOTFOUND,"DNS lookup failed");
-		return FE_DISCONNECT;
-	}
-#ifdef FIRETALK_USE_IPV6
-	if (conn->connected == FCS_WAITING_DNS6) {
-		memcpy(&conn->remote_addr6.sin6_addr,m,sizeof(struct in6_addr));
-		conn->remote_addr6.sin6_family = AF_INET6;
-		conn->fd = firetalk_internal_connect(NULL,&conn->remote_addr6);
-		if (conn->fd == -1)
-			goto ipv4fallback;
-		firetalk_callback_gotip(conn,firedns_ntoa6(&conn->remote_addr6.sin6_addr));
-		conn->connected = FCS_WAITING_SYNACK;
-		return FE_SUCCESS;
-	}
-#endif
-	memcpy(&conn->remote_addr.sin_addr,m,sizeof(struct in_addr));
-	conn->remote_addr.sin_family = AF_INET;
-	conn->fd = firetalk_internal_connect(&conn->remote_addr
-#ifdef FIRETALK_USE_IPV6
-			,NULL
-#endif
-			);
-	if (conn->fd == -1) {
-		firetalk_callback_connectfailed(conn,firetalkerror,"Unable to start connection");
-		return firetalkerror;
-	}
-	firetalk_callback_gotip(conn,firedns_ntoa4(&conn->remote_addr.sin_addr));
-	conn->connected = FCS_WAITING_SYNACK;
-	return FE_SUCCESS;
-}
-
 void firetalk_callback_connected(client_t c) {
 	unsigned int l;
 	struct sockaddr_in addr;
@@ -1772,8 +1717,6 @@ enum firetalk_error firetalk_handle_file_synack(firetalk_t conn, struct s_fireta
 	}
 
 	if (i != 0) {
-		if (conn->callbacks[FC_FILE_ERROR])
-			conn->callbacks[FC_FILE_ERROR](conn,conn->clientstruct,file,file->clientfilestruct,FE_CONNECT);
 		firetalk_file_cancel(conn,file);
 		return FE_CONNECT;
 	}
@@ -2029,24 +1972,6 @@ enum firetalk_error firetalk_chat_listmembers(firetalk_t conn, const char * cons
 	}
 
 	return FE_SUCCESS;
-}
-
-const char *firetalk_chat_get_topic(firetalk_t conn, const char * const room) {
-	struct s_firetalk_room *r;
-
-#ifdef DEBUG
-	if (firetalk_check_handle(conn) != FE_SUCCESS) {
-		firetalkerror = FE_BADHANDLE;
-		return NULL;
-	}
-#endif
-	
-	r = firetalk_find_room(conn,room);
-	if (r == NULL) {
-		firetalkerror = FE_NOTFOUND;
-		return NULL;
-	}
-	return r->topic;
 }
 
 const char * firetalk_chat_normalize(firetalk_t conn, const char * const room) {
@@ -2354,7 +2279,6 @@ enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nick
 	conn->file_head->who = safe_strdup(nickname);
 	conn->file_head->filename = safe_strdup(filename);
 	conn->file_head->sockfd = -1;
-	conn->file_head->customdata = NULL;
 
 	conn->file_head->filefd = open(filename,O_RDONLY);
 	if (conn->file_head->filefd == -1) {
@@ -2400,7 +2324,7 @@ enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nick
 	conn->file_head->port = ntohs(addr.sin_port);
 	conn->file_head->next = iter;
 	conn->file_head->type = FF_TYPE_DCC;
-	safe_snprintf(args,256,"SEND %s %y %u %l",conn->file_head->filename,conn->localip,conn->file_head->port,conn->file_head->size);
+	safe_snprintf(args,256,"SEND %s %lu %u %ld",conn->file_head->filename,conn->localip,conn->file_head->port,conn->file_head->size);
 	return firetalk_subcode_send_request(conn,nickname,"DCC",args);
 }
 
@@ -2424,7 +2348,7 @@ enum firetalk_error firetalk_file_accept(firetalk_t conn, void *filehandle, void
 	addr.sin_port = fileiter->port;
 	memcpy(&addr.sin_addr.s_addr,&fileiter->inet_ip,4);
 	fileiter->sockfd = firetalk_internal_connect(&addr
-#ifdef FIRETALK_USE_IPV6
+#ifdef _FC_USE_IPV6
 	, NULL
 #endif
 	);
@@ -2460,8 +2384,6 @@ enum firetalk_error firetalk_file_cancel(firetalk_t conn, void *filehandle) {
 				close(fileiter->sockfd);
 			if (fileiter->filefd >= 0)
 				close(fileiter->filefd);
-			if (fileiter->customdata != NULL)
-				free(fileiter->customdata);
 			return FE_SUCCESS;
 		}
 		fileiter2 = fileiter;
@@ -2610,19 +2532,8 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 			protocol_functions[fchandle->protocol].disconnect(fchandle->handle);
 		else if (FD_ISSET(fchandle->fd,my_read)) {
 			short length;
-			/* we handle DNS state connections seperately */
-			if (fchandle->connected == FCS_WAITING_DNS4
-#ifdef FIRETALK_USE_IPV6
-					|| fchandle->connected == FCS_WAITING_DNS6
-#endif
-			   ) {
-				firetalk_handle_dnsresult(fchandle);
-				continue;
-			}
-
-
 			/* read data into handle buffer */
-			length = recv(fchandle->fd,&fchandle->buffer[fchandle->bufferpos],buffersize[fchandle->protocol] - fchandle->bufferpos,0);
+			length = recv(fchandle->fd,&fchandle->buffer[fchandle->bufferpos],buffersize[fchandle->protocol] - fchandle->bufferpos,MSG_DONTWAIT);
 			if (length < 1)
 				firetalk_callback_disconnect(fchandle->handle,FE_DISCONNECT);
 			else {
@@ -2664,13 +2575,9 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 					} else {
 						close(fileiter->sockfd);
 						fileiter->sockfd = s;
-						if (fcntl(fileiter->sockfd, F_SETFL, O_NONBLOCK))
-							firetalk_file_cancel(fchandle,fileiter);
-						else {
-							fileiter->state = FF_STATE_TRANSFERRING;
-							if (fchandle->callbacks[FC_FILE_START])
-								fchandle->callbacks[FC_FILE_START](fchandle,fchandle->clientstruct,fileiter,fileiter->clientfilestruct);
-						}
+						fileiter->state = FF_STATE_TRANSFERRING;
+						if (fchandle->callbacks[FC_FILE_START])
+							fchandle->callbacks[FC_FILE_START](fchandle,fchandle->clientstruct,fileiter,fileiter->clientfilestruct);
 					}
 				} else if (FD_ISSET(fileiter->sockfd,my_except)) {
 					if (fchandle->callbacks[FC_FILE_ERROR])

@@ -19,44 +19,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include <ctype.h>
 #include "firetalk-int.h"
 #include "firetalk.h"
 #include "aim.h"
 #include "safestring.h"
-
-struct s_aim_file_header {
-	char  magic[4];         /* 0 */
-	short hdrlen;           /* 4 */
-	short hdrtype;          /* 6 */
-	char  bcookie[8];       /* 8 */
-	short encrypt;          /* 16 */
-	short compress;         /* 18 */
-	short totfiles;         /* 20 */
-	short filesleft;        /* 22 */
-	short totparts;         /* 24 */
-	short partsleft;        /* 26 */
-	long  totsize;          /* 28 */
-	long  size;             /* 32 */
-	long  modtime;          /* 36 */
-	long  checksum;         /* 40 */
-	long  rfrcsum;          /* 44 */
-	long  rfsize;           /* 48 */
-	long  cretime;          /* 52 */
-	long  rfcsum;           /* 56 */
-	long  nrecvd;           /* 60 */
-	long  recvcsum;         /* 64 */
-	char  idstring[32];     /* 68 */
-	char  flags;            /* 100 */
-	char  lnameoffset;      /* 101 */
-	char  lsizeoffset;      /* 102 */
-	char  dummy[69];        /* 103 */
-	char  macfileinfo[16];  /* 172 */
-	short nencode;          /* 188 */
-	short nlanguage;        /* 190 */
-	char  name[64];         /* 192 */
-				/* 256 */
-};
 
 char *aim_interpolate_variables(const char * const input, const char * const nickname) {
 	static char output[16384]; /* 2048 / 2 * 16 + 1 (max size with a string full of %n's, a 16-char nick and a null at the end) */
@@ -172,88 +138,4 @@ char *aim_handle_ect(void *conn, const char * const from, char * message, const 
 		}
 	}
 	return message;
-}
-
-unsigned char aim_debase64(const char c) {
-	if (c >= 'A' && c <= 'Z')
-		return (unsigned char) (c - 'A');
-	if (c >= 'a' && c <= 'z')
-		return (unsigned char) ((char) 26 + (c - 'a'));
-	if (c >= '0' && c <= '9')
-		return (unsigned char) ((char) 52 + (c - '0'));
-	if (c == '+')
-		return (unsigned char) 62;
-	if (c == '/')
-		return (unsigned char) 63;
-	return (unsigned char) 0;
-}
-
-enum firetalk_error aim_file_handle_custom(client_t c, const int fd, char *buffer, long *bufferpos, const char * const cookie) {
-	struct s_aim_file_header *h;
-	char *cd;
-
-	if (*bufferpos < 256)
-		return FE_NOTDONE;
-
-	h = (struct s_aim_file_header *)buffer;
-	h->hdrtype = htons(0x202);
-	h->encrypt = 0;
-	h->compress = 0;
-	h->bcookie[0] = (aim_debase64(cookie[0]) << 2) | (aim_debase64(cookie[1]) >> 4);
-	h->bcookie[1] = (aim_debase64(cookie[1]) << 4) | (aim_debase64(cookie[2]) >> 2);
-	h->bcookie[2] = (aim_debase64(cookie[2]) << 6) | aim_debase64(cookie[3]);
-	h->bcookie[3] = (aim_debase64(cookie[4]) << 2) | (aim_debase64(cookie[5]) >> 4);
-	h->bcookie[4] = (aim_debase64(cookie[5]) << 4) | (aim_debase64(cookie[6]) >> 2);
-	h->bcookie[5] = (aim_debase64(cookie[6]) << 6) | aim_debase64(cookie[7]);
-	h->bcookie[6] = (aim_debase64(cookie[8]) << 2) | (aim_debase64(cookie[9]) >> 4);
-	h->bcookie[7] = (aim_debase64(cookie[9]) << 4) | (aim_debase64(cookie[10]) >> 2);
-	if (send(fd,h,256,0) != 256)
-		return FE_IOERROR;
-	cd = safe_malloc(256);
-	memcpy(cd,h,256);
-	firetalk_internal_file_register_customdata(c,fd,cd);
-	*bufferpos -= 256;
-	memmove(buffer,&buffer[256],*bufferpos);
-	return FE_SUCCESS;
-}
-
-enum firetalk_error aim_file_complete_custom(client_t c, const int fd, void *customdata) {
-	struct s_aim_file_header *h;
-
-	h = (struct s_aim_file_header *) customdata;
-	h->hdrtype = htons(0x204);
-	h->filesleft = 0;
-	h->partsleft = 0;
-	h->recvcsum = h->checksum;
-	h->nrecvd = htons(1);
-	h->flags = 0;
-	if (send(fd,h,256,0) != 256)
-		return FE_IOERROR;
-	return FE_SUCCESS;
-}
-
-enum firetalk_error aim_compare_nicks (const char * const nick1, const char * const nick2) {
-	const char * tempchr1;
-	const char * tempchr2;
-
-	tempchr1 = nick1;
-	tempchr2 = nick2;
-
-	if (!nick1 || !nick2)
-		return FE_NOMATCH;
-
-	while (tempchr1[0] != '\0') {
-		while (tempchr1[0] == ' ')
-			tempchr1++;
-		while (tempchr2[0] == ' ')
-			tempchr2++;
-		if (tolower((unsigned char) tempchr1[0]) != tolower((unsigned char) tempchr2[0]))
-			return FE_NOMATCH;
-		tempchr1++;
-		tempchr2++;
-	}
-	if (tempchr2[0] != '\0')
-		return FE_NOMATCH;
-
-	return FE_SUCCESS;
 }

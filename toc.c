@@ -116,7 +116,7 @@ static int toc_send_printf(client_t c, const char * const format, ...);
 static char **toc_parse_args(char * const instring, int maxargs);
 static int toc_internal_split_exchange(const char * const string);
 static char *toc_internal_split_name(const char * const string);
-static int toc_get_tlv_value(char ** args, const int startarg, const int type, char *dest, int destlen);
+static char *toc_get_tlv_value(char ** args, const int startarg, const int type);
 enum firetalk_error toc_find_packet(client_t c, unsigned char * buffer, unsigned short * bufferpos, char * outbuffer, const int frametype, unsigned short *l);
 
 
@@ -126,15 +126,6 @@ enum firetalk_error  toc_find_packet(client_t c, unsigned char * buffer, unsigne
 	unsigned short length;
 
 	if (*bufferpos < TOC_HEADER_LENGTH) /* don't have the whole header yet */
-		return FE_NOTFOUND;
-
-	length = toc_get_length_from_header(buffer);
-	if (length > (8192 - TOC_HEADER_LENGTH)) {
-		toc_internal_disconnect(c,FE_PACKETSIZE);
-		return FE_DISCONNECT;
-	}
-
-	if (*bufferpos < length + TOC_HEADER_LENGTH) /* don't have the whole packet yet */
 		return FE_NOTFOUND;
 
 	if (frametype == SFLAP_FRAME_SIGNON)
@@ -150,6 +141,15 @@ enum firetalk_error  toc_find_packet(client_t c, unsigned char * buffer, unsigne
 		toc_internal_disconnect(c,FE_FRAMETYPE);
 		return FE_DISCONNECT;
 	}
+
+	length = toc_get_length_from_header(buffer);
+	if (length > (8192 - TOC_HEADER_LENGTH)) {
+		toc_internal_disconnect(c,FE_PACKETSIZE);
+		return FE_DISCONNECT;
+	}
+
+	if (*bufferpos < length + TOC_HEADER_LENGTH) /* don't have the whole packet yet */
+		return FE_NOTFOUND;
 
 	memcpy(outbuffer,&buffer[TOC_HEADER_LENGTH],length);
 	*bufferpos -= length + TOC_HEADER_LENGTH;
@@ -328,7 +328,7 @@ enum firetalk_error toc_postselect(client_t c, fd_set *read, fd_set *write, fd_s
 		} else if (i->state == TOC_STATE_TRANSFERRING && FD_ISSET(i->sockfd,read)) {
 			ssize_t s;
 			while (1) {
-				s = recv(i->sockfd,&i->buffer[i->buflen],TOC_HTML_MAXLEN - i->buflen - 1,0);
+				s = recv(i->sockfd,&i->buffer[i->buflen],TOC_HTML_MAXLEN - i->buflen - 1,MSG_DONTWAIT);
 				if (s <= 0)
 					break;
 				i->buflen += s;
@@ -472,7 +472,7 @@ static int toc_internal_set_joined(client_t c, const char * const name, const in
 
 	while (iter) {
 		if (iter->joined == 0) {
-			if ((iter->exchange == exchange) && (aim_compare_nicks(iter->name,name) == 0)) {
+			if ((iter->exchange == exchange) && (toc_compare_nicks(iter->name,name) == 0)) {
 				iter->joined = 1;
 				return FE_SUCCESS;
 			}
@@ -489,7 +489,7 @@ static int toc_internal_set_id(client_t c, const char * const name, const int ex
 
 	while (iter) {
 		if (iter->joined == 0) {
-			if ((iter->exchange == exchange) && (aim_compare_nicks(iter->name,name) == 0)) {
+			if ((iter->exchange == exchange) && (toc_compare_nicks(iter->name,name) == 0)) {
 				iter->id = safe_strdup(id);
 				return FE_SUCCESS;
 			}
@@ -506,7 +506,7 @@ static int toc_internal_find_exchange(client_t c, const char * const name) {
 
 	while (iter) {
 		if (iter->joined == 0)
-			if (aim_compare_nicks(iter->name,name) == 0)
+			if (toc_compare_nicks(iter->name,name) == 0)
 				return iter->exchange;
 		iter = iter->next;
 	}
@@ -527,7 +527,7 @@ static char * toc_internal_find_room_id(client_t c, const char * const name) {
 
 	while (iter) {
 		if (iter->exchange == exchange)
-			if (aim_compare_nicks(iter->name,namepart) == 0)
+			if (toc_compare_nicks(iter->name,namepart) == 0)
 				return iter->id;
 		iter = iter->next;
 	}
@@ -543,7 +543,7 @@ static char * toc_internal_find_room_name(client_t c, const char * const id) {
 	iter = c->room_head;
 
 	while (iter) {
-		if (aim_compare_nicks(iter->id,id) == 0) {
+		if (toc_compare_nicks(iter->id,id) == 0) {
 			safe_snprintf(newname,2048,"%d:%s",iter->exchange,iter->name);
 			return newname;
 		}
@@ -562,25 +562,46 @@ static char *toc_internal_split_name(const char * const string) {
 	return strchr(string,':') + 1;
 }
 
-static int toc_get_tlv_value(char **args, const int startarg, const int type, char *dest, int destlen) {
+static unsigned char toc_debase64(const char c) {
+	if (c >= 'A' && c <= 'Z')
+		return (unsigned char) (c - 'A');
+	if (c >= 'a' && c <= 'z')
+		return (unsigned char) ((char) 26 + (c - 'a'));
+	if (c >= '0' && c <= '9')
+		return (unsigned char) ((char) 52 + (c - '0'));
+	if (c == '+')
+		return (unsigned char) 62;
+	if (c == '/')
+		return (unsigned char) 63;
+	return (unsigned char) 0;
+}
+
+static char *toc_get_tlv_value(char **args, const int startarg, const int type) {
 	int i,o,s,l;
+	static unsigned char out[256];
 	i = startarg;
 	while (args[i]) {
 		if (atoi(args[i]) == type) {
 			/* got it, now de-base 64 the next block */
 			i++;
-			o = 0;
+			o = -8;
 			l = (int) strlen(args[i]);
-			for (s = 0, o = 0; s <= l - 3 && o + 3 < destlen; s += 4) {
-				dest[o++] = (aim_debase64(args[i][s]) << 2) | (aim_debase64(args[i][s+1]) >> 4);
-				dest[o++] = (aim_debase64(args[i][s+1]) << 4) | (aim_debase64(args[i][s+2]) >> 2);
-				dest[o++] = (aim_debase64(args[i][s+2]) << 6) | aim_debase64(args[i][s+3]);
+			for (s = 0; s <= l - 3; s += 4) {
+				if (o >= 0)
+					out[o] = (toc_debase64(args[i][s]) << 2) | (toc_debase64(args[i][s+1]) >> 4);
+				o++;
+				if (o >= 0)
+					out[o] = (toc_debase64(args[i][s+1]) << 4) | (toc_debase64(args[i][s+2]) >> 2);
+				o++;
+				if (o >= 0)
+					out[o] = (toc_debase64(args[i][s+2]) << 6) | toc_debase64(args[i][s+3]);
+				o++;
 			}
-			return o;
+			return (char *) out;
 		}
 		i += 2;
 	}
-	return 0;
+	return NULL;
 }
 
 static int toc_internal_set_room_invited(client_t c, const char * const name, const int invited) {
@@ -589,7 +610,7 @@ static int toc_internal_set_room_invited(client_t c, const char * const name, co
 	iter = c->room_head;
 
 	while (iter) {
-		if (aim_compare_nicks(iter->name,name) == 0) {
+		if (toc_compare_nicks(iter->name,name) == 0) {
 			iter->invited = invited;
 			return FE_SUCCESS;
 		}
@@ -605,12 +626,12 @@ static int toc_internal_get_room_invited(client_t c, const char * const name) {
 	iter = c->room_head;
 
 	while (iter) {
-		if (aim_compare_nicks(iter->name,name) == FE_SUCCESS && iter->invited == 1)
-			return 1;
+		if (toc_compare_nicks(iter->name,name) == 0)
+			return iter->invited;
 		iter = iter->next;
 	}
 
-	return 0;
+	return -1;
 }
 
 static int toc_send_printf(client_t c, const char * const format, ...) {
@@ -702,6 +723,32 @@ static char **toc_parse_args(char * const instring, const int maxargs) {
 }
 
 /* External Function Definitions */
+
+enum firetalk_error toc_compare_nicks (const char * const nick1, const char * const nick2) {
+	const char * tempchr1;
+	const char * tempchr2;
+
+	tempchr1 = nick1;
+	tempchr2 = nick2;
+
+	if (!nick1 || !nick2)
+		return FE_NOMATCH;
+
+	while (tempchr1[0] != '\0') {
+		while (tempchr1[0] == ' ')
+			tempchr1++;
+		while (tempchr2[0] == ' ')
+			tempchr2++;
+		if (tolower((unsigned char) tempchr1[0]) != tolower((unsigned char) tempchr2[0]))
+			return FE_NOMATCH;
+		tempchr1++;
+		tempchr2++;
+	}
+	if (tempchr2[0] != '\0')
+		return FE_NOMATCH;
+
+	return FE_SUCCESS;
+}
 
 client_t toc_create_handle() {
 	client_t c;
@@ -861,7 +908,7 @@ enum firetalk_error toc_im_upload_denies(client_t c) {
 }
 
 enum firetalk_error toc_im_send_message(client_t c, const char * const dest, const char * const message, const int auto_flag) {
-	if ((auto_flag == 0) && (aim_compare_nicks(dest,c->nickname) == FE_NOMATCH))
+	if ((auto_flag == 0) && (toc_compare_nicks(dest,c->nickname) == FE_NOMATCH))
 		c->lasttalk = time(NULL);
 	
 	if (auto_flag == 1)
@@ -1075,8 +1122,8 @@ got_data_start:
 		c->infoget_head->next = i;
 		c->infoget_head->state = TOC_STATE_CONNECTING;
 		c->infoget_head->sockfd = firetalk_internal_connect(firetalk_internal_remotehost4(c)
-#ifdef FIRETALK_USE_IPV6
-				,firetalk_internal_remotehost6(c)
+#ifdef _FC_USE_IPV6
+				firetalk_internal_remotehost6(c)
 #endif
 				);
 		if (c->infoget_head->sockfd == -1) {
@@ -1186,30 +1233,8 @@ got_data_start:
 			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"RVOUS_PROPOSE");
 			return FE_SUCCESS;
 		}
-		if (strcmp(args[2],"09461343-4C7F-11D1-8222-444553540000") == 0) {
-			/* file send offer */
-			char filename[256];
-			int length;
-			int totalsize = 0;
-
-			length = toc_get_tlv_value(args,9,10001,filename,255);
-
-			if (length < 8) {
-				firetalk_callback_error(c,FE_INVALIDFORMAT,args[1],"RVOUS_PROPOSE Invalid TLV length");
-				return FE_SUCCESS;
-			}
-			if (filename[3] != 1) {
-				firetalk_callback_error(c,FE_INVALIDFORMAT,args[1],"User offered multiple files (unsupported)");
-				return FE_SUCCESS;
-			}
-
-			totalsize |= (filename[4] << 24) & 0xff000000;
-			totalsize |= (filename[5] << 16) & 0x00ff0000;
-			totalsize |= (filename[6] << 8) & 0x0000ff00;
-			totalsize |= (filename[7] << 0) & 0x000000ff;
-
-			firetalk_callback_file_offer(c,args[1],&filename[8],totalsize,args[7],NULL,(uint16_t)atoi(args[8]),FF_TYPE_CUSTOM,args[3]);
-		}
+		if (strcmp(args[2],"09461343-4C7F-11D1-8222-444553540000") == 0)
+			firetalk_callback_file_offer(c,args[1],toc_get_tlv_value(args,9,10001),-1,args[7],NULL,(uint16_t)atoi(args[8]),FF_TYPE_RAW);
 	} else
 		firetalk_callback_error(c,FE_WIERDPACKET,NULL,arg0);
 
@@ -1383,10 +1408,7 @@ enum firetalk_error toc_periodic(struct s_firetalk_handle * const c) {
 	if (firetalk_internal_get_connectstate(conn) != FCS_ACTIVE)
 		return FE_NOTCONNECTED;
 
-	idle = ((long)time(NULL)) - conn->lasttalk;
-	passidle = (long)idle;
-	firetalk_callback_setidle(conn, &passidle);
-	idle = (time_t)passidle;
+	idle = (long) time(NULL) - conn->lasttalk;
 
 	if (idle < 600)
 		idle = 0;
@@ -1394,27 +1416,28 @@ enum firetalk_error toc_periodic(struct s_firetalk_handle * const c) {
 	if (idle == conn->lastidle)
 		return FE_IDLEFAST;
 
-	if ((idle - conn->lastidle) < 40)
-		if ((idle - conn->lastidle) > 0)
+	if (idle - conn->lastidle < 40)
+		if (idle - conn->lastidle > 0)
 			return FE_IDLEFAST;
 
 	conn->lastidle = idle;
 
-	sprintf(data, "%ld", (long)idle);
+	passidle = (long) idle;
+	firetalk_callback_setidle(conn,&passidle);
+	sprintf(data,"%ld",(long) idle);
 	return toc_send_printf(conn,"toc_set_idle %s",data);
 }
 
 enum firetalk_error toc_chat_join(client_t c, const char * const room) {
 	int i;
-	char *s;
-	s = toc_internal_split_name(room);
-	i = toc_internal_get_room_invited(c,s);
+	i = toc_internal_get_room_invited(c,room);
 	if (i == 1) {
 		(void) toc_internal_set_room_invited(c,room,0);
 		return toc_send_printf(c,"toc_chat_accept %s",toc_internal_find_room_id(c,room));
 	} else {
 		int m;
-		(void) toc_internal_add_room(c,s,m = toc_internal_split_exchange(room));
+		char *s;
+		(void) toc_internal_add_room(c,s = toc_internal_split_name(room),m = toc_internal_split_exchange(room));
 		return toc_send_printf(c,"toc_chat_join %d %s",m,s);
 	}
 }
@@ -1461,12 +1484,7 @@ enum firetalk_error toc_chat_send_action(client_t c, const char * const room, co
 }
 
 enum firetalk_error toc_chat_invite(client_t c, const char * const room, const char * const who, const char * const message) {
-	char *roomid;
-	roomid = toc_internal_find_room_id(c,room);
-	if (roomid != NULL)
-		return toc_send_printf(c,"toc_chat_invite %s %s %s",toc_internal_find_room_id(c,room),message,who);
-	else
-		return FE_NOTFOUND;
+	return toc_send_printf(c,"toc_chat_invite %s %s %s",toc_internal_find_room_id(c,room),message,who);
 }
 
 enum firetalk_error toc_subcode_send_request(client_t c, const char * const to, const char * const command, const char * const args) {
