@@ -63,7 +63,7 @@ class icqcontact {
 	imstatus status;
 
 	int nmsgs, fupdated, groupid, fhistoffset;
-	bool finlist, congratulated;
+	bool finlist, congratulated, modified;
 	time_t lastread, lastseen;
 
 	string sound[imevent::imeventtype_size];

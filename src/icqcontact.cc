@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.61 2002/08/20 17:43:21 konst Exp $
+* $Id: icqcontact.cc,v 1.62 2002/08/21 21:38:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -127,7 +127,7 @@ void icqcontact::clear() {
     interests.clear();
     background.clear();
 
-    nick = dispnick = about = "";
+    nick = about = dispnick = postponed = lastip = "";
     lastseen = 0;
 }
 
