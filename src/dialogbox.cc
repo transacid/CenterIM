@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.5 2001/09/14 15:57:37 konst Exp $
+* $Id: dialogbox.cc,v 1.6 2001/10/16 15:43:57 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -110,6 +110,7 @@ textbrowser *dialogbox::getbrowser() {
 
 bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
     bool ret = false;
+    list<keybarassociation>::iterator i;
 
     it = this;
     if(first) redraw();
@@ -148,11 +149,20 @@ bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
 		    fin = true; ret = false;
 		    break;
 		default:
-		    if(otherkeys)
-		    if((k = otherkeys(this, k)) != -1) {
+		    i = find(it->kba.begin(), it->kba.end(), k);
+
+	    	    if(i != it->kba.end()) {
+		      if(it->bar) {
+		        it->bar->item = i->baritem;
+		        it->bar->redraw();
+			fin = ret = true;
+		      }
+		    }
+		    else if(otherkeys)
+		      if((k = otherkeys(this, k)) != -1) {
 			menuitem = k;
 			fin = true;
-		    }
+		      }
 		    break;
 	    } else {
 		if(idle) idle(this);
@@ -227,6 +237,21 @@ void dialogbox::clearkeys() {
 
 void dialogbox::addkey(int key, int baritem) {
     kba.push_back(keybarassociation(key, baritem));
+}
+
+void dialogbox::addautokeys() {
+    int key;
+    vector<string>::const_iterator i;
+    string::const_iterator c;
+
+    if(bar) {
+	for(i = bar->items.begin(); i != bar->items.end(); i++) {
+	    for(c = i->begin(); (c != i->end()) && !isupper(*c); c++);
+	    key = c == i->end() ? key = *i->begin() : *c;
+	    addkey(tolower(key), i-bar->items.begin());
+	    addkey(toupper(key), i-bar->items.begin());
+	}
+    }
 }
 
 void dialogbox::menuidle(verticalmenu *caller) {

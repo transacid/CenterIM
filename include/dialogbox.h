@@ -73,6 +73,7 @@ class dialogbox {
 
         void clearkeys();
         void addkey(int key, int baritem);
+	void addautokeys();
 };
 
 __KTOOL_END_NAMESPACE
