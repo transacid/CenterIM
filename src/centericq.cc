@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.183 2004/03/13 11:18:51 konst Exp $
+* $Id: centericq.cc,v 1.184 2004/03/15 20:30:19 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,7 +87,7 @@ void centericq::exec() {
 
     if(conf.getouridcount()) {
 	conf.checkdir();
-	conf.load();
+//	conf.load();
 	groups.load();
 	clist.load();
 	lst.load();
@@ -168,10 +168,10 @@ void centericq::mainloop() {
     face.draw();
 
     while(!finished) {
-	face.status(face.action2key(key_user_menu, section_contact) + _(" contact menu, ")
-		    + face.action2key(key_change_status, section_contact) + _(" change status, ")
-		    + face.action2key(key_general_menu, section_contact) + _(" general actions, ")
-		    + face.action2key(key_quit, section_contact) + _(" quit"));
+	face.status(face.getstatusitem(_("contact menu, "), key_user_menu, section_contact)
+		    + face.getstatusitem(_("change status, "), key_change_status, section_contact)
+		    + face.getstatusitem(_("general actions, "), key_general_menu, section_contact)
+		    + face.getstatusitem(_("quit"), key_quit, section_contact));
 
 
 	c = face.mainloop(action);
@@ -732,7 +732,7 @@ void centericq::checkmail() {
 
 void centericq::checkconfigs() {
     static const char *configs[] = {
-	"sounds", "colorscheme", "actions", "external", 0
+	"sounds", "colorscheme", "actions", "external", "keybindings", 0
     };
 
     struct stat st;
@@ -759,6 +759,9 @@ void centericq::checkconfigs() {
 			break;
 		    case 3:
 			external.load();
+			break;
+		    case 4:
+			conf.loadkeys();
 			break;
 		}
 

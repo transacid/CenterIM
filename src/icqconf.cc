@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.128 2004/03/13 11:18:51 konst Exp $
+* $Id: icqconf.cc,v 1.129 2004/03/15 20:30:19 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -203,6 +203,8 @@ void icqconf::loadkeys() {
     string fname = getconfigfname("keybindings"), buf, param;
     struct keybinding k;
     ifstream f;
+
+    keys.clear();
 
     if(access(fname.c_str(), F_OK)) {
 	ofstream of(fname.c_str());

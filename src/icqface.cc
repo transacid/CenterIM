@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.215 2004/03/13 11:18:51 konst Exp $
+* $Id: icqface.cc,v 1.216 2004/03/15 20:30:19 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1175,9 +1175,8 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     saveworkarea();
     clearworkarea();
 
-    status(action2key(key_show_urls, section_info) + _(" to URLs, ")
-	    + action2key(key_user_external_action, section_info)
-	    + _(" external actions, esc close"));
+    status(getstatusitem(_("to URLs, "), key_show_urls, section_info)
+	    + getstatusitem(_("external actions, esc close"), key_user_external_action, section_info));
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
@@ -2079,15 +2078,13 @@ void icqface::userinfoexternal(const imcontact &ic) {
 }
 
 void icqface::showeventbottom(const imcontact &ic) {
-    status(action2key(key_send_message, section_editor) + _(" send, ")
-	+ action2key(key_multiple_recipients, section_editor) + _(" multi, ")
-	+ action2key(key_history, section_editor) + _(" history, ")
-	+ action2key(key_show_urls, section_editor) + _(" URLs, ")
-	+ action2key(key_fullscreen, section_editor) + _(" expand, ")
-	+ action2key(key_info, section_editor)
-	+ (ischannel(ic) ? _(" members, ") : _(" details, "))
-	+ action2key(key_quit, section_editor)
-	+ (ischannel(ic) ? _(" close") : _(" cancel")));
+    status(getstatusitem(_("send, "), key_send_message, section_editor)
+	+ getstatusitem(_("multi, "), key_multiple_recipients, section_editor)
+	+ getstatusitem(_("history, "), key_history, section_editor)
+	+ getstatusitem(_("URLs, "), key_show_urls, section_editor)
+	+ getstatusitem(_("expand, "), key_fullscreen, section_editor)
+	+ getstatusitem((ischannel(ic) ? _(" members, ") : _(" details, ")), key_info, section_editor)
+	+ getstatusitem((ischannel(ic) ? _(" close") : _(" cancel")), key_quit, section_editor) );
 }
 
 bool icqface::eventedit(imevent &ev) {
@@ -2787,8 +2784,8 @@ bool icqface::histexec(imevent *&im) {
 	    _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(), mhist.getcount());
 
-	status(action2key(key_search, section_history) + _(" search,")
-	    + action2key(key_search_again, section_history) + _(" again,")
+	status(getstatusitem(_("search, "), key_search, section_history)
+	    + getstatusitem(_("again,"), key_search_again, section_history)
 	    + _(" esc cancel"));
 
 	while(!fin) {
@@ -2883,6 +2880,19 @@ void icqface::transferidle(dialogbox &b) {
     }
 }
 
+string icqface::getstatusitem(string text, int key, int section) {
+    int i = 2;
+    string key2;
+    string keys = action2key(key, section);
+
+    while ( (key2 = action2key(key, section, i)) != "") {
+	keys += "/" + key2;
+	i++;
+    }
+
+    return (keys + " " + text);
+}
+
 string icqface::getmenuitem(string mtext, int width, int key, int section) {
     string text = " " + mtext + " ";
     string keyname = action2key(key, section);
@@ -2907,16 +2917,21 @@ int icqface::key2action(int k, int s) {
     return -1;
 }
 
-string icqface::action2key(int a, int s) {
+string icqface::action2key(int a, int s, int n) {
     string key;
     ostringstream o;
     vector<icqconf::keybinding>::size_type i = 0;
 
     for( ; i < icqconf::keys.size(); i++)
-	if(a == icqconf::keys[i].action && s == icqconf::keys[i].section)
-	    break;
+	if(a == icqconf::keys[i].action && s == icqconf::keys[i].section) {
+	    if (n <= 1)
+		break;
+	    n--;
+	}
 
-    if(icqconf::keys[i].key == '\r')
+    if (i == icqconf::keys.size())
+	return "";
+    else if(icqconf::keys[i].key == '\r')
 	return "enter";
     else if(icqconf::keys[i].key == ALT('\r'))
 	return "alt-enter";
