@@ -2952,6 +2952,8 @@ int yahoo_read_ready(int id, int fd, void *data)
 		int e = errno;
 		DEBUG_MSG(("len == %d (<= 0)", len));
 
+		YAHOO_CALLBACK(ext_yahoo_login_response)(yid->yd->client_id, YAHOO_LOGIN_SOCK, NULL);
+
 		if(yid->type == YAHOO_CONNECTION_PAGER)
 			yid->yd->current_status = -1;
 		yahoo_input_close(yid);
