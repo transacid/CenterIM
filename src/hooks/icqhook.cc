@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.25 2001/12/13 13:25:13 konst Exp $
+* $Id: icqhook.cc,v 1.26 2001/12/14 09:04:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -436,14 +436,6 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 		em.store(imsms(c->getdesc(), imevent::incoming,
 		    rusconv("wk", r->getMessage())));
 	    }
-	}
-    } else if(ev->getType() == MessageEvent::SMS_Response) {
-	SMSResponseEvent *r;
-	if(r = dynamic_cast<SMSResponseEvent *>(ev)) {
-	    face.log("sms response: %s", r->deliverable() ? "deliverable" : "undeliverable");
-	    face.log(r->getSource());
-	    face.log(r->getNetwork());
-	    face.log(r->getErrorParam());
 	}
 
     } else if(ev->getType() == MessageEvent::SMS_Receipt) {

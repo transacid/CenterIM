@@ -64,7 +64,7 @@ msgstr "Дек"
 
 #: src/icqdialogs.cc:49
 msgid "+ you must be logged in to find/add users"
-msgstr ""
+msgstr "+ вы должны войти в сеть прежде чем добавить кого-либо"
 
 #: src/icqdialogs.cc:63
 msgid " Find/add user(s) "
@@ -371,7 +371,7 @@ msgstr " Настройки Centericq "
 
 #: src/icqdialogs.cc:558
 msgid " Sound and colors "
-msgstr ""
+msgstr " Звук и цвета "
 
 #: src/icqdialogs.cc:559
 #, c-format
@@ -434,7 +434,7 @@ msgstr " Использовать SOCKS прокси : %s "
 
 #: src/icqdialogs.cc:575
 msgid " Miscellaneous "
-msgstr ""
+msgstr " Прочее "
 
 #: src/icqdialogs.cc:576
 #, c-format
@@ -551,7 +551,7 @@ msgstr " Послать ссылку (URL)   u"
 
 #: src/icqface.cc:182
 msgid " Send an SMS"
-msgstr ""
+msgstr " Послать SMS "
 
 #: src/icqface.cc:187
 msgid " User's details         ?"
@@ -595,7 +595,7 @@ msgstr " Перейти к контакту..            alt-s"
 
 #: src/icqface.cc:230
 msgid " Accounts.."
-msgstr ""
+msgstr " Логины.."
 
 #: src/icqface.cc:231
 msgid " Find/add users"
@@ -858,7 +858,7 @@ msgstr "Исходящее %s к %s"
 
 #: src/icqface.cc:1353
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
-msgstr ""
+msgstr "Ctrl-X послать, Ctrl-P получатели, Ctrl-O история, Alt-? детали, ESC отмена"
 
 #: src/icqface.cc:1496
 #, c-format
@@ -878,15 +878,15 @@ msgstr "Получено %s"
 #: src/icqface.cc:1598
 #, c-format
 msgid "History items for %s"
-msgstr ""
+msgstr "История для %s"
 
 #: src/icqface.cc:1600
 msgid "S search, L again, ESC cancel"
-msgstr ""
+msgstr "S поиск, L опять, ESC отмена"
 
 #: src/icqface.cc:1606
 msgid "search for: "
-msgstr ""
+msgstr "искать: "
 
 #: src/icqgroups.cc:36
 msgid "General"
@@ -894,7 +894,7 @@ msgstr "Свалка"
 
 #: src/accountmanager.cc:37
 msgid " IM account manager "
-msgstr ""
+msgstr " Менеджер логинов "
 
 #: src/accountmanager.cc:62
 #, c-format
@@ -908,7 +908,7 @@ msgstr " Пароль : %s "
 
 #: src/accountmanager.cc:75
 msgid " Register "
-msgstr ""
+msgstr " Регистрация "
 
 #: src/accountmanager.cc:77
 msgid " Update user details "
@@ -932,7 +932,7 @@ msgstr " пароль: "
 
 #: src/accountmanager.cc:108
 msgid "Drop the account information first!"
-msgstr ""
+msgstr "Сначала удалите информацию о логине!"
 
 #: src/accountmanager.cc:120
 msgid "You have to disconnect the service first!"
@@ -944,7 +944,7 @@ msgstr " Зарегистрировать ICQ UIN "
 
 #: src/imcontroller.cc:36
 msgid "Go ahead"
-msgstr ""
+msgstr "Поехали"
 
 #: src/imcontroller.cc:43 src/imcontroller.cc:53
 msgid " Details "
@@ -980,7 +980,7 @@ msgstr "Пароль: "
 
 #: src/imcontroller.cc:63
 msgid "Check the password you entered: "
-msgstr ""
+msgstr "Контроль введенного пароля: "
 
 #: src/imcontroller.cc:64
 msgid "Nickname to set: "
@@ -992,15 +992,15 @@ msgstr "Сервер: "
 
 #: src/imcontroller.cc:74
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Пароли не совпадают"
 
 #: src/imcontroller.cc:76
 msgid "Password must be entered"
-msgstr ""
+msgstr "Пароль должен быть указан"
 
 #: src/imcontroller.cc:94
 msgid " Registration progress "
-msgstr ""
+msgstr " Регистрация "
 
 #: src/imcontroller.cc:97
 #, c-format
@@ -1009,20 +1009,20 @@ msgstr "Соединение с сервером %s ..."
 
 #: src/imcontroller.cc:101
 msgid "Sending request"
-msgstr ""
+msgstr "Посылка запроса"
 
 #: src/imcontroller.cc:107
 msgid "Timed out waiting for a new uin. Retry?"
-msgstr ""
+msgstr "Время попытки истекло. Повторить?"
 
 #: src/imcontroller.cc:111
 msgid "Retrying.."
-msgstr ""
+msgstr "Повторяем.."
 
 #: src/imcontroller.cc:117
 #, c-format
 msgid "New UIN received, %lu"
-msgstr ""
+msgstr "Получен новый UIN, %lu"
 
 #: src/imcontroller.cc:133
 msgid "Disconnected"
@@ -1034,11 +1034,11 @@ msgstr "Невозможно соединиться с сервером. Повторить попытку?"
 
 #: src/imcontroller.cc:170
 msgid "registration is not supported"
-msgstr ""
+msgstr "регистрация не поддерживается"
 
 #: src/imcontroller.cc:184
 msgid "details update is not supported"
-msgstr ""
+msgstr "обновление информации не поддерживается"
 
 #: src/hooks/icqhook.cc:104
 msgid "+ [icq] connecting to the server"
@@ -1050,11 +1050,11 @@ msgstr "+ [icq] вход в систему состоялся"
 
 #: src/hooks/icqhook.cc:373
 msgid "as requested"
-msgstr ""
+msgstr "по запросу"
 
 #: src/hooks/icqhook.cc:374
 msgid "socket problems"
-msgstr ""
+msgstr "коммуникационные проблемы"
 
 #: src/hooks/icqhook.cc:375
 msgid "bad username"
@@ -1062,7 +1062,7 @@ msgstr "неправильное имя пользователя"
 
 #: src/hooks/icqhook.cc:376
 msgid "turboing"
-msgstr ""
+msgstr "слишком частые попытки"
 
 #: src/hooks/icqhook.cc:377
 msgid "bad password"
@@ -1070,11 +1070,11 @@ msgstr "неправильный пароль"
 
 #: src/hooks/icqhook.cc:378
 msgid "username and password mismatch"
-msgstr ""
+msgstr "несовпадение имени пользователя и пароля"
 
 #: src/hooks/icqhook.cc:379
 msgid "already logged"
-msgstr ""
+msgstr "уже в системе"
 
 #: src/hooks/icqhook.cc:388
 msgid "+ [icq] disconnected"
@@ -1104,7 +1104,7 @@ msgstr "+ [yahoo] удаление %s из списка"
 
 #: src/hooks/yahoohook.cc:306
 msgid "+ [yahoo] disconnected from the network"
-msgstr ""
+msgstr "+ [yahoo] рассоединение"
 
 #: src/hooks/yahoohook.cc:342
 msgid "+ [yahoo] bounced msg"
@@ -1271,7 +1271,7 @@ msgstr ""
 
 #: src/icqface.h:227
 msgid "authorization"
-msgstr ""
+msgstr "авторизация"
 
 #: src/icqface.h:231
 msgid "Fwd"
