@@ -150,6 +150,7 @@ class icqcontact {
 	int getgroupid() const;
 
 	const imcontact getdesc() const;
+	void setdesc(const imcontact &ic);
 
 	void remindbirthday(bool r);
 

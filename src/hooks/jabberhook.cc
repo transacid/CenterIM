@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.25 2002/12/09 12:05:30 konst Exp $
+* $Id: jabberhook.cc,v 1.26 2002/12/10 18:11:42 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,6 +26,42 @@
 #include "icqface.h"
 #include "imlogger.h"
 #include "eventmanager.h"
+
+static void jidsplit(const string &jid, string &user, string &host, string &rest) {
+    int pos;
+    user = jid;
+
+    if((pos = user.find("/")) != -1) {
+	rest = user.substr(pos+1);
+	user.erase(pos);
+    }
+
+    if((pos = user.find("@")) != -1) {
+	host = user.substr(pos+1);
+	user.erase(pos);
+    }
+}
+
+static string jidnormalize(const string &jid) {
+    string user, host, rest;
+    jidsplit(jid, user, host, rest);
+    if(host.empty()) host = "jabber.com";
+    user += (string) "@" + host;
+    if(!rest.empty()) user += (string) "/" + rest;
+    return user;
+}
+
+static string jidtodisp(const string &jid) {
+    string user, host, rest;
+    jidsplit(jid, user, host, rest);
+
+    if(host != "jabber.com" && !host.empty())
+	user += (string) "@" + host;
+
+    return user;
+}
+
+// ----------------------------------------------------------------------------
 
 jabberhook jhook;
 
@@ -332,7 +368,6 @@ void jabberhook::requestinfo(const imcontact &ic) {
 
     if(!c) {
 	c = clist.get(contactroot);
-	c->setabout("");
     }
 
     vector<icqcontact *>::const_iterator ifc = foundguys.begin();
@@ -341,8 +376,8 @@ void jabberhook::requestinfo(const imcontact &ic) {
 	if((*ifc)->getdesc() == ic) {
 	    c->clear();
 	    c->setbasicinfo((*ifc)->getbasicinfo());
+	    c->setnick((*ifc)->getnick());
 	    c->setdispnick((*ifc)->getdispnick());
-	    c->setnick(ic.nickname);
 	    break;
 	}
 	++ifc;
@@ -469,40 +504,6 @@ void jabberhook::sendvisibility() {
 
 	jab_send(jc, x);
 	xmlnode_free(x);
-    }
-}
-
-string jabberhook::jidnormalize(const string &jid) {
-    string user, host, rest;
-    jidsplit(jid, user, host, rest);
-    if(host.empty()) host = "jabber.com";
-    user += (string) "@" + host;
-    if(!rest.empty()) user += (string) "/" + rest;
-    return user;
-}
-
-string jabberhook::jidtodisp(const string &jid) {
-    string user, host, rest;
-    jidsplit(jid, user, host, rest);
-
-    if(host != "jabber.com" && !host.empty())
-	user += (string) "@" + host;
-
-    return user;
-}
-
-void jabberhook::jidsplit(const string &jid, string &user, string &host, string &rest) {
-    int pos;
-    user = jid;
-
-    if((pos = user.find("/")) != -1) {
-	rest = user.substr(pos+1);
-	user.erase(pos);
-    }
-
-    if((pos = user.find("@")) != -1) {
-	host = user.substr(pos+1);
-	user.erase(pos);
     }
 }
 
@@ -704,7 +705,12 @@ void jabberhook::gotsearchresults(xmlnode x) {
 	if(jid) {
 	    c = new icqcontact(imcontact(jidnormalize(jid), jabber));
 	    icqcontact::basicinfo cb = c->getbasicinfo();
-	    if(nick) c->setdispnick(nick);
+
+	    if(nick) {
+		c->setnick(nick);
+		c->setdispnick(nick);
+	    }
+
 	    if(first) cb.fname = first;
 	    if(last) cb.lname = last;
 	    if(email) cb.email = email;

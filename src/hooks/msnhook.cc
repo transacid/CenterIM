@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.49 2002/12/10 13:16:14 konst Exp $
+* $Id: msnhook.cc,v 1.50 2002/12/10 18:11:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,6 +45,24 @@ static const char * stat2name[imstatus_size] = {
     "FLN", "NLN", "HDN", "NLN", "BSY", "BSY", "BRB", "AWY"
 };
 
+static string nicknormalize(const string &nick) {
+    if(nick.find("@") == -1) return nick + "@hotmail.com";
+    return nick;
+}
+
+static string nicktodisp(const string &nick) {
+    int pos;
+    string r = nick;
+
+    if((pos = r.find("@")) != -1)
+    if(r.substr(pos+1) == "hotmail.com")
+	r.erase(pos);
+
+    return r;
+}
+
+// ----------------------------------------------------------------------------
+
 msnhook::msnhook() {
     ourstatus = offline;
     fonline = false;
@@ -67,7 +85,7 @@ void msnhook::connect() {
 
     face.log(_("+ [msn] connecting to the server"));
 
-    msn_init(&conn, account.nickname.c_str(), account.password.c_str());
+    msn_init(&conn, nicknormalize(account.nickname).c_str(), account.password.c_str());
     msn_connect(&conn, account.server.c_str(), account.port);
 
     fonline = true;
@@ -199,7 +217,7 @@ bool msnhook::send(const imevent &ev) {
 
     if(c)
     if(c->getstatus() != offline || !c->inlist()) {
-	msn_send_IM(&conn, ev.getcontact().nickname.c_str(), text.c_str());
+	msn_send_IM(&conn, nicknormalize(ev.getcontact().nickname).c_str(), text.c_str());
 	return true;
     }
 
@@ -208,7 +226,7 @@ bool msnhook::send(const imevent &ev) {
 
 void msnhook::sendnewuser(const imcontact &ic) {
     if(logged()) {
-	msn_add_to_list(&conn, "FL", ic.nickname.c_str());
+	msn_add_to_list(&conn, "FL", nicknormalize(ic.nickname).c_str());
     }
 
     requestinfo(ic);
@@ -242,7 +260,7 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 	if(report)
 	    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
 
-	msn_del_from_list(&conn, "FL", ic.nickname.c_str());
+	msn_del_from_list(&conn, "FL", nicknormalize(ic.nickname).c_str());
     }
 }
 
@@ -255,11 +273,16 @@ void msnhook::requestinfo(const imcontact &ic) {
     }
 
     icqcontact::moreinfo m = c->getmoreinfo();
-    m.homepage = "http://members.msn.com/" + ic.nickname;
+    icqcontact::basicinfo b = c->getbasicinfo();
+
+    b.email = nicknormalize(ic.nickname);
+    m.homepage = "http://members.msn.com/" + b.email;
+
     c->setmoreinfo(m);
+    c->setbasicinfo(b);
 
     if(!friendlynicks[ic.nickname].empty())
-	c->setabout(friendlynicks[ic.nickname]);
+	c->setnick(friendlynicks[ic.nickname]);
 
     face.relaxedupdate();
 }
@@ -269,8 +292,8 @@ void msnhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	vector<pair<string, string> >::const_iterator i = slst["RL"].begin();
 
 	while(i != slst["RL"].end()) {
-	    icqcontact *c = new icqcontact(imcontact(i->first, msn));
-	    c->setdispnick(i->second);
+	    icqcontact *c = new icqcontact(imcontact(nicktodisp(i->first), msn));
+	    c->setnick(i->second);
 
 	    dest.additem(conf.getcolor(cp_clist_msn), c, (string) " " + i->first);
 	    ++i;
@@ -315,6 +338,7 @@ void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool force
     string newnick = unmime(friendlynick);
 
     friendlynicks[c->getdesc().nickname] = newnick;
+    c->setnick(newnick);
 
     if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick || c->getdispnick() == c->getdesc().nickname))
 	c->setdispnick(newnick);
@@ -417,7 +441,7 @@ void ext_got_info(msnconn *conn, syncinfo *info) {
 
     for(lst = info->fl; lst; lst = lst->next) {
 	ud = (userdata *) lst->data;
-	ic = imcontact(ud->username, msn);
+	ic = imcontact(nicktodisp(ud->username), msn);
 
 	if(!clist.get(ic)) clist.addnew(ic, false);
 	mhook.slst["FL"].push_back(make_pair(ud->username, ud->friendlyname));
@@ -473,7 +497,7 @@ void ext_show_error(msnconn * conn, const char * msg) {
 
 void ext_buddy_set(msnconn * conn, const char * buddy, const char * friendlyname, const char * status) {
     log("ext_buddy_set");
-    imcontact ic(buddy, msn);
+    imcontact ic(nicktodisp(buddy), msn);
     icqcontact *c = clist.get(ic);
     bool forcefetch;
 
@@ -506,7 +530,7 @@ void ext_user_left(msnconn *conn, const char *username) {
 
 void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, message *msg) {
     log("ext_got_IM");
-    imcontact ic(username, msn);
+    imcontact ic(nicktodisp(username), msn);
 
     mhook.checkinlist(ic);
 
@@ -525,7 +549,7 @@ void ext_typing_user(msnconn *conn, const char *username, const char *friendlyna
 about every 4 seconds, if a user is typing, they should send a "typing"
 notification
 
-    icqcontact *c = clist.get(imcontact(username, msn));
+    icqcontact *c = clist.get(imcontact(nicktodisp(username), msn));
 
     if(c) {
 	face.log(_("+ [msn] %s, %s: typing"), username, friendlyname);
@@ -554,7 +578,7 @@ void ext_filetrans_invite(msnconn *conn, const char *username, const char *frien
     r.fname = inv->filename;
     r.size = inv->filesize;
 
-    imcontact ic(username, msn);
+    imcontact ic(nicktodisp(username), msn);
     mhook.checkinlist(ic);
 
     imfile fr(ic, imevent::incoming, "", vector<imfile::record>(1, r));

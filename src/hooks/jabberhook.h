@@ -44,10 +44,6 @@ class jabberhook: public abstracthook {
 	static void packethandler(jconn conn, jpacket packet);
 	static void jlogger(jconn conn, int inout, const char *p);
 
-	static string jidnormalize(const string &jid);
-	static string jidtodisp(const string &jid);
-	static void jidsplit(const string &jid, string &user, string &host, string &rest);
-
 	vector<pair<string, string> > getservparams(const string &agentname, agent::param_type pt) const;
 
 	void setjabberstatus(imstatus st, const string &msg);

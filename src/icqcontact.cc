@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.76 2002/12/09 12:05:29 konst Exp $
+* $Id: icqcontact.cc,v 1.77 2002/12/10 18:11:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -463,18 +463,16 @@ void icqcontact::setstatus(imstatus fstatus) {
     }
 }
 
+void icqcontact::setdesc(const imcontact &ic) {
+    string dir = getdirname();
+    cdesc = ic;
+    rename(dir.c_str(), getdirname().c_str());
+}
+
 void icqcontact::setnick(const string &fnick) {
-    string dir;
-
     nick = fnick;
-
-    if(!cdesc.nickname.empty()) {
-	dir = getdirname();
-	cdesc.nickname = fnick;
-	rename(dir.c_str(), getdirname().c_str());
-    }
-
     modified = true;
+    fupdated++;
 }
 
 void icqcontact::setdispnick(const string &fnick) {
