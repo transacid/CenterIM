@@ -24,17 +24,25 @@ jid (e.g. "conference.jabber.com"). Well, maybe that's not a problem, but
 
 codepages conversion extended
 
+new libicq2000
+
+-v lists built-in protocols
+
+group -> c -> segfault
+
+remove icq password change
+
 /*
 *
 * BUGS
 *
 */
 
-icq message in russian and english -> russian with ???
-
 network down -> yahoo disconnect
 
 http://www.dotgnu.org/index.rdf
+
+msn broken pipe bug
 
 /*
 *
@@ -42,14 +50,33 @@ http://www.dotgnu.org/index.rdf
 *
 */
 
+not in list users history (see chat with mellon)
+
+server stored icq lists
+
+no ssl -> no msn
+no iconv -> no protocols that use utf
+
 rss/infocard always online/offline to config dialog
 
--v lists built-in protocols
+cicqsync:
 
 > gettextize: unknown option --no-changelog
 > Try `gettextize --help' for more information.
 
-new libicq2000
+Solutions:
+1 Replace the #!/bin/sh by #!/bin/bash
+or
+2 Use e.g. i=`expr $i + 1` in stead of i=$(($i+1))
+
+Testfile:
+#!/bin/sh
+i=0
+j=5
+while test $i -lt $j; do
+  i=$(($i+1))
+    echo "!$i!"
+    done
 
 icq keywords + other parameters simultaneous search
 
@@ -127,4 +154,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.487 2004/02/10 23:55:15 konst Exp $
+$Id: TODO,v 1.488 2004/02/14 23:43:42 konst Exp $

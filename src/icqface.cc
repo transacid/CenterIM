@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.208 2004/02/10 23:55:15 konst Exp $
+* $Id: icqface.cc,v 1.209 2004/02/14 23:43:43 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2921,7 +2921,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    if(capab.count(hookcapab::contacts))
 		face.extk = ACT_CONTACT;
 
-	    if(c->getdesc().pname == rss)
+	    if(c && c->getdesc().pname == rss)
 		face.extk = ACT_PING;
 
 	    break;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.53 2004/02/10 23:55:16 konst Exp $
+* $Id: abstracthook.cc,v 1.54 2004/02/14 23:43:43 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -748,7 +748,7 @@ string abstracthook::getTimezoneIDtoString(signed char id) {
 	return "Unspecified";
     } else {
 	char buf[32];
-	sprintf(buf, "GMT %c%d:%s", id > 0 ? "-" : "+", abs(id/2), id % 2 == 0 ? "00" : "30");
+	sprintf(buf, "GMT %s%d:%s", id > 0 ? "-" : "+", abs(id/2), id % 2 == 0 ? "00" : "30");
 	return buf;
     }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.144 2004/02/10 23:55:16 konst Exp $
+* $Id: icqhook.cc,v 1.145 2004/02/14 23:43:43 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,7 +59,7 @@ icqhook::icqhook(): abstracthook(icq) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::changenick);
-    fcapabs.insert(hookcapab::changepassword);
+//    fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::authrequests);
     fcapabs.insert(hookcapab::authreqwithmessages);
@@ -81,7 +81,6 @@ icqhook::icqhook(): abstracthook(icq) {
 //    cli.password_changed.connect(this, &icqhook::password_changed_cb);
     cli.want_auto_resp.connect(this, &icqhook::want_auto_resp_cb);
     cli.search_result.connect(this, &icqhook::search_result_cb);
-//    cli.server_based_contact_list.connect(this, &icqhook::server_based_contact_list_cb);
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
     cli.self_contact_status_change_signal.connect(this, &icqhook::self_contact_status_change_cb);
 
@@ -106,7 +105,6 @@ icqhook::~icqhook() {
     cli.want_auto_resp.disconnect(this);
     cli.self_contact_userinfo_change_signal.disconnect(this);
     cli.self_contact_status_change_signal.disconnect(this);
-//    cli.server_based_contact_list.disconnect(this);
 //    cli.password_changed.disconnect(this);
 }
 
@@ -490,9 +488,10 @@ void icqhook::sendnewuser(const imcontact &ic) {
 
     if(logged() && ic.uin && cc) {
 	if(timer_current-lastadd > DELAY_SENDNEW) {
-	    addContact(ic.uin, groups.getname(cc->getgroupid()));
-	    cli.fetchSimpleContactInfo(cli.getContact(ic.uin));
-	    cli.fetchDetailContactInfo(cli.getContact(ic.uin));
+	    ContactRef cont = addContact(ic.uin, groups.getname(cc->getgroupid()));
+	    cli.fetchSimpleContactInfo(cont);
+	    cli.fetchDetailContactInfo(cont);
+	    cli.uploadServerBasedContact(cont);
 
 	    lastadd = timer_current;
 	} else {
@@ -502,20 +501,24 @@ void icqhook::sendnewuser(const imcontact &ic) {
 }
 
 void icqhook::removeuser(const imcontact &c) {
-    if(cli.getContact(c.uin).get()) {
+    ContactRef ic = cli.getContact(c.uin);
+
+    if(ic.get()) {
 	icqcontact *cc = clist.get(c);
+
 	if(cc)
 	if(cc->inlist()) {
-	    ContactRef ic = cli.getContact(c.uin);
 	    if(ic->getServerBased()) {
 		ic->setAlias(cc->getnick());
 		ic->setAuthAwait(cc->getbasicinfo().authawait);
-//                cli.removeServerBasedContactList(ic);
+		cli.removeServerBasedContact(ic);
 	    }
 	}
-    }
 
-//    cli.removeContact(c.uin);
+	ContactTree& ct = cli.getContactTree();
+	ContactTree::Group &gr = ct.lookup_group_containing_contact(ic);
+	gr.remove(c.uin);
+    }
 }
 
 void icqhook::setautostatus(imstatus st) {
@@ -943,6 +946,8 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
+
+    cli.fetchServerBasedContactList();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {

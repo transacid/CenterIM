@@ -6,7 +6,7 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.32 2004/02/04 07:44:41 konst Exp $
+# $Id: cicqsync,v 1.33 2004/02/14 23:43:42 konst Exp $
 #
 
 CROOT=":pserver:anonymous@cvs.thekonst.net:/home/konst/cvs/root"
@@ -96,12 +96,14 @@ makelinks() {
 		srcfname=`echo $fn | sed 's@^..*/\(orig/..*\)$@\1@'`
 		destdir=`dirname $fn | sed 's@/orig@@'`
 		updirs=`echo $srcfname | sed 's/ /_/g;s/\// /g' | wc -w`
-		updirs=$(($updirs-2))
+#                updirs=$(($updirs-2))
+		updirs=`expr $updirs - 2`
 		i=0
 
 		while test $i -lt $updirs; do
 		    srcfname="../"$srcfname
-		    i=$(($i+1))
+#                    i=$(($i+1))
+		    i=`expr $i + 1`
 		done
 
 		if test ! -d $destdir; then
@@ -175,20 +177,20 @@ runautomake() {
 
     cd $DEST
     if test ! -f intl/Makefile.in; then
-        gettextize -f --no-changelog --intl
+	gettextize -f --no-changelog --intl
 	if test -f po/Makevars.template -a ! -f po/Makevars; then
 	    mv po/Makevars.template po/Makevars
 	fi
 
 	if test -d m4; then
-	    sed 's/^\s*SUBDIRS[ 	=]*m4[ 	=]*\(.*\)$/SUBDIRS = \1/g' <Makefile.am >11
+	    sed 's/^\s*SUBDIRS[         =]*m4[  =]*\(.*\)$/SUBDIRS = \1/g' <Makefile.am >11
 	    grep -v "ACLOCAL_AMFLAGS = -I m4" 11 >Makefile.am
 	    rm -rf m4 11
 	    sed 's@intl/Makefile@@;s@po/Makefile.in@@;s@m4/Makefile @@' <configure.in >11
 	    mv 11 configure.in
 	fi
 
-        aclocal
+	aclocal
     fi
 }
 

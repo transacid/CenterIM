@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.70 2004/02/08 09:37:36 konst Exp $
+* $Id: msnhook.cc,v 1.71 2004/02/14 23:43:43 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -138,27 +138,14 @@ void msnhook::exectimers() {
 
 void msnhook::main() {
     vector<int>::const_iterator i;
-    fd_set rs, ws;
+    fd_set rs, ws, es;
     struct timeval tv;
-    int hsock;
+    int hsock = 0;
 
-    FD_ZERO(&rs);
-    FD_ZERO(&ws);
-
+    getsockets(rs, ws, es, hsock);
     tv.tv_sec = tv.tv_usec = 0;
-    hsock = 0;
 
-    for(i = rfds.begin(); i != rfds.end(); ++i) {
-	FD_SET(*i, &rs);
-	hsock = max(hsock, *i);
-    }
-
-    for(i = wfds.begin(); i != wfds.end(); ++i) {
-	FD_SET(*i, &ws);
-	hsock = max(hsock, *i);
-    }
-
-    if(select(hsock+1, &rs, &ws, 0, &tv) > 0) {
+    if(select(hsock+1, &rs, &ws, &es, &tv) > 0) {
 	for(i = rfds.begin(); i != rfds.end(); ++i)
 	    if(FD_ISSET(*i, &rs)) {
 		msn_handle_incoming(*i, 1, 0);
@@ -491,9 +478,8 @@ static void log(const string &s) {
 #endif
 }
 
-int ext_debug( char *str )
-{
-    log( str );
+int ext_debug(char *str) {
+    log(str);
     return 0;
 }
 
@@ -754,6 +740,7 @@ void ext_new_connection(msnconn *conn) {
 
 void ext_closing_connection(msnconn *conn) {
     log("ext_closing_connection");
+
     if(conn->type == CONN_NS) {
 	mhook.rfds.clear();
 	mhook.wfds.clear();

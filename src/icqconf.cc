@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.124 2004/02/01 17:52:09 konst Exp $
+* $Id: icqconf.cc,v 1.125 2004/02/14 23:43:42 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -893,7 +893,13 @@ void icqconf::commandline(int argc, char **argv) {
 
 	} else if((args == "-v") || (args == "--version")) {
 	    cout << PACKAGE << " " << VERSION << endl
-		<< "Written by Konstantin Klyagin." << endl << endl
+		<< "Written by Konstantin Klyagin." << endl
+		<< "Built-in protocols are:";
+
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(gethook(pname).enabled()) cout << " " << conf.getprotocolname(pname);
+
+	    cout << endl << endl
 		<< "This is free software; see the source for copying conditions.  There is NO" << endl
 		<< "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." << endl;
 
