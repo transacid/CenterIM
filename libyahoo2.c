@@ -2708,8 +2708,11 @@ int yahoo_write_ready(int id, int fd, void *data)
 	return 1;
 }
 
-static void yahoo_process_pager_connection(struct yahoo_input_data *yid)
+static void yahoo_process_pager_connection(struct yahoo_input_data *yid, int over)
 {
+	if(over)
+	    return;
+
 	struct yahoo_packet *pkt;
 	struct yahoo_data *yd = yid->yd;
 	int id = yd->client_id;
@@ -2723,24 +2726,30 @@ static void yahoo_process_pager_connection(struct yahoo_input_data *yid)
 	}
 }
 
-static void yahoo_process_ft_connection(struct yahoo_input_data *yid)
+static void yahoo_process_ft_connection(struct yahoo_input_data *yid, int over)
 {
 }
 
-static void yahoo_process_chatcat_connection(struct yahoo_input_data *yid)
+static void yahoo_process_chatcat_connection(struct yahoo_input_data *yid, int over)
 {
+	if(over)
+	    return;
+
 	if (strstr((char*)yid->rxqueue+(yid->rxlen-20), "</content>")) {
 		YAHOO_CALLBACK(ext_yahoo_chat_cat_xml)(yid->yd->client_id, (char*)yid->rxqueue);
 	}
 }
 
-static void yahoo_process_yab_connection(struct yahoo_input_data *yid)
+static void yahoo_process_yab_connection(struct yahoo_input_data *yid, int over)
 {
 	struct yahoo_data *yd = yid->yd;
 	struct yab *yab;
 	YList *buds;
 	int changed=0;
 	int id = yd->client_id;
+
+	if(over)
+	    return;
 
 	while(find_input_by_id_and_type(id, YAHOO_CONNECTION_YAB) 
 			&& (yab = yahoo_getyab(yid)) != NULL) {
@@ -2770,14 +2779,14 @@ static void yahoo_process_yab_connection(struct yahoo_input_data *yid)
 		YAHOO_CALLBACK(ext_yahoo_got_buddies)(yd->client_id, yd->buddies);
 }
 
-static void yahoo_process_search_connection(struct yahoo_input_data *yid)
+static void yahoo_process_search_connection(struct yahoo_input_data *yid, int over)
 {
     struct yahoo_found_contact *yct;
     struct yahoo_search_result *yr;
     char *p = yid->rxqueue, *np, *cp;
     int k, n;
 
-    if(strcmp(yid->rxqueue+yid->rxlen-5, "\004\005\004\003\002"))
+    if(!over)
 	return;
 
     yr = y_new0(struct yahoo_search_result, 1);
@@ -2806,7 +2815,8 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid)
 
 	    switch(k++) {
 		case 1:
-		    if(strlen(cp) > 2) {
+		    if(strlen(cp) > 2
+		    && y_list_length(yr->contacts) < yr->total) {
 			yct = y_new0(struct yahoo_found_contact, 1);
 			yr->contacts = y_list_append(yr->contacts, yct);
 			yct->id = cp+2;
@@ -2959,9 +2969,12 @@ static void yahoo_webcam_connect(struct yahoo_input_data *y)
 
 }
 
-static void yahoo_process_webcam_master_connection(struct yahoo_input_data *yid)
+static void yahoo_process_webcam_master_connection(struct yahoo_input_data *yid, int over)
 {
 	char* server;
+
+	if(over)
+	    return;
 
 	server = yahoo_getwebcam_master(yid);
 
@@ -2977,17 +2990,20 @@ static void yahoo_process_webcam_master_connection(struct yahoo_input_data *yid)
 	}
 }
 
-static void yahoo_process_webcam_connection(struct yahoo_input_data *yid)
+static void yahoo_process_webcam_connection(struct yahoo_input_data *yid, int over)
 {
 	int id = yid->yd->client_id;
 	int fd = yid->fd;
+
+	if(over)
+	    return;
 
 	/* as long as we still have packets available keep processing them */
 	while (find_input_by_id_and_fd(id, fd) 
 			&& yahoo_get_webcam_data(yid) == 1);
 }
 
-static void (*yahoo_process_connection[])(struct yahoo_input_data *) = {
+static void (*yahoo_process_connection[])(struct yahoo_input_data *, int over) = {
 	yahoo_process_pager_connection,
 	yahoo_process_ft_connection,
 	yahoo_process_yab_connection,
@@ -3016,10 +3032,11 @@ int yahoo_read_ready(int id, int fd, void *data)
 		int e = errno;
 		DEBUG_MSG(("len == %d (<= 0)", len));
 
-		YAHOO_CALLBACK(ext_yahoo_login_response)(yid->yd->client_id, YAHOO_LOGIN_SOCK, NULL);
+		if(yid->type == YAHOO_CONNECTION_PAGER) {
+			YAHOO_CALLBACK(ext_yahoo_login_response)(yid->yd->client_id, YAHOO_LOGIN_SOCK, NULL);
+		}
 
-		if(yid->type == YAHOO_CONNECTION_PAGER)
-			yid->yd->current_status = -1;
+		yahoo_process_connection[yid->type](yid, 1);
 		yahoo_input_close(yid);
 
 		/* no need to return an error, because we've already fixed it */
@@ -3034,7 +3051,7 @@ int yahoo_read_ready(int id, int fd, void *data)
 	memcpy(yid->rxqueue + yid->rxlen, buf, len);
 	yid->rxlen += len;
 
-	yahoo_process_connection[yid->type](yid);
+	yahoo_process_connection[yid->type](yid, 0);
 
 	return len;
 }
