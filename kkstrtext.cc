@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.23 2002/04/04 07:24:20 konst Exp $
+* $Id: kkstrtext.cc,v 1.24 2002/04/07 13:32:32 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -859,7 +859,7 @@ string ruscase(const string &s, const string &mode) {
     return r;
 }
 
-string iconv(const string &text, const string &fromcs, const string &tocs) {
+string siconv(const string &text, const string &fromcs, const string &tocs) {
 #ifdef HAVE_ICONV_H
     iconv_t cd = iconv_open(tocs.c_str(), fromcs.c_str());
 
@@ -874,7 +874,7 @@ string iconv(const string &text, const string &fromcs, const string &tocs) {
 	soutleft = outleft = inleft*4;
 	soutbuf = outbuf = new char[outleft];
 
-	iconv(cd,
+	size_t res = iconv(cd,
 #ifdef ICONV_CONST
 	    (const char **)
 #endif
@@ -882,8 +882,12 @@ string iconv(const string &text, const string &fromcs, const string &tocs) {
 
 	iconv_close(cd);
 
-	soutbuf[soutleft-outleft] = 0;
-	r = soutbuf;
+	if(res != -1) {
+	    soutbuf[soutleft-outleft] = 0;
+	    r = soutbuf;
+	} else {
+	    r = text;
+	}
 
 	delete soutbuf;
 	delete sinbuf;
