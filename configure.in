@@ -132,7 +132,7 @@ AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
 AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = xyes)
-AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes)
+AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes -o "x$build_lj" = xyes)
 AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = xyes)
 
 if test "$build_yahoo" = "yes"; then
@@ -151,7 +151,7 @@ if test "$build_jabber" = "yes"; then
     AC_DEFINE(BUILD_JABBER, 1, [build with jabber support])
 fi
 
-if test "$build_rss" = "yes"; then
+if test "$build_rss" = "yes" -o "$build_lj" = "yes"; then
     AC_DEFINE(BUILD_RSS, 1, [build the integrated rss feeds reader])
 fi
 
@@ -163,7 +163,7 @@ if test "$build_konst" = "yes"; then
     AC_DEFINE(BUILD_KONST, 1, [add konst's id by default])
 fi
 
-AC_CONFIG_SUBDIRS(blip-0.1 firetalk-0.1 kkconsui-0.1 kkstrtext-0.1 libicq2000-0.1 libjabber-0.1 libyahoo2-0.1 kksystr-0.1 connwrap-0.1)
+AC_CONFIG_SUBDIRS(firetalk-0.1 kkconsui-0.1 kkstrtext-0.1 libicq2000-0.1 libjabber-0.1 libyahoo2-0.1 kksystr-0.1 connwrap-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)

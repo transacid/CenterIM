@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.56 2003/10/19 23:24:36 konst Exp $
+* $Id: jabberhook.cc,v 1.57 2003/10/20 23:13:53 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -884,8 +884,8 @@ void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontac
 }
 
 static void vcput(xmlnode x, const string &name, const string &val) {
-    xmlnode_insert_cdata(xmlnode_insert_tag(x, KOI2UTF(name).c_str()),
-	val.c_str(), (unsigned int) -1);
+    xmlnode_insert_cdata(xmlnode_insert_tag(x, name.c_str()),
+	KOI2UTF(val).c_str(), (unsigned int) -1);
 }
 
 static void vcputphone(xmlnode x, const string &type, const string &place, const string &number) {
