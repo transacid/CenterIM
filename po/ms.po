@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.9\n"
-"POT-Creation-Date: 2002-05-18 12:09+0300\n"
+"POT-Creation-Date: 2002-06-27 16:58+0300\n"
 "PO-Revision-Date: 2002-04-18 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@ikhlas.com>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
@@ -56,485 +56,515 @@ msgstr "jenis IM tidak dikenali"
 msgid "status change error: "
 msgstr "ralat menukar status: "
 
-#: src/icqcontact.cc:681
+#: src/icqcontact.cc:680
+msgid "* The user has a birthday today"
+msgstr ""
+
+#: src/icqcontact.cc:709
 msgid "Jan"
 msgstr "Jan"
 
-#: src/icqcontact.cc:681
+#: src/icqcontact.cc:709
 msgid "Feb"
 msgstr "Feb"
 
-#: src/icqcontact.cc:681
+#: src/icqcontact.cc:709
 msgid "Mar"
 msgstr "Mac"
 
-#: src/icqcontact.cc:681
+#: src/icqcontact.cc:709
 msgid "Apr"
 msgstr "Apr"
 
-#: src/icqcontact.cc:682
+#: src/icqcontact.cc:710
 msgid "May"
 msgstr "Mei"
 
-#: src/icqcontact.cc:682
+#: src/icqcontact.cc:710
 msgid "Jun"
 msgstr "Jun"
 
-#: src/icqcontact.cc:682
+#: src/icqcontact.cc:710
 msgid "Jul"
 msgstr "Jul"
 
-#: src/icqcontact.cc:682
+#: src/icqcontact.cc:710
 msgid "Aug"
 msgstr "Ogo"
 
-#: src/icqcontact.cc:683
+#: src/icqcontact.cc:711
 msgid "Sep"
 msgstr "Sep"
 
-#: src/icqcontact.cc:683
+#: src/icqcontact.cc:711
 msgid "Oct"
 msgstr "Okt"
 
-#: src/icqcontact.cc:683
+#: src/icqcontact.cc:711
 msgid "Nov"
 msgstr "Nov"
 
-#: src/icqcontact.cc:683
+#: src/icqcontact.cc:711
 msgid "Dec"
 msgstr "Dis"
 
-#: src/icqdialogs.cc:49
+#: src/icqdialogs.cc:64
+msgid " Search profiles "
+msgstr ""
+
+#: src/icqdialogs.cc:71 src/icqdialogs.cc:653 src/icqface.cc:1240
+#: src/imcontroller.cc:193
+msgid "Remove"
+msgstr "Buang"
+
+#: src/icqdialogs.cc:71
+msgid "Load"
+msgstr ""
+
+#: src/icqdialogs.cc:144
 msgid "+ you must be logged in to find/add users"
 msgstr "+ anda mesti log in untuk mencari/menambah pengguna"
 
-#: src/icqdialogs.cc:63
+#: src/icqdialogs.cc:158
 msgid " Find/add user(s) "
 msgstr " Cari/tambah pengguna "
 
-#: src/icqdialogs.cc:72
+#: src/icqdialogs.cc:167
+msgid "lOad"
+msgstr ""
+
+#: src/icqdialogs.cc:167
+msgid "sAve"
+msgstr ""
+
+#: src/icqdialogs.cc:167
 msgid "cLear"
 msgstr "cLear"
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:72 src/icqdialogs.cc:300
-#: src/icqdialogs.cc:622 src/imcontroller.cc:38
+#: src/icqdialogs.cc:167 src/icqdialogs.cc:416 src/icqdialogs.cc:738
+#: src/accountmanager.cc:43 src/imcontroller.cc:38
 msgid "Change"
 msgstr "Tukar"
 
-#: src/icqdialogs.cc:72
+#: src/icqdialogs.cc:167
 msgid "Search/Add"
 msgstr "Cari/Tambah"
 
-#: src/icqdialogs.cc:82
+#: src/icqdialogs.cc:177
 msgid " Network "
 msgstr " Network "
 
-#: src/icqdialogs.cc:87
+#: src/icqdialogs.cc:182
 msgid " UIN "
 msgstr " UIN "
 
-#: src/icqdialogs.cc:91 src/icqdialogs.cc:125 src/imcontroller.cc:46
+#: src/icqdialogs.cc:186 src/icqdialogs.cc:220 src/imcontroller.cc:46
 #: src/imcontroller.cc:56
 msgid " Details "
 msgstr " Maklumat "
 
-#: src/icqdialogs.cc:92 src/icqdialogs.cc:199 src/imcontroller.cc:47
+#: src/icqdialogs.cc:187 src/icqdialogs.cc:315 src/imcontroller.cc:47
 #, c-format
 msgid " Nickname : %s "
 msgstr " Nama panggilan : %s "
 
-#: src/icqdialogs.cc:93 src/icqdialogs.cc:129 src/imcontroller.cc:48
+#: src/icqdialogs.cc:188 src/icqdialogs.cc:227 src/imcontroller.cc:48
 #, c-format
 msgid " E-Mail : %s "
 msgstr " Emel : %s "
 
-#: src/icqdialogs.cc:94 src/icqdialogs.cc:206 src/imcontroller.cc:49
+#: src/icqdialogs.cc:189 src/icqdialogs.cc:322 src/imcontroller.cc:49
 #, c-format
 msgid " First name : %s "
 msgstr " Nama : %s "
 
-#: src/icqdialogs.cc:95 src/icqdialogs.cc:207 src/imcontroller.cc:50
+#: src/icqdialogs.cc:190 src/icqdialogs.cc:323 src/imcontroller.cc:50
 #, c-format
 msgid " Last name : %s "
 msgstr " Nama Keluarga : %s "
 
-#: src/icqdialogs.cc:97
+#: src/icqdialogs.cc:192
 #, c-format
 msgid " Age range : %s "
 msgstr " Lingkungan umur : %s "
 
-#: src/icqdialogs.cc:98 src/icqdialogs.cc:209
+#: src/icqdialogs.cc:193 src/icqdialogs.cc:325
 #, c-format
 msgid " Gender : %s "
 msgstr " Jantina : %s "
 
-#: src/icqdialogs.cc:99
+#: src/icqdialogs.cc:194
 #, c-format
 msgid " Language : %s "
 msgstr " Bahasa : %s "
 
-#: src/icqdialogs.cc:102
+#: src/icqdialogs.cc:197
 msgid " Location "
 msgstr " Lokasi "
 
-#: src/icqdialogs.cc:103 src/icqdialogs.cc:214 src/icqdialogs.cc:226
+#: src/icqdialogs.cc:198 src/icqdialogs.cc:330 src/icqdialogs.cc:342
 #, c-format
 msgid " City : %s "
 msgstr " Bandar : %s "
 
-#: src/icqdialogs.cc:104 src/icqdialogs.cc:215 src/icqdialogs.cc:227
+#: src/icqdialogs.cc:199 src/icqdialogs.cc:331 src/icqdialogs.cc:343
 #, c-format
 msgid " State : %s "
 msgstr " Negeri : %s "
 
-#: src/icqdialogs.cc:105 src/icqdialogs.cc:216 src/icqdialogs.cc:228
+#: src/icqdialogs.cc:200 src/icqdialogs.cc:332 src/icqdialogs.cc:344
 #, c-format
 msgid " Country : %s "
 msgstr " Negara : %s "
 
-#: src/icqdialogs.cc:108 src/icqdialogs.cc:225
+#: src/icqdialogs.cc:203 src/icqdialogs.cc:341
 msgid " Work "
 msgstr " Kerja "
 
-#: src/icqdialogs.cc:109 src/icqdialogs.cc:233
+#: src/icqdialogs.cc:204 src/icqdialogs.cc:349
 #, c-format
 msgid " Company : %s "
 msgstr " Syarikat : %s "
 
-#: src/icqdialogs.cc:110 src/icqdialogs.cc:234
+#: src/icqdialogs.cc:205 src/icqdialogs.cc:350
 #, c-format
 msgid " Department : %s "
 msgstr " Jabatan : %s "
 
-#: src/icqdialogs.cc:111 src/icqdialogs.cc:235
+#: src/icqdialogs.cc:206 src/icqdialogs.cc:351
 #, c-format
 msgid " Position : %s "
 msgstr " Jawatan : %s "
 
-#: src/icqdialogs.cc:113
+#: src/icqdialogs.cc:208
 msgid " Online only "
 msgstr " Online sahaja "
 
-#: src/icqdialogs.cc:119
+#: src/icqdialogs.cc:214
 msgid " Nickname "
 msgstr " Nama panggilan "
 
-#: src/icqdialogs.cc:126
+#: src/icqdialogs.cc:221
 #, fuzzy, c-format
 msgid " Channel : %s "
 msgstr " Channel "
 
-#: src/icqdialogs.cc:128
+#: src/icqdialogs.cc:224
 #, fuzzy, c-format
 msgid " Name : %s "
 msgstr " Nama panggilan : %s "
 
-#: src/icqdialogs.cc:147
+#: src/icqdialogs.cc:241
+#, fuzzy
+msgid "New profile name: "
+msgstr "nama fail: "
+
+#: src/icqdialogs.cc:245
+msgid "The profile with this name already exists. Do you want to overwrite it?"
+msgstr ""
+
+#: src/icqdialogs.cc:263
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:148 src/icqdialogs.cc:322
+#: src/icqdialogs.cc:264 src/icqdialogs.cc:438
 msgid "Nickname: "
 msgstr "Nama panggilan: "
 
-#: src/icqdialogs.cc:149 src/imcontroller.cc:68
+#: src/icqdialogs.cc:265 src/imcontroller.cc:68
 msgid "E-Mail: "
 msgstr "Emel: "
 
-#: src/icqdialogs.cc:150 src/icqdialogs.cc:327 src/imcontroller.cc:69
+#: src/icqdialogs.cc:266 src/icqdialogs.cc:443 src/imcontroller.cc:69
 msgid "First name: "
 msgstr "Nama: "
 
-#: src/icqdialogs.cc:151 src/icqdialogs.cc:328 src/imcontroller.cc:70
+#: src/icqdialogs.cc:267 src/icqdialogs.cc:444 src/imcontroller.cc:70
 msgid "Last name: "
 msgstr "Nama keluarga: "
 
-#: src/icqdialogs.cc:155 src/icqdialogs.cc:360 src/icqdialogs.cc:369
+#: src/icqdialogs.cc:271 src/icqdialogs.cc:476 src/icqdialogs.cc:485
 msgid "City: "
 msgstr "Bandar: "
 
-#: src/icqdialogs.cc:156 src/icqdialogs.cc:361 src/icqdialogs.cc:370
+#: src/icqdialogs.cc:272 src/icqdialogs.cc:477 src/icqdialogs.cc:486
 msgid "State: "
 msgstr "Negeri: "
 
-#: src/icqdialogs.cc:158 src/icqdialogs.cc:374
+#: src/icqdialogs.cc:274 src/icqdialogs.cc:490
 msgid "Company: "
 msgstr "Syarikat: "
 
-#: src/icqdialogs.cc:159 src/icqdialogs.cc:375
+#: src/icqdialogs.cc:275 src/icqdialogs.cc:491
 msgid "Department: "
 msgstr "Jabatan: "
 
-#: src/icqdialogs.cc:160 src/icqdialogs.cc:376
+#: src/icqdialogs.cc:276 src/icqdialogs.cc:492
 msgid "Position: "
 msgstr "Jawatan: "
 
-#: src/icqdialogs.cc:162
+#: src/icqdialogs.cc:278
 msgid "Channel: "
 msgstr "Channel: "
 
-#: src/icqdialogs.cc:163
+#: src/icqdialogs.cc:279
 #, fuzzy
 msgid "Name: "
 msgstr "Nama"
 
-#: src/icqdialogs.cc:197 src/icqdialogs.cc:204
+#: src/icqdialogs.cc:313 src/icqdialogs.cc:320
 msgid " General "
 msgstr " Am "
 
-#: src/icqdialogs.cc:208
+#: src/icqdialogs.cc:324
 #, c-format
 msgid " E-mail : %s "
 msgstr " Emel : %s "
 
-#: src/icqdialogs.cc:210
+#: src/icqdialogs.cc:326
 #, c-format
 msgid " Birthdate : %s "
 msgstr " Tarikh Lahir : %s "
 
-#: src/icqdialogs.cc:211
+#: src/icqdialogs.cc:327
 #, c-format
 msgid " Age : %s "
 msgstr " Umur : %s "
 
-#: src/icqdialogs.cc:213
+#: src/icqdialogs.cc:329
 msgid " Home "
 msgstr " Rumah "
 
-#: src/icqdialogs.cc:219 src/icqdialogs.cc:231
+#: src/icqdialogs.cc:335 src/icqdialogs.cc:347
 #, c-format
 msgid " Street address : %s "
 msgstr " Jalan : %s "
 
-#: src/icqdialogs.cc:220 src/icqdialogs.cc:232
+#: src/icqdialogs.cc:336 src/icqdialogs.cc:348
 #, c-format
 msgid " Zip code : %s "
 msgstr " Poskod : % "
 
-#: src/icqdialogs.cc:221 src/icqdialogs.cc:237
+#: src/icqdialogs.cc:337 src/icqdialogs.cc:353
 #, c-format
 msgid " Phone : %s "
 msgstr " Telefon : %s "
 
-#: src/icqdialogs.cc:222 src/icqdialogs.cc:238
+#: src/icqdialogs.cc:338 src/icqdialogs.cc:354
 #, c-format
 msgid " Fax : %s "
 msgstr " Faks : %s "
 
-#: src/icqdialogs.cc:223
+#: src/icqdialogs.cc:339
 #, c-format
 msgid " Cellular phone : %s "
 msgstr " Telefon Bimbit : %s "
 
-#: src/icqdialogs.cc:236 src/icqdialogs.cc:241
+#: src/icqdialogs.cc:352 src/icqdialogs.cc:357
 #, c-format
 msgid " Homepage : %s "
 msgstr " Laman Web : %s "
 
-#: src/icqdialogs.cc:240
+#: src/icqdialogs.cc:356
 msgid " More "
 msgstr " Lagi "
 
-#: src/icqdialogs.cc:243
+#: src/icqdialogs.cc:359
 #, c-format
 msgid " 1st language : %s "
 msgstr " Bahasa Utama : %s "
 
-#: src/icqdialogs.cc:246
+#: src/icqdialogs.cc:362
 #, c-format
 msgid " 2nd language : %s "
 msgstr " Bahasa Kedua : %s "
 
-#: src/icqdialogs.cc:249
+#: src/icqdialogs.cc:365
 #, c-format
 msgid " 3rd language : %s "
 msgstr " Bahasa Ketiga : %s "
 
-#: src/icqdialogs.cc:254
+#: src/icqdialogs.cc:370
 msgid " About "
 msgstr " Mengenai "
 
-#: src/icqdialogs.cc:270
+#: src/icqdialogs.cc:386
 msgid "Fetching your details"
 msgstr "Dapatkan maklumat anda"
 
-#: src/icqdialogs.cc:284
+#: src/icqdialogs.cc:400
 #, c-format
 msgid " Your %s details "
 msgstr " Maklumat %s anda "
 
-#: src/icqdialogs.cc:287
+#: src/icqdialogs.cc:403
 #, c-format
 msgid " %s: details "
 msgstr " %s: maklumat "
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:300 src/icqdialogs.cc:622
-#: src/icqdialogs.cc:811 src/imcontroller.cc:193
+#: src/icqdialogs.cc:416 src/icqdialogs.cc:738 src/icqdialogs.cc:927
+#: src/accountmanager.cc:43 src/imcontroller.cc:193
 msgid "Done"
 msgstr "Siap"
 
-#: src/icqdialogs.cc:317
+#: src/icqdialogs.cc:433
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Tunggu sebentar. Maklumat anda masih belum diperolehi"
 
-#: src/icqdialogs.cc:329
+#: src/icqdialogs.cc:445
 msgid "E-mail: "
 msgstr "Emel: "
 
-#: src/icqdialogs.cc:340
+#: src/icqdialogs.cc:456
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Masukkan Tarikh Lahir (HH-BB-TTTT): "
 
-#: src/icqdialogs.cc:358
+#: src/icqdialogs.cc:474
 msgid "Age: "
 msgstr "Umur: "
 
-#: src/icqdialogs.cc:363 src/icqdialogs.cc:372
+#: src/icqdialogs.cc:479 src/icqdialogs.cc:488
 msgid "Street address: "
 msgstr "Alamat: "
 
-#: src/icqdialogs.cc:364 src/icqdialogs.cc:373
+#: src/icqdialogs.cc:480 src/icqdialogs.cc:489
 msgid "Zip code: "
 msgstr "Poskod: "
 
-#: src/icqdialogs.cc:365 src/icqdialogs.cc:378
+#: src/icqdialogs.cc:481 src/icqdialogs.cc:494
 msgid "Phone: "
 msgstr "Telefon: "
 
-#: src/icqdialogs.cc:366 src/icqdialogs.cc:379
+#: src/icqdialogs.cc:482 src/icqdialogs.cc:495
 msgid "Fax: "
 msgstr "Faks: "
 
-#: src/icqdialogs.cc:367
+#: src/icqdialogs.cc:483
 msgid "Cellular phone: "
 msgstr "Telefon Bimbit: "
 
-#: src/icqdialogs.cc:377 src/icqdialogs.cc:381
+#: src/icqdialogs.cc:493 src/icqdialogs.cc:497
 msgid "Homepage: "
 msgstr "Laman Web: "
 
-#: src/icqdialogs.cc:387 src/icqface.cc:888
+#: src/icqdialogs.cc:503 src/icqface.cc:904
 msgid "About"
 msgstr "Mengenai"
 
-#: src/icqdialogs.cc:470
+#: src/icqdialogs.cc:586
 msgid "none"
 msgstr "tiada"
 
-#: src/icqdialogs.cc:488
+#: src/icqdialogs.cc:604
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [Ctrl-X simpan, Esc batal] "
 
-#: src/icqdialogs.cc:527
+#: src/icqdialogs.cc:643
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Hantar fail ke %s, %lu "
 
-#: src/icqdialogs.cc:537 src/icqdialogs.cc:810 src/icqface.cc:575
-#: src/icqface.cc:1224 src/imcontroller.cc:193
+#: src/icqdialogs.cc:653 src/icqdialogs.cc:926 src/icqface.cc:591
+#: src/icqface.cc:1240 src/imcontroller.cc:193
 msgid "Add"
 msgstr "Tambah"
 
-#: src/icqdialogs.cc:537 src/icqface.cc:1224 src/imcontroller.cc:193
-msgid "Remove"
-msgstr "Buang"
-
-#: src/icqdialogs.cc:537
+#: src/icqdialogs.cc:653
 msgid "Comment"
 msgstr "Komen"
 
-#: src/icqdialogs.cc:537
+#: src/icqdialogs.cc:653
 msgid "Send"
 msgstr "Hantar"
 
-#: src/icqdialogs.cc:547
+#: src/icqdialogs.cc:663
 msgid " Files "
 msgstr " Fail "
 
-#: src/icqdialogs.cc:548
+#: src/icqdialogs.cc:664
 msgid " Comment "
 msgstr " Komen "
 
-#: src/icqdialogs.cc:560
+#: src/icqdialogs.cc:676
 msgid "filename: "
 msgstr "nama fail: "
 
-#: src/icqdialogs.cc:567
+#: src/icqdialogs.cc:683
 msgid "comment: "
 msgstr "komen: "
 
-#: src/icqdialogs.cc:613
+#: src/icqdialogs.cc:729
 msgid " CenterICQ configuration "
 msgstr " Tetapan CenterICQ "
 
-#: src/icqdialogs.cc:633
+#: src/icqdialogs.cc:749
 msgid " Sound and colors "
 msgstr " Bunyi dan warna "
 
-#: src/icqdialogs.cc:634
+#: src/icqdialogs.cc:750
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Tukar peranti bunyi ke : %s "
 
-#: src/icqdialogs.cc:635
+#: src/icqdialogs.cc:751
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Tukar skima warna ke : %s "
 
-#: src/icqdialogs.cc:637
+#: src/icqdialogs.cc:753
 msgid " Contact list "
 msgstr " Senarai hubungan "
 
-#: src/icqdialogs.cc:638
+#: src/icqdialogs.cc:754
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Susun rakan ke dalam kumpulan : %s "
 
-#: src/icqdialogs.cc:639
+#: src/icqdialogs.cc:755
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Sembunyikan pengguna offline : %s "
 
-#: src/icqdialogs.cc:640
+#: src/icqdialogs.cc:756
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Perlukan transliterasi Russia win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:641
+#: src/icqdialogs.cc:757
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-spam: buang mesej dari pengguna yang tiada dalam senarai : %s "
 
-#: src/icqdialogs.cc:642
+#: src/icqdialogs.cc:758
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Quote mesej dalam balasan : %s "
 
-#: src/icqdialogs.cc:643
+#: src/icqdialogs.cc:759
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Periksa peti surat setempat : %s "
 
-#: src/icqdialogs.cc:644
+#: src/icqdialogs.cc:760
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Ingat kata laluan : %s "
 
-#: src/icqdialogs.cc:645
+#: src/icqdialogs.cc:761
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Edit mesej away pada perubahan status : %s "
 
-#: src/icqdialogs.cc:646
+#: src/icqdialogs.cc:762
 #, fuzzy, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Quote mesej dalam balasan : %s "
 
-#: src/icqdialogs.cc:648
+#: src/icqdialogs.cc:764
 msgid " Communications "
 msgstr " Hubungan "
 
-#: src/icqdialogs.cc:649
+#: src/icqdialogs.cc:765
 #, c-format
 msgid " SMTP server : %s "
 msgstr " Pelayan SMTP : %s "
@@ -542,90 +572,90 @@ msgstr " Pelayan SMTP : %s "
 #.
 #. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
 #.
-#: src/icqdialogs.cc:654
+#: src/icqdialogs.cc:770
 msgid " Miscellaneous "
 msgstr " Pelbagai "
 
-#: src/icqdialogs.cc:655
+#: src/icqdialogs.cc:771
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Masa untuk menetapkan Away secara automatik (min) : %d "
 
-#: src/icqdialogs.cc:656
+#: src/icqdialogs.cc:772
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Masa untuk menetapkan N/A secara automatik (min) : %d "
 
-#: src/icqdialogs.cc:657
+#: src/icqdialogs.cc:773
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Maklumat terperinci IM di dalam fail log ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:688
+#: src/icqdialogs.cc:804
 msgid "Auto Away period (0 - disable): "
 msgstr "Jangkamasa Auto Away (0 - matikan): "
 
-#: src/icqdialogs.cc:692
+#: src/icqdialogs.cc:808
 msgid "Auto N/A period (0 - disable): "
 msgstr "Jangkamasa Auto N.A (0 - matikan): "
 
-#: src/icqdialogs.cc:700
+#: src/icqdialogs.cc:816
 msgid "SOCKS proxy server to use: "
 msgstr "Pelayan proksi SOCKS yang hendak diguna: "
 
-#: src/icqdialogs.cc:704
+#: src/icqdialogs.cc:820
 msgid "SOCKS proxy user name: "
 msgstr "Nama pengguna pelayan proksi SOCKS: "
 
-#: src/icqdialogs.cc:708
+#: src/icqdialogs.cc:824
 msgid "SOCKS proxy password: "
 msgstr "Katalaluan pelayan proksi SOCKS: "
 
-#: src/icqdialogs.cc:723
+#: src/icqdialogs.cc:839
 msgid "SMTP server hostname: "
 msgstr "Nama pelayan SMTP: "
 
-#: src/icqdialogs.cc:775
+#: src/icqdialogs.cc:891
 msgid "Your details have been fetched"
 msgstr "Maklumat anda telah diperolehi"
 
-#: src/icqdialogs.cc:787 src/icqface.cc:280
+#: src/icqdialogs.cc:903 src/icqface.cc:290
 msgid "Organize contact groups"
 msgstr "Susunan kumpulan rakan"
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:926
 msgid "Rename"
 msgstr "Namakan semula"
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:926
 msgid "rEmove"
 msgstr "uBah"
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:926
 msgid "move Up"
 msgstr "ke atas"
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:926
 msgid "move Down"
 msgstr "ke bawah"
 
-#: src/icqdialogs.cc:811
+#: src/icqdialogs.cc:927
 msgid "Select"
 msgstr "Pilih"
 
-#: src/icqdialogs.cc:826
+#: src/icqdialogs.cc:942
 msgid " Groups "
 msgstr " Kumpulan "
 
-#: src/icqdialogs.cc:841
+#: src/icqdialogs.cc:957
 msgid "Name for a group to be created: "
 msgstr "Nama kumpulan yang hendak dibuat: "
 
-#: src/icqdialogs.cc:850
+#: src/icqdialogs.cc:966
 msgid "New name for the group: "
 msgstr "Nama baru bagu kumpulan: "
 
-#: src/icqdialogs.cc:860
+#: src/icqdialogs.cc:976
 msgid "Are you sure want to remove the group?"
 msgstr "Adakah anda pasti untuk memadam kumpulan?"
 
@@ -661,374 +691,389 @@ msgstr "mod 1"
 msgid "mode 2"
 msgstr "mod 2"
 
-#: src/icqface.cc:63 src/icqface.h:224
+#: src/icqface.cc:63 src/icqface.h:226
 msgid "no"
 msgstr "tidak"
 
-#: src/icqface.cc:209
+#: src/icqface.cc:210
 msgid " Send a message     enter"
 msgstr " Hantar mesej       enter"
 
-#: src/icqface.cc:212
+#: src/icqface.cc:213
 msgid " Send an URL            u"
 msgstr " Hantar URL             u"
 
-#: src/icqface.cc:215
+#: src/icqface.cc:216
 msgid " Send an SMS"
 msgstr " Hantar SMS"
 
-#: src/icqface.cc:219
+#: src/icqface.cc:220
 msgid " User's details         ?"
 msgstr " Maklumat rakan         ?"
 
-#: src/icqface.cc:220
+#: src/icqface.cc:221
 msgid " Edit details"
 msgstr " Edit maklumat"
 
-#: src/icqface.cc:224
+#: src/icqface.cc:225
 msgid " Fetch away message"
 msgstr " Dapatkan mesej away"
 
-#: src/icqface.cc:227
+#: src/icqface.cc:228
 msgid " Events history         h"
 msgstr " Sejarah peristiwa      h"
 
-#: src/icqface.cc:232
+#: src/icqface.cc:233
 msgid " Ignore user"
 msgstr " Abaikan pengguna"
 
-#: src/icqface.cc:235
+#: src/icqface.cc:236
 msgid " Add to list            a"
 msgstr " Masukkan ke senarai    a"
 
-#: src/icqface.cc:240
+#: src/icqface.cc:241
 msgid " Remove user          del"
 msgstr " Buang pengguna       del"
 
-#: src/icqface.cc:241
+#: src/icqface.cc:242
 msgid " Rename contact         r"
 msgstr " Namakan semula         r"
 
-#: src/icqface.cc:244
+#: src/icqface.cc:245 src/icqface.cc:254
 msgid " Move to group.."
 msgstr " Pindah ke kumpulan.."
 
-#: src/icqface.cc:265
+#: src/icqface.cc:249
+#, fuzzy
+msgid " Send a channel message   enter"
+msgstr " Hantar mesej       enter"
+
+#: src/icqface.cc:250
+#, fuzzy
+msgid " Channel chat history         h"
+msgstr " Sejarah peristiwa      h"
+
+#: src/icqface.cc:251
+#, fuzzy
+msgid " Remove channel             del"
+msgstr " Buang pengguna       del"
+
+#: src/icqface.cc:275
 msgid " Change status                       s"
 msgstr " Tukar status                        s"
 
-#: src/icqface.cc:266
+#: src/icqface.cc:276
 msgid " Go to contact..                 alt-s"
 msgstr " Ke rakan...                     alt-s"
 
-#: src/icqface.cc:267
+#: src/icqface.cc:277
 msgid " Accounts.."
 msgstr " Akaun.."
 
-#: src/icqface.cc:268
+#: src/icqface.cc:278
 msgid " Find/add users"
 msgstr " Cari/Tambah rakan"
 
-#: src/icqface.cc:269
+#: src/icqface.cc:279
 msgid " CenterICQ config options"
 msgstr " Pilihan Tetapan CenterICQ"
 
-#: src/icqface.cc:271
+#: src/icqface.cc:281
 msgid " View/edit ignore list"
 msgstr " Papar/edit senarai abai"
 
-#: src/icqface.cc:272
+#: src/icqface.cc:282
 msgid " View/edit invisible list"
 msgstr " Papar/edit senarai invisible"
 
-#: src/icqface.cc:273
+#: src/icqface.cc:283
 msgid " View/edit visible list"
 msgstr " Papar/edit senarai nampak"
 
-#: src/icqface.cc:276
+#: src/icqface.cc:286
 msgid " Show offline users                 F5"
 msgstr " Paparkan rakan offline             F5"
 
-#: src/icqface.cc:277
+#: src/icqface.cc:287
 msgid " Hide offline users                 F5"
 msgstr " Sembunyikan rakan offline          F5"
 
-#: src/icqface.cc:575 src/icqface.cc:1224
+#: src/icqface.cc:591 src/icqface.cc:1240
 msgid "Details"
 msgstr "Maklumat"
 
-#: src/icqface.cc:575
+#: src/icqface.cc:591
 msgid "Message"
 msgstr "Mesej"
 
-#: src/icqface.cc:576
+#: src/icqface.cc:592
 msgid "New search"
 msgstr "Carian baru"
 
-#: src/icqface.cc:652
+#: src/icqface.cc:668
 #, c-format
 msgid "Information about %s"
 msgstr "Maklumat mengenai %s"
 
-#: src/icqface.cc:710
+#: src/icqface.cc:726
 msgid "Nickname"
 msgstr "Nama panggilan"
 
-#: src/icqface.cc:711
+#: src/icqface.cc:727
 msgid "Name"
 msgstr "Nama"
 
-#: src/icqface.cc:712
+#: src/icqface.cc:728
 msgid "E-mail"
 msgstr "Emel"
 
-#: src/icqface.cc:713
+#: src/icqface.cc:729
 msgid "2nd e-mail"
 msgstr "Emel ke-2"
 
-#: src/icqface.cc:714
+#: src/icqface.cc:730
 msgid "Old e-mail"
 msgstr "Emel lama"
 
-#: src/icqface.cc:715
+#: src/icqface.cc:731
 msgid "Gender"
 msgstr "Jantina"
 
-#: src/icqface.cc:716
+#: src/icqface.cc:732
 msgid "Birthdate"
 msgstr "Tarikh Lahir"
 
-#: src/icqface.cc:717
+#: src/icqface.cc:733
 msgid "Age"
 msgstr "Umur"
 
-#: src/icqface.cc:718
+#: src/icqface.cc:734
 msgid "Languages"
 msgstr "Bahasa"
 
-#: src/icqface.cc:719
+#: src/icqface.cc:735
 msgid "Last IP"
 msgstr "IP Terakhir"
 
-#: src/icqface.cc:740
+#: src/icqface.cc:756
 msgid "Last seen"
 msgstr "Kali terakhir ditemui"
 
-#: src/icqface.cc:742
+#: src/icqface.cc:758
 msgid "Never"
 msgstr "Tidak pernah"
 
-#: src/icqface.cc:755 src/icqface.cc:798
+#: src/icqface.cc:771 src/icqface.cc:814
 msgid "Address"
 msgstr "Alamat"
 
-#: src/icqface.cc:756 src/icqface.cc:799
+#: src/icqface.cc:772 src/icqface.cc:815
 msgid "Location"
 msgstr "Lokasi"
 
-#: src/icqface.cc:757 src/icqface.cc:800
+#: src/icqface.cc:773 src/icqface.cc:816
 msgid "Zip code"
 msgstr "Poskod"
 
-#: src/icqface.cc:758 src/icqface.cc:806
+#: src/icqface.cc:774 src/icqface.cc:822
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:759 src/icqface.cc:807
+#: src/icqface.cc:775 src/icqface.cc:823
 msgid "Fax"
 msgstr "Faks"
 
-#: src/icqface.cc:760
+#: src/icqface.cc:776
 msgid "Cellular"
 msgstr "Telefon Bimbit"
 
-#: src/icqface.cc:761
+#: src/icqface.cc:777
 msgid "Timezone"
 msgstr "Zon Masa"
 
-#: src/icqface.cc:763 src/icqface.cc:808
+#: src/icqface.cc:779 src/icqface.cc:824
 msgid "Homepage"
 msgstr "Laman Web"
 
-#: src/icqface.cc:802
+#: src/icqface.cc:818
 msgid "Company"
 msgstr "Syarikat"
 
-#: src/icqface.cc:803
+#: src/icqface.cc:819
 msgid "Department"
 msgstr "Jabatan"
 
-#: src/icqface.cc:804
+#: src/icqface.cc:820
 msgid "Title"
 msgstr "Pangkat"
 
-#: src/icqface.cc:848
+#: src/icqface.cc:864
 msgid "Interests"
 msgstr "Minat"
 
-#: src/icqface.cc:860
+#: src/icqface.cc:876
 msgid "Background"
 msgstr "Latarbelakang"
 
-#: src/icqface.cc:881 src/icqface.cc:1853
+#: src/icqface.cc:897 src/icqface.cc:1869
 msgid "F2 to URLs, ESC close"
 msgstr "F2 ke URL, ESC tutup"
 
-#: src/icqface.cc:888
+#: src/icqface.cc:904
 msgid "Info"
 msgstr "Maklumat"
 
-#: src/icqface.cc:888
+#: src/icqface.cc:904
 msgid "Home"
 msgstr "Rumah"
 
-#: src/icqface.cc:888
+#: src/icqface.cc:904
 msgid "Work"
 msgstr "Kerja"
 
-#: src/icqface.cc:888
+#: src/icqface.cc:904
 msgid "More"
 msgstr "Lagi"
 
-#: src/icqface.cc:889
+#: src/icqface.cc:905
 msgid "Retrieve"
 msgstr "Ambil"
 
-#: src/icqface.cc:889
+#: src/icqface.cc:905
 msgid "Edit"
 msgstr "Edit"
 
-#: src/icqface.cc:959
+#: src/icqface.cc:975
 msgid " [icq] ICQ network"
 msgstr " [icq] rangkaian ICQ"
 
-#: src/icqface.cc:960
+#: src/icqface.cc:976
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:961
+#: src/icqface.cc:977
 msgid " [msn] M$ Messenger"
 msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:962
+#: src/icqface.cc:978
 msgid " [aim] AOL TOC"
 msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:963
+#: src/icqface.cc:979
 msgid " [irc] IRC"
 msgstr " [irc] IRC"
 
-#: src/icqface.cc:994
+#: src/icqface.cc:1010
 msgid " [all] All of them"
 msgstr " [all] Semuanya"
 
-#: src/icqface.cc:1015
+#: src/icqface.cc:1031
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:1016
+#: src/icqface.cc:1032
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:1017
+#: src/icqface.cc:1033
 msgid " [a] Away"
 msgstr " [a] Away"
 
-#: src/icqface.cc:1018
+#: src/icqface.cc:1034
 msgid " [d] Do not disturb"
 msgstr " [d] Jangan ganggu"
 
-#: src/icqface.cc:1019
+#: src/icqface.cc:1035
 msgid " [n] Not available"
 msgstr " [n] Tiada"
 
-#: src/icqface.cc:1020
+#: src/icqface.cc:1036
 msgid " [c] Occupied"
 msgstr " [c] Sedang digunakan"
 
-#: src/icqface.cc:1021
+#: src/icqface.cc:1037
 msgid " [f] Free for chat"
 msgstr " [f] Boleh le sembang"
 
-#: src/icqface.cc:1022
+#: src/icqface.cc:1038
 msgid " [i] Invisible"
 msgstr " [i] Limunan"
 
-#: src/icqface.cc:1080
+#: src/icqface.cc:1096
 msgid " enter to select a file, esc to cancel "
 msgstr " enter untuk memilih fail, esc untuk batal "
 
-#: src/icqface.cc:1224
+#: src/icqface.cc:1240
 msgid "Move to contacts"
 msgstr "Pindah ke rakan"
 
-#: src/icqface.cc:1236
+#: src/icqface.cc:1252
 msgid "Ignore list"
 msgstr "Sengarai abai"
 
-#: src/icqface.cc:1237
+#: src/icqface.cc:1253
 msgid "Visible list"
 msgstr "Senarai Nampak"
 
-#: src/icqface.cc:1238
+#: src/icqface.cc:1254
 msgid "Invisible list"
 msgstr "Senarai Limunan"
 
-#: src/icqface.cc:1253
+#: src/icqface.cc:1269
 msgid "Select contacts to add to the list"
 msgstr "Pilih rakan untuk dimasukkan ke dalam senarai"
 
-#: src/icqface.cc:1302
+#: src/icqface.cc:1318
 msgid "Event recipients"
 msgstr "Penerima peristiwa"
 
-#: src/icqface.cc:1429
+#: src/icqface.cc:1445
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "CarianCepat: taip untuk cari, Alt-S cari semula, Enter siap"
 
-#: src/icqface.cc:1543
+#: src/icqface.cc:1559
 msgid "+ no URLs within the current context"
 msgstr "+ tiada URL di dalam konteks sekaran"
 
-#: src/icqface.cc:1556
+#: src/icqface.cc:1572
 msgid "URLs within the current context"
 msgstr "URL dalam konteks sekarang"
 
-#: src/icqface.cc:1587 src/icqface.cc:1871
+#: src/icqface.cc:1603 src/icqface.cc:1887
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "%s keluar ke %s"
 
-#: src/icqface.cc:1590 src/icqface.cc:1760
+#: src/icqface.cc:1606 src/icqface.cc:1776
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X hantar, Ctrl-P ramai, Ctrl-O sejarah, Alt-? selanjutnya, ESC batal"
 
-#: src/icqface.cc:1872
+#: src/icqface.cc:1888
 #, c-format
 msgid "Sent on %s"
 msgstr "Dihantar pada %s"
 
-#: src/icqface.cc:1875
+#: src/icqface.cc:1891
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "%s masuk dari %s"
 
-#: src/icqface.cc:1876
+#: src/icqface.cc:1892
 #, c-format
 msgid "Received on %s"
 msgstr "Diterima pada %s"
 
-#: src/icqface.cc:1977
+#: src/icqface.cc:1993
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Sejarah bagi %s, %d semuanya"
 
-#: src/icqface.cc:1980
+#: src/icqface.cc:1996
 msgid "S search, L again, ESC cancel"
 msgstr "S cari, L lagi, ESC batal"
 
-#: src/icqface.cc:1986
+#: src/icqface.cc:2002
 msgid "search for: "
 msgstr "cari: "
 
@@ -1104,7 +1149,7 @@ msgstr "Putuskan servis terlebih dahulu!"
 msgid " server address: "
 msgstr " alamat pelayan: "
 
-#: src/accountmanager.cc:166 src/centericq.cc:336
+#: src/accountmanager.cc:166 src/centericq.cc:337
 msgid "away message"
 msgstr "mesej away"
 
@@ -1198,22 +1243,47 @@ msgid "You must be logged to the ICQ network to update the details"
 msgstr "Anda mesti log ke rangkaian ICQ untuk mengemaskini maklumat"
 
 #: src/imcontroller.cc:187
-msgid " IRC channels (join/leave) "
-msgstr " Channel IRC (masuk/keluar) "
+#, fuzzy
+msgid " IRC channels manager "
+msgstr " Pengurus channel "
 
 #: src/imcontroller.cc:193
-msgid "Join/Leave"
+#, fuzzy
+msgid "Join/leave"
 msgstr "Masuk/Keluar"
+
+#: src/imcontroller.cc:193
+#, fuzzy
+msgid "Show on the list"
+msgstr " Senarai hubungan "
 
 #: src/imcontroller.cc:207
 msgid " Channels "
 msgstr " Channel "
 
-#: src/imcontroller.cc:219
+#: src/imcontroller.cc:210
+#, fuzzy
+msgid "joined"
+msgstr "diabaikan"
+
+#: src/imcontroller.cc:210
+msgid "not joined"
+msgstr ""
+
+#: src/imcontroller.cc:211
+#, fuzzy
+msgid "shown"
+msgstr "Telefon"
+
+#: src/imcontroller.cc:211
+msgid "hidden"
+msgstr ""
+
+#: src/imcontroller.cc:221
 msgid "channel name to add: "
 msgstr "nama channel yang hendak ditambah: "
 
-#: src/imcontroller.cc:254
+#: src/imcontroller.cc:263
 msgid "registration is not supported"
 msgstr "pendaftaran tidak disokong"
 
@@ -1270,7 +1340,7 @@ msgstr "* Pengguna telah menambah anda ke dalam senarai rakan"
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] gagal SMS ke %s, %s"
 
-#: src/hooks/icqhook.cc:909 src/hooks/irchook.cc:446
+#: src/hooks/icqhook.cc:909 src/hooks/irchook.cc:490
 msgid "* Away message:"
 msgstr "* Mesej away:"
 
@@ -1342,102 +1412,102 @@ msgstr "F2/M menu rakan sekarang, F3/S tukar status, F4/G aksi am, Q keluar"
 msgid "Ignore all events from %s?"
 msgstr "Abaikan semua acara dari %s?"
 
-#: src/centericq.cc:249
+#: src/centericq.cc:250
 #, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "Anda pasti untuk membuang %s?"
 
-#: src/centericq.cc:257
+#: src/centericq.cc:258
 msgid "New nickname to show: "
 msgstr "Nama baru untuk dipaparkan: "
 
-#: src/centericq.cc:265
+#: src/centericq.cc:266
 msgid "Select a group to move the user to"
 msgstr "Masukkan rakan ke kumpulan"
 
-#: src/centericq.cc:282
+#: src/centericq.cc:283
 msgid "+ cannot fetch away messages being offline"
 msgstr "+ gagal dapatkan mesej away kerana offline"
 
-#: src/centericq.cc:511
+#: src/centericq.cc:512
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] mail baru diterima, %d mesej"
 
-#: src/centericq.cc:514
+#: src/centericq.cc:515
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ mesej terakhir dari %s"
 
-#: src/centericq.cc:555
+#: src/centericq.cc:556
 msgid "! another running copy of centericq detected"
 msgstr "! ada centericq lain sedang dilarikan"
 
-#: src/centericq.cc:556
+#: src/centericq.cc:557
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! ini mungkin menyebabkan masalah. pid %lu"
 
-#: src/centericq.cc:644
+#: src/centericq.cc:645
 msgid "Mobile number: "
 msgstr "Nombor telefon bimbit: "
 
-#: src/centericq.cc:842
+#: src/centericq.cc:847
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ tiada sejarah bagi %s"
 
-#: src/centericq.cc:868
+#: src/centericq.cc:873
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ pengguna %s telah berada dalam senarai rakan"
 
-#: src/centericq.cc:874
+#: src/centericq.cc:879
 msgid "Select a group to add the user to"
 msgstr "PIlih kumpulan untuk masukkan rakan"
 
-#: src/centericq.cc:881
+#: src/centericq.cc:886
 msgid "Notify the user he/she has been added?"
 msgstr "Beritahu rakan yang mereka telah dimasukkan ke dalam senarai?"
 
 #.            ihook.sendalert(ic);
-#: src/centericq.cc:884
+#: src/centericq.cc:889
 #, c-format
 msgid "+ the notification has been sent to %lu"
 msgstr "+ pemberitahuan telah dihantar ke %lu"
 
-#: src/centericq.cc:895
+#: src/centericq.cc:900
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s telah dimasukkan ke senarai"
 
-#: src/centericq.cc:966
+#: src/centericq.cc:971
 msgid "+ the user is back"
 msgstr "+ pengguna telah kembali"
 
-#: src/centericq.cc:982
+#: src/centericq.cc:987
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status restored"
 
-#: src/centericq.cc:997
+#: src/centericq.cc:1002
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] telah ditetapkan secara automatik %s"
 
-#: src/centericq.cc:999
+#: src/centericq.cc:1004
 msgid "away"
 msgstr "away"
 
-#: src/centericq.cc:999
+#: src/centericq.cc:1004
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1122
+#: src/centericq.cc:1127
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! ruang storan kurang dari 10k, offline"
 
-#: src/centericq.cc:1123
+#: src/centericq.cc:1128
 msgid "! otherwise we can lose events and configuration"
 msgstr "! sebaliknya kita akan kehilangan data dan tetapan"
 
@@ -1586,81 +1656,91 @@ msgstr "Pengguna tidak mempunyai profil maklumat."
 msgid "+ [aim] password sent"
 msgstr "+ [aim] kata laluan telah dihantar"
 
-#: src/hooks/irchook.cc:84
+#: src/hooks/irchook.cc:88
 msgid "+ [irc] connecting to the server"
 msgstr "+ [irc] menghubungi pelayan"
 
-#: src/hooks/irchook.cc:96
+#: src/hooks/irchook.cc:100
 msgid "+ [irc] unable to connect to the server"
 msgstr "+ [irc] gagal menghubungi pelayan"
 
-#: src/hooks/irchook.cc:377
+#: src/hooks/irchook.cc:410
 #, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
 msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
 
-#: src/hooks/irchook.cc:508
+#: src/hooks/irchook.cc:572
 msgid "+ [irc] logged in"
 msgstr "+ [irc] log in"
 
-#: src/hooks/irchook.cc:539
+#: src/hooks/irchook.cc:608
 msgid "+ [irc] disconnected from the network"
 msgstr "+ [irc] diputuskan dari rangkaian"
 
-#: src/hooks/irchook.cc:553
+#: src/hooks/irchook.cc:622
 #, c-format
 msgid "+ [irc] connect failed: %s"
 msgstr "+ [irc] hubungan gagal: %s"
 
-#: src/hooks/irchook.cc:638
+#: src/hooks/irchook.cc:639
+#, fuzzy
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [aim] kata laluan berjaya ditukar"
+
+#: src/hooks/irchook.cc:710
 msgid "On channels: "
 msgstr "Di channel: "
 
-#: src/icqface.h:224
+#: src/hooks/irchook.cc:998
+#, c-format
+msgid "* Kicked by %s; reason: %s"
+msgstr ""
+
+#: src/icqface.h:226
 msgid "yes"
 msgstr "ya"
 
-#: src/icqface.h:228
+#: src/icqface.h:230
 msgid "Not specified"
 msgstr "Tidak ditetapkan"
 
-#: src/icqface.h:229
+#: src/icqface.h:231
 msgid "Male"
 msgstr "Lelaki"
 
-#: src/icqface.h:230
+#: src/icqface.h:232
 msgid "Female"
 msgstr "Perempuan"
 
-#: src/icqface.h:240
+#: src/icqface.h:242
 msgid "60-above"
 msgstr "60-ke atas"
 
-#: src/icqface.h:244
+#: src/icqface.h:246
 msgid "Ok"
 msgstr "Ok"
 
-#: src/icqface.h:244
+#: src/icqface.h:246
 msgid "Next"
 msgstr "Seterusnya"
 
-#: src/icqface.h:245
+#: src/icqface.h:247
 msgid "Fwd"
 msgstr "Ke hadapan"
 
-#: src/icqface.h:245
+#: src/icqface.h:247
 msgid "Reply"
 msgstr "Balas"
 
-#: src/icqface.h:246
+#: src/icqface.h:248
 msgid "Open"
 msgstr "Buka"
 
-#: src/icqface.h:246
+#: src/icqface.h:248
 msgid "Accept"
 msgstr "Terima"
 
-#: src/icqface.h:247
+#: src/icqface.h:249
 msgid "Reject"
 msgstr "Tolak"
 
@@ -1715,6 +1795,9 @@ msgstr "pengesahan"
 #: src/imlogger.h:41
 msgid "e-mail"
 msgstr "emel"
+
+#~ msgid " IRC channels (join/leave) "
+#~ msgstr " Channel IRC (masuk/keluar) "
 
 #~ msgid " Channel "
 #~ msgstr " Channel "

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.26 2002/06/27 13:56:45 konst Exp $
+* $Id: irchook.cc,v 1.27 2002/06/28 07:48:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -579,6 +579,7 @@ void irchook::connected(void *conn, void *cli, ...) {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
+	if(c->getdesc().pname == irc)
 	if(!ischannel(c)) {
 	    firetalk_im_add_buddy(irhook.handle, c->getdesc().nickname.c_str());
 	}
@@ -684,6 +685,9 @@ void irchook::gotinfo(void *conn, void *cli, ...) {
 
 	c->setnick(nick);
 	c->setbasicinfo(cbinfo);
+
+	if(c->getstatus() == offline)
+	    c->setstatus(available);
     }
 
     DLOG("gotinfo");
@@ -705,6 +709,9 @@ void irchook::gotchannels(void *conn, void *cli, ...) {
 	if(!c) c = clist.get(contactroot);
 
 	c->setabout((string) _("On channels: ") + channels);
+
+	if(c->getstatus() == offline)
+	    c->setstatus(available);
     }
 
     DLOG("gotchannels");
