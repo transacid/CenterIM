@@ -69,7 +69,7 @@ class XmlLeaf : public XmlNode {
 
  public:
   XmlLeaf(const std::string& t, const std::string& v);
-  ~XmlLeaf();
+  virtual ~XmlLeaf();
 
   bool isBranch();
   std::string getValue();
@@ -84,7 +84,7 @@ class XmlBranch : public XmlNode {
 
  public:
   XmlBranch(const std::string& t);
-  ~XmlBranch();
+  virtual ~XmlBranch();
 
   bool isBranch();
   bool exists(const std::string& tag);
@@ -101,4 +101,3 @@ class XmlBranch : public XmlNode {
 };
 
 #endif
-
