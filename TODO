@@ -9,6 +9,7 @@ log "changed status" record had inverse statuses
 zip code incorrect update and display
 they say online sounds don't work
 age is not respected for whitepages search
+away messages
 
 /*
 *
@@ -18,15 +19,18 @@ age is not respected for whitepages search
 
 X window resize -> sometimes segfaults
 
+libicq2000: add ourselves to the contact list, and then try to update details
+    contact list -> self details conflict
+
+remove trash from mobile addr helps to send SMSes
+
 /*
 *
 * TODO
 *
 */
 
-away messages!!! set away -> ask for a message
-
-write about receiving email express messages in README
+write about email express and away messages in README
 
 check auto-disconnect on all IMs after network down
 
@@ -72,4 +76,4 @@ so when I press F2 it just opens another screen and CenterICQ doesn't crash.
 
 -------------------------------------------------------------------------------
 
-$Id: TODO,v 1.110 2002/02/05 17:20:12 konst Exp $
+$Id: TODO,v 1.111 2002/02/06 16:37:30 konst Exp $

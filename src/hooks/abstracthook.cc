@@ -99,6 +99,9 @@ void abstracthook::stoplookup() {
     searchdest = 0;
 }
 
+void abstracthook::requestawaymsg(const imcontact &c) {
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

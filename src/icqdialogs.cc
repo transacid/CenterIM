@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.48 2002/02/05 17:20:12 konst Exp $
+* $Id: icqdialogs.cc,v 1.49 2002/02/06 16:36:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -444,7 +444,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     if(i) r = (ICQ2000::AgeRange) ((int) m.getref(i-1));
 }
 
-void icqface::edit(string &txt, const string header) {
+bool icqface::edit(string &txt, const string header) {
     texteditor se;
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
@@ -467,6 +467,7 @@ void icqface::edit(string &txt, const string header) {
     }
 
     w.close();
+    return editdone;
 }
 
 bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {

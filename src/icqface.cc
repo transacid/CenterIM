@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.78 2002/02/05 17:20:12 konst Exp $
+* $Id: icqface.cc,v 1.79 2002/02/06 16:36:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -215,6 +215,9 @@ int icqface::contextmenu(icqcontact *c) {
 
 	m.additem(0, ACT_INFO, _(" User's details         ?"));
 	m.additem(0, ACT_EDITUSER, _(" Edit details"));
+
+	if(capab & hoptCanSetAwayMsg)
+	    m.additem(0, ACT_FETCHAWAY, _(" Fetch away message"));
     }
 
     m.additem(0, ACT_HISTORY, _(" Events history         h"));
@@ -921,11 +924,6 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
 	if(r = i) {
 	    st = (imstatus) ((int) m.getref(i-1));
-
-	    if(gethook(pname).getcapabilities() & hoptCanSetAwayMsg)
-	    if(st == away) {
-		
-	    }
 	}
     }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.66 2002/01/22 11:59:15 konst Exp $
+* $Id: centericq.cc,v 1.67 2002/02/06 16:36:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -264,6 +264,10 @@ void centericq::mainloop() {
 
 	    case ACT_HISTORY:
 		history(c->getdesc());
+		break;
+
+	    case ACT_FETCHAWAY:
+		gethook(c->getdesc().pname).requestawaymsg(c->getdesc());
 		break;
 
 	    case ACT_MSG:

@@ -42,7 +42,7 @@ class icqconf {
 	    imaccount();
 	    imaccount(protocolname apname);
 
-	    string nickname, server, password;
+	    string nickname, server, password, awaymsg;
 	    unsigned long uin, port;
 	    protocolname pname;
 

@@ -54,6 +54,8 @@ class abstracthook {
 	virtual void lookup(const imsearchparams &params, verticalmenu &dest);
 	virtual void stoplookup();
 
+	virtual void requestawaymsg(const imcontact &c);
+
 	int getcapabilities() const;
 };
 

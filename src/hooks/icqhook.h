@@ -63,6 +63,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	imstatus getstatus() const;
 
 	void requestinfo(const imcontact c);
+	void requestawaymsg(const imcontact &c);
 
 	bool regconnect(const string aserv);
 	bool regattempt(unsigned int &auin, const string apassword);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.51 2002/02/05 16:15:32 konst Exp $
+* $Id: icqhook.cc,v 1.52 2002/02/06 16:36:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,7 +52,7 @@ icqhook::icqhook() {
     timer_reconnect = 0;
     fonline = false;
 
-    fcapabilities = hoptCanSendURL | hoptCanSendSMS;
+    fcapabilities = hoptCanSendURL | hoptCanSendSMS | hoptCanSetAwayMsg;
 
     cli.connected.connect(slot(this, &icqhook::connected_cb));
     cli.disconnected.connect(slot(this, &icqhook::disconnected_cb));
@@ -547,6 +547,15 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     cli.uploadSelfDetails();
 }
 
+void icqhook::requestawaymsg(const imcontact &c) {
+    Contact *ic = cli.getContact(c.uin);
+
+    if(ic) {
+	MessageEvent *ev = new AwayMessageEvent(ic);
+	cli.SendEvent(ev);
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -703,14 +712,6 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 	    }
 	}
 
-    } else if(ev->getType() == MessageEvent::AwayMessage) {
-	AwayMessageEvent *r;
-	if(r = dynamic_cast<AwayMessageEvent *>(ev)) {
-	    em.store(immessage(ic, imevent::incoming,
-		string() + _("* Away message:") + "\n\n" +
-		rusconv("wk", r->getMessage())));
-	}
-
     } else if(ev->getType() == MessageEvent::UserAdd) {
 	UserAddEvent *r;
 	if(r = dynamic_cast<UserAddEvent *>(ev)) {
@@ -736,6 +737,17 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 		if(!ev->isDelivered()) {
 		    face.log(_("+ [icq] failed SMS to %s, %s"),
 			c->getdispnick().c_str(), ic.totext().c_str());
+		}
+		break;
+	    case MessageEvent::AwayMessage:
+		{
+		    AwayMessageEvent *r;
+
+		    if(r = dynamic_cast<AwayMessageEvent *>(ev)) {
+			em.store(immessage(ic, imevent::incoming,
+			    string() + _("* Away message:") + "\n\n" +
+			    rusconv("wk", r->getMessage())));
+		    }
 		}
 		break;
 	}
@@ -985,7 +997,7 @@ void icqhook::socket_cb(SocketEvent *ev) {
 }
 
 void icqhook::want_auto_resp_cb(AwayMessageEvent *ev) {
-    ev->setMessage("");
+    ev->setMessage(conf.getourid(icq).awaymsg);
 }
 
 void icqhook::search_result_cb(SearchResultEvent *ev) {

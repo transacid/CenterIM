@@ -82,6 +82,10 @@ void accountmanager::exec() {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 		} else {
 		    t.addnode(n, 0, citem+7, _(" Update user details "));
+
+		    if(gethook(pname).getcapabilities() & hoptCanSetAwayMsg)
+			t.addnode(n, 0, citem+10, _(" Set away message "));
+
 		    t.addnode(n, 0, citem+8, _(" Drop "));
 		}
 	    }
@@ -96,6 +100,7 @@ void accountmanager::exec() {
 
 	    spname = conf.getprotocolname(pname);
 	    account = conf.getourid(pname);
+	    abstracthook &hook = gethook(pname);
 
 	    switch(action) {
 		case 1:
@@ -121,7 +126,7 @@ void accountmanager::exec() {
 		    imcontrol.updateinfo(account);
 		    break;
 		case 8:
-		    if(!gethook(pname).online()) {
+		    if(!hook.online()) {
 			account = icqconf::imaccount(pname);
 		    } else {
 			face.status(_("You have to disconnect the service first!"));
@@ -139,6 +144,13 @@ void accountmanager::exec() {
 			    account.server = tmp;
 			    account.port = 0;
 			}
+		    }
+		    break;
+
+		case 10:
+		    if(face.edit(tmp = account.awaymsg,
+		    spname + ": " + _("away message"))) {
+			account.awaymsg = tmp;
 		    }
 		    break;
 	    }

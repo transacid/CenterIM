@@ -57,6 +57,7 @@
 #define ACT_GROUPMOVE   -34
 #define ACT_ORG_GROUPS  -35
 #define ACT_HIDEOFFLINE -36
+#define ACT_FETCHAWAY   -37
 
 extern class centericq cicq;
 
@@ -140,8 +141,6 @@ class icqface {
 
 	int groupmanager(const string text, bool sel);
 
-	void edit(string &txt, const string header);
-
     public:
 	vector<imcontact> muins;
 
@@ -206,6 +205,8 @@ class icqface {
 
 	bool eventedit(imevent &ev);
 	eventviewresult eventview(const imevent *ev);
+
+	bool edit(string &txt, const string header);
 };
 
 extern icqface face;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.35 2002/01/28 14:09:34 konst Exp $
+* $Id: icqconf.cc,v 1.36 2002/02/06 16:36:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,6 +29,7 @@
 #include "icqconf.h"
 #include "icqface.h"
 #include "icqcontacts.h"
+#include "abstracthook.h"
 
 icqconf::icqconf() {
     rs = rscard;
@@ -47,10 +48,26 @@ icqconf::~icqconf() {
 }
 
 icqconf::imaccount icqconf::getourid(protocolname pname) {
+    ifstream f;
+    imaccount im;
+    string buf, fname;
     vector<imaccount>::iterator i;
 
     i = find(accounts.begin(), accounts.end(), pname);
-    return i == accounts.end() ? imaccount(pname) : *i;
+    im = i == accounts.end() ? imaccount(pname) : *i;
+
+    im.awaymsg = "";
+    fname = conf.getconfigfname("awaymsg-" + getprotocolname(im.pname));
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	getstring(f, buf);
+	if(!im.awaymsg.empty()) im.awaymsg += "\n";
+	im.awaymsg += buf;
+	f.close();
+    }
+
+    return im;
 }
 
 int icqconf::getouridcount() const {
@@ -136,6 +153,22 @@ void icqconf::setourid(const imaccount im) {
 		    }
 		    break;
 	    }
+	}
+    }
+
+    if(gethook(i->pname).getcapabilities() & hoptCanSetAwayMsg) {
+	if(i->awaymsg.empty()) {
+	    char buf[512];
+	    sprintf(buf, _("I do really enjoy the default away message of centericq %s."), VERSION);
+	    i->awaymsg = buf;
+	}
+
+	string fname = conf.getconfigfname("awaymsg-" + getprotocolname(i->pname));
+	ofstream f(fname.c_str());
+
+	if(f.is_open()) {
+	    f << i->awaymsg;
+	    f.close();
 	}
     }
 }
