@@ -1019,3 +1019,31 @@ conferencing support.
 
 As usual, several cosmetic bugs were fixed.
 
+4.8.0
+-----
+
+Finally people started sending patches. This version includes a patch
+from Julien LEMOINE <julien@3rd.dyndns.org> that fixed several fribidi
+and gcc 3.1 specific problems. Also Josh McIver <jmmc@flaglink.com> has
+sent a patch that made centericq report when one of your Yahoo! contacts
+starts or stops typing on his side.
+
+Fixed a bug that led to segfalut when you pressed "r" on a group header.
+
+Fixed a bug in Yahoo! that resulted into inability to remove contacts in
+some situations. Just after they were deleted they rised from the dead
+again. It doesn't happen anymore.
+
+There was a problem with the chat mode, when a lot of people asked me
+how to accept an authorizaiton request. Now it's easy, upon receiving it
+will pop-up in a usual windowed mode.
+
+The find/add dialog in the IRC mode was extended with a new option,
+called "Joined since the last check only". It will show only users
+joined since your last find/add request. It helps to view only those who
+entered a channel recently.
+
+The authorization request displaying dialog was extended with a new
+"User info" button. It allows to view user's details before you accept a
+request.
+

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.37 2002/08/08 13:42:25 konst Exp $
+* $Id: irchook.cc,v 1.38 2002/08/09 10:28:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -290,7 +290,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
     emailsub = params.email;
     namesub = params.firstname;
-    searchsincelast = params.sincelast;
+    searchsincelast = params.sincelast && !params.room.empty();
 
     searchchannels.clear();
     extlisted.clear();
