@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.43 2002/07/14 13:03:51 konst Exp $
+* $Id: yahoohook.cc,v 1.44 2002/07/16 08:50:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -298,14 +298,21 @@ void yahoohook::setautostatus(imstatus st) {
     } else {
 	if(getstatus() == offline) {
 	    connect();
+
 	} else {
 	    logger.putourstatus(yahoo, getstatus(), ourstatus = st);
 
-	    if(st != away) {
+	    if(st == freeforchat) {
+		auto_ptr<char> msg(strdup("free for chat"));
+		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 0);
+
+	    } else if(st != away) {
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], 0, 0);
+
 	    } else {
 		auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(yahoo)).c_str()));
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
+
 	    }
 	}
     }
