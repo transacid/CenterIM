@@ -8,8 +8,12 @@ Contents
     1.1. Creation history
     1.2. Features overview
     1.3. Requirements
-2. UIN registration
-    2.1. Updating details
+    1.4. First time start
+2. IM accounts registration
+    2.1. ICQ accounts
+    2.2. Yahoo! accounts
+    2.3. MSN accounts
+    2.4. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -140,20 +144,15 @@ libsigc++ (at least 1.0.0)
     http://libsigc.sourceforge.net/
 
 
-2. UIN registration
--------------------
+1.4. First time start
+---------------------
 
-  To be able to use ICQ you should have a UIN (I think it stands for
-something like "user identification number"). When you start centericq
-for the first time the registration dialog appears. You can either use
-an already existing UIN or register a new one. Actually, all the fields
-the dialog has are self-descriptive. Some attention should only be paid
-to the "server address" field. The default value it has is quite ok. In
-the majority of cases you do not need to change it. The only exception
-is if you have your own ICQ server on LAN.
-
-  If you want to use Yahoo! and MSN you should have already registered
-logins for these networks.
+  Upon the first execution, the program shows its configuration screen
+and then gets to the next stage, the account manager dialog. All the
+configuration dialog items are self-descriptive, so there must be no
+problems to customize your centericq. As soon as you're finished with
+it, using the right allow key, move cursor to the "Done" button and
+press Enter.
 
   Russian speaking users should pay attention to the "Russian
 translation" item of the registration dialog. It's vital to set its
@@ -165,7 +164,44 @@ Windows we need to recode every sent and received message in order for
 it to be readable.
 
 
-2.1. Updating details
+2. IM accounts registration
+---------------------------
+
+  This section says a bit about registering new and entering existing
+accounts' details into configuration of your centericq.
+
+
+2.1. ICQ accounts
+-----------------
+
+  To be able to use the ICQ IM service you should have a UIN (I think it
+stands for something like "user identification number"). You can either
+use an already existing UIN or register a new one selecting appropriate
+items in the "Account manager" dialog. Some attention should only be
+paid to the "server address" field. The default value will be
+substituted unless something is set there, i.e. empty "server" field is
+quite ok. In the majority of cases you do not need to change it. The
+only exception is if you have your own ICQ server on LAN.
+
+
+2.2. Yahoo! accounts
+--------------------
+
+  Centericq doesn't support registring new Yahoo! ID's, so if you don't
+have one yet, just visit the homepage Yahoo! messenger at
+http://messenger.yahoo.com/ and select the "Acct info" link in the top
+right corner.
+
+
+2.3. MSN accounts
+-----------------
+
+  An account for MSN can also be registered through a web interface at
+http://chat.msn.com/ though it seems that they block access from Linux
+based web browsers.
+
+
+2.4. Updating details
 ---------------------
 
   If you have just registered on the ICQ network only basic fields of
@@ -177,8 +213,9 @@ You can fill in information that will be visible to other ICQ users.
 They also will be able to find you with specifying what you filled in
 their "find users" requests.
 
-  It's possible to update your details any time you're online with the
-dialog.
+  It's possible to update your ICQ details any time you're online with
+the dialog. Details within other networks are possible to be updated
+with respective web interfaces, I believe.
 
 
 3. User interface
