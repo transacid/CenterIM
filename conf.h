@@ -22,6 +22,8 @@
 #define __KTOOL_BEGIN_NAMESPACE		namespace ktool {
 #define __KTOOL_END_NAMESPACE		}
 
+using namespace std;
+
 #else
 
 #define __KTOOL_BEGIN_NAMESPACE
