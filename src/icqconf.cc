@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.70 2002/05/14 07:31:06 konst Exp $
+* $Id: icqconf.cc,v 1.71 2002/07/09 12:29:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,6 +25,10 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <fstream>
+
+#ifdef __sun__
+#include <sys/statvfs.h>
+#endif
 
 #include "icqconf.h"
 #include "icqface.h"
@@ -879,11 +883,15 @@ unsigned int icqconf::getsmtpport() const {
 }
 
 void icqconf::checkdiskspace() {
-    struct statfs st;
-
     fenoughdiskspace = true;
 
+#ifndef __sun__
+    struct statfs st;
     if(!statfs(conf.getdirname().c_str(), &st)) {
+#else
+    struct statvfs st;
+    if(!statvfs(conf.getdirname().c_str(), &st)) {
+#endif
 	fenoughdiskspace = ((double) st.f_bavail) * st.f_bsize >= 10240;
     }
 }

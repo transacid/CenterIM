@@ -7,13 +7,346 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.7.1\n"
-"POT-Creation-Date: 2002-07-07 02:33+0300\n"
+"POT-Creation-Date: 2002-07-09 13:36+0300\n"
 "PO-Revision-Date: 2002-05-09 00:30+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/hooks/aimhook.cc:73
+msgid "+ [aim] connecting to the server"
+msgstr "+ [aim] 連接伺服器中"
+
+#: src/hooks/aimhook.cc:84
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ [aim] 無法連接伺服器"
+
+#: src/hooks/aimhook.cc:185
+#, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ [aim] 把 %s 加入好友名單"
+
+#: src/hooks/aimhook.cc:194
+#, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ [aim] 把 %s 從好友名單中刪除"
+
+#: src/hooks/aimhook.cc:283
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr "我很喜歡 CenterICQ 預設的 AIM 資訊 %s."
+
+#: src/hooks/aimhook.cc:319
+msgid "+ [aim] logged in"
+msgstr "+ [aim] 登入"
+
+#: src/hooks/aimhook.cc:349
+msgid "+ [aim] disconnected from the network"
+msgstr "+ [aim] 離開網路"
+
+#: src/hooks/aimhook.cc:367
+msgid "aim connection failed"
+msgstr "AIM 連線失敗"
+
+#: src/hooks/aimhook.cc:369
+#, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ [aim] 連線失敗: %s"
+
+#: src/hooks/aimhook.cc:386
+#, fuzzy
+msgid "+ [aim] password was changed successfully"
+msgstr "+ [aim] 密碼已送出: "
+
+#: src/hooks/aimhook.cc:409
+msgid "The user has no profile information."
+msgstr "該使用者沒有可取得的資訊"
+
+#: src/hooks/aimhook.cc:506
+msgid "+ [aim] password sent"
+msgstr "+ [aim] 密碼已送出: "
+
+#: src/hooks/icqhook.cc:125
+msgid "+ [icq] connecting to the server"
+msgstr "+ [icq] 連接伺服器中"
+
+#: src/hooks/icqhook.cc:728
+msgid "+ [icq] logged in"
+msgstr "+ [icq] 登入"
+
+#: src/hooks/icqhook.cc:755
+msgid "as requested"
+msgstr "如您所願"
+
+#: src/hooks/icqhook.cc:756
+msgid "socket problems"
+msgstr "連線有問題"
+
+#: src/hooks/icqhook.cc:757
+msgid "bad username"
+msgstr "不正確的使用者名稱"
+
+#: src/hooks/icqhook.cc:758
+msgid "turboing"
+msgstr "加速"
+
+#: src/hooks/icqhook.cc:759
+msgid "bad password"
+msgstr "密碼錯誤"
+
+#: src/hooks/icqhook.cc:760 src/hooks/yahoohook.cc:100
+msgid "username and password mismatch"
+msgstr "使用者名稱和密碼不符"
+
+#: src/hooks/icqhook.cc:761
+msgid "already logged"
+msgstr "已登入"
+
+# msgid "+ logged in"
+# msgstr "+ 登入成功"
+#: src/hooks/icqhook.cc:774
+msgid "+ [icq] disconnected"
+msgstr "+ [icq] 連線中斷"
+
+# msgid "+ logged in"
+# msgstr "+ 登入成功"
+#: src/hooks/icqhook.cc:780
+msgid "icq disconnection reason"
+msgstr "ICQ 中斷原因"
+
+#: src/hooks/icqhook.cc:877
+msgid "* The user has added you to his/her contact list"
+msgstr "* 己經將你加入他的好友名單中"
+
+#: src/hooks/icqhook.cc:908
+#, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ [icq] 無法傳簡訊給 %s, %s"
+
+#: src/hooks/icqhook.cc:919 src/hooks/irchook.cc:496
+msgid "* Away message:"
+msgstr "* 暫離訊息"
+
+#: src/hooks/icqhook.cc:923
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] 無法取得 %s, %s 的暫離訊息"
+
+#: src/hooks/icqhook.cc:1055
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr "%s 想要獲得您的暫離訊息, 已傳送"
+
+#: src/hooks/icqhook.cc:1095
+#, c-format
+msgid "+ [icq] whitepages search finished, %d found"
+msgstr "+ [icq] 搜尋結束, 找到 %d 筆資料"
+
+#: src/hooks/irchook.cc:90
+msgid "+ [irc] connecting to the server"
+msgstr "+ [irc] 連接伺服器中"
+
+#: src/hooks/irchook.cc:102
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ [irc] 無法連接伺服器"
+
+#: src/hooks/irchook.cc:415
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr "+ [irc] 頻道使用者列表已取回, 找到 %d 筆資料"
+
+#: src/hooks/irchook.cc:601
+msgid "+ [irc] logged in"
+msgstr "+ [irc] 登入"
+
+#: src/hooks/irchook.cc:638
+msgid "+ [irc] disconnected from the network"
+msgstr "+ [irc] 離開網路"
+
+#: src/hooks/irchook.cc:652
+#, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ [irc] 連線失敗: %s"
+
+#: src/hooks/irchook.cc:669
+#, fuzzy
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [aim] 密碼已送出: "
+
+#: src/hooks/irchook.cc:740
+msgid "On channels: "
+msgstr "登入頻道 : "
+
+#: src/hooks/irchook.cc:1021
+#, c-format
+msgid "* Kicked by %s; reason: %s"
+msgstr ""
+
+#: src/hooks/irchook.cc:1040
+#, c-format
+msgid "* %s"
+msgstr ""
+
+#: src/hooks/msnhook.cc:74
+msgid "+ [msn] connecting to the server"
+msgstr "+ [msn] 連接伺服器中"
+
+#: src/hooks/msnhook.cc:78
+msgid "+ [msn] logged in"
+msgstr "+ [msn] 登入"
+
+#: src/hooks/msnhook.cc:83
+msgid "+ [msn] unable to connect to the server"
+msgstr "+ [msn] 無法連接伺服器"
+
+#: src/hooks/msnhook.cc:204
+#, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ [msn] 把 %s 從好友名單中刪除"
+
+# msgid "+ logged in"
+# msgstr "+ 登入成功"
+#: src/hooks/msnhook.cc:324
+msgid "+ [msn] disconnected"
+msgstr "+ [msn] 連線中斷"
+
+#: src/hooks/msnhook.cc:341
+#, c-format
+msgid "+ [msn] connecting with %s"
+msgstr "+ [msn] 和 %s 連線"
+
+#: src/hooks/msnhook.cc:343
+#, c-format
+msgid "+ [msn] connection from %s"
+msgstr "+ [msn] 從 %s 來的連線"
+
+#: src/hooks/msnhook.cc:353
+#, c-format
+msgid "+ [msn] e-mail from %s <%s>, %s"
+msgstr "+ [msn] 從 %s <%s> 寄來的 e-mail, %s"
+
+#: src/hooks/yahoohook.cc:72
+#, c-format
+msgid "+ initializing %s engine"
+msgstr "+ %s 引擎正在初始化"
+
+#: src/hooks/yahoohook.cc:97
+msgid "unable to connect to the pager host"
+msgstr "無法連接呼叫器伺服器"
+
+#: src/hooks/yahoohook.cc:118
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] 連接伺服器中"
+
+#: src/hooks/yahoohook.cc:123
+msgid "+ [yahoo] unable to connect to the server"
+msgstr "+ [yahoo] 無法連接伺服器"
+
+#: src/hooks/yahoohook.cc:135
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] 登入"
+
+#: src/hooks/yahoohook.cc:226
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] 把 %s 加入好友名單"
+
+#: src/hooks/yahoohook.cc:238
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] 把 %s 從好友名單中刪除"
+
+#: src/hooks/yahoohook.cc:340
+msgid "+ [yahoo] disconnected from the network"
+msgstr "+ [yahoo] 離開網路"
+
+#: src/hooks/yahoohook.cc:380
+msgid "+ [yahoo] bounced msg"
+msgstr "+ [yahoo] 訊息退回"
+
+#: src/accountmanager.cc:37
+msgid " IM account manager "
+msgstr " IM 帳號管理員"
+
+#: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:426
+#: src/icqdialogs.cc:748 src/imcontroller.cc:38
+msgid "Change"
+msgstr "修改"
+
+#: src/accountmanager.cc:43 src/icqdialogs.cc:426 src/icqdialogs.cc:748
+#: src/icqdialogs.cc:937 src/imcontroller.cc:193
+msgid "Done"
+msgstr "完成"
+
+#: src/accountmanager.cc:66
+#, c-format
+msgid " Server : %s "
+msgstr " 伺服器位址 : %s "
+
+#: src/accountmanager.cc:71
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:76
+#, c-format
+msgid " Login : %s "
+msgstr " 帳號 : %s "
+
+#: src/accountmanager.cc:82
+#, c-format
+msgid " Password : %s "
+msgstr " 密碼 : %s "
+
+#: src/accountmanager.cc:87
+msgid " Register "
+msgstr " 註冊 "
+
+#: src/accountmanager.cc:90
+msgid " Update user details "
+msgstr " 更新您的詳細資料 "
+
+#: src/accountmanager.cc:93
+msgid " Set away message "
+msgstr " 設定暫離訊息"
+
+#: src/accountmanager.cc:96
+msgid " Channel manager "
+msgstr " 頻道管理員"
+
+#: src/accountmanager.cc:98
+msgid " Drop "
+msgstr " 停用 "
+
+#: src/accountmanager.cc:116
+msgid " user name: "
+msgstr " 使用者: "
+
+#: src/accountmanager.cc:120
+msgid " uin: "
+msgstr " uin: "
+
+#: src/accountmanager.cc:124
+msgid " password: "
+msgstr " 密碼: "
+
+#: src/accountmanager.cc:129
+msgid "Drop the account information first!"
+msgstr "必需先丟棄帳號資料!"
+
+#: src/accountmanager.cc:142
+msgid "You have to disconnect the service first!"
+msgstr "必需先離線!"
+
+#: src/accountmanager.cc:151
+msgid " server address: "
+msgstr " 伺服器位址 : %s "
+
+#: src/accountmanager.cc:166 src/centericq.cc:337
+msgid "away message"
+msgstr "暫離訊息"
 
 #: src/centericq.cc:120
 msgid "password: "
@@ -46,10 +379,6 @@ msgstr "改變使用者群組"
 #: src/centericq.cc:283
 msgid "+ cannot fetch away messages being offline"
 msgstr "+ 不能在離線狀態下讀取暫離訊息"
-
-#: src/accountmanager.cc:166 src/centericq.cc:337
-msgid "away message"
-msgstr "暫離訊息"
 
 #: src/centericq.cc:512
 #, c-format
@@ -133,97 +462,97 @@ msgstr "! 磁碟空間不到 10k, 自動離線"
 msgid "! otherwise we can lose events and configuration"
 msgstr "! 否則可能會遺失重要訊息或是設定"
 
-#: src/icqconf.cc:124
+#: src/icqconf.cc:128
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "我很喜歡預設的 %s 暫離訊息 %s %s."
 
-#: src/icqconf.cc:709
+#: src/icqconf.cc:713
 msgid "event sending error: not enough parameters"
 msgstr "事件傳送錯誤 : 參數不足"
 
-#: src/icqconf.cc:720
+#: src/icqconf.cc:724
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 
-#: src/icqconf.cc:735
+#: src/icqconf.cc:739
 msgid "event sending error: unknown IM type"
 msgstr "事件傳送錯誤 : 不明的 IM 型態"
 
-#: src/icqconf.cc:757
+#: src/icqconf.cc:761
 msgid "event sending error: unknown event type"
 msgstr "事件傳送錯誤 : 不明的事件型態"
 
-#: src/icqconf.cc:769
+#: src/icqconf.cc:773
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s 到 %s 已被放入佇列中"
 
-#: src/icqconf.cc:774
+#: src/icqconf.cc:778
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr "事件傳送錯誤 : 收件者不在你的名單上"
 
-#: src/icqconf.cc:813
+#: src/icqconf.cc:817
 msgid "unknown status character was given"
 msgstr "不明的狀態字元"
 
-#: src/icqconf.cc:816
+#: src/icqconf.cc:820
 msgid "unknown IM type"
 msgstr "不明的 IM 型態"
 
-#: src/icqconf.cc:819
+#: src/icqconf.cc:823
 msgid "status change error: "
 msgstr "狀態字元有誤 : "
 
-#: src/icqcontact.cc:680
+#: src/icqcontact.cc:688
 msgid "* The user has a birthday today"
 msgstr ""
 
-#: src/icqcontact.cc:709
+#: src/icqcontact.cc:717
 msgid "Jan"
 msgstr "一月"
 
-#: src/icqcontact.cc:709
+#: src/icqcontact.cc:717
 msgid "Feb"
 msgstr "二月"
 
-#: src/icqcontact.cc:709
+#: src/icqcontact.cc:717
 msgid "Mar"
 msgstr "三月"
 
-#: src/icqcontact.cc:709
+#: src/icqcontact.cc:717
 msgid "Apr"
 msgstr "四月"
 
-#: src/icqcontact.cc:710
+#: src/icqcontact.cc:718
 msgid "May"
 msgstr "五月"
 
-#: src/icqcontact.cc:710
+#: src/icqcontact.cc:718
 msgid "Jun"
 msgstr "六月"
 
-#: src/icqcontact.cc:710
+#: src/icqcontact.cc:718
 msgid "Jul"
 msgstr "七月"
 
-#: src/icqcontact.cc:710
+#: src/icqcontact.cc:718
 msgid "Aug"
 msgstr "八月"
 
-#: src/icqcontact.cc:711
+#: src/icqcontact.cc:719
 msgid "Sep"
 msgstr "九月"
 
-#: src/icqcontact.cc:711
+#: src/icqcontact.cc:719
 msgid "Oct"
 msgstr "十月"
 
-#: src/icqcontact.cc:711
+#: src/icqcontact.cc:719
 msgid "Nov"
 msgstr "十一月"
 
-#: src/icqcontact.cc:711
+#: src/icqcontact.cc:719
 msgid "Dec"
 msgstr "十二月"
 
@@ -259,11 +588,6 @@ msgstr ""
 #: src/icqdialogs.cc:169
 msgid "cLear"
 msgstr "清除"
-
-#: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:426
-#: src/icqdialogs.cc:748 src/imcontroller.cc:38
-msgid "Change"
-msgstr "修改"
 
 #: src/icqdialogs.cc:169
 msgid "Search/Add"
@@ -520,11 +844,6 @@ msgstr " 你的 %s 資料 "
 #, c-format
 msgid " %s: details "
 msgstr " %s 的詳細資料 "
-
-#: src/accountmanager.cc:43 src/icqdialogs.cc:426 src/icqdialogs.cc:748
-#: src/icqdialogs.cc:937 src/imcontroller.cc:193
-msgid "Done"
-msgstr "完成"
 
 #: src/icqdialogs.cc:443
 msgid "Wait a moment. Your details haven't been fetched yet"
@@ -933,7 +1252,7 @@ msgstr "訊息"
 msgid "New search"
 msgstr "新搜尋"
 
-#: src/icqface.cc:603
+#: src/icqface.cc:598
 msgid "Searching contacts.."
 msgstr ""
 
@@ -1212,74 +1531,6 @@ msgstr "搜尋: "
 msgid "General"
 msgstr "一般"
 
-#: src/accountmanager.cc:37
-msgid " IM account manager "
-msgstr " IM 帳號管理員"
-
-#: src/accountmanager.cc:66
-#, c-format
-msgid " Server : %s "
-msgstr " 伺服器位址 : %s "
-
-#: src/accountmanager.cc:71
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:76
-#, c-format
-msgid " Login : %s "
-msgstr " 帳號 : %s "
-
-#: src/accountmanager.cc:82
-#, c-format
-msgid " Password : %s "
-msgstr " 密碼 : %s "
-
-#: src/accountmanager.cc:87
-msgid " Register "
-msgstr " 註冊 "
-
-#: src/accountmanager.cc:90
-msgid " Update user details "
-msgstr " 更新您的詳細資料 "
-
-#: src/accountmanager.cc:93
-msgid " Set away message "
-msgstr " 設定暫離訊息"
-
-#: src/accountmanager.cc:96
-msgid " Channel manager "
-msgstr " 頻道管理員"
-
-#: src/accountmanager.cc:98
-msgid " Drop "
-msgstr " 停用 "
-
-#: src/accountmanager.cc:116
-msgid " user name: "
-msgstr " 使用者: "
-
-#: src/accountmanager.cc:120
-msgid " uin: "
-msgstr " uin: "
-
-#: src/accountmanager.cc:124
-msgid " password: "
-msgstr " 密碼: "
-
-#: src/accountmanager.cc:129
-msgid "Drop the account information first!"
-msgstr "必需先丟棄帳號資料!"
-
-#: src/accountmanager.cc:142
-msgid "You have to disconnect the service first!"
-msgstr "必需先離線!"
-
-#: src/accountmanager.cc:151
-msgid " server address: "
-msgstr " 伺服器位址 : %s "
-
 #: src/imcontroller.cc:32
 msgid " Register on ICQ network "
 msgstr " 註冊 ICQ "
@@ -1414,162 +1665,14 @@ msgstr "欲加入的頻道名 : "
 msgid "registration is not supported"
 msgstr "註冊目前尚未支援"
 
-#: src/hooks/icqhook.cc:125
-msgid "+ [icq] connecting to the server"
-msgstr "+ [icq] 連接伺服器中"
-
-#: src/hooks/icqhook.cc:728
-msgid "+ [icq] logged in"
-msgstr "+ [icq] 登入"
-
-#: src/hooks/icqhook.cc:755
-msgid "as requested"
-msgstr "如您所願"
-
-#: src/hooks/icqhook.cc:756
-msgid "socket problems"
-msgstr "連線有問題"
-
-#: src/hooks/icqhook.cc:757
-msgid "bad username"
-msgstr "不正確的使用者名稱"
-
-#: src/hooks/icqhook.cc:758
-msgid "turboing"
-msgstr "加速"
-
-#: src/hooks/icqhook.cc:759
-msgid "bad password"
-msgstr "密碼錯誤"
-
-#: src/hooks/icqhook.cc:760 src/hooks/yahoohook.cc:100
-msgid "username and password mismatch"
-msgstr "使用者名稱和密碼不符"
-
-#: src/hooks/icqhook.cc:761
-msgid "already logged"
-msgstr "已登入"
-
-# msgid "+ logged in"
-# msgstr "+ 登入成功"
-#: src/hooks/icqhook.cc:774
-msgid "+ [icq] disconnected"
-msgstr "+ [icq] 連線中斷"
-
-# msgid "+ logged in"
-# msgstr "+ 登入成功"
-#: src/hooks/icqhook.cc:780
-msgid "icq disconnection reason"
-msgstr "ICQ 中斷原因"
-
-#: src/hooks/icqhook.cc:877
-msgid "* The user has added you to his/her contact list"
-msgstr "* 己經將你加入他的好友名單中"
-
-#: src/hooks/icqhook.cc:908
-#, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ [icq] 無法傳簡訊給 %s, %s"
-
-#: src/hooks/icqhook.cc:919 src/hooks/irchook.cc:495
-msgid "* Away message:"
-msgstr "* 暫離訊息"
-
-#: src/hooks/icqhook.cc:923
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] 無法取得 %s, %s 的暫離訊息"
-
-#: src/hooks/icqhook.cc:1055
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s 想要獲得您的暫離訊息, 已傳送"
-
-#: src/hooks/icqhook.cc:1095
-#, c-format
-msgid "+ [icq] whitepages search finished, %d found"
-msgstr "+ [icq] 搜尋結束, 找到 %d 筆資料"
-
-#: src/hooks/yahoohook.cc:72
-#, c-format
-msgid "+ initializing %s engine"
-msgstr "+ %s 引擎正在初始化"
-
-#: src/hooks/yahoohook.cc:97
-msgid "unable to connect to the pager host"
-msgstr "無法連接呼叫器伺服器"
-
-#: src/hooks/yahoohook.cc:118
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] 連接伺服器中"
-
-#: src/hooks/yahoohook.cc:123
-msgid "+ [yahoo] unable to connect to the server"
-msgstr "+ [yahoo] 無法連接伺服器"
-
-#: src/hooks/yahoohook.cc:135
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] 登入"
-
-#: src/hooks/yahoohook.cc:226
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] 把 %s 加入好友名單"
-
-#: src/hooks/yahoohook.cc:238
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] 把 %s 從好友名單中刪除"
-
-#: src/hooks/yahoohook.cc:340
-msgid "+ [yahoo] disconnected from the network"
-msgstr "+ [yahoo] 離開網路"
-
-#: src/hooks/yahoohook.cc:380
-msgid "+ [yahoo] bounced msg"
-msgstr "+ [yahoo] 訊息退回"
-
-#: src/hooks/msnhook.cc:74
-msgid "+ [msn] connecting to the server"
-msgstr "+ [msn] 連接伺服器中"
-
-#: src/hooks/msnhook.cc:78
-msgid "+ [msn] logged in"
-msgstr "+ [msn] 登入"
-
-#: src/hooks/msnhook.cc:83
-msgid "+ [msn] unable to connect to the server"
-msgstr "+ [msn] 無法連接伺服器"
-
-#: src/hooks/msnhook.cc:204
-#, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ [msn] 把 %s 從好友名單中刪除"
-
-# msgid "+ logged in"
-# msgstr "+ 登入成功"
-#: src/hooks/msnhook.cc:324
-msgid "+ [msn] disconnected"
-msgstr "+ [msn] 連線中斷"
-
-#: src/hooks/msnhook.cc:341
-#, c-format
-msgid "+ [msn] connecting with %s"
-msgstr "+ [msn] 和 %s 連線"
-
-#: src/hooks/msnhook.cc:343
-#, c-format
-msgid "+ [msn] connection from %s"
-msgstr "+ [msn] 從 %s 來的連線"
-
-#: src/hooks/msnhook.cc:353
-#, c-format
-msgid "+ [msn] e-mail from %s <%s>, %s"
-msgstr "+ [msn] 從 %s <%s> 寄來的 e-mail, %s"
-
 #: src/imevents.cc:241
 msgid "Empty authorization request message"
 msgstr "空白的認證要求"
+
+#: src/imexternal.cc:96
+#, c-format
+msgid "executed external action %s"
+msgstr "執行外部命令 %s"
 
 #: src/imlogger.cc:23
 msgid "events log started"
@@ -1618,109 +1721,6 @@ msgstr "%s: 離線中"
 #, c-format
 msgid "changed our %s status to %s from %s"
 msgstr "把您的 %s 狀態從 %s 變成 %s"
-
-#: src/imexternal.cc:96
-#, c-format
-msgid "executed external action %s"
-msgstr "執行外部命令 %s"
-
-#: src/hooks/aimhook.cc:73
-msgid "+ [aim] connecting to the server"
-msgstr "+ [aim] 連接伺服器中"
-
-#: src/hooks/aimhook.cc:84
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ [aim] 無法連接伺服器"
-
-#: src/hooks/aimhook.cc:185
-#, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ [aim] 把 %s 加入好友名單"
-
-#: src/hooks/aimhook.cc:194
-#, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ [aim] 把 %s 從好友名單中刪除"
-
-#: src/hooks/aimhook.cc:283
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr "我很喜歡 CenterICQ 預設的 AIM 資訊 %s."
-
-#: src/hooks/aimhook.cc:319
-msgid "+ [aim] logged in"
-msgstr "+ [aim] 登入"
-
-#: src/hooks/aimhook.cc:349
-msgid "+ [aim] disconnected from the network"
-msgstr "+ [aim] 離開網路"
-
-#: src/hooks/aimhook.cc:367
-msgid "aim connection failed"
-msgstr "AIM 連線失敗"
-
-#: src/hooks/aimhook.cc:369
-#, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ [aim] 連線失敗: %s"
-
-#: src/hooks/aimhook.cc:386
-#, fuzzy
-msgid "+ [aim] password was changed successfully"
-msgstr "+ [aim] 密碼已送出: "
-
-#: src/hooks/aimhook.cc:409
-msgid "The user has no profile information."
-msgstr "該使用者沒有可取得的資訊"
-
-#: src/hooks/aimhook.cc:506
-msgid "+ [aim] password sent"
-msgstr "+ [aim] 密碼已送出: "
-
-#: src/hooks/irchook.cc:89
-msgid "+ [irc] connecting to the server"
-msgstr "+ [irc] 連接伺服器中"
-
-#: src/hooks/irchook.cc:101
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ [irc] 無法連接伺服器"
-
-#: src/hooks/irchook.cc:414
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr "+ [irc] 頻道使用者列表已取回, 找到 %d 筆資料"
-
-#: src/hooks/irchook.cc:577
-msgid "+ [irc] logged in"
-msgstr "+ [irc] 登入"
-
-#: src/hooks/irchook.cc:614
-msgid "+ [irc] disconnected from the network"
-msgstr "+ [irc] 離開網路"
-
-#: src/hooks/irchook.cc:628
-#, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ [irc] 連線失敗: %s"
-
-#: src/hooks/irchook.cc:645
-#, fuzzy
-msgid "+ [irc] nickname was changed successfully"
-msgstr "+ [aim] 密碼已送出: "
-
-#: src/hooks/irchook.cc:716
-msgid "On channels: "
-msgstr "登入頻道 : "
-
-#: src/hooks/irchook.cc:997
-#, c-format
-msgid "* Kicked by %s; reason: %s"
-msgstr ""
-
-#: src/hooks/irchook.cc:1016
-#, c-format
-msgid "* %s"
-msgstr ""
 
 #: src/icqface.h:227
 msgid "yes"
