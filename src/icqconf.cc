@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.87 2002/10/30 13:06:16 konst Exp $
+* $Id: icqconf.cc,v 1.88 2002/11/01 18:05:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -170,9 +170,11 @@ void icqconf::setawaymsg(protocolname pname, const string &amsg) {
 }
 
 void icqconf::checkdir() {
-    if(access(getdirname().c_str(), F_OK)) {
-	mkdir(getdirname().c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
-    }
+    string dname = getdirname();
+    dname.erase(dname.size()-1);
+
+    if(access(dname.c_str(), F_OK))
+	mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
 }
 
 void icqconf::load() {

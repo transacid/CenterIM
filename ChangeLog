@@ -1215,3 +1215,28 @@ the list get updated as soon as a remote changes their nick.
 The program now compiles and hopefully works well on the MacOS X/Darwin
 platform.
 
+4.8.7
+-----
+
+Several problems with Cyrillic characters were eliminated. It was
+impossible to perform ICQ White Pages searches using Cyrillic letters.
+Also when receiving messages with the letters used along with characters
+unknown for the koi8-r codepage, it resulted into showing it in bare
+cp1251. Also a guessing routine was written in order to be able to
+receive Yahoo! messages written both in cp1251 and utf-8 (the recent
+"improvement" by Yahoo).
+
+A patch written by Andreas Winge <d98winge@dtek.chalmers.se> was
+applied. The changes from it make it possible to join password-protected
+channels on the IRC network.
+
+"On fly" auto-reloading of configuration files was implemented, to
+eliminate the need to restart the program every time the files are
+changed. Centericq periodically checks them whether any modifications
+took place. If so, they get re-read. The ones that get re-read now are:
+sounds, colorscheme, actions and external. 
+
+The Yahoo! module was extended with the the feature to send and receive
+files, view conference members and creating own conferences. Before it
+was only possible to join to conferences being created by others. Also
+it's now possible to fetch custom status messages in the network.

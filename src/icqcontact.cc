@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.68 2002/10/22 11:36:04 konst Exp $
+* $Id: icqcontact.cc,v 1.69 2002/11/01 18:05:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -139,13 +139,16 @@ void icqcontact::save() {
     string infoname = getdirname() + "info";
     string aboutname = getdirname() + "about";
 
+    string dname = getdirname();
+    dname.erase(dname.size()-1);
+
     modified = modified
 	|| access(lrname.c_str(), F_OK)
 	|| access(infoname.c_str(), F_OK)
 	|| access(aboutname.c_str(), F_OK);
 
     if(modified && conf.enoughdiskspace()) {
-	mkdir(getdirname().c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+	mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
 
 	if(!access(getdirname().c_str(), W_OK)) {
 	    f.open(lrname.c_str());

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-11-01 14:04+0200\n"
+"POT-Creation-Date: 2002-11-01 17:36+0200\n"
 "PO-Revision-Date: 2002-10-03 18:36GMT\n"
 "Last-Translator: Ferenc Veres <lion@netngine.hu>\n"
 "Language-Team: hungarian <hu@li.org>\n"
@@ -13,6 +13,383 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.5\n"
+
+#: src/hooks/aimhook.cc:58
+msgid "+ [aim] connecting to the server"
+msgstr "+ [aim] kapcsolódás a szerverhez"
+
+#: src/hooks/aimhook.cc:87
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ [aim] nem lehet kapcsolódni a szerverhez"
+
+#: src/hooks/aimhook.cc:197
+#, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ [aim] %s hozzáadása a kapcsolatokhoz"
+
+#: src/hooks/aimhook.cc:211
+#, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ [aim] %s eltávolítása a kapcsolatok közül"
+
+#: src/hooks/aimhook.cc:309
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr "Igazán meg vagyok elégedve a centericq alap AIM beállításaival %s."
+
+#: src/hooks/aimhook.cc:361
+msgid "+ [aim] logged in"
+msgstr "+ [aim] bejelentkezve"
+
+#: src/hooks/aimhook.cc:378
+msgid "+ [aim] disconnected from the network"
+msgstr "+ [aim] lekapcsolva a hálózatról"
+
+#: src/hooks/aimhook.cc:396
+msgid "aim connection failed"
+msgstr "[aim] sikertelen kapcsolódás"
+
+#: src/hooks/aimhook.cc:398
+#, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ [aim] sikertelen kapcsolódás: %s"
+
+#: src/hooks/aimhook.cc:415
+msgid "+ [aim] password was changed successfully"
+msgstr "+ [aim] a jelszóváltoztatás rendben"
+
+#: src/hooks/aimhook.cc:438
+msgid "The user has no profile information."
+msgstr "A felhasználónak nincsenek megadva a személyi adatai"
+
+#: src/hooks/aimhook.cc:531
+msgid "+ [aim] password sent"
+msgstr "+ [aim] jelszó elküldve"
+
+#: src/hooks/icqhook.cc:136
+msgid "+ [icq] connecting to the server"
+msgstr "+ [icq] kapcsolódás a szerverhez"
+
+#: src/hooks/icqhook.cc:953
+msgid "+ [icq] logged in"
+msgstr "+ [icq] bejelentkezve"
+
+#: src/hooks/icqhook.cc:980
+msgid "as requested"
+msgstr "kérésre"
+
+#: src/hooks/icqhook.cc:981
+msgid "socket problems"
+msgstr "hálózati problémák"
+
+#: src/hooks/icqhook.cc:982
+msgid "bad username"
+msgstr "hibás felhasználónév"
+
+#: src/hooks/icqhook.cc:983
+msgid "turboing"
+msgstr "turbózás"
+
+#: src/hooks/icqhook.cc:984
+msgid "bad password"
+msgstr "hibás jelszó"
+
+#: src/hooks/icqhook.cc:985
+msgid "username and password mismatch"
+msgstr "hibás azonosító és jelszó"
+
+#: src/hooks/icqhook.cc:986
+msgid "already logged"
+msgstr "már bejelentkezve"
+
+#: src/hooks/icqhook.cc:999
+msgid "+ [icq] disconnected"
+msgstr "+ [icq] szétkapcsolódva"
+
+#: src/hooks/icqhook.cc:1005
+msgid "icq disconnection reason"
+msgstr "icq szétkapcsolódás oka"
+
+#: src/hooks/icqhook.cc:1064
+msgid "The user has accepted your authorization request"
+msgstr "A felhasználó elfogadta az azonosítási kérelmet"
+
+#: src/hooks/icqhook.cc:1068
+msgid "The user has rejected your authorization request; the message was: "
+msgstr "A felhasználó megtagadta az azonosítási kérelmet. Az üzenet:"
+
+#: src/hooks/icqhook.cc:1083 src/hooks/yahoohook.cc:763
+msgid "The user has added you to his/her contact list"
+msgstr "A felhasználó felvette az azonosítót a kapcsolataihoz"
+
+#: src/hooks/icqhook.cc:1123
+#, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ [icq] sikertelen SMS következõnek: %s, %s"
+
+#: src/hooks/icqhook.cc:1126
+#, c-format
+msgid "+ [icq] failed SMS to %s"
+msgstr "+ [icq] sikertelen SMS következõnek: %s"
+
+#: src/hooks/icqhook.cc:1137 src/hooks/irchook.cc:557
+msgid "Away message:"
+msgstr "Távollét oka:"
+
+#: src/hooks/icqhook.cc:1141
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] a távolléti ok lekérdezése sikertelen a következõtõl: %s, %s"
+
+#: src/hooks/icqhook.cc:1272
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr "%s lekérdezte a beállított távolléti okot, a válasz elküldve"
+
+#: src/hooks/icqhook.cc:1288
+msgid "Random Chat User"
+msgstr "Véletlenszerû beszélgetõpartner (Random Chat User)"
+
+#: src/hooks/icqhook.cc:1318
+#, c-format
+msgid "+ [icq] whitepages search finished, %d found"
+msgstr "+ [icq] a keresés befejezõdött, %d találat van"
+
+#: src/hooks/irchook.cc:116
+msgid "+ [irc] connecting to the server"
+msgstr "+ [irc] kapcsolódás a szerverhez"
+
+#: src/hooks/irchook.cc:128
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ [irc] a kapcsolódás a szerverhez sikertelen"
+
+#: src/hooks/irchook.cc:476
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr "+ [irc] a csatornán lévõk száma: %d"
+
+#: src/hooks/irchook.cc:727
+msgid "+ [irc] logged in"
+msgstr "+ [irc] bejelentkezve"
+
+#: src/hooks/irchook.cc:765
+msgid "+ [irc] disconnected from the network"
+msgstr "+ [irc] leválasztva a hálózatról"
+
+#: src/hooks/irchook.cc:779
+#, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ [irc] sikertelen kapcsolódás: %s"
+
+#: src/hooks/irchook.cc:796
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [irc] az azonosító megváltoztatva"
+
+#: src/hooks/irchook.cc:867
+msgid "On channels: "
+msgstr "Csatornák:"
+
+#: src/hooks/irchook.cc:1156
+#, c-format
+msgid "Kicked by %s; reason: %s"
+msgstr "Kirúgva a csatornáról %s által, indok: %s"
+
+#: src/hooks/irchook.cc:1211
+#, c-format
+msgid "The user has changed their nick from %s to %s"
+msgstr "%s megváltoztatta a nevét., az új név: %s"
+
+#: src/hooks/irchook.cc:1231
+msgid "+ [irc] password sent"
+msgstr "+ [irc] jelszó elküldve"
+
+#: src/hooks/irchook.cc:1233
+msgid "+ [irc] password was requested, but it's not set"
+msgstr "+ [irc] jelszó lekérve, de nincs elküldve"
+
+#: src/hooks/irchook.cc:1257
+#, c-format
+msgid "PING reply from the user: %d second(s)"
+msgstr ""
+
+#: src/hooks/irchook.cc:1262
+#, c-format
+msgid "The remote is using %s"
+msgstr ""
+
+#: src/hooks/msnhook.cc:73
+msgid "+ [msn] connecting to the server"
+msgstr "+ [msn] kapcsolódás a szerverhez"
+
+#: src/hooks/msnhook.cc:77
+msgid "+ [msn] logged in"
+msgstr "+ [msn] bejelentkezve"
+
+#: src/hooks/msnhook.cc:82
+msgid "+ [msn] unable to connect to the server"
+msgstr "+ [msn] a kapcsolódás a szerverhez sikertelen"
+
+#: src/hooks/msnhook.cc:219
+#, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ [msn] %s eltávolítása a kapcsolatok közül"
+
+#: src/hooks/msnhook.cc:303
+#, c-format
+msgid "+ [msn] reverse users listing finished, %d found"
+msgstr "+ [msn] fordított felhasználólistázás befejezve, %s találat"
+
+#: src/hooks/msnhook.cc:414
+msgid "+ [msn] disconnected"
+msgstr "+ [msn] leválasztva"
+
+#: src/hooks/msnhook.cc:431
+#, c-format
+msgid "+ [msn] connecting with %s"
+msgstr "+ [msn] kapcsolódás a következõhöz: %s"
+
+#: src/hooks/msnhook.cc:433
+#, c-format
+msgid "+ [msn] connection from %s"
+msgstr "+ [msn] kapcsolódás a következõtõl: %s"
+
+#: src/hooks/msnhook.cc:449
+#, c-format
+msgid "+ [msn] e-mail from %s <%s>, %s"
+msgstr "+ [msn] e-mail a következõtõl: %s <%s>, %s"
+
+#: src/hooks/yahoohook.cc:103
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] kapcsolódás a szerverhez"
+
+#: src/hooks/yahoohook.cc:111
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] a kapcsolódás a szerverhez sikertelen"
+
+#: src/hooks/yahoohook.cc:114
+msgid "could not resolve hostname"
+msgstr "a gépnév visszafejtése nem sikerült "
+
+#: src/hooks/yahoohook.cc:115
+msgid "could not create socket"
+msgstr "hálózati foglalat lérehozása nem sikerült"
+
+#: src/hooks/yahoohook.cc:116
+msgid "verify the pager host and port entered"
+msgstr "a gép és kapu ellenõrzése"
+
+#: src/hooks/yahoohook.cc:162
+msgid "+ [yahoo] disconnected"
+msgstr "+ [yahoo] leválasztva"
+
+#: src/hooks/yahoohook.cc:278
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] %s hozzáadása a kapcsolatokhoz"
+
+#: src/hooks/yahoohook.cc:299
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] %s eltávolítása a kapcsolatok közül"
+
+#: src/hooks/yahoohook.cc:313
+#, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] kilépés a %s konferenciából"
+
+#: src/hooks/yahoohook.cc:536
+#, fuzzy, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr "+ [irc] a csatornán lévõk száma: %d"
+
+#: src/hooks/yahoohook.cc:557
+#, fuzzy
+msgid "Please join my conference."
+msgstr "%s csatlakozott a konferenciához"
+
+#: src/hooks/yahoohook.cc:568
+msgid "Custom status message:"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:572
+#, fuzzy, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] a távolléti ok lekérdezése sikertelen a következõtõl: %s, %s"
+
+#: src/hooks/yahoohook.cc:588
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] bejelentkezve"
+
+#: src/hooks/yahoohook.cc:603
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "+ [yahoo] sikertelen bejelentkezés: hibás azonosító vagy jelszó"
+
+#: src/hooks/yahoohook.cc:608
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr "+ [yahoo] sikertelen bejelentkezés: a bejelentkezést letiltották"
+
+#: src/hooks/yahoohook.cc:609
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr "+ engedélyezhetõ: %s"
+
+#: src/hooks/yahoohook.cc:676
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "%s meghívja a %s konferenciára, a téma %s"
+
+#: src/hooks/yahoohook.cc:679
+msgid "Current conference members are: "
+msgstr "A konferencián résztvevõk:"
+
+#: src/hooks/yahoohook.cc:696
+msgid "Auto-joined the conference"
+msgstr "Automatikusan belépve a konferenciára"
+
+#: src/hooks/yahoohook.cc:706
+#, fuzzy, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr "%s csatlakozott a konferenciához"
+
+#: src/hooks/yahoohook.cc:716
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr "%s csatlakozott a konferenciához"
+
+#: src/hooks/yahoohook.cc:731
+#, c-format
+msgid "The user %s has left the conference"
+msgstr "%s elhagyta a konferenciát"
+
+#: src/hooks/yahoohook.cc:767
+msgid "the message was: "
+msgstr "az üzenet:"
+
+#: src/hooks/yahoohook.cc:779
+#, c-format
+msgid "+ [yahoo] %s: started typing"
+msgstr "+ [yahoo] %s gépel"
+
+#: src/hooks/yahoohook.cc:779
+#, c-format
+msgid "+ [yahoo] %s: stopped typing"
+msgstr "+ [yahoo] %s megállt a gépeléssel"
+
+#: src/hooks/yahoohook.cc:796
+#, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [yahoo] e-mail a következõtõl: %s, %s"
+
+#: src/hooks/yahoohook.cc:803
+#, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] rendszer: %s"
+
+#: src/hooks/yahoohook.cc:808
+#, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] hiba: %s"
 
 #: src/centericq.cc:121 src/imcontroller.cc:322
 msgid "password: "
@@ -143,156 +520,252 @@ msgstr "! a lemez betelése naplók és beállítások elvesztéséhez vezet"
 msgid "Invite to conference.."
 msgstr "Automatikusan belépve a konferenciára"
 
+#: src/accountmanager.cc:38
+msgid " IM account manager "
+msgstr " IM felhasználókezelõ"
+
+#: src/accountmanager.cc:44 src/icqdialogs.cc:202 src/icqdialogs.cc:497
+#: src/icqdialogs.cc:847 src/imcontroller.cc:41
+msgid "Change"
+msgstr "Változtat"
+
+#: src/accountmanager.cc:44 src/icqdialogs.cc:497 src/icqdialogs.cc:847
+#: src/icqdialogs.cc:1044 src/imcontroller.cc:281
+msgid "Done"
+msgstr "Kész"
+
+#: src/accountmanager.cc:67
+#, c-format
+msgid " Server : %s "
+msgstr " Szerver : %s "
+
+#: src/accountmanager.cc:72
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:77
+#, c-format
+msgid " Login : %s "
+msgstr " Azonosító : %s "
+
+#: src/accountmanager.cc:83
+#, c-format
+msgid " Password (optional) : %s "
+msgstr " Jelszó (nem kötelezõ) : %s "
+
+#: src/accountmanager.cc:83
+#, c-format
+msgid " Password : %s "
+msgstr " Jelszó : %s "
+
+#: src/accountmanager.cc:87
+msgid " Register "
+msgstr " Regisztráció"
+
+#: src/accountmanager.cc:93
+#, fuzzy
+msgid " Change nickname "
+msgstr " Aznosító "
+
+#: src/accountmanager.cc:94
+msgid " Update user details "
+msgstr " Adatok frissítése"
+
+#: src/accountmanager.cc:97
+msgid " Set away message "
+msgstr " Távollét oka"
+
+#: src/accountmanager.cc:100
+msgid " Channel manager "
+msgstr " Csatornakezelõ"
+
+#: src/accountmanager.cc:103
+msgid " Synchronize contact list "
+msgstr " Kapcsolati lista szinkronizálása"
+
+#: src/accountmanager.cc:105
+msgid " Drop "
+msgstr " Elvet"
+
+#: src/accountmanager.cc:123
+msgid " user name: "
+msgstr " felhasználónév:"
+
+#: src/accountmanager.cc:128
+msgid " uin: "
+msgstr " uin: "
+
+#: src/accountmanager.cc:133
+msgid " password: "
+msgstr " jelszó: "
+
+#: src/accountmanager.cc:141
+msgid "Drop the account information first!"
+msgstr "Elõbb az azonosító adatait kell törölni."
+
+#: src/accountmanager.cc:155
+msgid "You have to disconnect the service first!"
+msgstr "Elõbb a szolgáltáról le kell csatlakozni!"
+
+#: src/accountmanager.cc:164
+msgid " server address: "
+msgstr " szerver cím: "
+
+#: src/accountmanager.cc:190
+msgid "You must be logged in to preform the synchronization"
+msgstr "A szinkronizáláshoz elõbb be kell jelentkezni"
+
 #: src/icqconf.cc:147
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Meg vagyok elégedve az alap %s távolléti okkal: %s %s"
 
-#: src/icqconf.cc:608
+#: src/icqconf.cc:610
 msgid "+ launched the openurl command"
 msgstr ""
 
-#: src/icqconf.cc:763
+#: src/icqconf.cc:765
 msgid "event sending error: not enough parameters"
 msgstr "eseményküldési hiba: kevés paraméter"
 
-#: src/icqconf.cc:774
+#: src/icqconf.cc:776
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "eseményküldési hiba: csak az UIN engedélyezett az icq protokollon"
 
-#: src/icqconf.cc:789
+#: src/icqconf.cc:791
 msgid "event sending error: unknown IM type"
 msgstr "eseményküldési hiba: ismeretlen IM típus"
 
-#: src/icqconf.cc:811
+#: src/icqconf.cc:813
 msgid "event sending error: unknown event type"
 msgstr "eseményküldési hiba: ismeretlen esemény típus"
 
-#: src/icqconf.cc:823
+#: src/icqconf.cc:825
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s %s részére bekerült a pufferbe"
 
-#: src/icqconf.cc:829
+#: src/icqconf.cc:831
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr "eseményküldés: a címzett nem szerepel a kapcsolatok között"
 
-#: src/icqconf.cc:871
+#: src/icqconf.cc:873
 msgid "unknown status character was given"
 msgstr "ismeretlen állapotkarakter"
 
-#: src/icqconf.cc:874
+#: src/icqconf.cc:876
 msgid "unknown IM type"
 msgstr "ismeretlen IM típus"
 
-#: src/icqconf.cc:877
+#: src/icqconf.cc:879
 msgid "status change error: "
 msgstr "az állapot megváltoztatása sikertelen:"
 
-#: src/icqconf.cc:886
+#: src/icqconf.cc:888
 #, fuzzy
 msgid "Usage: "
 msgstr "Kor: "
 
-#: src/icqconf.cc:888
+#: src/icqconf.cc:890
 #, fuzzy
 msgid "General options:"
 msgstr "Általános"
 
-#: src/icqconf.cc:889
+#: src/icqconf.cc:891
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 
-#: src/icqconf.cc:890
+#: src/icqconf.cc:892
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr ""
 
-#: src/icqconf.cc:891
+#: src/icqconf.cc:893
 #, fuzzy
 msgid "  --help                   display this stuff"
 msgstr " Állapot megváltoztatása         s"
 
-#: src/icqconf.cc:893
+#: src/icqconf.cc:895
 #, fuzzy
 msgid "Events sending options:"
 msgstr " CenterICQ beállítások"
 
-#: src/icqconf.cc:894
+#: src/icqconf.cc:896
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 
-#: src/icqconf.cc:895
+#: src/icqconf.cc:897
 msgid "  -S, --status <status>    change the current IM status"
 msgstr ""
 
-#: src/icqconf.cc:896
+#: src/icqconf.cc:898
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc"
 msgstr ""
 
-#: src/icqconf.cc:897
+#: src/icqconf.cc:899
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 
-#: src/icqconf.cc:898
+#: src/icqconf.cc:900
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 
-#: src/icqconf.cc:900
+#: src/icqconf.cc:902
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 
-#: src/icqcontact.cc:704
+#: src/icqcontact.cc:707
 msgid "The user has a birthday today"
 msgstr "Ma van a születésnapja"
 
-#: src/icqcontact.cc:732
+#: src/icqcontact.cc:735
 msgid "Jan"
 msgstr "Jan"
 
-#: src/icqcontact.cc:732
+#: src/icqcontact.cc:735
 msgid "Feb"
 msgstr "Feb"
 
-#: src/icqcontact.cc:732
+#: src/icqcontact.cc:735
 msgid "Mar"
 msgstr "Márc"
 
-#: src/icqcontact.cc:732
+#: src/icqcontact.cc:735
 msgid "Apr"
 msgstr "Ápr"
 
-#: src/icqcontact.cc:733
+#: src/icqcontact.cc:736
 msgid "May"
 msgstr "Máj"
 
-#: src/icqcontact.cc:733
+#: src/icqcontact.cc:736
 msgid "Jun"
 msgstr "Jún"
 
-#: src/icqcontact.cc:733
+#: src/icqcontact.cc:736
 msgid "Jul"
 msgstr "Júl"
 
-#: src/icqcontact.cc:733
+#: src/icqcontact.cc:736
 msgid "Aug"
 msgstr "Aug"
 
-#: src/icqcontact.cc:734
+#: src/icqcontact.cc:737
 msgid "Sep"
 msgstr "Szept"
 
-#: src/icqcontact.cc:734
+#: src/icqcontact.cc:737
 msgid "Oct"
 msgstr "Okt"
 
-#: src/icqcontact.cc:734
+#: src/icqcontact.cc:737
 msgid "Nov"
 msgstr "Nov"
 
-#: src/icqcontact.cc:734
+#: src/icqcontact.cc:737
 msgid "Dec"
 msgstr "Dec"
 
@@ -372,11 +845,6 @@ msgstr "Mentés"
 #: src/icqdialogs.cc:202
 msgid "cLear"
 msgstr "Törlés"
-
-#: src/accountmanager.cc:44 src/icqdialogs.cc:202 src/icqdialogs.cc:497
-#: src/icqdialogs.cc:847 src/imcontroller.cc:41
-msgid "Change"
-msgstr "Változtat"
 
 #: src/icqdialogs.cc:202
 msgid "Search/Add"
@@ -678,11 +1146,6 @@ msgstr " %s adatok "
 #, c-format
 msgid " %s: details "
 msgstr " %s: adatai "
-
-#: src/accountmanager.cc:44 src/icqdialogs.cc:497 src/icqdialogs.cc:847
-#: src/icqdialogs.cc:1044 src/imcontroller.cc:281
-msgid "Done"
-msgstr "Kész"
 
 #: src/icqdialogs.cc:514
 msgid "Wait a moment. Your details haven't been fetched yet"
@@ -1540,92 +2003,6 @@ msgstr "keresés:"
 msgid "General"
 msgstr "Általános"
 
-#: src/accountmanager.cc:38
-msgid " IM account manager "
-msgstr " IM felhasználókezelõ"
-
-#: src/accountmanager.cc:67
-#, c-format
-msgid " Server : %s "
-msgstr " Szerver : %s "
-
-#: src/accountmanager.cc:72
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:77
-#, c-format
-msgid " Login : %s "
-msgstr " Azonosító : %s "
-
-#: src/accountmanager.cc:83
-#, c-format
-msgid " Password (optional) : %s "
-msgstr " Jelszó (nem kötelezõ) : %s "
-
-#: src/accountmanager.cc:83
-#, c-format
-msgid " Password : %s "
-msgstr " Jelszó : %s "
-
-#: src/accountmanager.cc:87
-msgid " Register "
-msgstr " Regisztráció"
-
-#: src/accountmanager.cc:93
-#, fuzzy
-msgid " Change nickname "
-msgstr " Aznosító "
-
-#: src/accountmanager.cc:94
-msgid " Update user details "
-msgstr " Adatok frissítése"
-
-#: src/accountmanager.cc:97
-msgid " Set away message "
-msgstr " Távollét oka"
-
-#: src/accountmanager.cc:100
-msgid " Channel manager "
-msgstr " Csatornakezelõ"
-
-#: src/accountmanager.cc:103
-msgid " Synchronize contact list "
-msgstr " Kapcsolati lista szinkronizálása"
-
-#: src/accountmanager.cc:105
-msgid " Drop "
-msgstr " Elvet"
-
-#: src/accountmanager.cc:123
-msgid " user name: "
-msgstr " felhasználónév:"
-
-#: src/accountmanager.cc:128
-msgid " uin: "
-msgstr " uin: "
-
-#: src/accountmanager.cc:133
-msgid " password: "
-msgstr " jelszó: "
-
-#: src/accountmanager.cc:141
-msgid "Drop the account information first!"
-msgstr "Elõbb az azonosító adatait kell törölni."
-
-#: src/accountmanager.cc:155
-msgid "You have to disconnect the service first!"
-msgstr "Elõbb a szolgáltáról le kell csatlakozni!"
-
-#: src/accountmanager.cc:164
-msgid " server address: "
-msgstr " szerver cím: "
-
-#: src/accountmanager.cc:190
-msgid "You must be logged in to preform the synchronization"
-msgstr "A szinkronizáláshoz elõbb be kell jelentkezni"
-
 #: src/imcontroller.cc:35
 msgid " Register on ICQ network "
 msgstr " Regisztráció az ICQ hálózaton "
@@ -1828,269 +2205,6 @@ msgstr "csatorna: "
 msgid "registration is not supported"
 msgstr "a regisztráció nincs támogatva"
 
-#: src/hooks/icqhook.cc:136
-msgid "+ [icq] connecting to the server"
-msgstr "+ [icq] kapcsolódás a szerverhez"
-
-#: src/hooks/icqhook.cc:953
-msgid "+ [icq] logged in"
-msgstr "+ [icq] bejelentkezve"
-
-#: src/hooks/icqhook.cc:980
-msgid "as requested"
-msgstr "kérésre"
-
-#: src/hooks/icqhook.cc:981
-msgid "socket problems"
-msgstr "hálózati problémák"
-
-#: src/hooks/icqhook.cc:982
-msgid "bad username"
-msgstr "hibás felhasználónév"
-
-#: src/hooks/icqhook.cc:983
-msgid "turboing"
-msgstr "turbózás"
-
-#: src/hooks/icqhook.cc:984
-msgid "bad password"
-msgstr "hibás jelszó"
-
-#: src/hooks/icqhook.cc:985
-msgid "username and password mismatch"
-msgstr "hibás azonosító és jelszó"
-
-#: src/hooks/icqhook.cc:986
-msgid "already logged"
-msgstr "már bejelentkezve"
-
-#: src/hooks/icqhook.cc:999
-msgid "+ [icq] disconnected"
-msgstr "+ [icq] szétkapcsolódva"
-
-#: src/hooks/icqhook.cc:1005
-msgid "icq disconnection reason"
-msgstr "icq szétkapcsolódás oka"
-
-#: src/hooks/icqhook.cc:1064
-msgid "The user has accepted your authorization request"
-msgstr "A felhasználó elfogadta az azonosítási kérelmet"
-
-#: src/hooks/icqhook.cc:1068
-msgid "The user has rejected your authorization request; the message was: "
-msgstr "A felhasználó megtagadta az azonosítási kérelmet. Az üzenet:"
-
-#: src/hooks/icqhook.cc:1083 src/hooks/yahoohook.cc:763
-msgid "The user has added you to his/her contact list"
-msgstr "A felhasználó felvette az azonosítót a kapcsolataihoz"
-
-#: src/hooks/icqhook.cc:1123
-#, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ [icq] sikertelen SMS következõnek: %s, %s"
-
-#: src/hooks/icqhook.cc:1126
-#, c-format
-msgid "+ [icq] failed SMS to %s"
-msgstr "+ [icq] sikertelen SMS következõnek: %s"
-
-#: src/hooks/icqhook.cc:1137 src/hooks/irchook.cc:557
-msgid "Away message:"
-msgstr "Távollét oka:"
-
-#: src/hooks/icqhook.cc:1141
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] a távolléti ok lekérdezése sikertelen a következõtõl: %s, %s"
-
-#: src/hooks/icqhook.cc:1272
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s lekérdezte a beállított távolléti okot, a válasz elküldve"
-
-#: src/hooks/icqhook.cc:1288
-msgid "Random Chat User"
-msgstr "Véletlenszerû beszélgetõpartner (Random Chat User)"
-
-#: src/hooks/icqhook.cc:1318
-#, c-format
-msgid "+ [icq] whitepages search finished, %d found"
-msgstr "+ [icq] a keresés befejezõdött, %d találat van"
-
-#: src/hooks/yahoohook.cc:103
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] kapcsolódás a szerverhez"
-
-#: src/hooks/yahoohook.cc:111
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] a kapcsolódás a szerverhez sikertelen"
-
-#: src/hooks/yahoohook.cc:114
-msgid "could not resolve hostname"
-msgstr "a gépnév visszafejtése nem sikerült "
-
-#: src/hooks/yahoohook.cc:115
-msgid "could not create socket"
-msgstr "hálózati foglalat lérehozása nem sikerült"
-
-#: src/hooks/yahoohook.cc:116
-msgid "verify the pager host and port entered"
-msgstr "a gép és kapu ellenõrzése"
-
-#: src/hooks/yahoohook.cc:162
-msgid "+ [yahoo] disconnected"
-msgstr "+ [yahoo] leválasztva"
-
-#: src/hooks/yahoohook.cc:278
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] %s hozzáadása a kapcsolatokhoz"
-
-#: src/hooks/yahoohook.cc:299
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] %s eltávolítása a kapcsolatok közül"
-
-#: src/hooks/yahoohook.cc:313
-#, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] kilépés a %s konferenciából"
-
-#: src/hooks/yahoohook.cc:536
-#, fuzzy, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr "+ [irc] a csatornán lévõk száma: %d"
-
-#: src/hooks/yahoohook.cc:557
-#, fuzzy
-msgid "Please join my conference."
-msgstr "%s csatlakozott a konferenciához"
-
-#: src/hooks/yahoohook.cc:568
-msgid "Custom status message:"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:572
-#, fuzzy, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] a távolléti ok lekérdezése sikertelen a következõtõl: %s, %s"
-
-#: src/hooks/yahoohook.cc:588
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] bejelentkezve"
-
-#: src/hooks/yahoohook.cc:603
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "+ [yahoo] sikertelen bejelentkezés: hibás azonosító vagy jelszó"
-
-#: src/hooks/yahoohook.cc:608
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr "+ [yahoo] sikertelen bejelentkezés: a bejelentkezést letiltották"
-
-#: src/hooks/yahoohook.cc:609
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr "+ engedélyezhetõ: %s"
-
-#: src/hooks/yahoohook.cc:676
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr "%s meghívja a %s konferenciára, a téma %s"
-
-#: src/hooks/yahoohook.cc:679
-msgid "Current conference members are: "
-msgstr "A konferencián résztvevõk:"
-
-#: src/hooks/yahoohook.cc:696
-msgid "Auto-joined the conference"
-msgstr "Automatikusan belépve a konferenciára"
-
-#: src/hooks/yahoohook.cc:706
-#, fuzzy, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr "%s csatlakozott a konferenciához"
-
-#: src/hooks/yahoohook.cc:716
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr "%s csatlakozott a konferenciához"
-
-#: src/hooks/yahoohook.cc:731
-#, c-format
-msgid "The user %s has left the conference"
-msgstr "%s elhagyta a konferenciát"
-
-#: src/hooks/yahoohook.cc:767
-msgid "the message was: "
-msgstr "az üzenet:"
-
-#: src/hooks/yahoohook.cc:779
-#, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] %s gépel"
-
-#: src/hooks/yahoohook.cc:779
-#, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] %s megállt a gépeléssel"
-
-#: src/hooks/yahoohook.cc:796
-#, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail a következõtõl: %s, %s"
-
-#: src/hooks/yahoohook.cc:803
-#, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] rendszer: %s"
-
-#: src/hooks/yahoohook.cc:808
-#, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] hiba: %s"
-
-#: src/hooks/msnhook.cc:73
-msgid "+ [msn] connecting to the server"
-msgstr "+ [msn] kapcsolódás a szerverhez"
-
-#: src/hooks/msnhook.cc:77
-msgid "+ [msn] logged in"
-msgstr "+ [msn] bejelentkezve"
-
-#: src/hooks/msnhook.cc:82
-msgid "+ [msn] unable to connect to the server"
-msgstr "+ [msn] a kapcsolódás a szerverhez sikertelen"
-
-#: src/hooks/msnhook.cc:219
-#, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ [msn] %s eltávolítása a kapcsolatok közül"
-
-#: src/hooks/msnhook.cc:303
-#, c-format
-msgid "+ [msn] reverse users listing finished, %d found"
-msgstr "+ [msn] fordított felhasználólistázás befejezve, %s találat"
-
-#: src/hooks/msnhook.cc:414
-msgid "+ [msn] disconnected"
-msgstr "+ [msn] leválasztva"
-
-#: src/hooks/msnhook.cc:431
-#, c-format
-msgid "+ [msn] connecting with %s"
-msgstr "+ [msn] kapcsolódás a következõhöz: %s"
-
-#: src/hooks/msnhook.cc:433
-#, c-format
-msgid "+ [msn] connection from %s"
-msgstr "+ [msn] kapcsolódás a következõtõl: %s"
-
-#: src/hooks/msnhook.cc:449
-#, c-format
-msgid "+ [msn] e-mail from %s <%s>, %s"
-msgstr "+ [msn] e-mail a következõtõl: %s <%s>, %s"
-
 #: src/imevents.cc:255
 msgid "Empty authorization request message"
 msgstr "Nincs azonosítási üzenet"
@@ -2118,6 +2232,11 @@ msgstr "<névtelen>"
 #: src/imevents.cc:550
 msgid "* File transfer"
 msgstr ""
+
+#: src/imexternal.cc:109
+#, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "Belsõ mûvelet lefuttatva: %s, visszatérési kód: %d"
 
 #: src/imlogger.cc:8
 msgid "Offline"
@@ -2231,125 +2350,6 @@ msgstr "%s kilépett"
 #, c-format
 msgid "changed our %s status to %s from %s"
 msgstr "%s állapot átállítva, most %s, korábban %s"
-
-#: src/imexternal.cc:109
-#, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "Belsõ mûvelet lefuttatva: %s, visszatérési kód: %d"
-
-#: src/hooks/aimhook.cc:58
-msgid "+ [aim] connecting to the server"
-msgstr "+ [aim] kapcsolódás a szerverhez"
-
-#: src/hooks/aimhook.cc:87
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ [aim] nem lehet kapcsolódni a szerverhez"
-
-#: src/hooks/aimhook.cc:197
-#, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ [aim] %s hozzáadása a kapcsolatokhoz"
-
-#: src/hooks/aimhook.cc:211
-#, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ [aim] %s eltávolítása a kapcsolatok közül"
-
-#: src/hooks/aimhook.cc:309
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr "Igazán meg vagyok elégedve a centericq alap AIM beállításaival %s."
-
-#: src/hooks/aimhook.cc:361
-msgid "+ [aim] logged in"
-msgstr "+ [aim] bejelentkezve"
-
-#: src/hooks/aimhook.cc:378
-msgid "+ [aim] disconnected from the network"
-msgstr "+ [aim] lekapcsolva a hálózatról"
-
-#: src/hooks/aimhook.cc:396
-msgid "aim connection failed"
-msgstr "[aim] sikertelen kapcsolódás"
-
-#: src/hooks/aimhook.cc:398
-#, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ [aim] sikertelen kapcsolódás: %s"
-
-#: src/hooks/aimhook.cc:415
-msgid "+ [aim] password was changed successfully"
-msgstr "+ [aim] a jelszóváltoztatás rendben"
-
-#: src/hooks/aimhook.cc:438
-msgid "The user has no profile information."
-msgstr "A felhasználónak nincsenek megadva a személyi adatai"
-
-#: src/hooks/aimhook.cc:531
-msgid "+ [aim] password sent"
-msgstr "+ [aim] jelszó elküldve"
-
-#: src/hooks/irchook.cc:116
-msgid "+ [irc] connecting to the server"
-msgstr "+ [irc] kapcsolódás a szerverhez"
-
-#: src/hooks/irchook.cc:128
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ [irc] a kapcsolódás a szerverhez sikertelen"
-
-#: src/hooks/irchook.cc:476
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr "+ [irc] a csatornán lévõk száma: %d"
-
-#: src/hooks/irchook.cc:727
-msgid "+ [irc] logged in"
-msgstr "+ [irc] bejelentkezve"
-
-#: src/hooks/irchook.cc:765
-msgid "+ [irc] disconnected from the network"
-msgstr "+ [irc] leválasztva a hálózatról"
-
-#: src/hooks/irchook.cc:779
-#, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ [irc] sikertelen kapcsolódás: %s"
-
-#: src/hooks/irchook.cc:796
-msgid "+ [irc] nickname was changed successfully"
-msgstr "+ [irc] az azonosító megváltoztatva"
-
-#: src/hooks/irchook.cc:867
-msgid "On channels: "
-msgstr "Csatornák:"
-
-#: src/hooks/irchook.cc:1156
-#, c-format
-msgid "Kicked by %s; reason: %s"
-msgstr "Kirúgva a csatornáról %s által, indok: %s"
-
-#: src/hooks/irchook.cc:1211
-#, c-format
-msgid "The user has changed their nick from %s to %s"
-msgstr "%s megváltoztatta a nevét., az új név: %s"
-
-#: src/hooks/irchook.cc:1231
-msgid "+ [irc] password sent"
-msgstr "+ [irc] jelszó elküldve"
-
-#: src/hooks/irchook.cc:1233
-msgid "+ [irc] password was requested, but it's not set"
-msgstr "+ [irc] jelszó lekérve, de nincs elküldve"
-
-#: src/hooks/irchook.cc:1257
-#, c-format
-msgid "PING reply from the user: %d second(s)"
-msgstr ""
-
-#: src/hooks/irchook.cc:1262
-#, c-format
-msgid "The remote is using %s"
-msgstr ""
 
 #~ msgid "Show on the list"
 #~ msgstr "Megjelenítés a listán"
