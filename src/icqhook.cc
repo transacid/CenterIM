@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.14 2001/10/03 21:30:23 konst Exp $
+* $Id: icqhook.cc,v 1.15 2001/11/07 14:39:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -155,12 +155,27 @@ void icqhook::loggedin(struct icq_link *link) {
     ihook.files.clear();
 }
 
-void icqhook::ildisconnected(struct icq_link *link) {
-    ihook.disconnected(link);
-    face.log(_("+ disconnected"));
+void icqhook::ildisconnected(struct icq_link *link, int reason) {
+    string msg;
+    ihook.disconnected(link, reason);
+
+    msg = _("+ disconnected");
+
+    switch(reason) {
+	case ICQ_DISCONNECT_FORCED:
+	    msg += ", ";
+	    msg = _("server forced us to disconnect");
+	    break;
+	case ICQ_DISCONNECT_BUSY:
+	    msg += ", ";
+	    msg = _("server is busy");
+	    break;
+    }
+
+    face.log(msg);
 }
 
-void icqhook::disconnected(struct icq_link *link) {
+void icqhook::disconnected(struct icq_link *link, int reason) {
     int i;
     icqcontact *c;
 
@@ -179,7 +194,7 @@ void icqhook::disconnected(struct icq_link *link) {
     face.update();
 }
 
-void icqhook::regdisconnected(struct icq_link *link) {
+void icqhook::regdisconnected(struct icq_link *link, int reason) {
     ihook.flogged = false;
     ihook.timer_reconnect = 0;
 }
@@ -449,12 +464,12 @@ unsigned short bcat4, const char *back4) {
 }
 
 void icqhook::wrongpass(struct icq_link *link) {
-    ihook.disconnected(link);
+    ihook.disconnected(link, 0);
     face.log(_("+ server reported a problem: wrong password"));
 }
 
 void icqhook::invaliduin(struct icq_link *link) {
-    ihook.disconnected(link);
+    ihook.disconnected(link, 0);
     face.log(_("+ server reported a problem: invalid uin"));
 }
 
@@ -640,7 +655,7 @@ void icqhook::exectimers() {
 	if((timer_current-timer_ack > PERIOD_DISCONNECT) || (n_keepalive > 3)) {
 	    icq_Logout(&icql);
 	    icq_Disconnect(&icql);
-	    ildisconnected(&icql);
+	    ildisconnected(&icql, ICQ_DISCONNECT_KEEPALIVE);
 	}
     } else {
 	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
@@ -649,7 +664,7 @@ void icqhook::exectimers() {
 
 	if(connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
 	    icq_Disconnect(&icql);
-	    disconnected(&icql);
+	    disconnected(&icql, 0);
 /*
 	    icql.icq_Status = (long unsigned int) STATUS_OFFLINE;
 	    icql.icq_UDPSok = -1;

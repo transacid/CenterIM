@@ -50,7 +50,7 @@ class icqhook {
 	vector<unsigned long> founduins;
 	vector<icqfileassociation> files;
 
-	void disconnected(struct icq_link *link);
+	void disconnected(struct icq_link *link, int reason);
 
     public:
 	icqhook();
@@ -78,8 +78,8 @@ class icqhook {
 	void setmanualstatus(int st);
 
 	static void loggedin(struct icq_link *link);
-	static void ildisconnected(struct icq_link *link);
-	static void regdisconnected(struct icq_link *link);
+	static void ildisconnected(struct icq_link *link, int reason);
+	static void regdisconnected(struct icq_link *link, int reason);
 	static void message(struct icq_link *link, unsigned long uin,
 	    unsigned char hour, unsigned char minute, unsigned char day,
 	    unsigned char month, unsigned short year, const char *msg);

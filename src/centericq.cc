@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.25 2001/10/29 17:40:23 konst Exp $
+* $Id: centericq.cc,v 1.26 2001/11/07 14:39:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -185,7 +185,7 @@ void centericq::reg() {
 
 		    face.progress.log(_("Disconnected"));
 		    icq_Disconnect(&icql);
-		    ihook.regdisconnected(&icql);
+		    ihook.regdisconnected(&icql, 0);
 		    sleep(2);
 		} else {
 		    if(face.ask(_("Unable to connect to the icq server. Retry?"),
@@ -349,7 +349,7 @@ void centericq::changestatus() {
 	if(ihook.getmanualstatus() == STATUS_OFFLINE) {
 	    icq_Logout(&icql);
 	    icq_Disconnect(&icql);
-	    ihook.ildisconnected(&icql);
+	    ihook.ildisconnected(&icql, 0);
 	} else {
 	    if(icql.icq_Status == STATUS_OFFLINE) {
 		ihook.connect();
