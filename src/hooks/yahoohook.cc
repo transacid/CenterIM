@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.86 2003/10/02 09:07:15 konst Exp $
+* $Id: yahoohook.cc,v 1.87 2003/10/02 22:24:37 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -175,20 +175,6 @@ void yahoohook::main() {
     int hsock;
     fd_set rs, ws, es;
 
-    if(cid < 0) {
-	yahoo_input_condition cond = YAHOO_INPUT_READ;
-	vector<yfd>::const_iterator ifd = rfds.begin();
-
-	if(ifd == rfds.end()) {
-	    ifd = wfds.begin();
-	    cond = YAHOO_INPUT_WRITE;
-	    if(ifd == wfds.end()) return;
-	}
-
-	connect_complete(ifd->data, ifd->fd, cond);
-	return;
-    }
-
     FD_ZERO(&rs);
     FD_ZERO(&ws);
     FD_ZERO(&es);
@@ -216,7 +202,11 @@ void yahoohook::main() {
 
 	for(i = wfds.begin(); i != wfds.end(); ++i) {
 	    if(FD_ISSET(i->fd, &ws)) {
-		yahoo_write_ready(cid, i->fd, i->data);
+		if(i->isconnect) {
+		    connect_complete(i->data, i->fd);
+		} else {
+		    yahoo_write_ready(cid, i->fd, i->data);
+		}
 		break;
 	    }
 	}
@@ -793,7 +783,7 @@ void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList 
     yhook.confmembers[room].push_back(inviter);
 
     for(YList *m = members; m; m = y_list_next(m)) {
-	string id = static_cast<yahoo_buddy *>(m->data)->id;
+	string id = (char *) m->data;
 
 	if(id != acc.nickname)
 	if(find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), id) == yhook.confmembers[room].end()) {
@@ -958,6 +948,9 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
     memcpy(&serv_addr.sin_addr.s_addr, *server->h_addr_list, server->h_length);
     serv_addr.sin_port = htons(port);
 
+    int f = fcntl(servfd, F_GETFL);
+    fcntl(servfd, F_SETFL, f | O_NONBLOCK);
+
     error = ::connect(servfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
 
     if(!error) {
@@ -969,7 +962,7 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
 	ccd->callback_data = data;
 	ccd->id = id;
 
-	yhook.add_handler(-1, servfd, YAHOO_INPUT_WRITE, ccd);
+	yhook.wfds.push_back(yfd(servfd, ccd, true));
 	return 1;
     } else {
 	close(servfd);
@@ -977,19 +970,22 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
     }
 }
 
-void yahoohook::connect_complete(void *data, int source, yahoo_input_condition condition) {
+void yahoohook::connect_complete(void *data, int source) {
     connect_callback_data *ccd = (connect_callback_data *) data;
     int error, err_size = sizeof(error);
 
     remove_handler(-1, source);
-    getsockopt(source, SOL_SOCKET, SO_ERROR, &error, (socklen_t *)&err_size);
 
-    if(error) {
+    if(getsockopt(source, SOL_SOCKET, SO_ERROR, &error, (socklen_t *) &err_size) == -1 || error != 0) {
+	if(yhook.logged())
+	    face.log(_("+ [yahoo] direct connection failed"));
+
 	close(source);
 	source = -1;
+    } else {
+	ccd->callback(source, error, ccd->callback_data);
     }
 
-    ccd->callback(source, error, ccd->callback_data);
     free(ccd);
 }
 

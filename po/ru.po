@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.6\n"
-"POT-Creation-Date: 2003-10-01 11:30+0300\n"
+"POT-Creation-Date: 2003-10-02 22:56+0300\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -13,9 +13,363 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/hooks/HTTPClient.cc:276
-msgid "Timed out"
-msgstr "Таймаут"
+#: src/centericq.cc:132
+msgid "password: "
+msgstr "пароль: "
+
+#: src/centericq.cc:168
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
+
+#: src/centericq.cc:248
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Игнорировать сообщения от %s?"
+
+#: src/centericq.cc:252
+#, c-format
+msgid "Remove %s from the contact list as well?"
+msgstr "Удалить %s из списка контактов?"
+
+#: src/centericq.cc:286
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Вы действительно хотите удалить %s?"
+
+#: src/centericq.cc:294
+msgid "New nickname to show: "
+msgstr "Новый ник для показа в списке: "
+
+#: src/centericq.cc:303
+msgid "Select a group to move the user to"
+msgstr "Выберите новую группу для пользователя"
+
+#: src/centericq.cc:321
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ невозможно запросить away-сообщение, будучи в offline"
+
+#: src/centericq.cc:385
+msgid "! cannot connect, free disk space is less than 10k"
+msgstr "! свободного места на диске осталось < 10k, рассоединение"
+
+#: src/centericq.cc:417 src/accountmanager.cc:207
+msgid "away message"
+msgstr "away-сообщение"
+
+#: src/centericq.cc:428
+#, c-format
+msgid "! support for %s was disabled at build time"
+msgstr "! поддержка %s была выключена при сборке"
+
+#: src/centericq.cc:651
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
+
+#: src/centericq.cc:654
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ последнее сообщение от %s"
+
+#: src/centericq.cc:698
+#, c-format
+msgid "+ the %s configuration was changed, reloaded"
+msgstr "+ конфигурация %s изменена, перечитываем"
+
+#: src/centericq.cc:752
+msgid "! another running copy of centericq detected"
+msgstr "! обнаружена работающая копия centericq"
+
+#: src/centericq.cc:753
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! это может вызвать проблемы. pid %lu"
+
+#: src/centericq.cc:877
+msgid "Mobile number: "
+msgstr "Номер мобильного телефона: "
+
+#: src/centericq.cc:1018
+msgid "directory to save the file(s) to: "
+msgstr "директория для файл(ов): "
+
+#: src/centericq.cc:1025
+msgid "The specified directory is not writable"
+msgstr "Не хватает прав на запись для указанного каталога"
+
+#: src/centericq.cc:1029
+msgid "The specified directory does not exist"
+msgstr "Указанный каталог не существует"
+
+#: src/centericq.cc:1164
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ история для %s пуста"
+
+#: src/centericq.cc:1190
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s уже есть в списке"
+
+#: src/centericq.cc:1196
+msgid "Select a group to add the user to"
+msgstr "Выберите группу для контакта"
+
+#: src/centericq.cc:1207
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s добавлен в список"
+
+#: src/centericq.cc:1278
+msgid "+ the user is back"
+msgstr "+ пользователь вернулся"
+
+#: src/centericq.cc:1294
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] статус восстановлен"
+
+#: src/centericq.cc:1309
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] автоматический переход в %s"
+
+#: src/centericq.cc:1311
+msgid "away"
+msgstr ""
+
+#: src/centericq.cc:1311
+msgid "n/a"
+msgstr ""
+
+#: src/centericq.cc:1438
+msgid "! free disk space is less than 10k, going offline"
+msgstr "! свободного места на диске осталось < 10k, рассоединение"
+
+#: src/centericq.cc:1439
+msgid "! otherwise we can lose events and configuration"
+msgstr "! иначе мы можем терять события и глючить"
+
+#: src/centericq.cc:1483
+msgid "Invite to conference.."
+msgstr "Пригласить на конференцию.."
+
+#: src/hooks/yahoohook.cc:146
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] соединение с сервером"
+
+#: src/hooks/yahoohook.cc:157
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] невозможно соединиться: "
+
+#: src/hooks/yahoohook.cc:160 src/hooks/msnhook.cc:722
+msgid "could not resolve hostname"
+msgstr "невозможно определить IP хоста"
+
+#: src/hooks/yahoohook.cc:161
+msgid "could not create socket"
+msgstr "невозможно создать сокет"
+
+#: src/hooks/yahoohook.cc:162
+msgid "verify the pager host and port entered"
+msgstr "проверьте имя хоста и порт"
+
+#: src/hooks/yahoohook.cc:257
+msgid "+ [yahoo] disconnected"
+msgstr "+ [yahoo] рассоединение"
+
+#: src/hooks/yahoohook.cc:359
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] добавление %s в список"
+
+#: src/hooks/yahoohook.cc:381
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] удаление %s из списка"
+
+#: src/hooks/yahoohook.cc:400
+#, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] выход с конференции %s"
+
+#: src/hooks/yahoohook.cc:608
+#, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr "+ [yahoo] вывод списка завершен, %d найдено"
+
+#: src/hooks/yahoohook.cc:627
+msgid "Please join my conference."
+msgstr ""
+
+#: src/hooks/yahoohook.cc:640
+msgid "Custom status message:"
+msgstr "Пользовательское статус-сообщение:"
+
+#: src/hooks/yahoohook.cc:644
+#, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [yahoo] невозможно запросить away-сообщение у %s, %s"
+
+#: src/hooks/yahoohook.cc:670
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] вход в систему состоялся"
+
+#: src/hooks/yahoohook.cc:688
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "+ [yahoo] невозможно соединиться: неправильный логин/пароль"
+
+#: src/hooks/yahoohook.cc:693
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr "+ [yahoo] невозможно соединиться: аккаунт заблокирован"
+
+#: src/hooks/yahoohook.cc:694
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr "+ чтобы реактивировать его, посетите %s"
+
+#: src/hooks/yahoohook.cc:698
+msgid "+ [yahoo] another logon detected"
+msgstr "+ [yahoo] кто-то еще вошел под этим ником"
+
+#: src/hooks/yahoohook.cc:777
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "Пользователь %s пригласил вас в конференцию %s, тема: %s"
+
+#: src/hooks/yahoohook.cc:782
+msgid "Current conference members are: "
+msgstr "Участники конференции: "
+
+#: src/hooks/yahoohook.cc:802
+msgid "Auto-joined the conference"
+msgstr "Авто-вход в конференцию состоялся"
+
+#: src/hooks/yahoohook.cc:812
+#, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr "Пользователь %s ответил отказом на приглашение к конференции"
+
+#: src/hooks/yahoohook.cc:822
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr "Пользователь %s вошел в конференцию"
+
+#: src/hooks/yahoohook.cc:837
+#, c-format
+msgid "The user %s has left the conference"
+msgstr "Пользователь %s покинул конференцию"
+
+#: src/hooks/yahoohook.cc:872 src/hooks/icqhook.cc:1155
+#: src/hooks/msnhook.cc:539
+msgid "The user has added you to his/her contact list"
+msgstr "Пользователь добавил вас в свой список контактов"
+
+#: src/hooks/yahoohook.cc:876
+msgid "the message was: "
+msgstr "сообщение:"
+
+#: src/hooks/yahoohook.cc:894
+#, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [yahoo] e-mail от %s, %s"
+
+#: src/hooks/yahoohook.cc:901
+#, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] система: %s"
+
+#: src/hooks/yahoohook.cc:906
+#, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] ошибка: %s"
+
+#: src/hooks/yahoohook.cc:981
+#, fuzzy
+msgid "+ [yahoo] direct connection failed"
+msgstr "+ [yahoo] рассоединение"
+
+#: src/hooks/jabberhook.cc:108
+msgid "+ [jab] connecting to the server"
+msgstr "+ [jab] соединение с сервером"
+
+#: src/hooks/jabberhook.cc:160
+msgid "+ [jab] unable to connect to the server"
+msgstr "+ [jab] невозможно соединиться с сервером"
+
+#: src/hooks/jabberhook.cc:288
+#, c-format
+msgid "+ [jab] adding %s to the contacts"
+msgstr "+ [jab] добавление %s в список"
+
+#: src/hooks/jabberhook.cc:349
+#, c-format
+msgid "+ [jab] removing %s from the contacts"
+msgstr "+ [jab] удаление %s из списка"
+
+#: src/hooks/jabberhook.cc:425 src/hooks/icqhook.cc:1209
+#: src/hooks/irchook.cc:572
+msgid "Away message:"
+msgstr "Away сообщение:"
+
+#: src/hooks/jabberhook.cc:427
+#, c-format
+msgid "+ [jab] no away message from %s, %s"
+msgstr "+ [jab] нет away-сообщения у %s, %s"
+
+#: src/hooks/jabberhook.cc:455
+msgid "Wrong nickname given, cannot register"
+msgstr "Неверный псевдоним, невозможно зарегистрировать"
+
+#: src/hooks/jabberhook.cc:472
+msgid "Unable to connect"
+msgstr "Невозможно соединиться"
+
+#: src/hooks/jabberhook.cc:706
+#, c-format
+msgid "+ [jab] conference list fetching finished, %d found"
+msgstr "+ [jab] вывод списка завершен, %d найдено"
+
+#: src/hooks/jabberhook.cc:760
+#, c-format
+msgid "+ [jab] search finished, %d found"
+msgstr "+ [jab] поиск закончен, %d найдено"
+
+#: src/hooks/jabberhook.cc:815
+msgid "+ [jab] logged in"
+msgstr "+ [jab] вход в систему состоялся"
+
+#: src/hooks/jabberhook.cc:1173 src/hooks/irchook.cc:1231
+#, c-format
+msgid "The remote is using %s"
+msgstr ".. а мы пользуемся %s"
+
+#: src/hooks/jabberhook.cc:1215
+msgid "+ [jab] disconnected"
+msgstr "+ [jab] рассоединение"
+
+#: src/hooks/jabberhook.cc:1353
+msgid "Default Jabber conference server"
+msgstr "Стандартный Jabber сервер конференций"
+
+#: src/hooks/jabberhook.cc:1402
+#, c-format
+msgid "+ [jab] error %d: %s"
+msgstr "+ [jab] ошибка %d: %s"
+
+#: src/hooks/jabberhook.cc:1471
+msgid "The user wants to subscribe to your network presence updates"
+msgstr "Пользователь хочет получать изменения вашего статуса в сети"
+
+#: src/hooks/jabberhook.cc:1480
+msgid ""
+"The user has removed you from his contact list (unsubscribed you, using the "
+"Jabber language)"
+msgstr ""
+"Пользователь удалил вас из списка контактов. Выражаясь языком Джаббера, "
+"\"отписался\" от вас"
 
 #: src/hooks/aimhook.cc:64
 msgid "+ [aim] connecting to the server"
@@ -124,11 +478,6 @@ msgid "The user has rejected your authorization request; the message was: "
 msgstr ""
 "Пользователь отклонил запрос на добавление в список контактов; объяснение: "
 
-#: src/hooks/icqhook.cc:1155 src/hooks/msnhook.cc:539
-#: src/hooks/yahoohook.cc:881
-msgid "The user has added you to his/her contact list"
-msgstr "Пользователь добавил вас в свой список контактов"
-
 #: src/hooks/icqhook.cc:1195
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
@@ -138,11 +487,6 @@ msgstr "+ [icq] невозможно отослать SMS к %s, %s"
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] невозможно отослать SMS к %s"
-
-#: src/hooks/icqhook.cc:1209 src/hooks/irchook.cc:572
-#: src/hooks/jabberhook.cc:425
-msgid "Away message:"
-msgstr "Away сообщение:"
 
 #: src/hooks/icqhook.cc:1213
 #, c-format
@@ -219,11 +563,6 @@ msgstr "+ [irc] пароль был запрошен, но в настройках он не указан"
 msgid "PING reply from the user: %d second(s)"
 msgstr "Ответ на PING от пользователя был получен за %d секунд"
 
-#: src/hooks/irchook.cc:1231 src/hooks/jabberhook.cc:1173
-#, c-format
-msgid "The remote is using %s"
-msgstr ".. а мы пользуемся %s"
-
 #: src/hooks/irchook.cc:1345
 #, c-format
 msgid "%s has joined."
@@ -269,109 +608,6 @@ msgstr "%s установил нам статус оператора."
 msgid "%s has deopped us."
 msgstr "%s снял с нас статус оператора"
 
-#: src/hooks/jabberhook.cc:108
-msgid "+ [jab] connecting to the server"
-msgstr "+ [jab] соединение с сервером"
-
-#: src/hooks/jabberhook.cc:160
-msgid "+ [jab] unable to connect to the server"
-msgstr "+ [jab] невозможно соединиться с сервером"
-
-#: src/hooks/jabberhook.cc:288
-#, c-format
-msgid "+ [jab] adding %s to the contacts"
-msgstr "+ [jab] добавление %s в список"
-
-#: src/hooks/jabberhook.cc:349
-#, c-format
-msgid "+ [jab] removing %s from the contacts"
-msgstr "+ [jab] удаление %s из списка"
-
-#: src/hooks/jabberhook.cc:427
-#, c-format
-msgid "+ [jab] no away message from %s, %s"
-msgstr "+ [jab] нет away-сообщения у %s, %s"
-
-#: src/hooks/jabberhook.cc:455
-msgid "Wrong nickname given, cannot register"
-msgstr "Неверный псевдоним, невозможно зарегистрировать"
-
-#: src/hooks/jabberhook.cc:472
-msgid "Unable to connect"
-msgstr "Невозможно соединиться"
-
-#: src/hooks/jabberhook.cc:706
-#, c-format
-msgid "+ [jab] conference list fetching finished, %d found"
-msgstr "+ [jab] вывод списка завершен, %d найдено"
-
-#: src/hooks/jabberhook.cc:760
-#, c-format
-msgid "+ [jab] search finished, %d found"
-msgstr "+ [jab] поиск закончен, %d найдено"
-
-#: src/hooks/jabberhook.cc:815
-msgid "+ [jab] logged in"
-msgstr "+ [jab] вход в систему состоялся"
-
-#: src/hooks/jabberhook.cc:1215
-msgid "+ [jab] disconnected"
-msgstr "+ [jab] рассоединение"
-
-#: src/hooks/jabberhook.cc:1353
-msgid "Default Jabber conference server"
-msgstr "Стандартный Jabber сервер конференций"
-
-#: src/hooks/jabberhook.cc:1402
-#, c-format
-msgid "+ [jab] error %d: %s"
-msgstr "+ [jab] ошибка %d: %s"
-
-#: src/hooks/jabberhook.cc:1471
-msgid "The user wants to subscribe to your network presence updates"
-msgstr "Пользователь хочет получать изменения вашего статуса в сети"
-
-#: src/hooks/jabberhook.cc:1480
-msgid ""
-"The user has removed you from his contact list (unsubscribed you, using the "
-"Jabber language)"
-msgstr ""
-"Пользователь удалил вас из списка контактов. Выражаясь языком Джаббера, "
-"\"отписался\" от вас"
-
-#: src/hooks/ljhook.cc:61
-msgid "+ [lj] connecting to the server"
-msgstr "+ [lj] соединение с сервером"
-
-#: src/hooks/ljhook.cc:92
-msgid "+ [lj] disconnected"
-msgstr "+ [lj] рассоединение"
-
-#: src/hooks/ljhook.cc:339
-msgid "cannot connect"
-msgstr "невозможно соединиться"
-
-#: src/hooks/ljhook.cc:340
-msgid "+ [lj] HTTP failed: %s"
-msgstr "+ [lj] ошибка HTTP: %s"
-
-#: src/hooks/ljhook.cc:366
-msgid "+ [lj] logged in"
-msgstr "+ [lj] вход в систему состоялся"
-
-#: src/hooks/ljhook.cc:376
-msgid "+ [lj] login failed: %s"
-msgstr "+ [lj] не удалось соединиться: %s"
-
-#: src/hooks/ljhook.cc:380
-#, c-format
-msgid "+ [lj] posted successully, the id is %s"
-msgstr "+ [lj] отправлено удачно, id = %s"
-
-#: src/hooks/ljhook.cc:382
-msgid "+ [lj] post error: %s"
-msgstr "+ [lj] ошибка отправки: %s"
-
 #: src/hooks/msnhook.cc:121
 msgid "+ [msn] connecting to the server"
 msgstr "+ [msn] соединение с сервером"
@@ -408,593 +644,65 @@ msgstr "+ [msn] рассоединение"
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] невозможно соединиться: "
 
-#: src/hooks/msnhook.cc:722 src/hooks/yahoohook.cc:159
-msgid "could not resolve hostname"
-msgstr "невозможно определить IP хоста"
-
 #: src/hooks/msnhook.cc:736
 msgid "verify the hostname and port"
 msgstr "проверьте имя хоста и порт"
 
-#: src/hooks/rsshook.cc:282
-msgid "coudln't fetch"
-msgstr "ошибка соединения"
-
-#: src/hooks/rsshook.cc:311
-msgid "wrong XML"
-msgstr "неправильный XML"
-
-#: src/hooks/rsshook.cc:314
-msgid "no <rss> tag found"
-msgstr "тэг <rss> не найден"
-
-#: src/hooks/rsshook.cc:321
-msgid "no <channel> tag found"
-msgstr "тэг <channel> не найден"
-
-#: src/hooks/rsshook.cc:328
-msgid "wrong <channel> tag"
-msgstr "неправильный тэг <channel>"
-
-#: src/hooks/rsshook.cc:337
-msgid "success"
-msgstr "успешно"
-
-#: src/hooks/rsshook.cc:356
-msgid "Title: "
-msgstr "Заголовок: "
-
-#: src/hooks/rsshook.cc:357
-msgid "Published on: "
-msgstr "Опубликовано: "
-
-#: src/hooks/rsshook.cc:358
-msgid "Category: "
-msgstr "Категория: "
-
-#: src/hooks/rsshook.cc:359
-msgid "Author: "
-msgstr "Автор: "
-
-#: src/hooks/rsshook.cc:361
-msgid "Description: "
-msgstr "Описание: "
-
-#: src/hooks/rsshook.cc:362
-msgid "Link: "
-msgstr "Ссылка: "
-
-#: src/hooks/rsshook.cc:363
-msgid "Comments: "
-msgstr "Комментарии: "
-
-#: src/hooks/yahoohook.cc:145
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] соединение с сервером"
-
-#: src/hooks/yahoohook.cc:156
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] невозможно соединиться: "
-
-#: src/hooks/yahoohook.cc:160
-msgid "could not create socket"
-msgstr "невозможно создать сокет"
-
-#: src/hooks/yahoohook.cc:161
-msgid "verify the pager host and port entered"
-msgstr "проверьте имя хоста и порт"
-
-#: src/hooks/yahoohook.cc:266
-msgid "+ [yahoo] disconnected"
-msgstr "+ [yahoo] рассоединение"
-
-#: src/hooks/yahoohook.cc:368
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] добавление %s в список"
-
-#: src/hooks/yahoohook.cc:390
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] удаление %s из списка"
-
-#: src/hooks/yahoohook.cc:409
-#, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] выход с конференции %s"
-
-#: src/hooks/yahoohook.cc:617
-#, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr "+ [yahoo] вывод списка завершен, %d найдено"
-
-#: src/hooks/yahoohook.cc:636
-msgid "Please join my conference."
-msgstr ""
-
-#: src/hooks/yahoohook.cc:649
-msgid "Custom status message:"
-msgstr "Пользовательское статус-сообщение:"
-
-#: src/hooks/yahoohook.cc:653
-#, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [yahoo] невозможно запросить away-сообщение у %s, %s"
-
-#: src/hooks/yahoohook.cc:679
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] вход в систему состоялся"
-
-#: src/hooks/yahoohook.cc:697
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "+ [yahoo] невозможно соединиться: неправильный логин/пароль"
-
-#: src/hooks/yahoohook.cc:702
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr "+ [yahoo] невозможно соединиться: аккаунт заблокирован"
-
-#: src/hooks/yahoohook.cc:703
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr "+ чтобы реактивировать его, посетите %s"
-
-#: src/hooks/yahoohook.cc:707
-msgid "+ [yahoo] another logon detected"
-msgstr "+ [yahoo] кто-то еще вошел под этим ником"
-
-#: src/hooks/yahoohook.cc:786
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr "Пользователь %s пригласил вас в конференцию %s, тема: %s"
-
-#: src/hooks/yahoohook.cc:791
-msgid "Current conference members are: "
-msgstr "Участники конференции: "
-
-#: src/hooks/yahoohook.cc:811
-msgid "Auto-joined the conference"
-msgstr "Авто-вход в конференцию состоялся"
-
-#: src/hooks/yahoohook.cc:821
-#, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr "Пользователь %s ответил отказом на приглашение к конференции"
-
-#: src/hooks/yahoohook.cc:831
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr "Пользователь %s вошел в конференцию"
-
-#: src/hooks/yahoohook.cc:846
-#, c-format
-msgid "The user %s has left the conference"
-msgstr "Пользователь %s покинул конференцию"
-
-#: src/hooks/yahoohook.cc:885
-msgid "the message was: "
-msgstr "сообщение:"
-
-#: src/hooks/yahoohook.cc:903
-#, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail от %s, %s"
-
-#: src/hooks/yahoohook.cc:910
-#, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] система: %s"
-
-#: src/hooks/yahoohook.cc:915
-#, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] ошибка: %s"
-
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " Менеджер логинов "
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:212 src/icqdialogs.cc:217
-#: src/icqdialogs.cc:222 src/icqdialogs.cc:687 src/icqdialogs.cc:1094
-#: src/imcontroller.cc:71
-msgid "Change"
-msgstr "Изменить"
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:687 src/icqdialogs.cc:1094
-#: src/icqdialogs.cc:1420
-msgid "Done"
-msgstr "Готово"
-
-#: src/accountmanager.cc:94
-#, c-format
-msgid " Server : %s "
-msgstr " Сервер : %s "
-
-#: src/accountmanager.cc:97
-#, c-format
-msgid " Secured : %s "
-msgstr " Защищенное соединение : %s "
-
-#: src/accountmanager.cc:103
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:108
-#, c-format
-msgid " Login : %s "
-msgstr " Логин : %s "
-
-#: src/accountmanager.cc:114
-#, c-format
-msgid " Password (optional) : %s "
-msgstr " Пароль (не обязательно) : %s "
-
-#: src/accountmanager.cc:114
-#, c-format
-msgid " Password : %s "
-msgstr " Пароль : %s "
-
-#: src/accountmanager.cc:118
-msgid " Register "
-msgstr " Регистрация "
-
-#: src/accountmanager.cc:124
-msgid " Change nickname "
-msgstr " Сменить friendly nickname "
-
-#: src/accountmanager.cc:125
-msgid " Update user details "
-msgstr " Обновить свою информацию "
-
-#: src/accountmanager.cc:128
-msgid " Set away message "
-msgstr " Установить away-сообщение "
-
-#: src/accountmanager.cc:131
-msgid " Synchronize contact list "
-msgstr " Снихронизировать список контактов "
-
-#: src/accountmanager.cc:133
-msgid " Drop "
-msgstr " Удалить "
-
-#: src/accountmanager.cc:151
-msgid " user name: "
-msgstr " логин: "
-
-#: src/accountmanager.cc:156
-msgid " uin: "
-msgstr " номер: "
-
-#: src/accountmanager.cc:161
-msgid " password: "
-msgstr " пароль: "
-
-#: src/accountmanager.cc:169
-msgid "Drop the account information first!"
-msgstr "Сначала удалите информацию о логине!"
-
-#: src/accountmanager.cc:183
-msgid "You have to disconnect the service first!"
-msgstr "Сначала вы должны произвести рассоединение!"
-
-#: src/accountmanager.cc:192
-msgid " server address: "
-msgstr " сервер : "
-
-#: src/accountmanager.cc:207 src/centericq.cc:436
-msgid "away message"
-msgstr "away-сообщение"
-
-#: src/accountmanager.cc:214
-msgid "You must be logged in to preform the synchronization"
-msgstr "Вы должны войти в сеть прежде чем сможете произвести синхронизацию"
-
-#: src/centericq.cc:151
-msgid "password: "
-msgstr "пароль: "
-
-#: src/centericq.cc:187
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
-
-#: src/centericq.cc:267
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Игнорировать сообщения от %s?"
-
-#: src/centericq.cc:271
-#, c-format
-msgid "Remove %s from the contact list as well?"
-msgstr "Удалить %s из списка контактов?"
-
-#: src/centericq.cc:305
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Вы действительно хотите удалить %s?"
-
-#: src/centericq.cc:313
-msgid "New nickname to show: "
-msgstr "Новый ник для показа в списке: "
-
-#: src/centericq.cc:322
-msgid "Select a group to move the user to"
-msgstr "Выберите новую группу для пользователя"
-
-#: src/centericq.cc:340
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ невозможно запросить away-сообщение, будучи в offline"
-
-#: src/centericq.cc:404
-msgid "! cannot connect, free disk space is less than 10k"
-msgstr "! свободного места на диске осталось < 10k, рассоединение"
-
-#: src/centericq.cc:447
-#, c-format
-msgid "! support for %s was disabled at build time"
-msgstr "! поддержка %s была выключена при сборке"
-
-#: src/centericq.cc:670
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
-
-#: src/centericq.cc:673
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ последнее сообщение от %s"
-
-#: src/centericq.cc:717
-#, c-format
-msgid "+ the %s configuration was changed, reloaded"
-msgstr "+ конфигурация %s изменена, перечитываем"
-
-#: src/centericq.cc:771
-msgid "! another running copy of centericq detected"
-msgstr "! обнаружена работающая копия centericq"
-
-#: src/centericq.cc:772
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! это может вызвать проблемы. pid %lu"
-
-#: src/centericq.cc:896
-msgid "Mobile number: "
-msgstr "Номер мобильного телефона: "
-
-#: src/centericq.cc:1037
-msgid "directory to save the file(s) to: "
-msgstr "директория для файл(ов): "
-
-#: src/centericq.cc:1044
-msgid "The specified directory is not writable"
-msgstr "Не хватает прав на запись для указанного каталога"
-
-#: src/centericq.cc:1048
-msgid "The specified directory does not exist"
-msgstr "Указанный каталог не существует"
-
-#: src/centericq.cc:1183
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ история для %s пуста"
-
-#: src/centericq.cc:1209
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s уже есть в списке"
-
-#: src/centericq.cc:1215
-msgid "Select a group to add the user to"
-msgstr "Выберите группу для контакта"
-
-#: src/centericq.cc:1226
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s добавлен в список"
-
-#: src/centericq.cc:1297
-msgid "+ the user is back"
-msgstr "+ пользователь вернулся"
-
-#: src/centericq.cc:1313
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] статус восстановлен"
-
-#: src/centericq.cc:1328
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] автоматический переход в %s"
-
-#: src/centericq.cc:1330
-msgid "away"
-msgstr ""
-
-#: src/centericq.cc:1330
-msgid "n/a"
-msgstr ""
-
-#: src/centericq.cc:1457
-msgid "! free disk space is less than 10k, going offline"
-msgstr "! свободного места на диске осталось < 10k, рассоединение"
-
-#: src/centericq.cc:1458
-msgid "! otherwise we can lose events and configuration"
-msgstr "! иначе мы можем терять события и глючить"
-
-#: src/centericq.cc:1502
-msgid "Invite to conference.."
-msgstr "Пригласить на конференцию.."
-
-#: src/icqconf.cc:147
-#, c-format
-msgid "I do really enjoy the default %s away message of %s %s."
-msgstr ""
-"Мне действительно нравится сообщение для %s, которое centericq %s %s "
-"устанавливает по умолчанию."
-
-#: src/icqconf.cc:688
-msgid "+ launched the openurl command"
-msgstr "+ команда openurl запущена"
-
-#: src/icqconf.cc:857
-msgid "event sending error: not enough parameters"
-msgstr "ошибка отсылки события: недостаточно параметров"
-
-#: src/icqconf.cc:868
-msgid "event sending error: only UINs are allowed with icq protocol"
-msgstr ""
-"ошибка отсылки события: для указанного протокола разрешены только номера "
-"(UIN)"
-
-#: src/icqconf.cc:883
-msgid "event sending error: unknown IM type"
-msgstr "ошибка отсылки события: неизвестная IM сеть"
-
-#: src/icqconf.cc:905
-msgid "event sending error: unknown event type"
-msgstr "ошибка отсылки события: неизвестный тип события"
-
-#: src/icqconf.cc:917
-#, c-format
-msgid "%s to %s has been put to the queue"
-msgstr "очередь пополнилась на %s к %s"
-
-#: src/icqconf.cc:923
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr ""
-"ошибка отсылки события: контакт назначения не найдем в вашем списке контактов"
-
-#: src/icqconf.cc:965
-msgid "unknown status character was given"
-msgstr "неизвестная буква для статуса была задана"
-
-#: src/icqconf.cc:968
-msgid "unknown IM type"
-msgstr "неизвестный тип IM сети"
-
-#: src/icqconf.cc:971
-msgid "status change error: "
-msgstr "ошибка смены статуса: "
-
-#: src/icqconf.cc:980
-msgid "Usage: "
-msgstr "Использование: "
-
-#: src/icqconf.cc:982
-msgid "General options:"
-msgstr "Основные опции:"
-
-#: src/icqconf.cc:983
-msgid ""
-"  --ascii, -a              use ASCII characters for windows and UI controls"
-msgstr ""
-"  --ascii, -a              использовать ASCII символы для окошек и рамок"
-
-#: src/icqconf.cc:984
-msgid "  --basedir, -b <path>     set a custom base directory"
-msgstr "  --basedir, -b <путь>     задать другую базовую директорию"
-
-#: src/icqconf.cc:985
-msgid "  --bind, -B <host/ip>     bind a custom local IP"
-msgstr "  --bind, -B <host/ip>     IP для выходящих соединений"
-
-#: src/icqconf.cc:986
-msgid "  --help                   display this stuff"
-msgstr "  --help                   показать этот экран"
-
-#: src/icqconf.cc:987
-msgid "  --version, -v            show the program version info"
-msgstr "  --version, -v            показать версию программы"
-
-#: src/icqconf.cc:989
-msgid "Events sending options:"
-msgstr "Опции для посылки сообщений:"
-
-#: src/icqconf.cc:990
-msgid "  -s, --send <event type>  event type; can be msg, sms or url"
-msgstr "  -s, --send <тип>         тип сообщения; может быть msg, sms или url"
-
-#: src/icqconf.cc:991
-msgid "  -S, --status <status>    change the current IM status"
-msgstr "  -S, --status <статус>    сменить текущий статус в одой из IM сетей"
-
-#: src/icqconf.cc:992
-msgid ""
-"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
-"or jabber"
-msgstr ""
-"  -p, --proto <протокол>   тип протокола; может быть icq, yahoo, msn, aim, "
-"irc или jabber"
-
-#: src/icqconf.cc:994
-msgid ""
-"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
-msgstr ""
-"  -t, --to <назначение>    UIN или nickname получателя (зависит от протокола)"
-
-#: src/icqconf.cc:995
-msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
-msgstr "  -n, --number <тел.ном.>  мобильный номер получателя (только для sms)"
-
-#: src/icqconf.cc:997
-msgid "Report bugs to <centericq-bugs@konst.org.ua>."
-msgstr "Сообщения об ошибках присылать на <centericq-bugs@konst.org.ua>."
-
-#: src/icqcontact.cc:711
+#: src/icqcontact.cc:709
 msgid "The user has a birthday today"
 msgstr "Сегодня день рождения"
 
-#: src/icqcontact.cc:739
+#: src/icqcontact.cc:737
 msgid "Jan"
 msgstr "Янв"
 
-#: src/icqcontact.cc:739
+#: src/icqcontact.cc:737
 msgid "Feb"
 msgstr "Фев"
 
-#: src/icqcontact.cc:739
+#: src/icqcontact.cc:737
 msgid "Mar"
 msgstr "Мар"
 
-#: src/icqcontact.cc:739
+#: src/icqcontact.cc:737
 msgid "Apr"
 msgstr "Апр"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:738
 msgid "May"
 msgstr "Май"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:738
 msgid "Jun"
 msgstr "Июн"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:738
 msgid "Jul"
 msgstr "Июл"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:738
 msgid "Aug"
 msgstr "Авг"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:739
 msgid "Sep"
 msgstr "Сен"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:739
 msgid "Oct"
 msgstr "Окт"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:739
 msgid "Nov"
 msgstr "Ноя"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:739
 msgid "Dec"
 msgstr "Дек"
+
+#: src/icqgroups.cc:66
+msgid "General"
+msgstr "Свалка"
 
 #: src/icqdialogs.cc:44
 msgid "60-above"
@@ -1068,6 +776,12 @@ msgstr "Сохранить"
 #: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
 msgid "cLear"
 msgstr "Очистить"
+
+#: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
+#: src/icqdialogs.cc:687 src/icqdialogs.cc:1094 src/accountmanager.cc:68
+#: src/imcontroller.cc:71
+msgid "Change"
+msgstr "Изменить"
 
 #: src/icqdialogs.cc:212
 msgid "Search/Add"
@@ -1450,6 +1164,11 @@ msgstr " Ваша %s информация "
 msgid " %s: details "
 msgstr " %s: детали "
 
+#: src/icqdialogs.cc:687 src/icqdialogs.cc:1094 src/icqdialogs.cc:1420
+#: src/accountmanager.cc:68
+msgid "Done"
+msgstr "Готово"
+
 #: src/icqdialogs.cc:705
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Подождите минуточку. Ваша информация еще не получена"
@@ -1642,6 +1361,7 @@ msgid " Russian win/koi translation : %s "
 msgstr " Перекодировка win1251-koi8 : %s "
 
 #: src/icqdialogs.cc:1150
+#, c-format
 msgid " Default charset : %s "
 msgstr " Основная кодировка : %s "
 
@@ -1815,6 +1535,525 @@ msgstr " из "
 #: src/icqdialogs.cc:1623
 msgid "Cannot remove a transfer which is in progress now"
 msgstr "Невозможно удалить передачу, которая еще не закончилась"
+
+#: src/imexternal.cc:130
+#, c-format
+msgid "executed external manual action %s, return code = %d"
+msgstr "запущена внешняя программа %s, код возврата = %d"
+
+#: src/imexternal.cc:162
+#, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "запущен внешний обработчик %s, код возврата = %d"
+
+#: src/imlogger.cc:33
+msgid "Offline"
+msgstr ""
+
+#: src/imlogger.cc:34
+msgid "Online"
+msgstr "На линии"
+
+#: src/imlogger.cc:35
+msgid "Invisible"
+msgstr "Невидимость"
+
+#: src/imlogger.cc:36
+msgid "Free for chat"
+msgstr "Не прочь поболтать"
+
+#: src/imlogger.cc:37
+msgid "DND"
+msgstr ""
+
+#: src/imlogger.cc:38
+msgid "Occupied"
+msgstr "Занят"
+
+#: src/imlogger.cc:39
+msgid "N/A"
+msgstr ""
+
+#: src/imlogger.cc:40
+msgid "Away"
+msgstr "Отсутствие"
+
+#: src/imlogger.cc:48
+msgid "message"
+msgstr "сообщение"
+
+#: src/imlogger.cc:49
+msgid "URL"
+msgstr ""
+
+#: src/imlogger.cc:50
+msgid "SMS"
+msgstr ""
+
+#: src/imlogger.cc:51
+msgid "authorization"
+msgstr "авторизация"
+
+#: src/imlogger.cc:52
+msgid "e-mail"
+msgstr ""
+
+#: src/imlogger.cc:53
+msgid "notification"
+msgstr "извещение"
+
+#: src/imlogger.cc:54
+msgid "contacts"
+msgstr "контакты"
+
+#: src/imlogger.cc:55
+msgid "files"
+msgstr "файлы"
+
+#: src/imlogger.cc:77
+msgid "events log started"
+msgstr "журналирование начато"
+
+#: src/imlogger.cc:108
+#, c-format
+msgid "outgoing %s to %s"
+msgstr "исходящее %s к %s"
+
+#: src/imlogger.cc:109
+#, c-format
+msgid "incoming %s from %s"
+msgstr "входящее %s от %s"
+
+#: src/imlogger.cc:121
+msgid "ignored"
+msgstr "проигнорировано"
+
+#: src/imlogger.cc:135
+#, c-format
+msgid "%s went online, with status %s"
+msgstr "%s появился на линии, статус %s"
+
+#: src/imlogger.cc:137
+#, c-format
+msgid "%s went offline"
+msgstr "%s ушел"
+
+#: src/imlogger.cc:139
+#, c-format
+msgid "%s changed status to %s from %s"
+msgstr "%s поменял статус на %s с %s"
+
+#: src/imlogger.cc:168
+#, c-format
+msgid "%s: went online, with status %s"
+msgstr "%s: вышли в онлайн, со статусом %s"
+
+#: src/imlogger.cc:170
+#, c-format
+msgid "%s: went offline"
+msgstr "%s: ушли в оффлайн"
+
+#: src/imlogger.cc:172
+#, c-format
+msgid "changed our %s status to %s from %s"
+msgstr "поменяли свой %s статус на %s с %s"
+
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " Менеджер логинов "
+
+#: src/accountmanager.cc:94
+#, c-format
+msgid " Server : %s "
+msgstr " Сервер : %s "
+
+#: src/accountmanager.cc:97
+#, c-format
+msgid " Secured : %s "
+msgstr " Защищенное соединение : %s "
+
+#: src/accountmanager.cc:103
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:108
+#, c-format
+msgid " Login : %s "
+msgstr " Логин : %s "
+
+#: src/accountmanager.cc:114
+#, c-format
+msgid " Password (optional) : %s "
+msgstr " Пароль (не обязательно) : %s "
+
+#: src/accountmanager.cc:114
+#, c-format
+msgid " Password : %s "
+msgstr " Пароль : %s "
+
+#: src/accountmanager.cc:118
+msgid " Register "
+msgstr " Регистрация "
+
+#: src/accountmanager.cc:124
+msgid " Change nickname "
+msgstr " Сменить friendly nickname "
+
+#: src/accountmanager.cc:125
+msgid " Update user details "
+msgstr " Обновить свою информацию "
+
+#: src/accountmanager.cc:128
+msgid " Set away message "
+msgstr " Установить away-сообщение "
+
+#: src/accountmanager.cc:131
+msgid " Synchronize contact list "
+msgstr " Снихронизировать список контактов "
+
+#: src/accountmanager.cc:133
+msgid " Drop "
+msgstr " Удалить "
+
+#: src/accountmanager.cc:151
+msgid " user name: "
+msgstr " логин: "
+
+#: src/accountmanager.cc:156
+msgid " uin: "
+msgstr " номер: "
+
+#: src/accountmanager.cc:161
+msgid " password: "
+msgstr " пароль: "
+
+#: src/accountmanager.cc:169
+msgid "Drop the account information first!"
+msgstr "Сначала удалите информацию о логине!"
+
+#: src/accountmanager.cc:183
+msgid "You have to disconnect the service first!"
+msgstr "Сначала вы должны произвести рассоединение!"
+
+#: src/accountmanager.cc:192
+msgid " server address: "
+msgstr " сервер : "
+
+#: src/accountmanager.cc:214
+msgid "You must be logged in to preform the synchronization"
+msgstr "Вы должны войти в сеть прежде чем сможете произвести синхронизацию"
+
+#: src/imcontroller.cc:64
+#, c-format
+msgid " Register on the %s network "
+msgstr " Регистрация в сети %s "
+
+#: src/imcontroller.cc:71
+msgid "Go ahead"
+msgstr "Поехали"
+
+#: src/imcontroller.cc:87
+#, c-format
+msgid " Password to set : %s "
+msgstr " Пароль : %s "
+
+#: src/imcontroller.cc:88
+#, c-format
+msgid " Check the password : %s "
+msgstr " Пароль для проверки : %s "
+
+#: src/imcontroller.cc:91
+#, c-format
+msgid " Server to use : %s "
+msgstr " Использовать сервер : %s "
+
+#: src/imcontroller.cc:100
+msgid "Check the password you entered: "
+msgstr "Контроль введенного пароля: "
+
+#: src/imcontroller.cc:101
+msgid "Nickname to set: "
+msgstr "Установить ник: "
+
+#: src/imcontroller.cc:105
+msgid "Server: "
+msgstr "Сервер: "
+
+#: src/imcontroller.cc:111
+msgid "Passwords do not match"
+msgstr "Пароли не совпадают"
+
+#: src/imcontroller.cc:113
+msgid "Password must be entered"
+msgstr "Пароль должен быть указан"
+
+#: src/imcontroller.cc:131 src/imcontroller.cc:192
+msgid " Registration progress "
+msgstr " Регистрация "
+
+#: src/imcontroller.cc:134
+#, c-format
+msgid "Connecting to the server %s ..."
+msgstr "Соединение с сервером %s ..."
+
+#: src/imcontroller.cc:138
+msgid "Sending request"
+msgstr "Посылка запроса"
+
+#: src/imcontroller.cc:144
+msgid "Timed out waiting for a new uin. Retry?"
+msgstr "Время попытки истекло. Повторить?"
+
+#: src/imcontroller.cc:148
+msgid "Retrying.."
+msgstr "Повторяем.."
+
+#: src/imcontroller.cc:154
+#, c-format
+msgid "New UIN received, %lu"
+msgstr "Получен новый UIN, %lu"
+
+#: src/imcontroller.cc:170 src/imcontroller.cc:228 src/imcontroller.cc:318
+msgid "Disconnected"
+msgstr "Рассоединение"
+
+#: src/imcontroller.cc:173
+msgid "Unable to connect to the icq server. Retry?"
+msgstr "Невозможно соединиться с сервером. Повторить попытку?"
+
+#: src/imcontroller.cc:194
+#, c-format
+msgid "Trying to register %s at %s ..."
+msgstr "Попытка зарегистрировать %s на %s ..."
+
+#: src/imcontroller.cc:209
+msgid "The Jabber ID was successfully registered"
+msgstr "Регистрация Jabber ID прошла успешно"
+
+#: src/imcontroller.cc:222
+msgid "Failed"
+msgstr "Неудача"
+
+#: src/imcontroller.cc:250
+msgid "You must be logged to the ICQ network to update the details"
+msgstr "Вы должны быть в он-лайн чтобы иметь возможность обновлять информацию"
+
+#: src/imcontroller.cc:268
+msgid "new MSN friendly nick: "
+msgstr "новый MSN friendly nick: "
+
+#: src/imcontroller.cc:276
+#, c-format
+msgid "Your friendly nickname has been changed to %s"
+msgstr "Ваш friendly nickname был изменен на %s"
+
+#: src/imcontroller.cc:280
+msgid "You must be logged to the MSN network to update the friendly nick"
+msgstr "Вы должны быть в он-лайн чтобы иметь возможность сменить ник"
+
+#: src/imcontroller.cc:297
+msgid "You must be logged to the Jabber network to update your details"
+msgstr "Вы должны быть в он-лайн чтобы иметь возможность обновлять информацию"
+
+#: src/imcontroller.cc:308
+msgid " Contact list synchronization "
+msgstr " Синхронизация списка контактов "
+
+#: src/imcontroller.cc:309
+msgid "Starting the synchronization process"
+msgstr "Начало процесса синхронизации списка"
+
+#: src/imcontroller.cc:313
+#, c-format
+msgid "Attempt #%d"
+msgstr "Попытка #%d"
+
+#: src/imcontroller.cc:314
+#, c-format
+msgid ".. %d already synchronized, %d contacts to be stored"
+msgstr ".. %d синхронизированы, осталось %d контактов"
+
+#: src/imcontroller.cc:317 src/imcontroller.cc:358
+msgid "Finished"
+msgstr "Завершено"
+
+#: src/imcontroller.cc:319
+msgid "Too many attempts, gave up"
+msgstr "Слишком много попыток, хватит"
+
+#: src/imcontroller.cc:341
+msgid " Uploading buddies "
+msgstr " Сохранение списка контактов "
+
+#: src/imcontroller.cc:344
+msgid "No contacts to be synchronized"
+msgstr "Все контакты уже синхронизированы"
+
+#: src/imcontroller.cc:345
+msgid ".. all of them are already stored server-side"
+msgstr ".. на сервере присутствуют все из вашего списка"
+
+#: src/imcontroller.cc:349
+#, c-format
+msgid "%d contacts are do be stored server-side. Add them now?"
+msgstr "%d контактов будут сохранены на сервере. Продолжить?"
+
+#: src/imcontroller.cc:354
+#, c-format
+msgid ".. adding %s"
+msgstr ".. добавляем %s"
+
+#: src/imcontroller.cc:360
+msgid "Cancelled"
+msgstr "Отменено"
+
+#: src/imcontroller.cc:375
+msgid "registration is not supported"
+msgstr "регистрация не поддерживается"
+
+#: src/icqconf.cc:147
+#, c-format
+msgid "I do really enjoy the default %s away message of %s %s."
+msgstr ""
+"Мне действительно нравится сообщение для %s, которое centericq %s %s "
+"устанавливает по умолчанию."
+
+#: src/icqconf.cc:688
+msgid "+ launched the openurl command"
+msgstr "+ команда openurl запущена"
+
+#: src/icqconf.cc:857
+msgid "event sending error: not enough parameters"
+msgstr "ошибка отсылки события: недостаточно параметров"
+
+#: src/icqconf.cc:868
+msgid "event sending error: only UINs are allowed with icq protocol"
+msgstr ""
+"ошибка отсылки события: для указанного протокола разрешены только номера "
+"(UIN)"
+
+#: src/icqconf.cc:883
+msgid "event sending error: unknown IM type"
+msgstr "ошибка отсылки события: неизвестная IM сеть"
+
+#: src/icqconf.cc:905
+msgid "event sending error: unknown event type"
+msgstr "ошибка отсылки события: неизвестный тип события"
+
+#: src/icqconf.cc:917
+#, c-format
+msgid "%s to %s has been put to the queue"
+msgstr "очередь пополнилась на %s к %s"
+
+#: src/icqconf.cc:923
+msgid "event sending error: the destination contact doesn't exist on your list"
+msgstr ""
+"ошибка отсылки события: контакт назначения не найдем в вашем списке контактов"
+
+#: src/icqconf.cc:965
+msgid "unknown status character was given"
+msgstr "неизвестная буква для статуса была задана"
+
+#: src/icqconf.cc:968
+msgid "unknown IM type"
+msgstr "неизвестный тип IM сети"
+
+#: src/icqconf.cc:971
+msgid "status change error: "
+msgstr "ошибка смены статуса: "
+
+#: src/icqconf.cc:980
+msgid "Usage: "
+msgstr "Использование: "
+
+#: src/icqconf.cc:982
+msgid "General options:"
+msgstr "Основные опции:"
+
+#: src/icqconf.cc:983
+msgid ""
+"  --ascii, -a              use ASCII characters for windows and UI controls"
+msgstr ""
+"  --ascii, -a              использовать ASCII символы для окошек и рамок"
+
+#: src/icqconf.cc:984
+msgid "  --basedir, -b <path>     set a custom base directory"
+msgstr "  --basedir, -b <путь>     задать другую базовую директорию"
+
+#: src/icqconf.cc:985
+msgid "  --bind, -B <host/ip>     bind a custom local IP"
+msgstr "  --bind, -B <host/ip>     IP для выходящих соединений"
+
+#: src/icqconf.cc:986
+msgid "  --help                   display this stuff"
+msgstr "  --help                   показать этот экран"
+
+#: src/icqconf.cc:987
+msgid "  --version, -v            show the program version info"
+msgstr "  --version, -v            показать версию программы"
+
+#: src/icqconf.cc:989
+msgid "Events sending options:"
+msgstr "Опции для посылки сообщений:"
+
+#: src/icqconf.cc:990
+msgid "  -s, --send <event type>  event type; can be msg, sms or url"
+msgstr "  -s, --send <тип>         тип сообщения; может быть msg, sms или url"
+
+#: src/icqconf.cc:991
+msgid "  -S, --status <status>    change the current IM status"
+msgstr "  -S, --status <статус>    сменить текущий статус в одой из IM сетей"
+
+#: src/icqconf.cc:992
+msgid ""
+"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
+"or jabber"
+msgstr ""
+"  -p, --proto <протокол>   тип протокола; может быть icq, yahoo, msn, aim, "
+"irc или jabber"
+
+#: src/icqconf.cc:994
+msgid ""
+"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
+msgstr ""
+"  -t, --to <назначение>    UIN или nickname получателя (зависит от протокола)"
+
+#: src/icqconf.cc:995
+msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
+msgstr "  -n, --number <тел.ном.>  мобильный номер получателя (только для sms)"
+
+#: src/icqconf.cc:997
+msgid "Report bugs to <centericq-bugs@konst.org.ua>."
+msgstr "Сообщения об ошибках присылать на <centericq-bugs@konst.org.ua>."
+
+#: src/imevents.cc:278
+msgid "Empty authorization request message"
+msgstr "Пустое сообщение в запросе на авторизацию"
+
+#: src/imevents.cc:301
+msgid "* Authorization request : "
+msgstr "* Запрос авторизации : "
+
+#: src/imevents.cc:302
+msgid "* Authorization : "
+msgstr "* Авторизация : "
+
+#: src/imevents.cc:360
+msgid "* SMS : "
+msgstr ""
+
+#: src/imevents.cc:493
+msgid "* Contacts : "
+msgstr "* Контакты : "
+
+#: src/imevents.cc:498
+msgid "<no nick>"
+msgstr "<нет ника>"
+
+#: src/imevents.cc:573
+msgid "* File transfer"
+msgstr "* Передача файлов"
 
 #: src/icqface.cc:40
 msgid "yes"
@@ -2503,327 +2742,101 @@ msgstr "/ поиск, N опять, ESC отмена"
 msgid "search for: "
 msgstr "искать: "
 
-#: src/icqgroups.cc:66
-msgid "General"
-msgstr "Свалка"
+#: src/hooks/rsshook.cc:282
+msgid "coudln't fetch"
+msgstr "ошибка соединения"
 
-#: src/imcontroller.cc:64
+#: src/hooks/rsshook.cc:311
+msgid "wrong XML"
+msgstr "неправильный XML"
+
+#: src/hooks/rsshook.cc:314
+msgid "no <rss> tag found"
+msgstr "тэг <rss> не найден"
+
+#: src/hooks/rsshook.cc:321
+msgid "no <channel> tag found"
+msgstr "тэг <channel> не найден"
+
+#: src/hooks/rsshook.cc:328
+msgid "wrong <channel> tag"
+msgstr "неправильный тэг <channel>"
+
+#: src/hooks/rsshook.cc:337
+msgid "success"
+msgstr "успешно"
+
+#: src/hooks/rsshook.cc:356
+msgid "Title: "
+msgstr "Заголовок: "
+
+#: src/hooks/rsshook.cc:357
+msgid "Published on: "
+msgstr "Опубликовано: "
+
+#: src/hooks/rsshook.cc:358
+msgid "Category: "
+msgstr "Категория: "
+
+#: src/hooks/rsshook.cc:359
+msgid "Author: "
+msgstr "Автор: "
+
+#: src/hooks/rsshook.cc:361
+msgid "Description: "
+msgstr "Описание: "
+
+#: src/hooks/rsshook.cc:362
+msgid "Link: "
+msgstr "Ссылка: "
+
+#: src/hooks/rsshook.cc:363
+msgid "Comments: "
+msgstr "Комментарии: "
+
+#: src/hooks/HTTPClient.cc:276
+msgid "Timed out"
+msgstr "Таймаут"
+
+#: src/hooks/ljhook.cc:61
+msgid "+ [lj] connecting to the server"
+msgstr "+ [lj] соединение с сервером"
+
+#: src/hooks/ljhook.cc:91
+msgid "+ [lj] disconnected"
+msgstr "+ [lj] рассоединение"
+
+#: src/hooks/ljhook.cc:351
+msgid "cannot connect"
+msgstr "невозможно соединиться"
+
+#: src/hooks/ljhook.cc:352
 #, c-format
-msgid " Register on the %s network "
-msgstr " Регистрация в сети %s "
+msgid "+ [lj] HTTP failed: %s"
+msgstr "+ [lj] ошибка HTTP: %s"
 
-#: src/imcontroller.cc:71
-msgid "Go ahead"
-msgstr "Поехали"
+#: src/hooks/ljhook.cc:378
+msgid "+ [lj] logged in"
+msgstr "+ [lj] вход в систему состоялся"
 
-#: src/imcontroller.cc:87
+#: src/hooks/ljhook.cc:391
 #, c-format
-msgid " Password to set : %s "
-msgstr " Пароль : %s "
+msgid "+ [lj] login failed: %s"
+msgstr "+ [lj] не удалось соединиться: %s"
 
-#: src/imcontroller.cc:88
+#: src/hooks/ljhook.cc:395
 #, c-format
-msgid " Check the password : %s "
-msgstr " Пароль для проверки : %s "
+msgid "+ [lj] posted successully, the id is %s"
+msgstr "+ [lj] отправлено удачно, id = %s"
 
-#: src/imcontroller.cc:91
+#: src/hooks/ljhook.cc:397
 #, c-format
-msgid " Server to use : %s "
-msgstr " Использовать сервер : %s "
+msgid "+ [lj] post error: %s"
+msgstr "+ [lj] ошибка отправки: %s"
 
-#: src/imcontroller.cc:100
-msgid "Check the password you entered: "
-msgstr "Контроль введенного пароля: "
-
-#: src/imcontroller.cc:101
-msgid "Nickname to set: "
-msgstr "Установить ник: "
-
-#: src/imcontroller.cc:105
-msgid "Server: "
-msgstr "Сервер: "
-
-#: src/imcontroller.cc:111
-msgid "Passwords do not match"
-msgstr "Пароли не совпадают"
-
-#: src/imcontroller.cc:113
-msgid "Password must be entered"
-msgstr "Пароль должен быть указан"
-
-#: src/imcontroller.cc:131 src/imcontroller.cc:192
-msgid " Registration progress "
-msgstr " Регистрация "
-
-#: src/imcontroller.cc:134
-#, c-format
-msgid "Connecting to the server %s ..."
-msgstr "Соединение с сервером %s ..."
-
-#: src/imcontroller.cc:138
-msgid "Sending request"
-msgstr "Посылка запроса"
-
-#: src/imcontroller.cc:144
-msgid "Timed out waiting for a new uin. Retry?"
-msgstr "Время попытки истекло. Повторить?"
-
-#: src/imcontroller.cc:148
-msgid "Retrying.."
-msgstr "Повторяем.."
-
-#: src/imcontroller.cc:154
-#, c-format
-msgid "New UIN received, %lu"
-msgstr "Получен новый UIN, %lu"
-
-#: src/imcontroller.cc:170 src/imcontroller.cc:228 src/imcontroller.cc:318
-msgid "Disconnected"
-msgstr "Рассоединение"
-
-#: src/imcontroller.cc:173
-msgid "Unable to connect to the icq server. Retry?"
-msgstr "Невозможно соединиться с сервером. Повторить попытку?"
-
-#: src/imcontroller.cc:194
-#, c-format
-msgid "Trying to register %s at %s ..."
-msgstr "Попытка зарегистрировать %s на %s ..."
-
-#: src/imcontroller.cc:209
-msgid "The Jabber ID was successfully registered"
-msgstr "Регистрация Jabber ID прошла успешно"
-
-#: src/imcontroller.cc:222
-msgid "Failed"
-msgstr "Неудача"
-
-#: src/imcontroller.cc:250
-msgid "You must be logged to the ICQ network to update the details"
-msgstr "Вы должны быть в он-лайн чтобы иметь возможность обновлять информацию"
-
-#: src/imcontroller.cc:268
-msgid "new MSN friendly nick: "
-msgstr "новый MSN friendly nick: "
-
-#: src/imcontroller.cc:276
-#, c-format
-msgid "Your friendly nickname has been changed to %s"
-msgstr "Ваш friendly nickname был изменен на %s"
-
-#: src/imcontroller.cc:280
-msgid "You must be logged to the MSN network to update the friendly nick"
-msgstr "Вы должны быть в он-лайн чтобы иметь возможность сменить ник"
-
-#: src/imcontroller.cc:297
-msgid "You must be logged to the Jabber network to update your details"
-msgstr "Вы должны быть в он-лайн чтобы иметь возможность обновлять информацию"
-
-#: src/imcontroller.cc:308
-msgid " Contact list synchronization "
-msgstr " Синхронизация списка контактов "
-
-#: src/imcontroller.cc:309
-msgid "Starting the synchronization process"
-msgstr "Начало процесса синхронизации списка"
-
-#: src/imcontroller.cc:313
-#, c-format
-msgid "Attempt #%d"
-msgstr "Попытка #%d"
-
-#: src/imcontroller.cc:314
-#, c-format
-msgid ".. %d already synchronized, %d contacts to be stored"
-msgstr ".. %d синхронизированы, осталось %d контактов"
-
-#: src/imcontroller.cc:317 src/imcontroller.cc:358
-msgid "Finished"
-msgstr "Завершено"
-
-#: src/imcontroller.cc:319
-msgid "Too many attempts, gave up"
-msgstr "Слишком много попыток, хватит"
-
-#: src/imcontroller.cc:341
-msgid " Uploading buddies "
-msgstr " Сохранение списка контактов "
-
-#: src/imcontroller.cc:344
-msgid "No contacts to be synchronized"
-msgstr "Все контакты уже синхронизированы"
-
-#: src/imcontroller.cc:345
-msgid ".. all of them are already stored server-side"
-msgstr ".. на сервере присутствуют все из вашего списка"
-
-#: src/imcontroller.cc:349
-#, c-format
-msgid "%d contacts are do be stored server-side. Add them now?"
-msgstr "%d контактов будут сохранены на сервере. Продолжить?"
-
-#: src/imcontroller.cc:354
-#, c-format
-msgid ".. adding %s"
-msgstr ".. добавляем %s"
-
-#: src/imcontroller.cc:360
-msgid "Cancelled"
-msgstr "Отменено"
-
-#: src/imcontroller.cc:375
-msgid "registration is not supported"
-msgstr "регистрация не поддерживается"
-
-#: src/imevents.cc:278
-msgid "Empty authorization request message"
-msgstr "Пустое сообщение в запросе на авторизацию"
-
-#: src/imevents.cc:301
-msgid "* Authorization request : "
-msgstr "* Запрос авторизации : "
-
-#: src/imevents.cc:302
-msgid "* Authorization : "
-msgstr "* Авторизация : "
-
-#: src/imevents.cc:360
-msgid "* SMS : "
+#: src/hooks/ljhook.cc:402
+msgid "+ [lj] error requesting friends list"
 msgstr ""
-
-#: src/imevents.cc:493
-msgid "* Contacts : "
-msgstr "* Контакты : "
-
-#: src/imevents.cc:498
-msgid "<no nick>"
-msgstr "<нет ника>"
-
-#: src/imevents.cc:573
-msgid "* File transfer"
-msgstr "* Передача файлов"
-
-#: src/imexternal.cc:130
-#, c-format
-msgid "executed external manual action %s, return code = %d"
-msgstr "запущена внешняя программа %s, код возврата = %d"
-
-#: src/imexternal.cc:162
-#, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "запущен внешний обработчик %s, код возврата = %d"
-
-#: src/imlogger.cc:33
-msgid "Offline"
-msgstr ""
-
-#: src/imlogger.cc:34
-msgid "Online"
-msgstr "На линии"
-
-#: src/imlogger.cc:35
-msgid "Invisible"
-msgstr "Невидимость"
-
-#: src/imlogger.cc:36
-msgid "Free for chat"
-msgstr "Не прочь поболтать"
-
-#: src/imlogger.cc:37
-msgid "DND"
-msgstr ""
-
-#: src/imlogger.cc:38
-msgid "Occupied"
-msgstr "Занят"
-
-#: src/imlogger.cc:39
-msgid "N/A"
-msgstr ""
-
-#: src/imlogger.cc:40
-msgid "Away"
-msgstr "Отсутствие"
-
-#: src/imlogger.cc:48
-msgid "message"
-msgstr "сообщение"
-
-#: src/imlogger.cc:49
-msgid "URL"
-msgstr ""
-
-#: src/imlogger.cc:50
-msgid "SMS"
-msgstr ""
-
-#: src/imlogger.cc:51
-msgid "authorization"
-msgstr "авторизация"
-
-#: src/imlogger.cc:52
-msgid "e-mail"
-msgstr ""
-
-#: src/imlogger.cc:53
-msgid "notification"
-msgstr "извещение"
-
-#: src/imlogger.cc:54
-msgid "contacts"
-msgstr "контакты"
-
-#: src/imlogger.cc:55
-msgid "files"
-msgstr "файлы"
-
-#: src/imlogger.cc:77
-msgid "events log started"
-msgstr "журналирование начато"
-
-#: src/imlogger.cc:108
-#, c-format
-msgid "outgoing %s to %s"
-msgstr "исходящее %s к %s"
-
-#: src/imlogger.cc:109
-#, c-format
-msgid "incoming %s from %s"
-msgstr "входящее %s от %s"
-
-#: src/imlogger.cc:121
-msgid "ignored"
-msgstr "проигнорировано"
-
-#: src/imlogger.cc:135
-#, c-format
-msgid "%s went online, with status %s"
-msgstr "%s появился на линии, статус %s"
-
-#: src/imlogger.cc:137
-#, c-format
-msgid "%s went offline"
-msgstr "%s ушел"
-
-#: src/imlogger.cc:139
-#, c-format
-msgid "%s changed status to %s from %s"
-msgstr "%s поменял статус на %s с %s"
-
-#: src/imlogger.cc:168
-#, c-format
-msgid "%s: went online, with status %s"
-msgstr "%s: вышли в онлайн, со статусом %s"
-
-#: src/imlogger.cc:170
-#, c-format
-msgid "%s: went offline"
-msgstr "%s: ушли в оффлайн"
-
-#: src/imlogger.cc:172
-#, c-format
-msgid "changed our %s status to %s from %s"
-msgstr "поменяли свой %s статус на %s с %s"
 
 #~ msgid "+ [yahoo] %s: started typing"
 #~ msgstr "+ [yahoo] %s: начал набирать текст"

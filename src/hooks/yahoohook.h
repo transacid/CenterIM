@@ -23,7 +23,8 @@ class yahoohook: public abstracthook {
 	struct yfd {
 	    int fd;
 	    void *data;
-	    yfd(int afd, void *adata): fd(afd), data(adata) {}
+	    bool isconnect;
+	    yfd(int afd, void *adata, bool aisconnect = false): fd(afd), data(adata), isconnect(aisconnect) {}
 
 	    bool operator == (int afd) const { return fd == afd; }
 	    bool operator != (int afd) const { return fd != afd; }
@@ -99,7 +100,7 @@ class yahoohook: public abstracthook {
 	void sendnewuser(const imcontact &ic, bool report);
 	void removeuser(const imcontact &ic, bool report);
 
-	void connect_complete(void *data, int source, yahoo_input_condition condition);
+	void connect_complete(void *data, int source);
 
     public:
 	yahoohook();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.6 2003/10/01 23:01:52 konst Exp $
+* $Id: ljhook.cc,v 1.7 2003/10/02 22:24:36 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -256,14 +256,15 @@ imstatus ljhook::getstatus() const {
 }
 
 void ljhook::requestinfo(const imcontact &ic) {
+    int npos;
     icqcontact *c = clist.get(ic);
 
     if(c) {
 	icqcontact::moreinfo m = c->getmoreinfo();
-
-	m.homepage = "http://" + conf.getourid(proto).server + "/users/" + ic.nickname;
-
-	c->setmoreinfo(m);
+	if((npos = ic.nickname.find("@")) != -1) {
+	    m.homepage = "http://" + conf.getourid(proto).server + "/users/" + ic.nickname.substr(0, npos);
+	    c->setmoreinfo(m);
+	}
     }
 }
 

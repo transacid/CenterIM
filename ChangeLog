@@ -1,10 +1,3 @@
-2003-10-01  gettextize  <bug-gnu-gettext@gnu.org>
-
-	* Makefile.am (SUBDIRS): Add intl,
-	(ACLOCAL_AMFLAGS): New variable.
-	(EXTRA_DIST): Add config.rpath mkinstalldirs.
-	* configure.in (AC_OUTPUT): Add intl/Makefile,
-
 0.0.1
 -----
 
@@ -1545,3 +1538,70 @@ support md5 digest auth. Fixed.
 
 HTTP proxy support for fetching RSS feeds was fixed. It used to segfault
 the application in some situation.
+
+4.9.7
+-----
+
+The "away message was requested" log message for the ICQ protocol was
+removed. The point is that receiving such a packet doesn't always mean
+someone requested it manually, but it happens very often that client
+programs fetch away messages on their own. Like when your status is
+away.
+
+The problem with the Yahoo! protocol which appeared recently was fixed
+with updating libyahoo2 to a newer version and hacking into it the fix
+code borrowed from GAIM.
+
+Applied a patch from Daniel Lublin <daniel@lublin.se> which makes it
+possible to define colors for incoming and outgoing history items
+separately.
+
+Sending messages by simply pressing the Enter key was implemented.
+Protocols list is configurable. So if you'd like to have such a feature,
+let's say, for irc, but leave icq as it's now, you can easily do it from
+the configuration dialog.
+
+Fixed several problems that used to appear when only one IM protocol was
+configured. For instance, it was unable to change the status. Thanks to
+Justin Scott for bug-report.
+
+Vassilios Karakoidas sent a patch for cicqconv which added converting
+some more Trillian contact items into centericq.
+
+Several grouping related problems were fixed. Sometimes groups got
+messed up. Now it shouldn't happen anymore.
+
+"User is typing" messages were removed from the log window. So now you
+can see a "T" letter in the brackets sometimes appearing there instead
+of online status.
+
+The "Default charset" parameter was added to the configuration dialog.
+It's a replacement for the hard-coded #define used to specify the
+explicitely used charset before.
+
+Several build problems on RH9 were fixed. The fix also eliminated
+problems ones had using the cicqsync script to fetch daily CVS updates.
+So if you had problems with it, just give it another try. And in case
+there are some other problems, consider reading this:
+http://centericq.de/docs/faq.php
+
+And now there is the most sick piece of centericq news ever. Since this
+very version, it supports LiveJournal. LiveJournal is an amazing blogs
+community which uses its own fully open source technology. It also has a
+client-server protocol, so I though we could make use of it in the small
+proggy. Connecting is simple: if you have an LJ account, just go to the
+account manager and introduce your login and password there. As soon as
+you login, you'll have a brightly colorized online item named
+<your_username>@lj, which you can use to send LJ posts. Also there will
+be your friends' journals automatically imported as RSS feeds. More
+details about LiveJournal at http://www.livejournal.com/
+
+Donating via webmoney is now supported. For those of you who for some
+reasons don't have a possibility to register a paypal account, but still
+want to reward me for my hard work, can make a donation via webmoney. A
+sum proportional to happiness and satisfaction you have of using
+centericq, can be sent to the webmoney purse Z846530103960. I also want
+to remind you that the old good paypal is still functional, and you can
+find a direct link to donations at the centericq homepage at
+http://thekonst.net/centericq/. Thank you for your support, guys!
+

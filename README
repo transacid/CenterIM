@@ -19,7 +19,8 @@ Contents
 	2.5.1. IRC channels
     2.6. Jabber accounts
 	2.6.1. Jabber groupchat conferences
-    2.7. Updating details
+    2.7. LiveJournal
+    2.8. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -39,6 +40,7 @@ Contents
 	4.5.4. AIM TOC
 	4.5.5. IRC
 	4.5.6. Jabber
+	4.5.7. LiveJournal
     4.6. Binding to various IP addresses
 5. Online status
     5.1. "Auto Away" and "Auto N/A"
@@ -112,7 +114,8 @@ informed on receiving email messages, automatically set away after the
 defined period of inactivity (on any console), and have your own ignore,
 visible and invisible lists. It can also associate events with sounds,
 has support for Hebrew and Arabic languages and allows to arrange
-contacts into groups. There is also an internal RSS reader.
+contacts into groups. There is also an internal RSS reader and even a
+LiveJournal client!
 
   Centericq is known to build and work well under Linux, FreeBSD,
 OpenBSD, NetBSD, Sun Solaris, MacOS X/Darwin and Microsoft
@@ -309,7 +312,20 @@ register new nicknames in it very easily.
    Like IRC channels, they're controlled like usual contacts, too.
 
 
-2.7. Updating details
+2.7. LiveJournal
+----------------
+
+  Though LiveJournal is not actually an IM service, but I hope you
+forgive me for that. LiveJournal is a weblogs community. Its URL is
+http://www.livejournal.com/. Centericq makes use of their open source
+and well-documented client-server protocol, and makes it possible to
+post items and read friends' RSS feeds directly from its interface. So
+if you want an account, go to http://www.livejournal.com/ and see how to
+get it. If you don't like the rules, you can always download their
+server software and install it on your own. Long live open source!
+
+
+2.8. Updating details
 ---------------------
 
   If you have just registered on the ICQ network only basic fields of
@@ -597,6 +613,19 @@ open to the public is the following:
 
   Hostname: jabber.com
   Port: 5222
+
+
+4.5.7. LiveJournal
+------------------
+
+  Since LiveJournal, despite of its being not an IM network, is also a
+completely open source and free (in the "free speech" sense) solution,
+you can find LiveJournal servers installed anywhere. You can even
+install one on your own. Just in case, here I'm giving you parameters of
+their main server:
+
+  Hostname: livejournal.com
+  Port: 80
 
 
 4.6. Binding to various IP addresses
@@ -1775,4 +1804,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.86 2003/10/01 00:27:44 konst Exp $
+$Id: README,v 1.87 2003/10/02 22:24:24 konst Exp $
