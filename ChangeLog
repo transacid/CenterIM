@@ -1364,3 +1364,37 @@ read as a bunch of the first connect with centericq is now done slower,
 with necessary timeouts and stuff. Because of this workaround the server
 is supposed not to kick us out because of flood anymore.
 
+4.9.2
+-----
+
+A problem resulted into ignoring bold attributes on the colorscheme file
+auto-re-reading was fixed.
+
+The SENDER_NICK environment variable for scripts executed on events
+related to MSN contacts had been set incorrectly. Fixed.
+
+Several small patches from Julien LEMOINE <speedblue@debian.org>, a
+Debian developer, were applied.
+
+Now the centericq build procedure can automatically find and use the
+alternative SSL library, called GnuTLS. Old versions of OpenSSL called
+SSLeay will work with centericq now too.
+
+User info "manual" external actions were implemented, so that now it's
+possible to define various operations to be performed with users on your
+contact list. You can bind the host(1) command for ICQ contacts to
+comfortably lookup their domain names, for instance. More info in the
+README chapter 9.3.6.
+
+The Jabber module was modified so that now it treats correctly all the
+data encoded in UTF-8, including nicknames in roster, user information,
+and so on.
+
+The centericq configuration now gets saved on receiving the SIGTERM
+signal. Useful if you don't wanna lose your recent settings on reboot.
+
+Shells others than /bin/sh didn't work in external actions. Fixed.
+
+In the adding to visible/invisible list selection box contacts that are
+already on the list are not shown anymore.
+
