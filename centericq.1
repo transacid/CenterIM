@@ -37,6 +37,10 @@ use ascii characters to draw lines and boxes
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display command line usage
+.TP
+\fB\-b\fR, \fB\-\-base\fR <directory>
+specify another base directory; useful for having several IM identities
+under the same UNIX account
 
 .PP
 
@@ -87,11 +91,8 @@ network with the following command line option.
 .TP
 \fB\-S\fR, \fB\-\-status\fR <status letter>
 The argument parameter is a letter which indicates which status is
-to be set:
-o (Online)		_ (Offline)
-a (Away)		d (Don't disturb)
-n (N/A)			c (Occupied)
-f (Free for chat)	i (Invisible)
+to be set: o (Online), _ (Offline), a (Away), d (Don't disturb), n (N/A),
+c (Occupied), f (Free for chat), i (Invisible)
 .TP
 \fB\-p\fR or \fB\-\-protocol\fR <protocol name>
 This one specifies to which IM network the destination contact belongs
@@ -110,7 +111,7 @@ disconnected immediately.
 
     \fB$ centericq -S a -p yahoo\fR
 
-And this command will switch your yahoo status to offline.
+And this command will switch your yahoo status to away.
 
 
 .SH VERSION

@@ -67,7 +67,8 @@ Contents
 	9.3.5. Hiding from scary ones
     9.4. Protocol debug mode
     9.5. "Friendly" logging
-    9.6. Latest CVS snapshots
+    9.6. Custom base directories
+    9.7. Latest CVS snapshots
 10. Lynx
     10.1. The program homepage
 	10.1.1. Centericq mailing list
@@ -1286,7 +1287,18 @@ automatic parsing tool can be written without a problem. Though in this
 case you should keep in mind the messages are locale dependent.
 
 
-9.6. Latest CVS snapshots
+9.6. Custom base directories
+----------------------------
+
+  By default, centericq uses the .centericq/ directory under your home
+to hold all of its information, such as configuration and contact list.
+There can be situations, when you want to have several IM identities in
+the same networks under the same UNIX account. To make it possible, the
+-b command line parameter was implemented. It's syntax is simple "-b
+<directory name>"
+
+
+9.7. Latest CVS snapshots
 -------------------------
 
   If you wanna always have the recent version of the program, there is
