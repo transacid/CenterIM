@@ -1,5 +1,5 @@
-Version: 4.0.0
-Summary: Console ncurses based ICQ client
+Version: 4.1.0
+Summary: Console ncurses based IM client. ICQ and Yahoo protocols are supported.
 Name: centericq
 Release: 3
 Copyright: GPL
@@ -10,13 +10,17 @@ Packager: Konstantin Klyagin <konst@konst.org.ua>
 BuildRoot: /var/tmp/%{name}-buildroot/
 
 %description
-Console icq client for Linux. Has a useful ncurses menu- and window-driven
-interface, allows to view contact list as a menu, send/receive messages,
-URLs and contacts, search for users, view users' details, register new ICQ
-UIN if one hasn't got one, maintain the contact list directly from the
-program, have one's own ignore list and notify a user when new mail arrives.
-Also if can associate events with sounds and you can customize them for users
-personally.
+centericq is a text mode menu- and window-driven IM interface. Currently
+ICQ and Yahoo protocols are supported. It allows you to send, receive, and
+forward messages, URLs and, contacts, mass message send, search for
+users (including extended "whitepages search"), view users' details,
+maintain your contact list directly from the program (including non-icq
+contacts), view the messages history, register a new UIN and update your
+details, be informed on receiving email messages, automatically set away
+after the defined period of inactivity (on any console), and have your own
+ignore, visible and invisible lists. It can also associate events with
+sounds, has support for Hebrew and Arabic languages and allows to arrange
+contacts into groups.
 
 %prep
 %setup

@@ -59,14 +59,17 @@ void yahoohook::connect() {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
 	    disconnected(yahoo);
 	} else {
-	    fonline = true;
 	    yahoo_get_config(yahoo);
-	    yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE);
-	    face.log(_("+ [yahoo] logged in"));
-	    clist.send();
-	    offl.scan(0, ossendall);
+	    if(!yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE)) {
+		fonline = true;
+		face.log(_("+ [yahoo] logged in"));
+		clist.send();
+		offl.scan(0, ossendall);
+	    }
 	}
     }
+
+    time(&timer_reconnect);
 }
 
 void yahoohook::main() {
@@ -291,6 +294,7 @@ void yahoohook::userstatus(yahoo_context *y, const char *nick, int status) {
 }
 
 void yahoohook::recvbounced(yahoo_context *y, const char *nick) {
+    face.log(_("+ [yahoo] bounced msg to %s"), nick);
 }
 
 void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg) {

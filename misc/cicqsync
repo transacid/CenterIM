@@ -6,11 +6,11 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.5 2001/11/21 14:35:54 konst Exp $
+# $Id: cicqsync,v 1.6 2001/11/22 16:35:25 konst Exp $
 #
 
-CVSROOT=":pserver:anonymous@cvs.konst.org.ua:/home/konst/cvs/root/"
-#CVSROOT=":ext:konst@cvs.konst.org.ua:/home/konst/cvs/root/"
+#CROOT=":pserver:anonymous@cvs.konst.org.ua:/home/konst/cvs/root"
+CROOT=":ext:konst@cvs.konst.org.ua:/home/konst/cvs/root"
 
 PROG="centericq"
 MODULES="kktoolbox/kkstrtext kktoolbox/kksystr kktoolbox/kkconsui icqlib libyahoo"
@@ -18,7 +18,7 @@ MAKEUPDATE="s/\/home\/konst\/devel\/kktoolbox/\$(top_srcdir)/g;s/\/home\/konst\/
 MONOLITE="0"
 
 RETVAL=0
-CVS='cvs -z9 '
+CVS="cvs -z9 -d $CROOT"
 
 moduledir=""
 
@@ -81,9 +81,12 @@ makelinks() {
 		srcfname=`echo $fn | sed 's/^.\+\/\(orig\/.\+\)$/\1/'`
 		destdir=`dirname $fn | sed 's/\/orig//'`
 		updirs=`echo $srcfname | sed 's/ /_/g;s/\// /g' | wc -w`
+		updirs=$(($updirs-2))
+		i=0
 
-		for (( i = 0 ; i < $((updirs))-2 ; i++ )); do
+		while test $i -lt $updirs; do
 		    srcfname="../"$srcfname
+		    i=$(($i-1))
 		done
 
 		if test ! -d $destdir; then
