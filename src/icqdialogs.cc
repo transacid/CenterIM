@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.60 2002/03/23 11:34:51 konst Exp $
+* $Id: icqdialogs.cc,v 1.61 2002/03/26 12:52:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -575,15 +575,15 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     dialogbox db;
 
     finished = success = false;
+
     if(conf.getsockshost().empty()) prserv = "";
+
     conf.getauto(aaway, ana);
 
     textwindow w(0, 0, sizeBigDlg.width, sizeBigDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
-    w.set_title(conf.getcolor(cp_dialog_highlight),
-	_(" CenterICQ configuration ")
-	);
+    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterICQ configuration "));
 
     db.setwindow(&w, false);
 

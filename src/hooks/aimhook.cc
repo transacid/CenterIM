@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.10 2002/03/22 18:20:12 konst Exp $
+* $Id: aimhook.cc,v 1.11 2002/03/26 12:52:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -147,7 +147,7 @@ bool aimhook::online() const {
 }
 
 bool aimhook::logged() const {
-    return flogged;
+    return flogged && fonline;
 }
 
 bool aimhook::isconnecting() const {

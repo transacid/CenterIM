@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.58 2002/03/24 12:32:10 konst Exp $
+* $Id: icqconf.cc,v 1.59 2002/03/26 12:52:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -207,42 +207,45 @@ void icqconf::loadmainconfig() {
 
 void icqconf::save() {
     string fname = getconfigfname("config"), param;
-    ofstream f(fname.c_str());
     int away, na;
-    vector<imaccount>::iterator ia;
 
-    if(f.is_open()) {
-	if(!getsockshost().empty()) {
-	    string user, pass;
-	    getsocksuser(user, pass);
-	    f << "sockshost\t" << getsockshost() + ":" + i2str(getsocksport()) << endl;
-	    f << "socksusername\t" << user << endl;
-	    f << "sockspass\t" << pass << endl;
+    if(enoughdiskspace()) {
+	ofstream f(fname.c_str());
+
+	if(f.is_open()) {
+	    if(!getsockshost().empty()) {
+		string user, pass;
+		getsocksuser(user, pass);
+		f << "sockshost\t" << getsockshost() + ":" + i2str(getsocksport()) << endl;
+		f << "socksusername\t" << user << endl;
+		f << "sockspass\t" << pass << endl;
+	    }
+
+	    getauto(away, na);
+
+	    if(russian) f << "russian" << endl;
+	    if(away) f << "autoaway\t" << i2str(away) << endl;
+	    if(na) f << "autona\t" << i2str(na) << endl;
+	    if(hideoffline) f << "hideoffline" << endl;
+	    if(getquote()) f << "quotemsgs" << endl;
+	    if(getantispam()) f << "antispam" << endl;
+	    if(getmailcheck()) f << "mailcheck" << endl;
+
+	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
+
+	    switch(getgroupmode()) {
+		case group1: f << "group1" << endl; break;
+		case group2: f << "group2" << endl; break;
+	    }
+
+	    if(getmakelog()) f << "log" << endl;
+
+	    vector<imaccount>::iterator ia;
+	    for(ia = accounts.begin(); ia != accounts.end(); ia++)
+		ia->write(f);
+
+	    f.close();
 	}
-
-	getauto(away, na);
-
-	if(russian) f << "russian" << endl;
-	if(away) f << "autoaway\t" << i2str(away) << endl;
-	if(na) f << "autona\t" << i2str(na) << endl;
-	if(hideoffline) f << "hideoffline" << endl;
-	if(getquote()) f << "quotemsgs" << endl;
-	if(getantispam()) f << "antispam" << endl;
-	if(getmailcheck()) f << "mailcheck" << endl;
-	f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
-
-	switch(getgroupmode()) {
-	    case group1: f << "group1" << endl; break;
-	    case group2: f << "group2" << endl; break;
-	}
-
-	if(getmakelog()) f << "log" << endl;
-
-	for(ia = accounts.begin(); ia != accounts.end(); ia++) {
-	    ia->write(f);
-	}
-
-	f.close();
     }
 }
 
@@ -867,19 +870,18 @@ void icqconf::setsmtphost(const string &asmtphost) {
 	}
     }
 
-    if(smtphost.empty())
-	smtphost = "localhost";
-
-    if(!smtpport)
-	smtpport = 25;
+    if(smtphost.empty() || !smtpport) {
+	smtphost = getsmtphost();
+	smtpport = getsmtpport();
+    }
 }
 
 string icqconf::getsmtphost() const {
-    return smtphost;
+    return smtphost.empty() ? "localhost" : smtphost;
 }
 
 unsigned int icqconf::getsmtpport() const {
-    return smtpport;
+    return smtpport ? smtpport : 25;
 }
 
 bool icqconf::enoughdiskspace() const {

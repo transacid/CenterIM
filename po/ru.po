@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.5\n"
-"POT-Creation-Date: 2002-03-24 11:38+0200\n"
+"POT-Creation-Date: 2002-03-26 14:28+0200\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -119,42 +119,45 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1032
+#: src/centericq.cc:1033
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободного места на диске осталось < 10k, рассоединение"
 
-#: src/centericq.cc:1033
+#: src/centericq.cc:1034
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе мы можем терять события и глючить"
 
 #: src/icqconf.cc:125
+#, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
-msgstr "Мне действительно нравится сообщение для %s, которое centericq %s %s устанавливает по умолчанию."
+msgstr ""
+"Мне действительно нравится сообщение для %s, которое centericq %s %s "
+"устанавливает по умолчанию."
 
-#: src/icqconf.cc:747
+#: src/icqconf.cc:750
 msgid "event sending error: not enough parameters"
 msgstr "ошибка отсылки события: недостаточно параметров"
 
-#: src/icqconf.cc:758
+#: src/icqconf.cc:761
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 "ошибка отсылки события: для указанного протокола разрешены только номера "
 "(UIN)"
 
-#: src/icqconf.cc:773
+#: src/icqconf.cc:776
 msgid "event sending error: unknown IM type"
 msgstr "ошибка отсылки события: неизвестная IM сеть"
 
-#: src/icqconf.cc:795
+#: src/icqconf.cc:798
 msgid "event sending error: unknown event type"
 msgstr "ошибка отсылки события: неизвестный тип события"
 
-#: src/icqconf.cc:807
+#: src/icqconf.cc:810
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "очередь пополнилась на %s к %s"
 
-#: src/icqconf.cc:812
+#: src/icqconf.cc:815
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 "ошибка отсылки события: контакт назначения не найдем в вашем списке контактов"
@@ -442,6 +445,7 @@ msgid "Fetching your details"
 msgstr "Запрашиваем персональные детали.."
 
 #: src/icqdialogs.cc:267
+#, c-format
 msgid " Your %s details "
 msgstr " Ваша %s информация "
 
@@ -545,7 +549,7 @@ msgstr "имя файла: "
 msgid "comment: "
 msgstr "комментарий: "
 
-#: src/icqdialogs.cc:585
+#: src/icqdialogs.cc:586
 msgid " CenterICQ configuration "
 msgstr " Настройки Centericq "
 
@@ -1097,67 +1101,67 @@ msgstr "Свалка"
 msgid " IM account manager "
 msgstr " Менеджер логинов "
 
-#: src/accountmanager.cc:67
+#: src/accountmanager.cc:66
 #, c-format
 msgid " Server : %s "
 msgstr " Сервер : %s "
 
-#: src/accountmanager.cc:72
+#: src/accountmanager.cc:71
 #, c-format
 msgid " UIN : %s "
 msgstr " UIN : %s "
 
-#: src/accountmanager.cc:77
+#: src/accountmanager.cc:76
 #, c-format
 msgid " Login : %s "
 msgstr " Логин : %s "
 
-#: src/accountmanager.cc:82
+#: src/accountmanager.cc:81
 #, c-format
 msgid " Password : %s "
 msgstr " Пароль : %s "
 
-#: src/accountmanager.cc:86
+#: src/accountmanager.cc:85
 msgid " Register "
 msgstr " Регистрация "
 
-#: src/accountmanager.cc:89
+#: src/accountmanager.cc:88
 msgid " Update user details "
 msgstr " Обновить свою информацию "
 
-#: src/accountmanager.cc:92
+#: src/accountmanager.cc:91
 msgid " Set away message "
 msgstr " Установить away-сообщение "
 
-#: src/accountmanager.cc:94
+#: src/accountmanager.cc:93
 msgid " Drop "
 msgstr " Удалить "
 
-#: src/accountmanager.cc:112
+#: src/accountmanager.cc:111
 msgid " user name: "
 msgstr " логин: "
 
-#: src/accountmanager.cc:116
+#: src/accountmanager.cc:115
 msgid " uin: "
 msgstr " номер: "
 
-#: src/accountmanager.cc:120
+#: src/accountmanager.cc:119
 msgid " password: "
 msgstr " пароль: "
 
-#: src/accountmanager.cc:125
+#: src/accountmanager.cc:124
 msgid "Drop the account information first!"
 msgstr "Сначала удалите информацию о логине!"
 
-#: src/accountmanager.cc:137
+#: src/accountmanager.cc:136
 msgid "You have to disconnect the service first!"
 msgstr "Сначала вы должны произвести рассоединение!"
 
-#: src/accountmanager.cc:145
+#: src/accountmanager.cc:144
 msgid " server address: "
 msgstr " сервер : %s "
 
-#: src/accountmanager.cc:160
+#: src/accountmanager.cc:159
 msgid "away message"
 msgstr "away-сообщение"
 
@@ -1466,16 +1470,21 @@ msgid "+ [aim] unable to connect to the server"
 msgstr "+ [aim] невозможно соединиться с сервером"
 
 #: src/hooks/aimhook.cc:184
+#, c-format
 msgid "+ [aim] adding %s to the contacts"
 msgstr "+ [aim] добавление %s в список"
 
 #: src/hooks/aimhook.cc:193
+#, c-format
 msgid "+ [aim] removing %s from the contacts"
 msgstr "+ [aim] удаление %s из списка"
 
 #: src/hooks/aimhook.cc:288
+#, c-format
 msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr "Мне действительно нравится AIM profile, который centericq %s устанавливает по умолчанию."
+msgstr ""
+"Мне действительно нравится AIM profile, который centericq %s устанавливает "
+"по умолчанию."
 
 #: src/hooks/aimhook.cc:324
 msgid "+ [aim] logged in"
@@ -1486,6 +1495,7 @@ msgid "+ [aim] disconnected from the network"
 msgstr "+ [aim] рассоединение"
 
 #: src/hooks/aimhook.cc:370
+#, c-format
 msgid "+ [aim] connect failed: %s"
 msgstr "+ [aim] не удалось соединиться: %s"
 

@@ -57,12 +57,11 @@ void accountmanager::exec() {
 		citem = ((int) (pname)+1) * 100;
 		capab = gethook(pname).getcapabilities();
 
-		if(capab & hoptChangableServer) {
-		    if(!account.server.empty() && account.port) {
+		if(!account.empty() && (capab & hoptChangableServer)) {
+		    tmp = "";
+
+		    if(!account.server.empty() && account.port)
 			tmp = account.server + ":" + i2str(account.port);
-		    } else {
-			tmp = "";
-		    }
 
 		    t.addleaff(n, 0, citem+9, _(" Server : %s "), tmp.c_str());
 		}

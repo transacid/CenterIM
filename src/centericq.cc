@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.82 2002/03/23 11:34:50 konst Exp $
+* $Id: centericq.cc,v 1.83 2002/03/26 12:52:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -991,8 +991,8 @@ void centericq::exectimers() {
 		    }
 		}
 	    } else {
-		reconnect[pname] = reconnectInfo();
 		fonline = true;
+		reconnect[pname] = reconnectInfo();
 	    }
 	}
     }
@@ -1025,12 +1025,14 @@ void centericq::exectimers() {
 
 	conf.checkdiskspace();
 
-	if(fonline && !conf.enoughdiskspace()) {
-	    for(pname = icq; pname != protocolname_size; (int) pname += 1)
-		gethook(pname).disconnect();
+	if(!conf.enoughdiskspace()) {
+	    if(fonline) {
+		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		    gethook(pname).disconnect();
 
-	    face.log(_("! free disk space is less than 10k, going offline"));
-	    face.log(_("! otherwise we can lose events and configuration"));
+		face.log(_("! free disk space is less than 10k, going offline"));
+		face.log(_("! otherwise we can lose events and configuration"));
+	    }
 	} else {
 	    /*
 	    *
@@ -1040,8 +1042,9 @@ void centericq::exectimers() {
 
 	    em.resend();
 	    face.relaxedupdate();
-	    time(&timer_resend);
 	}
+
+	time(&timer_resend);
     }
 
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
