@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.35 2002/04/08 13:45:44 konst Exp $
+* $Id: icqcontacts.cc,v 1.36 2002/06/20 15:11:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@ icqcontacts::icqcontacts() {
 icqcontacts::~icqcontacts() {
 }
 
-icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist = true) {
+icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist ) {
     icqcontact *c = new icqcontact(cinfo);
 
     switch(cinfo.pname) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.118 2002/05/26 07:17:33 konst Exp $
+* $Id: icqface.cc,v 1.119 2002/06/20 15:11:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1055,7 +1055,7 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
 #define INPUT_POS       LINES-2
 
-string icqface::inputstr(const string &q, const string &defl = "", char passwdchar = 0) {
+string icqface::inputstr(const string &q, const string &defl , char passwdchar ) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
 
     attrset(conf.getcolor(cp_status));
@@ -1072,7 +1072,7 @@ string icqface::inputstr(const string &q, const string &defl = "", char passwdch
     return input.getvalue();
 }
 
-string icqface::inputfile(const string &q, const string &defl = "") {
+string icqface::inputfile(const string &q, const string &defl ) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string r;
 
@@ -1117,7 +1117,7 @@ void catqstr(string &q, int option, int defl) {
     if(defl == option) q[q.size()-1] = toupper(q[q.size()-1]);
 }
 
-int icqface::ask(string q, int options, int deflt = -1) {
+int icqface::ask(string q, int options, int deflt ) {
     int ret;
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
 
@@ -1204,7 +1204,7 @@ void icqface::freeworkareabuf(void *p) {
     }
 }
 
-void icqface::workarealine(int l, chtype c = HLINE) {
+void icqface::workarealine(int l, chtype c ) {
     attrset(conf.getcolor(cp_main_frame));
     mvhline(l, sizeWArea.x1+1, c, sizeWArea.x2-sizeWArea.x1-1);
 }
@@ -1288,7 +1288,7 @@ void icqface::modelist(contactstatus cs) {
     restoreworkarea();
 }
 
-bool icqface::multicontacts(const string &ahead = "") {
+bool icqface::multicontacts(const string &ahead ) {
     int i, savefirst, saveelem;
     bool ret = true, finished = false;
     string head = ahead;
@@ -1423,7 +1423,7 @@ void icqface::unblockmainscreen() {
     update();
 }
 
-void icqface::quickfind(verticalmenu *multi = 0) {
+void icqface::quickfind(verticalmenu *multi ) {
     bool fin;
     string nick, disp, upnick, upcurrent;
     string::iterator is;
@@ -2277,7 +2277,7 @@ void icqface::icqprogress::log(const char *fmt, ...) {
     w->write(2, 1+curline++, buf);
 }
 
-void icqface::icqprogress::show(const string &title = "") {
+void icqface::icqprogress::show(const string &title ) {
     if(!w) {
 	w = new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);

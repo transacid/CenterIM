@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.100 2002/05/08 18:26:15 konst Exp $
+* $Id: centericq.cc,v 1.101 2002/06/20 15:11:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -898,7 +898,7 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
     return c;
 }
 
-bool centericq::idle(int options = 0) {
+bool centericq::idle(int options ) {
     bool keypressed, online, fin;
     fd_set rfds, wfds, efds;
     struct timeval tv;

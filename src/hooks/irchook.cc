@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.23 2002/06/03 15:15:11 konst Exp $
+* $Id: irchook.cc,v 1.24 2002/06/20 15:11:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -542,8 +542,13 @@ void irchook::connected(void *conn, void *cli, ...) {
 
 void irchook::disconnected(void *conn, void *cli, ...) {
     irhook.fonline = false;
+
     logger.putourstatus(irc, irhook.getstatus(), offline);
     clist.setoffline(irc);
+
+    vector<channelInfo>::iterator ic;
+    for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ic++)
+	ic->joined = ic->fetched = false;
 
     face.log(_("+ [irc] disconnected from the network"));
     face.update();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.14 2001/12/13 11:28:34 konst Exp $
+* $Id: centermain.cc,v 1.15 2002/06/20 15:11:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,7 @@ icqgroups groups;
 
 #ifdef ENABLE_NLS
 
-//#include <locale.h>
+#include <locale.h>
 #include <libintl.h>
 
 #endif
@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
     try {
 
 #ifdef ENABLE_NLS
+	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALE_DIR);
 	textdomain(PACKAGE);
 #endif
