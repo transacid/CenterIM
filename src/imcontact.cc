@@ -22,18 +22,22 @@ imcontact::imcontact(const icqcontact *c) {
 }
 
 bool imcontact::operator == (const imcontact &ainfo) const {
+    int k;
+    string nick1, nick2;
     bool r = (ainfo.uin == uin) && (ainfo.pname == pname);
 
-    if(pname == irc) {
-	int k;
-	string nick1, nick2;
+    switch(pname) {
+	case irc:
+	case yahoo:
+	    for(k = 0; k < ainfo.nickname.size(); k++) nick1 += toupper(ainfo.nickname[k]);
+	    for(k = 0; k < nickname.size(); k++) nick2 += toupper(nickname[k]);
 
-	for(k = 0; k < ainfo.nickname.size(); k++) nick1 += toupper(ainfo.nickname[k]);
-	for(k = 0; k < nickname.size(); k++) nick2 += toupper(nickname[k]);
+	    r = r & (nick1 == nick2);
+	    break;
 
-	r = r & (nick1 == nick2);
-    } else {
-	r = r & (ainfo.nickname == nickname);
+	default:
+	    r = r & (ainfo.nickname == nickname);
+	    break;
     }
 
     return r;
@@ -71,18 +75,6 @@ string imcontact::totext() const {
 		r = "[" + conf.getprotocolname(pname) + "] " + nickname;
 		break;
 	}
-    }
-
-    return r;
-}
-
-string imcontact::getshortservicename() const {
-    string r;
-
-    switch(pname) {
-	case icq: r = "I"; break;
-	case yahoo: r = "Y"; break;
-	case infocard: r = "C"; break;
     }
 
     return r;

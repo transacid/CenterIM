@@ -63,7 +63,6 @@ struct imcontact {
 
     bool empty() const;
     string totext() const;
-    string getshortservicename() const;
 };
 
 extern imcontact contactroot;
