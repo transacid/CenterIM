@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.13 2004/06/19 13:17:57 konst Exp $
+* $Id: HTTPClient.cc,v 1.14 2004/06/30 21:17:28 konst Exp $
 *
 * Copyright (C) 2003-4 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -166,6 +166,7 @@ void HTTPClient::Parse() {
 		    if(head == "LOCATION:") {
 			m_redirect = response.substr(npos+1);
 			m_socket->Disconnect();
+			SignalRemoveSocket(m_socket->getSocketHandle());
 			m_state = NOT_CONNECTED;
 			Connect();
 		    }
@@ -206,6 +207,7 @@ void HTTPClient::Parse() {
 			    }
 
 			    m_socket->Disconnect();
+			    SignalRemoveSocket(m_socket->getSocketHandle());
 			    m_state = NOT_CONNECTED;
 			    Connect();
 			}

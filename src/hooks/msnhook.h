@@ -65,6 +65,16 @@ class msnhook : public abstracthook {
 	MSN::NotificationServerConnection conn;
 	time_t timer_ping;
 
+	struct qevent {
+	    enum qetype { qeMsg, qeFile };
+
+	    qetype type;
+	    string nick, text;
+
+	    qevent(qetype atype, const string &anick, const string &atext):
+		type(atype), nick(anick), text(atext) { }
+	};
+
 	map<string, vector<msnbuddy> > slst;
 
 	vector<int> rfds, wfds;

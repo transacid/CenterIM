@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.84 2004/06/29 20:26:51 konst Exp $
+* $Id: msnhook.cc,v 1.85 2004/06/30 21:17:28 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -232,6 +232,7 @@ bool msnhook::enabled() const {
 
 bool msnhook::send(const imevent &ev) {
     string text;
+    string rcpt = nicknormalize(ev.getcontact().nickname);
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *>(&ev);
@@ -248,15 +249,17 @@ bool msnhook::send(const imevent &ev) {
 
 	for(ir = files.begin(); ir != files.end(); ++ir) {
 	    imfile::record r;
-	    MSN::FileTransferInvitation *p;
 
 	    r.fname = ir->fname;
 	    r.size = ir->size;
 
 	    imfile fr(ev.getcontact(), imevent::outgoing, "", vector<imfile::record>(1, r));
-/*
-	    if(p = msn_filetrans_send(&conn, ir->fname.c_str()))
-		transferinfo[fr].first = p;*/
+
+	    try {
+		qevent *ctx = new qevent(qevent::qeFile, rcpt, ir->fname);
+		conn.requestSwitchboardConnection(ctx);
+	    } catch(...) {
+	    }
 	}
 
 	return true;
@@ -267,10 +270,8 @@ bool msnhook::send(const imevent &ev) {
 
     if(c)
     if(c->getstatus() != offline || !c->inlist()) {
-	string rcpt = nicknormalize(ev.getcontact().nickname);
-
 	try {
-	    pair<string, string> *ctx = new pair<string, string>(rcpt, text);
+	    qevent *ctx = new qevent(qevent::qeMsg, rcpt, text);
 	    conn.requestSwitchboardConnection(ctx);
 	} catch(...) {
 	}
@@ -714,17 +715,29 @@ void MSN::ext::buddyOffline(MSN::Connection * conn, MSN::Passport buddy) {
 
 void MSN::ext::gotSwitchboard(MSN::SwitchboardServerConnection * conn, const void * tag) {
     ::log("MSN::ext::gotSwitchboard");
+
     if(tag) {
-	const pair<string, string> *ctx = static_cast<const pair<string, string> *>(tag);
-	conn->inviteUser(ctx->first);
+	const msnhook::qevent *ctx = static_cast<const msnhook::qevent *>(tag);
+	conn->inviteUser(ctx->nick);
     }
 }
 
 void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial) {
     ::log("MSN::ext::buddyJoinedConversation");
     if(conn->auth.tag) {
-	const pair<string, string> *ctx = static_cast<const pair<string, string> *>(conn->auth.tag);
-	conn->sendMessage(ctx->second);
+	const msnhook::qevent *ctx = static_cast<const msnhook::qevent *>(conn->auth.tag);
+	FileTransferInvitation *inv;
+
+	switch(ctx->type) {
+	    case msnhook::qevent::qeMsg:
+		conn->sendMessage(ctx->text);
+		break;
+	    case msnhook::qevent::qeFile:
+		inv = conn->sendFile(ctx->text);
+//                if(inv) mhook.transferinfo[] = inv;
+		break;
+	}
+
 	delete ctx;
 	conn->auth.tag = 0;
     }

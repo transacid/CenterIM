@@ -1817,3 +1817,46 @@ version. Fixed.
 MSN used to crash on long messages. Fixed as well.
 
 Jabber module now sends keepalive packets from time to time.
+
+
+4.10.0
+------
+
+Problems with displaying national characters that used to happen on some
+systems were fixed.
+
+Centericq was moved over the new C++ library for MSN written by Mark
+Rowe, a 18 years old guy from the New Zealand. His libmsn is really
+cool.
+
+Applied patch by Iulian Ciorascu that made Jabber not to block when
+establishing an SSL connection.
+
+A small patch by Daniel Lublin was applied. It makes centericq save
+postponed messages. Also if a contact has an unfinished message, a ">"
+characters appears next to the nickname on the contact list.
+
+Centericq now announces the "can receive RTF messages" flag to the ICQ
+server. This fixes the old Cyrillic+Latin characters problem, when the
+former become question-marks. Thanks to Sergei Dolmatov for helping me
+implement and test this one.
+
+When trying to send an event from command-line and there is no
+destination contact on the contact list, it is automatically added now.
+This behavious was chosen instead of the old one when centericq refused
+to send events to contacts that were not on the contact list.
+
+The LiveJournal part now brings the friends-only items too. They are
+fetched using the HTTP digest authentification mechanism. I added that
+to my HTTPClient class, which you can use in your GNU programs also,
+since it's quite a nice and quite advanced implementation of the
+protocol.
+
+On Yahoo! and MSN, when another simultaneous login is detected centericq
+doesn't ever try to reconnect.
+
+The Yahoo! protocol suffered another auth scheme change, after which all
+open-source clients became non-functional again. Applied a patch to
+libyahoo2, looks good so far.
+
+Several minor interface-related bugs were fixed.
