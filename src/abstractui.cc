@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui abstract ui control class
-* $Id: abstractui.cc,v 1.5 2002/10/04 17:00:18 konst Exp $
+* $Id: abstractui.cc,v 1.6 2002/10/06 12:15:11 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,27 +24,19 @@
 
 #include "abstractui.h"
 
-abstractuicontrol::abstractuicontrol() {
-    fisopen = emacs = false;
-    x1 = x2 = y1 = y2 = 0;
-}
+abstractuicontrol::abstractuicontrol()
+: fisopen(false), aborted(false), emacs(false), x1(0), x2(0), y1(0), y2(0)
+{ }
 
-abstractuicontrol::abstractuicontrol(const abstractuicontrol &a) {
-    int i;
+abstractuicontrol::abstractuicontrol(const abstractuicontrol &a)
+: fisopen(a.fisopen), finished(a.finished), emacs(a.emacs),
+  aborted(a.aborted), x1(a.x1), x2(a.x2), y1(a.y1), y2(a.y2)
+{ }
 
-    fisopen = a.fisopen;
-    finished = a.finished;
-    emacs = a.emacs;
-    x1 = a.x1;
-    x2 = a.x2;
-    y1 = a.y1;
-    y2 = a.y2;
-}
+abstractuicontrol::~abstractuicontrol()
+{ }
 
-abstractuicontrol::~abstractuicontrol() {
-}
-
-bool abstractuicontrol::empty() {
+bool abstractuicontrol::empty() const {
     return !x1 && !x2 && !y1 && !y2;
 }
 
@@ -56,10 +48,9 @@ void abstractuicontrol::close() {
     fisopen = false;
 }
 
-bool abstractuicontrol::isopen() {
-    return fisopen;
-}
+bool abstractuicontrol::isopen() const { return fisopen; }
+bool abstractuicontrol::getaborted() const { return aborted; };
 
 void abstractuicontrol::abort() {
-    finished = true;
+    finished = aborted = true;
 }

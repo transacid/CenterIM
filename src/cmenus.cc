@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.16 2002/10/04 17:00:19 konst Exp $
+* $Id: cmenus.cc,v 1.17 2002/10/06 12:15:12 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -230,7 +230,7 @@ int verticalmenu::open() {
     if(clearonfocuslost && curelem >= 0)
 	shownelem(curelem, 1);
 
-    finished = false;
+    finished = aborted = false;
 
     while(!finished) {
 	if(idle) go = keypressed(); else go = 1;
