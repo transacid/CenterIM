@@ -4,11 +4,21 @@
 *
 */
 
+darwin:
+D    socklen_t is replaced with int - check for the type existance
+D    stdint.h to firetalk.h
+
+D    icqcommon.h - the same thing like with ftw, maybe should find a directive for darwin
+D    icqhook.cc: inet_ntop doesn't exist in darwin
+D    lacks ftw - check for the header file
+
 /*
 *
 * BUGS
 *
 */
+
+msn nicks with a space are not shown correctly
 
 /*
 *
@@ -35,4 +45,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.315 2002/10/16 18:30:16 konst Exp $
+$Id: TODO,v 1.314 2002/10/16 18:28:20 konst Exp $
