@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.49 2002/08/17 14:08:40 konst Exp $
+* $Id: yahoohook.cc,v 1.50 2002/08/19 08:25:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -222,13 +222,20 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 
     if(online() && !ischannel(ic)) {
 	if(logged()) {
-	    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
+	    bool found = false;
+	    struct yahoo_buddy **buddies = get_buddylist(cid), **bud;
 
 	    auto_ptr<char> who(strdup(ic.nickname.c_str()));
 	    auto_ptr<char> group(strdup("centericq"));
 
-	    yahoo_add_buddy(cid, who.get(), group.get());
-	    yahoo_refresh(cid);
+	    for(bud = buddies; *bud && !found; bud++)
+		found = !strcmp((*bud)->id, who.get());
+
+	    if(!found) {
+		face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
+		yahoo_add_buddy(cid, who.get(), group.get());
+		yahoo_refresh(cid);
+	    }
 	}
     }
 
@@ -246,7 +253,9 @@ void yahoohook::removeuser(const imcontact &ic) {
 
 	    for(bud = buddies; *bud; bud++) {
 		if(!strcmp((*bud)->id, who.get())) {
-		    yahoo_remove_buddy(cid, who.get(), (*bud)->group);
+		    auto_ptr<char> grp(strdup((*bud)->group));
+		    yahoo_remove_buddy(cid, who.get(), grp.get());
+		    bud = buddies;
 		}
 	    }
 
@@ -588,13 +597,17 @@ void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
 
 void yahoohook::typing_notify(guint32 id, char *who, int stat) {
     icqcontact *c = clist.get(imcontact(who, yahoo));
+    static map<string, int> st;
 
     if(c) {
-	face.log(stat ? _("+ [yahoo] %s: started typing") : _("+ [yahoo] %s: stopped typing"), who);
+	if(st[who] != stat) {
+	    face.log(stat ? _("+ [yahoo] %s: started typing") : _("+ [yahoo] %s: stopped typing"), who);
+	    if(c->getstatus() == offline) {
+		c->setstatus(available);
+		face.relaxedupdate();
+	    }
 
-	if(c->getstatus() == offline) {
-	    c->setstatus(available);
-	    face.relaxedupdate();
+	    st[who] = stat;
 	}
     }
 }

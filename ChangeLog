@@ -1096,3 +1096,7 @@ The configuration changes, as well as users' details, group settings and
 some other stuff is now saved immediately once it gets modified, and not
 only on exit, like it was before. Thanks to Wolfram
 Schlich <wolfram@schlich.org> for pointing this out.
+
+Fixed a bug that caused Yahoo! users raise from the dead (re-appear on
+the list) when a user attempted to delete a contact which had been added
+in the same session, i.e. without logging off.

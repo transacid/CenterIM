@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.77 2002/08/16 16:48:26 konst Exp $
+* $Id: icqconf.cc,v 1.78 2002/08/19 08:25:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -819,7 +819,10 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 			f.close();
 
 			if(rpid > 0) {
-			    conf.savestatus(pname, imst);
+			    string sfname = conf.getconfigfname((string) "status-" + proto);
+			    ofstream sf(sfname.c_str());
+			    if(sf.is_open()) sf << imstatus2char[imst], sf.close();
+
 			    kill(rpid, SIGUSR1);
 			}
 		    }

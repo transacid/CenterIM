@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.113 2002/08/16 16:48:25 konst Exp $
+* $Id: centericq.cc,v 1.114 2002/08/19 08:25:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -577,7 +577,22 @@ void centericq::rereadstatus() {
 	ia = conf.getourid(pname);
 
 	if(!ia.empty()) {
-	    gethook(pname).setstatus(conf.getstatus(pname));
+	    char cst;
+	    imstatus st;
+	    string fname = conf.getconfigfname((string) "status-" + conf.getprotocolname(pname));
+	    ifstream f(fname.c_str());
+
+	    if(f.is_open()) {
+		f >> cst, f.close(), f.clear();
+		unlink(fname.c_str());
+
+		for(st = offline; st != imstatus_size; (int) st += 1) {
+		    if(imstatus2char[st] == cst) {
+			gethook(pname).setstatus(st);
+			break;
+		    }
+		}
+	    }
 	}
     }
 }
