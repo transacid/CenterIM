@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.45 2002/09/13 13:15:55 konst Exp $
+* $Id: irchook.cc,v 1.46 2002/09/23 11:35:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,6 +94,11 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_ERROR, &errorhandler);
     firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &nickchanged);
     firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
+    firetalk_register_callback(handle, FC_FILE_OFFER, &fileoffer);
+    firetalk_register_callback(handle, FC_FILE_START, &filestart);
+    firetalk_register_callback(handle, FC_FILE_PROGRESS, &fileprogress);
+    firetalk_register_callback(handle, FC_FILE_FINISH, &filefinish);
+    firetalk_register_callback(handle, FC_FILE_ERROR, &fileerror);
 
     firetalk_subcode_register_request_callback(handle, "VERSION", &subrequest);
 
@@ -633,6 +638,38 @@ void irchook::ping(const imcontact &c) {
 	firetalk_subcode_send_request(handle, c.nickname.c_str(), "PING", 0);
 	pingtime[up(c.nickname)] = time(0);
     }
+}
+
+bool irchook::knowntransfer(const imfile &fr) const {
+    return filetransfers.find(fr) != filetransfers.end();
+}
+
+void irchook::replytransfer(const imfile &fr, bool accept) {
+    void *fhandle = filetransfers[fr];
+
+    if(accept) {
+	firetalk_file_accept(handle, fhandle, 0,
+	    ((string) getenv("HOME") + "/" + justfname(fr.getfiles().begin()->fname)).c_str());
+
+    } else {
+	firetalk_file_refuse(handle, fhandle);
+	filetransfers.erase(fr);
+	em.store(imnotification(fr.getcontact(), _("File transfer refused")));
+    }
+}
+
+bool irchook::getfevent(void *fhandle, imfile &fr) {
+    map<imfile, void *>::const_iterator i = filetransfers.begin();
+
+    while(i != filetransfers.end()) {
+	if(i->second == fhandle) {
+	    fr = i->first;
+	    return true;
+	}
+	++i;
+    }
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1195,6 +1232,86 @@ const char * const command, const char * const args) {
 
     }
 }
+
+void irchook::fileoffer(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    void *filehandle = va_arg(ap, void *);
+    char *from = va_arg(ap, char *);
+    char *filename = va_arg(ap, char *);
+    long size = va_arg(ap, long);
+    va_end(ap);
+
+    imfile::record r;
+    r.fname = filename;
+    r.size = size;
+
+    imfile fr(imcontact(from, irc), imevent::incoming, "",
+	vector<imfile::record>(1, r));
+
+    irhook.filetransfers[fr] = filehandle;
+    em.store(fr);
+}
+
+void irchook::filestart(void *conn, void *cli, ...) {
+    va_list ap;
+    imfile fr;
+
+    va_start(ap, cli);
+    void *filehandle = va_arg(ap, void *);
+    void *clientfilestruct = va_arg(ap, void *);
+    va_end(ap);
+
+    if(irhook.getfevent(filehandle, fr)) {
+	em.store(imnotification(fr.getcontact(), _("File transfer started")));
+    }
+}
+
+void irchook::fileprogress(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    void *filehandle = va_arg(ap, void *);
+    void *clientfilestruct = va_arg(ap, void *);
+    long bytes = va_arg(ap, long);
+    long size = va_arg(ap, long);
+    va_end(ap);
+
+}
+
+void irchook::filefinish(void *conn, void *cli, ...) {
+    va_list ap;
+    imfile fr;
+
+    va_start(ap, cli);
+    void *filehandle = va_arg(ap, void *);
+    void *clientfilestruct = va_arg(ap, void *);
+    long size = va_arg(ap, long);
+    va_end(ap);
+
+    if(irhook.getfevent(filehandle, fr)) {
+	em.store(imnotification(fr.getcontact(), _("File transfer finished")));
+	irhook.filetransfers.erase(fr);
+    }
+}
+
+void irchook::fileerror(void *conn, void *cli, ...) {
+    va_list ap;
+    imfile fr;
+
+    va_start(ap, cli);
+    void *filehandle = va_arg(ap, void *);
+    void *clientfilestruct = va_arg(ap, void *);
+    int error = va_arg(ap, int);
+    va_end(ap);
+
+    if(irhook.getfevent(filehandle, fr)) {
+	em.store(imnotification(fr.getcontact(), _("File transfer was cancelled because of an error")));
+	irhook.filetransfers.erase(fr);
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 bool irchook::channelInfo::operator != (const string &aname) const {

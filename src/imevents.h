@@ -14,12 +14,13 @@ class imevent {
     friend class imemail;
     friend class imnotification;
     friend class imcontacts;
+    friend class imfile;
     friend class imrawevent;
 
     public:
 	enum imeventtype {
 	    message, url, sms, authorization, online, email, notification,
-	    contacts, imeventtype_size
+	    contacts, file, imeventtype_size
 	};
 
 	enum imdirection {
@@ -199,6 +200,38 @@ class imcontacts: public imevent {
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
+};
+
+class imfile: public imevent {
+    public:
+	struct record {
+	    string fname;
+	    long size;
+	};
+
+    protected:
+	vector<record> files;
+	string msg;
+
+    public:
+	imfile() { };
+	imfile(const imevent &ev);
+	imfile(const imcontact &acont, imdirection adirection,
+	    const string &amsg, const vector<record> &afiles);
+
+	string gettext() const;
+	const vector<record> &getfiles() const;
+	string getmessage() const;
+
+	bool empty() const;
+	bool contains(const string &atext) const;
+
+	void write(ofstream &f) const;
+	void read(ifstream &f);
+
+	bool operator == (const imfile &fr) const   { return this->gettext() == fr.gettext(); }
+	bool operator != (const imfile &fr) const   { return !(*this == fr); }
+	bool operator < (const imfile &fr) const    { return this->gettext() < fr.gettext(); }
 };
 
 class imrawevent: public imevent {

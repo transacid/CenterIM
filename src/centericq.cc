@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.121 2002/09/23 09:04:17 konst Exp $
+* $Id: centericq.cc,v 1.122 2002/09/23 11:35:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -840,14 +840,32 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, b
 	    break;
 
 	case icqface::accept:
-	    em.store(imauthorization(ev.getcontact(),
-		imevent::outgoing, imauthorization::Granted, "accepted"));
+	    switch(ev.gettype()) {
+		case imevent::authorization:
+		    em.store(imauthorization(ev.getcontact(),
+			imevent::outgoing, imauthorization::Granted, "accepted"));
+		    break;
+
+		case imevent::file:
+		    gethook(ev.getcontact().pname).replytransfer(*static_cast<const imfile *>(&ev), true);
+		    break;
+	    }
+
 	    enough = true;
 	    break;
 
 	case icqface::reject:
-	    em.store(imauthorization(ev.getcontact(),
-		imevent::outgoing, imauthorization::Rejected, "rejected"));
+	    switch(ev.gettype()) {
+		case imevent::authorization:
+		    em.store(imauthorization(ev.getcontact(),
+			imevent::outgoing, imauthorization::Rejected, "rejected"));
+		    break;
+
+		case imevent::file:
+		    gethook(ev.getcontact().pname).replytransfer(*static_cast<const imfile *>(&ev), false);
+		    break;
+	    }
+
 	    enough = true;
 	    break;
 
@@ -1160,7 +1178,9 @@ void centericq::exectimers() {
 
 		if(!hook.logged()) {
 		    time(&reconnect[pname].timer);
-		    reconnect[pname].period += reconnect[pname].period/2;
+
+		    if(reconnect[pname].period < 180)
+			reconnect[pname].period += reconnect[pname].period/2;
 
 		    if(hook.online()) {
 			hook.disconnect();

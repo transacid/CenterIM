@@ -112,6 +112,13 @@ void abstracthook::requestversion(const imcontact &c) {
 void abstracthook::ping(const imcontact &c) {
 }
 
+bool abstracthook::knowntransfer(const imfile &fr) const {
+    return false;
+}
+
+void abstracthook::replytransfer(const imfile &fr, bool accept) {
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.142 2002/09/23 09:04:17 konst Exp $
+* $Id: icqface.cc,v 1.143 2002/09/23 11:35:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1880,7 +1880,8 @@ void icqface::renderchathistory() {
 	if(events.back()->getdirection() == imevent::incoming)
 	if(events.back()->gettimestamp() > lastread) {
 	    if(events.back()->gettype() == imevent::authorization
-	    || events.back()->gettype() == imevent::contacts) {
+	    || events.back()->gettype() == imevent::contacts
+	    || events.back()->gettype() == imevent::file) {
 		bool fin, enough;
 		fin = enough = false;
 		saveworkarea();
@@ -2039,6 +2040,14 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 
     } else if(ev->gettype() == imevent::email) {
 	actions.push_back(forward);
+
+    } else if(ev->gettype() == imevent::file) {
+	actions.push_back(info);
+
+	if(gethook(ev->getcontact().pname).knowntransfer(*static_cast<const imfile *>(ev))) {
+	    actions.push_back(accept);
+	    actions.push_back(reject);
+	}
 
     }
 

@@ -397,6 +397,8 @@ string imexternal::action::geteventname(imevent::imeventtype et) {
 	    return "auth";
 	case imevent::contacts:
 	    return "contacts";
+	case imevent::file:
+	    return "file(s)";
     }
 
     return "";

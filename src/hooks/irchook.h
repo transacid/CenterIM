@@ -37,15 +37,19 @@ class irchook: public abstracthook {
 
 	vector<channelInfo> channels;
 	vector<string> searchchannels, extlisted;
-	map<string, string> awaymessages;
 	vector<icqcontact *> foundguys;
+
+	map<string, string> awaymessages;
 	map<string, time_t> pingtime;
+	map<imfile, void *> filetransfers;
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
 
 	void saveconfig() const;
 	void loadconfig();
+
+	bool getfevent(void *fhandle, imfile &fr);
 
 	static void connected(void *conn, void *cli, ...);
 	static void disconnected(void *conn, void *cli, ...);
@@ -69,6 +73,11 @@ class irchook: public abstracthook {
 	static void errorhandler(void *connection, void *cli, ...);
 	static void nickchanged(void *connection, void *cli, ...);
 	static void needpass(void *conn, void *cli, ...);
+	static void fileoffer(void *conn, void *cli, ...);
+	static void filestart(void *conn, void *cli, ...); 
+	static void fileprogress(void *conn, void *cli, ...);
+	static void filefinish(void *conn, void *cli, ...);
+	static void fileerror(void *conn, void *cli, ...);
 
 	static void subrequest(void *conn, void *cli,
 	    const char * const nick, const char * const command,
@@ -122,6 +131,9 @@ class irchook: public abstracthook {
 	void setautochannels(vector<channelInfo> &achannels);
 
 	void ouridchanged(const icqconf::imaccount &ia);
+
+	bool knowntransfer(const imfile &fr) const;
+	void replytransfer(const imfile &fr, bool accept);
 };
 
 extern irchook irhook;

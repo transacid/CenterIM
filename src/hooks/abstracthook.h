@@ -74,6 +74,9 @@ class abstracthook {
 
 	virtual vector<icqcontact *> getneedsync();
 	virtual void ouridchanged(const icqconf::imaccount &ia);
+
+	virtual bool knowntransfer(const imfile &fr) const;
+	virtual void replytransfer(const imfile &fr, bool accept);
 };
 
 abstracthook &gethook(protocolname pname);

@@ -12,7 +12,7 @@ static const string sdirection[imevent::imdirection_size] = {
 };
 
 static const string seventtype[imevent::imeventtype_size] = {
-    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE", "CONT"
+    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE", "CONT", "FILE"
 };
 
 // -- basic imevent class -----------------------------------------------------
@@ -140,6 +140,8 @@ imevent *imevent::getevent() const {
 	    return new imnotification(*this);
 	case contacts:
 	    return new imcontacts(*this);
+	case file:
+	    return new imfile(*this);
 	default:
 	    return new imrawevent(*this);
     }
@@ -520,6 +522,93 @@ void imcontacts::read(ifstream &f) {
 
 	if((pos = buf.find("\t")) != -1) {
 	    contacts.push_back(make_pair(atoi(buf.substr(0, pos).c_str()), buf.substr(pos+1)));
+	}
+    }
+}
+
+// -- imfile class ------------------------------------------------------------
+
+imfile::imfile(const imevent &ev) {
+    type = imevent::file;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
+
+    const imfile *m = dynamic_cast<const imfile *>(&ev);
+
+    if(m) {
+	files = m->files;
+    }
+}
+
+imfile::imfile(const imcontact &acont, imdirection adirection, const string &amsg, const vector<record> &afiles)
+: imevent(acont, adirection, imevent::file), msg(amsg), files(afiles) {
+}
+
+string imfile::gettext() const {
+    string r;
+    r = _("* File transfer");
+
+    if(!msg.empty())
+	r += (string) " <" + msg + ">";
+
+    r += (string) " : ";
+
+    for(vector<record>::const_iterator i = files.begin(); i != files.end(); ++i) {
+	r += i->fname;
+	if(i->size) r += (string) " (" + i2str(i->size) + ")";
+	if(i+1 != files.end())
+	    r += ", ";
+    }
+
+    return r;
+}
+
+string imfile::getmessage() const {
+    return msg;
+}
+
+const vector<imfile::record> &imfile::getfiles() const {
+    return files;
+}
+
+bool imfile::empty() const {
+    return files.empty();
+}
+
+bool imfile::contains(const string &atext) const {
+    return gettext().find(atext) != -1;
+}
+
+void imfile::write(ofstream &f) const {
+    imevent::write(f);
+
+    f << "|" << mime(msg) << endl;
+
+    for(vector<record>::const_iterator i = files.begin(); i != files.end(); ++i)
+	f << mime(i->fname) << "\t" << i->size << endl;
+}
+
+void imfile::read(ifstream &f) {
+    strstream st;
+    string buf;
+    int pos, line = 0;
+
+    st << readblock(f);
+
+    while(getline(st, buf)) {
+	while((pos = buf.find_first_of("\r\n")) != -1)
+	    buf.erase(pos, 1);
+
+	if(!line++) {
+	    msg = unmime(buf.substr(1));
+
+	} else if((pos = buf.find("\t")) != -1) {
+	    record r;
+	    r.fname = unmime(buf.substr(0, pos));
+	    r.size = strtoul(buf.substr(pos+1).c_str(), 0, 0);
+	    files.push_back(r);
+
 	}
     }
 }
