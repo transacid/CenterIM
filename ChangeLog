@@ -1444,3 +1444,17 @@ Speeded up the compilation a little bit.
 
 Ported to Cygwin. Now it's possible to build centericq as a native Win32
 application.
+
+4.9.4
+-----
+
+The Russian win1251/koi8 translation configuration parameter got enabled
+every time centericq started, even if it was turned off before.
+
+The find/add users dialog didn't allow entering nicknames, which made it
+impossible to add yahoo and aim contacts.
+
+Timestamps in the log window got duplicated on every terminal resize
+event.
+
+Several other minor problems were fixed.
