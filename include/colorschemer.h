@@ -7,64 +7,25 @@
 
 #include "conscommon.h"
 
+struct colordef {
+    string name, def;
+    int code;
+};
+
+void parsecolordef(const string sdef, int pair, colordef &d);
+
 template <class T>
 class colorschemer {
     private:
-	struct colordef {
-	    string name, def;
-	    int code;
-	};
-
-	string delim;
 	map<T, colordef> colors;
 
     public:
-	colorschemer()
-	    : delim(" \t") { }
-
 	void clear() {
 	    colors.clear();
 	}
 
 	void push(T elem, const string &def) {
-	    int pos, i, npos;
-	    string r, p;
-
-	    r = def;
-
-	    for(i = 0; i < 3; i++) {
-		if((pos = r.find_first_of(delim)) == -1)
-		    pos = r.size();
-
-		p = r.substr(0, pos);
-
-		if(pos != r.size()) {
-		    npos = r.substr(pos+1).find_first_not_of(delim);
-		    if(npos == -1) npos = 0;
-		    r.erase(0, pos+1+npos);
-		}
-
-		if(i == 0) {
-		    colors[elem].name = p;
-
-		} else if(i == 1) {
-		    if((pos = p.find("/")) != -1) {
-			init_pair((int) elem,
-			    findcolor(p.substr(0, pos)),
-			    findcolor(p.substr(pos+1)));
-
-			colors[elem].code = normalcolor((int) elem);
-			colors[elem].def = p;
-		    }
-
-		} else if(i == 2) {
-		    if(p == "bold") {
-			colors[elem].code = boldcolor((int) elem);
-			colors[elem].def += (string) "\t" + p;
-		    }
-
-		}
-	    }
+	    parsecolordef(def, (int) elem, colors[elem]);
 	}
 
 	void load(const string &fname) {
@@ -99,7 +60,7 @@ class colorschemer {
 	    while(!f.eof()) {
 		getstring(f, buf);
 
-		if((pos = buf.find_first_of(delim)) != -1) {
+		if((pos = buf.find_first_of(" \t")) != -1) {
 		    p = buf.substr(0, pos);
 
 		    for(ic = colors.begin(); ic != colors.end(); ic++) {
