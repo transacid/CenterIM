@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.119 2002/06/20 15:11:34 konst Exp $
+* $Id: icqface.cc,v 1.120 2002/06/27 13:56:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -204,43 +204,53 @@ int icqface::contextmenu(icqcontact *c) {
     cont = c->getdesc();
     capab = gethook(cont.pname).getcapabilities();
 
-    if(cont != contactroot) {
-	if(cont.pname != infocard)
-	    m.additem(0, ACT_MSG, _(" Send a message     enter"));
+    if(!ischannel(cont)) {
+	if(cont != contactroot) {
+	    if(cont.pname != infocard)
+		m.additem(0, ACT_MSG, _(" Send a message     enter"));
 
-	if(capab & hoptCanSendURL)
-	    m.additem(0, ACT_URL, _(" Send an URL            u"));
+	    if(capab & hoptCanSendURL)
+		m.additem(0, ACT_URL, _(" Send an URL            u"));
 
-	if(capab & hoptCanSendSMS)
-	    m.additem(0, ACT_SMS, _(" Send an SMS"));
+	    if(capab & hoptCanSendSMS)
+		m.additem(0, ACT_SMS, _(" Send an SMS"));
 
-	if(!m.empty()) m.addline();
+	    if(!m.empty()) m.addline();
 
-	m.additem(0, ACT_INFO, _(" User's details         ?"));
-	m.additem(0, ACT_EDITUSER, _(" Edit details"));
+	    m.additem(0, ACT_INFO, _(" User's details         ?"));
+	    m.additem(0, ACT_EDITUSER, _(" Edit details"));
 
-	if(c->getstatus() != offline)
-	if(capab & hoptCanFetchAwayMsg)
-	    m.additem(0, ACT_FETCHAWAY, _(" Fetch away message"));
-    }
-
-    m.additem(0, ACT_HISTORY, _(" Events history         h"));
-
-    if(cont != contactroot) {
-	m.addline();
-
-	m.additem(0, ACT_IGNORE, _(" Ignore user"));
-
-	if(!c->inlist()) {
-	    m.additem(0, ACT_ADD, _(" Add to list            a"));
+	    if(c->getstatus() != offline)
+	    if(capab & hoptCanFetchAwayMsg)
+		m.additem(0, ACT_FETCHAWAY, _(" Fetch away message"));
 	}
-    }
 
-    if(c->getdesc() != contactroot) {
-	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
-	m.additem(0, ACT_RENAME, _(" Rename contact         r"));
+	m.additem(0, ACT_HISTORY, _(" Events history         h"));
 
-	if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
+	if(cont != contactroot) {
+	    m.addline();
+
+	    m.additem(0, ACT_IGNORE, _(" Ignore user"));
+
+	    if(!c->inlist()) {
+		m.additem(0, ACT_ADD, _(" Add to list            a"));
+	    }
+	}
+
+	if(c->getdesc() != contactroot) {
+	    m.additem(0, ACT_REMOVE, _(" Remove user          del"));
+	    m.additem(0, ACT_RENAME, _(" Rename contact         r"));
+
+	    if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
+		m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
+	}
+
+    } else {
+	m.additem(0, ACT_MSG,     _(" Send a channel message   enter"));
+	m.additem(0, ACT_HISTORY, _(" Channel chat history         h"));
+	m.additem(0, ACT_REMOVE,  _(" Remove channel             del"));
+
+	if(conf.getgroupmode() != icqconf::nogroups)
 	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
     }
 
@@ -2132,7 +2142,8 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'r':
 	case 'R':
-	    face.extk = ACT_RENAME;
+	    if(!ischannel(c))
+		face.extk = ACT_RENAME;
 	    break;
 
 	case 'c':
@@ -2201,7 +2212,8 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    cicq.history(face.passinfo);
 	    break;
 	case ALT('?'):
-	    cicq.userinfo(face.passinfo);
+	    if(!ischannel(face.passinfo))
+		cicq.userinfo(face.passinfo);
 	    break;
 	case 27:
 	    return -1;

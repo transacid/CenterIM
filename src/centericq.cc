@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.102 2002/06/25 09:28:20 konst Exp $
+* $Id: centericq.cc,v 1.103 2002/06/27 13:56:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -242,6 +242,7 @@ void centericq::mainloop() {
 
 	    case ACT_INFO:
 		if(c->getdesc() != contactroot)
+		if(!ischannel(c))
 		    userinfo(c->getdesc());
 		break;
 
@@ -1253,4 +1254,12 @@ string rusconv(const string &tdir, const string &text) {
 #endif
 
     return r;
+}
+
+bool ischannel(const imcontact &cont) {
+    return (cont.nickname.substr(0, 1) == "#") && (cont.pname == irc);
+}
+
+bool ischannel(const icqcontact *c) {
+    return c ? ischannel(c->getdesc()) : false;
 }

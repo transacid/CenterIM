@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.25 2002/06/21 16:07:01 konst Exp $
+* $Id: irchook.cc,v 1.26 2002/06/27 13:56:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -73,6 +73,10 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_CHAT_LIST_EXTENDED, &listextended);
     firetalk_register_callback(handle, FC_CHAT_END_EXTENDED, &endextended);
     firetalk_register_callback(handle, FC_CHAT_NAMES, &chatnames);
+    firetalk_register_callback(handle, FC_CHAT_GETMESSAGE, &chatmessage);
+    firetalk_register_callback(handle, FC_CHAT_JOINED, &chatjoined);
+    firetalk_register_callback(handle, FC_CHAT_LEFT, &chatleft);
+    firetalk_register_callback(handle, FC_CHAT_KICKED, &chatkicked);
 
 #ifdef DEBUG
     firetalk_register_callback(handle, FC_LOG, &log);
@@ -185,14 +189,28 @@ bool irchook::send(const imevent &ev) {
 
 	}
 
-	return firetalk_im_send_message(handle, c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+	if(ischannel(c)) {
+	    if(text.substr(0, 1) == "/") {
+		rawcommand(text.substr(1));
+		return true;
+
+	    } else {
+		return firetalk_chat_send_message(handle,
+		    c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+	    }
+
+	} else {
+	    return firetalk_im_send_message(handle,
+		c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+
+	}
     }
 
     return false;
 }
 
 void irchook::sendnewuser(const imcontact &ic) {
-    if(online()) {
+    if(online() && !ischannel(ic)) {
 	firetalk_im_add_buddy(handle, ic.nickname.c_str());
 	requestinfo(ic);
     }
@@ -200,7 +218,13 @@ void irchook::sendnewuser(const imcontact &ic) {
 
 void irchook::removeuser(const imcontact &ic) {
     if(online()) {
-	firetalk_im_remove_buddy(handle, ic.nickname.c_str());
+	if(!ischannel(ic)) {
+	    firetalk_im_remove_buddy(handle, ic.nickname.c_str());
+	} else {
+	    vector<channelInfo>::iterator i;
+	    i = find(channels.begin(), channels.end(), ic.nickname);
+	    if(i != channels.end()) i->contactlist = false;
+	}
     }
 }
 
@@ -416,14 +440,18 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
     */
 
     for(ic = channels.begin(); ic != channels.end(); ic++) {
+	iac = find(achannels.begin(), achannels.end(), ic->name);
+
 	if(ic->joined) {
-	    iac = find(achannels.begin(), achannels.end(), ic->name);
 	    r = iac == achannels.end();
 	    if(!r) r = !iac->joined;
+	    if(r) firetalk_chat_part(irhook.handle, ic->name.c_str());
+	}
 
-	    if(r) {
-		firetalk_chat_part(irhook.handle, ic->name.c_str());
-	    }
+	if(ic->contactlist) {
+	    r = iac == achannels.end();
+	    if(!r) r = !iac->contactlist;
+	    if(r) clist.remove(imcontact(ic->name, irc));
 	}
     }
 
@@ -435,13 +463,20 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
     */
 
     for(iac = achannels.begin(); iac != achannels.end(); iac++) {
+	ic = find(channels.begin(), channels.end(), iac->name);
+
 	if(iac->joined) {
-	    ic = find(channels.begin(), channels.end(), iac->name);
 	    r = ic == channels.end();
 	    if(!r) r = !ic->joined;
+	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str());
+	}
 
+	if(iac->contactlist) {
+	    r = ic == channels.end();
+	    if(!r) r = !ic->contactlist;
 	    if(r) {
-		firetalk_chat_join(irhook.handle, iac->name.c_str());
+		icqcontact *c = clist.addnew(imcontact(iac->name, irc), false);
+		c->setstatus(iac->joined ? available : offline);
 	    }
 	}
     }
@@ -464,7 +499,10 @@ void irchook::saveconfig() const {
 	f << "name\t" << ircname << endl;
 
 	for(ic = savech.begin(); ic != savech.end(); ic++)
-	    f << "channel\t" << ic->name << "\t" << (ic->joined ? "1" : "0") << endl;
+	    f << "channel\t" << ic->name
+		<< "\t" << (ic->joined ? "1" : "0")
+		<< "\t" << (ic->contactlist ? "1" : "0")
+		<< endl;
 
 	f.close();
     }
@@ -486,11 +524,28 @@ void irchook::loadconfig() {
 	    if(param == "name") ircname = buf; else
 	    if(param == "channel") {
 		channels.push_back(channelInfo(getword(buf)));
-		channels.back().joined = (buf == "1");
+		channels.back().joined = (getword(buf) == "1");
+		channels.back().contactlist = (buf == "1");
 	    }
 	}
 
 	f.close();
+    }
+}
+
+void irchook::rawcommand(const string &cmd) {
+    int *r, *w, *e, sock;
+    if(online()) {
+	firetalk_getsockets(FP_IRC, &r, &w, &e);
+
+	if(*r) {
+	    write(*r, cmd.c_str(), cmd.size());
+	    write(*r, "\n", 1);
+	}
+
+	delete r;
+	delete w;
+	delete e;
     }
 }
 
@@ -524,7 +579,7 @@ void irchook::connected(void *conn, void *cli, ...) {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == irc) {
+	if(!ischannel(c)) {
 	    firetalk_im_add_buddy(irhook.handle, c->getdesc().nickname.c_str());
 	}
     }
@@ -574,7 +629,7 @@ void irchook::newnick(void *conn, void *cli, ...) {
     va_start(ap, cli);
     char *nick = va_arg(ap, char *);
     va_end(ap);
-/*
+
     if(nick)
     if(strlen(nick)) {
 	icqconf::imaccount acc = conf.getourid(irc);
@@ -583,7 +638,7 @@ void irchook::newnick(void *conn, void *cli, ...) {
 
 	face.log(_("+ [irc] nickname was changed successfully"));
     }
-*/
+
     DLOG("newnick");
 }
 
@@ -876,6 +931,68 @@ void irchook::endextended(void *connection, void *cli, ...) {
 		if(ic != irhook.channels.end()) irhook.channels.erase(ic);
 	    }
 	}
+    }
+}
+
+void irchook::chatmessage(void *connection, void *cli, ...) {
+    va_list ap;
+    string imsg;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *from = va_arg(ap, char *);
+    int automessage = va_arg(ap, int);
+    char *msg = va_arg(ap, char *);
+    va_end(ap);
+
+    if(clist.get(imcontact(room, irc))) {
+	imsg = (string) from + ": " + msg;
+	getmessage(connection, cli, room, automessage, imsg.c_str());
+    }
+}
+
+void irchook::chatjoined(void *connection, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    va_end(ap);
+
+    icqcontact *c = clist.get(imcontact(room, irc));
+    if(c) c->setstatus(available);
+}
+
+void irchook::chatleft(void *connection, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    va_end(ap);
+
+    icqcontact *c = clist.get(imcontact(room, irc));
+    if(c) {
+	c->setstatus(offline);
+    }
+}
+
+void irchook::chatkicked(void *connection, void *cli, ...) {
+    va_list ap;
+    char buf[512];
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *by = va_arg(ap, char *);
+    char *reason = va_arg(ap, char *);
+    va_end(ap);
+
+    icqcontact *c = clist.get(imcontact(room, irc));
+    if(c) {
+	c->setstatus(offline);
+
+	sprintf(buf, _("* Kicked by %s; reason: %s"), by,
+	    rushtmlconv("wk", reason).c_str());
+
+	em.store(immessage(imcontact(room, irc), imevent::incoming, buf));
     }
 }
 

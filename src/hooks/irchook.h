@@ -11,7 +11,7 @@ class irchook: public abstracthook {
     public:
 	struct channelInfo {
 	    string name;
-	    bool joined, fetched;
+	    bool joined, fetched, contactlist;
 
 	    vector<string> nicks;
 
@@ -61,6 +61,12 @@ class irchook: public abstracthook {
 	static void chatnames(void *connection, void *cli, ...);
 	static void listextended(void *connection, void *cli, ...);
 	static void endextended(void *connection, void *cli, ...);
+	static void chatmessage(void *connection, void *cli, ...);
+	static void chatjoined(void *connection, void *cli, ...);
+	static void chatleft(void *connection, void *cli, ...);
+	static void chatkicked(void *connection, void *cli, ...);
+
+	void rawcommand(const string &cmd);
 
     public:
 	irchook();
