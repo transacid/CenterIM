@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.99 2003/04/17 22:47:04 konst Exp $
+* $Id: icqconf.cc,v 1.100 2003/04/18 17:07:31 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,6 +37,7 @@
 #include "imexternal.h"
 #include "eventmanager.h"
 #include "imlogger.h"
+#include "connwrap.h"
 
 icqconf::icqconf() {
     rs = rscard;
@@ -738,6 +739,7 @@ void icqconf::commandline(int argc, char **argv) {
 	} else if((args == "-B") || (args == "--bind")) {
 	    if(argv[++i]) {
 		bindhost = argv[i];
+		cw_setbind(bindhost.c_str());
 	    }
 
 	} else if((args == "-s") || (args == "--send")) {

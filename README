@@ -38,6 +38,7 @@ Contents
 	4.5.4. AIM TOC
 	4.5.5. IRC
 	4.5.6. Jabber
+    4.6. Binding to various IP addresses
 5. Online status
     5.1. "Auto Away" and "Auto N/A"
 6. Contact list
@@ -587,6 +588,15 @@ open to the public is the following:
 
   Hostname: jabber.com
   Port: 5222
+
+
+4.6. Binding to various IP addresses
+------------------------------------
+
+  If the box you're running centericq on has several IPs and you would
+like to use a certain one of them for IM connections, there is a command
+line parameter made especially for you, --bind <IP address> or shortly,
+-B <IP address>.
 
 
 5. Online status
@@ -1723,4 +1733,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.81 2003/04/16 23:37:52 konst Exp $
+$Id: README,v 1.82 2003/04/18 17:07:30 konst Exp $

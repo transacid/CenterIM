@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.60 2003/04/16 23:38:07 konst Exp $
+* $Id: msnhook.cc,v 1.61 2003/04/18 17:07:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,6 +29,7 @@
 #include "accountmanager.h"
 #include "eventmanager.h"
 #include "imlogger.h"
+#include "connwrap.h"
 
 #include "msn_bittybits.h"
 
@@ -726,7 +727,7 @@ int ext_connect_socket(const char *hostname, int port) {
     if((s = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
 	return -1;
 
-    if(connect(s, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
+    if(cw_connect(s, (struct sockaddr *) &sa, sizeof(sa), 0) < 0) {
 	face.log(msgerr + _("verify the hostname and port"));
 	close(s);
 	return -1;
