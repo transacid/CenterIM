@@ -6,14 +6,16 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.1 2001/10/25 19:29:17 konst Exp $
+# $Id: cicqsync,v 1.2 2001/10/26 13:56:48 konst Exp $
 #
 
-CVSROOT=:pserver:anonymous@cvs.konst.org.ua:/home/konst/cvs/root/
+#CVSROOT=:pserver:anonymous@cvs.konst.org.ua:/home/konst/cvs/root/
+CVSROOT=:ext:konst@cvs.konst.org.ua:/home/konst/cvs/root/
 
 PROG="centericq"
 MODULES="kktoolbox/kkstrtext kktoolbox/kksystr kktoolbox/kkconsui icqlib"
 MAKEUPDATE="s/\/home\/konst\/devel\/kktoolbox/\$(top_srcdir)/g;s/\/home\/konst\/devel\/icqlib/\$(top_srcdir)\/icqlib/g"
+MONOLITE="0"
 
 RETVAL=0
 CVS='cvs -z9 '
@@ -51,13 +53,16 @@ progsync() {
 	    if test $1 = "checkout"; then
 		$CVS co -d $codir $module
 	    else
-		$CVS update -P -d
+		cd $codir
+		$CVS update -C -P -d
 	    fi
 
 	    RETVAL=$?
 	    [ $RETVAL != 0 ] && return
 	fi
     done
+
+    find $DEST -name ".#*" -exec rm -f {} \;
 }
 
 makelinks() {
@@ -132,7 +137,14 @@ updatemakepaths() {
 }
 
 runautomake() {
-    for i in `find $DEST -name "configure.in"`
+    if test "$MONOLITE" != "0"
+    then
+	traverse="${DEST}/configure.in"
+    else
+	traverse=`find $DEST -name "configure.in" -print`
+    fi
+
+    for i in $traverse
     do
 	cd `dirname $i`
 

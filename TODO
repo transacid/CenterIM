@@ -4,6 +4,7 @@
 *
 */
 
+
 kxicq2 and gnomeicu support in cicqconv
 there is no "send contacts" item in f2 menu :(
 allows to modify details after 3 (?) enter presses on the dialog fields
@@ -20,11 +21,16 @@ new textinputline and fileselector
 
 finish the doc
 
+user is on "not in list", and there is an attempt to press "add to the
+list" in "ICQ" -> complains
+
+
 /*
 *
 * BUGS
 *
 */
+
 
 "server forced us to disconnect" -> write to non-debug log also
 
@@ -32,11 +38,15 @@ file sending is limited to 1k/s
 X window resize -> sometimes segfaults
 segfaults on update details under rh62 (?)
 
+
 /*
 *
 * TODO
 *
 */
+
+
+how to use cicqsync -> to the doc
 
 login/logout history
 
@@ -73,4 +83,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.45 2001/10/25 19:28:17 konst Exp $
+$Id: TODO,v 1.46 2001/10/26 13:56:47 konst Exp $

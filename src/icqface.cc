@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.27 2001/10/24 16:37:31 konst Exp $
+* $Id: icqface.cc,v 1.28 2001/10/26 13:56:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1164,18 +1164,19 @@ bool icqface::editmsg(unsigned int uin, string &text) {
 
 bool icqface::checkicqmessage(unsigned int uin, string text, bool &ret, int options) {
     bool proceed = true, fin;
-    char c;
+    icqcontact *c;
+    char cc;
     int i;
 
     if(!uin && !text.empty()) {
-	c = text[0];
+	cc = text[0];
 	text.replace(0, 1, "");
 	uin = atol(text.c_str());
 	if((i = text.find(" ")) != -1) text.replace(0, i+1, "");
 	proceed = false;
 
 	for(fin = false; !fin; )
-	switch(i = showicq(uin, text, c, options)) {
+	switch(i = showicq(uin, text, cc, options)) {
 	    case -1:
 		ret = false;
 		fin = true;
@@ -1187,7 +1188,7 @@ bool icqface::checkicqmessage(unsigned int uin, string text, bool &ret, int opti
 		cicq.adduin(uin);
 		break;
 	    case 2:
-		switch(c) {
+		switch(cc) {
 		    case ICQM_REQUEST:
 			icq_SendAuthMsg(&icql, uin);
 			log(_("+ authorization sent to %lu"), uin);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.23 2001/10/16 15:38:05 konst Exp $
+* $Id: centericq.cc,v 1.24 2001/10/26 13:56:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -302,15 +302,7 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_ADD:
 		if(!c->inlist()) {
-		    if(conf.getusegroups()) {
-			gid = face.selectgroup(_("Select a group to add the user to"));
-			if(gid) c->setgroupid(gid);
-		    }
-
-		    if(gid || !conf.getusegroups()) {
-			c->includeintolist();
-			face.update();
-		    }
+		    c = adduin(c->getuin());
 		}
 		break;
 	}
@@ -727,27 +719,35 @@ icqcontact *centericq::adduin(unsigned int uin) {
     int groupid = 0;
 
     if(c = clist.get(uin)) {
-	face.log(_("+ user %s, %lu is already on the list"), c->getnick().c_str(), uin);
-	c = 0;
-    } else {
-	if(conf.getusegroups()) {
-	    groupid = face.selectgroup(_("Select a group to add the user to"));
-	    if(!groupid) return 0;
+	if(c->inlist()) {
+	    face.log(_("+ user %s, %lu is already on the list"),
+		c->getnick().c_str(), uin);
+	    return 0;
 	}
-
-	if(icql.icq_Status != STATUS_OFFLINE) {
-	    if(face.ask(_("Notify the user he/she has been added?"),
-	    ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-		icq_AlertAddUser(&icql, uin);
-		face.log(_("+ the notification has been sent to %lu"), uin);
-	    }
-	}
-
-	c = clist.addnew(uin, false);
-	c->setgroupid(groupid);
-	face.log(_("+ %lu has been added to the list"), uin);
-	face.update();
     }
+
+    if(conf.getusegroups()) {
+        groupid = face.selectgroup(_("Select a group to add the user to"));
+        if(!groupid) return 0;
+    }
+
+    if(icql.icq_Status != STATUS_OFFLINE) {
+        if(face.ask(_("Notify the user he/she has been added?"),
+        ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+	    icq_AlertAddUser(&icql, uin);
+	    face.log(_("+ the notification has been sent to %lu"), uin);
+	}
+    }
+
+    if(!c) {
+	c = clist.addnew(uin, false);
+    } else {
+	c->includeintolist();
+    }
+
+    c->setgroupid(groupid);
+    face.log(_("+ %lu has been added to the list"), uin);
+    face.update();
 
     return c;
 }
