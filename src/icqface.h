@@ -187,7 +187,7 @@ class icqface {
 
 	void status(const string &text);
 
-	bool changestatus(protocolname &pname, imstatus &st);
+	bool changestatus(vector<protocolname> &pnames, imstatus &st);
 	int contextmenu(icqcontact *c);
 	int generalmenu();
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.163 2003/07/19 08:35:09 konst Exp $
+* $Id: centericq.cc,v 1.164 2003/07/22 20:58:23 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -392,26 +392,37 @@ void centericq::mainloop() {
 
 void centericq::changestatus() {
     imstatus st;
-    protocolname ipname, pname;
     bool proceed, setaway;
-    string tmp, prompt;
+    string tmp, prompt, awaymsg;
     icqconf::imaccount ia;
 
-    if(face.changestatus(pname, st)) {
+    vector<protocolname> pnames;
+    vector<protocolname>::const_iterator ipname;
+
+    if(face.changestatus(pnames, st)) {
 	if(!conf.enoughdiskspace()) {
 	    face.log(_("! cannot connect, free disk space is less than 10k"));
 
-	} else if(pname != proto_all && !gethook(pname).enabled()) {
-	    face.log(_("! support for %s was disabled at build time"),
-		conf.getprotocolname(pname).c_str());
-
 	} else {
 	    proceed = true;
-
 	    setaway = conf.getaskaway();
-	    if(pname != proto_all) {
-		setaway = setaway && gethook(pname).getCapabs().count(hookcapab::setaway);
+
+	    bool same = true;
+
+	    for(ipname = pnames.begin(); ipname != pnames.end(); ++ipname) {
+		setaway = setaway && gethook(*ipname).getCapabs().count(hookcapab::setaway);
+
+		if(!conf.getourid(*ipname).empty()) {
+		    tmp = conf.getawaymsg(*ipname);
+		    if(!tmp.empty()) {
+			if(awaymsg.empty()) awaymsg = tmp; else
+			    same = same && tmp == awaymsg;
+		    }
+		}
 	    }
+
+	    if(!same)
+		awaymsg = "";
 
 	    if(setaway)
 	    switch(st) {
@@ -419,10 +430,10 @@ void centericq::changestatus() {
 		case notavail:
 		case occupied:
 		case dontdisturb:
-		    if(pname != proto_all)
-			prompt = conf.getprotocolname(pname) + ": ";
+		    if(pnames.size() == 1)
+			prompt = conf.getprotocolname(*ipname) + ": ";
 		    prompt += _("away message");
-		    proceed = setaway = face.edit(tmp = conf.getawaymsg(pname), prompt);
+		    proceed = setaway = face.edit(tmp = conf.getawaymsg(*ipname), prompt);
 		    break;
 		default:
 		    setaway = false;
@@ -430,16 +441,20 @@ void centericq::changestatus() {
 	    }
 
 	    if(proceed)
-	    for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
-		if(!(ia = conf.getourid(ipname)).empty())
-		if((pname == proto_all) || (ipname == pname)) {
-		    abstracthook &hook = gethook(ipname);
+	    for(ipname = pnames.begin(); ipname != pnames.end(); ++ipname) {
+		if(!gethook(*ipname).enabled()) {
+		    face.log(_("! support for %s was disabled at build time"),
+			conf.getprotocolname(*ipname).c_str());
+
+		} else {
+		    abstracthook &hook = gethook(*ipname);
 
 		    if(setaway && !tmp.empty())
 			if(hook.getCapabs().count(hookcapab::setaway))
-			    conf.setawaymsg(ipname, tmp);
+			    conf.setawaymsg(*ipname, tmp);
 
 		    hook.setstatus(st);
+
 		}
 	    }
 
@@ -459,6 +474,16 @@ void centericq::joindialog() {
 	if(ic.nickname.substr(0, 1) != "#")
 	    ic.nickname.insert(0, "#");
 
+	if(h.getCapabs().count(hookcapab::groupchatservices)) {
+	    if(ic.nickname.find("@") == -1)
+		ic.nickname += "@" + s.service;
+/*
+	    c->setnick(ic.nickname);
+	    c->setdispnick(c->getnick());
+	    c->setdesc(imcontact(c->getnick(), ic.pname));
+*/
+	}
+
 	if(h.getCapabs().count(hookcapab::conferencesaretemporary)) {
 	    createconference(imcontact("", s.pname));
 
@@ -467,12 +492,6 @@ void centericq::joindialog() {
 
 	    if(h.getCapabs().count(hookcapab::channelpasswords))
 		cb.zip = s.password;
-
-	    if(h.getCapabs().count(hookcapab::groupchatservices)) {
-		c->setnick(ic.nickname + "@" + s.service);
-		c->setdispnick(c->getnick());
-		c->setdesc(imcontact(c->getnick(), ic.pname));
-	    }
 
 	    cb.requiresauth = true;
 	    c->setbasicinfo(cb);
@@ -1499,11 +1518,21 @@ bool ischannel(const imcontact &cont) {
 }
 
 string up(string s) {
-    int k;
-    string r;
+    string::iterator is = s.begin();
+    while(is != s.end()) {
+	*is = toupper(*is);
+	++is;
+    }
 
-    for(k = 0; k < s.size(); k++)
-	r += toupper(s[k]);
+    return s;
+}
 
-    return r;
+string lo(string s) {
+    string::iterator is = s.begin();
+    while(is != s.end()) {
+	*is = tolower(*is);
+	++is;
+    }
+
+    return s;
 }

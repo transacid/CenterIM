@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contact basic info class
-* $Id: imcontact.cc,v 1.17 2003/07/12 17:14:22 konst Exp $
+* $Id: imcontact.cc,v 1.18 2003/07/22 20:58:24 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,17 +46,14 @@ imcontact::imcontact(const icqcontact *c) {
 }
 
 bool imcontact::operator == (const imcontact &ainfo) const {
-    int k;
     string nick1, nick2;
     bool r = (ainfo.uin == uin) && (ainfo.pname == pname);
 
     switch(pname) {
 	case irc:
 	case yahoo:
-	    for(k = 0; k < ainfo.nickname.size(); k++) nick1 += toupper(ainfo.nickname[k]);
-	    for(k = 0; k < nickname.size(); k++) nick2 += toupper(nickname[k]);
-
-	    r = r & (nick1 == nick2);
+	case jabber:
+	    r = r & (up(nick1) == up(nick2));
 	    break;
 
 	default:

@@ -71,5 +71,6 @@ using namespace std;
 */
 
 string up(string s);
+string lo(string s);
 
 #endif

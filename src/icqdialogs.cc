@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.119 2003/07/18 00:40:00 konst Exp $
+* $Id: icqdialogs.cc,v 1.120 2003/07/22 20:58:23 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -352,7 +352,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 	if(subj == fsrss) {
 	    i = tree.addnode(_(" Feed Parameters "));
 	    tree.addleaff(i, 0, 33, _(" XML export URL : %s "), s.url.c_str());
-	    tree.addleaff(i, 0, 34, _(" Check frequency (hours) : %lu "), s.checkfrequency);
+	    tree.addleaff(i, 0, 34, _(" Check frequency (minutes) : %lu "), s.checkfrequency);
 	}
 
 	if((subj == fsuser) && s.pname == irc && s.nick.empty()) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.187 2003/07/18 00:40:00 konst Exp $
+* $Id: icqface.cc,v 1.188 2003/07/22 20:58:24 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1242,25 +1242,33 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
     }
 }
 
-bool icqface::changestatus(protocolname &pname, imstatus &st) {
-    int i;
-    bool r;
+bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
+    int i, choice, protcount;
+    bool r, alrlogged = false;
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
+    protocolname pname;
 
     m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
 	sizeWArea.y1+9, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-    makeprotocolmenu(m);
 
-    if(m.getcount() < 2) {
+    for(protcount = 0, pname = icq; pname != protocolname_size; (int) pname += 1) {
+	if(!conf.getourid(pname).empty()) protcount++;
+	alrlogged = alrlogged || gethook(pname).getstatus() != offline;
+    }
+
+    if(protcount < 2) {
 	i = 1;
+
     } else {
+	m.additem(0, -1, _(" All protocols"));
+	if(alrlogged) m.additem(0, -2, _(" Already logged only"));
 	m.addline();
-	m.additem(0, proto_all, _(" [all] All of them"));
+	makeprotocolmenu(m);
 	m.scale();
 
 	i = m.open();
@@ -1268,7 +1276,24 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
     }
 
     if(r = i) {
-	pname = (protocolname) ((int) m.getref(i-1));
+	choice = (int) m.getref(i-1);
+	switch(choice) {
+	    case -1:
+		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		    if(!conf.getourid(pname).empty())
+			pnames.push_back(pname);
+		break;
+	    case -2:
+		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		    if(!conf.getourid(pname).empty())
+		    if(gethook(pname).getstatus() != offline)
+			pnames.push_back(pname);
+		break;
+	    default:
+		pnames.push_back((protocolname) choice);
+		break;
+	}
+
 	m.clear();
 
 	mst.push_back(available);
@@ -1294,12 +1319,12 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 	for(im = mst.begin(); im != mst.end(); ++im) {
 	    m.additem(0, *im, statustext[im-mst.begin()]);
 
-	    if(pname != proto_all)
-	    if(gethook(pname).getstatus() == *im)
+	    if(pnames.size() == 1)
+	    if(gethook(pnames.front()).getstatus() == *im)
 		m.setpos(m.getcount()-1);
 	}
 
-	if(pname == proto_all) {
+	if(pnames.size() > 1) {
 	    m.setpos(0);
 	}
 

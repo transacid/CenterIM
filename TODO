@@ -5,12 +5,16 @@
 */
 
 rdf format recognition
+some xml parsing related stuff
 thekonst.net rss is fetched as a whole every time
 check the last history entry against the lastread
 chose a group when adding a feed
 rss check delays in minutes
 remove reply button from rss messages
 run -> connect failed -> doesn't reconnect
+gettext (GNU gettext) 0.11.5
+jabber is unable to join a conference using a full JID
+jabber names (user and conference) are not case sensitive
 
 /*
 *
@@ -18,14 +22,11 @@ run -> connect failed -> doesn't reconnect
 *
 */
 
-http://blogs.osafoundation.org/news/index.xml
-
-gettext (GNU gettext) 0.11.5
-jabber conferences names are not case sensitive
 typing notifications are shown only once
 aim message receive - freeze
 yahoo file transfers -> cannot accept
 looks like icq auth requests in russian are utf-8 encoded
+status change -> all of them (already logged only), moved to the top
 
 /*
 *
@@ -33,10 +34,12 @@ looks like icq auth requests in russian are utf-8 encoded
 *
 */
 
+http client
+    redirect processing
+    proxy
+
 link to OSD script to README
 check if hash auth is supported by jabber server
-http client redirect processing
-gcc 3.3 warnings
 jabber pgp
 typing in the status []
 f9 opens all the chat history
@@ -101,4 +104,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.440 2003/07/19 08:35:09 konst Exp $
+$Id: TODO,v 1.441 2003/07/22 20:58:14 konst Exp $
