@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.17 2003/11/05 09:07:43 konst Exp $
+* $Id: ljhook.cc,v 1.18 2003/11/21 00:35:34 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -247,6 +247,7 @@ bool ljhook::send(const imevent &sev) {
 
 	    ev->addParam("lineendings", "unix");
 	    ev->addParam("security", m->getfield("security"));
+	    ev->addParam("allowmask", "0");
 
 	    if(!m->field_empty("journal")) ev->addParam("usejournal", m->getfield("journal"));
 	    if(!m->field_empty("subject")) ev->addParam("subject", KOI2UTF(m->getfield("subject")));

@@ -36,7 +36,6 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 
 	typedef pair<unsigned int, contactstatus> visInfo;
 	vector<visInfo> vislist;
-	vector<icqcontact *> foundguys;
 	vector<imcontact> uinstosend;
 
 	void connected_cb(ConnectedEvent *ev);

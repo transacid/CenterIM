@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.131 2003/11/05 09:07:38 konst Exp $
+* $Id: icqdialogs.cc,v 1.132 2003/11/21 00:35:33 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -383,6 +383,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 	    tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
 	    tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange(s.agerange));
 	    tree.addleaff(i, 0, 35, _(" Users with photos only : %s "), stryesno(s.photo));
+	    tree.addleaff(i, 0, 25, _(" Look for online only : %s "), stryesno(s.onlineonly));
 	}
 
 	if((subj == fsuser) && s.nick.empty()
@@ -1749,8 +1750,10 @@ bool icqface::setljparams(imxmlevent *ev) {
     if(snames.empty()) {
 	snames.push_back(_("public (visible to all)"));
 	svalues.push_back("public");
-	snames.push_back(_("private (friends only)"));
+	snames.push_back(_("private"));
 	svalues.push_back("private");
+	snames.push_back(_("friends only"));
+	svalues.push_back("usemask");
     }
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
@@ -1776,7 +1779,11 @@ bool icqface::setljparams(imxmlevent *ev) {
 	i = t.addnode(_(" General "));
 	t.addleaff(i, 0, 10, _(" Post to journal : %s "), ev->getfield("journal").c_str());
 	t.addleaff(i, 0, 11, _(" Subject : %s "), ev->getfield("subject").c_str());
-	t.addleaff(i, 0, 12, _(" Security : %s "), ev->getfield("security").c_str());
+
+	vector<string>::iterator is = find(svalues.begin(), svalues.end(), ev->getfield("security"));
+	if(is == svalues.end()) is = svalues.begin();
+	tmp = is != svalues.end() ? snames[is-svalues.begin()] : "";
+	t.addleaff(i, 0, 12, _(" Security : %s "), tmp.c_str());
 
 	i = t.addnode(_(" Fancy stuff "));
 

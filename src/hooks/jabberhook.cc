@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.57 2003/10/20 23:13:53 konst Exp $
+* $Id: jabberhook.cc,v 1.58 2003/11/21 00:35:34 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -759,7 +759,7 @@ void jabberhook::gotsearchresults(xmlnode x) {
 
 	    if(nick) {
 		c->setnick(nick);
-		c->setdispnick(nick);
+		c->setdispnick(c->getnick());
 	    }
 
 	    if(first) cb.fname = first;
@@ -822,7 +822,7 @@ void jabberhook::gotroster(xmlnode x) {
 		requestinfo(ic);
 	    }
 
-	    if(name) c->setdispnick(name);
+	    if(name) c->setdispnick(UTF2KOI(name));
 	}
     }
 

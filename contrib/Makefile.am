@@ -1,2 +1,2 @@
-EXTRA_DIST = colorscheme.green colorscheme.schlich
+EXTRA_DIST = colorscheme.schlich colorscheme.green
 SUBDIRS = spanish

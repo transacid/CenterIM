@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.94 2003/11/06 23:44:08 konst Exp $
+* $Id: yahoohook.cc,v 1.95 2003/11/21 00:35:35 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -476,18 +476,19 @@ imstatus yahoohook::getstatus() const {
 }
 
 void yahoohook::requestinfo(const imcontact &ic) {
+    requestfromfound(ic);
+
     icqcontact *c = clist.get(ic);
+    if(!c) c = clist.get(contactroot);
 
-    if(c) {
-	icqcontact::moreinfo m = c->getmoreinfo();
-	icqcontact::basicinfo b = c->getbasicinfo();
+    icqcontact::moreinfo m = c->getmoreinfo();
+    icqcontact::basicinfo b = c->getbasicinfo();
 
-	m.homepage = "http://profiles.yahoo.com/" + ic.nickname;
-	b.email = ic.nickname + "@yahoo.com";
+    m.homepage = "http://profiles.yahoo.com/" + ic.nickname;
+    b.email = ic.nickname + "@yahoo.com";
 
-	c->setmoreinfo(m);
-	c->setbasicinfo(b);
-    }
+    c->setmoreinfo(m);
+    c->setbasicinfo(b);
 }
 
 void yahoohook::userstatus(const string &nick, int st, const string &message, bool away) {
@@ -590,6 +591,7 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	foundguys.pop_back();
     }
 
+    searchonlineonly = params.onlineonly;
     searchdest = &dest;
 
     if(!params.kwords.empty()) {
@@ -794,6 +796,10 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
 
     for(ir = yr->contacts; ir; ir = ir->next) {
 	fc = (yahoo_found_contact *) ir->data;
+
+	if(yhook.searchonlineonly && !fc->online)
+	    continue;
+
 	c = new icqcontact(imcontact(fc->id, yahoo));
 
 	icqcontact::basicinfo binfo = c->getbasicinfo();

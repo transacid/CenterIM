@@ -39,7 +39,6 @@ class irchook: public abstracthook {
 
 	vector<channelInfo> channels;
 	vector<string> searchchannels, extlisted;
-	vector<icqcontact *> foundguys;
 
 	map<string, string> awaymessages;
 	map<string, time_t> pingtime;

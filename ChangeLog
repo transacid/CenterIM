@@ -1648,3 +1648,27 @@ A segfault on some of wrong RSS feeds was fixed.
 
 When everything but icq was disabled on build it, the linker couldn't
 find some symbols. Fixed that.
+
+4.9.9
+-----
+
+Yahoo! search was implemented. Now it's possible to find users by
+keywords and names from centericq.
+
+Yahoo! server-side groups are now reflected on the contact list. Also,
+any change made on the list being online is immediately reflected on the
+server. This is something I'm planning to do with all the supported
+protocols soon.
+
+LJ support was improved. Now messages that were written offline are
+stored and the get posted ok. Also, it's now possible to post comments
+on LJ postings of your friends without a need to launch a web browser.
+Also, the find/add dialog for LJ was extended with the "Show users who
+have you on their list" option.
+
+The RDF support got broken somehow in the previous release. Fixed.
+
+Crash on removing of Yahoo! users was fixed.
+
+IRC didn't remove nicks of users who were kicked from the channel
+members lists.

@@ -32,7 +32,6 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	};
 
 	map<HTTPRequestEvent *, RequestType> sent;
-	vector<icqcontact *> foundguys;
 	vector<string> friendof, journals, moods, pictures;
 
 	void socket_cb(SocketEvent *ev);

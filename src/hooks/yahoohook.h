@@ -33,14 +33,13 @@ class yahoohook: public abstracthook {
 	vector<yfd> rfds, wfds;
 	vector<pair<Action, string> > tobedone;
 
-	vector<icqcontact *> foundguys;
 	vector<char *> sfiles;
 	map<const char *, imfile> srfiles;
 
 	map<imfile, string> fvalid;
 	map<string, string> awaymessages;
 
-	bool fonline, flogged;
+	bool fonline, flogged, searchonlineonly;
 	map<string, vector<string> > confmembers;
 	imstatus ourstatus;
 	int cid;

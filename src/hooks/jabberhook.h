@@ -19,7 +19,6 @@ class jabberhook: public abstracthook {
 	vector<string> roster;
 	map<string, string> awaymsgs;
 	map<string, vector<string> > chatmembers;
-	vector<icqcontact *> foundguys;
 
 	struct agent {
 	    string jid, name, desc;

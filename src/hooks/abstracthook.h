@@ -62,12 +62,15 @@ class abstracthook {
 	imstatus manualstatus;
 	verticalmenu *searchdest;
 	set<hookcapab::enumeration> fcapabs;
+	vector<icqcontact *> foundguys;
 
 	string rusconv(const string &tdir, const string &text);
 	string rushtmlconv(const string &tdir, const string &text, bool rus = true);
 	string ruscrlfconv(const string &tdir, const string &text);
 
 	string getmd5(const string &text);
+
+	void requestfromfound(const imcontact &ic);
 
     public:
 	abstracthook(protocolname aproto);

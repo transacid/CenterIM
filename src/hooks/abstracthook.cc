@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.47 2003/11/05 14:54:27 konst Exp $
+* $Id: abstracthook.cc,v 1.48 2003/11/21 00:35:33 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -302,6 +302,29 @@ string abstracthook::getmd5(const string &text) {
     }
 
     return r;
+}
+
+void abstracthook::requestfromfound(const imcontact &ic) {
+    vector<icqcontact *>::const_iterator ig = foundguys.begin();
+
+    while(ig != foundguys.end()) {
+	if((*ig)->getdesc() == ic) {
+	    icqcontact *rc = clist.get(ic);
+	    if(!rc) rc = clist.get(contactroot);
+
+	    rc->setnick((*ig)->getnick());
+	    rc->setbasicinfo((*ig)->getbasicinfo());
+	    rc->setmoreinfo((*ig)->getmoreinfo());
+	    rc->setworkinfo((*ig)->getworkinfo());
+	    rc->setinterests((*ig)->getinterests());
+	    rc->setbackground((*ig)->getbackground());
+	    rc->setabout((*ig)->getabout());
+
+	    break;
+	}
+
+	++ig;
+    }
 }
 
 // ----------------------------------------------------------------------------
