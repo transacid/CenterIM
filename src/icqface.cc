@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.242 2005/02/03 02:02:37 konst Exp $
+* $Id: icqface.cc,v 1.243 2005/02/13 11:06:53 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -3379,8 +3379,8 @@ int icqface::statuskeys(verticalmenu &m, int k) {
 }
 
 int icqface::fullscreenkeys(textbrowser &m, int k) {
-    switch(k) {
-	case KEY_F(9):
+    switch(face.key2action(k, section_editor)) {
+	case key_fullscreen:
 	    return 0;
     }
 
