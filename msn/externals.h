@@ -23,75 +23,77 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <msn/buddy.h>
+
 namespace MSN
 {
     class ListSyncInfo;
     
     namespace ext
     {
-	void registerSocket(int s, int read, int write);
-	void unregisterSocket(int s);
-	
-	void showError(MSN::Connection * conn, std::string msg);
-	
-	void buddyChangedStatus(MSN::Connection * conn, std::string buddy, std::string friendlyname, std::string state);
-	void buddyOffline(MSN::Connection * conn, std::string buddy);
-	
-	void log(int writing, const char* buf);
-	
-	void gotFriendlyName(MSN::Connection * conn, std::string friendlyname);       
-	void gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data);
-	void gotLatestListSerial(MSN::Connection * conn, int serial);
-	void gotGTC(MSN::Connection * conn, char c);        
-	void gotBLP(MSN::Connection * conn, char c);
-	
-	void gotNewReverseListEntry(MSN::Connection * conn, std::string username, std::string friendlyname);
-	
-	void addedListEntry(MSN::Connection * conn, std::string list, std::string username, int groupID);
-	
-	void removedListEntry(MSN::Connection * conn, std::string list, std::string username, int groupID);
-	
-	void addedGroup(MSN::Connection * conn, std::string groupName, int groupID);
-	void removedGroup(MSN::Connection * conn, int groupID);
-	void renamedGroup(MSN::Connection * conn, int groupID, std::string newGroupName);
-	
-	void gotSwitchboard(MSN::Connection * conn, void * tag);
-	
-	void buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, std::string username, std::string friendlyname, int is_initial);
-	
-	void buddyLeftConversation(MSN::SwitchboardServerConnection * conn, std::string username);
-	
-	void gotInstantMessage(MSN::SwitchboardServerConnection * conn, std::string username, std::string friendlyname, MSN::Message * msg);
-	
-	void failedSendingMessage(MSN::Connection * conn);
-	
-	void buddyTyping(MSN::Connection * conn, std::string username, std::string friendlyname);
-	
-	void gotInitialEmailNotification(MSN::Connection * conn, int unread_inbox, int unread_folders);
-	
-	void gotNewEmailNotification(MSN::Connection * conn, std::string from, std::string subject);
-	
-	void gotFileTransferInvitation(MSN::Connection * conn, std::string username, std::string friendlyname, MSN::FileTransferInvitation * inv);
-	
-	void fileTransferProgress(MSN::FileTransferInvitation * inv, std::string status, unsigned long recv, unsigned long total);
-	
-	void fileTransferFailed(MSN::FileTransferInvitation * inv, int error, std::string message);
-	
-	void fileTransferSucceeded(MSN::FileTransferInvitation * inv);
-	
-	void gotNewConnection(MSN::Connection * conn);
-	
-	void closingConnection(MSN::Connection * conn);
-	
-	void changedStatus(MSN::Connection * conn, std::string state);
-	
-	int connectToServer(std::string server, int port, bool *connected);
-	
-	int listenOnPort(int port);
-	
-	std::string getOurIP(void);
-	
-	std::string getSecureHTTPProxy(void);
+        void registerSocket(int s, int read, int write);
+        void unregisterSocket(int s);
+        
+        void showError(MSN::Connection * conn, std::string msg);
+        
+        void buddyChangedStatus(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname, MSN::BuddyStatus state);
+        void buddyOffline(MSN::Connection * conn, MSN::Passport buddy);
+        
+        void log(int writing, const char* buf);
+        
+        void gotFriendlyName(MSN::Connection * conn, std::string friendlyname);       
+        void gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data);
+        void gotLatestListSerial(MSN::Connection * conn, int serial);
+        void gotGTC(MSN::Connection * conn, char c);        
+        void gotBLP(MSN::Connection * conn, char c);
+        
+        void gotNewReverseListEntry(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname);
+        
+        void addedListEntry(MSN::Connection * conn, std::string list, MSN::Passport buddy, int groupID);
+        
+        void removedListEntry(MSN::Connection * conn, std::string list, MSN::Passport buddy, int groupID);
+        
+        void addedGroup(MSN::Connection * conn, std::string groupName, int groupID);
+        void removedGroup(MSN::Connection * conn, int groupID);
+        void renamedGroup(MSN::Connection * conn, int groupID, std::string newGroupName);
+        
+        void gotSwitchboard(MSN::Connection * conn, void * tag);
+        
+        void buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial);
+        
+        void buddyLeftConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy);
+        
+        void gotInstantMessage(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, MSN::Message * msg);
+        
+        void failedSendingMessage(MSN::Connection * conn);
+        
+        void buddyTyping(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname);
+        
+        void gotInitialEmailNotification(MSN::Connection * conn, int unread_inbox, int unread_folders);
+        
+        void gotNewEmailNotification(MSN::Connection * conn, std::string from, std::string subject);
+        
+        void gotFileTransferInvitation(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname, MSN::FileTransferInvitation * inv);
+        
+        void fileTransferProgress(MSN::FileTransferInvitation * inv, std::string status, unsigned long recv, unsigned long total);
+        
+        void fileTransferFailed(MSN::FileTransferInvitation * inv, int error, std::string message);
+        
+        void fileTransferSucceeded(MSN::FileTransferInvitation * inv);
+        
+        void gotNewConnection(MSN::Connection * conn);
+        
+        void closingConnection(MSN::Connection * conn);
+        
+        void changedStatus(MSN::Connection * conn, MSN::BuddyStatus state);
+        
+        int connectToServer(std::string server, int port, bool *connected);
+        
+        int listenOnPort(int port);
+        
+        std::string getOurIP(void);
+        
+        std::string getSecureHTTPProxy(void);
     }
 }
 #endif

@@ -34,6 +34,7 @@ namespace MSN
 {
     class callback;
     class Message;
+    class Passport;
     
     /** An abstract base class that represents a connection to another computer.
      *
@@ -139,14 +140,14 @@ public:
          * @param  recipient  The userName of the recipient.
          * @param  msg        A Message object containing the message to send.
          */
-        virtual void sendMessage(std::string & recipient, Message *msg) = 0;
+        virtual void sendMessage(Passport recipient, Message *msg) = 0;
         
         /** Send message text @a s to @a recipient.
          *
          * Convenience function that wraps @a s as an instant message.
          * @overload
          */
-        virtual void sendMessage(std::string & recipient, std::string & s);
+        virtual void sendMessage(Passport recipient, std::string & s);
         
         /** Notify the calling library that an error with code @a errorCode has
          *  occured.

@@ -24,15 +24,16 @@
  */
 
 #include <string>
+#include <msn/passport.h>
 
 namespace MSN
 {
     class AuthData
     {
 public:
-        std::string username;
+        Passport username;
         
-        AuthData(std::string & username_) : username(username_) {};
+        AuthData(Passport username_) : username(username_) {};
         virtual ~AuthData() {};
     };
 }

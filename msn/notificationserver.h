@@ -27,6 +27,7 @@
 #include <msn/authdata.h>
 #include <msn/errorcodes.h>
 #include <msn/buddy.h>
+#include <msn/passport.h>
 #include <stdexcept>
 
 namespace MSN
@@ -119,11 +120,11 @@ public:
     class connectinfo // : public callback_data
     {
 public:
-        std::string username;
+        Passport username;
         std::string password;
         std::string cookie;
         
-        connectinfo(std::string & username_, std::string & password_) : username(username_), password(password_), cookie("") {};
+        connectinfo(Passport & username_, std::string & password_) : username(username_), password(password_), cookie("") {};
     };    
         
     /** Represents a connection to a MSN notification server.
@@ -142,9 +143,9 @@ private:
 public:
             std::string password;
             
-            AuthData(std::string & username_,
-                                       std::string & password_) : 
-                ::MSN::AuthData(username_), password(password_) {} ;
+            AuthData(Passport & passport_,
+                     std::string & password_) : 
+                ::MSN::AuthData(passport_), password(password_) {} ;
         };
         
         NotificationServerConnection::AuthData auth;
@@ -158,7 +159,7 @@ public:
         /** Create a NotificationServerConnection with the specified @a username and 
          *  @a password.
          */
-        NotificationServerConnection(std::string username, std::string password);
+        NotificationServerConnection(Passport username, std::string password);
         
         virtual ~NotificationServerConnection();
         virtual void dispatchCommand(std::vector<std::string> & args);
@@ -193,7 +194,7 @@ public:
          *
          *  @return  The matching SwitchboardServerConnection, or @c NULL.
          */
-        SwitchboardServerConnection *switchboardWithOnlyUser(std::string username);
+        SwitchboardServerConnection *switchboardWithOnlyUser(Passport username);
         
         /** @name Action Methods
          *
@@ -203,7 +204,7 @@ public:
         
         /** Set our online state to @a state.
          */
-        void setState(std::string state);
+        void setState(BuddyStatus state);
         
         void setBLP(char setting);
         void setGTC(char setting);
@@ -216,14 +217,14 @@ public:
         
         /** Add buddy named @a buddyName to the list named @a list.
          */
-        void addToList(std::string list, std::string buddyName);
+        void addToList(std::string list, Passport buddyName);
         
         /** Remove buddy named @a budydName from the list named @a list.
          */
-        void removeFromList(std::string list, std::string buddyName);
+        void removeFromList(std::string list, Passport buddyName);
         
-        void addToGroup(std::string buddyName, int groupID);
-        void removeFromGroup(std::string buddyName, int groupID);
+        void addToGroup(Passport, int groupID);
+        void removeFromGroup(Passport buddyName, int groupID);
         
         void addGroup(std::string groupName);
         void removeGroup(int groupId);
@@ -244,7 +245,7 @@ public:
         /** Request a switchboard connection with @a username.  @a msg will be sent when
          *  @a username joins the switchboard.
          */
-        void requestSwitchboardConnection(std::string username, Message *msg, void *tag);
+        void requestSwitchboardConnection(Passport username, Message *msg, void *tag);
         
         /** Request a switchboard connection.
          */
@@ -254,8 +255,8 @@ public:
         void checkReverseList(ListSyncInfo *);
 
         virtual void connect(std::string hostname, unsigned int port);
-        virtual void sendMessage(std::string & recipient, Message *msg);
-        virtual void sendMessage(std::string & recipient, std::string & s) { Connection::sendMessage(recipient, s); }
+        virtual void sendMessage(Passport recipient, Message *msg);
+        virtual void sendMessage(Passport recipient, std::string & s) { Connection::sendMessage(recipient, s); }
         
         /** Add a callback of @a cb to this connection for response with ID of @a trid.
          *  

@@ -25,6 +25,7 @@
 
 
 #include <string>
+#include <msn/passport.h>
 
 namespace MSN
 {
@@ -40,11 +41,11 @@ public:
         };
         ApplicationType application;
         std::string cookie;
-        std::string otherUser;
+        Passport otherUser;
         SwitchboardServerConnection *switchboardConnection;
         
         Invitation(ApplicationType application_, std::string cookie_, 
-                   std::string otherUser_, SwitchboardServerConnection * switchboardConnection_) :
+                   Passport otherUser_, SwitchboardServerConnection * switchboardConnection_) :
             application(application_), cookie(cookie_),
             otherUser(otherUser_), switchboardConnection(switchboardConnection_) {};
         virtual ~Invitation() {};

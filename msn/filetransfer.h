@@ -26,6 +26,8 @@
 #include <msn/util.h>
 #include <msn/switchboardserver.h>
 #include <msn/invitation.h>
+#include <msn/passport.h>
+
 #include <string>
 
 namespace MSN 
@@ -54,7 +56,7 @@ public:
          *  @todo  Do all of these parameters really need to be in the constructor?
          */
         FileTransferInvitation(Invitation::ApplicationType application_, std::string cookie_,
-                       std::string otherUser_, SwitchboardServerConnection * switchboardConnection_,
+                       Passport otherUser_, SwitchboardServerConnection * switchboardConnection_,
                        std::string fileName_, long unsigned fileSize_, void *userData_ = NULL) :
             Invitation(application_, cookie_, otherUser_, switchboardConnection_),
             fileName(fileName_), fileSize(fileSize_), userData(userData_) {};
@@ -138,7 +140,7 @@ public:
             unsigned long bytes_done;
             int num_ignore;
             
-            AuthData(std::string username_, std::string cookie_, Direction direction_, 
+            AuthData(Passport username_, std::string cookie_, Direction direction_, 
                                  FileTransferInvitation *inv_=NULL, FILE *fd_=NULL, bool connected_=false,
                                  unsigned long bytes_done_=0) :
                 ::MSN::AuthData(username_), cookie(cookie_), direction(direction_), inv(inv_), 
@@ -153,7 +155,7 @@ public:
         
         /** @todo Should this really be an empty function? */
         virtual void connect(std::string hostname, unsigned int port) {};
-        virtual void sendMessage(std::string & recipient, Message *msg) {};
+        virtual void sendMessage(Passport recipient, Message *msg) {};
         virtual void dispatchCommand(std::vector<std::string> & args) {};
 
         virtual void socketIsWritable();

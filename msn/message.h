@@ -124,6 +124,7 @@ public:
          *  @return  The value of the MIME header if present, or "" if not found.
          */ 
         std::string operator[](const std::string header) const;
+        void setHeader(const std::string name, const std::string value) { header.setHeader(name, value); };
         
         /** Return the body portion of this Message.
          */
@@ -146,9 +147,9 @@ public:
         
         /** Set the color used in this Message.
          */
-        const void setColor(std::vector<int> color);
-        const void setColor(std::string color);
-        const void setColor(int red, int green, int blue);
+        void setColor(std::vector<int> color);
+        void setColor(std::string color);
+        void setColor(int red, int green, int blue);
         
         /** Return the font effects used in this Message.
          *

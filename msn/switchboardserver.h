@@ -26,6 +26,7 @@
 #include <msn/message.h>
 #include <msn/authdata.h>
 #include <msn/connection.h>
+#include <msn/passport.h>
 #include <string>
 
 namespace MSN
@@ -47,17 +48,17 @@ public:
 public:
             std::string sessionID;
             std::string cookie;
-            std::string rcpt;  
+            Passport rcpt;  
             Message *msg;
             void * tag;
             
-            AuthData(std::string & username_, std::string & sessionID_, 
-                                      std::string & cookie_, Message *msg_=NULL, void *tag_=NULL) : 
+            AuthData(Passport & username_, std::string & sessionID_, 
+                     std::string & cookie_, Message *msg_=NULL, void *tag_=NULL) : 
                 ::MSN::AuthData(username_), sessionID(sessionID_), cookie(cookie_), 
-                rcpt(""), msg(msg_), tag(tag_) {};
+                msg(msg_), tag(tag_) {};
             
-            AuthData(std::string & username_, std::string & rcpt_,
-                                      Message *msg_=NULL, void *tag_=NULL) :
+            AuthData(Passport & username_, Passport & rcpt_,
+                     Message *msg_=NULL, void *tag_=NULL) :
                 ::MSN::AuthData(username_), sessionID(""), cookie(""), rcpt(rcpt_), 
                 msg(msg_), tag(tag_) {};        
         };
@@ -66,7 +67,7 @@ public:
         
         /** A list of the users in this switchboard session.
          */
-        std::list<std::string> users;
+        std::list<Passport> users;
 
         /** Invitations extended but not responded to.
         */
@@ -114,12 +115,12 @@ public:
         
         /** Invite @a userName into this conversation.
          */
-        void inviteUser(std::string userName);
+        void inviteUser(Passport userName);
 
         virtual void connect(std::string hostname, unsigned int port);
-        virtual void sendMessage(std::string & recipient, Message *msg);
-        virtual void sendMessage(Message *msg) { std::string r = ""; sendMessage(r, msg); };
-        virtual void sendMessage(std::string & s) { std::string r = ""; Connection::sendMessage(r, s); };
+        virtual void sendMessage(Passport recipient, Message *msg);
+        virtual void sendMessage(Message *msg) { Passport p; sendMessage(p, msg); };
+        virtual void sendMessage(std::string & s) { Passport p; Connection::sendMessage(p, s); };
         
         FileTransferInvitation *sendFile(const std::string path);
 
@@ -152,8 +153,8 @@ private:
         void callback_InviteUsers(std::vector<std::string> & args, int trid, void * data);
         void callback_AnsweredCall(std::vector<std::string> & args, int trid, void * data);
         
-        void handleInvite(std::string from, std::string friendly, std::string mime, std::string body);        
-        void handleNewInvite(std::string & from, std::string & friendly, std::string & mime, std::string & body);
+        void handleInvite(Passport from, std::string friendly, std::string mime, std::string body);        
+        void handleNewInvite(Passport & from, std::string & friendly, std::string & mime, std::string & body);
         friend class Connection;
     };
 }

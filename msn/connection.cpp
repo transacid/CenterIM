@@ -23,10 +23,12 @@
 #include <msn/connection.h>
 #include <msn/errorcodes.h>
 #include <msn/util.h>
+#include <msn/passport.h>
 #include <msn/externals.h>
 
 #ifndef WIN32
 #include <sys/socket.h>
+#include <unistd.h>
 #else
 #include <winsock.h>
 #include <io.h>
@@ -189,17 +191,28 @@ namespace MSN
             assert(errno != EAGAIN);
             
             ext::showError(this, strerror(errno));                
-            ext::closingConnection(this);
             delete this;            
+        }
+        else if (amountRead == 0)
+        {
+            ext::showError(this, "Connection closed by remote endpoint.");
+            delete this;
         }
         else
         {
             this->readBuffer += std::string(tempReadBuffer, amountRead);
-            handleIncomingData();
+            try
+            {
+                handleIncomingData();
+            }
+            catch (std::exception & e)
+            {
+                ext::showError(this, e.what());
+            }
         }
     }
 
-    void Connection::sendMessage(std::string & recipient, std::string & body)
+    void Connection::sendMessage(Passport recipient, std::string & body)
     { 
         Message msg(body, "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n");
         this->sendMessage(recipient, &msg);
@@ -230,9 +243,6 @@ namespace MSN
         std::map<std::string, void (Connection::*)(std::vector<std::string> &, std::string, std::string)>::iterator i = messageHandlers.find(contentType);
         if (i != messageHandlers.end())
             (this->*(messageHandlers[contentType]))(args, mime, body);
-        else {
-//            printf("Unknown Content-Type: \"%s\"\n", contentType.c_str());
-        }        
     }
     
     void Connection::message_plain(std::vector<std::string> & args, std::string mime, std::string body)

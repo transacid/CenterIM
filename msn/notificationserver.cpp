@@ -23,12 +23,14 @@
 #include <msn/notificationserver.h>
 #include <msn/errorcodes.h>
 #include <msn/externals.h>
-#include "md5.h"
+#include <md5.h>
 #include <msn/util.h>
 #include <curl/curl.h>
 #include <algorithm>
 
-#ifdef WIN32
+#ifndef WIN32
+#include <unistd.h>
+#else
 #include <io.h>
 #define EINPROGRESS WSAEINPROGRESS
 #endif
@@ -39,14 +41,14 @@ namespace MSN
     
     static size_t msn_handle_curl_write(void *ptr, size_t size, size_t nmemb, void  *stream);
     static size_t msn_handle_curl_header(void *ptr, size_t size, size_t nmemb, void *stream) ;    
-	
+	    
     NotificationServerConnection::NotificationServerConnection(NotificationServerConnection::AuthData & auth_)
 	: Connection(), auth(auth_)
     {
 	registerCommandHandlers();
     }
     
-    NotificationServerConnection::NotificationServerConnection(std::string username_, std::string password_) 
+    NotificationServerConnection::NotificationServerConnection(Passport username_, std::string password_) 
 	: Connection(), auth(username_, password_)
     {
 	registerCommandHandlers();
@@ -80,7 +82,7 @@ namespace MSN
 	return NULL;
     }
     
-    SwitchboardServerConnection *NotificationServerConnection::switchboardWithOnlyUser(std::string username)
+    SwitchboardServerConnection *NotificationServerConnection::switchboardWithOnlyUser(Passport username)
     {
 	std::list<SwitchboardServerConnection *> & list = _switchboardConnections;
 	std::list<SwitchboardServerConnection *>::iterator i = list.begin();
@@ -149,7 +151,7 @@ namespace MSN
 	    (this->*commandHandlers[args[0]])(args);
     }
     
-    void NotificationServerConnection::sendMessage(std::string & recipient, Message *msg)
+    void NotificationServerConnection::sendMessage(Passport recipient, Message *msg)
     {
 	SwitchboardServerConnection *sb = this->switchboardWithOnlyUser(recipient);
 	
@@ -225,7 +227,7 @@ namespace MSN
     
     void NotificationServerConnection::handle_CHG(std::vector<std::string> & args)
     {
-	ext::changedStatus(this, args[2]);       
+	ext::changedStatus(this, buddyStatusFromString(args[2]));
     }
     
     void NotificationServerConnection::handle_CHL(std::vector<std::string> & args)
@@ -254,12 +256,12 @@ namespace MSN
     
     void NotificationServerConnection::handle_ILN(std::vector<std::string> & args)
     {
-	ext::buddyChangedStatus(this, args[3], decodeURL(args[4]), args[2]);
+	ext::buddyChangedStatus(this, args[3], decodeURL(args[4]), buddyStatusFromString(args[2]));
     }
     
     void NotificationServerConnection::handle_NLN(std::vector<std::string> & args)
     {
-	ext::buddyChangedStatus(this, args[2], decodeURL(args[3]), args[1]);
+	ext::buddyChangedStatus(this, args[2], decodeURL(args[3]), buddyStatusFromString(args[1]));
     }
     
     void NotificationServerConnection::handle_FLN(std::vector<std::string> & args)
@@ -302,10 +304,10 @@ namespace MSN
     }
 
 
-    void NotificationServerConnection::setState(std::string state)
+    void NotificationServerConnection::setState(BuddyStatus state)
     {
 	std::stringstream buf_;
-	buf_ << "CHG " << trid++ << " " << state << " 0\r\n";
+	buf_ << "CHG " << trid++ << " " << buddyStatusToString(state) << " 0\r\n";
 	write(buf_);        
     }
     
@@ -333,28 +335,28 @@ namespace MSN
 	write(buf_);        
     }
 
-    void NotificationServerConnection::addToList(std::string list, std::string buddyName)
+    void NotificationServerConnection::addToList(std::string list, Passport buddyName)
     {
 	std::stringstream buf_;
 	buf_ << "ADD " << trid++ << " " << list << " " << buddyName << " " << buddyName << "\r\n";
 	write(buf_);        
     }
     
-    void NotificationServerConnection::removeFromList(std::string list, std::string buddyName)
+    void NotificationServerConnection::removeFromList(std::string list, Passport buddyName)
     {
 	std::stringstream buf_;
 	buf_ << "REM " << trid++ << " " << list << " " << buddyName << "\r\n";
 	write(buf_);        
     }
     
-    void NotificationServerConnection::addToGroup(std::string buddyName, int groupID)
+    void NotificationServerConnection::addToGroup(Passport buddyName, int groupID)
     {
 	std::stringstream buf_;
 	buf_ << "ADD " << trid++ << " " << "FL" << " " << buddyName << " " << buddyName <<  groupID << "\r\n";
 	write(buf_);
     }
     
-    void NotificationServerConnection::removeFromGroup(std::string buddyName, int groupID)
+    void NotificationServerConnection::removeFromGroup(Passport buddyName, int groupID)
     {
 	std::stringstream buf_;
 	buf_ << "REM " << trid++ << " " << "FL" << " " << buddyName << groupID << "\r\n";
@@ -400,7 +402,7 @@ namespace MSN
 	write("PNG\r\n");        
     }
     
-    void NotificationServerConnection::requestSwitchboardConnection(std::string username, Message *msg, void *tag)
+    void NotificationServerConnection::requestSwitchboardConnection(Passport username, Message *msg, void *tag)
     {
 	SwitchboardServerConnection::AuthData *auth = new SwitchboardServerConnection::AuthData(this->auth.username, 
 											       username, (msg ? new Message(*msg) : NULL), 
@@ -413,7 +415,8 @@ namespace MSN
     
     void NotificationServerConnection::requestSwitchboardConnection(void *tag)
     {
-	requestSwitchboardConnection("", NULL, tag);
+	Passport p;
+	requestSwitchboardConnection(p, NULL, tag);
     }
     
     template <class _Tp>
@@ -638,11 +641,14 @@ public:
 	}
 	else if (args[0] == "BPR")
 	{
-	    bool enabled = true;
-	    if (! std::isdigit(args[2][0]))
-		enabled = (decodeURL(args[2]) == "Y");
-	    
-	    info->forwardList.back().phoneNumbers.push_back(Buddy::PhoneNumber(args[1], decodeURL(args[2]), enabled));
+	    bool enabled;
+	    if (decodeURL(args[2])[0] == 'Y')
+		enabled = true;
+	    else
+		enabled = false;
+	    info->forwardList.back().phoneNumbers.push_back(Buddy::PhoneNumber(args[1], 
+									       decodeURL(args[2]), 
+									       enabled));
 	}
 	else
 	    throw std::runtime_error("Unexpected sync data");
@@ -678,7 +684,7 @@ public:
 	}
 	
 #ifdef DEBUG
-//	fprintf(stderr, "MSN Plugin: Negotiating CVR\n");
+	fprintf(stderr, "MSN Plugin: Negotiating CVR\n");
 #endif
 	
 	std::stringstream buf_;
@@ -727,7 +733,7 @@ public:
 	}
 	
 #ifdef DEBUG
-//	fprintf(stderr, "MSN Plugin: Requesting USR\n");
+	fprintf(stderr, "MSN Plugin: Requesting USR\n");
 #endif
 	
 	std::stringstream buf_;
@@ -781,7 +787,7 @@ public:
 	    ret = CURLE_OK;
 	
 #ifdef DEBUG
-//	fprintf(stderr, "MSN Plugin: Will connect to login.passport.com using proxy: %s\n", proxy.empty() ? "None" : proxy);
+	fprintf(stderr, "MSN Plugin: Will connect to login.passport.com using proxy: %s\n", proxy.empty() ? "None" : proxy);
 #endif
 	
 	if (ret == CURLE_OK)
@@ -814,7 +820,7 @@ public:
 	    ret = curl_easy_setopt(curl, CURLOPT_WRITEHEADER, info);
 	
 #ifdef DEBUG
-//	fprintf(stderr, "MSN Plugin: Connecting to login.passport.com\n");
+	fprintf(stderr, "MSN Plugin: Connecting to login.passport.com\n");
 #endif
 	
 	if (ret == CURLE_OK)
@@ -835,8 +841,8 @@ public:
 	}
 	
 #ifdef DEBUG
-//	fprintf(stderr, "MSN Plugin: Returning login cookie to MSN\n");
-//	fprintf(stderr, "MSN Plugin: Cookie: %s\n", info->cookie);
+	fprintf(stderr, "MSN Plugin: Returning login cookie to MSN\n");
+	fprintf(stderr, "MSN Plugin: Cookie: %s\n", info->cookie);
 #endif
 	
 	std::stringstream buf_;
@@ -886,7 +892,7 @@ public:
 	Message::Headers headers = Message::Headers(headers_);
 	cookiedata = headers["Authentication-Info:"];
 #ifdef DEBUG
-//	printf("MSN Plugin: Authentication-Info header: %s\n", cookiedata.empty() ? "Not found" : "Found");
+	printf("MSN Plugin: Authentication-Info header: %s\n", cookiedata.empty() ? "Not found" : "Found");
 #endif
 	if (! cookiedata.empty()) 
 	{

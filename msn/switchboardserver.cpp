@@ -150,7 +150,7 @@ public:
             (this->*commandHandlers[args[0]])(args);
     }
     
-    void SwitchboardServerConnection::sendMessage(std::string & recipient_, Message *msg)
+    void SwitchboardServerConnection::sendMessage(Passport recipient_, Message *msg)
     {
         std::string s = msg->asString();
         
@@ -159,7 +159,7 @@ public:
         this->write(buf_);
     }
     
-    void SwitchboardServerConnection::handleInvite(std::string from, std::string friendly, std::string mime, std::string body)
+    void SwitchboardServerConnection::handleInvite(Passport from, std::string friendly, std::string mime, std::string body)
     {
         Message::Headers headers = Message::Headers(body);
         std::string command = headers["Invitation-Command"];
@@ -174,7 +174,7 @@ public:
         } 
         else if (inv == NULL)
         {
-//            printf("Very odd - just got a %s out of mid-air...\n", command.c_str()); 
+            printf("Very odd - just got a %s out of mid-air...\n", command.c_str()); 
         }
         else if (command == "ACCEPT")
         {
@@ -184,11 +184,11 @@ public:
         {
             inv->invitationWasCanceled(body);
         } else {
-//            printf("Argh, don't support %s yet!\n", command.c_str());
+            printf("Argh, don't support %s yet!\n", command.c_str());
         }
     }
     
-    void SwitchboardServerConnection::handleNewInvite(std::string & from, std::string & friendly, std::string & mime, std::string & body)
+    void SwitchboardServerConnection::handleNewInvite(Passport & from, std::string & friendly, std::string & mime, std::string & body)
     {
         Message::Headers headers = Message::Headers(body);
         std::string appname;
@@ -217,8 +217,8 @@ public:
     
     void SwitchboardServerConnection::handle_BYE(std::vector<std::string> & args)
     {
-        std::list<std::string> & list = this->users;
-        std::list<std::string>::iterator i;
+        std::list<Passport> & list = this->users;
+        std::list<Passport>::iterator i;
         
         ext::buddyLeftConversation(this, args[1]);
         
@@ -279,7 +279,7 @@ public:
         write(buf_);        
     }
     
-    void SwitchboardServerConnection::inviteUser(std::string userName)
+    void SwitchboardServerConnection::inviteUser(Passport userName)
     {
         std::stringstream buf_;
         buf_ << "CAL " << trid++ << " " << userName << "\r\n";
@@ -374,14 +374,12 @@ public:
             return;
         }
         
-        if (this->auth.rcpt.empty()) // they're requesting the SB session the proper way
+        if (((std::string) (this->auth.rcpt)).empty()) // they're requesting the SB session the proper way
             ext::gotSwitchboard(this, this->auth.tag);
         else {
             std::stringstream buf_;
             buf_ << "CAL " << trid++ << " " << this->auth.rcpt << "\r\n";
             this->write(buf_);
-            
-            this->auth.rcpt = "";
         }
         ext::gotNewConnection(this);
     }
@@ -441,7 +439,7 @@ public:
         basename = basename.substr(basename_pos);
         
         std::stringstream buf_;
-        buf_ << "Application-Name: File transfer\r\n";
+        buf_ << "Application-Name: File Transfer\r\n";
         buf_ << "Application-GUID: {5D3E02AB-6190-11d3-BBBB-00C04F795683}\r\n";
         buf_ << "Invitation-Command: INVITE\r\n";
         buf_ << "Invitation-Cookie: " << inv->cookie << "\r\n";
@@ -449,7 +447,8 @@ public:
         buf_ << "Application-FileSize: " << inv->fileSize << "\r\n";
         buf_ << "\r\n";
         
-        Message *msg = new Message(buf_.str(), "Content-Type: text/x-msmsgsinvite; charset=UTF-8\r\n\r\n");
+        Message *msg = new Message(buf_.str());
+        msg->setHeader("Content-Type", "text/x-msmsgsinvite; charset=UTF-8");
         
         this->sendMessage(msg);
         

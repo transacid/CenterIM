@@ -24,47 +24,67 @@
  */
 
 #include <string>
+#include <list>
+#include <msn/passport.h>
 
 namespace MSN
 {
+    /** The online state of a buddy.
+    */
+    
+    enum BuddyStatus
+    {
+        STATUS_AVAILABLE,
+        STATUS_BUSY,
+        STATUS_IDLE,
+        STATUS_BERIGHTBACK,
+        STATUS_AWAY,
+        STATUS_ONTHEPHONE,
+        STATUS_OUTTOLUNCH,
+        STATUS_INVISIBLE
+    };
+    
+    std::string buddyStatusToString(BuddyStatus s);
+    BuddyStatus buddyStatusFromString(std::string s);
+    
     class Group;
     class Buddy
     {
-	/** @todo  BPR's need to be handled at @i any time, not just when syncing. */
+        /** @todo  BPR's need to be handled at @i any time, not just when syncing. */
 public:
-	class PhoneNumber
-	{
+        class PhoneNumber
+        {
 public:
-	    std::string title;
-	    std::string number;
-	    bool enabled;
-	    
-	    PhoneNumber(std::string title_, std::string number_, bool enabled_=true)
-		: title(title_), number(number_), enabled(enabled_) {};
-	};
-	
-	std::string userName;
-	std::string friendlyName;
-	
-	std::list<Buddy::PhoneNumber> phoneNumbers;
-	std::list<Group *> groups;
-	
-	Buddy(std::string userName_, std::string friendlyName_) :
-	    userName(userName_), friendlyName(friendlyName_) {};
-	bool const operator==(const Buddy &other) { return userName == other.userName; }
+            std::string title;
+            std::string number;
+            bool enabled;
+            
+            PhoneNumber(std::string title_, std::string number_, bool enabled_=true)
+                : title(title_), number(number_), enabled(enabled_) {};
+        };
+        
+        Passport userName;
+        std::string friendlyName;
+        
+        std::list<Buddy::PhoneNumber> phoneNumbers;
+        std::list<Group *> groups;
+        
+        Buddy(Passport userName_, std::string friendlyName_) :
+            userName(userName_), friendlyName(friendlyName_) {};
+        bool const operator==(const Buddy &other) { return userName == other.userName; }
     };
     
     class Group
     {
 public:
-	int groupID;
-	std::string name;
-	std::list<Buddy *> buddies;
-	
-	Group(int groupID_, std::string name_)
-	    : groupID(groupID_), name(name_) {};
-	
-	Group() : groupID(-1), name("INVALID") {};
+        int groupID;
+        std::string name;
+        std::list<Buddy *> buddies;
+        
+        Group(int groupID_, std::string name_)
+            : groupID(groupID_), name(name_) {};
+        
+        Group() : groupID(-1), name("INVALID") {};
     };
 }
 
