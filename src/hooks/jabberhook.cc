@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.43 2003/04/22 21:50:48 konst Exp $
+* $Id: jabberhook.cc,v 1.44 2003/04/22 22:46:16 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -297,15 +297,13 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	if(c = clist.get(ic)) {
 	    cname = getchanneljid(c);
 	    if(!cname.empty()) {
+		auto_ptr<char> confname(strdup(cname.c_str()));
 		cname += "/" + conf.getourid(jabber).nickname;
 
 		auto_ptr<char> ccname(strdup(cname.c_str()));
 		auto_ptr<char> ourjid(strdup(getourjid().c_str()));
 
 		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
-		xmlnode_put_attrib(x, "from", ourjid.get());
-//                z = xmlnode_insert_tag(y, "x");
-//                xmlnode_put_attrib(z, "xmlns", "http://jabber.org/protocol/muc");
 		jab_send(jc, x);
 		xmlnode_free(x);
 	    }
@@ -1402,8 +1400,10 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    default:
 			if(!jhook.regmode) {
 			    face.log(_("+ [jab] error %d: %s"), code, desc.c_str());
-			    close(jhook.jc->fd);
-			    jhook.jc->fd = -1;
+			    if(!jhook.flogged) {
+				close(jhook.jc->fd);
+				jhook.jc->fd = -1;
+			    }
 
 			} else {
 			    jhook.regerr = desc;
