@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.11 2001/10/02 17:31:01 konst Exp $
+* $Id: icqdialogs.cc,v 1.12 2001/10/03 21:41:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -816,7 +816,7 @@ int icqface::selectgroup(const string text) {
 }
 
 void icqface::organizegroups() {
-    groupmanager(_("Organize user groups"), false);
+    groupmanager(_("Organize contact groups"), false);
 }
 
 int icqface::groupmanager(const string text, bool sel) {

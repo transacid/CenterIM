@@ -65,7 +65,7 @@ msgstr "Игнорировать пользователя %s (%lu)?"
 
 #: src/centericq.cc:287
 msgid "Select a group to move the user to"
-msgstr ""
+msgstr "Выберите новую группу для пользователя"
 
 #: src/centericq.cc:315
 #, c-format
@@ -91,12 +91,11 @@ msgstr "+ тамошний клиент не позволяет пересылать файлы"
 
 #: src/centericq.cc:495
 msgid "+ cannot send contacts in offline mode"
-msgstr ""
+msgstr "+ для посылки контактов вы должны быть на линии"
 
 #: src/centericq.cc:501
-#, fuzzy
 msgid "Contacts to send"
-msgstr "Контакты от %s, %lu"
+msgstr "Послать контакты"
 
 #: src/centericq.cc:611
 #, c-format
@@ -123,23 +122,20 @@ msgid "%s (%lu) wrote:"
 msgstr ""
 
 #: src/centericq.cc:724
-#, fuzzy, c-format
 msgid "+ user %s, %lu is already on the list"
-msgstr "+ %s добавлен в список"
+msgstr "+ %s, %lu уже есть в списке"
 
 #: src/centericq.cc:728
-#, fuzzy
 msgid "Select a group to add the user to"
-msgstr "Выберите контакты для добавления в список"
+msgstr "Выберите группу для контакта"
 
 #: src/centericq.cc:733
 msgid "Notify the user he/she has been added?"
-msgstr ""
+msgstr "Уведомить пользователя о том, что он был добавлен?"
 
 #: src/centericq.cc:736
-#, fuzzy, c-format
 msgid "+ the notification has been sent to %lu"
-msgstr "+ подтверждение послано %lu"
+msgstr "+ уведомление послано %lu"
 
 #: src/centericq.cc:742
 #, c-format
@@ -699,7 +695,7 @@ msgstr " Посылать все сообщения через сервер : %s "
 #: src/icqdialogs.cc:698
 #, c-format
 msgid " Arrange contacts into groups : %s "
-msgstr ""
+msgstr " Поддержка групп контактов : %s "
 
 #: src/icqdialogs.cc:700
 #, c-format
@@ -718,36 +714,29 @@ msgstr " Авто-N/A после (0 - выкл): "
 msgid "Your ICQ details have been fetched"
 msgstr "Ваша icq-информация получена"
 
-#: src/icqdialogs.cc:819
-msgid "Organize user groups"
-msgstr ""
-
 #: src/icqdialogs.cc:842
-#, fuzzy
 msgid "Rename"
-msgstr "Удалить"
+msgstr "Переименовать"
 
 #: src/icqdialogs.cc:842
 msgid "Select"
-msgstr ""
+msgstr "Выбрать"
 
 #: src/icqdialogs.cc:856
 msgid " Groups "
-msgstr ""
+msgstr " Группы "
 
 #: src/icqdialogs.cc:869
 msgid "Name for a group to be created: "
-msgstr ""
+msgstr "Название для новой группы: "
 
 #: src/icqdialogs.cc:878
-#, fuzzy
 msgid "New name for the group: "
-msgstr "Новый ник для показа в списке: "
+msgstr "Новое имя группы: "
 
 #: src/icqdialogs.cc:888
-#, fuzzy
 msgid "Are you sure want to remove the group?"
-msgstr "Вы действительно хотите удалить %s (%lu)?"
+msgstr "Вы действительно хотите удалить группу?"
 
 #: src/icqface.cc:37
 msgid "yes"
@@ -871,7 +860,7 @@ msgstr " Удалить              del"
 
 #: src/icqface.cc:211
 msgid " Move to group.."
-msgstr ""
+msgstr " Переместить в группу.."
 
 #: src/icqface.cc:215
 msgid " Send URL               u"
@@ -914,27 +903,24 @@ msgid " View/edit ignore list"
 msgstr " Игнор. список"
 
 #: src/icqface.cc:255
-#, fuzzy
 msgid " View/edit invisible list"
-msgstr " Список visible-контактов"
+msgstr " Список invisible-контактов"
 
 #: src/icqface.cc:256
 msgid " View/edit visible list"
 msgstr " Список visible-контактов"
 
 #: src/icqface.cc:259
-#, fuzzy
-msgid " Show offline users                 F5"
-msgstr " Переименовать          r"
+msgid  " Show offline users                 F5"
+msgstr " Показывать оффлайн-контакты        F5"
 
 #: src/icqface.cc:260
-#, fuzzy
 msgid " Hide offline users                 F5"
-msgstr " Не показывать тех, кто не на линии (offline) : %s "
+msgstr " Спрятать оффлайн-контакты          F5"
 
 #: src/icqface.cc:263
 msgid " Organize contact groups"
-msgstr ""
+msgstr " Управление группами контактов"
 
 #: src/icqface.cc:472 src/icqface.cc:1222 src/icqface.cc:1232
 #: src/icqface.cc:1510 src/icqface.cc:1694
@@ -1028,7 +1014,7 @@ msgstr "Мобильный"
 
 #: src/icqface.cc:630
 msgid "Timezone"
-msgstr ""
+msgstr "Время"
 
 #: src/icqface.cc:632 src/icqface.cc:691
 msgid "Homepage"
@@ -1421,28 +1407,5 @@ msgid "+ the user is back"
 msgstr "+ пользователь активен, статус восстановлен"
 
 #: src/icqgroups.cc:35
-#, fuzzy
 msgid "General"
-msgstr " Основная "
-
-#, fuzzy
-#~ msgid "Cancel"
-#~ msgstr "Изменить"
-
-#~ msgid "+ %s has been removed from the visible list"
-#~ msgstr "+ %s удален из visible списка"
-
-#~ msgid "+ %s has been added to the visible list"
-#~ msgstr "+ %s добавлен в visible список"
-
-#~ msgid " Add to visible list    v"
-#~ msgstr " Видимость вкл.         v"
-
-#~ msgid " Remove from vis. list  v"
-#~ msgstr " Видимость выкл.        v"
-
-#~ msgid " by UIN "
-#~ msgstr " по номеру UIN "
-
-#~ msgid " by Details "
-#~ msgstr " по информации "
+msgstr "Свалка"

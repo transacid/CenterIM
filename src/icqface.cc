@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.20 2001/10/03 10:43:23 konst Exp $
+* $Id: icqface.cc,v 1.21 2001/10/03 21:41:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -260,7 +260,7 @@ int icqface::generalmenu() {
 	_(" Hide offline users                 F5"));
 
     if(conf.getusegroups()) {
-	m.additem(0, (void *) ACT_ORG_GROUPS, _(" Organize contact groups"));
+	m.additem(0, (void *) ACT_ORG_GROUPS, (string) " " + _("Organize contact groups"));
     }
 
     m.setpos(lastitem);
