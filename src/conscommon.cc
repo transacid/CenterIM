@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.11 2001/11/21 14:45:39 konst Exp $
+* $Id: conscommon.cc,v 1.12 2002/02/25 10:42:01 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -51,6 +51,7 @@ void kinterface() {
 //    raw();
     
     start_color();
+    use_default_colors();
     atexit(kendinterface);
 //      nodelay(stdscr, TRUE);
     ESCDELAY = 0;
@@ -286,11 +287,14 @@ const string makebidi(const string buf, int lpad = 0) {
 int findcolor(const string s) {
     int i;
     string::iterator is;
-    string colors[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE", ""};
+
+    string colors[] = {"TRANSPARENT", "BLACK", "RED", "GREEN",
+	"YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE", ""};
+
     string ls = s;
 
     for(is = ls.begin(); is != ls.end(); *is = toupper(*is), is++);
     for(i = 0; !colors[i].empty() && (ls != colors[i]); i++);
 
-    return i;
+    return i-1;
 }
