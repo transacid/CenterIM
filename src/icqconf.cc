@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.56 2002/03/15 15:15:37 konst Exp $
+* $Id: icqconf.cc,v 1.57 2002/03/15 15:44:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -127,6 +127,8 @@ string icqconf::getawaymsg(protocolname pname) {
 
 	setawaymsg(pname, r = buf);
     }
+
+    return r;
 }
 
 void icqconf::setawaymsg(protocolname pname, const string &amsg) {
