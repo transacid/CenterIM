@@ -17,6 +17,11 @@
 #include <ncurses.h>
 #include <ctype.h>
 
+#ifdef __sun__
+#include <sys/termio.h>
+#include <sys/filio.h>
+#endif
+
 #undef box
 #undef clear
 #undef erase
