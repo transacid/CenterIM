@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.41 2002/02/22 13:47:24 konst Exp $
+* $Id: icqconf.cc,v 1.42 2002/02/23 10:00:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -755,7 +755,7 @@ void icqconf::constructevent(const string event, const string proto, const strin
 
 	if((pos = text.find("\n")) != -1) {
 	    url = text.substr(0, pos);
-	    text.erase(pos+1);
+	    text.erase(0, pos+1);
 	} else {
 	    url = text;
 	    text = "";

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.69 2002/02/22 13:02:15 konst Exp $
+* $Id: centericq.cc,v 1.70 2002/02/23 10:00:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -437,8 +437,16 @@ void centericq::checkmail() {
 	    }
 
 	    if(mcount) {
-		face.log(_("+ new mail arrived, %d messages"), mcount);
+		time_t tnow;
+		const struct tm *lt;
+
+		lt = localtime(&(tnow = time(0)));
+
+		face.log(_("+ [%02d:%02d:%02d] new mail arrived, %d messages"),
+		    lt->tm_hour, lt->tm_min, lt->tm_sec, mcount);
+
 		face.log(_("+ last msg from %s"), lastfrom.c_str());
+
 		clist.get(contactroot)->playsound(imevent::email);
 	    }
 	}

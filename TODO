@@ -30,24 +30,13 @@ contrib/ doesn't go to rpm dists
 
 MSN: 3rd person invitation from other party -> centericq segfault
 
-When somebody with a "real" msn client closes my message window, my
-centericq shows that user as being offline. (because msn sends a "bye"
-command when closing the message window). After going offline and online
-again, the user is back. This happens every time, and my current solution
-is to ask the other site NOT to close their window but minimize it. (very
-frustrating to explain why this is neccesary to the avarage windows user ;-)
-
 /*
 *
 * TODO
 *
 */
 
-describe how to send urls
-
 ability to specify server/port for yahoo
-
-write about color schemes definition in the README
 
 nicks and writing messages to be rendered with fribidi
 
@@ -72,17 +61,4 @@ msn protocol
 
 todo and reminders
 
--------------------------------------------------------------------------------
-
-From: Jochen Sprickerhof <jochen.sprickerhof@web.de>
-
-1.I've just read through the README an saw this statement "The commands from "actions"
-run in parallel with centericq, so please only pass your URLs to scripts
-or to X based browsers, but to nothing interactive." I've found a solution for it:
-My CenterICQ is running under a screen and my actions file looks like this:
-openurl screen lynx $url$
-so when I press F2 it just opens another screen and CenterICQ doesn't crash.
-
--------------------------------------------------------------------------------
-
-$Id: TODO,v 1.128 2002/02/22 18:36:57 konst Exp $
+$Id: TODO,v 1.129 2002/02/23 10:00:37 konst Exp $

@@ -18,7 +18,8 @@ Contents
 4. Configuration
     4.1. Migrating from other ICQ software
     4.2. Event sounds
-    4.3. URL open action (web browser support)
+    4.3. Color schemes
+    4.4. URL open action (web browser support)
 5. Online status
     5.1. "Auto Away" and "Auto N/A"
 6. Contact list
@@ -325,7 +326,25 @@ facilities such as mixing streams, or playing on another computer, you
 might wish to change the "play" command to "esdplay".
 
 
-4.3. URL open action (web browser support)
+4.3. Color schemes
+------------------
+
+  It's possible to customise colors in the centericq's user interface.
+It's done with the ~/.centericq/colorscheme configuration file. Its
+contents are self-descriptive, and parameter names mean exactly that
+they're named after.
+
+  Started for the first time, centericq creates the default colorscheme
+file filled in with settings of one of default schemes that the
+Configuration dialog proposes. Also its contents are re-written every
+time you change color scheme from the dialog.
+
+  To define your own color scheme, feel free to modify the default
+colors configuration file or choose one of contributed ones that can be
+found under the contrib/ directory of the source tarball.
+
+
+4.4. URL open action (web browser support)
 ------------------------------------------
 
   Centericq can extract URLs from messages and user information records
@@ -339,6 +358,12 @@ Please only note that you cannot put lynx or any other text mode based
 browser starting in the same console there. The commands from "actions"
 run in parallel with centericq, so please only pass your URLs to scripts
 or to X based browsers, but to nothing interactive.
+
+  Though, if you're using centericq under screen(1) there is a solution.
+Jochen Sprickerhof <jochen.sprickerhof@web.de> advised it having read
+the statement in the previous paragraph. He proposes to define open url
+action the following way: "openurl screen lynx $url$", in order to open
+lynx in a new screen window as soon as an URL to browse it chosen.
 
 
 5. Online status
@@ -676,6 +701,12 @@ to pass it. For example, you can say "hi" to me through the ICQ network
 with the following command:
 
     $ echo "hi" | centericq -s msg -p icq -t 17502151
+
+In case you want to send an URL, the URL itself and its description are
+separated with a newline character the following way:
+
+    $ echo -e "http://konst.org.ua/\nMy modest homepage." \
+    | centericq -s url -p icq -t 17502151
 
 Please note, that all three parameters are required in order to queue an
 event.
