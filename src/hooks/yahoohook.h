@@ -16,6 +16,7 @@ class yahoohook: public abstracthook {
 	vector<pair<Action, string> > tobedone;
 
 	map<string, Encoding> userenc;
+	map<imfile, string> fvalid;
 
 	bool fonline, flogged;
 	map<string, vector<string> > confmembers;
@@ -82,6 +83,10 @@ class yahoohook: public abstracthook {
 	imstatus getstatus() const;
 
 	vector<icqcontact *> getneedsync();
+
+	bool knowntransfer(const imfile &fr) const;
+	void replytransfer(const imfile &fr, bool accept, const string &localpath = "");
+	void aborttransfer(const imfile &fr);
 };
 
 extern yahoohook yhook;

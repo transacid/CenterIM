@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.60 2002/10/28 11:44:56 konst Exp $
+* $Id: yahoohook.cc,v 1.61 2002/10/29 17:30:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,10 +33,7 @@ extern "C" {
 #include "yahoo2_callbacks.h"
 };
 
-char pager_host[64], pager_port[64];
-
-char *filetransfer_host = "filetransfer.msg.yahoo.com";
-char *filetransfer_port = "80";
+char pager_host[64], pager_port[64], filetransfer_host[64], filetransfer_port[64];
 
 yahoohook yhook;
 
@@ -54,8 +51,9 @@ static int stat2int[imstatus_size] = {
 yahoohook::yahoohook() : fonline(false) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::synclist);
+    fcapabs.insert(hookcapab::files);
 
-    pager_host[0] = pager_port[0] = 0;
+    pager_host[0] = pager_port[0] = filetransfer_host[0] = filetransfer_port[0] = 0;
 }
 
 yahoohook::~yahoohook() {
@@ -96,6 +94,9 @@ void yahoohook::connect() {
 
     strcpy(pager_host, acc.server.c_str());
     strcpy(pager_port, i2str(acc.port).c_str());
+
+    strcpy(filetransfer_host, "filetransfer.msg.yahoo.com");
+    strcpy(filetransfer_port, "80");
 
     face.log(_("+ [yahoo] connecting to the server"));
 
@@ -186,18 +187,46 @@ bool yahoohook::send(const imevent &ev) {
     string::iterator is;
 
     if(c) {
+	auto_ptr<char> who(strdup(ev.getcontact().nickname.c_str()));
+
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
 	    if(m) text = rushtmlconv("kw", m->gettext());
+
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
 	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+
+	} else if(ev.gettype() == imevent::file) {
+	    const imfile *m = static_cast<const imfile *>(&ev);
+	    vector<imfile::record> files = m->getfiles();
+	    vector<imfile::record>::const_iterator ir;
+
+	    for(ir = files.begin(); ir != files.end(); ++ir) {
+		FILE *fp;
+		imfile::record r;
+
+		r.fname = ir->fname;
+		r.size = ir->size;
+
+		imfile fr(c->getdesc(), imevent::outgoing, "",
+		    vector<imfile::record>(1, r));
+
+		auto_ptr<char> msg(strdup(m->getmessage().c_str()));
+		auto_ptr<char> fname(strdup(justfname(r.fname).c_str()));
+
+		if(fp = fopen(r.fname.c_str(), "r")) {
+		    yahoo_send_file(cid, who.get(), msg.get(), fname.get(), r.size, fileno(fp));
+		    fclose(fp);
+		}
+	    }
+
+	    return true;
 	}
 
 	for(is = text.begin(); is != text.end(); ++is)
 	    if((unsigned) *is < 32) *is = ' ';
 
-	auto_ptr<char> who(strdup(ev.getcontact().nickname.c_str()));
 	auto_ptr<char> what(strdup(text.c_str()));
 
 	if(!ischannel(c)) {
@@ -461,6 +490,26 @@ string yahoohook::encanalyze(const string &nick, const string &text) {
     return text;
 }
 
+
+bool yahoohook::knowntransfer(const imfile &fr) const {
+    return fvalid.find(fr) != fvalid.end();
+}
+
+void yahoohook::replytransfer(const imfile &fr, bool accept, const string &localpath) {
+    if(accept) {
+	conf.openurl(fvalid[fr]);
+	face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsFinish, 0, 0);
+
+    } else {
+	fvalid.erase(fr);
+    }
+}
+
+void yahoohook::aborttransfer(const imfile &fr) {
+    face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsCancel, 0, 0);
+    fvalid.erase(fr);
+}
+
 // ----------------------------------------------------------------------------
 
 void yahoohook::login_done(guint32 id, int succ, char *url) {
@@ -625,6 +674,17 @@ void yahoohook::conf_message(guint32 id, char *who, char *room, char *msg) {
 }
 
 void yahoohook::got_file(guint32 id, char *who, char *url, long expires, char *msg, char *fname, long fesize) {
+    imfile::record r;
+    r.fname = fname;
+    r.size = fesize;
+
+    imfile fr(imcontact(who, yahoo), imevent::incoming, "",
+	vector<imfile::record>(1, r));
+
+    yhook.fvalid[fr] = url;
+    em.store(fr);
+
+    face.transferupdate(fname, fr, icqface::tsInit, fesize, 0);
 }
 
 void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
