@@ -106,6 +106,11 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
 	writescript();
 	result = execscript();
 
+	sprintf(buf, _("executed external action %s, return code = %d"),
+	    name.c_str(), result);
+
+	logger.putmessage(buf);
+
 	if(!option) {
 	    respond();
 
@@ -113,11 +118,6 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
 	    substitute();
 
 	}
-
-	sprintf(buf, _("executed external action %s, return code = %d"),
-	    name.c_str(), result);
-
-	logger.putmessage(buf);
     }
 
     return r;
@@ -172,10 +172,11 @@ void imexternal::action::substitute() {
 void imexternal::action::writescript() {
     ostrstream tfname;
     ofstream f;
+    int i = 0;
 
     do {
 	tfname.clear();
-	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0);
+	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0)+i++;
 	sname = string(tfname.str(), tfname.pcount());
     } while(!access(sname.c_str(), F_OK));
 
@@ -194,6 +195,10 @@ int imexternal::action::execscript() {
     icqcontact *c;
     fd_set rfds;
     int r = -1;
+    struct sigaction sact, osact;
+
+    memset(&sact, 0, sizeof(sact));
+    sigaction(SIGCHLD, &sact, &osact);
 
     if(!pipe(inpipe) && !pipe(outpipe)) {
 	pid = fork();
@@ -253,6 +258,7 @@ int imexternal::action::execscript() {
 	}
     }
 
+    sigaction(SIGCHLD, &osact, 0);
     unlink(sname.c_str());
     return r;
 }
