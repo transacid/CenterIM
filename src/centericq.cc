@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.112 2002/08/16 11:54:07 konst Exp $
+* $Id: centericq.cc,v 1.113 2002/08/16 16:48:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -683,7 +683,7 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	if(proceed) {
 	    if(proceed = face.eventedit(*sendev))
 	    if(proceed = !sendev->empty()) {
-		for(i = face.muins.begin(); i != face.muins.end(); i++) {
+		for(i = face.muins.begin(); i != face.muins.end(); ++i) {
 		    sendev->setcontact(*i);
 		    em.store(*sendev);
 		}
@@ -759,7 +759,7 @@ void centericq::readevents(const imcontact cont) {
 	    events = em.getevents(cont, c->getlastread());
 	    fin = events.empty();
 
-	    for(iev = events.begin(); (iev != events.end()) && !fin; iev++) {
+	    for(iev = events.begin(); (iev != events.end()) && !fin; ++iev) {
 		if((*iev)->getdirection() == imevent::incoming) {
 		    enough = false;
 
@@ -866,7 +866,7 @@ string centericq::quotemsg(const string &text) {
 
     breakintolines(text, lines, 50/*face.sizeWArea.x2-face.sizeWArea.x1-4*/);
 
-    for(i = lines.begin(); i != lines.end(); i++) {
+    for(i = lines.begin(); i != lines.end(); ++i) {
 	if(!i->empty()) ret += (string) "> " + *i;
 	ret = trailcut(ret);
 	ret += "\n";
@@ -1233,7 +1233,7 @@ string rusconv(const string &tdir, const string &text) {
     if(tdir == "wk") table = wk;
 
     if(conf.getrussian() && table) {
-	for(i = text.begin(); i != text.end(); i++) {
+	for(i = text.begin(); i != text.end(); ++i) {
 	    c = (unsigned char) *i;
 	    c &= 0377;
 	    if(c & 0200) c = table[c & 0177];

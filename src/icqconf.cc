@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.76 2002/08/14 12:02:53 konst Exp $
+* $Id: icqconf.cc,v 1.77 2002/08/16 16:48:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -250,7 +250,7 @@ void icqconf::save() {
 	    if(getmakelog()) f << "log" << endl;
 
 	    vector<imaccount>::iterator ia;
-	    for(ia = accounts.begin(); ia != accounts.end(); ia++)
+	    for(ia = accounts.begin(); ia != accounts.end(); ++ia)
 		ia->write(f);
 
 	    f.close();
@@ -348,7 +348,7 @@ void icqconf::loadsounds() {
 	    fo << "# .. etc. Similar for the other protocols" << endl << "#" << endl;
 
 	    fo << "# <event>\tcan be: ";
-	    for(isn = soundnames.begin(); isn != soundnames.end(); isn++) {
+	    for(isn = soundnames.begin(); isn != soundnames.end(); ++isn) {
 		if(isn != soundnames.begin()) fo << ", ";
 		fo << isn->second;
 	    }
@@ -387,7 +387,7 @@ void icqconf::loadsounds() {
 
 	    it = imevent::imeventtype_size;
 
-	    for(isn = soundnames.begin(); isn != soundnames.end(); isn++) {
+	    for(isn = soundnames.begin(); isn != soundnames.end(); ++isn) {
 		if(skey == isn->second) {
 		    it = isn->first;
 		    break;
@@ -936,7 +936,7 @@ void icqconf::imaccount::write(ofstream &f) {
 	f << endl;
     }
 
-    for(ia = additional.begin(); ia != additional.end(); ia++) {
+    for(ia = additional.begin(); ia != additional.end(); ++ia) {
 	f << prefix << ia->first << "\t" << ia->second << endl;
     }
 }

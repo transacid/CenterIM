@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.47 2002/08/08 13:42:25 konst Exp $
+* $Id: yahoohook.cc,v 1.48 2002/08/16 16:48:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -183,7 +183,7 @@ bool yahoohook::send(const imevent &ev) {
 	    if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
 	}
 
-	for(is = text.begin(); is != text.end(); is++)
+	for(is = text.begin(); is != text.end(); ++is)
 	    if((unsigned) *is < 32) *is = ' ';
 
 	auto_ptr<char> who(strdup(ev.getcontact().nickname.c_str()));
@@ -377,7 +377,7 @@ char **yahoohook::getmembers(const string &room) {
     if((im = confmembers.find(room)) != confmembers.end()) {
 	smemb = new char*[im->second.size()+1];
 	smemb[im->second.size()] = 0;
-	for(ic = im->second.begin(); ic != im->second.end(); ic++) {
+	for(ic = im->second.begin(); ic != im->second.end(); ++ic) {
 	    smemb[ic-im->second.begin()] = strdup(ic->c_str());
 	}
     } else {

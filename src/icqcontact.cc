@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.59 2002/08/16 13:54:15 konst Exp $
+* $Id: icqcontact.cc,v 1.60 2002/08/16 16:48:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -78,7 +78,7 @@ string icqcontact::tosane(const string &p) const {
     string buf;
     string::iterator i;
 
-    for(buf = p, i = buf.begin(); i != buf.end(); i++) {
+    for(buf = p, i = buf.begin(); i != buf.end(); ++i) {
 	if(strchr("\n\r", *i)) *i = ' ';
     }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.97 2002/08/16 13:31:11 konst Exp $
+* $Id: icqhook.cc,v 1.98 2002/08/16 16:48:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,7 +174,7 @@ void icqhook::sendinvisible() {
     vector<visInfo>::iterator iv, it;
     icqlist::iterator i;
 
-    for(i = lst.begin(); i != lst.end(); i++) {
+    for(i = lst.begin(); i != lst.end(); ++i) {
 	if(i->getdesc().pname == icq) {
 	    switch(i->getstatus()) {
 		case csvisible:
@@ -188,7 +188,7 @@ void icqhook::sendinvisible() {
 
     nvislist = todo;
 
-    for(iv = vislist.begin(); iv != vislist.end(); iv++) {
+    for(iv = vislist.begin(); iv != vislist.end(); ++iv) {
 	it = find(todo.begin(), todo.end(), *iv);
 
 	if(it != todo.end()) {
@@ -201,7 +201,7 @@ void icqhook::sendinvisible() {
 	}
     }
 
-    for(it = todo.begin(); it != todo.end(); it++) {
+    for(it = todo.begin(); it != todo.end(); ++it) {
 	switch(it->second) {
 	    case csvisible: cli.addVisible(new Contact(it->first)); break;
 	    case csinvisible: cli.addInvisible(new Contact(it->first)); break;
@@ -241,37 +241,37 @@ void icqhook::main() {
     tv.tv_sec = tv.tv_usec = 0;
     hsock = 0;
 
-    for(i = rfds.begin(); i != rfds.end(); i++) {
+    for(i = rfds.begin(); i != rfds.end(); ++i) {
 	FD_SET(*i, &rs);
 	hsock = max(hsock, *i);
     }
 
-    for(i = wfds.begin(); i != wfds.end(); i++) {
+    for(i = wfds.begin(); i != wfds.end(); ++i) {
 	FD_SET(*i, &ws);
 	hsock = max(hsock, *i);
     }
 
-    for(i = efds.begin(); i != efds.end(); i++) {
+    for(i = efds.begin(); i != efds.end(); ++i) {
 	FD_SET(*i, &es);
 	hsock = max(hsock, *i);
     }
 
     if(select(hsock+1, &rs, &ws, &es, &tv) > 0) {
-	for(i = rfds.begin(); i != rfds.end(); i++) {
+	for(i = rfds.begin(); i != rfds.end(); ++i) {
 	    if(FD_ISSET(*i, &rs)) {
 		cli.socket_cb(*i, SocketEvent::READ);
 		break;
 	    }
 	}
 
-	for(i = wfds.begin(); i != wfds.end(); i++) {
+	for(i = wfds.begin(); i != wfds.end(); ++i) {
 	    if(FD_ISSET(*i, &ws)) {
 		cli.socket_cb(*i, SocketEvent::WRITE);
 		break;
 	    }
 	}
 
-	for(i = efds.begin(); i != efds.end(); i++) {
+	for(i = efds.begin(); i != efds.end(); ++i) {
 	    if(FD_ISSET(*i, &es)) {
 		cli.socket_cb(*i, SocketEvent::EXCEPTION);
 		break;
@@ -283,17 +283,17 @@ void icqhook::main() {
 void icqhook::getsockets(fd_set &rs, fd_set &ws, fd_set &es, int &hsocket) const {
     vector<int>::const_iterator i;
 
-    for(i = rfds.begin(); i != rfds.end(); i++) {
+    for(i = rfds.begin(); i != rfds.end(); ++i) {
 	hsocket = max(hsocket, *i);
 	FD_SET(*i, &rs);
     }
 
-    for(i = wfds.begin(); i != wfds.end(); i++) {
+    for(i = wfds.begin(); i != wfds.end(); ++i) {
 	hsocket = max(hsocket, *i);
 	FD_SET(*i, &ws);
     }
 
-    for(i = efds.begin(); i != efds.end(); i++) {
+    for(i = efds.begin(); i != efds.end(); ++i) {
 	hsocket = max(hsocket, *i);
 	FD_SET(*i, &es);
     }
@@ -302,15 +302,15 @@ void icqhook::getsockets(fd_set &rs, fd_set &ws, fd_set &es, int &hsocket) const
 bool icqhook::isoursocket(fd_set &rs, fd_set &ws, fd_set &es) const {
     vector<int>::const_iterator i;
 
-    for(i = rfds.begin(); i != rfds.end(); i++)
+    for(i = rfds.begin(); i != rfds.end(); ++i)
 	if(FD_ISSET(*i, &rs))
 	    return true;
 
-    for(i = wfds.begin(); i != wfds.end(); i++)
+    for(i = wfds.begin(); i != wfds.end(); ++i)
 	if(FD_ISSET(*i, &ws))
 	    return true;
 
-    for(i = efds.begin(); i != efds.end(); i++)
+    for(i = efds.begin(); i != efds.end(); ++i)
 	if(FD_ISSET(*i, &es))
 	    return true;
 
@@ -754,7 +754,7 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 
 	/* personal interests */
 
-	for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
+	for(ii = pint.interests.begin(); ii != pint.interests.end(); ++ii) {
 	    sbuf = UserInfoHelpers::getInterestsIDtoString(ii->first);
 
 	    if(!ii->second.empty()) {
@@ -767,7 +767,7 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 
 	/* education background */
 
-	for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
+	for(isc = backg.schools.begin(); isc != backg.schools.end(); ++isc) {
 	    sbuf = UserInfoHelpers::getBackgroundIDtoString(isc->first);
 	    if(!sbuf.empty()) sbuf += ": ";
 	    sbuf += rusconv("wk", isc->second);

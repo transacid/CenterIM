@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.14 2002/04/11 17:14:35 konst Exp $
+* $Id: icqmlist.cc,v 1.15 2002/08/16 16:48:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -85,7 +85,7 @@ void icqlist::save() {
 	f.open(getfname().c_str());
 
 	if(f.is_open()) {
-	    for(i = begin(); i != end(); i++) {
+	    for(i = begin(); i != end(); ++i) {
 		f << (int) i->getstatus() << "\t";
 		f << mime(i->getnick()) << "\t";
 		f << conf.getprotocolprefix(i->getdesc().pname);
@@ -108,7 +108,7 @@ void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
     m->clear();
     menucontents.clear();
 
-    for(i = begin(); i != end(); i++) {
+    for(i = begin(); i != end(); ++i) {
 	if(i->getstatus() == ncs) {
 	    m->additem(conf.getprotcolor(i->getdesc().pname), 0, " " + i->getnick());
 	    menucontents.push_back(*i);

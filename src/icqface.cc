@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.129 2002/08/14 10:16:36 konst Exp $
+* $Id: icqface.cc,v 1.130 2002/08/16 16:48:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -875,7 +875,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
     if(!data.empty()) {
 	text += (string) "* " + _("Interests") + "\n";
 
-	for(i = data.begin(); i != data.end(); i++) {
+	for(i = data.begin(); i != data.end(); ++i) {
 	    text += " + " + *i + "\n";
 	}
 
@@ -887,7 +887,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
     if(!data.empty()) {
 	text += (string) "* " + _("Background") + "\n";
 
-	for(i = data.begin(); i != data.end(); i++)
+	for(i = data.begin(); i != data.end(); ++i)
 	    text += " + " + *i + "\n";
     }
 
@@ -1050,7 +1050,7 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 	    _(" [i] Invisible")
 	};
 
-	for(im = mst.begin(); im != mst.end(); im++) {
+	for(im = mst.begin(); im != mst.end(); ++im) {
 	    m.additem(0, *im, statustext[im-mst.begin()]);
 
 	    if(pname != proto_all)
@@ -1279,7 +1279,7 @@ void icqface::modelist(contactstatus cs) {
 		muins.clear();
 
 		if(multicontacts(_("Select contacts to add to the list"))) {
-		    for(ic = muins.begin(); ic != muins.end(); ic++) {
+		    for(ic = muins.begin(); ic != muins.end(); ++ic) {
 			lst.push_back(modelistitem(clist.get(*ic)->getdispnick(), *ic, cs));
 			if(cs == csignore) clist.remove(*ic);
 		    }
@@ -1344,7 +1344,7 @@ bool icqface::multicontacts(const string &ahead ) {
 	m.getpos(saveelem, savefirst);
 	m.clear();
 
-	for(c = mlst.begin(); c != mlst.end(); c++) {
+	for(c = mlst.begin(); c != mlst.end(); ++c) {
 	    icqcontact *cont = (icqcontact *) clist.get(*c);
 
 	    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
@@ -1495,7 +1495,7 @@ void icqface::quickfind(verticalmenu *multi ) {
 			nick += k;
 		    }
 
-		    for(is = nick.begin(), upnick = ""; is != nick.end(); is++)
+		    for(is = nick.begin(), upnick = ""; is != nick.end(); ++is)
 			upnick += toupper(*is);
 
 		    bool fin = false;
@@ -1529,7 +1529,7 @@ void icqface::quickfind(verticalmenu *multi ) {
 			    current.erase(len);
 
 			    for(is = current.begin(), upcurrent = "";
-			    is != current.end(); is++)
+			    is != current.end(); ++is)
 				    upcurrent += toupper(*is);
 
 			    if(upnick == upcurrent) {
@@ -1583,7 +1583,7 @@ void icqface::showextractedurls() {
 	    conf.getcolor(cp_main_highlight),
 	    _("URLs within the current context"));
 
-	for(i = extractedurls.begin(); i != extractedurls.end(); i++)
+	for(i = extractedurls.begin(); i != extractedurls.end(); ++i)
 	    m.additem(" " + *i);
 
 	if(n = m.open())
@@ -1757,13 +1757,13 @@ void icqface::renderchathistory() {
     for(count = 0; count < chatlines; count++)
 	mvprintw(chatmargin-count, sizeWArea.x1+2, "%s", text.c_str());
 
-    for(count = 0, ir = toshow.begin(); ir != toshow.end() && count < chatlines; ir++) {
+    for(count = 0, ir = toshow.begin(); ir != toshow.end() && count < chatlines; ++ir) {
 	switch(ir->first) {
 	    case imevent::incoming: attrset(conf.getcolor(cp_main_text)); break;
 	    case imevent::outgoing: attrset(conf.getcolor(cp_main_highlight)); break;
 	}
 
-	for(il = ir->second.rbegin(); il != ir->second.rend() && count < chatlines; il++) {
+	for(il = ir->second.rbegin(); il != ir->second.rend() && count < chatlines; ++il) {
 	    kgotoxy(sizeWArea.x1+2, chatmargin-count);
 	    printstring(*il);
 	    count++;
@@ -1814,7 +1814,7 @@ void icqface::chat(const imcontact &ic) {
 	if(editdone) {
 	    auto_ptr<imevent> ev(new immessage(ic, imevent::outgoing, p.get()));
 
-	    for(i = muins.begin(); i != muins.end(); i++) {
+	    for(i = muins.begin(); i != muins.end(); ++i) {
 		ev.get()->setcontact(*i);
 		em.store(*ev.get());
 	    }
@@ -1905,7 +1905,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 
     bar->item = actions.size()-1;
 
-    for(ia = actions.begin(); ia != actions.end(); ia++) {
+    for(ia = actions.begin(); ia != actions.end(); ++ia) {
 	bar->items.push_back(eventviewresultnames[*ia]);
     }
 
@@ -1959,7 +1959,7 @@ void icqface::histmake(const vector<imevent *> &hist) {
     mhist.clear();
     mhist.setpos(0);
 
-    for(i = hist.rbegin(); i != hist.rend(); i++) {
+    for(i = hist.rbegin(); i != hist.rend(); ++i) {
 	imevent &ev = **i;
 
 	color = 0;
@@ -2081,7 +2081,7 @@ void icqface::menuidle(verticalmenu &m) {
 	    flog = face.lastlog;
 	    face.lastlog.clear();
 
-	    for(il = flog.begin(); il != flog.end(); il++)
+	    for(il = flog.begin(); il != flog.end(); ++il)
 		face.log(*il);
 
 	    face.dotermresize = false;

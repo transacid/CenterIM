@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.39 2002/08/14 10:16:38 konst Exp $
+* $Id: irchook.cc,v 1.40 2002/08/16 16:48:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -370,7 +370,7 @@ void irchook::processnicks() {
 	for(in = foundnicks.begin(); in != foundnicks.end(); ) {
 	    remove = false;
 
-	    for(ir = channels.begin(); !remove && (ir != channels.end()); ir++) {
+	    for(ir = channels.begin(); !remove && (ir != channels.end()); ++ir) {
 		if(find(searchchannels.begin(), searchchannels.end(), ir->name) == searchchannels.end())
 		    continue;
 		if(ir->name == *searchchannels.begin())
@@ -411,7 +411,7 @@ void irchook::processnicks() {
 
     lastfoundnicks = prelastfound;
 
-    for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
+    for(in = foundnicks.begin(); in != foundnicks.end(); ++in) {
 	dnick = *in;
 
 	npos = 0;
@@ -441,7 +441,7 @@ vector<irchook::channelInfo> irchook::getautochannels() const {
     vector<channelInfo> r;
     vector<channelInfo>::const_iterator ic;
 
-    for(ic = channels.begin(); ic != channels.end(); ic++) {
+    for(ic = channels.begin(); ic != channels.end(); ++ic) {
 	if(find(searchchannels.begin(), searchchannels.end(), ic->name) != searchchannels.end())
 	    if(!ic->joined)
 		// A channel used for search
@@ -463,7 +463,7 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
     *
     */
 
-    for(ic = channels.begin(); ic != channels.end(); ic++) {
+    for(ic = channels.begin(); ic != channels.end(); ++ic) {
 	iac = find(achannels.begin(), achannels.end(), ic->name);
 
 	if(ic->joined) {
@@ -486,7 +486,7 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
     *
     */
 
-    for(iac = achannels.begin(); iac != achannels.end(); iac++) {
+    for(iac = achannels.begin(); iac != achannels.end(); ++iac) {
 	ic = find(channels.begin(), channels.end(), iac->name);
 
 	if(iac->joined) {
@@ -522,7 +522,7 @@ void irchook::saveconfig() const {
     if(f.is_open()) {
 	f << "name\t" << ircname << endl;
 
-	for(ic = savech.begin(); ic != savech.end(); ic++)
+	for(ic = savech.begin(); ic != savech.end(); ++ic)
 	    f << "channel\t" << ic->name
 		<< "\t" << (ic->joined ? "1" : "0")
 		<< endl;
@@ -633,7 +633,7 @@ void irchook::connected(void *conn, void *cli, ...) {
 	}
     }
 
-    for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ic++) {
+    for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ++ic) {
 	if(ic->joined) {
 	    firetalk_chat_join(irhook.handle, ic->name.c_str());
 	}
@@ -651,7 +651,7 @@ void irchook::disconnected(void *conn, void *cli, ...) {
     clist.setoffline(irc);
 
     vector<channelInfo>::iterator ic;
-    for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ic++)
+    for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ++ic)
 	ic->fetched = false;
 
     face.log(_("+ [irc] disconnected from the network"));
@@ -889,7 +889,7 @@ void irchook::chatnames(void *connection, void *cli, ...) {
     }
 
     if(irhook.searchdest && irhook.emailsub.empty() && irhook.namesub.empty()) {
-	for(is = irhook.searchchannels.begin(); is != irhook.searchchannels.end(); is++) {
+	for(is = irhook.searchchannels.begin(); is != irhook.searchchannels.end(); ++is) {
 	    ic = find(irhook.channels.begin(), irhook.channels.end(), *is);
 
 	    if(ic != irhook.channels.end())
@@ -970,7 +970,7 @@ void irchook::endextended(void *connection, void *cli, ...) {
 	    if(!ic->joined)
 		firetalk_chat_part(irhook.handle, irhook.extlisted.back().c_str());
 
-	    for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); is++)
+	    for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); ++is)
 		ready = find(irhook.extlisted.begin(), irhook.extlisted.end(), *is) != irhook.extlisted.end();
 	}
     }

@@ -43,7 +43,7 @@ int imexternal::exec(const imevent &ev) {
     int r = 0;
     imcontact c;
 
-    for(i = actions.begin(); i != actions.end(); i++) {
+    for(i = actions.begin(); i != actions.end(); ++i) {
 	if(i->exec(ev)) r++;
     }
 
@@ -54,7 +54,7 @@ vector<imexternal::actioninfo> imexternal::getlist() const {
     vector<actioninfo> r;
     vector<action>::const_iterator i;
 
-    for(i = actions.begin(); i != actions.end(); i++) {
+    for(i = actions.begin(); i != actions.end(); ++i) {
 	r.push_back(i->getinfo());
     }
 
@@ -64,7 +64,7 @@ vector<imexternal::actioninfo> imexternal::getlist() const {
 void imexternal::update(const vector<imexternal::actioninfo> &info) {
     vector<imexternal::actioninfo>::const_iterator i;
 
-    for(i = info.begin(); i != info.end(); i++) {
+    for(i = info.begin(); i != info.end(); ++i) {
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.13 2002/07/03 14:35:21 konst Exp $
+* $Id: icqhist.cc,v 1.14 2002/08/16 16:48:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -227,7 +227,7 @@ void icqhistory::getmessage(string &text) {
     vector<storedopen>::iterator so = opens.end()-1;
     vector<string>::iterator i;
 
-    for(i = so->lastevent.begin(), text = ""; i != so->lastevent.end(); i++) {
+    for(i = so->lastevent.begin(), text = ""; i != so->lastevent.end(); ++i) {
 	if(text.size()) text += "\n";
 	text += *i;
     }
@@ -239,7 +239,7 @@ void icqhistory::geturl(string &url, string &text) {
 
     url = text = "";
 
-    for(i = so->lastevent.begin(); i != so->lastevent.end(); i++)
+    for(i = so->lastevent.begin(); i != so->lastevent.end(); ++i)
     if(i == so->lastevent.begin()) url = *i; else {
 	if(text.size()) text += "\n";
 	text += *i;

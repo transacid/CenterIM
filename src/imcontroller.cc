@@ -259,7 +259,7 @@ void imcontroller::ircchannels() {
 
 	i = db.gettree()->addnode(_(" Channels "));
 
-	for(ic = channels.begin(); ic != channels.end(); ic++) {
+	for(ic = channels.begin(); ic != channels.end(); ++ic) {
 	    st = (string) (ic->joined ? _("joined") : _("not joined")) + ", " +
 		(ic->contactlist ? _("shown") : _("hidden"));
 

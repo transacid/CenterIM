@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.82 2002/08/16 13:54:16 konst Exp $
+* $Id: icqdialogs.cc,v 1.83 2002/08/16 16:48:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,7 +82,7 @@ bool icqface::sprofmanager(string &name, string &act) {
     while(!finished) {
 	m.clear();
 
-	for(ip = profiles.begin(); ip != profiles.end(); ip++) {
+	for(ip = profiles.begin(); ip != profiles.end(); ++ip) {
 	    m.additemf(0, (void *) ip->first.c_str(), " %s: %s",
 		conf.getprotocolname(ip->second.pname).c_str(),
 		ip->first.c_str());
@@ -119,7 +119,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 
     unlink(conf.getconfigfname("search-profiles").c_str());
 
-    for(ip = profiles.begin(); ip != profiles.end(); ip++) {
+    for(ip = profiles.begin(); ip != profiles.end(); ++ip) {
 	ip->second.save(ip->first);
     }
 
@@ -1011,7 +1011,7 @@ int icqface::groupmanager(const string &text, bool sel) {
 
 	sort(groups.begin(), groups.end());
 
-	for(i = groups.begin(); i != groups.end(); i++) {
+	for(i = groups.begin(); i != groups.end(); ++i) {
 	    b = i-groups.begin()+1;
 	    id = t.addleaff(ngrp, 0, b, " %s ", i->getname().c_str());
 	    if(n == b) t.setcur(id);

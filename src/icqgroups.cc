@@ -51,11 +51,11 @@ void icqgroups::save() {
 	f.open(getfname().c_str());
 
 	if(f.is_open()) {
-	    for(i = begin(); i != end(); i++) {
+	    for(i = begin(); i != end(); ++i) {
 		f << i->getid() << "\t" << i->getname() << endl;
 	    }
-            for(i = begin(); i != end(); i++)
-                if(i->iscollapsed()) f << i->getid() << endl;
+	    for(i = begin(); i != end(); ++i)
+		if(i->iscollapsed()) f << i->getid() << endl;
 	    f.close();
 	}
     }
