@@ -1,15 +1,10 @@
-msn protocol
-    authorization
-
-yahoo
-    disconnect on "got zero length" ?
-	too many sockets?
-
 /*
 *
 * DONE
 *
 */
+
+some info for yahoo contacts is now filled in
 
 flavour of face.update() with internal time check a-la "don't update
 more frequently than once in 5 secs".
@@ -39,6 +34,10 @@ forward note for yahoo contacts contains "(0)"
 *
 */
 
+yahoo
+    disconnect on "got zero length" ?
+	too many sockets?
+
 check for open direct tcp connection doesn't work
     fixed? check
 
@@ -48,15 +47,22 @@ file sending is limited to 1k/s
 
 X window resize -> sometimes segfaults
 
-check ignore list
-    visible list   \ allow to add only IMs that support it
-    invisible list /
+messages written in a hook's being offline are sent twice
 
 /*
 *
 * TODO
 *
 */
+
+MSN: add every nick that comes with LST packet
+
+check ignore list
+    visible list   \ allow to add only IMs that support it
+    invisible list /
+
+msn protocol
+    authorization
 
 > <layout>
 > Online
@@ -122,4 +128,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.69 2001/11/28 19:08:09 konst Exp $
+$Id: TODO,v 1.70 2001/11/29 17:42:22 konst Exp $

@@ -122,7 +122,12 @@ bool msnhook::enabled() const {
 }
 
 unsigned long msnhook::sendmessage(const icqcontact *c, const string text) {
-    return !MSN_SendMessage(c->getnick().c_str(), text.c_str()) ? 1 : 0;
+    if(c->getstatus() != offline) {
+	MSN_SendMessage(c->getnick().c_str(), text.c_str());
+	return 1;
+    }
+
+    return 0;
 }
 
 void msnhook::sendnewuser(const imcontact c) {
@@ -196,11 +201,18 @@ void msnhook::removeuser(const imcontact ic) {
 void msnhook::messaged(void *data) {
     MSN_InstantMessage *d = (MSN_InstantMessage *) data;
     imcontact ic(d->sender, msn);
+    icqcontact *c;
 
     if(strlen(d->msg))
     if(!lst.inlist(ic, csignore)) {
+	if(!(c = clist.get(ic)))
+	if(c = clist.addnew(ic))
+	if(d->friendlyhandle) {
+	    c->setdispnick(d->friendlyhandle);
+	}
+
 	hist.putmessage(ic, d->msg, HIST_MSG_IN, TIMESTAMP);
-	icqcontact *c = clist.get(ic);
+	c = clist.get(ic);
 
 	if(c) {
 	    if(c->getstatus() == offline) {
@@ -221,6 +233,9 @@ void msnhook::statuschanged(void *data) {
 
     if(!c) {
 	c = clist.addnew(ic, false);
+	if(d->friendlyhandle) {
+	    c->setdispnick(d->friendlyhandle);
+	}
     }
 
     c->setstatus(mhook.msn2imstatus(d->newStatus));

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.30 2001/11/27 16:33:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.31 2001/11/29 17:42:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -237,18 +237,20 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 }
 
 bool icqface::updatedetails(icqcontact *c = 0) {
-    bool finished = false, ret = false;
+    bool finished = false, ret = false, msb;
     int n, b;
     dialogbox db;
 
     if(!c) {
 	status(_("Fetching your ICQ details"));
 	c = clist.get(contactroot);
-	if(mainscreenblock) return false;
+//        if(mainscreenblock) return false;
 	    // Another dialog is already on top
     }
 
-    blockmainscreen();
+    if(!(msb = mainscreenblock)) {
+	blockmainscreen();
+    }
 
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
@@ -273,6 +275,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     while(!finished) {
 	gendetails(db.gettree(), c);
 	finished = !db.open(n, b);
+	if(finished) continue;
 
 	string fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate;
 	string fphone, ffax, fstreet, fcellular, fhomepage, fwcity, fwstate;
@@ -370,7 +373,10 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     }
 
     db.close();
-    unblockmainscreen();
+
+    if(!msb) {
+	unblockmainscreen();
+    }
 
     return ret;
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.43 2001/11/28 19:08:09 konst Exp $
+* $Id: centericq.cc,v 1.44 2001/11/29 17:42:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,7 +37,7 @@
 
 centericq::centericq() {
     timer_keypress = time(0);
-    timer_checkmail = timer_update = 0;
+    timer_checkmail = timer_update = timer_resend = 0;
     regmode = false;
 }
 
@@ -735,6 +735,11 @@ void centericq::exectimers() {
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	cicq.checkmail();
 	time(&timer_checkmail);
+    }
+
+    if(timer_current-timer_resend > PERIOD_RESEND) {
+	offl.scan(0, osexpired);
+	time(&timer_resend);
     }
 
     if(face.updaterequested())

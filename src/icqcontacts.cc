@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.19 2001/11/26 13:02:52 konst Exp $
+* $Id: icqcontacts.cc,v 1.20 2001/11/29 17:42:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,7 @@ icqcontacts::~icqcontacts() {
 
 icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
     icqcontact *c = new icqcontact(cinfo);
+    string nnick;
 
     switch(cinfo.pname) {
 	case icq:
@@ -49,11 +50,16 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	case yahoo:
 	    c->setnick(cinfo.nickname);
 	    c->setdispnick(cinfo.nickname);
+	    c->setmoreinfo(0, 0, "http://profiles.yahoo.com/" + cinfo.nickname, 0, 0, 0, 0, 0, 0);
+	    c->setinfo("", "", cinfo.nickname + "@yahoo.com", "", "", "", "", "", "", "", "", 0, 0);
 	    break;
 
 	case msn:
 	    c->setnick(cinfo.nickname);
 	    c->setdispnick(cinfo.nickname);
+	    nnick = cinfo.nickname;
+	    if(nnick.find("@") == -1) nnick += "@hotmail.com";
+	    c->setinfo("", "", nnick, "", "", "", "", "", "", "", "", 0, 0);
 	    break;
     }
 

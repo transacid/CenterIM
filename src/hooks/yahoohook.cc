@@ -27,6 +27,8 @@ void yahoohook::init(const icqconf::imaccount account) {
     face.log("+ initializing %s engine",
 	conf.getprotocolname(account.pname).c_str());
 
+    alarm(5);
+
     if(yahoo = yahoo_init(account.nickname.c_str(), account.password.c_str(),
     &options)) {
 	yahoo->yahoo_Disconnected = &disconnected;
@@ -45,6 +47,8 @@ void yahoohook::init(const icqconf::imaccount account) {
 	face.log("+ unable to init %s engine",
 	    conf.getprotocolname(account.pname).c_str());
     }
+
+    alarm(0);
 }
 
 void yahoohook::connect() {
@@ -68,7 +72,7 @@ void yahoohook::connect() {
 	    if(!yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE)) {
 		fonline = true;
 		face.log(_("+ [yahoo] logged in"));
-		offl.scan(0, ossendall);
+//		offl.scan(0, ossendall);
 	    }
 	}
     }

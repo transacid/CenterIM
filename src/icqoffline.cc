@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.17 2001/11/26 23:30:34 konst Exp $
+* $Id: icqoffline.cc,v 1.18 2001/11/29 17:42:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -72,6 +72,7 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext, FILE *of = 0
 	    fprintf(f, "%lu\n%lu\n", seq, time(0));
 	    fprintf(f, "%s\n", text.c_str());
 	    totalunsent++;
+	    processed++;
 
 	    if(lst.empty()) break;
 	}
@@ -101,6 +102,7 @@ const string text, FILE *of = 0) {
 	fprintf(f, "%lu\n%lu\n", seq, time(0));
 	fprintf(f, "%s\n", url.c_str());
 	fprintf(f, "%s\n", text.c_str());
+	processed++;
 
 	if(!of) fclose(f);
 
@@ -125,6 +127,8 @@ unsigned long sseq) {
 	    case osresend:
 		if(send = (sseq == seq)) {
 		    c->setmsgdirect(false);
+
+		    if(c->getdesc().pname == icq)
 		    if(text.size() > MAX_UDPMSG_SIZE) {
 			splitlongtext(text, lst,
 			    MAX_UDPMSG_SIZE, "\r\n[continued]");
@@ -135,6 +139,8 @@ unsigned long sseq) {
 	    case osexpired:
 		if(send = (time(0)-tm > PERIOD_RESEND)) {
 		    c->setmsgdirect(false);
+
+		    if(c->getdesc().pname == icq)
 		    if(text.size() > MAX_UDPMSG_SIZE) {
 			splitlongtext(text, lst,
 			    MAX_UDPMSG_SIZE, "\r\n[continued]");
@@ -198,13 +204,14 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 
     totalunsent = 0;
 
-    for(i = processed = 0; i < clist.count; i++) {
+    for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 	text = url = "";
 
 	if(f = open(c->getdesc(), "r")) {
 	    ofname = (string) getenv("HOME") + "/.centericq/tmp." + i2str(getpid());
 	    of = fopen(ofname.c_str(), "w");
+	    processed = 0;
 
 	    while(!feof(f)) {
 		freads(f, buf, 512);
@@ -216,7 +223,7 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 		} else {
 		    switch(l) {
 			case 1:         // kind
-			    msg = !strcmp(buf, "MSG"); break;
+			    msg = (bool) !strcmp(buf, "MSG"); break;
 			case 2:         // seq
 			    seq = strtoul(buf, 0, 0);
 			    break;

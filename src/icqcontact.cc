@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.26 2001/11/28 19:08:10 konst Exp $
+* $Id: icqcontact.cc,v 1.27 2001/11/29 17:42:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -750,7 +750,8 @@ const string icqcontact::getpostponed() const {
 }
 
 void icqcontact::setmsgdirect(bool flag) {
-    msgdirect = flag;
+    if(cdesc.pname == icq)
+	msgdirect = flag;
 }
 
 bool icqcontact::getmsgdirect() const {

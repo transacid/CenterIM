@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.6 2001/11/28 19:08:11 konst Exp $
+* $Id: icqhook.cc,v 1.7 2001/11/29 17:42:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -147,7 +147,7 @@ void icqhook::loggedin(struct icq_link *link) {
     ihook.seq_keepalive = 0;
     ihook.n_keepalive = 0;
 
-    offl.scan(0, ossendall);
+//    offl.scan(0, ossendall);
     face.log(_("+ [icq] logged in"));
 
     string fname = conf.getdirname() + "/icq-infoset",
