@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.16 2004/08/04 15:40:36 konst Exp $
+* $Id: HTTPClient.cc,v 1.17 2004/10/07 10:49:17 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -81,6 +81,11 @@ void HTTPClient::Connect() {
     }
 
     try {
+	if(ev->connectTries++ > 10) {
+	    ev->setHTTPResp("too many connect attempts");
+	    throw DisconnectedException("Too many connect attempts");
+	}
+
 	if(m_proxy_hostname.empty()) {
 	    m_socket->setRemoteHost(m_hostname.c_str());
 	    m_socket->setRemotePort(m_port);
@@ -128,6 +133,8 @@ void HTTPClient::Parse() {
     int npos;
     string response, head, val;
     HTTPRequestEvent *ev = m_queue.front();
+
+    npos = m_recv.size();
 
     while(1) {
 	response = "";
@@ -185,7 +192,7 @@ void HTTPClient::Parse() {
 
 		case 401:
 		    if(head == "WWW-AUTHENTICATE:") {
-			if(ev->trycount++) {
+			if(ev->authTries++) {
 			    ev->setHTTPResp("HTTP auth failed");
 			    throw HTTPException("Authentification failed");
 			}
@@ -297,7 +304,9 @@ void HTTPClient::SendRequest() {
 
     if(m_proxy_hostname.empty()) {
 	b.Pack(rq + " " + m_resource + " HTTP/1.0\r\n");
-	b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n");
+	b.Pack((string) "Host: " + m_hostname);
+	if(m_port != 80) b.Pack((string) ":" + i2str(m_port));
+	b.Pack("\r\n");
     } else {
 	b.Pack(rq + " http://" + m_hostname + m_resource + " HTTP/1.0\r\n");
     }
