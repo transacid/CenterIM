@@ -53,7 +53,7 @@ extern class centericq cicq;
 class icqface {
     public:
 	enum eventviewresult {
-	    cancel, forward, reply, ok, open,
+	    ok, next, cancel, forward, reply, open,
 	    accept, reject, eventviewresult_size
 	};
 
@@ -197,7 +197,9 @@ class icqface {
 	bool histexec(imevent *&im);
 
 	bool eventedit(imevent &ev);
-	eventviewresult eventview(const imevent *ev);
+
+	eventviewresult eventview(const imevent *ev,
+	    vector<eventviewresult> abuttons = vector<eventviewresult>());
 
 	bool edit(string &txt, const string &header);
 };
@@ -232,8 +234,10 @@ static const char *stragerange[ICQ2000::range_60_above+1] = {
 };
 
 static const char *eventviewresultnames[icqface::eventviewresult_size] = {
-    "", _("Fwd"), _("Reply"), _("Ok"),
-    _("Open"), _("Accept"), _("Reject")
+    _("Ok"), _("Next"), "",
+    _("Fwd"), _("Reply"),
+    _("Open"), _("Accept"),
+    _("Reject")
 };
 
 #endif

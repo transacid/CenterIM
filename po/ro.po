@@ -6,125 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Centericq 3.20.5 \n"
-"POT-Creation-Date: 2002-03-08 09:23+0200\n"
+"POT-Creation-Date: 2002-03-09 19:02+0200\n"
 "PO-Revision-Date: 2001 Feb 5 10:30 EET\n"
 "Last-Translator: Ovidiu Ghinet <oghinet@doctor.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: src/centericq.cc:118
-#, fuzzy
-msgid "password: "
-msgstr "Parola: "
-
-#: src/centericq.cc:153
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M meniu contact curent, F3/S schimba statutul icq, F4/G meniu general, Q "
-"Iesire"
-
-#: src/centericq.cc:207
-#, fuzzy, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignora toate evenimentele de la %s (%lu)?"
-
-#: src/centericq.cc:246
-#, fuzzy, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Sunteti sigur ca doriti sa-l stergeti pe %s (%lu)?"
-
-#: src/centericq.cc:254
-msgid "New nickname to show: "
-msgstr "Noul nickname: "
-
-#: src/centericq.cc:262
-msgid "Select a group to move the user to"
-msgstr "Selecteaza un grup in care sa muti utilizatorul"
-
-#: src/centericq.cc:279
-msgid "+ cannot fetch away messages being offline"
-msgstr ""
-
-#: src/centericq.cc:456
-#, fuzzy, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ aveti posta noua, %d messages"
-
-#: src/centericq.cc:459
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ ultimul mesaj de la %s"
-
-#: src/centericq.cc:494
-msgid "! another running copy of centericq detected"
-msgstr "! o alta copie a centericq a fost detectata in functiune"
-
-#: src/centericq.cc:495
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! aceata poate cauza probleme. pid %lu"
-
-#: src/centericq.cc:570
-#, fuzzy
-msgid "Mobile number: "
-msgstr "numele fisierului: "
-
-#: src/centericq.cc:753
-#, fuzzy, c-format
-msgid "+ no history items for %s"
-msgstr "+ nimic in arhiva pentru %s, %lu"
-
-#: src/centericq.cc:779
-#, fuzzy, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s a fost adaugat la lista visibila"
-
-#: src/centericq.cc:785
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Selecteaza contactele de adaugat"
-
-#: src/centericq.cc:792
-msgid "Notify the user he/she has been added?"
-msgstr "Anunta utilizatorul ca el/ea a fost adaugat?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:795
-#, fuzzy, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ notificarea a fost trimisa  lui %lu"
-
-#: src/centericq.cc:807
-#, fuzzy, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s a fost adaugat la lista visibila"
-
-#: src/centericq.cc:879
-msgid "+ the user is back"
-msgstr "+ utilizatorul s-a intors"
-
-#: src/centericq.cc:895
-#, c-format
-msgid "+ [%s] status restored"
-msgstr ""
-
-#: src/centericq.cc:909
-#, fuzzy, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ statutul a fost shimbat automat in N/A Nedisponibil"
-
-#: src/centericq.cc:911
-#, fuzzy
-msgid "away"
-msgstr "Away"
-
-#: src/centericq.cc:911
-msgid "n/a"
-msgstr ""
 
 #: src/icqconf.cc:175
 #, c-format
@@ -746,7 +634,7 @@ msgstr " Mod "
 msgid "mode 2"
 msgstr " Mod "
 
-#: src/icqface.cc:63 src/icqface.h:215
+#: src/icqface.cc:63 src/icqface.h:217
 msgid "no"
 msgstr "nu"
 
@@ -958,7 +846,7 @@ msgstr "Interese"
 msgid "Background"
 msgstr "Fundal/Trecut"
 
-#: src/icqface.cc:780 src/icqface.cc:1613
+#: src/icqface.cc:780 src/icqface.cc:1614
 msgid "F2 to URLs, ESC close"
 msgstr "F2 spre URL-uri, ESC inchide"
 
@@ -1078,7 +966,7 @@ msgstr "+ nici un URL in acest context"
 msgid "URLs within the current context"
 msgstr "URL-uri in acest context"
 
-#: src/icqface.cc:1486 src/icqface.cc:1631
+#: src/icqface.cc:1486 src/icqface.cc:1632
 #, fuzzy, c-format
 msgid "Outgoing %s to %s"
 msgstr "Scrie un mesaj lui %s, %lu"
@@ -1088,31 +976,31 @@ msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X trimite, Ctrl-P multiple, Ctrl-O arhiva, Alt-? detalii,ESC anuleaza"
 
-#: src/icqface.cc:1632
+#: src/icqface.cc:1633
 #, c-format
 msgid "Sent on %s"
 msgstr "Trimis %s"
 
-#: src/icqface.cc:1635
+#: src/icqface.cc:1636
 #, fuzzy, c-format
 msgid "Incoming %s from %s"
 msgstr "Contacte de la %s, %lu"
 
-#: src/icqface.cc:1636
+#: src/icqface.cc:1637
 #, fuzzy, c-format
 msgid "Received on %s"
 msgstr "%s, primit %s"
 
-#: src/icqface.cc:1723
+#: src/icqface.cc:1738
 #, c-format
 msgid "History for %s, %d events total"
 msgstr ""
 
-#: src/icqface.cc:1726
+#: src/icqface.cc:1741
 msgid "S search, L again, ESC cancel"
 msgstr "S cauta, L din nou, ESC anuleaza"
 
-#: src/icqface.cc:1732
+#: src/icqface.cc:1747
 #, fuzzy
 msgid "search for: "
 msgstr "cautare dupa: "
@@ -1311,67 +1199,67 @@ msgstr "+ conectare la serverul icq"
 msgid "+ [icq] logged in"
 msgstr "+ conectat"
 
-#: src/hooks/icqhook.cc:706
+#: src/hooks/icqhook.cc:710
 msgid "as requested"
 msgstr ""
 
-#: src/hooks/icqhook.cc:707
+#: src/hooks/icqhook.cc:711
 msgid "socket problems"
 msgstr ""
 
-#: src/hooks/icqhook.cc:708
+#: src/hooks/icqhook.cc:712
 #, fuzzy
 msgid "bad username"
 msgstr " Numele utilizatorului proxy-ului : %s "
 
-#: src/hooks/icqhook.cc:709
+#: src/hooks/icqhook.cc:713
 msgid "turboing"
 msgstr ""
 
-#: src/hooks/icqhook.cc:710
+#: src/hooks/icqhook.cc:714
 #, fuzzy
 msgid "bad password"
 msgstr "Parola: "
 
-#: src/hooks/icqhook.cc:711
+#: src/hooks/icqhook.cc:715
 msgid "username and password mismatch"
 msgstr ""
 
-#: src/hooks/icqhook.cc:712
+#: src/hooks/icqhook.cc:716
 msgid "already logged"
 msgstr ""
 
-#: src/hooks/icqhook.cc:723
+#: src/hooks/icqhook.cc:727
 #, fuzzy
 msgid "+ [icq] disconnected"
 msgstr "+ deconectat"
 
-#: src/hooks/icqhook.cc:823
+#: src/hooks/icqhook.cc:827
 #, fuzzy
 msgid "* The user has added you to his/her contact list"
 msgstr "va adaugat la lista lui/ei de contacte"
 
-#: src/hooks/icqhook.cc:848
+#: src/hooks/icqhook.cc:852
 #, fuzzy, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ fisierul %s pentru %s, %lu a fost trimis"
 
-#: src/hooks/icqhook.cc:859
+#: src/hooks/icqhook.cc:863
 #, fuzzy
 msgid "* Away message:"
 msgstr "Pagina web"
 
-#: src/hooks/icqhook.cc:863
+#: src/hooks/icqhook.cc:867
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr ""
 
-#: src/hooks/icqhook.cc:991
+#: src/hooks/icqhook.cc:995
 #, c-format
 msgid "%lu requested our icq away message, sent the response"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1022
+#: src/hooks/icqhook.cc:1026
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
 msgstr ""
@@ -1409,6 +1297,118 @@ msgstr ""
 #, fuzzy
 msgid "+ [yahoo] bounced msg"
 msgstr "+ conectare la serverul icq"
+
+#: src/centericq.cc:118
+#, fuzzy
+msgid "password: "
+msgstr "Parola: "
+
+#: src/centericq.cc:153
+#, fuzzy
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M meniu contact curent, F3/S schimba statutul icq, F4/G meniu general, Q "
+"Iesire"
+
+#: src/centericq.cc:207
+#, fuzzy, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignora toate evenimentele de la %s (%lu)?"
+
+#: src/centericq.cc:246
+#, fuzzy, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Sunteti sigur ca doriti sa-l stergeti pe %s (%lu)?"
+
+#: src/centericq.cc:254
+msgid "New nickname to show: "
+msgstr "Noul nickname: "
+
+#: src/centericq.cc:262
+msgid "Select a group to move the user to"
+msgstr "Selecteaza un grup in care sa muti utilizatorul"
+
+#: src/centericq.cc:279
+msgid "+ cannot fetch away messages being offline"
+msgstr ""
+
+#: src/centericq.cc:456
+#, fuzzy, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ aveti posta noua, %d messages"
+
+#: src/centericq.cc:459
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ ultimul mesaj de la %s"
+
+#: src/centericq.cc:494
+msgid "! another running copy of centericq detected"
+msgstr "! o alta copie a centericq a fost detectata in functiune"
+
+#: src/centericq.cc:495
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! aceata poate cauza probleme. pid %lu"
+
+#: src/centericq.cc:570
+#, fuzzy
+msgid "Mobile number: "
+msgstr "numele fisierului: "
+
+#: src/centericq.cc:766
+#, fuzzy, c-format
+msgid "+ no history items for %s"
+msgstr "+ nimic in arhiva pentru %s, %lu"
+
+#: src/centericq.cc:792
+#, fuzzy, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s a fost adaugat la lista visibila"
+
+#: src/centericq.cc:798
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Selecteaza contactele de adaugat"
+
+#: src/centericq.cc:805
+msgid "Notify the user he/she has been added?"
+msgstr "Anunta utilizatorul ca el/ea a fost adaugat?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:808
+#, fuzzy, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ notificarea a fost trimisa  lui %lu"
+
+#: src/centericq.cc:820
+#, fuzzy, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s a fost adaugat la lista visibila"
+
+#: src/centericq.cc:892
+msgid "+ the user is back"
+msgstr "+ utilizatorul s-a intors"
+
+#: src/centericq.cc:908
+#, c-format
+msgid "+ [%s] status restored"
+msgstr ""
+
+#: src/centericq.cc:922
+#, fuzzy, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ statutul a fost shimbat automat in N/A Nedisponibil"
+
+#: src/centericq.cc:924
+#, fuzzy
+msgid "away"
+msgstr "Away"
+
+#: src/centericq.cc:924
+msgid "n/a"
+msgstr ""
 
 #: src/hooks/msnhook.cc:74
 #, fuzzy
@@ -1509,47 +1509,51 @@ msgstr ""
 msgid "executed external action %s"
 msgstr ""
 
-#: src/icqface.h:215
+#: src/icqface.h:217
 msgid "yes"
 msgstr "da"
 
-#: src/icqface.h:219
+#: src/icqface.h:221
 msgid "Not specified"
 msgstr "Nespecificat"
 
-#: src/icqface.h:220
+#: src/icqface.h:222
 msgid "Male"
 msgstr "Barbat"
 
-#: src/icqface.h:221
+#: src/icqface.h:223
 msgid "Female"
 msgstr "Femeie"
 
-#: src/icqface.h:231
+#: src/icqface.h:233
 msgid "60-above"
 msgstr ""
 
-#: src/icqface.h:235
-msgid "Fwd"
-msgstr "Fwd"
-
-#: src/icqface.h:235
-msgid "Reply"
-msgstr "Reply"
-
-#: src/icqface.h:235
+#: src/icqface.h:237
 msgid "Ok"
 msgstr "OK"
 
-#: src/icqface.h:236
+#: src/icqface.h:237
+msgid "Next"
+msgstr "Urmatorul"
+
+#: src/icqface.h:238
+msgid "Fwd"
+msgstr "Fwd"
+
+#: src/icqface.h:238
+msgid "Reply"
+msgstr "Reply"
+
+#: src/icqface.h:239
 msgid "Open"
 msgstr "Deschide"
 
-#: src/icqface.h:236
+#: src/icqface.h:239
 msgid "Accept"
 msgstr "Accepta"
 
-#: src/icqface.h:236
+#: src/icqface.h:240
 #, fuzzy
 msgid "Reject"
 msgstr "Selecteaza"
@@ -1665,9 +1669,6 @@ msgstr "E-mail"
 #, fuzzy
 #~ msgid "%s wrote:"
 #~ msgstr "%s (%lu) a scris:"
-
-#~ msgid "Next"
-#~ msgstr "Urmatorul"
 
 #, fuzzy
 #~ msgid "+ [icq] cannot send contacts in offline mode"

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.75 2002/03/04 14:40:51 konst Exp $
+* $Id: centericq.cc,v 1.76 2002/03/09 18:23:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -695,10 +695,11 @@ void centericq::readevents(const imcontact &cont) {
 }
 
 void centericq::history(const imcontact &cont) {
-    vector<imevent *> events;
     icqface::eventviewresult r;
     imevent *im;
     bool enough;
+    vector<imevent *> events;
+    vector<imevent *>::iterator i;
 
     events = em.getevents(cont, 0);
 
@@ -709,7 +710,9 @@ void centericq::history(const imcontact &cont) {
 	    enough = false;
 
 	    while(!enough) {
-		r = face.eventview(im);
+		vector<icqface::eventviewresult> buttons(1, icqface::next);
+
+		r = face.eventview(im, buttons);
 
 		switch(r) {
 		    case icqface::forward:
@@ -737,6 +740,16 @@ void centericq::history(const imcontact &cont) {
 		    case icqface::open:
 			if(const imurl *m = static_cast<const imurl *>(im))
 			    conf.openurl(m->geturl());
+			break;
+
+		    case icqface::next:
+			i = ::find(events.begin(), events.end(), im);
+			enough = i == events.begin();
+
+			if(!enough) {
+			    i--;
+			    im = *i;
+			}
 			break;
 		}
 	    }

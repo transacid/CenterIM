@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.91 2002/03/04 14:40:54 konst Exp $
+* $Id: icqface.cc,v 1.92 2002/03/09 18:23:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -436,7 +436,7 @@ void icqface::fillcontactlist() {
 		}
 
 		if(conf.getgroupmode() == icqconf::group2)
-		if(sc != '!') {
+		if(groupchange && (sc != '!')) {
 		    ADDGROUP(nonline);
 		    nnode = ngroup;
 		}
@@ -1555,7 +1555,7 @@ bool icqface::eventedit(imevent &ev) {
     return r;
 }
 
-icqface::eventviewresult icqface::eventview(const imevent *ev) {
+icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewresult> abuttons) {
     string title_event, title_timestamp, text;
     horizontalbar *bar;
     dialogbox db;
@@ -1605,6 +1605,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
 
     }
 
+    copy(abuttons.begin(), abuttons.end(), back_inserter(actions));
     text = ev->gettext();
 
     saveworkarea();
@@ -1707,6 +1708,20 @@ bool icqface::histexec(imevent *&im) {
 	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
 	db.setmenu(&mhist, false);
+
+	/*
+	*
+	* Now set the menu position
+	*
+	*/
+
+	for(k = 0; k < mhist.getcount(); k++) {
+	    imevent *rim = static_cast<imevent *> (mhist.getref(k));
+	    if(rim == im) {
+		mhist.setpos(k);
+		break;
+	    }
+	}
 
 	db.idle = &dialogidle;
 	db.otherkeys = &historykeys;

@@ -4,16 +4,26 @@
 *
 */
 
+group mode 2 shows offline users in offline folder, when only one group
+is defined
+
+"next" button to the history
+
+check for the libiconv presence
+check for twisted iconv
+
 /*
 *
 * BUGS
 *
 */
 
+update details -> auth needed doesn't work
+
+status keeps on changing online/away all the time in xterm
+
 does icq go down after several unsuccessful acks?
     check auto-disconnect on all IMs after network down
-
-something's wrong with sprintf and msn?
 
 MSN: 3rd person invitation from other party -> centericq segfault
 
@@ -27,7 +37,7 @@ MSN:
 *
 */
 
-"next" button to the history
+cp1251->koi8 translation to be done with iconv
 
 documentation: port numbers for IM services. for firewalls setup.
 
@@ -60,4 +70,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.150 2002/03/08 14:53:01 konst Exp $
+$Id: TODO,v 1.151 2002/03/09 18:23:55 konst Exp $
