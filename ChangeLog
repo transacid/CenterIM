@@ -1529,3 +1529,14 @@ capital and small letters the same way.
 
 The status change window was improved. Now it has the "All protocol" item on
 the top along with newly added "Already logged in only".
+
+The cicqconv contact list conversion utility was extended with ICQ list
+support for Trillian written by Vassilios Karakoidas <bkarak@aueb.gr>.
+
+Jabber authentification became smarter. If server doesn't support digest
+authentification, it's not tried anymore. The point was that the new
+digest practice made it impossible to login into server which didn't
+support md5 digest auth. Fixed.
+
+HTTP proxy support for fetching RSS feeds was fixed. It used to segfault
+the application in some situation.

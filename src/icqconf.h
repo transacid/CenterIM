@@ -29,6 +29,8 @@ enum cicq_colorpairs {
     cp_main_selected,
     cp_main_highlight,
     cp_main_frame,
+    cp_main_history_incoming,
+    cp_main_history_outgoing,
     cp_clist_icq,
     cp_clist_yahoo,
     cp_clist_infocard,

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.189 2003/07/25 17:03:01 konst Exp $
+* $Id: icqface.cc,v 1.190 2003/08/28 06:57:45 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2305,10 +2305,10 @@ void icqface::renderchathistory() {
     for(count = 0, ir = toshow.begin(); ir != toshow.end() && count < chatlines; ++ir) {
 	switch(ir->first) {
 	    case imevent::incoming:
-		attrset(conf.getcolor(cp_main_text));
+		attrset(conf.getcolor(cp_main_history_incoming));
 		break;
 	    case imevent::outgoing:
-		attrset(conf.getcolor(cp_main_highlight));
+		attrset(conf.getcolor(cp_main_history_outgoing));
 		break;
 	}
 
@@ -2593,9 +2593,9 @@ void icqface::histmake(const vector<imevent *> &hist) {
 	text += ev.gettext();
 
 	if(ev.getdirection() == imevent::incoming) {
-	    color = conf.getcolor(cp_main_text);
+	    color = conf.getcolor(cp_main_history_incoming);
 	} else if(ev.getdirection() == imevent::outgoing) {
-	    color = conf.getcolor(cp_main_highlight);
+	    color = conf.getcolor(cp_main_history_outgoing);
 	}
 
 	mhist.additem(color, (void *) *i, text);

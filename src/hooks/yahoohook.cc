@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.79 2003/07/07 18:51:02 konst Exp $
+* $Id: yahoohook.cc,v 1.80 2003/08/28 06:57:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -240,8 +240,8 @@ bool yahoohook::send(const imevent &ev) {
 	    return true;
 	}
 
-	for(is = text.begin(); is != text.end(); ++is)
-	    if((unsigned) *is < 32) *is = ' ';
+//	for(is = text.begin(); is != text.end(); ++is)
+//	    if((unsigned) *is < 32) *is = ' ';
 
 	auto_ptr<char> what(strdup(text.c_str()));
 

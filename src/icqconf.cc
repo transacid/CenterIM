@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.112 2003/07/25 17:03:00 konst Exp $
+* $Id: icqconf.cc,v 1.113 2003/08/28 06:57:45 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -327,6 +327,8 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_main_selected, "main_selected   black/white");
 	    schemer.push(cp_main_highlight, "main_highlight yellow/transparent  bold");
 	    schemer.push(cp_main_frame, "main_frame blue/transparent    bold");
+	    schemer.push(cp_main_history_incoming, "main_history_incoming  cyan/transparent");
+	    schemer.push(cp_main_history_outgoing, "main_history_outgoing  yellow/transparent  bold");
 	    schemer.push(cp_clist_icq, "clist_icq   green/transparent");
 	    schemer.push(cp_clist_yahoo, "clist_yahoo   magenta/transparent");
 	    schemer.push(cp_clist_infocard, "clist_infocard white/transparent");
@@ -349,6 +351,8 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_main_selected, "main_selected   black/cyan");
 	    schemer.push(cp_main_highlight, "main_highlight  white/blue  bold");
 	    schemer.push(cp_main_frame, "main_frame  blue/blue   bold");
+	    schemer.push(cp_main_history_incoming, "main_history_incoming  white/blue");
+	    schemer.push(cp_main_history_outgoing, "main_history_outgoing  white/blue  bold");
 	    schemer.push(cp_clist_icq, "clist_icq   green/blue");
 	    schemer.push(cp_clist_yahoo, "clist_yahoo magenta/blue");
 	    schemer.push(cp_clist_msn, "clist_msn   cyan/blue");

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.135 2003/07/19 08:35:10 konst Exp $
+* $Id: icqhook.cc,v 1.136 2003/08/28 06:57:46 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1343,10 +1343,10 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
 
     ident = cont.totext();
     if(c) ident += " (" + c->getdispnick() + ")";
-
+/*
     face.log(_("+ [icq] %s has requested our away message"), ident.c_str());
     sprintf(buf, _("%s requested our away message, sent the response"), ident.c_str());
-
+*/
     logger.putmessage(buf);
     ev->setAwayMessage(rusconv("kw", conf.getawaymsg(icq)));
 }

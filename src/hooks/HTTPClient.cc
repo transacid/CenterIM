@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.5 2003/08/20 23:12:52 konst Exp $
+* $Id: HTTPClient.cc,v 1.6 2003/08/28 06:57:46 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -242,7 +242,7 @@ void HTTPClient::check_timeout() {
 	MessageEvent *ev = *m_queue.begin();
 	ev->setDelivered(false);
 	ev->setFinished(true);
-	dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(_("Timed out"));
+	dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(gettext("Timed out"));
 	ev->setDeliveryFailureReason(MessageEvent::Failed);
 	messageack.emit(ev);
 
