@@ -10,7 +10,9 @@
 #endif
 
 #ifdef __GNUC__
-#include <_G_config.h>
+    #ifdef HAVE_G_CONFIG_H
+	#include <_G_config.h>
+    #endif
 #if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 9)
 #else
 #define __KTOOL_USE_NAMESPACES

@@ -56,4 +56,6 @@ case "$host_os" in
 	;;
 esac
 
+AC_CHECK_HEADERS(_G_config.h)
+
 AC_OUTPUT(Makefile include/Makefile src/Makefile)

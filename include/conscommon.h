@@ -22,6 +22,11 @@
 #include <sys/filio.h>
 #endif
 
+#ifdef __CYGWIN__
+#include <sys/termios.h>
+#include <sys/socket.h>
+#endif
+
 #undef box
 #undef clear
 #undef erase

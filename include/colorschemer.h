@@ -45,7 +45,7 @@ class colorschemer {
 	}
 
 	void save(ofstream &f) const {
-	    map<T, colordef>::const_iterator ic;
+	    typename map<T, colordef>::const_iterator ic;
 
 	    for(ic = colors.begin(); ic != colors.end(); ic++) {
 		f << ic->second.name << "\t" << ic->second.def << endl;
@@ -55,7 +55,7 @@ class colorschemer {
 	void load(ifstream &f) {
 	    int pos;
 	    string buf, p;
-	    map<T, colordef>::iterator ic;
+	    typename map<T, colordef>::iterator ic;
 
 	    while(!f.eof()) {
 		getstring(f, buf);
@@ -74,7 +74,7 @@ class colorschemer {
 	}
 
 	int operator[] (T elem) const {
-	    map<T, colordef>::const_iterator ic = colors.find(elem);
+	    typename map<T, colordef>::const_iterator ic = colors.find(elem);
 	    return (ic != colors.end()) ? ic->second.code : normalcolor(0);
 	}
 
