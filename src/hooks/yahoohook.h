@@ -8,8 +8,13 @@
 
 class yahoohook: public abstracthook {
     protected:
+	enum Action {
+	    tbdConfLogon
+	};
+
 	bool fonline, flogged;
 	map<string, vector<string> > confmembers;
+	vector<pair<Action, string> > tobedone;
 	imstatus ourstatus;
 	int cid;
 
@@ -37,6 +42,7 @@ class yahoohook: public abstracthook {
 
 	char **getmembers(const string &room);
 	void userstatus(const string &nick, int st, const string &message, bool away);
+	void disconnected();
 
     public:
 	yahoohook();
