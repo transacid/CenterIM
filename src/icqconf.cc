@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.73 2002/08/02 16:16:15 konst Exp $
+* $Id: icqconf.cc,v 1.74 2002/08/05 12:54:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -408,7 +408,7 @@ void icqconf::loadsounds() {
 		    for(pname = icq; pname != protocolname_size && skey != getprotocolname(pname); (int) pname += 1);
 
 		    if(pname != protocolname_size) {
-			if(pname == icq) ic = imcontact(strtoul(suin.c_str(), 0, 0), pname));
+			if(pname == icq) ic = imcontact(strtoul(suin.c_str(), 0, 0), pname);
 			else ic = imcontact(suin, pname);
 
 			c = clist.get(ic);
