@@ -10,7 +10,8 @@ class imexternal {
 	    aostdout = 4,
 	    aoprereceive = 8,
 	    aopresend = 16,
-	    aomanual = 32
+	    aomanual = 32,
+	    aonowait = 64
 	};
 
 	struct actioninfo {

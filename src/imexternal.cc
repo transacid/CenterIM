@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.22 2003/01/18 16:46:33 konst Exp $
+* $Id: imexternal.cc,v 1.21 2003/01/18 16:44:03 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -287,7 +287,7 @@ int imexternal::action::execscript() {
 	    r = 0;
 	    text = "";
 
-//	    if(!(options & aonowait)) {
+	    if(!(options & aonowait)) {
 		if(options & aostdout) {
 		    while(1) {
 			FD_ZERO(&rfds);
@@ -305,7 +305,7 @@ int imexternal::action::execscript() {
 
 		waitpid(pid, &r, 0);
 		unlink(sname.c_str());
-//	    }
+	    }
 
 	    close(inpipe[0]);
 	    close(outpipe[1]);
