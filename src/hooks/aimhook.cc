@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.11 2002/03/26 12:52:01 konst Exp $
+* $Id: aimhook.cc,v 1.12 2002/04/03 17:40:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,7 +43,6 @@ aimhook::aimhook()
 {
     fcapabilities =
 	hoptCanSetAwayMsg |
-	hoptCanChangeNick |
 	hoptCanChangePassword |
 	hoptCanUpdateDetails |
 	hoptChangableServer;
@@ -58,7 +57,6 @@ void aimhook::init() {
     firetalk_register_callback(handle, FC_CONNECTED, &connected);
     firetalk_register_callback(handle, FC_CONNECTFAILED, &connectfailed);
     firetalk_register_callback(handle, FC_DISCONNECT, &disconnected);
-    firetalk_register_callback(handle, FC_NEWNICK, &newnick);
     firetalk_register_callback(handle, FC_PASSCHANGED, &newpass);
     firetalk_register_callback(handle, FC_IM_GOTINFO, &gotinfo);
     firetalk_register_callback(handle, FC_IM_GETMESSAGE, &getmessage);
@@ -73,9 +71,9 @@ void aimhook::init() {
 
 void aimhook::connect() {
     icqconf::imaccount acc = conf.getourid(aim);
-
     face.log(_("+ [aim] connecting to the server"));
 
+    firetalk_disconnect(handle);
     fonline = firetalk_signon(handle, acc.server.c_str(), acc.port, acc.nickname.c_str()) == FE_SUCCESS;
 
     if(fonline) {
@@ -86,8 +84,8 @@ void aimhook::connect() {
 }
 
 void aimhook::disconnect() {
-    if(ahook.fonline) {
-	firetalk_disconnect(ahook.handle);
+    if(fonline) {
+	firetalk_disconnect(handle);
     }
 }
 
@@ -101,7 +99,7 @@ void aimhook::main() {
 void aimhook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
     int *r, *w, *e, *sr, *sw, *se;
 
-    firetalk_getsockets(&sr, &sw, &se);
+    firetalk_getsockets(FP_AIMTOC, &sr, &sw, &se);
 
     for(r = sr; *r; r++) {
 	if(*r > hsocket) hsocket = *r;
@@ -128,7 +126,7 @@ bool aimhook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
     int *r, *w, *e, *sr, *sw, *se;
 
     if(online()) {
-	firetalk_getsockets(&sr, &sw, &se);
+	firetalk_getsockets(FP_AIMTOC, &sr, &sw, &se);
 
 	for(r = sr; *r; r++) res = res || FD_ISSET(*r, &rfds);
 	for(w = sw; *w; w++) res = res || FD_ISSET(*w, &wfds);
@@ -162,7 +160,8 @@ bool aimhook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
     string text;
 
-    if(c) {
+    if(c)
+    if(c->getstatus() != offline) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
 	    if(m) text = rusconv("kw", m->gettext());
@@ -208,12 +207,11 @@ void aimhook::setautostatus(imstatus st) {
 		    case away:
 		    case notavail:
 		    case occupied:
-			firetalk_set_away(ahook.handle,
-			    conf.getawaymsg(aim).c_str());
+			firetalk_set_away(handle, conf.getawaymsg(aim).c_str());
 			break;
 
 		    default:
-			firetalk_set_away(ahook.handle, 0);
+			firetalk_set_away(handle, 0);
 			break;
 		}
 	    }
@@ -254,18 +252,13 @@ void aimhook::requestinfo(const imcontact &c) {
 void aimhook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
     icqconf::imaccount acc = conf.getourid(aim);
 
-    if(!c.getnick().empty())
-    if(c.getnick() != acc.nickname) {
-	firetalk_set_nickname(handle, c.getnick().c_str());
-    }
-
     if(!newpass.empty())
     if(newpass != acc.password) {
 	firetalk_set_password(handle, acc.password.c_str(), newpass.c_str());
     }
 
     profile.info = c.getabout();
-    firetalk_set_info(ahook.handle, ahook.profile.info.c_str());
+    firetalk_set_info(handle, profile.info.c_str());
     saveprofile();
 }
 
@@ -344,7 +337,6 @@ void aimhook::connected(void *connection, void *cli, ...) {
     firetalk_set_info(ahook.handle, ahook.profile.info.c_str());
 
     ahook.resolve();
-    DLOG("connected");
 }
 
 void aimhook::disconnected(void *connection, void *cli, ...) {
@@ -354,7 +346,6 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
 
     face.log(_("+ [aim] disconnected from the network"));
     face.update();
-    DLOG("disconnected");
 }
 
 void aimhook::connectfailed(void *connection, void *cli, ...) {
@@ -369,26 +360,6 @@ void aimhook::connectfailed(void *connection, void *cli, ...) {
 
     face.log(_("+ [aim] connect failed: %s"), reason);
     face.update();
-    DLOG("connectfailed");
-}
-
-void aimhook::newnick(void *connection, void *cli, ...) {
-    va_list ap;
-
-    va_start(ap, cli);
-    char *nick = va_arg(ap, char *);
-    va_end(ap);
-
-    if(nick)
-    if(strlen(nick)) {
-	icqconf::imaccount acc = conf.getourid(aim);
-	acc.nickname = nick;
-	conf.setourid(acc);
-
-	face.log(_("+ [aim] nickname was changed successfully"));
-    }
-
-    DLOG("newnick");
 }
 
 void aimhook::newpass(void *connection, void *cli, ...) {

@@ -9,6 +9,7 @@ enum protocolname {
     yahoo,
     msn,
     aim,
+    irc,
     infocard,
 
     protocolname_size

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.71 2002/03/22 18:20:12 konst Exp $
+* $Id: icqhook.cc,v 1.72 2002/04/03 17:40:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1008,7 +1008,6 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 		line += " <" + rusconv("wk", c->getEmail()) + ">";
 
 	    searchdest->additem(0, c->getUIN(), line);
-
 	    searchdest->redraw();
 	}
 

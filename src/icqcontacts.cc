@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.33 2002/03/23 11:34:51 konst Exp $
+* $Id: icqcontacts.cc,v 1.34 2002/04/03 17:40:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,6 +46,7 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist = true) {
 	case yahoo:
 	case msn:
 	case aim:
+	case irc:
 	    c->setnick(cinfo.nickname);
 	    c->setdispnick(cinfo.nickname);
 	    break;
@@ -99,6 +100,10 @@ void icqcontacts::load() {
 			break;
 		    case 'a':
 			c = new icqcontact(imcontact(ent->d_name+1, aim));
+			c->setnick(ent->d_name+1);
+			break;
+		    case 'i':
+			c = new icqcontact(imcontact(ent->d_name+1, irc));
 			c->setnick(ent->d_name+1);
 			break;
 		    case '0':

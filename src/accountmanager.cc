@@ -78,8 +78,10 @@ void accountmanager::exec() {
 			break;
 		}
 
-		t.addleaff(n, 0, citem+5, _(" Password : %s "),
-		    string(account.password.size(), '*').c_str());
+		if(!(capab & hoptNoPasswords)) {
+		    t.addleaff(n, 0, citem+5, _(" Password : %s "),
+			string(account.password.size(), '*').c_str());
+		}
 
 		if(account.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));

@@ -18,10 +18,21 @@ imcontact::imcontact(const string &anick, protocolname apname) {
 }
 
 bool imcontact::operator == (const imcontact &ainfo) const {
-    return
-	(ainfo.uin == uin) &&
-	(ainfo.pname == pname) &&
-	(ainfo.nickname == nickname);
+    bool r = (ainfo.uin == uin) && (ainfo.pname == pname);
+
+    if(pname == irc) {
+	int k;
+	string nick1, nick2;
+
+	for(k = 0; k < ainfo.nickname.size(); k++) nick1 += toupper(ainfo.nickname[k]);
+	for(k = 0; k < nickname.size(); k++) nick2 += toupper(nickname[k]);
+
+	r = r & (nick1 == nick2);
+    } else {
+	r = r & (ainfo.nickname == nickname);
+    }
+
+    return r;
 }
 
 bool imcontact::operator != (const imcontact &ainfo) const {

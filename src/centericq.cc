@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.85 2002/04/01 16:58:33 konst Exp $
+* $Id: centericq.cc,v 1.86 2002/04/03 17:40:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -113,20 +113,21 @@ bool centericq::checkpasswords() {
     r = regmode = true;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	ia = conf.getourid(pname);
-	if(!ia.empty()) {
-	    if(ia.password.empty()) {
-		conf.setsavepwd(false);
-
-		ia.password = face.inputstr("[" +
-		    conf.getprotocolname(pname) + "] " +
-		    _("password: "), "", '*');
-
+	if(!(gethook(pname).getcapabilities() & hoptNoPasswords)) {
+	    if(!(ia = conf.getourid(pname)).empty()) {
 		if(ia.password.empty()) {
-		    r = false;
-		    break;
-		} else {
-		    conf.setourid(ia);
+		    conf.setsavepwd(false);
+
+		    ia.password = face.inputstr("[" +
+			conf.getprotocolname(pname) + "] " +
+			_("password: "), "", '*');
+
+		    if(ia.password.empty()) {
+			r = false;
+			break;
+		    } else {
+			conf.setourid(ia);
+		    }
 		}
 	    }
 	}
@@ -353,6 +354,7 @@ void centericq::find() {
 
 		case yahoo:
 		case aim:
+		case irc:
 		    if(!s.nick.empty()) {
 			addcontact(imcontact(s.nick, s.pname));
 			ret = false;
@@ -905,6 +907,11 @@ void centericq::setauto(imstatus astatus) {
 	nautoset = false;
     }
 
+
+    face.log("timer_keypress = %lu, idle time = %lu",
+	timer_keypress, time(0)-timer_keypress);
+
+
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	abstracthook &hook = gethook(pname);
 	stcurrent = hook.getstatus();
@@ -1006,17 +1013,19 @@ void centericq::exectimers() {
     *
     */
 
-    conf.getauto(paway, pna);
+    if(fonline) {
+	conf.getauto(paway, pna);
 
-    if(paway || pna) {
-	if(paway && (timer_current-timer_keypress > paway*60))
-	    setauto(away);
+	if(paway || pna) {
+	    if(paway && (timer_current-timer_keypress > paway*60))
+		setauto(away);
 
-	if(pna && (timer_current-timer_keypress > pna*60))
-	    setauto(notavail);
+	    if(pna && (timer_current-timer_keypress > pna*60))
+		setauto(notavail);
 
-	if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
-	    setauto(available);
+	    if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
+		setauto(available);
+	}
     }
 
     if(timer_current-timer_resend > PERIOD_RESEND) {

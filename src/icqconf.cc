@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.60 2002/03/28 13:13:50 konst Exp $
+* $Id: icqconf.cc,v 1.61 2002/04/03 17:40:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -89,6 +89,10 @@ void icqconf::setourid(const imaccount &im) {
 		case aim:
 		    i->server = "toc.oscar.aol.com";
 		    i->port = 9898;
+		    break;
+		case irc:
+		    i->server = "irc.undernet.org";
+		    i->port = 6667;
 		    break;
 	    }
 	}
@@ -336,6 +340,7 @@ void icqconf::loadcolors() {
 	    if(tname == "clist_msn") npair = cp_clist_msn; else
 	    if(tname == "clist_infocard") npair = cp_clist_infocard; else
 	    if(tname == "clist_aim") npair = cp_clist_aim; else
+	    if(tname == "clist_irc") npair = cp_clist_irc; else
 	    continue;
 
 	    init_pair(npair, nfg, nbg);
@@ -556,6 +561,7 @@ void icqconf::initpairs() {
     init_pair(cp_clist_yahoo, COLOR_YELLOW, COLOR_BLACK);
     init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
     init_pair(cp_clist_aim, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(cp_clist_irc, COLOR_BLUE, COLOR_BLACK);
 }
 
 void icqconf::setauto(int away, int na) {
@@ -656,7 +662,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "infocard"
     };
 
     return ptextnames[pname];
@@ -694,18 +700,13 @@ void icqconf::savestatus(protocolname pname, imstatus st) {
 
 int icqconf::getprotcolor(protocolname pname) const {
     switch(pname) {
-	case icq:
-	    return getcolor(cp_clist_icq);
-	case yahoo:
-	    return getcolor(cp_clist_yahoo);
-	case infocard:
-	    return getcolor(cp_clist_infocard);
-	case msn:
-	    return getcolor(cp_clist_msn);
-	case aim:
-	    return getcolor(cp_clist_aim);
-	default:
-	    return getcolor(cp_main_text);
+	case      icq : return getcolor(cp_clist_icq);
+	case    yahoo : return getcolor(cp_clist_yahoo);
+	case infocard : return getcolor(cp_clist_infocard);
+	case      msn : return getcolor(cp_clist_msn);
+	case      aim : return getcolor(cp_clist_aim);
+	case      irc : return getcolor(cp_clist_irc);
+	default       : return getcolor(cp_main_text);
     }
 }
 

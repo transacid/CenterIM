@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.97 2002/03/30 17:47:16 konst Exp $
+* $Id: icqface.cc,v 1.98 2002/04/03 17:40:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -859,6 +859,7 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
 	_(" [yahoo] YAIM"),
 	_(" [msn] M$ Messenger"),
 	_(" [aim] AOL TOC"),
+	_(" [irc] IRC"),
 	""
     };
 

@@ -14,7 +14,8 @@ enum hookcapabilities {
     hoptCanChangeNick       = 64,
     hoptChangableServer     = 128,
     hoptCanChangePassword   = 256,
-    hoptCanUpdateDetails    = 512
+    hoptCanUpdateDetails    = 512,
+    hoptNoPasswords         = 1024
 };
 
 class abstracthook {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.52 2002/03/18 10:13:50 konst Exp $
+* $Id: icqcontact.cc,v 1.53 2002/04/03 17:40:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -104,6 +104,9 @@ string icqcontact::getdirname() const {
 	    break;
 	case aim:
 	    ret += "a" + cdesc.nickname;
+	    break;
+	case irc:
+	    ret += "i" + cdesc.nickname;
 	    break;
     }
 

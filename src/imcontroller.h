@@ -20,7 +20,7 @@ struct imsearchparams {
     ICQ2000::AgeRange agerange;
     imgender gender;
     string firstname, lastname, nick, city, state;
-    string company, department, position, email;
+    string company, department, position, email, room;
     protocolname pname;
 };
 
