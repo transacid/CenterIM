@@ -1,4 +1,5 @@
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I/home/konst/devel/kktoolbox/kkconsui -I/home/konst/devel/kktoolbox/kkconsui/include -I/home/konst/devel/kktoolbox/kkconsui/../kkstrtext -I/home/konst/devel/kktoolbox/kkconsui/../kkstrtext-0.1 -I/home/konst/devel/kktoolbox/kkstrtext -I/home/konst/devel/kktoolbox/kksystr -I/home/konst/devel/kktoolbox/kksystr/include -I/home/konst/devel/kktoolbox/kksystr/../kkstrtext-0.1 -I/home/konst/devel/kktoolbox/kksystr/../kkstrtext -I/home/konst/devel/libicq2000 -I/home/konst/devel/libmsn -I/home/konst/devel/firetalk -I/home/konst/devel/libyahoo2 -I$(top_srcdir)/intl
+CPPFLAGS = -DDEBUG
 bin_PROGRAMS = centericq
 centericq_SOURCES = accountmanager.cc centericq.cc centermain.cc eventmanager.cc icqconf.cc icqcontact.cc icqcontacts.cc icqdialogs.cc icqface.cc icqgroup.cc icqgroups.cc icqhist.cc icqmlist.cc imcontact.cc imcontroller.cc imevents.cc imexternal.cc imlogger.cc
 centericq_LDFLAGS = -L/home/konst/devel/kktoolbox/kkconsui -L/home/konst/devel/kktoolbox/kkstrtext -L/home/konst/devel/kktoolbox/kksystr -L/home/konst/devel/libicq2000 -L/home/konst/devel/libmsn -L/home/konst/devel/firetalk -L/home/konst/devel/libyahoo2

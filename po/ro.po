@@ -6,13 +6,434 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Centericq 3.20.5 \n"
-"POT-Creation-Date: 2002-07-16 10:48+0300\n"
+"POT-Creation-Date: 2002-07-16 12:00+0300\n"
 "PO-Revision-Date: 2001 Feb 5 10:30 EET\n"
 "Last-Translator: Ovidiu Ghinet <oghinet@doctor.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/hooks/aimhook.cc:73
+#, fuzzy
+msgid "+ [aim] connecting to the server"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/aimhook.cc:84
+#, fuzzy
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ conectarea la serverul icq nu a fost posibila"
+
+#: src/hooks/aimhook.cc:185
+#, fuzzy, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/aimhook.cc:194
+#, fuzzy, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/aimhook.cc:283
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr ""
+
+#: src/hooks/aimhook.cc:317
+#, fuzzy
+msgid "+ [aim] logged in"
+msgstr "+ conectat"
+
+#: src/hooks/aimhook.cc:347
+#, fuzzy
+msgid "+ [aim] disconnected from the network"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/aimhook.cc:365
+#, fuzzy
+msgid "aim connection failed"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/aimhook.cc:367
+#, fuzzy, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/aimhook.cc:384
+msgid "+ [aim] password was changed successfully"
+msgstr ""
+
+#: src/hooks/aimhook.cc:407
+msgid "The user has no profile information."
+msgstr ""
+
+#: src/hooks/aimhook.cc:504
+#, fuzzy
+msgid "+ [aim] password sent"
+msgstr "Parola: "
+
+#: src/hooks/icqhook.cc:125
+#, fuzzy
+msgid "+ [icq] connecting to the server"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/icqhook.cc:727
+#, fuzzy
+msgid "+ [icq] logged in"
+msgstr "+ conectat"
+
+#: src/hooks/icqhook.cc:754
+msgid "as requested"
+msgstr ""
+
+#: src/hooks/icqhook.cc:755
+msgid "socket problems"
+msgstr ""
+
+#: src/hooks/icqhook.cc:756
+#, fuzzy
+msgid "bad username"
+msgstr " Numele utilizatorului proxy-ului : %s "
+
+#: src/hooks/icqhook.cc:757
+msgid "turboing"
+msgstr ""
+
+#: src/hooks/icqhook.cc:758
+#, fuzzy
+msgid "bad password"
+msgstr "Parola: "
+
+#: src/hooks/icqhook.cc:759
+msgid "username and password mismatch"
+msgstr ""
+
+#: src/hooks/icqhook.cc:760
+msgid "already logged"
+msgstr ""
+
+#: src/hooks/icqhook.cc:773
+#, fuzzy
+msgid "+ [icq] disconnected"
+msgstr "+ deconectat"
+
+#: src/hooks/icqhook.cc:779
+#, fuzzy
+msgid "icq disconnection reason"
+msgstr "+ deconectat"
+
+#: src/hooks/icqhook.cc:876 src/hooks/yahoohook.cc:543
+#, fuzzy
+msgid "The user has added you to his/her contact list"
+msgstr "va adaugat la lista lui/ei de contacte"
+
+#: src/hooks/icqhook.cc:907
+#, fuzzy, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ fisierul %s pentru %s, %lu a fost trimis"
+
+#: src/hooks/icqhook.cc:917 src/hooks/irchook.cc:497
+#, fuzzy
+msgid "Away message:"
+msgstr "Pagina web"
+
+#: src/hooks/icqhook.cc:921
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr ""
+
+#: src/hooks/icqhook.cc:1053
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr ""
+
+#: src/hooks/icqhook.cc:1093
+#, c-format
+msgid "+ [icq] whitepages search finished, %d found"
+msgstr ""
+
+#: src/hooks/irchook.cc:90
+#, fuzzy
+msgid "+ [irc] connecting to the server"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/irchook.cc:102
+#, fuzzy
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ conectarea la serverul icq nu a fost posibila"
+
+#: src/hooks/irchook.cc:416
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr ""
+
+#: src/hooks/irchook.cc:603
+#, fuzzy
+msgid "+ [irc] logged in"
+msgstr "+ conectat"
+
+#: src/hooks/irchook.cc:640
+#, fuzzy
+msgid "+ [irc] disconnected from the network"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/irchook.cc:654
+#, fuzzy, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/irchook.cc:671
+msgid "+ [irc] nickname was changed successfully"
+msgstr ""
+
+#: src/hooks/irchook.cc:742
+msgid "On channels: "
+msgstr ""
+
+#: src/hooks/irchook.cc:1023
+#, c-format
+msgid "Kicked by %s; reason: %s"
+msgstr ""
+
+#: src/hooks/irchook.cc:1070
+#, c-format
+msgid "The user has changed their nick from %s to %s"
+msgstr ""
+
+#: src/hooks/msnhook.cc:74
+#, fuzzy
+msgid "+ [msn] connecting to the server"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/msnhook.cc:78
+#, fuzzy
+msgid "+ [msn] logged in"
+msgstr "+ conectat"
+
+#: src/hooks/msnhook.cc:83
+#, fuzzy
+msgid "+ [msn] unable to connect to the server"
+msgstr "+ conectarea la serverul icq nu a fost posibila"
+
+#: src/hooks/msnhook.cc:204
+#, fuzzy, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/msnhook.cc:324
+#, fuzzy
+msgid "+ [msn] disconnected"
+msgstr "+ deconectat"
+
+#: src/hooks/msnhook.cc:341
+#, fuzzy, c-format
+msgid "+ [msn] connecting with %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/msnhook.cc:343
+#, fuzzy, c-format
+msgid "+ [msn] connection from %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/msnhook.cc:359
+#, fuzzy, c-format
+msgid "+ [msn] e-mail from %s <%s>, %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:99
+#, fuzzy
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:107
+#, fuzzy
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:110
+msgid "could not resolve hostname"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:111
+msgid "could not create socket"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:112
+msgid "verify the pager host and port entered"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:148
+#, fuzzy
+msgid "+ [yahoo] disconnected"
+msgstr "+ deconectat"
+
+#: src/hooks/yahoohook.cc:221
+#, fuzzy, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:240
+#, fuzzy, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:244
+#, fuzzy, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:393
+#, fuzzy
+msgid "+ [yahoo] logged in"
+msgstr "+ conectat"
+
+#: src/hooks/yahoohook.cc:398
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:403
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:404
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:474
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:477
+msgid "Current conference members are: "
+msgstr ""
+
+#: src/hooks/yahoohook.cc:494
+msgid "Auto-joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:508
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:523
+#, c-format
+msgid "The user %s has left the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:547
+#, fuzzy
+msgid "the message was: "
+msgstr "Pagina web"
+
+#: src/hooks/yahoohook.cc:564
+#, fuzzy, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:571
+#, fuzzy, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/hooks/yahoohook.cc:576
+#, fuzzy, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ conectare la serverul icq"
+
+#: src/accountmanager.cc:37
+msgid " IM account manager "
+msgstr ""
+
+#: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:426
+#: src/icqdialogs.cc:748 src/imcontroller.cc:38
+msgid "Change"
+msgstr "Schimba"
+
+#: src/accountmanager.cc:43 src/icqdialogs.cc:426 src/icqdialogs.cc:748
+#: src/icqdialogs.cc:937 src/imcontroller.cc:193
+msgid "Done"
+msgstr "Gata"
+
+#: src/accountmanager.cc:66
+#, fuzzy, c-format
+msgid " Server : %s "
+msgstr " Adresa serverului : %s "
+
+#: src/accountmanager.cc:71
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:76
+#, fuzzy, c-format
+msgid " Login : %s "
+msgstr " Telefon : %s "
+
+#: src/accountmanager.cc:82
+#, c-format
+msgid " Password : %s "
+msgstr " Parola : %s "
+
+#: src/accountmanager.cc:87
+msgid " Register "
+msgstr ""
+
+#: src/accountmanager.cc:90
+#, fuzzy
+msgid " Update user details "
+msgstr " Inoieste detaliile"
+
+#: src/accountmanager.cc:93
+#, fuzzy
+msgid " Set away message "
+msgstr "Pagina web"
+
+#: src/accountmanager.cc:96
+msgid " Channel manager "
+msgstr ""
+
+#: src/accountmanager.cc:98
+#, fuzzy
+msgid " Drop "
+msgstr " Grupuri "
+
+#: src/accountmanager.cc:116
+#, fuzzy
+msgid " user name: "
+msgstr " Numele utilizatorului proxy-ului : %s "
+
+#: src/accountmanager.cc:120
+#, fuzzy
+msgid " uin: "
+msgstr "un nou uin"
+
+#: src/accountmanager.cc:124
+#, fuzzy
+msgid " password: "
+msgstr "Parola: "
+
+#: src/accountmanager.cc:130
+msgid "Drop the account information first!"
+msgstr ""
+
+#: src/accountmanager.cc:143
+#, fuzzy
+msgid "You have to disconnect the service first!"
+msgstr "+ conectarea la serverul icq nu a fost posibila"
+
+#: src/accountmanager.cc:152
+#, fuzzy
+msgid " server address: "
+msgstr " Adresa serverului ICQ : %s "
+
+#: src/accountmanager.cc:167 src/centericq.cc:337
+#, fuzzy
+msgid "away message"
+msgstr "Pagina web"
 
 #: src/centericq.cc:120
 #, fuzzy
@@ -48,11 +469,6 @@ msgstr "Selecteaza un grup in care sa muti utilizatorul"
 #: src/centericq.cc:283
 msgid "+ cannot fetch away messages being offline"
 msgstr ""
-
-#: src/accountmanager.cc:167 src/centericq.cc:337
-#, fuzzy
-msgid "away message"
-msgstr "Pagina web"
 
 #: src/centericq.cc:512
 #, fuzzy, c-format
@@ -267,11 +683,6 @@ msgstr ""
 #, fuzzy
 msgid "cLear"
 msgstr "Sterge"
-
-#: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:426
-#: src/icqdialogs.cc:748 src/imcontroller.cc:38
-msgid "Change"
-msgstr "Schimba"
 
 #: src/icqdialogs.cc:169
 #, fuzzy
@@ -536,11 +947,6 @@ msgstr " Detaliile dumneavoastra ICQ"
 #, fuzzy, c-format
 msgid " %s: details "
 msgstr " Detaliile ICQ ale lui %s "
-
-#: src/accountmanager.cc:43 src/icqdialogs.cc:426 src/icqdialogs.cc:748
-#: src/icqdialogs.cc:937 src/imcontroller.cc:193
-msgid "Done"
-msgstr "Gata"
 
 #: src/icqdialogs.cc:443
 #, fuzzy
@@ -1253,82 +1659,6 @@ msgstr "cautare dupa: "
 msgid "General"
 msgstr " Generale "
 
-#: src/accountmanager.cc:37
-msgid " IM account manager "
-msgstr ""
-
-#: src/accountmanager.cc:66
-#, fuzzy, c-format
-msgid " Server : %s "
-msgstr " Adresa serverului : %s "
-
-#: src/accountmanager.cc:71
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:76
-#, fuzzy, c-format
-msgid " Login : %s "
-msgstr " Telefon : %s "
-
-#: src/accountmanager.cc:82
-#, c-format
-msgid " Password : %s "
-msgstr " Parola : %s "
-
-#: src/accountmanager.cc:87
-msgid " Register "
-msgstr ""
-
-#: src/accountmanager.cc:90
-#, fuzzy
-msgid " Update user details "
-msgstr " Inoieste detaliile"
-
-#: src/accountmanager.cc:93
-#, fuzzy
-msgid " Set away message "
-msgstr "Pagina web"
-
-#: src/accountmanager.cc:96
-msgid " Channel manager "
-msgstr ""
-
-#: src/accountmanager.cc:98
-#, fuzzy
-msgid " Drop "
-msgstr " Grupuri "
-
-#: src/accountmanager.cc:116
-#, fuzzy
-msgid " user name: "
-msgstr " Numele utilizatorului proxy-ului : %s "
-
-#: src/accountmanager.cc:120
-#, fuzzy
-msgid " uin: "
-msgstr "un nou uin"
-
-#: src/accountmanager.cc:124
-#, fuzzy
-msgid " password: "
-msgstr "Parola: "
-
-#: src/accountmanager.cc:130
-msgid "Drop the account information first!"
-msgstr ""
-
-#: src/accountmanager.cc:143
-#, fuzzy
-msgid "You have to disconnect the service first!"
-msgstr "+ conectarea la serverul icq nu a fost posibila"
-
-#: src/accountmanager.cc:152
-#, fuzzy
-msgid " server address: "
-msgstr " Adresa serverului ICQ : %s "
-
 #: src/imcontroller.cc:32
 #, fuzzy
 msgid " Register on ICQ network "
@@ -1468,234 +1798,15 @@ msgstr ""
 msgid "registration is not supported"
 msgstr "Procesul de inregistrare "
 
-#: src/hooks/icqhook.cc:125
-#, fuzzy
-msgid "+ [icq] connecting to the server"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/icqhook.cc:726
-#, fuzzy
-msgid "+ [icq] logged in"
-msgstr "+ conectat"
-
-#: src/hooks/icqhook.cc:753
-msgid "as requested"
-msgstr ""
-
-#: src/hooks/icqhook.cc:754
-msgid "socket problems"
-msgstr ""
-
-#: src/hooks/icqhook.cc:755
-#, fuzzy
-msgid "bad username"
-msgstr " Numele utilizatorului proxy-ului : %s "
-
-#: src/hooks/icqhook.cc:756
-msgid "turboing"
-msgstr ""
-
-#: src/hooks/icqhook.cc:757
-#, fuzzy
-msgid "bad password"
-msgstr "Parola: "
-
-#: src/hooks/icqhook.cc:758
-msgid "username and password mismatch"
-msgstr ""
-
-#: src/hooks/icqhook.cc:759
-msgid "already logged"
-msgstr ""
-
-#: src/hooks/icqhook.cc:772
-#, fuzzy
-msgid "+ [icq] disconnected"
-msgstr "+ deconectat"
-
-#: src/hooks/icqhook.cc:778
-#, fuzzy
-msgid "icq disconnection reason"
-msgstr "+ deconectat"
-
-#: src/hooks/icqhook.cc:875 src/hooks/yahoohook.cc:543
-#, fuzzy
-msgid "The user has added you to his/her contact list"
-msgstr "va adaugat la lista lui/ei de contacte"
-
-#: src/hooks/icqhook.cc:906
-#, fuzzy, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ fisierul %s pentru %s, %lu a fost trimis"
-
-#: src/hooks/icqhook.cc:916 src/hooks/irchook.cc:497
-#, fuzzy
-msgid "Away message:"
-msgstr "Pagina web"
-
-#: src/hooks/icqhook.cc:920
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr ""
-
-#: src/hooks/icqhook.cc:1052
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr ""
-
-#: src/hooks/icqhook.cc:1092
-#, c-format
-msgid "+ [icq] whitepages search finished, %d found"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:99
-#, fuzzy
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:107
-#, fuzzy
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:110
-msgid "could not resolve hostname"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:111
-msgid "could not create socket"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:112
-msgid "verify the pager host and port entered"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:148
-#, fuzzy
-msgid "+ [yahoo] disconnected"
-msgstr "+ deconectat"
-
-#: src/hooks/yahoohook.cc:221
-#, fuzzy, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:240
-#, fuzzy, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:244
-#, fuzzy, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:393
-#, fuzzy
-msgid "+ [yahoo] logged in"
-msgstr "+ conectat"
-
-#: src/hooks/yahoohook.cc:398
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:403
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:404
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:474
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:477
-msgid "Current conference members are: "
-msgstr ""
-
-#: src/hooks/yahoohook.cc:494
-msgid "Auto-joined the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:508
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:523
-#, c-format
-msgid "The user %s has left the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:547
-#, fuzzy
-msgid "the message was: "
-msgstr "Pagina web"
-
-#: src/hooks/yahoohook.cc:564
-#, fuzzy, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:571
-#, fuzzy, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/yahoohook.cc:576
-#, fuzzy, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/msnhook.cc:74
-#, fuzzy
-msgid "+ [msn] connecting to the server"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/msnhook.cc:78
-#, fuzzy
-msgid "+ [msn] logged in"
-msgstr "+ conectat"
-
-#: src/hooks/msnhook.cc:83
-#, fuzzy
-msgid "+ [msn] unable to connect to the server"
-msgstr "+ conectarea la serverul icq nu a fost posibila"
-
-#: src/hooks/msnhook.cc:204
-#, fuzzy, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/msnhook.cc:324
-#, fuzzy
-msgid "+ [msn] disconnected"
-msgstr "+ deconectat"
-
-#: src/hooks/msnhook.cc:341
-#, fuzzy, c-format
-msgid "+ [msn] connecting with %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/msnhook.cc:343
-#, fuzzy, c-format
-msgid "+ [msn] connection from %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/msnhook.cc:359
-#, fuzzy, c-format
-msgid "+ [msn] e-mail from %s <%s>, %s"
-msgstr "+ conectare la serverul icq"
-
 #: src/imevents.cc:243
 #, fuzzy
 msgid "Empty authorization request message"
 msgstr "Cerere de autorizare de la %lu"
+
+#: src/imexternal.cc:96
+#, c-format
+msgid "executed external action %s"
+msgstr ""
 
 #: src/imlogger.cc:23
 msgid "events log started"
@@ -1744,117 +1855,6 @@ msgstr ""
 #: src/imlogger.cc:110
 #, c-format
 msgid "changed our %s status to %s from %s"
-msgstr ""
-
-#: src/imexternal.cc:96
-#, c-format
-msgid "executed external action %s"
-msgstr ""
-
-#: src/hooks/aimhook.cc:73
-#, fuzzy
-msgid "+ [aim] connecting to the server"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/aimhook.cc:84
-#, fuzzy
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ conectarea la serverul icq nu a fost posibila"
-
-#: src/hooks/aimhook.cc:185
-#, fuzzy, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/aimhook.cc:194
-#, fuzzy, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/aimhook.cc:283
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr ""
-
-#: src/hooks/aimhook.cc:317
-#, fuzzy
-msgid "+ [aim] logged in"
-msgstr "+ conectat"
-
-#: src/hooks/aimhook.cc:347
-#, fuzzy
-msgid "+ [aim] disconnected from the network"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/aimhook.cc:365
-#, fuzzy
-msgid "aim connection failed"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/aimhook.cc:367
-#, fuzzy, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/aimhook.cc:384
-msgid "+ [aim] password was changed successfully"
-msgstr ""
-
-#: src/hooks/aimhook.cc:407
-msgid "The user has no profile information."
-msgstr ""
-
-#: src/hooks/aimhook.cc:504
-#, fuzzy
-msgid "+ [aim] password sent"
-msgstr "Parola: "
-
-#: src/hooks/irchook.cc:90
-#, fuzzy
-msgid "+ [irc] connecting to the server"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/irchook.cc:102
-#, fuzzy
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ conectarea la serverul icq nu a fost posibila"
-
-#: src/hooks/irchook.cc:416
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr ""
-
-#: src/hooks/irchook.cc:603
-#, fuzzy
-msgid "+ [irc] logged in"
-msgstr "+ conectat"
-
-#: src/hooks/irchook.cc:640
-#, fuzzy
-msgid "+ [irc] disconnected from the network"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/irchook.cc:654
-#, fuzzy, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ conectare la serverul icq"
-
-#: src/hooks/irchook.cc:671
-msgid "+ [irc] nickname was changed successfully"
-msgstr ""
-
-#: src/hooks/irchook.cc:742
-msgid "On channels: "
-msgstr ""
-
-#: src/hooks/irchook.cc:1023
-#, c-format
-msgid "Kicked by %s; reason: %s"
-msgstr ""
-
-#: src/hooks/irchook.cc:1070
-#, c-format
-msgid "The user has changed their nick from %s to %s"
 msgstr ""
 
 #: src/icqface.h:227
