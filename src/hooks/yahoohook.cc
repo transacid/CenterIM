@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.61 2002/10/29 17:30:32 konst Exp $
+* $Id: yahoohook.cc,v 1.62 2002/11/01 12:13:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -50,8 +50,10 @@ static int stat2int[imstatus_size] = {
 
 yahoohook::yahoohook() : fonline(false) {
     fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::files);
+    fcapabs.insert(hookcapab::conferencing);
 
     pager_host[0] = pager_port[0] = filetransfer_host[0] = filetransfer_port[0] = 0;
 }
@@ -323,12 +325,10 @@ imstatus yahoohook::yahoo2imstatus(int status) {
 	case YAHOO_STATUS_AVAILABLE:
 	    st = available;
 	    break;
-	case YAHOO_STATUS_CUSTOM:
-	    st = freeforchat;
-	    break;
 	case YAHOO_STATUS_BUSY:
 	    st = dontdisturb;
 	    break;
+	case YAHOO_STATUS_CUSTOM:
 	case YAHOO_STATUS_BRB:
 	case YAHOO_STATUS_IDLE:
 	case YAHOO_STATUS_ONPHONE:
@@ -410,6 +410,8 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
     imcontact ic(nick, yahoo);
     icqcontact *c = clist.get(ic);
 
+    awaymessages[nick] = rusconv("wk", message);
+
     if(!c) {
 	c = clist.addnew(ic, false);
     }
@@ -418,7 +420,6 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
 	logger.putonline(ic, c->getstatus(), yahoo2imstatus(st));
 
 	c->setstatus(yahoo2imstatus(st));
-	c->setabout(rusconv("wk", message));
 
 	if(c->getstatus() == offline) {
 	    map<string, Encoding>::iterator i = userenc.find(nick);
@@ -508,6 +509,71 @@ void yahoohook::replytransfer(const imfile &fr, bool accept, const string &local
 void yahoohook::aborttransfer(const imfile &fr) {
     face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsCancel, 0, 0);
     fvalid.erase(fr);
+}
+
+void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
+    string room;
+    icqcontact *c;
+    vector<string>::const_iterator i;
+
+    searchdest = &dest;
+    room = params.room.substr(1);
+
+    if(!params.room.empty()) {
+	i = confmembers[room].begin();
+
+	while(i != confmembers[room].end()) {
+	    if(c = clist.get(imcontact(*i, yahoo)))
+		searchdest->additem(conf.getcolor(cp_clist_yahoo),
+		    c, (string) " " + *i);
+
+	    ++i;
+	}
+    }
+
+    face.findready();
+
+    face.log(_("+ [yahoo] members list fetching finished, %d found"),
+	searchdest->getcount());
+
+    searchdest->redraw();
+    searchdest = 0;
+}
+
+void yahoohook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
+    int i;
+    string room = confid.nickname.substr(1);
+
+    char **who = new char*[lst.size()+1];
+    who[lst.size()] = 0;
+
+    vector<imcontact>::const_iterator il = lst.begin();
+    while(il != lst.end()) {
+	who[il-lst.begin()] = strdup(il->nickname.c_str());
+	++il;
+    }
+
+    auto_ptr<char> cname(strdup(room.c_str()));
+    yahoo_conference_invite(cid, who, cname.get(), _("Please join my conference."));
+
+    for(i = 0; who[i]; delete who[i++]);
+    delete who;
+}
+
+void yahoohook::requestawaymsg(const imcontact &ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(c) {
+	if(awaymessages.find(ic.nickname) != awaymessages.end()) {
+	    em.store(imnotification(ic, string() + _("Custom status message:") + "\n\n" +
+		awaymessages[ic.nickname]));
+
+	} else {
+	    face.log(_("+ [yahoo] cannot fetch away msg from %s, %s"),
+		c->getdispnick().c_str(), ic.totext().c_str());
+
+	}
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -633,7 +699,13 @@ void yahoohook::got_conf_invite(guint32 id, char *who, char *room, char *msg, ch
 }
 
 void yahoohook::conf_userdecline(guint32 id, char *who, char *room, char *msg) {
-    face.log("conf_userdecline");
+    icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
+    char buf[512];
+
+    if(c) {
+	sprintf(buf, _("The user %s has declined your invitation to join the conference"), rushtmlconv("wk", who).c_str());
+	em.store(imnotification(c, buf));
+    }
 }
 
 void yahoohook::conf_userjoin(guint32 id, char *who, char *room) {

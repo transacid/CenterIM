@@ -49,6 +49,7 @@ class centericq {
 
 	void setauto(imstatus astatus);
 	void joinleave(icqcontact *c);
+	void createconference(const imcontact &ic);
 
     public:
 	centericq();

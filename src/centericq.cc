@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.131 2002/10/29 09:49:12 konst Exp $
+* $Id: centericq.cc,v 1.132 2002/11/01 12:13:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -253,18 +253,7 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_INFO:
-		if(c->getdesc() != contactroot) {
-		    if(!ischannel(c)) {
-			userinfo(c->getdesc());
-
-		    } else {
-			imsearchparams s;
-			s.pname = c->getdesc().pname;
-			s.room = c->getdesc().nickname;
-			face.findresults(s);
-
-		    }
-		}
+		userinfo(c->getdesc());
 		break;
 
 	    case ACT_REMOVE:
@@ -313,6 +302,10 @@ void centericq::mainloop() {
 
 	    case ACT_PING:
 		gethook(c->getdesc().pname).ping(c->getdesc());
+		break;
+
+	    case ACT_CONFER:
+		createconference(c);
 		break;
 
 	    case ACT_JOIN:
@@ -460,18 +453,27 @@ void centericq::find() {
 }
 
 void centericq::userinfo(const imcontact &cinfo) {
-    imcontact realuin = cinfo;
-    icqcontact *c = clist.get(cinfo);
+    if(ischannel(cinfo)) {
+	imsearchparams s;
+	s.pname = cinfo.pname;
+	s.room = cinfo.nickname;
+	face.findresults(s, true);
 
-    if(!c) {
-	c = clist.get(contactroot);
-	realuin = contactroot;
-	c->clear();
-	gethook(cinfo.pname).requestinfo(cinfo);
-    }
+    } else {
+	imcontact realuin = cinfo;
+	icqcontact *c = clist.get(cinfo);
 
-    if(c) {
-	face.userinfo(cinfo, realuin);
+	if(!c) {
+	    c = clist.get(contactroot);
+	    realuin = contactroot;
+	    c->clear();
+	    gethook(cinfo.pname).requestinfo(cinfo);
+	}
+
+	if(c) {
+	    face.userinfo(cinfo, realuin);
+	}
+
     }
 }
 
@@ -1353,6 +1355,30 @@ void centericq::joinleave(icqcontact *c) {
     if(ic != channels.end()) {
 	ic->joined = !ic->joined;
 	irhook.setautochannels(channels);
+    }
+}
+
+void centericq::createconference(const imcontact &ic) {
+    int apid = 0;
+    imcontact confid("", ic.pname);
+
+    set<protocolname> ps;
+    ps.insert(ic.pname);
+
+    face.muins.clear();
+    face.muins.push_back(ic);
+
+    if(face.multicontacts(_("Invite to conference.."), ps))
+    if(!face.muins.empty()) {
+	do {
+	    confid.nickname = (string) "#" + conf.getourid(ic.pname).nickname + "-" + i2str(getpid() + ++apid);
+	} while(clist.get(confid));
+
+	icqcontact *nc = clist.addnew(confid);
+	nc->setstatus(available);
+
+	abstracthook &hook = gethook(ic.pname);
+	hook.conferencecreate(nc, face.muins);
     }
 }
 

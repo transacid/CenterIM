@@ -20,7 +20,8 @@ struct hookcapab {
 	optionalpassword,
 	visibility,
 	version,
-	ping
+	ping,
+	conferencing
     };
 };
 
@@ -79,6 +80,9 @@ class abstracthook {
 	virtual void replytransfer(const imfile &fr, bool accept,
 	    const string &localpath = "");
 	virtual void aborttransfer(const imfile &fr);
+
+	virtual void conferencecreate(const imcontact &confid,
+	    const vector<imcontact> &lst);
 };
 
 abstracthook &gethook(protocolname pname);

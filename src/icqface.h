@@ -25,7 +25,7 @@ enum interfaceAction {
     ACT_PING, ACT_EDITUSER, ACT_VISIBLELIST, ACT_INVISLIST, ACT_QUICKFIND,
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
-    ACT_TRANSFERS
+    ACT_CONFER, ACT_TRANSFERS
 };
 
 extern class centericq cicq;
@@ -72,7 +72,8 @@ class icqface {
 
 	ofstream flog;
 	vector<string> extractedurls, lastlog;
-	string fstatus;
+
+	mutable string fstatus;
 
 	linkedlist workareas;
 
@@ -140,6 +141,7 @@ class icqface {
 
 	void renderchathistory();
 	bool sprofmanager(string &name, string &act);
+	void showeventbottom(const imcontact &ic) const;
 
     public:
 	int extk;
@@ -173,7 +175,7 @@ class icqface {
 	void log(const string &text);
 	void log(const char *fmt, ...);
 
-	void status(const string &text);
+	void status(const string &text) const;
 
 	bool changestatus(protocolname &pname, imstatus &st);
 	int contextmenu(icqcontact *c);
@@ -187,7 +189,7 @@ class icqface {
 	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
 
 	bool finddialog(imsearchparams &s);
-	bool findresults(const imsearchparams &sp);
+	bool findresults(const imsearchparams &sp, bool auto = false);
 	void findready();
 
 	bool updatedetails(icqcontact *c = 0, protocolname upname = icq);

@@ -122,6 +122,10 @@ void abstracthook::replytransfer(const imfile &fr, bool accept, const string &lo
 void abstracthook::aborttransfer(const imfile &fr) {
 }
 
+void abstracthook::conferencecreate(const imcontact &confid,
+const vector<imcontact> &lst) {
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.150 2002/10/28 11:29:40 konst Exp $
+* $Id: icqface.cc,v 1.151 2002/11/01 12:13:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -260,6 +260,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_PING]      = _(" Ping");
 	actnames[ACT_VERSION]   = _(" Fetch version info");
 	actnames[ACT_FILE]      = _(" Send file(s)");
+	actnames[ACT_CONFER]    = _(" Invite to conference..");
     }
 
     if(ischannel(c)) {
@@ -308,6 +309,7 @@ int icqface::contextmenu(icqcontact *c) {
 		if(capab.count(hookcapab::fetchaway)) actions.push_back(ACT_FETCHAWAY);
 		if(capab.count(hookcapab::version)) actions.push_back(ACT_VERSION);
 		if(capab.count(hookcapab::ping)) actions.push_back(ACT_PING);
+		if(capab.count(hookcapab::conferencing)) actions.push_back(ACT_CONFER);
 	    }
 	}
 
@@ -683,7 +685,7 @@ void icqface::fillcontactlist() {
     }
 }
 
-bool icqface::findresults(const imsearchparams &sp) {
+bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     bool finished = false, ret = false;
     unsigned int ffuin;
     icqcontact *c;
@@ -698,9 +700,10 @@ bool icqface::findresults(const imsearchparams &sp) {
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
 	conf.getcolor(cp_main_selected)));
+
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	conf.getcolor(cp_main_selected), _("Details"), _("Message"), _("Add"),
-	_("New search"), 0));
+	fauto ? 0 : _("New search"), 0));
 
     db.addautokeys();
     db.redraw();
@@ -1574,7 +1577,7 @@ void icqface::log(const string &atext) {
     }
 }
 
-void icqface::status(const string &text) {
+void icqface::status(const string &text) const {
     attrset(conf.getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
     kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", (fstatus = text).c_str());
@@ -1737,6 +1740,14 @@ void icqface::showextractedurls() {
     }
 }
 
+void icqface::showeventbottom(const imcontact &ic) const {
+    if(ischannel(ic)) {
+	status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? members, ESC cancel"));
+    } else {
+	status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
+    }
+}
+
 bool icqface::eventedit(imevent &ev) {
     bool r;
     texteditor editor;
@@ -1759,7 +1770,7 @@ bool icqface::eventedit(imevent &ev) {
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
 	_("Outgoing %s to %s"), streventname(ev.gettype()), ev.getcontact().totext().c_str());
 
-    status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
+    showeventbottom(ev.getcontact());
 
     if(ev.gettype() == imevent::message) {
 	immessage *m = static_cast<immessage *>(&ev);
@@ -2068,7 +2079,7 @@ void icqface::chat(const imcontact &ic) {
     editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
 
-    status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
+    showeventbottom(ic);
 
     for(bool finished = false; !finished && clist.get(ic); ) {
 	renderchathistory();
@@ -2561,8 +2572,7 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    cicq.history(face.passinfo);
 	    break;
 	case ALT('?'):
-	    if(!ischannel(face.passinfo))
-		cicq.userinfo(face.passinfo);
+	    cicq.userinfo(face.passinfo);
 	    break;
 	case 27:
 	    return -1;
