@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.28 2001/12/03 16:30:15 konst Exp $
+* $Id: icqcontact.cc,v 1.29 2001/12/04 17:11:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,9 +38,8 @@ icqcontact::icqcontact(const imcontact adesc) {
 
     clear();
     for(i = 0; i < SOUND_COUNT; i++) sound[i] = "";
-    seq2 = nmsgs = lastread = 0;
+    nmsgs = lastread = 0;
     finlist = true;
-    msgdirect = !conf.getserveronly();
 
     cdesc = adesc;
 
@@ -106,111 +105,108 @@ const string icqcontact::getdirname() const {
 }
 
 void icqcontact::clear() {
-    int i;
-
-    seq2 = nmsgs = fupdated = infotryn = groupid = 0;
+    nmsgs = fupdated = groupid = 0;
     finlist = true;
     status = offline;
     cdesc = contactroot;
-    msgdirect = !conf.getserveronly();
 
-    nick = dispnick = firstname = lastname = primemail = secemail = oldemail =
-    city = state = phone = fax = street = cellular = wcity = wstate = wphone =
-    wfax = waddress = company = department = job = whomepage = homepage =
-    about = "";
+    binfo = basicinfo();
+    minfo = moreinfo();
+    winfo = workinfo();
 
-    for(i = 0; i < 4; i++) fint[i] = faf[i] = fbg[i] = "";
-    
-    lang1 = lang2 = lang3 = bday = bmonth = byear = age = gender = 0;
-    zip = wzip = occupation = 0;
-    country = wcountry = 0;
+    nick = dispnick = about = "";
     lastseen = 0;
-    utimezone = 0;
 }
 
 void icqcontact::save() {
-    FILE *f;
-    string fn = getdirname(), tname;
-    mkdir(fn.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
-    char buf[1024];
+    string tname;
+    ofstream f;
 
-    getcwd(buf, 1024);
+    mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
 
-    if(!chdir(fn.c_str())) {
-	if(f = fopen((tname = fn + "/lastread").c_str(), "w")) {
-	    fprintf(f, "%lu\n", lastread);
-	    fclose(f);
+    if(!access(getdirname().c_str(), W_OK)) {
+	tname = getdirname() + "/lastread";
+	f.open(tname.c_str());
+	if(f.is_open()) {
+	    f << lastread << endl;
+	    f.close();
+	    f.clear();
 	}
 
-	if(f = fopen((tname = fn + "/info").c_str(), "w")) {
-	    fprintf(f, "%s\n", nick.c_str());
-	    fprintf(f, "%s\n", firstname.c_str());
-	    fprintf(f, "%s\n", lastname.c_str());
-	    fprintf(f, "%s\n", primemail.c_str());
-	    fprintf(f, "%s\n", secemail.c_str());
-	    fprintf(f, "%s\n", oldemail.c_str());
-	    fprintf(f, "%s\n", city.c_str());
-	    fprintf(f, "%s\n", state.c_str());
-	    fprintf(f, "%s\n", phone.c_str());
-	    fprintf(f, "%s\n", fax.c_str());
-	    fprintf(f, "%s\n", street.c_str());
-	    fprintf(f, "%s\n", cellular.c_str());
-	    fprintf(f, "%lu\n", zip);
-	    fprintf(f, "%lu\n", country);
-	    fprintf(f, "%s\n", wcity.c_str());
-	    fprintf(f, "%s\n", wstate.c_str());
-	    fprintf(f, "%s\n", wphone.c_str());
-	    fprintf(f, "%s\n", wfax.c_str());
-	    fprintf(f, "%s\n", waddress.c_str());
-	    fprintf(f, "%lu\n", wzip);
-	    fprintf(f, "%lu\n", wcountry);
-	    fprintf(f, "%s\n", company.c_str());
-	    fprintf(f, "%s\n", department.c_str());
-	    fprintf(f, "%s\n", job.c_str());
-	    fprintf(f, "%lu\n", occupation);
-	    fprintf(f, "%s\n", whomepage.c_str());
-	    fprintf(f, "%d\n", age);
-	    fprintf(f, "%d\n", gender);
-	    fprintf(f, "%s\n", homepage.c_str());
-	    fprintf(f, "%d\n", lang1);
-	    fprintf(f, "%d\n", lang2);
-	    fprintf(f, "%d\n", lang3);
-	    fprintf(f, "%d\n", bday);
-	    fprintf(f, "%d\n", bmonth);
-	    fprintf(f, "%d\n", byear);
-	    fprintf(f, "%s\n", fint[0].c_str());
-	    fprintf(f, "%s\n", fint[1].c_str());
-	    fprintf(f, "%s\n", fint[2].c_str());
-	    fprintf(f, "%s\n", fint[3].c_str());
-	    fprintf(f, "%s\n", faf[0].c_str());
-	    fprintf(f, "%s\n", faf[1].c_str());
-	    fprintf(f, "%s\n", faf[2].c_str());
-	    fprintf(f, "%s\n", faf[3].c_str());
-	    fprintf(f, "%c%c%c\n", reqauth ? '1' : '0', webaware ? '1' : '0', pubip ? '1' : '0');
-	    fprintf(f, "%s\n", lastip.c_str());
-	    fprintf(f, "%s\n", dispnick.c_str());
-	    fprintf(f, "%lu\n", lastseen);
-	    fprintf(f, "%s\n", fbg[0].c_str());
-	    fprintf(f, "%s\n", fbg[1].c_str());
-	    fprintf(f, "%s\n", fbg[2].c_str());
-	    fprintf(f, "%s\n", fbg[3].c_str());
-	    fprintf(f, "%d\n", groupid);
-	    fprintf(f, "%d\n", utimezone);
-	    fclose(f);
+	tname = getdirname() + "/info";
+	f.open(tname.c_str());
+	if(f.is_open()) {
+	    f << nick << endl <<
+		binfo.fname << endl <<
+		binfo.lname << endl <<
+		binfo.email << endl <<
+		endl <<
+		endl <<
+		binfo.city << endl <<
+		binfo.state << endl <<
+		binfo.phone << endl <<
+		binfo.fax << endl <<
+		binfo.street << endl <<
+		binfo.cellular << endl <<
+		binfo.zip << endl <<
+		binfo.country << endl <<
+		winfo.city << endl <<
+		winfo.state << endl <<
+		winfo.phone << endl <<
+		winfo.fax << endl <<
+		winfo.street << endl <<
+		winfo.zip << endl <<
+		winfo.country << endl <<
+		winfo.company << endl <<
+		winfo.dept << endl <<
+		winfo.position << endl <<
+		endl <<
+		winfo.homepage << endl <<
+		(int) minfo.age << endl <<
+		(int) minfo.gender << endl <<
+		minfo.homepage << endl <<
+		endl <<
+		endl <<
+		endl <<
+		minfo.birth_day << endl <<
+		minfo.birth_month << endl <<
+		minfo.birth_year << endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		lastip << endl <<
+		dispnick << endl <<
+		lastseen << endl <<
+		endl <<
+		endl <<
+		endl <<
+		endl <<
+		groupid << endl;
+
+	    f.close();
+	    f.clear();
 	}
 
-	if(f = fopen((tname = fn + "/about").c_str(), "w")) {
-	    fprintf(f, "%s", about.c_str());
-	    fclose(f);
+	tname = getdirname() + "/about";
+	f.open(tname.c_str());
+	if(f.is_open()) {
+	    f << about;
+	    f.close();
+	    f.clear();
 	}
 
-	if(!finlist)
-	if(f = fopen((tname = fn + "/excluded").c_str(), "w")) {
-	    fclose(f);
+	if(!finlist) {
+	    tname = getdirname() + "/excluded";
+	    f.open(tname.c_str());
+	    if(f.is_open()) f.close();
 	}
     }
-
-    chdir(buf);
 }
 
 void icqcontact::load() {
@@ -229,62 +225,57 @@ void icqcontact::load() {
 	    freads(f, buf, 512);
 	    switch(i) {
 		case  0: nick = buf; break;
-		case  1: firstname = buf; break;
-		case  2: lastname = buf; break;
-		case  3: primemail = buf; break;
-		case  4: secemail = buf; break;
-		case  5: oldemail = buf; break;
-		case  6: city = buf; break;
-		case  7: state = buf; break;
-		case  8: phone = buf; break;
-		case  9: fax = buf; break;
-		case 10: street = buf; break;
-		case 11: cellular = buf; break;
-		case 12: zip = strtoul(buf, 0, 0); break;
-		case 13: country = strtoul(buf, 0, 0); break;
-		case 14: wcity = buf; break;
-		case 15: wstate = buf; break;
-		case 16: wphone = buf; break;
-		case 17: wfax = buf; break;
-		case 18: waddress = buf; break;
-		case 19: wzip = strtoul(buf, 0, 0); break;
-		case 20: wcountry = strtoul(buf, 0, 0); break;
-		case 21: company = buf; break;
-		case 22: department = buf; break;
-		case 23: job = buf; break;
-		case 24: occupation = strtoul(buf, 0, 0); break;
-		case 25: whomepage = buf; break;
-		case 26: age = atoi(buf); break;
-		case 27: gender = atoi(buf); break;
-		case 28: homepage = buf; break;
-		case 29: lang1 = atoi(buf); break;
-		case 30: lang2 = atoi(buf); break;
-		case 31: lang3 = atoi(buf); break;
-		case 32: bday = atoi(buf); break;
-		case 33: bmonth = atoi(buf); break;
-		case 34: byear = atoi(buf); break;
-		case 35: fint[0] = buf; break;
-		case 36: fint[1] = buf; break;
-		case 37: fint[2] = buf; break;
-		case 38: fint[3] = buf; break;
-		case 39: faf[0] = buf; break;
-		case 40: faf[1] = buf; break;
-		case 41: faf[2] = buf; break;
-		case 42: faf[3] = buf; break;
-		case 43:
-		    reqauth = buf[0] == '1';
-		    webaware = buf[1] == '1';
-		    pubip = buf[2] == '1';
-		    break;
+		case  1: binfo.fname = buf; break;
+		case  2: binfo.lname = buf; break;
+		case  3: binfo.email = buf; break;
+		case  4: break;
+		case  5: break;
+		case  6: binfo.city = buf; break;
+		case  7: binfo.state = buf; break;
+		case  8: binfo.phone = buf; break;
+		case  9: binfo.fax = buf; break;
+		case 10: binfo.street = buf; break;
+		case 11: binfo.cellular = buf; break;
+		case 12: binfo.zip = strtoul(buf, 0, 0); break;
+		case 13: binfo.country = buf; break;
+		case 14: winfo.city = buf; break;
+		case 15: winfo.state = buf; break;
+		case 16: winfo.phone = buf; break;
+		case 17: winfo.fax = buf; break;
+		case 18: winfo.street = buf; break;
+		case 19: winfo.zip = strtoul(buf, 0, 0); break;
+		case 20: winfo.country = buf; break;
+		case 21: winfo.company = buf; break;
+		case 22: winfo.dept = buf; break;
+		case 23: winfo.position = buf; break;
+		case 24: break;
+		case 25: winfo.homepage = buf; break;
+		case 26: minfo.age = atoi(buf); break;
+		case 27: minfo.gender = (imgender) atoi(buf); break;
+		case 28: minfo.homepage = buf; break;
+		case 29: break;
+		case 30: break;
+		case 31: break;
+		case 32: minfo.birth_day = atoi(buf); break;
+		case 33: minfo.birth_month = atoi(buf); break;
+		case 34: minfo.birth_year = atoi(buf); break;
+		case 35: break;
+		case 36: break;
+		case 37: break;
+		case 38: break;
+		case 39: break;
+		case 40: break;
+		case 41: break;
+		case 42: break;
+		case 43: break;
 		case 44: lastip = buf; break;
 		case 45: dispnick = buf; break;
 		case 46: lastseen = strtoul(buf, 0, 0); break;
-		case 47: fbg[0] = buf; break;
-		case 48: fbg[1] = buf; break;
-		case 49: fbg[2] = buf; break;
-		case 50: fbg[3] = buf; break;
+		case 47: break;
+		case 48: break;
+		case 49: break;
+		case 50: break;
 		case 51: groupid = atoi(buf); break;
-		case 52: utimezone = atoi(buf); break;
 	    }
 	}
 	fclose(f);
@@ -324,8 +315,8 @@ bool icqcontact::isbirthday() const {
     memset(&tbd, 0, sizeof(tbd));
 
     tbd.tm_year = tcur->tm_year;
-    tbd.tm_mday = bday;
-    tbd.tm_mon = bmonth-1;
+    tbd.tm_mday = minfo.birth_day;
+    tbd.tm_mon = minfo.birth_month-1;
 
     if(tbd.tm_mday == tcur->tm_mday)
     if(tbd.tm_mon == tcur->tm_mon) {
@@ -414,11 +405,6 @@ void icqcontact::setlastread(time_t flastread) {
     scanhistory();
 }
 
-void icqcontact::setseq2(unsigned short fseq2) {
-    seq2 = fseq2;
-    unsetupdated();
-}
-
 void icqcontact::unsetupdated() {
     fupdated = 0;
 }
@@ -428,124 +414,67 @@ void icqcontact::setmsgcount(int n) {
     face.relaxedupdate();
 }
 
-void icqcontact::getinfo(string &fname, string &lname, string &fprimemail,
-string &fsecemail, string &foldemail, string &fcity,
-string &fstate, string &fphone, string &ffax, string &fstreet,
-string &fcellular, unsigned long &fzip, unsigned short &fcountry) const {
-    fname = firstname;
-    lname = lastname;
-    fprimemail = primemail;
-    fsecemail = secemail;
-    foldemail = oldemail;
-    fcity = city;
-    fstate = state;
-    fphone = phone;
-    ffax = fax;
-    fstreet = street;
-    fcellular = cellular;
-    fzip = zip;
-    fcountry = country;
-}
+#define recode(f) binfo.f = rusconv("wk", binfo.f)
 
-void icqcontact::setinfo(const string fname, const string lname,
-const string fprimemail, const string fsecemail, const string foldemail,
-const string fcity, const string fstate, const string fphone,
-const string ffax, const string fstreet, const string fcellular,
-unsigned long fzip, unsigned short fcountry) {
-    firstname = tosane(fname);
-    lastname = tosane(lname);
-    primemail = tosane(fprimemail);
-    secemail = tosane(fsecemail);
-    oldemail = tosane(foldemail);
-    city = tosane(fcity);
-    state = tosane(fstate);
-    phone = tosane(fphone);
-    fax = tosane(ffax);
-    street = tosane(fstreet);
-    cellular = tosane(fcellular);
-    zip = fzip;
-    country = fcountry;
+void icqcontact::setbasicinfo(const basicinfo &ainfo) {
+    binfo = ainfo;
     fupdated++;
+
+    recode(fname);
+    recode(lname);
+    recode(email);
+    recode(city);
+    recode(state);
+    recode(phone);
+    recode(fax);
+    recode(street);
+    recode(cellular);
+    recode(country);
 }
 
-void icqcontact::getmoreinfo(unsigned char &fage, unsigned char &fgender,
-string &fhomepage, unsigned char &flang1, unsigned char &flang2,
-unsigned char &flang3, unsigned char &fbday, unsigned char &fbmonth,
-unsigned char &fbyear) const {
-    fage = age;
-    fgender = gender;
-    fhomepage = homepage;
-    flang1 = lang1;
-    flang2 = lang2;
-    flang3 = lang3;
-    fbday = bday;
-    fbmonth = bmonth;
-    fbyear = byear;
-}
+#undef recode
+#define recode(f) minfo.f = rusconv("wk", minfo.f)
 
-void icqcontact::setmoreinfo(unsigned char fage, unsigned char fgender,
-const string fhomepage, unsigned char flang1, unsigned char flang2,
-unsigned char flang3, unsigned char fbday, unsigned char fbmonth,
-unsigned char fbyear) {
-    age = fage;
-    gender = fgender;
-    homepage = tosane(fhomepage);
-    lang1 = flang1;
-    lang2 = flang2;
-    lang3 = flang3;
-    bday = fbday;
-    bmonth = fbmonth;
-    byear = fbyear;
+void icqcontact::setmoreinfo(const moreinfo &ainfo) {
+    minfo = ainfo;
     fupdated++;
+
+    recode(homepage);
 }
 
-void icqcontact::getworkinfo(string &fwcity, string &fwstate, string &fwphone,
-string &fwfax, string &fwaddress, unsigned long &fwzip,
-unsigned short &fwcountry, string &fcompany, string &fdepartment,
-string &fjob, unsigned short &foccupation, string &fwhomepage) const {
-    fwcity = wcity;
-    fwstate = wstate;
-    fwphone = wphone;
-    fwfax = wfax;
-    fwaddress = waddress;
-    fwzip = wzip;
-    fwcountry = wcountry;
-    fcompany = company;
-    fdepartment = department;
-    fjob = job;
-    foccupation = occupation;
-    fwhomepage = whomepage;
-}
+#undef recode
+#define recode(f) winfo.f = rusconv("wk", winfo.f)
 
-void icqcontact::setworkinfo(string fwcity, const string fwstate,
-const string fwphone, const string fwfax, const string fwaddress,
-unsigned long fwzip, unsigned short fwcountry, const string fcompany,
-const string fdepartment, const string fjob, unsigned short foccupation,
-const string fwhomepage) {
-    wcity = tosane(fwcity);
-    wstate = tosane(fwstate);
-    wphone = tosane(fwphone);
-    wfax = tosane(fwfax);
-    waddress = tosane(fwaddress);
-    wzip = fwzip;
-    wcountry = fwcountry;
-    company = tosane(fcompany);
-    department = tosane(fdepartment);
-    job = tosane(fjob);
-    occupation = foccupation;
-    whomepage = tosane(fwhomepage);
+void icqcontact::setworkinfo(const workinfo &ainfo) {
+    winfo = ainfo;
     fupdated++;
+
+    recode(city);
+    recode(state);
+    recode(phone);
+    recode(fax);
+    recode(street);
+    recode(country);
+    recode(company);
+    recode(dept);
+    recode(position);
+    recode(homepage);
 }
 
-void icqcontact::getinterests(string &int1, string &int2, string &int3, string &int4) const {
-    int1 = fint[0];
-    int2 = fint[1];
-    int3 = fint[2];
-    int4 = fint[3];
+const icqcontact::basicinfo &icqcontact::getbasicinfo() const {
+    return binfo;
+}
+
+const icqcontact::moreinfo &icqcontact::getmoreinfo() const {
+    return minfo;
+}
+
+const icqcontact::workinfo &icqcontact::getworkinfo() const {
+    return winfo;
 }
 
 void icqcontact::setabout(const string data) {
-    about = data;
+    about = rusconv("wk", data);
     fupdated++;
 }
 
@@ -621,18 +550,6 @@ void icqcontact::playsound(int event) const {
     }
 }
 
-void icqcontact::setsecurity(bool freqauth, bool fwebaware, bool fpubip) {
-    reqauth = freqauth;
-    webaware = fwebaware;
-    pubip = fpubip;
-}
-
-void icqcontact::getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip) const {
-    freqauth = reqauth;
-    fwebaware = webaware;
-    fpubip = pubip;
-}
-
 void icqcontact::setlastip(const string flastip) {
     lastip = flastip;
 }
@@ -651,10 +568,6 @@ time_t icqcontact::getlastread() const {
 
 imstatus icqcontact::getstatus() const {
     return status;
-}
-
-unsigned short icqcontact::getseq2() const {
-    return seq2;
 }
 
 int icqcontact::getmsgcount() const {
@@ -681,45 +594,8 @@ time_t icqcontact::getlastseen() const {
     return lastseen;
 }
 
-void icqcontact::setinterests(const string nint[]) {
-    for(int i = 0; i < 4; i++) fint[i] = tosane(nint[i]);
-    fupdated++;
-}
-
-void icqcontact::setaffiliations(const string naf[]) {
-    for(int i = 0; i < 4; i++) faf[i] = tosane(naf[i]);
-}
-
-void icqcontact::setbackground(const string nbg[]) {
-    for(int i = 0; i < 4; i++) fbg[i] = tosane(nbg[i]);
-}
-
-void icqcontact::getaffiliations(string &naf1, string &naf2, string &naf3,
-string &naf4) const {
-    naf1 = faf[0];
-    naf2 = faf[1];
-    naf3 = faf[2];
-    naf4 = faf[3];
-}
-
-void icqcontact::getbackground(string &nbg1, string &nbg2, string &nbg3,
-string &nbg4) const {
-    nbg1 = fbg[0];
-    nbg2 = fbg[1];
-    nbg3 = fbg[2];
-    nbg4 = fbg[3];
-}
-
 char icqcontact::getshortstatus() const {
     return imstatus2char[status];
-}
-
-int icqcontact::getinfotryn() const {
-    return infotryn;
-}
-
-void icqcontact::incinfotryn() {
-    infotryn++;
 }
 
 bool icqcontact::operator > (const icqcontact &acontact) const {
@@ -740,22 +616,6 @@ const string icqcontact::getpostponed() const {
     return postponed;
 }
 
-void icqcontact::setmsgdirect(bool flag) {
-    if(cdesc.pname == icq)
-	msgdirect = flag;
-}
-
-bool icqcontact::getmsgdirect() const {
-    switch(cdesc.pname) {
-	case icq:
-	    if(ihook.isdirectopen(cdesc))
-		return true;
-	    break;
-    }
-
-    return msgdirect && (islocal() || !conf.getserveronly());
-}
-
 void icqcontact::setgroupid(int agroupid) {
     groupid = agroupid;
 }
@@ -764,52 +624,25 @@ int icqcontact::getgroupid() const {
     return groupid;
 }
 
-const string icqcontact::gettimezone() const {
-    string r;
-/*
-    time_t t = time(0), rt;
-
-    r = (utimezone > 0 ? "-" : "+");
-    r += i2str(abs(utimezone/2)) + ":" + (utimezone%2 ? "30" : "00");
-
-    rt = t+icq_GetSystemTimeZone()*1800;
-    rt -= utimezone*1800;
-
-    r += (string) ", " + ctime(&rt);
-*/
-
-    return r;
-}
-
-bool icqcontact::islocal() const {
-    vector<string> addrs;
-    vector<string>::iterator i;
-    string lc, a;
-
-    /*
-    *
-    * I know, it's stupid. Just a fast solution.
-    *
-    */
-
-    addrs.push_back("127.");
-    addrs.push_back("192.");
-    addrs.push_back("172.");
-    addrs.push_back("154.");
-    addrs.push_back("10.");
-
-    lc = lastip;
-
-    while(!lc.empty()) {
-	a = getword(lc);
-	for(i = addrs.begin(); i != addrs.end(); i++) {
-	    if(a.substr(0, i->size()) == *i) return true;
-	}
-    }
-
-    return false;
-}
-
 const imcontact icqcontact::getdesc() const {
     return cdesc;
+}
+
+// ----------------------------------------------------------------------------
+
+const string icqcontact::moreinfo::strbirthdate() const {
+    string r;
+
+    static const string smonths[12] = {
+	_("Jan"), _("Feb"), _("Mar"), _("Apr"),
+	_("May"), _("Jun"), _("Jul"), _("Aug"),
+	_("Sep"), _("Oct"), _("Nov"), _("Dec")
+    };
+
+    if((birth_day > 0) && (birth_day <= 31))
+    if((birth_month > 0) && (birth_month <= 12)) {
+	r = i2str(birth_day) + "-" + smonths[birth_month-1] + "-" + i2str(birth_year);
+    }
+
+    return r;
 }

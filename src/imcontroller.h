@@ -8,13 +8,13 @@ struct imsearchparams {
 	onlineonly = false;
 	uin = 0;
 	minage = maxage = country = 0;
-	gender = language = 0;
+	gender = genderUnspec;
     };
 
     bool onlineonly;
     unsigned int uin;
     unsigned short minage, maxage, country;
-    unsigned char gender, language;
+    imgender gender;
     string firstname, lastname, nick, city, state;
     string company, department, position, email;
     protocolname pname;

@@ -27,6 +27,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	void statuschanged_cb(MyStatusChangeEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
+	const string getcountryname(int code) const;
 
     public:
 	icqhook();

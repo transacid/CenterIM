@@ -124,10 +124,11 @@ class icqface {
 	int showicq(unsigned int uin, const string text, char imt, int options = 0);
 
 	void gendetails(treeview *tree, icqcontact *c = 0);
-	void selectgender(unsigned char &f);
+	void selectgender(imgender &f);
+/*
 	void selectcountry(unsigned short &f);
-	void selectoccupation(unsigned short &f);
 	void selectlanguage(unsigned char &f);
+*/
 	void editabout(string &fabout);
 
 	void saveworkarea();
@@ -209,10 +210,19 @@ extern icqface face;
 
 string getbdate(unsigned char fbday, unsigned char fbmonth, unsigned char fbyear);
 
-const char *strgender(unsigned char fgender);
-const char *stryesno(bool i);
 const char *strregsound(regsound s);
 const char *strregcolor(regcolor c);
 const char *strint(unsigned int i);
+
+static const char *stryesno[true+1] = {
+    _("No"),
+    _("Yes")
+};
+
+static const char *strgender[imgender_size] = {
+    _("Not specified"),
+    _("Male"),
+    _("Female")
+};
 
 #endif

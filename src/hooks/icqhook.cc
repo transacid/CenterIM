@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.11 2001/12/03 23:07:07 konst Exp $
+* $Id: icqhook.cc,v 1.12 2001/12/04 17:11:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,8 @@
 #include "icqcontacts.h"
 #include "accountmanager.h"
 #include "centericq.h"
+
+#include "userinfoconstants.h"
 
 #define PERIOD_ICQPING  60
 
@@ -180,16 +182,12 @@ bool icqhook::enabled() const {
 
 unsigned long icqhook::sendmessage(const icqcontact *c, const string text) {
     NormalMessageEvent *sv;
+    Contact ic(c->getdesc().uin);
 
-    if(c->getstatus() != offline) {
-	Contact ic(c->getdesc().uin);
-	sv = new NormalMessageEvent(&ic, rusconv("kw", text));
-	cli.SendEvent(sv);
-	return 1;
-    }
+    sv = new NormalMessageEvent(&ic, rusconv("kw", text));
+    cli.SendEvent(sv);
 
-    return 0;
-
+    return 1;
 }
 
 void icqhook::sendnewuser(const imcontact c) {
@@ -198,10 +196,39 @@ void icqhook::sendnewuser(const imcontact c) {
 }
 
 void icqhook::setautostatus(imstatus st) {
+    static Status stat2int[imstatus_size] = {
+	STATUS_OFFLINE,
+	STATUS_ONLINE,
+	 STATUS_OFFLINE,
+	STATUS_FREEFORCHAT,
+	STATUS_DND,
+	STATUS_OCCUPIED,
+	STATUS_NA,
+	STATUS_AWAY
+    };
+
+    if(st != offline) {
+	if(getstatus() == offline) {
+	    connect();
+	} else {
+	    cli.setInvisible(st == invisible);
+	    cli.setStatus(stat2int[st]);
+	}
+    } else {
+	if(getstatus() != offline) {
+	    disconnect();
+	}
+    }
 }
 
 imstatus icqhook::getstatus() const {
-    return icq2imstatus(cli.getStatus());
+    if(!fonline) {
+	return offline;
+    } else if(cli.getInvisible()) {
+	return invisible;
+    } else {
+	return icq2imstatus(cli.getStatus());
+    }
 }
 
 bool icqhook::regconnect(const string aserv) {
@@ -240,6 +267,18 @@ void icqhook::requestinfo(const imcontact c) {
     }
 }
 
+const string icqhook::getcountryname(int code) const {
+    int i;
+
+    for(i = 0; i < Country_table_size; i++) {
+	if(Country_table[i].code == code) {
+	    return Country_table[i].name;
+	}
+    }
+
+    return "";
+}
+
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -249,9 +288,30 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {
+    string msg;
+
+    static const string reasons[DisconnectedEvent::FAILED_UNKNOWN+1] = {
+	_("as requested"),
+	_("socket problems"),
+	_("bad username"),
+	_("turboing"),
+	_("bad password"),
+	_("username and password mismatch"),
+	_("already logged"),
+	""
+    };
+
     fds.clear();
     clist.setoffline(icq);
     fonline = false;
+
+    msg = _("+ [icq] disconnected");
+    if(!reasons[ev->getReason()].empty()) {
+	msg += ", ";
+	msg += reasons[ev->getReason()];
+    }
+
+    face.log(msg);
 }
 
 bool icqhook::messaged_cb(MessageEvent *ev) {
@@ -333,31 +393,39 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 	    if(dynamic_cast<UserInfoChangeEvent*>(ev)) {
 		Contact *ic = cli.getContact(ev->getUIN());
 
+		icqcontact::basicinfo cbinfo;
 		MainHomeInfo &home = ic->getMainHomeInfo();
+
+		cbinfo.fname = ic->getFirstName();
+		cbinfo.lname = ic->getLastName();
+		cbinfo.email = ic->getEmail();
+		cbinfo.city = home.city;
+		cbinfo.state = home.state;
+		cbinfo.phone = home.phone;
+		cbinfo.fax = home.fax;
+		cbinfo.street = home.street;
+		cbinfo.cellular = home.cellular;
+		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
+		cbinfo.country = getcountryname(home.country);
+
+		icqcontact::moreinfo cminfo;
 		HomepageInfo &hpage = ic->getHomepageInfo();
-//                WorkInfo &work = ic->getWorkInfo();
+
+		cminfo.age = hpage.age;
+		cminfo.gender = genderUnspec;
+		cminfo.homepage = hpage.homepage;
+		cminfo.birth_day = hpage.birth_day;
+		cminfo.birth_month = hpage.birth_month;
+		cminfo.birth_year = hpage.birth_year;
 
 		if(c->getnick() == c->getdispnick()) {
 		    c->setdispnick(ic->getAlias());
 		}
 
 		c->setnick(ic->getAlias());
-
-		c->setinfo(ic->getFirstName(), ic->getLastName(),
-		    ic->getEmail(), "", "", home.city, home.state,
-		    home.phone, home.fax, home.street, home.cellular,
-		    atol(home.zip.c_str()), home.country);
-
-		c->setmoreinfo(hpage.age, hpage.sex, hpage.homepage,
-		    hpage.lang1, hpage.lang2, hpage.lang3, hpage.birth_day,
-		    hpage.birth_month, hpage.birth_year);
-
-/*
-		c->setworkinfo(work.city, work.state, "",
-		    "", work.street, atol(work.zip.c_str()),
-		    work.country, work.company_name, work.company_dept,
-		    work.company_position, 0, work.company_web);
-*/
+		c->setbasicinfo(cbinfo);
+		c->setmoreinfo(cminfo);
+		c->setabout(ic->getAboutInfo());
 	    }
 	    break;
 

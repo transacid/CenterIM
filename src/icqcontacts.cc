@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.22 2001/12/03 16:30:15 konst Exp $
+* $Id: icqcontacts.cc,v 1.23 2001/12/04 17:11:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,8 @@ icqcontacts::~icqcontacts() {
 
 icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
     icqcontact *c = new icqcontact(cinfo);
-    string nnick;
+    icqcontact::moreinfo m;
+    icqcontact::basicinfo b;
 
     switch(cinfo.pname) {
 	case icq:
@@ -50,17 +51,24 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	case yahoo:
 	    c->setnick(cinfo.nickname);
 	    c->setdispnick(cinfo.nickname);
-	    c->setmoreinfo(0, 0, "http://profiles.yahoo.com/" + cinfo.nickname, 0, 0, 0, 0, 0, 0);
-	    c->setinfo("", "", cinfo.nickname + "@yahoo.com", "", "", "", "", "", "", "", "", 0, 0);
+
+	    m.homepage = "http://profiles.yahoo.com/" + cinfo.nickname;
+	    b.email = cinfo.nickname + "@yahoo.com";
+
+	    c->setbasicinfo(b);
+	    c->setmoreinfo(m);
 	    break;
 
 	case msn:
 	    c->setnick(cinfo.nickname);
 	    c->setdispnick(cinfo.nickname);
-	    nnick = cinfo.nickname;
-	    if(nnick.find("@") == -1) nnick += "@hotmail.com";
-	    c->setmoreinfo(0, 0, "http://members.msn.com/" + nnick, 0, 0, 0, 0, 0, 0);
-	    c->setinfo("", "", nnick, "", "", "", "", "", "", "", "", 0, 0);
+
+	    b.email = cinfo.nickname;
+	    if(b.email.find("@") == -1) b.email += "@hotmail.com";
+	    m.homepage = "http://members.msn.com/" + b.email;
+
+	    c->setbasicinfo(b);
+	    c->setmoreinfo(m);
 	    break;
     }
 
@@ -208,20 +216,6 @@ icqcontact *icqcontacts::get(const imcontact cinfo) {
 
 	if(c->getdesc() == cinfo)
 	    return (icqcontact *) at(i);
-    }
-
-    return 0;
-}
-
-icqcontact *icqcontacts::getseq2(unsigned short seq2) {
-    int i;
-    icqcontact *c;
-
-    for(i = 0; i < count; i++) {
-	c = (icqcontact *) at(i);
-	if(c->getseq2() == seq2) {
-	    return (icqcontact *) at(i);
-	}
     }
 
     return 0;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.19 2001/12/03 16:30:17 konst Exp $
+* $Id: icqoffline.cc,v 1.20 2001/12/04 17:11:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -106,13 +106,11 @@ unsigned long sseq) {
 	switch(act) {
 	    case osresend:
 		if(send = (sseq == seq)) {
-		    c->setmsgdirect(false);
 		}
 		break;
 
 	    case osexpired:
 		if(send = (time(0)-tm > PERIOD_RESEND)) {
-		    c->setmsgdirect(false);
 		}
 		break;
 

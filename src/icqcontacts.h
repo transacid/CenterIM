@@ -55,7 +55,6 @@ class icqcontacts: public linkedlist {
 	icqcontact* addnew(const imcontact adesc, bool notinlist = true);
 
 	icqcontact *get(const imcontact adesc);
-	icqcontact *getseq2(unsigned short seq2);
 };
 
 extern icqcontacts clist;

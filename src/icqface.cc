@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.47 2001/12/03 16:30:16 konst Exp $
+* $Id: icqface.cc,v 1.48 2001/12/04 17:11:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,10 +35,6 @@
 #include "icqhook.h"
 #include "yahoohook.h"
 
-const char *stryesno(bool i) {
-    return i ? _("yes") : _("no");
-}
-
 const char *strregsound(regsound s) {
     return s == rscard ? _("sound card") :
 	s == rsspeaker ? _("speaker") :
@@ -52,47 +48,9 @@ const char *strregcolor(regcolor c) {
 	_("don't change");
 }
 
-const char *strgender(unsigned char fgender) {
-    switch(fgender) {
-	case 1: return _("Female");
-	case 2: return _("Male");
-	default: return _("Not specified");
-    }
-}
-
 const char *strint(unsigned int i) {
     static string s;
     return i ? (s = i2str(i)).c_str() : "";
-}
-
-string getbdate(unsigned char bday, unsigned char bmonth, unsigned char byear) {
-    string ret;
-
-    if((bday > 0) && (bday <= 31))
-    if((bmonth > 0) && (bmonth <= 12)) {
-
-	ret = i2str(bday) + "-";
-
-	switch(bmonth) {
-	    case  1: ret += _("Jan"); break;
-	    case  2: ret += _("Feb"); break;
-	    case  3: ret += _("Mar"); break;
-	    case  4: ret += _("Apr"); break;
-	    case  5: ret += _("May"); break;
-	    case  6: ret += _("Jun"); break;
-	    case  7: ret += _("Jul"); break;
-	    case  8: ret += _("Aug"); break;
-	    case  9: ret += _("Sep"); break;
-	    case 10: ret += _("Oct"); break;
-	    case 11: ret += _("Nov"); break;
-	    case 12: ret += _("Dec"); break;
-	    default: return "";
-	}
-
-	ret += '-';
-	ret += i2str(1900 + byear);
-    }
-    return ret;
 }
 
 icqface::icqface() {
@@ -551,37 +509,24 @@ void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) 
     workarealine(WORKAREA_Y1+2);
     workarealine(WORKAREA_Y2-2);
 
-    string fhomepage1, fhomepage2, fcity, fstate, fphone, ffax, fstreet,
-	fcellular, fcompany, fdepartment, fjob, buf;
-    unsigned char fage, flang1, flang2, flang3, fbday, fbmonth, fbyear,
-	fgender;
-    unsigned short fcountry, foccupation;
-    unsigned long fzip;
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
+    icqcontact::workinfo wi = c->getworkinfo();
 
-    c->getmoreinfo(fage, fgender, fhomepage1, flang1, flang2, flang3, fbday, fbmonth, fbyear);
-    c->getworkinfo(fcity, fstate, fphone, ffax, fstreet, fzip, fcountry, fcompany, fdepartment, fjob, foccupation, fhomepage2);
+    extracturls(bi.city + " " + bi.state + " " + bi.street + " " +
+	wi.city + " " + wi.state + " " + wi.street + " " +
+	wi.company + " " + wi.dept + " " + wi.position + " " +
+	c->getabout());
 
-    buf = " " + fcity + " " + fstate + " " + fstreet + " " +
-	fcompany + " " + fdepartment + " " + fjob + " " +
-	c->getabout();
-
-    extracturls(buf);
-    if(!fhomepage1.empty()) extractedurls.push_back(fhomepage1);
-    if(!fhomepage2.empty()) extractedurls.push_back(fhomepage2);
+    if(!mi.homepage.empty())
+	extractedurls.push_back(mi.homepage);
+    if(!wi.homepage.empty())
+	extractedurls.push_back(wi.homepage);
 }
 
 void icqface::infogeneral(dialogbox &db, icqcontact *c) {
-    string fhomepage, fname, lname, fprimemail, fsecemail;
-    string foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, tmp;
-    bool reqauth, webaware, pubip;
-
-    unsigned long fzip, fwzip;
-    unsigned short fcountry, fwcountry;
-    unsigned char fage, flang1, flang2, flang3, fbday, fbmonth, fbyear, fgender;
-
-    c->getinfo(fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, fzip, fcountry);
-    c->getmoreinfo(fage, fgender, fhomepage, flang1, flang2, flang3, fbday, fbmonth, fbyear);
-    c->getsecurity(reqauth, webaware, pubip);
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
 
     workarealine(WORKAREA_Y1+8);
     workarealine(WORKAREA_Y1+12);
@@ -596,30 +541,15 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+10, conf.getcolor(cp_main_highlight), _("Age"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Languages"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+13, conf.getcolor(cp_main_highlight), _("Last IP"));
-/*
-    tmp = flang1 ? icq_GetMetaLanguageName(flang1) : "";
-
-    if(flang2) {
-	if(tmp.size()) tmp += ", ";
-	tmp += icq_GetMetaLanguageName(flang2);
-    }
-
-    if(flang3) {
-	if(tmp.size()) tmp += ", ";
-	tmp += icq_GetMetaLanguageName(flang3);
-    }
-*/
-    fname = fname + " " + lname;
 
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), c->getnick());
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), fname);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), fprimemail);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+5, conf.getcolor(cp_main_text), fsecemail);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), foldemail);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), strgender(fgender));
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), getbdate(fbday, fbmonth, fbyear));
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+10, conf.getcolor(cp_main_text), fage ? i2str(fage) : "");
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), tmp);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), bi.email);
+
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), strgender[mi.gender]);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
+
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
     if(c->getstatus() == offline) {
@@ -632,18 +562,10 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 }
 
 void icqface::infohome(dialogbox &db, icqcontact *c) {
-    string tmp;
     int i, x;
 
-    string fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate;
-    string fphone, ffax, fstreet, fcellular, fhomepage;
-    
-    unsigned long fzip;
-    unsigned short fcountry;
-    unsigned char flang1, flang2, flang3, fbday, fbmonth, fbyear, fage, fgender;
-
-    c->getinfo(fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, fzip, fcountry);
-    c->getmoreinfo(fage, fgender, fhomepage, flang1, flang2, flang3, fbday, fbmonth, fbyear);
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
 
     workarealine(WORKAREA_Y1+10);
     x = WORKAREA_X1+2;
@@ -658,51 +580,37 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
 
     mainw.write(x, WORKAREA_Y1+10, conf.getcolor(cp_main_highlight), _("Homepage"));
 
-    tmp = fcity;
-    
-    if(fstate.size()) {
-	if(tmp.size()) tmp += ", ";
-	tmp += fstate;
+    if(!bi.state.empty()) {
+	if(bi.city.size()) bi.city += ", ";
+	bi.city += bi.state;
     }
-/*    
-    if(fcountry) {
-	if(tmp.size()) tmp += ", ";
-	tmp += icq_GetCountryName(fcountry);
+
+    if(!bi.country.empty()) {
+	if(bi.city.size()) bi.city += ", ";
+	bi.city += bi.country;
     }
-*/
+
     x += 10;
-    mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_text), fstreet);
-    mainw.write(x, WORKAREA_Y1+3, conf.getcolor(cp_main_text), tmp);
-    mainw.write(x, WORKAREA_Y1+4, conf.getcolor(cp_main_text), fzip ? i2str(fzip) : "");
-    mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_text), fphone);
-    mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_text), ffax);
-    mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_text), fcellular);
-    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_text), c->gettimezone());
+    mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_text), bi.street);
+    mainw.write(x, WORKAREA_Y1+3, conf.getcolor(cp_main_text), bi.city);
+    mainw.write(x, WORKAREA_Y1+4, conf.getcolor(cp_main_text), bi.zip ? i2str(bi.zip) : "");
+    mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_text), bi.phone);
+    mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_text), bi.fax);
+    mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_text), bi.cellular);
 
-    const char *p = fhomepage.c_str();
-
-    for(i = 0; ; i++) {
-	tmp.assign(p, 0, WORKAREA_X2-WORKAREA_X1-12);
-	mainw.write(x, WORKAREA_Y1+10+i, conf.getcolor(cp_main_text), tmp);
-	p += tmp.size();
-	if(tmp.size() < WORKAREA_X2-WORKAREA_X1-12) break;
+    for(i = 0; !mi.homepage.empty(); i++) {
+	mainw.write(x, WORKAREA_Y1+10+i, conf.getcolor(cp_main_text),
+	    mi.homepage.substr(0, WORKAREA_X2-WORKAREA_X1-12));
+	mi.homepage.erase(0, WORKAREA_X2-WORKAREA_X1-12);
     }
 }
 
 void icqface::infowork(dialogbox &db, icqcontact *c) {
-    string fwcity, fwstate, fwphone, fwfax, fwaddress, fcompany, fdepartment;
-    string fjob, fwhomepage, tmp;
-
     int i;
-    unsigned long fwzip;
-    unsigned short fwcountry, foccupation;
+    icqcontact::workinfo wi = c->getworkinfo();
 
     workarealine(WORKAREA_Y1+6);
     workarealine(WORKAREA_Y1+11);
-
-    c->getworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, 
-	fwzip, fwcountry, fcompany, fdepartment, fjob,
-	foccupation, fwhomepage);
 
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+2, conf.getcolor(cp_main_highlight), _("Address"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+3, conf.getcolor(cp_main_highlight), _("Location"));
@@ -717,33 +625,24 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Fax"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+13, conf.getcolor(cp_main_highlight), _("Homepage"));
 
-    if(fwstate.size()) {
-	if(fwcity.size()) fwcity += ", ";
-	fwcity += fwstate;
+    if(wi.city.size()) {
+	if(wi.state.size()) wi.city += ", ";
+	wi.city += wi.state;
     }
-/*    
-    if(fwcountry) {
-	if(fwcity.size()) fwcity += ", ";
-	fwcity += icq_GetCountryName(fwcountry);
-    }
-*/
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), fwaddress);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), fwcity);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), fwzip ? i2str(fwzip) : "");
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), fcompany);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+7, conf.getcolor(cp_main_text), fdepartment);
-//    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), fjob);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+11, conf.getcolor(cp_main_text), fwphone);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), fwfax);
 
-    const char *p = fwhomepage.c_str();
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), wi.street);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), wi.city);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), wi.zip ? i2str(wi.zip) : "");
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), wi.company);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+7, conf.getcolor(cp_main_text), wi.dept);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), wi.position);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+11, conf.getcolor(cp_main_text), wi.phone);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), wi.fax);
 
-    for(i = 0; ; i++) {
-	tmp.assign(p, 0, WORKAREA_X2-WORKAREA_X1-14);
-	mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13+i, conf.getcolor(cp_main_text), tmp);
-	p += tmp.size();
-	if(tmp.size() < WORKAREA_X2-WORKAREA_X1-14) break;
+    for(i = 0; !wi.homepage.empty(); i++) {
+	mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13+i, conf.getcolor(cp_main_text),
+	    wi.homepage.substr(0, WORKAREA_X2-WORKAREA_X1-14));
+	wi.homepage.erase(0, WORKAREA_X2-WORKAREA_X1-14);
     }
 }
 
@@ -761,60 +660,12 @@ void commacat(string &text, string sub, bool nocomma = false) {
 }
 
 void icqface::infointerests(dialogbox &db, icqcontact *c) {
-    string intr[4], af[4], bg[4], text;
-    int i, naf[4], nbg[4], nint[4];
-    bool bint, baf, bbg;
-
-    bint = baf = bbg = false;
-
-    c->getinterests(intr[0], intr[1], intr[2], intr[3]);
-    c->getaffiliations(af[0], af[1], af[2], af[3]);
-    c->getbackground(bg[0], bg[1], bg[2], bg[3]);
-
-    for(i = 0; i < 4; i++) {
-	nint[i] = atol(getword(intr[i]).c_str());
-	naf[i] = atol(getword(af[i]).c_str());
-	nbg[i] = atol(getword(bg[i]).c_str());
-
-	bint = bint || (nint[i] && !intr[i].empty());
-	baf = baf || naf[i];
-	bbg = bbg || nbg[i];
-    }
-
-    if(bint) {
-	text = (string) "* " + _("Interests") + "\n";
-
-	commacat(text, intr[0], true);
-	for(i = 1; i < 4; i++) commacat(text, intr[i]);
-	text += "\n\n";
-    }
-
-/*
-    if(baf) {
-	text += (string) "* " + _("Affiliations") + "\n";
-
-	for(i = 0; i < 4; i++)
-	if(naf[i] && !af[i].empty()) {
-	    text += (string) icq_GetMetaAffiliationName(naf[i]) + ": " + af[i] + "\n";
-	}
-	text += "\n";
-    }
-
-    if(bbg) {
-	text += (string) "* " + _("Background/Past") + "\n";
-
-	for(i = 0; i < 4; i++)
-	if(nbg[i] && !bg[i].empty()) {
-	    text += (string) icq_GetMetaBackgroundName(nbg[i]) + ": " + bg[i] + "\n";
-	}
-    }
-*/
-
+    string text;
     db.getbrowser()->setbuf(text);
 }
 
 void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
-    bool finished = false, showinfo = true;
+    bool finished = false, showinfo;
     icqcontact *c = clist.get(realinfo);
     textbrowser tb(conf.getcolor(cp_main_text));
     dialogbox db;
@@ -834,6 +685,7 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 	_("Info"), _("Home"), _("Work"), _("More"), _("About"),
 	cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
 
+    showinfo = true;
     db.addautokeys();
     db.idle = &dialogidle;
     db.otherkeys = &userinfokeys;
@@ -842,11 +694,14 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 	if(!showinfo) {
 	    if(cicq.idle(HIDL_SOCKEXIT)) {
 		finished = !db.open(k, b);
+		showinfo = !finished;
 	    }
-	    showinfo = !finished;
 	}
 
-	if(c->updated()) c->unsetupdated();
+	if(c->updated()) {
+	    showinfo = true;
+	    c->unsetupdated();
+	}
 
 	if(showinfo) {
 	    db.setbrowser(0);
