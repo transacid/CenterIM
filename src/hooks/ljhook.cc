@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.8 2003/10/11 14:28:12 konst Exp $
+* $Id: ljhook.cc,v 1.9 2003/10/12 11:39:03 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,6 +29,7 @@
 #include "ljhook.h"
 #include "rsshook.h"
 #include "icqface.h"
+#include "eventmanager.h"
 
 #include <sys/utsname.h>
 
@@ -91,9 +92,9 @@ void ljhook::disconnect() {
 	fonline = false;
 	face.log(_("+ [lj] disconnected"));
 	if(flogged) {
+	    flogged = false;
 	    icqcontact *c = clist.get(self);
 	    if(c) c->setstatus(offline);
-	    flogged = false;
 	}
     }
 }
@@ -348,6 +349,7 @@ void ljhook::requestfriends() {
     ev->addParam("user", username);
     ev->addParam("hpassword", md5pass);
     ev->addParam("includefriendof", "1");
+    ev->addParam("includebdays", "1");
 
     httpcli.SendEvent(ev);
     sent[ev] = reqGetFriends;
@@ -436,7 +438,23 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		requestinfo(self);
 	    }
 
+	    icqcontact::basicinfo bi = c->getbasicinfo();
+
+	    string fullname = params["name"];
+	    bi.fname = getword(fullname);
+	    bi.lname = fullname;
+
+	    c->setbasicinfo(bi);
 	    c->setstatus(available);
+
+	    string buf;
+	    friendof.clear();
+	    while(!(buf = getword(bi.zip)).empty())
+		friendof.push_back(buf);
+
+	    if(!params["message"].empty())
+		em.store(imnotification(self, _("Message from the server: ") + params["message"]));
+
 	    requestfriends();
 
 	} else {
@@ -454,16 +472,19 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    face.log(_("+ [lj] error requesting friends list"));
 	}
 
-	int fcount = atoi(params["friend_count"].c_str()), i;
+	int fcount = atoi(params["friend_count"].c_str()), i, k;
+	string username, name, birthday, bd;
+	icqcontact::basicinfo bi;
+	icqcontact::moreinfo mi;
 
-	for(i = 1; i < fcount+1; i++) {
-	    string username = params[(string) "friend_" + i2str(i) + "_user"];
-	    string name = params[(string) "friend_" + i2str(i) + "_name"];
-	    string birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
+	for(i = 1; i <= fcount; i++) {
+	    username = params[(string) "friend_" + i2str(i) + "_user"];
+	    name = UTF2KOI(params[(string) "friend_" + i2str(i) + "_name"]);
+	    birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
 
 	    bool found = false;
 
-	    for(int k = 0; k < clist.count && !found; k++) {
+	    for(k = 0; k < clist.count && !found; k++) {
 		c = (icqcontact *) clist.at(k);
 		if(c->getdesc().pname == rss) {
 		    found = (c->getworkinfo().homepage == getfeedurl(username));
@@ -484,6 +505,56 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		c->setdispnick(c->getnick());
 		c->save();
 	    }
+
+	    bi = c->getbasicinfo();
+	    bi.fname = getword(name);
+	    bi.lname = name;
+	    c->setbasicinfo(bi);
+
+	    if(!birthday.empty()) {
+		mi = c->getmoreinfo();
+		k = 0;
+
+		while(!(bd = getrword(birthday, "-")).empty())
+		switch(k++) {
+		    case 0: mi.birth_day = atoi(bd.c_str()); break;
+		    case 1: mi.birth_month = atoi(bd.c_str()); break;
+		    case 2: mi.birth_year = atoi(bd.c_str()); break;
+		}
+
+		c->setmoreinfo(mi);
+	    }
+	}
+
+	fcount = atoi(params["friendof_count"].c_str());
+	bool foempty = friendof.empty();
+
+	for(i = 1; i <= fcount; i++) {
+	    username = params[(string) "friendof_" + i2str(i) + "_user"];
+	    name = UTF2KOI(params[(string) "friendof_" + i2str(i) + "_name"]);
+
+	    if(find(friendof.begin(), friendof.end(), username) == friendof.end()) {
+		friendof.push_back(username);
+
+		if(!foempty) {
+		    char buf[512];
+		    sprintf(buf, _("The user %s (%s) has added you to his/her friend list"), username.c_str(), name.c_str());
+		    em.store(imnotification(self, buf));
+		}
+	    }
+	}
+
+	if(c = clist.get(self)) {
+	    bi = c->getbasicinfo();
+	    vector<string>::const_iterator ifo = friendof.begin();
+	    bi.zip = "";
+
+	    while(ifo != friendof.end()) {
+		bi.zip += *ifo + " ";
+		++ifo;
+	    }
+
+	    c->setbasicinfo(bi);
 	}
 
     } else if(ie->second == reqDelFriend) {
