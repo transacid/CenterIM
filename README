@@ -1176,10 +1176,11 @@ action) can be read with cat command or something similar.
 
 Please also note it's possible to define actions that get invoked before
 the event is written to the history (and delivered to the contact list)
-as well as before it gets sent. It can be modified or prevented from
-further processing, i.e. from showing on the contact list or actual
-sending. The latter is done with returning a non-zero return code in the
-%exec section.
+as well as before it gets sent. Such kind of actions are defined with
+the %pre-send and %pre-receive directives. Using them, an event can be
+modified or even prevented from further processing, i.e. from showing on
+the contact list or actual sending. The latter is done with returning a
+non-zero return code in the %exec section.
 
 Every time something is to be executed the "%exec" section's contents
 are copied to a temporary file, and the latter is processed with the
@@ -1723,4 +1724,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.74 2003/01/05 21:47:25 konst Exp $
+$Id: README,v 1.75 2003/01/18 01:43:38 konst Exp $
