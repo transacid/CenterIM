@@ -5,7 +5,14 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 
-AC_CHECK_HEADER(iconv.h, iconv_h=yes)
+AC_CHECK_LIB(iconv, iconv,,
+    [AC_CHECK_LIB(c, iconv,, no_iconv_lib=yes)])
+
+if test -z "$no_iconv_lib"; then
+  AC_CHECK_HEADER(iconv.h, iconv_h=yes)
+fi
+
+AC_CHECK_HEADERS(_G_config.h)
 
 AC_LANG_CPLUSPLUS
 
