@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.29 2003/07/12 17:14:20 konst Exp $
+* $Id: accountmanager.cc,v 1.30 2003/11/24 09:19:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -107,6 +107,18 @@ void accountmanager::exec() {
 		    default:
 			t.addleaff(n, 0, citem+1, _(" Login : %s "),
 			    account.nickname.c_str());
+			break;
+		}
+
+		switch(pname) {
+		    case jabber:
+			if(account.additional["prio"].empty()) {
+			    account.additional["prio"] = "4";
+			    conf.setourid(account);
+			}
+
+			t.addleaff(n, 0, citem+14, " Priority : %s ",
+			    account.additional["prio"].c_str());
 			break;
 		}
 
@@ -229,6 +241,16 @@ void accountmanager::exec() {
 			if(account.port == icqconf::defservers[account.pname].secureport)
 			    account.port = icqconf::defservers[account.pname].port;
 		    }
+		    break;
+
+		case 14:
+		    tmp = leadcut(trailcut(face.inputstr(spname + _(" priority: "),
+			account.additional["prio"])));
+
+		    if(face.getlastinputkey() != KEY_ESC)
+		    if(i2str(atoi(tmp.c_str())) == tmp)
+			account.additional["prio"] = tmp;
+
 		    break;
 	    }
 

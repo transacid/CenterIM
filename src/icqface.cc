@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.202 2003/11/23 01:09:34 konst Exp $
+* $Id: icqface.cc,v 1.203 2003/11/24 09:19:49 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1442,7 +1442,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 
 #define INPUT_POS       LINES-2
 
-string icqface::inputstr(const string &q, const string &defl , char passwdchar ) {
+string icqface::inputstr(const string &q, const string &defl, char passwdchar) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
 
     attrset(conf.getcolor(cp_status));
@@ -3087,7 +3087,7 @@ int icqface::findreskeys(dialogbox &db, int k) {
 }
 
 int icqface::statuskeys(verticalmenu &m, int k) {
-    char *status_order = "o_adncfi";	// Shortcuts for status
+    char *status_order = "o_adncfi";    // Shortcuts for status
     char *p = strchr(status_order, k);
     if (p)
 	return (1 + p - status_order);

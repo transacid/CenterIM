@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.60 2003/11/22 19:14:33 konst Exp $
+* $Id: jabberhook.cc,v 1.61 2003/11/24 09:19:49 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -549,10 +549,13 @@ void jabberhook::setjabberstatus(imstatus st, const string &msg) {
 	    break;
     }
 
-    if(!msg.empty()) {
+    if(!conf.getourid(proto).additional["prio"].empty())
+	xmlnode_insert_cdata(xmlnode_insert_tag(x, "priority"),
+	    conf.getourid(proto).additional["prio"].c_str(), (unsigned) -1);
+
+    if(!msg.empty())
 	xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
 	    msg.c_str(), (unsigned) -1);
-    }
 
     jab_send(jc, x);
     xmlnode_free(x);
