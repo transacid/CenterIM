@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.10 2001/10/02 17:31:00 konst Exp $
+* $Id: icqcontacts.cc,v 1.11 2001/11/08 10:26:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,24 +33,27 @@ icqcontacts::icqcontacts() {
 icqcontacts::~icqcontacts() {
 }
 
-icqcontact *icqcontacts::addnew(unsigned int uin, bool notinlist = true,
-bool nonicq = false) {
-    icqcontact *c = new icqcontact(uin, nonicq);
+icqcontact *icqcontacts::addnew(const contactinfo cinfo, bool notinlist = true) {
+    icqcontact *c = new icqcontact(cinfo);
 
-    if(!nonicq) {
-	if(notinlist) c->excludefromlist();
-	c->setnick(i2str(uin));
-	c->setdispnick(i2str(uin));
-	c->save();
-	add(c);
-	icq_SendNewUser(&icql, uin);
-/*
-	icq_ContactAdd(&icql, uin);
-	c->setseq2(icq_SendMetaInfoReq(&icql, uin));
-*/
-    } else {
-	c->save();
-	add(c);
+    switch(cinfo.type) {
+	case contactinfo::icq:
+	    c->setnick(i2str(cinfo.uin));
+	    c->setdispnick(i2str(cinfo.uin));
+	    c->save();
+	    add(c);
+
+	    if(notinlist) {
+		c->excludefromlist();
+	    } else {
+		c->includeintolist();
+	    }
+	    break;
+
+	case contactinfo::infocard:
+	    c->save();
+	    add(c);
+	    break;
     }
 
     return c;
@@ -62,6 +65,8 @@ void icqcontacts::load() {
     struct stat st;
     DIR *d;
     FILE *f;
+    icqcontact *c;
+    contactinfo cinfo;
 
     empty();
 
@@ -72,11 +77,17 @@ void icqcontacts::load() {
 	    stat(tuname.c_str(), &st);
 
 	    if(S_ISDIR(st.st_mode)) {
+		c = 0;
+
 		if(ent->d_name[0] == 'n') {
-		    clist.add(new icqcontact(atol(ent->d_name+1), true));
+		    c = new icqcontact(contactinfo(atol(ent->d_name+1),
+			contactinfo::infocard));
 		} else if(strchr("0123456789", ent->d_name[0])) {
-		    clist.add(new icqcontact(atol(ent->d_name)));
+		    c = new icqcontact(contactinfo(atol(ent->d_name),
+			contactinfo::icq));
 		}
+
+		if(c) clist.add(c);
 	    }
 	}
 
@@ -86,11 +97,14 @@ void icqcontacts::load() {
     if(!count) {
 	tuname = tname + "17502151";
 	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
-	icqcontact *c = new icqcontact(17502151);
-	add(c);
+	add(new icqcontact(contactinfo(17502151, contactinfo::icq)));
     }
-    
-    if(!get(0)) add(new icqcontact(0));
+
+    cinfo = contactroot;
+
+    if(!get(cinfo)) {
+	add(new icqcontact(cinfo));
+    }
 }
 
 void icqcontacts::save() {
@@ -110,18 +124,21 @@ void icqcontacts::save() {
 void icqcontacts::send() {
     int i;
     icqcontact *c;
+
     icq_ContactClear(&icql);
 
     for(i = 0; i < count; i++) {
 	c = (icqcontact *) at(i);
-	
-	if(!c->isnonicq())
-	if(c->getuin()) {
-	    icq_ContactAdd(&icql, c->getuin());
-	    icq_ContactSetVis(&icql, c->getuin(),
-		lst.inlist(c->getuin(), csvisible) ? ICQ_CONT_VISIBLE :
-		lst.inlist(c->getuin(), csinvisible) ? ICQ_CONT_INVISIBLE :
-		ICQ_CONT_NORMAL);
+
+	if(c->getdesc().uin)
+	switch(c->getdesc().type) {
+	    case contactinfo::icq:
+		icq_ContactAdd(&icql, c->getdesc().uin);
+		icq_ContactSetVis(&icql, c->getdesc().uin,
+		    lst.inlist(c->getdesc(), csvisible) ? ICQ_CONT_VISIBLE :
+		    lst.inlist(c->getdesc(), csinvisible) ? ICQ_CONT_INVISIBLE :
+		    ICQ_CONT_NORMAL);
+		break;
 	}
     }
 
@@ -130,15 +147,14 @@ void icqcontacts::send() {
     icq_SendInvisibleList(&icql);
 }
 
-void icqcontacts::remove(unsigned int uin, bool nonicq = false) {
+void icqcontacts::remove(const contactinfo cinfo) {
     int i;
     icqcontact *c;
 
     for(i = 0; i < count; i++) {
 	c = (icqcontact *) at(i);
 
-	if(c->isnonicq() == nonicq)
-	if(c->getuin() == uin) {
+	if(cinfo == c->getdesc()) {
 	    c->remove();
 	    linkedlist::remove(i);
 	    break;
@@ -146,17 +162,15 @@ void icqcontacts::remove(unsigned int uin, bool nonicq = false) {
     }
 }
 
-icqcontact *icqcontacts::get(unsigned int uin, bool nonicq = false) {
+icqcontact *icqcontacts::get(const contactinfo cinfo) {
     int i;
     icqcontact *c;
 
     for(i = 0; i < count; i++) {
 	c = (icqcontact *) at(i);
 
-	if(c->isnonicq() == nonicq)
-	if(c->getuin() == uin) {
+	if(c->getdesc() == cinfo)
 	    return (icqcontact *) at(i);
-	}
     }
 
     return 0;

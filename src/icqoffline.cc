@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.8 2001/09/24 11:56:39 konst Exp $
+* $Id: icqoffline.cc,v 1.9 2001/11/08 10:26:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,17 +36,18 @@ icqoffline::icqoffline() {
 icqoffline::~icqoffline() {
 }
 
-FILE *icqoffline::open(unsigned int uin, const char *mode) {
-    icqcontact *c = clist.get(uin);
-    string fname = (string) getenv("HOME") + "/.centericq/" + i2str(uin) + "/offline";
+FILE *icqoffline::open(const contactinfo cinfo, const char *mode) {
+    icqcontact *c = clist.get(cinfo);
+    string fname = c->getdirname() + "/offline";
     return fopen(fname.c_str(), mode);
 }
 
-void icqoffline::sendmsg(unsigned int uin, string text) {
-    icqcontact *c = clist.get(uin);
+void icqoffline::sendmsg(const contactinfo cinfo, const string atext) {
+    icqcontact *c = clist.get(cinfo);
     unsigned long seq;
-    FILE *f = open(uin, "a");
+    FILE *f = open(cinfo, "a");
     vector<string> lst;
+    string text = atext;
 
     if(f) {
 	if(!c->getmsgdirect()) {
@@ -59,7 +60,7 @@ void icqoffline::sendmsg(unsigned int uin, string text) {
 		lst.erase(lst.begin());
 	    }
 
-	    seq = icq_SendMessage(&icql, uin, text.c_str(),
+	    seq = icq_SendMessage(&icql, cinfo.uin, text.c_str(),
 		c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
 
 	    fprintf(f, "\f\nMSG\n");
@@ -75,12 +76,12 @@ void icqoffline::sendmsg(unsigned int uin, string text) {
     }
 }
 
-void icqoffline::sendurl(unsigned int uin, string url, string text) {
-    icqcontact *c = clist.get(uin);
-    FILE *f = open(uin, "a");
+void icqoffline::sendurl(const contactinfo cinfo, const string url, const string text) {
+    icqcontact *c = clist.get(cinfo);
+    FILE *f = open(cinfo, "a");
 
     if(f) {
-	unsigned long seq = icq_SendURL(&icql, uin, url.c_str(), text.c_str(),
+	unsigned long seq = icq_SendURL(&icql, cinfo.uin, url.c_str(), text.c_str(),
 	    c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
 
 	fprintf(f, "\f\nURL\n");
@@ -94,13 +95,14 @@ void icqoffline::sendurl(unsigned int uin, string url, string text) {
     }
 }
 
-bool icqoffline::sendevent(unsigned int uin, bool msg, string url,
-string text, FILE *of, unsigned long seq, time_t tm, scanaction act,
+bool icqoffline::sendevent(const contactinfo cinfo, bool msg, const string url,
+const string atext, FILE *of, unsigned long seq, time_t tm, scanaction act,
 unsigned long sseq) {
-    icqcontact *c = clist.get(uin);
+    icqcontact *c = clist.get(cinfo);
     vector<string> lst;
     bool send, save;
     int way;
+    string text = atext;
 
     if(c) {
 	lst.clear();
@@ -136,9 +138,9 @@ unsigned long sseq) {
 		    send = save = false;
 
 		    if(msg) {
-			hist.putmessage(uin, text, HIST_MSG_OUT, localtime(&t));
+			hist.putmessage(cinfo, text, HIST_MSG_OUT, localtime(&t));
 		    } else {
-			hist.puturl(uin, url, text, HIST_MSG_OUT, localtime(&t));
+			hist.puturl(cinfo, url, text, HIST_MSG_OUT, localtime(&t));
 		    }
 		} else {
 		    send = false;
@@ -157,7 +159,7 @@ unsigned long sseq) {
 		}
 
 		if(send)
-		    seq = icq_SendMessage(&icql, uin, text.c_str(), way);
+		    seq = icq_SendMessage(&icql, cinfo.uin, text.c_str(), way);
 
 		fprintf(of, "\f\nMSG\n");
 		fprintf(of, "%lu\n%lu\n", seq, tm);
@@ -168,7 +170,7 @@ unsigned long sseq) {
 	    }
 	} else if(!msg && url.size()) {
 	    if(send) {
-		seq = icq_SendURL(&icql, uin, url.c_str(), text.c_str(), way);
+		seq = icq_SendURL(&icql, cinfo.uin, url.c_str(), text.c_str(), way);
 	    }
 
 	    if(save) {
@@ -192,14 +194,15 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
     char buf[512];
     string url, text, ofname;
     bool msg;
+    icqcontact *c;
 
     totalunsent = 0;
 
     for(i = processed = 0; i < clist.count; i++) {
-	uin = ((icqcontact *) clist.at(i))->getuin();
+	c = (icqcontact *) clist.at(i);
 	text = url = "";
 
-	if(f = open(uin, "r")) {
+	if(f = open(c->getdesc(), "r")) {
 	    ofname = (string) getenv("HOME") + "/.centericq/tmp." + i2str(getpid());
 	    of = fopen(ofname.c_str(), "w");
 
@@ -208,7 +211,7 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 
 		if((string) buf == "\f") {
 		    l = 0;
-		    sendevent(uin, msg, url, text, of, seq, t, act, sseq);
+		    sendevent(c->getdesc(), msg, url, text, of, seq, t, act, sseq);
 		    text = url = "";
 		} else {
 		    switch(l) {
@@ -236,11 +239,11 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 		l++;
 	    }
 
-	    sendevent(uin, msg, url, text, of, seq, t, act, sseq);
+	    sendevent(c->getdesc(), msg, url, text, of, seq, t, act, sseq);
 	    fclose(f);
 	    fclose(of);
 
-	    text = (string) getenv("HOME") + "/.centericq/" + i2str(uin) + "/offline";
+	    text = c->getdirname() + "/offline";
 	    rename(ofname.c_str(), text.c_str());
 	    if(!processed) unlink(text.c_str());
 	}

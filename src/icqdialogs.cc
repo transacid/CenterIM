@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.18 2001/10/30 17:46:17 konst Exp $
+* $Id: icqdialogs.cc,v 1.19 2001/11/08 10:26:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -279,7 +279,7 @@ bool icqface::finddialog(searchparameters &s) {
 }
 
 void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
-    if(!c) c = clist.get(0);
+    if(!c) c = clist.get(contactroot);
 
     string fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate;
     string fphone, ffax, fstreet, fcellular, fhomepage, fwcity, fwstate;
@@ -355,7 +355,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 
     if(!c) {
 	status(_("Fetching your ICQ details"));
-	c = clist.get(0);
+	c = clist.get(contactroot);
 	if(mainscreenblock) return false;
 	    // Another dialog is already on top
     }
@@ -364,7 +364,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
-    if(!c->getuin()) {
+    if(!c->getdesc().uin) {
 	w.set_title(conf.getcolor(cp_dialog_highlight), _(" Your ICQ details "));
     } else {
 	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s's ICQ details "), c->getdispnick().c_str());
@@ -400,7 +400,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	const char *pp = fabout.c_str();
 
 	if(!b) {
-	    if(!c->getuin() && (c->updated() < 5)) {
+	    if(!c->getdesc().uin && (c->updated() < 5)) {
 		status(_("Wait a moment. Your ICQ details haven't been fetched yet"));
 		continue;
 	    } else
@@ -408,7 +408,8 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 		case  0: finished = true; break;
 		case  2:
 		    c->setnick(inputstr(_("Nickname: "), c->getnick()));
-		    if(c->isnonicq()) c->setdispnick(c->getnick());
+		    if(c->getdesc().type == contactinfo::infocard)
+			c->setdispnick(c->getnick());
 		    break;
 		case  3: fname = inputstr(_("First name: "), fname); break;
 		case  4: lname = inputstr(_("Last name: "), lname); break;
@@ -472,7 +473,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	    c->setworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, fwzip, fwcountry, fcompany, fdepartment, fjob, foccupation, fwhomepage);
 	    c->setabout(fabout);
 	} else {
-	    ret = c->getuin() || (c->updated() >= 5);
+	    ret = c->getdesc().uin || (c->updated() >= 5);
 	    finished = true;
 	}
     }
@@ -587,7 +588,7 @@ void icqface::editabout(string &fabout) {
     w.close();
 }
 
-bool icqface::sendfiles(unsigned int uin, string &msg, linkedlist &flist) {
+bool icqface::sendfiles(const contactinfo cinfo, string &msg, linkedlist &flist) {
     int n, i, b;
     bool finished = false;
     string fname;
@@ -599,7 +600,10 @@ bool icqface::sendfiles(unsigned int uin, string &msg, linkedlist &flist) {
     blockmainscreen();
 
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" Send file(s) to %s, %lu "), clist.get(uin)->getdispnick().c_str(), uin);
+
+    w.set_titlef(conf.getcolor(cp_dialog_highlight),
+	_(" Send file(s) to %s, %lu "),
+	    clist.get(cinfo)->getdispnick().c_str(), cinfo.uin);
 
     db.setwindow(&w, false);
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
@@ -823,7 +827,7 @@ void icqface::detailsidle(dialogbox &db) {
     icqcontact *c;
 
     if(!ihook.idle(HIDL_SOCKEXIT))
-    if(c = clist.get(0))
+    if(c = clist.get(contactroot))
     if(c->updated() >= 5) {
 	face.gendetails(db.gettree());
 	db.gettree()->redraw();

@@ -7,6 +7,7 @@
 #include "kkfsys.h"
 
 #include "icqcommon.h"
+#include "contactinfo.h"
 
 #define HIST_MSG_OUT            2
 #define HIST_MSG_IN             4
@@ -41,20 +42,20 @@ class icqhistory {
 		vector<string> lastevent;
 	};
 
-	FILE *open(unsigned int uin, const char *mode);
+	FILE *open(const contactinfo cinfo, const char *mode);
 	vector<storedopen> opens;
 
     public:
 	icqhistory();
 	~icqhistory();
 	
-	void putmessage(unsigned int uin, string text, int dir, struct tm *timestamp);
-	void puturl(unsigned int uin, string url, string desc, int dir, struct tm *timestamp);
-	void putfile(unsigned int uin, unsigned long seq, string fname, int fsize, int dir, struct tm *timestamp);
-	void putmail(string nick, string email, string msg, int mailt, struct tm *timestamp);
-	void putcontact(unsigned int uin, icqcontactmsg *cont, int dir, struct tm *timestamp);
+	void putmessage(const contactinfo cinfo, const string text, int dir, struct tm *timestamp);
+	void puturl(const contactinfo cinfo, const string url, const string desc, int dir, struct tm *timestamp);
+	void putfile(const contactinfo cinfo, unsigned long seq, const string fname, int fsize, int dir, struct tm *timestamp);
+	void putmail(const string nick, const string email, const string msg, int mailt, struct tm *timestamp);
+	void putcontact(const contactinfo cinfo, icqcontactmsg *cont, int dir, struct tm *timestamp);
 
-	bool opencontact(unsigned int uin, time_t lastread = 0);
+	bool opencontact(const contactinfo cinfo, time_t lastread = 0);
 	int setpos(int n);
 	int setposlastread(time_t lr);
 	int find(const string sub, int pos = 0);
@@ -67,7 +68,7 @@ class icqhistory {
 
 	int getpos();
 
-	void fillmenu(unsigned int uin, verticalmenu *m);
+	void fillmenu(const contactinfo cinfo, verticalmenu *m);
 };
 
 extern icqhistory hist;

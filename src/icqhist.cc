@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.6 2001/08/17 19:11:59 konst Exp $
+* $Id: icqhist.cc,v 1.7 2001/11/08 10:26:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,20 +33,21 @@ icqhistory::icqhistory() {
 icqhistory::~icqhistory() {
 }
 
-FILE *icqhistory::open(unsigned int uin, const char *mode) {
-    icqcontact *c = clist.get(uin);
+FILE *icqhistory::open(const contactinfo cinfo, const char *mode) {
+    icqcontact *c = clist.get(cinfo);
 
     if(!c) {
 	if(conf.getantispam()) return 0;
-	else clist.addnew(uin);
+	c = clist.addnew(cinfo);
     }
 
-    string fname = (string) getenv("HOME") + "/.centericq/" + i2str(uin) + "/history";
+    string fname = c->getdirname() + "/history";
     return fopen(fname.c_str(), mode);
 }
 
-void icqhistory::putmessage(unsigned int uin, string text, int dir, struct tm *timestamp) {
-    FILE *f = open(uin, "a");
+void icqhistory::putmessage(const contactinfo cinfo, const string text,
+int dir, struct tm *timestamp) {
+    FILE *f = open(cinfo, "a");
     if(f) {
 	fprintf(f, "\f\n");
 	fprintf(f, "%s\nMSG\n", dir == HIST_MSG_OUT ? "OUT" : "IN");
@@ -55,8 +56,9 @@ void icqhistory::putmessage(unsigned int uin, string text, int dir, struct tm *t
     }
 }
 
-void icqhistory::puturl(unsigned int uin, string url, string desc, int dir, struct tm *timestamp) {
-    FILE *f = open(uin, "a");
+void icqhistory::puturl(const contactinfo cinfo, const string url,
+const string desc, int dir, struct tm *timestamp) {
+    FILE *f = open(cinfo, "a");
     if(f) {
 	fprintf(f, "\f\n");
 	fprintf(f, "%s\nURL\n", dir == HIST_MSG_OUT ? "OUT" : "IN");
@@ -65,9 +67,9 @@ void icqhistory::puturl(unsigned int uin, string url, string desc, int dir, stru
     }
 }
 
-void icqhistory::putfile(unsigned int uin, unsigned long seq, string fname,
-int fsize, int dir, struct tm *timestamp) {
-    FILE *f = open(uin, "a");
+void icqhistory::putfile(const contactinfo cinfo, unsigned long seq,
+const string fname, int fsize, int dir, struct tm *timestamp) {
+    FILE *f = open(cinfo, "a");
     if(f) {
 	fprintf(f, "\f\n");
 	fprintf(f, "%s\nFILE\n", dir == HIST_MSG_OUT ? "OUT" : "IN");
@@ -77,13 +79,13 @@ int fsize, int dir, struct tm *timestamp) {
     }
 }
 
-void icqhistory::putmail(string nick, string email, string msg, int mailt,
-struct tm *timestamp) {
+void icqhistory::putmail(const string nick, const string email,
+const string msg, int mailt, struct tm *timestamp) {
 }
 
-void icqhistory::putcontact(unsigned int uin, icqcontactmsg *conts,
+void icqhistory::putcontact(const contactinfo cinfo, icqcontactmsg *conts,
 int dir, struct tm *timestamp) {
-    FILE *f = open(uin, "a");
+    FILE *f = open(cinfo, "a");
     icqcontactmsg *cont;
     char buf[64];
 
@@ -101,11 +103,11 @@ int dir, struct tm *timestamp) {
     }
 }
 
-bool icqhistory::opencontact(unsigned int uin, time_t lastread = 0) {
+bool icqhistory::opencontact(const contactinfo cinfo, time_t lastread = 0) {
     bool ret = true;
     FILE *f;
 
-    if(f = open(uin, "r")) {
+    if(f = open(cinfo, "r")) {
 	opens.push_back(storedopen(f));
     } else {
 	ret = false;
@@ -188,8 +190,7 @@ int icqhistory::find(const string sub, int pos = 0) {
     return lastfound;
 }
 
-int icqhistory::readevent(int &event, time_t &lastread, struct tm &sent,
-int &dir) {
+int icqhistory::readevent(int &event, time_t &lastread, struct tm &sent, int &dir) {
     int ml = 1, thisevent, thisdir;
     char buf[512];
     bool finished, mread = false;
@@ -317,7 +318,7 @@ void icqhistory::closecontact() {
     }
 }
 
-void icqhistory::fillmenu(unsigned int uin, verticalmenu *m) {
+void icqhistory::fillmenu(const contactinfo cinfo, verticalmenu *m) {
     int event, dir, color, i, n = 0;
     struct tm tm;
     string text, url;
@@ -328,7 +329,7 @@ void icqhistory::fillmenu(unsigned int uin, verticalmenu *m) {
     list<histentry> hitems;
     list<histentry>::iterator ii;
     
-    if(opencontact(uin)) {
+    if(opencontact(cinfo)) {
 	while((n = readevent(event, lastread, tm, dir)) != -1) {
 	    url = text = "";
 
@@ -349,7 +350,7 @@ void icqhistory::fillmenu(unsigned int uin, verticalmenu *m) {
 		    break;
 	    }
 
-	    if(!uin) text.replace(0, 1, "");
+	    if(cinfo.empty()) text.replace(0, 1, "");
 
 	    if(text.size()) {
 		text = (string) " " + time2str(&lastread, "DD.MM hh:mm", buf) + " " + text;

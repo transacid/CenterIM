@@ -5,18 +5,24 @@
 
 #include "icq.h"
 #include "icqhook.h"
+#include "contactinfo.h"
 
 #include "icqcommon.h"
 
-enum scanaction {osresend, ossendall, osremove, osexpired};
+enum scanaction {
+    osresend,
+    ossendall,
+    osremove,
+    osexpired
+};
 
 class icqoffline {
     protected:
 	int processed, totalunsent;
 
-	FILE *open(unsigned int uin, const char *mode);
+	FILE *open(contactinfo cinfo, const char *mode);
 
-	bool sendevent(unsigned int uin, bool msg, string url, string text,
+	bool sendevent(contactinfo cinfo, bool msg, string url, string text,
 	    FILE *of, unsigned long seq, time_t tm, scanaction act,
 	    unsigned long sseq);
 
@@ -24,9 +30,10 @@ class icqoffline {
 	icqoffline();
 	~icqoffline();
 
-	void sendmsg(unsigned int uin, string text);
-	void sendurl(unsigned int uin, string url, string text);
-	void scan(unsigned long seq, scanaction act);
+	void sendmsg(contactinfo cinfo, const string text);
+	void sendurl(contactinfo cinfo, const string url, const string text);
+
+	void scan(unsigned long sseq, scanaction act);
 
 	int getunsentcount();
 };

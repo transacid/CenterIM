@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.15 2001/11/07 14:39:28 konst Exp $
+* $Id: icqhook.cc,v 1.16 2001/11/08 10:26:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -164,11 +164,11 @@ void icqhook::ildisconnected(struct icq_link *link, int reason) {
     switch(reason) {
 	case ICQ_DISCONNECT_FORCED:
 	    msg += ", ";
-	    msg = _("server forced us to disconnect");
+	    msg += _("server forced us to disconnect");
 	    break;
 	case ICQ_DISCONNECT_BUSY:
 	    msg += ", ";
-	    msg = _("server is busy");
+	    msg += _("server is busy");
 	    break;
     }
 
@@ -202,10 +202,13 @@ void icqhook::regdisconnected(struct icq_link *link, int reason) {
 void icqhook::message(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *msg) {
+    contactinfo cinfo(uin, contactinfo::icq);
+
     if(strlen(msg))
-    if(!lst.inlist(uin, csignore)) {
-	hist.putmessage(uin, msg, HIST_MSG_IN, TIMESTAMP);
-	icqcontact *c = clist.get(uin);
+    if(!lst.inlist(cinfo, csignore)) {
+	hist.putmessage(cinfo, msg, HIST_MSG_IN, TIMESTAMP);
+	icqcontact *c = clist.get(cinfo);
+
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_MSG);
@@ -217,9 +220,12 @@ unsigned char month, unsigned short year, const char *msg) {
 void icqhook::contact(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, icqcontactmsg *cont) {
-    if(!lst.inlist(uin, csignore)) {
-	hist.putcontact(uin, cont, HIST_MSG_IN, TIMESTAMP);
-	icqcontact *c = clist.get(uin);
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(!lst.inlist(cinfo, csignore)) {
+	hist.putcontact(cinfo, cont, HIST_MSG_IN, TIMESTAMP);
+	icqcontact *c = clist.get(cinfo);
+
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_CONTACT);
@@ -231,9 +237,12 @@ unsigned char month, unsigned short year, icqcontactmsg *cont) {
 void icqhook::url(struct icq_link *link, unsigned long uin, unsigned char hour,
 unsigned char minute, unsigned char day, unsigned char month,
 unsigned short year, const char *url, const char *descr) {
-    if(!lst.inlist(uin, csignore)) {
-	hist.puturl(uin, url, descr, HIST_MSG_IN, TIMESTAMP);
-	icqcontact *c = clist.get(uin);
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(!lst.inlist(cinfo, csignore)) {
+	hist.puturl(cinfo, url, descr, HIST_MSG_IN, TIMESTAMP);
+	icqcontact *c = clist.get(cinfo);
+
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_URL);
@@ -260,8 +269,11 @@ void icqhook::chat(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *descr,
 unsigned long seq /*, const char *session, unsigned long port*/) {
-    if(!lst.inlist(uin, csignore)) {
-	icqcontact *c = clist.get(uin);
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(!lst.inlist(cinfo, csignore)) {
+	icqcontact *c = clist.get(cinfo);
+
 	if(c) {
 	    c->playsound(EVT_CHAT);
 	}
@@ -272,9 +284,12 @@ void icqhook::file(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *descr,
 const char *filename, unsigned long filesize, unsigned long seq) {
-    if(!lst.inlist(uin, csignore)) {
-	hist.putfile(uin, seq, filename, filesize, HIST_MSG_IN, TIMESTAMP);
-	icqcontact *c = clist.get(uin);
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(!lst.inlist(cinfo, csignore)) {
+	hist.putfile(cinfo, seq, filename, filesize, HIST_MSG_IN, TIMESTAMP);
+	icqcontact *c = clist.get(cinfo);
+
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_FILE);
@@ -287,13 +302,15 @@ void icqhook::added(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *nick,
 const char *first, const char *last, const char *email) {
-    if(!lst.inlist(uin, csignore)) {
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(!lst.inlist(cinfo, csignore)) {
 	string text = (string) "I" + i2str(uin) + " " + first + " " + last + " ";
 	if(nick[0]) text += (string) "aka " + nick + " ";
 	if(email[0]) text += (string) "<" + email + "> ";
 	text += (string) _("has added you to his/her contact list");
-	hist.putmessage(0, text, HIST_MSG_IN, TIMESTAMP);
-	clist.get(0)->setmsgcount(clist.get(0)->getmsgcount()+1);
+	hist.putmessage(contactroot, text, HIST_MSG_IN, TIMESTAMP);
+	clist.get(contactroot)->setmsgcount(clist.get(contactroot)->getmsgcount()+1);
 	face.update();
     }
 }
@@ -303,13 +320,15 @@ unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *nick,
 const char *first, const char *last, const char *email,
 const char *reason) {
-    if(!lst.inlist(uin, csignore)) {
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(!lst.inlist(cinfo, csignore)) {
 	string text = (string) "R" + i2str(uin) + " " + first + " " + last + " ";
 	if(nick[0]) text += (string) "aka " + nick + " ";
 	if(email[0]) text += (string) "<" + email + "> ";
 	text += (string) _("has requested your authorization to add you to his/her contact list. The reason was: ") + reason;
-	hist.putmessage(0, text, HIST_MSG_IN, TIMESTAMP);
-	clist.get(0)->setmsgcount(clist.get(0)->getmsgcount()+1);
+	hist.putmessage(contactroot, text, HIST_MSG_IN, TIMESTAMP);
+	clist.get(contactroot)->setmsgcount(clist.get(contactroot)->getmsgcount()+1);
 	face.update();
     }
 }
@@ -317,7 +336,9 @@ const char *reason) {
 void icqhook::useronline(struct icq_link *link, unsigned long uin,
 unsigned long status, unsigned long ip, unsigned short port,
 unsigned long real_ip, unsigned char tcp_flag) {
-    icqcontact *c = clist.get(uin);
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    icqcontact *c = clist.get(cinfo);
     time_t curtime = time(0);
 
     string lastip, sip, srip, sip_rev;
@@ -354,7 +375,9 @@ unsigned long real_ip, unsigned char tcp_flag) {
 
 void icqhook::useroffline(struct icq_link *link, unsigned long uin) {
     icqcontact *c;
-    if(c = clist.get(uin)) {
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(c = clist.get(cinfo)) {
 	c->setstatus(STATUS_OFFLINE);
 	face.update();
     }
@@ -363,7 +386,9 @@ void icqhook::useroffline(struct icq_link *link, unsigned long uin) {
 void icqhook::userstatus(struct icq_link *link, unsigned long uin,
 unsigned long status) {
     icqcontact *c;
-    if(c = clist.get(uin)) {
+    contactinfo cinfo(uin, contactinfo::icq);
+
+    if(c = clist.get(cinfo)) {
 	c->setstatus(status);
 	face.update();
     }
@@ -380,7 +405,7 @@ unsigned char auth) {
     if(c) {
 	c->setnick(nick);
 
-	if(c->getdispnick() == i2str(c->getuin())) {
+	if(c->getdispnick() == i2str(c->getdesc().uin)) {
 	    c->setdispnick(nick);
 	    face.update();
 	}
@@ -521,7 +546,7 @@ int result, unsigned int length, void *data) {
 
     for(i = ihook.files.begin(); i != ihook.files.end(); i++) {
 	if(i->seq == id) {
-	    icqcontact *c = (icqcontact *) clist.get(i->uin);
+	    icqcontact *c = (icqcontact *) clist.get(contactinfo(i->uin, contactinfo::icq));
 
 	    if(!c) return;
 
@@ -529,7 +554,7 @@ int result, unsigned int length, void *data) {
 		face.log(_("+ file %s refused by %s, %lu"),
 		    justfname(i->fname).c_str(),
 		    c->getdispnick().c_str(),
-		    c->getuin());
+		    c->getdesc().uin);
 		return;
 	    } else {
 		if(result == ICQ_NOTIFY_FILE)
@@ -614,10 +639,11 @@ void icqhook::exectimers() {
 	if(timer_current-timer_resolve > PERIOD_RESOLVE) {
 	    for(int i = 0; i < clist.count; i++) {
 		icqcontact *c = (icqcontact *) clist.at(i);
-		if(c->getuin())
-		if(c->getnick() == i2str(c->getuin()))
+
+		if(!c->getdesc().empty())
+		if(c->getnick() == i2str(c->getdesc().uin))
 		if(c->getinfotryn() < 5) {
-		    c->setseq2(icq_SendMetaInfoReq(&icql, c->getuin()));
+		    c->setseq2(icq_SendMetaInfoReq(&icql, c->getdesc().uin));
 		    c->incinfotryn();
 		}
 	    }

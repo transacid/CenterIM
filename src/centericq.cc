@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.26 2001/11/07 14:39:28 konst Exp $
+* $Id: centericq.cc,v 1.27 2001/11/08 10:26:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -210,7 +210,7 @@ void centericq::mainloop() {
     int action, old, gid;
     icqcontact *c;
     char buf[512];
-    list<unsigned int>::iterator i;
+    vector<contactinfo>::iterator i;
 
     face.draw();
 
@@ -250,29 +250,30 @@ void centericq::mainloop() {
 
 	if(!c) continue;
 
-	if(c->getuin() && !c->isnonicq())
+	if(c->getdesc().uin && (c->getdesc().type == contactinfo::icq))
 	switch(action) {
 
 	    case ACT_URL:
 		url = "";
 		text = "";
-		if(face.editurl(c->getuin(), url, text))
+		if(face.editurl(c->getdesc(), url, text))
 		for(i = face.muins.begin(); i != face.muins.end(); i++)
 		    offl.sendurl(*i, url, text);
 		break;
 
 	    case ACT_IGNORE:
-		sprintf(buf, _("Ignore all events from %s (%lu)?"), c->getdispnick().c_str(), c->getuin());
+		sprintf(buf, _("Ignore all events from %s (%lu)?"), c->getdispnick().c_str(), c->getdesc().uin);
+
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
-		    lst.add(new icqlistitem(c->getdispnick(), c->getuin(), csignore));
-		    clist.remove(c->getuin());
+		    lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
+		    clist.remove(c->getdesc());
 		    face.update();
 		}
 		break;
 
 	    case ACT_FILE:
 		if(c->getstatus() != STATUS_OFFLINE) {
-		    sendfiles(c->getuin());
+		    sendfiles(c->getdesc());
 		}
 		break;
 
@@ -280,7 +281,7 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_CONTACT:
-		sendcontacts(c->getuin());
+		sendcontacts(c->getdesc());
 		break;
 
 	    case ACT_GROUPMOVE:
@@ -292,9 +293,9 @@ void centericq::mainloop() {
 
 	}
 	
-	if(c->isnonicq())
+	if(c->getdesc().type == contactinfo::infocard)
 	switch(action) {
-	    case ACT_EDITUSER: nonicq(c->getuin()); break;
+	    case ACT_EDITUSER: nonicq(c->getdesc().uin); break;
 	    case ACT_HISTORY: continue;
 	}
 
@@ -302,18 +303,20 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_ADD:
 		if(!c->inlist()) {
-		    adduin(c->getuin());
+		    adduin(c->getdesc().uin);
 		}
 		break;
 	}
 
-	if(c->getuin())
+	if(c->getdesc().uin)
 	switch(action) {
-	    case ACT_INFO: userinfo(c->getuin(), c->isnonicq()); break;
+	    case ACT_INFO: userinfo(c->getdesc()); break;
 	    case ACT_REMOVE:
-		sprintf(buf, _("Are you sure want to remove %s (%lu)?"), c->getdispnick().c_str(), c->getuin());
+		sprintf(buf, _("Are you sure want to remove %s (%lu)?"),
+		    c->getdispnick().c_str(), c->getdesc().uin);
+
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
-		    clist.remove(c->getuin(), c->isnonicq());
+		    clist.remove(c->getdesc());
 		    face.update();
 		}
 		break;
@@ -327,13 +330,13 @@ void centericq::mainloop() {
 	}
 	
 	switch(action) {
-	    case ACT_HISTORY: face.history(c->getuin()); break;
+	    case ACT_HISTORY: face.history(c->getdesc()); break;
 	    case ACT_MSG:
 		text = "";
 		if(c->getmsgcount()) {
-		    face.read(c->getuin());
-		} else if(c->getuin() && !c->isnonicq()) {
-		    message(c->getuin(), text, scratch);
+		    face.read(c->getdesc());
+		} else if(c->getdesc().uin && (c->getdesc().type != contactinfo::infocard)) {
+		    message(c->getdesc(), text, scratch);
 		}
 		break;
 	}
@@ -397,22 +400,24 @@ void centericq::find() {
     }
 }
 
-void centericq::userinfo(unsigned int uin, bool nonicq = false) {
-    unsigned int realuin = uin;
-    icqcontact *c = clist.get(uin, nonicq);
+void centericq::userinfo(const contactinfo cinfo) {
+    contactinfo realuin = cinfo;
+    icqcontact *c = clist.get(cinfo);
 
     if(!c) {
-	c = clist.get(0);
-	realuin = 0;
+	c = clist.get(contactroot);
+	realuin = contactroot;
 	c->clear();
-	c->setseq2(icq_SendMetaInfoReq(&icql, uin));
+	c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
     }
 
-    if(c) face.userinfo(uin, nonicq, realuin);
+    if(c) {
+	face.userinfo(cinfo, realuin);
+    }
 }
 
 void centericq::updatedetails() {
-    icqcontact *c = clist.get(0);
+    icqcontact *c = clist.get(contactroot);
 
     c->clear();
     c->setseq2(icq_SendMetaInfoReq(&icql, icql.icq_Uin));
@@ -457,15 +462,15 @@ void centericq::updatedetails() {
     }
 }
 
-void centericq::sendfiles(unsigned int uin) {
+void centericq::sendfiles(const contactinfo cinfo) {
     int i;
     string msg;
     unsigned long seq;
-    icqcontact *c = (icqcontact *) clist.get(uin);
+    icqcontact *c = (icqcontact *) clist.get(cinfo);
     linkedlist flist;
 
     if(c->getdirect()) {
-	if(face.sendfiles(uin, msg, flist)) {
+	if(face.sendfiles(cinfo, msg, flist)) {
 	    char **files = 0;
 
 	    for(i = 0; i < flist.count; i++) {
@@ -474,20 +479,20 @@ void centericq::sendfiles(unsigned int uin) {
 		files[i+1] = 0;
 	    }
 
-	    seq = icq_SendFileRequest(&icql, uin, msg.c_str(), files);
-	    ihook.addfile(uin, seq, files[0], HIST_MSG_OUT);
+	    seq = icq_SendFileRequest(&icql, cinfo.uin, msg.c_str(), files);
+	    ihook.addfile(cinfo.uin, seq, files[0], HIST_MSG_OUT);
 
 	    face.log(_("+ sending file %s to %s, %lu"),
-		justfname(files[0]).c_str(), c->getdispnick().c_str(), uin);
+		justfname(files[0]).c_str(), c->getdispnick().c_str(), cinfo.uin);
 	}
     } else {
 	face.log(_("+ remote client doesn't support file transfers"));
     }
 }
 
-void centericq::sendcontacts(unsigned int uin) {
+void centericq::sendcontacts(const contactinfo cinfo) {
     icqcontactmsg *m, *n, *cont;
-    list<unsigned int>::iterator i;
+    vector<contactinfo>::iterator i;
 
     if(icql.icq_Status == STATUS_OFFLINE) {
 	face.log(_("+ cannot send contacts in offline mode"));
@@ -496,20 +501,20 @@ void centericq::sendcontacts(unsigned int uin) {
 
     face.muins.clear();
 
-    if(face.multicontacts(_("Contacts to send"), face.muins))
+    if(face.multicontacts(_("Contacts to send")))
     if(!face.muins.empty()) {
 	for(m = 0, i = face.muins.begin(); i != face.muins.end(); i++) {
 	    n = new icqcontactmsg;
 	    if(m) m->next = n; else cont = n;
 	    m = n;
 
-	    m->uin = *i;
+	    m->uin = i->uin;
 	    strncpy(m->nick, clist.get(*i)->getnick().c_str(), 12);
 	    m->nick[11] = 0;
 	    m->next = 0;
 	}
 
-	icq_SendContact(&icql, uin, cont, ICQ_SEND_THRUSERVER);
+	icq_SendContact(&icql, cinfo.uin, cont, ICQ_SEND_THRUSERVER);
 
 	for(m = cont; m; ) {
 	    n = (icqcontactmsg *) m->next;
@@ -551,15 +556,15 @@ void centericq::nonicq(int id) {
     icqcontact *c;
 
     if(!id) {
-	c = clist.addnew(0, false, true);
+	c = clist.addnew(contactinfo(0, contactinfo::infocard), true);
 
 	if(face.updatedetails(c)) {
 	    c->save();
 	} else {
-	    clist.remove(c->getuin(), true);
+	    clist.remove(c->getdesc());
 	}
     } else {
-	c = clist.get(id, true);
+	c = clist.get(contactinfo(id, contactinfo::infocard));
 	if(face.updatedetails(c)) {
 	    c->setdispnick(c->getnick());
 	    c->save();
@@ -608,7 +613,7 @@ void centericq::checkmail() {
 	    if(mcount) {
 		face.log(_("+ new mail arrived, %d messages"), mcount);
 		face.log(_("+ last msg from %s"), lastfrom.c_str());
-		clist.get(0)->playsound(EVT_EMAIL);
+		clist.get(contactroot)->playsound(EVT_EMAIL);
 	    }
 	}
 
@@ -655,9 +660,9 @@ void centericq::checkparallel() {
     }
 }
 
-bool centericq::message(unsigned int uin, const string text, msgmode mode) {
-    icqcontact *c = (icqcontact *) clist.get(uin);
-    list<unsigned int>::iterator i;
+bool centericq::message(const contactinfo cinfo, const string text, msgmode mode) {
+    icqcontact *c = (icqcontact *) clist.get(cinfo);
+    vector<contactinfo>::iterator i;
     char buf[512];
     string stext;
     bool ret = true;
@@ -666,25 +671,30 @@ bool centericq::message(unsigned int uin, const string text, msgmode mode) {
 
     switch(mode) {
 	case reply:
-	    face.muins.push_back(uin);
+	    face.muins.push_back(cinfo);
 	    stext = conf.getquote() ? quotemsg(text) : "";
 	    break;
 	case forward:
-	    sprintf(buf, _("%s (%lu) wrote:"), c ? c->getdispnick().c_str() : "I", uin);
+	    sprintf(buf, _("%s (%lu) wrote:"),
+		c ? c->getdispnick().c_str() : "I", cinfo.uin);
+
 	    stext = (string) buf + "\n\n" + text;
-	    if(ret = face.multicontacts("", face.muins))
+
+	    if(ret = face.multicontacts()) {
 		ret = !face.muins.empty();
+	    }
 	    break;
 	case scratch:
-	    face.muins.push_back(uin);
+	    face.muins.push_back(cinfo);
 	    stext = text;
 	    break;
     }
 
     if(ret) {
 	if(ret = face.editmsg(*face.muins.begin(), stext)) {
-	    if(face.muins.empty())
-		face.muins.push_back(uin);
+	    if(face.muins.empty()) {
+		face.muins.push_back(cinfo);
+	    }
 
 	    if(stext.size() > MAX_TCPMSG_SIZE)
 		stext.resize(MAX_TCPMSG_SIZE);
@@ -717,8 +727,9 @@ const string centericq::quotemsg(const string text) {
 icqcontact *centericq::adduin(unsigned int uin) {
     icqcontact *c;
     int groupid = 0;
+    contactinfo cinfo(uin, contactinfo::icq);
 
-    if(c = clist.get(uin)) {
+    if(c = clist.get(cinfo)) {
 	if(c->inlist()) {
 	    face.log(_("+ user %s, %lu is already on the list"),
 		c->getnick().c_str(), uin);
@@ -740,7 +751,7 @@ icqcontact *centericq::adduin(unsigned int uin) {
     }
 
     if(!c) {
-	c = clist.addnew(uin, false);
+	c = clist.addnew(cinfo, false);
     } else {
 	c->includeintolist();
     }

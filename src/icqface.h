@@ -107,7 +107,8 @@ class icqface {
 
 	bool editdone, mainscreenblock, inited, onlinefolder, dotermresize;
 	int extk, totalunread;
-	unsigned int passuin;
+
+	contactinfo passinfo;
 
 	string rnick, rfname, rlname, remail;
 
@@ -135,8 +136,8 @@ class icqface {
 	void infointerests(dialogbox &db, icqcontact *c);
 	void infoabout(dialogbox &db, icqcontact *c);
 
-	bool checkicqmessage(unsigned int uin, string text, bool &ret, int options);
-	int showicq(unsigned int uin, string text, char imt, int options = 0);
+	bool checkicqmessage(unsigned int uin, const string text, bool &ret, int options);
+	int showicq(unsigned int uin, const string text, char imt, int options = 0);
 
 	void gendetails(treeview *tree, icqcontact *c = 0);
 	void selectgender(unsigned char &f);
@@ -155,7 +156,7 @@ class icqface {
 	int groupmanager(const string text, bool sel);
 
     public:
-	list<unsigned int> muins;
+	vector<contactinfo> muins;
 
 	icqface();
 	~icqface();
@@ -179,22 +180,22 @@ class icqface {
 	int contextmenu(icqcontact *c);
 	int generalmenu();
 
-	bool editmsg(unsigned int uin, string &text);
-	bool editurl(unsigned int uin, string &url, string &text);
-	void read(unsigned int uin);
-	void history(unsigned int uin);
+	bool editmsg(const contactinfo cinfo, string &text);
+	bool editurl(const contactinfo cinfo, string &url, string &text);
+	void read(const contactinfo cinfo);
+	void history(const contactinfo cinfo);
 	void modelist(contactstatus cs);
 
-	bool showevent(unsigned int uin, int direction, time_t &lastread);
-	int showmsg(unsigned int uin, string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	int showurl(unsigned int uin, string url, string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	int showfile(unsigned int uin, unsigned long seq, string fname, int fsize, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	int showcontact(unsigned int uin, icqcontactmsg *cont, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	void acceptfile(unsigned int uin, unsigned long seq, string fname);
-	void refusefile(unsigned int uin, unsigned long seq);
+	bool showevent(const contactinfo cinfo, int direction, time_t &lastread);
+	int showmsg(const contactinfo cinfo, const string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	int showurl(const contactinfo cinfo, const string url, const string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	int showfile(const contactinfo cinfo, unsigned long seq, const string fname, int fsize, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	int showcontact(const contactinfo cinfo, icqcontactmsg *cont, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	void acceptfile(const contactinfo cinfo, unsigned long seq, const string fname);
+	void refusefile(const contactinfo cinfo, unsigned long seq);
 
-	bool multicontacts(string head, list<unsigned int> &lst);
-	void userinfo(unsigned int uin, bool nonicq, unsigned int realuin);
+	bool multicontacts(const string head = "");
+	void userinfo(const contactinfo cinfo, const contactinfo realinfo);
 
 	bool regdialog(unsigned int &ruin, string &rpasswd);
 	void getregdata(string &nick, string &fname, string &lname, string &email);
@@ -204,9 +205,7 @@ class icqface {
 	bool findresults();
 
 	bool updatedetails(icqcontact *c = 0);
-	bool sendfiles(unsigned int uin, string &msg, linkedlist &flist);
-
-	void chat(unsigned int uin);
+	bool sendfiles(const contactinfo cinfo, string &msg, linkedlist &flist);
 
 	void blockmainscreen();
 	void unblockmainscreen();

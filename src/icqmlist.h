@@ -4,43 +4,54 @@
 #include "kkstrtext.h"
 #include "kkfsys.h"
 #include "cmenus.h"
-#include "linkedlist.h"
 
 #include "icqcommon.h"
+#include "contactinfo.h"
 
-enum contactstatus {csignore = 1, csvisible = 2, csinvisible = 3};
+enum contactstatus {
+    csignore = 1,
+    csvisible = 2,
+    csinvisible = 3
+};
 
-class icqlistitem {
+class modelistitem {
     private:
 	string nick;
-	unsigned int uin;
+	contactinfo cdesc;
 	contactstatus cs;
 
     public:
-	icqlistitem(string nnick, unsigned int nuin, contactstatus ncs):
-	    nick(nnick), uin(nuin), cs(ncs) { }
-	string getnick()                    { return nick; }
-	unsigned int getuin()               { return uin; }
-	contactstatus getstatus()           { return cs; }
-	void setstatus(contactstatus ncs)   { cs = ncs; }
+	modelistitem() {}
+	modelistitem(const string nnick, const contactinfo adesc, contactstatus ncs):
+	    nick(nnick), cdesc(adesc), cs(ncs) {}
+
+	const string getnick() const;
+	contactinfo getdesc() const;
+	contactstatus getstatus() const;
+
+	void setstatus(contactstatus ncs);
+
+	bool operator == (const contactinfo &cinfo) const;
+	bool operator != (const contactinfo &cinfo) const;
 };
 
-class icqlist : public linkedlist {
+class icqlist : public vector<modelistitem> {
     private:
-	linkedlist morder;
+	vector<modelistitem> menucontents;
 
     public:
 	icqlist();
 	~icqlist();
-	
+
 	void load();
 	void save();
+
 	void fillmenu(verticalmenu *m, contactstatus ncs);
 
-	bool inlist(unsigned int uin, contactstatus ncs);
-	void del(unsigned int uin, contactstatus ncs);
-	
-	icqlistitem *menuat(int pos);
+	bool inlist(const contactinfo cinfo, contactstatus ncs) const;
+	void del(const contactinfo cinfo, contactstatus ncs);
+
+	modelistitem menuat(int pos) const;
 };
 
 extern icqlist lst;

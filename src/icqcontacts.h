@@ -24,7 +24,7 @@
 
 #define SORTCHAR(c) ( \
     c->getmsgcount() ? '#' : \
-    c->isnonicq() ? 'N' : \
+    (c->getdesc().type == contactinfo::infocard) ? 'N' : \
     !c->inlist() ? '!' : \
     c->getshortstatus() \
 )
@@ -43,7 +43,7 @@ class icqcontacts: public linkedlist {
 	icqcontacts();
 	~icqcontacts();
 
-	void remove(unsigned int uin, bool nonicq = false);
+	void remove(const contactinfo adesc);
 	void load();
 	void save();
 	void send();
@@ -51,11 +51,9 @@ class icqcontacts: public linkedlist {
 	void order();
 	void rearrange();
 
-	icqcontact* addnew(unsigned int uin,
-	    bool notinlist = true,
-	    bool nonicq = false);
+	icqcontact* addnew(const contactinfo adesc, bool notinlist = true);
 
-	icqcontact *get(unsigned int uin, bool nonicq = false);
+	icqcontact *get(const contactinfo adesc);
 	icqcontact *getseq2(unsigned short seq2);
 };
 

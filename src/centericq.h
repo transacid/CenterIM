@@ -30,18 +30,18 @@ class centericq {
 	centericq();
 	~centericq();
 
-	bool message(unsigned int uin, const string text, msgmode mode);
+	bool message(const contactinfo cinfo, const string text, msgmode mode);
 
 	void commandline(int argc, char **argv);
 	void exec();
 	void reg();
 	void mainloop();
-	void userinfo(unsigned int uin, bool nonicq = false);
+	void userinfo(const contactinfo cinfo);
 	void changestatus();
 	void updatedetails();
 	void updateconf();
-	void sendfiles(unsigned int uin);
-	void sendcontacts(unsigned int uin);
+	void sendfiles(const contactinfo cinfo);
+	void sendcontacts(const contactinfo cinfo);
 	void find();
 	void nonicq(int id);
 	void checkmail();

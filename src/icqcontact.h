@@ -13,15 +13,18 @@
 #include "icq.h"
 
 #include "icqcommon.h"
+#include "contactinfo.h"
 
 #define SOUND_COUNT     7
 
 class icqcontact {
     protected:
-	unsigned int uin;
+	contactinfo cdesc;
+
 	unsigned short seq2;
+
 	int status, nmsgs, fupdated, infotryn, groupid;
-	bool finlist, reqauth, webaware, pubip, nonicq, direct, msgdirect;
+	bool finlist, reqauth, webaware, pubip, direct, msgdirect;
 	time_t lastread, lastseen;
 
 	string sound[SOUND_COUNT];
@@ -42,10 +45,8 @@ class icqcontact {
 	bool islocal() const;
 
     public:
-	icqcontact(unsigned int fuin, bool nonicq = false);
+	icqcontact(contactinfo adesc);
 	~icqcontact();
-
-	bool operator > (const icqcontact &acontact) const;
 
 	void setstatus(int fstatus);
 	void setlastread(time_t flastread);
@@ -106,7 +107,6 @@ class icqcontact {
 	time_t getlastseen() const;
 	
 	int getstatus() const;
-	unsigned int getuin() const;
 	unsigned short getseq2() const;
 	int getmsgcount() const;
 
@@ -134,7 +134,6 @@ class icqcontact {
 	void setmsgdirect(bool flag);
 	bool getmsgdirect() const;
 	
-	bool isnonicq() const;
 	bool isbirthday() const;
 	const string getdirname() const;
 
@@ -151,6 +150,10 @@ class icqcontact {
 
 	void settimezone(char atimezone) { utimezone = atimezone; }
 	const string gettimezone() const;
+
+	const contactinfo getdesc() const;
+
+	bool operator > (const icqcontact &acontact) const;
 };
 
 #endif

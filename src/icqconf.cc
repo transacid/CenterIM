@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.12 2001/10/31 16:46:18 konst Exp $
+* $Id: icqconf.cc,v 1.13 2001/11/08 10:26:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -298,8 +298,12 @@ void icqconf::loadsounds() {
 	    if(skey == "online") event = EVT_ONLINE; else
 	    if(skey == "chat") event = EVT_CHAT; else continue;
 
-	    if(suin != "*") c = (ffuin = atol(suin.c_str())) ? c = clist.get(ffuin) : 0;
-	    else c = clist.get(0);
+	    if(suin != "*") {
+		c = (ffuin = atol(suin.c_str())) ?
+		    clist.get(contactinfo(ffuin, contactinfo::icq)) : 0;
+	    } else {
+		c = clist.get(contactroot);
+	    }
 
 	    if(c) c->setsound(event, buf);
 	}
