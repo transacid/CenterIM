@@ -67,7 +67,7 @@ void y_strfreev(char ** vector);
 int strncasecmp(const char * s1, const char * s2, size_t n);
 int strcasecmp(const char * s1, const char * s2);
 
-char * strdup(const char *s);
+//char * strdup(const char *s);
 
 int snprintf(char *str, size_t size, const char *format, ...);
 int vsnprintf(char *str, size_t size, const char *format, va_list ap);
