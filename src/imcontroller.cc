@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.50 2004/01/27 00:14:34 konst Exp $
+* $Id: imcontroller.cc,v 1.51 2004/02/04 07:44:41 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,6 +29,7 @@
 #include "aimhook.h"
 #include "irchook.h"
 #include "jabberhook.h"
+#include "msnhook.h"
 #include "icqcontacts.h"
 #include "eventmanager.h"
 
