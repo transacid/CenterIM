@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textwindow class
-* $Id: textwindow.cc,v 1.7 2002/05/22 16:28:54 konst Exp $
+* $Id: textwindow.cc,v 1.8 2002/07/03 14:38:57 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,7 +29,7 @@ textwindow::textwindow() {
 }
 
 textwindow::textwindow(int xx1, int yy1, int xx2, int yy2, int wcolor,
-int noptions = 0, int tcolor = 0, const char *tfmt = 0, ...) {
+int noptions, int tcolor, const char *tfmt, ...) {
     char buf[10240];
 
     setoptions(noptions);

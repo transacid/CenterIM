@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.14 2002/03/30 17:47:53 konst Exp $
+* $Id: cmenus.cc,v 1.15 2002/07/03 14:38:56 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,7 +30,7 @@ verticalmenu::verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int 
     setcoords(px1, py1, px2, py2);
 }
 
-verticalmenu::verticalmenu(int pncolor = 0, int pscolor = 0) {
+verticalmenu::verticalmenu(int pncolor, int pscolor) {
     initmembers();
     setcolor(pncolor, pscolor);
 }
@@ -100,7 +100,7 @@ void verticalmenu::addline() {
     addline(ncolor, 0);
 }
 
-void verticalmenu::addline(int color, const char *fmt = 0, ...) {
+void verticalmenu::addline(int color, const char *fmt, ...) {
     verticalmenuitem i;
     char buf[10240];
     va_list ap;
@@ -377,7 +377,7 @@ void verticalmenu::getpos(int &cur, int &first) {
     first = firstdisp;
 }
 
-void verticalmenu::setpos(int cur, int first = -1) {
+void verticalmenu::setpos(int cur, int first) {
     curelem = cur;
     if(first != -1) firstdisp = first;
 }

@@ -221,8 +221,7 @@ void textinputline::setpasswordchar(char npc) {
     passwordchar = npc;
 }
 
-void textinputline::setcolor(int acolor, int ahistcolor = 0,
-int ahistcurcolor = 0) {
+void textinputline::setcolor(int acolor, int ahistcolor, int ahistcurcolor) {
     color = acolor;
 
     if(!(histcolor = ahistcolor)) histcolor = color;

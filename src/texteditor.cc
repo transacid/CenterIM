@@ -259,8 +259,7 @@ int texteditor::addwindow(char *id) {
     return files->count-1;
 }
 
-void texteditor::modification(tundoaction action, const string &data,
-bool connected = false, int curx = -1, int cury = -1) {
+void texteditor::modification(tundoaction action, const string &data, bool connected, int curx, int cury) {
     if(undolog && !data.empty()) {
 	undorecord *ur = new undorecord;
 	ur->x = curx < 0 ? CURCOL  : curx;
@@ -778,7 +777,7 @@ int texteditor::count_clrcodes(char *cp, int pos) {
     return k;
 }
 
-void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
+void texteditor::showline(int ln, int startx, int distance, int extrax) {
     if(!show) return;
 
     int i, n, inscount, bcolor, sxinscount, printed, j, lastoccur, q, eolstart, npos, offs;
@@ -1043,7 +1042,7 @@ bool texteditor::fix_x(bool tab) {
     return osx != curfile->sx;
 }
 
-void texteditor::eddel(bool usetabs = true) {
+void texteditor::eddel(bool usetabs) {
     char *p = CURSTRING;
     int nextlen, todelete = 1, rm;
     string deltext;
@@ -1193,7 +1192,7 @@ void texteditor::eddelline() {
     updatecursor();
 }
 
-void texteditor::edenter(bool countspaces = true) {
+void texteditor::edenter(bool countspaces) {
     char *p = CURSTRING, *r;
     string spaceins;
     
@@ -1237,7 +1236,7 @@ void texteditor::edenter(bool countspaces = true) {
     edmove(KEY_DOWN);
 }
 
-void texteditor::edmove(int k, int options = EM_TAB) {
+void texteditor::edmove(int k, int options) {
     int i, lm;
     bool fdraw = false, acted;
     bool ctrlpressed = (options & EM_CTRL) && (getctrlkeys() & CONTROL_PRESSED);
@@ -1973,3 +1972,4 @@ bool hlight::operator != (const hl_kind &k) const {
 bool hlight::operator < (const hlight &ah) const {
     return kind == h_eol;
 }
+

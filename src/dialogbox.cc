@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.11 2002/03/30 17:47:53 konst Exp $
+* $Id: dialogbox.cc,v 1.12 2002/07/03 14:38:56 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,12 +39,12 @@ dialogbox::~dialogbox() {
     if(browser && freebrowser) delete browser;
 }
 
-void dialogbox::setwindow(textwindow *neww, bool fw = true) {
+void dialogbox::setwindow(textwindow *neww, bool fw) {
     window = neww;
     freewindow = fw;
 }
 
-void dialogbox::setbar(horizontalbar *newb, bool fb = true) {
+void dialogbox::setbar(horizontalbar *newb, bool fb) {
     bar = newb;
     freebar = fb;
 
@@ -55,7 +55,7 @@ void dialogbox::setbar(horizontalbar *newb, bool fb = true) {
     }
 }
 
-void dialogbox::setmenu(verticalmenu *newm, bool fm = true) {
+void dialogbox::setmenu(verticalmenu *newm, bool fm) {
     menu = newm;
     freemenu = fm;
 
@@ -66,7 +66,7 @@ void dialogbox::setmenu(verticalmenu *newm, bool fm = true) {
     }
 }
 
-void dialogbox::settree(treeview *newt, bool ft = true) {
+void dialogbox::settree(treeview *newt, bool ft) {
     tree = newt;
     freetree = ft;
 
@@ -77,7 +77,7 @@ void dialogbox::settree(treeview *newt, bool ft = true) {
     }
 }
 
-void dialogbox::setbrowser(textbrowser *newbr, bool fbr = true) {
+void dialogbox::setbrowser(textbrowser *newbr, bool fbr) {
     browser = newbr;
     freebrowser = fbr;
 
@@ -108,7 +108,7 @@ textbrowser *dialogbox::getbrowser() {
     return browser;
 }
 
-bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
+bool dialogbox::open(int &menuitem, int &baritem, void **ref) {
     bool ret = false;
     list<keybarassociation>::iterator i;
 

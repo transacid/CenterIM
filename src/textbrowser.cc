@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.9 2002/03/30 17:47:54 konst Exp $
+* $Id: textbrowser.cc,v 1.10 2002/07/03 14:38:57 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,7 +31,7 @@ textbrowser::textbrowser(int nx1, int ny1, int nx2, int ny2, int clr) {
     otherkeys = 0;
 }
 
-textbrowser::textbrowser(int clr = 0) {
+textbrowser::textbrowser(int clr) {
     setcolor(clr);
     idle = 0;
     otherkeys = 0;
@@ -40,7 +40,7 @@ textbrowser::textbrowser(int clr = 0) {
 textbrowser::~textbrowser() {
 }
 
-void textbrowser::setcolor(int clr = 0) {
+void textbrowser::setcolor(int clr) {
     ncolor = clr;
 }
 

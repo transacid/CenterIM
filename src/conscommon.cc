@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.18 2002/03/26 16:14:34 konst Exp $
+* $Id: conscommon.cc,v 1.19 2002/07/03 14:38:56 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -288,7 +288,7 @@ string makebidi(const string &buf, int lpad = 0) {
 
 #else
 
-string makebidi(const string &buf, int lpad = 0) {
+string makebidi(const string &buf, int lpad) {
     return buf;
 }
 
