@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.92 2004/03/07 13:44:40 konst Exp $
+* $Id: icqcontact.cc,v 1.93 2004/03/09 23:00:36 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -631,6 +631,7 @@ time_t icqcontact::getlastread() const {
 }
 
 imstatus icqcontact::getstatus() const {
+    if(conf.getnonimonline(cdesc.pname)) return available;
     return status;
 }
 
@@ -658,7 +659,7 @@ time_t icqcontact::getlastseen() const {
 
 char icqcontact::getshortstatus() const {
     if(status >= offline && status < imstatus_size) {
-	return imstatus2char[status];
+	return imstatus2char[getstatus()];
     } else {
 	return imstatus2char[offline];
     }
