@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.56 2002/02/13 17:45:43 konst Exp $
+* $Id: icqhook.cc,v 1.57 2002/02/14 19:17:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -943,6 +943,16 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 	case ContactListEvent::UserInfoChange:
 	    if(dynamic_cast<UserInfoChangeEvent*>(ev)) {
+		if(!c) {
+		    c = clist.get(contactroot);
+		    /*
+		    *
+		    * In case we wanna look up info about a user which
+		    * is not on our contact list.
+		    *
+		    */
+		}
+
 		updateinforecord(cli.getContact(ev->getUIN()), c);
 	    }
 	    break;
