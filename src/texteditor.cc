@@ -1749,6 +1749,7 @@ void texteditor::putline(int ln, const char *newline) {
 }
 
 void texteditor::redraw() {
+    active = (bool) curfile;
     draw();
 }
 
