@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 #define PROXY_TIMEOUT   30
     // HTTP proxy timeout in seconds (for the CONNECT method)
@@ -92,6 +93,8 @@ static void delsock(int fd) {
 
 static char *bindaddr = 0;
 static char *proxyhost = 0;
+static char *proxyuser = 0;
+static char *proxypass = 0;
 
 static int proxyport = 3128;
 static int proxy_ssl = 0;
@@ -99,7 +102,7 @@ static int proxy_ssl = 0;
 #define SOCKOUT(s) write(sockfd, s, strlen(s))
 
 int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
-    int err, pos;
+    int err, pos, fl;
     struct hostent *server;
     struct sockaddr_in paddr;
     char buf[512];
@@ -119,7 +122,11 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 	memcpy(&paddr.sin_addr.s_addr, *server->h_addr_list, server->h_length);
 	paddr.sin_port = htons(proxyport);
 
+	fl = fcntl(sockfd, F_GETFL);
+	fcntl(sockfd, F_SETFL, fl & ~O_NONBLOCK);
+
 	buf[0] = 0;
+
 	err = cw_connect(sockfd, (struct sockaddr *) &paddr, sizeof(paddr), proxy_ssl);
     }
 
@@ -168,6 +175,8 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 	if(p)
 	if(atoi(++p) == 200)
 	    err = 0;
+
+	fcntl(sockfd, F_SETFL, fl);
     }
 
     in_http_connect = 0;
@@ -350,25 +359,20 @@ int cw_close(int fd) {
     close(fd);
 }
 
+#define FREEVAR(v) if(v) free(v), v = 0;
+
 void cw_setbind(const char *abindaddr) {
-    if(bindaddr) free(bindaddr);
+    FREEVAR(bindaddr);
     bindaddr = strdup(abindaddr);
 }
 
-void cw_setproxy(const char *aproxyhost) {
-    char *p;
+void cw_setproxy(const char *aproxyhost, int aproxyport, const char *aproxyuser, const char *aproxypass) {
+    FREEVAR(proxyhost);
+    FREEVAR(proxyuser);
+    FREEVAR(proxypass);
 
-    if(proxyhost) {
-	free(proxyhost);
-	proxyhost = 0;
-    }
-
-    if(aproxyhost) {
-	proxyhost = strdup(aproxyhost);
-
-	if((p = strchr(proxyhost, ':'))) {
-	    *p = 0, p++;
-	    proxyport = atol(p);
-	}
-    }
+    if(aproxyhost && strlen(aproxyhost)) proxyhost = strdup(aproxyhost);
+    if(aproxyuser && strlen(aproxyuser)) proxyuser = strdup(aproxyuser);
+    if(aproxypass && strlen(aproxypass)) proxypass = strdup(aproxypass);
+    proxyport = aproxyport;
 }

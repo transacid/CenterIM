@@ -29,8 +29,8 @@ int cw_read(int fd, void *buf, int count, int ssl);
 
 int cw_close(int fd);
 
+void cw_setproxy(const char *aproxyhost, int aproxyport, const char *aproxyuser, const char *aproxypass);
 void cw_setbind(const char *abindaddr);
-void cw_setproxy(const char *aproxyhost);
 
 #ifdef __cplusplus
 }
