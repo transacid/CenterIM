@@ -339,6 +339,7 @@ void jab_poll(jconn j, int timeout)
 {
     fd_set fds;
     struct timeval tv;
+    int r;
 
     if (!j || j->state == JCONN_STATE_OFF)
 	return;
@@ -346,17 +347,23 @@ void jab_poll(jconn j, int timeout)
     FD_ZERO(&fds);
     FD_SET(j->fd, &fds);
 
-    if (timeout < 0)
-    {
-	if (select(j->fd + 1, &fds, NULL, NULL, NULL) > 0)
-	    jab_recv(j);
+    if(timeout <= 0) {
+	r = select(j->fd + 1, &fds, NULL, NULL, NULL);
+
+    } else {
+	tv.tv_sec = 0;
+	tv.tv_usec = timeout;
+	r = select(j->fd + 1, &fds, NULL, NULL, &tv);
+
     }
-    else
-    {
-	    tv.tv_sec  = 0;
-	    tv.tv_usec = timeout;
-	    if (select(j->fd + 1, &fds, NULL, NULL, &tv) > 0)
-		jab_recv(j);
+
+    if(r > 0) {
+	jab_recv(j);
+
+    } else if(r) {
+	STATE_EVT(JCONN_STATE_OFF);
+	jab_stop(j);
+
     }
 }
 
