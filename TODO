@@ -1,6 +1,18 @@
 DONE
 
+дифференцировать direct communications и msgs though server
+
+change the default openurl action to following
+openurl (if test ! -z "`ps x | egrep '[0-9]:[0-9][0-9] netscape'`"; then netscape -remote 'openURL($url$, new-window)' -display 0:0; else netscape "$url$" -display 0:0; fi) >/dev/null 2>&1 &
+
 TODO
+
+add the GNU copyright notice
+warn on running the second copy in parallel
+todo and reminders
+
+While receiving a file with the same filename twice, the existing file will not be overwritten
+одно сообщение заколдобилось - посланное следом ушло, но не попало в хистори
 
 chat req and cancel. segfault
 away/na/online cyclic switching in xterm
@@ -27,4 +39,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.9 2001/05/15 07:42:28 konst Exp $
+$Id: TODO,v 1.10 2001/06/02 07:12:47 konst Exp $
