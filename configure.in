@@ -1,0 +1,10 @@
+AC_INIT(aclocal.m4)
+AM_INIT_AUTOMAKE(libyahoo2, 0.1)
+
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_RANLIB
+
+AM_PATH_GLIB(1.2.0)
+
+AC_OUTPUT(Makefile)
