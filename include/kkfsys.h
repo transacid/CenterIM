@@ -14,7 +14,7 @@
 #include "conf.h"
 #include "kkstrtext.h"
 
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(DARWIN)
 
 #define FTW_F           1
 #define FTW_D           2
