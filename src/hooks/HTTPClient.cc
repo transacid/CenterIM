@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.2 2003/07/13 16:00:09 konst Exp $
+* $Id: HTTPClient.cc,v 1.3 2003/07/13 18:10:28 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -295,6 +295,12 @@ void HTTPClient::socket_cb(int fd, SocketEvent::Mode m) {
 	} catch(DisconnectedException e) {
 	    SignalLog(LogEvent::WARN, e.what());
 	    SignalRemoveSocket(fd);
+
+	    if(!m_recv.empty()) {
+		string remains;
+		m_recv.Unpack(remains, m_recv.size());
+		m_content += remains;
+	    }
 
 	    HTTPRequestEvent *ev = *m_queue.begin();
 	    ev->setDelivered(true);
