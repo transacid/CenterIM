@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.134 2002/11/21 21:13:04 konst Exp $
+* $Id: centericq.cc,v 1.135 2002/11/22 19:11:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -486,6 +486,7 @@ bool centericq::updateconf() {
 	    conf.setregsound(snd);
 	    unlink(conf.getconfigfname("sounds").c_str());
 	    conf.loadsounds();
+	    configstats["sound"] = 0;
 	}
 
 	if(clr != icqconf::rcdontchange) {
@@ -495,6 +496,7 @@ bool centericq::updateconf() {
 	    face.done();
 	    face.init();
 	    face.draw();
+	    configstats["colorscheme"] = 0;
 	}
 
 	face.update();
@@ -571,7 +573,6 @@ void centericq::checkconfigs() {
 	"sounds", "colorscheme", "actions", "external", 0
     };
 
-    static map<string, time_t> stats;
     struct stat st;
     const char *p;
 
@@ -579,8 +580,8 @@ void centericq::checkconfigs() {
 	if(stat(conf.getconfigfname(p).c_str(), &st))
 	    st.st_mtime = 0;
 
-	if(stats.find(p) != stats.end()) {
-	    if(st.st_mtime != stats[p]) {
+	if(configstats.find(p) != configstats.end()) {
+	    if(st.st_mtime != configstats[p]) {
 		switch(i) {
 		    case 0:
 			conf.loadsounds();
@@ -601,7 +602,7 @@ void centericq::checkconfigs() {
 	    }
 	}
 
-	stats[p] = st.st_mtime;
+	configstats[p] = st.st_mtime;
     }
 }
 

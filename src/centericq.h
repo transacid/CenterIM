@@ -35,6 +35,8 @@ class centericq {
 	time_t timer_checkmail, timer_keypress, timer_update, timer_resend;
 	bool regmode;
 
+	map<string, time_t> configstats;
+
 	static void handlesignal(int signum);
 
 	void checkparallel();

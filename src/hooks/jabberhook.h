@@ -15,6 +15,7 @@ class jabberhook: public abstracthook {
 	string regerr;
 
 	vector<string> roster;
+	map<string, string> awaymsgs;
 
 	static void statehandler(jconn conn, int state);
 	static void packethandler(jconn conn, jpacket packet);
@@ -57,6 +58,7 @@ class jabberhook: public abstracthook {
 	imstatus getstatus() const;
 
 	void requestinfo(const imcontact &c);
+	void requestawaymsg(const imcontact &c);
 
 	bool regnick(const string &nick, const string &pass,
 	    const string &serv, string &err);

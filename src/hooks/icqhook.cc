@@ -1,9 +1,9 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.116 2002/11/18 12:22:49 konst Exp $
+* $Id: icqhook.cc,v 1.117 2002/11/22 19:11:59 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

@@ -1,9 +1,9 @@
 /*
 *
-* centericq single icq contact class
-* $Id: icqcontact.cc,v 1.70 2002/11/21 21:13:07 konst Exp $
+* centericq single IM contact class
+* $Id: icqcontact.cc,v 1.71 2002/11/22 19:11:49 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

@@ -1,9 +1,9 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.154 2002/11/21 21:13:09 konst Exp $
+* $Id: icqface.cc,v 1.155 2002/11/22 19:11:50 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

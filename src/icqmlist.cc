@@ -1,9 +1,9 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.15 2002/08/16 16:48:27 konst Exp $
+* $Id: icqmlist.cc,v 1.16 2002/11/22 19:11:54 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

@@ -1,9 +1,9 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.92 2002/10/07 17:33:15 konst Exp $
+* $Id: icqdialogs.cc,v 1.93 2002/11/22 19:11:50 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -877,22 +877,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
 
-/*
-	t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
-*/
 	i = t.addnode(_(" Miscellaneous "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
-/*
-	if(socks) {
-	    conf.getsocksuser(socksuser, sockspass);
-	    i = t.addnode(_(" SOCKS proxy settings "));
-	    t.addleaff(i, 0, 10, _(" Proxy server address : %s "), prserv.c_str());
-	    t.addleaff(i, 0, 11, _(" Proxy user name : %s "), socksuser.c_str());
-	    t.addleaff(i, 0, 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
-	}
-*/
+
 	void *p;
 	finished = !db.open(n, b, &p);
 	i = (int) p;

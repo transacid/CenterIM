@@ -1,9 +1,9 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.92 2002/11/22 16:08:16 konst Exp $
+* $Id: icqconf.cc,v 1.93 2002/11/22 19:11:46 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

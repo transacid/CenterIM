@@ -1,9 +1,9 @@
 /*
 *
-* centericq icq protocol handling class
-* $Id: jabberhook.cc,v 1.7 2002/11/22 18:18:42 konst Exp $
+* centericq Jabber protocol handling class
+* $Id: jabberhook.cc,v 1.8 2002/11/22 19:11:59 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -238,7 +238,8 @@ void jabberhook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
-	    setjabberstatus(ourstatus, "");
+	    setjabberstatus(ourstatus = st,
+		(st == away || st == notavail) ? conf.getawaymsg(jabber) : "");
 	}
     } else {
 	if(getstatus() != offline) {
@@ -248,6 +249,21 @@ void jabberhook::setautostatus(imstatus st) {
 }
 
 void jabberhook::requestinfo(const imcontact &c) {
+}
+
+void jabberhook::requestawaymsg(const imcontact &ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(c) {
+	string am = awaymsgs[ic.nickname];
+
+	if(!am.empty()) {
+	    em.store(imnotification(ic, (string) _("Away message:") + "\n\n" + am));
+	} else {
+	    face.log(_("+ [jab] no away message from %s, %s"),
+		c->getdispnick().c_str(), ic.totext().c_str());
+	}
+    }
 }
 
 imstatus jabberhook::getstatus() const {
@@ -564,7 +580,13 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		/*JABBERChatRoomBuddyStatus(room, user, status);*/
 	    } else {
 		icqcontact *c = clist.get(ic);
-		if(c) c->setstatus(ust);
+		if(c) {
+		    c->setstatus(ust);
+
+		    if(x = xmlnode_get_tag(packet->x, "status"))
+		    if(p = xmlnode_get_data(x))
+			jhook.awaymsgs[ic.nickname] = p;
+		}
 	    }
 	    break;
 
