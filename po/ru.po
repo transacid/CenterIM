@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.1\n"
-"POT-Creation-Date: 2002-02-28 10:49+0200\n"
+"POT-Creation-Date: 2002-02-28 17:49+0200\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -14,35 +14,35 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/icqconf.cc:174
+#: src/icqconf.cc:175
 #, c-format
 msgid "I do really enjoy the default away message of centericq %s."
 msgstr ""
 "Мне действительно нравится away-сообщение, которое centericq %s "
 "устанавливает по умолчанию."
 
-#: src/icqconf.cc:723
+#: src/icqconf.cc:724
 msgid "event sending error: not enough parameters"
 msgstr "ошибка отсылки события: недостаточно параметров"
 
-#: src/icqconf.cc:740
+#: src/icqconf.cc:741
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 
-#: src/icqconf.cc:749
+#: src/icqconf.cc:750
 msgid "event sending error: unknown IM type"
 msgstr "ошибка отсылки события: неизвестная IM сеть"
 
-#: src/icqconf.cc:770
+#: src/icqconf.cc:771
 msgid "event sending error: unknown event type"
 msgstr "ошибка отсылки события: неизвестный тип события"
 
-#: src/icqconf.cc:782
+#: src/icqconf.cc:783
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "очередь пополнилась на %s к %s"
 
-#: src/icqconf.cc:787
+#: src/icqconf.cc:788
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 "ошибка отсылки события: контакт назначения не найдем в вашем списке контактов"
@@ -616,7 +616,7 @@ msgstr "режим 1"
 msgid "mode 2"
 msgstr "режим 2"
 
-#: src/icqface.cc:81 src/icqface.h:216
+#: src/icqface.cc:81 src/icqface.h:217
 msgid "no"
 msgstr "нет"
 
@@ -821,7 +821,7 @@ msgstr "Интересы"
 msgid "Background"
 msgstr "Прошлый опыт"
 
-#: src/icqface.cc:798 src/icqface.cc:1622
+#: src/icqface.cc:798 src/icqface.cc:1628
 msgid "F2 to URLs, ESC close"
 msgstr "F2 показать ссылки, ESC закрыть"
 
@@ -925,54 +925,54 @@ msgstr "Выберите контакты для добавления в список"
 msgid "Event recipients"
 msgstr "Получатели"
 
-#: src/icqface.cc:1339
+#: src/icqface.cc:1345
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr ""
 "Быстрый переход: набирайте для поиска, Alt-S повторить, Enter завершить"
 
-#: src/icqface.cc:1451
+#: src/icqface.cc:1457
 msgid "+ no URLs within the current context"
 msgstr "+ не ни одной ссылки в данном контексте"
 
-#: src/icqface.cc:1464
+#: src/icqface.cc:1470
 msgid "URLs within the current context"
 msgstr "Ссылки в текущем контексте"
 
-#: src/icqface.cc:1495 src/icqface.cc:1640
+#: src/icqface.cc:1501 src/icqface.cc:1646
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Исходящее %s к %s"
 
-#: src/icqface.cc:1498
+#: src/icqface.cc:1504
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X послать, Ctrl-P получатели, Ctrl-O история, Alt-? детали, ESC отмена"
 
-#: src/icqface.cc:1641
+#: src/icqface.cc:1647
 #, c-format
 msgid "Sent on %s"
 msgstr "Послано %s"
 
-#: src/icqface.cc:1644
+#: src/icqface.cc:1650
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Входящее %s от %s"
 
-#: src/icqface.cc:1645
+#: src/icqface.cc:1651
 #, c-format
 msgid "Received on %s"
 msgstr "Получено %s"
 
-#: src/icqface.cc:1732
+#: src/icqface.cc:1738
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "История для %s, всего %d сообщений"
 
-#: src/icqface.cc:1735
+#: src/icqface.cc:1741
 msgid "S search, L again, ESC cancel"
 msgstr "S поиск, L опять, ESC отмена"
 
-#: src/icqface.cc:1741
+#: src/icqface.cc:1747
 msgid "search for: "
 msgstr "искать: "
 
@@ -1441,47 +1441,47 @@ msgstr "поменяли свой %s статус на %s с %s"
 msgid "executed external action %s"
 msgstr "запущен внешний обработчик %s"
 
-#: src/icqface.h:216
+#: src/icqface.h:217
 msgid "yes"
 msgstr "да"
 
-#: src/icqface.h:220
+#: src/icqface.h:221
 msgid "Not specified"
 msgstr "Не указан"
 
-#: src/icqface.h:221
+#: src/icqface.h:222
 msgid "Male"
 msgstr "Мужской"
 
-#: src/icqface.h:222
+#: src/icqface.h:223
 msgid "Female"
 msgstr "Женский"
 
-#: src/icqface.h:232
+#: src/icqface.h:233
 msgid "60-above"
 msgstr "60 и больше"
 
-#: src/icqface.h:236
+#: src/icqface.h:237
 msgid "Fwd"
 msgstr "Переслать"
 
-#: src/icqface.h:236
+#: src/icqface.h:237
 msgid "Reply"
 msgstr "Ответ"
 
-#: src/icqface.h:236
+#: src/icqface.h:237
 msgid "Ok"
 msgstr "Ок"
 
-#: src/icqface.h:237
+#: src/icqface.h:238
 msgid "Open"
 msgstr "Открыть"
 
-#: src/icqface.h:237
+#: src/icqface.h:238
 msgid "Accept"
 msgstr "Подтвердить"
 
-#: src/icqface.h:237
+#: src/icqface.h:238
 msgid "Reject"
 msgstr "Отказать"
 
