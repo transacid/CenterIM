@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.139 2003/12/05 00:39:44 konst Exp $
+* $Id: icqhook.cc,v 1.140 2003/12/11 22:41:33 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,7 +59,6 @@ icqhook::icqhook(): abstracthook(icq) {
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changedetails);
-    fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::authrequests);
     fcapabs.insert(hookcapab::authreqwithmessages);
     fcapabs.insert(hookcapab::contacts);
@@ -922,94 +921,6 @@ void icqhook::processemailevent(const string &sender, const string &email, const
     }
 }
 
-void icqhook::synclist() {
-    fd_set srfds, swfds, sefds;
-    struct timeval tv;
-    int hsockfd, s;
-    time_t t = time(0);
-
-    blockmode = SyncList;
-    syncstatus = reqUpload;
-
-    /*
-    *
-    * Let's now make a list of contacts to be uploaded.
-    *
-    */
-
-    ContactList tcl;
-    vector<icqcontact *> tobestored;
-    vector<icqcontact *>::iterator ic;
-
-    cli.contact_userinfo_change_signal.disconnect(this);
-    getsyncstatus(s, tobestored);
-
-    for(ic = tobestored.begin(); ic != tobestored.end() && tcl.size() <= 10; ++ic) {
-	ContactRef ct = cli.getContact((*ic)->getdesc().uin);
-	if(ct.get()) {
-	    ct->setAlias((*ic)->getnick());
-	    tcl.add(ct);
-	}
-    }
-
-    cli.contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
-    cli.uploadServerBasedContactList(tcl);
-
-    while(syncstatus != ackFetch && logged() && time(0)-t <= 30) {
-	hsockfd = 0;
-
-	FD_ZERO(&srfds);
-	FD_ZERO(&swfds);
-	FD_ZERO(&sefds);
-
-	getsockets(srfds, swfds, sefds, hsockfd);
-
-	tv.tv_sec = 10;
-	tv.tv_usec = 0;
-
-	select(hsockfd+1, &srfds, &swfds, &sefds, &tv);
-
-	if(isoursocket(srfds, swfds, sefds)) {
-	    main();
-
-	    switch(syncstatus) {
-		case ackUpload:
-		    syncstatus = reqFetch;
-		    cli.fetchServerBasedContactList();
-		    break;
-	    }
-	}
-    }
-
-    blockmode = Normal;
-}
-
-void icqhook::getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored) {
-    ContactList &cl = cli.getContactList();
-    ContactList::iterator ic = cl.begin();
-
-    tobestored.clear();
-    synchronized = 0;
-
-    while(ic != cl.end()) {
-	imcontact imc = imcontact((*ic)->getUIN(), icq);
-	icqcontact *c = clist.get(imc);
-
-	if(c)
-	if(c->inlist()) {
-	    if(!(*ic)->getServerBased()) {
-		tobestored.push_back(c);
-
-	    } else {
-		synchronized++;
-
-	    }
-	}
-
-	++ic;
-    }
-}
-
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -1437,8 +1348,6 @@ void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
     icqcontact *c;
 
     if(ev->getType() == ServerBasedContactEvent::Fetch) {
-	syncstatus = ackFetch;
-
 	while(i != lst.end()) {
 	    imcontact cont((*i)->getUIN(), icq);
 	    if(!clist.get(cont)) clist.addnew(cont, false);
@@ -1446,7 +1355,6 @@ void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
 	}
 
     } else if(ev->getType() == ServerBasedContactEvent::Upload) {
-	syncstatus = ackUpload;
 
     } else if(ev->getType() == ServerBasedContactEvent::Remove) {
 

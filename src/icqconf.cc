@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.121 2003/10/26 10:46:52 konst Exp $
+* $Id: icqconf.cc,v 1.122 2003/12/11 22:41:30 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -112,6 +112,16 @@ void icqconf::setourid(const imaccount &im) {
 	    i->port = defservers[i->pname].port;
 
 	switch(i->pname) {
+	    case jabber:
+		if(i->additional.find("prio") == i->additional.end())
+		    i->additional["prio"] = "4";
+		break;
+
+	    case livejournal:
+		if(i->additional.find("importfriends") == i->additional.end())
+		    i->additional["importfriends"] = "1";
+		break;
+
 	    case icq:
 		if(i->password.size() > 8)
 		    i->password = i->password.substr(0, 8);
@@ -298,7 +308,10 @@ void icqconf::save() {
 	    f << "smtp\t" << getsmtphost() << ":" << getsmtpport() << endl;
 
 	    if(!gethttpproxyhost().empty())
-		f << "http_proxy\t" << gethttpproxyhost() << ":" << gethttpproxyport() << endl;
+		if (!gethttpproxyuser().empty())
+		    f << "http_proxy\t" << gethttpproxyuser() << ":" << gethttpproxypasswd() << "@" << gethttpproxyhost() << ":" << gethttpproxyport() << endl;
+		else
+		    f << "http_proxy\t" << gethttpproxyhost() << ":" << gethttpproxyport() << endl;
 
 	    f << "ptp\t" << ptpmin << "-" << ptpmax << endl;
 
@@ -1091,15 +1104,26 @@ void icqconf::setsmtphost(const string &asmtphost) {
 }
 
 void icqconf::sethttpproxyhost(const string &ahttpproxyhost) {
-    int pos;
+    int pos, posn;
 
     httpproxyhost = "";
     httpproxyport = 0;
+    httpproxyuser = "";
+    httpproxypasswd = "";
 
     if(!ahttpproxyhost.empty()) {
 	if((pos = ahttpproxyhost.find(":")) != -1) {
-	    httpproxyhost = ahttpproxyhost.substr(0, pos);
-	    httpproxyport = atol(ahttpproxyhost.substr(pos+1).c_str());
+	    if ((posn = ahttpproxyhost.find("@")) != -1) {
+		httpproxyuser = ahttpproxyhost.substr(0, pos);
+		httpproxypasswd = ahttpproxyhost.substr(pos+1, posn-pos-1);
+		if((pos = ahttpproxyhost.find(":", posn)) != -1) {
+		    httpproxyhost = ahttpproxyhost.substr(posn+1, pos-posn-1);
+		    httpproxyport = atol(ahttpproxyhost.substr(pos+1).c_str());
+		}
+	    } else {
+		httpproxyhost = ahttpproxyhost.substr(0, pos);
+		httpproxyport = atol(ahttpproxyhost.substr(pos+1).c_str());
+	    }
 	} else {
 	    httpproxyhost = ahttpproxyhost;
 	    httpproxyport = 8080;
@@ -1121,6 +1145,14 @@ string icqconf::gethttpproxyhost() const {
 
 unsigned int icqconf::gethttpproxyport() const {
     return httpproxyport ? httpproxyport : 8080;
+}
+
+string icqconf::gethttpproxyuser() const {
+    return httpproxyuser;
+}
+
+string icqconf::gethttpproxypasswd() const {
+    return httpproxypasswd;
 }
 
 void icqconf::checkdiskspace() {

@@ -40,8 +40,6 @@ class imcontroller {
 	unsigned int ruin;
 	string rnick, rfname, rlname, remail, rpasswd, rserver;
 
-	void synclist(protocolname pname);
-
     protected:
 	bool regdialog(protocolname pname);
 
@@ -53,16 +51,12 @@ class imcontroller {
 	void msnupdateprofile();
 	void jabberupdateprofile();
 
-	void icqsynclist();
-	void yahoosynclist();
-
     public:
 	imcontroller();
 	~imcontroller();
 
 	void registration(icqconf::imaccount &account);
 	void updateinfo(icqconf::imaccount &account);
-	void synclist(icqconf::imaccount &account);
 };
 
 extern imcontroller imcontrol;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.98 2003/11/23 01:09:35 konst Exp $
+* $Id: yahoohook.cc,v 1.99 2003/12/11 22:41:34 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -67,7 +67,6 @@ static int stat2int[imstatus_size] = {
 yahoohook::yahoohook() : abstracthook(yahoo), fonline(false), cid(0) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
-    fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::conferencing);
@@ -122,7 +121,7 @@ void yahoohook::init() {
     c.ext_yahoo_webcam_closed = &webcam_closed;
     c.ext_yahoo_webcam_viewer = &webcam_viewer;
     c.ext_yahoo_webcam_data_request = &webcam_data_request;
-    c.ext_yahoo_search_result = &search_result;
+    c.ext_yahoo_got_search_result = &got_search_result;
     c.ext_yahoo_log = &log;
 
     yahoo_register_callbacks(&c);
@@ -527,37 +526,14 @@ YList *yahoohook::getmembers(const string &room) {
     return smemb;
 }
 
-vector<icqcontact *> yahoohook::getneedsync() {
-    int i;
-    icqcontact *c;
-    vector<icqcontact *> r;
-    bool found;
-
-    const YList *buddies = yahoo_get_buddylist(cid);
-    const YList *bud = 0;
-
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-
-	if(c->getdesc().pname == proto) {
-	    for(found = false, bud = buddies; bud && !found; bud = y_list_next(bud))
-		found = c->getdesc().nickname == static_cast<yahoo_buddy *>(bud->data)->id;
-
-	    if(!found)
-		r.push_back(c);
-	}
-    }
-
-    return r;
-}
-
 string yahoohook::decode(string text, bool utf) {
     int npos, mpos;
 
-    if(utf) text = siconv(text, "utf-8",
-	conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
-
-    text = rushtmlconv("wk", text);
+    if(utf) {
+	text = siconv(text, "utf-8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
+    } else {
+	text = rushtmlconv("wk", text);
+    }
 
     while((npos = text.find("\e[")) != -1) {
 	if((mpos = text.substr(npos).find("m")) == -1)
@@ -600,16 +576,23 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	foundguys.pop_back();
     }
 
+    yahoo_search_gender gender = YAHOO_GENDER_NONE;
+
+    switch(params.gender) {
+	case genderMale: gender = YAHOO_GENDER_MALE; break;
+	case genderFemale: gender = YAHOO_GENDER_FEMALE; break;
+    }
+
     searchonlineonly = params.onlineonly;
     searchdest = &dest;
 
     if(!params.kwords.empty()) {
 	yahoo_search(cid, YAHOO_SEARCH_KEYWORD, decode(params.kwords, false).c_str(),
-		params.gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
+		gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
 
     } else if(!params.firstname.empty()) {
 	yahoo_search(cid, YAHOO_SEARCH_NAME, decode(params.firstname, false).c_str(),
-		params.gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
+		gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
 
     } else if(!params.room.empty()) {
 	room = params.room.substr(1);
@@ -670,13 +653,21 @@ void yahoohook::requestawaymsg(const imcontact &ic) {
 }
 
 void yahoohook::checkinlist(imcontact ic) {
+    bool found = false;
     icqcontact *c = clist.get(ic);
-    vector<icqcontact *> notremote = getneedsync();
 
     if(c)
-    if(c->inlist())
-    if(find(notremote.begin(), notremote.end(), c) != notremote.end())
-	sendnewuser(ic, false);
+    if(c->inlist()) {
+	const YList *buddies = yahoo_get_buddylist(cid);
+
+	for(const YList *bud = buddies; bud && !found; ) {
+	    yahoo_buddy *yb = (yahoo_buddy *) bud->data;
+	    found = (c->getdesc().nickname == yb->id);
+	    bud = y_list_next(bud);
+	}
+
+	if(!found) sendnewuser(ic, false);
+    }
 }
 
 void yahoohook::updatecontact(icqcontact *c) {
@@ -780,7 +771,7 @@ void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8
     }
 }
 
-void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
+void yahoohook::got_search_result(int id, int found, int start, int total, YList *contacts) {
     yahoo_found_contact *fc;
     icqcontact *c;
     YList *ir;
@@ -789,7 +780,7 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
     if(!yhook.searchdest)
 	return;
 
-    for(ir = yr->contacts; ir; ir = ir->next) {
+    for(ir = contacts; ir; ir = ir->next) {
 	fc = (yahoo_found_contact *) ir->data;
 
 	if(yhook.searchonlineonly && !fc->online)
@@ -841,12 +832,12 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
 
     yhook.searchdest->redraw();
 
-    if(yr->start+yr->found >= yr->total) {
+    if(start + found >= total) {
 	face.findready();
 	face.log(_("+ [yahoo] search finished, %d found"), yhook.foundguys.size());
 	yhook.searchdest = 0;
     } else {
-	yahoo_search_again(yhook.cid);
+	yahoo_search_again(yhook.cid, -1);
     }
 }
 
@@ -1090,7 +1081,7 @@ void yahoohook::got_cookies(int id) {
 void yahoohook::chat_cat_xml(int id, char *xml) {
 }
 
-void yahoohook::chat_join(int id, char *room, char *topic, YList *members) {
+void yahoohook::chat_join(int id, char *room, char *topic, YList *members, int fd) {
 }
 
 void yahoohook::chat_userjoin(int id, char *room, struct yahoo_chat_member *who) {
@@ -1105,7 +1096,7 @@ void yahoohook::chat_message(int id, char *who, char *room, char *msg, int msgty
 void yahoohook::rejected(int id, char *who, char *msg) {
 }
 
-void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
+void yahoohook::got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
 }
 
 void yahoohook::webcam_invite(int id, char *from) {

@@ -69,6 +69,7 @@ class HTTPClient : public SocketClient {
 	Buffer m_recv;
 
 	string m_hostname, m_proxy_hostname;
+	string m_proxy_user, m_proxy_passwd;
 	string m_resource, m_content, m_redirect;
 	unsigned short m_port, m_proxy_port;
 	time_t m_last_operation, m_timeout;
@@ -99,11 +100,19 @@ class HTTPClient : public SocketClient {
 
 	void socket_cb(int fd, SocketEvent::Mode m);
 
+	string base64_encode(string in, int inlen);
+
 	void setProxyServerHost(const string& host) { m_proxy_hostname = host; }
 	string getProxyServerHost() const { return m_proxy_hostname; }
 
 	void setProxyServerPort(const unsigned short& port) { m_proxy_port = port; }
 	unsigned short getProxyServerPort() const { return m_proxy_port; }
+
+	void setProxyServerUser(const string& user) { m_proxy_user = user; }
+	string getProxyServerUser() const { return m_proxy_user; }
+	
+	void setProxyServerPasswd(const string& passwd) { m_proxy_passwd = passwd; }
+	string getProxyServerPasswd() const { return m_proxy_passwd; }
 };
 
 class HTTPException : public exception {

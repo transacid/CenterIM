@@ -7,7 +7,6 @@
 
 struct hookcapab {
     enum enumeration {
-	synclist,
 	urls,
 	files,
 	contacts,
@@ -114,7 +113,6 @@ class abstracthook {
 	set<hookcapab::enumeration> getCapabs() const
 	    { return fcapabs; }
 
-	virtual vector<icqcontact *> getneedsync();
 	virtual void ouridchanged(const icqconf::imaccount &ia);
 
 	virtual bool knowntransfer(const imfile &fr) const;

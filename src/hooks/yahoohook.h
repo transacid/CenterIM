@@ -67,14 +67,14 @@ class yahoohook: public abstracthook {
 	static void error(int id, char *err, int fatal);
 	static void got_ignore(int id, YList * igns);
 	static void got_cookies(int id);
-	static void search_result(int id, struct yahoo_search_result *yr);
+	static void got_search_result(int id, int found, int start, int total, YList *contacts);
 	static void chat_cat_xml(int id, char *xml);
-	static void chat_join(int id, char *room, char *topic, YList *members);
+	static void chat_join(int id, char *room, char *topic, YList *members, int fd);
 	static void chat_userjoin(int id, char *room, struct yahoo_chat_member *who);
 	static void chat_userleave(int id, char *room, char *who);
 	static void chat_message(int id, char *who, char *room, char *msg, int msgtype, int utf8);
 	static void rejected(int id, char *who, char *msg);
-	static void got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
+	static void got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
 	static void webcam_invite(int id, char *from);
 	static void webcam_invite_reply(int id, char *from, int accept);
 	static void webcam_closed(int id, char *who, int reason);
@@ -134,8 +134,6 @@ class yahoohook: public abstracthook {
 	imstatus getstatus() const;
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
-
-	vector<icqcontact *> getneedsync();
 
 	bool knowntransfer(const imfile &fr) const;
 	void replytransfer(const imfile &fr, bool accept, const string &localpath = string());

@@ -72,8 +72,6 @@ class aimhook: public abstracthook {
 
 	void requestinfo(const imcontact &c);
 	void sendupdateuserinfo(icqcontact &c);
-
-	vector<icqcontact *> getneedsync();
 };
 
 extern aimhook ahook;

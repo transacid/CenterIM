@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.10 2003/11/25 23:53:38 konst Exp $
+* $Id: HTTPClient.cc,v 1.11 2003/12/11 22:41:32 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -188,10 +188,43 @@ void HTTPClient::Send(Buffer &b) {
     }
 }
 
+static char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                             "abcdefghijklmnopqrstuvwxyz"
+                             "0123456789._";
+
+string HTTPClient::base64_encode(const string in, int inlen) {
+    string out;
+    int j = 0;
+
+    for (; inlen >= 3; inlen -= 3) {
+	out += base64digits[ in[j] >> 2 ];
+	out += base64digits[ ((in[j] << 4) & 0x30) | (in[j+1] >> 4) ];
+	out += base64digits[ ((in[j+1] << 2) & 0x3c) | (in[j+2] >> 6) ];
+	out += base64digits[ in[j+2] & 0x3f ];
+	j += 3;
+    }
+
+    if (inlen > 0) {
+	unsigned char fragment;
+
+	out += base64digits[in[j] >> 2];
+	fragment = (in[j] << 4) & 0x30;
+
+	if (inlen > 1)
+	    fragment |= in[j+1] >> 4;
+
+	out += base64digits[fragment];
+	out += (inlen < 2) ? '-' : base64digits[ (in[j+1] << 2) & 0x3c ];
+	out += '-';
+    }
+    
+    return out;
+}
+
 void HTTPClient::SendRequest() {
     Buffer b(&m_transl);
     HTTPRequestEvent *ev = m_queue.front();
-    string rq;
+    string rq, userpasswd;
 
     switch(ev->getMethod()) {
 	case HTTPRequestEvent::GET: rq = "GET"; break;
@@ -203,6 +236,14 @@ void HTTPClient::SendRequest() {
 	b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n");
     } else {
 	b.Pack(rq + " http://" + m_hostname + m_resource + " HTTP/1.0\r\n");
+    }
+
+    if (!m_proxy_user.empty()) {
+	userpasswd = (string)m_proxy_user + ":" + m_proxy_passwd;
+
+	if (!(m_proxy_hostname.empty())) {
+	    b.Pack((string) "Proxy-Authorization: Basic " + base64_encode(userpasswd, userpasswd.size()) + "\r\n");
+	};
     }
 
     b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");

@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.48 2003/11/05 09:07:41 konst Exp $
+* $Id: imcontroller.cc,v 1.49 2003/12/11 22:41:31 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -110,6 +110,8 @@ bool imcontroller::regdialog(protocolname pname) {
 		    face.status(_("Passwords do not match"));
 		} else if(rpasswd.empty()) {
 		    face.status(_("Password must be entered"));
+		} else if(pname == icq && rpasswd.size() < 6) {
+		    face.status(_("Password must be at least 6 chars long"));
 		} else {
 		    finished = success = true;
 		}
@@ -298,73 +300,6 @@ void imcontroller::jabberupdateprofile() {
 #endif
 }
 
-void imcontroller::icqsynclist() {
-    bool fin;
-    int synchronized, attempt = 1;
-    string msg;
-    vector<icqcontact *> tobestored;
-
-    face.progress.show(_(" Contact list synchronization "));
-    face.progress.log(_("Starting the synchronization process"));
-
-    for(fin = false; !fin; ) {
-	ihook.getsyncstatus(synchronized, tobestored);
-	face.progress.log(_("Attempt #%d"), attempt);
-	face.progress.log(_(".. %d already synchronized, %d contacts to be stored"), synchronized, tobestored.size());
-
-	msg = "";
-	if(tobestored.empty()) msg = _("Finished");
-	else if(!ihook.logged()) msg = _("Disconnected");
-	else if(attempt > 10) msg = _("Too many attempts, gave up");
-
-	if(!msg.empty()) {
-	    face.progress.log("%s", msg.c_str());
-	    fin = true;
-	    sleep(2);
-	}
-
-	if(!fin) {
-	    ihook.synclist();
-	}
-
-	attempt++;
-    }
-
-    face.progress.hide();
-}
-
-void imcontroller::synclist(protocolname pname) {
-    vector<icqcontact *> tosync = gethook(pname).getneedsync();
-    vector<icqcontact *>::iterator it;
-
-    face.progress.show(_(" Uploading buddies "));
-
-    if(tosync.empty()) {
-	face.progress.log(_("No contacts to be synchronized"));
-	face.progress.log(_(".. all of them are already stored server-side"));
-
-    } else {
-	char buf[512];
-	sprintf(buf, _("%d contacts are do be stored server-side. Add them now?"), tosync.size());
-
-	if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-
-	    for(it = tosync.begin(); it != tosync.end(); ++it) {
-		face.progress.log(_(".. adding %s"), (*it)->getdesc().nickname.c_str());
-		gethook(pname).sendnewuser((*it)->getdesc());
-	    }
-
-	    face.progress.log(_("Finished"));
-	} else {
-	    face.progress.log(_("Cancelled"));
-	}
-
-    }
-
-    sleep(2);
-    face.progress.hide();
-}
-
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq: icqregistration(account); break;
@@ -382,18 +317,6 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
 	case aim: aimupdateprofile(); break;
 	case msn: msnupdateprofile(); break;
 	case jabber: jabberupdateprofile(); break;
-    }
-}
-
-void imcontroller::synclist(icqconf::imaccount &account) {
-    switch(account.pname) {
-	case icq:
-	    icqsynclist();
-	    break;
-
-	default:
-	    synclist(account.pname);
-	    break;
     }
 }
 

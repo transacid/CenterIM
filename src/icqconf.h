@@ -89,7 +89,8 @@ class icqconf {
 	    entersends[protocolname_size];
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
-	    bindhost, httpproxyhost, defcharset;
+	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
+	    defcharset;
 
 	map<string, string> actions;
 
@@ -184,6 +185,8 @@ class icqconf {
 	string gethttpproxyhost() const;
 	unsigned int gethttpproxyport() const;
 	void sethttpproxyhost(const string &ahttpproxyhost);
+	string gethttpproxyuser() const;
+	string gethttpproxypasswd() const;
 
 	void getsocksuser(string &name, string &pass) const;
 	void setsocksuser(const string &name, const string &pass);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.48 2003/11/21 00:35:33 konst Exp $
+* $Id: abstracthook.cc,v 1.49 2003/12/11 22:41:32 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -127,10 +127,6 @@ void abstracthook::stoplookup() {
 }
 
 void abstracthook::requestawaymsg(const imcontact &c) {
-}
-
-vector<icqcontact *> abstracthook::getneedsync() {
-    return vector<icqcontact *>();
 }
 
 void abstracthook::ouridchanged(const icqconf::imaccount &ia) {
@@ -261,7 +257,7 @@ string abstracthook::rusconv(const string &tdir, const string &text) {
     string::const_iterator i;
     unsigned char *table = 0;
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
     if(tdir == "kw") r = siconv(text, "koi8-u", "cp1251"); else
     if(tdir == "wk") r = siconv(text, "cp1251", "koi8-u"); else
 #endif

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.61 2003/11/24 09:19:49 konst Exp $
+* $Id: jabberhook.cc,v 1.62 2003/12/11 22:41:33 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,7 +94,6 @@ jabberhook::jabberhook(): abstracthook(jabber), jc(0), flogged(false), fonline(f
     fcapabs.insert(hookcapab::groupchatservices);
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changeabout);
-    fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::version);
 }
 
@@ -555,7 +554,7 @@ void jabberhook::setjabberstatus(imstatus st, const string &msg) {
 
     if(!msg.empty())
 	xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
-	    msg.c_str(), (unsigned) -1);
+	    KOI2UTF(msg).c_str(), (unsigned) -1);
 
     jab_send(jc, x);
     xmlnode_free(x);
@@ -1172,22 +1171,6 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 	    }
 	}
     }
-}
-
-vector<icqcontact *> jabberhook::getneedsync() {
-    int i;
-    icqcontact *c;
-    vector<icqcontact *> r;
-
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-
-	if(c->getdesc().pname == proto)
-	if(roster.find(c->getdesc().nickname) == roster.end())
-	    r.push_back(c);
-    }
-
-    return r;
 }
 
 void jabberhook::requestversion(const imcontact &ic) {

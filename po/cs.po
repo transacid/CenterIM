@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.20.5\n"
-"POT-Creation-Date: 2003-11-23 13:34+0200\n"
+"POT-Creation-Date: 2003-12-10 00:52+0200\n"
 "PO-Revision-Date: 2001-02-10 20:50+0100\n"
 "Last-Translator: Jindrich Makovicka <makovick@kmlinux.fjfi.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -27,523 +27,532 @@ msgstr ""
 "F2/M menu vybraného kontaktu, F3/S zmìnit icq status, F4/G rùzné volby, Q "
 "konec"
 
-#: src/centericq.cc:254
+#: src/centericq.cc:257
 #, fuzzy, c-format
 msgid "Ignore all events from %s?"
 msgstr "Ignorovat v¹echny události od %s (%lu)?"
 
-#: src/centericq.cc:258
+#: src/centericq.cc:261
 #, fuzzy, c-format
 msgid "Remove %s from the contact list as well?"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/centericq.cc:292
+#: src/centericq.cc:295
 #, fuzzy, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "Opravdu chcete odstranit %s (%lu)?"
 
-#: src/centericq.cc:300
+#: src/centericq.cc:303
 msgid "New nickname to show: "
 msgstr "Nová pøezdívka: "
 
-#: src/centericq.cc:309
+#: src/centericq.cc:312
 msgid "Select a group to move the user to"
 msgstr ""
 
-#: src/centericq.cc:327
+#: src/centericq.cc:330
 msgid "+ cannot fetch away messages being offline"
 msgstr ""
 
-#: src/centericq.cc:391
+#: src/centericq.cc:394
 msgid "! cannot connect, free disk space is less than 10k"
 msgstr ""
 
-#: src/centericq.cc:423 src/accountmanager.cc:219
+#: src/centericq.cc:426 src/accountmanager.cc:218
 #, fuzzy
 msgid "away message"
 msgstr "Homepage"
 
-#: src/centericq.cc:434
+#: src/centericq.cc:437
 #, c-format
 msgid "! support for %s was disabled at build time"
 msgstr ""
 
-#: src/centericq.cc:655 src/centericq.cc:707
+#: src/centericq.cc:658 src/centericq.cc:710
 #, fuzzy, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ dorazila nová po¹ta, %d zpráv"
 
-#: src/centericq.cc:658 src/centericq.cc:710
+#: src/centericq.cc:661 src/centericq.cc:713
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ poslední zpráva od %s"
 
-#: src/centericq.cc:751
+#: src/centericq.cc:754
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:805
+#: src/centericq.cc:808
 msgid "! another running copy of centericq detected"
 msgstr ""
 
-#: src/centericq.cc:806
+#: src/centericq.cc:809
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr ""
 
-#: src/centericq.cc:959
+#: src/centericq.cc:962
 #, fuzzy
 msgid "Mobile number: "
 msgstr "jméno souboru: "
 
-#: src/centericq.cc:1103
+#: src/centericq.cc:1106
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:1110
+#: src/centericq.cc:1113
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:1114
+#: src/centericq.cc:1117
 msgid "The specified directory does not exist"
 msgstr ""
 
-#: src/centericq.cc:1249
+#: src/centericq.cc:1252
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ ¾ádné polo¾ky historie pro %s"
 
-#: src/centericq.cc:1275
+#: src/centericq.cc:1278
 #, fuzzy, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s byl pøidán do visible listu"
 
-#: src/centericq.cc:1281
+#: src/centericq.cc:1284
 #, fuzzy
 msgid "Select a group to add the user to"
 msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
 
-#: src/centericq.cc:1310
+#: src/centericq.cc:1313
 #, fuzzy, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s byl pøidán do visible listu"
 
-#: src/centericq.cc:1381
+#: src/centericq.cc:1384
 msgid "+ the user is back"
 msgstr "+ u¾ivatel je zpátky"
 
-#: src/centericq.cc:1397
+#: src/centericq.cc:1400
 #, c-format
 msgid "+ [%s] status restored"
 msgstr ""
 
-#: src/centericq.cc:1412
+#: src/centericq.cc:1415
 #, fuzzy, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ automaticky nastavuji \"N/A\""
 
-#: src/centericq.cc:1414
+#: src/centericq.cc:1417
 #, fuzzy
 msgid "away"
 msgstr "Pryè"
 
-#: src/centericq.cc:1414
+#: src/centericq.cc:1417
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1541
+#: src/centericq.cc:1544
 msgid "! free disk space is less than 10k, going offline"
 msgstr ""
 
-#: src/centericq.cc:1542
+#: src/centericq.cc:1545
 msgid "! otherwise we can lose events and configuration"
 msgstr ""
 
-#: src/centericq.cc:1586
+#: src/centericq.cc:1589
 msgid "Invite to conference.."
 msgstr ""
 
-#: src/hooks/yahoohook.cc:147
+#: src/centericq.cc:1609
+#, fuzzy
+msgid "Select contacts to move"
+msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
+
+#: src/centericq.cc:1612
+msgid "Mass move selected users to.."
+msgstr ""
+
+#: src/hooks/yahoohook.cc:146
 #, fuzzy
 msgid "+ [yahoo] connecting to the server"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:158
+#: src/hooks/yahoohook.cc:157
 #, fuzzy
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:161
+#: src/hooks/yahoohook.cc:160
 msgid "could not resolve hostname"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:162
+#: src/hooks/yahoohook.cc:161
 msgid "could not create socket"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:163
+#: src/hooks/yahoohook.cc:162
 msgid "verify the pager host and port entered"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:258
+#: src/hooks/yahoohook.cc:257
 #, fuzzy
 msgid "+ [yahoo] disconnected"
 msgstr "+ odpojeno"
 
-#: src/hooks/yahoohook.cc:361
+#: src/hooks/yahoohook.cc:360
 #, fuzzy, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:382
+#: src/hooks/yahoohook.cc:381
 #, fuzzy, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:396
+#: src/hooks/yahoohook.cc:395
 #, fuzzy, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:627
+#: src/hooks/yahoohook.cc:610
 #, c-format
 msgid "+ [yahoo] members list fetching finished, %d found"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:648
+#: src/hooks/yahoohook.cc:631
 msgid "Please join my conference."
 msgstr ""
 
-#: src/hooks/yahoohook.cc:661
+#: src/hooks/yahoohook.cc:644
 msgid "Custom status message:"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:665
+#: src/hooks/yahoohook.cc:648
 #, fuzzy, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:724
+#: src/hooks/yahoohook.cc:715
 #, fuzzy
 msgid "+ [yahoo] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/yahoohook.cc:732
+#: src/hooks/yahoohook.cc:723
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:738
+#: src/hooks/yahoohook.cc:729
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:739
+#: src/hooks/yahoohook.cc:730
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:743
+#: src/hooks/yahoohook.cc:734
 #, fuzzy
 msgid "+ [yahoo] another logon detected"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:846
+#: src/hooks/yahoohook.cc:837
 #, fuzzy, c-format
 msgid "+ [yahoo] search finished, %d found"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:869
+#: src/hooks/yahoohook.cc:860
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:874
+#: src/hooks/yahoohook.cc:865
 msgid "Current conference members are: "
 msgstr ""
 
-#: src/hooks/yahoohook.cc:894
+#: src/hooks/yahoohook.cc:885
 msgid "Auto-joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:904
+#: src/hooks/yahoohook.cc:895
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:914
+#: src/hooks/yahoohook.cc:905
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:929
+#: src/hooks/yahoohook.cc:920
 #, c-format
 msgid "The user %s has left the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:964 src/hooks/icqhook.cc:1155
+#: src/hooks/yahoohook.cc:955 src/hooks/icqhook.cc:1066
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "si Vás pøidal(a) do seznamu kontaktù"
 
-#: src/hooks/yahoohook.cc:968
+#: src/hooks/yahoohook.cc:959
 #, fuzzy
 msgid "the message was: "
 msgstr "Homepage"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:977
 #, fuzzy, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:993
+#: src/hooks/yahoohook.cc:984
 #, fuzzy, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:998
+#: src/hooks/yahoohook.cc:989
 #, fuzzy, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:1073
+#: src/hooks/yahoohook.cc:1064
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ odpojeno"
 
-#: src/hooks/jabberhook.cc:112
+#: src/hooks/jabberhook.cc:111
 #, fuzzy
 msgid "+ [jab] connecting to the server"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/jabberhook.cc:165
+#: src/hooks/jabberhook.cc:164
 #, fuzzy
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ k icq serveru se nelze pøipojit"
 
-#: src/hooks/jabberhook.cc:290
+#: src/hooks/jabberhook.cc:289
 #, fuzzy, c-format
 msgid "+ [jab] adding %s to the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/jabberhook.cc:363
+#: src/hooks/jabberhook.cc:362
 #, fuzzy, c-format
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/jabberhook.cc:374
+#: src/hooks/jabberhook.cc:373
 #, fuzzy, c-format
 msgid "+ [jab] removing %s from the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/jabberhook.cc:461 src/hooks/icqhook.cc:1209
+#: src/hooks/jabberhook.cc:460 src/hooks/icqhook.cc:1120
 #: src/hooks/irchook.cc:597
 #, fuzzy
 msgid "Away message:"
 msgstr "Homepage"
 
-#: src/hooks/jabberhook.cc:463
+#: src/hooks/jabberhook.cc:462
 #, fuzzy, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/jabberhook.cc:493
+#: src/hooks/jabberhook.cc:492
 msgid "Wrong nickname given, cannot register"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:509
+#: src/hooks/jabberhook.cc:508
 #, fuzzy
 msgid "Unable to connect"
 msgstr "+ k icq serveru se nelze pøipojit"
 
-#: src/hooks/jabberhook.cc:736
+#: src/hooks/jabberhook.cc:735
 #, c-format
 msgid "+ [jab] conference list fetching finished, %d found"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:808
+#: src/hooks/jabberhook.cc:807
 #, c-format
 msgid "+ [jab] search finished, %d found"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:865
+#: src/hooks/jabberhook.cc:864
 #, fuzzy
 msgid "+ [jab] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/jabberhook.cc:1228 src/hooks/irchook.cc:1296
+#: src/hooks/jabberhook.cc:1211 src/hooks/irchook.cc:1296
 #, c-format
 msgid "The remote is using %s"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1270
+#: src/hooks/jabberhook.cc:1253
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ odpojeno"
 
-#: src/hooks/jabberhook.cc:1409
+#: src/hooks/jabberhook.cc:1392
 msgid "Default Jabber conference server"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1458
+#: src/hooks/jabberhook.cc:1441
 #, fuzzy, c-format
 msgid "+ [jab] error %d: %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/jabberhook.cc:1529
+#: src/hooks/jabberhook.cc:1512
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1543
+#: src/hooks/jabberhook.cc:1526
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
 msgstr ""
 
-#: src/hooks/aimhook.cc:64
+#: src/hooks/aimhook.cc:63
 #, fuzzy
 msgid "+ [aim] connecting to the server"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:93
+#: src/hooks/aimhook.cc:92
 #, fuzzy
 msgid "+ [aim] unable to connect to the server"
 msgstr "+ k icq serveru se nelze pøipojit"
 
-#: src/hooks/aimhook.cc:195
+#: src/hooks/aimhook.cc:194
 #, fuzzy, c-format
 msgid "+ [aim] adding %s to the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:209
+#: src/hooks/aimhook.cc:208
 #, fuzzy, c-format
 msgid "+ [aim] removing %s from the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:307
+#: src/hooks/aimhook.cc:306
 #, c-format
 msgid "I do really enjoy the default AIM profile of centericq %s."
 msgstr ""
 
-#: src/hooks/aimhook.cc:359
+#: src/hooks/aimhook.cc:340
 #, fuzzy
 msgid "+ [aim] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/aimhook.cc:378
+#: src/hooks/aimhook.cc:359
 #, fuzzy
 msgid "+ [aim] disconnected"
 msgstr "+ odpojeno"
 
-#: src/hooks/aimhook.cc:396
+#: src/hooks/aimhook.cc:377
 #, fuzzy
 msgid "aim connection failed"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:398
+#: src/hooks/aimhook.cc:379
 #, fuzzy, c-format
 msgid "+ [aim] connect failed: %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:415
+#: src/hooks/aimhook.cc:396
 #, fuzzy
 msgid "+ [aim] password was changed successfully"
 msgstr " Nastavení hesla "
 
-#: src/hooks/aimhook.cc:438
+#: src/hooks/aimhook.cc:419
 msgid "The user has no profile information."
 msgstr ""
 
-#: src/hooks/aimhook.cc:531
+#: src/hooks/aimhook.cc:512
 #, fuzzy
 msgid "+ [aim] password sent"
 msgstr "Heslo: "
 
-#: src/hooks/icqhook.cc:154
+#: src/hooks/icqhook.cc:153
 #, fuzzy
 msgid "+ [icq] connecting to the server"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/icqhook.cc:1025
+#: src/hooks/icqhook.cc:936
 #, fuzzy
 msgid "+ [icq] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/icqhook.cc:1052
+#: src/hooks/icqhook.cc:963
 msgid "as requested"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1053
+#: src/hooks/icqhook.cc:964
 msgid "socket problems"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1054
+#: src/hooks/icqhook.cc:965
 #, fuzzy
 msgid "bad username"
 msgstr " Jméno u¾ivatele proxy serveru : %s "
 
-#: src/hooks/icqhook.cc:1055
+#: src/hooks/icqhook.cc:966
 msgid "turboing"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1056
+#: src/hooks/icqhook.cc:967
 #, fuzzy
 msgid "bad password"
 msgstr "Heslo: "
 
-#: src/hooks/icqhook.cc:1057
+#: src/hooks/icqhook.cc:968
 msgid "username and password mismatch"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1058
+#: src/hooks/icqhook.cc:969
 msgid "already logged"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1071
+#: src/hooks/icqhook.cc:982
 #, fuzzy
 msgid "+ [icq] disconnected"
 msgstr "+ odpojeno"
 
-#: src/hooks/icqhook.cc:1077
+#: src/hooks/icqhook.cc:988
 #, fuzzy
 msgid "icq disconnection reason"
 msgstr "+ odpojeno"
 
-#: src/hooks/icqhook.cc:1136
+#: src/hooks/icqhook.cc:1047
 #, fuzzy
 msgid "The user has accepted your authorization request"
 msgstr "si Vás pøidal(a) do seznamu kontaktù"
 
-#: src/hooks/icqhook.cc:1140
+#: src/hooks/icqhook.cc:1051
 #, fuzzy
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "®ádost o autorizaci od %lu"
 
-#: src/hooks/icqhook.cc:1195
+#: src/hooks/icqhook.cc:1106
 #, fuzzy, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ soubor od %s, %lu odmítnut"
 
-#: src/hooks/icqhook.cc:1198
+#: src/hooks/icqhook.cc:1109
 #, fuzzy, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ soubor od %s, %lu odmítnut"
 
-#: src/hooks/icqhook.cc:1213
+#: src/hooks/icqhook.cc:1124
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1360
+#: src/hooks/icqhook.cc:1271
 msgid "Random Chat User"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1390
+#: src/hooks/icqhook.cc:1301
 #, c-format
 msgid "+ [icq] search finished, %d found"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1430
+#: src/hooks/icqhook.cc:1341
 #, fuzzy
 msgid "+ [icq] password was changed successfully"
 msgstr " Nastavení hesla "
@@ -773,8 +782,8 @@ msgstr ""
 msgid " Search profiles "
 msgstr ""
 
-#: src/icqdialogs.cc:104 src/icqdialogs.cc:1004 src/icqdialogs.cc:1558
-#: src/icqface.cc:1647 src/icqface.cc:2274
+#: src/icqdialogs.cc:104 src/icqdialogs.cc:1004 src/icqdialogs.cc:1566
+#: src/icqface.cc:1648 src/icqface.cc:2275
 msgid "Remove"
 msgstr "Odebrat"
 
@@ -801,7 +810,7 @@ msgid "cLear"
 msgstr "Mobil"
 
 #: src/icqdialogs.cc:213 src/icqdialogs.cc:218 src/icqdialogs.cc:223
-#: src/icqdialogs.cc:704 src/icqdialogs.cc:1111 src/icqdialogs.cc:1770
+#: src/icqdialogs.cc:704 src/icqdialogs.cc:1119 src/icqdialogs.cc:1778
 #: src/accountmanager.cc:68 src/imcontroller.cc:70
 msgid "Change"
 msgstr "Zmìnit"
@@ -983,7 +992,7 @@ msgstr ""
 msgid " Keywords : %s "
 msgstr " Práce "
 
-#: src/icqdialogs.cc:381 src/icqdialogs.cc:1799
+#: src/icqdialogs.cc:381 src/icqdialogs.cc:1807
 #, fuzzy
 msgid " Options "
 msgstr "Místo"
@@ -1099,7 +1108,7 @@ msgstr "UIN: "
 msgid "Check frequency: "
 msgstr ""
 
-#: src/icqdialogs.cc:518 src/icqdialogs.cc:1781
+#: src/icqdialogs.cc:518 src/icqdialogs.cc:1789
 msgid " General "
 msgstr " Obecné "
 
@@ -1186,7 +1195,7 @@ msgstr " Druhý jazyk : %s "
 msgid " 3rd language : %s "
 msgstr " Tøetí jazyk : %s "
 
-#: src/icqdialogs.cc:637 src/icqdialogs.cc:1182
+#: src/icqdialogs.cc:637 src/icqdialogs.cc:1190
 msgid " Miscellaneous "
 msgstr ""
 
@@ -1229,7 +1238,7 @@ msgstr " Va¹e ICQ detaily "
 msgid " %s: details "
 msgstr " ICQ detaily: %s "
 
-#: src/icqdialogs.cc:704 src/icqdialogs.cc:1111 src/icqdialogs.cc:1437
+#: src/icqdialogs.cc:704 src/icqdialogs.cc:1119 src/icqdialogs.cc:1445
 #: src/accountmanager.cc:68
 msgid "Done"
 msgstr "Ok"
@@ -1275,8 +1284,8 @@ msgstr "Mobil: "
 msgid "Homepage: "
 msgstr "Homepage: "
 
-#: src/icqdialogs.cc:795 src/icqface.cc:1198 src/icqface.cc:1202
-#: src/icqface.cc:1214
+#: src/icqdialogs.cc:795 src/icqface.cc:1199 src/icqface.cc:1203
+#: src/icqface.cc:1215
 msgid "About"
 msgstr "O mnì"
 
@@ -1305,9 +1314,9 @@ msgstr " O mnì [Ctrl-X ulo¾it, Esc zru¹it] "
 msgid " Send file(s) to %s, %lu "
 msgstr " Poslat soubor(y) pro %s, %lu "
 
-#: src/icqdialogs.cc:1004 src/icqdialogs.cc:1436 src/icqface.cc:62
-#: src/icqface.cc:755 src/icqface.cc:758 src/icqface.cc:1647
-#: src/icqface.cc:2274
+#: src/icqdialogs.cc:1004 src/icqdialogs.cc:1444 src/icqface.cc:62
+#: src/icqface.cc:756 src/icqface.cc:759 src/icqface.cc:1648
+#: src/icqface.cc:2275
 msgid "Add"
 msgstr "Pøidat"
 
@@ -1315,7 +1324,7 @@ msgstr "Pøidat"
 msgid "Comment"
 msgstr "Komentáø"
 
-#: src/icqdialogs.cc:1004 src/icqface.cc:2274
+#: src/icqdialogs.cc:1004 src/icqface.cc:2275
 msgid "Send"
 msgstr "Poslat"
 
@@ -1335,402 +1344,402 @@ msgstr "jméno souboru: "
 msgid "comment: "
 msgstr "komentáø: "
 
-#: src/icqdialogs.cc:1102
+#: src/icqdialogs.cc:1110
 #, fuzzy
 msgid " CenterICQ configuration "
 msgstr " Konfigurace CenterICQ"
 
-#: src/icqdialogs.cc:1122
+#: src/icqdialogs.cc:1130
 #, fuzzy
 msgid " User interface "
 msgstr " Jméno u¾ivatele proxy serveru : %s "
 
-#: src/icqdialogs.cc:1123
+#: src/icqdialogs.cc:1131
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Zmìnit zvukové zaøízení na : %s "
 
-#: src/icqdialogs.cc:1124
+#: src/icqdialogs.cc:1132
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Zmìnit barevné schéma na : %s "
 
-#: src/icqdialogs.cc:1127
+#: src/icqdialogs.cc:1135
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1129
+#: src/icqdialogs.cc:1137
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1131
+#: src/icqdialogs.cc:1139
 #, fuzzy
 msgid " Contact list "
 msgstr "Kontakty od %s, %lu"
 
-#: src/icqdialogs.cc:1132
+#: src/icqdialogs.cc:1140
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1133
+#: src/icqdialogs.cc:1141
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Skrýt offline u¾ivatele : %s "
 
-#: src/icqdialogs.cc:1134
+#: src/icqdialogs.cc:1142
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-spam: zahazovat zprávy od neznámých lidí : %s "
 
-#: src/icqdialogs.cc:1135
+#: src/icqdialogs.cc:1143
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Citovat zprávu v odpovìdi : %s "
 
-#: src/icqdialogs.cc:1136
+#: src/icqdialogs.cc:1144
 #, fuzzy, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Ovìøení hesla : %s "
 
-#: src/icqdialogs.cc:1137
+#: src/icqdialogs.cc:1145
 #, fuzzy, c-format
 msgid " Remember passwords : %s "
 msgstr " Pamatovat si ICQ heslo : %s "
 
-#: src/icqdialogs.cc:1138
+#: src/icqdialogs.cc:1146
 #, fuzzy, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Citovat zprávu v odpovìdi : %s "
 
-#: src/icqdialogs.cc:1145
+#: src/icqdialogs.cc:1153
 #, fuzzy, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " Citovat zprávu v odpovìdi : %s "
 
-#: src/icqdialogs.cc:1151
+#: src/icqdialogs.cc:1159
 #, fuzzy, c-format
 msgid " Enter key sends message for : %s"
 msgstr " Citovat zprávu v odpovìdi : %s "
 
-#: src/icqdialogs.cc:1158
+#: src/icqdialogs.cc:1166
 #, fuzzy, c-format
 msgid " Russian win/koi translation for : %s"
 msgstr " Je potøeba transformace win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:1161
+#: src/icqdialogs.cc:1169
 #, fuzzy, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Citovat zprávu v odpovìdi : %s "
 
-#: src/icqdialogs.cc:1162
+#: src/icqdialogs.cc:1170
 #, c-format
 msgid " Enter key sends message : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1163
+#: src/icqdialogs.cc:1171
 #, fuzzy, c-format
 msgid " Russian win/koi translation : %s "
 msgstr " Je potøeba transformace win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:1167
+#: src/icqdialogs.cc:1175
 #, fuzzy, c-format
 msgid " Default charset : %s "
 msgstr " Oddìlení : %s "
 
-#: src/icqdialogs.cc:1169
+#: src/icqdialogs.cc:1177
 msgid " Communications "
 msgstr " Komunikace "
 
-#: src/icqdialogs.cc:1170
+#: src/icqdialogs.cc:1178
 #, fuzzy, c-format
 msgid " SMTP server : %s "
 msgstr " Adresa serveru : %s "
 
-#: src/icqdialogs.cc:1171
+#: src/icqdialogs.cc:1179
 #, fuzzy, c-format
 msgid " HTTP proxy server : %s "
 msgstr " Adresa serveru : %s "
 
-#: src/icqdialogs.cc:1172
+#: src/icqdialogs.cc:1180
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1175
+#: src/icqdialogs.cc:1183
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1177
+#: src/icqdialogs.cc:1185
 #, fuzzy
 msgid " Logging "
 msgstr " Telefon : %s "
 
-#: src/icqdialogs.cc:1178
+#: src/icqdialogs.cc:1186
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1179
+#: src/icqdialogs.cc:1187
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1180
+#: src/icqdialogs.cc:1188
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1183
+#: src/icqdialogs.cc:1191
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Automaticky nastavit \"pryè\" (min) : %d "
 
-#: src/icqdialogs.cc:1184
+#: src/icqdialogs.cc:1192
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Automaticky nastavit \"nedostupný\" (min) : %d "
 
-#: src/icqdialogs.cc:1211
+#: src/icqdialogs.cc:1219
 msgid "Auto Away period (0 - disable): "
 msgstr "Auto Away interval (0 - vypnout): "
 
-#: src/icqdialogs.cc:1215
+#: src/icqdialogs.cc:1223
 msgid "Auto N/A period (0 - disable): "
 msgstr "Auto N/A interval (0 - vypnout): "
 
-#: src/icqdialogs.cc:1224
+#: src/icqdialogs.cc:1232
 msgid "Default charset: "
 msgstr ""
 
-#: src/icqdialogs.cc:1244
+#: src/icqdialogs.cc:1252
 #, fuzzy
 msgid "SMTP server hostname: "
 msgstr " Jméno u¾ivatele proxy serveru : %s "
 
-#: src/icqdialogs.cc:1254
+#: src/icqdialogs.cc:1262
 msgid "Peer-to-peer port range (min-max): "
 msgstr ""
 
-#: src/icqdialogs.cc:1268
+#: src/icqdialogs.cc:1276
 #, fuzzy
 msgid "HTTP proxy server hostname: "
 msgstr " Jméno u¾ivatele proxy serveru : %s "
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1408
 #, fuzzy
 msgid "Your details have been fetched"
 msgstr "Va¹e ICQ detaily bylo sta¾eny"
 
-#: src/icqdialogs.cc:1412
+#: src/icqdialogs.cc:1420
 msgid "Organize contact groups"
 msgstr ""
 
-#: src/icqdialogs.cc:1436
+#: src/icqdialogs.cc:1444
 #, fuzzy
 msgid "Rename"
 msgstr "Odebrat"
 
-#: src/icqdialogs.cc:1436
+#: src/icqdialogs.cc:1444
 #, fuzzy
 msgid "rEmove"
 msgstr "Odebrat"
 
-#: src/icqdialogs.cc:1436
+#: src/icqdialogs.cc:1444
 #, fuzzy
 msgid "move Up"
 msgstr "Odebrat"
 
-#: src/icqdialogs.cc:1436
+#: src/icqdialogs.cc:1444
 msgid "move Down"
 msgstr ""
 
-#: src/icqdialogs.cc:1437
+#: src/icqdialogs.cc:1445
 msgid "Select"
 msgstr ""
 
-#: src/icqdialogs.cc:1452
+#: src/icqdialogs.cc:1460
 msgid " Groups "
 msgstr ""
 
-#: src/icqdialogs.cc:1467
+#: src/icqdialogs.cc:1475
 msgid "Name for a group to be created: "
 msgstr ""
 
-#: src/icqdialogs.cc:1477
+#: src/icqdialogs.cc:1485
 #, fuzzy
 msgid "New name for the group: "
 msgstr "Nová pøezdívka: "
 
-#: src/icqdialogs.cc:1492
+#: src/icqdialogs.cc:1500
 #, fuzzy
 msgid "Are you sure want to remove the group?"
 msgstr "Opravdu chcete odstranit %s (%lu)?"
 
-#: src/icqdialogs.cc:1549
+#: src/icqdialogs.cc:1557
 msgid "File transfer status"
 msgstr ""
 
-#: src/icqdialogs.cc:1558
+#: src/icqdialogs.cc:1566
 #, fuzzy
 msgid "Cancel"
 msgstr "Zmìnit"
 
-#: src/icqdialogs.cc:1587
+#: src/icqdialogs.cc:1595
 #, fuzzy, c-format
 msgid " Incoming from %s "
 msgstr "+ pøijímám %s od %s, %lu"
 
-#: src/icqdialogs.cc:1589
+#: src/icqdialogs.cc:1597
 #, fuzzy, c-format
 msgid " Outgoing to %s "
 msgstr "+ odesílám %s pro %s, %lu"
 
-#: src/icqdialogs.cc:1597
+#: src/icqdialogs.cc:1605
 msgid "init"
 msgstr ""
 
-#: src/icqdialogs.cc:1598
+#: src/icqdialogs.cc:1606
 msgid "start"
 msgstr ""
 
-#: src/icqdialogs.cc:1599
+#: src/icqdialogs.cc:1607
 #, fuzzy
 msgid "work"
 msgstr "Práce"
 
-#: src/icqdialogs.cc:1600
+#: src/icqdialogs.cc:1608
 #, fuzzy
 msgid "done"
 msgstr "Ok"
 
-#: src/icqdialogs.cc:1601
+#: src/icqdialogs.cc:1609
 msgid "err"
 msgstr ""
 
-#: src/icqdialogs.cc:1602
+#: src/icqdialogs.cc:1610
 #, fuzzy
 msgid "abort"
 msgstr "O mnì"
 
-#: src/icqdialogs.cc:1609
+#: src/icqdialogs.cc:1617
 #, fuzzy
 msgid " of "
 msgstr " Práce "
 
-#: src/icqdialogs.cc:1642
+#: src/icqdialogs.cc:1650
 msgid "Cannot remove a transfer which is in progress now"
 msgstr ""
 
-#: src/icqdialogs.cc:1753
+#: src/icqdialogs.cc:1761
 msgid "public (visible to all)"
 msgstr ""
 
-#: src/icqdialogs.cc:1755
+#: src/icqdialogs.cc:1763
 msgid "private"
 msgstr ""
 
-#: src/icqdialogs.cc:1757
+#: src/icqdialogs.cc:1765
 #, fuzzy
 msgid "friends only"
 msgstr "®ena"
 
-#: src/icqdialogs.cc:1762
+#: src/icqdialogs.cc:1770
 msgid " LiveJournal posting: attributes "
 msgstr ""
 
-#: src/icqdialogs.cc:1770
+#: src/icqdialogs.cc:1778
 msgid "Detect music"
 msgstr ""
 
-#: src/icqdialogs.cc:1770
+#: src/icqdialogs.cc:1778
 msgid "Post"
 msgstr ""
 
-#: src/icqdialogs.cc:1770
+#: src/icqdialogs.cc:1778
 #, fuzzy
 msgid "cAncel"
 msgstr "Zmìnit"
 
-#: src/icqdialogs.cc:1782
+#: src/icqdialogs.cc:1790
 #, fuzzy, c-format
 msgid " Post to journal : %s "
 msgstr " Pozice : %s "
 
-#: src/icqdialogs.cc:1783
+#: src/icqdialogs.cc:1791
 #, fuzzy, c-format
 msgid " Subject : %s "
 msgstr " Adresa serveru : %s "
 
-#: src/icqdialogs.cc:1788
+#: src/icqdialogs.cc:1796
 #, fuzzy, c-format
 msgid " Security : %s "
 msgstr " Adresa serveru : %s "
 
-#: src/icqdialogs.cc:1790
+#: src/icqdialogs.cc:1798
 msgid " Fancy stuff "
 msgstr ""
 
-#: src/icqdialogs.cc:1793
+#: src/icqdialogs.cc:1801
 #, fuzzy, c-format
 msgid " Mood : %s "
 msgstr " Telefon : %s "
 
-#: src/icqdialogs.cc:1793 src/icqdialogs.cc:1819
+#: src/icqdialogs.cc:1801 src/icqdialogs.cc:1827
 msgid "(none/custom)"
-msgstr ""
-
-#: src/icqdialogs.cc:1794
-#, fuzzy, c-format
-msgid " Custom mood : %s "
-msgstr " Pøíjmení : %s "
-
-#: src/icqdialogs.cc:1796
-#, fuzzy, c-format
-msgid " Music : %s "
-msgstr " E-Mail : %s "
-
-#: src/icqdialogs.cc:1797
-#, fuzzy, c-format
-msgid " Picture : %s "
-msgstr " Adresa serveru : %s "
-
-#: src/icqdialogs.cc:1797 src/icqdialogs.cc:1821
-msgid "(default)"
-msgstr ""
-
-#: src/icqdialogs.cc:1800
-#, c-format
-msgid " Disable auto-formatting : %s "
-msgstr ""
-
-#: src/icqdialogs.cc:1801
-#, c-format
-msgid " Disable sending comments by e-mail : %s "
 msgstr ""
 
 #: src/icqdialogs.cc:1802
 #, fuzzy, c-format
+msgid " Custom mood : %s "
+msgstr " Pøíjmení : %s "
+
+#: src/icqdialogs.cc:1804
+#, fuzzy, c-format
+msgid " Music : %s "
+msgstr " E-Mail : %s "
+
+#: src/icqdialogs.cc:1805
+#, fuzzy, c-format
+msgid " Picture : %s "
+msgstr " Adresa serveru : %s "
+
+#: src/icqdialogs.cc:1805 src/icqdialogs.cc:1829
+msgid "(default)"
+msgstr ""
+
+#: src/icqdialogs.cc:1808
+#, c-format
+msgid " Disable auto-formatting : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:1809
+#, c-format
+msgid " Disable sending comments by e-mail : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:1810
+#, fuzzy, c-format
 msgid " Disallow comments : %s "
 msgstr " Oddìlení : %s "
 
-#: src/icqdialogs.cc:1803
+#: src/icqdialogs.cc:1811
 #, fuzzy, c-format
 msgid " Backdated entry : %s "
 msgstr " Datum narození : %s "
 
-#: src/icqdialogs.cc:1811
+#: src/icqdialogs.cc:1819
 msgid "Posting subject: "
 msgstr ""
 
-#: src/icqdialogs.cc:1820
+#: src/icqdialogs.cc:1828
 msgid "Currently playing: "
 msgstr ""
 
-#: src/icqdialogs.cc:1822
+#: src/icqdialogs.cc:1830
 msgid "Current mood: "
 msgstr ""
 
@@ -1782,7 +1791,7 @@ msgstr "Pryè"
 msgid "message"
 msgstr "Homepage"
 
-#: src/imlogger.cc:49 src/icqface.cc:924
+#: src/imlogger.cc:49 src/icqface.cc:925
 msgid "URL"
 msgstr ""
 
@@ -1894,78 +1903,79 @@ msgstr " UIN : %s "
 msgid " Login : %s "
 msgstr " Telefon : %s "
 
-#: src/accountmanager.cc:126
+#: src/accountmanager.cc:114
 #, fuzzy, c-format
 msgid " Password (optional) : %s "
 msgstr " Heslo : %s "
 
-#: src/accountmanager.cc:126
+#: src/accountmanager.cc:114
 #, c-format
 msgid " Password : %s "
 msgstr " Heslo : %s "
 
-#: src/accountmanager.cc:130
+#: src/accountmanager.cc:120
+#, fuzzy, c-format
+msgid " Priority : %s "
+msgstr " Mìsto : %s "
+
+#: src/accountmanager.cc:125
+#, fuzzy, c-format
+msgid " Import friend list : %s "
+msgstr " Oddìlení : %s "
+
+#: src/accountmanager.cc:131
 msgid " Register "
 msgstr ""
 
-#: src/accountmanager.cc:136
+#: src/accountmanager.cc:137
 #, fuzzy
 msgid " Change nickname "
 msgstr "Pøezdívka: "
 
-#: src/accountmanager.cc:137
+#: src/accountmanager.cc:138
 #, fuzzy
 msgid " Update user details "
 msgstr " Aktualizovat Va¹e detaily"
 
-#: src/accountmanager.cc:140
+#: src/accountmanager.cc:141
 #, fuzzy
 msgid " Set away message "
 msgstr "Homepage"
 
 #: src/accountmanager.cc:143
-#, fuzzy
-msgid " Synchronize contact list "
-msgstr "Kontakty od %s, %lu"
-
-#: src/accountmanager.cc:145
 msgid " Drop "
 msgstr ""
 
-#: src/accountmanager.cc:163
+#: src/accountmanager.cc:162
 #, fuzzy
 msgid " user name: "
 msgstr " Jméno u¾ivatele proxy serveru : %s "
 
-#: src/accountmanager.cc:168
+#: src/accountmanager.cc:167
 #, fuzzy
 msgid " uin: "
 msgstr "nové UIN"
 
-#: src/accountmanager.cc:173
+#: src/accountmanager.cc:172
 #, fuzzy
 msgid " password: "
 msgstr "Heslo: "
 
-#: src/accountmanager.cc:181
+#: src/accountmanager.cc:180
 msgid "Drop the account information first!"
 msgstr ""
 
-#: src/accountmanager.cc:195
+#: src/accountmanager.cc:194
 #, fuzzy
 msgid "You have to disconnect the service first!"
 msgstr "+ k icq serveru se nelze pøipojit"
 
-#: src/accountmanager.cc:204
+#: src/accountmanager.cc:203
 #, fuzzy
 msgid " server address: "
 msgstr " Adresa ICQ serveru : %s "
 
-#: src/accountmanager.cc:226
-msgid "You must be logged in to preform the synchronization"
-msgstr ""
-
-#: src/accountmanager.cc:247
+#: src/accountmanager.cc:242
 msgid " priority: "
 msgstr ""
 
@@ -2015,242 +2025,193 @@ msgstr "Hesla se neshodují"
 msgid "Password must be entered"
 msgstr "Ovìøení hesla: "
 
-#: src/imcontroller.cc:130 src/imcontroller.cc:191
+#: src/imcontroller.cc:114
+#, fuzzy
+msgid "Password must be at least 6 chars long"
+msgstr "Ovìøení hesla: "
+
+#: src/imcontroller.cc:132 src/imcontroller.cc:193
 msgid " Registration progress "
 msgstr " Prùbìh registrace "
 
-#: src/imcontroller.cc:133
+#: src/imcontroller.cc:135
 #, c-format
 msgid "Connecting to the server %s ..."
 msgstr "Pøipojuji se k serveru %s ..."
 
-#: src/imcontroller.cc:137
+#: src/imcontroller.cc:139
 msgid "Sending request"
 msgstr "Vysílám ¾ádost"
 
-#: src/imcontroller.cc:143
+#: src/imcontroller.cc:145
 msgid "Timed out waiting for a new uin. Retry?"
 msgstr "Do¹el èas pøi èekání na nové UIN. Mám to zkusit znovu ?"
 
-#: src/imcontroller.cc:147
+#: src/imcontroller.cc:149
 msgid "Retrying.."
 msgstr "Zkou¹ím to znovu..."
 
-#: src/imcontroller.cc:153
+#: src/imcontroller.cc:155
 #, c-format
 msgid "New UIN received, %lu"
 msgstr "Dostal jsem nové UIN: %lu"
 
-#: src/imcontroller.cc:169 src/imcontroller.cc:227 src/imcontroller.cc:317
+#: src/imcontroller.cc:171 src/imcontroller.cc:229
 msgid "Disconnected"
 msgstr "Odpojeno"
 
-#: src/imcontroller.cc:172
+#: src/imcontroller.cc:174
 msgid "Unable to connect to the icq server. Retry?"
 msgstr "Nemohu se pøipojit k ICQ serveru. Znovu?"
 
-#: src/imcontroller.cc:193
+#: src/imcontroller.cc:195
 #, c-format
 msgid "Trying to register %s at %s ..."
 msgstr ""
 
-#: src/imcontroller.cc:208
+#: src/imcontroller.cc:210
 msgid "The Jabber ID was successfully registered"
 msgstr ""
 
-#: src/imcontroller.cc:221
+#: src/imcontroller.cc:223
 #, fuzzy
 msgid "Failed"
 msgstr "®ena"
 
-#: src/imcontroller.cc:249
+#: src/imcontroller.cc:251
 msgid "You must be logged to the ICQ network to update the details"
 msgstr ""
 
-#: src/imcontroller.cc:267
+#: src/imcontroller.cc:269
 msgid "new MSN friendly nick: "
 msgstr ""
 
-#: src/imcontroller.cc:275
+#: src/imcontroller.cc:277
 #, c-format
 msgid "Your friendly nickname has been changed to %s"
 msgstr ""
 
-#: src/imcontroller.cc:279
+#: src/imcontroller.cc:281
 msgid "You must be logged to the MSN network to update the friendly nick"
 msgstr ""
 
-#: src/imcontroller.cc:296
+#: src/imcontroller.cc:298
 msgid "You must be logged to the Jabber network to update your details"
 msgstr ""
 
-#: src/imcontroller.cc:307
-#, fuzzy
-msgid " Contact list synchronization "
-msgstr "Kontakty od %s, %lu"
-
-#: src/imcontroller.cc:308
-msgid "Starting the synchronization process"
-msgstr ""
-
-#: src/imcontroller.cc:312
-#, c-format
-msgid "Attempt #%d"
-msgstr ""
-
-#: src/imcontroller.cc:313
-#, c-format
-msgid ".. %d already synchronized, %d contacts to be stored"
-msgstr ""
-
-#: src/imcontroller.cc:316 src/imcontroller.cc:357
-msgid "Finished"
-msgstr ""
-
-#: src/imcontroller.cc:318
-msgid "Too many attempts, gave up"
-msgstr ""
-
-#: src/imcontroller.cc:340
-msgid " Uploading buddies "
-msgstr ""
-
-#: src/imcontroller.cc:343
-#, fuzzy
-msgid "No contacts to be synchronized"
-msgstr "Kontakty od %s, %lu"
-
-#: src/imcontroller.cc:344
-msgid ".. all of them are already stored server-side"
-msgstr ""
-
-#: src/imcontroller.cc:348
-#, c-format
-msgid "%d contacts are do be stored server-side. Add them now?"
-msgstr ""
-
-#: src/imcontroller.cc:353
-#, c-format
-msgid ".. adding %s"
-msgstr ""
-
-#: src/imcontroller.cc:359
-msgid "Cancelled"
-msgstr ""
-
-#: src/imcontroller.cc:374
+#: src/imcontroller.cc:309
 #, fuzzy
 msgid "registration is not supported"
 msgstr " Prùbìh registrace "
 
-#: src/icqconf.cc:148
+#: src/icqconf.cc:158
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr ""
 
-#: src/icqconf.cc:733
+#: src/icqconf.cc:746
 #, c-format
 msgid "+ launched the %s action command"
 msgstr ""
 
-#: src/icqconf.cc:903
+#: src/icqconf.cc:916
 msgid "event sending error: not enough parameters"
 msgstr ""
 
-#: src/icqconf.cc:914
+#: src/icqconf.cc:927
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 
-#: src/icqconf.cc:929
+#: src/icqconf.cc:942
 msgid "event sending error: unknown IM type"
 msgstr ""
 
-#: src/icqconf.cc:951
+#: src/icqconf.cc:964
 msgid "event sending error: unknown event type"
 msgstr ""
 
-#: src/icqconf.cc:963
+#: src/icqconf.cc:976
 #, fuzzy, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "+ %s byl pøidán do visible listu"
 
-#: src/icqconf.cc:969
+#: src/icqconf.cc:982
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 
-#: src/icqconf.cc:1011
+#: src/icqconf.cc:1024
 msgid "unknown status character was given"
 msgstr ""
 
-#: src/icqconf.cc:1014
+#: src/icqconf.cc:1027
 msgid "unknown IM type"
 msgstr ""
 
-#: src/icqconf.cc:1017
+#: src/icqconf.cc:1030
 msgid "status change error: "
 msgstr ""
 
-#: src/icqconf.cc:1026
+#: src/icqconf.cc:1039
 #, fuzzy
 msgid "Usage: "
 msgstr "Vìk: "
 
-#: src/icqconf.cc:1028
+#: src/icqconf.cc:1041
 #, fuzzy
 msgid "General options:"
 msgstr " Obecné "
 
-#: src/icqconf.cc:1029
+#: src/icqconf.cc:1042
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 
-#: src/icqconf.cc:1030
+#: src/icqconf.cc:1043
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr ""
 
-#: src/icqconf.cc:1031
+#: src/icqconf.cc:1044
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr ""
 
-#: src/icqconf.cc:1032
+#: src/icqconf.cc:1045
 #, fuzzy
 msgid "  --help                   display this stuff"
 msgstr " Zmìnit ICQ status                   s"
 
-#: src/icqconf.cc:1033
+#: src/icqconf.cc:1046
 msgid "  --version, -v            show the program version info"
 msgstr ""
 
-#: src/icqconf.cc:1035
+#: src/icqconf.cc:1048
 #, fuzzy
 msgid "Events sending options:"
 msgstr " Konfigurace CenterICQ"
 
-#: src/icqconf.cc:1036
+#: src/icqconf.cc:1049
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 
-#: src/icqconf.cc:1037
+#: src/icqconf.cc:1050
 msgid "  -S, --status <status>    change the current IM status"
 msgstr ""
 
-#: src/icqconf.cc:1038
+#: src/icqconf.cc:1051
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
 msgstr ""
 
-#: src/icqconf.cc:1040
+#: src/icqconf.cc:1053
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 
-#: src/icqconf.cc:1041
+#: src/icqconf.cc:1054
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 
-#: src/icqconf.cc:1043
+#: src/icqconf.cc:1056
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 
@@ -2594,519 +2555,519 @@ msgstr " Skrýt offline u¾ivatele : %s "
 msgid " Organize contact groups"
 msgstr "Kontakty od %s, %lu"
 
-#: src/icqface.cc:754 src/icqface.cc:758 src/icqface.cc:1647
+#: src/icqface.cc:426
+msgid " Mass group move.."
+msgstr ""
+
+#: src/icqface.cc:755 src/icqface.cc:759 src/icqface.cc:1648
 msgid "Details"
 msgstr "Detaily"
 
-#: src/icqface.cc:754
+#: src/icqface.cc:755
 #, fuzzy
 msgid "Message"
 msgstr "Homepage"
 
-#: src/icqface.cc:755 src/icqface.cc:759
+#: src/icqface.cc:756 src/icqface.cc:760
 msgid "New search"
 msgstr "Nové hledání"
 
-#: src/icqface.cc:773
+#: src/icqface.cc:774
 #, fuzzy
 msgid "Contact to add"
 msgstr "Kontakty od %s, %lu"
 
-#: src/icqface.cc:783
+#: src/icqface.cc:784
 msgid "Searching contacts.."
 msgstr ""
 
-#: src/icqface.cc:854
+#: src/icqface.cc:855
 msgid "Search results [done]"
 msgstr ""
 
-#: src/icqface.cc:865
+#: src/icqface.cc:866
 #, fuzzy, c-format
 msgid "Information about %s"
 msgstr "Informace o %lu, %s"
 
-#: src/icqface.cc:922 src/icqface.cc:955
+#: src/icqface.cc:923 src/icqface.cc:956
 msgid "Nickname"
 msgstr "Pøezdívka"
 
-#: src/icqface.cc:923 src/icqface.cc:956
+#: src/icqface.cc:924 src/icqface.cc:957
 msgid "Name"
 msgstr "Jméno"
 
-#: src/icqface.cc:930
+#: src/icqface.cc:931
 msgid "This is your LiveJournal account. Use it to"
 msgstr ""
 
-#: src/icqface.cc:931
+#: src/icqface.cc:932
 msgid "post new entries to your journal."
 msgstr ""
 
-#: src/icqface.cc:938
+#: src/icqface.cc:939
 msgid "The following users have you listed as their friend:"
 msgstr ""
 
-#: src/icqface.cc:957
+#: src/icqface.cc:958
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/icqface.cc:958
+#: src/icqface.cc:959
 msgid "2nd e-mail"
 msgstr "2. E-mail"
 
-#: src/icqface.cc:959
+#: src/icqface.cc:960
 msgid "Old e-mail"
 msgstr "St. E-mail"
 
-#: src/icqface.cc:960
+#: src/icqface.cc:961
 msgid "Gender"
 msgstr "Pohlaví"
 
-#: src/icqface.cc:961 src/icqface.cc:1169
+#: src/icqface.cc:962 src/icqface.cc:1170
 msgid "Birthdate"
 msgstr "Narozen(a)"
 
-#: src/icqface.cc:962
+#: src/icqface.cc:963
 msgid "Age"
 msgstr "Vìk"
 
-#: src/icqface.cc:963
+#: src/icqface.cc:964
 msgid "Languages"
 msgstr "Jazyky"
 
-#: src/icqface.cc:964
+#: src/icqface.cc:965
 msgid "Last IP"
 msgstr "Poslední IP"
 
-#: src/icqface.cc:985
+#: src/icqface.cc:986
 msgid "Last seen"
 msgstr "Naposled"
 
-#: src/icqface.cc:987 src/icqface.cc:1153 src/icqface.cc:1157
+#: src/icqface.cc:988 src/icqface.cc:1154 src/icqface.cc:1158
 msgid "Never"
 msgstr "Nikdy"
 
-#: src/icqface.cc:1000 src/icqface.cc:1043
+#: src/icqface.cc:1001 src/icqface.cc:1044
 msgid "Address"
 msgstr "Adresa"
 
-#: src/icqface.cc:1001 src/icqface.cc:1044
+#: src/icqface.cc:1002 src/icqface.cc:1045
 msgid "Location"
 msgstr "Místo"
 
-#: src/icqface.cc:1002 src/icqface.cc:1045
+#: src/icqface.cc:1003 src/icqface.cc:1046
 msgid "Zip code"
 msgstr "PSÈ/Zip"
 
-#: src/icqface.cc:1003 src/icqface.cc:1051
+#: src/icqface.cc:1004 src/icqface.cc:1052
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:1004 src/icqface.cc:1052
+#: src/icqface.cc:1005 src/icqface.cc:1053
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:1005
+#: src/icqface.cc:1006
 msgid "Cellular"
 msgstr "Mobil"
 
-#: src/icqface.cc:1006
+#: src/icqface.cc:1007
 msgid "Timezone"
 msgstr ""
 
-#: src/icqface.cc:1008 src/icqface.cc:1053
+#: src/icqface.cc:1009 src/icqface.cc:1054
 msgid "Homepage"
 msgstr "Homepage"
 
-#: src/icqface.cc:1047
+#: src/icqface.cc:1048
 msgid "Company"
 msgstr "Firma"
 
-#: src/icqface.cc:1048
+#: src/icqface.cc:1049
 msgid "Department"
 msgstr "Oddìlení"
 
-#: src/icqface.cc:1049 src/icqface.cc:1128
+#: src/icqface.cc:1050 src/icqface.cc:1129
 msgid "Title"
 msgstr "Titul"
 
-#: src/icqface.cc:1093
+#: src/icqface.cc:1094
 msgid "Interests"
 msgstr "Zájmy"
 
-#: src/icqface.cc:1105
+#: src/icqface.cc:1106
 msgid "Background"
 msgstr ""
 
-#: src/icqface.cc:1123
+#: src/icqface.cc:1124
 #, fuzzy
 msgid "Handle"
 msgstr "Mu¾"
 
-#: src/icqface.cc:1124
+#: src/icqface.cc:1125
 msgid "RSS doc"
 msgstr ""
 
-#: src/icqface.cc:1125
+#: src/icqface.cc:1126
 msgid "Version"
 msgstr ""
 
-#: src/icqface.cc:1126
+#: src/icqface.cc:1127
 msgid "Encoding"
 msgstr ""
 
-#: src/icqface.cc:1129
+#: src/icqface.cc:1130
 msgid "Link"
 msgstr ""
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1132
 msgid "Frequency"
 msgstr ""
 
-#: src/icqface.cc:1132
+#: src/icqface.cc:1133
 #, fuzzy
 msgid "Last check"
 msgstr "Naposled"
 
-#: src/icqface.cc:1133
+#: src/icqface.cc:1134
 msgid "Next check"
 msgstr ""
 
-#: src/icqface.cc:1134
+#: src/icqface.cc:1135
 #, fuzzy
 msgid "Last result"
 msgstr "Naposled"
 
-#: src/icqface.cc:1148
+#: src/icqface.cc:1149
 #, c-format
 msgid "%lu minutes"
 msgstr ""
 
-#: src/icqface.cc:1151
+#: src/icqface.cc:1152
 msgid "Now"
 msgstr ""
 
-#: src/icqface.cc:1170
+#: src/icqface.cc:1171
 #, fuzzy
 msgid "Full name"
 msgstr "jméno souboru: "
 
-#: src/icqface.cc:1189
+#: src/icqface.cc:1190
 msgid "F2 to URLs, F6 external actions, ESC close"
 msgstr ""
 
-#: src/icqface.cc:1198 src/icqface.cc:1202 src/icqface.cc:1208
-#: src/icqface.cc:1214
+#: src/icqface.cc:1199 src/icqface.cc:1203 src/icqface.cc:1209
+#: src/icqface.cc:1215
 msgid "Info"
 msgstr "Info"
 
-#: src/icqface.cc:1198
+#: src/icqface.cc:1199
 msgid "Check"
 msgstr ""
 
-#: src/icqface.cc:1198 src/icqface.cc:1215
+#: src/icqface.cc:1199 src/icqface.cc:1216
 msgid "Edit"
 msgstr "Zmìnit"
 
-#: src/icqface.cc:1198
+#: src/icqface.cc:1199
 msgid "LJ"
 msgstr ""
 
-#: src/icqface.cc:1202
+#: src/icqface.cc:1203
 #, fuzzy
 msgid "Retreive"
 msgstr "Stáhnout"
 
-#: src/icqface.cc:1208
+#: src/icqface.cc:1209
 #, fuzzy
 msgid "Friend of"
 msgstr "®ena"
 
-#: src/icqface.cc:1214
+#: src/icqface.cc:1215
 msgid "Home"
 msgstr "Bydli¹tì"
 
-#: src/icqface.cc:1214
+#: src/icqface.cc:1215
 msgid "Work"
 msgstr "Práce"
 
-#: src/icqface.cc:1214
+#: src/icqface.cc:1215
 msgid "More"
 msgstr "Dal¹í"
 
-#: src/icqface.cc:1215
+#: src/icqface.cc:1216
 msgid "Retrieve"
 msgstr "Stáhnout"
 
-#: src/icqface.cc:1316
+#: src/icqface.cc:1317
 #, fuzzy
 msgid " [icq] ICQ network"
 msgstr " Registrace na ICQ síti "
 
-#: src/icqface.cc:1317
+#: src/icqface.cc:1318
 msgid " [yahoo] YAIM"
 msgstr ""
 
-#: src/icqface.cc:1318
+#: src/icqface.cc:1319
 msgid " [msn] M$ Messenger"
 msgstr ""
 
-#: src/icqface.cc:1319
+#: src/icqface.cc:1320
 msgid " [aim] AOL TOC"
 msgstr ""
 
-#: src/icqface.cc:1320
+#: src/icqface.cc:1321
 msgid " [irc] IRC"
 msgstr ""
 
-#: src/icqface.cc:1321
+#: src/icqface.cc:1322
 msgid " [jab] Jabber"
 msgstr ""
 
-#: src/icqface.cc:1323
+#: src/icqface.cc:1324
 msgid " [lj] LiveJournal"
 msgstr ""
 
-#: src/icqface.cc:1364
+#: src/icqface.cc:1365
 msgid " All protocols"
 msgstr ""
 
-#: src/icqface.cc:1365
+#: src/icqface.cc:1366
 #, fuzzy
 msgid " Already logged in only"
 msgstr "+ pøipojeno"
 
-#: src/icqface.cc:1406
+#: src/icqface.cc:1407
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:1407
+#: src/icqface.cc:1408
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:1408
+#: src/icqface.cc:1409
 msgid " [a] Away"
 msgstr " [a] Pryè"
 
-#: src/icqface.cc:1409
+#: src/icqface.cc:1410
 msgid " [d] Do not disturb"
 msgstr " [d] Neru¹it"
 
-#: src/icqface.cc:1410
+#: src/icqface.cc:1411
 msgid " [n] Not available"
 msgstr " [n] Nejsem k zasti¾ení"
 
-#: src/icqface.cc:1411
+#: src/icqface.cc:1412
 msgid " [c] Occupied"
 msgstr " [c] Mám práci"
 
-#: src/icqface.cc:1412
+#: src/icqface.cc:1413
 msgid " [f] Free for chat"
 msgstr " [f] Chci si povídat"
 
-#: src/icqface.cc:1413
+#: src/icqface.cc:1414
 msgid " [i] Invisible"
 msgstr " [i] Neviditelný"
 
-#: src/icqface.cc:1474
+#: src/icqface.cc:1475
 msgid " <Space> or <Enter> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1503
+#: src/icqface.cc:1504
 msgid " <Space> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1647
+#: src/icqface.cc:1648
 msgid "Move to contacts"
 msgstr "Do kontaktù"
 
-#: src/icqface.cc:1659
+#: src/icqface.cc:1660
 #, fuzzy
 msgid "Ignore list"
 msgstr "ICQ Ignore list"
 
-#: src/icqface.cc:1660
+#: src/icqface.cc:1661
 #, fuzzy
 msgid "Visible list"
 msgstr "ICQ Visible list"
 
-#: src/icqface.cc:1661
+#: src/icqface.cc:1662
 #, fuzzy
 msgid "Invisible list"
 msgstr "ICQ Invisible list"
 
-#: src/icqface.cc:1683
+#: src/icqface.cc:1684
 msgid "Select contacts to add to the list"
 msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
 
-#: src/icqface.cc:1688
+#: src/icqface.cc:1689
 #, c-format
 msgid "Remove the %d contacts from the contact list as well?"
 msgstr ""
 
-#: src/icqface.cc:1744
+#: src/icqface.cc:1745
 msgid "Event recipients"
 msgstr "Pøíjemci události"
 
-#: src/icqface.cc:1910
+#: src/icqface.cc:1911
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "Hledání: nìco napi¹te, Alt-S hledá znovu, Enter ukonèí"
 
-#: src/icqface.cc:2024
+#: src/icqface.cc:2025
 msgid "+ no URLs within the current context"
 msgstr ""
 
-#: src/icqface.cc:2037
+#: src/icqface.cc:2038
 msgid "URLs within the current context"
 msgstr ""
 
-#: src/icqface.cc:2053
+#: src/icqface.cc:2054
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr ""
 
-#: src/icqface.cc:2073
+#: src/icqface.cc:2074
 #, c-format
 msgid "Result of the external action %s:"
 msgstr ""
 
-#: src/icqface.cc:2091
+#: src/icqface.cc:2092
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
 msgstr ""
 "Ctrl-X odeslat, Ctrl-P hromadnì, Ctrl-O historie, Alt-? detaily, ESC zru¹it"
 
-#: src/icqface.cc:2093
+#: src/icqface.cc:2094
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X odeslat, Ctrl-P hromadnì, Ctrl-O historie, Alt-? detaily, ESC zru¹it"
 
-#: src/icqface.cc:2119 src/icqface.cc:2581
+#: src/icqface.cc:2120 src/icqface.cc:2582
 #, fuzzy, c-format
 msgid "Outgoing %s to %s"
 msgstr "+ odesílám %s pro %s, %lu"
 
-#: src/icqface.cc:2245
+#: src/icqface.cc:2246
 #, fuzzy
 msgid "Send contacts.."
 msgstr "Do kontaktù"
 
-#: src/icqface.cc:2305
+#: src/icqface.cc:2306
 #, fuzzy
 msgid "file name: "
 msgstr "jméno souboru: "
 
-#: src/icqface.cc:2582
+#: src/icqface.cc:2583
 #, c-format
 msgid "Sent on %s"
 msgstr "Odesláno %s"
 
-#: src/icqface.cc:2585
+#: src/icqface.cc:2586
 #, fuzzy, c-format
 msgid "Incoming %s from %s"
 msgstr "+ pøijímám %s od %s, %lu"
 
-#: src/icqface.cc:2586
+#: src/icqface.cc:2587
 #, fuzzy, c-format
 msgid "Received on %s"
 msgstr "%s, pøijato %s"
 
-#: src/icqface.cc:2631
+#: src/icqface.cc:2632
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr ""
 
-#: src/icqface.cc:2676
+#: src/icqface.cc:2677
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "%s, pøijato %s"
 
-#: src/icqface.cc:2677
+#: src/icqface.cc:2678
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "Odesláno %s"
 
-#: src/icqface.cc:2690
+#: src/icqface.cc:2691
 msgid "ESC or F9 to close"
 msgstr ""
 
-#: src/icqface.cc:2772
+#: src/icqface.cc:2773
 #, c-format
 msgid "History for %s, %d events total"
 msgstr ""
 
-#: src/icqface.cc:2775
+#: src/icqface.cc:2776
 msgid "/ search, N again, ESC cancel"
 msgstr ""
 
-#: src/icqface.cc:2781
+#: src/icqface.cc:2782
 #, fuzzy
 msgid "search for: "
 msgstr "+ hledání dokonèeno"
 
-#: src/hooks/rsshook.cc:298
+#: src/hooks/rsshook.cc:302
 msgid "couldn't fetch"
 msgstr ""
 
-#: src/hooks/rsshook.cc:329
+#: src/hooks/rsshook.cc:333
 msgid "wrong XML"
 msgstr ""
 
-#: src/hooks/rsshook.cc:332
+#: src/hooks/rsshook.cc:336
 msgid "no <rss> tag found"
 msgstr ""
 
-#: src/hooks/rsshook.cc:342
+#: src/hooks/rsshook.cc:346
 msgid "no <channel> tag found"
 msgstr ""
 
-#: src/hooks/rsshook.cc:348
+#: src/hooks/rsshook.cc:352
 #, fuzzy
 msgid "wrong <channel> tag"
 msgstr "nemìnit"
 
-#: src/hooks/rsshook.cc:360
+#: src/hooks/rsshook.cc:364
 msgid "success"
 msgstr ""
 
-#: src/hooks/rsshook.cc:380
+#: src/hooks/rsshook.cc:384
 #, fuzzy
 msgid "Title: "
 msgstr "Titul"
 
-#: src/hooks/rsshook.cc:381
+#: src/hooks/rsshook.cc:385
 msgid "Published on: "
 msgstr ""
 
-#: src/hooks/rsshook.cc:382
+#: src/hooks/rsshook.cc:386
 #, fuzzy
 msgid "Category: "
 msgstr "Mìsto: "
 
-#: src/hooks/rsshook.cc:383
+#: src/hooks/rsshook.cc:387
 #, fuzzy
 msgid "Author: "
 msgstr " Vy¾adovat autorizaci : %s "
 
-#: src/hooks/rsshook.cc:385
+#: src/hooks/rsshook.cc:389
 #, fuzzy
 msgid "Description: "
 msgstr "Pozice: "
 
-#: src/hooks/rsshook.cc:386
+#: src/hooks/rsshook.cc:390
 #, fuzzy
 msgid "Link: "
 msgstr "nové UIN"
 
-#: src/hooks/rsshook.cc:387
+#: src/hooks/rsshook.cc:391
 #, fuzzy
 msgid "Comments: "
 msgstr "komentáø: "
-
-#: src/hooks/HTTPClient.cc:288
-msgid "Timed out"
-msgstr ""
 
 #: src/hooks/ljhook.cc:66
 #, fuzzy
@@ -3118,7 +3079,7 @@ msgstr "+ pøipojuji se k icq serveru"
 msgid "+ [lj] disconnected"
 msgstr "+ odpojeno"
 
-#: src/hooks/ljhook.cc:395 src/hooks/ljhook.cc:707
+#: src/hooks/ljhook.cc:395 src/hooks/ljhook.cc:712
 msgid "+ [lj] user lookup finished"
 msgstr ""
 
@@ -3156,7 +3117,7 @@ msgstr ""
 msgid "+ [lj] post error: %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/ljhook.cc:643
+#: src/hooks/ljhook.cc:648
 #, fuzzy, c-format
 msgid ""
 "The user %s (%s) has added you to his/her friend list\n"
@@ -3164,7 +3125,7 @@ msgid ""
 "Journal address: %s"
 msgstr "si Vás pøidal(a) do seznamu kontaktù"
 
-#: src/hooks/ljhook.cc:653
+#: src/hooks/ljhook.cc:658
 #, fuzzy, c-format
 msgid ""
 "The user %s has removed you from his/her friend list\n"
@@ -3172,22 +3133,34 @@ msgid ""
 "Journal address: %s"
 msgstr "si Vás pøidal(a) do seznamu kontaktù"
 
-#: src/hooks/ljhook.cc:679
+#: src/hooks/ljhook.cc:684
 msgid "+ [lj] error deleting friend"
 msgstr ""
 
-#: src/hooks/ljhook.cc:681
+#: src/hooks/ljhook.cc:686
 msgid "+ [lj] the user has been removed from your friend list"
 msgstr ""
 
-#: src/hooks/ljhook.cc:686
+#: src/hooks/ljhook.cc:691
 msgid "+ [lj] couldn't add friend"
 msgstr ""
 
-#: src/hooks/ljhook.cc:688
+#: src/hooks/ljhook.cc:693
 #, fuzzy, c-format
 msgid "+ [lj] %s was added to friends"
 msgstr "+ %s byl pøidán do visible listu"
+
+#, fuzzy
+#~ msgid " Synchronize contact list "
+#~ msgstr "Kontakty od %s, %lu"
+
+#, fuzzy
+#~ msgid " Contact list synchronization "
+#~ msgstr "Kontakty od %s, %lu"
+
+#, fuzzy
+#~ msgid "No contacts to be synchronized"
+#~ msgstr "Kontakty od %s, %lu"
 
 #, fuzzy
 #~ msgid "Friend list"

@@ -17,16 +17,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	vector<int> rfds, wfds, efds;
 
 	enum {
-	    reqUpload,
-	    ackUpload,
-	    reqFetch,
-	    ackFetch,
-	    noSync
-	} syncstatus;
-
-	enum {
-	    Normal,
-	    SyncList
+	    Normal
 	} blockmode;
 
 	time_t timer_poll, timer_resolve;
@@ -99,8 +90,6 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);
 
-	void synclist();
-	void getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored);
 	void sendaddauth();
 };
 

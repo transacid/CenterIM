@@ -124,9 +124,6 @@
 /* Define if you have the <hash_map> header file.  */
 #undef HAVE_HASH_MAP
 
-/* Define if you have the <iconv.h> header file.  */
-#undef HAVE_ICONV_H
-
 /* Define if you have the <iostream> header file.  */
 #undef HAVE_IOSTREAM
 
@@ -190,9 +187,6 @@
 /* Define if you have the crypto library (-lcrypto).  */
 #undef HAVE_LIBCRYPTO
 
-/* Define if you have the iconv library (-liconv).  */
-#undef HAVE_LIBICONV
-
 /* Define if you have the ncurses library (-lncurses).  */
 #undef HAVE_LIBNCURSES
 
@@ -220,6 +214,9 @@
 /* use gnutls */
 #undef HAVE_GNUTLS
 
+/* Define if you have the iconv() function. */
+#undef HAVE_ICONV
+
 /* build with yahoo support */
 #undef BUILD_YAHOO
 
@@ -240,9 +237,6 @@
 
 /* add konst's id by default */
 #undef BUILD_KONST
-
-/* Define if you have the iconv() function. */
-#undef HAVE_ICONV
 
 /* Define as const if the declaration of iconv() needs const. */
 #undef ICONV_CONST

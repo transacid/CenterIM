@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.31 2003/12/05 00:39:43 konst Exp $
+* $Id: accountmanager.cc,v 1.32 2003/12/11 22:41:30 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -110,26 +110,27 @@ void accountmanager::exec() {
 			break;
 		}
 
-		switch(pname) {
-		    case jabber:
-			if(account.additional["prio"].empty()) {
-			    account.additional["prio"] = "4";
-			    conf.setourid(account);
-			}
-
-			t.addleaff(n, 0, citem+14, _(" Priority : %s "),
-			    account.additional["prio"].c_str());
-			break;
-		}
-
 		t.addleaff(n, 0, citem+5, capab.count(hookcapab::optionalpassword) ?
 		    _(" Password (optional) : %s ") : _(" Password : %s "),
 		    string(account.password.size(), '*').c_str());
 
+		if(!account.empty())
+		switch(pname) {
+		    case jabber:
+			t.addleaff(n, 0, citem+14, _(" Priority : %s "),
+			    account.additional["prio"].c_str());
+			break;
+
+		    case livejournal:
+			t.addleaff(n, 0, citem+11, _(" Import friend list : %s "),
+			    stryesno(account.additional["importfriends"] == "1"));
+			break;
+		}
+
 		if(account.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
-		} else {
 
+		} else {
 		    if(capab.count(hookcapab::changedetails))
 			t.addnode(n, 0, citem+7,
 			    pname == msn ?
@@ -139,10 +140,8 @@ void accountmanager::exec() {
 		    if(capab.count(hookcapab::setaway))
 			t.addnode(n, 0, citem+10, _(" Set away message "));
 
-		    if(capab.count(hookcapab::synclist))
-			t.addnode(n, 0, citem+12, _(" Synchronize contact list "));
-
 		    t.addnode(n, 0, citem+8, _(" Drop "));
+
 		}
 	    }
 	}
@@ -221,13 +220,9 @@ void accountmanager::exec() {
 		    }
 		    break;
 
-		case 12:
-		    if(!hook.online()) {
-			face.status(_("You must be logged in to preform the synchronization"));
-		    } else {
-			imcontrol.synclist(account);
-			fin = true;
-		    }
+		case 11:
+		    account.additional["importfriends"] =
+			(account.additional["importfriends"] == "") ? "1" : "";
 		    break;
 
 		case 13:

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.133 2003/11/22 19:14:32 konst Exp $
+* $Id: icqdialogs.cc,v 1.134 2003/12/11 22:41:31 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1071,8 +1071,16 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     conf.getpeertopeer(ptpmin, ptpmax);
     bool ptp = ptpmax;
 
-    string httpproxy = conf.gethttpproxyhost();
-    if(!httpproxy.empty()) httpproxy += ":" + i2str(conf.gethttpproxyport());
+    string httpproxy;
+    if (!conf.gethttpproxyuser().empty()) {
+	httpproxy = conf.gethttpproxyuser();
+	if(!httpproxy.empty())
+	    httpproxy += ":" + conf.gethttpproxypasswd() + "@" + conf.gethttpproxyhost() + ":" + i2str(conf.gethttpproxyport());
+    } else {
+        httpproxy = conf.gethttpproxyhost();
+	if(!httpproxy.empty())
+	    httpproxy += ":" + i2str(conf.gethttpproxyport());
+    }
 
     string defcharset = conf.getdefcharset();
 

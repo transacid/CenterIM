@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.36 2003/10/11 14:28:12 konst Exp $
+* $Id: aimhook.cc,v 1.37 2003/12/11 22:41:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -47,7 +47,6 @@ aimhook::aimhook()
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changedetails);
-    fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::changeabout);
 }
@@ -332,24 +331,6 @@ void aimhook::resolve() {
 	    requestinfo(c);
 	}
     }
-}
-
-vector<icqcontact *> aimhook::getneedsync() {
-    vector<icqcontact *> r;
-
-    buddies.clear();
-    firetalk_im_list_buddies(handle);
-
-    for(int i = 0; i < clist.count; i++) {
-	icqcontact *c = (icqcontact *) clist.at(i);
-
-	if(c->getdesc().pname == aim) {
-	    if(find(buddies.begin(), buddies.end(), c->getdesc().nickname) == buddies.end())
-		r.push_back(c);
-	}
-    }
-
-    return r;
 }
 
 // ----------------------------------------------------------------------------

@@ -113,7 +113,6 @@ class jabberhook: public abstracthook {
 	vector<pair<string, string> > getregparameters(const string &agentname) const;
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
-	vector<icqcontact *> getneedsync();
 
 	void conferencecreate(const imcontact &confid,
 	    const vector<imcontact> &lst);

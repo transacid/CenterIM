@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.19 2003/11/22 19:14:34 konst Exp $
+* $Id: ljhook.cc,v 1.20 2003/12/11 22:41:33 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -562,7 +562,12 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	if(params["success"] == "OK") {
 	    journals = vector<string>(1, username);
 
-	    count = atoi(params["friend_count"].c_str());
+	    if(conf.getourid(proto).additional["importfriends"] == "1") {
+		count = atoi(params["friend_count"].c_str());
+	    } else {
+		count = 0;
+	    }
+
 	    string username, name, birthday, bd;
 	    icqcontact::moreinfo mi;
 	    icqcontact::basicinfo bi;
