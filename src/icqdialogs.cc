@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.53 2002/02/28 01:14:45 konst Exp $
+* $Id: icqdialogs.cc,v 1.54 2002/03/01 17:15:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -95,12 +95,14 @@ bool icqface::finddialog(imsearchparams &s) {
 
 		tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange[s.agerange]);
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
-		tree.addleaff(i, 0, 18, _(" Language : %s "), strlanguage(s.language));
+		tree.addleaff(i, 0, 18, _(" Language : %s "),
+		    ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
 
 		i = tree.addnode(_(" Location "));
 		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
 		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
-		tree.addleaff(i, 0, 21, _(" Country : %s "), strcountry(s.country));
+		tree.addleaff(i, 0, 21, _(" Country : %s "),
+		    ICQ2000::UserInfoHelpers::getCountryIDtoString(s.country).c_str());
 
 		i = tree.addnode(_(" Work "));
 		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
@@ -193,7 +195,9 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     i = tree->addnode(_(" Home "));
     tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
     tree->addleaff(i, 0, 18, _(" State : %s "), bi.state.c_str());
-    tree->addleaff(i, 0, 19, _(" Country : %s "), strcountry(bi.country));
+    tree->addleaff(i, 0, 19, _(" Country : %s "),
+	ICQ2000::UserInfoHelpers::getCountryIDtoString(bi.country).c_str());
+
     tree->addleaff(i, 0, 20, _(" Street address : %s "), bi.street.c_str());
     tree->addleaff(i, 0, 21, _(" Zip code : %s "), bi.zip.c_str());
     tree->addleaff(i, 0, 22, _(" Phone : %s "), bi.phone.c_str());
@@ -203,7 +207,9 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     i = tree->addnode(_(" Work "));
     tree->addleaff(i, 0, 25, _(" City : %s "), wi.city.c_str());
     tree->addleaff(i, 0, 26, _(" State : %s "), wi.state.c_str());
-    tree->addleaff(i, 0, 27, _(" Country : %s "), strcountry(wi.country));
+    tree->addleaff(i, 0, 27, _(" Country : %s "),
+	ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country).c_str());
+
     tree->addleaff(i, 0, 28, _(" Street address : %s "), wi.street.c_str());
     tree->addleaff(i, 0, 29, _(" Company : %s "), wi.company.c_str());
     tree->addleaff(i, 0, 30, _(" Department : %s "), wi.dept.c_str());
@@ -214,9 +220,15 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 
     i = tree->addnode(_(" More "));
     tree->addleaff(i, 0, 35, _(" Homepage : %s "), mi.homepage.c_str());
-    tree->addleaff(i, 0, 36, _(" 1st language : %s "), strlanguage(mi.lang1));
-    tree->addleaff(i, 0, 37, _(" 2nd language : %s "), strlanguage(mi.lang2));
-    tree->addleaff(i, 0, 38, _(" 3rd language : %s "), strlanguage(mi.lang3));
+
+    tree->addleaff(i, 0, 36, _(" 1st language : %s "),
+	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1).c_str());
+
+    tree->addleaff(i, 0, 37, _(" 2nd language : %s "),
+	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2).c_str());
+
+    tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
+	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
 
     if(c->getdesc().pname == icq)
     if(c->getdesc() == contactroot)
@@ -241,8 +253,6 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     if(!c) {
 	status(_("Fetching your details"));
 	c = clist.get(contactroot);
-//        if(mainscreenblock) return false;
-	    // Another dialog is already on top
     }
 
     if(!(msb = mainscreenblock)) {

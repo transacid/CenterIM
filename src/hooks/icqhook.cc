@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.63 2002/02/28 01:14:46 konst Exp $
+* $Id: icqhook.cc,v 1.64 2002/03/01 17:15:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,8 +30,7 @@
 #include "centericq.h"
 #include "imlogger.h"
 
-#include "libicq2000/userinfoconstants.h"
-#include "libicq2000/userinfohelpers.h"
+#include <libicq2000/userinfohelpers.h>
 
 #define PERIOD_ICQPOLL  5
 
@@ -631,13 +630,7 @@ void icqhook::updateinforecord(Contact *ic, icqcontact *c) {
 	list<PersonalInterestInfo::Interest>::iterator ii;
 
 	for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
-	    int k = ii->first-Interests_offset;
-
-	    if(k >= 0 && k < Interests_table_size) {
-		sbuf = (string) Interests_table[k];
-	    } else {
-		sbuf = "";
-	    }
+	    sbuf = UserInfoHelpers::getInterestsIDtoString(ii->first);
 
 	    if(!ii->second.empty()) {
 		if(!sbuf.empty()) sbuf += ": ";
@@ -653,15 +646,8 @@ void icqhook::updateinforecord(Contact *ic, icqcontact *c) {
 	list<BackgroundInfo::School>::iterator isc;
 
 	for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
-	    sbuf = "";
-
-	    for(int k = 0; k < Background_table_size; k++) {
-		if(Background_table[k].code == isc->first) {
-		    sbuf = (string) Background_table[k].name + ": ";
-		    break;
-		}
-	    }
-
+	    sbuf = UserInfoHelpers::getBackgroundIDtoString(isc->first);
+	    if(!sbuf.empty()) sbuf += ": ";
 	    sbuf += rusconv("wk", isc->second);
 	    if(!sbuf.empty()) backginfo.push_back(sbuf);
 	}

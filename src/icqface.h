@@ -14,7 +14,7 @@
 #include "icqmlist.h"
 #include "imcontroller.h"
 
-#include <libicq2000/userinfoconstants.h>
+#include <libicq2000/userinfohelpers.h>
 
 #define ASK_YES         2
 #define ASK_NO          4
@@ -209,8 +209,6 @@ string getbdate(unsigned char fbday, unsigned char fbmonth, unsigned char fbyear
 const char *strregsound(icqconf::regsound s);
 const char *strregcolor(icqconf::regcolor c);
 const char *strint(unsigned int i);
-const char *strcountry(unsigned int code);
-const char *strlanguage(unsigned int code);
 const char *strgroupmode(icqconf::groupmode gmode);
 
 static const char *stryesno[true+1] = {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.88 2002/03/01 16:09:20 konst Exp $
+* $Id: icqface.cc,v 1.89 2002/03/01 17:15:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -55,24 +55,6 @@ const char *strint(unsigned int i) {
     }
 
     return buf;
-}
-
-const char *strcountry(unsigned int code) {
-    int i;
-    for(i = 0; i < ICQ2000::Country_table_size; i++) {
-	if(ICQ2000::Country_table[i].code == code) {
-	    return ICQ2000::Country_table[i].name;
-	}
-    }
-    return "";
-}
-
-const char *strlanguage(unsigned int code) {
-    if(code < ICQ2000::Language_table_size) {
-	return ICQ2000::Language_table[code];
-    } else {
-	return "";
-    }
 }
 
 const char *strgroupmode(icqconf::groupmode gmode) {
@@ -643,9 +625,9 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
 
-    if(mi.lang1) commacat(langs, strlanguage(mi.lang1), langs.empty());
-    if(mi.lang2) commacat(langs, strlanguage(mi.lang2), langs.empty());
-    if(mi.lang3) commacat(langs, strlanguage(mi.lang3), langs.empty());
+    if(mi.lang1) commacat(langs, ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1), langs.empty());
+    if(mi.lang2) commacat(langs, ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2), langs.empty());
+    if(mi.lang3) commacat(langs, ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3), langs.empty());
     commaform(langs);
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), langs);
@@ -686,7 +668,7 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
 
     if(bi.country) {
 	if(bi.city.size()) bi.city += ", ";
-	bi.city += strcountry(bi.country);
+	bi.city += ICQ2000::UserInfoHelpers::getCountryIDtoString(bi.country);
     }
 
     x += 10;
@@ -731,7 +713,7 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 
     if(wi.country) {
 	if(wi.city.size()) wi.city += ", ";
-	wi.city += strcountry(wi.country);
+	wi.city += ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country);
     }
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), wi.street);

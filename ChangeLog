@@ -766,7 +766,7 @@ descriptions.
 Fixed a bug caused inability to fetch self details when our own UIN was
 on the contact list.
 
-4.6.2
+4.6.5
 -----
 
 Another really nice feature was added. Now it's possible to define external
@@ -801,3 +801,26 @@ Yes, the previous item means exactly that "sexy" transparent backgrounds
 in various terminals are supported now. It's implemented in the
 following way. Along with the standard color names there is the one
 named "transparent" which you can use in the colorscheme files.
+
+Size of contact list and log window are now proportional to the terminal
+size. Also they're re-calculated on every window resize event, which make
+a good use in various X terms.
+
+The log window and status bar contents are now saved during the terminal
+resize re-draws.
+
+Fixed the segfault on terminal window resize. Proud to say now it's
+almost uncrashable. Anyway, if you saw it segfaulting in such a situation,
+drop me a line.
+
+Sometimes during UIN registration centericq consumed up to 100% of CPU time.
+Fixed.
+
+Trying to specify server for icq resulted in segfault. Fixed.
+
+Finally sending SMSes through E-mail gateways supported by ICQ was
+implemented. I made a contribution to the libicq2000 source code in order to
+get it done, and another parameter called "SMTP server" was added to the
+centericq configuration dialog.
+
+Fixed memory leaks that were occuring every time history view was invoked.
