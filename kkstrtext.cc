@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.24 2002/04/07 13:32:32 konst Exp $
+* $Id: kkstrtext.cc,v 1.25 2002/07/03 14:38:58 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -275,8 +275,7 @@ vector<int> getsymbolpositions(const string &haystack, const string &needles, co
 	continue; \
     }
 
-const char *strqpbrk(const char *s, int offset,
-const char *accept, const char *q, const char *esc = "") {
+const char *strqpbrk(const char *s, int offset, const char *accept, const char *q, const char *esc) {
     if(!s) return 0;
     if(!s[0]) return 0;
 
@@ -308,8 +307,7 @@ const char *accept, const char *q, const char *esc = "") {
     return ret;
 }
 
-const char *strqcasestr(const char *s, const char *str,
-const char *q, const char *esc = "") {
+const char *strqcasestr(const char *s, const char *str, const char *q, const char *esc) {
     char quote = 0;
     int i;
 
@@ -327,8 +325,7 @@ const char *q, const char *esc = "") {
     return 0;
 }
 
-const char *strqstr(const char *s, const char *str,
-const char *q, const char *esc = "") {
+const char *strqstr(const char *s, const char *str, const char *q, const char *esc) {
     char quote;
     const char *ret = 0, *p, *ss, *r;
     p = ss = s;
@@ -442,17 +439,17 @@ string textscreen(const string &text) {
     return r;
 }
 
-string leadcut(const string &base, const string &delim = "\t\n\r ") {
+string leadcut(const string &base, const string &delim) {
     int pos = base.find_first_not_of(delim);
     return (pos != -1) ? base.substr(pos) : "";
 }
 
-string trailcut(const string &base, const string &delim = "\t\n\r ") {
+string trailcut(const string &base, const string &delim) {
     int pos = base.find_last_not_of(delim);
     return (pos != -1) ? base.substr(0, pos+1) : "";
 }
 
-string getword(string &base, const string &delim = "\t\n\r ") {
+string getword(string &base, const string &delim) {
     string sub;
     int i;
 
@@ -470,7 +467,7 @@ string getword(string &base, const string &delim = "\t\n\r ") {
     return sub;
 }
 
-const string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ") {
+const string getwordquote(string &base, string quote, string delim) {
     string sub;
     bool inquote = false;
     int i;
@@ -492,7 +489,7 @@ const string getwordquote(string &base, string quote = "\"", string delim = "\t\
     return sub;
 }
 
-string getrword(string &base, const string &delim = "\t\n\r ") {
+string getrword(string &base, const string &delim) {
     string sub;
     int i;
 
@@ -510,7 +507,7 @@ string getrword(string &base, const string &delim = "\t\n\r ") {
     return sub;
 }
 
-string getrwordquote(string &base, const string &quote = "\"", const string &delim = "\t\n\r ") {
+string getrwordquote(string &base, const string &quote, const string &delim) {
     string sub;
     bool inquote = false;
     int i;
@@ -531,7 +528,7 @@ string getrwordquote(string &base, const string &quote = "\"", const string &del
     return sub;
 }
 
-int rtabmargin(bool fake, int curpos, const char *p = 0) {
+int rtabmargin(bool fake, int curpos, const char *p) {
     int ret = -1, n, near;
 
     if(p && (curpos != strlen(p))) {
@@ -553,7 +550,7 @@ int rtabmargin(bool fake, int curpos, const char *p = 0) {
     return ret;
 }
 
-int ltabmargin(bool fake, int curpos, const char *p = 0) {
+int ltabmargin(bool fake, int curpos, const char *p) {
     int ret = -1, near, n = 0;
     const char *cp;
     
@@ -666,8 +663,8 @@ const string &quote, const string &escape) {
     }
 }
 
-int find_quoted(const string &str, const string &needle, int offs = 0,
-const string &quote = "\"'", const string &escape = "\\") {
+int find_quoted(const string &str, const string &needle, int offs,
+const string &quote, const string &escape) {
     vector<quotedblock> positions;
     vector<quotedblock>::iterator qi;
     int npos = offs;
@@ -686,8 +683,8 @@ const string &quote = "\"'", const string &escape = "\\") {
     return !found ? npos : -1;
 }
 
-int find_quoted_first_of(const string &str, const string &needle, int offs = 0,
-const string &quote = "\"'", const string &escape = "\\") {
+int find_quoted_first_of(const string &str, const string &needle, int offs,
+const string &quote, const string &escape) {
     vector<quotedblock> positions;
     vector<quotedblock>::iterator qi;
     int npos = offs;
@@ -706,7 +703,7 @@ const string &quote = "\"'", const string &escape = "\\") {
     return !found ? npos : -1;
 }
 
-void splitlongtext(string text, vector<string> &lst, int size = 440, const string cont = "\n[continued]") {
+void splitlongtext(string text, vector<string> &lst, int size, const string cont) {
     string sub;
     int npos;
 
@@ -734,11 +731,11 @@ void splitlongtext(string text, vector<string> &lst, int size = 440, const strin
     }
 }
 
-string strdateandtime(time_t stamp, const string &fmt = "") {
+string strdateandtime(time_t stamp, const string &fmt) {
     return strdateandtime(localtime(&stamp), fmt);
 }
 
-string strdateandtime(struct tm *tms, const string &fmt = "") {
+string strdateandtime(struct tm *tms, const string &fmt) {
     char buf[512];
     time_t current_time = time(0);
     time_t when = mktime(tms);
@@ -782,7 +779,7 @@ int hex2int(const string ahex) {
     return r;
 }
 
-bool getconf(string &st, string &buf, ifstream &f, bool passemptylines = false) {
+bool getconf(string &st, string &buf, ifstream &f, bool passemptylines) {
     bool ret = false;
     static string sect;
 
