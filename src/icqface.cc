@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.111 2002/05/01 20:02:02 konst Exp $
+* $Id: icqface.cc,v 1.112 2002/05/01 20:53:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1711,7 +1711,8 @@ void icqface::renderchathistory() {
 	}
 
 	for(il = ir->second.rbegin(); il != ir->second.rend() && count < chatlines; il++) {
-	    mvprintw(chatmargin-count, sizeWArea.x1+2, "%s", il->c_str());
+	    kgotoxy(sizeWArea.x1+2, chatmargin-count);
+	    printstring(*il);
 	    count++;
 	}
     }
