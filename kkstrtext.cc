@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.6 2001/10/24 09:09:58 konst Exp $
+* $Id: kkstrtext.cc,v 1.7 2001/10/24 11:24:20 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -333,6 +333,36 @@ vector<int> getquotelayout(const string haystack, const string qs, const string 
 
 	prevpos = curpos++;
 	prevchar = cchar;
+    }
+
+    return r;
+}
+
+vector<int> getsymbolpositions(const string haystack, const string needles, const string qoutes, const string esc) {
+    vector<int> r, qp, nr;
+    vector<int>::iterator iq, ir;
+    int pos, st, ed, cpos;
+
+    for(cpos = 0; (pos = haystack.substr(cpos).find_first_of(needles)) != -1; ) {
+	r.push_back(cpos+pos);
+	cpos += pos+1;
+    }
+
+    qp = getquotelayout(haystack, qoutes, esc);
+    for(iq = qp.begin(); iq != qp.end(); iq++) {
+	if(!((iq-qp.begin()) % 2)) {
+	    st = *iq;
+	    ed = iq+1 != qp.end() ? *(iq+1) : haystack.size();
+	    nr.clear();
+
+	    for(ir = r.begin(); ir != r.end(); ir++) {
+		if(!(*ir > st && *ir < ed)) {
+		    nr.push_back(*ir);
+		}
+	    }
+
+	    r = nr;
+	}
     }
 
     return r;
