@@ -203,26 +203,28 @@ void imcontroller::synclist(protocolname pname) {
     vector<icqcontact *> tosync = gethook(pname).getneedsync();
     vector<icqcontact *>::iterator it;
 
+    face.progress.show(_(" Uploading buddies "));
+
     if(tosync.empty()) {
-	face.status(_("No contacts to be synchronized; all of them are already stored server-side"));
+	face.progress.log(_("No contacts to be synchronize"));
+	face.progress.log(_(".. all of them are already stored server-side"));
 
     } else {
 	char buf[512];
 	sprintf(buf, _("%d contacts are do be stored server-side. Add them now?"), tosync.size());
 
 	if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    face.progress.show(_(" Uploading buddies "));
 
 	    for(it = tosync.begin(); it != tosync.end(); ++it) {
 		face.progress.log(_(".. adding %s"), (*it)->getdesc().nickname.c_str());
 		gethook(pname).sendnewuser((*it)->getdesc());
 	    }
-
-	    face.progress.log(_("Finished"));
-	    sleep(2);
-	    face.progress.hide();
 	}
     }
+
+    face.progress.log(_("Finished"));
+    sleep(2);
+    face.progress.hide();
 }
 
 void imcontroller::aimupdateprofile() {
