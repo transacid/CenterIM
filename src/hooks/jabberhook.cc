@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.51 2003/07/07 18:51:01 konst Exp $
+* $Id: jabberhook.cc,v 1.52 2003/08/20 23:12:52 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,7 +123,7 @@ void jabberhook::connect() {
 #endif
 
     if(jc->user) {
-	id = -1;
+	jstate = STATE_CONNECTING;
 	statehandler(0, -1);
 	jab_start(jc);
     }
@@ -136,10 +136,23 @@ void jabberhook::disconnect() {
 }
 
 void jabberhook::main() {
+    xmlnode x, z;
+    char *cid;
+
     jab_poll(jc, 0);
 
-    if(id == -1) {
-	id = atoi(jab_auth(jc));
+    if(jstate == STATE_CONNECTING) {
+	x = jutil_iqnew(JPACKET__GET, NS_AUTH);
+	cid = jab_getid(jc);
+	xmlnode_put_attrib(x, "id", cid);
+	id = atoi(cid);
+
+	z = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "username");
+	xmlnode_insert_cdata(z, jc->user->user, (unsigned) -1);
+	jab_send(jc, x);
+	xmlnode_free(x);
+
+	jstate = STATE_GETAUTH;
 
 	if(!jc || jc->state == JCONN_STATE_OFF) {
 	    face.log(_("+ [jab] unable to connect to the server"));
@@ -1256,7 +1269,19 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 		    if(iid == jhook.id) {
 			if(!jhook.regmode) {
-			    jhook.gotloggedin();
+			    if(jhook.jstate == STATE_GETAUTH) {
+				if(x = xmlnode_get_tag(packet->x, "query"))
+				if(!xmlnode_get_tag(x, "digest")) {
+				    jhook.jc->sid = 0;
+				}
+
+				jhook.id = atoi(jab_auth(jhook.jc));
+				jhook.jstate = STATE_SENDAUTH;
+
+			    } else {
+				jhook.gotloggedin();
+				jhook.jstate = STATE_LOGGED;
+			    }
 
 			} else {
 			    jhook.regdone = true;

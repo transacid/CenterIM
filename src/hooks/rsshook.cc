@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.10 2003/07/25 17:03:01 konst Exp $
+* $Id: rsshook.cc,v 1.11 2003/08/20 23:12:52 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -195,6 +195,8 @@ void rsshook::requestversion(const imcontact &c) {
 void rsshook::ping(const imcontact &ic) {
     icqcontact *c = clist.get(ic);
     if(c) {
+	httpcli.setProxyServerHost(conf.gethttpproxyhost());
+	httpcli.setProxyServerPort(conf.gethttpproxyport());
 	httpcli.SendEvent(new HTTPRequestEvent(c->getworkinfo().homepage));
     }
 }
@@ -395,9 +397,6 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 	    }
 	}
     }
-
-    httpcli.setProxyServerHost(conf.gethttpproxyhost());
-    httpcli.setProxyServerPort(conf.gethttpproxyport());
 }
 
 void rsshook::logger_cb(LogEvent *ev) {

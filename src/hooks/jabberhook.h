@@ -43,6 +43,13 @@ class jabberhook: public abstracthook {
 	    bool operator != (const string &ajid) const { return jid != ajid; }
 	};
 
+	enum {
+	    STATE_CONNECTING,
+	    STATE_GETAUTH,
+	    STATE_SENDAUTH,
+	    STATE_LOGGED
+	} jstate;
+
 	vector<agent> agents;
 
 	static void statehandler(jconn conn, int state);

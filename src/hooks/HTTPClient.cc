@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.4 2003/07/23 23:21:04 konst Exp $
+* $Id: HTTPClient.cc,v 1.5 2003/08/20 23:12:52 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,7 +184,7 @@ void HTTPClient::SendRequest() {
 	b.Pack((string) "GET " + m_resource + " HTTP/1.0\r\n");
 	b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n");
     } else {
-	b.Pack((string) "GET " + m_hostname + m_resource + " HTTP/1.0\r\n");
+	b.Pack((string) "GET http://" + m_hostname + m_resource + " HTTP/1.0\r\n");
     }
 
     b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n\r\n");
@@ -231,7 +231,6 @@ void HTTPClient::Recv() {
 
 	Disconnect();
 	SignalLog(LogEvent::ERROR, e.what());
-	throw DisconnectedException((string) "HTTP failed: " + e.what());
 
     }
 }

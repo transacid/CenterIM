@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.165 2003/07/25 17:03:00 konst Exp $
+* $Id: centericq.cc,v 1.166 2003/08/20 23:12:51 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -405,12 +405,13 @@ void centericq::changestatus() {
 
 	} else {
 	    proceed = true;
-	    setaway = conf.getaskaway();
+	    setaway = false;
 
 	    bool same = true;
 
 	    for(ipname = pnames.begin(); ipname != pnames.end(); ++ipname) {
-		setaway = setaway && gethook(*ipname).getCapabs().count(hookcapab::setaway);
+		if(conf.getaskaway())
+		    setaway = setaway || gethook(*ipname).getCapabs().count(hookcapab::setaway);
 
 		if(!conf.getourid(*ipname).empty()) {
 		    tmp = conf.getawaymsg(*ipname);
