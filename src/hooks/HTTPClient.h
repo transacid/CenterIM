@@ -115,8 +115,6 @@ class HTTPClient : public SocketClient {
 
 	void socket_cb(int fd, SocketEvent::Mode m);
 
-	string base64_encode(const string &in);
-
 	void setProxyServerHost(const string& host) { m_proxy_hostname = host; }
 	string getProxyServerHost() const { return m_proxy_hostname; }
 

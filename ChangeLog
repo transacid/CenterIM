@@ -1860,3 +1860,39 @@ open-source clients became non-functional again. Applied a patch to
 libyahoo2, looks good so far.
 
 Several minor interface-related bugs were fixed.
+
+
+4.11.0
+------
+
+Applied a patch by Alexander Kanevskiy that fixed a weird behaviour of
+the LJ import friend option in the accounts dialog.
+
+In the multi-contact selection window not all contacts were shown unless
+arranging users into groups was on in the configuration dialog.
+
+GG used to disconnect when setting its status to N/A. Fixed that.
+
+When LJ import friends feature was off deleting LJ friends from the list
+was reflected server-side. Not it happens only if LJ friend
+synchronization is on.
+
+Now centericq only saves postponed messages if they contain at least one
+character other than space, tab or a line-feed.
+
+Centericq used to hang right at the start on some machines. Fixed that.
+
+Sending Cyrillic letters over Yahoo! seems to be fixed now.
+
+Centericq now sets its own title text in xterm and screen. The aim of
+the messages in the title is to inform the user upon events receiving
+and such.
+
+Applied a patch by shaky that introduced status modes with descriptions
+into GG.
+
+RSS feed contact-list items now support specifying of login and password
+for basic HTTP authorization.
+
+The AOL TOC firetalk library was updated. Some major bugs were fixed by
+this update. Cheers.

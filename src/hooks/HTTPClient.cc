@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.15 2004/07/29 18:00:21 konst Exp $
+* $Id: HTTPClient.cc,v 1.16 2004/08/04 15:40:36 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,6 +25,7 @@
 #include "HTTPClient.h"
 
 #include <md5.h>
+#include <connwrap.h>
 
 #ifdef BUILD_RSS
 
@@ -256,40 +257,6 @@ void HTTPClient::Send(Buffer &b) {
     }
 }
 
-static char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			     "abcdefghijklmnopqrstuvwxyz"
-			     "0123456789._";
-
-string HTTPClient::base64_encode(const string &in) {
-    string out;
-    int j = 0;
-    int inlen = in.size();
-
-    for(; inlen >= 3; inlen -= 3) {
-	out += base64digits[ in[j] >> 2 ];
-	out += base64digits[ ((in[j] << 4) & 0x30) | (in[j+1] >> 4) ];
-	out += base64digits[ ((in[j+1] << 2) & 0x3c) | (in[j+2] >> 6) ];
-	out += base64digits[ in[j+2] & 0x3f ];
-	j += 3;
-    }
-
-    if(inlen > 0) {
-	unsigned char fragment;
-
-	out += base64digits[in[j] >> 2];
-	fragment = (in[j] << 4) & 0x30;
-
-	if(inlen > 1)
-	    fragment |= in[j+1] >> 4;
-
-	out += base64digits[fragment];
-	out += (inlen < 2) ? '-' : base64digits[ (in[j+1] << 2) & 0x3c ];
-	out += '-';
-    }
-    
-    return out;
-}
-
 string HTTPClient::strMethod(HTTPRequestEvent::RequestMethod m) {
     string r;
 
@@ -336,7 +303,8 @@ void HTTPClient::SendRequest() {
     }
 
     if(!m_proxy_user.empty() && !m_proxy_hostname.empty()) {
-	b.Pack((string) "Proxy-Authorization: Basic " + base64_encode(m_proxy_user + ":" + m_proxy_passwd) + "\r\n");
+	auto_ptr<char> ba(cw_base64_encode((m_proxy_user + ":" + m_proxy_passwd).c_str()));
+	b.Pack((string) "Proxy-Authorization: Basic " + ba.get() + "\r\n");
     }
 
     b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
@@ -345,8 +313,10 @@ void HTTPClient::SendRequest() {
 	rq = "";
 
 	switch(ev->authmethod) {
-	    case HTTPRequestEvent::Basic:
-		rq = (string) "Basic " + base64_encode(ev->m_user + ":" + ev->m_pass);
+	    case HTTPRequestEvent::Basic: {
+		    auto_ptr<char> ba(cw_base64_encode((ev->m_user + ":" + ev->m_pass).c_str()));
+		    rq = (string) "Basic " + ba.get();
+		}
 		break;
 
 	    case HTTPRequestEvent::User:

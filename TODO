@@ -1,30 +1,11 @@
+test jabber proxy and proxy user/pass auth
+
 /*
 *
 * DONE
 *
 */
 
-patch for LJ import friends by Alexander Kanevskiy
-
-multicontacts not all contacts showing
-
-GG disconnect on setting status to N/A
-
-msn opens a new connection for each message!
-
-when LJ friends import is off don't delete users from the server
-
-set postponed -> if there are only spaces and line-feeds, consider the message empty
-
-hang on start
-
-yahoo cyrillic
-
-xterm/putty window headers like in emerge
-
-GG patch from shaky on the list (statuses with descriptions)
-
-rss-feeds with auth. http://user:pass@...
 
 /*
 *
@@ -41,8 +22,6 @@ http://www.spiegel.de/schlagzeilen/rss/0,5291,,00.xml
 
 check for ssl support in libcurl
 
-aim: xoagray/Charger
-
 /*
 *
 * TODO
@@ -53,6 +32,8 @@ http connect
     protos: yahoo, irc, aim, msn, rss, lj, gg, icq
 	left: jab
     proxy user/pass auth
+
+jabber registration check
 
 поумнее титлы ставить
 
@@ -93,4 +74,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.528 2004/07/31 10:47:05 konst Exp $
+$Id: TODO,v 1.529 2004/08/04 15:40:36 konst Exp $
