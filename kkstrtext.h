@@ -72,6 +72,20 @@ vector<int> getquotelayout(const string haystack, const string qs,
 vector<int> getsymbolpositions(const string haystack,
     const string needles, const string qoutes, const string esc);
 
+#define VGETSTRING(c, fmt) \
+    { \
+	va_list vgs__ap; char vgs__buf[1024]; \
+	va_start(vgs__ap, fmt); \
+	vsprintf(vgs__buf, fmt, vgs__ap); c = vgs__buf; \
+	va_end(vgs__ap); \
+    }
+
+const string justfname(const string fname);
+const string justpathname(const string fname);
+const string textscreen(const string text);
+const string i2str(int i);
+const string ui2str(int i);
+
 __KTOOL_BEGIN_C
 
 int kwordcount(const char *strin, const char *delim);
@@ -123,13 +137,6 @@ char *unmime(char *text);
 char *mime(char *dst, const char *src);
 
 int parseformat(char *command, char *quotes, char *fmt, ...);
-
-const string justfname(const string fname);
-const string justpathname(const string fname);
-
-const string textscreen(const string text);
-const string i2str(int i);
-const string ui2str(int i);
 
 __KTOOL_END_C
 
