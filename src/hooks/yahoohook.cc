@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.44 2002/07/16 08:50:10 konst Exp $
+* $Id: yahoohook.cc,v 1.45 2002/07/17 16:24:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -536,7 +536,9 @@ void yahoohook::conf_message(guint32 id, char *who, char *room, char *msg) {
 }
 
 void yahoohook::got_file(guint32 id, char *who, char *url, long expires, char *msg, char *fname, long fesize) {
+#ifdef DEBUG
     face.log("got_file");
+#endif
 }
 
 void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
@@ -551,11 +553,19 @@ void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
 }
 
 void yahoohook::typing_notify(guint32 id, char *who, int stat) {
-    face.log("typing_notify");
+    icqcontact *c = clist.get(imcontact(who, yahoo));
+
+    if(c)
+    if(c->getstatus() == offline) {
+	c->setstatus(available);
+	face.relaxedupdate();
+    }
 }
 
 void yahoohook::game_notify(guint32 id, char *who, int stat) {
+#ifdef DEBUG
     face.log("game_notify");
+#endif
 }
 
 void yahoohook::mail_notify(guint32 id, char *from, char *subj, int cnt) {
@@ -579,9 +589,13 @@ void yahoohook::error(guint32 id, char *err, int fatal) {
 }
 
 void yahoohook::add_input(guint32 id, int fd) {
+#ifdef DEBUG
     face.log("add_input");
+#endif
 }
 
 void yahoohook::remove_input(guint32 id, int fd) {
+#ifdef DEBUG
     face.log("remove_input");
+#endif
 }
