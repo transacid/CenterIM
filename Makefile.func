@@ -1,0 +1,269 @@
+#
+# Motor IDE functional Makefile template
+# 	for static library in C/C++
+#
+# Written by Konstantin Klyagin <konst@konst.org.ua>
+# Distributed under the GNU Public License
+
+# Project settings and files
+
+SOURCES = libgadu.c pubdir.c dcc.c obsolete.c common.c http.c events.c pubdir50.c 
+HEADERS = libgadu.h libgadu-config.h compat.h 
+DOCS = COPYING 
+MISCF = libgadu.motor 
+BUILDF = configure.in Makefile.am 
+ALL_FILES := $(strip $(SOURCES) $(HEADERS) $(MISCF) $(DOCS))
+ALL_DIRS := $(sort $(dir $(ALL_FILES)))
+PROJNAME = libgadu
+PROJVER = 0.1
+INCLDIRS = 
+DIST_TARGZ := $(PROJNAME)-$(PROJVER).tar.gz
+LIB = liblibgadu.a
+
+# Motor specific targets
+
+# Executed every time there is a need to compile the stuff
+
+build: ready
+	CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" $(MAKE)
+
+ready: makesure
+	@if test ! -f Makefile.am; then $(MAKE) -f Makefile.func automake; fi
+	@if test ! -f Makefile.in; then automake; fi
+	@if test ! -f configure; then autoconf; fi
+	@if test ! -f Makefile; then \
+	    CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" ./configure; \
+	fi
+
+# Invoked for cleaning up
+
+clean: ready
+	$(MAKE) distclean
+
+# This one starts the debugger
+
+debug:
+
+# Executed on project creation
+
+start: automake makesure
+
+# Executed on project modification
+
+update: automake
+	rm -f config.cache && CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" ./configure
+
+dist: makesure automake
+	@if test ! -f Makefile; then ./configure; fi
+	$(MAKE) dist
+
+rpmspec:
+	@if test ! -f libgadu.spec; then \
+	    echo "libgadu.spec file not found!"; \
+	    exit 1; \
+	fi
+	sed "s/^]*Version\: .*$$/Version: $(PROJVER)/g" <libgadu.spec >libgadu.spec.uver
+	if test -z "`egrep '^]*BuildRoot: ' libgadu.spec`"; then \
+	    echo "BuildRoot: /var/tmp/%{name}-buildroot" >libgadu.spec; \
+	    cat libgadu.spec.uver >>libgadu.spec; \
+	fi
+	rm -f libgadu.spec.uver
+
+rpm: rpmspec dist
+	@if test ! -f ~/.motor/rpmrc; then \
+	    echo "macrofiles:	/usr/lib/rpm/macros:/usr/lib/rpm/%{_target}/macros:/etc/rpm/macros.specspo:/etc/rpm/macros:/etc/rpm/%{_target}/macros:~/.rpmmacros:~/.motor/rpmmacros" >~/.motor/rpmrc; \
+	fi
+	@if test ! -f ~/.motor/rpmmacros; then \
+	    echo "%_topdir	$${HOME}/.motor/rpm"	>>~/.motor/rpmmacros; \
+	    echo "%_builddir	%{_topdir}/BUILD"	>>~/.motor/rpmmacros; \
+	    echo "%_rpmdir	%{_topdir}/RPMS"	>>~/.motor/rpmmacros; \
+	    echo "%_sourcedir	%{_topdir}/SOURCES"	>>~/.motor/rpmmacros; \
+	    echo "%_specdir	%{_topdir}/SPECS"	>>~/.motor/rpmmacros; \
+	    echo "%_srcrpmdir	%{_topdir}/SRPMS"	>>~/.motor/rpmmacros; \
+	    echo "%_tmppath	%{_var}/tmp"		>>~/.motor/rpmmacros; \
+	fi
+	-for i in SPECS BUILD RPMS SRPMS; do \
+	    mkdir -p "$${HOME}/.motor/rpm/$$i"; \
+	done
+	rpm --rcfile ~/.motor/rpmrc -ta /$(DIST_TARGZ)
+	find "${HOME}/.motor/rpm" -name $(PROJNAME)-$(PROJVER)*rpm -exec mv {} "" \;
+	rm -rf "${HOME}/.motor/rpm"
+
+#
+# mfdetect(currentfiles) returns
+#	1 - root dir	2 - prog dir
+#	3 - lib dir	4 - doc dir
+#	5 - misc dir
+#
+# finlist(currentfiles, setof) $result to the list of files matched
+#
+# variables
+#	rfnames - files in the current directory (with relative path names)
+#	fnames  - files in the current directory (filenames only)
+#	dnames  - current dir subdirectories
+#
+automake:
+	@rootfound=0; \
+	cflgs=""; \
+	if test ! -z "$(INCLDIRS)"; then \
+	    idirs=`for i in $(addprefix -I, $(INCLDIRS)); do (echo -n "$$i " | \
+		grep -v "^-I/" | sed 's/^-I/-I\\\\044(top_srcdir)\//g'); done; \
+		for i in $(addprefix -I, $(INCLDIRS)); do (echo -n "$$i " | \
+		grep "^-I/"); done`; \
+	    idirs=`echo $$idirs | sed "s/\n//g"`; \
+	fi; \
+	idirs=`echo -e "$$idirs"`; \
+	\
+	finlist () { \
+	    result=""; \
+	    for i in $$1; do \
+		gmask=`echo $$i | sed 's/\//\\\\\//g' | sed 's/\./\\\\\./g'`; \
+		gmask="\<$$gmask\>"; \
+		if test ! -z "`echo $$2 | egrep $$gmask`"; then \
+		result="$$result $$i"; fi; \
+	    done; \
+	}; \
+	mfdetect () { \
+	    if test -z "$$2"; then return 2; fi; \
+	    finlist "$$1" "$(SOURCES)"; \
+	    if test ! -z "$$result"; then return 3; fi; \
+	    finlist "$$1" "$(DOCS)"; \
+	    if test ! -z "$$result"; then return 4; fi; \
+	    return 5; \
+	}; \
+	getlastword () { \
+	    result=`echo $$1 | sed "s/^\(.*\)\/\([^/]\+\)\/$$/\2/g" | sed "s/\///g"`; \
+	}; \
+	replaceparam() { \
+	    param="$$1"; val="$$2"; fname="$$3"; \
+	    pat="^$$param "; \
+	    \
+	    if test -z "`grep $$pat $$fname`"; then \
+		echo "$$param = $$val" >>$$fname; \
+	    else \
+		pat="s&$$pat.*\$$&$$param = $$val&"; \
+		sed "$$pat" $$fname >$$fname.motor.tmp; \
+		mv $$fname.motor.tmp $$fname; \
+	    fi; \
+	}; \
+	extractsubdirs () { dextracted=""; \
+	    for ndir; do \
+		pathcomp=""; \
+		set `echo ":$$ndir" | sed -ne 's/^:\//#/;s/^://;s/\// /g;s/^#/\//;p'`; \
+		if test "$$ndir" != "po/" -a "$ndir" != "./po/"; then \
+		for d; do pathcomp="$$pathcomp$$d"; \
+		    pathcomp="$$pathcomp/"; \
+		    dextracted="$$dextracted $$pathcomp"; \
+		    if test $$pathcomp = "./"; then pathcomp=""; fi; \
+		done; fi; \
+	    done; \
+	    dextracted=`for i in $$dextracted; do echo $$i; done | sort -u`; \
+	}; \
+	\
+	extractsubdirs ./ $(ALL_DIRS); \
+	echo $$dextracted >.dextracted; \
+	for dir in $$dextracted; do \
+	    if test "$$dir" = "./"; then dir=""; fi; \
+	    gmask="^$$dir[^/]+$$"; \
+	\
+	    rfnames=""; \
+	    if test ! -z "$(ALL_FILES)"; then \
+		rfnames=`for i in $(ALL_FILES); do echo $$i | egrep $$gmask; done`; \
+		rfnames=`echo $$rfnames | sed "s/\n//g"`; \
+	    fi; \
+	    if test ! -z "$$dir"; then \
+		gmask="s/`echo $$dir | sed 's/\//\\\\\//g'`//g"; \
+		fnames=`echo $$rfnames | sed $$gmask`; \
+		gmask="^$$dir[^/]+/$$" ;\
+	    else \
+		fnames="$$rfnames"; \
+		gmask="^[^.][^/]*/$$" ;\
+	    fi; \
+	    if test -f "$${dir}libgadu.spec"; then fnames="$$fnames libgadu.spec"; fi; \
+	\
+	    dnames=`for i in $$dextracted; do echo $$i | egrep $$gmask; done`; \
+	    dnames=`echo $$dnames | sed "s/\n//g"`; \
+	    if test ! -z "$$dir"; then \
+		gmask="s/`echo $$dir | sed 's/\//\\\\\//g'`//g"; \
+		dnames=`echo $$dnames | sed $$gmask`; \
+	    fi; \
+	    dnames=`echo $$dnames | sed "s/\///g"`; \
+	\
+	    mfdetect "$$rfnames" "$$dir"; tmf=$$?; \
+	    amfname="$${dir}Makefile.am"; \
+	    case "$$tmf" in \
+		2) pdir="$$dir"; \
+		   pfnames="$$fnames"; \
+		   pdnames="$$dnames"; \
+		   ;; \
+		3) getlastword $$dir; lib=$$result; \
+		   finlist "$$fnames" "$(SOURCES)"; \
+		   if test ! -z "$$result"; then \
+		       replaceparam INCLUDES "$$idirs" $$amfname; \
+		       replaceparam CPPFLAGS "$$cflgs" $$amfname; \
+		       lib=`echo $$lib | sed 's/[-.,]/_/g'`; \
+		       replaceparam noinst_LIBRARIES lib$${lib}.a $$amfname; \
+		       replaceparam lib$${lib}_a_SOURCES "$${result}" $$amfname; \
+		       objs=`for i in $$result; do echo "$${dir}$${i}" | sed 's/^\(.*\)\.\(.*\)$$/\1.o/g'; done`; \
+		       objs=`echo $$objs | sed "s/\n//g"`; \
+		       plibs="$$plibs $$objs"; \
+		   fi; ;; \
+	    esac; \
+	    replaceparam EXTRA_DIST "$$fnames" $$amfname; \
+	    replaceparam SUBDIRS "$$dnames" $$amfname; \
+	done; \
+	amfname="$${pdir}Makefile.am"; \
+	lmain=$(notdir $(LIB)); \
+	lmain=`echo $$lmain | sed "s/^lib\(.*\)\.a$$/\1/g" | sed 's/[-.,]/_/g'`; \
+	replaceparam INCLUDES "$$idirs" $$amfname; \
+	replaceparam CPPFLAGS "$$cflgs" $$amfname; \
+	finlist "$$pfnames" "$(SOURCES)"; \
+	replaceparam noinst_LIBRARIES lib$${lmain}.a $$amfname; \
+	replaceparam lib$${lmain}_a_SOURCES "$${result}" $$amfname; \
+	pldflags=''; \
+	if test ! -z "$$plibs"; then \
+	    replaceparam lib$${lmain}_a_LIBADD "$${plibs}" $$amfname; \
+	fi; if test ! -z "$$pdnames"; then \
+	    replaceparam SUBDIRS "$$pdnames" $$amfname; \
+	fi; \
+	replaceparam EXTRA_DIST "$${pfnames}" $$amfname; \
+	replaceparam AUTOMAKE_OPTIONS foreign $$amfname
+	@cat configure.in | egrep -v "^]*AC_OUTPUT" >configure.in.acout
+	@for i in `cat .dextracted && rm -f .dextracted`; do \
+	    if test ! -z "$$acmfnames"; then acmfnames="$$acmfnames "; fi; \
+	    if test $$i = "./"; then i=""; fi; \
+	    acmfnames="$${acmfnames}$${i}Makefile"; \
+	done; \
+	echo "AC_OUTPUT($${acmfnames})" >>configure.in.acout
+	@sed "s/^]*AM_INIT_AUTOMAKE\(.*\)/AM_INIT_AUTOMAKE($(PROJNAME), $(PROJVER))/g" <configure.in.acout >configure.in
+	@$(RM) configure.in.acout
+	@if test ! -z "`egrep '^]*AM_CONFIG_HEADER' configure.in`"; then \
+	    if test ! -f config.h.in; then autoheader; fi; \
+	fi
+	aclocal
+	autoconf
+	-automake -a -c
+
+makesure:
+	@for i in $(ALL_FILES) $(BUILDF); do \
+	    if test ! -f $$i; then touch $$i; fi; \
+	done
+
+tags:
+	@if test "$$MOTOR_TAGS" = "file"; then \
+	    TFILES="$$MOTOR_CURRENTFILE"; \
+	elif test "$$MOTOR_TAGS" = "project"; then \
+	    TFILES=" libgadu.c pubdir.c dcc.c obsolete.c common.c http.c events.c pubdir50.c libgadu.h libgadu-config.h compat.h"; \
+	elif test "$$MOTOR_TAGS" = "all"; then \
+	    TFILES=" libgadu.c pubdir.c dcc.c obsolete.c common.c http.c events.c pubdir50.c libgadu.h libgadu-config.h compat.h"; \
+	fi; \
+	if test ! -z "$$TFILES"; then ctags --excmd=number -f - $$TFILES; fi
+
+target: ready
+	@CFLAGS="-O0 -g" CXXFLAGS="-O0 -g" $(MAKE) `cat .maketarget && rm -f .maketarget`
+
+gnudoc:
+	touch INSTALL NEWS README COPYING AUTHORS ChangeLog
+
+.PHONY: build update debug automake dist rpm start makesure target \
+    gnudoc

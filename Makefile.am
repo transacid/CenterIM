@@ -1,0 +1,7 @@
+EXTRA_DIST = libgadu.c pubdir.c dcc.c obsolete.c common.c http.c events.c pubdir50.c libgadu.h libgadu-config.h compat.h COPYING
+SUBDIRS = 
+INCLUDES = 
+CPPFLAGS = 
+noinst_LIBRARIES = liblibgadu.a
+liblibgadu_a_SOURCES =  libgadu.c pubdir.c dcc.c obsolete.c common.c http.c events.c pubdir50.c
+AUTOMAKE_OPTIONS = foreign
