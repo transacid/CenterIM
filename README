@@ -1576,11 +1576,9 @@ only thing I wanna warn you is that no questions about their meaning are
 answered. If you feel like seeing and understanding them, please refer
 to the unofficial ICQ protocol specification, icqlib sources, whatever..
 
-  To enable this feature, ./configure the program the following way
-    CXXFLAGS="-DDEBUG" ./configure
-and after this perform the standard "make" and "make install" steps. The
-protocol messages will be visible in the log window, and also they'll be
-written into the ~/.centericq/log file.
+  To enable this feature, just run centericq with --debug parameter.
+Protocol debug messages will be in the log window, and also they'll be
+written into the ~/.centericq/debug file.
 
 
 9.6. "Friendly" logging
@@ -1814,4 +1812,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.101 2004/07/29 18:00:21 konst Exp $
+$Id: README,v 1.102 2004/12/21 14:12:36 konst Exp $
