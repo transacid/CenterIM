@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.79 2004/06/17 00:03:11 konst Exp $
+* $Id: msnhook.cc,v 1.80 2004/06/18 06:49:13 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -86,7 +86,7 @@ static MSN::BuddyStatus stat2buddy(imstatus st) {
 
 // ----------------------------------------------------------------------------
 
-msnhook::msnhook(): abstracthook(msn), conn(0) {
+msnhook::msnhook(): abstracthook(msn), conn(0), lasterror(false) {
     ourstatus = offline;
     fonline = false;
 

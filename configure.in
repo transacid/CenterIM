@@ -109,23 +109,6 @@ LIBS="$LIBS $LIBICONV"
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 
-# Check for curl.
-CURL_CONFIG=
-curl_CFLAGS=""
-curl_LIBS=""
-
-AC_ARG_WITH(curl,
-    [  --with-curl=[DIR]    curl-config in DIR],
-    [CURL_CONFIG=$withval],
-    [ AC_PATH_PROG(CURL_CONFIG,
-	curl-config)])
-
-if test ! -z "$CURL_CONFIG"; then
-    CFLAGS="$CFLAGS `$CURL_CONFIG --cflags`"
-    CXXFLAGS="$CXXFLAGS `$CURL_CONFIG --cflags`"
-    LDFLAGS="$LDFLAGS `$CURL_CONFIG --libs`"
-fi
-
 AC_CHECK_LIB(ncurses, initscr,,
     [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
 
@@ -140,10 +123,22 @@ fi
 
 AC_LANG_RESTORE
 
+# Check for curl.
+
+AC_ARG_WITH(curl,
+    [  --with-curl=[DIR]    curl-config in DIR],
+    [CURL_CONFIG=$withval],
+    [ AC_PATH_PROG(CURL_CONFIG,
+	curl-config)])
+
+if test ! -z "$CURL_CONFIG"; then
+    CFLAGS="$CFLAGS `$CURL_CONFIG --cflags`"
+    LDFLAGS="$LDFLAGS `$CURL_CONFIG --libs`"
+fi
+
 case "$host_os" in
 	darwin*)
 	    LIBS="$LIBS -flat_namespace"
-###            CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
 	;;
 esac
 
