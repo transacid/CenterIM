@@ -113,7 +113,7 @@ const int chCutBR = 1;
 const int chLeaveLinks = 2;
 
 string cuthtml(const string &html, int flags = 0);
-string striprtf(const string &s);
+string striprtf(const string &s, const string &charset);
 
 __KTOOL_BEGIN_C
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.38 2004/06/24 08:31:22 konst Exp $
+* $Id: kkstrtext.cc,v 1.39 2004/12/21 14:13:11 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1047,14 +1047,14 @@ char *str_to_utf8(const char *pin) {
     return result;
 }
 
-string striprtf(const string &s) {
-    string r, spec;
+string striprtf(const string &s, const string &charset) {
+    string r, spec, unichar, tmp;
     char pre = 0;
-    bool bprint, bspec;
+    bool bprint, bspec, bunicode;
     int bparen = -1;
 
     bprint = true;
-    bspec = false;
+    bspec = bunicode = false;
 
     for(string::const_iterator i = s.begin(); i != s.end(); ++i) {
 	if(!isalpha(*i) && !isdigit(*i)) bprint = true;
@@ -1106,9 +1106,33 @@ string striprtf(const string &s) {
 		}
 		break;
 
+	    case 'u':
+		if(pre == '\\') {
+		    unichar = "";
+		    bunicode = true;
+		}
+		break;
+
 	    default:
-		if(bprint && !bparen) {
-		    r += *i;
+		if(!bparen) {
+		    if(bunicode) {
+			unichar += *i;
+
+			if(unichar.size() == 5) {
+			    bunicode = false;
+
+			    if(unichar.substr(0, 4).find_first_not_of("0123456789") == -1) {
+				long l = strtol(unichar.substr(0, 4).c_str(), 0, 0);
+				char ubuf[sizeof(long)+1];
+				memcpy(ubuf, &l, sizeof(long));
+				ubuf[sizeof(long)+1] = 0;
+				r += siconv(ubuf , "utf-16", charset);
+			    }
+			}
+
+		    } else if(bprint) {
+			r += *i;
+		    }
 		}
 	}
 
