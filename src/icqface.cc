@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.75 2002/01/31 18:03:26 konst Exp $
+* $Id: icqface.cc,v 1.76 2002/02/01 18:05:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,8 +46,15 @@ const char *strregcolor(icqconf::regcolor c) {
 }
 
 const char *strint(unsigned int i) {
-    static string s;
-    return i ? (s = i2str(i)).c_str() : "";
+    static char buf[64];
+
+    if(i) {
+	sprintf(buf, "%lu", i);
+    } else {
+	buf[0] = 0;
+    }
+
+    return buf;
 }
 
 const char *strcountry(unsigned int code) {
