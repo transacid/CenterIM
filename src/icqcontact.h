@@ -18,123 +18,125 @@
 
 class icqcontact {
     protected:
-        unsigned int uin;
-        unsigned short seq2;
-        int status, nmsgs, fupdated, infotryn;
-        bool finlist, reqauth, webaware, pubip, nonicq, direct;
-        time_t lastread, lastseen;
+	unsigned int uin;
+	unsigned short seq2;
+	int status, nmsgs, fupdated, infotryn;
+	bool finlist, reqauth, webaware, pubip, nonicq, direct;
+	time_t lastread, lastseen;
 
-        string sound[SOUND_COUNT];
+	string sound[SOUND_COUNT];
 
-        string nick, firstname, lastname, primemail, secemail, oldemail;
-        string city, state, phone, fax, street, cellular, wcity, wstate;
-        string wphone, wfax, waddress, company, department, job, whomepage;
-        string homepage, lastip, about, dispnick;
-        string faf[4], fbg[4], fint[4];
+	string nick, firstname, lastname, primemail, secemail, oldemail;
+	string city, state, phone, fax, street, cellular, wcity, wstate;
+	string wphone, wfax, waddress, company, department, job, whomepage;
+	string homepage, lastip, about, dispnick;
+	string faf[4], fbg[4], fint[4];
 
-        unsigned char lang1, lang2, lang3, bday, bmonth, byear, age, gender;
-        unsigned short country, wcountry, occupation;
-        unsigned long zip, wzip;
+	unsigned char lang1, lang2, lang3, bday, bmonth, byear, age, gender;
+	unsigned short country, wcountry, occupation;
+	unsigned long zip, wzip;
 
-        void scanhistory();
-        string tosane(string p);
+	void scanhistory();
+	string tosane(string p);
 
     public:
-        icqcontact(unsigned int fuin, bool nonicq = false);
-        ~icqcontact();
+	icqcontact(unsigned int fuin, bool nonicq = false);
+	~icqcontact();
 
-        void setstatus(int fstatus);
-        void setlastread(time_t flastread);
-        void setlastseen();
+	bool operator > (const icqcontact &acontact) const;
 
-        void setseq2(unsigned short fseq2);
-        void setnick(string fnick);
-        void setdispnick(string fnick);
-        void setdirect(bool flag);
+	void setstatus(int fstatus);
+	void setlastread(time_t flastread);
+	void setlastseen();
 
-        void setinfo(string fname, string lname, string fprimemail,
-            string fsecemail, string foldemail, string fcity,
-            string fstate, string fphone, string ffax, string fstreet,
-            string fcellular, unsigned long fzip, unsigned short fcountry);
+	void setseq2(unsigned short fseq2);
+	void setnick(string fnick);
+	void setdispnick(string fnick);
+	void setdirect(bool flag);
 
-        void setmoreinfo(unsigned char fage, unsigned char fgender,
-            string fhomepage, unsigned char flang1, unsigned char flang2,
-            unsigned char flang3, unsigned char fbday, unsigned char fbmonth,
-            unsigned char fbyear);
+	void setinfo(string fname, string lname, string fprimemail,
+	    string fsecemail, string foldemail, string fcity,
+	    string fstate, string fphone, string ffax, string fstreet,
+	    string fcellular, unsigned long fzip, unsigned short fcountry);
 
-        void setworkinfo(string fwcity, string fwstate, string fwphone,
-            string fwfax, string fwaddress, unsigned long fwzip,
-            unsigned short fwcountry, string fcompany, string fdepartment,
-            string fjob, unsigned short foccupation, string fwhomepage);
+	void setmoreinfo(unsigned char fage, unsigned char fgender,
+	    string fhomepage, unsigned char flang1, unsigned char flang2,
+	    unsigned char flang3, unsigned char fbday, unsigned char fbmonth,
+	    unsigned char fbyear);
 
-        void setinterests(string nint[]);
-        void setaffiliations(string naf[]);
-        void setbackground(string nbg[]);
+	void setworkinfo(string fwcity, string fwstate, string fwphone,
+	    string fwfax, string fwaddress, unsigned long fwzip,
+	    unsigned short fwcountry, string fcompany, string fdepartment,
+	    string fjob, unsigned short foccupation, string fwhomepage);
 
-        void setsecurity(bool freqauth, bool fwebaware, bool fpubip);
-        void setabout(string data);
-        void setlastip(string flastip);
+	void setinterests(string nint[]);
+	void setaffiliations(string naf[]);
+	void setbackground(string nbg[]);
 
-        void getinfo(string &fname, string &lname, string &fprimemail,
-            string &fsecemail, string &foldemail, string &fcity,
-            string &fstate, string &fphone, string &ffax, string &fstreet,
-            string &fcellular, unsigned long &fzip, unsigned short &fcountry);
+	void setsecurity(bool freqauth, bool fwebaware, bool fpubip);
+	void setabout(string data);
+	void setlastip(string flastip);
 
-        void getmoreinfo(unsigned char &fage, unsigned char &fgender,
-            string &fhomepage, unsigned char &flang1, unsigned char &flang2,
-            unsigned char &flang3, unsigned char &fbday,
-            unsigned char &fbmonth, unsigned char &fbyear);
+	void getinfo(string &fname, string &lname, string &fprimemail,
+	    string &fsecemail, string &foldemail, string &fcity,
+	    string &fstate, string &fphone, string &ffax, string &fstreet,
+	    string &fcellular, unsigned long &fzip, unsigned short &fcountry);
 
-        void getworkinfo(string &fwcity, string &fwstate, string &fwphone,
-            string &fwfax, string &fwaddress, unsigned long &fwzip,
-            unsigned short &fwcountry, string &fcompany, string &fdepartment,
-            string &fjob, unsigned short &foccupation, string &fwhomepage);
+	void getmoreinfo(unsigned char &fage, unsigned char &fgender,
+	    string &fhomepage, unsigned char &flang1, unsigned char &flang2,
+	    unsigned char &flang3, unsigned char &fbday,
+	    unsigned char &fbmonth, unsigned char &fbyear);
 
-        void getinterests(string &int1, string &int2, string &int3, string &int4);
-        void getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4);
-        void getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4);
+	void getworkinfo(string &fwcity, string &fwstate, string &fwphone,
+	    string &fwfax, string &fwaddress, unsigned long &fwzip,
+	    unsigned short &fwcountry, string &fcompany, string &fdepartment,
+	    string &fjob, unsigned short &foccupation, string &fwhomepage);
 
-        void getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip);
+	void getinterests(string &int1, string &int2, string &int3, string &int4);
+	void getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4);
+	void getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4);
 
-        string getabout();
-        string getlastip();
+	void getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip);
 
-        time_t getlastread();
-        time_t getlastseen();
-        
-        int getstatus();
-        unsigned int getuin();
-        unsigned short getseq2();
-        int getmsgcount();
+	string getabout();
+	string getlastip();
 
-        string getnick();
-        string getdispnick();
+	time_t getlastread();
+	time_t getlastseen();
+	
+	int getstatus();
+	unsigned int getuin();
+	unsigned short getseq2();
+	int getmsgcount();
 
-        int updated();
-        void unsetupdated();
-        void setmsgcount(int n);
+	string getnick();
+	string getdispnick();
 
-        void setsound(int event, string sf);
-        void playsound(int event);
+	int updated();
+	void unsetupdated();
+	void setmsgcount(int n);
 
-        void clear();
-        void load();
-        void save();
-        void remove();
-        void excludefromlist();
-        void includeintolist();
-        bool inlist();
-        bool getdirect();
-        
-        bool isnonicq();
-        bool isbirthday();
-        string getdirname();
+	void setsound(int event, string sf);
+	void playsound(int event);
 
-        char getshortstatus();
-        char getsortchar();
+	void clear();
+	void load();
+	void save();
+	void remove();
+	void excludefromlist();
+	void includeintolist();
+	bool inlist();
+	bool getdirect();
+	
+	bool isnonicq();
+	bool isbirthday();
+	string getdirname();
 
-        int getinfotryn();
-        void incinfotryn();
+	char getshortstatus();
+	char getsortchar();
+
+	int getinfotryn();
+	void incinfotryn();
 };
 
 #endif

@@ -14,17 +14,17 @@ bool nonicq = false) {
     icqcontact *c = new icqcontact(uin, nonicq);
 
     if(!nonicq) {
-        if(notinlist) c->excludefromlist();
-        c->setnick(i2str(uin));
-        c->setdispnick(i2str(uin));
-        c->save();
-        add(c);
-        c->setseq2(icq_SendMetaInfoReq(&icql, uin));
-        icq_SendNewUser(&icql, uin);
-        icq_ContactAdd(&icql, uin);
+	if(notinlist) c->excludefromlist();
+	c->setnick(i2str(uin));
+	c->setdispnick(i2str(uin));
+	c->save();
+	add(c);
+	c->setseq2(icq_SendMetaInfoReq(&icql, uin));
+	icq_SendNewUser(&icql, uin);
+	icq_ContactAdd(&icql, uin);
     } else {
-        c->save();
-        add(c);
+	c->save();
+	add(c);
     }
 
     return c;
@@ -38,28 +38,28 @@ void icqcontacts::load() {
     FILE *f;
 
     if(d = opendir(tname.c_str())) {
-        while(ent = readdir(d))
-        if(strspn(ent->d_name+1, "0123456789") == strlen(ent->d_name)-1) {
-            tuname = tname + ent->d_name;
-            stat(tuname.c_str(), &st);
+	while(ent = readdir(d))
+	if(strspn(ent->d_name+1, "0123456789") == strlen(ent->d_name)-1) {
+	    tuname = tname + ent->d_name;
+	    stat(tuname.c_str(), &st);
 
-            if(S_ISDIR(st.st_mode)) {
-                if(ent->d_name[0] == 'n') {
-                    clist.add(new icqcontact(atol(ent->d_name+1), true));
-                } else if(strchr("0123456789", ent->d_name[0])) {
-                    clist.add(new icqcontact(atol(ent->d_name)));
-                }
-            }
-        }
+	    if(S_ISDIR(st.st_mode)) {
+		if(ent->d_name[0] == 'n') {
+		    clist.add(new icqcontact(atol(ent->d_name+1), true));
+		} else if(strchr("0123456789", ent->d_name[0])) {
+		    clist.add(new icqcontact(atol(ent->d_name)));
+		}
+	    }
+	}
 
-        closedir(d);
+	closedir(d);
     }
 
     if(!count) {
-        tuname = tname + "17502151";
-        mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
-        icqcontact *c = new icqcontact(17502151);
-        add(c);
+	tuname = tname + "17502151";
+	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
+	icqcontact *c = new icqcontact(17502151);
+	add(c);
     }
     
     if(!get(0)) add(new icqcontact(0));
@@ -69,13 +69,13 @@ void icqcontacts::save() {
     int i;
 
     for(i = 0; i < count; i++) {
-        icqcontact *c = (icqcontact *) at(i);
+	icqcontact *c = (icqcontact *) at(i);
 
-        if(c->inlist()) c->save(); else
-        if(!c->getmsgcount()) {
-            string fname = c->getdirname() + "/offline";
-            if(access(fname.c_str(), F_OK)) c->remove();
-        }
+	if(c->inlist()) c->save(); else
+	if(!c->getmsgcount()) {
+	    string fname = c->getdirname() + "/offline";
+	    if(access(fname.c_str(), F_OK)) c->remove();
+	}
     }
 }
 
@@ -85,15 +85,15 @@ void icqcontacts::send() {
     icq_ContactClear(&icql);
 
     for(i = 0; i < count; i++) {
-        c = (icqcontact *) at(i);
-        
-        if(!c->isnonicq())
-        if(c->getuin()) {
-            icq_ContactAdd(&icql, c->getuin());
-            if(lst.inlist(c->getuin(), csvisible)) {
-                icq_ContactSetVis(&icql, c->getuin(), 1);
-            }
-        }
+	c = (icqcontact *) at(i);
+	
+	if(!c->isnonicq())
+	if(c->getuin()) {
+	    icq_ContactAdd(&icql, c->getuin());
+	    if(lst.inlist(c->getuin(), csvisible)) {
+		icq_ContactSetVis(&icql, c->getuin(), 1);
+	    }
+	}
     }
 
     icq_SendContactList(&icql);
@@ -104,14 +104,14 @@ void icqcontacts::remove(unsigned int uin, bool nonicq = false) {
     icqcontact *c;
 
     for(i = 0; i < count; i++) {
-        c = (icqcontact *) at(i);
+	c = (icqcontact *) at(i);
 
-        if(c->isnonicq() == nonicq)
-        if(c->getuin() == uin) {
-            c->remove();
-            linkedlist::remove(i);
-            break;
-        }
+	if(c->isnonicq() == nonicq)
+	if(c->getuin() == uin) {
+	    c->remove();
+	    linkedlist::remove(i);
+	    break;
+	}
     }
 }
 
@@ -120,12 +120,12 @@ icqcontact *icqcontacts::get(unsigned int uin, bool nonicq = false) {
     icqcontact *c;
 
     for(i = 0; i < count; i++) {
-        c = (icqcontact *) at(i);
+	c = (icqcontact *) at(i);
 
-        if(c->isnonicq() == nonicq)
-        if(c->getuin() == uin) {
-            return (icqcontact *) at(i);
-        }
+	if(c->isnonicq() == nonicq)
+	if(c->getuin() == uin) {
+	    return (icqcontact *) at(i);
+	}
     }
 
     return 0;
@@ -136,10 +136,10 @@ icqcontact *icqcontacts::getseq2(unsigned short seq2) {
     icqcontact *c;
 
     for(i = 0; i < count; i++) {
-        c = (icqcontact *) at(i);
-        if(c->getseq2() == seq2) {
-            return (icqcontact *) at(i);
-        }
+	c = (icqcontact *) at(i);
+	if(c->getseq2() == seq2) {
+	    return (icqcontact *) at(i);
+	}
     }
 
     return 0;
@@ -158,11 +158,9 @@ int icqcontacts::clistsort(void *p1, void *p2) {
     if(c2->getmsgcount()) s2 = '#';
 
     if(s1 == s2) {
-        if(c1->getuin() > c2->getuin()) return -1;
-        else return 1;
+	if(*c1 > *c2) return -1; else return 1;
     } else {
-        if(strchr(sorder, s1) > strchr(sorder, s2)) return -1;
-        else return 1;
+	if(strchr(sorder, s1) > strchr(sorder, s2)) return -1; else return 1;
     }
 }
 

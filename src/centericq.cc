@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.3 2001/04/08 07:14:07 konst Exp $
+* $Id: centericq.cc,v 1.4 2001/04/15 15:37:47 konst Exp $
 *
 */
 
@@ -39,14 +39,13 @@ void centericq::commandline(int argc, char **argv) {
 }
 
 void centericq::exec() {
-    sigset_t sigs;
     string socksuser, sockspass;
+    struct sigaction sact;
 
-    sigemptyset(&sigs);
-    sigaddset(&sigs, SIGINT);
-    sigaddset(&sigs, SIGSTOP);
-    sigprocmask(SIG_BLOCK, &sigs, 0);
-    signal(SIGCHLD, &handlesignal);
+    memset(&sact, 0, sizeof(sact));
+    sact.sa_handler = &handlesignal;
+    sigaction(SIGINT, &sact, 0);
+    sigaction(SIGCHLD, &sact, 0);
 
     conf.initpairs();
     conf.load();
@@ -590,7 +589,6 @@ void centericq::handlesignal(int signum) {
     switch(signum) {
 	case SIGCHLD:
 	    while(wait3(&status, WNOHANG, 0) > 0);
-	    signal(SIGCHLD, &handlesignal);
 	    break;
     }
 }

@@ -11,10 +11,6 @@
 icqconf::icqconf(): uin(0), rs(rscard), rc(rcdark), autoaway(0),
 autona(0), hideoffline(false), savepwd(true), antispam(false) {
     setserver(ICQ_SERVER);
-
-    sharedir = SHAREDIR;
-    if(sharedir.substr(0, RPM_BUILDROOT.size()) == RPM_BUILDROOT)
-	sharedir.replace(0, RPM_BUILDROOT.size(), "");
 }
 
 icqconf::~icqconf() {
@@ -38,10 +34,6 @@ void icqconf::checkdir() {
     if(access(hostdir.c_str(), F_OK)) {
 	mkdir(hostdir.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
     }
-}
-
-const string &icqconf::getsharedir() {
-    return sharedir;
 }
 
 void icqconf::load() {
@@ -235,13 +227,13 @@ void icqconf::loadsounds() {
 
 	    switch(rs) {
 		case rscard:
-		    fo << "*\tmsg\tplay " << getsharedir() << "/centericq/msg.wav" << endl;
-		    fo << "*\turl\tplay " << getsharedir() << "/centericq/url.wav" << endl;
-		    fo << "*\tfile\tplay " << getsharedir() << "/centericq/file.wav" << endl;
-		    fo << "*\tchat\tplay " << getsharedir() << "/centericq/chat.wav" << endl;
-		    fo << "*\temail\tplay " << getsharedir() << "/centericq/email.wav" << endl;
-		    fo << "*\tonline\tplay " << getsharedir() << "/centericq/online.wav" << endl;
-		    fo << "*\tcont\tplay " << getsharedir() << "/centericq/cont.wav" << endl;
+		    fo << "*\tmsg\tplay " << SHARE_DIR << "/centericq/msg.wav" << endl;
+		    fo << "*\turl\tplay " << SHARE_DIR << "/centericq/url.wav" << endl;
+		    fo << "*\tfile\tplay " << SHARE_DIR << "/centericq/file.wav" << endl;
+		    fo << "*\tchat\tplay " << SHARE_DIR << "/centericq/chat.wav" << endl;
+		    fo << "*\temail\tplay " << SHARE_DIR << "/centericq/email.wav" << endl;
+		    fo << "*\tonline\tplay " << SHARE_DIR << "/centericq/online.wav" << endl;
+		    fo << "*\tcont\tplay " << SHARE_DIR << "/centericq/cont.wav" << endl;
 		    break;
 		case rsspeaker:
 		    fo << "*\tmsg\t!spk1" << endl;

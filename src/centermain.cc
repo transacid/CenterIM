@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.2 2001/04/08 07:14:07 konst Exp $
+* $Id: centermain.cc,v 1.3 2001/04/15 15:37:47 konst Exp $
 *
 */
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
     try {
 
-	string localedir = conf.getsharedir() + "/locale";
+	string localedir = (string) SHARE_DIR + "/locale";
 	setlocale(LC_ALL, "");
 	bindtextdomain("centericq", localedir.c_str());
 	textdomain("centericq");

@@ -27,7 +27,7 @@ icqhook::~icqhook() {
 }
 
 void icqhook::init(struct icq_link *link) {
-#ifndef __MOTOR
+#ifndef DEBUG
     icq_LogLevel = 0;
 #else
     icq_LogLevel = ICQ_LOG_MESSAGE;
@@ -150,6 +150,7 @@ void icqhook::regdisconnected(struct icq_link *link) {
 void icqhook::message(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *msg) {
+    if(strlen(msg))
     if(!lst.inlist(uin, csignore)) {
 	hist.putmessage(uin, msg, HIST_MSG_IN, TIMESTAMP);
 	icqcontact *c = clist.get(uin);
@@ -206,7 +207,7 @@ const char *msg) {
 void icqhook::chat(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *descr,
-unsigned long seq) {
+unsigned long seq, const char *session, unsigned long port) {
     if(!lst.inlist(uin, csignore)) {
 	icqcontact *c = clist.get(uin);
 	if(c) {
@@ -308,7 +309,7 @@ const char *nick, const char *first, const char *last, const char *pri_eml,
 const char *sec_eml, const char *old_eml, const char *city, const char *state,
 const char *phone, const char *fax, const char *street, const char *cellular,
 unsigned long zip, unsigned short country, unsigned char timezone,
-unsigned char auth, unsigned char webaware, unsigned char hideip) {
+unsigned char auth) {
     icqcontact *c = clist.getseq2(seq2);
 
     if(c) {
@@ -320,7 +321,7 @@ unsigned char auth, unsigned char webaware, unsigned char hideip) {
 	}
 
 	c->setinfo(first, last, pri_eml, sec_eml, old_eml, city, state, phone, fax, street, cellular, zip, country);
-	c->setsecurity(auth != 0, webaware != 0, hideip != 0);
+	c->setsecurity(auth != 0, false, false);
     }
 }
 
@@ -483,10 +484,6 @@ int result, unsigned int length, void *data) {
 	    }
 	}
     }
-
-#ifdef __MOTOR
-//    face.log("! rn: %d, %d, %lu", result, length, id);
-#endif
 
     switch(result) {
 	case ICQ_NOTIFY_SUCCESS:

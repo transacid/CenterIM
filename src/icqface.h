@@ -60,132 +60,133 @@ extern class centericq cicq;
 
 class icqprogress {
     protected:
-        textwindow *w;
-        int curline;
+	textwindow *w;
+	int curline;
 
     public:
-        icqprogress();
-        ~icqprogress();
+	icqprogress();
+	~icqprogress();
 
-        void log(const char *fmt, ...);
-        void show(string title = "");
-        void hide();
+	void log(const char *fmt, ...);
+	void show(string title = "");
+	void hide();
 };
 
 class icqface {
     protected:
-        treeview *mcontacts;
-        textinputline *il;
-        textwindow mainw;
-        filemanager *fm;
+	treeview *mcontacts;
+	textinputline *il;
+	textwindow mainw;
+	filemanager *fm;
 
-        linkedlist workareas;
+	linkedlist workareas;
 
-        bool editdone, mainscreenblock, inited, onlinefolder;
-        int extk;
-        unsigned int passuin;
+	bool editdone, mainscreenblock, inited, onlinefolder;
+	int extk, totalunread;
+	unsigned int passuin;
 
-        string rnick, rfname, rlname, remail;
+	string rnick, rfname, rlname, remail;
 
-        string textstatus(unsigned long st);
+	string textstatus(unsigned long st);
 
-        static int editmsgkeys(texteditor *e, int k);
-        static int editaboutkeys(texteditor *e, int k);
-        static int contactskeys(verticalmenu *m, int k);
-        static int multiplekeys(verticalmenu *m, int k);
+	static int editmsgkeys(texteditor *e, int k);
+	static int editaboutkeys(texteditor *e, int k);
+	static int contactskeys(verticalmenu *m, int k);
+	static int multiplekeys(verticalmenu *m, int k);
 
-        static void editidle(texteditor *e);
-        static void textbrowseridle(textbrowser *b);
-        static void textinputidle(textinputline *il);
-        static void freeworkareabuf(void *p);
-        static void detailsidle(dialogbox *db);
+	static void editidle(texteditor *e);
+	static void textbrowseridle(textbrowser *b);
+	static void textinputidle(textinputline *il);
+	static void freeworkareabuf(void *p);
+	static void detailsidle(dialogbox *db);
 
-        void infoclear(dialogbox &db, icqcontact *c, unsigned int uin);
-        void infogeneral(dialogbox &db, icqcontact *c);
-        void infohome(dialogbox &db, icqcontact *c);
-        void infowork(dialogbox &db, icqcontact *c);
-        void infointerests(dialogbox &db, icqcontact *c);
-        void infoabout(dialogbox &db, icqcontact *c);
+	void infoclear(dialogbox &db, icqcontact *c, unsigned int uin);
+	void infogeneral(dialogbox &db, icqcontact *c);
+	void infohome(dialogbox &db, icqcontact *c);
+	void infowork(dialogbox &db, icqcontact *c);
+	void infointerests(dialogbox &db, icqcontact *c);
+	void infoabout(dialogbox &db, icqcontact *c);
 
-        bool checkicqmessage(unsigned int uin, string text, bool &ret, int options);
-        int showicq(unsigned int uin, string text, char imt, int options = 0);
+	bool checkicqmessage(unsigned int uin, string text, bool &ret, int options);
+	int showicq(unsigned int uin, string text, char imt, int options = 0);
 
-        void gendetails(treeview *tree, icqcontact *c = 0);
-        void selectgender(unsigned char &f);
-        void selectcountry(unsigned short &f);
-        void selectoccupation(unsigned short &f);
-        void selectlanguage(unsigned char &f);
-        void editabout(string &fabout);
+	void gendetails(treeview *tree, icqcontact *c = 0);
+	void selectgender(unsigned char &f);
+	void selectcountry(unsigned short &f);
+	void selectoccupation(unsigned short &f);
+	void selectlanguage(unsigned char &f);
+	void editabout(string &fabout);
 
-        void saveworkarea();
-        void restoreworkarea();
-        void clearworkarea();
-        void workarealine(int l);
+	void saveworkarea();
+	void restoreworkarea();
+	void clearworkarea();
+	void workarealine(int l);
 
-        string quotemsg(string text);
+	string quotemsg(string text);
 
     public:
-        list<unsigned int> muins;
-        icqprogress progress;
+	list<unsigned int> muins;
+	icqprogress progress;
 
-        icqface();
-        ~icqface();
+	icqface();
+	~icqface();
 
-        void init();
-        void done();
+	void init();
+	void done();
 
-        static void menuidle(verticalmenu *caller);
-        static void dialogidle(dialogbox *caller);
+	static void menuidle(verticalmenu *caller);
+	static void dialogidle(dialogbox *caller);
 
-        void draw();
-        void update();
-        icqcontact *mainloop(int &action);
-        void fillcontactlist();
-        void log(string text);
-        void log(const char *fmt, ...);
-        void status(string text);
+	void draw();
+	void update();
+	void showtopbar() {
+	icqcontact *mainloop(int &action);
+	void fillcontactlist();
+	void log(string text);
+	void log(const char *fmt, ...);
+	void status(string text);
 
-        int changestatus(int old);
-        int contextmenu(icqcontact *c);
-        int generalmenu();
+	int changestatus(int old);
+	int contextmenu(icqcontact *c);
+	int generalmenu();
 
-        bool editmsg(unsigned int uin, string &text);
-        bool editurl(unsigned int uin, string &url, string &text);
-        void read(unsigned int uin);
-        void history(unsigned int uin);
-        void modelist(contactstatus cs);
+	bool editmsg(unsigned int uin, string &text);
+	bool editurl(unsigned int uin, string &url, string &text);
+	void read(unsigned int uin);
+	void history(unsigned int uin);
+	void modelist(contactstatus cs);
 
-        bool showevent(unsigned int uin, int direction, time_t &lastread);
-        int showmsg(unsigned int uin, string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-        int showurl(unsigned int uin, string url, string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-        int showfile(unsigned int uin, unsigned long seq, string fname, int fsize, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-        int showcontact(unsigned int uin, icqcontactmsg *cont, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-        void acceptfile(unsigned int uin, unsigned long seq, string fname);
-        void refusefile(unsigned int uin, unsigned long seq);
+	bool showevent(unsigned int uin, int direction, time_t &lastread);
+	int showmsg(unsigned int uin, string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	int showurl(unsigned int uin, string url, string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	int showfile(unsigned int uin, unsigned long seq, string fname, int fsize, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	int showcontact(unsigned int uin, icqcontactmsg *cont, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
+	void acceptfile(unsigned int uin, unsigned long seq, string fname);
+	void refusefile(unsigned int uin, unsigned long seq);
 
-        bool multicontacts(string head, list<unsigned int> &lst);
-        void userinfo(unsigned int uin, bool nonicq, unsigned int realuin);
+	bool multicontacts(string head, list<unsigned int> &lst);
+	void userinfo(unsigned int uin, bool nonicq, unsigned int realuin);
 
-        bool regdialog(unsigned int &ruin, string &rpasswd);
-        void getregdata(string &nick, string &fname, string &lname, string &email);
-        bool updateconf(regsound &s, regcolor &c);
+	bool regdialog(unsigned int &ruin, string &rpasswd);
+	void getregdata(string &nick, string &fname, string &lname, string &email);
+	bool updateconf(regsound &s, regcolor &c);
 
-        bool finddialog(unsigned int &uin, string &nick, string &email, string &first, string &last);
-        bool findresults();
+	bool finddialog(unsigned int &uin, string &nick, string &email, string &first, string &last);
+	bool findresults();
 
-        bool updatedetails(icqcontact *c = 0);
-        bool sendfiles(unsigned int uin, string &msg, linkedlist &flist);
+	bool updatedetails(icqcontact *c = 0);
+	bool sendfiles(unsigned int uin, string &msg, linkedlist &flist);
 
-        void chat(unsigned int uin);
+	void chat(unsigned int uin);
 
-        void blockmainscreen();
-        void unblockmainscreen();
+	void blockmainscreen();
+	void unblockmainscreen();
 
-        int ask(string q, int options, int deflt = -1);
-        string inputstr(string q, string defl = "", char passwdchar = 0);
-        string inputfile(string q, string defl = "");
+	int ask(string q, int options, int deflt = -1);
+	string inputstr(string q, string defl = "", char passwdchar = 0);
+	string inputfile(string q, string defl = "");
 
-        void quickfind();
+	void quickfind();
 };
 
 extern icqface face;

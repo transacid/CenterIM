@@ -73,102 +73,102 @@ important things that were changed:
 ---
 
 1.0.1 - Fixed a segfault that appeared when the user tried to add the same
-        uin to the contactlist when it's already exists there
-        
+	uin to the contactlist when it's already exists there
+	
 1.0.2 - New UIN registration procedure looked bad due to an extra screen
-        output (about new mail and status). Fixed
+	output (about new mail and status). Fixed
 
-        Now centerICQ will inform me when someone setups it on his computer.
-        It just sends a small information message so I could have a little
-        program using statistics
+	Now centerICQ will inform me when someone setups it on his computer.
+	It just sends a small information message so I could have a little
+	program using statistics
 
 1.0.3 - Great! After a day of a perversed sex with debugging tools, setting
-        hooks and other things, the wierd segfault has been catched and killed
+	hooks and other things, the wierd segfault has been catched and killed
 
 1.1.3 - Now if you've got any problems with F-keys in the terminal mode, there
-        is a possibility to use alternate keys for invoking user, status and
-        global menus, they are 'u', 's' and 'g'
+	is a possibility to use alternate keys for invoking user, status and
+	global menus, they are 'u', 's' and 'g'
 
 1.2.3 - The "Reply" item has been added to the message window that appears
-        when reading incoming messages. "Close" item was removed because the
-        window is closed with the Esc key
+	when reading incoming messages. "Close" item was removed because the
+	window is closed with the Esc key
 
 1.3.3 - Now the program handles SIGINT and SIGTERM correctly
 
-        First patch applied :) Its author was Piotr Waskiewicz
-        <wasp@linuxfreak.com>. Now centerICQ will inform user about an event
-        with a PC speaker beep if the sound device isn't available (busy with
-        playing something or something like this). Thank you, Piotr.
+	First patch applied :) Its author was Piotr Waskiewicz
+	<wasp@linuxfreak.com>. Now centerICQ will inform user about an event
+	with a PC speaker beep if the sound device isn't available (busy with
+	playing something or something like this). Thank you, Piotr.
 
 1.3.4 - A minor bug fixed. centerICQ played sound on receiving a message from
-        a user from ignore list
+	a user from ignore list
 
 1.7.6 - Four features added and two bugs fixed.
 
-        Feature 1.
-        
-        A major interface improvement has been implemented. I wrote new
-        ksmalledit class that allows to edit messages using more advanced
-        text editor
-                
-        Feature 2.
-        
-        Another nice interface improvement. centerICQ doesn't strip \r\n's
-        from the received messages anymore, because now it can display such
-        messages more correctly. Up and Down arrows scrolls up and down
-        the message     you're reading
+	Feature 1.
+	
+	A major interface improvement has been implemented. I wrote new
+	ksmalledit class that allows to edit messages using more advanced
+	text editor
+		
+	Feature 2.
+	
+	Another nice interface improvement. centerICQ doesn't strip \r\n's
+	from the received messages anymore, because now it can display such
+	messages more correctly. Up and Down arrows scrolls up and down
+	the message     you're reading
 
-        Feature 3.
-        
-        I proceeded with my idea to wrote a general purpose personal
-        communications program which will contain not only ICQ client inside.
-        So, an internal phonebook had been added. You can find it in the global
-        menu invoked with F4 key. Hope, you will find it useful. Maybe, it
-        worth integrating with the ICQ contactlist .. don't know. Any
-        suggestions are welcome, as usual :)
-                
-        Feature 4.
-                
-        Added support for non-80x25 text modes
-                
-        Bugs.
+	Feature 3.
+	
+	I proceeded with my idea to wrote a general purpose personal
+	communications program which will contain not only ICQ client inside.
+	So, an internal phonebook had been added. You can find it in the global
+	menu invoked with F4 key. Hope, you will find it useful. Maybe, it
+	worth integrating with the ICQ contactlist .. don't know. Any
+	suggestions are welcome, as usual :)
+		
+	Feature 4.
+		
+	Added support for non-80x25 text modes
+		
+	Bugs.
 
-        A couple of bugs have been fixed. First was related to adding users
-        with empty 'nickname' field into the contact list: after restarting
-        centerICQ they had been displayed incorrectly. And the second one
-        was that the program played 'received msg/url/etc ..' sound on
-        receiving messages from users in ignore list
+	A couple of bugs have been fixed. First was related to adding users
+	with empty 'nickname' field into the contact list: after restarting
+	centerICQ they had been displayed incorrectly. And the second one
+	was that the program played 'received msg/url/etc ..' sound on
+	receiving messages from users in ignore list
 
-        Some corrections.
-                
-        Since this version contactlist is updated on the screen even if you're
-        working with menus such as phonebook, change status, history, etc.
+	Some corrections.
+		
+	Since this version contactlist is updated on the screen even if you're
+	working with menus such as phonebook, change status, history, etc.
 
-        Misc.
+	Misc.
 
-        Also, file HOWTO-thank-me was added into the program package. Maybe
-        someone will really help me with a thing I wrote there ... Will see
+	Also, file HOWTO-thank-me was added into the program package. Maybe
+	someone will really help me with a thing I wrote there ... Will see
 
 1.10.7 -
-        Bugs fixed:
+	Bugs fixed:
 
-        There was a bug with receiving contacts from users, centerICQ thought
-        that all the received contacts had uins the same as uin of sender.
+	There was a bug with receiving contacts from users, centerICQ thought
+	that all the received contacts had uins the same as uin of sender.
 
-        And some minor changes made.
+	And some minor changes made.
 
-        Features added:
+	Features added:
 
-        It was impossible to abort updating user's details procedure until
-        it isn't finished. Now you're able to do that, so let's think it's a
-        a feature :)
+	It was impossible to abort updating user's details procedure until
+	it isn't finished. Now you're able to do that, so let's think it's a
+	a feature :)
 
-        Now all the files created by centerICQ in the .center directory have
-        -rw------- permissions to be more secure :) So now all of your
-        conversations are hidden from courious eyes of another users :)
+	Now all the files created by centerICQ in the .center directory have
+	-rw------- permissions to be more secure :) So now all of your
+	conversations are hidden from courious eyes of another users :)
 
-        "-a" command line parameter added. It forces centerICQ to draw its
-        windows using ascii characters '+', '|' and '-'
+	"-a" command line parameter added. It forces centerICQ to draw its
+	windows using ascii characters '+', '|' and '-'
 
 2.0.0
 -----
@@ -404,3 +404,22 @@ a lot. Keep it up, Jindrich!
 
 Ported to OpenBSD. Thanks to Peter Valchev <pvalchev@toxiclinux.org> for
 the patch.
+
+3.22.8
+------
+
+Centericq didn't remembered the "anti-spam" setting after restart. Fixed.
+
+A segfault caused sometimes by receiving and viewing histories
+containing empty msgs was fixed.
+
+Now it's possible to enter the quickfind mode with "/" key.
+
+Contact list is now sorted by "who-last-send-an-event" criteria :)
+
+Czech translation by Jindrich Makovicka has been added.
+
+Unsent messages counter in the top of the screen has been added.
+
+Developed and packaged with the new version of motor 2.15.7 which is
+available at http://konst.org.ua/motor/ ;)

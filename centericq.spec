@@ -22,14 +22,21 @@ personally.
 %setup
 
 %build
-./configure --prefix=%{buildroot}/usr/
+./configure --prefix=/usr
 make
 
 %install
-make install
+rm -rf $RPM_BUILD_ROOT
+make prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_BUILD_ROOT/etc install
+find $RPM_BUILD_ROOT/usr -type f -print | grep -v '\/(README|COPYING|INSTALL|TODO|ChangeLog|AUTHORS|FAQ)$' | \
+    sed "s@^$RPM_BUILD_ROOT@@g" > %{name}-%{version}-filelist
 
-%files
-%doc README COPYING INSTALL TODO FAQ ChangeLog
+%clean
+rm -rf $RPM_BUILD_ROOT
 
-/usr/bin/*
-/usr/share/*
+%files -f %{name}-%{version}-filelist
+%defattr(-, root, root)
+
+%doc README COPYING INSTALL TODO ChangeLog FAQ AUTHORS
+
+%changelog

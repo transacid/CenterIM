@@ -6,6 +6,7 @@
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
+#include "icqoffline.h"
 
 #include "konst.socket.h"
 
@@ -117,8 +118,11 @@ void icqface::draw() {
     update();
 }
 
-void icqface::update() {
-    string st = _("STATUS: ") + textstatus(icql.icq_Status);
+void icqface::showtopbar() {
+    string st =
+	_("STATUS: ") + textstatus(icql.icq_Status) + "  " +
+	_("UNSENT: ") + i2str(offl.getunsentcount());
+
     string suin = i2str(icql.icq_Uin);
 
     attrset(conf.getcolor(cp_status));
@@ -127,7 +131,10 @@ void icqface::update() {
     kwriteatf(2, 0, conf.getcolor(cp_status), "CENTERICQ %s", VERSION);
     kwriteatf(20, 0, conf.getcolor(cp_status), "%s", st.c_str());
     kwriteatf(COLS-suin.size()-1, 0, conf.getcolor(cp_status), "%s", suin.c_str());
+}
 
+void icqface::update() {
+    showtopbar();
     fillcontactlist();
 }
 
@@ -327,6 +334,8 @@ void icqface::fillcontactlist() {
     char prevsc = 'x', sc;
     bool online_added = false;
 
+    totalunread = 0;
+
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
     mcontacts->clear();
     clist.order();
@@ -344,6 +353,8 @@ void icqface::fillcontactlist() {
 	conf.gethideoffline() && !c->getmsgcount()) {
 	    continue;
 	}
+
+	totalunread += c->getmsgcount();
 
 	if(!c->getmsgcount())
 	if((sc = c->getsortchar()) != prevsc) {
@@ -718,7 +729,7 @@ void icqface::userinfo(unsigned int uin, bool nonicq, unsigned int realuin) {
     saveworkarea();
     clearworkarea();
 
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
+    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2+1,
 	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setbar(new horizontalbar(WORKAREA_X1+2, WORKAREA_Y2-1,
 	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
@@ -1100,13 +1111,13 @@ bool icqface::checkicqmessage(unsigned int uin, string text, bool &ret, int opti
 		clist.add(cn = new icqcontact(uin));
 		cn->setnick(i2str(uin));
 		cn->setseq2(icq_SendMetaInfoReq(&icql, uin));
-		log(_("+ %ul has been added to the list"), uin);
+		log(_("+ %lu has been added to the list"), uin);
 		break;
 	    case 2:
 		switch(c) {
 		    case ICQM_REQUEST:
 			icq_SendAuthMsg(&icql, uin);
-			log(_("+ authorization sent to %ul"), uin);
+			log(_("+ authorization sent to %lu"), uin);
 			break;
 		    case ICQM_ADDED: break;
 		}
@@ -1175,63 +1186,60 @@ bool icqface::showevent(unsigned int uin, int direction, time_t &lastread) {
     unsigned long seq;
     icqcontactmsg *cont;
 
-    if(ret = ((n = hist.readevent(event, lastread, tm, dir)) != -1)) {
-	if(((dir == HIST_MSG_IN) && (direction & HIST_MSG_IN)) || ((dir == HIST_MSG_OUT) && (direction & HIST_MSG_OUT)))
-	switch(event) {
-	    case EVT_MSG:
-		proceed = true;
-		hist.getmessage(text);
-		if(checkicqmessage(uin, text, ret, direction)) {
-		    i = showmsg(uin, text, *localtime(&lastread),
-			tm, dir, direction & HIST_HISTORYMODE);
+    if(ret = ((n = hist.readevent(event, lastread, tm, dir)) != -1))
+    if(((dir == HIST_MSG_IN) && (direction & HIST_MSG_IN)) || ((dir == HIST_MSG_OUT) && (direction & HIST_MSG_OUT)))
+    switch(event) {
+	case EVT_MSG:
+	    proceed = true;
+	    hist.getmessage(text);
+	    if(checkicqmessage(uin, text, ret, direction)) {
+		i = showmsg(uin, text, *localtime(&lastread),
+		    tm, dir, direction & HIST_HISTORYMODE);
 
-		    switch(i) {
-			case -1: ret = false; break;
-			case 0:
-			    cicq.fwdmsg(dir == HIST_MSG_IN ? uin : icql.icq_Uin, text);
-			    break;
-			case 1:
-			    text = conf.getquote() ? quotemsg(text) : "";
-
-			    if(face.editmsg(uin, text)) {
-				cicq.sendmsg(uin, text);
-			    }
-			    break;
-			case 2: break;
-		    }
-		}
-		break;
-	    case EVT_URL:
-		hist.geturl(url, text);
-		i = showurl(uin, url, text, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
 		switch(i) {
 		    case -1: ret = false; break;
 		    case 0:
-			text = url + "\n\n" + text;
 			cicq.fwdmsg(dir == HIST_MSG_IN ? uin : icql.icq_Uin, text);
 			break;
-		    case 1: break;
+		    case 1:
+			text = conf.getquote() ? quotemsg(text) : "";
+
+			if(face.editmsg(uin, text)) {
+			    cicq.sendmsg(uin, text);
+			}
+			break;
+		    case 2: break;
 		}
-		break;
-	    case EVT_FILE:
-		hist.getfile(seq, text, fsize);
-		i = showfile(uin, seq, text, fsize, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
-		switch(i) {
-		    case -1: ret = false; break;
-		    case 0: acceptfile(uin, seq, text); break;
-		    case 1: refusefile(uin, seq); break;
-		}
-		break;
-	    case EVT_CONTACT:
-		hist.getcontact(&cont);
-		i = showcontact(uin, cont, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
-		switch(i) {
-		    case -1: ret = false; break;
-		}
-		break;
-	}
-    } else {
-	ret = false;
+	    }
+	    break;
+	case EVT_URL:
+	    hist.geturl(url, text);
+	    i = showurl(uin, url, text, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
+	    switch(i) {
+		case -1: ret = false; break;
+		case 0:
+		    text = url + "\n\n" + text;
+		    cicq.fwdmsg(dir == HIST_MSG_IN ? uin : icql.icq_Uin, text);
+		    break;
+		case 1: break;
+	    }
+	    break;
+	case EVT_FILE:
+	    hist.getfile(seq, text, fsize);
+	    i = showfile(uin, seq, text, fsize, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
+	    switch(i) {
+		case -1: ret = false; break;
+		case 0: acceptfile(uin, seq, text); break;
+		case 1: refusefile(uin, seq); break;
+	    }
+	    break;
+	case EVT_CONTACT:
+	    hist.getcontact(&cont);
+	    i = showcontact(uin, cont, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
+	    switch(i) {
+		case -1: ret = false; break;
+	    }
+	    break;
     }
 
     return ret;
@@ -1876,10 +1884,11 @@ int icqface::contactskeys(verticalmenu *m, int k) {
 	case 'v':
 	case 'V': face.extk = ACT_SWITCH_VIS; break;
 
-	case ALT('s'): face.extk = ACT_QUICKFIND; break;
+	case ALT('s'):
+	case '/': face.extk = ACT_QUICKFIND; break;
     }
 
-    if(strchr("?rRqQsShHmMuUgGaAfFvV", k)
+    if(strchr("?rRqQsShHmMuUgGaAfFvV/", k)
 	|| (k == KEY_DC)
 	|| (k == KEY_F(2))
 	|| (k == KEY_F(3))

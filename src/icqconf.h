@@ -39,10 +39,12 @@
 #define VERSION "devel"
 #endif
 
-#define RPM_BUILDROOT   ((string) "/var/tmp/centericq-buildroot")
+#ifndef SHARE_DIR
+#define SHARE_DIR "/usr/local/share"
+#endif
 
-#ifndef SHAREDIR
-#define SHAREDIR "/usr/local/share"
+#ifndef LOCALE_DIR
+#define LOCALE_DIR "/usr/local/share/locale"
 #endif
 
 #define _(s)    gettext(s)
@@ -54,81 +56,79 @@ enum regcolor {rcdark, rcblue, rcdontchange};
 
 class icqconf {
     protected:
-        unsigned int uin, port, socksport;
+	unsigned int uin, port, socksport;
 
-        int autoaway, autona;
-        bool hideoffline, quote, savepwd, antispam;
+	int autoaway, autona;
+	bool hideoffline, quote, savepwd, antispam;
 
-        string password, rnick, rfname, rlname, remail, server;
-        string sockshost, socksuser, sockspass, sharedir;
+	string password, rnick, rfname, rlname, remail, server;
+	string sockshost, socksuser, sockspass;
 
-        list<int> boldcolors;
+	list<int> boldcolors;
 
-        regsound rs;
-        regcolor rc;
+	regsound rs;
+	regcolor rc;
 
-        int findcolor(string s);
+	int findcolor(string s);
 
     public:
-        icqconf();
-        ~icqconf();
+	icqconf();
+	~icqconf();
 
-        unsigned int getuin();
+	unsigned int getuin();
+	const string &getpassword();
 
-        const string &getsharedir();
-        const string &getpassword();
+	void setpassword(string npass);
+	
+	void checkdir();
+	void load();
 
-        void setpassword(string npass);
-        
-        void checkdir();
-        void load();
+	int getcolor(int npair);
 
-        int getcolor(int npair);
+	int getstatus();
+	void savestatus(int st);
+	
+	void loadmainconfig();
+	void savemainconfig(unsigned int fuin = 0);
 
-        int getstatus();
-        void savestatus(int st);
-        
-        void loadmainconfig();
-        void savemainconfig(unsigned int fuin = 0);
+	void loadcolors();
+	void loadsounds();
+	void initpairs();
 
-        void loadcolors();
-        void loadsounds();
-        void initpairs();
+	void registerinfo(unsigned int fuin, string passwd, string nick,
+	string fname, string lname, string email);
+	
+	regcolor getregcolor();
+	void setregcolor(regcolor c);
 
-        void registerinfo(unsigned int fuin, string passwd, string nick,
-        string fname, string lname, string email);
-        
-        regcolor getregcolor();
-        void setregcolor(regcolor c);
+	regsound getregsound();
+	void setregsound(regsound s);
 
-        regsound getregsound();
-        void setregsound(regsound s);
+	bool gethideoffline();
+	void sethideoffline(bool fho);
 
-        bool gethideoffline();
-        void sethideoffline(bool fho);
+	bool getantispam();
+	void setantispam(bool fas);
 
-        bool getantispam();
-        void setantispam(bool fas);
+	void setauto(int away, int na);
+	void getauto(int &away, int &na);
 
-        void setauto(int away, int na);
-        void getauto(int &away, int &na);
+	void setserver(string nserv);
+	string getservername();
+	unsigned int getserverport();
 
-        void setserver(string nserv);
-        string getservername();
-        unsigned int getserverport();
+	bool getquote();
+	void setquote(bool use);
 
-        bool getquote();
-        void setquote(bool use);
-
-        bool getsavepwd();
-        void setsavepwd(bool ssave);
+	bool getsavepwd();
+	void setsavepwd(bool ssave);
  
-        void setsockshost(string nsockshost);
-        string getsockshost();
-        unsigned int getsocksport();
+	void setsockshost(string nsockshost);
+	string getsockshost();
+	unsigned int getsocksport();
 
-        void getsocksuser(string &name, string &pass);
-        void setsocksuser(string name, string pass);
+	void getsocksuser(string &name, string &pass);
+	void setsocksuser(string name, string pass);
 };
 
 extern icqconf conf;
