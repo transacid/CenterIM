@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.96 2002/03/26 16:14:02 konst Exp $
+* $Id: icqface.cc,v 1.97 2002/03/30 17:47:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -118,7 +118,7 @@ void icqface::init() {
 	    conf.getcolor(cp_main_menu));
     }
 
-    mcontacts->setcoord(1, 2, sizeWArea.x1, LINES-2);
+    mcontacts->setcoords(1, 2, sizeWArea.x1, LINES-2);
     mcontacts->menu.idle = &menuidle;
     mcontacts->menu.otherkeys = &contactskeys;
 
