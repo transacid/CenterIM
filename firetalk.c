@@ -2499,7 +2499,9 @@ enum firetalk_error firetalk_compare_nicks(firetalk_t conn, const char * const n
 }
 
 enum firetalk_error firetalk_select() {
-	return firetalk_select_custom(0,NULL,NULL,NULL,NULL);
+	struct timeval tv;
+	tv.tv_sec = tv.tv_usec = 0;
+	return firetalk_select_custom(0,NULL,NULL,NULL,&tv);
 }
 
 enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_write, fd_set *fd_except, struct timeval *timeout) {

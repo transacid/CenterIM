@@ -118,7 +118,7 @@ static int toc_internal_split_exchange(const char * const string);
 static char *toc_internal_split_name(const char * const string);
 static char *toc_get_tlv_value(char ** args, const int startarg, const int type);
 enum firetalk_error toc_find_packet(client_t c, unsigned char * buffer, unsigned short * bufferpos, char * outbuffer, const int frametype, unsigned short *l);
-
+enum firetalk_error toc_send_keepalive(client_t c);
 
 /* Internal Function Definitions */
 
@@ -136,10 +136,13 @@ enum firetalk_error  toc_find_packet(client_t c, unsigned char * buffer, unsigne
 			return FE_DISCONNECT;
 		}
 	}
-
-	if (toc_get_frame_type_from_header(buffer) != frametype) {
-		toc_internal_disconnect(c,FE_FRAMETYPE);
-		return FE_DISCONNECT;
+	if (toc_get_frame_type_from_header(buffer) == SFLAP_FRAME_KEEPALIVE)
+		toc_send_keepalive(c);
+	else {
+		if (toc_get_frame_type_from_header(buffer) != frametype) {
+			toc_internal_disconnect(c,FE_FRAMETYPE);
+			return FE_DISCONNECT;
+		}
 	}
 
 	length = toc_get_length_from_header(buffer);
@@ -962,6 +965,17 @@ enum firetalk_error toc_set_password(client_t c, const char * const oldpass, con
 
 enum firetalk_error toc_im_evil(client_t c, const char * const who) {
 	return toc_send_printf(c,"toc_evil %s norm",who);
+}
+
+enum firetalk_error toc_send_keepalive(client_t c) {
+	char data[2048];
+	unsigned int length;
+	struct s_firetalk_handle *fchandle;
+	fchandle = firetalk_find_handle(c);
+	memset(data,0,sizeof(data));
+	length = toc_fill_header((unsigned char *)data,SFLAP_FRAME_KEEPALIVE,++c->local_sequence,TOC_HEADER_LENGTH);
+	firetalk_internal_send_data(fchandle,data,length,0);
+	return FE_SUCCESS;
 }
 
 enum firetalk_error toc_got_data(client_t c, unsigned char * buffer, unsigned short * bufferpos) {
