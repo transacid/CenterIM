@@ -9,6 +9,12 @@
 #define __GG_LIBGADU_HAVE_OPENSSL
 #endif
 
-#include <stdint.h>
+#ifdef HAVE_STDINT_H
+    #include <stdint.h>
+#else
+    #ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+    #endif
+#endif
 
 #endif

@@ -52,4 +52,6 @@ if test "$with_ssl" != "no"; then
     fi
 fi
 
+AC_CHECK_HEADERS([stdint.h sys/types.h],,)
+
 AC_OUTPUT(Makefile)
