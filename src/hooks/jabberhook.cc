@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.9 2002/11/22 20:23:44 konst Exp $
+* $Id: jabberhook.cc,v 1.10 2002/11/23 10:40:13 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -437,11 +437,14 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		body = (string) xmlnode_get_data (x) + ": " + body;
 	    }
 
-	    if(type == "groupchat") {
-	    } else {
+	    if(!body.empty()) {
 		jhook.checkinlist(ic);
 		body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
-		em.store(immessage(ic, imevent::incoming, body));
+
+		if(type == "groupchat") {
+		} else {
+		    em.store(immessage(ic, imevent::incoming, body));
+		}
 	    }
 	    break;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.157 2002/11/23 09:28:49 konst Exp $
+* $Id: icqface.cc,v 1.158 2002/11/23 10:40:10 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -559,10 +559,12 @@ void icqface::fillcontactlist() {
 
 	c->remindbirthday(birthday = c->isbirthday());
 
+	abstracthook &h = gethook(c->getdesc().pname);
+
 	if(c->getstatus() == offline)
 	if(conf.gethideoffline())
 	if(!c->getmsgcount())
-	if(c->inlist() || c->getdesc().pname == icq || !gethook(c->getdesc().pname).logged()) {
+	if(c->inlist() || !h.logged() || h.getCapabs().count(hookcapab::cltemporary)) {
 	    continue;
 	}
 

@@ -21,7 +21,8 @@ struct hookcapab {
 	visibility,
 	version,
 	ping,
-	conferencing
+	conferencing,
+	cltemporary
     };
 };
 
