@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.4 2003/10/01 10:16:40 konst Exp $
+* $Id: ljhook.cc,v 1.5 2003/10/01 18:48:11 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -342,6 +342,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
     int npos;
     string content = rev->getContent(), pname;
     map<string, string> params;
+    icqcontact *c;
 
     if(!ev->isDelivered() || content.empty()) {
 	pname = rev->getHTTPResp();
@@ -376,9 +377,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    face.update();
 	    setautostatus(manualstatus);
 
-	    icqcontact *c = clist.get(self);
-
-	    if(!c) {
+	    if(!(c = clist.get(self))) {
 		c = clist.addnew(self, false);
 		requestinfo(self);
 	    }
@@ -398,11 +397,36 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
     } else if(ie->second == reqGetFriends) {
 	int fcount = atoi(params["friend_count"].c_str()), i;
+	string friendbase = (string) "http://" + conf.getourid(proto).server + "/users/";
 
 	for(i = 0; i < fcount; i++) {
 	    string username = (string) "friend_" + i2str(i) + "_user";
 	    string name = (string) "friend_" + i2str(i) + "_name";
 	    string birthday = (string) "friend_" + i2str(i) + "_birthday";
+
+	    string feed = friendbase + username + "/rss/";
+	    bool found;
+
+	    for(int k = 0, found = false; k < clist.count && !found; k++) {
+		c = (icqcontact *) clist.at(k);
+		found = (c->getworkinfo().homepage == feed);
+	    }
+
+	    if(!found)
+	    if(c = clist.addnew(imcontact(0, rss), false)) {
+		icqcontact::workinfo wi = c->getworkinfo();
+		wi.homepage = feed;
+		c->setworkinfo(wi);
+
+		icqcontact::moreinfo mi = c->getmoreinfo();
+		mi.birth_day = 120;
+		c->setmoreinfo(mi);
+
+		c->setnick(username + "@lj");
+		c->setdispnick(c->getnick());
+		c->save();
+	    }
+
 	}
 
     }
