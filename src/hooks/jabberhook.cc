@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.46 2003/05/06 20:27:30 konst Exp $
+* $Id: jabberhook.cc,v 1.47 2003/06/02 16:43:33 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1452,6 +1452,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			if(c->getstatus() == offline)
 			    jhook.awaymsgs[ic.nickname] = "";
 
+			logger.putonline(c, c->getstatus(), ust);
 			c->setstatus(ust);
 
 			if(x = xmlnode_get_tag(packet->x, "status"))

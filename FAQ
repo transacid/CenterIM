@@ -3,7 +3,7 @@
 * The centericq FAQ (frequently asked questions)
 * by Konstantin Klyagin <konst@konst.org.ua>
 *
-* $Id: FAQ,v 1.14 2003/04/18 19:08:05 konst Exp $
+* $Id: FAQ,v 1.15 2003/06/02 16:43:32 konst Exp $
 *
 */
 
@@ -189,3 +189,14 @@ A: It doesn't make much sense, because in many cases they're transferred
    easily. But if you still think that such a crypting will help, please
    consult homepage of the program which was made especially for ones
    like you: http://konst.org.ua/kripp/
+
+/* *** */
+
+Q: When $HOME/.centericq/config gets created, you should set it mode 0600
+   so only the user can read it.  It contains passwords in clear text
+   which other users on a system could read.
+
+A: Your filesystem permissions knowledge is very sound, but please just try
+   to access the config file before making any affirmations. You'll see
+   that the .centericq directiory permissions do not allow others to read
+   your configuration data.
