@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.59 2002/03/26 12:52:01 konst Exp $
+* $Id: icqconf.cc,v 1.60 2002/03/28 13:13:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -99,7 +99,7 @@ int icqconf::getouridcount() const {
     return accounts.size();
 }
 
-string icqconf::getawaymsg(protocolname pname) {
+string icqconf::getawaymsg(protocolname pname) const {
     string r, buf, fname;
     ifstream f;
 
@@ -125,7 +125,7 @@ string icqconf::getawaymsg(protocolname pname) {
 	sprintf(buf, _("I do really enjoy the default %s away message of %s %s."),
 	    getprotocolname(pname).c_str(), PACKAGE, VERSION);
 
-	setawaymsg(pname, r = buf);
+	return buf;
     }
 
     return r;
@@ -455,32 +455,54 @@ void icqconf::loadsounds() {
 }
 
 void icqconf::loadactions() {
-    string fname = getconfigfname("actions"), buf, name;
+    string fname = getconfigfname("actions"), buf, name, browser;
+    ifstream f;
+    bool cont;
 
     if(access(fname.c_str(), F_OK)) {
+	buf = getenv("PATH") ? getenv("PATH") : "";
+
+	if(pathfind(browser = "mozilla", buf, X_OK).empty()) {
+	    browser = "netscape";
+	}
+
 	ofstream of(fname.c_str());
+
 	if(of.is_open()) {
 	    of << "# This file contains external actions configuration for centericq" << endl;
 	    of << "# Every line should look like: <action> <command>" << endl;
 	    of << "# Possible actions are: openurl" << endl << endl;
 
-	    of << "openurl\t";
-	    of << "(if test ! -z \"`ps x | grep /netscape | grep -v grep`\"; ";
-	    of << "then DISPLAY=0:0 netscape -remote 'openURL($url$, new-window)'; else ";
-	    of << "DISPLAY=0:0 netscape \"$url$\"; fi) >/dev/null 2>&1 &" << endl;
+	    of << "openurl \\" << endl;
+	    of << "    (if test ! -z \"`ps x | grep /" << browser << " | grep -v grep`\"; \\" << endl;
+	    of << "\tthen DISPLAY=0:0 " << browser << " -remote 'openURL($url$, new-window)'; \\" << endl;
+	    of << "\telse DISPLAY=0:0 " << browser << " \"$url$\"; \\" << endl;
+	    of << "    fi) >/dev/null 2>&1 &" << endl;
 
 	    of.close();
 	}
     }
 
-    ifstream f(fname.c_str());
+    f.open(fname.c_str());
+
     if(f.is_open()) {
+	openurlcommand = "";
+	cont = false;
+
 	while(!f.eof()) {
 	    getstring(f, buf);
-	    name = getword(buf);
+
+	    if(!cont) {
+		name = getword(buf);
+	    }
 
 	    if(name == "openurl") {
-		openurlcommand = buf;
+		if(!buf.empty()) {
+		    if(cont = buf.substr(buf.size()-1, 1) == "\\")
+			buf.erase(buf.size()-1, 1);
+		}
+
+		openurlcommand += buf;
 	    }
 	}
 

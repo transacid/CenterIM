@@ -154,7 +154,7 @@ class icqconf {
 	void setourid(const imaccount &im);
 	int getouridcount() const;
 
-	string getawaymsg(protocolname pname);
+	string getawaymsg(protocolname pname) const;
 	void setawaymsg(protocolname pname, const string &amsg);
 
 	string getdirname() const;

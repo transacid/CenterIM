@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.61 2002/03/26 12:52:01 konst Exp $
+* $Id: icqdialogs.cc,v 1.62 2002/03/28 13:13:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -213,6 +213,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	    ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country).c_str());
 
 	tree->addleaff(i, 0, 28, _(" Street address : %s "), wi.street.c_str());
+	tree->addleaff(i, 0, 41, _(" Zip code : %s "), wi.zip.c_str());
 	tree->addleaff(i, 0, 29, _(" Company : %s "), wi.company.c_str());
 	tree->addleaff(i, 0, 30, _(" Department : %s "), wi.dept.c_str());
 	tree->addleaff(i, 0, 31, _(" Position : %s "), wi.position.c_str());
@@ -351,6 +352,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		case 26: wi.state = inputstr(_("State: "), wi.state); break;
 		case 27: selectcountry(wi.country); break;
 		case 28: wi.street = inputstr(_("Street address: "), wi.street); break;
+		case 41: wi.zip = inputstr(_("Zip code: "), wi.zip); break;
 		case 29: wi.company = inputstr(_("Company: "), wi.company); break;
 		case 30: wi.dept = inputstr(_("Department: "), wi.dept); break;
 		case 31: wi.position = inputstr(_("Position: "), wi.position); break;
