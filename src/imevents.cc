@@ -572,6 +572,10 @@ const vector<imfile::record> &imfile::getfiles() const {
     return files;
 }
 
+void imfile::setfiles(const vector<imfile::record> &lst) {
+    files = lst;
+}
+
 bool imfile::empty() const {
     return files.empty();
 }

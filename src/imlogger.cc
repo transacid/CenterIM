@@ -27,6 +27,7 @@ const char *streventname(imevent::imeventtype type) {
 	case imevent::email: return _("e-mail");
 	case imevent::notification: return _("notification");
 	case imevent::contacts: return _("contacts");
+	case imevent::file: return _("files");
     }
     return "";
 };

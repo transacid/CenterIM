@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.143 2002/09/23 11:35:24 konst Exp $
+* $Id: icqface.cc,v 1.144 2002/09/23 17:11:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,7 @@ const char *strgender(imgender g) {
     return _("Not specified");
 }
 
-const char *seteventviewresult(icqface::eventviewresult r) {
+const char *geteventviewresult(icqface::eventviewresult r) {
     switch(r) {
 	case icqface::ok: return _("Ok");
 	case icqface::next: return _("Next");
@@ -255,6 +255,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_GROUPMOVE] = _(" Move to group..");
 	actnames[ACT_PING]      = _(" Ping");
 	actnames[ACT_VERSION]   = _(" Fetch version info");
+	actnames[ACT_FILE]      = _(" Send file(s)");
     }
 
     if(ischannel(c)) {
@@ -291,6 +292,7 @@ int icqface::contextmenu(icqcontact *c) {
 	    if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
 	    if(capab.count(hookcapab::contacts)) actions.push_back(ACT_CONTACT);
 	    if(capab.count(hookcapab::authrequests)) actions.push_back(ACT_AUTH);
+	    if(capab.count(hookcapab::files)) actions.push_back(ACT_FILE);
 
 	    if(!actions.empty())
 		actions.push_back(0);
@@ -1190,7 +1192,7 @@ string icqface::inputstr(const string &q, const string &defl , char passwdchar )
     return input.getvalue();
 }
 
-string icqface::inputfile(const string &q, const string &defl ) {
+string icqface::inputfile(const string &q, const string &defl) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string r;
 
@@ -1828,6 +1830,70 @@ bool icqface::eventedit(imevent &ev) {
 
 	*m = imcontacts(ev.getcontact(), imevent::outgoing, clst);
 
+    } else if(ev.gettype() == imevent::file) {
+	dialogbox db;
+	int baritem, mitem;
+	bool finished = false;
+	vector<imfile::record>::const_iterator ir;
+
+	imfile *m = static_cast<imfile *>(&ev);
+
+	db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+	db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
+	    conf.getcolor(cp_main_selected)));
+	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
+	    conf.getcolor(cp_main_selected),
+	    _("Add"), _("Remove"), _("Send"), 0));
+
+	db.addkey(KEY_IC, 0);
+	db.addkey(KEY_DC, 1);
+
+	db.addautokeys();
+	db.otherkeys = &userinfokeys;
+	db.idle = &dialogidle;
+
+	db.redraw();
+
+	workarealine(sizeWArea.y1+2);
+	workarealine(sizeWArea.y2-2);
+
+	while(!finished && !r) {
+	    db.getmenu()->clear();
+	    for(ir = m->getfiles().begin(); ir != m->getfiles().end(); ++ir) {
+		db.getmenu()->additemf(" %s", ir->fname.c_str());
+	    }
+
+	    finished = !db.open(mitem, baritem);
+
+	    if(!finished) {
+		vector<imfile::record> files = m->getfiles();
+
+		switch(baritem) {
+		    case 0:
+			if((msg = inputfile(_("file name: "))).size()) {
+			    struct stat st;
+
+			    if(!stat(msg.c_str(), &st)) {
+				imfile::record fr;
+				fr.fname = msg;
+				fr.size = st.st_size;
+				files.push_back(fr);
+			    }
+			}
+			break;
+		    case 1:
+			if(mitem > 0 && mitem <= m->getfiles().size())
+			    files.erase(files.begin()+mitem-1);
+			break;
+		    case 2:
+			r = true;
+			break;
+		}
+
+		m->setfiles(files);
+	    }
+	}
     }
 
     editdone = false;
@@ -2065,7 +2131,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     bar->item = actions.size()-1;
 
     for(ia = actions.begin(); ia != actions.end(); ++ia) {
-	bar->items.push_back(seteventviewresult(*ia));
+	bar->items.push_back(geteventviewresult(*ia));
     }
 
     switch(ev->getdirection()) {

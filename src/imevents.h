@@ -217,11 +217,14 @@ class imfile: public imevent {
 	imfile() { };
 	imfile(const imevent &ev);
 	imfile(const imcontact &acont, imdirection adirection,
-	    const string &amsg, const vector<record> &afiles);
+	    const string &amsg = "",
+	    const vector<record> &afiles = vector<record>());
 
 	string gettext() const;
-	const vector<record> &getfiles() const;
 	string getmessage() const;
+
+	const vector<record> &getfiles() const;
+	void setfiles(const vector<record> &lst);
 
 	bool empty() const;
 	bool contains(const string &atext) const;

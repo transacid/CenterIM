@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.122 2002/09/23 11:35:24 konst Exp $
+* $Id: centericq.cc,v 1.123 2002/09/23 17:11:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -217,18 +217,16 @@ void centericq::mainloop() {
 		    imauthorization::Request, ""), icqface::ok);
 		break;
 
+	    case ACT_FILE:
+		sendevent(imfile(c->getdesc(), imevent::outgoing), icqface::ok);
+		break;
+
 	    case ACT_IGNORE:
 		sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 		    lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
 		    clist.remove(c->getdesc());
 		    face.update();
-		}
-		break;
-
-	    case ACT_FILE:
-		if(c->getstatus() != offline) {
-//                    sendfiles(c->getdesc());
 		}
 		break;
 
@@ -752,6 +750,9 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 		sendev = new immessage(m->getcontact(), imevent::outgoing, "");
 		break;
 	}
+
+    } else if(ev.gettype() == imevent::file) {
+	sendev = new imfile(ev);
 
     }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.46 2002/09/23 11:35:25 konst Exp $
+* $Id: irchook.cc,v 1.47 2002/09/23 17:11:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -61,6 +61,7 @@ irchook::irchook()
     fcapabs.insert(hookcapab::optionalpassword);
     fcapabs.insert(hookcapab::ping);
     fcapabs.insert(hookcapab::version);
+    fcapabs.insert(hookcapab::files);
 }
 
 irchook::~irchook() {
@@ -208,12 +209,22 @@ bool irchook::send(const imevent &ev) {
     if(c) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
-	    if(m) text = rushtmlconv("kw", m->gettext());
+	    text = rushtmlconv("kw", m->gettext());
 
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
-	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rushtmlconv("kw", m->getdescription());
+	    text = rushtmlconv("kw", m->geturl()) + "\n\n" + rushtmlconv("kw", m->getdescription());
 
+	} else if(ev.gettype() == imevent::file) {
+	    const imfile *m = static_cast<const imfile *>(&ev);
+	    vector<imfile::record> files = m->getfiles();
+	    vector<imfile::record>::const_iterator ir;
+
+	    for(ir = files.begin(); ir != files.end(); ++ir)
+		firetalk_file_offer(handle, c->getdesc().nickname.c_str(),
+		    ir->fname.c_str());
+
+	    return true;
 	}
 
 	if(text.substr(0, 1) == "/") {
