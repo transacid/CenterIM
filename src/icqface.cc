@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.233 2004/11/11 13:42:05 konst Exp $
+* $Id: icqface.cc,v 1.234 2004/11/12 14:41:45 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1955,7 +1955,7 @@ void icqface::quickfind(verticalmenu *multi) {
     verticalmenu *cm = (multi ? multi : &mcontacts->menu);
 
     status(_("QuickSearch: type to find, %s find again, Enter finish"),
-	getstatkey(key_send_message, section_editor).c_str());
+	getstatkey(key_quickfind, section_contact).c_str());
 
     xtermtitle(_("contact list quick search"));
 

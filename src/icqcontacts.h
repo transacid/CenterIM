@@ -20,12 +20,13 @@
 *
 */
 
-#define SORT_CONTACTS   "#fodcan_!N"
+#define SORT_CONTACTS   "#odcan_!N"
 
 #define SORTCHAR(c) ( \
     c->hasevents() ? '#' : \
     !c->inlist() ? '!' : \
     c->getstatus() == invisible ? 'o' : \
+    c->getstatus() == freeforchat ? 'o' : \
     c->getshortstatus() \
 )
 
