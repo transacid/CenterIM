@@ -1,4 +1,4 @@
-Version: 3.22.8
+Version: 3.29.12
 Summary: Console ncurses based ICQ client
 Name: centericq
 Release: 3

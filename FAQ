@@ -61,3 +61,9 @@ A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
 Q: How do I authorize someone's request with centericq?
 
 A: You'll see as soon as someone requests it.
+
+Q: I can't use Ctrl-O to view history and Ctrl-Y to delete a line under FreeBSD
+
+A: Execute the following before starting centericq:
+    stty dsusp undef
+    stty discard undef
