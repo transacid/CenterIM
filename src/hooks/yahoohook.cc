@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.66 2002/11/22 20:23:44 konst Exp $
+* $Id: yahoohook.cc,v 1.67 2002/11/23 09:28:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -683,8 +683,6 @@ void yahoohook::got_conf_invite(guint32 id, char *who, char *room, char *msg, ch
     icqcontact *c = clist.get(cont);
     if(!c) c = clist.addnew(cont);
 
-    c->setstatus(available);
-
     inviter = confname.substr(1);
     if((i = inviter.rfind("-")) != -1) {
 	inviter.erase(i);
@@ -794,11 +792,6 @@ void yahoohook::typing_notify(guint32 id, char *who, int stat) {
     if(c) {
 	if(st[who] != stat) {
 	    face.log(stat ? _("+ [yahoo] %s: started typing") : _("+ [yahoo] %s: stopped typing"), who);
-	    if(c->getstatus() == offline) {
-		c->setstatus(available);
-		face.relaxedupdate();
-	    }
-
 	    st[who] = stat;
 	}
     }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.156 2002/11/22 20:23:42 konst Exp $
+* $Id: icqface.cc,v 1.157 2002/11/23 09:28:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -561,7 +561,8 @@ void icqface::fillcontactlist() {
 
 	if(c->getstatus() == offline)
 	if(conf.gethideoffline())
-	if(!c->getmsgcount()) {
+	if(!c->getmsgcount())
+	if(c->inlist() || c->getdesc().pname == icq || !gethook(c->getdesc().pname).logged()) {
 	    continue;
 	}
 
@@ -648,6 +649,7 @@ void icqface::fillcontactlist() {
 	    mcontacts->addleaff(nnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
 		c, "%s%s ", c->getmsgcount() ? "#" : " ", dnick.c_str());
+
 	} else {
 	    char *fmt = "%s[%c] %s ";
 
@@ -657,9 +659,8 @@ void icqface::fillcontactlist() {
 	    mcontacts->addleaff(nnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
 		c, fmt, c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
-	}
 
-//        if(savec && c->getmsgcount() && ontop) savec = 0;
+	}
     }
 
     if(!mainscreenblock) mcontacts->redraw();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.72 2002/11/22 20:23:41 konst Exp $
+* $Id: icqcontact.cc,v 1.73 2002/11/23 09:28:48 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -385,6 +385,9 @@ void icqcontact::excludefromlist() {
 }
 
 void icqcontact::includeintolist() {
+    if(cdesc.pname != icq)
+	status = offline;
+
     gethook(cdesc.pname).sendnewuser(cdesc);
     unlink((getdirname() + "excluded").c_str());
     finlist = true;

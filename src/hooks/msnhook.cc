@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.42 2002/11/22 20:23:44 konst Exp $
+* $Id: msnhook.cc,v 1.43 2002/11/23 09:28:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -363,11 +363,6 @@ void msnhook::messaged(void *data) {
 
 	text = siconv(d->msg, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
 	em.store(immessage(ic, imevent::incoming, text));
-
-	if(c)
-	if(c->getstatus() == offline) {
-	    c->setstatus(available);
-	}
     }
 }
 
