@@ -7,7 +7,7 @@
 
 struct imsearchparams {
     imsearchparams() {
-	onlineonly = false;
+	onlineonly = sincelast = false;
 	uin = 0;
 	minage = maxage = country = language = 0;
 	gender = genderUnspec;
@@ -19,7 +19,7 @@ struct imsearchparams {
     };
 
     protocolname pname;
-    bool onlineonly;
+    bool onlineonly, sincelast;
     unsigned int uin;
     unsigned short minage, maxage, country, language;
     ICQ2000::AgeRange agerange;

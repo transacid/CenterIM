@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.109 2002/08/05 21:15:12 konst Exp $
+* $Id: centericq.cc,v 1.110 2002/08/06 14:44:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -739,6 +739,10 @@ void centericq::readevent(const imevent &ev, bool &enough, bool &fin) {
 		imevent::outgoing, false, "rejected"));
 	    enough = true;
 	    break;
+
+	case icqface::info:
+	    cicq.userinfo(ev.getcontact());
+	    break;
     }
 }
 
@@ -834,6 +838,10 @@ void centericq::history(const imcontact &cont) {
 			    i--;
 			    im = *i;
 			}
+			break;
+
+		    case icqface::info:
+			cicq.userinfo(cont);
 			break;
 		}
 	    }

@@ -55,7 +55,7 @@ class icqface {
     public:
 	enum eventviewresult {
 	    ok, next, cancel, forward, reply, open,
-	    accept, reject, eventviewresult_size
+	    accept, reject, info, eventviewresult_size
 	};
 
 	class icqprogress {
@@ -247,7 +247,7 @@ static const char *eventviewresultnames[icqface::eventviewresult_size] = {
     _("Ok"), _("Next"), "",
     _("Fwd"), _("Reply"),
     _("Open"), _("Accept"),
-    _("Reject")
+    _("Reject"), _("User info")
 };
 
 #endif

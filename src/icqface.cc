@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.127 2002/07/31 11:17:32 konst Exp $
+* $Id: icqface.cc,v 1.128 2002/08/06 14:44:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1869,6 +1869,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 
     } else if(ev->gettype() == imevent::authorization) {
 	if(ev->getdirection() == imevent::incoming) {
+	    actions.push_back(info);
 	    actions.push_back(accept);
 	    actions.push_back(reject);
 	}

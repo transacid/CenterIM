@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.75 2002/07/03 14:35:20 konst Exp $
+* $Id: icqdialogs.cc,v 1.76 2002/08/06 14:44:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -227,6 +227,11 @@ bool icqface::finddialog(imsearchparams &s) {
 	    }
 
 	    tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
+
+	    if(!s.room.empty()) {
+		i = tree.addnode(_(" Joined since the last check only "));
+		tree.addleaff(i, 0, 16, " %s ", stryesno[s.sincelast]);
+	    }
 	}
 
 	finished = !db.open(n, b, (void **) &i);
@@ -277,6 +282,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 13: s.firstname = inputstr(_("First name: "), s.firstname); break;
 		    case 14: s.lastname = inputstr(_("Last name: "), s.lastname); break;
 		    case 15: selectagerange(s.agerange); break;
+		    case 16: s.sincelast = !s.sincelast; break;
 		    case 17: selectgender(s.gender); break;
 		    case 18: selectlanguage(s.language); break;
 		    case 19: s.city = inputstr(_("City: "), s.city); break;

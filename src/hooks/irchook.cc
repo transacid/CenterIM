@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.35 2002/07/15 15:20:36 konst Exp $
+* $Id: irchook.cc,v 1.36 2002/08/06 14:44:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -290,6 +290,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
     emailsub = params.email;
     namesub = params.firstname;
+    searchsincelast = params.sincelast;
 
     searchchannels.clear();
     extlisted.clear();
@@ -348,7 +349,8 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 void irchook::processnicks() {
     string dnick;
     char *nick;
-    vector<string> foundnicks;
+    vector<string> foundnicks, prelastfound;
+    static vector<string> lastfoundnicks;
     vector<string>::iterator in, isn;
     vector<channelInfo>::iterator ir;
     bool remove;
@@ -393,6 +395,21 @@ void irchook::processnicks() {
 	    }
 	}
     }
+
+    prelastfound = foundnicks;
+
+    if(searchsincelast) {
+	for(in = foundnicks.begin(); in != foundnicks.end(); ) {
+	    if(find(lastfoundnicks.begin(), lastfoundnicks.end(), *in) != lastfoundnicks.end()) {
+		foundnicks.erase(in);
+		in = foundnicks.begin();
+	    } else {
+		in++;
+	    }
+	}
+    }
+
+    lastfoundnicks = prelastfound;
 
     for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
 	dnick = *in;

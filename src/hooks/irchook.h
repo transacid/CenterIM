@@ -30,7 +30,7 @@ class irchook: public abstracthook {
 
 	searchMode smode;
 
-	bool fonline, flogged;
+	bool fonline, flogged, searchsincelast;
 	firetalk_t handle;
 	imstatus ourstatus;
 	string ircname, emailsub, namesub;
