@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.11 2002/03/11 13:06:48 konst Exp $
+* $Id: icqmlist.cc,v 1.12 2002/04/07 14:05:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,7 +32,7 @@ icqlist::~icqlist() {
 }
 
 string icqlist::getfname() const {
-    return conf.getdirname() + "modelist";
+    return conf.getconfigfname("modelist");
 }
 	
 void icqlist::load() {
@@ -50,13 +50,18 @@ void icqlist::load() {
 	    if(!tok.empty())
 	    if(i = atoi(tok.c_str())) {
 		nick = unmime(getword(buf));
+
 		if(!nick.empty()) {
 		    if(buf == "y") {
-			lst.push_back(modelistitem(nick,
-			    imcontact(nick, yahoo), (contactstatus) i));
+			lst.push_back(modelistitem(nick, imcontact(nick, yahoo), (contactstatus) i));
+		    } else if(buf == "m") {
+			lst.push_back(modelistitem(nick, imcontact(nick, msn), (contactstatus) i));
+		    } else if(buf == "a") {
+			lst.push_back(modelistitem(nick, imcontact(nick, aim), (contactstatus) i));
+		    } else if(buf == "i") {
+			lst.push_back(modelistitem(nick, imcontact(nick, irc), (contactstatus) i));
 		    } else {
-			lst.push_back(modelistitem(nick,
-			    imcontact(strtoul(buf.c_str(), 0, 0), icq), (contactstatus) i));
+			lst.push_back(modelistitem(nick, imcontact(strtoul(buf.c_str(), 0, 0), icq), (contactstatus) i));
 		    }
 		}
 	    }
@@ -80,6 +85,9 @@ void icqlist::save() {
 		switch(i->getdesc().pname) {
 		    case icq: f << i->getdesc().uin; break;
 		    case yahoo: f << "y"; break;
+		    case msn: f << "m"; break;
+		    case aim: f << "a"; break;
+		    case irc: f << "i"; break;
 		}
 
 		f << endl;
@@ -97,7 +105,7 @@ void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
 
     for(i = begin(); i != end(); i++) {
 	if(i->getstatus() == ncs) {
-	    m->additem(" " + i->getnick());
+	    m->additem(conf.getprotcolor(i->getdesc().pname), 0, " " + i->getnick());
 	    menucontents.push_back(*i);
 	}
     }
