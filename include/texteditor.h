@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <fstream>
 #include <algorithm>
 #include <unistd.h>
 #include <sys/types.h>
@@ -13,7 +14,7 @@
 #include "conf.h"
 
 #include "kkstrtext.h"
-#include "common.h"
+#include "conscommon.h"
 #include "abstractui.h"
 
 #define TEXTEDITOR_NOFILES -2
@@ -149,11 +150,13 @@ class texteditor: public abstractuicontrol {
 
 	int load(string buf, char *id);
 	int load(FILE *f, char *id);
+	int load(ifstream &f, const string id);
 	    // loads a file from char* or FILE opening
 	    // a new editor window
 
 	char *save(const char *linebreak);
 	int save(FILE *f, const char *linebreak);
+	int save(ofstream &f, const string linebreak);
 	    // saves a file to char* or FILE
 
 	void close();

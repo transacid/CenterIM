@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: cmenus.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -570,21 +570,11 @@ void horizontalmenu::close() {
 }
 
 void horizontalmenu::saveline() {
-    if(!scrbuf) {
-        scrbuf = (chtype **) malloc(sizeof(chtype*));
-        scrbuf[0] = (chtype *) malloc(sizeof(chtype) * COLS);
-        mvinchnstr(coordy, 0, scrbuf[0], COLS);
-    }
+    screenbuffer.save(0, coordy, COLS, coordy);
 }
 
 void horizontalmenu::restoreline() {
-    if(scrbuf) {
-        mvaddchnstr(coordy, 0, scrbuf[0], COLS);
-        refresh();
-        free(scrbuf[0]);
-        free(scrbuf);
-        scrbuf = 0;
-    }
+    screenbuffer.restore();
 }
 
 verticalmenu *horizontalmenu::pulldown(int n) {
@@ -601,16 +591,14 @@ verticalmenu *horizontalmenu::pulldown(int n) {
 
 // --------------------------------------------------------------------------
 
-using ktool::horizontalmenuitem;
-
-horizontalmenuitem::horizontalmenuitem() {
+ktool::horizontalmenuitem::horizontalmenuitem() {
 }
 
-horizontalmenuitem::horizontalmenuitem(const horizontalmenuitem &a) {
+ktool::horizontalmenuitem::horizontalmenuitem(const horizontalmenuitem &a) {
     text = a.text;
     color = a.color;
     menu = a.menu;
 }
 
-horizontalmenuitem::~horizontalmenuitem() {
+ktool::horizontalmenuitem::~horizontalmenuitem() {
 }

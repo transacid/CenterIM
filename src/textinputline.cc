@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textinputline class
-* $Id: textinputline.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: textinputline.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,7 +24,7 @@
 
 #include "textinputline.h"
 
-textinputline::textinputline(int clr):
+textinputline::textinputline(int clr = 0):
 ncolor(clr), fm(0), passwordchar(0), idle(0), otherkeys(0) {
     history = new linkedlist;
     history->freeitem = &charpointerfree;
@@ -74,19 +74,19 @@ void textinputline::draw() {
 
 char *textinputline::open(int x, int y, const char *buf, int pvisiblelen, int pactuallen) {
     bool finished = false, firstpass = true;
-    int k, go;
+    int go;
     
     actualstr = new char[ (actuallen = pactuallen) + 1];
     visiblestr = new char[ (visiblelen = pvisiblelen) + 1];
     x1 = x, y1 = y, x2 = x+visiblelen, y2 = y1+visiblelen;
     visiblestart = pos = 0, strcpy(actualstr, buf);
-    savescr();
+    screenbuffer.save(x1, y1, x2, y2);
     draw();
 
     while(!finished) {
 	if(idle) go = keypressed(); else go = 1;
 
-	if(go) switch(k = getkey()) {
+	if(go) switch(lastkey = getkey()) {
 	    case KEY_LEFT:
 		if(pos) {
 		    pos--;
@@ -153,17 +153,17 @@ char *textinputline::open(int x, int y, const char *buf, int pvisiblelen, int pa
 		break;
 		
 	    default:
-		if((k > 31) && (k < 256)) {
+		if((lastkey > 31) && (lastkey < 256)) {
 		    if(firstpass) {
-			sprintf(actualstr, "%c", k);
+			sprintf(actualstr, "%c", lastkey);
 			pos = 1;
 			drawcheck(true);
 		    } else if(strlen(actualstr) < actuallen) {
-			strcinsert(actualstr, pos++, k);
+			strcinsert(actualstr, pos++, lastkey);
 			drawcheck(true);
 		    }
 		} else if(otherkeys) {
-		    if((*otherkeys)(this, k));
+		    if((*otherkeys)(this, lastkey));
 		}
 	} else {
 	    if(idle) (*idle)(this);
@@ -171,8 +171,9 @@ char *textinputline::open(int x, int y, const char *buf, int pvisiblelen, int pa
 
 	firstpass = false;
     }
-    
-    restscr();
+
+    screenbuffer.restore();
+
     delete visiblestr;
     return actualstr;
 }
@@ -191,3 +192,6 @@ void textinputline::setpasswordchar(const char npc) {
 void textinputline::close() {
 }
 
+int textinputline::getlastkey() {
+    return lastkey;
+}

@@ -58,6 +58,8 @@
 #define EM_CTRL       4
 #define EM_MANUAL     8
 
+#define CHECKLOADED(a)	if(!getfcount()) return a;
+
 texteditor::texteditor():
 otherkeys(0), fn(-1), wrap(false), abscol(0), idle(0),
 insertmode(true), undolog(true), show(true), curfile(0),
@@ -107,6 +109,23 @@ int texteditor::load(FILE *f, char *id) {
     return i;
 }
 
+int texteditor::load(ifstream &f, const string id) {
+    int ret, size;
+    char *buf;
+
+    f.seekg(0, ios::end);
+    size = f.tellg();
+    f.seekg(0, ios::beg);
+
+    buf = new char[size+1];
+    f.read(buf, size);
+    buf[size] = 0;
+    ret = load(buf, strdup(id.c_str()));
+    delete buf;
+
+    return ret;
+}
+
 char *texteditor::save(const char *linebreak) {
     int i;
     char *buf, *p, *prev;
@@ -152,6 +171,13 @@ int texteditor::save(FILE *f, const char *linebreak) {
     char *buf = save(linebreak);
     fwrite(buf, strlen(buf), 1, f);
     delete buf;
+    return 0;
+}
+
+int texteditor::save(ofstream &f, const string linebreak) {
+    char *buf = save(linebreak.c_str());
+    f.write(buf, strlen(buf));
+    f.close();
     return 0;
 }
 
@@ -327,6 +353,7 @@ void texteditor::addblock(int x1, int y1, int x2, int y2, int color) {
 }
 
 void texteditor::startmark() {
+    CHECKLOADED();
     curfile->markmode = curfile->showmarked = true;
     curfile->markreverse = false;
     curfile->markblock->x1 = curfile->markblock->x2 = CURCOL;
@@ -336,12 +363,14 @@ void texteditor::startmark() {
 }
 
 void texteditor::endmark() {
+    CHECKLOADED();
     marktext();
     curfile->markmode = false;
 }
 
 void texteditor::marktext() {
     bool corrx, corry, sameline;
+    CHECKLOADED();
 
     if(curfile->markreverse) {
 	corrx = curfile->markblock->x2 >= CURCOL;
@@ -371,6 +400,7 @@ void texteditor::marktext() {
 
 void texteditor::copymark(FILE *f) {
     int i;
+    CHECKLOADED();
 
     for(i = curfile->markblock->y1; i <= curfile->markblock->y2; i++) {
 
@@ -407,6 +437,8 @@ void texteditor::copymark(char *p, int maxlen) {
 }
 
 void texteditor::delmark() {
+    CHECKLOADED();
+
     int i, newcol, newrow, line = 0;
     char *c, *p, *sl, *el;
     string deltext;
@@ -467,6 +499,7 @@ void texteditor::delmark() {
 }
 
 void texteditor::clearmark() {
+    CHECKLOADED();
     memset(curfile->markblock, 0, sizeof(struct textblock));
     draw();
 }
@@ -475,7 +508,7 @@ void texteditor::insert(FILE *f) {
     struct stat sb;
     int fsize;
     char *buf;
-    
+
     if(f) {
 	fseek(f, 0, SEEK_SET);
 	fstat(fileno(f), &sb);
@@ -488,6 +521,7 @@ void texteditor::insert(FILE *f) {
 }
 
 void texteditor::insert(char *p) {
+    CHECKLOADED();
     if(p) {
 	char *sl = strdup(CURSTRING), *el = strdup(CURSTRING+CURCOL);
 	char *curpos = p, buf[1024], *s;
@@ -732,7 +766,11 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 			    nr++;
 			}
 
-			if(!strlen(r)) continue;
+			if(!strlen(r)) {
+                            r = nr;
+                            continue;
+                        }
+
 			p = cp;
 			lastoccur = 0;
 			
@@ -1461,7 +1499,11 @@ void texteditor::inschar(int k) {
 void texteditor::setpos(int col, int line) {
     bool drawneeded = false;
 
-    if((line >= curfile->lines->count) || (line < 0)) return;
+    if(line >= curfile->lines->count)
+	line = curfile->lines->count-1;
+
+    if(line < 0)
+	line = 0;
 
     if((line >= curfile->sy) && (line < curfile->sy+y2-y1)) {
 	curfile->y = line-curfile->sy;
@@ -1644,6 +1686,7 @@ bool texteditor::find(const char *needle, const char *options, int *col, int *li
 }
 
 bool texteditor::ismark() {
+    CHECKLOADED(false);
     return curfile ? curfile->markmode : false;
 }
 
@@ -1713,11 +1756,10 @@ void texteditor::clearlight(int fn) {
 }
 
 void texteditor::switchmark() {
-    if(ismark()) {
-	endmark();
-    } else {
-	startmark();
-    }
+    CHECKLOADED();
+
+    if(ismark()) endmark();
+    else startmark();
 }
 
 void texteditor::shiftident(int x1, int y1, int x2, int y2, int delta) {
@@ -1725,6 +1767,7 @@ void texteditor::shiftident(int x1, int y1, int x2, int y2, int delta) {
     char *p, *newp;
     string origtext, repltext;
 
+    CHECKLOADED();
     if(!delta) return;
     if(x1) starty++;
     if(!x2) endy--;
@@ -1764,6 +1807,7 @@ void texteditor::shiftident(int x1, int y1, int x2, int y2, int delta) {
 }
 
 void texteditor::shiftident(int delta) {
+    CHECKLOADED();
     shiftident(curfile->markblock->x1, curfile->markblock->y1,
     curfile->markblock->x2, curfile->markblock->y2, delta);
 }
@@ -1774,7 +1818,8 @@ void texteditor::undo() {
     tundoaction a;
     bool firstpass = true, finished = false;
     undolog = show = false;
-    
+
+    CHECKLOADED();    
     while(curfile->undo->count && !finished) {
 	ur = (undorecord *) curfile->undo->at(curfile->undo->count-1);
 
@@ -1858,6 +1903,7 @@ int texteditor::findhighline(void *p1, void *p2) {
 }
 
 void texteditor::shiftmarkedblock(int delta) {
+    CHECKLOADED();
     if(CURLINE <= curfile->markblock->y1) {
 	curfile->markblock->y1 += delta;
 	curfile->markblock->y2 += delta;
@@ -1868,17 +1914,14 @@ void texteditor::shiftmarkedblock(int delta) {
 
 // --------------------------------------------------------------------------
 
-using ktool::hlight;
-
-bool hlight::operator == (const hl_kind &k) const {
+bool ktool::hlight::operator == (const hl_kind &k) const {
     return kind == k;
 }
 
-bool hlight::operator != (const hl_kind &k) const {
+bool ktool::hlight::operator != (const hl_kind &k) const {
     return kind != k;
 }
 
-bool hlight::operator < (const hlight &ah) const {
+bool ktool::hlight::operator < (const hlight &ah) const {
     return kind == h_eol;
 }
-

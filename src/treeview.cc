@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: treeview.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -106,6 +106,16 @@ int treeview::addleaf(int parent, int color, void *ref, string text) {
 
     items.push_back(node);
     return node.id;
+}
+
+int treeview::getid(void *ref) {
+    int id = -1;
+    vector<treeviewnode>::iterator i;
+
+    if((i = find(items.begin(), items.end(), (void *) ref)) != items.end())
+	id = i->id;
+
+    return id;
 }
 
 int treeview::getid(int mpos) {
@@ -217,7 +227,7 @@ void treeview::genmenu(int parent) {
 }
 
 void treeview::redraw() {
-    savescr();
+    screenbuffer.save();
     genmenu(0);
     menu.redraw();
 }
@@ -226,7 +236,7 @@ void *treeview::open(int *n) {
     void *p = 0;
     int k;
 
-    savescr();
+    screenbuffer.save(x1, y1, x2, y2);
     redraw();
 
     if(k = menu.open()) p = getref(getid(k-1));
@@ -277,25 +287,22 @@ void *treeview::getref(int id) {
     }
 }
 
-void treeview::setcur(void *ref) {
-    int menupos = 0;
-    bool count = true;
+void treeview::setcur(int id) {
     vector<treeviewnode>::iterator i;
-    
-    for(i = items.begin(); i != items.end(); i++) {
-	if(isnode(i->id) && collapsable)
-	if(isnodeopen(i->id)) {
-	    if(i->ref == ref) {
-		menu.setpos(menupos-1);
-		break;
-	    }
-	    menupos++;
-	}
+
+    if(!menu.getcount()) genmenu(0);
+
+    if((i = find(refdeps.begin(), refdeps.end(), id)) != refdeps.end()) {
+        menu.setpos(i-refdeps.begin());
     }
 }
 
 int treeview::getcount() {
     return items.size();
+}
+
+bool treeview::empty() {
+    return items.size() < 2;
 }
 
 void treeview::setcoord(int nx1, int ny1, int nx2, int ny2) {
@@ -304,20 +311,18 @@ void treeview::setcoord(int nx1, int ny1, int nx2, int ny2) {
 
 // ----------------------------------------------------------------------------
 
-using ktool::treeviewnode;
-
-bool treeviewnode::operator == (const int aid) {
+bool ktool::treeviewnode::operator == (const int aid) {
     return id == aid;
 }
 
-bool treeviewnode::operator == (const void *aref) {
+bool ktool::treeviewnode::operator == (const void *aref) {
     return ref == aref;
 }
 
-bool treeviewnode::operator != (const int aid) {
+bool ktool::treeviewnode::operator != (const int aid) {
     return id != aid;
 }
 
-bool treeviewnode::operator != (const void *aref) {
+bool ktool::treeviewnode::operator != (const void *aref) {
     return ref != aref;
 }

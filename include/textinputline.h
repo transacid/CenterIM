@@ -2,33 +2,35 @@
 #define __KONST_UI_INPUT_H_
 
 #include "conf.h"
-#include "common.h"
+#include "conscommon.h"
 #include "filemanager.h"
 
 __KTOOL_BEGIN_NAMESPACE
 
 class textinputline: public abstractuicontrol {
     protected:
-        int ncolor, visiblestart, visiblelen, actuallen, pos;
+	int ncolor, visiblestart, visiblelen, actuallen, pos, lastkey;
 	linkedlist *history;
-        char *actualstr, *visiblestr, passwordchar;
+	char *actualstr, *visiblestr, passwordchar;
 
-        void imove(int delta);
-        void draw();
-        void drawcheck(bool redraw);
+	void imove(int delta);
+	void draw();
+	void drawcheck(bool redraw);
 
     public:
 	int (*otherkeys)(textinputline *caller, int k);
 	void (*idle)(textinputline *caller);
 	filemanager *fm;
-        
-        textinputline(int clr);
-        ~textinputline();
+
+	textinputline(int clr = 0);
+	~textinputline();
 
 	char *open(int x, int y, const char *buf, int visiblelen, int actuallen);
 	void setbuf(const char *buf);
 	void close();
-        void setpasswordchar(const char npc);
+	void setpasswordchar(const char npc);
+
+	int getlastkey();
 };
 
 __KTOOL_END_NAMESPACE

@@ -2,7 +2,7 @@
 #define __KONST_UI_MENU_H_
 
 #include "conf.h"
-#include "common.h"
+#include "conscommon.h"
 #include "textwindow.h"
 
 #include <string>
@@ -14,7 +14,7 @@ __KTOOL_BEGIN_NAMESPACE
 #define ITEM_SEP        1
 #define ITEM_LINE       2
 
-class verticalmenuitem { public:
+struct verticalmenuitem {
     string text;
     int color, kind;
     void *ref;

@@ -2,7 +2,7 @@
 #define __KONST_UI_WINDOW_H_
 
 #include "conf.h"
-#include "common.h"
+#include "conscommon.h"
 #include "abstractui.h"
 
 __KTOOL_BEGIN_NAMESPACE

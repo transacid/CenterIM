@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "conf.h"
-#include "common.h"
+#include "conscommon.h"
 #include "abstractui.h"
 #include "kkstrtext.h"
 
@@ -17,19 +17,19 @@ enum bamode {
 class horizontalbar : public abstractuicontrol {
     protected:
     public:
-        bool done;
-        int item, ncolor, scolor, previtem;
-        vector<string> items;
+	bool done;
+	int item, ncolor, scolor, previtem;
+	vector<string> items;
 
-        horizontalbar(int x, int y, int nc, int sc, ...);
-        horizontalbar(int nc, int sc, ...);
-        ~horizontalbar();
+	horizontalbar(int x, int y, int nc, int sc, ...);
+	horizontalbar(int nc, int sc, ...);
+	~horizontalbar();
 
-        void movebar(int k);
-        virtual void redraw();
-        void update();
-        void align(bamode m);
-        void setcoord(int x, int y);
+	void movebar(int k);
+	virtual void redraw();
+	void update();
+	void align(bamode m);
+	void setcoord(int x, int y);
 };
 
 __KTOOL_END_NAMESPACE

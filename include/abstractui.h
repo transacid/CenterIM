@@ -2,15 +2,14 @@
 #define __KONST_UI_SKEL_H_
 
 #include "conf.h"
-#include "common.h"
+#include "conscommon.h"
+#include "screenarea.h"
 
 __KTOOL_BEGIN_NAMESPACE
 
 class abstractuicontrol {
     protected:
-	chtype **scrbuf;
-	void savescr();
-	void restscr();
+	screenarea screenbuffer;
 
     public:
 	bool isopen, emacs;

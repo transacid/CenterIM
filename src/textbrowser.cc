@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: textbrowser.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,7 +83,7 @@ int textbrowser::open() {
     bool finished = false, go;
     int res, ch;
     
-    savescr();
+    screenbuffer.save(x1, y1, x2, y2);
     draw(line);
 
     while(!finished) {
@@ -129,4 +129,3 @@ void textbrowser::move(int k) {
 	case KEY_HOME: line = 0; break;
     }
 }
-
