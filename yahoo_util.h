@@ -1,7 +1,7 @@
 /*
  * libyahoo2: yahoo_util.h
  *
- * Copyright (C) 2002, Philip S Tellis <philip . tellis AT gmx . net>
+ * Copyright (C) 2002-2004, Philip S Tellis <philip.tellis AT gmx.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,8 @@ void y_strfreev(char ** vector);
 
 int strncasecmp(const char * s1, const char * s2, size_t n);
 int strcasecmp(const char * s1, const char * s2);
+
+//char * strdup(const char *s);
 
 int snprintf(char *str, size_t size, const char *format, ...);
 int vsnprintf(char *str, size_t size, const char *format, va_list ap);

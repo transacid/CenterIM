@@ -1,7 +1,7 @@
 /*
  * libyahoo2: yahoo2_callbacks.h
  *
- * Copyright (C) 2002, Philip S Tellis <philip . tellis AT gmx . net>
+ * Copyright (C) 2002-2004, Philip S Tellis <philip.tellis AT gmx.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,6 +237,10 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_conf_userjoin)(int id, char *who, char *room)
 void YAHOO_CALLBACK_TYPE(ext_yahoo_conf_userleave)(int id, char *who, char *room);
 
 
+
+
+
+
 /*
  * Name: ext_yahoo_chat_cat_xml
  * 	Called when joining the chatroom.
@@ -249,6 +253,12 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_conf_userleave)(int id, char *who, char *room
  *	          yahoo_chat_member's) Must be freed by the client
  */
 void YAHOO_CALLBACK_TYPE(ext_yahoo_chat_cat_xml)(int id, char *xml);
+
+
+
+
+
+
 
 /*
  * Name: ext_yahoo_chat_join
@@ -263,6 +273,11 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_chat_cat_xml)(int id, char *xml);
  *	fd	- the socket where the connection is coming from (for tracking)
  */
 void YAHOO_CALLBACK_TYPE(ext_yahoo_chat_join)(int id, char *room, char *topic, YList *members, int fd);
+
+
+
+
+
 
 /*
  * Name: ext_yahoo_chat_userjoin
@@ -476,7 +491,7 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_system_message)(int id, char *msg);
  *	a timestamp to stay in sync
  */
 void YAHOO_CALLBACK_TYPE(ext_yahoo_got_webcam_image)(int id, const char * who,
-		unsigned char *image, unsigned int image_size, unsigned int real_size,
+		const unsigned char *image, unsigned int image_size, unsigned int real_size,
 		unsigned int timestamp);
 
 
@@ -530,6 +545,8 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_closed)(int id, char *who, int reason)
  * 	start	 - offset from where the current result set starts
  * 	total	 - total number of results available (start + found <= total)
  * 	contacts - the list of results as a YList of yahoo_found_contact
+ * 		   these will be freed after this function returns, so
+ * 		   if you need to use the information, make a copy
  */
 void YAHOO_CALLBACK_TYPE(ext_yahoo_got_search_result)(int id, int found, int start, int total, YList *contacts);
 
@@ -600,8 +617,10 @@ int YAHOO_CALLBACK_TYPE(ext_yahoo_log)(char *fmt, ...);
  * 	fd   - the fd on which to listen
  * 	cond - the condition on which to call the callback
  * 	data - callback data to pass to yahoo_*_ready
+ * 	
+ * Returns: a tag to be used when removing the handler
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_add_handler)(int id, int fd, yahoo_input_condition cond, void *data);
+int YAHOO_CALLBACK_TYPE(ext_yahoo_add_handler)(int id, int fd, yahoo_input_condition cond, void *data);
 
 
 
@@ -610,10 +629,9 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_add_handler)(int id, int fd, yahoo_input_cond
  * Name: ext_yahoo_remove_handler
  * 	Remove the listener for the fd.
  * Params:
- * 	id   - the id that identifies the server connection
- * 	fd   - the fd on which to listen
+ * 	tag  - the handler tag to remove
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_remove_handler)(int id, int fd);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_remove_handler)(int tag);
 
 
 

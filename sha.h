@@ -1,3 +1,6 @@
+#ifndef __SHA_H__
+#define __SHA_H__
+
 #if (SIZEOF_INT == 4)
 typedef unsigned int uint32;
 #elif (SIZEOF_SHORT == 4)
@@ -19,6 +22,5 @@ void shaInit(SHA_CTX *ctx);
 void shaUpdate(SHA_CTX *ctx, unsigned char *dataIn, int len);
 void shaFinal(SHA_CTX *ctx, unsigned char hashout[20]);
 void shaBlock(unsigned char *dataIn, int len, unsigned char hashout[20]);
-                                                                                                   
-      
 
+#endif

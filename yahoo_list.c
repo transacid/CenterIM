@@ -1,7 +1,7 @@
 /*
- * llist.c: linked list routines
+ * yahoo_list.c: linked list routines
  *
- * Some code copyright (C) 2002-2003, Philip S Tellis <philip . tellis AT gmx . net>
+ * Some code copyright (C) 2002-2004, Philip S Tellis <philip.tellis AT gmx.net>
  * Other code copyright Meredydd Luff <meredydd AT everybuddy.com>
  *
  * This program is free software; you can redistribute it and/or modify

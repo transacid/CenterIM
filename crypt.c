@@ -22,18 +22,9 @@
  * already had. isn't that lovely. people should just use linux or
  * freebsd, crypt works properly on those systems. i hate solaris */
 
-#if HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
-#if HAVE_STRING_H
-#  include <string.h>
-#elif HAVE_STRINGS_H
-#  include <strings.h>
-#endif
-
+#include <string.h>
 #include <stdlib.h>
-#include "yahoo_util.h"
+#include <glib.h>
 
 #include "md5.h"
 
@@ -46,10 +37,10 @@ static const char md5_salt_prefix[] = "$1$";
 static const char b64t[64] =
 "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-char *yahoo_crypt(char *key, char *salt)
+char *yahoo_crypt(const char *key, const char *salt)
 {
-	char *buffer = NULL;
-	int buflen = 0;
+	static char *buffer = NULL;
+	static int buflen = 0;
 	int needed = 3 + strlen (salt) + 1 + 26 + 1;
 
 	md5_byte_t alt_result[16];
@@ -62,7 +53,7 @@ char *yahoo_crypt(char *key, char *salt)
 
 	if (buflen < needed) {
 		buflen = needed;
-		if ((buffer = realloc(buffer, buflen)) == NULL)
+		if ((buffer = g_realloc(buffer, buflen)) == NULL)
 			return NULL;
 	}
 
@@ -79,29 +70,29 @@ char *yahoo_crypt(char *key, char *salt)
 	md5_init(&ctx);
 
 	/* Add the key string.  */
-	md5_append(&ctx, (md5_byte_t *)key, key_len);
+	md5_append(&ctx, key, key_len);
 
 	/* Because the SALT argument need not always have the salt prefix we
 	   add it separately.  */
-	md5_append(&ctx, (md5_byte_t *)md5_salt_prefix, sizeof (md5_salt_prefix) - 1);
+	md5_append(&ctx, md5_salt_prefix, sizeof (md5_salt_prefix) - 1);
 
 	/* The last part is the salt string.  This must be at most 8
 	   characters and it ends at the first `$' character (for
 	   compatibility which existing solutions).  */
-	md5_append(&ctx, (md5_byte_t *)salt, salt_len);
+	md5_append(&ctx, salt, salt_len);
 
 	/* Compute alternate MD5 sum with input KEY, SALT, and KEY.  The
 	   final result will be added to the first context.  */
 	md5_init(&alt_ctx);
 
 	/* Add key.  */
-	md5_append(&alt_ctx, (md5_byte_t *)key, key_len);
+	md5_append(&alt_ctx, key, key_len);
 
 	/* Add salt.  */
-	md5_append(&alt_ctx, (md5_byte_t *)salt, salt_len);
+	md5_append(&alt_ctx, salt, salt_len);
 
 	/* Add key again.  */
-	md5_append(&alt_ctx, (md5_byte_t *)key, key_len);
+	md5_append(&alt_ctx, key, key_len);
 
 	/* Now get result of this (16 bytes) and add it to the other
 	   context.  */
@@ -134,23 +125,23 @@ char *yahoo_crypt(char *key, char *salt)
 
 		/* Add key or last result.  */
 		if ((cnt & 1) != 0)
-			md5_append(&ctx, (md5_byte_t *)key, key_len);
+			md5_append(&ctx, key, key_len);
 		else
 			md5_append(&ctx, alt_result, 16);
 
 		/* Add salt for numbers not divisible by 3.  */
 		if (cnt % 3 != 0)
-			md5_append(&ctx, (md5_byte_t *)salt, salt_len);
+			md5_append(&ctx, salt, salt_len);
 
 		/* Add key for numbers not divisible by 7.  */
 		if (cnt % 7 != 0)
-			md5_append(&ctx, (md5_byte_t *)key, key_len);
+			md5_append(&ctx, key, key_len);
 
 		/* Add key or last result.  */
 		if ((cnt & 1) != 0)
 			md5_append(&ctx, alt_result, 16);
 		else
-			md5_append(&ctx, (md5_byte_t *)key, key_len);
+			md5_append(&ctx, key, key_len);
 
 		/* Create intermediate result.  */
 		md5_finish(&ctx, alt_result);
@@ -190,7 +181,8 @@ char *yahoo_crypt(char *key, char *salt)
 	b64_from_24bit (alt_result[4], alt_result[10], alt_result[5], 4);
 	b64_from_24bit (0, 0, alt_result[11], 2);
 	if (buflen <= 0) {
-		FREE(buffer);
+		g_free(buffer);
+		buffer = NULL;
 	} else
 		*cp = '\0';	/* Terminate the string.  */
 

@@ -1,7 +1,7 @@
 /*
  * libyahoo2: yahoo2.h
  *
- * Copyright (C) 2002, Philip S Tellis <philip . tellis AT gmx . net>
+ * Copyright (C) 2002-2004, Philip S Tellis <philip.tellis AT gmx.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,11 +130,12 @@ void yahoo_chat_logoff(int id, const char *from);
 
 /* requests a webcam feed */
 /* who is the person who's webcam you would like to view */
+/* if who is null, then you're the broadcaster */
 void yahoo_webcam_get_feed(int id, const char *who);
 void yahoo_webcam_close_feed(int id, const char *who);
 
 /* sends an image when uploading */
-/* image points to a JPEG-2000 image, lenght is the length of the image */
+/* image points to a JPEG-2000 image, length is the length of the image */
 /* in bytes. The timestamp is the time in milliseconds since we started the */
 /* webcam. */
 void yahoo_webcam_send_image(int id, unsigned char *image, unsigned int length, unsigned int timestamp);
