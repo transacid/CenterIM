@@ -25,23 +25,11 @@ enum imstatus {
     occupied,
     notavail,
     away,
-/*
-    berightback,
-    outtolunch,
-    steppedout,
-    busy,
-    onphone,
-    notathome,
-    notatdesk,
-    notinoffice,
-    onvacation,
-*/
     imstatus_size
 };
 
 static char imstatus2char[imstatus_size] = {
-    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a'/*, 'a',
-    'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'*/
+    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a'
 };
 
 class icqcontact;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.14 2002/11/28 14:25:50 konst Exp $
+* $Id: jabberhook.cc,v 1.15 2002/11/28 18:29:33 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -90,7 +90,7 @@ void jabberhook::connect() {
 }
 
 void jabberhook::disconnect() {
-    statehandler(jc, JCONN_STATE_OFF);
+    jab_stop(jc);
     jab_delete(jc);
     jc = 0;
 }
@@ -338,14 +338,30 @@ const string &serv, string &err) {
 }
 
 void jabberhook::setjabberstatus(imstatus st, const string &msg) {
-    xmlnode x = jutil_presnew (JPACKET__UNKNOWN, NULL, NULL);
-    xmlnode y = xmlnode_insert_tag (x, "show");
+    xmlnode x = jutil_presnew(JPACKET__UNKNOWN, 0, 0);
+    xmlnode y = xmlnode_insert_tag(x, "show");
 
     switch(st) {
-	case away: xmlnode_insert_cdata(y, "away", (unsigned) -1); break;
-	case dontdisturb: xmlnode_insert_cdata(y, "dnd", (unsigned) -1); break;
-	case freeforchat: xmlnode_insert_cdata(y, "chat", (unsigned) -1); break;
-	case notavail: xmlnode_insert_cdata(y, "xa", (unsigned) -1); break;
+	case away:
+	    xmlnode_insert_cdata(y, "away", (unsigned) -1);
+	    break;
+
+	case occupied:
+	case dontdisturb:
+	    xmlnode_insert_cdata(y, "dnd", (unsigned) -1);
+	    break;
+
+	case freeforchat:
+	    xmlnode_insert_cdata(y, "chat", (unsigned) -1);
+	    break;
+
+	case notavail:
+	    xmlnode_insert_cdata(y, "xa", (unsigned) -1);
+	    break;
+
+	case invisible:
+	    xmlnode_put_attrib(x, "type", "invisible");
+	    break;
     }
 
     if(!msg.empty()) {
@@ -559,6 +575,9 @@ void jabberhook::gotsearchresults(xmlnode x) {
 void jabberhook::gotloggedin() {
     xmlnode x;
 
+    jhook.flogged = true;
+    jhook.setjabberstatus(jhook.manualstatus, "");
+
     x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
     xmlnode_put_attrib(x, "id", "Roster");
     jab_send(jc, x);
@@ -568,9 +587,6 @@ void jabberhook::gotloggedin() {
     xmlnode_put_attrib(x, "id", "Agent List");
     jab_send(jc, x);
     xmlnode_free(x);
-
-    jhook.flogged = true;
-    jhook.setjabberstatus(jhook.manualstatus, "");
 
     face.log(_("+ [jab] logged in"));
     face.update();

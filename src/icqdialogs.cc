@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.95 2002/11/28 14:25:49 konst Exp $
+* $Id: icqdialogs.cc,v 1.96 2002/11/28 18:29:32 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -274,7 +274,13 @@ bool icqface::finddialog(imsearchparams &s) {
 		}
 		break;
 
-	    case jabber:
+	    default:
+		if(!s.reverse) {
+		    i = tree.addnode(_(" Nickname "));
+		    tree.addleaf(i, 0, 11, " " + s.nick + " ");
+		}
+
+		if(s.pname == jabber)
 		if(s.nick.empty() && !services.empty()) {
 		    i = tree.addnode(_(" Search service "));
 		    tree.addleaff(i, 0, 31, " %s ", s.service.c_str());
@@ -290,14 +296,6 @@ bool icqface::finddialog(imsearchparams &s) {
 			    ifp->first.c_str(), ifp->second.c_str());
 			++ifp;
 		    }
-
-		    break;
-		}
-
-	    default:
-		if(!s.reverse) {
-		    i = tree.addnode(_(" Nickname "));
-		    tree.addleaf(i, 0, 11, " " + s.nick + " ");
 		}
 		break;
 	}
