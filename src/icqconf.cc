@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.61 2002/04/03 17:40:54 konst Exp $
+* $Id: icqconf.cc,v 1.62 2002/04/05 16:06:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,39 +63,38 @@ icqconf::imaccount icqconf::getourid(protocolname pname) {
 void icqconf::setourid(const imaccount &im) {
     vector<imaccount>::iterator i;
 
+    static struct {
+	string server;
+	int port;
+    } defservers[protocolname_size] = {
+	{ "login.icq.com", 5190 },
+	{ "", 0 },
+	{ "messenger.hotmail.com", 1863 },
+	{ "toc.oscar.aol.com", 9898 },
+	{ "irc.openprojects.net", 6667 }
+    };
+
     i = find(accounts.begin(), accounts.end(), im.pname);
 
     if(i != accounts.end()) {
 	if(im.empty()) {
 	    accounts.erase(i);
+	    i = accounts.end();
 	} else {
 	    *i = im;
 	}
-    } else {
-	if(!im.empty()) {
-	    accounts.push_back(im);
-	    i = accounts.end()-1;
+    } else if(!im.empty()) {
+	accounts.push_back(im);
+	i = accounts.end()-1;
+    }
 
-	    if(i->server.empty())
-	    switch(i->pname) {
-		case icq:
-		    i->server = "login.icq.com";
-		    i->port = 5190;
-		    break;
-		case msn:
-		    i->server = "messenger.hotmail.com";
-		    i->port = 1863;
-		    break;
-		case aim:
-		    i->server = "toc.oscar.aol.com";
-		    i->port = 9898;
-		    break;
-		case irc:
-		    i->server = "irc.undernet.org";
-		    i->port = 6667;
-		    break;
-	    }
+    if(i != accounts.end()) {
+	if(i->server.empty()) {
+	    i->server = defservers[i->pname].server;
+	    i->port = defservers[i->pname].port;
 	}
+
+	if(!i->port) i->port = defservers[i->pname].port;
     }
 }
 

@@ -92,6 +92,9 @@ void accountmanager::exec() {
 		    if(capab & hoptCanSetAwayMsg)
 			t.addnode(n, 0, citem+10, _(" Set away message "));
 
+		    if(pname == irc)
+			t.addnode(n, 0, citem+11, _(" Channel manager "));
+
 		    t.addnode(n, 0, citem+8, _(" Drop "));
 		}
 	    }
@@ -110,12 +113,12 @@ void accountmanager::exec() {
 
 	    switch(action) {
 		case 1:
-		    account.nickname = face.inputstr(spname + _(" user name: "),
-			account.nickname);
+		    tmp = face.inputstr(spname + _(" user name: "), account.nickname);
+		    if(!tmp.empty()) account.nickname = tmp;
 		    break;
 		case 2:
-		    account.uin = strtoul(face.inputstr(spname + _(" uin: "),
-			i2str(account.uin)).c_str(), 0, 0);
+		    i = strtoul(face.inputstr(spname + _(" uin: "), i2str(account.uin)).c_str(), 0, 0);
+		    if(i) account.uin = i;
 		    break;
 		case 5:
 		    account.password = face.inputstr(spname + _(" password: "),
@@ -131,6 +134,7 @@ void accountmanager::exec() {
 		case 7:
 		    imcontrol.updateinfo(account);
 		    break;
+
 		case 8:
 		    if(!hook.online()) {
 			account = icqconf::imaccount(pname);
@@ -138,6 +142,7 @@ void accountmanager::exec() {
 			face.status(_("You have to disconnect the service first!"));
 		    }
 		    break;
+
 		case 9:
 		    tmp = "";
 		    if(!account.server.empty())
@@ -161,6 +166,10 @@ void accountmanager::exec() {
 		    spname + ": " + _("away message"))) {
 			conf.setawaymsg(pname, tmp);
 		    }
+		    break;
+
+		case 11:
+		    imcontrol.channels(account);
 		    break;
 	    }
 

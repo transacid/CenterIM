@@ -38,6 +38,7 @@ class irchook: public abstracthook {
 	static void disconnected(void *conn, void *cli, ...);
 	static void newnick(void *conn, void *cli, ...);
 	static void gotinfo(void *conn, void *cli, ...);
+	static void gotchannels(void *conn, void *cli, ...);
 	static void getmessage(void *conn, void *cli, ...);
 	static void buddyonline(void *conn, void *cli, ...);
 	static void buddyoffline(void *conn, void *cli, ...);

@@ -175,6 +175,9 @@ void imcontroller::aimupdateprofile() {
     }
 }
 
+void imcontroller::ircchannels() {
+}
+
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq:
@@ -191,5 +194,11 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq: icqupdatedetails(); break;
 	case aim: aimupdateprofile(); break;
+    }
+}
+
+void imcontroller::channels(icqconf::imaccount &account) {
+    switch(account.pname) {
+	case irc: ircchannels(); break;
     }
 }

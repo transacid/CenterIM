@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.3 2002/04/04 17:21:23 konst Exp $
+* $Id: irchook.cc,v 1.4 2002/04/05 16:06:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,6 +35,8 @@
 #define DLOG(s)
 #endif
 
+const string onchannels = _("On channels: ");
+
 irchook irhook;
 
 irchook::irchook()
@@ -44,7 +46,6 @@ irchook::irchook()
     fcapabilities =
 	hoptCanSetAwayMsg |
 	hoptCanChangeNick |
-	hoptCanUpdateDetails |
 	hoptNoPasswords |
 	hoptChangableServer;
 }
@@ -60,6 +61,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_DISCONNECT, &disconnected);
     firetalk_register_callback(handle, FC_NEWNICK, &newnick);
     firetalk_register_callback(handle, FC_IM_GOTINFO, &gotinfo);
+    firetalk_register_callback(handle, FC_IM_GOTCHANNELS, &gotchannels);
     firetalk_register_callback(handle, FC_IM_GETMESSAGE, &getmessage);
     firetalk_register_callback(handle, FC_IM_GETACTION, &getmessage);
     firetalk_register_callback(handle, FC_IM_BUDDYONLINE, &buddyonline);
@@ -235,7 +237,7 @@ imstatus irchook::getstatus() const {
 }
 
 void irchook::requestinfo(const imcontact &c) {
-    if(c != imcontact(conf.getourid(irc).uin, irc)) {
+    if(c != imcontact(conf.getourid(irc).nickname, irc)) {
 	firetalk_im_get_info(handle, c.nickname.c_str());
     }
 }
@@ -387,7 +389,10 @@ void irchook::newnick(void *conn, void *cli, ...) {
 }
 
 void irchook::gotinfo(void *conn, void *cli, ...) {
+    int pos;
     va_list ap;
+    string about, email;
+    icqcontact::basicinfo cbinfo;
 
     va_start(ap, cli);
     char *nick = va_arg(ap, char *);
@@ -400,18 +405,53 @@ void irchook::gotinfo(void *conn, void *cli, ...) {
     if(strlen(nick) && strlen(info)) {
 	icqcontact *c = clist.get(imcontact(nick, irc));
 
-	if(!c) {
-	    c = clist.get(contactroot);
+	if(!c) c = clist.get(contactroot);
+
+	about = info;
+	cbinfo = c->getbasicinfo();
+
+	if((pos = about.find(":")) != -1) {
+	    email = about.substr(0, pos);
+	    about.erase(0, pos);
+
+	    if(email.substr(0, 1) == "~") email.erase(0, 1);
+	    if((pos = about.find_first_not_of(" :")) > 0) about.erase(0, pos);
 	}
 
+	cbinfo.email = email;
 	c->setnick(nick);
-	c->setabout(info);
+	c->setabout(about);
+	c->setbasicinfo(cbinfo);
 
 	if(c->getabout().empty())
 	    c->setabout(_("The user has no profile information."));
     }
 
     DLOG("gotinfo");
+}
+
+void irchook::gotchannels(void *conn, void *cli, ...) {
+    va_list ap;
+    string info;
+    icqcontact *c;
+
+    va_start(ap, cli);
+    char *nick = va_arg(ap, char *);
+    char *channels = va_arg(ap, char *);
+    va_end(ap);
+
+    if(nick && channels)
+    if(strlen(nick) && strlen(channels))
+    if(c = clist.get(imcontact(nick, irc))) {
+	info = c->getabout();
+
+	if(info.find(onchannels) == -1) {
+	    info += (string) "\n\n" + onchannels + channels;
+	    c->setabout(info);
+	}
+    }
+
+    DLOG("gotchannels");
 }
 
 void irchook::getmessage(void *conn, void *cli, ...) {
@@ -520,8 +560,6 @@ void irchook::listmember(void *connection, void *cli, ...) {
 	    ir->nicks.push_back(/*(string) (opped ? "@": "") +*/ membername);
 	}
     }
-
-    DLOG("listmember");
 }
 
 void irchook::log(void *connection, void *cli, ...) {
