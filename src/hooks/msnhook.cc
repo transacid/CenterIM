@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.30 2002/09/13 13:15:55 konst Exp $
+* $Id: msnhook.cc,v 1.31 2002/09/19 17:09:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,6 +41,7 @@ msnhook::msnhook() {
     fonline = false;
 
     fcapabs.insert(hookcapab::synclist);
+    fcapabs.insert(hookcapab::changedetails);
 
     for(int i = MSN_RNG; i != MSN_NUM_EVENTS; i++) {
 	msn_event[i] = 0;
@@ -301,6 +302,10 @@ vector<icqcontact *> msnhook::getneedsync() {
     }
 
     return r;
+}
+
+void msnhook::sendupdateuserinfo(const icqcontact &c) {
+    MSN_Set_Friendly_Handle(c.getnick());
 }
 
 // ----------------------------------------------------------------------------

@@ -4,6 +4,7 @@
 #include "yahoohook.h"
 #include "aimhook.h"
 #include "irchook.h"
+#include "msnhook.h"
 #include "icqcontacts.h"
 #include "eventmanager.h"
 
@@ -164,6 +165,27 @@ void imcontroller::icqupdatedetails() {
     }
 }
 
+void imcontroller::aimupdateprofile() {
+    icqcontact *c = clist.get(contactroot);
+
+    c->clear();
+    ahook.requestinfo(imcontact(conf.getourid(aim).nickname, aim));
+
+    if(face.updatedetails(0, aim)) {
+	ahook.sendupdateuserinfo(*c, "");
+    }
+}
+
+void imcontroller::msnupdateprofile() {
+    string tmp = face.inputstr(_("new MSN friendly nick: "), "");
+
+    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
+	icqcontact *c = clist.get(contactroot);
+	c->setnick(tmp);
+	mhook.sendupdateuserinfo(*c);
+    }
+}
+
 void imcontroller::icqsynclist() {
     bool fin;
     int synchronized, attempt = 1;
@@ -229,17 +251,6 @@ void imcontroller::synclist(protocolname pname) {
 
     sleep(2);
     face.progress.hide();
-}
-
-void imcontroller::aimupdateprofile() {
-    icqcontact *c = clist.get(contactroot);
-
-    c->clear();
-    ahook.requestinfo(imcontact(conf.getourid(aim).uin, aim));
-
-    if(face.updatedetails(0, aim)) {
-	ahook.sendupdateuserinfo(*c, "");
-    }
 }
 
 void imcontroller::ircchannels() {
@@ -338,6 +349,7 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq: icqupdatedetails(); break;
 	case aim: aimupdateprofile(); break;
+	case msn: msnupdateprofile(); break;
     }
 }
 

@@ -86,8 +86,12 @@ void accountmanager::exec() {
 		if(account.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 		} else {
+
 		    if(capab.count(hookcapab::changedetails))
-			t.addnode(n, 0, citem+7, _(" Update user details "));
+			t.addnode(n, 0, citem+7,
+			    pname == msn ?
+			    _(" Change nickname ") :
+			    _(" Update user details "));
 
 		    if(capab.count(hookcapab::setaway))
 			t.addnode(n, 0, citem+10, _(" Set away message "));

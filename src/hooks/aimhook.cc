@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.24 2002/09/13 13:15:55 konst Exp $
+* $Id: aimhook.cc,v 1.25 2002/09/19 17:09:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -235,7 +235,7 @@ imstatus aimhook::getstatus() const {
 }
 
 void aimhook::requestinfo(const imcontact &c) {
-    if(c != imcontact(conf.getourid(aim).uin, aim)) {
+    if(c != imcontact(conf.getourid(aim).nickname, aim)) {
 	icqcontact *cc = clist.get(c);
 
 	if(cc)

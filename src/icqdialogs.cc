@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.87 2002/09/13 13:15:53 konst Exp $
+* $Id: icqdialogs.cc,v 1.88 2002/09/19 17:09:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -379,15 +379,14 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     i = 0;
 
     if(passinfo.pname == infocard
-    && gethook(passinfo.pname).getCapabs().count(hookcapab::changenick)
+    || gethook(passinfo.pname).getCapabs().count(hookcapab::changenick)
     || !ourdetails) {
 	if(!i) i = tree->addnode(_(" General "));
-
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
 
     }
 
-    if(passinfo.pname != aim && c->getdesc() == contactroot || !ourdetails) {
+    if(passinfo.pname == icq && c->getdesc() == contactroot || !ourdetails) {
 	if(!i) i = tree->addnode(_(" General "));
 
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
@@ -447,8 +446,10 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	}
     }
 
-    i = tree->addnode(_(" About "));
-    tree->addleaff(i, 0, 39, " %s ", about.c_str());
+    if(passinfo.pname == icq || passinfo.pname == aim) {
+	i = tree->addnode(_(" About "));
+	tree->addleaff(i, 0, 39, " %s ", about.c_str());
+    }
 
     tree->menu.setpos(saveitem, savefirst);
 }

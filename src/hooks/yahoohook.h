@@ -44,6 +44,9 @@ class yahoohook: public abstracthook {
 	void userstatus(const string &nick, int st, const string &message, bool away);
 	void disconnected();
 
+	void sendnewuser(const imcontact &ic, bool report);
+	void removeuser(const imcontact &ic, bool report);
+
     public:
 	yahoohook();
 	~yahoohook();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.55 2002/09/13 13:15:56 konst Exp $
+* $Id: yahoohook.cc,v 1.56 2002/09/19 17:09:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -138,6 +138,15 @@ bool yahoohook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
 
 void yahoohook::disconnect() {
     if(online()) {
+	for(int i = 0; i < clist.count; i++) {
+	    icqcontact *c = (icqcontact *) clist.at(i);
+	    imcontact ic = c->getdesc();
+
+	    if(ic.pname == yahoo)
+	    if(!c->inlist())
+		removeuser(ic);
+	}
+
 	yahoo_logoff(cid);
 	disconnected();
     }
@@ -216,6 +225,10 @@ bool yahoohook::isconnecting() const {
 }
 
 void yahoohook::sendnewuser(const imcontact &ic) {
+    sendnewuser(ic, true);
+}
+
+void yahoohook::sendnewuser(const imcontact &ic, bool report) {
     char *group;
 
     if(online() && !ischannel(ic)) {
@@ -230,7 +243,9 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 		found = !strcmp((*bud)->id, who.get());
 
 	    if(!found) {
-		face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
+		if(report)
+		    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
+
 		yahoo_add_buddy(cid, who.get(), group.get());
 		yahoo_refresh(cid);
 	    }
@@ -241,11 +256,17 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 }
 
 void yahoohook::removeuser(const imcontact &ic) {
+    removeuser(ic, true);
+}
+
+void yahoohook::removeuser(const imcontact &ic, bool report) {
     if(logged()) {
 	auto_ptr<char> who(strdup(ic.nickname.c_str()));
 
 	if(!ischannel(ic)) {
-	    face.log(_("+ [yahoo] removing %s from the contacts"), ic.nickname.c_str());
+	    if(report)
+		face.log(_("+ [yahoo] removing %s from the contacts"),
+		    ic.nickname.c_str());
 
 	    struct yahoo_buddy **buddies = get_buddylist(cid), **bud;
 
@@ -257,7 +278,10 @@ void yahoohook::removeuser(const imcontact &ic) {
 		}
 	    }
 	} else {
-	    face.log(_("+ [yahoo] leaving the %s conference"), ic.nickname.c_str());
+	    if(report)
+		face.log(_("+ [yahoo] leaving the %s conference"),
+		    ic.nickname.c_str());
+
 	    yahoo_conference_logoff(cid, getmembers(who.get()+1), who.get()+1);
 	}
     }
@@ -430,6 +454,16 @@ void yahoohook::login_done(guint32 id, int succ, char *url) {
 	    yhook.flogged = true;
 	    logger.putourstatus(yahoo, offline, yhook.ourstatus = yhook.manualstatus);
 	    face.log(_("+ [yahoo] logged in"));
+
+	    for(int i = 0; i < clist.count; i++) {
+		icqcontact *c = (icqcontact *) clist.at(i);
+		imcontact ic = c->getdesc();
+
+		if(ic.pname == yahoo)
+		if(!c->inlist()) {
+		    yhook.sendnewuser(ic);
+		}
+	    }
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:
@@ -466,12 +500,7 @@ void yahoohook::got_buddies(guint32 id, struct yahoo_buddy **buds) {
 
 	if(c->getdesc().pname == yahoo && !ischannel(c)) {
 	    in = find(nicks.begin(), nicks.end(), c->getdesc().nickname);
-
-	    if(in == nicks.end()) {
-//                yhook.sendnewuser(c);
-	    } else {
-		nicks.erase(in);
-	    }
+	    if(in != nicks.end()) nicks.erase(in);
 	}
     }
 
