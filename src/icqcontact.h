@@ -96,11 +96,12 @@ class icqcontact {
 	void setabout(const string &data);
 	void setlastip(const string &flastip);
 
-	const basicinfo &getbasicinfo() const;
-	const moreinfo &getmoreinfo() const;
-	const workinfo &getworkinfo() const;
-	const vector<string> &getinterests() const;
-	const vector<string> &getbackground() const;
+	const basicinfo &getbasicinfo() const { return binfo; }
+	const moreinfo &getmoreinfo() const { return minfo; }
+	const workinfo &getworkinfo() const { return winfo; }
+	const vector<string> &getinterests() const { return interests; }
+	const vector<string> &getbackground() const { return background; }
+
 	string getabout() const;
 	string getlastip() const;
 

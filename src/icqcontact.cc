@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.60 2002/08/16 16:48:26 konst Exp $
+* $Id: icqcontact.cc,v 1.61 2002/08/20 17:43:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -503,26 +503,6 @@ void icqcontact::setbackground(const vector<string> &abackground) {
 void icqcontact::setabout(const string &data) {
     about = data;
     fupdated++;
-}
-
-const icqcontact::basicinfo &icqcontact::getbasicinfo() const {
-    return binfo;
-}
-
-const icqcontact::moreinfo &icqcontact::getmoreinfo() const {
-    return minfo;
-}
-
-const icqcontact::workinfo &icqcontact::getworkinfo() const {
-    return winfo;
-}
-
-const vector<string> &icqcontact::getinterests() const {
-    return interests;
-}
-
-const vector<string> &icqcontact::getbackground() const {
-    return background;
 }
 
 void icqcontact::setsound(imevent::imeventtype event, const string &sf) {

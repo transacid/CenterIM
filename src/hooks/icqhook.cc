@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.101 2002/08/20 17:02:25 konst Exp $
+* $Id: icqhook.cc,v 1.102 2002/08/20 17:43:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -596,9 +596,9 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     Contact::HomepageInfo &hpage = ic->getHomepageInfo();
     Contact::WorkInfo &work = ic->getWorkInfo();
 
-    icqcontact::basicinfo cbinfo = c.getbasicinfo();
-    icqcontact::moreinfo cminfo = c.getmoreinfo();
-    icqcontact::workinfo cwinfo = c.getworkinfo();
+    const icqcontact::basicinfo &cbinfo = c.getbasicinfo();
+    const icqcontact::moreinfo &cminfo = c.getmoreinfo();
+    const icqcontact::workinfo &cwinfo = c.getworkinfo();
 
     /* basic information */
 
@@ -1035,7 +1035,6 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	    if(c = clist.addnew(imcontact(0, infocard), true)) {
 		icqcontact::basicinfo b = c->getbasicinfo();
 		b.cellular = r->getSender();
-
 		c->setbasicinfo(b);
 
 		c->setdispnick(b.cellular);
@@ -1298,8 +1297,6 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 
 	    }
 
-	    c->setbasicinfo(binfo);
-
 	    line = (cont->getStatus() == STATUS_ONLINE ? "o " : "  ") + c->getnick();
 
 	    if(line.size() > 12) line.resize(12);
@@ -1307,6 +1304,8 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 
 	    line += " " + binfo.fname + " " + binfo.lname;
 	    if(!binfo.email.empty()) line += " <" + binfo.email + ">";
+
+	    c->setbasicinfo(binfo);
 
 	    foundguys.push_back(c);
 	    searchdest->additem(conf.getcolor(cp_clist_icq), c, line);

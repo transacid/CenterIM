@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.50 2002/08/19 08:25:18 konst Exp $
+* $Id: yahoohook.cc,v 1.51 2002/08/20 17:43:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -352,8 +352,8 @@ void yahoohook::requestinfo(const imcontact &ic) {
 	m.homepage = "http://profiles.yahoo.com/" + ic.nickname;
 	b.email = ic.nickname + "@yahoo.com";
 
-	c->setbasicinfo(b);
 	c->setmoreinfo(m);
+	c->setbasicinfo(b);
     }
 }
 
