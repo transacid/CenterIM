@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.93 2003/11/06 14:32:51 konst Exp $
+* $Id: yahoohook.cc,v 1.94 2003/11/06 23:44:08 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -593,11 +593,11 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
     searchdest = &dest;
 
     if(!params.kwords.empty()) {
-	yahoo_search(cid, YAHOO_SEARCH_KEYWORD, params.kwords.c_str(),
+	yahoo_search(cid, YAHOO_SEARCH_KEYWORD, decode(params.kwords, false).c_str(),
 		params.gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
 
     } else if(!params.firstname.empty()) {
-	yahoo_search(cid, YAHOO_SEARCH_NAME, params.firstname.c_str(),
+	yahoo_search(cid, YAHOO_SEARCH_NAME, decode(params.firstname, false).c_str(),
 		params.gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
 
     } else if(!params.room.empty()) {
@@ -749,10 +749,6 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    break;
     }
 
-    if(succ != YAHOO_LOGIN_OK) {
-	yhook.cid = -1;
-    }
-
     face.update();
 }
 
@@ -816,7 +812,7 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
 	minfo.age = fc->age;
 	if(fc->location) binfo.street = fc->location;
 
-	line = (false ? "o " : "  ") + c->getnick();
+	line = (fc->online ? "o " : "  ") + c->getnick();
 
 	if(fc->age || fc->location || strlen(fc->gender) >= 4) {
 	    line += " <";
