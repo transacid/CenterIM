@@ -13,6 +13,8 @@ class yahoohook {
 	struct yahoo_context *yahoo;
 	string username;
 	bool fonline;
+	int ourstatus;
+	imstatus manualstatus;
 
 	time_t timer_reconnect;
 
@@ -46,6 +48,8 @@ class yahoohook {
 	void removeuser(const imcontact ic);
 
 	unsigned long sendmessage(const icqcontact *c, const string text);
+	void setstatus(imstatus st);
+	imstatus getstatus() const;
 };
 
 extern yahoohook yhook;

@@ -10,8 +10,8 @@
 
 enum contactstatus {
     csignore = 1,
-    csvisible = 2,
-    csinvisible = 3
+    csvisible,
+    csinvisible
 };
 
 class modelistitem {
@@ -38,6 +38,7 @@ class modelistitem {
 class icqlist : public vector<modelistitem> {
     private:
 	vector<modelistitem> menucontents;
+	const string getfname() const;
 
     public:
 	icqlist();

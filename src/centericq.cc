@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.29 2001/11/12 16:55:03 konst Exp $
+* $Id: centericq.cc,v 1.30 2001/11/13 17:08:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,20 +63,20 @@ void centericq::exec() {
     struct sigaction sact;
     unsigned long uin;
     string socksuser, sockspass, pass, yahooid;
+    icqconf::imaccount login;
 
     memset(&sact, 0, sizeof(sact));
     sact.sa_handler = &handlesignal;
     sigaction(SIGINT, &sact, 0);
     sigaction(SIGCHLD, &sact, 0);
+    sigaction(SIGALRM, &sact, 0);
 
     conf.initpairs();
     conf.load();
     face.init();
 
-    ihook.setmanualstatus(conf.getstatus());
-    conf.geticqlogin(uin, pass);
-
-    if(!uin) {
+    login = conf.getourid(icq);
+    if(login.empty()) {
 	reg();
 	if(ihook.getreguin()) {
 	    conf.checkdir();
@@ -95,9 +95,8 @@ void centericq::exec() {
     face.done();
     face.init();
 
-    conf.geticqlogin(uin, pass);
-
-    if(uin) {
+    login = conf.getourid(icq);
+    if(!login.empty()) {
 	icq_Init(&icql, uin, pass.c_str(), "");
 	ihook.init(&icql);
 
@@ -109,10 +108,9 @@ void centericq::exec() {
 	}
     }
 
-    conf.getyahoologin(yahooid, pass);
-
-    if(!yahooid.empty()) {
-	yhook.init(yahooid, pass);
+    login = conf.getourid(yahoo);
+    if(!login.empty()) {
+	yhook.init(login.nickname, login.password);
     }
 
     if(!yahooid.empty() || uin) {
@@ -123,13 +121,13 @@ void centericq::exec() {
 
     lst.save();
     clist.save();
-    conf.savestatus(ihook.getmanualstatus());
     groups.save();
 
     face.done();
 }
 
 void centericq::reg() {
+/*
     unsigned int ruin;
     int sockfd;
     bool finished;
@@ -212,6 +210,7 @@ void centericq::reg() {
 	    conf.registerinfo(ruin, rpasswd, nick, fname, lname, email);
 	}
     }
+*/
 }
 
 void centericq::mainloop() {
@@ -276,69 +275,41 @@ void centericq::mainloop() {
 
 	if(!c) continue;
 
-	if(c->getdesc() != contactroot)
-	if(c->getdesc().pname == icq)
 	switch(action) {
 	    case ACT_URL:
-		url = "";
-		text = "";
+		url = text = "";
 		if(face.editurl(c->getdesc(), url, text))
 		    for(i = face.muins.begin(); i != face.muins.end(); i++)
 			offl.sendurl(*i, url, text);
 		break;
-
 	    case ACT_IGNORE:
 		sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
-
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 		    lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
 		    clist.remove(c->getdesc());
 		    face.update();
 		}
 		break;
-
 	    case ACT_FILE:
-		if(c->getstatus() != STATUS_OFFLINE) {
+		if(c->getstatus() != offline) {
 		    sendfiles(c->getdesc());
 		}
 		break;
-
-	    case ACT_CHAT:
-		break;
-
 	    case ACT_CONTACT:
 		sendcontacts(c->getdesc());
 		break;
-
-	    case ACT_GROUPMOVE:
-		if(gid = face.selectgroup(_("Select a group to move the user to"))) {
-		    c->setgroupid(gid);
-		    face.fillcontactlist();
-		}
+	    case ACT_EDITUSER:
+		nonicq(c->getdesc().uin);
 		break;
-	}
-	
-	if(c->getdesc().pname == infocard)
-	switch(action) {
-	    case ACT_EDITUSER: nonicq(c->getdesc().uin); break;
-	    case ACT_HISTORY: continue;
-	}
-
-	if(!c->inlist())
-	switch(action) {
 	    case ACT_ADD:
 		if(!c->inlist()) {
 		    addcontact(c->getdesc());
 		}
 		break;
-	}
-
-	if(c->getdesc() != contactroot)
-	switch(action) {
 	    case ACT_INFO:
-		userinfo(c->getdesc());
+		if(c->getdesc() != contactroot)
+		    userinfo(c->getdesc());
 		break;
-
 	    case ACT_REMOVE:
 		sprintf(buf, _("Are you sure want to remove %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
@@ -346,7 +317,6 @@ void centericq::mainloop() {
 		    face.update();
 		}
 		break;
-
 	    case ACT_RENAME:
 		text = face.inputstr(_("New nickname to show: "), c->getdispnick());
 		if(text.size()) {
@@ -354,10 +324,16 @@ void centericq::mainloop() {
 		    face.update();
 		}
 		break;
-	}
-	
-	switch(action) {
-	    case ACT_HISTORY: face.history(c->getdesc()); break;
+	    case ACT_GROUPMOVE:
+		if(gid = face.selectgroup(_("Select a group to move the user to"))) {
+		    c->setgroupid(gid);
+		    face.fillcontactlist();
+		}
+		break;
+	    case ACT_HISTORY:
+		if(c->getdesc().pname != infocard)
+		    face.history(c->getdesc());
+		break;
 	    case ACT_MSG:
 		text = "";
 		if(c->getmsgcount()) {
@@ -376,33 +352,12 @@ void centericq::changestatus() {
 
     if(face.changestatus(pname, st)) {
 	switch(pname) {
-	    case icq:
-		break;
-	    case yahoo:
-		break;
+	    case icq: ihook.setstatus(st); break;
+	    case yahoo: yhook.setstatus(st); break;
 	}
 
 	face.update();
     }
-/*
-    ihook.setmanualstatus(face.changestatus(old = icql.icq_Status));
-
-    if(ihook.getmanualstatus() != old) {
-	if(ihook.getmanualstatus() == STATUS_OFFLINE) {
-	    icq_Logout(&icql);
-	    icq_Disconnect(&icql);
-	    ihook.ildisconnected(&icql, 0);
-	} else {
-	    if(icql.icq_Status == STATUS_OFFLINE) {
-		ihook.connect();
-	    } else {
-		icq_ChangeStatus(&icql, ihook.getmanualstatus());
-	    }
-	}
-
-	face.update();
-    }
-*/
 }
 
 void centericq::find() {
@@ -668,6 +623,8 @@ void centericq::handlesignal(int signum) {
 	case SIGCHLD:
 	    while(wait3(&status, WNOHANG, 0) > 0);
 	    break;
+	case SIGALRM:
+	    break;
     }
 }
 
@@ -786,7 +743,6 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	    notify = ihook.online();
 	    break;
 	case yahoo:
-	    notify = false;
 	default:
 	    notify = false;
 	    break;
@@ -848,16 +804,10 @@ bool centericq::idle(int options = 0) {
 	if(FD_ISSET(0, &fds)) {
 	    keypressed = true;
 	    time(&timer_keypress);
-	}
-
-	if(ihook.online())
-	if(FD_ISSET(ihook.getsockfd(), &fds)) {
+	} else if(ihook.online() && FD_ISSET(ihook.getsockfd(), &fds)) {
 	    icq_HandleServerResponse(&icql);
 	    if(options & HIDL_SOCKEXIT) break;
-	}
-
-	if(yhook.online())
-	if(FD_ISSET(yhook.getsockfd(), &fds)) {
+	} else if(yhook.online() && FD_ISSET(yhook.getsockfd(), &fds)) {
 	    yhook.main();
 	    if(options & HIDL_SOCKEXIT) break;
 	}

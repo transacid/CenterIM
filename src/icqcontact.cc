@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.17 2001/11/12 16:55:04 konst Exp $
+* $Id: icqcontact.cc,v 1.18 2001/11/13 17:08:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -646,7 +646,7 @@ time_t icqcontact::getlastread() const {
     return lastread;
 }
 
-int icqcontact::getstatus() const {
+imstatus icqcontact::getstatus() const {
     return status;
 }
 
@@ -728,8 +728,13 @@ void icqcontact::incinfotryn() {
 }
 
 bool icqcontact::operator > (const icqcontact &acontact) const {
-    if(acontact.lastread != lastread) return acontact.lastread > lastread;
-    else return acontact.cdesc.uin > cdesc.uin;
+    if(acontact.lastread != lastread) {
+	return acontact.lastread > lastread;
+    } else if(acontact.cdesc.uin != cdesc.uin) {
+	return acontact.cdesc.uin > cdesc.uin;
+    } else {
+	return acontact.cdesc.nickname.compare(cdesc.nickname);
+    }
 }
 
 void icqcontact::setpostponed(const string apostponed) {
@@ -751,6 +756,8 @@ bool icqcontact::getmsgdirect() const {
 	case icq:
 	    specific = icq_TCPLinkOpen(&icql, cdesc.uin);
 	    break;
+	case yahoo:
+	    return true;
     }
 
     return

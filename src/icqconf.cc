@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.14 2001/11/11 14:30:13 konst Exp $
+* $Id: icqconf.cc,v 1.15 2001/11/13 17:08:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,31 +32,29 @@
 #include "icqcontact.h"
 #include "icqcontacts.h"
 
-icqconf::icqconf(): icquin(0), rs(rscard), rc(rcdark), autoaway(0),
-autona(0), hideoffline(false), savepwd(true), antispam(false),
-mailcheck(true), usegroups(false) {
-    setserver(ICQ_SERVER);
+icqconf::icqconf() {
+    rs = rscard;
+    rc = rcdark;
+    autoaway = autona = 0;
+
+    hideoffline = antispam = usegroups = false;
+    savepwd = mailcheck = true;
 }
 
 icqconf::~icqconf() {
 }
 
-void icqconf::geticqlogin(unsigned long &auin, string &apass) {
-    auin = icquin;
+icqconf::imaccount icqconf::getourid(protocolname pname) {
+    vector<imaccount>::iterator i;
 
-    if(!conf.getsavepwd() && icqpass.empty()) {
-	icqpass = face.inputstr(_("Password: "), "", '*');
-	if(icqpass.empty()) {
-	    exit(0);
+    if((i = find(accounts.begin(), accounts.end(), pname)) != accounts.end()) {
+	if(!conf.getsavepwd() && i->password.empty()) {
+	    i->password = face.inputstr(_("Password: "), "", '*');
+	    if(i->password.empty()) i = accounts.end();
 	}
     }
 
-    apass = icqpass;
-}
-
-void icqconf::getyahoologin(string &alogin, string &apass) {
-    alogin = yahooid;
-    apass = yahoopass;
+    return i == accounts.end() ? imaccount(pname) : *i;
 }
 
 void icqconf::checkdir() {
@@ -74,51 +72,39 @@ void icqconf::load() {
 }
 
 void icqconf::loadmainconfig() {
-    string fname = (string) getenv("HOME") + "/.centericq/config", buf, param;
+    string fname = (string) getenv("HOME") + "/.centericq/config", buf, param, rbuf;
     ifstream f(fname.c_str());
+    imaccount im;
 
     if(f.is_open()) {
-	savepwd = mailcheck = serveronly = false;
+	mailcheck = serveronly = false;
+	savepwd = true;
 
 	while(!f.eof()) {
 	    getline(f, buf);
+	    rbuf = buf;
 	    param = getword(buf);
 
-	    if(param == "uin") {
-		icquin = atol(buf.c_str());
-	    } else if(param == "pass") {
-		icqpass = buf;
-		savepwd = !icqpass.empty();
-	    } else if(param == "hideoffline") {
-		hideoffline = true;
-	    } else if(param == "russian") {
-		icq_Russian = 1;
-	    } else if(param == "autoaway") {
-		autoaway = atol(buf.c_str());
-	    } else if(param == "autona") {
-		autona = atol(buf.c_str());
-	    } else if(param == "antispam") {
-		antispam = true;
-	    } else if(param == "mailcheck") {
-		mailcheck = true;
-	    } else if(param == "serveronly") {
-		serveronly = true;
-	    } else if(param == "server") {
-		setserver(buf);
-	    } else if(param == "quotemsgs") {
-		quote = true;
-	    } else if(param == "sockshost") {
-		setsockshost(buf);
-	    } else if(param == "socksusername") {
-		socksuser = buf;
-	    } else if(param == "sockspass") {
-		sockspass = buf;
-	    } else if(param == "usegroups") {
-		usegroups = true;
-	    } else if(param == "yahoo_id") {
-		yahooid = buf;
-	    } else if(param == "yahoo_pass") {
-		yahoopass = buf;
+	    if(param == "hideoffline") hideoffline = true; else
+	    if(param == "russian") icq_Russian = 1; else
+	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
+	    if(param == "autona") autona = atol(buf.c_str()); else
+	    if(param == "antispam") antispam = true; else
+	    if(param == "mailcheck") mailcheck = true; else
+	    if(param == "serveronly") serveronly = true; else
+	    if(param == "quotemsgs") quote = true; else
+	    if(param == "sockshost") setsockshost(buf); else
+	    if(param == "socksusername") socksuser = buf; else
+	    if(param == "sockspass") sockspass = buf; else
+	    if(param == "usegroups") usegroups = true;
+	    else if(param.substr(0, 3) == "icq") {
+		im = getourid(icq);
+		im.read(rbuf);
+		setourid(im);
+	    } else if(param.substr(0, 5) == "yahoo") {
+		im = getourid(yahoo);
+		im.read(rbuf);
+		setourid(im);
 	    }
 	}
 
@@ -126,19 +112,23 @@ void icqconf::loadmainconfig() {
     }
 }
 
+void icqconf::setourid(const imaccount im) {
+    vector<imaccount>::iterator i = find(accounts.begin(), accounts.end(), im.pname);
+
+    if(i != accounts.end()) {
+	*i = im;
+    } else {
+	accounts.push_back(im);
+    }
+}
+
 void icqconf::savemainconfig(unsigned int fuin = 0) {
     string fname = (string) getenv("HOME") + "/.centericq/config", param;
     ofstream f(fname.c_str());
+    int away, na;
+    vector<imaccount>::iterator ia;
 
     if(f.is_open()) {
-	f << "server\t" << getservername() << ":" << i2str(getserverport()) << endl;
-	f << "uin\t" << i2str(fuin ? (icquin = fuin) : icquin) << endl;
-
-	if(getsavepwd()) f << "pass\t" << icqpass << endl;
-
-	f << "yahoo_id\t" << yahooid << endl
-	<< "yahoo_pass\t" << yahoopass << endl;
-
 	if(!getsockshost().empty()) {
 	    string user, pass;
 	    getsocksuser(user, pass);
@@ -147,7 +137,6 @@ void icqconf::savemainconfig(unsigned int fuin = 0) {
 	    f << "sockspass\t" << pass << endl;
 	}
 
-	int away, na;
 	getauto(away, na);
 
 	if(icq_Russian) f << "russian" << endl;
@@ -160,11 +149,15 @@ void icqconf::savemainconfig(unsigned int fuin = 0) {
 	if(getserveronly()) f << "serveronly" << endl;
 	if(getusegroups()) f << "usegroups" << endl;
 
+	for(ia = accounts.begin(); ia != accounts.end(); ia++) {
+	    ia->write(f);
+	}
+
 	f.close();
     }
 }
 
-int icqconf::getcolor(int npair) {
+int icqconf::getcolor(int npair) const {
     return
 	find(boldcolors.begin(), boldcolors.end(), npair) != boldcolors.end()
 	? boldcolor(npair) : color(npair);
@@ -191,6 +184,11 @@ void icqconf::loadcolors() {
 		fprintf(f, "main_selected\tblack/white\n");
 		fprintf(f, "main_highlight\tyellow/black\tbold\n");
 		fprintf(f, "main_frame\tblue/black\tbold\n");
+		fprintf(f, "clist_icq\tgreen/black\n");
+		fprintf(f, "clist_yahoo\tcyan/black\n");
+		fprintf(f, "clist_infocard\twhite/black\n");
+		fprintf(f, "clist_root\tred/black\tbold\n");
+
 		break;
 	    case rcblue:
 		fprintf(f, "status\tblack/white\n");
@@ -204,6 +202,10 @@ void icqconf::loadcolors() {
 		fprintf(f, "main_selected\tblack/cyan\n");
 		fprintf(f, "main_highlight\twhite/blue\tbold\n");
 		fprintf(f, "main_frame\tblue/blue\tbold\n");
+		fprintf(f, "clist_icq\tgreen/blue\n");
+		fprintf(f, "clist_yahoo\tcyan/blue\n");
+		fprintf(f, "clist_infocard\twhite/blue\n");
+		fprintf(f, "clist_root\tred/blue\tbold\n");
 		break;
 	}
 	fclose(f);
@@ -235,6 +237,10 @@ void icqconf::loadcolors() {
 	    if(tname == "main_selected") npair = cp_main_selected; else
 	    if(tname == "main_highlight") npair = cp_main_highlight; else
 	    if(tname == "main_frame") npair = cp_main_frame; else
+	    if(tname == "clist_icq") npair = cp_clist_icq; else
+	    if(tname == "clist_yahoo") npair = cp_clist_yahoo; else
+	    if(tname == "clist_infocard") npair = cp_clist_infocard; else
+	    if(tname == "clist_root") npair = cp_clist_root; else
 	    continue;
 
 	    init_pair(npair, nfg, nbg);
@@ -359,35 +365,11 @@ void icqconf::loadactions() {
     }
 }
 
-int icqconf::getstatus() {
-    string fname = (string) getenv("HOME") + "/.centericq/laststatus";
-    char buf[64] = "0";
-    FILE *f;
-
-    if(f = fopen(fname.c_str(), "r")) {
-	freads(f, buf, 64);
-	fclose(f);
-	return atoi(buf);
-    } else {
-	return STATUS_ONLINE;
-    }
-}
-
-void icqconf::savestatus(int st) {
-    string fname = (string) getenv("HOME") + "/.centericq/laststatus";
-    FILE *f;
-
-    if(f = fopen(fname.c_str(), "w")) {
-	fprintf(f, "%d\n", st);
-	fclose(f);
-    }
-}
-
 void icqconf::registerinfo(unsigned int fuin, const string passwd,
 const string nick, const string fname, const string lname,
 const string email) {
-    fuin = icquin;
-    icqpass = passwd;
+//    fuin = icquin;
+//    icqpass = passwd;
     rnick = nick;
     rfname = fname;
     rlname = lname;
@@ -456,28 +438,6 @@ bool icqconf::getquote() const {
 
 void icqconf::setquote(bool use) {
     quote = use;
-}
-
-void icqconf::setserver(const string nserv) {
-    int pos;
-
-    if(!nserv.empty()) {
-	if((pos = nserv.find(":")) != -1) {
-	    server = nserv.substr(0, pos);
-	    port = atol(nserv.substr(pos+1).c_str());
-	} else {
-	    server = nserv;
-	    port = 4000;
-	}
-    }
-}
-
-const string icqconf::getservername() const {
-    return server;
-}
-
-unsigned int icqconf::getserverport() const {
-    return port;
 }
 
 void icqconf::setsockshost(const string nsockshost) {
@@ -558,4 +518,112 @@ bool icqconf::getserveronly() const {
 
 void icqconf::setserveronly(bool fso) {
     serveronly = fso;
+}
+
+const string icqconf::getprotocolname(protocolname pname) const {
+    switch(pname) {
+	case icq: return "icq";
+	case yahoo: return "yahoo";
+    }
+
+    return "";
+}
+
+imstatus icqconf::getstatus(protocolname pname) {
+    string fname, buf;
+    ifstream f;
+    imstatus st = available;
+
+    fname = (string) getenv("HOME") + "/.centericq/status-" + getprotocolname(pname);
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	getline(f, buf);
+	st = (imstatus) ((int) atol(buf.c_str()));
+	f.close();
+    }
+
+    return st;
+}
+
+void icqconf::savestatus(protocolname pname, imstatus st) {
+    string fname;
+    ofstream f;
+
+    fname = (string) getenv("HOME") + "/.centericq/status-" + getprotocolname(pname);
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	f << (int) st << endl;
+	f.close();
+    }
+}
+
+int icqconf::getprotcolor(protocolname pname) const {
+    switch(pname) {
+	case icq: return getcolor(cp_clist_icq);
+	case yahoo: return getcolor(cp_clist_yahoo);
+	case infocard: return getcolor(cp_clist_infocard);
+	default: return getcolor(cp_main_text);
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+icqconf::imaccount::imaccount() {
+    uin = port = 0;
+    pname = infocard;
+}
+
+icqconf::imaccount::imaccount(protocolname apname) {
+    uin = port = 0;
+    pname = apname;
+}
+
+bool icqconf::imaccount::empty() const {
+    return !uin && nickname.empty() && pname != infocard;
+}
+
+void icqconf::imaccount::write(ofstream &f) {
+    string prefix = conf.getprotocolname(pname) + "_";
+
+    f << endl;
+    if(!nickname.empty()) f << prefix << "nick\t" << nickname << endl;
+    if(uin) f << prefix << "uin\t" << uin << endl;
+    if(conf.getsavepwd()) f << prefix << "pass\t" << password << endl;
+    if(!server.empty()) {
+	f << prefix << "server\t" << server;
+	if(port) f << port;
+	f << endl;
+    }
+}
+
+void icqconf::imaccount::read(const string spec) {
+    int pos = spec.find("_");
+    string pname, buf;
+
+    if(pos != -1) {
+	buf = spec;
+	pname = getword(buf.erase(0, pos+1));
+
+	if(pname == "nick") nickname = buf; else
+	if(pname == "uin") uin = strtoul(buf.c_str(), 0, 0); else
+	if(pname == "pass") password = buf; else
+	if(pname == "server") {
+	    if((pos = buf.find(":")) != -1) {
+		server = buf.substr(0, pos);
+		port = strtoul(buf.substr(pos+1).c_str(), 0, 0);
+	    } else {
+		server = buf;
+	    }
+	}
+    }
+}
+
+bool icqconf::imaccount::operator == (protocolname apname) const {
+    return pname == apname;
+}
+
+bool icqconf::imaccount::operator != (protocolname apname) const {
+    return pname != apname;
 }

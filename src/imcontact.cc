@@ -27,6 +27,14 @@ bool imcontact::operator != (const imcontact &ainfo) const {
     return !(*this == ainfo);
 }
 
+bool imcontact::operator == (protocolname apname) const {
+    return apname == pname;
+}
+
+bool imcontact::operator != (protocolname apname) const {
+    return !(*this == apname);
+}
+
 bool imcontact::empty() const {
     return (!uin && pname == icq) || (nickname.empty() && pname == yahoo);
 }

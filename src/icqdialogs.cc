@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.20 2001/11/11 14:30:14 konst Exp $
+* $Id: icqdialogs.cc,v 1.21 2001/11/13 17:08:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@
 #include "icqgroups.h"
 
 bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
+/*
     bool finished, newuin, success, socks = false;
     int nmode, ndet, nopt, n, i, b, nproxy;
     string phidden, pcheck, socksuser, sockspass, psockscheck, tmp;
@@ -181,6 +182,8 @@ bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
     db.close();
 
     return success;
+*/
+    return true;
 }
 
 bool icqface::finddialog(searchparameters &s) {
@@ -660,8 +663,9 @@ bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
 }
 
 bool icqface::updateconf(regsound &s, regcolor &c) {
+/*
     bool finished, success;
-    int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
+    int nopt, n, i, b, nproxy, nconf, nicq, nyahoo, aaway, ana, noth, nfeat, ncl;
     string tmp, phidden, socksuser, sockspass;
     string serv = conf.getservername() + ":" + i2str(conf.getserverport());
     string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
@@ -686,11 +690,14 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterICQ quick config "));
 
     db.setwindow(&w, false);
+
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_text)));
+
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+
     db.idle = &dialogidle;
     db.addautokeys();
 
@@ -700,11 +707,14 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     while(!finished) {
 	t.clear();
 
-	nconf = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Configuration "));
-	ncl = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Contact list "));
-	nfeat = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Features "));
-	ncomm = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Communications "));
-	noth = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Other "));
+	n = conf.getcolor(cp_dialog_highlight);
+
+	nconf = t.addnode(0, n, 0, _(" Configuration "));
+	ncl = t.addnode(0, n, 0, _(" Contact list "));
+	nfeat = t.addnode(0, n, 0, _(" Features "));
+	nicq = t.addnode(0, n, 0, _(" ICQ "));
+	nyahoo = t.addnode(0, n, 0, _(" Yahoo "));
+	noth = t.addnode(0, n, 0, _(" Other "));
 
 	t.addleaff(nconf, 0, 1, _(" Change sound device to : %s "), strregsound(s));
 	t.addleaff(nconf, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
@@ -712,25 +722,26 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	t.addleaff(ncl, 0, 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
 	t.addleaff(ncl, 0, 6, _(" Hide offline users : %s "), stryesno(hideoffl));
 
-	t.addleaff(ncomm, 0, 7, _(" ICQ server address : %s "), serv.c_str());
-	t.addleaff(ncomm, 0, 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
+//        t.addleaff(nicq, 0, 18, _(" ICQ UIN : %lu "), );
+	t.addleaff(nicq, 0, 7, _(" ICQ server address : %s "), serv.c_str());
+	t.addleaff(nicq, 0, 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
 
 	t.addleaff(nfeat, 0, 3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
 	t.addleaff(nfeat, 0, 8, _(" Quote a message on reply : %s "), stryesno(quote));
 	t.addleaff(nfeat, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
-	t.addleaff(nfeat, 0,  13, _(" Remember ICQ password : %s "), stryesno(savepwd));
-	t.addleaff(nfeat, 0,  15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
-	t.addleaff(nfeat, 0,  16, _(" Send all events through server : %s "), stryesno(serveronly));
+	t.addleaff(nfeat, 0, 13, _(" Remember ICQ password : %s "), stryesno(savepwd));
+	t.addleaff(nfeat, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
+	t.addleaff(nfeat, 0, 16, _(" Send all events through server : %s "), stryesno(serveronly));
 
-	t.addleaff(noth, 0,   4, _(" Automatically set Away period (min) : %d "), aaway);
-	t.addleaff(noth, 0,   5, _(" Automatically set N/A period (min) : %d "), ana);
+	t.addleaff(noth, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
+	t.addleaff(noth, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
 
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);
 	    nproxy = t.addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
-	    t.addleaff(nproxy, 0,  10, _(" Proxy server address : %s "), prserv.c_str());
-	    t.addleaff(nproxy, 0,  11, _(" Proxy user name : %s "), socksuser.c_str());
-	    t.addleaff(nproxy, 0,  12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
+	    t.addleaff(nproxy, 0, 10, _(" Proxy server address : %s "), prserv.c_str());
+	    t.addleaff(nproxy, 0, 11, _(" Proxy user name : %s "), socksuser.c_str());
+	    t.addleaff(nproxy, 0, 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
 	}
 
 	void *p;
@@ -813,6 +824,8 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     unblockmainscreen();
 
     return success;
+*/
+    return true;
 }
 
 int icqface::editaboutkeys(texteditor &e, int k) {

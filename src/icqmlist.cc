@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.6 2001/11/11 14:30:15 konst Exp $
+* $Id: icqmlist.cc,v 1.7 2001/11/13 17:08:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,54 +29,61 @@ icqlist::icqlist() {
 
 icqlist::~icqlist() {
 }
+
+const string icqlist::getfname() const {
+    return (string) getenv("HOME") + "/.centericq/modelist";
+}
 	
 void icqlist::load() {
-    string fname = (string) getenv("HOME") + "/.centericq/modelist";
-    char buf[512], *p, *r, *rp;
-    unsigned int uin;
-    contactstatus st;
-    FILE *f;
-    
-    if(f = fopen(fname.c_str(), "r")) {
-	while(!feof(f)) {
-	    freads(f, buf, 512);
-	    strim(buf);
+    string buf, tok, nick;
+    ifstream f;
+    int i;
 
-	    if(buf[0])
-	    if(r = strpbrk(buf, " \t")) {
-		st = (contactstatus) atoi(buf);
-		if(p = strpbrk(r, " \t")) {
-		    strim(p);
-		    if(rp = strpbrk(p, " \t")) {
-			*rp = 0;
-			uin = strtoul(rp+1, 0, 0);
+    f.open(getfname().c_str());
 
-			if(uin) {
-			    push_back(modelistitem(unmime(p),
-				imcontact(uin, icq), st));
-			}
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    tok = getword(buf);
+
+	    if(!tok.empty())
+	    if(i = atoi(tok.c_str())) {
+		nick = unmime(getword(buf));
+		if(!nick.empty()) {
+		    if(buf == "y") {
+			lst.push_back(modelistitem(nick,
+			    imcontact(nick, yahoo), (contactstatus) i));
+		    } else {
+			lst.push_back(modelistitem(nick,
+			    imcontact(strtoul(buf.c_str(), 0, 0), icq), (contactstatus) i));
 		    }
 		}
 	    }
 	}
-	fclose(f);
+	f.close();
     }
 }
 
 void icqlist::save() {
-    string fname = (string) getenv("HOME") + "/.centericq/modelist";
     vector<modelistitem>::iterator i;
-    FILE *f;
-    char buf[512];
+    ofstream f;
 
-    if(f = fopen(fname.c_str(), "w")) {
+    f.open(getfname().c_str());
+
+    if(f.is_open()) {
 	for(i = begin(); i != end(); i++) {
-	    fprintf(f, "%d\t%s\t%lu\n",
-		i->getstatus(),
-		mime(buf, i->getnick().empty() ? " " : i->getnick().c_str()),
-		i->getdesc().uin);
+	    f << (int) i->getstatus() << "\t";
+	    f << mime(i->getnick()) << "\t";
+
+	    switch(i->getdesc().pname) {
+		case icq: f << i->getdesc().uin; break;
+		case yahoo: f << "y"; break;
+	    }
+
+	    f << endl;
 	}
-	fclose(f);
+
+	f.close();
     }
 }
 
@@ -87,7 +94,7 @@ void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
 
     for(i = begin(); i != end(); i++) {
 	if(i->getstatus() == ncs) {
-	    m->additemf(" %15lu   %s", i->getdesc().uin, i->getnick().c_str());
+	    m->additem(" " + i->getnick());
 	    menucontents.push_back(*i);
 	}
     }

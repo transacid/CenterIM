@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.33 2001/11/12 16:55:04 konst Exp $
+* $Id: icqface.cc,v 1.34 2001/11/13 17:08:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -212,10 +212,6 @@ int icqface::contextmenu(icqcontact *c) {
 	    m.addline();
 	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
 	    m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
-
-	    if(conf.getusegroups()) {
-		m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
-	    }
 	    break;
 
 	case yahoo:
@@ -233,6 +229,11 @@ int icqface::contextmenu(icqcontact *c) {
 	    m.additem(0, ACT_REMOVE,    _(" Remove user          del"));
 	    m.additem(0, ACT_EDITUSER,  _(" Edit details"));
 	    break;
+    }
+
+    if(c->getdesc().pname != infocard)
+    if(conf.getusegroups()) {
+	m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
     }
 
     if(m.empty()) {
@@ -266,16 +267,16 @@ int icqface::generalmenu() {
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+40, WORKAREA_Y1+11, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-    m.additem(0, ACT_STATUS, _(" Change ICQ status                   s"));
+    m.additem(0, ACT_STATUS,    _(" Change ICQ status                   s"));
     m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
-    m.additem(0, ACT_DETAILS, _(" Update your details"));
-    m.additem(0, ACT_FIND, _(" Find/add users"));
-    m.additem(0, ACT_CONF, _(" CenterICQ config options"));
-    m.additem(0, ACT_NONICQ, _(" Add non-icq contact"));
+    m.additem(0, ACT_DETAILS,   _(" Update your details"));
+    m.additem(0, ACT_FIND,      _(" Find/add users"));
+    m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
+    m.additem(0, ACT_NONICQ,    _(" Add non-icq contact"));
     m.addline();
-    m.additem(0, ACT_IGNORELIST, _(" View/edit ignore list"));
-    m.additem(0, ACT_INVISLIST, _(" View/edit invisible list"));
-    m.additem(0, ACT_VISIBLELIST, _(" View/edit visible list"));
+    m.additem(0, ACT_IGNORELIST,    _(" View/edit ignore list"));
+    m.additem(0, ACT_INVISLIST,     _(" View/edit invisible list"));
+    m.additem(0, ACT_VISIBLELIST,   _(" View/edit visible list"));
     m.addline();
     m.additem(0, ACT_HIDEOFFLINE, conf.gethideoffline() ?
 	_(" Show offline users                 F5") :
@@ -377,8 +378,9 @@ void icqface::fillcontactlist() {
 	if(c->getdesc() == contactroot)
 	    continue;
 
-	if((c->getstatus() == STATUS_OFFLINE) && 
-	conf.gethideoffline() && !c->getmsgcount()) {
+	if(c->getstatus() == offline)
+	if(conf.gethideoffline())
+	if(!c->getmsgcount()) {
 	    continue;
 	}
 
@@ -431,20 +433,20 @@ void icqface::fillcontactlist() {
 	dnick = c->getdispnick();
 	if(c->isbirthday()) dnick += " :)";
 
-	if(c->getstatus() == STATUS_OFFLINE) {
+	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
+		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
 		c, "%s%s ", c->getmsgcount() ? "#" : " ", dnick.c_str());
 	} else {
 	    mcontacts->addleaff(nnode,
-		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
+		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
 		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
     }
 
     if(c = clist.get(contactroot))
     if(!c->getmsgcount())
-	mcontacts->addleaf(0, conf.getcolor(cp_main_highlight), c, " ICQ ");
+	mcontacts->addleaf(0, conf.getcolor(cp_clist_root), c, " ICQ ");
 
     if(!mainscreenblock) mcontacts->redraw();
 
@@ -616,7 +618,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), tmp);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
-    if(c->getstatus() == STATUS_OFFLINE) {
+    if(c->getstatus() == offline) {
 	time_t ls = c->getlastseen();
 
 	mainw.write(WORKAREA_X1+2, WORKAREA_Y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
@@ -888,13 +890,17 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
     bool r;
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
 
+    vector<imstatus> mst;
+    vector<imstatus>::iterator im;
+    imstatus currentstatus;
+
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,
 	WORKAREA_Y1+9, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
 
     if(ihook.enabled()) m.additem(0, icq, _(" [icq] ICQ network"));
-    if(yhook.enabled()) m.additem(0, yahoo, _(" [yahoo] Yahoo Instant Messenger"));
+    if(yhook.enabled()) m.additem(0, yahoo, _(" [yahoo] YAIM"));
 
     m.scale();
 
@@ -906,22 +912,50 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
     }
 
     if(r = i) {
-	pname = (protocolname) ((int) m.getref(i));
+	pname = (protocolname) ((int) m.getref(i-1));
 	m.clear();
 
-	m.additem(0, available,     _(" [o] Online"));
-	m.additem(0, offline,       _(" [_] Offline"));
-	m.additem(0, away,          _(" [a] Away"));
-	m.additem(0, dontdisturb,   _(" [d] Do not disturb"));
-	m.additem(0, notavail,      _(" [n] Not available"));
-	m.additem(0, occupied,      _(" [c] Occupied"));
-	m.additem(0, freeforchat,   _(" [f] Free for chat"));
-	m.additem(0, invisible,     _(" [i] Invisible"));
+	mst.push_back(available);
+	mst.push_back(offline);
+	mst.push_back(away);
+	mst.push_back(dontdisturb);
+	mst.push_back(notavail);
+	mst.push_back(occupied);
+	mst.push_back(freeforchat);
+	mst.push_back(invisible);
+
+	static string statustext[8] = {
+	    _(" [o] Online"),
+	    _(" [_] Offline"),
+	    _(" [a] Away"),
+	    _(" [d] Do not disturb"),
+	    _(" [n] Not available"),
+	    _(" [c] Occupied"),
+	    _(" [f] Free for chat"),
+	    _(" [i] Invisible")
+	};
+
+	for(im = mst.begin(); im != mst.end(); im++) {
+	    m.additem(0, *im, statustext[im-mst.begin()]);
+
+	    switch(pname) {
+		case icq: currentstatus = ihook.getstatus(); break;
+		case yahoo: currentstatus = yhook.getstatus(); break;
+	    }
+
+	    if(currentstatus == *im) {
+		m.setpos(m.getcount()-1);
+	    }
+	}
 
 	m.scale();
 
 	i = m.open();
 	m.close();
+
+	if(r = i) {
+	    st = (imstatus) ((int) m.getref(i-1));
+	}
     }
 
     return r;
@@ -1100,7 +1134,7 @@ bool icqface::editurl(const imcontact cinfo, string &url, string &text) {
     se->wrap = true;
 
     mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("URL to %s, %lu"), clist.get(cinfo)->getdispnick().c_str(), cinfo.uin);
+	_("URL to %s"), cinfo.totext().c_str());
 
     workarealine(WORKAREA_Y1+2);
     workarealine(WORKAREA_Y1+4);
@@ -1152,8 +1186,7 @@ bool icqface::editmsg(const imcontact cinfo, string &text) {
     workarealine(WORKAREA_Y1+2);
 
     mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("Writing a message to %s, %lu"),
-	clist.get(cinfo)->getdispnick().c_str(), cinfo.uin);
+	_("Writing a message to %s"), cinfo.totext().c_str());
 
     status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
     passinfo = cinfo;
@@ -1383,16 +1416,14 @@ bool inhistory = false) {
 
     if(inout == HIST_MSG_IN) {
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("Message from %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
+	_("Message from %s"), cinfo.totext().c_str());
 
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
 	    conf.getcolor(cp_main_highlight), _("%s, rcvd on %s"),
 	    strdateandtime(&senttm).c_str(), strdateandtime(&recvtm).c_str());
     } else {
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
-	    conf.getcolor(cp_main_highlight),
-	    _("Message to %s, %lu"),
-	    c->getdispnick().c_str(), cinfo.uin);
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	    _("Message to %s"), cinfo.totext().c_str());
 
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
 	    conf.getcolor(cp_main_highlight),
@@ -1432,18 +1463,16 @@ int inout = HIST_MSG_IN, bool inhistory = false) {
 	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     if(inout == HIST_MSG_IN) {
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
-	    conf.getcolor(cp_main_highlight),
-	    _("URL from %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	    _("URL from %s"), cinfo.totext().c_str());
 
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
 	    conf.getcolor(cp_main_highlight), _("%s, rcvd on %s"),
 	    strdateandtime(&recvtm).c_str(),
 	    strdateandtime(&senttm).c_str());
     } else {
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
-	    conf.getcolor(cp_main_highlight),
-	    _("URL to %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	    _("URL to %s"), cinfo.totext().c_str());
 
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1,
 	    conf.getcolor(cp_main_highlight),
@@ -1537,7 +1566,7 @@ bool inhistory = false) {
     clearworkarea();
 
     mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-    _("Contacts from %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
+    _("Contacts from %s"), cinfo.totext().c_str());
 
     db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
 	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
@@ -1653,13 +1682,9 @@ void icqface::history(const imcontact cinfo) {
 	db.redraw();
 	workarealine(WORKAREA_Y1+2);
 
-	if(cinfo.uin) {
-	    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	    _("History items for %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
-	} else {
-	    mainw.write(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	    _("ICQ system messages history"));
-	}
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
+	    conf.getcolor(cp_main_highlight),
+	    _("History items for %s"), cinfo.totext().c_str());
 
 	while(1) {
 	    status(_("S search, L again, ESC cancel"));
@@ -1748,19 +1773,21 @@ void icqface::modelist(contactstatus cs) {
     workarealine(WORKAREA_Y2-2);
 
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	cs == csignore ? _("ICQ Ignore list") :
-	cs == csvisible ? _("ICQ Visible list") : _("ICQ Invisible list"));
+	cs == csignore ?
+	    _("Ignore list") :
+	cs == csvisible ?
+	    _("Visible list") :
+	    _("Invisible list"));
 
     lst.fillmenu(db.getmenu(), cs);
 
     while(db.open(i, b)) {
-	it = i ? lst.menuat(i-1) : modelistitem();
+	if(!lst.size() && b != 1) continue;
+	it = lst.menuat(i-1);
 
 	switch(b) {
 	    case 0:
-		if(!it.getdesc().empty()) {
-		    cicq.userinfo(it.getdesc());
-		}
+		cicq.userinfo(it.getdesc());
 		break;
 	    case 1:
 		muins.clear();
@@ -1776,19 +1803,13 @@ void icqface::modelist(contactstatus cs) {
 		}
 		break;
 	    case 2:
-		if(!it.getdesc().empty()) {
-		    lst.del(it.getdesc(), cs);
-		    lst.fillmenu(db.getmenu(), cs);
-		    db.getmenu()->redraw();
-		}
+		lst.del(it.getdesc(), cs);
+		lst.fillmenu(db.getmenu(), cs);
+		db.getmenu()->redraw();
 		break;
 	    case 3:
-		if(!it.getdesc().empty()) {
-		    if(!clist.get(it.getdesc()))
-		    if(c = clist.addnew(it.getdesc())) {
-			c->setdispnick(it.getnick());
-		    }
-
+		if(c = cicq.addcontact(it.getdesc())) {
+		    c->setdispnick(it.getnick());
 		    lst.del(it.getdesc(), cs);
 		    lst.fillmenu(db.getmenu(), cs);
 		    db.getmenu()->redraw();

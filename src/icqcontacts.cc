@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.13 2001/11/12 16:55:04 konst Exp $
+* $Id: icqcontacts.cc,v 1.14 2001/11/13 17:08:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -162,7 +162,7 @@ void icqcontacts::send() {
     for(i = 0; i < count; i++) {
 	c = (icqcontact *) at(i);
 
-	if(c->getdesc().uin)
+	if(c->getdesc() != contactroot)
 	switch(c->getdesc().pname) {
 	    case icq:
 		icq_ContactAdd(&icql, c->getdesc().uin);
@@ -171,12 +171,17 @@ void icqcontacts::send() {
 		    lst.inlist(c->getdesc(), csinvisible) ? ICQ_CONT_INVISIBLE :
 		    ICQ_CONT_NORMAL);
 		break;
+	    case yahoo:
+//                yhook.sendnewuser(c->getdesc());
+		break;
 	}
     }
 
-    icq_SendContactList(&icql);
-    icq_SendVisibleList(&icql);
-    icq_SendInvisibleList(&icql);
+    if(ihook.online()) {
+	icq_SendContactList(&icql);
+	icq_SendVisibleList(&icql);
+	icq_SendInvisibleList(&icql);
+    }
 }
 
 void icqcontacts::remove(const imcontact cinfo) {

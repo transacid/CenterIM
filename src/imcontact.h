@@ -14,12 +14,15 @@ struct imcontact {
     imcontact(unsigned long auin, protocolname apname);
     imcontact(const string anick, protocolname apname);
 
-    string nickname;
+    string nickname, pass;
     unsigned long uin;
     protocolname pname;
 
     bool operator == (const imcontact &ainfo) const;
     bool operator != (const imcontact &ainfo) const;
+
+    bool operator == (protocolname pname) const;
+    bool operator != (protocolname pname) const;
 
     bool empty() const;
     const string totext() const;

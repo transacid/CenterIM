@@ -128,7 +128,7 @@ class icqcontact {
 	time_t getlastread() const;
 	time_t getlastseen() const;
 	
-	int getstatus() const;
+	imstatus getstatus() const;
 	unsigned short getseq2() const;
 	int getmsgcount() const;
 

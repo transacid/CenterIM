@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.3 2001/11/12 16:55:05 konst Exp $
+* $Id: icqhook.cc,v 1.4 2001/11/13 17:08:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,9 +40,7 @@
 icqhook::icqhook() {
     time_t c = time(0);
 
-    timer_keepalive = timer_tcp = timer_resolve =
-    timer_offline = timer_ack;
-
+    timer_keepalive = timer_tcp = timer_resolve = timer_offline = timer_ack = c;
     timer_reconnect = 0;
 
     newuin = 0;
@@ -53,6 +51,7 @@ icqhook::icqhook() {
 }
 
 icqhook::~icqhook() {
+    conf.savestatus(icq, manualstatus);
 }
 
 void icqhook::init(struct icq_link *link) {
@@ -92,26 +91,24 @@ void icqhook::init(struct icq_link *link) {
     link->icq_RecvContact = &contact;
 
     factive = true;
+    manualstatus = conf.getstatus(icq);
 }
 
-void icqhook::connect(int status = -2) {
-    if(status == -2) status = manualstatus;
+void icqhook::connect() {
+    icqconf::imaccount acc = conf.getourid(icq);
 
-    if(status != -1) {
-	connecting = true;
+    connecting = true;
+    face.update();
+    icq_Disconnect(&icql);
+    face.log(_("+ [icq] connecting to the server"));
+
+    if(icq_Connect(&icql, acc.server.c_str(), acc.port) != -1) {
+	icq_Login(&icql, icql.icq_Status = STATUS_ONLINE);
+    } else {
+	face.log(_("+ [icq] unable to connect to the server"));
+	icql.icq_Status = (unsigned int) STATUS_OFFLINE;
+	connecting = false;
 	face.update();
-	icq_Disconnect(&icql);
-	face.log(_("+ connecting to the icq server"));
-
-	if(icq_Connect(&icql, conf.getservername().c_str(), conf.getserverport()) != -1) {
-	    icq_Login(&icql, status);
-	    icql.icq_Status = status;
-	} else {
-	    face.log(_("+ unable to connect to the icq server"));
-	    icql.icq_Status = (unsigned int) STATUS_OFFLINE;
-	    connecting = false;
-	    face.update();
-	}
     }
 
     time(&timer_reconnect);
@@ -150,7 +147,7 @@ void icqhook::loggedin(struct icq_link *link) {
 
     offl.scan(0, ossendall);
     face.update();
-    face.log(_("+ logged in"));
+    face.log(_("+ [icq] logged in"));
 
     clist.send();
 
@@ -161,7 +158,7 @@ void icqhook::ildisconnected(struct icq_link *link, int reason) {
     string msg;
     ihook.disconnected(link, reason);
 
-    msg = _("+ disconnected");
+    msg = _("+ [icq] disconnected");
 
     switch(reason) {
 	case ICQ_DISCONNECT_FORCED:
@@ -188,8 +185,10 @@ void icqhook::disconnected(struct icq_link *link, int reason) {
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-	c->setstatus(offline);
-	c->setseq2(0);
+	if(c->getdesc().pname == icq) {
+	    c->setstatus(offline);
+	    c->setseq2(0);
+	}
     }
 
     time(&ihook.timer_reconnect);
@@ -492,12 +491,12 @@ unsigned short bcat4, const char *back4) {
 
 void icqhook::wrongpass(struct icq_link *link) {
     ihook.disconnected(link, 0);
-    face.log(_("+ server reported a problem: wrong password"));
+    face.log(_("+ [icq] wrong password"));
 }
 
 void icqhook::invaliduin(struct icq_link *link) {
     ihook.disconnected(link, 0);
-    face.log(_("+ server reported a problem: invalid uin"));
+    face.log(_("+ [icq] invalid uin"));
 }
 
 void icqhook::regnewuin(struct icq_link *link, unsigned long uin) {
@@ -533,7 +532,7 @@ const char *email, char auth) {
 }
 
 void icqhook::searchdone(struct icq_link *link) {
-    face.log(_("+ search done"));
+    face.log(_("+ [icq] search done"));
 }
 
 void icqhook::wpfound(struct icq_link *link, unsigned short seq2,
@@ -553,7 +552,7 @@ int result, unsigned int length, void *data) {
 	    if(!c) return;
 
 	    if((result == length) && !result) {
-		face.log(_("+ file %s refused by %s, %lu"),
+		face.log(_("+ [icq] file %s refused by %s, %lu"),
 		    justfname(i->fname).c_str(),
 		    c->getdispnick().c_str(),
 		    c->getdesc().uin);
@@ -563,12 +562,12 @@ int result, unsigned int length, void *data) {
 		if(length == FILE_STATUS_NEXT_FILE) {
 		    if(i->seq == id) {
 			if(i->dir == HIST_MSG_IN) {
-			    face.log(_("+ file %s from %s, %lu received"),
+			    face.log(_("+ [icq] file %s from %s, %lu received"),
 				justfname(i->fname).c_str(),
 				c->getdispnick().c_str(),
 				i->uin);
 			} else {
-			    face.log(_("+ file %s to %s, %lu sent"),
+			    face.log(_("+ [icq] file %s to %s, %lu sent"),
 				justfname(i->fname).c_str(),
 				c->getdispnick().c_str(),
 				i->uin);
@@ -652,6 +651,7 @@ void icqhook::exectimers() {
 	    offl.scan(0, osexpired);
 	    time(&timer_resolve);
 	}
+/*
 	else
 	if(away &&
 	(timer_current-cicq.getkeypress() > away*60) &&
@@ -659,7 +659,7 @@ void icqhook::exectimers() {
 	(icql.icq_Status != STATUS_NA) &&
 	(icql.icq_Status != STATUS_INVISIBLE)) {
 	    icq_ChangeStatus(&icql, STATUS_AWAY);
-	    face.log(_("+ automatically set away"));
+	    face.log(_("+ [icq] automatically set away"));
 	    face.update();
 	}
 	else
@@ -668,16 +668,17 @@ void icqhook::exectimers() {
 	(icql.icq_Status != STATUS_NA) &&
 	(icql.icq_Status != STATUS_INVISIBLE)) {
 	    icq_ChangeStatus(&icql, STATUS_NA);
-	    face.log(_("+ automatically set N/A"));
+	    face.log(_("+ [icq] automatically set N/A"));
 	    face.update();
 	}
 	else
 	if((icql.icq_Status != manualstatus) &&
 	(timer_current-cicq.getkeypress() < MINCK0(away, na)*60)) {
 	    icq_ChangeStatus(&icql, manualstatus);
-	    face.log(_("+ the user is back"));
+	    face.log(_("+ [icq] the user is back"));
 	    face.update();
 	}
+*/
 
 	if((timer_current-timer_ack > PERIOD_DISCONNECT) || (n_keepalive > 3)) {
 	    icq_Logout(&icql);
@@ -685,6 +686,7 @@ void icqhook::exectimers() {
 	    ildisconnected(&icql, ICQ_DISCONNECT_KEEPALIVE);
 	}
     } else {
+	if(manualstatus != offline)
 	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
 	    connect();
 	}
@@ -717,14 +719,6 @@ struct tm *icqhook::maketm(int hour, int minute, int day, int month, int year) {
 
 void icqhook::addfile(unsigned int uin, unsigned long seq, string fname, int dir) {
     files.push_back(icqfileassociation(uin, seq, fname, dir));
-}
-
-int icqhook::getmanualstatus() {
-    return manualstatus;
-}
-
-void icqhook::setmanualstatus(int st) {
-    manualstatus = st;
 }
 
 bool icqhook::isconnecting() const {
@@ -760,4 +754,41 @@ imstatus icqhook::icq2imstatus(int status) const {
 
 bool icqhook::enabled() const {
     return factive;
+}
+
+void icqhook::setstatus(imstatus st) {
+    static int stat2int[imstatus_size] = {
+	STATUS_OFFLINE,
+	STATUS_ONLINE,
+	STATUS_INVISIBLE,
+	STATUS_FREE_CHAT,
+	STATUS_DND,
+	STATUS_OCCUPIED,
+	STATUS_NA,
+	STATUS_AWAY
+    };
+
+    if(st != offline) {
+	if(getstatus() == offline) {
+	    connect();
+	} else {
+	    icq_ChangeStatus(&icql, stat2int[st]);
+	}
+    } else {
+	if(getstatus() != offline) {
+	    disconnect();
+	}
+    }
+
+    manualstatus = st;
+}
+
+imstatus icqhook::getstatus() const {
+    return online() ? icq2imstatus(icql.icq_Status) : offline;
+}
+
+void icqhook::disconnect() {
+    icq_Logout(&icql);
+    icq_Disconnect(&icql);
+    ildisconnected(&icql, ICQ_DISCONNECT_SOCKET);
 }

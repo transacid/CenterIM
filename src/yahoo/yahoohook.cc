@@ -10,6 +10,7 @@ yahoohook::yahoohook() {
 }
 
 yahoohook::~yahoohook() {
+    conf.savestatus(::yahoo, manualstatus);
 }
 
 void yahoohook::init(const string id, const string pass) {
@@ -26,19 +27,25 @@ void yahoohook::init(const string id, const string pass) {
     yahoo->yahoo_UserStatus = &userstatus;
     yahoo->yahoo_RecvBounced = &recvbounced;
     yahoo->yahoo_RecvMessage = &recvmessage;
+
+    manualstatus = conf.getstatus(::yahoo);
 }
 
 void yahoohook::connect() {
     if(yahoo) {
-	fonline = true;
+	face.log(_("+ [yahoo] connecting to the server"));
+
+	alarm(5);
 
 	if(!yahoo_connect(yahoo)) {
-	    face.log(_("+ unable to connect to the yahoo server"));
+	    face.log(_("+ [yahoo] unable to connect to the server"));
 	    disconnected(yahoo);
 	} else {
+	    fonline = true;
 	    yahoo_get_config(yahoo);
-	    yahoo_cmd_logon(yahoo, YAHOO_STATUS_AVAILABLE);
-	    face.log(_("+ connected to the yahoo server"));
+	    yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE);
+	    face.log(_("+ [yahoo] logged in"));
+	    clist.send();
 	}
     }
 }
@@ -56,7 +63,7 @@ int yahoohook::getsockfd() const {
 void yahoohook::disconnect() {
     if(yahoo) {
 	yahoo_cmd_logoff(yahoo);
-	fonline = false;
+	disconnected(yahoo);
     }
 }
 
@@ -69,7 +76,7 @@ void yahoohook::exectimers() {
 	    if(tcurrent-timer_reconnect > PERIOD_RECONNECT) {
 		if(online() && !logged()) {
 		    disconnect();
-		} else {
+		} else if(manualstatus != offline) {
 		    connect();
 		}
 	    }
@@ -82,7 +89,13 @@ struct tm *yahoohook::timestamp() {
     return localtime(&t);
 }
 
-unsigned long yahoohook::sendmessage(const icqcontact *c, const string text) {
+unsigned long yahoohook::sendmessage(const icqcontact *c, const string atext) {
+    string text = atext;
+    string::iterator is;
+
+    for(is = text.begin(); is != text.end(); is++)
+	if(*is < 32) *is = ' ';
+
     yahoo_cmd_msg(yahoo, username.c_str(), c->getdesc().nickname.c_str(), text.c_str());
     return 1;
 }
@@ -98,17 +111,27 @@ bool yahoohook::logged() const {
 void yahoohook::sendnewuser(const imcontact ic) {
     char *group;
 
-    if(yahoo->buddies && yahoo->buddies[0]) {
-	group = yahoo->buddies[0]->group;
-    } else {
-	group = "group";
-    }
+    if(yahoo)
+    if(online()) {
+	if(yahoo->buddies && yahoo->buddies[0]) {
+	    group = yahoo->buddies[0]->group;
+	} else {
+	    group = "group";
+	}
 
-    yahoo_add_buddy(yahoo, ic.nickname.c_str(), username.c_str(), group, "");
+	if(!yahoo_isbuddy(yahoo, ic.nickname.c_str())) {
+	    yahoo_add_buddy(yahoo, ic.nickname.c_str(), username.c_str(), group, "");
+	}
+    }
 }
 
 void yahoohook::removeuser(const imcontact ic) {
-    yahoo_remove_buddy(yahoo, ic.nickname.c_str(), username.c_str(), "group", "");
+    if(yahoo)
+    if(online())
+    if(yahoo_isbuddy(yahoo, ic.nickname.c_str())) {
+	yahoo_remove_buddy(yahoo, ic.nickname.c_str(),
+	    username.c_str(), "group", "");
+    }
 }
 
 imstatus yahoohook::yahoo2imstatus(int status) const {
@@ -138,6 +161,9 @@ imstatus yahoohook::yahoo2imstatus(int status) const {
 	case YAHOO_STATUS_INVISIBLE:
 	    st = invisible;
 	    break;
+	case -1:
+	    st = offline;
+	    break;
     }
 
     return st;
@@ -146,7 +172,22 @@ imstatus yahoohook::yahoo2imstatus(int status) const {
 // ----------------------------------------------------------------------------
 
 void yahoohook::disconnected(yahoo_context *y) {
-    face.log(_("+ disconnected from yahoo network"));
+    int i;
+    icqcontact *c;
+
+    if(yhook.fonline) {
+	face.log(_("+ [yahoo] disconnected from the network"));
+	yhook.fonline = false;
+    }
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+	if(c->getdesc().pname == ::yahoo) {
+	    c->setstatus(offline);
+	}
+    }
+
+    time(&yhook.timer_reconnect);
 }
 
 void yahoohook::userlogon(yahoo_context *y, const char *nick) {
@@ -190,4 +231,23 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 
 bool yahoohook::enabled() const {
     return (bool) yahoo;
+}
+
+void yahoohook::setstatus(imstatus st) {
+    if(st == offline) {
+	if(getstatus() != offline) {
+	    disconnect();
+	}
+    } else {
+	if(getstatus() == offline) {
+	    connect();
+	} else {
+	}
+    }
+
+    manualstatus = st;
+}
+
+imstatus yahoohook::getstatus() const {
+    return online() ? yahoo2imstatus(ourstatus) : offline;
 }
