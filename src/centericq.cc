@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.107 2002/07/15 15:20:35 konst Exp $
+* $Id: centericq.cc,v 1.108 2002/07/31 11:17:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -702,11 +702,50 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
     return proceed;
 }
 
+void centericq::readevent(const imevent &ev, bool &enough, bool &fin) {
+    icqface::eventviewresult r = face.eventview(&ev);
+
+    switch(r) {
+	case icqface::forward:
+	    sendevent(ev, r);
+	    break;
+
+	case icqface::reply:
+	    sendevent(ev, r);
+	    enough = true;
+	    break;
+
+	case icqface::ok:
+	    enough = true;
+	    break;
+
+	case icqface::cancel:
+	    fin = true;
+	    break;
+
+	case icqface::open:
+	    if(const imurl *m = static_cast<const imurl *>(&ev))
+		conf.openurl(m->geturl());
+	    break;
+
+	case icqface::accept:
+	    em.store(imauthorization(ev.getcontact(),
+		imevent::outgoing, true, "accepted"));
+	    enough = true;
+	    break;
+
+	case icqface::reject:
+	    em.store(imauthorization(ev.getcontact(),
+		imevent::outgoing, false, "rejected"));
+	    enough = true;
+	    break;
+    }
+}
+
 void centericq::readevents(const imcontact &cont) {
     vector<imevent *> events;
     vector<imevent *>::iterator iev;
     icqcontact *c = clist.get(cont);
-    icqface::eventviewresult r;
     bool fin, enough;
 
     if(c) {
@@ -721,43 +760,7 @@ void centericq::readevents(const imcontact &cont) {
 		    enough = false;
 
 		    while(!enough && !fin) {
-			r = face.eventview(*iev);
-
-			switch(r) {
-			    case icqface::forward:
-				sendevent(**iev, r);
-				break;
-
-			    case icqface::reply:
-				sendevent(**iev, r);
-				enough = true;
-				break;
-
-			    case icqface::ok:
-				enough = true;
-				break;
-
-			    case icqface::cancel:
-				fin = true;
-				break;
-
-			    case icqface::open:
-				if(const imurl *m = static_cast<const imurl *>(*iev))
-				    conf.openurl(m->geturl());
-				break;
-
-			    case icqface::accept:
-				em.store(imauthorization(cont,
-				    imevent::outgoing, true, "accepted"));
-				enough = true;
-				break;
-
-			    case icqface::reject:
-				em.store(imauthorization(cont,
-				    imevent::outgoing, false, "rejected"));
-				enough = true;
-				break;
-			}
+			readevent(**iev, enough, fin);
 		    }
 		}
 

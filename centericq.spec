@@ -1,7 +1,7 @@
 Version: 4.7.8
 Summary: Console ncurses based IM client. ICQ, Yahoo!, MSN, AIM and IRC protocols are supported.
 Name: centericq
-Release: 3
+Release: 1
 Copyright: GPL
 Group: Applications/Communication
 Source: http://konst.org.ua/download/%{name}-%{version}.tar.gz

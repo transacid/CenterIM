@@ -15,6 +15,9 @@ applied a small patch by Jacob Shapiro <jacob@yashi.logicolor.net> in
 order to bring more bidirectional languages support to centericq
     NOT READY
 
+authorization requests now pop-up as soon as they arrive even in chat
+mode
+
 /*
 *
 * BUGS
@@ -45,8 +48,6 @@ msn library from everybuddy
 
 sending e-mail from centericq directly?
 
-non-blocking connects for msn
-
 fetch away messages
     yahoo, aim
 
@@ -58,10 +59,6 @@ try to implement the daemon mode
     substitute another "face" class
 	hooks call only face.log && update methods
 
-ability to specify server/port for yahoo
-
-nicks and writing messages to be rendered with fribidi
-
 todo and reminders
 
-$Id: TODO,v 1.242 2002/07/30 11:03:55 konst Exp $
+$Id: TODO,v 1.243 2002/07/31 11:17:32 konst Exp $

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.126 2002/07/29 14:52:51 konst Exp $
+* $Id: icqface.cc,v 1.127 2002/07/31 11:17:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1680,7 +1680,7 @@ void icqface::renderchathistory() {
     int count, chatmargin;
     string text;
     char buf[64];
-    time_t t;
+    time_t t, lastread;
     struct stat st;
 
     vector<imevent *> events;
@@ -1705,6 +1705,7 @@ void icqface::renderchathistory() {
     count = 0;
     events = em.getevents(passinfo, chatlastread);
     chatlastread = 0;
+    lastread = c->getlastread();
 
     if(events.size()) {
 	c->setlastread(events.back()->gettimestamp());
@@ -1716,6 +1717,17 @@ void icqface::renderchathistory() {
     }
 
     while(events.size()) {
+	if(events.back()->getdirection() == imevent::incoming)
+	if(events.back()->gettimestamp() > lastread) {
+	    if(events.back()->gettype() == imevent::authorization) {
+		bool fin, enough;
+		fin = enough = false;
+
+		while(!fin && !enough)
+		    cicq.readevent(*events.back(), enough, fin);
+	    }
+	}
+
 	if(count < chatlines) {
 	    text = (string) time2str(&(t = events.back()->gettimestamp()), "DD.MM hh:mm", buf) + " ";
 	    text += events.back()->gettext();

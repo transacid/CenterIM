@@ -64,7 +64,9 @@ class centericq {
 	bool idle(int options = 0);
 	void exectimers();
 
+	void readevent(const imevent &ev, bool &enough, bool &fin);
 	void readevents(const imcontact &cont);
+
 	void history(const imcontact &cont);
 
 	bool sendevent(const imevent &ev, icqface::eventviewresult r);
