@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.23 2003/01/19 00:52:03 konst Exp $
+* $Id: imexternal.cc,v 1.24 2003/01/19 01:33:46 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -262,15 +262,18 @@ int imexternal::action::execscript() {
 
 	if(!pid) {
 	    if(c = clist.get(currentev->getcontact())) {
-		setenv("SENDER_UIN", i2str(c->getdesc().uin).c_str(), 1);
-
-		if(c->getdesc().uin) setenv("SENDER_NICK", c->getnick().c_str(), 1);
-		    else setenv("SENDER_NICK", c->getdesc().nickname.c_str(), 1);
-
-		setenv("SENDER_INFODIR", c->getdirname().c_str(), 1);
-
 		setenv("EVENT_TYPE", geteventname(currentev->gettype()).c_str(), 1);
 		setenv("EVENT_NETWORK", conf.getprotocolname(c->getdesc().pname).c_str(), 1);
+
+		setenv("CONTACT_INFODIR", c->getdirname().c_str(), 1);
+		setenv("CONTACT_UIN", i2str(c->getdesc().uin).c_str(), 1);
+
+		if(c->getdesc().uin) setenv("CONTACT_NICK", c->getnick().c_str(), 1);
+		    else setenv("CONTACT_NICK", c->getdesc().nickname.c_str(), 1);
+
+		setenv("SENDER_UIN", getenv("CONTACT_UIN"), 1);
+		setenv("SENDER_NICK", getenv("CONTACT_NICK"), 1);
+		setenv("SENDER_INFODIR", getenv("CONTACT_INFODIR"), 1);
 	    }
 
 	    if(options & aonowait) {

@@ -1390,6 +1390,10 @@ The external actions definitions file format was extended with the
 new "nowait" option which makes centericq not to wait the action
 code to finish.
 
+Since external actions can also process outgoing messages (%pre-send),
+the environment variables for scripts were renamed from SENDER_* to
+CONTACT_*.
+
 The Jabber module was modified so that now it treats correctly all the
 data encoded in UTF-8, including nicknames in roster, user information,
 and so on.

@@ -1222,18 +1222,18 @@ EVENT_NETWORK
     The IM network name through which the event was received. Can be
     "icq", "msn", "yahoo", "aim", "irc" or "jabber".
 
-SENDER_UIN
+CONTACT_UIN
 
-    If an event is received through ICQ equals to the sender's UIN.
+    If an event is received through ICQ equals to the other party's UIN.
     Otherwise empty.
 
-SENDER_NICK
+CONTACT_NICK
 
-    Set to sender's real nickname. Real means that if you renamed the
-    user in your contact list, this parameter will be equal to the
-    original one, and not to what you set.
+    Set to other party's real nickname. Real means that even if you
+    renamed the user in your contact list, this parameter will be equal
+    to the original one, and not to what you set.
 
-SENDER_INFODIR
+CONTACT_INFODIR
 
     The most intresting parameter. Using it, you can access further
     information about the user. Every time an external action is
@@ -1254,14 +1254,14 @@ SENDER_INFODIR
     - etc;
 
 To read a certain line from the info file I recommend to use the
-following shell command: "head -n <N> $SENDER_INFODIR/info | tail -n 1",
+following shell command: "head -n <N> $CONTACT_INFODIR/info | tail -n 1",
 where N is the line number. Below the real examples go.
 
-    fname=`head -n 2 $SENDER_INFODIR/info | tail -n 1`
-    # to fetch sender's first name
+    fname=`head -n 2 $CONTACT_INFODIR/info | tail -n 1`
+    # to fetch contact's first name
 
-    lname=`head -n 3 $SENDER_INFODIR/info | tail -n 1`
-    # to fetch sender's last name
+    lname=`head -n 3 $CONTACT_INFODIR/info | tail -n 1`
+    # to fetch contact's last name
 
 The example from the next section demonstrates usage of the environment
 variables on an example of a simple answering machine :)
@@ -1284,8 +1284,8 @@ options         stdout
 %exec
 #!/bin/sh
 
-fname=`head -n 2 $SENDER_INFODIR/info | tail -n 1`
-lname=`head -n 3 $SENDER_INFODIR/info | tail -n 1`
+fname=`head -n 2 $CONTACT_INFODIR/info | tail -n 1`
+lname=`head -n 3 $CONTACT_INFODIR/info | tail -n 1`
 
 cat <<EOF
 Hello, $fname $lname!
@@ -1423,7 +1423,7 @@ options         stdin
 %exec
 #!/bin/sh
 
-if test "$SENDER_NICK" = "freddy_krueger"; then
+if test "$CONTACT_NICK" = "freddy_krueger"; then
     centericq -S _ -p $EVENT_NETWORK
 fi
 
@@ -1459,7 +1459,7 @@ proto           icq
 %exec
 #!/bin/sh
 
-ip=`head -n 45 $SENDER_INFODIR/info | tail -n 1`
+ip=`head -n 45 $CONTACT_INFODIR/info | tail -n 1`
 for i in $ip; do ip=$i; break; done
 host $ip
 
@@ -1733,4 +1733,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.77 2003/01/19 00:52:02 konst Exp $
+$Id: README,v 1.78 2003/01/19 01:33:45 konst Exp $
