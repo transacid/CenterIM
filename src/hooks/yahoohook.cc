@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.109 2004/06/28 12:49:16 konst Exp $
+* $Id: yahoohook.cc,v 1.110 2004/07/18 21:59:40 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -135,18 +135,6 @@ void yahoohook::connect() {
     icqconf::imaccount acc = conf.getourid(proto);
     int r;
 
-    strcpy(pager_host, acc.server.c_str());
-    strcpy(pager_port, i2str(acc.port).c_str());
-
-    strcpy(filetransfer_host, "filetransfer.msg.yahoo.com");
-    strcpy(filetransfer_port, "80");
-
-    strcpy(webcam_host, "webcam.yahoo.com");
-    strcpy(webcam_port, "5100");
-    strcpy(webcam_description, "Philips ToUcam Pro");
-    strcpy(local_host, "");
-    conn_type = 1;
-
     log(logConnecting);
 
     if(cid < 0) {
@@ -154,7 +142,10 @@ void yahoohook::connect() {
 	yahoo_close(cid);
     }
 
-    cid = yahoo_init(acc.nickname.c_str(), acc.password.c_str());
+    cid = yahoo_init_with_attributes(acc.nickname.c_str(), acc.password.c_str(),
+	"pager_host", acc.server.c_str(),
+	"pager_port", acc.port, 0);
+
     yahoo_login(cid, stat2int[manualstatus]);
 
     if(cid < 0) {
@@ -1072,19 +1063,19 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
 
 void yahoohook::connect_complete(void *data, int source) {
     connect_callback_data *ccd = (connect_callback_data *) data;
-    char error;
-    socklen_t err_size = sizeof(error);
+    int so_error;
+    socklen_t err_size = sizeof(so_error);
 
     remove_handler(0, ccd->tag);
 
-    if(getsockopt(source, SOL_SOCKET, SO_ERROR, &error, &err_size) == -1 || error != 0) {
+    if(getsockopt(source, SOL_SOCKET, SO_ERROR, (char *) &so_error, &err_size) == -1 || so_error != 0) {
 	if(yhook.logged())
 	    face.log(_("+ [yahoo] direct connection failed"));
 
 	close(source);
 	source = -1;
     } else {
-	ccd->callback(source, error, ccd->callback_data);
+	ccd->callback(source, so_error, ccd->callback_data);
     }
 
     free(ccd);

@@ -208,6 +208,10 @@ class icqface {
 	void status(const string &text);
 	void status(const char *fmt, ...);
 
+	void xtermtitle(const string &text);
+	void xtermtitle(const char *fmt, ...);
+	void xtermtitlereset();
+
 	bool changestatus(vector<protocolname> &pnames, imstatus &st);
 	int contextmenu(icqcontact *c);
 	int generalmenu();

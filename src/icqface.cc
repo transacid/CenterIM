@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.226 2004/07/03 08:21:12 konst Exp $
+* $Id: icqface.cc,v 1.227 2004/07/18 21:59:40 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -268,7 +268,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_REMOVE]    = _(" Remove channel             del");
 	actnames[ACT_JOIN]      = _(" Join channel");
 	actnames[ACT_LEAVE]     = _(" Leave channel");
-	actnames[ACT_INFO]      = getmenuitem(_("List nichnames"), 25, key_info, section_contact);
+	actnames[ACT_INFO]      = getmenuitem(_("List nicknames"), 25, key_info, section_contact);
 
 	if(lst.inlist(c, csignore))
 	    actnames[ACT_IGNORE]    = getmenuitem(_("UnBlock channel messages"), 25, key_ignore, section_contact);
@@ -1181,6 +1181,8 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	getstatkey(key_user_external_action, section_info).c_str(),
 	getstatkey(key_quit, section_editor).c_str());
 
+    xtermtitle(_("user info for %s"), realinfo.totext().c_str());
+
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
@@ -1287,7 +1289,6 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 		    continue;
 
 	    }
-
 
 	    refresh();
 	    showinfo = false;
@@ -1956,6 +1957,8 @@ void icqface::quickfind(verticalmenu *multi) {
 
     status(_("QuickSearch: type to find, %s find again, Enter finish"),
 	getstatkey(key_send_message, section_editor).c_str());
+
+    xtermtitle(_("contact list quick search"));
 
     if(multi) {
 	lx = sizeWArea.x1+2;
@@ -2679,6 +2682,9 @@ vector<eventviewresult> abuttons, bool nobuttons) {
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
 	title_timestamp.c_str(), extracttime(*ev).c_str());
 
+    xtermtitle(((string) _("view") + " " + title_event).c_str(),
+	streventname(ev->gettype()), ev->getcontact().totext().c_str());
+
     db.addautokeys();
 
     if(ev->gettype() == imevent::contacts) {
@@ -2706,6 +2712,7 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	    getstatkey(key_show_urls, section_history).c_str(),
 	    getstatkey(key_fullscreen, section_history).c_str(),
 	    getstatkey(key_quit, section_editor).c_str());
+
     }
 
     db.redraw();
@@ -2758,6 +2765,8 @@ void icqface::fullscreenize(const imevent *ev) {
 	strdateandtime(ev->gettimestamp()).c_str());
 
     w.write(0, 1, conf.getcolor(cp_main_highlight), buf);
+
+    xtermtitle((string) _("full-screen view") + " " + buf);
 
     tb.setbuf(ev->gettext());
 
@@ -2814,6 +2823,7 @@ bool icqface::histexec(imevent *&im) {
     bool r, fin;
     int k;
     static string sub;
+    char buf[512];
 
     r = fin = false;
 
@@ -2848,9 +2858,13 @@ bool icqface::histexec(imevent *&im) {
 
 	im = static_cast<imevent *> (mhist.getref(0));
 
-	mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	    _("History for %s, %d events total"),
-	    im->getcontact().totext().c_str(), mhist.getcount());
+	sprintf(buf, _("History for %s, %d events total"),
+	    im->getcontact().totext().c_str(),
+	    mhist.getcount());
+
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), buf);
+
+	xtermtitle(buf);
 
 	status(_("%s search, %s again, %s cancel"),
 	    getstatkey(key_search, section_history).c_str(),
@@ -3302,6 +3316,34 @@ void icqface::termresize(void) {
     face.dotermresize = true;
 }
 
+void icqface::relaxedupdate() {
+    fneedupdate = true;
+}
+
+bool icqface::updaterequested() {
+    return fneedupdate;
+}
+
+void icqface::redraw() {
+    if(!mainscreenblock) {
+	done();
+	init();
+	draw();
+	doredraw = fneedupdate = false;
+    } else {
+	doredraw = fneedupdate = true;
+    }
+}
+
+void icqface::xtermtitle(const string &text) {
+}
+
+void icqface::xtermtitle(const char *fmt, ...) {
+}
+
+void icqface::xtermtitlereset() {
+}
+
 // ----------------------------------------------------------------------------
 
 icqface::icqprogress::icqprogress() {
@@ -3342,23 +3384,4 @@ void icqface::icqprogress::show(const string &title ) {
 
 void icqface::icqprogress::hide() {
     w->close();
-}
-
-void icqface::relaxedupdate() {
-    fneedupdate = true;
-}
-
-bool icqface::updaterequested() {
-    return fneedupdate;
-}
-
-void icqface::redraw() {
-    if(!mainscreenblock) {
-	done();
-	init();
-	draw();
-	doredraw = fneedupdate = false;
-    } else {
-	doredraw = fneedupdate = true;
-    }
 }
