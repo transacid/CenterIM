@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.30 2003/11/24 09:19:49 konst Exp $
+* $Id: accountmanager.cc,v 1.31 2003/12/05 00:39:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -117,7 +117,7 @@ void accountmanager::exec() {
 			    conf.setourid(account);
 			}
 
-			t.addleaff(n, 0, citem+14, " Priority : %s ",
+			t.addleaff(n, 0, citem+14, _(" Priority : %s "),
 			    account.additional["prio"].c_str());
 			break;
 		}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.177 2003/11/25 23:53:37 konst Exp $
+* $Id: centericq.cc,v 1.178 2003/12/05 00:39:43 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1606,7 +1606,7 @@ void centericq::massmove() {
     icqcontact *c;
 
     face.muins.clear();
-    face.multicontacts();
+    face.multicontacts(_("Select contacts to move"));
 
     if(!face.muins.empty())
     if(gid = face.selectgroup(_("Mass move selected users to.."))) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.138 2003/10/15 23:40:19 konst Exp $
+* $Id: icqhook.cc,v 1.139 2003/12/05 00:39:44 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -798,7 +798,7 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 
 	cbinfo.fname = rusconv("wk", ic->getFirstName());
 	cbinfo.lname = rusconv("wk", ic->getLastName());
-	cbinfo.email = rusconv("wk", ic->getEmail());
+	if(!ic->getEmail().empty()) cbinfo.email = rusconv("wk", ic->getEmail());
 	cbinfo.city = rusconv("wk", home.city);
 	cbinfo.state = rusconv("wk", home.state);
 	cbinfo.phone = rusconv("wk", home.phone);
