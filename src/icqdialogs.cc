@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.39 2002/01/17 08:54:20 konst Exp $
+* $Id: icqdialogs.cc,v 1.40 2002/01/17 15:36:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,7 +87,6 @@ bool icqface::finddialog(imsearchparams &s) {
 		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, " %s ", strint(s.uin));
 
-/*
 		i = tree.addnode(_(" Details "));
 		tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
 		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
@@ -97,12 +96,12 @@ bool icqface::finddialog(imsearchparams &s) {
 		tree.addleaff(i, 0, 15, _(" Min. age : %s "), strint(s.minage));
 		tree.addleaff(i, 0, 16, _(" Max. age : %s "), strint(s.maxage));
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
-		tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
+		tree.addleaff(i, 0, 18, _(" Language : %s "), strlanguage(s.language));
 
 		i = tree.addnode(_(" Location "));
 		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
 		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
-		tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
+		tree.addleaff(i, 0, 21, _(" Country : %s "), strcountry(s.country));
 
 		i = tree.addnode(_(" Work "));
 		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
@@ -111,7 +110,6 @@ bool icqface::finddialog(imsearchparams &s) {
 
 		i = tree.addnode(_(" Online only "));
 		tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
-*/
 		break;
 
 	    case yahoo:
@@ -143,10 +141,10 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 15: s.minage = atol(inputstr(_("Minimal age: "), strint(s.minage)).c_str()); break;
 		    case 16: s.maxage = atol(inputstr(_("Maximal age: "), strint(s.maxage)).c_str()); break;
 		    case 17: selectgender(s.gender); break;
-		    case 18: /*selectlanguage(s.language); */break;
+		    case 18: selectlanguage(s.language); break;
 		    case 19: s.city = inputstr(_("City: "), s.city); break;
 		    case 20: s.state = inputstr(_("State: "), s.state); break;
-		    case 21: /*selectcountry(s.country); */break;
+		    case 21: selectcountry(s.country); break;
 		    case 22: s.company = inputstr(_("Company: "), s.company); break;
 		    case 23: s.department = inputstr(_("Department: "), s.department); break;
 		    case 24: s.position = inputstr(_("Position: "), s.position); break;
@@ -195,7 +193,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     i = tree->addnode(_(" Home "));
     tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
     tree->addleaff(i, 0, 18, _(" State : %s "), bi.state.c_str());
-    tree->addleaff(i, 0, 19, _(" Country : %s "), bi.country.c_str());
+    tree->addleaff(i, 0, 19, _(" Country : %s "), strcountry(bi.country));
     tree->addleaff(i, 0, 20, _(" Street address : %s "), bi.street.c_str());
     tree->addleaff(i, 0, 21, _(" Zip code : %s "), strint(bi.zip));
     tree->addleaff(i, 0, 22, _(" Phone : %s "), bi.phone.c_str());
@@ -205,7 +203,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     i = tree->addnode(_(" Work "));
     tree->addleaff(i, 0, 25, _(" City : %s "), wi.city.c_str());
     tree->addleaff(i, 0, 26, _(" State : %s "), wi.state.c_str());
-    tree->addleaff(i, 0, 27, _(" Country : %s "), wi.country.c_str());
+    tree->addleaff(i, 0, 27, _(" Country : %s "), strcountry(wi.country));
     tree->addleaff(i, 0, 28, _(" Street address : %s "), wi.street.c_str());
     tree->addleaff(i, 0, 29, _(" Company : %s "), wi.company.c_str());
     tree->addleaff(i, 0, 30, _(" Department : %s "), wi.dept.c_str());
@@ -216,12 +214,12 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 
     i = tree->addnode(_(" More "));
     tree->addleaff(i, 0, 35, _(" Homepage : %s "), mi.homepage.c_str());
-//    tree->addleaff(i, 0, 0, _(" 1st language : %s "), flang1 ? icq_GetMetaLanguageName(flang1) : "");
-//    tree->addleaff(i, 0, 0, _(" 2nd language : %s "), flang2 ? icq_GetMetaLanguageName(flang2) : "");
-//    tree->addleaff(i, 0, 0, _(" 3rd language : %s "), flang3 ? icq_GetMetaLanguageName(flang3) : "");
+    tree->addleaff(i, 0, 36, _(" 1st language : %s "), strlanguage(mi.lang1));
+    tree->addleaff(i, 0, 37, _(" 2nd language : %s "), strlanguage(mi.lang2));
+    tree->addleaff(i, 0, 38, _(" 3rd language : %s "), strlanguage(mi.lang3));
 
     i = tree->addnode(_(" About "));
-    tree->addleaff(i, 0, 36, " %s ", about.c_str());
+    tree->addleaff(i, 0, 39, " %s ", about.c_str());
 
     tree->menu.setpos(saveitem, savefirst);
 }
@@ -326,7 +324,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 
 		case 17: bi.city = inputstr(_("City: "), bi.city); break;
 		case 18: bi.state = inputstr(_("State: "), bi.state); break;
-		case 19: /*selectcountry(bi.country); */break;
+		case 19: selectcountry(bi.country); break;
 		case 20: bi.street = inputstr(_("Street address: "), bi.street); break;
 		case 21: bi.zip = strtoul(inputstr(_("Zip code: "), strint(bi.zip)).c_str(), 0, 0); break;
 		case 22: bi.phone = inputstr(_("Phone: "), bi.phone); break;
@@ -335,7 +333,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 
 		case 25: wi.city = inputstr(_("City: "), wi.city); break;
 		case 26: wi.state = inputstr(_("State: "), wi.state); break;
-		case 27: /*selectcountry(wi.country); */break;
+		case 27: selectcountry(wi.country); break;
 		case 28: wi.street = inputstr(_("Street address: "), wi.street); break;
 		case 29: wi.company = inputstr(_("Company: "), wi.company); break;
 		case 30: wi.dept = inputstr(_("Department: "), wi.dept); break;
@@ -346,7 +344,11 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 
 		case 35: mi.homepage = inputstr(_("Homepage: "), mi.homepage); break;
 
-		case 36: editabout(about); break;
+		case 36: selectlanguage(mi.lang1); break;
+		case 37: selectlanguage(mi.lang2); break;
+		case 38: selectlanguage(mi.lang3); break;
+
+		case 39: editabout(about); break;
 	    }
 
 	    c->setbasicinfo(bi);
@@ -368,21 +370,18 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     return ret;
 }
 
-/*
 void icqface::selectcountry(unsigned short &f) {
     int i;
 
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-16, 30, LINES-3, conf.getcolor(cp_dialog_menu)));
 
-    m.additem(0, 0, (string) " " + _("Not entered"));
+    for(i = 0; i < ICQ2000::Country_table_size; i++) {
+	m.additem(0, (int) ICQ2000::Country_table[i].code,
+	    (string) " " + ICQ2000::Country_table[i].name);
 
-    for(i = 0;; i++) {
-	if(icq_Countries[i].code == 0xffff) break; else {
-	    m.additem(0, (int) icq_Countries[i].code, (string) " " + icq_Countries[i].name);
-	    if(icq_Countries[i].code == f) {
-		m.setpos(i+1);
-	    }
+	if(ICQ2000::Country_table[i].code == f) {
+	    m.setpos(i);
 	}
     }
 
@@ -392,19 +391,21 @@ void icqface::selectcountry(unsigned short &f) {
     if(i) f = (unsigned short) ((int) m.getref(i-1));
 }
 
-void icqface::selectlanguage(unsigned char &f) {
+void icqface::selectlanguage(unsigned short &f) {
     int i;
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-13, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
 
-    for(i = 0; i <= 67; i++) m.additemf(" %s", icq_GetMetaLanguageName(i));
+    for(i = 0; i < ICQ2000::Language_table_size; i++) {
+	m.additemf(" %s", ICQ2000::Language_table[i]);
+    }
+
     m.setpos(f);
     i = m.open();
     m.close();
     
     if(i) f = i-1;
 }
-*/
 
 void icqface::selectgender(imgender &f) {
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));

@@ -25,9 +25,9 @@ class icqcontact {
 	struct basicinfo {
 	    basicinfo(): zip(0) {};
 
-	    string fname, lname, email, city, state, phone, fax, street;
-	    string cellular, country;
+	    string fname, lname, email, city, state, phone, fax, street, cellular;
 	    unsigned int zip;
+	    unsigned short country;
 	};
 
 	struct moreinfo {
@@ -37,6 +37,7 @@ class icqcontact {
 	    imgender gender;
 	    string homepage;
 	    unsigned int birth_day, birth_month, birth_year;
+	    unsigned short lang1, lang2, lang3;
 
 	    const string strbirthdate() const;
 	};
@@ -44,9 +45,10 @@ class icqcontact {
 	struct workinfo {
 	    workinfo(): zip(0) {};
 
-	    string city, state, phone, fax, street, country, company;
+	    string city, state, phone, fax, street, company;
 	    string dept, position, homepage;
 	    unsigned int zip;
+	    unsigned short country;
 	};
 
     protected:

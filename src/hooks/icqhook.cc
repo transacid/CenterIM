@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.33 2002/01/17 08:54:21 konst Exp $
+* $Id: icqhook.cc,v 1.34 2002/01/17 15:36:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -62,6 +62,7 @@ icqhook::icqhook() {
     cli.rate.connect(slot(this, &icqhook::rate_cb));
     cli.statuschanged.connect(slot(this, &icqhook::statuschanged_cb));
     cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
+    cli.search_result.connect(slot(this, &icqhook::search_result_cb));
 
 #ifdef DEBUG
     cli.logger.connect(slot(this, &icqhook::logger_cb));
@@ -405,33 +406,30 @@ void icqhook::requestinfo(const imcontact c) {
     }
 }
 
-const string icqhook::getcountryname(int code) const {
-    int i;
-
-    if(code) {
-	for(i = 0; i < Country_table_size; i++) {
-	    if(Country_table[i].code == code) {
-		return Country_table[i].name;
-	    }
-	}
-    }
-
-    return "";
-}
-
-/*
 void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
+    ICQ2000::Sex sex;
+
     searchdest = &dest;
 
-    if(!params.email.empty()) {
-	cli.lookupContacts(params.email);
-    } else if(!params.nick.empty() || !params.firstname.empty() || !params.lastname.empty()) {
-	cli.lookupContacts(params.nick, params.firstname, params.lastname);
+    sex = params.gender == genderMale ? ICQ2000::SEX_MALE :
+	params.gender == genderFemale ? ICQ2000::SEX_FEMALE :
+	ICQ2000::SEX_UNSPECIFIED;
+
+    if(!params.email.empty() || params.minage || params.maxage ||
+    !params.city.empty() || !params.state.empty() ||
+    !params.company.empty() || !params.department.empty() ||
+    !params.position.empty() || params.onlineonly ||
+    params.country || params.language || (sex != ICQ2000::SEX_UNSPECIFIED)) {
+	searchevent = cli.searchForContacts(params.nick, params.firstname,
+	    params.lastname, params.email, params.minage, params.maxage,
+	    sex, params.language, params.city, params.state, params.country,
+	    params.company, params.department, params.position,
+	    params.onlineonly);
     } else {
-	face.log(_("+ [icq] not enough search information given"));
+	searchevent = cli.searchForContacts(params.nick, params.firstname,
+	    params.lastname);
     }
 }
-*/
 
 // ----------------------------------------------------------------------------
 
@@ -643,7 +641,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		    cbinfo.cellular = rusconv("wk", home.cellular);
 
 		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
-		cbinfo.country = getcountryname(home.country);
+		cbinfo.country = home.country;
 
 		/* more information */
 
@@ -659,6 +657,10 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cminfo.birth_month = hpage.birth_month;
 		cminfo.birth_year = hpage.birth_year;
 
+		cminfo.lang1 = hpage.lang1;
+		cminfo.lang2 = hpage.lang2;
+		cminfo.lang3 = hpage.lang3;
+
 		/* work information */
 
 		cwinfo.city = rusconv("wk", work.city);
@@ -670,7 +672,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cwinfo.homepage = rusconv("wk", work.company_web);
 
 		cwinfo.zip = strtoul(work.zip.c_str(), 0, 0);
-		cwinfo.country = getcountryname(work.country);
+		cwinfo.country = work.country;
 
 		/* personal interests */
 
@@ -778,4 +780,31 @@ void icqhook::statuschanged_cb(MyStatusChangeEvent *ev) {
 
 void icqhook::want_auto_resp_cb(AwayMessageEvent *ev) {
     ev->setMessage("");
+}
+
+void icqhook::search_result_cb(SearchResultEvent *ev) {
+    if(ev == searchevent) {
+	string line;
+	Contact *c = ev->getLastContactAdded();
+
+	if(searchdest && c) {
+	    line = (c->getStatus() == STATUS_ONLINE ? "o " : "  ") +
+		c->getAlias();
+
+	    if(line.size() > 12) line.resize(12);
+	    else line += string(12-line.size(), ' ');
+
+	    line += " " + c->getFirstName() + " " + c->getLastName();
+	    if(!c->getEmail().empty()) line += " <" + c->getEmail() + ">";
+
+	    searchdest->additem(0, c->getUIN(), line);
+
+	    searchdest->redraw();
+	}
+
+	if(ev->isFinished()) {
+	    face.log(_("+ [icq] whitepages search finished, %d found"),
+		ev->getContactList().size());
+	}
+    }
 }

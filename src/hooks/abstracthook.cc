@@ -6,6 +6,7 @@
 
 abstracthook::abstracthook() {
     fcapabilities = 0;
+    searchdest = 0;
 }
 
 void abstracthook::init() {
@@ -88,10 +89,14 @@ int abstracthook::getcapabilities() const {
 
 void abstracthook::requestinfo(const imcontact c) {
 }
-/*
+
 void abstracthook::lookup(const imsearchparams &params, verticalmenu &dest) {
 }
-*/
+
+void abstracthook::stoplookup() {
+    searchdest = 0;
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.63 2002/01/17 08:54:19 konst Exp $
+* $Id: centericq.cc,v 1.64 2002/01/17 15:36:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -303,10 +303,8 @@ void centericq::find() {
 		    if(s.uin) {
 			addcontact(imcontact(s.uin, s.pname));
 			ret = false;
-/*
 		    } else {
 			ret = face.findresults(s);
-*/
 		    }
 
 		    break;
@@ -858,14 +856,17 @@ void centericq::setauto(imstatus astatus) {
 
 	    default:
 		if(autoset && (astatus == available)) {
-		    face.log(_("+ [%s] status restored"));
+		    face.log(_("+ [%s] status restored"),
+			conf.getprotocolname(pname).c_str());
+
 		    hook.restorestatus();
 		    nautoset = false;
 		} else {
 		    if(astatus == away && stcurrent == notavail)
 			break;
 
-		    if(!autoset && (astatus != stcurrent)) {
+		    if(astatus != stcurrent)
+		    if(!autoset || (autoset && (stcurrent == away))) {
 			hook.setautostatus(astatus);
 			nautoset = true;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.63 2002/01/17 08:54:20 konst Exp $
+* $Id: icqface.cc,v 1.64 2002/01/17 15:36:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -47,6 +47,24 @@ const char *strregcolor(regcolor c) {
 const char *strint(unsigned int i) {
     static string s;
     return i ? (s = i2str(i)).c_str() : "";
+}
+
+const char *strcountry(unsigned int code) {
+    int i;
+    for(i = 0; i < ICQ2000::Country_table_size; i++) {
+	if(ICQ2000::Country_table[i].code == code) {
+	    return ICQ2000::Country_table[i].name;
+	}
+    }
+    return "";
+}
+
+const char *strlanguage(unsigned int code) {
+    if(code < ICQ2000::Language_table_size) {
+	return ICQ2000::Language_table[code];
+    } else {
+	return "";
+    }
 }
 
 icqface::icqface() {
@@ -436,7 +454,7 @@ bool icqface::findresults(const imsearchparams &sp) {
 	conf.getcolor(cp_main_selected), _("Details"), _("Add"),
 	_("New search"), 0));
 
-//    gethook(sp.pname).lookup(sp, *db.getmenu());
+    gethook(sp.pname).lookup(sp, *db.getmenu());
 
     db.addautokeys();
     db.idle = &dialogidle;
@@ -449,23 +467,21 @@ bool icqface::findresults(const imsearchparams &sp) {
 
     while(!finished) {
 	finished = !db.open(r, b);
-//        gethook(sp.pname).stoplookup();
+	gethook(sp.pname).stoplookup();
 
 	if(!finished)
 	switch(b) {
 	    case 0:
-/*
-		if(ffuin = ihook.getfinduin(r)) {
-		    cicq.userinfo(imcontact(ffuin, icq));
+		if(r) {
+		    r = (int) db.getmenu()->getref(r-1);
+		    if(r) cicq.userinfo(imcontact(r, icq));
 		}
-*/
 		break;
 	    case 1:
-/*
-		if(ffuin = ihook.getfinduin(r)) {
-		    cicq.addcontact(imcontact(ffuin, icq));
+		if(r) {
+		    r = (int) db.getmenu()->getref(r-1);
+		    if(r) cicq.addcontact(imcontact(r, icq));
 		}
-*/
 		break;
 	    case 2:
 		ret = finished = true;
@@ -508,7 +524,38 @@ void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) 
 	extractedurls.push_back(wi.homepage);
 }
 
+void commacat(string &text, string sub, bool nocomma = false) {
+    if(!sub.empty()) {
+	if(!nocomma)
+	if(text[text.size()-1] != ',') text += ",";
+
+	text += sub;
+    }
+}
+
+void commaform(string &text) {
+    int pos = 0, ipos;
+
+    while((pos = text.find(",", pos)) != -1) {
+	if(text.substr(pos+1, 1) != " ") {
+	    text.insert(pos+1, " ");
+	}
+
+	ipos = pos-1;
+	while(ipos > 0) {
+	    if(text.substr(ipos, 1) == " ") {
+		text.erase(ipos--, 1);
+	    } else {
+		break;
+	    }
+	}
+
+	pos++;
+    }
+}
+
 void icqface::infogeneral(dialogbox &db, icqcontact *c) {
+    string langs;
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
 
@@ -534,6 +581,12 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
 
+    if(mi.lang1) commacat(langs, strlanguage(mi.lang1), langs.empty());
+    if(mi.lang2) commacat(langs, strlanguage(mi.lang2), langs.empty());
+    if(mi.lang3) commacat(langs, strlanguage(mi.lang3), langs.empty());
+    commaform(langs);
+
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), langs);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
     if(c->getstatus() == offline) {
@@ -569,9 +622,9 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
 	bi.city += bi.state;
     }
 
-    if(!bi.country.empty()) {
+    if(bi.country) {
 	if(bi.city.size()) bi.city += ", ";
-	bi.city += bi.country;
+	bi.city += strcountry(bi.country);
     }
 
     x += 10;
@@ -614,9 +667,9 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 	wi.city += wi.state;
     }
 
-    if(!wi.country.empty()) {
+    if(wi.country) {
 	if(wi.city.size()) wi.city += ", ";
-	wi.city += wi.country;
+	wi.city += strcountry(wi.country);
     }
 
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), wi.street);
@@ -639,20 +692,10 @@ void icqface::infoabout(dialogbox &db, icqcontact *c) {
     db.getbrowser()->setbuf(c->getabout());
 }
 
-void commacat(string &text, string sub, bool nocomma = false) {
-    if(!sub.empty()) {
-	if(!nocomma)
-	if(text[text.size()-1] != ',') text += ",";
-
-	text += sub;
-    }
-}
-
 void icqface::infointerests(dialogbox &db, icqcontact *c) {
     string text;
     vector<string> data;
     vector<string>::iterator i;
-    int pos, ipos;
 
     data = c->getinterests();
 
@@ -677,24 +720,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 	text += "\n\n";
     }
 
-    pos = 0;
-    while((pos = text.find(",", pos)) != -1) {
-	if(text.substr(pos+1, 1) != " ") {
-	    text.insert(pos+1, " ");
-	}
-
-	ipos = pos-1;
-	while(ipos > 0) {
-	    if(text.substr(ipos, 1) == " ") {
-		text.erase(ipos--, 1);
-	    } else {
-		break;
-	    }
-	}
-
-	pos++;
-    }
-
+    commaform(text);
     db.getbrowser()->setbuf(text);
 }
 

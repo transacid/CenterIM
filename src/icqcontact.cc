@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.37 2001/12/20 11:36:17 konst Exp $
+* $Id: icqcontact.cc,v 1.38 2002/01/17 15:36:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -166,9 +166,9 @@ void icqcontact::save() {
 		(int) minfo.age << endl <<
 		(int) minfo.gender << endl <<
 		minfo.homepage << endl <<
-		endl <<
-		endl <<
-		endl <<
+		minfo.lang1 << endl <<
+		minfo.lang2 << endl <<
+		minfo.lang3 << endl <<
 		minfo.birth_day << endl <<
 		minfo.birth_month << endl <<
 		minfo.birth_year << endl <<
@@ -238,14 +238,14 @@ void icqcontact::load() {
 		case 10: binfo.street = buf; break;
 		case 11: binfo.cellular = buf; break;
 		case 12: binfo.zip = strtoul(buf, 0, 0); break;
-		case 13: binfo.country = buf; break;
+		case 13: binfo.country = strtoul(buf, 0, 0); break;
 		case 14: winfo.city = buf; break;
 		case 15: winfo.state = buf; break;
 		case 16: winfo.phone = buf; break;
 		case 17: winfo.fax = buf; break;
 		case 18: winfo.street = buf; break;
 		case 19: winfo.zip = strtoul(buf, 0, 0); break;
-		case 20: winfo.country = buf; break;
+		case 20: winfo.country = strtoul(buf, 0, 0); break;
 		case 21: winfo.company = buf; break;
 		case 22: winfo.dept = buf; break;
 		case 23: winfo.position = buf; break;
@@ -254,9 +254,9 @@ void icqcontact::load() {
 		case 26: minfo.age = atoi(buf); break;
 		case 27: minfo.gender = (imgender) atoi(buf); break;
 		case 28: minfo.homepage = buf; break;
-		case 29: break;
-		case 30: break;
-		case 31: break;
+		case 29: minfo.lang1 = strtoul(buf, 0, 0); break;
+		case 30: minfo.lang2 = strtoul(buf, 0, 0); break;
+		case 31: minfo.lang3 = strtoul(buf, 0, 0); break;
 		case 32: minfo.birth_day = atoi(buf); break;
 		case 33: minfo.birth_month = atoi(buf); break;
 		case 34: minfo.birth_year = atoi(buf); break;

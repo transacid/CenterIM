@@ -17,6 +17,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	time_t timer_reconnect, timer_poll, timer_resolve;
 	bool fonline, flogged;
 	unsigned int reguin;
+	SearchResultEvent *searchevent;
 
 	void connected_cb(ConnectedEvent *ev);
 	void disconnected_cb(DisconnectedEvent *ev);
@@ -29,9 +30,9 @@ class icqhook: public abstracthook, public SigC::Object {
 	void socket_cb(SocketEvent *ev);
 	void statuschanged_cb(MyStatusChangeEvent *ev);
 	void want_auto_resp_cb(AwayMessageEvent *ev);
+	void search_result_cb(SearchResultEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
-	const string getcountryname(int code) const;
 
 	void resolve();
 
@@ -65,7 +66,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	bool regconnect(const string aserv);
 	bool regattempt(unsigned int &auin, const string apassword);
 
-//        void lookup(const imsearchparams &params, verticalmenu &dest);
+	void lookup(const imsearchparams &params, verticalmenu &dest);
 };
 
 extern icqhook ihook;

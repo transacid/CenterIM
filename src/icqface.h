@@ -14,6 +14,8 @@
 #include "icqmlist.h"
 #include "imcontroller.h"
 
+#include <libicq2000/userinfoconstants.h>
+
 #define DIALOG_WIDTH    60
 #define DIALOG_HEIGHT   15
 
@@ -123,10 +125,10 @@ class icqface {
 
 	void gendetails(treeview *tree, icqcontact *c = 0);
 	void selectgender(imgender &f);
-/*
+
 	void selectcountry(unsigned short &f);
-	void selectlanguage(unsigned char &f);
-*/
+	void selectlanguage(unsigned short &f);
+
 	void editabout(string &fabout);
 
 	void saveworkarea();
@@ -212,6 +214,8 @@ string getbdate(unsigned char fbday, unsigned char fbmonth, unsigned char fbyear
 const char *strregsound(regsound s);
 const char *strregcolor(regcolor c);
 const char *strint(unsigned int i);
+const char *strcountry(unsigned int code);
+const char *strlanguage(unsigned int code);
 
 static const char *stryesno[true+1] = {
     _("no"), _("yes")

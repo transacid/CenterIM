@@ -16,6 +16,7 @@ class abstracthook {
     protected:
 	imstatus manualstatus;
 	int fcapabilities;
+	verticalmenu *searchdest;
 
     public:
 	abstracthook();
@@ -49,7 +50,8 @@ class abstracthook {
 	virtual bool isdirectopen(const imcontact c) const;
 	virtual void requestinfo(const imcontact c);
 
-//        virtual vector<> lookup(const imsearchparams &params, verticalmenu &dest);
+	virtual void lookup(const imsearchparams &params, verticalmenu &dest);
+	virtual void stoplookup();
 
 	int getcapabilities() const;
 };
