@@ -1295,3 +1295,26 @@ The Jabber does now have support for the SSL connections with the
 server.
 
 Several interface related fixes were also made.
+
+4.9.0
+-----
+
+The FAQ document was extended with some more entries.
+
+The Jabber module was improved. Now it also supports registration on
+various agents that have the capacity. Groupchat was added, and
+nicknames in roaster get updated as soon as you change them on the
+centericq contact list.
+
+The UI approach to channels and conferences was changed dramatically.
+There is no "IRC Channel manager" anymore. It was replaced with the
+"Join channel/conference" dialog which is invoked from the F4/g-menu.
+All other operations with channels are done from the contact list
+directly, with the help of commands mentioned in the F2-menu when the
+hostkey is pressed on the corresponding entry.
+
+The MSN module migrated to the MSN library written by Meredydd Luff
+<m_luff@wincoll.ac.uk>. It's way better than the previous one, it's more
+stable and doesn't hang waiting for data to be received, supports typing
+notifications and extended new mail notifications.
+

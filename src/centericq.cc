@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.145 2002/12/09 17:38:37 konst Exp $
+* $Id: centericq.cc,v 1.146 2002/12/11 10:46:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -280,6 +280,7 @@ void centericq::mainloop() {
 		text = face.inputstr(_("New nickname to show: "), c->getdispnick());
 		if(face.getlastinputkey() != KEY_ESC) {
 		    c->setdispnick(text);
+		    gethook(c->getdesc().pname).updatecontact(c);
 		    face.update();
 		}
 		break;

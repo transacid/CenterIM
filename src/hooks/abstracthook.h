@@ -105,6 +105,8 @@ class abstracthook {
 
 	virtual vector<pair<string, string> > getsearchparameters(const string &agentname) const;
 	virtual vector<pair<string, string> > getregparameters(const string &agentname) const;
+
+	virtual void updatecontact(icqcontact *c);
 };
 
 abstracthook &gethook(protocolname pname);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.27 2002/12/10 18:58:56 konst Exp $
+* $Id: jabberhook.cc,v 1.28 2002/12/11 10:46:23 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -277,12 +277,13 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	jab_send(jc, x);
 	xmlnode_free(x);
 
-	imcontact icc(jidtodisp(ic.nickname), jabber);
-	if(ic.nickname != icc.nickname)
 	if(c = clist.get(ic)) {
-	    c->setdesc(icc);
-	    c->setnick(icc.nickname);
-	    c->setdispnick(icc.nickname);
+	    imcontact icc(jidtodisp(ic.nickname), jabber);
+	    if(ic.nickname != icc.nickname) {
+		c->setdesc(icc);
+		c->setdispnick(icc.nickname);
+	    }
+	    c->setnick("");
 	}
 
     } else {
@@ -763,6 +764,7 @@ void jabberhook::gotloggedin() {
 void jabberhook::gotroster(xmlnode x) {
     xmlnode y;
     imcontact ic;
+    icqcontact *c;
 
     for(y = xmlnode_get_tag(x, "item"); y; y = xmlnode_get_nextsibling(y)) {
 	const char *alias = xmlnode_get_attrib(y, "jid");
@@ -774,13 +776,12 @@ void jabberhook::gotroster(xmlnode x) {
 	    ic = imcontact(jidtodisp(alias), jabber);
 	    roster.push_back(jidnormalize(alias));
 
-	    if(!clist.get(ic)) {
-		icqcontact *c = clist.addnew(ic, false);
-		if(name) {
-		    icqcontact::basicinfo cb = c->getbasicinfo();
-		    cb.fname = name;
-		    c->setbasicinfo(cb);
-		}
+	    if(!(c = clist.get(ic)))
+		c = clist.addnew(ic, false);
+
+	    if(name) {
+		c->setnick(name);
+		c->setdispnick(name);
 	    }
 	}
     }
@@ -882,6 +883,24 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
     checkinlist(ic);
     body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
     em.store(immessage(ic, imevent::incoming, body));
+}
+
+void jabberhook::updatecontact(icqcontact *c) {
+    xmlnode x, y;
+
+    if(logged()) {
+	auto_ptr<char> cjid(strdup(jidnormalize(c->getdesc().nickname).c_str()));
+	auto_ptr<char> cname(strdup(c->getdispnick().c_str()));
+
+	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	y = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "item");
+	xmlnode_put_attrib(y, "jid", cjid.get());
+	xmlnode_put_attrib(y, "name", cname.get());
+	jab_send(jc, x);
+	xmlnode_free(x);
+
+	c->setnick(c->getdispnick());
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -6,387 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.0\n"
-"POT-Creation-Date: 2002-12-10 11:18+0200\n"
+"POT-Creation-Date: 2002-12-11 12:24+0200\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: src/hooks/aimhook.cc:59
-msgid "+ [aim] connecting to the server"
-msgstr "+ [aim] соединение с сервером"
-
-#: src/hooks/aimhook.cc:88
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ [aim] невозможно соединиться с сервером"
-
-#: src/hooks/aimhook.cc:189
-#, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ [aim] добавление %s в список"
-
-#: src/hooks/aimhook.cc:203
-#, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ [aim] удаление %s из списка"
-
-#: src/hooks/aimhook.cc:301
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr ""
-"Мне действительно нравится AIM profile, который centericq %s устанавливает "
-"по умолчанию."
-
-#: src/hooks/aimhook.cc:353
-msgid "+ [aim] logged in"
-msgstr "+ [aim] вход в систему состоялся"
-
-#: src/hooks/aimhook.cc:370
-msgid "+ [aim] disconnected"
-msgstr "+ [aim] рассоединение"
-
-#: src/hooks/aimhook.cc:388
-msgid "aim connection failed"
-msgstr "aim не удалось соединиться"
-
-#: src/hooks/aimhook.cc:390
-#, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ [aim] не удалось соединиться: %s"
-
-#: src/hooks/aimhook.cc:407
-msgid "+ [aim] password was changed successfully"
-msgstr "+ [aim] пароль бы изменен успешно"
-
-#: src/hooks/aimhook.cc:430
-msgid "The user has no profile information."
-msgstr "У пользователя нет профайл-информации."
-
-#: src/hooks/aimhook.cc:523
-msgid "+ [aim] password sent"
-msgstr "+ [aim] пароль выслан"
-
-#: src/hooks/icqhook.cc:141
-msgid "+ [icq] connecting to the server"
-msgstr "+ [icq] соединение с сервером"
-
-#: src/hooks/icqhook.cc:964
-msgid "+ [icq] logged in"
-msgstr "+ [icq] вход в систему состоялся"
-
-#: src/hooks/icqhook.cc:991
-msgid "as requested"
-msgstr "по запросу"
-
-#: src/hooks/icqhook.cc:992
-msgid "socket problems"
-msgstr "коммуникационные проблемы"
-
-#: src/hooks/icqhook.cc:993
-msgid "bad username"
-msgstr "неправильное имя пользователя"
-
-#: src/hooks/icqhook.cc:994
-msgid "turboing"
-msgstr "слишком частые попытки"
-
-#: src/hooks/icqhook.cc:995
-msgid "bad password"
-msgstr "неправильный пароль"
-
-#: src/hooks/icqhook.cc:996
-msgid "username and password mismatch"
-msgstr "несовпадение имени пользователя и пароля"
-
-#: src/hooks/icqhook.cc:997
-msgid "already logged"
-msgstr "уже в системе"
-
-#: src/hooks/icqhook.cc:1010
-msgid "+ [icq] disconnected"
-msgstr "+ [icq] рассоединение"
-
-#: src/hooks/icqhook.cc:1016
-msgid "icq disconnection reason"
-msgstr "причина рассоединения icq"
-
-#: src/hooks/icqhook.cc:1075
-msgid "The user has accepted your authorization request"
-msgstr "Пользователь подтвердил запрос на добавление в список контактов"
-
-#: src/hooks/icqhook.cc:1079
-msgid "The user has rejected your authorization request; the message was: "
-msgstr ""
-"Пользователь отклонил запрос на добавление в список контактов; объяснение: "
-
-#: src/hooks/icqhook.cc:1094 src/hooks/yahoohook.cc:784
-msgid "The user has added you to his/her contact list"
-msgstr "Пользователь добавил вас в свой список контактов"
-
-#: src/hooks/icqhook.cc:1134
-#, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ [icq] невозможно отослать SMS к %s, %s"
-
-#: src/hooks/icqhook.cc:1137
-#, c-format
-msgid "+ [icq] failed SMS to %s"
-msgstr "+ [icq] невозможно отослать SMS к %s"
-
-#: src/hooks/icqhook.cc:1148 src/hooks/irchook.cc:572
-#: src/hooks/jabberhook.cc:359
-msgid "Away message:"
-msgstr "Away сообщение:"
-
-#: src/hooks/icqhook.cc:1152
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] невозможно запросить away-сообщение у %s, %s"
-
-#: src/hooks/icqhook.cc:1283
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s запросил наше away-сообщение, ответ послан"
-
-#: src/hooks/icqhook.cc:1298
-msgid "Random Chat User"
-msgstr "Пользователь из random chat"
-
-#: src/hooks/icqhook.cc:1328
-#, c-format
-msgid "+ [icq] search finished, %d found"
-msgstr "+ [icq] поиск завершен, %d найдено"
-
-#: src/hooks/irchook.cc:133
-msgid "+ [irc] connecting to the server"
-msgstr "+ [irc] соединение с сервером"
-
-#: src/hooks/irchook.cc:145
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ [irc] невозможно соединиться с сервером"
-
-#: src/hooks/irchook.cc:507
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr "+ [irc] поиск по каналам закончен, %d найдено"
-
-#: src/hooks/irchook.cc:697
-msgid "+ [irc] logged in"
-msgstr "+ [irc] вход в систему состоялся"
-
-#: src/hooks/irchook.cc:735
-msgid "+ [irc] disconnected"
-msgstr "+ [irc] рассоединение"
-
-#: src/hooks/irchook.cc:749
-#, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ [irc] не удалось соединиться: %s"
-
-#: src/hooks/irchook.cc:766
-msgid "+ [irc] nickname was changed successfully"
-msgstr "+ [irc] никнейм изменен успешно"
-
-#: src/hooks/irchook.cc:837
-msgid "On channels: "
-msgstr "На каналах: "
-
-#: src/hooks/irchook.cc:1124
-#, c-format
-msgid "Kicked by %s; reason: %s"
-msgstr "Выброшен с канала оператором %s; причина: %s"
-
-#: src/hooks/irchook.cc:1179
-#, c-format
-msgid "The user has changed their nick from %s to %s"
-msgstr "Пользователь поменял свой ник с %s на %s"
-
-#: src/hooks/irchook.cc:1199
-msgid "+ [irc] password sent"
-msgstr "+ [irc] пароль выслан"
-
-#: src/hooks/irchook.cc:1201
-msgid "+ [irc] password was requested, but it's not set"
-msgstr "+ [irc] пароль был запрошен, но в настройках он не указан"
-
-#: src/hooks/irchook.cc:1225
-#, c-format
-msgid "PING reply from the user: %d second(s)"
-msgstr "Ответ на PING от пользователя был получен за %d секунд"
-
-#: src/hooks/irchook.cc:1230
-#, c-format
-msgid "The remote is using %s"
-msgstr ".. а мы пользуемся %s"
-
-#: src/hooks/msnhook.cc:67
-msgid "+ [msn] connecting to the server"
-msgstr "+ [msn] соединение с сервером"
-
-#: src/hooks/msnhook.cc:221
-#, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ [msn] удаление %s из списка"
-
-#: src/hooks/msnhook.cc:258
-#, c-format
-msgid "+ [msn] reverse users listing finished, %d found"
-msgstr "+ [msn] вывод \"обратного\" списка завершен, %d показано"
-
-#: src/hooks/msnhook.cc:419
-msgid "+ [msn] error: %s"
-msgstr "+ [msn] ошибка: %s"
-
-#: src/hooks/msnhook.cc:487
-#, c-format
-msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
-msgstr "+ [msn] e-mail: %d в inbox, %d в других папках"
-
-#: src/hooks/msnhook.cc:494
-msgid "+ [msn] e-mail from %s, %s"
-msgstr "+ [msn] e-mail от %s, %s"
-
-#: src/hooks/msnhook.cc:520
-msgid "+ [msn] logged in"
-msgstr "+ [msn] вход в систему состоялся"
-
-#: src/hooks/msnhook.cc:533
-msgid "+ [msn] disconnected"
-msgstr "+ [msn] рассоединение"
-
-#: src/hooks/yahoohook.cc:109
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] соединение с сервером"
-
-#: src/hooks/yahoohook.cc:117
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] невозможно соединиться: "
-
-#: src/hooks/yahoohook.cc:120
-msgid "could not resolve hostname"
-msgstr "невозможно определить IP хоста"
-
-#: src/hooks/yahoohook.cc:121
-msgid "could not create socket"
-msgstr "невозможно создать сокет"
-
-#: src/hooks/yahoohook.cc:122
-msgid "verify the pager host and port entered"
-msgstr "проверьте имя хоста и порт"
-
-#: src/hooks/yahoohook.cc:159
-msgid "+ [yahoo] disconnected"
-msgstr "+ [yahoo] рассоединение"
-
-#: src/hooks/yahoohook.cc:284
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] добавление %s в список"
-
-#: src/hooks/yahoohook.cc:304
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] удаление %s из списка"
-
-#: src/hooks/yahoohook.cc:318
-#, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] выход с конференции %s"
-
-#: src/hooks/yahoohook.cc:541
-#, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr "+ [yahoo] вывод списка завершен, %d найдено"
-
-#: src/hooks/yahoohook.cc:562
-msgid "Please join my conference."
-msgstr ""
-
-#: src/hooks/yahoohook.cc:573
-msgid "Custom status message:"
-msgstr "Пользовательское статус-сообщение:"
-
-#: src/hooks/yahoohook.cc:577
-#, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [yahoo] невозможно запросить away-сообщение у %s, %s"
-
-#: src/hooks/yahoohook.cc:607
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] вход в систему состоялся"
-
-#: src/hooks/yahoohook.cc:624
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "+ [yahoo] невозможно соединиться: неправильный логин/пароль"
-
-#: src/hooks/yahoohook.cc:629
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr "+ [yahoo] невозможно соединиться: аккаунт заблокирован"
-
-#: src/hooks/yahoohook.cc:630
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr "+ чтобы реактивировать его, посетите %s"
-
-#: src/hooks/yahoohook.cc:696
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr "Пользователь %s пригласил вас в конференцию %s, тема: %s"
-
-#: src/hooks/yahoohook.cc:699
-msgid "Current conference members are: "
-msgstr "Участники конференции: "
-
-#: src/hooks/yahoohook.cc:717
-msgid "Auto-joined the conference"
-msgstr "Авто-вход в конференцию состоялся"
-
-#: src/hooks/yahoohook.cc:727
-#, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr "Пользователь %s ответил отказом на приглашение к конференции"
-
-#: src/hooks/yahoohook.cc:737
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr "Пользователь %s вошел в конференцию"
-
-#: src/hooks/yahoohook.cc:752
-#, c-format
-msgid "The user %s has left the conference"
-msgstr "Пользователь %s покинул конференцию"
-
-#: src/hooks/yahoohook.cc:788
-msgid "the message was: "
-msgstr "сообщение:"
-
-#: src/hooks/yahoohook.cc:800
-#, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] %s: начал набирать текст"
-
-#: src/hooks/yahoohook.cc:800
-#, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] %s: закончил набирать текст"
-
-#: src/hooks/yahoohook.cc:813
-#, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail от %s, %s"
-
-#: src/hooks/yahoohook.cc:820
-#, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] система: %s"
-
-#: src/hooks/yahoohook.cc:825
-#, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] ошибка: %s"
 
 #: src/centericq.cc:121
 msgid "password: "
@@ -403,6 +29,7 @@ msgid "Ignore all events from %s?"
 msgstr "Игнорировать сообщения от %s?"
 
 #: src/centericq.cc:238
+#, c-format
 msgid "Remove %s from the contact list as well?"
 msgstr "Удалить %s из списка контактов?"
 
@@ -415,206 +42,110 @@ msgstr "Вы действительно хотите удалить %s?"
 msgid "New nickname to show: "
 msgstr "Новый ник для показа в списке: "
 
-#: src/centericq.cc:288
+#: src/centericq.cc:289
 msgid "Select a group to move the user to"
 msgstr "Выберите новую группу для пользователя"
 
-#: src/centericq.cc:306
+#: src/centericq.cc:307
 msgid "+ cannot fetch away messages being offline"
 msgstr "+ невозможно запросить away-сообщение, будучи в offline"
 
-#: src/accountmanager.cc:204 src/centericq.cc:382
+#: src/accountmanager.cc:204 src/centericq.cc:383
 msgid "away message"
 msgstr "away-сообщение"
 
-#: src/centericq.cc:582
+#: src/centericq.cc:583
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
 
-#: src/centericq.cc:585
+#: src/centericq.cc:586
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ последнее сообщение от %s"
 
-#: src/centericq.cc:627
+#: src/centericq.cc:628
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ конфигурация %s изменена, перечитываем"
 
-#: src/centericq.cc:666
+#: src/centericq.cc:667
 msgid "! another running copy of centericq detected"
 msgstr "! обнаружена работающая копия centericq"
 
-#: src/centericq.cc:667
+#: src/centericq.cc:668
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! это может вызвать проблемы. pid %lu"
 
-#: src/centericq.cc:791
+#: src/centericq.cc:792
 msgid "Mobile number: "
 msgstr "Номер мобильного телефона: "
 
-#: src/centericq.cc:932
+#: src/centericq.cc:933
 msgid "directory to save the file(s) to: "
 msgstr "директория для файл(ов): "
 
-#: src/centericq.cc:939
+#: src/centericq.cc:940
 msgid "The specified directory is not writable"
 msgstr "Не хватает прав на запись для указанного каталога"
 
-#: src/centericq.cc:943
+#: src/centericq.cc:944
 msgid "The specified directory does not exist"
 msgstr "Указанный каталог не существует"
 
-#: src/centericq.cc:1078
+#: src/centericq.cc:1079
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ история для %s пуста"
 
-#: src/centericq.cc:1104
+#: src/centericq.cc:1105
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s уже есть в списке"
 
-#: src/centericq.cc:1110
+#: src/centericq.cc:1111
 msgid "Select a group to add the user to"
 msgstr "Выберите группу для контакта"
 
-#: src/centericq.cc:1121
+#: src/centericq.cc:1122
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s добавлен в список"
 
-#: src/centericq.cc:1192
+#: src/centericq.cc:1193
 msgid "+ the user is back"
 msgstr "+ пользователь вернулся"
 
-#: src/centericq.cc:1208
+#: src/centericq.cc:1209
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус восстановлен"
 
-#: src/centericq.cc:1223
+#: src/centericq.cc:1224
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматический переход в %s"
 
-#: src/centericq.cc:1225
+#: src/centericq.cc:1226
 msgid "away"
 msgstr ""
 
-#: src/centericq.cc:1225
+#: src/centericq.cc:1226
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1351
+#: src/centericq.cc:1352
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободного места на диске осталось < 10k, рассоединение"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1353
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе мы можем терять события и глючить"
 
-#: src/centericq.cc:1391
+#: src/centericq.cc:1392
 msgid "Invite to conference.."
 msgstr "Пригласить на конференцию.."
-
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " Менеджер логинов "
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
-#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
-msgid "Change"
-msgstr "Изменить"
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
-#: src/icqdialogs.cc:1185
-msgid "Done"
-msgstr "Готово"
-
-#: src/accountmanager.cc:91
-#, c-format
-msgid " Server : %s "
-msgstr " Сервер : %s "
-
-#: src/accountmanager.cc:94
-#, c-format
-msgid " Secured : %s "
-msgstr " Защищенное соединение : %s "
-
-#: src/accountmanager.cc:100
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:105
-#, c-format
-msgid " Login : %s "
-msgstr " Логин : %s "
-
-#: src/accountmanager.cc:111
-#, c-format
-msgid " Password (optional) : %s "
-msgstr " Пароль (не обязательно) : %s "
-
-#: src/accountmanager.cc:111
-#, c-format
-msgid " Password : %s "
-msgstr " Пароль : %s "
-
-#: src/accountmanager.cc:115
-msgid " Register "
-msgstr " Регистрация "
-
-#: src/accountmanager.cc:121
-msgid " Change nickname "
-msgstr " Сменить friendly nickname "
-
-#: src/accountmanager.cc:122
-msgid " Update user details "
-msgstr " Обновить свою информацию "
-
-#: src/accountmanager.cc:125
-msgid " Set away message "
-msgstr " Установить away-сообщение "
-
-#: src/accountmanager.cc:128
-msgid " Synchronize contact list "
-msgstr " Снихронизировать список контактов "
-
-#: src/accountmanager.cc:130
-msgid " Drop "
-msgstr " Удалить "
-
-#: src/accountmanager.cc:148
-msgid " user name: "
-msgstr " логин: "
-
-#: src/accountmanager.cc:153
-msgid " uin: "
-msgstr " номер: "
-
-#: src/accountmanager.cc:158
-msgid " password: "
-msgstr " пароль: "
-
-#: src/accountmanager.cc:166
-msgid "Drop the account information first!"
-msgstr "Сначала удалите информацию о логине!"
-
-#: src/accountmanager.cc:180
-msgid "You have to disconnect the service first!"
-msgstr "Сначала вы должны произвести рассоединение!"
-
-#: src/accountmanager.cc:189
-msgid " server address: "
-msgstr " сервер : "
-
-#: src/accountmanager.cc:211
-msgid "You must be logged in to preform the synchronization"
-msgstr "Вы должны войти в сеть прежде чем сможете произвести синхронизацию"
 
 #: src/icqconf.cc:153
 #, c-format
@@ -724,55 +255,55 @@ msgstr "  -n, --number <тел.ном.>  мобильный номер получателя (только для sms)"
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "Сообщения об ошибках присылать на <centericq-bugs@konst.org.ua>."
 
-#: src/icqcontact.cc:716
+#: src/icqcontact.cc:714
 msgid "The user has a birthday today"
 msgstr "Сегодня день рождения"
 
-#: src/icqcontact.cc:744
+#: src/icqcontact.cc:742
 msgid "Jan"
 msgstr "Янв"
 
-#: src/icqcontact.cc:744
+#: src/icqcontact.cc:742
 msgid "Feb"
 msgstr "Фев"
 
-#: src/icqcontact.cc:744
+#: src/icqcontact.cc:742
 msgid "Mar"
 msgstr "Мар"
 
-#: src/icqcontact.cc:744
+#: src/icqcontact.cc:742
 msgid "Apr"
 msgstr "Апр"
 
-#: src/icqcontact.cc:745
+#: src/icqcontact.cc:743
 msgid "May"
 msgstr "Май"
 
-#: src/icqcontact.cc:745
+#: src/icqcontact.cc:743
 msgid "Jun"
 msgstr "Июн"
 
-#: src/icqcontact.cc:745
+#: src/icqcontact.cc:743
 msgid "Jul"
 msgstr "Июл"
 
-#: src/icqcontact.cc:745
+#: src/icqcontact.cc:743
 msgid "Aug"
 msgstr "Авг"
 
-#: src/icqcontact.cc:746
+#: src/icqcontact.cc:744
 msgid "Sep"
 msgstr "Сен"
 
-#: src/icqcontact.cc:746
+#: src/icqcontact.cc:744
 msgid "Oct"
 msgstr "Окт"
 
-#: src/icqcontact.cc:746
+#: src/icqcontact.cc:744
 msgid "Nov"
 msgstr "Ноя"
 
-#: src/icqcontact.cc:746
+#: src/icqcontact.cc:744
 msgid "Dec"
 msgstr "Дек"
 
@@ -852,6 +383,11 @@ msgstr "Сохранить"
 #: src/icqdialogs.cc:211 src/icqdialogs.cc:217
 msgid "cLear"
 msgstr "Очистить"
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
+msgid "Change"
+msgstr "Изменить"
 
 #: src/icqdialogs.cc:211
 msgid "Search/Add"
@@ -1194,6 +730,11 @@ msgstr " Ваша %s информация "
 #, c-format
 msgid " %s: details "
 msgstr " %s: детали "
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1185
+msgid "Done"
+msgstr "Готово"
 
 #: src/icqdialogs.cc:644
 msgid "Wait a moment. Your details haven't been fetched yet"
@@ -2086,6 +1627,92 @@ msgstr "искать: "
 msgid "General"
 msgstr "Свалка"
 
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " Менеджер логинов "
+
+#: src/accountmanager.cc:91
+#, c-format
+msgid " Server : %s "
+msgstr " Сервер : %s "
+
+#: src/accountmanager.cc:94
+#, c-format
+msgid " Secured : %s "
+msgstr " Защищенное соединение : %s "
+
+#: src/accountmanager.cc:100
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:105
+#, c-format
+msgid " Login : %s "
+msgstr " Логин : %s "
+
+#: src/accountmanager.cc:111
+#, c-format
+msgid " Password (optional) : %s "
+msgstr " Пароль (не обязательно) : %s "
+
+#: src/accountmanager.cc:111
+#, c-format
+msgid " Password : %s "
+msgstr " Пароль : %s "
+
+#: src/accountmanager.cc:115
+msgid " Register "
+msgstr " Регистрация "
+
+#: src/accountmanager.cc:121
+msgid " Change nickname "
+msgstr " Сменить friendly nickname "
+
+#: src/accountmanager.cc:122
+msgid " Update user details "
+msgstr " Обновить свою информацию "
+
+#: src/accountmanager.cc:125
+msgid " Set away message "
+msgstr " Установить away-сообщение "
+
+#: src/accountmanager.cc:128
+msgid " Synchronize contact list "
+msgstr " Снихронизировать список контактов "
+
+#: src/accountmanager.cc:130
+msgid " Drop "
+msgstr " Удалить "
+
+#: src/accountmanager.cc:148
+msgid " user name: "
+msgstr " логин: "
+
+#: src/accountmanager.cc:153
+msgid " uin: "
+msgstr " номер: "
+
+#: src/accountmanager.cc:158
+msgid " password: "
+msgstr " пароль: "
+
+#: src/accountmanager.cc:166
+msgid "Drop the account information first!"
+msgstr "Сначала удалите информацию о логине!"
+
+#: src/accountmanager.cc:180
+msgid "You have to disconnect the service first!"
+msgstr "Сначала вы должны произвести рассоединение!"
+
+#: src/accountmanager.cc:189
+msgid " server address: "
+msgstr " сервер : "
+
+#: src/accountmanager.cc:211
+msgid "You must be logged in to preform the synchronization"
+msgstr "Вы должны войти в сеть прежде чем сможете произвести синхронизацию"
+
 #: src/imcontroller.cc:64
 #, c-format
 msgid " Register on the %s network "
@@ -2254,6 +1881,272 @@ msgstr "Отменено"
 msgid "registration is not supported"
 msgstr "регистрация не поддерживается"
 
+#: src/hooks/icqhook.cc:141
+msgid "+ [icq] connecting to the server"
+msgstr "+ [icq] соединение с сервером"
+
+#: src/hooks/icqhook.cc:964
+msgid "+ [icq] logged in"
+msgstr "+ [icq] вход в систему состоялся"
+
+#: src/hooks/icqhook.cc:991
+msgid "as requested"
+msgstr "по запросу"
+
+#: src/hooks/icqhook.cc:992
+msgid "socket problems"
+msgstr "коммуникационные проблемы"
+
+#: src/hooks/icqhook.cc:993
+msgid "bad username"
+msgstr "неправильное имя пользователя"
+
+#: src/hooks/icqhook.cc:994
+msgid "turboing"
+msgstr "слишком частые попытки"
+
+#: src/hooks/icqhook.cc:995
+msgid "bad password"
+msgstr "неправильный пароль"
+
+#: src/hooks/icqhook.cc:996
+msgid "username and password mismatch"
+msgstr "несовпадение имени пользователя и пароля"
+
+#: src/hooks/icqhook.cc:997
+msgid "already logged"
+msgstr "уже в системе"
+
+#: src/hooks/icqhook.cc:1010
+msgid "+ [icq] disconnected"
+msgstr "+ [icq] рассоединение"
+
+#: src/hooks/icqhook.cc:1016
+msgid "icq disconnection reason"
+msgstr "причина рассоединения icq"
+
+#: src/hooks/icqhook.cc:1075
+msgid "The user has accepted your authorization request"
+msgstr "Пользователь подтвердил запрос на добавление в список контактов"
+
+#: src/hooks/icqhook.cc:1079
+msgid "The user has rejected your authorization request; the message was: "
+msgstr ""
+"Пользователь отклонил запрос на добавление в список контактов; объяснение: "
+
+#: src/hooks/icqhook.cc:1094 src/hooks/msnhook.cc:503
+#: src/hooks/yahoohook.cc:784
+msgid "The user has added you to his/her contact list"
+msgstr "Пользователь добавил вас в свой список контактов"
+
+#: src/hooks/icqhook.cc:1134
+#, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ [icq] невозможно отослать SMS к %s, %s"
+
+#: src/hooks/icqhook.cc:1137
+#, c-format
+msgid "+ [icq] failed SMS to %s"
+msgstr "+ [icq] невозможно отослать SMS к %s"
+
+#: src/hooks/icqhook.cc:1148 src/hooks/irchook.cc:572
+#: src/hooks/jabberhook.cc:404
+msgid "Away message:"
+msgstr "Away сообщение:"
+
+#: src/hooks/icqhook.cc:1152
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] невозможно запросить away-сообщение у %s, %s"
+
+#: src/hooks/icqhook.cc:1283
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr "%s запросил наше away-сообщение, ответ послан"
+
+#: src/hooks/icqhook.cc:1298
+msgid "Random Chat User"
+msgstr "Пользователь из random chat"
+
+#: src/hooks/icqhook.cc:1328
+#, c-format
+msgid "+ [icq] search finished, %d found"
+msgstr "+ [icq] поиск завершен, %d найдено"
+
+#: src/hooks/yahoohook.cc:109
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] соединение с сервером"
+
+#: src/hooks/yahoohook.cc:117
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] невозможно соединиться: "
+
+#: src/hooks/yahoohook.cc:120
+msgid "could not resolve hostname"
+msgstr "невозможно определить IP хоста"
+
+#: src/hooks/yahoohook.cc:121
+msgid "could not create socket"
+msgstr "невозможно создать сокет"
+
+#: src/hooks/yahoohook.cc:122
+msgid "verify the pager host and port entered"
+msgstr "проверьте имя хоста и порт"
+
+#: src/hooks/yahoohook.cc:159
+msgid "+ [yahoo] disconnected"
+msgstr "+ [yahoo] рассоединение"
+
+#: src/hooks/yahoohook.cc:284
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] добавление %s в список"
+
+#: src/hooks/yahoohook.cc:304
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] удаление %s из списка"
+
+#: src/hooks/yahoohook.cc:318
+#, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] выход с конференции %s"
+
+#: src/hooks/yahoohook.cc:541
+#, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr "+ [yahoo] вывод списка завершен, %d найдено"
+
+#: src/hooks/yahoohook.cc:562
+msgid "Please join my conference."
+msgstr ""
+
+#: src/hooks/yahoohook.cc:573
+msgid "Custom status message:"
+msgstr "Пользовательское статус-сообщение:"
+
+#: src/hooks/yahoohook.cc:577
+#, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [yahoo] невозможно запросить away-сообщение у %s, %s"
+
+#: src/hooks/yahoohook.cc:607
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] вход в систему состоялся"
+
+#: src/hooks/yahoohook.cc:624
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "+ [yahoo] невозможно соединиться: неправильный логин/пароль"
+
+#: src/hooks/yahoohook.cc:629
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr "+ [yahoo] невозможно соединиться: аккаунт заблокирован"
+
+#: src/hooks/yahoohook.cc:630
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr "+ чтобы реактивировать его, посетите %s"
+
+#: src/hooks/yahoohook.cc:696
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "Пользователь %s пригласил вас в конференцию %s, тема: %s"
+
+#: src/hooks/yahoohook.cc:699
+msgid "Current conference members are: "
+msgstr "Участники конференции: "
+
+#: src/hooks/yahoohook.cc:717
+msgid "Auto-joined the conference"
+msgstr "Авто-вход в конференцию состоялся"
+
+#: src/hooks/yahoohook.cc:727
+#, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr "Пользователь %s ответил отказом на приглашение к конференции"
+
+#: src/hooks/yahoohook.cc:737
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr "Пользователь %s вошел в конференцию"
+
+#: src/hooks/yahoohook.cc:752
+#, c-format
+msgid "The user %s has left the conference"
+msgstr "Пользователь %s покинул конференцию"
+
+#: src/hooks/yahoohook.cc:788
+msgid "the message was: "
+msgstr "сообщение:"
+
+#: src/hooks/yahoohook.cc:800
+#, c-format
+msgid "+ [yahoo] %s: started typing"
+msgstr "+ [yahoo] %s: начал набирать текст"
+
+#: src/hooks/yahoohook.cc:800
+#, c-format
+msgid "+ [yahoo] %s: stopped typing"
+msgstr "+ [yahoo] %s: закончил набирать текст"
+
+#: src/hooks/yahoohook.cc:813
+#, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [yahoo] e-mail от %s, %s"
+
+#: src/hooks/yahoohook.cc:820
+#, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] система: %s"
+
+#: src/hooks/yahoohook.cc:825
+#, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] ошибка: %s"
+
+#: src/hooks/msnhook.cc:86
+msgid "+ [msn] connecting to the server"
+msgstr "+ [msn] соединение с сервером"
+
+#: src/hooks/msnhook.cc:105
+#, fuzzy, c-format
+msgid "+ [msn] %s: stopped typing"
+msgstr "+ [yahoo] %s: закончил набирать текст"
+
+#: src/hooks/msnhook.cc:283
+#, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ [msn] удаление %s из списка"
+
+#: src/hooks/msnhook.cc:328
+#, c-format
+msgid "+ [msn] reverse users listing finished, %d found"
+msgstr "+ [msn] вывод \"обратного\" списка завершен, %d показано"
+
+#: src/hooks/msnhook.cc:581
+#, fuzzy, c-format
+msgid "+ [msn] %s: started typing"
+msgstr "+ [yahoo] %s: начал набирать текст"
+
+#: src/hooks/msnhook.cc:589
+#, c-format
+msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
+msgstr "+ [msn] e-mail: %d в inbox, %d в других папках"
+
+#: src/hooks/msnhook.cc:596
+#, c-format
+msgid "+ [msn] e-mail from %s, %s"
+msgstr "+ [msn] e-mail от %s, %s"
+
+#: src/hooks/msnhook.cc:637
+msgid "+ [msn] logged in"
+msgstr "+ [msn] вход в систему состоялся"
+
+#: src/hooks/msnhook.cc:651
+msgid "+ [msn] disconnected"
+msgstr "+ [msn] рассоединение"
+
 #: src/imevents.cc:278
 msgid "Empty authorization request message"
 msgstr "Пустое сообщение в запросе на авторизацию"
@@ -2281,11 +2174,6 @@ msgstr "<нет ника>"
 #: src/imevents.cc:573
 msgid "* File transfer"
 msgstr "* Передача файлов"
-
-#: src/imexternal.cc:133
-#, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "запущен внешний обработчик %s, код возврата = %d"
 
 #: src/imlogger.cc:32
 msgid "Offline"
@@ -2399,67 +2287,192 @@ msgstr "%s: ушли в оффлайн"
 msgid "changed our %s status to %s from %s"
 msgstr "поменяли свой %s статус на %s с %s"
 
-#: src/hooks/jabberhook.cc:58
+#: src/imexternal.cc:133
+#, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "запущен внешний обработчик %s, код возврата = %d"
+
+#: src/hooks/aimhook.cc:59
+msgid "+ [aim] connecting to the server"
+msgstr "+ [aim] соединение с сервером"
+
+#: src/hooks/aimhook.cc:88
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ [aim] невозможно соединиться с сервером"
+
+#: src/hooks/aimhook.cc:189
+#, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ [aim] добавление %s в список"
+
+#: src/hooks/aimhook.cc:203
+#, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ [aim] удаление %s из списка"
+
+#: src/hooks/aimhook.cc:301
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr ""
+"Мне действительно нравится AIM profile, который centericq %s устанавливает "
+"по умолчанию."
+
+#: src/hooks/aimhook.cc:353
+msgid "+ [aim] logged in"
+msgstr "+ [aim] вход в систему состоялся"
+
+#: src/hooks/aimhook.cc:370
+msgid "+ [aim] disconnected"
+msgstr "+ [aim] рассоединение"
+
+#: src/hooks/aimhook.cc:388
+msgid "aim connection failed"
+msgstr "aim не удалось соединиться"
+
+#: src/hooks/aimhook.cc:390
+#, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ [aim] не удалось соединиться: %s"
+
+#: src/hooks/aimhook.cc:407
+msgid "+ [aim] password was changed successfully"
+msgstr "+ [aim] пароль бы изменен успешно"
+
+#: src/hooks/aimhook.cc:430
+msgid "The user has no profile information."
+msgstr "У пользователя нет профайл-информации."
+
+#: src/hooks/aimhook.cc:523
+msgid "+ [aim] password sent"
+msgstr "+ [aim] пароль выслан"
+
+#: src/hooks/irchook.cc:133
+msgid "+ [irc] connecting to the server"
+msgstr "+ [irc] соединение с сервером"
+
+#: src/hooks/irchook.cc:145
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ [irc] невозможно соединиться с сервером"
+
+#: src/hooks/irchook.cc:507
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr "+ [irc] поиск по каналам закончен, %d найдено"
+
+#: src/hooks/irchook.cc:697
+msgid "+ [irc] logged in"
+msgstr "+ [irc] вход в систему состоялся"
+
+#: src/hooks/irchook.cc:735
+msgid "+ [irc] disconnected"
+msgstr "+ [irc] рассоединение"
+
+#: src/hooks/irchook.cc:749
+#, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ [irc] не удалось соединиться: %s"
+
+#: src/hooks/irchook.cc:766
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [irc] никнейм изменен успешно"
+
+#: src/hooks/irchook.cc:837
+msgid "On channels: "
+msgstr "На каналах: "
+
+#: src/hooks/irchook.cc:1124
+#, c-format
+msgid "Kicked by %s; reason: %s"
+msgstr "Выброшен с канала оператором %s; причина: %s"
+
+#: src/hooks/irchook.cc:1179
+#, c-format
+msgid "The user has changed their nick from %s to %s"
+msgstr "Пользователь поменял свой ник с %s на %s"
+
+#: src/hooks/irchook.cc:1199
+msgid "+ [irc] password sent"
+msgstr "+ [irc] пароль выслан"
+
+#: src/hooks/irchook.cc:1201
+msgid "+ [irc] password was requested, but it's not set"
+msgstr "+ [irc] пароль был запрошен, но в настройках он не указан"
+
+#: src/hooks/irchook.cc:1225
+#, c-format
+msgid "PING reply from the user: %d second(s)"
+msgstr "Ответ на PING от пользователя был получен за %d секунд"
+
+#: src/hooks/irchook.cc:1230
+#, c-format
+msgid "The remote is using %s"
+msgstr ".. а мы пользуемся %s"
+
+#: src/hooks/jabberhook.cc:94
 msgid "+ [jab] connecting to the server"
 msgstr "+ [jab] соединение с сервером"
 
-#: src/hooks/jabberhook.cc:90
+#: src/hooks/jabberhook.cc:126
 msgid "+ [jab] incorrect jabber id"
 msgstr "+ [jab] некорректный jabber id"
 
-#: src/hooks/jabberhook.cc:94
+#: src/hooks/jabberhook.cc:130
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ [jab] невозможно соединиться с сервером"
 
-#: src/hooks/jabberhook.cc:230
+#: src/hooks/jabberhook.cc:266
 #, c-format
 msgid "+ [jab] adding %s to the contacts"
 msgstr "+ [jab] добавление %s в список"
 
-#: src/hooks/jabberhook.cc:273
+#: src/hooks/jabberhook.cc:319
 #, c-format
 msgid "+ [jab] removing %s from the contacts"
 msgstr "+ [jab] удаление %s из списка"
 
-#: src/hooks/jabberhook.cc:361
+#: src/hooks/jabberhook.cc:406
 #, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ [jab] нет away-сообщения у %s, %s"
 
-#: src/hooks/jabberhook.cc:393
+#: src/hooks/jabberhook.cc:438
 msgid "Unable to connect"
 msgstr "Невозможно соединиться"
 
-#: src/hooks/jabberhook.cc:678
+#: src/hooks/jabberhook.cc:689
+#, c-format
 msgid "+ [jab] conference list fetching finished, %d found"
 msgstr "+ [jab] вывод списка завершен, %d найдено"
 
-#: src/hooks/jabberhook.cc:727
+#: src/hooks/jabberhook.cc:743
 #, c-format
 msgid "+ [jab] search finished, %d found"
 msgstr "+ [jab] поиск закончен, %d найдено"
 
-#: src/hooks/jabberhook.cc:783
+#: src/hooks/jabberhook.cc:799
 msgid "+ [jab] logged in"
 msgstr "+ [jab] вход в систему состоялся"
 
-#: src/hooks/jabberhook.cc:881
+#: src/hooks/jabberhook.cc:913
 msgid "+ [jab] disconnected"
 msgstr "+ [jab] рассоединение"
 
-#: src/hooks/jabberhook.cc:1039
+#: src/hooks/jabberhook.cc:1071
 #, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ [jab] ошибка: %s"
 
-#: src/hooks/jabberhook.cc:1089
+#: src/hooks/jabberhook.cc:1121
 msgid "The user wants to subscribe to your network presence updates"
 msgstr "Пользователь хочет получать изменения вашего статуса в сети"
 
-#: src/hooks/jabberhook.cc:1099
+#: src/hooks/jabberhook.cc:1131
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
 msgstr ""
 "Пользователь удалил вас из списка контактов. Выражаясь языком Джаббера, "
 "\"отписался\" от вас"
+
+#~ msgid "+ [msn] error: %s"
+#~ msgstr "+ [msn] ошибка: %s"

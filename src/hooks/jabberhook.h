@@ -104,6 +104,7 @@ class jabberhook: public abstracthook {
 	    const vector<imcontact> &lst);
 
 	void sendupdateuserinfo(const icqcontact &c);
+	void updatecontact(icqcontact *c);
 };
 
 extern jabberhook jhook;

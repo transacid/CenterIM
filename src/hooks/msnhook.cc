@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.51 2002/12/10 18:58:56 konst Exp $
+* $Id: msnhook.cc,v 1.52 2002/12/11 10:46:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -97,6 +97,18 @@ void msnhook::disconnect() {
 }
 
 void msnhook::exectimers() {
+    time_t t = time(0);
+    map<string, time_t>::iterator it = typing.begin();
+
+    while(it != typing.end()) {
+	if(t-it->second > 6) {
+	    face.log(_("+ [msn] %s: stopped typing"), it->first.c_str());
+	    typing.erase(it);
+	    it = typing.begin();
+	} else {
+	    ++it;
+	}
+    }
 }
 
 void msnhook::main() {
@@ -563,17 +575,12 @@ void ext_IM_failed(msnconn *conn) {
 
 void ext_typing_user(msnconn *conn, const char *username, const char *friendlyname) {
     log("ext_typing_user");
-/*
+    string nn = nicktodisp(username);
 
-about every 4 seconds, if a user is typing, they should send a "typing"
-notification
+    if(mhook.typing.find(nn) == mhook.typing.end())
+	face.log(_("+ [msn] %s: started typing"), nn.c_str());
 
-    icqcontact *c = clist.get(imcontact(nicktodisp(username), msn));
-
-    if(c) {
-	face.log(_("+ [msn] %s, %s: typing"), username, friendlyname);
-    }
-*/
+    mhook.typing[nn] = time(0);
 }
 
 void ext_initial_email(msnconn *conn, int unread_inbox, int unread_folders) {
@@ -640,6 +647,7 @@ void ext_closing_connection(msnconn *conn) {
 	logger.putourstatus(msn, mhook.getstatus(), mhook.ourstatus = offline);
 	clist.setoffline(msn);
 	mhook.fonline = false;
+	mhook.typing.clear();
 	face.log(_("+ [msn] disconnected"));
 	face.update();
     }
