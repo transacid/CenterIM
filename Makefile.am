@@ -8,13 +8,13 @@ liblibmsn_a_SOURCES =
 
 if BUILD_MSN
 
-liblibmsn_a_LIBADD =  msn/message.o msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o
+liblibmsn_a_LIBADD =  msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o msn/message.o
 
 else
 
-liblibmsn_a_LIBADD =  msn/message.o msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o
+liblibmsn_a_LIBADD = dummy.o
 
-dummy.cpp:
-	touch dummy.cpp
+dummy.c:
+	touch dummy.c
 
 endif

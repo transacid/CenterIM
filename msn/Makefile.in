@@ -68,10 +68,10 @@ VERSION = @VERSION@
 INCLUDES = -I$(top_srcdir)/msn/.. -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
 CPPFLAGS = 
 noinst_LIBRARIES = libmsn.a
-EXTRA_DIST = message.cpp authdata.cpp switchboardserver.cpp invitation.cpp notificationserver.cpp filetransfer.cpp buddy.cpp connection.cpp util.cpp passport.cpp msn.h authdata.h errorcodes.h filetransfer.h switchboardserver.h util.h externals.h invitation.h message.h connection.h notificationserver.h buddy.h passport.h
+EXTRA_DIST = authdata.cpp switchboardserver.cpp invitation.cpp notificationserver.cpp filetransfer.cpp buddy.cpp connection.cpp util.cpp passport.cpp message.cpp msn.h authdata.h errorcodes.h filetransfer.h switchboardserver.h util.h externals.h invitation.h message.h connection.h notificationserver.h buddy.h passport.h
 SUBDIRS = 
 
-@BUILD_MSN_TRUE@libmsn_a_SOURCES = message.cpp authdata.cpp switchboardserver.cpp invitation.cpp notificationserver.cpp filetransfer.cpp buddy.cpp connection.cpp util.cpp passport.cpp
+@BUILD_MSN_TRUE@libmsn_a_SOURCES = authdata.cpp switchboardserver.cpp invitation.cpp notificationserver.cpp filetransfer.cpp buddy.cpp connection.cpp util.cpp passport.cpp message.cpp
 
 @BUILD_MSN_FALSE@libmsn_a_LIBADD = dummy.o
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -84,9 +84,9 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 @BUILD_MSN_FALSE@libmsn_a_DEPENDENCIES =  dummy.o
-@BUILD_MSN_TRUE@libmsn_a_OBJECTS =  message.o authdata.o \
-@BUILD_MSN_TRUE@switchboardserver.o invitation.o notificationserver.o \
-@BUILD_MSN_TRUE@filetransfer.o buddy.o connection.o util.o passport.o
+@BUILD_MSN_TRUE@libmsn_a_OBJECTS =  authdata.o switchboardserver.o \
+@BUILD_MSN_TRUE@invitation.o notificationserver.o filetransfer.o \
+@BUILD_MSN_TRUE@buddy.o connection.o util.o passport.o message.o
 AR = ar
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)

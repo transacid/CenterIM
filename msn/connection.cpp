@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cassert>
+#include <cerrno>
 
 namespace MSN
 {

@@ -25,7 +25,7 @@
 
 #include <string>
 #include <stdexcept>
-#include <ostream>
+#include <iostream>
 
 namespace MSN
 {

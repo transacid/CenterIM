@@ -34,6 +34,7 @@
 #endif
 
 #include <cassert>
+#include <cerrno>
 
 namespace MSN 
 {

@@ -21,8 +21,6 @@ library/static
 0
 %makemode
 automake
-%file fsource msn/message.cpp
-1
 %file fsource msn/authdata.cpp
 1
 %file fsource msn/switchboardserver.cpp
@@ -40,6 +38,8 @@ automake
 %file fsource msn/util.cpp
 1
 %file fsource msn/passport.cpp
+1
+%file fsource msn/message.cpp
 1
 %file fheader msn/msn.h
 1
@@ -98,6 +98,6 @@ automake
 %watch
 %desktop
 ncurses_watchactive	0
-distdir	
+distdir	/home/konst/devel/libmsn
 tagbrowser_scope	2
 tagbrowser_filter	csgtfmednuv

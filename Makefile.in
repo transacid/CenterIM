@@ -73,8 +73,8 @@ noinst_LIBRARIES = liblibmsn.a
 AUTOMAKE_OPTIONS = foreign
 liblibmsn_a_SOURCES = 
 
-@BUILD_MSN_TRUE@liblibmsn_a_LIBADD = msn/message.o msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o
-@BUILD_MSN_FALSE@liblibmsn_a_LIBADD = msn/message.o msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o
+@BUILD_MSN_TRUE@liblibmsn_a_LIBADD = msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o msn/message.o
+@BUILD_MSN_FALSE@liblibmsn_a_LIBADD = dummy.o
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
@@ -85,15 +85,12 @@ LIBRARIES =  $(noinst_LIBRARIES)
 DEFS = @DEFS@ -I. -I$(srcdir) -I.
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-@BUILD_MSN_TRUE@liblibmsn_a_DEPENDENCIES =  msn/message.o msn/authdata.o \
+@BUILD_MSN_TRUE@liblibmsn_a_DEPENDENCIES =  msn/authdata.o \
 @BUILD_MSN_TRUE@msn/switchboardserver.o msn/invitation.o \
 @BUILD_MSN_TRUE@msn/notificationserver.o msn/filetransfer.o msn/buddy.o \
-@BUILD_MSN_TRUE@msn/connection.o msn/util.o msn/passport.o
-@BUILD_MSN_FALSE@liblibmsn_a_DEPENDENCIES =  msn/message.o \
-@BUILD_MSN_FALSE@msn/authdata.o msn/switchboardserver.o \
-@BUILD_MSN_FALSE@msn/invitation.o msn/notificationserver.o \
-@BUILD_MSN_FALSE@msn/filetransfer.o msn/buddy.o msn/connection.o \
-@BUILD_MSN_FALSE@msn/util.o msn/passport.o
+@BUILD_MSN_TRUE@msn/connection.o msn/util.o msn/passport.o \
+@BUILD_MSN_TRUE@msn/message.o
+@BUILD_MSN_FALSE@liblibmsn_a_DEPENDENCIES =  dummy.o
 liblibmsn_a_OBJECTS = 
 AR = ar
 DIST_COMMON =  README ./stamp-h.in AUTHORS COPYING ChangeLog INSTALL \
@@ -420,8 +417,8 @@ installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-@BUILD_MSN_FALSE@dummy.cpp:
-@BUILD_MSN_FALSE@	touch dummy.cpp
+@BUILD_MSN_FALSE@dummy.c:
+@BUILD_MSN_FALSE@	touch dummy.c
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
