@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contacts group class
-* $Id: icqgroup.cc,v 1.8 2004/11/09 23:49:59 konst Exp $
+* $Id: icqgroup.cc,v 1.9 2005/01/30 22:21:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -51,11 +51,26 @@ int icqgroup::getcount(bool countonline, bool countoffline) {
 }
 
 void icqgroup::moveup() {
-    if(id > 1) exchange(id-1);
+    int nid = id-1;
+
+    while(nid > 0) {
+	if(find(groups.begin(), groups.end(), nid) != groups.end()) break;
+	nid--;
+    }
+
+    if(nid > 0) exchange(nid);
 }
 
 void icqgroup::movedown() {
-    if(id < groups.size()) exchange(id+1);
+    int nid = id+1;
+    int fid = (groups.end()-1)->id;
+
+    while(nid <= fid) {
+	if(find(groups.begin(), groups.end(), nid) != groups.end()) break;
+	nid++;
+    }
+
+    if(nid <= fid) exchange(nid);
 }
 
 void icqgroup::exchange(int nid) {

@@ -46,10 +46,14 @@ vector<string> impgp::getkeys(bool secretonly) {
     gpgme_key_t key;
     vector<string> r;
 
-    if(ctx && !gpgme_op_keylist_start(ctx, 0, secretonly ? 1 : 0)) {
-	while(!gpgme_op_keylist_next(ctx, &key)) {
-	    r.push_back(key->subkeys->keyid);
-	    gpgme_key_release(key);
+    if(ctx) {
+	gpgme_set_protocol(ctx, GPGME_PROTOCOL_OpenPGP);
+
+	if(!gpgme_op_keylist_start(ctx, 0, secretonly ? 1 : 0)) {
+	    while(!gpgme_op_keylist_next(ctx, &key)) {
+		r.push_back(key->subkeys->keyid);
+		gpgme_key_release(key);
+	    }
 	}
     }
 

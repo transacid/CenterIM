@@ -121,8 +121,6 @@ if test "$ac_cv_c_socklen_t" = "no"; then
   AC_DEFINE(socklen_t, int, [Define type of socklen_t for systems missing it])
 fi
 
-AC_LANG_RESTORE
-
 # Check for GPGME
 
 AC_ARG_WITH(gpgme,
@@ -132,9 +130,32 @@ AC_ARG_WITH(gpgme,
 	gpgme-config)])
 
 if test ! -z "$GPGME_CONFIG"; then
+    save_CXXFLAGS="$CXXFLAGS"
+    save_LIBS="$LIBS"
     CXXFLAGS="$CXXFLAGS `$GPGME_CONFIG --cflags`"
     LIBS="`$GPGME_CONFIG --libs` $LIBS"
+
+    AC_MSG_CHECKING(OpenPGP protocol is available)
+    AC_TRY_RUN([
+	#include <gpgme.h>
+	int main() {
+	    gpgme_ctx_t ctx;
+	    if(!gpgme_new(&ctx))
+	    if(!gpgme_set_protocol(ctx, GPGME_PROTOCOL_OpenPGP))
+		return 0;
+	    return 1;
+	}
+    ], opengpg_avail=yes, opengpg_avail=no, opengpg_avail=no)
+    AC_MSG_RESULT($opengpg_avail)
+
+    if test "$opengpg_avail" != "yes"; then
+	CXXFLAGS="$save_CXXFLAGS"
+	LIBS="$save_LIBS"
+	GPGME_CONFIG=""
+    fi
 fi
+
+AC_LANG_RESTORE
 
 # Check for curl.
 
@@ -189,7 +210,7 @@ fi
 
 if test "$build_jabber" = "yes"; then
     if test -z "$GPGME_CONFIG"; then
-	AC_MSG_WARN([No GPG support in Jabber, since there was no GPGME library found])
+	AC_MSG_WARN([No GPG support in Jabber, since GPGME library not found or its setup not ok])
     else
 	AC_DEFINE(HAVE_GPGME, 1, [has GPGME library])
     fi
