@@ -693,9 +693,14 @@ void texteditor::hl_comment(char *cp, int st, int pend, int color) {
     int origclr = -1;
 
     if(color) {
-	for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
-	if(cp[i] == 1) origclr = cp[i+++1]; else
-	if(cp[i] == 2) origclr = -1;
+/// !!! 	for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
+
+	for(i = 0; (i < pend) && (i < strlen(cp)); i++) {
+	    switch(cp[i]) {
+		case 1: origclr = cp[i+++1]; break;
+		case 2: origclr = -1; break;
+	    }
+	}
 
 	if(pend > strlen(cp)) pend = strlen(cp);
 	if(cp[pend] != 2) strinsert(cp, pend, "\002");
@@ -841,6 +846,26 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 	}
 
 	// Quotes highlight ...
+
+	if(!colors.synt_quote.empty()) {
+	    bool qst;
+	    int qoffs;
+	    vector<int> quotelayout;
+	    vector<int>::iterator iq;
+
+	    quotelayout = getquotelayout(string(cp).substr(0, eolstart),
+		colors.synt_quote, colors.synt_qescape);
+
+	    for(qst = false, qoffs = 0, iq = quotelayout.begin();
+	    iq != quotelayout.end(); iq++) {
+		qst = !qst;
+
+		if(!qst) {
+		    hl_comment(cp, *(iq-1)+qoffs, *iq+qoffs+1, colors.qcolor);
+		    qoffs += 3;
+		}
+	    }
+	}
 
 #if 0
 	
