@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.69 2002/11/26 12:24:52 konst Exp $
+* $Id: yahoohook.cc,v 1.70 2002/11/26 21:58:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -807,10 +807,11 @@ void yahoohook::game_notify(guint32 id, char *who, int stat) {
 void yahoohook::mail_notify(guint32 id, char *from, char *subj, int cnt) {
     char buf[1024];
 
-    sprintf(buf, _("+ [yahoo] e-mail from %s, %s"), from, subj);
-    face.log(buf);
-
-    clist.get(contactroot)->playsound(imevent::email);
+    if(from && subj) {
+	sprintf(buf, _("+ [yahoo] e-mail from %s, %s"), from, subj);
+	face.log(buf);
+	clist.get(contactroot)->playsound(imevent::email);
+    }y
 }
 
 void yahoohook::system_message(guint32 id, char *msg) {
