@@ -41,10 +41,10 @@ void abstracthook::setstatus(imstatus st) {
     }
 }
 
-void abstracthook::getsockets(fd_set &fds, int &hsocket) const {
+void abstracthook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
 }
 
-bool abstracthook::isoursocket(fd_set &fds) const {
+bool abstracthook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
     return false;
 }
 

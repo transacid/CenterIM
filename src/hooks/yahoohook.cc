@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.15 2001/12/09 14:11:59 konst Exp $
+* $Id: yahoohook.cc,v 1.16 2001/12/14 16:19:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -115,15 +115,15 @@ void yahoohook::main() {
     }
 }
 
-void yahoohook::getsockets(fd_set &fds, int &hsocket) const {
+void yahoohook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
     if(online()) {
-	FD_SET(context->sockfd, &fds);
+	FD_SET(context->sockfd, &rfds);
 	hsocket = max(context->sockfd, hsocket);
     }
 }
 
-bool yahoohook::isoursocket(fd_set &fds) const {
-    return online() && FD_ISSET(context->sockfd, &fds);
+bool yahoohook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
+    return online() && FD_ISSET(context->sockfd, &rfds);
 }
 
 void yahoohook::disconnect() {

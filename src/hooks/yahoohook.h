@@ -36,8 +36,8 @@ class yahoohook: public abstracthook {
 	void exectimers();
 	void disconnect();
 
-	void getsockets(fd_set &fds, int &hsocket) const;
-	bool isoursocket(fd_set &fds) const;
+	void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;
+	bool isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const;
 
 	bool online() const;
 	bool logged() const;

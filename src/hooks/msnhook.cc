@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.9 2001/12/06 16:56:34 konst Exp $
+* $Id: msnhook.cc,v 1.10 2001/12/14 16:19:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -111,22 +111,22 @@ void msnhook::main() {
     }
 }
 
-void msnhook::getsockets(fd_set &fds, int &hsocket) const {
+void msnhook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
     vector<int> sockets = MSN_GetSockets();
     vector<int>::iterator i;
 
     for(i = sockets.begin(); i != sockets.end(); i++) {
 	hsocket = max(hsocket, *i);
-	FD_SET(*i, &fds);
+	FD_SET(*i, &rfds);
     }
 }
 
-bool msnhook::isoursocket(fd_set &fds) const {
+bool msnhook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
     vector<int> sockets = MSN_GetSockets();
     vector<int>::iterator i;
 
     for(i = sockets.begin(); i != sockets.end(); i++) {
-	if(FD_ISSET(*i, &fds))
+	if(FD_ISSET(*i, &rfds))
 	    return true;
     }
 

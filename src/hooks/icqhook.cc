@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.26 2001/12/14 09:04:20 konst Exp $
+* $Id: icqhook.cc,v 1.27 2001/12/14 16:19:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -156,44 +156,89 @@ void icqhook::exectimers() {
 }
 
 void icqhook::main() {
-    struct timeval tv;
-    fd_set s;
     vector<int>::iterator i;
+    struct timeval tv;
     int hsock;
+    fd_set rs, ws, es;
 
-    FD_ZERO(&s);
+    FD_ZERO(&rs);
+    FD_ZERO(&ws);
+    FD_ZERO(&es);
+
     tv.tv_sec = tv.tv_usec = 0;
     hsock = 0;
 
-    for(i = fds.begin(); i != fds.end(); i++) {
-	FD_SET(*i, &s);
+    for(i = rfds.begin(); i != rfds.end(); i++) {
+	FD_SET(*i, &rs);
 	hsock = max(hsock, *i);
     }
 
-    if(select(hsock+1, &s, 0, 0, &tv) > 0) {
-	for(i = fds.begin(); i != fds.end(); i++) {
-	    if(FD_ISSET(*i, &s)) {
+    for(i = wfds.begin(); i != wfds.end(); i++) {
+	FD_SET(*i, &ws);
+	hsock = max(hsock, *i);
+    }
+
+    for(i = efds.begin(); i != efds.end(); i++) {
+	FD_SET(*i, &es);
+	hsock = max(hsock, *i);
+    }
+
+    if(select(hsock+1, &rs, &ws, &es, &tv) > 0) {
+	for(i = rfds.begin(); i != rfds.end(); i++) {
+	    if(FD_ISSET(*i, &rs)) {
 		cli.socket_cb(*i, SocketEvent::READ);
+		break;
+	    }
+	}
+
+	for(i = wfds.begin(); i != wfds.end(); i++) {
+	    if(FD_ISSET(*i, &ws)) {
+		cli.socket_cb(*i, SocketEvent::WRITE);
+		break;
+	    }
+	}
+
+	for(i = efds.begin(); i != efds.end(); i++) {
+	    if(FD_ISSET(*i, &es)) {
+		cli.socket_cb(*i, SocketEvent::EXCEPTION);
 		break;
 	    }
 	}
     }
 }
 
-void icqhook::getsockets(fd_set &afds, int &hsocket) const {
+void icqhook::getsockets(fd_set &rs, fd_set &ws, fd_set &es, int &hsocket) const {
     vector<int>::const_iterator i;
 
-    for(i = fds.begin(); i != fds.end(); i++) {
+    for(i = rfds.begin(); i != rfds.end(); i++) {
 	hsocket = max(hsocket, *i);
-	FD_SET(*i, &afds);
+	FD_SET(*i, &rs);
+    }
+
+    for(i = wfds.begin(); i != wfds.end(); i++) {
+	hsocket = max(hsocket, *i);
+	FD_SET(*i, &ws);
+    }
+
+    for(i = efds.begin(); i != efds.end(); i++) {
+	hsocket = max(hsocket, *i);
+	FD_SET(*i, &es);
     }
 }
 
-bool icqhook::isoursocket(fd_set &afds) const {
+bool icqhook::isoursocket(fd_set &rs, fd_set &ws, fd_set &es) const {
     vector<int>::const_iterator i;
 
-    for(i = fds.begin(); i != fds.end(); i++)
-	if(FD_ISSET(*i, &afds))
+    for(i = rfds.begin(); i != rfds.end(); i++)
+	if(FD_ISSET(*i, &rs))
+	    return true;
+
+    for(i = wfds.begin(); i != wfds.end(); i++)
+	if(FD_ISSET(*i, &ws))
+	    return true;
+
+    for(i = efds.begin(); i != efds.end(); i++)
+	if(FD_ISSET(*i, &es))
 	    return true;
 
     return false;
@@ -289,24 +334,28 @@ bool icqhook::regconnect(const string aserv) {
 }
 
 bool icqhook::regattempt(unsigned int &auin, const string apassword) {
-    fd_set rfds;
+    fd_set rfds, wfds, efds;
     struct timeval tv;
     int hsockfd;
     time_t regtimeout = time(0);
 
     reguin = 0;
 
+    FD_ZERO(&rfds);
+    FD_ZERO(&wfds);
+    FD_ZERO(&efds);
+
     cli.setPassword(apassword);
     cli.RegisterUIN();
 
     while(!reguin && (time(0)-regtimeout < 60)) {
 	hsockfd = 0;
-	getsockets(rfds, hsockfd);
+	getsockets(rfds, wfds, efds, hsockfd);
 
 	tv.tv_sec = 30;
 	tv.tv_usec = 0;
 
-	if(isoursocket(rfds)) {
+	if(isoursocket(rfds, wfds, efds)) {
 	    main();
 	}
     }
@@ -381,7 +430,9 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
 	""
     };
 
-    fds.clear();
+    rfds.clear();
+    wfds.clear();
+    efds.clear();
 
     clist.setoffline(icq);
     fonline = false;
@@ -583,16 +634,29 @@ void icqhook::logger_cb(LogEvent *ev) {
 }
 
 void icqhook::socket_cb(SocketEvent *ev) {
+    vector<int>::iterator i;
+
     if(dynamic_cast<AddSocketHandleEvent*>(ev)) {
 	AddSocketHandleEvent *cev = dynamic_cast<AddSocketHandleEvent*>(ev);
-	fds.push_back(cev->getSocketHandle());
+
+	if(cev->isRead()) rfds.push_back(cev->getSocketHandle());
+	if(cev->isWrite()) wfds.push_back(cev->getSocketHandle());
+	if(cev->isException()) efds.push_back(cev->getSocketHandle());
+
     } else if(dynamic_cast<RemoveSocketHandleEvent*>(ev)) {
 	RemoveSocketHandleEvent *cev = dynamic_cast<RemoveSocketHandleEvent*>(ev);
 
-	vector<int>::iterator i = find(fds.begin(), fds.end(), cev->getSocketHandle());
-	if(i != fds.end()) {
-	    fds.erase(i);
-	}
+	i = find(rfds.begin(), rfds.end(), cev->getSocketHandle());
+	if(i != rfds.end())
+	    rfds.erase(i);
+
+	i = find(wfds.begin(), wfds.end(), cev->getSocketHandle());
+	if(i != wfds.end())
+	    wfds.erase(i);
+
+	i = find(efds.begin(), efds.end(), cev->getSocketHandle());
+	if(i != efds.end())
+	    efds.erase(i);
     }
 }
 

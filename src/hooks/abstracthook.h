@@ -26,8 +26,8 @@ class abstracthook {
 	virtual void exectimers();
 	virtual void main();
 
-	virtual void getsockets(fd_set &fds, int &hsocket) const;
-	virtual bool isoursocket(fd_set &fds) const;
+	virtual void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;
+	virtual bool isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const;
 
 	virtual bool online() const;
 	virtual bool logged() const;

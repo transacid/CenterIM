@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.60 2001/12/12 11:24:44 konst Exp $
+* $Id: centericq.cc,v 1.61 2001/12/14 16:19:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -774,7 +774,7 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 
 bool centericq::idle(int options = 0) {
     bool keypressed, online, fin;
-    fd_set fds;
+    fd_set rfds, wfds, efds;
     struct timeval tv;
     int hsockfd;
     protocolname pname;
@@ -782,8 +782,11 @@ bool centericq::idle(int options = 0) {
     for(keypressed = fin = false; !keypressed && !fin; ) {
 	timer_keypress = lastkeypress();
 
-	FD_ZERO(&fds);
-	FD_SET(hsockfd = 0, &fds);
+	FD_ZERO(&rfds);
+	FD_ZERO(&wfds);
+	FD_ZERO(&efds);
+
+	FD_SET(hsockfd = 0, &rfds);
 	online = false;
 
 	if(!regmode) {
@@ -793,7 +796,7 @@ bool centericq::idle(int options = 0) {
 		abstracthook &hook = gethook(pname);
 
 		if(hook.online()) {
-		    hook.getsockets(fds, hsockfd);
+		    hook.getsockets(rfds, wfds, efds, hsockfd);
 		    online = true;
 		}
 	    }
@@ -802,19 +805,20 @@ bool centericq::idle(int options = 0) {
 	tv.tv_sec = online ? PERIOD_SELECT : PERIOD_RECONNECT/3;
 	tv.tv_usec = 0;
 
-	select(hsockfd+1, &fds, 0, 0, &tv);
+	select(hsockfd+1, &rfds, &wfds, &efds, &tv);
 
-	if(FD_ISSET(0, &fds)) {
+	if(FD_ISSET(0, &rfds)) {
 	    keypressed = true;
 	    time(&timer_keypress);
-	} else
-	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	    abstracthook &hook = gethook(pname);
+	} else {
+	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		abstracthook &hook = gethook(pname);
 
-	    if(hook.online())
-	    if(hook.isoursocket(fds)) {
-		hook.main();
-		fin = fin || (options & HIDL_SOCKEXIT);
+		if(hook.online())
+		if(hook.isoursocket(rfds, wfds, efds)) {
+		    hook.main();
+		    fin = fin || (options & HIDL_SOCKEXIT);
+		}
 	    }
 	}
     }

@@ -3,6 +3,7 @@
 
 #include "abstracthook.h"
 #include "Client.h"
+#include "events.h"
 
 using namespace ICQ2000;
 
@@ -10,7 +11,7 @@ class icqhook: public abstracthook, public SigC::Object {
     protected:
 	Client cli;
 
-	vector<int> fds;
+	vector<int> rfds, wfds, efds;
 
 	time_t timer_reconnect, timer_ping, timer_resolve;
 	bool fonline, flogged;
@@ -43,8 +44,8 @@ class icqhook: public abstracthook, public SigC::Object {
 	void exectimers();
 	void main();
 
-	void getsockets(fd_set &fds, int &hsocket) const;
-	bool isoursocket(fd_set &fds) const;
+	void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;
+	bool isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const;
 
 	bool online() const;
 	bool logged() const;
