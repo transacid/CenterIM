@@ -37,6 +37,7 @@ bool imcontroller::icqregdialog() {
     db.setbar(new horizontalbar(clr(cp_dialog_text), clr(cp_dialog_selected),
 	_("Change"), _("Go ahead"), 0));
 
+    db.addautokeys();
     treeview &t = *db.gettree();
 
     while(!finished) {
@@ -200,6 +201,7 @@ void imcontroller::ircchannels() {
     db.addkey(KEY_IC, 0);
     db.addkey(KEY_DC, 1);
     db.addkey(' ', 2);
+    db.addautokeys();
 
     treeview &t = *db.gettree();
 

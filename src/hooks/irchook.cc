@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.5 2002/04/06 15:59:29 konst Exp $
+* $Id: irchook.cc,v 1.6 2002/04/07 08:33:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,6 +53,8 @@ irchook::~irchook() {
 
 void irchook::init() {
     manualstatus = conf.getstatus(irc);
+
+    loadconfig();
 
     firetalk_register_callback(handle, FC_CONNECTED, &connected);
     firetalk_register_callback(handle, FC_CONNECTFAILED, &connectfailed);
@@ -241,6 +243,15 @@ void irchook::requestinfo(const imcontact &c) {
 }
 
 void irchook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
+    const icqcontact::basicinfo &b = c.getbasicinfo();
+
+    ircname = b.fname;
+    if(!b.lname.empty()) {
+	if(!ircname.empty()) ircname += " ";
+	ircname += b.lname;
+    }
+
+    saveconfig();
 }
 
 void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
@@ -385,6 +396,46 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
     }
 
     channels = achannels;
+    saveconfig();
+}
+
+void irchook::saveconfig() const {
+    vector<channelInfo>::iterator ic;
+    vector<channelInfo> savech = getautochannels();
+    ofstream f(conf.getconfigfname("irc-profile").c_str());
+
+    if(f.is_open()) {
+	f << "name\t" << ircname << endl;
+
+	for(ic = savech.begin(); ic != savech.end(); ic++)
+	    f << "channel\t" << ic->name << "\t" << (ic->joined ? "1" : "0") << endl;
+
+	f.close();
+    }
+}
+
+void irchook::loadconfig() {
+    string buf, param;
+    vector<channelInfo>::iterator ic;
+
+    ifstream f(conf.getconfigfname("irc-profile").c_str());
+
+    if(f.is_open()) {
+	channels.clear();
+
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    param = getword(buf);
+
+	    if(param == "name") ircname = buf; else
+	    if(param == "channel") {
+		channels.push_back(channelInfo(getword(buf)));
+		channels.back().joined = (buf == "1");
+	    }
+	}
+
+	f.close();
+    }
 }
 
 // ----------------------------------------------------------------------------

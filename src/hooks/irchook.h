@@ -25,6 +25,7 @@ class irchook: public abstracthook {
 	bool fonline, flogged;
 	firetalk_t handle;
 	imstatus ourstatus;
+	string ircname;
 
 	vector<char *> userlist;
 	vector<channelInfo> channels;
@@ -32,6 +33,9 @@ class irchook: public abstracthook {
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
+
+	void saveconfig() const;
+	void loadconfig();
 
 	static void connected(void *conn, void *cli, ...);
 	static void disconnected(void *conn, void *cli, ...);
