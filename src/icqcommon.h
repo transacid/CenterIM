@@ -58,6 +58,8 @@ using namespace std;
 #define PERIOD_RESEND           20
 #define PERIOD_CHECKMAIL        30
 #define PERIOD_DISPUPDATE       2
+#define PERIOD_AUTOSAVE         120
+#define PERIOD_TYPING           6
 
 #define PERIOD_ATONCE           5
 #define MAX_ATONCE              10

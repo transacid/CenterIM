@@ -38,7 +38,8 @@ enum cicq_colorpairs {
     cp_clist_aim,
     cp_clist_irc,
     cp_clist_jabber,
-    cp_clist_rss
+    cp_clist_rss,
+    cp_clist_lj
 };
 
 class icqconf {
@@ -82,13 +83,13 @@ class icqconf {
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
-	    logonline, logtyping, emacs;
+	    logonline, emacs;
 
 	bool chatmode[protocolname_size], russian[protocolname_size],
 	    entersends[protocolname_size];
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
-	    argv0, smtphost, bindhost, httpproxyhost;
+	    argv0, smtphost, bindhost, httpproxyhost, defcharset;
 
 	regsound rs;
 	regcolor rc;
@@ -97,14 +98,12 @@ class icqconf {
 	colorschemer<cicq_colorpairs> schemer;
 
 	void loadmainconfig();
-
 	void usage() const;
 
 	void constructevent(const string &event, const string &proto,
 	    const string &dest, const string &number) const;
 
 	void externalstatuschange(char st, const string &proto) const;
-
 	void initmultiproto(bool p[], string buf);
 
     public:
@@ -216,11 +215,14 @@ class icqconf {
 
 	string getbindhost() const { return bindhost; }
 
-	void getlogoptions(bool &flogtimestamps, bool &flogonline, bool &flogtyping)
-	    { flogtimestamps = logtimestamps, flogonline = logonline, flogtyping = logtyping; }
+	void getlogoptions(bool &flogtimestamps, bool &flogonline)
+	    { flogtimestamps = logtimestamps, flogonline = logonline; }
 
-	void setlogoptions(bool flogtimestamps, bool flogonline, bool flogtyping)
-	    { logtimestamps = flogtimestamps, logonline = flogonline, logtyping = flogtyping; }
+	void setlogoptions(bool flogtimestamps, bool flogonline)
+	    { logtimestamps = flogtimestamps, logonline = flogonline; }
+
+	const char *getdefcharset() const { return defcharset.c_str(); }
+	void setdefcharset(const string &adefcharset) { defcharset = adefcharset; }
 };
 
 extern icqconf conf;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.193 2003/09/26 07:13:22 konst Exp $
+* $Id: icqface.cc,v 1.194 2003/09/30 11:38:41 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -540,6 +540,8 @@ void icqface::fillcontactlist() {
     bool online_added, prevoffline, grouponline, groupchange,
 	ontop, iscurrentnode, birthday;
 
+    time_t timer = time(0);
+
     grouponline = true;
     online_added = prevoffline = false;
     nnode = ngroup = prevgid = 0;
@@ -687,9 +689,16 @@ void icqface::fillcontactlist() {
 	    if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c> %s "; else
 	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c} %s ";
 
+	    char shortstatus = c->getshortstatus();
+
+	    if(c->getlasttyping()) {
+		if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
+		    else shortstatus = 'T';
+	    }
+
 	    mcontacts->addleaff(nnode,
 		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, fmt, c->hasevents() ? "#" : " ", c->getshortstatus(), dnick.c_str());
+		c, fmt, c->hasevents() ? "#" : " ", shortstatus, dnick.c_str());
 
 	}
     }
@@ -1736,8 +1745,8 @@ void icqface::log(const string &atext) {
     *
     */
 
-    bool lts, lo, lt;
-    conf.getlogoptions(lts, lo, lt);
+    bool lts, lo;
+    conf.getlogoptions(lts, lo);
 
     if(lts)
     if(text.size() > 3)
@@ -2714,14 +2723,14 @@ void icqface::menuidle(verticalmenu &m) {
 	    flog = face.lastlog;
 	    face.lastlog.clear();
 
-	    bool lts, lo, lt;
-	    conf.getlogoptions(lts, lo, lt);
-	    conf.setlogoptions(false, lo, lt);
+	    bool lts, lo;
+	    conf.getlogoptions(lts, lo);
+	    conf.setlogoptions(false, lo);
 
 	    for(il = flog.begin(); il != flog.end(); ++il)
 		face.log(*il);
 
-	    conf.setlogoptions(lts, lo, lt);
+	    conf.setlogoptions(lts, lo);
 	    face.dotermresize = false;
 	}
     }

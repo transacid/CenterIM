@@ -30,7 +30,7 @@ class centericq {
 	    reconnectInfo(): timer(0), period(30) {}
 	};
 
-	time_t timer_checkmail, timer_keypress, timer_update, timer_resend;
+	time_t timer_checkmail, timer_keypress, timer_update, timer_resend, timer_autosave;
 	bool regmode;
 
 	map<string, time_t> configstats;

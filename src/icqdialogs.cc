@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.124 2003/09/11 21:09:28 konst Exp $
+* $Id: icqdialogs.cc,v 1.125 2003/09/30 11:38:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -708,8 +708,12 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 	    switch(citem) {
 		case 10:
 		    c->setnick(inputstr(_("Nickname: "), c->getnick()));
-		    if(c->getdesc().pname == infocard) {
-			c->setdispnick(c->getnick());
+		    switch(c->getdesc().pname) {
+			case infocard:
+			case livejournal:
+			case rss:
+			    c->setdispnick(c->getnick());
+			    break;
 		    }
 		    break;
 		case 11: bi.fname = inputstr(_("First name: "), bi.fname); break;
@@ -1043,8 +1047,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool bidi = conf.getbidi();
     bool emacs = conf.getemacs();
 
-    bool logtimestamps, logonline, logtyping;
-    conf.getlogoptions(logtimestamps, logonline, logtyping);
+    bool logtimestamps, logonline;
+    conf.getlogoptions(logtimestamps, logonline);
 
     int ptpmin, ptpmax;
     conf.getpeertopeer(ptpmin, ptpmax);
@@ -1052,6 +1056,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     string httpproxy = conf.gethttpproxyhost();
     if(!httpproxy.empty()) httpproxy += ":" + i2str(conf.gethttpproxyport());
+
+    string defcharset = conf.getdefcharset();
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
@@ -1141,6 +1147,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	}
 
+	t.addleaff(i, 0, 11, _(" Default charset : %s "), defcharset.c_str());
+
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
 	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
@@ -1152,7 +1160,6 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Logging "));
 	t.addleaff(i, 0, 9, _(" Timestamps in the log window : %s "), stryesno(logtimestamps));
 	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
-	t.addleaff(i, 0, 11, _(" Typing notifications in the log window : %s "), stryesno(logtyping));
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
 
 	i = t.addnode(_(" Miscellaneous "));
@@ -1185,18 +1192,21 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 4:
 			tmp = inputstr(_("Auto Away period (0 - disable): "), i2str(aaway));
-			if(tmp.size()) aaway = atol(tmp.c_str());
+			if(!tmp.empty()) aaway = atol(tmp.c_str());
 			break;
 		    case 5:
 			tmp = inputstr(_("Auto N/A period (0 - disable): "), i2str(ana));
-			if(tmp.size()) ana = atol(tmp.c_str());
+			if(!tmp.empty()) ana = atol(tmp.c_str());
 			break;
 		    case 6: hideoffl = !hideoffl; break;
 		    case 7: askaway = !askaway; break;
 		    case 8: quote = !quote; break;
 		    case 9: logtimestamps = !logtimestamps; break;
 		    case 10: logonline = !logonline; break;
-		    case 11: logtyping = !logtyping; break;
+		    case 11:
+			tmp = inputstr(_("Default charset: "), defcharset);
+			if(!tmp.empty()) defcharset = tmp;
+			break;
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
@@ -1258,6 +1268,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmailcheck(mailcheck);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
+		conf.setdefcharset(defcharset);
 
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    conf.setchatmode(pname, chatmode[pname]);
@@ -1266,7 +1277,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		}
 
 		conf.setbidi(bidi);
-		conf.setlogoptions(logtimestamps, logonline, logtyping);
+		conf.setlogoptions(logtimestamps, logonline);
 
 		if(ptp) conf.setpeertopeer(ptpmin, ptpmax);
 		    else conf.setpeertopeer(0, 0);
@@ -1302,7 +1313,7 @@ void icqface::selectproto(bool prots[], bool irss) {
     memcpy(aprots, prots, sizeof(aprots));
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1)
-	if(!conf.getourid(pname).empty() || (irss && pname == rss))
+	if(!conf.getourid(pname).empty() || (irss && gethook(pname).getCapabs().count(hookcapab::nochat)))
 	    tempprots[i++] = pname;
 
     protmax = i;

@@ -67,7 +67,7 @@ class icqcontact {
 
 	int fupdated, groupid, fhistoffset;
 	bool finlist, congratulated, modified, fhasevents;
-	time_t lastread, lastseen;
+	time_t lastread, lastseen, lasttyping;
 
 	string sound[imevent::imeventtype_size];
 	string nick, about, dispnick, postponed, lastip;
@@ -156,6 +156,9 @@ class icqcontact {
 	void remindbirthday(bool r);
 
 	bool operator > (const icqcontact &acontact) const;
+
+	time_t getlasttyping() const { return lasttyping; }
+	void setlasttyping(time_t t) { lasttyping = t; }
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.136 2003/08/28 06:57:46 konst Exp $
+* $Id: icqhook.cc,v 1.137 2003/09/30 11:38:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -234,13 +234,11 @@ void icqhook::sendinvisible() {
 }
 
 void icqhook::exectimers() {
-    time_t tcurrent = time(0);
-
     if(logged()) {
-	if(tcurrent-timer_poll > PERIOD_ICQPOLL) {
+	if(timer_current-timer_poll > PERIOD_ICQPOLL) {
 	    cli.Poll();
 	    sendinvisible();
-	    timer_poll = tcurrent;
+	    timer_poll = timer_current;
 
 	    /*
 	    *
@@ -259,9 +257,9 @@ void icqhook::exectimers() {
 	    }
 	}
 
-	if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
+	if(timer_current-timer_resolve > PERIOD_RESOLVE) {
 	    resolve();
-	    timer_resolve = tcurrent;
+	    timer_resolve = timer_current;
 	}
     }
 }
@@ -437,7 +435,7 @@ bool icqhook::send(const imevent &ev) {
 	    cli.contact_userinfo_change_signal.connect(this, &icqhook::contact_userinfo_change_signal_cb);
 	}
 
-	sev = new SMSMessageEvent(ic, siconv(m->getmessage(), conf.getrussian(proto) ? "koi8-u" : DEFAULT_CHARSET, "utf8"), true);
+	sev = new SMSMessageEvent(ic, siconv(m->getmessage(), conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf8"), true);
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
@@ -488,11 +486,10 @@ bool icqhook::send(const imevent &ev) {
 }
 
 void icqhook::sendnewuser(const imcontact &ic) {
-    time_t tcurrent = time(0);
     static time_t lastadd = 0;
 
     if(logged() && ic.uin) {
-	if(tcurrent-lastadd > DELAY_SENDNEW) {
+	if(timer_current-lastadd > DELAY_SENDNEW) {
 	    cli.addContact(new Contact(ic.uin));
 	    cli.fetchSimpleContactInfo(cli.getContact(ic.uin));
 	    cli.fetchDetailContactInfo(cli.getContact(ic.uin));
@@ -504,7 +501,7 @@ void icqhook::sendnewuser(const imcontact &ic) {
 		    cli.uploadServerBasedContactList(cli.getContact(ic.uin));
 	    }
 
-	    lastadd = tcurrent;
+	    lastadd = timer_current;
 	} else {
 	    uinstosend.push_back(ic);
 	}
@@ -1117,7 +1114,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 
 	if(c) {
 	    em.store(imsms(c, imevent::incoming, siconv(r->getMessage(),
-		"utf8", conf.getrussian(proto) ? "koi8-u" : DEFAULT_CHARSET)));
+		"utf8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())));
 	}
 
     } else if(ev->getType() == MessageEvent::AuthReq) {

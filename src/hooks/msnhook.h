@@ -35,7 +35,6 @@ class msnhook : public abstracthook {
 	map<string, string> friendlynicks;
 	map<string, vector<pair<string, string> > > slst;
 	map<imfile, pair<invitation_ftp *, string> > transferinfo;
-	map<string, time_t> typing;
 
 	void checkfriendly(icqcontact *c, const string friendlynick,
 	    bool forcefetch = false);

@@ -31,7 +31,8 @@ struct hookcapab {
 	flexiblereg,
 	ssl,
 	channelpasswords,
-	groupchatservices
+	groupchatservices,
+	nochat
     };
 };
 
@@ -57,7 +58,6 @@ class abstracthook {
 	string rusconv(const string &tdir, const string &text);
 	string rushtmlconv(const string &tdir, const string &text, bool rus = true);
 	string ruscrlfconv(const string &tdir, const string &text);
-	Encoding guessencoding(const string &text);
 
 	string getmd5(const string &text);
 
@@ -124,5 +124,7 @@ class abstracthook {
 
 abstracthook &gethook(protocolname pname);
 struct tm *maketm(int hour, int minute, int day, int month, int year);
+
+extern time_t timer_current;
 
 #endif

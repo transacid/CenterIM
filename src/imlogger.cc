@@ -1,7 +1,7 @@
 /*
 *
 * centericq events logger class
-* $Id: imlogger.cc,v 1.9 2003/04/19 17:11:52 konst Exp $
+* $Id: imlogger.cc,v 1.10 2003/09/30 11:38:42 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,7 +94,7 @@ void imlogger::putmessage(const string &text) {
 	towrite += ": " + text;
 
 	f << towrite << endl;
-//	f.flush();
+//      f.flush();
     }
 }
 
@@ -151,7 +151,7 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 	}
 
 	bool lts, lo, lt;
-	conf.getlogoptions(lts, lo, lt);
+	conf.getlogoptions(lts, lo);
 	if(lo) {
 	    face.log((string) "+ " + buf);
 	}

@@ -14,6 +14,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	string baseurl, md5pass, username;
 	vector<int> rfds, wfds, efds;
 	bool fonline, flogged;
+	imcontact self;
 
 	enum RequestType {
 	    reqLogin,

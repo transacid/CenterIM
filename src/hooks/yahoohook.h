@@ -32,7 +32,9 @@ class yahoohook: public abstracthook {
 	vector<yfd> rfds, wfds;
 	vector<pair<Action, string> > tobedone;
 
-	map<string, Encoding> userenc;
+	vector<char *> sfiles;
+	map<const char *, imfile> srfiles;
+
 	map<imfile, string> fvalid;
 	map<string, string> awaymessages;
 
@@ -80,10 +82,14 @@ class yahoohook: public abstracthook {
 	static void remove_handler(int id, int fd);
 	static int connect_async(int id, char *host, int port, yahoo_connect_callback callback, void *data);
 
+	static void get_fd(int id, int fd, int error, void *data);
+	static void get_url(int id, int fd, int error, const char *filename,
+	    unsigned long size, void *data);
+
 	static struct tm *timestamp();
 	static imstatus yahoo2imstatus(int status);
 
-	string encanalyze(const string &nick, const string &text);
+	string decode(const string &text, bool utf);
 
 	YList *getmembers(const string &room);
 	void userstatus(const string &nick, int st, const string &message, bool away);

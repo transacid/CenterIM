@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.81 2003/07/18 00:39:59 konst Exp $
+* $Id: icqcontact.cc,v 1.82 2003/09/30 11:38:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -108,7 +108,7 @@ string icqcontact::getdirname() const {
 }
 
 void icqcontact::clear() {
-    fupdated = groupid = fhistoffset = 0;
+    fupdated = groupid = fhistoffset = lasttyping = 0;
     finlist = true;
     modified = false;
     cdesc = contactroot;
@@ -676,7 +676,7 @@ string icqcontact::getpostponed() const {
 
 void icqcontact::setgroupid(int agroupid) {
     groupid = agroupid;
-    save();
+    modified = true;
 }
 
 int icqcontact::getgroupid() const {

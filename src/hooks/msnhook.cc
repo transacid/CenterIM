@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.66 2003/07/07 18:51:01 konst Exp $
+* $Id: msnhook.cc,v 1.67 2003/09/30 11:38:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -132,23 +132,6 @@ void msnhook::disconnect() {
 }
 
 void msnhook::exectimers() {
-    bool lts, lo, lt;
-    conf.getlogoptions(lts, lo, lt);
-
-    if(lt) {
-	time_t t = time(0);
-	map<string, time_t>::iterator it = typing.begin();
-
-	while(it != typing.end()) {
-	    if(t-it->second > 6) {
-		face.log(_("+ [msn] %s: stopped typing"), it->first.c_str());
-		typing.erase(it);
-		it = typing.begin();
-	    } else {
-		++it;
-	    }
-	}
-    }
 }
 
 void msnhook::main() {
@@ -265,7 +248,7 @@ bool msnhook::send(const imevent &ev) {
     }
 
     icqcontact *c = clist.get(ev.getcontact());
-    text = siconv(text, conf.getrussian(msn) ? "koi8-u" : DEFAULT_CHARSET, "utf8");
+    text = siconv(text, conf.getrussian(msn) ? "koi8-u" : conf.getdefcharset(), "utf8");
 
     if(c)
     if(c->getstatus() != offline || !c->inlist()) {
@@ -619,7 +602,7 @@ void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, m
 
     mhook.checkinlist(ic);
 
-    string text = siconv(msg->body, "utf8", conf.getrussian(msn) ? "koi8-u" : DEFAULT_CHARSET);
+    string text = siconv(msg->body, "utf8", conf.getrussian(msn) ? "koi8-u" : conf.getdefcharset());
     em.store(immessage(ic, imevent::incoming, text));
 }
 
@@ -629,12 +612,8 @@ void ext_IM_failed(msnconn *conn) {
 
 void ext_typing_user(msnconn *conn, const char *username, const char *friendlyname) {
     log("ext_typing_user");
-    string nn = nicktodisp(username);
-
-    if(mhook.typing.find(nn) == mhook.typing.end())
-	face.log(_("+ [msn] %s: started typing"), nn.c_str());
-
-    mhook.typing[nn] = time(0);
+    icqcontact *c = clist.get(imcontact(nicktodisp(username), msn));
+    if(c) c->setlasttyping(timer_current);
 }
 
 void ext_initial_email(msnconn *conn, int unread_inbox, int unread_folders) {
@@ -721,7 +700,6 @@ void ext_closing_connection(msnconn *conn) {
 	logger.putourstatus(msn, mhook.getstatus(), mhook.ourstatus = offline);
 	clist.setoffline(msn);
 	mhook.fonline = false;
-	mhook.typing.clear();
 	mhook.slst.clear();
 	face.log(_("+ [msn] disconnected"));
 	face.update();

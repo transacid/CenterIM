@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.116 2003/09/28 21:29:48 konst Exp $
+* $Id: icqconf.cc,v 1.117 2003/09/30 11:38:40 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -49,7 +49,7 @@ icqconf::icqconf() {
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = false;
 
-    savepwd = mailcheck = fenoughdiskspace = logtyping = true;
+    savepwd = mailcheck = fenoughdiskspace = true;
 
     for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = true;
@@ -191,10 +191,11 @@ void icqconf::loadmainconfig() {
     protocolname pname;
 
     if(f.is_open()) {
-	mailcheck = askaway = logtyping = false;
+	mailcheck = askaway = false;
 	savepwd = bidi = true;
 	setsmtphost("");
 	setpeertopeer(0, 65535);
+	defcharset = "ISO-8859-1";
 
 	while(!f.eof()) {
 	    getstring(f, buf);
@@ -221,8 +222,8 @@ void icqconf::loadmainconfig() {
 	    if(param == "russian") initmultiproto(russian, buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
-	    if(param == "logtyping") logtyping = true; else
 	    if(param == "logtimestamps") logtimestamps = true; else
+	    if(param == "defcharset") setdefcharset(buf); else
 	    if(param == "logonline") logonline = true; else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
@@ -269,6 +270,7 @@ void icqconf::save() {
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
+	    f << "defcharset" << getdefcharset() << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
@@ -289,7 +291,6 @@ void icqconf::save() {
 		f << "russian" << param << endl;
 
 	    if(!getbidi()) f << "nobidi" << endl;
-	    if(logtyping) f << "logtyping" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
 	    if(logonline) f << "logonline" << endl;
 
@@ -342,6 +343,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_irc, "clist_irc    blue/transparent");
 	    schemer.push(cp_clist_jabber, "clist_jabber    red/transparent");
 	    schemer.push(cp_clist_rss, "clist_rss    white/transparent   bold");
+	    schemer.push(cp_clist_lj, "clist_lj    cyan/transparent   bold");
 	    break;
 
 	case rcblue:
@@ -366,6 +368,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_irc, "clist_irc   blue/blue   bold");
 	    schemer.push(cp_clist_jabber, "clist_jabber    red/blue");
 	    schemer.push(cp_clist_rss, "clist_rss    white/blue   bold");
+	    schemer.push(cp_clist_lj, "clist_lj    cyan/blue   bold");
 	    break;
     }
 
@@ -749,15 +752,16 @@ void icqconf::savestatus(protocolname pname, imstatus st) {
 
 int icqconf::getprotcolor(protocolname pname) const {
     switch(pname) {
-	case      icq : return getcolor(cp_clist_icq);
-	case    yahoo : return getcolor(cp_clist_yahoo);
+	case icq : return getcolor(cp_clist_icq);
+	case yahoo : return getcolor(cp_clist_yahoo);
 	case infocard : return getcolor(cp_clist_infocard);
-	case      msn : return getcolor(cp_clist_msn);
-	case      aim : return getcolor(cp_clist_aim);
-	case      irc : return getcolor(cp_clist_irc);
-	case   jabber : return getcolor(cp_clist_jabber);
-	case      rss : return getcolor(cp_clist_rss);
-	default       : return getcolor(cp_main_text);
+	case msn : return getcolor(cp_clist_msn);
+	case aim : return getcolor(cp_clist_aim);
+	case irc : return getcolor(cp_clist_irc);
+	case jabber : return getcolor(cp_clist_jabber);
+	case rss : return getcolor(cp_clist_rss);
+	case livejournal : return getcolor(cp_clist_lj);
+	default : return getcolor(cp_main_text);
     }
 }
 

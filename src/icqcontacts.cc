@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.45 2003/07/18 00:39:59 konst Exp $
+* $Id: icqcontacts.cc,v 1.46 2003/09/30 11:38:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,14 +123,14 @@ void icqcontacts::load() {
     }
 }
 
-void icqcontacts::save() {
+void icqcontacts::save(bool removenil) {
     int i;
 
     for(i = 0; i < count; i++) {
 	icqcontact *c = (icqcontact *) at(i);
 
 	if(c->inlist()) c->save(); else
-	if(!c->hasevents()) {
+	if(removenil && !c->hasevents()) {
 	    string fname = c->getdirname() + "offline";
 	    if(access(fname.c_str(), F_OK)) c->remove();
 	}

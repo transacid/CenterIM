@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.11 2003/08/20 23:12:52 konst Exp $
+* $Id: rsshook.cc,v 1.12 2003/09/30 11:38:44 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,6 +41,7 @@ rsshook::rsshook(): abstracthook(rss), timer_check(0) {
     fcapabs.insert(hookcapab::optionalpassword);
     fcapabs.insert(hookcapab::ping);
     fcapabs.insert(hookcapab::changeabout);
+    fcapabs.insert(hookcapab::nochat);
 }
 
 rsshook::~rsshook() {
@@ -239,8 +240,8 @@ const string &name, const string &title, const string &postfix) {
 
     if(d)
     if(!d->getValue().empty()) {
-	val = rushtmlconv("wk", d->getValue(), false);
-	if(!enc.empty()) val = siconv(val, enc, conf.getrussian(rss) ? "koi8-u" : DEFAULT_CHARSET);
+	val = rushtmlconv("wk", cuthtml(d->getValue(), true), false);
+	if(!enc.empty()) val = siconv(val, enc, conf.getrussian(rss) ? "koi8-u" : conf.getdefcharset());
 
 	while((pos = val.find("<br")) != -1 || (pos = val.find("<BR")) != -1) {
 	    if((n = val.substr(pos).find(">")) != -1) {
@@ -252,7 +253,6 @@ const string &name, const string &title, const string &postfix) {
 	    val.replace(pos, 3, "\n\n");
 	}
 
-	val = cuthtml(val, true);
 	base += title + val + postfix;
     }
 }

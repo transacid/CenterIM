@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.43 2003/09/28 12:56:02 konst Exp $
+* $Id: abstracthook.cc,v 1.44 2003/09/30 11:38:42 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,6 +36,8 @@
 #include "md5.h"
 
 #include <time.h>
+
+time_t timer_current = time(0);
 
 abstracthook::abstracthook(protocolname aproto)
     : proto(aproto), searchdest(0)
@@ -278,31 +280,6 @@ string abstracthook::rusconv(const string &tdir, const string &text) {
     }
 
     return r;
-}
-
-abstracthook::Encoding abstracthook::guessencoding(const string &text) {
-    if(!conf.getrussian(proto))
-	return encKOI;
-
-    string::const_iterator ic = text.begin();
-    int utf, latin, third;
-
-    utf = latin = 0;
-
-    while(ic != text.end()) {
-	unsigned char c = (unsigned) *ic;
-
-	if(c > 32 && c < 127) latin++; else
-	if(c > 127 && c < 192) utf++;
-
-	++ic;
-    }
-
-    third = (int) text.size()/3;
-
-    if(utf > third) return encUTF; else
-    if(latin > third) return encUnknown; else
-	return encKOI;
 }
 
 string abstracthook::getmd5(const string &text) {

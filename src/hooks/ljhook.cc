@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.1 2003/09/26 07:22:12 konst Exp $
+* $Id: ljhook.cc,v 1.2 2003/09/30 11:38:43 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,7 @@
 ljhook lhook;
 
 ljhook::ljhook(): abstracthook(livejournal), fonline(false) {
+    fcapabs.insert(hookcapab::nochat);
 }
 
 ljhook::~ljhook() {
@@ -63,6 +64,8 @@ void ljhook::connect() {
     ev->addParam("hpassword", md5pass);
     ev->addParam("clientversion", (string) PACKAGE + "/" + VERSION);
 
+    self = imcontact(username + "@lj", livejournal);
+
     fonline = true;
     httpcli.SendEvent(ev);
 }
@@ -70,7 +73,12 @@ void ljhook::connect() {
 void ljhook::disconnect() {
     if(fonline) {
 	fonline = false;
-	if(flogged) face.log(_("+ [lj] disconnected"));
+	if(flogged) {
+	    face.log(_("+ [lj] disconnected"));
+	    icqcontact *c = clist.get(self);
+	    if(c) c->setstatus(offline);
+	    flogged = false;
+	}
     }
 }
 
@@ -187,6 +195,12 @@ bool ljhook::send(const imevent &ev) {
 	const immessage *m = static_cast<const immessage *> (&ev);
 	HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
 
+    ev->addParam("mode", "login");
+    ev->addParam("user", username);
+    ev->addParam("hpassword", md5pass);
+    ev->addParam("clientversion", (string) PACKAGE + "/" + VERSION);
+
+/*
 	ev->addParam("mode", "postevent");
 	ev->addParam("user", username);
 	ev->addParam("hpassword", md5pass);
@@ -200,6 +214,7 @@ bool ljhook::send(const imevent &ev) {
 	ev->addParam("day", i2str(tm->tm_mday));
 	ev->addParam("hour", i2str(tm->tm_hour));
 	ev->addParam("min", i2str(tm->tm_min));
+*/
 
 	httpcli.SendEvent(ev);
 	return true;
@@ -322,6 +337,11 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    face.log(_("+ [lj] logged in"));
 	    face.update();
 	    setautostatus(manualstatus);
+
+	    icqcontact *c = clist.get(self);
+	    if(!c) c = clist.addnew(self, false);
+	    c->setstatus(available);
+
 	} else {
 	    face.log(_("+ [lj] login failed: %s"), params["errmsg"].c_str());
 	}

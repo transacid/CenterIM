@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.166 2003/08/20 23:12:51 konst Exp $
+* $Id: centericq.cc,v 1.167 2003/09/30 11:38:40 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,7 @@
 
 centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
-      regmode(false)
+      timer_autosave(0), regmode(false)
 {
 }
 
@@ -663,10 +663,9 @@ void centericq::checkmail() {
 	    }
 
 	    if(mcount && (oldcount == -1 || (mcount > oldcount))) {
-		time_t tnow;
 		const struct tm *lt;
 
-		lt = localtime(&(tnow = time(0)));
+		lt = localtime(&timer_current);
 
 		face.log(_("+ [%02d:%02d:%02d] new mail arrived, %d messages"),
 		    lt->tm_hour, lt->tm_min, lt->tm_sec, mcount);
@@ -1344,10 +1343,11 @@ void centericq::setauto(imstatus astatus) {
 #define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
 
 void centericq::exectimers() {
-    time_t timer_current = time(0);
     protocolname pname;
     int paway, pna;
     bool fonline = false;
+
+    time(&timer_current);
 
     /*
     *
@@ -1474,6 +1474,11 @@ void centericq::exectimers() {
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	checkmail();
 	timer_checkmail = timer_current;
+    }
+
+    if(timer_current-timer_autosave > PERIOD_AUTOSAVE) {
+	clist.save(false);
+	timer_autosave = timer_current;
     }
 
     if(face.updaterequested())

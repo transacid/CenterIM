@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.83 2003/09/28 21:29:48 konst Exp $
+* $Id: yahoohook.cc,v 1.84 2003/09/30 11:38:44 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -262,7 +262,6 @@ void yahoohook::disconnect() {
 void yahoohook::disconnected() {
     logger.putourstatus(proto, getstatus(), ourstatus = offline);
     clist.setoffline(proto);
-    userenc.clear();
     fonline = false;
     face.log(_("+ [yahoo] disconnected"));
     face.update();
@@ -283,18 +282,15 @@ void yahoohook::exectimers() {
     tobedone.clear();
 
     if(logged()) {
-	time_t tcurrent = time(0);
-
-	if(tcurrent-timer_refresh > PERIOD_REFRESH) {
+	if(timer_current-timer_refresh > PERIOD_REFRESH) {
 	    yahoo_refresh(cid);
-	    timer_refresh = tcurrent;
+	    timer_refresh = timer_current;
 	}
     }
 }
 
 struct tm *yahoohook::timestamp() {
-    time_t t = time(0);
-    return localtime(&t);
+    return localtime(&timer_current);
 }
 
 bool yahoohook::send(const imevent &ev) {
@@ -312,31 +308,20 @@ bool yahoohook::send(const imevent &ev) {
 	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
 
 	} else if(ev.gettype() == imevent::file) {
-/*
 	    const imfile *m = static_cast<const imfile *>(&ev);
 	    vector<imfile::record> files = m->getfiles();
 	    vector<imfile::record>::const_iterator ir;
 
 	    for(ir = files.begin(); ir != files.end(); ++ir) {
-		FILE *fp;
-		imfile::record r;
+		sfiles.push_back(strdup(ir->fname.c_str()));
+		srfiles[sfiles.back()] = *m;
 
-		r.fname = ir->fname;
-		r.size = ir->size;
-
-		imfile fr(c->getdesc(), imevent::outgoing, "",
-		    vector<imfile::record>(1, r));
-
-		if(fp = fopen(r.fname.c_str(), "r")) {
-		    yahoo_send_file(cid, ev.getcontact().nickname.c_str(),
-			m->getmessage().c_str(), justfname(r.fname).c_str(),
-			r.size, fileno(fp));
-
-		    fclose(fp);
-		}
+		yahoo_send_file(cid, ev.getcontact().nickname.c_str(),
+		    m->getmessage().c_str(), justfname(ir->fname).c_str(),
+		    ir->size, &get_fd, sfiles.back());
 	    }
+
 	    return true;
-*/
 	}
 
 	if(!ischannel(c)) {
@@ -529,13 +514,7 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
 
     if(c) {
 	logger.putonline(ic, c->getstatus(), yahoo2imstatus(st));
-
 	c->setstatus(yahoo2imstatus(st));
-
-	if(c->getstatus() == offline) {
-	    map<string, Encoding>::iterator i = userenc.find(nick);
-	    if(i != userenc.end()) userenc.erase(i);
-	}
     }
 }
 
@@ -584,18 +563,12 @@ vector<icqcontact *> yahoohook::getneedsync() {
     return r;
 }
 
-string yahoohook::encanalyze(const string &nick, const string &text) {
-    map<string, Encoding>::const_iterator i = userenc.find(nick);
+string yahoohook::decode(const string &text, bool utf) {
+    if(utf)
+	return siconv(text, "utf8",
+	    conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
 
-    if(i == userenc.end() || userenc[nick] == encUnknown)
-	userenc[nick] = guessencoding(text);
-
-    switch(yhook.userenc[nick]) {
-	case encUTF: return siconv(text, "utf8", conf.getrussian(proto) ? "koi8-u" : DEFAULT_CHARSET);
-	default: return rushtmlconv("wk", text);
-    }
-
-    return text;
+    return rushtmlconv("wk", text);
 }
 
 bool yahoohook::knowntransfer(const imfile &fr) const {
@@ -604,11 +577,13 @@ bool yahoohook::knowntransfer(const imfile &fr) const {
 
 void yahoohook::replytransfer(const imfile &fr, bool accept, const string &localpath) {
     if(accept) {
-	conf.openurl(fvalid[fr]);
-	face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsFinish, 0, 0);
+	sfiles.push_back(strdup(localpath.c_str()));
+	srfiles[sfiles.back()] = fr;
+	yahoo_get_url_handle(cid, fvalid[fr].c_str(), &get_url, sfiles.back());
 
     } else {
 	fvalid.erase(fr);
+
     }
 }
 
@@ -783,7 +758,7 @@ void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8
     string text = cuthtml(msg, true);
 
     yhook.checkinlist(ic);
-    text = yhook.encanalyze(who, text);
+    text = yhook.decode(text, utf8);
 
     if(!text.empty()) {
 	em.store(immessage(ic, imevent::incoming, text));
@@ -878,7 +853,7 @@ void yahoohook::conf_message(int id, char *who, char *room, char *msg, int utf8)
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
 
     string text = (string) who + ": " + cuthtml(msg, true);
-    text = yhook.encanalyze(who, text);
+    text = yhook.decode(text, utf8);
 
     if(c) em.store(immessage(c, imevent::incoming, text));
 }
@@ -909,20 +884,8 @@ void yahoohook::contact_added(int id, char *myid, char *who, char *msg) {
 }
 
 void yahoohook::typing_notify(int id, char *who, int stat) {
-    bool lts, lo, lt;
-    conf.getlogoptions(lts, lo, lt);
-
-    if(!lt) return;
-
     icqcontact *c = clist.get(imcontact(who, yahoo));
-    static map<string, int> st;
-
-    if(c) {
-	if(st[who] != stat) {
-	    face.log(stat ? _("+ [yahoo] %s: started typing") : _("+ [yahoo] %s: stopped typing"), who);
-	    st[who] = stat;
-	}
-    }
+    if(c) c->setlasttyping(stat ? timer_current : 0);
 }
 
 void yahoohook::game_notify(int id, char *who, int stat) {
@@ -1068,6 +1031,81 @@ void yahoohook::webcam_data_request(int id, int send) {
 
 int yahoohook::log(char *fmt, ...) {
     return 0;
+}
+
+void yahoohook::get_fd(int id, int fd, int error, void *data) {
+    const char *fname = (const char *) data;
+    char buf[1024];
+    int size = 0;
+
+    if(!error) {
+	ifstream f(fname);
+
+	if(f.is_open()) {
+	    while(!f.eof()) {
+		f.read(buf, 1024);
+		write(fd, buf, f.tellg());
+		size += f.tellg();
+	    }
+	    f.close();
+	}
+    }
+
+    map<const char *, imfile>::iterator ir = yhook.srfiles.find(fname);
+    if(ir != yhook.srfiles.end()) {
+	face.transferupdate(fname, ir->second,
+	    error ? icqface::tsError : icqface::tsFinish,
+	    size, size);
+
+	yhook.srfiles.erase(ir);
+    }
+
+    vector<char *>::iterator i = find(yhook.sfiles.begin(), yhook.sfiles.end(), fname);
+    if(i != yhook.sfiles.end()) {
+	delete *i;
+	yhook.sfiles.erase(i);
+    }
+}
+
+void yahoohook::get_url(int id, int fd, int error, const char *filename, unsigned long size, void *data) {
+    int rsize = 0;
+    const char *localdir = (const char *) data;
+
+    if(!error) {
+	vector<char *>::iterator i = find(yhook.sfiles.begin(), yhook.sfiles.end(), localdir);
+	if(i != yhook.sfiles.end()) {
+	    ofstream f(((string) localdir + "/" + filename).c_str());
+
+	    if(f.is_open()) {
+		int r;
+		char buf[1024];
+		FILE *fp = fdopen(fd, "r");
+
+		while(!feof(fp)) {
+		    r = fread(buf, 1, 1024, fp);
+		    if(r > 0) f.write(buf, r);
+		    rsize += r;
+		}
+
+		fclose(fp);
+		f.close();
+	    } else {
+		error = -1;
+	    }
+
+	    yhook.sfiles.erase(i);
+	}
+    }
+
+    map<const char *, imfile>::iterator ir = yhook.srfiles.find(localdir);
+    if(ir != yhook.srfiles.end()) {
+	face.transferupdate(filename, ir->second,
+	    error ? icqface::tsError : icqface::tsFinish,
+	    size, rsize);
+
+	yhook.srfiles.erase(ir);
+    }
+
 }
 
 #endif
