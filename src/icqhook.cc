@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.13 2001/10/03 21:23:11 konst Exp $
+* $Id: icqhook.cc,v 1.14 2001/10/03 21:30:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -161,13 +161,13 @@ void icqhook::ildisconnected(struct icq_link *link) {
 }
 
 void icqhook::disconnected(struct icq_link *link) {
-    ihook.flogged = false;
-    link->icq_Status = (long unsigned int) STATUS_OFFLINE;
-
     int i;
     icqcontact *c;
 
-    connecting = false;
+    link->icq_UDPSok = -1;
+    link->icq_Status = (long unsigned int) STATUS_OFFLINE;
+
+    ihook.flogged = ihook.connecting = false;
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
@@ -175,7 +175,6 @@ void icqhook::disconnected(struct icq_link *link) {
 	c->setseq2(0);
     }
 
-    icql.icq_UDPSok = -1;
     time(&ihook.timer_reconnect);
     face.update();
 }
@@ -647,7 +646,7 @@ void icqhook::exectimers() {
 	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
 	    connect();
 	}
-	
+
 	if(connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
 	    icq_Disconnect(&icql);
 	    disconnected(&icql);
