@@ -1618,7 +1618,7 @@ int texteditor::open() {
 		    eddelword();
 		    break;
 		default:
-		    if(k >= 32 && k < 255) {
+		    if(k >= 32 && k <= 255) {
 			if(!insertmode && !endofline()) eddel();
 			inschar(k);
 		    } else if(otherkeys) {

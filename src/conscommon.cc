@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.6 2001/08/21 09:31:36 konst Exp $
+* $Id: conscommon.cc,v 1.7 2001/09/03 20:47:38 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -142,7 +142,7 @@ void printstring(const string s) {
     for(i = 0; i < s.size(); i++)
 	ds += KT_DISP_FILTER(s[i]);
 
-    printw("%s", s.c_str());
+    printw("%s", ds.c_str());
 }
 
 int kwherex() {
