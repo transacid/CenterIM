@@ -52,6 +52,40 @@ struct ljparams {
     bool empty() {
 	return subj.empty() && mood.empty() && music.empty() && picture.empty();
     }
+
+    string serialize() const {
+	string r;
+	r += journal + "\t";
+	r += mood + "\t";
+	r += music + "\t";
+	r += picture + "\t";
+	r += (string) (noformat ? "1" : "0") + "\t";
+	r += (string) (nocomments ? "1" : "0") + "\t";
+	r += (string) (backdated ? "1" : "0") + "\t";
+	r += (string) (noemail ? "1" : "0") + "\t";
+	r += i2str((int) security);
+	return r;
+    }
+
+    void unserialize(string r) {
+	int i;
+	string param;
+
+	for(i = 0; i < 9 && !r.empty(); i++) {
+	    param = getword(r, "\t");
+	    switch(i) {
+		case 0: journal = param; break;
+		case 1: mood = param; break;
+		case 2: music = param; break;
+		case 3: picture = param; break;
+		case 4: noformat = param == "1"; break;
+		case 5: nocomments = param == "1"; break;
+		case 6: backdated = param == "1"; break;
+		case 7: noemail = param == "1"; break;
+		case 8: security = (ljsecurity) atoi(param.c_str()); break;
+	    }
+	}
+    }
 };
 
 class imcontroller {

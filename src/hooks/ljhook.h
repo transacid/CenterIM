@@ -87,7 +87,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	vector<string> getmoods() const { return moods; }
 	vector<string> getpictures() const { return pictures; }
 
-	void setpostparams(const ljparams &aljp) { ljp = aljp; }
+	void setpostparams(const ljparams &aljp);
 };
 
 extern ljhook lhook;

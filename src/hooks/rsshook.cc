@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.14 2003/10/11 14:28:12 konst Exp $
+* $Id: rsshook.cc,v 1.15 2003/10/26 10:46:54 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -321,7 +321,7 @@ void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
 	if(!top.get()) {
 	    if(!content.empty()) bi.lname = _("wrong XML");
 
-	} else if(top->getTag() != "rss" && top->getTag() != "rdf::RDF") {
+	} else if(up(top->getTag().substr(0, 3)) != "RSS" && up(top->getTag().substr(0, 3)) != "RDF") {
 	    if(!content.empty()) bi.lname = _("no <rss> tag found");
 
 	}

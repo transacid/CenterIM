@@ -1605,3 +1605,46 @@ to remind you that the old good paypal is still functional, and you can
 find a direct link to donations at the centericq homepage at
 http://thekonst.net/centericq/. Thank you for your support, guys!
 
+4.9.8
+-----
+
+MSN support was removed because of possible legal problems with the new
+protocol.
+
+LiveJournal posting parameters were added. Now it's possible to specify
+subject, mood, music and flags such as whether to allow comments or not,
+etc. It will be possible to detect music being played by the next
+version of orpheus (http://thekonst.net/orpheus) automatically ;)
+
+A set of LJ friends management features was added. Now you can add
+friends to your account directly from the "find/add" dialog. Also,
+deleting friends from the centericq contact list automatically sends
+respetives requests to the main server. Another neat feature is that
+centericq will now inform you when someone adds or removes you from
+their friend lists. Centericq does also keep track of birthdays of your
+LJ friends.
+
+Line breaks in LJ friend feed now look better.
+
+AIM buddy list is now automatically imported on every login.
+
+The Jabber module now works better with transports to other networks.
+
+On some systems codepages didn't work properly unless it was specified
+exactly like "utf-8". So I replaced all the occurences of "utf8" with
+"utf-8".
+
+Yahoo! weird disconnects were fixed by applying a patch made by Chris
+Drake.
+
+A patch by Andreas Winge to enable the "/me" command for IRC was
+applied.
+
+Applied a patch from BenV which enables qmail Maildirs checking.
+
+Some weird memory leak problems seem to be gone now.
+
+A segfault on some of wrong RSS feeds was fixed.
+
+When everything but icq was disabled on build it, the linker couldn't
+find some symbols. Fixed that.

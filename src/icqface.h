@@ -89,10 +89,9 @@ class icqface {
 
 	time_t chatlastread;
 
+	ljparams ljp;
 	imcontact passinfo;
 	const imevent *passevent;
-
-	ljparams ljp;
 
 	struct filetransferitem {
 	    string fname;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.14 2003/10/19 23:58:44 konst Exp $
+* $Id: ljhook.cc,v 1.15 2003/10/26 10:46:53 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -90,6 +90,8 @@ void ljhook::connect() {
 
     moods = vector<string>(1, "");
     pictures = vector<string>(1, "");
+
+    ljp = ljparams();
 }
 
 void ljhook::disconnect() {
@@ -666,8 +668,12 @@ void ljhook::logger_cb(LogEvent *ev) {
     }
 }
 
-#endif
-
 string ljhook::getfeedurl(const string &nick) const {
     return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/rss/";
 }
+
+void ljhook::setpostparams(const ljparams &aljp) {
+    ljp = aljp;
+}
+
+#endif
