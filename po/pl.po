@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.99.3\n"
-"POT-Creation-Date: 2002-12-02 13:23+0200\n"
+"POT-Creation-Date: 2002-12-03 16:04+0200\n"
 "PO-Revision-Date: 2001-10-01 15:27--18892017\n"
 "Last-Translator: Karol Makowski <spaceman@bsdzine.org>\n"
 "Language-Team: Polish <pl@dl.cku.pwr.wroc.pl>\n"
@@ -144,7 +144,7 @@ msgid "+ [icq] failed SMS to %s"
 msgstr "+ plik %s do  %s, %lu wys³any"
 
 #: src/hooks/icqhook.cc:1147 src/hooks/irchook.cc:560
-#: src/hooks/jabberhook.cc:308
+#: src/hooks/jabberhook.cc:310
 #, fuzzy
 msgid "Away message:"
 msgstr "Strona"
@@ -417,7 +417,7 @@ msgstr "+ trwa ³±czenie z serwerem icq"
 msgid "+ [yahoo] error: %s"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/centericq.cc:121 src/imcontroller.cc:385
+#: src/centericq.cc:121 src/imcontroller.cc:396
 #, fuzzy
 msgid "password: "
 msgstr "Has³o: "
@@ -562,7 +562,7 @@ msgid "Change"
 msgstr "Zmieñ"
 
 #: src/accountmanager.cc:68 src/icqdialogs.cc:555 src/icqdialogs.cc:905
-#: src/icqdialogs.cc:1091 src/imcontroller.cc:344
+#: src/icqdialogs.cc:1091 src/imcontroller.cc:355
 msgid "Done"
 msgstr "Zakoñczono"
 
@@ -868,7 +868,7 @@ msgid " Search profiles "
 msgstr ""
 
 #: src/icqdialogs.cc:104 src/icqdialogs.cc:819 src/icqdialogs.cc:1210
-#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:344
+#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:355
 msgid "Remove"
 msgstr "Usuñ"
 
@@ -1276,7 +1276,7 @@ msgstr " Wy¶lij plik(i) do %s, %lu"
 
 #: src/icqdialogs.cc:819 src/icqdialogs.cc:1090 src/icqface.cc:61
 #: src/icqface.cc:708 src/icqface.cc:1416 src/icqface.cc:1938
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Add"
 msgstr "Dodaj"
 
@@ -2220,7 +2220,7 @@ msgstr "Powtarzanie..."
 msgid "New UIN received, %lu"
 msgstr "Otrzymano nowy UIN, %lu"
 
-#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:276
+#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:287
 msgid "Disconnected"
 msgstr "Nast±pi³o roz³±czenie"
 
@@ -2259,107 +2259,111 @@ msgstr ""
 msgid "You must be logged to the MSN network to update the friendly nick"
 msgstr ""
 
-#: src/imcontroller.cc:266
+#: src/imcontroller.cc:267
+msgid "You must be logged to the Jabber network to update your details"
+msgstr ""
+
+#: src/imcontroller.cc:277
 #, fuzzy
 msgid " Contact list synchronization "
 msgstr "Kontakty do wys³ania"
 
-#: src/imcontroller.cc:267
+#: src/imcontroller.cc:278
 msgid "Starting the synchronization process"
 msgstr ""
 
-#: src/imcontroller.cc:271
+#: src/imcontroller.cc:282
 #, c-format
 msgid "Attempt #%d"
 msgstr ""
 
-#: src/imcontroller.cc:272
+#: src/imcontroller.cc:283
 #, c-format
 msgid ".. %d already synchronized, %d contacts to be stored"
 msgstr ""
 
-#: src/imcontroller.cc:275 src/imcontroller.cc:316
+#: src/imcontroller.cc:286 src/imcontroller.cc:327
 msgid "Finished"
 msgstr ""
 
-#: src/imcontroller.cc:277
+#: src/imcontroller.cc:288
 msgid "Too many attempts, gave up"
 msgstr ""
 
-#: src/imcontroller.cc:299
+#: src/imcontroller.cc:310
 msgid " Uploading buddies "
 msgstr ""
 
-#: src/imcontroller.cc:302
+#: src/imcontroller.cc:313
 #, fuzzy
 msgid "No contacts to be synchronized"
 msgstr "Kontakty do wys³ania"
 
-#: src/imcontroller.cc:303
+#: src/imcontroller.cc:314
 msgid ".. all of them are already stored server-side"
 msgstr ""
 
-#: src/imcontroller.cc:307
+#: src/imcontroller.cc:318
 #, c-format
 msgid "%d contacts are do be stored server-side. Add them now?"
 msgstr ""
 
-#: src/imcontroller.cc:312
+#: src/imcontroller.cc:323
 #, c-format
 msgid ".. adding %s"
 msgstr ""
 
-#: src/imcontroller.cc:318
+#: src/imcontroller.cc:329
 msgid "Cancelled"
 msgstr ""
 
-#: src/imcontroller.cc:338
+#: src/imcontroller.cc:349
 #, fuzzy
 msgid " IRC channels manager "
 msgstr "Zmieñ"
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 #, fuzzy
 msgid "Password"
 msgstr "Has³o: "
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Join/Part"
 msgstr ""
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 #, fuzzy
 msgid "Show"
 msgstr "Telefon"
 
-#: src/imcontroller.cc:358
+#: src/imcontroller.cc:369
 #, fuzzy
 msgid " Channels "
 msgstr "Zmieñ"
 
-#: src/imcontroller.cc:361
+#: src/imcontroller.cc:372
 #, fuzzy
 msgid "joined"
 msgstr "Ignoruj"
 
-#: src/imcontroller.cc:361
+#: src/imcontroller.cc:372
 msgid "not joined"
 msgstr ""
 
-#: src/imcontroller.cc:362
+#: src/imcontroller.cc:373
 #, fuzzy
 msgid "shown"
 msgstr "Telefon"
 
-#: src/imcontroller.cc:362
+#: src/imcontroller.cc:373
 msgid "hidden"
 msgstr ""
 
-#: src/imcontroller.cc:372
+#: src/imcontroller.cc:383
 msgid "channel name to add: "
 msgstr ""
 
-#: src/imcontroller.cc:421
+#: src/imcontroller.cc:432
 #, fuzzy
 msgid "registration is not supported"
 msgstr " Przebieg rejstracji "
@@ -2520,66 +2524,66 @@ msgstr ""
 msgid "changed our %s status to %s from %s"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:55
+#: src/hooks/jabberhook.cc:57
 #, fuzzy
 msgid "+ [jab] connecting to the server"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/jabberhook.cc:87
+#: src/hooks/jabberhook.cc:89
 #, fuzzy
 msgid "+ [jab] incorrect jabber id"
 msgstr "+ roz³±czony"
 
-#: src/hooks/jabberhook.cc:91
+#: src/hooks/jabberhook.cc:93
 #, fuzzy
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ brak po³±czenia z serwerem icq"
 
-#: src/hooks/jabberhook.cc:222
+#: src/hooks/jabberhook.cc:224
 #, fuzzy, c-format
 msgid "+ [jab] adding %s to the contacts"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/jabberhook.cc:245
+#: src/hooks/jabberhook.cc:247
 #, fuzzy, c-format
 msgid "+ [jab] removing %s from the contacts"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/jabberhook.cc:310
+#: src/hooks/jabberhook.cc:312
 #, fuzzy, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/jabberhook.cc:342
+#: src/hooks/jabberhook.cc:344
 #, fuzzy
 msgid "Unable to connect"
 msgstr "+ brak po³±czenia z serwerem icq"
 
-#: src/hooks/jabberhook.cc:614
+#: src/hooks/jabberhook.cc:616
 #, c-format
 msgid "+ [jab] search finished, %d found"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:638
+#: src/hooks/jabberhook.cc:640
 #, fuzzy
 msgid "+ [jab] logged in"
 msgstr "+ zarejstrowany"
 
-#: src/hooks/jabberhook.cc:658
+#: src/hooks/jabberhook.cc:660
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ roz³±czony"
 
-#: src/hooks/jabberhook.cc:827
+#: src/hooks/jabberhook.cc:829
 #, fuzzy, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/jabberhook.cc:877
+#: src/hooks/jabberhook.cc:879
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:887
+#: src/hooks/jabberhook.cc:889
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"

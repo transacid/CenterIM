@@ -3,7 +3,7 @@
 * The centericq FAQ (frequently asked questions)
 * by Konstantin Klyagin <konst@konst.org.ua>
 *
-* $Id: FAQ,v 1.11 2002/11/25 16:29:35 konst Exp $
+* $Id: FAQ,v 1.12 2002/12/03 15:18:06 konst Exp $
 *
 */
 
@@ -143,3 +143,27 @@ Q: From: staale@lorentzen.org
 A: It means exactly "turboing". You're loggin in and out too fast, so
    that the server turns on DoS attack protection. All you can do is
    to try again in half an hour.
+
+/* *** */
+
+Q: WTF?! My centericq binary is more than 20Mb. SOS! HELP! Virus? Aliens?
+
+A: There are three steps you need to take.
+
+    1. Look at other applications written in C++ compiled in your system.
+    2. Read the install(1) and strip(1) man-pages.
+    3. Type "strip centericq; ls -l centericq"
+
+/* *** */
+
+Q: I need a program for sending messages on IM networks from the command
+   line. Is it possible to write a program that would use the centericq
+   libraries, or maybe there is a special batch mode in the program?
+
+A: Batch mode like you described is not possible to be implemented, because
+   due to frequent logons followed by disconnections the servers will turn
+   on their DoS attacks protection. So there is the only decent way which
+   consists in sending messages in batch mode through an already running
+   centericq instance. If you want to run it like a "daemon", use
+   screen(1). More details on the batch mode usage can be found in the
+   README, chapter 9.2.

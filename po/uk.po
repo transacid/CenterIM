@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.2\n"
-"POT-Creation-Date: 2002-12-02 13:23+0200\n"
+"POT-Creation-Date: 2002-12-03 16:04+0200\n"
 "PO-Revision-Date: 2002-06-12 12:15+0300\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -138,7 +138,7 @@ msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] зб╕й в╕дсилання SMS до %s, %s"
 
 #: src/hooks/icqhook.cc:1147 src/hooks/irchook.cc:560
-#: src/hooks/jabberhook.cc:308
+#: src/hooks/jabberhook.cc:310
 #, fuzzy
 msgid "Away message:"
 msgstr "* Автопов╕домлення:"
@@ -404,7 +404,7 @@ msgstr "+ [yahoo] пов╕домлення не принято"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] пов╕домлення не принято"
 
-#: src/centericq.cc:121 src/imcontroller.cc:385
+#: src/centericq.cc:121 src/imcontroller.cc:396
 msgid "password: "
 msgstr "пароль: "
 
@@ -542,7 +542,7 @@ msgid "Change"
 msgstr "Зм╕нити"
 
 #: src/accountmanager.cc:68 src/icqdialogs.cc:555 src/icqdialogs.cc:905
-#: src/icqdialogs.cc:1091 src/imcontroller.cc:344
+#: src/icqdialogs.cc:1091 src/imcontroller.cc:355
 msgid "Done"
 msgstr "Гаразд"
 
@@ -841,7 +841,7 @@ msgid " Search profiles "
 msgstr ""
 
 #: src/icqdialogs.cc:104 src/icqdialogs.cc:819 src/icqdialogs.cc:1210
-#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:344
+#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:355
 msgid "Remove"
 msgstr "Видалити"
 
@@ -1239,7 +1239,7 @@ msgstr " В╕д╕слати файли для %s, %lu "
 
 #: src/icqdialogs.cc:819 src/icqdialogs.cc:1090 src/icqface.cc:61
 #: src/icqface.cc:708 src/icqface.cc:1416 src/icqface.cc:1938
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Add"
 msgstr "Додати"
 
@@ -2151,7 +2151,7 @@ msgstr "Нова спроба..."
 msgid "New UIN received, %lu"
 msgstr "Отримано новий номер UIN, %lu"
 
-#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:276
+#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:287
 msgid "Disconnected"
 msgstr "В╕д'╓днано"
 
@@ -2191,107 +2191,112 @@ msgstr ""
 msgid "You must be logged to the MSN network to update the friendly nick"
 msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
 
-#: src/imcontroller.cc:266
+#: src/imcontroller.cc:267
+#, fuzzy
+msgid "You must be logged to the Jabber network to update your details"
+msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
+
+#: src/imcontroller.cc:277
 #, fuzzy
 msgid " Contact list synchronization "
 msgstr " Контакт-л╕ст "
 
-#: src/imcontroller.cc:267
+#: src/imcontroller.cc:278
 msgid "Starting the synchronization process"
 msgstr ""
 
-#: src/imcontroller.cc:271
+#: src/imcontroller.cc:282
 #, c-format
 msgid "Attempt #%d"
 msgstr ""
 
-#: src/imcontroller.cc:272
+#: src/imcontroller.cc:283
 #, c-format
 msgid ".. %d already synchronized, %d contacts to be stored"
 msgstr ""
 
-#: src/imcontroller.cc:275 src/imcontroller.cc:316
+#: src/imcontroller.cc:286 src/imcontroller.cc:327
 msgid "Finished"
 msgstr ""
 
-#: src/imcontroller.cc:277
+#: src/imcontroller.cc:288
 msgid "Too many attempts, gave up"
 msgstr ""
 
-#: src/imcontroller.cc:299
+#: src/imcontroller.cc:310
 msgid " Uploading buddies "
 msgstr ""
 
-#: src/imcontroller.cc:302
+#: src/imcontroller.cc:313
 #, fuzzy
 msgid "No contacts to be synchronized"
 msgstr " Контакт-л╕ст "
 
-#: src/imcontroller.cc:303
+#: src/imcontroller.cc:314
 msgid ".. all of them are already stored server-side"
 msgstr ""
 
-#: src/imcontroller.cc:307
+#: src/imcontroller.cc:318
 #, c-format
 msgid "%d contacts are do be stored server-side. Add them now?"
 msgstr ""
 
-#: src/imcontroller.cc:312
+#: src/imcontroller.cc:323
 #, c-format
 msgid ".. adding %s"
 msgstr ""
 
-#: src/imcontroller.cc:318
+#: src/imcontroller.cc:329
 msgid "Cancelled"
 msgstr ""
 
-#: src/imcontroller.cc:338
+#: src/imcontroller.cc:349
 #, fuzzy
 msgid " IRC channels manager "
 msgstr " Розпорядник канал╕в "
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 #, fuzzy
 msgid "Password"
 msgstr " Пароль "
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 #, fuzzy
 msgid "Join/Part"
 msgstr "(При╓днатися/Залишити)"
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 #, fuzzy
 msgid "Show"
 msgstr "Телефон"
 
-#: src/imcontroller.cc:358
+#: src/imcontroller.cc:369
 msgid " Channels "
 msgstr " Канали "
 
-#: src/imcontroller.cc:361
+#: src/imcontroller.cc:372
 #, fuzzy
 msgid "joined"
 msgstr "╕гнору╓ться"
 
-#: src/imcontroller.cc:361
+#: src/imcontroller.cc:372
 msgid "not joined"
 msgstr ""
 
-#: src/imcontroller.cc:362
+#: src/imcontroller.cc:373
 #, fuzzy
 msgid "shown"
 msgstr "Телефон"
 
-#: src/imcontroller.cc:362
+#: src/imcontroller.cc:373
 msgid "hidden"
 msgstr ""
 
-#: src/imcontroller.cc:372
+#: src/imcontroller.cc:383
 msgid "channel name to add: "
 msgstr "додати канал: "
 
-#: src/imcontroller.cc:421
+#: src/imcontroller.cc:432
 msgid "registration is not supported"
 msgstr "ре╓страц╕я не п╕дтриму╓ться"
 
@@ -2446,66 +2451,66 @@ msgstr "%s: в╕д'╓днався"
 msgid "changed our %s status to %s from %s"
 msgstr "зм╕нено наш %s статус на %s з %s"
 
-#: src/hooks/jabberhook.cc:55
+#: src/hooks/jabberhook.cc:57
 #, fuzzy
 msgid "+ [jab] connecting to the server"
 msgstr "+ [aim] п╕д'╓днання до серверу"
 
-#: src/hooks/jabberhook.cc:87
+#: src/hooks/jabberhook.cc:89
 #, fuzzy
 msgid "+ [jab] incorrect jabber id"
 msgstr "+ [icq] в╕д'╓днано"
 
-#: src/hooks/jabberhook.cc:91
+#: src/hooks/jabberhook.cc:93
 #, fuzzy
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ [aim] не можу законектитися"
 
-#: src/hooks/jabberhook.cc:222
+#: src/hooks/jabberhook.cc:224
 #, fuzzy, c-format
 msgid "+ [jab] adding %s to the contacts"
 msgstr "+ [aim] дода╓мо %s в контакти"
 
-#: src/hooks/jabberhook.cc:245
+#: src/hooks/jabberhook.cc:247
 #, fuzzy, c-format
 msgid "+ [jab] removing %s from the contacts"
 msgstr "+ [aim] видаля╓мо %s з контакт╕в"
 
-#: src/hooks/jabberhook.cc:310
+#: src/hooks/jabberhook.cc:312
 #, fuzzy, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
 
-#: src/hooks/jabberhook.cc:342
+#: src/hooks/jabberhook.cc:344
 #, fuzzy
 msgid "Unable to connect"
 msgstr "не можу п╕д'╓днатися до сервера"
 
-#: src/hooks/jabberhook.cc:614
+#: src/hooks/jabberhook.cc:616
 #, fuzzy, c-format
 msgid "+ [jab] search finished, %d found"
 msgstr "+ [icq] пошук завершено, знайдено %d користувач╕в"
 
-#: src/hooks/jabberhook.cc:638
+#: src/hooks/jabberhook.cc:640
 #, fuzzy
 msgid "+ [jab] logged in"
 msgstr "+ [aim] законектилися"
 
-#: src/hooks/jabberhook.cc:658
+#: src/hooks/jabberhook.cc:660
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ [icq] в╕д'╓днано"
 
-#: src/hooks/jabberhook.cc:827
+#: src/hooks/jabberhook.cc:829
 #, fuzzy, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ [yahoo] пов╕домлення не принято"
 
-#: src/hooks/jabberhook.cc:877
+#: src/hooks/jabberhook.cc:879
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:887
+#: src/hooks/jabberhook.cc:889
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"

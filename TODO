@@ -4,6 +4,10 @@
 *
 */
 
+freebsd build problem
+
+the question about command line sending send-and-finish -> to faq
+
 /*
 *
 * BUGS
@@ -12,29 +16,11 @@
 
 crap in msn messages
 
-
-I've been having a problem compiling releases on Solaris 8 using gcc.
-The following files all try to include "_G_config.h" which, being a
-GNU libc specific header file, does not exist on my system. I have no
-problems building if I just comment out that line, which makes me
-wonder, is this include really necessary on any platform, even the ones
-with GNU libc?
-
-The problem files are:
-
-kkstrtext/conf.h
-kksystr/include/conf.h
-kkconsui/include/conf.h
-
 /*
 *
 * TODO
 *
 */
-
-check the freebsd build
-
-the question about command line sending send-and-finish -> to faq
 
 jabber
     group chat
@@ -56,4 +42,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.360 2002/12/03 14:01:35 konst Exp $
+$Id: TODO,v 1.361 2002/12/03 15:18:06 konst Exp $

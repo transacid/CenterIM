@@ -48,10 +48,10 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
     fi
 fi
 
-###	FriBiDi check end
+###     FriBiDi check end
 
 ###
-###	OpenSSL library
+###     OpenSSL library
 ###
 
 AC_ARG_WITH(openssl,
@@ -81,7 +81,7 @@ else
     AC_MSG_RESULT([not found or disabled])
 fi
 
-###	OpenSSL end
+###     OpenSSL end
 
 AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator exception utility],,
   AC_MSG_ERROR([You need to have the libstdc++ headers installed]))
@@ -109,7 +109,6 @@ AC_LANG_RESTORE
 
 case "$host_os" in
 	darwin*)
-	    LIBS=`for i in $LIBS; do echo $i | grep -v pthread; done`
 	    LIBS="$LIBS -L/sw/lib -flat_namespace"
 	    CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
 	;;

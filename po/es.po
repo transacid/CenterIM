@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.7\n"
-"POT-Creation-Date: 2002-12-02 13:23+0200\n"
+"POT-Creation-Date: 2002-12-03 16:04+0200\n"
 "PO-Revision-Date: 2002-11-05 03:52-0500\n"
 "Last-Translator: Leonardo Boshell <p@kapcoweb.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -133,7 +133,7 @@ msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] falló SMS a %s"
 
 #: src/hooks/icqhook.cc:1147 src/hooks/irchook.cc:560
-#: src/hooks/jabberhook.cc:308
+#: src/hooks/jabberhook.cc:310
 msgid "Away message:"
 msgstr "Mensaje de ausencia:"
 
@@ -395,7 +395,7 @@ msgstr "+ [yahoo] sistema: %s"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] error: %s"
 
-#: src/centericq.cc:121 src/imcontroller.cc:385
+#: src/centericq.cc:121 src/imcontroller.cc:396
 msgid "password: "
 msgstr "contraseña: "
 
@@ -535,7 +535,7 @@ msgid "Change"
 msgstr "Cambiar"
 
 #: src/accountmanager.cc:68 src/icqdialogs.cc:555 src/icqdialogs.cc:905
-#: src/icqdialogs.cc:1091 src/imcontroller.cc:344
+#: src/icqdialogs.cc:1091 src/imcontroller.cc:355
 msgid "Done"
 msgstr "Hecho"
 
@@ -832,7 +832,7 @@ msgid " Search profiles "
 msgstr " Buscar perfiles "
 
 #: src/icqdialogs.cc:104 src/icqdialogs.cc:819 src/icqdialogs.cc:1210
-#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:344
+#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:355
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -1227,7 +1227,7 @@ msgstr " Enviar archivo(s) a %s, %lu "
 
 #: src/icqdialogs.cc:819 src/icqdialogs.cc:1090 src/icqface.cc:61
 #: src/icqface.cc:708 src/icqface.cc:1416 src/icqface.cc:1938
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Add"
 msgstr "Agregar"
 
@@ -2122,7 +2122,7 @@ msgstr "Reintentando.."
 msgid "New UIN received, %lu"
 msgstr "Nuevo UIN recibido, %lu"
 
-#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:276
+#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:287
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -2161,100 +2161,105 @@ msgstr "Su alias amistoso ha sido cambiado a %s"
 msgid "You must be logged to the MSN network to update the friendly nick"
 msgstr "Debe encontrarse conectado a la red MSN para actualizar el alias"
 
-#: src/imcontroller.cc:266
+#: src/imcontroller.cc:267
+#, fuzzy
+msgid "You must be logged to the Jabber network to update your details"
+msgstr "Debe encontrarse conectado a la red ICQ para actualizar los detalles"
+
+#: src/imcontroller.cc:277
 msgid " Contact list synchronization "
 msgstr " Sincronización de lista de contactos "
 
-#: src/imcontroller.cc:267
+#: src/imcontroller.cc:278
 msgid "Starting the synchronization process"
 msgstr "Iniciando el proceso de sincronización"
 
-#: src/imcontroller.cc:271
+#: src/imcontroller.cc:282
 #, c-format
 msgid "Attempt #%d"
 msgstr "Intento #%d"
 
-#: src/imcontroller.cc:272
+#: src/imcontroller.cc:283
 #, c-format
 msgid ".. %d already synchronized, %d contacts to be stored"
 msgstr ".. %d ya sincronizados, %d contactos a almacenarse"
 
-#: src/imcontroller.cc:275 src/imcontroller.cc:316
+#: src/imcontroller.cc:286 src/imcontroller.cc:327
 msgid "Finished"
 msgstr "Finalizado"
 
-#: src/imcontroller.cc:277
+#: src/imcontroller.cc:288
 msgid "Too many attempts, gave up"
 msgstr "Demasiados intentos, desistió"
 
-#: src/imcontroller.cc:299
+#: src/imcontroller.cc:310
 msgid " Uploading buddies "
 msgstr " Cargando contactos "
 
-#: src/imcontroller.cc:302
+#: src/imcontroller.cc:313
 #, fuzzy
 msgid "No contacts to be synchronized"
 msgstr "No hay contactos a sincronizar"
 
-#: src/imcontroller.cc:303
+#: src/imcontroller.cc:314
 msgid ".. all of them are already stored server-side"
 msgstr ".. todos ellos ya están almacenados en el servidor"
 
-#: src/imcontroller.cc:307
+#: src/imcontroller.cc:318
 #, c-format
 msgid "%d contacts are do be stored server-side. Add them now?"
 msgstr "%d contactos se almacenarán en el servidor. ¿Agregarlos ahora?"
 
-#: src/imcontroller.cc:312
+#: src/imcontroller.cc:323
 #, c-format
 msgid ".. adding %s"
 msgstr ".. agregando %s"
 
-#: src/imcontroller.cc:318
+#: src/imcontroller.cc:329
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: src/imcontroller.cc:338
+#: src/imcontroller.cc:349
 msgid " IRC channels manager "
 msgstr " Administrador de canales IRC "
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Password"
 msgstr "Contraseña"
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Join/Part"
 msgstr "Unirse/Abandonar"
 
-#: src/imcontroller.cc:344
+#: src/imcontroller.cc:355
 msgid "Show"
 msgstr "Mostrar"
 
-#: src/imcontroller.cc:358
+#: src/imcontroller.cc:369
 msgid " Channels "
 msgstr " Canales "
 
-#: src/imcontroller.cc:361
+#: src/imcontroller.cc:372
 msgid "joined"
 msgstr "vinculado"
 
-#: src/imcontroller.cc:361
+#: src/imcontroller.cc:372
 msgid "not joined"
 msgstr "no vinculado"
 
-#: src/imcontroller.cc:362
+#: src/imcontroller.cc:373
 msgid "shown"
 msgstr "mostrado"
 
-#: src/imcontroller.cc:362
+#: src/imcontroller.cc:373
 msgid "hidden"
 msgstr "oculto"
 
-#: src/imcontroller.cc:372
+#: src/imcontroller.cc:383
 msgid "channel name to add: "
 msgstr "nombre del canal a agregar: "
 
-#: src/imcontroller.cc:421
+#: src/imcontroller.cc:432
 msgid "registration is not supported"
 msgstr "el registro no está implementado"
 
@@ -2403,66 +2408,66 @@ msgstr "%s: se ha desconectado"
 msgid "changed our %s status to %s from %s"
 msgstr "modificado nuestro status %s a %s desde %s"
 
-#: src/hooks/jabberhook.cc:55
+#: src/hooks/jabberhook.cc:57
 #, fuzzy
 msgid "+ [jab] connecting to the server"
 msgstr "+ [aim] conectándose al servidor"
 
-#: src/hooks/jabberhook.cc:87
+#: src/hooks/jabberhook.cc:89
 #, fuzzy
 msgid "+ [jab] incorrect jabber id"
 msgstr "+ [yahoo] desconectado"
 
-#: src/hooks/jabberhook.cc:91
+#: src/hooks/jabberhook.cc:93
 #, fuzzy
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ [aim] no fue posible conectarse al servidor"
 
-#: src/hooks/jabberhook.cc:222
+#: src/hooks/jabberhook.cc:224
 #, fuzzy, c-format
 msgid "+ [jab] adding %s to the contacts"
 msgstr "+ [aim] agregando %s a los contactos"
 
-#: src/hooks/jabberhook.cc:245
+#: src/hooks/jabberhook.cc:247
 #, fuzzy, c-format
 msgid "+ [jab] removing %s from the contacts"
 msgstr "+ [aim] removiendo %s de los contactos"
 
-#: src/hooks/jabberhook.cc:310
+#: src/hooks/jabberhook.cc:312
 #, fuzzy, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ [yahoo] no se puede consultar el mensaje de ausencia de %s, %s"
 
-#: src/hooks/jabberhook.cc:342
+#: src/hooks/jabberhook.cc:344
 #, fuzzy
 msgid "Unable to connect"
 msgstr "no fue posible conectarse al servidor del servicio"
 
-#: src/hooks/jabberhook.cc:614
+#: src/hooks/jabberhook.cc:616
 #, fuzzy, c-format
 msgid "+ [jab] search finished, %d found"
 msgstr "+ [icq] búsqueda en las páginas blancas finalizada, %d resultados"
 
-#: src/hooks/jabberhook.cc:638
+#: src/hooks/jabberhook.cc:640
 #, fuzzy
 msgid "+ [jab] logged in"
 msgstr "+ [aim] conectado"
 
-#: src/hooks/jabberhook.cc:658
+#: src/hooks/jabberhook.cc:660
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ [yahoo] desconectado"
 
-#: src/hooks/jabberhook.cc:827
+#: src/hooks/jabberhook.cc:829
 #, fuzzy, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ [yahoo] error: %s"
 
-#: src/hooks/jabberhook.cc:877
+#: src/hooks/jabberhook.cc:879
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:887
+#: src/hooks/jabberhook.cc:889
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
