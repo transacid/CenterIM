@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.74 2002/04/07 18:24:47 konst Exp $
+* $Id: icqhook.cc,v 1.75 2002/04/09 09:09:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -119,13 +119,17 @@ void icqhook::connect() {
     if(!conf.getsmtphost().empty()) cli.setSMTPServerHost(conf.getsmtphost());
     if(conf.getsmtpport()) cli.setSMTPServerPort(conf.getsmtpport());
 
+    face.log(_("+ [icq] connecting to the server"));
+
+    cli.self_contact_userinfo_change_signal.clear();
+
     cli.setUIN(acc.uin);
     cli.setPassword(acc.password);
 
-    face.log(_("+ [icq] connecting to the server"));
-
     sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
+
+    cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
 
     fonline = true;
     flogged = false;
