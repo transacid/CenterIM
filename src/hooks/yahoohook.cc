@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.101 2004/01/16 21:43:49 konst Exp $
+* $Id: yahoohook.cc,v 1.102 2004/01/27 00:14:35 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -124,7 +124,7 @@ void yahoohook::init() {
     c.ext_yahoo_webcam_viewer = &webcam_viewer;
     c.ext_yahoo_webcam_data_request = &webcam_data_request;
     c.ext_yahoo_got_search_result = &got_search_result;
-    c.ext_yahoo_log = &log;
+    c.ext_yahoo_log = &ylog;
 
     yahoo_register_callbacks(&c);
 }
@@ -145,7 +145,7 @@ void yahoohook::connect() {
     strcpy(local_host, "");
     conn_type = 1;
 
-    face.log(_("+ [yahoo] connecting to the server"));
+    log(logConnecting);
 
     if(cid < 0) {
 	yahoo_logoff(cid);
@@ -290,7 +290,6 @@ struct tm *yahoohook::timestamp() {
 bool yahoohook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
     string text;
-    string::iterator is;
 
     if(c) {
 	if(ev.gettype() == imevent::message) {
@@ -714,7 +713,7 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	case YAHOO_LOGIN_OK:
 	    yhook.flogged = true;
 	    logger.putourstatus(yahoo, offline, yhook.ourstatus = yhook.manualstatus);
-	    face.log(_("+ [yahoo] logged in"));
+	    yhook.log(logLogged);
 	    time(&yhook.timer_refresh);
 	    yhook.setautostatus(yhook.manualstatus);
 	    break;
@@ -1129,7 +1128,7 @@ void yahoohook::webcam_viewer(int id, char *who, int connect) {
 void yahoohook::webcam_data_request(int id, int send) {
 }
 
-int yahoohook::log(char *fmt, ...) {
+int yahoohook::ylog(char *fmt, ...) {
     return 0;
 }
 

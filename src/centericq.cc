@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.179 2004/01/15 01:04:38 konst Exp $
+* $Id: centericq.cc,v 1.180 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -468,11 +468,6 @@ void centericq::joindialog() {
 	if(h.getCapabs().count(hookcapab::groupchatservices)) {
 	    if(ic.nickname.find("@") == -1)
 		ic.nickname += "@" + s.service;
-/*
-	    c->setnick(ic.nickname);
-	    c->setdispnick(c->getnick());
-	    c->setdesc(imcontact(c->getnick(), ic.pname));
-*/
 	}
 
 	if(h.getCapabs().count(hookcapab::conferencesaretemporary)) {

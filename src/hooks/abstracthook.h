@@ -31,7 +31,7 @@ struct hookcapab {
 	ssl,
 	channelpasswords,
 	groupchatservices,
-	nochat,
+	nochat
     };
 };
 
@@ -57,6 +57,17 @@ class abstracthook {
 	    encUTF, encKOI, encUnknown
 	};
 
+	enum logevent {
+	    logConnecting,
+	    logLogged,
+	    logSearchFinished,
+	    logPasswordChanged,
+	    logDisconnected,
+	    logContactAdd,
+	    logContactRemove,
+	    logConfMembers
+	};
+
 	protocolname proto;
 	imstatus manualstatus;
 	verticalmenu *searchdest;
@@ -70,6 +81,7 @@ class abstracthook {
 	string getmd5(const string &text);
 
 	void requestfromfound(const imcontact &ic);
+	void log(logevent ev, ...);
 
     public:
 	abstracthook(protocolname aproto);
@@ -130,6 +142,9 @@ class abstracthook {
 
 	virtual void updatecontact(icqcontact *c);
 	virtual void renamegroup(const string &oldname, const string &newname);
+
+	virtual bool regconnect(const string &aserv);
+	virtual bool regattempt(unsigned int &auin, const string &apassword);
 };
 
 abstracthook &gethook(protocolname pname);

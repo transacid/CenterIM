@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.20 2003/12/11 22:41:33 konst Exp $
+* $Id: ljhook.cc,v 1.21 2004/01/27 00:14:35 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,7 +63,7 @@ void ljhook::connect() {
     baseurl = acc.server + ":" + i2str(acc.port) + "/interface/flat";
     md5pass = getmd5(acc.password);
 
-    face.log(_("+ [lj] connecting to the server"));
+    log(logConnecting);
 
     httpcli.setProxyServerHost(conf.gethttpproxyhost());
     httpcli.setProxyServerPort(conf.gethttpproxyport());
@@ -220,11 +220,20 @@ bool ljhook::enabled() const {
     return true;
 }
 
-bool ljhook::send(const imevent &sev) {
+bool ljhook::send(const imevent &asev) {
     if(!logged()) return false;
 
-    if(sev.gettype() == imevent::xml) {
-	const imxmlevent *m = static_cast<const imxmlevent *> (&sev);
+    bool ret = false;
+    imevent *sev;
+
+    if(asev.gettype() == imevent::xml) sev = asev.getevent(); else {
+	sev = new imxmlevent(asev.getcontact(), asev.getdirection(), asev.gettext());
+	static_cast<imxmlevent *>(sev)->setfield("_eventkind", "posting");
+
+    }
+
+    if(sev->gettype() == imevent::xml) {
+	const imxmlevent *m = static_cast<const imxmlevent *> (sev);
 	HTTPRequestEvent *ev = 0;
 
 	if(m->getfield("_eventkind") == "posting") {
@@ -265,7 +274,7 @@ bool ljhook::send(const imevent &sev) {
 	} else if(m->getfield("_eventkind") == "comment") {
 	    icqconf::imaccount acc = conf.getourid(proto);
 
-	    string journal = clist.get(sev.getcontact())->getnick();
+	    string journal = clist.get(sev->getcontact())->getnick();
 	    journal.erase(journal.find("@"));
 
 	    ev = new HTTPRequestEvent(acc.server + ":" + i2str(acc.port) + "/talkpost_do.bml", HTTPRequestEvent::POST);
@@ -278,7 +287,7 @@ bool ljhook::send(const imevent &sev) {
 	    ev->addParam("password", acc.password);
 	    ev->addParam("do_login", "0");
 	    ev->addParam("subject", "");
-	    ev->addParam("body", KOI2UTF(sev.gettext()));
+	    ev->addParam("body", KOI2UTF(sev->gettext()));
 	    ev->addParam("subjecticon", "none");
 	    ev->addParam("prop_opt_preformatted", "1");
 	    ev->addParam("submitpost", "1");
@@ -289,11 +298,12 @@ bool ljhook::send(const imevent &sev) {
 
 	if(ev) {
 	    httpcli.SendEvent(ev);
-	    return true;
+	    ret = true;
 	}
     }
 
-    return false;
+    delete sev;
+    return ret;
 }
 
 void ljhook::sendnewuser(const imcontact &ic) {
@@ -514,7 +524,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
 	if(params["success"] == "OK") {
 	    flogged = true;
-	    face.log(_("+ [lj] logged in"));
+	    log(logLogged);
 	    face.update();
 	    setautostatus(manualstatus);
 

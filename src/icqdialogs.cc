@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.134 2003/12/11 22:41:31 konst Exp $
+* $Id: icqdialogs.cc,v 1.135 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -282,44 +282,60 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 	if(subj != fschannel)
 	switch(s.pname) {
 	    case icq:
+	    case gadu:
 		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, " %s ", strint(s.uin));
 
 		if(!s.uin && !s.randomgroup && s.kwords.empty()) {
 		    i = tree.addnode(_(" Details "));
 		    tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
-		    tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
+
+		    if(s.pname == icq) {
+			tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
+		    }
+
 		    tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
 		    tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
 
-		    tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange(s.agerange));
+		    if(s.pname == icq) {
+			tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange(s.agerange));
+		    }
+
 		    tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
-		    tree.addleaff(i, 0, 18, _(" Language : %s "),
-			ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
+
+		    if(s.pname == icq) {
+			tree.addleaff(i, 0, 18, _(" Language : %s "),
+			    ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
+		    }
 
 		    i = tree.addnode(_(" Location "));
 		    tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
-		    tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
-		    tree.addleaff(i, 0, 21, _(" Country : %s "),
-			ICQ2000::UserInfoHelpers::getCountryIDtoString(s.country).c_str());
 
-		    i = tree.addnode(_(" Work "));
-		    tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
-		    tree.addleaff(i, 0, 23, _(" Department : %s "), s.department.c_str());
-		    tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
+		    if(s.pname == icq) {
+			tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
+			tree.addleaff(i, 0, 21, _(" Country : %s "),
+			    ICQ2000::UserInfoHelpers::getCountryIDtoString(s.country).c_str());
+
+			i = tree.addnode(_(" Work "));
+			tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
+			tree.addleaff(i, 0, 23, _(" Department : %s "), s.department.c_str());
+			tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
+		    }
 
 		    i = tree.addnode(_(" Online only "));
 		    tree.addleaff(i, 0, 25, " %s ", stryesno(s.onlineonly));
 		}
 
-		if(!s.uin && s.kwords.empty()) {
-		    i = tree.addnode(_(" Random chat group "));
-		    tree.addleaff(i, 0, 28, " %s ", strrandomgroup(s.randomgroup));
-		} 
+		if(s.pname == icq) {
+		    if(!s.uin && s.kwords.empty()) {
+			i = tree.addnode(_(" Random chat group "));
+			tree.addleaff(i, 0, 28, " %s ", strrandomgroup(s.randomgroup));
+		    }
 
-		if(!s.uin && !s.randomgroup) {
-		    i = tree.addnode(_(" Keywords "));
-		    tree.addleaff(i, 0, 29, " %s ", s.kwords.c_str());
+		    if(!s.uin && !s.randomgroup) {
+			i = tree.addnode(_(" Keywords "));
+			tree.addleaff(i, 0, 29, " %s ", s.kwords.c_str());
+		    }
 		}
 		break;
 
@@ -1077,7 +1093,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	if(!httpproxy.empty())
 	    httpproxy += ":" + conf.gethttpproxypasswd() + "@" + conf.gethttpproxyhost() + ":" + i2str(conf.gethttpproxyport());
     } else {
-        httpproxy = conf.gethttpproxyhost();
+	httpproxy = conf.gethttpproxyhost();
 	if(!httpproxy.empty())
 	    httpproxy += ":" + i2str(conf.gethttpproxyport());
     }

@@ -89,8 +89,6 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);
-
-	void sendaddauth();
 };
 
 extern icqhook ihook;

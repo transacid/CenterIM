@@ -6,14 +6,14 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.30 2004/01/15 20:25:22 konst Exp $
+# $Id: cicqsync,v 1.31 2004/01/27 00:14:33 konst Exp $
 #
 
 CROOT=":pserver:anonymous@cvs.thekonst.net:/home/konst/cvs/root"
 
 PROG="centericq"
-MODULES="libyahoo2 libicq2000 kktoolbox/kkconsui kktoolbox/kksystr kktoolbox/kkstrtext firetalk libjabber connwrap"
-MAKEUPDATE="s@/home/konst/devel/kktoolbox@\$(top_srcdir)@g;s@/home/konst/devel/libyahoo@\$(top_srcdir)/libyahoo@g;s@/home/konst/devel/libicq2000@\$(top_srcdir)/libicq2000@g;s@/home/konst/devel/firetalk@\$(top_srcdir)/firetalk@g;s@/home/konst/devel/libjabber@\$(top_srcdir)/libjabber@g;s@/home/konst/devel/connwrap@\$(top_srcdir)/connwrap@g"
+MODULES="libyahoo2 libicq2000 kktoolbox/kkconsui kktoolbox/kksystr kktoolbox/kkstrtext firetalk libjabber connwrap libgadu"
+MAKEUPDATE="s@/home/konst/devel/kktoolbox@\$(top_srcdir)@g;s@/home/konst/devel/libyahoo@\$(top_srcdir)/libyahoo@g;s@/home/konst/devel/libicq2000@\$(top_srcdir)/libicq2000@g;s@/home/konst/devel/firetalk@\$(top_srcdir)/firetalk@g;s@/home/konst/devel/libjabber@\$(top_srcdir)/libjabber@g;s@/home/konst/devel/connwrap@\$(top_srcdir)/connwrap@g;s@/home/konst/devel/libgadu@\$(top_srcdir)/libgadu@g"
 MONOLITE="0"
 
 RETVAL=0

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.140 2003/12/11 22:41:33 konst Exp $
+* $Id: icqhook.cc,v 1.141 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -150,7 +150,7 @@ void icqhook::connect() {
 	cli.setAcceptInDC(false);
     }
 
-    face.log(_("+ [icq] connecting to the server"));
+    log(logConnecting);
 
     cli.self_contact_userinfo_change_signal.disconnect(this);
 
@@ -933,7 +933,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     cli.setRandomChatGroup(strtoul(conf.getourid(icq).additional["randomgroup"].c_str(), 0, 0));
 
-    face.log(_("+ [icq] logged in"));
+    log(logLogged);
     face.update();
 
     string buf;

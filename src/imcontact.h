@@ -12,6 +12,7 @@ enum protocolname {
     jabber,
     rss,
     livejournal,
+    gadu,
     infocard,
 
     protocolname_size

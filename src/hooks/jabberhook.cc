@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.62 2003/12/11 22:41:33 konst Exp $
+* $Id: jabberhook.cc,v 1.63 2004/01/27 00:14:35 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -108,7 +108,7 @@ void jabberhook::connect() {
     icqconf::imaccount acc = conf.getourid(proto);
     string jid = getourjid();
 
-    face.log(_("+ [jab] connecting to the server"));
+    log(logConnecting);
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(acc.password.c_str()));
@@ -604,7 +604,7 @@ vector<string> jabberhook::getservices(servicetype::enumeration st) const {
 	    break;
 	case servicetype::groupchat:
 	    while(ia != agents.end()) {
-		if(ia->type == agent::atGroupchat) r.push_back(ia->name);
+		if(ia->type == agent::atGroupchat) r.push_back(ia->jid);
 		++ia;
 	    }
 	default:
@@ -861,7 +861,7 @@ void jabberhook::postlogin() {
     flogged = true;
     ourstatus = available;
     setautostatus(jhook.manualstatus);
-    face.log(_("+ [jab] logged in"));
+    log(logLogged);
     face.update();
 
     for(i = 0; i < clist.count; i++) {

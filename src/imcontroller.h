@@ -43,7 +43,7 @@ class imcontroller {
     protected:
 	bool regdialog(protocolname pname);
 
-	bool icqregistration(icqconf::imaccount &account);
+	bool uinreg(icqconf::imaccount &account);
 	bool jabberregistration(icqconf::imaccount &account);
 
 	void icqupdatedetails();

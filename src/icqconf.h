@@ -39,7 +39,8 @@ enum cicq_colorpairs {
     cp_clist_irc,
     cp_clist_jabber,
     cp_clist_rss,
-    cp_clist_lj
+    cp_clist_lj,
+    cp_clist_gadu
 };
 
 class icqconf {

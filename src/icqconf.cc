@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.122 2003/12/11 22:41:30 konst Exp $
+* $Id: icqconf.cc,v 1.123 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,7 +82,8 @@ icqconf::imserver icqconf::defservers[protocolname_size] = {
     { "irc.oftc.net", 6667, 0 },
     { "jabber.com", 5222, 5223 },
     { "", 0, 0 },
-    { "livejournal.com", 80, 0 }
+    { "livejournal.com", 80, 0 },
+    { "appmsg.gadu-gadu.pl", 80 }
 };
 
 void icqconf::setourid(const imaccount &im) {
@@ -358,6 +359,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_jabber, "clist_jabber    red/transparent");
 	    schemer.push(cp_clist_rss, "clist_rss    white/transparent   bold");
 	    schemer.push(cp_clist_lj, "clist_lj    cyan/transparent   bold");
+	    schemer.push(cp_clist_gadu, "clist_gg    blue/transparent   bold");
 	    break;
 
 	case rcblue:
@@ -383,6 +385,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_jabber, "clist_jabber    red/blue");
 	    schemer.push(cp_clist_rss, "clist_rss    white/blue   bold");
 	    schemer.push(cp_clist_lj, "clist_lj    cyan/blue   bold");
+	    schemer.push(cp_clist_gadu, "clist_gg    blue/blue   bold");
 	    break;
     }
 
@@ -749,7 +752,7 @@ string icqconf::execaction(const string &name, const string &param) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "irc", "jabber", "rss", "lj", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "jab", "rss", "lj", "gg", "infocard"
     };
 
     return ptextnames[pname];
@@ -765,6 +768,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 	case 'j': return jabber;
 	case 'r': return rss;
 	case 'l': return livejournal;
+	case 'g': return gadu;
 	case '0':
 	case '1':
 	case '2':
@@ -782,7 +786,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 
 string icqconf::getprotocolprefix(protocolname pname) const {
     static const string pprefixes[protocolname_size] = {
-	"", "y", "m", "a", "i", "j", "r", "l", "n"
+	"", "y", "m", "a", "i", "j", "r", "l", "g", "n"
     };
 
     return pprefixes[pname];
@@ -820,6 +824,7 @@ int icqconf::getprotcolor(protocolname pname) const {
 	case jabber : return getcolor(cp_clist_jabber);
 	case rss : return getcolor(cp_clist_rss);
 	case livejournal : return getcolor(cp_clist_lj);
+	case gadu : return getcolor(cp_clist_gadu);
 	default : return getcolor(cp_main_text);
     }
 }

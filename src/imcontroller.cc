@@ -1,9 +1,9 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.49 2003/12/11 22:41:31 konst Exp $
+* $Id: imcontroller.cc,v 1.50 2004/01/27 00:14:34 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -86,8 +86,10 @@ bool imcontroller::regdialog(protocolname pname) {
 	t.addleaff(i, 0, 2, _(" Password to set : %s "), string(rpasswd.size(), '*').c_str());
 	t.addleaff(i, 0, 3, _(" Check the password : %s "), string(pcheck.size(), '*').c_str());
 
-	i = db.gettree()->addnode(_(" Details "));
-	t.addleaff(i, 0, 8, _(" Server to use : %s "), rserver.c_str());
+	if(pname != gadu) {
+	    i = db.gettree()->addnode(_(" Details "));
+	    t.addleaff(i, 0, 8, _(" Server to use : %s "), rserver.c_str());
+	}
 
 	finished = !db.open(n, b, (void **) &i);
 
@@ -124,22 +126,23 @@ bool imcontroller::regdialog(protocolname pname) {
     return success;
 }
 
-bool imcontroller::icqregistration(icqconf::imaccount &account) {
+bool imcontroller::uinreg(icqconf::imaccount &account) {
     bool fin, success;
+    abstracthook &hook = gethook(account.pname);
 
     if(success = regdialog(account.pname)) {
-	unlink((conf.getdirname() + "icq-infoset").c_str());
+	unlink((conf.getdirname() + conf.getprotocolname(account.pname) + "-infoset").c_str());
 	face.progress.show(_(" Registration progress "));
 
 	for(fin = false; !fin; ) {
 	    face.progress.log(_("Connecting to the server %s ..."), rserver.c_str());
 
-	    if(ihook.regconnect(rserver)) {
+	    if(hook.regconnect(rserver)) {
 		while(!fin) {
 		    face.progress.log(_("Sending request"));
 
 		    while(!ruin && !fin) {
-			fin = ihook.regattempt(ruin, rpasswd);
+			fin = hook.regattempt(ruin, rpasswd);
 
 			if(!fin) {
 			    if(fin = (face.ask(_("Timed out waiting for a new uin. Retry?"),
@@ -157,7 +160,7 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 			account.password = rpasswd;
 
 			conf.checkdir();
-			ofstream f((conf.getdirname() + "icq-infoset").c_str());
+			ofstream f((conf.getdirname() + conf.getprotocolname(account.pname) + "-infoset").c_str());
 			if(f.is_open()) {
 			    f << rnick << endl <<
 				remail << endl <<
@@ -171,7 +174,7 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 		face.progress.log(_("Disconnected"));
 		sleep(2);
 	    } else {
-		fin = (face.ask(_("Unable to connect to the icq server. Retry?"),
+		fin = (face.ask(_("Unable to connect to icq server. Retry?"),
 		    ASK_YES | ASK_NO) == ASK_NO);
 	    }
 	}
@@ -302,8 +305,13 @@ void imcontroller::jabberupdateprofile() {
 
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
-	case icq: icqregistration(account); break;
-	case jabber: jabberregistration(account); break;
+	case icq:
+//        case gadu:
+	    uinreg(account);
+	    break;
+	case jabber:
+	    jabberregistration(account);
+	    break;
 	default:
 	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
 		_("registration is not supported"));

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.49 2003/12/11 22:41:32 konst Exp $
+* $Id: abstracthook.cc,v 1.50 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,9 @@
 #include "jabberhook.h"
 #include "rsshook.h"
 #include "ljhook.h"
+#include "gaduhook.h"
+
+#include "icqface.h"
 
 #include "md5.h"
 
@@ -323,6 +326,37 @@ void abstracthook::requestfromfound(const imcontact &ic) {
     }
 }
 
+bool abstracthook::regconnect(const string &aserv) {
+    return false;
+}
+
+bool abstracthook::regattempt(unsigned int &auin, const string &apassword) {
+    return false;
+}
+
+void abstracthook::log(logevent ev, ...) {
+    va_list ap;
+    char buf[512];
+    static map<logevent, string> lst;
+
+    if(lst.empty()) {
+	lst[logConnecting] = _("connecting to the server");
+	lst[logLogged] = _("logged in");
+	lst[logSearchFinished] = _("search finished, %d found");
+	lst[logPasswordChanged] = _("password was changed successfully");
+	lst[logDisconnected] = _("disconnected");
+	lst[logContactAdd] = _("adding %s to the contacts");
+	lst[logContactRemove] = _("removing %s from the contacts");
+	lst[logConfMembers] = _("members list fetching finished, %d found");
+    }
+
+    va_start(ap, ev);
+    vsprintf(buf, lst[ev].c_str(), ap);
+    va_end(ap);
+
+    face.log((string) "+ [" + conf.getprotocolname(proto)  + "] " + buf);
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {
@@ -347,6 +381,9 @@ abstracthook &gethook(protocolname pname) {
 #endif
 #ifdef BUILD_LJ
 	case livejournal: return lhook;
+#endif
+#ifdef BUILD_GADU
+	case gadu: return ghook;
 #endif
     }
 

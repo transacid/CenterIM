@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.75 2004/01/15 01:04:39 konst Exp $
+* $Id: irchook.cc,v 1.76 2004/01/27 00:14:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -126,13 +126,13 @@ void irchook::init() {
     firetalk_subcode_register_reply_callback(handle, "VERSION", &subreply);
 
 #ifdef DEBUG
-    firetalk_register_callback(handle, FC_LOG, &log);
+    firetalk_register_callback(handle, FC_LOG, &fclog);
 #endif
 }
 
 void irchook::connect() {
     icqconf::imaccount acc = conf.getourid(irc);
-    face.log(_("+ [irc] connecting to the server"));
+    log(logConnecting);
 
     firetalk_register_callback(handle, FC_DISCONNECT, 0);
     firetalk_disconnect(handle);
@@ -722,7 +722,7 @@ void irchook::userstatus(const string &nickname, imstatus st) {
 
 void irchook::connected(void *conn, void *cli, ...) {
     irhook.flogged = true;
-    face.log(_("+ [irc] logged in"));
+    irhook.log(logLogged);
     face.update();
 
     int i;
@@ -983,7 +983,7 @@ void irchook::listmember(void *connection, void *cli, ...) {
     }
 }
 
-void irchook::log(void *connection, void *cli, ...) {
+void irchook::fclog(void *connection, void *cli, ...) {
     va_list ap;
 
     va_start(ap, cli);

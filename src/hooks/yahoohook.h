@@ -84,7 +84,7 @@ class yahoohook: public abstracthook {
 	static void webcam_closed(int id, char *who, int reason);
 	static void webcam_viewer(int id, char *who, int connect);
 	static void webcam_data_request(int id, int send);
-	static int log(char *fmt, ...);
+	static int ylog(char *fmt, ...);
 
 	static int add_handler(int id, int fd, yahoo_input_condition cond, void *data);
 	static void remove_handler(int tag);

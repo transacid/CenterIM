@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.88 2003/11/05 14:54:26 konst Exp $
+* $Id: icqcontact.cc,v 1.89 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,6 +94,7 @@ string icqcontact::getdirname() const {
 	case icq:
 	case infocard:
 	case rss:
+	case gadu:
 	    ret += conf.getprotocolprefix(cdesc.pname) + i2str(cdesc.uin);
 	    break;
 	default:

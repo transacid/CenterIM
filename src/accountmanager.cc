@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.32 2003/12/11 22:41:30 konst Exp $
+* $Id: accountmanager.cc,v 1.33 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -100,6 +100,7 @@ void accountmanager::exec() {
 
 		switch(pname) {
 		    case icq:
+		    case gadu:
 			t.addleaff(n, 0, citem+2, _(" UIN : %s "),
 			    account.uin ? i2str(account.uin).c_str() : "");
 			break;

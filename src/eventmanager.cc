@@ -1,7 +1,7 @@
 /*
 *
 * centericq event manager class
-* $Id: eventmanager.cc,v 1.23 2003/10/31 00:55:52 konst Exp $
+* $Id: eventmanager.cc,v 1.24 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,8 +43,8 @@ void imeventmanager::store(const imevent &cev) {
     icqcontact *c;
     bool proceed;
 
-    auto_ptr<imevent> imev(cev.getevent());
-    imevent &ev = *imev.get();
+    auto_ptr<imevent> icev(cev.getevent());
+    imevent &ev = *icev.get();
 
     static int preoptions[imevent::imdirection_size] = {
 	imexternal::aoprereceive,

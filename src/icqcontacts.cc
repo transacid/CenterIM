@@ -1,9 +1,9 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.49 2003/11/22 23:58:55 konst Exp $
+* $Id: icqcontacts.cc,v 1.50 2004/01/27 00:14:34 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist) {
 
     switch(cinfo.pname) {
 	case icq:
+	case gadu:
 	    c->setnick(i2str(cinfo.uin));
 	    c->setdispnick(i2str(cinfo.uin));
 	    break;
@@ -97,6 +98,7 @@ void icqcontacts::load() {
 
 		    case infocard:
 		    case rss:
+		    case gadu:
 			c = new icqcontact(imcontact(atol(ent->d_name+1), pname));
 			break;
 

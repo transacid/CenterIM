@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.206 2004/01/15 21:25:31 konst Exp $
+* $Id: icqface.cc,v 1.207 2004/01/27 00:14:34 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1322,6 +1322,7 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
 	_(" [jab] Jabber"),
 	"",
 	_(" [lj] LiveJournal"),
+	_(" [gg] Gadu-Gadu"),
 	""
     };
 
@@ -2531,11 +2532,11 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	|| ev->gettype() == imevent::notification
 	|| ev->gettype() == imevent::xml) {
 	    actions.push_back(forward);
-/*
+
 	    if(ev->getdirection() == imevent::incoming)
-	    if(ev->getcontact().pname != rss || islivejournal(ev->getcontact()))
+	    if(ev->getcontact().pname != rss /*|| islivejournal(ev->getcontact())*/)
 		actions.push_back(reply);
-*/
+
 	} else if(ev->gettype() == imevent::url) {
 	    actions.push_back(forward);
 	    actions.push_back(open);
