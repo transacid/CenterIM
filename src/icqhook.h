@@ -14,7 +14,7 @@
 #define PERIOD_RESOLVE          40
 #define PERIOD_RECONNECT        30
 #define PERIOD_DISCONNECT       130
-#define PERIOD_RESEND           45
+#define PERIOD_RESEND           5
 #define PERIOD_CHECKMAIL        30
 #define PERIOD_WAITNEWUIN       20
 #define PERIOD_SOCKSALIVE       30
