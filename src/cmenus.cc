@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.10 2001/11/01 16:11:50 konst Exp $
+* $Id: cmenus.cc,v 1.11 2002/02/27 20:58:20 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -126,7 +126,7 @@ bool verticalmenu::shownelem(int n, int selected) {
     string buf;
 
     if((n < 0) || (n >= items.size())) return false;
-    verticalmenuitem item = items[n];
+    verticalmenuitem &item = items[n];
 
     if(!(selected && item.kind != ITEM_NORM)) {
 	attrset(selected && (item.kind == ITEM_NORM) ? scolor : item.color);
