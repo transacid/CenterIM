@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.58 2001/12/11 12:46:07 konst Exp $
+* $Id: icqface.cc,v 1.59 2001/12/13 11:28:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,9 +29,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqgroups.h"
-
-#include "icqhook.h"
-#include "yahoohook.h"
+#include "abstracthook.h"
 
 const char *strregsound(regsound s) {
     return s == rscard ? _("sound card") :

@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.25 2001/12/07 18:11:00 konst Exp $
+* $Id: icqcontacts.cc,v 1.26 2001/12/13 11:28:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,9 +26,7 @@
 #include "icqmlist.h"
 #include "icqconf.h"
 #include "icqgroups.h"
-
-#include "icqhook.h"
-#include "yahoohook.h"
+#include "abstracthook.h"
 
 icqcontacts::icqcontacts() {
 }
@@ -45,7 +43,7 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	case icq:
 	    c->setnick(i2str(cinfo.uin));
 	    c->setdispnick(i2str(cinfo.uin));
-	    ihook.sendnewuser(c->getdesc());
+	    gethook(icq).sendnewuser(c->getdesc());
 	    break;
 
 	case yahoo:

@@ -12,7 +12,6 @@
 #include "icqconf.h"
 #include "icqcontact.h"
 #include "icqmlist.h"
-#include "icqhook.h"
 #include "imcontroller.h"
 
 #define DIALOG_WIDTH    60

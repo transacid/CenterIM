@@ -3,6 +3,8 @@
 
 #include "imcontact.h"
 
+#undef gettext
+
 class imevent {
     friend class immessage;
     friend class imurl;

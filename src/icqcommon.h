@@ -13,6 +13,8 @@
 #include <unistd.h>
 #include <regex.h>
 
+#include <config.h>
+
 #include "kkiproc.h"
 #include "kkstrtext.h"
 #include "conf.h"

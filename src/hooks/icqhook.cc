@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.23 2001/12/12 09:21:05 konst Exp $
+* $Id: icqhook.cc,v 1.24 2001/12/13 11:28:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -158,7 +158,7 @@ void icqhook::exectimers() {
 void icqhook::main() {
     struct timeval tv;
     fd_set s;
-    set<int>::iterator i;
+    vector<int>::iterator i;
     int hsock;
 
     FD_ZERO(&s);
@@ -180,7 +180,7 @@ void icqhook::main() {
 }
 
 void icqhook::getsockets(fd_set &afds, int &hsocket) const {
-    set<int>::iterator i;
+    vector<int>::const_iterator i;
 
     for(i = fds.begin(); i != fds.end(); i++) {
 	hsocket = max(hsocket, *i);
@@ -189,7 +189,7 @@ void icqhook::getsockets(fd_set &afds, int &hsocket) const {
 }
 
 bool icqhook::isoursocket(fd_set &afds) const {
-    set<int>::iterator i;
+    vector<int>::const_iterator i;
 
     for(i = fds.begin(); i != fds.end(); i++)
 	if(FD_ISSET(*i, &afds))
@@ -218,38 +218,31 @@ bool icqhook::send(const imevent &ev) {
     unsigned int uin = ev.getcontact().uin;
     Contact ic(uin);
 
-    if(busy.find(uin) == busy.end()) {
-//        busy.insert(uin);
+    if(ev.gettype() == imevent::message) {
+	const immessage *m = static_cast<const immessage *> (&ev);
+	cli.SendEvent(new NormalMessageEvent(&ic, rusconv("kw", m->gettext())));
 
-	if(ev.gettype() == imevent::message) {
-	    const immessage *m = static_cast<const immessage *> (&ev);
-	    cli.SendEvent(new NormalMessageEvent(&ic, rusconv("kw", m->gettext())));
+    } else if(ev.gettype() == imevent::url) {
+	const imurl *m = static_cast<const imurl *> (&ev);
+	cli.SendEvent(new URLMessageEvent(&ic,
+	    rusconv("kw", m->getdescription()),
+	    rusconv("kw", m->geturl())));
 
-	} else if(ev.gettype() == imevent::url) {
-	    const imurl *m = static_cast<const imurl *> (&ev);
-	    cli.SendEvent(new URLMessageEvent(&ic,
-		rusconv("kw", m->getdescription()),
-		rusconv("kw", m->geturl())));
+    } else if(ev.gettype() == imevent::sms) {
+	const imsms *m = static_cast<const imsms *> (&ev);
+	ic.setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
+	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
 
-	} else if(ev.gettype() == imevent::sms) {
-	    const imsms *m = static_cast<const imsms *> (&ev);
-	    ic.setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
-	    cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
+    } else if(ev.gettype() == imevent::authorization) {
+	const imauthorization *m = static_cast<const imauthorization *> (&ev);
+	cli.SendEvent(new AuthAckEvent(&ic,
+	    rusconv("kw", m->gettext()), m->getgranted()));
 
-	} else if(ev.gettype() == imevent::authorization) {
-	    const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	    cli.SendEvent(new AuthAckEvent(&ic,
-		rusconv("kw", m->gettext()), m->getgranted()));
+    } else if(ev.gettype() == imevent::sms) {
+	const imsms *m = static_cast<const imsms *> (&ev);
+	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()),
+	    true));
 
-	} else if(ev.gettype() == imevent::sms) {
-	    const imsms *m = static_cast<const imsms *> (&ev);
-	    cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()),
-		true));
-
-	} else {
-	    busy.erase(uin);
-	    return false;
-	}
     } else {
 	return false;
     }
@@ -388,7 +381,6 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     };
 
     fds.clear();
-    busy.clear();
 
     clist.setoffline(icq);
     fonline = false;
@@ -483,7 +475,7 @@ void icqhook::messageack_cb(MessageEvent *ev) {
     if(ev->isFinished() && ev->isDelivered()) {
 	if(ev->getType() != MessageEvent::AwayMessage) {
 	    if(ic = ev->getContact()) {
-		busy.erase(ic->getUIN());
+//                busy.erase(ic->getUIN());
 	    }
 	}
     }
@@ -600,10 +592,14 @@ void icqhook::logger_cb(LogEvent *ev) {
 void icqhook::socket_cb(SocketEvent *ev) {
     if(dynamic_cast<AddSocketHandleEvent*>(ev)) {
 	AddSocketHandleEvent *cev = dynamic_cast<AddSocketHandleEvent*>(ev);
-	fds.insert(cev->getSocketHandle());
+	fds.push_back(cev->getSocketHandle());
     } else if(dynamic_cast<RemoveSocketHandleEvent*>(ev)) {
 	RemoveSocketHandleEvent *cev = dynamic_cast<RemoveSocketHandleEvent*>(ev);
-	fds.erase(cev->getSocketHandle());
+
+	vector<int>::iterator i = find(fds.begin(), fds.end(), cev->getSocketHandle());
+	if(i != fds.end()) {
+	    fds.erase(i);
+	}
     }
 }
 

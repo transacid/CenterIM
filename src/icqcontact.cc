@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.34 2001/12/12 09:21:05 konst Exp $
+* $Id: icqcontact.cc,v 1.35 2001/12/13 11:28:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,9 +27,7 @@
 #include "icqconf.h"
 #include "centericq.h"
 #include "icqface.h"
-
-#include "icqhook.h"
-#include "yahoohook.h"
+#include "abstracthook.h"
 
 icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;

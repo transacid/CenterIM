@@ -1,8 +1,6 @@
 #ifndef __ICQHOOK_H__
 #define __ICQHOOK_H__
 
-#include <set>
-
 #include "abstracthook.h"
 #include "Client.h"
 
@@ -12,8 +10,7 @@ class icqhook: public abstracthook, public SigC::Object {
     protected:
 	Client cli;
 
-	set<int> fds;
-	set<unsigned int> busy;
+	vector<int> fds;
 
 	time_t timer_reconnect, timer_ping, timer_resolve;
 	bool fonline, flogged;

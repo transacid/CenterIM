@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.37 2001/12/08 10:33:32 konst Exp $
+* $Id: icqdialogs.cc,v 1.38 2001/12/13 11:28:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,9 +29,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqgroups.h"
-
-#include "icqhook.h"
-#include "yahoohook.h"
+#include "abstracthook.h"
 
 bool icqface::finddialog(imsearchparams &s) {
     int n, b, i;

@@ -1,7 +1,7 @@
 #ifndef __ABSTRACTHOOK_H__
 #define __ABSTRACTHOOK_H__
 
-#include "icqcontact.h"
+#include "imcontact.h"
 #include "imevents.h"
 
 enum hookcapabilities {
