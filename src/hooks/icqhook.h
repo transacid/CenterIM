@@ -14,7 +14,7 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	vector<int> rfds, wfds, efds;
 
-	time_t timer_reconnect, timer_poll;
+	time_t timer_poll;
 	bool fonline, flogged;
 	unsigned int reguin;
 	SearchResultEvent *searchevent;

@@ -6,7 +6,6 @@
 
 class msnhook : public abstracthook {
     protected:
-	time_t timer_reconnect;
 	imstatus status;
 	bool fonline;
 

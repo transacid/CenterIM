@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.30 2002/03/21 17:43:44 konst Exp $
+* $Id: yahoohook.cc,v 1.31 2002/03/22 18:20:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,7 +45,7 @@ static int stat2int[imstatus_size] = {
 };
 
 yahoohook::yahoohook()
-    : fonline(false), timer_reconnect(0), context(0)
+    : fonline(false), context(0)
 { }
 
 yahoohook::~yahoohook() {
@@ -88,6 +88,22 @@ void yahoohook::initcontext(const icqconf::imaccount account) {
     } else {
 	face.log("+ unable to init %s engine",
 	    conf.getprotocolname(account.pname).c_str());
+
+	string err;
+
+	switch(yahoo_geterrno()) {
+	    case YERR_CONNECT:
+		err = _("unable to connect to the pager host");
+		break;
+	    case YERR_INVALID_LOGIN:
+		err = _("username and password mismatch");
+		break;
+	}
+
+	if(!err.empty()) {
+	    logger.putmessage((string) "yahoo: " + err);
+	    face.log((string) "+ [yahoo] " + err);
+	}
     }
 
     alarm(0);
@@ -122,7 +138,6 @@ void yahoohook::connect() {
     }
 
     yahoo_Russian = 0;
-    time(&timer_reconnect);
 }
 
 void yahoohook::main() {
@@ -309,7 +324,6 @@ void yahoohook::disconnected(yahoo_context *y) {
     }
 
     clist.setoffline(yahoo);
-    time(&yhook.timer_reconnect);
     face.update();
 }
 

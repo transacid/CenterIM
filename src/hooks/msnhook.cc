@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.20 2002/03/21 17:43:43 konst Exp $
+* $Id: msnhook.cc,v 1.21 2002/03/22 18:20:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,7 +39,6 @@ msnhook mhook;
 msnhook::msnhook() {
     status = offline;
     fonline = false;
-    timer_reconnect = 0;
 
     fcapabilities =
 	hoptChangableServer;
@@ -84,7 +83,6 @@ void msnhook::connect() {
 	face.log(_("+ [msn] unable to connect to the server"));
     }
 
-    time(&mhook.timer_reconnect);
     msn_Russian = conf.getrussian();
 }
 
@@ -310,7 +308,6 @@ void msnhook::disconnected(void *data) {
 
     clist.setoffline(msn);
     mhook.status = offline;
-    time(&mhook.timer_reconnect);
     face.update();
 }
 

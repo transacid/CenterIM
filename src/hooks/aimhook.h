@@ -14,7 +14,6 @@ class aimhook: public abstracthook {
 	};
 
 	bool fonline, flogged;
-	time_t timer_reconnect;
 	firetalk_t handle;
 	imstatus ourstatus;
 	ourprofile profile;

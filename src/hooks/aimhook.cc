@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.9 2002/03/21 17:43:43 konst Exp $
+* $Id: aimhook.cc,v 1.10 2002/03/22 18:20:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,7 @@
 aimhook ahook;
 
 aimhook::aimhook()
-    : timer_reconnect(0), handle(firetalk_create_handle(FP_AIMTOC, 0)),
+    : handle(firetalk_create_handle(FP_AIMTOC, 0)),
       fonline(false), flogged(false), ourstatus(offline)
 {
     fcapabilities =
@@ -83,8 +83,6 @@ void aimhook::connect() {
     } else {
 	face.log(_("+ [aim] unable to connect to the server"));
     }
-
-    time(&timer_reconnect);
 }
 
 void aimhook::disconnect() {
@@ -353,7 +351,6 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
     ahook.fonline = false;
     logger.putourstatus(aim, ahook.getstatus(), offline);
     clist.setoffline(aim);
-    time(&ahook.timer_reconnect);
 
     face.log(_("+ [aim] disconnected from the network"));
     face.update();
@@ -369,7 +366,6 @@ void aimhook::connectfailed(void *connection, void *cli, ...) {
     va_end(ap);
 
     ahook.fonline = false;
-    time(&ahook.timer_reconnect);
 
     face.log(_("+ [aim] connect failed: %s"), reason);
     face.update();

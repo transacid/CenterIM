@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.70 2002/03/21 17:43:43 konst Exp $
+* $Id: icqhook.cc,v 1.71 2002/03/22 18:20:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,6 @@ static const Status stat2int[imstatus_size] = {
 };
 
 icqhook::icqhook() {
-    timer_reconnect = 0;
     fonline = false;
 
     fcapabilities =
@@ -123,7 +122,6 @@ void icqhook::connect() {
     sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
 
-    time(&timer_reconnect);
     fonline = true;
     flogged = false;
 }

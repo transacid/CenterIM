@@ -10,8 +10,6 @@ class yahoohook: public abstracthook {
 	bool fonline;
 	imstatus ourstatus;
 
-	time_t timer_reconnect;
-
 	static void disconnected(yahoo_context *y);
 	static void userlogon(yahoo_context *y, const char *nick, int status);
 	static void userlogoff(yahoo_context *y, const char *nick);
