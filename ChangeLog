@@ -1738,8 +1738,15 @@ MSN protocol is back.
 LiveJournal can now use the http proxy setting from configuration. Patch by
 Ivan Daniluk.
 
-Support for the Polish Gadu-Gadu IM was added. Can be disabled like any other
-using --disable-gg command line parameter for configure.
+Welcome another IM in the centericq family. Support for the Polish Gadu-Gadu
+was added. Can be disabled like any other using --disable-gg command line
+parameter for configure. Though better just try it out.
+
+Server-side groups were implemented for the ICQ protocol. Now, I know it can
+be kinda flustrating to move your contacts into different groups again, but
+this way you'll have them arranged nicely on the server, not only locally
+in your centericq contact list. It must make you a little happier about it,
+as well as the fact that we have the "mass move" function.
 
 libiconv linking problems were fixed.
 

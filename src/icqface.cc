@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.216 2004/03/15 20:30:19 konst Exp $
+* $Id: icqface.cc,v 1.217 2004/03/17 19:08:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2894,14 +2894,21 @@ string icqface::getstatusitem(string text, int key, int section) {
 }
 
 string icqface::getmenuitem(string mtext, int width, int key, int section) {
+    int i = 2;
     string text = " " + mtext + " ";
     string keyname = action2key(key, section);
-    int i = keyname.size()+text.size();
+    string key2;
+    int s = keyname.size()+text.size();
 
-    if (i > width)
+    if (s > width)
 	return text;
 
-    for (; i < width; i++)
+    while ((key2 = action2key(key, section, i)) != "" && (s += key2.size()+1) < width) {
+	keyname += "/" + key2;
+	i++;
+    }
+
+    for (s = keyname.size()+text.size(); s < width; s++)
 	text += " ";
 
     text += keyname;
@@ -2933,6 +2940,10 @@ string icqface::action2key(int a, int s, int n) {
 	return "";
     else if(icqconf::keys[i].key == '\r')
 	return "enter";
+    else if(icqconf::keys[i].key == ' ')
+	return "space";
+    else if(icqconf::keys[i].key == '/')
+	return "\'/\'";
     else if(icqconf::keys[i].key == ALT('\r'))
 	return "alt-enter";
     else if(icqconf::keys[i].key == CTRL(' '))

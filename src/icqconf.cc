@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.129 2004/03/15 20:30:19 konst Exp $
+* $Id: icqconf.cc,v 1.130 2004/03/17 19:08:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -363,6 +363,7 @@ void icqconf::loadkeys() {
 	    if(param == "rss_check") k.action = key_rss_check; else
 	    if(param == "multiple_recipients") k.action = key_multiple_recipients; else
 	    if(param == "user_external_action") k.action = key_user_external_action;
+	    else continue;
 
 	    keys.push_back(k);
 	}
