@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.3 2003/07/13 18:10:28 konst Exp $
+* $Id: rsshook.cc,v 1.4 2003/07/16 00:19:47 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,11 +236,8 @@ const string &name, const string &title, const string &postfix) {
 
     if(d)
     if(!d->getValue().empty()) {
-	val = d->getValue();
-	if(!enc.empty()) {
-	    val = siconv(val, enc,
-		conf.getrussian(rss) ? "koi8-u" : DEFAULT_CHARSET);
-	}
+	val = rushtmlconv("wk", d->getValue(), false);
+	if(!enc.empty()) val = siconv(val, enc, conf.getrussian(rss) ? "koi8-u" : DEFAULT_CHARSET);
 
 	val = cuthtml(val, true);
 	base += title + val + postfix;

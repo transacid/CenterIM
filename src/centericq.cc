@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.160 2003/07/13 16:00:08 konst Exp $
+* $Id: centericq.cc,v 1.161 2003/07/16 00:19:46 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -111,8 +111,9 @@ void centericq::exec() {
 }
 
 void centericq::defaultcontacts(bool rus) {
-    icqcontact *rc = clist.addnew(imcontact(0, rss), false);
     clist.addnew(imcontact(17502151, icq), false);
+/*
+    icqcontact *rc = clist.addnew(imcontact(0, rss), false);
 
     if(rc) {
 	icqcontact::workinfo wi = rc->getworkinfo();
@@ -129,6 +130,7 @@ void centericq::defaultcontacts(bool rus) {
 	rc->setdispnick("thekonst.net");
 	rc->save();
     }
+*/
 }
 
 bool centericq::checkpasswords() {

@@ -75,15 +75,16 @@ Contents
 	9.3.4. Forwarding events
 	9.3.5. Hiding from scary ones
 	9.3.6. "Manual" external actions
-    9.4. Protocol debug mode
-    9.5. "Friendly" logging
-    9.6. Custom base directories
-    9.7. Latest CVS snapshots
+    9.4. Internal RSS reader
+    9.5. Protocol debug mode
+    9.6. "Friendly" logging
+    9.7. Custom base directories
+    9.8. Latest CVS snapshots
 10. Lynx
     10.1. The program homepage
 	10.1.1. Centericq mailing list
 	10.1.2. German fan-club of the program :-)
-    10.2. Konst.org.ua
+    10.2. thekonst.net
     10.3. Other programs I write
     10.4. IM protocols
 11. Help to the project I would appreciate
@@ -110,7 +111,7 @@ informed on receiving email messages, automatically set away after the
 defined period of inactivity (on any console), and have your own ignore,
 visible and invisible lists. It can also associate events with sounds,
 has support for Hebrew and Arabic languages and allows to arrange
-contacts into groups.
+contacts into groups. There is also an internal RSS reader.
 
   Centericq is known to build and work well under Linux, FreeBSD,
 OpenBSD, NetBSD, Sun Solaris, MacOS X/Darwin and Microsoft
@@ -188,6 +189,12 @@ gnutls
 Please note that in order to compile centericq from source on Redhat
 based systems you should have *-devel RPM packages of the before
 mentioned libraries installed.
+
+It's possible to disable support of various protocols during the build
+phase. Just take a look at the --disable-xxx parameters for configure.
+You can invoke the scripts command line help with the following command:
+
+$ ./configure --help
 
 
 1.4. First time start
@@ -1057,7 +1064,7 @@ with the following command:
 In case you want to send an URL, the URL itself and its description are
 separated with a newline character the following way:
 
-    $ echo -e "http://konst.org.ua/\nMy modest homepage." \
+    $ echo -e "http://thekonst.net/\nMy modest homepage." \
     | centericq -s url -p icq -t 17502151
 
 Finally, a small example of sending SMSes:
@@ -1482,7 +1489,37 @@ not having to copy'n'paste the IP address in case you want to look up a
 domain name.
 
 
-9.4. Protocol debug mode
+9.4. Internal RSS reader
+------------------------
+
+  There is another useful technology whose power can be utilized with
+centericq. It's called RSS or just "Really Simple Syndication". It's
+about a uniform XML format which is used to describe recent changes at
+various web sites and not only web sites. Theoretically you can describe
+updates of any kind of information resources with it. See
+http://backend.userland.com/rss for more info about the format.
+
+  Now, what centericq can do about it. Since version 4.9.5 it allows you
+to add RSS feeds to contact list just like they were usual contacts. You
+can also specify the check period. As soon as there are any updates, the
+contact pops up and you can read the news without a need to leave your
+favourite sweet IM proggy.
+
+  In order to find out if there is an RSS feed for a web site you're
+looking to receiving updates from, navigate to it and look for a button
+saying something like "RSS" or "XML". Then take a link and add it to
+centericq. If there are no such a button, ask web master to setup the
+feature.
+
+  Also, there is a feed URL for you to try: http://thekonst.net/rss_en.xml
+Having added it to your centericq you can stay tuned about updates on
+the program author's site. You'll be announced about new releases of
+centericq and other cool pieces of free software, as well as on
+publication of various articles and photos which I take sometimes with
+my digital camera.
+
+
+9.5. Protocol debug mode
 ------------------------
 
   Actually I have this feature for myself, to track protocol messages
@@ -1498,7 +1535,7 @@ protocol messages will be visible in the log window, and also they'll be
 written into the ~/.centericq/log file.
 
 
-9.5. "Friendly" logging
+9.6. "Friendly" logging
 -----------------------
 
   Another (better) way to log what is going on in your centericq, is
@@ -1511,7 +1548,7 @@ automatic parsing tool can be written without a problem. Though in this
 case you should keep in mind the messages are locale dependent.
 
 
-9.6. Custom base directories
+9.7. Custom base directories
 ----------------------------
 
   By default, centericq uses the .centericq/ directory under your home
@@ -1522,7 +1559,7 @@ the same networks under the same UNIX account. To make it possible, the
 simple "-b <directory name>"
 
 
-9.7. Latest CVS snapshots
+9.8. Latest CVS snapshots
 -------------------------
 
   If you wanna always have the recent version of the program, there is
@@ -1556,10 +1593,7 @@ you.
 --------------------------
 
 The centericq homepage can be found at
-    http://konst.org.ua/centericq/
-
-To go directly to the "download" section use
-    http://konst.org.ua/centericq/download/
+    http://thekonst.net/centericq/
 
 
 10.1.1. Centericq mailing list
@@ -1588,22 +1622,22 @@ The channel name is #centericq. The majority of centericq fans can be met
 there.
 
 
-10.2. Konst.org.ua
+10.2. thekonst.net
 ------------------
 
   If you want to find out more about my recent activities, news,
 software developments and other things I'm involved in, visit my web
-site at http://konst.org.ua/
+site at http://thekonst.net/
 
 
 10.3. Other programs I write
 ----------------------------
 
 To find out more about my software developments use the following URL:
-    http://konst.org.ua/software/
+    http://thekonst.net/konstware/
 
-There is also an "articles" section at
-    http://konst.org.ua/articles/
+There is also an "writings" section with my publications at
+    http://thekonst.net/writings/
 
 
 10.4. IM protocols
@@ -1734,4 +1768,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.83 2003/05/07 22:22:59 konst Exp $
+$Id: README,v 1.84 2003/07/16 00:19:37 konst Exp $

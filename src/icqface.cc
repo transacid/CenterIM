@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.185 2003/07/13 18:10:27 konst Exp $
+* $Id: icqface.cc,v 1.186 2003/07/16 00:19:46 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1089,9 +1089,6 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     string freq, last, next;
     char buf[512];
 
-    if(mi.birth_month) last = strdateandtime(mi.birth_month);
-	else last = _("Never");
-
     if(mi.birth_day) {
 	sprintf(buf, _("%lu hours"), mi.birth_day);
 	freq = buf;
@@ -1100,6 +1097,9 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     } else {
 	freq = next = _("Never");
     }
+
+    if(mi.birth_month) last = strdateandtime(mi.birth_month);
+	else last = _("Never");
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), freq);
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf.getcolor(cp_main_text), last);

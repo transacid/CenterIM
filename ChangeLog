@@ -1458,3 +1458,41 @@ Timestamps in the log window got duplicated on every terminal resize
 event.
 
 Several other minor problems were fixed.
+
+4.9.5
+-----
+
+If you're against M$, don't wanna use Yahoo! or find Jabber too
+complicated, since this version all of your religious reasons should be
+satisfied. You can also save compile time, money you'd spend on new HDD
+(since the current one is not enough for the centericq binary), etc :)
+What's it all about? Well, it's about build-time disabling of not
+desired protocols. For example, if you use the --disable-yahoo parameter
+with the centericq's configure script the Yahoo! module won't be
+compiled in. The same is valid for all the other modules except for ICQ.
+
+Internal RSS reader module was implemented. You can now easily add a
+feed to your list from the menu, and stay tuned on news at your
+favourite sites. See the README for details.
+
+Users who set their status to "away" on the MSN network appeared offline
+in centericq. Fixed.
+
+Jabber online/offline events were not shown in the log window. Fixed
+this one too.
+
+Fixed a bug because of which centericq couldn't connect to networks
+other than ICQ when the --bind parameter was used.
+
+ICQ away messages requests are now shown in the log window.
+
+SMSes in Russian now work (with operators which support Cyrillic of
+course).
+
+Auto-wrap was disabled in the internal editor, so now it's possible to
+paste text and it will not get screwed up.
+
+Jabber conferences were fixed. Actually, a small workaround was added
+for a weirdness of jabber.com server.
+
+Jabber passwords hash authentification was enabled.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.2\n"
-"POT-Creation-Date: 2003-07-07 21:28+0300\n"
+"POT-Creation-Date: 2003-07-16 02:29+0300\n"
 "PO-Revision-Date: 2002-06-12 12:15+0300\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -15,146 +15,146 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/centericq.cc:123
+#: src/centericq.cc:151
 msgid "password: "
 msgstr "пароль: "
 
-#: src/centericq.cc:159
+#: src/centericq.cc:187
 msgid ""
 "F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
 msgstr "F2/M меню користувача, F3/S зм╕на статусу, F4/G головне меню, Q вих╕д"
 
-#: src/centericq.cc:236
+#: src/centericq.cc:267
 #, c-format
 msgid "Ignore all events from %s?"
 msgstr "╤гнорувати пов╕домлення в╕д %s?"
 
-#: src/centericq.cc:240
+#: src/centericq.cc:271
 #, fuzzy, c-format
 msgid "Remove %s from the contact list as well?"
 msgstr "+ [aim] видаля╓мо %s з контакт╕в"
 
-#: src/centericq.cc:274
+#: src/centericq.cc:305
 #, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "Справд╕ видалити %s?"
 
-#: src/centericq.cc:282
+#: src/centericq.cc:313
 msgid "New nickname to show: "
 msgstr "Показувати п╕д такою Кличкою: "
 
-#: src/centericq.cc:291
+#: src/centericq.cc:322
 msgid "Select a group to move the user to"
 msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
 
-#: src/centericq.cc:309
+#: src/centericq.cc:340
 msgid "+ cannot fetch away messages being offline"
 msgstr "+ не можу витягти автопов╕домлення, коли не п╕дключен╕ до серверу"
 
-#: src/centericq.cc:370
+#: src/centericq.cc:402
 #, fuzzy
 msgid "! cannot connect, free disk space is less than 10k"
 msgstr "! на диску менше 10К в╕льного простору, в╕дключ╓мося"
 
-#: src/centericq.cc:373
+#: src/centericq.cc:405
 #, c-format
 msgid "! support for %s was disabled at build time"
 msgstr ""
 
-#: src/centericq.cc:392 src/accountmanager.cc:204
+#: src/centericq.cc:424 src/accountmanager.cc:207
 msgid "away message"
 msgstr "автопов╕домлення"
 
-#: src/centericq.cc:595
+#: src/centericq.cc:653
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] нова пошта! %d лист╕в"
 
-#: src/centericq.cc:598
+#: src/centericq.cc:656
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ останн╓ пов╕домлення в╕д %s"
 
-#: src/centericq.cc:642
+#: src/centericq.cc:700
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:696
+#: src/centericq.cc:754
 msgid "! another running copy of centericq detected"
 msgstr "! Вже одна коп╕я centericq працю╓"
 
-#: src/centericq.cc:697
+#: src/centericq.cc:755
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! це може призвести до проблем. номер процесу %lu"
 
-#: src/centericq.cc:821
+#: src/centericq.cc:879
 msgid "Mobile number: "
 msgstr "Номер моб╕ли: "
 
-#: src/centericq.cc:962
+#: src/centericq.cc:1020
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:969
+#: src/centericq.cc:1027
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:973
+#: src/centericq.cc:1031
 msgid "The specified directory does not exist"
 msgstr ""
 
-#: src/centericq.cc:1108
+#: src/centericq.cc:1166
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ ╕стор╕я замовчу╓ про %s"
 
-#: src/centericq.cc:1134
+#: src/centericq.cc:1192
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s вже у контакт-л╕ст╕"
 
-#: src/centericq.cc:1140
+#: src/centericq.cc:1198
 msgid "Select a group to add the user to"
 msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
 
-#: src/centericq.cc:1151
+#: src/centericq.cc:1209
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s додано у контакт-л╕ст"
 
-#: src/centericq.cc:1222
+#: src/centericq.cc:1280
 msgid "+ the user is back"
 msgstr "+ користувач повернувся"
 
-#: src/centericq.cc:1238
+#: src/centericq.cc:1296
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус в╕дновлено"
 
-#: src/centericq.cc:1253
+#: src/centericq.cc:1311
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] авто зм╕на статусу: %s"
 
-#: src/centericq.cc:1255
+#: src/centericq.cc:1313
 msgid "away"
 msgstr "в╕д╕йшoв"
 
-#: src/centericq.cc:1255
+#: src/centericq.cc:1313
 msgid "n/a"
 msgstr "н/д"
 
-#: src/centericq.cc:1381
+#: src/centericq.cc:1439
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! на диску менше 10К в╕льного простору, в╕дключ╓мося"
 
-#: src/centericq.cc:1382
+#: src/centericq.cc:1440
 msgid "! otherwise we can lose events and configuration"
 msgstr "! ╕накше можна втратити конф╕гурац╕ю та обл╕к под╕й"
 
-#: src/centericq.cc:1421
+#: src/centericq.cc:1479
 msgid "Invite to conference.."
 msgstr ""
 
@@ -686,55 +686,55 @@ msgstr "+ [yahoo] дода╓мо %s в контакти"
 msgid "verify the hostname and port"
 msgstr ""
 
-#: src/icqcontact.cc:712
+#: src/icqcontact.cc:714
 msgid "The user has a birthday today"
 msgstr ""
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:742
 msgid "Jan"
 msgstr "С╕ч"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:742
 msgid "Feb"
 msgstr "Лют"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:742
 msgid "Mar"
 msgstr "Бер"
 
-#: src/icqcontact.cc:740
+#: src/icqcontact.cc:742
 msgid "Apr"
 msgstr "Кв╕"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:743
 msgid "May"
 msgstr "Тра"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:743
 msgid "Jun"
 msgstr "Чер"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:743
 msgid "Jul"
 msgstr "Лип"
 
-#: src/icqcontact.cc:741
+#: src/icqcontact.cc:743
 msgid "Aug"
 msgstr "Сер"
 
-#: src/icqcontact.cc:742
+#: src/icqcontact.cc:744
 msgid "Sep"
 msgstr "Вер"
 
-#: src/icqcontact.cc:742
+#: src/icqcontact.cc:744
 msgid "Oct"
 msgstr "Жов"
 
-#: src/icqcontact.cc:742
+#: src/icqcontact.cc:744
 msgid "Nov"
 msgstr "Лис"
 
-#: src/icqcontact.cc:742
+#: src/icqcontact.cc:744
 msgid "Dec"
 msgstr "Гру"
 
@@ -792,12 +792,12 @@ msgstr ""
 msgid " Search profiles "
 msgstr ""
 
-#: src/icqdialogs.cc:104 src/icqdialogs.cc:941 src/icqdialogs.cc:1454
-#: src/icqface.cc:1430 src/icqface.cc:2031
+#: src/icqdialogs.cc:103 src/icqdialogs.cc:983 src/icqdialogs.cc:1497
+#: src/icqface.cc:1523 src/icqface.cc:2124
 msgid "Remove"
 msgstr "Видалити"
 
-#: src/icqdialogs.cc:104
+#: src/icqdialogs.cc:103
 msgid "Load"
 msgstr ""
 
@@ -806,739 +806,773 @@ msgstr ""
 msgid "+ you must be logged in first"
 msgstr "+ сл╕д п╕д'╓днатися спочатку"
 
-#: src/icqdialogs.cc:209
-msgid " Find/add user(s) "
-msgstr " Пошук користувач╕в"
-
-#: src/icqdialogs.cc:211
+#: src/icqdialogs.cc:212
 msgid "lOad"
 msgstr ""
 
-#: src/icqdialogs.cc:211
+#: src/icqdialogs.cc:212
 msgid "sAve"
 msgstr ""
 
-#: src/icqdialogs.cc:211 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
 msgid "cLear"
 msgstr "очистити"
 
-#: src/icqdialogs.cc:211 src/icqdialogs.cc:217 src/icqdialogs.cc:647
-#: src/icqdialogs.cc:1041 src/accountmanager.cc:68 src/imcontroller.cc:71
+#: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
+#: src/icqdialogs.cc:687 src/icqdialogs.cc:1083 src/accountmanager.cc:68
+#: src/imcontroller.cc:71
 msgid "Change"
 msgstr "Зм╕нити"
 
-#: src/icqdialogs.cc:211
+#: src/icqdialogs.cc:212
 msgid "Search/Add"
 msgstr "Шукати/додати"
-
-#: src/icqdialogs.cc:215
-msgid " Join create a channel/conference "
-msgstr ""
 
 #: src/icqdialogs.cc:217
 #, fuzzy
 msgid "Join/Create"
 msgstr "(При╓днатися/Залишити)"
 
-#: src/icqdialogs.cc:254
+#: src/icqdialogs.cc:222
+msgid "lInk"
+msgstr ""
+
+#: src/icqdialogs.cc:231
+msgid " Find/add user(s) "
+msgstr " Пошук користувач╕в"
+
+#: src/icqdialogs.cc:232
+#, fuzzy
+msgid " Join/create a channel/conference "
+msgstr "На каналах: "
+
+#: src/icqdialogs.cc:233
+msgid " Link an RSS feed "
+msgstr ""
+
+#: src/icqdialogs.cc:277
 msgid " Network "
 msgstr " Мережа "
 
-#: src/icqdialogs.cc:260
+#: src/icqdialogs.cc:284
 msgid " UIN "
 msgstr " UIN "
 
-#: src/icqdialogs.cc:264 src/icqdialogs.cc:329 src/imcontroller.cc:79
+#: src/icqdialogs.cc:288 src/icqdialogs.cc:359 src/imcontroller.cc:79
 #: src/imcontroller.cc:90
 msgid " Details "
 msgstr " ╤нформац╕я "
 
-#: src/icqdialogs.cc:265 src/icqdialogs.cc:525 src/imcontroller.cc:80
+#: src/icqdialogs.cc:289 src/icqdialogs.cc:558 src/imcontroller.cc:80
 #, c-format
 msgid " Nickname : %s "
 msgstr " Кличкa : %s "
 
-#: src/icqdialogs.cc:266 src/icqdialogs.cc:336 src/imcontroller.cc:82
+#: src/icqdialogs.cc:290 src/icqdialogs.cc:366 src/imcontroller.cc:82
 #, c-format
 msgid " E-Mail : %s "
 msgstr " Адреса ел.пошти : %s "
 
-#: src/icqdialogs.cc:267 src/icqdialogs.cc:538 src/imcontroller.cc:83
+#: src/icqdialogs.cc:291 src/icqdialogs.cc:572 src/imcontroller.cc:83
 #, c-format
 msgid " First name : %s "
 msgstr " Iм'я : %s "
 
-#: src/icqdialogs.cc:268 src/icqdialogs.cc:539 src/imcontroller.cc:84
+#: src/icqdialogs.cc:292 src/icqdialogs.cc:573 src/imcontroller.cc:84
 #, c-format
 msgid " Last name : %s "
 msgstr " Пр╕звище : %s "
 
-#: src/icqdialogs.cc:270
+#: src/icqdialogs.cc:294
 #, c-format
 msgid " Age range : %s "
 msgstr " В╕кова категор╕я : %s "
 
-#: src/icqdialogs.cc:271 src/icqdialogs.cc:542
+#: src/icqdialogs.cc:295 src/icqdialogs.cc:576
 #, c-format
 msgid " Gender : %s "
 msgstr " Стать : %s "
 
-#: src/icqdialogs.cc:272
+#: src/icqdialogs.cc:296
 #, c-format
 msgid " Language : %s "
 msgstr " Мова : %s "
 
-#: src/icqdialogs.cc:275
+#: src/icqdialogs.cc:299
 msgid " Location "
 msgstr " М╕сце "
 
-#: src/icqdialogs.cc:276 src/icqdialogs.cc:547 src/icqdialogs.cc:559
+#: src/icqdialogs.cc:300 src/icqdialogs.cc:581 src/icqdialogs.cc:593
 #, c-format
 msgid " City : %s "
 msgstr " М╕сто : %s "
 
-#: src/icqdialogs.cc:277 src/icqdialogs.cc:548 src/icqdialogs.cc:560
+#: src/icqdialogs.cc:301 src/icqdialogs.cc:582 src/icqdialogs.cc:594
 #, c-format
 msgid " State : %s "
 msgstr " Штат : %s "
 
-#: src/icqdialogs.cc:278 src/icqdialogs.cc:549 src/icqdialogs.cc:561
+#: src/icqdialogs.cc:302 src/icqdialogs.cc:583 src/icqdialogs.cc:595
 #, c-format
 msgid " Country : %s "
 msgstr " Кра╖на : %s "
 
-#: src/icqdialogs.cc:281 src/icqdialogs.cc:558
+#: src/icqdialogs.cc:305 src/icqdialogs.cc:592
 msgid " Work "
 msgstr " Робота "
 
-#: src/icqdialogs.cc:282 src/icqdialogs.cc:566
+#: src/icqdialogs.cc:306 src/icqdialogs.cc:600
 #, c-format
 msgid " Company : %s "
 msgstr " Компан╕я : %s "
 
-#: src/icqdialogs.cc:283 src/icqdialogs.cc:567
+#: src/icqdialogs.cc:307 src/icqdialogs.cc:601
 #, c-format
 msgid " Department : %s "
 msgstr " В╕дд╕л : %s "
 
-#: src/icqdialogs.cc:284 src/icqdialogs.cc:568
+#: src/icqdialogs.cc:308 src/icqdialogs.cc:602
 #, c-format
 msgid " Position : %s "
 msgstr " Посада : %s "
 
-#: src/icqdialogs.cc:286
+#: src/icqdialogs.cc:310
 msgid " Online only "
 msgstr " Лише п╕дключен╕ "
 
-#: src/icqdialogs.cc:291
+#: src/icqdialogs.cc:315
 msgid " Random chat group "
 msgstr ""
 
-#: src/icqdialogs.cc:296
+#: src/icqdialogs.cc:320
 #, fuzzy
 msgid " Keywords "
 msgstr " Мережа "
 
-#: src/icqdialogs.cc:304
+#: src/icqdialogs.cc:328
 msgid " Nickname "
 msgstr " Кличка "
 
-#: src/icqdialogs.cc:310
+#: src/icqdialogs.cc:334
 msgid " Search service "
 msgstr ""
 
-#: src/icqdialogs.cc:313
+#: src/icqdialogs.cc:337
 msgid " Search parameters "
 msgstr ""
 
-#: src/icqdialogs.cc:330
+#: src/icqdialogs.cc:353 src/icqdialogs.cc:632
+#, fuzzy
+msgid " Feed Parameters "
+msgstr " Ре╓страц╕я "
+
+#: src/icqdialogs.cc:354 src/icqdialogs.cc:633
+#, c-format
+msgid " XML export URL : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:355 src/icqdialogs.cc:634
+#, c-format
+msgid " Check frequency (hours) : %lu "
+msgstr ""
+
+#: src/icqdialogs.cc:360
 #, c-format
 msgid " Channel : %s "
 msgstr " Канал : %s "
 
-#: src/icqdialogs.cc:333
+#: src/icqdialogs.cc:363
 #, c-format
 msgid " Name : %s "
 msgstr " ╤м'я : %s "
 
-#: src/icqdialogs.cc:339
+#: src/icqdialogs.cc:369
 msgid " Joined since the last check only "
 msgstr ""
 
-#: src/icqdialogs.cc:345
+#: src/icqdialogs.cc:375
 #, fuzzy
 msgid " Show users who have you on their list "
 msgstr "+ %s вже у контакт-л╕ст╕"
 
-#: src/icqdialogs.cc:350
+#: src/icqdialogs.cc:380
 msgid " Name/Title "
 msgstr ""
 
-#: src/icqdialogs.cc:355 src/imcontroller.cc:86
+#: src/icqdialogs.cc:385 src/imcontroller.cc:86
 msgid " Password "
 msgstr " Пароль "
 
-#: src/icqdialogs.cc:360
+#: src/icqdialogs.cc:390
 #, fuzzy
 msgid " Service "
 msgstr "Сервер: "
 
-#: src/icqdialogs.cc:388
+#: src/icqdialogs.cc:419
 #, fuzzy
 msgid "New profile name: "
 msgstr "який файл: "
 
-#: src/icqdialogs.cc:392
+#: src/icqdialogs.cc:423
 msgid "The profile with this name already exists. Do you want to overwrite it?"
 msgstr ""
 
-#: src/icqdialogs.cc:419
+#: src/icqdialogs.cc:450
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:420 src/icqdialogs.cc:670
+#: src/icqdialogs.cc:451 src/icqdialogs.cc:710
 msgid "Nickname: "
 msgstr "Кличка: "
 
-#: src/icqdialogs.cc:420
+#: src/icqdialogs.cc:451
 #, fuzzy
 msgid "Name/Title: "
 msgstr "╤м'я: "
 
-#: src/icqdialogs.cc:421 src/imcontroller.cc:102
+#: src/icqdialogs.cc:452 src/imcontroller.cc:102
 msgid "E-Mail: "
 msgstr "Адреса електронно╖ пошти: "
 
-#: src/icqdialogs.cc:422 src/icqdialogs.cc:675 src/imcontroller.cc:103
+#: src/icqdialogs.cc:453 src/icqdialogs.cc:715 src/imcontroller.cc:103
 msgid "First name: "
 msgstr "╤м'я: "
 
-#: src/icqdialogs.cc:423 src/icqdialogs.cc:676 src/imcontroller.cc:104
+#: src/icqdialogs.cc:454 src/icqdialogs.cc:716 src/imcontroller.cc:104
 msgid "Last name: "
 msgstr "Пр╕звище: "
 
-#: src/icqdialogs.cc:428 src/icqdialogs.cc:708 src/icqdialogs.cc:717
+#: src/icqdialogs.cc:459 src/icqdialogs.cc:748 src/icqdialogs.cc:757
 msgid "City: "
 msgstr "М╕сто: "
 
-#: src/icqdialogs.cc:429 src/icqdialogs.cc:709 src/icqdialogs.cc:718
+#: src/icqdialogs.cc:460 src/icqdialogs.cc:749 src/icqdialogs.cc:758
 msgid "State: "
 msgstr "Штат: "
 
-#: src/icqdialogs.cc:431 src/icqdialogs.cc:721
+#: src/icqdialogs.cc:462 src/icqdialogs.cc:761
 msgid "Company: "
 msgstr "Компан╕я: "
 
-#: src/icqdialogs.cc:432 src/icqdialogs.cc:722
+#: src/icqdialogs.cc:463 src/icqdialogs.cc:762
 msgid "Department: "
 msgstr "В╕дд╕л: "
 
-#: src/icqdialogs.cc:433 src/icqdialogs.cc:723
+#: src/icqdialogs.cc:464 src/icqdialogs.cc:763
 msgid "Position: "
 msgstr "Посада: "
 
-#: src/icqdialogs.cc:435
+#: src/icqdialogs.cc:466
 msgid "Channel: "
 msgstr "Канал: "
 
-#: src/icqdialogs.cc:436
+#: src/icqdialogs.cc:467
 msgid "Name: "
 msgstr "╤м'я: "
 
-#: src/icqdialogs.cc:438
+#: src/icqdialogs.cc:469
 #, fuzzy
 msgid "Keywords: "
 msgstr "пароль: "
 
-#: src/icqdialogs.cc:447 src/imcontroller.cc:99
+#: src/icqdialogs.cc:478 src/imcontroller.cc:99
 msgid "Password: "
 msgstr "Пароль: "
 
-#: src/icqdialogs.cc:468
+#: src/icqdialogs.cc:479 src/icqdialogs.cc:802
+#, fuzzy
+msgid "URL: "
+msgstr "URL"
+
+#: src/icqdialogs.cc:480 src/icqdialogs.cc:803
+msgid "Check frequency: "
+msgstr ""
+
+#: src/icqdialogs.cc:501
 msgid " General "
 msgstr " Загальне "
 
-#: src/icqdialogs.cc:503
+#: src/icqdialogs.cc:536
 #, fuzzy
 msgid " Registration service "
 msgstr " Ре╓страц╕я "
 
-#: src/icqdialogs.cc:507
+#: src/icqdialogs.cc:540
 #, fuzzy
 msgid " Registration parameters "
 msgstr " Ре╓страц╕я "
 
-#: src/icqdialogs.cc:530
+#: src/icqdialogs.cc:563
 #, fuzzy, c-format
 msgid " Change password : %s "
 msgstr " Пароль ще раз : %s "
 
-#: src/icqdialogs.cc:540
+#: src/icqdialogs.cc:574
 #, c-format
 msgid " E-mail : %s "
 msgstr " Адреса ел.пошти : %s "
 
-#: src/icqdialogs.cc:543
+#: src/icqdialogs.cc:577
 #, c-format
 msgid " Birthdate : %s "
 msgstr " Дата народження : %s "
 
-#: src/icqdialogs.cc:544
+#: src/icqdialogs.cc:578
 #, c-format
 msgid " Age : %s "
 msgstr " В╕к : %s "
 
-#: src/icqdialogs.cc:546
+#: src/icqdialogs.cc:580
 msgid " Home "
 msgstr " Адреса "
 
-#: src/icqdialogs.cc:552 src/icqdialogs.cc:564
+#: src/icqdialogs.cc:586 src/icqdialogs.cc:598
 #, c-format
 msgid " Street address : %s "
 msgstr " Адреса : %s "
 
-#: src/icqdialogs.cc:553 src/icqdialogs.cc:565
+#: src/icqdialogs.cc:587 src/icqdialogs.cc:599
 #, c-format
 msgid " Zip code : %s "
 msgstr " Поштовий ╕ндекс : %s "
 
-#: src/icqdialogs.cc:554 src/icqdialogs.cc:570
+#: src/icqdialogs.cc:588 src/icqdialogs.cc:604
 #, c-format
 msgid " Phone : %s "
 msgstr " Телефон : %s "
 
-#: src/icqdialogs.cc:555 src/icqdialogs.cc:571
+#: src/icqdialogs.cc:589 src/icqdialogs.cc:605
 #, c-format
 msgid " Fax : %s "
 msgstr " Факс : %s "
 
-#: src/icqdialogs.cc:556
+#: src/icqdialogs.cc:590
 #, c-format
 msgid " Cellular phone : %s "
 msgstr " Моб╕ла : %s "
 
-#: src/icqdialogs.cc:569 src/icqdialogs.cc:574
+#: src/icqdialogs.cc:603 src/icqdialogs.cc:608
 #, c-format
 msgid " Homepage : %s "
 msgstr " Домашня стор╕нка : %s "
 
-#: src/icqdialogs.cc:573
+#: src/icqdialogs.cc:607
 msgid " More "
 msgstr " ╤нтереси "
 
-#: src/icqdialogs.cc:577
+#: src/icqdialogs.cc:611
 #, c-format
 msgid " 1st language : %s "
 msgstr " Мова N1 : %s "
 
-#: src/icqdialogs.cc:580
+#: src/icqdialogs.cc:614
 #, c-format
 msgid " 2nd language : %s "
 msgstr " Мова N2 : %s "
 
-#: src/icqdialogs.cc:583
+#: src/icqdialogs.cc:617
 #, c-format
 msgid " 3rd language : %s "
 msgstr " Мова N3 : %s "
 
-#: src/icqdialogs.cc:586 src/icqdialogs.cc:1102
+#: src/icqdialogs.cc:620 src/icqdialogs.cc:1145
 msgid " Miscellaneous "
 msgstr " Р╕зне "
 
-#: src/icqdialogs.cc:588
+#: src/icqdialogs.cc:622
 #, c-format
 msgid " Enable web status indicator : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:589
+#: src/icqdialogs.cc:623
 #, fuzzy, c-format
 msgid " Random chat group : %s "
 msgstr " Впрорядковувати контакти в групи: %s "
 
-#: src/icqdialogs.cc:590
+#: src/icqdialogs.cc:624
 #, fuzzy, c-format
 msgid " Store contact list server-side : %s "
 msgstr " Впрорядковувати контакти в групи: %s "
 
-#: src/icqdialogs.cc:592
+#: src/icqdialogs.cc:626
 #, fuzzy, c-format
 msgid " Authorization required : %s "
 msgstr "авторизац╕я"
 
-#: src/icqdialogs.cc:599
+#: src/icqdialogs.cc:639
 msgid " About "
 msgstr " Про "
 
-#: src/icqdialogs.cc:617
+#: src/icqdialogs.cc:657
 msgid "Fetching your details"
 msgstr "Отримання Вашо╖ ╕нформац╕╖ користувача"
 
-#: src/icqdialogs.cc:631
+#: src/icqdialogs.cc:671
 #, c-format
 msgid " Your %s details "
 msgstr " %s ╕нформац╕я про вас "
 
-#: src/icqdialogs.cc:634
+#: src/icqdialogs.cc:674
 #, c-format
 msgid " %s: details "
 msgstr " ╤нформац╕я про %s "
 
-#: src/icqdialogs.cc:647 src/icqdialogs.cc:1041 src/icqdialogs.cc:1335
+#: src/icqdialogs.cc:687 src/icqdialogs.cc:1083 src/icqdialogs.cc:1378
 #: src/accountmanager.cc:68
 msgid "Done"
 msgstr "Гаразд"
 
 #
-#: src/icqdialogs.cc:665
+#: src/icqdialogs.cc:705
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Зачекайте... Ваше ╕нфо все ще не отримано"
 
-#: src/icqdialogs.cc:677
+#: src/icqdialogs.cc:717
 msgid "E-mail: "
 msgstr "Адреса ел.пошти: "
 
-#: src/icqdialogs.cc:688
+#: src/icqdialogs.cc:728
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Дата Вашого народження (дд-мм-рррр): "
 
-#: src/icqdialogs.cc:706
+#: src/icqdialogs.cc:746
 msgid "Age: "
 msgstr "В╕к: "
 
-#: src/icqdialogs.cc:711 src/icqdialogs.cc:720
+#: src/icqdialogs.cc:751 src/icqdialogs.cc:760
 msgid "Street address: "
 msgstr "Адреса: "
 
-#: src/icqdialogs.cc:712 src/icqdialogs.cc:736
+#: src/icqdialogs.cc:752 src/icqdialogs.cc:776
 msgid "Zip code: "
 msgstr "Поштовий ╕ндекс: "
 
-#: src/icqdialogs.cc:713 src/icqdialogs.cc:725
+#: src/icqdialogs.cc:753 src/icqdialogs.cc:765
 msgid "Phone: "
 msgstr "Телефон: "
 
-#: src/icqdialogs.cc:714 src/icqdialogs.cc:726
+#: src/icqdialogs.cc:754 src/icqdialogs.cc:766
 msgid "Fax: "
 msgstr "Факс: "
 
-#: src/icqdialogs.cc:715
+#: src/icqdialogs.cc:755
 msgid "Cellular phone: "
 msgstr "Моб╕ла: "
 
-#: src/icqdialogs.cc:724 src/icqdialogs.cc:728
+#: src/icqdialogs.cc:764 src/icqdialogs.cc:768
 msgid "Homepage: "
 msgstr "Домашня стор╕нка: "
 
-#: src/icqdialogs.cc:734 src/icqface.cc:1062
+#: src/icqdialogs.cc:774 src/icqface.cc:1131 src/icqface.cc:1136
 msgid "About"
 msgstr "Про"
 
-#: src/icqdialogs.cc:756
+#: src/icqdialogs.cc:796
 #, fuzzy
 msgid "New password: "
 msgstr " пароль: "
 
-#: src/icqdialogs.cc:759
+#: src/icqdialogs.cc:799
 #, fuzzy
 msgid "Check the new password: "
 msgstr " Пароль ще раз : %s "
 
-#: src/icqdialogs.cc:835 src/icqdialogs.cc:873
+#: src/icqdialogs.cc:877 src/icqdialogs.cc:915
 msgid "none"
 msgstr "нема"
 
-#: src/icqdialogs.cc:891
+#: src/icqdialogs.cc:933
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [^X зберегти, Esc скасувати] "
 
-#: src/icqdialogs.cc:931
+#: src/icqdialogs.cc:973
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " В╕д╕слати файли для %s, %lu "
 
-#: src/icqdialogs.cc:941 src/icqdialogs.cc:1334 src/icqface.cc:62
-#: src/icqface.cc:719 src/icqface.cc:1430 src/icqface.cc:2031
+#: src/icqdialogs.cc:983 src/icqdialogs.cc:1377 src/icqface.cc:62
+#: src/icqface.cc:737 src/icqface.cc:1523 src/icqface.cc:2124
 msgid "Add"
 msgstr "Додати"
 
-#: src/icqdialogs.cc:941
+#: src/icqdialogs.cc:983
 msgid "Comment"
 msgstr "Коментар"
 
-#: src/icqdialogs.cc:941 src/icqface.cc:2031
+#: src/icqdialogs.cc:983 src/icqface.cc:2124
 msgid "Send"
 msgstr "В╕д╕слати"
 
-#: src/icqdialogs.cc:951
+#: src/icqdialogs.cc:993
 msgid " Files "
 msgstr " Файли "
 
-#: src/icqdialogs.cc:952
+#: src/icqdialogs.cc:994
 msgid " Comment "
 msgstr " Коментар "
 
-#: src/icqdialogs.cc:964
+#: src/icqdialogs.cc:1006
 msgid "filename: "
 msgstr "який файл: "
 
-#: src/icqdialogs.cc:971
+#: src/icqdialogs.cc:1013
 msgid "comment: "
 msgstr "коментар: "
 
-#: src/icqdialogs.cc:1032
+#: src/icqdialogs.cc:1074
 msgid " CenterICQ configuration "
 msgstr " Параметри CenterICQ"
 
-#: src/icqdialogs.cc:1052
+#: src/icqdialogs.cc:1094
 #, fuzzy
 msgid " User interface "
 msgstr " ╕м'я користувача: "
 
-#: src/icqdialogs.cc:1053
+#: src/icqdialogs.cc:1095
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Звуковий пристр╕й : %s"
 
-#: src/icqdialogs.cc:1054
+#: src/icqdialogs.cc:1096
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Пал╕тра кольор╕в : %s "
 
-#: src/icqdialogs.cc:1057
+#: src/icqdialogs.cc:1099
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1059
+#: src/icqdialogs.cc:1101
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1061
+#: src/icqdialogs.cc:1103
 msgid " Contact list "
 msgstr " Контакт-л╕ст "
 
-#: src/icqdialogs.cc:1062
+#: src/icqdialogs.cc:1104
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Впрорядковувати контакти в групи: %s "
 
-#: src/icqdialogs.cc:1063
+#: src/icqdialogs.cc:1105
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Не показувати в╕дключених : %s "
 
-#: src/icqdialogs.cc:1064
+#: src/icqdialogs.cc:1106
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " В╕дкидати пов╕домлення в╕д тих, хто не в контакт-лист╕ : %s "
 
-#: src/icqdialogs.cc:1065
+#: src/icqdialogs.cc:1107
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Цитувати пов╕домлення у в╕дпов╕д╕ : %s "
 
-#: src/icqdialogs.cc:1066
+#: src/icqdialogs.cc:1108
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Перев╕ряти поштову скриньку : %s "
 
-#: src/icqdialogs.cc:1067
+#: src/icqdialogs.cc:1109
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Запам'ятовувати парол╕ : %s "
 
-#: src/icqdialogs.cc:1068
+#: src/icqdialogs.cc:1110
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Редагувати автопов╕домлення при зм╕н╕ статусу : %s "
 
-#: src/icqdialogs.cc:1075
+#: src/icqdialogs.cc:1117
 #, fuzzy, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " Режим балачки: %s "
 
-#: src/icqdialogs.cc:1081
+#: src/icqdialogs.cc:1124
 #, fuzzy, c-format
 msgid " Russian win/koi translation for : %s"
 msgstr " Перекодування кирилиц╕ м╕ж Win1251 та Koi-8 : %s "
 
-#: src/icqdialogs.cc:1084
+#: src/icqdialogs.cc:1127
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Режим балачки: %s "
 
-#: src/icqdialogs.cc:1085
+#: src/icqdialogs.cc:1128
 #, fuzzy, c-format
 msgid " Russian win/koi translation : %s "
 msgstr " Перекодування кирилиц╕ м╕ж Win1251 та Koi-8 : %s "
 
-#: src/icqdialogs.cc:1089
+#: src/icqdialogs.cc:1132
 msgid " Communications "
 msgstr " Мережа "
 
-#: src/icqdialogs.cc:1090
+#: src/icqdialogs.cc:1133
 #, c-format
 msgid " SMTP server : %s "
 msgstr " Поштовий сервер: %s "
 
-#: src/icqdialogs.cc:1091
+#: src/icqdialogs.cc:1134
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1094
+#: src/icqdialogs.cc:1137
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1096
+#: src/icqdialogs.cc:1139
 #, fuzzy
 msgid " Logging "
 msgstr " Лог╕н : %s "
 
-#: src/icqdialogs.cc:1097
+#: src/icqdialogs.cc:1140
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1098
+#: src/icqdialogs.cc:1141
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1099
+#: src/icqdialogs.cc:1142
 #, c-format
 msgid " Typing notifications in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1100
+#: src/icqdialogs.cc:1143
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Детальний протокол под╕й в ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:1103
+#: src/icqdialogs.cc:1146
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Зм╕нювати статус на 'В╕д╕йшов' через %d хвилин "
 
-#: src/icqdialogs.cc:1104
+#: src/icqdialogs.cc:1147
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Зм╕нювати статус на 'Недocяжний' через %d хвилин "
 
-#: src/icqdialogs.cc:1131
+#: src/icqdialogs.cc:1174
 msgid "Auto Away period (0 - disable): "
 msgstr "Пер╕од автоматично╖ зм╕ни статусу на 'В╕д╕йшов' (0 - скинути): "
 
-#: src/icqdialogs.cc:1135
+#: src/icqdialogs.cc:1178
 msgid "Auto N/A period (0 - disable): "
 msgstr "Пер╕од автоматично╖ зм╕ни статусу на 'Недосяжний' (0 - скинути): "
 
-#: src/icqdialogs.cc:1161
+#: src/icqdialogs.cc:1204
 msgid "SMTP server hostname: "
 msgstr "Адреса поштового серверу: "
 
-#: src/icqdialogs.cc:1171
+#: src/icqdialogs.cc:1214
 msgid "Peer-to-peer port range (min-max): "
 msgstr ""
 
-#: src/icqdialogs.cc:1298
+#: src/icqdialogs.cc:1341
 msgid "Your details have been fetched"
 msgstr "Отримано вашу ╕нформац╕ю користувача"
 
-#: src/icqdialogs.cc:1310
+#: src/icqdialogs.cc:1353
 msgid "Organize contact groups"
 msgstr "Впорядкувати контакти в групи"
 
-#: src/icqdialogs.cc:1334
+#: src/icqdialogs.cc:1377
 msgid "Rename"
 msgstr "Пере╕менувати"
 
-#: src/icqdialogs.cc:1334
+#: src/icqdialogs.cc:1377
 msgid "rEmove"
 msgstr "Видалити"
 
-#: src/icqdialogs.cc:1334
+#: src/icqdialogs.cc:1377
 msgid "move Up"
 msgstr "посунути вгору"
 
-#: src/icqdialogs.cc:1334
+#: src/icqdialogs.cc:1377
 msgid "move Down"
 msgstr "посунути вниз"
 
-#: src/icqdialogs.cc:1335
+#: src/icqdialogs.cc:1378
 msgid "Select"
 msgstr "Вибрати"
 
-#: src/icqdialogs.cc:1350
+#: src/icqdialogs.cc:1393
 msgid " Groups "
 msgstr " Групи "
 
-#: src/icqdialogs.cc:1365
+#: src/icqdialogs.cc:1408
 msgid "Name for a group to be created: "
 msgstr "Назва для ново╖ групи: "
 
-#: src/icqdialogs.cc:1375
+#: src/icqdialogs.cc:1418
 msgid "New name for the group: "
 msgstr "Нова назва групи: "
 
-#: src/icqdialogs.cc:1388
+#: src/icqdialogs.cc:1431
 msgid "Are you sure want to remove the group?"
 msgstr "Справд╕ видалити групу?"
 
-#: src/icqdialogs.cc:1445
+#: src/icqdialogs.cc:1488
 msgid "File transfer status"
 msgstr ""
 
-#: src/icqdialogs.cc:1454
+#: src/icqdialogs.cc:1497
 #, fuzzy
 msgid "Cancel"
 msgstr "Зм╕нити"
 
-#: src/icqdialogs.cc:1483
+#: src/icqdialogs.cc:1526
 #, fuzzy, c-format
 msgid " Incoming from %s "
 msgstr "Вх╕дне %s в╕д %s"
 
-#: src/icqdialogs.cc:1485
+#: src/icqdialogs.cc:1528
 #, fuzzy, c-format
 msgid " Outgoing to %s "
 msgstr "Вих╕дне %s до %s"
 
-#: src/icqdialogs.cc:1493
+#: src/icqdialogs.cc:1536
 msgid "init"
 msgstr ""
 
-#: src/icqdialogs.cc:1494
+#: src/icqdialogs.cc:1537
 msgid "start"
 msgstr ""
 
-#: src/icqdialogs.cc:1495
+#: src/icqdialogs.cc:1538
 #, fuzzy
 msgid "work"
 msgstr "Робота"
 
-#: src/icqdialogs.cc:1496
+#: src/icqdialogs.cc:1539
 #, fuzzy
 msgid "done"
 msgstr "Гаразд"
 
-#: src/icqdialogs.cc:1497
+#: src/icqdialogs.cc:1540
 msgid "err"
 msgstr ""
 
-#: src/icqdialogs.cc:1498
+#: src/icqdialogs.cc:1541
 #, fuzzy
 msgid "abort"
 msgstr "Про"
 
-#: src/icqdialogs.cc:1505
+#: src/icqdialogs.cc:1548
 #, fuzzy
 msgid " of "
 msgstr " В╕дкинути "
 
-#: src/icqdialogs.cc:1538
+#: src/icqdialogs.cc:1581
 msgid "Cannot remove a transfer which is in progress now"
 msgstr ""
 
@@ -1671,87 +1705,87 @@ msgstr "зм╕нено наш %s статус на %s з %s"
 msgid " IM account manager "
 msgstr " Розпорядник акаунт╕в "
 
-#: src/accountmanager.cc:91
+#: src/accountmanager.cc:94
 #, c-format
 msgid " Server : %s "
 msgstr " Сервер : %s "
 
-#: src/accountmanager.cc:94
+#: src/accountmanager.cc:97
 #, fuzzy, c-format
 msgid " Secured : %s "
 msgstr " Сервер : %s "
 
-#: src/accountmanager.cc:100
+#: src/accountmanager.cc:103
 #, c-format
 msgid " UIN : %s "
 msgstr " UIN : %s "
 
-#: src/accountmanager.cc:105
+#: src/accountmanager.cc:108
 #, c-format
 msgid " Login : %s "
 msgstr " Лог╕н : %s "
 
-#: src/accountmanager.cc:111
+#: src/accountmanager.cc:114
 #, fuzzy, c-format
 msgid " Password (optional) : %s "
 msgstr " Новий пароль : %s "
 
-#: src/accountmanager.cc:111
+#: src/accountmanager.cc:114
 #, c-format
 msgid " Password : %s "
 msgstr " Пароль : %s "
 
-#: src/accountmanager.cc:115
+#: src/accountmanager.cc:118
 msgid " Register "
 msgstr " Заре╓струватися "
 
-#: src/accountmanager.cc:121
+#: src/accountmanager.cc:124
 #, fuzzy
 msgid " Change nickname "
 msgstr " Кличка "
 
-#: src/accountmanager.cc:122
+#: src/accountmanager.cc:125
 msgid " Update user details "
 msgstr " Поновити Ваше ╕нфо "
 
-#: src/accountmanager.cc:125
+#: src/accountmanager.cc:128
 msgid " Set away message "
 msgstr " Над╕слати автопов╕домлення  "
 
-#: src/accountmanager.cc:128
+#: src/accountmanager.cc:131
 #, fuzzy
 msgid " Synchronize contact list "
 msgstr " Контакт-л╕ст "
 
-#: src/accountmanager.cc:130
+#: src/accountmanager.cc:133
 msgid " Drop "
 msgstr " В╕дкинути "
 
-#: src/accountmanager.cc:148
+#: src/accountmanager.cc:151
 msgid " user name: "
 msgstr " ╕м'я користувача: "
 
-#: src/accountmanager.cc:153
+#: src/accountmanager.cc:156
 msgid " uin: "
 msgstr " uin: "
 
-#: src/accountmanager.cc:158
+#: src/accountmanager.cc:161
 msgid " password: "
 msgstr " пароль: "
 
-#: src/accountmanager.cc:166
+#: src/accountmanager.cc:169
 msgid "Drop the account information first!"
 msgstr "Спочатку треба скинути ╕нформац╕ю про акаунт"
 
-#: src/accountmanager.cc:180
+#: src/accountmanager.cc:183
 msgid "You have to disconnect the service first!"
 msgstr "Спочатку треба в╕д'╓днатися в╕д серв╕су!"
 
-#: src/accountmanager.cc:189
+#: src/accountmanager.cc:192
 msgid " server address: "
 msgstr " адреса серверу: "
 
-#: src/accountmanager.cc:211
+#: src/accountmanager.cc:214
 #, fuzzy
 msgid "You must be logged in to preform the synchronization"
 msgstr "+ сл╕д п╕д'╓днатися спочатку"
@@ -1929,113 +1963,113 @@ msgstr ""
 msgid "registration is not supported"
 msgstr "ре╓страц╕я не п╕дтриму╓ться"
 
-#: src/icqconf.cc:161
+#: src/icqconf.cc:162
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Мен╕ подоба╓ться типове %s автопов╕домлення для %s %s."
 
-#: src/icqconf.cc:671
+#: src/icqconf.cc:680
 msgid "+ launched the openurl command"
 msgstr ""
 
-#: src/icqconf.cc:836
+#: src/icqconf.cc:847
 msgid "event sending error: not enough parameters"
 msgstr "помилка в╕дсилання под╕╖: недостатньо параметр╕в"
 
-#: src/icqconf.cc:847
+#: src/icqconf.cc:858
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "помилка в╕дсилання под╕╖: в icq-протокол╕ дозволяються лише UIN'и"
 
-#: src/icqconf.cc:862
+#: src/icqconf.cc:873
 msgid "event sending error: unknown IM type"
 msgstr "помилка в╕дсилання под╕╖: нев╕домий тип програми"
 
-#: src/icqconf.cc:884
+#: src/icqconf.cc:895
 msgid "event sending error: unknown event type"
 msgstr "помилка в╕дсилання под╕╖: нев╕домий тип под╕╖"
 
-#: src/icqconf.cc:896
+#: src/icqconf.cc:907
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s до %s поставлено в чергу"
 
-#: src/icqconf.cc:902
+#: src/icqconf.cc:913
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr "помилка в╕дсилання под╕╖: ц╕льовий контакт не ╕сну╓ у вашому л╕ст╕"
 
-#: src/icqconf.cc:944
+#: src/icqconf.cc:955
 msgid "unknown status character was given"
 msgstr "нев╕домий статусний символ"
 
-#: src/icqconf.cc:947
+#: src/icqconf.cc:958
 msgid "unknown IM type"
 msgstr "нев╕домий тип комун╕катора"
 
-#: src/icqconf.cc:950
+#: src/icqconf.cc:961
 msgid "status change error: "
 msgstr "помилка зм╕ни статусу: "
 
-#: src/icqconf.cc:959
+#: src/icqconf.cc:970
 #, fuzzy
 msgid "Usage: "
 msgstr "В╕к: "
 
-#: src/icqconf.cc:961
+#: src/icqconf.cc:972
 #, fuzzy
 msgid "General options:"
 msgstr " Загальне "
 
-#: src/icqconf.cc:962
+#: src/icqconf.cc:973
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 
-#: src/icqconf.cc:963
+#: src/icqconf.cc:974
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr ""
 
-#: src/icqconf.cc:964
+#: src/icqconf.cc:975
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr ""
 
-#: src/icqconf.cc:965
+#: src/icqconf.cc:976
 #, fuzzy
 msgid "  --help                   display this stuff"
 msgstr " Зм╕нити статус                      s"
 
-#: src/icqconf.cc:966
+#: src/icqconf.cc:977
 msgid "  --version, -v            show the program version info"
 msgstr ""
 
-#: src/icqconf.cc:968
+#: src/icqconf.cc:979
 #, fuzzy
 msgid "Events sending options:"
 msgstr " Параметри CenterICQ"
 
-#: src/icqconf.cc:969
+#: src/icqconf.cc:980
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 
-#: src/icqconf.cc:970
+#: src/icqconf.cc:981
 msgid "  -S, --status <status>    change the current IM status"
 msgstr ""
 
-#: src/icqconf.cc:971
+#: src/icqconf.cc:982
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
 "or jabber"
 msgstr ""
 
-#: src/icqconf.cc:972
+#: src/icqconf.cc:983
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 
-#: src/icqconf.cc:973
+#: src/icqconf.cc:984
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 
-#: src/icqconf.cc:975
+#: src/icqconf.cc:986
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 
@@ -2158,543 +2192,686 @@ msgstr "режим 1"
 msgid "mode 2"
 msgstr "режим 2"
 
-#: src/icqface.cc:227
+#: src/icqface.cc:225
 #, c-format
 msgid "CENTERICQ %s   UNSENT: %lu"
 msgstr ""
 
-#: src/icqface.cc:251
+#: src/icqface.cc:249
 msgid " Send an URL            u"
 msgstr " Над╕слати URL          u"
 
-#: src/icqface.cc:252
+#: src/icqface.cc:250
 msgid " Send an SMS"
 msgstr " Над╕слати СМС"
 
-#: src/icqface.cc:253
+#: src/icqface.cc:251
 #, fuzzy
 msgid " Send contacts          c"
 msgstr " Пере╕менувати          r"
 
-#: src/icqface.cc:254
+#: src/icqface.cc:252
 #, fuzzy
 msgid " Request authorization"
 msgstr "авторизац╕я"
 
-#: src/icqface.cc:255
+#: src/icqface.cc:253
 #, fuzzy
 msgid " Edit details           e"
 msgstr " ╤нфо користувача       ?"
 
-#: src/icqface.cc:256
+#: src/icqface.cc:254
 #, fuzzy
 msgid " Fetch away message     f"
 msgstr " Витягти автопов╕домлення"
 
-#: src/icqface.cc:257
+#: src/icqface.cc:255
 msgid " Add to list            a"
 msgstr " Додати в контакт-л╕ст  a"
 
-#: src/icqface.cc:258
+#: src/icqface.cc:256
 msgid " Rename contact         r"
 msgstr " Пере╕менувати          r"
 
-#: src/icqface.cc:259
+#: src/icqface.cc:257
 msgid " Move to group.."
 msgstr " Перенести до групи.."
 
-#: src/icqface.cc:260
+#: src/icqface.cc:258
 msgid " Ping"
 msgstr ""
 
-#: src/icqface.cc:261
+#: src/icqface.cc:259
 msgid " Fetch version info     v"
 msgstr ""
 
-#: src/icqface.cc:262
+#: src/icqface.cc:260
 #, fuzzy
 msgid " Send file(s)"
 msgstr " В╕д╕слати файли для %s, %lu "
 
-#: src/icqface.cc:263
+#: src/icqface.cc:261
 msgid " Invite to conference.."
 msgstr ""
 
-#: src/icqface.cc:270
+#: src/icqface.cc:268
 #, fuzzy
 msgid " Send a channel message   enter"
 msgstr " Над╕слати пов╕домлення  "
 
-#: src/icqface.cc:271
+#: src/icqface.cc:269
 #, fuzzy
 msgid " Channel chat history         h"
 msgstr " ╤стор╕я пов╕домлень    h"
 
-#: src/icqface.cc:272
+#: src/icqface.cc:270
 #, fuzzy
 msgid " Remove channel             del"
 msgstr " Видалити користувача del"
 
-#: src/icqface.cc:273
+#: src/icqface.cc:271
 #, fuzzy
 msgid " Join channel"
 msgstr "На каналах: "
 
-#: src/icqface.cc:274
+#: src/icqface.cc:272
 msgid " Leave channel"
 msgstr ""
 
-#: src/icqface.cc:275
+#: src/icqface.cc:273
 #, fuzzy
 msgid " List nicknames               ?"
 msgstr " Приховати в╕длючених               F5"
 
-#: src/icqface.cc:278
+#: src/icqface.cc:276
 #, fuzzy
 msgid " UnBlock channel messages     i"
 msgstr " Над╕слати пов╕домлення  "
 
-#: src/icqface.cc:280
+#: src/icqface.cc:278
 #, fuzzy
 msgid " Block channel messages       i"
 msgstr " Над╕слати пов╕домлення  "
 
-#: src/icqface.cc:286
+#: src/icqface.cc:285
 msgid " Send a message     enter"
 msgstr " Над╕слати пов╕домлення  "
 
-#: src/icqface.cc:287
+#: src/icqface.cc:286 src/icqface.cc:297
 msgid " Events history         h"
 msgstr " ╤стор╕я пов╕домлень    h"
 
-#: src/icqface.cc:288
+#: src/icqface.cc:287
 msgid " Remove user          del"
 msgstr " Видалити користувача del"
 
-#: src/icqface.cc:289
+#: src/icqface.cc:288
 msgid " User's details         ?"
 msgstr " ╤нфо користувача       ?"
 
-#: src/icqface.cc:290
+#: src/icqface.cc:289 src/icqface.cc:300
 msgid " External actions..    f6"
 msgstr ""
 
-#: src/icqface.cc:293
+#: src/icqface.cc:292
 #, fuzzy
 msgid " Unset ignore user      i"
 msgstr " Видалити користувача del"
 
-#: src/icqface.cc:295
+#: src/icqface.cc:294
 #, fuzzy
 msgid " Ignore user            i"
 msgstr " Видалити користувача del"
 
-#: src/icqface.cc:386
+#: src/icqface.cc:298
+#, fuzzy
+msgid " Remove feed          del"
+msgstr " Видалити користувача del"
+
+#: src/icqface.cc:299
+msgid " Feed information       ?"
+msgstr ""
+
+#: src/icqface.cc:301
+msgid " Force check"
+msgstr ""
+
+#: src/icqface.cc:304
+#, fuzzy
+msgid " Unset ignore feed      i"
+msgstr " Видалити користувача del"
+
+#: src/icqface.cc:306
+#, fuzzy
+msgid " Ignore feed            i"
+msgstr " Видалити користувача del"
+
+#: src/icqface.cc:403
 msgid " Change status                       s"
 msgstr " Зм╕нити статус                      s"
 
-#: src/icqface.cc:387
+#: src/icqface.cc:404
 msgid " Go to contact..                 alt-s"
 msgstr " Перейти до контакту            meta-s"
 
-#: src/icqface.cc:388
+#: src/icqface.cc:405
 msgid " Accounts.."
 msgstr " Аккаунти.."
 
-#: src/icqface.cc:389
+#: src/icqface.cc:406
+msgid " CenterICQ config options"
+msgstr " Параметри CenterICQ"
+
+#: src/icqface.cc:407
+msgid " File transfers monitor"
+msgstr ""
+
+#: src/icqface.cc:409
 msgid " Find/add users"
 msgstr " Пошук користувач╕в"
 
-#: src/icqface.cc:390
+#: src/icqface.cc:410
 #, fuzzy
 msgid " Join channel/conference"
 msgstr "На каналах: "
 
-#: src/icqface.cc:391
-msgid " CenterICQ config options"
-msgstr " Параметри CenterICQ"
+#: src/icqface.cc:412
+msgid " Link an RSS feed"
+msgstr ""
 
-#: src/icqface.cc:393
+#: src/icqface.cc:415
 msgid " View/edit ignore list"
 msgstr " Редагувати список ╕гнорування"
 
-#: src/icqface.cc:394
+#: src/icqface.cc:416
 msgid " View/edit invisible list"
 msgstr " Редагувати список невидимост╕"
 
-#: src/icqface.cc:395
+#: src/icqface.cc:417
 msgid " View/edit visible list"
 msgstr " Редагувати список видимост╕"
 
-#: src/icqface.cc:398
+#: src/icqface.cc:420
 msgid " Show offline users                 F5"
 msgstr " Показувати в╕дключених             F5"
 
-#: src/icqface.cc:399
+#: src/icqface.cc:421
 msgid " Hide offline users                 F5"
 msgstr " Приховати в╕длючених               F5"
 
-#: src/icqface.cc:402
+#: src/icqface.cc:424
 #, fuzzy
 msgid " Organize contact groups"
 msgstr "Впорядкувати контакти в групи"
 
-#: src/icqface.cc:406
-msgid " File transfers monitor"
-msgstr ""
-
-#: src/icqface.cc:719 src/icqface.cc:1430
+#: src/icqface.cc:737 src/icqface.cc:1523
 msgid "Details"
 msgstr "╤нфо"
 
-#: src/icqface.cc:719
+#: src/icqface.cc:737
 msgid "Message"
 msgstr "Пов╕домлення"
 
-#: src/icqface.cc:720
+#: src/icqface.cc:738
 msgid "New search"
 msgstr "Новий пошук"
 
-#: src/icqface.cc:735
+#: src/icqface.cc:753
 #, fuzzy
 msgid "Contact to add"
 msgstr " Контакт-л╕ст "
 
-#: src/icqface.cc:745
+#: src/icqface.cc:763
 msgid "Searching contacts.."
 msgstr ""
 
-#: src/icqface.cc:813
+#: src/icqface.cc:831
 msgid "Search results [done]"
 msgstr ""
 
-#: src/icqface.cc:824
+#: src/icqface.cc:842
 #, c-format
 msgid "Information about %s"
 msgstr "╤нформац╕я про %s"
 
-#: src/icqface.cc:882
+#: src/icqface.cc:900
 msgid "Nickname"
 msgstr "Кличка"
 
-#: src/icqface.cc:883
+#: src/icqface.cc:901
 msgid "Name"
 msgstr "╤м'я"
 
-#: src/icqface.cc:884
+#: src/icqface.cc:902
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/icqface.cc:885
+#: src/icqface.cc:903
 msgid "2nd e-mail"
 msgstr "E-mail #2"
 
-#: src/icqface.cc:886
+#: src/icqface.cc:904
 msgid "Old e-mail"
 msgstr "Старе мило"
 
-#: src/icqface.cc:887
+#: src/icqface.cc:905
 msgid "Gender"
 msgstr "Стать"
 
-#: src/icqface.cc:888
+#: src/icqface.cc:906
 msgid "Birthdate"
 msgstr "Народження"
 
-#: src/icqface.cc:889
+#: src/icqface.cc:907
 msgid "Age"
 msgstr "В╕к"
 
-#: src/icqface.cc:890
+#: src/icqface.cc:908
 msgid "Languages"
 msgstr "Мови"
 
-#: src/icqface.cc:891
+#: src/icqface.cc:909
 msgid "Last IP"
 msgstr "Остання IP"
 
-#: src/icqface.cc:912
+#: src/icqface.cc:930
 msgid "Last seen"
 msgstr "Востанн╓"
 
-#: src/icqface.cc:914
+#: src/icqface.cc:932 src/icqface.cc:1098 src/icqface.cc:1102
 msgid "Never"
 msgstr "Н╕коли"
 
-#: src/icqface.cc:927 src/icqface.cc:970
+#: src/icqface.cc:945 src/icqface.cc:988
 msgid "Address"
 msgstr "Адреса"
 
-#: src/icqface.cc:928 src/icqface.cc:971
+#: src/icqface.cc:946 src/icqface.cc:989
 msgid "Location"
 msgstr "М╕сце"
 
-#: src/icqface.cc:929 src/icqface.cc:972
+#: src/icqface.cc:947 src/icqface.cc:990
 msgid "Zip code"
 msgstr "╤ндекс"
 
-#: src/icqface.cc:930 src/icqface.cc:978
+#: src/icqface.cc:948 src/icqface.cc:996
 msgid "Phone"
 msgstr "Телефон"
 
-#: src/icqface.cc:931 src/icqface.cc:979
+#: src/icqface.cc:949 src/icqface.cc:997
 msgid "Fax"
 msgstr "Факс"
 
-#: src/icqface.cc:932
+#: src/icqface.cc:950
 msgid "Cellular"
 msgstr "Моб╕ла"
 
-#: src/icqface.cc:933
+#: src/icqface.cc:951
 msgid "Timezone"
 msgstr "Часовий пояс"
 
-#: src/icqface.cc:935 src/icqface.cc:980
+#: src/icqface.cc:953 src/icqface.cc:998
 msgid "Homepage"
 msgstr "Стор╕нка"
 
-#: src/icqface.cc:974
+#: src/icqface.cc:992
 msgid "Company"
 msgstr "Компан╕я"
 
-#: src/icqface.cc:975
+#: src/icqface.cc:993
 msgid "Department"
 msgstr "В╕дд╕л"
 
-#: src/icqface.cc:976
+#: src/icqface.cc:994 src/icqface.cc:1073
 msgid "Title"
 msgstr "Посада"
 
-#: src/icqface.cc:1020
+#: src/icqface.cc:1038
 msgid "Interests"
 msgstr "╤нтереси"
 
-#: src/icqface.cc:1032
+#: src/icqface.cc:1050
 msgid "Background"
 msgstr "Минуле"
 
-#: src/icqface.cc:1055
+#: src/icqface.cc:1068
+#, fuzzy
+msgid "Handle"
+msgstr "Чолов╕ча"
+
+#: src/icqface.cc:1069
+msgid "RSS doc"
+msgstr ""
+
+#: src/icqface.cc:1070
+msgid "Version"
+msgstr ""
+
+#: src/icqface.cc:1071
+msgid "Encoding"
+msgstr ""
+
+#: src/icqface.cc:1074
+msgid "Link"
+msgstr ""
+
+#: src/icqface.cc:1076
+msgid "Frequency"
+msgstr ""
+
+#: src/icqface.cc:1077
+#, fuzzy
+msgid "Last check"
+msgstr "Востанн╓"
+
+#: src/icqface.cc:1078
+msgid "Next check"
+msgstr ""
+
+#: src/icqface.cc:1079
+#, fuzzy
+msgid "Last result"
+msgstr "як запитувалося"
+
+#: src/icqface.cc:1093
+#, c-format
+msgid "%lu hours"
+msgstr ""
+
+#: src/icqface.cc:1096
+#, fuzzy
+msgid "Now"
+msgstr "Лис"
+
+#: src/icqface.cc:1123
 #, fuzzy
 msgid "F2 to URLs, F6 external actions, ESC close"
 msgstr "F2 йде за посиланнями, ESC закрива╓"
 
-#: src/icqface.cc:1062
+#: src/icqface.cc:1131 src/icqface.cc:1136
 msgid "Info"
 msgstr "╤нфо"
 
-#: src/icqface.cc:1062
+#: src/icqface.cc:1131
 msgid "Home"
 msgstr "Д╕м"
 
-#: src/icqface.cc:1062
+#: src/icqface.cc:1131
 msgid "Work"
 msgstr "Робота"
 
-#: src/icqface.cc:1062
+#: src/icqface.cc:1131
 msgid "More"
 msgstr "Додатково"
 
-#: src/icqface.cc:1063
+#: src/icqface.cc:1132
 msgid "Retrieve"
 msgstr "Поновити"
 
-#: src/icqface.cc:1063
+#: src/icqface.cc:1132 src/icqface.cc:1136
 msgid "Edit"
 msgstr "Редагувати"
 
-#: src/icqface.cc:1134
+#: src/icqface.cc:1136
+msgid "Check"
+msgstr ""
+
+#: src/icqface.cc:1226
 msgid " [icq] ICQ network"
 msgstr " [icq] Мережа ICQ "
 
-#: src/icqface.cc:1135
+#: src/icqface.cc:1227
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:1136
+#: src/icqface.cc:1228
 msgid " [msn] M$ Messenger"
 msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:1137
+#: src/icqface.cc:1229
 msgid " [aim] AOL TOC"
 msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:1138
+#: src/icqface.cc:1230
 msgid " [irc] IRC"
 msgstr " [irc] IRC"
 
-#: src/icqface.cc:1139
+#: src/icqface.cc:1231
 msgid " [jab] Jabber"
 msgstr ""
 
-#: src/icqface.cc:1170
+#: src/icqface.cc:1263
 msgid " [all] All of them"
 msgstr " [вс╕] Вс╕ з них"
 
-#: src/icqface.cc:1191
+#: src/icqface.cc:1284
 msgid " [o] Online"
 msgstr " [o] В еф╕р╕"
 
-#: src/icqface.cc:1192
+#: src/icqface.cc:1285
 msgid " [_] Offline"
 msgstr " [_] В╕дключений"
 
-#: src/icqface.cc:1193
+#: src/icqface.cc:1286
 msgid " [a] Away"
 msgstr " [a] В╕д╕йшов"
 
-#: src/icqface.cc:1194
+#: src/icqface.cc:1287
 msgid " [d] Do not disturb"
 msgstr " [d] Не турбувaти"
 
-#: src/icqface.cc:1195
+#: src/icqface.cc:1288
 msgid " [n] Not available"
 msgstr " [n] Недocяжний"
 
-#: src/icqface.cc:1196
+#: src/icqface.cc:1289
 msgid " [c] Occupied"
 msgstr " [c] Зайнятий"
 
-#: src/icqface.cc:1197
+#: src/icqface.cc:1290
 msgid " [f] Free for chat"
 msgstr " [f] Xoчу попатякати!"
 
-#: src/icqface.cc:1198
+#: src/icqface.cc:1291
 msgid " [i] Invisible"
 msgstr " [i] Невидимий"
 
-#: src/icqface.cc:1257
+#: src/icqface.cc:1350
 msgid " <Space> or <Enter> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1286
+#: src/icqface.cc:1379
 msgid " <Space> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1430
+#: src/icqface.cc:1523
 msgid "Move to contacts"
 msgstr "В контакт-л╕ст"
 
-#: src/icqface.cc:1442
+#: src/icqface.cc:1535
 msgid "Ignore list"
 msgstr "Список ╕гнорування"
 
-#: src/icqface.cc:1443
+#: src/icqface.cc:1536
 msgid "Visible list"
 msgstr "Список видимост╕"
 
-#: src/icqface.cc:1444
+#: src/icqface.cc:1537
 msgid "Invisible list"
 msgstr "Список невидимост╕"
 
-#: src/icqface.cc:1466
+#: src/icqface.cc:1559
 msgid "Select contacts to add to the list"
 msgstr "Вибер╕ть контакти щоби додати в л╕ст"
 
-#: src/icqface.cc:1471
+#: src/icqface.cc:1564
 #, c-format
 msgid "Remove the %d contacts from the contact list as well?"
 msgstr ""
 
-#: src/icqface.cc:1527
+#: src/icqface.cc:1620
 msgid "Event recipients"
 msgstr "Отримувач╕"
 
-#: src/icqface.cc:1693
+#: src/icqface.cc:1786
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "ШвидкийПошук: набирайте, Meta-S знову шукати, Enter зак╕нчити"
 
-#: src/icqface.cc:1807
+#: src/icqface.cc:1900
 msgid "+ no URLs within the current context"
 msgstr "+ нема╓ посилань"
 
-#: src/icqface.cc:1820
+#: src/icqface.cc:1913
 msgid "URLs within the current context"
 msgstr "Посилання в поточному пов╕домленн╕"
 
-#: src/icqface.cc:1836
+#: src/icqface.cc:1929
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr ""
 
-#: src/icqface.cc:1856
+#: src/icqface.cc:1949
 #, c-format
 msgid "Result of the external action %s:"
 msgstr ""
 
-#: src/icqface.cc:1874
+#: src/icqface.cc:1967
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
 msgstr "^X в╕д╕слати, ^P багатьом, ^O ╕стор╕я, Meta-? ╕нфо, ESC скасувати"
 
-#: src/icqface.cc:1876
+#: src/icqface.cc:1969
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
 msgstr "^X в╕д╕слати, ^P багатьом, ^O ╕стор╕я, Meta-? ╕нфо, ESC скасувати"
 
-#: src/icqface.cc:1902 src/icqface.cc:2336
+#: src/icqface.cc:1995 src/icqface.cc:2429
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Вих╕дне %s до %s"
 
-#: src/icqface.cc:2002
+#: src/icqface.cc:2095
 #, fuzzy
 msgid "Send contacts.."
 msgstr "В контакт-л╕ст"
 
-#: src/icqface.cc:2062
+#: src/icqface.cc:2155
 #, fuzzy
 msgid "file name: "
 msgstr "який файл: "
 
-#: src/icqface.cc:2337
+#: src/icqface.cc:2430
 #, c-format
 msgid "Sent on %s"
 msgstr "В╕д╕слано %s"
 
-#: src/icqface.cc:2340
+#: src/icqface.cc:2433
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Вх╕дне %s в╕д %s"
 
-#: src/icqface.cc:2341
+#: src/icqface.cc:2434
 #, c-format
 msgid "Received on %s"
 msgstr "Отримано %s"
 
-#: src/icqface.cc:2386
+#: src/icqface.cc:2479
 #, fuzzy
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr "F2 йде за посиланнями, ESC закрива╓"
 
-#: src/icqface.cc:2431
+#: src/icqface.cc:2524
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "Отримано %s"
 
-#: src/icqface.cc:2432
+#: src/icqface.cc:2525
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "В╕д╕слано %s"
 
-#: src/icqface.cc:2445
+#: src/icqface.cc:2538
 msgid "ESC or F9 to close"
 msgstr ""
 
-#: src/icqface.cc:2527
+#: src/icqface.cc:2620
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "╤стор╕я з %s, всього под╕й: %d"
 
-#: src/icqface.cc:2530
+#: src/icqface.cc:2623
 #, fuzzy
 msgid "/ search, N again, ESC cancel"
 msgstr "S Пошук, L знову, ESC - скасувати"
 
-#: src/icqface.cc:2536
+#: src/icqface.cc:2629
 msgid "search for: "
 msgstr "шукати:"
+
+#: src/hooks/rsshook.cc:269
+msgid "coudln't fetch"
+msgstr ""
+
+#: src/hooks/rsshook.cc:298
+msgid "wrong XML"
+msgstr ""
+
+#: src/hooks/rsshook.cc:301
+msgid "no <rss> tag found"
+msgstr ""
+
+#: src/hooks/rsshook.cc:308
+msgid "no <channel> tag found"
+msgstr ""
+
+#: src/hooks/rsshook.cc:315
+#, fuzzy
+msgid "wrong <channel> tag"
+msgstr "На каналах: "
+
+#: src/hooks/rsshook.cc:324
+msgid "success"
+msgstr ""
+
+#: src/hooks/rsshook.cc:338
+#, fuzzy
+msgid "Title: "
+msgstr "Посада"
+
+#: src/hooks/rsshook.cc:339
+msgid "Published on: "
+msgstr ""
+
+#: src/hooks/rsshook.cc:340
+#, fuzzy
+msgid "Category: "
+msgstr "М╕сто: "
+
+#: src/hooks/rsshook.cc:341
+#, fuzzy
+msgid "Author: "
+msgstr "авторизац╕я"
+
+#: src/hooks/rsshook.cc:343
+#, fuzzy
+msgid "Description: "
+msgstr "Посада: "
+
+#: src/hooks/rsshook.cc:344
+#, fuzzy
+msgid "Link: "
+msgstr " uin: "
+
+#: src/hooks/rsshook.cc:345
+#, fuzzy
+msgid "Comments: "
+msgstr "коментар: "
+
+#: src/hooks/HTTPClient.cc:220
+msgid "Timed out"
+msgstr ""
 
 #, fuzzy
 #~ msgid "+ [jab] incorrect jabber id"
