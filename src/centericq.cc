@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.175 2003/11/21 00:35:32 konst Exp $
+* $Id: centericq.cc,v 1.176 2003/11/21 16:51:49 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -563,9 +563,8 @@ void centericq::userinfo(const imcontact &cinfo) {
 	    c = clist.get(contactroot);
 	    realuin = contactroot;
 	    c->clear();
+	    gethook(cinfo.pname).requestinfo(cinfo);
 	}
-
-	gethook(cinfo.pname).requestinfo(cinfo);
 
 	if(c) {
 	    face.userinfo(cinfo, realuin);

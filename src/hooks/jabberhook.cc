@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.58 2003/11/21 00:35:34 konst Exp $
+* $Id: jabberhook.cc,v 1.59 2003/11/21 16:51:49 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1495,6 +1495,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		if(!isagent) {
 		    em.store(imauthorization(ic, imevent::incoming,
 			imauthorization::Request, _("The user wants to subscribe to your network presence updates")));
+
 		} else {
 		    auto_ptr<char> cfrom(strdup(from.c_str()));
 		    x = jutil_presnew(JPACKET__SUBSCRIBED, cfrom.get(), 0);
