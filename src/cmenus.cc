@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.19 2003/11/05 09:10:27 konst Exp $
+* $Id: cmenus.cc,v 1.20 2004/03/28 11:38:35 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -259,12 +259,17 @@ int verticalmenu::open() {
 			    firstdisp = curelem - y2 + y1 + 1;
 			    intredraw();
 			} else {
+			    int savecurelem = curelem+1;
+
 			    while(curelem >= 0)
 			    if(!shownelem(curelem, 1)) {
 				curelem--;
 			    } else {
 				break;
 			    }
+
+			    if(curelem < 0)
+				shownelem(curelem = savecurelem, 1);
 
 			    refresh();
 			}
@@ -418,6 +423,25 @@ void verticalmenu::checkclear() {
 
 void verticalmenu::intredraw() {
     bool scf = clearonfocuslost;
+
+    if(curelem >= 0 && curelem < items.size()) {
+	vector<verticalmenuitem>::iterator ii;
+
+	for(ii = items.begin()+curelem; ii != items.end(); ii++) {
+	    if(ii->kind == ITEM_NORM) {
+		curelem = ii-items.begin();
+		break;
+	    }
+	}
+
+	for(ii = items.begin()+curelem; ii != items.begin(); ii--) {
+	    if(ii->kind == ITEM_NORM) {
+		curelem = ii-items.begin();
+		break;
+	    }
+	}
+    }
+
     clearonfocuslost = false;
     redraw();
     clearonfocuslost = scf;
