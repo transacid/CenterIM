@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.4 2002/03/14 15:15:49 konst Exp $
+* $Id: aimhook.cc,v 1.5 2002/03/15 09:21:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -386,11 +386,14 @@ void aimhook::newnick(void *connection, void *cli, ...) {
     char *nick = va_arg(ap, char *);
     va_end(ap);
 
-    icqconf::imaccount acc = conf.getourid(aim);
-    acc.nickname = nick;
-    conf.setourid(acc);
+    if(nick)
+    if(strlen(nick)) {
+	icqconf::imaccount acc = conf.getourid(aim);
+	acc.nickname = nick;
+	conf.setourid(acc);
 
-    face.log(_("+ [aim] nickname was changed successfully"));
+	face.log(_("+ [aim] nickname was changed successfully"));
+    }
 }
 
 void aimhook::newpass(void *connection, void *cli, ...) {
@@ -400,11 +403,14 @@ void aimhook::newpass(void *connection, void *cli, ...) {
     char *pass = va_arg(ap, char *);
     va_end(ap);
 
-    icqconf::imaccount acc = conf.getourid(aim);
-    acc.password = pass;
-    conf.setourid(acc);
+    if(pass)
+    if(strlen(pass)) {
+	icqconf::imaccount acc = conf.getourid(aim);
+	acc.password = pass;
+	conf.setourid(acc);
 
-    face.log(_("+ [aim] password was changed successfully"));
+	face.log(_("+ [aim] password was changed successfully"));
+    }
 }
 
 void aimhook::gotinfo(void *conn, void *cli, ...) {
@@ -417,12 +423,15 @@ void aimhook::gotinfo(void *conn, void *cli, ...) {
     int idle = va_arg(ap, int);
     va_end(ap);
 
-    icqcontact *c = clist.get(imcontact(nick, aim));
+    if(nick && info)
+    if(strlen(nick) && strlen(info)) {
+	icqcontact *c = clist.get(imcontact(nick, aim));
 
-    if(c) {
-	c->setabout(cuthtml(info));
-	if(c->getabout().empty())
-	    c->setabout(_("The user has no profile information."));
+	if(c) {
+	    c->setabout(cuthtml(info));
+	    if(c->getabout().empty())
+		c->setabout(_("The user has no profile information."));
+	}
     }
 }
 
@@ -435,7 +444,11 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
     char *message = va_arg(ap, char *);
     va_end(ap);
 
-    em.store(immessage(imcontact(sender, aim), imevent::incoming, rusconv("wk", message)));
+    if(sender && message)
+    if(strlen(sender) && strlen(message)) {
+	em.store(immessage(imcontact(sender, aim),
+	    imevent::incoming, rusconv("wk", message)));
+    }
 }
 
 void aimhook::userstatus(const string &nickname, imstatus st) {
@@ -465,7 +478,10 @@ void aimhook::buddyonline(void *conn, void *cli, ...) {
     char *nick = va_arg(ap, char *);
     va_end(ap);
 
-    ahook.userstatus(nick, available);
+    if(nick)
+    if(strlen(nick)) {
+	ahook.userstatus(nick, available);
+    }
 }
 
 void aimhook::buddyoffline(void *conn, void *cli, ...) {
@@ -475,7 +491,10 @@ void aimhook::buddyoffline(void *conn, void *cli, ...) {
     char *nick = va_arg(ap, char *);
     va_end(ap);
 
-    ahook.userstatus(nick, offline);
+    if(nick)
+    if(strlen(nick)) {
+	ahook.userstatus(nick, offline);
+    }
 }
 
 void aimhook::buddyaway(void *conn, void *cli, ...) {
@@ -485,7 +504,10 @@ void aimhook::buddyaway(void *conn, void *cli, ...) {
     char *nick = va_arg(ap, char *);
     va_end(ap);
 
-    ahook.userstatus(nick, away);
+    if(nick)
+    if(strlen(nick)) {
+	ahook.userstatus(nick, away);
+    }
 }
 
 void aimhook::needpass(void *conn, void *cli, ...) {
@@ -496,10 +518,12 @@ void aimhook::needpass(void *conn, void *cli, ...) {
     int size = va_arg(ap, int);
     va_end(ap);
 
-    icqconf::imaccount acc = conf.getourid(aim);
-    strncpy(pass, acc.password.c_str(), size-1);
-    pass[size-1] = 0;
-    face.log(_("+ [aim] password sent"));
+    if(pass) {
+	icqconf::imaccount acc = conf.getourid(aim);
+	strncpy(pass, acc.password.c_str(), size-1);
+	pass[size-1] = 0;
+	face.log(_("+ [aim] password sent"));
+    }
 }
 
 void aimhook::buddynickchanged(void *conn, void *cli, ...) {
@@ -510,13 +534,19 @@ void aimhook::buddynickchanged(void *conn, void *cli, ...) {
     char *newnick = va_arg(ap, char *);
     va_end(ap);
 
-    icqcontact *c = clist.get(imcontact(oldnick, aim));
-    if(c) {
-	if(c->getnick() == c->getdispnick())
-	    c->setdispnick(newnick);
+    if(oldnick && newnick)
+    if(strlen(oldnick) && strlen(newnick)) {
+	icqcontact *c = clist.get(imcontact(oldnick, aim));
 
-	c->setnick(newnick);
+	if(c) {
+	    if(c->getnick() == c->getdispnick()) {
+		c->setdispnick(newnick);
+	    }
 
-	face.log(_("+ [aim] user %s changed their nick to %s"), oldnick, newnick);
+	    c->setnick(newnick);
+
+	    face.log(_("+ [aim] user %s changed their nick to %s"),
+		oldnick, newnick);
+	}
     }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.53 2002/03/14 14:31:24 konst Exp $
+* $Id: icqconf.cc,v 1.54 2002/03/15 09:21:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -748,13 +748,20 @@ void icqconf::constructevent(const string &event, const string &proto, const str
 	    exit(1);
 	}
 	cdest = imcontact(strtoul(dest.c_str(), 0, 0), icq);
-    } else if(proto == "yahoo") {
-	cdest = imcontact(dest, yahoo);
-    } else if(proto == "msn") {
-	cdest = imcontact(dest, msn);
     } else {
-	cout << _("event sending error: unknown IM type") << endl;
-	exit(1);
+	protocolname pname;
+
+	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	    if(getprotocolname(pname) == proto) {
+		cdest = imcontact(dest, pname);
+		break;
+	    }
+	}
+
+	if(pname == protocolname_size) {
+	    cout << _("event sending error: unknown IM type") << endl;
+	    exit(1);
+	}
     }
 
     if(event == "msg") {
