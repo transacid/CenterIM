@@ -1,9 +1,9 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.143 2004/02/01 17:52:10 konst Exp $
+* $Id: icqhook.cc,v 1.144 2004/02/10 23:55:16 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,17 @@
 #include "icqconf.h"
 #include "icqface.h"
 #include "imlogger.h"
+#include "icqgroups.h"
 
 #include "accountmanager.h"
 #include "eventmanager.h"
 
-#include <libicq2000/userinfohelpers.h>
-
 #define PERIOD_ICQPOLL  5
 #define PERIOD_RESOLVE  10
 #define DELAY_SENDNEW   5
+
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 icqhook ihook;
 
@@ -66,8 +68,6 @@ icqhook::icqhook(): abstracthook(icq) {
     fcapabs.insert(hookcapab::cltemporary);
     fcapabs.insert(hookcapab::changeabout);
 
-    cli.setServerSideGroup("centericq", 0x0666);
-
     cli.connected.connect(this, &icqhook::connected_cb);
     cli.disconnected.connect(this, &icqhook::disconnected_cb);
     cli.socket.connect(this, &icqhook::socket_cb);
@@ -78,10 +78,10 @@ icqhook::icqhook(): abstracthook(icq) {
     cli.contact_status_change_signal.connect(this, &icqhook::contact_status_change_signal_cb);
     cli.newuin.connect(this, &icqhook::newuin_cb);
     cli.rate.connect(this, &icqhook::rate_cb);
-    cli.password_changed.connect(this, &icqhook::password_changed_cb);
+//    cli.password_changed.connect(this, &icqhook::password_changed_cb);
     cli.want_auto_resp.connect(this, &icqhook::want_auto_resp_cb);
     cli.search_result.connect(this, &icqhook::search_result_cb);
-    cli.server_based_contact_list.connect(this, &icqhook::server_based_contact_list_cb);
+//    cli.server_based_contact_list.connect(this, &icqhook::server_based_contact_list_cb);
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
     cli.self_contact_status_change_signal.connect(this, &icqhook::self_contact_status_change_cb);
 
@@ -106,8 +106,8 @@ icqhook::~icqhook() {
     cli.want_auto_resp.disconnect(this);
     cli.self_contact_userinfo_change_signal.disconnect(this);
     cli.self_contact_status_change_signal.disconnect(this);
-    cli.server_based_contact_list.disconnect(this);
-    cli.password_changed.disconnect(this);
+//    cli.server_based_contact_list.disconnect(this);
+//    cli.password_changed.disconnect(this);
 }
 
 void icqhook::init() {
@@ -119,18 +119,8 @@ void icqhook::connect() {
     int i, ptpmin, ptpmax;
     icqcontact *c;
 
-    if(acc.additional["autosync"].empty()) acc.additional["autosync"] = "1";
     if(acc.additional["webaware"].empty()) acc.additional["webaware"] = "1";
     conf.setourid(acc);
-
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-
-	if(c->getdesc().pname == proto && c->getdesc().uin) {
-	    ContactRef ct(new Contact(c->getdesc().uin));
-	    cli.addContact(ct);
-	}
-    }
 
     if(!acc.server.empty()) cli.setLoginServerHost(acc.server);
     if(acc.port) cli.setLoginServerPort(acc.port);
@@ -162,6 +152,13 @@ void icqhook::connect() {
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
 
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == proto && c->getdesc().uin)
+	    addContact(c->getdesc().uin, groups.getname(c->getgroupid()));
+    }
 
     fonline = true;
     flogged = false;
@@ -425,7 +422,10 @@ bool icqhook::send(const imevent &ev) {
 	    } else {
 		ic = new Contact(m->getphone());
 		ic->setMobileNo(m->getphone());
-		cli.addContact(ic);
+
+		ContactTree &ct = cli.getContactTree();
+		ContactTree::Group &g = ct.group_size() ? *ct.begin() : ct.add_group("New");
+		g.add(ic);
 	    }
 
 	} else {
@@ -486,19 +486,13 @@ bool icqhook::send(const imevent &ev) {
 
 void icqhook::sendnewuser(const imcontact &ic) {
     static time_t lastadd = 0;
+    icqcontact *cc = clist.get(ic);
 
-    if(logged() && ic.uin) {
+    if(logged() && ic.uin && cc) {
 	if(timer_current-lastadd > DELAY_SENDNEW) {
-	    cli.addContact(new Contact(ic.uin));
+	    addContact(ic.uin, groups.getname(cc->getgroupid()));
 	    cli.fetchSimpleContactInfo(cli.getContact(ic.uin));
 	    cli.fetchDetailContactInfo(cli.getContact(ic.uin));
-
-	    if(conf.getourid(icq).additional["autosync"] == "1") {
-		icqcontact *cc = clist.get(ic);
-		if(cc)
-		if(cc->inlist())
-		    cli.uploadServerBasedContactList(cli.getContact(ic.uin));
-	    }
 
 	    lastadd = timer_current;
 	} else {
@@ -508,7 +502,6 @@ void icqhook::sendnewuser(const imcontact &ic) {
 }
 
 void icqhook::removeuser(const imcontact &c) {
-    if(conf.getourid(icq).additional["autosync"] == "1")
     if(cli.getContact(c.uin).get()) {
 	icqcontact *cc = clist.get(c);
 	if(cc)
@@ -517,12 +510,12 @@ void icqhook::removeuser(const imcontact &c) {
 	    if(ic->getServerBased()) {
 		ic->setAlias(cc->getnick());
 		ic->setAuthAwait(cc->getbasicinfo().authawait);
-		cli.removeServerBasedContactList(ic);
+//                cli.removeServerBasedContactList(ic);
 	    }
 	}
     }
 
-    cli.removeContact(c.uin);
+//    cli.removeContact(c.uin);
 }
 
 void icqhook::setautostatus(imstatus st) {
@@ -625,7 +618,7 @@ void icqhook::requestinfo(const imcontact &c) {
 	    ContactRef icont = cli.getContact(c.uin);
 
 	    if(!icont.get()) {
-		cli.addContact(new Contact(c.uin));
+		addContact(c.uin, "");
 	    } else {
 		cli.fetchSimpleContactInfo(icont);
 		cli.fetchDetailContactInfo(icont);
@@ -646,7 +639,7 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
     sex = params.gender == genderMale ? ICQ2000::SEX_MALE :
 	params.gender == genderFemale ? ICQ2000::SEX_FEMALE :
-	ICQ2000::SEX_UNSPECIFIED;
+	ICQ2000::SEX_UNKNOWN;
 
     if(params.uin) {
 	searchevent = cli.searchForContacts(params.uin);
@@ -662,7 +655,7 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     !params.company.empty() || !params.department.empty() ||
     !params.position.empty() || params.onlineonly ||
     params.country || params.language ||
-    (sex != ICQ2000::SEX_UNSPECIFIED) || (params.agerange != range_NoRange)) {
+    (sex != SEX_UNKNOWN) || (params.agerange != RANGE_NORANGE)) {
 	searchevent = cli.searchForContacts(rusconv("kw", params.nick),
 	    rusconv("kw", params.firstname), rusconv("kw", params.lastname),
 	    rusconv("kw", params.email), params.agerange, sex,
@@ -709,8 +702,8 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     home.setMobileNo(rusconv("kw", cbinfo.cellular));
 
     home.zip = cbinfo.zip;
-    home.country = cbinfo.country;
-    home.timezone = UserInfoHelpers::getSystemTimezone();
+    home.country = (Country) cbinfo.country;
+    home.timezone = (Timezone) getSystemTimezone();
 
     /* more information */
 
@@ -719,16 +712,16 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     hpage.sex =
 	cminfo.gender == genderFemale ? SEX_FEMALE :
 	cminfo.gender == genderMale ? SEX_MALE :
-	    SEX_UNSPECIFIED;
+	    SEX_UNKNOWN;
 
     hpage.homepage = rusconv("kw", cminfo.homepage);
     hpage.birth_day = cminfo.birth_day;
     hpage.birth_month = cminfo.birth_month;
     hpage.birth_year = cminfo.birth_year;
 
-    hpage.lang1 = cminfo.lang1;
-    hpage.lang2 = cminfo.lang2;
-    hpage.lang3 = cminfo.lang3;
+    hpage.lang1 = (Language) cminfo.lang1;
+    hpage.lang2 = (Language) cminfo.lang2;
+    hpage.lang3 = (Language) cminfo.lang3;
 
     /* work information */
 
@@ -751,7 +744,6 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     icqconf::imaccount acc = conf.getourid(icq);
     acc.additional["webaware"] = cbinfo.webaware ? "1" : "0";
     acc.additional["randomgroup"] = i2str(cbinfo.randomgroup);
-    acc.additional["autosync"] = cbinfo.autosync ? "1" : "0";
     conf.setourid(acc);
 
     cli.setWebAware(cbinfo.webaware);
@@ -759,9 +751,9 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
 
     cli.uploadSelfDetails();
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
-
+/*
     if(!c.getreginfo().password.empty())
-	cli.changePassword(c.getreginfo().password);
+	cli.changePassword(c.getreginfo().password);*/
 }
 
 void icqhook::requestawaymsg(const imcontact &c) {
@@ -847,7 +839,7 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 	/* personal interests */
 
 	for(ii = pint.interests.begin(); ii != pint.interests.end(); ++ii) {
-	    sbuf = UserInfoHelpers::getInterestsIDtoString(ii->first);
+	    sbuf = getInterestsIDtoString(ii->first);
 
 	    if(!ii->second.empty()) {
 		if(!sbuf.empty()) sbuf += ": ";
@@ -860,7 +852,7 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 	/* education background */
 
 	for(isc = backg.schools.begin(); isc != backg.schools.end(); ++isc) {
-	    sbuf = UserInfoHelpers::getBackgroundIDtoString(isc->first);
+	    sbuf = getBackgroundIDtoString(isc->first);
 	    if(!sbuf.empty()) sbuf += ": ";
 	    sbuf += rusconv("wk", isc->second);
 	    if(!sbuf.empty()) backginfo.push_back(sbuf);
@@ -946,14 +938,11 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 	getstring(f, buf); cli.getSelfContact()->setLastName(buf);
 	f.close();
 
-	cli.getSelfContact()->getMainHomeInfo().timezone = UserInfoHelpers::getSystemTimezone();
+	cli.getSelfContact()->getMainHomeInfo().timezone = (Timezone) getSystemTimezone();
 	cli.uploadSelfDetails();
 
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
-
-    if(conf.getourid(icq).additional["autosync"] == "1")
-	cli.fetchServerBasedContactList();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {
@@ -1316,7 +1305,6 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 	icqcontact::basicinfo cbinfo = c->getbasicinfo();
 	cbinfo.webaware = im.additional["webaware"] == "1";
 	cbinfo.randomgroup = strtoul(im.additional["randomgroup"].c_str(), 0, 0);
-	cbinfo.autosync = im.additional["autosync"] == "1";
 	c->setbasicinfo(cbinfo);
     }
 }
@@ -1324,7 +1312,7 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
     face.update();
 }
-
+/*
 void icqhook::password_changed_cb(PasswordChangeEvent *ev) {
     if(ev->isSuccess()) {
 	icqconf::imaccount acc = conf.getourid(icq);
@@ -1351,4 +1339,25 @@ void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
     } else if(ev->getType() == ServerBasedContactEvent::Remove) {
 
     }
+}
+*/
+
+ContactRef icqhook::addContact(unsigned int uin, const string &groupname) {
+    ContactTree& ct = cli.getContactTree();
+    ContactTree::Group *gp = 0;
+
+    ContactTree::iterator curr = ct.begin();
+    while(curr != ct.end()) {
+	if((*curr).get_label() == groupname) {
+	    gp = &(*curr);
+	    break;
+	}
+	++curr;
+    }
+
+    if(!gp) gp = &(ct.add_group(groupname));
+
+    ContactRef cont(new Contact(uin));
+    gp->add(cont);
+    return cont;
 }

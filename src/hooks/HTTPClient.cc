@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.11 2003/12/11 22:41:32 konst Exp $
+* $Id: HTTPClient.cc,v 1.12 2004/02/10 23:55:16 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,7 +26,7 @@
 
 #ifdef BUILD_RSS
 
-HTTPClient::HTTPClient() : m_recv(&m_transl), m_state(NOT_CONNECTED),
+HTTPClient::HTTPClient() : m_recv(), m_state(NOT_CONNECTED),
 m_timeout(50), m_proxy_port(8080) {
     m_socket = new TCPSocket();
     Init();
@@ -189,8 +189,8 @@ void HTTPClient::Send(Buffer &b) {
 }
 
 static char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                             "abcdefghijklmnopqrstuvwxyz"
-                             "0123456789._";
+			     "abcdefghijklmnopqrstuvwxyz"
+			     "0123456789._";
 
 string HTTPClient::base64_encode(const string in, int inlen) {
     string out;
@@ -222,7 +222,7 @@ string HTTPClient::base64_encode(const string in, int inlen) {
 }
 
 void HTTPClient::SendRequest() {
-    Buffer b(&m_transl);
+    Buffer b;
     HTTPRequestEvent *ev = m_queue.front();
     string rq, userpasswd;
 

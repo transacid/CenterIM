@@ -5,9 +5,10 @@
 
 #ifdef BUILD_RSS
 
-#include <libicq2000/SocketClient.h>
-#include <libicq2000/buffer.h>
-#include <libicq2000/exceptions.h>
+#include "src/SocketClient.h"
+#include "src/buffer.h"
+
+#include "libicq2000/exceptions.h"
 
 using namespace ICQ2000;
 
@@ -65,7 +66,6 @@ class HTTPClient : public SocketClient {
 	list<HTTPRequestEvent*> m_queue;
 	State m_state;
 
-	Translator m_transl;
 	Buffer m_recv;
 
 	string m_hostname, m_proxy_hostname;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.136 2004/02/01 17:52:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.137 2004/02/10 23:55:15 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,17 +32,16 @@
 #include "abstracthook.h"
 #include "ljhook.h"
 
-#include <libicq2000/userinfohelpers.h>
-#include <libicq2000/constants.h>
+#include <libicq2000/userinfoconstants.h>
 
 const char *stragerange(ICQ2000::AgeRange r) {
     switch(r) {
-	case ICQ2000::range_18_22: return "18-22";
-	case ICQ2000::range_23_29: return "23-29";
-	case ICQ2000::range_30_39: return "30-39";
-	case ICQ2000::range_40_49: return "40-49";
-	case ICQ2000::range_50_59: return "50-59";
-	case ICQ2000::range_60_above: return _("60-above");
+	case ICQ2000::RANGE_18_22: return "18-22";
+	case ICQ2000::RANGE_23_29: return "23-29";
+	case ICQ2000::RANGE_30_39: return "30-39";
+	case ICQ2000::RANGE_40_49: return "40-49";
+	case ICQ2000::RANGE_50_59: return "50-59";
+	case ICQ2000::RANGE_60_ABOVE: return _("60-above");
     }
 
     return "";
@@ -50,16 +49,16 @@ const char *stragerange(ICQ2000::AgeRange r) {
 
 const char *strrandomgroup(short unsigned int gr) {
     switch((ICQ2000::RandomChatGroup) gr) {
-	case ICQ2000::group_GeneralChat: return _("General Chat");
-	case ICQ2000::group_Romance: return _("Romance");
-	case ICQ2000::group_Games: return _("Games");
-	case ICQ2000::group_Students: return _("Students");
-	case ICQ2000::group_20: return _("20 Something");
-	case ICQ2000::group_30: return _("30 Something");
-	case ICQ2000::group_40: return _("40 Something");
-	case ICQ2000::group_50Plus: return _("50 Plus");
-	case ICQ2000::group_SeekingWomen: return _("Seeking Women");
-	case ICQ2000::group_SeekingMen: return _("Seeking Men");
+	case ICQ2000::GROUP_GENERALCHAT: return _("General Chat");
+	case ICQ2000::GROUP_ROMANCE: return _("Romance");
+	case ICQ2000::GROUP_GAMES: return _("Games");
+	case ICQ2000::GROUP_STUDENTS: return _("Students");
+	case ICQ2000::GROUP_20: return _("20 Something");
+	case ICQ2000::GROUP_30: return _("30 Something");
+	case ICQ2000::GROUP_40: return _("40 Something");
+	case ICQ2000::GROUP_50PLUS: return _("50 Plus");
+	case ICQ2000::GROUP_SEEKINGWOMEN: return _("Seeking Women");
+	case ICQ2000::GROUP_SEEKINGMEN: return _("Seeking Men");
     }
 
     return "";
@@ -305,7 +304,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 
 		    if(s.pname == icq) {
 			tree.addleaff(i, 0, 18, _(" Language : %s "),
-			    ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
+			    abstracthook::getLanguageIDtoString(s.language).c_str());
 		    }
 
 		    i = tree.addnode(_(" Location "));
@@ -314,7 +313,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 		    if(s.pname == icq) {
 			tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
 			tree.addleaff(i, 0, 21, _(" Country : %s "),
-			    ICQ2000::UserInfoHelpers::getCountryIDtoString(s.country).c_str());
+			    abstracthook::getCountryIDtoString(s.country).c_str());
 
 			i = tree.addnode(_(" Work "));
 			tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
@@ -614,7 +613,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
 	tree->addleaff(i, 0, 18, _(" State : %s "), bi.state.c_str());
 	tree->addleaff(i, 0, 19, _(" Country : %s "),
-	    ICQ2000::UserInfoHelpers::getCountryIDtoString(bi.country).c_str());
+	    abstracthook::getCountryIDtoString(bi.country).c_str());
 
 	tree->addleaff(i, 0, 20, _(" Street address : %s "), bi.street.c_str());
 	tree->addleaff(i, 0, 21, _(" Zip code : %s "), bi.zip.c_str());
@@ -626,7 +625,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 25, _(" City : %s "), wi.city.c_str());
 	tree->addleaff(i, 0, 26, _(" State : %s "), wi.state.c_str());
 	tree->addleaff(i, 0, 27, _(" Country : %s "),
-	    ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country).c_str());
+	    abstracthook::getCountryIDtoString(wi.country).c_str());
 
 	tree->addleaff(i, 0, 28, _(" Street address : %s "), wi.street.c_str());
 	tree->addleaff(i, 0, 41, _(" Zip code : %s "), wi.zip.c_str());
@@ -642,13 +641,13 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 
 	if(passinfo.pname == icq) {
 	    tree->addleaff(i, 0, 36, _(" 1st language : %s "),
-		ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1).c_str());
+		abstracthook::getLanguageIDtoString(mi.lang1).c_str());
 
 	    tree->addleaff(i, 0, 37, _(" 2nd language : %s "),
-		ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2).c_str());
+		abstracthook::getLanguageIDtoString(mi.lang2).c_str());
 
 	    tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
-		ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
+		abstracthook::getLanguageIDtoString(mi.lang3).c_str());
 
 	    i = tree->addnode(_(" Miscellaneous "));
 	    if(ourdetails) {
@@ -873,11 +872,11 @@ void icqface::selectcountry(unsigned short &f) {
     m.setwindow(textwindow(4, LINES-16, 30, LINES-3, conf.getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
-    for(i = 0; i < ICQ2000::Country_table_size; i++) {
-	m.additem(0, (int) ICQ2000::Country_table[i].code,
-	    (string) " " + ICQ2000::Country_table[i].name);
+    for(i = 0; i < abstracthook::Country_table_size; i++) {
+	m.additem(0, (int) abstracthook::Country_table[i].code,
+	    (string) " " + abstracthook::Country_table[i].name);
 
-	if(ICQ2000::Country_table[i].code == f) {
+	if(abstracthook::Country_table[i].code == f) {
 	    m.setpos(i);
 	}
     }
@@ -894,8 +893,8 @@ void icqface::selectlanguage(unsigned short &f) {
     m.setwindow(textwindow(4, LINES-13, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
-    for(i = 0; i < ICQ2000::Language_table_size; i++) {
-	m.additemf(" %s", ICQ2000::Language_table[i]);
+    for(i = 0; i < abstracthook::Language_table_size; i++) {
+	m.additemf(" %s", abstracthook::Language_table[i]);
     }
 
     m.setpos(f);
@@ -913,7 +912,7 @@ void icqface::selectrandomgroup(unsigned short &f) {
 
     m.additemf(" %s", _("none"));
 
-    for(i = 1; i <= ((int) ICQ2000::group_SeekingMen); i++) {
+    for(i = 1; i <= ((int) ICQ2000::GROUP_SEEKINGMEN); i++) {
 	m.additemf(" %s", strrandomgroup(i));
     }
 
@@ -945,10 +944,10 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     m.setwindow(textwindow(4, LINES-8, 18, LINES-3, conf.getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
-    for(ICQ2000::AgeRange i = ICQ2000::range_NoRange; i <= ICQ2000::range_60_above; (int) i += 1) {
+    for(ICQ2000::AgeRange i = ICQ2000::RANGE_NORANGE; i <= ICQ2000::RANGE_60_ABOVE; (int) i += 1) {
 	const char *p = stragerange(i);
 
-	if(i == ICQ2000::range_NoRange)
+	if(i == ICQ2000::RANGE_NORANGE)
 	    p = _("none");
 
 	m.additemf(0, (int) i, " %s", p);

@@ -11,7 +11,7 @@ struct imsearchparams {
 	uin = checkfrequency = 0;
 	minage = maxage = country = language = randomgroup = 0;
 	gender = genderUnspec;
-	agerange = ICQ2000::range_NoRange;
+	agerange = ICQ2000::RANGE_NORANGE;
     };
 
     imsearchparams(const string &name) {

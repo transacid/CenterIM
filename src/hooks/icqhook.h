@@ -42,10 +42,10 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void socket_cb(SocketEvent *ev);
 	void want_auto_resp_cb(ICQMessageEvent *ev);
 	void search_result_cb(SearchResultEvent *ev);
-	void server_based_contact_list_cb(ServerBasedContactEvent *ev);
+//        void server_based_contact_list_cb(ServerBasedContactEvent *ev);
 	void self_contact_userinfo_change_cb(UserInfoChangeEvent *ev);
 	void self_contact_status_change_cb(StatusChangeEvent *ev);
-	void password_changed_cb(PasswordChangeEvent *ev);
+//        void password_changed_cb(PasswordChangeEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
 
@@ -53,6 +53,8 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void sendinvisible();
 	void updateinforecord(ContactRef ic, icqcontact *c);
 	void processemailevent(const string &sender, const string &email, const string &message);
+
+	ContactRef addContact(unsigned int uin, const string &groupname);
 
     public:
 	icqhook();

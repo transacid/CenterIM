@@ -1,7 +1,7 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.30 2003/10/31 00:55:53 konst Exp $
+* $Id: imevents.cc,v 1.31 2004/02/10 23:55:15 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,9 +23,9 @@
 */
 
 #include "imevents.h"
+#include "src/Xml.h"
 
 #include <strstream>
-#include <libicq2000/Xml.h>
 
 // -- serialization constants -------------------------------------------------
 

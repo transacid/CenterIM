@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.66 2004/02/08 09:37:36 konst Exp $
+* $Id: jabberhook.cc,v 1.67 2004/02/10 23:55:16 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,8 +31,6 @@
 #include "imlogger.h"
 #include "eventmanager.h"
 #include "icqgroups.h"
-
-#include <libicq2000/userinfohelpers.h>
 
 #define DEFAULT_CONFSERV "conference.jabber.org"
 
@@ -923,7 +921,7 @@ unsigned short country) {
     vcput(z, "LOCALITY", locality);
     vcput(z, "REGION", region);
     vcput(z, "PCODE", pcode);
-    vcput(z, "CTRY", ICQ2000::UserInfoHelpers::getCountryIDtoString(country));
+    vcput(z, "CTRY", getCountryIDtoString(country));
 }
 
 void jabberhook::sendupdateuserinfo(const icqcontact &c) {
@@ -1047,17 +1045,6 @@ void jabberhook::updatecontact(icqcontact *c) {
     }
 }
 
-static unsigned short getcountrybyname(string name) {
-    int i;
-    name = up(leadcut(trailcut(name)));    
-
-    for(i = 0; i < ICQ2000::Country_table_size; i++)
-	if(name == up(ICQ2000::Country_table[i].name))
-	    return ICQ2000::Country_table[i].code;
-
-    return 0;
-}
-
 void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
     xmlnode ad, n;
     char *p;
@@ -1123,7 +1110,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 
 		    if((p = xmlnode_get_tag_data(ad, "CTRY"))
 		    || (p = xmlnode_get_tag_data(ad, "COUNTRY")))
-			bi.country = getcountrybyname(p);
+			bi.country = getCountryByName(p);
 
 		} else if(xmlnode_get_tag(ad, "WORK")) {
 		    if(p = xmlnode_get_tag_data(ad, "STREET")) wi.street = rusconv("uk", p);
@@ -1133,7 +1120,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 
 		    if((p = xmlnode_get_tag_data(ad, "CTRY"))
 		    || (p = xmlnode_get_tag_data(ad, "COUNTRY")))
-			wi.country = getcountrybyname(p);
+			wi.country = getCountryByName(p);
 		}
 	    } else
 	    if(name == "TEL") {

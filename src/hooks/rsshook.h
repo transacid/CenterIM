@@ -6,7 +6,7 @@
 #ifdef BUILD_RSS
 
 #include "HTTPClient.h"
-#include <libicq2000/Xml.h>
+#include "src/Xml.h"
 
 class rsshook: public abstracthook, public sigslot::has_slots<> {
     protected:

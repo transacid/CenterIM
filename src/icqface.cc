@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.207 2004/01/27 00:14:34 konst Exp $
+* $Id: icqface.cc,v 1.208 2004/02/10 23:55:15 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,8 +33,6 @@
 #include "imlogger.h"
 #include "irchook.h"
 #include "imexternal.h"
-
-#include <libicq2000/userinfohelpers.h>
 
 const char *stryesno(bool b) {
     return b ? _("yes") : _("no");
@@ -972,9 +970,9 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
 
-    if(mi.lang1) commacat(langs, ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1), langs.empty());
-    if(mi.lang2) commacat(langs, ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2), langs.empty());
-    if(mi.lang3) commacat(langs, ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3), langs.empty());
+    if(mi.lang1) commacat(langs, abstracthook::getLanguageIDtoString(mi.lang1), langs.empty());
+    if(mi.lang2) commacat(langs, abstracthook::getLanguageIDtoString(mi.lang2), langs.empty());
+    if(mi.lang3) commacat(langs, abstracthook::getLanguageIDtoString(mi.lang3), langs.empty());
     commaform(langs);
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), langs);
@@ -1015,7 +1013,7 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
 
     if(bi.country) {
 	if(bi.city.size()) bi.city += ", ";
-	bi.city += ICQ2000::UserInfoHelpers::getCountryIDtoString(bi.country);
+	bi.city += abstracthook::getCountryIDtoString(bi.country);
     }
 
     x += 10;
@@ -1060,7 +1058,7 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 
     if(wi.country) {
 	if(wi.city.size()) wi.city += ", ";
-	wi.city += ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country);
+	wi.city += abstracthook::getCountryIDtoString(wi.country);
     }
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), wi.street);

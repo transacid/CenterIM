@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.89 2004/01/27 00:14:34 konst Exp $
+* $Id: icqcontact.cc,v 1.90 2004/02/10 23:55:15 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,7 +31,6 @@
 #include "eventmanager.h"
 
 #include <time.h>
-#include <libicq2000/userinfohelpers.h>
 #include <strstream>
 
 icqcontact::icqcontact(const imcontact adesc) {
@@ -727,8 +726,8 @@ string icqcontact::moreinfo::strtimezone() const {
     string r;
 
     if(timezone <= 24 && timezone >= -24) {
-	r = ICQ2000::UserInfoHelpers::getTimezoneIDtoString(timezone) + ", " +
-	    ICQ2000::UserInfoHelpers::getTimezonetoLocaltime(timezone);
+	r = abstracthook::getTimezoneIDtoString(timezone) + ", " +
+	    abstracthook::getTimezonetoLocaltime(timezone);
     }
 
     return r;

@@ -75,6 +75,26 @@ class abstracthook {
 	void requestfromfound(const imcontact &ic);
 	void log(logevent ev, ...);
 
+	struct Country_struct {
+	    char *name;
+	    unsigned short code;
+	};
+
+    public:
+	static const unsigned char Language_table_size;
+	static const char* const Language_table[];
+	static const unsigned short Country_table_size;
+	static const Country_struct Country_table[];
+
+	static string getCountryIDtoString(unsigned short id);
+	static unsigned short getCountryByName(string name);
+	static signed char getSystemTimezone();
+	static string getInterestsIDtoString(unsigned char id);
+	static string getBackgroundIDtoString(unsigned short id);
+	static string getTimezoneIDtoString(signed char id);
+	static string getTimezonetoLocaltime(signed char id);
+	static string getLanguageIDtoString(unsigned char id);
+
     public:
 	abstracthook(protocolname aproto);
 

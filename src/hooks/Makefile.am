@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I/home/konst/devel/firetalk -I/home/konst/devel/kktoolbox/kkconsui/include -I/home/konst/devel/kktoolbox/kkstrtext -I/home/konst/devel/libicq2000 -I/home/konst/devel/libjabber -I/home/konst/devel/libyahoo2 -I/home/konst/devel/kktoolbox/kksystr/include -I/home/konst/devel/connwrap -I/home/konst/devel/libgadu -I/home/konst/devel/blip -I/home/konst/devel/blip/../connwrap -I/home/konst/devel/blip/../connwrap-0.1 -I$(top_srcdir)/intl
+INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I/home/konst/devel/firetalk -I/home/konst/devel/kktoolbox/kkconsui/include -I/home/konst/devel/kktoolbox/kkstrtext -I/home/konst/devel/libicq2000 -I/home/konst/devel/libjabber -I/home/konst/devel/libyahoo2 -I/home/konst/devel/kktoolbox/kksystr/include -I/home/konst/devel/connwrap -I/home/konst/devel/libgadu -I/home/konst/devel/blip -I/home/konst/devel/libicq2000/libicq2000 -I$(top_srcdir)/intl
 CPPFLAGS = -DDEBUG
 noinst_LIBRARIES = libhooks.a
 libhooks_a_SOURCES = yahoohook.cc jabberhook.cc aimhook.cc icqhook.cc irchook.cc abstracthook.cc rsshook.cc HTTPClient.cc ljhook.cc gaduhook.cc msnhook.cc
