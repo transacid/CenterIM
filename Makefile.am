@@ -6,6 +6,13 @@ if BUILD_JABBER
 
 liblibjabber_a_SOURCES =  expat.c genhash.c hashtable.c jconn.c jid.c jpacket.c jutil.c log.c pool.c pproxy.c rate.c sha.c snprintf.c socket.c str.c xmlnode.c xmlparse.c xmlrole.c xmltok.c xstream.c
 
+else
+
+liblibjabber_a_LIBADD = dummy.o
+
+dummy.c:
+	touch dummy.c
+
 endif
 
 SUBDIRS = 
