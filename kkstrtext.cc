@@ -1,9 +1,9 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.35 2004/01/15 20:25:31 konst Exp $
+* $Id: kkstrtext.cc,v 1.36 2004/06/10 19:15:18 konst Exp $
 *
-* Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -789,7 +789,7 @@ bool iswholeword(const string &s, int so, int eo) {
     return rm && lm;
 }
 
-int hex2int(const string ahex) {
+int hex2int(const string &ahex) {
     int r, i;
 
     r = 0;
@@ -1045,4 +1045,75 @@ char *str_to_utf8(const char *pin) {
 
     result[i] = '\0';
     return result;
+}
+
+string striprtf(const string &s) {
+    string r, spec;
+    char pre = 0;
+    bool bprint, bspec;
+    int bparen = -1;
+
+    bprint = true;
+    bspec = false;
+
+    for(string::const_iterator i = s.begin(); i != s.end(); ++i) {
+	if(isspace(*i)) bprint = true;
+
+	if(bspec) {
+	    spec += *i;
+
+	    if(spec.size() == 2) {
+		r += (char) hex2int(spec);
+		bspec = false;
+	    }
+
+	} else switch(*i) {
+	    case '{':
+		if(pre != '\\') {
+		    bparen++;
+		    bprint = false;
+		} else {
+		    bparen--;
+		    bprint = true;
+		    r += *i;
+		}
+		break;
+
+	    case '}':
+		if(pre != '\\') {
+		    bprint = false;
+		} else {
+		    bprint = true;
+		    r += *i;
+		}
+
+		bparen--;
+		break;
+
+	    case '\\':
+		if(pre != '\\') {
+		    bprint = false;
+		} else {
+		    bprint = true;
+		    r += *i;
+		}
+		break;
+
+	    case '\'':
+		if(pre == '\\') {
+		    spec = "";
+		    bspec = true;
+		}
+		break;
+
+	    default:
+		if(bprint && !bparen) {
+		    r += *i;
+		}
+	}
+
+	pre = *i;
+    }
+
+    return leadcut(trailcut(r));
 }
