@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.64 2002/11/19 18:13:37 konst Exp $
+* $Id: yahoohook.cc,v 1.65 2002/11/22 16:29:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -142,15 +142,6 @@ bool yahoohook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
 
 void yahoohook::disconnect() {
     if(online()) {
-	for(int i = 0; i < clist.count; i++) {
-	    icqcontact *c = (icqcontact *) clist.at(i);
-	    imcontact ic = c->getdesc();
-
-	    if(ic.pname == yahoo)
-	    if(!c->inlist())
-		removeuser(ic, false);
-	}
-
 	yahoo_logoff(cid);
 	disconnected();
     }
@@ -586,6 +577,17 @@ void yahoohook::requestawaymsg(const imcontact &ic) {
     }
 }
 
+void yahoohook::checkinlist(imcontact ic) {
+    icqcontact *c = clist.get(ic);
+    vector<icqcontact *> notremote = getneedsync();
+
+    if(c)
+    if(c->inlist())
+    if(find(notremote.begin(), notremote.end(), c) != notremote.end()) {
+	sendnewuser(c, false);
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void yahoohook::login_done(guint32 id, int succ, char *url) {
@@ -660,6 +662,7 @@ void yahoohook::got_im(guint32 id, char *who, char *msg, long tm, int stat) {
     imcontact ic(who, yahoo);
     string text = cuthtml(msg, true);
 
+    yhook.checkinlist(ic);
     text = yhook.encanalyze(who, text);
 
     if(!text.empty()) {

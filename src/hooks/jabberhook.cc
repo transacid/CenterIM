@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: jabberhook.cc,v 1.5 2002/11/22 16:08:19 konst Exp $
+* $Id: jabberhook.cc,v 1.6 2002/11/22 16:29:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -343,6 +343,15 @@ void jabberhook::jidsplit(const string &jid, string &user, string &host, string 
     }
 }
 
+void jabberhook::checkinlist(imcontact ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(c)
+    if(c->inlist())
+    if(find(roster.begin(), roster.end(), jidnormalize(ic.nickname)) != roster.end())
+	sendnewuser(ic, false);
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
@@ -405,6 +414,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 	    if(type == "groupchat") {
 	    } else {
+		jhook.checkinlist(ic);
 		em.store(immessage(ic, imevent::incoming, body));
 	    }
 	    break;

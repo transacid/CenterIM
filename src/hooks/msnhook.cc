@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.40 2002/11/18 16:32:11 konst Exp $
+* $Id: msnhook.cc,v 1.41 2002/11/22 16:29:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,15 +87,6 @@ void msnhook::connect() {
 
 void msnhook::disconnect() {
     if(online()) {
-	for(int i = 0; i < clist.count; i++) {
-	    icqcontact *c = (icqcontact *) clist.at(i);
-	    imcontact ic = c->getdesc();
-
-	    if(ic.pname == msn)
-	    if(!c->inlist())
-		removeuser(ic, false);
-	}
-
 	disconnected(0);
     }
 }

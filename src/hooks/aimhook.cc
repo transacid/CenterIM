@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.27 2002/10/15 15:29:42 konst Exp $
+* $Id: aimhook.cc,v 1.28 2002/11/22 16:29:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -90,15 +90,6 @@ void aimhook::connect() {
 
 void aimhook::disconnect() {
     if(fonline) {
-	for(int i = 0; i < clist.count; i++) {
-	    icqcontact *c = (icqcontact *) clist.at(i);
-	    imcontact ic = c->getdesc();
-
-	    if(ic.pname == aim)
-	    if(!c->inlist())
-		removeuser(ic, false);
-	}
-
 	firetalk_disconnect(handle);
     }
 }
