@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.83 2002/03/26 12:52:01 konst Exp $
+* $Id: centericq.cc,v 1.84 2002/03/26 15:42:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -824,7 +824,6 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
 	c->includeintolist();
     }
 
-    hook.sendnewuser(c->getdesc());
     c->setgroupid(groupid);
     face.log(_("+ %s has been added to the list"), ic.totext().c_str());
     face.update();

@@ -4,36 +4,6 @@
 *
 */
 
-unable to set the aim server on registration phase
-
-doesn't get frozen on ctrl-l press. patch by Sergey A. Kogan
-<kogan@omskelecom.ru>
-
-initial IM info for yahoo, msn and aim to be refreshen on "retrieve"
-
-yahoo invalid login/password situation is now tracked
-
-"relaxed" re-connect timing
-
-bug: \n in user's details -> strange things happen ;)
-
-HD access reduced
-
-aim support
-
-cp1251->koi8 translation to be done with iconv
-
-group mode 2 shows offline users in offline folder, when only one group
-is defined
-
-"next" button to the history
-
-check for the libiconv presence
-check for twisted iconv
-
-crash test with zero disk space
-    go offline when df < 10k
-
 /*
 *
 * BUGS
@@ -85,4 +55,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.169 2002/03/26 12:51:54 konst Exp $
+$Id: TODO,v 1.170 2002/03/26 15:42:00 konst Exp $

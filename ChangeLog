@@ -831,3 +831,46 @@ invoked.
 Fixed the libicq2000 bug resulted in inability to accept authorization
 requests.
 
+4.6.6
+-----
+
+Now when free disk space becomes less than 10k centericq goes offline,
+refuses to connect and doesn't touch configuration files to not to lose
+any data.
+
+A compilation error with "twisted" versions of iconv was fixed by adding
+another check to configure.
+
+The "Next" button was added to the history. It actually goes back, so it's
+called so to conform the UI look.
+
+Weird behaviour of the group mode 2 when there is only one contact list
+group defined was fixed.
+
+When available, iconv is used for translation between koi8 and cp1251
+codepages instead of the internal routine.
+
+Support for AIM TOC protocol was added. This means now centericq supports
+four IM flavours, which makes it even more useful tool. Now, looking at
+the centericq main screen I find myself a real schizophrenic with four
+IM "avatars". So there is another slogan for the program "centericq - the
+power of your shizo" :)
+
+HDD access was reduced by not reading away messages every second, how it
+was before. So now owners of laptops should have no worries about batteries,
+for centericq will allow their boxes to go to power saving mode.
+
+Fixed a bug with user's details fetching, resulted into weird behaviour
+caused by new-line character in any fields on the information.
+
+This version also introduces the "relaxed" re-connect strategy. Every time
+it cannot automatically re-connect to an IM service, the try period is
+icreased by half of its previous value. This is made so that "turboing"
+situations are recovered without any user's intervention.
+
+Invalid username or/and password situation is now tracked and reported
+in the Yahoo! engine.
+
+Finally, a bug caused centericq to freeze (for protocols' activities)
+after "Ctrl-L" was fixed with a patch sent by Sergey A.
+Kogan <kogan@omskelecom.ru>
