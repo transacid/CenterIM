@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.26 2001/12/13 11:28:35 konst Exp $
+* $Id: icqcontacts.cc,v 1.27 2002/01/22 11:59:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -223,13 +223,26 @@ int icqcontacts::clistsort(void *p1, void *p2) {
     icqcontact *c1 = (icqcontact *) p1, *c2 = (icqcontact *) p2;
     static char *sorder = SORT_CONTACTS;
     char s1, s2;
+    bool makegroup;
 
     s1 = SORTCHAR(c1);
     s2 = SORTCHAR(c2);
 
+    switch(conf.getgroupmode()) {
+	case icqconf::group1:
+	    makegroup = true;
+	    break;
+	case icqconf::group2:
+	    makegroup = (s1 != '_' && s2 != '_') || (s1 == '_' && s2 == '_');
+	    break;
+	default:
+	    makegroup = false;
+	    break;
+    }
+
+    if(makegroup)
     if(!strchr("!N", s1) && !strchr("!N", s2))
-    if(!c1->getmsgcount() && !c2->getmsgcount())
-    if(conf.getusegroups()) {
+    if(!c1->getmsgcount() && !c2->getmsgcount()) {
 	if(c1->getgroupid() > c2->getgroupid()) return -1; else
 	if(c1->getgroupid() < c2->getgroupid()) return 1;
     }

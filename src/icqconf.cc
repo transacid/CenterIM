@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.33 2002/01/18 16:04:01 konst Exp $
+* $Id: icqconf.cc,v 1.34 2002/01/22 11:59:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,9 +33,11 @@
 icqconf::icqconf() {
     rs = rscard;
     rc = rcdark;
+    fgroupmode = nogroups;
+
     autoaway = autona = 0;
 
-    hideoffline = antispam = usegroups = russian = makelog = false;
+    hideoffline = antispam = russian = makelog = false;
     savepwd = mailcheck = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
@@ -92,7 +94,8 @@ void icqconf::loadmainconfig() {
 	    if(param == "sockshost") setsockshost(buf); else
 	    if(param == "socksusername") socksuser = buf; else
 	    if(param == "sockspass") sockspass = buf; else
-	    if(param == "usegroups") usegroups = true; else
+	    if((param == "usegroups") || (param == "group1")) fgroupmode = group1; else
+	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "log") makelog = true; else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
@@ -161,7 +164,13 @@ void icqconf::save() {
 	if(getquote()) f << "quotemsgs" << endl;
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
-	if(getusegroups()) f << "usegroups" << endl;
+
+
+	switch(getgroupmode()) {
+	    case group1: f << "group1" << endl; break;
+	    case group2: f << "group2" << endl; break;
+	}
+
 	if(getmakelog()) f << "log" << endl;
 
 	for(ia = accounts.begin(); ia != accounts.end(); ia++) {
@@ -411,19 +420,19 @@ void icqconf::loadactions() {
     }
 }
 
-regcolor icqconf::getregcolor() const {
+icqconf::regcolor icqconf::getregcolor() const {
     return rc;
 }
 
-void icqconf::setregcolor(regcolor c) {
+void icqconf::setregcolor(icqconf::regcolor c) {
     rc = c;
 }
 
-regsound icqconf::getregsound() const {
+icqconf::regsound icqconf::getregsound() const {
     return rs;
 }
 
-void icqconf::setregsound(regsound s) {
+void icqconf::setregsound(icqconf::regsound s) {
     rs = s;
 }
 
@@ -654,6 +663,14 @@ bool icqconf::getmakelog() const {
 
 void icqconf::setmakelog(bool slog) {
     makelog = slog;
+}
+
+icqconf::groupmode icqconf::getgroupmode() const {
+    return fgroupmode;
+}
+
+void icqconf::setgroupmode(icqconf::groupmode amode) {
+    fgroupmode = amode;
 }
 
 // ----------------------------------------------------------------------------

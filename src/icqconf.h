@@ -32,11 +32,12 @@
 #define cp_clist_root           15
 #define cp_clist_msn            16
 
-enum regsound { rscard, rsspeaker, rsdisable, rsdontchange };
-enum regcolor { rcdark, rcblue, rcdontchange };
-
 class icqconf {
     public:
+	enum regsound { rscard, rsspeaker, rsdisable, rsdontchange };
+	enum regcolor { rcdark, rcblue, rcdontchange };
+	enum groupmode { group1, group2, nogroups };
+
 	struct imaccount {
 	    imaccount();
 	    imaccount(protocolname apname);
@@ -63,14 +64,12 @@ class icqconf {
 
 	int autoaway, autona;
 
-	bool hideoffline, quote, savepwd, antispam, mailcheck,
-	    usegroups, russian, makelog;
-
-	string sockshost, socksuser, sockspass,
-	    openurlcommand, basedir;
+	bool hideoffline, quote, savepwd, antispam, mailcheck, russian, makelog;
+	string sockshost, socksuser, sockspass, openurlcommand, basedir;
 
 	regsound rs;
 	regcolor rc;
+	groupmode fgroupmode;
 
 	void loadmainconfig();
 
@@ -121,8 +120,8 @@ class icqconf {
 	bool getrussian() const;
 	void setrussian(bool frussian);
 
-	bool getusegroups() const { return usegroups; }
-	void setusegroups(bool ausegroups) { usegroups = ausegroups; }
+	groupmode getgroupmode() const;
+	void setgroupmode(groupmode amode);
  
 	void setsockshost(const string nsockshost);
 	const string getsockshost() const;

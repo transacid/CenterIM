@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.39 2002/01/21 14:24:48 konst Exp $
+* $Id: icqcontact.cc,v 1.40 2002/01/22 11:59:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -308,7 +308,7 @@ void icqcontact::load() {
 
     if(dispnick.empty()) dispnick = nick;
 
-    if(conf.getusegroups())
+    if(conf.getgroupmode() != icqconf::nogroups)
     if(find(groups.begin(), groups.end(), groupid) == groups.end()) {
 	groupid = 1;
     }

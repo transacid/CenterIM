@@ -177,7 +177,7 @@ class icqface {
 	bool multicontacts(const string head = "");
 	void userinfo(const imcontact cinfo, const imcontact realinfo);
 
-	bool updateconf(regsound &s, regcolor &c);
+	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
 
 	bool finddialog(imsearchparams &s);
 	bool findresults(const imsearchparams &sp);
@@ -211,11 +211,12 @@ extern icqface face;
 
 string getbdate(unsigned char fbday, unsigned char fbmonth, unsigned char fbyear);
 
-const char *strregsound(regsound s);
-const char *strregcolor(regcolor c);
+const char *strregsound(icqconf::regsound s);
+const char *strregcolor(icqconf::regcolor c);
 const char *strint(unsigned int i);
 const char *strcountry(unsigned int code);
 const char *strlanguage(unsigned int code);
+const char *strgroupmode(icqconf::groupmode gmode);
 
 static const char *stryesno[true+1] = {
     _("no"), _("yes")

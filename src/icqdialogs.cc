@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.43 2002/01/19 13:02:39 konst Exp $
+* $Id: icqdialogs.cc,v 1.44 2002/01/22 11:59:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -514,7 +514,7 @@ bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
     return flist.count;
 }
 
-bool icqface::updateconf(regsound &s, regcolor &c) {
+bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool finished, success;
     int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
     string tmp, phidden, socksuser, sockspass;
@@ -527,8 +527,9 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
-    bool usegroups = conf.getusegroups();
     bool makelog = conf.getmakelog();
+
+    icqconf::groupmode gmode = conf.getgroupmode();
 
     dialogbox db;
 
@@ -562,7 +563,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
 
 	i = t.addnode(_(" Contact list "));
-	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), stryesno[usegroups]);
+	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
 	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno[hideoffl]);
 	t.addleaff(i, 0,  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno[rus]);
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno[antispam]);
@@ -596,13 +597,15 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	    case 0:
 		switch(i) {
 		    case 1:
-			s = s == rsdontchange ? rscard :
-			    s == rscard ? rsspeaker :
-			    s == rsspeaker ? rsdisable : rsdontchange;
+			s = s == icqconf::rsdontchange ? icqconf::rscard :
+			    s == icqconf::rscard ? icqconf::rsspeaker :
+			    s == icqconf::rsspeaker ? icqconf::rsdisable :
+				icqconf::rsdontchange;
 			break;
 		    case 2:
-			c = c == rcdontchange ? rcdark :
-			    c == rcdark ? rcblue : rcdontchange;
+			c = c == icqconf::rcdontchange ? icqconf::rcdark :
+			    c == icqconf::rcdark ? icqconf::rcblue :
+				icqconf::rcdontchange;
 			break;
 		    case 3: rus = !rus; break;
 		    case 4:
@@ -631,7 +634,12 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
-		    case 17: usegroups = !usegroups; break;
+		    case 17:
+			gmode =
+			    gmode == icqconf::group1 ? icqconf::group2 :
+			    gmode == icqconf::group2 ? icqconf::nogroups :
+				icqconf::group1;
+			break;
 		    case 18: makelog = !makelog; break;
 		}
 		break;
@@ -646,8 +654,8 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setrussian(rus);
 		conf.setmakelog(makelog);
 
-		if(conf.getusegroups() != usegroups) {
-		    conf.setusegroups(usegroups);
+		if(conf.getgroupmode() != gmode) {
+		    conf.setgroupmode(gmode);
 		    clist.rearrange();
 		}
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.68 2002/01/21 17:25:54 konst Exp $
+* $Id: icqface.cc,v 1.69 2002/01/22 11:59:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,16 +32,16 @@
 #include "abstracthook.h"
 #include "imlogger.h"
 
-const char *strregsound(regsound s) {
-    return s == rscard ? _("sound card") :
-	s == rsspeaker ? _("speaker") :
-	s == rsdisable ? _("disable") :
+const char *strregsound(icqconf::regsound s) {
+    return s == icqconf::rscard ? _("sound card") :
+	s == icqconf::rsspeaker ? _("speaker") :
+	s == icqconf::rsdisable ? _("disable") :
 	_("don't change");
 }
 
-const char *strregcolor(regcolor c) {
-    return c == rcdark ? _("dark") :
-	c == rcblue ? _("blue") :
+const char *strregcolor(icqconf::regcolor c) {
+    return c == icqconf::rcdark ? _("dark") :
+	c == icqconf::rcblue ? _("blue") :
 	_("don't change");
 }
 
@@ -66,6 +66,12 @@ const char *strlanguage(unsigned int code) {
     } else {
 	return "";
     }
+}
+
+const char *strgroupmode(icqconf::groupmode gmode) {
+    return gmode == icqconf::group1 ? _("mode 1") :
+	gmode == icqconf::group2 ? _("mode 2") :
+	    _("no");
 }
 
 icqface::icqface() {
@@ -222,7 +228,7 @@ int icqface::contextmenu(icqcontact *c) {
     if(c->getdesc() != contactroot) {
 	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
 	m.additem(0, ACT_RENAME, _(" Rename contact         r"));
-	if(conf.getusegroups())
+	if(conf.getgroupmode() != icqconf::nogroups)
 	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
     }
 
@@ -258,7 +264,7 @@ int icqface::generalmenu() {
 	_(" Show offline users                 F5") :
 	_(" Hide offline users                 F5"));
 
-    if(conf.getusegroups()) {
+    if(conf.getgroupmode() != icqconf::nogroups) {
 	m.additem(0,  ACT_ORG_GROUPS, (string) " " + _("Organize contact groups"));
     }
 
@@ -329,8 +335,15 @@ icqcontact *icqface::mainloop(int &action) {
     return c;
 }
 
+#define ADDGROUP(nn) { \
+    if(groupchange && !strchr("!", sc)) \
+	ngroup = mcontacts->addnode(nn, conf.getcolor(cp_main_highlight), \
+	    0, " " + find(groups.begin(), groups.end(), \
+	    c->getgroupid())->getname() + " "); \
+}
+
 void icqface::fillcontactlist() {
-    int i, id, nnode, ngroup, prevgid;
+    int i, id, nnode, ngroup, prevgid, n, nonline;
     string dnick;
     icqcontact *c;
     void *savec;
@@ -342,11 +355,7 @@ void icqface::fillcontactlist() {
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
     mcontacts->clear();
     clist.order();
-/*
-    if(c = clist.get(contactroot))
-    if(c->getmsgcount())
-	mcontacts->addleaf(0, conf.getcolor(cp_main_highlight), c, "#ICQ ");
-*/
+
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
@@ -362,37 +371,57 @@ void icqface::fillcontactlist() {
 	sc = SORTCHAR(c);
 
 	groupchange =
-	    conf.getusegroups() &&
+	    (conf.getgroupmode() != icqconf::nogroups) &&
 	    (c->getgroupid() != prevgid) &&
 	    (sc != '#');
 
-	if(groupchange && !strchr("!", sc)) {
-	    ngroup = mcontacts->addnode(0, conf.getcolor(cp_main_highlight),
-		0, " " + find(groups.begin(), groups.end(),
-		c->getgroupid())->getname() + " ");
-	}
+	if(conf.getgroupmode() == icqconf::group1)
+	    ADDGROUP(0);
 
 	if(groupchange || (sc != '#')) {
 	    if(strchr("candifo", sc)) sc = 'O';
 
-	    if((sc != prevsc) || groupchange)
-	    switch(sc) {
-		case 'O':
-		    nnode = conf.gethideoffline() && conf.getusegroups() ?
-			ngroup : mcontacts->addnode(ngroup,
-			    conf.getcolor(cp_main_highlight), 0, " Online ");
+	    if((sc != prevsc) || groupchange) {
+		switch(conf.getgroupmode()) {
+		    case icqconf::group1:
+			n = ngroup;
+			break;
+		    case icqconf::group2:
+			if(prevsc == sc) {
+			    n = -1;
+			} else {
+			    n = 0;
+			}
+			break;
+		}
 
-		    online_added = true;
-		    break;
-		case '_':
-		    nnode = mcontacts->addnode(ngroup,
-			conf.getcolor(cp_main_highlight), 0, " Offline ");
-		    break;
-		case '!':
-		    ngroup = 0;
-		    nnode = mcontacts->addnode(ngroup,
-			conf.getcolor(cp_main_highlight), 0, " Not in list ");
-		    break;
+		if(n != -1) {
+		    switch(sc) {
+			case 'O':
+			    nnode = conf.gethideoffline() && (conf.getgroupmode() != icqconf::nogroups) ?
+				n : mcontacts->addnode(n,
+				    conf.getcolor(cp_main_highlight), 0, " Online ");
+
+			    online_added = true;
+			    break;
+			case '_':
+			    nnode = mcontacts->addnode(n,
+				conf.getcolor(cp_main_highlight), 0, " Offline ");
+			    break;
+			case '!':
+			    ngroup = 0;
+			    nnode = mcontacts->addnode(ngroup,
+				conf.getcolor(cp_main_highlight), 0, " Not in list ");
+			    break;
+		    }
+
+		    nonline = nnode;
+		}
+
+		if(conf.getgroupmode() == icqconf::group2) {
+		    ADDGROUP(nonline);
+		    nnode = ngroup;
+		}
 	    }
 
 	    if(groupchange) prevgid = c->getgroupid();
@@ -412,11 +441,7 @@ void icqface::fillcontactlist() {
 		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
     }
-/*
-    if(c = clist.get(contactroot))
-    if(!c->getmsgcount())
-	mcontacts->addleaf(0, conf.getcolor(cp_clist_root), c, " ICQ ");
-*/
+
     if(!mainscreenblock) mcontacts->redraw();
 
     if(!savec || (!onlinefolder && online_added && conf.gethideoffline())) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.65 2002/01/18 16:04:01 konst Exp $
+* $Id: centericq.cc,v 1.66 2002/01/22 11:59:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -362,17 +362,17 @@ void centericq::userinfo(const imcontact cinfo) {
 bool centericq::updateconf() {
     bool r;
 
-    regsound snd = rsdontchange;
-    regcolor clr = rcdontchange;
+    icqconf::regsound snd = icqconf::rsdontchange;
+    icqconf::regcolor clr = icqconf::rcdontchange;
 
     if(r = face.updateconf(snd, clr)) {
-	if(snd != rsdontchange) {
+	if(snd != icqconf::rsdontchange) {
 	    conf.setregsound(snd);
 	    unlink(conf.getconfigfname("sounds").c_str());
 	    conf.loadsounds();
 	}
 
-	if(clr != rcdontchange) {
+	if(clr != icqconf::rcdontchange) {
 	    conf.setregcolor(clr);
 	    unlink(conf.getconfigfname("colorscheme").c_str());
 	    conf.loadcolors();
@@ -747,7 +747,7 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	}
     }
 
-    if(conf.getusegroups()) {
+    if(conf.getgroupmode() != icqconf::nogroups) {
 	groupid = face.selectgroup(_("Select a group to add the user to"));
 	if(!groupid) return 0;
     }
