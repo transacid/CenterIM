@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.73 2004/08/05 11:20:08 konst Exp $
+* $Id: jabberhook.cc,v 1.74 2004/08/09 22:52:59 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -523,10 +523,8 @@ const string &serv, string &err) {
     jab_logger(jc, &jlogger);
 #endif
 
+    jc->cw_state = CW_CONNECT_BLOCKING;
     jab_start(jc);
-
-    while(jc && jc->state == JCONN_STATE_CONNECTING)
-       jab_start(jc);
 
     if(jc) id = atoi(jab_reg(jc));
 
