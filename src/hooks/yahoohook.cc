@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.14 2001/12/08 22:59:20 konst Exp $
+* $Id: yahoohook.cc,v 1.15 2001/12/09 14:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -321,17 +321,20 @@ void yahoohook::userlogoff(yahoo_context *y, const char *nick) {
 }
 
 void yahoohook::userstatus(yahoo_context *y, const char *nick, int status) {
-    imcontact ic(nick, yahoo);
-    icqcontact *c = clist.get(ic);
+    if(nick)
+    if(strlen(nick)) {
+	imcontact ic(nick, yahoo);
+	icqcontact *c = clist.get(ic);
 
-    if(!c) {
-	c = clist.addnew(ic, false);
-    }
+	if(!c) {
+	    c = clist.addnew(ic, false);
+	}
 
-    c->setstatus(yhook.yahoo2imstatus(status));
+	c->setstatus(yhook.yahoo2imstatus(status));
 
-    if(c->getstatus() != offline) {
-	c->setlastseen();
+	if(c->getstatus() != offline) {
+	    c->setlastseen();
+	}
     }
 }
 
@@ -340,15 +343,18 @@ void yahoohook::recvbounced(yahoo_context *y, const char *nick) {
 }
 
 void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg) {
-    imcontact ic(nick, yahoo);
+    if(nick)
+    if(strlen(nick)) {
+	imcontact ic(nick, yahoo);
 
-    if(strlen(msg)) {
-	em.store(immessage(ic, imevent::incoming, rusconv("wk", msg)));
-	icqcontact *c = clist.get(ic);
+	if(strlen(msg)) {
+	    em.store(immessage(ic, imevent::incoming, rusconv("wk", msg)));
+	    icqcontact *c = clist.get(ic);
 
-	if(c)
-	if(c->getstatus() == offline) {
-	    c->setstatus(available);
+	    if(c)
+	    if(c->getstatus() == offline) {
+		c->setstatus(available);
+	    }
 	}
     }
 }

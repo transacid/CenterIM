@@ -40,6 +40,26 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
     fi
 fi
 
+AM_PATH_SIGC(1.0.0,
+    [CXXFLAGS="$CXXFLAGS $SIGC_CFLAGS"],
+    [AC_MSG_ERROR([You need to have the libsigc++ libraries installed - see the README for more information])])
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator exception utility],,
+  AC_MSG_ERROR([You need to have the libstdc++ headers installed]))
+
+AC_CHECK_HEADERS([hash_map strstream ext/hash_map sstream],,)
+
+AC_CHECK_HEADERS(ext/hash_map,,
+  AC_CHECK_HEADERS(hash_map,, AC_MSG_ERROR([Your libstdc++ installation does not have the extra hash classes])))
+
+AC_CHECK_HEADERS(sstream,,
+  AC_CHECK_HEADERS(strstream,, AC_MSG_ERROR([Your libstdc++ doesn't have the sstream or strstream classes])))
+
+AC_LANG_RESTORE
+
 AC_CHECK_LIB(ncurses, main, LIBS="$LIBS -lncurses", LIBS="$LIBS -lcurses")
 
 AC_CONFIG_SUBDIRS(kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 libyahoo-0.1 libmsn-0.1 libicq2000-0.1)
