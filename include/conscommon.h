@@ -86,7 +86,7 @@ __KTOOL_BEGIN_C
 void kinterface();
 void kendinterface();
 
-int keypressed();
+int keypressed(bool wait = false);
 int emacsbind(int k);
 
 int getkey();

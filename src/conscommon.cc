@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.26 2003/01/19 02:14:50 konst Exp $
+* $Id: conscommon.cc,v 1.27 2004/06/21 13:04:31 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,14 +184,14 @@ void kwriteat(int x, int y, const char *msg, int c) {
     refresh();
 }
 
-int keypressed() {
+int keypressed(bool wait) {
     struct timeval tv;
     fd_set readfds;
     tv.tv_sec = tv.tv_usec = 0;
 
     FD_ZERO(&readfds);
     FD_SET(0, &readfds);
-    select(1, &readfds, 0, 0, &tv);
+    select(1, &readfds, 0, 0, wait ? 0 : &tv);
 
     return FD_ISSET(0, &readfds);
 }

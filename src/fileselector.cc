@@ -7,7 +7,7 @@
 
 static fileselector *instance;
 
-fileselector::fileselector() {
+fileselector::fileselector(): idle(0), otherkeys(0) {
 }
 
 fileselector::~fileselector() {
@@ -168,6 +168,8 @@ void fileselector::close() {
 void fileselector::menuidle(verticalmenu &m) {
     if(instance->idle) {
 	(*(instance->idle))(*instance);
+    } else {
+	keypressed(true);
     }
 }
 
