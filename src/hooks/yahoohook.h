@@ -9,9 +9,9 @@
 class yahoohook: public abstracthook {
     protected:
 	bool fonline, flogged;
-	int cid;
-	vector<string> tobeadded;
 	map<string, vector<string> > confmembers;
+	imstatus ourstatus;
+	int cid;
 
 	static void login_done(guint32 id, int succ, char *url);
 	static void got_buddies(guint32 id, struct yahoo_buddy **buds);
@@ -33,9 +33,9 @@ class yahoohook: public abstracthook {
 	static void remove_input(guint32 id, int fd);
 
 	static struct tm *timestamp();
+	static imstatus yahoo2imstatus(int status);
 
 	char **getmembers(const string &room);
-	imstatus yahoo2imstatus(int status) const;
 	void userstatus(const string &nick, int st, const string &message, bool away);
 
     public:

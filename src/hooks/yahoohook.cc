@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.41 2002/07/13 11:18:57 konst Exp $
+* $Id: yahoohook.cc,v 1.42 2002/07/13 16:10:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -49,7 +49,7 @@ static int stat2int[imstatus_size] = {
     YAHOO_STATUS_BUSY,
     YAHOO_STATUS_NOTATDESK,
     YAHOO_STATUS_NOTATHOME,
-    YAHOO_STATUS_BRB,
+    YAHOO_STATUS_IDLE,
 };
 
 yahoohook::yahoohook() : fonline(false) {
@@ -137,7 +137,7 @@ bool yahoohook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
 void yahoohook::disconnect() {
     if(online()) {
 	yahoo_logoff(cid);
-	logger.putourstatus(yahoo, getstatus(), offline);
+	logger.putourstatus(yahoo, getstatus(), ourstatus = offline);
 	clist.setoffline(yahoo);
 	fonline = false;
 	face.log(_("+ [yahoo] disconnected"));
@@ -209,8 +209,6 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 
 	    yahoo_add_buddy(cid, who.get(), group.get());
 	    yahoo_refresh(cid);
-	} else {
-	    tobeadded.push_back(ic.nickname);
 	}
     }
 
@@ -233,7 +231,7 @@ void yahoohook::removeuser(const imcontact &ic) {
     }
 }
 
-imstatus yahoohook::yahoo2imstatus(int status) const {
+imstatus yahoohook::yahoo2imstatus(int status) {
     imstatus st = offline;
 
     switch(status) {
@@ -285,11 +283,10 @@ void yahoohook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
-	    logger.putourstatus(yahoo, getstatus(), st);
+	    logger.putourstatus(yahoo, getstatus(), ourstatus = st);
 
-	    if(st == available) {
-		auto_ptr<char> msg(strdup("available"));
-		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 0);
+	    if(st != away) {
+		yahoo_set_away(cid, (yahoo_status) stat2int[st], 0, 0);
 	    } else {
 		auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(yahoo)).c_str()));
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
@@ -299,7 +296,7 @@ void yahoohook::setautostatus(imstatus st) {
 }
 
 imstatus yahoohook::getstatus() const {
-    return online() ? yahoo2imstatus(yahoo_current_status(cid)) : offline;
+    return online() ? ourstatus : offline;
 }
 
 void yahoohook::requestinfo(const imcontact &ic) {
@@ -326,9 +323,9 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
     }
 
     if(c) {
-	logger.putonline(ic, c->getstatus(), yhook.yahoo2imstatus(st));
+	logger.putonline(ic, c->getstatus(), yahoo2imstatus(st));
 
-	c->setstatus(yhook.yahoo2imstatus(st));
+	c->setstatus(yahoo2imstatus(st));
 	if(c->getstatus() != offline) c->setlastseen();
 
 	c->setabout(rusconv("wk", message));
@@ -369,17 +366,8 @@ void yahoohook::login_done(guint32 id, int succ, char *url) {
     switch(succ) {
 	case YAHOO_LOGIN_OK:
 	    yhook.flogged = true;
-
-	    logger.putourstatus(yahoo, offline,
-		yhook.yahoo2imstatus(yahoo_current_status(yhook.cid)));
-
+	    logger.putourstatus(yahoo, offline, yhook.ourstatus = yhook.manualstatus);
 	    face.log(_("+ [yahoo] logged in"));
-
-	    for(in = yhook.tobeadded.begin(); in != yhook.tobeadded.end(); ++in)
-		yhook.sendnewuser(imcontact(*in, yahoo));
-
-	    yhook.tobeadded.clear();
-
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:
@@ -533,12 +521,14 @@ void yahoohook::mail_notify(guint32 id, char *from, char *subj, int cnt) {
 }
 
 void yahoohook::system_message(guint32 id, char *msg) {
-    face.log(_("[yahoo] system: %s"), msg);
+    face.log(_("+ [yahoo] system: %s"), msg);
 }
 
 void yahoohook::error(guint32 id, char *err, int fatal) {
-    face.log(_("[yahoo] error: %s"), err);
-    if(fatal) yhook.disconnect();
+    if(fatal) {
+	face.log(_("+ [yahoo] error: %s"), err);
+	yhook.disconnect();
+    }
 }
 
 void yahoohook::add_input(guint32 id, int fd) {
