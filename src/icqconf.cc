@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.34 2002/01/22 11:59:15 konst Exp $
+* $Id: icqconf.cc,v 1.35 2002/01/28 14:09:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,7 +184,7 @@ void icqconf::save() {
 int icqconf::getcolor(int npair) const {
     return
 	find(boldcolors.begin(), boldcolors.end(), npair) != boldcolors.end()
-	? boldcolor(npair) : color(npair);
+	? boldcolor(npair) : normalcolor(npair);
 }
 
 void icqconf::loadcolors() {

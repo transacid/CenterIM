@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.45 2002/01/26 14:01:38 konst Exp $
+* $Id: icqhook.cc,v 1.46 2002/01/28 14:09:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -439,9 +439,14 @@ void icqhook::requestinfo(const imcontact c) {
 	    // Our info is requested
 	    cli.fetchSelfDetailContactInfo();
 	} else {
-	    Contact ic(c.uin);
-	    cli.addContact(ic);
-	    cli.fetchDetailContactInfo(cli.getContact(c.uin));
+	    Contact *icont = cli.getContact(c.uin);
+
+	    if(!icont) {
+		Contact ic(c.uin);
+		cli.addContact(ic);
+	    } else {
+		cli.fetchDetailContactInfo(icont);
+	    }
 	}
     }
 }
