@@ -23,11 +23,12 @@ enum imgender {
 class icqcontact {
     public:
 	struct basicinfo {
-	    basicinfo(): zip(0), country(0) {};
+	    basicinfo(): zip(0), country(0), requiresauth(false) {};
 
 	    string fname, lname, email, city, state, phone, fax, street, cellular;
 	    unsigned int zip;
 	    unsigned short country;
+	    bool requiresauth;
 	};
 
 	struct moreinfo {

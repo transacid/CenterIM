@@ -24,7 +24,7 @@
 #ifdef ENABLE_NLS
 
 #include <libintl.h>
-#define _(s)    gettext(s)
+#define _(s)    ::gettext(s)
 
 #else
 

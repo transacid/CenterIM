@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.42 2002/01/21 17:25:55 konst Exp $
+* $Id: icqhook.cc,v 1.43 2002/01/23 16:31:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -487,6 +487,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ic->setFirstName(rusconv("kw", cbinfo.fname));
     ic->setLastName(rusconv("kw", cbinfo.lname));
     ic->setEmail(rusconv("kw", cbinfo.email));
+    ic->setAuthReq(cbinfo.requiresauth);
 
     ic->setAboutInfo(rusconv("kw", c.getabout()));
 
@@ -768,6 +769,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cbinfo.phone = rusconv("wk", home.phone);
 		cbinfo.fax = rusconv("wk", home.fax);
 		cbinfo.street = rusconv("wk", home.street);
+		cbinfo.requiresauth = ic->getAuthReq();
 
 		if(!home.cellular.empty())
 		    cbinfo.cellular = rusconv("wk", home.cellular);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.44 2002/01/22 11:59:16 konst Exp $
+* $Id: icqdialogs.cc,v 1.45 2002/01/23 16:31:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -218,6 +218,11 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     tree->addleaff(i, 0, 37, _(" 2nd language : %s "), strlanguage(mi.lang2));
     tree->addleaff(i, 0, 38, _(" 3rd language : %s "), strlanguage(mi.lang3));
 
+    if(c->getdesc().pname == icq)
+    if(c->getdesc() == contactroot)
+	tree->addleaff(i, 0, 40, _(" Require authorization : %s "),
+	    stryesno[bi.requiresauth]);
+
     i = tree->addnode(_(" About "));
     tree->addleaff(i, 0, 39, " %s ", about.c_str());
 
@@ -347,6 +352,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 		case 38: selectlanguage(mi.lang3); break;
 
 		case 39: editabout(about); break;
+		case 40: bi.requiresauth = !bi.requiresauth; break;
 	    }
 
 	    c->setbasicinfo(bi);
@@ -354,7 +360,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	    c->setworkinfo(wi);
 	    c->setabout(about);
 	} else {
-	    ret = c->getdesc().uin || (c->updated() >= 5);
+	    ret = (c->getdesc() != contactroot) || c->updated();
 	    finished = true;
 	}
     }

@@ -236,8 +236,13 @@ bool agranted, const string atext) {
     type = authorization;
     contact = acont;
     direction = adirection;
-    text = atext;
     granted = agranted;
+
+    if(atext.empty()) {
+	text = _("Empty authorization request message");
+    } else {
+	text = atext;
+    }
 }
 
 imauthorization::imauthorization(const imevent &ev) {
