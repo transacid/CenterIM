@@ -225,14 +225,14 @@ void imcontroller::ircchannels() {
 		break;
 
 	    case 1:
-		if(n > 0) {
+		if(n > 1) {
 		    ic = channels.begin()+n-2;
 		    channels.erase(ic);
 		}
 		break;
 
 	    case 2:
-		if(n > 0) {
+		if(n > 1) {
 		    ic = channels.begin()+n-2;
 		    ic->joined = !ic->joined;
 		}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.75 2002/04/09 09:09:44 konst Exp $
+* $Id: icqhook.cc,v 1.76 2002/04/09 15:48:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -54,6 +54,7 @@ icqhook::icqhook() {
 	hoptCanSendURL |
 	hoptCanSendSMS |
 	hoptCanSetAwayMsg |
+	hoptCanFetchAwayMsg |
 	hoptCanChangeNick |
 	hoptCanUpdateDetails |
 	hoptChangableServer;
@@ -356,6 +357,10 @@ void icqhook::sendnewuser(const imcontact &c) {
     }
 }
 
+void icqhook::removeuser(const imcontact &c) {
+    cli.removeContact(c.uin);
+}
+
 void icqhook::setautostatus(imstatus st) {
     if(st != offline) {
 	if(getstatus() == offline) {
@@ -567,8 +572,7 @@ void icqhook::requestawaymsg(const imcontact &c) {
     ContactRef ic = cli.getContact(c.uin);
 
     if(ic.get()) {
-	MessageEvent *ev = new AwayMessageEvent(ic);
-	cli.SendEvent(ev);
+	cli.SendEvent(new AwayMessageEvent(ic));
     }
 }
 
@@ -804,7 +808,6 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 		rusconv("wk", r->getMessage())));
 	}
 
-    } else if(ev->getType() == MessageEvent::AuthAck) {
     } else if(ev->getType() == MessageEvent::EmailEx) {
 	EmailExEvent *r;
 
@@ -906,7 +909,6 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
     string lastip, sbuf;
     int ip;
 
-    if(dynamic_cast<StatusChangeEvent*>(ev))
     if(c) {
 	ContactRef ic = cli.getContact(ev->getUIN());
 	StatusChangeEvent *tev = dynamic_cast<StatusChangeEvent*>(ev);

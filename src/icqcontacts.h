@@ -20,7 +20,7 @@
 *
 */
 
-#define SORT_CONTACTS   "#fidocan_!N"
+#define SORT_CONTACTS   "#fiodcan_!N"
 
 #define SORTCHAR(c) ( \
     c->getmsgcount() ? '#' : \

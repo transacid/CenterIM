@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.11 2002/04/08 13:45:45 konst Exp $
+* $Id: irchook.cc,v 1.12 2002/04/09 15:48:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,6 +43,7 @@ irchook::irchook()
 {
     fcapabilities =
 	hoptCanSetAwayMsg |
+	hoptCanFetchAwayMsg |
 	hoptCanChangeNick |
 	hoptNoPasswords |
 	hoptChangableServer;

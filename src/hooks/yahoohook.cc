@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.33 2002/04/06 08:55:49 konst Exp $
+* $Id: yahoohook.cc,v 1.34 2002/04/09 15:48:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,7 +46,10 @@ static int stat2int[imstatus_size] = {
 
 yahoohook::yahoohook()
     : fonline(false), context(0)
-{ }
+{
+    fcapabilities =
+	hoptCanSetAwayMsg;
+}
 
 yahoohook::~yahoohook() {
 }
@@ -302,7 +305,8 @@ void yahoohook::setautostatus(imstatus st) {
 		if(stat2int[st] == YAHOO_STATUS_IDLE) {
 		    yahoo_cmd_idle(context);
 		} else {
-		    yahoo_cmd_set_away_mode(context, stat2int[st], "away");
+		    yahoo_cmd_set_away_mode(context, stat2int[st],
+			conf.getawaymsg(aim).c_str());
 		}
 	    }
 	}
