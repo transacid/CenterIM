@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.128 2002/12/23 09:18:27 konst Exp $
+* $Id: icqhook.cc,v 1.129 2002/12/23 14:33:53 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,9 +33,8 @@
 #include <libicq2000/userinfohelpers.h>
 
 #define PERIOD_ICQPOLL  5
-#define PERIOD_RESOLVE  25
-
-#define MAX_REQUESTS    20
+#define PERIOD_RESOLVE  10
+#define DELAY_SENDNEW   5
 
 icqhook ihook;
 
@@ -174,17 +173,20 @@ void icqhook::disconnect() {
 }
 
 void icqhook::resolve() {
-    int i, cnt;
     icqcontact *c;
+    vector<icqcontact *> toresolve;
 
-    for(i = cnt = 0; i < clist.count && cnt < MAX_REQUESTS; i++) {
+    for(int i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == icq)
-	if(c->getdispnick() == i2str(c->getdesc().uin)) {
-	    requestinfo(c);
-	    cnt++;
-	}
+	if(c->getdispnick() == i2str(c->getdesc().uin))
+	    toresolve.push_back(c);
+    }
+
+    if(toresolve.size()) {
+	c = toresolve[randlimit(0, toresolve.size()-1)];
+	requestinfo(c);
     }
 }
 
@@ -238,6 +240,22 @@ void icqhook::exectimers() {
 	    cli.Poll();
 	    sendinvisible();
 	    timer_poll = tcurrent;
+
+	    /*
+	    *
+	    * Will to the mass-adding stuff here too..
+	    *
+	    */
+
+	    vector<imcontact>::iterator ic = uinstosend.begin();
+
+	    if(ic != uinstosend.end()) {
+		imcontact imc = *ic;
+		uinstosend.erase(ic);
+
+		ContactRef icont = cli.getContact(imc.uin);
+		if(!icont.get()) sendnewuser(imc);
+	    }
 	}
 
 	if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
@@ -468,17 +486,26 @@ bool icqhook::send(const imevent &ev) {
     return true;
 }
 
-void icqhook::sendnewuser(const imcontact &c) {
-    if(logged() && c.uin) {
-	cli.addContact(new Contact(c.uin));
-	cli.fetchSimpleContactInfo(cli.getContact(c.uin));
-	cli.fetchDetailContactInfo(cli.getContact(c.uin));
+void icqhook::sendnewuser(const imcontact &ic) {
+    time_t tcurrent = time(0);
+    static time_t lastadd = 0;
 
-	if(conf.getourid(icq).additional["autosync"] == "1") {
-	    icqcontact *cc = clist.get(c);
-	    if(cc)
-	    if(cc->inlist())
-		cli.uploadServerBasedContactList(cli.getContact(c.uin));
+    if(logged() && ic.uin) {
+	if(tcurrent-lastadd > DELAY_SENDNEW) {
+	    cli.addContact(new Contact(ic.uin));
+	    cli.fetchSimpleContactInfo(cli.getContact(ic.uin));
+	    cli.fetchDetailContactInfo(cli.getContact(ic.uin));
+
+	    if(conf.getourid(icq).additional["autosync"] == "1") {
+		icqcontact *cc = clist.get(ic);
+		if(cc)
+		if(cc->inlist())
+		    cli.uploadServerBasedContactList(cli.getContact(ic.uin));
+	    }
+
+	    lastadd = tcurrent;
+	} else {
+	    uinstosend.push_back(ic);
 	}
     }
 }
@@ -1414,7 +1441,6 @@ void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
 	syncstatus = ackFetch;
 
 	while(i != lst.end()) {
-	    cli.addContact(*i);
 	    imcontact cont((*i)->getUIN(), icq);
 	    if(!clist.get(cont)) clist.addnew(cont, false);
 	    ++i;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.39 2002/12/20 17:28:43 konst Exp $
+* $Id: jabberhook.cc,v 1.40 2002/12/23 14:33:55 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1039,7 +1039,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
     bool wasrole = false;
 
     icqcontact *c = clist.get(ic);
-    if(!c) c = clist.get(contactroot);
+    if(!c || isourid(ic.nickname)) c = clist.get(contactroot);
 
     if(c) {
 	icqcontact::basicinfo bi = c->getbasicinfo();
@@ -1127,6 +1127,17 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 	c->setbasicinfo(bi);
 	c->setmoreinfo(mi);
 	c->setworkinfo(wi);
+
+	if(isourid(ic.nickname)) {
+	    icqcontact *cc = clist.get(ic);
+	    if(cc) {
+		cc->setnick(c->getnick());
+		cc->setabout(c->getabout());
+		cc->setbasicinfo(bi);
+		cc->setmoreinfo(mi);
+		cc->setworkinfo(wi);
+	    }
+	}
     }
 }
 
@@ -1184,6 +1195,17 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
 	sprintf(buf, _("The remote is using %s"), vinfo.c_str());
 	em.store(imnotification(ic, buf));
     }
+}
+
+bool jabberhook::isourid(const string &jid) {
+    icqconf::imaccount acc = conf.getourid(jabber);
+    int pos;
+
+    string ourjid = acc.nickname;
+    if(ourjid.find("@") == -1) ourjid += (string) "@" + acc.server;
+    if((pos = ourjid.find(":")) != -1) ourjid.erase(pos);
+
+    return jidnormalize(jid) == ourjid;
 }
 
 // ----------------------------------------------------------------------------

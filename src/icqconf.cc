@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.96 2002/12/13 11:08:43 konst Exp $
+* $Id: icqconf.cc,v 1.97 2002/12/23 14:33:53 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -911,8 +911,11 @@ void icqconf::usage() const {
     cout << endl << _("General options:") << endl;
     cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
-//    cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
+/*
+    cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
+*/
     cout << _("  --help                   display this stuff") << endl;
+    cout << _("  --version, -v            show the program version info") << endl;
 
     cout << endl << _("Events sending options:") << endl;
     cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;

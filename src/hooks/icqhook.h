@@ -20,7 +20,8 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	    reqUpload,
 	    ackUpload,
 	    reqFetch,
-	    ackFetch
+	    ackFetch,
+	    noSync
 	} syncstatus;
 
 	enum {
@@ -36,6 +37,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	typedef pair<unsigned int, contactstatus> visInfo;
 	vector<visInfo> vislist;
 	vector<icqcontact *> foundguys;
+	vector<imcontact> uinstosend;
 
 	void connected_cb(ConnectedEvent *ev);
 	void disconnected_cb(DisconnectedEvent *ev);
