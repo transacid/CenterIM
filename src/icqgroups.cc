@@ -59,3 +59,10 @@ int icqgroups::add(const string aname) {
 
     return i;
 }
+
+void icqgroups::remove(int gid) {
+    iterator i = find(begin(), end(), gid);
+    if(i != end()) {
+	erase(i);
+    }
+}

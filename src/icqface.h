@@ -58,6 +58,8 @@
 #define ACT_QUICKFIND   -32
 #define ACT_CONTACT     -33
 #define ACT_GROUPMOVE   -34
+#define ACT_ORG_GROUPS  -35
+#define ACT_HIDEOFFLINE -36
 
 extern class centericq cicq;
 
@@ -150,6 +152,7 @@ class icqface {
 
 	void showextractedurls();
 	void extracturls(const string buf);
+	int groupmanager(const string text, bool sel);
 
     public:
 	list<unsigned int> muins;
@@ -213,7 +216,9 @@ class icqface {
 	string inputfile(string q, string defl = "");
 
 	void quickfind(verticalmenu *multi = 0);
+
 	int selectgroup(const string text);
+	void organizegroups();
 };
 
 extern icqface face;

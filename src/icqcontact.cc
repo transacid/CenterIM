@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.9 2001/09/30 19:22:05 konst Exp $
+* $Id: icqcontact.cc,v 1.10 2001/10/02 17:31:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -103,6 +103,7 @@ void icqcontact::clear() {
     zip = wzip = occupation = 0;
     country = wcountry = 0;
     lastseen = 0;
+    timezone = 0;
 }
 
 void icqcontact::save() {
@@ -173,6 +174,7 @@ void icqcontact::save() {
 	    fprintf(f, "%s\n", fbg[2].c_str());
 	    fprintf(f, "%s\n", fbg[3].c_str());
 	    fprintf(f, "%d\n", groupid);
+	    fprintf(f, "%d\n", timezone);
 	    fclose(f);
 	}
 
@@ -261,6 +263,7 @@ void icqcontact::load() {
 		case 49: fbg[2] = buf; break;
 		case 50: fbg[3] = buf; break;
 		case 51: groupid = atoi(buf); break;
+		case 52: timezone = atoi(buf); break;
 	    }
 	}
 	fclose(f);
@@ -744,4 +747,11 @@ void icqcontact::setgroupid(int agroupid) {
 
 int icqcontact::getgroupid() const {
     return groupid;
+}
+
+const string icqcontact::gettimezone() const {
+    return (string)
+	(timezone > 0 ? "-" : "+") +
+	i2str(timezone/2) + ":" +
+	(timezone%2 ? "30" : "00");
 }

@@ -49,6 +49,7 @@ class icqcontacts: public linkedlist {
 	void send();
 	void nonicq(int id);
 	void order();
+	void rearrange();
 
 	icqcontact* addnew(unsigned int uin,
 	    bool notinlist = true,

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.19 2001/09/30 22:42:40 konst Exp $
+* $Id: centericq.cc,v 1.20 2001/10/02 17:30:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -90,6 +90,7 @@ void centericq::exec() {
     groups.load();
     clist.load();
     lst.load();
+    conf.loadsounds();
 
     face.done();
     face.init();
@@ -222,6 +223,12 @@ void centericq::mainloop() {
 	    case ACT_VISIBLELIST: face.modelist(csvisible); break;
 	    case ACT_INVISLIST: face.modelist(csinvisible); break;
 	    case ACT_STATUS: changestatus(); break;
+	    case ACT_ORG_GROUPS: face.organizegroups(); break;
+	    case ACT_HIDEOFFLINE:
+		conf.sethideoffline(!conf.gethideoffline());
+		conf.savemainconfig();
+		face.update();
+		break;
 	    case ACT_DETAILS:
 		if(ihook.logged()) updatedetails();
 		break;
@@ -343,7 +350,7 @@ void centericq::changestatus() {
 	if(ihook.getmanualstatus() == STATUS_OFFLINE) {
 	    icq_Logout(&icql);
 	    icq_Disconnect(&icql);
-	    ihook.disconnected(&icql);
+	    ihook.ildisconnected(&icql);
 	} else {
 	    if(icql.icq_Status == STATUS_OFFLINE) {
 		ihook.connect();
@@ -731,6 +738,7 @@ icqcontact *centericq::adduin(unsigned int uin) {
 	}
 
 	c = clist.addnew(uin, false);
+	c->setgroupid(groupid);
 	face.log(_("+ %lu has been added to the list"), uin);
 	face.update();
     }

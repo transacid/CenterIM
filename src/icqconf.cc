@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.10 2001/09/30 22:42:41 konst Exp $
+* $Id: icqconf.cc,v 1.11 2001/10/02 17:31:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -64,7 +64,6 @@ void icqconf::checkdir() {
 void icqconf::load() {
     loadmainconfig();
     loadcolors();
-    loadsounds();
     loadactions();
 }
 

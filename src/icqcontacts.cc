@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.9 2001/09/30 19:22:05 konst Exp $
+* $Id: icqcontacts.cc,v 1.10 2001/10/02 17:31:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,6 +25,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqconf.h"
+#include "icqgroups.h"
 
 icqcontacts::icqcontacts() {
 }
@@ -42,10 +43,10 @@ bool nonicq = false) {
 	c->setdispnick(i2str(uin));
 	c->save();
 	add(c);
-/*
-	c->setseq2(icq_SendMetaInfoReq(&icql, uin));
 	icq_SendNewUser(&icql, uin);
+/*
 	icq_ContactAdd(&icql, uin);
+	c->setseq2(icq_SendMetaInfoReq(&icql, uin));
 */
     } else {
 	c->save();
@@ -180,13 +181,15 @@ int icqcontacts::clistsort(void *p1, void *p2) {
     static char *sorder = SORT_CONTACTS;
     char s1, s2;
 
+    s1 = SORTCHAR(c1);
+    s2 = SORTCHAR(c2);
+
+    if(!strchr("!N", s1) && !strchr("!N", s2))
+    if(!c1->getmsgcount() && !c2->getmsgcount())
     if(conf.getusegroups()) {
 	if(c1->getgroupid() > c2->getgroupid()) return -1; else
 	if(c1->getgroupid() < c2->getgroupid()) return 1;
     }
-
-    s1 = SORTCHAR(c1);
-    s2 = SORTCHAR(c2);
 
     if(s1 == s2) {
 	if(*c1 > *c2) return -1; else return 1;
@@ -197,4 +200,16 @@ int icqcontacts::clistsort(void *p1, void *p2) {
 
 void icqcontacts::order() {
     sort(&clistsort);
+}
+
+void icqcontacts::rearrange() {
+    int i;
+    icqcontact *c;
+
+    for(i = 0; i < count; i++) {
+	c = (icqcontact *) at(i);
+	if(::find(groups.begin(), groups.end(), c->getgroupid()) == groups.end()) {
+	    c->setgroupid(1);
+	}
+    }
 }

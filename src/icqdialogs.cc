@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.10 2001/09/30 22:42:41 konst Exp $
+* $Id: icqdialogs.cc,v 1.11 2001/10/02 17:31:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -770,13 +770,12 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
 		conf.setserveronly(serveronly);
-		conf.setusegroups(usegroups);
 
 		icq_Russian = rus ? 1 : 0;
 
-		if(usegroups) {
-		    clist.save();
-		    clist.load();
+		if(conf.getusegroups() != usegroups) {
+		    conf.setusegroups(usegroups);
+		    clist.rearrange();
 		}
 
 		if(socks) conf.setsockshost(prserv);
@@ -813,8 +812,17 @@ void icqface::detailsidle(dialogbox *db) {
 }
 
 int icqface::selectgroup(const string text) {
+    return groupmanager(text, true);
+}
+
+void icqface::organizegroups() {
+    groupmanager(_("Organize user groups"), false);
+}
+
+int icqface::groupmanager(const string text, bool sel) {
     dialogbox db;
-    int r, ngrp, n, b;
+    static int n = 0;
+    int r, ngrp, b, id;
     vector<icqgroup>::iterator i;
     string gname;
 
@@ -828,23 +836,29 @@ int icqface::selectgroup(const string text) {
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_text)));
+
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("Cancel"), _("Add a group"), _("Select"), 0));
+	_("Add"), _("Rename"), _("Remove"), sel ? _("Select") : _("Done"), 0));
+
+    db.getbar()->item = 3;
 
     r = 0;
     db.idle = &dialogidle;
     blockmainscreen();
     treeview &t = *db.gettree();
-    db.getbar()->item = 2;
+
+    db.addkey(KEY_IC, 0);
+    db.addkey(KEY_DC, 2);
 
     for(bool fin = false; !fin && !r; ) {
 	t.clear();
 	ngrp = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Groups "));
 
 	for(i = groups.begin(); i != groups.end(); i++) {
-	    t.addleaff(ngrp, 0, (void *) (i-groups.begin()+1),
-		" %s ", i->getname().c_str());
+	    b = i-groups.begin()+1;
+	    id = t.addleaff(ngrp, 0, (void *) b, " %s ", i->getname().c_str());
+	    if(n == b) t.setcur(id);
 	}
 
 	fin = !db.open(n, b, (void **) &n);
@@ -852,19 +866,40 @@ int icqface::selectgroup(const string text) {
 	if(!fin)
 	switch(b) {
 	    case 0:
-		fin = true;
-		break;
-
-	    case 1:
 		gname = inputstr(_("Name for a group to be created: "), "");
 		if(!gname.empty()) {
 		    groups.add(gname);
 		}
 		break;
 
+	    case 1:
+		if(n) {
+		    i = groups.begin()+n-1;
+		    gname = inputstr(_("New name for the group: "), i->getname());
+		    if(!gname.empty()) i->rename(gname);
+		}
+		break;
+
 	    case 2:
-		i = groups.begin()+n-1;
-		r = i->getid();
+		if(n) {
+		    i = groups.begin()+n-1;
+
+		    if(i->getid() != 1) {
+			if(ask(_("Are you sure want to remove the group?"), ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
+			    groups.remove(i->getid());
+			    clist.rearrange();
+			}
+		    }
+		}
+		break;
+
+	    case 3:
+		if(n) {
+		    i = groups.begin()+n-1;
+		    r = i->getid();
+		} else if(!sel) {
+		    fin = true;
+		}
 		break;
 	}
     }

@@ -15,6 +15,7 @@ class icqgroups: private vector<icqgroup> {
 	void save();
 
 	int add(const string aname);
+	void remove(int gid);
 
 	iterator begin()
 	    { return vector<icqgroup>::begin(); }
