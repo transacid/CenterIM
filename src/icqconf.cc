@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.30 2001/12/11 12:46:06 konst Exp $
+* $Id: icqconf.cc,v 1.31 2001/12/19 16:18:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -344,13 +344,15 @@ void icqconf::loadsounds() {
 	    skey = getword(buf);
 
 	    it = imevent::imeventtype_size;
-	    isn = soundnames.begin();
 
-	    for(; (isn != soundnames.end()) && (it == imevent::imeventtype_size); isn++)
-		if(skey == isn->second)
+	    for(isn = soundnames.begin(); isn != soundnames.end(); isn++) {
+		if(skey == isn->second) {
 		    it = isn->first;
+		    break;
+		}
+	    }
 
-	    if(isn == soundnames.end())
+	    if(it == imevent::imeventtype_size)
 		continue;
 
 	    if(suin != "*") {

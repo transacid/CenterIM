@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.16 2001/12/14 16:19:12 konst Exp $
+* $Id: yahoohook.cc,v 1.17 2001/12/19 16:18:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,6 +48,11 @@ void yahoohook::init() {
 void yahoohook::initcontext(const icqconf::imaccount account) {
     yahoo_options options;
 
+    if(enabled()) {
+	yahoo_free_context(context);
+	context = 0;
+    }
+
     memset(&options, 0, sizeof(options));
     options.connect_mode = YAHOO_CONNECT_NORMAL;
 
@@ -82,9 +87,7 @@ void yahoohook::connect() {
     icqconf::imaccount acc = conf.getourid(yahoo);
     int r;
 
-    if(!enabled()) {
-	initcontext(acc);
-    }
+    initcontext(acc);
 
     if(context) {
 	face.log(_("+ [yahoo] connecting to the server"));
