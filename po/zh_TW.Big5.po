@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.9.0\n"
-"POT-Creation-Date: 2003-04-05 22:16+0300\n"
+"POT-Creation-Date: 2003-04-17 11:10+0300\n"
 "PO-Revision-Date: 2002-12-19 00:24+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -149,139 +149,139 @@ msgstr "! 否則可能會遺失重要訊息或是設定"
 msgid "Invite to conference.."
 msgstr "邀請加入會議.."
 
-#: src/hooks/yahoohook.cc:109
+#: src/hooks/yahoohook.cc:113
 msgid "+ [yahoo] connecting to the server"
 msgstr "+ [yahoo] 連接伺服器中"
 
-#: src/hooks/yahoohook.cc:117
+#: src/hooks/yahoohook.cc:121
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] 無法連線 : "
 
-#: src/hooks/yahoohook.cc:120 src/hooks/msnhook.cc:708
+#: src/hooks/yahoohook.cc:124 src/hooks/msnhook.cc:716
 msgid "could not resolve hostname"
 msgstr "無法反解主機名稱"
 
-#: src/hooks/yahoohook.cc:121
+#: src/hooks/yahoohook.cc:125
 msgid "could not create socket"
 msgstr "無法建立連線"
 
-#: src/hooks/yahoohook.cc:122
+#: src/hooks/yahoohook.cc:126
 msgid "verify the pager host and port entered"
 msgstr "驗證所輸入的主機名及埠號"
 
-#: src/hooks/yahoohook.cc:159
+#: src/hooks/yahoohook.cc:163
 msgid "+ [yahoo] disconnected"
 msgstr "+ [yahoo] 連線中斷"
 
-#: src/hooks/yahoohook.cc:284
+#: src/hooks/yahoohook.cc:288
 #, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ [yahoo] 把 %s 加入好友名單"
 
-#: src/hooks/yahoohook.cc:304
+#: src/hooks/yahoohook.cc:308
 #, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ [yahoo] 把 %s 從好友名單中刪除"
 
-#: src/hooks/yahoohook.cc:318
+#: src/hooks/yahoohook.cc:322
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] 離開 %s 會議"
 
-#: src/hooks/yahoohook.cc:541
+#: src/hooks/yahoohook.cc:545
 #, c-format
 msgid "+ [yahoo] members list fetching finished, %d found"
 msgstr "+ [yahoo] 成員列表已取回, 找到 %d 筆資料"
 
-#: src/hooks/yahoohook.cc:562
+#: src/hooks/yahoohook.cc:566
 msgid "Please join my conference."
 msgstr "請加入我的會議."
 
-#: src/hooks/yahoohook.cc:573
+#: src/hooks/yahoohook.cc:577
 msgid "Custom status message:"
 msgstr "自訂狀態訊息 :"
 
-#: src/hooks/yahoohook.cc:577
+#: src/hooks/yahoohook.cc:581
 #, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s"
 msgstr "+ [yahoo] 無法取得 %s, %s 的暫離訊息"
 
-#: src/hooks/yahoohook.cc:603
+#: src/hooks/yahoohook.cc:607
 msgid "+ [yahoo] logged in"
 msgstr "+ [yahoo] 登入"
 
-#: src/hooks/yahoohook.cc:621
+#: src/hooks/yahoohook.cc:625
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] 無法登入 : 使用者名稱和密碼不符"
 
-#: src/hooks/yahoohook.cc:626
+#: src/hooks/yahoohook.cc:630
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] 無法登入 : 該帳號被停用"
 
-#: src/hooks/yahoohook.cc:627
+#: src/hooks/yahoohook.cc:631
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ 重新檢視 %s"
 
-#: src/hooks/yahoohook.cc:693
+#: src/hooks/yahoohook.cc:697
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "使用者 %s 邀請你加入 %s 會議, 主題是 : %s"
 
-#: src/hooks/yahoohook.cc:696
+#: src/hooks/yahoohook.cc:700
 msgid "Current conference members are: "
 msgstr "目前參加會議的成員有 : "
 
-#: src/hooks/yahoohook.cc:714
+#: src/hooks/yahoohook.cc:718
 msgid "Auto-joined the conference"
 msgstr "自動加入會議"
 
-#: src/hooks/yahoohook.cc:724
+#: src/hooks/yahoohook.cc:728
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "使用者 %s 婉拒了你的會議邀請"
 
-#: src/hooks/yahoohook.cc:734
+#: src/hooks/yahoohook.cc:738
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "使用者 %s 加入會議中"
 
-#: src/hooks/yahoohook.cc:749
+#: src/hooks/yahoohook.cc:753
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "使用者 %s 離開會議了"
 
-#: src/hooks/yahoohook.cc:781 src/hooks/icqhook.cc:1157
-#: src/hooks/msnhook.cc:520
+#: src/hooks/yahoohook.cc:785 src/hooks/icqhook.cc:1157
+#: src/hooks/msnhook.cc:528
 msgid "The user has added you to his/her contact list"
 msgstr "該使用者己經將你加入他的好友名單中"
 
-#: src/hooks/yahoohook.cc:785
+#: src/hooks/yahoohook.cc:789
 msgid "the message was: "
 msgstr "訊息是 : "
 
-#: src/hooks/yahoohook.cc:797
+#: src/hooks/yahoohook.cc:801
 #, c-format
 msgid "+ [yahoo] %s: started typing"
 msgstr "+ [yahoo] %s : 開始輸入"
 
-#: src/hooks/yahoohook.cc:797
+#: src/hooks/yahoohook.cc:801
 #, c-format
 msgid "+ [yahoo] %s: stopped typing"
 msgstr "+ [yahoo] %s : 結束輸入"
 
-#: src/hooks/yahoohook.cc:810
+#: src/hooks/yahoohook.cc:814
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] 從 %s, %s 寄來的 e-mail"
 
-#: src/hooks/yahoohook.cc:817
+#: src/hooks/yahoohook.cc:821
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] 系統訊息 : %s"
 
-#: src/hooks/yahoohook.cc:822
+#: src/hooks/yahoohook.cc:826
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] 錯誤 : %s"
@@ -562,49 +562,49 @@ msgstr "從使用者來的 PING 回應 : %d 秒"
 msgid "+ [msn] connecting to the server"
 msgstr "+ [msn] 連接伺服器中"
 
-#: src/hooks/msnhook.cc:105
+#: src/hooks/msnhook.cc:109
 #, c-format
 msgid "+ [msn] %s: stopped typing"
 msgstr "+ [msn] %s : 結束輸入"
 
-#: src/hooks/msnhook.cc:283
+#: src/hooks/msnhook.cc:288
 #, c-format
 msgid "+ [msn] removing %s from the contacts"
 msgstr "+ [msn] 把 %s 從好友名單中刪除"
 
-#: src/hooks/msnhook.cc:320
+#: src/hooks/msnhook.cc:328
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] 反向使用者列表已取回, 找到 %d 筆資料"
 
-#: src/hooks/msnhook.cc:599
+#: src/hooks/msnhook.cc:607
 #, c-format
 msgid "+ [msn] %s: started typing"
 msgstr "+ [msn] %s : 開始輸入"
 
-#: src/hooks/msnhook.cc:607
+#: src/hooks/msnhook.cc:615
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr "+ [msn] 未讀信件 : 收件匣中有 %d 封, 其他信匣中有 %d 封"
 
-#: src/hooks/msnhook.cc:614
+#: src/hooks/msnhook.cc:622
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] 從 %s, %s 寄來的 e-mail"
 
-#: src/hooks/msnhook.cc:675
+#: src/hooks/msnhook.cc:683
 msgid "+ [msn] logged in"
 msgstr "+ [msn] 登入"
 
-#: src/hooks/msnhook.cc:690
+#: src/hooks/msnhook.cc:698
 msgid "+ [msn] disconnected"
 msgstr "+ [msn] 連線中斷"
 
-#: src/hooks/msnhook.cc:704
+#: src/hooks/msnhook.cc:712
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] 無法連線 : "
 
-#: src/hooks/msnhook.cc:722
+#: src/hooks/msnhook.cc:730
 msgid "verify the hostname and port"
 msgstr "驗證主機名及埠號"
 
@@ -712,8 +712,8 @@ msgstr "找男人"
 msgid " Search profiles "
 msgstr " 搜尋設定檔"
 
-#: src/icqdialogs.cc:104 src/icqdialogs.cc:936 src/icqdialogs.cc:1339
-#: src/icqface.cc:1427 src/icqface.cc:2007
+#: src/icqdialogs.cc:104 src/icqdialogs.cc:936 src/icqdialogs.cc:1351
+#: src/icqface.cc:1427 src/icqface.cc:2026
 msgid "Remove"
 msgstr "移除"
 
@@ -742,7 +742,7 @@ msgid "cLear"
 msgstr "L清除"
 
 #: src/icqdialogs.cc:211 src/icqdialogs.cc:217 src/icqdialogs.cc:643
-#: src/icqdialogs.cc:1023 src/accountmanager.cc:68 src/imcontroller.cc:71
+#: src/icqdialogs.cc:1026 src/accountmanager.cc:68 src/imcontroller.cc:71
 msgid "Change"
 msgstr "修改"
 
@@ -1052,7 +1052,7 @@ msgstr " 第一外語 : %s "
 msgid " 3rd language : %s "
 msgstr " 第二外語 : %s "
 
-#: src/icqdialogs.cc:582 src/icqdialogs.cc:1060
+#: src/icqdialogs.cc:582 src/icqdialogs.cc:1069
 msgid " Miscellaneous "
 msgstr " 雜項 "
 
@@ -1094,7 +1094,7 @@ msgstr " 你的 %s 資料 "
 msgid " %s: details "
 msgstr " %s 的詳細資料 "
 
-#: src/icqdialogs.cc:643 src/icqdialogs.cc:1023 src/icqdialogs.cc:1220
+#: src/icqdialogs.cc:643 src/icqdialogs.cc:1026 src/icqdialogs.cc:1232
 #: src/accountmanager.cc:68
 msgid "Done"
 msgstr "完成"
@@ -1166,8 +1166,8 @@ msgstr " [Ctrl-X 儲存, Esc 取消] "
 msgid " Send file(s) to %s, %lu "
 msgstr " 傳檔給 %s, %lu "
 
-#: src/icqdialogs.cc:936 src/icqdialogs.cc:1219 src/icqface.cc:62
-#: src/icqface.cc:719 src/icqface.cc:1427 src/icqface.cc:2007
+#: src/icqdialogs.cc:936 src/icqdialogs.cc:1231 src/icqface.cc:62
+#: src/icqface.cc:719 src/icqface.cc:1427 src/icqface.cc:2026
 msgid "Add"
 msgstr "加入"
 
@@ -1175,7 +1175,7 @@ msgstr "加入"
 msgid "Comment"
 msgstr "附註"
 
-#: src/icqdialogs.cc:936 src/icqface.cc:2007
+#: src/icqdialogs.cc:936 src/icqface.cc:2026
 msgid "Send"
 msgstr "傳送"
 
@@ -1195,219 +1195,239 @@ msgstr "檔名: "
 msgid "comment: "
 msgstr "附註: "
 
-#: src/icqdialogs.cc:1014
+#: src/icqdialogs.cc:1017
 msgid " CenterICQ configuration "
 msgstr " CenterICQ 設定選項 "
 
-#: src/icqdialogs.cc:1034
+#: src/icqdialogs.cc:1037
 msgid " User interface "
 msgstr " 使用者介面 "
 
-#: src/icqdialogs.cc:1035
+#: src/icqdialogs.cc:1038
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " 改變音效裝置為 : %s "
 
-#: src/icqdialogs.cc:1036
+#: src/icqdialogs.cc:1039
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " 改變色彩配置為 : %s "
 
-#: src/icqdialogs.cc:1039
+#: src/icqdialogs.cc:1042
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " 啟動雙語支援 : %s "
 
-#: src/icqdialogs.cc:1042
+#: src/icqdialogs.cc:1045
 msgid " Contact list "
 msgstr " 好友名單 "
 
-#: src/icqdialogs.cc:1043
+#: src/icqdialogs.cc:1046
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " 群組分類顯示法 : %s "
 
-#: src/icqdialogs.cc:1044
+#: src/icqdialogs.cc:1047
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " 隱藏離線使用者 : %s "
 
-#: src/icqdialogs.cc:1045
+#: src/icqdialogs.cc:1048
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " 俄語系 win1251-koi8 轉換 : %s "
 
-#: src/icqdialogs.cc:1046
+#: src/icqdialogs.cc:1049
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " 防垃圾訊息: 刪除非好友的訊息 : %s "
 
-#: src/icqdialogs.cc:1047
+#: src/icqdialogs.cc:1050
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " 在回覆訊息時引言 : %s "
 
-#: src/icqdialogs.cc:1048
+#: src/icqdialogs.cc:1051
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " 檢查本地端郵件 : %s "
 
-#: src/icqdialogs.cc:1049
+#: src/icqdialogs.cc:1052
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " 儲存密碼 : %s "
 
-#: src/icqdialogs.cc:1050
+#: src/icqdialogs.cc:1053
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " 在變更狀態時修改暫離訊息 : %s "
 
-#: src/icqdialogs.cc:1051
+#: src/icqdialogs.cc:1054
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " 聊天訊息模式 : %s "
 
-#: src/icqdialogs.cc:1053
+#: src/icqdialogs.cc:1056
 msgid " Communications "
 msgstr " 通訊 "
 
-#: src/icqdialogs.cc:1054
+#: src/icqdialogs.cc:1057
 #, c-format
 msgid " SMTP server : %s "
 msgstr " SMTP 伺服器 : %s "
 
-#: src/icqdialogs.cc:1055
+#: src/icqdialogs.cc:1058
 #, fuzzy, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr " 啟動網頁狀態指示器 : %s "
 
-#: src/icqdialogs.cc:1058
+#: src/icqdialogs.cc:1061
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1061
-#, c-format
-msgid " Automatically set Away period (min) : %d "
-msgstr " 幾分鐘後自動切換把狀態切換成暫離 : %d "
-
-#: src/icqdialogs.cc:1062
-#, c-format
-msgid " Automatically set N/A period (min) : %d "
-msgstr " 幾分鐘後自動把狀態切換成 N/A : %d "
-
 #: src/icqdialogs.cc:1063
+#, fuzzy
+msgid " Logging "
+msgstr " 帳號 : %s "
+
+#: src/icqdialogs.cc:1064
+#, c-format
+msgid " Timestamps in the log window : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:1065
+#, c-format
+msgid " Online/offile events in the log window : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:1066
+#, c-format
+msgid " Typing notifications in the log window : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:1067
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " 在 ~/.centericq/log 中詳註 IM 事件日誌細節 : %s"
 
-#: src/icqdialogs.cc:1086
+#: src/icqdialogs.cc:1070
+#, c-format
+msgid " Automatically set Away period (min) : %d "
+msgstr " 幾分鐘後自動切換把狀態切換成暫離 : %d "
+
+#: src/icqdialogs.cc:1071
+#, c-format
+msgid " Automatically set N/A period (min) : %d "
+msgstr " 幾分鐘後自動把狀態切換成 N/A : %d "
+
+#: src/icqdialogs.cc:1094
 msgid "Auto Away period (0 - disable): "
 msgstr "閒置自動暫離時間 (0 表不使用): "
 
-#: src/icqdialogs.cc:1090
+#: src/icqdialogs.cc:1098
 msgid "Auto N/A period (0 - disable): "
 msgstr "閒置自動N/A時間 (0 表不使用): "
 
-#: src/icqdialogs.cc:1108
+#: src/icqdialogs.cc:1119
 msgid "SMTP server hostname: "
 msgstr "SMTP 伺服器位址: "
 
-#: src/icqdialogs.cc:1118
+#: src/icqdialogs.cc:1129
 msgid "Peer-to-peer port range (min-max): "
 msgstr ""
 
-#: src/icqdialogs.cc:1183
+#: src/icqdialogs.cc:1195
 msgid "Your details have been fetched"
 msgstr "您的詳細資料已傳回"
 
-#: src/icqdialogs.cc:1195
+#: src/icqdialogs.cc:1207
 msgid "Organize contact groups"
 msgstr "管理群組"
 
-#: src/icqdialogs.cc:1219
+#: src/icqdialogs.cc:1231
 msgid "Rename"
 msgstr "R更名"
 
-#: src/icqdialogs.cc:1219
+#: src/icqdialogs.cc:1231
 msgid "rEmove"
 msgstr "E移除"
 
-#: src/icqdialogs.cc:1219
+#: src/icqdialogs.cc:1231
 msgid "move Up"
 msgstr "U向上移"
 
-#: src/icqdialogs.cc:1219
+#: src/icqdialogs.cc:1231
 msgid "move Down"
 msgstr "D向下移"
 
-#: src/icqdialogs.cc:1220
+#: src/icqdialogs.cc:1232
 msgid "Select"
 msgstr "選擇"
 
-#: src/icqdialogs.cc:1235
+#: src/icqdialogs.cc:1247
 msgid " Groups "
 msgstr " 群組 "
 
-#: src/icqdialogs.cc:1250
+#: src/icqdialogs.cc:1262
 msgid "Name for a group to be created: "
 msgstr "新增群組名稱: "
 
-#: src/icqdialogs.cc:1260
+#: src/icqdialogs.cc:1272
 msgid "New name for the group: "
 msgstr "新群組名: "
 
-#: src/icqdialogs.cc:1273
+#: src/icqdialogs.cc:1285
 msgid "Are you sure want to remove the group?"
 msgstr "確定要刪除群組嗎 ?"
 
-#: src/icqdialogs.cc:1330
+#: src/icqdialogs.cc:1342
 msgid "File transfer status"
 msgstr "檔案傳輸狀態"
 
-#: src/icqdialogs.cc:1339
+#: src/icqdialogs.cc:1351
 msgid "Cancel"
 msgstr "取消"
 
-#: src/icqdialogs.cc:1368
+#: src/icqdialogs.cc:1380
 #, c-format
 msgid " Incoming from %s "
 msgstr " 從 %s 來的"
 
-#: src/icqdialogs.cc:1370
+#: src/icqdialogs.cc:1382
 #, c-format
 msgid " Outgoing to %s "
 msgstr " 送到 %s 去 "
 
-#: src/icqdialogs.cc:1378
+#: src/icqdialogs.cc:1390
 msgid "init"
 msgstr "啟始"
 
-#: src/icqdialogs.cc:1379
+#: src/icqdialogs.cc:1391
 msgid "start"
 msgstr "開始"
 
-#: src/icqdialogs.cc:1380
+#: src/icqdialogs.cc:1392
 msgid "work"
 msgstr "工作"
 
-#: src/icqdialogs.cc:1381
+#: src/icqdialogs.cc:1393
 msgid "done"
 msgstr "完成"
 
-#: src/icqdialogs.cc:1382
+#: src/icqdialogs.cc:1394
 msgid "err"
 msgstr "錯誤"
 
-#: src/icqdialogs.cc:1383
+#: src/icqdialogs.cc:1395
 msgid "abort"
 msgstr "失敗"
 
-#: src/icqdialogs.cc:1390
+#: src/icqdialogs.cc:1402
 msgid " of "
 msgstr " 的 "
 
-#: src/icqdialogs.cc:1423
+#: src/icqdialogs.cc:1435
 msgid "Cannot remove a transfer which is in progress now"
 msgstr "這個傳送過程已經在進行中, 不能移除"
 
@@ -1421,85 +1441,85 @@ msgstr "執行外部命令 %s, 回傳碼 = %d"
 msgid "executed external action %s, return code = %d"
 msgstr "執行外部命令 %s, 回傳碼 = %d"
 
-#: src/imlogger.cc:32
+#: src/imlogger.cc:33
 msgid "Offline"
 msgstr "離線"
 
-#: src/imlogger.cc:33
+#: src/imlogger.cc:34
 msgid "Online"
 msgstr "上線"
 
-#: src/imlogger.cc:34
+#: src/imlogger.cc:35
 msgid "Invisible"
 msgstr "隱形"
 
-#: src/imlogger.cc:35
+#: src/imlogger.cc:36
 msgid "Free for chat"
 msgstr "歡迎聊天"
 
-#: src/imlogger.cc:36
+#: src/imlogger.cc:37
 msgid "DND"
 msgstr "DND"
 
-#: src/imlogger.cc:37
+#: src/imlogger.cc:38
 msgid "Occupied"
 msgstr "很忙"
 
-#: src/imlogger.cc:38
+#: src/imlogger.cc:39
 msgid "N/A"
 msgstr "沒空"
 
-#: src/imlogger.cc:39
+#: src/imlogger.cc:40
 msgid "Away"
 msgstr "暫離"
 
-#: src/imlogger.cc:47
+#: src/imlogger.cc:48
 msgid "message"
 msgstr "訊息"
 
-#: src/imlogger.cc:48
+#: src/imlogger.cc:49
 msgid "URL"
 msgstr "URL"
 
-#: src/imlogger.cc:49
+#: src/imlogger.cc:50
 msgid "SMS"
 msgstr "簡訊"
 
-#: src/imlogger.cc:50
+#: src/imlogger.cc:51
 msgid "authorization"
 msgstr "認證"
 
-#: src/imlogger.cc:51
+#: src/imlogger.cc:52
 msgid "e-mail"
 msgstr "E-mail"
 
-#: src/imlogger.cc:52
+#: src/imlogger.cc:53
 msgid "notification"
 msgstr "提醒"
 
-#: src/imlogger.cc:53
+#: src/imlogger.cc:54
 msgid "contacts"
 msgstr "好友"
 
-#: src/imlogger.cc:54
+#: src/imlogger.cc:55
 msgid "files"
 msgstr "檔案"
 
-#: src/imlogger.cc:76
+#: src/imlogger.cc:77
 msgid "events log started"
 msgstr "開始事件紀錄"
 
-#: src/imlogger.cc:106
+#: src/imlogger.cc:107
 #, c-format
 msgid "outgoing %s to %s"
 msgstr "送 %s 給 %s"
 
-#: src/imlogger.cc:107
+#: src/imlogger.cc:108
 #, c-format
 msgid "incoming %s from %s"
 msgstr "收到從 %2$s 傳來的 %1$s"
 
-#: src/imlogger.cc:119
+#: src/imlogger.cc:120
 msgid "ignored"
 msgstr "忽略"
 
@@ -1518,17 +1538,17 @@ msgstr "%s 離線了"
 msgid "%s changed status to %s from %s"
 msgstr "%s 的狀態從 %s 變成 %s"
 
-#: src/imlogger.cc:159
+#: src/imlogger.cc:167
 #, c-format
 msgid "%s: went online, with status %s"
 msgstr "%s: 上線中, 目前狀態是 %s"
 
-#: src/imlogger.cc:161
+#: src/imlogger.cc:169
 #, c-format
 msgid "%s: went offline"
 msgstr "%s: 離線中"
 
-#: src/imlogger.cc:163
+#: src/imlogger.cc:171
 #, c-format
 msgid "changed our %s status to %s from %s"
 msgstr "把您的 %1$s 狀態從 %3$s 變成 %2$s"
@@ -1787,90 +1807,90 @@ msgstr "取消"
 msgid "registration is not supported"
 msgstr "註冊目前尚未支援"
 
-#: src/icqconf.cc:153
+#: src/icqconf.cc:155
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "我很喜歡預設的 %s 暫離訊息 %s %s."
 
-#: src/icqconf.cc:624
+#: src/icqconf.cc:632
 msgid "+ launched the openurl command"
 msgstr "+ 執行 openurl 指令"
 
-#: src/icqconf.cc:786
+#: src/icqconf.cc:794
 msgid "event sending error: not enough parameters"
 msgstr "事件傳送錯誤 : 參數不足"
 
-#: src/icqconf.cc:797
+#: src/icqconf.cc:805
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "事件傳送錯誤 : 只有在 ICQ 協定才能傳 UINs"
 
-#: src/icqconf.cc:812
+#: src/icqconf.cc:820
 msgid "event sending error: unknown IM type"
 msgstr "事件傳送錯誤 : 不明的 IM 型態"
 
-#: src/icqconf.cc:834
+#: src/icqconf.cc:842
 msgid "event sending error: unknown event type"
 msgstr "事件傳送錯誤 : 不明的事件型態"
 
-#: src/icqconf.cc:846
+#: src/icqconf.cc:854
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s 到 %s 已被放入佇列中"
 
-#: src/icqconf.cc:852
+#: src/icqconf.cc:860
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr "事件傳送錯誤 : 收件者不在你的名單上"
 
-#: src/icqconf.cc:894
+#: src/icqconf.cc:902
 msgid "unknown status character was given"
 msgstr "不明的狀態字元"
 
-#: src/icqconf.cc:897
+#: src/icqconf.cc:905
 msgid "unknown IM type"
 msgstr "不明的 IM 型態"
 
-#: src/icqconf.cc:900
+#: src/icqconf.cc:908
 msgid "status change error: "
 msgstr "狀態字元有誤 : "
 
-#: src/icqconf.cc:909
+#: src/icqconf.cc:917
 msgid "Usage: "
 msgstr "使用方法: "
 
-#: src/icqconf.cc:911
+#: src/icqconf.cc:919
 msgid "General options:"
 msgstr "一般選項:"
 
-#: src/icqconf.cc:912
+#: src/icqconf.cc:920
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr "  --ascii, -a              使用 ASCII 字元來繪出視窗以及使用者介面"
 
-#: src/icqconf.cc:913
+#: src/icqconf.cc:921
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <path>     設定一個自訂目錄"
 
-#: src/icqconf.cc:917
+#: src/icqconf.cc:925
 msgid "  --help                   display this stuff"
 msgstr "  --help                   顯示這份訊息"
 
-#: src/icqconf.cc:918
+#: src/icqconf.cc:926
 msgid "  --version, -v            show the program version info"
 msgstr ""
 
-#: src/icqconf.cc:920
+#: src/icqconf.cc:928
 msgid "Events sending options:"
 msgstr "事件傳送選項:"
 
-#: src/icqconf.cc:921
+#: src/icqconf.cc:929
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr "  -s, --send <event type>  事件類型; 可以是 msg, sms 或是 url"
 
-#: src/icqconf.cc:922
+#: src/icqconf.cc:930
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <status>    設定目前的 IM 狀態"
 
-#: src/icqconf.cc:923
+#: src/icqconf.cc:931
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
 "or jabber"
@@ -1878,16 +1898,16 @@ msgstr ""
 "  -p, --proto <protocol>   協定類型; 可以是 icq, yahoo, msn, aim, irc 或是 "
 "jabber"
 
-#: src/icqconf.cc:924
+#: src/icqconf.cc:932
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr "  -t, --to <destination>   對象 UIN 或是暱稱 (依協定類型而異)"
 
-#: src/icqconf.cc:925
+#: src/icqconf.cc:933
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr "  -n, --number <phone#>    手機號碼 (只限用在短訊)"
 
-#: src/icqconf.cc:927
+#: src/icqconf.cc:935
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "錯誤請通報 <centericq-bugs@konst.org.ua>"
 
@@ -2432,96 +2452,96 @@ msgstr "也把 %d 好友從好友列表中移除嗎 ?"
 msgid "Event recipients"
 msgstr "事件接受者"
 
-#: src/icqface.cc:1671
+#: src/icqface.cc:1690
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "好友速查: 搜尋好友,        Alt-S 再找一次,   Enter 結束搜尋"
 
-#: src/icqface.cc:1785
+#: src/icqface.cc:1804
 msgid "+ no URLs within the current context"
 msgstr "+ 目前的訊息中沒有 URL"
 
-#: src/icqface.cc:1798
+#: src/icqface.cc:1817
 msgid "URLs within the current context"
 msgstr "目前訊息中的 URL"
 
-#: src/icqface.cc:1814
+#: src/icqface.cc:1833
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr ""
 
-#: src/icqface.cc:1834
+#: src/icqface.cc:1853
 #, c-format
 msgid "Result of the external action %s:"
 msgstr ""
 
-#: src/icqface.cc:1852
+#: src/icqface.cc:1871
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
 msgstr ""
 "^X 送出, ^P 多人短訊, ^O 過眼雲煙, F2 URLs, F9 全螢幕, Alt-? 成員, ESC 關閉"
 
-#: src/icqface.cc:1854
+#: src/icqface.cc:1873
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
 msgstr ""
 "^X 送出, ^P 多人短訊, ^O 過眼雲煙, F2 URLs, F9 全螢幕, Alt-? 詳細資料, ESC 取"
 "消"
 
-#: src/icqface.cc:1878 src/icqface.cc:2310
+#: src/icqface.cc:1897 src/icqface.cc:2329
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "送 %s 給 %s"
 
-#: src/icqface.cc:1978
+#: src/icqface.cc:1997
 msgid "Send contacts.."
 msgstr "傳送好友.."
 
-#: src/icqface.cc:2038
+#: src/icqface.cc:2057
 msgid "file name: "
 msgstr "檔名: "
 
-#: src/icqface.cc:2311
+#: src/icqface.cc:2330
 #, c-format
 msgid "Sent on %s"
 msgstr "送至 %s"
 
-#: src/icqface.cc:2314
+#: src/icqface.cc:2333
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "收到 %s, 從 %s 傳來"
 
-#: src/icqface.cc:2315
+#: src/icqface.cc:2334
 #, c-format
 msgid "Received on %s"
 msgstr "從 %s 接收到"
 
-#: src/icqface.cc:2360
+#: src/icqface.cc:2379
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr "F2 連到網址, F9 全螢幕, ESC 關閉"
 
-#: src/icqface.cc:2405
+#: src/icqface.cc:2424
 #, c-format
 msgid "%s from %s, received on %s"
 msgstr "在 %3$s 上收到從 %2$s 來的 %1$s"
 
-#: src/icqface.cc:2406
+#: src/icqface.cc:2425
 #, c-format
 msgid "%s to %s, sent on %s"
 msgstr "在 %3$s 上送出給 %2$s 的 %1$s"
 
-#: src/icqface.cc:2419
+#: src/icqface.cc:2438
 msgid "ESC or F9 to close"
 msgstr "ESC 或 F9 關閉"
 
-#: src/icqface.cc:2501
+#: src/icqface.cc:2520
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "與 %s 的過往雲煙, 共有 %d 筆"
 
-#: src/icqface.cc:2504
+#: src/icqface.cc:2523
 msgid "/ search, N again, ESC cancel"
 msgstr "/ 搜尋, N 再搜尋, ESC 取消"
 
-#: src/icqface.cc:2510
+#: src/icqface.cc:2529
 msgid "search for: "
 msgstr "搜尋: "
