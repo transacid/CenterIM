@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.37 2004/11/09 23:49:59 konst Exp $
+* $Id: accountmanager.cc,v 1.38 2004/11/10 11:24:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -126,6 +126,11 @@ void accountmanager::exec() {
 			t.addleaff(n, 0, citem+11, _(" Import friend list : %s "),
 			    stryesno(account.additional["importfriends"] == "1"));
 			break;
+
+		    case irc:
+			t.addleaff(n, 0, citem+12, _(" NickServ password : %s "),
+			    string(account.additional["nickpass"].size(), '*').c_str());
+			break;
 		}
 
 		if(account.empty()) {
@@ -224,6 +229,12 @@ void accountmanager::exec() {
 		case 11:
 		    account.additional["importfriends"] =
 			(account.additional["importfriends"] == "") ? "1" : "0";
+		    break;
+
+		case 12:
+		    tmp = face.inputstr(spname + _(" password: "), account.additional["nickpass"], '*');
+		    if(face.getlastinputkey() != KEY_ESC)
+			account.additional["nickpass"] = tmp;
 		    break;
 
 		case 13:

@@ -1,9 +1,9 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.77 2004/01/27 00:43:30 konst Exp $
+* $Id: irchook.cc,v 1.78 2004/11/10 11:24:46 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -882,10 +882,10 @@ void irchook::getmessage(void *conn, void *cli, ...) {
     if(strlen(sender) && strlen(message)) {
 	if(!irhook.sentpass)
 	if(up(sender) == "NICKSERV") {
-	    char buf[512];
-	    needpass(0, 0, buf, 512);
 	    firetalk_im_send_message(irhook.handle, "NickServ",
-		((string) "identify " + buf).c_str(), 0);
+		((string) "identify " + conf.getourid(irc).additional["nickpass"]).c_str(), 0);
+
+	    irhook.sentpass = true;
 	}
 
 	em.store(immessage(imcontact(sender, irc),
@@ -1267,8 +1267,6 @@ void irchook::needpass(void *conn, void *cli, ...) {
 	} else {
 	    face.log(_("+ [irc] password was requested, but it's not set"));
 	}
-
-	irhook.sentpass = true;
     }
 }
 
