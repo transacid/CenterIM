@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.205 2004/01/15 01:04:38 konst Exp $
+* $Id: icqface.cc,v 1.206 2004/01/15 21:25:31 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -298,7 +298,7 @@ int icqface::contextmenu(icqcontact *c) {
 	    actnames[ACT_REMOVE]    = _(" Remove feed          del");
 	    actnames[ACT_INFO]      = _(" Feed information       ?");
 	    actnames[ACT_EXTERN]    = _(" External actions..    f6");
-	    actnames[ACT_PING]      = _(" Force check");
+	    actnames[ACT_PING]      = _(" Force check            c");
 
 	    if(lst.inlist(c, csignore))
 		actnames[ACT_IGNORE]    = _(" Unset ignore feed      i");
@@ -2921,6 +2921,10 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	case 'C':
 	    if(capab.count(hookcapab::contacts))
 		face.extk = ACT_CONTACT;
+
+	    if(c->getdesc().pname == rss)
+		face.extk = ACT_PING;
+
 	    break;
 
 	case 'f':

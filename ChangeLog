@@ -1691,3 +1691,41 @@ Since now, the annoying Yahoo! color codes are removed from messages.
 
 Fixed a rare bug which led to auto-adding of people who drop-in into
 your contact list on Yahoo! after the program got crashed.
+
+4.9.10
+------
+
+Survived another Yahoo! protocol change. Thanks to Lucas Nussbaum and his patch
+for gaim that I used to update centericq's branch of libyahoo2.
+
+Moving of contacts between groups made easy due to the brand new "Mass group
+move" feature which you can find in the general actions menu.
+
+E-mail addresses used to disappear from ICQ details. Fixed.
+
+Applied patch by Ivan Daniluk to enable HTTP connecting through proxies. For
+RSS only. Now, if you specify proxy address in the form of
+user:passwd@host:port, necessary authentification will be performed.
+
+During the build process on BSD-like systems (including MacOS X) configure
+couldn't find iconv. Fixed that.
+
+Importing of LJ friends can now be disabled in the Account manager dialog.
+
+Contact list synchronization feature was removed, because due to some specific
+things of IM severs sometimes it didn't go smoothly and provoked too much
+weird questions from users.
+
+Some Yahoo! improvements related to Cyrillic and big-endian machines support
+were made.
+
+IRC /raw command was implemented.
+
+RSS displaying was improved. Now URLs of links and images are shown in
+text of feed items.
+
+LJ comments posting was removed, because it didn't work due to some recent
+protocol changes.
+
+The "Force check" item for RSS feeds got its own shortcut. The magic key is
+"c".
