@@ -543,7 +543,7 @@ static struct yahoo_buddy **getbuddylist(char *rawlist)
 			int tmpid = 0;
 			for(; buddylist[tmpid]; tmpid++)
 				if(!strcmp(buddylist[tmpid]->id, *bud))
-					goto next;
+					continue;
 
 			tmpbuddy = g_new0(struct yahoo_buddy, 1);
 			tmpbuddy->id = strdup(*bud);
@@ -554,7 +554,6 @@ static struct yahoo_buddy **getbuddylist(char *rawlist)
 
 //                        fprintf(stderr, "Added buddy %s to group %s\n",
 //                                        tmpbuddy->id, tmpbuddy->group);
-		next:
 		}
 
 		g_strfreev(buddies);
