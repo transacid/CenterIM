@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.68 2002/02/07 17:33:55 konst Exp $
+* $Id: centericq.cc,v 1.69 2002/02/22 13:02:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -50,6 +50,9 @@ void centericq::exec() {
     sigaction(SIGINT, &sact, 0);
     sigaction(SIGCHLD, &sact, 0);
     sigaction(SIGALRM, &sact, 0);
+
+    kinterface();
+    raw();
 
     conf.initpairs();
     conf.load();

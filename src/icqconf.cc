@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.39 2002/02/20 17:11:33 konst Exp $
+* $Id: icqconf.cc,v 1.40 2002/02/22 13:02:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,8 @@
 #include "icqcontacts.h"
 #include "abstracthook.h"
 #include "imexternal.h"
+#include "eventmanager.h"
+#include "imlogger.h"
 
 icqconf::icqconf() {
     rs = rscard;
@@ -677,25 +679,124 @@ void icqconf::setrussian(bool frussian) {
 
 void icqconf::commandline(int argc, char **argv) {
     int i;
+    string event, proto, dest;
+
+    argv0 = argv[0];
 
     for(i = 1; i < argc; i++) {
 	string args = argv[i];
 
 	if((args == "-a") || (args == "--ascii")) {
 	    kintf_graph = 0;
+
 	} else if((args == "-b") || (args == "--basedir")) {
 	    if(argv[++i]) {
 		basedir = argv[i];
 		if(basedir.substr(basedir.size()-1) != "/") basedir += "/";
 	    }
+
+	} else if((args == "-s") || (args == "--send")) {
+	    if(argv[++i]) event = argv[i];
+
+	} else if((args == "-p") || (args == "--proto")) {
+	    if(argv[++i]) proto = argv[i];
+
+	} else if((args == "-t") || (args == "--to")) {
+	    if(argv[++i]) dest = argv[i];
+
 	} else {
-	    kendinterface();
-	    cout << "centericq command line parameters:" << endl << endl;
-	    cout << "\t--ascii or -a : use characters for windows and UI controls" << endl;
-	    cout << "\tanything else : display this stuff" << endl;
+	    usage();
 	    exit(0);
 	}
     }
+
+    constructevent(event, proto, dest);
+}
+
+void icqconf::constructevent(const string event, const string proto, const string dest) const {
+    imevent *ev = 0;
+    imcontact cdest;
+    string text, buf;
+    ifstream f;
+    int pos;
+
+    if(event.empty() && proto.empty() && dest.empty()) return; else
+    if(event.empty() || proto.empty() || dest.empty()) {
+	cout << _("event sending error: not enough parameters") << endl;
+	exit(1);
+    }
+
+    f.attach(STDIN_FILENO);
+
+    if(f.is_open()) {
+	while(getline(f, buf)) {
+	    if(!text.empty()) text += "\n";
+	    text += buf;
+	}
+
+	f.close();
+    }
+
+    if(proto == "icq") {
+	cdest = imcontact(strtoul(dest.c_str(), 0, 0), icq);
+    } else if(proto == "yahoo") {
+	cdest = imcontact(dest, yahoo);
+    } else if(proto == "msn") {
+	cdest = imcontact(dest, msn);
+    } else {
+	cout << _("event sending error: unknown IM type") << endl;
+	exit(1);
+    }
+
+    if(event == "msg") {
+	ev = new immessage(cdest, imevent::outgoing, text);
+    } else if(event == "url") {
+	string url;
+
+	if((pos = text.find("\n")) != -1) {
+	    url = text.substr(0, pos);
+	    text.erase(pos+1);
+	} else {
+	    url = text;
+	    text = "";
+	}
+
+	ev = new imurl(cdest, imevent::outgoing, url, text);
+    } else {
+	cout << _("event sending error: unknown event type") << endl;
+	exit(1);
+    }
+
+    if(ev) {
+	icqcontact *c = new icqcontact(cdest);
+
+	if(!access(c->getdirname().c_str(), X_OK)) {
+	    clist.add(c);
+	    em.store(*ev);
+
+	    char buf[512];
+	    sprintf(buf, _("%s to %s has been put to the queue"),
+		eventnames[ev->gettype()], c->getdesc().totext().c_str());
+
+	    cout << buf << endl;
+	} else {
+	    cout << _("event sending error: the destination contact doesn't exist on your list") << endl;
+	    exit(1);
+	}
+
+	delete c;
+	delete ev;
+
+	exit(0);
+    }
+}
+
+void icqconf::usage() const {
+    cout << "Usage: " << argv0 << " [OPTION].." << endl << endl;
+    cout << "\t--ascii or -a : use characters for windows and UI controls" << endl;
+    cout << "\t--help : display this stuff" << endl;
+
+    cout << endl << "Report bugs to <centericq-bugs@konst.org.ua>." << endl;
 }
 
 bool icqconf::getmakelog() const {

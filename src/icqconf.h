@@ -65,13 +65,17 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian, makelog;
-	string sockshost, socksuser, sockspass, openurlcommand, basedir;
+	string sockshost, socksuser, sockspass, openurlcommand, basedir, argv0;
 
 	regsound rs;
 	regcolor rc;
 	groupmode fgroupmode;
 
 	void loadmainconfig();
+
+	void usage() const;
+	void constructevent(const string event, const string proto,
+	    const string dest) const;
 
     public:
 	icqconf();

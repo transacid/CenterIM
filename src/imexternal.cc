@@ -2,6 +2,7 @@
 #include "icqconf.h"
 #include "abstracthook.h"
 #include "eventmanager.h"
+#include "imlogger.h"
 
 #include <strstream>
 #include <sys/wait.h>
@@ -75,6 +76,7 @@ imexternal::action::~action() {
 
 bool imexternal::action::exec(const imevent &ev) {
     bool r;
+    char buf[512];
     abstracthook &hook = gethook(ev.getcontact().pname);
 
     r = enabled &&
@@ -88,6 +90,9 @@ bool imexternal::action::exec(const imevent &ev) {
 	writescript();
 	execscript();
 	respond();
+
+	sprintf(buf, _("executed external action %s"), name.c_str());
+	logger.putmessage(buf);
     }
 
     return r;
@@ -168,8 +173,6 @@ void imexternal::action::execscript() {
 		close(outpipe[1]);
 	    }
 
-	    waitpid(pid, 0, 0);
-
 	    if(options | aostdout) {
 		pout.attach(inpipe[0]);
 		text = "";
@@ -184,6 +187,8 @@ void imexternal::action::execscript() {
 		    pout.close();
 		}
 	    }
+
+	    waitpid(pid, 0, 0);
 
 	    close(inpipe[0]);
 	    close(outpipe[1]);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.22 2002/02/20 17:11:34 konst Exp $
+* $Id: yahoohook.cc,v 1.23 2002/02/22 13:02:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,17 @@
 #include "imlogger.h"
 
 yahoohook yhook;
+
+static int stat2int[imstatus_size] = {
+    0,
+    YAHOO_STATUS_AVAILABLE,
+    YAHOO_STATUS_INVISIBLE,
+    YAHOO_STATUS_CUSTOM,
+    YAHOO_STATUS_BUSY,
+    YAHOO_STATUS_NOTATDESK,
+    YAHOO_STATUS_NOTATHOME,
+    YAHOO_STATUS_BRB
+};
 
 yahoohook::yahoohook() {
     fonline = false;
@@ -96,16 +107,17 @@ void yahoohook::connect() {
 	alarm(5);
 	r = yahoo_connect(context);
 	alarm(0);
-	logger.putourstatus(yahoo, offline, available);
+	logger.putourstatus(yahoo, offline, manualstatus);
 
 	if(!r) {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
 	    disconnected(context);
 	} else {
-	    ourstatus = available;
 	    yahoo_get_config(context);
-	    if(!yahoo_cmd_logon(context, YAHOO_STATUS_AVAILABLE)) {
+
+	    if(!yahoo_cmd_logon(context, stat2int[ourstatus = available])) {
 		fonline = true;
+		setstatus(manualstatus);
 		face.log(_("+ [yahoo] logged in"));
 	    }
 	}
@@ -274,17 +286,6 @@ bool yahoohook::enabled() const {
 }
 
 void yahoohook::setautostatus(imstatus st) {
-    static int stat2int[imstatus_size] = {
-	0,
-	YAHOO_STATUS_AVAILABLE,
-	YAHOO_STATUS_INVISIBLE,
-	YAHOO_STATUS_CUSTOM,
-	YAHOO_STATUS_BUSY,
-	YAHOO_STATUS_NOTATDESK,
-	YAHOO_STATUS_NOTATHOME,
-	YAHOO_STATUS_BRB
-    };
-
     if(st == offline) {
 	if(getstatus() != offline) {
 	    disconnect();

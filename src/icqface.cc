@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.82 2002/02/19 18:38:04 konst Exp $
+* $Id: icqface.cc,v 1.83 2002/02/22 13:02:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,8 +82,6 @@ const char *strgroupmode(icqconf::groupmode gmode) {
 }
 
 icqface::icqface() {
-    kinterface();
-    raw();
     workareas.freeitem = &freeworkareabuf;
     kt_resize_event = &termresize;
     mainscreenblock = inited = onlinefolder = dotermresize = false;

@@ -102,7 +102,7 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 
 void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
     ofstream fhist;
-    string fname;
+    string fname, lockfname;
     icqcontact *c;
 
     if(c = clist.get(ev.getcontact())) {
@@ -117,11 +117,11 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 		break;
 	}
 
+	setlock(fname);
+
 	fhist.open(fname.c_str(), ios::app);
 
 	if(fhist.is_open()) {
-//            c->sethistoffset(fhist.seekg(0, ios::cur));
-
 	    if(ev.gettype() == imevent::message) {
 		const immessage *m = static_cast<const immessage *>(&ev);
 		m->write(fhist);
@@ -141,6 +141,8 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 
 	    fhist.close();
 	}
+
+	releaselock(fname);
     }
 }
 
@@ -202,4 +204,23 @@ void imeventmanager::resend() {
 
 int imeventmanager::getunsentcount() const {
     return unsent;
+}
+
+void imeventmanager::setlock(const string fname) const {
+    string lockfname = fname + ".lock";
+    int ntries = 0;
+    ofstream f;
+
+    while(!access(lockfname.c_str(), F_OK) && (ntries < 10)) {
+	usleep(10);
+	ntries++;
+    }
+
+    f.open(lockfname.c_str());
+    if(f.is_open()) f.close();
+}
+
+void imeventmanager::releaselock(const string fname) const {
+    string lockfname = fname + ".lock";
+    unlink(lockfname.c_str());
 }

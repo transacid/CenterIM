@@ -12,6 +12,9 @@ class imeventmanager {
 	void eventwrite(const imevent &ev, eventwritemode mode);
 	imevent *eventread(ifstream &f) const;
 
+	void setlock(const string fname) const;
+	void releaselock(const string fname) const;
+
     public:
 	imeventmanager();
 	~imeventmanager();
