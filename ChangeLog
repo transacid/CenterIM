@@ -731,3 +731,37 @@ bug related to accept status. I mean, if you send a message to a buddy
 who's using the Windows client and his status is occupied or N/A, the
 event won't reach him. And also it still segfaults on xterm resize event
 sometimes. Wierd.
+
+4.6.0
+-----
+
+Fixed a segfault used to occur every time on selecting "Find/add
+user(s)" item in the global menu under RedHat 6.2.
+
+Log messages reporting status change had old and new statuses swapped.
+Fixed.
+
+Fixed incorrect update of zip code when changes were made manually in
+"Edit users" or update self details dialogs.
+
+Sounds for user online event type didn't work.
+
+Whitepages search was fixed a little bit, for the majority of age ranges
+were not respected.
+
+Away messages support was added. It's now possible both set your own or
+fetch someone's else away message with centericq. Consult the README
+file for more details.
+
+Socks proxy support related options were removed from the configuration
+dialog until this feature is really supported.
+
+URLs starting with "https://" are now fetched along with others from
+messages, users' details, and in other places where URL extraction is
+supported.
+
+The README file was extended with e-mail express and away messages
+descriptions.
+
+Fixed a bug caused inability to fetch self details when our own UIN was
+on the contact list.
