@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.41 2005/01/24 00:23:31 konst Exp $
+* $Id: accountmanager.cc,v 1.42 2005/01/26 09:51:02 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -145,7 +145,7 @@ void accountmanager::exec() {
 				: account.additional["pgpkey"].c_str());
 
 			if(!account.additional["pgpkey"].empty())
-			    t.addleaff(n, 0, citem+16, _(" Key passphrase: %s"),
+			    t.addleaff(n, 0, citem+16, _(" Key passphrase: %s "),
 				string(account.additional["pgppass"].size(), '*').c_str());
 		    }
 		#endif

@@ -90,19 +90,18 @@ string impgp::sign(const string &text, const string &keyid, protocolname pname) 
 	gpgme_set_passphrase_cb(ctx, &passphrase_cb, 0);
 	opname = pname;
 
-	if(!gpgme_get_key(ctx, keyid.c_str(), &key, 1)) {
+	if(!(err = gpgme_get_key(ctx, keyid.c_str(), &key, 1))) {
 	    gpgme_signers_clear(ctx);
 	    gpgme_signers_add(ctx, key);
 
-	    if(!gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0)) {
-		if(!gpgme_data_new(&out)) {
+	    if(!(err = gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0))) {
+		if(!(err = gpgme_data_new(&out))) {
 		    if(!(err = gpgme_op_sign(ctx, in, out, GPGME_SIG_MODE_DETACH))) {
 			auto_ptr<char> p(gpgme_data_release_and_get_mem(out, &n));
 			r = p.get();
 			strip(r);
 		    } else {
 			gpgme_data_release(out);
-			r = (string) "sign error: " + gpgme_strerror(err);
 		    }
 		}
 
@@ -110,6 +109,12 @@ string impgp::sign(const string &text, const string &keyid, protocolname pname) 
 	    }
 
 	    gpgme_key_release(key);
+	}
+
+	if(err && err != GPG_ERR_CANCELED) {
+	    face.log((string) "+ [" + conf.getprotocolname(pname) + "] " +
+		_("PGP sign error: ") + gpgme_strerror(err));
+	    gethook(pname).disconnect();
 	}
     }
 
