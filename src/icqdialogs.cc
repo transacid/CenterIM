@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.56 2002/03/11 13:06:48 konst Exp $
+* $Id: icqdialogs.cc,v 1.57 2002/03/14 11:53:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -113,8 +113,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
 		break;
 
-	    case yahoo:
-	    case msn:
+	    default:
 		i = tree.addnode(_(" Nickname "));
 		tree.addleaf(i, 0, 11, " " + s.nick + " ");
 		break;
@@ -165,7 +164,7 @@ bool icqface::finddialog(imsearchparams &s) {
     return ret;
 }
 
-void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
+void icqface::gendetails(treeview *tree, icqcontact *c, protocolname pname) {
     int saveitem, savefirst, i;
 
     if(!c) c = clist.get(contactroot);
@@ -180,68 +179,66 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 
     i = tree->addnode(_(" General "));
 
-    if((c->getdesc().pname == infocard)
-    || (gethook(c->getdesc().pname).getcapabilities() & hoptCanChangeNick)) {
+    if((pname == infocard) || (gethook(pname).getcapabilities() & hoptCanChangeNick)) {
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
     }
 
-    tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
-    tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
-    tree->addleaff(i, 0, 13, _(" E-mail : %s "), bi.email.c_str());
-    tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender[mi.gender]);
-    tree->addleaff(i, 0, 15, _(" Birthdate : %s "), mi.strbirthdate().c_str());
-    tree->addleaff(i, 0, 16, _(" Age : %s "), strint(mi.age));
+    if(!(pname == aim) && (c->getdesc() == contactroot)) {
 
-    i = tree->addnode(_(" Home "));
-    tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
-    tree->addleaff(i, 0, 18, _(" State : %s "), bi.state.c_str());
-    tree->addleaff(i, 0, 19, _(" Country : %s "),
-	ICQ2000::UserInfoHelpers::getCountryIDtoString(bi.country).c_str());
+	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
+	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
+	tree->addleaff(i, 0, 13, _(" E-mail : %s "), bi.email.c_str());
+	tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender[mi.gender]);
+	tree->addleaff(i, 0, 15, _(" Birthdate : %s "), mi.strbirthdate().c_str());
+	tree->addleaff(i, 0, 16, _(" Age : %s "), strint(mi.age));
 
-    tree->addleaff(i, 0, 20, _(" Street address : %s "), bi.street.c_str());
-    tree->addleaff(i, 0, 21, _(" Zip code : %s "), bi.zip.c_str());
-    tree->addleaff(i, 0, 22, _(" Phone : %s "), bi.phone.c_str());
-    tree->addleaff(i, 0, 23, _(" Fax : %s "), bi.fax.c_str());
-    tree->addleaff(i, 0, 24, _(" Cellular phone : %s "), bi.cellular.c_str());
+	i = tree->addnode(_(" Home "));
+	tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
+	tree->addleaff(i, 0, 18, _(" State : %s "), bi.state.c_str());
+	tree->addleaff(i, 0, 19, _(" Country : %s "),
+	    ICQ2000::UserInfoHelpers::getCountryIDtoString(bi.country).c_str());
 
-    i = tree->addnode(_(" Work "));
-    tree->addleaff(i, 0, 25, _(" City : %s "), wi.city.c_str());
-    tree->addleaff(i, 0, 26, _(" State : %s "), wi.state.c_str());
-    tree->addleaff(i, 0, 27, _(" Country : %s "),
-	ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country).c_str());
+	tree->addleaff(i, 0, 20, _(" Street address : %s "), bi.street.c_str());
+	tree->addleaff(i, 0, 21, _(" Zip code : %s "), bi.zip.c_str());
+	tree->addleaff(i, 0, 22, _(" Phone : %s "), bi.phone.c_str());
+	tree->addleaff(i, 0, 23, _(" Fax : %s "), bi.fax.c_str());
+	tree->addleaff(i, 0, 24, _(" Cellular phone : %s "), bi.cellular.c_str());
 
-    tree->addleaff(i, 0, 28, _(" Street address : %s "), wi.street.c_str());
-    tree->addleaff(i, 0, 29, _(" Company : %s "), wi.company.c_str());
-    tree->addleaff(i, 0, 30, _(" Department : %s "), wi.dept.c_str());
-    tree->addleaff(i, 0, 31, _(" Position : %s "), wi.position.c_str());
-    tree->addleaff(i, 0, 32, _(" Homepage : %s "), wi.homepage.c_str());
-    tree->addleaff(i, 0, 33, _(" Phone : %s "), wi.phone.c_str());
-    tree->addleaff(i, 0, 34, _(" Fax : %s "), wi.fax.c_str());
+	i = tree->addnode(_(" Work "));
+	tree->addleaff(i, 0, 25, _(" City : %s "), wi.city.c_str());
+	tree->addleaff(i, 0, 26, _(" State : %s "), wi.state.c_str());
+	tree->addleaff(i, 0, 27, _(" Country : %s "),
+	    ICQ2000::UserInfoHelpers::getCountryIDtoString(wi.country).c_str());
 
-    i = tree->addnode(_(" More "));
-    tree->addleaff(i, 0, 35, _(" Homepage : %s "), mi.homepage.c_str());
+	tree->addleaff(i, 0, 28, _(" Street address : %s "), wi.street.c_str());
+	tree->addleaff(i, 0, 29, _(" Company : %s "), wi.company.c_str());
+	tree->addleaff(i, 0, 30, _(" Department : %s "), wi.dept.c_str());
+	tree->addleaff(i, 0, 31, _(" Position : %s "), wi.position.c_str());
+	tree->addleaff(i, 0, 32, _(" Homepage : %s "), wi.homepage.c_str());
+	tree->addleaff(i, 0, 33, _(" Phone : %s "), wi.phone.c_str());
+	tree->addleaff(i, 0, 34, _(" Fax : %s "), wi.fax.c_str());
 
-    tree->addleaff(i, 0, 36, _(" 1st language : %s "),
-	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1).c_str());
+	i = tree->addnode(_(" More "));
+	tree->addleaff(i, 0, 35, _(" Homepage : %s "), mi.homepage.c_str());
 
-    tree->addleaff(i, 0, 37, _(" 2nd language : %s "),
-	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2).c_str());
+	tree->addleaff(i, 0, 36, _(" 1st language : %s "),
+	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1).c_str());
 
-    tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
-	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
-/*
-    if(c->getdesc().pname == icq)
-    if(c->getdesc() == contactroot)
-	tree->addleaff(i, 0, 40, _(" Require authorization : %s "),
-	    stryesno[bi.requiresauth]);
-*/
+	tree->addleaff(i, 0, 37, _(" 2nd language : %s "),
+	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2).c_str());
+
+	tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
+	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
+
+    }
+
     i = tree->addnode(_(" About "));
     tree->addleaff(i, 0, 39, " %s ", about.c_str());
 
     tree->menu.setpos(saveitem, savefirst);
 }
 
-bool icqface::updatedetails(icqcontact *c = 0) {
+bool icqface::updatedetails(icqcontact *c, protocolname upname) {
     string about, tmp;
     icqcontact::basicinfo bi;
     icqcontact::workinfo wi;
@@ -262,7 +259,8 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     if(!c->getdesc().uin) {
-	w.set_title(conf.getcolor(cp_dialog_highlight), _(" Your details "));
+	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" Your %s details "),
+	    conf.getprotocolname(upname).c_str());
     } else {
 	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s: details "),
 	    c->getdesc().totext().c_str());
@@ -281,7 +279,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     db.addautokeys();
 
     while(!finished) {
-	gendetails(db.gettree(), c);
+	gendetails(db.gettree(), c, upname);
 	finished = !db.open(n, b, (void **) &citem);
 	if(finished) continue;
 

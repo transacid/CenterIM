@@ -8,6 +8,7 @@ enum protocolname {
     icq = 0,
     yahoo,
     msn,
+    aim,
     infocard,
 
     protocolname_size

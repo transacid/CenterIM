@@ -34,6 +34,7 @@ class imcontroller {
 
 	bool icqregistration(icqconf::imaccount &account);
 	void icqupdatedetails();
+	void aimupdateprofile();
 
     public:
 	imcontroller();

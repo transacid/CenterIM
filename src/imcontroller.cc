@@ -1,6 +1,7 @@
 #include "imcontroller.h"
 #include "icqface.h"
 #include "icqhook.h"
+#include "aimhook.h"
 #include "icqcontacts.h"
 
 #define clr(c)     conf.getcolor(c)
@@ -159,6 +160,21 @@ void imcontroller::icqupdatedetails() {
     }
 }
 
+void imcontroller::aimupdateprofile() {
+    icqcontact *c = clist.get(contactroot);
+
+    if(ahook.logged()) {
+	c->clear();
+	ahook.requestinfo(imcontact(conf.getourid(aim).uin, aim));
+
+	if(face.updatedetails(0, aim)) {
+	    ahook.sendupdateuserinfo(*c, "");
+	}
+    } else {
+	face.status(_("You must be logged to the AIM network to update your profile"));
+    }
+}
+
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq:
@@ -173,12 +189,7 @@ void imcontroller::registration(icqconf::imaccount &account) {
 
 void imcontroller::updateinfo(icqconf::imaccount &account) {
     switch(account.pname) {
-	case icq:
-	    icqupdatedetails();
-	    break;
-	default:
-	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
-		_("details update is not supported"));
-	    break;
+	case icq: icqupdatedetails(); break;
+	case aim: aimupdateprofile(); break;
     }
 }

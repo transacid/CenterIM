@@ -25,7 +25,7 @@ void accountmanager::exec() {
     dialogbox db;
     protocolname pname;
     icqconf::imaccount account;
-    int n, b, i, citem, action, pos;
+    int n, b, i, citem, action, pos, capab;
     string spname, tmp;
     bool fin, proceed;
 
@@ -55,8 +55,9 @@ void accountmanager::exec() {
 		account = conf.getourid(pname);
 		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(pname) + " ");
 		citem = ((int) (pname)+1) * 100;
+		capab = gethook(pname).getcapabilities();
 
-		if(gethook(pname).getcapabilities() & hoptChangableServer) {
+		if(capab & hoptChangableServer) {
 		    if(!account.server.empty() && account.port) {
 			tmp = account.server + ":" + i2str(account.port);
 		    } else {
@@ -67,14 +68,14 @@ void accountmanager::exec() {
 		}
 
 		switch(pname) {
-		    case yahoo:
-		    case msn:
-			t.addleaff(n, 0, citem+1, _(" Login : %s "),
-			    account.nickname.c_str());
-			break;
 		    case icq:
 			t.addleaff(n, 0, citem+2, _(" UIN : %s "),
 			    account.uin ? i2str(account.uin).c_str() : "");
+			break;
+
+		    default:
+			t.addleaff(n, 0, citem+1, _(" Login : %s "),
+			    account.nickname.c_str());
 			break;
 		}
 
@@ -84,9 +85,10 @@ void accountmanager::exec() {
 		if(account.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 		} else {
-		    t.addnode(n, 0, citem+7, _(" Update user details "));
+		    if(capab & hoptCanUpdateDetails)
+			t.addnode(n, 0, citem+7, _(" Update user details "));
 
-		    if(gethook(pname).getcapabilities() & hoptCanSetAwayMsg)
+		    if(capab & hoptCanSetAwayMsg)
 			t.addnode(n, 0, citem+10, _(" Set away message "));
 
 		    t.addnode(n, 0, citem+8, _(" Drop "));

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.67 2002/03/11 13:06:49 konst Exp $
+* $Id: icqhook.cc,v 1.68 2002/03/14 11:53:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -56,6 +56,7 @@ icqhook::icqhook() {
 	hoptCanSendSMS |
 	hoptCanSetAwayMsg |
 	hoptCanChangeNick |
+	hoptCanUpdateDetails |
 	hoptChangableServer;
 
     cli.connected.connect(slot(this, &icqhook::connected_cb));

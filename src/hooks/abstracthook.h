@@ -6,13 +6,15 @@
 #include "imcontroller.h"
 
 enum hookcapabilities {
-    hoptCanNotify = 2,
-    hoptCanSendURL = 4,
-    hoptCanSendFile = 8,
-    hoptCanSendSMS = 16,
-    hoptCanSetAwayMsg = 32,
-    hoptCanChangeNick = 64,
-    hoptChangableServer = 128
+    hoptCanNotify           = 2,
+    hoptCanSendURL          = 4,
+    hoptCanSendFile         = 8,
+    hoptCanSendSMS          = 16,
+    hoptCanSetAwayMsg       = 32,
+    hoptCanChangeNick       = 64,
+    hoptChangableServer     = 128,
+    hoptCanChangePassword   = 256,
+    hoptCanUpdateDetails    = 512
 };
 
 class abstracthook {

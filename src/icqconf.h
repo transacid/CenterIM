@@ -15,21 +15,22 @@
 #include "icqgroup.h"
 #include "icqcontact.h"
 
-#define cp_status               1
-#define cp_dialog_text          2
-#define cp_dialog_menu          3
-#define cp_dialog_selected      4
-#define cp_dialog_highlight     5
-#define cp_dialog_frame         6
-#define cp_main_text            7
-#define cp_main_menu            8
-#define cp_main_selected        9
+#define cp_status                1
+#define cp_dialog_text           2
+#define cp_dialog_menu           3
+#define cp_dialog_selected       4
+#define cp_dialog_highlight      5
+#define cp_dialog_frame          6
+#define cp_main_text             7
+#define cp_main_menu             8
+#define cp_main_selected         9
 #define cp_main_highlight       10
 #define cp_main_frame           11
 #define cp_clist_icq            12
 #define cp_clist_yahoo          13
 #define cp_clist_infocard       14
 #define cp_clist_msn            15
+#define cp_clist_aim            16
 
 class icqconf {
     public:

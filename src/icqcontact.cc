@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.50 2002/03/11 13:06:48 konst Exp $
+* $Id: icqcontact.cc,v 1.51 2002/03/14 11:53:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,9 +63,7 @@ icqcontact::icqcontact(const imcontact adesc) {
 	    load();
 	    break;
 
-	case icq:
-	case yahoo:
-	case msn:
+	default:
 	    load();
 	    scanhistory();
 	    break;
@@ -103,6 +101,9 @@ string icqcontact::getdirname() const {
 	    break;
 	case msn:
 	    ret += "m" + cdesc.nickname;
+	    break;
+	case aim:
+	    ret += "a" + cdesc.nickname;
 	    break;
     }
 
@@ -608,6 +609,7 @@ int icqcontact::updated() const {
 
 void icqcontact::setlastseen() {
     time(&lastseen);
+    fupdated++;
 }
 
 time_t icqcontact::getlastseen() const {

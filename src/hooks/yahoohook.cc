@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.27 2002/03/11 13:06:49 konst Exp $
+* $Id: yahoohook.cc,v 1.28 2002/03/14 11:53:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -44,11 +44,9 @@ static int stat2int[imstatus_size] = {
     YAHOO_STATUS_BRB
 };
 
-yahoohook::yahoohook() {
-    fonline = false;
-    timer_reconnect = 0;
-    context = 0;
-}
+yahoohook::yahoohook()
+    : fonline(false), timer_reconnect(0), context(0)
+{ }
 
 yahoohook::~yahoohook() {
 }
@@ -107,12 +105,12 @@ void yahoohook::connect() {
 	alarm(5);
 	r = yahoo_connect(context);
 	alarm(0);
-	logger.putourstatus(yahoo, offline, manualstatus);
 
 	if(!r) {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
 	    disconnected(context);
 	} else {
+	    logger.putourstatus(yahoo, offline, manualstatus);
 	    yahoo_get_config(context);
 
 	    if(!yahoo_cmd_logon(context, stat2int[ourstatus = available])) {
@@ -186,9 +184,7 @@ bool yahoohook::send(const imevent &ev) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
 	    if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
 	}
-    }
 
-//    if(!text.empty()) {
 	for(is = text.begin(); is != text.end(); is++)
 	    if((unsigned) *is < 32) *is = ' ';
 
@@ -201,7 +197,7 @@ bool yahoohook::send(const imevent &ev) {
 	}
 
 	return true;
-//    }
+    }
 
     return false;
 }

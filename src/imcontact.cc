@@ -1,4 +1,5 @@
 #include "imcontact.h"
+#include "icqconf.h"
 
 imcontact contactroot(0, icq);
 
@@ -44,20 +45,17 @@ string imcontact::totext() const {
 
     if(*this == contactroot) {
 	r = "[self]";
-    } else
-    switch(pname) {
-	case icq:
-	    r = "[icq] " + i2str(uin);
-	    break;
-	case yahoo:
-	    r = "[yahoo] " + nickname;
-	    break;
-	case msn:
-	    r = "[msn] " + nickname;
-	    break;
-	case infocard:
-	    r = "[infocard] " + i2str(uin);
-	    break;
+    } else {
+	switch(pname) {
+	    case icq:
+	    case infocard:
+		r = "[" + conf.getprotocolname(pname) + "] " + i2str(uin);
+		break;
+
+	    default:
+		r = "[" + conf.getprotocolname(pname) + "] " + nickname;
+		break;
+	}
     }
 
     return r;

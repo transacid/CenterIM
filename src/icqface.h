@@ -117,7 +117,7 @@ class icqface {
 	void infointerests(dialogbox &db, icqcontact *c);
 	void infoabout(dialogbox &db, icqcontact *c);
 
-	void gendetails(treeview *tree, icqcontact *c = 0);
+	void gendetails(treeview *tree, icqcontact *c = 0, protocolname pname = icq);
 	void selectgender(imgender &f);
 
 	void selectcountry(unsigned short &f);
@@ -175,7 +175,7 @@ class icqface {
 	bool finddialog(imsearchparams &s);
 	bool findresults(const imsearchparams &sp);
 
-	bool updatedetails(icqcontact *c = 0);
+	bool updatedetails(icqcontact *c = 0, protocolname upname = icq);
 	bool sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist);
 
 	void blockmainscreen();

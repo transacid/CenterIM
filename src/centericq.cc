@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.77 2002/03/11 13:06:47 konst Exp $
+* $Id: centericq.cc,v 1.78 2002/03/14 11:53:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -348,6 +348,7 @@ void centericq::find() {
 		    }
 
 		case yahoo:
+		case aim:
 		    if(!s.nick.empty()) {
 			addcontact(imcontact(s.nick, s.pname));
 			ret = false;

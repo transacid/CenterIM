@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.50 2002/03/11 13:06:47 konst Exp $
+* $Id: icqconf.cc,v 1.51 2002/03/14 11:53:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -165,6 +165,10 @@ void icqconf::setourid(const imaccount &im) {
 		    i->server = "messenger.hotmail.com";
 		    i->port = 1863;
 		    break;
+		case aim:
+		    i->server = "toc.oscar.aol.com";
+		    i->port = 9898;
+		    break;
 	    }
 	}
     }
@@ -260,8 +264,9 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_msn\tcyan/transparent\n");
 		fprintf(f, "clist_yahoo\tmagenta/transparent\n");
 		fprintf(f, "clist_infocard\twhite/transparent\n");
-
+		fprintf(f, "clist_aim\tred/transparent\n");
 		break;
+
 	    case rcblue:
 		fprintf(f, "status\tblack/white\n");
 		fprintf(f, "dialog_text\tblack/cyan\n");
@@ -278,6 +283,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_yahoo\tmagenta/blue\n");
 		fprintf(f, "clist_msn\tcyan/blue\n");
 		fprintf(f, "clist_infocard\twhite/blue\n");
+		fprintf(f, "clist_aim\tred/blue\n");
 		break;
 	}
 	fclose(f);
@@ -313,6 +319,7 @@ void icqconf::loadcolors() {
 	    if(tname == "clist_yahoo") npair = cp_clist_yahoo; else
 	    if(tname == "clist_msn") npair = cp_clist_msn; else
 	    if(tname == "clist_infocard") npair = cp_clist_infocard; else
+	    if(tname == "clist_aim") npair = cp_clist_aim; else
 	    continue;
 
 	    init_pair(npair, nfg, nbg);
@@ -510,6 +517,7 @@ void icqconf::initpairs() {
     init_pair(cp_clist_msn, COLOR_CYAN, COLOR_BLACK);
     init_pair(cp_clist_yahoo, COLOR_YELLOW, COLOR_BLACK);
     init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
+    init_pair(cp_clist_aim, COLOR_RED, COLOR_BLACK);
 }
 
 void icqconf::setauto(int away, int na) {
@@ -610,7 +618,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "infocard"
+	"icq", "yahoo", "msn", "aim", "infocard"
     };
 
     return ptextnames[pname];
@@ -656,6 +664,8 @@ int icqconf::getprotcolor(protocolname pname) const {
 	    return getcolor(cp_clist_infocard);
 	case msn:
 	    return getcolor(cp_clist_msn);
+	case aim:
+	    return getcolor(cp_clist_aim);
 	default:
 	    return getcolor(cp_main_text);
     }

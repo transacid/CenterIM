@@ -3,13 +3,13 @@
 #include "icqhook.h"
 #include "yahoohook.h"
 #include "msnhook.h"
+#include "aimhook.h"
 
 #include <time.h>
 
-abstracthook::abstracthook() {
-    fcapabilities = 0;
-    searchdest = 0;
-}
+abstracthook::abstracthook()
+    : fcapabilities(0), searchdest(0)
+{ }
 
 void abstracthook::init() {
 }
@@ -105,18 +105,16 @@ void abstracthook::requestawaymsg(const imcontact &c) {
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {
-    static abstracthook ahook;
+    static abstracthook abshook;
 
     switch(pname) {
-	case icq:
-	    return ihook;
-	case yahoo:
-	    return yhook;
-	case msn:
-	    return mhook;
+	case icq: return ihook;
+	case yahoo: return yhook;
+	case msn: return mhook;
+	case aim: return ahook;
     }
 
-    return ahook;
+    return abshook;
 }
 
 struct tm *maketm(int hour, int minute, int day, int month, int year) {
