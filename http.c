@@ -1,4 +1,4 @@
-/* $Id: http.c,v 1.1 2004/01/26 23:49:49 konst Exp $ */
+/* $Id: http.c,v 1.2 2004/04/11 16:35:02 konst Exp $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -40,6 +40,13 @@
 #include "compat.h"
 #include "libgadu.h"
 
+#define gg_http_error(x) \
+	close(h->fd); \
+	h->fd = -1; \
+	h->state = GG_STATE_ERROR; \
+	h->error = x; \
+	return 0;
+
 /*
  * gg_http_connect() // funkcja pomocnicza
  *
@@ -60,19 +67,19 @@ struct gg_http *gg_http_connect(const char *hostname, int port, int async, const
 	struct gg_http *h;
 
 	if (!hostname || !port || !method || !path || !header) {
-                gg_debug(GG_DEBUG_MISC, "// gg_http_connect() invalid arguments\n");
+		gg_debug(GG_DEBUG_MISC, "// gg_http_connect() invalid arguments\n");
 		errno = EINVAL;
 		return NULL;
 	}
 	
 	if (!(h = malloc(sizeof(*h))))
-                return NULL;        
+		return NULL;        
 	memset(h, 0, sizeof(*h));
 
 	h->async = async;
 	h->port = port;
 	h->fd = -1;
-        h->type = GG_SESSION_HTTP;
+	h->type = GG_SESSION_HTTP;
 
 	if (gg_proxy_enabled) {
 		char *auth = gg_proxy_auth();
@@ -91,37 +98,58 @@ struct gg_http *gg_http_connect(const char *hostname, int port, int async, const
 	}
 
 	if (!h->query) {
-                gg_debug(GG_DEBUG_MISC, "// gg_http_connect() not enough memory for query\n");
+		gg_debug(GG_DEBUG_MISC, "// gg_http_connect() not enough memory for query\n");
 		free(h);
-                errno = ENOMEM;
+		errno = ENOMEM;
 		return NULL;
 	}
 	
 	gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-QUERY-----\n%s\n=> -----END-HTTP-QUERY-----\n", h->query);
 
 	if (async) {
+		struct hostent *he;
+		struct in_addr a;
+
+		if (!(he = gg_gethostbyname(hostname))) {
+			gg_http_free(h);
+			errno = ENOENT;
+			return NULL;
+		} else {
+			memcpy((char*) &a, he->h_addr, sizeof(a));
+			free(he);
+		}
+/*
 #ifndef __GG_LIBGADU_HAVE_PTHREAD
 		if (gg_resolve(&h->fd, &h->pid, hostname)) {
 #else
 		if (gg_resolve_pthread(&h->fd, &h->resolver, hostname)) {
 #endif
-                        gg_debug(GG_DEBUG_MISC, "// gg_http_connect() resolver failed\n");
+			gg_debug(GG_DEBUG_MISC, "// gg_http_connect() resolver failed\n");
 			gg_http_free(h);
-                        errno = ENOENT;
+			errno = ENOENT;
 			return NULL;
 		}
 
 		gg_debug(GG_DEBUG_MISC, "// gg_http_connect() resolver = %p\n", h->resolver);
-
 		h->state = GG_STATE_RESOLVING;
 		h->check = GG_CHECK_READ;
 		h->timeout = GG_DEFAULT_TIMEOUT;
+*/
+		if ((h->fd = gg_connect(&a, h->port, h->async)) == -1) {
+			gg_debug(GG_DEBUG_MISC, "=> http, connection failed (errno=%d, %s)\n", errno, strerror(errno));
+			gg_http_error(GG_ERROR_CONNECTING);
+		}
+
+		h->state = GG_STATE_CONNECTING;
+		h->check = GG_CHECK_WRITE;
+		h->timeout = GG_DEFAULT_TIMEOUT;
+
 	} else {
 		struct hostent *he;
 		struct in_addr a;
 
 		if (!(he = gg_gethostbyname(hostname))) {
-                        gg_debug(GG_DEBUG_MISC, "// gg_http_connect() host not found\n");
+			gg_debug(GG_DEBUG_MISC, "// gg_http_connect() host not found\n");
 			gg_http_free(h);
 			errno = ENOENT;
 			return NULL;
@@ -131,7 +159,7 @@ struct gg_http *gg_http_connect(const char *hostname, int port, int async, const
 		}
 
 		if (!(h->fd = gg_connect(&a, port, 0)) == -1) {
-                        gg_debug(GG_DEBUG_MISC, "// gg_http_connect() connection failed (errno=%d, %s)\n", errno, strerror(errno));
+			gg_debug(GG_DEBUG_MISC, "// gg_http_connect() connection failed (errno=%d, %s)\n", errno, strerror(errno));
 			gg_http_free(h);
 			return NULL;
 		}
@@ -144,7 +172,7 @@ struct gg_http *gg_http_connect(const char *hostname, int port, int async, const
 		}
 
 		if (h->state != GG_STATE_PARSING) {
-                        gg_debug(GG_DEBUG_MISC, "// gg_http_connect() some strange error\n");
+			gg_debug(GG_DEBUG_MISC, "// gg_http_connect() some strange error\n");
 			gg_http_free(h);
 			return NULL;
 		}
@@ -155,13 +183,6 @@ struct gg_http *gg_http_connect(const char *hostname, int port, int async, const
 	
 	return h;
 }
-
-#define gg_http_error(x) \
-	close(h->fd); \
-	h->fd = -1; \
-	h->state = GG_STATE_ERROR; \
-	h->error = x; \
-	return 0;
 
 /*
  * gg_http_watch_fd()
@@ -321,7 +342,7 @@ int gg_http_watch_fd(struct gg_http *h)
 
 			/* HTTP/1.1 200 OK */
 			if (strlen(h->header) < 16 || strncmp(h->header + 9, "200", 3)) {
-			        gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-HEADER-----\n%s\n=> -----END-HTTP-HEADER-----\n", h->header);
+				gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-HEADER-----\n%s\n=> -----END-HTTP-HEADER-----\n", h->header);
 
 				gg_debug(GG_DEBUG_MISC, "=> http, didn't get 200 OK -- no results\n");
 				free(h->header);
@@ -332,7 +353,7 @@ int gg_http_watch_fd(struct gg_http *h)
 			h->body_size = 0;
 			line = h->header;
 			*tmp = 0;
-                        
+			
 			gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-HEADER-----\n%s\n=> -----END-HTTP-HEADER-----\n", h->header);
 
 			while (line) {
@@ -465,7 +486,7 @@ void gg_http_stop(struct gg_http *h)
 
 	if (h->fd != -1)
 		close(h->fd);
-        h->fd = -1;
+	h->fd = -1;
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: common.c,v 1.1 2004/01/26 23:49:47 konst Exp $ */
+/* $Id: common.c,v 1.2 2004/04/11 16:35:02 konst Exp $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -90,7 +90,7 @@ cleanup:
  */
 char *gg_vsaprintf(const char *format, va_list ap)
 {
-        int size = 0;
+	int size = 0;
 	const char *start;
 	char *buf = NULL;
 	
@@ -113,7 +113,7 @@ char *gg_vsaprintf(const char *format, va_list ap)
 		int res;
 		char *tmp;
 		
-		size = 128;
+		size = 256;
 		do {
 			size *= 2;
 			if (!(tmp = realloc(buf, size))) {
@@ -192,23 +192,23 @@ char *gg_saprintf(const char *format, ...)
  */
 char *gg_get_line(char **ptr)
 {
-        char *foo, *res;
+	char *foo, *res;
 
-        if (!ptr || !*ptr || !strcmp(*ptr, ""))
-                return NULL;
+	if (!ptr || !*ptr || !strcmp(*ptr, ""))
+		return NULL;
 
-        res = *ptr;
+	res = *ptr;
 
-        if (!(foo = strchr(*ptr, '\n')))
-                *ptr += strlen(*ptr);
-        else {
-                *ptr = foo + 1;
-                *foo = 0;
-                if (strlen(res) > 1 && res[strlen(res) - 1] == '\r')
-                        res[strlen(res) - 1] = 0;
-        }
+	if (!(foo = strchr(*ptr, '\n')))
+		*ptr += strlen(*ptr);
+	else {
+		*ptr = foo + 1;
+		*foo = 0;
+		if (strlen(res) > 1 && res[strlen(res) - 1] == '\r')
+			res[strlen(res) - 1] = 0;
+	}
 
-        return res;
+	return res;
 }
 
 /*
@@ -400,7 +400,7 @@ int gg_http_hash(const char *format, ...)
 		} else {
 			if (!(arg = va_arg(ap, unsigned char*)))
 				arg = "";
-		}	
+		}       
 
 		i = 0;
 		while ((c = (int) arg[i++]) != 0) {
@@ -482,37 +482,37 @@ int gg_win32_thread_socket(int thread_id, int socket)
 		if ((thread_id == -1 && wsk->socket == socket) || wsk->id == thread_id) {
 			if (close) {
 				/* socket zostaje usuniety */
-                        	closesocket(wsk->socket);
-         			*p_wsk = wsk->next;
-         			free(wsk);
-         			return 1;
-                        } else if (!socket) {
+				closesocket(wsk->socket);
+				*p_wsk = wsk->next;
+				free(wsk);
+				return 1;
+			} else if (!socket) {
 				/* socket zostaje zwrocony */
 				return wsk->socket;
-                        } else {
+			} else {
 				/* socket zostaje ustawiony */
 				wsk->socket = socket;
 				return socket;
 			}
-               }
+	       }
 		
-               p_wsk = &(wsk->next);
-               wsk = wsk->next;
-        }
+	       p_wsk = &(wsk->next);
+	       wsk = wsk->next;
+	}
 	
-        if (close && socket != -1)
+	if (close && socket != -1)
 		closesocket(socket);
-        if (close || !socket)
+	if (close || !socket)
 		return 0;
 	
-        /* Dodaje nowy element */
-        wsk = malloc(sizeof(gg_win32_thread));
-        wsk->id = thread_id;
-        wsk->socket = socket;
-        wsk->next = 0;
-        *p_wsk = wsk;
+	/* Dodaje nowy element */
+	wsk = malloc(sizeof(gg_win32_thread));
+	wsk->id = thread_id;
+	wsk->socket = socket;
+	wsk->next = 0;
+	*p_wsk = wsk;
 	
-        return socket;
+	return socket;
 }
 
 #endif /* ASSIGN_SOCKETS_TO_THREADS */
