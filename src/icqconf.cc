@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.44 2002/02/26 17:01:44 konst Exp $
+* $Id: icqconf.cc,v 1.45 2002/02/27 16:35:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -166,19 +166,21 @@ void icqconf::setourid(const imaccount im) {
 	}
     }
 
-    if(gethook(i->pname).getcapabilities() & hoptCanSetAwayMsg) {
-	if(i->awaymsg.empty()) {
-	    char buf[512];
-	    sprintf(buf, _("I do really enjoy the default away message of centericq %s."), VERSION);
-	    i->awaymsg = buf;
-	}
+    if(i != accounts.end()) {
+	if(gethook(i->pname).getcapabilities() & hoptCanSetAwayMsg) {
+	    if(i->awaymsg.empty()) {
+		char buf[512];
+		sprintf(buf, _("I do really enjoy the default away message of centericq %s."), VERSION);
+		i->awaymsg = buf;
+	    }
 
-	string fname = conf.getconfigfname("awaymsg-" + getprotocolname(i->pname));
-	ofstream f(fname.c_str());
+	    string fname = conf.getconfigfname("awaymsg-" + getprotocolname(i->pname));
+	    ofstream f(fname.c_str());
 
-	if(f.is_open()) {
-	    f << i->awaymsg;
-	    f.close();
+	    if(f.is_open()) {
+		f << i->awaymsg;
+		f.close();
+	    }
 	}
     }
 }

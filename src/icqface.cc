@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.85 2002/02/25 10:41:00 konst Exp $
+* $Id: icqface.cc,v 1.86 2002/02/27 16:35:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,12 +83,13 @@ const char *strgroupmode(icqconf::groupmode gmode) {
 
 icqface::icqface() {
     workareas.freeitem = &freeworkareabuf;
-    kt_resize_event = &termresize;
     mainscreenblock = inited = onlinefolder = dotermresize = false;
+    mcontacts = 0;
 }
 
 icqface::~icqface() {
     kendinterface();
+
     if(inited) {
 	for(int i = 0; i < LINES; i++) printf("\n");
     }
@@ -109,10 +110,33 @@ void icqface::init() {
     }
 #endif
 
-    mcontacts = new treeview(1, 2, 25, LINES-2,
-	conf.getcolor(cp_main_menu), conf.getcolor(cp_main_selected),
-	conf.getcolor(cp_main_menu), conf.getcolor(cp_main_menu));
+    /* Calculate various sizes and coordinates */
 
+    sizeDlg.width = COLS-20;
+    sizeDlg.height = LINES-10;
+
+    sizeBigDlg.width = COLS-10;
+    sizeBigDlg.height = LINES-7;
+
+    sizeWArea.x1 = (int) (COLS*0.32);
+    if(sizeWArea.x1 < 25)
+	sizeWArea.x1 = 25;
+
+    sizeWArea.x2 = COLS-1;
+    sizeWArea.y1 = 1;
+
+    sizeWArea.y2 = LINES - ((int) (LINES/4));
+    if(sizeWArea.y2 > LINES-6)
+	sizeWArea.y2 = LINES-6;
+
+    if(!mcontacts) {
+	mcontacts = new treeview(conf.getcolor(cp_main_menu),
+	    conf.getcolor(cp_main_selected),
+	    conf.getcolor(cp_main_menu),
+	    conf.getcolor(cp_main_menu));
+    }
+
+    mcontacts->setcoord(1, 2, sizeWArea.x1, LINES-2);
     mcontacts->menu.idle = &menuidle;
     mcontacts->menu.otherkeys = &contactskeys;
 
@@ -134,18 +158,20 @@ void icqface::init() {
     mvhline(LINES-1, 0, ' ', COLS);
 
     inited = true;
+    kt_resize_event = &termresize;
 }
 
 void icqface::done() {
-    delete mcontacts;
+    kt_resize_event = 0;
+    workareas.empty();
 }
 
 void icqface::draw() {
     mainw.open();
-    mainw.separatex(25);
-    workarealine(WORKAREA_Y2);
-    mvhline(WORKAREA_Y2, WORKAREA_X1, LTEE, 1);
-    mvhline(WORKAREA_Y2, WORKAREA_X2, RTEE, 1);
+    mainw.separatex(sizeWArea.x1);
+    workarealine(sizeWArea.y2);
+    mvhline(sizeWArea.y2, sizeWArea.x1, LTEE, 1);
+    mvhline(sizeWArea.y2, sizeWArea.x2, RTEE, 1);
 
     update();
 }
@@ -191,8 +217,8 @@ int icqface::contextmenu(icqcontact *c) {
     verticalmenu m(conf.getcolor(cp_main_text),
 	conf.getcolor(cp_main_selected));
 
-    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,
-	WORKAREA_Y1+6, conf.getcolor(cp_main_text)));
+    m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
+	sizeWArea.y1+6, conf.getcolor(cp_main_text)));
 
     if(!c) return 0;
 
@@ -253,7 +279,7 @@ int icqface::generalmenu() {
     static int lastitem = 0;
 
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
-    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+40, WORKAREA_Y1+11, conf.getcolor(cp_main_text)));
+    m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+40, sizeWArea.y1+11, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
     m.additem(0, ACT_STATUS,    _(" Change status                       s"));
@@ -482,8 +508,8 @@ bool icqface::findresults(const imsearchparams &sp) {
     saveworkarea();
     clearworkarea();
 
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
-	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
 	conf.getcolor(cp_main_selected)));
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
@@ -496,10 +522,10 @@ bool icqface::findresults(const imsearchparams &sp) {
     db.idle = &dialogidle;
     db.redraw();
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight), "Find results");
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), "Find results");
 
-    workarealine(WORKAREA_Y1+2);
-    workarealine(WORKAREA_Y2-2);
+    workarealine(sizeWArea.y1+2);
+    workarealine(sizeWArea.y2-2);
 
     while(!finished) {
 	finished = !db.open(r, b);
@@ -533,17 +559,17 @@ bool icqface::findresults(const imsearchparams &sp) {
 }
 
 void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) {
-    for(int i = WORKAREA_Y1+1; i < WORKAREA_Y2; i++) {
+    for(int i = sizeWArea.y1+1; i < sizeWArea.y2; i++) {
 	workarealine(i, ' ');
     }
 
     db.redraw();
 
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
 	_("Information about %s"), realdesc.totext().c_str());
 
-    workarealine(WORKAREA_Y1+2);
-    workarealine(WORKAREA_Y2-2);
+    workarealine(sizeWArea.y1+2);
+    workarealine(sizeWArea.y2-2);
 
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
@@ -595,41 +621,41 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
 
-    workarealine(WORKAREA_Y1+8);
-    workarealine(WORKAREA_Y1+12);
+    workarealine(sizeWArea.y1+8);
+    workarealine(sizeWArea.y1+12);
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+3, conf.getcolor(cp_main_highlight), _("Name"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+4, conf.getcolor(cp_main_highlight), _("E-mail"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+5, conf.getcolor(cp_main_highlight), _("2nd e-mail"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+6, conf.getcolor(cp_main_highlight), _("Old e-mail"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Gender"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+9, conf.getcolor(cp_main_highlight), _("Birthdate"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+10, conf.getcolor(cp_main_highlight), _("Age"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Languages"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+13, conf.getcolor(cp_main_highlight), _("Last IP"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Name"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("E-mail"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("2nd e-mail"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Old e-mail"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Gender"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+9, conf.getcolor(cp_main_highlight), _("Birthdate"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Age"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Languages"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Last IP"));
 
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), c->getnick());
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), bi.email);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.email);
 
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), strgender[mi.gender]);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), strgender[mi.gender]);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
 
     if(mi.lang1) commacat(langs, strlanguage(mi.lang1), langs.empty());
     if(mi.lang2) commacat(langs, strlanguage(mi.lang2), langs.empty());
     if(mi.lang3) commacat(langs, strlanguage(mi.lang3), langs.empty());
     commaform(langs);
 
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), langs);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13, conf.getcolor(cp_main_text), c->getlastip());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), langs);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
     if(c->getstatus() == offline) {
 	time_t ls = c->getlastseen();
 
-	mainw.write(WORKAREA_X1+2, WORKAREA_Y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
-	mainw.write(WORKAREA_X1+14, WORKAREA_Y1+14, conf.getcolor(cp_main_text),
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
+	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text),
 	    ls ? strdateandtime(ls) : _("Never"));
     }
 }
@@ -640,18 +666,18 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
 
-    workarealine(WORKAREA_Y1+10);
-    x = WORKAREA_X1+2;
+    workarealine(sizeWArea.y1+10);
+    x = sizeWArea.x1+2;
 
-    mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_highlight), _("Address"));
-    mainw.write(x, WORKAREA_Y1+3, conf.getcolor(cp_main_highlight), _("Location"));
-    mainw.write(x, WORKAREA_Y1+4, conf.getcolor(cp_main_highlight), _("Zip code"));
-    mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_highlight), _("Phone"));
-    mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_highlight), _("Fax"));
-    mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_highlight), _("Cellular"));
-    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Timezone"));
+    mainw.write(x, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Address"));
+    mainw.write(x, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Location"));
+    mainw.write(x, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("Zip code"));
+    mainw.write(x, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("Phone"));
+    mainw.write(x, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Fax"));
+    mainw.write(x, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("Cellular"));
+    mainw.write(x, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Timezone"));
 
-    mainw.write(x, WORKAREA_Y1+10, conf.getcolor(cp_main_highlight), _("Homepage"));
+    mainw.write(x, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Homepage"));
 
     if(!bi.state.empty()) {
 	if(bi.city.size()) bi.city += ", ";
@@ -664,18 +690,18 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     }
 
     x += 10;
-    mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_text), bi.street);
-    mainw.write(x, WORKAREA_Y1+3, conf.getcolor(cp_main_text), bi.city);
-    mainw.write(x, WORKAREA_Y1+4, conf.getcolor(cp_main_text), bi.zip);
-    mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_text), bi.phone);
-    mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_text), bi.fax);
-    mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_text), bi.cellular);
-    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_text), mi.strtimezone());
+    mainw.write(x, sizeWArea.y1+2, conf.getcolor(cp_main_text), bi.street);
+    mainw.write(x, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.city);
+    mainw.write(x, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.zip);
+    mainw.write(x, sizeWArea.y1+5, conf.getcolor(cp_main_text), bi.phone);
+    mainw.write(x, sizeWArea.y1+6, conf.getcolor(cp_main_text), bi.fax);
+    mainw.write(x, sizeWArea.y1+7, conf.getcolor(cp_main_text), bi.cellular);
+    mainw.write(x, sizeWArea.y1+8, conf.getcolor(cp_main_text), mi.strtimezone());
 
     for(i = 0; !mi.homepage.empty(); i++) {
-	mainw.write(x, WORKAREA_Y1+10+i, conf.getcolor(cp_main_text),
-	    mi.homepage.substr(0, WORKAREA_X2-WORKAREA_X1-12));
-	mi.homepage.erase(0, WORKAREA_X2-WORKAREA_X1-12);
+	mainw.write(x, sizeWArea.y1+10+i, conf.getcolor(cp_main_text),
+	    mi.homepage.substr(0, sizeWArea.x2-sizeWArea.x1-12));
+	mi.homepage.erase(0, sizeWArea.x2-sizeWArea.x1-12);
     }
 }
 
@@ -683,20 +709,20 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
     int i;
     icqcontact::workinfo wi = c->getworkinfo();
 
-    workarealine(WORKAREA_Y1+6);
-    workarealine(WORKAREA_Y1+11);
+    workarealine(sizeWArea.y1+6);
+    workarealine(sizeWArea.y1+11);
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+2, conf.getcolor(cp_main_highlight), _("Address"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+3, conf.getcolor(cp_main_highlight), _("Location"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+4, conf.getcolor(cp_main_highlight), _("Zip code"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Address"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Location"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("Zip code"));
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+6, conf.getcolor(cp_main_highlight), _("Company"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+7, conf.getcolor(cp_main_highlight), _("Department"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Title"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Company"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("Department"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Title"));
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+11, conf.getcolor(cp_main_highlight), _("Phone"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Fax"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+13, conf.getcolor(cp_main_highlight), _("Homepage"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+11, conf.getcolor(cp_main_highlight), _("Phone"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Fax"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Homepage"));
 
     if(!wi.state.empty()) {
 	if(wi.city.size()) wi.city += ", ";
@@ -708,19 +734,19 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 	wi.city += strcountry(wi.country);
     }
 
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), wi.street);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), wi.city);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), wi.zip);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), wi.company);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+7, conf.getcolor(cp_main_text), wi.dept);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), wi.position);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+11, conf.getcolor(cp_main_text), wi.phone);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), wi.fax);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), wi.street);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), wi.city);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), wi.zip);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+6, conf.getcolor(cp_main_text), wi.company);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+7, conf.getcolor(cp_main_text), wi.dept);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), wi.position);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf.getcolor(cp_main_text), wi.phone);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), wi.fax);
 
     for(i = 0; !wi.homepage.empty(); i++) {
-	mainw.write(WORKAREA_X1+14, WORKAREA_Y1+13+i, conf.getcolor(cp_main_text),
-	    wi.homepage.substr(0, WORKAREA_X2-WORKAREA_X1-14));
-	wi.homepage.erase(0, WORKAREA_X2-WORKAREA_X1-14);
+	mainw.write(sizeWArea.x1+14, sizeWArea.y1+13+i, conf.getcolor(cp_main_text),
+	    wi.homepage.substr(0, sizeWArea.x2-sizeWArea.x1-14));
+	wi.homepage.erase(0, sizeWArea.x2-sizeWArea.x1-14);
     }
 }
 
@@ -771,10 +797,10 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 
     status(_("F2 to URLs, ESC close"));
 
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
-	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
-    db.setbar(new horizontalbar(WORKAREA_X1+2, WORKAREA_Y2-1,
+    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 	_("Info"), _("Home"), _("Work"), _("More"), _("About"),
 	cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
@@ -870,8 +896,8 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
 
-    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,
-	WORKAREA_Y1+9, conf.getcolor(cp_main_text)));
+    m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
+	sizeWArea.y1+9, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
     makeprotocolmenu(m);
@@ -960,7 +986,7 @@ const string icqface::inputfile(const string q, const string defl = "") {
     kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
     kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
 
-    selector.setwindow(textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+    selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
 	conf.getcolor(cp_dialog_highlight),
 	_(" enter to select a file, esc to cancel ")));
@@ -1037,11 +1063,11 @@ int icqface::ask(string q, int options, int deflt = -1) {
 
 void icqface::saveworkarea() {
     int i;
-    chtype **workareabuf = (chtype **) malloc(sizeof(chtype *) * (WORKAREA_Y2-WORKAREA_Y1+1));
+    chtype **workareabuf = (chtype **) malloc(sizeof(chtype *) * (sizeWArea.y2-sizeWArea.y1+1));
 
-    for(i = 0; i <= WORKAREA_Y2-WORKAREA_Y1; i++) {
-	workareabuf[i] = (chtype *) malloc(sizeof(chtype) * (WORKAREA_X2-WORKAREA_X1+2));
-	mvinchnstr(WORKAREA_Y1+i, WORKAREA_X1, workareabuf[i], WORKAREA_X2-WORKAREA_X1+1);
+    for(i = 0; i <= sizeWArea.y2-sizeWArea.y1; i++) {
+	workareabuf[i] = (chtype *) malloc(sizeof(chtype) * (sizeWArea.x2-sizeWArea.x1+2));
+	mvinchnstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
     }
 
     workareas.add(workareabuf);
@@ -1052,9 +1078,9 @@ void icqface::restoreworkarea() {
     chtype **workareabuf = (chtype **) workareas.at(workareas.count-1);
 
     if(workareabuf && !dotermresize) {
-	for(i = 0; i <= WORKAREA_Y2-WORKAREA_Y1; i++) {
-	    mvaddchnstr(WORKAREA_Y1+i, WORKAREA_X1,
-		workareabuf[i], WORKAREA_X2-WORKAREA_X1+1);
+	for(i = 0; i <= sizeWArea.y2-sizeWArea.y1; i++) {
+	    mvaddchnstr(sizeWArea.y1+i, sizeWArea.x1,
+		workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
 	}
 
 	refresh();
@@ -1067,8 +1093,8 @@ void icqface::clearworkarea() {
     int i;
 
     attrset(conf.getcolor(cp_main_text));
-    for(i = WORKAREA_Y1+1; i < WORKAREA_Y2; i++) {
-	mvhline(i, WORKAREA_X1+1, ' ', WORKAREA_X2-WORKAREA_X1-1);
+    for(i = sizeWArea.y1+1; i < sizeWArea.y2; i++) {
+	mvhline(i, sizeWArea.x1+1, ' ', sizeWArea.x2-sizeWArea.x1-1);
 	refresh();
     }
 }
@@ -1076,14 +1102,17 @@ void icqface::clearworkarea() {
 void icqface::freeworkareabuf(void *p) {
     chtype **workareabuf = (chtype **) p;
     if(workareabuf) {
-	for(int i = 0; i <= WORKAREA_Y2-WORKAREA_Y1; i++) free((chtype *) workareabuf[i]);
+	for(int i = 0; i <= face.sizeWArea.y2-face.sizeWArea.y1; i++) {
+	    free((chtype *) workareabuf[i]);
+	}
+
 	free(workareabuf);
     }
 }
 
 void icqface::workarealine(int l, chtype c = HLINE) {
     attrset(conf.getcolor(cp_main_frame));
-    mvhline(l, WORKAREA_X1+1, c, WORKAREA_X2-WORKAREA_X1-1);
+    mvhline(l, sizeWArea.x1+1, c, sizeWArea.x2-sizeWArea.x1-1);
 }
 
 void icqface::modelist(contactstatus cs) {
@@ -1096,8 +1125,8 @@ void icqface::modelist(contactstatus cs) {
     saveworkarea();
     clearworkarea();
 
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
-	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_text),
 	conf.getcolor(cp_main_selected)));
@@ -1112,10 +1141,10 @@ void icqface::modelist(contactstatus cs) {
     db.addkey(KEY_DC, 2);
 
     db.redraw();
-    workarealine(WORKAREA_Y1+2);
-    workarealine(WORKAREA_Y2-2);
+    workarealine(sizeWArea.y1+2);
+    workarealine(sizeWArea.y2-2);
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
 	cs == csignore ?
 	    _("Ignore list") :
 	cs == csvisible ?
@@ -1176,16 +1205,16 @@ bool icqface::multicontacts(const string ahead = "") {
     vector<imcontact>::iterator c;
     vector<imcontact> mlst;
 
-    verticalmenu m(WORKAREA_X1+1, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2,
+    verticalmenu m(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2,
 	conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
 
     saveworkarea();
     clearworkarea();
 
-    workarealine(WORKAREA_Y1+2);
+    workarealine(sizeWArea.y1+2);
 
     if(!head.size()) head = _("Event recipients");
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight), head);
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), head);
 
     for(i = 0; i < clist.count; i++) {
 	icqcontact *c = (icqcontact *) clist.at(i);
@@ -1265,20 +1294,20 @@ void icqface::log(const string atext) {
 #endif
 
     if(!mainscreenblock) {
-	chtype *logline = new chtype[WORKAREA_X2-WORKAREA_X1+2];
+	chtype *logline = new chtype[sizeWArea.x2-sizeWArea.x1+2];
 	attrset(conf.getcolor(cp_main_text));
 
-	for(i = WORKAREA_Y2+2; i < LINES-2; i++) {
-	    mvinchnstr(i, WORKAREA_X1+1, logline, WORKAREA_X2-WORKAREA_X1);
-	    mvaddchnstr(i-1, WORKAREA_X1+1, logline, WORKAREA_X2-WORKAREA_X1);
+	for(i = sizeWArea.y2+2; i < LINES-2; i++) {
+	    mvinchnstr(i, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
+	    mvaddchnstr(i-1, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
 	}
 
 	while((i = text.find("\n")) != -1) text[i] = ' ';
 	while((i = text.find("\r")) != -1) text[i] = ' ';
 
-	if(text.size() > WORKAREA_X2-WORKAREA_X1-2) text.resize(WORKAREA_X2-WORKAREA_X1-2);
-	mvhline(LINES-3, WORKAREA_X1+2, ' ', WORKAREA_X2-WORKAREA_X1-2);
-	kwriteatf(WORKAREA_X1+2, LINES-3, conf.getcolor(cp_main_text), "%s", text.c_str());
+	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
+	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);
+	kwriteatf(sizeWArea.x1+2, LINES-3, conf.getcolor(cp_main_text), "%s", text.c_str());
 	delete logline;
     }
 }
@@ -1310,8 +1339,8 @@ void icqface::quickfind(verticalmenu *multi = 0) {
     status(_("QuickSearch: type to find, Alt-S find again, Enter finish"));
 
     if(multi) {
-	lx = WORKAREA_X1+2;
-	ly = WORKAREA_Y2;
+	lx = sizeWArea.x1+2;
+	ly = sizeWArea.y2;
     } else {
 	lx = 2;
 	ly = LINES-2;
@@ -1423,14 +1452,14 @@ void icqface::showextractedurls() {
     } else {
 	int n;
 	vector<string>::iterator i;
-	verticalmenu m(WORKAREA_X1+1, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2,
+	verticalmenu m(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2,
 	    conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
 
 	saveworkarea();
 	clearworkarea();
-	workarealine(WORKAREA_Y1+2);
+	workarealine(sizeWArea.y1+2);
 
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
+	mainw.writef(sizeWArea.x1+2, sizeWArea.y1,
 	    conf.getcolor(cp_main_highlight),
 	    _("URLs within the current context"));
 
@@ -1460,9 +1489,9 @@ bool icqface::eventedit(imevent &ev) {
     saveworkarea();
     clearworkarea();
 
-    workarealine(WORKAREA_Y1+2);
+    workarealine(sizeWArea.y1+2);
 
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
 	_("Outgoing %s to %s"), eventnames[ev.gettype()],
 	ev.getcontact().totext().c_str());
 
@@ -1471,7 +1500,7 @@ bool icqface::eventedit(imevent &ev) {
     if(ev.gettype() == imevent::message) {
 	immessage *m = static_cast<immessage *>(&ev);
 
-	editor.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2);
+	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
 	editor.load(m->gettext(), "");
 	editor.open();
 
@@ -1490,18 +1519,18 @@ bool icqface::eventedit(imevent &ev) {
 	imurl *m = static_cast<imurl *>(&ev);
 
 	urlinp.setvalue(m->geturl());
-	urlinp.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2-WORKAREA_X1-2);
+	urlinp.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2-sizeWArea.x1-2);
 	urlinp.setcolor(conf.getcolor(cp_main_highlight));
 	urlinp.idle = &textinputidle;
 
-	workarealine(WORKAREA_Y1+4);
+	workarealine(sizeWArea.y1+4);
 
 	urlinp.exec();
 
 	string url = urlinp.getlastkey() != KEY_ESC ? urlinp.getvalue() : "";
 
 	if(!url.empty()) {
-	    editor.setcoords(WORKAREA_X1+2, WORKAREA_Y1+5, WORKAREA_X2, WORKAREA_Y2);
+	    editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+5, sizeWArea.x2, sizeWArea.y2);
 	    editor.load(m->getdescription(), "");
 	    editor.open();
 
@@ -1514,7 +1543,7 @@ bool icqface::eventedit(imevent &ev) {
     } else if(ev.gettype() == imevent::sms) {
 	imsms *m = static_cast<imsms *>(&ev);
 
-	editor.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2);
+	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
 	editor.load(m->gettext(), "");
 	editor.open();
 
@@ -1592,8 +1621,8 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
 
     status(_("F2 to URLs, ESC close"));
 
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+3, WORKAREA_X2,
-	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+3, sizeWArea.x2,
+	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
 
@@ -1617,10 +1646,10 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
 	    break;
     }
 
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
 	title_event.c_str(), eventnames[ev->gettype()], ev->getcontact().totext().c_str());
 
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1+1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
 	title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());
 
     db.addautokeys();
@@ -1631,8 +1660,8 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
 
     extracturls(text);
 
-    workarealine(WORKAREA_Y1+3);
-    workarealine(WORKAREA_Y2-2);
+    workarealine(sizeWArea.y1+3);
+    workarealine(sizeWArea.y2-2);
 
     if(db.open(mitem, baritem)) {
 	r = actions[baritem];
@@ -1683,8 +1712,8 @@ bool icqface::histexec(imevent *&im) {
     r = fin = false;
 
     if(!mhist.empty()) {
-	db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
-	    WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+	db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
 	db.setmenu(&mhist, false);
 
@@ -1695,11 +1724,11 @@ bool icqface::histexec(imevent *&im) {
 	clearworkarea();
 
 	db.redraw();
-	workarealine(WORKAREA_Y1+2);
+	workarealine(sizeWArea.y1+2);
 
 	im = static_cast<imevent *> (mhist.getref(0));
 
-	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
 	    _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(), mhist.getcount());
 
@@ -1749,12 +1778,9 @@ void icqface::menuidle(verticalmenu &m) {
 
     if(face.dotermresize) {
 	if(&m == &face.mcontacts->menu) {
-	    if((COLS >= 80) && (LINES >= 25)) {
-		face.workareas.empty();
-		face.done();
-		face.init();
-		face.draw();
-	    }
+	    face.done();
+	    face.init();
+	    face.draw();
 	    face.dotermresize = false;
 	}
     }
@@ -1952,7 +1978,7 @@ void icqface::icqprogress::log(const char *fmt, ...) {
     vsprintf(buf, fmt, ap);
     va_end(ap);
 
-    if(curline >= DIALOG_HEIGHT-1) {
+    if(curline >= face.sizeDlg.height-1) {
 	w->redraw();
 	curline = 0;
     }
@@ -1962,7 +1988,7 @@ void icqface::icqprogress::log(const char *fmt, ...) {
 
 void icqface::icqprogress::show(const string title = "") {
     if(!w) {
-	w = new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+	w = new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
     }
 

@@ -32,7 +32,7 @@ void accountmanager::exec() {
     face.blockmainscreen();
     fopen = true;
 
-    db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+    db.setwindow(new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
 	getcolor(cp_dialog_frame), TW_CENTERED,
 	getcolor(cp_dialog_highlight), _(" IM account manager ")));
 
@@ -136,7 +136,10 @@ void accountmanager::exec() {
 		    }
 		    break;
 		case 9:
-		    tmp = account.server + ":" + i2str(account.port);
+		    tmp = "";
+		    if(!account.server.empty())
+			tmp = account.server + ":" + i2str(account.port);
+
 		    tmp = face.inputstr(spname + _(" server address: "), tmp);
 
 		    if(!tmp.empty()) {

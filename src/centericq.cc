@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.72 2002/02/25 10:40:59 konst Exp $
+* $Id: centericq.cc,v 1.73 2002/02/27 16:35:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -759,7 +759,7 @@ const string centericq::quotemsg(const string text) {
     vector<string> lines;
     vector<string>::iterator i;
 
-    breakintolines(text, lines, WORKAREA_X2-WORKAREA_X1-4);
+    breakintolines(text, lines, 50/*face.sizeWArea.x2-face.sizeWArea.x1-4*/);
 
     for(i = lines.begin(); i != lines.end(); i++) {
 	if(!i->empty()) ret += (string) "> " + *i;

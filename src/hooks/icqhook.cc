@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.61 2002/02/26 11:06:26 konst Exp $
+* $Id: icqhook.cc,v 1.62 2002/02/27 16:35:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -381,30 +381,31 @@ bool icqhook::regconnect(const string aserv) {
 }
 
 bool icqhook::regattempt(unsigned int &auin, const string apassword) {
-    fd_set rfds, wfds, efds;
+    fd_set srfds, swfds, sefds;
     struct timeval tv;
     int hsockfd;
     time_t regtimeout = time(0);
 
     reguin = 0;
 
-    FD_ZERO(&rfds);
-    FD_ZERO(&wfds);
-    FD_ZERO(&efds);
-
     cli.setPassword(apassword);
     cli.RegisterUIN();
 
     while(!reguin && (time(0)-regtimeout < 60)) {
 	hsockfd = 0;
-	getsockets(rfds, wfds, efds, hsockfd);
+
+	FD_ZERO(&srfds);
+	FD_ZERO(&swfds);
+	FD_ZERO(&sefds);
+
+	getsockets(srfds, swfds, sefds, hsockfd);
 
 	tv.tv_sec = 30;
 	tv.tv_usec = 0;
 
-	select(hsockfd+1, &rfds, &wfds, &efds, &tv);
+	select(hsockfd+1, &srfds, &swfds, &sefds, &tv);
 
-	if(isoursocket(rfds, wfds, efds)) {
+	if(isoursocket(srfds, swfds, sefds)) {
 	    main();
 	}
     }

@@ -25,7 +25,7 @@ bool imcontroller::icqregdialog() {
     rnick = rfname = rlname = remail = rpasswd = "";
     rserver = "login.icq.com:5190";
 
-    db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+    db.setwindow(new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
 	clr(cp_dialog_frame), TW_CENTERED, clr(cp_dialog_highlight),
 	_(" Register on ICQ network ")));
 

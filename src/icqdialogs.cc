@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.51 2002/02/15 16:59:31 konst Exp $
+* $Id: icqdialogs.cc,v 1.52 2002/02/27 16:35:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -58,7 +58,7 @@ bool icqface::finddialog(imsearchparams &s) {
     blockmainscreen();
     finished = ret = false;
 
-    db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+    db.setwindow(new textwindow(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
 	conf.getcolor(cp_dialog_highlight), _(" Find/add user(s) ")));
 
@@ -249,7 +249,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	blockmainscreen();
     }
 
-    textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     if(!c->getdesc().uin) {
 	w.set_title(conf.getcolor(cp_dialog_highlight), _(" Your details "));
@@ -448,7 +448,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
 
 bool icqface::edit(string &txt, const string header) {
     texteditor se;
-    textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
     w.open();
 
@@ -483,7 +483,7 @@ bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
 
     blockmainscreen();
 
-    textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     w.set_titlef(conf.getcolor(cp_dialog_highlight),
 	_(" Send file(s) to %s, %lu "),
@@ -564,8 +564,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     if(conf.getsockshost().empty()) prserv = "";
     conf.getauto(aaway, ana);
 
-    textwindow w(0, 0, BIGDIALOG_WIDTH, BIGDIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterICQ configuration "));
+    textwindow w(0, 0, sizeBigDlg.width, sizeBigDlg.height,
+	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+
+    w.set_title(conf.getcolor(cp_dialog_highlight),
+	_(" CenterICQ configuration "));
 
     db.setwindow(&w, false);
 
@@ -732,7 +735,7 @@ int icqface::groupmanager(const string text, bool sel) {
     vector<icqgroup>::iterator i;
     string gname;
 
-    textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     w.set_title(conf.getcolor(cp_dialog_highlight), " " + text + " ");

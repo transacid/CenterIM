@@ -16,17 +16,6 @@
 
 #include <libicq2000/userinfoconstants.h>
 
-#define DIALOG_WIDTH    60
-#define DIALOG_HEIGHT   15
-
-#define BIGDIALOG_WIDTH    70
-#define BIGDIALOG_HEIGHT   18
-
-#define WORKAREA_X1     25
-#define WORKAREA_X2     (COLS-1)
-#define WORKAREA_Y1     1
-#define WORKAREA_Y2     (LINES-6)
-
 #define ASK_YES         2
 #define ASK_NO          4
 #define ASK_CANCEL      8
@@ -81,6 +70,9 @@ class icqface {
 		void show(string title = "");
 		void hide();
 	} progress;
+
+	struct { int x1, y1, x2, y2; } sizeWArea;
+	struct { int width, height; } sizeDlg, sizeBigDlg;
 
     protected:
 	treeview *mcontacts;
