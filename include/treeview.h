@@ -48,11 +48,15 @@ class treeview : public abstractuicontrol {
 
         bool empty();
 
+	int addnode(int parent, int color, void *ref, const string text);
+	int addnode(int parent, int color, int ref, const string text);
 	int addnodef(int parent, int color, void *ref, const char *fmt, ...);
-	int addleaff(int parent, int color, void *ref, const char *fmt, ...);
+	int addnodef(int parent, int color, int ref, const char *fmt, ...);
 
-	int addnode(int parent, int color, void *ref, string text);
-	int addleaf(int parent, int color, void *ref, string text);
+	int addleaf(int parent, int color, void *ref, const string text);
+	int addleaf(int parent, int color, int ref, const string text);
+	int addleaff(int parent, int color, void *ref, const char *fmt, ...);
+	int addleaff(int parent, int color, int ref, const char *fmt, ...);
 
 	void opennode(int mpos);
 	void closenode(int mpos);

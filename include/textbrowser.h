@@ -17,8 +17,8 @@ class textbrowser: public abstractuicontrol {
 	void draw(int line);
 	
     public:
-	int (*otherkeys)(textbrowser *caller, int k);
-	void (*idle)(textbrowser *caller);
+	int (*otherkeys)(textbrowser &caller, int k);
+	void (*idle)(textbrowser &caller);
 	
 	textbrowser(int nx1, int ny1, int nx2, int ny2, int clr);
 	textbrowser(int clr = 0);

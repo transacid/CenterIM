@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.7 2001/10/25 13:05:09 konst Exp $
+* $Id: dialogbox.cc,v 1.8 2001/10/30 17:49:55 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -151,21 +151,21 @@ bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
 		default:
 		    i = find(it->kba.begin(), it->kba.end(), k);
 
-	    	    if(i != it->kba.end()) {
+		    if(i != it->kba.end()) {
 		      if(it->bar) {
-		        it->bar->item = i->baritem;
-		        it->bar->redraw();
+			it->bar->item = i->baritem;
+			it->bar->redraw();
 			fin = ret = true;
 		      }
 		    }
 		    else if(otherkeys)
-		      if((k = otherkeys(this, k)) != -1) {
+		      if((k = otherkeys(*this, k)) != -1) {
 			menuitem = k;
 			fin = true;
 		      }
 		    break;
 	    } else {
-		if(idle) idle(this);
+		if(idle) idle(*this);
 	    }
 	}
     }
@@ -250,9 +250,9 @@ void dialogbox::addautokeys() {
     }
 }
 
-void dialogbox::menuidle(verticalmenu *caller) {
+void dialogbox::menuidle(verticalmenu &caller) {
     if(it->idle) {
-	it->idle(it);
+	it->idle(*it);
     } else {
 	fd_set fds;
 	FD_ZERO(&fds);
@@ -261,9 +261,9 @@ void dialogbox::menuidle(verticalmenu *caller) {
     }
 }
 
-void dialogbox::browseridle(textbrowser *caller) {
+void dialogbox::browseridle(textbrowser &caller) {
     if(it->idle) {
-	it->idle(it);
+	it->idle(*it);
     } else {
 	fd_set fds;
 	FD_ZERO(&fds);
@@ -272,7 +272,7 @@ void dialogbox::browseridle(textbrowser *caller) {
     }
 }
 
-int dialogbox::menukeys(verticalmenu *caller, int k) {
+int dialogbox::menukeys(verticalmenu &caller, int k) {
     list<keybarassociation>::iterator i;
     bool found;
     int ip;
@@ -318,7 +318,7 @@ int dialogbox::menukeys(verticalmenu *caller, int k) {
 	    } else {
 		if(it->otherkeys) {
 		    sit = it;
-		    ip = it->otherkeys(it, k);
+		    ip = it->otherkeys(*it, k);
 		    it = sit;
 		    return ip;
 		}
@@ -329,7 +329,7 @@ int dialogbox::menukeys(verticalmenu *caller, int k) {
     return -1;
 }
 
-int dialogbox::browserkeys(textbrowser *caller, int k) {
+int dialogbox::browserkeys(textbrowser &caller, int k) {
     list<keybarassociation>::iterator i;
     bool found;
     int ip;
@@ -359,7 +359,7 @@ int dialogbox::browserkeys(textbrowser *caller, int k) {
 	    } else {
 		if(it->otherkeys) {
 		    sit = it;
-		    ip = it->otherkeys(it, k);
+		    ip = it->otherkeys(*it, k);
 		    it = sit;
 		    return ip;
 		}

@@ -140,10 +140,10 @@ class texteditor: public abstractuicontrol {
 	void shiftmarkedblock(int delta);
 	
     public:
-	bool active, wrap, insertmode, modified;
+	bool active, wrap, insertmode, modified, smarttab;
 
-	int (*otherkeys)(texteditor *caller, int k);
-	void (*idle)(texteditor *caller);
+	int (*otherkeys)(texteditor &caller, int k);
+	void (*idle)(texteditor &caller);
 
 	texteditor();
 	~texteditor();

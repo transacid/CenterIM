@@ -128,13 +128,17 @@ void textinputline::exec() {
 		    fin = true;
 		    break;
 		case KEY_DC:
-		    value.replace(position, 1, "");
+		    if(firstiter) {
+			value = "";
+		    } else {
+			value.erase(position, 1);
+		    }
 		    break;
 		case CTRL('k'):
 		    value = "";
 		    break;
 		case CTRL('u'):
-		    value.replace(0, position, "");
+		    value.erase(0, position);
 		    position = 0;
 		    break;
 		case CTRL('t'):
@@ -168,7 +172,7 @@ void textinputline::exec() {
 		case KEY_BACKSPACE:
 		case CTRL('h'):
 		    if(position) {
-			value.replace(--position, 1, "");
+			value.erase(--position, 1);
 		    }
 		    break;
 		case KEY_ESC:
@@ -201,7 +205,7 @@ void textinputline::historyadd(const string buf) {
     while(history.size() > TEXTINPUT_HIST_LIMIT)
 	history.erase(history.begin());
 
-    history.push_back(buf);
+    history.insert(history.begin(), buf);
 }
 
 void textinputline::setvalue(const string buf) {

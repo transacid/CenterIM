@@ -37,18 +37,18 @@ class dialogbox {
 
         list<keybarassociation> kba;
 
-        static void menuidle(verticalmenu *caller);
-        static void browseridle(textbrowser *caller);
-        static int menukeys(verticalmenu *caller, int k);
-        static int browserkeys(textbrowser *caller, int k);
+        static void menuidle(verticalmenu &caller);
+        static void browseridle(textbrowser &caller);
+        static int menukeys(verticalmenu &caller, int k);
+        static int browserkeys(textbrowser &caller, int k);
 
     public:
-        int (*otherkeys)(dialogbox *caller, int k);
+        int (*otherkeys)(dialogbox &caller, int k);
             // function called on pressing of non-standard menu keys
             // should return a number of selected menu item or -1 to
             // continue browsing
 
-        void (*idle)(dialogbox *caller);
+        void (*idle)(dialogbox &caller);
 
         dialogbox();
         ~dialogbox();

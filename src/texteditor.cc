@@ -49,7 +49,7 @@
 #define CURCOL        (curfile ? (curfile->sx+curfile->x) : 0)
 #define CURSTRING     (char *) curfile->lines->at(CURLINE)
 #define CSTRLEN       strlen(CURSTRING ? CURSTRING : "")
-#define UPDATECURRENTLINE	{ kgotoxy(x1, y1+curfile->y); showline(CURLINE, curfile->sx, x2-x1); }
+#define UPDATECURRENTLINE       { kgotoxy(x1, y1+curfile->y); showline(CURLINE, curfile->sx, x2-x1); }
 
 #define MAX_STRLEN    10240
 #define ALONE_DELIM   " ;(){}[].,:-+*/^?!=<>"
@@ -65,7 +65,7 @@
 texteditor::texteditor():
 otherkeys(0), fn(-1), wrap(false), abscol(0), idle(0),
 insertmode(true), undolog(true), show(true), curfile(0),
-prevshift(false) {
+prevshift(false), smarttab(true) {
 
     files = new linkedlist;
     files->freeitem = &editfilefree;
@@ -704,7 +704,7 @@ int texteditor::hl_comment(char *cp, int st, int pend, int color) {
     delcount = r = 0;
 
     if(color && (st <= strlen(cp)) && (pend-st > 0)) {
-/// !!! 	for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
+/// !!!         for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
 
 	for(i = 0; (i <= pend) && (i < strlen(cp)); i++) {
 	    switch(cp[i]) {
@@ -1047,7 +1047,7 @@ void texteditor::eddel(bool usetabs = true) {
 
 	    UPDATECURRENTLINE;
 	    updatecursor();
-//	    showline(CURLINE, CURCOL, x2-x1-curfile->x, curfile->x);
+//          showline(CURLINE, CURCOL, x2-x1-curfile->x, curfile->x);
 	    
 	} else {
 	    char *next = (char *) curfile->lines->at(CURLINE+1);
@@ -1604,7 +1604,9 @@ int texteditor::open() {
 		if(prevshift) prevshift = curfile->markmode = false;
 	    switch(k) {
 		case '\r':
-		    if(insertmode || (curfile->lines->count == CURLINE+1)) edenter(); else {
+		    if(insertmode || (curfile->lines->count == CURLINE+1)) {
+			edenter(smarttab);
+		    } else {
 			edmove(KEY_DOWN);
 			edmove(KEY_HOME);
 		    }
@@ -1634,7 +1636,7 @@ int texteditor::open() {
 			    case KEY_DC: eddel(); break;
 			} else {
 			    l = fn;
-			    if((*otherkeys)(this, k) == -1) return -1;
+			    if((*otherkeys)(*this, k) == -1) return -1;
 			    if(l != fn) {
 				draw();
 				updatecursor();
@@ -1643,7 +1645,7 @@ int texteditor::open() {
 		    }
 	    }}
 	} else {
-	    if(idle) (*idle)(this);
+	    if(idle) (*idle)(*this);
 	}
     }
 

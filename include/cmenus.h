@@ -14,14 +14,14 @@ __KTOOL_BEGIN_NAMESPACE
 #define ITEM_SEP        1
 #define ITEM_LINE       2
 
-struct verticalmenuitem {
-    string text;
-    int color, kind;
-    void *ref;
-};
-
 class verticalmenu: public abstractuicontrol {
     private:
+	struct verticalmenuitem {
+	    string text;
+	    int color, kind;
+	    void *ref;
+	};
+
 	vector<verticalmenuitem> items;
 	textwindow window;
 
@@ -39,12 +39,12 @@ class verticalmenu: public abstractuicontrol {
     public:
 	bool clearonfocuslost, cycled;
 
-	int (*otherkeys)(verticalmenu *caller, int k);
+	int (*otherkeys)(verticalmenu &caller, int k);
 	    // function called on pressing of non-standard menu keys
 	    // should return a number of selected menu item or -1 to
 	    // continue browsing
 
-	void (*idle)(verticalmenu *caller);
+	void (*idle)(verticalmenu &caller);
 
 	verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int pscolor);
 	verticalmenu(int pncolor = 0, int pscolor = 0);
@@ -63,10 +63,13 @@ class verticalmenu: public abstractuicontrol {
 	//   \009 == URCORNER [ ^| ]
 
 	void additemf(const char *fmt, ...);
+	void additem(const string text);
+
+	void additem(int color, void *ref, const string text);
 	void additemf(int color, void *ref, const char *fmt, ...);
 
-	void additem(string text);
-	void additem(int color, void *ref, string text);
+	void additem(int color, int ref, const string text);
+	void additemf(int color, int ref, const char *fmt, ...);
 
 	void addline();
 	void addline(int color, const char *fmt = 0, ...);
@@ -96,7 +99,7 @@ class verticalmenu: public abstractuicontrol {
     friend class horizontalmenu;
 };
 
-class horizontalmenuitem { public:
+struct horizontalmenuitem {
     string text;
     int color;
     verticalmenu menu;
@@ -112,7 +115,7 @@ class horizontalmenu: public abstractuicontrol {
 	int ncolor, scolor, fcolor, coordy, coordx, selected;
 	bool finished;
 
-	static int menu_otherkeys(verticalmenu *ref, int k);
+	static int menu_otherkeys(verticalmenu &ref, int k);
 
 	void draw();
 	void moveelem(int old);
@@ -123,8 +126,8 @@ class horizontalmenu: public abstractuicontrol {
 	int menulen(int n);
 
     public:
-	bool (*otherkeys)(horizontalmenu *caller, int k);
-	void (*idle)(horizontalmenu *caller);
+	bool (*otherkeys)(horizontalmenu &caller, int k);
+	void (*idle)(horizontalmenu &caller);
 
 	horizontalmenu(int x, int y, int normcolor, int selcolor, int framecolor);
 	horizontalmenu();

@@ -154,13 +154,13 @@ void fileselector::close() {
     m.close();
 }
 
-int fileselector::menukeys(verticalmenu *m, int k) {
+int fileselector::menukeys(verticalmenu &m, int k) {
     string fname;
     struct stat st;
     item *i;
     vector<string>::iterator si;
 
-    i = (item *) m->getref(m->getpos());
+    i = (item *) m.getref(m.getpos());
 
     switch(k) {
 	case ' ':
@@ -169,7 +169,7 @@ int fileselector::menukeys(verticalmenu *m, int k) {
 		    if(i->fname != "..") {
 			instance->selected.push_back(instance->dcurrent + i->fname);
 			instance->finish = true;
-			return m->getpos()+1;
+			return m.getpos()+1;
 		    }
 		}
 	    }
@@ -185,14 +185,14 @@ int fileselector::menukeys(verticalmenu *m, int k) {
 
 			if(si != instance->selected.end()) {
 			    instance->selected.erase(si);
-			    m->setitemcolor(m->getpos(), instance->cnormal);
+			    m.setitemcolor(m.getpos(), instance->cnormal);
 			} else {
 			    instance->selected.push_back(fname);
-			    m->setitemcolor(m->getpos(), instance->cselected);
+			    m.setitemcolor(m.getpos(), instance->cselected);
 			}
 
-			m->setpos(m->getpos()+1);
-			m->redraw();
+			m.setpos(m.getpos()+1);
+			m.redraw();
 		    }
 		}
 	    }

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.5 2001/08/06 21:32:45 konst Exp $
+* $Id: textbrowser.cc,v 1.6 2001/10/30 17:49:55 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -109,12 +109,12 @@ int textbrowser::open() {
 		
 	    default:
 		if(otherkeys) {
-		    res = (*otherkeys)(this, ch);
+		    res = (*otherkeys)(*this, ch);
 		    if(res >= 0) finished = true;
 		}
 
 	} else {
-	    if(idle) (*idle)(this);
+	    if(idle) (*idle)(*this);
 	}
     }
     

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.7 2001/10/19 17:02:10 konst Exp $
+* $Id: cmenus.cc,v 1.8 2001/10/30 17:49:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -62,38 +62,38 @@ void verticalmenu::setcoord(int nx1, int ny1, int nx2, int ny2) {
 }
 
 void verticalmenu::additemf(const char *fmt, ...) {
-    char buf[10240];
-    va_list ap;
-    
-    va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
-    va_end(ap);
-
+    string buf;
+    VGETSTRING(buf, fmt);
     additem(buf);
 }
 
-void verticalmenu::additemf(int color, void *ref, const char *fmt, ...) {
-    char buf[10240];
-    va_list ap;
-    
-    va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
-    va_end(ap);
-
-    additem(color, ref, buf);
-}
-
-void verticalmenu::additem(string text) {
+void verticalmenu::additem(const string text) {
     additem(ncolor, 0, text);
 }
 
-void verticalmenu::additem(int color, void *ref, string text) {
+void verticalmenu::additem(int color, void *ref, const string text) {
     verticalmenuitem i;
     i.text = text;
     i.color = color ? color : ncolor;
     i.kind = ITEM_NORM;
     i.ref = ref;
     items.push_back(i);
+}
+
+void verticalmenu::additemf(int color, void *ref, const char *fmt, ...) {
+    string buf;
+    VGETSTRING(buf, fmt);
+    additem(color, ref, buf);
+}
+
+void verticalmenu::additem(int color, int ref, const string text) {
+    additem(color, (void *) ref, text);
+}
+
+void verticalmenu::additemf(int color, int ref, const char *fmt, ...) {
+    string buf;
+    VGETSTRING(buf, fmt);
+    additem(color, (void *) ref, buf);
 }
 
 void verticalmenu::addline() {
@@ -106,13 +106,13 @@ void verticalmenu::addline(int color, const char *fmt = 0, ...) {
     va_list ap;
 
     if(fmt) {
-        va_start(ap, fmt);
-        vsprintf(buf, fmt, ap);
-        va_end(ap);
-        i.text = buf;
-        i.kind = ITEM_SEP;
+	va_start(ap, fmt);
+	vsprintf(buf, fmt, ap);
+	va_end(ap);
+	i.text = buf;
+	i.kind = ITEM_SEP;
     } else {
-        i.kind = ITEM_LINE;
+	i.kind = ITEM_LINE;
     }
 
     i.color = color;
@@ -129,43 +129,43 @@ bool verticalmenu::shownelem(int n, int selected) {
     verticalmenuitem item = items[n];
 
     if(!(selected && item.kind != ITEM_NORM)) {
-        attrset(selected && (item.kind == ITEM_NORM) ? scolor : item.color);
+	attrset(selected && (item.kind == ITEM_NORM) ? scolor : item.color);
 
-        if(item.kind == ITEM_LINE) {
-            if(!selected) mvhline(y1+n-firstdisp, x1, HLINE, x2-x1);
-        } else if(!item.text.empty()) {
-            mvprintw(y1+n-firstdisp, x1, "");
+	if(item.kind == ITEM_LINE) {
+	    if(!selected) mvhline(y1+n-firstdisp, x1, HLINE, x2-x1);
+	} else if(!item.text.empty()) {
+	    mvprintw(y1+n-firstdisp, x1, "");
 	    buf = item.text;
 
-            for(int i = x1; i < x2+extra; i++) {
-                if(i-x1 < buf.size()) {
-                    switch(c = buf[i-x1]) {
-                        case 1:
-                            if(hlight = !hlight)
-                                attrset(selected && (item.kind == ITEM_NORM) ? 
-                                    scolor : item.color);
-                            else attrset(ncolor);
+	    for(int i = x1; i < x2+extra; i++) {
+		if(i-x1 < buf.size()) {
+		    switch(c = buf[i-x1]) {
+			case 1:
+			    if(hlight = !hlight)
+				attrset(selected && (item.kind == ITEM_NORM) ? 
+				    scolor : item.color);
+			    else attrset(ncolor);
 
-                            extra++;
-                            break;
-                        case 2: addch(HLINE); break;
-                        case 3: addch(VLINE); break;
-                        case 4: addch(RTEE); break;
-                        case 5: addch(LTEE); break;
-                        case 6: addch(ULCORNER); break;
-                        case 7: addch(LLCORNER); break;
-                        case 8: addch(LRCORNER); break;
-                        case 9: addch(URCORNER); break;
-                        default:
-                            printchar(c);
-                            break;
-                    }
-                } else {
-                    printw(" ");
-                }
-            }
+			    extra++;
+			    break;
+			case 2: addch(HLINE); break;
+			case 3: addch(VLINE); break;
+			case 4: addch(RTEE); break;
+			case 5: addch(LTEE); break;
+			case 6: addch(ULCORNER); break;
+			case 7: addch(LLCORNER); break;
+			case 8: addch(LRCORNER); break;
+			case 9: addch(URCORNER); break;
+			default:
+			    printchar(c);
+			    break;
+		    }
+		} else {
+		    printw(" ");
+		}
+	    }
 
-        }
+	}
     }
 
     return item.kind == ITEM_NORM;
@@ -175,30 +175,30 @@ void verticalmenu::showall() {
     unsigned int p, k;
 
     if(curelem < 0) {
-         curelem = 0;
+	 curelem = 0;
     } else if(curelem > items.size()-1) {
-         curelem = items.size()-1;
+	 curelem = items.size()-1;
     }
 
    if((firstdisp+y2-y1 <= curelem) || (curelem < firstdisp)) {
-        firstdisp = curelem-y2+y1+1;
+	firstdisp = curelem-y2+y1+1;
     }
 
     if((firstdisp+y2-y1 > items.size()) && (y2-y1 < items.size())) {
-        firstdisp = items.size()-y2+y1;
+	firstdisp = items.size()-y2+y1;
     } else if(firstdisp < 0) {
-        firstdisp = 0;
+	firstdisp = 0;
     }
     
     attrset(ncolor);
 
     for(p = firstdisp; (p < firstdisp+y2-y1) && (p < items.size()); p++) {
-        kgotoxy(x1, y1+p-firstdisp);
-        shownelem(p, 0);
+	kgotoxy(x1, y1+p-firstdisp);
+	shownelem(p, 0);
     }
     
     for(; p < firstdisp+y2-y1; p++) {
-        mvhline(y1+p-firstdisp, x1, ' ', x2-x1);
+	mvhline(y1+p-firstdisp, x1, ' ', x2-x1);
     }
 }
 
@@ -231,112 +231,112 @@ int verticalmenu::open() {
 	shownelem(curelem, 1);
 
     while(!finished) {
-        if(idle) go = keypressed(); else go = 1;
-        if(go) {
-            k = getkey();
-            if(emacs) k = emacsbind(k);
-            lastkey = k;
+	if(idle) go = keypressed(); else go = 1;
+	if(go) {
+	    k = getkey();
+	    if(emacs) k = emacsbind(k);
+	    lastkey = k;
 
-            switch(k) {
-                case '\r':
-                    finished = true;
+	    switch(k) {
+		case '\r':
+		    finished = true;
 		    checkclear();
-                    if(items.empty()) ret = 0; else ret = curelem+1;
-                    break;
-        
-                case 27:
+		    if(items.empty()) ret = 0; else ret = curelem+1;
+		    break;
+	
+		case 27:
 		    checkclear();
-                    finished = true;
-                    ret = 0;
-                    break;
-        
-                case KEY_UP:
-                    if(curelem > 0) {
-                        shownelem(curelem, 0);
-                        if(--curelem < firstdisp) {
-                            firstdisp = curelem - y2 + y1 + 1;
-                            intredraw();
-                        } else {
-                            while(curelem >= 0)
-                            if(!shownelem(curelem, 1)) {
-                                curelem--;
-                            } else {
-                                break;
-                            }
+		    finished = true;
+		    ret = 0;
+		    break;
+	
+		case KEY_UP:
+		    if(curelem > 0) {
+			shownelem(curelem, 0);
+			if(--curelem < firstdisp) {
+			    firstdisp = curelem - y2 + y1 + 1;
+			    intredraw();
+			} else {
+			    while(curelem >= 0)
+			    if(!shownelem(curelem, 1)) {
+				curelem--;
+			    } else {
+				break;
+			    }
 
-                            refresh();
-                        }
-                    } else if(cycled) {
-                        curelem = items.size()-1;
-                        if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
-                        intredraw();
-                    }
-                    break;
+			    refresh();
+			}
+		    } else if(cycled) {
+			curelem = items.size()-1;
+			if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
+			intredraw();
+		    }
+		    break;
 
-                case KEY_DOWN:
-                    if(!items.empty()) {
-                        if(curelem < items.size()-1) {
-                            shownelem(curelem++, 0);
-                        
-                            if(curelem > firstdisp+y2-y1-1) {
-                                firstdisp += y2 - y1;
-                                intredraw();
-                            } else {
-                                bool lastone;
-                                int savecur = curelem-1;
-                        
-                                while(curelem < items.size()) {
-                                    if(!(lastone = shownelem(curelem, 1)))
-                                    curelem++; else break;
-                                }
+		case KEY_DOWN:
+		    if(!items.empty()) {
+			if(curelem < items.size()-1) {
+			    shownelem(curelem++, 0);
+			
+			    if(curelem > firstdisp+y2-y1-1) {
+				firstdisp += y2 - y1;
+				intredraw();
+			    } else {
+				bool lastone;
+				int savecur = curelem-1;
+			
+				while(curelem < items.size()) {
+				    if(!(lastone = shownelem(curelem, 1)))
+				    curelem++; else break;
+				}
 
-                                if(!lastone) shownelem(curelem = savecur, 1);
-                                refresh();
-                            }
-                        } else if(cycled) {
-                            curelem = firstdisp = 0;
-                            intredraw();
-                        }
-                    }
-                    break;
-        
-                case KEY_PPAGE:
-                    if((curelem -= y2-y1) < 0) curelem = 0;
-                    firstdisp = curelem;
-                    intredraw();
-                    break;
-        
-                case KEY_NPAGE:
-                    if(!items.empty()) {
-                        if((curelem += y2-y1) > items.size()-1) curelem = items.size()-1;
-                        if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
-                    }
-                    intredraw();
-                    break;
+				if(!lastone) shownelem(curelem = savecur, 1);
+				refresh();
+			    }
+			} else if(cycled) {
+			    curelem = firstdisp = 0;
+			    intredraw();
+			}
+		    }
+		    break;
+	
+		case KEY_PPAGE:
+		    if((curelem -= y2-y1) < 0) curelem = 0;
+		    firstdisp = curelem;
+		    intredraw();
+		    break;
+	
+		case KEY_NPAGE:
+		    if(!items.empty()) {
+			if((curelem += y2-y1) > items.size()-1) curelem = items.size()-1;
+			if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
+		    }
+		    intredraw();
+		    break;
       
-                case KEY_HOME:
-                    curelem = firstdisp = 0;
-                    intredraw();
-                    break;
+		case KEY_HOME:
+		    curelem = firstdisp = 0;
+		    intredraw();
+		    break;
 
-                case KEY_END:
-                    curelem = items.size()-1;
-                    if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
-                    intredraw();
-                    break;
+		case KEY_END:
+		    curelem = items.size()-1;
+		    if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
+		    intredraw();
+		    break;
       
-                default:
-                    if(otherkeys) {
-                        if((go = (*otherkeys)(this, k)) != -1) {
+		default:
+		    if(otherkeys) {
+			if((go = (*otherkeys)(*this, k)) != -1) {
 			    checkclear();
-                            return go;
-                        }
-                    }
-                    break;
-            }
-        } else {
-            if(idle) (*idle)(this);
-        }
+			    return go;
+			}
+		    }
+		    break;
+	    }
+	} else {
+	    if(idle) (*idle)(*this);
+	}
     }
 
     return ret;
@@ -370,7 +370,7 @@ void verticalmenu::setpos(int cur, int first = -1) {
 
 void verticalmenu::setitemcolor(int pos, int color) {
     if((pos >= 0) && (pos < items.size())) {
-        items[pos].color = color;
+	items[pos].color = color;
     }
 }
 
@@ -384,8 +384,8 @@ void verticalmenu::remove(int pos) {
     int i;
 
     if((pos >= 0) && (pos < items.size())) {
-        for(i = 0, ii = items.begin(); ii != items.end() && i < pos; i++, ii++);
-        items.erase(ii);
+	for(i = 0, ii = items.begin(); ii != items.end() && i < pos; i++, ii++);
+	items.erase(ii);
     }
 }
 
@@ -433,13 +433,13 @@ horizontalmenu::~horizontalmenu() {
 #define HM_LEFT         50002
 #define HM_CLOSE        50003
 
-int horizontalmenu::menu_otherkeys(verticalmenu *ref, int k) {
+int horizontalmenu::menu_otherkeys(verticalmenu &ref, int k) {
     switch(k) {
-        case KEY_RIGHT : return HM_RIGHT;
-        case KEY_LEFT  : return HM_LEFT;
-        case KEY_F(10) : return HM_CLOSE;
+	case KEY_RIGHT : return HM_RIGHT;
+	case KEY_LEFT  : return HM_LEFT;
+	case KEY_F(10) : return HM_CLOSE;
 	default:
-	    currenthmenu->finished = currenthmenu->otherkeys(currenthmenu, k);
+	    currenthmenu->finished = currenthmenu->otherkeys(*currenthmenu, k);
 	    return currenthmenu->finished ? 0 : -1;
     }
 
@@ -484,11 +484,11 @@ int horizontalmenu::getx(int n) {
 
 int horizontalmenu::menulen(int n) {
     verticalmenu m = menus[n].menu;
-    vector<verticalmenuitem>::iterator i;
+    vector<verticalmenu::verticalmenuitem>::iterator i;
     int l = 0;
 
     for(i = m.items.begin(); i != m.items.end(); i++) {
-        if(!i->text.empty() && (i->text.size() > l)) l = i->text.size();
+	if(!i->text.empty() && (i->text.size() > l)) l = i->text.size();
     }
 
     return l;
@@ -509,9 +509,9 @@ void horizontalmenu::draw() {
     mvhline(coordy, 0, ' ', COLS);
 
     for(n = 0, i = menus.begin(); i != menus.end(); i++, n++) {
-        kgotoxy(getx(n), coordy);
-        if(n == selected) attrset(scolor); else attrset(ncolor);
-        printstring(i->text);
+	kgotoxy(getx(n), coordy);
+	if(n == selected) attrset(scolor); else attrset(ncolor);
+	printstring(i->text);
     }
 
     refresh();
@@ -537,72 +537,72 @@ bool horizontalmenu::open(int *hor, int *pulld) {
     draw();
 
     for(finished = false; !finished; ) {
-        if(!oact) {
-            ch = getkey();
-            if(emacs) ch = emacsbind(ch);
-        } else {
-            ch = oact;
-        }
+	if(!oact) {
+	    ch = getkey();
+	    if(emacs) ch = emacsbind(ch);
+	} else {
+	    ch = oact;
+	}
 
-        osel = selected;
-         
-        switch(ch) {
-            case KEY_RIGHT:
-                if(++selected >= menus.size()) selected = 0;
-                moveelem(osel);
-                break;
+	osel = selected;
+	 
+	switch(ch) {
+	    case KEY_RIGHT:
+		if(++selected >= menus.size()) selected = 0;
+		moveelem(osel);
+		break;
 
-            case KEY_LEFT:
-                if(--selected < 0) selected = menus.size()-1;
-                moveelem(osel);
-                break;
+	    case KEY_LEFT:
+		if(--selected < 0) selected = menus.size()-1;
+		moveelem(osel);
+		break;
 
-            case '\r':
-            case KEY_DOWN:
-                m = pulldown(selected);
+	    case '\r':
+	    case KEY_DOWN:
+		m = pulldown(selected);
 
-                if(!m->items.empty()) {
-                    m->scale();
-                    m->x2 = m->x1 + menulen(selected) + 1;
-                    m->window.x2 = m->x2;
+		if(!m->items.empty()) {
+		    m->scale();
+		    m->x2 = m->x1 + menulen(selected) + 1;
+		    m->window.x2 = m->x2;
 		    currenthmenu = this;
 
-                    int r = m->open();
+		    int r = m->open();
 
-                    switch(r) {
-                        case HM_RIGHT: oact = KEY_RIGHT; break;
-                        case HM_LEFT: oact = KEY_LEFT; break;
-                        case HM_CLOSE: oact = KEY_F(10); break;
-                        default:
-                            if(r) {
-                                if(pulld) *pulld = r;
-                                if(hor) *hor = selected+1;
-                                done = finished = true;
-                            }
-                    }
+		    switch(r) {
+			case HM_RIGHT: oact = KEY_RIGHT; break;
+			case HM_LEFT: oact = KEY_LEFT; break;
+			case HM_CLOSE: oact = KEY_F(10); break;
+			default:
+			    if(r) {
+				if(pulld) *pulld = r;
+				if(hor) *hor = selected+1;
+				done = finished = true;
+			    }
+		    }
 
-                    m->close();
-                    if(r == HM_RIGHT || r == HM_LEFT) continue;
-                } else if(!oact) {
-                    if(pulld) *pulld = 0;
-                    if(hor) *hor = selected+1;
-                    done = finished = true;
-                }
-                break;
+		    m->close();
+		    if(r == HM_RIGHT || r == HM_LEFT) continue;
+		} else if(!oact) {
+		    if(pulld) *pulld = 0;
+		    if(hor) *hor = selected+1;
+		    done = finished = true;
+		}
+		break;
 
-            case KEY_F(10):
-            case 27:
-                finished = true;
-                break;
+	    case KEY_F(10):
+	    case 27:
+		finished = true;
+		break;
 
-            default:
-                if(otherkeys) {
-                    done = finished = (*otherkeys)(this, ch);
-                }
-                break;
-        }
+	    default:
+		if(otherkeys) {
+		    done = finished = (*otherkeys)(*this, ch);
+		}
+		break;
+	}
 
-        if(oact == KEY_RIGHT || oact == KEY_LEFT) oact = '\r'; else oact = 0;
+	if(oact == KEY_RIGHT || oact == KEY_LEFT) oact = '\r'; else oact = 0;
     }
 
     restoreline();
@@ -622,13 +622,13 @@ void horizontalmenu::restoreline() {
 
 verticalmenu *horizontalmenu::pulldown(int n) {
     if((n >= 0) && (n < menus.size())) {
-        menus[n].menu.setcolor(ncolor, scolor);
-        menus[n].menu.otherkeys = &menu_otherkeys;
-        menus[n].menu.cycled = true;
-        menus[n].menu.setwindow(textwindow(getx(n)-1, coordy+1, getx(n)+2, coordy+6, fcolor));
-        return &menus[n].menu;
+	menus[n].menu.setcolor(ncolor, scolor);
+	menus[n].menu.otherkeys = &menu_otherkeys;
+	menus[n].menu.cycled = true;
+	menus[n].menu.setwindow(textwindow(getx(n)-1, coordy+1, getx(n)+2, coordy+6, fcolor));
+	return &menus[n].menu;
     } else {
-        return 0;
+	return 0;
     }
 }
 
