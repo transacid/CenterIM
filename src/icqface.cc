@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.81 2002/02/13 15:42:34 konst Exp $
+* $Id: icqface.cc,v 1.82 2002/02/19 18:38:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1768,13 +1768,17 @@ bool icqface::histexec(imevent *&im) {
 void icqface::menuidle(verticalmenu &m) {
     cicq.idle();
 
-    if(face.dotermresize)
+    if(face.dotermresize) {
 	if(&m == &face.mcontacts->menu) {
-	    face.done();
-	    face.init();
-	    face.draw();
+	    if((COLS >= 80) && (LINES >= 25)) {
+		face.workareas.empty();
+		face.done();
+		face.init();
+		face.draw();
+	    }
 	    face.dotermresize = false;
 	}
+    }
 }
 
 void icqface::dialogidle(dialogbox &caller) {

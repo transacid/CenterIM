@@ -56,6 +56,16 @@ void accountmanager::exec() {
 		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(pname) + " ");
 		citem = ((int) (pname)+1) * 100;
 
+		if(gethook(pname).getcapabilities() & hoptChangableServer) {
+		    if(!account.server.empty() && account.port) {
+			tmp = account.server + ":" + i2str(account.port);
+		    } else {
+			tmp = "";
+		    }
+
+		    t.addleaff(n, 0, citem+9, _(" Server : %s "), tmp.c_str());
+		}
+
 		switch(pname) {
 		    case yahoo:
 		    case msn:
@@ -63,13 +73,6 @@ void accountmanager::exec() {
 			    account.nickname.c_str());
 			break;
 		    case icq:
-			if(!account.server.empty() && account.port) {
-			    tmp = account.server + ":" + i2str(account.port);
-			} else {
-			    tmp = "";
-			}
-
-			t.addleaff(n, 0, citem+9, _(" Server : %s "), tmp.c_str());
 			t.addleaff(n, 0, citem+2, _(" UIN : %s "),
 			    account.uin ? i2str(account.uin).c_str() : "");
 			break;

@@ -11,7 +11,8 @@ enum hookcapabilities {
     hoptCanSendFile = 8,
     hoptCanSendSMS = 16,
     hoptCanSetAwayMsg = 32,
-    hoptCanChangeNick = 64
+    hoptCanChangeNick = 64,
+    hoptChangableServer = 128
 };
 
 class abstracthook {

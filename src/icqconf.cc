@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.37 2002/02/07 10:55:42 konst Exp $
+* $Id: icqconf.cc,v 1.38 2002/02/19 18:38:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -148,12 +148,15 @@ void icqconf::setourid(const imaccount im) {
 	    accounts.push_back(im);
 	    i = accounts.end()-1;
 
+	    if(i->server.empty())
 	    switch(i->pname) {
 		case icq:
-		    if(i->server.empty()) {
-			i->server = "login.icq.com";
-			i->port = 5190;
-		    }
+		    i->server = "login.icq.com";
+		    i->port = 5190;
+		    break;
+		case msn:
+		    i->server = "messenger.hotmail.com";
+		    i->port = 1863;
 		    break;
 	    }
 	}

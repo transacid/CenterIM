@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.14 2002/02/16 14:17:51 konst Exp $
+* $Id: msnhook.cc,v 1.15 2002/02/19 18:38:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,6 +40,9 @@ msnhook::msnhook() {
     fonline = false;
     timer_reconnect = 0;
 
+    fcapabilities =
+	hoptChangableServer;
+
     for(int i = MSN_RNG; i != MSN_NUM_EVENTS; i++) {
 	msn_event[i] = 0;
     }
@@ -71,7 +74,7 @@ void msnhook::connect() {
     face.log(_("+ [msn] connecting to the server"));
 
     if(!MSN_Login(account.nickname.c_str(), account.password.c_str(),
-    DEFAULT_HOST, DEFAULT_PORT)) {
+    account.server.c_str(), account.port)) {
 	face.log(_("+ [msn] logged in"));
 	fonline = true;
 	status = available;
@@ -81,7 +84,7 @@ void msnhook::connect() {
     }
 
     time(&mhook.timer_reconnect);
-//    msn_Russian = 0;
+    msn_Russian = conf.getrussian();
 }
 
 void msnhook::disconnect() {
@@ -156,10 +159,10 @@ bool msnhook::send(const imevent &ev) {
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *>(&ev);
-	if(m) text = rusconv("kw", m->gettext());
+	if(m) text = m->gettext();
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *>(&ev);
-	if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+	if(m) text = m->geturl() + "\n\n" + m->getdescription();
     }
 
     if(!text.empty()) {
@@ -312,6 +315,7 @@ void msnhook::disconnected(void *data) {
     icqcontact *c;
 
     if(mhook.online()) {
+	MSN_Logout();
 	face.log(_("+ [msn] disconnected"));
 	mhook.fonline = false;
     }
