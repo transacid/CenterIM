@@ -6,12 +6,124 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-03-06 11:48+0200\n"
+"POT-Creation-Date: 2002-03-07 01:21+0200\n"
 "Last-Translator: Paulo Oliveira Filho <paulo.oliveira.filho@mail.com>\n"
 "Language-Team: Brazilian <???>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: iso-8859-1\n"
+
+#: src/centericq.cc:118
+#, fuzzy
+msgid "password: "
+msgstr "Senha: "
+
+#: src/centericq.cc:153
+#, fuzzy
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M opções do contato atual, F3/S mudar status do ICQ, F4/G ações gerais, Q "
+"sair"
+
+#: src/centericq.cc:207
+#, fuzzy, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignorar todos os eventos de %s (%lu)?"
+
+#: src/centericq.cc:246
+#, fuzzy, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Você tem certeza que deseja remover %s (%lu)?"
+
+#: src/centericq.cc:254
+msgid "New nickname to show: "
+msgstr "Novo apelido a exibir: "
+
+#: src/centericq.cc:262
+msgid "Select a group to move the user to"
+msgstr ""
+
+#: src/centericq.cc:279
+msgid "+ cannot fetch away messages being offline"
+msgstr ""
+
+#: src/centericq.cc:456
+#, fuzzy, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ novo mail chegou, %d mensagens"
+
+#: src/centericq.cc:459
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ última msg de %s"
+
+#: src/centericq.cc:494
+msgid "! another running copy of centericq detected"
+msgstr ""
+
+#: src/centericq.cc:495
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr ""
+
+#: src/centericq.cc:570
+#, fuzzy
+msgid "Mobile number: "
+msgstr "nome do arquivo: "
+
+#: src/centericq.cc:753
+#, fuzzy, c-format
+msgid "+ no history items for %s"
+msgstr "+ não existem items no histórico para %s, %lu"
+
+#: src/centericq.cc:779
+#, fuzzy, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %lu foi adicionar para a lista"
+
+#: src/centericq.cc:785
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Selecione os contatos para adicionar a lista"
+
+#: src/centericq.cc:792
+msgid "Notify the user he/she has been added?"
+msgstr ""
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:795
+#, fuzzy, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ autorização enviada para %lu"
+
+#: src/centericq.cc:807
+#, fuzzy, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %lu foi adicionar para a lista"
+
+#: src/centericq.cc:879
+msgid "+ the user is back"
+msgstr "+ o usuário está de volta"
+
+#: src/centericq.cc:895
+#, c-format
+msgid "+ [%s] status restored"
+msgstr ""
+
+#: src/centericq.cc:909
+#, fuzzy, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ automaticamente setar NÃO DISPONÍVEL (n/a)"
+
+#: src/centericq.cc:911
+#, fuzzy
+msgid "away"
+msgstr "Afastado (away)"
+
+#: src/centericq.cc:911
+msgid "n/a"
+msgstr ""
 
 #: src/icqconf.cc:175
 #, c-format
@@ -1297,118 +1409,6 @@ msgstr ""
 #, fuzzy
 msgid "+ [yahoo] bounced msg"
 msgstr "+ conectando para o servidor ICQ"
-
-#: src/centericq.cc:118
-#, fuzzy
-msgid "password: "
-msgstr "Senha: "
-
-#: src/centericq.cc:153
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M opções do contato atual, F3/S mudar status do ICQ, F4/G ações gerais, Q "
-"sair"
-
-#: src/centericq.cc:207
-#, fuzzy, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignorar todos os eventos de %s (%lu)?"
-
-#: src/centericq.cc:246
-#, fuzzy, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Você tem certeza que deseja remover %s (%lu)?"
-
-#: src/centericq.cc:254
-msgid "New nickname to show: "
-msgstr "Novo apelido a exibir: "
-
-#: src/centericq.cc:262
-msgid "Select a group to move the user to"
-msgstr ""
-
-#: src/centericq.cc:279
-msgid "+ cannot fetch away messages being offline"
-msgstr ""
-
-#: src/centericq.cc:456
-#, fuzzy, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ novo mail chegou, %d mensagens"
-
-#: src/centericq.cc:459
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ última msg de %s"
-
-#: src/centericq.cc:494
-msgid "! another running copy of centericq detected"
-msgstr ""
-
-#: src/centericq.cc:495
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr ""
-
-#: src/centericq.cc:570
-#, fuzzy
-msgid "Mobile number: "
-msgstr "nome do arquivo: "
-
-#: src/centericq.cc:753
-#, fuzzy, c-format
-msgid "+ no history items for %s"
-msgstr "+ não existem items no histórico para %s, %lu"
-
-#: src/centericq.cc:779
-#, fuzzy, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %lu foi adicionar para a lista"
-
-#: src/centericq.cc:785
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Selecione os contatos para adicionar a lista"
-
-#: src/centericq.cc:792
-msgid "Notify the user he/she has been added?"
-msgstr ""
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:795
-#, fuzzy, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ autorização enviada para %lu"
-
-#: src/centericq.cc:807
-#, fuzzy, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %lu foi adicionar para a lista"
-
-#: src/centericq.cc:879
-msgid "+ the user is back"
-msgstr "+ o usuário está de volta"
-
-#: src/centericq.cc:895
-#, c-format
-msgid "+ [%s] status restored"
-msgstr ""
-
-#: src/centericq.cc:909
-#, fuzzy, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ automaticamente setar NÃO DISPONÍVEL (n/a)"
-
-#: src/centericq.cc:911
-#, fuzzy
-msgid "away"
-msgstr "Afastado (away)"
-
-#: src/centericq.cc:911
-msgid "n/a"
-msgstr ""
 
 #: src/hooks/msnhook.cc:74
 #, fuzzy

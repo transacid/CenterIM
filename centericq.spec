@@ -1,4 +1,4 @@
-Version: 4.6.0
+Version: 4.6.5
 Summary: Console ncurses based IM client. ICQ, Yahoo! and MSN protocols are supported.
 Name: centericq
 Release: 3
