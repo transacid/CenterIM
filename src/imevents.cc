@@ -19,6 +19,9 @@ imevent::imevent() {
     time(&timestamp);
 }
 
+imevent::~imevent() {
+}
+
 imevent::imeventtype imevent::gettype() const {
     return type;
 }

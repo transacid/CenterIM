@@ -32,6 +32,7 @@ class imevent {
 
     public:
 	imevent();
+	virtual ~imevent();
 
 	imeventtype gettype() const;
 	imdirection getdirection() const;

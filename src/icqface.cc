@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.87 2002/02/28 12:05:27 konst Exp $
+* $Id: icqface.cc,v 1.88 2002/03/01 16:09:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1293,6 +1293,14 @@ void icqface::log(const string atext) {
 	flog << text << endl;
 #endif
 
+    while((i = text.find("\n")) != -1) text[i] = ' ';
+    while((i = text.find("\r")) != -1) text[i] = ' ';
+
+    while(lastlog.size() > LINES-sizeWArea.y2-2)
+	lastlog.erase(lastlog.begin());
+
+    lastlog.push_back(text);
+
     if(!mainscreenblock) {
 	chtype *logline = new chtype[sizeWArea.x2-sizeWArea.x1+2];
 	attrset(conf.getcolor(cp_main_text));
@@ -1302,19 +1310,11 @@ void icqface::log(const string atext) {
 	    mvaddchnstr(i-1, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
 	}
 
-	while((i = text.find("\n")) != -1) text[i] = ' ';
-	while((i = text.find("\r")) != -1) text[i] = ' ';
-
-	while(lastlog.size() > LINES-sizeWArea.y2-2)
-	    lastlog.erase(lastlog.begin());
-
-	lastlog.push_back(text);
+	delete logline;
 
 	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
 	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);
 	kwriteatf(sizeWArea.x1+2, LINES-3, conf.getcolor(cp_main_text), "%s", text.c_str());
-
-	delete logline;
     }
 }
 

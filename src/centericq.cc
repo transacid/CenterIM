@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.73 2002/02/27 16:35:45 konst Exp $
+* $Id: centericq.cc,v 1.74 2002/03/01 16:09:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -684,8 +684,8 @@ void centericq::readevents(const imcontact &cont) {
 	    }
 
 	    while(!events.empty()) {
-		delete *events.begin();
-		events.erase(events.begin());
+		delete events.back();
+		events.pop_back();
 	    }
 	}
 
@@ -745,8 +745,8 @@ void centericq::history(const imcontact &cont) {
 	face.status("");
 
 	while(!events.empty()) {
-	    delete *events.begin();
-	    events.erase(events.begin());
+	    delete events.back();
+	    events.pop_back();
 	}
 
     } else {
