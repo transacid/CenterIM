@@ -200,12 +200,16 @@ char *yahoo_urldecode(const char *instr)
 				str[bpos++] = instr[ipos++];
 		if(!instr[ipos])
 			break;
-		ipos++;
 		
-		entity[0]=instr[ipos++];
-		entity[1]=instr[ipos++];
-		sscanf(entity, "%2x", &dec);
-		str[bpos++] = (char)dec;
+		if(instr[ipos+1] && instr[ipos+2]) {
+			ipos++;
+			entity[0]=instr[ipos++];
+			entity[1]=instr[ipos++];
+			sscanf(entity, "%2x", &dec);
+			str[bpos++] = (char)dec;
+		} else {
+			str[bpos++] = instr[ipos++];
+		}
 	}
 	str[bpos]='\0';
 

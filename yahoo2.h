@@ -93,6 +93,7 @@ void yahoo_get_yab(int id);
 /* modify that entry else it creates a new entry */
 void yahoo_set_yab(int id, struct yab * yab);
 void yahoo_keepalive(int id);
+void yahoo_chat_keepalive(int id);
 
 /* from is the identity you're sending from.  if NULL, the default is used */
 /* utf8 is whether msg is a utf8 string or not. */
@@ -104,7 +105,7 @@ void yahoo_send_typing(int id, const char *from, const char *who, int typ);
 /* away says whether the custom message is an away message or a sig */
 void yahoo_set_away(int id, enum yahoo_status state, const char *msg, int away);
 
-void yahoo_add_buddy(int id, const char *who, const char *group);
+void yahoo_add_buddy(int id, const char *who, const char *group, const char *msg);
 void yahoo_remove_buddy(int id, const char *who, const char *group);
 void yahoo_reject_buddy(int id, const char *who, const char *msg);
 /* if unignore is true, unignore, else ignore */

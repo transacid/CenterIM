@@ -629,9 +629,10 @@ int YAHOO_CALLBACK_TYPE(ext_yahoo_add_handler)(int id, int fd, yahoo_input_condi
  * Name: ext_yahoo_remove_handler
  * 	Remove the listener for the fd.
  * Params:
+ * 	id   - the id that identifies the connection
  * 	tag  - the handler tag to remove
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_remove_handler)(int tag);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_remove_handler)(int id, int tag);
 
 
 
