@@ -2945,6 +2945,7 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 
     yr = y_new0(struct yahoo_search_result, 1);
 
+    if(p)
     if(p = strstr(p, "\r\n\r\n")) {
 	p += 4;
 
