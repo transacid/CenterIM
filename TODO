@@ -3,15 +3,19 @@ DONE
 namespaces related issue
 ctrl-right/left in msg edit mode..
 chinese characters don't pass the iscntrl check, --enable-locales-fix
+not respecting prefix problem (share and locale dirs were by default)
+update details -> about -> esc -> modifications are saved
+msg read -> fwd -> multiple -> selection lost
+cyclic switching between away and n/a happens when the periods are equal (?)
+centericq.1 wasn't installed on make install
+window resize in X
 
 TODO
 
-window resize in X
-However, if you "change" the color-schceme in the config-menu to the
-one you are already using, everything fits perfectly once again,
-perhaps if you can trigger this upon a window-size change?
+russian chars are not displayed under freebsd (?)
 
-cyclic switching between away and n/a happens when the periods are equal (?)
+window resize in X: when there are centericq windows on the screen or
+we're in msg write mode
 
 reset auto-away/na timers on disconnect
 
@@ -51,4 +55,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.17 2001/08/19 15:34:53 konst Exp $
+$Id: TODO,v 1.18 2001/08/21 09:33:12 konst Exp $

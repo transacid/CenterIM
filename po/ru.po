@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.0.0\n"
-"POT-Creation-Date: 2001-08-18 16:37+0300\n"
+"POT-Creation-Date: 2001-08-21 12:06+0300\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -14,123 +14,123 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:82 src/icqdialogs.cc:111
+#: src/centericq.cc:84 src/icqdialogs.cc:111
 msgid "Password: "
 msgstr "Пароль: "
 
-#: src/centericq.cc:127
+#: src/centericq.cc:129
 msgid " Registration progress "
 msgstr " Регистрация "
 
-#: src/centericq.cc:142
+#: src/centericq.cc:144
 #, c-format
 msgid "Connecting to the server %s ..."
 msgstr "Соединение с сервером %s ..."
 
-#: src/centericq.cc:147
+#: src/centericq.cc:149
 msgid "Sending request"
 msgstr "Посылка запроса"
 
-#: src/centericq.cc:158
+#: src/centericq.cc:160
 msgid "Timed out waiting for a new uin. Retry?"
 msgstr "Время ожидания нового UIN истекло. Повторить попытку?"
 
-#: src/centericq.cc:161
+#: src/centericq.cc:163
 msgid "Retrying.."
 msgstr "Повторение.."
 
-#: src/centericq.cc:176
+#: src/centericq.cc:178
 #, c-format
 msgid "New UIN received, %lu"
 msgstr "Новый UIN получен, %lu"
 
-#: src/centericq.cc:181
+#: src/centericq.cc:183
 msgid "Disconnected"
 msgstr "Рассоединение"
 
-#: src/centericq.cc:186
+#: src/centericq.cc:188
 msgid "Unable to connect to the icq server. Retry?"
 msgstr "Невозможно соединиться с сервером. Повторить?"
 
-#: src/centericq.cc:213
+#: src/centericq.cc:215
 msgid ""
 "F2/M current contact menu, F3/S change icq status, F4/G general actions, Q "
 "quit"
 msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
 
-#: src/centericq.cc:253
+#: src/centericq.cc:255
 #, c-format
 msgid "Ignore all events from %s (%lu)?"
 msgstr "Игнорировать пользователя %s (%lu)?"
 
-#: src/centericq.cc:264
+#: src/centericq.cc:266
 #, c-format
 msgid "+ %s has been removed from the visible list"
 msgstr "+ %s удален из visible списка"
 
-#: src/centericq.cc:267
+#: src/centericq.cc:269
 #, c-format
 msgid "+ %s has been added to the visible list"
 msgstr "+ %s добавлен в visible список"
 
-#: src/centericq.cc:297
+#: src/centericq.cc:299
 #, c-format
 msgid "Are you sure want to remove %s (%lu)?"
 msgstr "Вы действительно хотите удалить %s (%lu)?"
 
-#: src/centericq.cc:304
+#: src/centericq.cc:306
 msgid "New nickname to show: "
 msgstr "Новый ник для показа в списке: "
 
-#: src/centericq.cc:343
-#, c-format
-msgid "%s (%lu) wrote:"
-msgstr ""
-
-#: src/centericq.cc:413
+#: src/centericq.cc:387
 msgid "Fetching your ICQ details"
 msgstr "Запрос на информацию из базы данных отправлен"
 
-#: src/centericq.cc:467
+#: src/centericq.cc:441
 #, c-format
 msgid "+ sending file %s to %s, %lu"
 msgstr "+ посылка файла %s %s, %lu"
 
-#: src/centericq.cc:471
+#: src/centericq.cc:445
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ тамошний клиент не позволяет пересылать файлы"
 
-#: src/centericq.cc:561
+#: src/centericq.cc:535
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ получена новая почта, %d сообщений"
 
-#: src/centericq.cc:562
+#: src/centericq.cc:536
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ последнее сообщение от %s"
 
-#: src/centericq.cc:594
+#: src/centericq.cc:568
 msgid "! another running copy of centericq detected"
 msgstr "! обнаружена работающая копия centericq"
 
-#: src/centericq.cc:595
+#: src/centericq.cc:569
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! это может вызвать проблемы. pid %lu"
+
+#: src/centericq.cc:599
+#, c-format
+msgid "%s (%lu) wrote:"
+msgstr ""
 
 #: src/icqdialogs.cc:52
 msgid " Register on ICQ network "
 msgstr " Регистрация в сети ICQ "
 
 #: src/icqdialogs.cc:60 src/icqdialogs.cc:202 src/icqdialogs.cc:336
-#: src/icqdialogs.cc:635
+#: src/icqdialogs.cc:636
 msgid "Change"
 msgstr "Изменить"
 
 #: src/icqdialogs.cc:60 src/icqdialogs.cc:202 src/icqdialogs.cc:336
-#: src/icqdialogs.cc:635 src/icqface.cc:1342 src/icqface.cc:1422
-#: src/icqface.cc:1468
+#: src/icqdialogs.cc:636 src/icqface.cc:1336 src/icqface.cc:1416
+#: src/icqface.cc:1462
 msgid "Done"
 msgstr "Готово"
 
@@ -142,7 +142,7 @@ msgstr " Режим "
 msgid " Details "
 msgstr " Инфо "
 
-#: src/icqdialogs.cc:66 src/icqdialogs.cc:644
+#: src/icqdialogs.cc:66 src/icqdialogs.cc:645
 msgid " Options "
 msgstr " Настройки "
 
@@ -164,7 +164,7 @@ msgstr "существующий пользователь"
 msgid " Server address : %s "
 msgstr " Адрес сервера : %s "
 
-#: src/icqdialogs.cc:72 src/icqdialogs.cc:660
+#: src/icqdialogs.cc:72 src/icqdialogs.cc:661
 #, c-format
 msgid " Use SOCKS proxy : %s "
 msgstr " Использовать SOCKS прокси : %s "
@@ -179,7 +179,7 @@ msgstr " Звуковое устройство : %s "
 msgid " Initial color scheme : %s "
 msgstr " Цветовая схема : %s "
 
-#: src/icqdialogs.cc:75 src/icqdialogs.cc:652
+#: src/icqdialogs.cc:75 src/icqdialogs.cc:653
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Перекодировка win1251-koi8 требуется : %s "
@@ -224,26 +224,26 @@ msgstr " UIN : %s "
 msgid " Password : %s "
 msgstr " Пароль : %s "
 
-#: src/icqdialogs.cc:90 src/icqdialogs.cc:655
+#: src/icqdialogs.cc:90 src/icqdialogs.cc:656
 #, c-format
 msgid " Remember ICQ password : %s "
 msgstr " Помнить пароль : %s "
 
-#: src/icqdialogs.cc:95 src/icqdialogs.cc:664
+#: src/icqdialogs.cc:95 src/icqdialogs.cc:665
 msgid " SOCKS proxy settings "
 msgstr " Настройки SOCKS прокси "
 
-#: src/icqdialogs.cc:96 src/icqdialogs.cc:665
+#: src/icqdialogs.cc:96 src/icqdialogs.cc:666
 #, c-format
 msgid " Proxy server address : %s "
 msgstr " Адрес SOCKS прокси-сервера : %s "
 
-#: src/icqdialogs.cc:97 src/icqdialogs.cc:666
+#: src/icqdialogs.cc:97 src/icqdialogs.cc:667
 #, c-format
 msgid " Proxy user name : %s "
 msgstr " Прокси логин : %s "
 
-#: src/icqdialogs.cc:98 src/icqdialogs.cc:667
+#: src/icqdialogs.cc:98 src/icqdialogs.cc:668
 #, c-format
 msgid " Proxy password : %s "
 msgstr " Пароль на прокси : %s "
@@ -272,19 +272,19 @@ msgstr "Фамилия: "
 msgid "Existing UIN: "
 msgstr "Существующий UIN: "
 
-#: src/icqdialogs.cc:135 src/icqdialogs.cc:698
+#: src/icqdialogs.cc:135 src/icqdialogs.cc:699
 msgid "ICQ server to use: "
 msgstr "Соединяться с сервером: "
 
-#: src/icqdialogs.cc:140 src/icqdialogs.cc:704
+#: src/icqdialogs.cc:140 src/icqdialogs.cc:705
 msgid "SOCKS proxy server to use: "
 msgstr "Соединяться через SOCKS прокси сервер: "
 
-#: src/icqdialogs.cc:144 src/icqdialogs.cc:712
+#: src/icqdialogs.cc:144 src/icqdialogs.cc:713
 msgid "SOCKS proxy password: "
 msgstr "Пароль на SOCKS прокси: "
 
-#: src/icqdialogs.cc:148 src/icqdialogs.cc:708
+#: src/icqdialogs.cc:148 src/icqdialogs.cc:709
 msgid "SOCKS proxy user name: "
 msgstr "Имя пользователя на SOCKS прокси: "
 
@@ -539,110 +539,110 @@ msgstr " Не указано "
 msgid " About [Ctrl-X save, Esc cancel] "
 msgstr " Комментарий [Ctrl-X сохранить, Esc отмена] "
 
-#: src/icqdialogs.cc:554
+#: src/icqdialogs.cc:555
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Посылка файла(ов) %s, %lu"
 
-#: src/icqdialogs.cc:564 src/icqface.cc:467 src/icqface.cc:1509
-#: src/icqface.cc:1689
+#: src/icqdialogs.cc:565 src/icqface.cc:467 src/icqface.cc:1503
+#: src/icqface.cc:1683
 msgid "Add"
 msgstr "Добавить"
 
-#: src/icqdialogs.cc:564 src/icqface.cc:1689
+#: src/icqdialogs.cc:565 src/icqface.cc:1683
 msgid "Remove"
 msgstr "Удалить"
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:565
 msgid "Comment"
 msgstr "Комментарий"
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:565
 msgid "Send"
 msgstr "Послать"
 
-#: src/icqdialogs.cc:573
+#: src/icqdialogs.cc:574
 msgid " Files "
 msgstr " Файлы "
 
-#: src/icqdialogs.cc:574
+#: src/icqdialogs.cc:575
 msgid " Comment "
 msgstr " Комментарий "
 
-#: src/icqdialogs.cc:586
+#: src/icqdialogs.cc:587
 msgid "filename: "
 msgstr "имя файла: "
 
-#: src/icqdialogs.cc:593
+#: src/icqdialogs.cc:594
 msgid "comment: "
 msgstr "комментарий: "
 
-#: src/icqdialogs.cc:628
+#: src/icqdialogs.cc:629
 msgid " CenterICQ quick config "
 msgstr " Настройки centericq "
 
-#: src/icqdialogs.cc:643
+#: src/icqdialogs.cc:644
 msgid " Configuration "
 msgstr " Конфигурация "
 
-#: src/icqdialogs.cc:645
+#: src/icqdialogs.cc:646
 msgid " Communications "
 msgstr " Соединение "
 
-#: src/icqdialogs.cc:647
+#: src/icqdialogs.cc:648
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Звуковое устройство : %s "
 
-#: src/icqdialogs.cc:648
+#: src/icqdialogs.cc:649
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Цветовая схема : %s "
 
-#: src/icqdialogs.cc:650
+#: src/icqdialogs.cc:651
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Автоматически Away после (мин) : %d "
 
-#: src/icqdialogs.cc:651
+#: src/icqdialogs.cc:652
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Автоматически N/A после (мин) : %d "
 
-#: src/icqdialogs.cc:653
+#: src/icqdialogs.cc:654
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Не показывать тех, кто не на линии (offline) : %s "
 
-#: src/icqdialogs.cc:654
+#: src/icqdialogs.cc:655
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Цитировать сообщения при ответе : %s "
 
-#: src/icqdialogs.cc:656
+#: src/icqdialogs.cc:657
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Не принимать сообщения от юзеров, что не в списке : %s "
 
-#: src/icqdialogs.cc:657
+#: src/icqdialogs.cc:658
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Проверять локальный почтовый ящик : %s "
 
-#: src/icqdialogs.cc:659
+#: src/icqdialogs.cc:660
 #, c-format
 msgid " ICQ server address : %s "
 msgstr " Адрес ICQ сервера : %s "
 
-#: src/icqdialogs.cc:689
+#: src/icqdialogs.cc:690
 msgid "Auto Away period (0 - disable): "
 msgstr " Авто-away после (0 - выкл): "
 
-#: src/icqdialogs.cc:693
+#: src/icqdialogs.cc:694
 msgid "Auto N/A period (0 - disable): "
 msgstr " Авто-N/A после (0 - выкл): "
 
-#: src/icqdialogs.cc:760
+#: src/icqdialogs.cc:761
 msgid "Your ICQ details have been fetched"
 msgstr "Ваша icq-информация получена"
 
@@ -822,8 +822,8 @@ msgstr " Игнор. список"
 msgid " View/edit visible list"
 msgstr " Список visible-контактов"
 
-#: src/icqface.cc:467 src/icqface.cc:1219 src/icqface.cc:1229
-#: src/icqface.cc:1509 src/icqface.cc:1689
+#: src/icqface.cc:467 src/icqface.cc:1215 src/icqface.cc:1225
+#: src/icqface.cc:1503 src/icqface.cc:1683
 msgid "Details"
 msgstr "Инфо"
 
@@ -944,7 +944,7 @@ msgstr "Участие/Организации"
 msgid "Background/Past"
 msgstr "Квалификация/Прошлое"
 
-#: src/icqface.cc:790 src/icqface.cc:1335
+#: src/icqface.cc:790 src/icqface.cc:1329
 msgid "F2 to URLs, ESC close"
 msgstr "F2 показать ссылки, ESC закрыть"
 
@@ -1052,7 +1052,7 @@ msgstr ""
 msgid " enter to select a file, esc to cancel "
 msgstr " enter - выбрать файл, esc - закрыть"
 
-#: src/icqface.cc:1069 src/icqface.cc:1411
+#: src/icqface.cc:1069 src/icqface.cc:1405
 #, c-format
 msgid "URL to %s, %lu"
 msgstr "Посылка URL %s, %lu"
@@ -1067,178 +1067,178 @@ msgstr ""
 msgid "Writing a message to %s, %lu"
 msgstr "Сообщение %s, %lu"
 
-#: src/icqface.cc:1179
+#: src/icqface.cc:1175
 #, c-format
 msgid "+ %lu has been added to the list"
 msgstr "+ %s добавлен в список"
 
-#: src/icqface.cc:1185
+#: src/icqface.cc:1181
 #, c-format
 msgid "+ authorization sent to %lu"
 msgstr "+ подтверждение послано %lu"
 
-#: src/icqface.cc:1215
+#: src/icqface.cc:1211
 #, c-format
 msgid "Authorization request from %lu"
 msgstr "Запрос на добавление в список от %lu"
 
-#: src/icqface.cc:1219 src/icqface.cc:1229
+#: src/icqface.cc:1215 src/icqface.cc:1225
 msgid "Add to the list"
 msgstr "Добавить в список"
 
-#: src/icqface.cc:1219 src/icqface.cc:1467
+#: src/icqface.cc:1215 src/icqface.cc:1461
 msgid "Accept"
 msgstr "Подтвердить"
 
-#: src/icqface.cc:1220 src/icqface.cc:1230 src/icqface.cc:1464
-#: src/icqface.cc:1510
+#: src/icqface.cc:1216 src/icqface.cc:1226 src/icqface.cc:1458
+#: src/icqface.cc:1504
 msgid "Ok"
 msgstr "Ок"
 
-#: src/icqface.cc:1220
+#: src/icqface.cc:1216
 msgid "Ignore"
 msgstr "Проигнорировать"
 
-#: src/icqface.cc:1225
+#: src/icqface.cc:1221
 #, c-format
 msgid "You were added to %lu's list"
 msgstr "Вы были добавлены в список %lu"
 
-#: src/icqface.cc:1230 src/icqface.cc:1346 src/icqface.cc:1425
-#: src/icqface.cc:1468 src/icqface.cc:1510
+#: src/icqface.cc:1226 src/icqface.cc:1340 src/icqface.cc:1419
+#: src/icqface.cc:1462 src/icqface.cc:1504
 msgid "Next"
 msgstr "След"
 
-#: src/icqface.cc:1342 src/icqface.cc:1346 src/icqface.cc:1422
-#: src/icqface.cc:1425
+#: src/icqface.cc:1336 src/icqface.cc:1340 src/icqface.cc:1416
+#: src/icqface.cc:1419
 msgid "Fwd"
 msgstr "Переслать"
 
-#: src/icqface.cc:1342 src/icqface.cc:1346
+#: src/icqface.cc:1336 src/icqface.cc:1340
 msgid "Reply"
 msgstr "Ответ"
 
-#: src/icqface.cc:1352
+#: src/icqface.cc:1346
 #, c-format
 msgid "Message from %s, %lu"
 msgstr "Сообщение от %s, %lu"
 
-#: src/icqface.cc:1355 src/icqface.cc:1405
+#: src/icqface.cc:1349 src/icqface.cc:1399
 #, c-format
 msgid "%s, rcvd on %s"
 msgstr "%s, получено %s"
 
-#: src/icqface.cc:1360
+#: src/icqface.cc:1354
 #, c-format
 msgid "Message to %s, %lu"
 msgstr "Сообщение %s, %lu"
 
-#: src/icqface.cc:1365 src/icqface.cc:1415
+#: src/icqface.cc:1359 src/icqface.cc:1409
 #, c-format
 msgid "Sent on %s"
 msgstr "Послано %s"
 
-#: src/icqface.cc:1402
+#: src/icqface.cc:1396
 #, c-format
 msgid "URL from %s, %lu"
 msgstr "Ссылка от %s, %lu"
 
-#: src/icqface.cc:1422 src/icqface.cc:1425
+#: src/icqface.cc:1416 src/icqface.cc:1419
 msgid "Open"
 msgstr "Открыть"
 
-#: src/icqface.cc:1460
+#: src/icqface.cc:1454
 #, c-format
 msgid "File from %s, %lu"
 msgstr "Файл от %s, %lu"
 
-#: src/icqface.cc:1467
+#: src/icqface.cc:1461
 msgid "Refuse"
 msgstr "Отменить"
 
-#: src/icqface.cc:1502
+#: src/icqface.cc:1496
 #, c-format
 msgid "Contacts from %s, %lu"
 msgstr "Контакты от %s, %lu"
 
-#: src/icqface.cc:1559
+#: src/icqface.cc:1553
 msgid "save file(s) in: "
 msgstr "сохранить файл(ы) в каталоге: "
 
-#: src/icqface.cc:1565
+#: src/icqface.cc:1559
 #, c-format
 msgid "+ file %s from %s, %lu started"
 msgstr "+ получение файла %s от %s, %lu"
 
-#: src/icqface.cc:1568
+#: src/icqface.cc:1562
 msgid "+ already exists, skipping"
 msgstr "+ уже существует, пропускаем"
 
-#: src/icqface.cc:1580
+#: src/icqface.cc:1574
 #, c-format
 msgid "+ file from %s, %lu refused"
 msgstr "+ передача файла от %s, %lu отменена"
 
-#: src/icqface.cc:1610
+#: src/icqface.cc:1604
 #, c-format
 msgid "History items for %s, %lu"
 msgstr "Архив сообщений от пользователя %s, %lu"
 
-#: src/icqface.cc:1613
+#: src/icqface.cc:1607
 msgid "ICQ system messages history"
 msgstr "Архив сообщений ICQ"
 
-#: src/icqface.cc:1617
+#: src/icqface.cc:1611
 msgid "S search, L again, ESC cancel"
 msgstr "S поиск, L продолжить, ESC отмена"
 
-#: src/icqface.cc:1622
+#: src/icqface.cc:1616
 msgid "search for: "
 msgstr "искать: "
 
-#: src/icqface.cc:1632
+#: src/icqface.cc:1626
 msgid "+ search string not found"
 msgstr "+ искомая подстрока не найдена"
 
-#: src/icqface.cc:1646
+#: src/icqface.cc:1640
 #, c-format
 msgid "+ no history items for %s, %lu"
 msgstr "+ история сообщений с %s, %lu пуста"
 
-#: src/icqface.cc:1689
+#: src/icqface.cc:1683
 msgid "Move to contacts"
 msgstr "В контакт-лист"
 
-#: src/icqface.cc:1700
+#: src/icqface.cc:1694
 msgid "ICQ Ignore list"
 msgstr "Список игнорируемых пользователей"
 
-#: src/icqface.cc:1701
+#: src/icqface.cc:1695
 msgid "ICQ Visible list"
 msgstr "Список visible пользователей"
 
-#: src/icqface.cc:1701
+#: src/icqface.cc:1695
 msgid "ICQ Invisible list"
 msgstr "Список invisible пользователей"
 
-#: src/icqface.cc:1715
+#: src/icqface.cc:1709
 msgid "Select contacts to add to the list"
 msgstr "Выберите контакты для добавления в список"
 
-#: src/icqface.cc:1769
+#: src/icqface.cc:1763
 msgid "Event recipients"
 msgstr "Получатели"
 
-#: src/icqface.cc:1892
+#: src/icqface.cc:1870
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr ""
 "Быстрый переход: набирайте для поиска, Alt-S повторить, Enter завершить"
 
-#: src/icqface.cc:1995
+#: src/icqface.cc:1973
 msgid "+ no URLs within the current context"
 msgstr "+ не ни одной ссылки в данном контексте"
 
-#: src/icqface.cc:2008
+#: src/icqface.cc:1986
 msgid "URLs within the current context"
 msgstr "Ссылки в текущем контексте"
 

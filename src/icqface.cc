@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.10 2001/08/17 19:11:59 konst Exp $
+* $Id: icqface.cc,v 1.11 2001/08/21 09:33:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1127,9 +1127,6 @@ bool icqface::editmsg(unsigned int uin, string &text) {
     status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
     passuin = uin;
 
-    muins.clear();
-    muins.push_back(uin);
-
     se->setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2);
     se->addscheme(cp_main_text, cp_main_text, 0, 0);
 
@@ -1142,7 +1139,6 @@ bool icqface::editmsg(unsigned int uin, string &text) {
     ctext = se->save("\r\n");
     text = ctext;
 
-    if(muins.empty()) muins.push_back(uin);
     c->setpostponed(editdone ? "" : text);
 
     delete se;
@@ -1268,14 +1264,11 @@ bool icqface::showevent(unsigned int uin, int direction, time_t &lastread) {
 		switch(i) {
 		    case -1: ret = false; break;
 		    case 0:
-			cicq.fwdmsg(dir == HIST_MSG_IN ? uin : icql.icq_Uin, text);
+			cicq.message(dir == HIST_MSG_IN ? uin : icql.icq_Uin,
+			    text, centericq::forward);
 			break;
 		    case 1:
-			text = conf.getquote() ? quotemsg(text) : "";
-
-			if(face.editmsg(uin, text)) {
-			    cicq.sendmsg(uin, text);
-			}
+			cicq.message(uin, text, centericq::reply);
 			break;
 		    case 2: break;
 		}
@@ -1294,7 +1287,8 @@ bool icqface::showevent(unsigned int uin, int direction, time_t &lastread) {
 		    break;
 		case 1:
 		    text = url + "\n\n" + text;
-		    cicq.fwdmsg(dir == HIST_MSG_IN ? uin : icql.icq_Uin, text);
+		    cicq.message(dir == HIST_MSG_IN ? uin : icql.icq_Uin,
+			text, centericq::forward);
 		    break;
 		case 2:
 		    break;
@@ -1862,22 +1856,6 @@ void icqface::blockmainscreen() {
 void icqface::unblockmainscreen() {
     mainscreenblock = false;
     update();
-}
-
-string icqface::quotemsg(string text) {
-    string ret;
-    vector<string> lines;
-    vector<string>::iterator i;
-
-    breakintolines(text, lines, WORKAREA_X2-WORKAREA_X1-4);
-
-    for(i = lines.begin(); i != lines.end(); i++) {
-	if(!i->empty()) ret += (string) "> " + *i;
-	ret = trailcut(ret);
-	ret += "\n";
-    }
-
-    return ret;
 }
 
 void icqface::quickfind(verticalmenu *multi = 0) {

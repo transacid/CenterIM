@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.6 2001/08/17 19:11:59 konst Exp $
+* $Id: icqdialogs.cc,v 1.7 2001/08/21 09:33:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -521,6 +521,7 @@ void icqface::editabout(string &fabout) {
     w.set_title(conf.getcolor(cp_dialog_highlight), _(" About [Ctrl-X save, Esc cancel] "));
     w.open();
 
+    editdone = false;
     se.setcoords(w.x1+1, w.y1+1, w.x2, w.y2);
     se.addscheme(cp_dialog_text, cp_dialog_text, 0, 0);
     se.idle = &editidle;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.10 2001/08/17 19:11:58 konst Exp $
+* $Id: centericq.cc,v 1.11 2001/08/21 09:33:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,6 +63,8 @@ void centericq::exec() {
     sact.sa_handler = &handlesignal;
     sigaction(SIGINT, &sact, 0);
     sigaction(SIGCHLD, &sact, 0);
+
+    kt_resize_event = &termresize;
 
     conf.initpairs();
     conf.load();
@@ -246,7 +248,7 @@ void centericq::mainloop() {
 		text = "";
 		if(face.editurl(c->getuin(), url, text))
 		for(i = face.muins.begin(); i != face.muins.end(); i++)
-		    sendurl(*i, url, text);
+		    offl.sendurl(*i, url, text);
 		break;
 
 	    case ACT_IGNORE:
@@ -315,39 +317,11 @@ void centericq::mainloop() {
 		if(c->getmsgcount()) {
 		    face.read(c->getuin());
 		} else if(c->getuin() && !c->isnonicq()) {
-		    text = "";
-		    if(face.editmsg(c->getuin(), text))
-		    for(i = face.muins.begin(); i != face.muins.end(); i++)
-			sendmsg(*i, text);
+		    message(c->getuin(), text, scratch);
 		}
 		break;
 	}
     }
-}
-
-void centericq::sendmsg(unsigned int uin, string text) {
-    if(text.size() > MAX_TCPMSG_SIZE) text.resize(MAX_TCPMSG_SIZE);
-    offl.sendmsg(uin, text);
-}
-
-void centericq::sendurl(unsigned int uin, string url, string text) {
-    offl.sendurl(uin, url, text);
-}
-
-void centericq::fwdmsg(unsigned int uin, string text) {
-    icqcontact *c = (icqcontact *) clist.get(uin);
-    char buf[512];
-    list<unsigned int> lst;
-    list<unsigned int>::iterator i;
-
-    sprintf(buf, _("%s (%lu) wrote:"), c ? c->getdispnick().c_str() : "I", uin);
-    text = (string) buf + "\n\n" + text;
-
-    if(face.multicontacts("", lst))
-    if(!lst.empty())
-    if(face.editmsg(*lst.begin(), text))
-    for(i = lst.begin(); i != lst.end(); i++)
-	cicq.sendmsg(*i, text);
 }
 
 void centericq::changestatus() {
@@ -605,4 +579,69 @@ void centericq::checkparallel() {
 	    of.close();
 	}
     }
+}
+
+bool centericq::message(unsigned int uin, const string text, msgmode mode) {
+    icqcontact *c = (icqcontact *) clist.get(uin);
+    list<unsigned int>::iterator i;
+    char buf[512];
+    string stext;
+    bool ret = true;
+
+    face.muins.clear();
+
+    switch(mode) {
+	case reply:
+	    face.muins.push_back(uin);
+	    stext = conf.getquote() ? quotemsg(text) : "";
+	    break;
+	case forward:
+	    sprintf(buf, _("%s (%lu) wrote:"), c ? c->getdispnick().c_str() : "I", uin);
+	    stext = (string) buf + "\n\n" + text;
+	    if(ret = face.multicontacts("", face.muins))
+		ret = !face.muins.empty();
+	    break;
+	case scratch:
+	    face.muins.push_back(uin);
+	    stext = text;
+	    break;
+    }
+
+    if(ret) {
+	if(ret = face.editmsg(*face.muins.begin(), stext)) {
+	    if(face.muins.empty())
+		face.muins.push_back(uin);
+
+	    if(stext.size() > MAX_TCPMSG_SIZE)
+		stext.resize(MAX_TCPMSG_SIZE);
+
+	    for(i = face.muins.begin(); i != face.muins.end(); i++) {
+		offl.sendmsg(*i, stext);
+	    }
+	}
+    }
+
+    return ret;
+}
+
+const string centericq::quotemsg(const string text) {
+    string ret;
+    vector<string> lines;
+    vector<string>::iterator i;
+
+    breakintolines(text, lines, WORKAREA_X2-WORKAREA_X1-4);
+
+    for(i = lines.begin(); i != lines.end(); i++) {
+	if(!i->empty()) ret += (string) "> " + *i;
+	ret = trailcut(ret);
+	ret += "\n";
+    }
+
+    return ret;
+}
+
+void centericq::termresize(void) {
+    face.done();
+    face.init();
+    face.draw();
 }

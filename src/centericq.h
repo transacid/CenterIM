@@ -11,17 +11,26 @@
 #include "icqcontact.h"
 
 class centericq {
+    public:
+	enum msgmode {
+	    reply,
+	    forward,
+	    scratch
+	};
+
     protected:
 	static void handlesignal(int signum);
+	static void termresize(void);
+
 	void checkparallel();
+	const string quotemsg(const string text);
 
     public:
 	centericq();
 	~centericq();
 
-	void sendmsg(unsigned int uin, string text);
-	void sendurl(unsigned int uin, string url, string text);
-	void fwdmsg(unsigned int uin, string text);
+	bool message(unsigned int uin, const string text, msgmode mode);
+
 	void commandline(int argc, char **argv);
 	void exec();
 	void reg();

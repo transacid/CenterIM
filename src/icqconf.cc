@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.6 2001/08/17 19:11:58 konst Exp $
+* $Id: icqconf.cc,v 1.7 2001/08/21 09:33:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -424,11 +424,17 @@ void icqconf::initpairs() {
 void icqconf::setauto(int away, int na) {
     autoaway = away;
     autona = na;
+
+    if(away == na)
+	autoaway = 0;
 }
 
 void icqconf::getauto(int &away, int &na) {
     away = autoaway;
     na = autona;
+
+    if(away == na)
+	away = 0;
 }
 
 bool icqconf::getquote() {

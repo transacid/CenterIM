@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-08-18 16:37+0300\n"
+"POT-Creation-Date: 2001-08-21 12:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Pásztor György <pasztor@linux.gyakg.u-szeged.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -14,45 +14,45 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:82 src/icqdialogs.cc:111
+#: src/centericq.cc:84 src/icqdialogs.cc:111
 msgid "Password: "
 msgstr "Jelszó"
 
-#: src/centericq.cc:127
+#: src/centericq.cc:129
 msgid " Registration progress "
 msgstr " Regisztrációs folyamat "
 
-#: src/centericq.cc:142
+#: src/centericq.cc:144
 #, c-format
 msgid "Connecting to the server %s ..."
 msgstr "Kapcsolódás a %s szerverhez ..."
 
-#: src/centericq.cc:147
+#: src/centericq.cc:149
 msgid "Sending request"
 msgstr "Kérés küldése"
 
-#: src/centericq.cc:158
+#: src/centericq.cc:160
 msgid "Timed out waiting for a new uin. Retry?"
 msgstr "Letelt az idõ, még az új uin-ra vártunk. Újra?"
 
-#: src/centericq.cc:161
+#: src/centericq.cc:163
 msgid "Retrying.."
 msgstr "Újrapróbálás..."
 
-#: src/centericq.cc:176
+#: src/centericq.cc:178
 #, c-format
 msgid "New UIN received, %lu"
 msgstr "Új UIN-t kaptunk, %lu"
 
-#: src/centericq.cc:181
+#: src/centericq.cc:183
 msgid "Disconnected"
 msgstr "Lekapcsolódtunk"
 
-#: src/centericq.cc:186
+#: src/centericq.cc:188
 msgid "Unable to connect to the icq server. Retry?"
 msgstr "Nem lehet kapcsolódni az icq serverhez. Újra?"
 
-#: src/centericq.cc:213
+#: src/centericq.cc:215
 msgid ""
 "F2/M current contact menu, F3/S change icq status, F4/G general actions, Q "
 "quit"
@@ -60,79 +60,79 @@ msgstr ""
 "F2/M akt. Kontakt menü, F3/S icq státus megv., F4/G alapvetõ mûveletek, "
 "QKilépés"
 
-#: src/centericq.cc:253
+#: src/centericq.cc:255
 #, c-format
 msgid "Ignore all events from %s (%lu)?"
 msgstr "Letilt minden mûveletet %s -tõl (%lu) ?"
 
-#: src/centericq.cc:264
+#: src/centericq.cc:266
 #, c-format
 msgid "+ %s has been removed from the visible list"
 msgstr "+ %s -t levettük a láthatók listájáról"
 
-#: src/centericq.cc:267
+#: src/centericq.cc:269
 #, c-format
 msgid "+ %s has been added to the visible list"
 msgstr "+ %s -t hozzávettük a láthatók listájára"
 
-#: src/centericq.cc:297
+#: src/centericq.cc:299
 #, c-format
 msgid "Are you sure want to remove %s (%lu)?"
 msgstr "Biztos eltávolítod %s -t (%lu) ?"
 
-#: src/centericq.cc:304
+#: src/centericq.cc:306
 msgid "New nickname to show: "
 msgstr "Új niknév amit mutat: "
 
-#: src/centericq.cc:343
-#, c-format
-msgid "%s (%lu) wrote:"
-msgstr "%s (%lu) írta:"
-
-#: src/centericq.cc:413
+#: src/centericq.cc:387
 msgid "Fetching your ICQ details"
 msgstr "Letöltöm az ICQ információid"
 
-#: src/centericq.cc:467
+#: src/centericq.cc:441
 #, c-format
 msgid "+ sending file %s to %s, %lu"
 msgstr "+ küldöm a %s fájlt %s -nek, %lu"
 
-#: src/centericq.cc:471
+#: src/centericq.cc:445
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ a túloldali kliens nem támogatsa a fájlátvitelt"
 
-#: src/centericq.cc:561
+#: src/centericq.cc:535
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ új levél érkezett, %d db üzenet"
 
-#: src/centericq.cc:562
+#: src/centericq.cc:536
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ utolsó üzenet %s -tõl"
 
-#: src/centericq.cc:594
+#: src/centericq.cc:568
 msgid "! another running copy of centericq detected"
 msgstr ""
 
-#: src/centericq.cc:595
+#: src/centericq.cc:569
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr ""
+
+#: src/centericq.cc:599
+#, c-format
+msgid "%s (%lu) wrote:"
+msgstr "%s (%lu) írta:"
 
 #: src/icqdialogs.cc:52
 msgid " Register on ICQ network "
 msgstr " Bejegyzés az ICQ hálón "
 
 #: src/icqdialogs.cc:60 src/icqdialogs.cc:202 src/icqdialogs.cc:336
-#: src/icqdialogs.cc:635
+#: src/icqdialogs.cc:636
 msgid "Change"
 msgstr "Változtat"
 
 #: src/icqdialogs.cc:60 src/icqdialogs.cc:202 src/icqdialogs.cc:336
-#: src/icqdialogs.cc:635 src/icqface.cc:1342 src/icqface.cc:1422
-#: src/icqface.cc:1468
+#: src/icqdialogs.cc:636 src/icqface.cc:1336 src/icqface.cc:1416
+#: src/icqface.cc:1462
 msgid "Done"
 msgstr "Kész"
 
@@ -144,7 +144,7 @@ msgstr " Mód "
 msgid " Details "
 msgstr " Részletek "
 
-#: src/icqdialogs.cc:66 src/icqdialogs.cc:644
+#: src/icqdialogs.cc:66 src/icqdialogs.cc:645
 msgid " Options "
 msgstr " Opciók "
 
@@ -166,7 +166,7 @@ msgstr "létezõ felhasználó"
 msgid " Server address : %s "
 msgstr " Szerver cím : %s "
 
-#: src/icqdialogs.cc:72 src/icqdialogs.cc:660
+#: src/icqdialogs.cc:72 src/icqdialogs.cc:661
 #, c-format
 msgid " Use SOCKS proxy : %s "
 msgstr " Használandó SOCKS proxy: %s "
@@ -181,7 +181,7 @@ msgstr " Hang eszköz : %s "
 msgid " Initial color scheme : %s "
 msgstr " Kezdeti színséma: %s "
 
-#: src/icqdialogs.cc:75 src/icqdialogs.cc:652
+#: src/icqdialogs.cc:75 src/icqdialogs.cc:653
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Orosz fordítás a win1251-koi8 közt : %s "
@@ -226,26 +226,26 @@ msgstr " UIN : %s "
 msgid " Password : %s "
 msgstr " Jelszó : %s "
 
-#: src/icqdialogs.cc:90 src/icqdialogs.cc:655
+#: src/icqdialogs.cc:90 src/icqdialogs.cc:656
 #, c-format
 msgid " Remember ICQ password : %s "
 msgstr " Megjegyzi az ICQ jelszót : %s "
 
-#: src/icqdialogs.cc:95 src/icqdialogs.cc:664
+#: src/icqdialogs.cc:95 src/icqdialogs.cc:665
 msgid " SOCKS proxy settings "
 msgstr " SOCKS proxy beállítások "
 
-#: src/icqdialogs.cc:96 src/icqdialogs.cc:665
+#: src/icqdialogs.cc:96 src/icqdialogs.cc:666
 #, c-format
 msgid " Proxy server address : %s "
 msgstr " Proxy szerver cím : %s "
 
-#: src/icqdialogs.cc:97 src/icqdialogs.cc:666
+#: src/icqdialogs.cc:97 src/icqdialogs.cc:667
 #, c-format
 msgid " Proxy user name : %s "
 msgstr " Proxy felhasználónév : %s "
 
-#: src/icqdialogs.cc:98 src/icqdialogs.cc:667
+#: src/icqdialogs.cc:98 src/icqdialogs.cc:668
 #, c-format
 msgid " Proxy password : %s "
 msgstr " Proxy jelszó : %s "
@@ -274,19 +274,19 @@ msgstr "Családnév: "
 msgid "Existing UIN: "
 msgstr "Létezõ UIN: "
 
-#: src/icqdialogs.cc:135 src/icqdialogs.cc:698
+#: src/icqdialogs.cc:135 src/icqdialogs.cc:699
 msgid "ICQ server to use: "
 msgstr "Használandó ICQ szerver: "
 
-#: src/icqdialogs.cc:140 src/icqdialogs.cc:704
+#: src/icqdialogs.cc:140 src/icqdialogs.cc:705
 msgid "SOCKS proxy server to use: "
 msgstr "Használandó SOCKS proxy szerver: "
 
-#: src/icqdialogs.cc:144 src/icqdialogs.cc:712
+#: src/icqdialogs.cc:144 src/icqdialogs.cc:713
 msgid "SOCKS proxy password: "
 msgstr "SOCKS proxy jelszó: "
 
-#: src/icqdialogs.cc:148 src/icqdialogs.cc:708
+#: src/icqdialogs.cc:148 src/icqdialogs.cc:709
 msgid "SOCKS proxy user name: "
 msgstr "SOCKS proxy felhasználónév: "
 
@@ -541,111 +541,111 @@ msgstr " Nincs beírva"
 msgid " About [Ctrl-X save, Esc cancel] "
 msgstr " Névjegy [Ctrl-X ment, Esc mégse] "
 
-#: src/icqdialogs.cc:554
+#: src/icqdialogs.cc:555
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Elküldi a fájl(oka)t %s -nek, %lu "
 
-#: src/icqdialogs.cc:564 src/icqface.cc:467 src/icqface.cc:1509
-#: src/icqface.cc:1689
+#: src/icqdialogs.cc:565 src/icqface.cc:467 src/icqface.cc:1503
+#: src/icqface.cc:1683
 msgid "Add"
 msgstr "Felvesz"
 
-#: src/icqdialogs.cc:564 src/icqface.cc:1689
+#: src/icqdialogs.cc:565 src/icqface.cc:1683
 msgid "Remove"
 msgstr "Eltávolít"
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:565
 msgid "Comment"
 msgstr "Megjegyzés"
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:565
 msgid "Send"
 msgstr "Küld"
 
-#: src/icqdialogs.cc:573
+#: src/icqdialogs.cc:574
 msgid " Files "
 msgstr " Fájlok "
 
-#: src/icqdialogs.cc:574
+#: src/icqdialogs.cc:575
 msgid " Comment "
 msgstr " Megjegyzés "
 
-#: src/icqdialogs.cc:586
+#: src/icqdialogs.cc:587
 msgid "filename: "
 msgstr "fájlnév: "
 
-#: src/icqdialogs.cc:593
+#: src/icqdialogs.cc:594
 msgid "comment: "
 msgstr "megjegyzés: "
 
-#: src/icqdialogs.cc:628
+#: src/icqdialogs.cc:629
 msgid " CenterICQ quick config "
 msgstr " CenterICQ gyorsbeállító "
 
-#: src/icqdialogs.cc:643
+#: src/icqdialogs.cc:644
 msgid " Configuration "
 msgstr " Konfiguráció "
 
-#: src/icqdialogs.cc:645
+#: src/icqdialogs.cc:646
 msgid " Communications "
 msgstr " Kapcsolatok "
 
-#: src/icqdialogs.cc:647
+#: src/icqdialogs.cc:648
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Megváltoztatja a hangeszközt : %s "
 
-#: src/icqdialogs.cc:648
+#: src/icqdialogs.cc:649
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Megváltoztatja a színsémát: %s "
 
-#: src/icqdialogs.cc:650
+#: src/icqdialogs.cc:651
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Automatikusan beállítja az távollétet (perc) : %d "
 
-#: src/icqdialogs.cc:651
+#: src/icqdialogs.cc:652
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Automatikusan beállítja a N/A-t (perc) : %d "
 
-#: src/icqdialogs.cc:653
+#: src/icqdialogs.cc:654
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Elrejti az offline felhasználókat : %s "
 
-#: src/icqdialogs.cc:654
+#: src/icqdialogs.cc:655
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Idézze az üzenetet a válasznál : %s "
 
-#: src/icqdialogs.cc:656
+#: src/icqdialogs.cc:657
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr ""
 " Anti-spam: nem fogadja az üzenetet a listnán nem lévõ felhasználóktól: %s "
 
-#: src/icqdialogs.cc:657
+#: src/icqdialogs.cc:658
 #, fuzzy, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Jelszóellenõrzés : %s "
 
-#: src/icqdialogs.cc:659
+#: src/icqdialogs.cc:660
 #, c-format
 msgid " ICQ server address : %s "
 msgstr " ICQ szerver cím : %s "
 
-#: src/icqdialogs.cc:689
+#: src/icqdialogs.cc:690
 msgid "Auto Away period (0 - disable): "
 msgstr "Auto Távollét idõtartam (0 - letilt): "
 
-#: src/icqdialogs.cc:693
+#: src/icqdialogs.cc:694
 msgid "Auto N/A period (0 - disable): "
 msgstr "Auto N/A idõtartam (0 - letilt): "
 
-#: src/icqdialogs.cc:760
+#: src/icqdialogs.cc:761
 msgid "Your ICQ details have been fetched"
 msgstr "Az ICQ részleteid letöltve"
 
@@ -825,8 +825,8 @@ msgstr " Nézi/szerkeszti tiltólistát"
 msgid " View/edit visible list"
 msgstr " Nézi/szerkeszti a látható listát"
 
-#: src/icqface.cc:467 src/icqface.cc:1219 src/icqface.cc:1229
-#: src/icqface.cc:1509 src/icqface.cc:1689
+#: src/icqface.cc:467 src/icqface.cc:1215 src/icqface.cc:1225
+#: src/icqface.cc:1503 src/icqface.cc:1683
 msgid "Details"
 msgstr "Részletek"
 
@@ -947,7 +947,7 @@ msgstr "Felvétel"
 msgid "Background/Past"
 msgstr "Háttér/Múlt"
 
-#: src/icqface.cc:790 src/icqface.cc:1335
+#: src/icqface.cc:790 src/icqface.cc:1329
 msgid "F2 to URLs, ESC close"
 msgstr ""
 
@@ -1055,7 +1055,7 @@ msgstr "Ismeretlen"
 msgid " enter to select a file, esc to cancel "
 msgstr " enter kiválaszt egy fájlt, esc mégse "
 
-#: src/icqface.cc:1069 src/icqface.cc:1411
+#: src/icqface.cc:1069 src/icqface.cc:1405
 #, c-format
 msgid "URL to %s, %lu"
 msgstr "URL %s, %lu -nak"
@@ -1070,178 +1070,178 @@ msgstr ""
 msgid "Writing a message to %s, %lu"
 msgstr "Ír egy üzenetet %s, %lu -nak"
 
-#: src/icqface.cc:1179
+#: src/icqface.cc:1175
 #, fuzzy, c-format
 msgid "+ %lu has been added to the list"
 msgstr "+ %s -t hozzávettük a láthatók listájára"
 
-#: src/icqface.cc:1185
+#: src/icqface.cc:1181
 #, fuzzy, c-format
 msgid "+ authorization sent to %lu"
 msgstr "Authorizáció kérés %lu -tól"
 
-#: src/icqface.cc:1215
+#: src/icqface.cc:1211
 #, c-format
 msgid "Authorization request from %lu"
 msgstr "Authorizáció kérés %lu -tól"
 
-#: src/icqface.cc:1219 src/icqface.cc:1229
+#: src/icqface.cc:1215 src/icqface.cc:1225
 msgid "Add to the list"
 msgstr "Hozzávesz a listához"
 
-#: src/icqface.cc:1219 src/icqface.cc:1467
+#: src/icqface.cc:1215 src/icqface.cc:1461
 msgid "Accept"
 msgstr "Elfogad"
 
-#: src/icqface.cc:1220 src/icqface.cc:1230 src/icqface.cc:1464
-#: src/icqface.cc:1510
+#: src/icqface.cc:1216 src/icqface.cc:1226 src/icqface.cc:1458
+#: src/icqface.cc:1504
 msgid "Ok"
 msgstr "Ok"
 
-#: src/icqface.cc:1220
+#: src/icqface.cc:1216
 msgid "Ignore"
 msgstr "Kihagy"
 
-#: src/icqface.cc:1225
+#: src/icqface.cc:1221
 #, c-format
 msgid "You were added to %lu's list"
 msgstr "Hozzávettek %lu listájához"
 
-#: src/icqface.cc:1230 src/icqface.cc:1346 src/icqface.cc:1425
-#: src/icqface.cc:1468 src/icqface.cc:1510
+#: src/icqface.cc:1226 src/icqface.cc:1340 src/icqface.cc:1419
+#: src/icqface.cc:1462 src/icqface.cc:1504
 msgid "Next"
 msgstr "Következõ"
 
-#: src/icqface.cc:1342 src/icqface.cc:1346 src/icqface.cc:1422
-#: src/icqface.cc:1425
+#: src/icqface.cc:1336 src/icqface.cc:1340 src/icqface.cc:1416
+#: src/icqface.cc:1419
 msgid "Fwd"
 msgstr "Tovább"
 
-#: src/icqface.cc:1342 src/icqface.cc:1346
+#: src/icqface.cc:1336 src/icqface.cc:1340
 msgid "Reply"
 msgstr "Válasz"
 
-#: src/icqface.cc:1352
+#: src/icqface.cc:1346
 #, c-format
 msgid "Message from %s, %lu"
 msgstr "Üzenet %s, %lu tól"
 
-#: src/icqface.cc:1355 src/icqface.cc:1405
+#: src/icqface.cc:1349 src/icqface.cc:1399
 #, c-format
 msgid "%s, rcvd on %s"
 msgstr "%s, fgdv %s kor"
 
-#: src/icqface.cc:1360
+#: src/icqface.cc:1354
 #, c-format
 msgid "Message to %s, %lu"
 msgstr "Üzenet %s, %lu nak"
 
-#: src/icqface.cc:1365 src/icqface.cc:1415
+#: src/icqface.cc:1359 src/icqface.cc:1409
 #, c-format
 msgid "Sent on %s"
 msgstr "Elküldve: %s"
 
-#: src/icqface.cc:1402
+#: src/icqface.cc:1396
 #, c-format
 msgid "URL from %s, %lu"
 msgstr "URL %s, %lu tól"
 
-#: src/icqface.cc:1422 src/icqface.cc:1425
+#: src/icqface.cc:1416 src/icqface.cc:1419
 msgid "Open"
 msgstr ""
 
-#: src/icqface.cc:1460
+#: src/icqface.cc:1454
 #, c-format
 msgid "File from %s, %lu"
 msgstr "Fájl %s, %lu tól"
 
-#: src/icqface.cc:1467
+#: src/icqface.cc:1461
 msgid "Refuse"
 msgstr "Visszautasít"
 
-#: src/icqface.cc:1502
+#: src/icqface.cc:1496
 #, c-format
 msgid "Contacts from %s, %lu"
 msgstr "Kontaktok %s, %lu tól"
 
-#: src/icqface.cc:1559
+#: src/icqface.cc:1553
 msgid "save file(s) in: "
 msgstr "Elmenti a fájlt ide: "
 
-#: src/icqface.cc:1565
+#: src/icqface.cc:1559
 #, c-format
 msgid "+ file %s from %s, %lu started"
 msgstr "+ %s nevû fájl %s, %lu -tól elkezdve"
 
-#: src/icqface.cc:1568
+#: src/icqface.cc:1562
 msgid "+ already exists, skipping"
 msgstr ""
 
-#: src/icqface.cc:1580
+#: src/icqface.cc:1574
 #, c-format
 msgid "+ file from %s, %lu refused"
 msgstr "+ %s fájl %s, %lu tól visszautasítva"
 
-#: src/icqface.cc:1610
+#: src/icqface.cc:1604
 #, c-format
 msgid "History items for %s, %lu"
 msgstr "%s, %lu történeti elemei"
 
-#: src/icqface.cc:1613
+#: src/icqface.cc:1607
 msgid "ICQ system messages history"
 msgstr "ICQ rendszer üzenetek története"
 
-#: src/icqface.cc:1617
+#: src/icqface.cc:1611
 msgid "S search, L again, ESC cancel"
 msgstr ""
 
-#: src/icqface.cc:1622
+#: src/icqface.cc:1616
 #, fuzzy
 msgid "search for: "
 msgstr "+ keresés kész"
 
-#: src/icqface.cc:1632
+#: src/icqface.cc:1626
 msgid "+ search string not found"
 msgstr ""
 
-#: src/icqface.cc:1646
+#: src/icqface.cc:1640
 #, c-format
 msgid "+ no history items for %s, %lu"
 msgstr "+ nincsenek történeti elemei %s, %lu nak"
 
-#: src/icqface.cc:1689
+#: src/icqface.cc:1683
 msgid "Move to contacts"
 msgstr "Kontaktok közé tesz"
 
-#: src/icqface.cc:1700
+#: src/icqface.cc:1694
 msgid "ICQ Ignore list"
 msgstr "ICQ tiltólista"
 
-#: src/icqface.cc:1701
+#: src/icqface.cc:1695
 msgid "ICQ Visible list"
 msgstr "ICQ láthatólista"
 
-#: src/icqface.cc:1701
+#: src/icqface.cc:1695
 msgid "ICQ Invisible list"
 msgstr "ICQ láthatatlanlista"
 
-#: src/icqface.cc:1715
+#: src/icqface.cc:1709
 msgid "Select contacts to add to the list"
 msgstr "Válassz kontaktokat, hogy hozzávedd a listához"
 
-#: src/icqface.cc:1769
+#: src/icqface.cc:1763
 msgid "Event recipients"
 msgstr "Esemény címzettjei"
 
-#: src/icqface.cc:1892
+#: src/icqface.cc:1870
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "Gyorskeresés: írd be amit keresel, Alt-S újra keres, Enter befejez"
 
-#: src/icqface.cc:1995
+#: src/icqface.cc:1973
 msgid "+ no URLs within the current context"
 msgstr ""
 
-#: src/icqface.cc:2008
+#: src/icqface.cc:1986
 msgid "URLs within the current context"
 msgstr ""
 

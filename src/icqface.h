@@ -126,7 +126,6 @@ class icqface {
 	void clearworkarea();
 	void workarealine(int l, chtype c = HLINE);
 
-	string quotemsg(string text);
 	void showextractedurls();
 	void extracturls(const string buf);
 

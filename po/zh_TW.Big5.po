@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 3.34.15\n"
-"POT-Creation-Date: 2001-08-18 16:37+0300\n"
+"POT-Creation-Date: 2001-08-21 12:06+0300\n"
 "PO-Revision-Date: 2001-07-03 00:24+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -15,45 +15,45 @@ msgstr ""
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:82 src/icqdialogs.cc:111
+#: src/centericq.cc:84 src/icqdialogs.cc:111
 msgid "Password: "
 msgstr "密碼: "
 
-#: src/centericq.cc:127
+#: src/centericq.cc:129
 msgid " Registration progress "
 msgstr " 註冊進行中... "
 
-#: src/centericq.cc:142
+#: src/centericq.cc:144
 #, c-format
 msgid "Connecting to the server %s ..."
 msgstr "連線至伺服器 ..."
 
-#: src/centericq.cc:147
+#: src/centericq.cc:149
 msgid "Sending request"
 msgstr "送出請求"
 
-#: src/centericq.cc:158
+#: src/centericq.cc:160
 msgid "Timed out waiting for a new uin. Retry?"
 msgstr "註冊新使用者逾時。重試 ?"
 
-#: src/centericq.cc:161
+#: src/centericq.cc:163
 msgid "Retrying.."
 msgstr "重試中..."
 
-#: src/centericq.cc:176
+#: src/centericq.cc:178
 #, c-format
 msgid "New UIN received, %lu"
 msgstr "新的 UIN 是 %lu"
 
-#: src/centericq.cc:181
+#: src/centericq.cc:183
 msgid "Disconnected"
 msgstr "斷線"
 
-#: src/centericq.cc:186
+#: src/centericq.cc:188
 msgid "Unable to connect to the icq server. Retry?"
 msgstr "無法連接 icq 伺服器。重試 ?"
 
-#: src/centericq.cc:213
+#: src/centericq.cc:215
 msgid ""
 "F2/M current contact menu, F3/S change icq status, F4/G general actions, Q "
 "quit"
@@ -61,79 +61,79 @@ msgstr ""
 "F2/M 好友名單選單,         F3/S 變換 ICQ 狀態,     F4/G 一般選單,        Q "
 "離開"
 
-#: src/centericq.cc:253
+#: src/centericq.cc:255
 #, c-format
 msgid "Ignore all events from %s (%lu)?"
 msgstr "忽略所有來自 %s (%lu) 的訊息?"
 
-#: src/centericq.cc:264
+#: src/centericq.cc:266
 #, c-format
 msgid "+ %s has been removed from the visible list"
 msgstr "+ %s 已經從可視名單中移除了"
 
-#: src/centericq.cc:267
+#: src/centericq.cc:269
 #, c-format
 msgid "+ %s has been added to the visible list"
 msgstr "+ 把 %s 加入可視名單中"
 
-#: src/centericq.cc:297
+#: src/centericq.cc:299
 #, c-format
 msgid "Are you sure want to remove %s (%lu)?"
 msgstr "真的要將 %s (%lu) 由名單中刪除嗎 ?"
 
-#: src/centericq.cc:304
+#: src/centericq.cc:306
 msgid "New nickname to show: "
 msgstr "新暱稱: "
 
-#: src/centericq.cc:343
-#, c-format
-msgid "%s (%lu) wrote:"
-msgstr "%s (%lu) 說:"
-
-#: src/centericq.cc:413
+#: src/centericq.cc:387
 msgid "Fetching your ICQ details"
 msgstr "下載你的 ICQ 資料"
 
-#: src/centericq.cc:467
+#: src/centericq.cc:441
 #, c-format
 msgid "+ sending file %s to %s, %lu"
 msgstr "+ 傳送檔案 %s 給 %s, %lu 中"
 
-#: src/centericq.cc:471
+#: src/centericq.cc:445
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ 對方的程式不支援檔案傳輸"
 
-#: src/centericq.cc:561
+#: src/centericq.cc:535
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ 收到新信, 共 %d 封"
 
-#: src/centericq.cc:562
+#: src/centericq.cc:536
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ 最後訊息來自 %s"
 
-#: src/centericq.cc:594
+#: src/centericq.cc:568
 msgid "! another running copy of centericq detected"
 msgstr "! 有另一隻 centericq 正在執行中"
 
-#: src/centericq.cc:595
+#: src/centericq.cc:569
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! pid %lu 會造成問題"
+
+#: src/centericq.cc:599
+#, c-format
+msgid "%s (%lu) wrote:"
+msgstr "%s (%lu) 說:"
 
 #: src/icqdialogs.cc:52
 msgid " Register on ICQ network "
 msgstr " 註冊 ICQ "
 
 #: src/icqdialogs.cc:60 src/icqdialogs.cc:202 src/icqdialogs.cc:336
-#: src/icqdialogs.cc:635
+#: src/icqdialogs.cc:636
 msgid "Change"
 msgstr "修改"
 
 #: src/icqdialogs.cc:60 src/icqdialogs.cc:202 src/icqdialogs.cc:336
-#: src/icqdialogs.cc:635 src/icqface.cc:1342 src/icqface.cc:1422
-#: src/icqface.cc:1468
+#: src/icqdialogs.cc:636 src/icqface.cc:1336 src/icqface.cc:1416
+#: src/icqface.cc:1462
 msgid "Done"
 msgstr "確定"
 
@@ -145,7 +145,7 @@ msgstr " 狀態 "
 msgid " Details "
 msgstr " 詳細資料 "
 
-#: src/icqdialogs.cc:66 src/icqdialogs.cc:644
+#: src/icqdialogs.cc:66 src/icqdialogs.cc:645
 msgid " Options "
 msgstr " 選項 "
 
@@ -167,7 +167,7 @@ msgstr "已經有註冊過"
 msgid " Server address : %s "
 msgstr " 街道住址 : %s "
 
-#: src/icqdialogs.cc:72 src/icqdialogs.cc:660
+#: src/icqdialogs.cc:72 src/icqdialogs.cc:661
 #, c-format
 msgid " Use SOCKS proxy : %s "
 msgstr " 透過 SOCKS 伺服器 : %s "
@@ -182,7 +182,7 @@ msgstr " 音效方式: %s "
 msgid " Initial color scheme : %s "
 msgstr " 色彩配置: %s "
 
-#: src/icqdialogs.cc:75 src/icqdialogs.cc:652
+#: src/icqdialogs.cc:75 src/icqdialogs.cc:653
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " 俄語系 win1251-koi8 轉換 : %s "
@@ -227,26 +227,26 @@ msgstr " UIN : %s "
 msgid " Password : %s "
 msgstr " 密碼 : %s "
 
-#: src/icqdialogs.cc:90 src/icqdialogs.cc:655
+#: src/icqdialogs.cc:90 src/icqdialogs.cc:656
 #, c-format
 msgid " Remember ICQ password : %s "
 msgstr " 儲存 ICQ 密碼 : %s "
 
-#: src/icqdialogs.cc:95 src/icqdialogs.cc:664
+#: src/icqdialogs.cc:95 src/icqdialogs.cc:665
 msgid " SOCKS proxy settings "
 msgstr " SOCKS 伺服器設定 "
 
-#: src/icqdialogs.cc:96 src/icqdialogs.cc:665
+#: src/icqdialogs.cc:96 src/icqdialogs.cc:666
 #, c-format
 msgid " Proxy server address : %s "
 msgstr " 伺服器位址 : %s "
 
-#: src/icqdialogs.cc:97 src/icqdialogs.cc:666
+#: src/icqdialogs.cc:97 src/icqdialogs.cc:667
 #, c-format
 msgid " Proxy user name : %s "
 msgstr " 使用者 : %s "
 
-#: src/icqdialogs.cc:98 src/icqdialogs.cc:667
+#: src/icqdialogs.cc:98 src/icqdialogs.cc:668
 #, c-format
 msgid " Proxy password : %s "
 msgstr " 密碼 : %s "
@@ -275,19 +275,19 @@ msgstr "姓: "
 msgid "Existing UIN: "
 msgstr "已存在 UIN: "
 
-#: src/icqdialogs.cc:135 src/icqdialogs.cc:698
+#: src/icqdialogs.cc:135 src/icqdialogs.cc:699
 msgid "ICQ server to use: "
 msgstr "所用的 ICQ 主機: "
 
-#: src/icqdialogs.cc:140 src/icqdialogs.cc:704
+#: src/icqdialogs.cc:140 src/icqdialogs.cc:705
 msgid "SOCKS proxy server to use: "
 msgstr "所用的 SOCKS 主機: "
 
-#: src/icqdialogs.cc:144 src/icqdialogs.cc:712
+#: src/icqdialogs.cc:144 src/icqdialogs.cc:713
 msgid "SOCKS proxy password: "
 msgstr "SOCKS 伺服器密碼: "
 
-#: src/icqdialogs.cc:148 src/icqdialogs.cc:708
+#: src/icqdialogs.cc:148 src/icqdialogs.cc:709
 msgid "SOCKS proxy user name: "
 msgstr "SOCKS 伺服器使用者: "
 
@@ -542,110 +542,110 @@ msgstr " 未輸入"
 msgid " About [Ctrl-X save, Esc cancel] "
 msgstr " 關於 [Ctrl-X 儲存, Esc 取消] "
 
-#: src/icqdialogs.cc:554
+#: src/icqdialogs.cc:555
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " 傳檔給 %s, %lu "
 
-#: src/icqdialogs.cc:564 src/icqface.cc:467 src/icqface.cc:1509
-#: src/icqface.cc:1689
+#: src/icqdialogs.cc:565 src/icqface.cc:467 src/icqface.cc:1503
+#: src/icqface.cc:1683
 msgid "Add"
 msgstr "加入"
 
-#: src/icqdialogs.cc:564 src/icqface.cc:1689
+#: src/icqdialogs.cc:565 src/icqface.cc:1683
 msgid "Remove"
 msgstr "移除"
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:565
 msgid "Comment"
 msgstr "附註"
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:565
 msgid "Send"
 msgstr "傳送"
 
-#: src/icqdialogs.cc:573
+#: src/icqdialogs.cc:574
 msgid " Files "
 msgstr " 檔案 "
 
-#: src/icqdialogs.cc:574
+#: src/icqdialogs.cc:575
 msgid " Comment "
 msgstr " 附註 "
 
-#: src/icqdialogs.cc:586
+#: src/icqdialogs.cc:587
 msgid "filename: "
 msgstr "檔名: "
 
-#: src/icqdialogs.cc:593
+#: src/icqdialogs.cc:594
 msgid "comment: "
 msgstr "附註: "
 
-#: src/icqdialogs.cc:628
+#: src/icqdialogs.cc:629
 msgid " CenterICQ quick config "
 msgstr " CenterICQ 快速設定 "
 
-#: src/icqdialogs.cc:643
+#: src/icqdialogs.cc:644
 msgid " Configuration "
 msgstr " 組態設定 "
 
-#: src/icqdialogs.cc:645
+#: src/icqdialogs.cc:646
 msgid " Communications "
 msgstr " 連線設定 "
 
-#: src/icqdialogs.cc:647
+#: src/icqdialogs.cc:648
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " 改變音效方式至: %s "
 
-#: src/icqdialogs.cc:648
+#: src/icqdialogs.cc:649
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " 改變色彩配置至: %s "
 
-#: src/icqdialogs.cc:650
+#: src/icqdialogs.cc:651
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " 幾分鐘後自動調整狀態至不在: %d "
 
-#: src/icqdialogs.cc:651
+#: src/icqdialogs.cc:652
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " 幾分鐘後自動調整狀態至沒空: %d "
 
-#: src/icqdialogs.cc:653
+#: src/icqdialogs.cc:654
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " 隱藏離線使用者 : %s "
 
-#: src/icqdialogs.cc:654
+#: src/icqdialogs.cc:655
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " 在回覆訊息時引言 : %s "
 
-#: src/icqdialogs.cc:656
+#: src/icqdialogs.cc:657
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " 防垃圾訊息: 刪除非好友的訊息 : %s "
 
-#: src/icqdialogs.cc:657
+#: src/icqdialogs.cc:658
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " 檢查有無新信件 : %s "
 
-#: src/icqdialogs.cc:659
+#: src/icqdialogs.cc:660
 #, c-format
 msgid " ICQ server address : %s "
 msgstr " ICQ 主機位址 : %s "
 
-#: src/icqdialogs.cc:689
+#: src/icqdialogs.cc:690
 msgid "Auto Away period (0 - disable): "
 msgstr "自動 Away 週期 (0 代表取消此功\能): "
 
-#: src/icqdialogs.cc:693
+#: src/icqdialogs.cc:694
 msgid "Auto N/A period (0 - disable): "
 msgstr "自動 N/A 週期 (0 代表取消此功\能): "
 
-#: src/icqdialogs.cc:760
+#: src/icqdialogs.cc:761
 msgid "Your ICQ details have been fetched"
 msgstr " 你的 ICQ 資料 "
 
@@ -825,8 +825,8 @@ msgstr " 檢視/編輯 忽略名單"
 msgid " View/edit visible list"
 msgstr " 檢視/編輯 可視名單"
 
-#: src/icqface.cc:467 src/icqface.cc:1219 src/icqface.cc:1229
-#: src/icqface.cc:1509 src/icqface.cc:1689
+#: src/icqface.cc:467 src/icqface.cc:1215 src/icqface.cc:1225
+#: src/icqface.cc:1503 src/icqface.cc:1683
 msgid "Details"
 msgstr "詳細資料"
 
@@ -947,7 +947,7 @@ msgstr "聯盟"
 msgid "Background/Past"
 msgstr "背景"
 
-#: src/icqface.cc:790 src/icqface.cc:1335
+#: src/icqface.cc:790 src/icqface.cc:1329
 msgid "F2 to URLs, ESC close"
 msgstr "F2 連線到 URL, ESC 關閉"
 
@@ -1055,7 +1055,7 @@ msgstr "不明"
 msgid " enter to select a file, esc to cancel "
 msgstr " 按 enter 選擇檔案, 按 esc 取消"
 
-#: src/icqface.cc:1069 src/icqface.cc:1411
+#: src/icqface.cc:1069 src/icqface.cc:1405
 #, c-format
 msgid "URL to %s, %lu"
 msgstr "傳送 URL 給 %s, %lu"
@@ -1070,177 +1070,177 @@ msgstr ""
 msgid "Writing a message to %s, %lu"
 msgstr "對 %s, %lu 發送訊息"
 
-#: src/icqface.cc:1179
+#: src/icqface.cc:1175
 #, c-format
 msgid "+ %lu has been added to the list"
 msgstr "+ %lu 已被加入名單中"
 
-#: src/icqface.cc:1185
+#: src/icqface.cc:1181
 #, c-format
 msgid "+ authorization sent to %lu"
 msgstr "+ 認證已送給 %lu"
 
-#: src/icqface.cc:1215
+#: src/icqface.cc:1211
 #, c-format
 msgid "Authorization request from %lu"
 msgstr "來自 %lu 的確認要求"
 
-#: src/icqface.cc:1219 src/icqface.cc:1229
+#: src/icqface.cc:1215 src/icqface.cc:1225
 msgid "Add to the list"
 msgstr "加入名單"
 
-#: src/icqface.cc:1219 src/icqface.cc:1467
+#: src/icqface.cc:1215 src/icqface.cc:1461
 msgid "Accept"
 msgstr "接受"
 
-#: src/icqface.cc:1220 src/icqface.cc:1230 src/icqface.cc:1464
-#: src/icqface.cc:1510
+#: src/icqface.cc:1216 src/icqface.cc:1226 src/icqface.cc:1458
+#: src/icqface.cc:1504
 msgid "Ok"
 msgstr "確認"
 
-#: src/icqface.cc:1220
+#: src/icqface.cc:1216
 msgid "Ignore"
 msgstr "忽略"
 
-#: src/icqface.cc:1225
+#: src/icqface.cc:1221
 #, c-format
 msgid "You were added to %lu's list"
 msgstr "你已被 %lu 加入他的名單"
 
-#: src/icqface.cc:1230 src/icqface.cc:1346 src/icqface.cc:1425
-#: src/icqface.cc:1468 src/icqface.cc:1510
+#: src/icqface.cc:1226 src/icqface.cc:1340 src/icqface.cc:1419
+#: src/icqface.cc:1462 src/icqface.cc:1504
 msgid "Next"
 msgstr "下一個"
 
-#: src/icqface.cc:1342 src/icqface.cc:1346 src/icqface.cc:1422
-#: src/icqface.cc:1425
+#: src/icqface.cc:1336 src/icqface.cc:1340 src/icqface.cc:1416
+#: src/icqface.cc:1419
 msgid "Fwd"
 msgstr "轉送"
 
-#: src/icqface.cc:1342 src/icqface.cc:1346
+#: src/icqface.cc:1336 src/icqface.cc:1340
 msgid "Reply"
 msgstr "回覆"
 
-#: src/icqface.cc:1352
+#: src/icqface.cc:1346
 #, c-format
 msgid "Message from %s, %lu"
 msgstr "來自 %s, %lu 的訊息"
 
-#: src/icqface.cc:1355 src/icqface.cc:1405
+#: src/icqface.cc:1349 src/icqface.cc:1399
 #, c-format
 msgid "%s, rcvd on %s"
 msgstr "%s, 於 %s 收到"
 
-#: src/icqface.cc:1360
+#: src/icqface.cc:1354
 #, c-format
 msgid "Message to %s, %lu"
 msgstr "寫給 %s, %lu"
 
-#: src/icqface.cc:1365 src/icqface.cc:1415
+#: src/icqface.cc:1359 src/icqface.cc:1409
 #, c-format
 msgid "Sent on %s"
 msgstr "送至 %s"
 
-#: src/icqface.cc:1402
+#: src/icqface.cc:1396
 #, c-format
 msgid "URL from %s, %lu"
 msgstr "收到來自 %s, %lu 的網址"
 
-#: src/icqface.cc:1422 src/icqface.cc:1425
+#: src/icqface.cc:1416 src/icqface.cc:1419
 msgid "Open"
 msgstr "開啟"
 
-#: src/icqface.cc:1460
+#: src/icqface.cc:1454
 #, c-format
 msgid "File from %s, %lu"
 msgstr "收到來自 %s, %lu 的檔案"
 
-#: src/icqface.cc:1467
+#: src/icqface.cc:1461
 msgid "Refuse"
 msgstr "拒絕"
 
-#: src/icqface.cc:1502
+#: src/icqface.cc:1496
 #, c-format
 msgid "Contacts from %s, %lu"
 msgstr "收到來自 %s, %lu 的網址"
 
-#: src/icqface.cc:1559
+#: src/icqface.cc:1553
 msgid "save file(s) in: "
 msgstr "將檔案存在: "
 
-#: src/icqface.cc:1565
+#: src/icqface.cc:1559
 #, c-format
 msgid "+ file %s from %s, %lu started"
 msgstr "+ 接收檔案 %s, 來自 %s, %lu"
 
-#: src/icqface.cc:1568
+#: src/icqface.cc:1562
 msgid "+ already exists, skipping"
 msgstr "+ 已存在, 跳過"
 
-#: src/icqface.cc:1580
+#: src/icqface.cc:1574
 #, c-format
 msgid "+ file from %s, %lu refused"
 msgstr "+ 拒絕接收來自 %s, %lu 的檔案"
 
-#: src/icqface.cc:1610
+#: src/icqface.cc:1604
 #, c-format
 msgid "History items for %s, %lu"
 msgstr "與 %s, %lu 的過往雲煙"
 
-#: src/icqface.cc:1613
+#: src/icqface.cc:1607
 msgid "ICQ system messages history"
 msgstr "ICQ 系統訊息記錄"
 
-#: src/icqface.cc:1617
+#: src/icqface.cc:1611
 msgid "S search, L again, ESC cancel"
 msgstr "S 搜尋, L 再搜尋, ESC 取消"
 
-#: src/icqface.cc:1622
+#: src/icqface.cc:1616
 msgid "search for: "
 msgstr "搜尋: "
 
-#: src/icqface.cc:1632
+#: src/icqface.cc:1626
 msgid "+ search string not found"
 msgstr "+ 找不到要搜尋的字串"
 
-#: src/icqface.cc:1646
+#: src/icqface.cc:1640
 #, c-format
 msgid "+ no history items for %s, %lu"
 msgstr "+ 與 %s, %lu 之間無訊息記錄"
 
-#: src/icqface.cc:1689
+#: src/icqface.cc:1683
 msgid "Move to contacts"
 msgstr "移至好友名單"
 
-#: src/icqface.cc:1700
+#: src/icqface.cc:1694
 msgid "ICQ Ignore list"
 msgstr "ICQ 忽略名單"
 
-#: src/icqface.cc:1701
+#: src/icqface.cc:1695
 msgid "ICQ Visible list"
 msgstr "ICQ 可視名單"
 
-#: src/icqface.cc:1701
+#: src/icqface.cc:1695
 msgid "ICQ Invisible list"
 msgstr "ICQ 不可視名單"
 
-#: src/icqface.cc:1715
+#: src/icqface.cc:1709
 msgid "Select contacts to add to the list"
 msgstr "選擇加入名單的列表"
 
-#: src/icqface.cc:1769
+#: src/icqface.cc:1763
 msgid "Event recipients"
 msgstr "事件接受者"
 
-#: src/icqface.cc:1892
+#: src/icqface.cc:1870
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "好友速查: 搜尋好友,       Alt-S 再找一次,  Enter 結束搜尋"
 
-#: src/icqface.cc:1995
+#: src/icqface.cc:1973
 msgid "+ no URLs within the current context"
 msgstr "+ 目前的訊息中沒有 URL"
 
-#: src/icqface.cc:2008
+#: src/icqface.cc:1986
 msgid "URLs within the current context"
 msgstr "目前訊息中的 URL"
 
