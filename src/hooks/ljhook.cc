@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.22 2004/01/27 00:43:30 konst Exp $
+* $Id: ljhook.cc,v 1.23 2004/01/30 00:02:18 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -67,6 +67,10 @@ void ljhook::connect() {
 
     httpcli.setProxyServerHost(conf.gethttpproxyhost());
     httpcli.setProxyServerPort(conf.gethttpproxyport());
+    if (!conf.gethttpproxyuser().empty()) {
+	    httpcli.setProxyServerUser(conf.gethttpproxyuser());
+	    httpcli.setProxyServerPasswd(conf.gethttpproxypasswd());
+    }
 
     HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
     ev->addParam("mode", "login");
