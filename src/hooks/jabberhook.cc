@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: jabberhook.cc,v 1.6 2002/11/22 16:29:43 konst Exp $
+* $Id: jabberhook.cc,v 1.7 2002/11/22 18:18:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,7 @@ jabberhook jhook;
 jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
+    fcapabs.insert(hookcapab::authrequests);
 }
 
 jabberhook::~jabberhook() {
@@ -142,12 +143,18 @@ bool jabberhook::send(const imevent &ev) {
 
 	} else if(ev.gettype() == imevent::authorization) {
 	    const imauthorization *m = static_cast<const imauthorization *> (&ev);
+	    auto_ptr<char> cjid(strdup(jidnormalize(ev.getcontact().nickname).c_str()));
+	    xmlnode x = 0;
 
 	    if(m->getauthtype() == imauthorization::Granted) {
-		xmlnode x;
-		auto_ptr<char> cjid(strdup(jidnormalize(ev.getcontact().nickname).c_str()));
-
 		x = jutil_presnew(JPACKET__SUBSCRIBED, cjid.get(), 0);
+
+	    } else if(m->getauthtype() == imauthorization::Request) {
+		x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
+
+	    }
+
+	    if(x) {
 		jab_send(jc, x);
 		xmlnode_free(x);
 	    }
