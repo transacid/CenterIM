@@ -6,7 +6,15 @@ if BUILD_YAHOO
 
 liblibyahoo2_a_SOURCES =  crypt.c libyahoo2.c sha.c yahoo_list.c yahoo_httplib.c yahoo_util.c yahootransformtables.c
 
+else
+
+liblibyahoo2_a_LIBADD = dummy.o
+
+dummy.c:
+	touch dummy.c
+
 endif
+
 SUBDIRS = 
 INCLUDES = -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
 CPPFLAGS = -DSTDC_HEADERS -DUSE_STRUCT_CALLBACKS
