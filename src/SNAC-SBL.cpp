@@ -107,7 +107,9 @@ namespace ICQ2000 {
 
 	uin = Contact::StringtoUIN(name);
 	ContactRef ct = ContactRef(new Contact(uin));
-	
+
+	ct->setServerSideInfo(group_id, tag_id);
+
 	if (tlvlist.exists(TLV_SBL_Nick)) {
 	  SBLNickTLV *tlv = static_cast<SBLNickTLV*>(tlvlist[TLV_SBL_Nick]);
 	  ct->setAlias(tlv->Value()); // translate (?)

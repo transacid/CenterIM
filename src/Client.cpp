@@ -872,19 +872,19 @@ namespace ICQ2000
   
   void Client::mergeSBL(ContactTree& tree)
   {
+    /*
     ContactTree::iterator curr = tree.begin();
     while (curr != tree.end())
     {
       ContactTree::Group::iterator gcurr = (*curr).begin();
 
-      std::cout << "Group: " << (*curr).get_label() << endl;
       while (gcurr != (*curr).end())
       {
-	std::cout << "  Contact: " << (*gcurr)->getAlias() << endl;
 	++gcurr;
       }
       ++curr;
     }
+    */
   }
 
   ContactRef Client::getUserInfoCacheContact(unsigned int reqid)
@@ -2260,8 +2260,16 @@ namespace ICQ2000
   void Client::uploadServerBasedContact(const ContactRef& c)
   {
     Buffer b;
+
+    FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
     FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-    
+
+    ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(c);
+    FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
+
+    FLAPwrapSNAC( b, SBLAddEntrySNAC(c) );
+    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
+
     // TODO ContactTree!
     //    SBLAddEntrySNAC ssnac(l);
     //    ssnac.setRequestID( reqid );
@@ -2311,6 +2319,17 @@ namespace ICQ2000
     ssnac.setRequestID( reqid );
     FLAPwrapSNAC( b, ssnac );
     */
+    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
+
+    Send(b);
+  }
+
+  void Client::removeServerBasedContact(const ContactRef& c)
+  {
+    Buffer b;
+
+    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
+    FLAPwrapSNAC( b, SBLRemoveEntrySNAC(c) );
     FLAPwrapSNAC( b, SBLCommitEditSNAC() );
 
     Send(b);
