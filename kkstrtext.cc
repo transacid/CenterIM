@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.10 2001/11/13 17:13:31 konst Exp $
+* $Id: kkstrtext.cc,v 1.11 2002/02/20 17:18:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -963,7 +963,7 @@ bool getconf(string &st, string &buf, ifstream &f) {
 		sect = buf.substr(1);
 		break;
 	    case '#':
-		break;
+		if(buf[1] != '!') break;
 	    default:
 		ret = buf.size();
 		break;
