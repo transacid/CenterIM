@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.88 2003/10/14 20:36:24 konst Exp $
+* $Id: yahoohook.cc,v 1.89 2003/10/15 20:09:04 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -246,16 +246,17 @@ bool yahoohook::isoursocket(fd_set &rs, fd_set &ws, fd_set &es) const {
 void yahoohook::disconnect() {
     if(online()) {
 	yahoo_logoff(cid);
-	disconnected();
     }
 }
 
 void yahoohook::disconnected() {
-    logger.putourstatus(proto, getstatus(), ourstatus = offline);
-    clist.setoffline(proto);
-    fonline = false;
-    face.log(_("+ [yahoo] disconnected"));
-    face.update();
+    if(logged()) {
+	logger.putourstatus(proto, getstatus(), ourstatus = offline);
+	clist.setoffline(proto);
+	fonline = false;
+	face.log(_("+ [yahoo] disconnected"));
+	face.update();
+    }
 }
 
 void yahoohook::exectimers() {
