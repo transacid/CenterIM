@@ -178,7 +178,7 @@ void imcontroller::aimupdateprofile() {
 }
 
 void imcontroller::ircchannels() {
-    bool finished, success;
+    bool finished = false, success;
     int n, i, b;
     dialogbox db;
     string name;
