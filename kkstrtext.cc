@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.40 2004/12/24 18:33:34 konst Exp $
+* $Id: kkstrtext.cc,v 1.41 2004/12/25 16:08:00 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1107,11 +1107,13 @@ string striprtf(const string &s, const string &charset) {
 		break;
 
 	    case 'u':
-		if(pre == '\\') {
-		    unichar = "";
-		    bunicode = true;
-		} else if(bprint) {
-		    r += *i;
+		if(bprint) {
+		    if(pre == '\\') {
+			unichar = "";
+			bunicode = true;
+		    } else {
+			r += *i;
+		    }
 		}
 		break;
 
