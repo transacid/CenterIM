@@ -62,7 +62,7 @@
 #include "yahoo_httplib.h"
 
 #include "yahoo2_callbacks.h"
-
+#include "connwrap.h"
 
 extern char pager_host[];
 extern char pager_port[];
@@ -299,8 +299,7 @@ int yahoo_connect(char *host, int port)
 		serv_addr.sin_port = htons(port);
 
 		res = -1;
-		res = connect(servfd, (struct sockaddr *) &serv_addr, 
-				sizeof(serv_addr));
+		res = cw_connect(servfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr), 0);
 
 		if(res >= 0)
 			return servfd;
