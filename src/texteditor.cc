@@ -1577,6 +1577,10 @@ void texteditor::getpos(int *col, int *line) {
 int texteditor::open() {
     int k, l, go;
 
+    if((x2-x1 < 2) || (y2-y1 < 2)) {
+	return 0;
+    }
+
     if(fn < 0 || fn > files->count) setfnum(0);
 
     active = true;
@@ -1614,50 +1618,53 @@ int texteditor::open() {
 		    edmove(k, EM_TAB | EM_CTRL | EM_MANUAL);
 		    updatecursor();
 		    break;
-	    default:
-		if(prevshift) prevshift = curfile->markmode = false;
-	    switch(k) {
-		case '\r':
-		    if(insertmode || (curfile->lines->count == CURLINE+1)) {
-			edenter(smarttab);
-		    } else {
-			edmove(KEY_DOWN);
-			edmove(KEY_HOME);
-		    }
-		    break;
-		case KEY_BACKSPACE:
-		case CTRL('h'):
-		case 127:
-		    edbackspace();
-		    break;
-		case CTRL('y'):
-		    eddelline();
-		    break;
-		case KEY_TAB:
-		    inschar('\t');
-		    break;
-		case CTRL('t'):
-		    eddelword();
-		    break;
+
 		default:
-		    if(k >= 32 && k <= 255) {
-			if(!insertmode && !endofline()) eddel();
-			inschar(k);
-		    } else if(otherkeys) {
-			if(!getctrlkeys() && ((k == KEY_IC) || (k == KEY_DC)))
-			switch(k) {
-			    case KEY_IC: insertmode = !insertmode; break;
-			    case KEY_DC: eddel(); break;
+		    if(prevshift) prevshift = curfile->markmode = false;
+		switch(k) {
+		    case '\r':
+			if(insertmode || (curfile->lines->count == CURLINE+1)) {
+			    edenter(smarttab);
 			} else {
-			    l = fn;
-			    if((*otherkeys)(*this, k) == -1) return -1;
-			    if(l != fn) {
-				draw();
-				updatecursor();
+			    edmove(KEY_DOWN);
+			    edmove(KEY_HOME);
+			}
+			break;
+		    case KEY_BACKSPACE:
+		    case CTRL('h'):
+		    case 127:
+			edbackspace();
+			break;
+		    case CTRL('y'):
+			eddelline();
+			break;
+		    case KEY_TAB:
+			inschar('\t');
+			break;
+		    case CTRL('t'):
+			eddelword();
+			break;
+
+		    default:
+			if(k >= 32 && k <= 255) {
+			    if(!insertmode && !endofline()) eddel();
+			    inschar(k);
+			} else if(otherkeys) {
+			    if(!getctrlkeys() && ((k == KEY_IC) || (k == KEY_DC)))
+			    switch(k) {
+				case KEY_IC: insertmode = !insertmode; break;
+				case KEY_DC: eddel(); break;
+			    } else {
+				l = fn;
+				if((*otherkeys)(*this, k) == -1) return -1;
+				if(l != fn) {
+				    draw();
+				    updatecursor();
+				}
 			    }
 			}
-		    }
-	    }}
+		}
+	    }
 	} else {
 	    if(idle) (*idle)(*this);
 	}
