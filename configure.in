@@ -10,7 +10,21 @@ AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 if test "$build_yahoo" = "yes"; then
     AC_PROG_CXX
     AC_CHECK_HEADERS(inttypes.h stdint.h)
-    AC_C_BIGENDIAN
+
+    AC_MSG_CHECKING(endianness)
+    AC_TRY_COMPILE([
+	#include <sys/param.h>
+    ], [
+	#if (defined(BYTE_ORDER) && defined(BIG_ENDIAN) && (BYTE_ORDER == BIG_ENDIAN)) || defined(_BIG_ENDIAN)
+	    bogus
+	#endif
+    ],[
+	ac_end=little
+    ],[
+	AC_DEFINE(WORDS_BIGENDIAN, [big endian architecture])
+	ac_end=big
+    ])
+    AC_MSG_RESULT($ac_end)
 fi
 
 AC_OUTPUT(Makefile)
