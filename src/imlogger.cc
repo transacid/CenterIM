@@ -107,7 +107,7 @@ const imstatus &st) {
 	    } else if(st == offline) {
 		fmt = _("%s: went offline");
 	    } else {
-		fmt = _("changed our %s status from %s to %s");
+		fmt = _("changed our %s status to %s from %s");
 	    }
 
 	    sprintf(buf, fmt, conf.getprotocolname(pname).c_str(), imstatus2name[st], imstatus2name[oldst]);
