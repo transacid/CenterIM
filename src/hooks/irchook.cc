@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.20 2002/05/10 20:21:38 konst Exp $
+* $Id: irchook.cc,v 1.21 2002/05/13 16:46:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -603,14 +603,14 @@ void irchook::gotinfo(void *conn, void *cli, ...) {
 	    if((pos = about.find_first_not_of(" :")) > 0) about.erase(0, pos);
 	}
 
-	cbinfo.email = email;
+	cbinfo.email = rushtmlconv("wk", email);
 
 	if((pos = about.find(" ")) != -1) {
-	    cbinfo.lname = about.substr(pos+1);
+	    cbinfo.lname = rushtmlconv("wk", about.substr(pos+1));
 	    about.erase(pos);
 	}
 
-	cbinfo.fname = about;
+	cbinfo.fname = rushtmlconv("wk", about);
 
 	c->setnick(nick);
 	c->setbasicinfo(cbinfo);

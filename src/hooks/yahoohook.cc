@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.35 2002/04/20 21:07:08 konst Exp $
+* $Id: yahoohook.cc,v 1.36 2002/05/13 16:46:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -300,7 +300,7 @@ void yahoohook::setautostatus(imstatus st) {
 		    yahoo_cmd_idle(context);
 		} else {
 		    yahoo_cmd_set_away_mode(context, stat2int[st],
-			conf.getawaymsg(aim).c_str());
+			rusconv("kw", conf.getawaymsg(aim)).c_str());
 		}
 	    }
 	}

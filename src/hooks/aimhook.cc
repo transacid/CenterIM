@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.17 2002/04/17 16:01:25 konst Exp $
+* $Id: aimhook.cc,v 1.18 2002/05/13 16:46:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -209,7 +209,7 @@ void aimhook::setautostatus(imstatus st) {
 		    case away:
 		    case notavail:
 		    case occupied:
-			firetalk_set_away(handle, conf.getawaymsg(aim).c_str());
+			firetalk_set_away(handle, rusconv("kw", conf.getawaymsg(aim)).c_str());
 			break;
 
 		    default:
