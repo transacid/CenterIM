@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.148 2005/01/27 00:25:59 konst Exp $
+* $Id: icqdialogs.cc,v 1.149 2005/01/27 00:27:42 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1998,7 +1998,7 @@ bool icqface::selectpgpkey(string &keyid, bool secretonly) {
     m.additemf(0, 0, _(" Use no key"));
 
     while(i != keys.end()) {
-	m.additem(0, 0, (string) " " + pgp.getkeyinfo(*i, true));
+	m.additem(0, 0, (string) " " + pgp.getkeyinfo(*i, secretonly));
 	if(*i == keyid) m.setpos(m.getcount()-1);
 	++i;
     }
