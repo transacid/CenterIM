@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.102 2002/08/20 17:43:21 konst Exp $
+* $Id: icqhook.cc,v 1.103 2002/08/21 08:26:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -843,7 +843,9 @@ void icqhook::synclist() {
     vector<icqcontact *> tobestored, needauth;
     vector<icqcontact *>::iterator ic;
 
+    cli.contact_userinfo_change_signal.clear();
     getsyncstatus(s, tobestored, needauth);
+
     for(ic = tobestored.begin(); ic != tobestored.end(); ++ic) {
 	ContactRef ct = cli.getContact((*ic)->getdesc().uin);
 	if(ct.get()) {
@@ -852,6 +854,7 @@ void icqhook::synclist() {
 	}
     }
 
+    cli.contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
     cli.uploadServerBasedContactList(tcl);
 
     while(syncstatus != ackFetch && logged() && time(0)-t <= 30) {
@@ -894,7 +897,8 @@ void icqhook::getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored,
 	imcontact imc = imcontact((*ic)->getUIN(), icq);
 	icqcontact *c = clist.get(imc);
 
-	if(c) {
+	if(c)
+	if(c->inlist()) {
 	    if(!(*ic)->getServerBased()) {
 		if(!(*ic)->getAuthAwait()) {
 		    tobestored.push_back(c);
