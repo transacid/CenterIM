@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.67 2002/10/17 17:36:24 konst Exp $
+* $Id: icqcontact.cc,v 1.68 2002/10/22 11:36:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -645,7 +645,11 @@ time_t icqcontact::getlastseen() const {
 }
 
 char icqcontact::getshortstatus() const {
-    return imstatus2char[status];
+    if(status >= offline && status < imstatus_size) {
+	return imstatus2char[status];
+    } else {
+	return imstatus2char[offline];
+    }
 }
 
 bool icqcontact::operator > (const icqcontact &acontact) const {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.37 2002/10/16 18:28:29 konst Exp $
+* $Id: msnhook.cc,v 1.38 2002/10/22 11:36:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -259,6 +259,8 @@ imstatus msnhook::msn2imstatus(int st) {
 	default:
 	    return available;
     }
+
+    return offline;
 }
 
 void msnhook::requestinfo(const imcontact &ic) {

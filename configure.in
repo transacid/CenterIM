@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.8.6)
+AM_INIT_AUTOMAKE(centericq, 4.8.7)
 
 AC_CANONICAL_HOST
 
@@ -71,12 +71,10 @@ AC_CHECK_LIB(iconv, iconv,,
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 
-AC_LANG_RESTORE
-
 AC_CHECK_LIB(ncurses, initscr,,
     [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
 
-AM_PATH_GLIB(1.2.0, [ CPPFLAGS="$CPPFLAGS $GLIB_CFLAGS" ], AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
+AC_LANG_RESTORE
 
 case "$host_os" in
 	darwin*)
@@ -85,6 +83,8 @@ case "$host_os" in
 	    CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
 	;;
 esac
+
+AM_PATH_GLIB(1.2.0, [ CPPFLAGS="$CPPFLAGS $GLIB_CFLAGS" ], AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
 
 AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.3.3 libmsn-0.1 firetalk-0.1 libyahoo2-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
