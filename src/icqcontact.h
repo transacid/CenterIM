@@ -35,7 +35,7 @@ class icqcontact {
 	unsigned char lang1, lang2, lang3, bday, bmonth, byear, age, gender;
 	unsigned short country, wcountry, occupation;
 	unsigned long zip, wzip;
-	signed char timezone;
+	char utimezone;
 
 	void scanhistory();
 	const string tosane(const string p) const;
@@ -148,7 +148,7 @@ class icqcontact {
 	void setgroupid(int agroupid);
 	int getgroupid() const;
 
-	void settimezone(signed char atimezone) { timezone = atimezone; }
+	void settimezone(char atimezone) { utimezone = atimezone; }
 	const string gettimezone() const;
 };
 

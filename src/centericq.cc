@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.20 2001/10/02 17:30:59 konst Exp $
+* $Id: centericq.cc,v 1.21 2001/10/03 10:43:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -453,7 +453,7 @@ void centericq::updatedetails() {
 	    lname.c_str(), fprimemail.c_str(), fsecemail.c_str(),
 	    foldemail.c_str(), fcity.c_str(), fstate.c_str(), fphone.c_str(),
 	    ffax.c_str(), fstreet.c_str(), fcellular.c_str(), fzip, fcountry,
-	    0, 0);
+	    0);
 
 	icq_UpdateMetaInfoAbout(&icql, fabout.c_str());
     }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.19 2001/10/02 17:31:01 konst Exp $
+* $Id: icqface.cc,v 1.20 2001/10/03 10:43:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -369,7 +369,7 @@ void icqface::fillcontactlist() {
 
 	if(groupchange && !strchr("!N", sc)) {
 	    ngroup = mcontacts->addnode(0, conf.getcolor(cp_main_highlight),
-		(void *) (10+c->getgroupid()), " " + find(groups.begin(),
+		/*(void *) (10+c->getgroupid())*/ 0, " " + find(groups.begin(),
 		groups.end(), c->getgroupid())->getname() + " ");
 	}
 
@@ -382,20 +382,26 @@ void icqface::fillcontactlist() {
 		    nnode = conf.gethideoffline() && conf.getusegroups() ?
 			ngroup : mcontacts->addnode(ngroup,
 			    conf.getcolor(cp_main_highlight),
-				(void *) 1, " Online ");
+				/*(void *) 1*/ 0, " Online ");
 
 		    online_added = true;
 		    break;
 		case '_':
-		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 2, " Offline ");
+		    nnode = mcontacts->addnode(ngroup,
+			conf.getcolor(cp_main_highlight),
+			    /*(void *) 2*/ 0, " Offline ");
 		    break;
 		case '!':
 		    ngroup = 0;
-		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 3, " Not in list ");
+		    nnode = mcontacts->addnode(ngroup,
+			conf.getcolor(cp_main_highlight),
+			    /*(void *) 3*/ 0, " Not in list ");
 		    break;
 		case 'N':
 		    ngroup = 0;
-		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 4, " Non-ICQ ");
+		    nnode = mcontacts->addnode(ngroup,
+			conf.getcolor(cp_main_highlight),
+			    /*(void *) 4*/ 0, " Non-ICQ ");
 		    break;
 	    }
 
@@ -612,7 +618,7 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     c->getinfo(fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, fzip, fcountry);
     c->getmoreinfo(fage, fgender, fhomepage, flang1, flang2, flang3, fbday, fbmonth, fbyear);
 
-    workarealine(WORKAREA_Y1+9);
+    workarealine(WORKAREA_Y1+10);
     x = WORKAREA_X1+2;
 
     mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_highlight), _("Address"));
@@ -621,9 +627,9 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_highlight), _("Phone"));
     mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_highlight), _("Fax"));
     mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_highlight), _("Cellular"));
-//    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Timezone"));
+    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Timezone"));
 
-    mainw.write(x, WORKAREA_Y1+9, conf.getcolor(cp_main_highlight), _("Homepage"));
+    mainw.write(x, WORKAREA_Y1+10, conf.getcolor(cp_main_highlight), _("Homepage"));
 
     tmp = fcity;
     
@@ -644,13 +650,13 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_text), fphone);
     mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_text), ffax);
     mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_text), fcellular);
-//    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_text), c->gettimezone());
+    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_text), c->gettimezone());
 
     const char *p = fhomepage.c_str();
 
     for(i = 0; ; i++) {
 	tmp.assign(p, 0, WORKAREA_X2-WORKAREA_X1-12);
-	mainw.write(WORKAREA_X1+12, WORKAREA_Y1+9+i, conf.getcolor(cp_main_text), tmp);
+	mainw.write(x, WORKAREA_Y1+10+i, conf.getcolor(cp_main_text), tmp);
 	p += tmp.size();
 	if(tmp.size() < WORKAREA_X2-WORKAREA_X1-12) break;
     }

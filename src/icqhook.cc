@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.11 2001/10/02 17:31:02 konst Exp $
+* $Id: icqhook.cc,v 1.12 2001/10/03 10:43:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -373,6 +373,7 @@ unsigned char auth) {
 
 	c->setinfo(first, last, pri_eml, sec_eml, old_eml, city, state, phone, fax, street, cellular, zip, country);
 	c->setsecurity(auth != 0, false, false);
+	c->settimezone(timezone);
     }
 }
 

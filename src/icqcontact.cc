@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.10 2001/10/02 17:31:00 konst Exp $
+* $Id: icqcontact.cc,v 1.11 2001/10/03 10:43:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,7 +174,7 @@ void icqcontact::save() {
 	    fprintf(f, "%s\n", fbg[2].c_str());
 	    fprintf(f, "%s\n", fbg[3].c_str());
 	    fprintf(f, "%d\n", groupid);
-	    fprintf(f, "%d\n", timezone);
+	    fprintf(f, "%d\n", utimezone);
 	    fclose(f);
 	}
 
@@ -263,7 +263,7 @@ void icqcontact::load() {
 		case 49: fbg[2] = buf; break;
 		case 50: fbg[3] = buf; break;
 		case 51: groupid = atoi(buf); break;
-		case 52: timezone = atoi(buf); break;
+		case 52: utimezone = atoi(buf); break;
 	    }
 	}
 	fclose(f);
@@ -750,8 +750,16 @@ int icqcontact::getgroupid() const {
 }
 
 const string icqcontact::gettimezone() const {
-    return (string)
-	(timezone > 0 ? "-" : "+") +
-	i2str(timezone/2) + ":" +
-	(timezone%2 ? "30" : "00");
+    string r;
+    time_t t = time(0), rt;
+
+    r = (utimezone > 0 ? "-" : "+");
+    r += i2str(abs(utimezone/2)) + ":" + (utimezone%2 ? "30" : "00");
+
+    rt = t+icq_GetSystemTimeZone()*1800;
+    rt -= utimezone*1800;
+
+    r += (string) ", " + ctime(&rt);
+
+    return r;
 }
