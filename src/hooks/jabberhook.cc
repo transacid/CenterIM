@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.38 2002/12/18 18:05:39 konst Exp $
+* $Id: jabberhook.cc,v 1.39 2002/12/20 17:28:43 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,14 +128,18 @@ void jabberhook::connect() {
     if(jc->user) {
 	jab_start(jc);
 	id = atoi(jab_auth(jc));
+
+	if(!jc || jc->state == JCONN_STATE_OFF) {
+	    face.log(_("+ [jab] unable to connect to the server"));
+	    jab_delete(jc);
+	    jc = 0;
+	}
+
     } else {
 	face.log(_("+ [jab] incorrect jabber id"));
-    }
-
-    if(!jc || jc->state == JCONN_STATE_OFF) {
-	face.log(_("+ [jab] unable to connect to the server"));
 	jab_delete(jc);
 	jc = 0;
+
     }
 }
 
@@ -417,14 +421,27 @@ imstatus jabberhook::getstatus() const {
 
 bool jabberhook::regnick(const string &nick, const string &pass,
 const string &serv, string &err) {
-    int pos;
+    int pos, port;
     string jid = nick + "@" + serv;
-    if((pos = jid.find(":")) != -1) jid.erase(pos);
+
+    if((pos = jid.find(":")) != -1) {
+	port = atoi(jid.substr(pos+1).c_str());
+	jid.erase(pos);
+    } else {
+	port = icqconf::defservers[jabber].port;
+    }
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(pass.c_str()));
 
-    jc = jab_new(cjid.get(), cpass.get(), icqconf::defservers[jabber].port, 0);
+    jc = jab_new(cjid.get(), cpass.get(), port, 0);
+
+    if(!jc->user) {
+	err = _("Wrong nickname given, cannot register");
+	jab_delete(jc);
+	jc = 0;
+	return false;
+    }
 
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);

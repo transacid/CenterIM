@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.43 2002/12/16 17:58:54 konst Exp $
+* $Id: imcontroller.cc,v 1.44 2002/12/20 17:28:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -209,7 +209,7 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
 
 	} else {
 	    string msgerr = _("Failed");
-	    if(err.empty()) msgerr += (string) ": " + err;
+	    if(!err.empty()) msgerr += (string) ": " + err;
 	    face.progress.log("%s", msgerr.c_str());
 
 	}
