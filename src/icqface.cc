@@ -1,7 +1,7 @@
  /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.166 2002/12/06 13:07:41 konst Exp $
+* $Id: icqface.cc,v 1.167 2002/12/09 10:24:02 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1890,14 +1890,18 @@ bool icqface::eventedit(imevent &ev) {
     } else if(ev.gettype() == imevent::authorization) {
 	imauthorization *m = static_cast<imauthorization *>(&ev);
 
-	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
-	editor.load(msg = m->getmessage(), "");
-	editor.open();
+	if(gethook(ev.getcontact().pname).getCapabs().count(hookcapab::authreqwithmessages)) {
+	    editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
+	    editor.load(msg = m->getmessage(), "");
+	    editor.open();
+	    auto_ptr<char> p(editor.save("\r\n"));
+	    *m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
+	    r = editdone;
+	} else {
+	    *m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, "");
+	    r = true;
+	}
 
-	r = editdone;
-
-	auto_ptr<char> p(editor.save("\r\n"));
-	*m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
 
     } else if(ev.gettype() == imevent::contacts) {
 	imcontacts *m = static_cast<imcontacts *>(&ev);

@@ -3,7 +3,7 @@
 * The centericq FAQ (frequently asked questions)
 * by Konstantin Klyagin <konst@konst.org.ua>
 *
-* $Id: FAQ,v 1.12 2002/12/03 15:18:06 konst Exp $
+* $Id: FAQ,v 1.13 2002/12/09 10:24:02 konst Exp $
 *
 */
 
@@ -167,3 +167,13 @@ A: Batch mode like you described is not possible to be implemented, because
    centericq instance. If you want to run it like a "daemon", use
    screen(1). More details on the batch mode usage can be found in the
    README, chapter 9.2.
+
+/* *** */
+
+Q: ICQ new UINs registration doesn't work! It just sends a request and
+   then after 30 seconds reports a timeout.
+
+A: It does work. Though, the ICQ server doesn't report the "password is
+   too simple" situaion. Try to enter another one, more complicated. Also,
+   as far as I know, "xxx123" is complicated enough to be accepted by
+   the server software.

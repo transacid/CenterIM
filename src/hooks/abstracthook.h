@@ -12,6 +12,7 @@ struct hookcapab {
 	files,
 	contacts,
 	authrequests,
+	authreqwithmessages,
 	fetchaway,
 	setaway,
 	changenick,
