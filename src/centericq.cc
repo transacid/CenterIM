@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.150 2002/12/29 10:17:16 konst Exp $
+* $Id: centericq.cc,v 1.151 2003/01/05 21:47:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -330,6 +330,10 @@ void centericq::mainloop() {
 		    c->setstatus(cb.requiresauth ? available : offline);
 		    c->setbasicinfo(cb);
 		}
+		break;
+
+	    case ACT_EXTERN:
+		face.userinfoexternal(c->getdesc());
 		break;
 
 	    case ACT_MSG:

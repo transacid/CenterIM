@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.172 2002/12/29 10:17:16 konst Exp $
+* $Id: icqface.cc,v 1.173 2003/01/05 21:47:33 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,7 @@
 #include "abstracthook.h"
 #include "imlogger.h"
 #include "irchook.h"
+#include "imexternal.h"
 
 #include <libicq2000/userinfohelpers.h>
 
@@ -286,6 +287,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_HISTORY]   = _(" Events history         h");
 	actnames[ACT_REMOVE]    = _(" Remove user          del");
 	actnames[ACT_INFO]      = _(" User's details         ?");
+	actnames[ACT_EXTERN]    = _(" External actions..    f6");
 
 	if(lst.inlist(c, csignore))
 	    actnames[ACT_IGNORE]    = _(" Unset ignore user      i");
@@ -324,6 +326,7 @@ int icqface::contextmenu(icqcontact *c) {
 	}
 
 	actions.push_back(ACT_HISTORY);
+	actions.push_back(ACT_EXTERN);
 
 	if(cont != contactroot) {
 	    actions.push_back(0);
@@ -1038,7 +1041,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     bool finished = false, showinfo;
-    icqcontact *c = clist.get(realinfo);
+    icqcontact *c = clist.get(passinfo = realinfo);
     textbrowser tb(conf.getcolor(cp_main_text));
     dialogbox db;
     int k, lastb, b;
@@ -1047,7 +1050,7 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     saveworkarea();
     clearworkarea();
 
-    status(_("F2 to URLs, ESC close"));
+    status(_("F2 to URLs, F6 external actions, ESC close"));
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
@@ -1800,6 +1803,44 @@ void icqface::showextractedurls() {
     }
 }
 
+void icqface::userinfoexternal(const imcontact &ic) {
+    vector<pair<int, string> > r = external.getlist(imexternal::aomanual, ic.pname);
+
+    if(r.empty()) {
+	log(_("+ no external actions defined for %s"), conf.getprotocolname(ic.pname).c_str());
+
+    } else {
+	verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
+
+	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27, sizeWArea.y1+9, conf.getcolor(cp_main_text)));
+	m.idle = &menuidle;
+
+	vector<pair<int, string> >::const_iterator ir = r.begin();
+	while(ir != r.end()) {
+	    m.additem((string(" ") + ir->second).c_str());
+	    ++ir;
+	}
+
+	m.scale();
+	int i = m.open();
+	m.close();
+
+	if(i) {
+	    char cbuf[512];
+	    sprintf(cbuf, _("Result of the external action %s:"),
+		(r.begin()+i-1)->second.c_str());
+
+	    string buf;
+	    external.execmanual(ic, i-1, buf);
+	    imnotification ev(ic, (string) cbuf + "\n\n" + buf);
+
+	    saveworkarea();
+	    eventview(&ev, vector<eventviewresult>(), true);
+	    restoreworkarea();
+	}
+    }
+}
+
 void icqface::showeventbottom(const imcontact &ic) {
     if(ischannel(ic)) {
 	status(_("^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"));
@@ -2197,7 +2238,7 @@ void icqface::chat(const imcontact &ic) {
 }
 
 icqface::eventviewresult icqface::eventview(const imevent *ev,
-vector<eventviewresult> abuttons) {
+vector<eventviewresult> abuttons, bool nobuttons) {
 
     string title_event, title_timestamp, text;
     horizontalbar *bar = 0;
@@ -2209,48 +2250,50 @@ vector<eventviewresult> abuttons) {
     vector<eventviewresult> actions;
     vector<eventviewresult>::iterator ia;
 
-    if(ev->gettype() == imevent::message || ev->gettype() == imevent::notification) {
-	actions.push_back(forward);
+    if(!nobuttons) {
+	if(ev->gettype() == imevent::message || ev->gettype() == imevent::notification) {
+	    actions.push_back(forward);
 
-	if(ev->getdirection() == imevent::incoming) {
-	    actions.push_back(reply);
-	}
+	    if(ev->getdirection() == imevent::incoming) {
+		actions.push_back(reply);
+	    }
 
-    } else if(ev->gettype() == imevent::url) {
-	actions.push_back(forward);
-	actions.push_back(open);
+	} else if(ev->gettype() == imevent::url) {
+	    actions.push_back(forward);
+	    actions.push_back(open);
 
-	if(ev->getdirection() == imevent::incoming) {
-	    actions.push_back(reply);
-	}
+	    if(ev->getdirection() == imevent::incoming) {
+		actions.push_back(reply);
+	    }
 
-    } else if(ev->gettype() == imevent::sms) {
-	if(ev->getdirection() == imevent::incoming) {
-	    actions.push_back(reply);
-	}
+	} else if(ev->gettype() == imevent::sms) {
+	    if(ev->getdirection() == imevent::incoming) {
+		actions.push_back(reply);
+	    }
 
-    } else if(ev->gettype() == imevent::authorization) {
-	if(ev->getdirection() == imevent::incoming) {
+	} else if(ev->gettype() == imevent::authorization) {
+	    if(ev->getdirection() == imevent::incoming) {
+		actions.push_back(info);
+		actions.push_back(accept);
+		actions.push_back(reject);
+	    }
+
+	} else if(ev->gettype() == imevent::contacts) {
 	    actions.push_back(info);
-	    actions.push_back(accept);
-	    actions.push_back(reject);
+	    actions.push_back(add);
+
+	} else if(ev->gettype() == imevent::email) {
+	    actions.push_back(forward);
+
+	} else if(ev->gettype() == imevent::file) {
+	    actions.push_back(info);
+
+	    if(gethook(ev->getcontact().pname).knowntransfer(*static_cast<const imfile *>(ev))) {
+		actions.push_back(accept);
+		actions.push_back(reject);
+	    }
+
 	}
-
-    } else if(ev->gettype() == imevent::contacts) {
-	actions.push_back(info);
-	actions.push_back(add);
-
-    } else if(ev->gettype() == imevent::email) {
-	actions.push_back(forward);
-
-    } else if(ev->gettype() == imevent::file) {
-	actions.push_back(info);
-
-	if(gethook(ev->getcontact().pname).knowntransfer(*static_cast<const imfile *>(ev))) {
-	    actions.push_back(accept);
-	    actions.push_back(reject);
-	}
-
     }
 
     actions.push_back(ok);
@@ -2619,6 +2662,11 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    face.extk = ACT_HIDEOFFLINE;
 	    break;
 
+	case KEY_F(6):
+	    if(!ischannel(c) && c)
+		face.extk = ACT_EXTERN;
+	    break;
+
 	case 'r':
 	case 'R':
 	    if(!ischannel(c) && c)
@@ -2652,6 +2700,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	|| (k == KEY_F(3))
 	|| (k == KEY_F(4))
 	|| (k == KEY_F(5))
+	|| (k == KEY_F(6))
 	|| (k == ALT('s')))) {
 	return m.getpos()+1;
     } else {
@@ -2722,9 +2771,8 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 
 int icqface::userinfokeys(dialogbox &db, int k) {
     switch(k) {
-	case KEY_F(2):
-	    face.showextractedurls();
-	    break;
+	case KEY_F(2): face.showextractedurls(); break;
+	case KEY_F(6): face.userinfoexternal(face.passinfo); break;
     }
 
     return -1;

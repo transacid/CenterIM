@@ -28,7 +28,7 @@ groups.
 %setup
 
 %build
-./configure --prefix=/usr
+./configure --prefix=/usr --without-ssl
 make
 
 %install

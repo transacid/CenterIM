@@ -9,7 +9,8 @@ class imexternal {
 	    aostdin = 2,
 	    aostdout = 4,
 	    aoprereceive = 8,
-	    aopresend = 16
+	    aopresend = 16,
+	    aomanual = 32
 	};
 
 	struct actioninfo {
@@ -20,9 +21,9 @@ class imexternal {
     private:
 	class action {
 	    private:
-		vector<imevent::imeventtype> event;
-		vector<protocolname> proto;
-		vector<imstatus> status;
+		set<imevent::imeventtype> event;
+		set<protocolname> proto;
+		set<imstatus> status;
 
 		int options;
 		bool enabled;
@@ -43,13 +44,12 @@ class imexternal {
 		~action();
 
 		bool exec(imevent *ev, int &result, int option);
-
-		void disable();
-		void enable();
+		bool exec(const imcontact &ic, string &outbuf);
 
 		bool load(ifstream &f);
 
-		const actioninfo getinfo() const;
+		bool matches(int aoptions, protocolname apname) const;
+		string getname() const { return name; }
 	};
 
 	vector<action> actions;
@@ -67,8 +67,9 @@ class imexternal {
 	    // and "result" is filled in with a bool that indicates
 	    // if the event is accepted or not
 
-	vector<actioninfo> getlist() const;
-	void update(const vector<actioninfo> &info);
+	bool execmanual(const imcontact &ic, int id, string &outbuf);
+
+	vector<pair<int, string> > getlist(int options, protocolname pname) const;
 };
 
 extern imexternal external;

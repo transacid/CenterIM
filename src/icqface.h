@@ -25,7 +25,7 @@ enum interfaceAction {
     ACT_PING, ACT_EDITUSER, ACT_VISIBLELIST, ACT_INVISLIST, ACT_QUICKFIND,
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
-    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG
+    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN
 };
 
 extern class centericq cicq;
@@ -222,7 +222,8 @@ class icqface {
 	bool eventedit(imevent &ev);
 
 	eventviewresult eventview(const imevent *ev,
-	    vector<eventviewresult> abuttons = vector<eventviewresult>());
+	    vector<eventviewresult> abuttons = vector<eventviewresult>(),
+	    bool nobuttons = false);
 
 	void fullscreenize(const imevent *ev);
 
@@ -233,6 +234,7 @@ class icqface {
 	    transferstatus st, int btotal, int bdone);
 
 	void transfermonitor();
+	void userinfoexternal(const imcontact &ic);
 };
 
 extern icqface face;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.18 2002/12/29 10:17:16 konst Exp $
+* $Id: imexternal.cc,v 1.19 2003/01/05 21:47:33 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,30 +83,59 @@ int imexternal::exec(imevent *ev, bool &eaccept, int option) {
     return r;
 }
 
-vector<imexternal::actioninfo> imexternal::getlist() const {
-    vector<actioninfo> r;
-    vector<action>::const_iterator i;
+bool imexternal::execmanual(const imcontact &ic, int id, string &outbuf) {
+    int res;
+    bool r;
 
-    for(i = actions.begin(); i != actions.end(); ++i) {
-	r.push_back(i->getinfo());
+    if(r = (id < actions.size() && id >= 0)) {
+	vector<action>::iterator ia = actions.begin()+id;
+	r = ia->exec(ic, outbuf);
     }
 
     return r;
 }
 
-void imexternal::update(const vector<imexternal::actioninfo> &info) {
-    vector<imexternal::actioninfo>::const_iterator i;
+vector<pair<int, string> > imexternal::getlist(int options, protocolname pname) const {
+    vector<pair<int, string> > r;
+    vector<action>::const_iterator i;
 
-    for(i = info.begin(); i != info.end(); ++i) {
+    for(i = actions.begin(); i != actions.end(); ++i) {
+	if(i->matches(options, pname))
+	    r.push_back(make_pair(i-actions.begin(), i->getname()));
     }
+
+    return r;
 }
 
 // ----------------------------------------------------------------------------
 
-imexternal::action::action(): options(0), enabled(true/*false*/) {
+imexternal::action::action(): options(0), enabled(true) {
 }
 
 imexternal::action::~action() {
+}
+
+bool imexternal::action::exec(const imcontact &ic, string &outbuf) {
+    bool r;
+    char buf[512];
+    abstracthook &hook = gethook(ic.pname);
+
+    if(r = enabled)
+    if(r = (options & aomanual)) {
+	currentev = new immessage(ic, imevent::incoming, "");
+
+	writescript();
+	int result = execscript();
+
+	sprintf(buf, _("executed external manual action %s, return code = %d"),
+	    name.c_str(), result);
+
+	outbuf = output;
+	logger.putmessage(buf);
+	delete currentev;
+    }
+
+    return r;
 }
 
 bool imexternal::action::exec(imevent *ev, int &result, int option) {
@@ -121,7 +150,7 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
     && ((option && (options & option)) || !option);
 
     if(r && !option) {
-	r = !(options & aoprereceive) && !(options & aopresend);
+	r = !(options & aoprereceive) && !(options & aopresend) && !(options & aomanual);
     }
 
     if(r) {
@@ -290,14 +319,6 @@ int imexternal::action::execscript() {
     return r;
 }
 
-void imexternal::action::disable() {
-    enabled = false;
-}
-
-void imexternal::action::enable() {
-    enabled = true;
-}
-
 bool imexternal::action::load(ifstream &f) {
     int pos, npos, i;
     string buf, sect, param, aname;
@@ -309,6 +330,7 @@ bool imexternal::action::load(ifstream &f) {
     } actions[] = {
 	{ "pre-receive", aoprereceive },
 	{ "pre-send", aopresend },
+	{ "manual", aomanual },
 	{ 0, 0 }
     };
 
@@ -346,7 +368,7 @@ bool imexternal::action::load(ifstream &f) {
 		    for(imevent::imeventtype et = imevent::message; et != imevent::imeventtype_size; (int) et += 1) {
 			if((param == geteventname(et))
 			|| (param == "all")) {
-			    event.push_back(et);
+			    event.insert(et);
 			}
 		    }
 		}
@@ -356,28 +378,28 @@ bool imexternal::action::load(ifstream &f) {
 		    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
 			if((param == conf.getprotocolname(pname))
 			|| (param == "all")) {
-			    proto.push_back(pname);
+			    proto.insert(pname);
 			}
 		    }
 		}
 
 	    } else if(param == "status") {
 		while(!(param = getword(buf)).empty()) {
-		    if(param == "online") status.push_back(available); else
-		    if(param == "away") status.push_back(away); else
-		    if(param == "dnd") status.push_back(dontdisturb); else
-		    if(param == "na") status.push_back(notavail); else
-		    if(param == "occupied") status.push_back(occupied); else
-		    if(param == "ffc") status.push_back(freeforchat); else
-		    if(param == "invisible") status.push_back(invisible); else
+		    if(param == "online") status.insert(available); else
+		    if(param == "away") status.insert(away); else
+		    if(param == "dnd") status.insert(dontdisturb); else
+		    if(param == "na") status.insert(notavail); else
+		    if(param == "occupied") status.insert(occupied); else
+		    if(param == "ffc") status.insert(freeforchat); else
+		    if(param == "invisible") status.insert(invisible); else
 		    if(param == "all") {
-			status.push_back(available);
-			status.push_back(away);
-			status.push_back(dontdisturb);
-			status.push_back(notavail);
-			status.push_back(occupied);
-			status.push_back(freeforchat);
-			status.push_back(invisible);
+			status.insert(available);
+			status.insert(away);
+			status.insert(dontdisturb);
+			status.insert(notavail);
+			status.insert(occupied);
+			status.insert(freeforchat);
+			status.insert(invisible);
 		    }
 		}
 
@@ -396,16 +418,15 @@ bool imexternal::action::load(ifstream &f) {
 	pos = f.tellg();
     }
 
+    if(options & aomanual)
+    if(!(options & aostdout))
+	options |= aostdout;
+
     return wasexec;
 }
 
-const imexternal::actioninfo imexternal::action::getinfo() const {
-    actioninfo r;
-
-    r.name = name;
-    r.enabled = enabled;
-
-    return r;
+bool imexternal::action::matches(int aoptions, protocolname apname) const {
+    return (options & aoptions) && proto.count(apname);
 }
 
 string imexternal::action::geteventname(imevent::imeventtype et) {
@@ -425,7 +446,7 @@ string imexternal::action::geteventname(imevent::imeventtype et) {
 	case imevent::contacts:
 	    return "contacts";
 	case imevent::file:
-	    return "file(s)";
+	    return "file";
     }
 
     return "";

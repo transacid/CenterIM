@@ -73,6 +73,7 @@ Contents
 	9.3.3. Remote control with external actions
 	9.3.4. Forwarding events
 	9.3.5. Hiding from scary ones
+	9.3.6. "Manual" external actions
     9.4. Protocol debug mode
     9.5. "Friendly" logging
     9.6. Custom base directories
@@ -1107,9 +1108,9 @@ recommended just cut'n'paste the following text.
 # ----------------
 #
 # Every section starts with a line containing the "%action <name>",
-# "%pre-send <name>" or "%pre-receive <name>" text. Please note that
-# the <name> of any kind is necessary. It musn't be empty. Inside it
-# the following parameters can be used:
+# "%pre-send <name>", "%pre-receive <name>" or "%manual <name>" text.
+# Please note that the <name> of any kind is necessary. It musn't be
+# empty. Inside it the following parameters can be used:
 #
 # event
 # -----
@@ -1249,7 +1250,7 @@ where N is the line number. Below the real examples go.
     fname=`head -n 2 $SENDER_INFODIR/info | tail -n 1`
     # to fetch sender's first name
 
-    fname=`head -n 3 $SENDER_INFODIR/info | tail -n 1`
+    lname=`head -n 3 $SENDER_INFODIR/info | tail -n 1`
     # to fetch sender's last name
 
 The example from the next section demonstrates usage of the environment
@@ -1421,6 +1422,47 @@ fi
 Such a setup will make your centericq go offline as soon as the
 freddy_krueger user appears online on any of the IM networks you're
 currently logged in.
+
+
+9.3.6. "Manual" external actions
+--------------------------------
+
+  There were only automatically executed actions so far. "But where are
+manual ones?" - you will probably ask. Let me introduce to you the type
+of actions that can be executed either from the contact list or from the
+"users details" screen by pressing the F6 key. Such actions are executed
+depending on a menu selection, then the corresponding code is ran
+passing the data of a current contact, and the result will be shown in a
+dialog. One of the applications of the feature is to invoke the host(1)
+command for a users' IP in order to find out his Internet domain name.
+If you're a cool hacker, you can bind invoking nmap this way or anything
+else you want :)
+
+[ - cut (external actions setup for invoking of host(1) manually) ---------- ]
+
+%manual         host
+proto           icq
+#
+# Only ICQ shows up IP addresses
+#
+
+%exec
+#!/bin/sh
+
+ip=`head -n 45 $SENDER_INFODIR/info | tail -n 1`
+for i in $ip; do ip=$i; break; done
+host $ip
+
+[ -------------------------------------------------------------------------- ]
+
+The strange "for" cycle is there because we want only the first IP
+number, while quite frequently there are two separated with a space,
+where the second one represents a local IP address which we don't need
+to resolve.
+
+Add this section to your ~/.centericq/external and enjoy the comfort of
+not having to copy'n'paste the IP address in case you want to look up a
+domain name.
 
 
 9.4. Protocol debug mode
@@ -1681,4 +1723,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.73 2002/12/18 18:05:37 konst Exp $
+$Id: README,v 1.74 2003/01/05 21:47:25 konst Exp $
