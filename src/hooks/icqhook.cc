@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.121 2002/11/26 12:24:51 konst Exp $
+* $Id: icqhook.cc,v 1.122 2002/11/27 17:34:04 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1287,7 +1287,6 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
 
 void icqhook::search_result_cb(SearchResultEvent *ev) {
     if(ev == searchevent) {
-	string line;
 	ContactRef cont = ev->getLastContactAdded();
 
 	if(searchdest && cont.get()) {
@@ -1307,7 +1306,7 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 
 	    }
 
-	    line = (cont->getStatus() == STATUS_ONLINE ? "o " : "  ") + c->getnick();
+	    string line = (cont->getStatus() == STATUS_ONLINE ? "o " : "  ") + c->getnick();
 
 	    if(line.size() > 12) line.resize(12);
 	    else line += string(12-line.size(), ' ');

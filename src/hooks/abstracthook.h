@@ -23,7 +23,8 @@ struct hookcapab {
 	ping,
 	conferencing,
 	cltemporary,
-	directadd
+	directadd,
+	flexiblesearch
     };
 };
 
@@ -85,6 +86,9 @@ class abstracthook {
 
 	virtual void conferencecreate(const imcontact &confid,
 	    const vector<imcontact> &lst);
+
+	virtual vector<string> getsearchservices() const;
+	virtual vector<pair<string, string> > getsearchparameters(const string &agentname) const;
 };
 
 abstracthook &gethook(protocolname pname);

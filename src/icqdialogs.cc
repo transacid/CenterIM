@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.93 2002/11/22 19:11:50 konst Exp $
+* $Id: icqdialogs.cc,v 1.94 2002/11/27 17:34:02 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -164,8 +164,13 @@ bool icqface::finddialog(imsearchparams &s) {
     int nuin, ninfo, nloc, nwork, nonl;
     bool finished, ret, proceed;
     dialogbox db;
+
     vector<protocolname> penabled;
     vector<protocolname>::iterator ipname, ipfname;
+
+    vector<string> services;
+    vector<string>::iterator iservice;
+
     string tname, act;
     imsearchparams ts;
 
@@ -206,8 +211,22 @@ bool icqface::finddialog(imsearchparams &s) {
     treeview &tree = *db.gettree();
     db.getbar()->item = 3;
 
+    bool protchanged = true;
+
     while(!finished) {
 	tree.clear();
+
+	if(protchanged) {
+	    services = gethook(s.pname).getsearchservices();
+
+	    if(s.service.empty())
+	    if((iservice = services.begin()) != services.end()) {
+		s.service = *iservice;
+		s.flexparams = gethook(s.pname).getsearchparameters(s.service);
+	    }
+
+	    protchanged = false;
+	}
 
 	i = tree.addnode(_(" Network "));
 	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname) + " ");
@@ -254,6 +273,26 @@ bool icqface::finddialog(imsearchparams &s) {
 		    tree.addleaff(i, 0, 29, " %s ", s.kwords.c_str());
 		}
 		break;
+
+	    case jabber:
+		if(s.nick.empty() && !services.empty()) {
+		    i = tree.addnode(_(" Search service "));
+		    tree.addleaff(i, 0, 31, " %s ", s.service.c_str());
+
+		    i = tree.addnode(_(" Search parameters "));
+
+		    int id = 100;
+		    vector<pair<string, string> >::const_iterator
+			ifp = s.flexparams.begin();
+
+		    while(ifp != s.flexparams.end()) {
+			tree.addleaff(i, 0, id++, " %s : %s ",
+			    ifp->first.c_str(), ifp->second.c_str());
+			++ifp;
+		    }
+
+		    break;
+		}
 
 	    default:
 		if(!s.reverse) {
@@ -311,7 +350,7 @@ bool icqface::finddialog(imsearchparams &s) {
 			ASK_YES | ASK_NO, ASK_NO) == ASK_YES;
 
 		if(proceed)
-		    s.save(tname); 
+		    s.save(tname);
 		break;
 
 	    case 2:
@@ -322,7 +361,14 @@ bool icqface::finddialog(imsearchparams &s) {
 	    case 3:
 		switch(i) {
 		    case 1:
-			if(++ipname == penabled.end()) ipname = penabled.begin();
+			if(++ipname == penabled.end())
+			    ipname = penabled.begin();
+
+			if(protchanged = s.pname != *ipname) {
+			    s.service = "";
+			    s.flexparams.clear();
+			}
+
 			s.pname = *ipname;
 			break;
 
@@ -347,6 +393,18 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 28: selectrandomgroup(s.randomgroup); break;
 		    case 29: s.kwords = inputstr(_("Keywords: "), s.kwords); break;
 		    case 30: s.reverse = !s.reverse; break;
+		    case 31:
+			if(services.size()) {
+			    if(++iservice == services.end())
+				iservice = services.begin();
+			    s.service = *iservice;
+			}
+			break;
+		}
+
+		if(i >= 100) {
+		    vector<pair<string, string> >::iterator ifp = s.flexparams.begin()+i-100;
+		    ifp->second = inputstr(ifp->first + ": ", ifp->second);
 		}
 		break;
 

@@ -24,8 +24,12 @@ struct imsearchparams {
     unsigned short minage, maxage, country, language, randomgroup;
     ICQ2000::AgeRange agerange;
     imgender gender;
+
     string firstname, lastname, nick, city, state, kwords;
     string company, department, position, email, room;
+
+    string service;
+    vector<pair<string, string> > flexparams;
 
     void save(const string &prname) const;
     bool load(const string &prname);

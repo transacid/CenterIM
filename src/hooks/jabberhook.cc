@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.12 2002/11/26 12:24:51 konst Exp $
+* $Id: jabberhook.cc,v 1.13 2002/11/27 17:34:05 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,6 +34,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::authrequests);
     fcapabs.insert(hookcapab::directadd);
+    fcapabs.insert(hookcapab::flexiblesearch);
 }
 
 jabberhook::~jabberhook() {
@@ -261,7 +262,20 @@ void jabberhook::setautostatus(imstatus st) {
     }
 }
 
-void jabberhook::requestinfo(const imcontact &c) {
+void jabberhook::requestinfo(const imcontact &ic) {
+    vector<icqcontact *>::const_iterator ifc = foundguys.begin();
+
+    while(ifc != foundguys.end()) {
+	if((*ifc)->getdesc() == ic) {
+	    icqcontact *c = clist.get(contactroot);
+	    c->clear();
+	    c->setbasicinfo((*ifc)->getbasicinfo());
+	    c->setdispnick((*ifc)->getdispnick());
+	    c->setnick(ic.nickname);
+	    break;
+	}
+	++ifc;
+    }
 }
 
 void jabberhook::requestawaymsg(const imcontact &ic) {
@@ -392,6 +406,178 @@ void jabberhook::checkinlist(imcontact ic) {
     }
 }
 
+vector<string> jabberhook::getsearchservices() const {
+    vector<agent>::const_iterator ia = agents.begin();
+    vector<string> r;
+
+    while(ia != agents.end()) {
+	if(ia->type == agent::search)
+	    r.push_back(ia->name);
+	++ia;
+    }
+
+    return r;
+}
+
+vector<pair<string, string> > jabberhook::getsearchparameters(const string &agentname) const {
+    vector<agent>::const_iterator ia = agents.begin();
+    vector<pair<string, string> > r;
+
+    while(ia != agents.end()) {
+	if(ia->name == agentname)
+	if(ia->type == agent::search) {
+	    vector<string>::const_iterator isp = ia->searchparams.begin();
+	    while(isp != ia->searchparams.end()) {
+		r.push_back(make_pair(*isp, string()));
+		++isp;
+	    }
+	}
+
+	++ia;
+    }
+
+    return r;
+}
+
+void jabberhook::gotagentinfo(xmlnode x) {
+    xmlnode y;
+    string name, data;
+    const char *from = xmlnode_get_attrib(x, "from"), *p;
+    vector<agent>::iterator ia = jhook.agents.begin();
+
+    if(!from) return;
+
+    while(ia != jhook.agents.end()) {
+	if(ia->jid == from)
+	if(y = xmlnode_get_tag(x, "query")) {
+	    ia->searchparams.clear();
+
+	    for(y = xmlnode_get_firstchild(y); y; y = xmlnode_get_nextsibling(y)) {
+		p = xmlnode_get_name(y); name = p ? p : "";
+		p = xmlnode_get_data(y); data = p ? p : "";
+
+		if(name == "instructions") ia->instruction = data; else
+		if(name == "key") ia->key = data; else
+		if(!name.empty()) {
+		    ia->searchparams.push_back(name);
+		}
+	    }
+	    break;
+	}
+	++ia;
+    }
+
+}
+
+void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
+    xmlnode x, y;
+
+    while(!foundguys.empty()) {
+	delete foundguys.back();
+	foundguys.pop_back();
+    }
+
+    if(!params.service.empty()) {
+	searchdest = &dest;
+
+	x = jutil_iqnew(JPACKET__SET, NS_SEARCH);
+	xmlnode_put_attrib(x, "id", "Lookup");
+
+	y = xmlnode_get_tag(x, "query");
+
+	vector<agent>::const_iterator ia = agents.begin();
+	while(ia != agents.end()) {
+	    if(ia->name == params.service) {
+		xmlnode_put_attrib(x, "to", ia->jid.c_str());
+		xmlnode_insert_cdata(xmlnode_insert_tag(y, "key"),
+		    ia->key.c_str(), (unsigned int) -1);
+		break;
+	    }
+	    ++ia;
+	}
+
+	vector<pair<string, string> >::const_iterator ip = params.flexparams.begin();
+	while(ip != params.flexparams.end()) {
+	    xmlnode_insert_cdata(xmlnode_insert_tag(y,
+		ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
+	    ++ip;
+	}
+
+	xmlnode_insert_cdata(xmlnode_insert_tag(y, ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
+
+	jab_send(jc, x);
+	xmlnode_free(x);
+    }
+}
+
+void jabberhook::gotsearchresults(xmlnode x) {
+    xmlnode y, z;
+    const char *jid, *nick, *first, *last, *email;
+    icqcontact *c;
+
+    if(!searchdest)
+	return;
+
+    if(y = xmlnode_get_tag(x, "query"))
+    for(y = xmlnode_get_tag(y, "item"); y; y = xmlnode_get_nextsibling(y)) {
+	jid = xmlnode_get_attrib(y, "jid");
+	nick = first = last = email = 0;
+
+	z = xmlnode_get_tag(y, "nick"); if(z) nick = xmlnode_get_data(z);
+	z = xmlnode_get_tag(y, "first"); if(z) first = xmlnode_get_data(z);
+	z = xmlnode_get_tag(y, "last"); if(z) last = xmlnode_get_data(z);
+	z = xmlnode_get_tag(y, "email"); if(z) email = xmlnode_get_data(z);
+
+	if(jid) {
+	    c = new icqcontact(imcontact(jidnormalize(jid), jabber));
+	    icqcontact::basicinfo cb = c->getbasicinfo();
+	    if(nick) c->setdispnick(nick);
+	    if(first) cb.fname = first;
+	    if(last) cb.lname = last;
+	    if(email) cb.email = email;
+	    c->setbasicinfo(cb);
+
+	    foundguys.push_back(c);
+
+	    string line = (string) " " + c->getnick();
+	    if(line.size() > 12) line.resize(12);
+	    else line += string(12-line.size(), ' ');
+	    line += " " + cb.fname + " " + cb.lname;
+	    if(!cb.email.empty()) line += " <" + cb.email + ">";
+
+	    searchdest->additem(conf.getcolor(cp_clist_jabber), c, line);
+	}
+    }
+
+    face.findready();
+
+    face.log(_("+ [jab] search finished, %d found"),
+	foundguys.size());
+
+    searchdest->redraw();
+    searchdest = 0;
+}
+
+void jabberhook::gotloggedin() {
+    xmlnode x;
+
+    x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
+    xmlnode_put_attrib(x, "id", "Roster");
+    jab_send(jc, x);
+    xmlnode_free(x);
+
+    x = jutil_iqnew(JPACKET__GET, NS_AGENTS);
+    xmlnode_put_attrib(x, "id", "Agent List");
+    jab_send(jc, x);
+    xmlnode_free(x);
+
+    jhook.flogged = true;
+    jhook.setjabberstatus(jhook.manualstatus, "");
+
+    face.log(_("+ [jab] logged in"));
+    face.update();
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
@@ -418,10 +604,6 @@ void jabberhook::statehandler(jconn conn, int state) {
 	    break;
 
 	case JCONN_STATE_ON:
-	    jhook.flogged = true;
-	    jhook.setjabberstatus(jhook.manualstatus, "");
-	    face.log(_("+ [jab] logged in"));
-	    face.update();
 	    break;
 
 	default:
@@ -434,7 +616,7 @@ void jabberhook::statehandler(jconn conn, int state) {
 void jabberhook::packethandler(jconn conn, jpacket packet) {
     char *p;
     xmlnode x, y;
-    string from, type, body, ns;
+    string from, type, body, ns, id;
     imstatus ust;
 
     jpacket_reset(packet);
@@ -470,21 +652,12 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 		    if(iid == jhook.id) {
 			if(!jhook.regmode) {
-			    x = jutil_iqnew (JPACKET__GET, NS_ROSTER);
-			    xmlnode_put_attrib(x, "id", "Roster");
-			    jab_send(conn, x);
-			    xmlnode_free(x);
-
-			    x = jutil_iqnew (JPACKET__GET, NS_AGENTS);
-			    xmlnode_put_attrib(x, "id", "Agent List");
-			    jab_send(conn, x);
-			    xmlnode_free(x);
+			    jhook.gotloggedin();
 
 			} else {
 			    jhook.regdone = true;
 
 			}
-
 			return;
 		    }
 		}
@@ -524,21 +697,34 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 				const char *name = xmlnode_get_tag_data(y, "name");
 				const char *desc = xmlnode_get_tag_data(y, "description");
 				const char *service = xmlnode_get_tag_data(y, "service");
-				const char *agent_type = 0;
-				if(xmlnode_get_tag(y, "groupchat")) agent_type = "groupchat"; else
-				if(xmlnode_get_tag(y, "transport")) agent_type = "transport"; else
-				if(xmlnode_get_tag(y, "search")) agent_type = "search";
-//                                j_add_agent(name, alias, desc, service, from, agent_type);
+				agent::agent_type atype = agent::unknown;
+
+				if(xmlnode_get_tag(y, "groupchat")) atype = agent::groupchat; else
+				if(xmlnode_get_tag(y, "transport")) atype = agent::transport; else
+				if(xmlnode_get_tag(y, "search")) atype = agent::search;
+
+				if(alias && name && desc) {
+				    jhook.agents.push_back(agent(alias, name, desc, atype));
+				    if(atype == agent::search) {
+					x = jutil_iqnew (JPACKET__GET, NS_SEARCH);
+					xmlnode_put_attrib(x, "to", alias);
+					xmlnode_put_attrib(x, "id", "Agent info");
+					jab_send(conn, x);
+					xmlnode_free(x);
+				    }
+				}
 			    }
 			}
 
-		    } else if(ns == NS_AGENT) {
-			const char *name = xmlnode_get_tag_data(x, "name");
-			const char *url = xmlnode_get_tag_data(x, "url");
+		    } else if(ns == NS_SEARCH) {
+			p = xmlnode_get_attrib(packet->x, "id"); id = p ? p : "";
+			if(id == "Agent info") {
+			    jhook.gotagentinfo(packet->x);
+			} else if(id == "Lookup") {
+			    jhook.gotsearchresults(packet->x);
+			}
 
 		    }
-
-		    jab_send_raw (conn, "<presence/>");
 		}
 
 	    } else if(type == "set") {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.30 2002/11/22 19:11:58 konst Exp $
+* $Id: abstracthook.cc,v 1.31 2002/11/27 17:34:03 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -149,6 +149,14 @@ void abstracthook::aborttransfer(const imfile &fr) {
 
 void abstracthook::conferencecreate(const imcontact &confid,
 const vector<imcontact> &lst) {
+}
+
+vector<string> abstracthook::getsearchservices() const {
+    return vector<string>();
+}
+
+vector<pair< string, string> > abstracthook::getsearchparameters(const string &agentname) const {
+    return vector<pair<string, string> >();
 }
 
 // ----------------------------------------------------------------------------

@@ -16,6 +16,18 @@ class jabberhook: public abstracthook {
 
 	vector<string> roster;
 	map<string, string> awaymsgs;
+	vector<icqcontact *> foundguys;
+
+	struct agent {
+	    string jid, name, desc, instruction, key;
+	    enum agent_type { search, transport, groupchat, unknown } type;
+	    vector<string> searchparams;
+
+	    agent(const string &ajid, const string &aname, const string &adesc, agent_type atype):
+		jid(ajid), name(aname), desc(adesc), type(atype) {}
+	};
+
+	vector<agent> agents;
 
 	static void statehandler(jconn conn, int state);
 	static void packethandler(jconn conn, jpacket packet);
@@ -30,6 +42,10 @@ class jabberhook: public abstracthook {
 
 	void sendnewuser(const imcontact &c, bool report);
 	void removeuser(const imcontact &ic, bool report);
+
+	void gotagentinfo(xmlnode x);
+	void gotsearchresults(xmlnode x);
+	void gotloggedin();
 
     public:
 	jabberhook();
@@ -62,6 +78,11 @@ class jabberhook: public abstracthook {
 
 	bool regnick(const string &nick, const string &pass,
 	    const string &serv, string &err);
+
+	vector<string> getsearchservices() const;
+	vector<pair<string, string> > getsearchparameters(const string &agentname) const;
+
+	void lookup(const imsearchparams &params, verticalmenu &dest);
 };
 
 extern jabberhook jhook;
