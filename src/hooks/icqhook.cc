@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.30 2001/12/20 11:36:18 konst Exp $
+* $Id: icqhook.cc,v 1.31 2001/12/20 16:26:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -634,18 +634,16 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		vector<string> pintinfo;
 		list<PersonalInterestInfo::Interest>::iterator ii;
 
-		for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
-		    pintinfo.push_back(ii->second);
-		}
+		for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++)
+		    pintinfo.push_back(rusconv("wk", ii->second));
 
 		/* education background */
 
 		vector<string> backginfo;
 		list<BackgroundInfo::School>::iterator isc;
 
-		for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
-		    backginfo.push_back(isc->second);
-		}
+		for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++)
+		    backginfo.push_back(rusconv("wk", isc->second));
 
 		/* nicknames stuff */
 
