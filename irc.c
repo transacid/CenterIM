@@ -836,6 +836,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 						break;
 					if (tempchr2[0] == '@' || tempchr2[0] == '+') {
 //                                                firetalk_callback_chat_user_joined(c,args[4],&tempchr2[1],0);
+						firetalk_chat_internal_add_member(firetalk_find_handle(c),args[4],&tempchr2[1]);
 						firetalk_callback_im_buddyonline(c,&tempchr2[1],1);
 						if (tempchr2[0] == '@') {
 							firetalk_callback_chat_user_opped(c,args[4],&tempchr2[1],NULL);
@@ -844,6 +845,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 						}
 					} else {
 //                                                firetalk_callback_chat_user_joined(c,args[4],tempchr2,0);
+						firetalk_chat_internal_add_member(firetalk_find_handle(c),args[4],tempchr2);
 						firetalk_callback_im_buddyonline(c,tempchr2,1);
 					}
 					if (tempchr == NULL)
