@@ -221,6 +221,7 @@ struct yahoo_found_contact {
 	char *gender;
 	char *location;
 	int age;
+	int online;
 };
 
 /*

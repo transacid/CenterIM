@@ -2807,6 +2807,7 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 
 	if(p) p++;
 
+	if(p)
 	for(k = 0; *p; ) {
 	    cp = p;
 	    np = strchr(p, 4);
@@ -2827,6 +2828,7 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 		    }
 
 		    break;
+		case 2: yct->online = !strcmp(cp, "2") ? 1 : 0; break;
 		case 3: yct->gender = cp; break;
 		case 4: yct->age = atoi(cp); break;
 		case 5: if(cp != "\005") yct->location = cp; k = 0; break;
@@ -3976,6 +3978,7 @@ static void yahoo_search_internal(int id, int t, const char *text, int g, int ar
 	struct yahoo_input_data *yid;
 	char url[1024];
 	char buff[1024];
+	char *ctext, *p;
 
 	if(!yd)
 		return;
@@ -3990,9 +3993,15 @@ static void yahoo_search_internal(int id, int t, const char *text, int g, int ar
 	*/
 
 	snprintf(buff, sizeof(buff), "&.sq=%20&.tt=%d&.ss=%d", total, startpos);
+
+	ctext = strdup(text);
+	while(p = strchr(ctext, ' ')) *p = '+';
+
 	snprintf(url, 1024, "http://members.yahoo.com/interests?.oc=m&.kw=%s&.sb=%d&.g=%d&.ar=0%s%s%s",
-	    text, t, g, photo ? "&.p=y" : "", yahoo_only ? "&.pg=y" : "",
+	    ctext, t, g, photo ? "&.p=y" : "", yahoo_only ? "&.pg=y" : "",
 	    startpos ? buff : "");
+
+	FREE(ctext);
 
 	snprintf(buff, sizeof(buff), "Y=%s; T=%s", yd->cookie_y, yd->cookie_t);
 
