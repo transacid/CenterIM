@@ -1,4 +1,4 @@
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/../kkstrtext -I$(top_srcdir)/../kkstrtext-0.1
 noinst_LIBRARIES = libsrc.a
-libsrc_a_SOURCES = texteditor.cc horizontalbar.cc textinputline.cc abstractui.cc textbrowser.cc treeview.cc textwindow.cc dialogbox.cc cmenus.cc linkedlist.cc conscommon.cc screenarea.cc fileselector.cc colorschemer.cc
-EXTRA_DIST = texteditor.cc horizontalbar.cc textinputline.cc abstractui.cc textbrowser.cc treeview.cc textwindow.cc dialogbox.cc cmenus.cc linkedlist.cc conscommon.cc screenarea.cc fileselector.cc colorschemer.cc
+libsrc_a_SOURCES = treeview.cc colorschemer.cc textinputline.cc fileselector.cc textwindow.cc texteditor.cc dialogbox.cc screenarea.cc textbrowser.cc abstractui.cc horizontalbar.cc linkedlist.cc cmenus.cc conscommon.cc
+EXTRA_DIST = treeview.cc colorschemer.cc textinputline.cc fileselector.cc textwindow.cc texteditor.cc dialogbox.cc screenarea.cc textbrowser.cc abstractui.cc horizontalbar.cc linkedlist.cc cmenus.cc conscommon.cc

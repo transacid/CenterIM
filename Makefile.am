@@ -1,9 +1,12 @@
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/../kkstrtext -I$(top_srcdir)/../kkstrtext-0.1
 noinst_LIBRARIES = libkkconsui.a
 libkkconsui_a_SOURCES =
-libkkconsui_a_LIBADD = src/texteditor.o src/horizontalbar.o src/textinputline.o src/abstractui.o src/textbrowser.o src/treeview.o src/textwindow.o src/dialogbox.o src/cmenus.o src/linkedlist.o src/conscommon.o src/screenarea.o src/fileselector.o src/colorschemer.o
+libkkconsui_a_LIBADD = src/treeview.o src/colorschemer.o src/textinputline.o src/fileselector.o src/textwindow.o src/texteditor.o src/dialogbox.o src/screenarea.o src/textbrowser.o src/abstractui.o src/horizontalbar.o src/linkedlist.o src/cmenus.o src/conscommon.o
 SUBDIRS = include src
-EXTRA_DIST = 
+EXTRA_DIST = config.guess config.sub
 AUTOMAKE_OPTIONS = foreign
+libkkconsui_a_LIBADD = src/treeview.o src/colorschemer.o src/textinputline.o src/fileselector.o src/textwindow.o src/texteditor.o src/dialogbox.o src/screenarea.o src/textbrowser.o src/abstractui.o src/horizontalbar.o src/linkedlist.o src/cmenus.o src/conscommon.o
+libkkconsui_a_LIBADD = src/treeview.o src/colorschemer.o src/textinputline.o src/fileselector.o src/textwindow.o src/texteditor.o src/dialogbox.o src/screenarea.o src/textbrowser.o src/abstractui.o src/horizontalbar.o src/linkedlist.o src/cmenus.o src/conscommon.o
+libkkconsui_a_LIBADD = src/texteditor.o src/horizontalbar.o src/textinputline.o src/abstractui.o src/textbrowser.o src/treeview.o src/textwindow.o src/dialogbox.o src/cmenus.o src/linkedlist.o src/conscommon.o src/screenarea.o src/fileselector.o src/colorschemer.o
 libkkconsui_a_LIBADD = src/texteditor.o src/horizontalbar.o src/textinputline.o src/abstractui.o src/textbrowser.o src/treeview.o src/textwindow.o src/dialogbox.o src/cmenus.o src/linkedlist.o src/conscommon.o src/screenarea.o src/fileselector.o src/colorschemer.o
 libkkconsui_a_LIBADD = src/texteditor.o src/horizontalbar.o src/textinputline.o src/abstractui.o src/textbrowser.o src/treeview.o src/textwindow.o src/dialogbox.o src/cmenus.o src/linkedlist.o src/conscommon.o src/screenarea.o src/fileselector.o src/colorschemer.o

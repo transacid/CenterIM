@@ -10,7 +10,7 @@
 #endif
 
 #ifdef __GNUC__
-    #ifdef HAVE_G_CONFIG_H
+    #ifdef HAVE__G_CONFIG_H
 	#include <_G_config.h>
     #endif
 #if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 9)

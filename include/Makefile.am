@@ -1,1 +1,1 @@
-EXTRA_DIST = abstractui.h cmenus.h conf.h dialogbox.h horizontalbar.h textbrowser.h texteditor.h textinputline.h textwindow.h treeview.h linkedlist.h conscommon.h screenarea.h fileselector.h colorschemer.h
+EXTRA_DIST = cmenus.h textbrowser.h treeview.h abstractui.h conscommon.h horizontalbar.h conf.h colorschemer.h textwindow.h screenarea.h textinputline.h linkedlist.h fileselector.h texteditor.h dialogbox.h
