@@ -1,4 +1,4 @@
-/* $Id: libgadu.c,v 1.1 2004/01/26 23:49:18 konst Exp $ */
+/* $Id: libgadu.c,v 1.2 2004/03/30 22:44:07 konst Exp $ */
 
 /*
  *  (C) Copyright 2001-2003 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -42,6 +42,7 @@
 #include <string.h>
 #include <unistd.h>
 #ifdef __GG_LIBGADU_HAVE_OPENSSL
+#define OPENSSL_NO_KRB5 1
 #  include <openssl/err.h>
 #  include <openssl/rand.h>
 #endif
@@ -70,7 +71,7 @@ static char rcsid[]
 #ifdef __GNUC__
 __attribute__ ((unused))
 #endif
-= "$Id: libgadu.c,v 1.1 2004/01/26 23:49:18 konst Exp $";
+= "$Id: libgadu.c,v 1.2 2004/03/30 22:44:07 konst Exp $";
 #endif 
 
 /*
