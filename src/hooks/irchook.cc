@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.65 2002/12/13 12:48:02 konst Exp $
+* $Id: irchook.cc,v 1.66 2003/04/18 20:56:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -99,6 +99,8 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_CHAT_JOINED, &chatjoined);
     firetalk_register_callback(handle, FC_CHAT_LEFT, &chatleft);
     firetalk_register_callback(handle, FC_CHAT_KICKED, &chatkicked);
+    firetalk_register_callback(handle, FC_CHAT_OPPED, &chatopped);
+    firetalk_register_callback(handle, FC_CHAT_DEOPPED, &chatdeopped);
     firetalk_register_callback(handle, FC_ERROR, &errorhandler);
     firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &nickchanged);
     firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
@@ -107,6 +109,11 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_FILE_PROGRESS, &fileprogress);
     firetalk_register_callback(handle, FC_FILE_FINISH, &filefinish);
     firetalk_register_callback(handle, FC_FILE_ERROR, &fileerror);
+    firetalk_register_callback(handle, FC_CHAT_USER_JOINED, &chatuserjoined);
+    firetalk_register_callback(handle, FC_CHAT_USER_LEFT, &chatuserleft);
+    firetalk_register_callback(handle, FC_CHAT_GOTTOPIC, &chatgottopic);
+    firetalk_register_callback(handle, FC_CHAT_USER_OPPED, &chatuseropped);
+    firetalk_register_callback(handle, FC_CHAT_USER_DEOPPED, &chatuserdeopped);
 
     firetalk_subcode_register_request_callback(handle, "VERSION", &subrequest);
 
@@ -1313,6 +1320,130 @@ void irchook::fileerror(void *conn, void *cli, ...) {
 
 	irhook.transferinfo.erase(fr);
     }
+}
+
+void irchook::chatuserjoined(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *who = va_arg(ap, char *);
+    char *email = va_arg(ap, char *);
+    va_end(ap);
+
+    if(conf.getourid(irc).nickname != who) {
+	string uname = who;
+
+	if(email)
+	if(strlen(email))
+	    uname += (string) " (" + email + ")";
+
+	char buf[512];
+	sprintf(buf, _("%s has joined."), uname.c_str());
+	em.store(imnotification(imcontact(room, irc), buf));
+    }
+}
+
+void irchook::chatuserleft(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *who = va_arg(ap, char *);
+    char *reason = va_arg(ap, char *);
+    va_end(ap);
+
+    if(conf.getourid(irc).nickname != who) {
+	string text;
+	char buf[512];
+
+	sprintf(buf, _("%s has left"), who); text = buf;
+
+	if(reason)
+	if(strlen(reason)) {
+	    sprintf(buf, _("reason: %s"), reason);
+	    text += (string) "; " + buf + ".";
+	}
+
+	em.store(imnotification(imcontact(room, irc), text));
+    }
+}
+
+void irchook::chatgottopic(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *topic = va_arg(ap, char *);
+    char *author = va_arg(ap, char *);
+    va_end(ap);
+
+    string text;
+    char buf[1024];
+    sprintf(buf, _("Channel topic now is: %s"), topic);
+    text = buf;
+
+    if(author)
+    if(strlen(author)) {
+	sprintf(buf, _("set by %s"), author);
+	text += (string) "; " + buf + ".";
+    }
+
+    em.store(imnotification(imcontact(room, irc), text));
+}
+
+void irchook::chatuseropped(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *who = va_arg(ap, char *);
+    char *by = va_arg(ap, char *);
+    va_end(ap);
+
+    char buf[512];
+    sprintf(_("%s has been opped by %s."), who, by);
+    em.store(imnotification(imcontact(room, irc), buf));
+}
+
+void irchook::chatuserdeopped(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *who = va_arg(ap, char *);
+    char *by = va_arg(ap, char *);
+    va_end(ap);
+
+    char buf[512];
+    sprintf(_("%s has been deopped by %s."), who, by);
+    em.store(imnotification(imcontact(room, irc), buf));
+}
+
+void irchook::chatopped(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *by = va_arg(ap, char *);
+    va_end(ap);
+
+    char buf[512];
+    sprintf(_("%s has opped us."), by);
+    em.store(imnotification(imcontact(room, irc), buf));
+}
+
+void irchook::chatdeopped(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *by = va_arg(ap, char *);
+    va_end(ap);
+
+    char buf[512];
+    sprintf(_("%s has deopped us."), by);
+    em.store(imnotification(imcontact(room, irc), buf));
 }
 
 // ----------------------------------------------------------------------------

@@ -75,6 +75,13 @@ class irchook: public abstracthook {
 	static void fileprogress(void *conn, void *cli, ...);
 	static void filefinish(void *conn, void *cli, ...);
 	static void fileerror(void *conn, void *cli, ...);
+	static void chatuserjoined(void *conn, void *cli, ...);
+	static void chatuserleft(void *conn, void *cli, ...);
+	static void chatgottopic(void *conn, void *cli, ...);
+	static void chatuseropped(void *conn, void *cli, ...);
+	static void chatuserdeopped(void *conn, void *cli, ...);
+	static void chatopped(void *conn, void *cli, ...);
+	static void chatdeopped(void *conn, void *cli, ...);
 
 	static void subrequest(void *conn, void *cli,
 	    const char * const nick, const char * const command,
