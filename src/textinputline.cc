@@ -173,6 +173,7 @@ void textinputline::exec() {
 		    break;
 		case KEY_BACKSPACE:
 		case CTRL('h'):
+		case 127:
 		    if(position) {
 			value.erase(--position, 1);
 		    }
