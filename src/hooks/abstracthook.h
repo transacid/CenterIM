@@ -78,6 +78,7 @@ class abstracthook {
 	virtual bool knowntransfer(const imfile &fr) const;
 	virtual void replytransfer(const imfile &fr, bool accept,
 	    const string &localpath = "");
+	virtual void aborttransfer(const imfile &fr);
 };
 
 abstracthook &gethook(protocolname pname);

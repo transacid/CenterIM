@@ -119,6 +119,9 @@ bool abstracthook::knowntransfer(const imfile &fr) const {
 void abstracthook::replytransfer(const imfile &fr, bool accept, const string &localpath = "") {
 }
 
+void abstracthook::aborttransfer(const imfile &fr) {
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

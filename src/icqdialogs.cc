@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.90 2002/10/04 16:58:52 konst Exp $
+* $Id: icqdialogs.cc,v 1.91 2002/10/06 12:14:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1141,11 +1141,9 @@ int icqface::groupmanager(const string &text, bool sel) {
 
 void icqface::transfermonitor() {
     dialogbox db;
-    int n, b, incid, outid, cid;
+    int n, b, np, incid, outid, cid;
     vector<filetransferitem>::iterator it;
     string fitem;
-
-    incid = outid = -1;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
@@ -1161,6 +1159,7 @@ void icqface::transfermonitor() {
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), 0));
 
+    db.getbar()->item = 1;
     db.addautokeys();
 
     db.idle = &transferidle;
@@ -1171,9 +1170,10 @@ void icqface::transfermonitor() {
 
     for(bool fin = false; !fin; ) {
 	t.clear();
+	incid = outid = -1;
 
 	for(it = transfers.begin(); it != transfers.end(); ++it) {
-	    switch(it->direct) {
+	    switch(it->fr.getdirection()) {
 		case imevent::incoming:
 		    if(incid < 0) incid = t.addnode(_(" Incoming "));
 		    cid = incid;
@@ -1198,10 +1198,9 @@ void icqface::transfermonitor() {
 	    if(it->btotal > 0)
 		fitem += (string) ", " + i2str(it->btotal) + " " + _("total");
 
-	    if(it->status == icqface::tsProgress)
-		fitem += (string) ", " + i2str(it->bdone) + " " + _("done");
+	    fitem += (string) ", " + i2str(it->bdone) + " " + _("done");
 
-	    int limit = sizeDlg.width-8;
+	    int limit = sizeDlg.width-9;
 
 	    if(fitem.size() > limit) {
 		int pos = fitem.find("] ");
@@ -1212,28 +1211,37 @@ void icqface::transfermonitor() {
 	    t.addleaff(cid, 0, it-transfers.begin(), " %s ", fitem.c_str());
 	}
 
-	fin = !db.open(n, b, (void **) &n);
+	fin = !db.open(np, b, (void **) &n);
 
-	if(!fin)
-	switch(b) {
-	    case 0:
-		break;
-	    case 1:
+	if(!fin && !db.gettree()->menu.getaborted()) {
+	    it = transfers.end();
+
+	    if(!db.gettree()->isnode(db.gettree()->getid(np-1)))
 		it = transfers.begin() + (int) db.getmenu()->getref(n-1);
-		switch(it->status) {
-		    case icqface::tsInit:
-		    case icqface::tsStart:
-		    case icqface::tsProgress:
-			status(_("Cannot remove a transfer which is in progress now"));
-			break;
 
-		    case icqface::tsFinish:
-		    case icqface::tsError:
-		    case icqface::tsCancel:
-			transfers.erase(it);
-			break;
-		}
-		break;
+	    switch(b) {
+		case 0:
+		    if(it != transfers.end())
+			gethook(it->fr.getcontact().pname).aborttransfer(it->fr);
+		    break;
+
+		case 1:
+		    if(it != transfers.end())
+		    switch(it->status) {
+			case icqface::tsInit:
+			case icqface::tsStart:
+			case icqface::tsProgress:
+			    status(_("Cannot remove a transfer which is in progress now"));
+			    break;
+
+			case icqface::tsFinish:
+			case icqface::tsError:
+			case icqface::tsCancel:
+			    transfers.erase(it);
+			    break;
+		    }
+		    break;
+	    }
 	}
     }
 
@@ -1241,23 +1249,22 @@ void icqface::transfermonitor() {
     unblockmainscreen();
 }
 
-void icqface::transferupdate(const imcontact &c, const string &fname,
-imevent::imdirection dir, transferstatus st, int btotal, int bdone) {
-
+void icqface::transferupdate(const string &fname, const imfile &fr,
+transferstatus st, int btotal, int bdone) {
     vector<filetransferitem>::iterator i = transfers.begin();
 
     while(i != transfers.end()) {
-	if(i->cont == c && i->fname == fname && i->direct == dir)
+	if(i->fr.getcontact() == fr.getcontact()
+	&& i->fr.getdirection() == fr.getdirection()
+	&& i->fname == fname)
 	    break;
 	++i;
     }
 
     if(i == transfers.end()) {
-	transfers.push_back(filetransferitem());
+	transfers.push_back(filetransferitem(fr));
 	i = transfers.end()-1;
-	i->cont = c;
 	i->fname = fname;
-	i->direct = dir;
     }
 
     if(btotal) i->btotal = btotal;

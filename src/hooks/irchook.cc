@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.50 2002/10/04 16:58:53 konst Exp $
+* $Id: irchook.cc,v 1.51 2002/10/06 12:14:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -678,9 +678,17 @@ void irchook::replytransfer(const imfile &fr, bool accept, const string &localpa
     } else {
 	firetalk_file_refuse(handle, transferinfo[fr].first);
 	transferinfo.erase(fr);
-	em.store(imnotification(fr.getcontact(), _("File transfer refused")));
 
     }
+}
+
+void irchook::aborttransfer(const imfile &fr) {
+    firetalk_file_cancel(handle, transferinfo[fr].first);
+
+    face.transferupdate(fr.getfiles().begin()->fname, fr,
+	icqface::tsCancel, 0, 0);
+
+    irhook.transferinfo.erase(fr);
 }
 
 bool irchook::getfevent(void *fhandle, imfile &fr) {
@@ -1275,8 +1283,7 @@ void irchook::fileoffer(void *conn, void *cli, ...) {
     irhook.transferinfo[fr].first = filehandle;
     em.store(fr);
 
-    face.transferupdate(imcontact(from, irc), filename,
-	imevent::incoming, icqface::tsInit, size, 0);
+    face.transferupdate(filename, fr, icqface::tsInit, size, 0);
 }
 
 void irchook::filestart(void *conn, void *cli, ...) {
@@ -1289,8 +1296,8 @@ void irchook::filestart(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(irhook.getfevent(filehandle, fr)) {
-	face.transferupdate(fr.getcontact(), fr.getfiles().begin()->fname,
-	    fr.getdirection(), icqface::tsStart, 0, 0);
+	face.transferupdate(fr.getfiles().begin()->fname, fr,
+	    icqface::tsStart, 0, 0);
     }
 }
 
@@ -1306,8 +1313,8 @@ void irchook::fileprogress(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(irhook.getfevent(filehandle, fr)) {
-	face.transferupdate(fr.getcontact(), fr.getfiles().begin()->fname,
-	    fr.getdirection(), icqface::tsProgress, size, bytes);
+	face.transferupdate(fr.getfiles().begin()->fname, fr,
+	    icqface::tsProgress, size, bytes);
     }
 }
 
@@ -1322,8 +1329,8 @@ void irchook::filefinish(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(irhook.getfevent(filehandle, fr)) {
-	face.transferupdate(fr.getcontact(), fr.getfiles().begin()->fname,
-	    fr.getdirection(), icqface::tsFinish, size, 0);
+	face.transferupdate(fr.getfiles().begin()->fname, fr,
+	    icqface::tsFinish, size, 0);
 
 	irhook.transferinfo.erase(fr);
     }
@@ -1340,8 +1347,8 @@ void irchook::fileerror(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(irhook.getfevent(filehandle, fr)) {
-	face.transferupdate(fr.getcontact(), fr.getfiles().begin()->fname,
-	    fr.getdirection(), icqface::tsError, 0, 0);
+	face.transferupdate(fr.getfiles().begin()->fname, fr,
+	    icqface::tsError, 0, 0);
 
 	irhook.transferinfo.erase(fr);
     }

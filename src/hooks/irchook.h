@@ -134,6 +134,7 @@ class irchook: public abstracthook {
 
 	bool knowntransfer(const imfile &fr) const;
 	void replytransfer(const imfile &fr, bool accept, const string &localpath = "");
+	void aborttransfer(const imfile &fr);
 };
 
 extern irchook irhook;

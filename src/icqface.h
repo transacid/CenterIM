@@ -86,13 +86,13 @@ class icqface {
 	imcontact passinfo;
 
 	struct filetransferitem {
-	    imcontact cont;
-	    imevent::imdirection direct;
 	    string fname;
 	    int btotal, bdone;
 	    transferstatus status;
+	    imfile fr;
 
-	    filetransferitem(): btotal(0), bdone(0) { }
+	    filetransferitem(const imfile &afr)
+	    : btotal(0), bdone(0), fr(afr) { }
 	};
 
 	vector<filetransferitem> transfers;
@@ -221,9 +221,8 @@ class icqface {
 	bool edit(string &txt, const string &header);
 	void chat(const imcontact &ic);
 
-	void transferupdate(const imcontact &c, const string &fname,
-	    imevent::imdirection dir, transferstatus st, int btotal,
-	    int bdone);
+	void transferupdate(const string &fname, const imfile &fr,
+	    transferstatus st, int btotal, int bdone);
 
 	void transfermonitor();
 };
