@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.42 2002/11/23 10:40:10 konst Exp $
+* $Id: icqcontacts.cc,v 1.43 2002/11/29 17:34:30 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -97,10 +97,12 @@ void icqcontacts::load() {
 			c = new icqcontact(imcontact(atol(ent->d_name+1), pname));
 			break;
 
-		    case yahoo:
-		    case msn:
-		    case aim:
-		    case irc:
+		    case protocolname_size:
+			// Strange dir, doesn't belong to any of the
+			// supported protocols.
+			break;
+
+		    default:
 			c = new icqcontact(imcontact(ent->d_name+1, pname));
 			c->setnick(ent->d_name+1);
 			break;
