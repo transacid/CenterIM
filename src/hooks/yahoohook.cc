@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.62 2002/11/01 12:13:38 konst Exp $
+* $Id: yahoohook.cc,v 1.63 2002/11/18 16:32:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,8 @@
 extern "C" {
 #include "yahoo2_callbacks.h"
 };
+
+#define PERIOD_REFRESH          60
 
 char pager_host[64], pager_port[64], filetransfer_host[64], filetransfer_port[64];
 
@@ -176,6 +178,15 @@ void yahoohook::exectimers() {
     }
 
     tobedone.clear();
+
+    if(logged()) {
+	time_t tcurrent = time(0);
+
+	if(tcurrent-timer_refresh > PERIOD_REFRESH) {
+	    yahoo_refresh(cid);
+	    timer_refresh = tcurrent;
+	}
+    }
 }
 
 struct tm *yahoohook::timestamp() {
@@ -308,6 +319,8 @@ void yahoohook::removeuser(const imcontact &ic, bool report) {
 		    bud = buddies;
 		}
 	    }
+
+	    yahoo_refresh(cid);
 	} else {
 	    if(report)
 		face.log(_("+ [yahoo] leaving the %s conference"),
@@ -596,6 +609,8 @@ void yahoohook::login_done(guint32 id, int succ, char *url) {
 		    yhook.sendnewuser(ic);
 		}
 	    }
+
+	    time(&yhook.timer_refresh);
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:

@@ -24,6 +24,8 @@ class yahoohook: public abstracthook {
 	imstatus ourstatus;
 	int cid;
 
+	time_t timer_refresh;
+
 	static void login_done(guint32 id, int succ, char *url);
 	static void got_buddies(guint32 id, struct yahoo_buddy **buds);
 	static void status_changed(guint32 id, char *who, int stat, char *msg, int away);

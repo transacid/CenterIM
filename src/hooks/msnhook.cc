@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.39 2002/10/28 11:29:41 konst Exp $
+* $Id: msnhook.cc,v 1.40 2002/11/18 16:32:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -160,10 +160,9 @@ bool msnhook::send(const imevent &ev) {
 
     icqcontact *c = clist.get(ev.getcontact());
     text = siconv(text, conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET, "utf8");
-//    text = toutf8(rusconv("kw", text));
 
     if(c)
-    if(c->getstatus() != offline) {
+    if(c->getstatus() != offline || !c->inlist()) {
 	MSN_SendMessage(ev.getcontact().nickname.c_str(), text.c_str());
 	return true;
     }
@@ -340,13 +339,13 @@ void msnhook::sendupdateuserinfo(const icqcontact &c) {
     MSN_Set_Friendly_Handle(nick.c_str());
 }
 
-void msnhook::checkfriendly(icqcontact *c, const string friendlynick) {
+void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool forcefetch) {
     string oldnick = friendlynicks[c->getdesc().nickname];
     friendlynicks[c->getdesc().nickname] = unmime(friendlynick);
 
-    if(!oldnick.empty()
+    if(forcefetch || (!oldnick.empty()
     && c->getdispnick() == oldnick
-    && c->getbasicinfo().fname == oldnick)
+    && c->getbasicinfo().fname == oldnick))
 	requestinfo(c);
 }
 
@@ -357,20 +356,21 @@ void msnhook::messaged(void *data) {
     imcontact ic(d->sender, msn);
     icqcontact *c;
     string text;
+    bool forcefetch;
 
     if(!isourid(d->sender))
     if(strlen(d->msg)) {
 	c = clist.get(ic);
-	if(!c) c = clist.addnew(ic);
+
+	if(forcefetch = !c)
+	    c = clist.addnew(ic);
 
 	if(c->inlist() && c->getstatus() == offline)
 	    mhook.sendnewuser(ic);
 
-	if(d->friendlyhandle) {
-	    mhook.checkfriendly(c, d->friendlyhandle);
-	}
+	if(d->friendlyhandle)
+	    mhook.checkfriendly(c, d->friendlyhandle, forcefetch);
 
-//        text = rusconv("wk", fromutf8(d->msg));
 	text = siconv(d->msg, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
 	em.store(immessage(ic, imevent::incoming, text));
 
@@ -385,15 +385,14 @@ void msnhook::statuschanged(void *data) {
     MSN_StatusChange *d = (MSN_StatusChange *) data;
     imcontact ic(d->handle, msn);
     icqcontact *c = clist.get(ic);
+    bool forcefetch;
 
     if(!isourid(d->handle)) {
-	if(!c) {
+	if(forcefetch = !c)
 	    c = clist.addnew(ic, false);
-	}
 
-	if(d->friendlyhandle) {
-	    mhook.checkfriendly(c, d->friendlyhandle);
-	}
+	if(d->friendlyhandle)
+	    mhook.checkfriendly(c, d->friendlyhandle, forcefetch);
 
 	logger.putonline(ic, c->getstatus(), msn2imstatus(d->newStatus));
 	c->setstatus(msn2imstatus(d->newStatus));
