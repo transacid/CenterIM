@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.11 2001/10/02 17:31:00 konst Exp $
+* $Id: icqconf.cc,v 1.12 2001/10/31 16:46:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -155,16 +155,6 @@ int icqconf::getcolor(int npair) {
     return
 	find(boldcolors.begin(), boldcolors.end(), npair) != boldcolors.end()
 	? boldcolor(npair) : color(npair);
-}
-
-int icqconf::findcolor(string s) {
-    int i;
-    string colors[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE", ""};
-    
-    for(i = 0; i < s.size(); i++) s[i] = toupper(s[i]);
-    for(i = 0; !colors[i].empty() && (s != colors[i]); i++);
-    
-    return i;
 }
 
 void icqconf::loadcolors() {

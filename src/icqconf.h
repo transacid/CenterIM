@@ -68,8 +68,6 @@ class icqconf {
 	regsound rs;
 	regcolor rc;
 
-	int findcolor(string s);
-
     public:
 	icqconf();
 	~icqconf();
