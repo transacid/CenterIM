@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.28 2001/10/26 13:56:48 konst Exp $
+* $Id: icqface.cc,v 1.29 2001/10/30 17:46:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -192,35 +192,35 @@ int icqface::contextmenu(icqcontact *c) {
     if(!c) return 0;
 
     if(!c->getuin()) {
-	m.additem(0, (void *) ACT_HISTORY,  _(" Events history         h"));
+	m.additem(0, ACT_HISTORY,  _(" Events history         h"));
     } else if(!c->isnonicq() && c->getuin() && c->inlist()) { 
-	m.additem(0, (void *) ACT_MSG,      _(" Send a message     enter"));
-	m.additem(0, (void *) ACT_URL,      _(" Send an URL            u"));
-	m.additem(0, (void *) ACT_CONTACT,  _(" Send contacts          c"));
-	m.additem(0, (void *) ACT_FILE,     _(" Send a file            f"));
+	m.additem(0, ACT_MSG,      _(" Send a message     enter"));
+	m.additem(0, ACT_URL,      _(" Send an URL            u"));
+	m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
+	m.additem(0, ACT_FILE,     _(" Send a file            f"));
 	m.addline();
-	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
-	m.additem(0, (void *) ACT_HISTORY,  _(" Events history         h"));
+	m.additem(0, ACT_INFO,     _(" User's details         ?"));
+	m.additem(0, ACT_HISTORY,  _(" Events history         h"));
 	m.addline();
-	m.additem(0, (void *) ACT_IGNORE,   _(" Ignore user"));
-	m.additem(0, (void *) ACT_REMOVE,   _(" Remove user          del"));
+	m.additem(0, ACT_IGNORE,   _(" Ignore user"));
+	m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
 
 	if(conf.getusegroups()) {
-	    m.additem(0, (void *) ACT_GROUPMOVE,_(" Move to group.."));
+	    m.additem(0,  ACT_GROUPMOVE,_(" Move to group.."));
 	}
     } else if(!c->isnonicq() && c->getuin() && !c->inlist()) {
-	m.additem(0, (void *) ACT_MSG,      _(" Send a message     enter"));
+	m.additem(0, ACT_MSG,      _(" Send a message     enter"));
 	m.addline();
-	m.additem(0, (void *) ACT_ADD,      _(" Add to list            a"));
+	m.additem(0, ACT_ADD,      _(" Add to list            a"));
 	m.addline();
-	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
-	m.additem(0, (void *) ACT_HISTORY,  _(" Events history         h"));
-	m.additem(0, (void *) ACT_REMOVE,   _(" Remove user          del"));
-	m.additem(0, (void *) ACT_IGNORE,   _(" Ignore user"));
+	m.additem(0, ACT_INFO,     _(" User's details         ?"));
+	m.additem(0, ACT_HISTORY,  _(" Events history         h"));
+	m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
+	m.additem(0, ACT_IGNORE,   _(" Ignore user"));
     } else if(c->isnonicq()) {
-	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
-	m.additem(0, (void *) ACT_REMOVE,   _(" Remove user          del"));
-	m.additem(0, (void *) ACT_EDITUSER, _(" Edit details"));
+	m.additem(0, ACT_INFO,     _(" User's details         ?"));
+	m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
+	m.additem(0, ACT_EDITUSER, _(" Edit details"));
     }
 
     m.scale();
@@ -241,23 +241,23 @@ int icqface::generalmenu() {
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+40, WORKAREA_Y1+11, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-    m.additem(0, (void *) ACT_STATUS, _(" Change ICQ status                   s"));
-    m.additem(0, (void *) ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
-    m.additem(0, (void *) ACT_DETAILS, _(" Update your details"));
-    m.additem(0, (void *) ACT_FIND, _(" Find/add users"));
-    m.additem(0, (void *) ACT_CONF, _(" CenterICQ config options"));
-    m.additem(0, (void *) ACT_NONICQ, _(" Add non-icq contact"));
+    m.additem(0, ACT_STATUS, _(" Change ICQ status                   s"));
+    m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
+    m.additem(0, ACT_DETAILS, _(" Update your details"));
+    m.additem(0, ACT_FIND, _(" Find/add users"));
+    m.additem(0, ACT_CONF, _(" CenterICQ config options"));
+    m.additem(0, ACT_NONICQ, _(" Add non-icq contact"));
     m.addline();
-    m.additem(0, (void *) ACT_IGNORELIST, _(" View/edit ignore list"));
-    m.additem(0, (void *) ACT_INVISLIST, _(" View/edit invisible list"));
-    m.additem(0, (void *) ACT_VISIBLELIST, _(" View/edit visible list"));
+    m.additem(0, ACT_IGNORELIST, _(" View/edit ignore list"));
+    m.additem(0, ACT_INVISLIST, _(" View/edit invisible list"));
+    m.additem(0, ACT_VISIBLELIST, _(" View/edit visible list"));
     m.addline();
-    m.additem(0, (void *) ACT_HIDEOFFLINE, conf.gethideoffline() ?
+    m.additem(0, ACT_HIDEOFFLINE, conf.gethideoffline() ?
 	_(" Show offline users                 F5") :
 	_(" Hide offline users                 F5"));
 
     if(conf.getusegroups()) {
-	m.additem(0, (void *) ACT_ORG_GROUPS, (string) " " + _("Organize contact groups"));
+	m.additem(0,  ACT_ORG_GROUPS, (string) " " + _("Organize contact groups"));
     }
 
     m.setpos(lastitem);
@@ -2020,11 +2020,11 @@ void icqface::showextractedurls() {
 
 // ----------------------------------------------------------------------------
 
-void icqface::menuidle(verticalmenu *m) {
+void icqface::menuidle(verticalmenu &m) {
     ihook.idle();
 
     if(face.dotermresize)
-	if(m == &face.mcontacts->menu) {
+	if(&m == &face.mcontacts->menu) {
 	    face.done();
 	    face.init();
 	    face.draw();
@@ -2032,15 +2032,15 @@ void icqface::menuidle(verticalmenu *m) {
 	}
 }
 
-void icqface::dialogidle(dialogbox *caller) {
+void icqface::dialogidle(dialogbox &caller) {
     ihook.idle();
 }
 
-void icqface::textbrowseridle(textbrowser *b) {
+void icqface::textbrowseridle(textbrowser &b) {
     ihook.idle();
 }
 
-int icqface::contactskeys(verticalmenu *m, int k) {
+int icqface::contactskeys(verticalmenu &m, int k) {
     switch(k) {
 	case '?': face.extk = ACT_INFO; break;
 
@@ -2092,13 +2092,13 @@ int icqface::contactskeys(verticalmenu *m, int k) {
 	|| (k == KEY_F(4))
 	|| (k == KEY_F(5))
 	|| (k == ALT('s')))) {
-	return m->getpos()+1;
+	return m.getpos()+1;
     } else {
 	return -1;
     }
 }
 
-int icqface::multiplekeys(verticalmenu *m, int k) {
+int icqface::multiplekeys(verticalmenu &m, int k) {
     switch(k) {
 	case ' ':
 	case 'x':
@@ -2110,7 +2110,7 @@ int icqface::multiplekeys(verticalmenu *m, int k) {
     return -1;
 }
 
-int icqface::historykeys(dialogbox *db, int k) {
+int icqface::historykeys(dialogbox &db, int k) {
     static string sub;
 
     switch(k) {
@@ -2125,12 +2125,12 @@ int icqface::historykeys(dialogbox *db, int k) {
     return -1;
 }
 
-int icqface::editmsgkeys(texteditor *e, int k) {
+int icqface::editmsgkeys(texteditor &e, int k) {
     char *p;
 
     switch(k) {
 	case CTRL('x'):
-	    p = e->save("");
+	    p = e.save("");
 	    face.editdone = strlen(p);
 	    delete p;
 	    if(face.editdone) return -1; else break;
@@ -2142,7 +2142,7 @@ int icqface::editmsgkeys(texteditor *e, int k) {
     return 0;
 }
 
-int icqface::userinfokeys(dialogbox *db, int k) {
+int icqface::userinfokeys(dialogbox &db, int k) {
     switch(k) {
 	case KEY_F(2): face.showextractedurls(); break;
     }
@@ -2150,7 +2150,7 @@ int icqface::userinfokeys(dialogbox *db, int k) {
     return -1;
 }
 
-void icqface::editidle(texteditor *e) {
+void icqface::editidle(texteditor &e) {
     ihook.idle();
 }
 

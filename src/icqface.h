@@ -113,18 +113,18 @@ class icqface {
 
 	string textstatus(unsigned long st);
 
-	static int editmsgkeys(texteditor *e, int k);
-	static int editaboutkeys(texteditor *e, int k);
-	static int contactskeys(verticalmenu *m, int k);
-	static int multiplekeys(verticalmenu *m, int k);
-	static int historykeys(dialogbox *m, int k);
-	static int userinfokeys(dialogbox *db, int k);
+	static int editmsgkeys(texteditor &e, int k);
+	static int editaboutkeys(texteditor &e, int k);
+	static int contactskeys(verticalmenu &m, int k);
+	static int multiplekeys(verticalmenu &m, int k);
+	static int historykeys(dialogbox &m, int k);
+	static int userinfokeys(dialogbox &db, int k);
 
-	static void editidle(texteditor *e);
-	static void textbrowseridle(textbrowser *b);
+	static void editidle(texteditor &e);
+	static void textbrowseridle(textbrowser &b);
 	static void textinputidle(textinputline &il);
 	static void freeworkareabuf(void *p);
-	static void detailsidle(dialogbox *db);
+	static void detailsidle(dialogbox &db);
 
 	static void termresize(void);
 
@@ -163,8 +163,8 @@ class icqface {
 	void init();
 	void done();
 
-	static void menuidle(verticalmenu *caller);
-	static void dialogidle(dialogbox *caller);
+	static void menuidle(verticalmenu &caller);
+	static void dialogidle(dialogbox &caller);
 
 	void draw();
 	void update();
