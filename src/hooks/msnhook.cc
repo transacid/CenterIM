@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.78 2004/06/12 14:52:11 konst Exp $
+* $Id: msnhook.cc,v 1.79 2004/06/17 00:03:11 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -160,7 +160,7 @@ void msnhook::main() {
 	    for(i = rfds.begin(); i != rfds.end(); ++i)
 		if(FD_ISSET(*i, &rs)) {
 		    c = conn->connectionWithSocket(*i);
-		    c->dataArrivedOnSocket();
+		    if(c) c->dataArrivedOnSocket();
 		    return;
 		}
 
@@ -168,10 +168,12 @@ void msnhook::main() {
 		if(FD_ISSET(*i, &ws)) {
 		    c = conn->connectionWithSocket(*i);
 
-		    if(!c->isConnected()) {
-			c->socketConnectionCompleted();
-		    } else {
-			c->socketIsWritable();
+		    if(c) {
+			if(!c->isConnected()) {
+			    c->socketConnectionCompleted();
+			} else {
+			    c->socketIsWritable();
+			}
 		    }
 
 		    return;

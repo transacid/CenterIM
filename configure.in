@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.9.12)
+AM_INIT_AUTOMAKE(centericq, 4.10.0)
 
 AC_CANONICAL_HOST
 
@@ -118,18 +118,13 @@ AC_ARG_WITH(curl,
     [  --with-curl=[DIR]    curl-config in DIR],
     [CURL_CONFIG=$withval],
     [ AC_PATH_PROG(CURL_CONFIG,
-	curl-config,
-	have_curl=no)])
+	curl-config)])
 
-if test "$have_curl" != "no"; then
-    curl_LIBS="$curl_LIBS `$CURL_CONFIG --libs`"
-    curl_CFLAGS="$curl_CFLAGS `$CURL_CONFIG --cflags`"
+if test ! -z "$CURL_CONFIG"; then
+    CFLAGS="$CFLAGS `$CURL_CONFIG --cflags`"
+    CXXFLAGS="$CXXFLAGS `$CURL_CONFIG --cflags`"
     LDFLAGS="$LDFLAGS `$CURL_CONFIG --libs`"
-    AC_SUBST(curl_LIBS)
-    AC_SUBST(curl_CFLAGS)
 fi
-
-AC_CHECK_LIB([curl], [curl_easy_init], , have_curl=no)
 
 AC_CHECK_LIB(ncurses, initscr,,
     [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
@@ -208,7 +203,7 @@ if test "$build_gg" = "yes"; then
 fi
 
 if test "$build_msn" = "yes"; then
-    if test "$have_curl" = "no"; then
+    if test -z "$CURL_CONFIG"; then
 	AC_MSG_ERROR([MSN cannot be built without the curl library, use --disable-msn])
     else
 	AC_DEFINE(BUILD_MSN, 1, [build with MSN support])

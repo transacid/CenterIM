@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.20.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-10 22:27+0300\n"
+"POT-Creation-Date: 2004-06-16 17:25+0300\n"
 "PO-Revision-Date: 2001-02-10 20:50+0100\n"
 "Last-Translator: Jindrich Makovicka <makovick@kmlinux.fjfi.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:833
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:843
 msgid "could not resolve hostname"
 msgstr ""
 
@@ -103,7 +103,7 @@ msgid "The user %s has left the conference"
 msgstr ""
 
 #: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1148
-#: src/hooks/msnhook.cc:660
+#: src/hooks/msnhook.cc:676
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "si Vás pøidal(a) do seznamu kontaktù"
@@ -1923,88 +1923,88 @@ msgstr ""
 msgid "event sending error: unknown event type"
 msgstr ""
 
-#: src/icqconf.cc:1197
+#: src/icqconf.cc:1202
 #, fuzzy, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "+ %s byl pøidán do visible listu"
 
-#: src/icqconf.cc:1203
-msgid "event sending error: the destination contact doesn't exist on your list"
+#: src/icqconf.cc:1208
+msgid "event sending error: error creating directory for the contact"
 msgstr ""
 
-#: src/icqconf.cc:1245
+#: src/icqconf.cc:1255
 msgid "unknown status character was given"
 msgstr ""
 
-#: src/icqconf.cc:1248
+#: src/icqconf.cc:1258
 msgid "unknown IM type"
 msgstr ""
 
-#: src/icqconf.cc:1251
+#: src/icqconf.cc:1261
 msgid "status change error: "
 msgstr ""
 
-#: src/icqconf.cc:1260
+#: src/icqconf.cc:1270
 #, fuzzy
 msgid "Usage: "
 msgstr "Vìk: "
 
-#: src/icqconf.cc:1262
+#: src/icqconf.cc:1272
 #, fuzzy
 msgid "General options:"
 msgstr " Obecné "
 
-#: src/icqconf.cc:1263
+#: src/icqconf.cc:1273
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr ""
 
-#: src/icqconf.cc:1265
+#: src/icqconf.cc:1275
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr ""
 
-#: src/icqconf.cc:1266
+#: src/icqconf.cc:1276
 #, fuzzy
 msgid "  --help                   display this stuff"
 msgstr " Zmìnit ICQ status                   s"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "  --version, -v            show the program version info"
 msgstr ""
 
-#: src/icqconf.cc:1269
+#: src/icqconf.cc:1279
 #, fuzzy
 msgid "Events sending options:"
 msgstr " Konfigurace CenterICQ"
 
-#: src/icqconf.cc:1270
+#: src/icqconf.cc:1280
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 
-#: src/icqconf.cc:1271
+#: src/icqconf.cc:1281
 msgid "  -S, --status <status>    change the current IM status"
 msgstr ""
 
-#: src/icqconf.cc:1272
+#: src/icqconf.cc:1282
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
 msgstr ""
 
-#: src/icqconf.cc:1274
+#: src/icqconf.cc:1284
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 
-#: src/icqconf.cc:1275
+#: src/icqconf.cc:1285
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 
-#: src/icqconf.cc:1277
+#: src/icqconf.cc:1287
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 
@@ -2988,137 +2988,137 @@ msgstr ""
 msgid "! support for %s was disabled at build time"
 msgstr ""
 
-#: src/centericq.cc:664 src/centericq.cc:719
+#: src/centericq.cc:665 src/centericq.cc:720
 #, fuzzy, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ dorazila nová po¹ta, %d zpráv"
 
-#: src/centericq.cc:666 src/centericq.cc:721
+#: src/centericq.cc:667 src/centericq.cc:722
 #, fuzzy, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ dorazila nová po¹ta, %d zpráv"
 
-#: src/centericq.cc:669 src/centericq.cc:724
+#: src/centericq.cc:670 src/centericq.cc:725
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ poslední zpráva od %s"
 
-#: src/centericq.cc:768
+#: src/centericq.cc:769
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:822
+#: src/centericq.cc:826
 msgid "! another running copy of centericq detected"
 msgstr ""
 
-#: src/centericq.cc:823
+#: src/centericq.cc:827
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr ""
 
-#: src/centericq.cc:976
+#: src/centericq.cc:980
 #, fuzzy
 msgid "Mobile number: "
 msgstr "jméno souboru: "
 
-#: src/centericq.cc:1136
+#: src/centericq.cc:1140
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:1143
+#: src/centericq.cc:1147
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:1147
+#: src/centericq.cc:1151
 msgid "The specified directory does not exist"
 msgstr ""
 
-#: src/centericq.cc:1282
+#: src/centericq.cc:1286
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ ¾ádné polo¾ky historie pro %s"
 
-#: src/centericq.cc:1308
+#: src/centericq.cc:1312
 #, fuzzy, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s byl pøidán do visible listu"
 
-#: src/centericq.cc:1320
+#: src/centericq.cc:1324
 #, fuzzy
 msgid "Select a group to add the user to"
 msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1356
 #, fuzzy, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s byl pøidán do visible listu"
 
-#: src/centericq.cc:1423
+#: src/centericq.cc:1427
 msgid "+ the user is back"
 msgstr "+ u¾ivatel je zpátky"
 
-#: src/centericq.cc:1439
+#: src/centericq.cc:1443
 #, c-format
 msgid "+ [%s] status restored"
 msgstr ""
 
-#: src/centericq.cc:1454
+#: src/centericq.cc:1458
 #, fuzzy, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ automaticky nastavuji \"N/A\""
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 #, fuzzy
 msgid "away"
 msgstr "Pryè"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1583
+#: src/centericq.cc:1585
 msgid "! free disk space is less than 10k, going offline"
 msgstr ""
 
-#: src/centericq.cc:1584
+#: src/centericq.cc:1586
 msgid "! otherwise we can lose events and configuration"
 msgstr ""
 
-#: src/centericq.cc:1628
+#: src/centericq.cc:1630
 msgid "Invite to conference.."
 msgstr ""
 
-#: src/centericq.cc:1648
+#: src/centericq.cc:1651
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
 
-#: src/centericq.cc:1651
+#: src/centericq.cc:1653
 msgid "Mass move selected users to.."
 msgstr ""
 
-#: src/hooks/msnhook.cc:412
+#: src/hooks/msnhook.cc:411
 #, fuzzy, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/msnhook.cc:739
+#: src/hooks/msnhook.cc:746
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:745
+#: src/hooks/msnhook.cc:752
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/msnhook.cc:829
+#: src/hooks/msnhook.cc:839
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/msnhook.cc:851
+#: src/hooks/msnhook.cc:861
 msgid "verify the hostname and port"
 msgstr ""
 

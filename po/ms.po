@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-10 22:27+0300\n"
+"POT-Creation-Date: 2004-06-16 17:25+0300\n"
 "PO-Revision-Date: 2003-07-01 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@enemy.org>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] sambungan gagal: "
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:833
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:843
 msgid "could not resolve hostname"
 msgstr "gagal dapatkan nama hos"
 
@@ -103,7 +103,7 @@ msgid "The user %s has left the conference"
 msgstr "Pengguna %s meninggalkan perbincangan"
 
 #: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1148
-#: src/hooks/msnhook.cc:660
+#: src/hooks/msnhook.cc:676
 msgid "The user has added you to his/her contact list"
 msgstr "Pengguna telah menambah anda ke dalam senarai rakan"
 
@@ -1842,72 +1842,72 @@ msgstr "masalah menghantar peristiwa: jenis IM tidak dikenali"
 msgid "event sending error: unknown event type"
 msgstr "masalah menghantar peristiwa: jenis peristiwa tidak diketahui"
 
-#: src/icqconf.cc:1197
+#: src/icqconf.cc:1202
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s ke %s telah dimasukkan ke dalam queue"
 
-#: src/icqconf.cc:1203
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr ""
-"masalah menghantar peristiwa: maklumat penerima tiada dalam senarai anda"
+#: src/icqconf.cc:1208
+#, fuzzy
+msgid "event sending error: error creating directory for the contact"
+msgstr "masalah menghantar peristiwa: parameter tidak mencukupi"
 
-#: src/icqconf.cc:1245
+#: src/icqconf.cc:1255
 msgid "unknown status character was given"
 msgstr "terima aksara status yang tidak dikenali"
 
-#: src/icqconf.cc:1248
+#: src/icqconf.cc:1258
 msgid "unknown IM type"
 msgstr "jenis IM tidak dikenali"
 
-#: src/icqconf.cc:1251
+#: src/icqconf.cc:1261
 msgid "status change error: "
 msgstr "ralat menukar status: "
 
-#: src/icqconf.cc:1260
+#: src/icqconf.cc:1270
 msgid "Usage: "
 msgstr "Penggunaan: "
 
-#: src/icqconf.cc:1262
+#: src/icqconf.cc:1272
 msgid "General options:"
 msgstr "Pilihan am:"
 
-#: src/icqconf.cc:1263
+#: src/icqconf.cc:1273
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 "  --ascii, -a              gunakan aksara ASCII bagi tetingkap dan kawalan UI"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <path>     tetapkan direktori asas"
 
-#: src/icqconf.cc:1265
+#: src/icqconf.cc:1275
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr ""
 
-#: src/icqconf.cc:1266
+#: src/icqconf.cc:1276
 msgid "  --help                   display this stuff"
 msgstr "  --help                   senaraikan benda ini"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            tunjukkan maklumat versi"
 
-#: src/icqconf.cc:1269
+#: src/icqconf.cc:1279
 msgid "Events sending options:"
 msgstr "Pilihan penghantaran peristiwa:"
 
-#: src/icqconf.cc:1270
+#: src/icqconf.cc:1280
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 "  -s, --send <jenis peristiwa>  jenis peristiwa; samada msg, sms atau url"
 
-#: src/icqconf.cc:1271
+#: src/icqconf.cc:1281
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <status>    tukar status IM sekarang"
 
-#: src/icqconf.cc:1272
+#: src/icqconf.cc:1282
 #, fuzzy
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
@@ -1916,20 +1916,20 @@ msgstr ""
 "  -p, --proto <protocol>   jenis protokol; samada icq, yahoo, msn, aim, irc "
 "atau jabber"
 
-#: src/icqconf.cc:1274
+#: src/icqconf.cc:1284
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 "  -t, --to <destinasi>   UIN atau nama pendek destinasi (bergantung kepada "
 "protokol)"
 
-#: src/icqconf.cc:1275
+#: src/icqconf.cc:1285
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 "  -n, --number <phone#>    nombor telefon bagi menghantar peristiwa (sms "
 "sahaja)"
 
-#: src/icqconf.cc:1277
+#: src/icqconf.cc:1287
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "Laporkan pepijat ke <centericq-bugs@konst.org.ua>."
 
@@ -2892,136 +2892,141 @@ msgstr "! ruang storan kurang dari 10k, offline"
 msgid "! support for %s was disabled at build time"
 msgstr ""
 
-#: src/centericq.cc:664 src/centericq.cc:719
+#: src/centericq.cc:665 src/centericq.cc:720
 #, fuzzy, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] mail baru diterima, %d mesej"
 
-#: src/centericq.cc:666 src/centericq.cc:721
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] mail baru diterima, %d mesej"
 
-#: src/centericq.cc:669 src/centericq.cc:724
+#: src/centericq.cc:670 src/centericq.cc:725
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ mesej terakhir dari %s"
 
-#: src/centericq.cc:768
+#: src/centericq.cc:769
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ kofigurasi %s berubah, muat semula"
 
-#: src/centericq.cc:822
+#: src/centericq.cc:826
 msgid "! another running copy of centericq detected"
 msgstr "! ada centericq lain sedang dilarikan"
 
-#: src/centericq.cc:823
+#: src/centericq.cc:827
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! ini mungkin menyebabkan masalah. pid %lu"
 
-#: src/centericq.cc:976
+#: src/centericq.cc:980
 msgid "Mobile number: "
 msgstr "Nombor telefon bimbit: "
 
-#: src/centericq.cc:1136
+#: src/centericq.cc:1140
 msgid "directory to save the file(s) to: "
 msgstr "fail akan disimpan di dalam direktori: "
 
-#: src/centericq.cc:1143
+#: src/centericq.cc:1147
 msgid "The specified directory is not writable"
 msgstr "Direktori yang diberikan tidak dapat ditulis"
 
-#: src/centericq.cc:1147
+#: src/centericq.cc:1151
 msgid "The specified directory does not exist"
 msgstr "Direktori yang diberikan tidak wujud"
 
-#: src/centericq.cc:1282
+#: src/centericq.cc:1286
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ tiada sejarah bagi %s"
 
-#: src/centericq.cc:1308
+#: src/centericq.cc:1312
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ pengguna %s telah berada dalam senarai rakan"
 
-#: src/centericq.cc:1320
+#: src/centericq.cc:1324
 msgid "Select a group to add the user to"
 msgstr "PIlih kumpulan untuk masukkan rakan"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1356
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s telah dimasukkan ke senarai"
 
-#: src/centericq.cc:1423
+#: src/centericq.cc:1427
 msgid "+ the user is back"
 msgstr "+ pengguna telah kembali"
 
-#: src/centericq.cc:1439
+#: src/centericq.cc:1443
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status restored"
 
-#: src/centericq.cc:1454
+#: src/centericq.cc:1458
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] telah ditetapkan secara automatik %s"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "away"
 msgstr "away"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1583
+#: src/centericq.cc:1585
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! ruang storan kurang dari 10k, offline"
 
-#: src/centericq.cc:1584
+#: src/centericq.cc:1586
 msgid "! otherwise we can lose events and configuration"
 msgstr "! sebaliknya kita akan kehilangan data dan tetapan"
 
-#: src/centericq.cc:1628
+#: src/centericq.cc:1630
 msgid "Invite to conference.."
 msgstr "Jemput ke perbincangan.."
 
-#: src/centericq.cc:1648
+#: src/centericq.cc:1651
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Pilih rakan untuk dimasukkan ke dalam senarai"
 
-#: src/centericq.cc:1651
+#: src/centericq.cc:1653
 msgid "Mass move selected users to.."
 msgstr ""
 
-#: src/hooks/msnhook.cc:412
+#: src/hooks/msnhook.cc:411
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msc] selesai reverse senarai pengguna, %d ditemui"
 
-#: src/hooks/msnhook.cc:739
+#: src/hooks/msnhook.cc:746
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr "+ [msn] email tidak dibaca: %d dalam inbox, %d dalam folder"
 
-#: src/hooks/msnhook.cc:745
+#: src/hooks/msnhook.cc:752
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] emel dari %s, %s"
 
-#: src/hooks/msnhook.cc:829
+#: src/hooks/msnhook.cc:839
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] sambungan gagal: "
 
-#: src/hooks/msnhook.cc:851
+#: src/hooks/msnhook.cc:861
 msgid "verify the hostname and port"
 msgstr "sahkan nama hos dan port"
+
+#~ msgid ""
+#~ "event sending error: the destination contact doesn't exist on your list"
+#~ msgstr ""
+#~ "masalah menghantar peristiwa: maklumat penerima tiada dalam senarai anda"
 
 #, fuzzy
 #~ msgid "send, "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.9.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-10 22:27+0300\n"
+"POT-Creation-Date: 2004-06-16 17:25+0300\n"
 "PO-Revision-Date: 2002-10-25 20:27+0200\n"
 "Last-Translator: Mattias Webjörn Eriksson <mattias@webjorn.org>\n"
 "Language-Team: swedish <sv@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] kunde inte ansluta: "
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:833
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:843
 msgid "could not resolve hostname"
 msgstr "misslyckades med namnuppslagning"
 
@@ -100,7 +100,7 @@ msgid "The user %s has left the conference"
 msgstr "Användaren %s lämnade konferensen"
 
 #: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1148
-#: src/hooks/msnhook.cc:660
+#: src/hooks/msnhook.cc:676
 msgid "The user has added you to his/her contact list"
 msgstr "Användaren har lagt till dig i sin kontaktlista"
 
@@ -1833,70 +1833,71 @@ msgstr "sändfel: okänd IM typ"
 msgid "event sending error: unknown event type"
 msgstr "sändfel: okänd händelse typ"
 
-#: src/icqconf.cc:1197
+#: src/icqconf.cc:1202
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s till %s lades till i kön"
 
-#: src/icqconf.cc:1203
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr "sändfel: destinations kontakten finns inte på din lista"
+#: src/icqconf.cc:1208
+#, fuzzy
+msgid "event sending error: error creating directory for the contact"
+msgstr "sändfel: otillräckligt med parametrar"
 
-#: src/icqconf.cc:1245
+#: src/icqconf.cc:1255
 msgid "unknown status character was given"
 msgstr "Det angivna statustecknet är okänt"
 
-#: src/icqconf.cc:1248
+#: src/icqconf.cc:1258
 msgid "unknown IM type"
 msgstr "okänd IM typ"
 
-#: src/icqconf.cc:1251
+#: src/icqconf.cc:1261
 msgid "status change error: "
 msgstr "fel, status ändring: "
 
-#: src/icqconf.cc:1260
+#: src/icqconf.cc:1270
 msgid "Usage: "
 msgstr "Användning: "
 
-#: src/icqconf.cc:1262
+#: src/icqconf.cc:1272
 msgid "General options:"
 msgstr "Allmänna inställningar:"
 
-#: src/icqconf.cc:1263
+#: src/icqconf.cc:1273
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 "  --ascii, -a              använd ASCII tecken för fönster och UI kontroller"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <path>     ange baskatalog"
 
-#: src/icqconf.cc:1265
+#: src/icqconf.cc:1275
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <host/ip>     Skapa socket för lokal ipadress"
 
-#: src/icqconf.cc:1266
+#: src/icqconf.cc:1276
 msgid "  --help                   display this stuff"
 msgstr "  --help                   visa denna hjälp"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            visa visa versionsinformation"
 
-#: src/icqconf.cc:1269
+#: src/icqconf.cc:1279
 msgid "Events sending options:"
 msgstr "Händelse inställningar:"
 
-#: src/icqconf.cc:1270
+#: src/icqconf.cc:1280
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr "  -s, --send <händelsetyp> händelsetyp; kan vara msg, sms eller url"
 
-#: src/icqconf.cc:1271
+#: src/icqconf.cc:1281
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <status>    ändra IM status"
 
-#: src/icqconf.cc:1272
+#: src/icqconf.cc:1282
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
@@ -1904,19 +1905,19 @@ msgstr ""
 "  -p, --proto <protokoll>  protokolltyp; kan vara icq, yahoo, aim, irc "
 "jabber eller lj"
 
-#: src/icqconf.cc:1274
+#: src/icqconf.cc:1284
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 "  -t, --to <destination>   destinations UIN eller smeknamn (beror på "
 "protokoll)"
 
-#: src/icqconf.cc:1275
+#: src/icqconf.cc:1285
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 "  -n, --number <mobil#>    mobilnummer att skicka händelse till (endast sms)"
 
-#: src/icqconf.cc:1277
+#: src/icqconf.cc:1287
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "Rapportera buggar till <centericq-bugs@konst.org.ua>."
 
@@ -2868,136 +2869,140 @@ msgstr "! kunde inte ansluta, det finns mindre än 10k ledigt diskutrymme"
 msgid "! support for %s was disabled at build time"
 msgstr "! stöd för %s avaktiverades vid kompileringen"
 
-#: src/centericq.cc:664 src/centericq.cc:719
+#: src/centericq.cc:665 src/centericq.cc:720
 #, fuzzy, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] ny e-post, %d meddelanden"
 
-#: src/centericq.cc:666 src/centericq.cc:721
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] ny e-post, %d meddelanden"
 
-#: src/centericq.cc:669 src/centericq.cc:724
+#: src/centericq.cc:670 src/centericq.cc:725
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ sista meddelandet från %s"
 
-#: src/centericq.cc:768
+#: src/centericq.cc:769
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ %s konfigurationen ändrades och lästes in"
 
-#: src/centericq.cc:822
+#: src/centericq.cc:826
 msgid "! another running copy of centericq detected"
 msgstr "! en annan instans av centericq har upptäckts"
 
-#: src/centericq.cc:823
+#: src/centericq.cc:827
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! detta kan innebära problem. pid %lu"
 
-#: src/centericq.cc:976
+#: src/centericq.cc:980
 msgid "Mobile number: "
 msgstr "Mobilnummer: "
 
-#: src/centericq.cc:1136
+#: src/centericq.cc:1140
 msgid "directory to save the file(s) to: "
 msgstr "katalog att spara filen/filerna i: "
 
-#: src/centericq.cc:1143
+#: src/centericq.cc:1147
 msgid "The specified directory is not writable"
 msgstr "Den angivna katalogen är inte skrivbar"
 
-#: src/centericq.cc:1147
+#: src/centericq.cc:1151
 msgid "The specified directory does not exist"
 msgstr "Den angivna katalogen finns inte"
 
-#: src/centericq.cc:1282
+#: src/centericq.cc:1286
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ inga tidigare meddelanden från %s"
 
-#: src/centericq.cc:1308
+#: src/centericq.cc:1312
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ användaren %s finns redan på listan"
 
-#: src/centericq.cc:1320
+#: src/centericq.cc:1324
 msgid "Select a group to add the user to"
 msgstr "Välj en grupp att lägga till en användare"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1356
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s lades till i kontaktlistan"
 
-#: src/centericq.cc:1423
+#: src/centericq.cc:1427
 msgid "+ the user is back"
 msgstr "+ användaren är tillbaka"
 
-#: src/centericq.cc:1439
+#: src/centericq.cc:1443
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status återställd"
 
-#: src/centericq.cc:1454
+#: src/centericq.cc:1458
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] satte automatiskt %s"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "away"
 msgstr "iväg"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "n/a"
 msgstr "icke tillgänglig"
 
-#: src/centericq.cc:1583
+#: src/centericq.cc:1585
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! det finns mindre än 10k ledigt diskutrymme, kopplar ned"
 
-#: src/centericq.cc:1584
+#: src/centericq.cc:1586
 msgid "! otherwise we can lose events and configuration"
 msgstr "! annars kan händelser och inställningar gå förlorade"
 
-#: src/centericq.cc:1628
+#: src/centericq.cc:1630
 msgid "Invite to conference.."
 msgstr "Inbjud till konferens.."
 
-#: src/centericq.cc:1648
+#: src/centericq.cc:1651
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Välj kontakter att lägga till lista"
 
-#: src/centericq.cc:1651
+#: src/centericq.cc:1653
 msgid "Mass move selected users to.."
 msgstr ""
 
-#: src/hooks/msnhook.cc:412
+#: src/hooks/msnhook.cc:411
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] klar med att reversera användarlistan, %d funna"
 
-#: src/hooks/msnhook.cc:739
+#: src/hooks/msnhook.cc:746
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr "+ [msn] oläst e-post: %d i inkorgen, %d i mappar"
 
-#: src/hooks/msnhook.cc:745
+#: src/hooks/msnhook.cc:752
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-post från %s, %s"
 
-#: src/hooks/msnhook.cc:829
+#: src/hooks/msnhook.cc:839
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] kunde inte ansluta: "
 
-#: src/hooks/msnhook.cc:851
+#: src/hooks/msnhook.cc:861
 msgid "verify the hostname and port"
 msgstr "verifiera angiven värd och port"
+
+#~ msgid ""
+#~ "event sending error: the destination contact doesn't exist on your list"
+#~ msgstr "sändfel: destinations kontakten finns inte på din lista"
 
 #, fuzzy
 #~ msgid "to URLs, "

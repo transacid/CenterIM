@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-10 22:27+0300\n"
+"POT-Creation-Date: 2004-06-16 17:25+0300\n"
 "PO-Revision-Date: 2003-11-30 17:44+0200\n"
 "Last-Translator: Piotr KUCHARSKI <chopin@sgh.waw.pl>\n"
 "Language-Team: Polish\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] nie mo¿na siê po³±czyæ: "
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:833
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:843
 msgid "could not resolve hostname"
 msgstr "nie mo¿na znale¼æ nazwy serwera"
 
@@ -101,7 +101,7 @@ msgid "The user %s has left the conference"
 msgstr "U¿ytkownik %s opu¶ci³ konferencjê"
 
 #: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1148
-#: src/hooks/msnhook.cc:660
+#: src/hooks/msnhook.cc:676
 msgid "The user has added you to his/her contact list"
 msgstr "U¿ytkownik doda³ Ciê do swojej listy kontaktowej"
 
@@ -1831,71 +1831,71 @@ msgstr "b³±d wysy³ania zdarzenia: nieznany typ IM"
 msgid "event sending error: unknown event type"
 msgstr "b³±d wysy³ania zdarzenia: nieznany typ zdarzenia"
 
-#: src/icqconf.cc:1197
+#: src/icqconf.cc:1202
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s do %s zosta³o zostawione w kolejce"
 
-#: src/icqconf.cc:1203
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr ""
-"b³±d wysy³ania zdarzenia: docelowy kontakt nie istnieje na Twojej li¶cie"
+#: src/icqconf.cc:1208
+#, fuzzy
+msgid "event sending error: error creating directory for the contact"
+msgstr "b³±d wysy³ania zdarzenia: za ma³o parametrów"
 
-#: src/icqconf.cc:1245
+#: src/icqconf.cc:1255
 msgid "unknown status character was given"
 msgstr "podano nieznany znak statusu"
 
-#: src/icqconf.cc:1248
+#: src/icqconf.cc:1258
 msgid "unknown IM type"
 msgstr "nieznany typ IM"
 
-#: src/icqconf.cc:1251
+#: src/icqconf.cc:1261
 msgid "status change error: "
 msgstr "b³±d zmiany statusu: "
 
-#: src/icqconf.cc:1260
+#: src/icqconf.cc:1270
 msgid "Usage: "
 msgstr "U¿ycie: "
 
-#: src/icqconf.cc:1262
+#: src/icqconf.cc:1272
 msgid "General options:"
 msgstr "Opcje ogólne:"
 
-#: src/icqconf.cc:1263
+#: src/icqconf.cc:1273
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr "  --ascii, -a              u¿ywaj znaków ASCII do rysowania okienek"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <¶cie¿ka>  ustaw bazow± ¶cie¿kê"
 
-#: src/icqconf.cc:1265
+#: src/icqconf.cc:1275
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <host/ip>     korzystaj z danego IP"
 
-#: src/icqconf.cc:1266
+#: src/icqconf.cc:1276
 msgid "  --help                   display this stuff"
 msgstr "  --help                   poka¿ pomoc"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            poka¿ wersjê programu"
 
-#: src/icqconf.cc:1269
+#: src/icqconf.cc:1279
 msgid "Events sending options:"
 msgstr "Opcje wysy³ania zdarzeñ:"
 
-#: src/icqconf.cc:1270
+#: src/icqconf.cc:1280
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 "  -s, --send <typ>         typ zdarzenia; mo¿e byæ msg msg, sms lub url"
 
-#: src/icqconf.cc:1271
+#: src/icqconf.cc:1281
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <status>    zmieñ status IM"
 
-#: src/icqconf.cc:1272
+#: src/icqconf.cc:1282
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
@@ -1903,18 +1903,18 @@ msgstr ""
 "  -p, --proto <protokó³>   typ protoko³u; mo¿e byæ icq, yahoo, aim, irc, "
 "jabber lub lj"
 
-#: src/icqconf.cc:1274
+#: src/icqconf.cc:1284
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr "  -t, --to <cel>           docelowy UIN lub nick (zale¿y od protoko³u)"
 
-#: src/icqconf.cc:1275
+#: src/icqconf.cc:1285
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 "  -n, --number <nr tel>    numer telefonu komórkowego do wys³ania zdarzenia "
 "(tylko sms)"
 
-#: src/icqconf.cc:1277
+#: src/icqconf.cc:1287
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "Zg³aszanie problemów do <centericq-bugs@konst.org.ua>."
 
@@ -2868,137 +2868,142 @@ msgstr "! nie mo¿na siê po³±czyæ, mniej ni¿ 10kB wolnego na dysku"
 msgid "! support for %s was disabled at build time"
 msgstr "! wsparcie dla %s zosta³o usuniête w trakcie kompilacji"
 
-#: src/centericq.cc:664 src/centericq.cc:719
+#: src/centericq.cc:665 src/centericq.cc:720
 #, fuzzy, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] otrzymano now± pocztê, %d wiadomo¶ci"
 
-#: src/centericq.cc:666 src/centericq.cc:721
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] otrzymano now± pocztê, %d wiadomo¶ci"
 
-#: src/centericq.cc:669 src/centericq.cc:724
+#: src/centericq.cc:670 src/centericq.cc:725
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ ostatnia wiadomo¶æ od %s"
 
-#: src/centericq.cc:768
+#: src/centericq.cc:769
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ konfiguracja %s zmieni³a siê, od¶wie¿ono"
 
-#: src/centericq.cc:822
+#: src/centericq.cc:826
 msgid "! another running copy of centericq detected"
 msgstr "! inna kopia centericq jest ju¿ uruchomiona"
 
-#: src/centericq.cc:823
+#: src/centericq.cc:827
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! mo¿e to powodowaæ problemy. pid %lu"
 
-#: src/centericq.cc:976
+#: src/centericq.cc:980
 msgid "Mobile number: "
 msgstr "Komórka: "
 
-#: src/centericq.cc:1136
+#: src/centericq.cc:1140
 msgid "directory to save the file(s) to: "
 msgstr "katalog, w którym zostan± nagrane pliki: "
 
-#: src/centericq.cc:1143
+#: src/centericq.cc:1147
 msgid "The specified directory is not writable"
 msgstr "W danym katalogu nie mo¿na zapisywaæ"
 
-#: src/centericq.cc:1147
+#: src/centericq.cc:1151
 msgid "The specified directory does not exist"
 msgstr "Dany katalog nie istnieje"
 
-#: src/centericq.cc:1282
+#: src/centericq.cc:1286
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ brak historii dla %s"
 
-#: src/centericq.cc:1308
+#: src/centericq.cc:1312
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ u¿ytkownik %s jest ju¿ na li¶cie"
 
-#: src/centericq.cc:1320
+#: src/centericq.cc:1324
 msgid "Select a group to add the user to"
 msgstr "Wybierz grupê, do której chcesz dodaæ u¿ytkownika"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1356
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s zosta³ dodany do listy"
 
-#: src/centericq.cc:1423
+#: src/centericq.cc:1427
 msgid "+ the user is back"
 msgstr "+ u¿ytkownik powróci³"
 
-#: src/centericq.cc:1439
+#: src/centericq.cc:1443
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status odtworzony"
 
-#: src/centericq.cc:1454
+#: src/centericq.cc:1458
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] automatycznie oznacz jako %s"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "away"
 msgstr "Nieobecny"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1583
+#: src/centericq.cc:1585
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! wolne miejsce na dysku poni¿ej 10k, roz³±czono"
 
-#: src/centericq.cc:1584
+#: src/centericq.cc:1586
 msgid "! otherwise we can lose events and configuration"
 msgstr "! w przeciwnym wypadku mo¿na utraciæ wiadomo¶ci i konfiguracjê"
 
-#: src/centericq.cc:1628
+#: src/centericq.cc:1630
 msgid "Invite to conference.."
 msgstr "Zaproszenie do konferencji"
 
-#: src/centericq.cc:1648
+#: src/centericq.cc:1651
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Wybierz kontakty, które chcesz dodaæ do listy"
 
-#: src/centericq.cc:1651
+#: src/centericq.cc:1653
 msgid "Mass move selected users to.."
 msgstr ""
 
-#: src/hooks/msnhook.cc:412
+#: src/hooks/msnhook.cc:411
 #, fuzzy, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [yahoo] zakoñczono ¶ci±ganie listy cz³onków, znaleziono %d"
 
-#: src/hooks/msnhook.cc:739
+#: src/hooks/msnhook.cc:746
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:745
+#: src/hooks/msnhook.cc:752
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail od %s, %s"
 
-#: src/hooks/msnhook.cc:829
+#: src/hooks/msnhook.cc:839
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] nie mo¿na siê po³±czyæ: "
 
-#: src/hooks/msnhook.cc:851
+#: src/hooks/msnhook.cc:861
 #, fuzzy
 msgid "verify the hostname and port"
 msgstr "sprawd¼ wprowadzon± nazwê serwera i port"
+
+#~ msgid ""
+#~ "event sending error: the destination contact doesn't exist on your list"
+#~ msgstr ""
+#~ "b³±d wysy³ania zdarzenia: docelowy kontakt nie istnieje na Twojej li¶cie"
 
 #, fuzzy
 #~ msgid "send, "

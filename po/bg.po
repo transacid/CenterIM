@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bg\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-10 22:27+0300\n"
+"POT-Creation-Date: 2004-06-16 17:25+0300\n"
 "PO-Revision-Date: 2004-02-29 16:37+0200\n"
 "Last-Translator: Stefan Ilivanov <ep98@mail.bg>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] невъзможно свързване: "
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:833
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:843
 msgid "could not resolve hostname"
 msgstr "невъзможно да се определи IP-то на хоста"
 
@@ -104,7 +104,7 @@ msgid "The user %s has left the conference"
 msgstr "Потребител %s излезе от чат"
 
 #: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1148
-#: src/hooks/msnhook.cc:660
+#: src/hooks/msnhook.cc:676
 msgid "The user has added you to his/her contact list"
 msgstr "Потребителят ви добави към нейната/неговата листа"
 
@@ -1840,71 +1840,72 @@ msgstr "ГРЕШКА: неизвестен IM"
 msgid "event sending error: unknown event type"
 msgstr "ГРЕШКА: неизвестно събитие"
 
-#: src/icqconf.cc:1197
+#: src/icqconf.cc:1202
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s към %s беше поставен в списък-а с задачи"
 
-#: src/icqconf.cc:1203
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr "ГРЕШКА: получателя го няма в вашият списък"
+#: src/icqconf.cc:1208
+#, fuzzy
+msgid "event sending error: error creating directory for the contact"
+msgstr "ГРЕШКА: няма достатъчно параметри"
 
-#: src/icqconf.cc:1245
+#: src/icqconf.cc:1255
 msgid "unknown status character was given"
 msgstr "неизвестен символ зададен за статус"
 
-#: src/icqconf.cc:1248
+#: src/icqconf.cc:1258
 msgid "unknown IM type"
 msgstr "неизвестен тип на IM"
 
-#: src/icqconf.cc:1251
+#: src/icqconf.cc:1261
 msgid "status change error: "
 msgstr "ГРЕШКА при смяна на статус: "
 
-#: src/icqconf.cc:1260
+#: src/icqconf.cc:1270
 msgid "Usage: "
 msgstr "Указание: "
 
-#: src/icqconf.cc:1262
+#: src/icqconf.cc:1272
 msgid "General options:"
 msgstr "Основни опции:"
 
-#: src/icqconf.cc:1263
+#: src/icqconf.cc:1273
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 "  --ascii, -a              използвай ASCII символи за за прозорците и рамките"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <път>     задай друга базова директория"
 
-#: src/icqconf.cc:1265
+#: src/icqconf.cc:1275
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <host/ip>     IP за входящи връзки"
 
-#: src/icqconf.cc:1266
+#: src/icqconf.cc:1276
 msgid "  --help                   display this stuff"
 msgstr "  --help                   покажи този екран"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            покажи версията на програмата"
 
-#: src/icqconf.cc:1269
+#: src/icqconf.cc:1279
 msgid "Events sending options:"
 msgstr "Опции при изпращане на съобщение:"
 
-#: src/icqconf.cc:1270
+#: src/icqconf.cc:1280
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 "  -s, --send <тип>         тип на съобщението; може да бъде msg, sms или url"
 
-#: src/icqconf.cc:1271
+#: src/icqconf.cc:1281
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <статус>   сменете текущия статус на IM"
 
-#: src/icqconf.cc:1272
+#: src/icqconf.cc:1282
 #, fuzzy
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
@@ -1913,17 +1914,17 @@ msgstr ""
 "  -p, --proto <протокол>   тип на протокола; може да бъде icq, yahoo, msn, "
 "aim, irc или jabber"
 
-#: src/icqconf.cc:1274
+#: src/icqconf.cc:1284
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 "  -t, --to <назначение>    UIN или прякор на получателя (зависи от протокола)"
 
-#: src/icqconf.cc:1275
+#: src/icqconf.cc:1285
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr "  -n, --number <тел.ном.>  мобилен номер на получателя (само за sms)"
 
-#: src/icqconf.cc:1277
+#: src/icqconf.cc:1287
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "Изпрати грешки на <centericq-bugs@konst.org.ua>."
 
@@ -2875,135 +2876,139 @@ msgstr "! невъзможно сръзване, свободното място
 msgid "! support for %s was disabled at build time"
 msgstr "! поддръжката за %s е била изключена при компилирането"
 
-#: src/centericq.cc:664 src/centericq.cc:719
+#: src/centericq.cc:665 src/centericq.cc:720
 #, fuzzy, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] нова поща пристигна, %d съобщения"
 
-#: src/centericq.cc:666 src/centericq.cc:721
+#: src/centericq.cc:667 src/centericq.cc:722
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] нова поща пристигна, %d съобщения"
 
-#: src/centericq.cc:669 src/centericq.cc:724
+#: src/centericq.cc:670 src/centericq.cc:725
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ последно съобщение от %s"
 
-#: src/centericq.cc:768
+#: src/centericq.cc:769
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ конфигурацията %s е променена, презареждане"
 
-#: src/centericq.cc:822
+#: src/centericq.cc:826
 msgid "! another running copy of centericq detected"
 msgstr "! друго стартирано копие на centericq е открито"
 
-#: src/centericq.cc:823
+#: src/centericq.cc:827
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! това може да създаде проблем. pid %lu"
 
-#: src/centericq.cc:976
+#: src/centericq.cc:980
 msgid "Mobile number: "
 msgstr "Мобилен телефон: "
 
-#: src/centericq.cc:1136
+#: src/centericq.cc:1140
 msgid "directory to save the file(s) to: "
 msgstr "директория за запис на файл(ове)): "
 
-#: src/centericq.cc:1143
+#: src/centericq.cc:1147
 msgid "The specified directory is not writable"
 msgstr "В указаната директория неможе да се записва"
 
-#: src/centericq.cc:1147
+#: src/centericq.cc:1151
 msgid "The specified directory does not exist"
 msgstr "Указаната директория не съществува"
 
-#: src/centericq.cc:1282
+#: src/centericq.cc:1286
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ няма предишни съобщения за %s"
 
-#: src/centericq.cc:1308
+#: src/centericq.cc:1312
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ потребител %s вече е в листата ви"
 
-#: src/centericq.cc:1320
+#: src/centericq.cc:1324
 msgid "Select a group to add the user to"
 msgstr "Избери група в която да добавите контакта"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1356
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s бе добавен в списъка"
 
-#: src/centericq.cc:1423
+#: src/centericq.cc:1427
 msgid "+ the user is back"
 msgstr "+ потребителя се върна"
 
-#: src/centericq.cc:1439
+#: src/centericq.cc:1443
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус възтановен"
 
-#: src/centericq.cc:1454
+#: src/centericq.cc:1458
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматичен преход в %s"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "away"
 msgstr "няма ме"
 
-#: src/centericq.cc:1456
+#: src/centericq.cc:1460
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1583
+#: src/centericq.cc:1585
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободното място на диска е под 10к, изключване"
 
-#: src/centericq.cc:1584
+#: src/centericq.cc:1586
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе може да се изгубят събития и промени"
 
-#: src/centericq.cc:1628
+#: src/centericq.cc:1630
 msgid "Invite to conference.."
 msgstr "Покана за чат"
 
-#: src/centericq.cc:1648
+#: src/centericq.cc:1651
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Изберете контакти които да добавите в листата"
 
-#: src/centericq.cc:1651
+#: src/centericq.cc:1653
 msgid "Mass move selected users to.."
 msgstr "Премести всички избрани контакти в"
 
-#: src/hooks/msnhook.cc:412
+#: src/hooks/msnhook.cc:411
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] обратен потребителски списък завършен, %d намерени"
 
-#: src/hooks/msnhook.cc:739
+#: src/hooks/msnhook.cc:746
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr "+ [msn] e-mail: %d в inbox, %d в други папки"
 
-#: src/hooks/msnhook.cc:745
+#: src/hooks/msnhook.cc:752
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail от %s, %s"
 
-#: src/hooks/msnhook.cc:829
+#: src/hooks/msnhook.cc:839
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] невъзможно свързване: "
 
-#: src/hooks/msnhook.cc:851
+#: src/hooks/msnhook.cc:861
 msgid "verify the hostname and port"
 msgstr "проверете хоста и порта"
+
+#~ msgid ""
+#~ "event sending error: the destination contact doesn't exist on your list"
+#~ msgstr "ГРЕШКА: получателя го няма в вашият списък"
 
 #, fuzzy
 #~ msgid "send, "
