@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.6 2001/11/15 16:49:13 konst Exp $
+* $Id: treeview.cc,v 1.7 2002/02/19 18:42:40 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -269,7 +269,9 @@ void *treeview::open(int *n) {
     screenbuffer.save(x1, y1, x2, y2);
     redraw();
 
-    if(k = menu.open()) p = getref(getid(k-1));
+    if(k = menu.open()) {
+	p = getref(getid(k-1));
+    }
 
     if(n) *n = k;
     return p;
