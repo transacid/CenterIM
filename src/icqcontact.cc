@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.36 2001/12/19 15:13:28 konst Exp $
+* $Id: icqcontact.cc,v 1.37 2001/12/20 11:36:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -172,13 +172,13 @@ void icqcontact::save() {
 		minfo.birth_day << endl <<
 		minfo.birth_month << endl <<
 		minfo.birth_year << endl <<
-		endl <<
-		endl <<
-		endl <<
-		endl <<
-		endl <<
-		endl <<
-		endl <<
+		(interests.size() > 0 ? *(interests.begin()+0) : "") << endl <<
+		(interests.size() > 1 ? *(interests.begin()+1) : "") << endl <<
+		(interests.size() > 2 ? *(interests.begin()+2) : "") << endl <<
+		(interests.size() > 3 ? *(interests.begin()+3) : "") << endl <<
+		(background.size() > 0 ? *(background.begin()+0) : "") << endl <<
+		(background.size() > 1 ? *(background.begin()+1) : "") << endl <<
+		(background.size() > 2 ? *(background.begin()+2) : "") << endl <<
 		endl <<
 		endl <<
 		lastip << endl <<
@@ -260,13 +260,13 @@ void icqcontact::load() {
 		case 32: minfo.birth_day = atoi(buf); break;
 		case 33: minfo.birth_month = atoi(buf); break;
 		case 34: minfo.birth_year = atoi(buf); break;
-		case 35: break;
-		case 36: break;
-		case 37: break;
-		case 38: break;
-		case 39: break;
-		case 40: break;
-		case 41: break;
+		case 35: if(strlen(buf)) interests.push_back(buf); break;
+		case 36: if(strlen(buf)) interests.push_back(buf); break;
+		case 37: if(strlen(buf)) interests.push_back(buf); break;
+		case 38: if(strlen(buf)) interests.push_back(buf); break;
+		case 39: if(strlen(buf)) background.push_back(buf); break;
+		case 40: if(strlen(buf)) background.push_back(buf); break;
+		case 41: if(strlen(buf)) background.push_back(buf); break;
 		case 42: break;
 		case 43: break;
 		case 44: lastip = buf; break;
@@ -434,6 +434,21 @@ void icqcontact::setworkinfo(const workinfo &ainfo) {
     fupdated++;
 }
 
+void icqcontact::setinterests(const vector<string> &ainterests) {
+    interests = ainterests;
+    fupdated++;
+}
+
+void icqcontact::setbackground(const vector<string> &abackground) {
+    background = abackground;
+    fupdated++;
+}
+
+void icqcontact::setabout(const string data) {
+    about = data;
+    fupdated++;
+}
+
 const icqcontact::basicinfo &icqcontact::getbasicinfo() const {
     return binfo;
 }
@@ -446,9 +461,12 @@ const icqcontact::workinfo &icqcontact::getworkinfo() const {
     return winfo;
 }
 
-void icqcontact::setabout(const string data) {
-    about = data;
-    fupdated++;
+const vector<string> &icqcontact::getinterests() const {
+    return interests;
+}
+
+const vector<string> &icqcontact::getbackground() const {
+    return background;
 }
 
 void icqcontact::setsound(imevent::imeventtype event, const string sf) {

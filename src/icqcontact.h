@@ -63,6 +63,7 @@ class icqcontact {
 	basicinfo binfo;
 	moreinfo minfo;
 	workinfo winfo;
+	vector<string> interests, background;
 
 	void scanhistory();
 	const string tosane(const string p) const;
@@ -81,12 +82,16 @@ class icqcontact {
 	void setbasicinfo(const basicinfo &ainfo);
 	void setmoreinfo(const moreinfo &ainfo);
 	void setworkinfo(const workinfo &ainfo);
+	void setinterests(const vector<string> &ainterests);
+	void setbackground(const vector<string> &abackground);
 	void setabout(const string data);
 	void setlastip(const string flastip);
 
 	const basicinfo &getbasicinfo() const;
 	const moreinfo &getmoreinfo() const;
 	const workinfo &getworkinfo() const;
+	const vector<string> &getinterests() const;
+	const vector<string> &getbackground() const;
 	const string getabout() const;
 	const string getlastip() const;
 

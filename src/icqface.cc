@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.61 2001/12/19 15:13:29 konst Exp $
+* $Id: icqface.cc,v 1.62 2001/12/20 11:36:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -651,6 +651,51 @@ void commacat(string &text, string sub, bool nocomma = false) {
 
 void icqface::infointerests(dialogbox &db, icqcontact *c) {
     string text;
+    vector<string> data;
+    vector<string>::iterator i;
+    int pos, ipos;
+
+    data = c->getinterests();
+
+    if(!data.empty()) {
+	text += (string) "* " + _("Interests") + "\n";
+	commacat(text, *data.begin(), true);
+
+	for(i = data.begin()+1; i != data.end(); i++)
+	    commacat(text, *i);
+
+	text += "\n\n";
+    }
+
+    data = c->getbackground();
+
+    if(!data.empty()) {
+	text += (string) "* " + _("Background") + "\n";
+
+	for(i = data.begin(); i != data.end(); i++)
+	    text += *i + "\n";
+
+	text += "\n\n";
+    }
+
+    pos = 0;
+    while((pos = text.find(",", pos)) != -1) {
+	if(text.substr(pos+1, 1) != " ") {
+	    text.insert(pos+1, " ");
+	}
+
+	ipos = pos-1;
+	while(ipos > 0) {
+	    if(text.substr(ipos, 1) == " ") {
+		text.erase(ipos--, 1);
+	    } else {
+		break;
+	    }
+	}
+
+	pos++;
+    }
+
     db.getbrowser()->setbuf(text);
 }
 

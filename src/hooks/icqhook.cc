@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.29 2001/12/19 17:07:59 konst Exp $
+* $Id: icqhook.cc,v 1.30 2001/12/20 11:36:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -395,9 +395,11 @@ void icqhook::requestinfo(const imcontact c) {
 const string icqhook::getcountryname(int code) const {
     int i;
 
-    for(i = 0; i < Country_table_size; i++) {
-	if(Country_table[i].code == code) {
-	    return Country_table[i].name;
+    if(code) {
+	for(i = 0; i < Country_table_size; i++) {
+	    if(Country_table[i].code == code) {
+		return Country_table[i].name;
+	    }
 	}
     }
 
@@ -627,6 +629,26 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cwinfo.zip = strtoul(work.zip.c_str(), 0, 0);
 		cwinfo.country = getcountryname(work.country);
 
+		/* personal interests */
+
+		vector<string> pintinfo;
+		list<PersonalInterestInfo::Interest>::iterator ii;
+
+		for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
+		    pintinfo.push_back(ii->second);
+		}
+
+		/* education background */
+
+		vector<string> backginfo;
+		list<BackgroundInfo::School>::iterator isc;
+
+		for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
+		    backginfo.push_back(isc->second);
+		}
+
+		/* nicknames stuff */
+
 		string nick = rusconv("wk", ic->getAlias());
 
 		if((c->getnick() == c->getdispnick())
@@ -638,6 +660,8 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		c->setbasicinfo(cbinfo);
 		c->setmoreinfo(cminfo);
 		c->setworkinfo(cwinfo);
+		c->setinterests(pintinfo);
+		c->setbackground(backginfo);
 		c->setabout(rusconv("wk", ic->getAboutInfo()));
 
 		face.relaxedupdate();
@@ -666,6 +690,9 @@ void icqhook::logger_cb(LogEvent *ev) {
     switch(ev->getType()) {
 	case LogEvent::PACKET:
 	case LogEvent::DIRECTPACKET:
+#if PACKETDEBUG
+	    face.log(ev->getMessage());
+#endif
 	    break;
 
 	default:
