@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.10 2004/07/20 22:16:40 konst Exp $
+* $Id: gaduhook.cc,v 1.11 2004/08/04 17:45:34 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -149,8 +149,11 @@ void gaduhook::connect() {
 
 	lp.tls = acc.additional["ssl"] == "1" ? 1 : 0;
 
-	sess = gg_login(&lp);
 	log(logConnecting);
+	sess = gg_login(&lp);
+
+	if(!sess)
+	    face.log(_("+ [gg] connection failed"));
 
     } else {
 	face.log(_("+ [gg] cannot resolve %s"), acc.server.c_str());

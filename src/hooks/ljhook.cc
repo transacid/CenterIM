@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.26 2004/07/08 23:52:48 konst Exp $
+* $Id: ljhook.cc,v 1.27 2004/08/04 17:45:35 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -64,9 +64,10 @@ void ljhook::connect() {
 
     httpcli.setProxyServerHost(conf.gethttpproxyhost());
     httpcli.setProxyServerPort(conf.gethttpproxyport());
-    if (!conf.gethttpproxyuser().empty()) {
-	    httpcli.setProxyServerUser(conf.gethttpproxyuser());
-	    httpcli.setProxyServerPasswd(conf.gethttpproxypasswd());
+
+    if(!conf.gethttpproxyuser().empty()) {
+	httpcli.setProxyServerUser(conf.gethttpproxyuser());
+	httpcli.setProxyServerPasswd(conf.gethttpproxypasswd());
     }
 
     HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
@@ -89,8 +90,9 @@ void ljhook::connect() {
     self = imcontact(username + "@lj", livejournal);
 
     fonline = true;
-    httpcli.SendEvent(ev);
+
     sent[ev] = reqLogin;
+    httpcli.SendEvent(ev);
 
     moods = vector<string>(1, "");
     pictures = vector<string>(1, "");
@@ -322,8 +324,9 @@ void ljhook::sendnewuser(const imcontact &ic) {
 	ev->addParam("hpassword", md5pass);
 
 	ev->addParam("editfriend_add_1_user", c->getnick().substr(0, npos));
-	httpcli.SendEvent(ev);
+
 	sent[ev] = reqAddFriend;
+	httpcli.SendEvent(ev);
     }
 }
 
@@ -346,8 +349,8 @@ void ljhook::removeuser(const imcontact &ic) {
 
 	    ev->addParam((string) "editfriend_delete_" + nick, "1");
 
-	    httpcli.SendEvent(ev);
 	    sent[ev] = reqDelFriend;
+	    httpcli.SendEvent(ev);
 	}
     }
 }
@@ -410,8 +413,9 @@ void ljhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
     } else {
 	HTTPRequestEvent *ev = new HTTPRequestEvent(getfeedurl(params.nick));
-	httpcli.SendEvent(ev);
+
 	sent[ev] = reqLookup;
+	httpcli.SendEvent(ev);
 
 	sdest = &dest;
 	lookfor = params.nick;
@@ -448,8 +452,8 @@ void ljhook::requestfriends() {
     ev->addParam("includefriendof", "1");
     ev->addParam("includebdays", "1");
 
-    httpcli.SendEvent(ev);
     sent[ev] = reqGetFriends;
+    httpcli.SendEvent(ev);
 }
 
 // ----------------------------------------------------------------------------

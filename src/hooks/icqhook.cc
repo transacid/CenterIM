@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.156 2004/06/24 19:16:23 konst Exp $
+* $Id: icqhook.cc,v 1.157 2004/08/04 17:45:35 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1044,15 +1044,15 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     wfds.clear();
     efds.clear();
 
+    msg = isconnecting() ? _("+ [icq] cannot connect") : _("+ [icq] disconnected");
+
     logger.putourstatus(icq, getstatus(), offline);
 
     clist.setoffline(icq);
     fonline = false;
 
-    msg = _("+ [icq] disconnected");
-
     if(!reasons[ev->getReason()].empty()) {
-	msg += ", ";
+	msg += ": ";
 	msg += reasons[ev->getReason()];
 
 	logger.putmessage((string) _("icq disconnection reason") + ": " +

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.71 2004/06/10 19:13:13 konst Exp $
+* $Id: jabberhook.cc,v 1.72 2004/08/04 17:45:35 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -150,7 +150,7 @@ void jabberhook::main() {
     xmlnode x, z;
     char *cid;
 
-    if (jc && jc->state == JCONN_STATE_CONNECTING){
+    if(jc && jc->state == JCONN_STATE_CONNECTING) {
 	jab_start(jc);
 	return;
     }
@@ -183,6 +183,7 @@ void jabberhook::main() {
 
     } else if(jc->state == JCONN_STATE_OFF || jc->fd == -1) {
 	statehandler(jc, JCONN_STATE_OFF);
+
     }
 }
 
@@ -1262,10 +1263,11 @@ void jabberhook::statehandler(jconn conn, int state) {
 
     switch(state) {
 	case JCONN_STATE_OFF:
+	    jhook.flogged = jhook.fonline = false;
+
 	    if(previous_state != JCONN_STATE_OFF) {
 		logger.putourstatus(jhook.proto, jhook.getstatus(), jhook.ourstatus = offline);
 		jhook.log(logDisconnected);
-		jhook.flogged = jhook.fonline = false;
 		jhook.roster.clear();
 		jhook.agents.clear();
 		clist.setoffline(jhook.proto);

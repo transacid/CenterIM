@@ -1865,6 +1865,11 @@ Several minor interface-related bugs were fixed.
 4.11.0
 ------
 
+HTTP CONNECT method is now supported. This means that if this feature is
+enabled on your HTTP proxy server, you can use it to connect to your
+favourite IM servers. You can also specify a user/pass pair if your
+proxy requires authentification.
+
 Applied a patch by Alexander Kanevskiy that fixed a weird behaviour of
 the LJ import friend option in the accounts dialog.
 
