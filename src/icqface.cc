@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.169 2002/12/09 17:38:38 konst Exp $
+* $Id: icqface.cc,v 1.170 2002/12/18 18:05:39 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -257,7 +257,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_RENAME]    = _(" Rename contact         r");
 	actnames[ACT_GROUPMOVE] = _(" Move to group..");
 	actnames[ACT_PING]      = _(" Ping");
-	actnames[ACT_VERSION]   = _(" Fetch version info");
+	actnames[ACT_VERSION]   = _(" Fetch version info     v");
 	actnames[ACT_FILE]      = _(" Send file(s)");
 	actnames[ACT_CONFER]    = _(" Invite to conference..");
     }
@@ -1764,7 +1764,7 @@ void icqface::extracturls(const string &buf) {
     const char *pp = buf.c_str();
 
     extractedurls.clear();
-    if(!regcomp(&r, "(http://[^ ,\t\n]+|https://[^ ,\t\n]+|ftp://[^, \t\n]+|www\\.[^, \t\n]+)", REG_EXTENDED)) {
+    if(!regcomp(&r, "(http://[^ \t\n]+|https://[^ \t\n]+|ftp://[^ \t\n]+|www\\.[^ \t\n]+)", REG_EXTENDED)) {
 	while(!regexec(&r, buf.substr(pos).c_str(), 1, rm, 0)) {
 	    extractedurls.push_back(buf.substr(pos+rm[0].rm_so, rm[0].rm_eo-rm[0].rm_so));
 	    pos += rm[0].rm_eo;
@@ -2624,6 +2624,12 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 		face.extk = ACT_RENAME;
 	    break;
 
+	case 'v':
+	case 'V':
+	    if(capab.count(hookcapab::version))
+		face.extk = ACT_VERSION;
+	    break;
+
 	case 'e':
 	case 'E':
 	    if(!ischannel(c) && c)
@@ -2639,7 +2645,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	case '/': face.extk = ACT_QUICKFIND; break;
     }
 
-    if(k && face.extk && (strchr("?rRqQsShHmMuUgGaAfFcCeEiI/", k)
+    if(k && face.extk && (strchr("?rRqQsShHmMuUgGaAfFcCeEiIvV/", k)
 	|| (k == KEY_DC)
 	|| (k == KEY_F(2))
 	|| (k == KEY_F(3))

@@ -536,6 +536,11 @@ them here.
   Hostname: login.icq.com
   Port: 5190
 
+  Here a small note is needed. To a great displeasure of network admins,
+the ICQ main server listens on all the TCP ports, from 1 to 65535. So
+if in your network the 5190 is blocked, don't be upset, set it to 80 or
+to 21 or whatever is not restricted by firewall and it will work :)
+
 
 4.5.2. Yahoo!
 -------------
@@ -1676,4 +1681,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.72 2002/12/09 09:20:50 konst Exp $
+$Id: README,v 1.73 2002/12/18 18:05:37 konst Exp $

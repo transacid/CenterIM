@@ -62,6 +62,7 @@ class jabberhook: public abstracthook {
 	void gotroster(xmlnode x);
 	void gotvcard(const imcontact &ic, xmlnode v);
 	void gotmessage(const string &type, const string &from, const string &body);
+	void gotversion(const imcontact &ic, xmlnode x);
 
     public:
 	jabberhook();
@@ -107,6 +108,8 @@ class jabberhook: public abstracthook {
 
 	void sendupdateuserinfo(const icqcontact &c);
 	void updatecontact(icqcontact *c);
+
+	void requestversion(const imcontact &c);
 };
 
 extern jabberhook jhook;

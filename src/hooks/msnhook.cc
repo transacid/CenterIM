@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.56 2002/12/13 16:12:04 konst Exp $
+* $Id: msnhook.cc,v 1.57 2002/12/18 18:05:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -366,19 +366,10 @@ void msnhook::checkinlist(imcontact ic) {
     icqcontact *c = clist.get(ic);
     vector<icqcontact *> notremote = getneedsync();
 
-    if(c) {
-	if(c->inlist())
-	if(find(notremote.begin(), notremote.end(), c) != notremote.end()) {
-	    mhook.sendnewuser(ic);
-	}
-    } else {
-	c = clist.addnew(ic);
-	requestinfo(ic);
-    }
-
-    if(c) {
-	c->setstatus(available);
-    }
+    if(c)
+    if(c->inlist())
+    if(find(notremote.begin(), notremote.end(), c) != notremote.end())
+	mhook.sendnewuser(ic);
 }
 
 bool msnhook::knowntransfer(const imfile &fr) const {
@@ -522,7 +513,7 @@ void ext_got_BLP(msnconn * conn, char c) {
 
 void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname) {
     log("ext_new_RL_entry");
-    mhook.slst["RL"].push_back(make_pair(username, friendlyname));
+    msn_add_to_list(&mhook.conn, "AL", username);
 
     imcontact ic(nicktodisp(username), msn);
     mhook.checkinlist(ic);

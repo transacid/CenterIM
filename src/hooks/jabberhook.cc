@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.37 2002/12/13 12:48:03 konst Exp $
+* $Id: jabberhook.cc,v 1.38 2002/12/18 18:05:39 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,6 +82,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changeabout);
     fcapabs.insert(hookcapab::synclist);
+    fcapabs.insert(hookcapab::version);
 }
 
 jabberhook::~jabberhook() {
@@ -535,15 +536,10 @@ string jabberhook::getchanneljid(icqcontact *c) {
 void jabberhook::checkinlist(imcontact ic) {
     icqcontact *c = clist.get(ic);
 
-    if(c) {
-	if(c->inlist()) {
-	    if(find(roster.begin(), roster.end(), jidnormalize(ic.nickname)) != roster.end())
-		sendnewuser(ic, false);
-	}
-    } else {
-	clist.addnew(ic);
-	requestinfo(ic);
-    }
+    if(c)
+    if(c->inlist())
+    if(find(roster.begin(), roster.end(), jidnormalize(ic.nickname)) != roster.end())
+	sendnewuser(ic, false);
 }
 
 vector<string> jabberhook::getservices(servicetype::enumeration st) const {
@@ -1133,6 +1129,46 @@ vector<icqcontact *> jabberhook::getneedsync() {
     return r;
 }
 
+void jabberhook::requestversion(const imcontact &ic) {
+    auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+    xmlnode x = jutil_iqnew(JPACKET__GET, NS_VERSION);
+    xmlnode_put_attrib(x, "to", cjid.get());
+    xmlnode_put_attrib(x, "id", "versionreq");
+    jab_send(jc, x);
+    xmlnode_free(x);
+}
+
+void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
+    xmlnode y = xmlnode_get_tag(x, "query"), z;
+    char *p;
+    string vinfo;
+
+    if(y) {
+	if(z = xmlnode_get_tag(y, "name"))
+	if(p = xmlnode_get_data(y))
+	    if(p) vinfo = p;
+
+	if(z = xmlnode_get_tag(y, "version"))
+	if(p = xmlnode_get_data(y)) {
+	    if(!vinfo.empty()) vinfo += ", ";
+	    vinfo += p;
+	}
+
+	if(z = xmlnode_get_tag(y, "os"))
+	if(p = xmlnode_get_data(y)) {
+	    if(!vinfo.empty()) vinfo += " / ";
+	    vinfo += p;
+	}
+
+	if(vinfo.size() > 128)
+	    vinfo.erase(128);
+
+	char buf[256];
+	sprintf(buf, _("The remote is using %s"), vinfo.c_str());
+	em.store(imnotification(ic, buf));
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
@@ -1215,6 +1251,11 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 			jhook.gotvcard(ic, x);
 			return;
+
+		    } else if(!strcmp(p, "versionreq")) {
+			jhook.gotversion(ic, packet->x);
+			return;
+
 		    }
 		}
 
