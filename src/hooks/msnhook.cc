@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.23 2002/04/07 13:21:26 konst Exp $
+* $Id: msnhook.cc,v 1.24 2002/07/09 21:10:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -344,11 +344,17 @@ void msnhook::ring(void *data) {
     }
 }
 
+#define cutdata(s) if(strlen(s) > 300) s[300] = 0;
+
 void msnhook::mailed(void *data) {
     MSN_MailNotification *mail = (MSN_MailNotification *) data;
 
     if(mail->from) {
 	char buf[1024];
+
+	cutdata(mail->from);
+	cutdata(mail->fromaddr);
+	cutdata(mail->subject);
 
 	sprintf(buf, _("+ [msn] e-mail from %s <%s>, %s"),
 	    mail->from, mail->fromaddr, mail->subject);

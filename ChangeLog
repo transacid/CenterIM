@@ -989,3 +989,20 @@ In the IRC module there was a problem with not detecting the case of
 inability to join a channel, and it also was silent when a user was
 kicked. Fixed, so that now it's detected and reported to the contact
 list.
+
+4.7.8
+-----
+
+Fixed a segfault in the Yahoo! module.
+
+Now the source should compile well on Solaris OS. Thanks to Jochen
+Kmietsch <jochen.kmietsch@tu-clausthal.de> for initial portings efforts
+and to Lion Templin <lion@leonine.com> for providing an account on a
+Solaris box.
+
+Fixed a possible buffer overflow in the MSN e-mail notification
+processing code of the respective module. Thanks to KF
+<dotslash@snosoft.com> for finding and reporting it.
+
+The cicqconv migration script now does also support micq. Thanks to
+Artur Komarov <artur@emd.ru>

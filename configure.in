@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.7.7)
+AM_INIT_AUTOMAKE(centericq, 4.7.8)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -64,10 +64,11 @@ AC_LANG_RESTORE
 
 AC_CHECK_HEADERS(iconv.h)
 
-AC_CHECK_LIB(ncurses, initscr, LIBS="$LIBS -lncurses", LIBS="$LIBS -lcurses")
-AC_CHECK_LIB(iconv, iconv, LIBS="$LIBS -liconv")
-AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket")
-AC_CHECK_LIB(nsl, gethostbyname, LIBS="$LIBS -lnsl")
+AC_CHECK_LIB(ncurses, initscr,, AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program)))
+
+AC_CHECK_LIB(iconv, iconv)
+AC_CHECK_LIB(socket, socket)
+AC_CHECK_LIB(nsl, gethostbyname)
 
 AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.6 libmsn-0.1 libyahoo-0.1 firetalk-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
