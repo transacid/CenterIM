@@ -123,8 +123,8 @@ class texteditor: public abstractuicontrol {
 	const char currentchar();
 
 	int count_clrcodes(char *cp, int pos);
-	void hl_comment(char *cp, char *txt, int color);
-	void hl_comment(char *cp, int st, int pend, int color);
+	int hl_comment(char *cp, char *txt, int color);
+	int hl_comment(char *cp, int st, int pend, int color);
 	void showline(int ln, int startx, int distance, int extrax = 0);
 
 	void marktext();

@@ -682,17 +682,25 @@ void texteditor::scancomments(bool visible) {
     }
 }
 
-void texteditor::hl_comment(char *cp, char *txt, int color) {
+int texteditor::hl_comment(char *cp, char *txt, int color) {
+    int r;
     const char *p;
-    if(p = strqstr(cp, txt, "\"'")) hl_comment(cp, p-cp, strlen(cp), color);
+
+    r = 0;
+    if(p = strqstr(cp, txt, "\"'"))
+	r = hl_comment(cp, p-cp, strlen(cp), color);
+
+    return r;
 }
 
-void texteditor::hl_comment(char *cp, int st, int pend, int color) {
-    int i, delcount = 0;
+int texteditor::hl_comment(char *cp, int st, int pend, int color) {
+    int i, delcount, r;
     char ins[5] = "\001 ";
     int origclr = -1;
 
-    if(color) {
+    delcount = r = 0;
+
+    if(color && (st <= strlen(cp)) && (pend-st > 0)) {
 /// !!! 	for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
 
 	for(i = 0; (i < pend) && (i < strlen(cp)); i++) {
@@ -702,12 +710,18 @@ void texteditor::hl_comment(char *cp, int st, int pend, int color) {
 	    }
 	}
 
-	if(pend > strlen(cp)) pend = strlen(cp);
-	if(cp[pend] != 2) strinsert(cp, pend, "\002");
+	if(pend > strlen(cp))
+	    pend = strlen(cp);
+
+	if(cp[pend] != 2) {
+	    strinsert(cp, pend, "\002");
+	    r++;
+	}
 
 	if(origclr != -1) {
 	    ins[1] = origclr;
 	    strinsert(cp, pend+1, ins);
+	    r += 2;
 	}
 
 	for(i = st; (i < pend) && (i < strlen(cp)); i++) {
@@ -727,7 +741,10 @@ void texteditor::hl_comment(char *cp, int st, int pend, int color) {
 
 	ins[1] = color;
 	strinsert(cp, st, ins);
+	r += 2;
     }
+
+    return r-delcount;
 }
 
 int texteditor::count_clrcodes(char *cp, int pos) {
@@ -747,9 +764,13 @@ int texteditor::count_clrcodes(char *cp, int pos) {
 void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
     if(!show) return;
 
-    int i, n, inscount, bcolor, sxinscount, printed, j, lastoccur, q, eolstart = 0, npos;
+    int i, n, inscount, bcolor, sxinscount, printed, j, lastoccur, q, eolstart = 0, npos, offs;
     char *cs, *cp, *sr, *nr, *r, ins[3] = "\001 ", *buf;
+
+    vector<int> layout;
+    vector<int>::iterator iq;
     vector<hlight>::iterator hi;
+
     const char *p;
 
     if(!(cs = (char *) curfile->lines->at(ln))) return;
@@ -766,6 +787,7 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 	strinsert(cp, 0, ins);
 	strcat(cp, "\002");
     } else {
+	if(strlen(cp))
 	for(hi = colors.hl.begin(); hi != colors.hl.end(); hi++) {
 	    ins[1] = hi->color;
 	    p = cp;
@@ -810,14 +832,11 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 		    break;
 
 		case h_symbol:
-		    while(p = strqpbrk(cp, p-cp+lastoccur, hi->text.c_str(),
-		    colors.synt_quote.c_str(), colors.synt_qescape.c_str())) {
-			if(eolstart) eolstart += lastoccur;
-			if(p-cp > eolstart) break;
-			lastoccur = strspn(p, hi->text.c_str());
-			strinsert(cp, p-cp+lastoccur, "\002");
-			strinsert(cp, p-cp, ins);
-			lastoccur += 3;
+		    layout = getsymbolpositions(string(cp).substr(0, eolstart),
+			hi->text, colors.synt_quote, colors.synt_qescape);
+
+		    for(offs = 0, iq = layout.begin(); iq != layout.end(); iq++) {
+			offs += hl_comment(cp, *iq+offs, *iq+offs+1, hi->color);
 		    }
 		    break;
 
@@ -849,64 +868,19 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 
 	if(!colors.synt_quote.empty()) {
 	    bool qst;
-	    int qoffs;
-	    vector<int> quotelayout;
-	    vector<int>::iterator iq;
 
-	    quotelayout = getquotelayout(string(cp).substr(0, eolstart),
+	    layout = getquotelayout(string(cp).substr(0, eolstart),
 		colors.synt_quote, colors.synt_qescape);
 
-	    for(qst = false, qoffs = 0, iq = quotelayout.begin();
-	    iq != quotelayout.end(); iq++) {
+	    for(qst = false, offs = 0, iq = layout.begin(); iq != layout.end(); iq++) {
 		qst = !qst;
 
 		if(!qst) {
-		    hl_comment(cp, *(iq-1)+qoffs, *iq+qoffs+1, colors.qcolor);
-		    qoffs += 3;
+		    offs += hl_comment(cp, *(iq-1)+offs,
+			*iq+offs+1, colors.qcolor);
 		}
 	    }
 	}
-
-#if 0
-	
-	if(!colors.synt_quote.empty()) {
-	    char qchar = 0;
-	    int qpos;
-	    
-	    p = cp;
-	    ins[1] = colors.qcolor;
-
-	    for(qchar = 0; p = strpbrk(p, colors.synt_quote.c_str()); ) {
-
-		// check for "\" before the quote char
-		if(p > cp+1)
-		if(colors.synt_qescape.find(*(p-1)) != -1)
-		if(colors.synt_qescape.find(*(p-2)) == -1) {
-		    p++;
-		    continue;
-		}
-
-		if(p-cp > eolstart) {
-		    if(qchar) strinsert(cp, eolstart, "\002");
-		    break;
-		}
-
-		if(!qchar) {
-		    qchar = *p;
-		    qpos = p-cp;
-		} else if(*p == qchar) {
-		    qchar = 0;
-		    hl_comment(cp, qpos, p-cp+1, colors.qcolor);
-		    p += 3;
-		}
-
-		p++;
-	    }
-
-	    if(qchar) hl_comment(cp, qpos, strlen(cp), colors.qcolor);
-	}
-
-#endif
 
 	// Blocks ...
 
@@ -940,7 +914,6 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 		}
 	    }
 	}
-
     }
 
     // let's count the amount of color codes inserted
