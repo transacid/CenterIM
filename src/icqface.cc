@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.79 2002/02/06 16:36:07 konst Exp $
+* $Id: icqface.cc,v 1.80 2002/02/06 17:30:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -216,6 +216,7 @@ int icqface::contextmenu(icqcontact *c) {
 	m.additem(0, ACT_INFO, _(" User's details         ?"));
 	m.additem(0, ACT_EDITUSER, _(" Edit details"));
 
+	if(c->getstatus() != offline)
 	if(capab & hoptCanSetAwayMsg)
 	    m.additem(0, ACT_FETCHAWAY, _(" Fetch away message"));
     }

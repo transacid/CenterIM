@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.52 2002/02/06 16:36:08 konst Exp $
+* $Id: icqhook.cc,v 1.53 2002/02/06 17:30:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -739,8 +739,9 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 			c->getdispnick().c_str(), ic.totext().c_str());
 		}
 		break;
+
 	    case MessageEvent::AwayMessage:
-		{
+		if(ev->isDelivered()) {
 		    AwayMessageEvent *r;
 
 		    if(r = dynamic_cast<AwayMessageEvent *>(ev)) {
@@ -748,6 +749,9 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 			    string() + _("* Away message:") + "\n\n" +
 			    rusconv("wk", r->getMessage())));
 		    }
+		} else {
+		    face.log(_("+ [icq] cannot fetch away msg from %s, %s"),
+			c->getdispnick().c_str(), ic.totext().c_str());
 		}
 		break;
 	}
