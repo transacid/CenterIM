@@ -9,13 +9,16 @@ class jabberhook: public abstracthook {
     protected:
 	imstatus ourstatus;
 	jconn jc;
-	bool flogged;
 	int id;
+
+	bool flogged, regmode, regdone;
+	string regerr;
 
 	vector<string> roster;
 
 	static void statehandler(jconn conn, int state);
 	static void packethandler(jconn conn, jpacket packet);
+	static void jlogger(jconn conn, int inout, const char *p);
 
 	static string jidnormalize(const string &jid);
 	static string jidtodisp(const string &jid);
@@ -52,6 +55,9 @@ class jabberhook: public abstracthook {
 	imstatus getstatus() const;
 
 	void requestinfo(const imcontact &c);
+
+	bool regnick(const string &nick, const string &pass,
+	    const string &serv, string &err);
 };
 
 extern jabberhook jhook;

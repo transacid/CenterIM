@@ -44,6 +44,11 @@ class icqconf {
 	enum regcolor { rcdark, rcblue, rcdontchange };
 	enum groupmode { group1, group2, nogroups };
 
+	struct imserver {
+	    string server;
+	    int port;
+	};
+
 	struct imaccount {
 	    imaccount();
 	    imaccount(protocolname apname);
@@ -61,6 +66,8 @@ class icqconf {
 	    bool operator == (protocolname apname) const;
 	    bool operator != (protocolname apname) const;
 	};
+
+	static imserver defservers[];
 
     protected:
 	vector<icqgroup> groups;

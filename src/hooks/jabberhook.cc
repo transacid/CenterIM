@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: jabberhook.cc,v 1.4 2002/11/21 21:13:10 konst Exp $
+* $Id: jabberhook.cc,v 1.5 2002/11/22 16:08:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,8 @@
 jabberhook jhook;
 
 jabberhook::jabberhook(): jc(0), flogged(false) {
+    fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::fetchaway);
 }
 
 jabberhook::~jabberhook() {
@@ -42,18 +44,27 @@ void jabberhook::init() {
 void jabberhook::connect() {
     icqconf::imaccount acc = conf.getourid(jabber);
     string jid;
+    int pos;
 
     face.log(_("+ [jab] connecting to the server"));
-
     jid = acc.nickname + "@" + acc.server + "/centericq";
+
+    if((pos = jid.find(":")) != -1)
+	jid.erase(pos);
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(acc.password.c_str()));
+
+    regmode = false;
 
     jc = jab_new(cjid.get(), cpass.get());
 
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);
+
+#if PACKETDEBUG
+    jab_logger(jc, &jlogger);
+#endif
 
     jab_start(jc);
     id = atoi(jab_auth(jc));
@@ -236,6 +247,46 @@ imstatus jabberhook::getstatus() const {
     return online() ? ourstatus : offline;
 }
 
+bool jabberhook::regnick(const string &nick, const string &pass,
+const string &serv, string &err) {
+    int pos;
+    string jid = nick + "@" + serv;
+    if((pos = jid.find(":")) != -1) jid.erase(pos);
+
+    auto_ptr<char> cjid(strdup(jid.c_str()));
+    auto_ptr<char> cpass(strdup(pass.c_str()));
+
+    jc = jab_new(cjid.get(), cpass.get());
+
+    jab_packet_handler(jc, &packethandler);
+    jab_state_handler(jc, &statehandler);
+
+#if PACKETDEBUG
+    jab_logger(jc, &jlogger);
+#endif
+
+    jab_start(jc);
+    id = atoi(jab_reg(jc));
+
+    if(!online()) {
+	err = _("Unable to connect");
+
+    } else {
+	regmode = true;
+	regdone = false;
+	regerr = "";
+
+	while(online() && !regdone && regerr.empty()) {
+	    main();
+	}
+
+	disconnect();
+	err = regdone ? "" : regerr;
+    }
+
+    return regdone;
+}
+
 void jabberhook::setjabberstatus(imstatus st, const string &msg) {
     xmlnode x = jutil_presnew (JPACKET__UNKNOWN, NULL, NULL);
     xmlnode y = xmlnode_insert_tag (x, "show");
@@ -364,7 +415,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    int iid = atoi(p);
 
 		    if(iid == jhook.id) {
-			if(1/*!JConn->reg_flag*/) {
+			if(!jhook.regmode) {
 			    x = jutil_iqnew (JPACKET__GET, NS_ROSTER);
 			    xmlnode_put_attrib(x, "id", "Roster");
 			    jab_send(conn, x);
@@ -376,8 +427,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			    xmlnode_free(x);
 
 			} else {
-//                            JConn->reg_flag = 0;
-			    jhook.id = atoi(jab_auth(jhook.jc));
+			    jhook.regdone = true;
 
 			}
 
@@ -439,10 +489,13 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 	    } else if(type == "set") {
 	    } else if(type == "error") {
+		string name, desc;
+		int code;
+
 		x = xmlnode_get_tag(packet->x, "error");
-		int code = atoi(xmlnode_get_attrib(x, "code"));
-		string name = xmlnode_get_attrib(x, "id");
-		string desc = xmlnode_get_tag_data(packet->x, "error");
+		p = xmlnode_get_attrib(x, "code"); if(p) code = atoi(p);
+		p = xmlnode_get_attrib(x, "id"); if(p) name = p;
+		p = xmlnode_get_tag_data(packet->x, "error"); if(p) desc = p;
 
 		switch(code) {
 		    case 401: /* Unauthorized */
@@ -462,7 +515,11 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    case 503: /* Service Unavailable */
 		    case 504: /* Remote Server Timeout */
 		    default:
-			face.log(_("[jab] error %d: %s"), code, desc.c_str());
+			if(!jhook.regmode) {
+			    face.log(_("[jab] error %d: %s"), code, desc.c_str());
+			} else {
+			    jhook.regerr = desc;
+			}
 		}
 
 	    }
@@ -514,4 +571,10 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	default:
 	    break;
     }
+}
+
+void jabberhook::jlogger(jconn conn, int inout, const char *p) {
+    string tolog = (string) (inout ? "[IN]" : "[OUT]") + "\n";
+    tolog += p;
+    face.log(tolog);
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.38 2002/08/19 08:25:18 konst Exp $
+* $Id: icqcontacts.cc,v 1.39 2002/11/22 16:08:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -58,7 +58,8 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist) {
     if(c)
     if(notinlist) {
 	c->excludefromlist();
-	gethook(cinfo.pname).sendnewuser(cinfo);
+	if(cinfo.pname == icq)
+	    gethook(cinfo.pname).sendnewuser(cinfo);
     } else {
 	c->includeintolist();
     }

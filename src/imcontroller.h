@@ -39,9 +39,11 @@ class imcontroller {
 	void synclist(protocolname pname);
 
     protected:
-	bool icqregdialog();
+	bool regdialog(protocolname pname);
 
 	bool icqregistration(icqconf::imaccount &account);
+	bool jabberregistration(icqconf::imaccount &account);
+
 	void icqupdatedetails();
 	void aimupdateprofile();
 	void msnupdateprofile();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.91 2002/11/21 21:13:06 konst Exp $
+* $Id: icqconf.cc,v 1.92 2002/11/22 16:08:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -64,20 +64,17 @@ icqconf::imaccount icqconf::getourid(protocolname pname) const {
     return im;
 }
 
+icqconf::imserver icqconf::defservers[protocolname_size] = {
+    { "login.icq.com", 5190 },
+    { "scs.yahoo.com", 5050 },
+    { "messenger.hotmail.com", 1863 },
+    { "toc.oscar.aol.com", 9898 },
+    { "irc.openprojects.net", 6667 },
+    { "jabber.com", 5222 }
+};
+
 void icqconf::setourid(const imaccount &im) {
     vector<imaccount>::iterator i;
-
-    static struct {
-	string server;
-	int port;
-    } defservers[protocolname_size] = {
-	{ "login.icq.com", 5190 },
-	{ "scs.yahoo.com", 5050 },
-	{ "messenger.hotmail.com", 1863 },
-	{ "toc.oscar.aol.com", 9898 },
-	{ "irc.openprojects.net", 6667 },
-	{ "jabber.com", 5222 }
-    };
 
     i = find(accounts.begin(), accounts.end(), im.pname);
 
@@ -615,7 +612,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "irc", "jab", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "jabber", "infocard"
     };
 
     return ptextnames[pname];

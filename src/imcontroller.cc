@@ -5,6 +5,7 @@
 #include "aimhook.h"
 #include "irchook.h"
 #include "msnhook.h"
+#include "jabberhook.h"
 #include "icqcontacts.h"
 #include "eventmanager.h"
 
@@ -18,7 +19,7 @@ imcontroller::imcontroller() {
 imcontroller::~imcontroller() {
 }
 
-bool imcontroller::icqregdialog() {
+bool imcontroller::regdialog(protocolname pname) {
     bool finished, success;
     int n, i, b;
     string pcheck;
@@ -28,11 +29,16 @@ bool imcontroller::icqregdialog() {
     ruin = 0;
     finished = success = false;
     rnick = rfname = rlname = remail = rpasswd = "";
-    rserver = "login.icq.com:5190";
+
+    rserver = icqconf::defservers[pname].server + ":" +
+	i2str(icqconf::defservers[pname].port);
 
     db.setwindow(new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
-	clr(cp_dialog_frame), TW_CENTERED, clr(cp_dialog_highlight),
-	_(" Register on ICQ network ")));
+	clr(cp_dialog_frame), TW_CENTERED));
+
+    db.getwindow()->set_titlef(clr(cp_dialog_highlight),
+	_(" Register on the %s network "),
+	conf.getprotocolname(pname).c_str());
 
     db.settree(new treeview(clr(cp_dialog_text), clr(cp_dialog_selected),
 	clr(cp_dialog_highlight), clr(cp_dialog_text)));
@@ -48,9 +54,12 @@ bool imcontroller::icqregdialog() {
 	
 	i = db.gettree()->addnode(_(" Details "));
 	t.addleaff(i, 0, 4, _(" Nickname : %s "), rnick.c_str());
-	t.addleaff(i, 0, 5, _(" E-Mail : %s "), remail.c_str());
-	t.addleaff(i, 0, 6, _(" First name : %s "), rfname.c_str());
-	t.addleaff(i, 0, 7, _(" Last name : %s "), rlname.c_str());
+
+	if(pname == icq) {
+	    t.addleaff(i, 0, 5, _(" E-Mail : %s "), remail.c_str());
+	    t.addleaff(i, 0, 6, _(" First name : %s "), rfname.c_str());
+	    t.addleaff(i, 0, 7, _(" Last name : %s "), rlname.c_str());
+	}
 
 	i = db.gettree()->addnode(_(" Password "));
 	t.addleaff(i, 0, 2, _(" Password to set : %s "), string(rpasswd.size(), '*').c_str());
@@ -95,7 +104,7 @@ bool imcontroller::icqregdialog() {
 bool imcontroller::icqregistration(icqconf::imaccount &account) {
     bool fin, success;
 
-    if(success = icqregdialog()) {
+    if(success = regdialog(account.pname)) {
 	unlink((conf.getdirname() + "icq-infoset").c_str());
 	face.progress.show(_(" Registration progress "));
 
@@ -144,6 +153,36 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 	    }
 	}
 
+	face.progress.hide();
+    }
+
+    return success;
+}
+
+bool imcontroller::jabberregistration(icqconf::imaccount &account) {
+    bool success;
+    string err;
+
+    if(success = regdialog(account.pname)) {
+	face.progress.show(_(" Registration progress "));
+
+	face.progress.log(_("Trying to register %s at %s ..."),
+	    rnick.c_str(), rserver.c_str());
+
+	if(success = jhook.regnick(rnick, rpasswd, rserver, err)) {
+	    account.nickname = rnick;
+	    account.password = rpasswd;
+	    face.progress.log(_("The Jabber ID was successfully registered"));
+
+	} else {
+	    string msgerr = _("Failed");
+	    if(err.empty()) msgerr += (string) ": " + err;
+	    face.progress.log("%s", msgerr.c_str());
+
+	}
+
+	face.progress.log(_("Disconnected"));
+	sleep(2);
 	face.progress.hide();
     }
 
@@ -318,10 +357,10 @@ void imcontroller::ircchannels() {
 		break;
 
 	    case 2:
-	        if(n > 1) {
+		if(n > 1) {
 		    passwd = face.inputstr(_("password: "));
 		    ic = channels.begin()+n-2;
-                    ic->passwd = passwd;
+		    ic->passwd = passwd;
 		}
 		break;
 
@@ -351,9 +390,8 @@ void imcontroller::ircchannels() {
 
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
-	case icq:
-	    icqregistration(account);
-	    break;
+	case icq: icqregistration(account); break;
+	case jabber: jabberregistration(account); break;
 	default:
 	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
 		_("registration is not supported"));
