@@ -32,10 +32,6 @@
 #define cp_clist_root           15
 #define cp_clist_msn            16
 
-#ifndef VERSION
-#define VERSION "devel"
-#endif
-
 enum regsound { rscard, rsspeaker, rsdisable, rsdontchange };
 enum regcolor { rcdark, rcblue, rcdontchange };
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.16 2001/11/26 13:02:53 konst Exp $
+* $Id: icqoffline.cc,v 1.17 2001/11/26 23:30:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -115,21 +115,17 @@ unsigned long sseq) {
     icqcontact *c = clist.get(cinfo);
     vector<string> lst;
     bool send, save;
-    int way;
     string text = atext;
 
     if(c) {
 	lst.clear();
 	send = save = true;
-	way = c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER;
 
 	switch(act) {
 	    case osresend:
 		if(send = (sseq == seq)) {
 		    c->setmsgdirect(false);
-		    if(text.size() < MAX_UDPMSG_SIZE) {
-			way = ICQ_SEND_THRUSERVER;
-		    } else {
+		    if(text.size() > MAX_UDPMSG_SIZE) {
 			splitlongtext(text, lst,
 			    MAX_UDPMSG_SIZE, "\r\n[continued]");
 		    }
@@ -139,9 +135,7 @@ unsigned long sseq) {
 	    case osexpired:
 		if(send = (time(0)-tm > PERIOD_RESEND)) {
 		    c->setmsgdirect(false);
-		    if(text.size() < MAX_UDPMSG_SIZE) {
-			way = ICQ_SEND_THRUSERVER;
-		    } else {
+		    if(text.size() > MAX_UDPMSG_SIZE) {
 			splitlongtext(text, lst,
 			    MAX_UDPMSG_SIZE, "\r\n[continued]");
 		    }

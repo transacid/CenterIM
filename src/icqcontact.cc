@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.23 2001/11/26 13:02:51 konst Exp $
+* $Id: icqcontact.cc,v 1.24 2001/11/26 23:30:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     for(i = 0; i < SOUND_COUNT; i++) sound[i] = "";
     seq2 = nmsgs = lastread = 0;
     finlist = true;
+    msgdirect = !conf.getserveronly();
 
     cdesc = adesc;
 
@@ -110,6 +111,7 @@ void icqcontact::clear() {
     status = offline;
     direct = false;
     cdesc = contactroot;
+    msgdirect = !conf.getserveronly();
 
     nick = dispnick = firstname = lastname = primemail = secemail = oldemail =
     city = state = phone = fax = street = cellular = wcity = wstate = wphone =
@@ -749,11 +751,14 @@ void icqcontact::setmsgdirect(bool flag) {
 }
 
 bool icqcontact::getmsgdirect() const {
-    if(cdesc.pname == icq) {
-	return msgdirect && (!conf.getserveronly() || ihook.isdirectopen(cdesc) || islocal());
+    switch(cdesc.pname) {
+	case icq:
+	    if(ihook.isdirectopen(cdesc))
+		return true;
+	    break;
     }
 
-    return status != offline;
+    return msgdirect && (islocal() || !conf.getserveronly());
 }
 
 void icqcontact::setgroupid(int agroupid) {
