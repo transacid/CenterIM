@@ -690,5 +690,6 @@ void icqcontact::incinfotryn() {
 }
 
 bool icqcontact::operator > (const icqcontact &acontact) const {
-    return acontact.lastread > lastread;
+    if(acontact.lastread != lastread) return acontact.lastread > lastread;
+    else return acontact.uin > uin;
 }

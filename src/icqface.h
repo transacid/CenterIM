@@ -1,8 +1,9 @@
 #ifndef __ICQFACE_H__
 #define __ICQFACE_H__
 
-#include "icq.h"
+#include <fstream>
 
+#include "icq.h"
 #include "icqhist.h"
 
 #include "konst.ui.dlg.h"
@@ -78,6 +79,8 @@ class icqface {
 	textinputline *il;
 	textwindow mainw;
 	filemanager *fm;
+	ofstream flog;
+	vector<string> extractedurls;
 
 	linkedlist workareas;
 
@@ -93,6 +96,7 @@ class icqface {
 	static int editaboutkeys(texteditor *e, int k);
 	static int contactskeys(verticalmenu *m, int k);
 	static int multiplekeys(verticalmenu *m, int k);
+	static int userinfokeys(dialogbox *db, int k);
 
 	static void editidle(texteditor *e);
 	static void textbrowseridle(textbrowser *b);
@@ -123,6 +127,8 @@ class icqface {
 	void workarealine(int l);
 
 	string quotemsg(string text);
+	void showextractedurls();
+	void extracturls(const string buf);
 
     public:
 	list<unsigned int> muins;

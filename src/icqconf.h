@@ -68,7 +68,7 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam;
 
 	string password, rnick, rfname, rlname, remail, server;
-	string sockshost, socksuser, sockspass;
+	string sockshost, socksuser, sockspass, openurlcommand;
 
 	list<int> boldcolors;
 
@@ -99,6 +99,7 @@ class icqconf {
 
 	void loadcolors();
 	void loadsounds();
+	void loadactions();
 	void initpairs();
 
 	void registerinfo(unsigned int fuin, string passwd, string nick,
@@ -135,6 +136,8 @@ class icqconf {
 
 	void getsocksuser(string &name, string &pass);
 	void setsocksuser(string name, string pass);
+
+	void openurl(const string url);
 };
 
 extern icqconf conf;

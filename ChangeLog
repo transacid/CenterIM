@@ -423,3 +423,26 @@ Unsent messages counter in the top of the screen has been added.
 
 Developed and packaged with the new version of motor 2.15.7 which is
 available at http://konst.org.ua/motor/ ;)
+
+3.24.11
+-------
+
+Fixed a bug with the sound files path being incorrectly auto-written into
+the ~/.centericq/sounds file.
+
+The keypress handling routine was impoved. It caused centericq not to handle
+the protocol if a single ESC was pressed.
+
+Fixed a segfault on contacts receiving.
+
+Now it's possible to open a received URL with a browser (netscape by
+default). The command line for URL opening can be changed in the
+~/.centericq/actions file.
+
+Also centericq can now open URLs found in messages and user info. Just press
+F2 to see the list of URLs.
+
+Some cosmetic changes were made.
+
+Hungarian translation by Pásztor György <pasztor@linux.gyakg.u-szeged.hu>
+was added.

@@ -19,33 +19,41 @@ FILE *icqoffline::open(unsigned int uin, const char *mode) {
 }
 
 void icqoffline::sendmsg(unsigned int uin, string text) {
-    FILE *f = open(uin, "a");
     icqcontact *c = clist.get(uin);
     unsigned long seq;
+    FILE *f = open(uin, "a");
+    vector<string> lst;
 
     if(f) {
-	if(text.size() > MAX_UDPMSG_SIZE) {
-	    if(c->getdirect()) {
-		seq = icq_SendMessage(&icql, uin, text.c_str(), ICQ_SEND_DIRECT);
-	    } else {
-		seq = 0;
-	    }
-	} else {
-	    seq = icq_SendMessage(&icql, uin, text.c_str(), ICQ_SEND_BESTWAY);
+	if(!c->getdirect()) {
+	    splitlongtext(text, lst, MAX_UDPMSG_SIZE, "\r\n[continued]");
 	}
 
-	fprintf(f, "\f\nMSG\n");
-	fprintf(f, "%lu\n%lu\n", seq, time(0));
-	fprintf(f, "%s\n", text.c_str());
+	while(1) {
+	    if(!lst.empty()) {
+		text = *lst.begin();
+		lst.erase(lst.begin());
+	    }
+
+	    seq = icq_SendMessage(&icql, uin, text.c_str(),
+		c->getdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+
+	    fprintf(f, "\f\nMSG\n");
+	    fprintf(f, "%lu\n%lu\n", seq, time(0));
+	    fprintf(f, "%s\n", text.c_str());
+	    totalunsent++;
+
+	    if(lst.empty()) break;
+	}
+
 	fclose(f);
-	totalunsent++;
 	face.showtopbar();
     }
 }
 
 void icqoffline::sendurl(unsigned int uin, string url, string text) {
-    FILE *f = open(uin, "a");
     icqcontact *c = clist.get(uin);
+    FILE *f = open(uin, "a");
 
     if(f) {
 	unsigned long seq = icq_SendURL(&icql, uin, url.c_str(), text.c_str(),
@@ -56,57 +64,83 @@ void icqoffline::sendurl(unsigned int uin, string url, string text) {
 	fprintf(f, "%s\n", url.c_str());
 	fprintf(f, "%s\n", text.c_str());
 	fclose(f);
+
 	totalunsent++;
 	face.showtopbar();
     }
 }
 
-void icqoffline::sendevent(unsigned int uin, bool msg, string url,
+bool icqoffline::sendevent(unsigned int uin, bool msg, string url,
 string text, FILE *of, unsigned long seq, time_t tm, scanaction act,
 unsigned long sseq) {
     icqcontact *c = clist.get(uin);
-    int way;
+    vector<string> lst;
     bool send, save;
+    int way;
 
     if(c) {
+	lst.clear();
 	send = save = true;
 	way = c->getdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER;
 
 	switch(act) {
 	    case osresend:
-		if(sseq == seq) {
-		    way = ICQ_SEND_THRUSERVER;
-		} else {
-		    send = false;
+		if(send = (sseq == seq)) {
+		    c->setdirect(false);
+		    if(text.size() < MAX_UDPMSG_SIZE) {
+			way = ICQ_SEND_THRUSERVER;
+		    } else {
+			splitlongtext(text, lst,
+			    MAX_UDPMSG_SIZE, "\r\n[continued]");
+		    }
 		}
 		break;
 	    case osexpired:
-		if(time(0)-tm > PERIOD_RESEND) {
+		if(send = (time(0)-tm > PERIOD_RESEND)) {
+		    c->setdirect(false);
+		    if(text.size() < MAX_UDPMSG_SIZE) {
+			way = ICQ_SEND_THRUSERVER;
+		    } else {
+			splitlongtext(text, lst,
+			    MAX_UDPMSG_SIZE, "\r\n[continued]");
+		    }
+		}
+		break;
+	    case osremove:
+		if(sseq == seq) {
+		    time_t t = time(0);
+		    send = save = false;
+
+		    if(msg) {
+			hist.putmessage(uin, text, HIST_MSG_OUT, localtime(&t));
+		    } else {
+			hist.puturl(uin, url, text, HIST_MSG_OUT, localtime(&t));
+		    }
 		} else {
 		    send = false;
 		}
 		break;
 	    case ossendall:
 		break;
-	    case osremove:
-		if(sseq == seq) {
-		    send = save = false;
-		} else {
-		    send = false;
-		}
-		break;
 	}
 
 	if(msg && text.size()) {
-	    if(send) {
-		seq = icq_SendMessage(&icql, uin, text.c_str(), way);
-	    }
+	    if(save)
+	    while(1) {
+		if(!lst.empty()) {
+		    text = *lst.begin();
+		    lst.erase(lst.begin());
+		}
 
-	    if(save) {
+		if(send)
+		    seq = icq_SendMessage(&icql, uin, text.c_str(), way);
+
 		fprintf(of, "\f\nMSG\n");
 		fprintf(of, "%lu\n%lu\n", seq, tm);
 		fprintf(of, "%s\n", text.c_str());
 		processed++;
+
+		if(lst.empty()) break;
 	    }
 	} else if(!msg && url.size()) {
 	    if(send) {
@@ -122,6 +156,8 @@ unsigned long sseq) {
 	    }
 	}
     }
+
+    return c && save && ((!msg && url.size()) || (msg && text.size()));
 }
 
 void icqoffline::scan(unsigned long sseq, scanaction act) {
@@ -131,7 +167,7 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
     FILE *f, *of;
     char buf[512];
     string url, text, ofname;
-    bool msg;
+    bool msg, fin = false;
 
     totalunsent = 0;
 
@@ -143,12 +179,12 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 	    ofname = (string) getenv("HOME") + "/.centericq/tmp." + i2str(getpid());
 	    of = fopen(ofname.c_str(), "w");
 
-	    while(!feof(f)) {
+	    while(!feof(f) && !fin) {
 		freads(f, buf, 512);
 
 		if((string) buf == "\f") {
 		    l = 0;
-		    sendevent(uin, msg, url, text, of, seq, t, act, sseq);
+		    fin = sendevent(uin, msg, url, text, of, seq, t, act, sseq);
 		    text = url = "";
 		} else {
 		    switch(l) {

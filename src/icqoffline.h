@@ -3,8 +3,10 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
 
 #include "icq.h"
+#include "icqhook.h"
 
 enum scanaction {osresend, ossendall, osremove, osexpired};
 
@@ -14,7 +16,7 @@ class icqoffline {
 
 	FILE *open(unsigned int uin, const char *mode);
 
-	void sendevent(unsigned int uin, bool msg, string url, string text,
+	bool sendevent(unsigned int uin, bool msg, string url, string text,
 	    FILE *of, unsigned long seq, time_t tm, scanaction act,
 	    unsigned long sseq);
 

@@ -12,13 +12,13 @@
 #define PERIOD_RESOLVE          40
 #define PERIOD_RECONNECT        30
 #define PERIOD_DISCONNECT       130
-#define PERIOD_RESEND           40
+#define PERIOD_RESEND           45
 #define PERIOD_CHECKMAIL        30
 #define PERIOD_WAITNEWUIN       20
 #define PERIOD_SOCKSALIVE       30
 #define PERIOD_WAIT_KEEPALIVE   10
 
-#define MAX_UDPMSG_SIZE         420
+#define MAX_UDPMSG_SIZE         440
 #define MAX_TCPMSG_SIZE         7000
 
 #define HIDL_SOCKEXIT   2
@@ -94,7 +94,7 @@ class icqhook {
 	static void chat(struct icq_link *link, unsigned long uin,
 	    unsigned char hour, unsigned char minute, unsigned char day,
 	    unsigned char month, unsigned short year, const char *descr,
-	    unsigned long seq, const char *session, unsigned long port);
+	    unsigned long seq/*, const char *session, unsigned long port*/);
 	static void file(struct icq_link *link, unsigned long uin,
 	    unsigned char hour, unsigned char minute, unsigned char day,
 	    unsigned char month, unsigned short year, const char *descr,

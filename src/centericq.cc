@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.4 2001/04/15 15:37:47 konst Exp $
+* $Id: centericq.cc,v 1.5 2001/05/05 07:37:31 konst Exp $
 *
 */
 
@@ -312,41 +312,12 @@ void centericq::mainloop() {
 }
 
 void centericq::sendmsg(unsigned int uin, string text) {
-    time_t tcurrent;
-    string piece, cont = _(" [continued]");
-    int i, k, maxsize = MAX_UDPMSG_SIZE-cont.size();
-    icqcontact *c = clist.get(uin);
-
-    if(c->getdirect()) {
-	time(&tcurrent);
-	if(text.size() > MAX_TCPMSG_SIZE) text.resize(MAX_TCPMSG_SIZE);
-	offl.sendmsg(uin, text);
-	hist.putmessage(uin, text, HIST_MSG_OUT, localtime(&tcurrent));
-    } else
-    for(i = 0; i < text.size(); ) {
-	piece = text.substr(i, k = maxsize);
-
-	if(i+maxsize < text.size()) {
-	    for(k = maxsize; (k > 0) && (piece[k] != ' '); k--);
-	    if(k) piece.resize(k); else k = maxsize;
-	    i += k;
-	    piece += cont;
-	} else {
-	    i = text.size();
-	}
-
-	time(&tcurrent);
-	offl.sendmsg(uin, piece);
-	hist.putmessage(uin, piece, HIST_MSG_OUT, localtime(&tcurrent));
-    }
+    if(text.size() > MAX_TCPMSG_SIZE) text.resize(MAX_TCPMSG_SIZE);
+    offl.sendmsg(uin, text);
 }
 
 void centericq::sendurl(unsigned int uin, string url, string text) {
-    time_t tcurrent;
-    time(&tcurrent);
-
     offl.sendurl(uin, url, text);
-    hist.puturl(uin, url, text, HIST_MSG_OUT, localtime(&tcurrent));
 }
 
 void centericq::fwdmsg(unsigned int uin, string text) {

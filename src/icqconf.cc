@@ -40,6 +40,7 @@ void icqconf::load() {
     loadmainconfig();
     loadcolors();
     loadsounds();
+    loadactions();
 }
 
 void icqconf::loadmainconfig() {
@@ -276,6 +277,38 @@ void icqconf::loadsounds() {
     }
 }
 
+void icqconf::loadactions() {
+    string fname = (string) getenv("HOME") + "/.centericq/actions", buf, name;
+
+    if(access(fname.c_str(), F_OK)) {
+	ofstream of(fname.c_str());
+	if(of.is_open()) {
+	    of << "# This file contains external actions configuration for centericq" << endl;
+	    of << "# Every line should look like: <action> <command>" << endl;
+	    of << "# Possible actions are: openurl" << endl << endl;
+
+	    of << "openurl\tif test ! -z \"`ps x | egrep '[0-9]:[0-9][0-9] netscape'`\";";
+	    of << " then netscape -remote 'openURL($url$, new-window)' -display 0:0;";
+	    of << " else /bin/sh -c \"netscape $url$ -display 0:0 >/dev/null 2>&1 &\"; fi" << endl;
+	    of.close();
+	}
+    }
+
+    ifstream f(fname.c_str());
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getline(f, buf);
+	    name = getword(buf);
+
+	    if(name == "openurl") {
+		openurlcommand = buf;
+	    }
+	}
+
+	f.close();
+    }
+}
+
 int icqconf::getstatus() {
     string fname = (string) getenv("HOME") + "/.centericq/laststatus";
     char buf[64] = "0";
@@ -442,4 +475,14 @@ bool icqconf::getantispam() {
 
 void icqconf::setantispam(bool fas) {
     antispam = fas;
+}
+
+void icqconf::openurl(const string url) {
+    int npos;
+    string torun = openurlcommand;
+
+    while((npos = torun.find("$url$")) != -1)
+	torun.replace(npos, 5, url);
+
+    system(torun.c_str());
 }

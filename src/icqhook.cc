@@ -207,7 +207,7 @@ const char *msg) {
 void icqhook::chat(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *descr,
-unsigned long seq, const char *session, unsigned long port) {
+unsigned long seq /*, const char *session, unsigned long port*/) {
     if(!lst.inlist(uin, csignore)) {
 	icqcontact *c = clist.get(uin);
 	if(c) {
@@ -237,6 +237,7 @@ unsigned char month, unsigned short year, const char *nick,
 const char *first, const char *last, const char *email) {
     if(!lst.inlist(uin, csignore)) {
 	string text = (string) "I" + i2str(uin) + " " + first + " " + last + " ";
+	if(nick[0]) text += (string) "aka " + nick + " ";
 	if(email[0]) text += (string) "<" + email + "> ";
 	text += (string) _("has added you to his/her contact list");
 	hist.putmessage(0, text, HIST_MSG_IN, TIMESTAMP);
@@ -252,6 +253,7 @@ const char *first, const char *last, const char *email,
 const char *reason) {
     if(!lst.inlist(uin, csignore)) {
 	string text = (string) "R" + i2str(uin) + " " + first + " " + last + " ";
+	if(nick[0]) text += (string) "aka " + nick + " ";
 	if(email[0]) text += (string) "<" + email + "> ";
 	text += (string) _("has requested your authorization to add you to his/her contact list. The reason was: ") + reason;
 	hist.putmessage(0, text, HIST_MSG_IN, TIMESTAMP);
@@ -528,7 +530,7 @@ void icqhook::exectimers() {
 	if((!seq_keepalive &&
 	(period > (conf.getsockshost().empty() ? PERIOD_KEEPALIVE : PERIOD_SOCKSALIVE))) ||
 	(seq_keepalive && (period > PERIOD_WAIT_KEEPALIVE))) {
-	    if(!seq_keepalive) offl.scan(0, osexpired);
+//            if(!seq_keepalive) offl.scan(0, osexpired);
 	    seq_keepalive = icq_KeepAlive(&icql);
 	    n_keepalive++;
 	    time(&timer_keepalive);
@@ -549,6 +551,8 @@ void icqhook::exectimers() {
 		    c->incinfotryn();
 		}
 	    }
+
+	    offl.scan(0, osexpired);
 	    time(&timer_resolve);
 	}
 	else

@@ -655,8 +655,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 			break;
 		    case 2:
 			c = c == rcdontchange ? rcdark :
-			    c == rcdark ? rcblue :
-			    c == rcblue ? rcdark : rcdontchange;
+			    c == rcdark ? rcblue : rcdontchange;
 			break;
 		    case 3: rus = !rus; break;
 		    case 4:
