@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.37 2004/06/18 06:49:40 konst Exp $
+* $Id: kkstrtext.cc,v 1.38 2004/06/24 08:31:22 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1057,7 +1057,7 @@ string striprtf(const string &s) {
     bspec = false;
 
     for(string::const_iterator i = s.begin(); i != s.end(); ++i) {
-	if(isspace(*i)) bprint = true;
+	if(!isalpha(*i) && !isdigit(*i)) bprint = true;
 
 	if(bspec) {
 	    spec += *i;
@@ -1074,7 +1074,6 @@ string striprtf(const string &s) {
 		    bparen++;
 		    bprint = false;
 		} else {
-		    bparen--;
 		    bprint = true;
 		    r += *i;
 		}
@@ -1083,12 +1082,12 @@ string striprtf(const string &s) {
 	    case '}':
 		if(pre != '\\') {
 		    bprint = false;
+		    bparen--;
 		} else {
 		    bprint = true;
 		    r += *i;
 		}
 
-		bparen--;
 		break;
 
 	    case '\\':
