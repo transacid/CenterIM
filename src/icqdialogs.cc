@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.137 2004/02/10 23:55:15 konst Exp $
+* $Id: icqdialogs.cc,v 1.138 2004/02/20 20:48:47 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -519,7 +519,11 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 		break;
 
 	    case 4:
-		ret = finished = true;
+		if(s.pname == jabber && s.nick.find("@") == -1) {
+		    status(_("Wrong Jabber ID!"));
+		} else {
+		    ret = finished = true;
+		}
 		break;
 	}
     }

@@ -7,6 +7,19 @@
 
 #include "msn_core.h"
 
+struct msnbuddy {
+    msnbuddy(const string &anick, const string &afriendly = "", int agid = -1)
+	: nick(anick), friendly(afriendly), gid(agid) { }
+
+    string nick, friendly;
+    int gid;
+
+    bool operator == (const string &anick) const
+	{ return nick == anick; }
+    bool operator != (const string &anick) const
+	{ return nick != anick; }
+};
+
 class msnhook : public abstracthook {
 
     friend void ext_register_sock(int s, int reading, int writing);
@@ -17,7 +30,7 @@ class msnhook : public abstracthook {
     friend void ext_got_info(msnconn *conn, syncinfo *info);
     friend void ext_got_friendlyname(msnconn *conn, const char *friendlyname);
     friend void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname);
-    friend void ext_new_list_entry(msnconn *conn, const char *lst, const char *username);
+    friend void ext_new_list_entry(msnconn *conn, const char *lst, const char *username, const char *friendlyname, int gid);
     friend void ext_del_list_entry(msnconn *conn, const char *lst, const char *username);
     friend void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, message *msg);
     friend void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv);
@@ -31,19 +44,21 @@ class msnhook : public abstracthook {
 
     protected:
 	imstatus ourstatus;
-	bool fonline, flogged;
+	bool fonline, flogged, readinfo;
 	msnconn conn;
+
+	map<string, vector<msnbuddy> > slst;
 
 	vector<int> rfds, wfds;
 	map<int, string> mgroups;
 	map<string, string> friendlynicks;
-	map<string, vector<pair<string, string> > > slst;
 	map<imfile, pair<invitation_ftp *, string> > transferinfo;
 
 	void checkfriendly(icqcontact *c, const string friendlynick,
 	    bool forcefetch = false);
 
 	void checkinlist(imcontact ic);
+	int findgroup(const imcontact &ic, string &gname) const;
 
 	void removeuser(const imcontact &ic, bool report);
 	bool getfevent(invitation_ftp *fhandle, imfile &fr);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.125 2004/02/14 23:43:42 konst Exp $
+* $Id: icqconf.cc,v 1.126 2004/02/20 20:48:47 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -252,6 +252,7 @@ void icqconf::loadmainconfig() {
 	    }
 	}
 
+	if(fromcharset.empty() && tocharset.empty())
 	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	    if(getcpconvert(pname)) {
 		fromcharset = "cp1251";
@@ -308,6 +309,9 @@ void icqconf::save() {
 		if(getcpconvert(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "convert" << param << endl;
+
+	    f << "fromcharset\t" << fromcharset << endl;
+	    f << "tocharset\t" << tocharset << endl;
 
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
@@ -503,10 +507,18 @@ void icqconf::loadsounds() {
 		    for(pname = icq; pname != protocolname_size && skey != getprotocolname(pname); (int) pname += 1);
 
 		    if(pname != protocolname_size) {
-			if(pname == icq) ic = imcontact(strtoul(suin.c_str(), 0, 0), pname);
-			else ic = imcontact(suin, pname);
+			if(suin == "*") {
+			    for(i = 0; i < clist.count; i++) {
+				c = (icqcontact *) clist.at(i);
 
-			c = clist.get(ic);
+				if(c->getdesc().pname == pname) c->setsound(it, buf);
+			    }
+			} else {
+			    if(pname == icq) ic = imcontact(strtoul(suin.c_str(), 0, 0), pname);
+				else ic = imcontact(suin, pname);
+
+			    c = clist.get(ic);
+			}
 		    }
 		}
 	    } else {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.51 2004/02/04 07:44:41 konst Exp $
+* $Id: imcontroller.cc,v 1.52 2004/02/20 20:48:47 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -363,15 +363,15 @@ void imsearchparams::save(const string &prname) const {
 
     if(of.is_open()) {
 	of << prname << "\t"
-	    << dec << (int) pname << "\t"
+	    << (int) pname << "\t"
 	    << (onlineonly ? "1" : "0") << "\t"
-	    << dec << uin << "\t"
-	    << dec << minage << "\t"
-	    << dec << maxage << "\t"
-	    << dec << country << "\t"
-	    << dec << language << "\t"
-	    << dec << (int) agerange << "\t"
-	    << dec << (int) gender << "\t"
+	    << uin << "\t"
+	    << minage << "\t"
+	    << maxage << "\t"
+	    << country << "\t"
+	    << language << "\t"
+	    << (int) agerange << "\t"
+	    << (int) gender << "\t"
 	    << firstname << "\t"
 	    << lastname << "\t"
 	    << nick << "\t"
@@ -386,7 +386,8 @@ void imsearchparams::save(const string &prname) const {
 	    << (reverse ? "1" : "0") << "\t"
 	    << service << "\t"
 	    << (photo ? "1" : "0") << "\t"
-	    << kwords;
+	    << kwords << "\t"
+	    << randomgroup;
 
 	vector<pair<string, string> >::const_iterator
 	    ifp = flexparams.begin();
@@ -447,6 +448,7 @@ bool imsearchparams::load(const string &prname) {
 		service = getfield(buf);
 		photo = getfield(buf) == "1";
 		kwords = getfield(buf);
+		randomgroup = strtoul(getfield(buf).c_str(), 0, 0);
 
 		while(!buf.empty())
 		    if(!(flexparam = getfield(buf)).empty())

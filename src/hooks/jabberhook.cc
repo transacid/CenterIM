@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.68 2004/02/17 00:34:51 konst Exp $
+* $Id: jabberhook.cc,v 1.69 2004/02/20 20:48:47 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -279,8 +279,9 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 
     if(!ischannel(ic)) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
-	if(roster.find(cjid.get()) != roster.end())
+	if(roster.find(cjid.get()) != roster.end()) {
 	    return;
+	}
 
 	if(report) log(logContactAdd, ic.nickname.c_str());
 
@@ -311,9 +312,13 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	    imcontact icc(jidtodisp(ic.nickname), proto);
 	    if(ic.nickname != icc.nickname) {
 		c->setdesc(icc);
-		c->setdispnick(icc.nickname);
 	    }
+
 	    c->setnick("");
+
+	    string u, h, r;
+	    jidsplit(icc.nickname, u, h, r);
+	    c->setdispnick(u);
 	}
 
 	requestinfo(c);
@@ -837,9 +842,13 @@ void jabberhook::gotroster(xmlnode x) {
 	    ic = imcontact(jidtodisp(alias), proto);
 	    clist.updateEntry(ic, group ? group : "");
 
-	    if(name)
-	    if(c = clist.get(ic))
-		c->setdispnick(rusconv("uk", name));
+	    if(c = clist.get(ic)) {
+		if(name) c->setdispnick(rusconv("uk", name)); else {
+		    string u, h, r;
+		    jidsplit(alias, u, h, r);
+		    c->setdispnick(u);
+		}
+	    }
 
 	    roster[jidnormalize(alias)] = group ? group : "";
 	}

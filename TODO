@@ -36,6 +36,18 @@ ejabberd agent list bug
 
 cicqsync improved, works on freebsd and solaris (?)
 
+search load bug
+
+configuration -> set koi8-r -> reverts to koi8-r
+
+remove --without-ssl from .spec
+
+no ssl -> no msn
+
+sounds for specified protocols
+
+cut jabber dispnicks by default
+
 /*
 *
 * BUGS
@@ -50,21 +62,26 @@ http://www.dotgnu.org/index.rdf
 
 msn broken pipe bug
 
+msn contacts are shown offline
+
+manual actions are read wrong
+
 /*
 *
 * TODO
 *
 */
 
-commandline user-add, sending to non-list users
+initial registration: charset conversion!
 
-sounds for specified protocols
+sent timestamps patch by Heitham Omar (see mail)
+
+commandline user-add, sending to non-list users
 
 not in list users history (see chat with mellon)
 
 server stored icq lists
 
-no ssl -> no msn
 no iconv -> no protocols that use utf
 
 rss/infocard always online/offline to config dialog
@@ -145,4 +162,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.490 2004/02/17 00:34:51 konst Exp $
+$Id: TODO,v 1.491 2004/02/20 20:48:47 konst Exp $

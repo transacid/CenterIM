@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.72 2004/02/17 00:34:51 konst Exp $
+* $Id: msnhook.cc,v 1.73 2004/02/20 20:48:47 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -119,15 +119,14 @@ void msnhook::connect() {
 
     log(logConnecting);
 
-    flogged = false;
+    readinfo = flogged = false;
     fonline = true;
 
     msn_init(&conn, nicknormalize(account.nickname).c_str(), account.password.c_str());
     msn_connect(&conn, account.server.c_str(), account.port);
 
     if(conn.ready) {
-	fonline = true;
-	flogged = true;
+	fonline = flogged = true;
     }
 }
 
@@ -250,10 +249,28 @@ bool msnhook::send(const imevent &ev) {
     return false;
 }
 
+int msnhook::findgroup(const imcontact &ic, string &gname) const {
+    int gid = -1;
+    icqcontact *c;
+
+    if(c = clist.get(ic)) {
+	vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
+	if(ig != groups.end()) {
+	    gname = ig->getname();
+	    map<int, string>::const_iterator im = mgroups.begin();
+	    while(im != mgroups.end() && gid == -1) {
+		if(im->second == ig->getname())
+		    gid = im->first;
+		++im;
+	    }
+	}
+    }
+
+    return gid;
+}
+
 void msnhook::sendnewuser(const imcontact &ic) {
-    if(logged()) {
-	int gid = -1;
-	string gname;
+    if(logged() && !readinfo) {
 	icqcontact *c;
 	imcontact icc(nicktodisp(ic.nickname), msn);
 
@@ -264,18 +281,10 @@ void msnhook::sendnewuser(const imcontact &ic) {
 	    c->setdispnick(icc.nickname);
 	}
 
-	if(c = clist.get(ic)) {
-	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
-	    if(ig != groups.end()) {
-		gname = ig->getname();
-		map<int, string>::const_iterator im = mgroups.begin();
-		while(im != mgroups.end() && gid == -1) {
-		    if(im->second == ig->getname())
-			gid = im->first;
-		    ++im;
-		}
-	    }
-	}
+	int gid;
+	string gname;
+
+	gid = findgroup(ic, gname);
 
 	if(gid != -1) {
 	    msn_add_to_list(&conn, "FL", nicknormalize(ic.nickname).c_str(), gid);
@@ -311,11 +320,15 @@ void msnhook::removeuser(const imcontact &ic) {
 }
 
 void msnhook::removeuser(const imcontact &ic, bool report) {
-    if(online()) {
+    vector<msnbuddy>::const_iterator ib = find(slst["FL"].begin(), slst["FL"].end(), ic.nickname);
+
+    if(online() && ib != slst["FL"].end()) {
 	if(report)
 	    log(logContactRemove, ic.nickname.c_str());
 
-	msn_del_from_list(&conn, "FL", nicknormalize(ic.nickname).c_str());
+	msn_del_from_list(&conn, "FL",
+	    nicknormalize(ic.nickname).c_str(),
+	    ib->gid);
     }
 }
 
@@ -342,13 +355,13 @@ void msnhook::requestinfo(const imcontact &ic) {
 
 void msnhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     if(params.reverse) {
-	vector<pair<string, string> >::const_iterator i = slst["RL"].begin();
+	vector<msnbuddy>::const_iterator i = slst["RL"].begin();
 
 	while(i != slst["RL"].end()) {
-	    icqcontact *c = new icqcontact(imcontact(nicktodisp(i->first), msn));
-	    c->setnick(i->second);
+	    icqcontact *c = new icqcontact(imcontact(nicktodisp(i->nick), msn));
+	    c->setnick(i->friendly);
 
-	    dest.additem(conf.getcolor(cp_clist_msn), c, (string) " " + i->first);
+	    dest.additem(conf.getcolor(cp_clist_msn), c, (string) " " + i->nick);
 	    ++i;
 	}
 	face.findready();
@@ -369,10 +382,10 @@ vector<icqcontact *> msnhook::getneedsync() {
 	icqcontact *c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == msn) {
-	    vector<pair<string, string> >::const_iterator fi = slst["FL"].begin();
+	    vector<msnbuddy>::const_iterator fi = slst["FL"].begin();
 
 	    for(found = false; fi != slst["FL"].end() && !found; ++fi)
-		found = c->getdesc().nickname == fi->first;
+		found = c->getdesc().nickname == fi->nick;
 
 	    if(!found)
 		r.push_back(c);
@@ -453,8 +466,12 @@ bool msnhook::getfevent(invitation_ftp *fhandle, imfile &fr) {
 }
 
 void msnhook::updatecontact(icqcontact *c) {
-    if(logged() && conf.getgroupmode() != icqconf::nogroups) {
-	msn_del_from_list(&conn, "FL", nicknormalize(c->getdesc().nickname).c_str());
+    string gname, nick = c->getdesc().nickname;
+    vector<msnbuddy>::const_iterator ib = find(slst["FL"].begin(), slst["FL"].end(), nick);
+
+    if(ib != slst["FL"].end() && logged() && conf.getgroupmode() != icqconf::nogroups)
+    if(mhook.findgroup(c->getdesc(), gname) != ib->gid) {
+	msn_del_from_list(&conn, "FL", nicknormalize(nick).c_str());
 	sendnewuser(c->getdesc());
     }
 }
@@ -516,11 +533,19 @@ void ext_got_info(msnconn *conn, syncinfo *info) {
     userdata *ud;
     llist *lst, *pl;
     imcontact ic;
+    bool found;
+
+    mhook.readinfo = true;
+
+    for(pl = info->grp, mhook.mgroups.clear(); pl; pl = pl->next) {
+	groupdata *gd = (groupdata *) pl->data;
+	mhook.mgroups[gd->number] = gd->title;
+    }
 
     for(lst = info->fl; lst; lst = lst->next) {
 	ud = (userdata *) lst->data;
 
-	mhook.slst["FL"].push_back(make_pair(ud->username, ud->friendlyname));
+	mhook.slst["FL"].push_back(msnbuddy(ud->username, ud->friendlyname, ud->grp));
 
 	ic = imcontact(nicktodisp(ud->username), msn);
 	icqcontact *c = clist.get(ic);
@@ -544,26 +569,20 @@ void ext_got_info(msnconn *conn, syncinfo *info) {
 	c->setbasicinfo(bi);
 	c->setworkinfo(wi);
 
-	for(pl = info->grp; pl; pl = pl->next) {
+	for(found = false, pl = info->grp; pl && !found; pl = pl->next) {
 	    groupdata *gd = (groupdata *) pl->data;
-	    if(gd->number == ud->grp) {
-		clist.updateEntry(ic, gd->title);
-		break;
-	    }
+	    found = gd->number == ud->grp;
+	    if(found) clist.updateEntry(ic, gd->title);
 	}
     }
 
     for(lst = info->rl; lst; lst = lst->next) {
 	ud = (userdata *) lst->data;
-	mhook.slst["RL"].push_back(make_pair(ud->username, ud->friendlyname));
-    }
-
-    for(pl = info->grp, mhook.mgroups.clear(); pl; pl = pl->next) {
-	groupdata *gd = (groupdata *) pl->data;
-	mhook.mgroups[gd->number] = gd->title;
+	mhook.slst["RL"].push_back(msnbuddy(ud->username, ud->friendlyname));
     }
 
     mhook.setautostatus(mhook.ourstatus);
+    mhook.readinfo = false;
 }
 
 void ext_latest_serial(msnconn * conn, int serial) {
@@ -587,17 +606,17 @@ void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyn
     em.store(imnotification(ic, _("The user has added you to his/her contact list")));
 }
 
-void ext_new_list_entry(msnconn *conn, const char *lst, const char *username) {
+void ext_new_list_entry(msnconn *conn, const char *lst, const char *username, const char *friendlyname, int gid) {
     log("ext_new_list_entry");
-    mhook.slst[lst].push_back(make_pair(username, string()));
+    mhook.slst[lst].push_back(msnbuddy(username, friendlyname, gid));
 }
 
 void ext_del_list_entry(msnconn *conn, const char *lst, const char *username) {
     log("ext_del_list_entry");
 
-    vector<pair<string, string> >::iterator i = mhook.slst[lst].begin();
+    vector<msnbuddy>::iterator i = mhook.slst[lst].begin();
     while(i != mhook.slst[lst].end()) {
-	if(i->first == username) {
+	if(i->nick == username) {
 	    mhook.slst[lst].erase(i);
 	    i = mhook.slst[lst].begin();
 	} else {
