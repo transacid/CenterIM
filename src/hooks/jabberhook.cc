@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.41 2003/01/15 15:15:18 konst Exp $
+* $Id: jabberhook.cc,v 1.42 2003/04/21 22:41:32 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -97,21 +97,9 @@ void jabberhook::init() {
 
 void jabberhook::connect() {
     icqconf::imaccount acc = conf.getourid(jabber);
-    string jid;
-    int pos;
+    string jid = getourjid();
 
     face.log(_("+ [jab] connecting to the server"));
-
-    jid = acc.nickname;
-
-    if(jid.find("@") == -1)
-	jid += (string) "@" + acc.server;
-
-    if((pos = jid.find(":")) != -1)
-	jid.erase(pos);
-
-    if(jid.find("/") == -1)
-	jid += "/centericq";
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(acc.password.c_str()));
@@ -310,8 +298,14 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	    cname = getchanneljid(c);
 	    if(!cname.empty()) {
 		cname += "/" + conf.getourid(jabber).nickname;
+
 		auto_ptr<char> ccname(strdup(cname.c_str()));
+		auto_ptr<char> ourjid(strdup(getourjid().c_str()));
+
 		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
+		xmlnode_put_attrib(x, "from", ourjid.get());
+//                z = xmlnode_insert_tag(y, "x");
+//                xmlnode_put_attrib(z, "xmlns", "http://jabber.org/protocol/muc");
 		jab_send(jc, x);
 		xmlnode_free(x);
 	    }
@@ -1209,6 +1203,23 @@ bool jabberhook::isourid(const string &jid) {
     if((pos = ourjid.find(":")) != -1) ourjid.erase(pos);
 
     return jidnormalize(jid) == ourjid;
+}
+
+string jabberhook::getourjid() {
+    icqconf::imaccount acc = conf.getourid(jabber);
+    string jid = acc.nickname;
+    int pos;
+
+    if(jid.find("@") == -1)
+	jid += (string) "@" + acc.server;
+
+    if((pos = jid.find(":")) != -1)
+	jid.erase(pos);
+
+    if(jid.find("/") == -1)
+	jid += "/centericq";
+
+    return jid;
 }
 
 // ----------------------------------------------------------------------------

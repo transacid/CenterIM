@@ -121,7 +121,7 @@ AC_LANG_RESTORE
 
 case "$host_os" in
 	darwin*)
-	    LIBS="$LIBS -L/sw/lib -flat_namespace"
+	    LIBS="$LIBS -flat_namespace"
 ###            CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
 	;;
 esac

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.61 2003/04/18 17:07:31 konst Exp $
+* $Id: msnhook.cc,v 1.62 2003/04/21 22:41:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -42,10 +42,6 @@
 
 msnhook mhook;
 
-static const char * stat2name[imstatus_size] = {
-    "FLN", "NLN", "HDN", "NLN", "BSY", "BSY", "BRB", "AWY"
-};
-
 static string nicknormalize(const string &nick) {
     if(nick.find("@") == -1) return nick + "@hotmail.com";
     return nick;
@@ -60,6 +56,38 @@ static string nicktodisp(const string &nick) {
 	r.erase(pos);
 
     return r;
+}
+
+struct st2imr {
+    char *name;
+    imstatus st;
+};
+
+const st2imr st2im[] = {
+    { "FLN", offline },
+    { "NLN", available },
+    { "HDN", invisible },
+    { "BSY", dontdisturb },
+    { "PHN", occupied },
+    { "BRB", away },
+    { "LUN", away },
+    { 0, offline }
+};
+
+static imstatus msn2imstatus(const string &sname) {
+    for(const st2imr *sa = st2im; sa->name; sa++)
+	if(sname == sa->name)
+	    return sa->st;
+
+    return offline;
+}
+
+static const char *stat2name(imstatus st) {
+    for(const st2imr *sa = st2im; sa->name; sa++)
+	if(st == sa->st)
+	    return sa->name;
+
+    return "NLN";
 }
 
 // ----------------------------------------------------------------------------
@@ -266,7 +294,7 @@ void msnhook::setautostatus(imstatus st) {
 	    connect();
 	} else {
 	    logger.putourstatus(msn, ourstatus, st);
-	    msn_set_state(&conn, stat2name[ourstatus = st]);
+	    msn_set_state(&conn, stat2name(ourstatus = st));
 	}
     } else {
 	if(getstatus() != offline) {
@@ -426,13 +454,6 @@ bool msnhook::getfevent(invitation_ftp *fhandle, imfile &fr) {
 }
 
 // ----------------------------------------------------------------------------
-
-static imstatus msn2imstatus(const string &sname) {
-    for(imstatus st = offline; st != imstatus_size; (int) st += 1)
-	if(sname == stat2name[st]) return st;
-
-    return offline;
-}
 
 static void log(const string &s) {
 #ifdef DEBUG

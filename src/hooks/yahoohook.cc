@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.76 2003/04/18 19:08:06 konst Exp $
+* $Id: yahoohook.cc,v 1.77 2003/04/21 22:41:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -500,7 +500,6 @@ string yahoohook::encanalyze(const string &nick, const string &text) {
     return text;
 }
 
-
 bool yahoohook::knowntransfer(const imfile &fr) const {
     return fvalid.find(fr) != fvalid.end();
 }
@@ -725,7 +724,7 @@ void yahoohook::conf_userdecline(guint32 id, char *who, char *room, char *msg) {
     char buf[512];
 
     if(c) {
-	sprintf(buf, _("The user %s has declined your invitation to join the conference"), rushtmlconv("wk", who).c_str());
+	sprintf(buf, _("The user %s has declined your invitation to join the conference"), who);
 	em.store(imnotification(c, buf));
     }
 }
@@ -735,7 +734,7 @@ void yahoohook::conf_userjoin(guint32 id, char *who, char *room) {
     char buf[512];
 
     if(c) {
-	sprintf(buf, _("The user %s has joined the conference"), rushtmlconv("wk", who).c_str());
+	sprintf(buf, _("The user %s has joined the conference"), who);
 
 	if(find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), who) == yhook.confmembers[room].end())
 	    yhook.confmembers[room].push_back(who);
@@ -750,7 +749,7 @@ void yahoohook::conf_userleave(guint32 id, char *who, char *room) {
     vector<string>::iterator im;
 
     if(c) {
-	sprintf(buf, _("The user %s has left the conference"), rushtmlconv("wk", who).c_str());
+	sprintf(buf, _("The user %s has left the conference"), who);
 	em.store(imnotification(c, buf));
 
 	im = find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), who);

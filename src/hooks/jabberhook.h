@@ -65,6 +65,7 @@ class jabberhook: public abstracthook {
 	void gotversion(const imcontact &ic, xmlnode x);
 
 	static bool isourid(const string &jid);
+	static string getourjid();
 
     public:
 	jabberhook();
