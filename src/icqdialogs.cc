@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.115 2003/06/19 00:31:54 konst Exp $
+* $Id: icqdialogs.cc,v 1.116 2003/06/20 19:24:09 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -896,7 +896,8 @@ bool icqface::edit(string &txt, const string &header) {
     se.addscheme(cp_dialog_text, cp_dialog_text, 0, 0);
     se.idle = &editidle;
     se.otherkeys = &editaboutkeys;
-    se.wrap = false;
+    se.wrap = true;
+    se.smarttab = false;
 
     se.load(txt, "");
     se.open();

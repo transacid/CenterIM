@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.180 2003/06/19 00:31:55 konst Exp $
+* $Id: icqface.cc,v 1.181 2003/06/20 19:24:10 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1251,7 +1251,7 @@ string icqface::inputfile(const string &q, const string &defl) {
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
 	conf.getcolor(cp_dialog_highlight),
-	_(" enter to select a file, esc to cancel ")));
+	_(" <Space> or <Enter> confirm, <Esc> cancel ")));
 
     input.connectselector(selector);
 
@@ -1280,7 +1280,7 @@ string icqface::inputdir(const string &q, const string &defl) {
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
 	conf.getcolor(cp_dialog_highlight),
-	_(" space to select a directory, esc to cancel ")));
+	_(" <Space> confirm, <Esc> cancel ")));
 
     input.connectselector(selector);
 
@@ -1886,7 +1886,8 @@ bool icqface::eventedit(imevent &ev) {
     editor.addscheme(cp_main_text, cp_main_text, 0, 0);
     editor.otherkeys = &editmsgkeys;
     editor.idle = &editidle;
-    editor.wrap = false;
+    editor.wrap = true;
+    editor.smarttab = false;
     editor.emacs = conf.getemacs();
 
     saveworkarea();
@@ -2222,7 +2223,8 @@ void icqface::chat(const imcontact &ic) {
     editor.addscheme(cp_main_text, cp_main_text, 0, 0);
     editor.otherkeys = &editmsgkeys;
     editor.idle = &editchatidle;
-    editor.wrap = false;
+    editor.wrap = true;
+    editor.smarttab = false;
     editor.emacs = conf.getemacs();
     editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
