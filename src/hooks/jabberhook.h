@@ -38,6 +38,7 @@ class jabberhook: public abstracthook {
 	static void jidsplit(const string &jid, string &user, string &host, string &rest);
 
 	void setjabberstatus(imstatus st, const string &msg);
+	void sendvisibility();
 	void checkinlist(imcontact ic);
 
 	void sendnewuser(const imcontact &c, bool report);

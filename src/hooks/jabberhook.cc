@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.15 2002/11/28 18:29:33 konst Exp $
+* $Id: jabberhook.cc,v 1.16 2002/11/29 15:57:40 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,6 +35,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::authrequests);
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::flexiblesearch);
+    fcapabs.insert(hookcapab::visibility);
 }
 
 jabberhook::~jabberhook() {
@@ -252,8 +253,17 @@ void jabberhook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
-	    setjabberstatus(ourstatus = st,
-		(st == away || st == notavail) ? conf.getawaymsg(jabber) : "");
+	    string msg;
+
+	    switch(st) {
+		case away:
+		case dontdisturb:
+		case occupied:
+		case notavail:
+		    msg = conf.getawaymsg(jabber);
+	    }
+
+	    setjabberstatus(ourstatus = st, msg);
 	}
     } else {
 	if(getstatus() != offline) {
@@ -339,24 +349,23 @@ const string &serv, string &err) {
 
 void jabberhook::setjabberstatus(imstatus st, const string &msg) {
     xmlnode x = jutil_presnew(JPACKET__UNKNOWN, 0, 0);
-    xmlnode y = xmlnode_insert_tag(x, "show");
 
     switch(st) {
 	case away:
-	    xmlnode_insert_cdata(y, "away", (unsigned) -1);
+	    xmlnode_insert_cdata(xmlnode_insert_tag(x, "show"), "away", (unsigned) -1);
 	    break;
 
 	case occupied:
 	case dontdisturb:
-	    xmlnode_insert_cdata(y, "dnd", (unsigned) -1);
+	    xmlnode_insert_cdata(xmlnode_insert_tag(x, "show"), "dnd", (unsigned) -1);
 	    break;
 
 	case freeforchat:
-	    xmlnode_insert_cdata(y, "chat", (unsigned) -1);
+	    xmlnode_insert_cdata(xmlnode_insert_tag(x, "show"), "chat", (unsigned) -1);
 	    break;
 
 	case notavail:
-	    xmlnode_insert_cdata(y, "xa", (unsigned) -1);
+	    xmlnode_insert_cdata(xmlnode_insert_tag(x, "show"), "xa", (unsigned) -1);
 	    break;
 
 	case invisible:
@@ -365,14 +374,41 @@ void jabberhook::setjabberstatus(imstatus st, const string &msg) {
     }
 
     if(!msg.empty()) {
-	y = xmlnode_insert_tag(x, "status");
-	xmlnode_insert_cdata(y, msg.c_str(), (unsigned) -1);
+	xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
+	    msg.c_str(), (unsigned) -1);
     }
 
     jab_send(jc, x);
     xmlnode_free(x);
 
+    sendvisibility();
+
     logger.putourstatus(jabber, getstatus(), ourstatus = st);
+}
+
+void jabberhook::sendvisibility() {
+    xmlnode x;
+    icqlist::iterator i;
+
+    for(i = lst.begin(); i != lst.end(); ++i)
+    if(i->getdesc().pname == jabber) {
+	x = jutil_presnew(JPACKET__UNKNOWN, 0, 0);
+	xmlnode_put_attrib(x, "to", jidnormalize(i->getdesc().nickname).c_str());
+
+	if(i->getstatus() == csvisible && ourstatus == invisible) {
+
+	} else if(i->getstatus() == csvisible && ourstatus != invisible) {
+
+	} else if(i->getstatus() == csinvisible && ourstatus == invisible) {
+
+	} else if(i->getstatus() == csinvisible && ourstatus != invisible) {
+	    xmlnode_put_attrib(x, "type", "unavailable");
+
+	}
+
+	jab_send(jc, x);
+	xmlnode_free(x);
+    }
 }
 
 string jabberhook::jidnormalize(const string &jid) {
@@ -576,7 +612,8 @@ void jabberhook::gotloggedin() {
     xmlnode x;
 
     jhook.flogged = true;
-    jhook.setjabberstatus(jhook.manualstatus, "");
+    jhook.ourstatus = available;
+    jhook.setautostatus(jhook.manualstatus);
 
     x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
     xmlnode_put_attrib(x, "id", "Roster");
@@ -801,12 +838,18 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		/*JABBERChatRoomBuddyStatus(room, user, status);*/
 	    } else {
 		icqcontact *c = clist.get(ic);
-		if(c) {
-		    c->setstatus(ust);
 
-		    if(x = xmlnode_get_tag(packet->x, "status"))
-		    if(p = xmlnode_get_data(x))
-			jhook.awaymsgs[ic.nickname] = p;
+		if(c) {
+		    if(c->getstatus() != ust) {
+			if(c->getstatus() == offline)
+			    jhook.awaymsgs[ic.nickname] = "";
+
+			c->setstatus(ust);
+
+			if(x = xmlnode_get_tag(packet->x, "status"))
+			if(p = xmlnode_get_data(x))
+			    jhook.awaymsgs[ic.nickname] = p;
+		    }
 		}
 	    }
 	    break;

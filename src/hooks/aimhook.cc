@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.30 2002/11/26 12:24:51 konst Exp $
+* $Id: aimhook.cc,v 1.31 2002/11/29 15:57:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -367,7 +367,7 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
     logger.putourstatus(aim, ahook.getstatus(), offline);
     clist.setoffline(aim);
 
-    face.log(_("+ [aim] disconnected from the network"));
+    face.log(_("+ [aim] disconnected"));
     face.update();
 }
 

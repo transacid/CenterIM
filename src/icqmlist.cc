@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.16 2002/11/22 19:11:54 konst Exp $
+* $Id: icqmlist.cc,v 1.17 2002/11/29 15:57:39 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -57,17 +57,13 @@ void icqlist::load() {
 		    pname = conf.getprotocolbyletter(buf[0]);
 
 		    switch(pname) {
-			case yahoo:
-			case msn:
-			case aim:
-			case irc:
-			    lst.push_back(modelistitem(nick, imcontact(nick,
-				pname), (contactstatus) i));
-			    break;
-
 			case icq:
 			    lst.push_back(modelistitem(nick, imcontact(strtoul(buf.c_str(),
 				0, 0), icq), (contactstatus) i));
+			    break;
+			default:
+			    lst.push_back(modelistitem(nick, imcontact(nick,
+				pname), (contactstatus) i));
 			    break;
 		    }
 		}
