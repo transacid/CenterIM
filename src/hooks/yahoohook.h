@@ -3,7 +3,6 @@
 
 #include "icqconf.h"
 #include "abstracthook.h"
-#include "centericq.h"
 
 #include "glib.h"
 

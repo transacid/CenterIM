@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.41 2002/11/22 16:29:43 konst Exp $
+* $Id: msnhook.cc,v 1.42 2002/11/22 20:23:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,7 +28,6 @@
 #include "icqcontacts.h"
 #include "accountmanager.h"
 #include "eventmanager.h"
-#include "centericq.h"
 #include "imlogger.h"
 
 msnhook mhook;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contact basic info class
-* $Id: imcontact.cc,v 1.13 2002/11/22 19:11:55 konst Exp $
+* $Id: imcontact.cc,v 1.14 2002/11/22 20:23:42 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -102,4 +102,12 @@ string imcontact::totext() const {
     }
 
     return r;
+}
+
+// ----------------------------------------------------------------------------
+
+bool ischannel(const imcontact &cont) {
+    return
+	(cont.nickname.substr(0, 1) == "#") &&
+	(cont.pname == irc || cont.pname == yahoo);
 }

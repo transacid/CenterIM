@@ -1,7 +1,7 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.28 2002/11/22 19:11:56 konst Exp $
+* $Id: imevents.cc,v 1.29 2002/11/22 20:23:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,7 +23,6 @@
 */
 
 #include "imevents.h"
-#include "centericq.h"
 
 #include <strstream>
 

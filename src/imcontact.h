@@ -68,4 +68,6 @@ struct imcontact {
 
 extern imcontact contactroot;
 
+bool ischannel(const imcontact &cont);
+
 #endif

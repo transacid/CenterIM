@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.53 2002/10/28 11:29:40 konst Exp $
+* $Id: irchook.cc,v 1.54 2002/11/22 20:23:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,10 +24,11 @@
 
 #include "irchook.h"
 #include "icqface.h"
-#include "accountmanager.h"
 #include "icqcontacts.h"
-#include "centericq.h"
 #include "imlogger.h"
+
+#include "accountmanager.h"
+#include "eventmanager.h"
 
 #include <iterator>
 

@@ -62,4 +62,22 @@ using namespace std;
 #define PERIOD_ATONCE           5
 #define MAX_ATONCE              10
 
+#define DEFAULT_CHARSET "ISO-8859-1"
+
+/*
+*
+* Several helper routines
+*
+*/
+
+string rusconv(const string &tdir, const string &text);
+string rushtmlconv(const string &tdir, const string &text);
+string ruscrlfconv(const string &tdir, const string &text);
+
+enum Encoding {
+    encUTF, encKOI, encUnknown
+};
+
+Encoding guessencoding(const string &text);
+
 #endif

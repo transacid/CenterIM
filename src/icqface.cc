@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.155 2002/11/22 19:11:50 konst Exp $
+* $Id: icqface.cc,v 1.156 2002/11/22 20:23:42 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2117,9 +2117,11 @@ void icqface::chat(const imcontact &ic) {
     update();
 }
 
-icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewresult> abuttons) {
+icqface::eventviewresult icqface::eventview(const imevent *ev, bool zoom,
+vector<eventviewresult> abuttons) {
+
     string title_event, title_timestamp, text;
-    horizontalbar *bar;
+    horizontalbar *bar = 0;
     dialogbox db;
     int mitem, baritem;
     eventviewresult r;
@@ -2175,20 +2177,6 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     actions.push_back(ok);
     copy(abuttons.begin(), abuttons.end(), back_inserter(actions));
 
-    clearworkarea();
-
-    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+3, sizeWArea.x2,
-	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
-
-    db.setbar(bar = new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), 0));
-
-    bar->item = actions.size()-1;
-
-    for(ia = actions.begin(); ia != actions.end(); ++ia) {
-	bar->items.push_back(geteventviewresult(*ia));
-    }
-
     switch(ev->getdirection()) {
 	case imevent::outgoing:
 	    title_event = _("Outgoing %s to %s");
@@ -2200,13 +2188,34 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 	    break;
     }
 
-    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
+    if(!zoom) {
+	clearworkarea();
 
-    mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
-	title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());
+	db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+3, sizeWArea.x2,
+	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
-    db.addautokeys();
+	db.setbar(bar = new horizontalbar(conf.getcolor(cp_main_highlight),
+	    conf.getcolor(cp_main_selected), 0));
+
+	bar->item = actions.size()-1;
+
+	for(ia = actions.begin(); ia != actions.end(); ++ia)
+	    bar->items.push_back(geteventviewresult(*ia));
+
+	mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
+	    title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
+
+	mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
+	    title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());
+
+	db.addautokeys();
+
+    } else {
+	db.setwindow(new textwindow(0, 0, COLS, LINES,
+	    conf.getcolor(cp_main_text), TW_NOBORDER));
+
+    }
+
     db.otherkeys = &userinfokeys;
     db.idle = &dialogidle;
 
@@ -2236,8 +2245,10 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 
     db.redraw();
 
-    workarealine(sizeWArea.y1+3);
-    workarealine(sizeWArea.y2-2);
+    if(!zoom) {
+	workarealine(sizeWArea.y1+3);
+	workarealine(sizeWArea.y2-2);
+    }
 
     if(db.open(mitem, baritem)) {
 	r = actions[baritem];

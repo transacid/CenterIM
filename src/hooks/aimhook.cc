@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.28 2002/11/22 16:29:43 konst Exp $
+* $Id: aimhook.cc,v 1.29 2002/11/22 20:23:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,8 +26,8 @@
 #include "icqface.h"
 #include "accountmanager.h"
 #include "icqcontacts.h"
-#include "centericq.h"
 #include "imlogger.h"
+#include "eventmanager.h"
 
 #ifdef DEBUG
 #define DLOG(s) face.log("aim %s", s)

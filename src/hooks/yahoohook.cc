@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.65 2002/11/22 16:29:44 konst Exp $
+* $Id: yahoohook.cc,v 1.66 2002/11/22 20:23:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,8 +26,10 @@
 #include "icqmlist.h"
 #include "icqface.h"
 #include "icqcontacts.h"
-#include "accountmanager.h"
 #include "imlogger.h"
+
+#include "accountmanager.h"
+#include "eventmanager.h"
 
 extern "C" {
 #include "yahoo2_callbacks.h"

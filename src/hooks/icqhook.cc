@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.117 2002/11/22 19:11:59 konst Exp $
+* $Id: icqhook.cc,v 1.118 2002/11/22 20:23:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,9 +25,10 @@
 #include "icqhook.h"
 #include "icqconf.h"
 #include "icqface.h"
-#include "accountmanager.h"
-#include "centericq.h"
 #include "imlogger.h"
+
+#include "accountmanager.h"
+#include "eventmanager.h"
 
 #include <libicq2000/userinfohelpers.h>
 

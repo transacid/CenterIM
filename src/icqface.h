@@ -219,7 +219,7 @@ class icqface {
 
 	bool eventedit(imevent &ev);
 
-	eventviewresult eventview(const imevent *ev,
+	eventviewresult eventview(const imevent *ev, bool zoom = false,
 	    vector<eventviewresult> abuttons = vector<eventviewresult>());
 
 	bool edit(string &txt, const string &header);

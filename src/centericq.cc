@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.135 2002/11/22 19:11:44 konst Exp $
+* $Id: centericq.cc,v 1.136 2002/11/22 20:23:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -850,7 +850,7 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, const vector<ic
 }
 
 icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, bool &fin, const vector<icqface::eventviewresult> &buttons) {
-    icqface::eventviewresult r = face.eventview(&ev, buttons);
+    icqface::eventviewresult r = face.eventview(&ev, false, buttons);
 
     imcontact cont = ev.getcontact();
     string nickname, tmp;
@@ -1485,12 +1485,6 @@ string rusconv(const string &tdir, const string &text) {
     }
 
     return r;
-}
-
-bool ischannel(const imcontact &cont) {
-    return
-	(cont.nickname.substr(0, 1) == "#") &&
-	(cont.pname == irc || cont.pname == yahoo);
 }
 
 Encoding guessencoding(const string &text) {

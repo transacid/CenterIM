@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.71 2002/11/22 19:11:49 konst Exp $
+* $Id: icqcontact.cc,v 1.72 2002/11/22 20:23:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,10 +25,10 @@
 #include "icqcontacts.h"
 #include "icqgroups.h"
 #include "icqconf.h"
-#include "centericq.h"
 #include "icqface.h"
 #include "abstracthook.h"
 #include "imexternal.h"
+#include "eventmanager.h"
 
 #include <time.h>
 #include <libicq2000/userinfohelpers.h>
