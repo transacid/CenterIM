@@ -5,7 +5,7 @@
 # various flavours of icq client software to centericq format.
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
-# $Id $
+# $Id: cicqconv,v 1.4 2001/10/16 15:38:05 konst Exp $
 #
 
 use Time::Local;
@@ -51,6 +51,11 @@ sub cicq_addhistoryitem {
 	    print UF ($touin == $ourUIN) ? "IN" : "OUT", "\nMSG\n";
 	    print UF "$timestamp\n$timestamp\n";
 	    print UF "$text\n\n";
+	    close UF;
+	}
+
+	if(open(UF, '>', "$ENV{HOME}/.centericq/$histuin/lastread")) {
+	    print UF "$timestamp\n";
 	    close UF;
 	}
     }

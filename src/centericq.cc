@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.22 2001/10/09 18:07:00 konst Exp $
+* $Id: centericq.cc,v 1.23 2001/10/16 15:38:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -424,7 +424,6 @@ void centericq::updatedetails() {
 
     c->clear();
     c->setseq2(icq_SendMetaInfoReq(&icql, icql.icq_Uin));
-    face.status(_("Fetching your ICQ details"));
 
     if(face.updatedetails()) {
 	string fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate;

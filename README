@@ -7,6 +7,7 @@ Contents
     1.1. Creation history
     1.2. Features overview
 2. UIN registration
+    2.1. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -39,6 +40,7 @@ Contents
     9.2. Protocol debug mode
 10. Lynx
     10.1. The program homepage
+	10.1.1. Centericq mailing list
     10.2. Konst.org.ua
     10.3. Other programs I write
     10.4. ICQ
@@ -135,6 +137,19 @@ Windows we need to recode every sent and received message in order for
 it to be readable.
 
 
+2.1. Updating details
+---------------------
+
+  After the first logon centericq proposes to update your ICQ details
+with popping up the "update user details" dialog. You can fill in
+information that will be visible to other ICQ users. They also will be
+able to find you with specifying what you filled in their "find users"
+requests.
+
+  It's possible to update your details any time you're online with this
+dialog invoked with the global menu.
+
+
 3. User interface
 -----------------
 
@@ -181,6 +196,12 @@ one item. To do it, just press "Enter" on it. To make a mutiple
 selection, press "Space" on items and use "Enter" to finish the
 selection. ESC does also work in all menus to cancel the selection.
 
+  I will mention two menus below. They are global menu and contact
+context menu, invoked with F4 and F2 correspondingly. The former allows
+to execute various actions of global kind, such as find and add users,
+manage ignore, visible and invisible lists, change settings, etc. With
+the context menu you can do various current contact specific things.
+
 
 3.4. Dialogs
 ------------
@@ -197,12 +218,12 @@ always simple :)
 4. Configuration
 ----------------
 
-  The major parts of centericq settings can be found in the
-"Configuration" dialog which can be invoked by selecting an appropriate
-items in the global menu (the one you see on pressing F4). There are
-only three things you should setup from outside the program with
-modifying the program's configuration files. They are event sounds,
-actions (see below) and color schemes.
+  The majority of centericq settings can be found in the "Configuration"
+dialog which can be invoked by selecting an appropriate items in the
+global menu (the one you see on pressing F4). There are only three
+things you should setup from outside the program with modifying the
+program's configuration files. They are event sounds, actions (see
+below) and color schemes.
 
   With the "Configuration" dialog you can turn on and off various
 features, as well as change the ICQ server address and adjust network
@@ -307,14 +328,250 @@ so on.
 6.1. Finding and adding users
 -----------------------------
 
+  The most common way to add a contact to your list is to use the
+"find/add user(s)" dialog invoked from the global menu. First you have
+to find the contact you wanna add. Centericq allows you to search for
+users with various parameters. You can add a user knowing his UIN, or
+see a list of people matching your criterias. In fact, ICQ server sends
+only first 40 matching UINs, but usually it's quite enough.
+
+  Note that you can use simple wildcards in the text input fields. It's
+possible to put "*" there. For example, you don't remember my last name
+exactly, but know only several first letters. Then just type in a first
+name ("Konstantin") and fill in the "last name" field with "Klyag*". The
+same trick can be done with other fields: "city", "nickname", "company",
+etc..
+
+
 6.1.1. Some useful hints
 ------------------------
+
+  You can skip the finding step by issuing the following shell command
+to add a user:
+
+    $ mkdir ~/.centericq/<UIN of a user to add>
+
+Don't forget to restart centericq so that it re-reads the contact list.
+Though, it's better anyway to follow the usual find/add procedure.
+
+  Another intresting trick I wanna share with you. Because of a natural
+couriousity, sometimes names of people get me intrested in finding out
+about their ethnical origin. Once I saw a last name, Aslam, which seemed
+like a muslim one, but I had no idea which country the guy originated
+from. I decided to use ICQ to find out. Opened the "find/add" dialog and
+typed that in. After looking at several matched contacts I noticed the
+majority of people were from Pakistan, so I realized where the guy was
+from and my couriosity was satisfied.
+
+  I go the same way to find out in which country a certain city is
+located, and so on. This makes ICQ extremely useful for me. Just use
+your imagination to find other ways to use such a great statistics
+database :)
+
 
 6.2. Removing users
 -------------------
 
+  Removing users is a very simple procedure. You can either hit DEL on a
+certain contact or select an appropriate item in the context menu. After
+confirmation the contact is removed.
+
+
 6.3. Users' details
 -------------------
 
+  On the ICQ network, every user has a set of details that can be
+browsed and used in search queries by others. To browse details of a
+specific user on the contact list it's enough just to press '?' on a
+corresponding to a contact item.
+
+  Please don't hesistate to do it before asking people who they are. It
+takes time to explain, though it can be looked up so easily.
+
+
 6.4. Groups of contacts
 -----------------------
+
+  In case you have a lot of people on contact list, you might wish to be
+able to visually arrange them into groups. Choose any criteria.
+Geography, companies, activities, interestests.. Anything. Centericq
+supports it.
+
+  To turn the feature on invoke the configuration dialog and switch the
+"arrange contacts into groups" option value to "yes". By default, all of
+your contacts will appear on standard "Global" group from which you can
+move them to other groups creating them "on fly". There is an item in
+the context menu named "Move to group.." which allows you to do it.
+
+  Remove, add and rename operations on groups can be done with the group
+manager dialog invoked from the global menu item named "Organize contact
+groups".
+
+
+7. Sending and receiving events
+-------------------------------
+
+7.1. Messages
+-------------
+
+7.2. URLs
+---------
+
+7.3. Contacts
+-------------
+
+7.4. Files
+----------
+
+7.5. Events history
+-------------------
+
+8. Ignore, visible and invisible lists
+--------------------------------------
+
+  ICQ provides an easy way to have lists of users you want to be visible
+or invisible to, if you're online. Also there is a place to move all the
+annoying ones so that they don't disturb you with their stupid messages.
+
+  Modification operation with the lists can be performed with
+appropriate dialogs invoked from the global menu.
+
+
+8.1. Ignore list
+----------------
+
+  List for worst ones. If you find someone on (or outside) your contact
+list too annoying, you can just add him or her to the ignore list. After
+this simple operation you will never receive events from this user,
+until the contact is removed from this list of yours.
+
+
+8.2. Visible list
+-----------------
+
+  ICQ has the "invisible" option among its online status modes. When you
+switch to it, noone is able to see your online presence. But there can
+be a handful of people you would like to keep in touch, and you also
+feel like remaining visible for them. That's what this feature is all
+about.
+
+
+8.3. Invisible list
+-------------------
+
+  Invisible list has an opposite aim to the previous one. People who you
+have on this list are unable to see your presence all the time. Either
+you're online or offline, or occupied.. whatever, they see your status
+as "offline".
+
+
+9. Advanced features
+--------------------
+
+  Centericq has some advanced features that you may need, though they're
+not so easy to turn on for novice users. In this chapter I explain how
+to do it.
+
+
+9.1. Arabic and Hebrew languages support
+----------------------------------------
+
+  There is a basic support for bidirectional languages in centericq. It
+allows not to type, but only read messages in Hebrew and Arabic. It's
+possible to enable only on the ./configure stage, because the program
+needs to be linked against FriBiDi library. This means first you need to
+have the latter installed. The library homepage is located at
+    http://fribidi.sourceforge.net/
+
+  Once you have successfully installed FriBiDi, you need to execute
+centericq's ./configure script with "--with-fribidi" parameter. If it
+fails to find the library (you'll be reported), try
+"--with-fribidi=<prefix the library was installed with>".
+
+  Common "make" and "make install" steps should follow, and finally
+"shalom" or "selam" can be seen well on your monitor :)
+
+
+9.2. Protocol debug mode
+------------------------
+
+  Actually I have this feature for myself, to track protocol messages
+generated by icqlib. But I also don't mind your looking at them :) The
+only thing I wanna warn you is that no questions about their meaning are
+answered. If you feel like seeing and understanding them, please refer
+to the unofficial ICQ protocol specification, icqlib sources, whatever..
+
+  To enable this feature, ./configure the program the following way
+    CXXFLAGS="-DDEBUG" ./configure
+and after this perform the standard "make" and "make install" steps. The
+protocol messages will be visible in the log window, and also they'll be
+written into the ~/.centericq/log file.
+
+
+10. Lynx
+--------
+
+  This section contains links and references that may be of interest for
+you.
+
+
+10.1. The program homepage
+--------------------------
+
+The centericq homepage can be found at
+    http://konst.org.ua/centericq/
+
+To go directly to the "download" section use
+    http://konst.org.ua/centericq/download/
+
+
+10.1.1. Centericq mailing list
+------------------------------
+
+  There is a mailing list for centericq which is used by the program
+users to discuss their ideas, bug reports, fixes, and other stuff. You
+would rather want to use it instead of direct mailing to me.
+
+  To subscribe go to the centericq home page (URL is above) or send a
+message to cicq-request@linuxpl.org with "subscribe" in the subject
+field.
+
+
+10.2. Konst.org.ua
+------------------
+
+  If you want to find out more about my recent activities, news,
+software developments and other things I'm involved in, visit my web
+site at http://konst.org.ua/
+
+  It's currently available in English and Russian. Use icons in the
+right bottom corner to switch the language.
+
+
+10.3. Other programs I write
+----------------------------
+
+To find out more about my software developments use the following URL:
+    http://konst.org.ua/software/
+
+There is also an "articles" section at
+    http://konst.org.ua/articles/
+
+
+10.4. ICQ
+---------
+
+  Since centericq is only a console based Linux clone of an original
+software made by Israeli company named "Mirabilis", you might wish to
+know more about it. So, visit the ICQ website at
+
+    http://www.icq.com/
+
+It provides information about the company itself along with a lot of
+community services including SMS messaging, web directory, and so on.
+
+  If you're intrested in technical aspects of ICQ communications
+protocol, visit the following URLs:
+
+    http://www.student.nada.kth.se/~d95-mih/icq/
+    http://www.algonet.se/~henisak/icq/icqv5.html

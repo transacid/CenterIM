@@ -4,21 +4,20 @@ kxicq2 and gnomeicu support in cicqconv
 there is no "send contacts" item in f2 menu :(
 allows to modify details after 3 (?) enter presses on the dialog fields
 "add to contact list" in non-icq -> gotta ask group
-
-BUGS
-
+apply patch from kapuzin
 cicqconv : ok, but all the messages are unread :)
+check for curses lib
 
 first start -> not connected -> open config dialog -> connected ->
 update info dialog appears -> segfault
+
+BUGS
 
 X window resize -> sometimes segfaults
 
 segfaults on update details under rh62 (?)
 
 TODO
-
-apply patch from kapuzin
 
 finish the doc
 
@@ -57,4 +56,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.37 2001/10/15 06:01:54 konst Exp $
+$Id: TODO,v 1.38 2001/10/16 15:38:04 konst Exp $

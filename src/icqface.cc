@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.23 2001/10/09 18:07:01 konst Exp $
+* $Id: icqface.cc,v 1.24 2001/10/16 15:38:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -475,6 +475,7 @@ bool icqface::findresults() {
     ihook.clearfindresults();
     ihook.setfinddest(db.getmenu());
 
+    db.addautokeys();
     db.idle = &dialogidle;
     db.redraw();
 
@@ -803,6 +804,7 @@ void icqface::userinfo(unsigned int uin, bool nonicq, unsigned int realuin) {
 	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 	_("Info"), _("Home"), _("Work"), _("More"), _("About"),
 	!nonicq ? _("Retrieve") : _("Edit"), 0));
+    db.addautokeys();
     db.idle = &dialogidle;
     db.otherkeys = &userinfokeys;
 
@@ -1226,6 +1228,7 @@ int icqface::showicq(unsigned int uin, string text, char imt, int options = 0) {
 	    _("Details"), _("Add to the list"), _("Accept"),
 	    hist ? _("Ok") : _("Ignore"), 0));
 
+        db.addautokeys();
 	db.getbar()->item = hist ? 3 : 2;
     } else if(imt == ICQM_ADDED) {
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
@@ -1236,6 +1239,7 @@ int icqface::showicq(unsigned int uin, string text, char imt, int options = 0) {
 	    _("Details"), _("Add to the list"),
 	    hist ? _("Ok") : _("Next"), 0));
 
+        db.addautokeys();
 	db.getbar()->item = hist ? 2 : 1;
     }
 
@@ -1370,6 +1374,7 @@ struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false) {
 	    _("Sent on %s"), strdateandtime(&recvtm).c_str());
     }
 
+    db.addautokeys();
     db.otherkeys = &userinfokeys;
     db.idle = &dialogidle;
     db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
@@ -1430,6 +1435,7 @@ bool inhistory = false) {
 	    conf.getcolor(cp_main_selected), _("Open"), _("Fwd"), _("Next"), 0));
     }
 
+    db.addautokeys();
     db.getbar()->item = 2;
     db.idle = &dialogidle;
     db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
@@ -1476,6 +1482,7 @@ bool inhistory = false) {
     workarealine(WORKAREA_Y1+2);
     workarealine(WORKAREA_Y2-2);
 
+    db.addautokeys();
     db.idle = &dialogidle;
     db.getbrowser()->setbuf(fname);
     if(!db.open(i, b)) b = -1;
@@ -1514,6 +1521,7 @@ struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false) {
 	conf.getcolor(cp_main_selected), _("Details"), _("Add"),
 	inhistory ? _("Ok") : _("Next"), 0));
 
+    db.addautokeys();
     db.getbar()->item = 2;
     db.idle = &dialogidle;
     db.redraw();
@@ -1697,6 +1705,7 @@ void icqface::modelist(contactstatus cs) {
 	conf.getcolor(cp_main_selected),
 	_("Details"), _("Add"), _("Remove"), _("Move to contacts"), 0));
 
+    db.addautokeys();
     db.idle = &dialogidle;
     db.addkey(KEY_IC, 1);
     db.addkey(KEY_DC, 2);

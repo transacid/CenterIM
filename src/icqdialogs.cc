@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.15 2001/10/15 06:01:54 konst Exp $
+* $Id: icqdialogs.cc,v 1.16 2001/10/16 15:38:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,6 +59,7 @@ bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
 	_("Change"), _("Done"), 0));
+    db.addautokeys();
 
     treeview &t = *db.gettree();
 
@@ -202,8 +203,9 @@ bool icqface::finddialog(searchparameters &s) {
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("Clear"), _("Change"), _("Search"), 0));
+	_("cLear"), _("Change"), _("Search"), 0));
 
+    db.addautokeys();
     db.idle = &dialogidle;
     treeview &tree = *db.gettree();
     db.getbar()->item = 1;
@@ -353,7 +355,12 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     int n, b;
     dialogbox db;
 
-    if(!c) c = clist.get(0);
+    if(!c) {
+	status(_("Fetching your ICQ details"));
+	c = clist.get(0);
+	if(mainscreenblock) return false;
+	    // Another dialog is already on top
+    }
 
     blockmainscreen();
 
@@ -373,6 +380,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
     db.idle = &detailsidle;
+    db.addautokeys();
 
     while(!finished) {
 	gendetails(db.gettree(), c);
@@ -605,6 +613,7 @@ bool icqface::sendfiles(unsigned int uin, string &msg, linkedlist &flist) {
 
     db.addkey(KEY_IC, 0);
     db.addkey(KEY_DC, 1);
+    db.addautokeys();
     db.idle = &dialogidle;
 
     while(!finished) {
@@ -676,6 +685,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
     db.idle = &dialogidle;
+    db.addautokeys();
 
     blockmainscreen();
     treeview &t = *db.gettree();
@@ -849,6 +859,7 @@ int icqface::groupmanager(const string text, bool sel) {
 	conf.getcolor(cp_dialog_selected),
 	_("Add"), _("Rename"), _("Remove"), sel ? _("Select") : _("Done"), 0));
 
+    db.addautokeys();
     db.getbar()->item = 3;
 
     r = 0;
