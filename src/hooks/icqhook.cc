@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.106 2002/08/22 18:13:14 konst Exp $
+* $Id: icqhook.cc,v 1.107 2002/08/28 11:50:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,7 +59,6 @@ icqhook::icqhook() {
 	hoptCanFetchAwayMsg |
 	hoptCanChangeNick |
 	hoptCanUpdateDetails |
-	hoptChangableServer |
 	hoptCanSyncList |
 	hoptAuthReqSend |
 	hoptControlableVisibility;

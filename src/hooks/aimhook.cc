@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.22 2002/08/26 14:05:09 konst Exp $
+* $Id: aimhook.cc,v 1.23 2002/08/28 11:50:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -44,7 +44,7 @@ aimhook::aimhook()
 	hoptCanSetAwayMsg |
 	hoptCanChangePassword |
 	hoptCanUpdateDetails |
-	hoptChangableServer;
+	hoptCanSyncList;
 }
 
 aimhook::~aimhook() {
@@ -78,6 +78,7 @@ void aimhook::connect() {
     firetalk_register_callback(handle, FC_IM_BUDDYAWAY, &buddyaway);
     firetalk_register_callback(handle, FC_IM_BUDDYUNAWAY, &buddyonline);
     firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
+    firetalk_register_callback(handle, FC_IM_LISTBUDDY, &listbuddy);
 
     fonline = firetalk_signon(handle, acc.server.c_str(), acc.port, acc.nickname.c_str()) == FE_SUCCESS;
 
@@ -319,25 +320,30 @@ void aimhook::resolve() {
     }
 }
 
+vector<icqcontact *> aimhook::getneedsync() {
+    vector<icqcontact *> r;
+
+    buddies.clear();
+    firetalk_im_list_buddies(handle);
+
+    for(int i = 0; i < clist.count; i++) {
+	icqcontact *c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == aim) {
+	    if(find(buddies.begin(), buddies.end(), c->getdesc().nickname) == buddies.end())
+		r.push_back(c);
+	}
+    }
+
+    return r;
+}
+
 // ----------------------------------------------------------------------------
 
 void aimhook::connected(void *connection, void *cli, ...) {
     ahook.flogged = true;
     face.log(_("+ [aim] logged in"));
     face.update();
-
-    int i;
-    icqcontact *c;
-
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-
-	if(c->getdesc().pname == aim) {
-	    firetalk_im_add_buddy(ahook.handle, c->getdesc().nickname.c_str());
-	}
-    }
-
-    firetalk_im_upload_buddies(ahook.handle);
 
     ahook.ourstatus = available;
     ahook.setautostatus(ahook.manualstatus);
@@ -511,5 +517,20 @@ void aimhook::needpass(void *conn, void *cli, ...) {
 	strncpy(pass, acc.password.c_str(), size-1);
 	pass[size-1] = 0;
 	face.log(_("+ [aim] password sent"));
+    }
+}
+
+void aimhook::listbuddy(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *nickname = va_arg(ap, char *);
+    char online = va_arg(ap, int);
+    char away = va_arg(ap, int);
+    long idletime = va_arg(ap, long);
+    va_end(ap);
+
+    if(nickname) {
+	ahook.buddies.push_back(nickname);
     }
 }

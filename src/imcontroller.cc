@@ -199,8 +199,8 @@ void imcontroller::icqsynclist() {
     face.progress.hide();
 }
 
-void imcontroller::yahoosynclist() {
-    vector<icqcontact *> tosync = yhook.getneedsync();
+void imcontroller::synclist(protocolname pname) {
+    vector<icqcontact *> tosync = gethook(pname).getneedsync();
     vector<icqcontact *>::iterator it;
 
     if(tosync.empty()) {
@@ -211,11 +211,11 @@ void imcontroller::yahoosynclist() {
 	sprintf(buf, _("%d contacts are do be stored server-side. Add them now?"), tosync.size());
 
 	if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    face.progress.show(_(" Uploading Yahoo! buddies "));
+	    face.progress.show(_(" Uploading buddies "));
 
 	    for(it = tosync.begin(); it != tosync.end(); ++it) {
 		face.progress.log(_(".. adding %s"), (*it)->getdesc().nickname.c_str());
-		yhook.sendnewuser((*it)->getdesc());
+		gethook(pname).sendnewuser((*it)->getdesc());
 	    }
 
 	    face.progress.log(_("Finished"));
@@ -343,8 +343,14 @@ void imcontroller::channels(icqconf::imaccount &account) {
 
 void imcontroller::synclist(icqconf::imaccount &account) {
     switch(account.pname) {
-	case icq: icqsynclist(); break;
-	case yahoo: yahoosynclist(); break;
+	case icq:
+	    icqsynclist();
+	    break;
+
+	case yahoo:
+	case aim:
+	    synclist(account.pname);
+	    break;
     }
 }
 

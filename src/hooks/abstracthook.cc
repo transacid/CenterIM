@@ -103,6 +103,10 @@ void abstracthook::stoplookup() {
 void abstracthook::requestawaymsg(const imcontact &c) {
 }
 
+vector<icqcontact *> abstracthook::getneedsync() {
+    return vector<icqcontact *>();
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

@@ -12,7 +12,6 @@ enum hookcapabilities {
 	hoptCanFetchAwayMsg = 32,
 	  hoptCanSetAwayMsg = 64,
 	  hoptCanChangeNick = 128,
-	hoptChangableServer = 256,
       hoptCanChangePassword = 512,
        hoptCanUpdateDetails = 1024,
 	    hoptNoPasswords = 2048,
@@ -64,6 +63,8 @@ class abstracthook {
 	virtual void requestawaymsg(const imcontact &c);
 
 	int getcapabilities() const;
+
+	virtual vector<icqcontact *> getneedsync();
 };
 
 abstracthook &gethook(protocolname pname);

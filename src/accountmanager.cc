@@ -57,7 +57,7 @@ void accountmanager::exec() {
 		citem = ((int) (pname)+1) * 100;
 		capab = gethook(pname).getcapabilities();
 
-		if(!account.empty() && (capab & hoptChangableServer)) {
+		if(!account.empty()) {
 		    tmp = "";
 
 		    if(!account.server.empty() && account.port)

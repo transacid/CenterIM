@@ -18,6 +18,8 @@ class aimhook: public abstracthook {
 	imstatus ourstatus;
 	ourprofile profile;
 
+	vector<string> buddies;
+
 	void userstatus(const string &nickname, imstatus st);
 
 	void saveprofile();
@@ -35,6 +37,7 @@ class aimhook: public abstracthook {
 	static void buddyaway(void *conn, void *cli, ...);
 	static void needpass(void *conn, void *cli, ...);
 	static void connectfailed(void *connection, void *cli, ...);
+	static void listbuddy(void *conn, void *cli, ...);
 
     public:
 	aimhook();
@@ -66,6 +69,8 @@ class aimhook: public abstracthook {
 
 	void requestinfo(const imcontact &c);
 	void sendupdateuserinfo(icqcontact &c, const string &newpass);
+
+	vector<icqcontact *> getneedsync();
 };
 
 extern aimhook ahook;

@@ -36,6 +36,8 @@ class imcontroller {
 	unsigned int ruin;
 	string rnick, rfname, rlname, remail, rpasswd, rserver;
 
+	void synclist(protocolname pname);
+
     protected:
 	bool icqregdialog();
 
