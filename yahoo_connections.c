@@ -23,20 +23,20 @@
  * Linked list routines to handle multiple connections
  */
 
-#include <glib.h>
+#include "pseudoglib.h"
 #include "yahoo_connections.h"
 
 /*
  * Name: add_to_list
- * 	Adds a yahoo_data item to a connection list, creates
- * 	the connection if it doesn't exist.
+ *      Adds a yahoo_data item to a connection list, creates
+ *      the connection if it doesn't exist.
  *
  * Parameters:
- * 	list - a pointer to the list
- * 	yd   - the element to be added
+ *      list - a pointer to the list
+ *      yd   - the element to be added
  *
  * Returns:
- * 	a pointer to the list 	
+ *      a pointer to the list   
  */
 struct yahoo_connections * 
 add_to_list(struct yahoo_connections * list, struct yahoo_data *yd)
@@ -60,16 +60,16 @@ add_to_list(struct yahoo_connections * list, struct yahoo_data *yd)
 
 /*
  * Name: del_from_list
- * 	Removes a yahoo_data item from a connection list.
- * 	The yahoo_data item must be freed by the caller
- * 	after this function returns
+ *      Removes a yahoo_data item from a connection list.
+ *      The yahoo_data item must be freed by the caller
+ *      after this function returns
  *
  * Parameters:
- * 	list - a pointer to the list
- * 	yd   - the element to be removed
+ *      list - a pointer to the list
+ *      yd   - the element to be removed
  *
  * Returns:
- * 	a pointer to the list
+ *      a pointer to the list
  */
 struct yahoo_connections * 
 del_from_list(struct yahoo_connections * list, struct yahoo_data *yd)
@@ -90,7 +90,7 @@ del_from_list(struct yahoo_connections * list, struct yahoo_data *yd)
 	}
 
 	curr->next = NULL;
-	curr->yd = NULL;	// should be freed by caller
+	curr->yd = NULL;        // should be freed by caller
 	g_free(curr);
 
 	return list;
@@ -98,15 +98,15 @@ del_from_list(struct yahoo_connections * list, struct yahoo_data *yd)
 
 /*
  * Name: find_conn_by_id
- * 	Returns a yahoo_data item from this list identified
- * 	by the specified id
+ *      Returns a yahoo_data item from this list identified
+ *      by the specified id
  *
  * Parameters:
- * 	list - a pointer to the list
- * 	id   - the id that identifies the element to be returned
+ *      list - a pointer to the list
+ *      id   - the id that identifies the element to be returned
  *
  * Returns:
- * 	a pointer to the data element or NULL if it isn't found
+ *      a pointer to the data element or NULL if it isn't found
  */
 struct yahoo_data * 
 find_conn_by_id(struct yahoo_connections * list, guint32 id)

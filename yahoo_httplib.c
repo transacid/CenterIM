@@ -1,4 +1,4 @@
-#include <glib.h>
+#include "pseudoglib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,7 +19,7 @@ int yahoo_tcp_readline(char *ptr, int maxlen, int fd)
 
 		if ((rc = read(fd, &c, 1)) == 1)
 		{
-			if(c == '\r')			/* get rid of \r */
+			if(c == '\r')                   /* get rid of \r */
 				continue;
 			*ptr = c;
 			if (c == '\n')
@@ -29,9 +29,9 @@ int yahoo_tcp_readline(char *ptr, int maxlen, int fd)
 		else if (rc == 0)
 		{
 			if (n == 1)
-				return (0);		/* EOF, no data */
+				return (0);             /* EOF, no data */
 			else
-				break;			/* EOF, w/ data */
+				break;                  /* EOF, w/ data */
 		}
 		else
 		{
