@@ -31,6 +31,7 @@ class irchook: public abstracthook {
 	vector<char *> userlist;
 	vector<channelInfo> channels;
 	vector<string> searchchannels;
+	map<string, string> awaymessages;
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
@@ -81,6 +82,7 @@ class irchook: public abstracthook {
 	imstatus getstatus() const;
 
 	void requestinfo(const imcontact &c);
+	void requestawaymsg(const imcontact &c);
 	void sendupdateuserinfo(icqcontact &c, const string &newpass);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);

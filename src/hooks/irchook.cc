@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.12 2002/04/09 15:48:13 konst Exp $
+* $Id: irchook.cc,v 1.13 2002/04/10 08:49:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -405,6 +405,11 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
     saveconfig();
 }
 
+void irchook::requestawaymsg(const imcontact &ic) {
+    em.store(immessage(ic, imevent::incoming, string() +
+	_("* Away message:") + "\n\n" + awaymessages[ic.nickname]));
+}
+
 void irchook::saveconfig() const {
     vector<channelInfo>::iterator ic;
     vector<channelInfo> savech = getautochannels();
@@ -489,6 +494,7 @@ void irchook::connected(void *conn, void *cli, ...) {
 
     irhook.ourstatus = available;
     irhook.setautostatus(irhook.manualstatus);
+    irhook.awaymessages.clear();
 }
 
 void irchook::disconnected(void *conn, void *cli, ...) {
@@ -653,11 +659,13 @@ void irchook::buddyaway(void *conn, void *cli, ...) {
 
     va_start(ap, cli);
     char *nick = va_arg(ap, char *);
+    char *msg = va_arg(ap, char *);
     va_end(ap);
 
     if(nick)
     if(strlen(nick)) {
 	irhook.userstatus(nick, away);
+	if(msg) irhook.awaymessages[nick] = rusconv("wk", msg);
     }
 
     DLOG("buddyaway");

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.13 2002/04/07 15:13:27 konst Exp $
+* $Id: aimhook.cc,v 1.14 2002/04/10 08:48:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -473,6 +473,7 @@ void aimhook::buddyaway(void *conn, void *cli, ...) {
 
     va_start(ap, cli);
     char *nick = va_arg(ap, char *);
+    char *msg = va_arg(ap, char *);
     va_end(ap);
 
     if(nick)

@@ -15,6 +15,7 @@ Contents
     2.3. MSN accounts
     2.4. AIM accounts
     2.5. IRC accounts
+	2.5.1. IRC channels
     2.6. Updating details
 3. User interface
     3.1. The ESC key
@@ -181,7 +182,10 @@ it to be readable.
 ---------------------------
 
   This section says a bit about registering new and entering existing
-accounts' details into configuration of your centericq.
+accounts' details into configuration of your centericq. Everything that
+centericq can do about it is available through the "Accounts" dialog
+displayed at the start and then residing under the f4->Accounts.. menu
+item.
 
 
 2.1. ICQ accounts
@@ -231,6 +235,17 @@ centericq. You don't need to register to connect to irc. All you need is
 just choose a nick which is not used by anyone else. Otherwise it'll be
 reported as soon as you try to login. So set any nick and a host name of
 the server you want to chat on, and go ahead!
+
+
+2.5.1. IRC channels
+-------------------
+
+  With centericq so far you can only exchange private messages on IRC
+networks, and talking on channels is not yet available. But you can
+stay (join and part) various channels so that other users can see your
+presence. These things are done with the "Channel manager" dialog which
+can be invoked with selection of the respective item under the "irc" node
+in the account manager dialog.
 
 
 2.6. Updating details
@@ -530,35 +545,61 @@ so on.
 6.1. Finding and adding users
 -----------------------------
 
-  The most common way to add a contact to your list is to use the
+  The most common way to add an IM contact to your list is to use the
 "find/add user(s)" dialog invoked from the global menu. First you have
 to find the contact you wanna add. Centericq allows you to search for
-users with various parameters. You can add a user knowing his UIN, or
-see a list of people matching your criterias. In fact, ICQ server sends
-only first 40 matching UINs, but usually it's quite enough.
+users with various parameters in various networks.
 
-  Note that you can use simple wildcards in the text input fields. It's
-possible to put "*" there. For example, you don't remember my last name
-exactly, but know only several first letters. Then just type in a first
-name ("Konstantin") and fill in the "last name" field with "Klyag*". The
-same trick can be done with other fields: "city", "nickname", "company",
-etc..
+  In ICQ, you can add a user knowing his UIN, or see a list of people
+matching your criterias. In fact, ICQ server sends only first 40 matching
+UINs, but usually it's quite enough.
+
+  Note that in ICQ search requests you can use simple wildcards in the
+text input fields. It's possible to put "*" there. For example, you don't
+remember my last name exactly, but know only several first letters. Then
+just type in a first name ("Konstantin") and fill in the "last name" field
+with "Klyag*". The same trick can be done with other fields: "city",
+"nickname", "company", etc..
+
+  Yahoo, MSN and AIM networks support in centericq does only allow to add
+users by nicknames.
+
+  With IRC it's possible to get users from channels. For more info on
+channels and other IRC related stuff, please refer to http://www.irc.org/.
+So, with centericq you can either fetch a list of users for a specified
+channel, or (sic!) find users that stay on several channels simultaneously.
+To perform the latter, just put several channel names separated with spaces.
+For example, the "#centericq #linux" query will show a list of users that
+are currently talking on both channels.
 
 
 6.1.1. Some useful hints
 ------------------------
 
-  You can skip the finding step by issuing the following shell command
-to add a user:
+  You can skip the finding step by issuing one of the following shell
+commands to add a user (depends on an IM type):
 
     $ mkdir ~/.centericq/<UIN of a user to add>
+	This one is for ICQ
+
+    $ mkdir ~/.centericq/y<nickname>
+	For Yahoo!
+
+    $ mkdir ~/.centericq/m<nickname>
+	For MSN
+
+    $ mkdir ~/.centericq/a<nickname>
+	For AIM
+
+    $ mkdir ~/.centericq/i<nickname>
+	For IRC
 
 Don't forget to restart centericq so that it re-reads the contact list.
 Though, it's better anyway to follow the usual find/add procedure.
 
-  Another intresting trick I wanna share with you. Because of a natural
-couriousity, sometimes names of people get me intrested in finding out
-about their ethnical origin. Once I saw a last name, Aslam, which seemed
+  Another intresting ICQ related trick I wanna share with you. Because of
+a natural couriousity, sometimes names of people get me intrested in finding
+out about their ethnical origin. Once I saw a last name, Aslam, which seemed
 like a muslim one, but I had no idea which country the guy originated
 from. I decided to use ICQ to find out. Opened the "find/add" dialog and
 typed that in. After looking at several matched contacts I noticed the
@@ -700,7 +741,7 @@ the message as soon as connect to the ICQ network.
 7.6. Away messages
 ------------------
 
-  Another feature of ICQ network supported by centericq is away
+  Another feature of IM networks supported by centericq is away
 messages. It's quite a useful way to explain to everybody why you're
 away from your box right now. To read your reason for being away they
 just have to use the feature to fetch an away message in their ICQ
@@ -860,10 +901,10 @@ engine is to be affected.
     The argument parameter is a letter which indicates which status is
     to be set:
 
-	o (Online)		_ (Offline)
-	a (Away)		d (Don't disturb)
-	n (N/A)			c (Occupied)
-	f (Free for chat)	i (Invisible)
+	o (Online)              _ (Offline)
+	a (Away)                d (Don't disturb)
+	n (N/A)                 c (Occupied)
+	f (Free for chat)       i (Invisible)
 
 -p or --protocol <protocol name>
 
