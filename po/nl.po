@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2002-04-16 15:36+0300\n"
+"POT-Creation-Date: 2002-04-16 18:09+0300\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
@@ -1551,20 +1551,25 @@ msgstr "+ [icq] ingelogd"
 msgid "+ [aim] disconnected from the network"
 msgstr "+ [yahoo] disconnected van het netwerk"
 
-#: src/hooks/aimhook.cc:360
+#: src/hooks/aimhook.cc:364
+#, fuzzy
+msgid "aim connection failed"
+msgstr "+ [msn] verbinden met %s"
+
+#: src/hooks/aimhook.cc:366
 #, fuzzy, c-format
 msgid "+ [aim] connect failed: %s"
 msgstr "+ [msn] verbinden met %s"
 
-#: src/hooks/aimhook.cc:377
+#: src/hooks/aimhook.cc:383
 msgid "+ [aim] password was changed successfully"
 msgstr ""
 
-#: src/hooks/aimhook.cc:400
+#: src/hooks/aimhook.cc:406
 msgid "The user has no profile information."
 msgstr ""
 
-#: src/hooks/aimhook.cc:497
+#: src/hooks/aimhook.cc:503
 #, fuzzy
 msgid "+ [aim] password sent"
 msgstr " wachtwoord: "

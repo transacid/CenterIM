@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.6.5\n"
-"POT-Creation-Date: 2002-04-16 15:36+0300\n"
+"POT-Creation-Date: 2002-04-16 18:09+0300\n"
 "PO-Revision-Date: 2002-03-12 21:22+0200\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -1548,20 +1548,25 @@ msgstr "+ [icq] законектилися"
 msgid "+ [aim] disconnected from the network"
 msgstr "+ [yahoo] в╕д'╓днано в╕д мереж╕"
 
-#: src/hooks/aimhook.cc:360
+#: src/hooks/aimhook.cc:364
+#, fuzzy
+msgid "aim connection failed"
+msgstr "+ [msn] п╕д'╓днання до %s"
+
+#: src/hooks/aimhook.cc:366
 #, fuzzy, c-format
 msgid "+ [aim] connect failed: %s"
 msgstr "+ [msn] п╕д'╓днання до %s"
 
-#: src/hooks/aimhook.cc:377
+#: src/hooks/aimhook.cc:383
 msgid "+ [aim] password was changed successfully"
 msgstr ""
 
-#: src/hooks/aimhook.cc:400
+#: src/hooks/aimhook.cc:406
 msgid "The user has no profile information."
 msgstr ""
 
-#: src/hooks/aimhook.cc:497
+#: src/hooks/aimhook.cc:503
 #, fuzzy
 msgid "+ [aim] password sent"
 msgstr " пароль: "

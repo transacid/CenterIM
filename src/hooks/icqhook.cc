@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.80 2002/04/16 13:11:47 konst Exp $
+* $Id: icqhook.cc,v 1.81 2002/04/16 16:51:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -925,9 +925,6 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
-    char buf[64];
-    string lastip, sbuf;
-    int ip;
 
     if(c) {
 	ContactRef ic = cli.getContact(ev->getUIN());
@@ -939,33 +936,14 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
 	logger.putonline(c->getdesc(), c->getstatus(), nst);
 	c->setstatus(nst);
 
-	if(c->getstatus() != offline) {
+	if(c->getstatus() != offline)
 	    c->setlastseen();
-
-	    if(inet_ntop(AF_INET, &(ip = ntohl(ic->getExtIP())), buf, 64)) {
-		lastip = buf;
-	    }
-
-	    if(lastip.find_first_not_of(".0") != -1) {
-		if(inet_ntop(AF_INET, &(ip = ntohl(ic->getLanIP())), buf, 64)) {
-		    sbuf = buf;
-
-		    if(sbuf.find_first_not_of(".0") != -1) {
-			if(lastip != sbuf) {
-			    if(!lastip.empty()) lastip += " ";
-			    lastip += sbuf;
-			}
-		    }
-		}
-
-		c->setlastip(lastip);
-	    }
-	}
     }
 }
 
 void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
+    ContactRef ic = cli.getContact(ev->getUIN());
 
     if(!c) {
 	c = clist.get(contactroot);
@@ -978,7 +956,27 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
     }
 
     if(!ev->isTransientDetail()) {
-	updateinforecord(cli.getContact(ev->getUIN()), c);
+	updateinforecord(ic, c);
+
+    } else {
+	char buf[64];
+	string lastip, sbuf;
+	int ip;
+
+	if(inet_ntop(AF_INET, &(ip = ntohl(ic->getExtIP())), buf, 64))
+	    lastip = buf;
+
+	if(lastip.find_first_not_of(".0") != -1)
+	if(inet_ntop(AF_INET, &(ip = ntohl(ic->getLanIP())), buf, 64)) {
+	    sbuf = buf;
+	
+	    if(sbuf.find_first_not_of(".0") != -1 && lastip != sbuf) {
+		if(!lastip.empty()) lastip += " ";
+		lastip += sbuf;
+	    }
+
+	    c->setlastip(lastip);
+	}
     }
 }
 
