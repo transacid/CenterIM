@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.84 2002/09/13 13:15:52 konst Exp $
+* $Id: icqconf.cc,v 1.85 2002/09/23 07:01:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -881,19 +881,21 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 }
 
 void icqconf::usage() const {
-    cout << "Usage: " << argv0 << " [OPTION].." << endl;
+    cout << _("Usage: ") << argv0 << " [OPTION].." << endl;
 
-    cout << endl << "General options:" << endl;
-    cout << "  --ascii, -a              use characters for windows and UI controls" << endl;
-    cout << "  --help                   display this stuff" << endl;
+    cout << endl << _("General options:") << endl;
+    cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
+    cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
+    cout << _("  --help                   display this stuff") << endl;
 
-    cout << endl << "Events sending options:" << endl;
-    cout << "  -s, --send <event type>  event type; can be msg, sms or url" << endl;
-    cout << "  -S, --status <status>    change the current IM status" << endl;
-    cout << "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc" << endl;
-    cout << "  -t, --to <destination>   destination UIN or nick (depends on protocol)" << endl;
+    cout << endl << _("Events sending options:") << endl;
+    cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;
+    cout << _("  -S, --status <status>    change the current IM status") << endl;
+    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc") << endl;
+    cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
+    cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
 
-    cout << endl << "Report bugs to <centericq-bugs@konst.org.ua>." << endl;
+    cout << endl << _("Report bugs to <centericq-bugs@konst.org.ua>.") << endl;
 }
 
 void icqconf::setmakelog(bool slog) {

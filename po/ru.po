@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.4\n"
-"POT-Creation-Date: 2002-09-20 16:14+0300\n"
+"POT-Creation-Date: 2002-09-23 09:29+0300\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -618,6 +618,57 @@ msgstr "неизвестный тип IM сети"
 #: src/icqconf.cc:875
 msgid "status change error: "
 msgstr "ошибка смены статуса: "
+
+#: src/icqconf.cc:884
+msgid "Usage: "
+msgstr "Использование: "
+
+#: src/icqconf.cc:886
+msgid "General options:"
+msgstr "Основные опции:"
+
+#: src/icqconf.cc:887
+msgid "  --ascii, -a              use characters for windows and UI controls"
+msgstr "  --ascii, -a              использовать ASCII символы для окошек и рамок"
+
+#: src/icqconf.cc:888
+msgid "  --basedir, -b <path>     set a custom base directory"
+msgstr "  --basedir, -b <путь>     задать другую базовую директорию"
+
+#: src/icqconf.cc:889
+msgid "  --help                   display this stuff"
+msgstr "  --help                   показать этот экран"
+
+#: src/icqconf.cc:891
+msgid "Events sending options:"
+msgstr "Опции для посылки сообщений:"
+
+#: src/icqconf.cc:892
+msgid "  -s, --send <event type>  event type; can be msg, sms or url"
+msgstr "  -s, --send <тип>         тип сообщения; может быть msg, sms или url"
+
+#: src/icqconf.cc:893
+msgid "  -S, --status <status>    change the current IM status"
+msgstr "  -S, --status <статус>    сменить текущий статус в одой из IM сетей"
+
+#: src/icqconf.cc:894
+msgid ""
+"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc"
+msgstr "  -p, --proto <протокол>   тип протокола; может быть icq, yahoo, msn, aim или irc"
+
+#: src/icqconf.cc:895
+msgid ""
+"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
+msgstr "  -t, --to <назначение>    UIN или nickname получателя (зависит от протокола)"
+
+#: src/icqconf.cc:896
+msgid ""
+"  -n, --number <phone#>    mobile number to send an event to (sms/icq only)"
+msgstr "  -n, --number <тел.ном.>  мобильный номер получателя (только для sms)"
+
+#: src/icqconf.cc:898
+msgid "Report bugs to <centericq-bugs@konst.org.ua>."
+msgstr "Сообщения об ошибках присылать на <centericq-bugs@konst.org.ua>."
 
 #: src/icqcontact.cc:699
 msgid "The user has a birthday today"
