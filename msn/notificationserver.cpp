@@ -27,6 +27,8 @@
 #include <msn/util.h>
 #include <curl/curl.h>
 #include <algorithm>
+#include <cassert>
+#include <cctype>
 
 #ifndef WIN32
 #include <unistd.h>
@@ -43,30 +45,31 @@ namespace MSN
     static size_t msn_handle_curl_header(void *ptr, size_t size, size_t nmemb, void *stream) ;    
 	    
     NotificationServerConnection::NotificationServerConnection(NotificationServerConnection::AuthData & auth_)
-	: Connection(), auth(auth_)
+	: Connection(), auth(auth_), connectionStatus(NS_DISCONNECTED)
     {
 	registerCommandHandlers();
     }
     
     NotificationServerConnection::NotificationServerConnection(Passport username_, std::string password_) 
-	: Connection(), auth(username_, password_)
+	: Connection(), auth(username_, password_), connectionStatus(NS_DISCONNECTED)
+    {
+	registerCommandHandlers();
+    }
+    
+    NotificationServerConnection::NotificationServerConnection() : Connection(), auth(Passport(), ""), connectionStatus(NS_DISCONNECTED)
     {
 	registerCommandHandlers();
     }
     
     NotificationServerConnection::~NotificationServerConnection()
     {
-	ext::closingConnection(this);
-	std::list<SwitchboardServerConnection *> list = _switchboardConnections;
-	std::list<SwitchboardServerConnection *>::iterator i = list.begin();
-	for (; i != list.end(); i++)
-	{
-	    delete *i;
-	}
+	if (connectionStatus != NS_DISCONNECTED)
+	    this->disconnect();
     }
     
     Connection *NotificationServerConnection::connectionWithSocket(int fd)
     {
+	assert(connectionStatus != NS_DISCONNECTED);
 	std::list<SwitchboardServerConnection *> & list = _switchboardConnections;
 	std::list<SwitchboardServerConnection *>::iterator i = list.begin();
 	
@@ -84,6 +87,7 @@ namespace MSN
     
     SwitchboardServerConnection *NotificationServerConnection::switchboardWithOnlyUser(Passport username)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::list<SwitchboardServerConnection *> & list = _switchboardConnections;
 	std::list<SwitchboardServerConnection *>::iterator i = list.begin();
 
@@ -98,27 +102,32 @@ namespace MSN
     
     const std::list<SwitchboardServerConnection *> & NotificationServerConnection::switchboardConnections()
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	return _switchboardConnections;
     }
     
     void NotificationServerConnection::addSwitchboardConnection(SwitchboardServerConnection *c)
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	_switchboardConnections.push_back(c);
     }
 
     void NotificationServerConnection::removeSwitchboardConnection(SwitchboardServerConnection *c)
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	_switchboardConnections.remove(c);
     }
     
     void NotificationServerConnection::addCallback(NotificationServerCallback callback,
 						   int trid, void *data)
     {
+	assert(connectionStatus >= NS_CONNECTING);        
 	this->callbacks[trid] = std::make_pair(callback, data);
     }
     
     void NotificationServerConnection::removeCallback(int trid)
     {
+	assert(connectionStatus >= NS_CONNECTING);        
 	this->callbacks.erase(trid);
     }
     
@@ -146,23 +155,15 @@ namespace MSN
     
     void NotificationServerConnection::dispatchCommand(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	std::map<std::string, void (NotificationServerConnection::*)(std::vector<std::string> &)>::iterator i = commandHandlers.find(args[0]);
 	if (i != commandHandlers.end())
 	    (this->*commandHandlers[args[0]])(args);
     }
     
-    void NotificationServerConnection::sendMessage(Passport recipient, Message *msg)
-    {
-	SwitchboardServerConnection *sb = this->switchboardWithOnlyUser(recipient);
-	
-	if (sb)
-	    sb->sendMessage(recipient, msg);
-	else
-	    this->requestSwitchboardConnection(recipient, msg, NULL);
-    }
-    
     void NotificationServerConnection::handle_OUT(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	if (args.size() > 1)
 	{
 	    if (args[1] == "OTH")
@@ -177,11 +178,12 @@ namespace MSN
 				      args[1]).c_str());
 	    }
 	}
-	delete this;
+	this->disconnect();
     }
     
     void NotificationServerConnection::handle_ADD(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	if (args[2] == "RL")
 	{
 	    ext::gotNewReverseListEntry(this, args[4], decodeURL(args[5]));
@@ -199,6 +201,7 @@ namespace MSN
 
     void NotificationServerConnection::handle_REM(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	int groupID = -1;
 	if (args.size() > 4)
 	    groupID = decimalFromString(args[4]);
@@ -209,35 +212,40 @@ namespace MSN
     
     void NotificationServerConnection::handle_BLP(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::gotBLP(this, args[3][0]);
 	ext::gotLatestListSerial(this, decimalFromString(args[3]));
     }
 
     void NotificationServerConnection::handle_GTC(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::gotGTC(this, args[3][0]);
 	ext::gotLatestListSerial(this, decimalFromString(args[3]));
     }
     
     void NotificationServerConnection::handle_REA(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::gotFriendlyName(this, decodeURL(args[4]));
 	ext::gotLatestListSerial(this, decimalFromString(args[2]));        
     }
     
     void NotificationServerConnection::handle_CHG(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::changedStatus(this, buddyStatusFromString(args[2]));
     }
     
     void NotificationServerConnection::handle_CHL(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	md5_state_t state;
 	md5_byte_t digest[16];
 	int a;
 	
 	md5_init(&state);
-	md5_append(&state, (md5_byte_t *)(args[2].c_str()), args[2].size());
+	md5_append(&state, (md5_byte_t *)(args[2].c_str()), (int) args[2].size());
 	md5_append(&state, (md5_byte_t *)"VT6PX?UQTM4WM%YR", 16);
 	md5_finish(&state, digest);
 	
@@ -256,30 +264,35 @@ namespace MSN
     
     void NotificationServerConnection::handle_ILN(std::vector<std::string> & args)
     {
+	assert(connectionStatus == NS_CONNECTED);
 	ext::buddyChangedStatus(this, args[3], decodeURL(args[4]), buddyStatusFromString(args[2]));
     }
     
     void NotificationServerConnection::handle_NLN(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::buddyChangedStatus(this, args[2], decodeURL(args[3]), buddyStatusFromString(args[1]));
     }
     
     void NotificationServerConnection::handle_FLN(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::buddyOffline(this, args[1]);
     }    
     
     void NotificationServerConnection::handle_MSG(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	Connection::handle_MSG(args);
     }
     
     void NotificationServerConnection::handle_RNG(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	SwitchboardServerConnection::AuthData auth = SwitchboardServerConnection::AuthData(this->auth.username,
 											   args[1],
 											   args[4]);
-	SwitchboardServerConnection *newSBconn = new SwitchboardServerConnection(auth, this);
+	SwitchboardServerConnection *newSBconn = new SwitchboardServerConnection(auth, *this);
 	this->addSwitchboardConnection(newSBconn);  
 	std::pair<std::string, int> server_address = splitServerAddress(args[2]);  
 	newSBconn->connect(server_address.first, server_address.second);        
@@ -287,18 +300,21 @@ namespace MSN
     
     void NotificationServerConnection::handle_ADG(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);        
 	ext::addedGroup(this, args[3], decimalFromString(args[4]));
 	ext::gotLatestListSerial(this, decimalFromString(args[2]));
     }
 
     void NotificationServerConnection::handle_RMG(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::removedGroup(this, decimalFromString(args[3]));
 	ext::gotLatestListSerial(this, decimalFromString(args[2]));
     }
 
     void NotificationServerConnection::handle_REG(std::vector<std::string> & args)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	ext::renamedGroup(this, decimalFromString(args[3]), args[4]);
 	ext::gotLatestListSerial(this, decimalFromString(args[2]));
     }
@@ -306,6 +322,7 @@ namespace MSN
 
     void NotificationServerConnection::setState(BuddyStatus state)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "CHG " << trid++ << " " << buddyStatusToString(state) << " 0\r\n";
 	write(buf_);        
@@ -313,6 +330,7 @@ namespace MSN
     
     void NotificationServerConnection::setBLP(char setting)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "BLP " << trid++ << " " << setting << "L\r\n";
 	write(buf_);        
@@ -320,6 +338,7 @@ namespace MSN
 
     void NotificationServerConnection::setGTC(char setting)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "GTC " << trid++ << " " << setting << "\r\n";
 	write(buf_);        
@@ -327,6 +346,7 @@ namespace MSN
     
     void NotificationServerConnection::setFriendlyName(std::string friendlyName) throw (std::runtime_error)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	if (friendlyName.size() > 387)
 	    throw std::runtime_error("Friendly name too long!");
 	
@@ -337,6 +357,7 @@ namespace MSN
 
     void NotificationServerConnection::addToList(std::string list, Passport buddyName)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "ADD " << trid++ << " " << list << " " << buddyName << " " << buddyName << "\r\n";
 	write(buf_);        
@@ -344,6 +365,7 @@ namespace MSN
     
     void NotificationServerConnection::removeFromList(std::string list, Passport buddyName)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "REM " << trid++ << " " << list << " " << buddyName << "\r\n";
 	write(buf_);        
@@ -351,6 +373,7 @@ namespace MSN
     
     void NotificationServerConnection::addToGroup(Passport buddyName, int groupID)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "ADD " << trid++ << " " << "FL" << " " << buddyName << " " << buddyName <<  groupID << "\r\n";
 	write(buf_);
@@ -358,6 +381,7 @@ namespace MSN
     
     void NotificationServerConnection::removeFromGroup(Passport buddyName, int groupID)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "REM " << trid++ << " " << "FL" << " " << buddyName << groupID << "\r\n";
 	write(buf_);
@@ -365,6 +389,7 @@ namespace MSN
     
     void NotificationServerConnection::addGroup(std::string groupName)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "ADG " << trid++ << encodeURL(groupName) << " " << 0 << "\r\n";
 	write(buf_);        
@@ -372,6 +397,7 @@ namespace MSN
     
     void NotificationServerConnection::removeGroup(int groupID)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "RMG " << trid++ << groupID << "\r\n";
 	write(buf_);
@@ -379,6 +405,7 @@ namespace MSN
     
     void NotificationServerConnection::renameGroup(int groupID, std::string newGroupName)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
 	buf_ << "REG " << trid++ << groupID << " " << encodeURL(newGroupName) << " " << 0 << "\r\n";
 	write(buf_);
@@ -387,6 +414,7 @@ namespace MSN
     
     void NotificationServerConnection::synchronizeLists(int version)
     {
+	assert(connectionStatus >= NS_CONNECTED && connectionStatus != NS_SYNCHRONISING);
 	ListSyncInfo *info = new ListSyncInfo(version);
 	
 	std::ostringstream buf_;
@@ -394,29 +422,24 @@ namespace MSN
 	write(buf_);
 	
 	this->addCallback(&NotificationServerConnection::callback_SyncData, trid, (void *)info);
-	this->synctrid = trid++;        
+	this->synctrid = trid++;
+	connectionStatus = NS_SYNCHRONISING;
     }
     
     void NotificationServerConnection::sendPing()
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	write("PNG\r\n");        
     }
     
-    void NotificationServerConnection::requestSwitchboardConnection(Passport username, Message *msg, void *tag)
+    void NotificationServerConnection::requestSwitchboardConnection(const void *tag)
     {
-	SwitchboardServerConnection::AuthData *auth = new SwitchboardServerConnection::AuthData(this->auth.username, 
-											       username, (msg ? new Message(*msg) : NULL), 
-											       tag);
+	assert(connectionStatus >= NS_CONNECTED);        
+	SwitchboardServerConnection::AuthData *auth = new SwitchboardServerConnection::AuthData(this->auth.username, tag);
 	std::ostringstream buf_;
 	buf_ << "XFR " << trid << " SB\r\n";
 	write(buf_);
-	this->addCallback(&NotificationServerConnection::callback_TransferToSwitchboard, trid++, (void *)auth);
-    }
-    
-    void NotificationServerConnection::requestSwitchboardConnection(void *tag)
-    {
-	Passport p;
-	requestSwitchboardConnection(p, NULL, tag);
+	this->addCallback(&NotificationServerConnection::callback_TransferToSwitchboard, trid++, (void *)auth);        
     }
     
     template <class _Tp>
@@ -449,13 +472,16 @@ public:
     
     void NotificationServerConnection::socketConnectionCompleted()
     {
+	assert(connectionStatus == NS_CONNECTING);
 	Connection::socketConnectionCompleted();
 	ext::unregisterSocket(this->sock);
 	ext::registerSocket(this->sock, 1, 0);
+	connectionStatus = NS_CONNECTED;
     }
     
-    void NotificationServerConnection::connect(std::string hostname, unsigned int port)
+    void NotificationServerConnection::connect(const std::string & hostname, unsigned int port)
     {
+	assert(connectionStatus == NS_DISCONNECTED);
 	connectinfo *info = new connectinfo(this->auth.username, this->auth.password);
 	
 	if ((this->sock = ext::connectToServer(hostname, port, &this->connected)) == -1)
@@ -464,7 +490,7 @@ public:
 	    ext::closingConnection(this);
 	    return;
 	}
-	
+	connectionStatus = NS_CONNECTING;
 	ext::registerSocket(this->sock, 0, 1);
 	
 	std::ostringstream buf_;
@@ -473,8 +499,41 @@ public:
 	this->addCallback(&NotificationServerConnection::callback_NegotiateCVR, trid++, (void *)info);
     }
     
+    void NotificationServerConnection::connect(const std::string & hostname, unsigned int port, const Passport & username, const std::string & password)
+    {
+	this->auth.username = username;
+	this->auth.password = password;
+	this->connect(hostname, port);
+    }
+    
+    void NotificationServerConnection::disconnect()
+    {
+	assert(connectionStatus != NS_DISCONNECTED);
+	ext::closingConnection(this);
+	ext::unregisterSocket(this->sock);
+	::close(this->sock);
+	
+	std::list<SwitchboardServerConnection *> list = _switchboardConnections;
+	std::list<SwitchboardServerConnection *>::iterator i = list.begin();
+	for (; i != list.end(); i++)
+	{
+	    delete *i;
+	}
+	
+	connectionStatus = NS_DISCONNECTED;
+    }
+    
+    void NotificationServerConnection::disconnectForTransfer()
+    {
+	assert(connectionStatus != NS_DISCONNECTED);
+	ext::unregisterSocket(this->sock);
+	::close(this->sock);
+	connectionStatus = NS_DISCONNECTED;
+    }
+    
     void NotificationServerConnection::handleIncomingData()
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	while (this->isWholeLineAvailable())
 	{
 	    std::vector<std::string> args = this->getLine();
@@ -493,8 +552,7 @@ public:
 		//  0    1  2             3              4        5    
 		this->callbacks.clear(); // delete the callback data
 		
-		ext::unregisterSocket(this->sock);
-		::close(this->sock);
+		this->disconnectForTransfer();
 		
 		std::pair<std::string, int> server_address = splitServerAddress(args[3]);
 		this->connect(server_address.first, server_address.second);
@@ -568,6 +626,7 @@ public:
     
     void NotificationServerConnection::callback_SyncData(std::vector<std::string> & args, int trid, void *data) throw (std::runtime_error)
     {
+	assert(connectionStatus == NS_SYNCHRONISING);
 	ListSyncInfo *info = static_cast<ListSyncInfo *>(data);
 	
 	if (args[0] == "SYN")
@@ -662,6 +721,7 @@ public:
 	    ext::gotBuddyListInfo(this, info);
 	    this->synctrid = 0;
 	    delete info;
+	    connectionStatus = NS_CONNECTED;
 	}
 	else if (info->progress > 63 || info->progress < 0)
 	    throw std::runtime_error("Corrupt sync progress!");
@@ -670,6 +730,7 @@ public:
     
     void NotificationServerConnection::callback_NegotiateCVR(std::vector<std::string> & args, int trid, void *data)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	connectinfo * info = (connectinfo *) data;
 	this->removeCallback(trid);
 	
@@ -677,9 +738,7 @@ public:
 	{
 	    ext::showError(NULL, "Protocol negotiation failed");
 	    delete info;
-	    ext::unregisterSocket(this->sock);
-	    close(this->sock);
-	    this->sock = -1;
+	    this->disconnect();
 	    return;
 	}
 	
@@ -695,12 +754,14 @@ public:
     
     void NotificationServerConnection::callback_TransferToSwitchboard(std::vector<std::string> & args, int trid, void *data)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	SwitchboardServerConnection::AuthData *auth = static_cast<SwitchboardServerConnection::AuthData *>(data);
 	this->removeCallback(trid);
 	
 	if (args[0] != "XFR")
 	{
 	    this->showError(decimalFromString(args[0]));
+	    this->disconnect();
 	    delete auth;
 	    return;
 	}
@@ -708,7 +769,7 @@ public:
 	auth->cookie = args[5];
 	auth->sessionID = "";
 	
-	SwitchboardServerConnection *newconn = new SwitchboardServerConnection(*auth, this);
+	SwitchboardServerConnection *newconn = new SwitchboardServerConnection(*auth, *this);
 	
 	this->addSwitchboardConnection(newconn);
 	std::pair<std::string, int> server_address = splitServerAddress(args[3]);
@@ -719,6 +780,7 @@ public:
     
     void NotificationServerConnection::callback_RequestUSR(std::vector<std::string> & args, int trid, void *data)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	connectinfo *info = (connectinfo *)data;
 	this->removeCallback(trid);
 	
@@ -726,9 +788,7 @@ public:
 	{
 	    ext::showError(NULL, "Protocol negotiation failed");
 	    delete info;
-	    ext::unregisterSocket(this->sock);
-	    close(this->sock);
-	    this->sock = -1;
+	    this->disconnect();
 	    return;
 	}
 	
@@ -745,6 +805,7 @@ public:
     
     void NotificationServerConnection::callback_PassportAuthentication(std::vector<std::string> & args, int trid, void * data)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	connectinfo * info;
 	
 	CURL *curl;
@@ -760,13 +821,13 @@ public:
 	if (isdigit(args[0][0]))
 	{
 	    this->showError(decimalFromString(args[0]));
-	    delete this;
 	    delete info;
+	    this->disconnect();
 	    return;
 	}
 	
 	if (args.size() >= 4 && args[4].empty()) {
-	    delete this;
+	    this->disconnect();
 	    delete info;
 	    return;
 	}
@@ -775,7 +836,7 @@ public:
 	/* args[4] contains the most interesting part we need to send on */
 	curl = curl_easy_init();
 	if (curl == NULL) {
-	    delete this;
+	    this->disconnect();
 	    delete info;
 	    return;
 	}
@@ -835,7 +896,7 @@ public:
 	    // No authentication cookie /usually/ means that authentication failed.
 	    this->showError(911);
 	    
-	    delete this;
+	    this->disconnect();
 	    delete info;
 	    return;
 	}
@@ -853,6 +914,7 @@ public:
     
     void NotificationServerConnection::callback_AuthenticationComplete(std::vector<std::string> & args, int trid, void * data)
     {
+	assert(connectionStatus >= NS_CONNECTED);
 	connectinfo * info = (connectinfo *) data;
 	this->removeCallback(trid);
 	
@@ -860,7 +922,7 @@ public:
 	{
 	    this->showError(decimalFromString(args[0]));
 	    delete info;
-	    delete this;
+	    this->disconnect();
 	    return;
 	}
 	
@@ -896,7 +958,7 @@ public:
 #endif
 	if (! cookiedata.empty()) 
 	{
-	    unsigned int pos = cookiedata.find(",from-PP='");
+	    size_t pos = cookiedata.find(",from-PP='");
 	    if (pos == std::string::npos) {
 		info->cookie = "";
 	    } else {

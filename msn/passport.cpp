@@ -27,6 +27,9 @@ namespace MSN
 {
     void Passport::validate()
     {
+        if (email.find(" ") != std::string::npos)
+            throw InvalidPassport("Passport must not contain any spaces!");
+        
         if (email.find("@") == std::string::npos || email.find("@") != email.rfind("@"))
             throw InvalidPassport("Passport must contain exactly one '@' character!");
         

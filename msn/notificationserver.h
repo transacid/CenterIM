@@ -124,7 +124,7 @@ public:
         std::string password;
         std::string cookie;
         
-        connectinfo(Passport & username_, std::string & password_) : username(username_), password(password_), cookie("") {};
+        connectinfo(const Passport & username_, const std::string & password_) : username(username_), password(password_), cookie("") {};
     };    
         
     /** Represents a connection to a MSN notification server.
@@ -143,8 +143,8 @@ private:
 public:
             std::string password;
             
-            AuthData(Passport & passport_,
-                     std::string & password_) : 
+            AuthData(const Passport & passport_,
+                     const std::string & password_) : 
                 ::MSN::AuthData(passport_), password(password_) {} ;
         };
         
@@ -160,6 +160,9 @@ public:
          *  @a password.
          */
         NotificationServerConnection(Passport username, std::string password);
+        
+        /** Create a NotificationServerConnection with no specified username or password. */
+        NotificationServerConnection();
         
         virtual ~NotificationServerConnection();
         virtual void dispatchCommand(std::vector<std::string> & args);
@@ -245,18 +248,18 @@ public:
         /** Request a switchboard connection with @a username.  @a msg will be sent when
          *  @a username joins the switchboard.
          */
-        void requestSwitchboardConnection(Passport username, Message *msg, void *tag);
+        //        void requestSwitchboardConnection(Passport username, Message *msg, void *tag);
         
         /** Request a switchboard connection.
          */
-        void requestSwitchboardConnection(void *tag);
+        void requestSwitchboardConnection(const void *tag);
         /** @} */
         
         void checkReverseList(ListSyncInfo *);
 
-        virtual void connect(std::string hostname, unsigned int port);
-        virtual void sendMessage(Passport recipient, Message *msg);
-        virtual void sendMessage(Passport recipient, std::string & s) { Connection::sendMessage(recipient, s); }
+        virtual void connect(const std::string & hostname, unsigned int port);
+        virtual void connect(const std::string & hostname, unsigned int port, const Passport & username,  const std::string & password);
+        virtual void disconnect();
         
         /** Add a callback of @a cb to this connection for response with ID of @a trid.
          *  
@@ -272,10 +275,20 @@ public:
         
 protected:
         virtual void handleIncomingData();
+        enum
+        {
+            NS_DISCONNECTED,
+            NS_CONNECTING,
+            NS_CONNECTED,
+            NS_SYNCHRONISING,
+            NS_ONLINE
+        } connectionStatus;
 
 private:
         std::list<SwitchboardServerConnection *> _switchboardConnections;
         std::map<int, std::pair<NotificationServerCallback, void *> > callbacks;
+        
+        virtual void disconnectForTransfer();        
             
         static std::map<std::string, void (NotificationServerConnection::*)(std::vector<std::string> &)> commandHandlers;
         void registerCommandHandlers();

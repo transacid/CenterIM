@@ -94,9 +94,8 @@ public:
         
         /** Write a string to the connection.
          *
-         * @overload
          */
-        virtual int write(std::string s, bool log=true) throw (std::runtime_error);
+        virtual size_t write(std::string s, bool log=true) throw (std::runtime_error);
         
         /** Write the contents of a stringstream to the connection.
          *    
@@ -107,11 +106,12 @@ public:
          * In this case, the data will be written as soon as a connection is 
          * established.
          */
-        virtual int write(std::ostringstream & s, bool log=true) throw (std::runtime_error);
+        virtual size_t write(std::ostringstream & s, bool log=true) throw (std::runtime_error);
                 
         /** Connect ourself to @a hostname on @a port.
          */
-        virtual void connect(std::string hostname, unsigned int port) = 0;
+        virtual void connect(const std::string & hostname, unsigned int port) = 0;
+        virtual void disconnect() = 0;
         
         /** @name External Socket Hooks
          *  
@@ -134,21 +134,7 @@ public:
          */
         virtual void errorOnSocket(int errno_);
         /** @} */
-        
-        /** Send @a msg to @a recipient.
-         *
-         * @param  recipient  The userName of the recipient.
-         * @param  msg        A Message object containing the message to send.
-         */
-        virtual void sendMessage(Passport recipient, Message *msg) = 0;
-        
-        /** Send message text @a s to @a recipient.
-         *
-         * Convenience function that wraps @a s as an instant message.
-         * @overload
-         */
-        virtual void sendMessage(Passport recipient, std::string & s);
-        
+                
         /** Notify the calling library that an error with code @a errorCode has
          *  occured.
          */

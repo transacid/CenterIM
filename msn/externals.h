@@ -57,7 +57,7 @@ namespace MSN
         void removedGroup(MSN::Connection * conn, int groupID);
         void renamedGroup(MSN::Connection * conn, int groupID, std::string newGroupName);
         
-        void gotSwitchboard(MSN::Connection * conn, void * tag);
+        void gotSwitchboard(MSN::SwitchboardServerConnection * conn, const void * tag);
         
         void buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial);
         

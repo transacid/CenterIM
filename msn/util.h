@@ -36,7 +36,7 @@ namespace MSN
      * @return    A string with all non-alphanumeric characters replaced by their
      *            URL-encoded equivalent.
      */
-    std::string encodeURL(std::string s);
+    std::string encodeURL(const std::string & s);
     
     /** URL-decode a string
      *
@@ -44,7 +44,7 @@ namespace MSN
      * @return    A string with all URL-encoded sequences replaced by their
      *            @c ASCII equivalent.
      */
-    std::string decodeURL(std::string s);    
+    std::string decodeURL(const std::string & s);
     
     /** Split a string containing a hostname and port number into its respective parts.
      *
@@ -52,18 +52,18 @@ namespace MSN
      * @param  default_port  A port number to return in the event that ":port" is omitted from @a address.
      * @return               A pair containing the hostname and port number.
      */
-    std::pair<std::string, int> splitServerAddress(std::string & address, int default_port=1863);
+    std::pair<std::string, int> splitServerAddress(const std::string & address, int default_port=1863);
     
     /** Compare two strings in a case insensitive fashion
      */
-    int nocase_cmp(const std::string & s1, const std::string& s2);
+    int nocase_cmp(const std::string & s1, const std::string & s2);
     
     /** Split @a string at each occurence of @a separator.
      */
-    std::vector<std::string> splitString(std::string string, std::string separator);
+    std::vector<std::string> splitString(const std::string & string, const std::string & separator, bool suppressBlanks=true);
     
     /** Convert a string, @a s, that contains decimal digits into an unsigned int.
      */
-    unsigned int decimalFromString(std::string s) throw (std::logic_error);
+    unsigned int decimalFromString(const std::string & s) throw (std::logic_error);
 }
 #endif

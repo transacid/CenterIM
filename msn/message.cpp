@@ -287,10 +287,10 @@ namespace MSN
         }
         else
         {
-            unsigned int position = this->rawContents.find(header + ": ");
+            size_t position = this->rawContents.find(header + ": ");
             assert(position != std::string::npos);
             
-            unsigned int eol = this->rawContents.find("\r\n", position);
+            size_t eol = this->rawContents.find("\r\n", position);
             if (eol == std::string::npos)
                 eol = this->rawContents.size();
             
@@ -309,7 +309,7 @@ namespace MSN
             retval = this->rawContents;
         } else {
             std::string tmp = "\r\n" + header_;
-            unsigned int position = this->rawContents.find(tmp);
+            size_t position = this->rawContents.find(tmp);
             if (position == std::string::npos)
                 return "";
                 

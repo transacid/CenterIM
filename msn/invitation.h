@@ -44,14 +44,14 @@ public:
         Passport otherUser;
         SwitchboardServerConnection *switchboardConnection;
         
-        Invitation(ApplicationType application_, std::string cookie_, 
+        Invitation(ApplicationType application_, const std::string & cookie_, 
                    Passport otherUser_, SwitchboardServerConnection * switchboardConnection_) :
             application(application_), cookie(cookie_),
             otherUser(otherUser_), switchboardConnection(switchboardConnection_) {};
         virtual ~Invitation() {};
         
-        virtual void invitationWasAccepted(std::string & body) = 0;
-        virtual void invitationWasCanceled(std::string & body) = 0;
+        virtual void invitationWasAccepted(const std::string & body) = 0;
+        virtual void invitationWasCanceled(const std::string & body) = 0;
         
         bool invitationWasSent();
     };

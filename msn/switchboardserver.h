@@ -48,19 +48,14 @@ public:
 public:
             std::string sessionID;
             std::string cookie;
-            Passport rcpt;  
-            Message *msg;
-            void * tag;
+            const void *tag;
             
-            AuthData(Passport & username_, std::string & sessionID_, 
-                     std::string & cookie_, Message *msg_=NULL, void *tag_=NULL) : 
-                ::MSN::AuthData(username_), sessionID(sessionID_), cookie(cookie_), 
-                msg(msg_), tag(tag_) {};
+            AuthData(Passport & username_, const std::string & sessionID_, 
+                     const std::string & cookie_, const void *tag_=NULL) : 
+                ::MSN::AuthData(username_), sessionID(sessionID_), cookie(cookie_), tag(tag_) {};
             
-            AuthData(Passport & username_, Passport & rcpt_,
-                     Message *msg_=NULL, void *tag_=NULL) :
-                ::MSN::AuthData(username_), sessionID(""), cookie(""), rcpt(rcpt_), 
-                msg(msg_), tag(tag_) {};        
+            AuthData(Passport & username_, const void *tag_=NULL) :
+                ::MSN::AuthData(username_), sessionID(""), cookie(""), tag(tag_) {};        
         };
         
         SwitchboardServerConnection::AuthData auth;
@@ -77,7 +72,7 @@ public:
         */
         std::list<Invitation *> invitationsReceived;
         
-        SwitchboardServerConnection(AuthData & auth_, NotificationServerConnection *);
+        SwitchboardServerConnection(AuthData & auth_, NotificationServerConnection &);
         virtual ~SwitchboardServerConnection();
         virtual void dispatchCommand(std::vector<std::string> & args);
         
@@ -117,10 +112,10 @@ public:
          */
         void inviteUser(Passport userName);
 
-        virtual void connect(std::string hostname, unsigned int port);
-        virtual void sendMessage(Passport recipient, Message *msg);
-        virtual void sendMessage(Message *msg) { Passport p; sendMessage(p, msg); };
-        virtual void sendMessage(std::string & s) { Passport p; Connection::sendMessage(p, s); };
+        virtual void connect(const std::string & hostname, unsigned int port);
+        virtual void disconnect();
+        virtual void sendMessage(const Message *msg);
+        virtual void sendMessage(const std::string & s);
         
         FileTransferInvitation *sendFile(const std::string path);
 
@@ -133,13 +128,20 @@ public:
          */
         virtual void removeCallback(int trid);
         
-        Invitation *invitationWithCookie(std::string & cookie);
+        Invitation *invitationWithCookie(const std::string & cookie);
         
         virtual void socketConnectionCompleted();
 protected:
         virtual void handleIncomingData();
+        enum {
+            SB_DISCONNECTED,
+            SB_CONNECTING,
+            SB_CONNECTED,            
+            SB_WAITING_FOR_USERS,
+            SB_READY
+        } connectionStatus;
 private:
-        NotificationServerConnection *notificationServer;
+        NotificationServerConnection & notificationServer;
         std::list<FileTransferConnection *> _fileTransferConnections;
         std::map<int, std::pair<SwitchboardServerCallback, void *> > callbacks;        
         
@@ -153,8 +155,8 @@ private:
         void callback_InviteUsers(std::vector<std::string> & args, int trid, void * data);
         void callback_AnsweredCall(std::vector<std::string> & args, int trid, void * data);
         
-        void handleInvite(Passport from, std::string friendly, std::string mime, std::string body);        
-        void handleNewInvite(Passport & from, std::string & friendly, std::string & mime, std::string & body);
+        void handleInvite(Passport from, const std::string & friendly, const std::string & mime, const std::string & body);
+        void handleNewInvite(Passport & from, const std::string & friendly, const std::string & mime, const std::string & body);
         friend class Connection;
     };
 }

@@ -64,11 +64,11 @@ public:
 
         /** The remote side accepted our file transfer.  Notify calling code.
          */
-        virtual void invitationWasAccepted(std::string & body);
+        virtual void invitationWasAccepted(const std::string & body);
         
         /** The remote side canceled our file transfer.  Notify calling code.
          */
-        virtual void invitationWasCanceled(std::string & body);
+        virtual void invitationWasCanceled(const std::string & body);
         
         /** The user wishes to accept the file transfer, and have the file
          *  written to @a destinationFile.
@@ -77,7 +77,7 @@ public:
          *        in the file?  This would remove some of the complexity in the
          *        file transfer code.
          */
-        void acceptTransfer(const std::string destinationFile);
+        void acceptTransfer(const std::string & destinationFile);
         
         /** The user wishes to decline the file transfer.
          */
@@ -87,8 +87,8 @@ public:
          */
         void cancelTransfer();
 private:        
-        void sendFile(std::string & msg_body);
-        void receiveFile(std::string & msg_body);
+        void sendFile(const std::string & msg_body);
+        void receiveFile(const std::string & msg_body);
     };    
     
     
@@ -135,6 +135,7 @@ public:
 public:
             std::string cookie;
             Direction direction;
+            Perspective perspective;
             FileTransferInvitation *inv;
             FILE *fd;
             bool connected;
@@ -144,7 +145,8 @@ public:
             AuthData(Passport username_, std::string cookie_, Direction direction_, 
                                  FileTransferInvitation *inv_=NULL, FILE *fd_=NULL, bool connected_=false,
                                  unsigned long bytes_done_=0) :
-                ::MSN::AuthData(username_), cookie(cookie_), direction(direction_), inv(inv_), 
+                ::MSN::AuthData(username_), cookie(cookie_), direction(direction_),
+                perspective((direction == MSNFTP_RECV ? MSNFTP_CLIENT : MSNFTP_SERVER)), inv(inv_), 
                 fd(fd_), connected(connected_), bytes_done(bytes_done_), num_ignore(0) {};
             virtual ~AuthData() { if (fd) fclose(fd); };
         };
@@ -155,12 +157,13 @@ public:
         virtual ~FileTransferConnection();
         
         /** @todo Should this really be an empty function? */
-        virtual void connect(std::string hostname, unsigned int port) {};
-        virtual void sendMessage(Passport recipient, Message *msg) {};
+        virtual void connect(const std::string & hostname, unsigned int port) {};
+        virtual void disconnect();
         virtual void dispatchCommand(std::vector<std::string> & args) {};
 
         virtual void socketIsWritable();
         virtual void socketConnectionCompleted();
+        virtual void dataArrivedOnSocket();
 protected:
         virtual void handleIncomingData();
 

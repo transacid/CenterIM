@@ -92,7 +92,7 @@ public:
         class Headers
         {
 public:
-            Headers(std::string & rawContents_) : rawContents(rawContents_) {};
+            Headers(const std::string & rawContents_) : rawContents(rawContents_) {};
             Headers() : rawContents("") {};
             std::string asString() const;
             std::string operator[](const std::string header) const;

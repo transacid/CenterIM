@@ -40,7 +40,7 @@ namespace MSN
 {
     const unsigned int MAX_FTP_BLOCK_SIZE = 20000;
     
-    void FileTransferInvitation::invitationWasAccepted(std::string & body)
+    void FileTransferInvitation::invitationWasAccepted(const std::string & body)
     {
         if (this->invitationWasSent())
         {
@@ -52,7 +52,7 @@ namespace MSN
         }
     }
     
-    void FileTransferInvitation::invitationWasCanceled(std::string & body)
+    void FileTransferInvitation::invitationWasCanceled(const std::string & body)
     {
         ext::fileTransferFailed(this, 0, "Cancelled by remote user");
         if (this->invitationWasSent())
@@ -64,10 +64,9 @@ namespace MSN
             this->switchboardConnection->invitationsReceived.remove(this);
         }
         this->switchboardConnection->removeFileTransferConnection(this);
-        delete this;
     }
     
-    void FileTransferInvitation::sendFile(std::string & msg_body)
+    void FileTransferInvitation::sendFile(const std::string & msg_body)
     {
         int port = 6891;
         char tmp[64];
@@ -85,8 +84,7 @@ namespace MSN
             {
                 ext::fileTransferFailed(this, errno, strerror(errno));
                 this->switchboardConnection->invitationsSent.remove(this);
-                delete this;
-                delete conn;
+                conn->disconnect();
                 return;
             }
         }
@@ -111,7 +109,7 @@ namespace MSN
         delete msg;
     }
     
-    void FileTransferInvitation::receiveFile(std::string & msg_body)
+    void FileTransferInvitation::receiveFile(const std::string & msg_body)
     {
         Message::Headers headers = Message::Headers(msg_body);
         std::string cookie = headers["AuthCookie"];
@@ -123,7 +121,6 @@ namespace MSN
         {
             ext::fileTransferFailed(this, 0, "Missing parameters");
             this->switchboardConnection->invitationsReceived.remove(this);
-            delete this;
             return;
         }
         
@@ -143,7 +140,6 @@ namespace MSN
         {
             ext::fileTransferFailed(this, errno, strerror(errno));
             this->switchboardConnection->invitationsReceived.remove(this);
-            delete this;
             return;
         }
 
@@ -158,9 +154,19 @@ namespace MSN
         conn->write("VER MSNFTP\r\n");
     }
     
-    FileTransferConnection::~FileTransferConnection()
+    void FileTransferConnection::disconnect()
     {
         this->auth.inv->switchboardConnection->removeFileTransferConnection(this);
+        delete this->auth.inv;
+        this->auth.inv = NULL;
+        if (this->sock != -1)
+            ::close(this->sock);
+        this->sock = -1;
+    }
+    
+    FileTransferConnection::~FileTransferConnection()
+    {
+        this->disconnect();
     }
     
     void FileTransferConnection::socketConnectionCompleted()
@@ -172,8 +178,16 @@ namespace MSN
     
     void FileTransferConnection::socketIsWritable()
     {
-        assert(this->auth.direction == MSNFTP_SEND);
-        this->handleSend();
+        if (this->auth.direction == MSNFTP_SEND)
+            this->handleSend();
+    }
+    
+    void FileTransferConnection::dataArrivedOnSocket()
+    {
+        if (this->auth.direction == MSNFTP_SEND && ! this->auth.connected)
+            this->handleSend();
+        else
+            Connection::dataArrivedOnSocket();
     }
     
     void FileTransferConnection::handleIncomingData()
@@ -213,7 +227,6 @@ namespace MSN
             perror("Could not accept()\n");
             ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
             this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
-            delete this; // that will nuke both auth and inv
             return;
         }
         
@@ -248,7 +261,6 @@ namespace MSN
             {
                 ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
                 this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
-                delete this;
                 return;
             }
             std::ostringstream buf_;
@@ -264,7 +276,6 @@ namespace MSN
                 perror("fopen() failed");
                 ext::fileTransferFailed(this->auth.inv, errno, "Could not open file for reading");
                 this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
-                delete this;
                 return;
             }
             
@@ -325,7 +336,6 @@ namespace MSN
 cleanup:
             ;
         this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
-        delete this;
         if (readBuffer)
             free(readBuffer);
     }
@@ -350,7 +360,6 @@ cleanup:
         }
         
         this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);        
-        delete this;
     }
     
     
@@ -391,7 +400,6 @@ error:
             ;
         ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
         this->switchboardConnection()->invitationsReceived.remove(this->auth.inv);
-        delete this;
     }
     
     void FileTransferConnection::handleReceive_Transferring()
@@ -462,7 +470,6 @@ error:
 cleanup:
             ;
         this->auth.inv->switchboardConnection->invitationsReceived.remove(this->auth.inv);
-        delete this;
     }
     
     void FileTransferInvitation::rejectTransfer()
@@ -484,7 +491,7 @@ cleanup:
         this->switchboardConnection->invitationsReceived.remove(this);
     }
     
-    void FileTransferInvitation::acceptTransfer(const std::string dest)
+    void FileTransferInvitation::acceptTransfer(const std::string & dest)
     {
         std::ostringstream buf_;
         buf_ << "Invitation-Command: ACCEPT\r\n";

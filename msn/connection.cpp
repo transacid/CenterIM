@@ -47,7 +47,7 @@ namespace MSN
     Connection::Connection() 
         : sock(0), connected(false), trid(1), user_data(NULL)
     {
-        srand(time(NULL));
+        srand((unsigned int) time(NULL));
 
         if (errors.size() != 0)
         {
@@ -143,7 +143,7 @@ namespace MSN
         this->writeBuffer = "";
     }
         
-    int Connection::write(std::string s, bool log) throw (std::runtime_error)
+    size_t Connection::write(std::string s, bool log) throw (std::runtime_error)
     {
         if (! this->connected)
             this->writeBuffer.append(s);
@@ -152,10 +152,10 @@ namespace MSN
             if (log)
                 ext::log(1, s.c_str());
             
-            unsigned int written = 0;
+            size_t written = 0;
             while (written < s.size())
             {
-                int newWritten = ::write(this->sock, s.substr(written).c_str(), s.size() - written);
+                size_t newWritten = ::write(this->sock, s.substr(written).c_str(), (int) (s.size() - written));
                 if (newWritten <= 0)
                 {
                     if (errno == EAGAIN)
@@ -171,10 +171,10 @@ namespace MSN
         return s.size();
     }
     
-    int Connection::write(std::ostringstream & ss, bool log) throw (std::runtime_error)
+    size_t Connection::write(std::ostringstream & ss, bool log) throw (std::runtime_error)
     {
         std::string s = ss.str();
-        int result = write(s, log);
+        size_t result = write(s, log);
         ss.clear();
         return result;        
     }
@@ -191,12 +191,12 @@ namespace MSN
             assert(errno != EAGAIN);
             
             ext::showError(this, strerror(errno));                
-//            delete this;            
+            this->disconnect();            
         }
         else if (amountRead == 0)
         {
             ext::showError(this, "Connection closed by remote endpoint.");
-//            delete this;
+            this->disconnect();
         }
         else
         {
@@ -211,12 +211,6 @@ namespace MSN
             }
         }
     }
-
-    void Connection::sendMessage(Passport recipient, std::string & body)
-    { 
-        Message msg(body, "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n");
-        this->sendMessage(recipient, &msg);
-    }
     
     void Connection::handle_MSG(std::vector<std::string> & args)
     {
@@ -224,7 +218,7 @@ namespace MSN
         std::string msg;
         std::string mime;
         std::string body;
-        unsigned int tmp;
+        size_t tmp;
         
         msglen = decimalFromString(args[3]);
         msg = this->readBuffer.substr(0, msglen);

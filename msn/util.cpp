@@ -21,29 +21,34 @@
  */
 
 #include <msn/util.h>
-#include <errno.h>
+#include <cerrno>
 #include <cctype>
 
 namespace MSN 
 {    
-    std::pair<std::string, int> splitServerAddress(std::string & address, int default_port)
+    std::pair<std::string, int> splitServerAddress(const std::string & address, int default_port)
     {
-        unsigned int pos;
+        size_t pos;
+        std::string host = address;
         int port = default_port;
         
         if ((pos = address.find(":")) != std::string::npos)
         {
             std::string port_s = address.substr(pos + 1);
-            address = address.substr(0, pos);
+            host = address.substr(0, pos);
             port = decimalFromString(port_s);
         }
-        return std::make_pair(address, port);
+
+        if (host == "" || port < 0)
+            throw std::runtime_error("Invalid zero-length address or negative port number!");
+
+        return std::make_pair(host, port);
     }
 
-    std::string decodeURL(std::string s)
+    std::string decodeURL(const std::string & s)
     {
         std::string out;
-        std::string::iterator i;
+        std::string::const_iterator i;
         
         for (i = s.begin(); i != s.end(); i++)
         {
@@ -59,10 +64,10 @@ namespace MSN
         return out;
     }
     
-    std::string encodeURL(std::string s)
+    std::string encodeURL(const std::string & s)
     {
         std::string out;
-        std::string::iterator i;
+        std::string::const_iterator i;
         
         for (i = s.begin(); i != s.end(); i++)
         {
@@ -82,23 +87,25 @@ namespace MSN
         return out;
     }
     
-    std::vector<std::string> splitString(std::string s, std::string sep)
+    std::vector<std::string> splitString(const std::string & s, const std::string & sep, bool suppressBlanks)
     {
         std::vector<std::string> array;     
-        size_t position;
+        size_t position, last_position;
         
-        position = s.find_first_of(sep);        
-        while (position != s.npos)
+        last_position = position = 0;
+        while (position + sep.size() <= s.size())
         {
-            if (position)
-                array.push_back(s.substr(0, position));
-
-            s.erase(0, position + sep.length());
-            position = s.find_first_of(sep);
+            if (s[position] == sep[0] && s.compare(position, sep.size(), sep) == 0)
+            {
+                if (!suppressBlanks || position - last_position > 0)
+                    array.push_back(s.substr(last_position, position - last_position));
+                last_position = position = position + sep.size();
+            }
+            else
+                position++;
         }
-        
-        if (! s.empty())
-            array.push_back(s);
+        if (!suppressBlanks || last_position - s.size())
+            array.push_back(s.substr(last_position));
         
         return array;
     }
@@ -115,10 +122,10 @@ namespace MSN
                 return std::toupper(*it1) - std::toupper(*it2);
         }
         size_t size1 = s1.size(), size2 = s2.size(); 
-        return size1 - size2;
+        return (int) (size1 - size2);
     }
     
-    unsigned int decimalFromString(std::string s) throw (std::logic_error)
+    unsigned int decimalFromString(const std::string & s) throw (std::logic_error)
     {
         unsigned int result = strtol(s.c_str(), NULL, 10);
         errno = 0;
