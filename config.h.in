@@ -172,6 +172,9 @@
 /* Define if you have the <vector> header file.  */
 #undef HAVE_VECTOR
 
+/* Define if you have the crypto library (-lcrypto).  */
+#undef HAVE_LIBCRYPTO
+
 /* Define if you have the i library (-li).  */
 #undef HAVE_LIBI
 
@@ -186,6 +189,9 @@
 
 /* Define if you have the socket library (-lsocket).  */
 #undef HAVE_LIBSOCKET
+
+/* Define if you have the ssl library (-lssl).  */
+#undef HAVE_LIBSSL
 
 /* Name of package */
 #undef PACKAGE

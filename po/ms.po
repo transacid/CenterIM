@@ -5,13 +5,404 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.9\n"
-"POT-Creation-Date: 2002-12-11 12:24+0200\n"
+"POT-Creation-Date: 2002-12-11 14:09+0200\n"
 "PO-Revision-Date: 2002-04-18 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@ikhlas.com>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/hooks/aimhook.cc:59
+msgid "+ [aim] connecting to the server"
+msgstr "+ [aim] menghubungi pelayan"
+
+#: src/hooks/aimhook.cc:88
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ [aim] gagal menghubungi pelayan"
+
+#: src/hooks/aimhook.cc:189
+#, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ [aim] menambah %s ke senarai rakan"
+
+#: src/hooks/aimhook.cc:203
+#, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ [aim] mengeluarkan %s dari senarai rakan"
+
+#: src/hooks/aimhook.cc:301
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr "Saya gemar menggunakan profil defaul AIM dari centericq %s."
+
+#: src/hooks/aimhook.cc:353
+msgid "+ [aim] logged in"
+msgstr "+ [aim] log in"
+
+#: src/hooks/aimhook.cc:370
+#, fuzzy
+msgid "+ [aim] disconnected"
+msgstr "+ [icq] diputuskan"
+
+#: src/hooks/aimhook.cc:388
+msgid "aim connection failed"
+msgstr "hubungan aim gagal"
+
+#: src/hooks/aimhook.cc:390
+#, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ [aim] hubungan gagal: %s"
+
+#: src/hooks/aimhook.cc:407
+msgid "+ [aim] password was changed successfully"
+msgstr "+ [aim] kata laluan berjaya ditukar"
+
+#: src/hooks/aimhook.cc:430
+msgid "The user has no profile information."
+msgstr "Pengguna tidak mempunyai profil maklumat."
+
+#: src/hooks/aimhook.cc:523
+msgid "+ [aim] password sent"
+msgstr "+ [aim] kata laluan telah dihantar"
+
+#: src/hooks/icqhook.cc:141
+msgid "+ [icq] connecting to the server"
+msgstr "+ [icq] menghubungi pelayan"
+
+#: src/hooks/icqhook.cc:964
+msgid "+ [icq] logged in"
+msgstr "+ [icq] log in"
+
+#: src/hooks/icqhook.cc:991
+msgid "as requested"
+msgstr "seperti yang diminta"
+
+#: src/hooks/icqhook.cc:992
+msgid "socket problems"
+msgstr "masalah soket"
+
+#: src/hooks/icqhook.cc:993
+msgid "bad username"
+msgstr "nama tidak sah"
+
+#: src/hooks/icqhook.cc:994
+msgid "turboing"
+msgstr "mencepat"
+
+#: src/hooks/icqhook.cc:995
+msgid "bad password"
+msgstr "katalaluan tidak sah"
+
+#: src/hooks/icqhook.cc:996
+msgid "username and password mismatch"
+msgstr "nama dan kata laluan tidak seragam"
+
+#: src/hooks/icqhook.cc:997
+msgid "already logged"
+msgstr "telah log"
+
+#: src/hooks/icqhook.cc:1010
+msgid "+ [icq] disconnected"
+msgstr "+ [icq] diputuskan"
+
+#: src/hooks/icqhook.cc:1016
+msgid "icq disconnection reason"
+msgstr "sebab icq ditamatkan"
+
+#: src/hooks/icqhook.cc:1075
+#, fuzzy
+msgid "The user has accepted your authorization request"
+msgstr "* Pengguna telah menambah anda ke dalam senarai rakan"
+
+#: src/hooks/icqhook.cc:1079
+#, fuzzy
+msgid "The user has rejected your authorization request; the message was: "
+msgstr "Mesej permintaan pengesahan kosong"
+
+#: src/hooks/icqhook.cc:1094 src/hooks/msnhook.cc:503
+#: src/hooks/yahoohook.cc:784
+#, fuzzy
+msgid "The user has added you to his/her contact list"
+msgstr "* Pengguna telah menambah anda ke dalam senarai rakan"
+
+#: src/hooks/icqhook.cc:1134
+#, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ [icq] gagal SMS ke %s, %s"
+
+#: src/hooks/icqhook.cc:1137
+#, fuzzy, c-format
+msgid "+ [icq] failed SMS to %s"
+msgstr "+ [icq] gagal SMS ke %s, %s"
+
+#: src/hooks/icqhook.cc:1148 src/hooks/irchook.cc:572
+#: src/hooks/jabberhook.cc:404
+#, fuzzy
+msgid "Away message:"
+msgstr "* Mesej away:"
+
+#: src/hooks/icqhook.cc:1152
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] gagal dapatkan mesej away dari %s, %s"
+
+#: src/hooks/icqhook.cc:1283
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr "%s meminta mesej away anda, jawapan sudah dihantar"
+
+#: src/hooks/icqhook.cc:1298
+msgid "Random Chat User"
+msgstr ""
+
+#: src/hooks/icqhook.cc:1328
+#, fuzzy, c-format
+msgid "+ [icq] search finished, %d found"
+msgstr "+ [icq] tamat carian whitepages, %d ditemui"
+
+#: src/hooks/irchook.cc:133
+msgid "+ [irc] connecting to the server"
+msgstr "+ [irc] menghubungi pelayan"
+
+#: src/hooks/irchook.cc:145
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ [irc] gagal menghubungi pelayan"
+
+#: src/hooks/irchook.cc:507
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
+
+#: src/hooks/irchook.cc:697
+msgid "+ [irc] logged in"
+msgstr "+ [irc] log in"
+
+#: src/hooks/irchook.cc:735
+#, fuzzy
+msgid "+ [irc] disconnected"
+msgstr "+ [icq] diputuskan"
+
+#: src/hooks/irchook.cc:749
+#, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ [irc] hubungan gagal: %s"
+
+#: src/hooks/irchook.cc:766
+#, fuzzy
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [aim] kata laluan berjaya ditukar"
+
+#: src/hooks/irchook.cc:837
+msgid "On channels: "
+msgstr "Di channel: "
+
+#: src/hooks/irchook.cc:1124
+#, c-format
+msgid "Kicked by %s; reason: %s"
+msgstr ""
+
+#: src/hooks/irchook.cc:1179
+#, c-format
+msgid "The user has changed their nick from %s to %s"
+msgstr ""
+
+#: src/hooks/irchook.cc:1199
+#, fuzzy
+msgid "+ [irc] password sent"
+msgstr "+ [aim] kata laluan telah dihantar"
+
+#: src/hooks/irchook.cc:1201
+msgid "+ [irc] password was requested, but it's not set"
+msgstr ""
+
+#: src/hooks/irchook.cc:1225
+#, c-format
+msgid "PING reply from the user: %d second(s)"
+msgstr ""
+
+#: src/hooks/irchook.cc:1230
+#, c-format
+msgid "The remote is using %s"
+msgstr ""
+
+#: src/hooks/msnhook.cc:86
+msgid "+ [msn] connecting to the server"
+msgstr "+ [msn] menghubungi pelayan"
+
+#: src/hooks/msnhook.cc:105
+#, fuzzy, c-format
+msgid "+ [msn] %s: stopped typing"
+msgstr "+ [yahoo] log in"
+
+#: src/hooks/msnhook.cc:283
+#, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ [msn] membuang %s dari senarai"
+
+#: src/hooks/msnhook.cc:328
+#, fuzzy, c-format
+msgid "+ [msn] reverse users listing finished, %d found"
+msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
+
+#: src/hooks/msnhook.cc:581
+#, fuzzy, c-format
+msgid "+ [msn] %s: started typing"
+msgstr "+ [yahoo] log in"
+
+#: src/hooks/msnhook.cc:589
+#, c-format
+msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
+msgstr ""
+
+#: src/hooks/msnhook.cc:596
+#, fuzzy, c-format
+msgid "+ [msn] e-mail from %s, %s"
+msgstr "+ [msn] emel dari %s <%s>, %s"
+
+#: src/hooks/msnhook.cc:637
+msgid "+ [msn] logged in"
+msgstr "+ [msn] log in"
+
+#: src/hooks/msnhook.cc:651
+msgid "+ [msn] disconnected"
+msgstr "+ [msn] diputuskan"
+
+#: src/hooks/yahoohook.cc:109
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] menghubungi pelayan"
+
+#: src/hooks/yahoohook.cc:117
+#, fuzzy
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] masukkan %s ke senarai rakan"
+
+#: src/hooks/yahoohook.cc:120
+msgid "could not resolve hostname"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:121
+msgid "could not create socket"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:122
+msgid "verify the pager host and port entered"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:159
+#, fuzzy
+msgid "+ [yahoo] disconnected"
+msgstr "+ [icq] diputuskan"
+
+#: src/hooks/yahoohook.cc:284
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] masukkan %s ke senarai rakan"
+
+#: src/hooks/yahoohook.cc:304
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] keluarkan %s dari senarai rakan"
+
+#: src/hooks/yahoohook.cc:318
+#, fuzzy, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] menghubungi pelayan"
+
+#: src/hooks/yahoohook.cc:541
+#, fuzzy, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
+
+#: src/hooks/yahoohook.cc:562
+msgid "Please join my conference."
+msgstr ""
+
+#: src/hooks/yahoohook.cc:573
+msgid "Custom status message:"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:577
+#, fuzzy, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] gagal dapatkan mesej away dari %s, %s"
+
+#: src/hooks/yahoohook.cc:607
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] log in"
+
+#: src/hooks/yahoohook.cc:624
+#, fuzzy
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "nama dan kata laluan tidak seragam"
+
+#: src/hooks/yahoohook.cc:629
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:630
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:696
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:699
+msgid "Current conference members are: "
+msgstr ""
+
+#: src/hooks/yahoohook.cc:717
+msgid "Auto-joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:727
+#, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:737
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:752
+#, c-format
+msgid "The user %s has left the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:788
+#, fuzzy
+msgid "the message was: "
+msgstr "* Mesej away:"
+
+#: src/hooks/yahoohook.cc:800
+#, fuzzy, c-format
+msgid "+ [yahoo] %s: started typing"
+msgstr "+ [yahoo] log in"
+
+#: src/hooks/yahoohook.cc:800
+#, fuzzy, c-format
+msgid "+ [yahoo] %s: stopped typing"
+msgstr "+ [yahoo] log in"
+
+#: src/hooks/yahoohook.cc:813
+#, fuzzy, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [msn] emel dari %s <%s>, %s"
+
+#: src/hooks/yahoohook.cc:820
+#, fuzzy, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] mesej bounce"
+
+#: src/hooks/yahoohook.cc:825
+#, fuzzy, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] mesej bounce"
 
 #: src/centericq.cc:121
 msgid "password: "
@@ -145,6 +536,105 @@ msgstr "! sebaliknya kita akan kehilangan data dan tetapan"
 #: src/centericq.cc:1392
 msgid "Invite to conference.."
 msgstr ""
+
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " Pengurus akaun IM "
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
+msgid "Change"
+msgstr "Tukar"
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1185
+msgid "Done"
+msgstr "Siap"
+
+#: src/accountmanager.cc:91
+#, c-format
+msgid " Server : %s "
+msgstr " Pelayan : %s "
+
+#: src/accountmanager.cc:94
+#, fuzzy, c-format
+msgid " Secured : %s "
+msgstr " Pelayan : %s "
+
+#: src/accountmanager.cc:100
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:105
+#, c-format
+msgid " Login : %s "
+msgstr " Login : %s "
+
+#: src/accountmanager.cc:111
+#, fuzzy, c-format
+msgid " Password (optional) : %s "
+msgstr " Tetapkan kata laluan : %s "
+
+#: src/accountmanager.cc:111
+#, c-format
+msgid " Password : %s "
+msgstr " Katalaluan : %s "
+
+#: src/accountmanager.cc:115
+msgid " Register "
+msgstr " Daftar "
+
+#: src/accountmanager.cc:121
+#, fuzzy
+msgid " Change nickname "
+msgstr " Nama panggilan "
+
+#: src/accountmanager.cc:122
+msgid " Update user details "
+msgstr " Kemaskini maklumat rakan "
+
+#: src/accountmanager.cc:125
+msgid " Set away message "
+msgstr " Tetapkan mesej away "
+
+#: src/accountmanager.cc:128
+#, fuzzy
+msgid " Synchronize contact list "
+msgstr " Senarai hubungan "
+
+#: src/accountmanager.cc:130
+msgid " Drop "
+msgstr " Buang "
+
+#: src/accountmanager.cc:148
+msgid " user name: "
+msgstr " nama pengguna: "
+
+#: src/accountmanager.cc:153
+msgid " uin: "
+msgstr " uin: "
+
+#: src/accountmanager.cc:158
+msgid " password: "
+msgstr " kata laluan: "
+
+#: src/accountmanager.cc:166
+msgid "Drop the account information first!"
+msgstr "Buang maklumat akaun dahulu!"
+
+#: src/accountmanager.cc:180
+msgid "You have to disconnect the service first!"
+msgstr "Putuskan servis terlebih dahulu!"
+
+#: src/accountmanager.cc:189
+msgid " server address: "
+msgstr " alamat pelayan: "
+
+#: src/accountmanager.cc:211
+#, fuzzy
+msgid "You must be logged in to preform the synchronization"
+msgstr "+ anda mesti log in untuk mencari/menambah pengguna"
 
 #: src/icqconf.cc:153
 #, c-format
@@ -381,11 +871,6 @@ msgstr ""
 #: src/icqdialogs.cc:211 src/icqdialogs.cc:217
 msgid "cLear"
 msgstr "cLear"
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
-#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
-msgid "Change"
-msgstr "Tukar"
 
 #: src/icqdialogs.cc:211
 msgid "Search/Add"
@@ -738,11 +1223,6 @@ msgstr " Maklumat %s anda "
 #, c-format
 msgid " %s: details "
 msgstr " %s: maklumat "
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
-#: src/icqdialogs.cc:1185
-msgid "Done"
-msgstr "Siap"
 
 #: src/icqdialogs.cc:644
 msgid "Wait a moment. Your details haven't been fetched yet"
@@ -1664,95 +2144,6 @@ msgstr "cari: "
 msgid "General"
 msgstr "Am"
 
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " Pengurus akaun IM "
-
-#: src/accountmanager.cc:91
-#, c-format
-msgid " Server : %s "
-msgstr " Pelayan : %s "
-
-#: src/accountmanager.cc:94
-#, fuzzy, c-format
-msgid " Secured : %s "
-msgstr " Pelayan : %s "
-
-#: src/accountmanager.cc:100
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:105
-#, c-format
-msgid " Login : %s "
-msgstr " Login : %s "
-
-#: src/accountmanager.cc:111
-#, fuzzy, c-format
-msgid " Password (optional) : %s "
-msgstr " Tetapkan kata laluan : %s "
-
-#: src/accountmanager.cc:111
-#, c-format
-msgid " Password : %s "
-msgstr " Katalaluan : %s "
-
-#: src/accountmanager.cc:115
-msgid " Register "
-msgstr " Daftar "
-
-#: src/accountmanager.cc:121
-#, fuzzy
-msgid " Change nickname "
-msgstr " Nama panggilan "
-
-#: src/accountmanager.cc:122
-msgid " Update user details "
-msgstr " Kemaskini maklumat rakan "
-
-#: src/accountmanager.cc:125
-msgid " Set away message "
-msgstr " Tetapkan mesej away "
-
-#: src/accountmanager.cc:128
-#, fuzzy
-msgid " Synchronize contact list "
-msgstr " Senarai hubungan "
-
-#: src/accountmanager.cc:130
-msgid " Drop "
-msgstr " Buang "
-
-#: src/accountmanager.cc:148
-msgid " user name: "
-msgstr " nama pengguna: "
-
-#: src/accountmanager.cc:153
-msgid " uin: "
-msgstr " uin: "
-
-#: src/accountmanager.cc:158
-msgid " password: "
-msgstr " kata laluan: "
-
-#: src/accountmanager.cc:166
-msgid "Drop the account information first!"
-msgstr "Buang maklumat akaun dahulu!"
-
-#: src/accountmanager.cc:180
-msgid "You have to disconnect the service first!"
-msgstr "Putuskan servis terlebih dahulu!"
-
-#: src/accountmanager.cc:189
-msgid " server address: "
-msgstr " alamat pelayan: "
-
-#: src/accountmanager.cc:211
-#, fuzzy
-msgid "You must be logged in to preform the synchronization"
-msgstr "+ anda mesti log in untuk mencari/menambah pengguna"
-
 #: src/imcontroller.cc:64
 #, fuzzy, c-format
 msgid " Register on the %s network "
@@ -1926,279 +2317,6 @@ msgstr ""
 msgid "registration is not supported"
 msgstr "pendaftaran tidak disokong"
 
-#: src/hooks/icqhook.cc:141
-msgid "+ [icq] connecting to the server"
-msgstr "+ [icq] menghubungi pelayan"
-
-#: src/hooks/icqhook.cc:964
-msgid "+ [icq] logged in"
-msgstr "+ [icq] log in"
-
-#: src/hooks/icqhook.cc:991
-msgid "as requested"
-msgstr "seperti yang diminta"
-
-#: src/hooks/icqhook.cc:992
-msgid "socket problems"
-msgstr "masalah soket"
-
-#: src/hooks/icqhook.cc:993
-msgid "bad username"
-msgstr "nama tidak sah"
-
-#: src/hooks/icqhook.cc:994
-msgid "turboing"
-msgstr "mencepat"
-
-#: src/hooks/icqhook.cc:995
-msgid "bad password"
-msgstr "katalaluan tidak sah"
-
-#: src/hooks/icqhook.cc:996
-msgid "username and password mismatch"
-msgstr "nama dan kata laluan tidak seragam"
-
-#: src/hooks/icqhook.cc:997
-msgid "already logged"
-msgstr "telah log"
-
-#: src/hooks/icqhook.cc:1010
-msgid "+ [icq] disconnected"
-msgstr "+ [icq] diputuskan"
-
-#: src/hooks/icqhook.cc:1016
-msgid "icq disconnection reason"
-msgstr "sebab icq ditamatkan"
-
-#: src/hooks/icqhook.cc:1075
-#, fuzzy
-msgid "The user has accepted your authorization request"
-msgstr "* Pengguna telah menambah anda ke dalam senarai rakan"
-
-#: src/hooks/icqhook.cc:1079
-#, fuzzy
-msgid "The user has rejected your authorization request; the message was: "
-msgstr "Mesej permintaan pengesahan kosong"
-
-#: src/hooks/icqhook.cc:1094 src/hooks/msnhook.cc:503
-#: src/hooks/yahoohook.cc:784
-#, fuzzy
-msgid "The user has added you to his/her contact list"
-msgstr "* Pengguna telah menambah anda ke dalam senarai rakan"
-
-#: src/hooks/icqhook.cc:1134
-#, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ [icq] gagal SMS ke %s, %s"
-
-#: src/hooks/icqhook.cc:1137
-#, fuzzy, c-format
-msgid "+ [icq] failed SMS to %s"
-msgstr "+ [icq] gagal SMS ke %s, %s"
-
-#: src/hooks/icqhook.cc:1148 src/hooks/irchook.cc:572
-#: src/hooks/jabberhook.cc:404
-#, fuzzy
-msgid "Away message:"
-msgstr "* Mesej away:"
-
-#: src/hooks/icqhook.cc:1152
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] gagal dapatkan mesej away dari %s, %s"
-
-#: src/hooks/icqhook.cc:1283
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s meminta mesej away anda, jawapan sudah dihantar"
-
-#: src/hooks/icqhook.cc:1298
-msgid "Random Chat User"
-msgstr ""
-
-#: src/hooks/icqhook.cc:1328
-#, fuzzy, c-format
-msgid "+ [icq] search finished, %d found"
-msgstr "+ [icq] tamat carian whitepages, %d ditemui"
-
-#: src/hooks/yahoohook.cc:109
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] menghubungi pelayan"
-
-#: src/hooks/yahoohook.cc:117
-#, fuzzy
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] masukkan %s ke senarai rakan"
-
-#: src/hooks/yahoohook.cc:120
-msgid "could not resolve hostname"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:121
-msgid "could not create socket"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:122
-msgid "verify the pager host and port entered"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:159
-#, fuzzy
-msgid "+ [yahoo] disconnected"
-msgstr "+ [icq] diputuskan"
-
-#: src/hooks/yahoohook.cc:284
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] masukkan %s ke senarai rakan"
-
-#: src/hooks/yahoohook.cc:304
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] keluarkan %s dari senarai rakan"
-
-#: src/hooks/yahoohook.cc:318
-#, fuzzy, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] menghubungi pelayan"
-
-#: src/hooks/yahoohook.cc:541
-#, fuzzy, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
-
-#: src/hooks/yahoohook.cc:562
-msgid "Please join my conference."
-msgstr ""
-
-#: src/hooks/yahoohook.cc:573
-msgid "Custom status message:"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:577
-#, fuzzy, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] gagal dapatkan mesej away dari %s, %s"
-
-#: src/hooks/yahoohook.cc:607
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] log in"
-
-#: src/hooks/yahoohook.cc:624
-#, fuzzy
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "nama dan kata laluan tidak seragam"
-
-#: src/hooks/yahoohook.cc:629
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:630
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:696
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:699
-msgid "Current conference members are: "
-msgstr ""
-
-#: src/hooks/yahoohook.cc:717
-msgid "Auto-joined the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:727
-#, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:737
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:752
-#, c-format
-msgid "The user %s has left the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:788
-#, fuzzy
-msgid "the message was: "
-msgstr "* Mesej away:"
-
-#: src/hooks/yahoohook.cc:800
-#, fuzzy, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] log in"
-
-#: src/hooks/yahoohook.cc:800
-#, fuzzy, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] log in"
-
-#: src/hooks/yahoohook.cc:813
-#, fuzzy, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [msn] emel dari %s <%s>, %s"
-
-#: src/hooks/yahoohook.cc:820
-#, fuzzy, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] mesej bounce"
-
-#: src/hooks/yahoohook.cc:825
-#, fuzzy, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] mesej bounce"
-
-#: src/hooks/msnhook.cc:86
-msgid "+ [msn] connecting to the server"
-msgstr "+ [msn] menghubungi pelayan"
-
-#: src/hooks/msnhook.cc:105
-#, fuzzy, c-format
-msgid "+ [msn] %s: stopped typing"
-msgstr "+ [yahoo] log in"
-
-#: src/hooks/msnhook.cc:283
-#, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ [msn] membuang %s dari senarai"
-
-#: src/hooks/msnhook.cc:328
-#, fuzzy, c-format
-msgid "+ [msn] reverse users listing finished, %d found"
-msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
-
-#: src/hooks/msnhook.cc:581
-#, fuzzy, c-format
-msgid "+ [msn] %s: started typing"
-msgstr "+ [yahoo] log in"
-
-#: src/hooks/msnhook.cc:589
-#, c-format
-msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
-msgstr ""
-
-#: src/hooks/msnhook.cc:596
-#, fuzzy, c-format
-msgid "+ [msn] e-mail from %s, %s"
-msgstr "+ [msn] emel dari %s <%s>, %s"
-
-#: src/hooks/msnhook.cc:637
-msgid "+ [msn] logged in"
-msgstr "+ [msn] log in"
-
-#: src/hooks/msnhook.cc:651
-msgid "+ [msn] disconnected"
-msgstr "+ [msn] diputuskan"
-
 #: src/imevents.cc:278
 msgid "Empty authorization request message"
 msgstr "Mesej permintaan pengesahan kosong"
@@ -2229,6 +2347,11 @@ msgstr ""
 #: src/imevents.cc:573
 msgid "* File transfer"
 msgstr ""
+
+#: src/imexternal.cc:133
+#, fuzzy, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "lakukan aksi luaran %s"
 
 #: src/imlogger.cc:32
 msgid "Offline"
@@ -2345,129 +2468,6 @@ msgstr "%s: ke offline"
 msgid "changed our %s status to %s from %s"
 msgstr "tukar status kita %s ke %s dari %s"
 
-#: src/imexternal.cc:133
-#, fuzzy, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "lakukan aksi luaran %s"
-
-#: src/hooks/aimhook.cc:59
-msgid "+ [aim] connecting to the server"
-msgstr "+ [aim] menghubungi pelayan"
-
-#: src/hooks/aimhook.cc:88
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ [aim] gagal menghubungi pelayan"
-
-#: src/hooks/aimhook.cc:189
-#, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ [aim] menambah %s ke senarai rakan"
-
-#: src/hooks/aimhook.cc:203
-#, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ [aim] mengeluarkan %s dari senarai rakan"
-
-#: src/hooks/aimhook.cc:301
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr "Saya gemar menggunakan profil defaul AIM dari centericq %s."
-
-#: src/hooks/aimhook.cc:353
-msgid "+ [aim] logged in"
-msgstr "+ [aim] log in"
-
-#: src/hooks/aimhook.cc:370
-#, fuzzy
-msgid "+ [aim] disconnected"
-msgstr "+ [icq] diputuskan"
-
-#: src/hooks/aimhook.cc:388
-msgid "aim connection failed"
-msgstr "hubungan aim gagal"
-
-#: src/hooks/aimhook.cc:390
-#, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ [aim] hubungan gagal: %s"
-
-#: src/hooks/aimhook.cc:407
-msgid "+ [aim] password was changed successfully"
-msgstr "+ [aim] kata laluan berjaya ditukar"
-
-#: src/hooks/aimhook.cc:430
-msgid "The user has no profile information."
-msgstr "Pengguna tidak mempunyai profil maklumat."
-
-#: src/hooks/aimhook.cc:523
-msgid "+ [aim] password sent"
-msgstr "+ [aim] kata laluan telah dihantar"
-
-#: src/hooks/irchook.cc:133
-msgid "+ [irc] connecting to the server"
-msgstr "+ [irc] menghubungi pelayan"
-
-#: src/hooks/irchook.cc:145
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ [irc] gagal menghubungi pelayan"
-
-#: src/hooks/irchook.cc:507
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr "+ [irc] senarai rakan dalam channel telah didapatkan, %d ditemui"
-
-#: src/hooks/irchook.cc:697
-msgid "+ [irc] logged in"
-msgstr "+ [irc] log in"
-
-#: src/hooks/irchook.cc:735
-#, fuzzy
-msgid "+ [irc] disconnected"
-msgstr "+ [icq] diputuskan"
-
-#: src/hooks/irchook.cc:749
-#, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ [irc] hubungan gagal: %s"
-
-#: src/hooks/irchook.cc:766
-#, fuzzy
-msgid "+ [irc] nickname was changed successfully"
-msgstr "+ [aim] kata laluan berjaya ditukar"
-
-#: src/hooks/irchook.cc:837
-msgid "On channels: "
-msgstr "Di channel: "
-
-#: src/hooks/irchook.cc:1124
-#, c-format
-msgid "Kicked by %s; reason: %s"
-msgstr ""
-
-#: src/hooks/irchook.cc:1179
-#, c-format
-msgid "The user has changed their nick from %s to %s"
-msgstr ""
-
-#: src/hooks/irchook.cc:1199
-#, fuzzy
-msgid "+ [irc] password sent"
-msgstr "+ [aim] kata laluan telah dihantar"
-
-#: src/hooks/irchook.cc:1201
-msgid "+ [irc] password was requested, but it's not set"
-msgstr ""
-
-#: src/hooks/irchook.cc:1225
-#, c-format
-msgid "PING reply from the user: %d second(s)"
-msgstr ""
-
-#: src/hooks/irchook.cc:1230
-#, c-format
-msgid "The remote is using %s"
-msgstr ""
-
 #: src/hooks/jabberhook.cc:94
 #, fuzzy
 msgid "+ [jab] connecting to the server"
@@ -2518,21 +2518,21 @@ msgstr "+ [icq] tamat carian whitepages, %d ditemui"
 msgid "+ [jab] logged in"
 msgstr "+ [aim] log in"
 
-#: src/hooks/jabberhook.cc:913
+#: src/hooks/jabberhook.cc:915
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ [icq] diputuskan"
 
-#: src/hooks/jabberhook.cc:1071
+#: src/hooks/jabberhook.cc:1073
 #, fuzzy, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ [yahoo] mesej bounce"
 
-#: src/hooks/jabberhook.cc:1121
+#: src/hooks/jabberhook.cc:1123
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1131
+#: src/hooks/jabberhook.cc:1133
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"

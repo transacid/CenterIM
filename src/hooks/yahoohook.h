@@ -90,7 +90,7 @@ class yahoohook: public abstracthook {
 	vector<icqcontact *> getneedsync();
 
 	bool knowntransfer(const imfile &fr) const;
-	void replytransfer(const imfile &fr, bool accept, const string &localpath = "");
+	void replytransfer(const imfile &fr, bool accept, const string &localpath = string());
 	void aborttransfer(const imfile &fr);
 
 	void requestawaymsg(const imcontact &ic);

@@ -6,13 +6,399 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.3\n"
-"POT-Creation-Date: 2002-12-11 12:24+0200\n"
+"POT-Creation-Date: 2002-12-11 14:09+0200\n"
 "PO-Revision-Date: 2002-09-10 22:43+0200\n"
 "Last-Translator: Ovidiu Ghineþ <oghinet@umfiasi.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/hooks/aimhook.cc:59
+msgid "+ [aim] connecting to the server"
+msgstr "+ [aim] conectare la server"
+
+#: src/hooks/aimhook.cc:88
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ [aim] conectare la server imposibilã"
+
+#: src/hooks/aimhook.cc:189
+#, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ [aim] adãugãm pe %s la contacte"
+
+#: src/hooks/aimhook.cc:203
+#, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ [aim] ºtergem pe %s din contacte"
+
+#: src/hooks/aimhook.cc:301
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr "Îmi place enorm profilul AIM al centericq %s. "
+
+#: src/hooks/aimhook.cc:353
+msgid "+ [aim] logged in"
+msgstr "+ [aim] conectat"
+
+#: src/hooks/aimhook.cc:370
+#, fuzzy
+msgid "+ [aim] disconnected"
+msgstr "+ [icq] deconectat"
+
+#: src/hooks/aimhook.cc:388
+msgid "aim connection failed"
+msgstr "aim conectare eºuatã"
+
+#: src/hooks/aimhook.cc:390
+#, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ [aim] conectare eºuatã: %s"
+
+#: src/hooks/aimhook.cc:407
+msgid "+ [aim] password was changed successfully"
+msgstr "+ [aim] parolã schimbatã cu succes"
+
+#: src/hooks/aimhook.cc:430
+msgid "The user has no profile information."
+msgstr "Utilizatorul nu are profil"
+
+#: src/hooks/aimhook.cc:523
+msgid "+ [aim] password sent"
+msgstr "+ [aim] parolã trimisã"
+
+#: src/hooks/icqhook.cc:141
+msgid "+ [icq] connecting to the server"
+msgstr "+ [icq] conectare la server"
+
+#: src/hooks/icqhook.cc:964
+msgid "+ [icq] logged in"
+msgstr "+ [icq] conectat"
+
+#: src/hooks/icqhook.cc:991
+msgid "as requested"
+msgstr "as requested"
+
+#: src/hooks/icqhook.cc:992
+msgid "socket problems"
+msgstr "socket problems"
+
+#: src/hooks/icqhook.cc:993
+msgid "bad username"
+msgstr "username greºit"
+
+#: src/hooks/icqhook.cc:994
+msgid "turboing"
+msgstr "turboing"
+
+#: src/hooks/icqhook.cc:995
+msgid "bad password"
+msgstr "parolã greºitã"
+
+#: src/hooks/icqhook.cc:996
+msgid "username and password mismatch"
+msgstr "username si parolã nepotrivite"
+
+#: src/hooks/icqhook.cc:997
+msgid "already logged"
+msgstr "deja conectat"
+
+#: src/hooks/icqhook.cc:1010
+msgid "+ [icq] disconnected"
+msgstr "+ [icq] deconectat"
+
+#: src/hooks/icqhook.cc:1016
+msgid "icq disconnection reason"
+msgstr "icq motive de deconectare"
+
+#: src/hooks/icqhook.cc:1075
+msgid "The user has accepted your authorization request"
+msgstr "Utilizatorul a acceptat cererea dvs. de autorizare"
+
+#: src/hooks/icqhook.cc:1079
+msgid "The user has rejected your authorization request; the message was: "
+msgstr "Utilizatorul a respins cererea dvs. de autorizare; mesajul a fost: "
+
+#: src/hooks/icqhook.cc:1094 src/hooks/msnhook.cc:503
+#: src/hooks/yahoohook.cc:784
+msgid "The user has added you to his/her contact list"
+msgstr "Utilizatorul v-a adãugat la contactele lui/ei"
+
+#: src/hooks/icqhook.cc:1134
+#, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ [icq] SMS eºuat pentru %s, %s"
+
+#: src/hooks/icqhook.cc:1137
+#, c-format
+msgid "+ [icq] failed SMS to %s"
+msgstr "+ [icq] SMS eºuat pentru %s"
+
+#: src/hooks/icqhook.cc:1148 src/hooks/irchook.cc:572
+#: src/hooks/jabberhook.cc:404
+msgid "Away message:"
+msgstr "Mesaj robot:"
+
+#: src/hooks/icqhook.cc:1152
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
+
+#: src/hooks/icqhook.cc:1283
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr "%s a cerut mesajul nostru robot, am trimis rãspunsul"
+
+#: src/hooks/icqhook.cc:1298
+msgid "Random Chat User"
+msgstr "Random Chat User"
+
+#: src/hooks/icqhook.cc:1328
+#, fuzzy, c-format
+msgid "+ [icq] search finished, %d found"
+msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
+
+#: src/hooks/irchook.cc:133
+msgid "+ [irc] connecting to the server"
+msgstr "+ [irc] conectare la server"
+
+#: src/hooks/irchook.cc:145
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ [irc] conectare la server imposibilã"
+
+#: src/hooks/irchook.cc:507
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr ""
+"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
+
+#: src/hooks/irchook.cc:697
+msgid "+ [irc] logged in"
+msgstr "+ [irc] conectat"
+
+#: src/hooks/irchook.cc:735
+#, fuzzy
+msgid "+ [irc] disconnected"
+msgstr "+ [icq] deconectat"
+
+#: src/hooks/irchook.cc:749
+#, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ [irc] conectare eºuatã"
+
+#: src/hooks/irchook.cc:766
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [irc] nickname schimbat cu succes"
+
+#: src/hooks/irchook.cc:837
+msgid "On channels: "
+msgstr "Pe canalele: "
+
+#: src/hooks/irchook.cc:1124
+#, c-format
+msgid "Kicked by %s; reason: %s"
+msgstr "Dat afarã de %s; motiv: %s"
+
+#: src/hooks/irchook.cc:1179
+#, c-format
+msgid "The user has changed their nick from %s to %s"
+msgstr "Utilizatorul ºi-a schimbat nick-ul din %s în %s"
+
+#: src/hooks/irchook.cc:1199
+#, fuzzy
+msgid "+ [irc] password sent"
+msgstr "+ [aim] parolã trimisã"
+
+#: src/hooks/irchook.cc:1201
+msgid "+ [irc] password was requested, but it's not set"
+msgstr ""
+
+#: src/hooks/irchook.cc:1225
+#, c-format
+msgid "PING reply from the user: %d second(s)"
+msgstr ""
+
+#: src/hooks/irchook.cc:1230
+#, c-format
+msgid "The remote is using %s"
+msgstr ""
+
+#: src/hooks/msnhook.cc:86
+msgid "+ [msn] connecting to the server"
+msgstr "+ [msn] conectare la server"
+
+#: src/hooks/msnhook.cc:105
+#, fuzzy, c-format
+msgid "+ [msn] %s: stopped typing"
+msgstr "+ [yahoo] %s: s-a oprit din tastat"
+
+#: src/hooks/msnhook.cc:283
+#, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ [msn] ºtergem pe %s din contacte"
+
+#: src/hooks/msnhook.cc:328
+#, fuzzy, c-format
+msgid "+ [msn] reverse users listing finished, %d found"
+msgstr ""
+"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
+
+#: src/hooks/msnhook.cc:581
+#, fuzzy, c-format
+msgid "+ [msn] %s: started typing"
+msgstr "+ [yahoo] %s: a inceput sa tasteze"
+
+#: src/hooks/msnhook.cc:589
+#, c-format
+msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
+msgstr ""
+
+#: src/hooks/msnhook.cc:596
+#, fuzzy, c-format
+msgid "+ [msn] e-mail from %s, %s"
+msgstr "+ [msn] e-mail de la %s <%s>, %s"
+
+#: src/hooks/msnhook.cc:637
+msgid "+ [msn] logged in"
+msgstr "+ [msn] conectat"
+
+#: src/hooks/msnhook.cc:651
+msgid "+ [msn] disconnected"
+msgstr "+ [msn] deconectat"
+
+#: src/hooks/yahoohook.cc:109
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] conectare la server"
+
+#: src/hooks/yahoohook.cc:117
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] conectare imposibilã: "
+
+#: src/hooks/yahoohook.cc:120
+msgid "could not resolve hostname"
+msgstr "could not resolve hostname"
+
+#: src/hooks/yahoohook.cc:121
+msgid "could not create socket"
+msgstr "could not create socket"
+
+#: src/hooks/yahoohook.cc:122
+msgid "verify the pager host and port entered"
+msgstr "verificaþi host-ul ºi portul introdus"
+
+#: src/hooks/yahoohook.cc:159
+msgid "+ [yahoo] disconnected"
+msgstr "+ [yahoo] deconectat"
+
+#: src/hooks/yahoohook.cc:284
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] adãugãm %s la contacte"
+
+#: src/hooks/yahoohook.cc:304
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] ºtergem pe %s din contacte"
+
+#: src/hooks/yahoohook.cc:318
+#, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] pãrãsim conferinþa %s"
+
+#: src/hooks/yahoohook.cc:541
+#, fuzzy, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr ""
+"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
+
+#: src/hooks/yahoohook.cc:562
+#, fuzzy
+msgid "Please join my conference."
+msgstr "Utilizatorul %s s-a alãturat la conferinþã"
+
+#: src/hooks/yahoohook.cc:573
+msgid "Custom status message:"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:577
+#, fuzzy, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
+
+#: src/hooks/yahoohook.cc:607
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] conectat"
+
+#: src/hooks/yahoohook.cc:624
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "+ [yahoo] conectare imposibilã: username si parolã nepotrivite"
+
+#: src/hooks/yahoohook.cc:629
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr "+ [yahoo] conectare imposibilã: contul a fost blocat"
+
+#: src/hooks/yahoohook.cc:630
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr "+ pt. a reactiva viziteazã %s"
+
+#: src/hooks/yahoohook.cc:696
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "Utilizatorul %s v-ã invitã la conferinþa %s, subiectul este: %s"
+
+#: src/hooks/yahoohook.cc:699
+msgid "Current conference members are: "
+msgstr "Membrii conferinþei sunt: "
+
+#: src/hooks/yahoohook.cc:717
+msgid "Auto-joined the conference"
+msgstr "Ne auto-alãturãm la conferinþã"
+
+#: src/hooks/yahoohook.cc:727
+#, fuzzy, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr "Utilizatorul %s s-a alãturat la conferinþã"
+
+#: src/hooks/yahoohook.cc:737
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr "Utilizatorul %s s-a alãturat la conferinþã"
+
+#: src/hooks/yahoohook.cc:752
+#, c-format
+msgid "The user %s has left the conference"
+msgstr "Utilizatorul %s a pãrãsit conferinþa"
+
+#: src/hooks/yahoohook.cc:788
+msgid "the message was: "
+msgstr "mesajul a fost: "
+
+#: src/hooks/yahoohook.cc:800
+#, c-format
+msgid "+ [yahoo] %s: started typing"
+msgstr "+ [yahoo] %s: a inceput sa tasteze"
+
+#: src/hooks/yahoohook.cc:800
+#, c-format
+msgid "+ [yahoo] %s: stopped typing"
+msgstr "+ [yahoo] %s: s-a oprit din tastat"
+
+#: src/hooks/yahoohook.cc:813
+#, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [yahoo] e-mail de la %s, %s"
+
+#: src/hooks/yahoohook.cc:820
+#, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] sistem: %s"
+
+#: src/hooks/yahoohook.cc:825
+#, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] eroare: %s"
 
 #: src/centericq.cc:121
 msgid "password: "
@@ -147,6 +533,103 @@ msgstr "! altfel am putea pierdem evenimente si configuraþii"
 #, fuzzy
 msgid "Invite to conference.."
 msgstr "Ne auto-alãturãm la conferinþã"
+
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " IM manager conturi "
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
+msgid "Change"
+msgstr "Schimbã"
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1185
+msgid "Done"
+msgstr "Gata"
+
+#: src/accountmanager.cc:91
+#, c-format
+msgid " Server : %s "
+msgstr " Server : %s "
+
+#: src/accountmanager.cc:94
+#, fuzzy, c-format
+msgid " Secured : %s "
+msgstr " Server : %s "
+
+#: src/accountmanager.cc:100
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:105
+#, c-format
+msgid " Login : %s "
+msgstr " Login : %s "
+
+#: src/accountmanager.cc:111
+#, fuzzy, c-format
+msgid " Password (optional) : %s "
+msgstr " Parolã de setat : %s "
+
+#: src/accountmanager.cc:111
+#, c-format
+msgid " Password : %s "
+msgstr " Parolã : %s "
+
+#: src/accountmanager.cc:115
+msgid " Register "
+msgstr " Înregistreazã "
+
+#: src/accountmanager.cc:121
+#, fuzzy
+msgid " Change nickname "
+msgstr " Nickname "
+
+#: src/accountmanager.cc:122
+msgid " Update user details "
+msgstr " Editeazã detalii "
+
+#: src/accountmanager.cc:125
+msgid " Set away message "
+msgstr " Seteazã mesajul robot "
+
+#: src/accountmanager.cc:128
+msgid " Synchronize contact list "
+msgstr " Sincronizare contacte "
+
+#: src/accountmanager.cc:130
+msgid " Drop "
+msgstr " Renunþã "
+
+#: src/accountmanager.cc:148
+msgid " user name: "
+msgstr " nume utilizator: "
+
+#: src/accountmanager.cc:153
+msgid " uin: "
+msgstr "uin: "
+
+#: src/accountmanager.cc:158
+msgid " password: "
+msgstr " parolã: "
+
+#: src/accountmanager.cc:166
+msgid "Drop the account information first!"
+msgstr "Renunþã la informaþiile contului mai întãi!"
+
+#: src/accountmanager.cc:180
+msgid "You have to disconnect the service first!"
+msgstr "Trebuie sã te deconectezi mai întãi!"
+
+#: src/accountmanager.cc:189
+msgid " server address: "
+msgstr " adresã server: "
+
+#: src/accountmanager.cc:211
+msgid "You must be logged in to preform the synchronization"
+msgstr "Trebuie sã fii conectat pt. a face sincronizarea"
 
 #: src/icqconf.cc:153
 #, c-format
@@ -380,11 +863,6 @@ msgstr "sAlveazã"
 #: src/icqdialogs.cc:211 src/icqdialogs.cc:217
 msgid "cLear"
 msgstr "ºterge"
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
-#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
-msgid "Change"
-msgstr "Schimbã"
 
 #: src/icqdialogs.cc:211
 msgid "Search/Add"
@@ -735,11 +1213,6 @@ msgstr " Detaliile dvs. %s "
 #, c-format
 msgid " %s: details "
 msgstr " %s: detalii "
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
-#: src/icqdialogs.cc:1185
-msgid "Done"
-msgstr "Gata"
 
 #: src/icqdialogs.cc:644
 msgid "Wait a moment. Your details haven't been fetched yet"
@@ -1653,93 +2126,6 @@ msgstr "cautã: "
 msgid "General"
 msgstr "General"
 
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " IM manager conturi "
-
-#: src/accountmanager.cc:91
-#, c-format
-msgid " Server : %s "
-msgstr " Server : %s "
-
-#: src/accountmanager.cc:94
-#, fuzzy, c-format
-msgid " Secured : %s "
-msgstr " Server : %s "
-
-#: src/accountmanager.cc:100
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:105
-#, c-format
-msgid " Login : %s "
-msgstr " Login : %s "
-
-#: src/accountmanager.cc:111
-#, fuzzy, c-format
-msgid " Password (optional) : %s "
-msgstr " Parolã de setat : %s "
-
-#: src/accountmanager.cc:111
-#, c-format
-msgid " Password : %s "
-msgstr " Parolã : %s "
-
-#: src/accountmanager.cc:115
-msgid " Register "
-msgstr " Înregistreazã "
-
-#: src/accountmanager.cc:121
-#, fuzzy
-msgid " Change nickname "
-msgstr " Nickname "
-
-#: src/accountmanager.cc:122
-msgid " Update user details "
-msgstr " Editeazã detalii "
-
-#: src/accountmanager.cc:125
-msgid " Set away message "
-msgstr " Seteazã mesajul robot "
-
-#: src/accountmanager.cc:128
-msgid " Synchronize contact list "
-msgstr " Sincronizare contacte "
-
-#: src/accountmanager.cc:130
-msgid " Drop "
-msgstr " Renunþã "
-
-#: src/accountmanager.cc:148
-msgid " user name: "
-msgstr " nume utilizator: "
-
-#: src/accountmanager.cc:153
-msgid " uin: "
-msgstr "uin: "
-
-#: src/accountmanager.cc:158
-msgid " password: "
-msgstr " parolã: "
-
-#: src/accountmanager.cc:166
-msgid "Drop the account information first!"
-msgstr "Renunþã la informaþiile contului mai întãi!"
-
-#: src/accountmanager.cc:180
-msgid "You have to disconnect the service first!"
-msgstr "Trebuie sã te deconectezi mai întãi!"
-
-#: src/accountmanager.cc:189
-msgid " server address: "
-msgstr " adresã server: "
-
-#: src/accountmanager.cc:211
-msgid "You must be logged in to preform the synchronization"
-msgstr "Trebuie sã fii conectat pt. a face sincronizarea"
-
 #: src/imcontroller.cc:64
 #, fuzzy, c-format
 msgid " Register on the %s network "
@@ -1913,274 +2299,6 @@ msgstr ""
 msgid "registration is not supported"
 msgstr "înregistrarea nu este suportatã"
 
-#: src/hooks/icqhook.cc:141
-msgid "+ [icq] connecting to the server"
-msgstr "+ [icq] conectare la server"
-
-#: src/hooks/icqhook.cc:964
-msgid "+ [icq] logged in"
-msgstr "+ [icq] conectat"
-
-#: src/hooks/icqhook.cc:991
-msgid "as requested"
-msgstr "as requested"
-
-#: src/hooks/icqhook.cc:992
-msgid "socket problems"
-msgstr "socket problems"
-
-#: src/hooks/icqhook.cc:993
-msgid "bad username"
-msgstr "username greºit"
-
-#: src/hooks/icqhook.cc:994
-msgid "turboing"
-msgstr "turboing"
-
-#: src/hooks/icqhook.cc:995
-msgid "bad password"
-msgstr "parolã greºitã"
-
-#: src/hooks/icqhook.cc:996
-msgid "username and password mismatch"
-msgstr "username si parolã nepotrivite"
-
-#: src/hooks/icqhook.cc:997
-msgid "already logged"
-msgstr "deja conectat"
-
-#: src/hooks/icqhook.cc:1010
-msgid "+ [icq] disconnected"
-msgstr "+ [icq] deconectat"
-
-#: src/hooks/icqhook.cc:1016
-msgid "icq disconnection reason"
-msgstr "icq motive de deconectare"
-
-#: src/hooks/icqhook.cc:1075
-msgid "The user has accepted your authorization request"
-msgstr "Utilizatorul a acceptat cererea dvs. de autorizare"
-
-#: src/hooks/icqhook.cc:1079
-msgid "The user has rejected your authorization request; the message was: "
-msgstr "Utilizatorul a respins cererea dvs. de autorizare; mesajul a fost: "
-
-#: src/hooks/icqhook.cc:1094 src/hooks/msnhook.cc:503
-#: src/hooks/yahoohook.cc:784
-msgid "The user has added you to his/her contact list"
-msgstr "Utilizatorul v-a adãugat la contactele lui/ei"
-
-#: src/hooks/icqhook.cc:1134
-#, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ [icq] SMS eºuat pentru %s, %s"
-
-#: src/hooks/icqhook.cc:1137
-#, c-format
-msgid "+ [icq] failed SMS to %s"
-msgstr "+ [icq] SMS eºuat pentru %s"
-
-#: src/hooks/icqhook.cc:1148 src/hooks/irchook.cc:572
-#: src/hooks/jabberhook.cc:404
-msgid "Away message:"
-msgstr "Mesaj robot:"
-
-#: src/hooks/icqhook.cc:1152
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
-
-#: src/hooks/icqhook.cc:1283
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s a cerut mesajul nostru robot, am trimis rãspunsul"
-
-#: src/hooks/icqhook.cc:1298
-msgid "Random Chat User"
-msgstr "Random Chat User"
-
-#: src/hooks/icqhook.cc:1328
-#, fuzzy, c-format
-msgid "+ [icq] search finished, %d found"
-msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
-
-#: src/hooks/yahoohook.cc:109
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] conectare la server"
-
-#: src/hooks/yahoohook.cc:117
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] conectare imposibilã: "
-
-#: src/hooks/yahoohook.cc:120
-msgid "could not resolve hostname"
-msgstr "could not resolve hostname"
-
-#: src/hooks/yahoohook.cc:121
-msgid "could not create socket"
-msgstr "could not create socket"
-
-#: src/hooks/yahoohook.cc:122
-msgid "verify the pager host and port entered"
-msgstr "verificaþi host-ul ºi portul introdus"
-
-#: src/hooks/yahoohook.cc:159
-msgid "+ [yahoo] disconnected"
-msgstr "+ [yahoo] deconectat"
-
-#: src/hooks/yahoohook.cc:284
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] adãugãm %s la contacte"
-
-#: src/hooks/yahoohook.cc:304
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] ºtergem pe %s din contacte"
-
-#: src/hooks/yahoohook.cc:318
-#, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] pãrãsim conferinþa %s"
-
-#: src/hooks/yahoohook.cc:541
-#, fuzzy, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr ""
-"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
-
-#: src/hooks/yahoohook.cc:562
-#, fuzzy
-msgid "Please join my conference."
-msgstr "Utilizatorul %s s-a alãturat la conferinþã"
-
-#: src/hooks/yahoohook.cc:573
-msgid "Custom status message:"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:577
-#, fuzzy, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
-
-#: src/hooks/yahoohook.cc:607
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] conectat"
-
-#: src/hooks/yahoohook.cc:624
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "+ [yahoo] conectare imposibilã: username si parolã nepotrivite"
-
-#: src/hooks/yahoohook.cc:629
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr "+ [yahoo] conectare imposibilã: contul a fost blocat"
-
-#: src/hooks/yahoohook.cc:630
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr "+ pt. a reactiva viziteazã %s"
-
-#: src/hooks/yahoohook.cc:696
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr "Utilizatorul %s v-ã invitã la conferinþa %s, subiectul este: %s"
-
-#: src/hooks/yahoohook.cc:699
-msgid "Current conference members are: "
-msgstr "Membrii conferinþei sunt: "
-
-#: src/hooks/yahoohook.cc:717
-msgid "Auto-joined the conference"
-msgstr "Ne auto-alãturãm la conferinþã"
-
-#: src/hooks/yahoohook.cc:727
-#, fuzzy, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr "Utilizatorul %s s-a alãturat la conferinþã"
-
-#: src/hooks/yahoohook.cc:737
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr "Utilizatorul %s s-a alãturat la conferinþã"
-
-#: src/hooks/yahoohook.cc:752
-#, c-format
-msgid "The user %s has left the conference"
-msgstr "Utilizatorul %s a pãrãsit conferinþa"
-
-#: src/hooks/yahoohook.cc:788
-msgid "the message was: "
-msgstr "mesajul a fost: "
-
-#: src/hooks/yahoohook.cc:800
-#, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] %s: a inceput sa tasteze"
-
-#: src/hooks/yahoohook.cc:800
-#, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] %s: s-a oprit din tastat"
-
-#: src/hooks/yahoohook.cc:813
-#, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail de la %s, %s"
-
-#: src/hooks/yahoohook.cc:820
-#, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] sistem: %s"
-
-#: src/hooks/yahoohook.cc:825
-#, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] eroare: %s"
-
-#: src/hooks/msnhook.cc:86
-msgid "+ [msn] connecting to the server"
-msgstr "+ [msn] conectare la server"
-
-#: src/hooks/msnhook.cc:105
-#, fuzzy, c-format
-msgid "+ [msn] %s: stopped typing"
-msgstr "+ [yahoo] %s: s-a oprit din tastat"
-
-#: src/hooks/msnhook.cc:283
-#, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ [msn] ºtergem pe %s din contacte"
-
-#: src/hooks/msnhook.cc:328
-#, fuzzy, c-format
-msgid "+ [msn] reverse users listing finished, %d found"
-msgstr ""
-"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
-
-#: src/hooks/msnhook.cc:581
-#, fuzzy, c-format
-msgid "+ [msn] %s: started typing"
-msgstr "+ [yahoo] %s: a inceput sa tasteze"
-
-#: src/hooks/msnhook.cc:589
-#, c-format
-msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
-msgstr ""
-
-#: src/hooks/msnhook.cc:596
-#, fuzzy, c-format
-msgid "+ [msn] e-mail from %s, %s"
-msgstr "+ [msn] e-mail de la %s <%s>, %s"
-
-#: src/hooks/msnhook.cc:637
-msgid "+ [msn] logged in"
-msgstr "+ [msn] conectat"
-
-#: src/hooks/msnhook.cc:651
-msgid "+ [msn] disconnected"
-msgstr "+ [msn] deconectat"
-
 #: src/imevents.cc:278
 msgid "Empty authorization request message"
 msgstr "Cerere de autorizare farã conþinut"
@@ -2209,6 +2327,11 @@ msgstr ""
 #: src/imevents.cc:573
 msgid "* File transfer"
 msgstr ""
+
+#: src/imexternal.cc:133
+#, fuzzy, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "s-a executat acþiunea externã %s"
 
 #: src/imlogger.cc:32
 msgid "Offline"
@@ -2324,129 +2447,6 @@ msgstr "%s este offline"
 msgid "changed our %s status to %s from %s"
 msgstr "ne-am schimbat statutul %s din %s in %s"
 
-#: src/imexternal.cc:133
-#, fuzzy, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "s-a executat acþiunea externã %s"
-
-#: src/hooks/aimhook.cc:59
-msgid "+ [aim] connecting to the server"
-msgstr "+ [aim] conectare la server"
-
-#: src/hooks/aimhook.cc:88
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ [aim] conectare la server imposibilã"
-
-#: src/hooks/aimhook.cc:189
-#, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ [aim] adãugãm pe %s la contacte"
-
-#: src/hooks/aimhook.cc:203
-#, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ [aim] ºtergem pe %s din contacte"
-
-#: src/hooks/aimhook.cc:301
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr "Îmi place enorm profilul AIM al centericq %s. "
-
-#: src/hooks/aimhook.cc:353
-msgid "+ [aim] logged in"
-msgstr "+ [aim] conectat"
-
-#: src/hooks/aimhook.cc:370
-#, fuzzy
-msgid "+ [aim] disconnected"
-msgstr "+ [icq] deconectat"
-
-#: src/hooks/aimhook.cc:388
-msgid "aim connection failed"
-msgstr "aim conectare eºuatã"
-
-#: src/hooks/aimhook.cc:390
-#, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ [aim] conectare eºuatã: %s"
-
-#: src/hooks/aimhook.cc:407
-msgid "+ [aim] password was changed successfully"
-msgstr "+ [aim] parolã schimbatã cu succes"
-
-#: src/hooks/aimhook.cc:430
-msgid "The user has no profile information."
-msgstr "Utilizatorul nu are profil"
-
-#: src/hooks/aimhook.cc:523
-msgid "+ [aim] password sent"
-msgstr "+ [aim] parolã trimisã"
-
-#: src/hooks/irchook.cc:133
-msgid "+ [irc] connecting to the server"
-msgstr "+ [irc] conectare la server"
-
-#: src/hooks/irchook.cc:145
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ [irc] conectare la server imposibilã"
-
-#: src/hooks/irchook.cc:507
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr ""
-"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
-
-#: src/hooks/irchook.cc:697
-msgid "+ [irc] logged in"
-msgstr "+ [irc] conectat"
-
-#: src/hooks/irchook.cc:735
-#, fuzzy
-msgid "+ [irc] disconnected"
-msgstr "+ [icq] deconectat"
-
-#: src/hooks/irchook.cc:749
-#, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ [irc] conectare eºuatã"
-
-#: src/hooks/irchook.cc:766
-msgid "+ [irc] nickname was changed successfully"
-msgstr "+ [irc] nickname schimbat cu succes"
-
-#: src/hooks/irchook.cc:837
-msgid "On channels: "
-msgstr "Pe canalele: "
-
-#: src/hooks/irchook.cc:1124
-#, c-format
-msgid "Kicked by %s; reason: %s"
-msgstr "Dat afarã de %s; motiv: %s"
-
-#: src/hooks/irchook.cc:1179
-#, c-format
-msgid "The user has changed their nick from %s to %s"
-msgstr "Utilizatorul ºi-a schimbat nick-ul din %s în %s"
-
-#: src/hooks/irchook.cc:1199
-#, fuzzy
-msgid "+ [irc] password sent"
-msgstr "+ [aim] parolã trimisã"
-
-#: src/hooks/irchook.cc:1201
-msgid "+ [irc] password was requested, but it's not set"
-msgstr ""
-
-#: src/hooks/irchook.cc:1225
-#, c-format
-msgid "PING reply from the user: %d second(s)"
-msgstr ""
-
-#: src/hooks/irchook.cc:1230
-#, c-format
-msgid "The remote is using %s"
-msgstr ""
-
 #: src/hooks/jabberhook.cc:94
 #, fuzzy
 msgid "+ [jab] connecting to the server"
@@ -2498,21 +2498,21 @@ msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
 msgid "+ [jab] logged in"
 msgstr "+ [aim] conectat"
 
-#: src/hooks/jabberhook.cc:913
+#: src/hooks/jabberhook.cc:915
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ [yahoo] deconectat"
 
-#: src/hooks/jabberhook.cc:1071
+#: src/hooks/jabberhook.cc:1073
 #, fuzzy, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ [yahoo] eroare: %s"
 
-#: src/hooks/jabberhook.cc:1121
+#: src/hooks/jabberhook.cc:1123
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1131
+#: src/hooks/jabberhook.cc:1133
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"

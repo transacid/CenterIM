@@ -95,7 +95,7 @@ class abstracthook {
 
 	virtual bool knowntransfer(const imfile &fr) const;
 	virtual void replytransfer(const imfile &fr, bool accept,
-	    const string &localpath = "");
+	    const string &localpath = string());
 	virtual void aborttransfer(const imfile &fr);
 
 	virtual void conferencecreate(const imcontact &confid,
