@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.95 2002/11/30 23:33:44 konst Exp $
+* $Id: icqconf.cc,v 1.96 2002/12/13 11:08:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -200,6 +200,7 @@ void icqconf::loadmainconfig() {
 	mailcheck = askaway = false;
 	savepwd = bidi = true;
 	setsmtphost("");
+	setpeertopeer(0, 65535);
 
 	while(!f.eof()) {
 	    getstring(f, buf);
@@ -222,7 +223,11 @@ void icqconf::loadmainconfig() {
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") chatmode = true; else
 	    if(param == "nobidi") setbidi(false); else
-	    if(param == "askaway") askaway = true; else {
+	    if(param == "askaway") askaway = true; else
+	    if(param == "ptp") {
+		ptpmin = atoi(getword(buf, "-").c_str());
+		ptpmax = atoi(buf.c_str());
+	    } else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
 		    if(param.substr(0, buf.size()) == buf) {
@@ -268,6 +273,7 @@ void icqconf::save() {
 	    if(!getbidi()) f << "nobidi" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
+	    f << "ptp\t" << ptpmin << "-" << ptpmax << endl;
 
 	    switch(getgroupmode()) {
 		case group1: f << "group1" << endl; break;

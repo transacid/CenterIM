@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.102 2002/12/12 16:47:53 konst Exp $
+* $Id: icqdialogs.cc,v 1.103 2002/12/13 11:08:44 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -965,15 +965,14 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
 
 bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool finished, success;
-    int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
-    string tmp, phidden, socksuser, sockspass;
-    string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
+    int nopt, n, i, b, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
+    string tmp, phidden;
+
     string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
 
     bool quote = conf.getquote();
     bool rus = conf.getrussian();
     bool savepwd = conf.getsavepwd();
-    bool socks = !conf.getsockshost().empty();
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
@@ -982,13 +981,15 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool chatmode = conf.getchatmode();
     bool bidi = conf.getbidi();
 
+    int ptpmin, ptpmax;
+    conf.getpeertopeer(ptpmin, ptpmax);
+    bool ptp = ptpmax;
+
     icqconf::groupmode gmode = conf.getgroupmode();
 
     dialogbox db;
 
     finished = success = false;
-
-    if(conf.getsockshost().empty()) prserv = "";
 
     conf.getauto(aaway, ana);
 
@@ -1036,6 +1037,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
+	t.addleaff(i, 0, 21, _(" Enable peer-to-peer communications : %s "), stryesno(ptp));
+
+	if(ptp)
+	    t.addleaff(i, 0, 22, _(" Port range to use for peer-to-peer : %s "), (i2str(ptpmin) + "-" + i2str(ptpmax)).c_str());
 
 	i = t.addnode(_(" Miscellaneous "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
@@ -1073,19 +1078,6 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 6: hideoffl = !hideoffl; break;
 		    case 7: askaway = !askaway; break;
 		    case 8: quote = !quote; break;
-		    case 9: socks = !socks; break;
-		    case 10:
-			tmp = inputstr(_("SOCKS proxy server to use: "), prserv);
-			if(!tmp.empty()) prserv = tmp;
-			break;
-		    case 11:
-			socksuser = inputstr(_("SOCKS proxy user name: "), socksuser);
-			conf.setsocksuser(socksuser, sockspass);
-			break;
-		    case 12:
-			sockspass = inputstr(_("SOCKS proxy password: "), sockspass, '*');
-			conf.setsocksuser(socksuser, sockspass);
-			break;
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
@@ -1102,6 +1094,24 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			if(!tmp.empty()) smtp = tmp;
 			break;
 		    case 20: bidi = !bidi; break;
+		    case 21:
+			ptp = !ptp;
+			if(ptp && !ptpmax)
+			    ptpmin = 0, ptpmax = 65535;
+			break;
+		    case 22:
+			tmp = inputstr(_("Peer-to-peer port range (min-max): "),
+			    (i2str(ptpmin) + "-" + i2str(ptpmax)).c_str());
+
+			if(tmp.size()) {
+			    int tptpmin = atoi(getword(tmp, "-").c_str());
+			    int tptpmax = atoi(tmp.c_str());
+
+			    if(tptpmax)
+			    if(tptpmin < tptpmax)
+				ptpmin = tptpmin, ptpmax = tptpmax;
+			}
+			break;
 		}
 		break;
 	    case 1:
@@ -1118,12 +1128,14 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setchatmode(chatmode);
 		conf.setbidi(bidi);
 
+		if(ptp) conf.setpeertopeer(ptpmin, ptpmax);
+		    else conf.setpeertopeer(0, 0);
+
 		if(conf.getgroupmode() != gmode) {
 		    conf.setgroupmode(gmode);
 		    clist.rearrange();
 		}
 
-		conf.setsockshost(socks ? prserv : "");
 		conf.setsmtphost(smtp);
 		conf.save();
 		break;

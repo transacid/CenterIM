@@ -75,7 +75,7 @@ class icqconf {
 
 	unsigned short socksport, smtpport;
 
-	int autoaway, autona;
+	int autoaway, autona, ptpmin, ptpmax;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
 	    makelog, fenoughdiskspace, askaway, chatmode, bidi;
@@ -156,7 +156,7 @@ class icqconf {
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);
- 
+
 	string getsockshost() const;
 	unsigned int getsocksport() const;
 	void setsockshost(const string &nsockshost);
@@ -167,6 +167,9 @@ class icqconf {
 
 	void getsocksuser(string &name, string &pass) const;
 	void setsocksuser(const string &name, const string &pass);
+
+	void getpeertopeer(int &min, int &max) const { min = ptpmin; max = ptpmax; }
+	void setpeertopeer(int min, int max) { ptpmin = min; ptpmax = max; }
 
 	void openurl(const string &url);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.124 2002/12/12 14:14:34 konst Exp $
+* $Id: icqhook.cc,v 1.125 2002/12/13 11:08:44 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -115,7 +115,7 @@ void icqhook::init() {
 
 void icqhook::connect() {
     icqconf::imaccount acc = conf.getourid(icq);
-    int i;
+    int i, ptpmin, ptpmax;
     icqcontact *c;
 
     if(acc.additional["autosync"].empty()) acc.additional["autosync"] = "1";
@@ -138,6 +138,15 @@ void icqhook::connect() {
     if(conf.getsmtpport()) cli.setSMTPServerPort(conf.getsmtpport());
 
     if(!conf.getbindhost().empty()) cli.setClientBindHost(conf.getbindhost());
+
+    conf.getpeertopeer(ptpmin, ptpmax);
+    if(ptpmax) {
+	cli.setAcceptInDC(true);
+	cli.setPortRangeLowerBound(ptpmin);
+	cli.setPortRangeUpperBound(ptpmax);
+    } else {
+	cli.setAcceptInDC(false);
+    }
 
     face.log(_("+ [icq] connecting to the server"));
 
