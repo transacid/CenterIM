@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.4 2001/08/18 07:30:43 konst Exp $
+* $Id: dialogbox.cc,v 1.5 2001/09/14 15:57:37 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -356,6 +356,10 @@ dialogbox::keybarassociation::keybarassociation(int nkey, int nbarit) {
     baritem = nbarit;
 }
 
+bool dialogbox::keybarassociation::operator == (const int akey) {
+    return key == akey;
+}
+
 bool dialogbox::keybarassociation::operator != (const int akey) {
-    return key != akey;
+    return !(*this == akey);
 }

@@ -22,6 +22,8 @@ class dialogbox {
             public:
                 int key, baritem;
                 keybarassociation(int nkey, int nbarit);
+
+                bool operator == (const int akey);
                 bool operator != (const int akey);
         };
 
