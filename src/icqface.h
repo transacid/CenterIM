@@ -90,7 +90,7 @@ class icqface {
 	bool editdone, mainscreenblock, inited, onlinefolder,
 	    dotermresize, fneedupdate, detailsfetched;
 
-	int extk;
+	int extk, chatlines;
 
 	imcontact passinfo;
 
@@ -134,6 +134,8 @@ class icqface {
 	void extracturls(const string &buf);
 
 	int groupmanager(const string &text, bool sel);
+
+	void renderchathistory();
 
     public:
 	vector<imcontact> muins;
@@ -203,6 +205,7 @@ class icqface {
 	    vector<eventviewresult> abuttons = vector<eventviewresult>());
 
 	bool edit(string &txt, const string &header);
+	void chat(const imcontact &ic);
 };
 
 extern icqface face;

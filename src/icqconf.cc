@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.65 2002/04/11 17:14:35 konst Exp $
+* $Id: icqconf.cc,v 1.66 2002/04/25 17:04:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -42,7 +42,7 @@ icqconf::icqconf() {
     autoaway = autona = 0;
 
     hideoffline = antispam = russian = makelog = askaway = false;
-    savepwd = mailcheck = fenoughdiskspace = true;
+    savepwd = mailcheck = fenoughdiskspace = chatmode = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }
@@ -189,6 +189,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "log") makelog = true; else
+	    if(param == "chatmode") chatmode = true; else
 	    if(param == "askaway") askaway = true; else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
@@ -231,6 +232,7 @@ void icqconf::save() {
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
+	    if(getchatmode()) f << "chatmode" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
 
@@ -625,6 +627,10 @@ void icqconf::setmailcheck(bool fmc) {
 
 void icqconf::setaskaway(bool faskaway) {
     askaway = faskaway;
+}
+
+void icqconf::setchatmode(bool fchatmode) {
+    chatmode = fchatmode;
 }
 
 void icqconf::openurl(const string &url) {

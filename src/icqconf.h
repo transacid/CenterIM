@@ -69,7 +69,7 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
-	    makelog, fenoughdiskspace, askaway;
+	    makelog, fenoughdiskspace, askaway, chatmode;
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost;
@@ -141,6 +141,9 @@ class icqconf {
 
 	bool getaskaway() const { return askaway; }
 	void setaskaway(bool faskaway);
+
+	bool getchatmode() const { return chatmode; }
+	void setchatmode(bool fchatmode);
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);
