@@ -84,7 +84,7 @@ class icqconf {
 	bool chatmode[protocolname_size], russian[protocolname_size];
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
-	    argv0, smtphost, bindhost;
+	    argv0, smtphost, bindhost, proxyhost;
 
 	regsound rs;
 	regcolor rc;

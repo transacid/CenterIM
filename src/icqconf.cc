@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.106 2003/05/09 13:13:49 konst Exp $
+* $Id: icqconf.cc,v 1.107 2003/06/19 00:31:54 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -409,8 +409,8 @@ void icqconf::loadsounds() {
 
 	    fo << "# <id>\tid of a contact; can be one of the following" << endl;
 	    fo << "# *\tmeans default sound for all the contacts" << endl;
-	    fo << "# icq_<uin>\tfor icq contacts" << endl;
-	    fo << "# yahoo_<nickname>\tfor yahoo" << endl;
+	    fo << "# icq_<uin>\tfor icq contacts (e.g. icq_123)" << endl;
+	    fo << "# yahoo_<nickname>\tfor yahoo (e.g. yahoo_thekonst)" << endl;
 	    fo << "# .. etc. Similar for the other protocols" << endl << "#" << endl;
 
 	    fo << "# <event>\tcan be: ";
@@ -774,6 +774,12 @@ void icqconf::commandline(int argc, char **argv) {
 	    if(argv[++i]) {
 		bindhost = argv[i];
 		cw_setbind(bindhost.c_str());
+	    }
+
+	} else if((args == "-P") || (args == "--http-proxy")) {
+	    if(argv[++i]) {
+		proxyhost = argv[i];
+//                cw_setproxy(proxyhost.c_str());
 	    }
 
 	} else if((args == "-s") || (args == "--send")) {

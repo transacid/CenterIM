@@ -9,6 +9,7 @@ jabber online/offline are not reported in the log window
 other than icq networks cannot connect with --bind
 log away msg requests in the window
 smses in russian
+removed auto-wrap in editor
 
 /*
 *
@@ -16,16 +17,68 @@ smses in russian
 *
 */
 
-try to see the log window trashing on text modes with higer resolutions
 jabber invisible status doesn't work
+jabber conferences don't work
+
 typing notifications are shown only once
 aim message receive - freeze
+yahoo file transfers -> cannot accept
+looks like icq auth requests in russian are utf-8 encoded
 
 /*
 *
 * TODO
 *
 */
+
+rss reader
+
+f9 opens all the chat history
+
+http(s) connect method
+
+ Follows is an example of the CONNECT method, going to a correctly configured proxy:
+
+>>> $ telnet oblivion.its.uq.edu.au 8080
+<<< Trying 130.102.152.116...
+<<< Connected to oblivion.its.uq.edu.au.
+<<< Escape character is '^]'.
+>>> CONNECT smtp.uq.edu.au:25 HTTP/1.0
+>>>
+<<< HTTP/1.0 403 Forbidden
+<<< Server: Squid/2.4.STABLE4
+<<< Mime-Version: 1.0
+<<< Date: Tue, 15 Oct 2002 00:24:57 GMT
+<<< Content-Type: text/html
+<<< Content-Length: 696
+<<< Expires: Tue, 15 Oct 2002 00:24:57 GMT
+<<< X-Squid-Error: ERR_ACCESS_DENIED 0
+<<< X-Cache: MISS from oblivion
+<<< Proxy-Connection: close
+
+	.
+	. HTML Cut for clarity.
+	.
+			
+<<< Connection closed by foreign host.
+<<< $ 
+
+Follows is the same proxy server badly configured and therefore open:
+
+>>> $ telnet oblivion.its.uq.edu.au 8080
+<<< Trying 130.102.152.116...
+<<< Connected to oblivion.its.uq.edu.au.
+<<< Escape character is '^]'.
+>>> CONNECT smtp.uq.edu.au:25 HTTP/1.0
+>>>
+<<< HTTP/1.0 200 Connection established
+<<<
+<<< 220 bunyip.cc.uq.edu.au ESMTP Sendmail 8.9.3/8.9.3; Tue, 15 Oct 2002 10:46:23 (GMT)
+>>> QUIT
+<<< 221 bunyip.cc.uq.edu.au closing connection
+<<< Connection closed by foreign host.
+<<< $ 
+
 
 specific status lists for every protocol, extend the standard statuses
 
@@ -50,4 +103,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.425 2003/06/02 18:59:20 konst Exp $
+$Id: TODO,v 1.426 2003/06/19 00:31:53 konst Exp $
