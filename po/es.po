@@ -4,9 +4,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: centericq 4.7.1\n"
+"Project-Id-Version: centericq 4.7.2\n"
 "POT-Creation-Date: 2002-05-18 12:09+0300\n"
-"PO-Revision-Date: 2002-04-17 21:01-0500\n"
+"PO-Revision-Date: 2002-05-21 14:08-0500\n"
 "Last-Translator: Leonardo Boshell <p@kapcoweb.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,8 @@ msgid "%s to %s has been put to the queue"
 msgstr "%s a %s ha sido colocado en cola"
 
 #: src/icqconf.cc:774
-msgid "event sending error: the destination contact doesn't exist on your list"
+msgid ""
+"event sending error: the destination contact doesn't exist on your list"
 msgstr "evento enviando error: el contacto de destino no existe en su lista"
 
 #: src/icqconf.cc:813
@@ -219,14 +220,14 @@ msgid " Nickname "
 msgstr " Alias "
 
 #: src/icqdialogs.cc:126
-#, fuzzy, c-format
+#, c-format
 msgid " Channel : %s "
-msgstr " Canales "
+msgstr " Canal : %s "
 
 #: src/icqdialogs.cc:128
-#, fuzzy, c-format
+#, c-format
 msgid " Name : %s "
-msgstr " Alias : %s "
+msgstr " Nombre : %s "
 
 #: src/icqdialogs.cc:147
 msgid "UIN: "
@@ -273,9 +274,8 @@ msgid "Channel: "
 msgstr "Canal: "
 
 #: src/icqdialogs.cc:163
-#, fuzzy
 msgid "Name: "
-msgstr "Nombre"
+msgstr "Nombre: "
 
 #: src/icqdialogs.cc:197 src/icqdialogs.cc:204
 msgid " General "
@@ -289,7 +289,7 @@ msgstr " E-Mail : %s "
 #: src/icqdialogs.cc:210
 #, c-format
 msgid " Birthdate : %s "
-msgstr " Fecha de nacimiento : %s "
+msgstr " Cumpleaños : %s "
 
 #: src/icqdialogs.cc:211
 #, c-format
@@ -394,7 +394,7 @@ msgstr "Dirección: "
 
 #: src/icqdialogs.cc:364 src/icqdialogs.cc:373
 msgid "Zip code: "
-msgstr "Código postal: "
+msgstr "Cód. Zip: "
 
 #: src/icqdialogs.cc:365 src/icqdialogs.cc:378
 msgid "Phone: "
@@ -410,7 +410,7 @@ msgstr "Teléfono celular: "
 
 #: src/icqdialogs.cc:377 src/icqdialogs.cc:381
 msgid "Homepage: "
-msgstr "Página personal: "
+msgstr "Sitio web: "
 
 #: src/icqdialogs.cc:387 src/icqface.cc:888
 msgid "About"
@@ -502,8 +502,7 @@ msgstr " Traduccion al ruso con win1251-koi8 necesaria : %s "
 #: src/icqdialogs.cc:641
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
-msgstr ""
-" Anti-spam: elimina mensajes de usuarios que no están en la lista : %s "
+msgstr " Anti-spam: ignorar mensajes de usuarios por fuera de la lista : %s "
 
 #: src/icqdialogs.cc:642
 #, c-format
@@ -526,9 +525,9 @@ msgid " Edit away message on status change : %s "
 msgstr " Editar el mensaje de ausencia al cambiar de status : %s "
 
 #: src/icqdialogs.cc:646
-#, fuzzy, c-format
+#, c-format
 msgid " Chat messaging mode : %s "
-msgstr " Citar el mensaje original en la respuesta : %s "
+msgstr " Modo de mensajería tipo chat : %s "
 
 #: src/icqdialogs.cc:648
 msgid " Communications "
@@ -602,13 +601,12 @@ msgid "rEmove"
 msgstr "Eliminar"
 
 #: src/icqdialogs.cc:810
-#, fuzzy
 msgid "move Up"
-msgstr "Eliminar"
+msgstr "(U) mover arriba"
 
 #: src/icqdialogs.cc:810
 msgid "move Down"
-msgstr ""
+msgstr "(D) mover abajo"
 
 #: src/icqdialogs.cc:811
 msgid "Select"
@@ -688,7 +686,7 @@ msgstr " Editar detalles"
 
 #: src/icqface.cc:224
 msgid " Fetch away message"
-msgstr " Consultar mensaje de ausencia"
+msgstr " Ver mensaje de ausencia"
 
 #: src/icqface.cc:227
 msgid " Events history         h"
@@ -732,7 +730,7 @@ msgstr " Buscar/agregar usuarios"
 
 #: src/icqface.cc:269
 msgid " CenterICQ config options"
-msgstr " Opciones de configuración de CenterICQ"
+msgstr " Valores de configuración de CenterICQ"
 
 #: src/icqface.cc:271
 msgid " View/edit ignore list"
@@ -789,7 +787,7 @@ msgstr "2do e-mail"
 
 #: src/icqface.cc:714
 msgid "Old e-mail"
-msgstr "E-mail antiguo"
+msgstr "E-mail viejo"
 
 #: src/icqface.cc:715
 msgid "Gender"
@@ -829,7 +827,7 @@ msgstr "Ubicación"
 
 #: src/icqface.cc:757 src/icqface.cc:800
 msgid "Zip code"
-msgstr "Código postal"
+msgstr "Cód. Zip"
 
 #: src/icqface.cc:758 src/icqface.cc:806
 msgid "Phone"
@@ -845,11 +843,11 @@ msgstr "Celular"
 
 #: src/icqface.cc:761
 msgid "Timezone"
-msgstr "Zona horaria"
+msgstr "Horario"
 
 #: src/icqface.cc:763 src/icqface.cc:808
 msgid "Homepage"
-msgstr "Página personal"
+msgstr "Sitio web"
 
 #: src/icqface.cc:802
 msgid "Company"
@@ -857,7 +855,7 @@ msgstr "Compañía"
 
 #: src/icqface.cc:803
 msgid "Department"
-msgstr "Departamento"
+msgstr "Depart."
 
 #: src/icqface.cc:804
 msgid "Title"
@@ -1002,7 +1000,8 @@ msgid "Outgoing %s to %s"
 msgstr "Evento saliente %s a %s"
 
 #: src/icqface.cc:1590 src/icqface.cc:1760
-msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
+msgid ""
+"Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X enviar, Ctrl-P múltiple, Ctrl-O historial, Alt-? detalles, ESC "
 "cancelar"
@@ -1339,8 +1338,8 @@ msgstr "contraseña: "
 msgid ""
 "F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
 msgstr ""
-"F2/M menú de contactos actual, F3/S modificar status, F4/G acciones "
-"generales, Q salir"
+"F2/M menú de contactos actual, F3/S cambiar status, F4/G generalidades, Q "
+"salir"
 
 #: src/centericq.cc:210
 #, c-format
@@ -1721,12 +1720,3 @@ msgstr "autorización"
 #: src/imlogger.h:41
 msgid "e-mail"
 msgstr "e-mail"
-
-#~ msgid " Channel "
-#~ msgstr " Canal "
-
-#, fuzzy
-#~ msgid "Ctrl-X send, Ctrl-O history, Alt-? details, ESC exit"
-#~ msgstr ""
-#~ "Ctrl-X enviar, Ctrl-P múltiple, Ctrl-O historial, Alt-? detalles, ESC "
-#~ "cancelar"
