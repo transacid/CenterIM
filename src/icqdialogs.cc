@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.122 2003/07/24 16:31:32 konst Exp $
+* $Id: icqdialogs.cc,v 1.123 2003/07/25 17:03:00 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1050,8 +1050,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     conf.getpeertopeer(ptpmin, ptpmax);
     bool ptp = ptpmax;
 
-    string http = conf.gethttphost();
-    if(!http.empty()) http += ":" + i2str(conf.gethttpport());
+    string httpproxy = conf.gethttpproxyhost();
+    if(!httpproxy.empty()) httpproxy += ":" + i2str(conf.gethttpproxyport());
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
@@ -1134,7 +1134,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
-	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), http.c_str());
+	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
 	t.addleaff(i, 0, 21, _(" Enable peer-to-peer communications : %s "), stryesno(ptp));
 
 	if(ptp)
@@ -1229,7 +1229,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 23: emacs = !emacs; break;
 		    case 24:
-			http = inputstr(_("HTTP proxy server hostname: "), http);
+			httpproxy = inputstr(_("HTTP proxy server hostname: "), httpproxy);
 			break;
 		}
 		break;
@@ -1262,7 +1262,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		}
 
 		conf.setsmtphost(smtp);
-		conf.sethttphost(http);
+		conf.sethttpproxyhost(httpproxy);
 		conf.save();
 		break;
 	}

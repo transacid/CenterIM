@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.164 2003/07/22 20:58:23 konst Exp $
+* $Id: centericq.cc,v 1.165 2003/07/25 17:03:00 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -431,9 +431,9 @@ void centericq::changestatus() {
 		case occupied:
 		case dontdisturb:
 		    if(pnames.size() == 1)
-			prompt = conf.getprotocolname(*ipname) + ": ";
+			prompt = conf.getprotocolname(pnames.front()) + ": ";
 		    prompt += _("away message");
-		    proceed = setaway = face.edit(tmp = conf.getawaymsg(*ipname), prompt);
+		    proceed = setaway = face.edit(tmp = conf.getawaymsg(pnames.front()), prompt);
 		    break;
 		default:
 		    setaway = false;

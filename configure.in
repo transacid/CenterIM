@@ -130,7 +130,7 @@ AC_ARG_ENABLE(aim,    [  --disable-aim      Build without AIM], build_aim="$enab
 AC_ARG_ENABLE(irc,    [  --disable-irc      Build without IRC], build_irc="$enableval", build_irc="yes")
 AC_ARG_ENABLE(jabber, [  --disable-jabber   Build without Jabber], build_jabber="$enableval", build_jabber="yes")
 AC_ARG_ENABLE(rss,    [  --disable-rss      Build without RSS reader], build_rss="$enableval", build_rss="yes")
-AC_ARG_ENABLE(konst,  [  --no-konst         Don't add contact list items supplied by author by default], build_konst="$enableval", build_konst="yes")
+AC_ARG_ENABLE(konst,  [  --disable-konst    Don't add contact list items supplied by author by default], build_konst="$enableval", build_konst="yes")
 
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)

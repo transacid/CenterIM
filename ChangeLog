@@ -1496,3 +1496,36 @@ Jabber conferences were fixed. Actually, a small workaround was added
 for a weirdness of jabber.com server.
 
 Jabber passwords hash authentification was enabled.
+
+4.9.6
+-----
+
+The internal RSS parser suffered some changes that enabled it to undestand
+the RDF dialect as well as CDATA values. Some problems related to fetching
+all the records on every check were fixed.
+
+RSS checking delays are now specified in minutes, not in hours.
+
+The "Reply" button was removed that used to appear in the message box
+when reading RSS records.
+
+Correct redirect processing was implemented in the HTTP module used to fetch
+RSS documents.
+
+HTTP proxy support was added. So far it's used only for RSS fetching.
+
+History lastreads checking was improved. Now centericq shouldn't show the
+unread messages mark for contacts you communicated with during some clock
+skews.
+
+Auto-reconnect appeared not to work for the ICQ protocol. Fixed.
+
+It's now possible to join a Jabber conference by its JID, without a need
+for a service to be registered on the server. Example:
+"jdev@conference.jabber.org" in the "Name/Title" field.
+
+Since Jabber IDs are not case sensitive, centericq treats JIDs written with
+capital and small letters the same way.
+
+The status change window was improved. Now it has the "All protocol" item on
+the top along with newly added "Already logged in only".

@@ -1,5 +1,5 @@
-Version: 4.9.5
-Summary: Console ncurses based IM client. ICQ, Yahoo!, MSN, AIM, IRC and Jabber protocols are supported.
+Version: 4.9.6
+Summary: Console ncurses based IM client. ICQ, Yahoo!, MSN, AIM, IRC and Jabber protocols are supported. Internal RSS reader is also provided.
 Name: centericq
 Release: 1
 Copyright: GPL
@@ -22,7 +22,7 @@ email messages, automatically set away after the defined period of
 inactivity (on any console), and have your own ignore, visible and
 invisible lists. It can also associate events with sounds, has support
 for Hebrew and Arabic languages and allows to arrange contacts into
-groups.
+groups. Internal RSS reader is provided.
 
 %prep
 %setup

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.188 2003/07/22 20:58:24 konst Exp $
+* $Id: icqface.cc,v 1.189 2003/07/25 17:03:01 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1266,7 +1266,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 
     } else {
 	m.additem(0, -1, _(" All protocols"));
-	if(alrlogged) m.additem(0, -2, _(" Already logged only"));
+	if(alrlogged) m.additem(0, -2, _(" Already logged in only"));
 	m.addline();
 	makeprotocolmenu(m);
 	m.scale();
