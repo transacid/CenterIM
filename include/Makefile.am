@@ -1,2 +1,2 @@
-EXTRA_DIST = cmenus.h textbrowser.h treeview.h abstractui.h conscommon.h horizontalbar.h conf.h colorschemer.h textwindow.h screenarea.h textinputline.h linkedlist.h fileselector.h texteditor.h dialogbox.h
+EXTRA_DIST = abstractui.h cmenus.h colorschemer.h conf.h conscommon.h dialogbox.h fileselector.h horizontalbar.h linkedlist.h screenarea.h textbrowser.h texteditor.h textinputline.h textwindow.h treeview.h
 SUBDIRS = 
