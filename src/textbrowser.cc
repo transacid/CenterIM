@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.8 2002/03/07 09:16:25 konst Exp $
+* $Id: textbrowser.cc,v 1.9 2002/03/30 17:47:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,7 +25,7 @@
 #include "textbrowser.h"
 
 textbrowser::textbrowser(int nx1, int ny1, int nx2, int ny2, int clr) {
-    setcoord(nx1, ny1, nx2, ny2);
+    setcoords(nx1, ny1, nx2, ny2);
     setcolor(clr);
     idle = 0;
     otherkeys = 0;
@@ -44,7 +44,7 @@ void textbrowser::setcolor(int clr = 0) {
     ncolor = clr;
 }
 
-void textbrowser::setcoord(int nx1, int ny1, int nx2, int ny2) {
+void textbrowser::setcoords(int nx1, int ny1, int nx2, int ny2) {
     x1 = nx1;
     x2 = nx2;
     y1 = ny1;

@@ -31,9 +31,9 @@ class fileselector: public abstractuicontrol {
 		string fname;
 		int mode;
 
-		item(const string afname, int amode)
+		item(const string &afname, int amode)
 		    { fname = afname, mode = amode; }
-		const string getprefix() const;
+		string getprefix() const;
 
 		bool operator < (const item &aitem) const;
 		bool operator > (const item &aitem) const;
@@ -63,7 +63,7 @@ class fileselector: public abstractuicontrol {
 	~fileselector();
 
 	void setoptions(int noptions);
-	void setstartpoint(const string aspoint);
+	void setstartpoint(const string &aspoint);
 	void setwindow(textwindow awindow);
 	void setcolor(int acnormal, int acselected, int accurrent, int acfile);
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.8 2002/03/09 18:26:10 konst Exp $
+* $Id: treeview.cc,v 1.9 2002/03/30 17:47:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,7 +30,7 @@ treeview::treeview(int nx1, int ny1, int nx2, int ny2, int nbgcolor, int nselect
     nodecolor = nnodecolor;
     leafcolor = nleafcolor;
     init();
-    setcoord(nx1, ny1, nx2, ny2);
+    setcoords(nx1, ny1, nx2, ny2);
 }
 
 treeview::treeview(int nbgcolor, int nselectcolor, int nnodecolor, int nleafcolor) {
@@ -93,11 +93,11 @@ int treeview::addleaff(int parent, int color, int ref, const char *fmt, ...) {
     return addleaf(parent, color, (void *) ref, buf);
 }
 
-int treeview::addnode(const string text) {
+int treeview::addnode(const string &text) {
     return addnode(0, 0, 0, text);
 }
 
-int treeview::addnode(int parent, int color, void *ref, const string text) {
+int treeview::addnode(int parent, int color, void *ref, const string &text) {
     treeviewnode node;
 
     node.id = idseq++;
@@ -112,11 +112,11 @@ int treeview::addnode(int parent, int color, void *ref, const string text) {
     return node.id;
 }
 
-int treeview::addleaf(const string text) {
-    addleaf(0, 0, 0, text);
+int treeview::addleaf(const string &text) {
+    return addleaf(0, 0, 0, text);
 }
 
-int treeview::addleaf(int parent, int color, void *ref, const string text) {
+int treeview::addleaf(int parent, int color, void *ref, const string &text) {
     treeviewnode node;
 
     node.id = idseq++;
@@ -130,11 +130,11 @@ int treeview::addleaf(int parent, int color, void *ref, const string text) {
     return node.id;
 }
 
-int treeview::addnode(int parent, int color, int ref, const string text) {
+int treeview::addnode(int parent, int color, int ref, const string &text) {
     return addnode(parent, color, (void *) ref, text);
 }
 
-int treeview::addleaf(int parent, int color, int ref, const string text) {
+int treeview::addleaf(int parent, int color, int ref, const string &text) {
     return addleaf(parent, color, (void *) ref, text);
 }
 
@@ -328,8 +328,8 @@ bool treeview::empty() {
     return items.size() < 2;
 }
 
-void treeview::setcoord(int nx1, int ny1, int nx2, int ny2) {
-    menu.setcoord(x1 = nx1, y1 = ny1, x2 = nx2, y2 = ny2);
+void treeview::setcoords(int nx1, int ny1, int nx2, int ny2) {
+    menu.setcoords(x1 = nx1, y1 = ny1, x2 = nx2, y2 = ny2);
 }
 
 // ----------------------------------------------------------------------------

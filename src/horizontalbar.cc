@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui horizontalbar class
-* $Id: horizontalbar.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: horizontalbar.cc,v 1.3 2002/03/30 17:47:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,7 +29,7 @@ done(false), item(0), previtem(-1), scolor(sc), ncolor(nc) {
     char *p;
     va_list ap;
 
-    setcoord(x, y);
+    setcoords(x, y);
     va_start(ap, sc);
     while(p = va_arg(ap, char *)) items.push_back((string) p);
     va_end(ap);
@@ -118,7 +118,7 @@ void horizontalbar::align(bamode m) {
     }
 }
 
-void horizontalbar::setcoord(int x, int y) {
+void horizontalbar::setcoords(int x, int y) {
     x1 = x, y1 = y;
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.13 2002/03/09 18:26:09 konst Exp $
+* $Id: cmenus.cc,v 1.14 2002/03/30 17:47:53 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,7 +27,7 @@
 verticalmenu::verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int pscolor) {
     initmembers();
     setcolor(pncolor, pscolor);
-    setcoord(px1, py1, px2, py2);
+    setcoords(px1, py1, px2, py2);
 }
 
 verticalmenu::verticalmenu(int pncolor = 0, int pscolor = 0) {
@@ -54,7 +54,7 @@ bool verticalmenu::empty() {
     return items.empty();
 }
 
-void verticalmenu::setcoord(int nx1, int ny1, int nx2, int ny2) {
+void verticalmenu::setcoords(int nx1, int ny1, int nx2, int ny2) {
     x1 = nx1;
     x2 = nx2;
     y1 = ny1;
@@ -390,7 +390,7 @@ void verticalmenu::setitemcolor(int pos, int color) {
 
 void verticalmenu::setwindow(textwindow nwindow) {
     window = nwindow;
-    setcoord(window.x1+1, window.y1+1, window.x2, window.y2);
+    setcoords(window.x1+1, window.y1+1, window.x2, window.y2);
 }
 
 void verticalmenu::remove(int pos) {
@@ -460,14 +460,14 @@ int horizontalmenu::menu_otherkeys(verticalmenu &ref, int k) {
     return -1;
 }
 
-void horizontalmenu::additem(int color, string text) {
+void horizontalmenu::additem(int color, const string &text) {
     horizontalmenuitem i;
     i.text = text;
     i.color = color ? color : ncolor;
     menus.push_back(i);
 }
 
-void horizontalmenu::additem(string text) {
+void horizontalmenu::additem(const string &text) {
     additem(0, text);
 }
 

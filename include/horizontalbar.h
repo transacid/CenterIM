@@ -29,7 +29,7 @@ class horizontalbar : public abstractuicontrol {
 	virtual void redraw();
 	void update();
 	void align(bamode m);
-	void setcoord(int x, int y);
+	void setcoords(int x, int y);
 };
 
 __KTOOL_END_NAMESPACE

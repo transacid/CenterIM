@@ -202,18 +202,18 @@ void textinputline::exec() {
 void textinputline::close() {
 }
 
-void textinputline::historyadd(const string buf) {
+void textinputline::historyadd(const string &buf) {
     while(history.size() > TEXTINPUT_HIST_LIMIT)
 	history.erase(history.begin());
 
     history.insert(history.begin(), buf);
 }
 
-void textinputline::setvalue(const string buf) {
+void textinputline::setvalue(const string &buf) {
     value = buf;
 }
 
-const string textinputline::getvalue() const {
+string textinputline::getvalue() const {
     return value;
 }
 

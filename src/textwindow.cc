@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textwindow class
-* $Id: textwindow.cc,v 1.5 2001/08/18 14:33:20 konst Exp $
+* $Id: textwindow.cc,v 1.6 2002/03/30 17:47:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,7 +83,7 @@ void textwindow::set_titlef(int color, const char *fmt, ...) {
     set_title(color, buf);
 }
 
-void textwindow::set_title(int color, const string atitle) {
+void textwindow::set_title(int color, const string &atitle) {
     title = atitle;
     tc = color;
     
@@ -116,11 +116,11 @@ void textwindow::writef(int x, int y, int c, const char *fmt, ...) {
     write(x, y, c, buf);
 }
 
-void textwindow::write(int x, int y, const string text) {
+void textwindow::write(int x, int y, const string &text) {
     write(x, y, wc, text);
 }
 
-void textwindow::write(int x, int y, int c, const string text) {
+void textwindow::write(int x, int y, int c, const string &text) {
     int i;
     string dtext;
 
@@ -171,7 +171,7 @@ void textwindow::redraw() {
 void textwindow::open() {
     if(!fisopen) {
 	fisopen = true;
-        screenbuffer.save(x1, y1, x2, y2);
+	screenbuffer.save(x1, y1, x2, y2);
 	redraw();
     }
 }

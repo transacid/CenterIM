@@ -206,7 +206,7 @@ void fileselector::setoptions(int noptions) {
     options = noptions;
 }
 
-void fileselector::setstartpoint(const string aspoint) {
+void fileselector::setstartpoint(const string &aspoint) {
     spoint = aspoint;
     dcurrent = "";
 }
@@ -225,7 +225,7 @@ int fileselector::getlastkey() {
 
 // ----------------------------------------------------------------------------
 
-const string fileselector::item::getprefix() const {
+string fileselector::item::getprefix() const {
     string prefix = " ";
     struct stat st;
 

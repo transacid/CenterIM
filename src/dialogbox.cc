@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.10 2001/11/20 14:09:57 konst Exp $
+* $Id: dialogbox.cc,v 1.11 2002/03/30 17:47:53 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -50,7 +50,7 @@ void dialogbox::setbar(horizontalbar *newb, bool fb = true) {
 
     if(bar)
     if(window) {
-	bar->setcoord(window->x2-1, window->y2-1);
+	bar->setcoords(window->x2-1, window->y2-1);
 	bar->align(baleft);
     }
 }
@@ -61,7 +61,7 @@ void dialogbox::setmenu(verticalmenu *newm, bool fm = true) {
 
     if(menu)
     if(window) {
-	menu->setcoord(window->x1+1, window->y1+1, window->x2,
+	menu->setcoords(window->x1+1, window->y1+1, window->x2,
 	bar ? window->y2-2 : window->y2);
     }
 }
@@ -72,7 +72,7 @@ void dialogbox::settree(treeview *newt, bool ft = true) {
 
     if(tree)
     if(window) {
-	tree->setcoord(window->x1+1, window->y1+1, window->x2,
+	tree->setcoords(window->x1+1, window->y1+1, window->x2,
 	bar ? window->y2-2 : window->y2);
     }
 }
@@ -83,7 +83,7 @@ void dialogbox::setbrowser(textbrowser *newbr, bool fbr = true) {
 
     if(browser)    
     if(window) {
-	browser->setcoord(window->x1+2, window->y1+1,
+	browser->setcoords(window->x1+2, window->y1+1,
 	window->x2, bar ? window->y2-2 : window->y2);
     }
 }
@@ -198,22 +198,22 @@ void dialogbox::redraw() {
 		window->separatey(window->y2-window->y1-2);
 	    }
 
-	    bar->setcoord(window->x2 - (window->isbordered() ? 1 : 2), window->y2-1);
+	    bar->setcoords(window->x2 - (window->isbordered() ? 1 : 2), window->y2-1);
 	    bar->align(baleft);
 	    bar->redraw();
 	}
 
 	if(menu) {
-	    menu->setcoord(window->x1+1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
+	    menu->setcoords(window->x1+1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
 	    menu->idle = &menuidle;
 	    menu->otherkeys = &menukeys;
 	} else if(tree) {
-	    tree->setcoord(window->x1+1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
+	    tree->setcoords(window->x1+1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
 	    tree->redraw();
 	    tree->menu.idle = &menuidle;
 	    tree->menu.otherkeys = &menukeys;
 	} else if(browser) {
-	    browser->setcoord(window->x1+2, window->y1+1, window->x2-1, bar ? window->y2-2 : window->y2);
+	    browser->setcoords(window->x1+2, window->y1+1, window->x2-1, bar ? window->y2-2 : window->y2);
 	    browser->redraw();
 	    browser->idle = &browseridle;
 	    browser->otherkeys = &browserkeys;

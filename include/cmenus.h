@@ -95,7 +95,7 @@ class verticalmenu: public abstractuicontrol {
 	int open();
 	void scale();
 	void close();
-	void setcoord(int nx1, int ny1, int nx2, int ny2);
+	void setcoords(int nx1, int ny1, int nx2, int ny2);
 	void setcolor(int pncolor, int pscolor);
 
     friend class horizontalmenu;
@@ -138,8 +138,8 @@ class horizontalmenu: public abstractuicontrol {
 	void additemf(int color, const char *fmt, ...);
 	void additemf(const char *fmt, ...);
 
-	void additem(int color, string text);
-	void additem(string text);
+	void additem(int color, const string &text);
+	void additem(const string &text);
 
 	verticalmenu *pulldown(int n);
 

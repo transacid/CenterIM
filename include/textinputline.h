@@ -29,10 +29,10 @@ class textinputline: public abstractuicontrol {
 	textinputline();
 	~textinputline();
 
-	void historyadd(const string buf);
+	void historyadd(const string &buf);
 
-	void setvalue(const string buf);
-	const string getvalue() const;
+	void setvalue(const string &buf);
+	string getvalue() const;
 
 	void setcoords(int x, int y, int len);
 	void setcolor(int acolor, int ahistcolor = 0, int ahistcurcolor = 0);

@@ -25,7 +25,7 @@ class textbrowser: public abstractuicontrol {
 	~textbrowser();
 
 	void setcolor(int clr);
-	void setcoord(int nx1, int ny1, int nx2, int ny2);
+	void setcoords(int nx1, int ny1, int nx2, int ny2);
 	void redraw();
 	void move(int k);
 

@@ -48,17 +48,17 @@ class treeview : public abstractuicontrol {
 
 	bool empty();
 
-	int addnode(int parent, int color, void *ref, const string text);
-	int addnode(int parent, int color, int ref, const string text);
-	int addnode(const string text);
+	int addnode(int parent, int color, void *ref, const string &text);
+	int addnode(int parent, int color, int ref, const string &text);
+	int addnode(const string &text);
 
 	int addnodef(int parent, int color, void *ref, const char *fmt, ...);
 	int addnodef(int parent, int color, int ref, const char *fmt, ...);
 	int addnodef(const char *fmt, ...);
 
-	int addleaf(int parent, int color, void *ref, const string text);
-	int addleaf(int parent, int color, int ref, const string text);
-	int addleaf(const string text);
+	int addleaf(int parent, int color, void *ref, const string &text);
+	int addleaf(int parent, int color, int ref, const string &text);
+	int addleaf(const string &text);
 
 	int addleaff(int parent, int color, void *ref, const char *fmt, ...);
 	int addleaff(int parent, int color, int ref, const char *fmt, ...);
@@ -82,7 +82,7 @@ class treeview : public abstractuicontrol {
 	void *open(int *n);
 
 	void setcur(int id);
-	void setcoord(int nx1, int ny1, int nx2, int ny2);
+	void setcoords(int nx1, int ny1, int nx2, int ny2);
 };
 
 __KTOOL_END_NAMESPACE
