@@ -535,9 +535,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 							firetalk_callback_subcode_request(c,irc_get_nickname(args[0]),&tempchr[1],NULL);
 					}
 					if (tempchr2)
-						memmove(tempchr,&tempchr2[1],strlen(&tempchr2[1]) + 1);
-					if(args[3][0] == 1)
-						break;
+						memmove(tempchr,&tempchr2[1],strlen(&tempchr2[1]) + 1); else break;
 				}
 				if (args[3][0] != '\0') {
 					if (strchr(ROOMSTARTS,args[2][0]))
@@ -562,7 +560,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 							firetalk_callback_subcode_reply(c,irc_get_nickname(args[0]),&tempchr[1],NULL);
 					}
 					if (tempchr2)
-						memcpy(tempchr,&tempchr2[1],strlen(&tempchr2[1]) + 1);
+						memcpy(tempchr,&tempchr2[1],strlen(&tempchr2[1]) + 1); else break;
 				}
 				if (!strcasecmp(irc_get_nickname(args[0]),"NickServ")) {
 					if ((strstr(args[3],"IDENTIFY") != NULL) && (strstr(args[3],"/msg") != NULL) && (strstr(args[3],"HELP") == NULL)) {
