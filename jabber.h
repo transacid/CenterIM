@@ -267,6 +267,7 @@ typedef struct jconn_struct
     pool        p;             /* Memory allocation pool */
     int         state;     /* Connection state flag */
     int         fd;            /* Connection file descriptor */
+    int         ssl;
     jid         user;      /* User info */
     char        *pass;     /* User passwd */
 
@@ -288,7 +289,7 @@ typedef void (*jconn_state_h)(jconn j, int state);
 typedef void (*jconn_packet_h)(jconn j, jpacket p);
 typedef void (*jconn_logger)(jconn j, int inout, const char *p);
 
-jconn jab_new(char *user, char *pass);
+jconn jab_new(char *user, char *pass, int ssl);
 void jab_delete(jconn j);
 void jab_state_handler(jconn j, jconn_state_h h);
 void jab_packet_handler(jconn j, jconn_packet_h h);
@@ -308,8 +309,6 @@ void jab_poll(jconn j, int timeout);
 
 char *jab_auth(jconn j);
 char *jab_reg(jconn j);
-
-
 
 #ifdef __cplusplus
 }

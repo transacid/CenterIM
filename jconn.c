@@ -18,6 +18,7 @@
  */
 
 #include "jabber.h"
+#include "connwrap.h"
 
 /* local macros for launching event handlers */
 #define STATE_EVT(arg) if(j->on_state) { (j->on_state)(j, (arg) ); }
@@ -38,7 +39,7 @@ static void charData(void *userdata, const char *s, int slen);
  *      a pointer to the connection structure
  *      or NULL if allocations failed
  */
-jconn jab_new(char *user, char *pass)
+jconn jab_new(char *user, char *pass, int ssl)
 {
     pool p;
     jconn j;
@@ -57,6 +58,7 @@ jconn jab_new(char *user, char *pass)
     j->state = JCONN_STATE_OFF;
     j->id = 1;
     j->fd = -1;
+    j->ssl = ssl;
 
     return j;
 }
@@ -131,7 +133,7 @@ void jab_start(jconn j)
     XML_SetElementHandler(j->parser, startElement, endElement);
     XML_SetCharacterDataHandler(j->parser, charData);
 
-    j->fd = make_netsocket(5222, j->user->server, NETSOCKET_CLIENT);
+    j->fd = make_netsocket(5222, j->user->server, NETSOCKET_CLIENT, j->ssl);
     if(j->fd < 0) {
 	STATE_EVT(JCONN_STATE_OFF)
 	return;
@@ -243,7 +245,7 @@ void jab_send(jconn j, xmlnode x)
     {
 	    char *buf = xmlnode2str(x);
 	    if (buf) {
-		write(j->fd, buf, strlen(buf));
+		cw_write(j->fd, buf, strlen(buf), j->ssl);
 		if (j->logger)
 		    (j->logger)(j, 0, buf);
 	    }
@@ -264,7 +266,7 @@ void jab_send(jconn j, xmlnode x)
 void jab_send_raw(jconn j, const char *str)
 {
     if (j && j->state != JCONN_STATE_OFF) {
-	write(j->fd, str, strlen(str));
+	cw_write(j->fd, str, strlen(str), j->ssl);
 
 	if (j->logger)
 	    (j->logger)(j, 0, str);
@@ -289,7 +291,7 @@ void jab_recv(jconn j)
     if(!j || j->state == JCONN_STATE_OFF)
 	return;
 
-    len = read(j->fd, buf, sizeof(buf)-1);
+    len = cw_read(j->fd, buf, sizeof(buf)-1, j->ssl);
     if(len>0)
     {
 	buf[len] = '\0';

@@ -27,7 +27,7 @@
  * type = NETSOCKET_UDP
  */
 
-int make_netsocket(u_short port, char *host, int type)
+int make_netsocket(u_short port, char *host, int type, int ssl)
 {
     int s, flag = 1;
     struct sockaddr_in sa;
@@ -40,53 +40,53 @@ int make_netsocket(u_short port, char *host, int type)
     bzero((void *)&sa,sizeof(struct sockaddr_in));
 
     if((s = socket(AF_INET,socket_type,0)) < 0)
-        return(-1);
+	return(-1);
     if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&flag, sizeof(flag)) < 0)
-        return(-1);
+	return(-1);
 
     saddr = make_addr(host);
     if(saddr == NULL)
-        return(-1);
+	return(-1);
     sa.sin_family = AF_INET;
     sa.sin_port = htons(port);
 
     if(type == NETSOCKET_SERVER)
     {
-        /* bind to specific address if specified */
-        if(host != NULL)
-            sa.sin_addr.s_addr = saddr->s_addr;
+	/* bind to specific address if specified */
+	if(host != NULL)
+	    sa.sin_addr.s_addr = saddr->s_addr;
 
-        if(bind(s,(struct sockaddr*)&sa,sizeof sa) < 0)
-        {
-            close(s);
-            return(-1);
-        }
+	if(bind(s,(struct sockaddr*)&sa,sizeof sa) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
     }
     if(type == NETSOCKET_CLIENT)
     {
-        sa.sin_addr.s_addr = saddr->s_addr;
-        if(connect(s,(struct sockaddr*)&sa,sizeof sa) < 0)
-        {
-            close(s);
-            return(-1);
-        }
+	sa.sin_addr.s_addr = saddr->s_addr;
+	if(cw_connect(s,(struct sockaddr*)&sa,sizeof sa,ssl) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
     }
     if(type == NETSOCKET_UDP)
     {
-        /* bind to all addresses for now */
-        if(bind(s,(struct sockaddr*)&sa,sizeof sa) < 0)
-        {
-            close(s);
-            return(-1);
-        }
+	/* bind to all addresses for now */
+	if(bind(s,(struct sockaddr*)&sa,sizeof sa) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
 
-        /* specify default recipient for read/write */
-        sa.sin_addr.s_addr = saddr->s_addr;
-        if(connect(s,(struct sockaddr*)&sa,sizeof sa) < 0)
-        {
-            close(s);
-            return(-1);
-        }
+	/* specify default recipient for read/write */
+	sa.sin_addr.s_addr = saddr->s_addr;
+	if(cw_connect(s,(struct sockaddr*)&sa,sizeof sa,ssl) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
     }
 
 
@@ -102,23 +102,23 @@ struct in_addr *make_addr(char *host)
 
     if(host == NULL || strlen(host) == 0)
     {
-        gethostname(myname,MAXHOSTNAMELEN);
-        hp = gethostbyname(myname);
-        if(hp != NULL)
-        {
-            return (struct in_addr *) *hp->h_addr_list;
-        }
+	gethostname(myname,MAXHOSTNAMELEN);
+	hp = gethostbyname(myname);
+	if(hp != NULL)
+	{
+	    return (struct in_addr *) *hp->h_addr_list;
+	}
     }else{
-        addr.s_addr = inet_addr(host);
-        if(addr.s_addr != -1)
-        {
-            return &addr;
-        }
-        hp = gethostbyname(host);
-        if(hp != NULL)
-        {
-            return (struct in_addr *) *hp->h_addr_list;
-        }
+	addr.s_addr = inet_addr(host);
+	if(addr.s_addr != -1)
+	{
+	    return &addr;
+	}
+	hp = gethostbyname(host);
+	if(hp != NULL)
+	{
+	    return (struct in_addr *) *hp->h_addr_list;
+	}
     }
     return NULL;
 }
@@ -133,12 +133,12 @@ int set_fd_close_on_exec(int fd, int flag)
     int newflags;
 
     if(flag)
-        newflags = oldflags | FD_CLOEXEC;
+	newflags = oldflags | FD_CLOEXEC;
     else
-        newflags = oldflags & (~FD_CLOEXEC);
+	newflags = oldflags & (~FD_CLOEXEC);
 
     if(newflags==oldflags)
-        return 0;
+	return 0;
     return fcntl(fd,F_SETFL,(long)newflags);
 }
 
