@@ -116,7 +116,7 @@ bool abstracthook::knowntransfer(const imfile &fr) const {
     return false;
 }
 
-void abstracthook::replytransfer(const imfile &fr, bool accept) {
+void abstracthook::replytransfer(const imfile &fr, bool accept, const string &localpath = "") {
 }
 
 // ----------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.25 2002/09/19 17:09:03 konst Exp $
+* $Id: aimhook.cc,v 1.26 2002/09/24 16:20:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -455,10 +455,6 @@ void aimhook::userstatus(const string &nickname, imstatus st) {
 	if(st != c->getstatus()) {
 	    logger.putonline(ic, c->getstatus(), st);
 	    c->setstatus(st);
-
-	    if(c->getstatus() != offline) {
-		c->setlastseen();
-	    }
 	}
     }
 }

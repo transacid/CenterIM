@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.65 2002/08/29 17:25:25 konst Exp $
+* $Id: icqcontact.cc,v 1.66 2002/09/24 16:20:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -451,6 +451,7 @@ void icqcontact::setstatus(imstatus fstatus) {
 	    playsound(imevent::online);
 	}
 
+	setlastseen();
 	status = fstatus;
 	face.relaxedupdate();
     }

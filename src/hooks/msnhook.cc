@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.33 2002/09/23 09:04:18 konst Exp $
+* $Id: msnhook.cc,v 1.34 2002/09/24 16:20:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -366,10 +366,6 @@ void msnhook::statuschanged(void *data) {
 
 	logger.putonline(ic, c->getstatus(), msn2imstatus(d->newStatus));
 	c->setstatus(msn2imstatus(d->newStatus));
-
-	if(c->getstatus() != offline) {
-	    c->setlastseen();
-	}
     }
 }
 

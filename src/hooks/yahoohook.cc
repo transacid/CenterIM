@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.56 2002/09/19 17:09:05 konst Exp $
+* $Id: yahoohook.cc,v 1.57 2002/09/24 16:20:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -389,8 +389,6 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
 	logger.putonline(ic, c->getstatus(), yahoo2imstatus(st));
 
 	c->setstatus(yahoo2imstatus(st));
-	if(c->getstatus() != offline) c->setlastseen();
-
 	c->setabout(rusconv("wk", message));
     }
 }

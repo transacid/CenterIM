@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.47 2002/09/23 17:11:21 konst Exp $
+* $Id: irchook.cc,v 1.48 2002/09/24 16:20:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -652,28 +652,34 @@ void irchook::ping(const imcontact &c) {
 }
 
 bool irchook::knowntransfer(const imfile &fr) const {
-    return filetransfers.find(fr) != filetransfers.end();
+    return transferinfo.find(fr) != transferinfo.end();
 }
 
-void irchook::replytransfer(const imfile &fr, bool accept) {
-    void *fhandle = filetransfers[fr];
-
+void irchook::replytransfer(const imfile &fr, bool accept, const string &localpath = "") {
     if(accept) {
-	firetalk_file_accept(handle, fhandle, 0,
-	    ((string) getenv("HOME") + "/" + justfname(fr.getfiles().begin()->fname)).c_str());
+	transferinfo[fr].second = localpath;
+
+	if(transferinfo[fr].second.substr(transferinfo[fr].second.size()-1) != "/")
+	    transferinfo[fr].second += "/";
+
+	transferinfo[fr].second += justfname(fr.getfiles().begin()->fname);
+
+	firetalk_file_accept(handle, transferinfo[fr].first, 0,
+	    transferinfo[fr].second.c_str());
 
     } else {
-	firetalk_file_refuse(handle, fhandle);
-	filetransfers.erase(fr);
+	firetalk_file_refuse(handle, transferinfo[fr].first);
+	transferinfo.erase(fr);
 	em.store(imnotification(fr.getcontact(), _("File transfer refused")));
+
     }
 }
 
 bool irchook::getfevent(void *fhandle, imfile &fr) {
-    map<imfile, void *>::const_iterator i = filetransfers.begin();
+    map<imfile, pair<void *, string> >::const_iterator i = transferinfo.begin();
 
-    while(i != filetransfers.end()) {
-	if(i->second == fhandle) {
+    while(i != transferinfo.end()) {
+	if(i->second.first == fhandle) {
 	    fr = i->first;
 	    return true;
 	}
@@ -694,9 +700,6 @@ void irchook::userstatus(const string &nickname, imstatus st) {
 	if(st != c->getstatus()) {
 	    logger.putonline(ic, c->getstatus(), st);
 	    c->setstatus(st);
-
-	    if(c->getstatus() != offline)
-		c->setlastseen();
 	}
     }
 }
@@ -1261,7 +1264,7 @@ void irchook::fileoffer(void *conn, void *cli, ...) {
     imfile fr(imcontact(from, irc), imevent::incoming, "",
 	vector<imfile::record>(1, r));
 
-    irhook.filetransfers[fr] = filehandle;
+    irhook.transferinfo[fr].first = filehandle;
     em.store(fr);
 }
 
@@ -1303,7 +1306,7 @@ void irchook::filefinish(void *conn, void *cli, ...) {
 
     if(irhook.getfevent(filehandle, fr)) {
 	em.store(imnotification(fr.getcontact(), _("File transfer finished")));
-	irhook.filetransfers.erase(fr);
+	irhook.transferinfo.erase(fr);
     }
 }
 
@@ -1319,7 +1322,7 @@ void irchook::fileerror(void *conn, void *cli, ...) {
 
     if(irhook.getfevent(filehandle, fr)) {
 	em.store(imnotification(fr.getcontact(), _("File transfer was cancelled because of an error")));
-	irhook.filetransfers.erase(fr);
+	irhook.transferinfo.erase(fr);
     }
 }
 

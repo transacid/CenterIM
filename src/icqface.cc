@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.144 2002/09/23 17:11:20 konst Exp $
+* $Id: icqface.cc,v 1.145 2002/09/24 16:20:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1200,10 +1200,40 @@ string icqface::inputfile(const string &q, const string &defl) {
     kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
     kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
 
+    selector.setoptions(0);
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
 	conf.getcolor(cp_dialog_highlight),
 	_(" enter to select a file, esc to cancel ")));
+
+    input.connectselector(selector);
+
+    input.setcoords(q.size(), INPUT_POS, COLS-q.size()-8);
+    input.setvalue(defl);
+    input.exec();
+    r = input.getvalue();
+
+    if(r.rfind("/") != -1) {
+	selector.setstartpoint(r.substr(0, r.find("/")));
+    }
+
+    sa.restore();
+    return r;
+}
+
+string icqface::inputdir(const string &q, const string &defl = "") {
+    screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
+    string r;
+
+    mvhline(INPUT_POS, 0, ' ', COLS);
+    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
+    kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
+
+    selector.setoptions(FSEL_DIRSELECT);
+    selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
+	conf.getcolor(cp_dialog_frame), TW_CENTERED,
+	conf.getcolor(cp_dialog_highlight),
+	_(" space to select a directory, esc to cancel ")));
 
     input.connectselector(selector);
 

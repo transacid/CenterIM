@@ -175,6 +175,8 @@ class icqface {
 
 	string inputstr(const string &q, const string &defl = "", char passwdchar = 0);
 	string inputfile(const string &q, const string &defl = "");
+	string inputdir(const string &q, const string &defl = "");
+
 	int getlastinputkey() const;
 
 	void quickfind(verticalmenu *multi = 0);

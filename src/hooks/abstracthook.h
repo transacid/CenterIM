@@ -76,7 +76,8 @@ class abstracthook {
 	virtual void ouridchanged(const icqconf::imaccount &ia);
 
 	virtual bool knowntransfer(const imfile &fr) const;
-	virtual void replytransfer(const imfile &fr, bool accept);
+	virtual void replytransfer(const imfile &fr, bool accept,
+	    const string &localpath = "");
 };
 
 abstracthook &gethook(protocolname pname);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.109 2002/09/13 13:15:55 konst Exp $
+* $Id: icqhook.cc,v 1.110 2002/09/24 16:20:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1165,9 +1165,6 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
 
 	logger.putonline(c, c->getstatus(), nst);
 	c->setstatus(nst);
-
-	if(c->getstatus() != offline)
-	    c->setlastseen();
     }
 }
 

@@ -41,7 +41,7 @@ class irchook: public abstracthook {
 
 	map<string, string> awaymessages;
 	map<string, time_t> pingtime;
-	map<imfile, void *> filetransfers;
+	map<imfile, pair<void *, string> > transferinfo;
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
@@ -133,7 +133,7 @@ class irchook: public abstracthook {
 	void ouridchanged(const icqconf::imaccount &ia);
 
 	bool knowntransfer(const imfile &fr) const;
-	void replytransfer(const imfile &fr, bool accept);
+	void replytransfer(const imfile &fr, bool accept, const string &localpath = "");
 };
 
 extern irchook irhook;

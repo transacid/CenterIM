@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.123 2002/09/23 17:11:20 konst Exp $
+* $Id: centericq.cc,v 1.124 2002/09/24 16:20:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -799,7 +799,7 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, b
     icqface::eventviewresult r = face.eventview(&ev, buttons);
 
     imcontact cont = ev.getcontact();
-    string nickname;
+    string nickname, tmp;
 
     if(ev.gettype() == imevent::contacts) {
 	const imcontacts *m = static_cast<const imcontacts *>(&ev);
@@ -845,14 +845,26 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, b
 		case imevent::authorization:
 		    em.store(imauthorization(ev.getcontact(),
 			imevent::outgoing, imauthorization::Granted, "accepted"));
+		    enough = true;
 		    break;
 
 		case imevent::file:
-		    gethook(ev.getcontact().pname).replytransfer(*static_cast<const imfile *>(&ev), true);
+		    tmp = face.inputdir(_("directory to save the file(s) to: "));
+
+		    if(enough = tmp.empty() && !access(tmp.c_str(), X_OK)) {
+			if(enough = !access(tmp.c_str(), W_OK)) {
+			    gethook(ev.getcontact().pname).replytransfer(*static_cast<const imfile *>(&ev), true, tmp);
+			} else {
+			    face.status(_("The specified directory is not writable"));
+			}
+
+		    } else {
+			face.status(_("The specified directory does not exist"));
+
+		    }
 		    break;
 	    }
 
-	    enough = true;
 	    break;
 
 	case icqface::reject:
