@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.16 2002/03/06 01:20:44 konst Exp $
+* $Id: kkstrtext.cc,v 1.17 2002/03/06 16:48:47 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1014,7 +1014,7 @@ string ruscase(const string &s, const string &mode) {
     for(r = s; (pos = r.find_first_of(tfrom)) != -1; ) {
 	char c = r[pos];
 	tpos = tfrom.find(c);
-	r.replace(pos, 1, tto[tpos]);
+	r[pos] = tto[tpos];
     }
 
     pos = 0;
