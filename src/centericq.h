@@ -65,7 +65,7 @@ class centericq {
 	void exectimers();
 
 	void readevent(const imevent &ev, bool &enough, bool &fin);
-	void readevents(const imcontact &cont);
+	void readevents(const imcontact cont);
 
 	void history(const imcontact &cont);
 

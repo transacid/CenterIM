@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.108 2002/07/31 11:17:32 konst Exp $
+* $Id: centericq.cc,v 1.109 2002/08/05 21:15:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -742,7 +742,7 @@ void centericq::readevent(const imevent &ev, bool &enough, bool &fin) {
     }
 }
 
-void centericq::readevents(const imcontact &cont) {
+void centericq::readevents(const imcontact cont) {
     vector<imevent *> events;
     vector<imevent *>::iterator iev;
     icqcontact *c = clist.get(cont);
