@@ -1,7 +1,7 @@
-/*
+ /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.164 2002/12/04 17:44:25 konst Exp $
+* $Id: icqface.cc,v 1.165 2002/12/05 14:01:12 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -253,7 +253,6 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_AUTH]      = _(" Request authorization");
 	actnames[ACT_EDITUSER]  = _(" Edit details           e");
 	actnames[ACT_FETCHAWAY] = _(" Fetch away message     f");
-	actnames[ACT_IGNORE]    = _(" Ignore user            i");
 	actnames[ACT_ADD]       = _(" Add to list            a");
 	actnames[ACT_RENAME]    = _(" Rename contact         r");
 	actnames[ACT_GROUPMOVE] = _(" Move to group..");
@@ -273,6 +272,12 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_JOIN]      = _(" Join channel");
 	actnames[ACT_LEAVE]     = _(" Leave channel");
 	actnames[ACT_INFO]      = _(" List nicknames               ?");
+
+	if(lst.inlist(c, csignore))
+	    actnames[ACT_IGNORE]    = _(" UnBlock channel messages     i");
+	else
+	    actnames[ACT_IGNORE]    = _(" Block channel messages       i");
+
     } else {
 	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
 	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
@@ -281,6 +286,11 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_HISTORY]   = _(" Events history         h");
 	actnames[ACT_REMOVE]    = _(" Remove user          del");
 	actnames[ACT_INFO]      = _(" User's details         ?");
+
+	if(lst.inlist(c, csignore))
+	    actnames[ACT_IGNORE]    = _(" Unset ignore user      i");
+	else
+	    actnames[ACT_IGNORE]    = _(" Ignore user            i");
     }
 
     cont = c->getdesc();
@@ -334,6 +344,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actions.push_back(ACT_HISTORY);
 	actions.push_back(ACT_INFO);
 	actions.push_back(ACT_REMOVE);
+	actions.push_back(ACT_IGNORE);
 
 	if(conf.getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
@@ -2610,7 +2621,8 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'e':
 	case 'E':
-	    if(c) face.extk = ACT_EDITUSER;
+	    if(!ischannel(c) && c)
+		face.extk = ACT_EDITUSER;
 	    break;
 
 	case 'i':

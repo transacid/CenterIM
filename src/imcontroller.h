@@ -26,7 +26,7 @@ struct imsearchparams {
     imgender gender;
 
     string firstname, lastname, nick, city, state, kwords;
-    string company, department, position, email, room;
+    string company, department, position, email, room, password;
 
     string service;
     vector<pair<string, string> > flexparams;
@@ -53,8 +53,6 @@ class imcontroller {
 	void msnupdateprofile();
 	void jabberupdateprofile();
 
-	void ircchannels();
-
 	void icqsynclist();
 	void yahoosynclist();
 
@@ -64,7 +62,6 @@ class imcontroller {
 
 	void registration(icqconf::imaccount &account);
 	void updateinfo(icqconf::imaccount &account);
-	void channels(icqconf::imaccount &account);
 	void synclist(icqconf::imaccount &account);
 };
 

@@ -8,11 +8,11 @@ extern "C" {
 }
 
 class irchook: public abstracthook {
-    public:
+    protected:
 	struct channelInfo {
 	    string name;
 	    string passwd;
-	    bool joined, fetched, contactlist;
+	    bool joined, fetched;
 
 	    vector<string> nicks;
 
@@ -23,7 +23,6 @@ class irchook: public abstracthook {
 	    bool operator == (const string &aname) const;
 	};
 
-    protected:
 	enum searchMode {
 	    Channel,
 	    Email
@@ -46,9 +45,6 @@ class irchook: public abstracthook {
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
-
-	void saveconfig() const;
-	void loadconfig();
 
 	bool getfevent(void *fhandle, imfile &fr);
 

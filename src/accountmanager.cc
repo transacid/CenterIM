@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.26 2002/11/30 23:33:44 konst Exp $
+* $Id: accountmanager.cc,v 1.27 2002/12/05 14:01:11 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -124,9 +124,6 @@ void accountmanager::exec() {
 		    if(capab.count(hookcapab::setaway))
 			t.addnode(n, 0, citem+10, _(" Set away message "));
 
-		    if(pname == irc)
-			t.addnode(n, 0, citem+11, _(" Channel manager "));
-
 		    if(capab.count(hookcapab::synclist))
 			t.addnode(n, 0, citem+12, _(" Synchronize contact list "));
 
@@ -207,10 +204,6 @@ void accountmanager::exec() {
 		    spname + ": " + _("away message"))) {
 			conf.setawaymsg(pname, tmp);
 		    }
-		    break;
-
-		case 11:
-		    imcontrol.channels(account);
 		    break;
 
 		case 12:

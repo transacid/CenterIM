@@ -26,7 +26,8 @@ struct hookcapab {
 	directadd,
 	flexiblesearch,
 	flexiblereg,
-	ssl
+	ssl,
+	channelpasswords
     };
 };
 

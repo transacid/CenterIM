@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.74 2002/12/04 17:44:24 konst Exp $
+* $Id: icqcontact.cc,v 1.75 2002/12/05 14:01:12 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -389,7 +389,9 @@ void icqcontact::includeintolist() {
     if(cdesc.pname != icq)
 	status = offline;
 
-    gethook(cdesc.pname).sendnewuser(cdesc);
+    if(!ischannel(cdesc))
+	gethook(cdesc.pname).sendnewuser(cdesc);
+
     unlink((getdirname() + "excluded").c_str());
     finlist = true;
 }
@@ -442,9 +444,17 @@ void icqcontact::scanhistory() {
 
 void icqcontact::setstatus(imstatus fstatus) {
     if(status != fstatus) {
-	if(status == offline) {
-	    external.exec(imrawevent(imevent::online, cdesc, imevent::incoming));
-	    playsound(imevent::online);
+	if(!ischannel(cdesc)) {
+	    if(status == offline) {
+		external.exec(imrawevent(imevent::online, cdesc, imevent::incoming));
+		playsound(imevent::online);
+	    }
+
+	} else {
+	    abstracthook &h = gethook(cdesc.pname);
+	    if(fstatus == offline) h.removeuser(cdesc);
+		else h.sendnewuser(cdesc);
+
 	}
 
 	setlastseen();

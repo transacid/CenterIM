@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.58 2002/12/04 17:44:26 konst Exp $
+* $Id: irchook.cc,v 1.59 2002/12/05 14:01:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -66,15 +66,26 @@ irchook::irchook()
     fcapabs.insert(hookcapab::cltemporary);
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::conferencing);
+    fcapabs.insert(hookcapab::channelpasswords);
 }
 
 irchook::~irchook() {
 }
 
 void irchook::init() {
+    int i;
+
     manualstatus = conf.getstatus(irc);
 
-    loadconfig();
+    for(i = 0; i < clist.count; i++) {
+	icqcontact *c = (icqcontact *) clist.at(i);
+	if(c->getdesc().pname == irc)
+	if(ischannel(c)) {
+	    channels.push_back(channelInfo(c->getdesc().nickname));
+	    channels.back().joined = 1;
+	    channels.back().passwd = c->getbasicinfo().zip;
+	}
+    }
 
     firetalk_register_callback(handle, FC_CONNECTED, &connected);
     firetalk_register_callback(handle, FC_CONNECTFAILED, &connectfailed);
@@ -259,6 +270,8 @@ bool irchook::send(const imevent &ev) {
 }
 
 void irchook::sendnewuser(const imcontact &ic) {
+    icqcontact *c;
+
     if(online()) {
 	if(!ischannel(ic)) {
 	    firetalk_im_add_buddy(handle, ic.nickname.c_str());
@@ -267,6 +280,10 @@ void irchook::sendnewuser(const imcontact &ic) {
 	    vector<channelInfo> ch = getautochannels();
 	    if(find(ch.begin(), ch.end(), ic.nickname) == ch.end()) {
 		ch.push_back(ic.nickname);
+		ch.back().joined = true;
+		if(c = clist.get(ic)) {
+		    ch.back().passwd = c->getbasicinfo().zip;
+		}
 		setautochannels(ch);
 	    }
 	}
@@ -277,12 +294,14 @@ void irchook::removeuser(const imcontact &ic) {
     if(online()) {
 	if(!ischannel(ic)) {
 	    firetalk_im_remove_buddy(handle, ic.nickname.c_str());
+	} else {
+	    vector<channelInfo> ch = getautochannels();
+	    vector<channelInfo>::iterator ich = find(ch.begin(), ch.end(), ic.nickname);
+	    if(ich != ch.end()) {
+		ch.erase(ich);
+		setautochannels(ch);
+	    }
 	}
-    }
-
-    if(ischannel(ic)) {
-	vector<channelInfo>::iterator i = find(channels.begin(), channels.end(), ic.nickname);
-	if(i != channels.end()) i->contactlist = false;
     }
 }
 
@@ -332,8 +351,6 @@ void irchook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
 	if(!ircname.empty()) ircname += " ";
 	ircname += b.lname;
     }
-
-    saveconfig();
 }
 
 void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
@@ -526,12 +543,6 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 	    if(!r) r = !iac->joined;
 	    if(r) firetalk_chat_part(irhook.handle, ic->name.c_str());
 	}
-
-	if(ic->contactlist) {
-	    r = iac == achannels.end();
-	    if(!r) r = !iac->contactlist;
-	    if(r) clist.remove(imcontact(ic->name, irc));
-	}
     }
 
     /*
@@ -549,68 +560,14 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 	    if(!r) r = !ic->joined;
 	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str(), iac->passwd.c_str());
 	}
-
-	if(iac->contactlist) {
-	    r = ic == channels.end();
-	    if(!r) r = !ic->contactlist;
-	    if(r) {
-		icqcontact *c = clist.addnew(imcontact(iac->name, irc), false);
-		c->setstatus((iac->joined && gethook(irc).logged()) ? available : offline);
-	    }
-	}
     }
 
     channels = achannels;
-    saveconfig();
 }
 
 void irchook::requestawaymsg(const imcontact &ic) {
     em.store(imnotification(ic, string() +
 	_("Away message:") + "\n\n" + awaymessages[ic.nickname]));
-}
-
-void irchook::saveconfig() const {
-    vector<channelInfo>::iterator ic;
-    vector<channelInfo> savech = getautochannels();
-    ofstream f(conf.getconfigfname("irc-profile").c_str());
-
-    if(f.is_open()) {
-	f << "name\t" << ircname << endl;
-
-	for(ic = savech.begin(); ic != savech.end(); ++ic)
-	  f << "channel\t" << ic->name 
-		<< "\t" << (ic->joined ? "1" : "0")
-		<< "\t" << (ic->passwd == "" ? "0\t" : "1\t") << ic->passwd
-		<< endl;
-
-	f.close();
-    }
-}
-
-void irchook::loadconfig() {
-    string buf, param;
-    vector<channelInfo>::iterator ic;
-
-    ifstream f(conf.getconfigfname("irc-profile").c_str());
-
-    if(f.is_open()) {
-	channels.clear();
-
-	while(!f.eof()) {
-	    getstring(f, buf);
-	    param = getword(buf);
-
-	    if(param == "name") ircname = buf; else
-	    if(param == "channel") {
-		channels.push_back(channelInfo(getword(buf)));
-		channels.back().joined = (getword(buf) == "1");
-		if (getword(buf) == "1") channels.back().passwd = (getword(buf)); else channels.back().passwd = "";
-		channels.back().contactlist = clist.get(imcontact(channels.back().name, irc));
-	    }
-	}
-
-	f.close();
-    }
 }
 
 void irchook::rawcommand(const string &cmd) {
@@ -649,7 +606,7 @@ void irchook::channelfatal(string room, const char *fmt, ...) {
 	if(!c) c = clist.addnew(cont);
 	c->setstatus(offline);
 	i->joined = i->fetched = false;
-	i->contactlist = true;
+//        i->contactlist = true;
 	em.store(imnotification(cont, buf));
     }
 }
@@ -1151,9 +1108,7 @@ void irchook::chatleft(void *connection, void *cli, ...) {
     va_end(ap);
 
     icqcontact *c = clist.get(imcontact(room, irc));
-    if(c) {
-	c->setstatus(offline);
-    }
+    if(c) c->setstatus(offline);
 }
 
 void irchook::chatkicked(void *connection, void *cli, ...) {

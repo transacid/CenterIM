@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.97 2002/12/04 17:44:24 konst Exp $
+* $Id: icqdialogs.cc,v 1.98 2002/12/05 14:01:12 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -337,6 +337,12 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	if(!users) {
 	    i = tree.addnode(_(" Name/Title "));
 	    tree.addleaf(i, 0, 11, " " + s.nick + " ");
+
+	    if(!s.nick.empty())
+	    if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords)) {
+		i = tree.addnode(_(" Password "));
+		tree.addleaf(i, 0, 32, " " + s.password + " ");
+	    }
 	}
 
 	finished = !db.open(n, b, (void **) &i);
@@ -420,6 +426,7 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 			    s.service = *iservice;
 			}
 			break;
+		    case 32: s.password = inputstr(_("Password: "), s.password, '*'); break;
 		}
 
 		if(i >= 100) {

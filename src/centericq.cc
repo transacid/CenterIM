@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.140 2002/12/04 17:44:23 konst Exp $
+* $Id: centericq.cc,v 1.141 2002/12/05 14:01:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -228,15 +228,18 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_IGNORE:
-		sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
-		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
-		    lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
-
-		    sprintf(buf, _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
-		    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES)
-			clist.remove(c->getdesc());
-
-		    face.update();
+		if(lst.inlist(c->getdesc(), csignore)) {
+		    lst.del(c->getdesc(), csignore);
+		} else {
+		    sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
+		    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
+			lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
+			sprintf(buf, _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
+			if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
+			    clist.remove(c->getdesc());
+			    face.update();
+			}
+		    }
 		}
 		break;
 
@@ -404,7 +407,15 @@ void centericq::joindialog() {
 	if(ic.nickname.substr(0, 1) != "#")
 	    ic.nickname.insert(0, "#");
 
-	cicq.addcontact(ic);
+	icqcontact *c = cicq.addcontact(ic);
+	if(c) {
+	    if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords)) {
+		icqcontact::basicinfo cb = c->getbasicinfo();
+		cb.zip = s.password;
+		c->setbasicinfo(cb);
+	    }
+	    c->setstatus(available);
+	}
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.37 2002/12/04 17:44:25 konst Exp $
+* $Id: imcontroller.cc,v 1.38 2002/12/05 14:01:12 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -337,96 +337,6 @@ void imcontroller::synclist(protocolname pname) {
     face.progress.hide();
 }
 
-void imcontroller::ircchannels() {
-/*
-    bool finished = false, success;
-    int n, i, b;
-    dialogbox db;
-    string name, st, passwd;
-
-    vector<irchook::channelInfo> channels;
-    vector<irchook::channelInfo>::iterator ic;
-
-    db.setwindow(new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
-	clr(cp_dialog_frame), TW_CENTERED, clr(cp_dialog_highlight),
-	_(" IRC channels manager ")));
-
-    db.settree(new treeview(clr(cp_dialog_text), clr(cp_dialog_selected),
-	clr(cp_dialog_highlight), clr(cp_dialog_text)));
-
-    db.setbar(new horizontalbar(clr(cp_dialog_text), clr(cp_dialog_selected),
-	_("Add"), _("Remove"), _("Password"), _("Join/Part"), _("Show"), _("Done"), 0));
-
-    channels = irhook.getautochannels();
-
-    db.addkey(KEY_IC, 0);
-    db.addkey(KEY_DC, 1);
-    db.addkey(' ', 2);
-    db.addautokeys();
-
-    treeview &t = *db.gettree();
-
-    while(!finished) {
-	t.clear();
-
-	i = db.gettree()->addnode(_(" Channels "));
-
-	for(ic = channels.begin(); ic != channels.end(); ++ic) {
-	    st = (string) (ic->joined ? _("joined") : _("not joined")) + ", " +
-		(ic->contactlist ? _("shown") : _("hidden"));
-
-	    t.addleaff(i, 0, 0, " %s %s [%s] ", ic->name.c_str(), ic->passwd.c_str(), st.c_str());
-	}
-
-	finished = !db.open(n, b, (void **) &i);
-
-	if(!finished)
-	switch(b) {
-	    case 0:
-		name = face.inputstr(_("channel name to add: "));
-		if(!name.empty()) channels.push_back(name);
-		break;
-
-	    case 1:
-		if(n > 1) {
-		    ic = channels.begin()+n-2;
-		    channels.erase(ic);
-		}
-		break;
-
-	    case 2:
-		if(n > 1) {
-		    passwd = face.inputstr(_("password: "));
-		    ic = channels.begin()+n-2;
-		    ic->passwd = passwd;
-		}
-		break;
-
-	    case 3:
-		if(n > 1) {
-		    ic = channels.begin()+n-2;
-		    ic->joined = !ic->joined;
-		}
-		break;
-
-	    case 4:
-		if(n > 1) {
-		    ic = channels.begin()+n-2;
-		    ic->contactlist = !ic->contactlist;
-		}
-		break;
-
-	    case 5:
-		finished = true;
-		irhook.setautochannels(channels);
-		break;
-	}
-    }
-
-    db.close();
-*/
-}
-
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq: icqregistration(account); break;
@@ -444,12 +354,6 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
 	case aim: aimupdateprofile(); break;
 	case msn: msnupdateprofile(); break;
 	case jabber: jabberupdateprofile(); break;
-    }
-}
-
-void imcontroller::channels(icqconf::imaccount &account) {
-    switch(account.pname) {
-	case irc: ircchannels(); break;
     }
 }
 
