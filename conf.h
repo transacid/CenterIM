@@ -11,7 +11,7 @@
 
 #ifdef __GNUC__
 #include <_G_config.h>
-#if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 8)
+#if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 9)
 #else
 #define __KTOOL_USE_NAMESPACES
 #endif

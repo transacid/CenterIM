@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.3 2001/08/03 09:21:14 konst Exp $
+* $Id: kkstrtext.cc,v 1.4 2001/08/18 07:30:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -843,4 +843,19 @@ bool iswholeword(const string s, int so, int eo) {
     rm = (eo == s.size()-1) || (wdelims.find(s.substr(eo, 1)) != -1);
 
     return rm && lm;
+}
+
+int hex2int(const string ahex) {
+    int r, i;
+
+    r = 0;
+
+    if(ahex.size() <= 2) {
+	for(i = 0; i < ahex.size(); i++) {
+	    r += isdigit(ahex[i]) ? ahex[i]-48 : toupper(ahex[i])-55;
+	    if(!i) r *= 16;
+	}
+    }
+
+    return r;
 }

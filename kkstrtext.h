@@ -63,6 +63,8 @@ const string strdateandtime(struct tm *tms, string fmt = "");
 
 bool iswholeword(const string s, int so, int eo);
 
+int hex2int(const string ahex);
+
 __KTOOL_BEGIN_C
 
 int kwordcount(const char *strin, const char *delim);
