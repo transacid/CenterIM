@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.63 2003/05/06 20:27:30 konst Exp $
+* $Id: msnhook.cc,v 1.64 2003/06/02 15:05:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -69,6 +69,7 @@ const st2imr st2im[] = {
     { "HDN", invisible },
     { "BSY", dontdisturb },
     { "PHN", occupied },
+    { "AWY", away },
     { "BRB", away },
     { "LUN", away },
     { 0, offline }
