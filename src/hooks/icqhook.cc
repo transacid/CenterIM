@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.47 2002/01/29 18:20:15 konst Exp $
+* $Id: icqhook.cc,v 1.48 2002/01/30 11:32:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -703,6 +703,13 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 	    em.store(immessage(ic, imevent::incoming,
 		string() + _("* Away message:") + "\n\n" +
 		rusconv("wk", r->getMessage())));
+	}
+
+    } else if(ev->getType() == MessageEvent::UserAdd) {
+	UserAddEvent *r;
+	if(r = dynamic_cast<UserAddEvent *>(ev)) {
+	    em.store(immessage(ic, imevent::incoming,
+		string() + _("* The user has added you to his/her contact list")));
 	}
 
     }
