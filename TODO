@@ -10,32 +10,9 @@
 *
 */
 
-yahoo
-    disconnect on "got zero length" ?
-	too many sockets?
-
-test cicqsync under freebsd
+change status to away doesn't work
 
 X window resize -> sometimes segfaults
-
-----------------------------------------------------------------------------
-> > Not too sure if this is a bug or just a "change", but since 4.2.0 my
-> > status seems to reset back to "online" for ICQ and Yahoo (MSN seems to
-> > always stay) every now and again. Also, it doesn't remember the status
-> > for ICQ and Yahoo (again, fine with MSN) if it's restarted.
->
-> What do you select so that it becomes online again?
-
-Nothing, I just come back a few hours later and find a barrage of messages
-because it's gone from away, NA or invisible back to online.
-
-> What if you set
-> "offline" manually? It should not try to connect again.
-
-Yes, it stays off-line. It's only in modes like away, NA and invisible.
-After a few hours they seem to go back to online. Same with restarting the
-client.
-----------------------------------------------------------------------------
 
 /*
 *
@@ -99,4 +76,4 @@ with this..might give it a go..
 
 away messages
 
-$Id: TODO,v 1.80 2001/12/08 23:57:33 konst Exp $
+$Id: TODO,v 1.81 2001/12/09 16:36:02 konst Exp $
