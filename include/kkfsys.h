@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <regex.h>
 
 #include "conf.h"
 #include "kkstrtext.h"
@@ -32,8 +33,14 @@
 
 #endif
 
+#define	FFIND_FILE	1
+#define	FFIND_LINK	2
+#define	FFIND_DIR	4
+
+vector<string> filefind(const string mask, const string aroot, int mode = FFIND_FILE);
+
 const string readlink(const string fname);
-const string pathfind(const string name, string path, int amode = F_OK);
+const string pathfind(const string name, const string path, int amode = F_OK);
 bool mksubdirs(string dir);
 bool samefile(const string fname1, const string fname2);
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkfsys file system related routines
-* $Id: kkfsys.cc,v 1.4 2001/08/23 11:35:20 konst Exp $
+* $Id: kkfsys.cc,v 1.5 2001/10/12 07:23:55 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -185,4 +185,52 @@ bool samefile(const string fname1, const string fname2) {
     }
 
     return r;
+}
+
+#define FINDFILE_PUSH(m) \
+    if((mode & m) && !regexec(&r, fname.c_str(), 0, 0, 0)) \
+	lst.push_back(fname);
+
+vector<string> filefind(const string mask, const string aroot, int mode = FFIND_FILE) {
+    vector<string> lst, rlst;
+    vector<string>::iterator is;
+    regex_t r;
+    DIR *d;
+    string fname, root;
+    struct dirent *de;
+    struct stat st;
+
+    root = aroot;
+    if(root.substr(root.size()-1) != "/") root += "/";
+
+    if(!regcomp(&r, mask.c_str(), REG_EXTENDED)) {
+	if(d = opendir(root.c_str())) {
+	    while(de = readdir(d)) {
+		fname = de->d_name;
+		if((fname != ".") && (fname != "..")) {
+		    fname = root + fname;
+
+		    if(!stat(fname.c_str(), &st)) {
+			if(S_ISREG(st.st_mode)) {
+			    FINDFILE_PUSH(FFIND_FILE);
+			} else if(S_ISDIR(st.st_mode)) {
+			    FINDFILE_PUSH(FFIND_DIR);
+			    rlst = filefind(mask, fname, mode);
+			    for(is = rlst.begin(); is != rlst.end(); is++) {
+				lst.push_back(*is);
+			    }
+			} else if(S_ISLNK(st.st_mode)) {
+			    FINDFILE_PUSH(FFIND_LINK);
+			}
+		    }
+		}
+	    }
+
+	    closedir(d);
+	}
+
+	regfree(&r);
+    }
+
+    return lst;
 }
