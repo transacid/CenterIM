@@ -206,6 +206,7 @@ class icqhook: public abstracthook {
 	bool enabled() const;
 
 	unsigned long sendmessage(const icqcontact *c, const string text);
+	void sendnewuser(const imcontact desc);
 
 	void setautostatus(imstatus st);
 	void setstatus(imstatus st);

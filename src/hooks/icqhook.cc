@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.2 2001/11/21 14:35:56 konst Exp $
+* $Id: icqhook.cc,v 1.3 2001/11/21 18:03:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "centericq.h"
+#include "accountmanager.h"
 
 #include <unistd.h>
 #include <netinet/in.h>
@@ -661,7 +662,8 @@ void icqhook::exectimers() {
 	}
     } else {
 	if(manualstatus != offline)
-	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
+	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT))
+	if(!manager.isopen()) {
 	    connect();
 	}
 
@@ -835,4 +837,10 @@ bool icqhook::regattempt(unsigned long &uin, const string password) {
     }
 
     return (bool) reguin;
+}
+
+void icqhook::sendnewuser(const imcontact ic) {
+    if(enabled()) {
+	icq_SendNewUser(&icql, ic.uin);
+    }
 }

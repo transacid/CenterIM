@@ -45,6 +45,9 @@ const string text) {
     return 0;
 }
 
+void abstracthook::sendnewuser(const imcontact c) {
+}
+
 imstatus abstracthook::getstatus() const {
     return offline;
 }

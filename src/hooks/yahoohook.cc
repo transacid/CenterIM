@@ -3,6 +3,7 @@
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "icqoffline.h"
+#include "accountmanager.h"
 
 yahoohook::yahoohook() {
     fonline = false;
@@ -94,7 +95,9 @@ void yahoohook::exectimers() {
 	    if(online() && !logged()) {
 		disconnect();
 	    } else if(manualstatus != offline) {
-		connect();
+		if(!manager.isopen()) {
+		    connect();
+		}
 	    }
 	}
     }

@@ -3,12 +3,14 @@
 #include "icqhook.h"
 #include "yahoohook.h"
 #include "imcontroller.h"
+#include "icqcontacts.h"
 
 #define getcolor(c)     conf.getcolor(c)
 
 accountmanager manager;
 
 accountmanager::accountmanager() {
+    fopen = false;
 }
 
 accountmanager::~accountmanager() {
@@ -28,6 +30,7 @@ void accountmanager::exec() {
     bool fin, proceed;
 
     face.blockmainscreen();
+    fopen = true;
 
     db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
 	getcolor(cp_dialog_frame), TW_CENTERED,
@@ -125,6 +128,12 @@ void accountmanager::exec() {
     db.close();
     face.unblockmainscreen();
 
+    clist.checkdefault();
     conf.save();
     face.update();
+    fopen = false;
+}
+
+bool accountmanager::isopen() const {
+    return fopen;
 }

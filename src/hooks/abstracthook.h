@@ -20,6 +20,8 @@ class abstracthook {
 	virtual unsigned long sendmessage(const icqcontact *c,
 	    const string text);
 
+	virtual void sendnewuser(const imcontact c);
+
 	virtual void setautostatus(imstatus st);
 	virtual void setstatus(imstatus st);
 	virtual imstatus getstatus() const;

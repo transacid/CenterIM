@@ -593,3 +593,30 @@ properly. And also it's now possible to view user's local time in the
 
 A first version of contact list and history converting perl script was
 included into distribution. Now only licq is supported.
+
+4.1.0
+-----
+
+cicqconv script now has support for kxicq2 and gnomeicu.
+
+"Send contacts" wasn't displayed in the context menu. Fixed.
+
+"Add to contact list" for "Not in list" contacts now asks a group.
+
+Shortcuts were added to dialogs.
+
+All the input lines how have history which is possible to invoke with
+Alt-H.
+
+Finally, a great piece of news. As Mirabilis servers have problems with
+v7 protocol, all the Linux ICQ clients work very unstable nowdays. Some
+messages never arrive, or delivered an incredible amount of times,
+search eventually appears not to work, etc. Until we have a good open
+source library for icq2000, I decided to pay some attention to other IM
+protocols. It resulted in implementing a support for Yahoo in this
+version of the program. A lot of interface related code has been
+changed, so bugs are quite possible. Registering new UIN, updating
+details, etc, now look a bit different, but still intuitive, so that
+you'll have no major problems with it. Enjoy. In the next version
+support for MSN is expected.
+

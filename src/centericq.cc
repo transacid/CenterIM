@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.37 2001/11/21 14:35:55 konst Exp $
+* $Id: centericq.cc,v 1.38 2001/11/21 18:03:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -597,13 +597,8 @@ icqcontact *centericq::addcontact(const imcontact ic) {
     }
 
     switch(ic.pname) {
-	case icq:
-	    notify = ihook.online();
-	    break;
-	case yahoo:
-	default:
-	    notify = false;
-	    break;
+	case icq: notify = ihook.online(); break;
+	default: notify = false; break;
     }
 
     if(notify) {
@@ -618,6 +613,7 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	c = clist.addnew(ic, false);
     } else {
 	c->includeintolist();
+	gethook(c->getdesc().pname).sendnewuser(c->getdesc());
     }
 
     c->setgroupid(groupid);
@@ -646,7 +642,9 @@ bool centericq::idle(int options = 0) {
 
 	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		abstracthook &hook = gethook(pname);
-		if(hook.online()) {
+
+		if(hook.online())
+		if(hook.getsockfd()) {
 		    FD_SET(hook.getsockfd(), &fds);
 		    online = true;
 
@@ -665,12 +663,12 @@ bool centericq::idle(int options = 0) {
 	if(FD_ISSET(0, &fds)) {
 	    keypressed = true;
 	    time(&timer_keypress);
-	}
-
+	} else
 	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	    abstracthook &hook = gethook(pname);
 
 	    if(hook.online())
+	    if(hook.getsockfd())
 	    if(FD_ISSET(hook.getsockfd(), &fds)) {
 		hook.main();
 		fin = fin || (options & HIDL_SOCKEXIT);

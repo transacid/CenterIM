@@ -14,30 +14,6 @@ add "thekonst" and icq account by default
 */
 
 
-kxicq2 and gnomeicu support in cicqconv
-there is no "send contacts" item in f2 menu :(
-allows to modify details after 3 (?) enter presses on the dialog fields
-"add to contact list" in non-icq -> gotta ask group
-apply patch from kapuzin
-cicqconv : ok, but all the messages are unread :)
-check for curses lib
-
-first start -> not connected -> open config dialog -> connected ->
-update info dialog appears -> segfault
-
-new textinputline and fileselector
-    with history
-
-finish the doc
-
-user is on "not in list", and there is an attempt to press "add to the
-list" in "ICQ" -> complains
-
-applied a patch for processing various byte orders, so that the program
-doesn't bail out with sigbus working on sparc
-
-"server forced us to disconnect" -> write to non-debug log also
-
 /*
 *
 * BUGS
@@ -54,11 +30,15 @@ check ignore list
     visible list   \ allow to add only IMs that support it
     invisible list /
 
+forward note for yahoo contacts contains "(0)"
+
 /*
 *
 * TODO
 *
 */
+
+color hightlight for different IM protocols in multi selection box
 
 flavour of face.update() with internal time check a-la "don't update
 more frequently than once in 5 secs".
@@ -106,4 +86,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.61 2001/11/21 14:35:54 konst Exp $
+$Id: TODO,v 1.62 2001/11/21 18:03:47 konst Exp $

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.20 2001/11/21 14:35:55 konst Exp $
+* $Id: icqcontact.cc,v 1.21 2001/11/21 18:03:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -362,18 +362,8 @@ void icqcontact::excludefromlist() {
 }
 
 void icqcontact::includeintolist() {
-    string fname = getdirname() + "/excluded";
-    unlink(fname.c_str());
+    unlink((getdirname() + "/excluded").c_str());
     finlist = true;
-
-    switch(cdesc.pname) {
-	case yahoo:
-	    yhook.sendnewuser(cdesc);
-	    break;
-	case icq:
-	    icq_SendNewUser(&icql, cdesc.uin);
-	    break;
-    }
 }
 
 bool icqcontact::inlist() const {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.40 2001/11/20 17:08:50 konst Exp $
+* $Id: icqface.cc,v 1.41 2001/11/21 18:03:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2023,6 +2023,7 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 				fpass = false;
 			    } else {
 				fin = true;
+				break;
 			    }
 			}
 

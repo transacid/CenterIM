@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.16 2001/11/21 14:35:56 konst Exp $
+* $Id: icqcontacts.cc,v 1.17 2001/11/21 18:03:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,6 +45,7 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	    c->setdispnick(i2str(cinfo.uin));
 	    c->save();
 	    add(c);
+	    ihook.sendnewuser(c->getdesc());
 	    break;
 
 	case yahoo:
@@ -71,7 +72,7 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 }
 
 void icqcontacts::load() {
-    string tname = (string) getenv("HOME") + "/.centericq/", tuname, fname;
+    string tuname, fname;
     struct dirent *ent;
     struct stat st;
     DIR *d;
@@ -81,9 +82,9 @@ void icqcontacts::load() {
 
     empty();
 
-    if(d = opendir(tname.c_str())) {
+    if(d = opendir(conf.getdirname().c_str())) {
 	while(ent = readdir(d)) {
-	    tuname = tname + ent->d_name;
+	    tuname = conf.getdirname() + ent->d_name;
 	    stat(tuname.c_str(), &st);
 
 	    if(S_ISDIR(st.st_mode)) {
@@ -112,25 +113,43 @@ void icqcontacts::load() {
 			break;
 		}
 
-		if(c) clist.add(c);
+		if(c) {
+		    clist.add(c);
+		}
 	    }
 	}
 
 	closedir(d);
     }
 
-    if(!count) {
-	tuname = tname + "17502151";
-	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
-	add(new icqcontact(imcontact(17502151, icq)));
-
-	tuname = tname + "ythekonst";
-	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
-	add(new icqcontact(imcontact("thekonst", yahoo)));
-    }
+    checkdefault();
 
     if(!get(contactroot)) {
 	add(new icqcontact(contactroot));
+    }
+}
+
+void icqcontacts::checkdefault() {
+    protocolname pname;
+    icqcontact *c;
+    int i;
+    bool found;
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	if(!conf.getourid(pname).empty()) {
+	    for(i = 0, found = false; i < count && !found; i++) {
+		c = (icqcontact *) at(i);
+		if(c->getdesc() != contactroot) {
+		    found = (c->getdesc().pname == pname);
+		}
+	    }
+
+	    if(!found)
+	    switch(pname) {
+		case icq: addnew(imcontact(17502151, pname), false); break;
+		case yahoo: addnew(imcontact("thekonst", pname), false); break;
+	    }
+	}
     }
 }
 
