@@ -2,6 +2,7 @@
 
 #include <netdb.h>
 #include <string.h>
+#include <netinet/in.h>
 
 #ifdef HAVE_OPENSSL
 
