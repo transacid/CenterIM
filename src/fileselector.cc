@@ -146,7 +146,7 @@ void fileselector::exec() {
 
 			if(!(options & FSEL_MULTI) || multibutempty) {
 			    selected.push_back(dcurrent + i->fname);
-			    fin = multibutempty;
+			    fin = true;
 			}
 		    }
 		}
