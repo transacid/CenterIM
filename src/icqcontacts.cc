@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.44 2003/07/12 17:14:21 konst Exp $
+* $Id: icqcontacts.cc,v 1.45 2003/07/18 00:39:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -130,7 +130,7 @@ void icqcontacts::save() {
 	icqcontact *c = (icqcontact *) at(i);
 
 	if(c->inlist()) c->save(); else
-	if(!c->getmsgcount()) {
+	if(!c->hasevents()) {
 	    string fname = c->getdirname() + "offline";
 	    if(access(fname.c_str(), F_OK)) c->remove();
 	}
@@ -189,7 +189,7 @@ int icqcontacts::clistsort(void *p1, void *p2) {
 
     if(makegroup)
     if(!strchr("!N", s1) && !strchr("!N", s2))
-    if(!c1->getmsgcount() && !c2->getmsgcount()) {
+    if(!c1->hasevents() && !c2->hasevents()) {
 	if(c1->getgroupid() > c2->getgroupid()) return -1; else
 	if(c1->getgroupid() < c2->getgroupid()) return 1;
     }

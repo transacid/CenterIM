@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.80 2003/07/12 17:14:21 konst Exp $
+* $Id: icqcontact.cc,v 1.81 2003/07/18 00:39:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,7 @@
 
 #include <time.h>
 #include <libicq2000/userinfohelpers.h>
+#include <strstream>
 
 icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;
@@ -39,7 +40,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     int i;
 
     clear();
-    nmsgs = lastread = fhistoffset = 0;
+    lastread = fhistoffset = 0;
     status = offline;
     finlist = true;
     congratulated = false;
@@ -107,7 +108,7 @@ string icqcontact::getdirname() const {
 }
 
 void icqcontact::clear() {
-    nmsgs = fupdated = groupid = fhistoffset = 0;
+    fupdated = groupid = fhistoffset = 0;
     finlist = true;
     modified = false;
     cdesc = contactroot;
@@ -403,40 +404,43 @@ bool icqcontact::inlist() const {
 }
 
 void icqcontact::scanhistory() {
-    string fn = getdirname() + "history";
-    char buf[512];
-    int line, pos;
+    string fn = getdirname() + "history", block;
+    char buf[65];
+    int pos, backstep, r;
     FILE *f = fopen(fn.c_str(), "r");
-    bool docount;
+    struct stat st;
+    strstream evdata;
 
-    setmsgcount(0);
+    sethasevents(false);
 
     if(f) {
-//      fseek(f, gethistoffset(), SEEK_SET);
+	fseek(f, 0, SEEK_END);
 	sethistoffset(0);
 	pos = 0;
 
-	while(!feof(f)) {
-	    freads(f, buf, 512);
+	while(ftell(f)) {
+	    backstep = 64;
+	    if(ftell(f) < backstep) backstep = ftell(f);
 
-	    if((string) buf == "\f") {
-		line = 0;
-		pos = ftell(f);
-	    } else {
-		switch(line) {
-		    case 1:
-			docount = ((string) buf == "IN");
-			break;
-		    case 4:
-			if(docount && (atol(buf) > lastread)) {
-			    nmsgs++;
-			    if(!gethistoffset()) sethistoffset(pos);
-			}
-			break;
+	    if(fseek(f, -backstep, SEEK_CUR)) break;
+	    if((r = fread(buf, 1, backstep, f)) <= 0) break;
+	    if(fseek(f, -backstep, SEEK_CUR)) break;
+
+	    buf[r] = 0;
+	    block.insert(0, buf);
+
+	    if((r = block.find("\f\nIN\n")) != -1) {
+		if(!stat(fn.c_str(), &st)) {
+		    pos = st.st_size-block.size()+r;
 		}
-	    }
 
-	    line++;
+		block.erase(0, r+2);
+		evdata << block;
+
+		for(r = 0; (r < 4) && getline(evdata, block); r++);
+		if(r == 4) sethasevents(strtoul(block.c_str(), 0, 0) > lastread);
+		break;
+	    }
 	}
 
 	fclose(f);
@@ -490,12 +494,6 @@ void icqcontact::setlastread(time_t flastread) {
 
 void icqcontact::unsetupdated() {
     fupdated = 0;
-}
-
-void icqcontact::setmsgcount(int n) {
-    nmsgs = n;
-    face.relaxedupdate();
-    modified = true;
 }
 
 void icqcontact::setbasicinfo(const basicinfo &ainfo) {
@@ -626,10 +624,6 @@ time_t icqcontact::getlastread() const {
 
 imstatus icqcontact::getstatus() const {
     return status;
-}
-
-int icqcontact::getmsgcount() const {
-    return nmsgs;
 }
 
 string icqcontact::getnick() const {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.161 2003/07/16 00:19:46 konst Exp $
+* $Id: centericq.cc,v 1.162 2003/07/18 00:39:59 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -375,7 +375,7 @@ void centericq::mainloop() {
 		    face.chat(c->getdesc());
 
 		} else {
-		    if(c->getmsgcount()) {
+		    if(c->hasevents()) {
 			readevents(c->getdesc());
 		    } else {
 			if(c->getdesc().pname != infocard && c->getdesc().pname != rss) {
@@ -487,24 +487,22 @@ void centericq::linkfeed() {
     imsearchparams s;
 
     s.pname = rss;
-    s.checkfrequency = 2;
+    s.checkfrequency = 120;
 
     if(face.finddialog(s, icqface::fsrss)) {
-	clist.add(c = new icqcontact(imcontact(0, rss)));
+	if(c = cicq.addcontact(imcontact(0, rss))) {
+	    icqcontact::workinfo wi = c->getworkinfo();
+	    wi.homepage = s.url; // syndication url
+	    c->setworkinfo(wi);
 
-	icqcontact::workinfo wi = c->getworkinfo();
-	wi.homepage = s.url; // syndication url
-	c->setworkinfo(wi);
+	    icqcontact::moreinfo mi = c->getmoreinfo();
+	    mi.birth_day = s.checkfrequency;
+	    c->setmoreinfo(mi);
 
-	icqcontact::moreinfo mi = c->getmoreinfo();
-	mi.birth_day = s.checkfrequency;
-	c->setmoreinfo(mi);
-
-	c->setnick(s.nick);
-	c->setdispnick(s.nick);
-	c->save();
-
-	face.update();
+	    c->setnick(s.nick);
+	    c->setdispnick(s.nick);
+	    c->save();
+	}
     }
 }
 
@@ -1074,7 +1072,7 @@ void centericq::readevents(const imcontact cont) {
 	fin = false;
 	face.saveworkarea();
 
-	while(c->getmsgcount() && !fin) {
+	while(c->hasevents() && !fin) {
 	    events = em.getevents(cont, c->getlastread());
 	    fin = events.empty();
 
@@ -1206,7 +1204,7 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
     }
 
     c->setgroupid(groupid);
-    face.log(_("+ %s has been added to the list"), ic.totext().c_str());
+    face.log(_("+ %s has been added to the list"), c->getdesc().totext().c_str());
     face.relaxedupdate();
 
     return c;

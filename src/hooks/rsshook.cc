@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.6 2003/07/17 00:30:33 konst Exp $
+* $Id: rsshook.cc,v 1.7 2003/07/18 00:40:01 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -69,7 +69,7 @@ void rsshook::exectimers() {
 		lastcheck = mi.birth_month;
 
 		if(freq)
-		if(tcurrent-lastcheck > freq*3600) {
+		if(tcurrent-lastcheck > freq*60) {
 		    ping(c);
 		}
 	    }
@@ -370,8 +370,9 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 		    if(ev = dynamic_cast<immessage*>(events.back())) {
 			for(ii = items.begin(); ii != items.end(); ++ii) {
 			    string evtext = ev->gettext();
-			    while((k = evtext.find("\r")) != -1)
-				evtext.erase(k, 1);
+
+			    while((k = evtext.find("\r")) != -1) evtext.erase(k, 1);
+			    while((k = ii->find("\r")) != -1) ii->erase(k, 1);
 
 			    if(*ii == evtext) {
 				items.erase(ii, items.end());

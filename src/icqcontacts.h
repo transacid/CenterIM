@@ -23,7 +23,7 @@
 #define SORT_CONTACTS   "#fodcan_!N"
 
 #define SORTCHAR(c) ( \
-    c->getmsgcount() ? '#' : \
+    c->hasevents() ? '#' : \
     !c->inlist() ? '!' : \
     c->getstatus() == invisible ? 'o' : \
     c->getshortstatus() \

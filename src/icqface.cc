@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.186 2003/07/16 00:19:46 konst Exp $
+* $Id: icqface.cc,v 1.187 2003/07/18 00:40:00 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -472,7 +472,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    }                
 
 	    if(c) {
-		if(action == ACT_MSG && c->getdesc().pname == infocard && !c->getmsgcount())
+		if(action == ACT_MSG && c->getdesc().pname == infocard && !c->hasevents())
 		    action = ACT_SMS;
 
 		if(action == ACT_MENU)
@@ -554,7 +554,7 @@ void icqface::fillcontactlist() {
 
 	if(ig != groups.end()) {
 	    g = &(*ig);
-	    if(g->iscollapsed() && !((icqcontact *) savec)->getmsgcount())
+	    if(g->iscollapsed() && !((icqcontact *) savec)->hasevents())
 		savec = g;
 	}
     }
@@ -592,7 +592,7 @@ void icqface::fillcontactlist() {
 
 	if(c->getstatus() == offline)
 	if(conf.gethideoffline())
-	if(!c->getmsgcount())
+	if(!c->hasevents())
 	if(c->inlist() || !h.logged() || h.getCapabs().count(hookcapab::cltemporary)) {
 	    continue;
 	}
@@ -673,13 +673,13 @@ void icqface::fillcontactlist() {
 	if(birthday) dnick += " :)";
 
 	if(conf.getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
-	    !c->getmsgcount() && sc != '!')
+	    !c->hasevents() && sc != '!')
 		continue;
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, "%s%s ", c->getmsgcount() ? "#" : " ", dnick.c_str());
+		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
+		c, "%s%s ", c->hasevents() ? "#" : " ", dnick.c_str());
 
 	} else {
 	    char *fmt = "%s[%c] %s ";
@@ -688,8 +688,8 @@ void icqface::fillcontactlist() {
 	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c} %s ";
 
 	    mcontacts->addleaff(nnode,
-		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, fmt, c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
+		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
+		c, fmt, c->hasevents() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 
 	}
     }
@@ -1090,9 +1090,9 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     char buf[512];
 
     if(mi.birth_day) {
-	sprintf(buf, _("%lu hours"), mi.birth_day);
+	sprintf(buf, _("%lu minutes"), mi.birth_day);
 	freq = buf;
-	if(mi.birth_month) next = strdateandtime(mi.birth_month+mi.birth_day*3600);
+	if(mi.birth_month) next = strdateandtime(mi.birth_month+mi.birth_day*60);
 	    else next = _("Now");
     } else {
 	freq = next = _("Never");
@@ -2379,9 +2379,9 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	if(ev->gettype() == imevent::message || ev->gettype() == imevent::notification) {
 	    actions.push_back(forward);
 
-	    if(ev->getdirection() == imevent::incoming) {
+	    if(ev->getdirection() == imevent::incoming)
+	    if(ev->getcontact().pname != rss)
 		actions.push_back(reply);
-	    }
 
 	} else if(ev->gettype() == imevent::url) {
 	    actions.push_back(forward);
@@ -2941,7 +2941,7 @@ void icqface::editchatidle(texteditor &e) {
     cicq.idle(HIDL_SOCKEXIT);
 
     if(c = clist.get(face.passinfo))
-    if(c->getmsgcount()) {
+    if(c->hasevents()) {
 	face.renderchathistory();
     }
 }

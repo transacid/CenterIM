@@ -1,7 +1,7 @@
 /*
 *
 * centericq event manager class
-* $Id: eventmanager.cc,v 1.21 2002/11/22 19:11:45 konst Exp $
+* $Id: eventmanager.cc,v 1.22 2003/07/18 00:39:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -73,7 +73,7 @@ void imeventmanager::store(const imevent &cev) {
 	    if(c) {
 		eventwrite(ev, history);
 
-		c->setmsgcount(c->getmsgcount()+1);
+		c->sethasevents(true);
 		c->playsound(ev.gettype());
 
 		external.exec(ev);

@@ -65,8 +65,8 @@ class icqcontact {
 	imcontact cdesc;
 	imstatus status;
 
-	int nmsgs, fupdated, groupid, fhistoffset;
-	bool finlist, congratulated, modified;
+	int fupdated, groupid, fhistoffset;
+	bool finlist, congratulated, modified, fhasevents;
 	time_t lastread, lastseen;
 
 	string sound[imevent::imeventtype_size];
@@ -115,14 +115,15 @@ class icqcontact {
 	time_t getlastseen() const;
 	
 	imstatus getstatus() const;
-	int getmsgcount() const;
+
+	bool hasevents() const { return fhasevents; }
+	void sethasevents(bool n) { fhasevents = n; }
 
 	string getnick() const;
 	string getdispnick() const;
 
 	int updated() const;
 	void unsetupdated();
-	void setmsgcount(int n);
 
 	void setsound(imevent::imeventtype event, const string &sf);
 	void playsound(imevent::imeventtype event) const;

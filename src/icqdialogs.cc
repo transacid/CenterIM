@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.118 2003/07/13 16:00:08 konst Exp $
+* $Id: icqdialogs.cc,v 1.119 2003/07/18 00:40:00 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -631,7 +631,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     if(passinfo.pname == rss) {
 	i = tree->addnode(_(" Feed Parameters "));
 	tree->addleaff(i, 0, 48, _(" XML export URL : %s "), wi.homepage.c_str());
-	tree->addleaff(i, 0, 49, _(" Check frequency (hours) : %lu "), mi.birth_day);
+	tree->addleaff(i, 0, 49, _(" Check frequency (minutes) : %lu "), mi.birth_day);
     }
 
     if(capab.count(hookcapab::changeabout))
