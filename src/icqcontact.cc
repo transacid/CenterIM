@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.47 2002/02/23 17:14:19 konst Exp $
+* $Id: icqcontact.cc,v 1.48 2002/02/25 10:41:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -383,7 +383,7 @@ void icqcontact::scanhistory() {
     setmsgcount(0);
 
     if(f) {
-	fseek(f, gethistoffset(), SEEK_SET);
+//	fseek(f, gethistoffset(), SEEK_SET);
 	sethistoffset(0);
 	pos = 0;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.84 2002/02/23 13:13:13 konst Exp $
+* $Id: icqface.cc,v 1.85 2002/02/25 10:41:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -876,11 +876,13 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
     m.idle = &menuidle;
     makeprotocolmenu(m);
 
-    m.scale();
-
     if(m.getcount() < 2) {
 	i = 1;
     } else {
+	m.addline();
+	m.additem(0, proto_all, _(" [all] All of them"));
+	m.scale();
+
 	i = m.open();
 	m.close();
     }
@@ -911,6 +913,8 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
 	for(im = mst.begin(); im != mst.end(); im++) {
 	    m.additem(0, *im, statustext[im-mst.begin()]);
+
+	    if(pname != proto_all)
 	    if(gethook(pname).getstatus() == *im) {
 		m.setpos(m.getcount()-1);
 	    }

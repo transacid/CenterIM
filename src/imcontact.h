@@ -4,6 +4,7 @@
 #include "icqcommon.h"
 
 enum protocolname {
+    proto_all = -1,
     icq = 0,
     yahoo,
     msn,

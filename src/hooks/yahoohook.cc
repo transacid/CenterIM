@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.23 2002/02/22 13:02:17 konst Exp $
+* $Id: yahoohook.cc,v 1.24 2002/02/25 10:41:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -192,7 +192,7 @@ bool yahoohook::send(const imevent &ev) {
 	for(is = text.begin(); is != text.end(); is++)
 	    if((unsigned) *is < 32) *is = ' ';
 
-	if(c->getstatus() != offline) {
+	if((c->getstatus() != offline) && c->inlist()) {
 	    yahoo_cmd_msg(context, conf.getourid(yahoo).nickname.c_str(),
 		ev.getcontact().nickname.c_str(), text.c_str());
 	} else {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.71 2002/02/24 19:54:16 konst Exp $
+* $Id: centericq.cc,v 1.72 2002/02/25 10:40:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -300,9 +300,20 @@ void centericq::mainloop() {
 void centericq::changestatus() {
     imstatus st;
     protocolname pname;
+    icqconf::imaccount ia;
 
     if(face.changestatus(pname, st)) {
-	gethook(pname).setstatus(st);
+	if(pname != proto_all) {
+	    gethook(pname).setstatus(st);
+	} else {
+	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		ia = conf.getourid(pname);
+		if(!ia.empty()) {
+		    gethook(pname).setstatus(st);
+		}
+	    }
+	}
+
 	face.update();
     }
 }

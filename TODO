@@ -4,6 +4,9 @@
 *
 */
 
+patch for transparency and "all protocols" by W.J. van der Laan
+<gnufnork@hetdigitalegat.nl>
+
 mail arrived timestamps
 
 external auto-respond and events processing actions
@@ -42,13 +45,12 @@ MSN: 3rd person invitation from other party -> centericq segfault
 *
 */
 
-propose the team [tm] to write a php or something for putting README online
-
 try to implement the daemon mode
     substitute another "face" class
 	hooks call only face.log && update methods
 
 crash test with zero disk space
+    go offline when df < 10k
 
 ability to specify server/port for yahoo
 
@@ -75,4 +77,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.132 2002/02/24 13:06:08 konst Exp $
+$Id: TODO,v 1.133 2002/02/25 10:40:59 konst Exp $
