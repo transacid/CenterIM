@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.49 2003/07/05 12:41:39 konst Exp $
+* $Id: jabberhook.cc,v 1.50 2003/07/05 13:09:50 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -120,6 +120,7 @@ void jabberhook::connect() {
 
     if(jc->user) {
 	id = -1;
+	statehandler(0, -1);
 	jab_start(jc);
     }
 }
