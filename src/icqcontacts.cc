@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.20 2001/11/29 17:42:23 konst Exp $
+* $Id: icqcontacts.cc,v 1.21 2001/11/30 18:55:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,6 +59,7 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	    c->setdispnick(cinfo.nickname);
 	    nnick = cinfo.nickname;
 	    if(nnick.find("@") == -1) nnick += "@hotmail.com";
+	    c->setmoreinfo(0, 0, "http://members.msn.com/" + nnick, 0, 0, 0, 0, 0, 0);
 	    c->setinfo("", "", nnick, "", "", "", "", "", "", "", "", 0, 0);
 	    break;
     }

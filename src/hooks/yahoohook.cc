@@ -72,7 +72,6 @@ void yahoohook::connect() {
 	    if(!yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE)) {
 		fonline = true;
 		face.log(_("+ [yahoo] logged in"));
-//		offl.scan(0, ossendall);
 	    }
 	}
     }
