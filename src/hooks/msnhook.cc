@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.87 2004/07/27 07:38:32 konst Exp $
+* $Id: msnhook.cc,v 1.88 2004/07/31 10:47:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -920,16 +920,14 @@ int MSN::ext::connectToServer(string server, int port, bool *connected) {
     int oldfdArgs = fcntl(s, F_GETFL, 0);
     fcntl(s, F_SETFL, oldfdArgs | O_NONBLOCK);
 
-    if(connect(s,(struct sockaddr *)&sa,sizeof sa) < 0) {
+    *connected = false;
+
+    if(cw_connect(s, (struct sockaddr *) &sa, sizeof sa, 0) < 0) {
 	if(errno != EINPROGRESS) { 
 	    face.log(msgerr + _("verify the hostname and port"));
 	    close(s);
 	    return -1;
 	}
-
-	*connected = false;
-    } else {
-	*connected = true;
     }
 
     return s;

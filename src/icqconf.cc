@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.133 2004/07/31 00:00:15 konst Exp $
+* $Id: icqconf.cc,v 1.134 2004/07/31 10:47:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1384,6 +1384,8 @@ void icqconf::sethttpproxyhost(const string &ahttpproxyhost) {
 	    httpproxyport = 8080;
 	}
     }
+
+    setproxy();
 }
 
 string icqconf::getsmtphost() const {
