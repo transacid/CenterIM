@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.14 2001/09/26 09:58:35 konst Exp $
+* $Id: icqface.cc,v 1.15 2001/09/27 08:53:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -300,7 +300,7 @@ int icqface::generalmenu() {
 	    case  5: return ACT_CONF;
 	    case  6: return ACT_NONICQ;
 	    case  8: return ACT_IGNORELIST;
-	    case  9: return ACT_INVISIBLELIST;
+	    case  9: return ACT_INVISLIST;
 	    case 10: return ACT_VISIBLELIST;
 	}
     }
@@ -2050,12 +2050,15 @@ int icqface::contactskeys(verticalmenu *m, int k) {
 
 	case 'r':
 	case 'R': face.extk = ACT_RENAME; break;
+
+	case 'c':
+	case 'C': face.extk = ACT_CONTACT; break;
 	
 	case ALT('s'):
 	case '/': face.extk = ACT_QUICKFIND; break;
     }
 
-    if(k && (strchr("?rRqQsShHmMuUgGaAfF/", k)
+    if(k && (strchr("?rRqQsShHmMuUgGaAfFcC/", k)
 	|| (k == KEY_DC)
 	|| (k == KEY_F(2))
 	|| (k == KEY_F(3))

@@ -54,8 +54,9 @@
 #define ACT_NONICQ      -28
 #define ACT_EDITUSER    -29
 #define ACT_VISIBLELIST -30
-#define ACT_INVISIBLELIST -31
+#define ACT_INVISLIST   -31
 #define ACT_QUICKFIND   -32
+#define ACT_CONTACT     -33
 
 extern class centericq cicq;
 

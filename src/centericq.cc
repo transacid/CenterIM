@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.15 2001/09/26 15:09:43 konst Exp $
+* $Id: centericq.cc,v 1.16 2001/09/27 08:53:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -216,7 +216,7 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_IGNORELIST: face.modelist(csignore); break;
 	    case ACT_VISIBLELIST: face.modelist(csvisible); break;
-	    case ACT_INVISIBLELIST: face.modelist(csinvisible); break;
+	    case ACT_INVISLIST: face.modelist(csinvisible); break;
 	    case ACT_STATUS: changestatus(); break;
 	    case ACT_DETAILS:
 		if(ihook.logged()) updatedetails();
@@ -260,6 +260,9 @@ void centericq::mainloop() {
 
 	    case ACT_FILE: if(c->getstatus() != STATUS_OFFLINE) sendfiles(c->getuin()); break;
 	    case ACT_CHAT: break;
+	    case ACT_CONTACT:
+		sendcontacts(c->getuin());
+		break;
 	}
 	
 	if(c->isnonicq())
@@ -454,6 +457,40 @@ void centericq::sendfiles(unsigned int uin) {
 	}
     } else {
 	face.log(_("+ remote client doesn't support file transfers"));
+    }
+}
+
+void centericq::sendcontacts(unsigned int uin) {
+    icqcontactmsg *m, *n, *cont;
+    list<unsigned int>::iterator i;
+
+    if(icql.icq_Status == STATUS_OFFLINE) {
+	face.log(_("+ cannot send contacts in offline mode"));
+	return;
+    }
+
+    face.muins.clear();
+
+    if(face.multicontacts(_("Contacts to send"), face.muins))
+    if(!face.muins.empty()) {
+	for(m = 0, i = face.muins.begin(); i != face.muins.end(); i++) {
+	    n = new icqcontactmsg;
+	    if(m) m->next = n; else cont = n;
+	    m = n;
+
+	    m->uin = *i;
+	    strncpy(m->nick, clist.get(*i)->getnick().c_str(), 12);
+	    m->nick[11] = 0;
+	    m->next = 0;
+	}
+
+	icq_SendContact(&icql, uin, cont, ICQ_SEND_THRUSERVER);
+
+	for(m = cont; m; ) {
+	    n = (icqcontactmsg *) m->next;
+	    delete m;
+	    m = n;
+	}
     }
 }
 

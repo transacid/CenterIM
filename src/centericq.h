@@ -41,6 +41,7 @@ class centericq {
 	void updatedetails();
 	void updateconf();
 	void sendfiles(unsigned int uin);
+	void sendcontacts(unsigned int uin);
 	void find();
 	void nonicq(int id);
 	void checkmail();
