@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.25 2001/11/15 16:46:55 konst Exp $
+* $Id: icqdialogs.cc,v 1.26 2001/11/16 14:00:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -89,15 +89,15 @@ bool icqface::finddialog(searchparameters &s) {
     while(!finished) {
 	tree.clear();
 
-	i = tree.addnode(0, 0, 0, _(" Network "));
+	i = tree.addnode(_(" Network "));
 	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(*ipname) + " ");
 
 	switch(*ipname) {
 	    case icq:
-		i = tree.addnode(0, 0, 0, _(" UIN "));
+		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, _(" UIN : %s "), strint(s.uin));
 
-		i = tree.addnode(0, 0, 0, _(" Details "));
+		i = tree.addnode(_(" Details "));
 		tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
 		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
 		tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
@@ -107,22 +107,22 @@ bool icqface::finddialog(searchparameters &s) {
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
 		tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
 
-		i = tree.addnode(0, 0, 0, _(" Location "));
+		i = tree.addnode(_(" Location "));
 		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
 		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
 		tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
 
-		i = tree.addnode(0, 0, 0, _(" Work "));
+		i = tree.addnode(_(" Work "));
 		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
 		tree.addleaff(i, 0, 23, _(" Department : %s "), s.department.c_str());
 		tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
 
-		i = tree.addnode(0, 0, 0, _(" Online only "));
+		i = tree.addnode(_(" Online only "));
 		tree.addleaff(i, 0, 25, " %s ", stryesno(s.onlineonly));
 		break;
 
 	    case yahoo:
-		i = tree.addnode(0, 0, 0, _(" Nickname "));
+		i = tree.addnode(_(" Nickname "));
 		tree.addleaf(i, 0, 11, " " + s.nick + " ");
 		break;
 	}
@@ -191,54 +191,53 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 
     fabout = c->getabout();
 
-    int saveitem, savefirst;
+    int saveitem, savefirst, i;
     
     tree->menu.getpos(saveitem, savefirst);
     tree->clear();
 
-    int ngen = tree->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" General "));
-    int nhome = tree->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Home "));
-    int nwork = tree->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Work "));
-    int nmore = tree->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" More "));
-    int nabout = tree->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" About "));
+    i = tree->addnode(_(" General "));
+    tree->addleaff(i, 0, 0, _(" Nickname : %s "), c->getnick().c_str());
+    tree->addleaff(i, 0, 0, _(" First name : %s "), fname.c_str());
+    tree->addleaff(i, 0, 0, _(" Last name : %s "), lname.c_str());
+    tree->addleaff(i, 0, 0, _(" E-mail : %s "), fprimemail.c_str());
+    tree->addleaff(i, 0, 0, _(" Second e-mail : %s "), fsecemail.c_str());
+    tree->addleaff(i, 0, 0, _(" Old e-mail : %s "), foldemail.c_str());
+    tree->addleaff(i, 0, 0, _(" Gender : %s "), strgender(fgender));
+    tree->addleaff(i, 0, 0, _(" Birthdate : %s "), getbdate(fbday, fbmonth, fbyear).c_str());
+    tree->addleaff(i, 0, 0, _(" Age : %s "), strint(fage));
 
-    tree->addleaff(ngen, 0, 0, _(" Nickname : %s "), c->getnick().c_str());
-    tree->addleaff(ngen, 0, 0, _(" First name : %s "), fname.c_str());
-    tree->addleaff(ngen, 0, 0, _(" Last name : %s "), lname.c_str());
-    tree->addleaff(ngen, 0, 0, _(" E-mail : %s "), fprimemail.c_str());
-    tree->addleaff(ngen, 0, 0, _(" Second e-mail : %s "), fsecemail.c_str());
-    tree->addleaff(ngen, 0, 0, _(" Old e-mail : %s "), foldemail.c_str());
-    tree->addleaff(ngen, 0, 0, _(" Gender : %s "), strgender(fgender));
-    tree->addleaff(ngen, 0, 0, _(" Birthdate : %s "), getbdate(fbday, fbmonth, fbyear).c_str());
-    tree->addleaff(ngen, 0, 0, _(" Age : %s "), strint(fage));
+    i = tree->addnode(_(" Home "));
+    tree->addleaff(i, 0, 0, _(" City : %s "), fcity.c_str());
+    tree->addleaff(i, 0, 0, _(" State : %s "), fstate.c_str());
+    tree->addleaff(i, 0, 0, _(" Country : %s "), fcountry ? icq_GetCountryName(fcountry) : "");
+    tree->addleaff(i, 0, 0, _(" Street address : %s "), fstreet.c_str());
+    tree->addleaff(i, 0, 0, _(" Zip code : %s "), strint(fzip));
+    tree->addleaff(i, 0, 0, _(" Phone : %s "), fphone.c_str());
+    tree->addleaff(i, 0, 0, _(" Fax : %s "), ffax.c_str());
+    tree->addleaff(i, 0, 0, _(" Cellular phone : %s "), fcellular.c_str());
 
-    tree->addleaff(nhome, 0, 0, _(" City : %s "), fcity.c_str());
-    tree->addleaff(nhome, 0, 0, _(" State : %s "), fstate.c_str());
-    tree->addleaff(nhome, 0, 0, _(" Country : %s "), fcountry ? icq_GetCountryName(fcountry) : "");
-    tree->addleaff(nhome, 0, 0, _(" Street address : %s "), fstreet.c_str());
-    tree->addleaff(nhome, 0, 0, _(" Zip code : %s "), strint(fzip));
-    tree->addleaff(nhome, 0, 0, _(" Phone : %s "), fphone.c_str());
-    tree->addleaff(nhome, 0, 0, _(" Fax : %s "), ffax.c_str());
-    tree->addleaff(nhome, 0, 0, _(" Cellular phone : %s "), fcellular.c_str());
+    i = tree->addnode(_(" Work "));
+    tree->addleaff(i, 0, 0, _(" City : %s "), fwcity.c_str());
+    tree->addleaff(i, 0, 0, _(" State : %s "), fwstate.c_str());
+    tree->addleaff(i, 0, 0, _(" Country : %s "), fwcountry ? icq_GetCountryName(fwcountry) : "");
+    tree->addleaff(i, 0, 0, _(" Street address : %s "), fwaddress.c_str());
+    tree->addleaff(i, 0, 0, _(" Company : %s "), fcompany.c_str());
+    tree->addleaff(i, 0, 0, _(" Department : %s "), fdepartment.c_str());
+    tree->addleaff(i, 0, 0, _(" Occupation : %s "), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
+    tree->addleaff(i, 0, 0, _(" Position : %s "), fjob.c_str());
+    tree->addleaff(i, 0, 0, _(" Homepage : %s "), fwhomepage.c_str());
+    tree->addleaff(i, 0, 0, _(" Phone : %s "), fwphone.c_str());
+    tree->addleaff(i, 0, 0, _(" Fax : %s "), fwfax.c_str());
 
-    tree->addleaff(nwork, 0, 0, _(" City : %s "), fwcity.c_str());
-    tree->addleaff(nwork, 0, 0, _(" State : %s "), fwstate.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Country : %s "), fwcountry ? icq_GetCountryName(fwcountry) : "");
-    tree->addleaff(nwork, 0, 0, _(" Street address : %s "), fwaddress.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Company : %s "), fcompany.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Department : %s "), fdepartment.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Occupation : %s "), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
-    tree->addleaff(nwork, 0, 0, _(" Position : %s "), fjob.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Homepage : %s "), fwhomepage.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Phone : %s "), fwphone.c_str());
-    tree->addleaff(nwork, 0, 0, _(" Fax : %s "), fwfax.c_str());
+    i = tree->addnode(_(" More "));
+    tree->addleaff(i, 0, 0, _(" Homepage : %s "), fhomepage.c_str());
+    tree->addleaff(i, 0, 0, _(" 1st language : %s "), flang1 ? icq_GetMetaLanguageName(flang1) : "");
+    tree->addleaff(i, 0, 0, _(" 2nd language : %s "), flang2 ? icq_GetMetaLanguageName(flang2) : "");
+    tree->addleaff(i, 0, 0, _(" 3rd language : %s "), flang3 ? icq_GetMetaLanguageName(flang3) : "");
 
-    tree->addleaff(nmore, 0, 0, _(" Homepage : %s "), fhomepage.c_str());
-    tree->addleaff(nmore, 0, 0, _(" 1st language : %s "), flang1 ? icq_GetMetaLanguageName(flang1) : "");
-    tree->addleaff(nmore, 0, 0, _(" 2nd language : %s "), flang2 ? icq_GetMetaLanguageName(flang2) : "");
-    tree->addleaff(nmore, 0, 0, _(" 3rd language : %s "), flang3 ? icq_GetMetaLanguageName(flang3) : "");
-
-    tree->addleaff(nabout, 0, 0, " %s ", fabout.c_str());
+    i = tree->addnode(_(" About "));
+    tree->addleaff(i, 0, 0, " %s ", fabout.c_str());
 
     tree->menu.setpos(saveitem, savefirst);
 }
@@ -268,10 +267,12 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     db.setwindow(&w, false);
 
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
+
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+
     db.idle = &detailsidle;
     db.addautokeys();
 
@@ -503,8 +504,7 @@ bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
 
     db.setwindow(&w, false);
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
-	conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
@@ -519,8 +519,8 @@ bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
     while(!finished) {
 	db.gettree()->clear();
 	
-	int nfiles = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Files "));
-	int ncomment = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Comment "));
+	int nfiles = db.gettree()->addnode(_(" Files "));
+	int ncomment = db.gettree()->addnode(_(" Comment "));
 
 	for(i = 0; i < flist.count; i++)
 	    db.gettree()->addleaf(nfiles,  0, 0, " " +
@@ -577,7 +577,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     conf.getauto(aaway, ana);
 
     textwindow w(0, 0, BIGDIALOG_WIDTH, BIGDIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterICQ quick config "));
+    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterICQ configuration "));
 
     db.setwindow(&w, false);
 
@@ -746,7 +746,7 @@ int icqface::groupmanager(const string text, bool sel) {
     db.setwindow(&w, false);
 
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
@@ -766,7 +766,7 @@ int icqface::groupmanager(const string text, bool sel) {
 
     for(bool fin = false; !fin && !r; ) {
 	t.clear();
-	ngrp = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Groups "));
+	ngrp = t.addnode(_(" Groups "));
 
 	for(i = groups.begin(); i != groups.end(); i++) {
 	    b = i-groups.begin()+1;

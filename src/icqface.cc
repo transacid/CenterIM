@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.38 2001/11/15 16:46:55 konst Exp $
+* $Id: icqface.cc,v 1.39 2001/11/16 14:00:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -124,8 +124,8 @@ icqface::~icqface() {
 
 void icqface::init() {
     mcontacts = new treeview(1, 2, 25, LINES-2,
-    conf.getcolor(cp_main_menu), conf.getcolor(cp_main_selected),
-    conf.getcolor(cp_main_menu), conf.getcolor(cp_main_menu));
+	conf.getcolor(cp_main_menu), conf.getcolor(cp_main_selected),
+	conf.getcolor(cp_main_menu), conf.getcolor(cp_main_menu));
 
     mcontacts->menu.idle = &menuidle;
     mcontacts->menu.otherkeys = &contactskeys;

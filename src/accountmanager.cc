@@ -14,6 +14,11 @@ accountmanager::accountmanager() {
 accountmanager::~accountmanager() {
 }
 
+icqconf::imaccount accountmanager::addcontact() {
+    icqconf::imaccount account;
+    return account;
+}
+
 void accountmanager::exec() {
     dialogbox db;
     protocolname pname;
@@ -24,7 +29,7 @@ void accountmanager::exec() {
 
     face.blockmainscreen();
 
-    db.setwindow(new textwindow(0, 0, BIGDIALOG_WIDTH, BIGDIALOG_HEIGHT,
+    db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
 	getcolor(cp_dialog_frame), TW_CENTERED,
 	getcolor(cp_dialog_highlight), _(" IM account manager ")));
 
@@ -95,7 +100,11 @@ void accountmanager::exec() {
 			account.password, '*');
 		    break;
 		case 6:
-		    imcontrol.registration(account);
+		    if(!account.empty()) {
+			face.status(_("Drop the account information first!"));
+		    } else {
+			imcontrol.registration(account);
+		    }
 		    break;
 		case 7:
 		    imcontrol.updateinfo(account);

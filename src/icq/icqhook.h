@@ -45,7 +45,7 @@ class icqhook {
     protected:
 	bool flogged, connecting, factive;
 	int newuin, n_keepalive;
-	unsigned long seq_keepalive;
+	unsigned long seq_keepalive, reguin;
 	imstatus manualstatus;
 
 	time_t timer_keepalive, timer_tcp, timer_resolve, timer_offline,
@@ -183,13 +183,8 @@ class icqhook {
 	icqhook();
 	~icqhook();
 
-	static void regdisconnected(struct icq_link *link, int reason);
-
-	void reginit(struct icq_link *link);
-
-	unsigned int getreguin();
-	void setreguin(unsigned int ruin);
-	void postreg();
+	bool regconnect(const string aserver);
+	bool regattempt(unsigned long &uin, const string password);
 
 	void connect();
 	void disconnect();

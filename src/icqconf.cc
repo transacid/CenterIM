@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.18 2001/11/15 16:46:54 konst Exp $
+* $Id: icqconf.cc,v 1.19 2001/11/16 14:00:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,16 +128,18 @@ void icqconf::setourid(const imaccount im) {
 	    *i = im;
 	}
     } else {
-	accounts.push_back(im);
-	i = accounts.end()-1;
+	if(!im.empty()) {
+	    accounts.push_back(im);
+	    i = accounts.end()-1;
 
-	switch(i->pname) {
-	    case icq:
-		if(i->server.empty()) {
-		    i->server = "icq.mirabilis.com";
-		    i->port = 4000;
-		}
-		break;
+	    switch(i->pname) {
+		case icq:
+		    if(i->server.empty()) {
+			i->server = "icq.mirabilis.com";
+			i->port = 4000;
+		    }
+		    break;
+	    }
 	}
     }
 }

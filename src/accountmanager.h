@@ -5,6 +5,8 @@
 
 class accountmanager {
     protected:
+	icqconf::imaccount addcontact();
+
     public:
 	accountmanager();
 	~accountmanager();

@@ -42,7 +42,6 @@ class centericq {
 	void mainloop();
 	void userinfo(const imcontact cinfo);
 	void changestatus();
-	void updatedetails();
 	bool updateconf();
 	void sendfiles(const imcontact cinfo);
 	void sendcontacts(const imcontact cinfo);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.6 2001/11/15 16:46:56 konst Exp $
+* $Id: icqhook.cc,v 1.7 2001/11/16 14:00:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,7 @@
 #include "icqmlist.h"
 #include "centericq.h"
 
+#include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
@@ -58,8 +59,6 @@ icqhook::~icqhook() {
 
 void icqhook::init(const icqconf::imaccount account) {
     string spuser, sppass;
-
-    face.log("+ initializing %s engine", conf.getprotocolname(account.pname).c_str());
 
     icq_Init(&icql, account.uin, account.password.c_str(), "");
 
@@ -112,7 +111,12 @@ void icqhook::init(const icqconf::imaccount account) {
 void icqhook::connect() {
     icqconf::imaccount acc = conf.getourid(icq);
 
-    if(!enabled()) init(acc);
+    if(!enabled()) {
+	face.log("+ initializing %s engine",
+	    conf.getprotocolname(acc.pname).c_str());
+
+	init(acc);
+    }
 
     connecting = true;
     face.update();
@@ -131,12 +135,6 @@ void icqhook::connect() {
     time(&timer_reconnect);
 }
 
-void icqhook::reginit(struct icq_link *link) {
-    flogged = true;
-    link->icq_NewUIN = &regnewuin;
-    link->icq_Disconnected = &regdisconnected;
-}
-
 void icqhook::loggedin(struct icq_link *link) {
     ihook.flogged = true;
     ihook.connecting = false;
@@ -152,8 +150,29 @@ void icqhook::loggedin(struct icq_link *link) {
     face.update();
     face.log(_("+ [icq] logged in"));
 
-    clist.send();
+    string fname = conf.getdirname() + "/icq-infoset",
+	rnick, remail, rfname, rlname;
 
+    if(!access(fname.c_str(), R_OK)) {
+	face.log(_("+ [icq] setting initial user info"));
+
+	ifstream f(fname.c_str());
+
+	if(f.is_open()) {
+	    getstring(f, rnick);
+	    getstring(f, remail);
+	    getstring(f, rfname);
+	    getstring(f, rlname);
+
+	    icq_UpdateNewUserInfo(&icql, rnick.c_str(), rfname.c_str(),
+		rlname.c_str(), remail.c_str());
+
+	    f.close();
+	    unlink(fname.c_str());
+	}
+    }
+
+    clist.send();
     ihook.files.clear();
 }
 
@@ -196,11 +215,6 @@ void icqhook::disconnected(struct icq_link *link, int reason) {
 
     time(&ihook.timer_reconnect);
     face.update();
-}
-
-void icqhook::regdisconnected(struct icq_link *link, int reason) {
-    ihook.flogged = false;
-    ihook.timer_reconnect = 0;
 }
 
 void icqhook::message(struct icq_link *link, unsigned long uin,
@@ -502,18 +516,6 @@ void icqhook::invaliduin(struct icq_link *link) {
     face.log(_("+ [icq] invalid uin"));
 }
 
-void icqhook::regnewuin(struct icq_link *link, unsigned long uin) {
-    ihook.newuin = uin;
-}
-
-unsigned int icqhook::getreguin() {
-    return newuin;
-}
-
-void icqhook::setreguin(unsigned int ruin) {
-    newuin = ruin;
-}
-
 bool icqhook::logged() const {
     return flogged;
 }
@@ -798,4 +800,63 @@ void icqhook::disconnect() {
     icq_Logout(&icql);
     icq_Disconnect(&icql);
     ildisconnected(&icql, ICQ_DISCONNECT_SOCKET);
+}
+
+void icqhook::regnewuin(struct icq_link *link, unsigned long uin) {
+    ihook.reguin = uin;
+}
+
+bool icqhook::regconnect(const string aserver) {
+    icqconf::imaccount account(icq);
+    string server;
+    int pos, port;
+
+    if((pos = aserver.find(":")) != -1) {
+	server = aserver.substr(0, pos);
+	port = strtoul(aserver.substr(pos+1).c_str(), 0, 0);
+    } else {
+	server = aserver;
+	port = 4000;
+	if(server.empty()) server = "icq.mirabilis.com";
+    }
+
+    if(!factive) {
+	init(account);
+    }
+
+    icql.icq_NewUIN = &regnewuin;
+    return icq_Connect(&icql, server.c_str(), port) != -1;
+}
+
+bool icqhook::regattempt(unsigned long &uin, const string password) {
+    struct timeval tv;
+    time_t spent;
+    int sockfd;
+    fd_set fds;
+
+    reguin = 0;
+    icq_RegNewUser(&icql, password.c_str());
+
+    for(spent = time(0); !reguin && time(0)-spent < PERIOD_WAITNEWUIN; ) {
+	tv.tv_sec = 5;
+	tv.tv_usec = 0;
+
+	FD_ZERO(&fds);
+	FD_SET((sockfd = icq_GetSok(&icql)), &fds);
+	select(sockfd+1, &fds, 0, 0, &tv);
+	
+	if(FD_ISSET(sockfd, &fds)) {
+	    icq_HandleServerResponse(&icql);
+	}
+    }
+
+    if(reguin) {
+	icq_Disconnect(&icql);
+	icq_Done(&icql);
+	factive = false;
+
+	uin = reguin;
+    }
+
+    return (bool) reguin;
 }

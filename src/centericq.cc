@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.33 2001/11/15 16:46:54 konst Exp $
+* $Id: centericq.cc,v 1.34 2001/11/16 14:00:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -316,52 +316,6 @@ void centericq::userinfo(const imcontact cinfo) {
 
     if(c) {
 	face.userinfo(cinfo, realuin);
-    }
-}
-
-void centericq::updatedetails() {
-    icqcontact *c = clist.get(contactroot);
-
-    c->clear();
-    c->setseq2(icq_SendMetaInfoReq(&icql, icql.icq_Uin));
-
-    if(face.updatedetails()) {
-	string fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate;
-	string fphone, ffax, fstreet, fcellular, fhomepage, fwcity, fwstate;
-	string fwphone, fwfax, fwaddress, fcompany, fdepartment, fjob;
-	string fwhomepage, icat1, int1, icat2, int2, icat3, int3, icat4;
-	string int4, fabout;
-
-	unsigned char flang1, flang2, flang3, fbyear, fbmonth, fbday, fage, fgender;
-	unsigned long fzip, fwzip;
-	unsigned short fcountry, fwcountry, foccupation;
-
-	c->getinfo(fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, fzip, fcountry);
-	c->getmoreinfo(fage, fgender, fhomepage, flang1, flang2, flang3, fbday, fbmonth, fbyear);
-
-	c->getworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, fwzip,
-	    fwcountry, fcompany, fdepartment, fjob, foccupation, fwhomepage);
-
-	fabout = c->getabout();
-
-	icq_UpdateUserInfo(&icql, c->getnick().c_str(), fname.c_str(),
-	    lname.c_str(), fprimemail.c_str());
-
-	icq_UpdateMetaInfoHomepage(&icql, fage, fhomepage.c_str(),
-	    fbyear, fbmonth, fbday, flang1, flang2, flang3, fgender);
-
-	icq_UpdateMetaInfoWork(&icql, fwcity.c_str(), fwstate.c_str(),
-	    fwphone.c_str(), fwfax.c_str(), fwaddress.c_str(),
-	    fcompany.c_str(), fdepartment.c_str(), fjob.c_str(),
-	    fwhomepage.c_str(), foccupation, fwcountry, fwzip);
-
-	icq_UpdateMetaInfoSet(&icql, c->getnick().c_str(), fname.c_str(),
-	    lname.c_str(), fprimemail.c_str(), fsecemail.c_str(),
-	    foldemail.c_str(), fcity.c_str(), fstate.c_str(), fphone.c_str(),
-	    ffax.c_str(), fstreet.c_str(), fcellular.c_str(), fzip, fcountry,
-	    0);
-
-	icq_UpdateMetaInfoAbout(&icql, fabout.c_str());
     }
 }
 
@@ -729,8 +683,8 @@ bool centericq::idle(int options = 0) {
 void centericq::exectimers() {
     time_t timer_current = time(0);
 
-    ihook.exectimers();
-    yhook.exectimers();
+    if(!conf.getourid(icq).empty()) ihook.exectimers();
+    if(!conf.getourid(yahoo).empty()) yhook.exectimers();
 
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	cicq.checkmail();
