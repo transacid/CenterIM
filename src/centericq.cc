@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.101 2002/06/20 15:11:33 konst Exp $
+* $Id: centericq.cc,v 1.102 2002/06/25 09:28:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -686,6 +686,10 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 		    sendev->setcontact(*i);
 		    em.store(*sendev);
 		}
+
+		face.muins.clear();
+		face.muins.push_back(ev.getcontact());
+
 	    }
 	}
     }
