@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.1\n"
-"POT-Creation-Date: 2002-04-11 16:33+0300\n"
+"POT-Creation-Date: 2002-04-12 13:04+0300\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -51,15 +51,15 @@ msgstr ""
 
 #: src/icqconf.cc:879
 msgid "unknown status character was given"
-msgstr ""
+msgstr "неизвестная буква для статуса была задана"
 
 #: src/icqconf.cc:882
 msgid "unknown IM type"
-msgstr ""
+msgstr "неизвестный тип IM сети"
 
 #: src/icqconf.cc:885
 msgid "status change error: "
-msgstr ""
+msgstr "ошибка смены статуса: "
 
 #: src/icqcontact.cc:681
 msgid "Jan"
@@ -515,9 +515,8 @@ msgid " Remember passwords : %s "
 msgstr " Помнить пароли : %s "
 
 #: src/icqdialogs.cc:633
-#, fuzzy, c-format
 msgid " Edit away message on status change : %s "
-msgstr " Цитировать сообщения при ответе : %s "
+msgstr " Редактировать away сообщения при переключении статуса : %s "
 
 #: src/icqdialogs.cc:635
 msgid " Communications "
@@ -1177,20 +1176,19 @@ msgstr "Вы должны быть в он-лайн чтобы иметь возможность обновлять информацию"
 
 #: src/imcontroller.cc:191
 msgid " IRC channels (join/leave) "
-msgstr ""
+msgstr " IRC каналы (присоединиться/покинуть) "
 
 #: src/imcontroller.cc:197
 msgid "Join/Leave"
-msgstr ""
+msgstr "Зайти/Покинуть"
 
 #: src/imcontroller.cc:211
-#, fuzzy
 msgid " Channels "
-msgstr " Канал "
+msgstr " Каналы "
 
 #: src/imcontroller.cc:223
 msgid "channel name to add: "
-msgstr ""
+msgstr "добавить канал: "
 
 #: src/imcontroller.cc:258
 msgid "registration is not supported"
@@ -1258,12 +1256,11 @@ msgstr "* Away сообщение:"
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] невозможно запросить away-сообщение у %s, %s"
 
-#: src/hooks/icqhook.cc:1018
-#, c-format
-msgid "%lu requested our icq away message, sent the response"
-msgstr "%lu запросил наше away-сообщение, ответ послан"
+#: src/hooks/icqhook.cc:1024
+msgid "%s requested our away message, sent the response"
+msgstr "%s запросил наше away-сообщение, ответ послан"
 
-#: src/hooks/icqhook.cc:1048
+#: src/hooks/icqhook.cc:1054
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
 msgstr "+ [icq] поиск whitepages закончен, %d найдено"
@@ -1582,7 +1579,6 @@ msgid "+ [irc] removing %s from the contacts"
 msgstr "+ [irc] удаление %s из списка"
 
 #: src/hooks/irchook.cc:341
-#, fuzzy, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
 msgstr "+ [irc] поиск по каналам закончен, %d найдено"
 
@@ -1702,12 +1698,3 @@ msgstr "авторизация"
 #: src/imlogger.h:41
 msgid "e-mail"
 msgstr ""
-
-#~ msgid "+ [aim] user %s changed their nick to %s"
-#~ msgstr "+ [aim] пользователь %s поменял свой ник на %s"
-
-#~ msgid "+ [irc] nickname was changed successfully"
-#~ msgstr "+ [irc] псевдоним был изменен успешно"
-
-#~ msgid "+ [irc] user %s changed their nick to %s"
-#~ msgstr "+ [irc] пользователь %s поменял свой ник на %s"
