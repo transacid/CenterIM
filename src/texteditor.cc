@@ -49,6 +49,8 @@
 #define CURCOL        (curfile ? (curfile->sx+curfile->x) : 0)
 #define CURSTRING     (char *) curfile->lines->at(CURLINE)
 #define CSTRLEN       strlen(CURSTRING ? CURSTRING : "")
+#define UPDATECURRENTLINE	{ kgotoxy(x1, y1+curfile->y); showline(CURLINE, curfile->sx, x2-x1); }
+
 #define MAX_STRLEN    10240
 #define ALONE_DELIM   " ;(){}[].,:-+*/^?!=<>"
 #define NONCHAR_DELIM " ;(){}[].,:-+*/^?!=<>\"'"
@@ -703,7 +705,7 @@ int texteditor::hl_comment(char *cp, int st, int pend, int color) {
     if(color && (st <= strlen(cp)) && (pend-st > 0)) {
 /// !!! 	for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
 
-	for(i = 0; (i < pend) && (i < strlen(cp)); i++) {
+	for(i = 0; (i <= pend) && (i < strlen(cp)); i++) {
 	    switch(cp[i]) {
 		case 1: origclr = cp[i+++1]; break;
 		case 2: origclr = -1; break;
@@ -880,6 +882,10 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 			*iq+offs+1, colors.qcolor);
 		}
 	    }
+
+	    if(qst) {
+		hl_comment(cp, *(layout.end()-1)+offs, strlen(cp), colors.qcolor);
+	    }
 	}
 
 	// Blocks ...
@@ -909,7 +915,6 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 		} else n = j = 0;
 
 		if(!(tb->x1 == tb->x2 && tb->y1 == tb->y2)) {
-		    //if(!cp[0]) extrax++;
 		    hl_comment(cp, n, q, tb->color);
 		}
 	    }
@@ -967,6 +972,7 @@ void texteditor::draw(int fromline) {
 		for(; k < y2-y1+curfile->sy; k++) mvhline(k-curfile->sy+y1, x1, ' ', x2-x1);
 	    }
 	}
+
 	refresh();
     }
 }
@@ -1036,10 +1042,11 @@ void texteditor::eddel(bool usetabs = true) {
 	    }
 
 	    modification(udelchar, deltext);
-
 	    strcut(p, CURCOL, todelete);
+
+	    UPDATECURRENTLINE;
 	    updatecursor();
-	    showline(CURLINE, CURCOL, x2-x1-curfile->x, curfile->x);
+//	    showline(CURLINE, CURCOL, x2-x1-curfile->x, curfile->x);
 	    
 	} else {
 	    char *next = (char *) curfile->lines->at(CURLINE+1);
@@ -1493,19 +1500,13 @@ void texteditor::inschar(int k) {
 	    draw();
 
 	} else {
-
 	    curfile->lines->replace(CURLINE, n);
 	    modification(uinschar, np);
-	
-	    int startx;
-	    for(startx = curfile->x; startx && !strchr(WORD_DELIM, n[startx]); startx--);
-	    kgotoxy(x1+startx, y1+curfile->y);
 
-	    showline(CURLINE, curfile->sx+startx, x2-x1-startx, startx);
+	    UPDATECURRENTLINE;
 	    edmove(KEY_RIGHT, 0);
-	    
 	}
-	
+
 	updatecursor();
 	abscol = CURCOL;
     }
