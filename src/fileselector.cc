@@ -134,7 +134,6 @@ void fileselector::exec() {
 			    setdcurrent = justfname(di.dirname.substr(0,
 				di.dirname.size()-1));
 
-			    chdir("..");
 			    dcurrent = getcwd(buf, 511);
 			}
 		    } else {
@@ -182,14 +181,20 @@ int fileselector::menukeys(verticalmenu &m, int k) {
 
     switch(k) {
 	case ' ':
-	    if(instance->options & FSEL_DIRSELECT) {
+	    if((instance->options & FSEL_DIRSELECT)
+	    || (instance->options & FSEL_MULTI)) {
 		if(i) {
 		    if(i->fname != "..") {
-			instance->selected.push_back(instance->dcurrent + i->fname);
+			if(!(instance->options & FSEL_MULTI) || instance->selected.empty())
+			    instance->selected.push_back(instance->dcurrent + i->fname);
+
 			instance->finish = true;
-			return m.getpos()+1;
 		    }
 		}
+
+		if(instance->finish)
+		    return m.getpos()+1;
+
 	    }
 	    break;
 
