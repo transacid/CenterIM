@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.190 2003/08/28 06:57:45 konst Exp $
+* $Id: icqface.cc,v 1.191 2003/09/11 21:09:28 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2897,6 +2897,9 @@ int icqface::editmsgkeys(texteditor &e, int k) {
     char *p;
 
     switch(k) {
+	case '\r':
+	    if(!conf.getentersends(face.passinfo.pname))
+		break;
 	case CTRL('x'):
 	    p = e.save("");
 	    face.editdone = strlen(p);

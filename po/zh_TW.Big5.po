@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.9.4\n"
-"POT-Creation-Date: 2003-08-22 00:24+0300\n"
+"POT-Creation-Date: 2003-09-10 00:55+0300\n"
 "PO-Revision-Date: 2003-05-14 11:12+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -493,16 +493,6 @@ msgstr "+ [icq] 無法傳簡訊給 %s"
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] 無法取得 %s, %s 的暫離訊息"
 
-#: src/hooks/icqhook.cc:1347
-#, fuzzy, c-format
-msgid "+ [icq] %s has requested our away message"
-msgstr "%s 想要獲得您的暫離訊息, 已傳送"
-
-#: src/hooks/icqhook.cc:1348
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s 想要獲得您的暫離訊息, 已傳送"
-
 #: src/hooks/icqhook.cc:1363
 msgid "Random Chat User"
 msgstr "亂數選取聊天對象"
@@ -772,7 +762,7 @@ msgstr "找男人"
 msgid " Search profiles "
 msgstr " 搜尋設定檔"
 
-#: src/icqdialogs.cc:103 src/icqdialogs.cc:983 src/icqdialogs.cc:1505
+#: src/icqdialogs.cc:103 src/icqdialogs.cc:983 src/icqdialogs.cc:1520
 #: src/icqface.cc:1548 src/icqface.cc:2149
 msgid "Remove"
 msgstr "移除"
@@ -798,7 +788,7 @@ msgid "cLear"
 msgstr "L清除"
 
 #: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
-#: src/icqdialogs.cc:687 src/icqdialogs.cc:1086 src/accountmanager.cc:68
+#: src/icqdialogs.cc:687 src/icqdialogs.cc:1088 src/accountmanager.cc:68
 #: src/imcontroller.cc:71
 msgid "Change"
 msgstr "修改"
@@ -1145,7 +1135,7 @@ msgstr " 第一外語 : %s "
 msgid " 3rd language : %s "
 msgstr " 第二外語 : %s "
 
-#: src/icqdialogs.cc:620 src/icqdialogs.cc:1149
+#: src/icqdialogs.cc:620 src/icqdialogs.cc:1158
 msgid " Miscellaneous "
 msgstr " 雜項 "
 
@@ -1187,7 +1177,7 @@ msgstr " 你的 %s 資料 "
 msgid " %s: details "
 msgstr " %s 的詳細資料 "
 
-#: src/icqdialogs.cc:687 src/icqdialogs.cc:1086 src/icqdialogs.cc:1386
+#: src/icqdialogs.cc:687 src/icqdialogs.cc:1088 src/icqdialogs.cc:1401
 #: src/accountmanager.cc:68
 msgid "Done"
 msgstr "完成"
@@ -1257,7 +1247,7 @@ msgstr " [Ctrl-X 儲存, Esc 取消] "
 msgid " Send file(s) to %s, %lu "
 msgstr " 傳檔給 %s, %lu "
 
-#: src/icqdialogs.cc:983 src/icqdialogs.cc:1385 src/icqface.cc:62
+#: src/icqdialogs.cc:983 src/icqdialogs.cc:1400 src/icqface.cc:62
 #: src/icqface.cc:737 src/icqface.cc:1548 src/icqface.cc:2149
 msgid "Add"
 msgstr "加入"
@@ -1286,263 +1276,273 @@ msgstr "檔名: "
 msgid "comment: "
 msgstr "附註: "
 
-#: src/icqdialogs.cc:1077
+#: src/icqdialogs.cc:1079
 msgid " CenterICQ configuration "
 msgstr " CenterICQ 設定選項 "
 
-#: src/icqdialogs.cc:1097
+#: src/icqdialogs.cc:1099
 msgid " User interface "
 msgstr " 使用者介面 "
 
-#: src/icqdialogs.cc:1098
+#: src/icqdialogs.cc:1100
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " 改變音效裝置為 : %s "
 
-#: src/icqdialogs.cc:1099
+#: src/icqdialogs.cc:1101
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " 改變色彩配置為 : %s "
 
-#: src/icqdialogs.cc:1102
+#: src/icqdialogs.cc:1104
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " 啟動雙語支援 : %s "
 
-#: src/icqdialogs.cc:1104
+#: src/icqdialogs.cc:1106
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr " 在文字編輯器裡啟動 emacs 按鍵設定 : %s "
 
-#: src/icqdialogs.cc:1106
+#: src/icqdialogs.cc:1108
 msgid " Contact list "
 msgstr " 好友名單 "
 
-#: src/icqdialogs.cc:1107
+#: src/icqdialogs.cc:1109
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " 群組分類顯示法 : %s "
 
-#: src/icqdialogs.cc:1108
+#: src/icqdialogs.cc:1110
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " 隱藏離線使用者 : %s "
 
-#: src/icqdialogs.cc:1109
+#: src/icqdialogs.cc:1111
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " 防垃圾訊息: 刪除非好友的訊息 : %s "
 
-#: src/icqdialogs.cc:1110
+#: src/icqdialogs.cc:1112
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " 在回覆訊息時引言 : %s "
 
-#: src/icqdialogs.cc:1111
+#: src/icqdialogs.cc:1113
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " 檢查本地端郵件 : %s "
 
-#: src/icqdialogs.cc:1112
+#: src/icqdialogs.cc:1114
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " 儲存密碼 : %s "
 
-#: src/icqdialogs.cc:1113
+#: src/icqdialogs.cc:1115
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " 在變更狀態時修改暫離訊息 : %s "
 
-#: src/icqdialogs.cc:1120
+#: src/icqdialogs.cc:1122
 #, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " 聊天訊息模式  : %s"
 
-#: src/icqdialogs.cc:1127
+#: src/icqdialogs.cc:1128
+#, fuzzy, c-format
+msgid " Enter key sends message for : %s"
+msgstr " 在回覆訊息時引言 : %s "
+
+#: src/icqdialogs.cc:1135
 #, c-format
 msgid " Russian win/koi translation for : %s"
 msgstr " 俄語系 win/koi 轉換 : %s "
 
-#: src/icqdialogs.cc:1130
+#: src/icqdialogs.cc:1138
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " 聊天訊息模式 : %s "
 
-#: src/icqdialogs.cc:1131
+#: src/icqdialogs.cc:1139
+#, c-format
+msgid " Enter key sends message : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:1140
 #, c-format
 msgid " Russian win/koi translation : %s "
 msgstr " 俄語系 win/koi 轉換 : %s "
 
-#: src/icqdialogs.cc:1135
+#: src/icqdialogs.cc:1144
 msgid " Communications "
 msgstr " 通訊 "
 
-#: src/icqdialogs.cc:1136
+#: src/icqdialogs.cc:1145
 #, c-format
 msgid " SMTP server : %s "
 msgstr " SMTP 伺服器 : %s "
 
-#: src/icqdialogs.cc:1137
+#: src/icqdialogs.cc:1146
 #, fuzzy, c-format
 msgid " HTTP proxy server : %s "
 msgstr " SMTP 伺服器 : %s "
 
-#: src/icqdialogs.cc:1138
+#: src/icqdialogs.cc:1147
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr " 啟動 P2P 通訊 : %s "
 
-#: src/icqdialogs.cc:1141
+#: src/icqdialogs.cc:1150
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr " P2P 可使用的 port 範圍 : %s "
 
-#: src/icqdialogs.cc:1143
+#: src/icqdialogs.cc:1152
 msgid " Logging "
 msgstr " 登入 "
 
-#: src/icqdialogs.cc:1144
+#: src/icqdialogs.cc:1153
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr " log 視窗中是否要顯示時間戳記 : %s "
 
-#: src/icqdialogs.cc:1145
+#: src/icqdialogs.cc:1154
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr " log 視窗中是否要顯示 上線/離線 資訊 : %s "
 
-#: src/icqdialogs.cc:1146
+#: src/icqdialogs.cc:1155
 #, c-format
 msgid " Typing notifications in the log window : %s "
 msgstr " log 視窗中是否要顯示輸入提醒 : %s "
 
-#: src/icqdialogs.cc:1147
+#: src/icqdialogs.cc:1156
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " 在 ~/.centericq/log 中詳註 IM 事件日誌細節 : %s"
 
-#: src/icqdialogs.cc:1150
+#: src/icqdialogs.cc:1159
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " 幾分鐘後自動切換把狀態切換成暫離 : %d "
 
-#: src/icqdialogs.cc:1151
+#: src/icqdialogs.cc:1160
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " 幾分鐘後自動把狀態切換成 N/A : %d "
 
-#: src/icqdialogs.cc:1178
+#: src/icqdialogs.cc:1187
 msgid "Auto Away period (0 - disable): "
 msgstr "閒置自動暫離時間 (0 表不使用): "
 
-#: src/icqdialogs.cc:1182
+#: src/icqdialogs.cc:1191
 msgid "Auto N/A period (0 - disable): "
 msgstr "閒置自動N/A時間 (0 表不使用): "
 
-#: src/icqdialogs.cc:1208
+#: src/icqdialogs.cc:1217
 msgid "SMTP server hostname: "
 msgstr "SMTP 伺服器位址: "
 
-#: src/icqdialogs.cc:1218
+#: src/icqdialogs.cc:1227
 msgid "Peer-to-peer port range (min-max): "
 msgstr "P2P 可使用的 port 範圍 (最小-最大): "
 
-#: src/icqdialogs.cc:1232
+#: src/icqdialogs.cc:1241
 #, fuzzy
 msgid "HTTP proxy server hostname: "
 msgstr "SMTP 伺服器位址: "
 
-#: src/icqdialogs.cc:1349
+#: src/icqdialogs.cc:1364
 msgid "Your details have been fetched"
 msgstr "您的詳細資料已傳回"
 
-#: src/icqdialogs.cc:1361
+#: src/icqdialogs.cc:1376
 msgid "Organize contact groups"
 msgstr "管理群組"
 
-#: src/icqdialogs.cc:1385
+#: src/icqdialogs.cc:1400
 msgid "Rename"
 msgstr "R更名"
 
-#: src/icqdialogs.cc:1385
+#: src/icqdialogs.cc:1400
 msgid "rEmove"
 msgstr "E移除"
 
-#: src/icqdialogs.cc:1385
+#: src/icqdialogs.cc:1400
 msgid "move Up"
 msgstr "U向上移"
 
-#: src/icqdialogs.cc:1385
+#: src/icqdialogs.cc:1400
 msgid "move Down"
 msgstr "D向下移"
 
-#: src/icqdialogs.cc:1386
+#: src/icqdialogs.cc:1401
 msgid "Select"
 msgstr "選擇"
 
-#: src/icqdialogs.cc:1401
+#: src/icqdialogs.cc:1416
 msgid " Groups "
 msgstr " 群組 "
 
-#: src/icqdialogs.cc:1416
+#: src/icqdialogs.cc:1431
 msgid "Name for a group to be created: "
 msgstr "新增群組名稱: "
 
-#: src/icqdialogs.cc:1426
+#: src/icqdialogs.cc:1441
 msgid "New name for the group: "
 msgstr "新群組名: "
 
-#: src/icqdialogs.cc:1439
+#: src/icqdialogs.cc:1454
 msgid "Are you sure want to remove the group?"
 msgstr "確定要刪除群組嗎 ?"
 
-#: src/icqdialogs.cc:1496
+#: src/icqdialogs.cc:1511
 msgid "File transfer status"
 msgstr "檔案傳輸狀態"
 
-#: src/icqdialogs.cc:1505
+#: src/icqdialogs.cc:1520
 msgid "Cancel"
 msgstr "取消"
 
-#: src/icqdialogs.cc:1534
+#: src/icqdialogs.cc:1549
 #, c-format
 msgid " Incoming from %s "
 msgstr " 從 %s 來的"
 
-#: src/icqdialogs.cc:1536
+#: src/icqdialogs.cc:1551
 #, c-format
 msgid " Outgoing to %s "
 msgstr " 送到 %s 去 "
 
-#: src/icqdialogs.cc:1544
+#: src/icqdialogs.cc:1559
 msgid "init"
 msgstr "啟始"
 
-#: src/icqdialogs.cc:1545
+#: src/icqdialogs.cc:1560
 msgid "start"
 msgstr "開始"
 
-#: src/icqdialogs.cc:1546
+#: src/icqdialogs.cc:1561
 msgid "work"
 msgstr "工作"
 
-#: src/icqdialogs.cc:1547
+#: src/icqdialogs.cc:1562
 msgid "done"
 msgstr "完成"
 
-#: src/icqdialogs.cc:1548
+#: src/icqdialogs.cc:1563
 msgid "err"
 msgstr "錯誤"
 
-#: src/icqdialogs.cc:1549
+#: src/icqdialogs.cc:1564
 msgid "abort"
 msgstr "失敗"
 
-#: src/icqdialogs.cc:1556
+#: src/icqdialogs.cc:1571
 msgid " of "
 msgstr " 的 "
 
-#: src/icqdialogs.cc:1589
+#: src/icqdialogs.cc:1604
 msgid "Cannot remove a transfer which is in progress now"
 msgstr "這個傳送過程已經在進行中, 不能移除"
 
@@ -1922,94 +1922,94 @@ msgstr "取消"
 msgid "registration is not supported"
 msgstr "註冊目前尚未支援"
 
-#: src/icqconf.cc:145
+#: src/icqconf.cc:146
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "我很喜歡預設的 %s 暫離訊息 %s %s."
 
-#: src/icqconf.cc:668
+#: src/icqconf.cc:684
 msgid "+ launched the openurl command"
 msgstr "+ 執行 openurl 指令"
 
-#: src/icqconf.cc:835
+#: src/icqconf.cc:851
 msgid "event sending error: not enough parameters"
 msgstr "事件傳送錯誤 : 參數不足"
 
-#: src/icqconf.cc:846
+#: src/icqconf.cc:862
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "事件傳送錯誤 : 只有在 ICQ 協定才能傳 UINs"
 
-#: src/icqconf.cc:861
+#: src/icqconf.cc:877
 msgid "event sending error: unknown IM type"
 msgstr "事件傳送錯誤 : 不明的 IM 型態"
 
-#: src/icqconf.cc:883
+#: src/icqconf.cc:899
 msgid "event sending error: unknown event type"
 msgstr "事件傳送錯誤 : 不明的事件型態"
 
-#: src/icqconf.cc:895
+#: src/icqconf.cc:911
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s 到 %s 已被放入佇列中"
 
-#: src/icqconf.cc:901
+#: src/icqconf.cc:917
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr "事件傳送錯誤 : 收件者不在你的名單上"
 
-#: src/icqconf.cc:943
+#: src/icqconf.cc:959
 msgid "unknown status character was given"
 msgstr "不明的狀態字元"
 
-#: src/icqconf.cc:946
+#: src/icqconf.cc:962
 msgid "unknown IM type"
 msgstr "不明的 IM 型態"
 
-#: src/icqconf.cc:949
+#: src/icqconf.cc:965
 msgid "status change error: "
 msgstr "狀態字元有誤 : "
 
-#: src/icqconf.cc:958
+#: src/icqconf.cc:974
 msgid "Usage: "
 msgstr "使用方法: "
 
-#: src/icqconf.cc:960
+#: src/icqconf.cc:976
 msgid "General options:"
 msgstr "一般選項:"
 
-#: src/icqconf.cc:961
+#: src/icqconf.cc:977
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr "  --ascii, -a              使用 ASCII 字元來繪出視窗以及使用者介面"
 
-#: src/icqconf.cc:962
+#: src/icqconf.cc:978
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <path>     設定一個自訂目錄"
 
-#: src/icqconf.cc:963
+#: src/icqconf.cc:979
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <host/ip>     使用自訂的 IP"
 
-#: src/icqconf.cc:964
+#: src/icqconf.cc:980
 msgid "  --help                   display this stuff"
 msgstr "  --help                   顯示這份訊息"
 
-#: src/icqconf.cc:965
+#: src/icqconf.cc:981
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            顯示程式版本資訊"
 
-#: src/icqconf.cc:967
+#: src/icqconf.cc:983
 msgid "Events sending options:"
 msgstr "事件傳送選項:"
 
-#: src/icqconf.cc:968
+#: src/icqconf.cc:984
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr "  -s, --send <event type>  事件類型; 可以是 msg, sms 或是 url"
 
-#: src/icqconf.cc:969
+#: src/icqconf.cc:985
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <status>    設定目前的 IM 狀態"
 
-#: src/icqconf.cc:970
+#: src/icqconf.cc:986
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
 "or jabber"
@@ -2017,16 +2017,16 @@ msgstr ""
 "  -p, --proto <protocol>   協定類型; 可以是 icq, yahoo, msn, aim, irc 或是 "
 "jabber"
 
-#: src/icqconf.cc:971
+#: src/icqconf.cc:987
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr "  -t, --to <destination>   對象 UIN 或是暱稱 (依協定類型而異)"
 
-#: src/icqconf.cc:972
+#: src/icqconf.cc:988
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr "  -n, --number <phone#>    手機號碼 (只限用在短訊)"
 
-#: src/icqconf.cc:974
+#: src/icqconf.cc:990
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "錯誤請通報 <centericq-bugs@konst.org.ua>"
 
@@ -2810,6 +2810,13 @@ msgstr "附註: "
 #: src/hooks/HTTPClient.cc:245
 msgid "Timed out"
 msgstr ""
+
+#, fuzzy
+#~ msgid "+ [icq] %s has requested our away message"
+#~ msgstr "%s 想要獲得您的暫離訊息, 已傳送"
+
+#~ msgid "%s requested our away message, sent the response"
+#~ msgstr "%s 想要獲得您的暫離訊息, 已傳送"
 
 #~ msgid " [all] All of them"
 #~ msgstr " [all] 全部"

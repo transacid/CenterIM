@@ -84,7 +84,8 @@ class icqconf {
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, logtyping, emacs;
 
-	bool chatmode[protocolname_size], russian[protocolname_size];
+	bool chatmode[protocolname_size], russian[protocolname_size],
+	    entersends[protocolname_size];
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost, bindhost, httpproxyhost;
@@ -164,6 +165,9 @@ class icqconf {
 
 	bool getchatmode(protocolname pname);
 	void setchatmode(protocolname pname, bool fchatmode);
+
+	bool getentersends(protocolname pname);
+	void setentersends(protocolname pname, bool fentersends);
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.123 2003/07/25 17:03:00 konst Exp $
+* $Id: icqdialogs.cc,v 1.124 2003/09/11 21:09:28 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1055,10 +1055,12 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
-    bool chatmode[protocolname_size], rus[protocolname_size];
+    bool chatmode[protocolname_size], rus[protocolname_size],
+	entersends[protocolname_size];
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = conf.getchatmode(pname);
+	entersends[pname] = conf.getentersends(pname);
 	rus[pname] = conf.getrussian(pname);
     }
 
@@ -1120,6 +1122,12 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
 
 	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(entersends[pname] && !conf.getourid(pname).empty())
+		    tmp += conf.getprotocolname(pname) + " ";
+
+	    t.addleaff(i, 0, 25, _(" Enter key sends message for : %s"), tmp.c_str());
+
+	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
 		if(rus[pname])
 		if(!conf.getourid(pname).empty() || pname == rss)
 		    tmp += conf.getprotocolname(pname) + " ";
@@ -1128,6 +1136,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	} else {
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno(chatmode[icq]));
+	    t.addleaff(i, 0, 25, _(" Enter key sends message : %s "), stryesno(entersends[icq]));
 	    t.addleaff(i, 0,  3, _(" Russian win/koi translation : %s "), stryesno(rus[icq]));
 
 	}
@@ -1231,6 +1240,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 24:
 			httpproxy = inputstr(_("HTTP proxy server hostname: "), httpproxy);
 			break;
+		    case 25:
+			if(hasany) selectproto(entersends); else
+			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+				entersends[pname] = !entersends[pname];
+			break;
 		}
 		break;
 	    case 1:
@@ -1247,6 +1261,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    conf.setchatmode(pname, chatmode[pname]);
+		    conf.setentersends(pname, entersends[pname]);
 		    conf.setrussian(pname, rus[pname]);
 		}
 

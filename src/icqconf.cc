@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.113 2003/08/28 06:57:45 konst Exp $
+* $Id: icqconf.cc,v 1.114 2003/09/11 21:09:28 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -54,6 +54,7 @@ icqconf::icqconf() {
     for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = true;
 	russian[pname] = false;
+	entersends[pname] = false;
     }
 
     basedir = (string) getenv("HOME") + "/.centericq/";
@@ -215,6 +216,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") initmultiproto(chatmode, buf); else
+	    if(param == "entersends") initmultiproto(entersends, buf); else
 	    if(param == "russian") initmultiproto(russian, buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
@@ -268,18 +270,20 @@ void icqconf::save() {
 	    if(getaskaway()) f << "askaway" << endl;
 
 	    param = "";
-
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
 		if(getchatmode(pname)) param += (string) " " + conf.getprotocolname(pname);
-
 	    if(!param.empty())
 		f << "chatmode" << param << endl;
 
 	    param = "";
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(getentersends(pname)) param += (string) " " + conf.getprotocolname(pname);
+	    if(!param.empty())
+		f << "entersends" << param << endl;
 
+	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
 		if(getrussian(pname)) param += (string) " " + conf.getprotocolname(pname);
-
 	    if(!param.empty())
 		f << "russian" << param << endl;
 
@@ -650,6 +654,14 @@ bool icqconf::getchatmode(protocolname pname) {
 
 void icqconf::setchatmode(protocolname pname, bool fchatmode) {
     chatmode[pname] = fchatmode;
+}
+
+bool icqconf::getentersends(protocolname pname) {
+    return entersends[pname];
+}
+
+void icqconf::setentersends(protocolname pname, bool fentersends) {
+    entersends[pname] = fentersends;
 }
 
 bool icqconf::getrussian(protocolname pname) {
