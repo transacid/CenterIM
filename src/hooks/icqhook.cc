@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.89 2002/07/13 11:18:57 konst Exp $
+* $Id: icqhook.cc,v 1.90 2002/07/16 09:03:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -602,6 +602,14 @@ void icqhook::requestawaymsg(const imcontact &c) {
 }
 
 void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
+    string sbuf;
+    vector<string> pintinfo, backginfo;
+    list<Contact::PersonalInterestInfo::Interest>::iterator ii;
+    list<Contact::BackgroundInfo::School>::iterator isc;
+    icqcontact::basicinfo cbinfo;
+    icqcontact::moreinfo cminfo;
+    icqcontact::workinfo cwinfo;
+
     if(ic.get() && c) {
 	Contact::MainHomeInfo &home = ic->getMainHomeInfo();
 	Contact::HomepageInfo &hpage = ic->getHomepageInfo();
@@ -610,9 +618,9 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 	Contact::BackgroundInfo &backg = ic->getBackgroundInfo();
 	Contact::EmailInfo &email = ic->getEmailInfo();
 
-	icqcontact::basicinfo cbinfo = c->getbasicinfo();
-	icqcontact::moreinfo cminfo = c->getmoreinfo();
-	icqcontact::workinfo cwinfo = c->getworkinfo();
+	cbinfo = c->getbasicinfo();
+	cminfo = c->getmoreinfo();
+	cwinfo = c->getworkinfo();
 
 	/* basic information */
 
@@ -667,10 +675,6 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 
 	/* personal interests */
 
-	string sbuf;
-	vector<string> pintinfo;
-	list<Contact::PersonalInterestInfo::Interest>::iterator ii;
-
 	for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
 	    sbuf = UserInfoHelpers::getInterestsIDtoString(ii->first);
 
@@ -683,9 +687,6 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 	}
 
 	/* education background */
-
-	vector<string> backginfo;
-	list<Contact::BackgroundInfo::School>::iterator isc;
 
 	for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
 	    sbuf = UserInfoHelpers::getBackgroundIDtoString(isc->first);
