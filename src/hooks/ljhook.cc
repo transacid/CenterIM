@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.13 2003/10/19 23:24:36 konst Exp $
+* $Id: ljhook.cc,v 1.14 2003/10/19 23:58:44 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -226,6 +226,7 @@ bool ljhook::send(const imevent &ev) {
 	ev->addParam("user", username);
 	ev->addParam("hpassword", md5pass);
 	ev->addParam("event", KOI2UTF(m->gettext()));
+	ev->addParam("ver", "1");
 
 	time_t t = m->gettimestamp();
 	struct tm *tm = localtime(&t);
