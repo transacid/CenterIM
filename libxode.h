@@ -26,24 +26,24 @@
 **  Arrange to use either varargs or stdargs
 */
 
-#define MAXSHORTSTR	203		/* max short string length */
-#define QUAD_T	unsigned long long
+#define MAXSHORTSTR     203             /* max short string length */
+#define QUAD_T  unsigned long long
 
 #ifdef __STDC__
 
 #include <stdarg.h>
 
-# define VA_LOCAL_DECL	va_list ap;
-# define VA_START(f)	va_start(ap, f)
-# define VA_END		va_end(ap)
+# define VA_LOCAL_DECL  va_list ap;
+# define VA_START(f)    va_start(ap, f)
+# define VA_END         va_end(ap)
 
 #else /* __STDC__ */
 
 # include <varargs.h>
 
-# define VA_LOCAL_DECL	va_list ap;
-# define VA_START(f)	va_start(ap)
-# define VA_END		va_end(ap)
+# define VA_LOCAL_DECL  va_list ap;
+# define VA_START(f)    va_start(ap)
+# define VA_END         va_end(ap)
 
 #endif /* __STDC__ */
 
@@ -188,7 +188,7 @@ typedef unsigned int uint32;
 
 int sha_hash(int *data, int *hash);
 int sha_init(int *hash);
-char *shahash(char *str);	/* NOT THREAD SAFE */
+char *shahash(char *str);       /* NOT THREAD SAFE */
 void shahash_r(const char* str, char hashbuf[40]); /* USE ME */
 
 int strprintsha(char *dest, int *hashval);
@@ -383,7 +383,7 @@ xstream xstream_new(pool p, xstream_onNode f, void *arg); /* create a new xstrea
 int xstream_eat(xstream xs, char *buff, int len); /* parse new data for this xstream, returns last XSTREAM_* status */
 
 /* convience functions */
-xmlnode xstream_header(char *namespace, char *to, char *from);
+xmlnode xstream_header(char *nspace, char *to, char *from);
 char *xstream_header_char(xmlnode x);
 
 /* SHA.H */

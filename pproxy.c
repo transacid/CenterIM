@@ -17,7 +17,7 @@
  *  Copyright (C) 1998-1999 The Jabber Team http://jabber.org/
  */
 
-#include "include/jabber/jabber.h"
+#include "jabber.h"
 
 /* these aren't the most efficient things in the world, a hash optimized for tiny spaces would be far better */
 
@@ -42,7 +42,7 @@ ppdb _ppdb_get(ppdb db, jid id)
     if(db == NULL || id == NULL) return NULL;
 
     for(cur = db->next; cur != NULL; cur = cur->next)
-        if(jid_cmp(cur->id,id) == 0) return cur;
+	if(jid_cmp(cur->id,id) == 0) return cur;
 
     return NULL;
 }
@@ -54,13 +54,13 @@ ppdb ppdb_insert(ppdb db, jid id, xmlnode x)
     pool p;
 
     if(id == NULL || id->server == NULL || x == NULL)
-        return db;
+	return db;
 
     /* new ppdb list dummy holder */
     if(db == NULL)
     {
-        p = pool_heap(1024);
-        db = _ppdb_new(p,id);
+	p = pool_heap(1024);
+	db = _ppdb_new(p,id);
     }
 
     cur = _ppdb_get(db,id);
@@ -68,10 +68,10 @@ ppdb ppdb_insert(ppdb db, jid id, xmlnode x)
     /* just update it */
     if(cur != NULL)
     {
-        xmlnode_free(cur->x);
-        cur->x = xmlnode_dup(x);
-        cur->pri = jutil_priority(x);
-        return db;
+	xmlnode_free(cur->x);
+	cur->x = xmlnode_dup(x);
+	cur->pri = jutil_priority(x);
+	return db;
     }
 
     /* make an entry for it */
@@ -84,25 +84,25 @@ ppdb ppdb_insert(ppdb db, jid id, xmlnode x)
     /* this is a presence from a resource, make an entry for just the user */
     if(id->user != NULL && id->resource != NULL)
     {
-        /* modify the id to just user@host */
-        res = id->resource;
-        jid_set(id,NULL,JID_RESOURCE);
-        curu = _ppdb_get(db,id);
+	/* modify the id to just user@host */
+	res = id->resource;
+	jid_set(id,NULL,JID_RESOURCE);
+	curu = _ppdb_get(db,id);
 
-        /* no user entry, make one */
-        if(curu == NULL)
-        {
-            curu = _ppdb_new(db->p,id);
-            curu->next = db->next;
-            db->next = curu;
-        }
+	/* no user entry, make one */
+	if(curu == NULL)
+	{
+	    curu = _ppdb_new(db->p,id);
+	    curu->next = db->next;
+	    db->next = curu;
+	}
 
-        /* restore the id */
-        jid_set(id,res,JID_RESOURCE);
+	/* restore the id */
+	jid_set(id,res,JID_RESOURCE);
 
-        /* insert this resource into the user list */
-        cur->user = curu->user;
-        curu->user = cur;
+	/* insert this resource into the user list */
+	cur->user = curu->user;
+	curu->user = cur;
     }
 
     return db;
@@ -123,7 +123,7 @@ xmlnode ppdb_primary(ppdb db, jid id)
 
     top = cur;
     for(cur = cur->user; cur != NULL; cur = cur->user)
-        if(cur->pri >= top->pri) top = cur;
+	if(cur->pri >= top->pri) top = cur;
 
     if(top != NULL && top->pri >= 0) return top->x;
 
@@ -141,18 +141,18 @@ xmlnode ppdb_get(ppdb db, jid id)
     /* MODE: if this is NOT just user@host addy, return just the single entry */
     if(id->user == NULL || id->resource != NULL)
     {
-        /* we were just here, return now */
-        if(last != NULL)
-        {
-            last = NULL;
-            return NULL;
-        }
+	/* we were just here, return now */
+	if(last != NULL)
+	{
+	    last = NULL;
+	    return NULL;
+	}
 
-        last = _ppdb_get(db,id);
-        if(last != NULL)
-            return last->x;
-        else
-            return NULL;
+	last = _ppdb_get(db,id);
+	if(last != NULL)
+	    return last->x;
+	else
+	    return NULL;
     }
 
     /* handle looping for user@host */
@@ -160,15 +160,15 @@ xmlnode ppdb_get(ppdb db, jid id)
     /* we're already in the loop */
     if(last != NULL)
     {
-        /* this is the last entry in the list */
-        if(last->user == NULL)
-        {
-            last = NULL;
-            return NULL;
-        }
+	/* this is the last entry in the list */
+	if(last->user == NULL)
+	{
+	    last = NULL;
+	    return NULL;
+	}
 
-        last = last->user;
-        return last->x;
+	last = last->user;
+	return last->x;
     }
 
     /* start a new loop */
@@ -178,9 +178,9 @@ xmlnode ppdb_get(ppdb db, jid id)
 
     last = cur->user;
     if(last != NULL)
-        return last->x;
+	return last->x;
     else
-        return NULL;
+	return NULL;
 }
 
 
@@ -191,7 +191,7 @@ void ppdb_free(ppdb db)
     if(db == NULL) return;
 
     for(cur = db; cur != NULL; cur = cur->next)
-        xmlnode_free(cur->x);
+	xmlnode_free(cur->x);
 
     pool_free(db->p);
 }

@@ -17,8 +17,7 @@
  *  Copyright (C) 1998-1999 The Jabber Team http://jabber.org/
  */
 
-
-#include "jabber/jabber.h"
+#include "jabber.h"
 
 jlimit jlimit_new(int maxt, int maxp)
 {
@@ -40,8 +39,8 @@ void jlimit_free(jlimit r)
 {
     if(r != NULL)
     {
-        if(r->key != NULL) free(r->key);
-        pool_free(r->p);
+	if(r->key != NULL) free(r->key);
+	pool_free(r->p);
     }
 }
 
@@ -54,15 +53,15 @@ int jlimit_check(jlimit r, char *key, int points)
     /* make sure we didn't go over the time frame or get a null/new key */
     if((now - r->start) > r->maxt || key == NULL || j_strcmp(key,r->key) != 0)
     { /* start a new key */
-        free(r->key);
-        if(key != NULL)
+	free(r->key);
+	if(key != NULL)
 	  /* We use strdup instead of pstrdup since r->key needs to be free'd before 
 	     and more often than the rest of the rlimit structure */
-            r->key = strdup(key); 
-        else
-            r->key = NULL;
-        r->start = now;
-        r->points = 0;
+	    r->key = strdup(key); 
+	else
+	    r->key = NULL;
+	r->start = now;
+	r->points = 0;
     }
 
     r->points += points;
@@ -70,7 +69,7 @@ int jlimit_check(jlimit r, char *key, int points)
     /* if we're within the time frame and over the point limit */
     if(r->points > r->maxp && (now - r->start) < r->maxt)
     {
-        return 1; /* we don't reset the rate here, so that it remains rated until the time runs out */
+	return 1; /* we don't reset the rate here, so that it remains rated until the time runs out */
     }
 
     return 0;

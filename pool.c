@@ -38,8 +38,6 @@
  */
 
 #include "libxode.h"
-#include "config.h"
-
 
 #ifdef POOL_DEBUG
 int pool__total = 0;
@@ -77,7 +75,7 @@ pool _pool_new(char *zone)
     sprintf(p->name,"%X",p);
 
     if(pool__disturbed == NULL)
-        pool__disturbed = ghash_create(POOL_DEBUG,(KEYHASHFUNC)str_hash_code,(KEYCOMPAREFUNC)j_strcmp);
+	pool__disturbed = ghash_create(POOL_DEBUG,(KEYHASHFUNC)str_hash_code,(KEYCOMPAREFUNC)j_strcmp);
     ghash_put(pool__disturbed,p->name,p);
 #endif
 
@@ -100,8 +98,8 @@ void _pool_cleanup_append(pool p, struct pfree *pf)
 
     if(p->cleanup == NULL)
     {
-        p->cleanup = pf;
-        return;
+	p->cleanup = pf;
+	return;
     }
 
     /* fast forward to end of list */
@@ -159,26 +157,26 @@ void *pmalloc(pool p, int size)
 
     if(p == NULL)
     {
-        fprintf(stderr,"Memory Leak! [pmalloc received NULL pool, unable to track allocation, exiting]\n");
-        abort();
+	fprintf(stderr,"Memory Leak! [pmalloc received NULL pool, unable to track allocation, exiting]\n");
+	abort();
     }
 
     /* if there is no heap for this pool or it's a big request, just raw, I like how we clean this :) */
     if(p->heap == NULL || size > (p->heap->size / 2))
     {
-        while((block = _pool__malloc(size)) == NULL) sleep(1);
-        p->size += size;
-        _pool_cleanup_append(p, _pool_free(p, _pool__free, block));
-        return block;
+	while((block = _pool__malloc(size)) == NULL) sleep(1);
+	p->size += size;
+	_pool_cleanup_append(p, _pool_free(p, _pool__free, block));
+	return block;
     }
 
     /* we have to preserve boundaries, long story :) */
     if(size >= 4)
-        while(p->heap->used&7) p->heap->used++;
+	while(p->heap->used&7) p->heap->used++;
 
     /* if we don't fit in the old heap, replace it */
     if(size > (p->heap->size - p->heap->used))
-        p->heap = _pool_heap(p, p->heap->size);
+	p->heap = _pool_heap(p, p->heap->size);
 
     /* the current heap has room */
     block = (char *)p->heap->block + p->heap->used;
@@ -190,7 +188,7 @@ void *pmalloc_x(pool p, int size, char c)
 {
    void* result = pmalloc(p, size);
    if (result != NULL)
-           memset(result, c, size);
+	   memset(result, c, size);
    return result;
 }  
 
@@ -208,7 +206,7 @@ char *pstrdup(pool p, const char *src)
     char *ret;
 
     if(src == NULL)
-        return NULL;
+	return NULL;
 
     ret = pmalloc(p,strlen(src) + 1);
     strcpy(ret,src);
@@ -238,10 +236,10 @@ void pool_free(pool p)
     cur = p->cleanup;
     while(cur != NULL)
     {
-        (*cur->f)(cur->arg);
-        stub = cur->next;
-        _pool__free(cur);
-        cur = stub;
+	(*cur->f)(cur->arg);
+	stub = cur->next;
+	_pool__free(cur);
+	cur = stub;
     }
 
 #ifdef POOL_DEBUG
@@ -269,11 +267,11 @@ int _pool_stat(void *arg, const void *key, void *data)
     pool p = (pool)data;
 
     if(p->lsize == -1)
-        debug_log("leak","%s: %X is a new pool",p->zone,p->name);
+	debug_log("leak","%s: %X is a new pool",p->zone,p->name);
     else if(p->size > p->lsize)
-        debug_log("leak","%s: %X grew %d",p->zone,p->name, p->size - p->lsize);
+	debug_log("leak","%s: %X grew %d",p->zone,p->name, p->size - p->lsize);
     else if((int)arg)
-        debug_log("leak","%s: %X exists %d",p->zone,p->name, p->size);
+	debug_log("leak","%s: %X exists %d",p->zone,p->name, p->size);
     p->lsize = p->size;
     return 1;
 }
@@ -282,7 +280,7 @@ void pool_stat(int full)
 {
     ghash_walk(pool__disturbed,_pool_stat,(void *)full);
     if(pool__total != pool__ltotal)
-        debug_log("leak","%d\ttotal missed mallocs",pool__total);
+	debug_log("leak","%d\ttotal missed mallocs",pool__total);
     pool__ltotal = pool__total;
     return;
 }
