@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.7 2002/04/07 13:21:26 konst Exp $
+* $Id: irchook.cc,v 1.8 2002/04/07 14:11:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -664,7 +664,7 @@ void irchook::buddynickchanged(void *conn, void *cli, ...) {
     char *oldnick = va_arg(ap, char *);
     char *newnick = va_arg(ap, char *);
     va_end(ap);
-
+/*
     if(oldnick && newnick)
     if(strlen(oldnick) && strlen(newnick)) {
 	icqcontact *c = clist.get(imcontact(oldnick, irc));
@@ -680,6 +680,7 @@ void irchook::buddynickchanged(void *conn, void *cli, ...) {
 		oldnick, newnick);
 	}
     }
+*/
 }
 
 void irchook::listmember(void *connection, void *cli, ...) {
