@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.74 2002/06/25 13:46:18 konst Exp $
+* $Id: icqdialogs.cc,v 1.75 2002/07/03 14:35:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,7 +83,9 @@ bool icqface::sprofmanager(string &name, string &act) {
 	m.clear();
 
 	for(ip = profiles.begin(); ip != profiles.end(); ip++) {
-	    m.additemf(0, (void *) ip->first.c_str(), " %s", ip->first.c_str());
+	    m.additemf(0, (void *) ip->first.c_str(), " %s: %s",
+		conf.getprotocolname(ip->second.pname).c_str(),
+		ip->first.c_str());
 	}
 
 	finished = !db.open(n, b);
@@ -130,7 +132,7 @@ bool icqface::finddialog(imsearchparams &s) {
     bool finished, ret, proceed;
     dialogbox db;
     vector<protocolname> penabled;
-    vector<protocolname>::iterator ipname;
+    vector<protocolname>::iterator ipname, ipfname;
     string tname, act;
     imsearchparams ts;
 
@@ -145,9 +147,9 @@ bool icqface::finddialog(imsearchparams &s) {
 	return false;
     }
 
-    if((ipname = find(penabled.begin(), penabled.end(),
-    s.pname)) == penabled.end()) {
+    if((ipname = find(penabled.begin(), penabled.end(), s.pname)) == penabled.end()) {
 	ipname = penabled.begin();
+	s.pname = *ipname;
     }
 
     blockmainscreen();
@@ -175,9 +177,9 @@ bool icqface::finddialog(imsearchparams &s) {
 	tree.clear();
 
 	i = tree.addnode(_(" Network "));
-	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname = *ipname) + " ");
+	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname) + " ");
 
-	switch(*ipname) {
+	switch(s.pname) {
 	    case icq:
 		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, " %s ", strint(s.uin));
@@ -216,7 +218,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		break;
 	}
 
-	if(*ipname == irc && s.nick.empty()) {
+	if(s.pname == irc && s.nick.empty()) {
 	    i = tree.addnode(_(" Details "));
 	    tree.addleaff(i, 0, 26, _(" Channel : %s "), s.room.c_str());
 
@@ -233,7 +235,15 @@ bool icqface::finddialog(imsearchparams &s) {
 	switch(b) {
 	    case 0:
 		if(sprofmanager(tname, act)) {
-		    if(act == "load") s.load(tname);
+		    if(act == "load") {
+			imsearchparams ts(tname);
+
+			if((ipfname = find(penabled.begin(), penabled.end(),
+			ts.pname)) != penabled.end()) {
+			    s = ts;
+			    ipname = ipfname;
+			}
+		    }
 		}
 		break;
 
@@ -251,15 +261,16 @@ bool icqface::finddialog(imsearchparams &s) {
 
 	    case 2:
 		s = imsearchparams();
+		s.pname = *ipname;
 		break;
 
 	    case 3:
 		switch(i) {
 		    case 1:
-			if(++ipname == penabled.end()) {
-			    ipname = penabled.begin();
-			}
+			if(++ipname == penabled.end()) ipname = penabled.begin();
+			s.pname = *ipname;
 			break;
+
 		    case 10: s.uin = atol(inputstr(_("UIN: "), strint(s.uin)).c_str()); break;
 		    case 11: s.nick = inputstr(_("Nickname: "), s.nick); break;
 		    case 12: s.email = inputstr(_("E-Mail: "), s.email); break;
@@ -282,7 +293,6 @@ bool icqface::finddialog(imsearchparams &s) {
 
 	    case 4:
 		ret = finished = true;
-		s.pname = *ipname;
 		break;
 	}
     }

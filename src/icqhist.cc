@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.12 2001/12/03 16:30:16 konst Exp $
+* $Id: icqhist.cc,v 1.13 2002/07/03 14:35:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -84,7 +84,7 @@ void icqhistory::putmail(const string nick, const string email,
 const string msg, int mailt, struct tm *timestamp) {
 }
 
-bool icqhistory::opencontact(const imcontact cinfo, time_t lastread = 0) {
+bool icqhistory::opencontact(const imcontact cinfo, time_t lastread) {
     bool ret = true;
     FILE *f;
 
@@ -146,7 +146,7 @@ int icqhistory::setposlastread(time_t lr) {
     return so->rn;
 }
 
-int icqhistory::find(const string sub, int pos = 0) {
+int icqhistory::find(const string sub, int pos) {
     int evt, dir, n, lastfound = -1;
     time_t lr;
     struct tm tsent;
