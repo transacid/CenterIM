@@ -45,7 +45,6 @@ class icqcontacts: public linkedlist {
 	void remove(const imcontact adesc);
 	void load();
 	void save();
-	void nonicq(int id);
 	void order();
 	void rearrange();
 	void checkdefault();
@@ -55,6 +54,7 @@ class icqcontacts: public linkedlist {
 	icqcontact* addnew(const imcontact adesc, bool notinlist = true);
 
 	icqcontact *get(const imcontact adesc);
+	icqcontact *getmobile(const string &anumber);
 };
 
 extern icqcontacts clist;

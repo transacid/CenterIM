@@ -49,7 +49,6 @@ class centericq {
 	bool updateconf();
 
 	void find();
-	void nonicq(int id);
 	void checkmail();
 
 	icqcontact *addcontact(const imcontact ic);

@@ -146,7 +146,6 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 
 void imcontroller::icqupdatedetails() {
     icqcontact *c = clist.get(contactroot);
-    face.status(_("Disabled"));
 /*
     if(ihook.logged()) {
 	c->clear();
@@ -166,8 +165,9 @@ void imcontroller::registration(icqconf::imaccount &account) {
 	case icq:
 	    icqregistration(account);
 	    break;
-	case yahoo:
-	    face.status(_("Yahoo! registration is not supported"));
+	default:
+	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
+		_("registration is not supported"));
 	    break;
     }
 }
@@ -175,10 +175,13 @@ void imcontroller::registration(icqconf::imaccount &account) {
 void imcontroller::updateinfo(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq:
+/*
 	    icqupdatedetails();
 	    break;
-	case yahoo:
-	    face.status(_("Yahoo! details update is not supported"));
+*/
+	default:
+	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
+		_("details update is not supported"));
 	    break;
     }
 }

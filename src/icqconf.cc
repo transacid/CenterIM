@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.27 2001/12/06 16:56:31 konst Exp $
+* $Id: icqconf.cc,v 1.28 2001/12/07 18:11:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -74,7 +74,7 @@ void icqconf::loadmainconfig() {
     protocolname pname;
 
     if(f.is_open()) {
-	mailcheck = serveronly = false;
+	mailcheck = false;
 	savepwd = true;
 
 	while(!f.eof()) {
@@ -88,7 +88,6 @@ void icqconf::loadmainconfig() {
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
 	    if(param == "mailcheck") mailcheck = true; else
-	    if(param == "serveronly") serveronly = true; else
 	    if(param == "quotemsgs") quote = true; else
 	    if(param == "sockshost") setsockshost(buf); else
 	    if(param == "socksusername") socksuser = buf; else
@@ -161,7 +160,6 @@ void icqconf::save() {
 	if(getquote()) f << "quotemsgs" << endl;
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
-	if(getserveronly()) f << "serveronly" << endl;
 	if(getusegroups()) f << "usegroups" << endl;
 
 	for(ia = accounts.begin(); ia != accounts.end(); ia++) {
@@ -537,14 +535,6 @@ void icqconf::openurl(const string url) {
 	torun.replace(npos, 5, url);
 
     system(torun.c_str());
-}
-
-bool icqconf::getserveronly() const {
-    return serveronly;
-}
-
-void icqconf::setserveronly(bool fso) {
-    serveronly = fso;
 }
 
 const string icqconf::getprotocolname(protocolname pname) const {

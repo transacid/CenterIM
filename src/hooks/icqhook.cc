@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.17 2001/12/07 11:27:24 konst Exp $
+* $Id: icqhook.cc,v 1.18 2001/12/07 18:11:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,7 +39,7 @@ icqhook::icqhook() {
     timer_reconnect = 0;
     fonline = false;
 
-    fcapabilities = hoptCanSendURL;
+    fcapabilities = hoptCanSendURL | hoptCanSendSMS;
 
     cli.connected.connect(slot(this, &icqhook::connected_cb));
     cli.disconnected.connect(slot(this, &icqhook::disconnected_cb));
@@ -190,18 +190,28 @@ bool icqhook::send(const imevent &ev) {
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
 	cli.SendEvent(new NormalMessageEvent(&ic, rusconv("kw", m->gettext())));
+
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *> (&ev);
 	cli.SendEvent(new URLMessageEvent(&ic,
 	    rusconv("kw", m->getdescription()),
 	    rusconv("kw", m->geturl())));
+
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = static_cast<const imsms *> (&ev);
+	ic.setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
 	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
+
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
 	cli.SendEvent(new AuthAckEvent(&ic,
 	    rusconv("kw", m->gettext()), m->getgranted()));
+
+    } else if(ev.gettype() == imevent::sms) {
+	const imsms *m = static_cast<const imsms *> (&ev);
+	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()),
+	    true));
+
     } else {
 	return false;
     }
@@ -258,30 +268,29 @@ bool icqhook::regconnect(const string aserv) {
 }
 
 bool icqhook::regattempt(unsigned int &auin, const string apassword) {
-    fd_set fds;
+    fd_set rfds;
     struct timeval tv;
     int hsockfd;
     time_t regtimeout = time(0);
 
     reguin = 0;
+
     cli.setPassword(apassword);
     cli.RegisterUIN();
 
     while(!reguin && (time(0)-regtimeout < 60)) {
 	hsockfd = 0;
-	FD_ZERO(&fds);
-	getsockets(fds, hsockfd);
+	getsockets(rfds, hsockfd);
 
 	tv.tv_sec = 30;
 	tv.tv_usec = 0;
 
-	select(hsockfd+1, &fds, 0, 0, &tv);
-
-	if(isoursocket(fds)) {
+	if(isoursocket(rfds)) {
 	    main();
 	}
     }
 
+    auin = reguin;
     return (bool) reguin;
 }
 
@@ -375,6 +384,7 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 	    em.store(immessage(ic, imevent::incoming,
 		rusconv("wk", r->getMessage())));
 	}
+
     } else if(ev->getType() == MessageEvent::URL) {
 	URLMessageEvent *r;
 	if(r = dynamic_cast<URLMessageEvent *>(ev)) {
@@ -382,15 +392,53 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 		rusconv("wk", r->getURL()),
 		rusconv("wk", r->getMessage())));
 	}
+
     } else if(ev->getType() == MessageEvent::SMS) {
+	SMSMessageEvent *r;
+
+	if(r = dynamic_cast<SMSMessageEvent *>(ev)) {
+	    icqcontact *c = clist.getmobile(r->getSender());
+
+	    if(!c)
+	    if(c = clist.addnew(imcontact(0, infocard), true)) {
+		c->setdispnick("mobile");
+		icqcontact::basicinfo b = c->getbasicinfo();
+		b.cellular = r->getSender();
+		c->setbasicinfo(b);
+	    }
+
+	    if(c) {
+		em.store(imsms(c->getdesc(), imevent::incoming,
+		    rusconv("wk", r->getMessage())));
+	    }
+	}
     } else if(ev->getType() == MessageEvent::SMS_Response) {
+	SMSResponseEvent *r;
+	if(r = dynamic_cast<SMSResponseEvent *>(ev)) {
+	    face.log("sms response: %s", r->deliverable() ? "deliverable" : "undeliverable");
+	    face.log(r->getSource());
+	    face.log(r->getNetwork());
+	    face.log(r->getErrorParam());
+	}
+
     } else if(ev->getType() == MessageEvent::SMS_Receipt) {
+	SMSReceiptEvent *r;
+	if(r = dynamic_cast<SMSReceiptEvent *>(ev)) {
+	    face.log("sms receipt %s", r->delivered() ? "delivered" : "failed");
+	    face.log(r->getMessage());
+	    face.log(r->getMessageId());
+	    face.log(r->getDestination());
+	    face.log(r->getSubmissionTime());
+	    face.log(r->getDeliveryTime());
+	}
+
     } else if(ev->getType() == MessageEvent::AuthReq) {
 	AuthReqEvent *r;
 	if(r = dynamic_cast<AuthReqEvent *>(ev)) {
 	    em.store(imauthorization(ic, imevent::incoming, false,
 		rusconv("wk", r->getMessage())));
 	}
+
     } else if(ev->getType() == MessageEvent::AuthAck) {
     }
 
@@ -433,7 +481,11 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 	    if(dynamic_cast<UserInfoChangeEvent*>(ev)) {
 		Contact *ic = cli.getContact(ev->getUIN());
 
-		icqcontact::basicinfo cbinfo;
+		if(!c) {
+		    c = clist.get(contactroot);
+		}
+
+		icqcontact::basicinfo cbinfo = c->getbasicinfo();
 		MainHomeInfo &home = ic->getMainHomeInfo();
 
 		cbinfo.fname = ic->getFirstName();
@@ -444,11 +496,14 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cbinfo.phone = home.phone;
 		cbinfo.fax = home.fax;
 		cbinfo.street = home.street;
-		cbinfo.cellular = home.cellular;
+
+		if(!home.cellular.empty())
+		    cbinfo.cellular = home.cellular;
+
 		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
 		cbinfo.country = getcountryname(home.country);
 
-		icqcontact::moreinfo cminfo;
+		icqcontact::moreinfo cminfo = c->getmoreinfo();
 		HomepageInfo &hpage = ic->getHomepageInfo();
 
 		cminfo.age = hpage.age;
@@ -460,21 +515,15 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 		string nick = rusconv("wk", ic->getAlias());
 
-		if(!c) {
-		    c = clist.get(contactroot);
+		if((c->getnick() == c->getdispnick())
+		|| (c->getdispnick() == i2str(ev->getUIN()))) {
+		    c->setdispnick(nick);
 		}
 
-		if(c) {
-		    if((c->getnick() == c->getdispnick())
-		    || (c->getdispnick() == i2str(ev->getUIN()))) {
-			c->setdispnick(nick);
-		    }
-
-		    c->setnick(nick);
-		    c->setbasicinfo(cbinfo);
-		    c->setmoreinfo(cminfo);
-		    c->setabout(ic->getAboutInfo());
-		}
+		c->setnick(nick);
+		c->setbasicinfo(cbinfo);
+		c->setmoreinfo(cminfo);
+		c->setabout(ic->getAboutInfo());
 
 		face.relaxedupdate();
 	    }

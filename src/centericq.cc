@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.53 2001/12/07 13:07:14 konst Exp $
+* $Id: centericq.cc,v 1.54 2001/12/07 18:10:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,7 +191,13 @@ void centericq::mainloop() {
 
 	switch(action) {
 	    case ACT_URL:
-		sendevent(imurl(c->getdesc(), imevent::outgoing, "", ""), icqface::ok);
+		sendevent(imurl(c->getdesc(), imevent::outgoing, "", ""),
+		    icqface::ok);
+		break;
+
+	    case ACT_SMS:
+		sendevent(imsms(c->getdesc(), imevent::outgoing,
+		    c->getpostponed()), icqface::ok);
 		break;
 
 	    case ACT_IGNORE:
@@ -210,8 +216,15 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_EDITUSER:
-		nonicq(c->getdesc().uin);
+		if(face.updatedetails(c)) {
+		    c->setdispnick(c->getnick());
+		    c->save();
+		    face.relaxedupdate();
+		} else {
+		    c->load();
+		}
 		break;
+
 	    case ACT_ADD:
 		if(!c->inlist()) {
 		    addcontact(c->getdesc());
@@ -272,6 +285,7 @@ void centericq::changestatus() {
 void centericq::find() {
     static imsearchparams s;
     bool ret = true;
+    icqcontact *c;
 
     while(ret) {
 	if(ret = face.finddialog(s)) {
@@ -299,7 +313,18 @@ void centericq::find() {
 		    break;
 
 		case infocard:
-		    nonicq(0);
+		    c = clist.addnew(imcontact(0, infocard), true);
+
+		    if(face.updatedetails(c)) {
+			addcontact(c->getdesc());
+		    }
+
+		    if(!c->inlist()) {
+			clist.remove(c->getdesc());
+		    } else {
+			c->save();
+		    }
+
 		    ret = false;
 		    break;
 	    }
@@ -349,36 +374,6 @@ bool centericq::updateconf() {
     }
 
     return r;
-}
-
-void centericq::nonicq(int id) {
-    icqcontact *c;
-    bool done = false;
-
-    if(!id) {
-	c = clist.addnew(imcontact(0, infocard), true);
-
-	if(face.updatedetails(c)) {
-	    addcontact(c->getdesc());
-	}
-
-	if(!c->inlist()) {
-	    clist.remove(c->getdesc());
-	} else {
-	    c->save();
-	}
-    } else {
-	c = clist.get(imcontact(id, infocard));
-
-	if(face.updatedetails(c)) {
-	    c->setdispnick(c->getnick());
-	    c->save();
-	} else {
-	    c->load();
-	}
-    }
-
-    face.update();
 }
 
 void centericq::checkmail() {
@@ -520,6 +515,36 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 		sendev = new immessage(m->getcontact(), imevent::outgoing, "");
 		break;
 	}
+    } else if(ev.gettype() == imevent::sms) {
+	const imsms *m = dynamic_cast<const imsms *>(&ev);
+
+	if(c = clist.get(ev.getcontact())) {
+	    icqcontact::basicinfo b = c->getbasicinfo();
+
+	    if(b.cellular.empty()) {
+		b.cellular = face.inputstr(_("Mobile number: "));
+
+		if(b.cellular.empty() || (face.getlastinputkey() == KEY_ESC))
+		    return;
+
+		c->setbasicinfo(b);
+		c->save();
+	    }
+	}
+
+	text = m->gettext();
+
+	if(r == icqface::reply) {
+	    if(conf.getquote()) {
+		text = quotemsg(text);
+	    } else {
+		text = "";
+	    }
+	} else if(r == icqface::forward) {
+	    text = fwdnote + text;
+	}
+
+	sendev = new imsms(m->getcontact(), imevent::outgoing, text);
     }
 
     if(proceed = sendev) {
@@ -909,6 +934,8 @@ const string rusconv(const string tdir, const string text) {
 	    if(c & 0200) c = table[c & 0177];
 	    r += c;
 	}
+    } else {
+	r = text;
     }
 
     return r;

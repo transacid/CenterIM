@@ -35,7 +35,7 @@
 #define ACT_URL         -12
 #define ACT_STATUS      -13
 #define ACT_REMOVE      -14
-#define ACT_FILE        -15
+#define ACT_SMS         -15
 #define ACT_CHAT        -16
 #define ACT_FIND        -17
 #define ACT_INFO        -18
@@ -52,7 +52,7 @@
 #define ACT_VISIBLELIST -30
 #define ACT_INVISLIST   -31
 #define ACT_QUICKFIND   -32
-#define ACT_CONTACT     -33
+#define ACT_FILE        -33
 #define ACT_GROUPMOVE   -34
 #define ACT_ORG_GROUPS  -35
 #define ACT_HIDEOFFLINE -36
@@ -188,8 +188,10 @@ class icqface {
 	void unblockmainscreen();
 
 	int ask(string q, int options, int deflt = -1);
+
 	const string inputstr(const string q, const string defl = "", char passwdchar = 0);
 	const string inputfile(const string q, const string defl = "");
+	int getlastinputkey() const;
 
 	void quickfind(verticalmenu *multi = 0);
 

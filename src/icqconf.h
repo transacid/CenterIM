@@ -64,7 +64,7 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
-	    serveronly, usegroups, russian;
+	    usegroups, russian;
 
 	string sockshost, socksuser, sockspass,
 	    openurlcommand, basedir;
@@ -105,9 +105,6 @@ class icqconf {
 
 	bool getmailcheck() const;
 	void setmailcheck(bool fmc);
-
-	bool getserveronly() const;
-	void setserveronly(bool fso);
 
 	void setauto(int away, int na);
 	void getauto(int &away, int &na) const;

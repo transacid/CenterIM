@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.24 2001/12/06 16:56:32 konst Exp $
+* $Id: icqcontacts.cc,v 1.25 2001/12/07 18:11:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -268,4 +268,30 @@ void icqcontacts::setoffline(protocolname pname) {
 	if(c->getdesc().pname == pname)
 	    c->setstatus(offline);
     }
+}
+
+icqcontact *icqcontacts::getmobile(const string &anumber) {
+    int i, pos;
+    icqcontact *c;
+    string cnumber, number;
+
+    if(!anumber.empty()) {
+	number = anumber;
+
+	while((pos = number.find_first_not_of("0123456789")) != -1)
+	    number.erase(pos, 1);
+
+	for(i = 0; i < count; i++) {
+	    c = (icqcontact *) at(i);
+	    cnumber = c->getbasicinfo().cellular;
+
+	    while((pos = cnumber.find_first_not_of("0123456789")) != -1)
+		cnumber.erase(pos, 1);
+
+	    if(number == cnumber)
+		return c;
+	}
+    }
+
+    return 0;
 }

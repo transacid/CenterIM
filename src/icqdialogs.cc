@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.35 2001/12/06 18:30:55 konst Exp $
+* $Id: icqdialogs.cc,v 1.36 2001/12/07 18:11:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -233,7 +233,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     dialogbox db;
 
     if(!c) {
-	status(_("Fetching your ICQ details"));
+	status(_("Fetching your details"));
 	c = clist.get(contactroot);
 //        if(mainscreenblock) return false;
 	    // Another dialog is already on top
@@ -246,9 +246,10 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     if(!c->getdesc().uin) {
-	w.set_title(conf.getcolor(cp_dialog_highlight), _(" Your ICQ details "));
+	w.set_title(conf.getcolor(cp_dialog_highlight), _(" Your details "));
     } else {
-	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s's ICQ details "), c->getdispnick().c_str());
+	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s: details "),
+	    c->getdesc().totext().c_str());
     }
 
     db.setwindow(&w, false);
@@ -522,7 +523,6 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
-    bool serveronly = conf.getserveronly();
     bool usegroups = conf.getusegroups();
 
     dialogbox db;
@@ -563,7 +563,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno[antispam]);
 	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno[quote]);
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno[mailcheck]);
-	t.addleaff(i, 0, 16, _(" Send all events through server : %s "), stryesno[serveronly]);
+//        t.addleaff(i, 0, 16, _(" Send all events through server : %s "), stryesno[serveronly]);
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno[savepwd]);
 
 	i = t.addnode(_(" Communications "));
@@ -625,7 +625,6 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
-		    case 16: serveronly = !serveronly; break;
 		    case 17: usegroups = !usegroups; break;
 		}
 		break;
@@ -637,7 +636,6 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.sethideoffline(hideoffl);
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
-		conf.setserveronly(serveronly);
 		conf.setrussian(rus);
 
 		if(conf.getusegroups() != usegroups) {

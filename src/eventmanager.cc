@@ -15,13 +15,18 @@ imeventmanager::~imeventmanager() {
 
 void imeventmanager::store(const imevent &ev) {
     icqcontact *c;
+    bool proceed;
 
     if(ev.getdirection() == imevent::incoming) {
 	if(!lst.inlist(ev.getcontact(), csignore)) {
 	    c = clist.get(ev.getcontact());
 
-	    if(!c && !conf.getantispam()) {
-		c = clist.addnew(ev.getcontact());
+	    if(!c) {
+		proceed = !conf.getantispam();
+		proceed = (ev.gettype() == imevent::authorization) || proceed;
+
+		if(proceed)
+		    c = clist.addnew(ev.getcontact());
 	    }
 
 	    if(c) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.55 2001/12/07 13:34:05 konst Exp $
+* $Id: icqface.cc,v 1.56 2001/12/07 18:11:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -56,14 +56,6 @@ icqface::icqface() {
     raw();
     workareas.freeitem = &freeworkareabuf;
     kt_resize_event = &termresize;
-
-#ifdef DEBUG
-    time_t logtime = time(0);
-    flog.clear();
-    flog.open((conf.getdirname() + "log").c_str(), ios::app);
-    if(flog.is_open()) flog << endl << "-- centericq log started on " << ctime(&logtime);
-#endif
-
     mainscreenblock = inited = onlinefolder = dotermresize = false;
 }
 
@@ -79,6 +71,16 @@ icqface::~icqface() {
 }
 
 void icqface::init() {
+#ifdef DEBUG
+    if(!flog.is_open()) {
+	time_t logtime = time(0);
+
+	flog.open((conf.getdirname() + "log").c_str(), ios::app);
+	if(flog.is_open())
+	    flog << endl << "-- centericq log started on " << ctime(&logtime);
+    }
+#endif
+
     mcontacts = new treeview(1, 2, 25, LINES-2,
 	conf.getcolor(cp_main_menu), conf.getcolor(cp_main_selected),
 	conf.getcolor(cp_main_menu), conf.getcolor(cp_main_menu));
@@ -175,7 +177,6 @@ int icqface::contextmenu(icqcontact *c) {
     switch(c->getdesc().pname) {
 	case infocard:
 	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
-	    m.additem(0, ACT_EDITUSER,  _(" Edit details"));
 	    break;
 
 	default:
@@ -183,6 +184,9 @@ int icqface::contextmenu(icqcontact *c) {
 
 	    if(capab & hoptCanSendURL)
 		m.additem(0, ACT_URL,      _(" Send an URL            u"));
+
+	    if(capab & hoptCanSendSMS)
+		m.additem(0, ACT_SMS,      _(" Send an SMS"));
 /*
 	    m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
 	    m.additem(0, ACT_FILE,     _(" Send a file            f"));
@@ -208,11 +212,11 @@ int icqface::contextmenu(icqcontact *c) {
     }
 
     if(c->getdesc() != contactroot) {
+	m.additem(0, ACT_EDITUSER, _(" Edit details"));
 	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
 	m.additem(0, ACT_RENAME, _(" Rename contact         r"));
-	if(conf.getusegroups()) {
+	if(conf.getusegroups())
 	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
-	}
     }
 
     m.scale();
@@ -875,6 +879,10 @@ const string icqface::inputfile(const string q, const string defl = "") {
     return r;
 }
 
+int icqface::getlastinputkey() const {
+    return input.getlastkey();
+}
+
 void catqstr(string &q, int option, int defl) {
     char c = q[q.size()-1];
     if(!strchr("(/", c)) q += '/';
@@ -1151,7 +1159,8 @@ void icqface::log(const string atext) {
     string text = atext;
 
 #ifdef DEBUG
-    if(flog.is_open()) flog << text << endl;
+    if(flog.is_open())
+	flog << text << endl;
 #endif
 
     if(!mainscreenblock) {
@@ -1398,6 +1407,23 @@ bool icqface::eventedit(imevent &ev) {
 	    *m = imurl(ev.getcontact(), imevent::outgoing, url, p);
 	    delete p;
 	}
+    } else if(ev.gettype() == imevent::sms) {
+	imsms *m = static_cast<imsms *>(&ev);
+
+	editor.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2);
+	editor.load(m->gettext(), "");
+	editor.open();
+
+	r = editdone;
+
+	char *p = editor.save("\r\n");
+	*m = imsms(ev.getcontact(), imevent::outgoing, p);
+
+	if(c = clist.get(ev.getcontact()))
+	    c->setpostponed(r ? "" : p);
+
+	delete p;
+
     }
 
     restoreworkarea();
