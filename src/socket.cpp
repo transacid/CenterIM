@@ -30,6 +30,12 @@
 # include <config.h>
 #endif
 
+#ifdef MSG_NOSIGNAL
+    #define SEND_FLAGS MSG_NOSIGNAL
+#else
+    #define SEND_FLAGS 0
+#endif
+
 using std::string;
 using std::ostringstream;
 using std::istringstream;
@@ -120,7 +126,7 @@ namespace ICQ2000
     // after the socket is writeable
     int so_error;
     socklen_t optlen = sizeof(so_error);
-    if (getsockopt(m_socketDescriptor, SOL_SOCKET, SO_ERROR, &so_error, &optlen) == -1 || so_error != 0) {
+    if (getsockopt(m_socketDescriptor, SOL_SOCKET, SO_ERROR, (char *) &so_error, &optlen) == -1 || so_error != 0) {
       m_state = NOT_CONNECTED;
       close(m_socketDescriptor);
       m_socketDescriptor_valid = false;
@@ -180,7 +186,7 @@ namespace ICQ2000
 
     while (sent < b.size())
     {
-      ret = send(m_socketDescriptor, data + sent, b.size() - sent, MSG_NOSIGNAL);
+      ret = send(m_socketDescriptor, (char *) (data + sent), b.size() - sent, SEND_FLAGS);
       if (ret == -1) {
 	m_state = NOT_CONNECTED;
 	close(m_socketDescriptor);
@@ -197,7 +203,7 @@ namespace ICQ2000
 
     unsigned char buffer[max_receive_size];
 
-    int ret = recv(m_socketDescriptor, buffer, max_receive_size, MSG_NOSIGNAL);
+    int ret = recv(m_socketDescriptor, (char *) buffer, max_receive_size, SEND_FLAGS);
     if (ret <= 0) {
       if (ret == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) return false;
 
