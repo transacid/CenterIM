@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.82 2004/06/24 08:30:59 konst Exp $
+* $Id: msnhook.cc,v 1.83 2004/06/28 23:25:24 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -833,6 +833,8 @@ void MSN::ext::closingConnection(MSN::Connection * conn) {
 
 	face.update();
     }
+
+    unregisterSocket(conn->sock);
 }
 
 void MSN::ext::changedStatus(MSN::Connection * conn, MSN::BuddyStatus state) {
