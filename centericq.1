@@ -2,7 +2,7 @@
 
 .SH NAME
 \fBcentericq\fP \- a text mode based IM client for Linux, *BSD and possibly,
-other Unices. ICQ2000, Yahoo!, MSN, AIM TOC and IRC protocols are now supported.
+other Unices. ICQ2000, Yahoo!, MSN, AIM TOC, IRC and Jabber protocols are now supported.
 
 .SH SYNOPSIS
 .B "centericq "
@@ -16,7 +16,7 @@ This manual page documents briefly the
 command.
 .PP
 \fBcentericq\fP is a text mode menu- and window-driven IM interface.
-Currently ICQ2000, Yahoo!, MSN, AIM and IRC protocols are supported. It
+Currently ICQ2000, Yahoo!, MSN, AIM, IRC and Jabber protocols are supported. It
 allows you to send, receive, and forward messages, URLs, SMSes and,
 contacts, mass message send, search for users (including extended
 "whitepages search"), view users' details, maintain your contact list
@@ -56,7 +56,7 @@ Currently only "msg", "url" and "sms" are supported.
 .TP
 \fB\-p\fR, \fB\-\-proto\fR <protocol type>
 This one specifies to which IM network the destination contact
-beyongs. Can be "icq", "yahoo", "aim", "msn" or "irc".
+beyongs. Can be "icq", "yahoo", "aim", "msn", "irc" or "jabber".
 .TP
 \fB\-t\fR, \fB\-\-to\fR <nickname or UIN>
 With this one you specify nickname or UIN of the
@@ -101,10 +101,8 @@ The argument parameter is a letter which indicates which status is
 to be set: o (Online), _ (Offline), a (Away), d (Don't disturb), n (N/A),
 c (Occupied), f (Free for chat), i (Invisible)
 .TP
-\fB\-p\fR or \fB\-\-protocol\fR <protocol name>
-This one specifies to which IM network the destination contact belongs
-to. Can be either "icq", "yahoo", "msn", "aim" or "irc".
-
+\fB\-p\fR or \fB\-\-proto\fR <protocol name>
+Exactly the same like it was described for the previous command.
 
 .PP
 
@@ -122,7 +120,7 @@ And this command will switch your yahoo status to away.
 
 
 .SH VERSION
-centericq 4.8.7
+centericq 4.8.8
 
 .SH BUG REPORT
 Report any bugs to centericq-bugs@konst.org.ua
