@@ -11,7 +11,9 @@
 #include "kkstrtext.h"
 #include "kkfsys.h"
 #include "conscommon.h"
+
 #include "icq.h"
+#include "yahoolib.h"
 
 #include "icqgroup.h"
 #include "icqcontact.h"

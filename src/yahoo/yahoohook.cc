@@ -231,8 +231,8 @@ void yahoohook::disconnected(yahoo_context *y) {
     time(&yhook.timer_reconnect);
 }
 
-void yahoohook::userlogon(yahoo_context *y, const char *nick) {
-    yhook.userstatus(yhook.yahoo, nick, YAHOO_STATUS_AVAILABLE);
+void yahoohook::userlogon(yahoo_context *y, const char *nick, int status) {
+    yhook.userstatus(yhook.yahoo, nick, status);
 }
 
 void yahoohook::userlogoff(yahoo_context *y, const char *nick) {
@@ -268,6 +268,10 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 	icqcontact *c = clist.get(ic);
 
 	if(c) {
+	    if(c->getstatus() != offline) {
+		c->setstatus(available);
+	    }
+
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_MSG);
 	    face.update();

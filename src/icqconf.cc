@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.16 2001/11/14 16:18:14 konst Exp $
+* $Id: icqconf.cc,v 1.17 2001/11/15 10:03:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,7 +88,9 @@ void icqconf::loadmainconfig() {
 	    param = getword(buf);
 
 	    if(param == "hideoffline") hideoffline = true; else
-	    if(param == "russian") icq_Russian = 1; else
+	    if(param == "russian") {
+		icq_Russian = yahoo_Russian = 1;
+	    } else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else

@@ -3,10 +3,6 @@
 
 #include "icqconf.h"
 
-extern "C" {
-#include "yahoolib.h"
-}
-
 class yahoohook {
     protected:
 	struct yahoo_context *yahoo;
@@ -17,7 +13,7 @@ class yahoohook {
 	time_t timer_reconnect;
 
 	static void disconnected(yahoo_context *y);
-	static void userlogon(yahoo_context *y, const char *nick);
+	static void userlogon(yahoo_context *y, const char *nick, int status);
 	static void userlogoff(yahoo_context *y, const char *nick);
 	static void userstatus(yahoo_context *y, const char *nick, int status);
 	static void recvbounced(yahoo_context *y, const char *nick);

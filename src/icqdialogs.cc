@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.23 2001/11/14 18:09:46 konst Exp $
+* $Id: icqdialogs.cc,v 1.24 2001/11/15 10:03:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -689,7 +689,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setmailcheck(mailcheck);
 		conf.setserveronly(serveronly);
 
-		icq_Russian = rus ? 1 : 0;
+		icq_Russian = yahoo_Russian = rus ? 1 : 0;
 
 		if(conf.getusegroups() != usegroups) {
 		    conf.setusegroups(usegroups);
