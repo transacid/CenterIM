@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.211 2004/02/22 13:03:59 konst Exp $
+* $Id: icqface.cc,v 1.212 2004/02/26 08:07:30 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2333,11 +2333,29 @@ bool icqface::eventedit(imevent &ev) {
     return r;
 }
 
+string icqface::extracttime(const imevent &ev) {
+    string ds1, ds2, r;
+    int tdiff;
+    time_t t, ts;
+    char buf[64];
+
+    ds1 = time2str(&(t = ev.gettimestamp()), "DD.MM hh:mm", buf);
+    ds2 = time2str(&(ts = ev.getsenttimestamp()), "DD.MM hh:mm", buf);
+
+    r = ds1 + " ";
+    tdiff = ts-t;
+    if(tdiff < 0) tdiff *= -1;
+
+    if(tdiff > 5)
+    if(ds1 != ds2) r += (string) "[" + ds2 + "] ";
+
+    return r;
+}
+
 void icqface::renderchathistory() {
     int count, chatmargin;
-    string text, ds1, ds2;
-    char buf[64];
-    time_t t, ts, lastread;
+    string text;
+    time_t lastread;
     struct stat st;
 
     vector<imevent *> events;
@@ -2398,14 +2416,9 @@ void icqface::renderchathistory() {
 	}
 
 	if(count < chatlines) {
-	    ds1 = time2str(&(t = events.back()->gettimestamp()), "DD.MM hh:mm", buf);
-	    ds2 = time2str(&(ts = events.back()->getsenttimestamp()), "DD.MM hh:mm", buf);
-
-	    text = ds1 + " ";
-	    if(ds1 != ds2) text += (string) "[" + ds2 + "] ";
-
+	    text = extracttime(*events.back());
 	    text += events.back()->gettext();
-	    chatlastread = t-1;
+	    chatlastread = events.back()->gettimestamp()-1;
 
 	    h = histentry();
 	    h.first = events.back()->getdirection();
@@ -2609,7 +2622,7 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
-	title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());
+	title_timestamp.c_str(), extracttime(*ev).c_str());
 
     db.addautokeys();
 

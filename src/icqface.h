@@ -162,6 +162,8 @@ class icqface {
 	bool setljparams(imxmlevent *ev);
 	void multichange(bool conv[], bool newstate);
 
+	string extracttime(const imevent &ev);
+
     public:
 	int extk;
 	vector<imcontact> muins;

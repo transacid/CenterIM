@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.74 2004/02/21 15:31:00 konst Exp $
+* $Id: msnhook.cc,v 1.75 2004/02/26 08:07:30 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -320,7 +320,9 @@ void msnhook::removeuser(const imcontact &ic) {
 }
 
 void msnhook::removeuser(const imcontact &ic, bool report) {
-    vector<msnbuddy>::const_iterator ib = find(slst["FL"].begin(), slst["FL"].end(), ic.nickname);
+    int i;
+    bool found;
+    vector<msnbuddy>::const_iterator ib = find(slst["FL"].begin(), slst["FL"].end(), nicknormalize(ic.nickname));
 
     if(online() && ib != slst["FL"].end()) {
 	if(report)
@@ -329,6 +331,15 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 	msn_del_from_list(&conn, "FL",
 	    nicknormalize(ic.nickname).c_str(),
 	    ib->gid);
+
+	for(i = 0, found = false; i < clist.count && !found; i++) {
+	    icqcontact *c = (icqcontact *) clist.at(i);
+	    found = c->getdesc().pname == msn
+		&& groups.getname(c->getgroupid()) == mgroups[ib->gid];
+	}
+
+	if(!found)
+	    msn_del_group(&conn, ib->gid);
     }
 }
 
