@@ -1,3 +1,3 @@
 EXTRA_DIST = INSTALL README COPYING AUTHORS TODO ChangeLog FAQ centericq.spec
-SUBDIRS = share src po intl
+SUBDIRS = intl po share src
 AUTOMAKE_OPTIONS = foreign

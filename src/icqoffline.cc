@@ -4,6 +4,7 @@
 #include "icqcontacts.h"
 #include "icqconf.h"
 #include "icqhook.h"
+#include "icqface.h"
 
 icqoffline::icqoffline() {
 }
@@ -37,6 +38,8 @@ void icqoffline::sendmsg(unsigned int uin, string text) {
 	fprintf(f, "%lu\n%lu\n", seq, time(0));
 	fprintf(f, "%s\n", text.c_str());
 	fclose(f);
+	totalunsent++;
+	face.showtopbar();
     }
 }
 
@@ -53,6 +56,8 @@ void icqoffline::sendurl(unsigned int uin, string url, string text) {
 	fprintf(f, "%s\n", url.c_str());
 	fprintf(f, "%s\n", text.c_str());
 	fclose(f);
+	totalunsent++;
+	face.showtopbar();
     }
 }
 
@@ -92,8 +97,6 @@ unsigned long sseq) {
 		break;
 	}
 
-	if(save) totalunsent++;
-
 	if(msg && text.size()) {
 	    if(send) {
 		seq = icq_SendMessage(&icql, uin, text.c_str(), way);
@@ -119,8 +122,6 @@ unsigned long sseq) {
 	    }
 	}
     }
-
-    cicq.showtopbar();
 }
 
 void icqoffline::scan(unsigned long sseq, scanaction act) {
@@ -184,6 +185,9 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 	    if(!processed) unlink(text.c_str());
 	}
     }
+
+    totalunsent = processed;
+    face.showtopbar();
 }
 
 int icqoffline::getunsentcount() {

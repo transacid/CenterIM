@@ -139,7 +139,7 @@ class icqface {
 
 	void draw();
 	void update();
-	void showtopbar() {
+	void showtopbar();
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();
 	void log(string text);

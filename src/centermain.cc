@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.3 2001/04/15 15:37:47 konst Exp $
+* $Id: centermain.cc,v 1.4 2001/04/17 08:09:26 konst Exp $
 *
 */
 
@@ -25,6 +25,10 @@ icqlist lst;
 
 struct icq_link icql;
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 int main(int argc, char **argv) {
     char savedir[1024];
 
@@ -32,10 +36,11 @@ int main(int argc, char **argv) {
 
     try {
 
-	string localedir = (string) SHARE_DIR + "/locale";
+#if defined(HAVE_SETLOCALE) && defined(ENABLE_NLS)
 	setlocale(LC_ALL, "");
-	bindtextdomain("centericq", localedir.c_str());
+	bindtextdomain("centericq", LOCALE_DIR);
 	textdomain("centericq");
+#endif
 
 	cicq.commandline(argc, argv);
 	cicq.exec();

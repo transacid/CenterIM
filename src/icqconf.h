@@ -12,9 +12,6 @@
 #include <list>
 #include <algorithm>
 
-#include <locale.h>
-#include <libintl.h>
-
 #include "konst.list.h"
 #include "konst.string.h"
 #include "konst.fs.h"
@@ -47,7 +44,16 @@
 #define LOCALE_DIR "/usr/local/share/locale"
 #endif
 
+#ifdef ENABLE_NLS
+
+#include <libintl.h>
 #define _(s)    gettext(s)
+
+#else
+
+#define _(s)    (s)
+
+#endif
 
 #define ICQ_SERVER      "icq.mirabilis.com:4000"
 
