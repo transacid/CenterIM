@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.5 2003/07/16 22:54:32 konst Exp $
+* $Id: rsshook.cc,v 1.6 2003/07/17 00:30:33 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -308,7 +308,7 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 		if(!top.get()) {
 		    if(!content.empty()) bi.lname = _("wrong XML");
 
-		} else if(top->getTag() != "rss") {
+		} else if(top->getTag() != "rss" && top->getTag() != "rdf::RDF") {
 		    if(!content.empty()) bi.lname = _("no <rss> tag found");
 
 		}
@@ -342,6 +342,11 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 
 		    text = ""; fetchRSSParam(text, channel, enc, "description", "");
 		    if(!text.empty()) c->setabout(text);
+
+		    if(!channel->getBranch("item")) {
+			channel = rss;
+			if(bi.city.empty()) bi.city = "rdf";
+		    }
 
 		    for(k = 0; item = channel->getBranch("item", k); k++) {
 			text = "";
