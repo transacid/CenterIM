@@ -2108,7 +2108,7 @@ enum firetalk_error firetalk_im_searchemail(firetalk_t conn, const char * const 
 	return protocol_functions[conn->protocol].im_searchemail(conn->handle,email);
 }
 
-enum firetalk_error firetalk_chat_join(firetalk_t conn, const char * const room) {
+enum firetalk_error firetalk_chat_join(firetalk_t conn, const char * const room, const char * const passwd) {
 	const char *normalroom;
 
 #ifdef DEBUG
@@ -2123,7 +2123,7 @@ enum firetalk_error firetalk_chat_join(firetalk_t conn, const char * const room)
 	if (!normalroom)
 		return FE_ROOMUNAVAILABLE;
 
-	return protocol_functions[conn->protocol].chat_join(conn->handle,normalroom);
+	return protocol_functions[conn->protocol].chat_join(conn->handle,normalroom,passwd);
 }
 
 enum firetalk_error firetalk_chat_part(firetalk_t conn, const char * const room) {

@@ -1442,7 +1442,7 @@ enum firetalk_error toc_periodic(struct s_firetalk_handle * const c) {
 	return toc_send_printf(conn,"toc_set_idle %s",data);
 }
 
-enum firetalk_error toc_chat_join(client_t c, const char * const room) {
+enum firetalk_error toc_chat_join(client_t c, const char * const room, const char * const passwd) {
 	int i;
 	i = toc_internal_get_room_invited(c,room);
 	if (i == 1) {

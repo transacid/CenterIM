@@ -943,8 +943,8 @@ enum firetalk_error irc_compare_nicks(const char * const nick1, const char * con
 	return FE_SUCCESS;
 }
 
-enum firetalk_error irc_chat_join(client_t c, const char * const room) {
-	return irc_send_printf(c,"JOIN %s",room);
+enum firetalk_error irc_chat_join(client_t c, const char * const room, const char * const passwd) {
+	return irc_send_printf(c,"JOIN %s %s",room, passwd);
 }
 
 enum firetalk_error irc_chat_part(client_t c, const char * const room) {

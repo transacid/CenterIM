@@ -42,7 +42,7 @@ enum firetalk_error irc_set_info(client_t c, const char * const info);
 enum firetalk_error irc_set_nickname(client_t c, const char * const nickname);
 enum firetalk_error irc_set_password(client_t c, const char * const oldpass, const char * const newpass);
 
-enum firetalk_error irc_chat_join(client_t c, const char * const room);
+enum firetalk_error irc_chat_join(client_t c, const char * const room, const char * const passwd);
 enum firetalk_error irc_chat_part(client_t c, const char * const room);
 enum firetalk_error irc_chat_send_message(client_t c, const char * const room, const char * const message, const int auto_flag);
 enum firetalk_error irc_chat_send_action(client_t c, const char * const room, const char * const message, const int auto_flag);

@@ -206,7 +206,7 @@ enum firetalk_error firetalk_im_evil(firetalk_t c, const char * const who);
 enum firetalk_error firetalk_im_get_info(firetalk_t conn, const char * const nickname);
 enum firetalk_error firetalk_im_searchemail(firetalk_t conn, const char * const email);
 
-enum firetalk_error firetalk_chat_join(firetalk_t conn, const char * const room);
+enum firetalk_error firetalk_chat_join(firetalk_t conn, const char * const room, const char * const passwd);
 enum firetalk_error firetalk_chat_part(firetalk_t conn, const char * const room);
 enum firetalk_error firetalk_chat_send_message(firetalk_t conn, const char * const room, const char * const message, const int auto_flag);
 enum firetalk_error firetalk_chat_send_action(firetalk_t conn, const char * const room, const char * const message, const int auto_flag);
