@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.99 2002/04/04 14:41:43 konst Exp $
+* $Id: icqface.cc,v 1.100 2002/04/08 13:45:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -163,12 +163,6 @@ void icqface::showtopbar() {
     protocolname pname;
     icqconf::imaccount ia;
 
-    attrset(conf.getcolor(cp_status));
-    mvhline(0, 0, ' ', COLS);
-
-    kwriteatf(2, 0, conf.getcolor(cp_status),
-	"CENTERICQ %s   UNSENT: %lu", VERSION, em.getunsentcount());
-
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	if(pname != infocard) {
 	    ia = conf.getourid(pname);
@@ -182,7 +176,10 @@ void icqface::showtopbar() {
 	}
     }
 
-    kwriteatf(COLS-buf.size()-2, 0, conf.getcolor(cp_status), buf.c_str());
+    attrset(conf.getcolor(cp_status));
+    mvhline(0, 0, ' ', COLS);
+    mvprintw(0, 2, "CENTERICQ %s   UNSENT: %lu", VERSION, em.getunsentcount());
+    mvprintw(0, COLS-buf.size()-2, "%s", buf.c_str());
 }
 
 void icqface::update() {

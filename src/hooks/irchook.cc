@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.10 2002/04/07 18:24:47 konst Exp $
+* $Id: irchook.cc,v 1.11 2002/04/08 13:45:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,9 +236,7 @@ imstatus irchook::getstatus() const {
 }
 
 void irchook::requestinfo(const imcontact &c) {
-    if(c != imcontact(conf.getourid(irc).nickname, irc)) {
-	firetalk_im_get_info(handle, c.nickname.c_str());
-    }
+    firetalk_im_get_info(handle, c.nickname.c_str());
 }
 
 void irchook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
@@ -743,7 +741,7 @@ static string up(string s) {
     string r;
 
     for(k = 0; k < s.size(); k++)
-	r += s[k];
+	r += toupper(s[k]);
 
     return r;
 }

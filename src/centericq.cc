@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.88 2002/04/07 13:21:25 konst Exp $
+* $Id: centericq.cc,v 1.89 2002/04/08 13:45:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -51,6 +51,8 @@ void centericq::exec() {
     sigaction(SIGINT, &sact, 0);
     sigaction(SIGCHLD, &sact, 0);
     sigaction(SIGALRM, &sact, 0);
+    sigaction(SIGUSR1, &sact, 0);
+    sigaction(SIGUSR2, &sact, 0);
 
     kinterface();
     raw();
@@ -492,7 +494,9 @@ void centericq::handlesignal(int signum) {
 	case SIGCHLD:
 	    while(wait3(&status, WNOHANG, 0) > 0);
 	    break;
-	case SIGALRM:
+
+	case SIGUSR1:
+	    cicq.rereadstatus();
 	    break;
     }
 }
@@ -522,6 +526,19 @@ void centericq::checkparallel() {
 	if(of.is_open()) {
 	    of << getpid() << endl;
 	    of.close();
+	}
+    }
+}
+
+void centericq::rereadstatus() {
+    protocolname pname;
+    icqconf::imaccount ia;
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	ia = conf.getourid(pname);
+
+	if(!ia.empty()) {
+	    gethook(pname).setstatus(conf.getstatus(pname));
 	}
     }
 }

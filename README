@@ -55,12 +55,15 @@ Contents
     8.3. Invisible list
 9. Advanced features
     9.1. Arabic and Hebrew languages support
-    9.2. Sending events from the command line
+    9.2. Command line facilities
+	9.2.1. Sending events
+	9.2.2. Changing current IM status
     9.3. External actions and auto-responses
 	9.3.1. IM answering machine
 	9.3.2. Elizatalk: making fun with your friends
 	9.3.3. Remote control with external actions
 	9.3.4. Forwarding events
+	9.3.5. Hiding from scary ones
     9.4. Protocol debug mode
     9.5. "Friendly" logging
     9.6. Latest CVS snapshots
@@ -792,8 +795,15 @@ fails to find the library (you'll be reported), try
 there, guys.
 
 
-9.2. Sending events from the command line
------------------------------------------
+9.2. Command line facilities
+----------------------------
+
+  Centericq has a bunch of command line options that make it possible to
+queue IM events and change your status in various IM networks.
+
+
+9.2.1. Sending events
+---------------------
 
   In fact, it's not really sending. Centericq just allows you to put an
 event to the outgoing queue from another process with command line
@@ -813,7 +823,7 @@ outgoing queue:
 -p or --proto <protocol type>
 
     This one specifies to which IM network the destination contact
-    beyongs. Can be "icq", "yahoo", "msn", "aim" or "irc".
+    belongs to. Can be either "icq", "yahoo", "msn", "aim" or "irc".
 
 -t or --to
 
@@ -836,6 +846,29 @@ separated with a newline character the following way:
 
 Please note, that all three parameters are required in order to queue an
 event.
+
+
+9.2.2. Changing current IM status
+---------------------------------
+
+  Changing status is done with a pair of parameters. They're -S and -p.
+The former is used to specify the status itself, and -p points which IM
+engine is to be affected.
+
+-S or --status <status letter>
+
+    The argument parameter is a letter which indicates which status is
+    to be set:
+
+	o (Online)		_ (Offline)
+	a (Away)		d (Don't disturb)
+	n (N/A)			c (Occupied)
+	f (Free for chat)	i (Invisible)
+
+-p or --protocol <protocol name>
+
+    This one specifies to which IM network the destination contact
+    belongs to. Can be either "icq", "yahoo", "msn", "aim" or "irc".
 
 
 9.3. External actions and auto-responses
@@ -1132,6 +1165,34 @@ Please note UIN 0 is specified to send SMS to your own contact. Also,
 you can easily forward your incoming events to any other IM contacts,
 emails with the mail(1) command. In fact, everything you can access from
 the command line is possible to be used here.
+
+
+9.3.5. Hiding from scary ones
+-----------------------------
+
+  This example will use the -S command line parameter which allows to
+control current status on IM networks from the command line.
+
+[ - cut (centericq external actions setup for hiding from scary ones) ------ ]
+
+%action         Hide from freddy_krueger
+event           online
+proto           all
+status          all
+options         stdin
+
+%exec
+#!/bin/sh
+
+if test "$SENDER_NICK" = "freddy_krueger"; then
+    centericq -S _ -p $EVENT_NETWORK
+fi
+
+[ -------------------------------------------------------------------------- ]
+
+Such a setup will make your centericq go online as soon as a user
+freddy_krueger appears online on any of the IM networks you're currently
+logged in.
 
 
 9.4. Protocol debug mode

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.12 2002/04/07 14:05:43 konst Exp $
+* $Id: icqmlist.cc,v 1.13 2002/04/08 13:45:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,6 +37,7 @@ string icqlist::getfname() const {
 	
 void icqlist::load() {
     string buf, tok, nick;
+    protocolname pname;
     ifstream f;
     int i;
 
@@ -51,17 +52,22 @@ void icqlist::load() {
 	    if(i = atoi(tok.c_str())) {
 		nick = unmime(getword(buf));
 
-		if(!nick.empty()) {
-		    if(buf == "y") {
-			lst.push_back(modelistitem(nick, imcontact(nick, yahoo), (contactstatus) i));
-		    } else if(buf == "m") {
-			lst.push_back(modelistitem(nick, imcontact(nick, msn), (contactstatus) i));
-		    } else if(buf == "a") {
-			lst.push_back(modelistitem(nick, imcontact(nick, aim), (contactstatus) i));
-		    } else if(buf == "i") {
-			lst.push_back(modelistitem(nick, imcontact(nick, irc), (contactstatus) i));
-		    } else {
-			lst.push_back(modelistitem(nick, imcontact(strtoul(buf.c_str(), 0, 0), icq), (contactstatus) i));
+		if(!nick.empty() && !buf.empty()) {
+		    pname = conf.getprotocolbyletter(buf[0]);
+
+		    switch(pname) {
+			case yahoo:
+			case msn:
+			case aim:
+			case irc:
+			    lst.push_back(modelistitem(nick, imcontact(nick,
+				pname), (contactstatus) i));
+			    break;
+
+			case icq:
+			    lst.push_back(modelistitem(nick, imcontact(strtoul(buf.c_str(),
+				0, 0), icq), (contactstatus) i));
+			    break;
 		    }
 		}
 	    }

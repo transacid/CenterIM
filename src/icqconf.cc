@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.62 2002/04/05 16:06:02 konst Exp $
+* $Id: icqconf.cc,v 1.63 2002/04/08 13:45:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -96,10 +96,6 @@ void icqconf::setourid(const imaccount &im) {
 
 	if(!i->port) i->port = defservers[i->pname].port;
     }
-}
-
-int icqconf::getouridcount() const {
-    return accounts.size();
 }
 
 string icqconf::getawaymsg(protocolname pname) const {
@@ -250,12 +246,6 @@ void icqconf::save() {
 	    f.close();
 	}
     }
-}
-
-int icqconf::getcolor(int npair) const {
-    return
-	find(boldcolors.begin(), boldcolors.end(), npair) != boldcolors.end()
-	? boldcolor(npair) : normalcolor(npair);
 }
 
 void icqconf::loadcolors() {
@@ -530,10 +520,6 @@ void icqconf::setregsound(icqconf::regsound s) {
     rs = s;
 }
 
-bool icqconf::gethideoffline() const {
-    return hideoffline;
-}
-
 void icqconf::initpairs() {
     boldcolors.clear();
 
@@ -579,10 +565,6 @@ void icqconf::getauto(int &away, int &na) const {
 	away = 0;
 }
 
-bool icqconf::getquote() const {
-    return quote;
-}
-
 void icqconf::setquote(bool use) {
     quote = use;
 }
@@ -621,10 +603,6 @@ void icqconf::setsocksuser(const string &name, const string &pass) {
     sockspass = pass;
 }
 
-bool icqconf::getsavepwd() const {
-    return savepwd;
-}
-
 void icqconf::setsavepwd(bool ssave) {
     savepwd = ssave;
 }
@@ -633,16 +611,8 @@ void icqconf::sethideoffline(bool fho) {
     hideoffline = fho;
 }
 
-bool icqconf::getantispam() const {
-    return antispam;
-}
-
 void icqconf::setantispam(bool fas) {
     antispam = fas;
-}
-
-bool icqconf::getmailcheck() const {
-    return mailcheck;
 }
 
 void icqconf::setmailcheck(bool fmc) {
@@ -665,6 +635,28 @@ string icqconf::getprotocolname(protocolname pname) const {
     };
 
     return ptextnames[pname];
+}
+
+protocolname icqconf::getprotocolbyletter(char letter) const {
+    switch(letter) {
+	case 'y': return yahoo;
+	case 'a': return aim;
+	case 'i': return irc;
+	case 'm': return msn;
+	case 'n': return infocard;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9': return icq;
+    }
+
+    return protocolname_size;
 }
 
 imstatus icqconf::getstatus(protocolname pname) {
@@ -709,18 +701,6 @@ int icqconf::getprotcolor(protocolname pname) const {
     }
 }
 
-string icqconf::getdirname() const {
-    return basedir;
-}
-
-string icqconf::getconfigfname(const string &fname) const {
-    return getdirname() + fname;
-}
-
-bool icqconf::getrussian() const {
-    return russian;
-}
-
 void icqconf::setrussian(bool frussian) {
     russian = frussian;
 }
@@ -728,6 +708,7 @@ void icqconf::setrussian(bool frussian) {
 void icqconf::commandline(int argc, char **argv) {
     int i;
     string event, proto, dest;
+    char st = 0;
 
     argv0 = argv[0];
 
@@ -752,6 +733,11 @@ void icqconf::commandline(int argc, char **argv) {
 	} else if((args == "-t") || (args == "--to")) {
 	    if(argv[++i]) dest = argv[i];
 
+	} else if((args == "-S") || (args == "--status")) {
+	    if(argv[++i])
+	    if(strlen(argv[i]))
+		st = argv[i][0];
+
 	} else {
 	    usage();
 	    exit(0);
@@ -759,6 +745,7 @@ void icqconf::commandline(int argc, char **argv) {
     }
 
     constructevent(event, proto, dest);
+    externalstatuschange(st, proto);
 }
 
 void icqconf::constructevent(const string &event, const string &proto, const string &dest) const {
@@ -767,7 +754,7 @@ void icqconf::constructevent(const string &event, const string &proto, const str
     string text, buf;
     int pos;
 
-    if(event.empty() && proto.empty() && dest.empty()) return; else
+    if(event.empty() && dest.empty()) return; else
     if(event.empty() || proto.empty() || dest.empty()) {
 	cout << _("event sending error: not enough parameters") << endl;
 	exit(1);
@@ -845,6 +832,48 @@ void icqconf::constructevent(const string &event, const string &proto, const str
     }
 }
 
+void icqconf::externalstatuschange(char st, const string &proto) const {
+    imstatus imst;
+    protocolname pname;
+    int rpid;
+
+    if(st) {
+	for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	    if(getprotocolname(pname) == proto)
+		break;
+
+	for(imst = available; imst != imstatus_size; (int) imst += 1)
+	    if(imstatus2char[imst] == st)
+		break;
+
+	try {
+	    if(pname != protocolname_size) {
+		if(imst != imstatus_size) {
+		    ifstream f(conf.getconfigfname("pid").c_str());
+		    if(f.is_open()) {
+			f >> rpid;
+			f.close();
+
+			if(rpid > 0) {
+			    conf.savestatus(pname, imst);
+			    kill(rpid, SIGUSR1);
+			}
+		    }
+		} else {
+		    throw _("unknown status character was given");
+		}
+	    } else {
+		throw _("unknown IM type");
+	    }
+	} catch(char *p) {
+	    cout << _("status change error: ") << p << endl;
+	    exit(1);
+	}
+
+	exit(0);
+    }
+}
+
 void icqconf::usage() const {
     cout << "Usage: " << argv0 << " [OPTION].." << endl;
 
@@ -854,22 +883,15 @@ void icqconf::usage() const {
 
     cout << endl << "Events sending options:" << endl;
     cout << "  -s, --send <event type>  event type; can be msg, sms or url" << endl;
+    cout << "  -S, --status <status>    change the current IM status" << endl;
     cout << "  -p, --proto <protocol>   protocol type; can be icq, yahoo or msn" << endl;
     cout << "  -t, --to <destination>   destination UIN or nick (depends on protocol)" << endl;
 
     cout << endl << "Report bugs to <centericq-bugs@konst.org.ua>." << endl;
 }
 
-bool icqconf::getmakelog() const {
-    return makelog;
-}
-
 void icqconf::setmakelog(bool slog) {
     makelog = slog;
-}
-
-icqconf::groupmode icqconf::getgroupmode() const {
-    return fgroupmode;
 }
 
 void icqconf::setgroupmode(icqconf::groupmode amode) {
@@ -904,10 +926,6 @@ string icqconf::getsmtphost() const {
 
 unsigned int icqconf::getsmtpport() const {
     return smtpport ? smtpport : 25;
-}
-
-bool icqconf::enoughdiskspace() const {
-    return fenoughdiskspace;
 }
 
 void icqconf::checkdiskspace() {

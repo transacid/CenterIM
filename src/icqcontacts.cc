@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.34 2002/04/03 17:40:54 konst Exp $
+* $Id: icqcontacts.cc,v 1.35 2002/04/08 13:45:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -74,6 +74,7 @@ void icqcontacts::load() {
     FILE *f;
     icqcontact *c;
     imcontact cinfo;
+    protocolname pname;
 
     empty();
 
@@ -84,39 +85,23 @@ void icqcontacts::load() {
 
 	    if(S_ISDIR(st.st_mode)) {
 		c = 0;
+		pname = conf.getprotocolbyletter(ent->d_name[0]);
 
-		switch(ent->d_name[0]) {
-		    case 'n':
-			c = new icqcontact(imcontact(atol(ent->d_name+1),
-			    infocard));
+		switch(pname) {
+		    case icq:
+			c = new icqcontact(imcontact(atol(ent->d_name), pname));
 			break;
-		    case 'y':
-			c = new icqcontact(imcontact(ent->d_name+1, yahoo));
+
+		    case infocard:
+			c = new icqcontact(imcontact(atol(ent->d_name+1), pname));
+			break;
+
+		    case yahoo:
+		    case msn:
+		    case aim:
+		    case irc:
+			c = new icqcontact(imcontact(ent->d_name+1, pname));
 			c->setnick(ent->d_name+1);
-			break;
-		    case 'm':
-			c = new icqcontact(imcontact(ent->d_name+1, msn));
-			c->setnick(ent->d_name+1);
-			break;
-		    case 'a':
-			c = new icqcontact(imcontact(ent->d_name+1, aim));
-			c->setnick(ent->d_name+1);
-			break;
-		    case 'i':
-			c = new icqcontact(imcontact(ent->d_name+1, irc));
-			c->setnick(ent->d_name+1);
-			break;
-		    case '0':
-		    case '1':
-		    case '2':
-		    case '3':
-		    case '4':
-		    case '5':
-		    case '6':
-		    case '7':
-		    case '8':
-		    case '9':
-			c = new icqcontact(imcontact(atol(ent->d_name), icq));
 			break;
 		}
 
@@ -156,15 +141,6 @@ void icqcontacts::checkdefault() {
 		case icq:
 		    addnew(imcontact(17502151, pname), false);
 		    break;
-/*
-		case yahoo:
-//                case aim:
-		    addnew(imcontact("thekonst", pname), false);
-		    break;
-		case msn:
-		    addnew(imcontact("konst@konst.org.ua", pname), false);
-		    break;
-*/
 	    }
 	}
     }

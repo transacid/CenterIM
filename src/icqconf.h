@@ -81,8 +81,11 @@ class icqconf {
 	void loadmainconfig();
 
 	void usage() const;
+
 	void constructevent(const string &event, const string &proto,
 	    const string &dest) const;
+
+	void externalstatuschange(char st, const string &proto) const;
 
     public:
 	icqconf();
@@ -91,7 +94,12 @@ class icqconf {
 	void checkdir();
 	void load();
 
-	int getcolor(int npair) const;
+	int getcolor(int npair) const {
+	    return find(boldcolors.begin(), boldcolors.end(), npair) != boldcolors.end()
+		? boldcolor(npair) : normalcolor(npair);
+	}
+
+	int getprotcolor(protocolname pname) const;
 
 	void save();
 
@@ -107,40 +115,40 @@ class icqconf {
 	regsound getregsound() const;
 	void setregsound(regsound s);
 
-	bool gethideoffline() const;
+	bool gethideoffline() const { return hideoffline; }
 	void sethideoffline(bool fho);
 
-	bool getantispam() const;
+	bool getantispam() const { return antispam; }
 	void setantispam(bool fas);
 
-	bool getmailcheck() const;
+	bool getmailcheck() const { return mailcheck; }
 	void setmailcheck(bool fmc);
 
-	void setauto(int away, int na);
 	void getauto(int &away, int &na) const;
+	void setauto(int away, int na);
 
-	bool getquote() const;
+	bool getquote() const { return quote; }
 	void setquote(bool use);
 
-	bool getsavepwd() const;
+	bool getsavepwd() const { return savepwd; }
 	void setsavepwd(bool ssave);
 
-	bool getmakelog() const;
+	bool getmakelog() const { return makelog; }
 	void setmakelog(bool slog);
 
-	bool getrussian() const;
+	bool getrussian() const { return russian; }
 	void setrussian(bool frussian);
 
-	groupmode getgroupmode() const;
+	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);
  
-	void setsockshost(const string &nsockshost);
 	string getsockshost() const;
 	unsigned int getsocksport() const;
+	void setsockshost(const string &nsockshost);
 
-	void setsmtphost(const string &asmtphost);
 	string getsmtphost() const;
 	unsigned int getsmtpport() const;
+	void setsmtphost(const string &asmtphost);
 
 	void getsocksuser(string &name, string &pass) const;
 	void setsocksuser(const string &name, const string &pass);
@@ -150,22 +158,22 @@ class icqconf {
 	imstatus getstatus(protocolname pname);
 	void savestatus(protocolname pname, imstatus st);
 
-	int getprotcolor(protocolname pname) const;
 	string getprotocolname(protocolname pname) const;
+	protocolname getprotocolbyletter(char letter) const;
 
+	int getouridcount() const { return accounts.size(); }
 	imaccount getourid(protocolname pname);
 	void setourid(const imaccount &im);
-	int getouridcount() const;
 
 	string getawaymsg(protocolname pname) const;
 	void setawaymsg(protocolname pname, const string &amsg);
 
-	string getdirname() const;
-	string getconfigfname(const string &fname) const;
+	string getdirname() const { return basedir; }
+	string getconfigfname(const string &fname) const { return getdirname() + fname; }
 
 	void commandline(int argc, char **argv);
 
-	bool enoughdiskspace() const;
+	bool enoughdiskspace() const { return fenoughdiskspace; }
 	void checkdiskspace();
 };
 

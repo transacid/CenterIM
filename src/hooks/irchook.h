@@ -12,6 +12,7 @@ class irchook: public abstracthook {
 	struct channelInfo {
 	    string name;
 	    bool joined, fetched;
+
 	    vector<string> nicks;
 
 	    channelInfo(const string &aname):

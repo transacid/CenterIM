@@ -38,6 +38,7 @@ class centericq {
 	void checkparallel();
 	void inithooks();
 	bool checkpasswords();
+	void rereadstatus();
 
 	string quotemsg(const string &text);
 
