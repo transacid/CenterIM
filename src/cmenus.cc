@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.5 2001/08/18 07:30:43 konst Exp $
+* $Id: cmenus.cc,v 1.6 2001/08/18 08:26:27 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -634,7 +634,11 @@ verticalmenu *horizontalmenu::pulldown(int n) {
 
 // --------------------------------------------------------------------------
 
+#ifdef __KTOOL_USE_NAMESPACES
+
 using ktool::horizontalmenuitem;
+
+#endif
 
 horizontalmenuitem::horizontalmenuitem() {
 }

@@ -1921,7 +1921,11 @@ void texteditor::shiftmarkedblock(int delta) {
 
 // --------------------------------------------------------------------------
 
+#ifdef __KTOOL_USE_NAMESPACES
+
 using ktool::hlight;
+
+#endif
 
 bool hlight::operator == (const hl_kind &k) const {
     return kind == k;
