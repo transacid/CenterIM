@@ -490,9 +490,10 @@ public:
 	    ext::closingConnection(this);
 	    return;
 	}
+
 	connectionStatus = NS_CONNECTING;
 	ext::registerSocket(this->sock, 0, 1);
-	
+
 	std::ostringstream buf_;
 	buf_ << "VER " << trid << " MSNP8\r\n";
 	this->write(buf_);
