@@ -1,7 +1,7 @@
 /*
 *
 * centericq events logger class
-* $Id: imlogger.cc,v 1.10 2003/09/30 11:38:42 konst Exp $
+* $Id: imlogger.cc,v 1.11 2003/10/31 00:55:53 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,6 +53,7 @@ const char *streventname(imevent::imeventtype type) {
 	case imevent::notification: return _("notification");
 	case imevent::contacts: return _("contacts");
 	case imevent::file: return _("files");
+	case imevent::xml: return _("event");
     }
     return "";
 };

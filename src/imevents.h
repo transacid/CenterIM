@@ -16,11 +16,12 @@ class imevent {
     friend class imcontacts;
     friend class imfile;
     friend class imrawevent;
+    friend class imxmlevent;
 
     public:
 	enum imeventtype {
 	    message, url, sms, authorization, online, email, notification,
-	    contacts, file, imeventtype_size
+	    contacts, file, xml, imeventtype_size
 	};
 
 	enum imdirection {
@@ -241,6 +242,28 @@ class imrawevent: public imevent {
     public:
 	imrawevent(const imevent &ev);
 	imrawevent(imeventtype atype, const imcontact &acont, imdirection adirection);
+};
+
+class imxmlevent: public imevent {
+    protected:
+	map<string, string> data;
+
+    public:
+	imxmlevent(const imevent &ev);
+	imxmlevent(const imcontact &acont, imdirection adirection, const string &atext);
+
+	string gettext() const;
+
+	bool field_empty(const string &name) const;
+	string getfield(const string &name) const;
+
+	void setfield(const string &name, const string &val);
+
+	bool empty() const;
+	bool contains(const string &atext) const;
+
+	void write(ofstream &f) const;
+	void read(ifstream &f);
 };
 
 #endif

@@ -25,7 +25,7 @@ enum interfaceAction {
     ACT_PING, ACT_EDITUSER, ACT_VISIBLELIST, ACT_INVISLIST, ACT_QUICKFIND,
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
-    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN, ACT_RSS
+    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN, ACT_RSS, ACT_LJ
 };
 
 extern class centericq cicq;
@@ -89,7 +89,6 @@ class icqface {
 
 	time_t chatlastread;
 
-	ljparams ljp;
 	imcontact passinfo;
 	const imevent *passevent;
 
@@ -158,7 +157,7 @@ class icqface {
 	void showeventbottom(const imcontact &ic);
 
 	void invokelist(string &s, vector<string> &v, const string &def, textwindow *w);
-	bool setljparams();
+	bool setljparams(imxmlevent *ev);
 
     public:
 	int extk;

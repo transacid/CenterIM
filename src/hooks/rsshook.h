@@ -33,6 +33,7 @@ class rsshook: public abstracthook, public sigslot::has_slots<> {
 
 	void exectimers();
 	void main();
+	bool send(const imevent &ev);
 
 	void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;
 	bool isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const;

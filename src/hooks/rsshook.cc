@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.15 2003/10/26 10:46:54 konst Exp $
+* $Id: rsshook.cc,v 1.16 2003/10/31 00:55:54 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -85,6 +85,15 @@ void rsshook::exectimers() {
     }
 
     httpcli.clearoutMessagesPoll();
+}
+
+bool rsshook::send(const imevent &ev) {
+    if(ev.gettype() == imevent::xml && islivejournal(ev.getcontact())) {
+	gethook(livejournal).send(ev);
+	return true;
+    }
+
+    return false;
 }
 
 void rsshook::main() {
@@ -288,7 +297,7 @@ void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
 
     if(!rev->isDelivered() || content.empty()) {
 	bi.lname = rev->getHTTPResp();
-	if(bi.lname.empty()) bi.lname = _("coudln't fetch");
+	if(bi.lname.empty()) bi.lname = _("couldn't fetch");
 
 	content = "";
     }
@@ -356,6 +365,7 @@ void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
 	if(!text.empty()) bi.fname = text;
 
 	text = ""; rhook.fetchRSSParam(text, channel, enc, "link", "");
+	while((k = text.find_first_of(" \t\r\n")) != -1) text.erase(k, 1);
 	if(!text.empty()) mi.homepage = text;
 
 	text = ""; rhook.fetchRSSParam(text, channel, enc, "description", "");

@@ -1,7 +1,7 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.29 2002/11/22 20:23:43 konst Exp $
+* $Id: imevents.cc,v 1.30 2003/10/31 00:55:53 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,6 +25,7 @@
 #include "imevents.h"
 
 #include <strstream>
+#include <libicq2000/Xml.h>
 
 // -- serialization constants -------------------------------------------------
 
@@ -35,7 +36,7 @@ static const string sdirection[imevent::imdirection_size] = {
 };
 
 static const string seventtype[imevent::imeventtype_size] = {
-    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE", "CONT", "FILE"
+    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE", "CONT", "FILE", "XML"
 };
 
 // -- basic imevent class -----------------------------------------------------
@@ -83,6 +84,9 @@ void imevent::setcontact(const imcontact &acontact) {
 }
 
 void imevent::write(ofstream &f) const {
+    if(type == imeventtype_size)
+	return;
+
     f << "\f" << endl <<
 	sdirection[direction] << endl <<
 	seventtype[type] << endl <<
@@ -165,6 +169,8 @@ imevent *imevent::getevent() const {
 	    return new imcontacts(*this);
 	case file:
 	    return new imfile(*this);
+	case xml:
+	    return new imxmlevent(*this);
 	default:
 	    return new imrawevent(*this);
     }
@@ -654,4 +660,86 @@ imrawevent::imrawevent(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+}
+
+// -- imxmlevent class --------------------------------------------------------
+
+imxmlevent::imxmlevent(const imcontact &acont, imdirection adirection, const string &atext)
+: imevent(acont, adirection, imevent::xml) {
+    data["text"] = atext;
+}
+
+imxmlevent::imxmlevent(const imevent &ev) {
+    type = ev.type;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
+
+    const imxmlevent *m = dynamic_cast<const imxmlevent *>(&ev);
+
+    if(m) {
+	data = m->data;
+    }
+}
+
+string imxmlevent::gettext() const {
+    return getfield("text");
+}
+
+bool imxmlevent::field_empty(const string &name) const {
+    return getfield(name).empty();
+}
+
+string imxmlevent::getfield(const string &name) const {
+    string r;
+    map<string, string>::const_iterator ic = data.find(name);
+
+    if(ic != data.end()) {
+	r = ic->second;
+    }
+
+    return r;
+}
+
+void imxmlevent::setfield(const string &name, const string &val) {
+    data[name] = val;
+}
+
+bool imxmlevent::empty() const {
+    return getfield("text").empty();
+}
+
+bool imxmlevent::contains(const string &atext) const {
+    return gettext().find(atext) != -1;
+}
+
+void imxmlevent::write(ofstream &f) const {
+    XmlBranch x("xml");
+
+    map<string, string>::const_iterator id = data.begin();
+    while(id != data.end()) {
+	if(!id->second.empty())
+	    x.pushnode(new XmlLeaf(id->first, id->second));
+	++id;
+    }
+
+    imevent::write(f);
+    f << x.toString(0) << endl;
+}
+
+void imxmlevent::read(ifstream &f) {
+    string content = readblock(f);
+    string::iterator ic = content.begin();
+
+    auto_ptr<XmlNode> top(XmlNode::parse(ic, content.end()));
+    XmlBranch *x = dynamic_cast<XmlBranch *>(top.get());
+
+    list<string> tags = x->getChildren();
+    list<string>::const_iterator it = tags.begin();
+
+    while(it != tags.end()) {
+	data[*it] = x->getLeaf(*it)->getValue();
+	++it;
+    }
+
 }

@@ -23,6 +23,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	enum RequestType {
 	    reqLogin,
 	    reqPost,
+	    reqPostComment,
 	    reqGetFriends,
 	    reqDelFriend,
 	    reqAddFriend,
@@ -33,7 +34,6 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	map<HTTPRequestEvent *, RequestType> sent;
 	vector<icqcontact *> foundguys;
 	vector<string> friendof, journals, moods, pictures;
-	ljparams ljp;
 
 	void socket_cb(SocketEvent *ev);
 	void messageack_cb(MessageEvent *ev);
@@ -62,7 +62,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	bool isconnecting() const;
 	bool enabled() const;
 
-	bool send(const imevent &ev);
+	bool send(const imevent &sev);
 
 	void sendnewuser(const imcontact &ic);
 	void removeuser(const imcontact &ic);
@@ -86,8 +86,6 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	vector<string> getjournals() const { return journals; }
 	vector<string> getmoods() const { return moods; }
 	vector<string> getpictures() const { return pictures; }
-
-	void setpostparams(const ljparams &aljp);
 };
 
 extern ljhook lhook;

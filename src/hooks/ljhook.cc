@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.15 2003/10/26 10:46:53 konst Exp $
+* $Id: ljhook.cc,v 1.16 2003/10/31 00:55:54 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,8 @@ ljhook lhook;
 #define KOI2UTF(x) siconv(x, conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf-8")
 #define UTF2KOI(x) siconv(x, "utf-8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())
 
+#define PERIOD_FRIENDS  3600
+
 ljhook::ljhook(): abstracthook(livejournal), fonline(false), sdest(0) {
     fcapabs.insert(hookcapab::nochat);
 }
@@ -52,6 +54,7 @@ void ljhook::init() {
 #ifdef DEBUG
     httpcli.logger.connect(this, &ljhook::logger_cb);
 #endif
+    journals = vector<string>(1, conf.getourid(proto).nickname);
 }
 
 void ljhook::connect() {
@@ -90,8 +93,6 @@ void ljhook::connect() {
 
     moods = vector<string>(1, "");
     pictures = vector<string>(1, "");
-
-    ljp = ljparams();
 }
 
 void ljhook::disconnect() {
@@ -108,7 +109,7 @@ void ljhook::disconnect() {
 
 void ljhook::exectimers() {
     if(logged())
-    if(timer_current-timer_getfriends >= 120) {
+    if(timer_current-timer_getfriends >= PERIOD_FRIENDS) {
 	requestfriends();
 	timer_getfriends = timer_current;
     }
@@ -219,45 +220,74 @@ bool ljhook::enabled() const {
     return true;
 }
 
-bool ljhook::send(const imevent &ev) {
-    if(ev.gettype() == imevent::message) {
-	const immessage *m = static_cast<const immessage *> (&ev);
-	HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
+bool ljhook::send(const imevent &sev) {
+    if(sev.gettype() == imevent::xml) {
+	const imxmlevent *m = static_cast<const imxmlevent *> (&sev);
+	HTTPRequestEvent *ev = 0;
 
-	ev->addParam("mode", "postevent");
-	ev->addParam("user", username);
-	ev->addParam("hpassword", md5pass);
-	ev->addParam("event", KOI2UTF(m->gettext()));
-	ev->addParam("ver", "1");
+	if(m->getfield("_eventkind") == "posting") {
+	    ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
 
-	time_t t = m->gettimestamp();
-	struct tm *tm = localtime(&t);
+	    ev->addParam("mode", "postevent");
+	    ev->addParam("user", username);
+	    ev->addParam("hpassword", md5pass);
+	    ev->addParam("event", KOI2UTF(m->gettext()));
+	    ev->addParam("ver", "1");
 
-	ev->addParam("year", i2str(tm->tm_year+1900));
-	ev->addParam("mon", i2str(tm->tm_mon+1));
-	ev->addParam("day", i2str(tm->tm_mday));
-	ev->addParam("hour", i2str(tm->tm_hour));
-	ev->addParam("min", i2str(tm->tm_min));
+	    time_t t = m->gettimestamp();
+	    struct tm *tm = localtime(&t);
 
-	ev->addParam("lineendings", "unix");
-	ev->addParam("security",
-	    ljp.security == ljparams::sPublic ? "public" :
-	    ljp.security == ljparams::sPrivate ? "private" : "");
+	    ev->addParam("year", i2str(tm->tm_year+1900));
+	    ev->addParam("mon", i2str(tm->tm_mon+1));
+	    ev->addParam("day", i2str(tm->tm_mday));
+	    ev->addParam("hour", i2str(tm->tm_hour));
+	    ev->addParam("min", i2str(tm->tm_min));
 
-	if(!ljp.journal.empty()) ev->addParam("usejournal", ljp.journal);
-	if(!ljp.subj.empty()) ev->addParam("subject", KOI2UTF(ljp.subj));
-	if(!ljp.mood.empty()) ev->addParam("prop_current_mood", KOI2UTF(ljp.mood));
-	if(!ljp.music.empty()) ev->addParam("prop_current_music", KOI2UTF(ljp.music));
-	if(!ljp.picture.empty()) ev->addParam("prop_picture_keyword", ljp.picture);
+	    ev->addParam("lineendings", "unix");
+	    ev->addParam("security", m->getfield("security"));
 
-	if(ljp.noformat) ev->addParam("prop_opt_preformatted", "1");
-	if(ljp.nocomments) ev->addParam("prop_opt_nocomments", "1");
-	if(ljp.backdated) ev->addParam("prop_opt_backdated", "1");
-	if(ljp.noemail) ev->addParam("prop_opt_noemail", "1");
+	    if(!m->field_empty("journal")) ev->addParam("usejournal", m->getfield("journal"));
+	    if(!m->field_empty("subject")) ev->addParam("subject", KOI2UTF(m->getfield("subject")));
+	    if(!m->field_empty("mood")) ev->addParam("prop_current_mood", KOI2UTF(m->getfield("mood")));
+	    if(!m->field_empty("music")) ev->addParam("prop_current_music", KOI2UTF(m->getfield("music")));
+	    if(!m->field_empty("picture")) ev->addParam("prop_picture_keyword", m->getfield("picture"));
 
-	httpcli.SendEvent(ev);
-	sent[ev] = reqPost;
-	return true;
+	    if(!m->field_empty("preformatted")) ev->addParam("prop_opt_preformatted", "1");
+	    if(!m->field_empty("nocomments")) ev->addParam("prop_opt_nocomments", "1");
+	    if(!m->field_empty("backdated")) ev->addParam("prop_opt_backdated", "1");
+	    if(!m->field_empty("noemail")) ev->addParam("prop_opt_noemail", "1");
+
+	    sent[ev] = reqPost;
+
+	} else if(m->getfield("_eventkind") == "comment") {
+	    icqconf::imaccount acc = conf.getourid(proto);
+
+	    string journal = clist.get(sev.getcontact())->getnick();
+	    journal.erase(journal.find("@"));
+
+	    ev = new HTTPRequestEvent(acc.server + ":" + i2str(acc.port) + "/talkpost_do.bml", HTTPRequestEvent::POST);
+
+	    ev->addParam("parenttalkid", "0");
+	    ev->addParam("itemid", m->getfield("replyto"));
+	    ev->addParam("journal", journal);
+	    ev->addParam("usertype", "user");
+	    ev->addParam("userpost", acc.nickname);
+	    ev->addParam("password", acc.password);
+	    ev->addParam("do_login", "0");
+	    ev->addParam("subject", "");
+	    ev->addParam("body", sev.gettext());
+	    ev->addParam("subjecticon", "none");
+	    ev->addParam("prop_opt_preformatted", "1");
+	    ev->addParam("submitpost", "1");
+	    ev->addParam("do_spellcheck", "0");
+
+	    sent[ev] = reqPostComment;
+	}
+
+	if(ev) {
+	    httpcli.SendEvent(ev);
+	    return true;
+	}
     }
 
     return false;
@@ -498,6 +528,8 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    face.log(_("+ [lj] post error: %s"), params["errmsg"].c_str());
 	}
 
+    } else if(ie->second == reqPostComment) {
+
     } else if(ie->second == reqGetFriends) {
 	if(params["success"] == "OK") {
 	    journals = vector<string>(1, username);
@@ -670,10 +702,6 @@ void ljhook::logger_cb(LogEvent *ev) {
 
 string ljhook::getfeedurl(const string &nick) const {
     return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/rss/";
-}
-
-void ljhook::setpostparams(const ljparams &aljp) {
-    ljp = aljp;
 }
 
 #endif

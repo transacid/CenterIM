@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.129 2003/10/19 23:24:34 konst Exp $
+* $Id: icqdialogs.cc,v 1.130 2003/10/31 00:55:52 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -180,7 +180,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 	    if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
 		continue;
 
-	    if(gethook(apname).logged()) {
+	    if(gethook(apname).logged() || apname == infocard) {
 		penabled.push_back(apname);
 	    }
 	}
@@ -1687,37 +1687,56 @@ void icqface::invokelist(string &s, vector<string> &v, const string &def, textwi
     if(i) s = v[i-1];
 }
 
-bool icqface::setljparams() {
+bool icqface::setljparams(imxmlevent *ev) {
     bool r = false;
 
 #ifdef BUILD_LJ
+
+    #define LJP_LIST(x, l, d) \
+	tmp = ev->getfield(x); \
+	invokelist(tmp, l, d, db.getwindow()); \
+	ev->setfield(x, tmp);
+
+    #define LJP_STR(x, m) \
+	ev->setfield(x, inputstr(m, ev->getfield(x)));
+
+    #define LJP_BOOL(x) \
+	ev->setfield(x, ev->getfield(x) == "1" ? "" : "1"); 
+
     int i, n, b;
     dialogbox db;
 
     vector<string> journals, moods, pictures;
-    vector<string>::iterator is, im;
+    vector<string>::iterator im;
     string tmp;
     bool custmood;
 
-    static vector<string> snames;
+    static vector<string> snames, svalues;
 
     journals = lhook.getjournals();
     pictures = lhook.getpictures();
     moods = lhook.getmoods();
 
-    if(ljp.empty()) {
-	if(!journals.empty()) ljp.journal = journals.front();
-	if(!moods.empty()) ljp.mood = moods.front();
-	if(!pictures.empty()) ljp.picture = pictures.front();
-    }
+    ev->setfield("_eventkind", "posting");
+
+    if(ev->field_empty("journal") && !journals.empty())
+	ev->setfield("journal", journals.front());
+
+    if(ev->field_empty("mood") && !moods.empty())
+	ev->setfield("mood", moods.front());
+
+    if(ev->field_empty("picture") && !pictures.empty())
+	ev->setfield("picture", pictures.front());
+
+    if(ev->field_empty("security"))
+	ev->setfield("security", "public");
 
     if(snames.empty()) {
 	snames.push_back(_("public (visible to all)"));
+	svalues.push_back("public");
 	snames.push_back(_("private (friends only)"));
+	svalues.push_back("private");
     }
-
-    if((int) ljp.security < snames.size())
-	is = snames.begin()+(int) ljp.security;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), _(" LiveJournal posting: attributes "));
@@ -1740,55 +1759,54 @@ bool icqface::setljparams() {
 	t.clear();
 
 	i = t.addnode(_(" General "));
-	t.addleaff(i, 0, 10, _(" Post to journal : %s "), ljp.journal.c_str());
-	t.addleaff(i, 0, 11, _(" Subject : %s "), ljp.subj.c_str());
-	t.addleaff(i, 0, 12, _(" Security : %s "), is->c_str());
+	t.addleaff(i, 0, 10, _(" Post to journal : %s "), ev->getfield("journal").c_str());
+	t.addleaff(i, 0, 11, _(" Subject : %s "), ev->getfield("subject").c_str());
+	t.addleaff(i, 0, 12, _(" Security : %s "), ev->getfield("security").c_str());
 
 	i = t.addnode(_(" Fancy stuff "));
 
-	custmood = find(moods.begin(), moods.end(), ljp.mood) == moods.end() || ljp.mood.empty();
-	t.addleaff(i, 0, 20, _(" Mood : %s "), custmood ? _("(none/custom)") : ljp.mood.c_str());
-	if(custmood) t.addleaff(i, 0, 23, _(" Custom mood : %s "), ljp.mood.c_str());
+	custmood = find(moods.begin(), moods.end(), ev->getfield("mood")) == moods.end() || ev->getfield("mood").empty();
+	t.addleaff(i, 0, 20, _(" Mood : %s "), custmood ? _("(none/custom)") : ev->getfield("mood").c_str());
+	if(custmood) t.addleaff(i, 0, 23, _(" Custom mood : %s "), ev->getfield("mood").c_str());
 
-	t.addleaff(i, 0, 21, _(" Music : %s "), ljp.music.c_str());
-	t.addleaff(i, 0, 22, _(" Picture : %s "), ljp.picture.empty() ? _("(default)") : ljp.picture.c_str());
+	t.addleaff(i, 0, 21, _(" Music : %s "), ev->getfield("music").c_str());
+	t.addleaff(i, 0, 22, _(" Picture : %s "), ev->getfield("picture").empty() ? _("(default)") : ev->getfield("picture").c_str());
 
 	i = t.addnode(_(" Options "));
-	t.addleaff(i, 0, 30, _(" Disable auto-formatting : %s "), stryesno(ljp.noformat));
-	t.addleaff(i, 0, 31, _(" Disable sending comments by e-mail : %s "), stryesno(ljp.noemail));
-	t.addleaff(i, 0, 32, _(" Disallow comments : %s "), stryesno(ljp.nocomments));
-	t.addleaff(i, 0, 33, _(" Backdated entry : %s "), stryesno(ljp.backdated));
+	t.addleaff(i, 0, 30, _(" Disable auto-formatting : %s "), stryesno(ev->getfield("preformatted") == "1"));
+	t.addleaff(i, 0, 31, _(" Disable sending comments by e-mail : %s "), stryesno(ev->getfield("noemail") == "1"));
+	t.addleaff(i, 0, 32, _(" Disallow comments : %s "), stryesno(ev->getfield("nocomments") == "1"));
+	t.addleaff(i, 0, 33, _(" Backdated entry : %s "), stryesno(ev->getfield("backdated") == "1"));
 
 	fin = !db.open(n, b, (void **) &n);
 
 	if(!fin) {
 	    if(b == 0) {
 		switch(n) {
-		    case 10: invokelist(ljp.journal, journals, "", db.getwindow()); break;
-		    case 11: ljp.subj = inputstr(_("Posting subject: "), ljp.subj); break;
+		    case 10: LJP_LIST("journal", journals, ""); break;
+		    case 11: LJP_STR("subject", _("Posting subject: ")); break;
 		    case 12:
-			tmp = *is;
+			tmp = snames[find(svalues.begin(), svalues.end(), ev->getfield("security"))-svalues.begin()];
 			invokelist(tmp, snames, "", db.getwindow());
-			is = find(snames.begin(), snames.end(), tmp);
-			if(is == snames.end()) is = snames.begin();
-			ljp.security = (ljparams::ljsecurity) (is-snames.begin());
+			tmp = svalues[find(snames.begin(), snames.end(), tmp)-snames.begin()];
+			ev->setfield("security", tmp);
 			break;
-		    case 20: invokelist(ljp.mood, moods, _("(none/custom)"), db.getwindow()); break;
-		    case 21: ljp.music = inputstr(_("Currently playing: "), ljp.music); break;
-		    case 22: invokelist(ljp.picture, pictures, _("(default)"), db.getwindow()); break;
-		    case 23: ljp.mood = inputstr(_("Current mood: "), ljp.mood); break;
-		    case 30: ljp.noformat = !ljp.noformat; break;
-		    case 31: ljp.noemail = !ljp.noemail; break;
-		    case 32: ljp.nocomments = !ljp.nocomments; break;
-		    case 33: ljp.backdated = !ljp.backdated; break;
+
+		    case 20: LJP_LIST("mood", moods, _("(none/custom)")); break;
+		    case 21: LJP_STR("music", _("Currently playing: ")); break;
+		    case 22: LJP_LIST("picture", pictures, _("(default)")); break;
+		    case 23: LJP_STR("mood", _("Current mood: ")); break;
+		    case 30: LJP_BOOL("preformatted"); break;
+		    case 31: LJP_BOOL("noemail"); break;
+		    case 32: LJP_BOOL("nocomments"); break;
+		    case 33: LJP_BOOL("backdated"); break;
 		}
 
 	    } else if(b == 1) {
-		ljp.music = conf.execaction("detectmusic");
+		ev->setfield("music", conf.execaction("detectmusic"));
 
 	    } else if(b == 2) {
 		r = true;
-		lhook.setpostparams(ljp);
 
 	    } else if(b == 3) {
 		r = false;

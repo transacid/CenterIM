@@ -58,5 +58,7 @@ struct imcontact {
 extern imcontact contactroot;
 
 bool ischannel(const imcontact &cont);
+bool islivejournal(const icqcontact *c);
+bool islivejournal(const imcontact &cont);
 
 #endif

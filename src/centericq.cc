@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.172 2003/10/21 00:29:45 konst Exp $
+* $Id: centericq.cc,v 1.173 2003/10/31 00:55:52 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,7 @@
 #include "irchook.h"
 #include "yahoohook.h"
 #include "rsshook.h"
+#include "ljhook.h"
 #include "icqface.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
@@ -225,6 +226,11 @@ void centericq::mainloop() {
 	    case ACT_SMS:
 		sendevent(imsms(c->getdesc(), imevent::outgoing,
 		    c->getpostponed()), icqface::ok);
+		break;
+
+	    case ACT_LJ:
+		sendevent(imxmlevent(c->getdesc(),
+		    imevent::outgoing, c->getpostponed()), icqface::ok);
 		break;
 
 	    case ACT_CONTACT:
@@ -860,24 +866,50 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = dynamic_cast<const immessage *>(&ev);
-
 	text = m->gettext();
 
 	if(r == icqface::reply) {
-	    if(conf.getquote()) {
-		text = quotemsg(text);
-	    } else {
-		text = "";
+	    if(m->getcontact().pname == rss)
+	    if(islivejournal(m->getcontact())) {
+		imxmlevent *x = new imxmlevent(m->getcontact(), imevent::outgoing, "");
+
+		string url = clist.get(m->getcontact())->getmoreinfo().homepage;
+		int npos = text.rfind(url), id = 0;
+		if(npos != -1) id = strtoul(text.c_str()+url.size()+npos, 0, 0);
+
+		x->setfield("_eventkind", "comment");
+		x->setfield("replyto", i2str(id));
+		sendev = x;
 	    }
+
+	    if(conf.getquote()) text = quotemsg(text);
+		else text = "";
+
 	} else if(r == icqface::forward) {
 	    text = fwdnote + text;
 	}
 
-	sendev = new immessage(m->getcontact(), imevent::outgoing, text);
+	if(!sendev) {
+	    sendev = new immessage(m->getcontact(), imevent::outgoing, text);
+	}
+
+    } else if(ev.gettype() == imevent::xml) {
+	const imxmlevent *m = dynamic_cast<const imxmlevent *>(&ev);
+	text = m->gettext();
+
+	if(r == icqface::reply) {
+	    if(conf.getquote()) text = quotemsg(text);
+		else text = "";
+
+	} else if(r == icqface::forward) {
+	    text = fwdnote + text;
+
+	}
+
+	sendev = new imxmlevent(m->getcontact(), imevent::outgoing, text);
 
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = dynamic_cast<const imurl *>(&ev);
-
 	text = m->getdescription();
 
 	switch(r) {
@@ -1567,6 +1599,20 @@ bool ischannel(const imcontact &cont) {
 	return true;
 
     return false;
+}
+
+bool islivejournal(const icqcontact *c) {
+    bool r = false;
+#ifdef BUILD_LJ
+    if(c->getnick().size() > 3)
+	r = c->getnick().substr(c->getnick().size()-3) == "@lj";
+#endif
+    return r;
+}
+
+bool islivejournal(const imcontact &cont) {
+    icqcontact *c = clist.get(cont);
+    return c ? islivejournal(c) : false;
 }
 
 string up(string s) {

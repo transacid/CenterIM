@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.199 2003/10/21 00:40:28 konst Exp $
+* $Id: icqface.cc,v 1.200 2003/10/31 00:55:52 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -473,8 +473,12 @@ icqcontact *icqface::mainloop(int &action) {
 	    }                
 
 	    if(c) {
-		if(action == ACT_MSG && c->getdesc().pname == infocard && !c->hasevents())
-		    action = ACT_SMS;
+		if(action == ACT_MSG && !c->hasevents()) {
+		    switch(c->getdesc().pname) {
+			case infocard: action = ACT_SMS; break;
+			case livejournal: action = ACT_LJ; break;
+		    }
+		}
 
 		if(action == ACT_MENU)
 		if(!(action = contextmenu(c))) continue;
@@ -1170,7 +1174,7 @@ void icqface::infoljrss(dialogbox &db, icqcontact *c) {
 }
 
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
-    bool finished = false, showinfo, lj = false;
+    bool finished = false, showinfo;
     textbrowser tb(conf.getcolor(cp_main_text));
     dialogbox db;
     int k, lastb, b;
@@ -1188,13 +1192,10 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     if(cinfo.pname == rss) {
-	if(c->getnick().size() > 3)
-	    lj = c->getnick().substr(c->getnick().size()-3) == "@lj";
-
 	if(c->inlist() && realinfo != contactroot) {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-		_("Info"), _("About"), _("Check"), _("Edit"), lj ? _("LJ") : 0, 0));
+		_("Info"), _("About"), _("Check"), _("Edit"), islivejournal(c) ? _("LJ") : 0, 0));
 	} else {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
@@ -2118,11 +2119,26 @@ bool icqface::eventedit(imevent &ev) {
     showeventbottom(ev.getcontact());
 
     if(ev.gettype() == imevent::message) {
-	ljp = ljparams();
+	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
+
+	immessage *m = static_cast<immessage *>(&ev);
+	editor.load(msg = m->gettext(), "");
+
+	editdone = false;
+	editor.open();
+	r = editdone;
+
+	auto_ptr<char> p(editor.save("\r\n"));
+	*m = immessage(ev.getcontact(), imevent::outgoing, p.get());
+
+	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
+	    c->setpostponed(r ? "" : p.get());
+
+    } else if(ev.gettype() == imevent::xml) {
 	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
 
 	while(1) {
-	    immessage *m = static_cast<immessage *>(&ev);
+	    imxmlevent *m = static_cast<imxmlevent *>(&ev);
 	    editor.load(msg = m->gettext(), "");
 
 	    editdone = false;
@@ -2130,11 +2146,11 @@ bool icqface::eventedit(imevent &ev) {
 	    r = editdone;
 
 	    auto_ptr<char> p(editor.save("\r\n"));
-	    *m = immessage(ev.getcontact(), imevent::outgoing, p.get());
+	    m->setfield("text", p.get());
 
 	    if(r)
 	    if(ev.getcontact().pname == livejournal)
-	    if(!setljparams())
+	    if(!setljparams(m))
 		continue;
 
 	    if((c = clist.get(ev.getcontact())) && (msg != p.get()))
@@ -2512,7 +2528,7 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	    actions.push_back(forward);
 
 	    if(ev->getdirection() == imevent::incoming)
-	    if(ev->getcontact().pname != rss)
+	    if(ev->getcontact().pname != rss || islivejournal(ev->getcontact()))
 		actions.push_back(reply);
 
 	} else if(ev->gettype() == imevent::url) {

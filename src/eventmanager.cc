@@ -1,7 +1,7 @@
 /*
 *
 * centericq event manager class
-* $Id: eventmanager.cc,v 1.22 2003/07/18 00:39:59 konst Exp $
+* $Id: eventmanager.cc,v 1.23 2003/10/31 00:55:52 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -97,7 +97,8 @@ void imeventmanager::store(const imevent &cev) {
 	if(time(0)-lastevent > PERIOD_ATONCE)
 	    recentlysent = 0;
 
-	proceed = hook->logged() && recentlysent < MAX_ATONCE;
+	proceed = (hook->logged() || ev.getcontact().pname == rss)
+	    && recentlysent < MAX_ATONCE;
 
 	// 3.. 2.. 1.. LAUNCH!
 
@@ -186,6 +187,11 @@ imevent *imeventmanager::eventread(ifstream &f) const {
 
     if(rev = ev.getevent()) {
 	rev->read(f);
+
+	if(rev->gettype() == imevent::imeventtype_size) {
+	    delete rev;
+	    rev = 0;
+	}
     }
 
     return rev;
@@ -211,9 +217,10 @@ void imeventmanager::resend() {
 	    if(f.is_open()) {
 		while(!f.eof()) {
 		    rev = eventread(f);
-		    rev->setcontact(c->getdesc());
 
 		    if(rev) {
+			rev->setcontact(c->getdesc());
+
 			if(rev->gettimestamp() > PERIOD_RESEND) {
 			    store(*rev);
 			} else {
