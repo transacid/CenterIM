@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.84 2002/05/10 20:21:37 konst Exp $
+* $Id: icqhook.cc,v 1.85 2002/06/28 11:51:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -320,6 +320,8 @@ bool icqhook::enabled() const {
 bool icqhook::send(const imevent &ev) {
     unsigned int uin = ev.getcontact().uin;
     ContactRef ic = cli.getContact(uin);
+    MessageEvent *sev = 0;
+    ICQMessageEvent *iev;
 
     if(!ic.get()) {
 	return false;
@@ -327,13 +329,13 @@ bool icqhook::send(const imevent &ev) {
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
-	cli.SendEvent(new NormalMessageEvent(ic, ruscrlfconv("kw", m->gettext())));
+	sev = new NormalMessageEvent(ic, ruscrlfconv("kw", m->gettext()));
 
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *> (&ev);
-	cli.SendEvent(new URLMessageEvent(ic,
+	sev = new URLMessageEvent(ic,
 	    ruscrlfconv("kw", m->getdescription()),
-	    ruscrlfconv("kw", m->geturl())));
+	    ruscrlfconv("kw", m->geturl()));
 
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = static_cast<const imsms *> (&ev);
@@ -349,15 +351,22 @@ bool icqhook::send(const imevent &ev) {
 	    ic->setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
 	}
 
-	cli.SendEvent(new SMSMessageEvent(ic, ruscrlfconv("kw", m->gettext()), true));
+	sev = new SMSMessageEvent(ic, ruscrlfconv("kw", m->gettext()), true);
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	cli.SendEvent(new AuthAckEvent(ic,
-	    ruscrlfconv("kw", m->gettext()), m->getgranted()));
+	sev = new AuthAckEvent(ic, ruscrlfconv("kw", m->gettext()), m->getgranted());
 
     } else {
 	return false;
+    }
+
+    if(sev) {
+	if(ic->getStatus() == STATUS_DND || ic->getStatus() == STATUS_OCCUPIED)
+	if(iev = dynamic_cast<ICQMessageEvent *>(sev))
+	    iev->setUrgent(true);
+
+	cli.SendEvent(sev);
     }
 
     return true;
@@ -876,6 +885,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 void icqhook::messageack_cb(MessageEvent *ev) {
     imcontact ic;
     icqcontact *c;
+    ICQMessageEvent *me;
 
     ic = imcontact(ev->getContact()->getUIN(), icq);
     c = clist.get(ic);
