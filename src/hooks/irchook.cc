@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.9 2002/04/07 15:13:27 konst Exp $
+* $Id: irchook.cc,v 1.10 2002/04/07 18:24:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -297,6 +297,7 @@ void irchook::processnicks() {
     vector<string> foundnicks;
     vector<string>::iterator in, isn;
     vector<channelInfo>::iterator ir;
+    bool remove;
 
     ir = find(channels.begin(), channels.end(), *searchchannels.begin());
 
@@ -304,24 +305,31 @@ void irchook::processnicks() {
     sort(foundnicks.begin(), foundnicks.end());
 
     if(searchchannels.size() > 1) {
-	for(in = foundnicks.begin(); in != foundnicks.end(); in++)
-	for(ir = channels.begin(); ir != channels.end(); ir++) {
-	    if(find(searchchannels.begin(), searchchannels.end(), ir->name) == searchchannels.end())
-		continue;
+	for(in = foundnicks.begin(); in != foundnicks.end(); ) {
+	    remove = false;
 
-	    if(ir->name == *searchchannels.begin())
-		continue;
+	    for(ir = channels.begin(); !remove && (ir != channels.end()); ir++) {
+		if(find(searchchannels.begin(), searchchannels.end(), ir->name) == searchchannels.end())
+		    continue;
+		if(ir->name == *searchchannels.begin())
+		    continue;
 
-	    if(find(ir->nicks.begin(), ir->nicks.end(), *in) == ir->nicks.end()) {
-		/*
-		*
-		* Not found in one of other channels. Remove it from the
-		* first channel's list.
-		*
-		*/
+		if(find(ir->nicks.begin(), ir->nicks.end(), *in) == ir->nicks.end()) {
+		    /*
+		    *
+		    * Not found in one of other channels. Remove it from the
+		    * first channel's list.
+		    *
+		    */
+		    remove = true;
+		}
+	    }
 
+	    if(remove) {
 		foundnicks.erase(in);
 		in = foundnicks.begin();
+	    } else {
+		in++;
 	    }
 	}
     }
@@ -691,6 +699,8 @@ void irchook::chatnames(void *connection, void *cli, ...) {
     vector<channelInfo>::iterator ic;
     vector<string>::iterator is;
     bool ready = true;
+
+    DLOG("chatnames");
 
     va_start(ap, cli);
     char *croom = va_arg(ap, char *);

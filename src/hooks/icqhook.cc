@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.73 2002/04/07 13:21:25 konst Exp $
+* $Id: icqhook.cc,v 1.74 2002/04/07 18:24:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -843,6 +843,8 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	}
 
     }
+
+    ev->setDelivered(true);
 }
 
 void icqhook::messageack_cb(MessageEvent *ev) {
