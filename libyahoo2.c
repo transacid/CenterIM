@@ -62,6 +62,7 @@
 #include <ctype.h>
 
 #include "md5.h"
+#include "sha.h"
 #include "libyahoo2.h"
 #include "yahoo_httplib.h"
 #include "yahoo_util.h"
@@ -1310,20 +1311,9 @@ static void yahoo_process_list(struct yahoo_input_data *yid, struct yahoo_packet
 	}
 }
 
-static void yahoo_process_auth(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
+static void yahoo_process_auth_old(struct yahoo_input_data *yid, const char *seed, const char *sn)
 {
 	struct yahoo_data *yd = yid->yd;
-	char *seed = NULL;
-	char *sn   = NULL;
-	YList *l;
-	
-	for (l = pkt->hash; l; l = l->next) {
-		struct yahoo_pair *pair = l->data;
-		if (pair->key == 94)
-			seed = pair->value;
-		if (pair->key == 1)
-			sn = pair->value;
-	}
 	
 	if (!seed)
 		return;
@@ -1438,6 +1428,431 @@ static void yahoo_process_auth(struct yahoo_input_data *yid, struct yahoo_packet
 
 	yahoo_packet_free(pack);
 
+	}
+}
+
+static void yahoo_process_auth_new(struct yahoo_input_data *yid, const char *seed)
+{
+	struct yahoo_packet *pack = NULL;
+
+	md5_byte_t         result[16];
+	md5_state_t        ctx;
+	
+	SHA_CTX            ctx1;
+	SHA_CTX            ctx2;
+
+	char *alphabet1 = "FBZDWAGHrJTLMNOPpRSKUVEXYChImkwQ";
+	char *alphabet2 = "F0E1D2C3B4A59687abcdefghijklmnop";
+	
+	char *challenge_lookup = "qzec2tb3um1olpar8whx4dfgijknsvy5";
+	char *operand_lookup = "+|&%/*^-";
+	char *delimit_lookup = ",;";
+	
+	char *password_hash = malloc(25);
+	char *crypt_hash = malloc(25);
+	char *crypt_result = NULL;
+	char pass_hash_xor1[64];
+	char pass_hash_xor2[64];
+	char crypt_hash_xor1[64];
+	char crypt_hash_xor2[64];
+	char resp_6[100];
+	char resp_96[100];
+
+	unsigned char digest1[20];
+	unsigned char digest2[20];
+	unsigned char magic_key_char[4];
+	const unsigned char *magic_ptr;
+
+	unsigned int  magic[64];
+	unsigned int  magic_work;
+	unsigned int  value = 0;
+	
+	int x;
+	int cnt = 0;
+	int magic_cnt = 0;
+	int magic_len;
+	int times = 0;
+	
+	memset(&pass_hash_xor1, 0, 64);
+	memset(&pass_hash_xor2, 0, 64);
+	memset(&crypt_hash_xor1, 0, 64);
+	memset(&crypt_hash_xor2, 0, 64);
+	memset(&digest1, 0, 20);
+	memset(&digest2, 0, 20);
+	memset(&magic, 0, 64);
+	memset(&resp_6, 0, 100);
+	memset(&resp_96, 0, 100);
+	memset(&magic_key_char, 0, 4);
+
+	/* 
+	 * Magic: Phase 1.  Generate what seems to be a 30 
+	 * byte value (could change if base64
+	 * ends up differently?  I don't remember and I'm 
+	 * tired, so use a 64 byte buffer.
+	 */
+
+	magic_ptr = seed;
+	
+	while (*magic_ptr != (int)NULL) {
+		char *loc;
+		
+		/* Ignore parentheses.  */
+		
+		if (*magic_ptr == '(' || *magic_ptr == ')') {
+			magic_ptr++;
+			continue;
+		}
+		
+		/* Characters and digits verify against 
+		   the challenge lookup.
+		*/
+		
+		if (isalpha(*magic_ptr) || isdigit(*magic_ptr)) {
+			loc = strchr(challenge_lookup, *magic_ptr);
+			if (!loc) {
+				/* This isn't good */
+			}
+			
+			/* Get offset into lookup table and lsh 3. */
+			
+			magic_work = loc - challenge_lookup;
+			magic_work <<= 3;
+			
+			magic_ptr++;
+			continue;
+		} else {
+			unsigned int local_store;
+			
+			loc = strchr(operand_lookup, *magic_ptr);
+			if (!loc) {
+				/* Also not good. */
+			}
+			
+			local_store = loc - operand_lookup;
+					
+			/* Oops; how did this happen? */
+			if (magic_cnt >= 64) 
+				break;
+					
+			magic[magic_cnt++] = magic_work | local_store;
+			magic_ptr++;
+			continue;
+		}
+	}
+	
+	magic_len = magic_cnt;
+	magic_cnt = 0;
+	
+	/* Magic: Phase 2.  Take generated magic value and 
+	 * sprinkle fairy dust on the values. */
+	
+	for (magic_cnt = magic_len-2; magic_cnt >= 0; magic_cnt--) {
+		unsigned char byte1;
+		unsigned char byte2;
+		
+		/* Bad.  Abort.
+		 */
+		if ((magic_cnt + 1 > magic_len) || 
+		    (magic_cnt > magic_len))
+			break;
+		
+		byte1 = magic[magic_cnt];
+		byte2 = magic[magic_cnt+1];
+
+		byte1 *= 0xcd;
+		byte1 ^= byte2;
+		
+		magic[magic_cnt+1] = byte1;
+	}
+	
+	/* Magic: Phase 3.  Final phase; this gives us our 
+	 * key. */
+	
+	magic_cnt = 1;
+	
+	for (;;) {
+		unsigned int cl = magic[magic_cnt] & 0xff;
+		unsigned int bl = magic[magic_cnt+1] & 0xff;
+		
+		if (!bl || !cl)
+			break;
+		
+		if (magic_cnt > magic_len)
+			break;
+		
+		if (cl <= 0x7f)
+			bl = cl;
+		else {
+			if (cl >= 0x0e0) {
+				cl = cl & 0x0f;
+				cl = cl << 6;
+				bl = bl & 0x3f;
+				bl = cl + bl;
+				bl = bl << 6;
+			} else {
+				cl = cl & 0x1f;
+				cl = cl << 6;
+				bl = cl;
+			}
+			
+			cl = magic[magic_cnt+2];
+			
+			if (!cl)
+				break;
+			
+			cl = cl & 0x3f;
+			bl = bl + cl;
+		}
+		
+		/* Result is bl.
+		 */
+		
+		magic_cnt += 3;
+
+		if (times == 0) {
+			value |= (bl & 0xff) << 8; 
+			value |= (bl & 0xff00) >> 8;           
+		} else { 
+			value |= (bl & 0xff) << 24; 
+			value |= (bl & 0xff00) << 8;           
+			break; 
+		} 
+		
+		times++;
+	}
+	
+	/* Dump magic key into a char for SHA1 action. */
+		
+	memcpy(&magic_key_char[0], &value, sizeof(int));
+
+	/* Get password and crypt hashes as per usual. */
+	md5_init(&ctx);
+	md5_append(&ctx, yid->yd->password, strlen(yid->yd->password));
+	md5_finish(&ctx, result);
+	to_y64(password_hash, result, 16);
+	
+	md5_init(&ctx);
+	crypt_result = yahoo_crypt(yid->yd->password, "$1$_2S43d5f$");  
+	md5_append(&ctx, crypt_result, strlen(crypt_result));
+	md5_finish(&ctx, result);
+	to_y64(crypt_hash, result, 16);
+	
+	/* Our first authentication response is based off 
+	 * of the password hash. */
+	
+	for (x = 0; x < (int)strlen(password_hash); x++) 
+		pass_hash_xor1[cnt++] = password_hash[x] ^ 0x36;
+	
+	if (cnt < 64) 
+		memset(&(pass_hash_xor1[cnt]), 0x36, 64-cnt);
+	
+	cnt = 0;
+	
+	for (x = 0; x < (int)strlen(password_hash); x++) 
+		pass_hash_xor2[cnt++] = password_hash[x] ^ 0x5c;
+	
+	if (cnt < 64) 
+		memset(&(pass_hash_xor2[cnt]), 0x5c, 64-cnt);
+	
+	shaInit(&ctx1);
+	shaInit(&ctx2);
+	
+	/* The first context gets the password hash XORed 
+	 * with 0x36 plus a magic value
+	 * which we previously extrapolated from our 
+	 * challenge. */
+	
+	shaUpdate(&ctx1, pass_hash_xor1, 64);
+	shaUpdate(&ctx1, magic_key_char, 4);
+	shaFinal(&ctx1, digest1);
+	
+	 /* The second context gets the password hash XORed 
+	  * with 0x5c plus the SHA-1 digest
+	  * of the first context. */
+	
+	shaUpdate(&ctx2, pass_hash_xor2, 64);
+	shaUpdate(&ctx2, digest1, 20);
+	shaFinal(&ctx2, digest2);
+	
+	/* Now that we have digest2, use it to fetch 
+	 * characters from an alphabet to construct
+	 * our first authentication response. */
+	
+	for (x = 0; x < 20; x += 2) {
+		unsigned int    val = 0;
+		unsigned int    lookup = 0;
+		char            byte[6];
+		
+		memset(&byte, 0, 6);
+		
+		/* First two bytes of digest stuffed 
+		 *  together.
+		 */
+		
+		val = digest2[x];
+		val <<= 8;
+		val += digest2[x+1];
+		
+		lookup = (val >> 0x0b);
+		lookup &= 0x1f;
+		if (lookup >= strlen(alphabet1))
+			break;
+		sprintf(byte, "%c", alphabet1[lookup]);
+		strcat(resp_6, byte);
+		strcat(resp_6, "=");
+		
+		lookup = (val >> 0x06);
+		lookup &= 0x1f;
+		if (lookup >= strlen(alphabet2))
+			break;
+		sprintf(byte, "%c", alphabet2[lookup]);
+		strcat(resp_6, byte);
+		
+		lookup = (val >> 0x01);
+		lookup &= 0x1f;
+		if (lookup >= strlen(alphabet2))
+			break;
+		sprintf(byte, "%c", alphabet2[lookup]);
+		strcat(resp_6, byte);
+		
+		lookup = (val & 0x01);
+		if (lookup >= strlen(delimit_lookup))
+			break;
+		sprintf(byte, "%c", delimit_lookup[lookup]);
+		strcat(resp_6, byte);
+	}
+	
+	/* Our second authentication response is based off 
+	 * of the crypto hash. */
+	
+	cnt = 0;
+	memset(&digest1, 0, 20);
+	memset(&digest2, 0, 20);
+	
+	for (x = 0; x < (int)strlen(crypt_hash); x++) 
+		crypt_hash_xor1[cnt++] = crypt_hash[x] ^ 0x36;
+	
+	if (cnt < 64) 
+		memset(&(crypt_hash_xor1[cnt]), 0x36, 64-cnt);
+	
+	cnt = 0;
+	
+	for (x = 0; x < (int)strlen(crypt_hash); x++) 
+		crypt_hash_xor2[cnt++] = crypt_hash[x] ^ 0x5c;
+	
+	if (cnt < 64) 
+		memset(&(crypt_hash_xor2[cnt]), 0x5c, 64-cnt);
+	
+	shaInit(&ctx1);
+	shaInit(&ctx2);
+	
+	/* The first context gets the password hash XORed 
+	 * with 0x36 plus a magic value
+	 * which we previously extrapolated from our 
+	 * challenge. */
+	
+	shaUpdate(&ctx1, crypt_hash_xor1, 64);
+	shaUpdate(&ctx1, magic_key_char, 4);
+	shaFinal(&ctx1, digest1);
+	
+	/* The second context gets the password hash XORed 
+	 * with 0x5c plus the SHA-1 digest
+	 * of the first context. */
+	
+	shaUpdate(&ctx2, crypt_hash_xor2, 64);
+	shaUpdate(&ctx2, digest1, 20);
+	shaFinal(&ctx2, digest2);
+	
+	/* Now that we have digest2, use it to fetch 
+	 * characters from an alphabet to construct
+	 * our first authentication response.  */
+	
+	for (x = 0; x < 20; x += 2) {
+		unsigned int val = 0;
+		unsigned int lookup = 0;
+		
+		char byte[6];
+		
+		memset(&byte, 0, 6);
+		
+		/* First two bytes of digest stuffed 
+		 *  together. */
+		
+		val = digest2[x];
+		val <<= 8;
+		val += digest2[x+1];
+		
+		lookup = (val >> 0x0b);
+		lookup &= 0x1f;
+		if (lookup >= strlen(alphabet1))
+			break;
+		sprintf(byte, "%c", alphabet1[lookup]);
+		strcat(resp_96, byte);
+		strcat(resp_96, "=");
+		
+		lookup = (val >> 0x06);
+		lookup &= 0x1f;
+		if (lookup >= strlen(alphabet2))
+			break;
+		sprintf(byte, "%c", alphabet2[lookup]);
+		strcat(resp_96, byte);
+		
+		lookup = (val >> 0x01);
+		lookup &= 0x1f;
+		if (lookup >= strlen(alphabet2))
+			break;
+		sprintf(byte, "%c", alphabet2[lookup]);
+		strcat(resp_96, byte);
+		
+		lookup = (val & 0x01);
+		if (lookup >= strlen(delimit_lookup))
+			break;
+		sprintf(byte, "%c", delimit_lookup[lookup]);
+		strcat(resp_96, byte);
+	}
+	
+	pack = yahoo_packet_new(YAHOO_SERVICE_AUTHRESP, YAHOO_STATUS_AVAILABLE, 0);
+	yahoo_packet_hash(pack, 0, yid->yd->user);
+	yahoo_packet_hash(pack, 6, resp_6);
+	yahoo_packet_hash(pack, 96, resp_96);
+	yahoo_packet_hash(pack, 1, yid->yd->user);
+	yahoo_send_packet(yid->fd, pack, 0);
+	yahoo_packet_free(pack);
+
+	free(password_hash);
+	free(crypt_hash);
+}
+
+static void yahoo_process_auth(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
+{
+	char *seed = NULL;
+	char *sn   = NULL;
+	YList *l = pkt->hash;
+	int m = 1;
+	
+	while (l) {
+		struct yahoo_pair *pair = l->data;
+		if (pair->key == 94)
+			seed = pair->value;
+		if (pair->key == 1)
+			sn = pair->value;
+		if (pair->key == 13)
+			m = atoi(pair->value);
+		l = l->next;
+	}
+	
+	if (seed) {
+		switch (m) {
+		case 0:
+			yahoo_process_auth_old(yid, seed, sn);
+			break;
+		case 1:
+			yahoo_process_auth_new(yid, seed);
+			break;
+		default:
+			YAHOO_CALLBACK(ext_yahoo_login_response)(yid->yd->client_id, YAHOO_LOGIN_UNKNOWN_AUTH, 0);
+			yahoo_process_auth_new(yid, seed); /* Can't hurt to try it anyway. */
+		}
 	}
 }
 

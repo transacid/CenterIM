@@ -45,13 +45,14 @@ enum yahoo_status {
 	YAHOO_STATUS_OFFLINE = 0x5a55aa56, /* don't ask */
 	YAHOO_STATUS_NOTIFY = 0x16
 };
-#define YAHOO_STATUS_GAME	0x2 		/* Games don't fit into the regular status model */
+#define YAHOO_STATUS_GAME       0x2             /* Games don't fit into the regular status model */
 
 enum yahoo_login_status {
 	YAHOO_LOGIN_OK = 0,
 	YAHOO_LOGIN_PASSWD = 13,
 	YAHOO_LOGIN_LOCK = 14,
 	YAHOO_LOGIN_DUPL = 99,
+	YAHOO_LOGIN_UNKNOWN_AUTH = -2,
 	YAHOO_LOGIN_SOCK = -1
 };
 
@@ -109,8 +110,8 @@ enum yahoo_connection_type {
 };
 
 enum yahoo_webcam_direction_type {
-        YAHOO_WEBCAM_DOWNLOAD=0,
-        YAHOO_WEBCAM_UPLOAD
+	YAHOO_WEBCAM_DOWNLOAD=0,
+	YAHOO_WEBCAM_UPLOAD
 };
 
 /* chat member attribs */
