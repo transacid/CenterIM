@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.23 2002/08/14 12:03:43 konst Exp $
+* $Id: conscommon.cc,v 1.24 2002/08/24 08:40:03 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -256,7 +256,7 @@ extern "C" {
 #include <fribidi/fribidi.h>
 }
 
-string makebidi(const string &buf, int lpad = 0) {
+string makebidi(const string &buf, int lpad) {
     if(!use_fribidi) return buf;
 
     FriBidiChar *us, *out_us;
