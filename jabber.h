@@ -65,13 +65,13 @@ typedef struct jid_struct
     struct jid_struct *next; /* for lists of jids */
 } *jid;
   
-jid     jid_new(pool p, char *idstr);	       /* Creates a jabber id from the idstr */
+jid     jid_new(pool p, char *idstr);          /* Creates a jabber id from the idstr */
 void    jid_set(jid id, char *str, int item);  /* Individually sets jid components */
-char*   jid_full(jid id);		       /* Builds a string type=user/resource@server from the jid data */
-int     jid_cmp(jid a, jid b);		       /* Compares two jid's, returns 0 for perfect match */
+char*   jid_full(jid id);                      /* Builds a string type=user/resource@server from the jid data */
+int     jid_cmp(jid a, jid b);                 /* Compares two jid's, returns 0 for perfect match */
 int     jid_cmpx(jid a, jid b, int parts);     /* Compares just the parts specified as JID_|JID_ */
-jid     jid_append(jid a, jid b);	       /* Appending b to a (list), no dups */
-xmlnode jid_xres(jid id);		       /* Returns xmlnode representation of the resource?query=string */
+jid     jid_append(jid a, jid b);              /* Appending b to a (list), no dups */
+xmlnode jid_xres(jid id);                      /* Returns xmlnode representation of the resource?query=string */
 xmlnode jid_nodescan(jid id, xmlnode x);       /* Scans the children of the node for a matching jid attribute */
 
 
@@ -117,7 +117,7 @@ typedef struct jpacket_struct
     pool          p;
 } *jpacket, _jpacket;
  
-jpacket jpacket_new(xmlnode x);	    /* Creates a jabber packet from the xmlnode */
+jpacket jpacket_new(xmlnode x);     /* Creates a jabber packet from the xmlnode */
 jpacket jpacket_reset(jpacket p);   /* Resets the jpacket values based on the xmlnode */
 int     jpacket_subtype(jpacket p); /* Returns the subtype value (looks at xmlnode for it) */
 
@@ -128,8 +128,8 @@ int     jpacket_subtype(jpacket p); /* Returns the subtype value (looks at xmlno
 /*                                                           */
 /* --------------------------------------------------------- */
 typedef struct ppdb_struct
-{			      
-    jid     id;		       /* entry data */
+{                             
+    jid     id;                /* entry data */
     int     pri;
     xmlnode x;
     struct ppdb_struct* user;  /* linked list for user@server */
@@ -138,9 +138,9 @@ typedef struct ppdb_struct
 } _ppdb, *ppdb;
 
 ppdb    ppdb_insert(ppdb db, jid id, xmlnode x); /* Inserts presence into the proxy */
-xmlnode ppdb_primary(ppdb db, jid id);		 /* Fetches the matching primary presence for the id */
-void    ppdb_free(ppdb db);			 /* Frees the db and all entries */
-xmlnode ppdb_get(ppdb db, jid id);		 /* Called successively to return each presence xmlnode */
+xmlnode ppdb_primary(ppdb db, jid id);           /* Fetches the matching primary presence for the id */
+void    ppdb_free(ppdb db);                      /* Frees the db and all entries */
+xmlnode ppdb_get(ppdb db, jid id);               /* Called successively to return each presence xmlnode */
 						 /*   for the id and children, returns NULL at the end */
 
 
@@ -225,11 +225,11 @@ typedef struct terror_struct
 /* Message Types                                             */
 /*                                                           */
 /* --------------------------------------------------------- */
-#define TMSG_NORMAL	"normal"
-#define TMSG_ERROR	"error"
-#define TMSG_CHAT	"chat"
-#define TMSG_GROUPCHAT	"groupchat"
-#define TMSG_HEADLINE	"headline"
+#define TMSG_NORMAL     "normal"
+#define TMSG_ERROR      "error"
+#define TMSG_CHAT       "chat"
+#define TMSG_GROUPCHAT  "groupchat"
+#define TMSG_HEADLINE   "headline"
 
 
 /* --------------------------------------------------------- */
@@ -238,17 +238,17 @@ typedef struct terror_struct
 /*                                                           */
 /* --------------------------------------------------------- */
 xmlnode jutil_presnew(int type, char *to, char *status); /* Create a skeleton presence packet */
-xmlnode jutil_iqnew(int type, char *ns);		 /* Create a skeleton iq packet */
+xmlnode jutil_iqnew(int type, char *ns);                 /* Create a skeleton iq packet */
 xmlnode jutil_msgnew(char *type, char *to, char *subj, char *body);
 							 /* Create a skeleton message packet */
-xmlnode jutil_header(char* xmlns, char* server);	 /* Create a skeleton stream packet */
-int     jutil_priority(xmlnode x);			 /* Determine priority of this packet */
-void    jutil_tofrom(xmlnode x);			 /* Swaps to/from fields on a packet */
-xmlnode jutil_iqresult(xmlnode x);			 /* Generate a skeleton iq/result, given a iq/query */
-char*   jutil_timestamp(void);				 /* Get stringified timestamp */
-void    jutil_error(xmlnode x, terror E);		 /* Append an <error> node to x */
-void    jutil_delay(xmlnode msg, char *reason);		 /* Append a delay packet to msg */
-char*   jutil_regkey(char *key, char *seed);		 /* pass a seed to generate a key, pass the key again to validate (returns it) */
+xmlnode jutil_header(char* xmlns, char* server);         /* Create a skeleton stream packet */
+int     jutil_priority(xmlnode x);                       /* Determine priority of this packet */
+void    jutil_tofrom(xmlnode x);                         /* Swaps to/from fields on a packet */
+xmlnode jutil_iqresult(xmlnode x);                       /* Generate a skeleton iq/result, given a iq/query */
+char*   jutil_timestamp(void);                           /* Get stringified timestamp */
+void    jutil_error(xmlnode x, terror E);                /* Append an <error> node to x */
+void    jutil_delay(xmlnode msg, char *reason);          /* Append a delay packet to msg */
+char*   jutil_regkey(char *key, char *seed);             /* pass a seed to generate a key, pass the key again to validate (returns it) */
 
 
 /* --------------------------------------------------------- */
@@ -264,9 +264,9 @@ char*   jutil_regkey(char *key, char *seed);		 /* pass a seed to generate a key,
 typedef struct jconn_struct
 {
     /* Core structure */
-    pool        p;	       /* Memory allocation pool */
-    int         state;	   /* Connection state flag */
-    int         fd;	       /* Connection file descriptor */
+    pool        p;             /* Memory allocation pool */
+    int         state;     /* Connection state flag */
+    int         fd;            /* Connection file descriptor */
     jid         user;      /* User info */
     char        *pass;     /* User passwd */
 
@@ -280,17 +280,19 @@ typedef struct jconn_struct
     /* Event callback ptrs */
     void (*on_state)(struct jconn_struct *j, int state);
     void (*on_packet)(struct jconn_struct *j, jpacket p);
+    void (*logger)(struct jconn_struct *j, int inout, const char *p);
 
 } *jconn, jconn_struct;
 
 typedef void (*jconn_state_h)(jconn j, int state);
 typedef void (*jconn_packet_h)(jconn j, jpacket p);
-
+typedef void (*jconn_logger)(jconn j, int inout, const char *p);
 
 jconn jab_new(char *user, char *pass);
 void jab_delete(jconn j);
 void jab_state_handler(jconn j, jconn_state_h h);
 void jab_packet_handler(jconn j, jconn_packet_h h);
+void jab_logger(jconn j, jconn_logger h);
 void jab_start(jconn j);
 void jab_stop(jconn j);
 
@@ -313,4 +315,4 @@ char *jab_reg(jconn j);
 }
 #endif
 
-#endif	/* INCL_JABBER_H */
+#endif  /* INCL_JABBER_H */

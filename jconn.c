@@ -104,6 +104,13 @@ void jab_packet_handler(jconn j, jconn_packet_h h)
     j->on_packet = h;
 }
 
+void jab_logger(jconn j, jconn_logger h)
+{
+    if(!j) return;
+
+    j->logger = h;
+}
+
 
 /*
  *  jab_start -- start connection
@@ -235,7 +242,12 @@ void jab_send(jconn j, xmlnode x)
     if (j && j->state != JCONN_STATE_OFF)
     {
 	    char *buf = xmlnode2str(x);
-	    if (buf) write(j->fd, buf, strlen(buf));
+	    if (buf) {
+		write(j->fd, buf, strlen(buf));
+		if (j->logger)
+		    (j->logger)(j, 0, buf);
+	    }
+
 #ifdef JDEBUG
 	    printf ("out: %s\n", buf);
 #endif
@@ -251,8 +263,13 @@ void jab_send(jconn j, xmlnode x)
  */
 void jab_send_raw(jconn j, const char *str)
 {
-    if (j && j->state != JCONN_STATE_OFF)
+    if (j && j->state != JCONN_STATE_OFF) {
 	write(j->fd, str, strlen(str));
+
+	if (j->logger)
+	    (j->logger)(j, 0, str);
+    }
+
 #ifdef JDEBUG
     printf ("out: %s\n", str);
 #endif
@@ -276,6 +293,10 @@ void jab_recv(jconn j)
     if(len>0)
     {
 	buf[len] = '\0';
+
+	if (j->logger)
+	    (j->logger)(j, 1, buf);
+
 #ifdef JDEBUG
 	printf (" in: %s\n", buf);
 #endif
