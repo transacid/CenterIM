@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.7 2001/09/03 20:47:38 konst Exp $
+* $Id: conscommon.cc,v 1.8 2001/09/18 12:17:59 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -216,7 +216,7 @@ int string2key(const string adef) {
 
     r = 0;
     d = adef;
-    if((ck = d).find("-") != -1) ck = getrword(d);
+    if((ck = d).find("-") != -1) ck = getrword(d, "-");
 
     if(!ck.empty()) {
 	if((ck.size() > 1) && (toupper(ck[0]) == 'F')) {
