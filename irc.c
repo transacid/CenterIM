@@ -684,6 +684,9 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 							buddyiter = buddyiter->next;
 						}
 						break;
+					case 319:
+						firetalk_callback_gotchannels(c, args[3], args[4]);
+						break;
 					case 366:
 						firetalk_callback_chat_names(c, args[3]);
 						break;

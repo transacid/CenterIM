@@ -854,6 +854,15 @@ void firetalk_callback_gotinfo(client_t c, const char * const nickname, const ch
 	return;
 }
 
+void firetalk_callback_gotchannels(client_t c, const char * const nickname, const char * const channels) {
+	struct s_firetalk_handle *conn;
+	conn = firetalk_find_handle(c);
+	if (conn == NULL)
+		return;
+	if (conn->callbacks[FC_IM_GOTCHANNELS])
+		conn->callbacks[FC_IM_GOTCHANNELS](conn,conn->clientstruct,nickname,channels);
+}
+
 void firetalk_callback_idleinfo(client_t c, char const * const nickname, const long idletime) {
 	struct s_firetalk_handle *conn;
 	struct s_firetalk_buddy *buddyiter;

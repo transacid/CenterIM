@@ -69,6 +69,8 @@ enum firetalk_callback {
 		/* void *connection, void *clientstruct, char *nickname, long idletime */
 	FC_IM_GOTINFO,
 		/* void *connection, void *clientstruct, char *nickname, char *info, int warning, int idle */
+	FC_IM_GOTCHANNELS,
+		/* void *connection, void *clientstruct, char *nickname, char *channels */
 	FC_IM_USER_NICKCHANGED,
 		/* void *connection, void *clientstruct, char *oldnick, char *newnick */
 	FC_IM_GETMESSAGE,
