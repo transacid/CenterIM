@@ -1,6 +1,6 @@
 Centericq documentation by
 Konstantin Klyagin <konst@konst.org.ua>
-2001-2003
+2001-2004
 
 Contents
 --------
@@ -20,7 +20,8 @@ Contents
 	2.5.1. Jabber groupchat conferences
     2.6. LiveJournal
     2.7. Gadu-gadu
-    2.8. Updating details
+    2.8. MSN
+    2.9. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -32,16 +33,18 @@ Contents
     4.1. Migrating from other ICQ software
     4.2. Event sounds
     4.3. Color schemes
-    4.4. URL open action (web browser support)
-    4.5. Hostnames and port numbers (for crazy firewall admins)
-	4.5.1. ICQ
-	4.5.2. Yahoo!
-	4.5.3. AIM TOC
-	4.5.4. IRC
-	4.5.5. Jabber
-	4.5.6. LiveJournal
-	4.5.7. Gadu-gadu
-    4.6. Binding to various IP addresses
+    4.4. Key bindings
+    4.5. URL open action (web browser support)
+    4.6. Hostnames and port numbers (for crazy firewall admins)
+	4.6.1. ICQ
+	4.6.2. Yahoo!
+	4.6.3. AIM TOC
+	4.6.4. IRC
+	4.6.5. Jabber
+	4.6.6. LiveJournal
+	4.6.7. Gadu-gadu
+	4.6.8. MSN
+    4.7. Binding to various IP addresses
 5. Online status
     5.1. "Auto Away" and "Auto N/A"
 6. Contact list
@@ -103,9 +106,9 @@ Contents
 ---------------
 
   Centericq is a text mode menu- and window-driven IM interface. ICQ,
-Yahoo!, AIM TOC, IRC and Jabber protocols are now supported. It
-allows you to send, receive, and forward messages, URLs, SMSes and,
-contacts, mass message send, search for users (including extended
+Yahoo!, AIM TOC, IRC, MSN, Gadu-Gadu and Jabber protocols are currently
+supported. It allows you to send, receive, and forward messages, URLs,
+SMSes and, contacts, mass message send, search for users (including extended
 "whitepages search"), view users' details, maintain your contact list
 directly from the program (including non-icq contacts), view the
 messages history, register a new UIN and update your details, be
@@ -324,7 +327,15 @@ register only with the official client that can be downloaded from the
 official site at http://www.gadu-gadu.pl/
 
 
-2.8. Updating details
+2.8. MSN
+--------
+
+  An account for MSN can also be registered through a web interface at
+http://chat.msn.com/ though it seems that they block access from Linux
+based web browsers.
+
+
+2.9. Updating details
 ---------------------
 
   If you have just registered on the ICQ network only basic fields of
@@ -528,7 +539,16 @@ found under the contrib/ directory of the source tarball.
 http://centericq.de/misc/colorscheme_helper.png
 
 
-4.4. URL open action (web browser support)
+4.4. Key bindings
+-----------------
+
+  Key bindings are also configurable in centericq. On the first start it
+creates a file called keybindings in your ~/.centericq/ directory. You can
+use its initial contents for reference. If you want to change something,
+well, it's all there.
+
+
+4.5. URL open action (web browser support)
 ------------------------------------------
 
   Centericq can extract URLs from messages and user information records
@@ -550,7 +570,7 @@ action the following way: "openurl screen lynx $url$", in order to open
 lynx in a new screen window as soon as an URL to browse it chosen.
 
 
-4.5. Hostnames and port numbers (for crazy firewall admins)
+4.6. Hostnames and port numbers (for crazy firewall admins)
 -----------------------------------------------------------
 
   I'm frequently asked what ports and hostnames centericq uses to
@@ -558,7 +578,7 @@ connect to various IM services. To avoid further buzz, I just include
 them here.
 
 
-4.5.1. ICQ
+4.6.1. ICQ
 ----------
 
   Hostname: login.icq.com
@@ -570,21 +590,21 @@ if in your network the 5190 is blocked, don't be upset, set it to 80 or
 to 21 or whatever is not restricted by firewall and it will work :)
 
 
-4.5.2. Yahoo!
+4.6.2. Yahoo!
 -------------
 
   Hostname: scs.msg.yahoo.com
   Port: 5050
 
 
-4.5.3. AIM TOC
+4.6.3. AIM TOC
 --------------
 
   Hostname: toc.oscar.aol.com
   Port: 9898
 
 
-4.5.4. IRC
+4.6.4. IRC
 ----------
 
   For this network you gotta choose a server yourself, because the
@@ -595,7 +615,7 @@ choice. However, by default, centericq sets the following parameters:
   Port: 6667
 
 
-4.5.5. Jabber
+4.6.5. Jabber
 -------------
 
   There are many Jabber servers in the world, also the solution is
@@ -607,7 +627,7 @@ open to the public is the following:
   Port: 5222
 
 
-4.5.6. LiveJournal
+4.6.6. LiveJournal
 ------------------
 
   Since LiveJournal, despite of its being not an IM network, is also a
@@ -619,14 +639,22 @@ their main server:
   Hostname: livejournal.com
   Port: 80
 
-4.5.7. Gadu-gadu
+
+4.6.7. Gadu-gadu
 ----------------
 
   Hostname: appmsg.gadu-gadu.pl
   Port: 80
 
 
-4.6. Binding to various IP addresses
+4.6.8. MSN
+----------
+
+  Hostname: messenger.hotmail.com
+  Port: 1863
+
+
+4.7. Binding to various IP addresses
 ------------------------------------
 
   If the box you're running centericq on has several IPs and you would
@@ -1782,4 +1810,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.95 2004/03/17 19:08:31 konst Exp $
+$Id: README,v 1.96 2004/03/20 16:49:06 konst Exp $

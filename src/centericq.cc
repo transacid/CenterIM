@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.184 2004/03/15 20:30:19 konst Exp $
+* $Id: centericq.cc,v 1.185 2004/03/20 16:49:08 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,7 +87,7 @@ void centericq::exec() {
 
     if(conf.getouridcount()) {
 	conf.checkdir();
-//	conf.load();
+//      conf.load();
 	groups.load();
 	clist.load();
 	lst.load();
@@ -168,11 +168,11 @@ void centericq::mainloop() {
     face.draw();
 
     while(!finished) {
-	face.status(face.getstatusitem(_("contact menu, "), key_user_menu, section_contact)
-		    + face.getstatusitem(_("change status, "), key_change_status, section_contact)
-		    + face.getstatusitem(_("general actions, "), key_general_menu, section_contact)
-		    + face.getstatusitem(_("quit"), key_quit, section_contact));
-
+	face.status(_("%s contact menu, %s change status, %s general actions, %s quit"),
+	    face.getstatkey(key_user_menu, section_contact).c_str(),
+	    face.getstatkey(key_change_status, section_contact).c_str(),
+	    face.getstatkey(key_general_menu, section_contact).c_str(),
+	    face.getstatkey(key_quit, section_contact).c_str());
 
 	c = face.mainloop(action);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.217 2004/03/17 19:08:31 konst Exp $
+* $Id: icqface.cc,v 1.218 2004/03/20 16:49:08 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -211,7 +211,7 @@ void icqface::showtopbar() {
 	ia = conf.getourid(pname);
 
 	if(!ia.empty()) {
-	    buf += " " + conf.getprotocolname(pname) + "<";
+	    buf += conf.getprotocolname(pname) + "<";
 
 	    buf += imstatus2char[gethook(pname).getstatus()];
 	    buf += ">";
@@ -220,8 +220,8 @@ void icqface::showtopbar() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvprintw(0, 2, _("CENTERICQ %s  UNSENT: %lu"), VERSION, em.getunsentcount());
-    mvprintw(0, COLS-buf.size()-2, "%s", buf.c_str());
+    mvprintw(0, 0, _(" CENTERICQ %s  UNSENT: %lu"), VERSION, em.getunsentcount());
+    mvprintw(0, COLS-buf.size()-1, "%s", buf.c_str());
 }
 
 void icqface::update() {
@@ -405,7 +405,7 @@ int icqface::generalmenu() {
     m.additem(0, ACT_VISIBLELIST,   _(" View/edit visible list"));
     m.addline();
     if(conf.gethideoffline())
-    	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Show offline users"), 38, key_hide_offline, section_contact));
+	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Show offline users"), 38, key_hide_offline, section_contact));
     else
 	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Hide offline users"), 38, key_hide_offline, section_contact));
 
@@ -1175,8 +1175,10 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     saveworkarea();
     clearworkarea();
 
-    status(getstatusitem(_("to URLs, "), key_show_urls, section_info)
-	    + getstatusitem(_("external actions, esc close"), key_user_external_action, section_info));
+    status(_("%s to URLs, %s external actions, %s close"),
+	getstatkey(key_show_urls, section_info).c_str(),
+	getstatkey(key_user_external_action, section_info).c_str(),
+	getstatkey(key_quit, section_editor).c_str());
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
@@ -1880,6 +1882,16 @@ void icqface::status(const string &text) {
     kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", t.c_str());
 }
 
+void icqface::status(const char *fmt, ...) {
+    va_list ap;
+    char buf[1024];
+
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    status((string) buf);
+    va_end(ap);
+}
+
 void icqface::blockmainscreen() {
     mainscreenblock = true;
 }
@@ -1898,7 +1910,8 @@ void icqface::quickfind(verticalmenu *multi) {
     icqcontact *c;
     verticalmenu *cm = (multi ? multi : &mcontacts->menu);
 
-    status(_("QuickSearch: type to find, Alt-S find again, Enter finish"));
+    status(_("QuickSearch: type to find, %s find again, Enter finish"),
+	getstatkey(key_send_message, section_editor).c_str());
 
     if(multi) {
 	lx = sizeWArea.x1+2;
@@ -2078,13 +2091,18 @@ void icqface::userinfoexternal(const imcontact &ic) {
 }
 
 void icqface::showeventbottom(const imcontact &ic) {
-    status(getstatusitem(_("send, "), key_send_message, section_editor)
-	+ getstatusitem(_("multi, "), key_multiple_recipients, section_editor)
-	+ getstatusitem(_("history, "), key_history, section_editor)
-	+ getstatusitem(_("URLs, "), key_show_urls, section_editor)
-	+ getstatusitem(_("expand, "), key_fullscreen, section_editor)
-	+ getstatusitem((ischannel(ic) ? _(" members, ") : _(" details, ")), key_info, section_editor)
-	+ getstatusitem((ischannel(ic) ? _(" close") : _(" cancel")), key_quit, section_editor) );
+    const char *text = ischannel(ic) ?
+	_("%s send, %s multi, %s history, %s URLs, %s expand, %s members, %s close") :
+	_("%s send, %s multi, %s history, %s URLs, %s expand, %s details, %s cancel");
+
+    status(text,
+	getstatkey(key_send_message, section_editor).c_str(),
+	getstatkey(key_multiple_recipients, section_editor).c_str(),
+	getstatkey(key_history, section_editor).c_str(),
+	getstatkey(key_show_urls, section_editor).c_str(),
+	getstatkey(key_fullscreen, section_editor).c_str(),
+	getstatkey(key_info, section_editor).c_str(),
+	getstatkey(key_quit, section_editor).c_str());
 }
 
 bool icqface::eventedit(imevent &ev) {
@@ -2639,8 +2657,11 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
 	db.getbrowser()->setbuf(text);
 	extracturls(text);
-	status(_("F2 to URLs, F9 to full-screenize, ESC close"));
 
+	status(_("%s to URLs, %s to full-screenize, %s close"),
+	    getstatkey(key_show_urls, section_info).c_str(),
+	    getstatkey(key_fullscreen, section_editor).c_str(),
+	    getstatkey(key_quit, section_editor).c_str());
     }
 
     db.redraw();
@@ -2697,7 +2718,10 @@ void icqface::fullscreenize(const imevent *ev) {
     tb.setbuf(ev->gettext());
 
     blockmainscreen();
-    status(_("ESC or F9 to close, Up/Down and PgUp/PgDn to scroll"));
+
+    status(_("%s or %s to close, Up/Down and PgUp/PgDn to scroll"),
+	getstatkey(key_quit, section_editor).c_str(),
+	getstatkey(key_fullscreen, section_editor).c_str());
 
     tb.idle = &textbrowseridle;
     tb.otherkeys = &fullscreenkeys;
@@ -2784,9 +2808,10 @@ bool icqface::histexec(imevent *&im) {
 	    _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(), mhist.getcount());
 
-	status(getstatusitem(_("search, "), key_search, section_history)
-	    + getstatusitem(_("again,"), key_search_again, section_history)
-	    + _(" esc cancel"));
+	status(_("%s search, %s again, %s cancel"),
+	    getstatkey(key_search, section_history).c_str(),
+	    getstatkey(key_search_again, section_history).c_str(),
+	    getstatkey(key_quit, section_editor).c_str());
 
 	while(!fin) {
 	    if(db.open(k)) {
@@ -2880,17 +2905,17 @@ void icqface::transferidle(dialogbox &b) {
     }
 }
 
-string icqface::getstatusitem(string text, int key, int section) {
+string icqface::getstatkey(int key, int section) const {
     int i = 2;
     string key2;
     string keys = action2key(key, section);
 
-    while ( (key2 = action2key(key, section, i)) != "") {
+    while((key2 = action2key(key, section, i)) != "") {
 	keys += "/" + key2;
 	i++;
     }
 
-    return (keys + " " + text);
+    return keys;
 }
 
 string icqface::getmenuitem(string mtext, int width, int key, int section) {
@@ -2924,9 +2949,13 @@ int icqface::key2action(int k, int s) {
     return -1;
 }
 
-string icqface::action2key(int a, int s, int n) {
+string icqface::action2key(int a, int s, int n) const {
     string key;
-    ostringstream o;
+#ifdef HAVE_SSTREAM
+    std::ostringstream o;
+#else
+    std::ostrstream o;
+#endif
     vector<icqconf::keybinding>::size_type i = 0;
 
     for( ; i < icqconf::keys.size(); i++)
@@ -2963,7 +2992,7 @@ string icqface::action2key(int a, int s, int n) {
     else if(icqconf::keys[i].key == KEY_DC)
 	return "del";
     else if(icqconf::keys[i].alt && icqconf::keys[i].ctrl)
-        o << "F" << (icqconf::keys[i].key-KEY_F0);
+	o << "F" << (icqconf::keys[i].key-KEY_F0);
     else if(icqconf::keys[i].alt)
 	o << "alt-" << (char)icqconf::keys[i].key;
     else if(icqconf::keys[i].ctrl)
@@ -2971,7 +3000,15 @@ string icqface::action2key(int a, int s, int n) {
     else
 	o << (char)icqconf::keys[i].key;
 
-    return o.str();
+    string ret;
+#ifdef HAVE_SSTREAM
+    ret = o.str();
+#else
+    ret = string(o.str(), o.pcount());
+    o.freeze(false);
+#endif
+
+    return ret;
 }
 
 int icqface::contactskeys(verticalmenu &m, int k) {

@@ -4,14 +4,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <sstream>
 #include <fstream>
 #include <algorithm>
 #include <list>
 #include <map>
 #include <set>
 #include <memory>
-
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -19,6 +17,12 @@
 #include <regex.h>
 
 #include <config.h>
+
+#ifdef HAVE_SSTREAM
+    #include <sstream>
+#else
+    #include <strstream>
+#endif
 
 #include "kkiproc.h"
 #include "kkstrtext.h"

@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.3 2004/02/22 13:03:59 konst Exp $
+* $Id: gaduhook.cc,v 1.4 2004/03/20 16:49:08 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,10 +31,12 @@
 #include "icqface.h"
 #include "imlogger.h"
 
+#include "libgadu-config.h"
 #include "libgadu.h"
 
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 
 imstatus gg2imstatus(int st) {
     imstatus imst;

@@ -162,7 +162,7 @@ class icqface {
 	void showeventbottom(const imcontact &ic);
 
 	int key2action(int k, int s);
-	string action2key(int a, int s, int n = 1);
+	string action2key(int a, int s, int n = 1) const;
 
 	void invokelist(string &s, vector<string> &v, const string &def, textwindow *w);
 	bool setljparams(imxmlevent *ev);
@@ -183,8 +183,8 @@ class icqface {
 	static void menuidle(verticalmenu &caller);
 	static void dialogidle(dialogbox &caller);
 
-	string getstatusitem(string text, int key, int section);
 	string getmenuitem(string mtext, int width, int key, int section);
+	string getstatkey(int key, int section) const;
 
 	void redraw();
 
@@ -206,6 +206,7 @@ class icqface {
 	void log(const char *fmt, ...);
 
 	void status(const string &text);
+	void status(const char *fmt, ...);
 
 	bool changestatus(vector<protocolname> &pnames, imstatus &st);
 	int contextmenu(icqcontact *c);

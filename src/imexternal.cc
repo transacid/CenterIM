@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.26 2004/03/15 22:36:37 konst Exp $
+* $Id: imexternal.cc,v 1.27 2004/03/20 16:49:08 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,12 +28,6 @@
 #include "eventmanager.h"
 #include "imlogger.h"
 #include "icqcontacts.h"
-
-#ifdef HAVE_SSTREAM
-#include <sstream>
-#else
-#include <strstream>
-#endif
 #include <sys/wait.h>
 
 imexternal external;
@@ -239,10 +233,10 @@ void imexternal::action::writescript() {
 	tfname.clear();
 	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0)+i++;
 #ifdef HAVE_SSTREAM
- 	sname = tfname.str();
+	sname = tfname.str();
 #else
 	sname = string(tfname.str(), tfname.pcount());
- 	stfname.freeze(false); // memory leak fixed
+	tfname.freeze(false); // memory leak fixed
 #endif
     } while(!access(sname.c_str(), F_OK));
 
