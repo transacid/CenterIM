@@ -1,12 +1,9 @@
 AC_INIT(aclocal.m4)
-AM_INIT_AUTOMAKE(centericq, 3.34.15)
-
-AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(centericq, 0.1)
 
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
-
-ALL_LINGUAS="zh_TW.Big5 ru ro pt_BR pl hu de cs"
+ALL_LINGUAS="zh_TW.Big5 ru ro pt_BR pl it hu de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile share/Makefile src/Makefile po/Makefile.in intl/Makefile)
