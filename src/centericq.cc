@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.153 2003/01/18 16:44:02 konst Exp $
+* $Id: centericq.cc,v 1.154 2003/01/19 00:52:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -646,6 +646,7 @@ void centericq::handlesignal(int signum) {
     switch(signum) {
 	case SIGCHLD:
 	    while((pid = wait3(&status, WNOHANG, 0)) > 0) {
+		// In case the child was a nowait external action
 		string sname = conf.getdirname() + "centericq-external-tmp." + i2str(pid);
 		unlink(sname.c_str());
 	    }

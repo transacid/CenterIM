@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.174 2003/01/16 17:22:41 konst Exp $
+* $Id: icqface.cc,v 1.175 2003/01/19 00:52:03 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1836,11 +1836,13 @@ void icqface::userinfoexternal(const imcontact &ic) {
 
 	    string buf;
 	    external.execmanual(ic, i-1, buf);
-	    imnotification ev(ic, (string) cbuf + "\n\n" + buf);
 
-	    saveworkarea();
-	    eventview(&ev, vector<eventviewresult>(), true);
-	    restoreworkarea();
+	    if(!buf.empty()) {
+		imnotification ev(ic, (string) cbuf + "\n\n" + buf);
+		saveworkarea();
+		eventview(&ev, vector<eventviewresult>(), true);
+		restoreworkarea();
+	    }
 	}
     }
 }

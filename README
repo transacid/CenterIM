@@ -1,5 +1,5 @@
 Centericq documentation
-    by konst, 2001-2002
+    by konst, 2001-2003
 
 Contents
 --------
@@ -1146,6 +1146,9 @@ recommended just cut'n'paste the following text.
 #       stdout          The script output is to be sent as a reply
 #                       message (if not empty).
 #
+#       nowait          Don't wait for the script to finish. Obviously, the
+#                       stdout option won't make sense if this one is used.
+#
 # Then, the section named "%exec" should follow. It contains a piece of
 # script to be executed being copied to a file first.
 #
@@ -1439,11 +1442,11 @@ manual ones?" - you will probably ask. Let me introduce to you the type
 of actions that can be executed either from the contact list or from the
 "users details" screen by pressing the F6 key. Such actions are executed
 depending on a menu selection, then the corresponding code is ran
-passing the data of a current contact, and the result will be shown in a
-dialog. One of the applications of the feature is to invoke the host(1)
-command for a users' IP in order to find out his Internet domain name.
-If you're a cool hacker, you can bind invoking nmap this way or anything
-else you want :)
+passing the data of a current contact, and if there was some output, it
+will be shown in a dialog. One of the applications of the feature is to
+invoke the host(1) command for a users' IP in order to find out his
+Internet domain name. If you're a cool hacker, you can bind invoking nmap
+this way or anything else you want :)
 
 [ - cut (external actions setup for invoking of host(1) manually) ---------- ]
 
@@ -1730,4 +1733,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.76 2003/01/18 02:06:57 konst Exp $
+$Id: README,v 1.77 2003/01/19 00:52:02 konst Exp $

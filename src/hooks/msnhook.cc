@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.58 2002/12/28 13:26:47 konst Exp $
+* $Id: msnhook.cc,v 1.59 2003/01/19 00:52:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -533,8 +533,9 @@ void ext_del_list_entry(msnconn *conn, const char *lst, const char *username) {
 	if(i->first == username) {
 	    mhook.slst[lst].erase(i);
 	    i = mhook.slst[lst].begin();
+	} else {
+	    ++i;
 	}
-	++i;
     }
 }
 

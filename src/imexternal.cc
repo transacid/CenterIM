@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.21 2003/01/18 16:44:03 konst Exp $
+* $Id: imexternal.cc,v 1.23 2003/01/19 00:52:03 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,6 +123,8 @@ bool imexternal::action::exec(const imcontact &ic, string &outbuf) {
     if(r = enabled)
     if(r = (options & aomanual)) {
 	currentev = new immessage(ic, imevent::incoming, "");
+
+	writescript();
 	int result = execscript();
 
 	sprintf(buf, _("executed external manual action %s, return code = %d"),
@@ -153,6 +155,8 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
 
     if(r) {
 	currentev = ev;
+
+	writescript();
 	result = execscript();
 
 	sprintf(buf, _("executed external action %s, return code = %d"),
@@ -219,9 +223,16 @@ void imexternal::action::substitute() {
 }
 
 void imexternal::action::writescript() {
+    ostrstream tfname;
     ofstream f;
+    int i = 0;
 
-    sname = conf.getdirname() + "centericq-external-tmp." + i2str(getpid());
+    do {
+	tfname.clear();
+	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0)+i++;
+	sname = string(tfname.str(), tfname.pcount());
+    } while(!access(sname.c_str(), F_OK));
+
     f.open(sname.c_str());
 
     if(f.is_open()) {
@@ -250,8 +261,6 @@ int imexternal::action::execscript() {
 	pid = fork();
 
 	if(!pid) {
-	    writescript();
-
 	    if(c = clist.get(currentev->getcontact())) {
 		setenv("SENDER_UIN", i2str(c->getdesc().uin).c_str(), 1);
 
@@ -262,6 +271,15 @@ int imexternal::action::execscript() {
 
 		setenv("EVENT_TYPE", geteventname(currentev->gettype()).c_str(), 1);
 		setenv("EVENT_NETWORK", conf.getprotocolname(c->getdesc().pname).c_str(), 1);
+	    }
+
+	    if(options & aonowait) {
+		string nsname = conf.getdirname() + "centericq-external-tmp." + i2str(getpid());
+		rename(sname.c_str(), nsname.c_str());
+		sname = nsname;
+
+		if(r = open("/dev/null", 0))
+		    inpipe[1] = outpipe[0] = r;
 	    }
 
 	    dup2(inpipe[1], STDOUT_FILENO);
