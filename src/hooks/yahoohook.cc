@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.32 2002/03/23 11:34:52 konst Exp $
+* $Id: yahoohook.cc,v 1.33 2002/04/06 08:55:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -66,7 +66,7 @@ void yahoohook::initcontext(const icqconf::imaccount account) {
     memset(&options, 0, sizeof(options));
     options.connect_mode = YAHOO_CONNECT_NORMAL;
 
-    face.log("+ initializing %s engine",
+    face.log(_("+ initializing %s engine"),
 	conf.getprotocolname(account.pname).c_str());
 
     alarm(5);
