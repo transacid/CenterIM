@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.51 2002/03/14 11:53:30 konst Exp $
+* $Id: icqcontact.cc,v 1.52 2002/03/18 10:13:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -147,34 +147,34 @@ void icqcontact::save() {
 	    f.open(tname.c_str());
 	    if(f.is_open()) {
 		f << nick << endl <<
-		    binfo.fname << endl <<
-		    binfo.lname << endl <<
-		    binfo.email << endl <<
+		    tosane(binfo.fname) << endl <<
+		    tosane(binfo.lname) << endl <<
+		    tosane(binfo.email) << endl <<
 		    endl <<
 		    endl <<
-		    binfo.city << endl <<
-		    binfo.state << endl <<
-		    binfo.phone << endl <<
-		    binfo.fax << endl <<
-		    binfo.street << endl <<
-		    binfo.cellular << endl <<
-		    binfo.zip << endl <<
+		    tosane(binfo.city) << endl <<
+		    tosane(binfo.state) << endl <<
+		    tosane(binfo.phone) << endl <<
+		    tosane(binfo.fax) << endl <<
+		    tosane(binfo.street) << endl <<
+		    tosane(binfo.cellular) << endl <<
+		    tosane(binfo.zip) << endl <<
 		    binfo.country << endl <<
-		    winfo.city << endl <<
-		    winfo.state << endl <<
-		    winfo.phone << endl <<
-		    winfo.fax << endl <<
-		    winfo.street << endl <<
-		    winfo.zip << endl <<
+		    tosane(winfo.city) << endl <<
+		    tosane(winfo.state) << endl <<
+		    tosane(winfo.phone) << endl <<
+		    tosane(winfo.fax) << endl <<
+		    tosane(winfo.street) << endl <<
+		    tosane(winfo.zip) << endl <<
 		    winfo.country << endl <<
-		    winfo.company << endl <<
-		    winfo.dept << endl <<
-		    winfo.position << endl <<
+		    tosane(winfo.company) << endl <<
+		    tosane(winfo.dept) << endl <<
+		    tosane(winfo.position) << endl <<
 		    (int) minfo.timezone << endl <<
-		    winfo.homepage << endl <<
+		    tosane(winfo.homepage) << endl <<
 		    (int) minfo.age << endl <<
 		    (int) minfo.gender << endl <<
-		    minfo.homepage << endl <<
+		    tosane(minfo.homepage) << endl <<
 		    minfo.lang1 << endl <<
 		    minfo.lang2 << endl <<
 		    minfo.lang3 << endl <<
@@ -191,7 +191,7 @@ void icqcontact::save() {
 		    endl <<
 		    endl <<
 		    lastip << endl <<
-		    dispnick << endl <<
+		    tosane(dispnick) << endl <<
 		    lastseen << endl <<
 		    endl <<
 		    endl <<

@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.6.5)
+AM_INIT_AUTOMAKE(centericq, 4.6.6)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -68,6 +68,6 @@ AC_CHECK_LIB(ncurses, initscr, LIBS="$LIBS -lncurses", LIBS="$LIBS -lcurses")
 AC_CHECK_LIB(iconv, iconv, LIBS="$LIBS -liconv")
 
 AC_CONFIG_SUBDIRS(kkstrtext-0.1 kksystr-0.1 kkconsui-0.1 libyahoo-0.1 libmsn-0.1 libicq2000-0.5 firetalk-0.1)
-ALL_LINGUAS="zh_TW.Big5 ru ro pt_BR pl nl it hu es de cs"
+ALL_LINGUAS="zh_TW.Big5 uk ru ro pt_BR pl nl it hu es de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)
