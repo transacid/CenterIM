@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.15 2002/04/11 17:14:36 konst Exp $
+* $Id: aimhook.cc,v 1.16 2002/04/16 15:01:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -349,6 +349,7 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
 
 void aimhook::connectfailed(void *connection, void *cli, ...) {
     va_list ap;
+    string msg;
 
     va_start(ap, cli);
     int err = va_arg(ap, int);
@@ -357,7 +358,12 @@ void aimhook::connectfailed(void *connection, void *cli, ...) {
 
     ahook.fonline = false;
 
-    face.log(_("+ [aim] connect failed: %s"), reason);
+    if(err) msg = firetalk_strerror((firetalk_error) err);
+    if(msg.size() && reason) msg += (string) ", " + reason;
+
+    logger.putmessage((string) _("aim connection failed") + ": " + msg);
+
+    face.log(_("+ [aim] connect failed: %s"), msg.c_str());
     face.update();
 }
 
