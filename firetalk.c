@@ -1629,6 +1629,9 @@ void firetalk_destroy_handle(firetalk_t conn) {
 	if (firetalk_check_handle(conn) != FE_SUCCESS)
 		return;
 #endif
+	if (conn->handle)
+		protocol_functions[conn->protocol].destroy_handle(conn->handle);
+
 	free(conn->buffer);
 	if (conn->prev)
 		conn->prev->next = conn->next;
@@ -1636,8 +1639,6 @@ void firetalk_destroy_handle(firetalk_t conn) {
 		handle_head = conn->next;
 	if (conn->next)
 		conn->next->prev = conn->prev;
-	if (conn->handle)
-		protocol_functions[conn->protocol].destroy_handle(conn->handle);
 
 	free(conn);
 	return;
