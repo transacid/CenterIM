@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.21 2001/11/13 17:08:12 konst Exp $
+* $Id: icqdialogs.cc,v 1.22 2001/11/14 16:18:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,8 +32,8 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 
-bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
 /*
+bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
     bool finished, newuin, success, socks = false;
     int nmode, ndet, nopt, n, i, b, nproxy;
     string phidden, pcheck, socksuser, sockspass, psockscheck, tmp;
@@ -182,9 +182,8 @@ bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
     db.close();
 
     return success;
-*/
-    return true;
 }
+*/
 
 bool icqface::finddialog(searchparameters &s) {
     int n, b, i;
@@ -663,11 +662,9 @@ bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
 }
 
 bool icqface::updateconf(regsound &s, regcolor &c) {
-/*
     bool finished, success;
-    int nopt, n, i, b, nproxy, nconf, nicq, nyahoo, aaway, ana, noth, nfeat, ncl;
+    int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
     string tmp, phidden, socksuser, sockspass;
-    string serv = conf.getservername() + ":" + i2str(conf.getserverport());
     string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
 
     bool quote = conf.getquote();
@@ -712,8 +709,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	nconf = t.addnode(0, n, 0, _(" Configuration "));
 	ncl = t.addnode(0, n, 0, _(" Contact list "));
 	nfeat = t.addnode(0, n, 0, _(" Features "));
-	nicq = t.addnode(0, n, 0, _(" ICQ "));
-	nyahoo = t.addnode(0, n, 0, _(" Yahoo "));
+	ncomm = t.addnode(0, n, 0, _(" Communications "));
 	noth = t.addnode(0, n, 0, _(" Other "));
 
 	t.addleaff(nconf, 0, 1, _(" Change sound device to : %s "), strregsound(s));
@@ -722,14 +718,12 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	t.addleaff(ncl, 0, 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
 	t.addleaff(ncl, 0, 6, _(" Hide offline users : %s "), stryesno(hideoffl));
 
-//        t.addleaff(nicq, 0, 18, _(" ICQ UIN : %lu "), );
-	t.addleaff(nicq, 0, 7, _(" ICQ server address : %s "), serv.c_str());
-	t.addleaff(nicq, 0, 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
+	t.addleaff(ncomm, 0, 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
 
 	t.addleaff(nfeat, 0, 3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
 	t.addleaff(nfeat, 0, 8, _(" Quote a message on reply : %s "), stryesno(quote));
 	t.addleaff(nfeat, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
-	t.addleaff(nfeat, 0, 13, _(" Remember ICQ password : %s "), stryesno(savepwd));
+	t.addleaff(nfeat, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
 	t.addleaff(nfeat, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
 	t.addleaff(nfeat, 0, 16, _(" Send all events through server : %s "), stryesno(serveronly));
 
@@ -771,10 +765,6 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 			if(tmp.size()) ana = atol(tmp.c_str());
 			break;
 		    case 6: hideoffl = !hideoffl; break;
-		    case 7:
-			tmp = inputstr(_("ICQ server to use: "), serv);
-			if(!tmp.empty()) serv = tmp;
-			break;
 		    case 8: quote = !quote; break;
 		    case 9: socks = !socks; break;
 		    case 10:
@@ -798,7 +788,6 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		break;
 	    case 1:
 		finished = success = true;
-		conf.setserver(serv);
 		conf.setquote(quote);
 		conf.setsavepwd(savepwd);
 		conf.setauto(aaway, ana);
@@ -814,8 +803,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		    clist.rearrange();
 		}
 
-		if(socks) conf.setsockshost(prserv);
-		else conf.setsockshost("");
+		conf.setsockshost(socks ? prserv : "");
 		break;
 	}
     }
@@ -824,8 +812,6 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     unblockmainscreen();
 
     return success;
-*/
-    return true;
 }
 
 int icqface::editaboutkeys(texteditor &e, int k) {

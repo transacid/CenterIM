@@ -1,8 +1,7 @@
 #ifndef __YAHOOHOOK_H__
 #define __YAHOOHOOK_H__
 
-#include "icqcommon.h"
-#include "icqcontact.h"
+#include "icqconf.h"
 
 extern "C" {
 #include "yahoolib.h"
@@ -11,7 +10,6 @@ extern "C" {
 class yahoohook {
     protected:
 	struct yahoo_context *yahoo;
-	string username;
 	bool fonline;
 	int ourstatus;
 	imstatus manualstatus;
@@ -24,16 +22,17 @@ class yahoohook {
 	static void userstatus(yahoo_context *y, const char *nick, int status);
 	static void recvbounced(yahoo_context *y, const char *nick);
 	static void recvmessage(yahoo_context *y, const char *nick, const char *msg);
+	static void log(yahoo_context *y, const char *msg);
 
 	static struct tm *timestamp();
 
 	imstatus yahoo2imstatus(int status) const;
+	void init(const icqconf::imaccount account);
 
     public:
 	yahoohook();
 	~yahoohook();
 
-	void init(const string id, const string pass);
 	void connect();
 	void main();
 	void exectimers();

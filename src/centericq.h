@@ -26,6 +26,7 @@ class centericq {
 	static void handlesignal(int signum);
 
 	void checkparallel();
+
 	const string quotemsg(const string text);
 
     public:

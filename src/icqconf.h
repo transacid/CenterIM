@@ -39,8 +39,6 @@
 #define VERSION "devel"
 #endif
 
-#define ICQ_SERVER      "icq.mirabilis.com:4000"
-
 enum regsound { rscard, rsspeaker, rsdisable, rsdontchange };
 enum regcolor { rcdark, rcblue, rcdontchange };
 
@@ -81,22 +79,18 @@ class icqconf {
 	regsound rs;
 	regcolor rc;
 
-	const string getprotocolname(protocolname pname) const;
+	void loadmainconfig();
 
     public:
 	icqconf();
 	~icqconf();
-
-	imaccount getourid(protocolname pname);
-	void setourid(const imaccount im);
 
 	void checkdir();
 	void load();
 
 	int getcolor(int npair) const;
 
-	void loadmainconfig();
-	void savemainconfig(unsigned int fuin = 0);
+	void save();
 
 	void loadcolors();
 	void loadsounds();
@@ -104,10 +98,6 @@ class icqconf {
 
 	void initpairs();
 
-	void registerinfo(unsigned int fuin, const string passwd,
-	    const string nick, const string fname,
-	    const string lname, const string email);
-	
 	regcolor getregcolor() const;
 	void setregcolor(regcolor c);
 
@@ -151,6 +141,14 @@ class icqconf {
 	void savestatus(protocolname pname, imstatus st);
 
 	int getprotcolor(protocolname pname) const;
+	const string getprotocolname(protocolname pname) const;
+
+	imaccount getourid(protocolname pname);
+	void setourid(const imaccount im);
+	int getouridcount() const;
+
+	const string getdirname() const;
+	const string getconfigfname(const string fname) const;
 };
 
 extern icqconf conf;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.15 2001/11/13 17:08:11 konst Exp $
+* $Id: icqconf.cc,v 1.16 2001/11/14 16:18:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -57,11 +57,13 @@ icqconf::imaccount icqconf::getourid(protocolname pname) {
     return i == accounts.end() ? imaccount(pname) : *i;
 }
 
-void icqconf::checkdir() {
-    string hostdir = (string) getenv("HOME") + "/.centericq";
+int icqconf::getouridcount() const {
+    return accounts.size();
+}
 
-    if(access(hostdir.c_str(), F_OK)) {
-	mkdir(hostdir.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
+void icqconf::checkdir() {
+    if(access(getdirname().c_str(), F_OK)) {
+	mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
     }
 }
 
@@ -72,7 +74,7 @@ void icqconf::load() {
 }
 
 void icqconf::loadmainconfig() {
-    string fname = (string) getenv("HOME") + "/.centericq/config", buf, param, rbuf;
+    string fname = getconfigfname("config"), buf, param, rbuf;
     ifstream f(fname.c_str());
     imaccount im;
 
@@ -113,17 +115,33 @@ void icqconf::loadmainconfig() {
 }
 
 void icqconf::setourid(const imaccount im) {
-    vector<imaccount>::iterator i = find(accounts.begin(), accounts.end(), im.pname);
+    vector<imaccount>::iterator i;
+
+    i = find(accounts.begin(), accounts.end(), im.pname);
 
     if(i != accounts.end()) {
-	*i = im;
+	if(im.empty()) {
+	    accounts.erase(i);
+	} else {
+	    *i = im;
+	}
     } else {
 	accounts.push_back(im);
+	i = accounts.end()-1;
+
+	switch(i->pname) {
+	    case icq:
+		if(i->server.empty()) {
+		    i->server = "icq.mirabilis.com";
+		    i->port = 4000;
+		}
+		break;
+	}
     }
 }
 
-void icqconf::savemainconfig(unsigned int fuin = 0) {
-    string fname = (string) getenv("HOME") + "/.centericq/config", param;
+void icqconf::save() {
+    string fname = getconfigfname("config"), param;
     ofstream f(fname.c_str());
     int away, na;
     vector<imaccount>::iterator ia;
@@ -166,7 +184,7 @@ int icqconf::getcolor(int npair) const {
 void icqconf::loadcolors() {
     FILE *f;
     char buf[512], sub[512], *p;
-    string tname = (string) getenv("HOME") + "/.centericq/colorscheme";
+    string tname = getconfigfname("colorscheme");
     int nfg, nbg, npair;
 
     if(access(tname.c_str(), F_OK))
@@ -253,7 +271,7 @@ void icqconf::loadcolors() {
 }
 
 void icqconf::loadsounds() {
-    string tname = (string) getenv("HOME") + "/.centericq/sounds", buf, suin, skey;
+    string tname = getconfigfname("sounds"), buf, suin, skey;
     int event, n, ffuin;
     icqcontact *c;
     int i, k;
@@ -332,7 +350,7 @@ void icqconf::loadsounds() {
 }
 
 void icqconf::loadactions() {
-    string fname = (string) getenv("HOME") + "/.centericq/actions", buf, name;
+    string fname = getconfigfname("actions"), buf, name;
 
     if(access(fname.c_str(), F_OK)) {
 	ofstream of(fname.c_str());
@@ -363,17 +381,6 @@ void icqconf::loadactions() {
 
 	f.close();
     }
-}
-
-void icqconf::registerinfo(unsigned int fuin, const string passwd,
-const string nick, const string fname, const string lname,
-const string email) {
-//    fuin = icquin;
-//    icqpass = passwd;
-    rnick = nick;
-    rfname = fname;
-    rlname = lname;
-    remail = email;
 }
 
 regcolor icqconf::getregcolor() const {
@@ -534,7 +541,7 @@ imstatus icqconf::getstatus(protocolname pname) {
     ifstream f;
     imstatus st = available;
 
-    fname = (string) getenv("HOME") + "/.centericq/status-" + getprotocolname(pname);
+    fname = getconfigfname("status-" + getprotocolname(pname));
     f.open(fname.c_str());
 
     if(f.is_open()) {
@@ -550,7 +557,7 @@ void icqconf::savestatus(protocolname pname, imstatus st) {
     string fname;
     ofstream f;
 
-    fname = (string) getenv("HOME") + "/.centericq/status-" + getprotocolname(pname);
+    fname = getconfigfname("status-" + getprotocolname(pname));
     f.open(fname.c_str());
 
     if(f.is_open()) {
@@ -568,6 +575,14 @@ int icqconf::getprotcolor(protocolname pname) const {
     }
 }
 
+const string icqconf::getdirname() const {
+    return (string) getenv("HOME") + "/.centericq/";
+}
+
+const string icqconf::getconfigfname(const string fname) const {
+    return getdirname() + fname;
+}
+
 // ----------------------------------------------------------------------------
 
 icqconf::imaccount::imaccount() {
@@ -581,7 +596,7 @@ icqconf::imaccount::imaccount(protocolname apname) {
 }
 
 bool icqconf::imaccount::empty() const {
-    return !uin && nickname.empty() && pname != infocard;
+    return !uin && nickname.empty();
 }
 
 void icqconf::imaccount::write(ofstream &f) {
@@ -593,7 +608,7 @@ void icqconf::imaccount::write(ofstream &f) {
     if(conf.getsavepwd()) f << prefix << "pass\t" << password << endl;
     if(!server.empty()) {
 	f << prefix << "server\t" << server;
-	if(port) f << port;
+	if(port) f << ":" << port;
 	f << endl;
     }
 }

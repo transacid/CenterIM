@@ -6,14 +6,14 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.2 2001/10/26 13:56:48 konst Exp $
+# $Id: cicqsync,v 1.3 2001/11/14 16:18:13 konst Exp $
 #
 
 #CVSROOT=:pserver:anonymous@cvs.konst.org.ua:/home/konst/cvs/root/
 CVSROOT=:ext:konst@cvs.konst.org.ua:/home/konst/cvs/root/
 
 PROG="centericq"
-MODULES="kktoolbox/kkstrtext kktoolbox/kksystr kktoolbox/kkconsui icqlib"
+MODULES="kktoolbox/kkstrtext kktoolbox/kksystr kktoolbox/kkconsui icqlib libyahoo"
 MAKEUPDATE="s/\/home\/konst\/devel\/kktoolbox/\$(top_srcdir)/g;s/\/home\/konst\/devel\/icqlib/\$(top_srcdir)\/icqlib/g"
 MONOLITE="0"
 

@@ -6,8 +6,7 @@
 #include "kkiproc.h"
 #include "cmenus.h"
 
-#include "icqcommon.h"
-#include "icqcontact.h"
+#include "icqconf.h"
 
 #define PERIOD_KEEPALIVE        100
 #define PERIOD_SELECT           1
@@ -178,13 +177,14 @@ class icqhook {
 	static void requestnotify(struct icq_link *link, unsigned long id,
 	    int result, unsigned int length, void *data);
 
+	void init(const icqconf::imaccount account);
+
     public:
 	icqhook();
 	~icqhook();
 
 	static void regdisconnected(struct icq_link *link, int reason);
 
-	void init(struct icq_link *link);
 	void reginit(struct icq_link *link);
 
 	unsigned int getreguin();

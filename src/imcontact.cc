@@ -42,6 +42,9 @@ bool imcontact::empty() const {
 const string imcontact::totext() const {
     string r;
 
+    if(*this == contactroot) {
+	r = "[root]";
+    } else
     switch(pname) {
 	case icq:
 	    r = "[icq] " + i2str(uin);

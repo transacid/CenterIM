@@ -6,7 +6,9 @@
 enum protocolname {
     icq = 0,
     yahoo,
-    infocard
+    infocard,
+
+    protocolname_size
 };
 
 struct imcontact {
@@ -14,7 +16,7 @@ struct imcontact {
     imcontact(unsigned long auin, protocolname apname);
     imcontact(const string anick, protocolname apname);
 
-    string nickname, pass;
+    string nickname;
     unsigned long uin;
     protocolname pname;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.14 2001/11/13 17:08:12 konst Exp $
+* $Id: icqcontacts.cc,v 1.15 2001/11/14 16:18:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -65,15 +65,6 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	c->excludefromlist();
     } else {
 	c->includeintolist();
-    }
-
-    switch(cinfo.pname) {
-	case icq:
-	    icq_SendNewUser(&icql, cinfo.uin);
-	    break;
-	case yahoo:
-	    yhook.sendnewuser(cinfo);
-	    break;
     }
 
     return c;
@@ -157,7 +148,9 @@ void icqcontacts::send() {
     int i;
     icqcontact *c;
 
-    icq_ContactClear(&icql);
+    if(ihook.online()) {
+	icq_ContactClear(&icql);
+    }
 
     for(i = 0; i < count; i++) {
 	c = (icqcontact *) at(i);
@@ -165,11 +158,13 @@ void icqcontacts::send() {
 	if(c->getdesc() != contactroot)
 	switch(c->getdesc().pname) {
 	    case icq:
-		icq_ContactAdd(&icql, c->getdesc().uin);
-		icq_ContactSetVis(&icql, c->getdesc().uin,
-		    lst.inlist(c->getdesc(), csvisible) ? ICQ_CONT_VISIBLE :
-		    lst.inlist(c->getdesc(), csinvisible) ? ICQ_CONT_INVISIBLE :
-		    ICQ_CONT_NORMAL);
+		if(ihook.online()) {
+		    icq_ContactAdd(&icql, c->getdesc().uin);
+		    icq_ContactSetVis(&icql, c->getdesc().uin,
+			lst.inlist(c->getdesc(), csvisible) ? ICQ_CONT_VISIBLE :
+			lst.inlist(c->getdesc(), csinvisible) ? ICQ_CONT_INVISIBLE :
+			ICQ_CONT_NORMAL);
+		}
 		break;
 	    case yahoo:
 //                yhook.sendnewuser(c->getdesc());

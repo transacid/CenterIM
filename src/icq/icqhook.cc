@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.4 2001/11/13 17:08:13 konst Exp $
+* $Id: icqhook.cc,v 1.5 2001/11/14 16:18:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,54 +48,71 @@ icqhook::icqhook() {
 
     seq_keepalive = n_keepalive = 0;
     flogged = connecting = factive = false;
+
+    manualstatus = conf.getstatus(icq);
 }
 
 icqhook::~icqhook() {
     conf.savestatus(icq, manualstatus);
 }
 
-void icqhook::init(struct icq_link *link) {
-#ifndef DEBUG
-    icq_LogLevel = 0;
-#else
+void icqhook::init(const icqconf::imaccount account) {
+    string spuser, sppass;
+
+    face.log("+ initializing %s engine", conf.getprotocolname(account.pname).c_str());
+
+    icq_Init(&icql, account.uin, account.password.c_str(), "");
+
+    if(!conf.getsockshost().empty()) {
+	conf.getsocksuser(spuser, sppass);
+	icq_SetProxy(&icql, conf.getsockshost().c_str(), conf.getsocksport(),
+	    spuser.empty() ? 0 : 1, spuser.c_str(), sppass.c_str());
+    }
+
+#ifdef DEBUG
     icq_LogLevel = ICQ_LOG_MESSAGE;
+    icql.icq_Log = &log;
+#else
+    icq_LogLevel = 0;
+    icql.icq_Log = 0;
 #endif
-    link->icq_Logged = &loggedin;
-    link->icq_Disconnected = &ildisconnected;
-    link->icq_RecvMessage = &message;
-    link->icq_RecvURL = &url;
-    link->icq_RecvWebPager = &webpager;
-    link->icq_RecvMailExpress = &mailexpress;
-    link->icq_RecvChatReq = &chat;
-    link->icq_RecvFileReq = &file;
-    link->icq_RecvAdded = &added;
-    link->icq_RecvAuthReq = &auth;
-    link->icq_UserOnline = &useronline;
-    link->icq_UserOffline = &useroffline;
-    link->icq_UserStatusUpdate = &userstatus;
-    link->icq_MetaUserInfo = &metauserinfo;
-    link->icq_MetaUserAbout = &metauserabout;
-    link->icq_MetaUserMore = &metausermore;
-    link->icq_MetaUserWork = &metauserwork;
-    link->icq_MetaUserInterests = &metauserinterests;
-    link->icq_MetaUserAffiliations = &metauseraffiliations;
-    link->icq_WrongPassword = &wrongpass;
-    link->icq_InvalidUIN = &invaliduin;
 
-    link->icq_UserFound = &userfound;
-    link->icq_WhitePagesFound = &wpfound;
-    link->icq_SearchDone = link->icq_WhitePagesDone = &searchdone;
+    icql.icq_Logged = &loggedin;
+    icql.icq_Disconnected = &ildisconnected;
+    icql.icq_RecvMessage = &message;
+    icql.icq_RecvURL = &url;
+    icql.icq_RecvWebPager = &webpager;
+    icql.icq_RecvMailExpress = &mailexpress;
+    icql.icq_RecvChatReq = &chat;
+    icql.icq_RecvFileReq = &file;
+    icql.icq_RecvAdded = &added;
+    icql.icq_RecvAuthReq = &auth;
+    icql.icq_UserOnline = &useronline;
+    icql.icq_UserOffline = &useroffline;
+    icql.icq_UserStatusUpdate = &userstatus;
+    icql.icq_MetaUserInfo = &metauserinfo;
+    icql.icq_MetaUserAbout = &metauserabout;
+    icql.icq_MetaUserMore = &metausermore;
+    icql.icq_MetaUserWork = &metauserwork;
+    icql.icq_MetaUserInterests = &metauserinterests;
+    icql.icq_MetaUserAffiliations = &metauseraffiliations;
+    icql.icq_WrongPassword = &wrongpass;
+    icql.icq_InvalidUIN = &invaliduin;
 
-    link->icq_Log = &log;
-    link->icq_RequestNotify = &requestnotify;
-    link->icq_RecvContact = &contact;
+    icql.icq_UserFound = &userfound;
+    icql.icq_WhitePagesFound = &wpfound;
+    icql.icq_SearchDone = icql.icq_WhitePagesDone = &searchdone;
+
+    icql.icq_RequestNotify = &requestnotify;
+    icql.icq_RecvContact = &contact;
 
     factive = true;
-    manualstatus = conf.getstatus(icq);
 }
 
 void icqhook::connect() {
     icqconf::imaccount acc = conf.getourid(icq);
+
+    if(!enabled()) init(acc);
 
     connecting = true;
     face.update();
@@ -123,7 +140,7 @@ void icqhook::reginit(struct icq_link *link) {
 void icqhook::loggedin(struct icq_link *link) {
     ihook.flogged = true;
     ihook.connecting = false;
-
+/*
     if(ihook.getreguin()) {
 	string nick, fname, lname, email;
 	face.getregdata(nick, fname, lname, email);
@@ -136,7 +153,7 @@ void icqhook::loggedin(struct icq_link *link) {
 	cicq.updatedetails();
 	ihook.setreguin(0);
     }
-
+*/
     ihook.timer_resolve = time(0)-PERIOD_RESOLVE+5;
 
     time(&ihook.logontime);
@@ -163,7 +180,7 @@ void icqhook::ildisconnected(struct icq_link *link, int reason) {
     switch(reason) {
 	case ICQ_DISCONNECT_FORCED:
 	    msg += ", ";
-	    msg += _("server forced us to disconnect");
+	    msg += _("server forced");
 	    break;
 	case ICQ_DISCONNECT_BUSY:
 	    msg += ", ";

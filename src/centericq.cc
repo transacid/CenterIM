@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.30 2001/11/13 17:08:11 konst Exp $
+* $Id: centericq.cc,v 1.31 2001/11/14 16:18:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqgroups.h"
+#include "accountmanager.h"
 
 centericq::centericq() {
     timer_keypress = time(0);
@@ -61,9 +62,6 @@ void centericq::commandline(int argc, char **argv) {
 
 void centericq::exec() {
     struct sigaction sact;
-    unsigned long uin;
-    string socksuser, sockspass, pass, yahooid;
-    icqconf::imaccount login;
 
     memset(&sact, 0, sizeof(sact));
     sact.sa_handler = &handlesignal;
@@ -75,55 +73,32 @@ void centericq::exec() {
     conf.load();
     face.init();
 
-    login = conf.getourid(icq);
-    if(login.empty()) {
-	reg();
-	if(ihook.getreguin()) {
-	    conf.checkdir();
-	    conf.getsocksuser(socksuser, sockspass);
-	    conf.savemainconfig(ihook.getreguin());
-	}
+    if(!conf.getouridcount()) {
+	manager.exec();
     }
 
-    conf.checkdir();
-    conf.load();
-    groups.load();
-    clist.load();
-    lst.load();
-    conf.loadsounds();
+    if(conf.getouridcount()) {
+	conf.checkdir();
+	conf.load();
+	groups.load();
+	clist.load();
+	lst.load();
+	conf.loadsounds();
 
-    face.done();
-    face.init();
+	face.done();
+	face.init();
 
-    login = conf.getourid(icq);
-    if(!login.empty()) {
-	icq_Init(&icql, uin, pass.c_str(), "");
-	ihook.init(&icql);
-
-	if(!conf.getsockshost().empty()) {
-	    conf.getsocksuser(socksuser, sockspass);
-	    icq_SetProxy(&icql, conf.getsockshost().c_str(),
-		conf.getsocksport(), socksuser.empty() ? 0 : 1,
-		socksuser.c_str(), sockspass.c_str());
-	}
-    }
-
-    login = conf.getourid(yahoo);
-    if(!login.empty()) {
-	yhook.init(login.nickname, login.password);
-    }
-
-    if(!yahooid.empty() || uin) {
 	face.draw();
 	checkparallel();
 	mainloop();
+
+	lst.save();
+	clist.save();
+	groups.save();
     }
 
-    lst.save();
-    clist.save();
-    groups.save();
-
     face.done();
+    conf.save();
 }
 
 void centericq::reg() {
@@ -245,11 +220,10 @@ void centericq::mainloop() {
 		break;
 	    case ACT_HIDEOFFLINE:
 		conf.sethideoffline(!conf.gethideoffline());
-		conf.savemainconfig();
 		face.update();
 		break;
 	    case ACT_DETAILS:
-		if(ihook.logged()) updatedetails();
+		manager.exec();
 		break;
 	    case ACT_FIND:
 		if(ihook.logged()) find();
@@ -264,11 +238,6 @@ void centericq::mainloop() {
 		face.quickfind();
 		break;
 	    case ACT_QUIT:
-		if(icql.icq_Status != STATUS_OFFLINE) {
-		    icq_Logout(&icql);
-		    icq_Disconnect(&icql);
-		}
-		icq_Done(&icql);
 		finished = true;
 		break;
 	}
@@ -522,27 +491,23 @@ void centericq::sendcontacts(const imcontact cinfo) {
 void centericq::updateconf() {
     regsound snd = rsdontchange;
     regcolor clr = rcdontchange;
-    string fname;
 
     if(face.updateconf(snd, clr)) {
 	if(snd != rsdontchange) {
 	    conf.setregsound(snd);
-	    fname = (string) getenv("HOME") + "/.centericq/sounds";
-	    unlink(fname.c_str());
+	    unlink(conf.getconfigfname("sounds").c_str());
 	    conf.loadsounds();
 	}
 
 	if(clr != rcdontchange) {
 	    conf.setregcolor(clr);
-	    fname = (string) getenv("HOME") + "/.centericq/colorscheme";
-	    unlink(fname.c_str());
+	    unlink(conf.getconfigfname("colorscheme").c_str());
 	    conf.loadcolors();
 	    face.done();
 	    face.init();
 	    face.draw();
 	}
 
-	conf.savemainconfig();
 	face.update();
     }
 }

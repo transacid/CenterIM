@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.34 2001/11/13 17:08:12 konst Exp $
+* $Id: icqface.cc,v 1.35 2001/11/14 16:18:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -161,20 +161,30 @@ void icqface::draw() {
 }
 
 void icqface::showtopbar() {
+    string buf;
+    protocolname pname;
+    icqconf::imaccount ia;
+
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-/*
-    string spadd(COLS-strlen(VERSION)-textstatus(icql.icq_Status).size()-
-	i2str(offl.getunsentcount()).size()-i2str(icql.icq_Uin).size()-
-	32, ' ');
 
-    kwriteatf(0, 0, conf.getcolor(cp_status),
-	" CENTERICQ %s  STATUS: %s  UNSENT: %lu%s%lu ",
-	    VERSION,
-	    textstatus(icql.icq_Status).c_str(),
-	    offl.getunsentcount(),
-	    spadd.c_str(), icql.icq_Uin);
-*/
+    kwriteatf(2, 0, conf.getcolor(cp_status),
+	"CENTERICQ %s   UNSENT: %lu", VERSION, offl.getunsentcount());
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	if(pname != infocard) {
+	    ia = conf.getourid(pname);
+
+	    if(!ia.empty()) {
+		buf += "  " + conf.getprotocolname(pname) + ":";
+
+		if(!ia.nickname.empty()) buf += ia.nickname; else
+		if(ia.uin) buf += i2str(ia.uin);
+	    }
+	}
+    }
+
+    kwriteatf(COLS-buf.size()-2, 0, conf.getcolor(cp_status), buf.c_str());
 }
 
 void icqface::update() {
@@ -269,7 +279,7 @@ int icqface::generalmenu() {
     m.idle = &menuidle;
     m.additem(0, ACT_STATUS,    _(" Change ICQ status                   s"));
     m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
-    m.additem(0, ACT_DETAILS,   _(" Update your details"));
+    m.additem(0, ACT_DETAILS,   _(" Accounts.."));
     m.additem(0, ACT_FIND,      _(" Find/add users"));
     m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
     m.additem(0, ACT_NONICQ,    _(" Add non-icq contact"));
@@ -468,13 +478,6 @@ void icqface::fillcontactlist() {
     }
 }
 
-void icqface::getregdata(string &nick, string &fname, string &lname, string &email) {
-    nick = rnick;
-    fname = rfname;
-    lname = rlname;
-    email = remail;
-}
-
 bool icqface::findresults() {
     bool finished = false, ret = false;
     unsigned int ffuin;
@@ -534,7 +537,7 @@ bool icqface::findresults() {
     return ret;
 }
 
-void icqface::infoclear(dialogbox &db, icqcontact *c, unsigned int uin) {
+void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) {
     for(int i = WORKAREA_Y1+1; i < WORKAREA_Y2; i++) {
 	workarealine(i, ' ');
     }
@@ -542,7 +545,7 @@ void icqface::infoclear(dialogbox &db, icqcontact *c, unsigned int uin) {
     db.redraw();
 
     mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	_("Information about %s"), c->getdesc().totext().c_str());
+	_("Information about %s"), realdesc.totext().c_str());
 
     workarealine(WORKAREA_Y1+2);
     workarealine(WORKAREA_Y2-2);
@@ -844,7 +847,7 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 
 	if(showinfo) {
 	    db.setbrowser(0);
-	    infoclear(db, c, cinfo.uin);
+	    infoclear(db, c, cinfo);
 
 	    switch(b) {
 		case 0: infogeneral(db, c); break;
@@ -853,12 +856,12 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 		case 3:
 		    db.setbrowser(&tb, false);
 		    infointerests(db, c);
-		    infoclear(db, c, cinfo.uin);
+		    infoclear(db, c, cinfo);
 		    break;
 		case 4:
 		    db.setbrowser(&tb, false);
 		    infoabout(db, c);
-		    infoclear(db, c, cinfo.uin);
+		    infoclear(db, c, cinfo);
 		    break;
 		case 5:
 		    switch(cinfo.pname) {
@@ -889,6 +892,7 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
     int i;
     bool r;
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
+    protocolname ipname;
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
@@ -899,8 +903,15 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
     m.idle = &menuidle;
 
-    if(ihook.enabled()) m.additem(0, icq, _(" [icq] ICQ network"));
-    if(yhook.enabled()) m.additem(0, yahoo, _(" [yahoo] YAIM"));
+    for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
+	icqconf::imaccount ia = conf.getourid(ipname);
+
+	if(!ia.empty())
+	switch(ipname) {
+	    case icq: m.additem(0, icq, _(" [icq] ICQ network")); break;
+	    case yahoo: m.additem(0, yahoo, _(" [yahoo] YAIM")); break;
+	}
+    }
 
     m.scale();
 
