@@ -219,10 +219,14 @@ void imcontroller::synclist(protocolname pname) {
 		face.progress.log(_(".. adding %s"), (*it)->getdesc().nickname.c_str());
 		gethook(pname).sendnewuser((*it)->getdesc());
 	    }
+
+	    face.progress.log(_("Finished"));
+	} else {
+	    face.progress.log(_("Cancelled"));
 	}
+
     }
 
-    face.progress.log(_("Finished"));
     sleep(2);
     face.progress.hide();
 }
@@ -349,8 +353,7 @@ void imcontroller::synclist(icqconf::imaccount &account) {
 	    icqsynclist();
 	    break;
 
-	case yahoo:
-	case aim:
+	default:
 	    synclist(account.pname);
 	    break;
     }
@@ -408,7 +411,9 @@ void imsearchparams::save(const string &prname) const {
 	    << department << "\t"
 	    << position << "\t"
 	    << email << "\t"
-	    << room << endl;
+	    << room << "\t"
+	    << (sincelast ? "1" : "0") << "\t"
+	    << (reverse ? "1" : "0") << endl;
 
 	of.close();
     }
@@ -456,6 +461,8 @@ bool imsearchparams::load(const string &prname) {
 		position = getfield(buf);
 		email = getfield(buf);
 		room = getfield(buf);
+		sincelast = getfield(buf) == "1";
+		reverse = getfield(buf) == "1";
 		break;
 	    }
 	}

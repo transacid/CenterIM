@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.83 2002/08/16 16:48:26 konst Exp $
+* $Id: icqdialogs.cc,v 1.84 2002/09/03 10:02:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -223,8 +223,10 @@ bool icqface::finddialog(imsearchparams &s) {
 		break;
 
 	    default:
-		i = tree.addnode(_(" Nickname "));
-		tree.addleaf(i, 0, 11, " " + s.nick + " ");
+		if(!s.reverse) {
+		    i = tree.addnode(_(" Nickname "));
+		    tree.addleaf(i, 0, 11, " " + s.nick + " ");
+		}
 		break;
 	}
 
@@ -242,6 +244,11 @@ bool icqface::finddialog(imsearchparams &s) {
 		i = tree.addnode(_(" Joined since the last check only "));
 		tree.addleaff(i, 0, 16, " %s ", stryesno[s.sincelast]);
 	    }
+	}
+
+	if(s.pname == msn && s.nick.empty()) {
+	    i = tree.addnode(_(" Show users who have you on their list "));
+	    tree.addleaff(i, 0, 30, " %s ", stryesno[s.reverse]);
 	}
 
 	finished = !db.open(n, b, (void **) &i);
@@ -306,6 +313,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 27: s.firstname = inputstr(_("Name: "), s.firstname); break;
 		    case 28: selectrandomgroup(s.randomgroup); break;
 		    case 29: s.kwords = inputstr(_("Keywords: "), s.kwords); break;
+		    case 30: s.reverse = !s.reverse; break;
 		}
 		break;
 

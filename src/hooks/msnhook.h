@@ -47,6 +47,9 @@ class msnhook : public abstracthook {
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;
+
+	void lookup(const imsearchparams &params, verticalmenu &dest);
+	vector<icqcontact *> getneedsync();
 };
 
 extern msnhook mhook;

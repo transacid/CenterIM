@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.28 2002/09/02 15:48:39 konst Exp $
+* $Id: msnhook.cc,v 1.29 2002/09/03 10:02:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,7 +40,7 @@ msnhook::msnhook() {
     status = offline;
     fonline = false;
 
-    fcapabilities = 0;
+    fcapabilities = hoptCanSyncList;
 
     for(int i = MSN_RNG; i != MSN_NUM_EVENTS; i++) {
 	msn_event[i] = 0;
@@ -258,6 +258,50 @@ void msnhook::requestinfo(const imcontact &ic) {
     }
 }
 
+void msnhook::lookup(const imsearchparams &params, verticalmenu &dest) {
+    if(params.reverse) {
+	vector< pair<string, string> > rl = MSN_GetLSTUsers("RL");
+	vector< pair<string, string> >::const_iterator i = rl.begin();
+
+	while(i != rl.end()) {
+	    icqcontact *c = new icqcontact(imcontact(i->first, msn));
+	    c->setdispnick(i->second);
+
+	    dest.additem(conf.getcolor(cp_clist_msn), c, (string) " " + i->first);
+	    ++i;
+	}
+
+	face.findready();
+
+	face.log(_("+ [msn] reverse users listing finished, %d found"),
+	    rl.size());
+
+	dest.redraw();
+    }
+}
+
+vector<icqcontact *> msnhook::getneedsync() {
+    int i;
+    vector<icqcontact *> r;
+    bool found;
+    vector< pair<string, string> > fl = MSN_GetLSTUsers("FL");
+
+    for(i = 0; i < clist.count; i++) {
+	icqcontact *c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == msn) {
+	    vector< pair<string, string> >::const_iterator fi = fl.begin();
+
+	    for(found = false; fi != fl.end() && !found; ++fi)
+		found = c->getdesc().nickname == fi->first;
+
+	    if(!found)
+		r.push_back(c);
+	}
+    }
+
+    return r;
+}
 
 // ----------------------------------------------------------------------------
 
