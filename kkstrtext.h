@@ -99,6 +99,9 @@ bool getstring(istream &f, string &buf);
 string unmime(const string &text);
 string mime(const string &text);
 
+string toutf8(const string &text);
+string fromutf8(const string &text);
+
 string ruscase(const string &s, const string &mode);
 string siconv(const string &text, const string &fromcs, const string &tocs);
 string cuthtml(const string &html, bool cutbrs = false);
@@ -144,6 +147,9 @@ time_t str2time(char *sdate, char *mask, time_t *t);
 
 char *unmime(char *text);
 char *mime(char *dst, const char *src);
+
+char *utf8_to_str(const char *pin);
+char *str_to_utf8(const char *pin);
 
 __KTOOL_END_C
 

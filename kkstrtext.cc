@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.27 2002/08/22 10:52:18 konst Exp $
+* $Id: kkstrtext.cc,v 1.28 2002/09/20 17:18:26 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -145,6 +145,22 @@ string mime(const string &text) {
     string r;
     char *buf = new char[text.size()*3+1];
     r = mime(buf, text.c_str());
+    delete buf;
+    return r;
+}
+
+string fromutf8(const string &text) {
+    string r;
+    char *buf = (char *) str_to_utf8(text.c_str());
+    r = buf;
+    delete buf;
+    return r;
+}
+
+string toutf8(const string &text) {
+    string r;
+    char *buf = utf8_to_str(text.c_str());
+    r = buf;
     delete buf;
     return r;
 }
@@ -926,4 +942,74 @@ string cuthtml(const string &html, bool cutbrs) {
 	r += html.substr(pos);
 
     return r;
+}
+
+char *utf8_to_str(const char *pin) {
+    int n = 0, i = 0, inlen;
+    unsigned char *result;
+    const unsigned char *in = (unsigned char *) pin;
+
+    if(!in) return NULL;
+
+    inlen = strlen(pin);
+    result = new unsigned char[inlen + 1];
+
+    while (n <= inlen - 1) {
+	long c = (long)in[n];
+	if(c < 0x80) result[i++] = (char)c; else {
+	    if((c & 0xC0) == 0xC0) result[i++] = (char)(((c & 0x03) << 6) | (((unsigned char)in[++n]) & 0x3F));
+	    else if ((c & 0xE0) == 0xE0) {
+		if (n + 2 <= inlen) {
+		    result[i] = (char)(((c & 0xF) << 4) | (((unsigned char)in[++n]) & 0x3F));
+		    result[i] = (char)(((unsigned char)result[i]) | (((unsigned char)in[++n]) & 0x3F));
+		    i++;
+		} else n += 2;
+	    } else if ((c & 0xF0) == 0xF0) n += 3;
+	    else if ((c & 0xF8) == 0xF8)
+		n += 4;
+	    else if ((c & 0xFC) == 0xFC)
+		n += 5;
+	}
+	n++;
+    }
+
+    result[i] = '\0';
+    return (char *) result;
+}
+
+char *str_to_utf8(const char *pin) {
+    int n = 0, i = 0;
+    int inlen;
+    char *result = NULL;
+    const unsigned char *in = (unsigned char *) pin;
+
+    if(!in)
+	return NULL;
+
+    inlen = strlen(pin);
+    result = new char[inlen * 2 + 1];
+
+    while (n < inlen) {
+	long c = (long)in[n];
+	if (c == 27) {
+	    n += 2;
+	    if (in[n] == 'x')
+		n++;
+	    if (in[n] == '3')
+		n++;
+	    n += 2;
+	    continue;
+	}
+
+	if (c < 128)
+	    result[i++] = (char)c;
+	else {
+	    result[i++] = (char)((c >> 6) | 192);
+	    result[i++] = (char)((c & 63) | 128);
+	}
+	n++;
+    }
+
+    result[i] = '\0';
+    return result;
 }
