@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.35 2002/12/12 17:58:50 konst Exp $
+* $Id: jabberhook.cc,v 1.36 2002/12/13 09:46:32 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -206,12 +206,16 @@ bool jabberhook::send(const imevent &ev) {
 	    auto_ptr<char> cjid(strdup(jidnormalize(ev.getcontact().nickname).c_str()));
 	    xmlnode x = 0;
 
-	    if(m->getauthtype() == imauthorization::Granted) {
-		x = jutil_presnew(JPACKET__SUBSCRIBED, cjid.get(), 0);
-
-	    } else if(m->getauthtype() == imauthorization::Request) {
-		x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
-
+	    switch(m->getauthtype()) {
+		case imauthorization::Granted:
+		    x = jutil_presnew(JPACKET__SUBSCRIBED, cjid.get(), 0);
+		    break;
+		case imauthorization::Rejected:
+		    x = jutil_presnew(JPACKET__UNSUBSCRIBED, cjid.get(), 0);
+		    break;
+		case imauthorization::Request:
+		    x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
+		    break;
 	    }
 
 	    if(x) {
@@ -1345,9 +1349,10 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		jab_send(jhook.jc, x);
 		xmlnode_free(x);
 
-		em.store(imnotification(ic, (string)
-		    _("The user has removed you from his contact list (unsubscribed you, using the Jabber language)")));
+		em.store(imnotification(ic, _("The user has removed you from his contact list (unsubscribed you, using the Jabber language)")));
+
 	    }
+
 	    break;
 
 	default:
