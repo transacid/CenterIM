@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.95 2002/03/26 13:13:07 konst Exp $
+* $Id: icqface.cc,v 1.96 2002/03/26 16:14:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1287,7 +1287,7 @@ void icqface::log(const string &atext) {
 
     lastlog.push_back(text);
 
-    if(!mainscreenblock) {
+    if(!mainscreenblock && (sizeWArea.x2-sizeWArea.x1 > 0)) {
 	chtype *logline = new chtype[sizeWArea.x2-sizeWArea.x1+2];
 	attrset(conf.getcolor(cp_main_text));
 
