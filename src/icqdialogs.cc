@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.113 2003/05/09 09:40:24 konst Exp $
+* $Id: icqdialogs.cc,v 1.114 2003/05/11 00:16:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1228,8 +1228,10 @@ void icqface::selectproto(bool chatmode[]) {
 
     protocolname pname;
     protocolname tempchatmode[protocolname_size];
+    bool achatmode[protocolname_size];
 
     i = 0;
+    memcpy(achatmode, chatmode, sizeof(achatmode));
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1)
 	if(!conf.getourid(pname).empty())
@@ -1241,7 +1243,7 @@ void icqface::selectproto(bool chatmode[]) {
     vector<imstatus>::iterator im;
 
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-9, 18, LINES-6, conf.getcolor(cp_dialog_menu)));
+    m.setwindow(textwindow(4, LINES-5-protmax, 18, LINES-4, conf.getcolor(cp_dialog_menu)));
 
     m.idle = &menuidle;
     m.otherkeys = &multiplekeys;
@@ -1252,15 +1254,14 @@ void icqface::selectproto(bool chatmode[]) {
 	m.clear();
 
 	for(i = 0; i < protmax; i++)
-	    m.additemf(0, i, "[%c] %s", chatmode[tempchatmode[i]] ? 'x' : ' ',
+	    m.additemf(0, i, "[%c] %s", achatmode[tempchatmode[i]] ? 'x' : ' ',
 		conf.getprotocolname(tempchatmode[i]).c_str());
 
-	m.scale();
 	m.setpos(saveelem);
 
 	switch(m.open()) {
 	    case -2:
-		chatmode[tempchatmode[m.getpos()]] = !chatmode[tempchatmode[m.getpos()]];
+		achatmode[tempchatmode[m.getpos()]] = !achatmode[tempchatmode[m.getpos()]];
 		break;
 
 	    default:
@@ -1270,7 +1271,10 @@ void icqface::selectproto(bool chatmode[]) {
     }
 
     m.close();
-}               
+
+    if(m.getlastkey() != KEY_ESC)
+	memcpy(chatmode, achatmode, sizeof(achatmode));
+}
 
 int icqface::editaboutkeys(texteditor &e, int k) {
     switch(k) {
