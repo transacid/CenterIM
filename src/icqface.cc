@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.225 2004/06/21 13:04:10 konst Exp $
+* $Id: icqface.cc,v 1.226 2004/07/03 08:21:12 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1749,7 +1749,7 @@ const set<protocolname> &protos, contactstatus cs) {
 	    imcontact desc = c->getdesc();
 
 	    if(!desc.empty())
-	    if(c->getgroupid() == ig->getid())
+	    if(c->getgroupid() == ig->getid() || conf.getgroupmode() == icqconf::nogroups)
 	    if(protos.empty() || protos.count(desc.pname))
 	    if(!lst.inlist(desc, cs))
 		mlst.push_back(desc);

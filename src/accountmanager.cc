@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.34 2004/02/04 07:44:41 konst Exp $
+* $Id: accountmanager.cc,v 1.35 2004/07/03 08:21:12 konst Exp $
 *
 * Copyright (C) 2001-4 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -223,7 +223,7 @@ void accountmanager::exec() {
 
 		case 11:
 		    account.additional["importfriends"] =
-			(account.additional["importfriends"] == "") ? "1" : "";
+			(account.additional["importfriends"] == "") ? "1" : "0";
 		    break;
 
 		case 13:
