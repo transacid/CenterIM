@@ -884,9 +884,10 @@ enum firetalk_error irc_got_data_connecting(client_t c, unsigned char * buffer, 
 		} else {
 			switch (atoi(args[1])) {
 				case 376:
+                        	case 422:
 					firetalk_callback_doinit(c,c->nickname);
 					firetalk_callback_connected(c);
-					break;
+                                        break;
 				case 431:
 				case 432:
 				case 436:
