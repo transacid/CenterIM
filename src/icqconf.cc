@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.100 2003/04/18 17:07:31 konst Exp $
+* $Id: icqconf.cc,v 1.101 2003/04/18 19:08:05 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -47,7 +47,7 @@ icqconf::icqconf() {
     autoaway = autona = 0;
 
     hideoffline = antispam = russian = makelog = askaway = chatmode =
-	logtimestamps = logonline = false;
+	logtimestamps = logonline = emacs = false;
 
     savepwd = mailcheck = fenoughdiskspace = logtyping = true;
 
@@ -211,6 +211,7 @@ void icqconf::loadmainconfig() {
 	    param = getword(buf);
 
 	    if(param == "hideoffline") hideoffline = true; else
+	    if(param == "emacs") emacs = true; else
 	    if(param == "russian") russian = true; else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
@@ -271,6 +272,7 @@ void icqconf::save() {
 	    if(away) f << "autoaway\t" << i2str(away) << endl;
 	    if(na) f << "autona\t" << i2str(na) << endl;
 	    if(hideoffline) f << "hideoffline" << endl;
+	    if(emacs) f << "emacs" << endl;
 	    if(getquote()) f << "quotemsgs" << endl;
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
@@ -603,6 +605,10 @@ void icqconf::setsavepwd(bool ssave) {
 
 void icqconf::sethideoffline(bool fho) {
     hideoffline = fho;
+}
+
+void icqconf::setemacs(bool fem) {
+    emacs = fem;
 }
 
 void icqconf::setantispam(bool fas) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.106 2003/04/16 23:38:06 konst Exp $
+* $Id: icqdialogs.cc,v 1.107 2003/04/18 19:08:06 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -995,6 +995,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool askaway = conf.getaskaway();
     bool chatmode = conf.getchatmode();
     bool bidi = conf.getbidi();
+    bool emacs = conf.getemacs();
 
     bool logtimestamps, logonline, logtyping;
     conf.getlogoptions(logtimestamps, logonline, logtyping);
@@ -1041,6 +1042,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     #ifdef USE_FRIBIDI
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
     #endif
+ 	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
@@ -1138,6 +1140,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 				ptpmin = tptpmin, ptpmax = tptpmax;
 			}
 			break;
+		    case 23: emacs = !emacs; break;
 		}
 		break;
 	    case 1:
@@ -1146,6 +1149,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setsavepwd(savepwd);
 		conf.setauto(aaway, ana);
 		conf.sethideoffline(hideoffl);
+		conf.setemacs(emacs);
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
 		conf.setrussian(rus);

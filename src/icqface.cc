@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.176 2003/04/16 23:38:06 konst Exp $
+* $Id: icqface.cc,v 1.177 2003/04/18 19:08:06 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1887,6 +1887,7 @@ bool icqface::eventedit(imevent &ev) {
     editor.otherkeys = &editmsgkeys;
     editor.idle = &editidle;
     editor.wrap = true;
+    editor.emacs = conf.getemacs();
 
     saveworkarea();
     clearworkarea();
@@ -2222,6 +2223,7 @@ void icqface::chat(const imcontact &ic) {
     editor.otherkeys = &editmsgkeys;
     editor.idle = &editchatidle;
     editor.wrap = true;
+    editor.emacs = conf.getemacs();
     editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.75 2003/04/16 23:38:07 konst Exp $
+* $Id: yahoohook.cc,v 1.76 2003/04/18 19:08:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -280,7 +280,7 @@ void yahoohook::sendnewuser(const imcontact &ic, bool report) {
 	    auto_ptr<char> who(strdup(ic.nickname.c_str()));
 	    auto_ptr<char> group(strdup("centericq"));
 
-	    for(bud = buddies; *bud && !found; bud++)
+	    for(bud = buddies; bud && *bud && !found; bud++)
 		found = !strcmp((*bud)->id, who.get());
 
 	    if(!found) {
@@ -310,7 +310,7 @@ void yahoohook::removeuser(const imcontact &ic, bool report) {
 
 	    struct yahoo_buddy **buddies = get_buddylist(cid), **bud;
 
-	    for(bud = buddies; *bud; bud++) {
+	    for(bud = buddies; bud && *bud; bud++) {
 		if(!strcmp((*bud)->id, who.get())) {
 		    auto_ptr<char> grp(strdup((*bud)->group));
 		    yahoo_remove_buddy(cid, who.get(), grp.get());
@@ -474,7 +474,7 @@ vector<icqcontact *> yahoohook::getneedsync() {
 	c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == yahoo) {
-	    for(found = false, bud = buddies; *bud && !found; bud++) {
+	    for(found = false, bud = buddies; bud && *bud && !found; bud++) {
 		found = c->getdesc().nickname == (string) (*bud)->id;
 	    }
 

@@ -79,7 +79,7 @@ class icqconf {
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
 	    makelog, fenoughdiskspace, askaway, chatmode, bidi, logtimestamps,
-	    logonline, logtyping;
+	    logonline, logtyping, emacs;
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost, bindhost;
@@ -121,6 +121,9 @@ class icqconf {
 
 	regsound getregsound() const;
 	void setregsound(regsound s);
+
+	bool getemacs() const { return emacs; }
+	void setemacs(bool fem);
 
 	bool gethideoffline() const { return hideoffline; }
 	void sethideoffline(bool fho);
