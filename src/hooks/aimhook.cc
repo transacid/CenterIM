@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.1 2002/03/14 11:53:32 konst Exp $
+* $Id: aimhook.cc,v 1.2 2002/03/14 12:23:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -304,6 +304,22 @@ void aimhook::loadprofile() {
     }
 }
 
+void aimhook::resolve() {
+    int i;
+    icqcontact *c;
+    imcontact cont;
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+	cont = c->getdesc();
+
+	if(cont.pname == aim)
+	if(c->getabout().empty()) {
+	    requestinfo(cont);
+	}
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void aimhook::connected(void *connection, void *cli, ...) {
@@ -329,6 +345,8 @@ void aimhook::connected(void *connection, void *cli, ...) {
 
     ahook.loadprofile();
     firetalk_set_info(ahook.handle, ahook.profile.info.c_str());
+
+    ahook.resolve();
 }
 
 void aimhook::disconnected(void *connection, void *cli, ...) {
@@ -383,6 +401,8 @@ void aimhook::gotinfo(void *conn, void *cli, ...) {
 
     if(c) {
 	c->setabout(cuthtml(info));
+	if(c->getabout().empty())
+	    c->setabout(_("The user has no profile information."));
     }
 }
 

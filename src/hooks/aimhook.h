@@ -24,6 +24,8 @@ class aimhook: public abstracthook {
 	void saveprofile();
 	void loadprofile();
 
+	void resolve();
+
 	static void connected(void *conn, void *cli, ...);
 	static void disconnected(void *conn, void *cli, ...);
 	static void newnick(void *conn, void *cli, ...);
