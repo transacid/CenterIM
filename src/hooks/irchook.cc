@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.63 2002/12/10 18:11:42 konst Exp $
+* $Id: irchook.cc,v 1.64 2002/12/12 14:14:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,16 +37,6 @@
 #else
 #define DLOG(s)
 #endif
-
-static string up(string s) {
-    int k;
-    string r;
-
-    for(k = 0; k < s.size(); k++)
-	r += toupper(s[k]);
-
-    return r;
-}
 
 // ----------------------------------------------------------------------------
 

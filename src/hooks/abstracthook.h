@@ -18,6 +18,7 @@ struct hookcapab {
 	changenick,
 	changepassword,
 	changedetails,
+	changeabout,
 	optionalpassword,
 	visibility,
 	version,

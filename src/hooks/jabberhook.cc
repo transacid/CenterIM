@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.32 2002/12/11 22:43:55 konst Exp $
+* $Id: jabberhook.cc,v 1.33 2002/12/12 14:14:35 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,6 +26,8 @@
 #include "icqface.h"
 #include "imlogger.h"
 #include "eventmanager.h"
+
+#include <libicq2000/userinfohelpers.h>
 
 static void jidsplit(const string &jid, string &user, string &host, string &rest) {
     int pos;
@@ -77,6 +79,8 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::conferencing);
     fcapabs.insert(hookcapab::groupchatservices);
+    fcapabs.insert(hookcapab::changenick);
+    fcapabs.insert(hookcapab::changeabout);
 }
 
 jabberhook::~jabberhook() {
@@ -380,6 +384,7 @@ void jabberhook::requestinfo(const imcontact &ic) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
 	xmlnode x = jutil_iqnew(JPACKET__GET, NS_VCARD);
 	xmlnode_put_attrib(x, "to", cjid.get());
+	xmlnode_put_attrib(x, "id", "VCARDreq");
 	jab_send(jc, x);
 	xmlnode_free(x);
     }
@@ -817,18 +822,40 @@ static void vcput(xmlnode x, const string &name, const string &val) {
 	val.c_str(), (unsigned int) -1);
 }
 
+static void vcputphone(xmlnode x, const string &type, const string &place, const string &number) {
+    xmlnode z = xmlnode_insert_tag(x, "TEL");
+    vcput(z, type, "");
+    vcput(z, place, "");
+    vcput(z, "NUMBER", number);
+}
+
+static void vcputaddr(xmlnode x, const string &place, const string &street,
+const string &locality, const string &region, const string &pcode,
+unsigned short country) {
+    xmlnode z = xmlnode_insert_tag(x, "ADR");
+    vcput(z, place, "");
+    vcput(z, "STREET", street);
+    vcput(z, "LOCALITY", locality);
+    vcput(z, "REGION", region);
+    vcput(z, "PCODE", pcode);
+    vcput(z, "CTRY", ICQ2000::UserInfoHelpers::getCountryIDtoString(country));
+}
+
 void jabberhook::sendupdateuserinfo(const icqcontact &c) {
-    xmlnode x, y;
+    xmlnode x, y, z;
     icqcontact::reginfo ri = c.getreginfo();
     string buf;
+    char cbuf[64];
 
     vector<agent>::const_iterator ia = agents.begin();
 
     while(ia != agents.end()) {
 	if(ia->name == ri.service) {
 	    if(ia->type == agent::atStandard) {
-		x = jutil_iqnew(JPACKET__SET, NS_VCARD);
-		y = xmlnode_get_tag(x, "vCard");
+		x = jutil_iqnew(JPACKET__SET, 0);
+		y = xmlnode_insert_tag(x, "vCard");
+		xmlnode_put_attrib(y, "xmlns", NS_VCARD);
+		xmlnode_put_attrib(y, "version", "3.0");
 
 		icqcontact::basicinfo bi = c.getbasicinfo();
 		icqcontact::moreinfo mi = c.getmoreinfo();
@@ -839,10 +866,38 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 		vcput(y, "URL", mi.homepage);
 		vcput(y, "TITLE", wi.position);
 		vcput(y, "AGE", i2str(mi.age));
-		vcput(y, "HOMECELL", bi.cellular);
+		vcput(y, "NICKNAME", c.getnick());
+
+		vcput(y, "GENDER",
+		    mi.gender == genderMale ? "Male" :
+		    mi.gender == genderFemale ? "Female" : "");
+
+		if(mi.birth_year && mi.birth_month && mi.birth_day) {
+		    sprintf(cbuf, "%04d-%02d-%02d", mi.birth_year, mi.birth_month, mi.birth_day);
+		    vcput(y, "BDAY", cbuf);
+		}
 
 		if(!(buf = bi.fname).empty()) buf += " " + bi.lname;
 		vcput(y, "FN", buf);
+
+		z = xmlnode_insert_tag(y, "N");
+		vcput(z, "GIVEN", bi.fname);
+		vcput(z, "FAMILY", bi.lname);
+
+		z = xmlnode_insert_tag(y, "ORG");
+		vcput(z, "ORGNAME", wi.company);
+		vcput(z, "ORGUNIT", wi.dept);
+
+		vcputphone(y, "VOICE", "HOME", bi.phone);
+		vcputphone(y, "FAX", "HOME", bi.fax);
+		vcputphone(y, "VOICE", "WORK", wi.phone);
+		vcputphone(y, "FAX", "WORK", wi.fax);
+
+		vcputaddr(y, "HOME", bi.street, bi.city, bi.state, bi.zip, bi.country);
+		vcputaddr(y, "WORK", wi.street, wi.city, wi.state, wi.zip, wi.country);
+
+		vcput(y, "HOMECELL", bi.cellular);
+		vcput(y, "WORKURL", wi.homepage);
 
 	    } else {
 		x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
@@ -926,46 +981,101 @@ void jabberhook::updatecontact(icqcontact *c) {
     }
 }
 
+static unsigned short getcountrybyname(string name) {
+    int i;
+    name = up(leadcut(trailcut(name)));    
+
+    for(i = 0; i < ICQ2000::Country_table_size; i++)
+	if(name == up(ICQ2000::Country_table[i].name))
+	    return ICQ2000::Country_table[i].code;
+
+    return 0;
+}
+
 void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
     xmlnode ad, n;
-    icqcontact *c;
     char *p;
+    string name, data;
 
-    if(c = clist.get(ic)) {
+    icqcontact *c = clist.get(ic);
+    if(!c) c = clist.get(contactroot);
+
+    if(c) {
 	icqcontact::basicinfo bi = c->getbasicinfo();
 	icqcontact::moreinfo mi = c->getmoreinfo();
 	icqcontact::workinfo wi = c->getworkinfo();
 
-	if(p = xmlnode_get_tag_data(v, "NICKNAME")) c->setnick(p);
-	if(p = xmlnode_get_tag_data(v, "DESC")) c->setabout(p);
-	if(p = xmlnode_get_tag_data(v, "EMAIL")) bi.email = p;
-	if(p = xmlnode_get_tag_data(v, "URL")) mi.homepage = p;
-	if(p = xmlnode_get_tag_data(v, "TITLE")) wi.position = p;
-	if(p = xmlnode_get_tag_data(v, "AGE")) mi.age = atoi(p);
-	if(p = xmlnode_get_tag_data(v, "HOMECELL")) bi.cellular = p;
+	for(ad = xmlnode_get_firstchild(v); ad; ad = xmlnode_get_nextsibling(ad)) {
+	    p = xmlnode_get_name(ad); name = p ? up(p) : "";
+	    p = xmlnode_get_data(ad); data = p ? p : "";
 
-	if(p = xmlnode_get_tag_data(v, "ROLE"))
-	if(!wi.position.empty()) wi.position += (string) " / " + p;
+	    if(name == "NICKNAME") c->setnick(data); else
+	    if(name == "DESC") c->setabout(data); else
+	    if(name == "EMAIL") bi.email = data; else
+	    if(name == "URL") mi.homepage = data; else
+	    if(name == "AGE") mi.age = atoi(data.c_str()); else
+	    if(name == "HOMECELL") bi.cellular = data; else
+	    if(name == "WORKURL") wi.homepage = data; else
+	    if(name == "GENDER") {
+		if(data == "Male") mi.gender = genderMale; else
+		if(data == "Female") mi.gender = genderFemale; else
+		    mi.gender = genderUnspec;
+	    } else
+	    if(name == "TITLE" || name == "ROLE") {
+		if(!wi.position.empty()) wi.position += " / ";
+		wi.position += data;
+	    } else
+	    if(name == "FN") {
+		bi.fname = getword(data);
+		bi.lname = data;
+	    } else
+	    if(name == "BDAY") {
+		mi.birth_year = atoi(getword(data, "-").c_str());
+		mi.birth_month = atoi(getword(data, "-").c_str());
+		mi.birth_day = atoi(getword(data, "-").c_str());
+	    } else
+	    if(name == "ORG") {
+		if(p = xmlnode_get_tag_data(ad, "ORGNAME")) wi.company = p;
+		if(p = xmlnode_get_tag_data(ad, "ORGUNIT")) wi.dept = p;
+	    } else
+	    if(name == "N") {
+		if(p = xmlnode_get_tag_data(ad, "GIVEN")) bi.fname = p;
+		if(p = xmlnode_get_tag_data(ad, "FAMILY")) bi.lname = p;
+	    } else
+	    if(name == "ADR") {
+		if(xmlnode_get_tag(ad, "HOME")) {
+		    if(p = xmlnode_get_tag_data(ad, "STREET")) bi.street = p;
+		    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) bi.city = p;
+		    if(p = xmlnode_get_tag_data(ad, "REGION")) bi.state = p;
+		    if(p = xmlnode_get_tag_data(ad, "PCODE")) bi.zip = p;
 
-	if(p = xmlnode_get_tag_data(v, "FN")) {
-	    string buf = p;
-	    bi.fname = getword(buf);
-	    bi.lname = buf;
-	}
+		    if((p = xmlnode_get_tag_data(ad, "CTRY"))
+		    || (p = xmlnode_get_tag_data(ad, "COUNTRY")))
+			bi.country = getcountrybyname(p);
 
-	if(ad = xmlnode_get_tag(v, "ORG")) {
-	    if(p = xmlnode_get_tag_data(ad, "ORGNAME")) wi.company = p;
-	    if(p = xmlnode_get_tag_data(ad, "ORGUNIT")) wi.dept = p;
-	}
+		} else if(xmlnode_get_tag(ad, "WORK")) {
+		    if(p = xmlnode_get_tag_data(ad, "STREET")) wi.street = p;
+		    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) wi.city = p;
+		    if(p = xmlnode_get_tag_data(ad, "REGION")) wi.state = p;
+		    if(p = xmlnode_get_tag_data(ad, "PCODE")) wi.zip = p;
 
-	if(ad = xmlnode_get_tag(v, "TEL")) {
-	    if(p = xmlnode_get_tag_data(ad, "VOICE")) bi.phone = p;
-	    if(p = xmlnode_get_tag_data(ad, "HOME")) bi.fax = p;
-	}
+		    if((p = xmlnode_get_tag_data(ad, "CTRY"))
+		    || (p = xmlnode_get_tag_data(ad, "COUNTRY")))
+			wi.country = getcountrybyname(p);
+		}
+	    } else
+	    if(name == "TEL") {
+		if(p = xmlnode_get_tag_data(ad, "NUMBER")) {
+		    if(xmlnode_get_tag(ad, "VOICE")) {
+			if(xmlnode_get_tag(ad, "HOME")) bi.phone = p; else
+			if(xmlnode_get_tag(ad, "WORK")) wi.phone = p;
 
-	if(ad = xmlnode_get_tag(v, "ADR")) {
-	    if(p = xmlnode_get_tag_data(ad, "STREET")) bi.street = p;
-	    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) bi.state = p;
+		    } else if(xmlnode_get_tag(ad, "FAX")) {
+			if(xmlnode_get_tag(ad, "HOME")) bi.fax = p; else
+			if(xmlnode_get_tag(ad, "WORK")) wi.fax = p;
+		    }
+		}
+	    }
 	}
 
 	c->setbasicinfo(bi);
@@ -1049,6 +1159,14 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			}
 			return;
 		    }
+
+		    if(!strcmp(p, "VCARDreq")) {
+			x = xmlnode_get_firstchild(packet->x);
+			if(!x) x = packet->x;
+
+			jhook.gotvcard(ic, x);
+			return;
+		    }
 		}
 
 		if(x = xmlnode_get_tag(packet->x, "query")) {
@@ -1110,11 +1228,6 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 		    }
 		}
-
-		if(x = xmlnode_get_firstchild(packet->x))
-		if(p = xmlnode_get_name(x))
-		if(!strcasecmp(p, "vcard"))
-		    jhook.gotvcard(ic, x);
 
 	    } else if(type == "set") {
 	    } else if(type == "error") {

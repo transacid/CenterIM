@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.147 2002/12/11 22:43:54 konst Exp $
+* $Id: centericq.cc,v 1.148 2002/12/12 14:14:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1536,4 +1536,14 @@ bool ischannel(const imcontact &cont) {
 	return true;
 
     return false;
+}
+
+string up(string s) {
+    int k;
+    string r;
+
+    for(k = 0; k < s.size(); k++)
+	r += toupper(s[k]);
+
+    return r;
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.31 2002/11/29 15:57:39 konst Exp $
+* $Id: aimhook.cc,v 1.32 2002/12/12 14:14:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,6 +45,7 @@ aimhook::aimhook()
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::directadd);
+    fcapabs.insert(hookcapab::changeabout);
 }
 
 aimhook::~aimhook() {

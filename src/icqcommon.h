@@ -73,6 +73,7 @@ using namespace std;
 string rusconv(const string &tdir, const string &text);
 string rushtmlconv(const string &tdir, const string &text);
 string ruscrlfconv(const string &tdir, const string &text);
+string up(string s);
 
 enum Encoding {
     encUTF, encKOI, encUnknown

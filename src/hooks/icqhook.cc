@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.123 2002/12/09 10:24:03 konst Exp $
+* $Id: icqhook.cc,v 1.124 2002/12/12 14:14:34 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -65,6 +65,7 @@ icqhook::icqhook() {
     fcapabs.insert(hookcapab::contacts);
     fcapabs.insert(hookcapab::visibility);
     fcapabs.insert(hookcapab::cltemporary);
+    fcapabs.insert(hookcapab::changeabout);
 
     cli.setServerSideGroup("centericq", 0x0666);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.77 2002/12/10 18:11:41 konst Exp $
+* $Id: icqcontact.cc,v 1.78 2002/12/12 14:14:33 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -516,8 +516,6 @@ void icqcontact::setworkinfo(const workinfo &ainfo) {
 
 void icqcontact::setreginfo(const reginfo &arinfo) {
     rinfo = arinfo;
-    fupdated++;
-    modified = true;
 }
 
 void icqcontact::setinterests(const vector<string> &ainterests) {

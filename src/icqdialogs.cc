@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.100 2002/12/11 22:43:54 konst Exp $
+* $Id: icqdialogs.cc,v 1.101 2002/12/12 14:14:33 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -559,16 +559,16 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	i = tree->addnode(_(" More "));
 	tree->addleaff(i, 0, 35, _(" Homepage : %s "), mi.homepage.c_str());
 
-	tree->addleaff(i, 0, 36, _(" 1st language : %s "),
-	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1).c_str());
-
-	tree->addleaff(i, 0, 37, _(" 2nd language : %s "),
-	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2).c_str());
-
-	tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
-	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
-
 	if(passinfo.pname == icq) {
+	    tree->addleaff(i, 0, 36, _(" 1st language : %s "),
+		ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang1).c_str());
+
+	    tree->addleaff(i, 0, 37, _(" 2nd language : %s "),
+		ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang2).c_str());
+
+	    tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
+		ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
+
 	    i = tree->addnode(_(" Miscellaneous "));
 	    if(ourdetails) {
 		tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno(bi.webaware));
@@ -580,7 +580,8 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	}
     }
 
-    if(passinfo.pname == icq || passinfo.pname == aim) {
+    if(capab.count(hookcapab::changeabout))
+    if(capab.count(hookcapab::flexiblereg) && ri.params.empty()) {
 	i = tree->addnode(_(" About "));
 	tree->addleaff(i, 0, 39, " %s ", about.c_str());
     }
