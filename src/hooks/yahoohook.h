@@ -50,7 +50,7 @@ class yahoohook: public abstracthook {
 	imstatus ourstatus;
 	int cid;
 
-	time_t timer_refresh;
+	time_t timer_refresh, timer_close;
 
 	static void login_response(int id, int succ, char *url);
 	static void got_buddies(int id, YList *buds);

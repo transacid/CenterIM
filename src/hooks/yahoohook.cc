@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.105 2004/02/22 13:03:59 konst Exp $
+* $Id: yahoohook.cc,v 1.106 2004/03/22 21:10:18 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -44,6 +44,7 @@
 #include <netinet/in.h>
 
 #define PERIOD_REFRESH          60
+#define PERIOD_CLOSE            6
 
 int yahoohook::yfd::connection_tags = 0;
 
@@ -248,6 +249,7 @@ bool yahoohook::isoursocket(fd_set &rs, fd_set &ws, fd_set &es) const {
 void yahoohook::disconnect() {
     if(online()) {
 	yahoo_logoff(cid);
+	time(&timer_close);
     }
 }
 
@@ -279,6 +281,11 @@ void yahoohook::exectimers() {
 	if(timer_current-timer_refresh > PERIOD_REFRESH) {
 	    yahoo_refresh(cid);
 	    timer_refresh = timer_current;
+
+	} else if(timer_close && timer_current-timer_close > PERIOD_CLOSE) {
+	    yahoo_close(cid);
+	    disconnected();
+
 	}
     }
 }
@@ -707,6 +714,7 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    yhook.log(logLogged);
 	    time(&yhook.timer_refresh);
 	    yhook.setautostatus(yhook.manualstatus);
+	    yhook.timer_close = 0;
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.148 2004/03/09 21:46:26 konst Exp $
+* $Id: icqhook.cc,v 1.149 2004/03/22 21:10:18 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -147,9 +147,7 @@ void icqhook::connect() {
     cli.setPassword(acc.password);
     cli.setWebAware(acc.additional["webaware"] == "1");
 
-    sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
-
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
 
     for(i = 0; i < clist.count; i++) {
@@ -163,6 +161,8 @@ void icqhook::connect() {
 	    addContact(c->getdesc().uin, groups.getname(c->getgroupid()));
 	}
     }
+
+    sendinvisible();
 
     fonline = true;
     flogged = false;
@@ -1488,5 +1488,6 @@ ContactRef icqhook::addContact(unsigned int uin, const string &groupname) {
 
     ContactRef cont(new Contact(uin));
     gp->add(cont);
+
     return cont;
 }
