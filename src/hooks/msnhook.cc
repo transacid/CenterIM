@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.10 2001/12/14 16:19:11 konst Exp $
+* $Id: msnhook.cc,v 1.11 2001/12/20 18:12:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -199,7 +199,24 @@ imstatus msnhook::getstatus() const {
     return status;
 }
 
-imstatus msnhook::msn2imstatus(int st) const {
+void msnhook::removeuser(const imcontact ic) {
+    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
+    MSN_RemoveContact(ic.nickname.c_str());
+}
+
+bool msnhook::isourid(const string nick) {
+    string s1, s2;
+    icqconf::imaccount account = conf.getourid(msn);
+
+    s1 = nick, s2 = account.nickname;
+
+    if(s1.find("@") == -1) s1 += "@hotmail.com";
+    if(s2.find("@") == -1) s2 += "@hotmail.com";
+
+    return (s1 == s2);
+}
+
+imstatus msnhook::msn2imstatus(int st) {
     switch(st) {
 	case USER_HDN:
 	    return invisible;
@@ -225,11 +242,6 @@ imstatus msnhook::msn2imstatus(int st) const {
     }
 }
 
-void msnhook::removeuser(const imcontact ic) {
-    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
-    MSN_RemoveContact(ic.nickname.c_str());
-}
-
 // ----------------------------------------------------------------------------
 
 void msnhook::messaged(void *data) {
@@ -237,6 +249,7 @@ void msnhook::messaged(void *data) {
     imcontact ic(d->sender, msn);
     icqcontact *c;
 
+    if(!isourid(d->sender))
     if(strlen(d->msg)) {
 	c = clist.get(ic);
 
@@ -260,17 +273,19 @@ void msnhook::statuschanged(void *data) {
     imcontact ic(d->handle, msn);
     icqcontact *c = clist.get(ic);
 
-    if(!c) {
-	c = clist.addnew(ic, false);
-	if(d->friendlyhandle) {
-	    c->setdispnick(d->friendlyhandle);
+    if(!isourid(d->handle)) {
+	if(!c) {
+	    c = clist.addnew(ic, false);
+	    if(d->friendlyhandle) {
+		c->setdispnick(d->friendlyhandle);
+	    }
 	}
-    }
 
-    c->setstatus(mhook.msn2imstatus(d->newStatus));
+	c->setstatus(msn2imstatus(d->newStatus));
 
-    if(c->getstatus() != offline) {
-	c->setlastseen();
+	if(c->getstatus() != offline) {
+	    c->setlastseen();
+	}
     }
 }
 
