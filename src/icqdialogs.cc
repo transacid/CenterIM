@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.41 2002/01/18 16:04:01 konst Exp $
+* $Id: icqdialogs.cc,v 1.42 2002/01/18 18:01:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,7 +236,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     if(!c) {
 	status(_("Fetching your details"));
 	c = clist.get(contactroot);
-//        if(mainscreenblock) return false;
+	if(mainscreenblock) return false;
 	    // Another dialog is already on top
     }
 

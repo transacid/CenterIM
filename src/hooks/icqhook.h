@@ -68,6 +68,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	bool regattempt(unsigned int &auin, const string apassword);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
+	void sendupdateuserinfo(const icqcontact &c);
 };
 
 extern icqhook ihook;

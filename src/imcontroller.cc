@@ -146,18 +146,17 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 
 void imcontroller::icqupdatedetails() {
     icqcontact *c = clist.get(contactroot);
-/*
+
     if(ihook.logged()) {
 	c->clear();
-	ihook.sendinforeq(c, conf.getourid(icq).uin);
+	ihook.requestinfo(imcontact(conf.getourid(icq).uin, icq));
 
 	if(face.updatedetails()) {
-	    ihook.sendupdateuserinfo(c);
+	    ihook.sendupdateuserinfo(*c);
 	}
     } else {
 	face.status(_("You must be logged to the ICQ network to update the details"));
     }
-*/
 }
 
 void imcontroller::registration(icqconf::imaccount &account) {
@@ -175,10 +174,8 @@ void imcontroller::registration(icqconf::imaccount &account) {
 void imcontroller::updateinfo(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq:
-/*
 	    icqupdatedetails();
 	    break;
-*/
 	default:
 	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
 		_("details update is not supported"));

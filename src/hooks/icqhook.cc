@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.36 2002/01/18 16:04:02 konst Exp $
+* $Id: icqhook.cc,v 1.37 2002/01/18 18:01:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -459,6 +459,9 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	searchevent = cli.searchForContacts(params.nick, params.firstname,
 	    params.lastname);
     }
+}
+
+void icqhook::sendupdateuserinfo(const icqcontact &c) {
 }
 
 // ----------------------------------------------------------------------------
