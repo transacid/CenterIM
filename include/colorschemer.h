@@ -112,8 +112,9 @@ class colorschemer {
 	    }
 	}
 
-	int operator[] (T elem) {
-	    return colors[elem].code;
+	int operator[] (T elem) const {
+	    map<T, colordef>::const_iterator ic = colors.find(elem);
+	    return (ic != colors.end()) ? ic->second.code : normalcolor(0);
 	}
 
 	friend std::ostream& operator<< (std::ostream &o, const colorschemer &s) {
