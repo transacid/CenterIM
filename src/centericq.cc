@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.151 2003/01/05 21:47:33 konst Exp $
+* $Id: centericq.cc,v 1.152 2003/01/15 15:15:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -54,6 +54,7 @@ void centericq::exec() {
     sigaction(SIGALRM, &sact, 0);
     sigaction(SIGUSR1, &sact, 0);
     sigaction(SIGUSR2, &sact, 0);
+    sigaction(SIGTERM, &sact, 0);
 
     kinterface();
     raw();
@@ -653,6 +654,17 @@ void centericq::handlesignal(int signum) {
 
 	case SIGALRM:
 	case SIGUSR2:
+	    break;
+
+	case SIGTERM:
+	    lst.save();
+	    clist.save();
+	    groups.save();
+	    conf.save();
+	    face.done();
+
+	    signal(SIGTERM, 0);
+	    kill(0, SIGTERM);
 	    break;
     }
 }

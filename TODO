@@ -15,27 +15,23 @@ GnuTLS support (update the README and the web page)
 
 user info external progs
 
+roster nicknames with non-ascii chars
+
+save configuration on SIGTERM - useful on reboot
+
+Shells others than /bin/sh don't work in external.
+
+small fixes.
+
 /*
 *
 * BUGS
 *
 */
 
-> When I change a jabber contact's nickname to include non-ASCII characters
-> (e.g. "Gabri?l Demo") centericq itself works fine, but the nickname is
-> messed up when using a different jabber client (e.g. gabber). I suspect the
-> jabber standards prescribe UTF8 as the encoding for contact names in
-> rosters but centericq is violating this requirement.
+messages in invisible don't work
 
-# status
-# ------
-# Can be "online", "away", "dnd", "na", "occupied", "ffc" or "invisible".
-# Specifying several ones is possible. "all" stands for all of possible
-# status modes.
-
-So, there is no abbreviation for 'occupied'.
-
-Shells others than /bin/sh don't work in external.
+add to visible/invisible list -> don't show if already there
 
 When an ICQ2000 user sends me a contact, while I don't use centericq,
 centericq crashes during start up (Segmentation fault after writing
@@ -68,4 +64,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.396 2003/01/15 11:02:00 konst Exp $
+$Id: TODO,v 1.397 2003/01/15 15:15:17 konst Exp $

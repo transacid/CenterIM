@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.73 2002/12/18 18:05:40 konst Exp $
+* $Id: yahoohook.cc,v 1.74 2003/01/15 15:15:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -613,6 +613,7 @@ void yahoohook::login_done(guint32 id, int succ, char *url) {
 	    }
 
 	    time(&yhook.timer_refresh);
+	    yhook.setautostatus(yhook.manualstatus);
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.40 2002/12/23 14:33:55 konst Exp $
+* $Id: jabberhook.cc,v 1.41 2003/01/15 15:15:18 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -62,6 +62,9 @@ static string jidtodisp(const string &jid) {
 
     return user;
 }
+
+#define KOI2UTF(x) siconv(x, conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET, "utf8")
+#define UTF2KOI(x) siconv(x, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET)
 
 // ----------------------------------------------------------------------------
 
@@ -232,7 +235,7 @@ bool jabberhook::send(const imevent &ev) {
 	    return true;
 	}
 
-	text = siconv(text, conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET, "utf8");
+	text = KOI2UTF(text);
 
 	auto_ptr<char> cjid(strdup(jidnormalize(c->getdesc().nickname).c_str()));
 	auto_ptr<char> ctext(strdup(text.c_str()));
@@ -860,7 +863,7 @@ void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontac
 }
 
 static void vcput(xmlnode x, const string &name, const string &val) {
-    xmlnode_insert_cdata(xmlnode_insert_tag(x, name.c_str()),
+    xmlnode_insert_cdata(xmlnode_insert_tag(x, KOI2UTF(name).c_str()),
 	val.c_str(), (unsigned int) -1);
 }
 
@@ -1001,8 +1004,7 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
     }
 
     checkinlist(ic);
-    body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
-    em.store(immessage(ic, imevent::incoming, body));
+    em.store(immessage(ic, imevent::incoming, UTF2KOI(body)));
 }
 
 void jabberhook::updatecontact(icqcontact *c) {
@@ -1010,12 +1012,13 @@ void jabberhook::updatecontact(icqcontact *c) {
 
     if(logged()) {
 	auto_ptr<char> cjid(strdup(jidnormalize(c->getdesc().nickname).c_str()));
-	auto_ptr<char> cname(strdup(c->getdispnick().c_str()));
+	auto_ptr<char> cname(strdup(KOI2UTF(c->getdispnick()).c_str()));
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
 	y = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "item");
 	xmlnode_put_attrib(y, "jid", cjid.get());
 	xmlnode_put_attrib(y, "name", cname.get());
+
 	jab_send(jc, x);
 	xmlnode_free(x);
     }
@@ -1048,7 +1051,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 
 	for(ad = xmlnode_get_firstchild(v); ad; ad = xmlnode_get_nextsibling(ad)) {
 	    p = xmlnode_get_name(ad); name = p ? up(p) : "";
-	    p = xmlnode_get_data(ad); data = p ? p : "";
+	    p = xmlnode_get_data(ad); data = p ? UTF2KOI(p) : "";
 
 	    if(name == "NICKNAME") c->setnick(data); else
 	    if(name == "DESC") c->setabout(data); else
@@ -1081,29 +1084,29 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 		mi.birth_day = atoi(getword(data, "-").c_str());
 	    } else
 	    if(name == "ORG") {
-		if(p = xmlnode_get_tag_data(ad, "ORGNAME")) wi.company = p;
-		if(p = xmlnode_get_tag_data(ad, "ORGUNIT")) wi.dept = p;
+		if(p = xmlnode_get_tag_data(ad, "ORGNAME")) wi.company = UTF2KOI(p);
+		if(p = xmlnode_get_tag_data(ad, "ORGUNIT")) wi.dept = UTF2KOI(p);
 	    } else
 	    if(name == "N") {
-		if(p = xmlnode_get_tag_data(ad, "GIVEN")) bi.fname = p;
-		if(p = xmlnode_get_tag_data(ad, "FAMILY")) bi.lname = p;
+		if(p = xmlnode_get_tag_data(ad, "GIVEN")) bi.fname = UTF2KOI(p);
+		if(p = xmlnode_get_tag_data(ad, "FAMILY")) bi.lname = UTF2KOI(p);
 	    } else
 	    if(name == "ADR") {
 		if(xmlnode_get_tag(ad, "HOME")) {
-		    if(p = xmlnode_get_tag_data(ad, "STREET")) bi.street = p;
-		    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) bi.city = p;
-		    if(p = xmlnode_get_tag_data(ad, "REGION")) bi.state = p;
-		    if(p = xmlnode_get_tag_data(ad, "PCODE")) bi.zip = p;
+		    if(p = xmlnode_get_tag_data(ad, "STREET")) bi.street = UTF2KOI(p);
+		    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) bi.city = UTF2KOI(p);
+		    if(p = xmlnode_get_tag_data(ad, "REGION")) bi.state = UTF2KOI(p);
+		    if(p = xmlnode_get_tag_data(ad, "PCODE")) bi.zip = UTF2KOI(p);
 
 		    if((p = xmlnode_get_tag_data(ad, "CTRY"))
 		    || (p = xmlnode_get_tag_data(ad, "COUNTRY")))
 			bi.country = getcountrybyname(p);
 
 		} else if(xmlnode_get_tag(ad, "WORK")) {
-		    if(p = xmlnode_get_tag_data(ad, "STREET")) wi.street = p;
-		    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) wi.city = p;
-		    if(p = xmlnode_get_tag_data(ad, "REGION")) wi.state = p;
-		    if(p = xmlnode_get_tag_data(ad, "PCODE")) wi.zip = p;
+		    if(p = xmlnode_get_tag_data(ad, "STREET")) wi.street = UTF2KOI(p);
+		    if(p = xmlnode_get_tag_data(ad, "LOCALITY")) wi.city = UTF2KOI(p);
+		    if(p = xmlnode_get_tag_data(ad, "REGION")) wi.state = UTF2KOI(p);
+		    if(p = xmlnode_get_tag_data(ad, "PCODE")) wi.zip = UTF2KOI(p);
 
 		    if((p = xmlnode_get_tag_data(ad, "CTRY"))
 		    || (p = xmlnode_get_tag_data(ad, "COUNTRY")))
@@ -1113,12 +1116,12 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 	    if(name == "TEL") {
 		if(p = xmlnode_get_tag_data(ad, "NUMBER")) {
 		    if(xmlnode_get_tag(ad, "VOICE")) {
-			if(xmlnode_get_tag(ad, "HOME")) bi.phone = p; else
-			if(xmlnode_get_tag(ad, "WORK")) wi.phone = p;
+			if(xmlnode_get_tag(ad, "HOME")) bi.phone = UTF2KOI(p); else
+			if(xmlnode_get_tag(ad, "WORK")) wi.phone = UTF2KOI(p);
 
 		    } else if(xmlnode_get_tag(ad, "FAX")) {
-			if(xmlnode_get_tag(ad, "HOME")) bi.fax = p; else
-			if(xmlnode_get_tag(ad, "WORK")) wi.fax = p;
+			if(xmlnode_get_tag(ad, "HOME")) bi.fax = UTF2KOI(p); else
+			if(xmlnode_get_tag(ad, "WORK")) wi.fax = UTF2KOI(p);
 		    }
 		}
 	    }
@@ -1174,18 +1177,18 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
     if(y) {
 	if(z = xmlnode_get_tag(y, "name"))
 	if(p = xmlnode_get_data(y))
-	    if(p) vinfo = p;
+	    if(p) vinfo = UTF2KOI(p);
 
 	if(z = xmlnode_get_tag(y, "version"))
 	if(p = xmlnode_get_data(y)) {
 	    if(!vinfo.empty()) vinfo += ", ";
-	    vinfo += p;
+	    vinfo += UTF2KOI(p);
 	}
 
 	if(z = xmlnode_get_tag(y, "os"))
 	if(p = xmlnode_get_data(y)) {
 	    if(!vinfo.empty()) vinfo += " / ";
-	    vinfo += p;
+	    vinfo += UTF2KOI(p);
 	}
 
 	if(vinfo.size() > 128)

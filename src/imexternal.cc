@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.19 2003/01/05 21:47:33 konst Exp $
+* $Id: imexternal.cc,v 1.20 2003/01/15 15:15:18 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,8 +236,12 @@ void imexternal::action::writescript() {
     f.open(sname.c_str());
 
     if(f.is_open()) {
+	if(code.substr(0, 2) != "#!")
+	    f << "#!/bin/sh" << endl << endl;
+
 	f << code << endl;
 	f.close();
+	chmod(sname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
     }
 }
 
@@ -277,7 +281,7 @@ int imexternal::action::execscript() {
 	    close(outpipe[0]);
 	    close(outpipe[1]);
 
-	    execl("/bin/sh", "sh", sname.c_str(), 0);
+	    execl(sname.c_str(), sname.c_str(), 0);
 	    _exit(0);
 	} else {
 	    close(outpipe[0]);
