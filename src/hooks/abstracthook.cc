@@ -1,6 +1,8 @@
 #include "abstracthook.h"
+
 #include "icqhook.h"
 #include "yahoohook.h"
+#include "msnhook.h"
 
 void abstracthook::connect() {
 }
@@ -70,9 +72,11 @@ abstracthook &gethook(protocolname pname) {
 	    return ihook;
 	case yahoo:
 	    return yhook;
-	default:
-	    return ahook;
+	case msn:
+	    return mhook;
     }
+
+    return ahook;
 }
 
 struct tm *maketm(int hour, int minute, int day, int month, int year) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.20 2001/11/23 15:10:08 konst Exp $
+* $Id: icqconf.cc,v 1.21 2001/11/23 16:33:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -77,6 +77,7 @@ void icqconf::loadmainconfig() {
     string fname = getconfigfname("config"), buf, param, rbuf;
     ifstream f(fname.c_str());
     imaccount im;
+    protocolname pname;
 
     if(f.is_open()) {
 	mailcheck = serveronly = false;
@@ -98,15 +99,15 @@ void icqconf::loadmainconfig() {
 	    if(param == "sockshost") setsockshost(buf); else
 	    if(param == "socksusername") socksuser = buf; else
 	    if(param == "sockspass") sockspass = buf; else
-	    if(param == "usegroups") usegroups = true;
-	    else if(param.substr(0, 3) == "icq") {
-		im = getourid(icq);
-		im.read(rbuf);
-		setourid(im);
-	    } else if(param.substr(0, 5) == "yahoo") {
-		im = getourid(yahoo);
-		im.read(rbuf);
-		setourid(im);
+	    if(param == "usegroups") usegroups = true; else {
+		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		    buf = getprotocolname(pname);
+		    if(param.substr(0, buf.size()) == buf) {
+			im = getourid(pname);
+			im.read(rbuf);
+			setourid(im);
+		    }
+		}
 	    }
 	}
 
@@ -542,12 +543,11 @@ void icqconf::setserveronly(bool fso) {
 }
 
 const string icqconf::getprotocolname(protocolname pname) const {
-    switch(pname) {
-	case icq: return "icq";
-	case yahoo: return "yahoo";
-    }
+    static const string ptextnames[protocolname_size] = {
+	"icq", "yahoo", "msn", "infocard"
+    };
 
-    return "";
+    return ptextnames[pname];
 }
 
 imstatus icqconf::getstatus(protocolname pname) {
