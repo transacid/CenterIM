@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.91 2002/04/08 16:06:24 konst Exp $
+* $Id: centericq.cc,v 1.92 2002/04/08 16:24:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -332,6 +332,9 @@ void centericq::changestatus() {
 		    prompt += _("away message");
 		    proceed = setaway = face.edit(tmp = conf.getawaymsg(pname), prompt);
 		    break;
+		default:
+		    setaway = false;
+		    break;
 	    }
 
 	    if(proceed)
@@ -340,7 +343,7 @@ void centericq::changestatus() {
 		if((pname == proto_all) || (ipname == pname)) {
 		    abstracthook &hook = gethook(ipname);
 
-		    if(setaway)
+		    if(setaway && !tmp.empty())
 			if(hook.getcapabilities() & hoptCanSetAwayMsg)
 			    conf.setawaymsg(ipname, tmp);
 
