@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.36 2004/06/10 19:15:18 konst Exp $
+* $Id: kkstrtext.cc,v 1.37 2004/06/18 06:49:40 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1065,6 +1065,7 @@ string striprtf(const string &s) {
 	    if(spec.size() == 2) {
 		r += (char) hex2int(spec);
 		bspec = false;
+		bprint = true;
 	    }
 
 	} else switch(*i) {
