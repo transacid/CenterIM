@@ -18,36 +18,40 @@
 #define ASK_NO          4
 #define ASK_CANCEL      8
 
-#define ACT_QUIT        -10
-#define ACT_MSG         -11
-#define ACT_URL         -12
-#define ACT_STATUS      -13
-#define ACT_REMOVE      -14
-#define ACT_SMS         -15
-#define ACT_CHAT        -16
-#define ACT_FIND        -17
-#define ACT_INFO        -18
-#define ACT_HISTORY     -19
-#define ACT_IGNORE      -20
-#define ACT_ADD         -21
-#define ACT_MENU        -22
-#define ACT_IGNORELIST  -23
-#define ACT_DETAILS     -24
-#define ACT_GMENU       -25
-#define ACT_CONF        -26
-#define ACT_RENAME      -27
-#define ACT_EDITUSER    -29
-#define ACT_VISIBLELIST -30
-#define ACT_INVISLIST   -31
-#define ACT_QUICKFIND   -32
-#define ACT_FILE        -33
-#define ACT_GROUPMOVE   -34
-#define ACT_ORG_GROUPS  -35
-#define ACT_HIDEOFFLINE -36
-#define ACT_FETCHAWAY   -37
-#define ACT_EMAIL       -38
-#define ACT_AUTH        -39
-#define ACT_CONTACT     -40
+enum interfaceAction {
+    ACT_QUIT = -10,
+    ACT_MSG = -11,
+    ACT_URL = -12,
+    ACT_STATUS = -13,
+    ACT_REMOVE = -14,
+    ACT_SMS = -15,
+    ACT_CHAT = -16,
+    ACT_FIND = -17,
+    ACT_INFO = -18,
+    ACT_HISTORY = -19,
+    ACT_IGNORE = -20,
+    ACT_ADD = -21,
+    ACT_MENU = -22,
+    ACT_IGNORELIST = -23,
+    ACT_DETAILS = -24,
+    ACT_GMENU = -25,
+    ACT_CONF = -26,
+    ACT_RENAME = -27,
+    ACT_PING = -28,
+    ACT_EDITUSER = -29,
+    ACT_VISIBLELIST = -30,
+    ACT_INVISLIST = -31,
+    ACT_QUICKFIND = -32,
+    ACT_FILE = -33,
+    ACT_GROUPMOVE = -34,
+    ACT_ORG_GROUPS = -35,
+    ACT_HIDEOFFLINE = -36,
+    ACT_FETCHAWAY = -37,
+    ACT_EMAIL = -38,
+    ACT_AUTH = -39,
+    ACT_CONTACT = -40,
+    ACT_VERSION = -41
+};
 
 extern class centericq cicq;
 

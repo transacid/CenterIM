@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.140 2002/09/12 09:33:47 konst Exp $
+* $Id: icqface.cc,v 1.141 2002/09/13 13:15:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -230,7 +230,7 @@ void icqface::update() {
 }
 
 int icqface::contextmenu(icqcontact *c) {
-    int ret = 0, i, capab;
+    int ret = 0, i;
     static int lastr = 0;
     imcontact cont;
 
@@ -253,6 +253,8 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_ADD]       = _(" Add to list            a");
 	actnames[ACT_RENAME]    = _(" Rename contact         r");
 	actnames[ACT_GROUPMOVE] = _(" Move to group..");
+	actnames[ACT_PING]      = _(" Ping");
+	actnames[ACT_VERSION]   = _(" Fetch version info");
     }
 
     if(ischannel(c)) {
@@ -272,7 +274,8 @@ int icqface::contextmenu(icqcontact *c) {
     }
 
     cont = c->getdesc();
-    capab = gethook(cont.pname).getcapabilities();
+
+    set<hookcapab::enumeration> capab = gethook(cont.pname).getCapabs();
 
     vector<int> actions;
     vector<int>::const_iterator ia;
@@ -280,10 +283,10 @@ int icqface::contextmenu(icqcontact *c) {
     if(!ischannel(cont)) {
 	if(cont != contactroot) {
 	    if(cont.pname != infocard) actions.push_back(ACT_MSG);
-	    if(capab & hoptCanSendURL) actions.push_back(ACT_URL);
+	    if(capab.count(hookcapab::urls)) actions.push_back(ACT_URL);
 	    if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
-	    if(capab & hoptCanSendContacts) actions.push_back(ACT_CONTACT);
-	    if(capab & hoptAuthReqSend) actions.push_back(ACT_AUTH);
+	    if(capab.count(hookcapab::contacts)) actions.push_back(ACT_CONTACT);
+	    if(capab.count(hookcapab::authrequests)) actions.push_back(ACT_AUTH);
 
 	    if(!actions.empty())
 		actions.push_back(0);
@@ -291,9 +294,11 @@ int icqface::contextmenu(icqcontact *c) {
 	    actions.push_back(ACT_INFO);
 	    actions.push_back(ACT_EDITUSER);
 
-	    if(c->getstatus() != offline)
-	    if(capab & hoptCanFetchAwayMsg)
-		actions.push_back(ACT_FETCHAWAY);
+	    if(c->getstatus() != offline) {
+		if(capab.count(hookcapab::fetchaway)) actions.push_back(ACT_FETCHAWAY);
+		if(capab.count(hookcapab::version)) actions.push_back(ACT_VERSION);
+		if(capab.count(hookcapab::ping)) actions.push_back(ACT_PING);
+	    }
 	}
 
 	actions.push_back(ACT_HISTORY);
@@ -1346,7 +1351,7 @@ void icqface::modelist(contactstatus cs) {
     set<protocolname> ps;
     if(cs == csvisible || cs == csinvisible) {
 	for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
-	    if(gethook(pname).getcapabilities() & hoptControllableVisibility)
+	    if(gethook(pname).getCapabs().count(hookcapab::visibility))
 		ps.insert(pname);
     }
 
@@ -2259,16 +2264,18 @@ void icqface::textbrowseridle(textbrowser &b) {
 
 int icqface::contactskeys(verticalmenu &m, int k) {
     icqcontact *c = NULL;
-    int id, capab;
-    id = face.mcontacts->getid(face.mcontacts->menu.getpos());
+
+    int id = face.mcontacts->getid(face.mcontacts->menu.getpos());
     if(id != -1 && ! face.mcontacts->isnode(id))
 	c = (icqcontact *) face.mcontacts->getref(m.getpos()+1);
 
-    face.extk = capab = 0;
+    set<hookcapab::enumeration> capab;
+
+    face.extk = 0;
 
     if(c)
     if(c->getdesc() != contactroot) {
-	capab = gethook(c->getdesc().pname).getcapabilities();
+	capab = gethook(c->getdesc().pname).getCapabs();
     }
 
     switch(k) {
@@ -2287,7 +2294,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'u':
 	case 'U':
-	    if(capab & hoptCanSendURL)
+	    if(capab.count(hookcapab::urls))
 		face.extk = ACT_URL;
 	    break;
 
@@ -2307,13 +2314,13 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'c':
 	case 'C':
-	    if(capab & hoptCanSendContacts)
+	    if(capab.count(hookcapab::contacts))
 		face.extk = ACT_CONTACT;
 	    break;
 
 	case 'f':
 	case 'F':
-	    if(capab & hoptCanFetchAwayMsg)
+	    if(capab.count(hookcapab::fetchaway))
 		face.extk = ACT_FETCHAWAY;
 	    break;
 

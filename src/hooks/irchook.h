@@ -39,6 +39,7 @@ class irchook: public abstracthook {
 	vector<string> searchchannels, extlisted;
 	map<string, string> awaymessages;
 	vector<icqcontact *> foundguys;
+	map<string, time_t> pingtime;
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();
@@ -68,6 +69,14 @@ class irchook: public abstracthook {
 	static void errorhandler(void *connection, void *cli, ...);
 	static void nickchanged(void *connection, void *cli, ...);
 	static void needpass(void *conn, void *cli, ...);
+
+	static void subrequest(void *conn, void *cli,
+	    const char * const nick, const char * const command,
+	    const char * const args);
+
+	static void subreply(void *conn, void *cli,
+	    const char * const nick, const char * const command,
+	    const char * const args);
 
 	void rawcommand(const string &cmd);
 	void channelfatal(string room, const char *fmt, ...);
@@ -99,6 +108,9 @@ class irchook: public abstracthook {
 	void setautostatus(imstatus st);
 
 	imstatus getstatus() const;
+
+	void requestversion(const imcontact &c);
+	void ping(const imcontact &c);
 
 	void requestinfo(const imcontact &c);
 	void requestawaymsg(const imcontact &c);

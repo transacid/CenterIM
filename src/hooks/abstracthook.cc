@@ -9,7 +9,7 @@
 #include <time.h>
 
 abstracthook::abstracthook()
-    : fcapabilities(0), searchdest(0)
+    : searchdest(0)
 { }
 
 void abstracthook::init() {
@@ -86,10 +86,6 @@ bool abstracthook::isdirectopen(const imcontact &c) const {
 void abstracthook::removeuser(const imcontact &ic) {
 }
 
-int abstracthook::getcapabilities() const {
-    return fcapabilities;
-}
-
 void abstracthook::requestinfo(const imcontact &c) {
 }
 
@@ -108,6 +104,12 @@ vector<icqcontact *> abstracthook::getneedsync() {
 }
 
 void abstracthook::ouridchanged(const icqconf::imaccount &ia) {
+}
+
+void abstracthook::requestversion(const imcontact &c) {
+}
+
+void abstracthook::ping(const imcontact &c) {
 }
 
 // ----------------------------------------------------------------------------

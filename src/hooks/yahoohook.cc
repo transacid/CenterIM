@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.54 2002/09/04 14:33:47 konst Exp $
+* $Id: yahoohook.cc,v 1.55 2002/09/13 13:15:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,9 +53,8 @@ static int stat2int[imstatus_size] = {
 };
 
 yahoohook::yahoohook() : fonline(false) {
-    fcapabilities =
-	hoptCanSetAwayMsg |
-	hoptCanSyncList;
+    fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::synclist);
 
     pager_host[0] = pager_port[0] = 0;
 }

@@ -25,7 +25,8 @@ void accountmanager::exec() {
     dialogbox db;
     protocolname pname;
     icqconf::imaccount account;
-    int n, b, i, citem, action, pos, capab;
+    int n, b, i, citem, action, pos;
+    set<hookcapab::enumeration> capab;
     string spname, tmp;
     bool fin, proceed;
 
@@ -55,7 +56,7 @@ void accountmanager::exec() {
 		account = conf.getourid(pname);
 		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(pname) + " ");
 		citem = ((int) (pname)+1) * 100;
-		capab = gethook(pname).getcapabilities();
+		capab = gethook(pname).getCapabs();
 
 		if(!account.empty()) {
 		    tmp = "";
@@ -78,23 +79,23 @@ void accountmanager::exec() {
 			break;
 		}
 
-		t.addleaff(n, 0, citem+5, (capab & hoptOptionalPass) ?
+		t.addleaff(n, 0, citem+5, capab.count(hookcapab::optionalpassword) ?
 		    _(" Password (optional) : %s ") : _(" Password : %s "),
 		    string(account.password.size(), '*').c_str());
 
 		if(account.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 		} else {
-		    if(capab & hoptCanUpdateDetails)
+		    if(capab.count(hookcapab::changedetails))
 			t.addnode(n, 0, citem+7, _(" Update user details "));
 
-		    if(capab & hoptCanSetAwayMsg)
+		    if(capab.count(hookcapab::setaway))
 			t.addnode(n, 0, citem+10, _(" Set away message "));
 
 		    if(pname == irc)
 			t.addnode(n, 0, citem+11, _(" Channel manager "));
 
-		    if(capab & hoptCanSyncList)
+		    if(capab.count(hookcapab::synclist))
 			t.addnode(n, 0, citem+12, _(" Synchronize contact list "));
 
 		    t.addnode(n, 0, citem+8, _(" Drop "));
@@ -127,7 +128,7 @@ void accountmanager::exec() {
 		case 5:
 		    tmp = face.inputstr(spname + _(" password: "), account.password, '*');
 		    if(face.getlastinputkey() != KEY_ESC &&
-		      (!tmp.empty() || (capab & hoptOptionalPass)))
+		      (!tmp.empty() || capab.count(hookcapab::optionalpassword)))
 			account.password = tmp;
 		    break;
 

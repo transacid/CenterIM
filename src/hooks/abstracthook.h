@@ -5,26 +5,30 @@
 #include "imevents.h"
 #include "imcontroller.h"
 
-enum hookcapabilities {
-	    hoptCanSyncList = 2,
-	     hoptCanSendURL = 4,
-	    hoptCanSendFile = 8,
-	hoptCanSendContacts = 16,
-	hoptCanFetchAwayMsg = 32,
-	  hoptCanSetAwayMsg = 64,
-	  hoptCanChangeNick = 128,
-      hoptCanChangePassword = 512,
-       hoptCanUpdateDetails = 1024,
-	   hoptOptionalPass = 2048,
- hoptControllableVisibility = 4096,
-	    hoptAuthReqSend = 8192
+struct hookcapab {
+    enum enumeration {
+	synclist,
+	urls,
+	files,
+	contacts,
+	authrequests,
+	fetchaway,
+	setaway,
+	changenick,
+	changepassword,
+	changedetails,
+	optionalpassword,
+	visibility,
+	version,
+	ping
+    };
 };
 
 class abstracthook {
     protected:
 	imstatus manualstatus;
-	int fcapabilities;
 	verticalmenu *searchdest;
+	set<hookcapab::enumeration> fcapabs;
 
     public:
 	abstracthook();
@@ -62,8 +66,11 @@ class abstracthook {
 	virtual void stoplookup();
 
 	virtual void requestawaymsg(const imcontact &c);
+	virtual void requestversion(const imcontact &c);
+	virtual void ping(const imcontact &c);
 
-	int getcapabilities() const;
+	set<hookcapab::enumeration> getCapabs() const
+	    { return fcapabs; }
 
 	virtual vector<icqcontact *> getneedsync();
 	virtual void ouridchanged(const icqconf::imaccount &ia);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.83 2002/09/10 16:37:37 konst Exp $
+* $Id: icqconf.cc,v 1.84 2002/09/13 13:15:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -125,7 +125,7 @@ string icqconf::getawaymsg(protocolname pname) const {
 	return same ? allmsg : "";
     }
 
-    if(!(gethook(pname).getcapabilities() & hoptCanSetAwayMsg))
+    if(!gethook(pname).getCapabs().count(hookcapab::setaway))
 	return "";
 
     fname = conf.getconfigfname("awaymsg-" + getprotocolname(pname));
@@ -157,7 +157,7 @@ void icqconf::setawaymsg(protocolname pname, const string &amsg) {
     string fname;
     ofstream f;
 
-    if(!(gethook(pname).getcapabilities() & hoptCanSetAwayMsg))
+    if(!gethook(pname).getCapabs().count(hookcapab::setaway))
 	return;
 
     fname = conf.getconfigfname("awaymsg-" + getprotocolname(pname));

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.119 2002/09/09 11:03:16 konst Exp $
+* $Id: centericq.cc,v 1.120 2002/09/13 13:15:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -110,7 +110,7 @@ bool centericq::checkpasswords() {
     r = regmode = true;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!(gethook(pname).getcapabilities() & hoptOptionalPass)) {
+	if(!gethook(pname).getCapabs().count(hookcapab::optionalpassword)) {
 	    if(!(ia = conf.getourid(pname)).empty()) {
 		if(ia.password.empty()) {
 		    conf.setsavepwd(false);
@@ -295,6 +295,14 @@ void centericq::mainloop() {
 		}
 		break;
 
+	    case ACT_VERSION:
+		gethook(c->getdesc().pname).requestversion(c->getdesc());
+		break;
+
+	    case ACT_PING:
+		gethook(c->getdesc().pname).ping(c->getdesc());
+		break;
+
 	    case ACT_MSG:
 	    case 0:
 		if(conf.getchatmode()) {
@@ -332,8 +340,7 @@ void centericq::changestatus() {
 
 	    setaway = conf.getaskaway();
 	    if(pname != proto_all) {
-		setaway = setaway &&
-		    (gethook(pname).getcapabilities() & hoptCanSetAwayMsg);
+		setaway = setaway && gethook(pname).getCapabs().count(hookcapab::setaway);
 	    }
 
 	    if(setaway)
@@ -359,7 +366,7 @@ void centericq::changestatus() {
 		    abstracthook &hook = gethook(ipname);
 
 		    if(setaway && !tmp.empty())
-			if(hook.getcapabilities() & hoptCanSetAwayMsg)
+			if(hook.getCapabs().count(hookcapab::setaway))
 			    conf.setawaymsg(ipname, tmp);
 
 		    hook.setstatus(st);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.23 2002/08/28 11:50:36 konst Exp $
+* $Id: aimhook.cc,v 1.24 2002/09/13 13:15:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,11 +40,10 @@ aimhook ahook;
 aimhook::aimhook()
     : handle(0), fonline(false), flogged(false), ourstatus(offline)
 {
-    fcapabilities =
-	hoptCanSetAwayMsg |
-	hoptCanChangePassword |
-	hoptCanUpdateDetails |
-	hoptCanSyncList;
+    fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::changepassword);
+    fcapabs.insert(hookcapab::changedetails);
+    fcapabs.insert(hookcapab::synclist);
 }
 
 aimhook::~aimhook() {

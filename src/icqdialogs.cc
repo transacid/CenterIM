@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.86 2002/09/10 16:37:37 konst Exp $
+* $Id: icqdialogs.cc,v 1.87 2002/09/13 13:15:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -378,7 +378,9 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 
     i = 0;
 
-    if(passinfo.pname == infocard || (gethook(passinfo.pname).getcapabilities() & hoptCanChangeNick) || !ourdetails) {
+    if(passinfo.pname == infocard
+    && gethook(passinfo.pname).getCapabs().count(hookcapab::changenick)
+    || !ourdetails) {
 	if(!i) i = tree->addnode(_(" General "));
 
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.44 2002/09/01 11:03:12 konst Exp $
+* $Id: irchook.cc,v 1.45 2002/09/13 13:15:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -55,11 +55,12 @@ irchook::irchook()
     : handle(firetalk_create_handle(FP_IRC, 0)),
       fonline(false), flogged(false), ourstatus(offline)
 {
-    fcapabilities =
-	hoptCanSetAwayMsg |
-	hoptCanFetchAwayMsg |
-	hoptCanChangeNick |
-	hoptOptionalPass;
+    fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::fetchaway);
+    fcapabs.insert(hookcapab::changenick);
+    fcapabs.insert(hookcapab::optionalpassword);
+    fcapabs.insert(hookcapab::ping);
+    fcapabs.insert(hookcapab::version);
 }
 
 irchook::~irchook() {
@@ -93,6 +94,11 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_ERROR, &errorhandler);
     firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &nickchanged);
     firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
+
+    firetalk_subcode_register_request_callback(handle, "VERSION", &subrequest);
+
+    firetalk_subcode_register_reply_callback(handle, "PING", &subreply);
+    firetalk_subcode_register_reply_callback(handle, "VERSION", &subreply);
 
 #ifdef DEBUG
     firetalk_register_callback(handle, FC_LOG, &log);
@@ -613,6 +619,19 @@ void irchook::channelfatal(string room, const char *fmt, ...) {
 void irchook::ouridchanged(const icqconf::imaccount &ia) {
     if(logged()) {
 	firetalk_set_nickname(handle, ia.nickname.c_str());
+    }
+}
+
+void irchook::requestversion(const imcontact &c) {
+    if(logged()) {
+	firetalk_subcode_send_request(handle, c.nickname.c_str(), "VERSION", 0);
+    }
+}
+
+void irchook::ping(const imcontact &c) {
+    if(logged()) {
+	firetalk_subcode_send_request(handle, c.nickname.c_str(), "PING", 0);
+	pingtime[up(c.nickname)] = time(0);
     }
 }
 
@@ -1149,6 +1168,33 @@ void irchook::needpass(void *conn, void *cli, ...) {
     }
 }
 
+void irchook::subrequest(void *conn, void *cli, const char * const nick,
+const char * const command, const char * const args) {
+
+    if(!strcmp(command, "VERSION")) {
+	firetalk_subcode_send_reply(conn, nick, "VERSION", PACKAGE " " VERSION);
+
+    }
+}
+
+void irchook::subreply(void *conn, void *cli, const char * const nick,
+const char * const command, const char * const args) {
+    char buf[512];
+
+    if(!strcmp(command, "PING")) {
+	map<string, time_t>::iterator i = irhook.pingtime.find(up(nick));
+
+	if(i != irhook.pingtime.end()) {
+	    sprintf(buf, _("PING reply from the user: %d second(s)"), time(0)-i->second);
+	    em.store(imnotification(imcontact(nick, irc), buf));
+	}
+
+    } else if(!strcmp(command, "VERSION")) {
+	sprintf(buf, _("The remote is using %s"), args);
+	em.store(imnotification(imcontact(nick, irc), buf));
+
+    }
+}
 // ----------------------------------------------------------------------------
 
 bool irchook::channelInfo::operator != (const string &aname) const {

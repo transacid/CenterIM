@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.29 2002/09/03 10:02:08 konst Exp $
+* $Id: msnhook.cc,v 1.30 2002/09/13 13:15:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,7 +40,7 @@ msnhook::msnhook() {
     status = offline;
     fonline = false;
 
-    fcapabilities = hoptCanSyncList;
+    fcapabs.insert(hookcapab::synclist);
 
     for(int i = MSN_RNG; i != MSN_NUM_EVENTS; i++) {
 	msn_event[i] = 0;

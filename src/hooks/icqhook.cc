@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.108 2002/08/30 17:31:59 konst Exp $
+* $Id: icqhook.cc,v 1.109 2002/09/13 13:15:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,16 +53,15 @@ icqhook::icqhook() {
     fonline = false;
     blockmode = Normal;
 
-    fcapabilities =
-	hoptCanSendURL |
-	hoptCanSetAwayMsg |
-	hoptCanFetchAwayMsg |
-	hoptCanChangeNick |
-	hoptCanUpdateDetails |
-	hoptCanSyncList |
-	hoptAuthReqSend |
-	hoptCanSendContacts |
-	hoptControllableVisibility;
+    fcapabs.insert(hookcapab::urls);
+    fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::fetchaway);
+    fcapabs.insert(hookcapab::changenick);
+    fcapabs.insert(hookcapab::changedetails);
+    fcapabs.insert(hookcapab::synclist);
+    fcapabs.insert(hookcapab::authrequests);
+    fcapabs.insert(hookcapab::contacts);
+    fcapabs.insert(hookcapab::visibility);
 
     cli.setServerSideGroup("centericq", 0x0666);
 
@@ -376,7 +375,9 @@ bool icqhook::send(const imevent &ev) {
 	    }
 
 	} else {
+	    cli.contact_userinfo_change_signal.clear();
 	    ic->setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
+	    cli.contact_userinfo_change_signal.connect(slot(this, &icqhook::contact_userinfo_change_signal_cb));
 	}
 
 	sev = new SMSMessageEvent(ic, ruscrlfconv("kw", m->getmessage()), true);
