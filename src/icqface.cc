@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.98 2002/04/03 17:40:55 konst Exp $
+* $Id: icqface.cc,v 1.99 2002/04/04 14:41:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -486,6 +486,7 @@ bool icqface::findresults(const imsearchparams &sp) {
     icqcontact *c;
     dialogbox db;
     int r, b;
+    char *nick;
 
     saveworkarea();
     clearworkarea();
@@ -516,17 +517,33 @@ bool icqface::findresults(const imsearchparams &sp) {
 	if(!finished)
 	switch(b) {
 	    case 0:
-		if(r) {
-		    r = (int) db.getmenu()->getref(r-1);
-		    if(r) cicq.userinfo(imcontact(r, icq));
+		if(r)
+		switch(sp.pname) {
+		    case icq:
+			r = (int) db.getmenu()->getref(r-1);
+			if(r) cicq.userinfo(imcontact(r, sp.pname));
+			break;
+		    case irc:
+			nick = (char *) db.getmenu()->getref(r-1);
+			if(nick) cicq.userinfo(imcontact(nick, sp.pname));
+			break;
 		}
 		break;
+
 	    case 1:
-		if(r) {
-		    r = (int) db.getmenu()->getref(r-1);
-		    if(r) cicq.addcontact(imcontact(r, icq));
+		if(r)
+		switch(sp.pname) {
+		    case icq:
+			r = (int) db.getmenu()->getref(r-1);
+			if(r) cicq.addcontact(imcontact(r, sp.pname));
+			break;
+		    case irc:
+			nick = (char *) db.getmenu()->getref(r-1);
+			if(nick) cicq.addcontact(imcontact(nick, sp.pname));
+			break;
 		}
 		break;
+
 	    case 2:
 		ret = finished = true;
 		break;

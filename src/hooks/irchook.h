@@ -8,12 +8,31 @@ extern "C" {
 }
 
 class irchook: public abstracthook {
+    private:
+	struct roomInfo {
+	    string name;
+	    vector<string> nicks;
+	    bool fetched;
+
+	    roomInfo(const string &aname): name(aname), fetched(false) {}
+
+	    bool operator != (const string &aname) const;
+	    bool operator == (const string &aname) const;
+
+	    bool operator != (const bool &afetched) const;
+	    bool operator == (const bool &afetched) const;
+	};
+
     protected:
 	bool fonline, flogged;
 	firetalk_t handle;
 	imstatus ourstatus;
 
+	vector<char *> userlist;
+	vector<roomInfo> rooms;
+
 	void userstatus(const string &nickname, imstatus st);
+	void processnicks();
 
 	static void connected(void *conn, void *cli, ...);
 	static void disconnected(void *conn, void *cli, ...);
@@ -27,6 +46,7 @@ class irchook: public abstracthook {
 	static void connectfailed(void *connection, void *cli, ...);
 	static void listmember(void *connection, void *cli, ...);
 	static void log(void *connection, void *cli, ...);
+	static void chatnames(void *connection, void *cli, ...);
 
     public:
 	irchook();

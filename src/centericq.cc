@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.86 2002/04/03 17:40:53 konst Exp $
+* $Id: centericq.cc,v 1.87 2002/04/04 14:41:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -352,9 +352,17 @@ void centericq::find() {
 			s.nick.erase(s.nick.size()-12);
 		    }
 
+		case irc:
+		    if(!s.nick.empty()) {
+			addcontact(imcontact(s.nick, s.pname));
+			ret = false;
+		    } else {
+			ret = face.findresults(s);
+		    }
+		    break;
+
 		case yahoo:
 		case aim:
-		case irc:
 		    if(!s.nick.empty()) {
 			addcontact(imcontact(s.nick, s.pname));
 			ret = false;
