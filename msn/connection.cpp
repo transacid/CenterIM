@@ -108,10 +108,12 @@ namespace MSN
         }
     }
     
-    Connection::~Connection()
+    Connection::~Connection() {}
+    
+    void Connection::disconnect()
     {
         ext::unregisterSocket(this->sock);
-        close(this->sock);
+        ::close(this->sock);
     }
     
     std::vector<std::string> Connection::getLine()
@@ -129,9 +131,8 @@ namespace MSN
     
     void Connection::errorOnSocket(int errno_)
     {
-        close(this->sock);
-        ext::showError(this, strerror(errno_));        
-        ext::closingConnection(this);
+        ext::showError(this, strerror(errno_));
+        this->disconnect();
     }
     
     void Connection::socketConnectionCompleted()

@@ -159,9 +159,7 @@ namespace MSN
         this->auth.inv->switchboardConnection->removeFileTransferConnection(this);
         delete this->auth.inv;
         this->auth.inv = NULL;
-        if (this->sock != -1)
-            ::close(this->sock);
-        this->sock = -1;
+        Connection::disconnect();
     }
     
     FileTransferConnection::~FileTransferConnection()

@@ -131,15 +131,20 @@ public:
         Invitation *invitationWithCookie(const std::string & cookie);
         
         virtual void socketConnectionCompleted();
-protected:
-        virtual void handleIncomingData();
-        enum {
+        
+        enum SwitchboardServerState
+        {
             SB_DISCONNECTED,
             SB_CONNECTING,
             SB_CONNECTED,            
             SB_WAITING_FOR_USERS,
             SB_READY
-        } connectionStatus;
+        };
+        
+        SwitchboardServerState connectionState() const { return this->connectionStatus; };
+protected:
+        virtual void handleIncomingData();
+        SwitchboardServerState connectionStatus;
 private:
         NotificationServerConnection & notificationServer;
         std::list<FileTransferConnection *> _fileTransferConnections;

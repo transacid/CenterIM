@@ -253,6 +253,9 @@ public:
         if (args[1] == this->auth.username)
             return;
         
+        if (this->auth.sessionID.empty() && connectionStatus == SB_WAITING_FOR_USERS)
+            connectionStatus = SB_READY;
+        
         this->users.push_back(args[1]);
         ext::buddyJoinedConversation(this, args[1], decodeURL(args[2]), 0);
     }
@@ -287,7 +290,7 @@ public:
     
     void SwitchboardServerConnection::inviteUser(Passport userName)
     {
-        assert(connectionStatus >= SB_READY);        
+        assert(connectionStatus >= SB_WAITING_FOR_USERS);        
         std::ostringstream buf_;
         buf_ << "CAL " << trid++ << " " << userName << "\r\n";
         write(buf_);        
@@ -335,6 +338,7 @@ public:
         {
             removeFileTransferConnection(*i);
         }
+        Connection::disconnect();
         connectionStatus = SB_DISCONNECTED;
     }    
     
@@ -344,10 +348,7 @@ public:
         Connection::socketConnectionCompleted();
         ext::unregisterSocket(this->sock);
         ext::registerSocket(this->sock, 1, 0);
-        if (this->auth.sessionID.empty())
-            connectionStatus = SB_READY;
-        else
-            connectionStatus = SB_WAITING_FOR_USERS;
+        connectionStatus = SB_WAITING_FOR_USERS;
     }
     
     void SwitchboardServerConnection::handleIncomingData()

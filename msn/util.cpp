@@ -95,7 +95,7 @@ namespace MSN
         last_position = position = 0;
         while (position + sep.size() <= s.size())
         {
-            if (s[position] == sep[0] && s.compare(position, sep.size(), sep) == 0)
+            if (s[position] == sep[0] && s.substr(position, sep.size()) == sep)
             {
                 if (!suppressBlanks || position - last_position > 0)
                     array.push_back(s.substr(last_position, position - last_position));

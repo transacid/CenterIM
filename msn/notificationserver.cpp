@@ -510,8 +510,6 @@ public:
     {
 	assert(connectionStatus != NS_DISCONNECTED);
 	ext::closingConnection(this);
-	ext::unregisterSocket(this->sock);
-	::close(this->sock);
 	
 	std::list<SwitchboardServerConnection *> list = _switchboardConnections;
 	std::list<SwitchboardServerConnection *>::iterator i = list.begin();
@@ -519,7 +517,7 @@ public:
 	{
 	    delete *i;
 	}
-	
+	Connection::disconnect();
 	connectionStatus = NS_DISCONNECTED;
     }
     
@@ -854,8 +852,8 @@ public:
 	if (ret == CURLE_OK)
 	    ret = curl_easy_setopt(curl, CURLOPT_URL, "https://login.passport.com/login2.srf");
 	
-	uname = curl_escape(info->username.c_str(), 0);
-	pword = curl_escape(info->password.c_str(), 0);
+	uname = curl_escape(const_cast<char *>(info->username.c_str()), 0);
+	pword = curl_escape(const_cast<char *>(info->password.c_str()), 0);
 	auth = std::string("Authorization: Passport1.4 OrgVerb=GET,OrgURL=http%3A%2F%2Fmessenger%2Emsn%2Ecom,sign-in=") + uname + ",pwd=" + pword + ","+ args[4];
 	free(uname);
 	free(pword);

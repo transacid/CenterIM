@@ -273,16 +273,20 @@ public:
         
         virtual void socketConnectionCompleted();
         
-protected:
-        virtual void handleIncomingData();
-        enum
+        
+        enum NotificationServerState
         {
             NS_DISCONNECTED,
             NS_CONNECTING,
             NS_CONNECTED,
             NS_SYNCHRONISING,
             NS_ONLINE
-        } connectionStatus;
+        };
+
+        NotificationServerState connectionState() const { return this->connectionStatus; };
+protected:
+        virtual void handleIncomingData();
+        NotificationServerState connectionStatus;
 
 private:
         std::list<SwitchboardServerConnection *> _switchboardConnections;
