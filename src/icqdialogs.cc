@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.81 2002/08/15 08:25:42 konst Exp $
+* $Id: icqdialogs.cc,v 1.82 2002/08/16 13:54:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -927,6 +927,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 		conf.setsockshost(socks ? prserv : "");
 		conf.setsmtphost(smtp);
+		conf.save();
 		break;
 	}
     }
@@ -975,6 +976,7 @@ int icqface::groupmanager(const string &text, bool sel) {
     int r, ngrp, b, id;
     vector<icqgroup>::iterator i;
     string gname;
+    bool touched = false;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
@@ -1023,6 +1025,7 @@ int icqface::groupmanager(const string &text, bool sel) {
 		gname = inputstr(_("Name for a group to be created: "), "");
 		if(!gname.empty()) {
 		    groups.add(gname);
+		    touched = true;
 		}
 		break;
 
@@ -1030,7 +1033,10 @@ int icqface::groupmanager(const string &text, bool sel) {
 		if(n) {
 		    i = groups.begin()+n-1;
 		    gname = inputstr(_("New name for the group: "), i->getname());
-		    if(!gname.empty()) i->rename(gname);
+		    if(!gname.empty()) {
+			i->rename(gname);
+			touched = true;
+		    }
 		}
 		break;
 
@@ -1042,6 +1048,7 @@ int icqface::groupmanager(const string &text, bool sel) {
 			if(ask(_("Are you sure want to remove the group?"), ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 			    groups.remove(i->getid());
 			    clist.rearrange();
+			    touched = true;
 			}
 		    }
 		}
@@ -1052,6 +1059,7 @@ int icqface::groupmanager(const string &text, bool sel) {
 		    i = groups.begin()+n-1;
 		    i->moveup();
 		    n--;
+		    touched = true;
 		}
 		break;
 
@@ -1060,6 +1068,7 @@ int icqface::groupmanager(const string &text, bool sel) {
 		    i = groups.begin()+n-1;
 		    i->movedown();
 		    n++;
+		    touched = true;
 		}
 		break;
 
@@ -1073,6 +1082,8 @@ int icqface::groupmanager(const string &text, bool sel) {
 		break;
 	}
     }
+
+    if(touched) groups.save();
 
     db.close();
     unblockmainscreen();

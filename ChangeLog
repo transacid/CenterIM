@@ -1092,3 +1092,6 @@ DoS/flood protection on the remove IM servers doesn't turn on because of
 hudge mass-sendings. Now messages that overflow the limit get postponed
 and sent in another 5 seconds.
 
+The configuration changes, as well as users' details, group settings and
+some other stuff is now saved immediately once it gets modified, and not
+only on exit, like it was before.

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.58 2002/08/14 10:16:35 konst Exp $
+* $Id: icqcontact.cc,v 1.59 2002/08/16 13:54:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -663,6 +663,7 @@ string icqcontact::getpostponed() const {
 
 void icqcontact::setgroupid(int agroupid) {
     groupid = agroupid;
+    save();
 }
 
 int icqcontact::getgroupid() const {
