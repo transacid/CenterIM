@@ -1,9 +1,9 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.17 2002/03/06 16:48:47 konst Exp $
+* $Id: kkstrtext.cc,v 1.18 2002/03/06 23:49:30 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -767,7 +767,31 @@ int ltabmargin(bool fake, int curpos, const char *p = 0) {
     return ret;
 }
 
-void breakintolines(const string &text, vector<string> &lst, int linelen = 0) {
+void breakintolines(string text, vector<string> &lst, int linelen) {
+    int dpos, nlen;
+    string sub;
+    vector<string>::iterator i;
+
+    breakintolines(text, lst);
+
+    if(linelen > 0) {
+	for(i = lst.begin(); i != lst.end(); i++) {
+	    if(i->size() > linelen) {
+		sub = i->substr(0, nlen = linelen);
+		if((dpos = sub.rfind(" ")) != -1) {
+		    if(dpos) nlen = dpos; else nlen = 1;
+		}
+
+		sub = i->substr(nlen+1);
+		i->erase(nlen);
+		lst.insert(i+1, sub);
+		i = lst.begin();
+	    }
+	}
+    }
+}
+
+void breakintolines(const string &text, vector<string> &lst) {
     int npos, dpos, tpos;
     string sub;
 
@@ -775,31 +799,20 @@ void breakintolines(const string &text, vector<string> &lst, int linelen = 0) {
     lst.clear();
 
     while(tpos < text.size()) {
-	if((npos = text.find("\n", tpos)) == -1)
-	    npos = text.size();
-
-	if(linelen)
-	if(npos-tpos > linelen) {
-	    npos = tpos+linelen;
+	if((npos = text.find("\n", tpos)) != -1) {
 	    sub = text.substr(tpos, npos-tpos);
-
-	    if((dpos = sub.find_last_of(" \t")) != -1)
-		if(sub.substr(0, dpos).find_first_not_of("\t ") != -1)
-		    npos = tpos+dpos;
-		else
-		    npos = tpos+dpos+1;
+	} else {
+	    sub = text.substr(tpos);
+	    npos = text.size();
 	}
 
-	sub = text.substr(tpos, npos-tpos);
-	tpos += npos-tpos;
+	tpos += npos-tpos+1;
 
-	if(text.substr(tpos, 1).find_first_of("\n ") != -1)
-	    tpos += 1;
+	for(dpos = 0; (dpos = sub.find("\r", dpos)) != -1; ) {
+	    sub.erase(dpos, 1);
+	}
 
-	while((npos = sub.find("\r")) != -1)
-	    sub.erase(npos, 1);
-
-	while((dpos = sub.find("\t")) != -1) {
+	for(dpos = 0; (dpos = sub.find("\t", dpos)) != -1; ) {
 	    sub.erase(dpos, 1);
 	    sub.insert(dpos, string(rtabmargin(false, dpos)-dpos, ' '));
 	}

@@ -45,7 +45,9 @@ string getrwordquote(string &base, const string &quote = "\"", const string &del
 
 int rtabmargin(bool fake, int curpos, const char *p = 0);
 int ltabmargin(bool fake, int curpos, const char *p = 0);
-void breakintolines(const string &text, vector<string> &lst, int linelen = 0);
+
+void breakintolines(string text, vector<string> &lst, int linelen);
+void breakintolines(const string &text, vector<string> &lst);
 
 void find_gather_quoted(vector<quotedblock> &lst, const string &str,
     const string &quote, const string &escape);
