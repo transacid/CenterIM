@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.65 2002/03/04 14:40:56 konst Exp $
+* $Id: icqhook.cc,v 1.66 2002/03/08 14:53:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -679,6 +679,10 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     face.log(_("+ [icq] logged in"));
     face.update();
+
+#ifdef DEBUG
+    face.log("+ ALL YOUR BASE ARE BELONG TO US");
+#endif
 
     string buf;
     ifstream f(conf.getconfigfname("icq-infoset").c_str());
