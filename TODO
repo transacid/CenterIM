@@ -13,6 +13,8 @@ developer
 
 GnuTLS support (update the README and the web page)
 
+user info external progs
+
 /*
 *
 * BUGS
@@ -25,13 +27,19 @@ GnuTLS support (update the README and the web page)
 > jabber standards prescribe UTF8 as the encoding for contact names in
 > rosters but centericq is violating this requirement.
 
+# status
+# ------
+# Can be "online", "away", "dnd", "na", "occupied", "ffc" or "invisible".
+# Specifying several ones is possible. "all" stands for all of possible
+# status modes.
+
+So, there is no abbreviation for 'occupied'.
+
 /*
 *
 * TODO
 *
 */
-
-user info external progs
 
 server hostname guess from the JID
 
@@ -53,4 +61,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.393 2003/01/05 12:01:59 konst Exp $
+$Id: TODO,v 1.394 2003/01/10 01:15:39 konst Exp $
