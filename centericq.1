@@ -59,10 +59,14 @@ This one specifies to which IM network the destination contact
 beyongs. Can be "icq", "yahoo", "aim", "msn" or "irc".
 .TP
 \fB\-t\fR, \fB\-\-to\fR <nickname or UIN>
-Finally, with this one you specify nickname or UIN of the
+With this one you specify nickname or UIN of the
 destination contact. For icq it's possible to specify 0 to send
 events to yourself. Only SMSes are known to be possible to be sent
 to oneself though.
+.TP
+\fB\-n\fR, \fB\-\-number\fR <phone number>
+Using this parameter you can send SMSes to any mobile numbers
+through the ICQ network.
 
 .PP
 
@@ -81,6 +85,9 @@ separated with a newline character the following way:
 Please note, that all three parameters are required in order to queue an
 event.
 
+Finally, a small example of sending SMSes:
+
+    \fB$ echo "sms test" | centericq -s sms -n 1234567890\fR
 
 .PP
 

@@ -204,7 +204,7 @@ void imcontroller::yahoosynclist() {
     vector<icqcontact *>::iterator it;
 
     if(tosync.empty()) {
-	face.status(_("To contacts to be synchronized; all of them are already stored server-side"));
+	face.status(_("No contacts to be synchronized; all of them are already stored server-side"));
 
     } else {
 	char buf[512];

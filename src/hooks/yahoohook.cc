@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.51 2002/08/20 17:43:21 konst Exp $
+* $Id: yahoohook.cc,v 1.52 2002/08/26 14:32:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -181,10 +181,10 @@ bool yahoohook::send(const imevent &ev) {
     if(c) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
-	    if(m) text = rusconv("kw", m->gettext());
+	    if(m) text = rushtmlconv("kw", m->gettext());
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
-	    if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
 	}
 
 	for(is = text.begin(); is != text.end(); ++is)
@@ -489,7 +489,7 @@ void yahoohook::status_changed(guint32 id, char *who, int stat, char *msg, int a
 
 void yahoohook::got_im(guint32 id, char *who, char *msg, long tm, int stat) {
     imcontact ic(who, yahoo);
-    string text = rusconv("wk", cuthtml(msg, true));
+    string text = rushtmlconv("wk", cuthtml(msg, true));
 
     if(!text.empty()) {
 	em.store(immessage(ic, imevent::incoming, text));
@@ -574,7 +574,7 @@ void yahoohook::conf_userleave(guint32 id, char *who, char *room) {
 void yahoohook::conf_message(guint32 id, char *who, char *room, char *msg) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
 
-    string text = rusconv("wk", who) + ": " + rusconv("wk", cuthtml(msg, true));
+    string text = rushtmlconv("wk", who) + ": " + rushtmlconv("wk", cuthtml(msg, true));
     if(c) em.store(immessage(c, imevent::incoming, text));
 }
 
