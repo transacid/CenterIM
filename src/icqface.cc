@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.74 2002/01/30 17:25:41 konst Exp $
+* $Id: icqface.cc,v 1.75 2002/01/31 18:03:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1710,7 +1710,8 @@ bool icqface::histexec(imevent *&im) {
 	im = static_cast<imevent *> (mhist.getref(0));
 
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-	    _("History items for %s"), im->getcontact().totext().c_str());
+	    _("History for %s, %d events total"),
+	    im->getcontact().totext().c_str(), mhist.getcount());
 
 	status(_("S search, L again, ESC cancel"));
 

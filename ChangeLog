@@ -722,12 +722,12 @@ visa versa, e.g. online/offline has upper position.
 Fixed a bug in libicq2000 which caused receiving only empty messages in
 authoriation requests.
 
-Now centericq (and libicq2000 too) can receive e-mail express and "you were
-added" messages from other users.
+Now centericq (and libicq2000 too) can receive e-mail express and "you
+were added" messages from other users.
 
-The only known problem of this release, actually of the ICQ part, is that
-the version of libicq2000 included is not release one, and it has a bug
-related to accept status. I mean, if you send a message to a buddy who's
-using the Windows client and his status is occupied or N/A, the event won't
-reach him. And also it still segfaults on xterm resize event sometimes.
-Wierd.
+The only known problem of this release, actually of the ICQ part, is
+that the version of libicq2000 included is not release one, and it has a
+bug related to accept status. I mean, if you send a message to a buddy
+who's using the Windows client and his status is occupied or N/A, the
+event won't reach him. And also it still segfaults on xterm resize event
+sometimes. Wierd.
