@@ -4,6 +4,8 @@
 *
 */
 
+cp1251->koi8 translation to be done with iconv
+
 group mode 2 shows offline users in offline folder, when only one group
 is defined
 
@@ -12,13 +14,14 @@ is defined
 check for the libiconv presence
 check for twisted iconv
 
+crash test with zero disk space
+    go offline when df < 10k
+
 /*
 *
 * BUGS
 *
 */
-
-update details -> auth needed doesn't work
 
 status keeps on changing online/away all the time in xterm
 
@@ -37,7 +40,7 @@ MSN:
 *
 */
 
-cp1251->koi8 translation to be done with iconv
+fetching icq contact list from the server
 
 documentation: port numbers for IM services. for firewalls setup.
 
@@ -48,9 +51,6 @@ cvs 1.10 -> cicqsync should produce error msg and bail out
 try to implement the daemon mode
     substitute another "face" class
 	hooks call only face.log && update methods
-
-crash test with zero disk space
-    go offline when df < 10k
 
 ability to specify server/port for yahoo
 
@@ -70,4 +70,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.151 2002/03/09 18:23:55 konst Exp $
+$Id: TODO,v 1.152 2002/03/11 13:06:46 konst Exp $

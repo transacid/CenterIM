@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.10 2002/03/04 14:40:55 konst Exp $
+* $Id: icqmlist.cc,v 1.11 2002/03/11 13:06:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -69,22 +69,24 @@ void icqlist::save() {
     vector<modelistitem>::iterator i;
     ofstream f;
 
-    f.open(getfname().c_str());
+    if(conf.enoughdiskspace()) {
+	f.open(getfname().c_str());
 
-    if(f.is_open()) {
-	for(i = begin(); i != end(); i++) {
-	    f << (int) i->getstatus() << "\t";
-	    f << mime(i->getnick()) << "\t";
+	if(f.is_open()) {
+	    for(i = begin(); i != end(); i++) {
+		f << (int) i->getstatus() << "\t";
+		f << mime(i->getnick()) << "\t";
 
-	    switch(i->getdesc().pname) {
-		case icq: f << i->getdesc().uin; break;
-		case yahoo: f << "y"; break;
+		switch(i->getdesc().pname) {
+		    case icq: f << i->getdesc().uin; break;
+		    case yahoo: f << "y"; break;
+		}
+
+		f << endl;
 	    }
 
-	    f << endl;
+	    f.close();
 	}
-
-	f.close();
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.49 2002/03/07 12:42:25 konst Exp $
+* $Id: icqconf.cc,v 1.50 2002/03/11 13:06:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,7 @@
 */
 
 #include <sys/types.h>
+#include <sys/vfs.h>
 #include <dirent.h>
 #include <fstream>
 
@@ -42,7 +43,7 @@ icqconf::icqconf() {
     autoaway = autona = 0;
 
     hideoffline = antispam = russian = makelog = false;
-    savepwd = mailcheck = true;
+    savepwd = mailcheck = fenoughdiskspace = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }
@@ -725,8 +726,8 @@ void icqconf::constructevent(const string &event, const string &proto, const str
     }
 
     while(getline(cin, buf)) {
-        if(!text.empty()) text += "\n";
-        text += buf;
+	if(!text.empty()) text += "\n";
+	text += buf;
     }
 
     if(proto == "icq") {
@@ -849,6 +850,20 @@ string icqconf::getsmtphost() const {
 
 unsigned int icqconf::getsmtpport() const {
     return smtpport;
+}
+
+bool icqconf::enoughdiskspace() const {
+    return fenoughdiskspace;
+}
+
+void icqconf::checkdiskspace() {
+    struct statfs st;
+
+    fenoughdiskspace = true;
+
+    if(!statfs(conf.getdirname().c_str(), &st)) {
+	fenoughdiskspace = st.f_bavail*st.f_bsize >= 10240;
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -41,14 +41,16 @@ void icqgroups::save() {
     ofstream f;
     iterator i;
 
-    f.open(getfname().c_str());
+    if(conf.enoughdiskspace()) {
+	f.open(getfname().c_str());
 
-    if(f.is_open()) {
-	for(i = begin(); i != end(); i++) {
-	    f << i->getid() << "\t" << i->getname() << endl;
+	if(f.is_open()) {
+	    for(i = begin(); i != end(); i++) {
+		f << i->getid() << "\t" << i->getname() << endl;
+	    }
+
+	    f.close();
 	}
-
-	f.close();
     }
 }
 

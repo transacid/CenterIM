@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.26 2002/03/04 14:40:57 konst Exp $
+* $Id: yahoohook.cc,v 1.27 2002/03/11 13:06:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -156,7 +156,7 @@ void yahoohook::exectimers() {
 
     if(logged()) {
     } else {
-	if(tcurrent-timer_reconnect > PERIOD_RECONNECT) {
+	if(tcurrent-timer_reconnect > PERIOD_RECONNECT && conf.enoughdiskspace()) {
 	    if(online() && !logged()) {
 		disconnect();
 	    } else if(manualstatus != offline) {

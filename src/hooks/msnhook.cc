@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.18 2002/03/07 09:12:58 konst Exp $
+* $Id: msnhook.cc,v 1.19 2002/03/11 13:06:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,6 +34,7 @@
 msnhook mhook;
 
 #define TIMESTAMP maketm(d->hour-1, d->minute, d->day, d->month, d->year)
+#define DEFAULT_CHARSET "ISO-8859-1"
 
 msnhook::msnhook() {
     status = offline;
@@ -98,7 +99,7 @@ void msnhook::exectimers() {
 
     if(logged()) {
     } else {
-	if(tcurrent-timer_reconnect > PERIOD_RECONNECT) {
+	if(tcurrent-timer_reconnect > PERIOD_RECONNECT && conf.enoughdiskspace()) {
 	    if(online() && !logged()) {
 		disconnect();
 	    } else if(manualstatus != offline) {
@@ -165,15 +166,14 @@ bool msnhook::send(const imevent &ev) {
 	if(m) text = m->geturl() + "\n\n" + m->getdescription();
     }
 
-//    if(!text.empty()) {
-	icqcontact *c = clist.get(ev.getcontact());
+    icqcontact *c = clist.get(ev.getcontact());
+    text = iconv(text, conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET, "utf8");
 
-	if(c)
-	if(c->getstatus() != offline) {
-	    MSN_SendMessage(ev.getcontact().nickname.c_str(), text.c_str());
-	    return true;
-	}
-//    }
+    if(c)
+    if(c->getstatus() != offline) {
+	MSN_SendMessage(ev.getcontact().nickname.c_str(), text.c_str());
+	return true;
+    }
 
     return false;
 }
@@ -263,6 +263,7 @@ void msnhook::messaged(void *data) {
     MSN_InstantMessage *d = (MSN_InstantMessage *) data;
     imcontact ic(d->sender, msn);
     icqcontact *c;
+    string text;
 
     if(!isourid(d->sender))
     if(strlen(d->msg)) {
@@ -274,7 +275,8 @@ void msnhook::messaged(void *data) {
 	    c->setdispnick(unmime((string) d->friendlyhandle));
 	}
 
-	em.store(immessage(ic, imevent::incoming, d->msg));
+	text = iconv(d->msg, "utf8", conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET);
+	em.store(immessage(ic, imevent::incoming, text));
 
 	if(c)
 	if(c->getstatus() == offline) {

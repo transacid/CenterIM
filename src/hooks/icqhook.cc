@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.66 2002/03/08 14:53:02 konst Exp $
+* $Id: icqhook.cc,v 1.67 2002/03/11 13:06:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -182,7 +182,7 @@ void icqhook::exectimers() {
 	    time(&timer_poll);
 	}
     } else {
-	if(tcurrent-timer_reconnect > PERIOD_RECONNECT) {
+	if(tcurrent-timer_reconnect > PERIOD_RECONNECT && conf.enoughdiskspace()) {
 	    if(online() && !logged()) {
 		disconnect();
 	    } else if(manualstatus != offline) {
@@ -679,10 +679,6 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     face.log(_("+ [icq] logged in"));
     face.update();
-
-#ifdef DEBUG
-    face.log("+ ALL YOUR BASE ARE BELONG TO US");
-#endif
 
     string buf;
     ifstream f(conf.getconfigfname("icq-infoset").c_str());

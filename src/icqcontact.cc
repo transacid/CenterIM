@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.49 2002/03/04 14:40:52 konst Exp $
+* $Id: icqcontact.cc,v 1.50 2002/03/11 13:06:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -130,89 +130,91 @@ void icqcontact::save() {
     string tname;
     ofstream f;
 
-    mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
+    if(conf.enoughdiskspace()) {
+	mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
 
-    if(!access(getdirname().c_str(), W_OK)) {
-	tname = getdirname() + "lastread";
-	f.open(tname.c_str());
-	if(f.is_open()) {
-	    f << lastread << endl;
-	    f.close();
-	    f.clear();
-	}
-
-	tname = getdirname() + "info";
-	f.open(tname.c_str());
-	if(f.is_open()) {
-	    f << nick << endl <<
-		binfo.fname << endl <<
-		binfo.lname << endl <<
-		binfo.email << endl <<
-		endl <<
-		endl <<
-		binfo.city << endl <<
-		binfo.state << endl <<
-		binfo.phone << endl <<
-		binfo.fax << endl <<
-		binfo.street << endl <<
-		binfo.cellular << endl <<
-		binfo.zip << endl <<
-		binfo.country << endl <<
-		winfo.city << endl <<
-		winfo.state << endl <<
-		winfo.phone << endl <<
-		winfo.fax << endl <<
-		winfo.street << endl <<
-		winfo.zip << endl <<
-		winfo.country << endl <<
-		winfo.company << endl <<
-		winfo.dept << endl <<
-		winfo.position << endl <<
-		(int) minfo.timezone << endl <<
-		winfo.homepage << endl <<
-		(int) minfo.age << endl <<
-		(int) minfo.gender << endl <<
-		minfo.homepage << endl <<
-		minfo.lang1 << endl <<
-		minfo.lang2 << endl <<
-		minfo.lang3 << endl <<
-		minfo.birth_day << endl <<
-		minfo.birth_month << endl <<
-		minfo.birth_year << endl <<
-		(interests.size() > 0 ? *(interests.begin()+0) : "") << endl <<
-		(interests.size() > 1 ? *(interests.begin()+1) : "") << endl <<
-		(interests.size() > 2 ? *(interests.begin()+2) : "") << endl <<
-		(interests.size() > 3 ? *(interests.begin()+3) : "") << endl <<
-		(background.size() > 0 ? *(background.begin()+0) : "") << endl <<
-		(background.size() > 1 ? *(background.begin()+1) : "") << endl <<
-		(background.size() > 2 ? *(background.begin()+2) : "") << endl <<
-		endl <<
-		endl <<
-		lastip << endl <<
-		dispnick << endl <<
-		lastseen << endl <<
-		endl <<
-		endl <<
-		endl <<
-		endl <<
-		groupid << endl;
-
-	    f.close();
-	    f.clear();
-	}
-
-	tname = getdirname() + "about";
-	f.open(tname.c_str());
-	if(f.is_open()) {
-	    f << about;
-	    f.close();
-	    f.clear();
-	}
-
-	if(!finlist) {
-	    tname = getdirname() + "excluded";
+	if(!access(getdirname().c_str(), W_OK)) {
+	    tname = getdirname() + "lastread";
 	    f.open(tname.c_str());
-	    if(f.is_open()) f.close();
+	    if(f.is_open()) {
+		f << lastread << endl;
+		f.close();
+		f.clear();
+	    }
+
+	    tname = getdirname() + "info";
+	    f.open(tname.c_str());
+	    if(f.is_open()) {
+		f << nick << endl <<
+		    binfo.fname << endl <<
+		    binfo.lname << endl <<
+		    binfo.email << endl <<
+		    endl <<
+		    endl <<
+		    binfo.city << endl <<
+		    binfo.state << endl <<
+		    binfo.phone << endl <<
+		    binfo.fax << endl <<
+		    binfo.street << endl <<
+		    binfo.cellular << endl <<
+		    binfo.zip << endl <<
+		    binfo.country << endl <<
+		    winfo.city << endl <<
+		    winfo.state << endl <<
+		    winfo.phone << endl <<
+		    winfo.fax << endl <<
+		    winfo.street << endl <<
+		    winfo.zip << endl <<
+		    winfo.country << endl <<
+		    winfo.company << endl <<
+		    winfo.dept << endl <<
+		    winfo.position << endl <<
+		    (int) minfo.timezone << endl <<
+		    winfo.homepage << endl <<
+		    (int) minfo.age << endl <<
+		    (int) minfo.gender << endl <<
+		    minfo.homepage << endl <<
+		    minfo.lang1 << endl <<
+		    minfo.lang2 << endl <<
+		    minfo.lang3 << endl <<
+		    minfo.birth_day << endl <<
+		    minfo.birth_month << endl <<
+		    minfo.birth_year << endl <<
+		    (interests.size() > 0 ? *(interests.begin()+0) : "") << endl <<
+		    (interests.size() > 1 ? *(interests.begin()+1) : "") << endl <<
+		    (interests.size() > 2 ? *(interests.begin()+2) : "") << endl <<
+		    (interests.size() > 3 ? *(interests.begin()+3) : "") << endl <<
+		    (background.size() > 0 ? *(background.begin()+0) : "") << endl <<
+		    (background.size() > 1 ? *(background.begin()+1) : "") << endl <<
+		    (background.size() > 2 ? *(background.begin()+2) : "") << endl <<
+		    endl <<
+		    endl <<
+		    lastip << endl <<
+		    dispnick << endl <<
+		    lastseen << endl <<
+		    endl <<
+		    endl <<
+		    endl <<
+		    endl <<
+		    groupid << endl;
+
+		f.close();
+		f.clear();
+	    }
+
+	    tname = getdirname() + "about";
+	    f.open(tname.c_str());
+	    if(f.is_open()) {
+		f << about;
+		f.close();
+		f.clear();
+	    }
+
+	    if(!finlist) {
+		tname = getdirname() + "excluded";
+		f.open(tname.c_str());
+		if(f.is_open()) f.close();
+	    }
 	}
     }
 }

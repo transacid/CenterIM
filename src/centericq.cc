@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.76 2002/03/09 18:23:59 konst Exp $
+* $Id: centericq.cc,v 1.77 2002/03/11 13:06:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,10 +33,11 @@
 #include "icqgroups.h"
 #include "accountmanager.h"
 
-centericq::centericq() {
+centericq::centericq()
+    : timer_checkmail(0), timer_update(0), timer_resend(0),
+      regmode(false)
+{
 //    timer_keypress = time(0)-50;
-    timer_checkmail = timer_update = timer_resend = 0;
-    regmode = false;
 }
 
 centericq::~centericq() {
@@ -303,18 +304,22 @@ void centericq::changestatus() {
     icqconf::imaccount ia;
 
     if(face.changestatus(pname, st)) {
-	if(pname != proto_all) {
-	    gethook(pname).setstatus(st);
+	if(!conf.enoughdiskspace()) {
+	    face.log("! cannot connect, free disk space is less than 10k");
 	} else {
-	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-		ia = conf.getourid(pname);
-		if(!ia.empty()) {
-		    gethook(pname).setstatus(st);
+	    if(pname != proto_all) {
+		gethook(pname).setstatus(st);
+	    } else {
+		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		    ia = conf.getourid(pname);
+		    if(!ia.empty()) {
+			gethook(pname).setstatus(st);
+		    }
 		}
 	    }
-	}
 
-	face.update();
+	    face.update();
+	}
     }
 }
 
@@ -938,6 +943,7 @@ void centericq::exectimers() {
     time_t timer_current = time(0);
     protocolname pname;
     int paway, pna;
+    bool fonline;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	if(!conf.getourid(pname).empty()) {
@@ -964,6 +970,31 @@ void centericq::exectimers() {
     }
 
     if(timer_current-timer_resend > PERIOD_RESEND) {
+	/*
+	*
+	* We'll check for free disk space here too
+	*
+	*/
+
+	conf.checkdiskspace();
+
+	for(pname = icq, fonline = false; pname != protocolname_size; (int) pname += 1)
+	    fonline = fonline || (gethook(pname).getstatus() != offline);
+
+	if(!conf.enoughdiskspace() && fonline) {
+	    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		gethook(pname).setstatus(offline);
+
+	    face.log(_("! free disk space is less than 10k, going offline"));
+	    face.log(_("! otherwise we can lose events and configuration"));
+	}
+
+	/*
+	*
+	* Now try to re-send unsent events
+	*
+	*/
+
 	em.resend();
 	face.relaxedupdate();
 	time(&timer_resend);
@@ -979,6 +1010,9 @@ void centericq::exectimers() {
 // ----------------------------------------------------------------------------
 
 string rusconv(const string &tdir, const string &text) {
+    string r;
+
+#ifndef HAVE_ICONV_H
     static unsigned char kw[] = {
 	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
 	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
@@ -1001,7 +1035,6 @@ string rusconv(const string &tdir, const string &text) {
 	210,211,212,213,198,200,195,222,219,221,223,217,216,220,192,209
     };
 
-    string r;
     unsigned char c;
     string::const_iterator i;
     unsigned char *table = 0;
@@ -1019,6 +1052,17 @@ string rusconv(const string &tdir, const string &text) {
     } else {
 	r = text;
     }
+#else
+
+    if(conf.getrussian()) {
+	if(tdir == "kw") r = iconv(text, "koi8-r", "cp1251"); else
+	if(tdir == "wk") r = iconv(text, "cp1251", "koi8-r"); else
+	    r = text;
+    } else {
+	r = text;
+    }
+
+#endif
 
     return r;
 }

@@ -65,7 +65,7 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
-	    makelog;
+	    makelog, fenoughdiskspace;
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost;
@@ -157,6 +157,9 @@ class icqconf {
 	string getconfigfname(const string &fname) const;
 
 	void commandline(int argc, char **argv);
+
+	bool enoughdiskspace() const;
+	void checkdiskspace();
 };
 
 extern icqconf conf;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.55 2002/03/04 14:40:53 konst Exp $
+* $Id: icqdialogs.cc,v 1.56 2002/03/11 13:06:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -229,12 +229,12 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 
     tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
 	ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
-
+/*
     if(c->getdesc().pname == icq)
     if(c->getdesc() == contactroot)
 	tree->addleaff(i, 0, 40, _(" Require authorization : %s "),
 	    stryesno[bi.requiresauth]);
-
+*/
     i = tree->addnode(_(" About "));
     tree->addleaff(i, 0, 39, " %s ", about.c_str());
 
@@ -579,7 +579,12 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     w.set_title(conf.getcolor(cp_dialog_highlight),
-	_(" CenterICQ configuration "));
+#ifdef DEBUG
+	_(" ALL YOUR BASE ARE BELONG TO US ")
+#else
+	_(" CenterICQ configuration ")
+#endif
+	);
 
     db.setwindow(&w, false);
 
