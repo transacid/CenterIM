@@ -239,10 +239,11 @@ bool imurl::contains(const string &atext) const {
 // -- imauthorization class ---------------------------------------------------
 
 imauthorization::imauthorization(const imcontact &acont, imdirection adirection,
-AuthType atype, const string &atext)
-: imevent(acont, adirection, authorization), authtype(atype) {
-
-    if(atext.empty() && authtype == Request)
+    AuthType atype, const string &atext) : imevent(acont, adirection,
+    authorization), authtype(atype)
+{
+    text = atext;
+    if(text.empty() && authtype == Request)
     switch(adirection) {
 	case outgoing: text = "Please accept my authorization to add you to my contact list."; break;
 	case incoming: text = _("Empty authorization request message"); break;
@@ -303,7 +304,7 @@ imauthorization::AuthType imauthorization::getauthtype() const {
 }
 
 bool imauthorization::contains(const string &atext) const {
-    return text.find(atext) != -1;
+    return gettext().find(atext) != -1;
 }
 
 // -- imsms class -------------------------------------------------------------
