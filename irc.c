@@ -521,6 +521,8 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 					}
 					if (tempchr2)
 						memmove(tempchr,&tempchr2[1],strlen(&tempchr2[1]) + 1);
+					if(args[3][0] == 1)
+						break;
 				}
 				if (args[3][0] != '\0') {
 					if (strchr(ROOMSTARTS,args[2][0]))
