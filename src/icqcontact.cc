@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.12 2001/10/03 21:08:27 konst Exp $
+* $Id: icqcontact.cc,v 1.13 2001/10/17 18:17:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -708,8 +708,10 @@ char icqcontact::getshortstatus() const {
     if((status & STATUS_DND) == STATUS_DND) return 'd'; else
     if((status & STATUS_OCCUPIED) == STATUS_OCCUPIED) return 'c'; else
     if((status & STATUS_NA) == STATUS_NA) return 'n'; else
-    if((status & STATUS_AWAY) == STATUS_AWAY) return 'a'; else
-    if(!(status & 0x01FF)) return 'o'; else return '?';
+    if((status & STATUS_AWAY) == STATUS_AWAY) return 'a'; else {
+	return 'o';
+    }
+//    if(!(status & 0x01FF)) return 'o'; else return '_';
 }
 
 int icqcontact::getinfotryn() const {
