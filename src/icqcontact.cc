@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.64 2002/08/24 11:54:25 konst Exp $
+* $Id: icqcontact.cc,v 1.65 2002/08/29 17:25:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -688,14 +688,13 @@ void icqcontact::sethistoffset(int aoffset) {
 
 void icqcontact::remindbirthday(bool r) {
     string tname = getdirname() + "congratulated";
-    ofstream f;
 
     if(!congratulated && r) {
 	congratulated = !access(tname.c_str(), F_OK);
 
 	if(!congratulated) {
-	    f.open(tname.c_str());
-	    if(f.is_open()) f.close();
+	    ofstream f(tname.c_str());
+	    if(f.is_open()) f.close(), f.clear();
 
 	    em.store(imnotification(getdesc(), _("The user has a birthday today")));
 	    congratulated = true;
