@@ -84,7 +84,8 @@ class centericq {
 	void readevents(const imcontact cont);
 
 	void history(const imcontact &cont);
-
+	bool next_chat(bool next = false);
+  
 	bool sendevent(const imevent &ev, icqface::eventviewresult r);
 };
 

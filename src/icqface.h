@@ -26,7 +26,7 @@ enum interfaceAction {
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
     ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN, ACT_RSS, ACT_LJ,
-    ACT_MASS_MOVE, ACT_PGPKEY, ACT_PGPSWITCH
+    ACT_MASS_MOVE, ACT_PGPKEY, ACT_PGPSWITCH, ACT_DUMMY
 };
 
 extern class centericq cicq;
@@ -92,6 +92,9 @@ class icqface {
 
 	imcontact passinfo;
 	const imevent *passevent;
+  
+	icqcontact *last_selected;
+	int find_next_action;
 
 	struct filetransferitem {
 	    string fname;
@@ -202,6 +205,10 @@ class icqface {
 	void relaxedupdate();
 	bool updaterequested();
 
+  
+	icqcontact *find_next_chat(int *idx = 0);
+	bool next_chat(bool next = true);
+  
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();
 

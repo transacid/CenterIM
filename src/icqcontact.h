@@ -70,7 +70,7 @@ class icqcontact {
 	imstatus status;
 
 	int fupdated, groupid, fhistoffset;
-	bool finlist, congratulated, modified, fhasevents, usepgpkey;
+	bool finlist, congratulated, modified, fhasevents, usepgpkey, openedforchat;
 	time_t lastread, lastseen, lasttyping;
 
 	string sound[imevent::imeventtype_size];
@@ -122,6 +122,9 @@ class icqcontact {
 
 	bool hasevents() const { return fhasevents; }
 	void sethasevents(bool n) { fhasevents = n; }
+	bool isopenedforchat() const { return openedforchat; }
+	bool setopenedforchat(bool n) { openedforchat = n; }
+	bool toggleopenedforchat() { openedforchat = !openedforchat; }
 
 	string getnick() const;
 	string getdispnick() const;

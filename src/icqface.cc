@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.243 2005/02/13 11:06:53 iulica Exp $
+* $Id: icqface.cc,v 1.244 2005/02/13 12:10:56 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -447,9 +447,45 @@ int icqface::generalmenu() {
     return r;
 }
 
+/* called to prepare the next chat contact, returns true if it found one, false otherwise
+   parameter is true if its next chat contact or false if is the previous
+ */
+bool icqface::next_chat(bool next) {
+  find_next_action = (next ? 1:-1);
+  if (last_selected) last_selected->setopenedforchat(false);
+  return true;
+}
+
+icqcontact *icqface::find_next_chat(int *idx) {
+  if (find_next_action == 0) return 0;
+  int i;
+  if (last_selected){
+    for(i = 0; i < clist.count && clist.at(i) != last_selected; i++)
+      ;
+    i += find_next_action;
+    if (i <= 0) i = clist.count -1;
+    else if (i >= clist.count) i = 0;
+  }
+  else i = find_next_action == 1 ? 0 : clist.count -1;
+
+  icqcontact *c;
+  for (; i < clist.count && i >= 0; i += find_next_action){
+    c = (icqcontact *) clist.at(i);
+    if (c->isopenedforchat() || c->hasevents()) {
+      find_next_action = 0;
+      extk = ACT_MSG;
+      if (idx) *idx = i;
+      return c;
+    }
+  }
+  
+  find_next_action = 0;
+  return 0;
+}
+
 icqcontact *icqface::mainloop(int &action) {
     int i, curid;
-    icqcontact *c = 0; icqgroup *g;
+    icqcontact *c = 0, *c1 = 0; icqgroup *g;
     bool fin;
 
     for(fin = false; !fin; ) {
@@ -457,8 +493,12 @@ icqcontact *icqface::mainloop(int &action) {
 
 	/* Obtain the (icqcontact *) from the treeview. If a node is
 	   selected, throw out the contact and obtain the correct (icqgroup *). */
-
-	c = (icqcontact *) mcontacts->open(&i);
+	c = find_next_chat(); //check if next_chat was called from inside a chat window
+	if (!c){
+	    last_selected = 0; // next_chat (if called) was called from contacts menu so there was no last selected contact
+	  c = (icqcontact *) mcontacts->open(&i);
+          if (c1 = find_next_chat(&i)) c = c1; //check if next_chat was called from contacts menu
+        }
 
 	if(mcontacts->isnode(i) && c) {
 	    c = 0;
@@ -529,7 +569,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    break;
 	}
     }
-
+    if (c) last_selected = c;
     return c;
 }
 
@@ -694,7 +734,7 @@ void icqface::fillcontactlist() {
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
 		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? " " : ">", dnick.c_str());
+		c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {
 	    char *fmt = "%s[%c]%s%s ";
@@ -711,7 +751,7 @@ void icqface::fillcontactlist() {
 
 	    mcontacts->addleaff(nnode,
 		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, fmt, c->hasevents() ? "#" : " ", shortstatus,
+		c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
 		c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
 	}
@@ -2191,13 +2231,15 @@ void icqface::userinfoexternal(const imcontact &ic) {
 
 void icqface::showeventbottom(const imcontact &ic) {
     const char *text = ischannel(ic) ?
-	_("%s send, %s multi, %s history, %s URLs, %s expand, %s members, %s close") :
-	_("%s send, %s multi, %s history, %s URLs, %s expand, %s details, %s cancel");
+	_("%s send, %s multi, %s history, %s prev chat, %s next chat, %s URLs, %s expand, %s members, %s close") :
+	_("%s send, %s multi, %s history, %s prev chat, %s next chat, %s URLs, %s expand, %s details, %s cancel");
 
     status(text,
 	getstatkey(key_send_message, section_editor).c_str(),
 	getstatkey(key_multiple_recipients, section_editor).c_str(),
 	getstatkey(key_history, section_editor).c_str(),
+	getstatkey(key_prev_chat, section_editor).c_str(),
+	getstatkey(key_next_chat, section_editor).c_str(),
 	getstatkey(key_show_urls, section_editor).c_str(),
 	getstatkey(key_fullscreen, section_editor).c_str(),
 	getstatkey(key_info, section_editor).c_str(),
@@ -2620,6 +2662,7 @@ void icqface::chat(const imcontact &ic) {
     chatlastread = 0;
     inchat = true;
     passinfo = ic;
+    c->setopenedforchat(true);
 
     muins.clear();
     muins.push_back(passinfo);
@@ -2666,6 +2709,7 @@ void icqface::chat(const imcontact &ic) {
 	c->setpostponed(editdone ? "" : p.get());
     }
 
+    c->toggleopenedforchat();
     c->save();
     restoreworkarea();
     status("@");
@@ -3196,6 +3240,16 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    face.extk = ACT_HISTORY;
 	    break;
 
+	case key_next_chat:
+	    face.extk = ACT_DUMMY;
+	    face.next_chat(true);
+	    break;
+            
+	case key_prev_chat:
+	    face.extk = ACT_DUMMY;
+	    face.next_chat(false);
+	    break;
+
 	case key_add: face.extk = ACT_ADD; break;
 
 	case key_send_contact:
@@ -3323,6 +3377,14 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	case key_history:
 	    cicq.history(face.passinfo);
 	    break;
+	case key_prev_chat:
+	    face.editdone = false;
+	    face.next_chat(false);
+	    return -1;
+	case key_next_chat:
+	    face.editdone = false;
+	    face.next_chat(true);
+	    return -1;
 	case key_info:
 	    cicq.userinfo(face.passinfo);
 	    break;

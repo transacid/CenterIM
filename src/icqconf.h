@@ -71,6 +71,8 @@ enum cicq_keybindings {
     key_quickfind,
     key_search,
     key_search_again,
+    key_next_chat,
+    key_prev_chat,
     key_show_urls,
     key_rss_check,
     key_multiple_recipients,

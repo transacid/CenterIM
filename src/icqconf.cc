@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.139 2005/01/26 23:52:47 konst Exp $
+* $Id: icqconf.cc,v 1.140 2005/02/13 12:10:55 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -237,6 +237,8 @@ void icqconf::loadkeys() {
 	    of << "bind contact\ti\tignore" << endl;
 	    of << "bind contact\t\\as\tquickfind" << endl;
 	    of << "bind contact\t/\tquickfind" << endl << endl;
+	    of << "bind contact\t\\cn\tnext_chat" << endl;
+	    of << "bind contact\t\\cb\tprev_chat" << endl;
 	    of << "bind history\t/\tsearch" << endl;
 	    of << "bind history\ts\tsearch" << endl;
 	    of << "bind history\tn\tsearch_again" << endl;
@@ -246,6 +248,8 @@ void icqconf::loadkeys() {
 	    of << "bind editor\t<esc>\tquit" << endl;
 	    of << "bind editor\t\\cp\tmultiple_recipients" << endl;
 	    of << "bind editor\t\\co\thistory" << endl;
+	    of << "bind editor\t\\cn\tnext_chat" << endl;
+	    of << "bind editor\t\\cb\tprev_chat" << endl;
 	    of << "bind editor\t\\a?\tinfo" << endl;
 	    of << "bind editor\t<F2>\tshow_urls" << endl;
 	    of << "bind editor\t<F9>\tfullscreen" << endl << endl;
@@ -341,6 +345,8 @@ void icqconf::loadkeys() {
 	    if(param == "quit") k.action = key_quit; else
 	    if(param == "change_status") k.action = key_change_status; else
 	    if(param == "history") k.action = key_history; else
+	    if(param == "next_chat") k.action = key_next_chat; else
+	    if(param == "prev_chat") k.action = key_prev_chat; else
 	    if(param == "fetch_away_message") k.action = key_fetch_away_message; else
 	    if(param == "user_menu") k.action = key_user_menu; else
 	    if(param == "general_menu") k.action = key_general_menu; else
