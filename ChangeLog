@@ -1,0 +1,898 @@
+2002-07-20 13:01  barnabygray
+
+	* examples/Makefile.am: More header files to include in SOURCES for
+	dist target
+
+2002-07-18 20:46  barnabygray
+
+	* examples/: Makefile.am, Select.cpp, Select.h, shell.cpp, shell.h:
+	Fixed up working example again.
+
+2002-07-11 00:28  barnabygray
+
+	* libicq2000/DCCache.h, libicq2000/ICBMCookieCache.h,
+	libicq2000/RequestIDCache.h, libicq2000/SeqNumCache.h,
+	src/Client.cpp: Fix some memory leaks (thanks to lukasm for
+	pointing them out).
+
+2002-06-25 18:47  barnabygray
+
+	* THANKS, libicq2000/Client.h, libicq2000/events.h, src/Client.cpp,
+	src/events.cpp: Nils Björklund <nilbjo@telia.com>  - connecting
+	signal
+
+2002-06-20 15:08  barnabygray
+
+	* configure.in: Fix so libtoolize will actually be run.
+
+2002-06-08 14:51  barnabygray
+
+	* libicq2000/ICQ.h, libicq2000/MessageHandler.h, libicq2000/TLV.h,
+	libicq2000/events.h, src/ICQ.cpp, src/MessageHandler.cpp,
+	src/TLV.cpp, src/events.cpp: Support for Web pager messages (almost
+	identical to Email express ones).
+
+2002-06-08 12:57  barnabygray
+
+	* src/MessageHandler.cpp: Remove updating contact status based on
+	accept-status in ACK.
+
+2002-05-19 15:36  barnabygray
+
+	* libicq2000.m4: Correction to the m4 macro.
+
+2002-05-17 18:18  barnabygray
+
+	* examples/Makefile.am: Don't compile the examples for the moment
+
+2002-05-17 11:40  barnabygray
+
+	* examples/: PipeExec.cpp, PipeExec.h, Select.cpp, Select.h:
+	Improved the examples
+
+2002-05-17 11:38  barnabygray
+
+	* examples/Makefile.am, examples/shell.cpp, src/Client.cpp:
+	Aborting sending correctly when switching to offline whilst
+	messages are still in delivery.
+
+2002-05-16 19:02  barnabygray
+
+	* src/Capabilities.cpp: Seems this capability is relevant too - re:
+	ICQ2Go
+
+2002-05-11 13:28  barnabygray
+
+	* libicq2000/events.h, src/events.cpp: Support for copying some
+	events easily
+
+2002-05-10 01:09  barnabygray
+
+	* src/MessageHandler.cpp: All acks to away message requests are
+	delivered.. well they should be.
+
+2002-05-06 01:14  barnabygray
+
+	* libicq2000/Client.h, src/Client.cpp: Couple of convenience
+	methods
+
+2002-05-06 00:49  barnabygray
+
+	* src/ICQ.cpp: Fix for compatability with licq, which seems to use
+	different (incorrect?) accept-status flags
+
+2002-05-05 19:38  barnabygray
+
+	* src/MessageHandler.cpp: Default to delivered so it's at least
+	defined for clients that don't do this
+
+2002-04-30 01:03  barnabygray
+
+	* configure.in: By default compile without -g flag, as discussed on
+	ickle mailing list
+
+2002-04-29 17:13  mitz
+
+	* libicq2000/Client.h, libicq2000/SNAC-GEN.h, src/Client.cpp,
+	src/SNAC-GEN.cpp: Web-aware
+
+2002-04-28 23:33  barnabygray
+
+	* Makefile.am: Removing debian bits
+
+2002-04-28 23:33  barnabygray
+
+	* debian/: README, changelog, control, copyright,
+	libicq2000-dev.files, libicq2000-dev.links,
+	libicq2000-dev.manpages, libicq2000-doc.files,
+	libicq2000-doc.links, libicq2000.docs, libicq2000.files, rules:
+	Removed debian files, since it's now actually in debian..
+
+2002-04-27 19:50  barnabygray
+
+	* autogen.sh: Pick up alternate forms of libtool macro
+
+2002-04-27 15:34  barnabygray
+
+	* configure.in, src/Client.cpp: The server seems to have started
+	sending user info updates with blank IP fields, ignore these.
+
+2002-04-26 23:36  alant
+
+	* src/Capabilities.cpp: Fix for strange RedHat's gcc-2.96
+	behaviour. Need to read Stroustrup once more.
+
+2002-04-26 16:47  barnabygray
+
+	* configure.in: Inc. version numbers
+
+2002-04-26 16:44  barnabygray
+
+	* libicq2000/DirectClient.h, src/DirectClient.cpp: Boo
+
+2002-04-26 16:41  barnabygray
+
+	* ChangeLog, NEWS, README, src/DirectClient.cpp: Stuff what need to
+	be done for the next release
+
+2002-04-26 16:18  barnabygray
+
+	* libicq2000/Capabilities.h, libicq2000/Client.h,
+	libicq2000/MessageHandler.h, libicq2000/events.h,
+	src/Capabilities.cpp, src/Client.cpp, src/Contact.cpp,
+	src/DirectClient.cpp, src/ICQ.cpp, src/MessageHandler.cpp,
+	src/SMTPClient.cpp, src/SNAC-SRV.cpp, src/buffer.cpp: - Unifying
+	more of the message handling stuff - Fix receiving offline messages
+	whilst in occupied/DND
+
+2002-04-23 16:09  barnabygray
+
+	* libicq2000/Capabilities.h, src/Capabilities.cpp: Fix sizes
+
+2002-04-23 14:39  barnabygray
+
+	* src/Capabilities.cpp: Oops.. get it right!
+
+2002-04-23 14:31  barnabygray
+
+	* libicq2000/Capabilities.h, src/Capabilities.cpp, src/Contact.cpp,
+	src/SNAC-MSG.cpp: Much better capability support
+
+2002-04-22 09:55  barnabygray
+
+	* libicq2000/DCCache.h: And another fix.
+
+2002-04-22 01:24  barnabygray
+
+	* libicq2000/DCCache.h, src/DirectClient.cpp: Fix direct connection
+	(rare) segfault.
+
+2002-04-21 15:47  barnabygray
+
+	* Makefile.am: Oops.. weren't including TODO in dist
+
+2002-04-21 15:25  barnabygray
+
+	* THANKS, autogen.sh, libicq2000/Client.h, libicq2000/socket.h,
+	src/Client.cpp, src/socket.cpp: Port range binding (esp. for people
+	behind firewalls) thanks to Tobias Hoffmann.
+
+2002-04-16 22:13  barnabygray
+
+	* NEWS, README, TODO: For the release
+
+2002-04-16 20:41  barnabygray
+
+	* libicq2000/Client.h, libicq2000/DCCache.h, src/Client.cpp: What I
+	want is all of the power and none of the responsibility.
+
+2002-04-16 00:13  barnabygray
+
+	* src/SNAC-MSG.cpp: Finally.. caught the bastard. (Sending advanced
+	through server was failing)
+
+2002-04-14 20:39  barnabygray
+
+	* src/SNAC-MSG.cpp: Fixes
+
+2002-04-14 20:09  barnabygray
+
+	* libicq2000/Contact.h, libicq2000/UserInfoBlock.h, src/Client.cpp,
+	src/Contact.cpp, src/MessageHandler.cpp, src/UserInfoBlock.cpp:
+	Added some time statistics
+
+2002-04-13 22:31  barnabygray
+
+	* libicq2000/Capabilities.h, libicq2000/Contact.h,
+	libicq2000/Makefile.am, libicq2000/SNAC-MSG.h, libicq2000/TLV.h,
+	libicq2000/UserInfoBlock.h, src/Capabilities.cpp, src/Client.cpp,
+	src/Contact.cpp, src/Makefile.am, src/SNAC-MSG.cpp, src/TLV.cpp,
+	src/UserInfoBlock.cpp: More flexible handling of capabilities. 
+	General tidying up of code for messaging.
+
+2002-04-11 19:07  barnabygray
+
+	* src/ContactList.cpp: Better to use make_pair, it does exist in
+	gcc 3.0 just needed the namespace prefix.
+
+2002-04-11 15:56  thekonst
+
+	* src/: ContactList.cpp, MessageHandler.cpp: Fixed two minor issues
+	that made it impossible to build the library with gcc 3.x.x
+
+2002-04-11 12:09  barnabygray
+
+	* libicq2000/Client.h, libicq2000/SNAC-SRV.h, libicq2000/events.h,
+	src/Client.cpp, src/SNAC-SRV.cpp: Added keyword searching in
+	Whitepages
+
+2002-04-10 17:32  barnabygray
+
+	* Makefile.am: docs built on dist target
+
+2002-04-08 00:24  barnabygray
+
+	* libicq2000/events.h, src/Client.cpp, src/SNAC-MSG.cpp,
+	src/events.cpp: setOfflineMessage(true) for messages sent through
+	server as offline
+
+2002-04-06 23:31  barnabygray
+
+	* libicq2000/socket.h, src/Client.cpp, src/socket.cpp: Fixed up
+	sockets behaviour, some of the signalling was a bit fscked. This
+	was probably the cause of ickle being a little CPU hungry recently
+	too.
+
+2002-04-06 21:09  barnabygray
+
+	* src/MessageHandler.cpp: Fixed bug that prevented people from
+	reading away message
+
+2002-04-06 16:03  barnabygray
+
+	* src/SNAC-SRV.cpp: Fixed status reported for contacts searched for
+	when they are not web-aware (it shouldn't have been STATUS_NA).
+
+2002-04-03 07:41  mitz
+
+	* libicq2000/Client.h, libicq2000/SNAC-BOS.h, src/Client.cpp,
+	src/SNAC-BOS.cpp: Visible/invisible lists
+
+2002-04-02 01:25  barnabygray
+
+	* src/socket.cpp: Oops.. my bad
+
+2002-04-01 22:44  alant
+
+	* libicq2000/ref_ptr.h: operator= should return value
+
+2002-04-01 20:19  mitz
+
+	* libicq2000/Contact.h, libicq2000/events.h, src/Contact.cpp,
+	src/events.cpp: Added an indicator to UserInfoChangeEvent of
+	whether the change is a transient detail or a permanent detail.
+
+2002-04-01 12:24  barnabygray
+
+	* libicq2000/events.h, src/Client.cpp, src/events.cpp: - More small
+	fixes/tweaks
+
+2002-04-01 01:46  barnabygray
+
+	* libicq2000/Client.h, src/Client.cpp, src/socket.cpp: - General
+	connection/disconnection code cleanup - maybe this will catch the  
+	phantom gezillion disconnection dialogs bug
+
+2002-03-31 21:54  barnabygray
+
+	* src/ICQ.cpp: Eek.. perl good.
+
+2002-03-31 21:22  barnabygray
+
+	* libicq2000/ICQ.h, libicq2000/events.h, src/Client.cpp,
+	src/ICQ.cpp, src/MessageHandler.cpp, src/SNAC-MSG.cpp,
+	src/events.cpp: Fixed up User Add 'user has added you' stuff, which
+	someone, (ehhum) didn't do fully first time.
+
+2002-03-31 17:53  barnabygray
+
+	* libicq2000/ICQ.h, libicq2000/buffer.h, src/ICQ.cpp,
+	src/MessageHandler.cpp, src/buffer.cpp: Fixed up auth requests
+
+2002-03-29 11:54  barnabygray
+
+	* src/Contact.cpp: Status changing bug (thanks Justin for pointing
+	it out)
+
+2002-03-28 18:24  barnabygray
+
+	* examples/shell.cpp, libicq2000/Client.h, libicq2000/Contact.h,
+	libicq2000/ContactList.h, libicq2000/DCCache.h,
+	libicq2000/DirectClient.h, libicq2000/ICBMCookieCache.h,
+	libicq2000/ICQ.h, libicq2000/Makefile.am,
+	libicq2000/MessageHandler.h, libicq2000/RequestIDCache.h,
+	libicq2000/SMTPClient.h, libicq2000/SNAC-BUD.h,
+	libicq2000/SNAC-SRV.h, libicq2000/SocketClient.h,
+	libicq2000/events.h, libicq2000/ref_ptr.h, src/Client.cpp,
+	src/Contact.cpp, src/ContactList.cpp, src/DirectClient.cpp,
+	src/ICQ.cpp, src/Makefile.am, src/MessageHandler.cpp,
+	src/SMTPClient.cpp, src/SNAC-BOS.cpp, src/SNAC-BUD.cpp,
+	src/SNAC-SBL.cpp, src/SNAC-SRV.cpp, src/events.cpp: Fairly major
+	reorganisation of library: - Changed Contacts over to using a
+	reference counted scheme - Moved around the hierarchy of the events
+	(especially related to ContactList and Contact events) - Removed
+	queueing of messages in the library - Maybe some other stuff
+
+2002-03-12 19:40  barnabygray
+
+	* src/Client.cpp: EmailExpress never worked for when you receive
+	them whilst online - probably because it was never actually
+	implemented.. ;-)
+
+2002-03-12 18:45  barnabygray
+
+	* libicq2000/ContactList.h, src/Client.cpp, src/ContactList.cpp:
+	Fixes for EmailExpress (pager) messages.
+
+2002-03-07 00:13  barnabygray
+
+	* src/exceptions: Be gone, you foul being.
+
+2002-03-05 15:34  barnabygray
+
+	* src/Client.cpp: Downgrade client capabilities when we fail to get
+	an ACK on an advanced message. These seems to be occuring with
+	ICQ2001 clients.. need to investigate.
+
+2002-03-03 17:33  thekonst
+
+	* src/userinfohelpers.cpp: Damn.
+
+2002-03-02 17:15  barnabygray
+
+	* src/Contact.cpp: Clear dynamic fields on going offline.
+
+2002-03-02 17:13  barnabygray
+
+	* src/Contact.cpp: Never attempt direct connections for offline
+	contacts.
+
+2002-03-02 17:06  barnabygray
+
+	* src/time_extra.cpp: Ooops
+
+2002-03-02 17:00  barnabygray
+
+	* libicq2000/Makefile.am, libicq2000/time_extra.h, src/Makefile.am,
+	src/SNAC-SRV.cpp, src/time_extra.cpp: Fix to offline messages being
+	timestamped incorrectly if your timezone isn't GMT
+
+2002-03-02 16:20  thekonst
+
+	* libicq2000/SMTPClient.h, src/SMTPClient.cpp,
+	src/userinfohelpers.cpp: - an interests lookup bug was fixed - and
+	I always knew my name was difficult to spell :)
+
+2002-03-02 14:09  barnabygray
+
+	* libicq2000/ICQ.h, src/ICQ.cpp: Fixed last breakages.. hopefully
+	I've really caught the problem as to why ACKs were screwed up for
+	Normal messages.
+
+2002-03-01 19:36  barnabygray
+
+	* libicq2000/Client.h, src/Client.cpp: - Added setStatus for
+	setting status without touching invisibility - Added setInvisible
+	similarly to above
+
+2002-03-01 17:09  thekonst
+
+	* libicq2000/userinfohelpers.h, src/userinfohelpers.cpp: Just tired
+	of seeing "todo" there all the time :)
+
+2002-03-01 15:55  barnabygray
+
+	* libicq2000/ICQ.h, src/DirectClient.cpp, src/ICQ.cpp,
+	src/SNAC-MSG.cpp, src/SNAC-SRV.cpp, src/TLV.cpp: Fixed a major
+	screw-up in a very recent commit that meant acks weren't being
+	parsed properly.
+
+2002-02-28 17:31  barnabygray
+
+	* libicq2000/Client.h, libicq2000/DirectClient.h, libicq2000/ICQ.h,
+	libicq2000/Makefile.am, libicq2000/SMTPClient.h,
+	libicq2000/SocketClient.h, src/Client.cpp, src/DirectClient.cpp,
+	src/ICQ.cpp, src/Makefile.am, src/SMTPClient.cpp,
+	src/SocketClient.cpp: Fixes up to konst's really buggy code.. (only
+	joking) :-) Just a few small minor changes.
+
+2002-02-28 16:23  thekonst
+
+	* libicq2000/Client.h, libicq2000/DirectClient.h,
+	libicq2000/SMTPClient.h, libicq2000/events.h, src/Client.cpp,
+	src/DirectClient.cpp, src/SMTPClient.cpp, src/events.cpp: - Added
+	basic SMTP support to send SMS messages through E-mail gateways
+	(SMTPClient) - Created a base interface for DirectClient and
+	SMTPClient - Added the EmailMessageEvent class, which represents
+	usual E-mail messages - .. and it cannot be true there are no bugs
+	;)
+
+2002-02-28 08:30  thekonst
+
+	* libicq2000/buffer.h, src/buffer.cpp: Added a method to extract an
+	LF terminated string from Buffer
+
+2002-02-27 19:17  barnabygray
+
+	* src/buffer.cpp, libicq2000/buffer.h: Fixed bug in
+	Buffer::UnpackUint16Null that meant possible evil clients could
+	remote segfault the library. Not exploitable - no worries!
+
+2002-02-26 16:14  barnabygray
+
+	* libicq2000/events.h, src/SNAC-SRV.cpp, src/events.cpp: Fixed
+
+2002-02-26 15:36  barnabygray
+
+	* libicq2000/SNAC-SRV.h, src/Client.cpp, src/SNAC-SRV.cpp: -
+	Changes for SMTP sending
+
+2002-02-26 14:19  barnabygray
+
+	* src/SNAC-SRV.cpp: oops, libicq2000 != ickle
+
+2002-02-26 13:48  barnabygray
+
+	* libicq2000/Contact.h, src/Client.cpp, src/Contact.cpp: - Changed
+	icq/virtual contact system slightly - Distinguish SMSable from
+	virtual contacts (which are not necessarily   SMSable) - Fixed bug
+	in email express created contacts
+
+2002-02-25 19:45  barnabygray
+
+	* libicq2000/constants.h, src/Client.cpp, src/DirectClient.cpp: -
+	Log split packets only once - Make library more robust to evil
+	people sending crap at our listening   port
+
+2002-02-21 15:53  barnabygray
+
+	* libicq2000/ICQ.h, src/Client.cpp, src/ICQ.cpp, src/SNAC-MSG.cpp:
+	Fixed auth responses.  General code clean up for the really messy
+	Message send SNAC stuff.
+
+2002-02-20 22:51  barnabygray
+
+	* src/Client.cpp: Should have been sending to normalised mobile
+	number
+
+2002-02-16 09:52  mitz
+
+	* libicq2000/Client.h, libicq2000/events.h, src/Client.cpp,
+	src/events.cpp: Changed server-based contact list signaling from
+	contact-at-a-time to list-at-a-time
+
+2002-02-15 17:36  barnabygray
+
+	* THANKS, libicq2000/RequestIDCache.h, libicq2000/constants.h,
+	libicq2000/userinfoconstants.h, src/TLV.cpp: More -Wall fixes
+
+2002-02-13 16:08  thekonst
+
+	* src/Client.cpp: Reverted the latest modification.
+
+2002-02-13 15:25  thekonst
+
+	* src/Client.cpp: Made it a little bit harder for user to add
+	theirselves to contact list.  Caused problems before. Now works
+	great for me allowing to fetch self details without a problem.
+
+2002-02-10 16:59  mitz
+
+	* src/SNAC-SBL.cpp: Process entries where the UIN is not the first
+	piece of information correctly.
+
+2002-02-05 17:13  barnabygray
+
+	* libicq2000/: constants.h, userinfoconstants.h: Moved AgeRange
+	constants to a more appropriate place
+
+2002-02-05 16:27  thekonst
+
+	* libicq2000/Client.h, libicq2000/constants.h, src/Client.cpp: Min
+	and max ages were replaced with ranges for the full WhitePages
+	search mode.
+
+2002-02-02 08:34  mitz
+
+	* src/SNAC-SRV.cpp: Filled in the request ID field inside server
+	requests with the low word of the SNAC request ID field.
+
+2002-02-01 19:47  barnabygray
+
+	* examples/shell.cpp, libicq2000/Cache.h, libicq2000/DCCache.h,
+	libicq2000/RequestIDCache.h, libicq2000/events.h, src/Client.cpp,
+	src/Contact.cpp, src/DirectClient.cpp, src/ICQ.cpp,
+	src/SNAC-SRV.cpp, src/TLV.cpp, src/Xml.cpp, src/buffer.cpp,
+	src/events.cpp: Removed a lot of warnings when compiled under
+	-Wall. Thanks Jason Townsend for the patch.
+
+2002-02-01 17:55  barnabygray
+
+	* src/Client.cpp: Bug fix, for sending through server which the
+	last priority changes broke.
+
+2002-02-01 12:47  thekonst
+
+	* libicq2000/Client.h, libicq2000/ContactList.h, libicq2000/ICQ.h,
+	libicq2000/events.h, src/Client.cpp, src/ContactList.cpp,
+	src/ICQ.cpp, src/events.cpp: Added support for "you were added" and
+	e-mail express messages.
+
+2002-01-30 22:02  barnabygray
+
+	* libicq2000/Client.h, libicq2000/ICQ.h, libicq2000/events.h,
+	src/Client.cpp, src/DirectClient.cpp, src/ICQ.cpp, src/events.cpp:
+	Sending/receiving urgent + to contact list priorities on messages
+	(untested)
+
+2002-01-27 13:19  thekonst
+
+	* configure.in, src/userinfohelpers.cpp: The getSystemTimezone
+	routine couldn't be compiled under FreeBSD and obviously other
+	system that hadn't the timezone variable in time.h.  Fixed.
+
+2002-01-26 19:31  barnabygray
+
+	* libicq2000/SNAC-BOS.h, src/Client.cpp, src/DirectClient.cpp,
+	src/SNAC-BOS.cpp: Message ACK temporary fix - send an accept-status
+	of zero for now.
+
+2002-01-26 13:51  thekonst
+
+	* libicq2000/userinfohelpers.h, src/userinfohelpers.cpp: Time zone
+	related routines were added to UserInfoHelpers.
+
+2002-01-25 15:38  barnabygray
+
+	* libicq2000/Client.h, libicq2000/Contact.h,
+	libicq2000/DirectClient.h, libicq2000/events.h, src/Client.cpp,
+	src/Contact.cpp, src/DirectClient.cpp, src/events.cpp: - Migrating
+	status & invisibility settings across to self contact in   Client -
+	Fixed sending own status in messages - so sending whilst not online
+	  should not mess up status of remote end
+
+2002-01-25 01:35  barnabygray
+
+	* libicq2000/Makefile.am, libicq2000/userinfohelpers.h,
+	src/Makefile.am, src/userinfohelpers.cpp: Added convenience stuff
+	for user info
+
+2002-01-24 15:06  thekonst
+
+	* libicq2000/ICQ.h, libicq2000/events.h, src/Client.cpp,
+	src/ICQ.cpp, src/events.cpp: Choppy choppy choppy... :) Removed
+	unused fields from the authorization request related classes.
+
+2002-01-24 14:41  thekonst
+
+	* src/ICQ.cpp: Wrong parsing of authorization request packets was
+	fixed. Now the message is read correctly.
+
+2002-01-24 14:01  barnabygray
+
+	* src/SNAC-SRV.cpp: Stupid mistake fix #2 of today
+
+2002-01-24 13:48  barnabygray
+
+	* src/Client.cpp: setInvisible to false when going offline.. stupid
+	me, thanks Dominic
+
+2002-01-23 16:49  barnabygray
+
+	* libicq2000/Contact.h, src/Contact.cpp, src/ContactList.cpp,
+	src/SNAC-SRV.cpp: Correctly associates sms responses to contacts
+	now.
+
+2002-01-21 14:39  barnabygray
+
+	* src/socket.cpp: And actually include config.h so we will pick up
+	the fix
+
+2002-01-21 14:05  barnabygray
+
+	* acinclude.m4, config.h.in, configure.in: Added configure check
+	(+fix) for missing socklen_t type to help compilation on MacOS X
+	and goodness knows what else.
+
+2002-01-21 13:29  barnabygray
+
+	* libicq2000/Contact.h, libicq2000/buffer.h,
+	libicq2000/userinfoconstants.h, src/Contact.cpp, src/SNAC-SRV.cpp:
+	Changed MainHomeInfo.gmt to proper type and renamed it 'timezone',
+	which makes a lot more sense to me.
+
+2002-01-19 15:22  thekonst
+
+	* libicq2000/userinfoconstants.h: Added constants for interests
+	categories and background types.
+
+2002-01-19 15:19  barnabygray
+
+	* libicq2000/Client.h, libicq2000/events.h, src/Client.cpp,
+	src/Contact.cpp, src/events.cpp: - Rearrangement of events for
+	SelfEvent - Renaming of some methods on Client for consistency
+
+2002-01-18 16:46  barnabygray
+
+	* libicq2000/Client.h, libicq2000/Contact.h, src/Client.cpp,
+	src/Contact.cpp: Tidying up after self contact.
+
+2002-01-18 16:17  barnabygray
+
+	* libicq2000/Client.h, libicq2000/SNAC-SRV.h,
+	libicq2000/Translator.h, libicq2000/buffer.h, libicq2000/events.h,
+	src/Client.cpp, src/SNAC-SRV.cpp, src/Translator.cpp,
+	src/buffer.cpp, src/events.cpp: - Added retrieving + setting own
+	info support, thanks to Mitz's work.  - Added/Fixed a few
+	ServerToClient translations that should have been   taking place.
+
+2002-01-18 15:55  barnabygray
+
+	* libicq2000/ICQ.h, src/Client.cpp, src/ICQ.cpp: Fixed invisible
+	users -> offline not clearing invisible flag.
+
+2002-01-15 18:44  barnabygray
+
+	* libicq2000/SNAC-UIN.h: gcc 3.0 namespace fixes
+
+2002-01-14 00:33  barnabygray
+
+	* Makefile.am: Temporary fix
+
+2002-01-13 17:18  barnabygray
+
+	* Makefile.am: Updated
+
+2002-01-13 17:18  barnabygray
+
+	* libicq2000-config.1: Added manpage for libicq2000-config, mainly
+	to meet the strict debian policy.
+
+2002-01-13 17:17  barnabygray
+
+	* doxyfile.conf: Changed doxygen config
+
+2002-01-13 17:16  barnabygray
+
+	* debian/: README, changelog, control, copyright,
+	libicq2000-dev.files, libicq2000-dev.links,
+	libicq2000-dev.manpages, libicq2000-doc.files,
+	libicq2000-doc.links, libicq2000.docs, libicq2000.files, rules:
+	Debian packaging stuff
+
+2002-01-13 17:15  barnabygray
+
+	* src/Client.cpp, libicq2000/Client.h: - Changed old
+	FLAPHeader/FLAPFooter system over to using Buffer::marker's -
+	Reduced a lot of code duplication in sending SNACs, with new
+	functions   FLAPwrapSNAC and FLAPwrapSNACandSend
+
+2002-01-11 21:38  barnabygray
+
+	* libicq2000/Contact.h: gcc 3.0 fixes - thanks Alex for pointing
+	them out
+
+2002-01-11 01:02  barnabygray
+
+	* autogen.sh, config.h.in, configure.in, doxyfile.conf,
+	libicq2000/Cache.h, libicq2000/Client.h, libicq2000/Contact.h,
+	libicq2000/ContactList.h, libicq2000/DCCache.h,
+	libicq2000/DirectClient.h, libicq2000/ICQ.h,
+	libicq2000/RequestIDCache.h, libicq2000/SNAC-MSG.h,
+	libicq2000/SNAC-SRV.h, libicq2000/SNAC-base.h,
+	libicq2000/SeqNumCache.h, libicq2000/buffer.h, libicq2000/events.h,
+	libicq2000/socket.h, libicq2000/userinfoconstants.h,
+	libicq2000/version.h.in, src/Client.cpp, src/Contact.cpp,
+	src/ContactList.cpp, src/DirectClient.cpp, src/ICBMCookie.cpp,
+	src/ICQ.cpp, src/SNAC-MSG.cpp, src/SNAC-SRV.cpp, src/SNAC-UIN.cpp,
+	src/SNAC-base.cpp, src/SNAC.cpp, src/TLV.cpp, src/buffer.cpp,
+	src/events.cpp, src/socket.cpp, src/sstream_fix.h, src/version.cpp:
+	- Added 3 types of searching - Put userinfo constants into ICQ2000
+	namespace - Renamed UINRelatedSubtype to UINICQSubtype - Fixes to
+	DC timeouts - Other stuff.. etc.. blah blah
+
+2002-01-09 20:18  nordman
+
+	* libicq2000/constants.h: Wrap in the ICQ2000 namespace.
+
+2001-12-26 17:48  mitz
+
+	* src/: Client.cpp, ICQ.cpp: Mitz cleaning up his mess before
+	somebody gets killed.
+
+2001-12-26 17:30  mitz
+
+	* src/: Client.cpp, ICQ.cpp: - Invisible mode - Additional settings
+	(server host and port, ignore unlisted users)
+
+2001-12-25 23:59  barnabygray
+
+	* libicq2000/TLV.h, src/SNAC-LOC.cpp, src/TLV.cpp: Fixes for what
+	Ian's patch broke. The Capabilities TLV coded was not for parsing
+	incoming capabilities which arrive with a different TLV type then
+	the sent ones. Changing the Capabilities TLV to parse your incoming
+	ones and then changing the constant broke my code, and I spent a
+	long while tracking this down so am rightfully a bit annoyed.
+
+2001-12-25 22:28  barnabygray
+
+	* libicq2000/Client.h, src/Client.cpp: Removed setInvisible at
+	Mitz's suggestion, to avoid confusion. setStatus should always be
+	used.
+
+2001-12-25 21:48  barnabygray
+
+	* libicq2000/Client.h, libicq2000/events.h, src/Client.cpp,
+	src/events.cpp: Invisibility fixes
+
+2001-12-25 19:33  barnabygray
+
+	* libicq2000/Client.h, libicq2000/DirectClient.h, src/Client.cpp,
+	src/DirectClient.cpp, src/ICQ.cpp, src/SNAC-SRV.cpp: - Away message
+	setting
+
+2001-12-24 18:14  mitz
+
+	* src/Client.cpp: Fixes to invisibility: - Enabled logging in as
+	invisible - Changes to visibility trigger a MyStatusChangedEvent
+
+2001-12-24 14:26  barnabygray
+
+	* libicq2000/SNAC.h, src/Client.cpp: Note to self: Check it
+	actually compiles before a commit
+
+2001-12-24 14:15  barnabygray
+
+	* libicq2000/Client.h, libicq2000/Contact.h, libicq2000/TLV.h,
+	libicq2000/UserInfoBlock.h, src/Client.cpp, src/Contact.cpp,
+	src/TLV.cpp, src/UserInfoBlock.cpp: - Enabled invisibility, could
+	do with a per user customisability.  - Added fix to try to
+	distinguish ICQlite for non-advanced message   delivery.
+
+2001-12-21 21:41  barnabygray
+
+	* Makefile.am, autogen.sh, config.h.in, configure.in,
+	libicq2000.m4, libicq2000/Makefile.am, libicq2000/version.h.in,
+	src/Makefile.am, src/version.cpp: - m4 macros for testing for
+	libicq2000 - version symbols in library
+
+2001-12-21 20:05  barnabygray
+
+	* Makefile.am, configure.in, libicq2000-config.in: Created a
+	libicq2000-config script
+
+2001-12-21 18:09  barnabygray
+
+	* libicq2000/Makefile.am: Added Makefile for library headers
+	directory
+
+2001-12-21 17:43  barnabygray
+
+	* Makefile.am, configure.in, examples/shell.cpp,
+	libicq2000/Cache.h, libicq2000/Client.h, libicq2000/Contact.h,
+	libicq2000/ContactList.h, libicq2000/DCCache.h,
+	libicq2000/DirectClient.h, libicq2000/ICBMCookie.h,
+	libicq2000/ICBMCookieCache.h, libicq2000/ICQ.h,
+	libicq2000/RequestIDCache.h, libicq2000/SNAC-BOS.h,
+	libicq2000/SNAC-BUD.h, libicq2000/SNAC-GEN.h,
+	libicq2000/SNAC-LOC.h, libicq2000/SNAC-MSG.h,
+	libicq2000/SNAC-SBL.h, libicq2000/SNAC-SRV.h,
+	libicq2000/SNAC-UIN.h, libicq2000/SNAC-base.h, libicq2000/SNAC.h,
+	libicq2000/SeqNumCache.h, libicq2000/TLV.h,
+	libicq2000/Translator.h, libicq2000/UserInfoBlock.h,
+	libicq2000/Xml.h, libicq2000/buffer.h, libicq2000/constants.h,
+	libicq2000/custom_marshal.h, libicq2000/events.h,
+	libicq2000/exceptions.h, libicq2000/socket.h,
+	libicq2000/userinfoconstants.h, src/Cache.h, src/Client.cpp,
+	src/Client.h, src/Contact.cpp, src/Contact.h, src/ContactList.cpp,
+	src/ContactList.h, src/DCCache.h, src/DirectClient.cpp,
+	src/DirectClient.h, src/ICBMCookie.cpp, src/ICBMCookie.h,
+	src/ICBMCookieCache.h, src/ICQ.cpp, src/ICQ.h, src/Makefile.am,
+	src/RequestIDCache.h, src/SNAC-BOS.cpp, src/SNAC-BUD.cpp,
+	src/SNAC-BUD.h, src/SNAC-GEN.cpp, src/SNAC-GEN.h, src/SNAC-LOC.cpp,
+	src/SNAC-LOC.h, src/SNAC-MSG.cpp, src/SNAC-MSG.h, src/SNAC-SBL.cpp,
+	src/SNAC-SRV.cpp, src/SNAC-SRV.h, src/SNAC-UIN.cpp, src/SNAC-UIN.h,
+	src/SNAC-base.cpp, src/SNAC-base.h, src/SNAC.cpp, src/SNAC.h,
+	src/SeqNumCache.h, src/TLV.cpp, src/TLV.h, src/Translator.cpp,
+	src/Translator.h, src/UserInfoBlock.cpp, src/UserInfoBlock.h,
+	src/Xml.cpp, src/Xml.h, src/buffer.cpp, src/buffer.h,
+	src/constants.h, src/custom_marshal.h, src/events.cpp,
+	src/events.h, src/exceptions.cpp, src/exceptions.h, src/socket.cpp,
+	src/socket.h, src/userinfoconstants.h: Many changes: - imported
+	Mitz's additions (needs more work) - move all the installed headers
+	in a libicq2000 directory - fixes to build process - removed uses
+	of the hash_map, to ease compatibility with STL   implementations
+
+2001-12-20 15:33  barnabygray
+
+	* doxyfile.conf: doxygen config file
+
+2001-12-20 15:32  barnabygray
+
+	* README: Spelling mistakes
+
+2001-12-20 13:31  barnabygray
+
+	* Makefile.am, README, src/Client.cpp, src/Client.h,
+	src/DirectClient.h, src/Translator.h, src/events.cpp, src/events.h:
+	Documented a lot of the library.  Small fixes to Translator (const
+	methods)
+
+2001-12-20 13:13  thekonst
+
+	* src/: Client.cpp, Contact.cpp, Contact.h, SNAC-SRV.cpp,
+	SNAC-SRV.h: 100% of user details are now read. Work info along with
+	personal interests and background/past are fetched, parsed and
+	passed to the Contact class.
+
+2001-12-19 18:57  barnabygray
+
+	* configure.in: Autoconf guff
+
+2001-12-19 18:24  barnabygray
+
+	* ChangeLog, Makefile.am: More additions
+
+2001-12-19 16:37  barnabygray
+
+	* configure.in: Configure should now work
+
+2001-12-19 15:56  barnabygray
+
+	* configure.in: Updated
+
+2001-12-19 15:41  barnabygray
+
+	* src/: Makefile, Makefile.in: Oops, shouldn't have been in CVS
+
+2001-12-19 15:20  barnabygray
+
+	* AUTHORS, COPYING, INSTALL, NEWS, README, THANKS, TODO,
+	autogen.sh, configure.in, src/Makefile.in: Administrivia stuff
+
+2001-12-19 15:13  barnabygray
+
+	* examples/Makefile.am, examples/shell.cpp, src/Cache.h,
+	src/Client.cpp, src/Client.h, src/Contact.cpp, src/Contact.h,
+	src/ContactList.cpp, src/ContactList.h, src/DCCache.h,
+	src/DirectClient.cpp, src/DirectClient.h, src/ICBMCookie.cpp,
+	src/ICBMCookie.h, src/ICBMCookieCache.h, src/ICQ.cpp, src/ICQ.h,
+	src/RequestIDCache.h, src/SNAC-BUD.cpp, src/SNAC-BUD.h,
+	src/SNAC-GEN.cpp, src/SNAC-GEN.h, src/SNAC-LOC.cpp, src/SNAC-LOC.h,
+	src/SNAC-MSG.cpp, src/SNAC-MSG.h, src/SNAC-SRV.cpp, src/SNAC-SRV.h,
+	src/SNAC-UIN.cpp, src/SNAC-UIN.h, src/SNAC-base.cpp,
+	src/SNAC-base.h, src/SNAC.cpp, src/SNAC.h, src/SeqNumCache.h,
+	src/TLV.cpp, src/TLV.h, src/Translator.cpp, src/Translator.h,
+	src/UserInfoBlock.cpp, src/UserInfoBlock.h, src/Xml.cpp, src/Xml.h,
+	src/buffer.cpp, src/buffer.h, src/constants.h,
+	src/custom_marshal.h, src/events.cpp, src/events.h,
+	src/exceptions.cpp, src/exceptions.h, src/socket.cpp, src/socket.h,
+	src/sstream_fix.h, src/userinfoconstants.h: Modified licensing to
+	LGPL.
+
+2001-12-19 14:12  barnabygray
+
+	* src/: Cache.h, Client.cpp, Client.h, Contact.cpp, Contact.h,
+	ContactList.cpp, ContactList.h, DCCache.h, DirectClient.cpp,
+	DirectClient.h, ICBMCookie.cpp, ICBMCookie.h, ICBMCookieCache.h,
+	ICQ.cpp, ICQ.h, Makefile, Makefile.am, Makefile.in,
+	RequestIDCache.h, SNAC-BUD.cpp, SNAC-BUD.h, SNAC-GEN.cpp,
+	SNAC-GEN.h, SNAC-LOC.cpp, SNAC-LOC.h, SNAC-MSG.cpp, SNAC-MSG.h,
+	SNAC-SRV.cpp, SNAC-SRV.h, SNAC-UIN.cpp, SNAC-UIN.h, SNAC-base.cpp,
+	SNAC-base.h, SNAC.cpp, SNAC.h, SeqNumCache.h, TLV.cpp, TLV.h,
+	Translator.cpp, Translator.h, UserInfoBlock.cpp, UserInfoBlock.h,
+	Xml.cpp, Xml.h, buffer.cpp, buffer.h, constants.h,
+	custom_marshal.h, events.cpp, events.h, exceptions, exceptions.cpp,
+	exceptions.h, socket.cpp, socket.h, sstream_fix.h,
+	userinfoconstants.h: Moved library from ickle to libicq2000
+
