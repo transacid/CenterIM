@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.31 2002/12/12 14:26:06 konst Exp $
+* $Id: kkstrtext.cc,v 1.32 2003/07/16 23:41:10 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,7 @@
 */
 
 #include "kkstrtext.h"
+#include <errno.h>
 
 char *strcut(char *strin, int frompos, int count) {
     if(count > 0) {
@@ -763,12 +764,15 @@ string strdateandtime(struct tm *tms, const string &fmt) {
     string afmt = fmt;
 
     if(afmt.empty()) {
-	if(current_time > when + 6L * 30L * 24L * 60L * 60L /* Old. */
-	|| current_time < when - 60L * 60L)                 /* Future. */ {
+	afmt = "%b %e %Y %H:%M";
+/*
+	if(current_time > when + 6L * 30L * 24L * 60L * 60L // Old.
+	|| current_time < when - 60L * 60L) {               // Future.
 	    afmt = "%b %e  %Y";
 	} else {
 	    afmt = "%b %e %H:%M";
 	}
+*/
     }
 
     strftime(buf, 512, afmt.c_str(), tms);
@@ -877,44 +881,53 @@ string ruscase(const string &s, const string &mode) {
     return r;
 }
 
-string siconv(const string &text, const string &fromcs, const string &tocs) {
+#ifdef ICONV_CONST
+#define ICONV_CCHAR (const char **)
+#else
+#define ICONV_CCHAR
+#endif
+
+string siconv(const string &atext, const string &fromcs, const string &tocs) {
 #ifdef HAVE_ICONV_H
     iconv_t cd = iconv_open(tocs.c_str(), fromcs.c_str());
 
     if(((int) cd) != -1) {
-	string r;
+	string r, text(atext);
 	size_t inleft, outleft, soutleft;
 	char *inbuf, *outbuf, *sinbuf, *soutbuf;
 
-	sinbuf = inbuf = strdup(text.c_str());
-	inleft = strlen(inbuf);
+	while(!text.empty()) {
+	    sinbuf = inbuf = strdup(text.c_str());
+	    inleft = strlen(inbuf);
 
-	soutleft = outleft = inleft*4;
-	soutbuf = outbuf = new char[outleft];
+	    soutleft = outleft = inleft*4;
+	    soutbuf = outbuf = new char[outleft];
 
-	size_t res = iconv(cd,
-#ifdef ICONV_CONST
-	    (const char **)
-#endif
-	    &inbuf, &inleft, &outbuf, &outleft);
+	    size_t res = iconv(cd, ICONV_CCHAR &inbuf, &inleft,
+		&outbuf, &outleft);
 
-	iconv_close(cd);
-
-	if(res != -1) {
 	    soutbuf[soutleft-outleft] = 0;
-	    r = soutbuf;
-	} else {
-	    r = text;
+	    r += soutbuf;
+	    text.erase(0, text.size()-inleft);
+
+	    delete soutbuf;
+	    delete sinbuf;
+
+	    if(res == -1 && errno != EILSEQ)
+		break;
+
+	    if(!text.empty()) {
+		text.erase(0, 1);
+		r += " ";
+	    }
 	}
 
-	delete soutbuf;
-	delete sinbuf;
-
+	iconv_close(cd);
 	return r;
     }
 #endif
 
-    return text;
+    return atext;
 }
 
 string cuthtml(const string &html, bool cutbrs) {
