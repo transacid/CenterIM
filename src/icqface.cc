@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.139 2002/09/10 16:37:37 konst Exp $
+* $Id: icqface.cc,v 1.140 2002/09/12 09:33:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,9 +39,12 @@ const char *stryesno(bool b) {
 }
 
 const char *strgender(imgender g) {
-    return g == genderMale ? _("Male") :
-	genderFemale ? _("Female") :
-	    _("Not specified");
+    switch(g) {
+	case genderMale: return _("Male");
+	case genderFemale: return _("Female");
+    }
+
+    return _("Not specified");
 }
 
 const char *seteventviewresult(icqface::eventviewresult r) {
@@ -62,16 +65,22 @@ const char *seteventviewresult(icqface::eventviewresult r) {
 }
 
 const char *strregsound(icqconf::regsound s) {
-    return s == icqconf::rscard ? _("sound card") :
-	s == icqconf::rsspeaker ? _("speaker") :
-	s == icqconf::rsdisable ? _("disable") :
-	_("don't change");
+    switch(s) {
+	case icqconf::rscard: return _("sound card");
+	case icqconf::rsspeaker: return _("speaker");
+	case icqconf::rsdisable: return _("disable");
+    }
+
+    return _("don't change");
 }
 
 const char *strregcolor(icqconf::regcolor c) {
-    return c == icqconf::rcdark ? _("dark") :
-	c == icqconf::rcblue ? _("blue") :
-	_("don't change");
+    switch(c) {
+	case icqconf::rcdark: return _("dark");
+	case icqconf::rcblue: return _("blue");
+    }
+
+    return _("don't change");
 }
 
 const char *strint(unsigned int i) {
@@ -87,9 +96,12 @@ const char *strint(unsigned int i) {
 }
 
 const char *strgroupmode(icqconf::groupmode gmode) {
-    return gmode == icqconf::group1 ? _("mode 1") :
-	gmode == icqconf::group2 ? _("mode 2") :
-	    _("no");
+    switch(gmode) {
+	case icqconf::group1: return _("mode 1");
+	case icqconf::group2: return _("mode 2");
+    }
+
+    return _("no");
 }
 
 icqface::icqface() {
