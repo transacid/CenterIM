@@ -82,7 +82,8 @@ class icqface {
 	verticalmenu mhist;
 
 	ofstream flog;
-	vector<string> extractedurls;
+	vector<string> extractedurls, lastlog;
+	string fstatus;
 
 	linkedlist workareas;
 

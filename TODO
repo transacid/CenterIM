@@ -6,11 +6,15 @@
 
 resizable contact list and log window
 
+the log window and status bar contents are now saved during resize
+
 segfault on resize fixed
 
 try to register with password "centericq" -> 100% CPU time
 
 exit -> segfault
+
+sending smses through email gws, the server reports the email to send it
 
 /*
 *
@@ -38,8 +42,6 @@ documentation: port numbers for IM services. for firewalls setup.
 scriptable protocols actions
 
 cvs 1.10 -> cicqsync should produce error msg and bail out
-
-sending smses through email gws, the server reports the email to send it
 
 try to implement the daemon mode
     substitute another "face" class
@@ -71,4 +73,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.136 2002/02/27 16:35:45 konst Exp $
+$Id: TODO,v 1.137 2002/02/28 12:05:27 konst Exp $

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.86 2002/02/27 16:35:46 konst Exp $
+* $Id: icqface.cc,v 1.87 2002/02/28 12:05:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1305,9 +1305,15 @@ void icqface::log(const string atext) {
 	while((i = text.find("\n")) != -1) text[i] = ' ';
 	while((i = text.find("\r")) != -1) text[i] = ' ';
 
+	while(lastlog.size() > LINES-sizeWArea.y2-2)
+	    lastlog.erase(lastlog.begin());
+
+	lastlog.push_back(text);
+
 	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
 	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);
 	kwriteatf(sizeWArea.x1+2, LINES-3, conf.getcolor(cp_main_text), "%s", text.c_str());
+
 	delete logline;
     }
 }
@@ -1315,7 +1321,7 @@ void icqface::log(const string atext) {
 void icqface::status(const string text) {
     attrset(conf.getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
-    kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", text.c_str());
+    kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", (fstatus = text).c_str());
 }
 
 void icqface::blockmainscreen() {
@@ -1781,6 +1787,21 @@ void icqface::menuidle(verticalmenu &m) {
 	    face.done();
 	    face.init();
 	    face.draw();
+
+	    /*
+	     * Terminal resize specific
+	     */
+
+	    vector<string> flog;
+	    vector<string>::iterator il;
+
+	    face.status(face.fstatus);
+	    flog = face.lastlog;
+	    face.lastlog.clear();
+
+	    for(il = flog.begin(); il != flog.end(); il++)
+		face.log(*il);
+
 	    face.dotermresize = false;
 	}
     }
