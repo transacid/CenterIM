@@ -1873,7 +1873,7 @@ void yahoo_send_file(guint32 id, char *who, char *msg,
 		size -= cnt;
 		while(cnt>0) {
 			cnt2 = write(nyd->fd, buff, cnt);
-			cnt -= cnt2;
+			if(cnt2 < 0) size = cnt = 0; else cnt -= cnt2;
 		}
 	}
 
