@@ -36,6 +36,7 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	void resolve();
 	void sendinvisible();
+	void updateinforecord(Contact *ic, icqcontact *c);
 
     public:
 	icqhook();

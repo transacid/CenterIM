@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.55 2002/02/08 16:56:46 konst Exp $
+* $Id: icqhook.cc,v 1.56 2002/02/13 17:45:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -556,6 +556,133 @@ void icqhook::requestawaymsg(const imcontact &c) {
     }
 }
 
+void icqhook::updateinforecord(Contact *ic, icqcontact *c) {
+    if(ic && c) {
+	MainHomeInfo &home = ic->getMainHomeInfo();
+	HomepageInfo &hpage = ic->getHomepageInfo();
+	WorkInfo &work = ic->getWorkInfo();
+	PersonalInterestInfo &pint = ic->getPersonalInterestInfo();
+	BackgroundInfo &backg = ic->getBackgroundInfo();
+	EmailInfo &email = ic->getEmailInfo();
+
+	icqcontact::basicinfo cbinfo = c->getbasicinfo();
+	icqcontact::moreinfo cminfo = c->getmoreinfo();
+	icqcontact::workinfo cwinfo = c->getworkinfo();
+
+	/* basic information */
+
+	cbinfo.fname = rusconv("wk", ic->getFirstName());
+	cbinfo.lname = rusconv("wk", ic->getLastName());
+	cbinfo.email = rusconv("wk", ic->getEmail());
+	cbinfo.city = rusconv("wk", home.city);
+	cbinfo.state = rusconv("wk", home.state);
+	cbinfo.phone = rusconv("wk", home.phone);
+	cbinfo.fax = rusconv("wk", home.fax);
+	cbinfo.street = rusconv("wk", home.street);
+	cbinfo.requiresauth = ic->getAuthReq();
+
+	if(!home.getMobileNo().empty())
+	    cbinfo.cellular = rusconv("wk", home.getMobileNo());
+
+	cbinfo.zip = home.zip;
+	cbinfo.country = home.country;
+
+	/* more information */
+
+	cminfo.age = hpage.age;
+
+	cminfo.gender =
+	    hpage.sex == 1 ? genderFemale :
+	    hpage.sex == 2 ? genderMale :
+		genderUnspec;
+
+	cminfo.homepage = rusconv("wk", hpage.homepage);
+	cminfo.birth_day = hpage.birth_day;
+	cminfo.birth_month = hpage.birth_month;
+	cminfo.birth_year = hpage.birth_year;
+
+	cminfo.lang1 = hpage.lang1;
+	cminfo.lang2 = hpage.lang2;
+	cminfo.lang3 = hpage.lang3;
+
+	cminfo.timezone = home.timezone;
+
+	/* work information */
+
+	cwinfo.city = rusconv("wk", work.city);
+	cwinfo.state = rusconv("wk", work.state);
+	cwinfo.street = rusconv("wk", work.street);
+	cwinfo.company = rusconv("wk", work.company_name);
+	cwinfo.dept = rusconv("wk", work.company_dept);
+	cwinfo.position = rusconv("wk", work.company_position);
+	cwinfo.homepage = rusconv("wk", work.company_web);
+
+	cwinfo.zip = work.zip;
+	cwinfo.country = work.country;
+
+	/* personal interests */
+
+	string sbuf;
+	vector<string> pintinfo;
+	list<PersonalInterestInfo::Interest>::iterator ii;
+
+	for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
+	    int k = ii->first-Interests_offset;
+
+	    if(k >= 0 && k < Interests_table_size) {
+		sbuf = (string) Interests_table[k];
+	    } else {
+		sbuf = "";
+	    }
+
+	    if(!ii->second.empty()) {
+		if(!sbuf.empty()) sbuf += ": ";
+		sbuf += rusconv("wk", ii->second);
+	    }
+
+	    if(!sbuf.empty()) pintinfo.push_back(sbuf);
+	}
+
+	/* education background */
+
+	vector<string> backginfo;
+	list<BackgroundInfo::School>::iterator isc;
+
+	for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
+	    sbuf = "";
+
+	    for(int k = 0; k < Background_table_size; k++) {
+		if(Background_table[k].code == isc->first) {
+		    sbuf = (string) Background_table[k].name + ": ";
+		    break;
+		}
+	    }
+
+	    sbuf += rusconv("wk", isc->second);
+	    if(!sbuf.empty()) backginfo.push_back(sbuf);
+	}
+
+	/* nicknames stuff */
+
+	string nick = rusconv("wk", ic->getAlias());
+
+	if((c->getnick() == c->getdispnick())
+	|| (c->getdispnick() == i2str(c->getdesc().uin))) {
+	    c->setdispnick(nick);
+	}
+
+	c->setnick(nick);
+	c->setbasicinfo(cbinfo);
+	c->setmoreinfo(cminfo);
+	c->setworkinfo(cwinfo);
+	c->setinterests(pintinfo);
+	c->setbackground(backginfo);
+	c->setabout(rusconv("wk", ic->getAboutInfo()));
+
+	face.relaxedupdate();
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -816,136 +943,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 	case ContactListEvent::UserInfoChange:
 	    if(dynamic_cast<UserInfoChangeEvent*>(ev)) {
-		Contact *ic = cli.getContact(ev->getUIN());
-
-		if(!c) {
-		    c = clist.get(contactroot);
-		    if(ev->getUIN() == conf.getourid(icq).uin) {
-			ic = cli.getSelfContact();
-		    }
-		}
-
-		MainHomeInfo &home = ic->getMainHomeInfo();
-		HomepageInfo &hpage = ic->getHomepageInfo();
-		WorkInfo &work = ic->getWorkInfo();
-		PersonalInterestInfo &pint = ic->getPersonalInterestInfo();
-		BackgroundInfo &backg = ic->getBackgroundInfo();
-		EmailInfo &email = ic->getEmailInfo();
-
-		icqcontact::basicinfo cbinfo = c->getbasicinfo();
-		icqcontact::moreinfo cminfo = c->getmoreinfo();
-		icqcontact::workinfo cwinfo = c->getworkinfo();
-
-		/* basic information */
-
-		cbinfo.fname = rusconv("wk", ic->getFirstName());
-		cbinfo.lname = rusconv("wk", ic->getLastName());
-		cbinfo.email = rusconv("wk", ic->getEmail());
-		cbinfo.city = rusconv("wk", home.city);
-		cbinfo.state = rusconv("wk", home.state);
-		cbinfo.phone = rusconv("wk", home.phone);
-		cbinfo.fax = rusconv("wk", home.fax);
-		cbinfo.street = rusconv("wk", home.street);
-		cbinfo.requiresauth = ic->getAuthReq();
-
-		if(!home.getMobileNo().empty())
-		    cbinfo.cellular = rusconv("wk", home.getMobileNo());
-
-		cbinfo.zip = home.zip;
-		cbinfo.country = home.country;
-
-		/* more information */
-
-		cminfo.age = hpage.age;
-
-		cminfo.gender =
-		    hpage.sex == 1 ? genderFemale :
-		    hpage.sex == 2 ? genderMale :
-			genderUnspec;
-
-		cminfo.homepage = rusconv("wk", hpage.homepage);
-		cminfo.birth_day = hpage.birth_day;
-		cminfo.birth_month = hpage.birth_month;
-		cminfo.birth_year = hpage.birth_year;
-
-		cminfo.lang1 = hpage.lang1;
-		cminfo.lang2 = hpage.lang2;
-		cminfo.lang3 = hpage.lang3;
-
-		cminfo.timezone = home.timezone;
-
-		/* work information */
-
-		cwinfo.city = rusconv("wk", work.city);
-		cwinfo.state = rusconv("wk", work.state);
-		cwinfo.street = rusconv("wk", work.street);
-		cwinfo.company = rusconv("wk", work.company_name);
-		cwinfo.dept = rusconv("wk", work.company_dept);
-		cwinfo.position = rusconv("wk", work.company_position);
-		cwinfo.homepage = rusconv("wk", work.company_web);
-
-		cwinfo.zip = work.zip;
-		cwinfo.country = work.country;
-
-		/* personal interests */
-
-		vector<string> pintinfo;
-		list<PersonalInterestInfo::Interest>::iterator ii;
-
-		for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
-		    int k = ii->first-Interests_offset;
-
-		    if(k >= 0 && k < Interests_table_size) {
-			sbuf = (string) Interests_table[k];
-		    } else {
-			sbuf = "";
-		    }
-
-		    if(!ii->second.empty()) {
-			if(!sbuf.empty()) sbuf += ": ";
-			sbuf += rusconv("wk", ii->second);
-		    }
-
-		    if(!sbuf.empty()) pintinfo.push_back(sbuf);
-		}
-
-		/* education background */
-
-		vector<string> backginfo;
-		list<BackgroundInfo::School>::iterator isc;
-
-		for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
-		    sbuf = "";
-
-		    for(int k = 0; k < Background_table_size; k++) {
-			if(Background_table[k].code == isc->first) {
-			    sbuf = (string) Background_table[k].name + ": ";
-			    break;
-			}
-		    }
-
-		    sbuf += rusconv("wk", isc->second);
-		    if(!sbuf.empty()) backginfo.push_back(sbuf);
-		}
-
-		/* nicknames stuff */
-
-		string nick = rusconv("wk", ic->getAlias());
-
-		if((c->getnick() == c->getdispnick())
-		|| (c->getdispnick() == i2str(ev->getUIN()))) {
-		    c->setdispnick(nick);
-		}
-
-		c->setnick(nick);
-		c->setbasicinfo(cbinfo);
-		c->setmoreinfo(cminfo);
-		c->setworkinfo(cwinfo);
-		c->setinterests(pintinfo);
-		c->setbackground(backginfo);
-		c->setabout(rusconv("wk", ic->getAboutInfo()));
-
-		face.relaxedupdate();
+		updateinforecord(cli.getContact(ev->getUIN()), c);
 	    }
 	    break;
 
@@ -1059,10 +1057,8 @@ void icqhook::self_event_cb(SelfEvent *ev) {
 	    break;
 
 	case SelfEvent::MyUserInfoChange:
-	    {
-		UserInfoChangeEvent cl(cli.getSelfContact());
-		contactlist_cb(&cl);
-	    }
+	    updateinforecord(cli.getSelfContact(), clist.get(contactroot));
+	    updateinforecord(cli.getSelfContact(), clist.get(imcontact(cli.getUIN(), icq)));
 	    break;
     }
 }
