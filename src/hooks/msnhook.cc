@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.17 2002/03/04 14:40:56 konst Exp $
+* $Id: msnhook.cc,v 1.18 2002/03/07 09:12:58 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -271,7 +271,7 @@ void msnhook::messaged(void *data) {
 	if(!c)
 	if(c = clist.addnew(ic))
 	if(d->friendlyhandle) {
-	    c->setdispnick(d->friendlyhandle);
+	    c->setdispnick(unmime((string) d->friendlyhandle));
 	}
 
 	em.store(immessage(ic, imevent::incoming, d->msg));
@@ -292,7 +292,7 @@ void msnhook::statuschanged(void *data) {
 	if(!c) {
 	    c = clist.addnew(ic, false);
 	    if(d->friendlyhandle) {
-		c->setdispnick(d->friendlyhandle);
+		c->setdispnick(unmime((string) d->friendlyhandle));
 	    }
 	}
 
