@@ -72,10 +72,10 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 	if(fhist.is_open()) {
 	    while(!fhist.eof()) {
 		rev = eventread(fhist);
-		rev->setcontact(cont);
 
 		if(rev) {
 		    if(rev->gettimestamp() > lastread) {
+			rev->setcontact(cont);
 			r.push_back(rev);
 		    } else {
 			delete rev;

@@ -30,7 +30,7 @@ Contents
 7. Sending and receiving events
     7.1. Messages
     7.2. URLs
-    7.3. Contacts
+    7.3. SMSes
     7.4. Files
     7.5. Events history
 8. Ignore, visible and invisible lists
@@ -40,9 +40,11 @@ Contents
 9. Advanced features
     9.1. Arabic and Hebrew languages support
     9.2. Protocol debug mode
+    9.3. Latest CVS snapshots
 10. Lynx
     10.1. The program homepage
 	10.1.1. Centericq mailing list
+	10.1.2. German fan-club of the program :-)
     10.2. Konst.org.ua
     10.3. Other programs I write
     10.4. IM protocols
@@ -103,9 +105,9 @@ lot in it.
 1.2. Features overview
 ----------------------
 
-  Centericq has almost all the functionality including extended issues
-that Mirabilis client have. Now it's one of the most full-featured
-clients for UNIX.
+  Centericq's ICQ module has almost all the functionality including
+extended issues that Mirabilis client has. Speaking of other protocols,
+it has quite enough support for Yahoo! and MSN.
 
   Beside simple things like sending and receiving messages, changing
 online status and basic user information, centericq advanced features
@@ -138,11 +140,10 @@ an already existing UIN or register a new one. Actually, all the fields
 the dialog has are self-descriptive. Some attention should only be paid
 to the "server address" field. The default value it has is quite ok. In
 the majority of cases you do not need to change it. The only exception
-is if you have your own ICQ server on LAN. I received quite a bunch of
-"bug-reports" saying that centericq didn't work with "login.icq.com"
-server. No wonder it didn't. Erm, I would be quite surprised if it did
-:) The point is that login.icq.com is used for new Mirabilis client
-software which uses a new version of the protocol.
+is if you have your own ICQ server on LAN.
+
+  If you want to use Yahoo! and MSN you should have already registered
+logins for these networks.
 
   Russian speaking users should pay attention to the "Russian
 translation" item of the registration dialog. It's vital to set its
@@ -157,14 +158,17 @@ it to be readable.
 2.1. Updating details
 ---------------------
 
-  After the first logon centericq proposes to update your ICQ details
-with popping up the "update user details" dialog. You can fill in
-information that will be visible to other ICQ users. They also will be
-able to find you with specifying what you filled in their "find users"
-requests.
+  If you have just registered on the ICQ network only basic fields of
+your details were set. Now, if you want to provide the world with more
+information about yourself, you should invoke the "Update ICQ details"
+dialog. First go to the "Accounts" dialog which can be accessed through
+the global menu, and there in the ICQ node select "Update user details".
+You can fill in information that will be visible to other ICQ users.
+They also will be able to find you with specifying what you filled in
+their "find users" requests.
 
-  It's possible to update your details any time you're online with this
-dialog invoked with the global menu.
+  It's possible to update your details any time you're online with the
+dialog.
 
 
 3. User interface
@@ -486,20 +490,22 @@ wish for future version of the protocol to support e-mail addresses and
 host names as separate events :)
 
 
-7.3. Contacts
--------------
+7.3. SMSes
+----------
 
-  A good feature of ICQ is users' ability to exchange parts of their
-contact lists with each other. To make it possible events of "contact"
-type are used.
-
-  On executing this action with either the context menu or with 'c'
-hotkey, a contact selection dialog appears. Select contacts to send with
-"Space", finish selection with "Enter".
+  ICQ (and only ICQ so far) has a server-side mechanism which allows its
+users to send and receive short text messages to cellular phones. There
+is an item visible in the context menu for ICQ contacts, named "Send an
+SMS" which is be choosen. Then if a user does not have any cellular
+number on his details, centericq will ask you to provide one. This
+number can be changed any time with the "Edit details" item of the same
+menu.
 
 
 7.4. Files
 ----------
+
+  [ currently disabled ]
 
   To send or receive files over the ICQ network, centericq must have an
 ability to establish a direct TCP connection from side of a sender to
@@ -604,6 +610,29 @@ protocol messages will be visible in the log window, and also they'll be
 written into the ~/.centericq/log file.
 
 
+9.3. Latest CVS snapshots
+-------------------------
+
+  If you wanna always have the recent version of the program, there is
+an annonymous CVS access and a script which allows you to download
+recent hot source with new features as soon as they appear.
+
+  Ok, now how to do it. There is a script in the centericq package under
+the misc/ directory. If you use an RPM package, it's installed to your
+$prefix/bin/. Its name is cicqsync. Using it you can checkout or update
+your source snapshot any time.
+
+  Command line usage is simple. Cicqsync takes two parameters, the first
+one is an action to perform (checkout - fresh copy from scratch, or
+update - to update an already checked out source), and the second is a
+path name to put the result to. Note that the directory must exist and
+centericq/ will be created under it.
+
+  Once you checked out or updated the fresh source, a usual build
+procedure must be followed. Change current dir to {whatever}/centericq/,
+execute configure, make and make install. Voila!
+
+
 10. Lynx
 --------
 
@@ -631,6 +660,19 @@ would rather want to use it instead of direct mailing to me.
   To subscribe go to the centericq home page (URL is above) or send a
 message to cicq-request@linuxpl.org with "subscribe" in the subject
 field.
+
+
+10.1.2. German fan-club of the program :-)
+------------------------------------------
+
+  There are also some guys that decided to make their own resource on
+the web where they share advises, tips and tricks on using the program.
+I find it very nice. The site itself can be found at
+http://www.centericq.de/
+
+  Also they made an irc channel at the openprojects network,
+irc.freshmeat.net. The channel name is #centericq. The majority of
+centericq fans can be met there.
 
 
 10.2. Konst.org.ua

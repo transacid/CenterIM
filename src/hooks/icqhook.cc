@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.39 2002/01/19 15:36:03 konst Exp $
+* $Id: icqhook.cc,v 1.40 2002/01/21 10:50:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -932,13 +932,17 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 
 	if(searchdest && c) {
 	    line = (c->getStatus() == STATUS_ONLINE ? "o " : "  ") +
-		c->getAlias();
+		rusconv("wk", c->getAlias());
 
 	    if(line.size() > 12) line.resize(12);
 	    else line += string(12-line.size(), ' ');
 
-	    line += " " + c->getFirstName() + " " + c->getLastName();
-	    if(!c->getEmail().empty()) line += " <" + c->getEmail() + ">";
+	    line += " " + 
+		rusconv("wk", c->getFirstName()) + " " +
+		rusconv("wk", c->getLastName());
+
+	    if(!c->getEmail().empty())
+		line += " <" + rusconv("wk", c->getEmail()) + ">";
 
 	    searchdest->additem(0, c->getUIN(), line);
 

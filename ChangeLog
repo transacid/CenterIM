@@ -674,3 +674,42 @@ Because of the mentioned above changes some parts of centericq's user
 interface things were changed. I don't feel like remembering all of them
 now, so just take a look yourself. What's for sure, they made the whole
 thing only better.
+
+4.5.1
+-----
+
+Centericq now can display more users' ICQ details than it ever could.
+Now it can show gender, IP address, spoken languages, interest names and
+categories, background info, etc. This part is finally ready.
+
+Another improvement of the ICQ module affected finding users, an
+extremely useful feature which was disabled for a while because of
+moving centericq to the new protocol and the nice engine named
+libicq2000. The latter now supports white pages, and so does centericq
+:)
+
+And finally, it's possible to update your own ICQ info with the "Update
+user details" item in the account manager dialog.
+
+Sound actions associated with e-mail arrival events didn't work. Fixed.
+
+Account manager now re-reads IM logins information after changing
+something in the appropriate dialog.
+
+Another small bug was fixed. After editing details of any user on the
+list mannualy set nicknames which were to be shown on the contact list
+were reset to initial values.
+
+Now it's possible to specify another ICQ server in the registration and
+account manager dialogs.
+
+Invisible mode works well now.
+
+The FAQ was updated from the centericq.de fan club site :-)
+
+AutoAway/AutoNA modes should work well now.
+
+A useful and very wanted feature was added. Now centericq can make a log
+file in which events such as users' going offline and online, as well as
+events receiption and sending are logged. It's possible to turn on with
+the "Configuration" dialog.
