@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.21 2002/07/09 12:30:07 konst Exp $
+* $Id: conscommon.cc,v 1.22 2002/07/16 16:20:25 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,7 @@
 */
 
 #include "conscommon.h"
+#include <iostream>
 
 bool kintf_graph = true, kintf_refresh = true;
 
@@ -45,7 +46,7 @@ void kreinit(int sn) {
 void kinterface() {
 #ifdef KTOOL_USE_FRIBIDI
     // an experimental thingie
-    cout << ((char) 27) << "(K" << flush;
+    std::cout << ((char) 27) << "(K" << std::flush;
 #endif
 
     initscr();
