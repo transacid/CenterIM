@@ -28,10 +28,13 @@ class icqgroup {
 	void moveup();
 	void movedown();
 
-	void rename(const string &aname) { name = aname; }
+	void rename(const string &aname);
 
 	bool operator == (int aid) const { return id == aid; }
 	bool operator != (int aid) const { return !(*this == aid); }
+
+	bool operator == (const string &aname) const { return name == aname; }
+	bool operator != (const string &aname) const { return !(*this == aname); }
 
 	bool operator < (const icqgroup &ag) const { return id < ag.id; }
 	bool operator > (const icqgroup &ag) const { return id > ag.id; }

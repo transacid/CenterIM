@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contacts group class
-* $Id: icqgroup.cc,v 1.5 2002/11/22 19:11:52 konst Exp $
+* $Id: icqgroup.cc,v 1.6 2003/11/05 14:54:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,6 +24,7 @@
 
 #include "icqgroup.h"
 #include "icqgroups.h"
+#include "abstracthook.h"
 
 icqgroup::icqgroup(int aid, const string &aname) {
     id = aid;
@@ -68,11 +69,18 @@ void icqgroup::exchange(int nid) {
 	for(i = 0; i < clist.count; i++) {
 	    c = (icqcontact *) clist.at(i);
 
-	    if(c->getgroupid() == id) c->setgroupid(nid); else
-	    if(c->getgroupid() == nid) c->setgroupid(id);
+	    if(c->getgroupid() == id) c->setgroupid(nid, false); else
+	    if(c->getgroupid() == nid) c->setgroupid(id, false);
 	}
 
 	ig->id = id;
 	id = nid;
     }
+}
+
+void icqgroup::rename(const string &aname) {
+    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	gethook(pname).renamegroup(name, aname);
+
+    name = aname;
 }

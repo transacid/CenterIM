@@ -44,6 +44,14 @@ struct servicetype {
     };
 };
 
+struct groupoperation {
+    enum enumeration {
+	add,
+	remove,
+	rename
+    };
+};
+
 class abstracthook {
     protected:
 	enum Encoding {
@@ -120,6 +128,7 @@ class abstracthook {
 	virtual vector<pair<string, string> > getregparameters(const string &agentname) const;
 
 	virtual void updatecontact(icqcontact *c);
+	virtual void renamegroup(const string &oldname, const string &newname);
 };
 
 abstracthook &gethook(protocolname pname);

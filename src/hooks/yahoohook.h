@@ -142,6 +142,9 @@ class yahoohook: public abstracthook {
 
 	void requestawaymsg(const imcontact &ic);
 	void conferencecreate(const imcontact &confid, const vector<imcontact> &lst);
+
+	void updatecontact(icqcontact *c);
+	void renamegroup(const string &oldname, const string &newname);
 };
 
 extern yahoohook yhook;

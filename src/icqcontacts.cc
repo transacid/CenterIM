@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.46 2003/09/30 11:38:41 konst Exp $
+* $Id: icqcontacts.cc,v 1.47 2003/11/05 14:54:26 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -268,4 +268,19 @@ icqcontact *icqcontacts::getemail(const string &aemail) {
     }
 
     return 0;
+}
+
+void icqcontacts::updateEntry(const imcontact &ic, const string &groupname) {
+    int gid;
+    icqcontact *c = get(ic);
+    if(!c) c = addnew(ic, false);
+
+    if(conf.getgroupmode() != icqconf::nogroups && !groupname.empty()) {
+	vector<icqgroup>::iterator ig = ::find(groups.begin(), groups.end(), groupname);
+
+	if(ig != groups.end()) gid = ig->getid();
+	    else gid = groups.add(groupname);
+
+	c->setgroupid(gid);
+    }
 }

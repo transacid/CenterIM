@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.91 2003/11/05 09:07:44 konst Exp $
+* $Id: yahoohook.cc,v 1.92 2003/11/05 14:54:28 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -668,6 +668,37 @@ void yahoohook::checkinlist(imcontact ic) {
 	sendnewuser(ic, false);
 }
 
+void yahoohook::updatecontact(icqcontact *c) {
+    if(logged() && conf.getgroupmode() != icqconf::nogroups) {
+	bool found = false;
+	const YList *buddies = yahoo_get_buddylist(cid);
+	string newgroupname = groups.getname(c->getgroupid());
+
+	for(const YList *bud = buddies; bud; ) {
+	    yahoo_buddy *yb = (yahoo_buddy *) bud->data;
+
+	    if(c->getdesc().nickname == yb->id) {
+		if(!found) {
+		    if(newgroupname != yb->group)
+			yahoo_change_buddy_group(cid, yb->id, yb->group, newgroupname.c_str());
+
+		    found = true;
+		} else {
+		    yahoo_remove_buddy(cid, yb->id, yb->group);
+		}
+	    }
+
+	    bud = y_list_next(bud);
+	}
+    }
+}
+
+void yahoohook::renamegroup(const string &oldname, const string &newname) {
+    if(logged()) {
+	yahoo_group_rename(cid, oldname.c_str(), newname.c_str());
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void yahoohook::login_response(int id, int succ, char *url) {
@@ -695,11 +726,13 @@ void yahoohook::login_response(int id, int succ, char *url) {
 
 	case YAHOO_LOGIN_PASSWD:
 	    yhook.fonline = false;
+	    yahoo_close(yhook.cid);
 	    face.log(_("+ [yahoo] cannot login: username and password mismatch"));
 	    break;
 
 	case YAHOO_LOGIN_LOCK:
 	    yhook.fonline = false;
+	    yahoo_close(yhook.cid);
 	    face.log(_("+ [yahoo] cannot login: the account has been blocked"));
 	    face.log(_("+ to reactivate visit %s"), url);
 	    break;
@@ -722,35 +755,15 @@ void yahoohook::login_response(int id, int succ, char *url) {
 }
 
 void yahoohook::got_buddies(int id, YList *buds) {
-    vector<string> nicks;
-    vector<string>::iterator in;
-
-    icqconf::imaccount acc = conf.getourid(yahoo);
-    icqcontact *c;
     const YList *buddy;
 
-    int i;
-
     for(buddy = buds; buddy; buddy = y_list_next(buddy)) {
-	yahoo_buddy *bud = static_cast<yahoo_buddy*>(buddy->data);
-	string id = bud->id;
+	yahoo_buddy *bud = static_cast<yahoo_buddy *>(buddy->data);
 
-	if(find(nicks.begin(), nicks.end(), id) == nicks.end()) {
-	    nicks.push_back(id);
+	if(bud->group) {
+	    clist.updateEntry(imcontact(bud->id, yahoo), bud->group);
 	}
     }
-
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-
-	if(c->getdesc().pname == yahoo && !ischannel(c)) {
-	    in = find(nicks.begin(), nicks.end(), c->getdesc().nickname);
-	    if(in != nicks.end()) nicks.erase(in);
-	}
-    }
-
-    for(in = nicks.begin(); in != nicks.end(); ++in)
-	clist.addnew(imcontact(*in, yahoo), false);
 }
 
 void yahoohook::got_identities(int id, YList *buds) {
@@ -773,28 +786,38 @@ void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8
 }
 
 void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
-    for(YList *ir = yr->contacts; ir; ir = ir->next) {
-	yahoo_found_contact *fc = (yahoo_found_contact *) ir->data;
-	icqcontact *c = new icqcontact(imcontact(fc->id, yahoo));
+    yahoo_found_contact *fc;
+    icqcontact *c;
+    YList *ir;
+    string sg, line;
+
+    if(!yhook.searchdest)
+	return;
+
+    for(ir = yr->contacts; ir; ir = ir->next) {
+	fc = (yahoo_found_contact *) ir->data;
+	c = new icqcontact(imcontact(fc->id, yahoo));
 
 	icqcontact::basicinfo binfo = c->getbasicinfo();
 	icqcontact::moreinfo minfo = c->getmoreinfo();
 
+	if(!fc->id || !fc->location || !fc->gender)
+	    continue;
+
 	c->setnick(fc->id);
 	c->setdispnick(c->getnick());
 
-	string sg = up(fc->gender);
-
+	sg = up(fc->gender);
 	if(sg == "MALE") minfo.gender = genderMale;
 	else if(sg == "FEMALE") minfo.gender = genderFemale;
 
-	minfo.age = fc->age;
 	binfo.street = fc->location;
+	minfo.age = fc->age;
 
-	string line = (false ? "o " : "  ") + c->getnick();
+	line = (false ? "o " : "  ") + c->getnick();
 
-	if(line.size() > 15) line.resize(15);
-	else line += string(15-line.size(), ' ');
+	if(line.size() > 20) line.resize(20);
+	else line += string(20-line.size(), ' ');
 
 	line += " <";
 	if(fc->age) line += i2str(fc->age);
@@ -811,9 +834,9 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
 
 	yhook.foundguys.push_back(c);
 	yhook.searchdest->additem(conf.getcolor(cp_clist_yahoo), c, line);
-	yhook.searchdest->redraw();
     }
 
+    yhook.searchdest->redraw();
     face.findready();
     face.log(_("+ [yahoo] search finished, %d found"), yhook.foundguys.size());
     yhook.searchdest = 0;

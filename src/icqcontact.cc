@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.87 2003/11/05 10:33:55 konst Exp $
+* $Id: icqcontact.cc,v 1.88 2003/11/05 14:54:26 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -449,7 +449,7 @@ void icqcontact::scanhistory() {
     }
 }
 
-void icqcontact::setstatus(imstatus fstatus) {
+void icqcontact::setstatus(imstatus fstatus, bool reflect) {
     if(status != fstatus) {
 	if(!ischannel(cdesc)) {
 	    if(status == offline) {
@@ -457,7 +457,7 @@ void icqcontact::setstatus(imstatus fstatus) {
 		playsound(imevent::online);
 	    }
 
-	} else {
+	} else if(reflect) {
 	    abstracthook &h = gethook(cdesc.pname);
 	    if(fstatus == offline) h.removeuser(cdesc);
 	    else h.sendnewuser(cdesc);
@@ -675,9 +675,12 @@ string icqcontact::getpostponed() const {
     return postponed;
 }
 
-void icqcontact::setgroupid(int agroupid) {
+void icqcontact::setgroupid(int agroupid, bool reflect) {
     groupid = agroupid;
     modified = true;
+
+    if(reflect)
+	gethook(cdesc.pname).updatecontact(this);
 }
 
 int icqcontact::getgroupid() const {

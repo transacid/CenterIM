@@ -149,7 +149,7 @@ class icqcontact {
 	int gethistoffset() const;
 	void sethistoffset(int aoffset);
 
-	void setgroupid(int agroupid);
+	void setgroupid(int agroupid, bool reflect = true);
 	int getgroupid() const;
 
 	const imcontact getdesc() const;

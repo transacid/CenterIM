@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contacts group listing class
-* $Id: icqgroups.cc,v 1.11 2002/11/22 19:11:53 konst Exp $
+* $Id: icqgroups.cc,v 1.12 2003/11/05 14:54:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -99,4 +99,12 @@ void icqgroups::remove(int gid) {
     if(i != end()) {
 	erase(i);
     }
+}
+
+string icqgroups::getname(int gid) const {
+    string r;
+    const_iterator i = find(vector<icqgroup>::begin(), vector<icqgroup>::end(), gid);
+    if(i != vector<icqgroup>::end()) r = i->getname();
+
+    return r;
 }

@@ -16,6 +16,7 @@ class icqgroups: private vector<icqgroup> {
 
 	int add(const string &aname);
 	void remove(int gid);
+	string getname(int gid) const;
 
 	int size() const { return vector<icqgroup>::size(); }
 
