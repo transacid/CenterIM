@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.2.0\n"
-"POT-Creation-Date: 2001-11-30 11:07+0200\n"
+"POT-Creation-Date: 2001-11-30 22:38+0200\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -14,27 +14,32 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:126
+#: src/centericq.cc:133
+#, fuzzy
+msgid "password: "
+msgstr " пароль: "
+
+#: src/centericq.cc:160
 msgid ""
 "F2/M current contact menu, F3/S change icq status, F4/G general actions, Q "
 "quit"
 msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
 
-#: src/centericq.cc:176
+#: src/centericq.cc:210
 #, c-format
 msgid "Ignore all events from %s?"
 msgstr "Игнорировать сообщения от %s?"
 
-#: src/centericq.cc:204
+#: src/centericq.cc:238
 #, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "Вы действительно хотите удалить %s?"
 
-#: src/centericq.cc:211
+#: src/centericq.cc:245
 msgid "New nickname to show: "
 msgstr "Новый ник для показа в списке: "
 
-#: src/centericq.cc:218
+#: src/centericq.cc:252
 msgid "Select a group to move the user to"
 msgstr "Выберите новую группу для пользователя"
 
@@ -56,88 +61,84 @@ msgstr "Выберите новую группу для пользователя"
 #. justfname(files[0]).c_str(), c->getdispnick().c_str(), cinfo.uin);
 #. }
 #. } else
-#: src/centericq.cc:328
+#: src/centericq.cc:362
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ тамошний клиент не позволяет пересылать файлы"
 
 #.
 #. if(ihook.getstatus() == offline)
-#: src/centericq.cc:337
+#: src/centericq.cc:371
 #, fuzzy
 msgid "+ [icq] cannot send contacts in offline mode"
 msgstr "+ для посылки контактов вы должны быть на линии"
 
-#: src/centericq.cc:343
+#: src/centericq.cc:377
 msgid "Contacts to send"
 msgstr "Послать контакты"
 
-#: src/centericq.cc:459
+#: src/centericq.cc:493
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ получена новая почта, %d сообщений"
 
-#: src/centericq.cc:460
+#: src/centericq.cc:494
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ последнее сообщение от %s"
 
-#: src/centericq.cc:494
+#: src/centericq.cc:528
 msgid "! another running copy of centericq detected"
 msgstr "! обнаружена работающая копия centericq"
 
-#: src/centericq.cc:495
+#: src/centericq.cc:529
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! это может вызвать проблемы. pid %lu"
 
-#: src/centericq.cc:527
+#: src/centericq.cc:561
 #, c-format
 msgid "%s wrote:"
 msgstr ""
 
-#: src/centericq.cc:585
+#: src/centericq.cc:619
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s уже есть в списке"
 
-#: src/centericq.cc:591
+#: src/centericq.cc:625
 msgid "Select a group to add the user to"
 msgstr "Выберите группу для контакта"
 
-#: src/centericq.cc:601
+#: src/centericq.cc:635
 msgid "Notify the user he/she has been added?"
 msgstr "Уведомить пользователя о том, что он был добавлен?"
 
-#: src/centericq.cc:604
+#: src/centericq.cc:638
 #, c-format
 msgid "+ the notification has been sent to %lu"
 msgstr "+ уведомление послано %lu"
 
-#: src/centericq.cc:616
+#: src/centericq.cc:650
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s добавлен в список"
 
-#: src/centericq.cc:689
+#: src/centericq.cc:723
 msgid "+ the user is back"
 msgstr "+ пользователь вернулся"
 
-#: src/centericq.cc:699
+#: src/centericq.cc:733
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматический переход в %s"
 
-#: src/centericq.cc:701
+#: src/centericq.cc:735
 msgid "away"
 msgstr ""
 
-#: src/centericq.cc:701
+#: src/centericq.cc:735
 msgid "n/a"
 msgstr ""
-
-#: src/icqconf.cc:52 src/imcontroller.cc:62
-msgid "Password: "
-msgstr "Пароль: "
 
 #: src/icqdialogs.cc:52
 msgid "+ you must be logged in to find/add users"
@@ -1318,6 +1319,10 @@ msgstr " Пароль для проверки : %s "
 msgid " Server to use : %s "
 msgstr " Использовать сервер : %s "
 
+#: src/imcontroller.cc:62
+msgid "Password: "
+msgstr "Пароль: "
+
 #: src/imcontroller.cc:63
 msgid "Check the password you entered: "
 msgstr ""
@@ -1392,60 +1397,59 @@ msgstr "+ [icq] соединение с сервером"
 msgid "+ [icq] unable to connect to the server"
 msgstr "+ [icq] невозможно соединиться с сервером"
 
-#.    offl.scan(0, ossendall);
-#: src/hooks/icqhook.cc:151
+#: src/hooks/icqhook.cc:150
 msgid "+ [icq] logged in"
 msgstr "+ [icq] вход в систему состоялся"
 
-#: src/hooks/icqhook.cc:157
+#: src/hooks/icqhook.cc:156
 msgid "+ [icq] setting initial user info"
 msgstr ""
 
-#: src/hooks/icqhook.cc:185
+#: src/hooks/icqhook.cc:184
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] рассоединение"
 
-#: src/hooks/icqhook.cc:190
+#: src/hooks/icqhook.cc:189
 msgid "server forced"
 msgstr ""
 
-#: src/hooks/icqhook.cc:194
+#: src/hooks/icqhook.cc:193
 msgid "server is busy"
 msgstr "сервер занят"
 
-#: src/hooks/icqhook.cc:327
+#: src/hooks/icqhook.cc:326
 msgid "has added you to his/her contact list"
 msgstr "добавил(а) вас в свой список контактов"
 
-#: src/hooks/icqhook.cc:344
+#: src/hooks/icqhook.cc:343
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
 msgstr "запросил(а) ваше разрешение на добавление в свой список. Причина: "
 
-#: src/hooks/icqhook.cc:503
+#: src/hooks/icqhook.cc:502
 msgid "+ [icq] wrong password"
 msgstr ""
 
-#: src/hooks/icqhook.cc:508
+#: src/hooks/icqhook.cc:507
 msgid "+ [icq] invalid uin"
 msgstr ""
 
-#: src/hooks/icqhook.cc:532
+#: src/hooks/icqhook.cc:531
 msgid "+ [icq] search done"
 msgstr "+ [icq] поиск завершен"
 
-#: src/hooks/icqhook.cc:552
+#: src/hooks/icqhook.cc:551
 #, c-format
 msgid "+ [icq] file %s refused by %s, %lu"
 msgstr "+ [icq] передача файла %s отменена пользователем %s, %lu"
 
-#: src/hooks/icqhook.cc:562
+#: src/hooks/icqhook.cc:561
 #, c-format
 msgid "+ [icq] file %s from %s, %lu received"
 msgstr "+ [icq] файл %s от %s, %lu получен"
 
-#: src/hooks/icqhook.cc:567
+#: src/hooks/icqhook.cc:566
 #, c-format
 msgid "+ [icq] file %s to %s, %lu sent"
 msgstr "+ [icq] файл %s послан %s, %lu"
@@ -1462,21 +1466,21 @@ msgstr "+ [yahoo] невозможно соединиться с сервером"
 msgid "+ [yahoo] logged in"
 msgstr "+ [yahoo] вход в систему состоялся"
 
-#: src/hooks/yahoohook.cc:168
+#: src/hooks/yahoohook.cc:167
 #, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ [yahoo] добавление %s в список"
 
-#: src/hooks/yahoohook.cc:178
+#: src/hooks/yahoohook.cc:177
 #, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ [yahoo] удаление %s из списка"
 
-#: src/hooks/yahoohook.cc:269
+#: src/hooks/yahoohook.cc:268
 msgid "+ [yahoo] disconnected from the network"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:308
+#: src/hooks/yahoohook.cc:307
 #, fuzzy, c-format
 msgid "+ [yahoo] bounced msg to %s"
 msgstr "+ [yahoo] соединение с сервером"

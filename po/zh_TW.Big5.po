@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.1.0\n"
-"POT-Creation-Date: 2001-11-30 11:07+0200\n"
+"POT-Creation-Date: 2001-11-30 22:38+0200\n"
 "PO-Revision-Date: 2001-11-25 05:31+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -15,7 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:126
+#: src/centericq.cc:133
+#, fuzzy
+msgid "password: "
+msgstr " 密碼: "
+
+#: src/centericq.cc:160
 msgid ""
 "F2/M current contact menu, F3/S change icq status, F4/G general actions, Q "
 "quit"
@@ -23,21 +28,21 @@ msgstr ""
 "F2/M 好友名單選單,         F3/S 變換 ICQ 狀態,     F4/G 一般選單,        Q "
 "離開"
 
-#: src/centericq.cc:176
+#: src/centericq.cc:210
 #, c-format
 msgid "Ignore all events from %s?"
 msgstr "忽略所有來自 %s 的訊息?"
 
-#: src/centericq.cc:204
+#: src/centericq.cc:238
 #, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "真的要將 %s 由名單中刪除嗎 ?"
 
-#: src/centericq.cc:211
+#: src/centericq.cc:245
 msgid "New nickname to show: "
 msgstr "新暱稱: "
 
-#: src/centericq.cc:218
+#: src/centericq.cc:252
 msgid "Select a group to move the user to"
 msgstr "改變使用者群組"
 
@@ -59,88 +64,84 @@ msgstr "改變使用者群組"
 #. justfname(files[0]).c_str(), c->getdispnick().c_str(), cinfo.uin);
 #. }
 #. } else
-#: src/centericq.cc:328
+#: src/centericq.cc:362
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ 對方的程式不支援檔案傳輸"
 
 #.
 #. if(ihook.getstatus() == offline)
-#: src/centericq.cc:337
+#: src/centericq.cc:371
 #, fuzzy
 msgid "+ [icq] cannot send contacts in offline mode"
 msgstr "+ 在離線狀況下無法傳送好友名單"
 
-#: src/centericq.cc:343
+#: src/centericq.cc:377
 msgid "Contacts to send"
 msgstr "要送出的名單"
 
-#: src/centericq.cc:459
+#: src/centericq.cc:493
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ 收到新信, 共 %d 封"
 
-#: src/centericq.cc:460
+#: src/centericq.cc:494
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ 最後訊息來自 %s"
 
-#: src/centericq.cc:494
+#: src/centericq.cc:528
 msgid "! another running copy of centericq detected"
 msgstr "! 有另一隻 centericq 正在執行中"
 
-#: src/centericq.cc:495
+#: src/centericq.cc:529
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! pid %lu 會造成問題"
 
-#: src/centericq.cc:527
+#: src/centericq.cc:561
 #, fuzzy, c-format
 msgid "%s wrote:"
 msgstr "%s (%lu) 說:"
 
-#: src/centericq.cc:585
+#: src/centericq.cc:619
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s 已在名單中"
 
-#: src/centericq.cc:591
+#: src/centericq.cc:625
 msgid "Select a group to add the user to"
 msgstr "把使用者加入群組"
 
-#: src/centericq.cc:601
+#: src/centericq.cc:635
 msgid "Notify the user he/she has been added?"
 msgstr "要提醒對方已被加入嗎 ?"
 
-#: src/centericq.cc:604
+#: src/centericq.cc:638
 #, c-format
 msgid "+ the notification has been sent to %lu"
 msgstr "+ 認證已送給 %lu"
 
-#: src/centericq.cc:616
+#: src/centericq.cc:650
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s 已被加入名單中"
 
-#: src/centericq.cc:689
+#: src/centericq.cc:723
 msgid "+ the user is back"
 msgstr "+ 對方已經回來"
 
-#: src/centericq.cc:699
+#: src/centericq.cc:733
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] 自動設定 %s"
 
-#: src/centericq.cc:701
+#: src/centericq.cc:735
 msgid "away"
 msgstr "away"
 
-#: src/centericq.cc:701
+#: src/centericq.cc:735
 msgid "n/a"
 msgstr "N/A"
-
-#: src/icqconf.cc:52 src/imcontroller.cc:62
-msgid "Password: "
-msgstr "密碼: "
 
 #: src/icqdialogs.cc:52
 msgid "+ you must be logged in to find/add users"
@@ -1324,6 +1325,10 @@ msgstr " 確認密碼 : %s "
 msgid " Server to use : %s "
 msgstr " 伺服器位址 : %s "
 
+#: src/imcontroller.cc:62
+msgid "Password: "
+msgstr "密碼: "
+
 #: src/imcontroller.cc:63
 msgid "Check the password you entered: "
 msgstr "驗證密碼: "
@@ -1398,62 +1403,61 @@ msgstr "+ [icq] 連接伺服器中"
 msgid "+ [icq] unable to connect to the server"
 msgstr "+ [icq] 無法連接伺服器"
 
-#.    offl.scan(0, ossendall);
-#: src/hooks/icqhook.cc:151
+#: src/hooks/icqhook.cc:150
 msgid "+ [icq] logged in"
 msgstr "+ [icq] 登入"
 
-#: src/hooks/icqhook.cc:157
+#: src/hooks/icqhook.cc:156
 msgid "+ [icq] setting initial user info"
 msgstr "+ [icq] 設定使用者初始資料"
 
 # msgid "+ logged in"
 # msgstr "+ 登入成功"
-#: src/hooks/icqhook.cc:185
+#: src/hooks/icqhook.cc:184
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] 連線中斷"
 
-#: src/hooks/icqhook.cc:190
+#: src/hooks/icqhook.cc:189
 msgid "server forced"
 msgstr ""
 
-#: src/hooks/icqhook.cc:194
+#: src/hooks/icqhook.cc:193
 msgid "server is busy"
 msgstr "伺服器忙線中"
 
-#: src/hooks/icqhook.cc:327
+#: src/hooks/icqhook.cc:326
 msgid "has added you to his/her contact list"
 msgstr "己經將你加入他的好友名單中"
 
-#: src/hooks/icqhook.cc:344
+#: src/hooks/icqhook.cc:343
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
 msgstr "要求將你加入他/她的好友名單中。理由是: "
 
-#: src/hooks/icqhook.cc:503
+#: src/hooks/icqhook.cc:502
 msgid "+ [icq] wrong password"
 msgstr "+ [icq] 密碼錯誤"
 
-#: src/hooks/icqhook.cc:508
+#: src/hooks/icqhook.cc:507
 msgid "+ [icq] invalid uin"
 msgstr "+ [icq] 不合法的 uin"
 
-#: src/hooks/icqhook.cc:532
+#: src/hooks/icqhook.cc:531
 msgid "+ [icq] search done"
 msgstr "+ [icq] 搜尋結束"
 
-#: src/hooks/icqhook.cc:552
+#: src/hooks/icqhook.cc:551
 #, c-format
 msgid "+ [icq] file %s refused by %s, %lu"
 msgstr "+ [icq] 傳送檔案 %s 給 %s, %lu 被拒絕了"
 
-#: src/hooks/icqhook.cc:562
+#: src/hooks/icqhook.cc:561
 #, c-format
 msgid "+ [icq] file %s from %s, %lu received"
 msgstr "+ [icq] 接收檔案 %s 給 %s, %lu"
 
-#: src/hooks/icqhook.cc:567
+#: src/hooks/icqhook.cc:566
 #, c-format
 msgid "+ [icq] file %s to %s, %lu sent"
 msgstr "+ [icq] 傳送檔案 %s, 來自 %s, %lu"
@@ -1470,21 +1474,21 @@ msgstr "+ [yahoo] 無法連接伺服器"
 msgid "+ [yahoo] logged in"
 msgstr "+ [yahoo] 登入"
 
-#: src/hooks/yahoohook.cc:168
+#: src/hooks/yahoohook.cc:167
 #, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ [yahoo] 把 %s 加入好友名單"
 
-#: src/hooks/yahoohook.cc:178
+#: src/hooks/yahoohook.cc:177
 #, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ [yahoo] 把 %s 從好友名單中刪除"
 
-#: src/hooks/yahoohook.cc:269
+#: src/hooks/yahoohook.cc:268
 msgid "+ [yahoo] disconnected from the network"
 msgstr "+ [yahoo] 離開網路"
 
-#: src/hooks/yahoohook.cc:308
+#: src/hooks/yahoohook.cc:307
 #, fuzzy, c-format
 msgid "+ [yahoo] bounced msg to %s"
 msgstr "+ [yahoo] 連接伺服器中"

@@ -6,14 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.13.3\n"
-"POT-Creation-Date: 2001-11-30 11:07+0200\n"
+"POT-Creation-Date: 2001-11-30 22:38+0200\n"
 "Last-Translator: Florian Mueller <me@flo.s-s-f.de>\n"
 "Language-Team: German <???>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:126
+#: src/centericq.cc:133
+#, fuzzy
+msgid "password: "
+msgstr "Passwort: "
+
+#: src/centericq.cc:160
 msgid ""
 "F2/M current contact menu, F3/S change icq status, F4/G general actions, Q "
 "quit"
@@ -21,21 +26,21 @@ msgstr ""
 "F2/M Aktuelles Kontakt Menü, F3/S Ändere ICQ-Status, F4/G Allgemeine "
 "Handlungen"
 
-#: src/centericq.cc:176
+#: src/centericq.cc:210
 #, fuzzy, c-format
 msgid "Ignore all events from %s?"
 msgstr "Alle Handlungen von %s (%lu) ignorieren?"
 
-#: src/centericq.cc:204
+#: src/centericq.cc:238
 #, fuzzy, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "Willst du %s (%lu) wirklich entfernen?"
 
-#: src/centericq.cc:211
+#: src/centericq.cc:245
 msgid "New nickname to show: "
 msgstr "Neuer Nickname: "
 
-#: src/centericq.cc:218
+#: src/centericq.cc:252
 msgid "Select a group to move the user to"
 msgstr ""
 
@@ -57,90 +62,86 @@ msgstr ""
 #. justfname(files[0]).c_str(), c->getdispnick().c_str(), cinfo.uin);
 #. }
 #. } else
-#: src/centericq.cc:328
+#: src/centericq.cc:362
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ Entfernter Client unterstützt keine Dateiübertragungen"
 
 #.
 #. if(ihook.getstatus() == offline)
-#: src/centericq.cc:337
+#: src/centericq.cc:371
 msgid "+ [icq] cannot send contacts in offline mode"
 msgstr ""
 
-#: src/centericq.cc:343
+#: src/centericq.cc:377
 #, fuzzy
 msgid "Contacts to send"
 msgstr "Unterhaltungen von %s, %lu"
 
-#: src/centericq.cc:459
+#: src/centericq.cc:493
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ Neue E-Mail erhalten, %d Nachrichten"
 
-#: src/centericq.cc:460
+#: src/centericq.cc:494
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ Letzte Nachricht von: %s"
 
-#: src/centericq.cc:494
+#: src/centericq.cc:528
 msgid "! another running copy of centericq detected"
 msgstr ""
 
-#: src/centericq.cc:495
+#: src/centericq.cc:529
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr ""
 
-#: src/centericq.cc:527
+#: src/centericq.cc:561
 #, fuzzy, c-format
 msgid "%s wrote:"
 msgstr "%s (%lu) schrieb:"
 
-#: src/centericq.cc:585
+#: src/centericq.cc:619
 #, fuzzy, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %lu wurde in die Liste aufgenommen"
 
-#: src/centericq.cc:591
+#: src/centericq.cc:625
 #, fuzzy
 msgid "Select a group to add the user to"
 msgstr "Wähle Kontakte zum Aufnehmen in die Liste"
 
-#: src/centericq.cc:601
+#: src/centericq.cc:635
 msgid "Notify the user he/she has been added?"
 msgstr ""
 
-#: src/centericq.cc:604
+#: src/centericq.cc:638
 #, fuzzy, c-format
 msgid "+ the notification has been sent to %lu"
 msgstr "+ Ermächtigungsnachfrage an %lu gesendet"
 
-#: src/centericq.cc:616
+#: src/centericq.cc:650
 #, fuzzy, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %lu wurde in die Liste aufgenommen"
 
-#: src/centericq.cc:689
+#: src/centericq.cc:723
 msgid "+ the user is back"
 msgstr "+ Der Benutzer ist zurück"
 
-#: src/centericq.cc:699
+#: src/centericq.cc:733
 #, fuzzy, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ Automatisch \"nicht Verfügbar\" gesetzt"
 
-#: src/centericq.cc:701
+#: src/centericq.cc:735
 #, fuzzy
 msgid "away"
 msgstr "Weg"
 
-#: src/centericq.cc:701
+#: src/centericq.cc:735
 msgid "n/a"
 msgstr ""
-
-#: src/icqconf.cc:52 src/imcontroller.cc:62
-msgid "Password: "
-msgstr "Passwort: "
 
 #: src/icqdialogs.cc:52
 msgid "+ you must be logged in to find/add users"
@@ -1348,6 +1349,10 @@ msgstr " Überprüfung des Passworts : %s "
 msgid " Server to use : %s "
 msgstr " Server Adresse : %s "
 
+#: src/imcontroller.cc:62
+msgid "Password: "
+msgstr "Passwort: "
+
 #: src/imcontroller.cc:63
 msgid "Check the password you entered: "
 msgstr "Überpfrüfe dein eingegebenes Passwort: "
@@ -1426,35 +1431,34 @@ msgstr "+ Verbinde mit dem ICQ-Server"
 msgid "+ [icq] unable to connect to the server"
 msgstr "+ Kein Verbindungsaufbau zum ICQ-Server möglich"
 
-#.    offl.scan(0, ossendall);
-#: src/hooks/icqhook.cc:151
+#: src/hooks/icqhook.cc:150
 #, fuzzy
 msgid "+ [icq] logged in"
 msgstr "+ eingeloggt"
 
-#: src/hooks/icqhook.cc:157
+#: src/hooks/icqhook.cc:156
 msgid "+ [icq] setting initial user info"
 msgstr ""
 
-#: src/hooks/icqhook.cc:185
+#: src/hooks/icqhook.cc:184
 #, fuzzy
 msgid "+ [icq] disconnected"
 msgstr "+ nicht verbunden"
 
-#: src/hooks/icqhook.cc:190
+#: src/hooks/icqhook.cc:189
 msgid "server forced"
 msgstr ""
 
-#: src/hooks/icqhook.cc:194
+#: src/hooks/icqhook.cc:193
 #, fuzzy
 msgid "server is busy"
 msgstr "zu verwend. ICQ-Server: "
 
-#: src/hooks/icqhook.cc:327
+#: src/hooks/icqhook.cc:326
 msgid "has added you to his/her contact list"
 msgstr "Hat dich in ihre/seine Kontaktliste aufgenommen"
 
-#: src/hooks/icqhook.cc:344
+#: src/hooks/icqhook.cc:343
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
@@ -1462,30 +1466,30 @@ msgstr ""
 "hat um deine Erlaubnis gebeten dich in ihre/seine Kontaktlisteaufzunehmen. "
 "Grund: "
 
-#: src/hooks/icqhook.cc:503
+#: src/hooks/icqhook.cc:502
 msgid "+ [icq] wrong password"
 msgstr ""
 
-#: src/hooks/icqhook.cc:508
+#: src/hooks/icqhook.cc:507
 msgid "+ [icq] invalid uin"
 msgstr ""
 
-#: src/hooks/icqhook.cc:532
+#: src/hooks/icqhook.cc:531
 #, fuzzy
 msgid "+ [icq] search done"
 msgstr "+ suche beendet"
 
-#: src/hooks/icqhook.cc:552
+#: src/hooks/icqhook.cc:551
 #, fuzzy, c-format
 msgid "+ [icq] file %s refused by %s, %lu"
 msgstr "+ Datei %s abgelehnt von %s, %lu"
 
-#: src/hooks/icqhook.cc:562
+#: src/hooks/icqhook.cc:561
 #, fuzzy, c-format
 msgid "+ [icq] file %s from %s, %lu received"
 msgstr "+ Datei %s von %s, %lu empfangen"
 
-#: src/hooks/icqhook.cc:567
+#: src/hooks/icqhook.cc:566
 #, fuzzy, c-format
 msgid "+ [icq] file %s to %s, %lu sent"
 msgstr "+ Datei %s an %s, %lu geschickt"
@@ -1505,21 +1509,21 @@ msgstr "+ Kein Verbindungsaufbau zum ICQ-Server möglich"
 msgid "+ [yahoo] logged in"
 msgstr "+ eingeloggt"
 
-#: src/hooks/yahoohook.cc:168
+#: src/hooks/yahoohook.cc:167
 #, fuzzy, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:178
+#: src/hooks/yahoohook.cc:177
 #, fuzzy, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:269
+#: src/hooks/yahoohook.cc:268
 msgid "+ [yahoo] disconnected from the network"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:308
+#: src/hooks/yahoohook.cc:307
 #, fuzzy, c-format
 msgid "+ [yahoo] bounced msg to %s"
 msgstr "+ Verbinde mit dem ICQ-Server"
