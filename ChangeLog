@@ -1818,7 +1818,6 @@ MSN used to crash on long messages. Fixed as well.
 
 Jabber module now sends keepalive packets from time to time.
 
-
 4.10.0
 ------
 
@@ -1860,7 +1859,6 @@ open-source clients became non-functional again. Applied a patch to
 libyahoo2, looks good so far.
 
 Several minor interface-related bugs were fixed.
-
 
 4.11.0
 ------
@@ -1905,3 +1903,27 @@ this update. Cheers.
 Jabber registration got broken in the previous version because of the
 Jabber non-blocking connection patch. It has been fixed by the patch
 author in this version :)
+
+4.12.0
+------
+
+Fixed an MSN group management problem. Libmsn din't send a space character,
+so group operations had no effect or led to disconnects.
+
+With no SSL library found during the build the source failed to compile.
+Fixed that.
+
+Jabber server messages used to come from a nick that was similar to
+the server name with an "@" sign at the end. That was unnecesary, so it's
+not added anymore.
+
+Added the --no-xtitles (-T) commmand line parameter, which disables
+changing window titles in xterm and screen.
+
+In LJ, if the whole friends name list grew more than 512, the LJ contact
+got garbled. Fixed that. Now there musn't be any lenght limitation for the
+records of info files.
+
+The configure script now checks if libcurl has SSL support enabled in
+order to avoid MSN malfunctions. It requires libcurl with SSL, so just
+provide the MSN module with it if you want to use it.

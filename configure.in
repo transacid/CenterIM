@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.11.0)
+AM_INIT_AUTOMAKE(centericq, 4.12.0)
 
 AC_CANONICAL_HOST
 
@@ -117,7 +117,7 @@ AC_TRY_COMPILE([
     #include <sys/socket.h>
 ],[ socklen_t foo; ], ac_cv_c_socklen_t=yes, ac_cv_c_socklen_t=no)
 
-if test $ac_cv_c_socklen_t = no; then
+if test "$ac_cv_c_socklen_t" = "no"; then
   AC_DEFINE(socklen_t, int, [Define type of socklen_t for systems missing it])
 fi
 
@@ -127,7 +127,7 @@ AC_LANG_RESTORE
 
 AC_ARG_WITH(curl,
     [  --with-curl=[DIR]    curl-config in DIR],
-    [CURL_CONFIG=$withval],
+    [ if test "$withval" = "no"; then CURL_CONFIG=""; else CURL_CONFIG="$withval"; fi ],
     [ AC_PATH_PROG(CURL_CONFIG,
 	curl-config)])
 
@@ -201,6 +201,17 @@ if test "$build_msn" = "yes"; then
     if test -z "$CURL_CONFIG"; then
 	AC_MSG_ERROR([MSN cannot be built without the curl library, use --disable-msn])
     else
+	AC_MSG_CHECKING(for SSL support in libcurl)
+
+	curlssl=`$CURL_CONFIG --feature | grep SSL`
+	if test -z "$curlssl"; then
+	    AC_MSG_RESULT([no])
+	    AC_MSG_ERROR([MSN requires libcurl built with SSL support
+    use --disable-msn --without-curl])
+	else
+	    AC_MSG_RESULT([yes])
+	fi
+
 	AC_DEFINE(BUILD_MSN, 1, [build with MSN support])
     fi
 fi

@@ -125,7 +125,7 @@ class icqconf {
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
-	    logonline, emacs, proxyconnect, proxyssl;
+	    logonline, emacs, proxyconnect, proxyssl, notitles;
 
 	bool chatmode[protocolname_size];
 	bool cpconvert[protocolname_size];
@@ -287,6 +287,8 @@ class icqconf {
 
 	const char *getconvertfrom(protocolname pname = protocolname_size) const;
 	const char *getconvertto(protocolname pname = protocolname_size) const;
+
+	bool getxtitles() const { return !notitles; }
 };
 
 extern icqconf conf;

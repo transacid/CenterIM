@@ -1,9 +1,9 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.98 2004/07/08 23:52:48 konst Exp $
+* $Id: icqcontact.cc,v 1.99 2004/09/27 22:17:31 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -250,26 +250,27 @@ void icqcontact::save() {
 
 void icqcontact::load() {
     int i;
-    FILE *f;
-    char buf[512];
+    ifstream f;
     struct stat st;
-    string tname = getdirname(), fn;
+    string tname = getdirname(), fn, buf;
 
     imcontact savedesc = cdesc;
     clear();
     cdesc = savedesc;
 
-    if(f = fopen((fn = tname + "/info").c_str(), "r")) {
-	for(i = 0; !feof(f); i++) {
-	    freads(f, buf, 512);
+    f.clear();
+    f.open((fn = tname + "/info").c_str());
+
+    if(f.is_open()) {
+	for(i = 0; getstring(f, buf); i++) {
 	    switch(i) {
 		case  0: nick = buf; break;
 		case  1: binfo.fname = buf; break;
 		case  2: binfo.lname = buf; break;
 		case  3: binfo.email = buf; break;
 		case  4:
-		    binfo.requiresauth = (strstr(buf, "a") != 0);
-		    binfo.authawait = (strstr(buf, "w") != 0);
+		    binfo.requiresauth = (buf.find('a') != -1);
+		    binfo.authawait = (buf.find('w') != -1);
 		    break;
 		case  5: break;
 		case  6: binfo.city = buf; break;
@@ -279,48 +280,48 @@ void icqcontact::load() {
 		case 10: binfo.street = buf; break;
 		case 11: binfo.cellular = buf; break;
 		case 12: binfo.zip = buf; break;
-		case 13: binfo.country = strtoul(buf, 0, 0); break;
+		case 13: binfo.country = strtoul(buf.c_str(), 0, 0); break;
 		case 14: winfo.city = buf; break;
 		case 15: winfo.state = buf; break;
 		case 16: winfo.phone = buf; break;
 		case 17: winfo.fax = buf; break;
 		case 18: winfo.street = buf; break;
 		case 19: winfo.zip = buf; break;
-		case 20: winfo.country = strtoul(buf, 0, 0); break;
+		case 20: winfo.country = strtoul(buf.c_str(), 0, 0); break;
 		case 21: winfo.company = buf; break;
 		case 22: winfo.dept = buf; break;
 		case 23: winfo.position = buf; break;
-		case 24: minfo.timezone = atoi(buf); break;
+		case 24: minfo.timezone = atoi(buf.c_str()); break;
 		case 25: winfo.homepage = buf; break;
-		case 26: minfo.age = atoi(buf); break;
-		case 27: minfo.gender = (imgender) atoi(buf); break;
+		case 26: minfo.age = atoi(buf.c_str()); break;
+		case 27: minfo.gender = (imgender) atoi(buf.c_str()); break;
 		case 28: minfo.homepage = buf; break;
-		case 29: minfo.lang1 = strtoul(buf, 0, 0); break;
-		case 30: minfo.lang2 = strtoul(buf, 0, 0); break;
-		case 31: minfo.lang3 = strtoul(buf, 0, 0); break;
-		case 32: minfo.birth_day = atoi(buf); break;
-		case 33: minfo.birth_month = atoi(buf); break;
-		case 34: minfo.birth_year = atoi(buf); break;
-		case 35: if(strlen(buf)) interests.push_back(buf); break;
-		case 36: if(strlen(buf)) interests.push_back(buf); break;
-		case 37: if(strlen(buf)) interests.push_back(buf); break;
-		case 38: if(strlen(buf)) interests.push_back(buf); break;
-		case 39: if(strlen(buf)) background.push_back(buf); break;
-		case 40: if(strlen(buf)) background.push_back(buf); break;
-		case 41: if(strlen(buf)) background.push_back(buf); break;
-		case 42: minfo.checkfreq = atoi(buf); break;
-		case 43: minfo.checklast = atoi(buf); break;
+		case 29: minfo.lang1 = strtoul(buf.c_str(), 0, 0); break;
+		case 30: minfo.lang2 = strtoul(buf.c_str(), 0, 0); break;
+		case 31: minfo.lang3 = strtoul(buf.c_str(), 0, 0); break;
+		case 32: minfo.birth_day = atoi(buf.c_str()); break;
+		case 33: minfo.birth_month = atoi(buf.c_str()); break;
+		case 34: minfo.birth_year = atoi(buf.c_str()); break;
+		case 35: if(!buf.empty()) interests.push_back(buf); break;
+		case 36: if(!buf.empty()) interests.push_back(buf); break;
+		case 37: if(!buf.empty()) interests.push_back(buf); break;
+		case 38: if(!buf.empty()) interests.push_back(buf); break;
+		case 39: if(!buf.empty()) background.push_back(buf); break;
+		case 40: if(!buf.empty()) background.push_back(buf); break;
+		case 41: if(!buf.empty()) background.push_back(buf); break;
+		case 42: minfo.checkfreq = atoi(buf.c_str()); break;
+		case 43: minfo.checklast = atoi(buf.c_str()); break;
 		case 44: lastip = buf; break;
 		case 45: dispnick = buf; break;
-		case 46: lastseen = strtoul(buf, 0, 0); break;
+		case 46: lastseen = strtoul(buf.c_str(), 0, 0); break;
 		case 47: break;
 		case 48: break;
 		case 49: break;
 		case 50: break;
-		case 51: groupid = atoi(buf); break;
+		case 51: groupid = atoi(buf.c_str()); break;
 	    }
 	}
-	fclose(f);
+	f.close();
 
     } else {
 	if(cdesc.uin)
@@ -328,28 +329,35 @@ void icqcontact::load() {
 
     }
 
-    if(f = fopen((fn = tname + "/about").c_str(), "r")) {
-	while(!feof(f)) {
-	    freads(f, buf, 512);
+    f.clear();
+    f.open((fn = tname + "/about").c_str());
+
+    if(f.is_open()) {
+	while(getstring(f, buf)) {
 	    if(about.size()) about += '\n';
 	    about += buf;
 	}
-	fclose(f);
+	f.close();
     }
 
-    if(f = fopen((fn = tname + "/postponed").c_str(), "r")) {
-	while(!feof(f)) {
-	    freads(f, buf, 512);
+    f.clear();
+    f.open((fn = tname + "/postponed").c_str());
+
+    if(f.is_open()) {
+	while(getstring(f, buf)) {
 	    if(postponed.size()) postponed += '\n';
 	    postponed += buf;
 	}
-	fclose(f);
+	f.close();
     }
 
-    if(f = fopen((fn = tname + "/lastread").c_str(), "r")) {
-	freads(f, buf, 512);
-	sscanf(buf, "%lu", &lastread);
-	fclose(f);
+    f.clear();
+    f.open((fn = tname + "/lastread").c_str());
+
+    if(f.is_open()) {
+	getstring(f, buf);
+	lastread = strtoul(buf.c_str(), 0, 0);
+	f.close();
     }
 
     finlist = stat((fn = tname + "/excluded").c_str(), &st);

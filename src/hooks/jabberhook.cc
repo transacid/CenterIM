@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.74 2004/08/09 22:52:59 konst Exp $
+* $Id: jabberhook.cc,v 1.75 2004/09/27 22:17:32 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,11 +53,9 @@ static void jidsplit(const string &jid, string &user, string &host, string &rest
 static string jidtodisp(const string &jid) {
     string user, host, rest;
     jidsplit(jid, user, host, rest);
-/*
-    if(host != "jabber.com" && !host.empty())
+
+    if(!host.empty())
 	user += (string) "@" + host;
-*/
-    user += (string) "@" + host;
 
     return user;
 }
@@ -72,7 +70,10 @@ string jabberhook::jidnormalize(const string &jid) const {
 
     string user, host, rest;
     jidsplit(jid, user, host, rest);
-    if(host.empty()) host = "jabber.com";
+
+    if(host.empty())
+	host = conf.getourid(proto).server;
+
     user += (string) "@" + host;
     if(!rest.empty()) user += (string) "/" + rest;
     return user;

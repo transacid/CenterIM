@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.134 2004/07/31 10:47:05 konst Exp $
+* $Id: icqconf.cc,v 1.135 2004/09/27 22:17:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,7 @@ icqconf::icqconf() {
     autoaway = autona = 0;
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
-	logonline = emacs = proxyssl = proxyconnect = false;
+	logonline = emacs = proxyssl = proxyconnect = notitles = false;
 
     savepwd = mailcheck = fenoughdiskspace = true;
 
@@ -1076,6 +1076,9 @@ void icqconf::commandline(int argc, char **argv) {
 		cw_setbind(bindhost.c_str());
 	    }
 
+	} else if((args == "-T") || (args == "--no-xtitles")) {
+	    notitles = true;
+
 	} else if((args == "-s") || (args == "--send")) {
 	    if(argv[++i]) event = argv[i];
 
@@ -1272,6 +1275,7 @@ void icqconf::usage() const {
     cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
     cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
+    cout << _("  --no-xtitles, -T         disable xterm titles") << endl;
     cout << _("  --help                   display this stuff") << endl;
     cout << _("  --version, -v            show the program version info") << endl;
 

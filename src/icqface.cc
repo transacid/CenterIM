@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.230 2004/08/05 18:39:34 konst Exp $
+* $Id: icqface.cc,v 1.231 2004/09/27 22:17:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1666,7 +1666,7 @@ void icqface::modelist(contactstatus cs) {
     lst.fillmenu(db.getmenu(), cs);
 
     while(db.open(i, b)) {
-	if(!lst.size() && b != 1) continue;
+	if(!db.getmenu()->getcount() && b != 1) continue;
 	if(b != 1) it = lst.menuat(i-1);
 
 	switch(b) {
@@ -3332,26 +3332,32 @@ void icqface::redraw() {
 }
 
 void icqface::xtermtitle(const string &text) {
-    string term = getenv("TERM") ? getenv("TERM") : "";
+    if(conf.getxtitles()) {
+	string term = getenv("TERM") ? getenv("TERM") : "";
 
-    if(term == "xterm" || term == "Eterm" || term == "aterm"
-    || term == "rxvt" || term == "screen")
-	cout << "\x1b]1;\x07\x1b]2;" << "centericq" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
+	if(term == "xterm" || term == "Eterm" || term == "aterm"
+	|| term == "rxvt" || term == "screen")
+	    cout << "\x1b]1;\x07\x1b]2;" << "centericq" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
+    }
 }
 
 void icqface::xtermtitle(const char *fmt, ...) {
-    va_list ap;
-    char buf[1024];
+    if(conf.getxtitles()) {
+	va_list ap;
+	char buf[1024];
 
-    va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
-    xtermtitle((string) buf);
-    va_end(ap);
+	va_start(ap, fmt);
+	vsprintf(buf, fmt, ap);
+	xtermtitle((string) buf);
+	va_end(ap);
+    }
 }
 
 void icqface::xtermtitlereset() {
-    const char *p = getenv("TERM");
-    if(p) xtermtitle((string) p);
+    if(conf.getxtitles()) {
+	const char *p = getenv("TERM");
+	if(p) xtermtitle((string) p);
+    }
 }
 
 // ----------------------------------------------------------------------------
