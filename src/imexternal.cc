@@ -274,7 +274,7 @@ void imexternal::action::enable() {
 bool imexternal::action::load(ifstream &f) {
     int pos, npos, i;
     string buf, sect, param, aname;
-    bool action;
+    bool action, wasexec = false;
 
     static const struct {
 	const char *name;
@@ -296,19 +296,13 @@ bool imexternal::action::load(ifstream &f) {
 		action = aname == actions[i].name;
 
 	if(action) {
-	    param = getword(buf);
-
-	    if(name.empty()) {
-		name = leadcut(sect.substr(npos+1));
-
-	    } else {
-		if(name != leadcut(sect.substr(npos+1))) {
-		    // another "action" section
-		    f.seekg(pos, ios::beg);
-		    break;
-		}
-
+	    if(wasexec) {
+		f.seekg(pos, ios::beg);
+		break;
 	    }
+
+	    if(npos != sect.size() && name.empty())
+		name = leadcut(sect.substr(npos+1));
 
 	    for(i = 0; actions[i].name; i++) {
 		if(aname == actions[i].name) {
@@ -317,6 +311,8 @@ bool imexternal::action::load(ifstream &f) {
 		    break;
 		}
 	    }
+
+	    param = getword(buf);
 
 	    if(param == "event") {
 		while(!(param = getword(buf)).empty()) {
@@ -365,6 +361,7 @@ bool imexternal::action::load(ifstream &f) {
 		}
 	    }
 	} else if(sect == "exec") {
+	    wasexec = true;
 	    if(!code.empty()) code += "\n";
 	    code += buf;
 	}
@@ -372,7 +369,7 @@ bool imexternal::action::load(ifstream &f) {
 	pos = f.tellg();
     }
 
-    return !name.empty() && !code.empty();
+    return wasexec;
 }
 
 const imexternal::actioninfo imexternal::action::getinfo() const {
