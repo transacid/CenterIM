@@ -32,21 +32,9 @@
 
 #endif
 
-__KTOOL_BEGIN_NAMESPACE
-
 const string readlink(const string fname);
 const string pathfind(const string name, string path, int amode = F_OK);
 bool mksubdirs(string dir);
-
-__KTOOL_END_NAMESPACE
-
-#ifdef __KTOOL_USE_NAMESPACES
-
-using ktool::pathfind;
-using ktool::mksubdirs;
-using ktool::readlink;
-
-#endif
 
 __KTOOL_BEGIN_C
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkfsys file system related routines
-* $Id: kkfsys.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: kkfsys.cc,v 1.3 2001/08/18 07:30:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -129,7 +129,7 @@ int stubnftw(const char *dir, int (*fn)(const char *file, const struct stat *sb,
     return stopwalk;
 }
 
-const string ktool::pathfind(const string name, string path, int amode = F_OK) {
+const string pathfind(const string name, string path, int amode = F_OK) {
     string token, current;
 
     while(!(token = getword(path, ":")).empty()) {
@@ -140,7 +140,7 @@ const string ktool::pathfind(const string name, string path, int amode = F_OK) {
     return "";
 }
 
-bool ktool::mksubdirs(string dir) {
+bool mksubdirs(string dir) {
     string subname, created;
     bool errhappen = false;
 
@@ -162,7 +162,7 @@ bool ktool::mksubdirs(string dir) {
     return !errhappen;
 }
 
-const string ktool::readlink(const string fname) {
+const string readlink(const string fname) {
     char rfname[1024];
     int n;
 
