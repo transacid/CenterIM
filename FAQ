@@ -1,0 +1,63 @@
+/*
+*
+* The centericq FAQ (frequently asked questions)
+* by Konstantin Klyagin <konst@konst.org.ua>
+*
+*/
+
+Q: "Who are you?" - a question usually addressed to the user "konst"
+   on the default centericq contact list by everybody who doesn't
+   like to read documentation.
+
+A: I usually answer "Santa Claus".
+
+Q: What is the "ICQ" contact list item?
+
+A: It's a special kind of contact you receive system messages from.
+   For example, someone has requested your authorization to add you
+   to his contact list or someone has added you. You'll be noticed
+   with that item.
+
+Q: How can I request someone's authorization to add him to my
+   contact list?
+
+A: There is no need to ask for authorization to add somebody with
+   centericq ;) It adds people quietly.
+
+Q: What about implementing such a neat <blah-blah> feature in centericq?
+
+A: Hey, centericq is GPL and opensource, so feel free to contribute.
+   Don't wait for the author/maintainer to implement it, just do it
+   yourself and send a patch.
+
+Q: Can't build it under FreeBSD..
+
+A: Use gmake instead of make
+
+Q: (by Paonia Ezrine, paonia@home.welcomehome.org)
+   When I run centericq in a xterm or from the console it is fine but
+   when I run it in a gnome terminal windows the screen does not update
+   correctly. Specificly the right side of the screen does not get
+   cleared after I send a message or other similar events.
+
+A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
+
+   It happens only with the gnome-terminal. centericq works fine on
+   linux-console and eterm (enlightenment) so it is problem with
+   gnome-terminal. It does not support all xterm sequences.
+   /usr/share/terminfo/g/gnome file could correct that (gnome users
+   should have it), so that ncurses will not use such a extended
+   sequences for gnome-terminal.
+
+   Workaround: For me it worked setting TERM variable to gnome and then
+   running centericq without problems.
+   
+   (gnome-terminal)
+   $ export TERM=gnome
+   $ centericq
+   
+   and it is ok
+
+Q: How do I authorize someone's request with centericq?
+
+A: You'll see as soon as someone requests it.

@@ -1,0 +1,406 @@
+0.0.1
+-----
+
+Just a first public release of the program.
+
+1.0.0
+-----
+
+In this version I made a lot of fixes according to new users' comments. That's
+great that so much people deceided to try my program. Here is the list of most
+important things that were changed:
+
+- Conflict of the symbol ustat in unistd.h (libc5) and the variable in
+  centerICQ.cpp. Fixed. I renamed the variable to usrstat. Noticed by
+  Bernhard Sadlowski <sadlowsk@mathematik.uni-bielefeld.de>
+
+- Makefiles in ktools/src and center/ directories didn't work with GNU
+  make 3.76 because it appeared to not understand rules like '.cpp.o:'.
+  Fixed. All of such rules were changed to '%.o : %.cpp'
+
+- Now centerICQ detects the socket physical disconnection. For example, in
+  previous version if you were using Linux system at home and connecting it
+  to internet with dial-up ppp account, centerICQ thought it's online even
+  after you disconnect from the Internet
+    
+- Since this version all the outgoing messages are put into the
+  center.<uin>.out files in the $(HOME)/.center directory
+  
+- Some user interface improvements
+ 
+- A very funny bug was fixed. The point is that my ICQ UIN that was added to
+  contact list when one started centerICQ for the first time, was a little
+  bit incorrect (typing error), my real ICQ UIN is 17502151 :)
+
+- New user registration feature was added
+
+- Now centerICQ send the authorization acceptation immediately after
+  receiving of the request from a Mirabilis client
+
+- Now you can make centerICQ not check your mailbox adding 'dontcheckmail'
+  parameter into the $(HOME)/.center/config file. Idea of Bernhard
+  Sadlowski <sadlowsk@mathematik.uni-bielefeld.de> whose mailbox appeared
+  to be too large for scanning every minute :)
+
+- Since this day (1 aug 1999) you always can download the hottest and the
+  _latest_ snapshot of the program from its homepage at
+  http://konst-linux.i.am/
+
+- CenterICQ now can update your details in the ICQ database
+
+- Now users that are online, offline and users messages from whose have been
+  received are highlighted with different colors. It looks much better :)
+
+- Added a nice "History" feature
+
+- Another nice feature. If you don't press any key on one of local consoles
+  of your system, centerICQ can automatically set your status to Away and
+  then to N/A. Set the time periods with new parameters 'autoAway' and 'autoNA'
+  in the ~/.center/config file
+  
+- 'About' menu item added to global menu invoked by pressing F4
+  
+- Now centerICQ can handle "ack" packets server reports us about the result of
+  sending messages and URLs with. This means that now your messages won't be
+  lost on unexpected disconnection from server. Also with this feature you're
+  able to write your messages being offline in order for them to be sent when
+  you connect to server
+
+---
+    Here the detailed changelog begins. A little version number explanation.
+    First number means the version number itself, second is how many features
+    have been added to it and the third one shows an amount of bugs fixed.
+---
+
+1.0.1 - Fixed a segfault that appeared when the user tried to add the same
+        uin to the contactlist when it's already exists there
+        
+1.0.2 - New UIN registration procedure looked bad due to an extra screen
+        output (about new mail and status). Fixed
+
+        Now centerICQ will inform me when someone setups it on his computer.
+        It just sends a small information message so I could have a little
+        program using statistics
+
+1.0.3 - Great! After a day of a perversed sex with debugging tools, setting
+        hooks and other things, the wierd segfault has been catched and killed
+
+1.1.3 - Now if you've got any problems with F-keys in the terminal mode, there
+        is a possibility to use alternate keys for invoking user, status and
+        global menus, they are 'u', 's' and 'g'
+
+1.2.3 - The "Reply" item has been added to the message window that appears
+        when reading incoming messages. "Close" item was removed because the
+        window is closed with the Esc key
+
+1.3.3 - Now the program handles SIGINT and SIGTERM correctly
+
+        First patch applied :) Its author was Piotr Waskiewicz
+        <wasp@linuxfreak.com>. Now centerICQ will inform user about an event
+        with a PC speaker beep if the sound device isn't available (busy with
+        playing something or something like this). Thank you, Piotr.
+
+1.3.4 - A minor bug fixed. centerICQ played sound on receiving a message from
+        a user from ignore list
+
+1.7.6 - Four features added and two bugs fixed.
+
+        Feature 1.
+        
+        A major interface improvement has been implemented. I wrote new
+        ksmalledit class that allows to edit messages using more advanced
+        text editor
+                
+        Feature 2.
+        
+        Another nice interface improvement. centerICQ doesn't strip \r\n's
+        from the received messages anymore, because now it can display such
+        messages more correctly. Up and Down arrows scrolls up and down
+        the message     you're reading
+
+        Feature 3.
+        
+        I proceeded with my idea to wrote a general purpose personal
+        communications program which will contain not only ICQ client inside.
+        So, an internal phonebook had been added. You can find it in the global
+        menu invoked with F4 key. Hope, you will find it useful. Maybe, it
+        worth integrating with the ICQ contactlist .. don't know. Any
+        suggestions are welcome, as usual :)
+                
+        Feature 4.
+                
+        Added support for non-80x25 text modes
+                
+        Bugs.
+
+        A couple of bugs have been fixed. First was related to adding users
+        with empty 'nickname' field into the contact list: after restarting
+        centerICQ they had been displayed incorrectly. And the second one
+        was that the program played 'received msg/url/etc ..' sound on
+        receiving messages from users in ignore list
+
+        Some corrections.
+                
+        Since this version contactlist is updated on the screen even if you're
+        working with menus such as phonebook, change status, history, etc.
+
+        Misc.
+
+        Also, file HOWTO-thank-me was added into the program package. Maybe
+        someone will really help me with a thing I wrote there ... Will see
+
+1.10.7 -
+        Bugs fixed:
+
+        There was a bug with receiving contacts from users, centerICQ thought
+        that all the received contacts had uins the same as uin of sender.
+
+        And some minor changes made.
+
+        Features added:
+
+        It was impossible to abort updating user's details procedure until
+        it isn't finished. Now you're able to do that, so let's think it's a
+        a feature :)
+
+        Now all the files created by centerICQ in the .center directory have
+        -rw------- permissions to be more secure :) So now all of your
+        conversations are hidden from courious eyes of another users :)
+
+        "-a" command line parameter added. It forces centerICQ to draw its
+        windows using ascii characters '+', '|' and '-'
+
+2.0.0
+-----
+
+First major feature that's implemented in this version is support for icq
+protocol version 5. It will allow me to implement such useful thing as file
+transfer and chat, I'm going to make it soon.
+
+Next, a lot of user interface improvements. Parameters for users searching
+and updating user's info now are entered with a menu. Also, 'user information'
+window was improved, now it allows to view more info and has quite useful menu
+in bottom line of the window.
+
+Another thing that's improved in user information displaying, was saving
+all the retreived info in separate disk file. So now there is no need to
+retreive it every time you choose 'user info' in menu.
+
+Sure, some bugs were fixed. Due to the fixes connection became more stable and
+it doesn't break because of protocol implementation mistakes.
+
+
+PS: As usual I'd like you to take a look at HOWTO-thank-me file. Who knows,
+    maybe you're the one who's able to make it.
+
+
+2.2.1
+-----
+
+First... Grhm. Happy New Year! Cheers :)
+
+AutoAWAY and AutoNA options now work ok. There were some problems detecting
+the time of local user's inactivity, but after implementing that another way
+it became great :)
+
+Rewritten some code related to contact list management, now it looks much
+better.
+
+Now centericq package is proudly distributed with its own autoconf script ;)
+
+'Edit ignore list' fascility added to the program interface (see global menu).
+
+2.3.3
+-----
+
+Fixed a minor bug in the source code that caused problems compiling
+the program.
+
+Fixed a bug that caused centericq to switch status to n/a when running
+on a remote console (/dev/ttypXX for example).
+
+Previous version seems to be the most buggy one. One more bug has
+been fixed, it caused centericq not to auto-accept authorization requests
+and not to inform a user that someone has added him to a contact list.
+
+Now the centericq windows use all the screen height and width (if more
+than 80).
+
+Now available in RPM format :)
+
+2.7.4
+-----
+
+As the ktools library was rewritten and optimized, centerICQ became faster.
+For example, messages history now pops up a little bit quicker, etc. A lot
+of code improvements, in general :)
+
+Text message editor was totally rewritten. It now allows to enter more than
+one space between words and has some useful facilities.
+
+History reading and sorting operation was speed up.
+
+ESC is not an exit key anymore. To quit the program you should now use 'q'.
+
+Phonebook was obsoleted.
+
+Ignore list didn't work at all. Fixed.
+
+2.11.5
+------
+
+Now it's possible to view messages history when writing a message.
+
+Makefile.in has changed in order to make the installation more flexible. Now
+the program can be ./configured and installed with any ${prefix}. Proposed by
+Alexandr D. Kanevskiy <kad@dc.ukrtel.net>, the author of BlackCat Linux
+distribution.
+
+If you're such a emacs fan like Felix Natter <f.natter@ndh.net> ;), now you
+can enjoy emacs key bindings support in centericq. All needed to turn the
+feature on is to add 'emacs' string to your ~/.center/config file.
+
+Sometimes centerICQ sent messages twice. Fixed.
+
+Now it's possible to send a message to several users on your list.
+"^P multiple" option was added to the "send message" dialog.
+
+Messages forwarding feature added.
+
+2.12.6
+------
+
+Ctrl-L now refreshes the screen contents.
+
+To cancel an action or close a window now you gotta press ESC
+twice (like in Midnigh Commander).
+
+Splitting messages longer than 450 characters now works ok. There were some
+problems in previous versions.
+
+3.0.0
+-----
+
+Completely rewritten from scratch. Its advantages are:
+
+  + nice C++ design
+  + written with motor, http://konst.org.ua/motor
+  + use of icqlib that extends icq related features with file
+    transfers, handling wider sets of users' details, etc
+
+Note for those who upgrade from previous versions. Binary file now called
+centericq, not center like it was before. Shared files (wav's) are now held
+in /usr/local/share/centericq/, not in /usr/local/share/center/ Also,
+~/.center directory is no longer used, ~/.centericq is created instead.
+
+3.2.3
+-----
+
+Some code clean-ups made. There were some problems with compiling the program
+on some systems.
+
+User interface improved. Now quick keyboard help is displayed in the status
+line.
+
+Now centericq can hide offline users when contact list is displayed.
+
+Ctrl-C (sigint) is now blocked since it's dangerously close to Ctrl-X
+used to send an event.
+
+"Quick config options" improved.
+
+Fixed segfault on sending long messages.
+
+3.7.3
+-----
+
+A little patch to the icqlib has been made. Now centericq can receive messages
+and URLs from people with mirabilis clients sent to several recipients.
+
+Ported to FreeBSD at last! Thanks to
+Gregory Edigaroff <greg@Thing-Fish.Kharkov.NET> for a FreeBSD 4.0 CD :)
+
+German .po translation by Florian Müller" <flo@flo.s-s-f.de> included into
+the distribution.
+
+Now centericq doesn't automatically switch your status to Away or N/A when you
+are invisible.
+
+Visible list feature added.
+
+History reading has been speed-up.
+
+Now it's possible to view users' details with alt-? when writing a message.
+
+3.13.3
+------
+
+At last contacts receiving feature was implemented in this re-write. It was
+supported in 2.x.x series, but had been lost. Now it's ok.
+
+ICQ server address is now configurable.
+
+Update user info feature now works great. It's possible to update gender
+and languages fields in the ICQ database.
+
+Now ":)" is printed next to nickname of a user having a birthday.
+
+Countries are sorted alphabetically in the selection box invoked from
+the "update details" dialog.
+
+It's now possible to view affiliations and background in users' details.
+
+Quoting a message on reply is now possible.
+
+SOCKS proxy support added. Thanks to Sir Kot <cyrilm@maris.ru> for the patch.
+
+Quick contact search feature added. Now you can type nickname to search
+for a user in contact list. This new feature is activated with Alt-S (or
+ESC-S) key.
+
+Some minor interface bugs have been fixed.
+
+3.20.5
+------
+
+"Add to the list" button added to the authorization request dialog.
+
+Now it's possible to specify sounds for two additional kinds of events:
+someone's appearing online and receiving a contact.
+
+Added a command line parameter "--ascii" or "-a" to make centericq
+draw all the dialog frames, boxes and other interface stuff with
+non-pseudographical characters.
+
+Centericq doesn't allow to send empty messages anymore.
+
+Now, when sending a long (more than 450 characters) message, centericq
+checks whether if it's possible to send it with a direct TCP/IP link.
+If so, it doesn't split the message as it did before.
+
+Fixed a bug that caused impossiblity to receive messages longer than
+512 bytes.
+
+The "telnet <centericq tcp port number>" bug fixed. If you telneted to a
+port listened by centericq and typed random characters it caused centericq
+segfault.
+
+"Remember ICQ password" item has been added to the configuration dialog.
+Set to "no" it causes centericq not to hold it in the config file,
+thus the password is asked every time you launch the program.
+
+Online users are now sorted by status.
+
+Now it's possible to reply on a message from history.
+
+Anti-spam feature added. If you set this option to "yes" in the
+configuration dialog, no messages will be accepted from people not
+on your contact list.
+
+Applied the file transfer segfaults fixing patch for icqlib by Jindrich
+Makovicka <makovick@kmlinux.fjfi.cvut.cz>. He appeared to be a great
+contributor having many intresting ideas, so I hope we'll work together
+a lot. Keep it up, Jindrich!
+
+Ported to OpenBSD. Thanks to Peter Valchev <pvalchev@toxiclinux.org> for
+the patch.
