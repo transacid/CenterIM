@@ -1,7 +1,7 @@
 /*
 *
 * kkfsys file system related routines
-* $Id: kkfsys.cc,v 1.5 2001/10/12 07:23:55 konst Exp $
+* $Id: kkfsys.cc,v 1.6 2002/03/04 15:27:27 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -129,10 +129,10 @@ int stubnftw(const char *dir, int (*fn)(const char *file, const struct stat *sb,
     return stopwalk;
 }
 
-const string pathfind(const string name, string path, int amode = F_OK) {
-    string token, current;
+string pathfind(const string &name, const string &path, int amode = F_OK) {
+    string token, current, buf = path;
 
-    while(!(token = getword(path, ":")).empty()) {
+    while(!(token = getword(buf, ":")).empty()) {
 	current = token + "/" + name;
 	if(!access(current.c_str(), amode)) return current;
     }
@@ -162,7 +162,7 @@ bool mksubdirs(string dir) {
     return !errhappen;
 }
 
-const string readlink(const string fname) {
+string readlink(const string &fname) {
     char rfname[1024];
     int n;
 
@@ -174,7 +174,7 @@ const string readlink(const string fname) {
     }
 }
 
-bool samefile(const string fname1, const string fname2) {
+bool samefile(const string &fname1, const string &fname2) {
     bool r;
     struct stat st1, st2;
 
@@ -191,7 +191,7 @@ bool samefile(const string fname1, const string fname2) {
     if((mode & m) && !regexec(&r, fname.c_str(), 0, 0, 0)) \
 	lst.push_back(fname);
 
-vector<string> filefind(const string mask, const string aroot, int mode = FFIND_FILE) {
+vector<string> filefind(const string &mask, const string &aroot, int mode = FFIND_FILE) {
     vector<string> lst, rlst;
     vector<string>::iterator is;
     regex_t r;
