@@ -15,6 +15,10 @@
 
 #include "conf.h"
 
+#ifdef HAVE_ICONV_H
+#include <iconv.h>
+#endif
+
 #define randlimit(l, h) ((int)((float)rand()/(float)RAND_MAX*(float)(h+1-l)+(float)l))
 
 #define SWAPVAL(v1, v2) { \
@@ -97,19 +101,12 @@ string mime(const string &text);
 
 string ruscase(const string &s, const string &mode);
 string iconv(const string &text, const string &fromcs, const string &tocs);
+string cuthtml(const string &html);
 
 __KTOOL_BEGIN_C
 
-int kwordcount(const char *strin, const char *delim);
-char *kgetword(int wordn, const char *strin, const char *delim, char *sout, int maxout);
-
-int kwordcountq(char *strin, char *delim, char *q);
-int kwordposq(int n, char *s, char *delim, char *q);
-char *kgetwordq(int wordn, char *strin, char *delim, char *q, char *sout, int maxout);
-
 char *strcut(char *strin, int frompos, int count);
-char *kstrcopy(char *strin, int frompos, int count, char *strout);
-char *kcuturls(char *strin, char *strout);
+
 char *trimlead(char *str, char *chr);
 char *trimtrail(char *str, char *chr);
 char *trim(char *str, char *chr);
@@ -147,8 +144,6 @@ time_t str2time(char *sdate, char *mask, time_t *t);
 
 char *unmime(char *text);
 char *mime(char *dst, const char *src);
-
-int parseformat(char *command, char *quotes, char *fmt, ...);
 
 __KTOOL_END_C
 

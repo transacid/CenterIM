@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.19 2002/03/11 13:44:42 konst Exp $
+* $Id: kkstrtext.cc,v 1.20 2002/03/14 11:56:41 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,112 +24,6 @@
 
 #include "kkstrtext.h"
 
-#ifdef HAVE_ICONV_H
-#include <iconv.h>
-#endif
-
-int kwordcount(const char *strin, const char *delim) {
-    int count = 0, i = 0, slen = strlen(strin);
-
-    while(i<slen) {
-	for( ; i < slen && strchr(delim, strin[i]); i++);
-	if(i < slen) count++;
-	for( ; i < slen && !strchr(delim, strin[i]); i++);
-    }
-
-    return count;
-}
-
-char *kgetword(int wordn, const char *strin, const char *delim, char *sout, int maxout) {
-    int i = 0, count = 0, len = 0, slen = strlen(strin);
-
-    sout[0] = 0;
-    while(i < slen && count != wordn) {
-	while(i < slen && strchr(delim, strin[i])) i++;
-	if(i < slen) count++;
-	while(i < slen && !strchr(delim, strin[i])) {
-	    if(count == wordn) {
-		sout[++len] = 0;
-		sout[len-1] = strin[i];
-	    }
-	    i++;
-	}
-    }
-    return sout;
-}
-
-int kwordcountq(char *strin, char *delim, char *q) {
-    int slen = strlen(strin), count = 0, i = -1, quoted = 0, prevbs = 0;
-
-    while(i<slen) {
-	while(i<slen) {
-	    i++;
-	    if(strchr(q, strin[i]) && !prevbs) break;
-	    if(!strchr(delim, strin[i])) break;
-	    prevbs = (strin[i] == '\\');
-	}
-    
-	if(i < slen) count++;
-	while(i < slen && (quoted || !strchr(delim, strin[i]))) {
-	    if(strchr(q, strin[i]) && !prevbs) quoted = !quoted;
-	    prevbs = (strin[i] == '\\');
-	    i++;
-	}
-    }
-
-    return count;
-}
-
-int kwordposq(int n, char *s, char *delim, char *q) {
-    int count = 0, slen = strlen(s), i = 0, quoted = 0, retval = -1;
-
-    while(i < slen && count != n) {
-	if(i < slen && !strchr(q, s[i]) && strchr(delim, s[i])) {
-	    while(strchr(delim, s[i]) && i < slen) i++;
-	}
-
-	if(i < slen) count++;
-
-	if(count != n)
-	while(i < slen && (quoted || !strchr(delim, s[i]))) {
-	    if(strchr(q, s[i]))
-	    if(s[i-1] != '\\' || !i) quoted =! quoted;
-	    i++;
-	} else {
-	    if(strchr(delim, s[i])) i++;
-	    retval = i;
-	}
-    }
-  
-    return retval;
-}
-
-char *kgetwordq(int wordn, char *strin, char *delim, char *q, char *sout, int maxout) {
-    int slen = strlen(strin), len = 0, quoted = 0, i = kwordposq(wordn, strin, delim, q);
-    sout[0] = 0;
-
-    if(i >= 0) {
-	while(i < slen && len < maxout && (quoted || !strchr(delim, strin[i]))) {
-	    if(strchr(q, strin[i])) {
-		if(strin[i-1] != '\\' || !i) quoted =! quoted; else
-		if(len > 0) len--;
-	    }
-      
-	    sout[len++] = strin[i++];
-	}
-    }
-
-    sout[len] = 0;
-    return sout;
-}
-
-char *kstrcopy(char *strin, int frompos, int count, char *strout) {
-    strcpy(strout, strin);
-    strout += frompos-1;
-    strout[count] = 0;
-    return strout;
-}
-
 char *strcut(char *strin, int frompos, int count) {
     if(count > 0) {
 	if(count > strlen(strin)-frompos) count = strlen(strin)-frompos;
@@ -140,22 +34,6 @@ char *strcut(char *strin, int frompos, int count) {
 	free(buf);
     }
     return strin;
-}
-
-char *kcuturls(char *strin, char *strout) {
-    int i, j;
-
-    strout[0] = 0;
-    for(i = 0; i < strlen(strin); i++) {
-	if(!strncasecmp(strin + i, "http://", 7) || !strncasecmp(strin + i, "ftp://", 6))
-	for( ; !strchr(",;*& \000", strin[i]); i++); else {
-	    j = strlen(strout);
-	    strout[j] = strin[i];
-	    strout[j + 1] = 0;
-	}
-    }
-
-    return strout;
 }
 
 char *strimlead(char *str)  { return trimlead(str, " \t");  }
@@ -476,71 +354,6 @@ const char *q, const char *esc = "") {
     }
 
     return ret;
-}
-
-// select %list from %word where %any
-// insert [(%list)] values (%list) into %word
-// update [table] %word %any where %any
-
-int parseformat(char *command, char *quotes, char *fmt, ...) {
-    const char *cp = command, *fnp, *fp;
-    char *p, *t;
-    const char *cnp;
-    va_list ap;
-
-    va_start(ap, fmt);
-    fnp = fp = fmt;
-
-    while(fp && cp && *fp && *cp) {
-	fnp = strqpbrk(fp+1, 0, "%[]", quotes);
-	for(; *fp && strchr(" ]", *fp); fp++);
-	for(; *cp && *cp == ' '; cp++);
-
-	switch(*fp) {
-	    case '[':
-		if(strncasecmp(fp+1, cp, fnp-fp-1)) {
-		    if(!(fp = strqpbrk(fp+1, 0, "]", quotes)));
-		} else {
-		    cp += fnp-fp-1;
-		    fp += fnp-fp;
-		}
-		break;
-	    case '%':
-		if(!strncmp(fp+1, "list", 4)) {
-		    fp += 5;
-		    fnp = strqpbrk(fp+1, 0, "%[]", quotes);
-		    p = (char *) malloc(fnp-fp+1);
-		    p[fnp-fp] = 0;
-		    strncpy(p, fp, fnp-fp);
-		    cnp = strqcasestr(cp+1, p, quotes);
-		    free(p);
-
-		    t = va_arg(ap, char *);
-		    t[cnp-cp] = 0;
-		    strncpy(t, cp, cnp-cp);
-
-		    cp += cnp-cp;
-		} else if(!strncmp(fp+1, "word", 4)) {
-		    fp += 5;
-		    if(!(cnp = strqpbrk(cp, 0, ";() ,.", "'"))) cnp = cp+strlen(cp);
-		    t = va_arg(ap, char *);
-		    t[cnp-cp] = 0;
-		    strncpy(t, cp, cnp-cp);
-
-		    cp += cnp-cp;
-		} else if(!strncmp(fp+1, "any", 3)) {
-		}
-		break;
-	    default:
-		if(!strncasecmp(fp, cp, fnp-fp)) {
-		    cp += fnp-fp;
-		    fp += fnp-fp;
-		} else;
-	}
-    }
-
-    va_end(ap);
-    return 1;
 }
 
 char *strinsert(char *buf, int pos, char *ins) {
@@ -1079,4 +892,29 @@ string iconv(const string &text, const string &fromcs, const string &tocs) {
 #endif
 
     return text;
+}
+
+string cuthtml(const string &html) {
+    string r, tag;
+    int npos, pos, tpos;
+
+    for(pos = 0; (npos = html.find("<", pos)) != -1; pos = npos) {
+	tpos = npos;
+	r += html.substr(pos, npos-pos);
+
+	if((npos = html.find(">", ++npos)) != -1) {
+	    npos++;
+
+	    tag = html.substr(tpos+1, npos-tpos-2);
+	    if(tag.substr(0, 1) == "/") tag.erase(0, 1);
+
+	    if((tag == "br") || (tag == "BR"))
+		r += "<br>";
+	}
+    }
+
+    if(pos < html.size())
+	r += html.substr(pos);
+
+    return r;
 }
