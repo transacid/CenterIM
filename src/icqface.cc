@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.191 2003/09/11 21:09:28 konst Exp $
+* $Id: icqface.cc,v 1.192 2003/09/11 23:37:33 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1249,7 +1249,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
-    protocolname pname;
+    protocolname pname, onechoice;
 
     m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
 	sizeWArea.y1+9, conf.getcolor(cp_main_text)));
@@ -1257,12 +1257,17 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
     m.idle = &menuidle;
 
     for(protcount = 0, pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!conf.getourid(pname).empty()) protcount++;
+	if(!conf.getourid(pname).empty()) {
+	    protcount++;
+	    onechoice = pname;
+	}
+
 	alrlogged = alrlogged || gethook(pname).getstatus() != offline;
     }
 
     if(protcount < 2) {
 	i = 1;
+	choice = onechoice;
 
     } else {
 	m.additem(0, -1, _(" All protocols"));
@@ -1272,11 +1277,12 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	m.scale();
 
 	i = m.open();
+	choice = (int) m.getref(i-1);
+
 	m.close();
     }
 
     if(r = i) {
-	choice = (int) m.getref(i-1);
 	switch(choice) {
 	    case -1:
 		for(pname = icq; pname != protocolname_size; (int) pname += 1)
