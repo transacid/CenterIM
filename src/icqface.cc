@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.116 2002/05/11 15:41:58 konst Exp $
+* $Id: icqface.cc,v 1.117 2002/05/15 16:35:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1657,6 +1657,7 @@ void icqface::renderchathistory() {
     string text;
     char buf[64];
     time_t t;
+    struct stat st;
 
     vector<imevent *> events;
     typedef pair<imevent::imdirection, vector<string> > histentry;
@@ -1667,7 +1668,15 @@ void icqface::renderchathistory() {
 
     icqcontact *c = clist.get(passinfo);
 
-    c->sethistoffset(0);
+    count = 0;
+
+    if(!stat((c->getdirname() + "history").c_str(), &st)) {
+	count = st.st_size-chatlines*(sizeWArea.x2-sizeWArea.x1)*2;
+	if(count < 0) count = 0;
+    }
+
+    c->sethistoffset(count);
+
     count = 0;
     events = em.getevents(passinfo, chatlastread);
     chatlastread = 0;
