@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.14 2001/09/26 14:23:36 konst Exp $
+* $Id: centericq.cc,v 1.15 2001/09/26 15:09:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -340,14 +340,8 @@ void centericq::find() {
     while(ret) {
 	if(ret = face.finddialog(s)) {
 	    if(s.uin) {
-		icq_SendSearchUINReq(&icql, s.uin);
-	    } else
-	    if(!s.email.empty() || !s.nick.empty()
-	    || !s.firstname.empty() || !s.lastname.empty()) {
 
-		icq_SendSearchReq(&icql, s.email.c_str(),
-		    s.nick.c_str(), s.firstname.c_str(),
-		    s.lastname.c_str());
+		icq_SendSearchUINReq(&icql, s.uin);
 
 	    } else
 	    if(s.minage || s.maxage || s.country || s.language
@@ -360,6 +354,12 @@ void centericq::find() {
 		    s.state.c_str(), s.country, s.company.c_str(),
 		    s.department.c_str(), s.position.c_str(),
 		    s.onlineonly ? 1 : 0);
+
+	    } else {
+
+		icq_SendSearchReq(&icql, s.email.c_str(),
+		    s.nick.c_str(), s.firstname.c_str(),
+		    s.lastname.c_str());
 
 	    }
 
