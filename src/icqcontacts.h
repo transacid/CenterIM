@@ -48,7 +48,6 @@ class icqcontacts: public linkedlist {
 	void save();
 	void order();
 	void rearrange();
-	void checkdefault();
 
 	void setoffline(protocolname pname);
 

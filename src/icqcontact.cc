@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.79 2002/12/15 15:45:19 konst Exp $
+* $Id: icqcontact.cc,v 1.80 2003/07/12 17:14:21 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -51,8 +51,9 @@ icqcontact::icqcontact(const imcontact adesc) {
 
     switch(cdesc.pname) {
 	case infocard:
+	case rss:
 	    if(!cdesc.uin) {
-		fname = conf.getdirname() + "n";
+		fname = conf.getdirname() + conf.getprotocolprefix(cdesc.pname);
 
 		for(i = 1; ; i++) {
 		    tname = fname + i2str(i);
@@ -91,8 +92,9 @@ string icqcontact::getdirname() const {
     ret = conf.getdirname();
 
     switch(cdesc.pname) {
-	case infocard:
 	case icq:
+	case infocard:
+	case rss:
 	    ret += conf.getprotocolprefix(cdesc.pname) + i2str(cdesc.uin);
 	    break;
 	default:

@@ -131,12 +131,15 @@ AC_ARG_ENABLE(yahoo,  [  --disable-yahoo    Build without Yahoo!], build_yahoo="
 AC_ARG_ENABLE(aim,    [  --disable-aim      Build without AIM], build_aim="$enableval", build_aim="yes")
 AC_ARG_ENABLE(irc,    [  --disable-irc      Build without IRC], build_irc="$enableval", build_irc="yes")
 AC_ARG_ENABLE(jabber, [  --disable-jabber   Build without Jabber], build_jabber="$enableval", build_jabber="yes")
+AC_ARG_ENABLE(rss,    [  --disable-rss      Build without RSS reader], build_rss="$enableval", build_rss="yes")
+AC_ARG_ENABLE(konst,  [  --no-konst         Don't add contact list items supplied by author by default], build_konst="$enableval", build_konst="yes")
 
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
 AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = xyes)
+AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes)
 
 if test "$build_msn" = "yes"; then
     AC_DEFINE(BUILD_MSN)
@@ -156,6 +159,14 @@ fi
 
 if test "$build_jabber" = "yes"; then
     AC_DEFINE(BUILD_JABBER)
+fi
+
+if test "$build_rss" = "yes"; then
+    AC_DEFINE(BUILD_RSS)
+fi
+
+if test "$build_konst" = "yes"; then
+    AC_DEFINE(BUILD_KONST)
 fi
 
 AC_CONFIG_SUBDIRS(blip-0.1 firetalk-0.1 kkconsui-0.1 kkstrtext-0.1 libicq2000-0.1 libjabber-0.1 libyahoo2-0.1 kksystr-0.1 connwrap-0.1)

@@ -1,9 +1,9 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.182 2003/06/25 20:59:59 konst Exp $
+* $Id: icqface.cc,v 1.183 2003/07/12 17:14:22 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -210,15 +210,13 @@ void icqface::showtopbar() {
     icqconf::imaccount ia;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(pname != infocard) {
-	    ia = conf.getourid(pname);
+	ia = conf.getourid(pname);
 
-	    if(!ia.empty()) {
-		buf += " " + conf.getprotocolname(pname) + "<";
+	if(!ia.empty()) {
+	    buf += " " + conf.getprotocolname(pname) + "<";
 
-		buf += imstatus2char[gethook(pname).getstatus()];
-		buf += ">";
-	    }
+	    buf += imstatus2char[gethook(pname).getstatus()];
+	    buf += ">";
 	}
     }
 
@@ -283,16 +281,30 @@ int icqface::contextmenu(icqcontact *c) {
 	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
 	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
 
-	actnames[ACT_MSG]       = _(" Send a message     enter");
-	actnames[ACT_HISTORY]   = _(" Events history         h");
-	actnames[ACT_REMOVE]    = _(" Remove user          del");
-	actnames[ACT_INFO]      = _(" User's details         ?");
-	actnames[ACT_EXTERN]    = _(" External actions..    f6");
+	if(c->getdesc().pname != rss) {
+	    actnames[ACT_MSG]       = _(" Send a message     enter");
+	    actnames[ACT_HISTORY]   = _(" Events history         h");
+	    actnames[ACT_REMOVE]    = _(" Remove user          del");
+	    actnames[ACT_INFO]      = _(" User's details         ?");
+	    actnames[ACT_EXTERN]    = _(" External actions..    f6");
 
-	if(lst.inlist(c, csignore))
-	    actnames[ACT_IGNORE]    = _(" Unset ignore user      i");
-	else
-	    actnames[ACT_IGNORE]    = _(" Ignore user            i");
+	    if(lst.inlist(c, csignore))
+		actnames[ACT_IGNORE]    = _(" Unset ignore user      i");
+	    else
+		actnames[ACT_IGNORE]    = _(" Ignore user            i");
+
+	} else {
+	    actnames[ACT_HISTORY]   = _(" Events history         h");
+	    actnames[ACT_REMOVE]    = _(" Remove feed          del");
+	    actnames[ACT_INFO]      = _(" Feed information       ?");
+	    actnames[ACT_EXTERN]    = _(" External actions..    f6");
+	    actnames[ACT_PING]      = _(" Force check");
+
+	    if(lst.inlist(c, csignore))
+		actnames[ACT_IGNORE]    = _(" Unset ignore feed      i");
+	    else
+		actnames[ACT_IGNORE]    = _(" Ignore feed            i");
+	}
     }
 
     cont = c->getdesc();
@@ -302,47 +314,7 @@ int icqface::contextmenu(icqcontact *c) {
     vector<int> actions;
     vector<int>::const_iterator ia;
 
-    if(!ischannel(cont)) {
-	if(cont != contactroot) {
-	    if(cont.pname != infocard) actions.push_back(ACT_MSG);
-	    if(capab.count(hookcapab::urls)) actions.push_back(ACT_URL);
-	    if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
-	    if(capab.count(hookcapab::contacts)) actions.push_back(ACT_CONTACT);
-	    if(capab.count(hookcapab::authrequests)) actions.push_back(ACT_AUTH);
-	    if(capab.count(hookcapab::files)) actions.push_back(ACT_FILE);
-
-	    if(!actions.empty())
-		actions.push_back(0);
-
-	    actions.push_back(ACT_INFO);
-	    actions.push_back(ACT_EDITUSER);
-
-	    if(c->getstatus() != offline) {
-		if(capab.count(hookcapab::fetchaway)) actions.push_back(ACT_FETCHAWAY);
-		if(capab.count(hookcapab::version)) actions.push_back(ACT_VERSION);
-		if(capab.count(hookcapab::ping)) actions.push_back(ACT_PING);
-		if(capab.count(hookcapab::conferencesaretemporary)) actions.push_back(ACT_CONFER);
-	    }
-	}
-
-	actions.push_back(ACT_HISTORY);
-	actions.push_back(ACT_EXTERN);
-
-	if(cont != contactroot) {
-	    actions.push_back(0);
-	    actions.push_back(ACT_IGNORE);
-	    if(!c->inlist()) actions.push_back(ACT_ADD);
-	}
-
-	if(c->getdesc() != contactroot) {
-	    actions.push_back(ACT_REMOVE);
-	    actions.push_back(ACT_RENAME);
-
-	    if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
-		actions.push_back(ACT_GROUPMOVE);
-	}
-
-    } else {
+    if(ischannel(cont)) {
 	actions.push_back(ACT_MSG);
 	actions.push_back(ACT_HISTORY);
 	actions.push_back(ACT_REMOVE);
@@ -355,6 +327,51 @@ int icqface::contextmenu(icqcontact *c) {
 
 	if(conf.getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
+
+    } else if(c->getdesc().pname != rss) {
+	if(cont.pname != infocard) actions.push_back(ACT_MSG);
+	if(capab.count(hookcapab::urls)) actions.push_back(ACT_URL);
+	if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
+	if(capab.count(hookcapab::contacts)) actions.push_back(ACT_CONTACT);
+	if(capab.count(hookcapab::authrequests)) actions.push_back(ACT_AUTH);
+	if(capab.count(hookcapab::files)) actions.push_back(ACT_FILE);
+
+	if(!actions.empty())
+	    actions.push_back(0);
+
+	actions.push_back(ACT_INFO);
+	actions.push_back(ACT_EDITUSER);
+
+	if(c->getstatus() != offline) {
+	    if(capab.count(hookcapab::fetchaway)) actions.push_back(ACT_FETCHAWAY);
+	    if(capab.count(hookcapab::version)) actions.push_back(ACT_VERSION);
+	    if(capab.count(hookcapab::ping)) actions.push_back(ACT_PING);
+	    if(capab.count(hookcapab::conferencesaretemporary)) actions.push_back(ACT_CONFER);
+	}
+
+	actions.push_back(ACT_HISTORY);
+	actions.push_back(ACT_EXTERN);
+
+	actions.push_back(0);
+	actions.push_back(ACT_IGNORE);
+	if(!c->inlist()) actions.push_back(ACT_ADD);
+
+	actions.push_back(ACT_REMOVE);
+	actions.push_back(ACT_RENAME);
+
+	if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
+	    actions.push_back(ACT_GROUPMOVE);
+
+    } else {
+	actions.push_back(ACT_HISTORY);
+	actions.push_back(ACT_REMOVE);
+	actions.push_back(ACT_IGNORE);
+	actions.push_back(ACT_INFO);
+	actions.push_back(ACT_PING);
+
+	if(conf.getgroupmode() != icqconf::nogroups)
+	    actions.push_back(ACT_GROUPMOVE);
+
     }
 
     for(ia = actions.begin(); ia != actions.end(); ++ia) {
@@ -386,9 +403,14 @@ int icqface::generalmenu() {
     m.additem(0, ACT_STATUS,    _(" Change status                       s"));
     m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
+    m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
+    m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
+    m.addline();
     m.additem(0, ACT_FIND,      _(" Find/add users"));
     m.additem(0, ACT_JOINDIALOG, _(" Join channel/conference"));
-    m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
+#ifdef BUILD_RSS
+    m.additem(0, ACT_RSS,       _(" Link an RSS feed"));
+#endif
     m.addline();
     m.additem(0, ACT_IGNORELIST,    _(" View/edit ignore list"));
     m.additem(0, ACT_INVISLIST,     _(" View/edit invisible list"));
@@ -400,10 +422,6 @@ int icqface::generalmenu() {
 
     if(conf.getgroupmode() != icqconf::nogroups) {
 	m.additem(0, ACT_ORG_GROUPS, _(" Organize contact groups"));
-    }
-
-    if(!transfers.empty()) {
-	m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
     }
 
     m.setpos(lastitem);
@@ -1039,6 +1057,49 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
     db.getbrowser()->setbuf(text);
 }
 
+void icqface::inforss(dialogbox &db, icqcontact *c) {
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
+    icqcontact::workinfo wi = c->getworkinfo();
+
+    workarealine(sizeWArea.y1+5);
+    workarealine(sizeWArea.y1+8);
+
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Handle"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("RSS doc"));
+
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("Title"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Link"));
+
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Frequency"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+9, conf.getcolor(cp_main_highlight), _("Last check"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Next check"));
+
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), wi.homepage);
+
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), bi.fname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+6, conf.getcolor(cp_main_text), mi.homepage);
+
+    string freq, last, next;
+    char buf[512];
+
+    if(mi.birth_month) last = strdateandtime(mi.birth_month);
+	else last = _("Never");
+
+    if(mi.birth_day) {
+	sprintf(buf, _("%lu hours"), mi.birth_day);
+	freq = buf;
+	next = strdateandtime(mi.birth_month+mi.birth_day*3600);
+    } else {
+	freq = next = _("Never");
+    }
+
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), freq);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), last);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), next);
+}
+
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     bool finished = false, showinfo;
     textbrowser tb(conf.getcolor(cp_main_text));
@@ -1057,10 +1118,16 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
-    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-	_("Info"), _("Home"), _("Work"), _("More"), _("About"),
-	cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
+    if(cinfo.pname != rss) {
+	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
+	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
+	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
+    } else {
+	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
+	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+	    _("Info"), _("About"), _("Check"), _("Edit"), 0));
+    }
 
     showinfo = true;
     db.addautokeys();
@@ -1084,6 +1151,7 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	    db.setbrowser(0);
 	    infoclear(db, c, cinfo);
 
+	    if(cinfo.pname != rss)
 	    switch(b) {
 		case 0: infogeneral(db, c); break;
 		case 1: infohome(db, c); break;
@@ -1112,6 +1180,19 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 
 		    b = lastb;
 		    continue;
+
+	    } else switch(b) {
+		case 0: inforss(db, c); break;
+		case 1: 
+		    db.setbrowser(&tb, false);
+		    infoabout(db, c);
+		    infoclear(db, c, cinfo);
+		    break;
+		case 2:
+		    gethook(cinfo.pname).ping(c);
+		    b = lastb;
+		    continue;
+		case 3: updatedetails(c); showinfo = true; break;
 	    }
 
 	    refresh();
@@ -1137,6 +1218,7 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
 	_(" [aim] AOL TOC"),
 	_(" [irc] IRC"),
 	_(" [jab] Jabber"),
+	"",
 	""
     };
 

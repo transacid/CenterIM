@@ -25,7 +25,7 @@ enum interfaceAction {
     ACT_PING, ACT_EDITUSER, ACT_VISIBLELIST, ACT_INVISLIST, ACT_QUICKFIND,
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
-    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN
+    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN, ACT_RSS
 };
 
 extern class centericq cicq;
@@ -44,6 +44,13 @@ class icqface {
 	    tsFinish,
 	    tsError,
 	    tsCancel
+	};
+
+	enum findsubject {
+	    fsuser,
+	    fschannel,
+	    fsrss,
+	    fs_size
 	};
 
 	class icqprogress {
@@ -124,6 +131,8 @@ class icqface {
 	void infointerests(dialogbox &db, icqcontact *c);
 	void infoabout(dialogbox &db, icqcontact *c);
 
+	void inforss(dialogbox &db, icqcontact *c);
+
 	void gendetails(treeview *tree, icqcontact *c = 0);
 
 	void selectgender(imgender &f);
@@ -131,7 +140,7 @@ class icqface {
 	void selectlanguage(unsigned short &f);
 	void selectagerange(ICQ2000::AgeRange &r);
 	void selectrandomgroup(unsigned short &f);
-	void selectproto(bool chatmode[]);
+	void selectproto(bool prots[], bool irss = false);
 
 	void workarealine(int l, chtype c = HLINE);
 
@@ -192,7 +201,7 @@ class icqface {
 
 	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
 
-	bool finddialog(imsearchparams &s, bool users = true);
+	bool finddialog(imsearchparams &s, findsubject subj);
 	bool findresults(const imsearchparams &sp, bool auto = false);
 	void findready();
 

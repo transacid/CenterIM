@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.107 2003/06/19 00:31:54 konst Exp $
+* $Id: icqconf.cc,v 1.108 2003/07/12 17:14:21 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -78,7 +78,8 @@ icqconf::imserver icqconf::defservers[protocolname_size] = {
     { "messenger.hotmail.com", 1863, 0 },
     { "toc.oscar.aol.com", 9898, 0 },
     { "irc.oftc.net", 6667, 0 },
-    { "jabber.com", 5222, 5223 }
+    { "jabber.com", 5222, 5223 },
+    { "", 0, 0 }
 };
 
 void icqconf::setourid(const imaccount &im) {
@@ -345,6 +346,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_aim, "clist_aim   yellow/transparent");
 	    schemer.push(cp_clist_irc, "clist_irc    blue/transparent");
 	    schemer.push(cp_clist_jabber, "clist_jabber    red/transparent");
+	    schemer.push(cp_clist_rss, "clist_rss    white/transparent   bold");
 	    break;
 
 	case rcblue:
@@ -366,6 +368,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_aim, "clist_aim   yellow/blue");
 	    schemer.push(cp_clist_irc, "clist_irc   blue/blue   bold");
 	    schemer.push(cp_clist_jabber, "clist_jabber    red/blue");
+	    schemer.push(cp_clist_rss, "clist_rss    white/blue   bold");
 	    break;
     }
 
@@ -644,6 +647,12 @@ void icqconf::setaskaway(bool faskaway) {
 }
 
 bool icqconf::getchatmode(protocolname pname) {
+    switch(pname) {
+	case infocard:
+	case rss:
+	    return false;
+    }
+
     return chatmode[pname];
 }
 
@@ -673,7 +682,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "irc", "jabber", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "jabber", "rss", "infocard"
     };
 
     return ptextnames[pname];
@@ -687,6 +696,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 	case 'm': return msn;
 	case 'n': return infocard;
 	case 'j': return jabber;
+	case 'r': return rss;
 	case '0':
 	case '1':
 	case '2':
@@ -704,7 +714,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 
 string icqconf::getprotocolprefix(protocolname pname) const {
     static const string pprefixes[protocolname_size] = {
-	"", "y", "m", "a", "i", "j", "n"
+	"", "y", "m", "a", "i", "j", "r", "n"
     };
 
     return pprefixes[pname];
@@ -740,6 +750,7 @@ int icqconf::getprotcolor(protocolname pname) const {
 	case      aim : return getcolor(cp_clist_aim);
 	case      irc : return getcolor(cp_clist_irc);
 	case   jabber : return getcolor(cp_clist_jabber);
+	case      rss : return getcolor(cp_clist_rss);
 	default       : return getcolor(cp_main_text);
     }
 }

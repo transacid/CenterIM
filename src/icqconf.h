@@ -35,7 +35,8 @@ enum cicq_colorpairs {
     cp_clist_msn,
     cp_clist_aim,
     cp_clist_irc,
-    cp_clist_jabber
+    cp_clist_jabber,
+    cp_clist_rss
 };
 
 class icqconf {

@@ -12,3 +12,5 @@
 #undef BUILD_YAHOO
 #undef BUILD_AIM
 #undef BUILD_IRC
+#undef BUILD_RSS
+#undef BUILD_KONST

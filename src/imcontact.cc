@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contact basic info class
-* $Id: imcontact.cc,v 1.16 2002/12/04 17:44:25 konst Exp $
+* $Id: imcontact.cc,v 1.17 2003/07/12 17:14:22 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -89,15 +89,10 @@ string imcontact::totext() const {
     if(*this == contactroot) {
 	r = "[self]";
     } else {
-	switch(pname) {
-	    case icq:
-	    case infocard:
-		r = "[" + conf.getprotocolname(pname) + "] " + i2str(uin);
-		break;
-
-	    default:
-		r = "[" + conf.getprotocolname(pname) + "] " + nickname;
-		break;
+	if(uin) {
+	    r = "[" + conf.getprotocolname(pname) + "] " + i2str(uin);
+	} else {
+	    r = "[" + conf.getprotocolname(pname) + "] " + nickname;
 	}
     }
 

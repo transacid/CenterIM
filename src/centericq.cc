@@ -1,9 +1,9 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.158 2003/07/07 18:50:59 konst Exp $
+* $Id: centericq.cc,v 1.159 2003/07/12 17:14:21 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include "icqhook.h"
 #include "irchook.h"
 #include "yahoohook.h"
+#include "rsshook.h"
 #include "icqface.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
@@ -63,15 +64,19 @@ void centericq::exec() {
     face.init();
 
     if(regmode = !conf.getouridcount()) {
+	bool rus = false;
 	char *p = getenv("LANG");
 
 	if(p)
-	if(((string) p).substr(0, 2) == "ru")
+	if(rus = (((string) p).substr(0, 2) == "ru"))
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
 		conf.setrussian(pname, true);
 
 	if(updateconf()) {
 	    manager.exec();
+#ifdef BUILD_KONST
+	    defaultcontacts(rus);
+#endif
 	}
 
 	regmode = false;
@@ -103,6 +108,27 @@ void centericq::exec() {
 
     face.done();
     conf.save();
+}
+
+void centericq::defaultcontacts(bool rus) {
+    icqcontact *rc = clist.addnew(imcontact(0, rss), false);
+    clist.addnew(imcontact(17502151, icq), false);
+
+    if(rc) {
+	icqcontact::workinfo wi = rc->getworkinfo();
+	wi.homepage = rus ? "http://thekonst.net/rss_ru.xml"
+	    : "http://thekonst.net/rss_en.xml";
+	rc->setworkinfo(wi);
+
+	icqcontact::moreinfo mi = rc->getmoreinfo();
+	mi.homepage = "http://thekonst.net/";
+	mi.birth_day = 2;
+	rc->setmoreinfo(mi);
+
+	rc->setnick("thekonst.net");
+	rc->setdispnick("thekonst.net");
+	rc->save();
+    }
 }
 
 bool centericq::checkpasswords() {
@@ -190,6 +216,9 @@ void centericq::mainloop() {
 		break;
 	    case ACT_JOINDIALOG:
 		joindialog();
+		break;
+	    case ACT_RSS:
+		linkfeed();
 		break;
 	    case ACT_CONF:
 		updateconf();
@@ -342,16 +371,17 @@ void centericq::mainloop() {
 	    case 0:
 		if(conf.getchatmode(c->getdesc().pname)) {
 		    face.chat(c->getdesc());
+
 		} else {
 		    if(c->getmsgcount()) {
 			readevents(c->getdesc());
 		    } else {
-			if(c->getdesc() != contactroot)
-			if(c->getdesc().pname != infocard) {
+			if(c->getdesc().pname != infocard && c->getdesc().pname != rss) {
 			    sendevent(immessage(c->getdesc(), imevent::outgoing,
 				c->getpostponed()), icqface::ok);
 			}
 		    }
+
 		}
 		break;
 	}
@@ -369,7 +399,7 @@ void centericq::changestatus() {
 	if(!conf.enoughdiskspace()) {
 	    face.log(_("! cannot connect, free disk space is less than 10k"));
 
-	} else if(!gethook(pname).enabled()) {
+	} else if(pname != proto_all && !gethook(pname).enabled()) {
 	    face.log(_("! support for %s was disabled at build time"),
 		conf.getprotocolname(pname).c_str());
 
@@ -420,7 +450,7 @@ void centericq::joindialog() {
     static imsearchparams s;
     icqcontact *c;
 
-    if(face.finddialog(s, false)) {
+    if(face.finddialog(s, icqface::fschannel)) {
 	imcontact ic(s.nick, s.pname);
 	abstracthook &h = gethook(s.pname);
 
@@ -450,13 +480,38 @@ void centericq::joindialog() {
     }
 }
 
+void centericq::linkfeed() {
+    icqcontact *c;
+    static imsearchparams s;
+
+    s.checkfrequency = 2;
+
+    if(face.finddialog(s, icqface::fsrss)) {
+	clist.add(c = new icqcontact(imcontact(0, rss)));
+
+	icqcontact::workinfo wi = c->getworkinfo();
+	wi.homepage = s.url; // syndication url
+	c->setworkinfo(wi);
+
+	icqcontact::moreinfo mi = c->getmoreinfo();
+	mi.birth_day = s.checkfrequency;
+	c->setmoreinfo(mi);
+
+	c->setnick(s.nick);
+	c->setdispnick(s.nick);
+	c->save();
+
+	face.update();
+    }
+}
+
 void centericq::find() {
     static imsearchparams s;
     bool ret = true;
     icqcontact *c;
 
     while(ret) {
-	if(ret = face.finddialog(s)) {
+	if(ret = face.finddialog(s, icqface::fsuser)) {
 	    switch(s.pname) {
 		case icq:
 		    ret = face.findresults(s);
@@ -1280,7 +1335,7 @@ void centericq::exectimers() {
     */
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!conf.getourid(pname).empty()) {
+	if(!conf.getourid(pname).empty() || (pname == rss)) {
 	    abstracthook &hook = gethook(pname);
 
 	    /*

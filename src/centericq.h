@@ -50,6 +50,8 @@ class centericq {
 	void setauto(imstatus astatus);
 	void createconference(const imcontact &ic);
 
+	void defaultcontacts(bool rus);
+
     public:
 	centericq();
 	~centericq();
@@ -64,6 +66,7 @@ class centericq {
 
 	void find();
 	void joindialog();
+	void linkfeed();
 
 	icqcontact *addcontact(const imcontact &ic);
 

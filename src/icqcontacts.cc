@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.43 2002/11/29 17:34:30 konst Exp $
+* $Id: icqcontacts.cc,v 1.44 2003/07/12 17:14:21 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,6 +94,7 @@ void icqcontacts::load() {
 			break;
 
 		    case infocard:
+		    case rss:
 			c = new icqcontact(imcontact(atol(ent->d_name+1), pname));
 			break;
 
@@ -117,35 +118,8 @@ void icqcontacts::load() {
 	closedir(d);
     }
 
-    checkdefault();
-
     if(!get(contactroot)) {
 	add(new icqcontact(contactroot));
-    }
-}
-
-void icqcontacts::checkdefault() {
-    protocolname pname;
-    icqcontact *c;
-    int i;
-    bool found;
-
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!conf.getourid(pname).empty()) {
-	    for(i = 0, found = false; i < count && !found; i++) {
-		c = (icqcontact *) at(i);
-		if(c->getdesc() != contactroot) {
-		    found = (c->getdesc().pname == pname);
-		}
-	    }
-
-	    if(!found)
-	    switch(pname) {
-		case icq:
-		    addnew(imcontact(17502151, pname), false);
-		    break;
-	    }
-	}
     }
 }
 

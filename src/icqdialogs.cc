@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.116 2003/06/20 19:24:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.117 2003/07/12 17:14:22 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -100,8 +100,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 	conf.getcolor(cp_dialog_selected)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
-	_("Remove"), _("Load"), 0));
+	conf.getcolor(cp_dialog_selected), _("Remove"), _("Load"), 0));
 
     db.addkey(KEY_DC, 0);
 
@@ -159,7 +158,7 @@ bool icqface::sprofmanager(string &name, string &act) {
     return r;
 }
 
-bool icqface::finddialog(imsearchparams &s, bool users) {
+bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     int n, b, i;
     int nuin, ninfo, nloc, nwork, nonl;
     bool finished, ret, proceed;
@@ -175,7 +174,7 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
     imsearchparams ts;
 
     for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
-	if(!users)
+	if(subj == fschannel)
 	if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
 	    continue;
 
@@ -205,19 +204,36 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
 
-    if(users) {
-	db.getwindow()->set_title(conf.getcolor(cp_dialog_highlight), _(" Find/add user(s) "));
-	db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-	    _("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
-	db.getbar()->item = 3;
+    switch(subj) {
+	case fsuser:
+	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+		_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
+	    break;
 
-    } else {
-	db.getwindow()->set_title(conf.getcolor(cp_dialog_highlight), _(" Join create a channel/conference "));
-	db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-	    _("cLear"), _("Change"), _("Join/Create"), 0));
-	db.getbar()->item = 1;
+	case fschannel:
+	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+		_("cLear"), _("Change"), _("Join/Create"), 0));
+	    break;
 
+	case fsrss:
+	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+		_("cLear"), _("Change"), _("lInk"), 0));
+	    break;
     }
+
+    struct {
+	char *title;
+	int item;
+
+    } dlgparam[fs_size] = {
+	{ _(" Find/add user(s) "), 3 },
+	{ _(" Join/create a channel/conference "), 1 },
+	{ _(" Link an RSS feed "), 1 }
+
+    };
+
+    db.getwindow()->set_title(conf.getcolor(cp_dialog_highlight), dlgparam[subj].title);
+    db.getbar()->item = dlgparam[subj].item;
 
     db.addautokeys();
     db.idle = &dialogidle;
@@ -229,32 +245,38 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	tree.clear();
 
 	if(protchanged) {
-	    if(users) {
-		services = gethook(s.pname).getservices(servicetype::search);
+	    switch(subj) {
+		case fsuser:
+		    services = gethook(s.pname).getservices(servicetype::search);
 
-		if((iservice = find(services.begin(), services.end(), s.service)) == services.end())
-		    s.service = "";
+		    if((iservice = find(services.begin(), services.end(), s.service)) == services.end())
+			s.service = "";
 
-		if(s.service.empty())
-		if((iservice = services.begin()) != services.end()) {
-		    s.service = *iservice;
-		    s.flexparams = gethook(s.pname).getsearchparameters(s.service);
-		}
-	    } else {
-		services = gethook(s.pname).getservices(servicetype::groupchat);
+		    if(s.service.empty())
+		    if((iservice = services.begin()) != services.end()) {
+			s.service = *iservice;
+			s.flexparams = gethook(s.pname).getsearchparameters(s.service);
+		    }
+		    break;
 
-		if(s.service.empty())
-		if((iservice = services.begin()) != services.end())
-		    s.service = *iservice;
+		case fschannel:
+		    services = gethook(s.pname).getservices(servicetype::groupchat);
+
+		    if(s.service.empty())
+		    if((iservice = services.begin()) != services.end())
+			s.service = *iservice;
+		    break;
 	    }
 
 	    protchanged = false;
 	}
 
-	i = tree.addnode(_(" Network "));
-	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname) + " ");
+	if(subj != fsrss) {
+	    i = tree.addnode(_(" Network "));
+	    tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname) + " ");
+	}
 
-	if(users)
+	if(subj != fschannel)
 	switch(s.pname) {
 	    case icq:
 		i = tree.addnode(_(" UIN "));
@@ -325,7 +347,13 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 		break;
 	}
 
-	if(users && s.pname == irc && s.nick.empty()) {
+	if(subj == fsrss) {
+	    i = tree.addnode(_(" Feed Parameters "));
+	    tree.addleaff(i, 0, 33, _(" XML export URL : %s "), s.url.c_str());
+	    tree.addleaff(i, 0, 34, _(" Check frequency (hours) : %lu "), s.checkfrequency);
+	}
+
+	if((subj == fsuser) && s.pname == irc && s.nick.empty()) {
 	    i = tree.addnode(_(" Details "));
 	    tree.addleaff(i, 0, 26, _(" Channel : %s "), s.room.c_str());
 
@@ -341,12 +369,12 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	    }
 	}
 
-	if(users && s.pname == msn && s.nick.empty()) {
+	if((subj == fsuser) && s.pname == msn && s.nick.empty()) {
 	    i = tree.addnode(_(" Show users who have you on their list "));
 	    tree.addleaff(i, 0, 30, " %s ", stryesno(s.reverse));
 	}
 
-	if(!users) {
+	if(subj == fschannel) {
 	    i = tree.addnode(_(" Name/Title "));
 	    tree.addleaf(i, 0, 11, " " + s.nick + " ");
 
@@ -365,7 +393,8 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 
 	finished = !db.open(n, b, (void **) &i);
 
-	if(!users) b += 2;
+	if(subj != fsuser)
+	    b += 2;
 
 	if(!finished)
 	switch(b) {
@@ -417,7 +446,7 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 			break;
 
 		    case 10: s.uin = atol(inputstr(_("UIN: "), strint(s.uin)).c_str()); break;
-		    case 11: s.nick = inputstr(users ? _("Nickname: ") : _("Name/Title: "), s.nick); break;
+		    case 11: s.nick = inputstr(subj != fschannel ? _("Nickname: ") : _("Name/Title: "), s.nick); break;
 		    case 12: s.email = inputstr(_("E-Mail: "), s.email); break;
 		    case 13: s.firstname = inputstr(_("First name: "), s.firstname); break;
 		    case 14: s.lastname = inputstr(_("Last name: "), s.lastname); break;
@@ -445,6 +474,8 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 			}
 			break;
 		    case 32: s.password = inputstr(_("Password: "), s.password, '*'); break;
+		    case 33: s.url = inputstr(_("URL: "), s.url); break;
+		    case 34: s.checkfrequency = atol(inputstr(_("Check frequency: "), strint(s.checkfrequency)).c_str()); break;
 		}
 
 		if(i >= 100) {
@@ -531,6 +562,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	    string(ri.password.size(), '*').c_str());
     }
 
+    if(passinfo.pname != rss)
     if(passinfo.pname == icq && c->getdesc() == contactroot || !ourdetails ||
     (ourdetails && capab.count(hookcapab::flexiblereg) && ri.params.empty())) {
 	CHECKGENERAL;
@@ -592,6 +624,12 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 		tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno(bi.requiresauth));
 	    }
 	}
+    }
+
+    if(passinfo.pname == rss) {
+	i = tree->addnode(_(" Feed Parameters "));
+	tree->addleaff(i, 0, 48, _(" XML export URL : %s "), wi.homepage.c_str());
+	tree->addleaff(i, 0, 49, _(" Check frequency (hours) : %lu "), mi.birth_day);
     }
 
     if(capab.count(hookcapab::changeabout))
@@ -759,6 +797,8 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		    if(inputstr(_("Check the new password: "), "", '*') != ri.password)
 			ri.password = "";
 		    break;
+		case 48: wi.homepage = inputstr(_("URL: "), wi.homepage); break;
+		case 49: mi.birth_day = atol(inputstr(_("Check frequency: "), strint(mi.birth_day)).c_str()); break;
 		default:
 		    if(citem >= 100) {
 			vector<pair<string, string> >::iterator ifp = ri.params.begin()+citem-100;
@@ -1075,7 +1115,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
 
 	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
-		if(rus[pname] && !conf.getourid(pname).empty())
+		if(rus[pname])
+		if(!conf.getourid(pname).empty() || pname == rss)
 		    tmp += conf.getprotocolname(pname) + " ";
 
 	    t.addleaff(i, 0,  3, _(" Russian win/koi translation for : %s"), tmp.c_str());
@@ -1123,7 +1164,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 				icqconf::rcdontchange;
 			break;
 		    case 3:
-			if(hasany) selectproto(rus); else
+			if(hasany) selectproto(rus, true); else
 			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
 				rus[pname] = !rus[pname];
 			break;
@@ -1223,21 +1264,21 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     return success;
 }
 
-void icqface::selectproto(bool chatmode[]) {
+void icqface::selectproto(bool prots[], bool irss) {
     static int saveelem = 0;
     int i, protmax;
     bool r, finished = false;
 
     protocolname pname;
-    protocolname tempchatmode[protocolname_size];
-    bool achatmode[protocolname_size];
+    protocolname tempprots[protocolname_size];
+    bool aprots[protocolname_size];
 
     i = 0;
-    memcpy(achatmode, chatmode, sizeof(achatmode));
+    memcpy(aprots, prots, sizeof(aprots));
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1)
-	if(!conf.getourid(pname).empty())
-	    tempchatmode[i++] = pname;
+	if(!conf.getourid(pname).empty() || (irss && pname == rss))
+	    tempprots[i++] = pname;
 
     protmax = i;
 
@@ -1256,14 +1297,14 @@ void icqface::selectproto(bool chatmode[]) {
 	m.clear();
 
 	for(i = 0; i < protmax; i++)
-	    m.additemf(0, i, "[%c] %s", achatmode[tempchatmode[i]] ? 'x' : ' ',
-		conf.getprotocolname(tempchatmode[i]).c_str());
+	    m.additemf(0, i, "[%c] %s", aprots[tempprots[i]] ? 'x' : ' ',
+		conf.getprotocolname(tempprots[i]).c_str());
 
 	m.setpos(saveelem);
 
 	switch(m.open()) {
 	    case -2:
-		achatmode[tempchatmode[m.getpos()]] = !achatmode[tempchatmode[m.getpos()]];
+		aprots[tempprots[m.getpos()]] = !aprots[tempprots[m.getpos()]];
 		break;
 
 	    default:
@@ -1275,7 +1316,7 @@ void icqface::selectproto(bool chatmode[]) {
     m.close();
 
     if(m.getlastkey() != KEY_ESC)
-	memcpy(chatmode, achatmode, sizeof(achatmode));
+	memcpy(prots, aprots, sizeof(aprots));
 }
 
 int icqface::editaboutkeys(texteditor &e, int k) {

@@ -1,9 +1,9 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.35 2003/07/07 18:51:00 konst Exp $
+* $Id: abstracthook.cc,v 1.36 2003/07/12 17:14:23 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "aimhook.h"
 #include "irchook.h"
 #include "jabberhook.h"
+#include "rsshook.h"
 
 #include <time.h>
 
@@ -312,6 +313,9 @@ abstracthook &gethook(protocolname pname) {
 #endif
 #ifdef BUILD_JABBER
 	case jabber: return jhook;
+#endif
+#ifdef BUILD_RSS
+	case rss: return rhook;
 #endif
     }
 
