@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.34 2002/07/13 11:18:57 konst Exp $
+* $Id: irchook.cc,v 1.35 2002/07/15 15:20:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -222,11 +222,12 @@ void irchook::removeuser(const imcontact &ic) {
     if(online()) {
 	if(!ischannel(ic)) {
 	    firetalk_im_remove_buddy(handle, ic.nickname.c_str());
-	} else {
-	    vector<channelInfo>::iterator i;
-	    i = find(channels.begin(), channels.end(), ic.nickname);
-	    if(i != channels.end()) i->contactlist = false;
 	}
+    }
+
+    if(ischannel(ic)) {
+	vector<channelInfo>::iterator i = find(channels.begin(), channels.end(), ic.nickname);
+	if(i != channels.end()) i->contactlist = false;
     }
 }
 
@@ -482,7 +483,7 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 	    if(!r) r = !ic->contactlist;
 	    if(r) {
 		icqcontact *c = clist.addnew(imcontact(iac->name, irc), false);
-		c->setstatus(iac->joined ? available : offline);
+		c->setstatus((iac->joined && gethook(irc).logged()) ? available : offline);
 	    }
 	}
     }
@@ -507,7 +508,6 @@ void irchook::saveconfig() const {
 	for(ic = savech.begin(); ic != savech.end(); ic++)
 	    f << "channel\t" << ic->name
 		<< "\t" << (ic->joined ? "1" : "0")
-		<< "\t" << (ic->contactlist ? "1" : "0")
 		<< endl;
 
 	f.close();
@@ -531,7 +531,7 @@ void irchook::loadconfig() {
 	    if(param == "channel") {
 		channels.push_back(channelInfo(getword(buf)));
 		channels.back().joined = (getword(buf) == "1");
-		channels.back().contactlist = (buf == "1");
+		channels.back().contactlist = clist.get(imcontact(channels.back().name, irc));
 	    }
 	}
 

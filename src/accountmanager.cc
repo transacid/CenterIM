@@ -114,15 +114,15 @@ void accountmanager::exec() {
 	    switch(action) {
 		case 1:
 		    tmp = face.inputstr(spname + _(" user name: "), account.nickname);
-		    if(face.getlastinputkey() == KEY_ENTER && !tmp.empty()) account.nickname = tmp;
+		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) account.nickname = tmp;
 		    break;
 		case 2:
 		    i = strtoul(face.inputstr(spname + _(" uin: "), i2str(account.uin)).c_str(), 0, 0);
-		    if(face.getlastinputkey() == KEY_ENTER && i) account.uin = i;
+		    if(face.getlastinputkey() != KEY_ESC && i) account.uin = i;
 		    break;
 		case 5:
 		    tmp = face.inputstr(spname + _(" password: "), account.password, '*');
-		    if(face.getlastinputkey() == KEY_ENTER && !tmp.empty())
+		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty())
 			account.password = tmp;
 		    break;
 		case 6:
@@ -151,7 +151,7 @@ void accountmanager::exec() {
 
 		    tmp = face.inputstr(spname + _(" server address: "), tmp);
 
-		    if(face.getlastinputkey() == KEY_ENTER && !tmp.empty()) {
+		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
 			if((pos = tmp.find(":")) != -1) {
 			    account.server = tmp.substr(0, pos);
 			    account.port = strtoul(tmp.substr(pos+1).c_str(), 0, 0);

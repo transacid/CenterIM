@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.106 2002/07/15 14:44:59 konst Exp $
+* $Id: centericq.cc,v 1.107 2002/07/15 15:20:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -122,7 +122,7 @@ bool centericq::checkpasswords() {
 		    if(ia.password.empty()) {
 			r = false;
 			break;
-		    } else if(face.getlastinputkey() == KEY_ENTER) {
+		    } else if(face.getlastinputkey() != KEY_ESC) {
 			conf.setourid(ia);
 		    }
 		}
@@ -256,7 +256,7 @@ void centericq::mainloop() {
 
 	    case ACT_RENAME:
 		text = face.inputstr(_("New nickname to show: "), c->getdispnick());
-		if(face.getlastinputkey() == KEY_ENTER) {
+		if(face.getlastinputkey() != KEY_ESC) {
 		    c->setdispnick(text);
 		    face.update();
 		}

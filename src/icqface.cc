@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.123 2002/07/10 09:23:31 konst Exp $
+* $Id: icqface.cc,v 1.124 2002/07/15 15:20:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1670,6 +1670,7 @@ bool icqface::eventedit(imevent &ev) {
 
     }
 
+    editdone = false;
     restoreworkarea();
     status("");
     return r;
