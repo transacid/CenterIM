@@ -135,8 +135,12 @@ void jab_start(jconn j)
 	XML_SetUserData(j->parser, (void *)j);
 	XML_SetElementHandler(j->parser, startElement, endElement);
 	XML_SetCharacterDataHandler(j->parser, charData);
+
+	if (j->cw_state & CW_CONNECT_BLOCKING)
+	    j->fd = make_netsocket(j->port, j->user->server, NETSOCKET_CLIENT, j->ssl);
+	else
+	    j->fd = make_nb_netsocket(j->port, j->user->server, NETSOCKET_CLIENT, j->ssl, &j->cw_state);
 	
-	j->fd = make_nb_netsocket(j->port, j->user->server, NETSOCKET_CLIENT, j->ssl, &j->cw_state);
 	if(j->fd < 0) {
 	    STATE_EVT(JCONN_STATE_OFF);
 	    return;
