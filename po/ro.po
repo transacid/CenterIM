@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Centericq 3.20.5 \n"
-"POT-Creation-Date: 2002-07-16 20:57+0300\n"
+"POT-Creation-Date: 2002-07-30 13:43+0300\n"
 "PO-Revision-Date: 2001 Feb 5 10:30 EET\n"
 "Last-Translator: Ovidiu Ghinet <oghinet@doctor.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,7 +122,7 @@ msgstr "+ deconectat"
 msgid "icq disconnection reason"
 msgstr "+ deconectat"
 
-#: src/hooks/icqhook.cc:876 src/hooks/yahoohook.cc:543
+#: src/hooks/icqhook.cc:876 src/hooks/yahoohook.cc:552
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "va adaugat la lista lui/ei de contacte"
@@ -272,74 +272,74 @@ msgstr "+ deconectat"
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ conectare la serverul icq"
 
-#: src/hooks/yahoohook.cc:240
+#: src/hooks/yahoohook.cc:239
 #, fuzzy, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ conectare la serverul icq"
 
-#: src/hooks/yahoohook.cc:244
+#: src/hooks/yahoohook.cc:251
 #, fuzzy, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ conectare la serverul icq"
 
-#: src/hooks/yahoohook.cc:393
+#: src/hooks/yahoohook.cc:400
 #, fuzzy
 msgid "+ [yahoo] logged in"
 msgstr "+ conectat"
 
-#: src/hooks/yahoohook.cc:398
+#: src/hooks/yahoohook.cc:405
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:403
+#: src/hooks/yahoohook.cc:410
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:404
+#: src/hooks/yahoohook.cc:411
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:474
+#: src/hooks/yahoohook.cc:481
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:477
+#: src/hooks/yahoohook.cc:484
 msgid "Current conference members are: "
 msgstr ""
 
-#: src/hooks/yahoohook.cc:494
+#: src/hooks/yahoohook.cc:501
 msgid "Auto-joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:508
+#: src/hooks/yahoohook.cc:515
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:523
+#: src/hooks/yahoohook.cc:530
 #, c-format
 msgid "The user %s has left the conference"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:547
+#: src/hooks/yahoohook.cc:556
 #, fuzzy
 msgid "the message was: "
 msgstr "Pagina web"
 
-#: src/hooks/yahoohook.cc:564
+#: src/hooks/yahoohook.cc:581
 #, fuzzy, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ conectare la serverul icq"
 
-#: src/hooks/yahoohook.cc:571
+#: src/hooks/yahoohook.cc:588
 #, fuzzy, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ conectare la serverul icq"
 
-#: src/hooks/yahoohook.cc:576
+#: src/hooks/yahoohook.cc:593
 #, fuzzy, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ conectare la serverul icq"
@@ -1487,7 +1487,7 @@ msgstr "Interese"
 msgid "Background"
 msgstr "Fundal/Trecut"
 
-#: src/icqface.cc:904 src/icqface.cc:1877
+#: src/icqface.cc:904 src/icqface.cc:1878
 msgid "F2 to URLs, ESC close"
 msgstr "F2 spre URL-uri, ESC inchide"
 
@@ -1615,41 +1615,41 @@ msgstr "+ nici un URL in acest context"
 msgid "URLs within the current context"
 msgstr "URL-uri in acest context"
 
-#: src/icqface.cc:1610 src/icqface.cc:1895
+#: src/icqface.cc:1610 src/icqface.cc:1896
 #, fuzzy, c-format
 msgid "Outgoing %s to %s"
 msgstr "Scrie un mesaj lui %s, %lu"
 
-#: src/icqface.cc:1613 src/icqface.cc:1784
+#: src/icqface.cc:1613 src/icqface.cc:1785
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X trimite, Ctrl-P multiple, Ctrl-O arhiva, Alt-? detalii,ESC anuleaza"
 
-#: src/icqface.cc:1896
+#: src/icqface.cc:1897
 #, c-format
 msgid "Sent on %s"
 msgstr "Trimis %s"
 
-#: src/icqface.cc:1899
+#: src/icqface.cc:1900
 #, fuzzy, c-format
 msgid "Incoming %s from %s"
 msgstr "Contacte de la %s, %lu"
 
-#: src/icqface.cc:1900
+#: src/icqface.cc:1901
 #, fuzzy, c-format
 msgid "Received on %s"
 msgstr "%s, primit %s"
 
-#: src/icqface.cc:2001
+#: src/icqface.cc:2002
 #, c-format
 msgid "History for %s, %d events total"
 msgstr ""
 
-#: src/icqface.cc:2004
+#: src/icqface.cc:2005
 msgid "S search, L again, ESC cancel"
 msgstr "S cauta, L din nou, ESC anuleaza"
 
-#: src/icqface.cc:2010
+#: src/icqface.cc:2011
 #, fuzzy
 msgid "search for: "
 msgstr "cautare dupa: "
