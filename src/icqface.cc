@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.66 2002/01/19 15:36:03 konst Exp $
+* $Id: icqface.cc,v 1.67 2002/01/21 14:24:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -635,6 +635,7 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     mainw.write(x, WORKAREA_Y1+5, conf.getcolor(cp_main_text), bi.phone);
     mainw.write(x, WORKAREA_Y1+6, conf.getcolor(cp_main_text), bi.fax);
     mainw.write(x, WORKAREA_Y1+7, conf.getcolor(cp_main_text), bi.cellular);
+    mainw.write(x, WORKAREA_Y1+8, conf.getcolor(cp_main_text), mi.strtimezone());
 
     for(i = 0; !mi.homepage.empty(); i++) {
 	mainw.write(x, WORKAREA_Y1+10+i, conf.getcolor(cp_main_text),

@@ -58,5 +58,6 @@ class abstracthook {
 
 abstracthook &gethook(protocolname pname);
 struct tm *maketm(int hour, int minute, int day, int month, int year);
+char getsystemtimezone();
 
 #endif

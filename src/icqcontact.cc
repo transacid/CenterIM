@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.38 2002/01/17 15:36:33 konst Exp $
+* $Id: icqcontact.cc,v 1.39 2002/01/21 14:24:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,8 @@
 #include "centericq.h"
 #include "icqface.h"
 #include "abstracthook.h"
+
+#include <time.h>
 
 icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;
@@ -161,7 +163,7 @@ void icqcontact::save() {
 		winfo.company << endl <<
 		winfo.dept << endl <<
 		winfo.position << endl <<
-		endl <<
+		(int) minfo.timezone << endl <<
 		winfo.homepage << endl <<
 		(int) minfo.age << endl <<
 		(int) minfo.gender << endl <<
@@ -249,7 +251,7 @@ void icqcontact::load() {
 		case 21: winfo.company = buf; break;
 		case 22: winfo.dept = buf; break;
 		case 23: winfo.position = buf; break;
-		case 24: break;
+		case 24: minfo.timezone = atoi(buf); break;
 		case 25: winfo.homepage = buf; break;
 		case 26: minfo.age = atoi(buf); break;
 		case 27: minfo.gender = (imgender) atoi(buf); break;
@@ -617,6 +619,21 @@ const imcontact icqcontact::getdesc() const {
 }
 
 // ----------------------------------------------------------------------------
+
+const string icqcontact::moreinfo::strtimezone() const {
+    string r;
+    time_t t = time(0), rt;
+
+    r = (timezone > 0 ? "-" : "+");
+    r += i2str(abs(timezone/2)) + ":" + (timezone%2 ? "30" : "00");
+
+    rt = t + getsystemtimezone()*1800;
+    rt -= timezone*1800;
+
+    r += (string) ", " + ctime(&rt);
+
+    return r;
+}
 
 const string icqcontact::moreinfo::strbirthdate() const {
     string r;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.40 2002/01/21 10:50:41 konst Exp $
+* $Id: icqhook.cc,v 1.41 2002/01/21 14:24:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -401,6 +401,8 @@ bool icqhook::regattempt(unsigned int &auin, const string apassword) {
 	tv.tv_sec = 30;
 	tv.tv_usec = 0;
 
+	select(hsockfd+1, &rfds, &wfds, &efds, &tv);
+
 	if(isoursocket(rfds, wfds, efds)) {
 	    main();
 	}
@@ -497,6 +499,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
 
     home.zip = i2str(cbinfo.zip);
     home.country = cbinfo.country;
+    home.timezone = getsystemtimezone();
 
     /* more information */
 
@@ -556,7 +559,10 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 	getstring(f, buf); cli.getSelfContact()->setFirstName(buf);
 	getstring(f, buf); cli.getSelfContact()->setLastName(buf);
 	f.close();
+
+	cli.getSelfContact()->getMainHomeInfo().timezone = getsystemtimezone();
 	cli.uploadSelfDetails();
+
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
 }
@@ -786,6 +792,8 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cminfo.lang1 = hpage.lang1;
 		cminfo.lang2 = hpage.lang2;
 		cminfo.lang3 = hpage.lang3;
+
+		cminfo.timezone = home.timezone;
 
 		/* work information */
 

@@ -38,8 +38,10 @@ class icqcontact {
 	    string homepage;
 	    unsigned int birth_day, birth_month, birth_year;
 	    unsigned short lang1, lang2, lang3;
+	    signed char timezone;
 
 	    const string strbirthdate() const;
+	    const string strtimezone() const;
 	};
 
 	struct workinfo {
