@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.54 2004/02/14 23:43:43 konst Exp $
+* $Id: abstracthook.cc,v 1.55 2004/03/27 12:05:53 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -232,6 +232,18 @@ string abstracthook::ruscrlfconv(const string &tdir, const string &text) {
 string abstracthook::rusconv(const string &tdir, const string &text) {
     string r;
 
+    if(!conf.getcpconvert(proto) && tdir.find("u") == -1)
+	return text;
+
+#ifdef HAVE_ICONV
+    if(tdir == "kw") r = siconv(text, conf.getconvertto(proto), conf.getconvertfrom(proto)); else
+    if(tdir == "wk") r = siconv(text, conf.getconvertfrom(proto), conf.getconvertto(proto)); else
+    if(tdir == "ku") r = siconv(text, conf.getconvertto(proto), "utf-8"); else
+    if(tdir == "uk") r = siconv(text, "utf-8", conf.getconvertto(proto)); else
+#endif
+	r = text;
+
+#ifndef HAVE_ICONV
     static unsigned char kw[] = {
 	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
 	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
@@ -258,29 +270,20 @@ string abstracthook::rusconv(const string &tdir, const string &text) {
     string::const_iterator i;
     unsigned char *table = 0;
 
-#ifdef HAVE_ICONV
-    if(tdir == "kw") r = siconv(text, conf.getconvertto(proto), conf.getconvertfrom(proto)); else
-    if(tdir == "wk") r = siconv(text, conf.getconvertfrom(proto), conf.getconvertto(proto)); else
-    if(tdir == "ku") r = siconv(text, conf.getconvertto(proto), "utf-8"); else
-    if(tdir == "uk") r = siconv(text, "utf-8", conf.getconvertto(proto)); else
-#endif
-	r = text;
+    if(tdir == "kw") table = kw; else
+    if(tdir == "wk") table = wk;
 
-    if(text == r) {
-	if(tdir == "kw") table = kw; else
-	if(tdir == "wk") table = wk;
+    if(table) {
+	r = "";
 
-	if(table) {
-	    r = "";
-
-	    for(i = text.begin(); i != text.end(); ++i) {
-		c = (unsigned char) *i;
-		c &= 0377;
-		if(c & 0200) c = table[c & 0177];
-		r += c;
-	    }
+	for(i = text.begin(); i != text.end(); ++i) {
+	    c = (unsigned char) *i;
+	    c &= 0377;
+	    if(c & 0200) c = table[c & 0177];
+	    r += c;
 	}
     }
+#endif
 
     return r;
 }

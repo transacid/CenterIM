@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.185 2004/03/20 16:49:08 konst Exp $
+* $Id: centericq.cc,v 1.186 2004/03/27 12:05:52 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,7 +87,7 @@ void centericq::exec() {
 
     if(conf.getouridcount()) {
 	conf.checkdir();
-//      conf.load();
+	conf.load();
 	groups.load();
 	clist.load();
 	lst.load();

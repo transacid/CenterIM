@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.141 2004/03/09 21:46:26 konst Exp $
+* $Id: icqdialogs.cc,v 1.142 2004/03/27 12:05:53 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,7 +32,7 @@
 #include "abstracthook.h"
 #include "ljhook.h"
 
-#include <libicq2000/userinfoconstants.h>
+#include <libicq2000/constants.h>
 
 const char *stragerange(ICQ2000::AgeRange r) {
     switch(r) {
@@ -1429,7 +1429,8 @@ void icqface::selectproto(bool prots[], spmode mode) {
 		continue;
 
 	} else {
-	    if(mode != spIMplusRSS || pname != rss) {
+	    if(mode != spIMplusRSS || pname != rss)
+	    if(pname != livejournal || mode == spIMonly) {
 		if(gethook(pname).getCapabs().count(hookcapab::nochat))
 		    continue;
 
