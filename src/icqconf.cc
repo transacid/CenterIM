@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.48 2002/03/04 14:40:52 konst Exp $
+* $Id: icqconf.cc,v 1.49 2002/03/07 12:42:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -716,7 +716,6 @@ void icqconf::constructevent(const string &event, const string &proto, const str
     imevent *ev = 0;
     imcontact cdest;
     string text, buf;
-    ifstream f;
     int pos;
 
     if(event.empty() && proto.empty() && dest.empty()) return; else
@@ -725,15 +724,9 @@ void icqconf::constructevent(const string &event, const string &proto, const str
 	exit(1);
     }
 
-    f.attach(STDIN_FILENO);
-
-    if(f.is_open()) {
-	while(getline(f, buf)) {
-	    if(!text.empty()) text += "\n";
-	    text += buf;
-	}
-
-	f.close();
+    while(getline(cin, buf)) {
+        if(!text.empty()) text += "\n";
+        text += buf;
     }
 
     if(proto == "icq") {
