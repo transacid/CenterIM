@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: kkiproc.cc,v 1.3 2001/08/03 09:21:14 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,8 @@
 */
 
 #include "kkiproc.h"
+
+#include <sys/ioctl.h>
 
 bool issuchpid(int pid) {
     string pdir = "/proc/" + i2str(pid);
@@ -102,13 +104,6 @@ time_t lastkeypress() {
     return t;
 }
 
-char *getcurtty() {
-    static char devname[32];
-
-    if(readlink("/proc/self/fd/0", devname, 32) != -1)
-    return devname; else return 0;
-}
-
 int dataready(int fd, int dowait) {
     struct timeval tv;
     fd_set fds;
@@ -120,7 +115,9 @@ int dataready(int fd, int dowait) {
     FD_SET(fd, &fds);
 
     if(select(fd+1, &fds, 0, 0, dowait ? 0 : &tv) != -1) {
-	rc = FD_ISSET(fd, &fds);
+	if(rc = FD_ISSET(fd, &fds)) {
+	    ioctl(fd, FIONREAD, &rc);
+	}
     } else {
 	rc = 0;
     }
@@ -150,4 +147,17 @@ char *gethostname() {
 
 char *getdomainname() {
     return getprocentry("/proc/kernel/domainname");
+}
+
+const char *getcurtty() {
+    static char buf[64];
+    int n;
+
+    sprintf(buf, "/proc/%lu/fd/0", getpid());
+    if((n = readlink(buf, buf, 64)) != -1) {
+	buf[n] = 0;
+	return buf;
+    }
+
+    return 0;
 }

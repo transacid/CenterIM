@@ -25,9 +25,9 @@ int dataready(int fd, int dowait);
 
 time_t lastkeypress();
 void detach(char *logfile);
-char *getcurtty();
 
 char *getprocentry(char *fname);
+const char *getcurtty();
 
 __KTOOL_END_C
 
