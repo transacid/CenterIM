@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.155 2004/06/24 08:30:59 konst Exp $
+* $Id: icqhook.cc,v 1.156 2004/06/24 19:16:23 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1072,19 +1072,24 @@ static string fixicqrtf(string msg) {
 
     static char *emoticons[] = {
 	":-)", ":-O", ":-|", ":-\\", ":-(", ":-*", "8-/", ":~(",
-	";-)", ">:-O", ":`(", ":-X", ":-P", "B-)", "O:-)", ":-D"
+	";-)", ">:-O", ":`(", ":-X", ":-P", "B-)", "O:-)", ":-D",
+	"*ANNOYED*", "*DISGUSTED*", "*DROOLING*", "*GIGGLING*",
+	"*JOKINGLY*", "*SHOCKED*", "*WHINNING*", "*SURPRISED*",
+	"*SURPRISED*", "*IN LOVE*"
     };
 
-    while((pos = msg.find("<##icqimage")) != -1) {
-	msg.erase(pos, 11);
+    for(pos = 0; (pos = msg.find("<##icqimage", pos)) != -1; ) {
 	if((bpos = msg.find(">", pos)) != -1) {
 	    sub = msg.substr(pos, bpos-pos);
+
 	    if(sub.size() > 2) sub.erase(0, sub.size()-2);
 	    n = hex2int(sub);
-	    msg.erase(pos, bpos-pos+1);
 
-	    if(n >= 0 && n <= 15) {
+	    if(n >= 0 && n <= 25) {
+		msg.erase(pos, bpos-pos+1);
 		msg.insert(pos, emoticons[n]);
+	    } else {
+		pos++;
 	    }
 	}
     }
