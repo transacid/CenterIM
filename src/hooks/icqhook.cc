@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.27 2001/12/14 16:19:11 konst Exp $
+* $Id: icqhook.cc,v 1.28 2001/12/19 15:13:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,7 +31,7 @@
 
 #include "userinfoconstants.h"
 
-#define PERIOD_ICQPING  60
+#define PERIOD_ICQPOLL  5
 
 icqhook ihook;
 
@@ -135,9 +135,9 @@ void icqhook::exectimers() {
     time_t tcurrent = time(0);
 
     if(logged()) {
-	if(tcurrent-timer_ping > PERIOD_ICQPING) {
-	    cli.PingServer();
-	    time(&timer_ping);
+	if(tcurrent-timer_poll > PERIOD_ICQPOLL) {
+	    cli.Poll();
+	    time(&timer_poll);
 	} else if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
 	    resolve();
 	    time(&timer_resolve);
@@ -300,7 +300,7 @@ void icqhook::sendnewuser(const imcontact c) {
     if(logged()) {
 	Contact ic(c.uin);
 	cli.addContact(ic);
-	cli.fetchSimpleContactInfo(&ic);
+	cli.fetchDetailContactInfo(cli.getContact(c.uin));
     }
 }
 
@@ -388,7 +388,7 @@ void icqhook::requestinfo(const imcontact c) {
     if(logged()) {
 	Contact ic(c.uin);
 	cli.addContact(ic);
-	cli.fetchSimpleContactInfo(&ic);
+	cli.fetchDetailContactInfo(cli.getContact(c.uin));
     }
 }
 
@@ -409,7 +409,7 @@ const string icqhook::getcountryname(int code) const {
 void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
-    time(&timer_ping);
+    time(&timer_poll);
     timer_resolve = time(0)-PERIOD_RESOLVE+2;
 
     face.log(_("+ [icq] logged in"));
@@ -528,8 +528,8 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 void icqhook::contactlist_cb(ContactListEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
     char buf[64];
+    string lastip, sbuf;
     int ip;
-    string lastip;
 
     switch(ev->getType()) {
 	case ContactListEvent::StatusChange:
@@ -540,12 +540,25 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		c->setstatus(icq2imstatus(tev->getStatus()));
 
 		if(c->getstatus() != offline) {
-		    if(inet_ntop(AF_INET, &(ip = ic->getExtIP()), buf, 64))
-			lastip = buf;
+		    c->setlastseen();
 
-		    if(inet_ntop(AF_INET, &(ip = ic->getLanIP()), buf, 64)) {
-			if(!lastip.empty()) lastip += " ";
-			lastip += buf;
+		    if(inet_ntop(AF_INET, &(ip = ntohl(ic->getExtIP())), buf, 64)) {
+			lastip = buf;
+		    }
+
+		    if(lastip.find_first_not_of(".0") != -1) {
+			if(inet_ntop(AF_INET, &(ip = ntohl(ic->getLanIP())), buf, 64)) {
+			    sbuf = buf;
+
+			    if(sbuf.find_first_not_of(".0") != -1) {
+				if(lastip != sbuf) {
+				    if(!lastip.empty()) lastip += " ";
+				    lastip += sbuf;
+				}
+			    }
+			}
+
+			c->setlastip(lastip);
 		    }
 		}
 	    }
@@ -559,8 +572,11 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		    c = clist.get(contactroot);
 		}
 
-		icqcontact::basicinfo cbinfo = c->getbasicinfo();
 		MainHomeInfo &home = ic->getMainHomeInfo();
+		HomepageInfo &hpage = ic->getHomepageInfo();
+
+		icqcontact::basicinfo cbinfo = c->getbasicinfo();
+		icqcontact::moreinfo cminfo = c->getmoreinfo();
 
 		cbinfo.fname = rusconv("wk", ic->getFirstName());
 		cbinfo.lname = rusconv("wk", ic->getLastName());
@@ -577,11 +593,13 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
 		cbinfo.country = getcountryname(home.country);
 
-		icqcontact::moreinfo cminfo = c->getmoreinfo();
-		HomepageInfo &hpage = ic->getHomepageInfo();
-
 		cminfo.age = hpage.age;
-		cminfo.gender = genderUnspec;
+
+		cminfo.gender =
+		    hpage.sex == 1 ? genderFemale :
+		    hpage.sex == 2 ? genderMale :
+			genderUnspec;
+
 		cminfo.homepage = rusconv("wk", hpage.homepage);
 		cminfo.birth_day = hpage.birth_day;
 		cminfo.birth_month = hpage.birth_month;

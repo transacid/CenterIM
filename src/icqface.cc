@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.60 2001/12/14 16:30:06 konst Exp $
+* $Id: icqface.cc,v 1.61 2001/12/19 15:13:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -715,6 +715,7 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 		    switch(cinfo.pname) {
 			case infocard:
 			    updatedetails(c);
+			    showinfo = true;
 			    break;
 
 			default:
@@ -723,7 +724,6 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 		    }
 
 		    b = lastb;
-		    showinfo = true;
 		    continue;
 	    }
 

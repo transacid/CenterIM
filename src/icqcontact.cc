@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.35 2001/12/13 11:28:34 konst Exp $
+* $Id: icqcontact.cc,v 1.36 2001/12/19 15:13:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -461,7 +461,7 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 
     if(sf.size()) {
 	if(sf[0] == '!') {
-	    time_t lastmelody = 0;
+	    static time_t lastmelody = 0;
 
 	    if(time(0)-lastmelody < 5) return;
 	    time(&lastmelody);
@@ -521,6 +521,7 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 
 void icqcontact::setlastip(const string flastip) {
     lastip = flastip;
+    fupdated++;
 }
 
 const string icqcontact::getabout() const {

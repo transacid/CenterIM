@@ -13,7 +13,7 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	vector<int> rfds, wfds, efds;
 
-	time_t timer_reconnect, timer_ping, timer_resolve;
+	time_t timer_reconnect, timer_poll, timer_resolve;
 	bool fonline, flogged;
 	unsigned int reguin;
 
