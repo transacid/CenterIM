@@ -1623,6 +1623,9 @@ int texteditor::open() {
 		    if(prevshift) prevshift = curfile->markmode = false;
 		switch(k) {
 		    case '\r':
+			if(otherkeys)
+			if((*otherkeys)(*this, k) == -1) return -1;
+
 			if(insertmode || (curfile->lines->count == CURLINE+1)) {
 			    edenter(smarttab);
 			} else {
