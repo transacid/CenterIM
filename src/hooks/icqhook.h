@@ -23,6 +23,11 @@ class icqhook: public abstracthook, public SigC::Object {
 	    ackFetch
 	} syncstatus;
 
+	enum {
+	    Normal,
+	    SyncList
+	} blockmode;
+
 	time_t timer_poll;
 	bool fonline, flogged;
 	unsigned int reguin;
@@ -93,7 +98,8 @@ class icqhook: public abstracthook, public SigC::Object {
 	void sendupdateuserinfo(const icqcontact &c);
 
 	void synclist();
-	void getsyncstatus(int &tobestored);
+	void getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored, vector<icqcontact *> &needauth);
+	void sendaddauth();
 };
 
 extern icqhook ihook;

@@ -4,6 +4,7 @@
 #include "aimhook.h"
 #include "irchook.h"
 #include "icqcontacts.h"
+#include "eventmanager.h"
 
 #define clr(c)     conf.getcolor(c)
 
@@ -162,20 +163,35 @@ void imcontroller::icqupdatedetails() {
     }
 }
 
+void imcontroller::sendauthorization(vector<icqcontact *> &needauth) {
+    char buf[512];
+    sprintf(buf, _("%d contacts require authorization to be added. Request it now?"), needauth.size());
+
+    if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+	ihook.sendaddauth();
+    }
+}
+
 void imcontroller::icqsynclist() {
     bool fin;
-    int tobestored, attempt = 1;
+    int synchronized, attempt = 1;
     string msg;
+    vector<icqcontact *> needauth, tobestored;
 
     face.progress.show(_(" Contact list synchronization "));
-    face.progress.log(_("Starting the synchronization process"), tobestored);
+    face.progress.log(_("Starting the synchronization process"));
 
     for(fin = false; !fin; ) {
-	ihook.getsyncstatus(tobestored);
-	face.progress.log(_("Attempt #%d, %d contacts to be stored server-side"), attempt, tobestored);
+	ihook.getsyncstatus(synchronized, tobestored, needauth);
+	face.progress.log(_("Attempt #%d"), attempt);
+	face.progress.log(_(".. %d already synchronized, %d contacts to be stored"), synchronized, tobestored.size());
+
+	if(!needauth.empty()) {
+	    face.progress.log(_(".. %d contacts require authorization"), needauth.size());
+	}
 
 	msg = "";
-	if(!tobestored) msg = _("Finished");
+	if(tobestored.empty()) msg = _("Finished");
 	else if(!ihook.logged()) msg = _("Disconnected");
 	else if(attempt > 10) msg = _("Too many attempts, gave up");
 
@@ -190,6 +206,10 @@ void imcontroller::icqsynclist() {
 	}
 
 	attempt++;
+    }
+
+    if(!needauth.empty()) {
+	sendauthorization(needauth);
     }
 
     face.progress.hide();

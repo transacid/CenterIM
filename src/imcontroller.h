@@ -43,7 +43,9 @@ class imcontroller {
 	void icqupdatedetails();
 	void aimupdateprofile();
 	void ircchannels();
+
 	void icqsynclist();
+	void sendauthorization(vector<icqcontact *> &needauth);
 
     public:
 	imcontroller();

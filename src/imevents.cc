@@ -238,9 +238,16 @@ bool imurl::contains(const string &atext) const {
 
 // -- imauthorization class ---------------------------------------------------
 
-imauthorization::imauthorization(const imcontact &acont, imdirection adirection, bool agranted, const string &atext)
-: imevent(acont, adirection, authorization), granted(agranted),
-  text(atext.empty() ? _("Empty authorization request message") : atext) {
+imauthorization::imauthorization(const imcontact &acont, imdirection adirection,
+AuthType atype, const string &atext)
+: imevent(acont, adirection, authorization), authtype(atype) {
+
+    if(atext.empty() && authtype == Request)
+    switch(adirection) {
+	case outgoing: text = "Please accept my authorization to add you to my contact list."; break;
+	case incoming: text = _("Empty authorization request message"); break;
+    }
+
 }
 
 imauthorization::imauthorization(const imevent &ev) {
@@ -253,12 +260,18 @@ imauthorization::imauthorization(const imevent &ev) {
 
     if(m) {
 	text = m->text;
-	granted = m->granted;
+	authtype = m->authtype;
     }
 }
 
 string imauthorization::gettext() const {
-    return (string) _("* Authorization: ") + text;
+    string prefix;
+
+    prefix = (authtype == Request) ?
+	_("* Authorization request : ") :
+	_("* Authorization : ");
+
+    return prefix + text;
 }
 
 string imauthorization::getmessage() const {
@@ -268,7 +281,7 @@ string imauthorization::getmessage() const {
 void imauthorization::write(ofstream &f) const {
     imevent::write(f);
 
-    f << (granted ? "1" : "0") << endl <<
+    f << i2str((int) authtype) << endl <<
 	text << endl;
 }
 
@@ -278,15 +291,15 @@ void imauthorization::read(ifstream &f) {
     getstring(f, rdbuf);
     text = readblock(f);
 
-    granted = rdbuf == "1";
+    authtype = (AuthType) strtoul(rdbuf.c_str(), 0, 0);
 }
 
 bool imauthorization::empty() const {
     return false;
 }
 
-bool imauthorization::getgranted() const {
-    return granted;
+imauthorization::AuthType imauthorization::getauthtype() const {
+    return authtype;
 }
 
 bool imauthorization::contains(const string &atext) const {

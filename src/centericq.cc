@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.111 2002/08/14 10:16:35 konst Exp $
+* $Id: centericq.cc,v 1.112 2002/08/16 11:54:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -730,13 +730,13 @@ void centericq::readevent(const imevent &ev, bool &enough, bool &fin) {
 
 	case icqface::accept:
 	    em.store(imauthorization(ev.getcontact(),
-		imevent::outgoing, true, "accepted"));
+		imevent::outgoing, imauthorization::Granted, "accepted"));
 	    enough = true;
 	    break;
 
 	case icqface::reject:
 	    em.store(imauthorization(ev.getcontact(),
-		imevent::outgoing, false, "rejected"));
+		imevent::outgoing, imauthorization::Rejected, "rejected"));
 	    enough = true;
 	    break;
 
@@ -811,13 +811,13 @@ void centericq::history(const imcontact &cont) {
 		    case icqface::accept:
 			enough = true;
 			em.store(imauthorization(cont, imevent::outgoing,
-			    true, "accepted"));
+			    imauthorization::Granted, "accepted"));
 			break;
 
 		    case icqface::reject:
 			enough = true;
 			em.store(imauthorization(cont, imevent::outgoing,
-			    false, "rejected"));
+			    imauthorization::Rejected, "rejected"));
 			break;
 
 		    case icqface::cancel:

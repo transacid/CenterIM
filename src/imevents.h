@@ -115,19 +115,27 @@ class imsms: public imevent {
 };
 
 class imauthorization: public imevent {
+    public:
+	enum AuthType {
+	    Rejected = 0,
+	    Granted = 1,
+	    Request = 2,
+	    AuthType_size
+	};
+
     protected:
 	string text;
-	bool granted;
+	AuthType authtype;
 
     public:
 	imauthorization(const imevent &ev);
 	imauthorization(const imcontact &acont, imdirection adirection,
-	    bool granted, const string &atext);
+	    AuthType aatype, const string &atext = "");
 
 	string gettext() const;
 	string getmessage() const;
 
-	bool getgranted() const;
+	AuthType getauthtype() const;
 
 	bool empty() const;
 	bool contains(const string &atext) const;
