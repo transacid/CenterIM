@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.57 2001/12/08 10:18:33 konst Exp $
+* $Id: icqface.cc,v 1.58 2001/12/11 12:46:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -325,11 +325,11 @@ void icqface::fillcontactlist() {
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
     mcontacts->clear();
     clist.order();
-
+/*
     if(c = clist.get(contactroot))
     if(c->getmsgcount())
 	mcontacts->addleaf(0, conf.getcolor(cp_main_highlight), c, "#ICQ ");
-
+*/
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
@@ -395,11 +395,11 @@ void icqface::fillcontactlist() {
 		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
     }
-
+/*
     if(c = clist.get(contactroot))
     if(!c->getmsgcount())
 	mcontacts->addleaf(0, conf.getcolor(cp_clist_root), c, " ICQ ");
-
+*/
     if(!mainscreenblock) mcontacts->redraw();
 
     if(!savec || (!onlinefolder && online_added && conf.gethideoffline())) {
