@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.35 2002/10/04 16:58:54 konst Exp $
+* $Id: msnhook.cc,v 1.36 2002/10/15 15:29:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,6 +88,15 @@ void msnhook::connect() {
 
 void msnhook::disconnect() {
     if(online()) {
+	for(int i = 0; i < clist.count; i++) {
+	    icqcontact *c = (icqcontact *) clist.at(i);
+	    imcontact ic = c->getdesc();
+
+	    if(ic.pname == msn)
+	    if(!c->inlist())
+		removeuser(ic, false);
+	}
+
 	disconnected(0);
     }
 }
@@ -202,8 +211,16 @@ imstatus msnhook::getstatus() const {
 }
 
 void msnhook::removeuser(const imcontact &ic) {
-    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
-    MSN_RemoveContact(ic.nickname.c_str());
+    removeuser(ic, true);
+}
+
+void msnhook::removeuser(const imcontact &ic, bool report) {
+    if(online()) {
+	if(report)
+	    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
+
+	MSN_RemoveContact(ic.nickname.c_str());
+    }
 }
 
 bool msnhook::isourid(const string &nick) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.57 2002/09/24 16:20:49 konst Exp $
+* $Id: yahoohook.cc,v 1.58 2002/10/15 15:29:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -144,7 +144,7 @@ void yahoohook::disconnect() {
 
 	    if(ic.pname == yahoo)
 	    if(!c->inlist())
-		removeuser(ic);
+		removeuser(ic, false);
 	}
 
 	yahoo_logoff(cid);

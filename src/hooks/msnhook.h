@@ -23,6 +23,7 @@ class msnhook : public abstracthook {
 	static bool isourid(const string &nick);
 
 	void checkfriendly(icqcontact *c, const string friendlynick);
+	void removeuser(const imcontact &ic, bool report);
 
     public:
 	msnhook();

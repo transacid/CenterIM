@@ -26,6 +26,7 @@ class aimhook: public abstracthook {
 	void loadprofile();
 
 	void resolve();
+	void removeuser(const imcontact &ic, bool report);
 
 	static void connected(void *conn, void *cli, ...);
 	static void disconnected(void *conn, void *cli, ...);
