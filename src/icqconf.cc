@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.72 2002/07/12 18:01:43 konst Exp $
+* $Id: icqconf.cc,v 1.73 2002/08/02 16:16:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -343,7 +343,7 @@ void icqconf::loadsounds() {
 	    fo << "# *\tmeans default sound for all the contacts" << endl;
 	    fo << "# icq_<uin>\tfor icq contacts" << endl;
 	    fo << "# yahoo_<nickname>\tfor yahoo" << endl;
-	    fo << "# msn_<nickname>\tmsn contacts" << endl << "#" << endl;
+	    fo << "# .. etc. Similar for the other protocols" << endl << "#" << endl;
 
 	    fo << "# <event>\tcan be: ";
 	    for(isn = soundnames.begin(); isn != soundnames.end(); isn++) {
@@ -395,14 +395,24 @@ void icqconf::loadsounds() {
 	    if(it == imevent::imeventtype_size)
 		continue;
 
+	    c = 0;
+
 	    if(suin != "*") {
 		if((i = suin.find("_")) != -1) {
 		    skey = suin.substr(0, i);
 		    suin.erase(0, i+1);
 
-		    if(skey == "icq") c = clist.get(imcontact(strtoul(suin.c_str(), 0, 0), icq)); else
-		    if(skey == "yahoo") c = clist.get(imcontact(suin, yahoo)); else
-		    if(skey == "msn") c = clist.get(imcontact(suin, msn));
+		    imcontact ic;
+		    protocolname pname;
+
+		    for(pname = icq; pname != protocolname_size && skey != getprotocolname(pname); (int) pname += 1);
+
+		    if(pname != protocolname_size) {
+			if(pname == icq) ic = imcontact(strtoul(suin.c_str(), 0, 0), pname));
+			else ic = imcontact(suin, pname);
+
+			c = clist.get(ic);
+		    }
 		}
 	    } else {
 		c = clist.get(contactroot);
