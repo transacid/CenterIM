@@ -78,17 +78,10 @@ texteditor::~texteditor() {
 int texteditor::load(const string abuf, const string id) {
     int newfn = addwindow(strdup(id.c_str())), k;
     string buf = abuf;
-    string::iterator is;
     vector<string> lst;
     vector<string>::iterator i;
 
     setfnum(newfn);
-
-    is = buf.begin();
-    while((is = ::find(buf.begin(), buf.end(), '\r')) != buf.end()) {
-	buf.erase(is);
-	is++;
-    }
 
     breakintolines(buf, lst, wrap ? x2-x1 : 0);
 
