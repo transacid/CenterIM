@@ -71,9 +71,7 @@ class icqface {
 	verticalmenu mhist;
 
 	ofstream flog;
-	vector<string> extractedurls, lastlog;
-
-	mutable string fstatus;
+	vector<string> extractedurls, lastlog, fstatus;
 
 	linkedlist workareas;
 
@@ -143,7 +141,7 @@ class icqface {
 
 	void renderchathistory();
 	bool sprofmanager(string &name, string &act);
-	void showeventbottom(const imcontact &ic) const;
+	void showeventbottom(const imcontact &ic);
 
     public:
 	int extk;
@@ -177,7 +175,7 @@ class icqface {
 	void log(const string &text);
 	void log(const char *fmt, ...);
 
-	void status(const string &text) const;
+	void status(const string &text);
 
 	bool changestatus(protocolname &pname, imstatus &st);
 	int contextmenu(icqcontact *c);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.138 2002/11/26 12:24:49 konst Exp $
+* $Id: centericq.cc,v 1.139 2002/11/30 10:06:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1018,7 +1018,7 @@ void centericq::history(const imcontact &cont) {
 	}
 
 	face.restoreworkarea();
-	face.status("");
+	face.status("@");
 
 	while(!events.empty()) {
 	    delete events.back();

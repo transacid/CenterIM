@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.162 2002/11/26 12:24:50 konst Exp $
+* $Id: icqface.cc,v 1.163 2002/11/30 10:06:30 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1109,7 +1109,7 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 
     db.close();
     restoreworkarea();
-    status("");
+    status("@");
 }
 
 void icqface::makeprotocolmenu(verticalmenu &m) {
@@ -1602,10 +1602,27 @@ void icqface::log(const string &atext) {
     }
 }
 
-void icqface::status(const string &text) const {
+void icqface::status(const string &text) {
+    string t(text);
+
+    if(t == "@") {
+	if(!fstatus.empty()) fstatus.pop_back();
+	if(!fstatus.empty()) t = fstatus.back();
+
+    } else if(t == "#") {
+	if(!fstatus.empty()) t = fstatus.back();
+
+    } else {
+	fstatus.push_back(t);
+	while(fstatus.size() > 5)
+	    fstatus.erase(fstatus.begin());
+
+    }
+
     attrset(conf.getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
-    kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", (fstatus = text).c_str());
+
+    kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", t.c_str());
 }
 
 void icqface::blockmainscreen() {
@@ -1617,7 +1634,7 @@ void icqface::unblockmainscreen() {
     update();
 }
 
-void icqface::quickfind(verticalmenu *multi ) {
+void icqface::quickfind(verticalmenu *multi) {
     bool fin;
     string nick, disp, upnick, upcurrent;
     string::iterator is;
@@ -1765,7 +1782,7 @@ void icqface::showextractedurls() {
     }
 }
 
-void icqface::showeventbottom(const imcontact &ic) const {
+void icqface::showeventbottom(const imcontact &ic) {
     if(ischannel(ic)) {
 	status(_("^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"));
     } else {
@@ -1976,7 +1993,7 @@ bool icqface::eventedit(imevent &ev) {
 
     editdone = false;
     restoreworkarea();
-    status("");
+    status("@");
     return r;
 }
 
@@ -2152,7 +2169,7 @@ void icqface::chat(const imcontact &ic) {
 
     c->save();
     restoreworkarea();
-    status("");
+    status("@");
     inchat = false;
     update();
 }
@@ -2336,7 +2353,7 @@ void icqface::fullscreenize(const imevent *ev) {
     } while(k != KEY_ESC && k != KEY_F(9));
 
     unblockmainscreen();
-    status("");
+    status("@");
 
     w.close();
 }
@@ -2469,7 +2486,8 @@ void icqface::menuidle(verticalmenu &m) {
 	    vector<string> flog;
 	    vector<string>::iterator il;
 
-	    face.status(face.fstatus);
+	    face.status("#");
+
 	    flog = face.lastlog;
 	    face.lastlog.clear();
 
