@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.30 2002/11/18 16:33:26 konst Exp $
+* $Id: kkstrtext.cc,v 1.31 2002/12/12 14:26:06 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -468,6 +468,7 @@ string trailcut(const string &base, const string &delim) {
 string getword(string &base, const string &delim) {
     string sub;
     int i;
+    bool found = false;
 
     base = leadcut(base, delim);
     
@@ -476,10 +477,11 @@ string getword(string &base, const string &delim) {
 	sub.resize(i);
 	base.replace(0, i, "");
 	base = leadcut(base, delim);
+	found = true;
 	break;
     }
 
-    if(sub == base) base = "";
+    if(!found) base = "";
     return sub;
 }
 
