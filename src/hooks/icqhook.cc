@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.93 2002/08/14 10:16:37 konst Exp $
+* $Id: icqhook.cc,v 1.94 2002/08/15 08:25:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -110,6 +110,10 @@ void icqhook::connect() {
     icqconf::imaccount acc = conf.getourid(icq);
     int i;
     icqcontact *c;
+
+    if(acc.additional["autosync"].empty()) acc.additional["autosync"] = "1";
+    if(acc.additional["webaware"].empty()) acc.additional["webaware"] = "1";
+    conf.setourid(acc);
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
@@ -380,20 +384,25 @@ void icqhook::sendnewuser(const imcontact &c) {
 	cli.fetchSimpleContactInfo(cli.getContact(c.uin));
 	cli.fetchDetailContactInfo(cli.getContact(c.uin));
 
-	icqcontact *cc = clist.get(c);
-	if(cc)
-	if(cc->inlist()) {
-	    cli.uploadServerBasedContactList(cli.getContact(c.uin));
+	if(conf.getourid(icq).additional["autosync"] == "1") {
+	    icqcontact *cc = clist.get(c);
+	    if(cc)
+	    if(cc->inlist())
+		cli.uploadServerBasedContactList(cli.getContact(c.uin));
 	}
     }
 }
 
 void icqhook::removeuser(const imcontact &c) {
+    if(conf.getourid(icq).additional["autosync"] == "1")
     if(cli.getContact(c.uin).get()) {
 	icqcontact *cc = clist.get(c);
 	if(cc)
 	if(cc->inlist()) {
-	    cli.removeServerBasedContactList(cli.getContact(c.uin));
+	    ContactRef ic = cli.getContact(c.uin);
+	    ic->setAlias(cc->getnick());
+	    ic->setAuthAwait(cc->getbasicinfo().authawait);
+	    cli.removeServerBasedContactList(ic);
 	}
     }
 
@@ -621,6 +630,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     icqconf::imaccount acc = conf.getourid(icq);
     acc.additional["webaware"] = cbinfo.webaware ? "1" : "0";
     acc.additional["randomgroup"] = i2str(cbinfo.randomgroup);
+    acc.additional["autosync"] = cbinfo.autosync ? "1" : "0";
     conf.setourid(acc);
 
     cli.setWebAware(cbinfo.webaware);
@@ -862,7 +872,9 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
 
-    cli.fetchServerBasedContactList();
+    if(conf.getourid(icq).additional["autosync"] == "1")
+	cli.fetchServerBasedContactList();
+
     resolve();
 }
 
@@ -1060,7 +1072,7 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
 
     if(c) {
-	ContactRef ic = cli.getContact(ev->getUIN());
+	ContactRef ic = ev->getContact();
 	StatusChangeEvent *tev = dynamic_cast<StatusChangeEvent*>(ev);
 	imstatus nst = icq2imstatus(tev->getStatus());
 
@@ -1076,7 +1088,7 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
 
 void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
-    ContactRef ic = cli.getContact(ev->getUIN());
+    ContactRef ic = ev->getContact();
 
     if(!c) {
 	c = clist.get(contactroot);
@@ -1232,10 +1244,17 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 	updateinforecord(cli.getSelfContact(), c);
 	updateinforecord(cli.getSelfContact(), clist.get(imcontact(cli.getUIN(), icq)));
 
+	/*
+	*
+	* Fill in the locally stored parts now.
+	*
+	*/
+
 	icqconf::imaccount im = conf.getourid(icq);
 	icqcontact::basicinfo cbinfo = c->getbasicinfo();
 	cbinfo.webaware = im.additional["webaware"] == "1";
 	cbinfo.randomgroup = strtoul(im.additional["randomgroup"].c_str(), 0, 0);
+	cbinfo.autosync = im.additional["autosync"] == "1";
 	c->setbasicinfo(cbinfo);
     }
 }
