@@ -870,6 +870,17 @@ engine is to be affected.
     This one specifies to which IM network the destination contact
     belongs to. Can be either "icq", "yahoo", "msn", "aim" or "irc".
 
+Examples:
+
+    $ centericq -S _ -p icq
+
+This will set the icq status to offline. In other words, it'll be
+disconnected immediately.
+
+    $ centericq -S a -p yahoo
+
+And this command will switch your yahoo status to offline.
+
 
 9.3. External actions and auto-responses
 ----------------------------------------

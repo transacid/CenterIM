@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.64 2002/04/07 13:21:25 konst Exp $
+* $Id: icqdialogs.cc,v 1.65 2002/04/08 15:59:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -469,6 +469,9 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
 }
 
 bool icqface::edit(string &txt, const string &header) {
+    bool msb = mainscreenblock;
+    if(!msb) blockmainscreen();
+
     texteditor se;
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
@@ -491,6 +494,8 @@ bool icqface::edit(string &txt, const string &header) {
     }
 
     w.close();
+    if(!msb) unblockmainscreen();
+
     return editdone;
 }
 
@@ -578,6 +583,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
     bool makelog = conf.getmakelog();
+    bool askaway = conf.getaskaway();
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
@@ -624,6 +630,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno[quote]);
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno[mailcheck]);
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno[savepwd]);
+	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno[askaway]);
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -673,6 +680,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			if(tmp.size()) ana = atol(tmp.c_str());
 			break;
 		    case 6: hideoffl = !hideoffl; break;
+		    case 7: askaway = !askaway; break;
 		    case 8: quote = !quote; break;
 		    case 9: socks = !socks; break;
 		    case 10:
@@ -713,6 +721,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmailcheck(mailcheck);
 		conf.setrussian(rus);
 		conf.setmakelog(makelog);
+		conf.setaskaway(askaway);
 
 		if(conf.getgroupmode() != gmode) {
 		    conf.setgroupmode(gmode);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.89 2002/04/08 13:45:44 konst Exp $
+* $Id: centericq.cc,v 1.90 2002/04/08 15:59:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -303,21 +303,47 @@ void centericq::mainloop() {
 
 void centericq::changestatus() {
     imstatus st;
-    protocolname pname;
+    protocolname ipname, pname;
+    bool proceed, setaway;
+    string tmp;
     icqconf::imaccount ia;
 
     if(face.changestatus(pname, st)) {
 	if(!conf.enoughdiskspace()) {
 	    face.log("! cannot connect, free disk space is less than 10k");
+
 	} else {
+	    proceed = true;
+
+	    setaway = conf.getaskaway();
 	    if(pname != proto_all) {
-		gethook(pname).setstatus(st);
-	    } else {
-		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-		    ia = conf.getourid(pname);
-		    if(!ia.empty()) {
-			gethook(pname).setstatus(st);
-		    }
+		setaway = setaway &&
+		    (gethook(pname).getcapabilities() & hoptCanSetAwayMsg);
+	    }
+
+	    if(setaway) {
+		switch(st) {
+		    case away:
+		    case notavail:
+		    case occupied:
+		    case dontdisturb:
+			proceed = setaway = face.edit(tmp = conf.getawaymsg(pname),
+			    conf.getprotocolname(pname) + ": " + _("away message"));
+			break;
+		}
+	    }
+
+	    if(proceed)
+	    for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
+		if(!(ia = conf.getourid(ipname)).empty())
+		if((pname == proto_all) || (ipname == pname)) {
+		    abstracthook &hook = gethook(ipname);
+
+		    if(setaway)
+			if(hook.getcapabilities() & hoptCanSetAwayMsg)
+			    conf.setawaymsg(ipname, tmp);
+
+		    hook.setstatus(st);
 		}
 	    }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.63 2002/04/08 13:45:44 konst Exp $
+* $Id: icqconf.cc,v 1.64 2002/04/08 15:59:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,7 +41,7 @@ icqconf::icqconf() {
 
     autoaway = autona = 0;
 
-    hideoffline = antispam = russian = makelog = false;
+    hideoffline = antispam = russian = makelog = askaway = false;
     savepwd = mailcheck = fenoughdiskspace = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
@@ -166,7 +166,7 @@ void icqconf::loadmainconfig() {
     protocolname pname;
 
     if(f.is_open()) {
-	mailcheck = false;
+	mailcheck = askaway = false;
 	savepwd = true;
 	setsmtphost("");
 
@@ -188,7 +188,8 @@ void icqconf::loadmainconfig() {
 	    if((param == "usegroups") || (param == "group1")) fgroupmode = group1; else
 	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "smtp") setsmtphost(buf); else
-	    if(param == "log") makelog = true; else {
+	    if(param == "log") makelog = true; else
+	    if(param == "askaway") askaway = true; else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
 		    if(param.substr(0, buf.size()) == buf) {
@@ -229,6 +230,7 @@ void icqconf::save() {
 	    if(getquote()) f << "quotemsgs" << endl;
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
+	    if(getaskaway()) f << "askaway" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
 
@@ -617,6 +619,10 @@ void icqconf::setantispam(bool fas) {
 
 void icqconf::setmailcheck(bool fmc) {
     mailcheck = fmc;
+}
+
+void icqconf::setaskaway(bool faskaway) {
+    askaway = faskaway;
 }
 
 void icqconf::openurl(const string &url) {

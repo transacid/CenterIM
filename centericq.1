@@ -1,4 +1,4 @@
-.TH CENTERICQ 1 "April 4, 2002"
+.TH CENTERICQ 1 "April 8, 2002"
 
 .SH NAME
 \fBcentericq\fP \- a text mode based IM client for Linux, *BSD and possibly,
@@ -77,8 +77,44 @@ separated with a newline character the following way:
 Please note, that all three parameters are required in order to queue an
 event.
 
+
+.PP
+
+
+It's also possible to change your current status on a particular IM
+network with the following command line option.
+
+.TP
+\fB\-S\fR, \fB\-\-status\fR <status letter>
+The argument parameter is a letter which indicates which status is
+to be set:
+o (Online)		_ (Offline)
+a (Away)		d (Don't disturb)
+n (N/A)			c (Occupied)
+f (Free for chat)	i (Invisible)
+.TP
+\fB\-p\fR or \fB\-\-protocol\fR <protocol name>
+This one specifies to which IM network the destination contact belongs
+to. Can be either "icq", "yahoo", "msn", "aim" or "irc".
+
+
+.PP
+
+
+Examples:
+
+    \fB$ centericq -S _ -p icq\fR
+
+This will set the icq status to offline. In other words, it'll be
+disconnected immediately.
+
+    \fB$ centericq -S a -p yahoo\fR
+
+And this command will switch your yahoo status to offline.
+
+
 .SH VERSION
-centericq 4.7.0
+centericq 4.7.1
 
 .SH BUG REPORT
 Report any bugs to centericq-bugs@konst.org.ua
