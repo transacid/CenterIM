@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.7 2003/10/02 22:24:36 konst Exp $
+* $Id: ljhook.cc,v 1.8 2003/10/11 14:28:12 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,6 +27,7 @@
 #ifdef BUILD_LJ
 
 #include "ljhook.h"
+#include "rsshook.h"
 #include "icqface.h"
 
 #include <sys/utsname.h>
@@ -36,7 +37,7 @@ ljhook lhook;
 #define KOI2UTF(x) siconv(x, conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf8")
 #define UTF2KOI(x) siconv(x, "utf8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())
 
-ljhook::ljhook(): abstracthook(livejournal), fonline(false) {
+ljhook::ljhook(): abstracthook(livejournal), fonline(false), sdest(0) {
     fcapabs.insert(hookcapab::nochat);
 }
 
@@ -235,10 +236,47 @@ bool ljhook::send(const imevent &ev) {
     return false;
 }
 
-void ljhook::sendnewuser(const imcontact &c) {
+void ljhook::sendnewuser(const imcontact &ic) {
+    int npos;
+    icqcontact *c;
+
+    if(logged())
+    if(c = clist.get(ic))
+    if((npos = c->getnick().find("@lj")) != -1) {
+	HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
+
+	ev->addParam("mode", "editfriends");
+	ev->addParam("user", username);
+	ev->addParam("hpassword", md5pass);
+
+	ev->addParam("editfriend_add_1_user", c->getnick().substr(0, npos));
+	httpcli.SendEvent(ev);
+	sent[ev] = reqAddFriend;
+    }
 }
 
 void ljhook::removeuser(const imcontact &ic) {
+    int npos;
+    icqcontact *c;
+
+    if(logged())
+    if(c = clist.get(ic))
+    if((npos = c->getnick().find("@lj")) != -1) {
+	string nick = c->getnick().substr(0, npos);
+
+	if(c->getworkinfo().homepage == getfeedurl(nick)) {
+	    HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
+
+	    ev->addParam("mode", "editfriends");
+	    ev->addParam("user", username);
+	    ev->addParam("hpassword", md5pass);
+
+	    ev->addParam((string) "editfriend_delete_" + nick, "1");
+
+	    httpcli.SendEvent(ev);
+	    sent[ev] = reqDelFriend;
+	}
+    }
 }
 
 void ljhook::setautostatus(imstatus st) {
@@ -261,17 +299,29 @@ void ljhook::requestinfo(const imcontact &ic) {
 
     if(c) {
 	icqcontact::moreinfo m = c->getmoreinfo();
-	if((npos = ic.nickname.find("@")) != -1) {
-	    m.homepage = "http://" + conf.getourid(proto).server + "/users/" + ic.nickname.substr(0, npos);
+	if((npos = c->getnick().find("@lj")) != -1) {
+	    m.homepage = getfeedurl(c->getnick().substr(0, npos));
 	    c->setmoreinfo(m);
 	}
     }
 }
 
 void ljhook::lookup(const imsearchparams &params, verticalmenu &dest) {
+    while(!foundguys.empty()) {
+	delete foundguys.back();
+	foundguys.pop_back();
+    }
+
+    HTTPRequestEvent *ev = new HTTPRequestEvent(getfeedurl(params.nick));
+    httpcli.SendEvent(ev);
+    sent[ev] = reqLookup;
+
+    sdest = &dest;
+    lookfor = params.nick;
 }
 
 void ljhook::stoplookup() {
+    sdest = 0;
 }
 
 void ljhook::requestawaymsg(const imcontact &c) {
@@ -346,28 +396,30 @@ void ljhook::messageack_cb(MessageEvent *ev) {
     map<string, string> params;
     icqcontact *c;
 
-    if(!ev->isDelivered() || content.empty()) {
-	pname = rev->getHTTPResp();
-	if(pname.empty()) pname = _("cannot connect");
-	face.log(_("+ [lj] HTTP failed: %s"), pname.c_str());
-	fonline = false;
-	return;
-    }
+    if(ie->second != reqLookup) {
+	if(!ev->isDelivered() || content.empty()) {
+	    pname = rev->getHTTPResp();
+	    if(pname.empty()) pname = _("cannot connect");
+	    face.log(_("+ [lj] HTTP failed: %s"), pname.c_str());
+	    disconnect();
+	    return;
+	}
 
-    while((npos = content.find("\r")) != -1)
-	content.erase(npos, 1);
+	while((npos = content.find("\r")) != -1)
+	    content.erase(npos, 1);
 
-    while((npos = content.find("\n")) != -1) {
-	pname = content.substr(0, npos);
-	content.erase(0, npos+1);
+	while((npos = content.find("\n")) != -1) {
+	    pname = content.substr(0, npos);
+	    content.erase(0, npos+1);
 
-	if((npos = content.find("\n")) == -1)
-	    npos = content.size();
+	    if((npos = content.find("\n")) == -1)
+		npos = content.size();
 
-	params[pname] = content.substr(0, npos);
+	    params[pname] = content.substr(0, npos);
 
-	if(npos != content.size()) content.erase(0, npos+1);
-	    else content = "";
+	    if(npos != content.size()) content.erase(0, npos+1);
+		else content = "";
+	}
     }
 
     if(isconnecting() && ie->second == reqLogin) {
@@ -403,31 +455,29 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	}
 
 	int fcount = atoi(params["friend_count"].c_str()), i;
-	string friendbase = (string) "http://" + conf.getourid(proto).server + "/users/";
 
 	for(i = 1; i < fcount+1; i++) {
 	    string username = params[(string) "friend_" + i2str(i) + "_user"];
 	    string name = params[(string) "friend_" + i2str(i) + "_name"];
 	    string birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
 
-	    string feed = friendbase + username + "/rss/";
 	    bool found = false;
 
 	    for(int k = 0; k < clist.count && !found; k++) {
 		c = (icqcontact *) clist.at(k);
 		if(c->getdesc().pname == rss) {
-		    found = (c->getworkinfo().homepage == feed);
+		    found = (c->getworkinfo().homepage == getfeedurl(username));
 		}
 	    }
 
 	    if(!found)
 	    if(c = clist.addnew(imcontact(0, rss), false)) {
 		icqcontact::workinfo wi = c->getworkinfo();
-		wi.homepage = feed;
+		wi.homepage = getfeedurl(username);
 		c->setworkinfo(wi);
 
 		icqcontact::moreinfo mi = c->getmoreinfo();
-		mi.birth_day = 120;
+		mi.checkfreq = 120;
 		c->setmoreinfo(mi);
 
 		c->setnick(username + "@lj");
@@ -435,6 +485,41 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		c->save();
 	    }
 	}
+
+    } else if(ie->second == reqDelFriend) {
+	if(params["success"] != "OK") {
+	    face.log(_("+ [lj] error deleting friend"));
+	} else {
+	    face.log(_("+ [lj] the user has been removed from your friend list"));
+	}
+
+    } else if(ie->second == reqAddFriend) {
+	if(params["success"] != "OK" || !atoi(params["friends_added"].c_str())) {
+	    face.log(_("+ [lj] couldn't add friend"));
+	} else {
+	    face.log(_("+ [lj] %s was added to friends"), params["friend_1_user"].c_str());
+	}
+
+    } else if(ie->second == reqLookup && sdest) {
+	if(ev->isDelivered() && !content.empty()) {
+	    imcontact ic(0, rss);
+	    ic.nickname = rev->getURL();
+	    c = new icqcontact(ic);
+
+	    c->setnick(lookfor + "@lj");
+	    c->setdispnick(c->getnick());
+	    c->excludefromlist();
+	    rsshook::parsedocument(rev, c);
+
+	    sdest->additem(conf.getcolor(cp_clist_rss), c, (string) " " + c->getnick());
+	    foundguys.push_back(c);
+	}
+
+	face.findready();
+	face.log(_("+ [lj] user lookup finished"));
+	sdest->redraw();
+	sdest = 0;
+
     }
 
     if(ie != sent.end()) sent.erase(ie);
@@ -456,3 +541,7 @@ void ljhook::logger_cb(LogEvent *ev) {
 }
 
 #endif
+
+string ljhook::getfeedurl(const string &nick) const {
+    return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/rss/";
+}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.35 2003/07/07 18:51:00 konst Exp $
+* $Id: aimhook.cc,v 1.36 2003/10/11 14:28:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -190,7 +190,8 @@ bool aimhook::send(const imevent &ev) {
 }
 
 void aimhook::sendnewuser(const imcontact &ic) {
-    if(online()) {
+    if(logged())
+    if(find(buddies.begin(), buddies.end(), ic.nickname) == buddies.end()) {
 	face.log(_("+ [aim] adding %s to the contacts"), ic.nickname.c_str());
 	firetalk_im_add_buddy(handle, ic.nickname.c_str());
 	firetalk_save_config(handle);
@@ -363,8 +364,10 @@ void aimhook::connected(void *connection, void *cli, ...) {
 
     ahook.loadprofile();
     firetalk_set_info(ahook.handle, ahook.profile.info.c_str());
+    firetalk_im_list_buddies(ahook.handle);
 
     ahook.resolve();
+    face.update();
 }
 
 void aimhook::disconnected(void *connection, void *cli, ...) {
@@ -541,6 +544,9 @@ void aimhook::listbuddy(void *conn, void *cli, ...) {
 
     if(nickname) {
 	ahook.buddies.push_back(nickname);
+
+	imcontact cont(nickname, aim);
+	if(!clist.get(cont)) clist.addnew(cont, false);
     }
 }
 

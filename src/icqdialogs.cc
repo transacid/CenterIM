@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.126 2003/10/01 00:27:45 konst Exp $
+* $Id: icqdialogs.cc,v 1.127 2003/10/11 14:28:11 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -179,7 +179,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 	    if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
 		continue;
 
-	    if(gethook(apname).logged() || apname == infocard) {
+	    if(gethook(apname).logged()) {
 		penabled.push_back(apname);
 	    }
 	}
@@ -631,7 +631,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     if(passinfo.pname == rss) {
 	i = tree->addnode(_(" Feed Parameters "));
 	tree->addleaff(i, 0, 48, _(" XML export URL : %s "), wi.homepage.c_str());
-	tree->addleaff(i, 0, 49, _(" Check frequency (minutes) : %lu "), mi.birth_day);
+	tree->addleaff(i, 0, 49, _(" Check frequency (minutes) : %lu "), mi.checkfreq);
     }
 
     if(capab.count(hookcapab::changeabout))
@@ -804,7 +804,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 			ri.password = "";
 		    break;
 		case 48: wi.homepage = inputstr(_("URL: "), wi.homepage); break;
-		case 49: mi.birth_day = atol(inputstr(_("Check frequency: "), strint(mi.birth_day)).c_str()); break;
+		case 49: mi.checkfreq = atol(inputstr(_("Check frequency: "), strint(mi.checkfreq)).c_str()); break;
 		default:
 		    if(citem >= 100) {
 			vector<pair<string, string> >::iterator ifp = ri.params.begin()+citem-100;

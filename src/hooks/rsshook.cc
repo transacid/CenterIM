@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.13 2003/10/05 23:01:20 konst Exp $
+* $Id: rsshook.cc,v 1.14 2003/10/11 14:28:12 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -66,10 +66,15 @@ void rsshook::exectimers() {
 
 	    if(c->getdesc().pname == rss) {
 		icqcontact::moreinfo mi = c->getmoreinfo();
-		freq = mi.birth_day;
-		lastcheck = mi.birth_month;
 
-		if(freq)
+		freq = mi.checkfreq;
+		lastcheck = mi.checklast;
+
+		if(freq <= 0) {
+		    mi.checkfreq = 120;
+		    c->setmoreinfo(mi);
+		}
+
 		if(tcurrent-lastcheck > freq*60) {
 		    ping(c);
 		}
@@ -188,18 +193,32 @@ bool rsshook::enabled() const {
 }
 
 void rsshook::requestinfo(const imcontact &c) {
+    ping(c);
 }
 
 void rsshook::requestversion(const imcontact &c) {
 }
 
 void rsshook::ping(const imcontact &ic) {
+    string url;
     icqcontact *c = clist.get(ic);
-    if(c) {
+
+    if(c) url = c->getworkinfo().homepage;
+	else url = ic.nickname;
+
+    if(!url.empty()) {
 	httpcli.setProxyServerHost(conf.gethttpproxyhost());
 	httpcli.setProxyServerPort(conf.gethttpproxyport());
-	httpcli.SendEvent(new HTTPRequestEvent(c->getworkinfo().homepage));
+	httpcli.SendEvent(new HTTPRequestEvent(url));
     }
+}
+
+void rsshook::sendnewuser(const imcontact &ic) {
+    gethook(livejournal).sendnewuser(ic);
+}
+
+void rsshook::removeuser(const imcontact &ic) {
+    gethook(livejournal).removeuser(ic);
 }
 
 // ----------------------------------------------------------------------------
@@ -257,153 +276,170 @@ const string &name, const string &title, const string &postfix) {
     }
 }
 
+void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
+    int k, n;
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
+    icqcontact::workinfo wi = c->getworkinfo();
+
+    string content = rev->getContent(), enc;
+
+    bi.city = bi.state = bi.lname = "";
+
+    if(!rev->isDelivered() || content.empty()) {
+	bi.lname = rev->getHTTPResp();
+	if(bi.lname.empty()) bi.lname = _("coudln't fetch");
+
+	content = "";
+    }
+
+    if(bi.lname.empty())
+    if((k = content.find("<?xml")) != -1) {
+	string xmlspec = content.substr(k+6);
+
+	if((k = xmlspec.find("?>")) != -1) {
+	    xmlspec.erase(k);
+	    xmlspec.insert(0, "<x ");
+	    xmlspec += "/>";
+
+	    string::iterator ix = xmlspec.begin();
+	    auto_ptr<XmlNode> x(XmlNode::parse(ix, xmlspec.end()));
+	    XmlLeaf *xx = dynamic_cast<XmlLeaf*>(x.get());
+
+	    enc = xx->getAttrib("encoding");
+	    bi.state = enc;
+	}
+    }
+
+    XmlBranch *rss, *channel, *item;
+    rss = channel = item = 0;
+
+    string::iterator is = content.begin();
+    auto_ptr<XmlNode> top(XmlNode::parse(is, content.end()));
+
+    if(bi.lname.empty()) {
+	if(!top.get()) {
+	    if(!content.empty()) bi.lname = _("wrong XML");
+
+	} else if(top->getTag() != "rss" && top->getTag() != "rdf::RDF") {
+	    if(!content.empty()) bi.lname = _("no <rss> tag found");
+
+	}
+    }
+
+    if(bi.lname.empty())
+    if(top.get()) {
+	rss = dynamic_cast<XmlBranch*>(top.get());
+
+	if(rss == NULL || !rss->exists("channel")) {
+	    if(!content.empty()) bi.lname = _("no <channel> tag found");
+
+	} else {
+	    bi.city = top.get()->getAttrib("version");
+	    channel = rss->getBranch("channel");
+	    if(!channel) {
+		if(!content.empty()) bi.lname = _("wrong <channel> tag");
+	    }
+
+	}
+    }
+
+    vector<string> items;
+    vector<string>::iterator ii;
+    string text;
+
+    if(bi.lname.empty())
+    if(channel) {
+	bi.lname = _("success");
+
+	text = ""; rhook.fetchRSSParam(text, channel, enc, "title", "");
+	if(!text.empty()) bi.fname = text;
+
+	text = ""; rhook.fetchRSSParam(text, channel, enc, "link", "");
+	if(!text.empty()) mi.homepage = text;
+
+	text = ""; rhook.fetchRSSParam(text, channel, enc, "description", "");
+	if(!text.empty()) c->setabout(text);
+
+	if(!channel->getBranch("item")) {
+	    channel = rss;
+	    if(bi.city.empty()) bi.city = "rdf";
+	}
+
+	for(k = 0; item = channel->getBranch("item", k); k++) {
+	    text = "";
+
+	    rhook.fetchRSSParam(text, item, enc, "title", _("Title: "));
+	    rhook.fetchRSSParam(text, item, enc, "pubDate", _("Published on: "));
+	    rhook.fetchRSSParam(text, item, enc, "category", _("Category: "));
+	    rhook.fetchRSSParam(text, item, enc, "author", _("Author: "));
+	    text += "\n";
+	    rhook.fetchRSSParam(text, item, enc, "description", _("Description: "), "\n\n");
+	    rhook.fetchRSSParam(text, item, enc, "link", _("Link: "));
+	    rhook.fetchRSSParam(text, item, enc, "comments", _("Comments: "));
+
+	    items.push_back(text);
+	}
+
+	imevent *ev;
+	vector<imevent *> events = em.getevents(c->getdesc(), 0);
+
+	if(!events.empty())
+	if(ev = dynamic_cast<immessage*>(events.back())) {
+	    for(ii = items.begin(); ii != items.end(); ++ii) {
+		string evtext = ev->gettext();
+
+		while((k = evtext.find("\r")) != -1) evtext.erase(k, 1);
+		while((k = ii->find("\r")) != -1) ii->erase(k, 1);
+
+		if(*ii == evtext) {
+		    items.erase(ii, items.end());
+		    break;
+		}
+	    }
+	}
+    }
+
+    if(c->inlist() && c->getdesc() != contactroot) {
+	if(!items.empty()) {
+	    vector<string>::reverse_iterator ir;
+
+	    for(ir = items.rbegin(); ir != items.rend(); ++ir)
+		em.store(immessage(c->getdesc(), imevent::incoming, *ir));
+	}
+    } else {
+	string bfeed = rev->getURL();
+	getrword(bfeed, "/");
+	c->setnick(getrword(bfeed, "/"));
+	wi.homepage = rev->getURL();
+    }
+
+    mi.checklast = timer_current;
+
+    c->setbasicinfo(bi);
+    c->setmoreinfo(mi);
+    c->setworkinfo(wi);
+}
+
 void rsshook::messageack_cb(MessageEvent *ev) {
     HTTPRequestEvent *rev = dynamic_cast<HTTPRequestEvent*>(ev);
 
     if(!rev) return;
 
-    int i, k, n;
+    int i;
     icqcontact *c;
-    time_t tcurrent = time(0);
+    bool found;
 
-    for(i = 0; i < clist.count; i++) {
+    for(i = 0, found = false; i < clist.count && !found; i++) {
 	c = (icqcontact *) clist.at(i);
-	if(c->getdesc().pname == rss) {
-	    if(c->getworkinfo().homepage == rev->getURL()) {
-		icqcontact::basicinfo bi = c->getbasicinfo();
-		icqcontact::moreinfo mi = c->getmoreinfo();
 
-		string content = rev->getContent(), enc;
-
-		bi.city = bi.state = bi.lname = "";
-
-		if(!ev->isDelivered() || content.empty()) {
-		    bi.lname = rev->getHTTPResp();
-		    if(bi.lname.empty()) bi.lname = _("coudln't fetch");
-
-		    content = "";
-		}
-
-		if(bi.lname.empty())
-		if((k = content.find("<?xml")) != -1) {
-		    string xmlspec = content.substr(k+6);
-
-		    if((k = xmlspec.find("?>")) != -1) {
-			xmlspec.erase(k);
-			xmlspec.insert(0, "<x ");
-			xmlspec += "/>";
-
-			string::iterator ix = xmlspec.begin();
-			auto_ptr<XmlNode> x(XmlNode::parse(ix, xmlspec.end()));
-			XmlLeaf *xx = dynamic_cast<XmlLeaf*>(x.get());
-
-			enc = xx->getAttrib("encoding");
-			bi.state = enc;
-		    }
-		}
-
-		XmlBranch *rss, *channel, *item;
-		rss = channel = item = 0;
-
-		string::iterator is = content.begin();
-		auto_ptr<XmlNode> top(XmlNode::parse(is, content.end()));
-
-		if(bi.lname.empty()) {
-		    if(!top.get()) {
-			if(!content.empty()) bi.lname = _("wrong XML");
-
-		    } else if(top->getTag() != "rss" && top->getTag() != "rdf::RDF") {
-			if(!content.empty()) bi.lname = _("no <rss> tag found");
-
-		    }
-		}
-
-		if(bi.lname.empty())
-		if(top.get()) {
-		    rss = dynamic_cast<XmlBranch*>(top.get());
-
-		    if(rss == NULL || !rss->exists("channel")) {
-			if(!content.empty()) bi.lname = _("no <channel> tag found");
-
-		    } else {
-			bi.city = top.get()->getAttrib("version");
-			channel = rss->getBranch("channel");
-			if(!channel) {
-			    if(!content.empty()) bi.lname = _("wrong <channel> tag");
-			}
-
-		    }
-		}
-
-		vector<string> items;
-		vector<string>::iterator ii;
-		string text;
-
-		if(bi.lname.empty())
-		if(channel) {
-		    bi.lname = _("success");
-
-		    text = ""; fetchRSSParam(text, channel, enc, "title", "");
-		    if(!text.empty()) bi.fname = text;
-
-		    text = ""; fetchRSSParam(text, channel, enc, "link", "");
-		    if(!text.empty()) mi.homepage = text;
-
-		    text = ""; fetchRSSParam(text, channel, enc, "description", "");
-		    if(!text.empty()) c->setabout(text);
-
-		    if(!channel->getBranch("item")) {
-			channel = rss;
-			if(bi.city.empty()) bi.city = "rdf";
-		    }
-
-		    for(k = 0; item = channel->getBranch("item", k); k++) {
-			text = "";
-
-			fetchRSSParam(text, item, enc, "title", _("Title: "));
-			fetchRSSParam(text, item, enc, "pubDate", _("Published on: "));
-			fetchRSSParam(text, item, enc, "category", _("Category: "));
-			fetchRSSParam(text, item, enc, "author", _("Author: "));
-			text += "\n";
-			fetchRSSParam(text, item, enc, "description", _("Description: "), "\n\n");
-			fetchRSSParam(text, item, enc, "link", _("Link: "));
-			fetchRSSParam(text, item, enc, "comments", _("Comments: "));
-
-			items.push_back(text);
-		    }
-
-		    imevent *ev;
-		    vector<imevent *> events = em.getevents(c->getdesc(), 0);
-
-		    if(!events.empty())
-		    if(ev = dynamic_cast<immessage*>(events.back())) {
-			for(ii = items.begin(); ii != items.end(); ++ii) {
-			    string evtext = ev->gettext();
-
-			    while((k = evtext.find("\r")) != -1) evtext.erase(k, 1);
-			    while((k = ii->find("\r")) != -1) ii->erase(k, 1);
-
-			    if(*ii == evtext) {
-				items.erase(ii, items.end());
-				break;
-			    }
-			}
-		    }
-		}
-
-		if(!items.empty()) {
-		    vector<string>::reverse_iterator ir;
-
-		    for(ir = items.rbegin(); ir != items.rend(); ++ir)
-			em.store(immessage(c->getdesc(), imevent::incoming, *ir));
-		}
-
-		mi.birth_month = tcurrent;
-		c->setbasicinfo(bi);
-		c->setmoreinfo(mi);
-	    }
-	}
+	found = c->getdesc().pname == rss &&
+	    c->getworkinfo().homepage == rev->getURL();
     }
+
+    if(!found) c = clist.get(contactroot);
+
+    parsedocument(rev, c);
 }
 
 void rsshook::logger_cb(LogEvent *ev) {

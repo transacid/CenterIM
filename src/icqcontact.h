@@ -35,7 +35,7 @@ class icqcontact {
 	    moreinfo():
 		gender(genderUnspec), age(0), birth_day(0),
 		birth_month(0), birth_year(0), lang1(0), lang2(0), lang3(0),
-		timezone(0) {};
+		timezone(0), checkfreq(0), checklast(0) {};
 
 	    unsigned char age;
 	    imgender gender;
@@ -46,6 +46,8 @@ class icqcontact {
 
 	    string strbirthdate() const;
 	    string strtimezone() const;
+
+	    int checkfreq, checklast;
 	};
 
 	struct workinfo {

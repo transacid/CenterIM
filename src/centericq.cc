@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.169 2003/10/01 18:48:11 konst Exp $
+* $Id: centericq.cc,v 1.170 2003/10/11 14:28:10 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -497,7 +497,7 @@ void centericq::linkfeed() {
 	    c->setworkinfo(wi);
 
 	    icqcontact::moreinfo mi = c->getmoreinfo();
-	    mi.birth_day = s.checkfrequency;
+	    mi.checkfreq = s.checkfrequency;
 	    c->setmoreinfo(mi);
 
 	    c->setnick(s.nick);
@@ -515,10 +515,6 @@ void centericq::find() {
     while(ret) {
 	if(ret = face.finddialog(s, icqface::fsuser)) {
 	    switch(s.pname) {
-		case icq:
-		    ret = face.findresults(s);
-		    break;
-
 		case infocard:
 		    c = clist.addnew(imcontact(0, infocard), true);
 		    c->setnick(s.nick);
@@ -1198,9 +1194,25 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
     }
 
     if(!c) {
-	c = clist.addnew(ic, false);
+	if(ic.pname == rss) {
+	    c = clist.addnew(imcontact(0, rss), false);
+	    icqcontact::workinfo wi = c->getworkinfo();
+	    wi.homepage = ic.nickname;
+	    c->setworkinfo(wi);
+
+	    string bfeed = ic.nickname;
+	    getrword(bfeed, "/");
+	    c->setnick(getrword(bfeed, "/") + "@lj");
+	    c->setdispnick(c->getnick());
+	    gethook(ic.pname).sendnewuser(c);
+
+	} else {
+	    c = clist.addnew(ic, false);
+	}
+
     } else {
 	c->includeintolist();
+
     }
 
     c->setgroupid(groupid);

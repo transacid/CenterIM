@@ -23,6 +23,9 @@ class rsshook: public abstracthook, public sigslot::has_slots<> {
 	    const string &postfix = "\n");
 
     public:
+	static void parsedocument(const HTTPRequestEvent *rev, icqcontact *c);
+
+    public:
 	rsshook();
 	~rsshook();
 
@@ -42,6 +45,9 @@ class rsshook: public abstracthook, public sigslot::has_slots<> {
 	void requestinfo(const imcontact &c);
 	void requestversion(const imcontact &c);
 	void ping(const imcontact &c);
+
+	void sendnewuser(const imcontact &ic);
+	void removeuser(const imcontact &ic);
 };
 
 extern rsshook rhook;

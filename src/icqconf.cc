@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.118 2003/10/01 00:27:45 konst Exp $
+* $Id: icqconf.cc,v 1.119 2003/10/11 14:28:10 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -270,7 +270,7 @@ void icqconf::save() {
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
-	    f << "defcharset" << getdefcharset() << endl;
+	    f << "defcharset\t" << getdefcharset() << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)

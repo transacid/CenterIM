@@ -16,20 +16,29 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	bool fonline, flogged;
 	imcontact self;
 
+	verticalmenu *sdest;
+	string lookfor;
+
 	enum RequestType {
 	    reqLogin,
 	    reqPost,
 	    reqGetFriends,
+	    reqDelFriend,
+	    reqAddFriend,
+	    reqLookup,
 	    reqDone
 	};
 
 	map<HTTPRequestEvent *, RequestType> sent;
+	vector<icqcontact *> foundguys;
 
 	void socket_cb(SocketEvent *ev);
 	void messageack_cb(MessageEvent *ev);
 	void logger_cb(LogEvent *ev);
 
 	void requestfriends();
+
+	string getfeedurl(const string &nick) const;
 
     public:
 	ljhook();
@@ -52,7 +61,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 
 	bool send(const imevent &ev);
 
-	void sendnewuser(const imcontact &c);
+	void sendnewuser(const imcontact &ic);
 	void removeuser(const imcontact &ic);
 
 	void setautostatus(imstatus st);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.194 2003/09/30 11:38:41 konst Exp $
+* $Id: icqface.cc,v 1.195 2003/10/11 14:28:11 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -222,7 +222,7 @@ void icqface::showtopbar() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvprintw(0, 2, _("CENTERICQ %s   UNSENT: %lu"), VERSION, em.getunsentcount());
+    mvprintw(0, 2, _("CENTERICQ %s  UNSENT: %lu"), VERSION, em.getunsentcount());
     mvprintw(0, COLS-buf.size()-2, "%s", buf.c_str());
 }
 
@@ -737,19 +737,25 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     saveworkarea();
     clearworkarea();
 
+    abstracthook &h = gethook(sp.pname);
+
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
 	conf.getcolor(cp_main_selected)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), _("Details"), _("Message"), _("Add"),
-	fauto ? 0 : _("New search"), 0));
+    if(!h.getCapabs().count(hookcapab::nochat)) {
+	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
+	    conf.getcolor(cp_main_selected), _("Details"), _("Message"),
+	    _("Add"), fauto ? 0 : _("New search"), 0));
+    } else {
+	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
+	    conf.getcolor(cp_main_selected), _("Details"), _("Add"),
+	    fauto ? 0 : _("New search"), 0));
+    }
 
     db.addautokeys();
     db.redraw();
-
-    abstracthook &h = gethook(sp.pname);
 
     if(!sp.nick.empty() && h.getCapabs().count(hookcapab::directadd)) {
 	imcontact ic(sp.nick, sp.pname);
@@ -784,6 +790,9 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     while(!finished) {
 	finished = !db.open(r, b);
 	h.stoplookup();
+
+	if(h.getCapabs().count(hookcapab::nochat) && b > 0)
+	    b++;
 
 	if(!finished) {
 	    if(r == -3) {
@@ -1098,16 +1107,16 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     string freq, last, next;
     char buf[512];
 
-    if(mi.birth_day) {
-	sprintf(buf, _("%lu minutes"), mi.birth_day);
+    if(mi.checkfreq) {
+	sprintf(buf, _("%lu minutes"), mi.checkfreq);
 	freq = buf;
-	if(mi.birth_month) next = strdateandtime(mi.birth_month+mi.birth_day*60);
+	if(mi.checklast) next = strdateandtime(mi.checklast+mi.checkfreq*60);
 	    else next = _("Now");
     } else {
 	freq = next = _("Never");
     }
 
-    if(mi.birth_month) last = strdateandtime(mi.birth_month);
+    if(mi.checklast) last = strdateandtime(mi.checklast);
 	else last = _("Never");
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), freq);
@@ -1140,9 +1149,15 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
 	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
     } else {
-	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-	    _("Info"), _("About"), _("Check"), _("Edit"), 0));
+	if(c->inlist() && realinfo != contactroot) {
+	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
+		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+		_("Info"), _("About"), _("Check"), _("Edit"), 0));
+	} else {
+	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
+		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+		_("Info"), _("About"), _("Retreive"), 0));
+	}
     }
 
     showinfo = true;

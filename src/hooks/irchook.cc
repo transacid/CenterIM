@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.70 2003/07/07 18:51:01 konst Exp $
+* $Id: irchook.cc,v 1.71 2003/10/11 14:28:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -378,6 +378,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	smode = Channel;
 
 	while(!(room = getword(rooms)).empty()) {
+	    if(room[0] != '#') room.insert(0, "#");
 	    searchchannels.push_back(room);
 	    ic = find(channels.begin(), channels.end(), room);
 
@@ -1380,6 +1381,11 @@ void irchook::chatgottopic(void *conn, void *cli, ...) {
     char *topic = va_arg(ap, char *);
     char *author = va_arg(ap, char *);
     va_end(ap);
+
+    vector<channelInfo>::const_iterator ic = find(irhook.channels.begin(), irhook.channels.end(), room);
+
+    if(ic == irhook.channels.end() || !ic->joined)
+	return;
 
     string text;
     char buf[1024];
