@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.27 2001/11/08 10:26:17 konst Exp $
+* $Id: centericq.cc,v 1.28 2001/11/11 14:30:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,6 +26,7 @@
 #include "icqconf.h"
 #include "icqhist.h"
 #include "icqhook.h"
+#include "yahoohook.h"
 #include "icqface.h"
 #include "icqoffline.h"
 #include "icqcontact.h"
@@ -34,6 +35,8 @@
 #include "icqgroups.h"
 
 centericq::centericq() {
+    timer_keypress = time(0);
+    timer_checkmail = 0;
 }
 
 centericq::~centericq() {
@@ -57,8 +60,9 @@ void centericq::commandline(int argc, char **argv) {
 }
 
 void centericq::exec() {
-    string socksuser, sockspass;
     struct sigaction sact;
+    unsigned long uin;
+    string socksuser, sockspass, pass, yahooid;
 
     memset(&sact, 0, sizeof(sact));
     sact.sa_handler = &handlesignal;
@@ -70,8 +74,9 @@ void centericq::exec() {
     face.init();
 
     ihook.setmanualstatus(conf.getstatus());
+    conf.geticqlogin(uin, pass);
 
-    if(!conf.getuin()) {
+    if(!uin) {
 	reg();
 	if(ihook.getreguin()) {
 	    conf.checkdir();
@@ -79,10 +84,12 @@ void centericq::exec() {
 	    conf.savemainconfig(ihook.getreguin());
 	}
     } else {
+/*
 	if(!conf.getsavepwd()) {
 	    string cpass = face.inputstr(_("Password: "), "", '*');
 	    if(cpass.empty()) exit(0); else conf.setpassword(cpass);
 	}
+*/
     }
 
     conf.checkdir();
@@ -95,8 +102,10 @@ void centericq::exec() {
     face.done();
     face.init();
 
-    if(conf.getuin()) {
-	icq_Init(&icql, conf.getuin(), conf.getpassword().c_str(), "");
+    conf.geticqlogin(uin, pass);
+
+    if(uin) {
+	icq_Init(&icql, uin, pass.c_str(), "");
 	ihook.init(&icql);
 
 	if(!conf.getsockshost().empty()) {
@@ -105,7 +114,15 @@ void centericq::exec() {
 		conf.getsocksport(), socksuser.empty() ? 0 : 1,
 		socksuser.c_str(), sockspass.c_str());
 	}
+    }
 
+    conf.getyahoologin(yahooid, pass);
+
+    if(!yahooid.empty()) {
+	yhook.init(yahooid, pass);
+    }
+
+    if(!yahooid.empty() || uin) {
 	face.draw();
 	checkparallel();
 	mainloop();
@@ -210,7 +227,7 @@ void centericq::mainloop() {
     int action, old, gid;
     icqcontact *c;
     char buf[512];
-    vector<contactinfo>::iterator i;
+    vector<imcontact>::iterator i;
 
     face.draw();
 
@@ -250,7 +267,7 @@ void centericq::mainloop() {
 
 	if(!c) continue;
 
-	if(c->getdesc().uin && (c->getdesc().type == contactinfo::icq))
+	if(c->getdesc().uin && (c->getdesc().pname == icq))
 	switch(action) {
 
 	    case ACT_URL:
@@ -293,7 +310,7 @@ void centericq::mainloop() {
 
 	}
 	
-	if(c->getdesc().type == contactinfo::infocard)
+	if(c->getdesc().pname == infocard)
 	switch(action) {
 	    case ACT_EDITUSER: nonicq(c->getdesc().uin); break;
 	    case ACT_HISTORY: continue;
@@ -335,7 +352,7 @@ void centericq::mainloop() {
 		text = "";
 		if(c->getmsgcount()) {
 		    face.read(c->getdesc());
-		} else if(c->getdesc().uin && (c->getdesc().type != contactinfo::infocard)) {
+		} else if(c->getdesc().uin && (c->getdesc().pname != infocard)) {
 		    message(c->getdesc(), text, scratch);
 		}
 		break;
@@ -400,8 +417,8 @@ void centericq::find() {
     }
 }
 
-void centericq::userinfo(const contactinfo cinfo) {
-    contactinfo realuin = cinfo;
+void centericq::userinfo(const imcontact cinfo) {
+    imcontact realuin = cinfo;
     icqcontact *c = clist.get(cinfo);
 
     if(!c) {
@@ -462,7 +479,7 @@ void centericq::updatedetails() {
     }
 }
 
-void centericq::sendfiles(const contactinfo cinfo) {
+void centericq::sendfiles(const imcontact cinfo) {
     int i;
     string msg;
     unsigned long seq;
@@ -490,9 +507,9 @@ void centericq::sendfiles(const contactinfo cinfo) {
     }
 }
 
-void centericq::sendcontacts(const contactinfo cinfo) {
+void centericq::sendcontacts(const imcontact cinfo) {
     icqcontactmsg *m, *n, *cont;
-    vector<contactinfo>::iterator i;
+    vector<imcontact>::iterator i;
 
     if(icql.icq_Status == STATUS_OFFLINE) {
 	face.log(_("+ cannot send contacts in offline mode"));
@@ -556,7 +573,7 @@ void centericq::nonicq(int id) {
     icqcontact *c;
 
     if(!id) {
-	c = clist.addnew(contactinfo(0, contactinfo::infocard), true);
+	c = clist.addnew(imcontact(0, infocard), true);
 
 	if(face.updatedetails(c)) {
 	    c->save();
@@ -564,7 +581,7 @@ void centericq::nonicq(int id) {
 	    clist.remove(c->getdesc());
 	}
     } else {
-	c = clist.get(contactinfo(id, contactinfo::infocard));
+	c = clist.get(imcontact(id, infocard));
 	if(face.updatedetails(c)) {
 	    c->setdispnick(c->getnick());
 	    c->save();
@@ -660,9 +677,9 @@ void centericq::checkparallel() {
     }
 }
 
-bool centericq::message(const contactinfo cinfo, const string text, msgmode mode) {
+bool centericq::message(const imcontact cinfo, const string text, msgmode mode) {
     icqcontact *c = (icqcontact *) clist.get(cinfo);
-    vector<contactinfo>::iterator i;
+    vector<imcontact>::iterator i;
     char buf[512];
     string stext;
     bool ret = true;
@@ -727,7 +744,7 @@ const string centericq::quotemsg(const string text) {
 icqcontact *centericq::adduin(unsigned int uin) {
     icqcontact *c;
     int groupid = 0;
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(c = clist.get(cinfo)) {
 	if(c->inlist()) {
@@ -761,4 +778,70 @@ icqcontact *centericq::adduin(unsigned int uin) {
     face.update();
 
     return c;
+}
+
+bool centericq::idle(int options = 0) {
+    bool keypressed;
+    fd_set fds;
+    struct timeval tv;
+    int sockfd;
+
+    for(keypressed = false; !keypressed; ) {
+	timer_keypress = lastkeypress();
+	exectimers();
+
+	FD_ZERO(&fds);
+	FD_SET(0, &fds);
+
+	if(ihook.getsockfd()) {
+	    FD_SET(ihook.getsockfd(), &fds);
+	}
+
+	if(yhook.getsockfd()) {
+	    FD_SET(yhook.getsockfd(), &fds);
+	}
+
+	tv.tv_usec = 0;
+
+	if(ihook.online() || yhook.online()) {
+	    tv.tv_sec = PERIOD_SELECT;
+	} else {
+	    tv.tv_sec = PERIOD_RECONNECT/3;
+	}
+
+	select(max(ihook.getsockfd(), yhook.getsockfd()) + 1, &fds, 0, 0, &tv);
+
+	if(FD_ISSET(0, &fds)) {
+	    keypressed = true;
+	    time(&timer_keypress);
+	}
+
+	if(FD_ISSET(ihook.getsockfd(), &fds)) {
+	    icq_HandleServerResponse(&icql);
+	    if(options & HIDL_SOCKEXIT) break;
+	}
+
+	if(FD_ISSET(yhook.getsockfd(), &fds)) {
+	    yhook.main();
+	    if(options & HIDL_SOCKEXIT) break;
+	}
+    }
+
+    return keypressed;
+}
+
+void centericq::exectimers() {
+    time_t timer_current = time(0);
+
+    ihook.exectimers();
+    yhook.exectimers();
+
+    if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
+	cicq.checkmail();
+	time(&timer_checkmail);
+    }
+}
+
+time_t centericq::getkeypress() const {
+    return timer_keypress;
 }

@@ -26,15 +26,15 @@
 
 #define HIDL_SOCKEXIT   2
 
-class icqfileassociation {
-    public:
-	icqfileassociation(unsigned int fuin, unsigned long fseq,
-	string ffname, int fdir): uin(fuin), seq(fseq), fname(ffname), dir(fdir) {};
+struct icqfileassociation {
+    icqfileassociation(unsigned int fuin, unsigned long fseq,
+	const string ffname, int fdir):
+	    uin(fuin), seq(fseq), fname(ffname), dir(fdir) {};
 
-	int dir;
-	unsigned int uin;
-	unsigned long seq;
-	string fname;
+    int dir;
+    unsigned int uin;
+    unsigned long seq;
+    string fname;
 };
 
 class icqhook {
@@ -42,8 +42,8 @@ class icqhook {
 	bool flogged, connecting;
 	int newuin, n_keepalive, manualstatus;
 	unsigned long seq_keepalive;
-	time_t timer_keepalive, timer_tcp, timer_resolve, timer_keypress;
-	time_t timer_offline, timer_reconnect, timer_ack, timer_checkmail;
+	time_t timer_keepalive, timer_tcp, timer_resolve;
+	time_t timer_offline, timer_reconnect, timer_ack;
 	time_t logontime;
 	verticalmenu *finddest;
 
@@ -68,7 +68,6 @@ class icqhook {
 	bool isconnecting();
 	struct tm *maketm(int hour, int minute, int day, int month, int year);
 	void exectimers();
-	bool idle(int options = 0);
 	void setfinddest(verticalmenu *m);
 	unsigned int getfinduin(int pos);
 	void clearfindresults();
@@ -76,6 +75,9 @@ class icqhook {
 	void addfile(unsigned int uin, unsigned long seq, string fname, int dir);
 	int getmanualstatus();
 	void setmanualstatus(int st);
+
+	int getsockfd() const;
+	bool online() const;
 
 	static void loggedin(struct icq_link *link);
 	static void ildisconnected(struct icq_link *link, int reason);
@@ -170,5 +172,6 @@ class icqhook {
 };
 
 extern icqhook ihook;
+extern struct icq_link icql;
 
 #endif

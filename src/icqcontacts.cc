@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.11 2001/11/08 10:26:18 konst Exp $
+* $Id: icqcontacts.cc,v 1.12 2001/11/11 14:30:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,6 +25,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqconf.h"
+#include "icqhook.h"
 #include "icqgroups.h"
 
 icqcontacts::icqcontacts() {
@@ -33,11 +34,11 @@ icqcontacts::icqcontacts() {
 icqcontacts::~icqcontacts() {
 }
 
-icqcontact *icqcontacts::addnew(const contactinfo cinfo, bool notinlist = true) {
+icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
     icqcontact *c = new icqcontact(cinfo);
 
-    switch(cinfo.type) {
-	case contactinfo::icq:
+    switch(cinfo.pname) {
+	case icq:
 	    c->setnick(i2str(cinfo.uin));
 	    c->setdispnick(i2str(cinfo.uin));
 	    c->save();
@@ -50,7 +51,7 @@ icqcontact *icqcontacts::addnew(const contactinfo cinfo, bool notinlist = true) 
 	    }
 	    break;
 
-	case contactinfo::infocard:
+	case infocard:
 	    c->save();
 	    add(c);
 	    break;
@@ -66,7 +67,7 @@ void icqcontacts::load() {
     DIR *d;
     FILE *f;
     icqcontact *c;
-    contactinfo cinfo;
+    imcontact cinfo;
 
     empty();
 
@@ -80,11 +81,11 @@ void icqcontacts::load() {
 		c = 0;
 
 		if(ent->d_name[0] == 'n') {
-		    c = new icqcontact(contactinfo(atol(ent->d_name+1),
-			contactinfo::infocard));
+		    c = new icqcontact(imcontact(atol(ent->d_name+1),
+			infocard));
 		} else if(strchr("0123456789", ent->d_name[0])) {
-		    c = new icqcontact(contactinfo(atol(ent->d_name),
-			contactinfo::icq));
+		    c = new icqcontact(imcontact(atol(ent->d_name),
+			icq));
 		}
 
 		if(c) clist.add(c);
@@ -97,7 +98,7 @@ void icqcontacts::load() {
     if(!count) {
 	tuname = tname + "17502151";
 	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
-	add(new icqcontact(contactinfo(17502151, contactinfo::icq)));
+	add(new icqcontact(imcontact(17502151, icq)));
     }
 
     cinfo = contactroot;
@@ -131,8 +132,8 @@ void icqcontacts::send() {
 	c = (icqcontact *) at(i);
 
 	if(c->getdesc().uin)
-	switch(c->getdesc().type) {
-	    case contactinfo::icq:
+	switch(c->getdesc().pname) {
+	    case icq:
 		icq_ContactAdd(&icql, c->getdesc().uin);
 		icq_ContactSetVis(&icql, c->getdesc().uin,
 		    lst.inlist(c->getdesc(), csvisible) ? ICQ_CONT_VISIBLE :
@@ -147,7 +148,7 @@ void icqcontacts::send() {
     icq_SendInvisibleList(&icql);
 }
 
-void icqcontacts::remove(const contactinfo cinfo) {
+void icqcontacts::remove(const imcontact cinfo) {
     int i;
     icqcontact *c;
 
@@ -162,7 +163,7 @@ void icqcontacts::remove(const contactinfo cinfo) {
     }
 }
 
-icqcontact *icqcontacts::get(const contactinfo cinfo) {
+icqcontact *icqcontacts::get(const imcontact cinfo) {
     int i;
     icqcontact *c;
 

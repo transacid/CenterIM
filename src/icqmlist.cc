@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.5 2001/11/08 10:26:20 konst Exp $
+* $Id: icqmlist.cc,v 1.6 2001/11/11 14:30:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,7 +53,7 @@ void icqlist::load() {
 
 			if(uin) {
 			    push_back(modelistitem(unmime(p),
-				contactinfo(uin, contactinfo::icq), st));
+				imcontact(uin, icq), st));
 			}
 		    }
 		}
@@ -93,7 +93,7 @@ void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
     }
 }
 
-bool icqlist::inlist(const contactinfo cinfo, contactstatus ncs) const {
+bool icqlist::inlist(const imcontact cinfo, contactstatus ncs) const {
     vector<modelistitem>::const_iterator i;
 
     i = begin();
@@ -105,7 +105,7 @@ bool icqlist::inlist(const contactinfo cinfo, contactstatus ncs) const {
     return false;
 }
 
-void icqlist::del(const contactinfo cinfo, contactstatus ncs) {
+void icqlist::del(const imcontact cinfo, contactstatus ncs) {
     vector<modelistitem>::iterator i;
 
     i = begin();
@@ -132,7 +132,7 @@ contactstatus modelistitem::getstatus() const {
     return cs;
 }
 
-contactinfo modelistitem::getdesc() const {
+imcontact modelistitem::getdesc() const {
     return cdesc;
 }
 
@@ -140,10 +140,10 @@ void modelistitem::setstatus(contactstatus ncs) {
     cs = ncs;
 }
 
-bool modelistitem::operator == (const contactinfo &cinfo) const {
+bool modelistitem::operator == (const imcontact &cinfo) const {
     return cdesc == cinfo;
 }
 
-bool modelistitem::operator != (const contactinfo &cinfo) const {
+bool modelistitem::operator != (const imcontact &cinfo) const {
     return !(*this == cinfo);
 }

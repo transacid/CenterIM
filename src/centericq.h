@@ -21,6 +21,8 @@ class centericq {
 	};
 
     protected:
+	time_t timer_checkmail, timer_keypress;
+
 	static void handlesignal(int signum);
 
 	void checkparallel();
@@ -30,23 +32,27 @@ class centericq {
 	centericq();
 	~centericq();
 
-	bool message(const contactinfo cinfo, const string text, msgmode mode);
+	bool message(const imcontact cinfo, const string text, msgmode mode);
 
 	void commandline(int argc, char **argv);
 	void exec();
 	void reg();
 	void mainloop();
-	void userinfo(const contactinfo cinfo);
+	void userinfo(const imcontact cinfo);
 	void changestatus();
 	void updatedetails();
 	void updateconf();
-	void sendfiles(const contactinfo cinfo);
-	void sendcontacts(const contactinfo cinfo);
+	void sendfiles(const imcontact cinfo);
+	void sendcontacts(const imcontact cinfo);
 	void find();
 	void nonicq(int id);
 	void checkmail();
 
 	icqcontact *adduin(unsigned int uin);
+
+	bool idle(int options = 0);
+	void exectimers();
+	time_t getkeypress() const;
 };
 
 extern centericq cicq;

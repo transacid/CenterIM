@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.1 2001/11/08 16:46:39 konst Exp $
+* $Id: icqhook.cc,v 1.2 2001/11/11 14:30:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,9 +41,9 @@ icqhook::icqhook() {
     time_t c = time(0);
 
     timer_keepalive = timer_tcp = timer_resolve =
-    timer_offline = timer_ack = timer_keypress = c;
+    timer_offline = timer_ack;
 
-    timer_reconnect = timer_checkmail = 0;
+    timer_reconnect = 0;
 
     newuin = 0;
     finddest = 0;
@@ -202,7 +202,7 @@ void icqhook::regdisconnected(struct icq_link *link, int reason) {
 void icqhook::message(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *msg) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(strlen(msg))
     if(!lst.inlist(cinfo, csignore)) {
@@ -220,7 +220,7 @@ unsigned char month, unsigned short year, const char *msg) {
 void icqhook::contact(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, icqcontactmsg *cont) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(!lst.inlist(cinfo, csignore)) {
 	hist.putcontact(cinfo, cont, HIST_MSG_IN, TIMESTAMP);
@@ -237,7 +237,7 @@ unsigned char month, unsigned short year, icqcontactmsg *cont) {
 void icqhook::url(struct icq_link *link, unsigned long uin, unsigned char hour,
 unsigned char minute, unsigned char day, unsigned char month,
 unsigned short year, const char *url, const char *descr) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(!lst.inlist(cinfo, csignore)) {
 	hist.puturl(cinfo, url, descr, HIST_MSG_IN, TIMESTAMP);
@@ -269,7 +269,7 @@ void icqhook::chat(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *descr,
 unsigned long seq /*, const char *session, unsigned long port*/) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(!lst.inlist(cinfo, csignore)) {
 	icqcontact *c = clist.get(cinfo);
@@ -284,7 +284,7 @@ void icqhook::file(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *descr,
 const char *filename, unsigned long filesize, unsigned long seq) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(!lst.inlist(cinfo, csignore)) {
 	hist.putfile(cinfo, seq, filename, filesize, HIST_MSG_IN, TIMESTAMP);
@@ -302,7 +302,7 @@ void icqhook::added(struct icq_link *link, unsigned long uin,
 unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *nick,
 const char *first, const char *last, const char *email) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(!lst.inlist(cinfo, csignore)) {
 	string text = (string) "I" + i2str(uin) + " " + first + " " + last + " ";
@@ -320,7 +320,7 @@ unsigned char hour, unsigned char minute, unsigned char day,
 unsigned char month, unsigned short year, const char *nick,
 const char *first, const char *last, const char *email,
 const char *reason) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(!lst.inlist(cinfo, csignore)) {
 	string text = (string) "R" + i2str(uin) + " " + first + " " + last + " ";
@@ -336,7 +336,7 @@ const char *reason) {
 void icqhook::useronline(struct icq_link *link, unsigned long uin,
 unsigned long status, unsigned long ip, unsigned short port,
 unsigned long real_ip, unsigned char tcp_flag) {
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     icqcontact *c = clist.get(cinfo);
     time_t curtime = time(0);
@@ -375,7 +375,7 @@ unsigned long real_ip, unsigned char tcp_flag) {
 
 void icqhook::useroffline(struct icq_link *link, unsigned long uin) {
     icqcontact *c;
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(c = clist.get(cinfo)) {
 	c->setstatus(STATUS_OFFLINE);
@@ -386,7 +386,7 @@ void icqhook::useroffline(struct icq_link *link, unsigned long uin) {
 void icqhook::userstatus(struct icq_link *link, unsigned long uin,
 unsigned long status) {
     icqcontact *c;
-    contactinfo cinfo(uin, contactinfo::icq);
+    imcontact cinfo(uin, icq);
 
     if(c = clist.get(cinfo)) {
 	c->setstatus(status);
@@ -510,7 +510,7 @@ void icqhook::setreguin(unsigned int ruin) {
     newuin = ruin;
 }
 
-bool icqhook::logged() {
+bool icqhook::logged() const {
     return flogged;
 }
 
@@ -546,7 +546,7 @@ int result, unsigned int length, void *data) {
 
     for(i = ihook.files.begin(); i != ihook.files.end(); i++) {
 	if(i->seq == id) {
-	    icqcontact *c = (icqcontact *) clist.get(contactinfo(i->uin, contactinfo::icq));
+	    icqcontact *c = (icqcontact *) clist.get(imcontact(i->uin, icq));
 
 	    if(!c) return;
 
@@ -625,7 +625,6 @@ void icqhook::exectimers() {
 	if((!seq_keepalive &&
 	(period > (conf.getsockshost().empty() ? PERIOD_KEEPALIVE : PERIOD_SOCKSALIVE))) ||
 	(seq_keepalive && (period > PERIOD_WAIT_KEEPALIVE))) {
-//            if(!seq_keepalive) offl.scan(0, osexpired);
 	    seq_keepalive = icq_KeepAlive(&icql);
 	    n_keepalive++;
 	    time(&timer_keepalive);
@@ -653,7 +652,7 @@ void icqhook::exectimers() {
 	}
 	else
 	if(away &&
-	(timer_current-timer_keypress > away*60) &&
+	(timer_current-cicq.getkeypress() > away*60) &&
 	(icql.icq_Status != STATUS_AWAY) &&
 	(icql.icq_Status != STATUS_NA) &&
 	(icql.icq_Status != STATUS_INVISIBLE)) {
@@ -663,7 +662,7 @@ void icqhook::exectimers() {
 	}
 	else
 	if(na &&
-	(timer_current-timer_keypress > na*60) &&
+	(timer_current-cicq.getkeypress() > na*60) &&
 	(icql.icq_Status != STATUS_NA) &&
 	(icql.icq_Status != STATUS_INVISIBLE)) {
 	    icq_ChangeStatus(&icql, STATUS_NA);
@@ -672,7 +671,7 @@ void icqhook::exectimers() {
 	}
 	else
 	if((icql.icq_Status != manualstatus) &&
-	(timer_current-timer_keypress < MINCK0(away, na)*60)) {
+	(timer_current-cicq.getkeypress() < MINCK0(away, na)*60)) {
 	    icq_ChangeStatus(&icql, manualstatus);
 	    face.log(_("+ the user is back"));
 	    face.update();
@@ -691,56 +690,8 @@ void icqhook::exectimers() {
 	if(connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
 	    icq_Disconnect(&icql);
 	    disconnected(&icql, 0);
-/*
-	    icql.icq_Status = (long unsigned int) STATUS_OFFLINE;
-	    icql.icq_UDPSok = -1;
-	    connecting = false;
-*/
 	}
     }
-
-    if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
-	cicq.checkmail();
-	time(&timer_checkmail);
-    }
-}
-
-bool icqhook::idle(int options = 0) {
-    bool keypressed;
-
-    for(keypressed = false; !keypressed; ) {
-	timer_keypress = lastkeypress();
-	exectimers();
-
-	int sockfd = icq_GetSok(&icql);
-	fd_set fds;
-	struct timeval tv;
-
-	FD_ZERO(&fds);
-	FD_SET(0, &fds);
-	if(sockfd > 2) FD_SET(sockfd, &fds);
-	tv.tv_sec = PERIOD_SELECT;
-	tv.tv_usec = 0;
-
-	if(sockfd > 2) {
-	    select(sockfd + 1, &fds, 0, 0, &tv);
-	} else {
-	    tv.tv_sec = PERIOD_RECONNECT/3;
-	    select(1, &fds, 0, 0, &tv);
-	}
-
-	if(FD_ISSET(0, &fds)) {
-	    keypressed = true;
-	    time(&timer_keypress);
-	} else
-	if(sockfd > 2)
-	if(FD_ISSET(sockfd, &fds)) {
-	    icq_HandleServerResponse(&icql);
-	    if(options & HIDL_SOCKEXIT) break;
-	}
-    }
-
-    return keypressed;
 }
 
 void icqhook::setfinddest(verticalmenu *m) {
@@ -776,4 +727,12 @@ void icqhook::setmanualstatus(int st) {
 
 bool icqhook::isconnecting() {
     return connecting;
+}
+
+int icqhook::getsockfd() const {
+    return online() ? icq_GetSock(&icql) : 0;
+}
+
+bool icqhook::online() const {
+    return connecting || logged();
 }

@@ -13,13 +13,13 @@
 #include "icq.h"
 
 #include "icqcommon.h"
-#include "contactinfo.h"
+#include "imcontact.h"
 
 #define SOUND_COUNT     7
 
 class icqcontact {
     protected:
-	contactinfo cdesc;
+	imcontact cdesc;
 
 	unsigned short seq2;
 
@@ -45,7 +45,7 @@ class icqcontact {
 	bool islocal() const;
 
     public:
-	icqcontact(contactinfo adesc);
+	icqcontact(imcontact adesc);
 	~icqcontact();
 
 	void setstatus(int fstatus);
@@ -151,7 +151,7 @@ class icqcontact {
 	void settimezone(char atimezone) { utimezone = atimezone; }
 	const string gettimezone() const;
 
-	const contactinfo getdesc() const;
+	const imcontact getdesc() const;
 
 	bool operator > (const icqcontact &acontact) const;
 };

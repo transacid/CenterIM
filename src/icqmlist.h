@@ -6,7 +6,7 @@
 #include "cmenus.h"
 
 #include "icqcommon.h"
-#include "contactinfo.h"
+#include "imcontact.h"
 
 enum contactstatus {
     csignore = 1,
@@ -17,22 +17,22 @@ enum contactstatus {
 class modelistitem {
     private:
 	string nick;
-	contactinfo cdesc;
+	imcontact cdesc;
 	contactstatus cs;
 
     public:
 	modelistitem() {}
-	modelistitem(const string nnick, const contactinfo adesc, contactstatus ncs):
+	modelistitem(const string nnick, const imcontact adesc, contactstatus ncs):
 	    nick(nnick), cdesc(adesc), cs(ncs) {}
 
 	const string getnick() const;
-	contactinfo getdesc() const;
+	imcontact getdesc() const;
 	contactstatus getstatus() const;
 
 	void setstatus(contactstatus ncs);
 
-	bool operator == (const contactinfo &cinfo) const;
-	bool operator != (const contactinfo &cinfo) const;
+	bool operator == (const imcontact &cinfo) const;
+	bool operator != (const imcontact &cinfo) const;
 };
 
 class icqlist : public vector<modelistitem> {
@@ -48,8 +48,8 @@ class icqlist : public vector<modelistitem> {
 
 	void fillmenu(verticalmenu *m, contactstatus ncs);
 
-	bool inlist(const contactinfo cinfo, contactstatus ncs) const;
-	void del(const contactinfo cinfo, contactstatus ncs);
+	bool inlist(const imcontact cinfo, contactstatus ncs) const;
+	void del(const imcontact cinfo, contactstatus ncs);
 
 	modelistitem menuat(int pos) const;
 };

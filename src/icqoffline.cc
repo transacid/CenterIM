@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.9 2001/11/08 10:26:20 konst Exp $
+* $Id: icqoffline.cc,v 1.10 2001/11/11 14:30:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,13 +36,13 @@ icqoffline::icqoffline() {
 icqoffline::~icqoffline() {
 }
 
-FILE *icqoffline::open(const contactinfo cinfo, const char *mode) {
+FILE *icqoffline::open(const imcontact cinfo, const char *mode) {
     icqcontact *c = clist.get(cinfo);
     string fname = c->getdirname() + "/offline";
     return fopen(fname.c_str(), mode);
 }
 
-void icqoffline::sendmsg(const contactinfo cinfo, const string atext) {
+void icqoffline::sendmsg(const imcontact cinfo, const string atext) {
     icqcontact *c = clist.get(cinfo);
     unsigned long seq;
     FILE *f = open(cinfo, "a");
@@ -76,7 +76,7 @@ void icqoffline::sendmsg(const contactinfo cinfo, const string atext) {
     }
 }
 
-void icqoffline::sendurl(const contactinfo cinfo, const string url, const string text) {
+void icqoffline::sendurl(const imcontact cinfo, const string url, const string text) {
     icqcontact *c = clist.get(cinfo);
     FILE *f = open(cinfo, "a");
 
@@ -95,7 +95,7 @@ void icqoffline::sendurl(const contactinfo cinfo, const string url, const string
     }
 }
 
-bool icqoffline::sendevent(const contactinfo cinfo, bool msg, const string url,
+bool icqoffline::sendevent(const imcontact cinfo, bool msg, const string url,
 const string atext, FILE *of, unsigned long seq, time_t tm, scanaction act,
 unsigned long sseq) {
     icqcontact *c = clist.get(cinfo);

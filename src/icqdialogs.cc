@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.19 2001/11/08 10:26:18 konst Exp $
+* $Id: icqdialogs.cc,v 1.20 2001/11/11 14:30:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -408,8 +408,9 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 		case  0: finished = true; break;
 		case  2:
 		    c->setnick(inputstr(_("Nickname: "), c->getnick()));
-		    if(c->getdesc().type == contactinfo::infocard)
+		    if(c->getdesc().pname == infocard) {
 			c->setdispnick(c->getnick());
+		    }
 		    break;
 		case  3: fname = inputstr(_("First name: "), fname); break;
 		case  4: lname = inputstr(_("Last name: "), lname); break;
@@ -588,7 +589,7 @@ void icqface::editabout(string &fabout) {
     w.close();
 }
 
-bool icqface::sendfiles(const contactinfo cinfo, string &msg, linkedlist &flist) {
+bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
     int n, i, b;
     bool finished = false;
     string fname;
@@ -826,7 +827,7 @@ int icqface::editaboutkeys(texteditor &e, int k) {
 void icqface::detailsidle(dialogbox &db) {
     icqcontact *c;
 
-    if(!ihook.idle(HIDL_SOCKEXIT))
+    if(!cicq.idle(HIDL_SOCKEXIT))
     if(c = clist.get(contactroot))
     if(c->updated() >= 5) {
 	face.gendetails(db.gettree());

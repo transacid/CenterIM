@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.31 2001/11/08 16:46:37 konst Exp $
+* $Id: icqface.cc,v 1.32 2001/11/11 14:30:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,8 +191,8 @@ int icqface::contextmenu(icqcontact *c) {
 
     if(!c) return 0;
 
-    switch(c->getdesc().type) {
-	case contactinfo::icq:
+    switch(c->getdesc().pname) {
+	case icq:
 	    if(!c->getdesc().uin) {
 		m.additem(0, ACT_HISTORY,  _(" Events history         h"));
 	    } else if(c->inlist()) {
@@ -222,7 +222,7 @@ int icqface::contextmenu(icqcontact *c) {
 	    }
 	    break;
 
-	case contactinfo::infocard:
+	case infocard:
 	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
 	    m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
 	    m.additem(0, ACT_EDITUSER, _(" Edit details"));
@@ -495,7 +495,7 @@ bool icqface::findresults() {
 	switch(b) {
 	    case 0:
 		if(ffuin = ihook.getfinduin(r)) {
-		    cicq.userinfo(contactinfo(ffuin, contactinfo::icq));
+		    cicq.userinfo(imcontact(ffuin, icq));
 		}
 		break;
 	    case 1:
@@ -525,7 +525,7 @@ void icqface::infoclear(dialogbox &db, icqcontact *c, unsigned int uin) {
 
     mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
 	conf.getcolor(cp_main_highlight), _("Information about %lu, %s"), uin,
-	c->getdesc().type == contactinfo::infocard ?
+	c->getdesc().pname == infocard ?
 	    _("Non-ICQ") : textstatus(c->getstatus()).c_str());
 
     workarealine(WORKAREA_Y1+2);
@@ -791,7 +791,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
     db.getbrowser()->setbuf(text);
 }
 
-void icqface::userinfo(const contactinfo cinfo, const contactinfo realinfo) {
+void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
     bool finished = false, showinfo = true;
     icqcontact *c = clist.get(realinfo);
     textbrowser tb(conf.getcolor(cp_main_text));
@@ -810,7 +810,7 @@ void icqface::userinfo(const contactinfo cinfo, const contactinfo realinfo) {
     db.setbar(new horizontalbar(WORKAREA_X1+2, WORKAREA_Y2-1,
 	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 	_("Info"), _("Home"), _("Work"), _("More"), _("About"),
-	cinfo.type != contactinfo::infocard ? _("Retrieve") : _("Edit"), 0));
+	cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
 
     db.addautokeys();
     db.idle = &dialogidle;
@@ -818,7 +818,7 @@ void icqface::userinfo(const contactinfo cinfo, const contactinfo realinfo) {
 
     while(!finished) {
 	if(!showinfo) {
-	    if(ihook.idle(HIDL_SOCKEXIT)) {
+	    if(cicq.idle(HIDL_SOCKEXIT)) {
 		finished = !db.open(k, b);
 	    }
 	    showinfo = !finished;
@@ -845,10 +845,13 @@ void icqface::userinfo(const contactinfo cinfo, const contactinfo realinfo) {
 		    infoclear(db, c, cinfo.uin);
 		    break;
 		case 5:
-		    if(cinfo.type == contactinfo::infocard) {
-			updatedetails(c);
-		    } else {
-			c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
+		    switch(cinfo.pname) {
+			case infocard:
+			    updatedetails(c);
+			    break;
+			case icq:
+			    c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
+			    break;
 		    }
 
 		    b = lastb;
@@ -1070,7 +1073,7 @@ void icqface::workarealine(int l, chtype c = HLINE) {
     mvhline(l, WORKAREA_X1+1, c, WORKAREA_X2-WORKAREA_X1-1);
 }
 
-bool icqface::editurl(const contactinfo cinfo, string &url, string &text) {
+bool icqface::editurl(const imcontact cinfo, string &url, string &text) {
     bool finished = false;
     static textinputline urlinp;
     char *ctext;
@@ -1135,7 +1138,7 @@ bool icqface::editurl(const contactinfo cinfo, string &url, string &text) {
     return editdone;
 }
 
-bool icqface::editmsg(const contactinfo cinfo, string &text) {
+bool icqface::editmsg(const imcontact cinfo, string &text) {
     char *ctext;
     texteditor *se = new texteditor;
     icqcontact *c = clist.get(cinfo);
@@ -1195,7 +1198,7 @@ bool icqface::checkicqmessage(unsigned int uin, const string atext, bool &ret, i
 		fin = true;
 		break;
 	    case 0:
-		cicq.userinfo(contactinfo(uin, contactinfo::icq));
+		cicq.userinfo(imcontact(uin, icq));
 		break;
 	    case 1:
 		cicq.adduin(uin);
@@ -1271,7 +1274,7 @@ int icqface::showicq(unsigned int uin, const string text, char imt, int options 
     return b;
 }
 
-bool icqface::showevent(const contactinfo cinfo, int direction, time_t &lastread) {
+bool icqface::showevent(const imcontact cinfo, int direction, time_t &lastread) {
     int event, dir, i, fsize, n;
     string text, url;
     struct tm tm;
@@ -1293,7 +1296,7 @@ bool icqface::showevent(const contactinfo cinfo, int direction, time_t &lastread
 		    case -1: ret = false; break;
 		    case 0:
 			cicq.message(dir == HIST_MSG_IN ?
-			    cinfo : contactinfo(icql.icq_Uin, contactinfo::icq),
+			    cinfo : imcontact(icql.icq_Uin, icq),
 				text, centericq::forward);
 			break;
 		    case 1:
@@ -1317,7 +1320,7 @@ bool icqface::showevent(const contactinfo cinfo, int direction, time_t &lastread
 		case 1:
 		    text = url + "\n\n" + text;
 		    cicq.message(dir == HIST_MSG_IN ?
-			cinfo : contactinfo(icql.icq_Uin, contactinfo::icq),
+			cinfo : imcontact(icql.icq_Uin, icq),
 			text, centericq::forward);
 		    break;
 		case 2:
@@ -1345,7 +1348,7 @@ bool icqface::showevent(const contactinfo cinfo, int direction, time_t &lastread
     return ret;
 }
 
-int icqface::showmsg(const contactinfo cinfo, const string text,
+int icqface::showmsg(const imcontact cinfo, const string text,
 struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN,
 bool inhistory = false) {
     int i, b;
@@ -1407,7 +1410,7 @@ bool inhistory = false) {
     return b;
 }
 
-int icqface::showurl(const contactinfo cinfo, const string url,
+int icqface::showurl(const imcontact cinfo, const string url,
 const string text, struct tm &recvtm, struct tm &senttm,
 int inout = HIST_MSG_IN, bool inhistory = false) {
     int i, b;
@@ -1469,7 +1472,7 @@ int inout = HIST_MSG_IN, bool inhistory = false) {
     return b;
 }
 
-int icqface::showfile(const contactinfo cinfo, unsigned long seq,
+int icqface::showfile(const imcontact cinfo, unsigned long seq,
 const string fname, int fsize, struct tm &recvtm, struct tm &senttm,
 int inout = HIST_MSG_IN, bool inhistory = false) {
     int i, b;
@@ -1510,7 +1513,7 @@ int inout = HIST_MSG_IN, bool inhistory = false) {
     return b;
 }
 
-int icqface::showcontact(const contactinfo cinfo, icqcontactmsg *cont,
+int icqface::showcontact(const imcontact cinfo, icqcontactmsg *cont,
 struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN,
 bool inhistory = false) {
     int n, b, i;
@@ -1560,7 +1563,7 @@ bool inhistory = false) {
 	    switch(b) {
 		case 0:
 		    if(cur) {
-			cicq.userinfo(contactinfo(cur->uin, contactinfo::icq));
+			cicq.userinfo(imcontact(cur->uin, icq));
 		    }
 		    break;
 
@@ -1585,7 +1588,7 @@ bool inhistory = false) {
     return b;
 }
 
-void icqface::acceptfile(const contactinfo cinfo, unsigned long seq,
+void icqface::acceptfile(const imcontact cinfo, unsigned long seq,
 const string fname) {
     if(ihook.logged()) {
 	icq_FileSession *sess;
@@ -1612,7 +1615,7 @@ const string fname) {
     }
 }
 
-void icqface::refusefile(const contactinfo cinfo, unsigned long seq) {
+void icqface::refusefile(const imcontact cinfo, unsigned long seq) {
     if(ihook.logged()) {
 	icqcontact *c = (icqcontact *) clist.get(cinfo);
 	icq_RefuseFileRequest(&icql, cinfo.uin, seq, "refused");
@@ -1620,7 +1623,7 @@ void icqface::refusefile(const contactinfo cinfo, unsigned long seq) {
     }
 }
 
-void icqface::history(const contactinfo cinfo) {
+void icqface::history(const imcontact cinfo) {
     int k, savepos, b, n, i;
     icqcontact *c = clist.get(cinfo);
     dialogbox db;
@@ -1688,7 +1691,7 @@ void icqface::history(const contactinfo cinfo) {
     db.close();
 }
 
-void icqface::read(const contactinfo cinfo) {
+void icqface::read(const imcontact cinfo) {
     icqcontact *c = clist.get(cinfo);
 
     saveworkarea();
@@ -1714,7 +1717,7 @@ void icqface::modelist(contactstatus cs) {
     icqcontact *c;
     dialogbox db;
     modelistitem it;
-    vector<contactinfo>::iterator ic;
+    vector<imcontact>::iterator ic;
 
     saveworkarea();
     clearworkarea();
@@ -1799,9 +1802,9 @@ bool icqface::multicontacts(const string ahead = "") {
     bool ret = true, finished = false;
     string head = ahead;
 
-    contactinfo *ic;
-    vector<contactinfo>::iterator c;
-    vector<contactinfo> mlst;
+    imcontact *ic;
+    vector<imcontact>::iterator c;
+    vector<imcontact> mlst;
 
     verticalmenu m(WORKAREA_X1+1, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2,
 	conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
@@ -1831,7 +1834,7 @@ bool icqface::multicontacts(const string ahead = "") {
 	for(c = mlst.begin(); c != mlst.end(); c++) {
 	    icqcontact *cont = (icqcontact *) clist.get(*c);
 
-	    m.additemf(0, (contactinfo *) &(*c), " [%c] %s",
+	    m.additemf(0, (imcontact *) &(*c), " [%c] %s",
 		find(muins.begin(), muins.end(), *c) != muins.end()
 		? 'x' : ' ', cont->getdispnick().c_str());
 	}
@@ -1841,7 +1844,7 @@ bool icqface::multicontacts(const string ahead = "") {
 	switch(m.open()) {
 	    case -2:
 		if(m.getref(m.getpos())) {
-		    ic = (contactinfo *) m.getref(m.getpos());
+		    ic = (imcontact *) m.getref(m.getpos());
 		    c = find(muins.begin(), muins.end(), *ic);
 
 		    if(c != muins.end()) {
@@ -1948,7 +1951,7 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 	kgotoxy(lx+2+disp.size(), ly);
 	refresh();
 
-	if(ihook.idle())
+	if(cicq.idle())
 	switch(k = getkey()) {
 	    case KEY_ESC:
 	    case '\r':
@@ -1986,7 +1989,7 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 			}
 
 			if(multi) {
-			    c = clist.get(*((contactinfo *) cm->getref(i)));
+			    c = clist.get(*((imcontact *) cm->getref(i)));
 			} else {
 			    c = (icqcontact *) mcontacts->getref(i);
 			}
@@ -2065,7 +2068,7 @@ void icqface::showextractedurls() {
 // ----------------------------------------------------------------------------
 
 void icqface::menuidle(verticalmenu &m) {
-    ihook.idle();
+    cicq.idle();
 
     if(face.dotermresize)
 	if(&m == &face.mcontacts->menu) {
@@ -2077,11 +2080,11 @@ void icqface::menuidle(verticalmenu &m) {
 }
 
 void icqface::dialogidle(dialogbox &caller) {
-    ihook.idle();
+    cicq.idle();
 }
 
 void icqface::textbrowseridle(textbrowser &b) {
-    ihook.idle();
+    cicq.idle();
 }
 
 int icqface::contactskeys(verticalmenu &m, int k) {
@@ -2195,11 +2198,11 @@ int icqface::userinfokeys(dialogbox &db, int k) {
 }
 
 void icqface::editidle(texteditor &e) {
-    ihook.idle();
+    cicq.idle();
 }
 
 void icqface::textinputidle(textinputline &il) {
-    ihook.idle();
+    cicq.idle();
 }
 
 void icqface::termresize(void) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.15 2001/11/08 10:26:18 konst Exp $
+* $Id: icqcontact.cc,v 1.16 2001/11/11 14:30:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,8 +27,10 @@
 #include "icqgroups.h"
 #include "icqconf.h"
 #include "centericq.h"
+#include "icqhook.h"
+#include "yahoohook.h"
 
-icqcontact::icqcontact(const contactinfo adesc) {
+icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;
     int i;
 
@@ -40,8 +42,8 @@ icqcontact::icqcontact(const contactinfo adesc) {
 
     cdesc = adesc;
 
-    switch(cdesc.type) {
-	case contactinfo::infocard:
+    switch(cdesc.pname) {
+	case infocard:
 	    if(!cdesc.uin) {
 		fname = (string) getenv("HOME") + "/.centericq/n";
 
@@ -55,7 +57,7 @@ icqcontact::icqcontact(const contactinfo adesc) {
 	    load();
 	    break;
 
-	case contactinfo::icq:
+	case icq:
 	    load();
 	    scanhistory();
 	    break;
@@ -79,11 +81,11 @@ const string icqcontact::tosane(const string p) const {
 const string icqcontact::getdirname() const {
     string ret;
 
-    switch(cdesc.type) {
-	case contactinfo::infocard:
+    switch(cdesc.pname) {
+	case infocard:
 	    ret = (string) getenv("HOME") + "/.centericq/n" + i2str(cdesc.uin);
 	    break;
-	case contactinfo::icq:
+	case icq:
 	    ret = (string) getenv("HOME") + "/.centericq/" + i2str(cdesc.uin);
 	    break;
     }
@@ -209,7 +211,7 @@ void icqcontact::load() {
     struct stat st;
     string tname = getdirname(), fn;
 
-    contactinfo savedesc = cdesc;
+    imcontact savedesc = cdesc;
     clear();
     cdesc = savedesc;
 
@@ -353,8 +355,8 @@ void icqcontact::includeintolist() {
     unlink(fname.c_str());
     finlist = true;
 
-    switch(cdesc.type) {
-	case contactinfo::icq:
+    switch(cdesc.pname) {
+	case icq:
 	    icq_SendNewUser(&icql, cdesc.uin);
 	    break;
     }
@@ -749,8 +751,8 @@ void icqcontact::setmsgdirect(bool flag) {
 bool icqcontact::getmsgdirect() const {
     bool specific = false;
 
-    switch(cdesc.type) {
-	case contactinfo::icq:
+    switch(cdesc.pname) {
+	case icq:
 	    specific = icq_TCPLinkOpen(&icql, cdesc.uin);
 	    break;
     }
@@ -810,6 +812,6 @@ bool icqcontact::islocal() const {
     return false;
 }
 
-const contactinfo icqcontact::getdesc() const {
+const imcontact icqcontact::getdesc() const {
     return cdesc;
 }

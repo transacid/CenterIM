@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.13 2001/11/08 10:26:17 konst Exp $
+* $Id: icqconf.cc,v 1.14 2001/11/11 14:30:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,7 +32,7 @@
 #include "icqcontact.h"
 #include "icqcontacts.h"
 
-icqconf::icqconf(): uin(0), rs(rscard), rc(rcdark), autoaway(0),
+icqconf::icqconf(): icquin(0), rs(rscard), rc(rcdark), autoaway(0),
 autona(0), hideoffline(false), savepwd(true), antispam(false),
 mailcheck(true), usegroups(false) {
     setserver(ICQ_SERVER);
@@ -41,16 +41,22 @@ mailcheck(true), usegroups(false) {
 icqconf::~icqconf() {
 }
 
-unsigned int icqconf::getuin() {
-    return uin;
+void icqconf::geticqlogin(unsigned long &auin, string &apass) {
+    auin = icquin;
+
+    if(!conf.getsavepwd() && icqpass.empty()) {
+	icqpass = face.inputstr(_("Password: "), "", '*');
+	if(icqpass.empty()) {
+	    exit(0);
+	}
+    }
+
+    apass = icqpass;
 }
 
-const string &icqconf::getpassword() {
-    return password;
-}
-
-void icqconf::setpassword(string npass) {
-    password = npass;
+void icqconf::getyahoologin(string &alogin, string &apass) {
+    alogin = yahooid;
+    apass = yahoopass;
 }
 
 void icqconf::checkdir() {
@@ -79,10 +85,10 @@ void icqconf::loadmainconfig() {
 	    param = getword(buf);
 
 	    if(param == "uin") {
-		uin = atol(buf.c_str());
+		icquin = atol(buf.c_str());
 	    } else if(param == "pass") {
-		password = buf;
-		savepwd = !password.empty();
+		icqpass = buf;
+		savepwd = !icqpass.empty();
 	    } else if(param == "hideoffline") {
 		hideoffline = true;
 	    } else if(param == "russian") {
@@ -109,6 +115,10 @@ void icqconf::loadmainconfig() {
 		sockspass = buf;
 	    } else if(param == "usegroups") {
 		usegroups = true;
+	    } else if(param == "yahoo_id") {
+		yahooid = buf;
+	    } else if(param == "yahoo_pass") {
+		yahoopass = buf;
 	    }
 	}
 
@@ -122,9 +132,12 @@ void icqconf::savemainconfig(unsigned int fuin = 0) {
 
     if(f.is_open()) {
 	f << "server\t" << getservername() << ":" << i2str(getserverport()) << endl;
-	f << "uin\t" << i2str(fuin ? (uin = fuin) : getuin()) << endl;
+	f << "uin\t" << i2str(fuin ? (icquin = fuin) : icquin) << endl;
 
-	if(getsavepwd()) f << "pass\t" << getpassword() << endl;
+	if(getsavepwd()) f << "pass\t" << icqpass << endl;
+
+	f << "yahoo_id\t" << yahooid << endl
+	<< "yahoo_pass\t" << yahoopass << endl;
 
 	if(!getsockshost().empty()) {
 	    string user, pass;
@@ -300,7 +313,7 @@ void icqconf::loadsounds() {
 
 	    if(suin != "*") {
 		c = (ffuin = atol(suin.c_str())) ?
-		    clist.get(contactinfo(ffuin, contactinfo::icq)) : 0;
+		    clist.get(imcontact(ffuin, icq)) : 0;
 	    } else {
 		c = clist.get(contactroot);
 	    }
@@ -370,10 +383,11 @@ void icqconf::savestatus(int st) {
     }
 }
 
-void icqconf::registerinfo(unsigned int fuin, string passwd, string nick,
-string fname, string lname, string email) {
-    fuin = uin;
-    password = passwd;
+void icqconf::registerinfo(unsigned int fuin, const string passwd,
+const string nick, const string fname, const string lname,
+const string email) {
+    fuin = icquin;
+    icqpass = passwd;
     rnick = nick;
     rfname = fname;
     rlname = lname;

@@ -43,15 +43,16 @@ class icqconf {
     protected:
 	vector<icqgroup> groups;
 
-	unsigned int uin, port, socksport;
+	unsigned int icquin, port, socksport;
 
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    serveronly, usegroups;
 
-	string password, rnick, rfname, rlname, remail, server,
-	    sockshost, socksuser, sockspass, openurlcommand;
+	string icqpass, rnick, rfname, rlname, remail, server,
+	    sockshost, socksuser, sockspass, openurlcommand,
+	    yahooid, yahoopass;
 
 	list<int> boldcolors;
 
@@ -62,11 +63,9 @@ class icqconf {
 	icqconf();
 	~icqconf();
 
-	unsigned int getuin();
-	const string &getpassword();
+	void geticqlogin(unsigned long &auin, string &apass);
+	void getyahoologin(string &alogin, string &apass);
 
-	void setpassword(const string npass);
-	
 	void checkdir();
 	void load();
 
@@ -133,6 +132,5 @@ class icqconf {
 };
 
 extern icqconf conf;
-extern struct icq_link icql;
 
 #endif

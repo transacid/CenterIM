@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.9 2001/10/04 16:29:38 konst Exp $
+* $Id: centermain.cc,v 1.10 2001/11/11 14:30:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,6 +24,7 @@
 
 #include "centericq.h"
 #include "icqhook.h"
+#include "yahoohook.h"
 #include "icqface.h"
 #include "icqconf.h"
 #include "icqhist.h"
@@ -36,6 +37,7 @@ centericq cicq;
 icqconf conf;
 icqcontacts clist;
 icqhook ihook;
+yahoohook yhook;
 icqface face;
 icqhistory hist;
 icqoffline offl;

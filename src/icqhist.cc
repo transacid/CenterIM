@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.7 2001/11/08 10:26:19 konst Exp $
+* $Id: icqhist.cc,v 1.8 2001/11/11 14:30:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,7 +33,7 @@ icqhistory::icqhistory() {
 icqhistory::~icqhistory() {
 }
 
-FILE *icqhistory::open(const contactinfo cinfo, const char *mode) {
+FILE *icqhistory::open(const imcontact cinfo, const char *mode) {
     icqcontact *c = clist.get(cinfo);
 
     if(!c) {
@@ -45,7 +45,7 @@ FILE *icqhistory::open(const contactinfo cinfo, const char *mode) {
     return fopen(fname.c_str(), mode);
 }
 
-void icqhistory::putmessage(const contactinfo cinfo, const string text,
+void icqhistory::putmessage(const imcontact cinfo, const string text,
 int dir, struct tm *timestamp) {
     FILE *f = open(cinfo, "a");
     if(f) {
@@ -56,7 +56,7 @@ int dir, struct tm *timestamp) {
     }
 }
 
-void icqhistory::puturl(const contactinfo cinfo, const string url,
+void icqhistory::puturl(const imcontact cinfo, const string url,
 const string desc, int dir, struct tm *timestamp) {
     FILE *f = open(cinfo, "a");
     if(f) {
@@ -67,7 +67,7 @@ const string desc, int dir, struct tm *timestamp) {
     }
 }
 
-void icqhistory::putfile(const contactinfo cinfo, unsigned long seq,
+void icqhistory::putfile(const imcontact cinfo, unsigned long seq,
 const string fname, int fsize, int dir, struct tm *timestamp) {
     FILE *f = open(cinfo, "a");
     if(f) {
@@ -83,7 +83,7 @@ void icqhistory::putmail(const string nick, const string email,
 const string msg, int mailt, struct tm *timestamp) {
 }
 
-void icqhistory::putcontact(const contactinfo cinfo, icqcontactmsg *conts,
+void icqhistory::putcontact(const imcontact cinfo, icqcontactmsg *conts,
 int dir, struct tm *timestamp) {
     FILE *f = open(cinfo, "a");
     icqcontactmsg *cont;
@@ -103,7 +103,7 @@ int dir, struct tm *timestamp) {
     }
 }
 
-bool icqhistory::opencontact(const contactinfo cinfo, time_t lastread = 0) {
+bool icqhistory::opencontact(const imcontact cinfo, time_t lastread = 0) {
     bool ret = true;
     FILE *f;
 
@@ -318,7 +318,7 @@ void icqhistory::closecontact() {
     }
 }
 
-void icqhistory::fillmenu(const contactinfo cinfo, verticalmenu *m) {
+void icqhistory::fillmenu(const imcontact cinfo, verticalmenu *m) {
     int event, dir, color, i, n = 0;
     struct tm tm;
     string text, url;
