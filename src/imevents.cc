@@ -1,6 +1,8 @@
 #include "imevents.h"
 #include "centericq.h"
 
+#include <strstream>
+
 // -- serialization constants -------------------------------------------------
 
 static const string evlinebreak = "\r\n";
@@ -10,7 +12,7 @@ static const string sdirection[imevent::imdirection_size] = {
 };
 
 static const string seventtype[imevent::imeventtype_size] = {
-    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE"
+    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE", "CONT"
 };
 
 // -- basic imevent class -----------------------------------------------------
@@ -136,6 +138,8 @@ imevent *imevent::getevent() const {
 	    return new imemail(*this);
 	case notification:
 	    return new imnotification(*this);
+	case contacts:
+	    return new imcontacts(*this);
 	default:
 	    return 0;
     }
@@ -439,6 +443,85 @@ void imnotification::write(ofstream &f) const {
 
 void imnotification::read(ifstream &f) {
     text = readblock(f);
+}
+
+// -- imcontacts class --------------------------------------------------------
+
+imcontacts::imcontacts(const imcontact &acont, imdirection adirection, const vector< pair<unsigned int, string> > &lst)
+: imevent(acont, adirection, imevent::contacts), contacts(lst) {
+}
+
+imcontacts::imcontacts(const imevent &ev) {
+    type = imevent::contacts;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
+
+    const imcontacts *m = dynamic_cast<const imcontacts *>(&ev);
+
+    if(m) {
+	contacts = m->contacts;
+    }
+}
+
+string imcontacts::gettext() const {
+    string text = _("* Contacts : ");
+    vector< pair<unsigned int, string> >::const_iterator ic;
+
+    for(ic = contacts.begin(); ic != contacts.end(); ++ic) {
+	if(ic->first) {
+	    text += (ic->second.empty() ? _("<no nick>") : ic->second)
+		+ " (" + i2str(ic->first) + ")";
+	} else {
+	    text += ic->second;
+	}
+
+	if(ic+1 != contacts.end())
+	    text += ", ";
+    }
+
+    return text;
+}
+
+const vector< pair<unsigned int, string> > &imcontacts::getcontacts() const {
+    return contacts;
+}
+
+bool imcontacts::empty() const {
+    return contacts.empty();
+}
+
+bool imcontacts::contains(const string &atext) const {
+    return gettext().find(atext) != -1;
+}
+
+void imcontacts::write(ofstream &f) const {
+    vector< pair<unsigned int, string> >::const_iterator ic;
+
+    imevent::write(f);
+
+    for(ic = contacts.begin(); ic != contacts.end(); ++ic) {
+	f
+	    << ic->first << "\t"
+	    << ic->second << "\n";
+    }
+}
+
+void imcontacts::read(ifstream &f) {
+    strstream st;
+    string buf;
+    int pos;
+
+    st << readblock(f);
+
+    while(getline(st, buf)) {
+	while((pos = buf.find_first_of("\r\n")) != -1)
+	    buf.erase(pos, 1);
+
+	if((pos = buf.find("\t")) != -1) {
+	    contacts.push_back(make_pair(atoi(buf.substr(0, pos).c_str()), buf.substr(pos+1)));
+	}
+    }
 }
 
 // -- imrawevent class --------------------------------------------------------

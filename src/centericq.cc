@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.116 2002/08/22 18:13:12 konst Exp $
+* $Id: centericq.cc,v 1.117 2002/08/30 17:31:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -204,6 +204,11 @@ void centericq::mainloop() {
 	    case ACT_SMS:
 		sendevent(imsms(c->getdesc(), imevent::outgoing,
 		    c->getpostponed()), icqface::ok);
+		break;
+
+	    case ACT_CONTACT:
+		sendevent(imcontacts(c->getdesc(), imevent::outgoing, vector< pair<unsigned int, string> >()),
+		    icqface::ok);
 		break;
 
 	    case ACT_AUTH:
@@ -709,6 +714,23 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	}
 
 	sendev = new imsms(m->getcontact(), imevent::outgoing, text, phone);
+
+    } else if(ev.gettype() == imevent::contacts) {
+	const imcontacts *m = dynamic_cast<const imcontacts *>(&ev);
+
+	switch(r) {
+	    case icqface::forward:
+	    case icqface::ok:
+		sendev = new imcontacts(m->getcontact(), imevent::outgoing,
+		    m->getcontacts());
+		break;
+
+	    case icqface::reply:
+		/* reply to contacts is a message */
+		sendev = new immessage(m->getcontact(), imevent::outgoing, "");
+		break;
+	}
+
     }
 
     if(proceed = sendev) {
@@ -745,8 +767,32 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
     return proceed;
 }
 
-void centericq::readevent(const imevent &ev, bool &enough, bool &fin) {
-    icqface::eventviewresult r = face.eventview(&ev);
+icqface::eventviewresult centericq::readevent(const imevent &ev, const vector<icqface::eventviewresult> &buttons) {
+    bool b1, b2;
+    return readevent(ev, b1, b2, buttons);
+}
+
+icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, bool &fin, const vector<icqface::eventviewresult> &buttons) {
+    icqface::eventviewresult r = face.eventview(&ev, buttons);
+
+    imcontact cont = ev.getcontact();
+    string nickname;
+
+    if(ev.gettype() == imevent::contacts) {
+	const imcontacts *m = static_cast<const imcontacts *>(&ev);
+
+	if(face.extk <= m->getcontacts().size() && face.extk > 0) {
+	    vector< pair<unsigned int, string> >::const_iterator icc =
+		m->getcontacts().begin()+face.extk-1;
+
+	    nickname = icc->second;
+	    cont = imcontact();
+	    cont.pname = ev.getcontact().pname;
+
+	    if(!(cont.uin = icc->first))
+		cont.nickname = nickname;
+	}
+    }
 
     switch(r) {
 	case icqface::forward:
@@ -784,9 +830,16 @@ void centericq::readevent(const imevent &ev, bool &enough, bool &fin) {
 	    break;
 
 	case icqface::info:
-	    cicq.userinfo(ev.getcontact());
+	    cicq.userinfo(cont);
+	    break;
+
+	case icqface::add:
+	    icqcontact *c = cicq.addcontact(cont);
+	    if(c) c->setdispnick(nickname);
 	    break;
     }
+
+    return r;
 }
 
 void centericq::readevents(const imcontact cont) {
@@ -841,36 +894,12 @@ void centericq::history(const imcontact &cont) {
 	    enough = false;
 
 	    while(!enough) {
-		vector<icqface::eventviewresult> buttons(1, icqface::next);
-
-		r = face.eventview(im, buttons);
+		r = readevent(*im, vector<icqface::eventviewresult>(1, icqface::next));
 
 		switch(r) {
-		    case icqface::forward:
-		    case icqface::reply:
-			sendevent(*im, r);
-			break;
-
-		    case icqface::accept:
-			enough = true;
-			em.store(imauthorization(cont, imevent::outgoing,
-			    imauthorization::Granted, "accepted"));
-			break;
-
-		    case icqface::reject:
-			enough = true;
-			em.store(imauthorization(cont, imevent::outgoing,
-			    imauthorization::Rejected, "rejected"));
-			break;
-
 		    case icqface::cancel:
 		    case icqface::ok:
 			enough = true;
-			break;
-
-		    case icqface::open:
-			if(const imurl *m = static_cast<const imurl *>(im))
-			    conf.openurl(m->geturl());
 			break;
 
 		    case icqface::next:
@@ -881,10 +910,6 @@ void centericq::history(const imcontact &cont) {
 			    i--;
 			    im = *i;
 			}
-			break;
-
-		    case icqface::info:
-			cicq.userinfo(cont);
 			break;
 		}
 	    }
@@ -942,7 +967,7 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
 
     c->setgroupid(groupid);
     face.log(_("+ %s has been added to the list"), ic.totext().c_str());
-    face.update();
+    face.relaxedupdate();
 
     return c;
 }

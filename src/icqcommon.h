@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <list>
 #include <map>
+#include <set>
 #include <memory>
 
 #include <sys/time.h>

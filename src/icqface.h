@@ -50,6 +50,7 @@
 #define ACT_FETCHAWAY   -37
 #define ACT_EMAIL       -38
 #define ACT_AUTH        -39
+#define ACT_CONTACT     -40
 
 extern class centericq cicq;
 
@@ -57,7 +58,7 @@ class icqface {
     public:
 	enum eventviewresult {
 	    ok, next, cancel, forward, reply, open,
-	    accept, reject, info, eventviewresult_size
+	    accept, reject, info, add, eventviewresult_size
 	};
 
 	class icqprogress {
@@ -93,7 +94,7 @@ class icqface {
 	bool editdone, mainscreenblock, inited, onlinefolder,
 	    dotermresize, fneedupdate, detailsfetched, inchat;
 
-	int extk, chatlines;
+	int chatlines;
 
 	time_t chatlastread;
 
@@ -146,6 +147,7 @@ class icqface {
 	bool sprofmanager(string &name, string &act);
 
     public:
+	int extk;
 	vector<imcontact> muins;
 
 	icqface();
@@ -178,7 +180,7 @@ class icqface {
 
 	void modelist(contactstatus cs);
 
-	bool multicontacts(const string &head = "");
+	bool multicontacts(const string &head = "", const set<protocolname> &protos = set<protocolname>());
 	void userinfo(const imcontact &cinfo, const imcontact &realinfo);
 
 	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
@@ -264,7 +266,8 @@ static const char *eventviewresultnames[icqface::eventviewresult_size] = {
     _("Ok"), _("Next"), "",
     _("Fwd"), _("Reply"),
     _("Open"), _("Accept"),
-    _("Reject"), _("User info")
+    _("Reject"), _("User info"),
+    _("Add")
 };
 
 #endif

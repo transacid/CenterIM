@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.42 2002/08/28 11:50:37 konst Exp $
+* $Id: irchook.cc,v 1.43 2002/08/30 17:31:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1084,8 +1084,8 @@ void irchook::nickchanged(void *connection, void *cli, ...) {
 	if(c = clist.get(imcontact(oldnick, irc))) {
 	    if(!clist.get(imcontact(newnick, irc))) {
 		if(!c->inlist()) {
-		    c->setnick(newnick);
 		    if(c->getdispnick() == oldnick) c->setdispnick(newnick);
+		    c->setnick(newnick);
 		}
 
 	    } else {

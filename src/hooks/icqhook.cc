@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.107 2002/08/28 11:50:37 konst Exp $
+* $Id: icqhook.cc,v 1.108 2002/08/30 17:31:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -61,7 +61,8 @@ icqhook::icqhook() {
 	hoptCanUpdateDetails |
 	hoptCanSyncList |
 	hoptAuthReqSend |
-	hoptControlableVisibility;
+	hoptCanSendContacts |
+	hoptControllableVisibility;
 
     cli.setServerSideGroup("centericq", 0x0666);
 
@@ -399,6 +400,19 @@ bool icqhook::send(const imevent &ev) {
 		}
 		break;
 	}
+
+    } else if(ev.gettype() == imevent::contacts) {
+	const imcontacts *m = static_cast<const imcontacts *> (&ev);
+	vector< pair<unsigned int, string> >::const_iterator icc;
+	list<ContactRef> slst;
+
+	for(icc = m->getcontacts().begin(); icc != m->getcontacts().end(); ++icc) {
+	    ContactRef ct(new Contact(icc->first));
+	    ct->setAlias(ruscrlfconv("kw", icc->second));
+	    slst.push_back(ct);
+	}
+
+	sev = new ContactMessageEvent(ic, slst);
 
     } else {
 	return false;
@@ -1000,89 +1014,83 @@ void icqhook::messaged_cb(MessageEvent *ev) {
     ic = imcontact(ev->getContact()->getUIN(), icq);
 
     if(ev->getType() == MessageEvent::Normal) {
-	NormalMessageEvent *r;
-	if(r = dynamic_cast<NormalMessageEvent *>(ev)) {
-	    em.store(immessage(ic, imevent::incoming,
-		rusconv("wk", r->getMessage())));
-	}
+	NormalMessageEvent *r = static_cast<NormalMessageEvent *>(ev);
+	em.store(immessage(ic, imevent::incoming, rusconv("wk", r->getMessage())));
 
     } else if(ev->getType() == MessageEvent::URL) {
-	URLMessageEvent *r;
-	if(r = dynamic_cast<URLMessageEvent *>(ev)) {
-	    em.store(imurl(ic, imevent::incoming,
-		rusconv("wk", r->getURL()),
-		rusconv("wk", r->getMessage())));
-	}
+	URLMessageEvent *r = static_cast<URLMessageEvent *>(ev);
+	em.store(imurl(ic, imevent::incoming,
+	    rusconv("wk", r->getURL()),
+	    rusconv("wk", r->getMessage())));
 
     } else if(ev->getType() == MessageEvent::SMS) {
-	SMSMessageEvent *r;
+	SMSMessageEvent *r = static_cast<SMSMessageEvent *>(ev);
+	icqcontact *c = clist.getmobile(r->getSender());
 
-	if(r = dynamic_cast<SMSMessageEvent *>(ev)) {
-	    icqcontact *c = clist.getmobile(r->getSender());
+	if(!c)
+	if(c = clist.addnew(imcontact(0, infocard), true)) {
+	    icqcontact::basicinfo b = c->getbasicinfo();
+	    b.cellular = r->getSender();
+	    c->setbasicinfo(b);
 
-	    if(!c)
-	    if(c = clist.addnew(imcontact(0, infocard), true)) {
-		icqcontact::basicinfo b = c->getbasicinfo();
-		b.cellular = r->getSender();
-		c->setbasicinfo(b);
+	    c->setdispnick(b.cellular);
+	    c->setnick(b.cellular);
+	}
 
-		c->setdispnick(b.cellular);
-		c->setnick(b.cellular);
-	    }
-
-	    if(c) {
-		em.store(imsms(c, imevent::incoming,
-		    rusconv("wk", r->getMessage())));
-	    }
+	if(c) {
+	    em.store(imsms(c, imevent::incoming,
+		rusconv("wk", r->getMessage())));
 	}
 
     } else if(ev->getType() == MessageEvent::AuthReq) {
-	AuthReqEvent *r;
-	if(r = dynamic_cast<AuthReqEvent *>(ev)) {
-	    em.store(imauthorization(ic, imevent::incoming, imauthorization::Request,
-		rusconv("wk", r->getMessage())));
-	}
+	AuthReqEvent *r = static_cast<AuthReqEvent *>(ev);
+	em.store(imauthorization(ic, imevent::incoming, imauthorization::Request,
+	    rusconv("wk", r->getMessage())));
 
     } else if(ev->getType() == MessageEvent::AuthAck) {
-	AuthAckEvent *r;
-	if(r = dynamic_cast<AuthAckEvent *>(ev)) {
-	    icqcontact *c = clist.get(ic);
-	    if(c) {
-		icqcontact::basicinfo bi = c->getbasicinfo();
-		bi.authawait = false;
-		c->setbasicinfo(bi);
-	    }
+	AuthAckEvent *r = static_cast<AuthAckEvent *>(ev);
+	icqcontact *c = clist.get(ic);
 
-	    if(r->isGranted()) {
-		em.store(imnotification(ic, _("The user has accepted your authorization request")));
+	if(c) {
+	    icqcontact::basicinfo bi = c->getbasicinfo();
+	    bi.authawait = false;
+	    c->setbasicinfo(bi);
+	}
 
-	    } else {
-		em.store(imnotification(ic, (string)
-		    _("The user has rejected your authorization request; the message was: ") + r->getMessage()));
+	if(r->isGranted()) {
+	    em.store(imnotification(ic, _("The user has accepted your authorization request")));
 
-	    }
+	} else {
+	    em.store(imnotification(ic, (string)
+		_("The user has rejected your authorization request; the message was: ") + r->getMessage()));
+
 	}
 
     } else if(ev->getType() == MessageEvent::EmailEx) {
-	EmailExEvent *r;
-
-	if(r = dynamic_cast<EmailExEvent *>(ev)) {
-	    processemailevent(r->getSender(), r->getEmail(), r->getMessage());
-	}
+	EmailExEvent *r = static_cast<EmailExEvent *>(ev);
+	processemailevent(r->getSender(), r->getEmail(), r->getMessage());
 
     } else if(ev->getType() == MessageEvent::WebPager) {
-	WebPagerEvent *r;
-
-	if(r = dynamic_cast<WebPagerEvent *>(ev)) {
-	    processemailevent(r->getSender(), r->getEmail(), r->getMessage());
-	}
+	WebPagerEvent *r = static_cast<WebPagerEvent *>(ev);
+	processemailevent(r->getSender(), r->getEmail(), r->getMessage());
 
     } else if(ev->getType() == MessageEvent::UserAdd) {
-	UserAddEvent *r;
-	if(r = dynamic_cast<UserAddEvent *>(ev)) {
-	    em.store(imnotification(ic,
-		_("The user has added you to his/her contact list")));
+	UserAddEvent *r = static_cast<UserAddEvent *>(ev);
+	em.store(imnotification(ic,
+	    _("The user has added you to his/her contact list")));
+
+    } else if(ev->getType() == MessageEvent::Contacts) {
+	ContactMessageEvent *r = static_cast<ContactMessageEvent *>(ev);
+	vector< pair<unsigned int, string> > lst;
+
+	list<ContactRef> clst = r->getContacts();
+	list<ContactRef>::iterator il;
+
+	for(il = clst.begin(); il != clst.end(); ++il) {
+	    lst.push_back(make_pair((*il)->getUIN(), (*il)->getAlias()));
 	}
+
+	em.store(imcontacts(ic, imevent::incoming, lst));
 
     }
 

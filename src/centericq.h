@@ -64,7 +64,12 @@ class centericq {
 	bool idle(int options = 0);
 	void exectimers();
 
-	void readevent(const imevent &ev, bool &enough, bool &fin);
+	icqface::eventviewresult readevent(const imevent &ev,
+	    const vector<icqface::eventviewresult> &buttons = vector<icqface::eventviewresult>());
+
+	icqface::eventviewresult readevent(const imevent &ev, bool &enough, bool &fin,
+	    const vector<icqface::eventviewresult> &buttons = vector<icqface::eventviewresult>());
+
 	void readevents(const imcontact cont);
 
 	void history(const imcontact &cont);

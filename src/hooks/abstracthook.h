@@ -9,13 +9,14 @@ enum hookcapabilities {
 	    hoptCanSyncList = 2,
 	     hoptCanSendURL = 4,
 	    hoptCanSendFile = 8,
+	hoptCanSendContacts = 16,
 	hoptCanFetchAwayMsg = 32,
 	  hoptCanSetAwayMsg = 64,
 	  hoptCanChangeNick = 128,
       hoptCanChangePassword = 512,
        hoptCanUpdateDetails = 1024,
 	    hoptNoPasswords = 2048,
-  hoptControlableVisibility = 4096,
+ hoptControllableVisibility = 4096,
 	    hoptAuthReqSend = 8192
 };
 

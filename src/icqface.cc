@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.133 2002/08/24 11:54:25 konst Exp $
+* $Id: icqface.cc,v 1.134 2002/08/30 17:31:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -203,6 +203,7 @@ int icqface::contextmenu(icqcontact *c) {
     if(actnames.empty()) {
 	actnames[ACT_URL]       = _(" Send an URL            u");
 	actnames[ACT_SMS]       = _(" Send an SMS");
+	actnames[ACT_CONTACT]   = _(" Send contacts          c");
 	actnames[ACT_AUTH]      = _(" Request authorization");
 	actnames[ACT_INFO]      = _(" User's details         ?");
 	actnames[ACT_EDITUSER]  = _(" Edit details           e");
@@ -240,6 +241,7 @@ int icqface::contextmenu(icqcontact *c) {
 	    if(cont.pname != infocard) actions.push_back(ACT_MSG);
 	    if(capab & hoptCanSendURL) actions.push_back(ACT_URL);
 	    if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
+	    if(capab & hoptCanSendContacts) actions.push_back(ACT_CONTACT);
 	    if(capab & hoptAuthReqSend) actions.push_back(ACT_AUTH);
 
 	    if(!actions.empty())
@@ -1300,6 +1302,13 @@ void icqface::modelist(contactstatus cs) {
 	cs == csvisible     ? _("Visible list") :
 	cs == csinvisible   ? _("Invisible list") : "");
 
+    set<protocolname> ps;
+    if(cs == csvisible || cs == csinvisible) {
+	for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    if(gethook(pname).getcapabilities() & hoptControllableVisibility)
+		ps.insert(pname);
+    }
+
     lst.fillmenu(db.getmenu(), cs);
 
     while(db.open(i, b)) {
@@ -1313,7 +1322,7 @@ void icqface::modelist(contactstatus cs) {
 	    case 1:
 		muins.clear();
 
-		if(multicontacts(_("Select contacts to add to the list"))) {
+		if(multicontacts(_("Select contacts to add to the list"), ps)) {
 		    for(ic = muins.begin(); ic != muins.end(); ++ic) {
 			lst.push_back(modelistitem(clist.get(*ic)->getdispnick(), *ic, cs));
 			if(cs == csignore) clist.remove(*ic);
@@ -1345,7 +1354,7 @@ void icqface::modelist(contactstatus cs) {
     restoreworkarea();
 }
 
-bool icqface::multicontacts(const string &ahead ) {
+bool icqface::multicontacts(const string &ahead, const set<protocolname> &protos) {
     int i, savefirst, saveelem;
     bool ret = true, finished = false;
     string head = ahead;
@@ -1367,9 +1376,10 @@ bool icqface::multicontacts(const string &ahead ) {
 
     for(i = 0; i < clist.count; i++) {
 	icqcontact *c = (icqcontact *) clist.at(i);
-	if(!c->getdesc().empty()) {
-	    mlst.push_back(c->getdesc());
-	}
+	imcontact desc = c->getdesc();
+
+	if(!desc.empty() && (protos.empty() || protos.count(desc.pname)))
+	    mlst.push_back(desc);
     }
 
     m.idle = &menuidle;
@@ -1720,6 +1730,45 @@ bool icqface::eventedit(imevent &ev) {
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
 
+    } else if(ev.gettype() == imevent::contacts) {
+	imcontacts *m = static_cast<imcontacts *>(&ev);
+	imcontact cont;
+
+	vector<imcontact> smuins = muins;
+	vector<imcontact>::iterator imc;
+
+	vector< pair<unsigned int, string> > clst;
+	vector< pair<unsigned int, string> >::const_iterator icc;
+
+	muins.clear();
+
+	for(icc = m->getcontacts().begin(); icc != m->getcontacts().end(); ++icc) {
+	    cont = imcontact();
+	    cont.pname = ev.getcontact().pname;
+
+	    if(icc->first) cont.uin = icc->first; else
+		cont.nickname = icc->second;
+
+	    muins.push_back(cont);
+	}
+
+	set<protocolname> ps;
+	ps.insert(ev.getcontact().pname);
+	r = multicontacts(_("Send contacts.."), ps);
+
+	for(imc = muins.begin(); imc != muins.end(); ++imc) {
+	    if(imc->uin) {
+		icqcontact *cc = clist.get(*imc);
+		if(cc) imc->nickname = cc->getnick();
+	    }
+
+	    clst.push_back(make_pair(imc->uin, imc->nickname));
+	}
+
+	muins = smuins;
+
+	*m = imcontacts(ev.getcontact(), imevent::outgoing, clst);
+
     }
 
     editdone = false;
@@ -1771,7 +1820,8 @@ void icqface::renderchathistory() {
     while(events.size()) {
 	if(events.back()->getdirection() == imevent::incoming)
 	if(events.back()->gettimestamp() > lastread) {
-	    if(events.back()->gettype() == imevent::authorization) {
+	    if(events.back()->gettype() == imevent::authorization
+	    || events.back()->gettype() == imevent::contacts) {
 		bool fin, enough;
 		fin = enough = false;
 
@@ -1889,6 +1939,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     dialogbox db;
     int mitem, baritem;
     eventviewresult r;
+    static int elem = 0;
 
     vector<eventviewresult> actions;
     vector<eventviewresult>::iterator ia;
@@ -1900,8 +1951,6 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 	    actions.push_back(reply);
 	}
 
-	actions.push_back(ok);
-
     } else if(ev->gettype() == imevent::url) {
 	actions.push_back(forward);
 	actions.push_back(open);
@@ -1910,14 +1959,10 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 	    actions.push_back(reply);
 	}
 
-	actions.push_back(ok);
-
     } else if(ev->gettype() == imevent::sms) {
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
-
-	actions.push_back(ok);
 
     } else if(ev->gettype() == imevent::authorization) {
 	if(ev->getdirection() == imevent::incoming) {
@@ -1926,26 +1971,26 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
 	    actions.push_back(reject);
 	}
 
-	actions.push_back(ok);
+    } else if(ev->gettype() == imevent::contacts) {
+	actions.push_back(info);
+	actions.push_back(add);
 
     } else if(ev->gettype() == imevent::email) {
 	actions.push_back(forward);
-	actions.push_back(ok);
 
     }
 
-    copy(abuttons.begin(), abuttons.end(), back_inserter(actions));
-    text = ev->gettext();
+    if(abuttons.empty()) {
+	actions.push_back(ok);
+    } else {
+	copy(abuttons.begin(), abuttons.end(), back_inserter(actions));
+    }
 
     saveworkarea();
     clearworkarea();
 
-    status(_("F2 to URLs, ESC close"));
-
     db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+3, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
-
-    db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
 
     db.setbar(bar = new horizontalbar(conf.getcolor(cp_main_highlight),
 	conf.getcolor(cp_main_selected), 0));
@@ -1976,10 +2021,32 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     db.addautokeys();
     db.otherkeys = &userinfokeys;
     db.idle = &dialogidle;
-    db.redraw();
-    db.getbrowser()->setbuf(text);
 
-    extracturls(text);
+    if(ev->gettype() == imevent::contacts) {
+	const imcontacts *m = static_cast<const imcontacts *>(ev);
+
+	db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
+	    conf.getcolor(cp_main_selected)));
+
+	vector< pair<unsigned int, string> > lst = m->getcontacts();
+	vector< pair<unsigned int, string> >::const_iterator il;
+
+	for(il = lst.begin(); il != lst.end(); ++il) {
+	    db.getmenu()->additemf(" %s", il->second.c_str());
+	}
+
+	db.getmenu()->setpos(elem-1);
+
+    } else {
+	text = ev->gettext();
+	db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
+	db.getbrowser()->setbuf(text);
+	extracturls(text);
+	status(_("F2 to URLs, ESC close"));
+
+    }
+
+    db.redraw();
 
     workarealine(sizeWArea.y1+3);
     workarealine(sizeWArea.y2-2);
@@ -1989,6 +2056,9 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     } else {
 	r = cancel;
     }
+
+    elem = mitem;
+    if(r == add) extk = elem;
 
     db.close();
     restoreworkarea();
@@ -2191,6 +2261,12 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'a':
 	case 'A': face.extk = ACT_ADD; break;
+
+	case 'c':
+	case 'C':
+	    if(capab & hoptCanSendContacts)
+		face.extk = ACT_CONTACT;
+	    break;
 
 	case 'f':
 	case 'F':
