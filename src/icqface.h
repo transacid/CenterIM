@@ -140,6 +140,7 @@ class icqface {
 	int groupmanager(const string &text, bool sel);
 
 	void renderchathistory();
+	bool sprofmanager(string &name, string &act);
 
     public:
 	vector<imcontact> muins;

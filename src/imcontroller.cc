@@ -268,3 +268,113 @@ void imcontroller::channels(icqconf::imaccount &account) {
 	case irc: ircchannels(); break;
     }
 }
+
+// ----------------------------------------------------------------------------
+
+void imsearchparams::save(const string &prname) const {
+    string fname = conf.getconfigfname("search-profiles"), buf, orig;
+
+    ifstream rf;
+    ofstream of;
+
+    of.open((fname + ".tmp").c_str());
+
+    if(of.is_open()) {
+	rf.open(fname.c_str());
+
+	if(rf.is_open()) {
+	    while(!rf.eof()) {
+		getstring(rf, orig);
+		if(getword(buf = orig, "\t") != prname)
+		    of << orig << endl;
+	    }
+
+	    rf.close();
+	    rf.clear();
+	}
+
+	of.close();
+	of.clear();
+
+	rename((fname + ".tmp").c_str(), fname.c_str());
+    }
+
+    of.open(fname.c_str(), ios::app);
+
+    if(of.is_open()) {
+	of << prname << "\t"
+	    << dec << (int) pname << "\t"
+	    << (onlineonly ? "1" : "0") << "\t"
+	    << dec << uin << "\t"
+	    << dec << minage << "\t"
+	    << dec << maxage << "\t"
+	    << dec << country << "\t"
+	    << dec << language << "\t"
+	    << dec << (int) agerange << "\t"
+	    << dec << (int) gender << "\t"
+	    << firstname << "\t"
+	    << lastname << "\t"
+	    << nick << "\t"
+	    << city << "\t"
+	    << state << "\t"
+	    << company << "\t"
+	    << department << "\t"
+	    << position << "\t"
+	    << email << "\t"
+	    << room << endl;
+
+	of.close();
+    }
+}
+
+static string getfield(string &buf) {
+    string r;
+    int pos;
+
+    if((pos = buf.find("\t")) == -1)
+	pos = buf.size();
+
+    r = buf.substr(0, pos);
+    buf.erase(0, pos+1);
+
+    return r;
+}
+
+bool imsearchparams::load(const string &prname) {
+    ifstream f(conf.getconfigfname("search-profiles").c_str());
+    string buf;
+    bool r = false;
+
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getstring(f, buf);
+
+	    if(r = (getword(buf, "\t") == prname)) {
+		pname = (protocolname) strtoul(getfield(buf).c_str(), 0, 0);
+		onlineonly = getfield(buf) == "1";
+		uin = strtoul(getfield(buf).c_str(), 0, 0);
+		minage = strtoul(getfield(buf).c_str(), 0, 0);
+		maxage = strtoul(getfield(buf).c_str(), 0, 0);
+		country = strtoul(getfield(buf).c_str(), 0, 0);
+		language = strtoul(getfield(buf).c_str(), 0, 0);
+		agerange = (ICQ2000::AgeRange) strtoul(getfield(buf).c_str(), 0, 0);
+		gender = (imgender) strtoul(getfield(buf).c_str(), 0, 0);
+		firstname = getfield(buf);
+		lastname = getfield(buf);
+		nick = getfield(buf);
+		city = getfield(buf);
+		state = getfield(buf);
+		company = getfield(buf);
+		department = getfield(buf);
+		position = getfield(buf);
+		email = getfield(buf);
+		room = getfield(buf);
+		break;
+	    }
+	}
+
+	f.close();
+    }
+
+    return r;
+}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.71 2002/05/09 10:44:33 konst Exp $
+* $Id: icqdialogs.cc,v 1.72 2002/05/30 18:22:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,13 +31,108 @@
 #include "icqgroups.h"
 #include "abstracthook.h"
 
+bool icqface::sprofmanager(string &name, string &act) {
+    dialogbox db;
+    string buf, tname;
+    bool finished, r;
+    int n, b, i, dx, dy;
+
+    map<string, imsearchparams> profiles;
+    map<string, imsearchparams>::iterator ip;
+
+    string pfname = conf.getconfigfname("search-profiles");
+
+    ifstream f(pfname.c_str());
+
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    tname = getword(buf, "\t");
+
+	    if(!tname.empty())
+		profiles[tname] = imsearchparams(tname);
+	}
+
+	f.close();
+    }
+
+    dx = (COLS-sizeDlg.width)/2+sizeDlg.width;
+    dy = (LINES-sizeDlg.height)/2+sizeDlg.height;
+
+    db.setwindow(new textwindow(dx-(int) (sizeDlg.width*0.6), dy-(int) (sizeDlg.height*0.6),
+	dx, dy, conf.getcolor(cp_dialog_frame), 0, conf.getcolor(cp_dialog_highlight),
+	_(" Search profiles ")));
+
+    db.setmenu(new verticalmenu(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected)));
+
+    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected),
+	_("Remove"), _("Load"), 0));
+
+    db.addkey(KEY_DC, 0);
+
+    db.addautokeys();
+    db.idle = &dialogidle;
+    verticalmenu &m = *db.getmenu();
+    db.getbar()->item = 1;
+
+    finished = r = false;
+
+    while(!finished) {
+	m.clear();
+
+	for(ip = profiles.begin(); ip != profiles.end(); ip++) {
+	    m.additemf(0, (void *) ip->first.c_str(), " %s", ip->first.c_str());
+	}
+
+	finished = !db.open(n, b);
+
+	if(!finished) {
+	    if(!profiles.empty()) {
+		tname = (char *) m.getref(n-1);
+		ip = profiles.find(tname);
+	    } else {
+		ip = profiles.end();
+	    }
+
+	    switch(b) {
+		case 0:
+		    if(ip != profiles.end())
+			profiles.erase(ip);
+		    break;
+
+		case 1:
+		    if(ip != profiles.end()) {
+			finished = r = true;
+			name = tname;
+			act = "load";
+		    }
+		    break;
+	    }
+	}
+    }
+
+    db.close();
+
+    unlink(conf.getconfigfname("search-profiles").c_str());
+
+    for(ip = profiles.begin(); ip != profiles.end(); ip++) {
+	ip->second.save(ip->first);
+    }
+
+    return r;
+}
+
 bool icqface::finddialog(imsearchparams &s) {
     int n, b, i;
     int nuin, ninfo, nloc, nwork, nonl;
-    bool finished, ret;
+    bool finished, ret, proceed;
     dialogbox db;
     vector<protocolname> penabled;
     vector<protocolname>::iterator ipname;
+    string tname, act;
+    imsearchparams ts;
 
     for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
 	if(gethook(apname).logged() || apname == infocard) {
@@ -69,18 +164,18 @@ bool icqface::finddialog(imsearchparams &s) {
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("cLear"), _("Change"), _("Search/Add"), 0));
+	_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
 
     db.addautokeys();
     db.idle = &dialogidle;
     treeview &tree = *db.gettree();
-    db.getbar()->item = 1;
+    db.getbar()->item = 3;
 
     while(!finished) {
 	tree.clear();
 
 	i = tree.addnode(_(" Network "));
-	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(*ipname) + " ");
+	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname = *ipname) + " ");
 
 	switch(*ipname) {
 	    case icq:
@@ -135,9 +230,28 @@ bool icqface::finddialog(imsearchparams &s) {
 	if(!finished)
 	switch(b) {
 	    case 0:
+		if(sprofmanager(tname, act)) {
+		    if(act == "load") s.load(tname);
+		}
+		break;
+
+	    case 1:
+		tname = inputstr(_("New profile name: "));
+		proceed = !tname.empty();
+
+		if(ts.load(tname))
+		    proceed = ask(_("The profile with this name already exists. Do you want to overwrite it?"),
+			ASK_YES | ASK_NO, ASK_NO) == ASK_YES;
+
+		if(proceed)
+		    s.save(tname); 
+		break;
+
+	    case 2:
 		s = imsearchparams();
 		break;
-	    case 1:
+
+	    case 3:
 		switch(i) {
 		    case 1:
 			if(++ipname == penabled.end()) {
@@ -164,7 +278,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		}
 		break;
 
-	    case 2:
+	    case 4:
 		ret = finished = true;
 		s.pname = *ipname;
 		break;

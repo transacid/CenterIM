@@ -14,6 +14,11 @@ struct imsearchparams {
 	agerange = ICQ2000::range_NoRange;
     };
 
+    imsearchparams(const string &name) {
+	load(name);
+    };
+
+    protocolname pname;
     bool onlineonly;
     unsigned int uin;
     unsigned short minage, maxage, country, language;
@@ -21,7 +26,9 @@ struct imsearchparams {
     imgender gender;
     string firstname, lastname, nick, city, state;
     string company, department, position, email, room;
-    protocolname pname;
+
+    void save(const string &prname) const;
+    bool load(const string &prname);
 };
 
 class imcontroller {
