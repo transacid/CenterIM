@@ -1055,23 +1055,35 @@ on a group header.
 
 The ICQ part suffered a lot of changes that brought several major
 improvements. This happened after yours sincerelly decided to contribute
-a bunch of code to the libicq2000 project. So, here we go with the new
-features of the ICQ module.
+a bunch of code to the libicq2000 project which can be found at
+http://libicq2000.sf.net/. So, here we go with the new features of the
+ICQ module.
 
-random chat search
-    setting own group
+Random chat feature support. Now it's possible to search for a random
+chat partner in a specific group with the "Find/add dialog" as well as
+to announce your own availability with the "Update user info" item under
+the "irc" tab in the account manager dialog.
 
-server-based contact lists in icq
-icq details update -> add another param "auto-sync contact list"
+Finally, a long-awaited feature got implemented. Server-based contact
+lists are now supported by centericq. By default, all the add and remove
+operations on your contact list are reflected server-side. Also, as soon
+as you login the contacts stored on the ICQ server get auto-added to
+your local list. Though it's possible to disable this, by setting the
+value of the "Store contact list server-side" in the "Update user info"
+dialog for ICQ to "no". To synchronize your local contact list with the
+remote one, i.e. to add the server-side missing items, use the
+"Syncronize contact list" item in the account manager dialog.
 
-icq webpager events are now received
+Also, having a look at the newly implemented features of libicq2000, I
+found something missed in centericq. So, since this version centericq is
+able to perform keywords-based search, receive webpager events and
+control the visibility of your current ICQ status on the web.
 
-icq keywords search
+There were user interface related changes as well. Visible and invisible
+contacts are highlighted in a special way on the contact list now. Read
+the README file for more details.
 
-icq webaware param
+When compiled with fribidi, it's now possible to disable displaying of
+right-to-left text by switching off the appropriate item in the
+configuration dialog.
 
-visible and invisible contacts are highlighted now on the contact list
-
-when compiled with fribidi, allow switching between the two modes
-
-irc user renames himself to something what already exists on the list
