@@ -5,14 +5,25 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 
+
+###	use option --enable-locales-fix to fix problems with double-byte
+###	encodings on systems with broken locale, iscntrl()
+
+AC_ARG_ENABLE(locales-fix,
+	[  --enable-locales-fix    enables workaround for broken locales. use this
+			  option if some of characters in your texts in Chinese
+			  or Japanese diappear],
+        [if test "$enableval" = "yes"; then
+                AC_DEFINE(LOCALES_HACK)
+        fi])
+
+
 ###	use option --with-fribidi to compile with fribidi support
 AC_ARG_WITH(fribidi,
 	[  --with-fribidi=[DIR]    enable Hebrew and Arabic support using fribidi
                           library in DIR],
 	[with_fribidi=$withval],
 	[with_fribidi=no])
-
-test "$with_fribidi" = "yes" && AC_DEFINE(KTOOL_USE_FRIBIDI)
 
 if test "$with_fribidi" = "yes"; then
     for ac_dir in /usr/local /usr; do
@@ -36,5 +47,7 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
 else
     echo 'disabling FriBiDi support...'
 fi
+
+
 
 AC_OUTPUT(Makefile include/Makefile src/Makefile)

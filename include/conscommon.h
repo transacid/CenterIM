@@ -26,7 +26,11 @@
 #define boldcolor(c)    COLOR_PAIR(c)|A_BOLD
 #define color(c)        COLOR_PAIR(c)
 
+#ifdef LOCALES_HACK
 #define	KT_DISP_FILTER(c)	( ((c > ' ') && (c != '\177')) ? c : ' ' )
+#else
+#define KT_DISP_FILTER(c)	(!iscntrl(c) ? c : ' ')
+#endif
 
 #define VLINE           kintf_graph ? ACS_VLINE         : '|'
 #define HLINE           kintf_graph ? ACS_HLINE         : '-'
