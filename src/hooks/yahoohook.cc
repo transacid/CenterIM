@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.71 2002/11/27 17:34:06 konst Exp $
+* $Id: yahoohook.cc,v 1.72 2002/12/09 17:38:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,6 +59,7 @@ yahoohook::yahoohook() : fonline(false) {
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::conferencing);
     fcapabs.insert(hookcapab::directadd);
+    fcapabs.insert(hookcapab::conferencesaretemporary);
 
     pager_host[0] = pager_port[0] = filetransfer_host[0] = filetransfer_port[0] = 0;
 }
@@ -711,6 +712,7 @@ void yahoohook::got_conf_invite(guint32 id, char *who, char *room, char *msg, ch
 	    text += ", ";
     }
 
+    c->setstatus(available);
     em.store(imnotification(cont, text));
     em.store(imnotification(cont, _("Auto-joined the conference")));
 

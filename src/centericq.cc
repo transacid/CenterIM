@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.144 2002/12/09 12:05:28 konst Exp $
+* $Id: centericq.cc,v 1.145 2002/12/09 17:38:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -259,9 +259,9 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_ADD:
-		if(!c->inlist()) {
+		if(!c->inlist())
+		if(!ischannel(c) || !gethook(c->getdesc().pname).getCapabs().count(hookcapab::conferencesaretemporary))
 		    addcontact(c->getdesc());
-		}
 		break;
 
 	    case ACT_INFO:
@@ -317,7 +317,8 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_CONFER:
-		createconference(c);
+		if(gethook(c->getdesc().pname).getCapabs().count(hookcapab::conferencesaretemporary))
+		    createconference(c);
 		break;
 
 	    case ACT_JOIN:
@@ -407,26 +408,31 @@ void centericq::changestatus() {
 
 void centericq::joindialog() {
     static imsearchparams s;
+    icqcontact *c;
 
     if(face.finddialog(s, false)) {
 	imcontact ic(s.nick, s.pname);
+	abstracthook &h = gethook(s.pname);
 
 	if(ic.nickname.substr(0, 1) != "#")
 	    ic.nickname.insert(0, "#");
 
-	icqcontact *c = cicq.addcontact(ic);
-	if(c) {
+	if(h.getCapabs().count(hookcapab::conferencesaretemporary)) {
+	    createconference(imcontact("", s.pname));
+
+	} else if(c = cicq.addcontact(ic)) {
 	    icqcontact::basicinfo cb = c->getbasicinfo();
 
-	    if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords))
+	    if(h.getCapabs().count(hookcapab::channelpasswords))
 		cb.zip = s.password;
 
-	    if(gethook(s.pname).getCapabs().count(hookcapab::groupchatservices))
+	    if(h.getCapabs().count(hookcapab::groupchatservices))
 		cb.street = s.service;
 
 	    cb.requiresauth = true;
 	    c->setbasicinfo(cb);
 	    c->setstatus(available);
+
 	}
     }
 }
@@ -1379,7 +1385,8 @@ void centericq::createconference(const imcontact &ic) {
     ps.insert(ic.pname);
 
     face.muins.clear();
-    face.muins.push_back(ic);
+    if(!ic.empty())
+	face.muins.push_back(ic);
 
     if(face.multicontacts(_("Invite to conference.."), ps))
     if(!face.muins.empty()) {

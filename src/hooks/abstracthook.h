@@ -23,6 +23,7 @@ struct hookcapab {
 	version,
 	ping,
 	conferencing,
+	conferencesaretemporary,
 	cltemporary,
 	directadd,
 	flexiblesearch,

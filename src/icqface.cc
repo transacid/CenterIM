@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.168 2002/12/09 16:01:49 konst Exp $
+* $Id: icqface.cc,v 1.169 2002/12/09 17:38:38 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -319,7 +319,7 @@ int icqface::contextmenu(icqcontact *c) {
 		if(capab.count(hookcapab::fetchaway)) actions.push_back(ACT_FETCHAWAY);
 		if(capab.count(hookcapab::version)) actions.push_back(ACT_VERSION);
 		if(capab.count(hookcapab::ping)) actions.push_back(ACT_PING);
-		if(capab.count(hookcapab::conferencing)) actions.push_back(ACT_CONFER);
+		if(capab.count(hookcapab::conferencesaretemporary)) actions.push_back(ACT_CONFER);
 	    }
 	}
 
