@@ -9,6 +9,10 @@ class jabberhook: public abstracthook {
     protected:
 	imstatus status;
 	jconn jc;
+	bool flogged;
+
+	static void statehandler(jconn conn, int state);
+	static void packethandler(jconn conn, jpacket packet);
 
     public:
 	jabberhook();
