@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.64 2002/01/17 15:36:33 konst Exp $
+* $Id: icqface.cc,v 1.65 2002/01/18 16:04:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 #include "abstracthook.h"
+#include "imlogger.h"
 
 const char *strregsound(regsound s) {
     return s == rscard ? _("sound card") :
@@ -91,9 +92,9 @@ void icqface::init() {
     if(!flog.is_open()) {
 	time_t logtime = time(0);
 
-	flog.open((conf.getdirname() + "log").c_str(), ios::app);
+	flog.open((conf.getdirname() + "debug").c_str(), ios::app);
 	if(flog.is_open())
-	    flog << endl << "-- centericq log started on " << ctime(&logtime);
+	    flog << endl << "-- centericq debug log started on " << ctime(&logtime);
     }
 #endif
 
@@ -211,9 +212,9 @@ int icqface::contextmenu(icqcontact *c) {
     if(cont != contactroot) {
 	m.addline();
 
-	if(c->inlist()) {
-	    m.additem(0, ACT_IGNORE, _(" Ignore user"));
-	} else {
+	m.additem(0, ACT_IGNORE, _(" Ignore user"));
+
+	if(!c->inlist()) {
 	    m.additem(0, ACT_ADD, _(" Add to list            a"));
 	}
     }

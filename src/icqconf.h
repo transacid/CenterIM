@@ -64,7 +64,7 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
-	    usegroups, russian;
+	    usegroups, russian, makelog;
 
 	string sockshost, socksuser, sockspass,
 	    openurlcommand, basedir;
@@ -114,6 +114,9 @@ class icqconf {
 
 	bool getsavepwd() const;
 	void setsavepwd(bool ssave);
+
+	bool getmakelog() const;
+	void setmakelog(bool slog);
 
 	bool getrussian() const;
 	void setrussian(bool frussian);

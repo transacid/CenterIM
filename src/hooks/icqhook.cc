@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.35 2002/01/17 16:51:54 konst Exp $
+* $Id: icqhook.cc,v 1.36 2002/01/18 16:04:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,7 @@
 #include "icqcontacts.h"
 #include "accountmanager.h"
 #include "centericq.h"
+#include "imlogger.h"
 
 #include "libicq2000/userinfoconstants.h"
 
@@ -108,7 +109,9 @@ void icqhook::connect() {
 
     face.log(_("+ [icq] connecting to the server"));
 
+    sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
+    logger.putourstatus(icq, offline, manualstatus);
 
     time(&timer_reconnect);
     fonline = true;
@@ -116,6 +119,7 @@ void icqhook::connect() {
 }
 
 void icqhook::disconnect() {
+    logger.putourstatus(icq, getstatus(), offline);
     cli.setStatus(STATUS_OFFLINE);
 }
 
@@ -135,12 +139,36 @@ void icqhook::resolve() {
     }
 }
 
+void icqhook::sendinvisible() {
+    icqlist::iterator i;
+    Contact *c;
+    int k;
+/*
+    for(k = 0; k < clist.count; k++) {
+	if(c = cli.getContact(((icqcontact *) clist.at(k))->getdesc().uin)) {
+	    c->setInvisible(false);
+	}
+    }
+
+    for(i = lst.begin(); i != lst.end(); i++) {
+	switch(i->getstatus()) {
+	    case csinvisible:
+		if(c = cli.getContact(i->getdesc().uin)) {
+		    c->setInvisible(true);
+		}
+		break;
+	}
+    }
+*/
+}
+
 void icqhook::exectimers() {
     time_t tcurrent = time(0);
 
     if(logged()) {
 	if(tcurrent-timer_poll > PERIOD_ICQPOLL) {
 	    cli.Poll();
+	    sendinvisible();
 	    time(&timer_poll);
 	} else if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
 	    resolve();
@@ -317,6 +345,8 @@ void icqhook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
+	    sendinvisible();
+	    logger.putourstatus(icq, getstatus(), st);
 	    cli.setStatus(stat2int[st], st == invisible);
 	}
     } else {
@@ -580,6 +610,11 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 	    if(c) {
 		Contact *ic = cli.getContact(ev->getUIN());
 		StatusChangeEvent *tev = dynamic_cast<StatusChangeEvent*>(ev);
+
+		logger.putonline(c->getdesc(),
+		    c->getstatus(),
+		    icq2imstatus(tev->getStatus()));
+
 		c->setstatus(icq2imstatus(tev->getStatus()));
 
 		if(c->getstatus() != offline) {

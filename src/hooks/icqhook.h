@@ -35,6 +35,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	imstatus icq2imstatus(const Status st) const;
 
 	void resolve();
+	void sendinvisible();
 
     public:
 	icqhook();

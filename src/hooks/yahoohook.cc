@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.17 2001/12/19 16:18:53 konst Exp $
+* $Id: yahoohook.cc,v 1.18 2002/01/18 16:04:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,6 +29,7 @@
 #include "accountmanager.h"
 #include "yahoolib.h"
 #include "centericq.h"
+#include "imlogger.h"
 
 yahoohook yhook;
 
@@ -95,6 +96,7 @@ void yahoohook::connect() {
 	alarm(5);
 	r = yahoo_connect(context);
 	alarm(0);
+	logger.putourstatus(yahoo, offline, available);
 
 	if(!r) {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
@@ -280,6 +282,7 @@ void yahoohook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
+	    logger.putourstatus(yahoo, getstatus(), st);
 	    ourstatus = stat2int[st];
 
 	    if(st == available) {
@@ -333,6 +336,7 @@ void yahoohook::userstatus(yahoo_context *y, const char *nick, int status) {
 	    c = clist.addnew(ic, false);
 	}
 
+	logger.putonline(ic, c->getstatus(), yhook.yahoo2imstatus(status));
 	c->setstatus(yhook.yahoo2imstatus(status));
 
 	if(c->getstatus() != offline) {

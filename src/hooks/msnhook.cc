@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.11 2001/12/20 18:12:33 konst Exp $
+* $Id: msnhook.cc,v 1.12 2002/01/18 16:04:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,7 @@
 #include "icqcontacts.h"
 #include "accountmanager.h"
 #include "eventmanager.h"
+#include "imlogger.h"
 
 msnhook mhook;
 
@@ -186,6 +187,7 @@ void msnhook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
+	    logger.putourstatus(msn, status, st);
 	    MSN_ChangeState(stat2int[status = st]);
 	}
     } else {
@@ -281,6 +283,7 @@ void msnhook::statuschanged(void *data) {
 	    }
 	}
 
+	logger.putonline(ic, c->getstatus(), msn2imstatus(d->newStatus));
 	c->setstatus(msn2imstatus(d->newStatus));
 
 	if(c->getstatus() != offline) {

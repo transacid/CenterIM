@@ -4,6 +4,7 @@
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "abstracthook.h"
+#include "imlogger.h"
 
 imeventmanager em;
 
@@ -50,6 +51,8 @@ void imeventmanager::store(const imevent &ev) {
 	    eventwrite(ev, offline);
 	}
     }
+
+    logger.putevent(ev);
 }
 
 // if incoming, store to the history immediately

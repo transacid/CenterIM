@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.32 2002/01/17 16:51:53 konst Exp $
+* $Id: icqconf.cc,v 1.33 2002/01/18 16:04:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,7 +35,7 @@ icqconf::icqconf() {
     rc = rcdark;
     autoaway = autona = 0;
 
-    hideoffline = antispam = usegroups = russian = false;
+    hideoffline = antispam = usegroups = russian = makelog = false;
     savepwd = mailcheck = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
@@ -92,7 +92,8 @@ void icqconf::loadmainconfig() {
 	    if(param == "sockshost") setsockshost(buf); else
 	    if(param == "socksusername") socksuser = buf; else
 	    if(param == "sockspass") sockspass = buf; else
-	    if(param == "usegroups") usegroups = true; else {
+	    if(param == "usegroups") usegroups = true; else
+	    if(param == "log") makelog = true; else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
 		    if(param.substr(0, buf.size()) == buf) {
@@ -161,6 +162,7 @@ void icqconf::save() {
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
 	if(getusegroups()) f << "usegroups" << endl;
+	if(getmakelog()) f << "log" << endl;
 
 	for(ia = accounts.begin(); ia != accounts.end(); ia++) {
 	    ia->write(f);
@@ -644,6 +646,14 @@ void icqconf::commandline(int argc, char **argv) {
 	    exit(0);
 	}
     }
+}
+
+bool icqconf::getmakelog() const {
+    return makelog;
+}
+
+void icqconf::setmakelog(bool slog) {
+    makelog = slog;
 }
 
 // ----------------------------------------------------------------------------

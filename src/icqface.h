@@ -227,10 +227,6 @@ static const char *strgender[imgender_size] = {
     _("Female")
 };
 
-static const char *eventnames[imevent::imeventtype_size] = {
-    _("message"), _("URL"), _("SMS"), _("authorization")
-};
-
 static const char *eventviewresultnames[icqface::eventviewresult_size] = {
     "", _("Fwd"), _("Reply"), _("Ok"),
     _("Open"), _("Accept"), _("Reject")

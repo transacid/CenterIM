@@ -40,6 +40,17 @@ static char imstatus2char[imstatus_size] = {
     'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'*/
 };
 
+static char* imstatus2name[imstatus_size] = {
+    _("Offline"),
+    _("Online"),
+    _("Invisible"),
+    _("Free for chat"),
+    _("DND"),
+    _("Occupied"),
+    _("N/A"),
+    _("Away")
+};
+
 struct imcontact {
     imcontact();
     imcontact(unsigned long auin, protocolname apname);

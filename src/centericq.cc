@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.64 2002/01/17 15:36:32 konst Exp $
+* $Id: centericq.cc,v 1.65 2002/01/18 16:04:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -267,6 +267,7 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_MSG:
+	    case 0:
 		if(c->getmsgcount()) {
 		    readevents(c->getdesc());
 		} else {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.40 2002/01/17 15:36:33 konst Exp $
+* $Id: icqdialogs.cc,v 1.41 2002/01/18 16:04:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -530,6 +530,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
     bool usegroups = conf.getusegroups();
+    bool makelog = conf.getmakelog();
 
     dialogbox db;
 
@@ -578,6 +579,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	i = t.addnode(_(" Miscellaneous "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
+	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno[makelog]);
 
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);
@@ -632,6 +634,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
 		    case 17: usegroups = !usegroups; break;
+		    case 18: makelog = !makelog; break;
 		}
 		break;
 	    case 1:
@@ -643,6 +646,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
 		conf.setrussian(rus);
+		conf.setmakelog(makelog);
 
 		if(conf.getusegroups() != usegroups) {
 		    conf.setusegroups(usegroups);
