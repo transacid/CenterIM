@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.20.5\n"
-"POT-Creation-Date: 2002-07-12 18:38+0300\n"
+"POT-Creation-Date: 2002-07-15 11:15+0300\n"
 "PO-Revision-Date: 2001-02-10 20:50+0100\n"
 "Last-Translator: Jindrich Makovicka <makovick@kmlinux.fjfi.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -39,36 +39,36 @@ msgstr "+ pøipojuji se k icq serveru"
 msgid "I do really enjoy the default AIM profile of centericq %s."
 msgstr ""
 
-#: src/hooks/aimhook.cc:319
+#: src/hooks/aimhook.cc:317
 #, fuzzy
 msgid "+ [aim] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/aimhook.cc:349
+#: src/hooks/aimhook.cc:347
 #, fuzzy
 msgid "+ [aim] disconnected from the network"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:367
+#: src/hooks/aimhook.cc:365
 #, fuzzy
 msgid "aim connection failed"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:369
+#: src/hooks/aimhook.cc:367
 #, fuzzy, c-format
 msgid "+ [aim] connect failed: %s"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/aimhook.cc:386
+#: src/hooks/aimhook.cc:384
 #, fuzzy
 msgid "+ [aim] password was changed successfully"
 msgstr " Nastavení hesla "
 
-#: src/hooks/aimhook.cc:409
+#: src/hooks/aimhook.cc:407
 msgid "The user has no profile information."
 msgstr ""
 
-#: src/hooks/aimhook.cc:506
+#: src/hooks/aimhook.cc:504
 #, fuzzy
 msgid "+ [aim] password sent"
 msgstr "Heslo: "
@@ -78,77 +78,77 @@ msgstr "Heslo: "
 msgid "+ [icq] connecting to the server"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/icqhook.cc:728
+#: src/hooks/icqhook.cc:726
 #, fuzzy
 msgid "+ [icq] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/icqhook.cc:755
+#: src/hooks/icqhook.cc:753
 msgid "as requested"
 msgstr ""
 
-#: src/hooks/icqhook.cc:756
+#: src/hooks/icqhook.cc:754
 msgid "socket problems"
 msgstr ""
 
-#: src/hooks/icqhook.cc:757
+#: src/hooks/icqhook.cc:755
 #, fuzzy
 msgid "bad username"
 msgstr " Jméno u¾ivatele proxy serveru : %s "
 
-#: src/hooks/icqhook.cc:758
+#: src/hooks/icqhook.cc:756
 msgid "turboing"
 msgstr ""
 
-#: src/hooks/icqhook.cc:759
+#: src/hooks/icqhook.cc:757
 #, fuzzy
 msgid "bad password"
 msgstr "Heslo: "
 
-#: src/hooks/icqhook.cc:760
+#: src/hooks/icqhook.cc:758
 msgid "username and password mismatch"
 msgstr ""
 
-#: src/hooks/icqhook.cc:761
+#: src/hooks/icqhook.cc:759
 msgid "already logged"
 msgstr ""
 
-#: src/hooks/icqhook.cc:774
+#: src/hooks/icqhook.cc:772
 #, fuzzy
 msgid "+ [icq] disconnected"
 msgstr "+ odpojeno"
 
-#: src/hooks/icqhook.cc:780
+#: src/hooks/icqhook.cc:778
 #, fuzzy
 msgid "icq disconnection reason"
 msgstr "+ odpojeno"
 
-#: src/hooks/icqhook.cc:877
+#: src/hooks/icqhook.cc:875 src/hooks/yahoohook.cc:536
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "si Vás pøidal(a) do seznamu kontaktù"
 
-#: src/hooks/icqhook.cc:908
+#: src/hooks/icqhook.cc:906
 #, fuzzy, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ soubor od %s, %lu odmítnut"
 
-#: src/hooks/icqhook.cc:918 src/hooks/irchook.cc:496
+#: src/hooks/icqhook.cc:916 src/hooks/irchook.cc:496
 #, fuzzy
 msgid "Away message:"
 msgstr "Homepage"
 
-#: src/hooks/icqhook.cc:922
+#: src/hooks/icqhook.cc:920
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1054
+#: src/hooks/icqhook.cc:1052
 #, c-format
 msgid "%s requested our away message, sent the response"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1094
+#: src/hooks/icqhook.cc:1092
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
 msgstr ""
@@ -264,53 +264,87 @@ msgstr ""
 msgid "verify the pager host and port entered"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:143
+#: src/hooks/yahoohook.cc:148
 #, fuzzy
 msgid "+ [yahoo] disconnected"
 msgstr "+ odpojeno"
 
-#.
-#. if(context->buddies && context->buddies[0]) {
-#. group = context->buddies[0]->group;
-#. } else {
-#. group = "group";
-#. }
-#.
-#. struct yahoo_buddy **lst = get_buddylist(cid);
-#.
-#. !yahoo_isbuddy(context, ic.nickname.c_str())
-#: src/hooks/yahoohook.cc:210
+#: src/hooks/yahoohook.cc:221
 #, fuzzy, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:224
+#: src/hooks/yahoohook.cc:240
 #, fuzzy, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ pøipojuji se k icq serveru"
 
-#: src/hooks/yahoohook.cc:347
+#: src/hooks/yahoohook.cc:244
+#, fuzzy, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ pøipojuji se k icq serveru"
+
+#: src/hooks/yahoohook.cc:386
 #, fuzzy
 msgid "+ [yahoo] logged in"
 msgstr "+ pøipojeno"
 
-#: src/hooks/yahoohook.cc:352
+#: src/hooks/yahoohook.cc:391
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:357
+#: src/hooks/yahoohook.cc:396
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:358
+#: src/hooks/yahoohook.cc:397
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:424
+#: src/hooks/yahoohook.cc:467
 #, c-format
-msgid "[yahoo] error: %s"
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr ""
+
+#: src/hooks/yahoohook.cc:470
+msgid "Current conference members are: "
+msgstr ""
+
+#: src/hooks/yahoohook.cc:487
+msgid "Auto-joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:501
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:516
+#, c-format
+msgid "The user %s has left the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:540
+#, fuzzy
+msgid "the message was: "
+msgstr "Homepage"
+
+#: src/hooks/yahoohook.cc:557
+#, fuzzy, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ pøipojuji se k icq serveru"
+
+#: src/hooks/yahoohook.cc:564
+#, fuzzy, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ pøipojuji se k icq serveru"
+
+#: src/hooks/yahoohook.cc:569
+#, fuzzy, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ pøipojuji se k icq serveru"
 
 #: src/accountmanager.cc:37
 msgid " IM account manager "
@@ -1940,10 +1974,6 @@ msgstr "Místo"
 #, fuzzy
 #~ msgid "+ [yahoo] unable to connect to the server"
 #~ msgstr "+ k icq serveru se nelze pøipojit"
-
-#, fuzzy
-#~ msgid "+ [yahoo] bounced msg"
-#~ msgstr "+ pøipojuji se k icq serveru"
 
 #, fuzzy
 #~ msgid " Channel "
