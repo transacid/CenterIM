@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.100 2002/08/20 16:12:09 konst Exp $
+* $Id: icqhook.cc,v 1.101 2002/08/20 17:02:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -369,7 +369,7 @@ bool icqhook::send(const imevent &ev) {
 	    ic->setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
 	}
 
-	sev = new SMSMessageEvent(ic, ruscrlfconv("kw", m->gettext()), true);
+	sev = new SMSMessageEvent(ic, ruscrlfconv("kw", m->getmessage()), true);
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);

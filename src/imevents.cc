@@ -327,6 +327,10 @@ imsms::imsms(const imevent &ev) {
 }
 
 string imsms::gettext() const {
+    return (string) _("* SMS : ")  + text;
+}
+
+string imsms::getmessage() const {
     return text;
 }
 

@@ -106,6 +106,7 @@ class imsms: public imevent {
 	    const string &atext);
 
 	string gettext() const;
+	string getmessage() const;
 
 	bool empty() const;
 	bool contains(const string &atext) const;
