@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.43 2005/01/23 13:22:15 konst Exp $
+* $Id: kkstrtext.cc,v 1.44 2005/01/31 15:21:56 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -890,6 +890,9 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
 	size_t inleft, outleft, soutleft;
 	char *inbuf, *outbuf, *sinbuf, *soutbuf;
 
+	//from iconv.c (libiconv)
+	iconv(cd,NULL,NULL,NULL,NULL);
+
 	while(!text.empty()) {
 	    sinbuf = inbuf = strdup(text.c_str());
 	    inleft = strlen(inbuf);
@@ -1102,23 +1105,24 @@ string striprtf(const string &s, const string &charset) {
 		break;
 
 	    case '\'':
-		if(pre == '\\') {
+		if(!bparen && bprint && pre == '\\') {
 		    spec = "";
 		    bspec = true;
+		} else {
+		    r += *i;
 		}
 		break;
 
 	    case 'u':
-		if(!bparen && bprint) {
-		    if(pre == '\\') {
+		if(!bparen) {
+		    if(pre == '\\' && isdigit(*(i+1))) {
 			unichar = "";
 			bunicode = true;
-		    } else {
+		    } else if(bprint) {
 			r += *i;
 		    }
 		}
-		break;
-
+                break;
 	    default:
 		if(!bparen) {
 		    if(bunicode) {
@@ -1126,12 +1130,12 @@ string striprtf(const string &s, const string &charset) {
 
 			if(unichar.size() == 5) {
 			    bunicode = false;
-
 			    if(unichar.substr(0, 4).find_first_not_of("0123456789") == -1) {
 				long l = strtol(unichar.substr(0, 4).c_str(), 0, 0);
-				char ubuf[sizeof(long)+1];
-				memcpy(ubuf, &l, sizeof(long));
-				ubuf[sizeof(long)+1] = 0;
+				char ubuf[sizeof(long)+4];
+				memcpy(ubuf, "\xff\xfe", 2);
+				memcpy(ubuf+2, &l, sizeof(long));
+				memcpy(ubuf+sizeof(long)*2, "\x0a\x00", 2);
 				r += siconv(ubuf , "utf-16", charset);
 			    }
 			}
