@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.27 2002/06/28 07:48:48 konst Exp $
+* $Id: irchook.cc,v 1.28 2002/07/03 15:31:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -407,10 +407,13 @@ void irchook::processnicks() {
 	foundguys.push_back(c);
     }
 
+    face.findready();
+
     face.log(_("+ [irc] channel members list fetching finished, %d found"),
 	foundguys.size());
 
     searchdest->redraw();
+    searchdest = 0;
 }
 
 vector<irchook::channelInfo> irchook::getautochannels() const {

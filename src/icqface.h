@@ -182,6 +182,7 @@ class icqface {
 
 	bool finddialog(imsearchparams &s);
 	bool findresults(const imsearchparams &sp);
+	void findready();
 
 	bool updatedetails(icqcontact *c = 0, protocolname upname = icq);
 	bool sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.85 2002/06/28 11:51:01 konst Exp $
+* $Id: icqhook.cc,v 1.86 2002/07/03 15:31:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1090,8 +1090,12 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 	}
 
 	if(ev->isFinished()) {
+	    face.findready();
+
 	    face.log(_("+ [icq] whitepages search finished, %d found"),
 		ev->getContactList().size());
+
+	    searchdest = 0;
 	}
     }
 }

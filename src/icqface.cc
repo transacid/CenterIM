@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.120 2002/06/27 13:56:45 konst Exp $
+* $Id: icqface.cc,v 1.121 2002/07/03 15:31:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -599,7 +599,8 @@ bool icqface::findresults(const imsearchparams &sp) {
     db.idle = &dialogidle;
     db.otherkeys = &findreskeys;
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), "Find results");
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1,
+	conf.getcolor(cp_main_highlight), _("Searching contacts.."));
 
     workarealine(sizeWArea.y1+2);
     workarealine(sizeWArea.y2-2);
@@ -655,6 +656,12 @@ bool icqface::findresults(const imsearchparams &sp) {
     restoreworkarea();
 
     return ret;
+}
+
+void icqface::findready() {
+    mvhline(sizeWArea.x1+2, sizeWArea.y1, ' ', sizeWArea.x2-sizeWArea.x1-2);
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1,
+	conf.getcolor(cp_main_highlight), _("Search results [done]"));
 }
 
 void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) {
