@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.9 2001/12/03 16:30:18 konst Exp $
+* $Id: icqhook.cc,v 1.10 2001/12/03 18:16:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -332,6 +332,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		Contact *ic = cli.getContact(ev->getUIN());
 
 		MainHomeInfo &home = ic->getMainHomeInfo();
+		HomepageInfo &hpage = ic->getHomepageInfo();
 //                WorkInfo &work = ic->getWorkInfo();
 
 		if(c->getnick() == c->getdispnick()) {
@@ -344,6 +345,11 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		    ic->getEmail(), "", "", home.city, home.state,
 		    home.phone, home.fax, home.street, home.cellular,
 		    atol(home.zip.c_str()), home.country);
+
+		c->setmoreinfo(hpage.age, hpage.sex, hpage.homepage,
+		    hpage.lang1, hpage.lang2, hpage.lang3, hpage.birth_day,
+		    hpage.birth_month, hpage.birth_year);
+
 /*
 		c->setworkinfo(work.city, work.state, "",
 		    "", work.street, atol(work.zip.c_str()),

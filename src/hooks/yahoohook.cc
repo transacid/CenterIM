@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.9 2001/12/03 16:30:18 konst Exp $
+* $Id: yahoohook.cc,v 1.10 2001/12/03 18:16:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -101,7 +101,7 @@ void yahoohook::connect() {
 	}
     }
 
-    yahoo_Russian = conf.getrussian() ? 1 : 0;
+    yahoo_Russian = 0;
     time(&timer_reconnect);
 }
 
