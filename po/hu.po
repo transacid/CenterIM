@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-10-03 23:37+0300\n"
+"POT-Creation-Date: 2001-10-04 17:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Pásztor György <pasztor@linux.gyakg.u-szeged.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -726,8 +726,8 @@ msgstr "Auto N/A idõtartam (0 - letilt): "
 msgid "Your ICQ details have been fetched"
 msgstr "Az ICQ részleteid letöltve"
 
-#: src/icqdialogs.cc:819
-msgid "Organize user groups"
+#: src/icqdialogs.cc:819 src/icqface.cc:263
+msgid "Organize contact groups"
 msgstr ""
 
 #: src/icqdialogs.cc:842
@@ -939,10 +939,6 @@ msgstr " Átnevezi               r"
 #, fuzzy
 msgid " Hide offline users                 F5"
 msgstr " Elrejti az offline felhasználókat : %s "
-
-#: src/icqface.cc:263
-msgid " Organize contact groups"
-msgstr ""
 
 #: src/icqface.cc:472 src/icqface.cc:1222 src/icqface.cc:1232
 #: src/icqface.cc:1510 src/icqface.cc:1694
@@ -1379,11 +1375,11 @@ msgstr "+ bejelentkezve"
 msgid "+ disconnected"
 msgstr "+ szétkapcsolódva"
 
-#: src/icqhook.cc:280
+#: src/icqhook.cc:279
 msgid "has added you to his/her contact list"
 msgstr "hozzávett téged a kontaktlistájához"
 
-#: src/icqhook.cc:296
+#: src/icqhook.cc:295
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
@@ -1391,42 +1387,42 @@ msgstr ""
 "a hozzájárulásod kérte, hogy hozzávegyen a kontaktlistájához. Az okaa "
 "következõ: "
 
-#: src/icqhook.cc:454
+#: src/icqhook.cc:453
 msgid "+ server reported a problem: wrong password"
 msgstr "+ a szerver hibát jelzett: hibás jelszó"
 
-#: src/icqhook.cc:459
+#: src/icqhook.cc:458
 msgid "+ server reported a problem: invalid uin"
 msgstr "+ a szerver hibát jelzett: érvénytelen uin"
 
-#: src/icqhook.cc:495
+#: src/icqhook.cc:494
 msgid "+ search done"
 msgstr "+ keresés kész"
 
-#: src/icqhook.cc:515
+#: src/icqhook.cc:514
 #, c-format
 msgid "+ file %s refused by %s, %lu"
 msgstr "+ a %s fájlt visszautasította %s, %lu"
 
-#: src/icqhook.cc:525
+#: src/icqhook.cc:524
 #, c-format
 msgid "+ file %s from %s, %lu received"
 msgstr "+ a %s fájl %s, %lu -tól megérkezett"
 
-#: src/icqhook.cc:530
+#: src/icqhook.cc:529
 #, c-format
 msgid "+ file %s to %s, %lu sent"
 msgstr "+ a %s fájl %s, %lu -nek elküldve"
 
-#: src/icqhook.cc:621
+#: src/icqhook.cc:620
 msgid "+ automatically set away"
 msgstr "+ automatikus távollét beállítás"
 
-#: src/icqhook.cc:630
+#: src/icqhook.cc:629
 msgid "+ automatically set N/A"
 msgstr "+ automatikus N/A beállítás"
 
-#: src/icqhook.cc:637
+#: src/icqhook.cc:636
 msgid "+ the user is back"
 msgstr "+ a felhasználó visszajött"
 

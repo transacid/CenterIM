@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.20.5\n"
-"POT-Creation-Date: 2001-10-03 23:37+0300\n"
+"POT-Creation-Date: 2001-10-04 17:45+0300\n"
 "Last-Translator: C4_ <germanach@yahoo.es>\n"
 "Language-Team: Spanish <???>\n"
 "MIME-Version: 1.0\n"
@@ -722,8 +722,8 @@ msgstr "Auto N/A en periodo (0 - deshabilitado): "
 msgid "Your ICQ details have been fetched"
 msgstr "Sus detalles ICQ han sido actualizados"
 
-#: src/icqdialogs.cc:819
-msgid "Organize user groups"
+#: src/icqdialogs.cc:819 src/icqface.cc:263
+msgid "Organize contact groups"
 msgstr ""
 
 #: src/icqdialogs.cc:842
@@ -935,10 +935,6 @@ msgstr " Renombrar usuario      r"
 #, fuzzy
 msgid " Hide offline users                 F5"
 msgstr " Esconder usuarios offline : %s "
-
-#: src/icqface.cc:263
-msgid " Organize contact groups"
-msgstr ""
 
 #: src/icqface.cc:472 src/icqface.cc:1222 src/icqface.cc:1232
 #: src/icqface.cc:1510 src/icqface.cc:1694
@@ -1376,11 +1372,11 @@ msgstr "+ logeado"
 msgid "+ disconnected"
 msgstr "+ desconectado"
 
-#: src/icqhook.cc:280
+#: src/icqhook.cc:279
 msgid "has added you to his/her contact list"
 msgstr "te a agregado a su lista de contactos"
 
-#: src/icqhook.cc:296
+#: src/icqhook.cc:295
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
@@ -1388,42 +1384,42 @@ msgstr ""
 "ha pedido tu autorizacion para agregarte a su lista de contactos. La razon "
 "fue: "
 
-#: src/icqhook.cc:454
+#: src/icqhook.cc:453
 msgid "+ server reported a problem: wrong password"
 msgstr "+ El servidor reporto un problema: password erroneo"
 
-#: src/icqhook.cc:459
+#: src/icqhook.cc:458
 msgid "+ server reported a problem: invalid uin"
 msgstr "+ El servidor reporto un problema: UIN invalido"
 
-#: src/icqhook.cc:495
+#: src/icqhook.cc:494
 msgid "+ search done"
 msgstr "+ busqueda hecha"
 
-#: src/icqhook.cc:515
+#: src/icqhook.cc:514
 #, c-format
 msgid "+ file %s refused by %s, %lu"
 msgstr "+ archivo %s rechazado por %s, %lu"
 
-#: src/icqhook.cc:525
+#: src/icqhook.cc:524
 #, c-format
 msgid "+ file %s from %s, %lu received"
 msgstr "+ archivo %s de %s, %lu recibido"
 
-#: src/icqhook.cc:530
+#: src/icqhook.cc:529
 #, c-format
 msgid "+ file %s to %s, %lu sent"
 msgstr "+ archivo %s a %s, %lu enviado"
 
-#: src/icqhook.cc:621
+#: src/icqhook.cc:620
 msgid "+ automatically set away"
 msgstr "+ automaticamente cambiado a aucente"
 
-#: src/icqhook.cc:630
+#: src/icqhook.cc:629
 msgid "+ automatically set N/A"
 msgstr "+ automaticamente cambiado a No Disponible"
 
-#: src/icqhook.cc:637
+#: src/icqhook.cc:636
 msgid "+ the user is back"
 msgstr "+ el usuario ha vuelto"
 

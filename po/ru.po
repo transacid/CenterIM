@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.99.2\n"
-"POT-Creation-Date: 2001-10-03 23:37+0300\n"
+"POT-Creation-Date: 2001-10-04 17:45+0300\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -122,6 +122,7 @@ msgid "%s (%lu) wrote:"
 msgstr ""
 
 #: src/centericq.cc:724
+#, c-format
 msgid "+ user %s, %lu is already on the list"
 msgstr "+ %s, %lu уже есть в списке"
 
@@ -134,6 +135,7 @@ msgid "Notify the user he/she has been added?"
 msgstr "Уведомить пользователя о том, что он был добавлен?"
 
 #: src/centericq.cc:736
+#, c-format
 msgid "+ the notification has been sent to %lu"
 msgstr "+ уведомление послано %lu"
 
@@ -714,6 +716,11 @@ msgstr " Авто-N/A после (0 - выкл): "
 msgid "Your ICQ details have been fetched"
 msgstr "Ваша icq-информация получена"
 
+#: src/icqdialogs.cc:819 src/icqface.cc:263
+#, fuzzy
+msgid "Organize contact groups"
+msgstr " Управление группами контактов"
+
 #: src/icqdialogs.cc:842
 msgid "Rename"
 msgstr "Переименовать"
@@ -911,16 +918,12 @@ msgid " View/edit visible list"
 msgstr " Список visible-контактов"
 
 #: src/icqface.cc:259
-msgid  " Show offline users                 F5"
+msgid " Show offline users                 F5"
 msgstr " Показывать оффлайн-контакты        F5"
 
 #: src/icqface.cc:260
 msgid " Hide offline users                 F5"
 msgstr " Спрятать оффлайн-контакты          F5"
-
-#: src/icqface.cc:263
-msgid " Organize contact groups"
-msgstr " Управление группами контактов"
 
 #: src/icqface.cc:472 src/icqface.cc:1222 src/icqface.cc:1232
 #: src/icqface.cc:1510 src/icqface.cc:1694
@@ -1357,52 +1360,52 @@ msgstr "+ вход в систему состоялся"
 msgid "+ disconnected"
 msgstr "+ рассоединение"
 
-#: src/icqhook.cc:280
+#: src/icqhook.cc:279
 msgid "has added you to his/her contact list"
 msgstr "добавил(а) вас в свой список контактов"
 
-#: src/icqhook.cc:296
+#: src/icqhook.cc:295
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
 msgstr "запросил(а) ваше разрешение на добавление в свой список. Причина: "
 
-#: src/icqhook.cc:454
+#: src/icqhook.cc:453
 msgid "+ server reported a problem: wrong password"
 msgstr "+ отказ в соединении: неверный пароль"
 
-#: src/icqhook.cc:459
+#: src/icqhook.cc:458
 msgid "+ server reported a problem: invalid uin"
 msgstr "+ отказ в соединении: неправильный uin"
 
-#: src/icqhook.cc:495
+#: src/icqhook.cc:494
 msgid "+ search done"
 msgstr "+ поиск завершен"
 
-#: src/icqhook.cc:515
+#: src/icqhook.cc:514
 #, c-format
 msgid "+ file %s refused by %s, %lu"
 msgstr "+ передача файла %s отменена пользователем %s, %lu"
 
-#: src/icqhook.cc:525
+#: src/icqhook.cc:524
 #, c-format
 msgid "+ file %s from %s, %lu received"
 msgstr "+ файл %s от %s, %lu получен"
 
-#: src/icqhook.cc:530
+#: src/icqhook.cc:529
 #, c-format
 msgid "+ file %s to %s, %lu sent"
 msgstr "+ файл %s послан %s, %lu"
 
-#: src/icqhook.cc:621
+#: src/icqhook.cc:620
 msgid "+ automatically set away"
 msgstr "+ статус автоматически изменен на away"
 
-#: src/icqhook.cc:630
+#: src/icqhook.cc:629
 msgid "+ automatically set N/A"
 msgstr "+ статус автоматически установлен в N/A"
 
-#: src/icqhook.cc:637
+#: src/icqhook.cc:636
 msgid "+ the user is back"
 msgstr "+ пользователь активен, статус восстановлен"
 

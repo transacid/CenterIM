@@ -532,3 +532,56 @@ that have no support for namespaces.
 Applied patch by Pavel Gubin <pg@cedar.ie.tusur.ru> which fixes the bug
 causing centericq not to return from autoAway/autoNA mode when only one
 of the timeouts is set.
+
+Message editor was fixed a little bit. Ctrl-right/left to walk through
+words hadn't worked.
+
+--enable-locales-fix parameter was added to ./configure scipt. It's very
+useful when you have an old version of libc with twisted iscntrl(), but
+still need to be able to see Chinese characters :)
+
+The previous version didn't respect prefix setting. Share and locale
+directories pointed into /usr/local/share/ anyway. Fixed.
+
+The centericq man page hadn't been installed along with other stuff.
+Fixed.
+
+Now centericq is able to react on xterm window resize event.
+
+The program is not compatible with GCC >= 3.0.0. You can easily use the
+new compiler to build it.
+
+The following items were added to the "Config options" dialog.
+    - "Send all events through server"
+    - "Arrange contacts into groups"
+
+The last item means I have finally implemented support for contact
+groups. Waahaa.
+
+Spanish PO along with docs in this language was added.
+
+"Next" button in incoming contacts window didn't work properly
+sometimes. Fixed.
+
+It's now possible to update information in "Work" section. Had to patch
+icqlib.
+
+Since I was dealing with icqlib, I couldn't help making other useful
+modifications. For example, I implemented White page search support. You
+can see it as a bunch of additional parameters in the "Find/add users"
+dialog.
+
+"Clear" button was added to the "Find/add" dialog.
+
+"Wrong password" situation is now tracked in icqlib, and thus reported
+by centericq.
+
+Invisible list was implemented.
+
+Contacts sending feature was implemented.
+
+Offline contacts show/hide command now has a hotkey - F5.
+
+Now centericq (my branch of icqlib to be exact) sets user's timezone
+properly. And also it's now possible to view user's local time in "user
+info" dialog.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.13.3\n"
-"POT-Creation-Date: 2001-10-03 23:37+0300\n"
+"POT-Creation-Date: 2001-10-04 17:45+0300\n"
 "PO-Revision-Date: 2001-07-08 05:03+02:00\n"
 "Last-Translator: Leandro Noferini <lnoferin@cybervalley.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -879,8 +879,8 @@ msgstr ""
 msgid "Your ICQ details have been fetched"
 msgstr "I tuoi dettagli ICQ sono stati scaricati"
 
-#: src/icqdialogs.cc:819
-msgid "Organize user groups"
+#: src/icqdialogs.cc:819 src/icqface.cc:263
+msgid "Organize contact groups"
 msgstr ""
 
 # src/icqdialogs.cc:539 src/icqface.cc:1656
@@ -1139,10 +1139,6 @@ msgstr " Rinomina l'utente      r"
 #, fuzzy
 msgid " Hide offline users                 F5"
 msgstr " Nascondi gli utenti sconnessi : %s "
-
-#: src/icqface.cc:263
-msgid " Organize contact groups"
-msgstr ""
 
 # src/icqface.cc:444 src/icqface.cc:1191 src/icqface.cc:1201
 # src/icqface.cc:1481 src/icqface.cc:1656
@@ -1684,12 +1680,12 @@ msgid "+ disconnected"
 msgstr "+ disconnesso"
 
 # src/icqhook.cc:245
-#: src/icqhook.cc:280
+#: src/icqhook.cc:279
 msgid "has added you to his/her contact list"
 msgstr "sei stato aggiunto alla sua lista di contatti"
 
 # src/icqhook.cc:261
-#: src/icqhook.cc:296
+#: src/icqhook.cc:295
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
@@ -1698,50 +1694,50 @@ msgstr ""
 "contatti. La ragione è: "
 
 # src/icqhook.cc:417
-#: src/icqhook.cc:454
+#: src/icqhook.cc:453
 msgid "+ server reported a problem: wrong password"
 msgstr "+ il server ha riportato il seguente problema: password errata"
 
 # src/icqhook.cc:422
-#: src/icqhook.cc:459
+#: src/icqhook.cc:458
 msgid "+ server reported a problem: invalid uin"
 msgstr "+ il server ha risportato il seguente problema: uin non valido"
 
 # src/icqhook.cc:458
-#: src/icqhook.cc:495
+#: src/icqhook.cc:494
 msgid "+ search done"
 msgstr "+ ricerca eseguita"
 
 # src/icqhook.cc:474
-#: src/icqhook.cc:515
+#: src/icqhook.cc:514
 #, c-format
 msgid "+ file %s refused by %s, %lu"
 msgstr "+ file %s rifiutato da %s, %lu"
 
 # src/icqhook.cc:484
-#: src/icqhook.cc:525
+#: src/icqhook.cc:524
 #, c-format
 msgid "+ file %s from %s, %lu received"
 msgstr "+ file %s da %s, %lu ricevuto"
 
 # src/icqhook.cc:489
-#: src/icqhook.cc:530
+#: src/icqhook.cc:529
 #, c-format
 msgid "+ file %s to %s, %lu sent"
 msgstr "+ file %s per %s, %lu inviato"
 
 # src/icqhook.cc:578
-#: src/icqhook.cc:621
+#: src/icqhook.cc:620
 msgid "+ automatically set away"
 msgstr "+ impsta automaticamente assenza"
 
 # src/icqhook.cc:587
-#: src/icqhook.cc:630
+#: src/icqhook.cc:629
 msgid "+ automatically set N/A"
 msgstr "+ imposta automaticamente N/A"
 
 # src/icqhook.cc:594
-#: src/icqhook.cc:637
+#: src/icqhook.cc:636
 msgid "+ the user is back"
 msgstr "+ l'utente è tornato"
 

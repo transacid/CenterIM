@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.8 2001/09/30 07:45:38 konst Exp $
+* $Id: centermain.cc,v 1.9 2001/10/04 16:29:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -56,8 +56,8 @@ int main(int argc, char **argv) {
     try {
 
 #ifdef ENABLE_NLS
-	bindtextdomain("centericq", LOCALE_DIR);
-	textdomain("centericq");
+	bindtextdomain(PACKAGE, LOCALE_DIR);
+	textdomain(PACKAGE);
 #endif
 
 	cicq.commandline(argc, argv);

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Centericq 3.20.5 \n"
-"POT-Creation-Date: 2001-10-03 23:37+0300\n"
+"POT-Creation-Date: 2001-10-04 17:45+0300\n"
 "PO-Revision-Date: 2001 Feb 5 10:30 EET\n"
 "Last-Translator: Ovidiu Ghinet <oghinet@doctor.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -726,8 +726,8 @@ msgstr "Perioada auto N/A (0 - dezactivare): "
 msgid "Your ICQ details have been fetched"
 msgstr "Detaliile dumneavoastra ICQ au fost citite"
 
-#: src/icqdialogs.cc:819
-msgid "Organize user groups"
+#: src/icqdialogs.cc:819 src/icqface.cc:263
+msgid "Organize contact groups"
 msgstr ""
 
 #: src/icqdialogs.cc:842
@@ -939,10 +939,6 @@ msgstr " Redenumeste utiliz.    r"
 #, fuzzy
 msgid " Hide offline users                 F5"
 msgstr " Ascunde utilizatorii offline : %s "
-
-#: src/icqface.cc:263
-msgid " Organize contact groups"
-msgstr ""
 
 #: src/icqface.cc:472 src/icqface.cc:1222 src/icqface.cc:1232
 #: src/icqface.cc:1510 src/icqface.cc:1694
@@ -1380,11 +1376,11 @@ msgstr "+ conectat"
 msgid "+ disconnected"
 msgstr "+ deconectat"
 
-#: src/icqhook.cc:280
+#: src/icqhook.cc:279
 msgid "has added you to his/her contact list"
 msgstr "va adaugat la lista lui/ei de contacte"
 
-#: src/icqhook.cc:296
+#: src/icqhook.cc:295
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
@@ -1392,42 +1388,42 @@ msgstr ""
 "va cerut autorizatia de a va adauga la lista lui/ei de contacte.Motivul a "
 "fost:"
 
-#: src/icqhook.cc:454
+#: src/icqhook.cc:453
 msgid "+ server reported a problem: wrong password"
 msgstr "+ serverul a raportat o problema: parola gresita"
 
-#: src/icqhook.cc:459
+#: src/icqhook.cc:458
 msgid "+ server reported a problem: invalid uin"
 msgstr "+ serverul a raportat o problema: uin invalid"
 
-#: src/icqhook.cc:495
+#: src/icqhook.cc:494
 msgid "+ search done"
 msgstr "+ cautarea a luat sfarsit"
 
-#: src/icqhook.cc:515
+#: src/icqhook.cc:514
 #, c-format
 msgid "+ file %s refused by %s, %lu"
 msgstr "+ fisierul %s a fost refuzat de %s, %lu"
 
-#: src/icqhook.cc:525
+#: src/icqhook.cc:524
 #, c-format
 msgid "+ file %s from %s, %lu received"
 msgstr "+ fisierul %s de la %s, %lu a sosit"
 
-#: src/icqhook.cc:530
+#: src/icqhook.cc:529
 #, c-format
 msgid "+ file %s to %s, %lu sent"
 msgstr "+ fisierul %s pentru %s, %lu a fost trimis"
 
-#: src/icqhook.cc:621
+#: src/icqhook.cc:620
 msgid "+ automatically set away"
 msgstr "+ statutul a fost schimbat automat in Away"
 
-#: src/icqhook.cc:630
+#: src/icqhook.cc:629
 msgid "+ automatically set N/A"
 msgstr "+ statutul a fost shimbat automat in N/A Nedisponibil"
 
-#: src/icqhook.cc:637
+#: src/icqhook.cc:636
 msgid "+ the user is back"
 msgstr "+ utilizatorul s-a intors"
 

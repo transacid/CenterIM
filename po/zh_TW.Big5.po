@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 3.34.15\n"
-"POT-Creation-Date: 2001-10-03 23:37+0300\n"
+"POT-Creation-Date: 2001-10-04 17:45+0300\n"
 "PO-Revision-Date: 2001-07-03 00:24+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -730,8 +730,8 @@ msgstr ""
 msgid "Your ICQ details have been fetched"
 msgstr " 你的 ICQ 資料 "
 
-#: src/icqdialogs.cc:819
-msgid "Organize user groups"
+#: src/icqdialogs.cc:819 src/icqface.cc:263
+msgid "Organize contact groups"
 msgstr ""
 
 #: src/icqdialogs.cc:842
@@ -943,10 +943,6 @@ msgstr " 改變對方稱號           r"
 #, fuzzy
 msgid " Hide offline users                 F5"
 msgstr " 隱藏離線使用者 : %s "
-
-#: src/icqface.cc:263
-msgid " Organize contact groups"
-msgstr ""
 
 #: src/icqface.cc:472 src/icqface.cc:1222 src/icqface.cc:1232
 #: src/icqface.cc:1510 src/icqface.cc:1694
@@ -1384,54 +1380,54 @@ msgstr ""
 msgid "+ disconnected"
 msgstr "+ 連線中斷"
 
-#: src/icqhook.cc:280
+#: src/icqhook.cc:279
 msgid "has added you to his/her contact list"
 msgstr "己經將你加入他的好友名單中"
 
-#: src/icqhook.cc:296
+#: src/icqhook.cc:295
 msgid ""
 "has requested your authorization to add you to his/her contact list. The "
 "reason was: "
 msgstr "要求將你加入他/她的好友名單中。理由是: "
 
-#: src/icqhook.cc:454
+#: src/icqhook.cc:453
 msgid "+ server reported a problem: wrong password"
 msgstr "+ 伺服器回應: 密碼錯誤"
 
-#: src/icqhook.cc:459
+#: src/icqhook.cc:458
 msgid "+ server reported a problem: invalid uin"
 msgstr "+ 伺服器回應: 不正確的 uin"
 
-#: src/icqhook.cc:495
+#: src/icqhook.cc:494
 msgid "+ search done"
 msgstr "+ 搜尋結束"
 
-#: src/icqhook.cc:515
+#: src/icqhook.cc:514
 #, c-format
 msgid "+ file %s refused by %s, %lu"
 msgstr "+ 傳送檔案 %s 給 %s, %lu 被拒絕了"
 
-#: src/icqhook.cc:525
+#: src/icqhook.cc:524
 #, c-format
 msgid "+ file %s from %s, %lu received"
 msgstr "+ 傳送檔案 %s 給 %s, %lu 中"
 
-#: src/icqhook.cc:530
+#: src/icqhook.cc:529
 #, fuzzy, c-format
 msgid "+ file %s to %s, %lu sent"
 msgstr "+ 接收檔案 %s, 來自 %s, %lu"
 
 # msgid "+ file %s to %s, %lu sent"
 # msgstr "+ 傳送檔案 %s 給 %s, %lu 成功"
-#: src/icqhook.cc:621
+#: src/icqhook.cc:620
 msgid "+ automatically set away"
 msgstr "+ 自設調整狀態為不在"
 
-#: src/icqhook.cc:630
+#: src/icqhook.cc:629
 msgid "+ automatically set N/A"
 msgstr "+ 自動調整狀態為沒空"
 
-#: src/icqhook.cc:637
+#: src/icqhook.cc:636
 msgid "+ the user is back"
 msgstr "+ 對方已經回來"
 
