@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.72 2004/08/04 17:45:35 konst Exp $
+* $Id: jabberhook.cc,v 1.73 2004/08/05 11:20:08 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -524,7 +524,11 @@ const string &serv, string &err) {
 #endif
 
     jab_start(jc);
-    id = atoi(jab_reg(jc));
+
+    while(jc && jc->state == JCONN_STATE_CONNECTING)
+       jab_start(jc);
+
+    if(jc) id = atoi(jab_reg(jc));
 
     if(!online()) {
 	err = _("Unable to connect");
