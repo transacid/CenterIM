@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.16 2001/09/27 08:53:41 konst Exp $
+* $Id: centericq.cc,v 1.17 2001/09/30 07:45:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,7 @@
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
+#include "icqgroups.h"
 
 centericq::centericq() {
 }
@@ -88,6 +89,7 @@ void centericq::exec() {
     clist.load();
     conf.load();
     lst.load();
+    groups.load();
 
     face.done();
     face.init();
@@ -111,6 +113,8 @@ void centericq::exec() {
     lst.save();
     clist.save();
     conf.savestatus(ihook.getmanualstatus());
+    groups.save();
+
     face.done();
 }
 

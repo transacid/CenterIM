@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.7 2001/09/24 11:56:37 konst Exp $
+* $Id: icqcontact.cc,v 1.8 2001/09/30 07:45:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,6 +24,7 @@
 
 #include "icqcontact.h"
 #include "icqcontacts.h"
+#include "icqgroups.h"
 #include "icqconf.h"
 #include "centericq.h"
 
@@ -86,7 +87,7 @@ const string icqcontact::getdirname() const {
 void icqcontact::clear() {
     int i;
 
-    seq2 = nmsgs = uin = fupdated = infotryn = 0;
+    seq2 = nmsgs = uin = fupdated = infotryn = groupid = 0;
     finlist = true;
     status = STATUS_OFFLINE;
     direct = false;
@@ -171,6 +172,7 @@ void icqcontact::save() {
 	    fprintf(f, "%s\n", fbg[1].c_str());
 	    fprintf(f, "%s\n", fbg[2].c_str());
 	    fprintf(f, "%s\n", fbg[3].c_str());
+	    fprintf(f, "%d\n", groupid);
 	    fclose(f);
 	}
 
@@ -258,6 +260,7 @@ void icqcontact::load() {
 		case 48: fbg[1] = buf; break;
 		case 49: fbg[2] = buf; break;
 		case 50: fbg[3] = buf; break;
+		case 51: groupid = atoi(buf); break;
 	    }
 	}
 	fclose(f);
@@ -282,6 +285,11 @@ void icqcontact::load() {
 
     if(!nick.size()) nick = i2str(uin);
     if(!dispnick.size()) dispnick = i2str(uin);
+
+    if(conf.getusegroups())
+    if(find(groups.begin(), groups.end(), groupid) == groups.end()) {
+	groupid = 1;
+    }
 }
 
 bool icqcontact::isbirthday() const {
@@ -366,11 +374,11 @@ void icqcontact::setstatus(int fstatus) {
     status = fstatus;
 }
 
-void icqcontact::setnick(string fnick) {
+void icqcontact::setnick(const string fnick) {
     nick = fnick;
 }
 
-void icqcontact::setdispnick(string fnick) {
+void icqcontact::setdispnick(const string fnick) {
     dispnick = fnick;
 }
 
@@ -411,9 +419,11 @@ string &fcellular, unsigned long &fzip, unsigned short &fcountry) const {
     fcountry = country;
 }
 
-void icqcontact::setinfo(string fname, string lname, string fprimemail, string fsecemail,
-string foldemail, string fcity, string fstate, string fphone, string ffax,
-string fstreet, string fcellular, unsigned long fzip, unsigned short fcountry) {
+void icqcontact::setinfo(const string fname, const string lname,
+const string fprimemail, const string fsecemail, const string foldemail,
+const string fcity, const string fstate, const string fphone,
+const string ffax, const string fstreet, const string fcellular,
+unsigned long fzip, unsigned short fcountry) {
     firstname = tosane(fname);
     lastname = tosane(lname);
     primemail = tosane(fprimemail);
@@ -446,7 +456,7 @@ unsigned char &fbyear) const {
 }
 
 void icqcontact::setmoreinfo(unsigned char fage, unsigned char fgender,
-string fhomepage, unsigned char flang1, unsigned char flang2,
+const string fhomepage, unsigned char flang1, unsigned char flang2,
 unsigned char flang3, unsigned char fbday, unsigned char fbmonth,
 unsigned char fbyear) {
     age = fage;
@@ -479,10 +489,11 @@ string &fjob, unsigned short &foccupation, string &fwhomepage) const {
     fwhomepage = whomepage;
 }
 
-void icqcontact::setworkinfo(string fwcity, string fwstate, string fwphone,
-string fwfax, string fwaddress, unsigned long fwzip,
-unsigned short fwcountry, string fcompany, string fdepartment,
-string fjob, unsigned short foccupation, string fwhomepage) {
+void icqcontact::setworkinfo(string fwcity, const string fwstate,
+const string fwphone, const string fwfax, const string fwaddress,
+unsigned long fwzip, unsigned short fwcountry, const string fcompany,
+const string fdepartment, const string fjob, unsigned short foccupation,
+const string fwhomepage) {
     wcity = tosane(fwcity);
     wstate = tosane(fwstate);
     wphone = tosane(fwphone);
@@ -505,18 +516,18 @@ void icqcontact::getinterests(string &int1, string &int2, string &int3, string &
     int4 = fint[3];
 }
 
-void icqcontact::setabout(string data) {
+void icqcontact::setabout(const string data) {
     about = data;
     fupdated++;
 }
 
-void icqcontact::setsound(int event, string sf) {
+void icqcontact::setsound(int event, const string sf) {
     if(event <= SOUND_COUNT) {
 	sound[event] = sf;
     }
 }
 
-void icqcontact::playsound(int event) {
+void icqcontact::playsound(int event) const {
     string sf = sound[event], cline;
     int i;
 
@@ -594,7 +605,7 @@ void icqcontact::getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip) cons
     fpubip = pubip;
 }
 
-void icqcontact::setlastip(string flastip) {
+void icqcontact::setlastip(const string flastip) {
     lastip = flastip;
 }
 
@@ -671,14 +682,16 @@ void icqcontact::setbackground(const string nbg[]) {
     for(int i = 0; i < 4; i++) fbg[i] = tosane(nbg[i]);
 }
 
-void icqcontact::getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4) const {
+void icqcontact::getaffiliations(string &naf1, string &naf2, string &naf3,
+string &naf4) const {
     naf1 = faf[0];
     naf2 = faf[1];
     naf3 = faf[2];
     naf4 = faf[3];
 }
 
-void icqcontact::getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4) const {
+void icqcontact::getbackground(string &nbg1, string &nbg2, string &nbg3,
+string &nbg4) const {
     nbg1 = fbg[0];
     nbg2 = fbg[1];
     nbg3 = fbg[2];
@@ -724,7 +737,7 @@ void icqcontact::setpostponed(const string apostponed) {
     postponed = apostponed;
 }
 
-string icqcontact::getpostponed() const {
+const string icqcontact::getpostponed() const {
     return postponed;
 }
 
@@ -734,4 +747,12 @@ void icqcontact::setmsgdirect(bool flag) {
 
 bool icqcontact::getmsgdirect() const {
     return msgdirect && !conf.getserveronly();
+}
+
+void icqcontact::setgroupid(int agroupid) {
+    groupid = agroupid;
+}
+
+int icqcontact::getgroupid() const {
+    return groupid;
 }

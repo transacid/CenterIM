@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.8 2001/09/24 11:56:37 konst Exp $
+* $Id: icqconf.cc,v 1.9 2001/09/30 07:45:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@
 
 icqconf::icqconf(): uin(0), rs(rscard), rc(rcdark), autoaway(0),
 autona(0), hideoffline(false), savepwd(true), antispam(false),
-mailcheck(true) {
+mailcheck(true), usegroups(false) {
     setserver(ICQ_SERVER);
 }
 
@@ -384,7 +384,7 @@ string fname, string lname, string email) {
     remail = email;
 }
 
-regcolor icqconf::getregcolor() {
+regcolor icqconf::getregcolor() const {
     return rc;
 }
 
@@ -392,7 +392,7 @@ void icqconf::setregcolor(regcolor c) {
     rc = c;
 }
 
-regsound icqconf::getregsound() {
+regsound icqconf::getregsound() const {
     return rs;
 }
 
@@ -400,7 +400,7 @@ void icqconf::setregsound(regsound s) {
     rs = s;
 }
 
-bool icqconf::gethideoffline() {
+bool icqconf::gethideoffline() const {
     return hideoffline;
 }
 
@@ -432,7 +432,7 @@ void icqconf::setauto(int away, int na) {
 	autoaway = 0;
 }
 
-void icqconf::getauto(int &away, int &na) {
+void icqconf::getauto(int &away, int &na) const {
     away = autoaway;
     na = autona;
 
@@ -440,7 +440,7 @@ void icqconf::getauto(int &away, int &na) {
 	away = 0;
 }
 
-bool icqconf::getquote() {
+bool icqconf::getquote() const {
     return quote;
 }
 
@@ -448,7 +448,7 @@ void icqconf::setquote(bool use) {
     quote = use;
 }
 
-void icqconf::setserver(string nserv) {
+void icqconf::setserver(const string nserv) {
     int pos;
 
     if(!nserv.empty()) {
@@ -462,15 +462,15 @@ void icqconf::setserver(string nserv) {
     }
 }
 
-string icqconf::getservername() {
+const string icqconf::getservername() const {
     return server;
 }
 
-unsigned int icqconf::getserverport() {
+unsigned int icqconf::getserverport() const {
     return port;
 }
 
-void icqconf::setsockshost(string nsockshost) {
+void icqconf::setsockshost(const string nsockshost) {
     int pos;
 
     if(!nsockshost.empty()) {
@@ -486,25 +486,25 @@ void icqconf::setsockshost(string nsockshost) {
     }
 }
 
-string icqconf::getsockshost() {
+const string icqconf::getsockshost() const {
     return sockshost;
 }
 
-unsigned int icqconf::getsocksport() {
+unsigned int icqconf::getsocksport() const {
     return socksport;
 }
 
-void icqconf::getsocksuser(string &name, string &pass) {
+void icqconf::getsocksuser(string &name, string &pass) const {
     name = socksuser;
     pass = sockspass;
 }
 
-void icqconf::setsocksuser(string name, string pass) {
+void icqconf::setsocksuser(const string name, const string pass) {
     socksuser = name;
     sockspass = pass;
 }
 
-bool icqconf::getsavepwd() {
+bool icqconf::getsavepwd() const {
     return savepwd;
 }
 
@@ -516,7 +516,7 @@ void icqconf::sethideoffline(bool fho) {
     hideoffline = fho;
 }
 
-bool icqconf::getantispam() {
+bool icqconf::getantispam() const {
     return antispam;
 }
 
@@ -524,7 +524,7 @@ void icqconf::setantispam(bool fas) {
     antispam = fas;
 }
 
-bool icqconf::getmailcheck() {
+bool icqconf::getmailcheck() const {
     return mailcheck;
 }
 
@@ -542,7 +542,7 @@ void icqconf::openurl(const string url) {
     system(torun.c_str());
 }
 
-bool icqconf::getserveronly() {
+bool icqconf::getserveronly() const {
     return serveronly;
 }
 

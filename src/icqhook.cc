@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.8 2001/09/24 11:56:39 konst Exp $
+* $Id: icqhook.cc,v 1.9 2001/09/30 07:45:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -599,6 +599,7 @@ void icqhook::exectimers() {
 		if(c->getnick() == i2str(c->getuin()))
 		if(c->getinfotryn() < 5) {
 		    c->setseq2(icq_SendMetaInfoReq(&icql, c->getuin()));
+		    icq_SendNewUser(&icql, c->getuin());
 		    c->incinfotryn();
 		}
 	    }

@@ -20,7 +20,7 @@ class icqcontact {
     protected:
 	unsigned int uin;
 	unsigned short seq2;
-	int status, nmsgs, fupdated, infotryn;
+	int status, nmsgs, fupdated, infotryn, groupid;
 	bool finlist, reqauth, webaware, pubip, nonicq, direct, msgdirect;
 	time_t lastread, lastseen;
 
@@ -116,7 +116,7 @@ class icqcontact {
 	void setmsgcount(int n);
 
 	void setsound(int event, const string sf);
-	void playsound(int event);
+	void playsound(int event) const;
 
 	void clear();
 	void load();
@@ -143,7 +143,10 @@ class icqcontact {
 	void incinfotryn();
 
 	void setpostponed(const string apostponed);
-	string getpostponed() const;
+	const string getpostponed() const;
+
+	void setgroupid(int agroupid);
+	int getgroupid() const;
 };
 
 #endif

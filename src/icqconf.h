@@ -8,16 +8,13 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#include <string>
-#include <list>
-#include <algorithm>
-
 #include "kkstrtext.h"
 #include "kkfsys.h"
 #include "conscommon.h"
 #include "icq.h"
 
 #include "icqcommon.h"
+#include "icqgroup.h"
 
 #define cp_status           1
 
@@ -47,17 +44,6 @@
 #endif
 */
 
-#ifdef ENABLE_NLS
-
-#include <libintl.h>
-#define _(s)    gettext(s)
-
-#else
-
-#define _(s)    (s)
-
-#endif
-
 #define ICQ_SERVER      "icq.mirabilis.com:4000"
 
 enum regsound {rscard, rsspeaker, rsdisable, rsdontchange};
@@ -65,13 +51,17 @@ enum regcolor {rcdark, rcblue, rcdontchange};
 
 class icqconf {
     protected:
+	vector<icqgroup> groups;
+
 	unsigned int uin, port, socksport;
 
 	int autoaway, autona;
-	bool hideoffline, quote, savepwd, antispam, mailcheck, serveronly;
 
-	string password, rnick, rfname, rlname, remail, server;
-	string sockshost, socksuser, sockspass, openurlcommand;
+	bool hideoffline, quote, savepwd, antispam, mailcheck,
+	    serveronly, usegroups;
+
+	string password, rnick, rfname, rlname, remail, server,
+	    sockshost, socksuser, sockspass, openurlcommand;
 
 	list<int> boldcolors;
 
@@ -87,7 +77,7 @@ class icqconf {
 	unsigned int getuin();
 	const string &getpassword();
 
-	void setpassword(string npass);
+	void setpassword(const string npass);
 	
 	void checkdir();
 	void load();
@@ -103,48 +93,53 @@ class icqconf {
 	void loadcolors();
 	void loadsounds();
 	void loadactions();
+
 	void initpairs();
 
-	void registerinfo(unsigned int fuin, string passwd, string nick,
-	string fname, string lname, string email);
+	void registerinfo(unsigned int fuin, const string passwd,
+	    const string nick, const string fname,
+	    const string lname, const string email);
 	
-	regcolor getregcolor();
+	regcolor getregcolor() const;
 	void setregcolor(regcolor c);
 
-	regsound getregsound();
+	regsound getregsound() const;
 	void setregsound(regsound s);
 
-	bool gethideoffline();
+	bool gethideoffline() const;
 	void sethideoffline(bool fho);
 
-	bool getantispam();
+	bool getantispam() const;
 	void setantispam(bool fas);
 
-	bool getmailcheck();
+	bool getmailcheck() const;
 	void setmailcheck(bool fmc);
 
-	bool getserveronly();
+	bool getserveronly() const;
 	void setserveronly(bool fso);
 
 	void setauto(int away, int na);
-	void getauto(int &away, int &na);
+	void getauto(int &away, int &na) const;
 
-	void setserver(string nserv);
-	string getservername();
-	unsigned int getserverport();
+	void setserver(const string nserv);
+	const string getservername() const;
+	unsigned int getserverport() const;
 
-	bool getquote();
+	bool getquote() const;
 	void setquote(bool use);
 
-	bool getsavepwd();
+	bool getsavepwd() const;
 	void setsavepwd(bool ssave);
- 
-	void setsockshost(string nsockshost);
-	string getsockshost();
-	unsigned int getsocksport();
 
-	void getsocksuser(string &name, string &pass);
-	void setsocksuser(string name, string pass);
+	bool getusegroups() const { return usegroups; }
+	void setusegroups(bool ausegroups) { usegroups = ausegroups; }
+ 
+	void setsockshost(const string nsockshost);
+	const string getsockshost() const;
+	unsigned int getsocksport() const;
+
+	void getsocksuser(string &name, string &pass) const;
+	void setsocksuser(const string name, const string pass);
 
 	void openurl(const string url);
 };

@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.7 2001/09/24 11:56:37 konst Exp $
+* $Id: centermain.cc,v 1.8 2001/09/30 07:45:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "icqoffline.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
+#include "icqgroups.h"
 
 centericq cicq;
 icqconf conf;
@@ -39,6 +40,7 @@ icqface face;
 icqhistory hist;
 icqoffline offl;
 icqlist lst;
+icqgroups groups;
 
 struct icq_link icql;
 

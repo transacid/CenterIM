@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.7 2001/09/26 09:58:35 konst Exp $
+* $Id: icqcontacts.cc,v 1.8 2001/09/30 07:45:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -42,9 +42,11 @@ bool nonicq = false) {
 	c->setdispnick(i2str(uin));
 	c->save();
 	add(c);
+/*
 	c->setseq2(icq_SendMetaInfoReq(&icql, uin));
 	icq_SendNewUser(&icql, uin);
 	icq_ContactAdd(&icql, uin);
+*/
     } else {
 	c->save();
 	add(c);
