@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.12 2001/10/03 21:41:36 konst Exp $
+* $Id: icqdialogs.cc,v 1.13 2001/10/04 17:14:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -642,7 +642,7 @@ bool icqface::sendfiles(unsigned int uin, string &msg, linkedlist &flist) {
 
 bool icqface::updateconf(regsound &s, regcolor &c) {
     bool finished, success;
-    int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana;
+    int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
     string tmp, phidden, socksuser, sockspass;
     string serv = conf.getservername() + ":" + i2str(conf.getserverport());
     string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
@@ -675,37 +675,42 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     db.idle = &dialogidle;
 
     blockmainscreen();
+    treeview &t = *db.gettree();
 
     while(!finished) {
-	db.gettree()->clear();
+	t.clear();
 
-	nconf = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Configuration "));
-	nopt = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Options "));
-	ncomm = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Communications "));
+	nconf = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Configuration "));
+	ncl = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Contact list "));
+	nfeat = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Features "));
+	ncomm = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Communications "));
+	noth = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Other "));
 
-	db.gettree()->addleaff(nconf, 0, (void *) 1, _(" Change sound device to : %s "), strregsound(s));
-	db.gettree()->addleaff(nconf, 0, (void *) 2, _(" Change color scheme to : %s "), strregcolor(c));
+	t.addleaff(nconf, 0, (void *) 1, _(" Change sound device to : %s "), strregsound(s));
+	t.addleaff(nconf, 0, (void *) 2, _(" Change color scheme to : %s "), strregcolor(c));
 
-	db.gettree()->addleaff(nopt, 0, (void *)  4, _(" Automatically set Away period (min) : %d "), aaway);
-	db.gettree()->addleaff(nopt, 0, (void *)  5, _(" Automatically set N/A period (min) : %d "), ana);
-	db.gettree()->addleaff(nopt, 0, (void *)  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
-	db.gettree()->addleaff(nopt, 0, (void *)  6, _(" Hide offline users : %s "), stryesno(hideoffl));
-	db.gettree()->addleaff(nopt, 0, (void *)  8, _(" Quote a message on reply : %s "), stryesno(quote));
-	db.gettree()->addleaff(nopt, 0, (void *) 13, _(" Remember ICQ password : %s "), stryesno(savepwd));
-	db.gettree()->addleaff(nopt, 0, (void *) 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
-	db.gettree()->addleaff(nopt, 0, (void *) 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
-	db.gettree()->addleaff(nopt, 0, (void *) 16, _(" Send all events through server : %s "), stryesno(serveronly));
-	db.gettree()->addleaff(nopt, 0, (void *) 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
+	t.addleaff(ncl, 0, (void *) 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
+	t.addleaff(ncl, 0, (void *)  6, _(" Hide offline users : %s "), stryesno(hideoffl));
 
-	db.gettree()->addleaff(ncomm, 0, (void *) 7, _(" ICQ server address : %s "), serv.c_str());
-	db.gettree()->addleaff(ncomm, 0, (void *) 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
+	t.addleaff(ncomm, 0, (void *) 7, _(" ICQ server address : %s "), serv.c_str());
+	t.addleaff(ncomm, 0, (void *) 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
+
+	t.addleaff(nfeat, 0, (void *)  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
+	t.addleaff(nfeat, 0, (void *)  8, _(" Quote a message on reply : %s "), stryesno(quote));
+	t.addleaff(nfeat, 0, (void *) 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
+	t.addleaff(nfeat, 0, (void *) 13, _(" Remember ICQ password : %s "), stryesno(savepwd));
+	t.addleaff(nfeat, 0, (void *) 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
+	t.addleaff(nfeat, 0, (void *) 16, _(" Send all events through server : %s "), stryesno(serveronly));
+
+	t.addleaff(noth, 0, (void *)  4, _(" Automatically set Away period (min) : %d "), aaway);
+	t.addleaff(noth, 0, (void *)  5, _(" Automatically set N/A period (min) : %d "), ana);
 
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);
-	    nproxy = db.gettree()->addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
-	    db.gettree()->addleaff(nproxy, 0, (void *) 10, _(" Proxy server address : %s "), prserv.c_str());
-	    db.gettree()->addleaff(nproxy, 0, (void *) 11, _(" Proxy user name : %s "), socksuser.c_str());
-	    db.gettree()->addleaff(nproxy, 0, (void *) 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
+	    nproxy = t.addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
+	    t.addleaff(nproxy, 0, (void *) 10, _(" Proxy server address : %s "), prserv.c_str());
+	    t.addleaff(nproxy, 0, (void *) 11, _(" Proxy user name : %s "), socksuser.c_str());
+	    t.addleaff(nproxy, 0, (void *) 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
 	}
 
 	void *p;
