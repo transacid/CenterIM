@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.31 2002/03/14 15:15:48 konst Exp $
+* $Id: icqcontacts.cc,v 1.32 2002/03/15 17:05:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,6 +174,7 @@ void icqcontacts::checkdefault() {
 		case icq:
 		    addnew(imcontact(17502151, pname), false);
 		    break;
+/*
 		case yahoo:
 //                case aim:
 		    addnew(imcontact("thekonst", pname), false);
@@ -181,6 +182,7 @@ void icqcontacts::checkdefault() {
 		case msn:
 		    addnew(imcontact("konst@konst.org.ua", pname), false);
 		    break;
+*/
 	    }
 	}
     }
