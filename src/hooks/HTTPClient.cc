@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.17 2004/10/07 10:49:17 konst Exp $
+* $Id: HTTPClient.cc,v 1.18 2005/01/07 22:22:21 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -178,6 +178,10 @@ void HTTPClient::Parse() {
 	    if((npos = response.find(" ")) != -1)
 		head = up(response.substr(0, npos));
 
+	    if(head == "CONTENT-LENGTH:") {
+		m_length = strtoul(response.substr(npos+1).c_str(), 0, 0);
+	    }
+
 	    switch(m_code) {
 		case 301:
 		case 302:
@@ -316,6 +320,7 @@ void HTTPClient::SendRequest() {
 	b.Pack((string) "Proxy-Authorization: Basic " + ba.get() + "\r\n");
     }
 
+    b.Pack((string) "Connection: keep-alive\r\n");
     b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
 
     if(!ev->m_user.empty()) {
@@ -413,10 +418,13 @@ void HTTPClient::FinishNonBlockingConnect() {
 }
 
 void HTTPClient::Recv() {
+    m_length = 0;
+
     try {
 	while(m_socket->connected()) {
 	    if(!m_socket->Recv(m_recv)) break;
 	    Parse();
+	    if(m_length && m_recv.size() >= m_length) break;
 	}
 
     } catch(SocketException e) {
@@ -440,6 +448,11 @@ void HTTPClient::Recv() {
 	Disconnect();
 	SignalLog(LogEvent::ERROR, e.what());
 
+    }
+
+    if(m_length && m_recv.size() >= m_length) {
+	Disconnect();
+	throw DisconnectedException("Content-Length reached");
     }
 }
 

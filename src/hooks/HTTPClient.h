@@ -87,6 +87,7 @@ class HTTPClient : public SocketClient {
 	string m_proxy_user, m_proxy_passwd;
 	string m_resource, m_content, m_redirect;
 	unsigned short m_port, m_proxy_port;
+	unsigned long m_length;
 	time_t m_last_operation, m_timeout;
 	int m_code;
 
