@@ -44,6 +44,8 @@ class centericq {
 	void find();
 	void nonicq(int id);
 	void checkmail();
+
+	icqcontact *adduin(unsigned int uin);
 };
 
 extern centericq cicq;

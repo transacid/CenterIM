@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.6 2001/09/24 11:56:38 konst Exp $
+* $Id: icqcontacts.cc,v 1.7 2001/09/26 09:58:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -114,12 +114,15 @@ void icqcontacts::send() {
 	if(c->getuin()) {
 	    icq_ContactAdd(&icql, c->getuin());
 	    icq_ContactSetVis(&icql, c->getuin(),
-		lst.inlist(c->getuin(), csvisible) ? 1 : 0);
+		lst.inlist(c->getuin(), csvisible) ? ICQ_CONT_VISIBLE :
+		lst.inlist(c->getuin(), csinvisible) ? ICQ_CONT_INVISIBLE :
+		ICQ_CONT_NORMAL);
 	}
     }
 
     icq_SendContactList(&icql);
     icq_SendVisibleList(&icql);
+    icq_SendInvisibleList(&icql);
 }
 
 void icqcontacts::remove(unsigned int uin, bool nonicq = false) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.12 2001/09/24 11:56:36 konst Exp $
+* $Id: centericq.cc,v 1.13 2001/09/26 09:58:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -258,18 +258,6 @@ void centericq::mainloop() {
 		}
 		break;
 
-	    case ACT_SWITCH_VIS:
-		if(lst.inlist(c->getuin(), csvisible)) {
-		    lst.del(c->getuin(), csvisible);
-		    face.log(_("+ %s has been removed from the visible list"), c->getdispnick().c_str());
-		} else {
-		    lst.add(new icqlistitem(c->getdispnick(), c->getuin(), csvisible));
-		    face.log(_("+ %s has been added to the visible list"), c->getdispnick().c_str());
-		}
-
-		clist.send();
-		break;
-
 	    case ACT_FILE: if(c->getstatus() != STATUS_OFFLINE) sendfiles(c->getuin()); break;
 	    case ACT_CHAT: break;
 	}
@@ -517,6 +505,7 @@ void centericq::nonicq(int id) {
 	    c->load();
 	}
     }
+
     face.update();
 }
 
@@ -661,4 +650,25 @@ const string centericq::quotemsg(const string text) {
     }
 
     return ret;
+}
+
+icqcontact *centericq::adduin(unsigned int uin) {
+    icqcontact *c;
+
+    if(c = clist.get(uin)) {
+	face.log(_("+ user %s, %lu is already on the list"), c->getnick().c_str(), uin);
+	c = 0;
+    } else {
+	if(face.ask(_("Notify the user he/she has been added?"),
+	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+	    icq_AlertAddUser(&icql, uin);
+	    face.log(_("+ the notification has been sent to %lu"), uin);
+	}
+
+	c = clist.addnew(uin, false);
+	face.log(_("+ %lu has been added to the list"), uin);
+	face.update();
+    }
+
+    return c;
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.13 2001/09/25 13:07:31 konst Exp $
+* $Id: icqface.cc,v 1.14 2001/09/26 09:58:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,7 +191,7 @@ int icqface::contextmenu(icqcontact *c) {
 	conf.getcolor(cp_main_selected));
 
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,
-	WORKAREA_Y1+7, conf.getcolor(cp_main_text)));
+	WORKAREA_Y1+6, conf.getcolor(cp_main_text)));
 
     if(!c) return 0;
 
@@ -208,12 +208,6 @@ int icqface::contextmenu(icqcontact *c) {
 	m.additem(_(" Remove user          del"));
 	m.additem(_(" Ignore user"));
 	m.additem(_(" Rename user            r"));
-
-	if(!lst.inlist(c->getuin(), csvisible))
-	m.additem(_(" Add to visible list    v"));
-	    else
-	m.additem(_(" Remove from vis. list  v"));
-
     } else if(!c->isnonicq() && c->getuin() && !c->inlist()) {
 	m.additem(_(" Send a message     enter"));
 	m.additem(_(" Send URL               u"));
@@ -224,12 +218,6 @@ int icqface::contextmenu(icqcontact *c) {
 	m.additem(_(" Events history         h"));
 	m.additem(_(" Remove user          del"));
 	m.additem(_(" Ignore user"));
-
-	if(!lst.inlist(c->getuin(), csvisible))
-	m.additem(_(" Add to visible list    v"));
-	    else
-	m.additem(_(" Remove from vis. list  v"));
-
     } else if(c->isnonicq()) {
 	m.additem(_(" User's details         ?"));
 	m.additem(_(" Remove user          del"));
@@ -257,7 +245,6 @@ int icqface::contextmenu(icqcontact *c) {
 	    case  8: ret = ACT_REMOVE; break;
 	    case  9: ret = ACT_IGNORE; break;
 	    case 10: ret = ACT_RENAME; break;
-	    case 11: ret = ACT_SWITCH_VIS; break;
 	}
     } else if(!c->isnonicq() && c->getuin() && !c->inlist()) {
 	switch(i) {
@@ -268,7 +255,6 @@ int icqface::contextmenu(icqcontact *c) {
 	    case  7: ret = ACT_HISTORY; break;
 	    case  8: ret = ACT_REMOVE; break;
 	    case  9: ret = ACT_IGNORE; break;
-	    case 10: ret = ACT_SWITCH_VIS; break;
 	}
     } else if(c->isnonicq()) {
 	switch(i) {
@@ -285,7 +271,7 @@ int icqface::generalmenu() {
     static int lastitem = 0;
 
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
-    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+40, WORKAREA_Y1+10, conf.getcolor(cp_main_text)));
+    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+40, WORKAREA_Y1+11, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
     m.additem(_(" Change ICQ status                   s"));
@@ -501,19 +487,7 @@ bool icqface::findresults() {
 		break;
 	    case 1:
 		if(ffuin = ihook.getfinduin(r)) {
-		    if(!(c = clist.get(ffuin))) {
-			if(ask(_("Notify the user he/she has been added?"),
-			ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-			    icq_AlertAddUser(&icql, ffuin);
-			    log(_("+ the notification has been sent to %lu"), ffuin);
-			}
-
-			clist.addnew(ffuin, false);
-			face.update();
-		    } else {
-			log(_("+ user %s, %lu is already on the list"),
-			    c->getnick().c_str(), ffuin);
-		    }
+		    cicq.adduin(ffuin);
 		}
 		break;
 	    case 2:
@@ -1193,8 +1167,7 @@ bool icqface::checkicqmessage(unsigned int uin, string text, bool &ret, int opti
 		cicq.userinfo(uin);
 		break;
 	    case 1:
-		if(!clist.get(uin)) clist.addnew(uin, false);
-		log(_("+ %lu has been added to the list"), uin);
+		cicq.adduin(uin);
 		break;
 	    case 2:
 		switch(c) {
@@ -1549,13 +1522,9 @@ struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false) {
 		    break;
 
 		case 1:
-		    if(cur) {
-			if(!clist.get(cur->uin)) {
-			    clist.addnew(cur->uin, false);
-			    c = clist.get(cur->uin);
-			    c->setdispnick(cur->nick);
-			}
-
+		    if(cur)
+		    if(c = cicq.adduin(cur->uin)) {
+			c->setdispnick(cur->nick);
 			lst.remove(n-1);
 		    }
 		    break;
@@ -1755,9 +1724,8 @@ void icqface::modelist(contactstatus cs) {
 		break;
 	    case 3:
 		if(it) {
-		    if(!clist.get(it->getuin())) {
-			clist.addnew(it->getuin(), false);
-			c = clist.get(it->getuin());
+		    if(!clist.get(it->getuin()))
+		    if(c = clist.addnew(it->getuin(), false)) {
 			c->setdispnick(it->getnick());
 		    }
 
@@ -2083,14 +2051,11 @@ int icqface::contactskeys(verticalmenu *m, int k) {
 	case 'r':
 	case 'R': face.extk = ACT_RENAME; break;
 	
-	case 'v':
-	case 'V': face.extk = ACT_SWITCH_VIS; break;
-
 	case ALT('s'):
 	case '/': face.extk = ACT_QUICKFIND; break;
     }
 
-    if(k && (strchr("?rRqQsShHmMuUgGaAfFvV/", k)
+    if(k && (strchr("?rRqQsShHmMuUgGaAfF/", k)
 	|| (k == KEY_DC)
 	|| (k == KEY_F(2))
 	|| (k == KEY_F(3))
