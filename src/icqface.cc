@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.71 2002/01/23 16:31:23 konst Exp $
+* $Id: icqface.cc,v 1.72 2002/01/24 10:07:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1344,6 +1344,8 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 		    bool fpass = true;
 
 		    for(; !fin; i++) {
+			c = 0;
+
 			if(i > cm->getcount()) {
 			    if(fpass) {
 				i = 0;
@@ -1355,7 +1357,8 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 			}
 
 			if(multi) {
-			    c = clist.get(*((imcontact *) cm->getref(i)));
+			    imcontact *cnt = (imcontact *) cm->getref(i);
+			    if(cnt) c = clist.get(*cnt);
 			} else {
 			    c = (icqcontact *) mcontacts->getref(i);
 			}
