@@ -185,8 +185,6 @@ AC_ARG_ENABLE(msn,    [  --disable-msn      Build without MSN], build_msn="$enab
 AC_ARG_ENABLE(rss,    [  --disable-rss      Build without RSS reader], build_rss="$enableval", build_rss="yes")
 AC_ARG_ENABLE(lj,     [  --disable-lj       Build without LiveJournal client], build_lj="$enableval", build_lj="yes")
 
-AC_ARG_ENABLE(konst,  [  --disable-konst    Don't add contact list items supplied by author by default], build_konst="$enableval", build_konst="yes")
-
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
@@ -261,10 +259,6 @@ fi
 
 if test "$build_lj" = "yes"; then
     AC_DEFINE(BUILD_LJ, 1, [build the integrated livejournal client])
-fi
-
-if test "$build_konst" = "yes"; then
-    AC_DEFINE(BUILD_KONST, 1, [add konst's id by default])
 fi
 
 AC_CONFIG_SUBDIRS(firetalk-0.1 kkconsui-0.1 kkstrtext-0.1 libicq2000-0.1 libjabber-0.1 libyahoo2-0.1 kksystr-0.1 connwrap-0.1 libgadu-0.1 libmsn-0.1)

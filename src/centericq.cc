@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.195 2005/01/26 23:52:47 konst Exp $
+* $Id: centericq.cc,v 1.196 2005/02/19 17:51:05 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -77,9 +77,6 @@ void centericq::exec() {
 
 	if(updateconf()) {
 	    manager.exec();
-#ifdef BUILD_KONST
-	    defaultcontacts(rus);
-#endif
 	}
 
 	regmode = false;
@@ -111,10 +108,6 @@ void centericq::exec() {
 
     face.done();
     conf.save();
-}
-
-void centericq::defaultcontacts(bool rus) {
-    clist.addnew(imcontact(17502151, icq), false);
 }
 
 bool centericq::checkpasswords() {

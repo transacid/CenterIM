@@ -5,6 +5,11 @@
 */
 
 jabber pgp bug from count
+jabber sendxmpp bug from count
+
+POLICY
+
+removed konst from the default CL
 
 /*
 *
@@ -26,9 +31,52 @@ build with fribidi -> rss doesn't work?
 *
 */
 
-antispam to block auth events too
+new libmsn
 
-history patch from Iulica
+--8<--
+have you ever used a jabber server with additional transports/agents?
+centericq behaves a bit "strange" when dealing with transport/agent contacts
+maybe you can just try using the jabber.ccc.de transports for AIM and ICQ with psi
+and then with centericq
+also, centericq doesn't even support service discovery and transport functions (like registration, logon/logoff etc.)
+so at first you *have to* use psi to register for such a transport
+and then you can use the jabber account with centericq
+the gateways will appear as normal contacts
+but if you try to move them to a group for example, that doesn't "survive" a reconnect
+more, the contact appears duplicated
+everytime you reconnect
+same goes for the server contact itself
+[ registration ]
+it doesn't allow me to change that
+I guess it doesn't query for such transports.
+but only for user directories
+this is what happens in Psi when I run the service discovery:
+
+and this is what happens in centericq when I go to the "update user details" screen
+
+it only queries the vcard
+and btw, this is what happens when I leave the vcard-screen without changing anything:
+
++ [jab] error 501
+
+the server is jabberd2
+you can test with jabber.ccc.de or with my own
+if you wish, I can create you an account there
+maybe you can try both, as jabber.ccc.de is jabberd1.4 with different transports
+so those are 2 completely different setups -- maybe good test scenarios
+
+so, just tell me and I will create an account for you. public registration is
+disabled on my server, that's the reason you cannot register one using
+centericq.
+
+something else I've notices
+noticeD
+when using centericq and Psi simultaneously for one jabber account
+when I delete a contact in centericq, Psi notices on the fly and the contact disappears from psi's list
+when I do it the other way round centericq notices nothing :)
+--8<--
+
+antispam to block auth events too
 
 chat window cycle patch from Iulica
 
@@ -77,4 +125,4 @@ specific status lists for every protocol, extend the standard statuses
 
 stupid conversation logs
 
-$Id: TODO,v 1.560 2005/02/12 15:04:12 konst Exp $
+$Id: TODO,v 1.561 2005/02/19 17:51:04 konst Exp $
