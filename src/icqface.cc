@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.151 2002/11/01 12:13:37 konst Exp $
+* $Id: icqface.cc,v 1.152 2002/11/11 14:32:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -443,7 +443,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    }                
 
 	    if(c) {
-		if(action == ACT_MSG && c->getdesc().pname == infocard)
+		if(action == ACT_MSG && c->getdesc().pname == infocard && !c->getmsgcount())
 		    action = ACT_SMS;
 
 		if(action == ACT_MENU)

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.132 2002/11/01 12:13:37 konst Exp $
+* $Id: centericq.cc,v 1.133 2002/11/11 14:32:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -506,7 +506,6 @@ bool centericq::updateconf() {
 }
 
 void centericq::checkmail() {
-    static int fsize = -1;
     const char *fname = getenv("MAIL");
     struct stat st;
     int mcount = 0;
@@ -514,6 +513,9 @@ void centericq::checkmail() {
     string lastfrom;
     bool prevempty, header;
     FILE *f;
+
+    static int fsize = -1;
+    static int oldcount = -1;
 
     if(conf.getmailcheck() && fname)
     if(!stat(fname, &st))
@@ -545,7 +547,7 @@ void centericq::checkmail() {
 		fclose(f);
 	    }
 
-	    if(mcount) {
+	    if(mcount && (oldcount == -1 || (mcount > oldcount))) {
 		time_t tnow;
 		const struct tm *lt;
 
@@ -558,6 +560,8 @@ void centericq::checkmail() {
 
 		clist.get(contactroot)->playsound(imevent::email);
 	    }
+
+	    oldcount = mcount;
 	}
 
 	fsize = st.st_size;
