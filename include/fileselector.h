@@ -55,6 +55,7 @@ class fileselector: public abstractuicontrol {
 	textwindow w;
 
 	static int menukeys(verticalmenu &m, int k);
+	static void menuidle(verticalmenu &m);
 
 	void generatemenu();
 

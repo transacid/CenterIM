@@ -85,6 +85,7 @@ void fileselector::exec() {
     m = verticalmenu(cnormal, ccurrent);
     m.setwindow(w);
     m.otherkeys = &menukeys;
+    m.idle = &menuidle;
 
     selected.clear();
 
@@ -154,6 +155,12 @@ void fileselector::close() {
     m.close();
 }
 
+void fileselector::menuidle(verticalmenu &m) {
+    if(instance->idle) {
+	(*(instance->idle))(*instance);
+    }
+}
+
 int fileselector::menukeys(verticalmenu &m, int k) {
     string fname;
     struct stat st;
@@ -195,6 +202,12 @@ int fileselector::menukeys(verticalmenu &m, int k) {
 			m.redraw();
 		    }
 		}
+	    }
+	    break;
+
+	default:
+	    if(instance->otherkeys) {
+		(*(instance->otherkeys))(*instance, k);
 	    }
 	    break;
     }
