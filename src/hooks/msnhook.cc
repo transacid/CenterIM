@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.55 2002/12/13 12:48:03 konst Exp $
+* $Id: msnhook.cc,v 1.56 2002/12/13 16:12:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -411,6 +411,20 @@ void msnhook::aborttransfer(const imfile &fr) {
     transferinfo.erase(fr);
 }
 
+bool msnhook::getfevent(invitation_ftp *fhandle, imfile &fr) {
+    map<imfile, pair<invitation_ftp *, string> >::const_iterator i = transferinfo.begin();
+
+    while(i != transferinfo.end()) {
+	if(i->second.first == fhandle) {
+	    fr = i->first;
+	    return true;
+	}
+	++i;
+    }
+
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 
 static imstatus msn2imstatus(const string &sname) {
@@ -454,16 +468,36 @@ void ext_got_friendlyname(msnconn * conn, const char * friendlyname) {
 void ext_got_info(msnconn *conn, syncinfo *info) {
     log("ext_got_info");
 
-    llist *lst;
     userdata *ud;
+    llist *lst, *pl;
     imcontact ic;
 
     for(lst = info->fl; lst; lst = lst->next) {
 	ud = (userdata *) lst->data;
-	ic = imcontact(nicktodisp(ud->username), msn);
 
-	if(!clist.get(ic)) clist.addnew(ic, false);
 	mhook.slst["FL"].push_back(make_pair(ud->username, ud->friendlyname));
+
+	ic = imcontact(nicktodisp(ud->username), msn);
+	icqcontact *c = clist.get(ic);
+	if(!c) c = clist.addnew(ic, false);
+
+	icqcontact::basicinfo bi = c->getbasicinfo();
+	icqcontact::workinfo wi = c->getworkinfo();
+
+	for(pl = ud->phone; pl; pl = pl->next) {
+	    phonedata *pd = (phonedata *) pl->data;
+	    string title = pd->title ? pd->title : "";
+
+	    if(pd->number)
+	    if(strlen(pd->number)) {
+		if(title == "PHH") bi.phone = pd->number; else
+		if(title == "PHW") wi.phone = pd->number; else
+		if(title == "PHM") bi.cellular = pd->number;
+	    }
+	}
+
+	c->setbasicinfo(bi);
+	c->setworkinfo(wi);
     }
 
     for(lst = info->rl; lst; lst = lst->next) {
@@ -591,7 +625,9 @@ void ext_new_mail_arrived(msnconn *conn, const char *from, const char *subject) 
 
 void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv) {
     log("ext_filetrans_invite");
-    return;
+
+    if(!mhook.fcapabs.count(hookcapab::files))
+	return;
 
     imfile::record r;
     r.fname = inv->filename;
@@ -610,14 +646,32 @@ void ext_filetrans_invite(msnconn *conn, const char *username, const char *frien
 
 void ext_filetrans_progress(invitation_ftp *inv, const char *status, unsigned long sent, unsigned long total) {
     log("ext_filetrans_progress");
+    imfile fr;
+
+    if(mhook.getfevent(inv, fr)) {
+	face.transferupdate(fr.getfiles().begin()->fname, fr,
+	    icqface::tsProgress, total, sent);
+    }
 }
 
 void ext_filetrans_failed(invitation_ftp *inv, int error, const char *message) {
     log("ext_filetrans_failed");
+    imfile fr;
+
+    if(mhook.getfevent(inv, fr)) {
+	face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsError, 0, 0);
+	mhook.transferinfo.erase(fr);
+    }
 }
 
 void ext_filetrans_success(invitation_ftp *inv) {
     log("ext_filetrans_success");
+    imfile fr;
+
+    if(mhook.getfevent(inv, fr)) {
+	face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsFinish, 0, 0);
+	mhook.transferinfo.erase(fr);
+    }
 }
 
 void ext_new_connection(msnconn *conn) {

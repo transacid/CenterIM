@@ -20,6 +20,9 @@ class msnhook : public abstracthook {
     friend void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, message *msg);
     friend void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv);
     friend void ext_typing_user(msnconn *conn, const char *username, const char *friendlyname);
+    friend void ext_filetrans_progress(invitation_ftp *inv, const char *status, unsigned long sent, unsigned long total);
+    friend void ext_filetrans_failed(invitation_ftp *inv, int error, const char *message);
+    friend void ext_filetrans_success(invitation_ftp *inv);
 
     protected:
 	imstatus ourstatus;
@@ -38,6 +41,7 @@ class msnhook : public abstracthook {
 	void checkinlist(imcontact ic);
 
 	void removeuser(const imcontact &ic, bool report);
+	bool getfevent(invitation_ftp *fhandle, imfile &fr);
 
     public:
 	msnhook();
