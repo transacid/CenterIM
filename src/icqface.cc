@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.104 2002/04/16 13:11:46 konst Exp $
+* $Id: icqface.cc,v 1.105 2002/04/17 16:01:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -307,10 +307,11 @@ icqcontact *icqface::mainloop(int &action) {
 	c = (icqcontact *) mcontacts->open(&i);
 
 	if(mcontacts->isnode(i) && c) {
-		c = NULL;
-		g = (icqgroup *) mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
+	    c = 0;
+	    g = (icqgroup *) mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
+	} else {
+	    g = 0;
 	}
-	else g = NULL;
 	
 	if((int) c < 100) c = 0;
 
@@ -558,14 +559,16 @@ bool icqface::findresults(const imsearchparams &sp) {
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
 	conf.getcolor(cp_main_selected)));
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), _("Details"), _("Add"),
+	conf.getcolor(cp_main_selected), _("Details"), _("Message"), _("Add"),
 	_("New search"), 0));
 
     gethook(sp.pname).lookup(sp, *db.getmenu());
 
     db.addautokeys();
-    db.idle = &dialogidle;
     db.redraw();
+
+    db.idle = &dialogidle;
+    db.otherkeys = &findreskeys;
 
     mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), "Find results");
 
@@ -576,39 +579,41 @@ bool icqface::findresults(const imsearchparams &sp) {
 	finished = !db.open(r, b);
 	gethook(sp.pname).stoplookup();
 
-	if(!finished)
-	switch(b) {
-	    case 0:
-		if(r)
-		switch(sp.pname) {
-		    case icq:
-			r = (int) db.getmenu()->getref(r-1);
-			if(r) cicq.userinfo(imcontact(r, sp.pname));
-			break;
-		    case irc:
-			nick = (char *) db.getmenu()->getref(r-1);
-			if(nick) cicq.userinfo(imcontact(nick, sp.pname));
-			break;
-		}
-		break;
+	if(!finished) {
+	    if(r == -3) {
+		quickfind(db.getmenu());
 
-	    case 1:
-		if(r)
-		switch(sp.pname) {
-		    case icq:
-			r = (int) db.getmenu()->getref(r-1);
-			if(r) cicq.addcontact(imcontact(r, sp.pname));
-			break;
-		    case irc:
-			nick = (char *) db.getmenu()->getref(r-1);
-			if(nick) cicq.addcontact(imcontact(nick, sp.pname));
-			break;
-		}
-		break;
+	    } else switch(b) {
+		case 0:
+		    if(r) {
+			c = (icqcontact *) db.getmenu()->getref(r-1);
+			cicq.userinfo(c->getdesc());
+		    }
+		    break;
 
-	    case 2:
-		ret = finished = true;
-		break;
+		case 1:
+		    if(r) {
+			c = (icqcontact *) db.getmenu()->getref(r-1);
+			c = clist.addnew(c->getdesc());
+
+			if(c)
+			if(!cicq.sendevent(immessage(c->getdesc(), imevent::outgoing, ""), icqface::ok)) {
+			    clist.remove(c->getdesc());
+			}
+		    }
+		    break;
+
+		case 2:
+		    if(r) {
+			c = (icqcontact *) db.getmenu()->getref(r-1);
+			cicq.addcontact(c->getdesc());
+		    }
+		    break;
+
+		case 3:
+		    ret = finished = true;
+		    break;
+	    }
 	}
 	
     }
@@ -1265,7 +1270,7 @@ bool icqface::multicontacts(const string &ahead = "") {
     bool ret = true, finished = false;
     string head = ahead;
 
-    imcontact *ic;
+    imcontact ic;
     vector<imcontact>::iterator c;
     vector<imcontact> mlst;
 
@@ -1297,9 +1302,7 @@ bool icqface::multicontacts(const string &ahead = "") {
 	for(c = mlst.begin(); c != mlst.end(); c++) {
 	    icqcontact *cont = (icqcontact *) clist.get(*c);
 
-	    m.additemf(
-		conf.getprotcolor(c->pname),
-		(imcontact *) &(*c), " [%c] %s",
+	    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
 		find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
 		cont->getdispnick().c_str()
 	    );
@@ -1310,13 +1313,13 @@ bool icqface::multicontacts(const string &ahead = "") {
 	switch(m.open()) {
 	    case -2:
 		if(m.getref(m.getpos())) {
-		    ic = (imcontact *) m.getref(m.getpos());
-		    c = find(muins.begin(), muins.end(), *ic);
+		    ic = ((icqcontact *) m.getref(m.getpos()))->getdesc();
+		    c = find(muins.begin(), muins.end(), ic);
 
 		    if(c != muins.end()) {
 			muins.erase(c);
 		    } else {
-			muins.push_back(*ic);
+			muins.push_back(ic);
 		    }
 		}
 		break;
@@ -1433,6 +1436,7 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 		break;
 
 	    case KEY_BACKSPACE:
+	    case CTRL('h'):
 		if(!nick.empty()) nick.resize(nick.size()-1);
 		else fin = true;
 		break;
@@ -1465,12 +1469,12 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 			    }
 			}
 			
-			if(mcontacts->isnode(i)) c = 0;
-			else if(multi) {
-			    imcontact *cnt = (imcontact *) cm->getref(i);
-			    if(cnt) c = clist.get(*cnt);
-			} else {
+			if(!multi && mcontacts->isnode(i)) {
+			    c = 0;
+			} else if(!multi) {
 			    c = (icqcontact *) mcontacts->getref(i);
+			} else {
+			    c = (icqcontact *) cm->getref(i);
 			}
 
 			if((int) c > 100) {
@@ -1999,6 +2003,7 @@ int icqface::multiplekeys(verticalmenu &m, int k) {
 	case 'X':
 	    return -2;
 	case ALT('s'):
+	case '/':
 	    return -3;
     }
     return -1;
@@ -2047,6 +2052,16 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 int icqface::userinfokeys(dialogbox &db, int k) {
     switch(k) {
 	case KEY_F(2): face.showextractedurls(); break;
+    }
+
+    return -1;
+}
+
+int icqface::findreskeys(dialogbox &db, int k) {
+    switch(k) {
+	case ALT('s'):
+	case '/':
+	    return -3;
     }
 
     return -1;

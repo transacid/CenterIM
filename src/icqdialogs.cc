@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.66 2002/04/17 09:55:20 konst Exp $
+* $Id: icqdialogs.cc,v 1.67 2002/04/17 16:01:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,30 +87,32 @@ bool icqface::finddialog(imsearchparams &s) {
 		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, " %s ", strint(s.uin));
 
-		i = tree.addnode(_(" Details "));
-		tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
-		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
-		tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
-		tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
+		if(!s.uin) {
+		    i = tree.addnode(_(" Details "));
+		    tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
+		    tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
+		    tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
+		    tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
 
-		tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange[s.agerange]);
-		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
-		tree.addleaff(i, 0, 18, _(" Language : %s "),
-		    ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
+		    tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange[s.agerange]);
+		    tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
+		    tree.addleaff(i, 0, 18, _(" Language : %s "),
+			ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
 
-		i = tree.addnode(_(" Location "));
-		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
-		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
-		tree.addleaff(i, 0, 21, _(" Country : %s "),
-		    ICQ2000::UserInfoHelpers::getCountryIDtoString(s.country).c_str());
+		    i = tree.addnode(_(" Location "));
+		    tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
+		    tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
+		    tree.addleaff(i, 0, 21, _(" Country : %s "),
+			ICQ2000::UserInfoHelpers::getCountryIDtoString(s.country).c_str());
 
-		i = tree.addnode(_(" Work "));
-		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
-		tree.addleaff(i, 0, 23, _(" Department : %s "), s.department.c_str());
-		tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
+		    i = tree.addnode(_(" Work "));
+		    tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
+		    tree.addleaff(i, 0, 23, _(" Department : %s "), s.department.c_str());
+		    tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
 
-		i = tree.addnode(_(" Online only "));
-		tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
+		    i = tree.addnode(_(" Online only "));
+		    tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
+		}
 		break;
 
 	    default:
@@ -119,7 +121,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		break;
 	}
 
-	if(*ipname == irc) {
+	if(*ipname == irc && s.nick.empty()) {
 	    i = tree.addnode(_(" Channel "));
 	    tree.addleaf(i, 0, 26, " " + s.room + " ");
 	}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.93 2002/04/11 17:14:34 konst Exp $
+* $Id: centericq.cc,v 1.94 2002/04/17 16:01:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -573,7 +573,7 @@ void centericq::rereadstatus() {
     }
 }
 
-void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
+bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
     bool proceed;
     string text, fwdnote;
     imevent *sendev;
@@ -637,7 +637,7 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
 		if((b.cellular.find_first_of("0123456789") == -1)
 		|| (face.getlastinputkey() == KEY_ESC))
-		    return;
+		    return false;
 
 		c->setbasicinfo(b);
 		c->save();
@@ -672,8 +672,8 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	}
 
 	if(proceed) {
-	    if(face.eventedit(*sendev))
-	    if(!sendev->empty()) {
+	    if(proceed = face.eventedit(*sendev))
+	    if(proceed = !sendev->empty()) {
 		for(i = face.muins.begin(); i != face.muins.end(); i++) {
 		    sendev->setcontact(*i);
 		    em.store(*sendev);
@@ -685,6 +685,8 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
     if(sendev) {
 	delete sendev;
     }
+
+    return proceed;
 }
 
 void centericq::readevents(const imcontact &cont) {

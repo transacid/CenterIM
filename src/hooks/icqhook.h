@@ -3,6 +3,7 @@
 
 #include "abstracthook.h"
 #include "icqmlist.h"
+#include "icqcontacts.h"
 
 #include "libicq2000/Client.h"
 #include "libicq2000/events.h"
@@ -22,6 +23,7 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	typedef pair<unsigned int, contactstatus> visInfo;
 	vector<visInfo> vislist;
+	vector<icqcontact *> foundguys;
 
 	void connected_cb(ConnectedEvent *ev);
 	void disconnected_cb(DisconnectedEvent *ev);

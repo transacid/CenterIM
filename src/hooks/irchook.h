@@ -28,10 +28,10 @@ class irchook: public abstracthook {
 	imstatus ourstatus;
 	string ircname;
 
-	vector<char *> userlist;
 	vector<channelInfo> channels;
 	vector<string> searchchannels;
 	map<string, string> awaymessages;
+	vector<icqcontact *> foundguys;
 
 	void userstatus(const string &nickname, imstatus st);
 	void processnicks();

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2002-04-16 18:09+0300\n"
+"POT-Creation-Date: 2002-04-17 12:56+0300\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
@@ -359,7 +359,7 @@ msgid " %s: details "
 msgstr " %s: details "
 
 #: src/accountmanager.cc:43 src/icqdialogs.cc:289 src/icqdialogs.cc:610
-#: src/icqdialogs.cc:795 src/imcontroller.cc:197
+#: src/icqdialogs.cc:796 src/imcontroller.cc:197
 msgid "Done"
 msgstr "Klaar"
 
@@ -425,8 +425,7 @@ msgstr " Zend bestand(en) naar %s, %lu "
 msgid "Add"
 msgstr "Voeg toe"
 
-#: src/icqdialogs.cc:526 src/icqdialogs.cc:795 src/icqface.cc:1202
-#: src/imcontroller.cc:197
+#: src/icqdialogs.cc:526 src/icqface.cc:1202 src/imcontroller.cc:197
 msgid "Remove"
 msgstr "Verwijder"
 
@@ -586,22 +585,36 @@ msgid "Rename"
 msgstr "Hernoem"
 
 #: src/icqdialogs.cc:795
+#, fuzzy
+msgid "rEmove"
+msgstr "Verwijder"
+
+#: src/icqdialogs.cc:795
+#, fuzzy
+msgid "move Up"
+msgstr "Verwijder"
+
+#: src/icqdialogs.cc:795
+msgid "move Down"
+msgstr ""
+
+#: src/icqdialogs.cc:796
 msgid "Select"
 msgstr "Selecteer"
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:811
 msgid " Groups "
 msgstr " Groepen "
 
-#: src/icqdialogs.cc:823
+#: src/icqdialogs.cc:826
 msgid "Name for a group to be created: "
 msgstr "Naam voor de groep: "
 
-#: src/icqdialogs.cc:832
+#: src/icqdialogs.cc:835
 msgid "New name for the group: "
 msgstr "Nieuwe naam voor de groep: "
 
-#: src/icqdialogs.cc:842
+#: src/icqdialogs.cc:845
 msgid "Are you sure want to remove the group?"
 msgstr "Ben je zeker dat de groep verwijderd mag worden?"
 
@@ -1259,12 +1272,12 @@ msgstr "* Afwezigheidsbericht:"
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] kan 'ben weg' bericht van %s niet ophalen, %s"
 
-#: src/hooks/icqhook.cc:1043
+#: src/hooks/icqhook.cc:1041
 #, fuzzy, c-format
 msgid "%s requested our away message, sent the response"
 msgstr "%lu 'ben weg' bericht is opgevraagd, verzonden."
 
-#: src/hooks/icqhook.cc:1073
+#: src/hooks/icqhook.cc:1071
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
 msgstr "+ [icq] whitepages zoektocht gereed, %d gevonden"

@@ -67,7 +67,7 @@ class centericq {
 	void readevents(const imcontact &cont);
 	void history(const imcontact &cont);
 
-	void sendevent(const imevent &ev, icqface::eventviewresult r);
+	bool sendevent(const imevent &ev, icqface::eventviewresult r);
 };
 
 extern centericq cicq;

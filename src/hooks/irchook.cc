@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.14 2002/04/11 17:14:36 konst Exp $
+* $Id: irchook.cc,v 1.15 2002/04/17 16:01:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -81,7 +81,9 @@ void irchook::connect() {
     icqconf::imaccount acc = conf.getourid(irc);
     face.log(_("+ [irc] connecting to the server"));
 
+    firetalk_register_callback(handle, FC_DISCONNECT, 0);
     firetalk_disconnect(handle);
+    firetalk_register_callback(handle, FC_DISCONNECT, &disconnected);
 
     fonline = firetalk_signon(handle, acc.server.c_str(),
 	acc.port, acc.nickname.c_str()) == FE_SUCCESS;
@@ -260,9 +262,9 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
     searchdest = &dest;
     searchchannels.clear();
 
-    while(!userlist.empty()) {
-	delete userlist.back();
-	userlist.pop_back();
+    while(!foundguys.empty()) {
+	delete foundguys.back();
+	foundguys.pop_back();
     }
 
     while(!(room = getword(rooms)).empty()) {
@@ -297,6 +299,7 @@ void irchook::processnicks() {
     vector<string>::iterator in, isn;
     vector<channelInfo>::iterator ir;
     bool remove;
+    icqcontact *c;
 
     ir = find(channels.begin(), channels.end(), *searchchannels.begin());
 
@@ -334,12 +337,15 @@ void irchook::processnicks() {
     }
 
     for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
-	userlist.push_back(nick = strdup(in->c_str()));
-	searchdest->additem(0, nick, (string) " " + nick);
+	c = new icqcontact(imcontact(*in, irc));
+	c->setdispnick(*in);
+
+	searchdest->additem(conf.getcolor(cp_clist_irc), c, (string) " " + *in);
+	foundguys.push_back(c);
     }
 
     face.log(_("+ [irc] channel members list fetching finished, %d found"),
-	userlist.size());
+	foundguys.size());
 
     searchdest->redraw();
 }

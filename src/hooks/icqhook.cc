@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.81 2002/04/16 16:51:04 konst Exp $
+* $Id: icqhook.cc,v 1.82 2002/04/17 16:01:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,7 +25,6 @@
 #include "icqhook.h"
 #include "icqconf.h"
 #include "icqface.h"
-#include "icqcontacts.h"
 #include "accountmanager.h"
 #include "centericq.h"
 #include "imlogger.h"
@@ -485,6 +484,11 @@ void icqhook::requestinfo(const imcontact &c) {
 
 void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     ICQ2000::Sex sex;
+
+    while(!foundguys.empty()) {
+	delete foundguys.back();
+	foundguys.pop_back();
+    }
 
     searchdest = &dest;
 
@@ -1047,23 +1051,31 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
 void icqhook::search_result_cb(SearchResultEvent *ev) {
     if(ev == searchevent) {
 	string line;
-	ContactRef c = ev->getLastContactAdded();
+	ContactRef cont = ev->getLastContactAdded();
 
-	if(searchdest && c.get()) {
-	    line = (c->getStatus() == STATUS_ONLINE ? "o " : "  ") +
-		rusconv("wk", c->getAlias());
+	if(searchdest && cont.get()) {
+	    icqcontact *c = new icqcontact(imcontact(cont->getUIN(), icq));
+	    icqcontact::basicinfo binfo = c->getbasicinfo();
+
+	    c->setnick(rusconv("wk", cont->getAlias()));
+	    c->setdispnick(c->getnick());
+
+	    binfo.fname = rusconv("wk", cont->getFirstName());
+	    binfo.lname = rusconv("wk", cont->getLastName());
+	    binfo.email = rusconv("wk", cont->getEmail());
+
+	    c->setbasicinfo(binfo);
+
+	    line = (cont->getStatus() == STATUS_ONLINE ? "o " : "  ") + c->getnick();
 
 	    if(line.size() > 12) line.resize(12);
 	    else line += string(12-line.size(), ' ');
 
-	    line += " " + 
-		rusconv("wk", c->getFirstName()) + " " +
-		rusconv("wk", c->getLastName());
+	    line += " " + binfo.fname + " " + binfo.lname;
+	    if(!binfo.email.empty()) line += " <" + binfo.email + ">";
 
-	    if(!c->getEmail().empty())
-		line += " <" + rusconv("wk", c->getEmail()) + ">";
-
-	    searchdest->additem(0, c->getUIN(), line);
+	    foundguys.push_back(c);
+	    searchdest->additem(conf.getcolor(cp_clist_icq), c, line);
 	    searchdest->redraw();
 	}
 

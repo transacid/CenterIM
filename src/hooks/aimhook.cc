@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.16 2002/04/16 15:01:12 konst Exp $
+* $Id: aimhook.cc,v 1.17 2002/04/17 16:01:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -72,7 +72,10 @@ void aimhook::connect() {
     icqconf::imaccount acc = conf.getourid(aim);
     face.log(_("+ [aim] connecting to the server"));
 
+    firetalk_register_callback(handle, FC_DISCONNECT, 0);
     firetalk_disconnect(handle);
+    firetalk_register_callback(handle, FC_DISCONNECT, &disconnected);
+
     fonline = firetalk_signon(handle, acc.server.c_str(), acc.port, acc.nickname.c_str()) == FE_SUCCESS;
 
     if(fonline) {
