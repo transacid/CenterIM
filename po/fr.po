@@ -18,7 +18,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-16 23:14+0200\n"
+"POT-Creation-Date: 2003-01-20 13:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -258,39 +258,39 @@ msgstr "+ [msn] suppression de %s des contacts"
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] affichage inversé des utilisateurs terminé, %d réponse(s)"
 
-#: src/hooks/msnhook.cc:598
+#: src/hooks/msnhook.cc:599
 #, fuzzy, c-format
 msgid "+ [msn] %s: started typing"
 msgstr "+ [yahoo] %s: début de frappe"
 
-#: src/hooks/msnhook.cc:606
+#: src/hooks/msnhook.cc:607
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:613
+#: src/hooks/msnhook.cc:614
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail de %s <%s>, %s"
 
-#: src/hooks/msnhook.cc:674
+#: src/hooks/msnhook.cc:675
 msgid "+ [msn] logged in"
 msgstr "+ [msn] connecté"
 
-#: src/hooks/msnhook.cc:689
+#: src/hooks/msnhook.cc:690
 msgid "+ [msn] disconnected"
 msgstr "+ [msn] déconnecté"
 
-#: src/hooks/msnhook.cc:703
+#: src/hooks/msnhook.cc:704
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] impossible de se connecter: "
 
-#: src/hooks/msnhook.cc:707 src/hooks/yahoohook.cc:120
+#: src/hooks/msnhook.cc:708 src/hooks/yahoohook.cc:120
 msgid "could not resolve hostname"
 msgstr "impossible de résoudre le nom d'hôte"
 
-#: src/hooks/msnhook.cc:721
+#: src/hooks/msnhook.cc:722
 #, fuzzy
 msgid "verify the hostname and port"
 msgstr "vérifiez le nom d'hôte et le port entrés"
@@ -481,81 +481,81 @@ msgstr "+ dernier message de : %s"
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ la configuration de %s a changé"
 
-#: src/centericq.cc:685
+#: src/centericq.cc:689
 msgid "! another running copy of centericq detected"
 msgstr "! un autre centericq est déjà lancé"
 
-#: src/centericq.cc:686
+#: src/centericq.cc:690
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! cela peut poser problème. pid %lu"
 
-#: src/centericq.cc:810
+#: src/centericq.cc:814
 msgid "Mobile number: "
 msgstr "Téléphone portable : "
 
-#: src/centericq.cc:951
+#: src/centericq.cc:955
 msgid "directory to save the file(s) to: "
 msgstr "répertoire où sauver le(s) fichier(s): "
 
-#: src/centericq.cc:958
+#: src/centericq.cc:962
 msgid "The specified directory is not writable"
 msgstr "Le répertoire donné n'a pas les droits en écriture"
 
-#: src/centericq.cc:962
+#: src/centericq.cc:966
 msgid "The specified directory does not exist"
 msgstr "Le répertoire donné n'existe pas"
 
-#: src/centericq.cc:1097
+#: src/centericq.cc:1101
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ pas d'historique pour %s"
 
-#: src/centericq.cc:1123
+#: src/centericq.cc:1127
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ l'utilisateur %s est déjà dans la liste"
 
-#: src/centericq.cc:1129
+#: src/centericq.cc:1133
 msgid "Select a group to add the user to"
 msgstr "Sélectionnez un groupe où ajouter l'utilisateur"
 
-#: src/centericq.cc:1140
+#: src/centericq.cc:1144
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s a été ajouté à la liste"
 
-#: src/centericq.cc:1211
+#: src/centericq.cc:1215
 msgid "+ the user is back"
 msgstr "+ l'utilisateur est de retour"
 
-#: src/centericq.cc:1227
+#: src/centericq.cc:1231
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] état précédent rétabli"
 
-#: src/centericq.cc:1242
+#: src/centericq.cc:1246
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] mode automatique : %s"
 
-#: src/centericq.cc:1244
+#: src/centericq.cc:1248
 msgid "away"
 msgstr "absent"
 
-#: src/centericq.cc:1244
+#: src/centericq.cc:1248
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1370
+#: src/centericq.cc:1374
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! espace disponible sur le disque < 10k, déconnexion"
 
-#: src/centericq.cc:1371
+#: src/centericq.cc:1375
 msgid "! otherwise we can lose events and configuration"
 msgstr "! pour éviter la perte de messages ou de la configuration"
 
-#: src/centericq.cc:1410
+#: src/centericq.cc:1414
 msgid "Invite to conference.."
 msgstr "Inviter à une conférence..."
 
@@ -862,7 +862,7 @@ msgid " Search profiles "
 msgstr " Rechercher des profils "
 
 #: src/icqdialogs.cc:104 src/icqdialogs.cc:936 src/icqdialogs.cc:1339
-#: src/icqface.cc:1427 src/icqface.cc:2005
+#: src/icqface.cc:1427 src/icqface.cc:2007
 msgid "Remove"
 msgstr "Supprimer"
 
@@ -1309,7 +1309,7 @@ msgid " Send file(s) to %s, %lu "
 msgstr " Envoyer le(s) fichier(s) à %s, %lu "
 
 #: src/icqdialogs.cc:936 src/icqdialogs.cc:1219 src/icqface.cc:62
-#: src/icqface.cc:719 src/icqface.cc:1427 src/icqface.cc:2005
+#: src/icqface.cc:719 src/icqface.cc:1427 src/icqface.cc:2007
 msgid "Add"
 msgstr "Ajouter"
 
@@ -1317,7 +1317,7 @@ msgstr "Ajouter"
 msgid "Comment"
 msgstr "Commentaire"
 
-#: src/icqdialogs.cc:936 src/icqface.cc:2005
+#: src/icqdialogs.cc:936 src/icqface.cc:2007
 msgid "Send"
 msgstr "Envoyer"
 
@@ -2096,7 +2096,7 @@ msgstr ""
 msgid "Result of the external action %s:"
 msgstr ""
 
-#: src/icqface.cc:1850
+#: src/icqface.cc:1852
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
@@ -2104,7 +2104,7 @@ msgstr ""
 "Ctrl-X envoyer, Ctrl-P multiple, Ctrl-O historique, Alt-? membres, ESC "
 "annuler"
 
-#: src/icqface.cc:1852
+#: src/icqface.cc:1854
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
@@ -2112,63 +2112,63 @@ msgstr ""
 "Ctrl-X envoyer, Ctrl-P multiple, Ctrl-O historique, Alt-? détails, ESC "
 "annuler"
 
-#: src/icqface.cc:1876 src/icqface.cc:2308
+#: src/icqface.cc:1878 src/icqface.cc:2310
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "%s envoyé via %s"
 
-#: src/icqface.cc:1976
+#: src/icqface.cc:1978
 msgid "Send contacts.."
 msgstr "Envoyer aux contacts..."
 
-#: src/icqface.cc:2036
+#: src/icqface.cc:2038
 msgid "file name: "
 msgstr "nom du fichier: "
 
-#: src/icqface.cc:2309
+#: src/icqface.cc:2311
 #, c-format
 msgid "Sent on %s"
 msgstr "Envoyé le %s"
 
-#: src/icqface.cc:2312
+#: src/icqface.cc:2314
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "%s reçu via %s"
 
-#: src/icqface.cc:2313
+#: src/icqface.cc:2315
 #, c-format
 msgid "Received on %s"
 msgstr "Reçu le %s"
 
-#: src/icqface.cc:2358
+#: src/icqface.cc:2360
 #, fuzzy
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr "F2 pour les URLS, ESC pour fermer"
 
-#: src/icqface.cc:2403
+#: src/icqface.cc:2405
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "Reçu le %s"
 
-#: src/icqface.cc:2404
+#: src/icqface.cc:2406
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "Envoyé le %s"
 
-#: src/icqface.cc:2417
+#: src/icqface.cc:2419
 msgid "ESC or F9 to close"
 msgstr ""
 
-#: src/icqface.cc:2499
+#: src/icqface.cc:2501
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Historique pour %s, %d évènements au total"
 
-#: src/icqface.cc:2502
+#: src/icqface.cc:2504
 msgid "/ search, N again, ESC cancel"
 msgstr "/ chercher, N encore, ESC annuler"
 
-#: src/icqface.cc:2508
+#: src/icqface.cc:2510
 msgid "search for: "
 msgstr "Chercher: "
 

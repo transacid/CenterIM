@@ -1,4 +1,4 @@
-Version: 4.9.1
+Version: 4.9.2
 Summary: Console ncurses based IM client. ICQ, Yahoo!, MSN, AIM, IRC and Jabber protocols are supported.
 Name: centericq
 Release: 1
