@@ -5,38 +5,15 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 
-AC_CHECK_LIB(iconv, iconv,,
-    [AC_CHECK_LIB(c, iconv,, no_iconv_lib=yes)])
-
-if test -z "$no_iconv_lib"; then
-  AC_CHECK_HEADER(iconv.h, iconv_h=yes)
-fi
-
 AC_CHECK_HEADERS(_G_config.h)
-
 AC_LANG_CPLUSPLUS
 
-#
-# iconv const checking
-#
+AM_ICONV_LINK
+AM_ICONV
 
-if test "$iconv_h" = "yes"; then
-    AC_DEFINE(HAVE_ICONV_H)
-    AC_MSG_CHECKING([for twisted iconv()])
+CFLAGS="$CFLAGS $INCICONV"
+CXXFLAGS="$CXXFLAGS $INCICONV"
 
-    AC_TRY_COMPILE([ #include <iconv.h> ], [
-	char *inbuf, *outbuf; iconv_t k; size_t a, b;
-	iconv(k, &inbuf, &a, &outbuf, &b);
-    ],
-	iconv_const=no,
-	iconv_const=yes
-    )
-
-    AC_MSG_RESULT($iconv_const)
-
-    if test "$iconv_const" = "yes"; then
-	AC_DEFINE(ICONV_CONST)
-    fi
-fi
+LIBS="$LIBS $LIBICONV"
 
 AC_OUTPUT(Makefile)
