@@ -19,7 +19,7 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
 /* non-blocking socket
    state should be initialized with 0, subsequent calls should keep the modified state (state is a bitwise OR between CW_CONNECT_XXX)
    returns 0 for OK, or if it wants subsequent calls
-           -1 for a fatal error
+	   -1 for a fatal error
  */
 int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl, int *state);
 int cw_accept(int s, struct sockaddr *addr, int *addrlen, int ssl);
@@ -30,6 +30,7 @@ int cw_read(int fd, void *buf, int count, int ssl);
 int cw_close(int fd);
 
 void cw_setbind(const char *abindaddr);
+void cw_setproxy(const char *aproxyhost);
 
 #ifdef __cplusplus
 }

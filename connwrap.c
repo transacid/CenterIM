@@ -4,6 +4,10 @@
 #include <string.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include <arpa/inet.h>
+
+#define PROXY_TIMEOUT   30
+    // HTTP proxy timeout in seconds (for the CONNECT method)
 
 #ifdef HAVE_OPENSSL
 
@@ -26,6 +30,7 @@ typedef struct { int fd; SSL *ssl; } sslsock;
 
 static sslsock *socks = 0;
 static int sockcount = 0;
+static int in_http_connect = 0;
 
 static sslsock *getsock(int fd) {
     int i;
@@ -86,6 +91,89 @@ static void delsock(int fd) {
 #endif
 
 static char *bindaddr = 0;
+static char *proxyhost = 0;
+
+static int proxyport = 3128;
+static int proxy_ssl = 0;
+
+#define SOCKOUT(s) write(sockfd, s, strlen(s))
+
+int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
+    int err, pos;
+    struct hostent *server;
+    struct sockaddr_in paddr;
+    char buf[512];
+    fd_set rfds;
+
+    err = 0;
+    in_http_connect = 1;
+
+    if(!(server = gethostbyname(proxyhost))) {
+	errno = h_errno;
+	err = -1;
+    }
+
+    if(!err) {
+	memset(&paddr, 0, sizeof(paddr));
+	paddr.sin_family = AF_INET;
+	memcpy(&paddr.sin_addr.s_addr, *server->h_addr_list, server->h_length);
+	paddr.sin_port = htons(proxyport);
+
+	buf[0] = 0;
+	err = cw_connect(sockfd, (struct sockaddr *) &paddr, sizeof(paddr), proxy_ssl);
+    }
+
+    if(!err) {
+	struct sockaddr_in *sin = (struct sockaddr_in *) serv_addr;
+	char *ip = inet_ntoa(sin->sin_addr), c;
+	struct timeval tv;
+
+	sprintf(buf, "%d", ntohs(sin->sin_port));
+	SOCKOUT("CONNECT ");
+	SOCKOUT(ip);
+	SOCKOUT(":");
+	SOCKOUT(buf);
+	SOCKOUT(" HTTP/1.0\n\n");
+
+	buf[0] = 0;
+
+	while(err != -1) {
+	    FD_ZERO(&rfds);
+	    FD_SET(sockfd, &rfds);
+
+	    tv.tv_sec = PROXY_TIMEOUT;
+	    tv.tv_usec = 0;
+
+	    err = select(sockfd+1, &rfds, 0, 0, &tv);
+	    if(err != -1 && FD_ISSET(sockfd, &rfds)) {
+		err = read(sockfd, &c, 1);
+		if(err != -1) {
+		    pos = strlen(buf);
+		    buf[pos] = c;
+		    buf[pos+1] = 0;
+
+		    if(strlen(buf) > 4)
+		    if(!strcmp(buf+strlen(buf)-4, "\r\n\r\n"))
+			break;
+		}
+	    }
+	}
+    }
+
+    if(err != -1 && strlen(buf)) {
+	char *p = strstr(buf, " ");
+
+	err = -1;
+
+	if(p)
+	if(atoi(++p) == 200)
+	    err = 0;
+    }
+
+    in_http_connect = 0;
+
+    return err;
+}
 
 int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl) {
     int rc;
@@ -111,20 +199,18 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
 	if(rc) return rc;
     }
 
+    if(proxyhost && !in_http_connect) rc = cw_http_connect(sockfd, serv_addr, addrlen);
+	else rc = connect(sockfd, serv_addr, addrlen);
+
 #ifdef HAVE_OPENSSL
-    if(ssl) {
-	rc = connect(sockfd, serv_addr, addrlen);
-
-	if(!rc) {
-	    sslsock *p = addsock(sockfd);
-	    if(SSL_connect(p->ssl) != 1)
-		return -1;
-	}
-
-	return rc;
+    if(ssl && !rc) {
+	sslsock *p = addsock(sockfd);
+	if(SSL_connect(p->ssl) != 1)
+	    return -1;
     }
 #endif
-    return connect(sockfd, serv_addr, addrlen);
+
+    return rc;
 }
 
 int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl, int *state) {
@@ -267,4 +353,22 @@ int cw_close(int fd) {
 void cw_setbind(const char *abindaddr) {
     if(bindaddr) free(bindaddr);
     bindaddr = strdup(abindaddr);
+}
+
+void cw_setproxy(const char *aproxyhost) {
+    char *p;
+
+    if(proxyhost) {
+	free(proxyhost);
+	proxyhost = 0;
+    }
+
+    if(aproxyhost) {
+	proxyhost = strdup(aproxyhost);
+
+	if((p = strchr(proxyhost, ':'))) {
+	    *p = 0, p++;
+	    proxyport = atol(p);
+	}
+    }
 }

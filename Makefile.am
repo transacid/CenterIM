@@ -1,4 +1,4 @@
-EXTRA_DIST = connwrap.c md5.c connwrap.h md5.h connwrap.spec
+EXTRA_DIST = connwrap.c md5.c connwrap.h md5.h INSTALL NEWS README COPYING AUTHORS ChangeLog connwrap.spec
 SUBDIRS = 
 INCLUDES = 
 CPPFLAGS = 
