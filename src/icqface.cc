@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.44 2001/11/27 16:33:09 konst Exp $
+* $Id: icqface.cc,v 1.45 2001/11/28 09:34:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -131,6 +131,8 @@ void icqface::init() {
     mcontacts->menu.otherkeys = &contactskeys;
 
     input.setcolor(conf.getcolor(cp_status));
+    input.idle = &textinputidle;
+
     mainw = textwindow(0, 1, COLS-1, LINES-2, conf.getcolor(cp_main_frame));
 
     selector.setcolor(
@@ -256,7 +258,7 @@ int icqface::contextmenu(icqcontact *c) {
 
     if(c->getdesc() != contactroot) {
 	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
-	m.additem(0, ACT_RENAME, _(" Rename contact       r"));
+	m.additem(0, ACT_RENAME, _(" Rename contact         r"));
 	if(conf.getusegroups()) {
 	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
 	}
@@ -1130,7 +1132,7 @@ bool icqface::editurl(const imcontact cinfo, string &url, string &text) {
     texteditor *se = new texteditor;
 
     urlinp.setvalue(url);
-    urlinp.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2-WORKAREA_X1-1);
+    urlinp.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2-WORKAREA_X1-2);
     urlinp.setcolor(conf.getcolor(cp_main_highlight));
     urlinp.idle = &textinputidle;
 
