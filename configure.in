@@ -13,10 +13,17 @@ if test "$build_yahoo" = "yes"; then
 
     AC_MSG_CHECKING(endianness)
     AC_TRY_COMPILE([
+	#include <sys/types.h>
 	#include <sys/param.h>
     ], [
-	#if (defined(BYTE_ORDER) && defined(BIG_ENDIAN) && (BYTE_ORDER == BIG_ENDIAN)) || defined(_BIG_ENDIAN)
-	    bogus
+	#if defined(BYTE_ORDER) && defined(BIG_ENDIAN)
+	    #if BYTE_ORDER == BIG_ENDIAN
+		bogus
+	    #endif
+	#else
+	    #if defined(_BIG_ENDIAN)
+		bogus
+	    #endif
 	#endif
     ],[
 	ac_end=little
