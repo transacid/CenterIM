@@ -7,7 +7,7 @@
 # by Konstantin Klyagin <konst@konst.org.ua>
 # trillian support by Vassilios Karakoidas <bkarak@aueb.gr>
 #
-# $Id: cicqconv,v 1.8 2003/08/20 23:12:51 konst Exp $
+# $Id: cicqconv,v 1.9 2003/09/26 07:13:21 konst Exp $
 #
 
 use Time::Local;
@@ -273,6 +273,13 @@ sub kxicq2 {
 
 # Trillian specific functions
 
+sub create_account_irc {
+    local $OUTPUT_DIR = "$ENV{HOME}/.centericq/";
+    local $buddy_dir = $OUTPUT_DIR."i".$_[0];
+    
+    mkdir($buddy_dir);
+}
+
 sub create_account_msn {
     local $OUTPUT_DIR = "$ENV{HOME}/.centericq/";
     local @buddy_mail = split("@",$_[0]);
@@ -292,12 +299,16 @@ sub trillian {
 
     foreach(@lines){
 	if($_ =~ /\<buddy uri=\"ICQ:1%3A(.*)\"\>(.*)\<\/buddy\>/) {
-	    @buddy_array = split("%3A",$1);
-	    cicq_adduser($buddy_array[0]);
+	    @buddy_icq_array = split("%3A",$1);
+	    cicq_adduser($buddy_icq_array[0]);
 	} elsif($_ =~ /\<buddy uri=\"MSN:1%3A(.*)\"\>(.*)\<\/buddy\>/) {
-	    @buddy_array = split("%3A",$1);
-	    $buddy_array[0] =~ s/%([0-9A-Za-z]{2})/pack("H2",$1)/ge;
-	    create_account_msn($buddy_array[0]);
+	    @buddy_msn_array = split("%3A",$1);
+	    $buddy_msn_array[0] =~ s/%([0-9A-Za-z]{2})/pack("H2",$1)/ge;
+	    create_account_msn($buddy_msn_array[0]);
+	} elsif($_ =~ /\<buddy uri=\"IRC:(.*)\"\>(.*)\<\/buddy\>/) {
+	    $buddy_irc = $2;
+	    $buddy_irc =~ s/%([0-9A-Za-z]{2})/pack("H2",$1)/ge;
+	    create_account_irc($buddy_irc);
 	}
     }
 }

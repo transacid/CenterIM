@@ -6,7 +6,7 @@
 #ifdef BUILD_YAHOO
 
 #include "icqconf.h"
-#include "pseudoglib.h"
+#include "yahoo2_callbacks.h"
 
 class yahoohook: public abstracthook {
     protected:
@@ -14,6 +14,22 @@ class yahoohook: public abstracthook {
 	    tbdConfLogon
 	};
 
+	struct connect_callback_data {
+	    yahoo_connect_callback callback;
+	    void *callback_data;
+	    int id;
+	};
+
+	struct yfd {
+	    int fd;
+	    void *data;
+	    yfd(int afd, void *adata): fd(afd), data(adata) {}
+
+	    bool operator == (int afd) const { return fd == afd; }
+	    bool operator != (int afd) const { return fd != afd; }
+	};
+
+	vector<yfd> rfds, wfds;
 	vector<pair<Action, string> > tobedone;
 
 	map<string, Encoding> userenc;
@@ -27,37 +43,40 @@ class yahoohook: public abstracthook {
 
 	time_t timer_refresh;
 
-	static void login_done(guint32 id, int succ, char *url);
-	static void got_buddies(guint32 id, struct yahoo_buddy **buds);
-	static void status_changed(guint32 id, char *who, int stat, char *msg, int away);
-	static void got_im(guint32 id, char *who, char *msg, long tm, int stat);
-	static void got_conf_invite(guint32 id, char *who, char *room, char *msg, char **members);
-	static void conf_userdecline(guint32 id, char *who, char *room, char *msg);
-	static void conf_userjoin(guint32 id, char *who, char *room);
-	static void conf_userleave(guint32 id, char *who, char *room);
-	static void conf_message(guint32 id, char *who, char *room, char *msg);
-	static void got_file(guint32 id, char *who, char *url, long expires, char *msg, char *fname, long fesize);
-	static void contact_added(guint32 id, char *myid, char *who, char *msg);
-	static void typing_notify(guint32 id, char *who, int stat);
-	static void game_notify(guint32 id, char *who, int stat);
-	static void mail_notify(guint32 id, char *from, char *subj, int cnt);
-	static void system_message(guint32 id, char *msg);
-	static void error(guint32 id, char *err, int fatal);
-	static void add_input(guint32 id, int fd);
-	static void remove_input(guint32 id, int fd);
+	static void login_response(int id, int succ, char *url);
+	static void got_buddies(int id, YList *buds);
+	static void status_changed(int id, char *who, int stat, char *msg, int away);
+	static void got_im(int id, char *who, char *msg, long tm, int stat, int utf8);
+	static void got_conf_invite(int id, char *who, char *room, char *msg, YList *members);
+	static void conf_userdecline(int id, char *who, char *room, char *msg);
+	static void conf_userjoin(int id, char *who, char *room);
+	static void conf_userleave(int id, char *who, char *room);
+	static void conf_message(int id, char *who, char *room, char *msg, int utf8);
+	static void got_file(int id, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize);
+	static void contact_added(int id, char *myid, char *who, char *msg);
+	static void typing_notify(int id, char *who, int stat);
+	static void game_notify(int id, char *who, int stat);
+	static void mail_notify(int id, char *from, char *subj, int cnt);
+	static void system_message(int id, char *msg);
+	static void error(int id, char *err, int fatal);
+	static void add_handler(int id, int fd, yahoo_input_condition cond, void *data);
+	static void remove_handler(int id, int fd);
+	static int connect_async(int id, char *host, int port, yahoo_connect_callback callback, void *data);
 
 	static struct tm *timestamp();
 	static imstatus yahoo2imstatus(int status);
 
 	string encanalyze(const string &nick, const string &text);
 
-	char **getmembers(const string &room);
+	YList *getmembers(const string &room);
 	void userstatus(const string &nick, int st, const string &message, bool away);
 	void disconnected();
 
 	void checkinlist(imcontact ic);
 	void sendnewuser(const imcontact &ic, bool report);
 	void removeuser(const imcontact &ic, bool report);
+
+	void connect_complete(void *data, int source, yahoo_input_condition condition);
 
     public:
 	yahoohook();
@@ -70,8 +89,8 @@ class yahoohook: public abstracthook {
 	void exectimers();
 	void disconnect();
 
-	void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;
-	bool isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const;
+	void getsockets(fd_set &rs, fd_set &ws, fd_set &es, int &hsocket) const;
+	bool isoursocket(fd_set &rs, fd_set &ws, fd_set &es) const;
 
 	bool online() const;
 	bool logged() const;

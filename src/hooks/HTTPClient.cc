@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.6 2003/08/28 06:57:46 konst Exp $
+* $Id: HTTPClient.cc,v 1.7 2003/09/26 07:13:23 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,7 +45,7 @@ void HTTPClient::Connect() {
 	return;
 
     int pos;
-    HTTPRequestEvent *ev = *m_queue.begin();
+    HTTPRequestEvent *ev = m_queue.front();
     m_hostname = !m_redirect.empty() ? m_redirect : ev->getURL();
 
     m_port = 80;
@@ -179,15 +179,46 @@ void HTTPClient::Send(Buffer &b) {
 
 void HTTPClient::SendRequest() {
     Buffer b(&m_transl);
+    HTTPRequestEvent *ev = m_queue.front();
+    string rq;
 
-    if(m_proxy_hostname.empty()) {
-	b.Pack((string) "GET " + m_resource + " HTTP/1.0\r\n");
-	b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n");
-    } else {
-	b.Pack((string) "GET http://" + m_hostname + m_resource + " HTTP/1.0\r\n");
+    switch(ev->getMethod()) {
+	case HTTPRequestEvent::GET: rq = "GET"; break;
+	case HTTPRequestEvent::POST: rq = "POST"; break;
     }
 
-    b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n\r\n");
+    if(m_proxy_hostname.empty()) {
+	b.Pack(rq + " " + m_resource + " HTTP/1.0\r\n");
+	b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n");
+    } else {
+	b.Pack(rq + " http://" + m_hostname + m_resource + " HTTP/1.0\r\n");
+    }
+
+    b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
+
+    if(ev->getMethod() == HTTPRequestEvent::POST) {
+	int len = 0;
+	vector<pair<string, string> >::const_iterator ip = ev->pbegin();
+
+	b.Pack("Content-type: application/x-www-form-urlencoded\r\n");
+
+	while(ip != ev->pend()) {
+	    len += ip->first.size() + ip->second.size() + 2;
+	    ++ip;
+	}
+
+	b.Pack((string) "Content-length: " + i2str(len) + "\r\n\r\n");
+
+	for(ip = ev->pbegin(); ip != ev->pend(); ++ip) {
+	    if(ip != ev->pbegin()) b.Pack("&");
+	    b.Pack(ip->first);
+	    b.Pack("=");
+	    b.Pack(ip->second);
+	}
+
+    }
+
+    b.Pack("\r\n");
 
     Send(b);
     m_state = WAITING_FOR_HEADER;

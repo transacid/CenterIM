@@ -59,6 +59,8 @@ class abstracthook {
 	string ruscrlfconv(const string &tdir, const string &text);
 	Encoding guessencoding(const string &text);
 
+	string getmd5(const string &text);
+
     public:
 	abstracthook(protocolname aproto);
 

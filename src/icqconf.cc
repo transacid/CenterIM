@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.114 2003/09/11 21:09:28 konst Exp $
+* $Id: icqconf.cc,v 1.115 2003/09/26 07:13:22 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -80,7 +80,8 @@ icqconf::imserver icqconf::defservers[protocolname_size] = {
     { "toc.oscar.aol.com", 9898, 0 },
     { "irc.oftc.net", 6667, 0 },
     { "jabber.com", 5222, 5223 },
-    { "", 0, 0 }
+    { "", 0, 0 },
+    { "livejournal.com", 80, 0 }
 };
 
 void icqconf::setourid(const imaccount &im) {
@@ -686,7 +687,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "irc", "jabber", "rss", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "jabber", "rss", "lj", "infocard"
     };
 
     return ptextnames[pname];
@@ -701,6 +702,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 	case 'n': return infocard;
 	case 'j': return jabber;
 	case 'r': return rss;
+	case 'l': return livejournal;
 	case '0':
 	case '1':
 	case '2':
@@ -984,6 +986,7 @@ void icqconf::usage() const {
     cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;
     cout << _("  -S, --status <status>    change the current IM status") << endl;
     cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc or jabber") << endl;
+
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
 

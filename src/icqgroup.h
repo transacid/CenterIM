@@ -17,8 +17,8 @@ class icqgroup {
 	icqgroup(int aid, const string &aname);
 	~icqgroup();
 
-	string getname() { return name; }
-	int getid() { return id; }
+	string getname() const { return name; }
+	int getid() const { return id; }
 
 	int getcount(bool countonline, bool countoffline);
 

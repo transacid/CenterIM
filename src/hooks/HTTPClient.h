@@ -12,29 +12,49 @@
 using namespace ICQ2000;
 
 class HTTPRequestEvent : public MessageEvent {
+    public:
+	enum RequestMethod {
+	    GET,
+	    POST
+	};
+
     private:
-	std::string m_content, m_url, m_httpresp;
+	string m_content, m_url, m_httpresp;
+	vector<pair<string, string> > params;
+
+	RequestMethod method;
 
     public:
-	HTTPRequestEvent(const string &url): MessageEvent(ContactRef()), m_url(url) { }
+	HTTPRequestEvent(const string &url, RequestMethod rt = GET)
+	    : MessageEvent(ContactRef()), m_url(url), method(rt) { }
 
 	string getContent() const { return m_content; }
 	string getURL() const { return m_url; }
 	string getHTTPResp() const { return m_httpresp; }
+
 	MessageType getType() const { return Normal; }
+	RequestMethod getMethod() const { return method; }
 
 	void setContent(const string &content) { m_content = content; }
 	void setHTTPResp(const string &resp) { m_httpresp = resp; }
+
+	void addParam(const string pname, const string pval)
+	    { params.push_back(make_pair(mime(pname), mime(pval))); }
+
+	vector<pair<string, string> >::const_iterator pbegin() const { return params.begin(); }
+	vector<pair<string, string> >::const_iterator pend() const { return params.end(); }
 };
 
 class HTTPClient : public SocketClient {
     private:
-	enum State { NOT_CONNECTED,
+	enum State {
+	    NOT_CONNECTED,
 	    WAITING_FOR_CONNECT,
 	    WAITING_FOR_HEADER,
 	    RECEIVING_HEADER,
 	    RECEIVING_CONTENT,
-	    DISCONNECTING };
+	    DISCONNECTING
+	};
 
 	list<HTTPRequestEvent*> m_queue;
 	State m_state;
@@ -42,8 +62,8 @@ class HTTPClient : public SocketClient {
 	Translator m_transl;
 	Buffer m_recv;
 
-	std::string m_hostname, m_proxy_hostname;
-	std::string m_resource, m_content, m_redirect;
+	string m_hostname, m_proxy_hostname;
+	string m_resource, m_content, m_redirect;
 	unsigned short m_port, m_proxy_port;
 	time_t m_last_operation, m_timeout;
 	int m_code;
@@ -80,13 +100,13 @@ class HTTPClient : public SocketClient {
 	unsigned short getProxyServerPort() const { return m_proxy_port; }
 };
 
-class HTTPException : public std::exception {
+class HTTPException : public exception {
     private:
-	std::string m_errortext;
+	string m_errortext;
 
     public:
 	HTTPException() {}
-	HTTPException(const std::string& text): m_errortext(text) {};
+	HTTPException(const string& text): m_errortext(text) {};
 	~HTTPException() throw() {}
 
 	const char* what() const throw() { return m_errortext.c_str(); }

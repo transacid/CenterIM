@@ -18,6 +18,7 @@ class icqgroups: private vector<icqgroup> {
 	void remove(int gid);
 
 	int size() const { return vector<icqgroup>::size(); }
+
 	iterator begin() { return vector<icqgroup>::begin(); }
 	iterator end() { return vector<icqgroup>::end(); }
 };

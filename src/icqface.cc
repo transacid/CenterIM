@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.192 2003/09/11 23:37:33 konst Exp $
+* $Id: icqface.cc,v 1.193 2003/09/26 07:13:22 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1230,6 +1230,7 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
 	_(" [irc] IRC"),
 	_(" [jab] Jabber"),
 	"",
+	_(" [lj] LiveJournal"),
 	""
     };
 

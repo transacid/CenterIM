@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.41 2003/09/11 21:09:29 konst Exp $
+* $Id: abstracthook.cc,v 1.42 2003/09/26 07:13:23 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,9 @@
 #include "irchook.h"
 #include "jabberhook.h"
 #include "rsshook.h"
+#include "ljhook.h"
+
+#include "md5.h"
 
 #include <time.h>
 
@@ -195,8 +198,12 @@ string abstracthook::rushtmlconv(const string &tdir, const string &text, bool ru
 	    if(r.substr(pos+1, 5) == "#150;") r.replace(pos, 6, "-"); else
 	    if(r.substr(pos+1, 5) == "#151;") r.replace(pos, 6, "--"); else
 	    if(r.substr(pos+1, 5) == "#146;") r.replace(pos, 6, "`"); else
-	    if(r.substr(pos+1, 7) == "hellip;") r.replace(pos, 8, "..."); 
-	    if(r.substr(pos+1, 5) == "copy;") r.replace(pos, 8, "(c)"); 
+	    if(r.substr(pos+1, 7) == "hellip;") r.replace(pos, 8, "..."); else
+	    if(r.substr(pos+1, 6) == "laquo;") r.replace(pos, 7, "<<"); else
+	    if(r.substr(pos+1, 6) == "raquo;") r.replace(pos, 7, ">>"); else
+	    if(r.substr(pos+1, 6) == "bdquo;") r.replace(pos, 7, "\""); else
+	    if(r.substr(pos+1, 6) == "ldquo;") r.replace(pos, 7, "\""); else
+	    if(r.substr(pos+1, 5) == "copy;") r.replace(pos, 8, "(c)");
 	    pos++;
 	}
     }
@@ -297,6 +304,24 @@ abstracthook::Encoding abstracthook::guessencoding(const string &text) {
 	return encKOI;
 }
 
+string abstracthook::getmd5(const string &text) {
+    md5_state_t state;
+    md5_byte_t digest[16];
+    string r;
+    char buf[3];
+
+    md5_init(&state);
+    md5_append(&state, (md5_byte_t *) text.c_str(), text.size());
+    md5_finish(&state, digest);
+
+    for(int i = 0; i < 16; i++) {
+	sprintf(buf, "%02x", digest[i]);
+	r += buf;
+    }
+
+    return r;
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {
@@ -321,6 +346,9 @@ abstracthook &gethook(protocolname pname) {
 #endif
 #ifdef BUILD_RSS
 	case rss: return rhook;
+#endif
+#ifdef BUILD_LJ
+	case livejournal: return lhook;
 #endif
     }
 

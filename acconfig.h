@@ -13,4 +13,5 @@
 #undef BUILD_AIM
 #undef BUILD_IRC
 #undef BUILD_RSS
+#undef BUILD_LJ
 #undef BUILD_KONST
