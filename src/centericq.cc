@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.17 2001/09/30 07:45:38 konst Exp $
+* $Id: centericq.cc,v 1.18 2001/09/30 19:22:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -695,11 +695,17 @@ const string centericq::quotemsg(const string text) {
 
 icqcontact *centericq::adduin(unsigned int uin) {
     icqcontact *c;
+    int groupid = 0;
 
     if(c = clist.get(uin)) {
 	face.log(_("+ user %s, %lu is already on the list"), c->getnick().c_str(), uin);
 	c = 0;
     } else {
+	if(conf.getusegroups()) {
+	    groupid = face.selectgroup(_("Select a group to add the user to"));
+	    if(!groupid) return 0;
+	}
+
 	if(icql.icq_Status != STATUS_OFFLINE) {
 	    if(face.ask(_("Notify the user he/she has been added?"),
 	    ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {

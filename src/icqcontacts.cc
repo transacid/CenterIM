@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.8 2001/09/30 07:45:39 konst Exp $
+* $Id: icqcontacts.cc,v 1.9 2001/09/30 19:22:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -61,6 +61,8 @@ void icqcontacts::load() {
     struct stat st;
     DIR *d;
     FILE *f;
+
+    empty();
 
     if(d = opendir(tname.c_str())) {
 	while(ent = readdir(d))
@@ -174,16 +176,17 @@ icqcontact *icqcontacts::getseq2(unsigned short seq2) {
 }
 
 int icqcontacts::clistsort(void *p1, void *p2) {
-    int i;
     icqcontact *c1 = (icqcontact *) p1, *c2 = (icqcontact *) p2;
-    char s1 = c1->getsortchar(), s2 = c2->getsortchar();
     static char *sorder = SORT_CONTACTS;
+    char s1, s2;
 
-    if(s1 == 'O') s1 = c1->getshortstatus();
-    if(s2 == 'O') s2 = c2->getshortstatus();
+    if(conf.getusegroups()) {
+	if(c1->getgroupid() > c2->getgroupid()) return -1; else
+	if(c1->getgroupid() < c2->getgroupid()) return 1;
+    }
 
-    if(c1->getmsgcount()) s1 = '#';
-    if(c2->getmsgcount()) s2 = '#';
+    s1 = SORTCHAR(c1);
+    s2 = SORTCHAR(c2);
 
     if(s1 == s2) {
 	if(*c1 > *c2) return -1; else return 1;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.8 2001/09/24 11:56:38 konst Exp $
+* $Id: icqdialogs.cc,v 1.9 2001/09/30 19:22:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
+#include "icqgroups.h"
 
 bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
     bool finished, newuin, success, socks = false;
@@ -654,6 +655,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
     bool serveronly = conf.getserveronly();
+    bool usegroups = conf.getusegroups();
 
     dialogbox db;
 
@@ -693,6 +695,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	db.gettree()->addleaff(nopt, 0, (void *) 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
 	db.gettree()->addleaff(nopt, 0, (void *) 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
 	db.gettree()->addleaff(nopt, 0, (void *) 16, _(" Send all events through server : %s "), stryesno(serveronly));
+	db.gettree()->addleaff(nopt, 0, (void *) 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
 
 	db.gettree()->addleaff(ncomm, 0, (void *) 7, _(" ICQ server address : %s "), serv.c_str());
 	db.gettree()->addleaff(ncomm, 0, (void *) 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
@@ -754,6 +757,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
 		    case 16: serveronly = !serveronly; break;
+		    case 17: usegroups = !usegroups; break;
 		}
 		break;
 	    case 1:
@@ -766,11 +770,17 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
 		conf.setserveronly(serveronly);
+		conf.setusegroups(usegroups);
+
 		icq_Russian = rus ? 1 : 0;
+
+		if(usegroups) {
+		    clist.save();
+		    clist.load();
+		}
 
 		if(socks) conf.setsockshost(prserv);
 		else conf.setsockshost("");
-		
 		break;
 	}
     }
@@ -786,6 +796,7 @@ int icqface::editaboutkeys(texteditor *e, int k) {
 	case CTRL('x'): face.editdone = true; return -1;
 	case 27: return -1;
     }
+
     return 0;
 }
 
@@ -799,4 +810,64 @@ void icqface::detailsidle(dialogbox *db) {
 	db->gettree()->redraw();
 	face.status(_("Your ICQ details have been fetched"));
     }
+}
+
+int icqface::selectgroup(const string text) {
+    dialogbox db;
+    int r, ngrp, n, b;
+    vector<icqgroup>::iterator i;
+    string gname;
+
+    textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+
+    w.set_title(conf.getcolor(cp_dialog_highlight), " " + text + " ");
+
+    db.setwindow(&w, false);
+
+    db.settree(new treeview(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_text)));
+    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected),
+	_("Cancel"), _("Add a group"), _("Select"), 0));
+
+    r = 0;
+    db.idle = &dialogidle;
+    blockmainscreen();
+    treeview &t = *db.gettree();
+
+    for(bool fin = false; !fin && !r; ) {
+	t.clear();
+	ngrp = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Groups "));
+
+	for(i = groups.begin(); i != groups.end(); i++) {
+	    t.addleaf(ngrp, 0, (void *) (i-groups.begin()+1), i->getname());
+	}
+
+	fin = !db.open(n, b, (void **) &n);
+
+	if(!fin)
+	switch(b) {
+	    case 0:
+		fin = true;
+		break;
+
+	    case 1:
+		gname = inputstr(_("Name for a group to be created: "), "");
+		if(!gname.empty()) {
+		    groups.add(gname);
+		}
+		break;
+
+	    case 2:
+		i = groups.begin()-1;
+		r = i->getid();
+		break;
+	}
+    }
+
+    db.close();
+    unblockmainscreen();
+    return r;
 }

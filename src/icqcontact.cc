@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.8 2001/09/30 07:45:39 konst Exp $
+* $Id: icqcontact.cc,v 1.9 2001/09/30 19:22:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -707,17 +707,6 @@ char icqcontact::getshortstatus() const {
     if((status & STATUS_NA) == STATUS_NA) return 'n'; else
     if((status & STATUS_AWAY) == STATUS_AWAY) return 'a'; else
     if(!(status & 0x01FF)) return 'o'; else return '?';
-}
-
-char icqcontact::getsortchar() const {
-    char ret;
-
-    if(isnonicq()) ret = 'N';
-    else if(!inlist()) ret = '!';
-    else if(getstatus() == STATUS_OFFLINE) ret = '_';
-    else ret = 'O';
-
-    return ret;
 }
 
 int icqcontact::getinfotryn() const {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.15 2001/09/27 08:53:41 konst Exp $
+* $Id: icqface.cc,v 1.16 2001/09/30 19:22:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -388,8 +388,10 @@ void icqface::fillcontactlist() {
 
 	totalunread += c->getmsgcount();
 
-	if(!c->getmsgcount())
-	if((sc = c->getsortchar()) != prevsc) {
+	if((sc = SORTCHAR(c)) != '#') {
+	    if(strchr("candifo", sc)) sc = 'O';
+
+	    if(sc != prevsc)
 	    switch(sc) {
 		case 'O':
 		    thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 1, " Online ");
@@ -399,6 +401,7 @@ void icqface::fillcontactlist() {
 		case '!': thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 3, " Not in list "); break;
 		case 'N': thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 4, " Non-ICQ "); break;
 	    }
+
 	    prevsc = sc;
 	}
 
@@ -406,14 +409,15 @@ void icqface::fillcontactlist() {
 	if(c->isbirthday()) dnick += " :)";
 
 	if(c->getstatus() == STATUS_OFFLINE) {
-	    mcontacts->addleaf(thisnode,
+	    mcontacts->addleaff(thisnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
-		c, (c->getmsgcount() ? "#" : " ") + dnick + " ");
+		c, "%.*s %d %s ", c->getmsgcount() ? 1 : 0, "#",
+		    c->getgroupid(), dnick.c_str());
 	} else {
 	    mcontacts->addleaff(thisnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
-		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ",
-		c->getshortstatus(), dnick.c_str());
+		c, "%s[%c] %d %s ", c->getmsgcount() ? "#" : " ",
+		c->getshortstatus(), c->getgroupid(), dnick.c_str());
 	}
     }
 

@@ -137,7 +137,6 @@ class icqcontact {
 	const string getdirname() const;
 
 	char getshortstatus() const;
-	char getsortchar() const;
 
 	int getinfotryn() const;
 	void incinfotryn();

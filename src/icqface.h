@@ -212,6 +212,7 @@ class icqface {
 	string inputfile(string q, string defl = "");
 
 	void quickfind(verticalmenu *multi = 0);
+	int selectgroup(const string text);
 };
 
 extern icqface face;

@@ -1,20 +1,17 @@
 #ifndef __ICQCONTACTS_H__
 #define __ICQCONTACTS_H__
 
-#include "cmenus.h"
-
 /*
 *
 * SORT_CONTACTS
 *
-* O Online
-*   o Online
-*   f Free for chat
-*   i Invisible
-*   d Do not disturb
-*   c Occupied
-*   a Away
-*   n N/A
+* o Online
+* f Free for chat
+* i Invisible
+* d Do not disturb
+* c Occupied
+* a Away
+* n N/A
 *
 * _ Offline
 * ! Not in list
@@ -24,6 +21,15 @@
 */
 
 #define SORT_CONTACTS   "#fidocan_!N"
+
+#define SORTCHAR(c) ( \
+    c->getmsgcount() ? '#' : \
+    c->isnonicq() ? 'N' : \
+    !c->inlist() ? '!' : \
+    c->getshortstatus() \
+)
+
+#include "cmenus.h"
 
 #include "linkedlist.h"
 #include "icqcontact.h"
