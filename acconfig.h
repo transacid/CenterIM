@@ -5,3 +5,4 @@
 #undef ENABLE_NLS
 #undef USE_FRIBIDI
 #undef HAVE_STPCPY
+#undef HAVE_OPENSSL

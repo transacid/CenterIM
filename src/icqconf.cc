@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.94 2002/11/25 11:50:50 konst Exp $
+* $Id: icqconf.cc,v 1.95 2002/11/30 23:33:44 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -65,12 +65,12 @@ icqconf::imaccount icqconf::getourid(protocolname pname) const {
 }
 
 icqconf::imserver icqconf::defservers[protocolname_size] = {
-    { "login.icq.com", 5190 },
-    { "scs.yahoo.com", 5050 },
-    { "messenger.hotmail.com", 1863 },
-    { "toc.oscar.aol.com", 9898 },
-    { "irc.openprojects.net", 6667 },
-    { "jabber.com", 5222 }
+    { "login.icq.com", 5190, 0 },
+    { "scs.yahoo.com", 5050, 0 },
+    { "messenger.hotmail.com", 1863, 0 },
+    { "toc.oscar.aol.com", 9898, 0 },
+    { "irc.openprojects.net", 6667, 0 },
+    { "jabber.com", 5222, 5223 }
 };
 
 void icqconf::setourid(const imaccount &im) {
@@ -1000,9 +1000,9 @@ void icqconf::imaccount::write(ofstream &f) {
 	f << endl;
     }
 
-    for(ia = additional.begin(); ia != additional.end(); ++ia) {
-	f << prefix << ia->first << "\t" << ia->second << endl;
-    }
+    for(ia = additional.begin(); ia != additional.end(); ++ia)
+	if(!ia->first.empty() && !ia->second.empty())
+	    f << prefix << ia->first << "\t" << ia->second << endl;
 }
 
 void icqconf::imaccount::read(const string &spec) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.18 2002/11/30 15:36:11 konst Exp $
+* $Id: jabberhook.cc,v 1.19 2002/11/30 23:33:45 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,6 +36,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::flexiblesearch);
     fcapabs.insert(hookcapab::visibility);
+    fcapabs.insert(hookcapab::ssl);
 //    fcapabs.insert(hookcapab::conferencing);
 }
 
@@ -69,7 +70,8 @@ void jabberhook::connect() {
 
     regmode = false;
 
-    jc = jab_new(cjid.get(), cpass.get(), 0);
+    jc = jab_new(cjid.get(), cpass.get(), acc.port,
+	acc.additional["ssl"] == "1" ? 1 : 0);
 
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);
@@ -324,7 +326,7 @@ const string &serv, string &err) {
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(pass.c_str()));
 
-    jc = jab_new(cjid.get(), cpass.get(), 0);
+    jc = jab_new(cjid.get(), cpass.get(), icqconf::defservers[jabber].port, 0);
 
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);

@@ -24,7 +24,8 @@ struct hookcapab {
 	conferencing,
 	cltemporary,
 	directadd,
-	flexiblesearch
+	flexiblesearch,
+	ssl
     };
 };
 

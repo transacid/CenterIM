@@ -46,7 +46,7 @@ class icqconf {
 
 	struct imserver {
 	    string server;
-	    int port;
+	    int port, secureport;
 	};
 
 	struct imaccount {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.25 2002/11/22 19:11:44 konst Exp $
+* $Id: accountmanager.cc,v 1.26 2002/11/30 23:33:44 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,7 +52,7 @@ void accountmanager::exec() {
     int n, b, i, citem, action, pos;
     set<hookcapab::enumeration> capab;
     string spname, tmp;
-    bool fin, proceed;
+    bool fin;
 
     face.blockmainscreen();
     fopen = true;
@@ -89,6 +89,10 @@ void accountmanager::exec() {
 			tmp = account.server + ":" + i2str(account.port);
 
 		    t.addleaff(n, 0, citem+9, _(" Server : %s "), tmp.c_str());
+
+		    if(capab.count(hookcapab::ssl))
+			t.addleaff(n, 0, citem+13, _(" Secured : %s "),
+			    stryesno(account.additional["ssl"] == "1"));
 		}
 
 		switch(pname) {
@@ -215,6 +219,19 @@ void accountmanager::exec() {
 		    } else {
 			imcontrol.synclist(account);
 			fin = true;
+		    }
+		    break;
+
+		case 13:
+		    account.additional["ssl"] =
+			(account.additional["ssl"] == "") ? "1" : "";
+
+		    if(account.additional["ssl"] == "1") {
+			if(account.port == icqconf::defservers[account.pname].port)
+			    account.port = icqconf::defservers[account.pname].secureport;
+		    } else {
+			if(account.port == icqconf::defservers[account.pname].secureport)
+			    account.port = icqconf::defservers[account.pname].port;
 		    }
 		    break;
 	    }

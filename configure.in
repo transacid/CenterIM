@@ -48,6 +48,41 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
     fi
 fi
 
+###	FriBiDi check end
+
+###
+###	OpenSSL library
+###
+
+AC_ARG_WITH(openssl,
+	[  --with-openssl=[DIR]    enable SSL secured connections using the OpenSSL
+			  library in DIR],
+	[with_openssl=$withval])
+
+if test -z "$with_openssl"; then
+    for ac_dir in /usr/local /usr; do
+	if test -f "$ac_dir/include/openssl/ssl.h"; then
+	    with_openssl=$ac_dir
+	    break;
+	fi
+    done
+fi
+
+AC_MSG_CHECKING(for OpenSSL)
+
+if test -n "$with_openssl" -a "$with_openssl" != "no"; then
+    if test "$with_openssl" = "yes"; then with_openssl="/usr"; fi
+    CFLAGS="$CFLAGS -I${with_openssl}"
+    LDFLAGS="$LDFLAGS -L${with_openssl}"
+    LIBS="$LIBS -lssl"
+    AC_DEFINE(HAVE_OPENSSL)
+    AC_MSG_RESULT([found in $with_openssl])
+else
+    AC_MSG_RESULT([not found or disabled])
+fi
+
+###	OpenSSL end
+
 AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator exception utility],,
   AC_MSG_ERROR([You need to have the libstdc++ headers installed]))
 
