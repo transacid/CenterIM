@@ -6,6 +6,7 @@
 
 #ifdef HAVE_OPENSSL
 
+#define OPENSSL_NO_KRB5 1
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
