@@ -305,7 +305,7 @@ void jab_recv(jconn j)
 #endif
 	XML_Parse(j->parser, buf, len, 0);
     }
-    else if(len<0)
+    else if(len<=0)
     {
 	STATE_EVT(JCONN_STATE_OFF);
 	jab_stop(j);
