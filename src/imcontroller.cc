@@ -1,6 +1,7 @@
 #include "imcontroller.h"
 #include "icqface.h"
 #include "icqhook.h"
+#include "yahoohook.h"
 #include "aimhook.h"
 #include "irchook.h"
 #include "icqcontacts.h"
@@ -163,15 +164,6 @@ void imcontroller::icqupdatedetails() {
     }
 }
 
-void imcontroller::sendauthorization(vector<icqcontact *> &needauth) {
-    char buf[512];
-    sprintf(buf, _("%d contacts require authorization to be added. Request it now?"), needauth.size());
-
-    if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	ihook.sendaddauth();
-    }
-}
-
 void imcontroller::icqsynclist() {
     bool fin;
     int synchronized, attempt = 1;
@@ -209,10 +201,41 @@ void imcontroller::icqsynclist() {
     }
 
     if(!needauth.empty()) {
-	sendauthorization(needauth);
+	char buf[512];
+	sprintf(buf, _("%d contacts require authorization to be added. Request it now?"), needauth.size());
+
+	if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+	    ihook.sendaddauth();
+	}
     }
 
     face.progress.hide();
+}
+
+void imcontroller::yahoosynclist() {
+    vector<icqcontact *> tosync = yhook.getneedsync();
+    vector<icqcontact *>::iterator it;
+
+    if(tosync.empty()) {
+	face.status(_("To contacts to be synchronized; all of them are already stored server-side"));
+
+    } else {
+	char buf[512];
+	sprintf(buf, _("%d contacts are do be stored server-side. Add them now?"), tosync.size());
+
+	if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+	    face.progress.show(_(" Uploading Yahoo! buddies "));
+
+	    for(it = tosync.begin(); it != tosync.end(); ++it) {
+		face.progress.log(_(".. adding %s"), (*it)->getdesc().nickname.c_str());
+		yhook.sendnewuser((*it)->getdesc());
+	    }
+
+	    face.progress.log(_("Finished"));
+	    sleep(2);
+	    face.progress.hide();
+	}
+    }
 }
 
 void imcontroller::aimupdateprofile() {
@@ -334,6 +357,7 @@ void imcontroller::channels(icqconf::imaccount &account) {
 void imcontroller::synclist(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq: icqsynclist(); break;
+	case yahoo: yahoosynclist(); break;
     }
 }
 

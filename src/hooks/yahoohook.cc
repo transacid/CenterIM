@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.48 2002/08/16 16:48:29 konst Exp $
+* $Id: yahoohook.cc,v 1.49 2002/08/17 14:08:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,7 +53,11 @@ static int stat2int[imstatus_size] = {
 };
 
 yahoohook::yahoohook() : fonline(false) {
-    fcapabilities = hoptCanSetAwayMsg | hoptChangableServer;
+    fcapabilities =
+	hoptCanSetAwayMsg |
+	hoptChangableServer |
+	hoptCanSyncList;
+
     pager_host[0] = pager_port[0] = 0;
 }
 
@@ -386,6 +390,29 @@ char **yahoohook::getmembers(const string &room) {
     }
 
     return smemb;
+}
+
+vector<icqcontact *> yahoohook::getneedsync() {
+    int i;
+    icqcontact *c;
+    yahoo_buddy **buddies = get_buddylist(cid), **bud;
+    vector<icqcontact *> r;
+    bool found;
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == yahoo) {
+	    for(found = false, bud = buddies; *bud && !found; bud++) {
+		found = c->getdesc().nickname == (string) (*bud)->id;
+	    }
+
+	    if(!found)
+		r.push_back(c);
+	}
+    }
+
+    return r;
 }
 
 // ----------------------------------------------------------------------------

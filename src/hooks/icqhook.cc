@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.98 2002/08/16 16:48:28 konst Exp $
+* $Id: icqhook.cc,v 1.99 2002/08/17 14:08:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -428,9 +428,6 @@ void icqhook::removeuser(const imcontact &c) {
 	if(cc->inlist()) {
 	    ContactRef ic = cli.getContact(c.uin);
 	    if(ic->getServerBased()) {
-#ifdef DEBUG
-		face.log("icq: removing SBC %lu, tag = %lu", ic->getUIN(), ic->getServerSideID());
-#endif
 		ic->setAlias(cc->getnick());
 		ic->setAuthAwait(cc->getbasicinfo().authawait);
 		cli.removeServerBasedContactList(ic);

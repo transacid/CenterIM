@@ -45,7 +45,7 @@ class imcontroller {
 	void ircchannels();
 
 	void icqsynclist();
-	void sendauthorization(vector<icqcontact *> &needauth);
+	void yahoosynclist();
 
     public:
 	imcontroller();

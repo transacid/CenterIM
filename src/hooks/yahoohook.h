@@ -71,6 +71,8 @@ class yahoohook: public abstracthook {
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;
+
+	vector<icqcontact *> getneedsync();
 };
 
 extern yahoohook yhook;
