@@ -169,6 +169,8 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 
 	    if(err != -1 && FD_ISSET(sockfd, &rfds)) {
 		err = read(sockfd, &c, 1);
+		if(!err) err = -1;
+
 		if(err != -1) {
 		    pos = strlen(buf);
 		    buf[pos] = c;
