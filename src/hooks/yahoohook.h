@@ -3,6 +3,7 @@
 
 #include "icqconf.h"
 #include "abstracthook.h"
+#include "centericq.h"
 
 #include "glib.h"
 
@@ -12,9 +13,12 @@ class yahoohook: public abstracthook {
 	    tbdConfLogon
 	};
 
+	vector<pair<Action, string> > tobedone;
+
+	map<string, Encoding> userenc;
+
 	bool fonline, flogged;
 	map<string, vector<string> > confmembers;
-	vector<pair<Action, string> > tobedone;
 	imstatus ourstatus;
 	int cid;
 
@@ -39,6 +43,8 @@ class yahoohook: public abstracthook {
 
 	static struct tm *timestamp();
 	static imstatus yahoo2imstatus(int status);
+
+	string encanalyze(const string &nick, const string &text);
 
 	char **getmembers(const string &room);
 	void userstatus(const string &nick, int st, const string &message, bool away);

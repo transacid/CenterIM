@@ -77,7 +77,7 @@ class icqface {
 	linkedlist workareas;
 
 	bool editdone, mainscreenblock, inited, onlinefolder,
-	    dotermresize, fneedupdate, detailsfetched, inchat;
+	    dotermresize, fneedupdate, detailsfetched, inchat, doredraw;
 
 	int chatlines;
 
@@ -153,6 +153,8 @@ class icqface {
 
 	static void menuidle(verticalmenu &caller);
 	static void dialogidle(dialogbox &caller);
+
+	void redraw();
 
 	void draw();
 	void update();

@@ -11,12 +11,13 @@ class irchook: public abstracthook {
     public:
 	struct channelInfo {
 	    string name;
+	    string passwd;
 	    bool joined, fetched, contactlist;
 
 	    vector<string> nicks;
 
 	    channelInfo(const string &aname):
-		name(aname), joined(false), fetched(false) {}
+		name(aname), joined(false), fetched(false), passwd("") {}
 
 	    bool operator != (const string &aname) const;
 	    bool operator == (const string &aname) const;

@@ -265,7 +265,7 @@ void imcontroller::ircchannels() {
     bool finished = false, success;
     int n, i, b;
     dialogbox db;
-    string name, st;
+    string name, st, passwd;
 
     vector<irchook::channelInfo> channels;
     vector<irchook::channelInfo>::iterator ic;
@@ -278,7 +278,7 @@ void imcontroller::ircchannels() {
 	clr(cp_dialog_highlight), clr(cp_dialog_text)));
 
     db.setbar(new horizontalbar(clr(cp_dialog_text), clr(cp_dialog_selected),
-	_("Add"), _("Remove"), _("Join/leave"), _("Show on the list"), _("Done"), 0));
+	_("Add"), _("Remove"), _("Password"), _("Join/Part"), _("Show"), _("Done"), 0));
 
     channels = irhook.getautochannels();
 
@@ -298,7 +298,7 @@ void imcontroller::ircchannels() {
 	    st = (string) (ic->joined ? _("joined") : _("not joined")) + ", " +
 		(ic->contactlist ? _("shown") : _("hidden"));
 
-	    t.addleaff(i, 0, 0, " %s [%s] ", ic->name.c_str(), st.c_str());
+	    t.addleaff(i, 0, 0, " %s %s [%s] ", ic->name.c_str(), ic->passwd.c_str(), st.c_str());
 	}
 
 	finished = !db.open(n, b, (void **) &i);
@@ -318,20 +318,28 @@ void imcontroller::ircchannels() {
 		break;
 
 	    case 2:
-		if(n > 1) {
+	        if(n > 1) {
+		    passwd = face.inputstr(_("password: "));
 		    ic = channels.begin()+n-2;
-		    ic->joined = !ic->joined;
+                    ic->passwd = passwd;
 		}
 		break;
 
 	    case 3:
 		if(n > 1) {
 		    ic = channels.begin()+n-2;
-		    ic->contactlist = !ic->contactlist;
+		    ic->joined = !ic->joined;
 		}
 		break;
 
 	    case 4:
+		if(n > 1) {
+		    ic = channels.begin()+n-2;
+		    ic->contactlist = !ic->contactlist;
+		}
+		break;
+
+	    case 5:
 		finished = true;
 		irhook.setautochannels(channels);
 		break;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.127 2002/10/04 16:58:52 konst Exp $
+* $Id: centericq.cc,v 1.128 2002/10/28 11:29:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 #include "accountmanager.h"
+#include "imexternal.h"
 
 centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
@@ -558,6 +559,45 @@ void centericq::checkmail() {
 	}
 
 	fsize = st.st_size;
+    }
+}
+
+void centericq::checkconfigs() {
+    static const char *configs[] = {
+	"sounds", "colorscheme", "actions", "external", 0
+    };
+
+    static map<string, time_t> stats;
+    struct stat st;
+    const char *p;
+
+    for(int i = 0; p = configs[i]; i++) {
+	if(stat(conf.getconfigfname(p).c_str(), &st))
+	    st.st_mtime = 0;
+
+	if(stats.find(p) != stats.end()) {
+	    if(st.st_mtime != stats[p]) {
+		switch(i) {
+		    case 0:
+			conf.loadsounds();
+			break;
+		    case 1:
+			conf.loadcolors();
+			face.redraw();
+			break;
+		    case 2:
+			conf.loadactions();
+			break;
+		    case 3:
+			external.load();
+			break;
+		}
+
+		face.log(_("+ the %s configuration was changed, reloaded"), p);
+	    }
+	}
+
+	stats[p] = st.st_mtime;
     }
 }
 
@@ -1269,6 +1309,7 @@ void centericq::exectimers() {
 	*
 	*/
 
+	checkconfigs();
 	conf.checkdiskspace();
 
 	if(!conf.enoughdiskspace()) {
@@ -1294,7 +1335,7 @@ void centericq::exectimers() {
     }
 
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
-	cicq.checkmail();
+	checkmail();
 	timer_checkmail = timer_current;
     }
 
@@ -1422,4 +1463,26 @@ bool ischannel(const imcontact &cont) {
     return
 	(cont.nickname.substr(0, 1) == "#") &&
 	(cont.pname == irc || cont.pname == yahoo);
+}
+
+Encoding guessencoding(const string &text) {
+    if(!conf.getrussian())
+	return encKOI;
+
+    string::const_iterator ic = text.begin();
+    int utf, latin, third;
+
+    utf = latin = 0;
+
+    while(ic != text.end()) {
+	if((unsigned) *ic < 127) latin++; else
+	if((unsigned) *ic < 208) utf++;
+	++ic;
+    }
+
+    third = (int) text.size()/3;
+
+    if(text.size()-latin < third) return encUnknown; else
+    if(text.size()-utf < third) return encUTF; else
+	return encKOI;
 }

@@ -14,6 +14,8 @@
 
 #define HIDL_SOCKEXIT   2
 
+#define DEFAULT_CHARSET "ISO-8859-1"
+
 class centericq {
     public:
 	enum msgmode {
@@ -40,6 +42,9 @@ class centericq {
 	bool checkpasswords();
 	void rereadstatus();
 
+	void checkmail();
+	void checkconfigs();
+
 	string quotemsg(const string &text);
 
 	void setauto(imstatus astatus);
@@ -58,7 +63,6 @@ class centericq {
 	bool updateconf();
 
 	void find();
-	void checkmail();
 
 	icqcontact *addcontact(const imcontact &ic);
 
@@ -85,5 +89,11 @@ string rushtmlconv(const string &tdir, const string &text);
 string ruscrlfconv(const string &tdir, const string &text);
 
 bool ischannel(const imcontact &cont);
+
+enum Encoding {
+    encUTF, encKOI, encUnknown
+};
+
+Encoding guessencoding(const string &text);
 
 #endif

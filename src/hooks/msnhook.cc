@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.38 2002/10/22 11:36:04 konst Exp $
+* $Id: msnhook.cc,v 1.39 2002/10/28 11:29:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,6 @@
 msnhook mhook;
 
 #define TIMESTAMP maketm(d->hour-1, d->minute, d->day, d->month, d->year)
-#define DEFAULT_CHARSET "ISO-8859-1"
 
 msnhook::msnhook() {
     status = offline;

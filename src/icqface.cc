@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.149 2002/10/06 21:12:17 konst Exp $
+* $Id: icqface.cc,v 1.150 2002/10/28 11:29:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -107,7 +107,10 @@ const char *strgroupmode(icqconf::groupmode gmode) {
 
 icqface::icqface() {
     workareas.freeitem = &freeworkareabuf;
-    mainscreenblock = inited = onlinefolder = dotermresize = inchat = false;
+
+    mainscreenblock = inited = onlinefolder = dotermresize =
+	inchat = doredraw = false;
+
     mcontacts = 0;
 }
 
@@ -228,6 +231,7 @@ void icqface::update() {
     showtopbar();
     fillcontactlist();
     fneedupdate = false;
+    if(doredraw) redraw();
 }
 
 int icqface::contextmenu(icqcontact *c) {
@@ -2656,4 +2660,15 @@ void icqface::relaxedupdate() {
 
 bool icqface::updaterequested() {
     return fneedupdate;
+}
+
+void icqface::redraw() {
+    if(!mainscreenblock) {
+	done();
+	init();
+	draw();
+	doredraw = fneedupdate = false;
+    } else {
+	doredraw = fneedupdate = true;
+    }
 }

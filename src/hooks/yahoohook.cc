@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.58 2002/10/15 15:29:43 konst Exp $
+* $Id: yahoohook.cc,v 1.59 2002/10/28 11:29:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,7 +27,6 @@
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "accountmanager.h"
-#include "centericq.h"
 #include "imlogger.h"
 
 extern "C" {
@@ -390,6 +389,11 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
 
 	c->setstatus(yahoo2imstatus(st));
 	c->setabout(rusconv("wk", message));
+
+	if(c->getstatus() == offline) {
+	    map<string, Encoding>::iterator i = userenc.find(nick);
+	    if(i != userenc.end()) userenc.erase(i);
+	}
     }
 }
 
@@ -440,6 +444,20 @@ vector<icqcontact *> yahoohook::getneedsync() {
     }
 
     return r;
+}
+
+string yahoohook::encanalyze(const string &nick, const string &text) {
+    map<string, Encoding>::const_iterator i = userenc.find(nick);
+
+    if(i == userenc.end() || userenc[nick] == encUnknown)
+	userenc[nick] = guessencoding(text);
+
+    switch(yhook.userenc[nick]) {
+	case encUTF: return siconv(text, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
+	default: return rushtmlconv("wk", text);
+    }
+
+    return text;
 }
 
 // ----------------------------------------------------------------------------
@@ -512,7 +530,9 @@ void yahoohook::status_changed(guint32 id, char *who, int stat, char *msg, int a
 
 void yahoohook::got_im(guint32 id, char *who, char *msg, long tm, int stat) {
     imcontact ic(who, yahoo);
-    string text = rushtmlconv("wk", cuthtml(msg, true));
+    string text = cuthtml(msg, true);
+
+    text = yhook.encanalyze(who, text);
 
     if(!text.empty()) {
 	em.store(immessage(ic, imevent::incoming, text));
@@ -597,14 +617,13 @@ void yahoohook::conf_userleave(guint32 id, char *who, char *room) {
 void yahoohook::conf_message(guint32 id, char *who, char *room, char *msg) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
 
-    string text = rushtmlconv("wk", who) + ": " + rushtmlconv("wk", cuthtml(msg, true));
+    string text = (string) who + ": " + cuthtml(msg, true);
+    text = yhook.encanalyze(who, text);
+
     if(c) em.store(immessage(c, imevent::incoming, text));
 }
 
 void yahoohook::got_file(guint32 id, char *who, char *url, long expires, char *msg, char *fname, long fesize) {
-#ifdef DEBUG
-    face.log("got_file");
-#endif
 }
 
 void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
@@ -636,9 +655,6 @@ void yahoohook::typing_notify(guint32 id, char *who, int stat) {
 }
 
 void yahoohook::game_notify(guint32 id, char *who, int stat) {
-#ifdef DEBUG
-    face.log("game_notify");
-#endif
 }
 
 void yahoohook::mail_notify(guint32 id, char *from, char *subj, int cnt) {
@@ -662,13 +678,7 @@ void yahoohook::error(guint32 id, char *err, int fatal) {
 }
 
 void yahoohook::add_input(guint32 id, int fd) {
-#ifdef DEBUG
-    face.log("add_input");
-#endif
 }
 
 void yahoohook::remove_input(guint32 id, int fd) {
-#ifdef DEBUG
-    face.log("remove_input");
-#endif
 }

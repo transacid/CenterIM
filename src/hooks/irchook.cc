@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.52 2002/10/06 21:12:18 konst Exp $
+* $Id: irchook.cc,v 1.53 2002/10/28 11:29:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -356,7 +356,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	    }
 
 	    if(!ic->joined) {
-		firetalk_chat_join(handle, room.c_str());
+		firetalk_chat_join(handle, room.c_str(), ic->passwd.c_str());
 		ready = false;
 	    }
 
@@ -535,7 +535,7 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 	if(iac->joined) {
 	    r = ic == channels.end();
 	    if(!r) r = !ic->joined;
-	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str());
+	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str(), iac->passwd.c_str());
 	}
 
 	if(iac->contactlist) {
@@ -566,8 +566,9 @@ void irchook::saveconfig() const {
 	f << "name\t" << ircname << endl;
 
 	for(ic = savech.begin(); ic != savech.end(); ++ic)
-	    f << "channel\t" << ic->name
+	  f << "channel\t" << ic->name 
 		<< "\t" << (ic->joined ? "1" : "0")
+		<< "\t" << (ic->passwd == "" ? "0\t" : "1\t") << ic->passwd
 		<< endl;
 
 	f.close();
@@ -591,6 +592,7 @@ void irchook::loadconfig() {
 	    if(param == "channel") {
 		channels.push_back(channelInfo(getword(buf)));
 		channels.back().joined = (getword(buf) == "1");
+		if (getword(buf) == "1") channels.back().passwd = (getword(buf)); else channels.back().passwd = "";
 		channels.back().contactlist = clist.get(imcontact(channels.back().name, irc));
 	    }
 	}
@@ -740,7 +742,7 @@ void irchook::connected(void *conn, void *cli, ...) {
 
     for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ++ic) {
 	if(ic->joined) {
-	    firetalk_chat_join(irhook.handle, ic->name.c_str());
+	    firetalk_chat_join(irhook.handle, ic->name.c_str(), ic->passwd.c_str());
 	}
     }
 
