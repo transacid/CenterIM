@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.4 2001/08/18 07:30:43 konst Exp $
+* $Id: kkstrtext.cc,v 1.5 2001/10/23 17:16:59 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -298,6 +298,43 @@ char *strccat(char *dest, char c) {
     return dest;
 }
 
+vector<int> getquotelayout(const string haystack, const string qs, const string aescs) {
+    vector<int> r;
+    string needle, escs;
+    int pos, prevpos, curpos;
+    char cchar, qchar, prevchar;
+
+    qchar = 0;
+    curpos = prevpos = 0;
+    escs = (qs == aescs) ? "" : aescs;
+    needle = qs + escs;
+
+    while((pos = haystack.substr(curpos).find_first_of(needle)) != -1) {
+	curpos += pos;
+	cchar = *(haystack.begin()+curpos);
+
+	if(escs.find(cchar) != -1) {
+	    if(qchar)
+	    if(prevpos == curpos-1)
+	    if(escs.find(prevchar) != -1) {
+		// Neutralize previous esc char
+		cchar = 0;
+	    }
+	} else if(qs.find(cchar) != -1) {
+	    if(escs.find(prevchar) == -1) {
+		// Wasn't an escape
+		qchar = qchar ? 0 : cchar;
+		r.push_back(curpos);
+	    }
+	}
+
+	prevpos = curpos++;
+	prevchar = cchar;
+    }
+
+    return r;
+}
+
 #define CHECKESC(curpos, startpos, esc) \
     if(curpos > startpos+1) \
     if(strchr(esc, *(curpos-1))) \
@@ -321,7 +358,7 @@ const char *accept, const char *q, const char *esc = "") {
     while(p = strpbrk(p, cset)) {
 	if(strchr(q, *p)) {
 	    CHECKESC(p, s, esc);
-	    
+
 	    if(!qchar) {
 		qchar = *p;
 	    } else {

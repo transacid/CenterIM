@@ -66,6 +66,9 @@ bool iswholeword(const string s, int so, int eo);
 
 int hex2int(const string ahex);
 
+vector<int> getquotelayout(const string haystack, const string qs,
+    const string aescs);
+
 __KTOOL_BEGIN_C
 
 int kwordcount(const char *strin, const char *delim);
