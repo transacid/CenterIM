@@ -181,7 +181,7 @@ public:
         } 
         else if (inv == NULL)
         {
-            printf("Very odd - just got a %s out of mid-air...\n", command.c_str()); 
+//            printf("Very odd - just got a %s out of mid-air...\n", command.c_str()); 
         }
         else if (command == "ACCEPT")
         {
@@ -191,7 +191,7 @@ public:
         {
             inv->invitationWasCanceled(body);
         } else {
-            printf("Argh, don't support %s yet!\n", command.c_str());
+//            printf("Argh, don't support %s yet!\n", command.c_str());
         }
     }
     
