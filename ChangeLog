@@ -1163,3 +1163,37 @@ MSN contact-lists synchronization feature was added.
 The "Prev" button was added to the event view dialog in the history
 browsing mode, so that it's possible to navigate the history in both
 directions.
+
+4.8.5
+-----
+
+Fixed a bug that made all the yahoo, msn and irc contacts have female
+gender.
+
+A cosmetic bug was fixed. It used to appear on attempts to send SMSes.
+Nickname shown on the list changed to UIN and then quickly back to the
+nick.
+
+IRC "version" requests now answers with the correct value of the version
+of centericq being used.
+
+IRC ping command was added. Possible to be invoked from the context (f2)
+menu for any IRC contact who is online.
+
+It's now possible to change MSN friendly nick from the "Account manager"
+dialog.
+
+For IRC channels there is now a possibility to join or leave them from
+the f2 menu without a need to go to the "Channel manager" dialog.
+Pressing "?" on a channel item shows the list of channel users.
+
+File transfers in IRC were implemented.
+
+A small change in the local mailbox check mechanism. New messages
+announced now only if the mailbox grown, to avoid announcements when
+some messages get deleted.
+
+A patch to get rid of recently appeared problems with AIM was applied.
+Thanks to MP <centericq@blackcore.net>. Yeah, I'm fond of the open
+source development principle.
+
