@@ -599,7 +599,7 @@ void texteditor::sethlcolor(int n) {
     colors.difcolors.end())
 	at = !at;
 
-    attrset(at ? boldcolor(n) : color(n));
+    attrset(at ? boldcolor(n) : normalcolor(n));
 }
 
 void texteditor::draw_print(char *buf, int bcolor, int distance) {

@@ -25,8 +25,8 @@
 
 /* Fucking ncurses stuff */
 
-#define boldcolor(c)    COLOR_PAIR(c)|A_BOLD
-#define color(c)        COLOR_PAIR(c)
+#define boldcolor(c)		COLOR_PAIR(c)|A_BOLD
+#define normalcolor(c)		COLOR_PAIR(c)
 
 #ifdef LOCALES_HACK
 #define KT_DISP_FILTER(c)       ( ((c > ' ') && (c != '\177')) ? c : ' ' )
