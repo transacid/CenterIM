@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.15 2002/07/03 14:38:56 konst Exp $
+* $Id: cmenus.cc,v 1.16 2002/10/04 17:00:19 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -220,7 +220,6 @@ void verticalmenu::scale() {
 }
 
 int verticalmenu::open() {
-    bool finished = false;
     int go, k;
 
     if(!window.empty()) window.open();
@@ -230,6 +229,8 @@ int verticalmenu::open() {
     kgotoxy(x1, y1+curelem-firstdisp);
     if(clearonfocuslost && curelem >= 0)
 	shownelem(curelem, 1);
+
+    finished = false;
 
     while(!finished) {
 	if(idle) go = keypressed(); else go = 1;

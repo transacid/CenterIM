@@ -133,6 +133,9 @@ void fileselector::exec() {
 			} else {
 			    setdcurrent = justfname(di.dirname.substr(0,
 				di.dirname.size()-1));
+
+			    chdir("..");
+			    dcurrent = getcwd(buf, 511);
 			}
 		    } else {
 			dhist.push_back(di);
@@ -150,7 +153,8 @@ void fileselector::exec() {
 
     if(options & FSEL_CHROOT) {
 	for(is = selected.begin(); is != selected.end(); is++) {
-	    is->erase(0, spoint.size());
+	    if(is->substr(0, spoint.size()) == spoint)
+		is->erase(0, spoint.size());
 	}
     }
 }

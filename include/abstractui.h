@@ -10,7 +10,7 @@ __KTOOL_BEGIN_NAMESPACE
 class abstractuicontrol {
     protected:
 	screenarea screenbuffer;
-	bool fisopen;
+	bool fisopen, finished;
 
     public:
 	bool emacs;
@@ -24,6 +24,7 @@ class abstractuicontrol {
 
 	virtual void redraw();
 	virtual void close();
+	virtual void abort();
 
 	bool isopen();
 };

@@ -115,7 +115,6 @@ class horizontalmenu: public abstractuicontrol {
     protected:
 	vector<horizontalmenuitem> menus;
 	int ncolor, scolor, fcolor, coordy, coordx, selected;
-	bool finished;
 
 	static int menu_otherkeys(verticalmenu &ref, int k);
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui abstract ui control class
-* $Id: abstractui.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
+* $Id: abstractui.cc,v 1.5 2002/10/04 17:00:18 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@ abstractuicontrol::abstractuicontrol(const abstractuicontrol &a) {
     int i;
 
     fisopen = a.fisopen;
+    finished = a.finished;
     emacs = a.emacs;
     x1 = a.x1;
     x2 = a.x2;
@@ -57,4 +58,8 @@ void abstractuicontrol::close() {
 
 bool abstractuicontrol::isopen() {
     return fisopen;
+}
+
+void abstractuicontrol::abort() {
+    finished = true;
 }
