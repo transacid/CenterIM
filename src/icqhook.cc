@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.12 2001/10/03 10:43:23 konst Exp $
+* $Id: icqhook.cc,v 1.13 2001/10/03 21:23:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -641,7 +641,7 @@ void icqhook::exectimers() {
 	if((timer_current-timer_ack > PERIOD_DISCONNECT) || (n_keepalive > 3)) {
 	    icq_Logout(&icql);
 	    icq_Disconnect(&icql);
-	    disconnected(&icql);
+	    ildisconnected(&icql);
 	}
     } else {
 	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
