@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.81 2003/09/26 07:13:24 konst Exp $
+* $Id: yahoohook.cc,v 1.82 2003/09/28 12:56:02 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -105,11 +105,23 @@ void yahoohook::init() {
     c.ext_yahoo_add_handler = &add_handler;
     c.ext_yahoo_remove_handler = &remove_handler;
     c.ext_yahoo_connect_async = &connect_async;
-
-    bool lts, lo, lt;
-    conf.getlogoptions(lts, lo, lt);
-    if(lt)
-	c.ext_yahoo_typing_notify = &typing_notify;
+    c.ext_yahoo_got_identities = &got_identities;
+    c.ext_yahoo_got_ignore = &got_ignore;
+    c.ext_yahoo_got_cookies = &got_cookies;
+    c.ext_yahoo_chat_cat_xml = &chat_cat_xml;
+    c.ext_yahoo_chat_join = &chat_join;
+    c.ext_yahoo_chat_userjoin = &chat_userjoin;
+    c.ext_yahoo_chat_userleave = &chat_userleave;
+    c.ext_yahoo_chat_message = &chat_message;
+    c.ext_yahoo_rejected = &rejected;
+    c.ext_yahoo_typing_notify = &typing_notify;
+    c.ext_yahoo_got_webcam_image = &got_webcam_image;
+    c.ext_yahoo_webcam_invite = &webcam_invite;
+    c.ext_yahoo_webcam_invite_reply = &webcam_invite_reply;
+    c.ext_yahoo_webcam_closed = &webcam_closed;
+    c.ext_yahoo_webcam_viewer = &webcam_viewer;
+    c.ext_yahoo_webcam_data_request = &webcam_data_request;
+    c.ext_yahoo_log = &log;
 
     yahoo_register_callbacks(&c);
 }
@@ -754,6 +766,9 @@ void yahoohook::got_buddies(int id, YList *buds) {
 	clist.addnew(imcontact(*in, yahoo), false);
 }
 
+void yahoohook::got_identities(int id, YList *buds) {
+}
+
 void yahoohook::status_changed(int id, char *who, int stat, char *msg, int away) {
     yhook.userstatus(who, stat, msg ? msg : "", (bool) away);
 }
@@ -889,6 +904,11 @@ void yahoohook::contact_added(int id, char *myid, char *who, char *msg) {
 }
 
 void yahoohook::typing_notify(int id, char *who, int stat) {
+    bool lts, lo, lt;
+    conf.getlogoptions(lts, lo, lt);
+
+    if(!lt) return;
+
     icqcontact *c = clist.get(imcontact(who, yahoo));
     static map<string, int> st;
 
@@ -997,6 +1017,52 @@ void yahoohook::connect_complete(void *data, int source, yahoo_input_condition c
 
     ccd->callback(source, error, ccd->callback_data);
     free(ccd);
+}
+
+void yahoohook::got_ignore(int id, YList * igns) {
+}
+
+void yahoohook::got_cookies(int id) {
+}
+
+void yahoohook::chat_cat_xml(int id, char *xml) {
+}
+
+void yahoohook::chat_join(int id, char *room, char *topic, YList *members) {
+}
+
+void yahoohook::chat_userjoin(int id, char *room, struct yahoo_chat_member *who) {
+}
+
+void yahoohook::chat_userleave(int id, char *room, char *who) {
+}
+
+void yahoohook::chat_message(int id, char *who, char *room, char *msg, int msgtype, int utf8) {
+}
+
+void yahoohook::rejected(int id, char *who, char *msg) {
+}
+
+void yahoohook::got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
+}
+
+void yahoohook::webcam_invite(int id, char *from) {
+}
+
+void yahoohook::webcam_invite_reply(int id, char *from, int accept) {
+}
+
+void yahoohook::webcam_closed(int id, char *who, int reason) {
+}
+
+void yahoohook::webcam_viewer(int id, char *who, int connect) {
+}
+
+void yahoohook::webcam_data_request(int id, int send) {
+}
+
+int yahoohook::log(char *fmt, ...) {
+    return 0;
 }
 
 #endif

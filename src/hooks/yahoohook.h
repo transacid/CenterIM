@@ -45,6 +45,7 @@ class yahoohook: public abstracthook {
 
 	static void login_response(int id, int succ, char *url);
 	static void got_buddies(int id, YList *buds);
+	static void got_identities(int id, YList *ids);
 	static void status_changed(int id, char *who, int stat, char *msg, int away);
 	static void got_im(int id, char *who, char *msg, long tm, int stat, int utf8);
 	static void got_conf_invite(int id, char *who, char *room, char *msg, YList *members);
@@ -59,6 +60,22 @@ class yahoohook: public abstracthook {
 	static void mail_notify(int id, char *from, char *subj, int cnt);
 	static void system_message(int id, char *msg);
 	static void error(int id, char *err, int fatal);
+	static void got_ignore(int id, YList * igns);
+	static void got_cookies(int id);
+	static void chat_cat_xml(int id, char *xml);
+	static void chat_join(int id, char *room, char *topic, YList *members);
+	static void chat_userjoin(int id, char *room, struct yahoo_chat_member *who);
+	static void chat_userleave(int id, char *room, char *who);
+	static void chat_message(int id, char *who, char *room, char *msg, int msgtype, int utf8);
+	static void rejected(int id, char *who, char *msg);
+	static void got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
+	static void webcam_invite(int id, char *from);
+	static void webcam_invite_reply(int id, char *from, int accept);
+	static void webcam_closed(int id, char *who, int reason);
+	static void webcam_viewer(int id, char *who, int connect);
+	static void webcam_data_request(int id, int send);
+	static int log(char *fmt, ...);
+
 	static void add_handler(int id, int fd, yahoo_input_condition cond, void *data);
 	static void remove_handler(int id, int fd);
 	static int connect_async(int id, char *host, int port, yahoo_connect_callback callback, void *data);
