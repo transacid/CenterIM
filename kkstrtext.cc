@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.29 2002/10/04 17:00:19 konst Exp $
+* $Id: kkstrtext.cc,v 1.30 2002/11/18 16:33:26 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -137,7 +137,7 @@ string unmime(const string &text) {
     char *buf = new char[text.size()+1];
     strcpy(buf, text.c_str());
     r = unmime(buf);
-    delete buf;
+    delete[] buf;
     return r;
 }
 
@@ -145,7 +145,7 @@ string mime(const string &text) {
     string r;
     char *buf = new char[text.size()*3+1];
     r = mime(buf, text.c_str());
-    delete buf;
+    delete[] buf;
     return r;
 }
 
