@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.121 2003/07/23 23:21:03 konst Exp $
+* $Id: icqdialogs.cc,v 1.122 2003/07/24 16:31:32 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1134,7 +1134,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
-	t.addleaff(i, 0, 24, _(" HTTP server : %s "), http.c_str());
+	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), http.c_str());
 	t.addleaff(i, 0, 21, _(" Enable peer-to-peer communications : %s "), stryesno(ptp));
 
 	if(ptp)
@@ -1229,8 +1229,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 23: emacs = !emacs; break;
 		    case 24:
-			tmp = inputstr(_("HTTP server hostname: "), http);
-			if(!tmp.empty()) http = tmp;
+			http = inputstr(_("HTTP proxy server hostname: "), http);
 			break;
 		}
 		break;
@@ -1263,7 +1262,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		}
 
 		conf.setsmtphost(smtp);
-		conf.sethttphost(smtp);
+		conf.sethttphost(http);
 		conf.save();
 		break;
 	}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.110 2003/07/23 23:21:03 konst Exp $
+* $Id: icqconf.cc,v 1.111 2003/07/24 16:31:32 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1032,11 +1032,6 @@ void icqconf::sethttphost(const string &ahttphost) {
 	    httphost = ahttphost;
 	    httpport = 8080;
 	}
-    }
-
-    if(httphost.empty() || !httpport) {
-	httphost = getsmtphost();
-	httpport = getsmtpport();
     }
 }
 
