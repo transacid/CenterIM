@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.8 2002/04/04 07:24:20 konst Exp $
+* $Id: kkiproc.cc,v 1.9 2002/07/06 15:16:59 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,6 +26,11 @@
 
 #include <sys/ioctl.h>
 #include <signal.h>
+
+#ifdef __sun__
+#include <sys/termio.h>
+#include <sys/filio.h>
+#endif
 
 void detach(char *logfile) {
     if(logfile) freopen(logfile, "w", stdout);
