@@ -83,7 +83,7 @@ than just splitting the screen into two windows, one with contact list
 and another with usual mICQ output :) Actually it was all based on mICQ
 code. I don't wanna say mICQ was bad, for it was the first ICQ client
 for Linux, and its author made a great job exploring and sniffing the
-ICQ protocol.
+protocol.
 
   After looking at freshmeat and some "icq for linux" pages the hope to
 find something worth was finally lost. I decided to put some effort into
@@ -105,10 +105,10 @@ that Mirabilis client have. Now it's one of the most full-featured
 clients for UNIX.
 
   Beside simple things like sending and receiving messages, changing
-online status and basic user information, centericq has such advanced
-features like "White pages" search, an ability to update almost all the
-fields in user's details, send URL, files, contacts, etc. I hope you
-enjoy it a lot :)
+online status and basic user information, centericq advanced features
+such as "White pages" search, an ability to update almost all the fields
+in user's details, send URL, files, contacts, etc. I hope you enjoy it a
+lot :)
 
 
 2. UIN registration
@@ -411,20 +411,72 @@ groups".
 7. Sending and receiving events
 -------------------------------
 
+  Sending and receiving events is what ICQ and all the instant messaging
+are all about. The concept itself means an ability to stay in touch by
+delivering messages of various kind immediately.
+
+
 7.1. Messages
 -------------
+
+  The most common type of events. It takes the ICQ network about one
+second to deliver one. Messages can be sent either through server or
+directly through a TCP link. Size of a message sent through server
+cannot exceed 450 characters, while size of direct messages is
+unlimited. In case centericq cannot establish a direct link or you have
+the "sent all events through server" option enabled, a message is
+automatically split into several parts.
+
+  To send a message just press "Enter" on a contact. Then type and press
+"Ctrl-X" to send it. To cancel the message press ESC (twice).
+
 
 7.2. URLs
 ---------
 
+  Though you can send URLs with regular messages the Mirabilis guys
+decided to make a separate event for it. No problem, centericq supports
+URL events. An URL message consists of two parts, they're an URL itself
+and a description. Well, nothing else to say about it. Except maybe a
+wish for future version of the protocol to support e-mail addresses and
+host names as separate events :)
+
+
 7.3. Contacts
 -------------
+
+  A good feature of ICQ is users' ability to exchange parts of their
+contact lists with each other. To make it possible events of "contact"
+type are used.
+
+  On executing this action with either the context menu or with 'c'
+hotkey, a contact selection dialog appears. Select contacts to send with
+"Space", finish selection with "Enter".
+
 
 7.4. Files
 ----------
 
+  To send or receive files over the ICQ network, centericq must have an
+ability to establish a direct TCP connection from side of a sender to
+receiver. Unfortunatelly there is no way to use the server for this ;)
+
+  Sending files with centericq is also simple. Just activate the
+appropriate menu item and select files to send. Voila. If something goes
+wrong, the program will tell you by displaying a message in the log
+window.
+
+
 7.5. Events history
 -------------------
+
+  All of events sent and received with centericq are held in its
+database. It's very simple to access history of events you exchanged
+with a particular user. You should only select the "Events history" item
+of the context menu. Then, if at least one event is there, you'll be
+shown a list every item of which can be read, replied or forwarded to
+someone.
+
 
 8. Ignore, visible and invisible lists
 --------------------------------------
