@@ -1602,16 +1602,13 @@ void yahoo_add_buddy(guint32 id, char *who, char *group)
 	yahoo_packet_free(pkt);
 
 
-#if 0
 	/* maybe this should come in the response to this call */
 	{
 	int buddycnt;
-	struct yahoo_buddy **tmp_buddylist;
-	struct yahoo_buddy *bud;
-
+	struct yahoo_buddy **tmp_buddylist, **budd, *bud;
 	
 	/* count number of buddies in this list */
-	for (bud = yd->buddies; bud && *bud; bud++)
+	for (buddycnt = 0, budd = yd->buddies; *budd; budd++)
 		buddycnt++;
 	buddycnt++;     /* one more */
 
@@ -1622,23 +1619,19 @@ void yahoo_add_buddy(guint32 id, char *who, char *group)
 	/* Free and copy the old one if necessary */
 	if (yd->buddies)
 	{
-		memcpy(tmp_buddylist, yd->buddies,
-			(tmp_buddycnt + 1) * 
-			sizeof(struct yahoo_buddy *));
-
+		memcpy(tmp_buddylist, yd->buddies, (buddycnt + 1) * sizeof(struct yahoo_buddy *));
 		g_free(yd->buddies);
 	}
+
 	yd->buddies = tmp_buddylist;
 
 	bud = g_new0(struct yahoo_buddy, 1);
-	bud->id = strdup(*who);
+	bud->id = strdup(who);
 	bud->group = strdup(group);
 	bud->real_name = NULL;
-	yd->buddies[buddycnt++] = bud;
-
+	yd->buddies[buddycnt-1] = bud;
 	yd->buddies[buddycnt] = NULL;
 	}
-#endif
 }
 
 void yahoo_remove_buddy(guint32 id, char *who, char *group)
@@ -1657,23 +1650,28 @@ void yahoo_remove_buddy(guint32 id, char *who, char *group)
 	yahoo_send_packet(yd, pkt, 0);
 	yahoo_packet_free(pkt);
 
-#if 0
 	/* maybe this has to come in the response to this call */
 	{
-	struct yahoo_buddy **buddy;
+	struct yahoo_buddy **buddy, *tbud;
 
 	for(buddy = yd->buddies; *buddy; buddy++) {
 		struct yahoo_buddy *bud = *buddy;
-		if(!strcmp(bud->id, who)) {
+		if(!strcmp(bud->id, who) && !strcmp(bud->group, group)) {
+			g_free(bud->id);
+			g_free(bud->group);
+			g_free(bud->real_name);
 			g_free(bud);
-			for(buddy++; *buddy; buddy++)
-				*(buddy - 1) = *buddy;
-			*buddy = NULL;
+
+			while(*(buddy+1)) {
+			    *buddy = *(buddy+1);
+			    buddy++;
+			}
+
+			*buddy = 0;
 			break;
 		}
 	}
 	}
-#endif
 }
 
 void yahoo_conference_addinvite(guint32 id, char *who, char *room, char *msg)
