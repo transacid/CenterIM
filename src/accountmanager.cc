@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.40 2005/01/23 13:21:46 konst Exp $
+* $Id: accountmanager.cc,v 1.41 2005/01/24 00:23:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -138,12 +138,17 @@ void accountmanager::exec() {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 
 		} else {
-#ifdef HAVE_GPGME
-		    if(capab.count(hookcapab::pgp))
+		#ifdef HAVE_GPGME
+		    if(capab.count(hookcapab::pgp)) {
 			t.addleaff(n, 0, citem+15, _(" OpenPGP key: %s "),
 			    account.additional["pgpkey"].empty() ? "none"
 				: account.additional["pgpkey"].c_str());
-#endif
+
+			if(!account.additional["pgpkey"].empty())
+			    t.addleaff(n, 0, citem+16, _(" Key passphrase: %s"),
+				string(account.additional["pgppass"].size(), '*').c_str());
+		    }
+		#endif
 
 		    if(capab.count(hookcapab::changedetails))
 			t.addnode(n, 0, citem+7,
@@ -270,6 +275,12 @@ void accountmanager::exec() {
 
 		case 15:
 		    face.selectpgpkey(account.additional["pgpkey"], true);
+		    break;
+
+		case 16:
+		    tmp = face.inputstr(_("PGP key passphrase: "), account.additional["pgppass"], '*');
+		    if(face.getlastinputkey() != KEY_ESC)
+			account.additional["pgppass"] = tmp;
 		    break;
 	    }
 

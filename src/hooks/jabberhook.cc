@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.77 2005/01/23 13:21:46 konst Exp $
+* $Id: jabberhook.cc,v 1.78 2005/01/24 00:23:31 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -599,9 +599,10 @@ void jabberhook::setjabberstatus(imstatus st, string msg) {
 #ifdef HAVE_GPGME
 
     if(!add["pgpkey"].empty()) {
+	pgp.clearphrase(proto);
 	xmlnode sign = xmlnode_insert_tag(x, "x");
 	xmlnode_put_attrib(sign, "xmlns", "jabber:x:signed");
-	xmlnode_insert_cdata(sign, pgp.sign(msg, add["pgpkey"]).c_str(), (unsigned) -1);
+	xmlnode_insert_cdata(sign, pgp.sign(msg, add["pgpkey"], proto).c_str(), (unsigned) -1);
     }
 
 #endif
@@ -914,8 +915,8 @@ void jabberhook::postlogin() {
     ourstatus = available;
     time(&timer_keepalive);
 
-    setautostatus(jhook.manualstatus);
     log(logLogged);
+    setautostatus(jhook.manualstatus);
     face.update();
 
     for(i = 0; i < clist.count; i++) {
@@ -1087,7 +1088,7 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
     if(c) {
 	if(!enc.empty()) {
 	    c->setusepgpkey(true);
-	    if(pgp.enabled(ic)) body = pgp.decrypt(enc);
+	    if(pgp.enabled(ic)) body = pgp.decrypt(enc, proto);
 		else c->setusepgpkey(false);
 	} else {
 	    c->setusepgpkey(false);

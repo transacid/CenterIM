@@ -3,9 +3,13 @@
 #ifdef HAVE_GPGME
 
 #include "icqconf.h"
+#include "icqface.h"
 #include "abstracthook.h"
 
 impgp pgp;
+
+protocolname impgp::opname;
+string impgp::passphrase[];
 
 impgp::impgp() {
     if(gpgme_new(&ctx))
@@ -50,7 +54,28 @@ vector<string> impgp::getkeys(bool secretonly) {
     return r;
 }
 
-string impgp::sign(const string &text, const string &keyid) {
+gpgme_error_t impgp::passphrase_cb(void *hook, const char *uidhint,
+const char *info, int prevbad, int fd) {
+    if(!prevbad) {
+	if(passphrase[opname].empty())
+	    passphrase[opname] = conf.getourid(opname).additional["pgppass"];
+
+	if(passphrase[opname].empty())
+	    passphrase[opname] = face.inputstr(_("PGP passphrase required: "), "", '*');
+
+    } else {
+	face.log((string) "+ [" + conf.getprotocolname(opname) + "] " + _("incorrect PGP passphrase"));
+	gethook(opname).disconnect();
+	return GPG_ERR_CANCELED;
+    }
+
+    write(fd, passphrase[opname].c_str(), passphrase[opname].size());
+    write(fd, "\n", 1);
+
+    return 0;
+}
+
+string impgp::sign(const string &text, const string &keyid, protocolname pname) {
     gpgme_data_t in, out;
     gpgme_key_t key;
     string r;
@@ -60,6 +85,8 @@ string impgp::sign(const string &text, const string &keyid) {
 	gpgme_set_protocol(ctx, GPGME_PROTOCOL_OpenPGP);
 	gpgme_set_textmode(ctx, 0);
 	gpgme_set_armor(ctx, 1);
+	gpgme_set_passphrase_cb(ctx, &passphrase_cb, 0);
+	opname = pname;
 
 	if(!gpgme_get_key(ctx, keyid.c_str(), &key, 1)) {
 	    gpgme_signers_clear(ctx);
@@ -113,13 +140,7 @@ string impgp::verify(string sign, const string &orig) {
     return r;
 }
 
-gpgme_error_t impgp::passphrase_cb(void *hook, const char *uidhint,
-const char *info, int prevbad, int fd) {
-    cout << info << endl;
-    return 0;
-}
-
-string impgp::decrypt(string text) {
+string impgp::decrypt(string text, protocolname pname) {
     string r;
     gpgme_data_t in, out;
     gpgme_key_t key;
@@ -129,6 +150,7 @@ string impgp::decrypt(string text) {
     if(ctx) {
 	text = "-----BEGIN PGP MESSAGE-----\n\n" + text + "\n-----END PGP MESSAGE-----\n";
 	gpgme_set_passphrase_cb(ctx, &passphrase_cb, 0);
+	opname = pname;
 
 	if(!gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0)) {
 	    if(!gpgme_data_new(&out)) {
@@ -199,6 +221,10 @@ bool impgp::enabled(const imcontact &ic) const {
     }
 
     return r;
+}
+
+void impgp::clearphrase(protocolname p) {
+    passphrase[p] = "";
 }
 
 void impgp::strip(string &r) {
