@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.10 2001/12/03 18:16:52 konst Exp $
+* $Id: icqhook.cc,v 1.11 2001/12/03 23:07:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -179,10 +179,12 @@ bool icqhook::enabled() const {
 }
 
 unsigned long icqhook::sendmessage(const icqcontact *c, const string text) {
+    NormalMessageEvent *sv;
+
     if(c->getstatus() != offline) {
 	Contact ic(c->getdesc().uin);
-	NormalMessageEvent sv(&ic, rusconv("kw", text));
-	cli.SendEvent(&sv);
+	sv = new NormalMessageEvent(&ic, rusconv("kw", text));
+	cli.SendEvent(sv);
 	return 1;
     }
 
