@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.107 2003/04/18 19:08:06 konst Exp $
+* $Id: icqdialogs.cc,v 1.108 2003/05/04 22:12:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -982,8 +982,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool finished, success;
     int nopt, n, i, b, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
     string tmp, phidden;
-
     string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
+    protocolname pname;
 
     bool quote = conf.getquote();
     bool rus = conf.getrussian();
@@ -993,7 +993,6 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool mailcheck = conf.getmailcheck();
     bool makelog = conf.getmakelog();
     bool askaway = conf.getaskaway();
-    bool chatmode = conf.getchatmode();
     bool bidi = conf.getbidi();
     bool emacs = conf.getemacs();
 
@@ -1005,6 +1004,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool ptp = ptpmax;
 
     icqconf::groupmode gmode = conf.getgroupmode();
+
+    bool chatmode[protocolname_size];
+    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	chatmode[pname] = conf.getchatmode(pname);
 
     dialogbox db;
 
@@ -1042,7 +1045,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     #ifdef USE_FRIBIDI
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
     #endif
- 	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
+	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
@@ -1053,7 +1056,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
 	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno(askaway));
-	t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno(chatmode));
+
+	tmp = "";
+	for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	    if(chatmode[pname])
+		tmp += conf.getprotocolname(pname) + " ";
+
+	t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -1109,7 +1118,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
-		    case 16: chatmode = !chatmode; break;
+		    case 16: selectchatmode(chatmode); break;
 		    case 17:
 			gmode =
 			    gmode == icqconf::group1 ? icqconf::group2 :
@@ -1155,7 +1164,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setrussian(rus);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
-		conf.setchatmode(chatmode);
+
+		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		    conf.setchatmode(pname, chatmode[pname]);
+
 		conf.setbidi(bidi);
 		conf.setlogoptions(logtimestamps, logonline, logtyping);
 
@@ -1178,6 +1190,59 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     return success;
 }
+
+void icqface::selectchatmode(bool chatmode[]) {
+    static int saveelem = 0;
+    int i, protmax;
+    bool r, finished = false;
+
+    protocolname pname;
+    icqconf::imaccount ia;
+    protocolname tempchatmode[protocolname_size];
+
+    i = 0;
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	ia = conf.getourid(pname);
+	if(!ia.empty()) {
+	    tempchatmode[i++] = pname;
+	}
+    }
+    protmax = i;
+
+    vector<imstatus> mst;
+    vector<imstatus>::iterator im;
+
+    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-9, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
+
+    m.idle = &menuidle;
+    m.otherkeys = &multiplekeys;
+    m.setpos(saveelem);
+
+    while(!finished) {
+	saveelem = m.getpos();
+	m.clear();
+
+	for(i = 0; i < protmax; i++)
+	    m.additemf(0, i, "[%c] %s", chatmode[tempchatmode[i]] ? 'x' : ' ',
+		conf.getprotocolname(tempchatmode[i]).c_str());
+
+	m.scale();
+	m.setpos(saveelem);
+
+	switch(m.open()) {
+	    case -2:
+		chatmode[tempchatmode[m.getpos()]] = !chatmode[tempchatmode[m.getpos()]];
+		break;
+
+	    default:
+		finished = true;
+		break;
+	}
+    }
+
+    m.close();
+}               
 
 int icqface::editaboutkeys(texteditor &e, int k) {
     switch(k) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.154 2003/01/19 00:52:03 konst Exp $
+* $Id: centericq.cc,v 1.155 2003/05/04 22:12:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -339,9 +339,8 @@ void centericq::mainloop() {
 
 	    case ACT_MSG:
 	    case 0:
-		if(conf.getchatmode()) {
+		if(conf.getchatmode(c->getdesc().pname)) {
 		    face.chat(c->getdesc());
-
 		} else {
 		    if(c->getmsgcount()) {
 			readevents(c->getdesc());

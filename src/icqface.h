@@ -131,6 +131,7 @@ class icqface {
 	void selectlanguage(unsigned short &f);
 	void selectagerange(ICQ2000::AgeRange &r);
 	void selectrandomgroup(unsigned short &f);
+	void selectchatmode(bool chatmode[]);
 
 	void workarealine(int l, chtype c = HLINE);
 

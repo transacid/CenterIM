@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.44 2003/04/22 22:46:16 konst Exp $
+* $Id: jabberhook.cc,v 1.45 2003/05/04 22:12:42 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -296,8 +296,8 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
     } else {
 	if(c = clist.get(ic)) {
 	    cname = getchanneljid(c);
+
 	    if(!cname.empty()) {
-		auto_ptr<char> confname(strdup(cname.c_str()));
 		cname += "/" + conf.getourid(jabber).nickname;
 
 		auto_ptr<char> ccname(strdup(cname.c_str()));
@@ -1260,6 +1260,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
     xmlnode x, y;
     string from, type, body, ns, id;
     imstatus ust;
+    int npos;
 
     jpacket_reset(packet);
 
@@ -1432,8 +1433,17 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    if(type == "unavailable")
 		ust = offline;
 
-	    if(0/*ischatroom(from)*/) {
-		/*JABBERChatRoomBuddyStatus(room, user, status);*/
+	    id = "";
+	    if((npos = from.find("@")) != -1) {
+		icqcontact *c = clist.get(imcontact((string) "#" + from.substr(0, npos), jabber));
+		if(c) id = jhook.getchanneljid(c);
+	    }
+
+	    if(!id.empty()) {
+		string u, h, s;
+		jidsplit(from, u, h, s);
+		jhook.chatmembers[id].push_back(s);
+
 	    } else {
 		icqcontact *c = clist.get(ic);
 

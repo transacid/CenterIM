@@ -78,8 +78,8 @@ class icqconf {
 	int autoaway, autona, ptpmin, ptpmax;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
-	    makelog, fenoughdiskspace, askaway, chatmode, bidi, logtimestamps,
-	    logonline, logtyping, emacs;
+	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
+	    logonline, logtyping, emacs, chatmode[protocolname_size];
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost, bindhost;
@@ -155,8 +155,9 @@ class icqconf {
 	bool getaskaway() const { return askaway; }
 	void setaskaway(bool faskaway);
 
-	bool getchatmode() const { return chatmode; }
-	void setchatmode(bool fchatmode);
+	bool getchatmode(protocolname pname);
+	void setchatmode(protocolname pname, bool fchatmode);
+	void initchatmode(string buf);
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.102 2003/04/18 20:56:21 konst Exp $
+* $Id: icqconf.cc,v 1.103 2003/05/04 22:12:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,10 +46,12 @@ icqconf::icqconf() {
 
     autoaway = autona = 0;
 
-    hideoffline = antispam = russian = makelog = askaway = chatmode =
+    hideoffline = antispam = russian = makelog = askaway =
 	logtimestamps = logonline = emacs = false;
 
     savepwd = mailcheck = fenoughdiskspace = logtyping = true;
+
+    memset(&chatmode, 0, sizeof(chatmode));
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }
@@ -225,7 +227,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "log") makelog = true; else
-	    if(param == "chatmode") chatmode = true; else
+	    if(param == "chatmode") initchatmode(buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
 	    if(param == "logtyping") logtyping = true; else
@@ -277,7 +279,15 @@ void icqconf::save() {
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
-	    if(getchatmode()) f << "chatmode" << endl;
+
+	    param = "";
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(getchatmode(pname))
+		    param += (string) " " + conf.getprotocolname(pname);
+
+	    if(!param.empty())
+		f << "chatmode" << param << endl;
+
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtyping) f << "logtyping" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
@@ -623,8 +633,12 @@ void icqconf::setaskaway(bool faskaway) {
     askaway = faskaway;
 }
 
-void icqconf::setchatmode(bool fchatmode) {
-    chatmode = fchatmode;
+bool icqconf::getchatmode(protocolname pname) {
+    return chatmode[pname];
+}
+
+void icqconf::setchatmode(protocolname pname, bool fchatmode) {
+    chatmode[pname] = fchatmode;
 }
 
 void icqconf::openurl(const string &url) {
@@ -947,6 +961,27 @@ void icqconf::setmakelog(bool slog) {
 
 void icqconf::setgroupmode(icqconf::groupmode amode) {
     fgroupmode = amode;
+}
+
+void icqconf::initchatmode(string buf) {
+    string w;
+    memset(&chatmode, 0, sizeof(chatmode));
+
+    if(buf.empty()) {
+	for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    chatmode[pname] = true;
+
+    } else {
+	while(!(w = getword(buf)).empty()) {
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
+		if(getprotocolname(pname) == w) {
+		    chatmode[pname] = true;
+		    break;
+		}
+	    }
+	}
+
+    }
 }
 
 void icqconf::setsmtphost(const string &asmtphost) {

@@ -24,6 +24,10 @@ msn status problems
 
 minor jabber problems
 
+jabber conferencing -> users browse
+
+patch from Mark Verboom <mark@verboom.net>, chat mode customization
+
 /*
 *
 * BUGS
@@ -38,11 +42,14 @@ try to see the log window trashing on text modes with higer resolutions
 *
 */
 
+protocol selection window in the chat mode conf dialog
+
+jabber connect problem. if the server replies nothing, it sucks the
+whole program
+
 russian codepages for different protocols
 
 finish the cygwin porting
-
-jabber conferencing -> users browse
 
 server hostname guess from the JID
 
@@ -64,4 +71,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.413 2003/04/22 21:50:47 konst Exp $
+$Id: TODO,v 1.414 2003/05/04 22:12:41 konst Exp $
