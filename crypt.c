@@ -184,7 +184,7 @@ char *yahoo_crypt(char *key, char *salt)
 		g_free(buffer);
 		buffer = NULL;
 	} else
-		*cp = '\0';	/* Terminate the string.  */
+		*cp = '\0';     /* Terminate the string.  */
 
 	/* Clear the buffer for the intermediate result so that people
 	   attaching to processes or reading core dumps cannot get any
