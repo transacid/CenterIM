@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.10 2001/11/30 00:15:18 konst Exp $
+* $Id: icqhist.cc,v 1.11 2001/11/30 11:32:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -354,7 +354,7 @@ void icqhistory::fillmenu(const imcontact cinfo, verticalmenu *m) {
 	    if(cinfo.empty()) text.replace(0, 1, "");
 
 	    if(text.size()) {
-		text.erase(COLS);
+		if(text.size() > COLS) text.erase(COLS);
 		text = (string) " " + time2str(&lastread, "DD.MM hh:mm", buf) + " " + text;
 		color = dir == HIST_MSG_IN ? conf.getcolor(cp_main_text) : conf.getcolor(cp_main_highlight);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.23 2001/11/27 16:33:08 konst Exp $
+* $Id: icqconf.cc,v 1.24 2001/11/30 11:32:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -47,13 +47,7 @@ icqconf::~icqconf() {
 icqconf::imaccount icqconf::getourid(protocolname pname) {
     vector<imaccount>::iterator i;
 
-    if((i = find(accounts.begin(), accounts.end(), pname)) != accounts.end()) {
-	if(!conf.getsavepwd() && i->password.empty()) {
-	    i->password = face.inputstr(_("Password: "), "", '*');
-	    if(i->password.empty()) i = accounts.end();
-	}
-    }
-
+    i = find(accounts.begin(), accounts.end(), pname);
     return i == accounts.end() ? imaccount(pname) : *i;
 }
 

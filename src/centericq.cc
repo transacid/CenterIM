@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.44 2001/11/29 17:42:22 konst Exp $
+* $Id: centericq.cc,v 1.45 2001/11/30 11:32:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -101,7 +101,10 @@ void centericq::exec() {
 
 	face.draw();
 	checkparallel();
-	mainloop();
+
+	if(checkpasswords()) {
+	    mainloop();
+	}
 
 	lst.save();
 	clist.save();
@@ -110,6 +113,37 @@ void centericq::exec() {
 
     face.done();
     conf.save();
+}
+
+bool centericq::checkpasswords() {
+    protocolname pname;
+    icqconf::imaccount ia;
+    bool r;
+
+    r = regmode = true;
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	ia = conf.getourid(pname);
+	if(!ia.empty()) {
+	    if(ia.password.empty()) {
+		conf.setsavepwd(false);
+
+		ia.password = face.inputstr("[" +
+		    conf.getprotocolname(pname) + "] " +
+		    _("password: "), "", '*');
+
+		if(ia.password.empty()) {
+		    r = false;
+		    break;
+		} else {
+		    conf.setourid(ia);
+		}
+	    }
+	}
+    }
+
+    regmode = false;
+    return r;
 }
 
 void centericq::mainloop() {
