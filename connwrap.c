@@ -40,7 +40,13 @@ static sslsock *addsock(int fd) {
     if(!ctx) {
 	SSL_library_init();
 	SSL_load_error_strings();
+
+#ifdef HAVE_SSLEAY
+	SSLeay_add_all_algorithms();
+#else
 	OpenSSL_add_all_algorithms();
+#endif
+
 	ctx = SSL_CTX_new(SSLv23_client_method());
     }
 
