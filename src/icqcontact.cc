@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.33 2001/12/10 14:00:42 konst Exp $
+* $Id: icqcontact.cc,v 1.34 2001/12/12 09:21:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,7 @@ icqcontact::icqcontact(const imcontact adesc) {
 
     clear();
     nmsgs = lastread = 0;
+    status = offline;
     finlist = true;
 
     for(ie = imevent::message; ie != imevent::imeventtype_size; (int) ie += 1)
@@ -110,7 +111,6 @@ const string icqcontact::getdirname() const {
 void icqcontact::clear() {
     nmsgs = fupdated = groupid = 0;
     finlist = true;
-    status = offline;
     cdesc = contactroot;
 
     binfo = basicinfo();

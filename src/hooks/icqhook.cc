@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.22 2001/12/10 14:00:43 konst Exp $
+* $Id: icqhook.cc,v 1.23 2001/12/12 09:21:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -608,4 +608,5 @@ void icqhook::socket_cb(SocketEvent *ev) {
 }
 
 void icqhook::statuschanged_cb(MyStatusChangeEvent *ev) {
+    face.update();
 }
