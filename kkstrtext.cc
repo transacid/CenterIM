@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.15 2002/03/05 15:28:54 konst Exp $
+* $Id: kkstrtext.cc,v 1.16 2002/03/06 01:20:44 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -996,22 +996,17 @@ bool getstring(istream &f, string &sbuf) {
 }
 
 string ruscase(const string &s, const string &mode) {
-    static const struct {
-	string lower, upper;
-    } rustable = {
-	"ÁÂ×ÇÄÅÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØßÙÜÀÑ",
-	"áâ÷çäåöúéêëìíîïğòóôõæèãşûıøÿùüàñ"
-    };
-
+    static const string lower = "ÁÂ×ÇÄÅÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØßÙÜÀÑ";
+    static const string upper = "áâ÷çäåöúéêëìíîïğòóôõæèãşûıøÿùüàñ";
     string r, tfrom, tto;
     int pos, tpos;
 
     if(mode == "tolower") {
-	tfrom = rustable.upper;
-	tto = rustable.lower;
+	tfrom = upper;
+	tto = lower;
     } else if(mode == "toupper") {
-	tfrom = rustable.lower;
-	tto = rustable.upper;
+	tfrom = lower;
+	tto = upper;
     } else {
 	return s;
     }
