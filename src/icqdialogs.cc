@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.52 2002/02/27 16:35:46 konst Exp $
+* $Id: icqdialogs.cc,v 1.53 2002/02/28 01:14:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -546,6 +546,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     int nopt, n, i, b, nproxy, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
     string tmp, phidden, socksuser, sockspass;
     string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
+    string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
 
     bool quote = conf.getquote();
     bool rus = conf.getrussian();
@@ -600,8 +601,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno[quote]);
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno[mailcheck]);
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno[savepwd]);
-/*
+
 	i = t.addnode(_(" Communications "));
+	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
+
+/*
 	t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
 */
 	i = t.addnode(_(" Miscellaneous "));
@@ -670,6 +674,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 				icqconf::group1;
 			break;
 		    case 18: makelog = !makelog; break;
+		    case 19:
+			tmp = inputstr(_("SMTP server hostname: "), smtp);
+			if(!tmp.empty()) smtp = tmp;
+			break;
 		}
 		break;
 	    case 1:
@@ -689,6 +697,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		}
 
 		conf.setsockshost(socks ? prserv : "");
+		conf.setsmtphost(smtp);
 		break;
 	}
     }

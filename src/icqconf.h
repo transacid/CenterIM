@@ -57,14 +57,18 @@ class icqconf {
     protected:
 	vector<icqgroup> groups;
 	vector<imaccount> accounts;
+
 	list<int> boldcolors;
 
-	unsigned int socksport;
+	unsigned short socksport, smtpport;
 
 	int autoaway, autona;
 
-	bool hideoffline, quote, savepwd, antispam, mailcheck, russian, makelog;
-	string sockshost, socksuser, sockspass, openurlcommand, basedir, argv0;
+	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
+	    makelog;
+
+	string sockshost, socksuser, sockspass, openurlcommand, basedir,
+	    argv0, smtphost;
 
 	regsound rs;
 	regcolor rc;
@@ -129,6 +133,10 @@ class icqconf {
 	void setsockshost(const string nsockshost);
 	const string getsockshost() const;
 	unsigned int getsocksport() const;
+
+	void setsmtphost(const string asmtphost);
+	const string getsmtphost() const;
+	unsigned int getsmtpport() const;
 
 	void getsocksuser(string &name, string &pass) const;
 	void setsocksuser(const string name, const string pass);

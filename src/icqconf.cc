@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.45 2002/02/27 16:35:46 konst Exp $
+* $Id: icqconf.cc,v 1.46 2002/02/28 01:14:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -120,6 +120,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "sockspass") sockspass = buf; else
 	    if((param == "usegroups") || (param == "group1")) fgroupmode = group1; else
 	    if(param == "group2") fgroupmode = group2; else
+	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "log") makelog = true; else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
@@ -209,7 +210,7 @@ void icqconf::save() {
 	if(getquote()) f << "quotemsgs" << endl;
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
-
+	f << getsmtphost() << ":" << dec << getsmtpport() << endl;
 
 	switch(getgroupmode()) {
 	    case group1: f << "group1" << endl; break;
@@ -823,6 +824,37 @@ icqconf::groupmode icqconf::getgroupmode() const {
 
 void icqconf::setgroupmode(icqconf::groupmode amode) {
     fgroupmode = amode;
+}
+
+void icqconf::setsmtphost(const string asmtphost) {
+    int pos;
+
+    smtphost = "";
+    smtpport = 0;
+
+    if(!asmtphost.empty()) {
+	if((pos = asmtphost.find(":")) != -1) {
+	    smtphost = asmtphost.substr(0, pos);
+	    smtpport = atol(asmtphost.substr(pos+1).c_str());
+	} else {
+	    smtphost = asmtphost;
+	    smtpport = 25;
+	}
+    }
+
+    if(smtphost.empty())
+	smtphost = "localhost";
+
+    if(!smtpport)
+	smtpport = 25;
+}
+
+const string icqconf::getsmtphost() const {
+    return smtphost;
+}
+
+unsigned int icqconf::getsmtpport() const {
+    return smtpport;
 }
 
 // ----------------------------------------------------------------------------
