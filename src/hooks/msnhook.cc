@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.53 2002/12/11 22:43:55 konst Exp $
+* $Id: msnhook.cc,v 1.54 2002/12/12 16:47:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -302,14 +302,6 @@ void msnhook::requestinfo(const imcontact &ic) {
 
     c->setmoreinfo(m);
     c->setbasicinfo(b);
-
-    if(!friendlynicks[ic.nickname].empty()) {
-	bool sn = c->getnick() == c->getdispnick();
-	c->setnick(friendlynicks[ic.nickname]);
-	if(sn) c->setdispnick(c->getnick());
-    }
-
-    face.relaxedupdate();
 }
 
 void msnhook::lookup(const imsearchparams &params, verticalmenu &dest) {
@@ -359,13 +351,12 @@ void msnhook::sendupdateuserinfo(const icqcontact &c) {
 }
 
 void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool forcefetch) {
-    string oldnick = friendlynicks[c->getdesc().nickname];
+    string oldnick = c->getnick();
     string newnick = unmime(friendlynick);
 
-    friendlynicks[c->getdesc().nickname] = newnick;
     c->setnick(newnick);
 
-    if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick || c->getdispnick() == c->getdesc().nickname)) {
+    if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick) || oldnick.empty()) {
 	c->setdispnick(newnick);
 	face.relaxedupdate();
     }

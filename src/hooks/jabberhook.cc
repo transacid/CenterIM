@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.33 2002/12/12 14:14:35 konst Exp $
+* $Id: jabberhook.cc,v 1.34 2002/12/12 16:47:53 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -380,7 +380,7 @@ void jabberhook::setautostatus(imstatus st) {
 }
 
 void jabberhook::requestinfo(const imcontact &ic) {
-    if(logged()) {
+    if(isconnecting() || logged()) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
 	xmlnode x = jutil_iqnew(JPACKET__GET, NS_VCARD);
 	xmlnode_put_attrib(x, "to", cjid.get());
@@ -774,13 +774,12 @@ void jabberhook::gotroster(xmlnode x) {
 	    ic = imcontact(jidtodisp(alias), jabber);
 	    roster.push_back(jidnormalize(alias));
 
-	    if(!(c = clist.get(ic)))
+	    if(!(c = clist.get(ic))) {
 		c = clist.addnew(ic, false);
-
-	    if(name) {
-		c->setnick(name);
-		c->setdispnick(name);
+		requestinfo(ic);
 	    }
+
+	    if(name) c->setdispnick(name);
 	}
     }
 
@@ -976,8 +975,6 @@ void jabberhook::updatecontact(icqcontact *c) {
 	xmlnode_put_attrib(y, "name", cname.get());
 	jab_send(jc, x);
 	xmlnode_free(x);
-
-	c->setnick(c->getdispnick());
     }
 }
 
@@ -996,6 +993,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
     xmlnode ad, n;
     char *p;
     string name, data;
+    bool wasrole = false;
 
     icqcontact *c = clist.get(ic);
     if(!c) c = clist.get(contactroot);
@@ -1022,6 +1020,11 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 		    mi.gender = genderUnspec;
 	    } else
 	    if(name == "TITLE" || name == "ROLE") {
+		if(!wasrole) {
+		    wasrole = true;
+		    wi.position = "";
+		}
+
 		if(!wi.position.empty()) wi.position += " / ";
 		wi.position += data;
 	    } else
