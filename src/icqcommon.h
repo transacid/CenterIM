@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <list>
 
+#include <sys/types.h>
 #include <regex.h>
 
 #include "kkstrtext.h"

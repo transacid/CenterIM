@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.11 2001/10/03 10:43:23 konst Exp $
+* $Id: icqcontact.cc,v 1.12 2001/10/03 21:08:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -103,7 +103,7 @@ void icqcontact::clear() {
     zip = wzip = occupation = 0;
     country = wcountry = 0;
     lastseen = 0;
-    timezone = 0;
+    utimezone = 0;
 }
 
 void icqcontact::save() {
