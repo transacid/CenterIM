@@ -5,8 +5,8 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: centericq 4.9.2\n"
-"POT-Creation-Date: 2003-05-07 11:11+0300\n"
+"Project-Id-Version: centericq 4.9.3\n"
+"POT-Creation-Date: 2003-05-07 23:44+0300\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -348,7 +348,7 @@ msgid "+ [jab] disconnected"
 msgstr "+ [jab] рассоединение"
 
 #: src/hooks/jabberhook.cc:1403
-#, fuzzy, c-format
+#, c-format
 msgid "+ [jab] error %d: %s"
 msgstr "+ [jab] ошибка %d: %s"
 
@@ -564,47 +564,47 @@ msgstr "Ответ на PING от пользователя был получен за %d секунд"
 #: src/hooks/irchook.cc:1342
 #, c-format
 msgid "%s has joined."
-msgstr ""
+msgstr "%s вошел."
 
 #: src/hooks/irchook.cc:1360
 #, c-format
 msgid "%s has left"
-msgstr ""
+msgstr "%s вышел."
 
 #: src/hooks/irchook.cc:1364
-#, fuzzy, c-format
+#, c-format
 msgid "reason: %s"
-msgstr "Послано %s"
+msgstr "причина: %s"
 
 #: src/hooks/irchook.cc:1383
-#, fuzzy, c-format
+#, c-format
 msgid "Channel topic now is: %s"
-msgstr " Канал : %s "
+msgstr "Установлена тема канала: %s "
 
 #: src/hooks/irchook.cc:1388
-#, fuzzy, c-format
+#, c-format
 msgid "set by %s"
-msgstr "Послано %s"
+msgstr "автор - %s"
 
 #: src/hooks/irchook.cc:1406
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been opped by %s."
-msgstr "+ %s добавлен в список"
+msgstr "%s назначен оператором по инициативе %s."
 
 #: src/hooks/irchook.cc:1422
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been deopped by %s."
-msgstr "+ %s добавлен в список"
+msgstr "%s больше не оператор канала, %s снял флаг."
 
 #: src/hooks/irchook.cc:1436
 #, c-format
 msgid "%s has opped us."
-msgstr ""
+msgstr "%s установил нам статус оператора."
 
 #: src/hooks/irchook.cc:1449
 #, c-format
 msgid "%s has deopped us."
-msgstr ""
+msgstr "%s снял с нас статус оператора"
 
 #: src/hooks/msnhook.cc:115
 msgid "+ [msn] connecting to the server"
@@ -1015,9 +1015,8 @@ msgid "Password: "
 msgstr "Пароль: "
 
 #: src/icqdialogs.cc:468
-#, fuzzy
 msgid " General "
-msgstr "Свалка"
+msgstr " Общие "
 
 #: src/icqdialogs.cc:503
 msgid " Registration service "
@@ -1265,9 +1264,9 @@ msgid " Enable bidirectional languages support : %s "
 msgstr " Поддержка двунаправленных языков : %s "
 
 #: src/icqdialogs.cc:1057
-#, fuzzy, c-format
+#, c-format
 msgid " Enable emacs bindings in text editor : %s "
-msgstr " Включить web статус индикатор : %s "
+msgstr " Кнопки а-ля emacs в редакторе : %s "
 
 #: src/icqdialogs.cc:1059
 msgid " Contact list "
@@ -1309,14 +1308,14 @@ msgid " Edit away message on status change : %s "
 msgstr " Редактировать away сообщения при переключении статуса : %s "
 
 #: src/icqdialogs.cc:1073
-#, fuzzy, c-format
+#, c-format
 msgid " Chat messaging mode for : %s"
-msgstr " Чат-режим при общении : %s "
+msgstr " Чат-режим при общении для : %s "
 
 #: src/icqdialogs.cc:1079
-#, fuzzy, c-format
-msgid " Russian translation for : %s "
-msgstr " Перекодировка win1251-koi8 требуется : %s "
+#, c-format
+msgid " Russian win/koi translation for : %s"
+msgstr " Перекодировка win1251-koi8 для : %s "
 
 #: src/icqdialogs.cc:1082
 #, c-format
@@ -1324,9 +1323,9 @@ msgid " Chat messaging mode : %s "
 msgstr " Чат-режим при общении : %s "
 
 #: src/icqdialogs.cc:1083
-#, fuzzy, c-format
-msgid " Russian translation : %s "
-msgstr " Перекодировка win1251-koi8 требуется : %s "
+#, c-format
+msgid " Russian win/koi translation : %s "
+msgstr " Перекодировка win1251-koi8 : %s "
 
 #: src/icqdialogs.cc:1087
 msgid " Communications "
@@ -1348,24 +1347,23 @@ msgid " Port range to use for peer-to-peer : %s "
 msgstr " Диапазон портов для прямых соединений : %s "
 
 #: src/icqdialogs.cc:1094
-#, fuzzy
 msgid " Logging "
-msgstr " Логин : %s "
+msgstr " Журнал "
 
 #: src/icqdialogs.cc:1095
 #, c-format
 msgid " Timestamps in the log window : %s "
-msgstr ""
+msgstr " Время событий в окошке лога : %s "
 
 #: src/icqdialogs.cc:1096
 #, c-format
 msgid " Online/offile events in the log window : %s "
-msgstr ""
+msgstr " Входы-выходы пользователей в логе : %s "
 
 #: src/icqdialogs.cc:1097
 #, c-format
 msgid " Typing notifications in the log window : %s "
-msgstr ""
+msgstr " \"Начал/окончил набирать\" сообщения в логе : %s "
 
 #: src/icqdialogs.cc:1098
 #, c-format
@@ -1939,7 +1937,7 @@ msgstr "  --basedir, -b <путь>     задать другую базовую директорию"
 
 #: src/icqconf.cc:960
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
-msgstr ""
+msgstr "  --bind, -B <host/ip>     IP для выходящих соединений"
 
 #: src/icqconf.cc:961
 msgid "  --help                   display this stuff"

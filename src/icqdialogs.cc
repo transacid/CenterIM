@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.111 2003/05/06 20:27:28 konst Exp $
+* $Id: icqdialogs.cc,v 1.112 2003/05/07 22:23:09 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1076,11 +1076,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		if(rus[pname] && !conf.getourid(pname).empty())
 		    tmp += conf.getprotocolname(pname) + " ";
 
-	    t.addleaff(i, 0,  3, _(" Russian translation for : %s "), tmp.c_str());
+	    t.addleaff(i, 0,  3, _(" Russian win/koi translation for : %s"), tmp.c_str());
 
 	} else {
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno(chatmode[icq]));
-	    t.addleaff(i, 0,  3, _(" Russian translation : %s "), stryesno(rus[icq]));
+	    t.addleaff(i, 0,  3, _(" Russian win/koi translation : %s "), stryesno(rus[icq]));
 
 	}
 

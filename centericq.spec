@@ -1,4 +1,4 @@
-Version: 4.9.2
+Version: 4.9.3
 Summary: Console ncurses based IM client. ICQ, Yahoo!, MSN, AIM, IRC and Jabber protocols are supported.
 Name: centericq
 Release: 1
@@ -8,7 +8,7 @@ Source: http://konst.org.ua/download/%{name}-%{version}.tar.gz
 URL: http://konst.org.ua/centericq/
 Packager: Konstantin Klyagin <konst@konst.org.ua>
 BuildRoot: /var/tmp/%{name}-buildroot/
-Requires: ncurses >= 4.2, glib >= 1.2.0
+Requires: ncurses >= 4.2
 
 %description
 centericq is a text mode menu- and window-driven IM interface. Currently

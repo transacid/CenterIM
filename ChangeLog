@@ -1409,6 +1409,8 @@ already on the list are not shown anymore.
 4.9.3
 -----
 
+Glib is not needed to build the program anymore.
+
 The old nickname didn't appear in the change nickname input line which
 was invoked from the Account manager dialog.
 
@@ -1439,3 +1441,6 @@ now as well.
 
 Eliminated a bunch of warnings in the kkconsui and libicq2000 code.
 Speeded up the compilation a little bit.
+
+Ported to Cygwin. Now it's possible to build centericq as a native Win32
+application.
