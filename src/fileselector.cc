@@ -117,7 +117,11 @@ void fileselector::exec() {
 		    di.dirname = dcurrent;
 		    m.getpos(di.pos, di.fpos);
 
-		    dcurrent = getcwd(buf, 512);
+		    if(i->fname != "..") {
+			if(dcurrent.substr(dcurrent.size()-1) != "/") dcurrent += "/";
+			dcurrent += i->fname;
+		    }
+
 		    m.setpos(0);
 
 		    if(i->fname == "..") {
