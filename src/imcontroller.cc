@@ -179,10 +179,18 @@ void imcontroller::aimupdateprofile() {
 void imcontroller::msnupdateprofile() {
     string tmp = face.inputstr(_("new MSN friendly nick: "), "");
 
-    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
-	icqcontact *c = clist.get(contactroot);
-	c->setnick(tmp);
-	mhook.sendupdateuserinfo(*c);
+    if(mhook.logged()) {
+	if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
+	    icqcontact *c = clist.get(contactroot);
+	    c->setnick(tmp);
+	    mhook.sendupdateuserinfo(*c);
+
+	    char buf[512];
+	    sprintf(buf, _("Your friendly nickname has been changed to %s"), tmp.c_str());
+	    face.status(buf);
+	}
+    } else {
+	face.status(_("You must be logged to the MSN network to update the friendly nick"));
     }
 }
 

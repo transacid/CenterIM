@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.31 2002/09/19 17:09:04 konst Exp $
+* $Id: msnhook.cc,v 1.32 2002/09/20 17:18:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -151,7 +151,8 @@ bool msnhook::send(const imevent &ev) {
     }
 
     icqcontact *c = clist.get(ev.getcontact());
-    text = siconv(text, conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET, "utf8");
+//    text = siconv(text, conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET, "utf8");
+    text = toutf8(rusconv("kw", text));
 
     if(c)
     if(c->getstatus() != offline) {
@@ -256,6 +257,11 @@ void msnhook::requestinfo(const imcontact &ic) {
 
 	c->setbasicinfo(b);
 	c->setmoreinfo(m);
+
+	if(!friendlynicks[ic.nickname].empty())
+	    c->setdispnick(friendlynicks[ic.nickname]);
+
+	face.relaxedupdate();
     }
 }
 
@@ -308,6 +314,23 @@ void msnhook::sendupdateuserinfo(const icqcontact &c) {
     MSN_Set_Friendly_Handle(c.getnick());
 }
 
+void msnhook::checkfriendly(icqcontact *c, const string friendlynick) {
+    friendlynicks[c->getdesc().nickname] = friendlynick;
+/*
+    if(friendlynick != c->getdesc().nickname) {
+	string fn = unmime(friendlynick);
+	c->setdispnick(fn);
+
+	icqcontact::basicinfo bi = c->getbasicinfo();
+
+	if(bi.fname.empty() && (fn != bi.email)) {
+	    bi.fname = fn;
+	    c->setbasicinfo(bi);
+	}
+    }
+*/
+}
+
 // ----------------------------------------------------------------------------
 
 void msnhook::messaged(void *data) {
@@ -321,7 +344,14 @@ void msnhook::messaged(void *data) {
 	c = clist.get(ic);
 	if(!c) c = clist.addnew(ic);
 
-	text = siconv(d->msg, "utf8", conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET);
+	if(c->inlist() && c->getstatus() == offline)
+	    mhook.sendnewuser(ic);
+
+	if(d->friendlyhandle) {
+	    mhook.checkfriendly(c, d->friendlyhandle);
+	}
+
+	text = rusconv("wk", fromutf8(d->msg));
 	em.store(immessage(ic, imevent::incoming, text));
 
 	if(c)
@@ -342,17 +372,7 @@ void msnhook::statuschanged(void *data) {
 	}
 
 	if(d->friendlyhandle) {
-	    if(c->getdispnick() == ic.nickname) {
-		string fn = unmime((string) d->friendlyhandle);
-		c->setdispnick(fn);
-
-		icqcontact::basicinfo bi = c->getbasicinfo();
-
-		if(bi.fname.empty() && (fn != bi.email)) {
-		    bi.fname = fn;
-		    c->setbasicinfo(bi);
-		}
-	    }
+	    mhook.checkfriendly(c, d->friendlyhandle);
 	}
 
 	logger.putonline(ic, c->getstatus(), msn2imstatus(d->newStatus));

@@ -316,6 +316,10 @@ commander is a good example), because checking for only one ESC would
 spoil arrow key processing. The point is that they have correspond
 sequences that start with an ASCII#27 character which is actually ESC.
 
+  If you still want to press a simple key combination to close a dialog
+or cancel something, try Alt-ESC. Though it's not guaranteed to work on
+all terminals.
+
   The ESC key can also help you to issue shortcuts and key combinations
 such as Alt-? or F<x>. The former, if Alt-Shift-/ doesn't work can be
 produced by first pressing ESC and then Shift-/ (i.e. "?"). And instead
@@ -1619,4 +1623,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.62 2002/09/17 16:31:43 konst Exp $
+$Id: README,v 1.63 2002/09/20 17:17:54 konst Exp $

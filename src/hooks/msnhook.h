@@ -9,6 +9,8 @@ class msnhook : public abstracthook {
 	imstatus status;
 	bool fonline;
 
+	map<string, string> friendlynicks;
+
 	static void messaged(void *data);
 	static void statuschanged(void *data);
 	static void authrequested(void *data);
@@ -19,6 +21,8 @@ class msnhook : public abstracthook {
 
 	static imstatus msn2imstatus(int st);
 	static bool isourid(const string &nick);
+
+	void checkfriendly(icqcontact *c, const string friendlynick);
 
     public:
 	msnhook();
