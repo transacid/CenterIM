@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.36 2002/12/13 09:46:32 konst Exp $
+* $Id: jabberhook.cc,v 1.37 2002/12/13 12:48:03 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -81,6 +81,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::groupchatservices);
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changeabout);
+    fcapabs.insert(hookcapab::synclist);
 }
 
 jabberhook::~jabberhook() {
@@ -1114,6 +1115,22 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 	c->setmoreinfo(mi);
 	c->setworkinfo(wi);
     }
+}
+
+vector<icqcontact *> jabberhook::getneedsync() {
+    int i;
+    icqcontact *c;
+    vector<icqcontact *> r;
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == jabber)
+	if(find(roster.begin(), roster.end(), c->getdesc().nickname) == roster.end())
+	    r.push_back(c);
+    }
+
+    return r;
 }
 
 // ----------------------------------------------------------------------------
