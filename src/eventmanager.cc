@@ -123,6 +123,9 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 	    } else if(ev.gettype() == imevent::authorization) {
 		const imauthorization *m = static_cast<const imauthorization *>(&ev);
 		m->write(fhist);
+	    } else if(ev.gettype() == imevent::email) {
+		const imemail *m = static_cast<const imemail *>(&ev);
+		m->write(fhist);
 	    }
 
 	    fhist.close();

@@ -55,6 +55,7 @@ class icqcontacts: public linkedlist {
 
 	icqcontact *get(const imcontact adesc);
 	icqcontact *getmobile(const string &anumber);
+	icqcontact *getemail(const string &aemail);
 };
 
 extern icqcontacts clist;

@@ -10,7 +10,7 @@ static const string sdirection[imevent::imdirection_size] = {
 };
 
 static const string seventtype[imevent::imeventtype_size] = {
-    "MSG", "URL", "SMS", "AUTH", "", ""
+    "MSG", "URL", "SMS", "AUTH", "", "EMAIL"
 };
 
 // -- basic imevent class -----------------------------------------------------
@@ -79,7 +79,8 @@ void imevent::read(ifstream &f) {
 	while(!f.eof() && rdbuf != "\f")
 	    getstring(f, rdbuf);
 
-	read(f);
+	if(!f.eof())
+	    read(f);
     }
 }
 
@@ -113,6 +114,8 @@ imevent *imevent::getevent() const {
 	    return new imsms(*this);
 	case authorization:
 	    return new imauthorization(*this);
+	case email:
+	    return new imemail(*this);
 	default:
 	    return 0;
     }
@@ -336,4 +339,51 @@ bool imsms::empty() const {
 
 bool imsms::contains(const string atext) const {
     return text.find(atext) != -1;
+}
+
+// -- imemail class -----------------------------------------------------------
+
+imemail::imemail() {
+    type = email;
+}
+
+imemail::imemail(const imcontact acont, imdirection adirection,
+const string atext) {
+    type = email;
+    contact = acont;
+    direction = adirection;
+    text = atext;
+}
+
+imemail::imemail(const imevent &ev) {
+    type = email;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
+
+    const imemail *m = dynamic_cast<const imemail *>(&ev);
+    if(m) {
+	text = m->text;
+    }
+}
+
+const string imemail::gettext() const {
+    return text;
+}
+
+bool imemail::empty() const {
+    return text.empty();
+}
+
+bool imemail::contains(const string atext) const {
+    return text.find(atext) != -1;
+}
+
+void imemail::write(ofstream &f) const {
+    imevent::write(f);
+    f << text << endl;
+}
+
+void imemail::read(ifstream &f) {
+    text = readblock(f);
 }

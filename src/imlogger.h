@@ -27,7 +27,7 @@ class imlogger {
 extern imlogger logger;
 
 static const char *eventnames[imevent::imeventtype_size] = {
-    _("message"), _("URL"), _("SMS"), _("authorization")
+    _("message"), _("URL"), _("SMS"), _("authorization"), "", _("e-mail")
 };
 
 #endif

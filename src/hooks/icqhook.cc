@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.46 2002/01/28 14:09:35 konst Exp $
+* $Id: icqhook.cc,v 1.47 2002/01/29 18:20:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -666,6 +666,36 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 	}
 
     } else if(ev->getType() == MessageEvent::AuthAck) {
+    } else if(ev->getType() == MessageEvent::EmailEx) {
+	EmailExEvent *r;
+
+	if(r = dynamic_cast<EmailExEvent *>(ev)) {
+	    icqcontact *c = clist.getemail(r->getEmail());
+
+	    if(!c)
+	    if(c = clist.addnew(imcontact(0, infocard), true)) {
+		c->setdispnick("email_express");
+		icqcontact::basicinfo b = c->getbasicinfo();
+
+		b.email = r->getEmail();
+		int pos = r->getSender().find(" ");
+
+		if(pos != -1) {
+		    b.fname = r->getSender().substr(0, pos);
+		    b.lname = r->getSender().substr(pos+1);
+		} else {
+		    b.fname = r->getSender();
+		}
+
+		c->setbasicinfo(b);
+		c->setnick(r->getEmail());
+	    }
+
+	    if(c) {
+		em.store(imemail(c->getdesc(), imevent::incoming,
+		    rusconv("wk", r->getMessage())));
+	    }
+	}
 
     } else if(ev->getType() == MessageEvent::AwayMessage) {
 	AwayMessageEvent *r;

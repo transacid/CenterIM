@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.27 2002/01/22 11:59:15 konst Exp $
+* $Id: icqcontacts.cc,v 1.28 2002/01/29 18:20:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -300,6 +300,22 @@ icqcontact *icqcontacts::getmobile(const string &anumber) {
 		cnumber.erase(pos, 1);
 
 	    if(number == cnumber)
+		return c;
+	}
+    }
+
+    return 0;
+}
+
+icqcontact *icqcontacts::getemail(const string &aemail) {
+    int i;
+    icqcontact *c;
+
+    if(!aemail.empty()) {
+	for(i = 0; i < count; i++) {
+	    c = (icqcontact *) at(i);
+
+	    if(aemail == c->getbasicinfo().email)
 		return c;
 	}
     }

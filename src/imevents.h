@@ -10,6 +10,8 @@ class imevent {
     friend class imurl;
     friend class imsms;
     friend class imauthorization;
+    friend class imemailexpress;
+    friend class imemail;
 
     public:
 	enum imeventtype {
@@ -119,6 +121,24 @@ class imauthorization: public imevent {
 
 	const string gettext() const;
 	bool getgranted() const;
+
+	bool empty() const;
+	bool contains(const string atext) const;
+
+	void write(ofstream &f) const;
+	void read(ifstream &f);
+};
+
+class imemail: public imevent {
+    protected:
+	string text;
+
+    public:
+	imemail();
+	imemail(const imevent &ev);
+	imemail(const imcontact acont, imdirection adirection, const string atext);
+
+	const string gettext() const;
 
 	bool empty() const;
 	bool contains(const string atext) const;

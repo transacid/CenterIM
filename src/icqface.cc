@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.72 2002/01/24 10:07:13 konst Exp $
+* $Id: icqface.cc,v 1.73 2002/01/29 18:20:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1575,6 +1575,12 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
 	}
 	actions.push_back(ok);
 
+    } else if(ev->gettype() == imevent::email) {
+	const imemail *m = static_cast<const imemail *>(ev);
+	text = m->gettext();
+
+	actions.push_back(forward);
+	actions.push_back(ok);
     }
 
     saveworkarea();
@@ -1665,6 +1671,9 @@ void icqface::histmake(const vector<imevent *> &hist) {
 	    text += m->gettext();
 	} else if(ev.gettype() == imevent::authorization) {
 	    const imauthorization *m = static_cast<const imauthorization *>(&ev);
+	    text += m->gettext();
+	} else if(ev.gettype() == imevent::email) {
+	    const imemail *m = static_cast<const imemail *>(&ev);
 	    text += m->gettext();
 	}
 
