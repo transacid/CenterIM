@@ -2488,11 +2488,7 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 			fchandle = fchandle->next;
 			continue;
 		}
-		protocol_functions[fchandle->protocol].periodic(fchandle);
-		if (fchandle->connected == FCS_NOTCONNECTED) {
-			fchandle = fchandle->next;
-			continue;
-		}
+
 		if (fchandle->fd >= n)
 			n = fchandle->fd + 1;
 		FD_SET(fchandle->fd,my_except);
@@ -2559,6 +2555,7 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 			fchandle = fchandle->next;
 			continue;
 		}
+
 		if (FD_ISSET(fchandle->fd,my_except))
 			protocol_functions[fchandle->protocol].disconnect(fchandle->handle);
 		else if (FD_ISSET(fchandle->fd,my_read)) {
@@ -2583,6 +2580,7 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 		}
 		else if (FD_ISSET(fchandle->fd,my_write))
 			firetalk_handle_synack(fchandle);
+
 		fileiter = fchandle->file_head;
 		while (fileiter) {
 			fileiter2 = fileiter->next;
@@ -2628,8 +2626,10 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 			fileiter = fileiter2;
 		}
 
+		protocol_functions[fchandle->protocol].periodic(fchandle);
 		fchandle = fchandle->next;
 	}
+
 	return FE_SUCCESS;
 }
 
