@@ -53,6 +53,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void server_based_contact_list_cb(ServerBasedContactEvent *ev);
 	void self_contact_userinfo_change_cb(UserInfoChangeEvent *ev);
 	void self_contact_status_change_cb(StatusChangeEvent *ev);
+	void password_changed_cb(PasswordChangeEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
 

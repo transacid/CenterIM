@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.126 2002/12/16 17:58:55 konst Exp $
+* $Id: icqhook.cc,v 1.127 2002/12/17 16:09:40 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -58,7 +58,7 @@ icqhook::icqhook() {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::changenick);
-//    fcapabs.insert(hookcapab::changepassword);
+    fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::authrequests);
@@ -80,6 +80,7 @@ icqhook::icqhook() {
     cli.contact_status_change_signal.connect(this, &icqhook::contact_status_change_signal_cb);
     cli.newuin.connect(this, &icqhook::newuin_cb);
     cli.rate.connect(this, &icqhook::rate_cb);
+    cli.password_changed.connect(this, &icqhook::password_changed_cb);
     cli.want_auto_resp.connect(this, &icqhook::want_auto_resp_cb);
     cli.search_result.connect(this, &icqhook::search_result_cb);
     cli.server_based_contact_list.connect(this, &icqhook::server_based_contact_list_cb);
@@ -108,6 +109,7 @@ icqhook::~icqhook() {
     cli.self_contact_userinfo_change_signal.disconnect(this);
     cli.self_contact_status_change_signal.disconnect(this);
     cli.server_based_contact_list.disconnect(this);
+    cli.password_changed.disconnect(this);
 }
 
 void icqhook::init() {
@@ -1390,6 +1392,16 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 
 void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
     face.update();
+}
+
+void icqhook::password_changed_cb(PasswordChangeEvent *ev) {
+    if(ev->isSuccess()) {
+	icqconf::imaccount acc = conf.getourid(icq);
+	acc.password = ev->getPassword();
+	conf.setourid(acc);
+
+	face.log(_("+ [icq] password was changed successfully"));
+    }
 }
 
 void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
