@@ -1,9 +1,11 @@
 #ifndef __YAHOOHOOK_H__
 #define __YAHOOHOOK_H__
 
-#include "icqconf.h"
 #include "abstracthook.h"
 
+#ifdef BUILD_YAHOO
+
+#include "icqconf.h"
 #include "pseudoglib.h"
 
 class yahoohook: public abstracthook {
@@ -98,5 +100,7 @@ class yahoohook: public abstracthook {
 };
 
 extern yahoohook yhook;
+
+#endif
 
 #endif

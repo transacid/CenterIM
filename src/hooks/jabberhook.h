@@ -3,6 +3,8 @@
 
 #include "abstracthook.h"
 
+#ifdef BUILD_JABBER
+
 #include "jabber.h"
 
 class jabberhook: public abstracthook {
@@ -118,5 +120,7 @@ class jabberhook: public abstracthook {
 };
 
 extern jabberhook jhook;
+
+#endif
 
 #endif

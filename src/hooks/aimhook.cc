@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.34 2003/05/06 20:27:29 konst Exp $
+* $Id: aimhook.cc,v 1.35 2003/07/07 18:51:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,9 @@
 */
 
 #include "aimhook.h"
+
+#ifdef BUILD_AIM
+
 #include "icqface.h"
 #include "accountmanager.h"
 #include "icqcontacts.h"
@@ -540,3 +543,5 @@ void aimhook::listbuddy(void *conn, void *cli, ...) {
 	ahook.buddies.push_back(nickname);
     }
 }
+
+#endif

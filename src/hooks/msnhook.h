@@ -3,6 +3,8 @@
 
 #include "abstracthook.h"
 
+#ifdef BUILD_MSN
+
 #include "msn_core.h"
 
 class msnhook : public abstracthook {
@@ -82,5 +84,7 @@ class msnhook : public abstracthook {
 };
 
 extern msnhook mhook;
+
+#endif
 
 #endif

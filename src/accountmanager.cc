@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.27 2002/12/05 14:01:11 konst Exp $
+* $Id: accountmanager.cc,v 1.28 2003/07/07 18:50:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -76,7 +76,9 @@ void accountmanager::exec() {
 	t.clear();
 
 	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	    if(pname != infocard) {
+	    account = conf.getourid(pname);
+
+	    if(gethook(pname).enabled() || !account.empty()) {
 		account = conf.getourid(pname);
 		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(pname) + " ");
 		citem = ((int) (pname)+1) * 100;

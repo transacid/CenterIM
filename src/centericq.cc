@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.157 2003/06/25 20:59:58 konst Exp $
+* $Id: centericq.cc,v 1.158 2003/07/07 18:50:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -367,7 +367,11 @@ void centericq::changestatus() {
 
     if(face.changestatus(pname, st)) {
 	if(!conf.enoughdiskspace()) {
-	    face.log("! cannot connect, free disk space is less than 10k");
+	    face.log(_("! cannot connect, free disk space is less than 10k"));
+
+	} else if(!gethook(pname).enabled()) {
+	    face.log(_("! support for %s was disabled at build time"),
+		conf.getprotocolname(pname).c_str());
 
 	} else {
 	    proceed = true;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.78 2003/05/06 20:27:30 konst Exp $
+* $Id: yahoohook.cc,v 1.79 2003/07/07 18:51:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -21,6 +21,10 @@
 * USA
 *
 */
+
+#include "icqcommon.h"
+
+#ifdef BUILD_YAHOO
 
 #include "yahoohook.h"
 #include "icqmlist.h"
@@ -834,3 +838,5 @@ void yahoohook::add_input(guint32 id, int fd) {
 
 void yahoohook::remove_input(guint32 id, int fd) {
 }
+
+#endif

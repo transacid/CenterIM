@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.50 2003/07/05 13:09:50 konst Exp $
+* $Id: jabberhook.cc,v 1.51 2003/07/07 18:51:01 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -21,6 +21,10 @@
 * USA
 *
 */
+
+#include "icqcommon.h"
+
+#ifdef BUILD_JABBER
 
 #include "jabberhook.h"
 #include "icqface.h"
@@ -949,11 +953,15 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 }
 
 void jabberhook::gotmessage(const string &type, const string &from, const string &abody) {
-    string body(abody);
-    imcontact ic(jidtodisp(from), proto), chic;
+    string u, h, r, body(abody);
+    jidsplit(from, u, h, r);
 
-    if(clist.get(chic = imcontact((string) "#" + from, proto)))
+    imcontact ic(jidtodisp(u + "@" + h), proto), chic;
+
+    if(clist.get(chic = imcontact((string) "#" + ic.nickname, proto))) {
 	ic = chic;
+	if(!r.empty()) body.insert(0, r + ": ");
+    }
 
     checkinlist(ic);
     em.store(immessage(ic, imevent::incoming, UTF2KOI(body)));
@@ -1458,3 +1466,5 @@ void jabberhook::jlogger(jconn conn, int inout, const char *p) {
     tolog += p;
     face.log(tolog);
 }
+
+#endif

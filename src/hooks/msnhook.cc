@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.65 2003/06/02 15:39:13 konst Exp $
+* $Id: msnhook.cc,v 1.66 2003/07/07 18:51:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -21,6 +21,10 @@
 * USA
 *
 */
+
+#include "icqcommon.h"
+
+#ifdef BUILD_MSN
 
 #include "msnhook.h"
 #include "icqconf.h"
@@ -797,3 +801,5 @@ void ext_protocol_log(const char *buf, int readev, int writeev) {
 	log(string("[OUT] ") + buf);
     }
 }
+
+#endif

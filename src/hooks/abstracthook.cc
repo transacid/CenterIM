@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.34 2003/05/06 20:27:28 konst Exp $
+* $Id: abstracthook.cc,v 1.35 2003/07/07 18:51:00 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -298,11 +298,21 @@ abstracthook &gethook(protocolname pname) {
 
     switch(pname) {
 	case icq: return ihook;
+#ifdef BUILD_YAHOO
 	case yahoo: return yhook;
+#endif
+#ifdef BUILD_MSN
 	case msn: return mhook;
+#endif
+#ifdef BUILD_AIM
 	case aim: return ahook;
+#endif
+#ifdef BUILD_IRC
 	case irc: return irhook;
+#endif
+#ifdef BUILD_JABBER
 	case jabber: return jhook;
+#endif
     }
 
     return abshook;

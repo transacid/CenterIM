@@ -7,3 +7,8 @@
 #undef HAVE_STPCPY
 #undef HAVE_OPENSSL
 #undef HAVE_GNUTLS
+#undef BUILD_JABBER
+#undef BUILD_MSN
+#undef BUILD_YAHOO
+#undef BUILD_AIM
+#undef BUILD_IRC

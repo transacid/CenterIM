@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.133 2003/06/25 20:59:59 konst Exp $
+* $Id: icqhook.cc,v 1.134 2003/07/07 18:51:01 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1115,8 +1115,8 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	}
 
 	if(c) {
-	    em.store(imsms(c, imevent::incoming,
-		/*rusconv("wk",*/ r->getMessage()/*)*/));
+	    em.store(imsms(c, imevent::incoming, siconv(r->getMessage(),
+		"utf8", conf.getrussian(proto) ? "koi8-u" : DEFAULT_CHARSET)));
 	}
 
     } else if(ev->getType() == MessageEvent::AuthReq) {

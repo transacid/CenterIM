@@ -3,6 +3,8 @@
 
 #include "abstracthook.h"
 
+#ifdef BUILD_AIM
+
 extern "C" {
 #include "firetalk.h"
 }
@@ -75,5 +77,7 @@ class aimhook: public abstracthook {
 };
 
 extern aimhook ahook;
+
+#endif
 
 #endif

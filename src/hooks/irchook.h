@@ -3,6 +3,8 @@
 
 #include "abstracthook.h"
 
+#ifdef BUILD_IRC
+
 extern "C" {
 #include "firetalk.h"
 }
@@ -142,5 +144,7 @@ class irchook: public abstracthook {
 };
 
 extern irchook irhook;
+
+#endif
 
 #endif

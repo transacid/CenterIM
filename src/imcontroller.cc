@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.45 2003/04/22 21:50:47 konst Exp $
+* $Id: imcontroller.cc,v 1.46 2003/07/07 18:50:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -182,6 +182,7 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 }
 
 bool imcontroller::jabberregistration(icqconf::imaccount &account) {
+#ifdef BUILD_JABBER
     bool success;
     string err;
     int pos;
@@ -230,6 +231,9 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
     }
 
     return success;
+#else
+    return false;
+#endif
 }
 
 void imcontroller::icqupdatedetails() {
@@ -248,14 +252,17 @@ void imcontroller::icqupdatedetails() {
 }
 
 void imcontroller::aimupdateprofile() {
+#ifdef BUILD_AIM
     icqcontact *c = clist.get(contactroot);
 
     c->clear();
     ahook.requestinfo(imcontact(conf.getourid(aim).nickname, aim));
     if(face.updatedetails(0, aim)) ahook.sendupdateuserinfo(*c);
+#endif
 }
 
 void imcontroller::msnupdateprofile() {
+#ifdef BUILD_MSN
     if(mhook.logged()) {
 	mhook.requestinfo(imcontact(conf.getourid(msn).nickname, msn));
 	string tmp = face.inputstr(_("new MSN friendly nick: "), clist.get(contactroot)->getnick());
@@ -272,9 +279,11 @@ void imcontroller::msnupdateprofile() {
     } else {
 	face.status(_("You must be logged to the MSN network to update the friendly nick"));
     }
+#endif
 }
 
 void imcontroller::jabberupdateprofile() {
+#ifdef BUILD_JABBER
     if(jhook.logged()) {
 	icqcontact *c;
 
@@ -287,6 +296,7 @@ void imcontroller::jabberupdateprofile() {
     } else {
 	face.status(_("You must be logged to the Jabber network to update your details"));
     }
+#endif
 }
 
 void imcontroller::icqsynclist() {

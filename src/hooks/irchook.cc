@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.69 2003/05/06 20:27:30 konst Exp $
+* $Id: irchook.cc,v 1.70 2003/07/07 18:51:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,9 @@
 */
 
 #include "irchook.h"
+
+#ifdef BUILD_IRC
+
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "imlogger.h"
@@ -1459,3 +1462,5 @@ bool irchook::channelInfo::operator != (const string &aname) const {
 bool irchook::channelInfo::operator == (const string &aname) const {
     return up(aname) == up(name);
 }
+
+#endif
