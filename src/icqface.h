@@ -12,7 +12,7 @@
 #include "textinputline.h"
 #include "texteditor.h"
 #include "textbrowser.h"
-#include "filemanager.h"
+#include "fileselector.h"
 
 #include "icqconf.h"
 #include "icqcontact.h"
@@ -97,9 +97,9 @@ class icqface {
 
     protected:
 	treeview *mcontacts;
-	textinputline *il;
+	textinputline input;
 	textwindow mainw;
-	filemanager *fm;
+	fileselector selector;
 	ofstream flog;
 	vector<string> extractedurls;
 
@@ -212,8 +212,8 @@ class icqface {
 	void unblockmainscreen();
 
 	int ask(string q, int options, int deflt = -1);
-	string inputstr(string q, string defl = "", char passwdchar = 0);
-	string inputfile(string q, string defl = "");
+	const string inputstr(const string q, const string defl = "", char passwdchar = 0);
+	const string inputfile(const string q, const string defl = "");
 
 	void quickfind(verticalmenu *multi = 0);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.24 2001/10/16 15:38:06 konst Exp $
+* $Id: icqface.cc,v 1.25 2001/10/18 18:58:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,12 +128,14 @@ void icqface::init() {
     mcontacts->menu.idle = &menuidle;
     mcontacts->menu.otherkeys = &contactskeys;
 
-    il = new textinputline(conf.getcolor(cp_status));
+    input.setcolor(conf.getcolor(cp_status));
     mainw = textwindow(0, 1, COLS-1, LINES-2, conf.getcolor(cp_main_frame));
 
-    fm = new filemanager(1, 2, (int) (COLS*0.7), (int) (LINES*0.75),
-    conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_highlight), 0,
-    conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_frame));
+    selector.setcolor(
+	conf.getcolor(cp_dialog_menu),
+	conf.getcolor(cp_dialog_highlight),
+	conf.getcolor(cp_dialog_selected),
+	conf.getcolor(cp_dialog_frame));
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
@@ -144,8 +146,6 @@ void icqface::init() {
 
 void icqface::done() {
     delete mcontacts;
-    delete il;
-    delete fm;
 }
 
 void icqface::draw() {
@@ -915,25 +915,24 @@ string icqface::textstatus(unsigned long st) {
 
 #define INPUT_POS       LINES-2
 
-string icqface::inputstr(string q, string defl = "", char passwdchar = 0) {
+const string icqface::inputstr(const string q, string defl = "", char passwdchar = 0) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
-    string ret;
-    char *p;
 
     attrset(conf.getcolor(cp_status));
     mvhline(INPUT_POS, 0, ' ', COLS);
     kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
-    il->setpasswordchar(passwdchar);
-    il->fm = 0;
 
-    ret = (p = il->open(q.size(), INPUT_POS, defl.c_str(), COLS-q.size()-1, 2048));
-    delete p;
+    input.setpasswordchar(passwdchar);
+    input.removeselector();
+    input.setvalue(defl);
+    input.setcoords();
+    input.exec(q.size(), INPUT_POS, COLS-q.size()-1);
 
     sa.restore();
-    return ret;
+    return input.getvalue();
 }
 
-string icqface::inputfile(string q, string defl = "") {
+const string icqface::inputfile(string q, string defl = "") {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string ret;
     char *p, *r;
@@ -1228,7 +1227,7 @@ int icqface::showicq(unsigned int uin, string text, char imt, int options = 0) {
 	    _("Details"), _("Add to the list"), _("Accept"),
 	    hist ? _("Ok") : _("Ignore"), 0));
 
-        db.addautokeys();
+	db.addautokeys();
 	db.getbar()->item = hist ? 3 : 2;
     } else if(imt == ICQM_ADDED) {
 	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
@@ -1239,7 +1238,7 @@ int icqface::showicq(unsigned int uin, string text, char imt, int options = 0) {
 	    _("Details"), _("Add to the list"),
 	    hist ? _("Ok") : _("Next"), 0));
 
-        db.addautokeys();
+	db.addautokeys();
 	db.getbar()->item = hist ? 2 : 1;
     }
 
