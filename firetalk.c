@@ -1340,6 +1340,9 @@ void firetalk_callback_subcode_reply(client_t c, const char * const from, const 
 void firetalk_callback_file_offer(client_t c, const char * const from, const char * const filename, const long size, const char * const ipstring, const char * const ip6string, const uint16_t port, const int type) {
 	struct s_firetalk_handle *conn;
 	struct s_firetalk_file *iter;
+	struct in_addr addr;
+	int ret;
+
 	conn = firetalk_find_handle(c);
 	if (conn == NULL)
 		return;
@@ -1359,16 +1362,27 @@ void firetalk_callback_file_offer(client_t c, const char * const from, const cha
 	conn->file_head->type = type;
 	conn->file_head->next = iter;
 	conn->file_head->clientfilestruct = NULL;
-	if (inet_pton(AF_INET,ipstring,&conn->file_head->inet_ip) == 0) {
-		firetalk_file_cancel(c,conn->file_head);
-		return;
+
+#ifdef HAVE_INET_ATON
+	ret = inet_aton(ipstring, &addr);
+	conn->file_head->inet_ip.s_addr = addr.s_addr;
+#else
+	ret = inet_pton(AF_INET, ipstring, &conn->file_head->inet_ip);
+#endif
+
+	if(!ret) {
+	    firetalk_file_cancel(c,conn->file_head);
+	    return;
 	}
+
+/*
 #ifdef _FC_USE_IPV6
 	conn->file_head->tryinet6 = 0;
 	if (ip6string)
 		if (inet_pton(AF_INET6,ip6string,&conn->file_head->inet6_ip) != 0)
 			conn->file_head->tryinet6 = 1;
 #endif
+*/
 	if (conn->callbacks[FC_FILE_OFFER])
 		conn->callbacks[FC_FILE_OFFER](conn,conn->clientstruct,(void *)conn->file_head,from,filename,size);
 	return;
