@@ -31,7 +31,7 @@ static sslsock *addsock(int fd) {
     if(!ctx) {
 	OpenSSL_add_all_algorithms();
 	SSL_load_error_strings();
-	ctx = SSL_CTX_new(SSLv2_client_method());
+	ctx = SSL_CTX_new(SSLv23_method());
     }
 
     p->ssl = SSL_new(ctx);
@@ -44,6 +44,7 @@ static void delsock(int fd) {
     int i, nsockcount;
     sslsock *nsocks;
 
+    nsockcount = 0;
     nsocks = (sslsock *) malloc(sizeof(sslsock)*(sockcount-1));
 
     for(i = 0; i < sockcount; i++) {
