@@ -58,7 +58,7 @@
 #define EM_CTRL       4
 #define EM_MANUAL     8
 
-#define CHECKLOADED	if(!getfcount()) return;
+#define CHECKLOADED     if(!getfcount()) return;
 
 texteditor::texteditor():
 otherkeys(0), fn(-1), wrap(false), abscol(0), idle(0),
@@ -633,8 +633,8 @@ void texteditor::scancomments(bool visible) {
 	    while(1) {
 		lsub = strqstr(sub, lc.c_str(), colors.synt_quote.c_str());
 
-                if(tb) rsub = strstr(sub, rc.c_str());
-                else rsub = strqstr(sub, rc.c_str(), colors.synt_quote.c_str());
+		if(tb) rsub = strstr(sub, rc.c_str());
+		else rsub = strqstr(sub, rc.c_str(), colors.synt_quote.c_str());
 		
 		if(rsub && (((rsub < lsub) && lsub) || !lsub)) {
 		    sub = rsub;
@@ -775,9 +775,9 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 			}
 
 			if(!strlen(r)) {
-                            r = nr;
-                            continue;
-                        }
+			    r = nr;
+			    continue;
+			}
 
 			p = cp;
 			lastoccur = 0;
@@ -841,6 +841,8 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 	}
 
 	// Quotes highlight ...
+
+#if 0
 	
 	if(!colors.synt_quote.empty()) {
 	    char qchar = 0;
@@ -878,6 +880,8 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 
 	    if(qchar) hl_comment(cp, qpos, strlen(cp), colors.qcolor);
 	}
+
+#endif
 
 	// Blocks ...
 
