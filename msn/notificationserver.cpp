@@ -740,10 +740,6 @@ public:
 	    return;
 	}
 	
-#ifdef DEBUG
-	fprintf(stderr, "MSN Plugin: Negotiating CVR\n");
-#endif
-	
 	std::ostringstream buf_;
 	buf_ << "CVR " << trid << " 0x0409 winnt 5.2 i386 MSNMSGR 6.0.0250 MSMSGS " << info->username << "\r\n";
 	this->write(buf_);
@@ -789,10 +785,6 @@ public:
 	    this->disconnect();
 	    return;
 	}
-	
-#ifdef DEBUG
-	fprintf(stderr, "MSN Plugin: Requesting USR\n");
-#endif
 	
 	std::ostringstream buf_;
 	buf_ << "USR " << trid << " TWN I " << info->username << "\r\n";
@@ -845,10 +837,6 @@ public:
 	else    
 	    ret = CURLE_OK;
 	
-#ifdef DEBUG
-	fprintf(stderr, "MSN Plugin: Will connect to login.passport.com using proxy: %s\n", proxy.empty() ? "None" : proxy);
-#endif
-	
 	if (ret == CURLE_OK)
 	    ret = curl_easy_setopt(curl, CURLOPT_URL, "https://login.passport.com/login2.srf");
 	
@@ -878,10 +866,6 @@ public:
 	if (ret == CURLE_OK)
 	    ret = curl_easy_setopt(curl, CURLOPT_WRITEHEADER, info);
 	
-#ifdef DEBUG
-	fprintf(stderr, "MSN Plugin: Connecting to login.passport.com\n");
-#endif
-	
 	if (ret == CURLE_OK)
 	    ret = curl_easy_perform(curl);
 	
@@ -898,11 +882,6 @@ public:
 	    delete info;
 	    return;
 	}
-	
-#ifdef DEBUG
-	fprintf(stderr, "MSN Plugin: Returning login cookie to MSN\n");
-	fprintf(stderr, "MSN Plugin: Cookie: %s\n", info->cookie);
-#endif
 	
 	std::ostringstream buf_;
 	buf_ << "USR " << trid << " TWN S " << info->cookie << "\r\n";
@@ -951,9 +930,7 @@ public:
 	std::string headers_ = std::string((char *)ptr, size * nmemb);
 	Message::Headers headers = Message::Headers(headers_);
 	cookiedata = headers["Authentication-Info:"];
-#ifdef DEBUG
-	printf("MSN Plugin: Authentication-Info header: %s\n", cookiedata.empty() ? "Not found" : "Found");
-#endif
+
 	if (! cookiedata.empty()) 
 	{
 	    size_t pos = cookiedata.find(",from-PP='");

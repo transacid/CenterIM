@@ -482,10 +482,6 @@ cleanup:
         this->switchboardConnection->sendMessage(msg);
         delete msg;
         
-#ifdef DEBUG
-        printf("Rejecting file transfer\n");
-#endif
-        
         this->switchboardConnection->invitationsReceived.remove(this);
     }
     
@@ -504,9 +500,6 @@ cleanup:
         this->switchboardConnection->sendMessage(msg);
         delete msg;
         
-#ifdef DEBUG
-        printf("Accepting file transfer\n");
-#endif
     }
     
     void FileTransferInvitation::cancelTransfer()
