@@ -2,720 +2,602 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-09-23 11:42+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Pásztor György <pasztor@linux.gyakg.u-szeged.hu>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"POT-Creation-Date: 2002-09-10 14:50+0300\n"
+"PO-Revision-Date: 2002-10-03 18:36GMT\n"
+"Last-Translator: Ferenc Veres <lion@netngine.hu>\n"
+"Language-Team: hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.9.5\n"
 
-#: src/hooks/aimhook.cc:58
-#, fuzzy
+#: src/hooks/aimhook.cc:59
 msgid "+ [aim] connecting to the server"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [aim] kapcsolódás a szerverhez"
 
-#: src/hooks/aimhook.cc:87
-#, fuzzy
+#: src/hooks/aimhook.cc:88
 msgid "+ [aim] unable to connect to the server"
-msgstr "+ nem lehet kapcsolódni az icq szerverhez"
+msgstr "+ [aim] nem lehet kapcsolódni a szerverhez"
 
-#: src/hooks/aimhook.cc:188
-#, fuzzy, c-format
+#: src/hooks/aimhook.cc:189
+#, c-format
 msgid "+ [aim] adding %s to the contacts"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [aim] %s hozzáadása a kapcsolatokhoz"
 
-#: src/hooks/aimhook.cc:197
-#, fuzzy, c-format
+#: src/hooks/aimhook.cc:198
+#, c-format
 msgid "+ [aim] removing %s from the contacts"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [aim] %s eltávolítása a kapcsolatok közül"
 
-#: src/hooks/aimhook.cc:292
+#: src/hooks/aimhook.cc:293
 #, c-format
 msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr ""
+msgstr "Igazán meg vagyok elégedve a centericq alap AIM beállításaival %s."
 
-#: src/hooks/aimhook.cc:344
-#, fuzzy
+#: src/hooks/aimhook.cc:345
 msgid "+ [aim] logged in"
-msgstr "+ bejelentkezve"
+msgstr "+ [aim] bejelentkezve"
 
-#: src/hooks/aimhook.cc:361
-#, fuzzy
+#: src/hooks/aimhook.cc:362
 msgid "+ [aim] disconnected from the network"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [aim] lekapcsolva a hálózatról"
 
-#: src/hooks/aimhook.cc:379
-#, fuzzy
+#: src/hooks/aimhook.cc:380
 msgid "aim connection failed"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "[aim] sikertelen kapcsolódás"
 
-#: src/hooks/aimhook.cc:381
-#, fuzzy, c-format
+#: src/hooks/aimhook.cc:382
+#, c-format
 msgid "+ [aim] connect failed: %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [aim] sikertelen kapcsolódás: %s"
 
-#: src/hooks/aimhook.cc:398
+#: src/hooks/aimhook.cc:399
 msgid "+ [aim] password was changed successfully"
-msgstr ""
+msgstr "+ [aim] a jelszóváltoztatás rendben"
 
-#: src/hooks/aimhook.cc:421
+#: src/hooks/aimhook.cc:422
 msgid "The user has no profile information."
-msgstr ""
+msgstr "A felhasználónak nincsenek megadva a személyi adatai"
 
-#: src/hooks/aimhook.cc:518
-#, fuzzy
+#: src/hooks/aimhook.cc:519
 msgid "+ [aim] password sent"
-msgstr "Jelszó"
+msgstr "+ [aim] jelszó elküldve"
 
-#: src/hooks/icqhook.cc:136
-#, fuzzy
+#: src/hooks/icqhook.cc:137
 msgid "+ [icq] connecting to the server"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [icq] kapcsolódás a szerverhez"
 
-#: src/hooks/icqhook.cc:951
-#, fuzzy
+#: src/hooks/icqhook.cc:950
 msgid "+ [icq] logged in"
-msgstr "+ bejelentkezve"
+msgstr "+ [icq] bejelentkezve"
+
+#: src/hooks/icqhook.cc:977
+msgid "as requested"
+msgstr "kérésre"
 
 #: src/hooks/icqhook.cc:978
-msgid "as requested"
-msgstr ""
+msgid "socket problems"
+msgstr "hálózati problémák"
 
 #: src/hooks/icqhook.cc:979
-msgid "socket problems"
-msgstr ""
+msgid "bad username"
+msgstr "hibás felhasználónév"
 
 #: src/hooks/icqhook.cc:980
-#, fuzzy
-msgid "bad username"
-msgstr " Proxy felhasználónév : %s "
+msgid "turboing"
+msgstr "turbózás"
 
 #: src/hooks/icqhook.cc:981
-msgid "turboing"
-msgstr ""
+msgid "bad password"
+msgstr "hibás jelszó"
 
 #: src/hooks/icqhook.cc:982
-#, fuzzy
-msgid "bad password"
-msgstr "Jelszó"
+msgid "username and password mismatch"
+msgstr "hibás azonosító és jelszó"
 
 #: src/hooks/icqhook.cc:983
-msgid "username and password mismatch"
-msgstr ""
-
-#: src/hooks/icqhook.cc:984
 msgid "already logged"
-msgstr ""
+msgstr "már bejelentkezve"
 
-#: src/hooks/icqhook.cc:997
-#, fuzzy
+#: src/hooks/icqhook.cc:996
 msgid "+ [icq] disconnected"
-msgstr "+ szétkapcsolódva"
+msgstr "+ [icq] szétkapcsolódva"
 
-#: src/hooks/icqhook.cc:1003
-#, fuzzy
+#: src/hooks/icqhook.cc:1002
 msgid "icq disconnection reason"
-msgstr "+ szétkapcsolódva"
+msgstr "icq szétkapcsolódás oka"
 
-#: src/hooks/icqhook.cc:1062
-#, fuzzy
+#: src/hooks/icqhook.cc:1061
 msgid "The user has accepted your authorization request"
-msgstr "hozzávett téged a kontaktlistájához"
+msgstr "A felhasználó elfogadta az azonosítási kérelmet"
 
-#: src/hooks/icqhook.cc:1066
-#, fuzzy
+#: src/hooks/icqhook.cc:1065
 msgid "The user has rejected your authorization request; the message was: "
-msgstr "Authorizáció kérés %lu -tól"
+msgstr "A felhasználó megtagadta az azonosítási kérelmet. Az üzenet:"
 
-#: src/hooks/icqhook.cc:1081 src/hooks/yahoohook.cc:613
-#, fuzzy
+#: src/hooks/icqhook.cc:1080 src/hooks/yahoohook.cc:585
 msgid "The user has added you to his/her contact list"
-msgstr "hozzávett téged a kontaktlistájához"
+msgstr "A felhasználó felvette az azonosítót a kapcsolataihoz"
 
-#: src/hooks/icqhook.cc:1121
-#, fuzzy, c-format
+#: src/hooks/icqhook.cc:1120
+#, c-format
 msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ a %s fájl %s, %lu -nek elküldve"
+msgstr "+ [icq] sikertelen SMS következõnek: %s, %s"
 
-#: src/hooks/icqhook.cc:1124
-#, fuzzy, c-format
+#: src/hooks/icqhook.cc:1123
+#, c-format
 msgid "+ [icq] failed SMS to %s"
-msgstr "+ a %s fájl %s, %lu -nek elküldve"
+msgstr "+ [icq] sikertelen SMS következõnek: %s"
 
-#: src/hooks/icqhook.cc:1135 src/hooks/irchook.cc:533
-#, fuzzy
+#: src/hooks/icqhook.cc:1134 src/hooks/irchook.cc:527
 msgid "Away message:"
-msgstr "Honlap"
+msgstr "Távollét oka:"
 
-#: src/hooks/icqhook.cc:1139
+#: src/hooks/icqhook.cc:1138
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr ""
+msgstr "+ [icq] a távolléti ok lekérdezése sikertelen a következõtõl: %s, %s"
 
-#: src/hooks/icqhook.cc:1271
+#: src/hooks/icqhook.cc:1270
 #, c-format
 msgid "%s requested our away message, sent the response"
-msgstr ""
+msgstr "%s lekérdezte a beállított távolléti okot, a válasz elküldve"
 
-#: src/hooks/icqhook.cc:1287
+#: src/hooks/icqhook.cc:1286
 msgid "Random Chat User"
-msgstr ""
+msgstr "Véletlenszerû beszélgetõpartner (Random Chat User)"
 
-#: src/hooks/icqhook.cc:1317
+#: src/hooks/icqhook.cc:1316
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
-msgstr ""
+msgstr "+ [icq] a keresés befejezõdött, %d találat van"
 
-#: src/hooks/irchook.cc:110
-#, fuzzy
+#: src/hooks/irchook.cc:104
 msgid "+ [irc] connecting to the server"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [irc] kapcsolódás a szerverhez"
 
-#: src/hooks/irchook.cc:122
-#, fuzzy
+#: src/hooks/irchook.cc:116
 msgid "+ [irc] unable to connect to the server"
-msgstr "+ nem lehet kapcsolódni az icq szerverhez"
+msgstr "+ [irc] a kapcsolódás a szerverhez sikertelen"
 
-#: src/hooks/irchook.cc:452
+#: src/hooks/irchook.cc:446
 #, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr ""
+msgstr "+ [irc] a csatornán lévõk száma: %d"
 
-#: src/hooks/irchook.cc:658
-#, fuzzy
+#: src/hooks/irchook.cc:639
 msgid "+ [irc] logged in"
-msgstr "+ bejelentkezve"
+msgstr "+ [irc] bejelentkezve"
 
-#: src/hooks/irchook.cc:696
-#, fuzzy
+#: src/hooks/irchook.cc:677
 msgid "+ [irc] disconnected from the network"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [irc] leválasztva a hálózatról"
 
-#: src/hooks/irchook.cc:710
-#, fuzzy, c-format
+#: src/hooks/irchook.cc:691
+#, c-format
 msgid "+ [irc] connect failed: %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [irc] sikertelen kapcsolódás: %s"
 
-#: src/hooks/irchook.cc:727
+#: src/hooks/irchook.cc:708
 msgid "+ [irc] nickname was changed successfully"
-msgstr ""
+msgstr "+ [irc] az azonosító megváltoztatva"
 
-#: src/hooks/irchook.cc:798
+#: src/hooks/irchook.cc:779
 msgid "On channels: "
-msgstr ""
+msgstr "Csatornák:"
 
-#: src/hooks/irchook.cc:1087
+#: src/hooks/irchook.cc:1068
 #, c-format
 msgid "Kicked by %s; reason: %s"
-msgstr ""
+msgstr "Kirúgva a csatornáról %s által, indok: %s"
 
-#: src/hooks/irchook.cc:1142
+#: src/hooks/irchook.cc:1123
 #, c-format
 msgid "The user has changed their nick from %s to %s"
-msgstr ""
+msgstr "%s megváltoztatta a nevét., az új név: %s"
 
-#: src/hooks/irchook.cc:1162
-#, fuzzy
+#: src/hooks/irchook.cc:1143
 msgid "+ [irc] password sent"
-msgstr "Jelszó"
+msgstr "+ [irc] jelszó elküldve"
 
-#: src/hooks/irchook.cc:1164
+#: src/hooks/irchook.cc:1145
 msgid "+ [irc] password was requested, but it's not set"
-msgstr ""
+msgstr "+ [irc] jelszó lekérve, de nincs elküldve"
 
-#: src/hooks/irchook.cc:1188
-#, c-format
-msgid "PING reply from the user: %d second(s)"
-msgstr ""
-
-#: src/hooks/irchook.cc:1193
-#, c-format
-msgid "The remote is using %s"
-msgstr ""
-
-#: src/hooks/msnhook.cc:74
-#, fuzzy
+#: src/hooks/msnhook.cc:73
 msgid "+ [msn] connecting to the server"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [msn] kapcsolódás a szerverhez"
 
-#: src/hooks/msnhook.cc:78
-#, fuzzy
+#: src/hooks/msnhook.cc:77
 msgid "+ [msn] logged in"
-msgstr "+ bejelentkezve"
+msgstr "+ [msn] bejelentkezve"
 
-#: src/hooks/msnhook.cc:83
-#, fuzzy
+#: src/hooks/msnhook.cc:82
 msgid "+ [msn] unable to connect to the server"
-msgstr "+ nem lehet kapcsolódni az icq szerverhez"
+msgstr "+ [msn] a kapcsolódás a szerverhez sikertelen"
 
-#: src/hooks/msnhook.cc:205
-#, fuzzy, c-format
+#: src/hooks/msnhook.cc:203
+#, c-format
 msgid "+ [msn] removing %s from the contacts"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [msn] %s eltávolítása a kapcsolatok közül"
 
-#: src/hooks/msnhook.cc:285
+#: src/hooks/msnhook.cc:276
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
-msgstr ""
+msgstr "+ [msn] fordított felhasználólistázás befejezve, %s találat"
 
-#: src/hooks/msnhook.cc:387
-#, fuzzy
+#: src/hooks/msnhook.cc:373
 msgid "+ [msn] disconnected"
-msgstr "+ szétkapcsolódva"
+msgstr "+ [msn] leválasztva"
 
-#: src/hooks/msnhook.cc:404
-#, fuzzy, c-format
+#: src/hooks/msnhook.cc:390
+#, c-format
 msgid "+ [msn] connecting with %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [msn] kapcsolódás a következõhöz: %s"
 
-#: src/hooks/msnhook.cc:406
-#, fuzzy, c-format
+#: src/hooks/msnhook.cc:392
+#, c-format
 msgid "+ [msn] connection from %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [msn] kapcsolódás a következõtõl: %s"
 
-#: src/hooks/msnhook.cc:422
-#, fuzzy, c-format
+#: src/hooks/msnhook.cc:408
+#, c-format
 msgid "+ [msn] e-mail from %s <%s>, %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [msn] e-mail a következõtõl: %s <%s>, %s"
 
-#: src/hooks/yahoohook.cc:101
-#, fuzzy
+#: src/hooks/yahoohook.cc:102
 msgid "+ [yahoo] connecting to the server"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] kapcsolódás a szerverhez"
 
-#: src/hooks/yahoohook.cc:109
-#, fuzzy
+#: src/hooks/yahoohook.cc:110
 msgid "+ [yahoo] cannot connect: "
-msgstr "+ kapcsolódás az icq szerverhez"
-
-#: src/hooks/yahoohook.cc:112
-msgid "could not resolve hostname"
-msgstr ""
+msgstr "+ [yahoo] a kapcsolódás a szerverhez sikertelen"
 
 #: src/hooks/yahoohook.cc:113
-msgid "could not create socket"
-msgstr ""
+msgid "could not resolve hostname"
+msgstr "a gépnév visszafejtése nem sikerült "
 
 #: src/hooks/yahoohook.cc:114
+msgid "could not create socket"
+msgstr "hálózati foglalat lérehozása nem sikerült"
+
+#: src/hooks/yahoohook.cc:115
 msgid "verify the pager host and port entered"
-msgstr ""
+msgstr "a gép és kapu ellenõrzése"
 
-#: src/hooks/yahoohook.cc:159
-#, fuzzy
+#: src/hooks/yahoohook.cc:151
 msgid "+ [yahoo] disconnected"
-msgstr "+ szétkapcsolódva"
+msgstr "+ [yahoo] leválasztva"
 
-#: src/hooks/yahoohook.cc:247
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:234
+#, c-format
 msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] %s hozzáadása a kapcsolatokhoz"
 
-#: src/hooks/yahoohook.cc:268
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:249
+#, c-format
 msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] %s eltávolítása a kapcsolatok közül"
 
-#: src/hooks/yahoohook.cc:282
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:261
+#, c-format
 msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] kilépés a %s konferenciából"
 
-#: src/hooks/yahoohook.cc:456
-#, fuzzy
+#: src/hooks/yahoohook.cc:433
 msgid "+ [yahoo] logged in"
-msgstr "+ bejelentkezve"
+msgstr "+ [yahoo] bejelentkezve"
 
-#: src/hooks/yahoohook.cc:471
+#: src/hooks/yahoohook.cc:438
 msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr ""
+msgstr "+ [yahoo] sikertelen bejelentkezés: hibás azonosító vagy jelszó"
 
-#: src/hooks/yahoohook.cc:476
+#: src/hooks/yahoohook.cc:443
 msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr ""
+msgstr "+ [yahoo] sikertelen bejelentkezés: a bejelentkezést letiltották"
 
-#: src/hooks/yahoohook.cc:477
+#: src/hooks/yahoohook.cc:444
 #, c-format
 msgid "+ to reactivate visit %s"
-msgstr ""
+msgstr "+ engedélyezhetõ: %s"
 
-#: src/hooks/yahoohook.cc:542
+#: src/hooks/yahoohook.cc:514
 #, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr ""
+msgid "The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "%s meghívja a %s konferenciára, a téma %s"
 
-#: src/hooks/yahoohook.cc:545
+#: src/hooks/yahoohook.cc:517
 msgid "Current conference members are: "
-msgstr ""
+msgstr "A konferencián résztvevõk:"
 
-#: src/hooks/yahoohook.cc:562
+#: src/hooks/yahoohook.cc:534
 msgid "Auto-joined the conference"
-msgstr ""
+msgstr "Automatikusan belépve a konferenciára"
 
-#: src/hooks/yahoohook.cc:576
+#: src/hooks/yahoohook.cc:548
 #, c-format
 msgid "The user %s has joined the conference"
-msgstr ""
+msgstr "%s csatlakozott a konferenciához"
 
-#: src/hooks/yahoohook.cc:591
+#: src/hooks/yahoohook.cc:563
 #, c-format
 msgid "The user %s has left the conference"
-msgstr ""
+msgstr "%s elhagyta a konferenciát"
 
-#: src/hooks/yahoohook.cc:617
-#, fuzzy
+#: src/hooks/yahoohook.cc:589
 msgid "the message was: "
-msgstr "Honlap"
+msgstr "az üzenet:"
 
-#: src/hooks/yahoohook.cc:629
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:601
+#, c-format
 msgid "+ [yahoo] %s: started typing"
-msgstr "+ bejelentkezve"
+msgstr "+ [yahoo] %s gépel"
 
-#: src/hooks/yahoohook.cc:629
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:601
+#, c-format
 msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ bejelentkezve"
+msgstr "+ [yahoo] %s megállt a gépeléssel"
 
-#: src/hooks/yahoohook.cc:649
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:621
+#, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] e-mail a következõtõl: %s, %s"
 
-#: src/hooks/yahoohook.cc:656
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:628
+#, c-format
 msgid "+ [yahoo] system: %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] rendszer: %s"
 
-#: src/hooks/yahoohook.cc:661
-#, fuzzy, c-format
+#: src/hooks/yahoohook.cc:633
+#, c-format
 msgid "+ [yahoo] error: %s"
-msgstr "+ kapcsolódás az icq szerverhez"
+msgstr "+ [yahoo] hiba: %s"
 
-#: src/accountmanager.cc:38
+#: src/accountmanager.cc:37
 msgid " IM account manager "
-msgstr ""
+msgstr " IM felhasználókezelõ"
 
-#: src/accountmanager.cc:44 src/icqdialogs.cc:202 src/icqdialogs.cc:497
-#: src/icqdialogs.cc:847 src/imcontroller.cc:41
+#: src/accountmanager.cc:43 src/icqdialogs.cc:202 src/icqdialogs.cc:494
+#: src/icqdialogs.cc:844 src/imcontroller.cc:40
 msgid "Change"
 msgstr "Változtat"
 
-#: src/accountmanager.cc:44 src/icqdialogs.cc:497 src/icqdialogs.cc:847
-#: src/icqdialogs.cc:1044 src/imcontroller.cc:281
+#: src/accountmanager.cc:43 src/icqdialogs.cc:494 src/icqdialogs.cc:844
+#: src/icqdialogs.cc:1041 src/imcontroller.cc:262
 msgid "Done"
 msgstr "Kész"
 
-#: src/accountmanager.cc:67
-#, fuzzy, c-format
+#: src/accountmanager.cc:66
+#, c-format
 msgid " Server : %s "
-msgstr " Szerver cím : %s "
+msgstr " Szerver : %s "
 
-#: src/accountmanager.cc:72
+#: src/accountmanager.cc:71
 #, c-format
 msgid " UIN : %s "
 msgstr " UIN : %s "
 
-#: src/accountmanager.cc:77
-#, fuzzy, c-format
+#: src/accountmanager.cc:76
+#, c-format
 msgid " Login : %s "
-msgstr " Telefon : %s "
+msgstr " Azonosító : %s "
 
-#: src/accountmanager.cc:83
-#, fuzzy, c-format
+#: src/accountmanager.cc:82
+#, c-format
 msgid " Password (optional) : %s "
-msgstr " Jelszó amit beállít : %s "
+msgstr " Jelszó (nem kötelezõ) : %s "
 
-#: src/accountmanager.cc:83
+#: src/accountmanager.cc:82
 #, c-format
 msgid " Password : %s "
 msgstr " Jelszó : %s "
 
-#: src/accountmanager.cc:87
+#: src/accountmanager.cc:86
 msgid " Register "
-msgstr ""
+msgstr " Regisztráció"
 
-#: src/accountmanager.cc:93
-#, fuzzy
-msgid " Change nickname "
-msgstr "Niknév: "
-
-#: src/accountmanager.cc:94
-#, fuzzy
+#: src/accountmanager.cc:89
 msgid " Update user details "
-msgstr " Frissíti a részleteid"
+msgstr " Adatok frissítése"
 
-#: src/accountmanager.cc:97
-#, fuzzy
+#: src/accountmanager.cc:92
 msgid " Set away message "
-msgstr "Honlap"
+msgstr " Távollét oka"
+
+#: src/accountmanager.cc:95
+msgid " Channel manager "
+msgstr " Csatornakezelõ"
+
+#: src/accountmanager.cc:98
+msgid " Synchronize contact list "
+msgstr " Kapcsolati lista szinkronizálása"
 
 #: src/accountmanager.cc:100
-msgid " Channel manager "
-msgstr ""
-
-#: src/accountmanager.cc:103
-#, fuzzy
-msgid " Synchronize contact list "
-msgstr "Kontaktok %s, %lu tól"
-
-#: src/accountmanager.cc:105
 msgid " Drop "
-msgstr ""
+msgstr " Elvet"
+
+#: src/accountmanager.cc:118
+msgid " user name: "
+msgstr " felhasználónév:"
 
 #: src/accountmanager.cc:123
-#, fuzzy
-msgid " user name: "
-msgstr " Proxy felhasználónév : %s "
+msgid " uin: "
+msgstr " uin: "
 
 #: src/accountmanager.cc:128
-#, fuzzy
-msgid " uin: "
-msgstr "új uin"
-
-#: src/accountmanager.cc:133
-#, fuzzy
 msgid " password: "
-msgstr "Jelszó"
+msgstr " jelszó: "
 
-#: src/accountmanager.cc:141
+#: src/accountmanager.cc:136
 msgid "Drop the account information first!"
-msgstr ""
+msgstr "Elõbb az azonosító adatait kell törölni."
 
-#: src/accountmanager.cc:155
-#, fuzzy
+#: src/accountmanager.cc:150
 msgid "You have to disconnect the service first!"
-msgstr "+ nem lehet kapcsolódni az icq szerverhez"
+msgstr "Elõbb a szolgáltáról le kell csatlakozni!"
 
-#: src/accountmanager.cc:164
-#, fuzzy
+#: src/accountmanager.cc:159
 msgid " server address: "
-msgstr " ICQ szerver cím : %s "
+msgstr " szerver cím: "
 
-#: src/accountmanager.cc:179 src/centericq.cc:369
-#, fuzzy
+#: src/accountmanager.cc:174 src/centericq.cc:347
 msgid "away message"
-msgstr "Honlap"
+msgstr "távollét oka"
 
-#: src/accountmanager.cc:190
+#: src/accountmanager.cc:185
 msgid "You must be logged in to preform the synchronization"
-msgstr ""
+msgstr "A szinkronizáláshoz elõbb be kell jelentkezni"
 
-#: src/centericq.cc:121
-#, fuzzy
+#: src/centericq.cc:120
 msgid "password: "
-msgstr "Jelszó"
+msgstr "jelszó: "
 
-#: src/centericq.cc:157
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M akt. Kontakt menü, F3/S icq státus megv., F4/G alapvetõ mûveletek, "
-"QKilépés"
+#: src/centericq.cc:156
+msgid "F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M kapcsolat menü, F3/S állapot, F4/G mûveletek, Q kilépés"
 
-#: src/centericq.cc:221
-#, fuzzy, c-format
+#: src/centericq.cc:220
+#, c-format
 msgid "Ignore all events from %s?"
-msgstr "Letilt minden mûveletet %s -tõl (%lu) ?"
+msgstr "%s tiltása?"
 
-#: src/centericq.cc:270
-#, fuzzy, c-format
+#: src/centericq.cc:260
+#, c-format
 msgid "Are you sure want to remove %s?"
-msgstr "Biztos eltávolítod %s -t (%lu) ?"
+msgstr "%s eltávolítása?"
 
-#: src/centericq.cc:278
+#: src/centericq.cc:268
 msgid "New nickname to show: "
-msgstr "Új niknév amit mutat: "
+msgstr "Új név: "
 
-#: src/centericq.cc:286
+#: src/centericq.cc:276
 msgid "Select a group to move the user to"
-msgstr ""
+msgstr "Célcsoport"
 
-#: src/centericq.cc:303
+#: src/centericq.cc:293
 msgid "+ cannot fetch away messages being offline"
-msgstr ""
+msgstr "+ Offline felhasználótól nem kérhetõ le a távolléti indok"
 
-#: src/centericq.cc:544
-#, fuzzy, c-format
+#: src/centericq.cc:522
+#, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ új levél érkezett, %d db üzenet"
+msgstr "+ [%02d:%02d:%02d] új levél érkezett, %d üzenet"
 
-#: src/centericq.cc:547
+#: src/centericq.cc:525
 #, c-format
 msgid "+ last msg from %s"
-msgstr "+ utolsó üzenet %s -tõl"
+msgstr "+ %s legutóbbi üzenete"
 
-#: src/centericq.cc:588
+#: src/centericq.cc:566
 msgid "! another running copy of centericq detected"
-msgstr ""
+msgstr "! több centericq is fut"
 
-#: src/centericq.cc:589
+#: src/centericq.cc:567
 #, c-format
 msgid "! this may cause problems. pid %lu"
-msgstr ""
+msgstr "! ez mûködési problémákat okozhat. Processzus azonosító: %lu"
 
-#: src/centericq.cc:713
-#, fuzzy
+#: src/centericq.cc:691
 msgid "Mobile number: "
-msgstr "fájlnév: "
+msgstr "Mobiltelefon szám:"
 
-#: src/centericq.cc:966
-#, fuzzy, c-format
+#: src/centericq.cc:944
+#, c-format
 msgid "+ no history items for %s"
-msgstr "+ nincsenek történeti elemei %s, %lu nak"
+msgstr "+ nincs napló a következõhöz: %s"
 
-#: src/centericq.cc:992
-#, fuzzy, c-format
+#: src/centericq.cc:970
+#, c-format
 msgid "+ user %s is already on the list"
-msgstr "+ %s -t hozzávettük a láthatók listájára"
+msgstr "+ %s már szerepel a listán"
 
-#: src/centericq.cc:998
-#, fuzzy
+#: src/centericq.cc:976
 msgid "Select a group to add the user to"
-msgstr "Válassz kontaktokat, hogy hozzávedd a listához"
+msgstr "Csoport kiválasztása"
 
-#: src/centericq.cc:1009
-#, fuzzy, c-format
+#: src/centericq.cc:987
+#, c-format
 msgid "+ %s has been added to the list"
-msgstr "+ %s -t hozzávettük a láthatók listájára"
+msgstr "+ %s felvéve a listára"
 
-#: src/centericq.cc:1080
+#: src/centericq.cc:1058
 msgid "+ the user is back"
 msgstr "+ a felhasználó visszajött"
 
-#: src/centericq.cc:1096
+#: src/centericq.cc:1074
 #, c-format
 msgid "+ [%s] status restored"
-msgstr ""
+msgstr "+ [%s] visszaállítva"
 
-#: src/centericq.cc:1111
-#, fuzzy, c-format
+#: src/centericq.cc:1089
+#, c-format
 msgid "+ [%s] automatically set %s"
-msgstr "+ automatikus N/A beállítás"
+msgstr "+ [%s] automatikusan beállítva %s"
 
-#: src/centericq.cc:1113
-#, fuzzy
+#: src/centericq.cc:1091
 msgid "away"
 msgstr "Távol"
 
-#: src/centericq.cc:1113
+#: src/centericq.cc:1091
 msgid "n/a"
-msgstr ""
+msgstr "nem elérhetõ"
 
-#: src/centericq.cc:1236
+#: src/centericq.cc:1214
 msgid "! free disk space is less than 10k, going offline"
-msgstr ""
+msgstr "! a szabad lemezterület 10 kB alatt van, lecsatlakozás"
 
-#: src/centericq.cc:1237
+#: src/centericq.cc:1215
 msgid "! otherwise we can lose events and configuration"
-msgstr ""
+msgstr "! a lemez betelése naplók és beállítások elvesztéséhez vezet"
 
 #: src/icqconf.cc:147
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
-msgstr ""
+msgstr "Meg vagyok elégedve az alap %s távolléti okkal: %s %s"
 
 #: src/icqconf.cc:761
 msgid "event sending error: not enough parameters"
-msgstr ""
+msgstr "eseményküldési hiba: kevés paraméter"
 
 #: src/icqconf.cc:772
 msgid "event sending error: only UINs are allowed with icq protocol"
-msgstr ""
+msgstr "eseményküldési hiba: csak az UIN engedélyezett az icq protokollon"
 
 #: src/icqconf.cc:787
 msgid "event sending error: unknown IM type"
-msgstr ""
+msgstr "eseményküldési hiba: ismeretlen IM típus"
 
 #: src/icqconf.cc:809
 msgid "event sending error: unknown event type"
-msgstr ""
+msgstr "eseményküldési hiba: ismeretlen esemény típus"
 
 #: src/icqconf.cc:821
-#, fuzzy, c-format
+#, c-format
 msgid "%s to %s has been put to the queue"
-msgstr "+ %s -t hozzávettük a láthatók listájára"
+msgstr "%s %s részére bekerült a pufferbe"
 
 #: src/icqconf.cc:827
 msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr ""
+msgstr "eseményküldés: a címzett nem szerepel a kapcsolatok között"
 
 #: src/icqconf.cc:869
 msgid "unknown status character was given"
-msgstr ""
+msgstr "ismeretlen állapotkarakter"
 
 #: src/icqconf.cc:872
 msgid "unknown IM type"
-msgstr ""
+msgstr "ismeretlen IM típus"
 
 #: src/icqconf.cc:875
 msgid "status change error: "
-msgstr ""
-
-#: src/icqconf.cc:884
-#, fuzzy
-msgid "Usage: "
-msgstr "Kor: "
-
-#: src/icqconf.cc:886
-#, fuzzy
-msgid "General options:"
-msgstr " Általános "
-
-#: src/icqconf.cc:887
-msgid ""
-"  --ascii, -a              use ASCII characters for windows and UI controls"
-msgstr ""
-
-#: src/icqconf.cc:888
-msgid "  --basedir, -b <path>     set a custom base directory"
-msgstr ""
-
-#: src/icqconf.cc:889
-#, fuzzy
-msgid "  --help                   display this stuff"
-msgstr " ICQ Állapot megváltoztatása         s"
-
-#: src/icqconf.cc:891
-#, fuzzy
-msgid "Events sending options:"
-msgstr " CenterICQ konfig opciók"
-
-#: src/icqconf.cc:892
-msgid "  -s, --send <event type>  event type; can be msg, sms or url"
-msgstr ""
-
-#: src/icqconf.cc:893
-msgid "  -S, --status <status>    change the current IM status"
-msgstr ""
-
-#: src/icqconf.cc:894
-msgid ""
-"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc"
-msgstr ""
-
-#: src/icqconf.cc:895
-msgid ""
-"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
-msgstr ""
-
-#: src/icqconf.cc:896
-msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
-msgstr ""
-
-#: src/icqconf.cc:898
-msgid "Report bugs to <centericq-bugs@konst.org.ua>."
-msgstr ""
+msgstr "az állapot megváltoztatása sikertelen:"
 
 #: src/icqcontact.cc:699
 msgid "The user has a birthday today"
-msgstr ""
+msgstr "Ma van a születésnapja"
 
 #: src/icqcontact.cc:727
 msgid "Jan"
@@ -727,7 +609,7 @@ msgstr "Feb"
 
 #: src/icqcontact.cc:727
 msgid "Mar"
-msgstr "Már"
+msgstr "Márc"
 
 #: src/icqcontact.cc:727
 msgid "Apr"
@@ -751,7 +633,7 @@ msgstr "Aug"
 
 #: src/icqcontact.cc:729
 msgid "Sep"
-msgstr "Sze"
+msgstr "Szept"
 
 #: src/icqcontact.cc:729
 msgid "Oct"
@@ -767,349 +649,333 @@ msgstr "Dec"
 
 #: src/icqdialogs.cc:44
 msgid "60-above"
-msgstr ""
+msgstr "60-felett"
 
 #: src/icqdialogs.cc:52
-#, fuzzy
 msgid "General Chat"
-msgstr " Általános "
+msgstr "Általános"
 
 #: src/icqdialogs.cc:53
 msgid "Romance"
-msgstr ""
+msgstr "Románc"
 
 #: src/icqdialogs.cc:54
-#, fuzzy
 msgid "Games"
-msgstr "Név"
+msgstr "Játékok"
 
 #: src/icqdialogs.cc:55
 msgid "Students"
-msgstr ""
+msgstr "Tanulók"
 
 #: src/icqdialogs.cc:56
 msgid "20 Something"
-msgstr ""
+msgstr "20 Valami"
 
 #: src/icqdialogs.cc:57
 msgid "30 Something"
-msgstr ""
+msgstr "30 Valami"
 
 #: src/icqdialogs.cc:58
 msgid "40 Something"
-msgstr ""
+msgstr "40 Valami"
 
 #: src/icqdialogs.cc:59
 msgid "50 Plus"
-msgstr ""
+msgstr "50 Plussz"
 
 #: src/icqdialogs.cc:60
 msgid "Seeking Women"
-msgstr ""
+msgstr "Nõt keres"
 
 #: src/icqdialogs.cc:61
 msgid "Seeking Men"
-msgstr ""
+msgstr "Pasit keres"
 
 #: src/icqdialogs.cc:97
 msgid " Search profiles "
-msgstr ""
+msgstr "Adatlap keresés"
 
-#: src/icqdialogs.cc:104 src/icqdialogs.cc:761 src/icqface.cc:1348
-#: src/imcontroller.cc:281
+#: src/icqdialogs.cc:104 src/icqdialogs.cc:758 src/icqface.cc:1318
+#: src/imcontroller.cc:262
 msgid "Remove"
-msgstr "Eltávolít"
+msgstr "Eltávolítás"
 
 #: src/icqdialogs.cc:104
 msgid "Load"
-msgstr ""
+msgstr "Betöltés"
 
 #: src/icqdialogs.cc:179
 msgid "+ you must be logged in to find/add users"
-msgstr ""
+msgstr "+ felhasználó kereséshez be kell jelentkezni"
 
 #: src/icqdialogs.cc:193
-#, fuzzy
 msgid " Find/add user(s) "
-msgstr " Keres/hozzávesz felhasználókat"
+msgstr " Felhasználó keresés, hozzáadás"
 
 #: src/icqdialogs.cc:202
 msgid "lOad"
-msgstr ""
+msgstr "IOad"
 
 #: src/icqdialogs.cc:202
 msgid "sAve"
-msgstr ""
+msgstr "Mentés"
 
 #: src/icqdialogs.cc:202
-#, fuzzy
 msgid "cLear"
-msgstr "Cell."
+msgstr "Törlés"
 
 #: src/icqdialogs.cc:202
-#, fuzzy
 msgid "Search/Add"
-msgstr "Új keresés"
+msgstr "Keresés/Hozzáadás"
 
 #: src/icqdialogs.cc:212
-#, fuzzy
 msgid " Network "
-msgstr " Munka "
+msgstr " Hálózat "
 
 #: src/icqdialogs.cc:217
-#, fuzzy
 msgid " UIN "
-msgstr "UIN: "
+msgstr " UIN "
 
-#: src/icqdialogs.cc:221 src/icqdialogs.cc:267 src/imcontroller.cc:49
-#: src/imcontroller.cc:59
+#: src/icqdialogs.cc:221 src/icqdialogs.cc:267 src/imcontroller.cc:48
+#: src/imcontroller.cc:58
 msgid " Details "
 msgstr " Részletek "
 
-#: src/icqdialogs.cc:222 src/icqdialogs.cc:385 src/imcontroller.cc:50
+#: src/icqdialogs.cc:222 src/icqdialogs.cc:384 src/imcontroller.cc:49
 #, c-format
 msgid " Nickname : %s "
-msgstr " Niknév : %s "
+msgstr " Azonosító: %s "
 
-#: src/icqdialogs.cc:223 src/icqdialogs.cc:274 src/imcontroller.cc:51
+#: src/icqdialogs.cc:223 src/icqdialogs.cc:274 src/imcontroller.cc:50
 #, c-format
 msgid " E-Mail : %s "
 msgstr " E-Mail : %s "
 
-#: src/icqdialogs.cc:224 src/icqdialogs.cc:392 src/imcontroller.cc:52
+#: src/icqdialogs.cc:224 src/icqdialogs.cc:391 src/imcontroller.cc:51
 #, c-format
 msgid " First name : %s "
 msgstr " Keresztnév : %s "
 
-#: src/icqdialogs.cc:225 src/icqdialogs.cc:393 src/imcontroller.cc:53
+#: src/icqdialogs.cc:225 src/icqdialogs.cc:392 src/imcontroller.cc:52
 #, c-format
 msgid " Last name : %s "
-msgstr " Családnév : %s "
+msgstr " Vezetéknév : %s "
 
 #: src/icqdialogs.cc:227
-#, fuzzy, c-format
+#, c-format
 msgid " Age range : %s "
-msgstr " Kor : %s "
+msgstr " Korhatárok : %s "
 
-#: src/icqdialogs.cc:228 src/icqdialogs.cc:395
+#: src/icqdialogs.cc:228 src/icqdialogs.cc:394
 #, c-format
 msgid " Gender : %s "
 msgstr " Nem : %s "
 
 #: src/icqdialogs.cc:229
-#, fuzzy, c-format
+#, c-format
 msgid " Language : %s "
-msgstr " 3. nyelv : %s "
+msgstr " Nyelv : %s "
 
 #: src/icqdialogs.cc:232
-#, fuzzy
 msgid " Location "
-msgstr "Helyzet"
+msgstr " Hely "
 
-#: src/icqdialogs.cc:233 src/icqdialogs.cc:400 src/icqdialogs.cc:412
+#: src/icqdialogs.cc:233 src/icqdialogs.cc:399 src/icqdialogs.cc:411
 #, c-format
 msgid " City : %s "
 msgstr " Város : %s "
 
-#: src/icqdialogs.cc:234 src/icqdialogs.cc:401 src/icqdialogs.cc:413
+#: src/icqdialogs.cc:234 src/icqdialogs.cc:400 src/icqdialogs.cc:412
 #, c-format
 msgid " State : %s "
-msgstr " Megye : %s "
+msgstr " Állam, Megye : %s "
 
-#: src/icqdialogs.cc:235 src/icqdialogs.cc:402 src/icqdialogs.cc:414
+#: src/icqdialogs.cc:235 src/icqdialogs.cc:401 src/icqdialogs.cc:413
 #, c-format
 msgid " Country : %s "
 msgstr " Ország : %s "
 
-#: src/icqdialogs.cc:238 src/icqdialogs.cc:411
+#: src/icqdialogs.cc:238 src/icqdialogs.cc:410
 msgid " Work "
-msgstr " Munka "
+msgstr " Munkahely "
 
-#: src/icqdialogs.cc:239 src/icqdialogs.cc:419
+#: src/icqdialogs.cc:239 src/icqdialogs.cc:418
 #, c-format
 msgid " Company : %s "
-msgstr " Cég : %s "
+msgstr " Cégnév : %s "
 
-#: src/icqdialogs.cc:240 src/icqdialogs.cc:420
+#: src/icqdialogs.cc:240 src/icqdialogs.cc:419
 #, c-format
 msgid " Department : %s "
 msgstr " Részleg : %s "
 
-#: src/icqdialogs.cc:241 src/icqdialogs.cc:421
+#: src/icqdialogs.cc:241 src/icqdialogs.cc:420
 #, c-format
 msgid " Position : %s "
-msgstr " Pozíció : %s "
+msgstr " Beosztás : %s "
 
 #: src/icqdialogs.cc:243
-#, fuzzy
 msgid " Online only "
-msgstr "Online"
+msgstr " Csak online "
 
 #: src/icqdialogs.cc:248
 msgid " Random chat group "
-msgstr ""
+msgstr " Véletlenszerû csoport"
 
 #: src/icqdialogs.cc:253
-#, fuzzy
 msgid " Keywords "
-msgstr " Munka "
+msgstr " Kulcsszavak "
 
 #: src/icqdialogs.cc:260
-#, fuzzy
 msgid " Nickname "
-msgstr "Niknév: "
+msgstr " Aznosító "
 
 #: src/icqdialogs.cc:268
-#, fuzzy, c-format
+#, c-format
 msgid " Channel : %s "
-msgstr "Változtat"
+msgstr " Csatorna : %s "
 
 #: src/icqdialogs.cc:271
-#, fuzzy, c-format
+#, c-format
 msgid " Name : %s "
-msgstr " Niknév : %s "
+msgstr " Név : %s "
 
 #: src/icqdialogs.cc:277
 msgid " Joined since the last check only "
-msgstr ""
+msgstr " Az utolsó ellenõrzés óta lépett be "
 
 #: src/icqdialogs.cc:283
-#, fuzzy
 msgid " Show users who have you on their list "
-msgstr "+ %s -t hozzávettük a láthatók listájára"
+msgstr " Azok a felhasználok akinek szerpel a kapcsolatai között"
 
 #: src/icqdialogs.cc:306
-#, fuzzy
 msgid "New profile name: "
-msgstr "fájlnév: "
+msgstr "Új adatlap neve: "
 
 #: src/icqdialogs.cc:310
 msgid "The profile with this name already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Már létezik adatlap ezen a néven. Felülírás?"
 
 #: src/icqdialogs.cc:329
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:330 src/icqdialogs.cc:519
+#: src/icqdialogs.cc:330 src/icqdialogs.cc:516
 msgid "Nickname: "
-msgstr "Niknév: "
+msgstr "Azonosító: "
 
-#: src/icqdialogs.cc:331 src/imcontroller.cc:71
+#: src/icqdialogs.cc:331 src/imcontroller.cc:70
 msgid "E-Mail: "
 msgstr "E-Mail: "
 
-#: src/icqdialogs.cc:332 src/icqdialogs.cc:524 src/imcontroller.cc:72
+#: src/icqdialogs.cc:332 src/icqdialogs.cc:521 src/imcontroller.cc:71
 msgid "First name: "
 msgstr "Keresztnév: "
 
-#: src/icqdialogs.cc:333 src/icqdialogs.cc:525 src/imcontroller.cc:73
+#: src/icqdialogs.cc:333 src/icqdialogs.cc:522 src/imcontroller.cc:72
 msgid "Last name: "
-msgstr "Családnév: "
+msgstr "Vezetéknév: "
 
-#: src/icqdialogs.cc:338 src/icqdialogs.cc:557 src/icqdialogs.cc:566
+#: src/icqdialogs.cc:338 src/icqdialogs.cc:554 src/icqdialogs.cc:563
 msgid "City: "
 msgstr "Város: "
 
-#: src/icqdialogs.cc:339 src/icqdialogs.cc:558 src/icqdialogs.cc:567
+#: src/icqdialogs.cc:339 src/icqdialogs.cc:555 src/icqdialogs.cc:564
 msgid "State: "
-msgstr "Megye: "
+msgstr "Állam/Megye: "
 
-#: src/icqdialogs.cc:341 src/icqdialogs.cc:570
+#: src/icqdialogs.cc:341 src/icqdialogs.cc:567
 msgid "Company: "
-msgstr "Cég: "
+msgstr "Cégnév: "
 
-#: src/icqdialogs.cc:342 src/icqdialogs.cc:571
+#: src/icqdialogs.cc:342 src/icqdialogs.cc:568
 msgid "Department: "
 msgstr "Részleg: "
 
-#: src/icqdialogs.cc:343 src/icqdialogs.cc:572
+#: src/icqdialogs.cc:343 src/icqdialogs.cc:569
 msgid "Position: "
-msgstr "Pozíció: "
+msgstr "Beosztás: "
 
 #: src/icqdialogs.cc:345
-#, fuzzy
 msgid "Channel: "
-msgstr "Változtat"
+msgstr "Csatorna: "
 
 #: src/icqdialogs.cc:346
-#, fuzzy
 msgid "Name: "
-msgstr "Név"
+msgstr "Név: "
 
 #: src/icqdialogs.cc:348
-#, fuzzy
 msgid "Keywords: "
-msgstr "Jelszó"
+msgstr "Kulcsszavak: "
 
-#: src/icqdialogs.cc:384 src/icqdialogs.cc:390
+#: src/icqdialogs.cc:382 src/icqdialogs.cc:389
 msgid " General "
 msgstr " Általános "
 
-#: src/icqdialogs.cc:394
+#: src/icqdialogs.cc:393
 #, c-format
 msgid " E-mail : %s "
 msgstr " E-mail : %s "
 
-#: src/icqdialogs.cc:396
+#: src/icqdialogs.cc:395
 #, c-format
 msgid " Birthdate : %s "
 msgstr " Szülinap : %s "
 
-#: src/icqdialogs.cc:397
+#: src/icqdialogs.cc:396
 #, c-format
 msgid " Age : %s "
 msgstr " Kor : %s "
 
-#: src/icqdialogs.cc:399
+#: src/icqdialogs.cc:398
 msgid " Home "
 msgstr " Otthon "
 
-#: src/icqdialogs.cc:405 src/icqdialogs.cc:417
+#: src/icqdialogs.cc:404 src/icqdialogs.cc:416
 #, c-format
 msgid " Street address : %s "
-msgstr " Utca cím : %s "
+msgstr " Cím : %s "
 
-#: src/icqdialogs.cc:406 src/icqdialogs.cc:418
+#: src/icqdialogs.cc:405 src/icqdialogs.cc:417
 #, c-format
 msgid " Zip code : %s "
 msgstr " Irányítószám : %s "
 
-#: src/icqdialogs.cc:407 src/icqdialogs.cc:423
+#: src/icqdialogs.cc:406 src/icqdialogs.cc:422
 #, c-format
 msgid " Phone : %s "
 msgstr " Telefon : %s "
 
-#: src/icqdialogs.cc:408 src/icqdialogs.cc:424
+#: src/icqdialogs.cc:407 src/icqdialogs.cc:423
 #, c-format
 msgid " Fax : %s "
 msgstr " Fax : %s "
 
-#: src/icqdialogs.cc:409
+#: src/icqdialogs.cc:408
 #, c-format
 msgid " Cellular phone : %s "
-msgstr " Cell. Telefon : %s "
+msgstr " Mobiltelefon : %s "
 
-#: src/icqdialogs.cc:422 src/icqdialogs.cc:427
+#: src/icqdialogs.cc:421 src/icqdialogs.cc:426
 #, c-format
 msgid " Homepage : %s "
 msgstr " Honlap : %s "
 
-#: src/icqdialogs.cc:426
+#: src/icqdialogs.cc:425
 msgid " More "
-msgstr " Többi "
+msgstr " További adatok "
 
-#: src/icqdialogs.cc:429
+#: src/icqdialogs.cc:428
 #, c-format
 msgid " 1st language : %s "
 msgstr " 1. nyelv : %s "
 
-#: src/icqdialogs.cc:432
+#: src/icqdialogs.cc:431
 #, c-format
 msgid " 2nd language : %s "
 msgstr " 2. nyelv : %s "
 
-#: src/icqdialogs.cc:435
+#: src/icqdialogs.cc:434
 #, c-format
 msgid " 3rd language : %s "
 msgstr " 3. nyelv : %s "
@@ -1117,1089 +983,997 @@ msgstr " 3. nyelv : %s "
 #.
 #. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
 #.
-#: src/icqdialogs.cc:438 src/icqdialogs.cc:883
+#: src/icqdialogs.cc:437 src/icqdialogs.cc:880
 msgid " Miscellaneous "
-msgstr ""
+msgstr " Egyéb "
+
+#: src/icqdialogs.cc:440
+#, c-format
+msgid " Enable web status indicator : %s "
+msgstr " Web állapotjelzõ engedélyezése: %s "
 
 #: src/icqdialogs.cc:441
 #, c-format
-msgid " Enable web status indicator : %s "
-msgstr ""
+msgid " Random chat group : %s "
+msgstr " Véletlenszerû csoport : %s "
 
 #: src/icqdialogs.cc:442
-#, fuzzy, c-format
-msgid " Random chat group : %s "
-msgstr " 2. nyelv : %s "
-
-#: src/icqdialogs.cc:443
 #, c-format
 msgid " Store contact list server-side : %s "
-msgstr ""
+msgstr " Kapcsolatok tárolása a szerveren: %s "
 
-#: src/icqdialogs.cc:445
-#, fuzzy, c-format
+#: src/icqdialogs.cc:444
+#, c-format
 msgid " Authorization required : %s "
-msgstr "Authorizáció kérés %lu -tól"
+msgstr " Azonosítás szükséges: %s "
 
-#: src/icqdialogs.cc:450
+#: src/icqdialogs.cc:448
 msgid " About "
 msgstr " Névjegy "
 
-#: src/icqdialogs.cc:467
-#, fuzzy
+#: src/icqdialogs.cc:464
 msgid "Fetching your details"
-msgstr "Letöltöm az ICQ információid"
+msgstr "Adatok letöltése"
+
+#: src/icqdialogs.cc:478
+#, c-format
+msgid " Your %s details "
+msgstr " %s adatok "
 
 #: src/icqdialogs.cc:481
-#, fuzzy, c-format
-msgid " Your %s details "
-msgstr " Az ICQ részleteid "
-
-#: src/icqdialogs.cc:484
-#, fuzzy, c-format
+#, c-format
 msgid " %s: details "
-msgstr " %s ICQ részletei "
+msgstr " %s: adatai "
 
-#: src/icqdialogs.cc:514
-#, fuzzy
+#: src/icqdialogs.cc:511
 msgid "Wait a moment. Your details haven't been fetched yet"
-msgstr "Várj egy picit. Az ICQ részleteid még nem töltöttem le"
+msgstr "Egy pillanat, az adatok letöltése folyamatban"
 
-#: src/icqdialogs.cc:526
+#: src/icqdialogs.cc:523
 msgid "E-mail: "
 msgstr "E-mail: "
 
-#: src/icqdialogs.cc:537
+#: src/icqdialogs.cc:534
 msgid "Enter birthdate (DD-MM-YYYY): "
-msgstr "Írd be a születési dátumot (NN-HH-ÉÉÉÉ): "
+msgstr "Születési dátum (NN-HH-ÉÉÉÉ): "
 
-#: src/icqdialogs.cc:555
+#: src/icqdialogs.cc:552
 msgid "Age: "
 msgstr "Kor: "
 
-#: src/icqdialogs.cc:560 src/icqdialogs.cc:569
+#: src/icqdialogs.cc:557 src/icqdialogs.cc:566
 msgid "Street address: "
-msgstr "Utca cím: "
+msgstr "Cím: "
 
-#: src/icqdialogs.cc:561 src/icqdialogs.cc:585
+#: src/icqdialogs.cc:558 src/icqdialogs.cc:582
 msgid "Zip code: "
 msgstr "Irányítószám: "
 
-#: src/icqdialogs.cc:562 src/icqdialogs.cc:574
+#: src/icqdialogs.cc:559 src/icqdialogs.cc:571
 msgid "Phone: "
 msgstr "Telefon: "
 
-#: src/icqdialogs.cc:563 src/icqdialogs.cc:575
+#: src/icqdialogs.cc:560 src/icqdialogs.cc:572
 msgid "Fax: "
 msgstr "Fax: "
 
-#: src/icqdialogs.cc:564
+#: src/icqdialogs.cc:561
 msgid "Cellular phone: "
-msgstr "Cell. Telefon: "
+msgstr "Mobiltelefon: "
 
-#: src/icqdialogs.cc:573 src/icqdialogs.cc:577
+#: src/icqdialogs.cc:570 src/icqdialogs.cc:574
 msgid "Homepage: "
 msgstr "Honlap: "
 
-#: src/icqdialogs.cc:583 src/icqface.cc:1012
+#: src/icqdialogs.cc:580 src/icqface.cc:982
 msgid "About"
 msgstr "Névjegy"
 
-#: src/icqdialogs.cc:656 src/icqdialogs.cc:694
-#, fuzzy
+#: src/icqdialogs.cc:653 src/icqdialogs.cc:691
 msgid "none"
-msgstr "Kész"
+msgstr "semmi"
 
-#: src/icqdialogs.cc:712
-#, fuzzy
+#: src/icqdialogs.cc:709
 msgid " [Ctrl-X save, Esc cancel] "
-msgstr " Névjegy [Ctrl-X ment, Esc mégse] "
+msgstr " [Ctrl-X mentés, Esc mégsem] "
 
-#: src/icqdialogs.cc:751
+#: src/icqdialogs.cc:748
 #, c-format
 msgid " Send file(s) to %s, %lu "
-msgstr " Elküldi a fájl(oka)t %s -nek, %lu "
+msgstr " Fájl(ok) küldése a következõnek: %s, %lu "
 
-#: src/icqdialogs.cc:761 src/icqdialogs.cc:1043 src/icqface.cc:61
-#: src/icqface.cc:692 src/icqface.cc:1348 src/imcontroller.cc:281
+#: src/icqdialogs.cc:758 src/icqdialogs.cc:1040 src/icqface.cc:57
+#: src/icqface.cc:662 src/icqface.cc:1318 src/imcontroller.cc:262
 msgid "Add"
-msgstr "Felvesz"
+msgstr "Hozzáadás"
 
-#: src/icqdialogs.cc:761
+#: src/icqdialogs.cc:758
 msgid "Comment"
 msgstr "Megjegyzés"
 
-#: src/icqdialogs.cc:761
+#: src/icqdialogs.cc:758
 msgid "Send"
-msgstr "Küld"
+msgstr "Küldés"
 
-#: src/icqdialogs.cc:771
+#: src/icqdialogs.cc:768
 msgid " Files "
 msgstr " Fájlok "
 
-#: src/icqdialogs.cc:772
+#: src/icqdialogs.cc:769
 msgid " Comment "
 msgstr " Megjegyzés "
 
-#: src/icqdialogs.cc:784
+#: src/icqdialogs.cc:781
 msgid "filename: "
 msgstr "fájlnév: "
 
-#: src/icqdialogs.cc:791
+#: src/icqdialogs.cc:788
 msgid "comment: "
 msgstr "megjegyzés: "
 
-#: src/icqdialogs.cc:838
-#, fuzzy
+#: src/icqdialogs.cc:835
 msgid " CenterICQ configuration "
-msgstr " CenterICQ konfig opciók"
+msgstr " CenterICQ beállítások "
 
-#: src/icqdialogs.cc:858
-#, fuzzy
+#: src/icqdialogs.cc:855
 msgid " User interface "
-msgstr " Proxy felhasználónév : %s "
+msgstr " Felhasználói felület "
 
-#: src/icqdialogs.cc:859
+#: src/icqdialogs.cc:856
 #, c-format
 msgid " Change sound device to : %s "
-msgstr " Megváltoztatja a hangeszközt : %s "
+msgstr " Hangeszköz : %s "
+
+#: src/icqdialogs.cc:857
+#, c-format
+msgid " Change color scheme to : %s "
+msgstr " Színbeállítás: %s "
 
 #: src/icqdialogs.cc:860
 #, c-format
-msgid " Change color scheme to : %s "
-msgstr " Megváltoztatja a színsémát: %s "
+msgid " Enable bidirectional languages support : %s "
+msgstr " Kétirányú nyelvtámogatás: %s "
 
 #: src/icqdialogs.cc:863
+msgid " Contact list "
+msgstr " Kapcsolatok "
+
+#: src/icqdialogs.cc:864
 #, c-format
-msgid " Enable bidirectional languages support : %s "
-msgstr ""
+msgid " Arrange contacts into groups : %s "
+msgstr " Kapcsolatok csoportokba rendezése: %s "
+
+#: src/icqdialogs.cc:865
+#, c-format
+msgid " Hide offline users : %s "
+msgstr " Offline felhasználók elrejtése : %s "
 
 #: src/icqdialogs.cc:866
-#, fuzzy
-msgid " Contact list "
-msgstr "Kontaktok %s, %lu tól"
+#, c-format
+msgid " Russian translation win1251-koi8 needed : %s "
+msgstr " Orosz win1251-koi8 átalakítás : %s "
 
 #: src/icqdialogs.cc:867
 #, c-format
-msgid " Arrange contacts into groups : %s "
-msgstr ""
+msgid " Anti-spam: kill msgs from users not on the list : %s "
+msgstr " Anti-spam: üzenetet tiltása a listán nem szereplõ felhasználóktól: %s "
 
 #: src/icqdialogs.cc:868
 #, c-format
-msgid " Hide offline users : %s "
-msgstr " Elrejti az offline felhasználókat : %s "
+msgid " Quote a message on reply : %s "
+msgstr " Üzenetet idézete válasznál : %s "
 
 #: src/icqdialogs.cc:869
 #, c-format
-msgid " Russian translation win1251-koi8 needed : %s "
-msgstr " Orosz fordítás a win1251-koi8 közt : %s "
+msgid " Check the local mailbox : %s "
+msgstr " Helyi postaláda figyelése : %s "
 
 #: src/icqdialogs.cc:870
 #, c-format
-msgid " Anti-spam: kill msgs from users not on the list : %s "
-msgstr ""
-" Anti-spam: nem fogadja az üzenetet a listnán nem lévõ felhasználóktól: %s "
+msgid " Remember passwords : %s "
+msgstr " Jelszavak megjegyzése : %s "
 
 #: src/icqdialogs.cc:871
 #, c-format
-msgid " Quote a message on reply : %s "
-msgstr " Idézze az üzenetet a válasznál : %s "
+msgid " Edit away message on status change : %s "
+msgstr " Állapotváltás esetén az indok szerkesztése : %s "
 
 #: src/icqdialogs.cc:872
-#, fuzzy, c-format
-msgid " Check the local mailbox : %s "
-msgstr " Jelszóellenõrzés : %s "
-
-#: src/icqdialogs.cc:873
-#, fuzzy, c-format
-msgid " Remember passwords : %s "
-msgstr " Megjegyzi az ICQ jelszót : %s "
+#, c-format
+msgid " Chat messaging mode : %s "
+msgstr " Üzenetmód : %s "
 
 #: src/icqdialogs.cc:874
-#, fuzzy, c-format
-msgid " Edit away message on status change : %s "
-msgstr " Idézze az üzenetet a válasznál : %s "
+msgid " Communications "
+msgstr " Kapcsolódások "
 
 #: src/icqdialogs.cc:875
-#, fuzzy, c-format
-msgid " Chat messaging mode : %s "
-msgstr " Idézze az üzenetet a válasznál : %s "
-
-#: src/icqdialogs.cc:877
-msgid " Communications "
-msgstr " Kapcsolatok "
-
-#: src/icqdialogs.cc:878
-#, fuzzy, c-format
+#, c-format
 msgid " SMTP server : %s "
-msgstr " Szerver cím : %s "
+msgstr " Levelezõ SMTP szerver : %s "
 
-#: src/icqdialogs.cc:884
+#: src/icqdialogs.cc:881
 #, c-format
 msgid " Automatically set Away period (min) : %d "
-msgstr " Automatikusan beállítja az távollétet (perc) : %d "
+msgstr " Távollét automatikus beállítása (perc után) : %d "
 
-#: src/icqdialogs.cc:885
+#: src/icqdialogs.cc:882
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
-msgstr " Automatikusan beállítja a N/A-t (perc) : %d "
+msgstr " Nem elérhetõ automatikus beállítása (perc után) : %d "
 
-#: src/icqdialogs.cc:886
+#: src/icqdialogs.cc:883
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
-msgstr ""
+msgstr " Részletes naplózás a ~/.centericq/log fájlban: %s "
 
-#: src/icqdialogs.cc:917
+#: src/icqdialogs.cc:914
 msgid "Auto Away period (0 - disable): "
-msgstr "Auto Távollét idõtartam (0 - letilt): "
+msgstr "Távollét automatikus bekapcsolásának idõtartama (0 - letiltás): "
 
-#: src/icqdialogs.cc:921
+#: src/icqdialogs.cc:918
 msgid "Auto N/A period (0 - disable): "
-msgstr "Auto N/A idõtartam (0 - letilt): "
+msgstr "Nem elérhetõ automatikus bekapcsolásának idõtartama (0 - letiltás): "
 
-#: src/icqdialogs.cc:929
+#: src/icqdialogs.cc:926
 msgid "SOCKS proxy server to use: "
-msgstr "Használandó SOCKS proxy szerver: "
+msgstr "SOCKS proxy szerver: "
 
-#: src/icqdialogs.cc:933
+#: src/icqdialogs.cc:930
 msgid "SOCKS proxy user name: "
 msgstr "SOCKS proxy felhasználónév: "
 
-#: src/icqdialogs.cc:937
+#: src/icqdialogs.cc:934
 msgid "SOCKS proxy password: "
 msgstr "SOCKS proxy jelszó: "
 
-#: src/icqdialogs.cc:952
-#, fuzzy
+#: src/icqdialogs.cc:949
 msgid "SMTP server hostname: "
-msgstr " Proxy felhasználónév : %s "
+msgstr "SMTP szerver: "
 
-#: src/icqdialogs.cc:1007
-#, fuzzy
+#: src/icqdialogs.cc:1004
 msgid "Your details have been fetched"
-msgstr "Az ICQ részleteid letöltve"
+msgstr "Az adatok letöltve"
 
-#: src/icqdialogs.cc:1019 src/icqface.cc:383
+#: src/icqdialogs.cc:1016 src/icqface.cc:353
 msgid "Organize contact groups"
-msgstr ""
+msgstr "Csoportok kezelése"
 
-#: src/icqdialogs.cc:1043
-#, fuzzy
+#: src/icqdialogs.cc:1040
 msgid "Rename"
-msgstr "Eltávolít"
+msgstr "Átnevezés"
 
-#: src/icqdialogs.cc:1043
-#, fuzzy
+#: src/icqdialogs.cc:1040
 msgid "rEmove"
-msgstr "Eltávolít"
+msgstr "Eltávolítás"
 
-#: src/icqdialogs.cc:1043
-#, fuzzy
+#: src/icqdialogs.cc:1040
 msgid "move Up"
-msgstr "Eltávolít"
+msgstr "Felfelé"
 
-#: src/icqdialogs.cc:1043
+#: src/icqdialogs.cc:1040
 msgid "move Down"
-msgstr ""
+msgstr "Lefelé"
 
-#: src/icqdialogs.cc:1044
+#: src/icqdialogs.cc:1041
 msgid "Select"
-msgstr ""
+msgstr "Kiválasztás"
 
-#: src/icqdialogs.cc:1059
+#: src/icqdialogs.cc:1056
 msgid " Groups "
-msgstr ""
+msgstr " Csoportok "
 
-#: src/icqdialogs.cc:1074
+#: src/icqdialogs.cc:1071
 msgid "Name for a group to be created: "
-msgstr ""
+msgstr "Létrehozandó csoport neve:"
 
-#: src/icqdialogs.cc:1084
-#, fuzzy
+#: src/icqdialogs.cc:1081
 msgid "New name for the group: "
-msgstr "Új niknév amit mutat: "
+msgstr "Új csoportnév: "
 
-#: src/icqdialogs.cc:1097
-#, fuzzy
+#: src/icqdialogs.cc:1094
 msgid "Are you sure want to remove the group?"
-msgstr "Biztos eltávolítod %s -t (%lu) ?"
+msgstr "Csoport törlése?"
 
-#: src/icqface.cc:39
+#: src/icqface.cc:38
 msgid "yes"
 msgstr "igen"
 
-#: src/icqface.cc:39 src/icqface.cc:105
+#: src/icqface.cc:38 src/icqface.cc:92
 msgid "no"
 msgstr "nem"
 
-#: src/icqface.cc:44
+#: src/icqface.cc:42
 msgid "Male"
 msgstr "Férfi"
 
-#: src/icqface.cc:45
+#: src/icqface.cc:43
 msgid "Female"
 msgstr "Nõ"
 
-#: src/icqface.cc:48
+#: src/icqface.cc:44
 msgid "Not specified"
 msgstr "Nincs megadva"
 
-#: src/icqface.cc:53
+#: src/icqface.cc:49
 msgid "Ok"
 msgstr "Ok"
 
-#: src/icqface.cc:54
+#: src/icqface.cc:50
 msgid "Next"
 msgstr "Következõ"
 
-#: src/icqface.cc:55
+#: src/icqface.cc:51
 msgid "Fwd"
 msgstr "Tovább"
 
-#: src/icqface.cc:56
+#: src/icqface.cc:52
 msgid "Reply"
 msgstr "Válasz"
 
-#: src/icqface.cc:57
+#: src/icqface.cc:53
 msgid "Open"
-msgstr ""
+msgstr "Megnyitás"
+
+#: src/icqface.cc:54
+msgid "Accept"
+msgstr "Elfogadás"
+
+#: src/icqface.cc:55
+msgid "Reject"
+msgstr "Visszautasítás"
+
+#: src/icqface.cc:56
+msgid "User info"
+msgstr "Felhasználói adatok"
 
 #: src/icqface.cc:58
-msgid "Accept"
-msgstr "Elfogad"
-
-#: src/icqface.cc:59
-msgid "Reject"
-msgstr ""
-
-#: src/icqface.cc:60
-msgid "User info"
-msgstr ""
-
-#: src/icqface.cc:62
 msgid "Prev"
-msgstr ""
+msgstr "Elõzõ"
 
-#: src/icqface.cc:70
+#: src/icqface.cc:65
 msgid "sound card"
 msgstr "hangkártya"
 
-#: src/icqface.cc:71
+#: src/icqface.cc:66
 msgid "speaker"
-msgstr "fejhalgató"
+msgstr "csipogó"
+
+#: src/icqface.cc:67
+msgid "disable"
+msgstr "letiltás"
+
+#: src/icqface.cc:68 src/icqface.cc:74
+msgid "don't change"
+msgstr "változatlan"
 
 #: src/icqface.cc:72
-msgid "disable"
-msgstr "letilt"
-
-#: src/icqface.cc:75 src/icqface.cc:84
-msgid "don't change"
-msgstr "nem változtat"
-
-#: src/icqface.cc:80
 msgid "dark"
 msgstr "sötét"
 
-#: src/icqface.cc:81
+#: src/icqface.cc:73
 msgid "blue"
 msgstr "kék"
 
-#: src/icqface.cc:101
-#, fuzzy
+#: src/icqface.cc:90
 msgid "mode 1"
-msgstr " Mód "
+msgstr "mód 1"
 
-#: src/icqface.cc:102
-#, fuzzy
+#: src/icqface.cc:91
 msgid "mode 2"
-msgstr " Mód "
+msgstr "mód 2"
 
-#: src/icqface.cc:246
+#: src/icqface.cc:233
 msgid " Send an URL            u"
-msgstr " URL-t küld             u"
+msgstr " URL küldése            u"
 
-#: src/icqface.cc:247
+#: src/icqface.cc:234
 msgid " Send an SMS"
-msgstr ""
+msgstr " SMS küldése"
 
-#: src/icqface.cc:248
-#, fuzzy
+#: src/icqface.cc:235
 msgid " Send contacts          c"
-msgstr " URL-t küld             u"
+msgstr " Kapcsolatok küldése     u"
 
-#: src/icqface.cc:249
-#, fuzzy
+#: src/icqface.cc:236
 msgid " Request authorization"
-msgstr "Authorizáció kérés %lu -tól"
+msgstr " Azonosítási kérelem"
+
+#: src/icqface.cc:237
+msgid " User's details         ?"
+msgstr " Felhasználó adatai  ?"
+
+#: src/icqface.cc:238
+msgid " Edit details           e"
+msgstr " Adatok szerkesztése   e"
+
+#: src/icqface.cc:239
+msgid " Fetch away message     f"
+msgstr " Távollét oka           f"
+
+#: src/icqface.cc:240
+msgid " Ignore user            i"
+msgstr " Felhasználó tiltása     i"
+
+#: src/icqface.cc:241
+msgid " Add to list            a"
+msgstr " Hozzáadás a listához  a"
+
+#: src/icqface.cc:242
+msgid " Rename contact         r"
+msgstr " Átnevezés            r"
+
+#: src/icqface.cc:243
+msgid " Move to group.."
+msgstr " Áthelyezés egy csoporba"
 
 #: src/icqface.cc:250
-#, fuzzy
-msgid " Edit details           e"
-msgstr " Felhasználó részletei  ?"
+msgid " Send a channel message   enter"
+msgstr " Csatornaüzenet küldése    enter"
 
 #: src/icqface.cc:251
-#, fuzzy
-msgid " Fetch away message     f"
-msgstr "Honlap"
+msgid " Channel chat history         h"
+msgstr " Csatorna eseménynapló     h"
 
 #: src/icqface.cc:252
-#, fuzzy
-msgid " Ignore user            i"
-msgstr " Eltávolítja          del"
-
-#: src/icqface.cc:253
-msgid " Add to list            a"
-msgstr " A listához ad          a"
-
-#: src/icqface.cc:254
-#, fuzzy
-msgid " Rename contact         r"
-msgstr " URL-t küld             u"
-
-#: src/icqface.cc:255
-msgid " Move to group.."
-msgstr ""
-
-#: src/icqface.cc:256
-msgid " Ping"
-msgstr ""
+msgid " Remove channel             del"
+msgstr " Csatorna eltávolítása         del"
 
 #: src/icqface.cc:257
-msgid " Fetch version info"
-msgstr ""
-
-#: src/icqface.cc:264
-#, fuzzy
-msgid " Send a channel message   enter"
-msgstr " Üzenetet küld      enter"
-
-#: src/icqface.cc:265
-#, fuzzy
-msgid " Channel chat history         h"
-msgstr " Esemény történet       h"
-
-#: src/icqface.cc:266
-#, fuzzy
-msgid " Remove channel             del"
-msgstr " Eltávolítja          del"
-
-#: src/icqface.cc:267
-#, fuzzy
-msgid " Join channel"
-msgstr "nem változtat"
-
-#: src/icqface.cc:268
-#, fuzzy
-msgid " Leave channel"
-msgstr "Változtat"
-
-#: src/icqface.cc:269
-#, fuzzy
-msgid " List nicknames               ?"
-msgstr " Elrejti az offline felhasználókat : %s "
-
-#: src/icqface.cc:274
 msgid " Send a message     enter"
-msgstr " Üzenetet küld      enter"
+msgstr " Üzenetküldés        enter"
 
-#: src/icqface.cc:275
+#: src/icqface.cc:258
 msgid " Events history         h"
-msgstr " Esemény történet       h"
+msgstr " Eseménynapló       h"
 
-#: src/icqface.cc:276
+#: src/icqface.cc:259
 msgid " Remove user          del"
-msgstr " Eltávolítja          del"
+msgstr " Felhasználó eltávolítása          del"
 
-#: src/icqface.cc:277
-msgid " User's details         ?"
-msgstr " Felhasználó részletei  ?"
-
-#: src/icqface.cc:368
-#, fuzzy
+#: src/icqface.cc:338
 msgid " Change status                       s"
-msgstr " ICQ Állapot megváltoztatása         s"
+msgstr " Állapot megváltoztatása         s"
 
-#: src/icqface.cc:369
+#: src/icqface.cc:339
 msgid " Go to contact..                 alt-s"
-msgstr " Kontkatra megy                  alt-s"
+msgstr " Kapcsolat keresése                  alt-s"
 
-#: src/icqface.cc:370
+#: src/icqface.cc:340
 msgid " Accounts.."
-msgstr ""
+msgstr " Azonosítók.."
 
-#: src/icqface.cc:371
+#: src/icqface.cc:341
 msgid " Find/add users"
-msgstr " Keres/hozzávesz felhasználókat"
+msgstr " Felhasználó keresés/hozzáadás"
 
-#: src/icqface.cc:372
+#: src/icqface.cc:342
 msgid " CenterICQ config options"
-msgstr " CenterICQ konfig opciók"
+msgstr " CenterICQ beállítások"
 
-#: src/icqface.cc:374
+#: src/icqface.cc:344
 msgid " View/edit ignore list"
-msgstr " Nézi/szerkeszti tiltólistát"
+msgstr " Tiltólista szerkesztése"
 
-#: src/icqface.cc:375
-#, fuzzy
+#: src/icqface.cc:345
 msgid " View/edit invisible list"
-msgstr " Nézi/szerkeszti a látható listát"
+msgstr " Láthatatlanok listájának szerkesztése"
 
-#: src/icqface.cc:376
+#: src/icqface.cc:346
 msgid " View/edit visible list"
-msgstr " Nézi/szerkeszti a látható listát"
+msgstr " Látathók listájának szerkesztése"
 
-#: src/icqface.cc:379
-#, fuzzy
+#: src/icqface.cc:349
 msgid " Show offline users                 F5"
-msgstr " Átnevezi               r"
+msgstr " Offline felhasználok megjelenítése    F5"
 
-#: src/icqface.cc:380
-#, fuzzy
+#: src/icqface.cc:350
 msgid " Hide offline users                 F5"
-msgstr " Elrejti az offline felhasználókat : %s "
+msgstr " Offline felhasználók elrejtése      F5"
 
-#: src/icqface.cc:692 src/icqface.cc:1348
+#: src/icqface.cc:662 src/icqface.cc:1318
 msgid "Details"
 msgstr "Részletek"
 
-#: src/icqface.cc:692
-#, fuzzy
+#: src/icqface.cc:662
 msgid "Message"
-msgstr "Honlap"
+msgstr "Üzenet"
 
-#: src/icqface.cc:693
+#: src/icqface.cc:663
 msgid "New search"
 msgstr "Új keresés"
 
-#: src/icqface.cc:699
+#: src/icqface.cc:669
 msgid "Searching contacts.."
-msgstr ""
+msgstr "Kapcsolatok keresése.."
 
-#: src/icqface.cc:765
+#: src/icqface.cc:735
 msgid "Search results [done]"
-msgstr ""
+msgstr "Találatok"
 
-#: src/icqface.cc:776
-#, fuzzy, c-format
+#: src/icqface.cc:746
+#, c-format
 msgid "Information about %s"
-msgstr "Információ %lu, %s -rõl"
+msgstr "Információ a következõrõl: %s"
 
-#: src/icqface.cc:834
+#: src/icqface.cc:804
 msgid "Nickname"
-msgstr "Niknév"
+msgstr "Azonosító"
 
-#: src/icqface.cc:835
+#: src/icqface.cc:805
 msgid "Name"
 msgstr "Név"
 
-#: src/icqface.cc:836
+#: src/icqface.cc:806
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "E-mail cím"
 
-#: src/icqface.cc:837
+#: src/icqface.cc:807
 msgid "2nd e-mail"
-msgstr "2. e-mail"
+msgstr "2. e-mail cím"
 
-#: src/icqface.cc:838
+#: src/icqface.cc:808
 msgid "Old e-mail"
-msgstr "Régi e-mail"
+msgstr "Régi e-mail cím"
 
-#: src/icqface.cc:839
+#: src/icqface.cc:809
 msgid "Gender"
 msgstr "Nem"
 
-#: src/icqface.cc:840
+#: src/icqface.cc:810
 msgid "Birthdate"
 msgstr "Szülinap"
 
-#: src/icqface.cc:841
+#: src/icqface.cc:811
 msgid "Age"
 msgstr "Kor"
 
-#: src/icqface.cc:842
+#: src/icqface.cc:812
 msgid "Languages"
 msgstr "Nyelvek"
 
-#: src/icqface.cc:843
+#: src/icqface.cc:813
 msgid "Last IP"
-msgstr "Utolsó IP"
+msgstr "Legutóbbi IP"
 
-#: src/icqface.cc:864
+#: src/icqface.cc:834
 msgid "Last seen"
-msgstr "Utolsó bejelentkezés"
+msgstr "Legutóbbi bejelentkezés"
 
-#: src/icqface.cc:866
+#: src/icqface.cc:836
 msgid "Never"
 msgstr "Soha"
 
-#: src/icqface.cc:879 src/icqface.cc:922
+#: src/icqface.cc:849 src/icqface.cc:892
 msgid "Address"
 msgstr "Cím"
 
-#: src/icqface.cc:880 src/icqface.cc:923
+#: src/icqface.cc:850 src/icqface.cc:893
 msgid "Location"
-msgstr "Helyzet"
+msgstr "Hely"
 
-#: src/icqface.cc:881 src/icqface.cc:924
+#: src/icqface.cc:851 src/icqface.cc:894
 msgid "Zip code"
 msgstr "Irányítószám"
 
-#: src/icqface.cc:882 src/icqface.cc:930
+#: src/icqface.cc:852 src/icqface.cc:900
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:883 src/icqface.cc:931
+#: src/icqface.cc:853 src/icqface.cc:901
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:884
+#: src/icqface.cc:854
 msgid "Cellular"
-msgstr "Cell."
+msgstr "Mobiltelefon"
 
-#: src/icqface.cc:885
+#: src/icqface.cc:855
 msgid "Timezone"
-msgstr ""
+msgstr "Idõzóna"
 
-#: src/icqface.cc:887 src/icqface.cc:932
+#: src/icqface.cc:857 src/icqface.cc:902
 msgid "Homepage"
 msgstr "Honlap"
 
-#: src/icqface.cc:926
+#: src/icqface.cc:896
 msgid "Company"
-msgstr "Cég"
+msgstr "Cégnév"
 
-#: src/icqface.cc:927
+#: src/icqface.cc:897
 msgid "Department"
 msgstr "Részleg"
 
-#: src/icqface.cc:928
+#: src/icqface.cc:898
 msgid "Title"
 msgstr "Cím"
 
-#: src/icqface.cc:972
+#: src/icqface.cc:942
 msgid "Interests"
-msgstr "Érdekeltségek"
+msgstr "Érdeklõdési kör"
 
-#: src/icqface.cc:984
-#, fuzzy
+#: src/icqface.cc:954
 msgid "Background"
 msgstr "Háttér/Múlt"
 
-#: src/icqface.cc:1005 src/icqface.cc:2103
+#: src/icqface.cc:975 src/icqface.cc:2073
 msgid "F2 to URLs, ESC close"
-msgstr ""
+msgstr "F2 URL-ek, Esc mégsem"
 
-#: src/icqface.cc:1012
+#: src/icqface.cc:982
 msgid "Info"
-msgstr "Infó"
+msgstr "Információk"
 
-#: src/icqface.cc:1012
+#: src/icqface.cc:982
 msgid "Home"
 msgstr "Otthon"
 
-#: src/icqface.cc:1012
+#: src/icqface.cc:982
 msgid "Work"
-msgstr "Munka"
+msgstr "Munkahely"
 
-#: src/icqface.cc:1012
+#: src/icqface.cc:982
 msgid "More"
-msgstr "Többi"
+msgstr "További"
 
-#: src/icqface.cc:1013
+#: src/icqface.cc:983
 msgid "Retrieve"
 msgstr "Fogadás"
 
-#: src/icqface.cc:1013
+#: src/icqface.cc:983
 msgid "Edit"
-msgstr "Szerkeszt"
+msgstr "Szerkesztés"
 
-#: src/icqface.cc:1083
-#, fuzzy
+#: src/icqface.cc:1053
 msgid " [icq] ICQ network"
-msgstr " Bejegyzés az ICQ hálón "
+msgstr " [icq] ICQ hálózat"
 
-#: src/icqface.cc:1084
+#: src/icqface.cc:1054
 msgid " [yahoo] YAIM"
-msgstr ""
+msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:1085
+#: src/icqface.cc:1055
 msgid " [msn] M$ Messenger"
-msgstr ""
+msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:1086
+#: src/icqface.cc:1056
 msgid " [aim] AOL TOC"
-msgstr ""
+msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:1087
+#: src/icqface.cc:1057
 msgid " [irc] IRC"
-msgstr ""
+msgstr " [irc] IRC"
 
-#: src/icqface.cc:1118
+#: src/icqface.cc:1088
 msgid " [all] All of them"
-msgstr ""
+msgstr " [all] mind"
 
-#: src/icqface.cc:1139
+#: src/icqface.cc:1109
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:1140
+#: src/icqface.cc:1110
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:1141
+#: src/icqface.cc:1111
 msgid " [a] Away"
 msgstr " [a] Távol"
 
-#: src/icqface.cc:1142
+#: src/icqface.cc:1112
 msgid " [d] Do not disturb"
 msgstr " [d] Ne zavarjanak"
 
-#: src/icqface.cc:1143
+#: src/icqface.cc:1113
 msgid " [n] Not available"
 msgstr " [n] Nem elérhetõ"
 
-#: src/icqface.cc:1144
+#: src/icqface.cc:1114
 msgid " [c] Occupied"
 msgstr " [c] Elfoglalt"
 
-#: src/icqface.cc:1145
+#: src/icqface.cc:1115
 msgid " [f] Free for chat"
 msgstr " [f] Ráér dumcsizni"
 
-#: src/icqface.cc:1146
+#: src/icqface.cc:1116
 msgid " [i] Invisible"
 msgstr " [i] Láthatatlan"
 
-#: src/icqface.cc:1204
+#: src/icqface.cc:1174
 msgid " enter to select a file, esc to cancel "
-msgstr " enter kiválaszt egy fájlt, esc mégse "
+msgstr " Enter fájl kiválasztása, Esc mégsem "
 
-#: src/icqface.cc:1348
+#: src/icqface.cc:1318
 msgid "Move to contacts"
-msgstr "Kontaktok közé tesz"
+msgstr "Hozzáadás a kapcsolatokhoz"
 
-#: src/icqface.cc:1360
-#, fuzzy
+#: src/icqface.cc:1330
 msgid "Ignore list"
-msgstr "ICQ tiltólista"
+msgstr "Tiltólista"
 
-#: src/icqface.cc:1361
-#, fuzzy
+#: src/icqface.cc:1331
 msgid "Visible list"
-msgstr "ICQ láthatólista"
+msgstr "Láthatólista"
 
-#: src/icqface.cc:1362
-#, fuzzy
+#: src/icqface.cc:1332
 msgid "Invisible list"
-msgstr "ICQ láthatatlanlista"
+msgstr "Láthatatlanlista"
 
-#: src/icqface.cc:1384
+#: src/icqface.cc:1354
 msgid "Select contacts to add to the list"
-msgstr "Válassz kontaktokat, hogy hozzávedd a listához"
+msgstr "Kapcsolatok hozzáadása a listához"
 
-#: src/icqface.cc:1433
+#: src/icqface.cc:1403
 msgid "Event recipients"
 msgstr "Esemény címzettjei"
 
-#: src/icqface.cc:1561
+#: src/icqface.cc:1531
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
-msgstr "Gyorskeresés: írd be amit keresel, Alt-S újra keres, Enter befejez"
+msgstr "Gyorskeresés: Alt-S újra keres, Enter befejez"
 
-#: src/icqface.cc:1675
+#: src/icqface.cc:1645
 msgid "+ no URLs within the current context"
-msgstr ""
+msgstr "+ Nincs hivatkozás az aktuális szövegben"
 
-#: src/icqface.cc:1688
+#: src/icqface.cc:1658
 msgid "URLs within the current context"
-msgstr ""
+msgstr "Hivatkozások a szövegben"
 
-#: src/icqface.cc:1720 src/icqface.cc:2064
-#, fuzzy, c-format
+#: src/icqface.cc:1690 src/icqface.cc:2034
+#, c-format
 msgid "Outgoing %s to %s"
-msgstr "Ír egy üzenetet %s, %lu -nak"
+msgstr "Kimenõ %s a következõnek: %s"
 
-#: src/icqface.cc:1722 src/icqface.cc:1961
+#: src/icqface.cc:1692 src/icqface.cc:1931
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
-msgstr ""
-"Ctrl-X küld, Ctrl-P többnek, Ctrl-O történet, Alt-? részletek, ESC mégse"
+msgstr "Ctrl-X elküldés, Ctrl-P többeknek, Ctrl-O napló, Alt-? részletek, ESC mégsem"
 
-#: src/icqface.cc:1816
-#, fuzzy
+#: src/icqface.cc:1786
 msgid "Send contacts.."
-msgstr "Kontaktok közé tesz"
+msgstr "Kapcsolatok elküldése.."
 
-#: src/icqface.cc:2065
+#: src/icqface.cc:2035
 #, c-format
 msgid "Sent on %s"
 msgstr "Elküldve: %s"
 
-#: src/icqface.cc:2068
-#, fuzzy, c-format
+#: src/icqface.cc:2038
+#, c-format
 msgid "Incoming %s from %s"
-msgstr "Kontaktok %s, %lu tól"
+msgstr "Bejövõ %s a következõtõl: %s"
 
-#: src/icqface.cc:2069
-#, fuzzy, c-format
+#: src/icqface.cc:2039
+#, c-format
 msgid "Received on %s"
-msgstr "%s, fgdv %s kor"
+msgstr "Fogadva: %s"
 
-#: src/icqface.cc:2198
+#: src/icqface.cc:2168
 #, c-format
 msgid "History for %s, %d events total"
-msgstr ""
+msgstr "%s napló, összesen %d esemény"
 
-#: src/icqface.cc:2201
-msgid "/ search, N again, ESC cancel"
-msgstr ""
+#: src/icqface.cc:2171
+msgid "S search, L again, ESC cancel"
+msgstr "S keresés, L újra, Esc mégsem"
 
-#: src/icqface.cc:2207
-#, fuzzy
+#: src/icqface.cc:2177
 msgid "search for: "
-msgstr "+ keresés kész"
+msgstr "keresés:"
 
 #: src/icqgroups.cc:42
-#, fuzzy
 msgid "General"
-msgstr " Általános "
+msgstr "Általános"
 
-#: src/imcontroller.cc:35
-#, fuzzy
+#: src/imcontroller.cc:34
 msgid " Register on ICQ network "
-msgstr " Bejegyzés az ICQ hálón "
+msgstr " Regisztráció az ICQ hálózaton "
 
-#: src/imcontroller.cc:41
+#: src/imcontroller.cc:40
 msgid "Go ahead"
-msgstr ""
+msgstr "Mehet"
+
+#: src/imcontroller.cc:54
+msgid " Password "
+msgstr " Jelszó "
 
 #: src/imcontroller.cc:55
-#, fuzzy
-msgid " Password "
-msgstr "Jelszó"
-
-#: src/imcontroller.cc:56
 #, c-format
 msgid " Password to set : %s "
-msgstr " Jelszó amit beállít : %s "
+msgstr " Beállítandó jelszó : %s "
 
-#: src/imcontroller.cc:57
+#: src/imcontroller.cc:56
 #, c-format
 msgid " Check the password : %s "
 msgstr " Jelszóellenõrzés : %s "
 
-#: src/imcontroller.cc:60
-#, fuzzy, c-format
+#: src/imcontroller.cc:59
+#, c-format
 msgid " Server to use : %s "
 msgstr " Szerver cím : %s "
 
-#: src/imcontroller.cc:68
+#: src/imcontroller.cc:67
 msgid "Password: "
-msgstr "Jelszó"
+msgstr "Jelszó: "
 
-#: src/imcontroller.cc:69
+#: src/imcontroller.cc:68
 msgid "Check the password you entered: "
 msgstr "A beírt jelszó ellenõrzése: "
 
-#: src/imcontroller.cc:70
+#: src/imcontroller.cc:69
 msgid "Nickname to set: "
-msgstr "Beállítandó niknév: "
+msgstr "Beállítandó azonosító: "
 
-#: src/imcontroller.cc:74
-#, fuzzy
+#: src/imcontroller.cc:73
 msgid "Server: "
-msgstr "Soha"
+msgstr "Szerver: "
 
-#: src/imcontroller.cc:80
+#: src/imcontroller.cc:79
 msgid "Passwords do not match"
-msgstr "A jelszavak nem azonosak"
+msgstr "A megadott jelszavak nem egyeznek"
 
-#: src/imcontroller.cc:82
-#, fuzzy
+#: src/imcontroller.cc:81
 msgid "Password must be entered"
-msgstr "A beírt jelszó ellenõrzése: "
+msgstr "A jelszó megadása kötelezõ"
 
-#: src/imcontroller.cc:100
+#: src/imcontroller.cc:99
 msgid " Registration progress "
-msgstr " Regisztrációs folyamat "
+msgstr " Regisztráció "
 
-#: src/imcontroller.cc:103
+#: src/imcontroller.cc:102
 #, c-format
 msgid "Connecting to the server %s ..."
-msgstr "Kapcsolódás a %s szerverhez ..."
+msgstr "Kapcsolódás a következõ szerverhez: %s ..."
 
-#: src/imcontroller.cc:107
+#: src/imcontroller.cc:106
 msgid "Sending request"
-msgstr "Kérés küldése"
+msgstr "Kérelem elküldése"
 
-#: src/imcontroller.cc:113
+#: src/imcontroller.cc:112
 msgid "Timed out waiting for a new uin. Retry?"
-msgstr "Letelt az idõ, még az új uin-ra vártunk. Újra?"
+msgstr "Idõtúllépés az új UIN-ra várakozáskor. Újrapróbálkozás?"
 
-#: src/imcontroller.cc:117
+#: src/imcontroller.cc:116
 msgid "Retrying.."
-msgstr "Újrapróbálás..."
+msgstr "Újrapróbálkozás..."
 
-#: src/imcontroller.cc:123
+#: src/imcontroller.cc:122
 #, c-format
 msgid "New UIN received, %lu"
-msgstr "Új UIN-t kaptunk, %lu"
+msgstr "Az új UIN: %lu"
 
-#: src/imcontroller.cc:139 src/imcontroller.cc:213
+#: src/imcontroller.cc:138 src/imcontroller.cc:183
 msgid "Disconnected"
-msgstr "Lekapcsolódtunk"
+msgstr "Leválasztva"
 
-#: src/imcontroller.cc:142
+#: src/imcontroller.cc:141
 msgid "Unable to connect to the icq server. Retry?"
-msgstr "Nem lehet kapcsolódni az icq serverhez. Újra?"
+msgstr "Kapcsolódás az ICQ szerverhez sikertelen. Újrapróbálozás?"
 
-#: src/imcontroller.cc:164
+#: src/imcontroller.cc:163
 msgid "You must be logged to the ICQ network to update the details"
-msgstr ""
+msgstr "Az adatok frissítéséhez az ICQ hálozatra be kell jelentkezni."
 
-#: src/imcontroller.cc:180
-msgid "new MSN friendly nick: "
-msgstr ""
-
-#: src/imcontroller.cc:189
-#, c-format
-msgid "Your friendly nickname has been changed to %s"
-msgstr ""
-
-#: src/imcontroller.cc:193
-msgid "You must be logged to the MSN network to update the friendly nick"
-msgstr ""
-
-#: src/imcontroller.cc:203
-#, fuzzy
+#: src/imcontroller.cc:173
 msgid " Contact list synchronization "
-msgstr "Kontaktok %s, %lu tól"
+msgstr " Kapcsolatok listájának szinkronizálása "
 
-#: src/imcontroller.cc:204
+#: src/imcontroller.cc:174
 msgid "Starting the synchronization process"
-msgstr ""
+msgstr "Szinkronizáció indítása"
 
-#: src/imcontroller.cc:208
+#: src/imcontroller.cc:178
 #, c-format
 msgid "Attempt #%d"
-msgstr ""
+msgstr "Próbálkozás: %d"
 
-#: src/imcontroller.cc:209
+#: src/imcontroller.cc:179
 #, c-format
 msgid ".. %d already synchronized, %d contacts to be stored"
-msgstr ""
+msgstr ".. %d szinkronizálva, %d kapcsolat kerül tárolásra"
 
-#: src/imcontroller.cc:212 src/imcontroller.cc:253
+#: src/imcontroller.cc:182 src/imcontroller.cc:223
 msgid "Finished"
-msgstr ""
+msgstr "A mûvelet befejezõdött"
+
+#: src/imcontroller.cc:184
+msgid "Too many attempts, gave up"
+msgstr "Túl sok sikertelen probálkozás, megúntam"
+
+#: src/imcontroller.cc:206
+msgid " Uploading buddies "
+msgstr " Kapcsoaltok feltöltése "
+
+#: src/imcontroller.cc:209
+msgid "No contacts to be synchronize"
+msgstr "Nincs szinkronizálandó kapcsolat"
+
+#: src/imcontroller.cc:210
+msgid ".. all of them are already stored server-side"
+msgstr ".. már mind szerepel a szerveren"
 
 #: src/imcontroller.cc:214
-msgid "Too many attempts, gave up"
-msgstr ""
-
-#: src/imcontroller.cc:236
-msgid " Uploading buddies "
-msgstr ""
-
-#: src/imcontroller.cc:239
-#, fuzzy
-msgid "No contacts to be synchronize"
-msgstr "Kontaktok %s, %lu tól"
-
-#: src/imcontroller.cc:240
-msgid ".. all of them are already stored server-side"
-msgstr ""
-
-#: src/imcontroller.cc:244
 #, c-format
 msgid "%d contacts are do be stored server-side. Add them now?"
-msgstr ""
+msgstr "%d kapcsolat tárolása a szerveren. Mehet?"
 
-#: src/imcontroller.cc:249
+#: src/imcontroller.cc:219
 #, c-format
 msgid ".. adding %s"
-msgstr ""
+msgstr "... %s hozzáadása"
 
-#: src/imcontroller.cc:255
+#: src/imcontroller.cc:225
 msgid "Cancelled"
-msgstr ""
+msgstr "Megszakítva"
 
-#: src/imcontroller.cc:275
-#, fuzzy
+#: src/imcontroller.cc:256
 msgid " IRC channels manager "
-msgstr "Változtat"
+msgstr " IRC csatornák kezelése"
 
-#: src/imcontroller.cc:281
+#: src/imcontroller.cc:262
 msgid "Join/leave"
-msgstr ""
+msgstr "Belépés/kilépés"
 
-#: src/imcontroller.cc:281
-#, fuzzy
+#: src/imcontroller.cc:262
 msgid "Show on the list"
-msgstr "Kontaktok %s, %lu tól"
+msgstr "Megjelenítés a listán"
 
-#: src/imcontroller.cc:295
-#, fuzzy
+#: src/imcontroller.cc:276
 msgid " Channels "
-msgstr "Változtat"
+msgstr " Csatornák "
 
-#: src/imcontroller.cc:298
-#, fuzzy
+#: src/imcontroller.cc:279
 msgid "joined"
-msgstr "Kihagy"
+msgstr "belépett"
 
-#: src/imcontroller.cc:298
+#: src/imcontroller.cc:279
 msgid "not joined"
-msgstr ""
+msgstr "nem lépett be"
 
-#: src/imcontroller.cc:299
-#, fuzzy
+#: src/imcontroller.cc:280
 msgid "shown"
-msgstr "Telefon"
+msgstr "megjelenítve"
 
-#: src/imcontroller.cc:299
+#: src/imcontroller.cc:280
 msgid "hidden"
-msgstr ""
+msgstr "rejtett"
 
-#: src/imcontroller.cc:309
+#: src/imcontroller.cc:290
 msgid "channel name to add: "
-msgstr ""
+msgstr "csatorna: "
 
-#: src/imcontroller.cc:351
-#, fuzzy
+#: src/imcontroller.cc:332
 msgid "registration is not supported"
-msgstr " Regisztrációs folyamat "
+msgstr "a regisztráció nincs támogatva"
 
 #: src/imevents.cc:253
-#, fuzzy
 msgid "Empty authorization request message"
-msgstr "Authorizáció kérés %lu -tól"
+msgstr "Nincs azonosítási üzenet"
 
 #: src/imevents.cc:276
-#, fuzzy
 msgid "* Authorization request : "
-msgstr "Authorizáció kérés %lu -tól"
+msgstr "* Aznonosítási kérelem : "
 
 #: src/imevents.cc:277
-#, fuzzy
 msgid "* Authorization : "
-msgstr "Authorizáció kérés %lu -tól"
+msgstr "* Azonosítás : "
 
 #: src/imevents.cc:335
 msgid "* SMS : "
-msgstr ""
+msgstr "* SMS : "
 
 #: src/imevents.cc:468
-#, fuzzy
 msgid "* Contacts : "
-msgstr "Kontaktok %s, %lu tól"
+msgstr "* Kapcsolatok : "
 
 #: src/imevents.cc:473
 msgid "<no nick>"
-msgstr ""
+msgstr "<névtelen>"
 
 #: src/imexternal.cc:109
 #, c-format
 msgid "executed external action %s, return code = %d"
-msgstr ""
+msgstr "Belsõ mûvelet lefuttatva: %s, visszatérési kód: %d"
 
 #: src/imlogger.cc:8
 msgid "Offline"
@@ -2219,7 +1993,7 @@ msgstr "Ráér dumcsizni"
 
 #: src/imlogger.cc:12
 msgid "DND"
-msgstr ""
+msgstr "DND"
 
 #: src/imlogger.cc:13
 msgid "Occupied"
@@ -2227,113 +2001,85 @@ msgstr "Elfoglalt"
 
 #: src/imlogger.cc:14
 msgid "N/A"
-msgstr ""
+msgstr "Nem elérhetõ"
 
 #: src/imlogger.cc:15
-#, fuzzy
 msgid "Away"
 msgstr "Távol"
 
 #: src/imlogger.cc:23
-#, fuzzy
 msgid "message"
-msgstr "Honlap"
+msgstr "üzenet"
 
 #: src/imlogger.cc:24
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: src/imlogger.cc:25
 msgid "SMS"
-msgstr ""
+msgstr "SMS"
 
 #: src/imlogger.cc:26
 msgid "authorization"
-msgstr ""
+msgstr "azonosítás"
 
 #: src/imlogger.cc:27
-#, fuzzy
 msgid "e-mail"
 msgstr "E-mail"
 
 #: src/imlogger.cc:28
-#, fuzzy
 msgid "notification"
-msgstr "Helyzet"
+msgstr "jelzés"
 
 #: src/imlogger.cc:29
-#, fuzzy
 msgid "contacts"
-msgstr "Kontaktok közé tesz"
+msgstr "kapcsolatok"
 
 #: src/imlogger.cc:51
 msgid "events log started"
-msgstr ""
+msgstr "naplózás elindítva"
 
 #: src/imlogger.cc:81
-#, fuzzy, c-format
+#, c-format
 msgid "outgoing %s to %s"
-msgstr "Ír egy üzenetet %s, %lu -nak"
+msgstr "kimenõ %s a következõnek: %s"
 
 #: src/imlogger.cc:82
-#, fuzzy, c-format
+#, c-format
 msgid "incoming %s from %s"
-msgstr "Kontaktok %s, %lu tól"
+msgstr "bejövõ %s a következõtõl: %s"
 
 #: src/imlogger.cc:94
-#, fuzzy
 msgid "ignored"
-msgstr "Kihagy"
+msgstr "tiltva"
 
 #: src/imlogger.cc:109
 #, c-format
 msgid "%s went online, with status %s"
-msgstr ""
+msgstr "%s kilépett: %s"
 
 #: src/imlogger.cc:111
 #, c-format
 msgid "%s went offline"
-msgstr ""
+msgstr "%s kilépett"
 
 #: src/imlogger.cc:113
 #, c-format
 msgid "%s changed status to %s from %s"
-msgstr ""
+msgstr "%s állapota megváltozott: %s volt, most pedig %s"
 
 #: src/imlogger.cc:134
 #, c-format
 msgid "%s: went online, with status %s"
-msgstr ""
+msgstr "%s kilépett: %s"
 
 #: src/imlogger.cc:136
 #, c-format
 msgid "%s: went offline"
-msgstr ""
+msgstr "%s kilépett"
 
 #: src/imlogger.cc:138
 #, c-format
 msgid "changed our %s status to %s from %s"
-msgstr ""
+msgstr "%s állapot átállítva, most %s, korábban %s"
 
-#~ msgid " Edit details"
-#~ msgstr " Részletek szerkesztése"
-
-#~ msgid " Ignore user"
-#~ msgstr " Figyelmen kívül hagyja"
-
-#, fuzzy
-#~ msgid "+ the notification has been sent to %lu"
-#~ msgstr "Authorizáció kérés %lu -tól"
-
-#, fuzzy
-#~ msgid "unable to connect to the pager host"
-#~ msgstr "+ nem lehet kapcsolódni az icq szerverhez"
-
-#, fuzzy
-#~ msgid "+ [yahoo] unable to connect to the server"
-#~ msgstr "+ nem lehet kapcsolódni az icq szerverhez"
-
-#, fuzzy
-#~ msgid "Ctrl-X send, Ctrl-O history, Alt-? details, ESC exit"
-#~ msgstr ""
-#~ "Ctrl-X küld, Ctrl-P többnek, Ctrl-O történet, Alt-? részletek, ESC mégse"
