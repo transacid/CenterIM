@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textwindow class
-* $Id: textwindow.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
+* $Id: textwindow.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -87,7 +87,7 @@ void textwindow::set_title(int color, const string atitle) {
     title = atitle;
     tc = color;
     
-    if(isopen) {
+    if(fisopen) {
 	attrset(wc);
 	mvhline(y1, x1+1, HLINE, x2-x1-1);
 	write(((x2 - x1) - title.size())/2, 0, tc, title);
@@ -121,7 +121,7 @@ void textwindow::write(int x, int y, string text) {
 }
 
 void textwindow::write(int x, int y, int c, string text) {
-    if(isopen && (y < y2-y1)) {
+    if(fisopen && (y < y2-y1)) {
 	text.resize(x2-x1-x);
 
 	for(int k = 0; k < text.size(); k++)
@@ -134,11 +134,11 @@ void textwindow::write(int x, int y, int c, string text) {
 }
 
 void textwindow::gotoxy(int x, int y) {
-    if(isopen) kgotoxy(x1 + x, y1 + y);
+    if(fisopen) kgotoxy(x1 + x, y1 + y);
 }
 
 void textwindow::redraw() {
-    if(isopen) {
+    if(fisopen) {
 	int i;
 	attrset(wc);
 
@@ -168,8 +168,8 @@ void textwindow::redraw() {
 }
 
 void textwindow::open() {
-    if(!isopen) {
-	isopen = true;
+    if(!fisopen) {
+	fisopen = true;
         screenbuffer.save(x1, y1, x2, y2);
 	redraw();
     }
@@ -197,5 +197,4 @@ bool textwindow::isbordered() {
 
 void textwindow::close() {
     abstractuicontrol::close();
-    isopen = false;
 }

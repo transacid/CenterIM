@@ -33,6 +33,9 @@ class verticalmenu: public abstractuicontrol {
 	bool shownelem(int n, int selected);
 	void showall();
 
+	void checkclear();
+        void intredraw();
+
     public:
 	bool clearonfocuslost, cycled;
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui abstract ui control class
-* $Id: abstractui.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
+* $Id: abstractui.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,14 +25,14 @@
 #include "abstractui.h"
 
 abstractuicontrol::abstractuicontrol() {
-    isopen = emacs = false;
+    fisopen = emacs = false;
     x1 = x2 = y1 = y2 = 0;
 }
 
 abstractuicontrol::abstractuicontrol(const abstractuicontrol &a) {
     int i;
 
-    isopen = a.isopen;
+    fisopen = a.fisopen;
     emacs = a.emacs;
     x1 = a.x1;
     x2 = a.x2;
@@ -52,4 +52,9 @@ void abstractuicontrol::redraw() {
 
 void abstractuicontrol::close() {
     screenbuffer.restore();
+    fisopen = false;
+}
+
+bool abstractuicontrol::isopen() {
+    return fisopen;
 }

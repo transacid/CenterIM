@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
+* $Id: cmenus.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,6 +123,7 @@ bool verticalmenu::shownelem(int n, int selected) {
     bool hlight = true;
     int extra = 0;
     unsigned char c;
+    string buf;
 
     if((n < 0) || (n >= items.size())) return false;
     verticalmenuitem item = items[n];
@@ -134,9 +135,11 @@ bool verticalmenu::shownelem(int n, int selected) {
             if(!selected) mvhline(y1+n-firstdisp, x1, HLINE, x2-x1);
         } else if(!item.text.empty()) {
             mvprintw(y1+n-firstdisp, x1, "");
+	    buf = item.text;
+
             for(int i = x1; i < x2+extra; i++) {
-                if(i-x1 < item.text.size()) {
-                    switch(c = item.text[i-x1]) {
+                if(i-x1 < buf.size()) {
+                    switch(c = buf[i-x1]) {
                         case 1:
                             if(hlight = !hlight)
                                 attrset(selected && (item.kind == ITEM_NORM) ? 
@@ -200,9 +203,16 @@ void verticalmenu::showall() {
 }
 
 void verticalmenu::redraw() {
+//    if(!window.empty())
+//	window.redraw();
+
     showall();
     kgotoxy(x1, y1+curelem-firstdisp);
-    if(curelem >= 0) shownelem(curelem, 1);
+
+    if(!clearonfocuslost)
+	if(curelem >= 0)
+	    shownelem(curelem, 1);
+
     refresh();
 }
 
@@ -217,7 +227,11 @@ int verticalmenu::open() {
 
     if(!window.empty()) window.open();
 
-    redraw();
+    intredraw();
+
+    kgotoxy(x1, y1+curelem-firstdisp);
+    if(clearonfocuslost && curelem >= 0)
+	shownelem(curelem, 1);
 
     while(!finished) {
         if(idle) go = keypressed(); else go = 1;
@@ -229,12 +243,12 @@ int verticalmenu::open() {
             switch(k) {
                 case '\r':
                     finished = true;
-                    if(clearonfocuslost) shownelem(curelem, 0);
+		    checkclear();
                     if(items.empty()) ret = 0; else ret = curelem+1;
                     break;
         
                 case 27:
-                    if(clearonfocuslost) shownelem(curelem, 0);
+		    checkclear();
                     finished = true;
                     ret = 0;
                     break;
@@ -244,7 +258,7 @@ int verticalmenu::open() {
                         shownelem(curelem, 0);
                         if(--curelem < firstdisp) {
                             firstdisp = curelem - y2 + y1 + 1;
-                            redraw();
+                            intredraw();
                         } else {
                             while(curelem >= 0)
                             if(!shownelem(curelem, 1)) {
@@ -258,7 +272,7 @@ int verticalmenu::open() {
                     } else if(cycled) {
                         curelem = items.size()-1;
                         if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
-                        redraw();
+                        intredraw();
                     }
                     break;
 
@@ -269,7 +283,7 @@ int verticalmenu::open() {
                         
                             if(curelem > firstdisp+y2-y1-1) {
                                 firstdisp += y2 - y1;
-                                redraw();
+                                intredraw();
                             } else {
                                 bool lastone;
                                 int savecur = curelem-1;
@@ -284,7 +298,7 @@ int verticalmenu::open() {
                             }
                         } else if(cycled) {
                             curelem = firstdisp = 0;
-                            redraw();
+                            intredraw();
                         }
                     }
                     break;
@@ -292,7 +306,7 @@ int verticalmenu::open() {
                 case KEY_PPAGE:
                     if((curelem -= y2-y1) < 0) curelem = 0;
                     firstdisp = curelem;
-                    redraw();
+                    intredraw();
                     break;
         
                 case KEY_NPAGE:
@@ -300,24 +314,24 @@ int verticalmenu::open() {
                         if((curelem += y2-y1) > items.size()-1) curelem = items.size()-1;
                         if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
                     }
-                    redraw();
+                    intredraw();
                     break;
       
                 case KEY_HOME:
                     curelem = firstdisp = 0;
-                    redraw();
+                    intredraw();
                     break;
 
                 case KEY_END:
                     curelem = items.size()-1;
                     if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
-                    redraw();
+                    intredraw();
                     break;
       
                 default:
                     if(otherkeys) {
                         if((go = (*otherkeys)(this, k)) != -1) {
-                            if(clearonfocuslost) shownelem(curelem, 0);
+			    checkclear();
                             return go;
                         }
                     }
@@ -380,6 +394,19 @@ void verticalmenu::remove(int pos) {
 
 void verticalmenu::close() {
     window.close();
+}
+
+void verticalmenu::checkclear() {
+    if(window.isopen())
+	if(clearonfocuslost)
+	    shownelem(curelem, 0);
+}
+
+void verticalmenu::intredraw() {
+    bool scf = clearonfocuslost;
+    clearonfocuslost = false;
+    redraw();
+    clearonfocuslost = scf;
 }
 
 verticalmenu::~verticalmenu() {
