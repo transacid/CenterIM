@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.114 2002/10/23 12:57:35 konst Exp $
+* $Id: icqhook.cc,v 1.115 2002/11/11 23:41:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -820,6 +820,9 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
 }
 
 void icqhook::processemailevent(const string &sender, const string &email, const string &message) {
+    if(email.empty() && sender.empty() && message.empty())
+	return;
+
     icqcontact *c = clist.getemail(email);
 
     if(!c)
