@@ -32,19 +32,21 @@ class imevent {
 	imcontact contact;
 	imeventtype type;
 	imdirection direction;
+	time_t senttimestamp;
 	time_t timestamp;
 
 	string readblock(ifstream &f);
 
     public:
 	imevent();
-	imevent(const imcontact &acont, imdirection adir, imeventtype atype);
+	imevent(const imcontact &acont, imdirection adir, imeventtype atype, time_t asenttimestamp = 0);
 	imevent(ifstream &f);
 	virtual ~imevent();
 
 	imeventtype gettype() const;
 	imdirection getdirection() const;
 	imcontact getcontact() const;
+	time_t getsenttimestamp() const;
 	time_t gettimestamp() const;
 
 	void settimestamp(time_t atimestamp);
@@ -68,7 +70,7 @@ class immessage: public imevent {
     public:
 	immessage(const imevent &ev);
 	immessage(const imcontact &acont, imdirection adirection,
-	    const string &atext);
+	    const string &atext, const time_t asenttime = 0);
 
 	string gettext() const;
 

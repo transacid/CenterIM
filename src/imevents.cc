@@ -1,9 +1,9 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.31 2004/02/10 23:55:15 konst Exp $
+* $Id: imevents.cc,v 1.32 2004/02/22 13:03:59 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include "imevents.h"
 #include "src/Xml.h"
+#include "hooks/abstracthook.h"
 
 #include <strstream>
 
@@ -44,8 +45,9 @@ static const string seventtype[imevent::imeventtype_size] = {
 imevent::imevent() {
 }
 
-imevent::imevent(const imcontact &acont, imdirection adir, imeventtype atype)
-: contact(acont), direction(adir), type(atype), timestamp(time(0)) {
+imevent::imevent(const imcontact &acont, imdirection adir, imeventtype atype, time_t asenttimestamp)
+: contact(acont), direction(adir), type(atype), timestamp(timer_current),
+  senttimestamp(asenttimestamp ? asenttimestamp : timer_current) {
 }
 
 imevent::imevent(ifstream &f) {
@@ -65,6 +67,10 @@ imevent::imdirection imevent::getdirection() const {
 
 imcontact imevent::getcontact() const {
     return contact;
+}
+
+time_t imevent::getsenttimestamp() const {
+    return senttimestamp;
 }
 
 time_t imevent::gettimestamp() const {
@@ -91,7 +97,7 @@ void imevent::write(ofstream &f) const {
 	sdirection[direction] << endl <<
 	seventtype[type] << endl <<
 	timestamp << endl <<
-	timestamp << endl;
+	senttimestamp << endl;
 }
 
 void imevent::read(ifstream &f) {
@@ -116,7 +122,7 @@ void imevent::read(ifstream &f) {
     timestamp = strtoul(rdbuf.c_str(), 0, 0);
 
     getstring(f, rdbuf);
-	// skip the second stamp
+    senttimestamp = strtoul(rdbuf.c_str(), 0, 0);
 
     if(direction == imdirection_size || type == imeventtype_size) {
 	while(!f.eof() && rdbuf != "\f")
@@ -182,8 +188,8 @@ bool imevent::contains(const string &text) const {
 
 // -- immessage class ---------------------------------------------------------
 
-immessage::immessage(const imcontact &acont, imdirection adirection, const string &atext)
-: imevent(acont, adirection, message), text(atext) {
+immessage::immessage(const imcontact &acont, imdirection adirection, const string &atext, const time_t asenttime)
+: imevent(acont, adirection, message, asenttime), text(atext) {
 }
 
 immessage::immessage(const imevent &ev) {
@@ -191,6 +197,7 @@ immessage::immessage(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const immessage *m = dynamic_cast<const immessage *>(&ev);
 
@@ -231,6 +238,7 @@ imurl::imurl(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imurl *m = dynamic_cast<const imurl *>(&ev);
 
@@ -291,6 +299,7 @@ imauthorization::imauthorization(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imauthorization *m = dynamic_cast<const imauthorization *>(&ev);
 
@@ -353,6 +362,7 @@ imsms::imsms(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imsms *m = dynamic_cast<const imsms *>(&ev);
 
@@ -407,6 +417,7 @@ imemail::imemail(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imemail *m = dynamic_cast<const imemail *>(&ev);
 
@@ -447,6 +458,7 @@ imnotification::imnotification(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imnotification *m = dynamic_cast<const imnotification *>(&ev);
 
@@ -487,6 +499,7 @@ imcontacts::imcontacts(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imcontacts *m = dynamic_cast<const imcontacts *>(&ev);
 
@@ -562,6 +575,7 @@ imfile::imfile(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imfile *m = dynamic_cast<const imfile *>(&ev);
 
@@ -660,6 +674,7 @@ imrawevent::imrawevent(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 }
 
 // -- imxmlevent class --------------------------------------------------------
@@ -674,6 +689,7 @@ imxmlevent::imxmlevent(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+    senttimestamp = ev.senttimestamp;
 
     const imxmlevent *m = dynamic_cast<const imxmlevent *>(&ev);
 

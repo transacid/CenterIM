@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.210 2004/02/20 20:48:47 konst Exp $
+* $Id: icqface.cc,v 1.211 2004/02/22 13:03:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2335,9 +2335,9 @@ bool icqface::eventedit(imevent &ev) {
 
 void icqface::renderchathistory() {
     int count, chatmargin;
-    string text;
+    string text, ds1, ds2;
     char buf[64];
-    time_t t, lastread;
+    time_t t, ts, lastread;
     struct stat st;
 
     vector<imevent *> events;
@@ -2398,7 +2398,12 @@ void icqface::renderchathistory() {
 	}
 
 	if(count < chatlines) {
-	    text = (string) time2str(&(t = events.back()->gettimestamp()), "DD.MM hh:mm", buf) + " ";
+	    ds1 = time2str(&(t = events.back()->gettimestamp()), "DD.MM hh:mm", buf);
+	    ds2 = time2str(&(ts = events.back()->getsenttimestamp()), "DD.MM hh:mm", buf);
+
+	    text = ds1 + " ";
+	    if(ds1 != ds2) text += (string) "[" + ds2 + "] ";
+
 	    text += events.back()->gettext();
 	    chatlastread = t-1;
 
@@ -2704,7 +2709,7 @@ void icqface::fullscreenize(const imevent *ev) {
 void icqface::histmake(const vector<imevent *> &hist) {
     vector<imevent *>::const_reverse_iterator i;
     string text;
-    time_t t;
+    time_t t, ts;
     char buf[64];
     int color;
 
@@ -2716,7 +2721,11 @@ void icqface::histmake(const vector<imevent *> &hist) {
 
 	color = 0;
 
-	text = (string) + " " + time2str(&(t = ev.gettimestamp()), "DD.MM hh:mm", buf) + " ";
+	t = ev.gettimestamp();
+	ts = ev.getsenttimestamp();
+	text = (string) + " " + time2str(&t, "DD.MM hh:mm", buf) + " ";
+	if ((t - ts) > 0) 
+	    text += (string) + "[" + time2str(&ts, "DD.MM hh:mm", buf) + "] ";
 	text += ev.gettext();
 
 	if(ev.getdirection() == imevent::incoming) {

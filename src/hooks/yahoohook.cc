@@ -1,9 +1,9 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.104 2004/02/01 17:52:10 konst Exp $
+* $Id: yahoohook.cc,v 1.105 2004/02/22 13:03:59 konst Exp $
 *
-* Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -760,7 +760,7 @@ void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8
     text = yhook.decode(text, utf8);
 
     if(!text.empty()) {
-	em.store(immessage(ic, imevent::incoming, text));
+	em.store(immessage(ic, imevent::incoming, text, tm));
     }
 }
 

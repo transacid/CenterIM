@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.145 2004/02/14 23:43:43 konst Exp $
+* $Id: icqhook.cc,v 1.146 2004/02/22 13:03:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -995,7 +995,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 
     if(ev->getType() == MessageEvent::Normal) {
 	NormalMessageEvent *r = static_cast<NormalMessageEvent *>(ev);
-	em.store(immessage(ic, imevent::incoming, rusconv("wk", r->getMessage())));
+	em.store(immessage(ic, imevent::incoming, rusconv("wk", r->getMessage()), r->getTime()));
 
     } else if(ev->getType() == MessageEvent::URL) {
 	URLMessageEvent *r = static_cast<URLMessageEvent *>(ev);

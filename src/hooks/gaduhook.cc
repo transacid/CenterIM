@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.2 2004/02/01 17:52:09 konst Exp $
+* $Id: gaduhook.cc,v 1.3 2004/02/22 13:03:59 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -173,7 +173,7 @@ void gaduhook::main() {
 		if(e->event.msg.sender && e->event.msg.message) {
 		    text = rusconv("wk", (const char *) e->event.msg.message);
 		    em.store(immessage(imcontact(e->event.msg.sender, gadu),
-			imevent::incoming, text));
+			imevent::incoming, text, e->event.msg.time));
 		}
 		break;
 

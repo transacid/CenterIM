@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.90 2004/02/10 23:55:15 konst Exp $
+* $Id: icqcontact.cc,v 1.91 2004/02/22 13:03:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -438,8 +438,8 @@ void icqcontact::scanhistory() {
 		block.erase(0, r+2);
 		evdata << block;
 
-		for(r = 0; (r < 4) && getline(evdata, block); r++);
-		if(r == 4) sethasevents(strtoul(block.c_str(), 0, 0) > lastread);
+		for(r = 0; (r < 3) && getline(evdata, block); r++);
+		if(r == 3) sethasevents(strtoul(block.c_str(), 0, 0) > lastread);
 		break;
 	    }
 	}
