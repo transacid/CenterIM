@@ -1,6 +1,6 @@
-EXTRA_DIST = libmsn.motor NEWS README AUTHORS INSTALL ChangeLog COPYING
+EXTRA_DIST = libmsn.motor ChangeLog AUTHORS COPYING INSTALL NEWS README
 SUBDIRS = msn
-INCLUDES = -I$(top_srcdir)/msn/.. -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
+INCLUDES = -I$(top_srcdir)/../connwrap
 CPPFLAGS = 
 noinst_LIBRARIES = liblibmsn.a
 AUTOMAKE_OPTIONS = foreign
@@ -8,7 +8,7 @@ liblibmsn_a_SOURCES =
 
 if BUILD_MSN
 
-liblibmsn_a_LIBADD =  msn/authdata.o msn/switchboardserver.o msn/invitation.o msn/notificationserver.o msn/filetransfer.o msn/buddy.o msn/connection.o msn/util.o msn/passport.o msn/message.o
+liblibmsn_a_LIBADD =  msn/authdata.o msn/buddy.o msn/connection.o msn/filetransfer.o msn/invitation.o msn/message.o msn/notificationserver.o msn/passport.o msn/switchboardserver.o msn/util.o
 
 else
 

@@ -7,16 +7,16 @@
 
 # Project settings and files
 
-SOURCES = msn/authdata.cpp msn/switchboardserver.cpp msn/invitation.cpp msn/notificationserver.cpp msn/filetransfer.cpp msn/buddy.cpp msn/connection.cpp msn/util.cpp msn/passport.cpp msn/message.cpp 
-HEADERS = msn/msn.h msn/authdata.h msn/errorcodes.h msn/filetransfer.h msn/switchboardserver.h msn/util.h msn/externals.h msn/invitation.h msn/message.h msn/connection.h msn/notificationserver.h msn/buddy.h msn/passport.h msn/sstream_fix.h 
-DOCS = NEWS README AUTHORS INSTALL ChangeLog COPYING 
+SOURCES = msn/authdata.cpp msn/buddy.cpp msn/connection.cpp msn/filetransfer.cpp msn/invitation.cpp msn/message.cpp msn/notificationserver.cpp msn/passport.cpp msn/switchboardserver.cpp msn/util.cpp 
+HEADERS = msn/authdata.h msn/buddy.h msn/connection.h msn/errorcodes.h msn/externals.h msn/filetransfer.h msn/invitation.h msn/message.h msn/msn.h msn/notificationserver.h msn/passport.h msn/sstream_fix.h msn/switchboardserver.h msn/util.h 
+DOCS = ChangeLog AUTHORS COPYING INSTALL NEWS README 
 MISCF = libmsn.motor 
-BUILDF = msn/Makefile.am configure.in Makefile.am 
+BUILDF = Makefile.am msn/Makefile.am configure.in 
 ALL_FILES := $(strip $(SOURCES) $(HEADERS) $(MISCF) $(DOCS))
 ALL_DIRS := $(sort $(dir $(ALL_FILES)))
 PROJNAME = libmsn
 PROJVER = 0.1
-INCLDIRS = msn/.. ../connwrap ../connwrap-0.1 
+INCLDIRS = ../connwrap 
 DIST_TARGZ := $(PROJNAME)-$(PROJVER).tar.gz
 LIB = liblibmsn.a
 WANT = WANT_AUTOCONF=2.1 WANT_AUTOMAKE=1.4 CFLAGS="-O0 -g" CXXFLAGS="-O0 -g"
@@ -254,9 +254,9 @@ tags:
 	@if test "$$MOTOR_TAGS" = "file"; then \
 	    TFILES="$$MOTOR_CURRENTFILE"; \
 	elif test "$$MOTOR_TAGS" = "project"; then \
-	    TFILES=" msn/authdata.cpp msn/switchboardserver.cpp msn/invitation.cpp msn/notificationserver.cpp msn/filetransfer.cpp msn/buddy.cpp msn/connection.cpp msn/util.cpp msn/passport.cpp msn/message.cpp msn/msn.h msn/authdata.h msn/errorcodes.h msn/filetransfer.h msn/switchboardserver.h msn/util.h msn/externals.h msn/invitation.h msn/message.h msn/connection.h msn/notificationserver.h msn/buddy.h msn/passport.h msn/sstream_fix.h"; \
+	    TFILES=" msn/authdata.cpp msn/buddy.cpp msn/connection.cpp msn/filetransfer.cpp msn/invitation.cpp msn/message.cpp msn/notificationserver.cpp msn/passport.cpp msn/switchboardserver.cpp msn/util.cpp msn/authdata.h msn/buddy.h msn/connection.h msn/errorcodes.h msn/externals.h msn/filetransfer.h msn/invitation.h msn/message.h msn/msn.h msn/notificationserver.h msn/passport.h msn/sstream_fix.h msn/switchboardserver.h msn/util.h"; \
 	elif test "$$MOTOR_TAGS" = "all"; then \
-	    TFILES=" msn/authdata.cpp msn/switchboardserver.cpp msn/invitation.cpp msn/notificationserver.cpp msn/filetransfer.cpp msn/buddy.cpp msn/connection.cpp msn/util.cpp msn/passport.cpp msn/message.cpp msn/msn.h msn/authdata.h msn/errorcodes.h msn/filetransfer.h msn/switchboardserver.h msn/util.h msn/externals.h msn/invitation.h msn/message.h msn/connection.h msn/notificationserver.h msn/buddy.h msn/passport.h msn/sstream_fix.h"; \
+	    TFILES=" msn/authdata.cpp msn/buddy.cpp msn/connection.cpp msn/filetransfer.cpp msn/invitation.cpp msn/message.cpp msn/notificationserver.cpp msn/passport.cpp msn/switchboardserver.cpp msn/util.cpp msn/authdata.h msn/buddy.h msn/connection.h msn/errorcodes.h msn/externals.h msn/filetransfer.h msn/invitation.h msn/message.h msn/msn.h msn/notificationserver.h msn/passport.h msn/sstream_fix.h msn/switchboardserver.h msn/util.h"; \
 	fi; \
 	if test ! -z "$$TFILES"; then ctags --excmd=number -f - $$TFILES; fi
 

@@ -1,12 +1,12 @@
-INCLUDES = -I$(top_srcdir)/msn/.. -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
+INCLUDES = -I$(top_srcdir)/../connwrap
 CPPFLAGS = 
 noinst_LIBRARIES = libmsn.a
-EXTRA_DIST = authdata.cpp switchboardserver.cpp invitation.cpp notificationserver.cpp filetransfer.cpp buddy.cpp connection.cpp util.cpp passport.cpp message.cpp msn.h authdata.h errorcodes.h filetransfer.h switchboardserver.h util.h externals.h invitation.h message.h connection.h notificationserver.h buddy.h passport.h sstream_fix.h
+EXTRA_DIST = authdata.cpp buddy.cpp connection.cpp filetransfer.cpp invitation.cpp message.cpp notificationserver.cpp passport.cpp switchboardserver.cpp util.cpp authdata.h buddy.h connection.h errorcodes.h externals.h filetransfer.h invitation.h message.h msn.h notificationserver.h passport.h sstream_fix.h switchboardserver.h util.h
 SUBDIRS = 
 
 if BUILD_MSN
 
-libmsn_a_SOURCES =  authdata.cpp switchboardserver.cpp invitation.cpp notificationserver.cpp filetransfer.cpp buddy.cpp connection.cpp util.cpp passport.cpp message.cpp
+libmsn_a_SOURCES =  authdata.cpp buddy.cpp connection.cpp filetransfer.cpp invitation.cpp message.cpp notificationserver.cpp passport.cpp switchboardserver.cpp util.cpp
 
 else
 
