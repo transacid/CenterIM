@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.59 2001/12/10 14:00:42 konst Exp $
+* $Id: centericq.cc,v 1.60 2001/12/12 11:24:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@
 #include "accountmanager.h"
 
 centericq::centericq() {
-    timer_keypress = time(0)-50;
+//    timer_keypress = time(0)-50;
     timer_checkmail = timer_update = timer_resend = 0;
     regmode = false;
 }
@@ -780,7 +780,7 @@ bool centericq::idle(int options = 0) {
     protocolname pname;
 
     for(keypressed = fin = false; !keypressed && !fin; ) {
-//        timer_keypress = lastkeypress();
+	timer_keypress = lastkeypress();
 
 	FD_ZERO(&fds);
 	FD_SET(hsockfd = 0, &fds);
