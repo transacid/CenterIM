@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.160 2002/11/23 16:07:00 konst Exp $
+* $Id: icqface.cc,v 1.161 2002/11/25 22:55:18 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1746,9 +1746,9 @@ void icqface::showextractedurls() {
 
 void icqface::showeventbottom(const imcontact &ic) const {
     if(ischannel(ic)) {
-	status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? members, ESC cancel"));
+	status(_("^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"));
     } else {
-	status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
+	status(_("^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"));
     }
 }
 
@@ -1972,6 +1972,12 @@ void icqface::renderchathistory() {
     vector<histentry> toshow;
     vector<histentry>::iterator ir;
     vector<string>::reverse_iterator il;
+
+    static imevent *lastev = 0;
+
+    delete lastev;
+    passevent = lastev = 0;
+
     histentry h;
 
     icqcontact *c = clist.get(passinfo);
@@ -2001,19 +2007,20 @@ void icqface::renderchathistory() {
     }
 
     while(events.size()) {
-	if(events.back()->getdirection() == imevent::incoming)
-	if(events.back()->gettimestamp() > lastread) {
-	    if(events.back()->gettype() == imevent::authorization
-	    || events.back()->gettype() == imevent::contacts
-	    || events.back()->gettype() == imevent::file) {
-		bool fin, enough;
-		fin = enough = false;
-		saveworkarea();
+	if(events.back()->getdirection() == imevent::incoming) {
+	    if(events.back()->gettimestamp() > lastread) {
+		if(events.back()->gettype() == imevent::authorization
+		|| events.back()->gettype() == imevent::contacts
+		|| events.back()->gettype() == imevent::file) {
+		    bool fin, enough;
+		    fin = enough = false;
+		    saveworkarea();
 
-		while(!fin && !enough)
-		    cicq.readevent(*events.back(), enough, fin);
+		    while(!fin && !enough)
+			cicq.readevent(*events.back(), enough, fin);
 
-		restoreworkarea();
+		    restoreworkarea();
+		}
 	    }
 	}
 
@@ -2026,6 +2033,12 @@ void icqface::renderchathistory() {
 	    h.first = events.back()->getdirection();
 	    breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-2);
 	    toshow.push_back(h);
+
+	    if(!lastev)
+	    if(h.first == imevent::incoming) {
+		passevent = lastev = events.back()->getevent();
+		extracturls(text);
+	    }
 
 	    count += h.second.size();
 	}
@@ -2043,8 +2056,12 @@ void icqface::renderchathistory() {
 
     for(count = 0, ir = toshow.begin(); ir != toshow.end() && count < chatlines; ++ir) {
 	switch(ir->first) {
-	    case imevent::incoming: attrset(conf.getcolor(cp_main_text)); break;
-	    case imevent::outgoing: attrset(conf.getcolor(cp_main_highlight)); break;
+	    case imevent::incoming:
+		attrset(conf.getcolor(cp_main_text));
+		break;
+	    case imevent::outgoing:
+		attrset(conf.getcolor(cp_main_highlight));
+		break;
 	}
 
 	for(il = ir->second.rbegin(); il != ir->second.rend() && count < chatlines; ++il) {
@@ -2621,6 +2638,12 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    break;
 	case ALT('?'):
 	    cicq.userinfo(face.passinfo);
+	    break;
+	case KEY_F(2):
+	    face.showextractedurls(); break;
+	case KEY_F(9):
+	    if(face.passevent)
+		face.fullscreenize(face.passevent);
 	    break;
 	case 27:
 	    return -1;
