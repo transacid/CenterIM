@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.31 2001/12/19 16:18:52 konst Exp $
+* $Id: icqconf.cc,v 1.32 2002/01/17 16:51:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -678,22 +678,26 @@ void icqconf::imaccount::write(ofstream &f) {
 
 void icqconf::imaccount::read(const string spec) {
     int pos = spec.find("_");
-    string pname, buf;
+    string spname, buf;
 
     if(pos != -1) {
 	buf = spec;
-	pname = getword(buf.erase(0, pos+1));
+	spname = getword(buf.erase(0, pos+1));
 
-	if(pname == "nick") nickname = buf; else
-	if(pname == "uin") uin = strtoul(buf.c_str(), 0, 0); else
-	if(pname == "pass") password = buf; else
-	if(pname == "server") {
+	if(spname == "nick") nickname = buf; else
+	if(spname == "uin") uin = strtoul(buf.c_str(), 0, 0); else
+	if(spname == "pass") password = buf; else
+	if(spname == "server") {
 	    if((pos = buf.find(":")) != -1) {
 		server = buf.substr(0, pos);
 		port = strtoul(buf.substr(pos+1).c_str(), 0, 0);
 	    } else {
 		server = buf;
 	    }
+
+	    if(pname == icq)
+	    if(server == "icq.mirabilis.com")
+		server = "";
 	}
     }
 }

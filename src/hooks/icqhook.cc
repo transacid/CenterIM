@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.34 2002/01/17 15:36:34 konst Exp $
+* $Id: icqhook.cc,v 1.35 2002/01/17 16:51:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -100,8 +100,8 @@ void icqhook::connect() {
 	}
     }
 
-    cli.setLoginServerHost(acc.server);
-    cli.setLoginServerPort(acc.port);
+    if(!acc.server.empty()) cli.setLoginServerHost(acc.server);
+    if(acc.port) cli.setLoginServerPort(acc.port);
 
     cli.setUIN(acc.uin);
     cli.setPassword(acc.password);
