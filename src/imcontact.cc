@@ -52,6 +52,9 @@ const string imcontact::totext() const {
 	case yahoo:
 	    r = "[yahoo] " + nickname;
 	    break;
+	case msn:
+	    r = "[msn] " + nickname;
+	    break;
 	case infocard:
 	    r = "[infocard] " + i2str(uin);
 	    break;

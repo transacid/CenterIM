@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.28 2001/11/23 15:10:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.29 2001/11/26 13:02:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -115,6 +115,7 @@ bool icqface::finddialog(icqhook::searchparameters &s) {
 		break;
 
 	    case yahoo:
+	    case msn:
 		i = tree.addnode(_(" Nickname "));
 		tree.addleaf(i, 0, 11, " " + s.nick + " ");
 		break;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.42 2001/11/23 15:10:09 konst Exp $
+* $Id: icqface.cc,v 1.43 2001/11/26 13:02:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -176,10 +176,13 @@ void icqface::showtopbar() {
 	    ia = conf.getourid(pname);
 
 	    if(!ia.empty()) {
-		buf += "  " + conf.getprotocolname(pname) + ":";
-
+		buf += "  " + conf.getprotocolname(pname) + ":[";
+/*
 		if(!ia.nickname.empty()) buf += ia.nickname; else
 		if(ia.uin) buf += i2str(ia.uin);
+*/
+		buf += imstatus2char[gethook(pname).getstatus()];
+		buf += "]";
 	    }
 	}
     }
@@ -889,13 +892,18 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
     icqconf::imaccount ia;
     protocolname ipname;
 
+    static const string pitems[protocolname_size] = {
+	_(" [icq] ICQ network"),
+	_(" [yahoo] YAIM"),
+	_(" [msn] M$ Messenger"),
+	""
+    };
+
     for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
 	ia = conf.getourid(ipname);
 
-	if(!ia.empty())
-	switch(ipname) {
-	    case icq: m.additem(0, icq, _(" [icq] ICQ network")); break;
-	    case yahoo: m.additem(0, yahoo, _(" [yahoo] YAIM")); break;
+	if(!ia.empty()) {
+	    m.additem(0, ipname, pitems[ipname]);
 	}
     }
 }

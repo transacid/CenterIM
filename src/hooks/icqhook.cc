@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.4 2001/11/23 15:10:11 konst Exp $
+* $Id: icqhook.cc,v 1.5 2001/11/26 13:02:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,6 +39,8 @@
 
 #define TIMESTAMP maketm(hour-1, minute, day, month, year)
 
+icqhook ihook;
+
 icqhook::icqhook() {
     time_t c = time(0);
 
@@ -55,7 +57,6 @@ icqhook::icqhook() {
 }
 
 icqhook::~icqhook() {
-    conf.savestatus(icq, manualstatus);
 }
 
 void icqhook::init(const icqconf::imaccount account) {

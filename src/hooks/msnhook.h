@@ -14,6 +14,7 @@ class msnhook : public abstracthook {
 	static void statuschanged(void *data);
 	static void authrequested(void *data);
 	static void disconnected(void *data);
+	static void log(const char *event, const char *cause);
 
 	imstatus msn2imstatus(int st) const;
 
@@ -38,6 +39,7 @@ class msnhook : public abstracthook {
 	    const string text);
 
 	void sendnewuser(const imcontact c);
+	void removeuser(const imcontact ic);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;

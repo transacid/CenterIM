@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.22 2001/11/23 15:10:08 konst Exp $
+* $Id: icqcontact.cc,v 1.23 2001/11/26 13:02:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -58,6 +58,7 @@ icqcontact::icqcontact(const imcontact adesc) {
 
 	case icq:
 	case yahoo:
+	case msn:
 	    load();
 	    scanhistory();
 	    break;
@@ -92,6 +93,9 @@ const string icqcontact::getdirname() const {
 	    break;
 	case yahoo:
 	    ret += "y" + cdesc.nickname;
+	    break;
+	case msn:
+	    ret += "m" + cdesc.nickname;
 	    break;
     }
 
@@ -334,11 +338,7 @@ void icqcontact::remove() {
     struct stat st;
     DIR *d;
 
-    switch(cdesc.pname) {
-	case yahoo:
-	    yhook.removeuser(cdesc);
-	    break;
-    }
+    gethook(cdesc.pname).removeuser(cdesc);
 
     if(d = opendir(dname.c_str())) {
 	while(e = readdir(d)) {
@@ -715,7 +715,7 @@ string &nbg4) const {
 }
 
 char icqcontact::getshortstatus() const {
-    return status2char[status];
+    return imstatus2char[status];
 }
 
 int icqcontact::getinfotryn() const {

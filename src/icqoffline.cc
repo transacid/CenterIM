@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.15 2001/11/23 15:10:09 konst Exp $
+* $Id: icqoffline.cc,v 1.16 2001/11/26 13:02:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -80,6 +80,7 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext, FILE *of = 0
 
 	switch(cinfo.pname) {
 	    case yahoo:
+	    case msn:
 		if(seq) offl.scan(seq, osremove);
 		break;
 	}

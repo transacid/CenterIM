@@ -25,10 +25,13 @@ msnhook::msnhook() {
     MSN_RegisterCallback(MSN_AUTH, &authrequested);
     MSN_RegisterCallback(MSN_OUT, &disconnected);
 //    MSN_RegisterCallback(MSN_MAIL, &mail_callback);
+
+#ifdef DEBUG
+    MSN_RegisterErrorOutput(&log);
+#endif
 }
 
 msnhook::~msnhook() {
-    conf.savestatus(msn, manualstatus);
 }
 
 void msnhook::connect() {
@@ -41,7 +44,7 @@ void msnhook::connect() {
 	face.log(_("+ [msn] logged in"));
 	fonline = true;
 	status = available;
-	setautostatus(manualstatus);
+//        setautostatus(manualstatus);
     } else {
 	face.log(_("+ [msn] unable to connect to the server"));
     }
@@ -117,9 +120,13 @@ bool msnhook::enabled() const {
 }
 
 unsigned long msnhook::sendmessage(const icqcontact *c, const string text) {
+    return MSN_SendMessage(c->getnick().c_str(), text.c_str());
 }
 
 void msnhook::sendnewuser(const imcontact c) {
+    if(online()) {
+	MSN_AddContact(c.nickname.c_str());
+    }
 }
 
 void msnhook::setautostatus(imstatus st) {
@@ -172,9 +179,16 @@ imstatus msnhook::msn2imstatus(int st) const {
 	    return notavail;
 
 	case USER_FLN:
+	    return offline;
+
 	default:
 	    return available;
     }
+}
+
+void msnhook::removeuser(const imcontact ic) {
+    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
+    MSN_RemoveContact(ic.nickname.c_str());
 }
 
 // ----------------------------------------------------------------------------
@@ -239,4 +253,8 @@ void msnhook::disconnected(void *data) {
 
     time(&mhook.timer_reconnect);
     face.update();
+}
+
+void msnhook::log(const char *event, const char *cause) {
+    face.log("%s: %s", event, cause);
 }

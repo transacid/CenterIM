@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.11 2001/11/23 15:10:07 konst Exp $
+* $Id: centermain.cc,v 1.12 2001/11/26 13:02:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,8 +36,6 @@
 centericq cicq;
 icqconf conf;
 icqcontacts clist;
-icqhook ihook;
-yahoohook yhook;
 icqface face;
 icqhistory hist;
 icqoffline offl;

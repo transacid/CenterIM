@@ -15,29 +15,6 @@
 
 #define SOUND_COUNT     7
 
-enum imstatus {
-    offline = 0,
-    available,
-    invisible,
-    freeforchat,
-    dontdisturb,
-    occupied,
-    notavail,
-    away,
-/*
-    berightback,
-    outtolunch,
-    steppedout,
-    busy,
-    onphone,
-    notathome,
-    notatdesk,
-    notinoffice,
-    onvacation,
-*/
-    imstatus_size
-};
-
 class icqcontact {
     protected:
 	imcontact cdesc;

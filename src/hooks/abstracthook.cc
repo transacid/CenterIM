@@ -21,6 +21,13 @@ void abstracthook::setautostatus(imstatus st) {
 
 void abstracthook::setstatus(imstatus st) {
     setautostatus(manualstatus = st);
+
+    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
+	if(&gethook(pname) == this) {
+	    conf.savestatus(pname, manualstatus);
+	    break;
+	}
+    }
 }
 
 void abstracthook::getsockets(fd_set &fds, int &hsocket) const {
@@ -60,6 +67,9 @@ imstatus abstracthook::getstatus() const {
 
 bool abstracthook::isdirectopen(const imcontact c) const {
     return false;
+}
+
+void abstracthook::removeuser(const imcontact ic) {
 }
 
 // ----------------------------------------------------------------------------

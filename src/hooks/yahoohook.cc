@@ -6,6 +6,8 @@
 #include "accountmanager.h"
 #include "yahoolib.h"
 
+yahoohook yhook;
+
 yahoohook::yahoohook() {
     fonline = false;
     timer_reconnect = 0;
@@ -14,7 +16,6 @@ yahoohook::yahoohook() {
 }
 
 yahoohook::~yahoohook() {
-    conf.savestatus(::yahoo, manualstatus);
 }
 
 void yahoohook::init(const icqconf::imaccount account) {
@@ -48,6 +49,7 @@ void yahoohook::init(const icqconf::imaccount account) {
 
 void yahoohook::connect() {
     icqconf::imaccount acc = conf.getourid(::yahoo);
+    int r;
 
     if(!enabled()) init(acc);
 
@@ -55,8 +57,10 @@ void yahoohook::connect() {
 	face.log(_("+ [yahoo] connecting to the server"));
 
 	alarm(5);
+	r = yahoo_connect(yahoo);
+	alarm(0);
 
-	if(!yahoo_connect(yahoo)) {
+	if(!r) {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
 	    disconnected(yahoo);
 	} else {

@@ -25,6 +25,7 @@ class abstracthook {
 	    const string text);
 
 	virtual void sendnewuser(const imcontact c);
+	virtual void removeuser(const imcontact ic);
 
 	virtual void setautostatus(imstatus st);
 	virtual void setstatus(imstatus st);

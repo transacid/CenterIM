@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.18 2001/11/23 15:10:08 konst Exp $
+* $Id: icqcontacts.cc,v 1.19 2001/11/26 13:02:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,23 +43,22 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	case icq:
 	    c->setnick(i2str(cinfo.uin));
 	    c->setdispnick(i2str(cinfo.uin));
-	    c->save();
-	    add(c);
 	    ihook.sendnewuser(c->getdesc());
 	    break;
 
 	case yahoo:
 	    c->setnick(cinfo.nickname);
 	    c->setdispnick(cinfo.nickname);
-	    c->save();
-	    add(c);
 	    break;
 
-	case infocard:
-	    c->save();
-	    add(c);
+	case msn:
+	    c->setnick(cinfo.nickname);
+	    c->setdispnick(cinfo.nickname);
 	    break;
     }
+
+    c->save();
+    add(c);
 
     if(c)
     if(notinlist) {
@@ -97,6 +96,10 @@ void icqcontacts::load() {
 			break;
 		    case 'y':
 			c = new icqcontact(imcontact(ent->d_name+1, yahoo));
+			c->setnick(ent->d_name+1);
+			break;
+		    case 'm':
+			c = new icqcontact(imcontact(ent->d_name+1, msn));
 			c->setnick(ent->d_name+1);
 			break;
 		    case '0':
@@ -146,8 +149,15 @@ void icqcontacts::checkdefault() {
 
 	    if(!found)
 	    switch(pname) {
-		case icq: addnew(imcontact(17502151, pname), false); break;
-		case yahoo: addnew(imcontact("thekonst", pname), false); break;
+		case icq:
+		    addnew(imcontact(17502151, pname), false);
+		    break;
+		case yahoo:
+		    addnew(imcontact("thekonst", pname), false);
+		    break;
+		case msn:
+		    addnew(imcontact("konst@konst.org.ua", pname), false);
+		    break;
 	    }
 	}
     }

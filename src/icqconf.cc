@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.21 2001/11/23 16:33:01 konst Exp $
+* $Id: icqconf.cc,v 1.22 2001/11/26 13:02:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -207,7 +207,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "main_frame\tblue/black\tbold\n");
 		fprintf(f, "clist_icq\tgreen/black\n");
 		fprintf(f, "clist_msn\tcyan/black\n");
-		fprintf(f, "clist_yahoo\tyellow/black\n");
+		fprintf(f, "clist_yahoo\tmagenta/black\n");
 		fprintf(f, "clist_infocard\twhite/black\n");
 		fprintf(f, "clist_root\tred/black\tbold\n");
 
@@ -225,7 +225,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "main_highlight\twhite/blue\tbold\n");
 		fprintf(f, "main_frame\tblue/blue\tbold\n");
 		fprintf(f, "clist_icq\tgreen/blue\n");
-		fprintf(f, "clist_yahoo\tyahoo/blue\n");
+		fprintf(f, "clist_yahoo\tmagenta/blue\n");
 		fprintf(f, "clist_msn\tcyan/blue\n");
 		fprintf(f, "clist_infocard\twhite/blue\n");
 		fprintf(f, "clist_root\tred/blue\tbold\n");

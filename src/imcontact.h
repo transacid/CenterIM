@@ -12,6 +12,34 @@ enum protocolname {
     protocolname_size
 };
 
+enum imstatus {
+    offline = 0,
+    available,
+    invisible,
+    freeforchat,
+    dontdisturb,
+    occupied,
+    notavail,
+    away,
+/*
+    berightback,
+    outtolunch,
+    steppedout,
+    busy,
+    onphone,
+    notathome,
+    notatdesk,
+    notinoffice,
+    onvacation,
+*/
+    imstatus_size
+};
+
+static char imstatus2char[imstatus_size] = {
+    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a'/*, 'a',
+    'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'*/
+};
+
 struct imcontact {
     imcontact();
     imcontact(unsigned long auin, protocolname apname);
