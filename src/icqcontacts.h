@@ -42,7 +42,7 @@ class icqcontacts: public linkedlist {
 	icqcontacts();
 	~icqcontacts();
 
-	void remove(const imcontact adesc);
+	void remove(const imcontact &adesc);
 	void load();
 	void save();
 	void order();
@@ -51,9 +51,9 @@ class icqcontacts: public linkedlist {
 
 	void setoffline(protocolname pname);
 
-	icqcontact* addnew(const imcontact adesc, bool notinlist = true);
+	icqcontact* addnew(const imcontact &adesc, bool notinlist = true);
 
-	icqcontact *get(const imcontact adesc);
+	icqcontact *get(const imcontact &adesc);
 	icqcontact *getmobile(const string &anumber);
 	icqcontact *getemail(const string &aemail);
 };

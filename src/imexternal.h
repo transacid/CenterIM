@@ -32,7 +32,7 @@ class imexternal {
 		void execscript();
 		void respond();
 
-		static const string geteventname(imevent::imeventtype et);
+		static string geteventname(imevent::imeventtype et);
 
 	    public:
 		action();

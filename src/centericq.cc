@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.74 2002/03/01 16:09:20 konst Exp $
+* $Id: centericq.cc,v 1.75 2002/03/04 14:40:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -369,7 +369,7 @@ void centericq::find() {
     }
 }
 
-void centericq::userinfo(const imcontact cinfo) {
+void centericq::userinfo(const imcontact &cinfo) {
     imcontact realuin = cinfo;
     icqcontact *c = clist.get(cinfo);
 
@@ -754,7 +754,7 @@ void centericq::history(const imcontact &cont) {
     }
 }
 
-const string centericq::quotemsg(const string text) {
+string centericq::quotemsg(const string &text) {
     string ret;
     vector<string> lines;
     vector<string>::iterator i;
@@ -770,7 +770,7 @@ const string centericq::quotemsg(const string text) {
     return ret;
 }
 
-icqcontact *centericq::addcontact(const imcontact ic) {
+icqcontact *centericq::addcontact(const imcontact &ic) {
     icqcontact *c;
     int groupid = 0;
 
@@ -916,6 +916,7 @@ void centericq::setauto(imstatus astatus) {
     }
 
     autoset = nautoset;
+    face.update();
 }
 
 #define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
@@ -964,7 +965,7 @@ void centericq::exectimers() {
 
 // ----------------------------------------------------------------------------
 
-const string rusconv(const string tdir, const string text) {
+string rusconv(const string &tdir, const string &text) {
     static unsigned char kw[] = {
 	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
 	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,

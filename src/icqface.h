@@ -67,7 +67,7 @@ class icqface {
 		~icqprogress();
 
 		void log(const char *fmt, ...);
-		void show(string title = "");
+		void show(const string &title = "");
 		void hide();
 	} progress;
 
@@ -130,9 +130,9 @@ class icqface {
 	void workarealine(int l, chtype c = HLINE);
 
 	void showextractedurls();
-	void extracturls(const string buf);
+	void extracturls(const string &buf);
 
-	int groupmanager(const string text, bool sel);
+	int groupmanager(const string &text, bool sel);
 
     public:
 	vector<imcontact> muins;
@@ -156,10 +156,10 @@ class icqface {
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();
 
-	void log(const string text);
+	void log(const string &text);
 	void log(const char *fmt, ...);
 
-	void status(const string text);
+	void status(const string &text);
 
 	bool changestatus(protocolname &pname, imstatus &st);
 	int contextmenu(icqcontact *c);
@@ -167,8 +167,8 @@ class icqface {
 
 	void modelist(contactstatus cs);
 
-	bool multicontacts(const string head = "");
-	void userinfo(const imcontact cinfo, const imcontact realinfo);
+	bool multicontacts(const string &head = "");
+	void userinfo(const imcontact &cinfo, const imcontact &realinfo);
 
 	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
 
@@ -176,20 +176,20 @@ class icqface {
 	bool findresults(const imsearchparams &sp);
 
 	bool updatedetails(icqcontact *c = 0);
-	bool sendfiles(const imcontact cinfo, string &msg, linkedlist &flist);
+	bool sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist);
 
 	void blockmainscreen();
 	void unblockmainscreen();
 
 	int ask(string q, int options, int deflt = -1);
 
-	const string inputstr(const string q, const string defl = "", char passwdchar = 0);
-	const string inputfile(const string q, const string defl = "");
+	string inputstr(const string &q, const string &defl = "", char passwdchar = 0);
+	string inputfile(const string &q, const string &defl = "");
 	int getlastinputkey() const;
 
 	void quickfind(verticalmenu *multi = 0);
 
-	int selectgroup(const string text);
+	int selectgroup(const string &text);
 	void organizegroups();
 	void makeprotocolmenu(verticalmenu &m);
 
@@ -199,7 +199,7 @@ class icqface {
 	bool eventedit(imevent &ev);
 	eventviewresult eventview(const imevent *ev);
 
-	bool edit(string &txt, const string header);
+	bool edit(string &txt, const string &header);
 };
 
 extern icqface face;

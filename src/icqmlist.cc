@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.9 2001/12/06 16:56:33 konst Exp $
+* $Id: icqmlist.cc,v 1.10 2002/03/04 14:40:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,7 +31,7 @@ icqlist::icqlist() {
 icqlist::~icqlist() {
 }
 
-const string icqlist::getfname() const {
+string icqlist::getfname() const {
     return conf.getdirname() + "modelist";
 }
 	
@@ -101,7 +101,7 @@ void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
     }
 }
 
-bool icqlist::inlist(const imcontact cinfo, contactstatus ncs) const {
+bool icqlist::inlist(const imcontact &cinfo, contactstatus ncs) const {
     vector<modelistitem>::const_iterator i;
 
     i = begin();
@@ -113,7 +113,7 @@ bool icqlist::inlist(const imcontact cinfo, contactstatus ncs) const {
     return false;
 }
 
-void icqlist::del(const imcontact cinfo, contactstatus ncs) {
+void icqlist::del(const imcontact &cinfo, contactstatus ncs) {
     vector<modelistitem>::iterator i;
 
     i = begin();
@@ -132,7 +132,7 @@ modelistitem icqlist::menuat(int pos) const {
 
 // ----------------------------------------------------------------------------
 
-const string modelistitem::getnick() const {
+string modelistitem::getnick() const {
     return nick;
 }
 

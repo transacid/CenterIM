@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.48 2002/02/25 10:41:00 konst Exp $
+* $Id: icqcontact.cc,v 1.49 2002/03/04 14:40:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -75,7 +75,7 @@ icqcontact::icqcontact(const imcontact adesc) {
 icqcontact::~icqcontact() {
 }
 
-const string icqcontact::tosane(const string p) const {
+string icqcontact::tosane(const string &p) const {
     string buf;
     string::iterator i;
 
@@ -86,7 +86,7 @@ const string icqcontact::tosane(const string p) const {
     return buf;
 }
 
-const string icqcontact::getdirname() const {
+string icqcontact::getdirname() const {
     string ret;
 
     ret = conf.getdirname();
@@ -383,7 +383,7 @@ void icqcontact::scanhistory() {
     setmsgcount(0);
 
     if(f) {
-//	fseek(f, gethistoffset(), SEEK_SET);
+//      fseek(f, gethistoffset(), SEEK_SET);
 	sethistoffset(0);
 	pos = 0;
 
@@ -427,11 +427,11 @@ void icqcontact::setstatus(imstatus fstatus) {
     }
 }
 
-void icqcontact::setnick(const string fnick) {
+void icqcontact::setnick(const string &fnick) {
     nick = fnick;
 }
 
-void icqcontact::setdispnick(const string fnick) {
+void icqcontact::setdispnick(const string &fnick) {
     dispnick = fnick;
 }
 
@@ -474,7 +474,7 @@ void icqcontact::setbackground(const vector<string> &abackground) {
     fupdated++;
 }
 
-void icqcontact::setabout(const string data) {
+void icqcontact::setabout(const string &data) {
     about = data;
     fupdated++;
 }
@@ -499,7 +499,7 @@ const vector<string> &icqcontact::getbackground() const {
     return background;
 }
 
-void icqcontact::setsound(imevent::imeventtype event, const string sf) {
+void icqcontact::setsound(imevent::imeventtype event, const string &sf) {
     sound[event] = sf;
 }
 
@@ -567,16 +567,16 @@ void icqcontact::playsound(imevent::imeventtype event) const {
     }
 }
 
-void icqcontact::setlastip(const string flastip) {
+void icqcontact::setlastip(const string &flastip) {
     lastip = flastip;
     fupdated++;
 }
 
-const string icqcontact::getabout() const {
+string icqcontact::getabout() const {
     return about;
 }
 
-const string icqcontact::getlastip() const {
+string icqcontact::getlastip() const {
     return lastip;
 }
 
@@ -592,11 +592,11 @@ int icqcontact::getmsgcount() const {
     return nmsgs;
 }
 
-const string icqcontact::getnick() const {
+string icqcontact::getnick() const {
     return nick;
 }
 
-const string icqcontact::getdispnick() const {
+string icqcontact::getdispnick() const {
     return dispnick;
 }
 
@@ -626,11 +626,11 @@ bool icqcontact::operator > (const icqcontact &acontact) const {
     }
 }
 
-void icqcontact::setpostponed(const string apostponed) {
+void icqcontact::setpostponed(const string &apostponed) {
     postponed = apostponed;
 }
 
-const string icqcontact::getpostponed() const {
+string icqcontact::getpostponed() const {
     return postponed;
 }
 
@@ -656,7 +656,7 @@ void icqcontact::sethistoffset(int aoffset) {
 
 // ----------------------------------------------------------------------------
 
-const string icqcontact::moreinfo::strtimezone() const {
+string icqcontact::moreinfo::strtimezone() const {
     string r;
 
     if(timezone <= 24 && timezone >= -24) {
@@ -667,7 +667,7 @@ const string icqcontact::moreinfo::strtimezone() const {
     return r;
 }
 
-const string icqcontact::moreinfo::strbirthdate() const {
+string icqcontact::moreinfo::strbirthdate() const {
     string r;
 
     static const string smonths[12] = {

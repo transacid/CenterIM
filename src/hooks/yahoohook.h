@@ -43,8 +43,8 @@ class yahoohook: public abstracthook {
 	bool logged() const;
 	bool enabled() const;
 
-	void sendnewuser(const imcontact ic);
-	void removeuser(const imcontact ic);
+	void sendnewuser(const imcontact &ic);
+	void removeuser(const imcontact &ic);
 
 	bool send(const imevent &ev);
 

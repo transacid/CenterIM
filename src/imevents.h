@@ -28,10 +28,12 @@ class imevent {
 	imdirection direction;
 	time_t timestamp;
 
-	const string readblock(ifstream &f);
+	string readblock(ifstream &f);
 
     public:
 	imevent();
+	imevent(const imcontact &acont, imdirection adir, imeventtype atype);
+	imevent(ifstream &f);
 	virtual ~imevent();
 
 	imeventtype gettype() const;
@@ -44,10 +46,10 @@ class imevent {
 
 	imevent *getevent() const;
 
-	virtual const string gettext() const;
+	virtual string gettext() const;
 
 	virtual bool empty() const;
-	virtual bool contains(const string atext) const;
+	virtual bool contains(const string &atext) const;
 
 	virtual void write(ofstream &f) const;
 	virtual void read(ifstream &f);
@@ -58,15 +60,14 @@ class immessage: public imevent {
 	string text;
 
     public:
-	immessage();
 	immessage(const imevent &ev);
-	immessage(const imcontact acont, imdirection adirection,
-	    const string atext);
+	immessage(const imcontact &acont, imdirection adirection,
+	    const string &atext);
 
-	const string gettext() const;
+	string gettext() const;
 
 	bool empty() const;
-	bool contains(const string atext) const;
+	bool contains(const string &atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -77,18 +78,17 @@ class imurl: public imevent {
 	string url, description;
 
     public:
-	imurl();
 	imurl(const imevent &ev);
-	imurl(const imcontact acont, imdirection adirection,
-	    const string aurl, const string adescription);
+	imurl(const imcontact &acont, imdirection adirection,
+	    const string &aurl, const string &adescription);
 
-	const string geturl() const;
-	const string getdescription() const;
+	string geturl() const;
+	string getdescription() const;
 
-	const string gettext() const;
+	string gettext() const;
 
 	bool empty() const;
-	bool contains(const string atext) const;
+	bool contains(const string &atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -99,15 +99,14 @@ class imsms: public imevent {
 	string text;
 
     public:
-	imsms();
 	imsms(const imevent &ev);
-	imsms(const imcontact acont, imdirection adirection,
-	    const string atext);
+	imsms(const imcontact &acont, imdirection adirection,
+	    const string &atext);
 
-	const string gettext() const;
+	string gettext() const;
 
 	bool empty() const;
-	bool contains(const string atext) const;
+	bool contains(const string &atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -119,16 +118,15 @@ class imauthorization: public imevent {
 	bool granted;
 
     public:
-	imauthorization();
 	imauthorization(const imevent &ev);
-	imauthorization(const imcontact acont, imdirection adirection,
-	    bool granted, const string atext);
+	imauthorization(const imcontact &acont, imdirection adirection,
+	    bool granted, const string &atext);
 
-	const string gettext() const;
+	string gettext() const;
 	bool getgranted() const;
 
 	bool empty() const;
-	bool contains(const string atext) const;
+	bool contains(const string &atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -139,14 +137,13 @@ class imemail: public imevent {
 	string text;
 
     public:
-	imemail();
 	imemail(const imevent &ev);
-	imemail(const imcontact acont, imdirection adirection, const string atext);
+	imemail(const imcontact &acont, imdirection adirection, const string &atext);
 
-	const string gettext() const;
+	string gettext() const;
 
 	bool empty() const;
-	bool contains(const string atext) const;
+	bool contains(const string &atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -154,8 +151,7 @@ class imemail: public imevent {
 
 class imrawevent: public imevent {
     public:
-	imrawevent();
-	imrawevent(imeventtype atype, const imcontact acont, imdirection adirection);
+	imrawevent(imeventtype atype, const imcontact &acont, imdirection adirection);
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.16 2002/02/25 17:08:31 konst Exp $
+* $Id: msnhook.cc,v 1.17 2002/03/04 14:40:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -178,7 +178,7 @@ bool msnhook::send(const imevent &ev) {
     return false;
 }
 
-void msnhook::sendnewuser(const imcontact c) {
+void msnhook::sendnewuser(const imcontact &c) {
     if(logged()) {
 	MSN_AddContact(c.nickname.c_str());
     }
@@ -214,12 +214,12 @@ imstatus msnhook::getstatus() const {
     return status;
 }
 
-void msnhook::removeuser(const imcontact ic) {
+void msnhook::removeuser(const imcontact &ic) {
     face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
     MSN_RemoveContact(ic.nickname.c_str());
 }
 
-bool msnhook::isourid(const string nick) {
+bool msnhook::isourid(const string &nick) {
     string s1, s2;
     icqconf::imaccount account = conf.getourid(msn);
 

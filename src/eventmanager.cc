@@ -131,9 +131,7 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 }
 
 imevent *imeventmanager::eventread(ifstream &f) const {
-    imevent *rev, ev;
-
-    ev.read(f);
+    imevent *rev, ev(f);
 
     if(rev = ev.getevent()) {
 	rev->read(f);
@@ -190,7 +188,7 @@ int imeventmanager::getunsentcount() const {
     return unsent;
 }
 
-void imeventmanager::setlock(const string fname) const {
+void imeventmanager::setlock(const string &fname) const {
     string lockfname = fname + ".lock";
     int ntries = 0;
     ofstream f;
@@ -204,7 +202,7 @@ void imeventmanager::setlock(const string fname) const {
     if(f.is_open()) f.close();
 }
 
-void imeventmanager::releaselock(const string fname) const {
+void imeventmanager::releaselock(const string &fname) const {
     string lockfname = fname + ".lock";
     unlink(lockfname.c_str());
 }

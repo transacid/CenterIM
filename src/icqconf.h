@@ -46,7 +46,7 @@ class icqconf {
 	    protocolname pname;
 
 	    void write(ofstream &f);
-	    void read(const string spec);
+	    void read(const string &spec);
 
 	    bool empty() const;
 
@@ -77,8 +77,8 @@ class icqconf {
 	void loadmainconfig();
 
 	void usage() const;
-	void constructevent(const string event, const string proto,
-	    const string dest) const;
+	void constructevent(const string &event, const string &proto,
+	    const string &dest) const;
 
     public:
 	icqconf();
@@ -130,31 +130,31 @@ class icqconf {
 	groupmode getgroupmode() const;
 	void setgroupmode(groupmode amode);
  
-	void setsockshost(const string nsockshost);
-	const string getsockshost() const;
+	void setsockshost(const string &nsockshost);
+	string getsockshost() const;
 	unsigned int getsocksport() const;
 
-	void setsmtphost(const string asmtphost);
-	const string getsmtphost() const;
+	void setsmtphost(const string &asmtphost);
+	string getsmtphost() const;
 	unsigned int getsmtpport() const;
 
 	void getsocksuser(string &name, string &pass) const;
-	void setsocksuser(const string name, const string pass);
+	void setsocksuser(const string &name, const string &pass);
 
-	void openurl(const string url);
+	void openurl(const string &url);
 
 	imstatus getstatus(protocolname pname);
 	void savestatus(protocolname pname, imstatus st);
 
 	int getprotcolor(protocolname pname) const;
-	const string getprotocolname(protocolname pname) const;
+	string getprotocolname(protocolname pname) const;
 
 	imaccount getourid(protocolname pname);
-	void setourid(const imaccount im);
+	void setourid(const imaccount &im);
 	int getouridcount() const;
 
-	const string getdirname() const;
-	const string getconfigfname(const string fname) const;
+	string getdirname() const;
+	string getconfigfname(const string &fname) const;
 
 	void commandline(int argc, char **argv);
 };

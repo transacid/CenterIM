@@ -15,8 +15,15 @@ static const string seventtype[imevent::imeventtype_size] = {
 
 // -- basic imevent class -----------------------------------------------------
 
-imevent::imevent() {
-    time(&timestamp);
+imevent::imevent(): timestamp(time(0)) {
+}
+
+imevent::imevent(const imcontact &acont, imdirection adir, imeventtype atype)
+: contact(acont), direction(adir), timestamp(time(0)), type(atype) {
+}
+
+imevent::imevent(ifstream &f) {
+    read(f);
 }
 
 imevent::~imevent() {
@@ -38,7 +45,7 @@ time_t imevent::gettimestamp() const {
     return timestamp;
 }
 
-const string imevent::gettext() const {
+string imevent::gettext() const {
     return "";
 }
 
@@ -91,7 +98,7 @@ void imevent::read(ifstream &f) {
     }
 }
 
-const string imevent::readblock(ifstream &f) {
+string imevent::readblock(ifstream &f) {
     string rdbuf, r;
 
     while(!f.eof()) {
@@ -128,22 +135,14 @@ imevent *imevent::getevent() const {
     }
 }
 
-bool imevent::contains(const string text) const {
+bool imevent::contains(const string &text) const {
     return false;
 }
 
 // -- immessage class ---------------------------------------------------------
 
-immessage::immessage() {
-    type = message;
-}
-
-immessage::immessage(const imcontact acont, imdirection adirection,
-const string atext) {
-    type = message;
-    contact = acont;
-    direction = adirection;
-    text = atext;
+immessage::immessage(const imcontact &acont, imdirection adirection, const string &atext)
+: imevent(acont, adirection, message), text(atext) {
 }
 
 immessage::immessage(const imevent &ev) {
@@ -159,7 +158,7 @@ immessage::immessage(const imevent &ev) {
     }
 }
 
-const string immessage::gettext() const {
+string immessage::gettext() const {
     return text;
 }
 
@@ -176,23 +175,14 @@ bool immessage::empty() const {
     return text.empty();
 }
 
-bool immessage::contains(const string atext) const {
+bool immessage::contains(const string &atext) const {
     return text.find(atext) != -1;
 }
 
 // -- imurl class -------------------------------------------------------------
 
-imurl::imurl() {
-    type = imevent::url;
-}
-
-imurl::imurl(const imcontact acont, imdirection adirection, const string aurl,
-const string adescription) {
-    type = imevent::url;
-    contact = acont;
-    direction = adirection;
-    url = aurl;
-    description = adescription;
+imurl::imurl(const imcontact &acont, imdirection adirection, const string &aurl, const string &adescription)
+: imevent(acont, adirection, imevent::url), url(aurl), description(adescription) {
 }
 
 imurl::imurl(const imevent &ev) {
@@ -209,15 +199,15 @@ imurl::imurl(const imevent &ev) {
     }
 }
 
-const string imurl::geturl() const {
+string imurl::geturl() const {
     return url;
 }
 
-const string imurl::getdescription() const {
+string imurl::getdescription() const {
     return description;
 }
 
-const string imurl::gettext() const {
+string imurl::gettext() const {
     return url + "\n----\n" + description;
 }
 
@@ -236,28 +226,15 @@ bool imurl::empty() const {
     return url.empty() && description.empty();
 }
 
-bool imurl::contains(const string atext) const {
+bool imurl::contains(const string &atext) const {
     return (url.find(atext) != -1) || (description.find(atext) != -1);
 }
 
 // -- imauthorization class ---------------------------------------------------
 
-imauthorization::imauthorization() {
-    type = authorization;
-}
-
-imauthorization::imauthorization(const imcontact acont, imdirection adirection,
-bool agranted, const string atext) {
-    type = authorization;
-    contact = acont;
-    direction = adirection;
-    granted = agranted;
-
-    if(atext.empty()) {
-	text = _("Empty authorization request message");
-    } else {
-	text = atext;
-    }
+imauthorization::imauthorization(const imcontact &acont, imdirection adirection, bool agranted, const string &atext)
+: imevent(acont, adirection, authorization), granted(agranted),
+  text(atext.empty() ? _("Empty authorization request message") : atext) {
 }
 
 imauthorization::imauthorization(const imevent &ev) {
@@ -274,7 +251,7 @@ imauthorization::imauthorization(const imevent &ev) {
     }
 }
 
-const string imauthorization::gettext() const {
+string imauthorization::gettext() const {
     return text;
 }
 
@@ -302,22 +279,14 @@ bool imauthorization::getgranted() const {
     return granted;
 }
 
-bool imauthorization::contains(const string atext) const {
+bool imauthorization::contains(const string &atext) const {
     return text.find(atext) != -1;
 }
 
 // -- imsms class -------------------------------------------------------------
 
-imsms::imsms() {
-    type = sms;
-}
-
-imsms::imsms(const imcontact acont, imdirection adirection,
-const string atext) {
-    type = sms;
-    contact = acont;
-    direction = adirection;
-    text = atext;
+imsms::imsms(const imcontact &acont, imdirection adirection, const string &atext)
+: imevent(acont, adirection, sms), text(atext) {
 }
 
 imsms::imsms(const imevent &ev) {
@@ -333,7 +302,7 @@ imsms::imsms(const imevent &ev) {
     }
 }
 
-const string imsms::gettext() const {
+string imsms::gettext() const {
     return text;
 }
 
@@ -350,22 +319,14 @@ bool imsms::empty() const {
     return text.empty();
 }
 
-bool imsms::contains(const string atext) const {
+bool imsms::contains(const string &atext) const {
     return text.find(atext) != -1;
 }
 
 // -- imemail class -----------------------------------------------------------
 
-imemail::imemail() {
-    type = email;
-}
-
-imemail::imemail(const imcontact acont, imdirection adirection,
-const string atext) {
-    type = email;
-    contact = acont;
-    direction = adirection;
-    text = atext;
+imemail::imemail(const imcontact &acont, imdirection adirection, const string &atext)
+: imevent(acont, adirection, email), text(atext) {
 }
 
 imemail::imemail(const imevent &ev) {
@@ -381,7 +342,7 @@ imemail::imemail(const imevent &ev) {
     }
 }
 
-const string imemail::gettext() const {
+string imemail::gettext() const {
     return text;
 }
 
@@ -389,7 +350,7 @@ bool imemail::empty() const {
     return text.empty();
 }
 
-bool imemail::contains(const string atext) const {
+bool imemail::contains(const string &atext) const {
     return text.find(atext) != -1;
 }
 
@@ -404,13 +365,6 @@ void imemail::read(ifstream &f) {
 
 // -- imrawevent class --------------------------------------------------------
 
-imrawevent::imrawevent() {
-}
-
-imrawevent::imrawevent(imeventtype atype, const imcontact acont,
-imdirection adirection) {
-    type = atype;
-    contact = acont;
-    direction = adirection;
-    time(&timestamp);
+imrawevent::imrawevent(imeventtype atype, const imcontact &acont, imdirection adirection)
+: imevent(acont, adirection, atype) {
 }

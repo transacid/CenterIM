@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.25 2002/02/25 17:08:31 konst Exp $
+* $Id: yahoohook.cc,v 1.26 2002/03/04 14:40:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -214,7 +214,7 @@ bool yahoohook::logged() const {
     return fonline;
 }
 
-void yahoohook::sendnewuser(const imcontact ic) {
+void yahoohook::sendnewuser(const imcontact &ic) {
     char *group;
 
     if(yahoo)
@@ -233,7 +233,7 @@ void yahoohook::sendnewuser(const imcontact ic) {
     }
 }
 
-void yahoohook::removeuser(const imcontact ic) {
+void yahoohook::removeuser(const imcontact &ic) {
     if(context)
     if(online()) {
 	face.log(_("+ [yahoo] removing %s from the contacts"), ic.nickname.c_str());

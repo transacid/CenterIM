@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.90 2002/03/03 17:12:17 konst Exp $
+* $Id: icqface.cc,v 1.91 2002/03/04 14:40:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -766,7 +766,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
     db.getbrowser()->setbuf(text);
 }
 
-void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
+void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     bool finished = false, showinfo;
     icqcontact *c = clist.get(realinfo);
     textbrowser tb(conf.getcolor(cp_main_text));
@@ -946,7 +946,7 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
 #define INPUT_POS       LINES-2
 
-const string icqface::inputstr(const string q, string defl = "", char passwdchar = 0) {
+string icqface::inputstr(const string &q, const string &defl = "", char passwdchar = 0) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
 
     attrset(conf.getcolor(cp_status));
@@ -963,7 +963,7 @@ const string icqface::inputstr(const string q, string defl = "", char passwdchar
     return input.getvalue();
 }
 
-const string icqface::inputfile(const string q, const string defl = "") {
+string icqface::inputfile(const string &q, const string &defl = "") {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string r;
 
@@ -1181,7 +1181,7 @@ void icqface::modelist(contactstatus cs) {
     restoreworkarea();
 }
 
-bool icqface::multicontacts(const string ahead = "") {
+bool icqface::multicontacts(const string &ahead = "") {
     int i, savefirst, saveelem;
     bool ret = true, finished = false;
     string head = ahead;
@@ -1269,7 +1269,7 @@ void icqface::log(const char *fmt, ...) {
     va_end(ap);
 }
 
-void icqface::log(const string atext) {
+void icqface::log(const string &atext) {
     int i;
     string text = atext;
 
@@ -1303,7 +1303,7 @@ void icqface::log(const string atext) {
     }
 }
 
-void icqface::status(const string text) {
+void icqface::status(const string &text) {
     attrset(conf.getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
     kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", (fstatus = text).c_str());
@@ -1421,7 +1421,7 @@ void icqface::quickfind(verticalmenu *multi = 0) {
     mvhline(ly, lx, HLINE, 23);
 }
 
-void icqface::extracturls(const string buf) {
+void icqface::extracturls(const string &buf) {
     int pos = 0;
     regex_t r;
     regmatch_t rm[1];
@@ -1992,7 +1992,7 @@ void icqface::icqprogress::log(const char *fmt, ...) {
     w->write(2, 1+curline++, buf);
 }
 
-void icqface::icqprogress::show(const string title = "") {
+void icqface::icqprogress::show(const string &title = "") {
     if(!w) {
 	w = new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);

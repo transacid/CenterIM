@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.54 2002/03/01 17:15:23 konst Exp $
+* $Id: icqdialogs.cc,v 1.55 2002/03/04 14:40:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -456,7 +456,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     if(i) r = (ICQ2000::AgeRange) ((int) m.getref(i-1));
 }
 
-bool icqface::edit(string &txt, const string header) {
+bool icqface::edit(string &txt, const string &header) {
     texteditor se;
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
@@ -482,7 +482,7 @@ bool icqface::edit(string &txt, const string header) {
     return editdone;
 }
 
-bool icqface::sendfiles(const imcontact cinfo, string &msg, linkedlist &flist) {
+bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) {
     int n, i, b;
     bool finished = false;
     string fname;
@@ -739,7 +739,7 @@ void icqface::detailsidle(dialogbox &db) {
     }
 }
 
-int icqface::selectgroup(const string text) {
+int icqface::selectgroup(const string &text) {
     return groupmanager(text, true);
 }
 
@@ -747,7 +747,7 @@ void icqface::organizegroups() {
     groupmanager(_("Organize contact groups"), false);
 }
 
-int icqface::groupmanager(const string text, bool sel) {
+int icqface::groupmanager(const string &text, bool sel) {
     dialogbox db;
     static int n = 0;
     int r, ngrp, b, id;

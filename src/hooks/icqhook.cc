@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.64 2002/03/01 17:15:24 konst Exp $
+* $Id: icqhook.cc,v 1.65 2002/03/04 14:40:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -180,9 +180,6 @@ void icqhook::exectimers() {
 	    cli.Poll();
 	    sendinvisible();
 	    time(&timer_poll);
-	} else if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
-	    resolve();
-	    time(&timer_resolve);
 	}
     } else {
 	if(tcurrent-timer_reconnect > PERIOD_RECONNECT) {
@@ -337,7 +334,7 @@ bool icqhook::send(const imevent &ev) {
     return true;
 }
 
-void icqhook::sendnewuser(const imcontact c) {
+void icqhook::sendnewuser(const imcontact &c) {
     if(logged()) {
 	Contact ic(c.uin);
 	cli.addContact(ic);
@@ -371,7 +368,7 @@ imstatus icqhook::getstatus() const {
     }
 }
 
-bool icqhook::regconnect(const string aserv) {
+bool icqhook::regconnect(const string &aserv) {
     int pos;
 
     if((pos = aserv.find(":")) != -1) {
@@ -382,7 +379,7 @@ bool icqhook::regconnect(const string aserv) {
     return true;
 }
 
-bool icqhook::regattempt(unsigned int &auin, const string apassword) {
+bool icqhook::regattempt(unsigned int &auin, const string &apassword) {
     fd_set srfds, swfds, sefds;
     struct timeval tv;
     int hsockfd;
@@ -436,7 +433,7 @@ imstatus icqhook::icq2imstatus(const Status st) const {
     }
 }
 
-void icqhook::requestinfo(const imcontact c) {
+void icqhook::requestinfo(const imcontact &c) {
     if(logged()) {
 	if(c == imcontact(conf.getourid(icq).uin, icq)) {
 	    // Our info is requested
@@ -679,7 +676,6 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
     time(&timer_poll);
-    timer_resolve = time(0)-PERIOD_RESOLVE+2;
 
     face.log(_("+ [icq] logged in"));
     face.update();
@@ -699,6 +695,8 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
+
+    resolve();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {

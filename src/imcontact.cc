@@ -10,7 +10,7 @@ imcontact::imcontact(unsigned long auin, protocolname apname) {
     pname = apname;
 }
 
-imcontact::imcontact(const string anick, protocolname apname) {
+imcontact::imcontact(const string &anick, protocolname apname) {
     nickname = anick;
     pname = apname;
     uin = 0;
@@ -39,7 +39,7 @@ bool imcontact::empty() const {
     return (!uin && pname == icq) || (nickname.empty() && pname == yahoo);
 }
 
-const string imcontact::totext() const {
+string imcontact::totext() const {
     string r;
 
     if(*this == contactroot) {
@@ -63,7 +63,7 @@ const string imcontact::totext() const {
     return r;
 }
 
-const string imcontact::getshortservicename() const {
+string imcontact::getshortservicename() const {
     string r;
 
     switch(pname) {

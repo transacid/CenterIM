@@ -22,10 +22,10 @@ class modelistitem {
 
     public:
 	modelistitem() {}
-	modelistitem(const string nnick, const imcontact adesc, contactstatus ncs):
+	modelistitem(const string &nnick, const imcontact &adesc, contactstatus ncs):
 	    nick(nnick), cdesc(adesc), cs(ncs) {}
 
-	const string getnick() const;
+	string getnick() const;
 	imcontact getdesc() const;
 	contactstatus getstatus() const;
 
@@ -38,7 +38,7 @@ class modelistitem {
 class icqlist : public vector<modelistitem> {
     private:
 	vector<modelistitem> menucontents;
-	const string getfname() const;
+	string getfname() const;
 
     public:
 	icqlist();
@@ -49,8 +49,8 @@ class icqlist : public vector<modelistitem> {
 
 	void fillmenu(verticalmenu *m, contactstatus ncs);
 
-	bool inlist(const imcontact cinfo, contactstatus ncs) const;
-	void del(const imcontact cinfo, contactstatus ncs);
+	bool inlist(const imcontact &cinfo, contactstatus ncs) const;
+	void del(const imcontact &cinfo, contactstatus ncs);
 
 	modelistitem menuat(int pos) const;
 };

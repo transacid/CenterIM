@@ -41,8 +41,8 @@ class abstracthook {
 
 	virtual bool send(const imevent &ev);
 
-	virtual void sendnewuser(const imcontact c);
-	virtual void removeuser(const imcontact ic);
+	virtual void sendnewuser(const imcontact &c);
+	virtual void removeuser(const imcontact &ic);
 
 	virtual void setautostatus(imstatus st);
 	virtual void restorestatus();
@@ -50,8 +50,8 @@ class abstracthook {
 	virtual void setstatus(imstatus st);
 	virtual imstatus getstatus() const;
 
-	virtual bool isdirectopen(const imcontact c) const;
-	virtual void requestinfo(const imcontact c);
+	virtual bool isdirectopen(const imcontact &c) const;
+	virtual void requestinfo(const imcontact &c);
 
 	virtual void lookup(const imsearchparams &params, verticalmenu &dest);
 	virtual void stoplookup();

@@ -71,25 +71,25 @@ bool abstracthook::send(const imevent &ev) {
     return false;
 }
 
-void abstracthook::sendnewuser(const imcontact c) {
+void abstracthook::sendnewuser(const imcontact &c) {
 }
 
 imstatus abstracthook::getstatus() const {
     return offline;
 }
 
-bool abstracthook::isdirectopen(const imcontact c) const {
+bool abstracthook::isdirectopen(const imcontact &c) const {
     return false;
 }
 
-void abstracthook::removeuser(const imcontact ic) {
+void abstracthook::removeuser(const imcontact &ic) {
 }
 
 int abstracthook::getcapabilities() const {
     return fcapabilities;
 }
 
-void abstracthook::requestinfo(const imcontact c) {
+void abstracthook::requestinfo(const imcontact &c) {
 }
 
 void abstracthook::lookup(const imsearchparams &params, verticalmenu &dest) {

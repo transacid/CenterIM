@@ -9,12 +9,12 @@ class icqgroups: private vector<icqgroup> {
 	icqgroups();
 	~icqgroups();
 
-	const string getfname() const;
+	string getfname() const;
 
 	void load();
 	void save();
 
-	int add(const string aname);
+	int add(const string &aname);
 	void remove(int gid);
 
 	iterator begin()

@@ -32,7 +32,7 @@ class centericq {
 	void inithooks();
 	bool checkpasswords();
 
-	const string quotemsg(const string text);
+	string quotemsg(const string &text);
 
 	void setauto(imstatus astatus);
 
@@ -44,14 +44,14 @@ class centericq {
 	void exec();
 	void reg();
 	void mainloop();
-	void userinfo(const imcontact cinfo);
+	void userinfo(const imcontact &cinfo);
 	void changestatus();
 	bool updateconf();
 
 	void find();
 	void checkmail();
 
-	icqcontact *addcontact(const imcontact ic);
+	icqcontact *addcontact(const imcontact &ic);
 
 	bool idle(int options = 0);
 	void exectimers();
@@ -64,6 +64,6 @@ class centericq {
 
 extern centericq cicq;
 
-const string rusconv(const string tdir, const string text);
+string rusconv(const string &tdir, const string &text);
 
 #endif

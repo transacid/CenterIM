@@ -14,7 +14,7 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	vector<int> rfds, wfds, efds;
 
-	time_t timer_reconnect, timer_poll, timer_resolve;
+	time_t timer_reconnect, timer_poll;
 	bool fonline, flogged;
 	unsigned int reguin;
 	SearchResultEvent *searchevent;
@@ -58,16 +58,16 @@ class icqhook: public abstracthook, public SigC::Object {
 	bool enabled() const;
 
 	bool send(const imevent &ev);
-	void sendnewuser(const imcontact c);
+	void sendnewuser(const imcontact &c);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;
 
-	void requestinfo(const imcontact c);
+	void requestinfo(const imcontact &c);
 	void requestawaymsg(const imcontact &c);
 
-	bool regconnect(const string aserv);
-	bool regattempt(unsigned int &auin, const string apassword);
+	bool regconnect(const string &aserv);
+	bool regattempt(unsigned int &auin, const string &apassword);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);

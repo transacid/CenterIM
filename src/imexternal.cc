@@ -310,7 +310,7 @@ const imexternal::actioninfo imexternal::action::getinfo() const {
     return r;
 }
 
-const string imexternal::action::geteventname(imevent::imeventtype et) {
+string imexternal::action::geteventname(imevent::imeventtype et) {
     switch(et) {
 	case imevent::message:
 	    return "msg";

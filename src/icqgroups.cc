@@ -7,7 +7,7 @@ icqgroups::icqgroups() {
 icqgroups::~icqgroups() {
 }
 
-const string icqgroups::getfname() const {
+string icqgroups::getfname() const {
     return conf.getdirname() + "groups";
 }
 
@@ -52,7 +52,7 @@ void icqgroups::save() {
     }
 }
 
-int icqgroups::add(const string aname) {
+int icqgroups::add(const string &aname) {
     int i;
 
     for(i = 1; find(begin(), end(), i) != end(); i++);

@@ -44,8 +44,8 @@ class icqcontact {
 	    unsigned short lang1, lang2, lang3;
 	    signed char timezone;
 
-	    const string strbirthdate() const;
-	    const string strtimezone() const;
+	    string strbirthdate() const;
+	    string strtimezone() const;
 	};
 
 	struct workinfo {
@@ -73,7 +73,7 @@ class icqcontact {
 	vector<string> interests, background;
 
 	void scanhistory();
-	const string tosane(const string p) const;
+	string tosane(const string &p) const;
 
     public:
 	icqcontact(imcontact adesc);
@@ -83,24 +83,24 @@ class icqcontact {
 	void setlastread(time_t flastread);
 	void setlastseen();
 
-	void setnick(const string fnick);
-	void setdispnick(const string fnick);
+	void setnick(const string &fnick);
+	void setdispnick(const string &fnick);
 
 	void setbasicinfo(const basicinfo &ainfo);
 	void setmoreinfo(const moreinfo &ainfo);
 	void setworkinfo(const workinfo &ainfo);
 	void setinterests(const vector<string> &ainterests);
 	void setbackground(const vector<string> &abackground);
-	void setabout(const string data);
-	void setlastip(const string flastip);
+	void setabout(const string &data);
+	void setlastip(const string &flastip);
 
 	const basicinfo &getbasicinfo() const;
 	const moreinfo &getmoreinfo() const;
 	const workinfo &getworkinfo() const;
 	const vector<string> &getinterests() const;
 	const vector<string> &getbackground() const;
-	const string getabout() const;
-	const string getlastip() const;
+	string getabout() const;
+	string getlastip() const;
 
 	time_t getlastread() const;
 	time_t getlastseen() const;
@@ -108,14 +108,14 @@ class icqcontact {
 	imstatus getstatus() const;
 	int getmsgcount() const;
 
-	const string getnick() const;
-	const string getdispnick() const;
+	string getnick() const;
+	string getdispnick() const;
 
 	int updated() const;
 	void unsetupdated();
 	void setmsgcount(int n);
 
-	void setsound(imevent::imeventtype event, const string sf);
+	void setsound(imevent::imeventtype event, const string &sf);
 	void playsound(imevent::imeventtype event) const;
 
 	void clear();
@@ -127,12 +127,12 @@ class icqcontact {
 	bool inlist() const;
 
 	bool isbirthday() const;
-	const string getdirname() const;
+	string getdirname() const;
 
 	char getshortstatus() const;
 
-	void setpostponed(const string apostponed);
-	const string getpostponed() const;
+	void setpostponed(const string &apostponed);
+	string getpostponed() const;
 
 	int gethistoffset() const;
 	void sethistoffset(int aoffset);

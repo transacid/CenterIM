@@ -19,7 +19,7 @@ class msnhook : public abstracthook {
 	static void mailed(void *data);
 
 	static imstatus msn2imstatus(int st);
-	static bool isourid(const string nick);
+	static bool isourid(const string &nick);
 
     public:
 	msnhook();
@@ -42,8 +42,8 @@ class msnhook : public abstracthook {
 
 	bool send(const imevent &ev);
 
-	void sendnewuser(const imcontact c);
-	void removeuser(const imcontact ic);
+	void sendnewuser(const imcontact &c);
+	void removeuser(const imcontact &ic);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;

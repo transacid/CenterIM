@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.47 2002/02/28 09:10:40 konst Exp $
+* $Id: icqconf.cc,v 1.48 2002/03/04 14:40:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -138,7 +138,7 @@ void icqconf::loadmainconfig() {
     }
 }
 
-void icqconf::setourid(const imaccount im) {
+void icqconf::setourid(const imaccount &im) {
     vector<imaccount>::iterator i;
 
     i = find(accounts.begin(), accounts.end(), im.pname);
@@ -535,7 +535,7 @@ void icqconf::setquote(bool use) {
     quote = use;
 }
 
-void icqconf::setsockshost(const string nsockshost) {
+void icqconf::setsockshost(const string &nsockshost) {
     int pos;
 
     if(!nsockshost.empty()) {
@@ -551,7 +551,7 @@ void icqconf::setsockshost(const string nsockshost) {
     }
 }
 
-const string icqconf::getsockshost() const {
+string icqconf::getsockshost() const {
     return sockshost;
 }
 
@@ -564,7 +564,7 @@ void icqconf::getsocksuser(string &name, string &pass) const {
     pass = sockspass;
 }
 
-void icqconf::setsocksuser(const string name, const string pass) {
+void icqconf::setsocksuser(const string &name, const string &pass) {
     socksuser = name;
     sockspass = pass;
 }
@@ -597,7 +597,7 @@ void icqconf::setmailcheck(bool fmc) {
     mailcheck = fmc;
 }
 
-void icqconf::openurl(const string url) {
+void icqconf::openurl(const string &url) {
     int npos;
     string torun = openurlcommand;
 
@@ -607,7 +607,7 @@ void icqconf::openurl(const string url) {
     system(torun.c_str());
 }
 
-const string icqconf::getprotocolname(protocolname pname) const {
+string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
 	"icq", "yahoo", "msn", "infocard"
     };
@@ -660,11 +660,11 @@ int icqconf::getprotcolor(protocolname pname) const {
     }
 }
 
-const string icqconf::getdirname() const {
+string icqconf::getdirname() const {
     return basedir;
 }
 
-const string icqconf::getconfigfname(const string fname) const {
+string icqconf::getconfigfname(const string &fname) const {
     return getdirname() + fname;
 }
 
@@ -712,7 +712,7 @@ void icqconf::commandline(int argc, char **argv) {
     constructevent(event, proto, dest);
 }
 
-void icqconf::constructevent(const string event, const string proto, const string dest) const {
+void icqconf::constructevent(const string &event, const string &proto, const string &dest) const {
     imevent *ev = 0;
     imcontact cdest;
     string text, buf;
@@ -827,7 +827,7 @@ void icqconf::setgroupmode(icqconf::groupmode amode) {
     fgroupmode = amode;
 }
 
-void icqconf::setsmtphost(const string asmtphost) {
+void icqconf::setsmtphost(const string &asmtphost) {
     int pos;
 
     smtphost = "";
@@ -850,7 +850,7 @@ void icqconf::setsmtphost(const string asmtphost) {
 	smtpport = 25;
 }
 
-const string icqconf::getsmtphost() const {
+string icqconf::getsmtphost() const {
     return smtphost;
 }
 
@@ -888,7 +888,7 @@ void icqconf::imaccount::write(ofstream &f) {
     }
 }
 
-void icqconf::imaccount::read(const string spec) {
+void icqconf::imaccount::read(const string &spec) {
     int pos = spec.find("_");
     string spname, buf;
 

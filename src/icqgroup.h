@@ -9,13 +9,13 @@ class icqgroup {
 	string name;
 
     public:
-	icqgroup(int aid, const string aname);
+	icqgroup(int aid, const string &aname);
 	~icqgroup();
 
-	const string getname() { return name; }
+	string getname() { return name; }
 	int getid() { return id; }
 
-	void rename(const string aname) { name = aname; }
+	void rename(const string &aname) { name = aname; }
 
 	bool operator == (int aid) const;
 	bool operator != (int aid) const;
