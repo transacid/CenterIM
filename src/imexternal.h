@@ -5,6 +5,13 @@
 
 class imexternal {
     public:
+	enum aoption {
+	    aostdin = 2,
+	    aostdout = 4,
+	    aoprereceive = 8,
+	    aopresend = 16
+	};
+
 	struct actioninfo {
 	    string name;
 	    bool enabled;
@@ -13,11 +20,6 @@ class imexternal {
     private:
 	class action {
 	    private:
-		enum aoption {
-		    aostdin = 2,
-		    aostdout = 4
-		};
-
 		vector<imevent::imeventtype> event;
 		vector<protocolname> proto;
 		vector<imstatus> status;
@@ -29,7 +31,7 @@ class imexternal {
 		const imevent *currentev;
 
 		void writescript();
-		void execscript();
+		int execscript();
 		void respond();
 
 		static string geteventname(imevent::imeventtype et);
@@ -38,13 +40,12 @@ class imexternal {
 		action();
 		~action();
 
-		bool exec(const imevent &ev);
+		bool exec(imevent *ev, int &result, int option);
 
 		void disable();
 		void enable();
 
 		bool load(ifstream &f);
-		void ssave(ofstream &f) const;
 
 		const actioninfo getinfo() const;
 	};
@@ -56,10 +57,13 @@ class imexternal {
 	~imexternal();
 
 	void load();
-	void ssave() const;
 
 	int exec(const imevent &ev);
+	int exec(imevent *ev, bool &result, int option = 0);
 	    // returns the amount of external actions ran
+	    // option can be aopresend or aoprereceive if needed
+	    // and "result" is filled in with a bool that indicates
+	    // if the event is accepted or not
 
 	vector<actioninfo> getlist() const;
 	void update(const vector<actioninfo> &info);

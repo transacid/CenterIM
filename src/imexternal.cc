@@ -35,16 +35,25 @@ void imexternal::load() {
     }
 }
 
-void imexternal::ssave() const {
+int imexternal::exec(const imevent &ev) {
+    bool r;
+    auto_ptr<imevent> p(ev.getevent());
+    int n = exec(p.get(), r);
+    return n;
 }
 
-int imexternal::exec(const imevent &ev) {
+int imexternal::exec(imevent *ev, bool &eaccept, int option) {
     vector<action>::iterator i;
-    int r = 0;
+    int r = 0, rl;
     imcontact c;
 
+    eaccept = true;
+
     for(i = actions.begin(); i != actions.end(); ++i) {
-	if(i->exec(ev)) r++;
+	if(i->exec(ev, rl, option)) {
+	    eaccept = eaccept && !rl;
+	    r++;
+	}
     }
 
     return r;
@@ -76,24 +85,33 @@ imexternal::action::action(): options(0), enabled(true/*false*/) {
 imexternal::action::~action() {
 }
 
-bool imexternal::action::exec(const imevent &ev) {
+bool imexternal::action::exec(imevent *ev, int &result, int option) {
     bool r;
     char buf[512];
-    abstracthook &hook = gethook(ev.getcontact().pname);
+    abstracthook &hook = gethook(ev->getcontact().pname);
 
     r = enabled &&
-	(find(event.begin(), event.end(), ev.gettype()) != event.end()) &&
-	(find(proto.begin(), proto.end(), ev.getcontact().pname) != proto.end()) &&
-	(find(status.begin(), status.end(), hook.getstatus()) != status.end());
+	(find(event.begin(), event.end(), ev->gettype()) != event.end()) &&
+	(find(proto.begin(), proto.end(), ev->getcontact().pname) != proto.end()) &&
+	(find(status.begin(), status.end(), hook.getstatus()) != status.end())
+    && ((option && (options & option)) || !option);
+
+    if(r && !option) {
+	r = !(options & aoprereceive) && !(options & aopresend);
+    }
 
     if(r) {
-	currentev = &ev;
+	currentev = ev;
 
 	writescript();
-	execscript();
-	respond();
+	result = execscript();
 
-	sprintf(buf, _("executed external action %s"), name.c_str());
+	if(!option)
+	    respond();
+
+	sprintf(buf, _("executed external action %s, return code = %d"),
+	    name.c_str(), result);
+
 	logger.putmessage(buf);
     }
 
@@ -142,12 +160,13 @@ void imexternal::action::writescript() {
     }
 }
 
-void imexternal::action::execscript() {
+int imexternal::action::execscript() {
     int inpipe[2], outpipe[2], pid;
     string text;
     char ch;
     icqcontact *c;
     fd_set rfds;
+    int r = -1;
 
     if(!pipe(inpipe) && !pipe(outpipe)) {
 	pid = fork();
@@ -199,7 +218,7 @@ void imexternal::action::execscript() {
 		}
 	    }
 
-	    waitpid(pid, 0, 0);
+	    waitpid(pid, &r, 0);
 
 	    close(inpipe[0]);
 	    close(outpipe[1]);
@@ -208,6 +227,7 @@ void imexternal::action::execscript() {
     }
 
     unlink(sname.c_str());
+    return r;
 }
 
 void imexternal::action::disable() {
@@ -219,11 +239,35 @@ void imexternal::action::enable() {
 }
 
 bool imexternal::action::load(ifstream &f) {
-    int pos;
-    string buf, sect, param;
+    int pos, i;
+    string buf, sect, param, aname;
+
+    static const struct {
+	const char *name;
+	int option;
+    } actions[] = {
+	{ "pre-receive", aoprereceive },
+	{ "pre-send", aopresend },
+	{ 0, 0 }
+    };
 
     while(getconf(sect, buf, f, sect == "exec")) {
-	if(sect.substr(0, 6) == "action") {
+	if((i = sect.find_first_of(" \t")) == -1)
+	    i = sect.size();
+
+	aname = sect.substr(0, i);
+
+	for(i = 0; actions[i].name; i++) {
+	    if(aname == actions[i].name) {
+		if(!(options & actions[i].option))
+		    options |= actions[i].option;
+
+		aname = "action";
+		break;
+	    }
+	}
+
+	if(aname == "action") {
 	    param = getword(buf);
 
 	    if(name.empty()) {
@@ -293,9 +337,6 @@ bool imexternal::action::load(ifstream &f) {
     return !name.empty() && !code.empty();
 }
 
-void imexternal::action::ssave(ofstream &f) const {
-}
-
 const imexternal::actioninfo imexternal::action::getinfo() const {
     actioninfo r;
 
@@ -317,6 +358,10 @@ string imexternal::action::geteventname(imevent::imeventtype et) {
 	    return "online";
 	case imevent::notification:
 	    return "notification";
+	case imevent::authorization:
+	    return "auth";
+	case imevent::contacts:
+	    return "contacts";
     }
 
     return "";

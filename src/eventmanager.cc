@@ -15,9 +15,22 @@ imeventmanager::imeventmanager(): unsent(0), lastevent(0), recentlysent(0) {
 imeventmanager::~imeventmanager() {
 }
 
-void imeventmanager::store(const imevent &ev) {
+void imeventmanager::store(const imevent &cev) {
     icqcontact *c;
     bool proceed;
+
+    auto_ptr<imevent> imev(cev.getevent());
+    imevent &ev = *imev.get();
+
+    static int preoptions[imevent::imdirection_size] = {
+	imexternal::aoprereceive,
+	imexternal::aopresend
+    };
+
+    external.exec(&ev, proceed, preoptions[ev.getdirection()]);
+
+    if(!proceed)
+	return;
 
     if(ev.getdirection() == imevent::incoming) {
 	if(!lst.inlist(ev.getcontact(), csignore)) {
@@ -78,11 +91,6 @@ void imeventmanager::store(const imevent &ev) {
 	}
     }
 }
-
-// if incoming, store to the history immediately
-// if outgoing, return id
-
-// void accept(const imcontact cont);
 
 vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastread) const {
     ifstream fhist;

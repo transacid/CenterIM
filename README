@@ -1045,8 +1045,8 @@ recommended just cut'n'paste the following text.
 #
 # event
 # -----
-# Can be "msg", "sms", "url", "online" or "notification". The latter
-# means centericq's own notifications, such as birthday reminders,
+# Can be "msg", "sms", "url", "online", "auth", "contacts" or "notification".
+# The latter means centericq's own notifications, such as birthday reminders,
 # away messages, and other stuff. Specifying several event types is
 # also allowed. "all" stands for all the event types.
 #
@@ -1129,7 +1129,7 @@ environment variables imported by centericq:
 EVENT_TYPE
 
     The type of the received event. Can be "msg", "sms", "url",
-    "online" or "notification".
+    "online", "auth", "contacts" or "notification".
 
 EVENT_NETWORK
 
@@ -1601,4 +1601,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.58 2002/09/02 15:48:37 konst Exp $
+$Id: README,v 1.59 2002/09/02 18:17:04 konst Exp $

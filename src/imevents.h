@@ -14,6 +14,7 @@ class imevent {
     friend class imemail;
     friend class imnotification;
     friend class imcontacts;
+    friend class imrawevent;
 
     public:
 	enum imeventtype {
@@ -202,6 +203,7 @@ class imcontacts: public imevent {
 
 class imrawevent: public imevent {
     public:
+	imrawevent(const imevent &ev);
 	imrawevent(imeventtype atype, const imcontact &acont, imdirection adirection);
 };
 

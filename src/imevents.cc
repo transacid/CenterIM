@@ -141,7 +141,7 @@ imevent *imevent::getevent() const {
 	case contacts:
 	    return new imcontacts(*this);
 	default:
-	    return 0;
+	    return new imrawevent(*this);
     }
 }
 
@@ -528,4 +528,11 @@ void imcontacts::read(ifstream &f) {
 
 imrawevent::imrawevent(imeventtype atype, const imcontact &acont, imdirection adirection)
 : imevent(acont, adirection, atype) {
+}
+
+imrawevent::imrawevent(const imevent &ev) {
+    type = ev.type;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
 }
