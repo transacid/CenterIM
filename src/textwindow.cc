@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textwindow class
-* $Id: textwindow.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
+* $Id: textwindow.cc,v 1.5 2001/08/18 14:33:20 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -116,19 +116,20 @@ void textwindow::writef(int x, int y, int c, const char *fmt, ...) {
     write(x, y, c, buf);
 }
 
-void textwindow::write(int x, int y, string text) {
+void textwindow::write(int x, int y, const string text) {
     write(x, y, wc, text);
 }
 
-void textwindow::write(int x, int y, int c, string text) {
-    if(fisopen && (y < y2-y1)) {
-	text.resize(x2-x1-x);
+void textwindow::write(int x, int y, int c, const string text) {
+    int i;
+    string dtext;
 
-	for(int k = 0; k < text.size(); k++)
-	if(text[k] > 0 && text[k] < 32) text[k] = ' ';
+    if(fisopen && (y < y2-y1)) {
+	for(i = 0; (i < text.size()) && (i < x2-x1-x); i++)
+	    dtext += KT_DISP_FILTER(text[i]);
 
 	attrset(c);
-	mvprintw(y1 + y, x1 + x, "%s", text.c_str());
+	mvprintw(y1 + y, x1 + x, "%s", dtext.c_str());
 	refresh();
     }
 }

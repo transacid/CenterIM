@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
+* $Id: conscommon.cc,v 1.5 2001/08/18 14:33:20 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,14 +128,15 @@ int emacsbind(int k) {
 }
 
 void printchar(char c) {
-    printw("%c", !iscntrl(c) ? c : ' ');
+    printw("%c", KT_DISP_FILTER(c));
 }
 
-void printstring(string s) {
+void printstring(const string s) {
     int i;
+    string ds;
 
     for(i = 0; i < s.size(); i++)
-    if(iscntrl(s[i])) s[i] = ' ';
+	ds += KT_DISP_FILTER(s[i]);
 
     printw("%s", s.c_str());
 }

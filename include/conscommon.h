@@ -26,6 +26,8 @@
 #define boldcolor(c)    COLOR_PAIR(c)|A_BOLD
 #define color(c)        COLOR_PAIR(c)
 
+#define	KT_DISP_FILTER(c)	( ((c > ' ') && (c != '\177')) ? c : ' ' )
+
 #define VLINE           kintf_graph ? ACS_VLINE         : '|'
 #define HLINE           kintf_graph ? ACS_HLINE         : '-'
 #define ULCORNER        kintf_graph ? ACS_ULCORNER      : '+'
@@ -56,7 +58,7 @@
 extern bool kintf_graph, kintf_refresh;
 
 void printchar(char c);
-void printstring(string s);
+void printstring(const string s);
 int string2key(const string adef);
 
 const string makebidi(const string buf, int lpad = 0);

@@ -1319,17 +1319,22 @@ void texteditor::edmove(int k, int options = EM_TAB) {
 		break;
 
 	    case KEY_RIGHT:
-		if(ctrlpressed && (CURLINE != curfile->lines->count-1)) {
+		if(ctrlpressed) {
 		    char *p = CURSTRING+CURCOL+1, *r = 0;
 
 		    if(*(CURSTRING+CURCOL)) {
 			if(r = strpbrk(p, NONCHAR_DELIM))
 			for(; *r && strchr(NONCHAR_DELIM, *r); r++);
 		    }
-		    
-		    if(r) curfile->x += r-p+1; else {
-			if(endofline()) setpos(0, CURLINE+1);
-			else curfile->x = CSTRLEN;
+
+		    if(r) {
+			curfile->x += r-p+1;
+		    } else {
+			if(endofline() && (CURLINE < curfile->lines->count-1)) {
+			    setpos(0, CURLINE+1);
+			} else {
+			    curfile->x = CSTRLEN;
+			}
 		    }
 		} else {
 		    if(CSTRLEN > CURCOL) {

@@ -22,8 +22,8 @@ class textwindow: public abstractuicontrol {
 	    int noptions = 0, int tcolor = 0, const char *tfmt = 0, ...);
 	~textwindow();
 
-	void write(int x, int y, int c, string text);
-	void write(int x, int y, string text);
+	void write(int x, int y, int c, const string text);
+	void write(int x, int y, const string text);
 
 	void writef(int x, int y, int c, const char *fmt, ...);
 	void writef(int x, int y, const char *fmt, ...);
