@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.12 2002/10/06 12:15:12 konst Exp $
+* $Id: textbrowser.cc,v 1.13 2002/11/23 15:42:08 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -49,6 +49,7 @@ void textbrowser::setcoords(int nx1, int ny1, int nx2, int ny2) {
     x2 = nx2;
     y1 = ny1;
     y2 = ny2;
+    setbuf(buf);
 }
 
 void textbrowser::redraw() {
@@ -68,7 +69,7 @@ void textbrowser::draw(int line) {
 	mvprintw(y1+i-line, x1, "");
 	buf = makebidi(lines[i], x2-x1);
 	printstring(buf);
-	for(k = buf.size(); k <= x2-x1; k++) printw(" ");
+	for(k = buf.size(); k < x2-x1; k++) printw(" ");
     }
 
     for(; i-line < y2-y1; i++) mvhline(y1+i-line, x1, ' ', x2-x1);
@@ -77,7 +78,11 @@ void textbrowser::draw(int line) {
 
 void textbrowser::setbuf(const string &p) {
     line = 0;
-    breakintolines(p, lines, x2-x1);
+    buf = p;
+
+    if(x2-x1 > 1)
+	breakintolines(buf = p, lines, x2-x1);
+
     if((endline = lines.size()-y2+y1+1) < 0) endline = 0;
 }
 

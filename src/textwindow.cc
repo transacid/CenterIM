@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textwindow class
-* $Id: textwindow.cc,v 1.8 2002/07/03 14:38:57 konst Exp $
+* $Id: textwindow.cc,v 1.9 2002/11/23 15:42:09 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -151,7 +151,7 @@ void textwindow::redraw() {
 	attrset(wc);
 
 	if(options & TW_NOBORDER) {
-	    for(i = y1; i < y2; i++) mvhline(i, x1+1, ' ', x2-x1-2);
+	    for(i = y1; i < y2; i++) mvhline(i, x1, ' ', x2-x1);
 	} else {
 	    for(i = y1; i <= y2; i++) mvhline(i, x1, ' ', x2-x1+1);
 

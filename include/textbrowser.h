@@ -13,6 +13,7 @@ class textbrowser: public abstractuicontrol {
     protected:
 	int ncolor, line, endline;
 	vector<string> lines;
+	string buf;
 
 	void draw(int line);
 	

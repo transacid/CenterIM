@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.12 2002/07/03 14:38:56 konst Exp $
+* $Id: dialogbox.cc,v 1.13 2002/11/23 15:42:08 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -47,45 +47,21 @@ void dialogbox::setwindow(textwindow *neww, bool fw) {
 void dialogbox::setbar(horizontalbar *newb, bool fb) {
     bar = newb;
     freebar = fb;
-
-    if(bar)
-    if(window) {
-	bar->setcoords(window->x2-1, window->y2-1);
-	bar->align(baleft);
-    }
 }
 
 void dialogbox::setmenu(verticalmenu *newm, bool fm) {
     menu = newm;
     freemenu = fm;
-
-    if(menu)
-    if(window) {
-	menu->setcoords(window->x1+1, window->y1+1, window->x2,
-	bar ? window->y2-2 : window->y2);
-    }
 }
 
 void dialogbox::settree(treeview *newt, bool ft) {
     tree = newt;
     freetree = ft;
-
-    if(tree)
-    if(window) {
-	tree->setcoords(window->x1+1, window->y1+1, window->x2,
-	bar ? window->y2-2 : window->y2);
-    }
 }
 
 void dialogbox::setbrowser(textbrowser *newbr, bool fbr) {
     browser = newbr;
     freebrowser = fbr;
-
-    if(browser)    
-    if(window) {
-	browser->setcoords(window->x1+2, window->y1+1,
-	window->x2, bar ? window->y2-2 : window->y2);
-    }
 }
 
 verticalmenu *dialogbox::getmenu() {
@@ -203,17 +179,23 @@ void dialogbox::redraw() {
 	    bar->redraw();
 	}
 
+	int x1 = window->x1 + (window->isbordered() ? 1 : 0);
+
 	if(menu) {
-	    menu->setcoords(window->x1+1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
+	    menu->setcoords(x1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
 	    menu->idle = &menuidle;
 	    menu->otherkeys = &menukeys;
 	} else if(tree) {
-	    tree->setcoords(window->x1+1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
+	    tree->setcoords(x1, window->y1+1, window->x2, bar ? window->y2-2 : window->y2);
 	    tree->redraw();
 	    tree->menu.idle = &menuidle;
 	    tree->menu.otherkeys = &menukeys;
 	} else if(browser) {
-	    browser->setcoords(window->x1+2, window->y1+1, window->x2-1, bar ? window->y2-2 : window->y2);
+	    int x2 = window->x2 - (window->isbordered() ? 1 : 0);
+
+	    browser->setcoords(window->x1+1, window->y1+1, x2,
+		bar ? window->y2-2 : window->y2);
+
 	    browser->redraw();
 	    browser->idle = &browseridle;
 	    browser->otherkeys = &browserkeys;

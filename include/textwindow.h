@@ -5,11 +5,13 @@
 #include "conscommon.h"
 #include "abstractui.h"
 
-__KTOOL_BEGIN_NAMESPACE
+enum textwindowtype {
+    TW_CENTERED = 2,
+    TW_NOBORDER = 4,
+    TW_SPACEBORDER = 8
+};
 
-#define TW_CENTERED     2
-#define TW_NOBORDER     4
-#define TW_SPACEBORDER  8
+__KTOOL_BEGIN_NAMESPACE
 
 class textwindow: public abstractuicontrol {
     private:
