@@ -27,7 +27,7 @@
 #include <list>
 #include <msn/switchboardserver.h>
 
-/** \mainpage libmsn 3.0 Reference
+/** \mainpage libmsn 3.1.1 Reference
  *
  * <code>libmsn</code> is a C++ library for Microsoft's MSN Messenger service. It
  * provides a high-level interface that allows an application to access instant

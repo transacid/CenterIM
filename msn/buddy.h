@@ -48,25 +48,54 @@ namespace MSN
     BuddyStatus buddyStatusFromString(std::string s);
     
     class Group;
+    
+    /** The Buddy class contains information about a member of a buddy list.
+     *
+     *  Each Buddy is made up of their passport address (@a userName),
+     *  user-visible display name (@a friendlyName), zero or more @a phoneNumbers,
+     *  and zero or more @a groups on the buddy list that they belong to.
+     *
+     *  It is only currently used during MSN::ext::gotBuddyListInfo to
+     *  store contact information about a buddy that was retrieved during
+     *  the buddy list synchronisation process.
+     */
     class Buddy
     {
-        /** @todo  BPR's need to be handled at @i any time, not just when syncing. */
+        /** @todo  BPR's need to be handled at any time, not just when syncing. */
 public:
+        /** The PhoneNumber class contains information about a single phone number
+         *  that is retrieved during the buddy list synchronisation process.
+         */
         class PhoneNumber
         {
 public:
+            /** The name of this phone number.
+             *
+             *  @todo Should this be an enumeration containing the possible
+             *        types of phone number?
+             */
             std::string title;
+            
+            /** The phone number */
             std::string number;
+            
+            /** @todo Document me! */
             bool enabled;
             
             PhoneNumber(std::string title_, std::string number_, bool enabled_=true)
                 : title(title_), number(number_), enabled(enabled_) {};
         };
         
+        /** Their passport address */
         Passport userName;
+        
+        /** Their friendly name */
         std::string friendlyName;
         
+        /** A list of phone numbers related to this buddy */
         std::list<Buddy::PhoneNumber> phoneNumbers;
+        
+        /** A list of Group's that this buddy is a member of */
         std::list<Group *> groups;
         
         Buddy(Passport userName_, std::string friendlyName_) :
@@ -74,6 +103,11 @@ public:
         bool const operator==(const Buddy &other) { return userName == other.userName; }
     };
     
+    /** The Group class represents a group of contacts on the buddy list.
+     *
+     *  Each group is represented by a @a groupID and has a user-visible
+     *  @a name.
+     */
     class Group
     {
 public:

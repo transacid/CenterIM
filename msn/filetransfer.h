@@ -29,7 +29,7 @@
 #include <msn/passport.h>
 
 #include <string>
-#include <cstdio>
+#include <stdio.h>
 
 namespace MSN 
 {

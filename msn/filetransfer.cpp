@@ -95,7 +95,7 @@ namespace MSN
         
         this->switchboardConnection->addFileTransferConnection(conn);
         
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "Invitation-Command: ACCEPT\r\n";
         buf_ << "Invitation-Cookie: " << this->cookie << "\r\n";
         buf_ << "IP-Address: " << ext::getOurIP() << "\r\n";
@@ -133,7 +133,7 @@ namespace MSN
                                                                                  cookie, FileTransferConnection::MSNFTP_RECV, this);
         FileTransferConnection * conn = new FileTransferConnection(auth);
         
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "Connecting to " << remote << ":" << port << "\n";
         ext::fileTransferProgress(this, buf_.str(), 0, 0);
         
@@ -251,7 +251,7 @@ namespace MSN
                 delete this;
                 return;
             }
-            std::stringstream buf_;
+            std::ostringstream buf_;
             buf_ << "FIL " << this->auth.inv->fileSize << "\r\n";
             this->write(buf_);
         }
@@ -372,7 +372,7 @@ cleanup:
         
         if (args[0] == "VER")
         {
-            std::stringstream buf_;
+            std::ostringstream buf_;
             buf_ << "USR " << this->auth.username << " " << this->auth.cookie << "\r\n";
             this->write(buf_);
             ext::fileTransferProgress(this->auth.inv, "Negotiating", 0, 0);
@@ -467,7 +467,7 @@ cleanup:
     
     void FileTransferInvitation::rejectTransfer()
     {
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "Invitation-Command: CANCEL\r\n";
         buf_ << "Invitation-Cookie: " << this->cookie << "\r\n";
         buf_ << "Cancel-Code: REJECT\r\n";
@@ -486,7 +486,7 @@ cleanup:
     
     void FileTransferInvitation::acceptTransfer(const std::string dest)
     {
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "Invitation-Command: ACCEPT\r\n";
         buf_ << "Invitation-Cookie: " << (this->cookie.empty() ? "" : this->cookie) << "\r\n";
         buf_ << "Launch-Application: FALSE\r\n";
@@ -506,7 +506,7 @@ cleanup:
     
     void FileTransferInvitation::cancelTransfer()
     {
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "Invitation-Command: CANCEL\r\n";
         buf_ << "Invitation-Cookie: " << this->cookie << "\r\n";
         buf_ << "Cancel-Code: OUTBANDCANCEL\r\n";

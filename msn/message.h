@@ -24,7 +24,7 @@
  */
 
 #include <string>
-#include <sstream>
+#include <msn/sstream_fix.h>
 #include <map>
 #include <vector>
 #include <stdexcept>

@@ -27,7 +27,7 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <sstream>
+#include <msn/sstream_fix.h>
 #include <stdexcept>
 
 namespace MSN
@@ -107,7 +107,7 @@ public:
          * In this case, the data will be written as soon as a connection is 
          * established.
          */
-        virtual int write(std::stringstream & s, bool log=true) throw (std::runtime_error);
+        virtual int write(std::ostringstream & s, bool log=true) throw (std::runtime_error);
                 
         /** Connect ourself to @a hostname on @a port.
          */

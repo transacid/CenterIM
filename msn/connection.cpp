@@ -171,11 +171,10 @@ namespace MSN
         return s.size();
     }
     
-    int Connection::write(std::stringstream & ss, bool log) throw (std::runtime_error)
+    int Connection::write(std::ostringstream & ss, bool log) throw (std::runtime_error)
     {
         std::string s = ss.str();
         int result = write(s, log);
-        ss.str("");
         ss.clear();
         return result;        
     }
@@ -299,7 +298,7 @@ namespace MSN
     
     void Connection::showError(int errorCode)
     {
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "An error has occurred while communicating with the MSN Messenger server: " << errors[errorCode] << " (code " << errorCode << ")";
         ext::showError(this, buf_.str());        
     }

@@ -135,7 +135,7 @@ namespace MSN
     const std::string Message::getColorAsHTMLString() const
     {
         std::vector<int> color = this->getColor();
-        std::stringstream s;
+        std::ostringstream s;
         s << std::hex << std::setfill('0') << std::setw(2) << color[0];
         s << std::hex << std::setfill('0') << std::setw(2) << color[1];
         s << std::hex << std::setfill('0') << std::setw(2) << color[2];
@@ -149,7 +149,7 @@ namespace MSN
         std::map<std::string, std::string> info = this->getFormatInfo();
         assert(color.size() == 3);
         
-        std::stringstream s;
+        std::ostringstream s;
         s << std::hex << std::setfill('0') << std::setw(2) << color[2];
         s << std::hex << std::setfill('0') << std::setw(2) << color[1];
         s << std::hex << std::setfill('0') << std::setw(2) << color[0];
@@ -236,7 +236,7 @@ namespace MSN
     void Message::setFontCharacterSet(CharacterSet cs)
     {
         std::map<std::string, std::string> info = this->getFormatInfo();
-        std::stringstream s;
+        std::ostringstream s;
         
         s << std::hex << (int) cs;
         info["CS"] = s.str();
@@ -265,7 +265,7 @@ namespace MSN
     void Message::setFontFamilyAndPitch(Message::FontFamily fontFamily, Message::FontPitch fontPitch)
     {
         std::map<std::string, std::string> info = this->getFormatInfo();
-        std::stringstream s;
+        std::ostringstream s;
         
         s << fontFamily << fontPitch;
         info["PF"] = s.str();
@@ -304,7 +304,7 @@ namespace MSN
         std::string retval;
         std::string::iterator i;
             
-        if (this->rawContents.substr(0, header_.size()) == header_)
+        if (this->rawContents.substr(0U, header_.size()) == header_)
         {
             retval = this->rawContents;
         } else {

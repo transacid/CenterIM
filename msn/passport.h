@@ -29,12 +29,22 @@
 
 namespace MSN
 {
+    /** An InvalidPassport exception will be thrown whenever
+     *  a malformed passport is passed to a function that requires
+     *  a valid address.
+     */
     class InvalidPassport : public std::runtime_error
     {
 public:
         InvalidPassport(std::string err) : std::runtime_error(err) {};
     };
     
+    /** A Passport represents a passport address.  It is used to
+     *  validate these addresses for functions that require it.
+     *
+     *  @todo Document validation rules.
+     *  @todo Investigate subclassing std::string to reduce code duplication.
+     */
     class Passport
     {
 public:

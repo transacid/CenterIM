@@ -241,7 +241,7 @@ namespace MSN
 	md5_append(&state, (md5_byte_t *)"VT6PX?UQTM4WM%YR", 16);
 	md5_finish(&state, digest);
 	
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "QRY " << trid++ << " PROD0038W!61ZTF9 32\r\n";
 	write(buf_);
 	
@@ -306,21 +306,21 @@ namespace MSN
 
     void NotificationServerConnection::setState(BuddyStatus state)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "CHG " << trid++ << " " << buddyStatusToString(state) << " 0\r\n";
 	write(buf_);        
     }
     
     void NotificationServerConnection::setBLP(char setting)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "BLP " << trid++ << " " << setting << "L\r\n";
 	write(buf_);        
     }
 
     void NotificationServerConnection::setGTC(char setting)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "GTC " << trid++ << " " << setting << "\r\n";
 	write(buf_);        
     }
@@ -330,56 +330,56 @@ namespace MSN
 	if (friendlyName.size() > 387)
 	    throw std::runtime_error("Friendly name too long!");
 	
-	std::stringstream buf_;  
+	std::ostringstream buf_;  
 	buf_ << "REA " << trid++ << " " << this->auth.username << " " << encodeURL(friendlyName) << "\r\n";
 	write(buf_);        
     }
 
     void NotificationServerConnection::addToList(std::string list, Passport buddyName)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "ADD " << trid++ << " " << list << " " << buddyName << " " << buddyName << "\r\n";
 	write(buf_);        
     }
     
     void NotificationServerConnection::removeFromList(std::string list, Passport buddyName)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "REM " << trid++ << " " << list << " " << buddyName << "\r\n";
 	write(buf_);        
     }
     
     void NotificationServerConnection::addToGroup(Passport buddyName, int groupID)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "ADD " << trid++ << " " << "FL" << " " << buddyName << " " << buddyName <<  groupID << "\r\n";
 	write(buf_);
     }
     
     void NotificationServerConnection::removeFromGroup(Passport buddyName, int groupID)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "REM " << trid++ << " " << "FL" << " " << buddyName << groupID << "\r\n";
 	write(buf_);
     }
     
     void NotificationServerConnection::addGroup(std::string groupName)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "ADG " << trid++ << encodeURL(groupName) << " " << 0 << "\r\n";
 	write(buf_);        
     }
     
     void NotificationServerConnection::removeGroup(int groupID)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "RMG " << trid++ << groupID << "\r\n";
 	write(buf_);
     }
     
     void NotificationServerConnection::renameGroup(int groupID, std::string newGroupName)
     {
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "REG " << trid++ << groupID << " " << encodeURL(newGroupName) << " " << 0 << "\r\n";
 	write(buf_);
     }
@@ -389,7 +389,7 @@ namespace MSN
     {
 	ListSyncInfo *info = new ListSyncInfo(version);
 	
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "SYN " << trid << " " << version << "\r\n";
 	write(buf_);
 	
@@ -407,7 +407,7 @@ namespace MSN
 	SwitchboardServerConnection::AuthData *auth = new SwitchboardServerConnection::AuthData(this->auth.username, 
 											       username, (msg ? new Message(*msg) : NULL), 
 											       tag);
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "XFR " << trid << " SB\r\n";
 	write(buf_);
 	this->addCallback(&NotificationServerConnection::callback_TransferToSwitchboard, trid++, (void *)auth);
@@ -467,7 +467,7 @@ public:
 	
 	ext::registerSocket(this->sock, 0, 1);
 	
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "VER " << trid << " MSNP8\r\n";
 	this->write(buf_);
 	this->addCallback(&NotificationServerConnection::callback_NegotiateCVR, trid++, (void *)info);
@@ -494,7 +494,7 @@ public:
 		this->callbacks.clear(); // delete the callback data
 		
 		ext::unregisterSocket(this->sock);
-		close(this->sock);
+		::close(this->sock);
 		
 		std::pair<std::string, int> server_address = splitServerAddress(args[3]);
 		this->connect(server_address.first, server_address.second);
@@ -687,7 +687,7 @@ public:
 	fprintf(stderr, "MSN Plugin: Negotiating CVR\n");
 #endif
 	
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "CVR " << trid << " 0x0409 winnt 5.2 i386 MSNMSGR 6.0.0250 MSMSGS " << info->username << "\r\n";
 	this->write(buf_);
 	this->addCallback(&NotificationServerConnection::callback_RequestUSR, trid++, (void *) data);
@@ -736,7 +736,7 @@ public:
 	fprintf(stderr, "MSN Plugin: Requesting USR\n");
 #endif
 	
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "USR " << trid << " TWN I " << info->username << "\r\n";
 	this->write(buf_);
 	
@@ -845,7 +845,7 @@ public:
 	fprintf(stderr, "MSN Plugin: Cookie: %s\n", info->cookie);
 #endif
 	
-	std::stringstream buf_;
+	std::ostringstream buf_;
 	buf_ << "USR " << trid << " TWN S " << info->cookie << "\r\n";
 	this->write(buf_);
 	this->addCallback(&NotificationServerConnection::callback_AuthenticationComplete, trid++, (void *) data);

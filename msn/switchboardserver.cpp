@@ -154,7 +154,7 @@ public:
     {
         std::string s = msg->asString();
         
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "MSG " << trid++ << " N " << s.size() << "\r\n" << s;
         this->write(buf_);
     }
@@ -266,7 +266,7 @@ public:
     
     void SwitchboardServerConnection::sendTypingNotification()
     {
-        std::stringstream buf_, msg_;
+        std::ostringstream buf_, msg_;
         msg_ << "MIME-Version: 1.0\r\n";
         msg_ << "Content-Type: text/x-msmsgscontrol\r\n";
         msg_ << "TypingUser: " << this->auth.username << "\r\n";
@@ -281,7 +281,7 @@ public:
     
     void SwitchboardServerConnection::inviteUser(Passport userName)
     {
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "CAL " << trid++ << " " << userName << "\r\n";
         write(buf_);        
     }
@@ -295,7 +295,7 @@ public:
         }
         
         ext::registerSocket(this->sock, 1, 1);
-        std::stringstream buf_;
+        std::ostringstream buf_;
         if (this->auth.sessionID.empty())
         {
             buf_ << "USR " << trid << " " << this->auth.username << " " << this->auth.cookie << "\r\n";
@@ -377,7 +377,7 @@ public:
         if (((std::string) (this->auth.rcpt)).empty()) // they're requesting the SB session the proper way
             ext::gotSwitchboard(this, this->auth.tag);
         else {
-            std::stringstream buf_;
+            std::ostringstream buf_;
             buf_ << "CAL " << trid++ << " " << this->auth.rcpt << "\r\n";
             this->write(buf_);
         }
@@ -438,7 +438,7 @@ public:
         
         basename = basename.substr(basename_pos);
         
-        std::stringstream buf_;
+        std::ostringstream buf_;
         buf_ << "Application-Name: File Transfer\r\n";
         buf_ << "Application-GUID: {5D3E02AB-6190-11d3-BBBB-00C04F795683}\r\n";
         buf_ << "Invitation-Command: INVITE\r\n";
