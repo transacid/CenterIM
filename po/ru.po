@@ -6,13 +6,130 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.1\n"
-"POT-Creation-Date: 2002-04-23 11:03+0300\n"
+"POT-Creation-Date: 2002-04-24 21:55+0300\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/centericq.cc:121
+msgid "password: "
+msgstr "пароль: "
+
+#: src/centericq.cc:157
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
+
+#: src/centericq.cc:211
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Игнорировать сообщения от %s?"
+
+#: src/centericq.cc:250
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Вы действительно хотите удалить %s?"
+
+#: src/centericq.cc:258
+msgid "New nickname to show: "
+msgstr "Новый ник для показа в списке: "
+
+#: src/centericq.cc:266
+msgid "Select a group to move the user to"
+msgstr "Выберите новую группу для пользователя"
+
+#: src/centericq.cc:283
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ невозможно запросить away-сообщение, будучи в offline"
+
+#: src/accountmanager.cc:166 src/centericq.cc:332
+msgid "away message"
+msgstr "away-сообщение"
+
+#: src/centericq.cc:507
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
+
+#: src/centericq.cc:510
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ последнее сообщение от %s"
+
+#: src/centericq.cc:551
+msgid "! another running copy of centericq detected"
+msgstr "! обнаружена работающая копия centericq"
+
+#: src/centericq.cc:552
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! это может вызвать проблемы. pid %lu"
+
+#: src/centericq.cc:640
+msgid "Mobile number: "
+msgstr "Номер мобильного телефона: "
+
+#: src/centericq.cc:838
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ история для %s пуста"
+
+#: src/centericq.cc:864
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s уже есть в списке"
+
+#: src/centericq.cc:870
+msgid "Select a group to add the user to"
+msgstr "Выберите группу для контакта"
+
+#: src/centericq.cc:877
+msgid "Notify the user he/she has been added?"
+msgstr "Уведомить пользователя о том, что он был добавлен?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:880
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ уведомление послано %lu"
+
+#: src/centericq.cc:891
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s добавлен в список"
+
+#: src/centericq.cc:962
+msgid "+ the user is back"
+msgstr "+ пользователь вернулся"
+
+#: src/centericq.cc:978
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] статус восстановлен"
+
+#: src/centericq.cc:993
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] автоматический переход в %s"
+
+#: src/centericq.cc:995
+msgid "away"
+msgstr ""
+
+#: src/centericq.cc:995
+msgid "n/a"
+msgstr ""
+
+#: src/centericq.cc:1118
+msgid "! free disk space is less than 10k, going offline"
+msgstr "! свободного места на диске осталось < 10k, рассоединение"
+
+#: src/centericq.cc:1119
+msgid "! otherwise we can lose events and configuration"
+msgstr "! иначе мы можем терять события и глючить"
 
 #: src/icqconf.cc:124
 #, c-format
@@ -1093,10 +1210,6 @@ msgstr "Сначала вы должны произвести рассоединение!"
 msgid " server address: "
 msgstr " сервер : "
 
-#: src/accountmanager.cc:166 src/centericq.cc:332
-msgid "away message"
-msgstr "away-сообщение"
-
 #: src/imcontroller.cc:32
 msgid " Register on ICQ network "
 msgstr " Зарегистрировать ICQ UIN "
@@ -1316,119 +1429,6 @@ msgstr "+ [yahoo] рассоединение"
 #: src/hooks/yahoohook.cc:373
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] сообщение не принято"
-
-#: src/centericq.cc:121
-msgid "password: "
-msgstr "пароль: "
-
-#: src/centericq.cc:157
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
-
-#: src/centericq.cc:211
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Игнорировать сообщения от %s?"
-
-#: src/centericq.cc:250
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Вы действительно хотите удалить %s?"
-
-#: src/centericq.cc:258
-msgid "New nickname to show: "
-msgstr "Новый ник для показа в списке: "
-
-#: src/centericq.cc:266
-msgid "Select a group to move the user to"
-msgstr "Выберите новую группу для пользователя"
-
-#: src/centericq.cc:283
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ невозможно запросить away-сообщение, будучи в offline"
-
-#: src/centericq.cc:507
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
-
-#: src/centericq.cc:510
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ последнее сообщение от %s"
-
-#: src/centericq.cc:547
-msgid "! another running copy of centericq detected"
-msgstr "! обнаружена работающая копия centericq"
-
-#: src/centericq.cc:548
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! это может вызвать проблемы. pid %lu"
-
-#: src/centericq.cc:636
-msgid "Mobile number: "
-msgstr "Номер мобильного телефона: "
-
-#: src/centericq.cc:834
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ история для %s пуста"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s уже есть в списке"
-
-#: src/centericq.cc:866
-msgid "Select a group to add the user to"
-msgstr "Выберите группу для контакта"
-
-#: src/centericq.cc:873
-msgid "Notify the user he/she has been added?"
-msgstr "Уведомить пользователя о том, что он был добавлен?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:876
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ уведомление послано %lu"
-
-#: src/centericq.cc:887
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s добавлен в список"
-
-#: src/centericq.cc:958
-msgid "+ the user is back"
-msgstr "+ пользователь вернулся"
-
-#: src/centericq.cc:974
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] статус восстановлен"
-
-#: src/centericq.cc:989
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] автоматический переход в %s"
-
-#: src/centericq.cc:991
-msgid "away"
-msgstr ""
-
-#: src/centericq.cc:991
-msgid "n/a"
-msgstr ""
-
-#: src/centericq.cc:1114
-msgid "! free disk space is less than 10k, going offline"
-msgstr "! свободного места на диске осталось < 10k, рассоединение"
-
-#: src/centericq.cc:1115
-msgid "! otherwise we can lose events and configuration"
-msgstr "! иначе мы можем терять события и глючить"
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"

@@ -7,13 +7,131 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.1.0\n"
-"POT-Creation-Date: 2002-04-23 11:03+0300\n"
+"POT-Creation-Date: 2002-04-24 21:55+0300\n"
 "PO-Revision-Date: 2002-02-28 16:12+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/centericq.cc:121
+msgid "password: "
+msgstr "密碼: "
+
+#: src/centericq.cc:157
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M 好友名單選單,         F3/S 變換 ICQ 狀態, F4/G 一般選單,        Q 離開"
+
+#: src/centericq.cc:211
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "忽略所有來自 %s 的訊息?"
+
+#: src/centericq.cc:250
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "真的要將 %s 由名單中刪除嗎 ?"
+
+#: src/centericq.cc:258
+msgid "New nickname to show: "
+msgstr "新暱稱: "
+
+#: src/centericq.cc:266
+msgid "Select a group to move the user to"
+msgstr "改變使用者群組"
+
+#: src/centericq.cc:283
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ 不能在離線狀態下讀取暫離訊息"
+
+#: src/accountmanager.cc:166 src/centericq.cc:332
+msgid "away message"
+msgstr "暫離訊息"
+
+#: src/centericq.cc:507
+#, fuzzy, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ 收到新信, 共 %d 封"
+
+#: src/centericq.cc:510
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ 最後的訊息是 %s 傳來的"
+
+#: src/centericq.cc:551
+msgid "! another running copy of centericq detected"
+msgstr "! 有另一隻 centericq 正在執行中"
+
+#: src/centericq.cc:552
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! pid %lu 會造成問題"
+
+#: src/centericq.cc:640
+msgid "Mobile number: "
+msgstr "手機號碼: "
+
+#: src/centericq.cc:838
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ 與 %s 之間無訊息記錄"
+
+#: src/centericq.cc:864
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s 已在名單中"
+
+#: src/centericq.cc:870
+msgid "Select a group to add the user to"
+msgstr "把使用者加入群組"
+
+#: src/centericq.cc:877
+msgid "Notify the user he/she has been added?"
+msgstr "要提醒對方已被加入嗎 ?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:880
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ 通知已送給 %lu"
+
+#: src/centericq.cc:891
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s 已被加入名單中"
+
+#: src/centericq.cc:962
+msgid "+ the user is back"
+msgstr "+ 對方已經回來"
+
+#: src/centericq.cc:978
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] 狀態回存"
+
+#: src/centericq.cc:993
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] 自動設定 %s"
+
+#: src/centericq.cc:995
+msgid "away"
+msgstr "暫離"
+
+#: src/centericq.cc:995
+msgid "n/a"
+msgstr "N/A"
+
+#: src/centericq.cc:1118
+msgid "! free disk space is less than 10k, going offline"
+msgstr ""
+
+#: src/centericq.cc:1119
+msgid "! otherwise we can lose events and configuration"
+msgstr ""
 
 #: src/icqconf.cc:124
 #, fuzzy, c-format
@@ -1101,10 +1219,6 @@ msgstr "必需先離線!"
 msgid " server address: "
 msgstr " 伺服器位址 : %s "
 
-#: src/accountmanager.cc:166 src/centericq.cc:332
-msgid "away message"
-msgstr "暫離訊息"
-
 #: src/imcontroller.cc:32
 msgid " Register on ICQ network "
 msgstr " 註冊 ICQ "
@@ -1331,120 +1445,6 @@ msgstr "+ [yahoo] 離開網路"
 #: src/hooks/yahoohook.cc:373
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] 訊息退回"
-
-#: src/centericq.cc:121
-msgid "password: "
-msgstr "密碼: "
-
-#: src/centericq.cc:157
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M 好友名單選單,         F3/S 變換 ICQ 狀態, F4/G 一般選單,        Q 離開"
-
-#: src/centericq.cc:211
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "忽略所有來自 %s 的訊息?"
-
-#: src/centericq.cc:250
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "真的要將 %s 由名單中刪除嗎 ?"
-
-#: src/centericq.cc:258
-msgid "New nickname to show: "
-msgstr "新暱稱: "
-
-#: src/centericq.cc:266
-msgid "Select a group to move the user to"
-msgstr "改變使用者群組"
-
-#: src/centericq.cc:283
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ 不能在離線狀態下讀取暫離訊息"
-
-#: src/centericq.cc:507
-#, fuzzy, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ 收到新信, 共 %d 封"
-
-#: src/centericq.cc:510
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ 最後的訊息是 %s 傳來的"
-
-#: src/centericq.cc:547
-msgid "! another running copy of centericq detected"
-msgstr "! 有另一隻 centericq 正在執行中"
-
-#: src/centericq.cc:548
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! pid %lu 會造成問題"
-
-#: src/centericq.cc:636
-msgid "Mobile number: "
-msgstr "手機號碼: "
-
-#: src/centericq.cc:834
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ 與 %s 之間無訊息記錄"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s 已在名單中"
-
-#: src/centericq.cc:866
-msgid "Select a group to add the user to"
-msgstr "把使用者加入群組"
-
-#: src/centericq.cc:873
-msgid "Notify the user he/she has been added?"
-msgstr "要提醒對方已被加入嗎 ?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:876
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ 通知已送給 %lu"
-
-#: src/centericq.cc:887
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s 已被加入名單中"
-
-#: src/centericq.cc:958
-msgid "+ the user is back"
-msgstr "+ 對方已經回來"
-
-#: src/centericq.cc:974
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] 狀態回存"
-
-#: src/centericq.cc:989
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] 自動設定 %s"
-
-#: src/centericq.cc:991
-msgid "away"
-msgstr "暫離"
-
-#: src/centericq.cc:991
-msgid "n/a"
-msgstr "N/A"
-
-#: src/centericq.cc:1114
-msgid "! free disk space is less than 10k, going offline"
-msgstr ""
-
-#: src/centericq.cc:1115
-msgid "! otherwise we can lose events and configuration"
-msgstr ""
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"

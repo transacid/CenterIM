@@ -5,13 +5,132 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.1\n"
-"POT-Creation-Date: 2002-04-23 11:03+0300\n"
+"POT-Creation-Date: 2002-04-24 21:55+0300\n"
 "PO-Revision-Date: 2002-04-17 21:01-0500\n"
 "Last-Translator: Leonardo Boshell <p@kapcoweb.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/centericq.cc:121
+msgid "password: "
+msgstr "contraseña: "
+
+#: src/centericq.cc:157
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M menú de contactos actual, F3/S modificar status, F4/G acciones "
+"generales, Q salir"
+
+#: src/centericq.cc:211
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "¿Ignorar todos los eventos de %s?"
+
+#: src/centericq.cc:250
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "¿Está seguro que desea eliminar %s?"
+
+#: src/centericq.cc:258
+msgid "New nickname to show: "
+msgstr "Nuevo alias a mostrar: "
+
+#: src/centericq.cc:266
+msgid "Select a group to move the user to"
+msgstr "Seleccione un grupo hacia donde mover al usuario"
+
+#: src/centericq.cc:283
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ no se pueden consutar los mensajes de ausencia estando desconectado"
+
+#: src/accountmanager.cc:166 src/centericq.cc:332
+msgid "away message"
+msgstr "mensaje de ausencia"
+
+#: src/centericq.cc:507
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] llegó nuevo correo, %d mensajes"
+
+#: src/centericq.cc:510
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ ultimo mensaje de: %s"
+
+#: src/centericq.cc:551
+msgid "! another running copy of centericq detected"
+msgstr "! se detectó otra copia de centericq ejecutándose"
+
+#: src/centericq.cc:552
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! esto puede ocasionar problemas. pid %lu"
+
+#: src/centericq.cc:640
+msgid "Mobile number: "
+msgstr "Número de dispositivo móvil: "
+
+#: src/centericq.cc:838
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ no hay ítems en el historial para %s"
+
+#: src/centericq.cc:864
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ el usuario %s ya se encuentra en la lista"
+
+#: src/centericq.cc:870
+msgid "Select a group to add the user to"
+msgstr "Seleccione un grupo en donde agregar al usuario"
+
+#: src/centericq.cc:877
+msgid "Notify the user he/she has been added?"
+msgstr "¿Notificar al usuario que él/ella ha sido agregado(a)?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:880
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ la notificación ha sido enviada a %lu"
+
+#: src/centericq.cc:891
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s ha sido agregado(a) a la lista"
+
+#: src/centericq.cc:962
+msgid "+ the user is back"
+msgstr "+ el usuario ha vuelto"
+
+#: src/centericq.cc:978
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ Status [%s] retomado"
+
+#: src/centericq.cc:993
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] automáticamente estableció %s"
+
+#: src/centericq.cc:995
+msgid "away"
+msgstr "ausente"
+
+#: src/centericq.cc:995
+msgid "n/a"
+msgstr "n/d"
+
+#: src/centericq.cc:1118
+msgid "! free disk space is less than 10k, going offline"
+msgstr "! el espacio libre en disco es menos de 10k, desconectándose"
+
+#: src/centericq.cc:1119
+msgid "! otherwise we can lose events and configuration"
+msgstr "! de otro modo pueden perderse eventos y datos de configuración"
 
 #: src/icqconf.cc:124
 #, c-format
@@ -1090,10 +1209,6 @@ msgstr "Debe desconectarse del servicio primero!"
 msgid " server address: "
 msgstr " dirección del servidor: "
 
-#: src/accountmanager.cc:166 src/centericq.cc:332
-msgid "away message"
-msgstr "mensaje de ausencia"
-
 #: src/imcontroller.cc:32
 msgid " Register on ICQ network "
 msgstr " Registro en la red ICQ "
@@ -1313,121 +1428,6 @@ msgstr "+ [yahoo] desconectado de la red"
 #: src/hooks/yahoohook.cc:373
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] se he devuelto el mensaje"
-
-#: src/centericq.cc:121
-msgid "password: "
-msgstr "contraseña: "
-
-#: src/centericq.cc:157
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M menú de contactos actual, F3/S modificar status, F4/G acciones "
-"generales, Q salir"
-
-#: src/centericq.cc:211
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "¿Ignorar todos los eventos de %s?"
-
-#: src/centericq.cc:250
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "¿Está seguro que desea eliminar %s?"
-
-#: src/centericq.cc:258
-msgid "New nickname to show: "
-msgstr "Nuevo alias a mostrar: "
-
-#: src/centericq.cc:266
-msgid "Select a group to move the user to"
-msgstr "Seleccione un grupo hacia donde mover al usuario"
-
-#: src/centericq.cc:283
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ no se pueden consutar los mensajes de ausencia estando desconectado"
-
-#: src/centericq.cc:507
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] llegó nuevo correo, %d mensajes"
-
-#: src/centericq.cc:510
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ ultimo mensaje de: %s"
-
-#: src/centericq.cc:547
-msgid "! another running copy of centericq detected"
-msgstr "! se detectó otra copia de centericq ejecutándose"
-
-#: src/centericq.cc:548
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! esto puede ocasionar problemas. pid %lu"
-
-#: src/centericq.cc:636
-msgid "Mobile number: "
-msgstr "Número de dispositivo móvil: "
-
-#: src/centericq.cc:834
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ no hay ítems en el historial para %s"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ el usuario %s ya se encuentra en la lista"
-
-#: src/centericq.cc:866
-msgid "Select a group to add the user to"
-msgstr "Seleccione un grupo en donde agregar al usuario"
-
-#: src/centericq.cc:873
-msgid "Notify the user he/she has been added?"
-msgstr "¿Notificar al usuario que él/ella ha sido agregado(a)?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:876
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ la notificación ha sido enviada a %lu"
-
-#: src/centericq.cc:887
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s ha sido agregado(a) a la lista"
-
-#: src/centericq.cc:958
-msgid "+ the user is back"
-msgstr "+ el usuario ha vuelto"
-
-#: src/centericq.cc:974
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ Status [%s] retomado"
-
-#: src/centericq.cc:989
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] automáticamente estableció %s"
-
-#: src/centericq.cc:991
-msgid "away"
-msgstr "ausente"
-
-#: src/centericq.cc:991
-msgid "n/a"
-msgstr "n/d"
-
-#: src/centericq.cc:1114
-msgid "! free disk space is less than 10k, going offline"
-msgstr "! el espacio libre en disco es menos de 10k, desconectándose"
-
-#: src/centericq.cc:1115
-msgid "! otherwise we can lose events and configuration"
-msgstr "! de otro modo pueden perderse eventos y datos de configuración"
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"
