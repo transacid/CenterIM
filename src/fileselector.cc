@@ -142,8 +142,11 @@ void fileselector::exec() {
 		    }
 		} else {
 		    if(fin = (!S_ISDIR(i->mode) || (options & FSEL_DIRSELECT))) {
-			if(!(options & FSEL_MULTI)) {
+			bool multibutempty = (options & FSEL_MULTI) && selected.empty();
+
+			if(!(options & FSEL_MULTI) || multibutempty) {
 			    selected.push_back(dcurrent + i->fname);
+			    fin = multibutempty;
 			}
 		    }
 		}
@@ -193,6 +196,7 @@ int fileselector::menukeys(verticalmenu &m, int k) {
 	case KEY_IC:
 	    if(instance->options & FSEL_MULTI) {
 		if(i) {
+		    if(i->fname != "..")
 		    if(!stat(i->fname.c_str(), &st)) {
 			fname = instance->dcurrent + i->fname;
 			si = find(instance->selected.begin(),
