@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.15 2002/02/19 18:38:05 konst Exp $
+* $Id: msnhook.cc,v 1.16 2002/02/25 17:08:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -165,7 +165,7 @@ bool msnhook::send(const imevent &ev) {
 	if(m) text = m->geturl() + "\n\n" + m->getdescription();
     }
 
-    if(!text.empty()) {
+//    if(!text.empty()) {
 	icqcontact *c = clist.get(ev.getcontact());
 
 	if(c)
@@ -173,7 +173,7 @@ bool msnhook::send(const imevent &ev) {
 	    MSN_SendMessage(ev.getcontact().nickname.c_str(), text.c_str());
 	    return true;
 	}
-    }
+//    }
 
     return false;
 }

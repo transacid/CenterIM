@@ -4,25 +4,6 @@
 *
 */
 
-patch for transparency and "all protocols" by W.J. van der Laan
-<gnufnork@hetdigitalegat.nl>
-
-mail arrived timestamps
-
-external auto-respond and events processing actions
-
-gotta see if it's possible to update our own nick
-
-applied patch for MSN cyrillic letters by Walery Studennikov <despair@sama.ru>
-
-edit user -> esc -> interests info doubles
-
-msn -> server is setable
-
-"executing external ..." -> to log
-
-communications from the command line, sending messages through
-
 /*
 *
 * BUGS
@@ -30,8 +11,6 @@ communications from the command line, sending messages through
 */
 
 does icq go down after several unsuccessful acks?
-
-empty offline message -> produces sounds?
 
 something's wrong with sprintf and msn
 
@@ -44,6 +23,9 @@ MSN: 3rd person invitation from other party -> centericq segfault
 * TODO
 *
 */
+
+sending smses through email gws, the server reports the email to send it
+to
 
 try to implement the daemon mode
     substitute another "face" class
@@ -77,4 +59,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.133 2002/02/25 10:40:59 konst Exp $
+$Id: TODO,v 1.134 2002/02/25 17:08:30 konst Exp $

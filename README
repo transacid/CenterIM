@@ -694,8 +694,10 @@ outgoing queue:
 
 -t or --to
 
-    Finally, which this one you specify nickname or UIN of the
-    destination contact.
+    Finally, with this one you specify nickname or UIN of the
+    destination contact. For icq it's possible to specify 0 to send
+    events to yourself. Only SMSes are known to be possible to be sent
+    to oneself though.
 
 The message text is read from the standard input, so use pipes in shell
 to pass it. For example, you can say "hi" to me through the ICQ network
@@ -754,28 +756,28 @@ recommended just cut'n'paste the following text.
 # -------
 # Possible options for an action are:
 #
-#	stdin		The incoming message text is to be passed to
-#			stdin of the script to be executed.
+#       stdin           The incoming message text is to be passed to
+#                       stdin of the script to be executed.
 #
-#	stdout		The script output is to be sent as a reply
-#			message (if not empty).
+#       stdout          The script output is to be sent as a reply
+#                       message (if not empty).
 #
 # Then, the section named "%exec" should follow. It contains a piece of
 # script to be executed being copied to a file first.
 #
 
-%action		Simple auto-responder
+%action         Simple auto-responder
 
-event		msg
+event           msg
 # Reacts only on events of message type ..
 
-proto		icq yahoo
+proto           icq yahoo
 # .. only for icq and yahoo protocols
 
-status		away na
+status          away na
 # .. when we are in away or n/a status
 
-options		stdin stdout
+options         stdin stdout
 # .. the external commands text (below) reads the message from
 # stdin, then its stdout output is sent as a response to a
 # remote user.
@@ -878,11 +880,11 @@ you're away from your computer and your IM mode is set to Away or N/A.
 
 [ - cut (centericq external actions setup for an IM answering machine) ----- ]
 
-%action		Answering machine
-event		msg
-proto		all
-status		away na
-options		stdout
+%action         Answering machine
+event           msg
+proto           all
+status          away na
+options         stdout
 
 %exec
 #!/bin/sh
@@ -923,11 +925,11 @@ away mode. All we need is to add one more section.
 
 [ - cut (centericq external actions setup for elizatalk) ------------------- ]
 
-%action		Eliza
-event		msg
-proto		all
-status		away
-options		stdin stdout
+%action         Eliza
+event           msg
+proto           all
+status          away
+options         stdin stdout
 
 %exec
 msg=`cat`
@@ -958,11 +960,11 @@ messages.
 
 [ - cut (centericq external actions setup for simple remote control) ------- ]
 
-%action		Remote control
-event		msg
-proto		all
-status		all
-options		stdin stdout
+%action         Remote control
+event           msg
+proto           all
+status          all
+options         stdin stdout
 
 %exec
 #!/bin/sh
@@ -989,26 +991,24 @@ messages when you're away to a cellular phone with SMS.
 
 [ - cut (centericq external actions setup for simple events forwarding) ---- ]
 
-%action		ICQ messages forwarding
-event		msg
-proto		icq
-status		away na
-options		stdin
+%action         ICQ messages forwarding
+event           msg
+proto           icq
+status          away na
+options         stdin
 
 %exec
 #!/bin/sh
 
 msg=`cat`
-echo $msg | centericq -s sms -p icq -t <put an uin here>
+echo $msg | centericq -s sms -p icq -t 0
 
 [ -------------------------------------------------------------------------- ]
 
-Please note that you must have an UIN on your contact list that has your
-cellular phone number associated with it. Such an inconveniece exists
-because of an ability to send SMSes only through ICQ network. Also, you
-can easily forward your incoming events to any other IM contacts, emails
-with the mail(1) command. In fact, everything you can access from the
-command line is possible to be used here.
+Please note UIN 0 is specified to send SMS to your own contact. Also,
+you can easily forward your incoming events to any other IM contacts,
+emails with the mail(1) command. In fact, everything you can access from
+the command line is possible to be used here.
 
 
 9.4. Protocol debug mode

@@ -765,3 +765,34 @@ descriptions.
 
 Fixed a bug caused inability to fetch self details when our own UIN was
 on the contact list.
+
+4.6.2
+-----
+
+Another really nice feature was added. Now it's possible to define external
+actions to be performed when centericq receives an event. Quite a flexible
+configuration file allows to execute actions depending on IM protocol, event
+type and your current status. This feature makes it possible to setup
+auto-answering, Elizatalk (a bot to make fun with your friends), remote
+control, events forwarding and whatever else your fantasy can say. More
+information you'll find in the README.
+
+Added a bunch of command line options for putting events to the outgoing
+queue from the command line. Consult the man page and README for more
+information.
+
+Now it's possible to specify server address for MSN protocol.
+
+Fixed a bug that resulted in interests and background information doubling
+after every "edit details" attempt with users on your contact list.
+
+It was impossible to update own ICQ nickname. Fixed.
+
+Now timestamps are attached to "new mail arrived" messages in the log window.
+
+Applied a patch for correct processing of Cyrillic letters for MSN by
+Walery Studennikov <despair@sama.ru>
+
+Applied a patch for transparent background support in some X terminals and
+switching status simultaneously for all the IM protocols together, by
+W.J. van der Laan <gnufnork@hetdigitalegat.nl>

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.42 2002/02/23 10:00:37 konst Exp $
+* $Id: icqconf.cc,v 1.43 2002/02/25 17:08:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -738,6 +738,10 @@ void icqconf::constructevent(const string event, const string proto, const strin
     }
 
     if(proto == "icq") {
+	if(dest.find_first_not_of("0123456789") != -1) {
+	    cout << _("event sending error: only UINs are allowed with icq protocol") << endl;
+	    exit(1);
+	}
 	cdest = imcontact(strtoul(dest.c_str(), 0, 0), icq);
     } else if(proto == "yahoo") {
 	cdest = imcontact(dest, yahoo);

@@ -43,7 +43,7 @@ const string imcontact::totext() const {
     string r;
 
     if(*this == contactroot) {
-	r = "[root]";
+	r = "[self]";
     } else
     switch(pname) {
 	case icq:

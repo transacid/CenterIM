@@ -1,4 +1,4 @@
-.TH CENTERICQ 1 "December 14, 2001"
+.TH CENTERICQ 1 "February 25, 2002"
 
 .SH NAME
 \fBcentericq\fP \- a text mode based IM client for Linux, *BSD and possibly,
@@ -24,8 +24,10 @@ non-icq contacts), view the messages history, register a new UIN and update
 your details, be informed on receiving email messages, automatically set away
 after the defined period of inactivity (on any console), and have your own
 ignore, visible and invisible lists. It can also associate events with
-sounds, has support for Hebrew and Arabic languages and allows to arrange
-contacts into groups.
+sounds, add events to the outgoing queue from command line, define external
+event processing actions (like events auto-forwarding or elizatalk), has
+support for Hebrew and Arabic languages and allows to arrange contacts into
+groups.
 
 .SH OPTIONS
 .TP
@@ -35,8 +37,30 @@ use ascii characters to draw lines and boxes
 \fB\-h\fR, \fB\-\-help\fR
 display command line usage
 
+.PP
+
+The following commands are used to put events to the outgoing queue from
+the command line. If centericq is already running they're to be sent
+immediately, otherwise they will be sent as soon as you go online.
+
+
+.TP
+\fB\-s\fR, \fB\-\-send\fR <event type>
+This parameter specifies the type of event you want to send.
+Currently only "msg", "url" and "sms" are supported.
+.TP
+\fB\-p\fR, \fB\-\-proto\fR <protocol type>
+This one specifies to which IM network the destination contact
+beyongs. Can be "icq", "yahoo" or "msn".
+.TP
+\fB\-t\fR, \fB\-\-to\fR <nickname or UIN>
+Finally, with this one you specify nickname or UIN of the
+destination contact. For icq it's possible to specify 0 to send
+events to yourself. Only SMSes are known to be possible to be sent
+to oneself though.
+
 .SH VERSION
-centericq 4.5.0
+centericq 4.6.2
 
 .SH BUG REPORT
 Report any bugs to centericq-bugs@konst.org.ua
