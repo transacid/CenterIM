@@ -169,7 +169,7 @@ class icqconf {
 	string getprotocolprefix(protocolname pname) const;
 
 	int getouridcount() const { return accounts.size(); }
-	imaccount getourid(protocolname pname);
+	imaccount getourid(protocolname pname) const;
 	void setourid(const imaccount &im);
 
 	string getawaymsg(protocolname pname) const;

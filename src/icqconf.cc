@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.81 2002/09/01 11:03:11 konst Exp $
+* $Id: icqconf.cc,v 1.82 2002/09/02 09:20:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -54,9 +54,9 @@ icqconf::icqconf() {
 icqconf::~icqconf() {
 }
 
-icqconf::imaccount icqconf::getourid(protocolname pname) {
+icqconf::imaccount icqconf::getourid(protocolname pname) const {
     imaccount im;
-    vector<imaccount>::iterator i;
+    vector<imaccount>::const_iterator i;
 
     i = find(accounts.begin(), accounts.end(), pname);
     im = i == accounts.end() ? imaccount(pname) : *i;
@@ -107,6 +107,23 @@ void icqconf::setourid(const imaccount &im) {
 string icqconf::getawaymsg(protocolname pname) const {
     string r, buf, fname;
     ifstream f;
+
+    if(pname == proto_all) {
+	bool same = true;
+	string allmsg;
+
+	for(protocolname ipname = icq; ipname != protocolname_size && same; (int) ipname += 1) {
+	    if(!getourid(ipname).empty()) {
+		buf = getawaymsg(ipname);
+		if(!buf.empty()) {
+		    if(allmsg.empty()) allmsg = buf;
+		    else same = same && buf == allmsg;
+		}
+	    }
+	}
+
+	return same ? allmsg : "";
+    }
 
     if(!(gethook(pname).getcapabilities() & hoptCanSetAwayMsg))
 	return "";
