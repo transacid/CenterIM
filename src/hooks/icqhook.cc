@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.96 2002/08/16 11:54:09 konst Exp $
+* $Id: icqhook.cc,v 1.97 2002/08/16 13:31:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,9 @@
 #include <libicq2000/userinfohelpers.h>
 
 #define PERIOD_ICQPOLL  5
+#define PERIOD_RESOLVE  25
+
+#define MAX_REQUESTS    20
 
 icqhook ihook;
 
@@ -152,15 +155,16 @@ void icqhook::disconnect() {
 }
 
 void icqhook::resolve() {
-    int i;
+    int i, cnt;
     icqcontact *c;
 
-    for(i = 0; i < clist.count; i++) {
+    for(i = cnt = 0; i < clist.count && cnt < MAX_REQUESTS; i++) {
 	c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == icq)
 	if(c->getdispnick() == i2str(c->getdesc().uin)) {
 	    requestinfo(c);
+	    cnt++;
 	}
     }
 }
@@ -215,6 +219,11 @@ void icqhook::exectimers() {
 	    cli.Poll();
 	    sendinvisible();
 	    time(&timer_poll);
+	}
+
+	if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
+	    resolve();
+	    time(&timer_resolve);
 	}
     }
 }
@@ -931,6 +940,8 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
     time(&timer_poll);
+    time(&timer_resolve);
+
     logger.putourstatus(icq, offline, manualstatus);
 
     cli.setRandomChatGroup(strtoul(conf.getourid(icq).additional["randomgroup"].c_str(), 0, 0));
@@ -956,8 +967,6 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     if(conf.getourid(icq).additional["autosync"] == "1")
 	cli.fetchServerBasedContactList();
-
-    resolve();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {

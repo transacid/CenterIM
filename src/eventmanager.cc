@@ -9,8 +9,7 @@
 
 imeventmanager em;
 
-imeventmanager::imeventmanager() {
-    unsent = 0;
+imeventmanager::imeventmanager(): unsent(0), lastevent(0), recentlysent(0) {
 }
 
 imeventmanager::~imeventmanager() {
@@ -48,10 +47,17 @@ void imeventmanager::store(const imevent &ev) {
     } else if(ev.getdirection() == imevent::outgoing) {
 	abstracthook &hook = gethook(ev.getcontact().pname);
 
-	if(hook.logged()) {
+	if(time(0)-lastevent > PERIOD_ATONCE)
+	    recentlysent = 0;
+
+	proceed = hook.logged() && recentlysent < MAX_ATONCE;
+
+	if(proceed) {
 	    if(hook.send(ev)) {
 		eventwrite(ev, history);
 		logger.putevent(ev);
+		time(&lastevent);
+		recentlysent++;
 	    } else {
 		eventwrite(ev, offline);
 	    }
@@ -148,9 +154,7 @@ void imeventmanager::resend() {
     ifstream f;
     int i;
 
-    unsent = 0;
-
-    for(i = 0; i < clist.count; i++) {
+    for(unsent = i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
 	fname = c->getdirname() + "offline";

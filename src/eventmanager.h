@@ -5,7 +5,8 @@
 
 class imeventmanager {
     private:
-	int unsent;
+	int unsent, recentlysent;
+	time_t lastevent;
 
 	enum eventwritemode { history, offline };
 

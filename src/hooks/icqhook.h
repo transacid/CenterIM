@@ -28,7 +28,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	    SyncList
 	} blockmode;
 
-	time_t timer_poll;
+	time_t timer_poll, timer_resolve;
 	bool fonline, flogged;
 	unsigned int reguin;
 	SearchResultEvent *searchevent;

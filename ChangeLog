@@ -1087,3 +1087,8 @@ When compiled with fribidi, it's now possible to disable displaying of
 right-to-left text by switching off the appropriate item in the
 configuration dialog.
 
+The event sending general-purpose routine was improved so that remote
+DoS/flood protection on the remove IM servers doesn't turn on because of
+hudge mass-sendings. Now messages that overflow the limit get postponed
+and sent in another 5 seconds.
+
