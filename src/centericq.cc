@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.78 2002/03/14 11:53:29 konst Exp $
+* $Id: centericq.cc,v 1.79 2002/03/14 12:55:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -947,8 +947,11 @@ void centericq::exectimers() {
     bool fonline;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	abstracthook &hook = gethook(pname);
+
+	if(hook.enabled())
 	if(!conf.getourid(pname).empty()) {
-	    gethook(pname).exectimers();
+	    hook.exectimers();
 	}
     }
 

@@ -6,14 +6,14 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.15 2002/03/14 11:53:28 konst Exp $
+# $Id: cicqsync,v 1.16 2002/03/14 12:55:58 konst Exp $
 #
 
 CROOT=":pserver:anonymous@cvs.konst.org.ua:/home/konst/cvs/root"
 
 PROG="centericq"
 MODULES="libyahoo libmsn libicq2000 kktoolbox/kkconsui kktoolbox/kksystr kktoolbox/kkstrtext firetalk"
-MAKEUPDATE="s@/home/konst/devel/kktoolbox@\$(top_srcdir)@g;s@/home/konst/devel/libyahoo@\$(top_srcdir)/libyahoo@g;s@/home/konst/devel/libmsn@\$(top_srcdir)/libmsn@;s@/home/konst/devel/libicq2000@\$(top_srcdir)/libicq2000@g"
+MAKEUPDATE="s@/home/konst/devel/kktoolbox@\$(top_srcdir)@g;s@/home/konst/devel/libyahoo@\$(top_srcdir)/libyahoo@g;s@/home/konst/devel/libmsn@\$(top_srcdir)/libmsn@;s@/home/konst/devel/libicq2000@\$(top_srcdir)/libicq2000@g;s@/home/konst/devel/firetalk@\$(top_srcdir)/firetalk@g"
 MONOLITE="0"
 
 RETVAL=0
