@@ -6,13 +6,116 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.20.5\n"
-"POT-Creation-Date: 2001-12-14 18:32+0200\n"
+"POT-Creation-Date: 2001-12-14 21:35+0200\n"
 "PO-Revision-Date: 2001-02-10 20:50+0100\n"
 "Last-Translator: Jindrich Makovicka <makovick@kmlinux.fjfi.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/centericq.cc:115
+#, fuzzy
+msgid "password: "
+msgstr "Heslo: "
+
+#: src/centericq.cc:150
+#, fuzzy
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M menu vybraného kontaktu, F3/S zmìnit icq status, F4/G rùzné volby, Q "
+"konec"
+
+#: src/centericq.cc:204
+#, fuzzy, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignorovat v¹echny události od %s (%lu)?"
+
+#: src/centericq.cc:241
+#, fuzzy, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Opravdu chcete odstranit %s (%lu)?"
+
+#: src/centericq.cc:249
+msgid "New nickname to show: "
+msgstr "Nová pøezdívka: "
+
+#: src/centericq.cc:257
+msgid "Select a group to move the user to"
+msgstr ""
+
+#: src/centericq.cc:421
+#, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ dorazila nová po¹ta, %d zpráv"
+
+#: src/centericq.cc:422
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ poslední zpráva od %s"
+
+#: src/centericq.cc:456
+msgid "! another running copy of centericq detected"
+msgstr ""
+
+#: src/centericq.cc:457
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr ""
+
+#: src/centericq.cc:532
+#, fuzzy
+msgid "Mobile number: "
+msgstr "jméno souboru: "
+
+#: src/centericq.cc:715
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ ¾ádné polo¾ky historie pro %s"
+
+#: src/centericq.cc:741
+#, fuzzy, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s byl pøidán do visible listu"
+
+#: src/centericq.cc:747
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
+
+#: src/centericq.cc:754
+msgid "Notify the user he/she has been added?"
+msgstr ""
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:757
+#, fuzzy, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "®ádost o autorizaci od %lu"
+
+#: src/centericq.cc:769
+#, fuzzy, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s byl pøidán do visible listu"
+
+#: src/centericq.cc:849
+msgid "+ the user is back"
+msgstr "+ u¾ivatel je zpátky"
+
+#: src/centericq.cc:860
+#, fuzzy, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ automaticky nastavuji \"N/A\""
+
+#: src/centericq.cc:862
+#, fuzzy
+msgid "away"
+msgstr "Pryè"
+
+#: src/centericq.cc:862
+msgid "n/a"
+msgstr ""
 
 #: src/icqcontact.cc:606
 msgid "Jan"
@@ -1153,109 +1256,6 @@ msgstr ""
 #, fuzzy
 msgid "+ [yahoo] bounced msg"
 msgstr "+ pøipojuji se k icq serveru"
-
-#: src/centericq.cc:115
-#, fuzzy
-msgid "password: "
-msgstr "Heslo: "
-
-#: src/centericq.cc:150
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M menu vybraného kontaktu, F3/S zmìnit icq status, F4/G rùzné volby, Q "
-"konec"
-
-#: src/centericq.cc:204
-#, fuzzy, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignorovat v¹echny události od %s (%lu)?"
-
-#: src/centericq.cc:241
-#, fuzzy, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Opravdu chcete odstranit %s (%lu)?"
-
-#: src/centericq.cc:249
-msgid "New nickname to show: "
-msgstr "Nová pøezdívka: "
-
-#: src/centericq.cc:257
-msgid "Select a group to move the user to"
-msgstr ""
-
-#: src/centericq.cc:421
-#, c-format
-msgid "+ new mail arrived, %d messages"
-msgstr "+ dorazila nová po¹ta, %d zpráv"
-
-#: src/centericq.cc:422
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ poslední zpráva od %s"
-
-#: src/centericq.cc:456
-msgid "! another running copy of centericq detected"
-msgstr ""
-
-#: src/centericq.cc:457
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr ""
-
-#: src/centericq.cc:532
-#, fuzzy
-msgid "Mobile number: "
-msgstr "jméno souboru: "
-
-#: src/centericq.cc:715
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ ¾ádné polo¾ky historie pro %s"
-
-#: src/centericq.cc:741
-#, fuzzy, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s byl pøidán do visible listu"
-
-#: src/centericq.cc:747
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Vyberte kontakty, které chcete pøidat do seznamu"
-
-#: src/centericq.cc:754
-msgid "Notify the user he/she has been added?"
-msgstr ""
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:757
-#, fuzzy, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "®ádost o autorizaci od %lu"
-
-#: src/centericq.cc:769
-#, fuzzy, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s byl pøidán do visible listu"
-
-#: src/centericq.cc:849
-msgid "+ the user is back"
-msgstr "+ u¾ivatel je zpátky"
-
-#: src/centericq.cc:860
-#, fuzzy, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ automaticky nastavuji \"N/A\""
-
-#: src/centericq.cc:862
-#, fuzzy
-msgid "away"
-msgstr "Pryè"
-
-#: src/centericq.cc:862
-msgid "n/a"
-msgstr ""
 
 #: src/hooks/msnhook.cc:69
 #, fuzzy
