@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.4 2003/07/16 00:19:47 konst Exp $
+* $Id: rsshook.cc,v 1.5 2003/07/16 22:54:32 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -233,11 +233,22 @@ const string &name, const string &title, const string &postfix) {
 
     XmlLeaf *d = i->getLeaf(name);
     string val;
+    int pos, n;
 
     if(d)
     if(!d->getValue().empty()) {
 	val = rushtmlconv("wk", d->getValue(), false);
 	if(!enc.empty()) val = siconv(val, enc, conf.getrussian(rss) ? "koi8-u" : DEFAULT_CHARSET);
+
+	while((pos = val.find("<br")) != -1 || (pos = val.find("<BR")) != -1) {
+	    if((n = val.substr(pos).find(">")) != -1) {
+		val.replace(pos, n+1, "\n");
+	    }
+	}
+
+	while((pos = val.find("<p>")) != -1 || (pos = val.find("<P>")) != -1) {
+	    val.replace(pos, 3, "\n\n");
+	}
 
 	val = cuthtml(val, true);
 	base += title + val + postfix;
