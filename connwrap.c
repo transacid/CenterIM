@@ -126,6 +126,96 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
     return connect(sockfd, serv_addr, addrlen);
 }
 
+int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl, int *state) {
+    int rc = 0;
+    struct sockaddr_in ba;
+
+    if(bindaddr)
+    if(strlen(bindaddr)) {
+#ifdef HAVE_INET_ATON
+	struct in_addr addr;
+	rc = inet_aton(bindaddr, &addr);
+	ba.sin_addr.s_addr = addr.s_addr;
+#else
+	rc = inet_pton(AF_INET, bindaddr, &ba);
+#endif
+
+	if(rc) {
+	    ba.sin_port = 0;
+	    rc = bind(sockfd, (struct sockaddr *) &ba, sizeof(ba));
+	} else {
+	    rc = -1;
+	}
+
+	if(rc) return rc;
+    }
+
+#ifdef HAVE_OPENSSL
+    if(ssl) {
+	if ( !(*state & CW_CONNECT_WANT_SOMETHING))
+	    rc = connect(sockfd, serv_addr, addrlen);
+	else{ /* check if the socket is connected correctly */
+	    socklen_t optlen = sizeof(int);
+	    int optval;
+	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)
+	    return -1;
+	}
+
+	if(!rc) {
+	    sslsock *p;
+	    if (*state & CW_CONNECT_SSL)
+		p = getsock(sockfd);
+	    else
+		p = addsock(sockfd);
+	    
+	    rc = SSL_connect(p->ssl);
+	    switch(rc){
+	    case 1:
+		*state = 0;
+		return 0;
+	    case 0:
+		return -1;
+	    default:
+		switch (SSL_get_error(p->ssl, rc)){
+		case SSL_ERROR_WANT_READ:
+		    *state = CW_CONNECT_SSL | CW_CONNECT_WANT_READ;
+		    return 0;
+		case SSL_ERROR_WANT_WRITE:
+		    *state = CW_CONNECT_SSL | CW_CONNECT_WANT_WRITE;
+		    return 0;
+		default:
+		    return -1;
+		}
+	    }
+	}
+	else{ /* catch EINPROGRESS error from the connect call */
+	    if (errno == EINPROGRESS){
+		*state = CW_CONNECT_STARTED | CW_CONNECT_WANT_WRITE;
+		return 0;
+	    }
+	}
+
+	return rc;
+    }
+#endif
+    if ( !(*state & CW_CONNECT_WANT_SOMETHING))
+	rc = connect(sockfd, serv_addr, addrlen);
+    else{ /* check if the socket is connected correctly */
+	socklen_t optlen = sizeof(int);
+	int optval;
+	if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)
+	    return -1;
+	*state = 0;
+	return 0;
+    }
+    if (rc)
+	if (errno == EINPROGRESS){
+	    *state = CW_CONNECT_STARTED | CW_CONNECT_WANT_WRITE;
+	    return 0;
+	}
+    return rc;
+}
+
 int cw_accept(int s, struct sockaddr *addr, int *addrlen, int ssl) {
 #ifdef HAVE_OPENSSL
     int rc;
