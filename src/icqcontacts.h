@@ -23,7 +23,7 @@
 *
 */
 
-#define SORT_CONTACTS   "#ofidcan_!N"
+#define SORT_CONTACTS   "#fidocan_!N"
 
 #include "linkedlist.h"
 #include "icqcontact.h"

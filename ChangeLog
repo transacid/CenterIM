@@ -408,7 +408,7 @@ the patch.
 3.22.8
 ------
 
-Centericq didn't remembered the "anti-spam" setting after restart. Fixed.
+Centericq didn't remember the "anti-spam" setting after restart. Fixed.
 
 A segfault caused sometimes by receiving and viewing histories
 containing empty msgs was fixed.
@@ -487,3 +487,38 @@ call. So now you can easily mix up Ctrl-X and Ctrl-Z without any problem
 :)
 
 An ability to turn off local mailbox checking was added.
+
+3.35.22
+-------
+
+Sclerosis again. Centericq didn't remember the "local mailbox checking"
+setting after restart. Fixed.
+
+Italian translation by Leandro Noferini <lnoferin@cybervalley.org> has
+been added.
+
+New "green" and "schlich" color schemes can now be found under the
+contrib/ subdir.
+
+icqlib forgot to make a koi8-win1251 translation in user info fields. Fixed.
+
+If centericq didn't find its ~/.centericq/config file it removed whole
+contact list by mistake. Fixed.
+
+After setting the "sound device" setting to "off" the sound remained until
+a user restarted the program.
+
+The "Details" and "Add" buttons in the "Find/add users" dialog caused
+segfaults and hangs on empty lists.
+
+All the received messages in history had an hour forward time in the
+"sent" field.
+
+Good news for Russian speaking centericq users. I've patched icqlib so
+that now it does translate comments for received URLs from win1251
+into koi8.
+
+Basic Hebrew and Arabic languages support was added. To enable it,
+first, install fribidi library, and then run ./configure --with-fribidi
+before running make. You can download the library from
+http://imagic.weizmann.ac.il/~dov/freesw/FriBidi

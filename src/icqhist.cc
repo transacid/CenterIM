@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.5 2001/06/03 13:25:30 konst Exp $
+* $Id: icqhist.cc,v 1.6 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *

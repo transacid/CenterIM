@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.9 2001/06/29 23:43:10 konst Exp $
+* $Id: icqface.cc,v 1.10 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -508,7 +508,12 @@ bool icqface::findresults() {
 }
 
 void icqface::infoclear(dialogbox &db, icqcontact *c, unsigned int uin) {
+    for(int i = WORKAREA_Y1+1; i < WORKAREA_Y2; i++) {
+	workarealine(i, ' ');
+    }
+
     db.redraw();
+
     mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
 	conf.getcolor(cp_main_highlight), _("Information about %lu, %s"), uin,
 	c->isnonicq() ? _("Non-ICQ") : textstatus(c->getstatus()).c_str());
@@ -784,7 +789,7 @@ void icqface::userinfo(unsigned int uin, bool nonicq, unsigned int realuin) {
 
     status(_("F2 to URLs, ESC close"));
 
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2+1,
+    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
 	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setbar(new horizontalbar(WORKAREA_X1+2, WORKAREA_Y2-1,
 	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
@@ -1036,9 +1041,9 @@ void icqface::freeworkareabuf(void *p) {
     }
 }
 
-void icqface::workarealine(int l) {
+void icqface::workarealine(int l, chtype c = HLINE) {
     attrset(conf.getcolor(cp_main_frame));
-    mvhline(l, WORKAREA_X1+1, HLINE, WORKAREA_X2-WORKAREA_X1-1);
+    mvhline(l, WORKAREA_X1+1, c, WORKAREA_X2-WORKAREA_X1-1);
 }
 
 bool icqface::editurl(unsigned int uin, string &url, string &text) {
@@ -1077,7 +1082,7 @@ bool icqface::editurl(unsigned int uin, string &url, string &text) {
 	passuin = uin;
 	status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
 
-	se->load(text, strdup(""));
+	se->load(text, "");
 	se->open();
 
 	if(editdone) {
@@ -1132,7 +1137,7 @@ bool icqface::editmsg(unsigned int uin, string &text) {
     se->idle = &editidle;
     se->wrap = true;
 
-    se->load(text.empty() ? c->getpostponed() : text, strdup(""));
+    se->load(text.empty() ? c->getpostponed() : text, "");
     se->open();
     ctext = se->save("\r\n");
     text = ctext;

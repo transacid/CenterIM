@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.5 2001/06/29 23:43:09 konst Exp $
+* $Id: icqconf.cc,v 1.6 2001/08/17 19:11:58 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -73,7 +73,7 @@ void icqconf::loadmainconfig() {
     ifstream f(fname.c_str());
 
     if(f.is_open()) {
-	savepwd = false;
+	savepwd = mailcheck = false;
 
 	while(!f.eof()) {
 	    getline(f, buf);
@@ -242,6 +242,14 @@ void icqconf::loadsounds() {
     string tname = (string) getenv("HOME") + "/.centericq/sounds", buf, suin, skey;
     int event, n, ffuin;
     icqcontact *c;
+    int i, k;
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+	for(k = 0; k < SOUND_COUNT; k++) {
+	    c->setsound(k, "");
+	}
+    }
 
     if(access(tname.c_str(), F_OK)) {
 	ofstream fo(tname.c_str());

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.5 2001/06/02 07:12:39 konst Exp $
+* $Id: icqcontact.cc,v 1.6 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -60,16 +60,18 @@ icqcontact::icqcontact(unsigned int fuin, bool fnonicq = false) {
 icqcontact::~icqcontact() {
 }
 
-string icqcontact::tosane(string p) {
-    int i;
+const string icqcontact::tosane(const string p) const {
+    string buf;
+    string::iterator i;
 
-    for(i = 0; i < p.size(); i++)
-    if(strchr("\n\r", p[i])) p[i] = ' ';
+    for(buf = p, i = buf.begin(); i != buf.end(); i++) {
+	if(strchr("\n\r", *i)) *i = ' ';
+    }
 
-    return p;
+    return buf;
 }
 
-string icqcontact::getdirname() {
+const string icqcontact::getdirname() const {
     string ret;
 
     if(nonicq) {
@@ -282,7 +284,7 @@ void icqcontact::load() {
     if(!dispnick.size()) dispnick = i2str(uin);
 }
 
-bool icqcontact::isbirthday() {
+bool icqcontact::isbirthday() const {
     bool ret = false;
     time_t curtime = time(0);
     struct tm tbd, *tcur = localtime(&curtime);
@@ -332,7 +334,7 @@ void icqcontact::includeintolist() {
     icq_SendNewUser(&icql, uin);
 }
 
-bool icqcontact::inlist() {
+bool icqcontact::inlist() const {
     return finlist;
 }
 
@@ -393,7 +395,7 @@ void icqcontact::setmsgcount(int n) {
 void icqcontact::getinfo(string &fname, string &lname, string &fprimemail,
 string &fsecemail, string &foldemail, string &fcity,
 string &fstate, string &fphone, string &ffax, string &fstreet,
-string &fcellular, unsigned long &fzip, unsigned short &fcountry) {
+string &fcellular, unsigned long &fzip, unsigned short &fcountry) const {
     fname = firstname;
     lname = lastname;
     fprimemail = primemail;
@@ -431,7 +433,7 @@ string fstreet, string fcellular, unsigned long fzip, unsigned short fcountry) {
 void icqcontact::getmoreinfo(unsigned char &fage, unsigned char &fgender,
 string &fhomepage, unsigned char &flang1, unsigned char &flang2,
 unsigned char &flang3, unsigned char &fbday, unsigned char &fbmonth,
-unsigned char &fbyear) {
+unsigned char &fbyear) const {
     fage = age;
     fgender = gender;
     fhomepage = homepage;
@@ -462,7 +464,7 @@ unsigned char fbyear) {
 void icqcontact::getworkinfo(string &fwcity, string &fwstate, string &fwphone,
 string &fwfax, string &fwaddress, unsigned long &fwzip,
 unsigned short &fwcountry, string &fcompany, string &fdepartment,
-string &fjob, unsigned short &foccupation, string &fwhomepage) {
+string &fjob, unsigned short &foccupation, string &fwhomepage) const {
     fwcity = wcity;
     fwstate = wstate;
     fwphone = wphone;
@@ -496,7 +498,7 @@ string fjob, unsigned short foccupation, string fwhomepage) {
     fupdated++;
 }
 
-void icqcontact::getinterests(string &int1, string &int2, string &int3, string &int4) {
+void icqcontact::getinterests(string &int1, string &int2, string &int3, string &int4) const {
     int1 = fint[0];
     int2 = fint[1];
     int3 = fint[2];
@@ -586,7 +588,7 @@ void icqcontact::setsecurity(bool freqauth, bool fwebaware, bool fpubip) {
     pubip = fpubip;
 }
 
-void icqcontact::getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip) {
+void icqcontact::getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip) const {
     freqauth = reqauth;
     fwebaware = webaware;
     fpubip = pubip;
@@ -596,47 +598,47 @@ void icqcontact::setlastip(string flastip) {
     lastip = flastip;
 }
 
-string icqcontact::getabout() {
+const string icqcontact::getabout() const {
     return about;
 }
 
-string icqcontact::getlastip() {
+const string icqcontact::getlastip() const {
     return lastip;
 }
 
-time_t icqcontact::getlastread() {
+time_t icqcontact::getlastread() const {
     return lastread;
 }
 
-int icqcontact::getstatus() {
+int icqcontact::getstatus() const {
     return status;
 }
 
-unsigned int icqcontact::getuin() {
+unsigned int icqcontact::getuin() const {
     return uin;
 }
 
-unsigned short icqcontact::getseq2() {
+unsigned short icqcontact::getseq2() const {
     return seq2;
 }
 
-int icqcontact::getmsgcount() {
+int icqcontact::getmsgcount() const {
     return nmsgs;
 }
 
-string icqcontact::getnick() {
+const string icqcontact::getnick() const {
     return nick;
 }
 
-string icqcontact::getdispnick() {
+const string icqcontact::getdispnick() const {
     return dispnick;
 }
 
-int icqcontact::updated() {
+int icqcontact::updated() const {
     return fupdated;
 }
 
-bool icqcontact::isnonicq() {
+bool icqcontact::isnonicq() const {
     return nonicq;
 }
 
@@ -644,7 +646,7 @@ void icqcontact::setdirect(bool flag) {
     direct = flag;
 }
 
-bool icqcontact::getdirect() {
+bool icqcontact::getdirect() const {
     return direct && (status != STATUS_OFFLINE);
 }
 
@@ -652,38 +654,38 @@ void icqcontact::setlastseen() {
     time(&lastseen);
 }
 
-time_t icqcontact::getlastseen() {
+time_t icqcontact::getlastseen() const {
     return lastseen;
 }
 
-void icqcontact::setinterests(string nint[]) {
+void icqcontact::setinterests(const string nint[]) {
     for(int i = 0; i < 4; i++) fint[i] = tosane(nint[i]);
     fupdated++;
 }
 
-void icqcontact::setaffiliations(string naf[]) {
+void icqcontact::setaffiliations(const string naf[]) {
     for(int i = 0; i < 4; i++) faf[i] = tosane(naf[i]);
 }
 
-void icqcontact::setbackground(string nbg[]) {
+void icqcontact::setbackground(const string nbg[]) {
     for(int i = 0; i < 4; i++) fbg[i] = tosane(nbg[i]);
 }
 
-void icqcontact::getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4) {
+void icqcontact::getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4) const {
     naf1 = faf[0];
     naf2 = faf[1];
     naf3 = faf[2];
     naf4 = faf[3];
 }
 
-void icqcontact::getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4) {
+void icqcontact::getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4) const {
     nbg1 = fbg[0];
     nbg2 = fbg[1];
     nbg3 = fbg[2];
     nbg4 = fbg[3];
 }
 
-char icqcontact::getshortstatus() {
+char icqcontact::getshortstatus() const {
     if((unsigned long) STATUS_OFFLINE == status) return '_'; else
     if((status & STATUS_INVISIBLE) == STATUS_INVISIBLE) return 'i'; else
     if((status & STATUS_FREE_CHAT) == STATUS_FREE_CHAT) return 'f'; else
@@ -694,7 +696,7 @@ char icqcontact::getshortstatus() {
     if(!(status & 0x01FF)) return 'o'; else return '?';
 }
 
-char icqcontact::getsortchar() {
+char icqcontact::getsortchar() const {
     char ret;
 
     if(isnonicq()) ret = 'N';
@@ -705,7 +707,7 @@ char icqcontact::getsortchar() {
     return ret;
 }
 
-int icqcontact::getinfotryn() {
+int icqcontact::getinfotryn() const {
     return infotryn;
 }
 
@@ -722,7 +724,7 @@ void icqcontact::setpostponed(const string apostponed) {
     postponed = apostponed;
 }
 
-string icqcontact::getpostponed() {
+string icqcontact::getpostponed() const {
     return postponed;
 }
 
@@ -730,6 +732,6 @@ void icqcontact::setmsgdirect(bool flag) {
     msgdirect = flag;
 }
 
-bool icqcontact::getmsgdirect() {
+bool icqcontact::getmsgdirect() const {
     return msgdirect;
 }

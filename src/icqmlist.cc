@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.3 2001/06/02 07:12:39 konst Exp $
+* $Id: icqmlist.cc,v 1.4 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *

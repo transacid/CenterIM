@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.6 2001/06/07 08:47:00 konst Exp $
+* $Id: icqoffline.cc,v 1.7 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *

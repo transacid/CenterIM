@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.5 2001/06/29 23:43:10 konst Exp $
+* $Id: icqdialogs.cc,v 1.6 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -427,7 +427,8 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	    c->setworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, fwzip, fwcountry, fcompany, fdepartment, fjob, foccupation, fwhomepage);
 	    c->setabout(fabout);
 	} else {
-	    finished = ret = true;
+	    ret = c->getuin() || (c->updated() >= 5);
+	    finished = true;
 	}
     }
 
@@ -526,7 +527,7 @@ void icqface::editabout(string &fabout) {
     se.otherkeys = &editaboutkeys;
     se.wrap = true;
 
-    se.load(fabout, strdup(""));
+    se.load(fabout, "");
     se.open();
 
     if(editdone) {

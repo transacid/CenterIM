@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.5 2001/06/02 07:12:39 konst Exp $
+* $Id: centermain.cc,v 1.6 2001/08/17 19:11:58 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *

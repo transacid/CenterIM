@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.6 2001/06/03 13:25:30 konst Exp $
+* $Id: icqhook.cc,v 1.7 2001/08/17 19:11:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,16 +35,21 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define TIMESTAMP ihook.maketm(hour, minute, day, month, year)
+#define TIMESTAMP ihook.maketm(hour-1, minute, day, month, year)
 
-icqhook::icqhook(): flogged(false), newuin(0), finddest(0),
-seq_keepalive(0), n_keepalive(0), connecting(false) {
+icqhook::icqhook() {
     time_t c = time(0);
 
     timer_keepalive = timer_tcp = timer_resolve =
     timer_offline = timer_ack = timer_keypress = c;
 
     timer_reconnect = timer_checkmail = 0;
+
+    newuin = 0;
+    finddest = 0;
+
+    seq_keepalive = n_keepalive = 0;
+    flogged = connecting = false;
 }
 
 icqhook::~icqhook() {
@@ -134,14 +139,16 @@ void icqhook::loggedin(struct icq_link *link) {
 
     time(&ihook.logontime);
     time(&ihook.timer_keepalive);
+
     ihook.seq_keepalive = 0;
     ihook.n_keepalive = 0;
-
-    clist.send();
 
     offl.scan(0, ossendall);
     face.update();
     face.log(_("+ logged in"));
+
+    clist.send();
+
     ihook.files.clear();
 }
 
@@ -547,7 +554,9 @@ unsigned char level, const char *str) {
 }
 
 unsigned int icqhook::getfinduin(int pos) {
-    return founduins[pos-1];
+    int r;
+    if(pos > 0 && pos <= founduins.size()) r = founduins[pos-1]; else r = 0;
+    return r;
 }
 
 #define MIN(x, y)       (x > y ? y : x)
@@ -622,7 +631,7 @@ void icqhook::exectimers() {
 	}
     } else {
 	if(!connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
-	    ihook.connect();
+	    connect();
 	}
 	
 	if(connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {

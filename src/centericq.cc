@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.9 2001/06/29 23:43:09 konst Exp $
+* $Id: centericq.cc,v 1.10 2001/08/17 19:11:58 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -121,12 +121,6 @@ void centericq::reg() {
     string rpasswd, nick, fname, lname, email, socksuser, sockspass;
     fd_set fds;
     FILE *f;
-
-    if(!fork()) {
-	string d = (string) getenv("HOME") + "/.centericq/";
-	execlp("/bin/rm", "/bin/rm", "-rf", d.c_str(), 0);
-	exit(0);
-    }
 
     if(face.regdialog(ruin, rpasswd)) {
 	if(!ruin) {

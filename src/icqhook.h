@@ -17,6 +17,7 @@
 #define PERIOD_WAITNEWUIN       20
 #define PERIOD_SOCKSALIVE       30
 #define PERIOD_WAIT_KEEPALIVE   10
+#define PERIOD_CLIST_RESEND     5
 
 #define MAX_UDPMSG_SIZE         440
 #define MAX_TCPMSG_SIZE         7000

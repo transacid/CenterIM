@@ -80,3 +80,9 @@ Q: How do I enable logging the protocol info, etc?
 
 A: Compile the program with the -DDEBUG parameter.
    [konst@morgue]$ CFLAGS=-DDEBUG CXXFLAGS=-DDEBUG ./configure && make
+
+Q: Centericq compiles way too slow on my box. What's wrong?
+
+A: C++ compiler optimization being a rather slow thing is on by default.
+   To turn it off, do the following.
+   [konst@morgue]$ CXXFLAGS=-O0 ./configure && make

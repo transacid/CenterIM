@@ -35,7 +35,7 @@ class icqcontact {
 	unsigned long zip, wzip;
 
 	void scanhistory();
-	string tosane(string p);
+	const string tosane(const string p) const;
 
     public:
 	icqcontact(unsigned int fuin, bool nonicq = false);
@@ -48,72 +48,72 @@ class icqcontact {
 	void setlastseen();
 
 	void setseq2(unsigned short fseq2);
-	void setnick(string fnick);
-	void setdispnick(string fnick);
+	void setnick(const string fnick);
+	void setdispnick(const string fnick);
 
-	void setinfo(string fname, string lname, string fprimemail,
-	    string fsecemail, string foldemail, string fcity,
-	    string fstate, string fphone, string ffax, string fstreet,
-	    string fcellular, unsigned long fzip, unsigned short fcountry);
+	void setinfo(const string fname, const string lname, const string fprimemail,
+	    const string fsecemail, const string foldemail, const string fcity,
+	    const string fstate, const string fphone, const string ffax, const string fstreet,
+	    const string fcellular, unsigned long fzip, unsigned short fcountry);
 
 	void setmoreinfo(unsigned char fage, unsigned char fgender,
-	    string fhomepage, unsigned char flang1, unsigned char flang2,
+	    const string fhomepage, unsigned char flang1, unsigned char flang2,
 	    unsigned char flang3, unsigned char fbday, unsigned char fbmonth,
 	    unsigned char fbyear);
 
-	void setworkinfo(string fwcity, string fwstate, string fwphone,
-	    string fwfax, string fwaddress, unsigned long fwzip,
-	    unsigned short fwcountry, string fcompany, string fdepartment,
-	    string fjob, unsigned short foccupation, string fwhomepage);
+	void setworkinfo(const string fwcity, const string fwstate, const string fwphone,
+	    const string fwfax, const string fwaddress, unsigned long fwzip,
+	    unsigned short fwcountry, const string fcompany, const string fdepartment,
+	    const string fjob, unsigned short foccupation, const string fwhomepage);
 
-	void setinterests(string nint[]);
-	void setaffiliations(string naf[]);
-	void setbackground(string nbg[]);
+	void setinterests(const string nint[]);
+	void setaffiliations(const string naf[]);
+	void setbackground(const string nbg[]);
 
 	void setsecurity(bool freqauth, bool fwebaware, bool fpubip);
-	void setabout(string data);
-	void setlastip(string flastip);
+	void setabout(const string data);
+	void setlastip(const string flastip);
 
 	void getinfo(string &fname, string &lname, string &fprimemail,
 	    string &fsecemail, string &foldemail, string &fcity,
 	    string &fstate, string &fphone, string &ffax, string &fstreet,
-	    string &fcellular, unsigned long &fzip, unsigned short &fcountry);
+	    string &fcellular, unsigned long &fzip, unsigned short &fcountry) const;
 
 	void getmoreinfo(unsigned char &fage, unsigned char &fgender,
 	    string &fhomepage, unsigned char &flang1, unsigned char &flang2,
 	    unsigned char &flang3, unsigned char &fbday,
-	    unsigned char &fbmonth, unsigned char &fbyear);
+	    unsigned char &fbmonth, unsigned char &fbyear) const;
 
 	void getworkinfo(string &fwcity, string &fwstate, string &fwphone,
 	    string &fwfax, string &fwaddress, unsigned long &fwzip,
 	    unsigned short &fwcountry, string &fcompany, string &fdepartment,
-	    string &fjob, unsigned short &foccupation, string &fwhomepage);
+	    string &fjob, unsigned short &foccupation, string &fwhomepage) const;
 
-	void getinterests(string &int1, string &int2, string &int3, string &int4);
-	void getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4);
-	void getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4);
+	void getinterests(string &int1, string &int2, string &int3, string &int4) const;
+	void getaffiliations(string &naf1, string &naf2, string &naf3, string &naf4) const;
+	void getbackground(string &nbg1, string &nbg2, string &nbg3, string &nbg4) const;
 
-	void getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip);
+	void getsecurity(bool &freqauth, bool &fwebaware, bool &fpubip) const;
 
-	string getabout();
-	string getlastip();
+	const string getabout() const;
+	const string getlastip() const;
 
-	time_t getlastread();
-	time_t getlastseen();
+	time_t getlastread() const;
+	time_t getlastseen() const;
 	
-	int getstatus();
-	unsigned int getuin();
-	unsigned short getseq2();
-	int getmsgcount();
+	int getstatus() const;
+	unsigned int getuin() const;
+	unsigned short getseq2() const;
+	int getmsgcount() const;
 
-	string getnick();
-	string getdispnick();
+	const string getnick() const;
+	const string getdispnick() const;
 
-	int updated();
+	int updated() const;
 	void unsetupdated();
 	void setmsgcount(int n);
 
-	void setsound(int event, string sf);
+	void setsound(int event, const string sf);
 	void playsound(int event);
 
 	void clear();
@@ -122,26 +122,26 @@ class icqcontact {
 	void remove();
 	void excludefromlist();
 	void includeintolist();
-	bool inlist();
+	bool inlist() const;
 
 	void setdirect(bool flag);
-	bool getdirect();
+	bool getdirect() const;
 
 	void setmsgdirect(bool flag);
-	bool getmsgdirect();
+	bool getmsgdirect() const;
 	
-	bool isnonicq();
-	bool isbirthday();
-	string getdirname();
+	bool isnonicq() const;
+	bool isbirthday() const;
+	const string getdirname() const;
 
-	char getshortstatus();
-	char getsortchar();
+	char getshortstatus() const;
+	char getsortchar() const;
 
-	int getinfotryn();
+	int getinfotryn() const;
 	void incinfotryn();
 
 	void setpostponed(const string apostponed);
-	string getpostponed();
+	string getpostponed() const;
 };
 
 #endif
