@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.42 2005/01/26 09:51:02 konst Exp $
+* $Id: accountmanager.cc,v 1.43 2005/01/26 23:52:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,12 +48,12 @@ icqconf::imaccount accountmanager::addcontact() {
 
 void accountmanager::exec() {
     dialogbox db;
-    protocolname pname;
-    icqconf::imaccount account;
     int n, b, i, citem, action, pos;
     set<hookcapab::enumeration> capab;
     string spname, tmp;
     bool fin;
+    icqconf::imaccount a;
+    protocolname pname;
 
     face.blockmainscreen();
     fopen = true;
@@ -73,86 +73,88 @@ void accountmanager::exec() {
 
     treeview &t = *db.gettree();
 
+    map<protocolname, bool> mod;
+    for(protocolname pname = icq; pname != protocolname_size; pname++)
+	mod[pname] = false;
+
     for(fin = false; !fin; ) {
 	t.clear();
 
 	for(pname = icq; pname != protocolname_size; pname++) {
-	    account = conf.getourid(pname);
+	    if(pname != rss && gethook(pname).enabled()) {
+		a = conf.getourid(pname);
 
-	    if(pname != rss)
-	    if(gethook(pname).enabled() || !account.empty()) {
-		account = conf.getourid(pname);
-		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(pname) + " ");
-		citem = ((int) (pname)+1) * 100;
-		capab = gethook(pname).getCapabs();
+		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(a.pname) + " ");
+		citem = ((int) (a.pname)+1) * 100;
+		capab = gethook(a.pname).getCapabs();
 
-		if(!account.empty()) {
+		if(!a.empty()) {
 		    tmp = "";
 
-		    if(!account.server.empty() && account.port)
-			tmp = account.server + ":" + i2str(account.port);
+		    if(!a.server.empty() && a.port)
+			tmp = a.server + ":" + i2str(a.port);
 
 		    t.addleaff(n, 0, citem+9, _(" Server : %s "), tmp.c_str());
 
 		    if(capab.count(hookcapab::ssl))
 			t.addleaff(n, 0, citem+13, _(" Secured : %s "),
-			    stryesno(account.additional["ssl"] == "1"));
+			    stryesno(a.additional["ssl"] == "1"));
 		}
 
-		switch(pname) {
+		switch(a.pname) {
 		    case icq:
 		    case gadu:
 			t.addleaff(n, 0, citem+2, _(" UIN : %s "),
-			    account.uin ? i2str(account.uin).c_str() : "");
+			    a.uin ? i2str(a.uin).c_str() : "");
 			break;
 
 		    default:
 			t.addleaff(n, 0, citem+1, _(" Login : %s "),
-			    account.nickname.c_str());
+			    a.nickname.c_str());
 			break;
 		}
 
 		t.addleaff(n, 0, citem+5, capab.count(hookcapab::optionalpassword) ?
 		    _(" Password (optional) : %s ") : _(" Password : %s "),
-		    string(account.password.size(), '*').c_str());
+		    string(a.password.size(), '*').c_str());
 
-		if(!account.empty())
-		switch(pname) {
+		if(!a.empty())
+		switch(a.pname) {
 		    case jabber:
 			t.addleaff(n, 0, citem+14, _(" Priority : %s "),
-			    account.additional["prio"].c_str());
+			    a.additional["prio"].c_str());
 			break;
 
 		    case livejournal:
 			t.addleaff(n, 0, citem+11, _(" Import friend list : %s "),
-			    stryesno(account.additional["importfriends"] == "1"));
+			    stryesno(a.additional["importfriends"] == "1"));
 			break;
 
 		    case irc:
 			t.addleaff(n, 0, citem+12, _(" NickServ password (optional) : %s "),
-			    string(account.additional["nickpass"].size(), '*').c_str());
+			    string(a.additional["nickpass"].size(), '*').c_str());
 			break;
 		}
 
-		if(account.empty()) {
+		if(a.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 
 		} else {
 		#ifdef HAVE_GPGME
 		    if(capab.count(hookcapab::pgp)) {
 			t.addleaff(n, 0, citem+15, _(" OpenPGP key: %s "),
-			    account.additional["pgpkey"].empty() ? "none"
-				: account.additional["pgpkey"].c_str());
+			    a.additional["pgpkey"].empty() ? "none"
+				: a.additional["pgpkey"].c_str());
 
-			if(!account.additional["pgpkey"].empty())
+			if(!a.additional["pgpkey"].empty())
 			    t.addleaff(n, 0, citem+16, _(" Key passphrase: %s "),
-				string(account.additional["pgppass"].size(), '*').c_str());
+				string(a.additional["pgppass"].size(), '*').c_str());
 		    }
 		#endif
 
 		    if(capab.count(hookcapab::changedetails))
 			t.addnode(n, 0, citem+7,
-			    pname == msn ?
+			    a.pname == msn ?
 			    _(" Change nickname ") :
 			    _(" Update user details "));
 
@@ -167,48 +169,47 @@ void accountmanager::exec() {
 
 	fin = !db.open(n, b, (void **) &citem) || (b == 1);
 
-	if(!fin)
-	if(citem) {
-	    pname = (protocolname) (citem/100-1);
+	if(!fin && citem) {
 	    action = citem-(citem/100)*100;
+	    pname = (protocolname) (citem/100-1);
 
+	    a = conf.getourid(pname);
 	    spname = conf.getprotocolname(pname);
-	    account = conf.getourid(pname);
 	    abstracthook &hook = gethook(pname);
 
 	    switch(action) {
 		case 1:
-		    tmp = face.inputstr(spname + _(" user name: "), account.nickname);
-		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) account.nickname = tmp;
+		    tmp = face.inputstr(spname + _(" user name: "), a.nickname);
+		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) a.nickname = tmp;
 		    break;
 
 		case 2:
-		    i = strtoul(face.inputstr(spname + _(" uin: "), i2str(account.uin)).c_str(), 0, 0);
-		    if(face.getlastinputkey() != KEY_ESC && i) account.uin = i;
+		    i = strtoul(face.inputstr(spname + _(" uin: "), i2str(a.uin)).c_str(), 0, 0);
+		    if(face.getlastinputkey() != KEY_ESC && i) a.uin = i;
 		    break;
 
 		case 5:
-		    tmp = face.inputstr(spname + _(" password: "), account.password, '*');
+		    tmp = face.inputstr(spname + _(" password: "), a.password, '*');
 		    if(face.getlastinputkey() != KEY_ESC &&
 		      (!tmp.empty() || capab.count(hookcapab::optionalpassword)))
-			account.password = tmp;
+			a.password = tmp;
 		    break;
 
 		case 6:
-		    if(!account.empty()) {
+		    if(!a.empty()) {
 			face.status(_("Drop the account information first!"));
 		    } else {
-			imcontrol.registration(account);
+			imcontrol.registration(a);
 		    }
 		    break;
 
 		case 7:
-		    imcontrol.updateinfo(account);
+		    imcontrol.updateinfo(a);
 		    break;
 
 		case 8:
 		    if(!hook.online()) {
-			account = icqconf::imaccount(pname);
+			a = icqconf::imaccount(a.pname);
 		    } else {
 			face.status(_("You have to disconnect the service first!"));
 		    }
@@ -216,82 +217,86 @@ void accountmanager::exec() {
 
 		case 9:
 		    tmp = "";
-		    if(!account.server.empty())
-			tmp = account.server + ":" + i2str(account.port);
+		    if(!a.server.empty())
+			tmp = a.server + ":" + i2str(a.port);
 
 		    tmp = face.inputstr(spname + _(" server address: "), tmp);
 
 		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
 			if((pos = tmp.find(":")) != -1) {
-			    account.server = tmp.substr(0, pos);
-			    account.port = strtoul(tmp.substr(pos+1).c_str(), 0, 0);
+			    a.server = tmp.substr(0, pos);
+			    a.port = strtoul(tmp.substr(pos+1).c_str(), 0, 0);
 			} else {
-			    account.server = tmp;
-			    account.port = 0;
+			    a.server = tmp;
+			    a.port = 0;
 			}
 		    }
 		    break;
 
 		case 10:
-		    if(face.edit(tmp = conf.getawaymsg(pname),
-		    spname + ": " + _("away message"))) {
-			conf.setawaymsg(pname, tmp);
+		    if(face.edit(tmp = conf.getawaymsg(a.pname), spname + ": " + _("away message"))) {
+			conf.setawaymsg(a.pname, tmp);
 		    }
 		    break;
 
 		case 11:
-		    account.additional["importfriends"] =
-			(account.additional["importfriends"] == "") ? "1" : "0";
+		    a.additional["importfriends"] =
+			(a.additional["importfriends"] == "") ? "1" : "0";
 		    break;
 
 		case 12:
-		    tmp = face.inputstr(spname + _(" password: "), account.additional["nickpass"], '*');
+		    tmp = face.inputstr(spname + _(" password: "), a.additional["nickpass"], '*');
 		    if(face.getlastinputkey() != KEY_ESC)
-			account.additional["nickpass"] = tmp;
+			a.additional["nickpass"] = tmp;
 		    break;
 
 		case 13:
-		    account.additional["ssl"] =
-			(account.additional["ssl"] == "") ? "1" : "";
+		    a.additional["ssl"] =
+			(a.additional["ssl"] == "") ? "1" : "";
 
-		    if(account.additional["ssl"] == "1") {
-			if(account.port == icqconf::defservers[account.pname].port)
-			    account.port = icqconf::defservers[account.pname].secureport;
+		    if(a.additional["ssl"] == "1") {
+			if(a.port == icqconf::defservers[a.pname].port)
+			    a.port = icqconf::defservers[a.pname].secureport;
 		    } else {
-			if(account.port == icqconf::defservers[account.pname].secureport)
-			    account.port = icqconf::defservers[account.pname].port;
+			if(a.port == icqconf::defservers[a.pname].secureport)
+			    a.port = icqconf::defservers[a.pname].port;
 		    }
 		    break;
 
 		case 14:
 		    tmp = leadcut(trailcut(face.inputstr(spname + _(" priority: "),
-			account.additional["prio"])));
+			a.additional["prio"])));
 
 		    if(face.getlastinputkey() != KEY_ESC)
 		    if(i2str(atoi(tmp.c_str())) == tmp)
-			account.additional["prio"] = tmp;
+			a.additional["prio"] = tmp;
 
 		    break;
 
 		case 15:
-		    face.selectpgpkey(account.additional["pgpkey"], true);
+		    face.selectpgpkey(a.additional["pgpkey"], true);
 		    break;
 
 		case 16:
-		    tmp = face.inputstr(_("PGP key passphrase: "), account.additional["pgppass"], '*');
+		    tmp = face.inputstr(_("PGP key passphrase: "), a.additional["pgppass"], '*');
 		    if(face.getlastinputkey() != KEY_ESC)
-			account.additional["pgppass"] = tmp;
+			a.additional["pgppass"] = tmp;
 		    break;
 	    }
 
 	    if(action != 7) {
-		conf.setourid(account);
+		conf.setourid(a);
+		mod[a.pname] = true;
 	    }
 	}
     }
 
     db.close();
     face.unblockmainscreen();
+
+    for(pname = icq; pname != protocolname_size; pname++)
+	if(mod[pname])
+	    gethook(pname).ouridchanged(conf.getourid(pname));
 
     conf.save();
     face.relaxedupdate();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.80 2005/01/26 19:36:50 konst Exp $
+* $Id: jabberhook.cc,v 1.81 2005/01/26 23:52:48 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -806,6 +806,13 @@ void jabberhook::renamegroup(const string &oldname, const string &newname) {
     }
 }
 
+void jabberhook::ouridchanged(const icqconf::imaccount &ia) {
+    if(logged()) {
+	setautostatus(ourstatus);
+	// send a new presence
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::gotsearchresults(xmlnode x) {
@@ -1569,8 +1576,6 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    if(x = xmlnode_get_tag(packet->x, "status"))
 		    if(p = xmlnode_get_data(x))
 			jhook.awaymsgs[ic.nickname] = p;
-
-		    c->setpgpkey("");
 
 #ifdef HAVE_GPGME
 		    if(x = xmlnode_get_tag(packet->x, "x"))

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.138 2005/01/18 23:20:16 konst Exp $
+* $Id: icqconf.cc,v 1.139 2005/01/26 23:52:47 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -130,8 +130,6 @@ void icqconf::setourid(const imaccount &im) {
 		    i->password = i->password.substr(0, 8);
 		break;
 	}
-
-	gethook(i->pname).ouridchanged(*i);
     }
 }
 

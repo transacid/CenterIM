@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.103 2005/01/25 01:15:12 konst Exp $
+* $Id: icqcontact.cc,v 1.104 2005/01/26 23:52:48 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -162,6 +162,7 @@ void icqcontact::save() {
 		string options;
 		if(binfo.requiresauth) options += "a";
 		if(binfo.authawait) options += "w";
+		if(usepgpkey) options += "p";
 
 		f << nick << endl <<
 		    tosane(binfo.fname) << endl <<
@@ -271,6 +272,7 @@ void icqcontact::load() {
 		case  4:
 		    binfo.requiresauth = (buf.find('a') != -1);
 		    binfo.authawait = (buf.find('w') != -1);
+		    usepgpkey = (buf.find('p') != -1);
 		    break;
 		case  5: pgpkey = buf; break;
 		case  6: binfo.city = buf; break;
@@ -667,7 +669,8 @@ string icqcontact::getpgpkey() const {
 
 void icqcontact::setpgpkey(const string &key) {
     pgpkey = key;
-    usepgpkey = true;
+    usepgpkey = modified = true;
+    fupdated++;
 }
 
 bool icqcontact::getusepgpkey() const {
@@ -676,6 +679,7 @@ bool icqcontact::getusepgpkey() const {
 
 void icqcontact::setusepgpkey(bool usekey) {
     usepgpkey = usekey;
+    modified = true;
 }
 
 string icqcontact::getabout() const {

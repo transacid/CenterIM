@@ -131,6 +131,8 @@ class jabberhook: public abstracthook {
 
 	void requestversion(const imcontact &c);
 	void renamegroup(const string &oldname, const string &newname);
+
+	void ouridchanged(const icqconf::imaccount &ia);
 };
 
 extern jabberhook jhook;

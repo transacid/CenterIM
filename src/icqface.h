@@ -26,7 +26,7 @@ enum interfaceAction {
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
     ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG, ACT_EXTERN, ACT_RSS, ACT_LJ,
-    ACT_MASS_MOVE
+    ACT_MASS_MOVE, ACT_PGPKEY, ACT_PGPSWITCH
 };
 
 extern class centericq cicq;
@@ -169,6 +169,7 @@ class icqface {
 	void multichange(bool conv[], bool newstate);
 
 	string extracttime(const imevent &ev);
+	void peerinfo(int line, const imcontact &ic);
 
     public:
 	int extk;

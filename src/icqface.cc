@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.239 2005/01/25 01:15:12 konst Exp $
+* $Id: icqface.cc,v 1.240 2005/01/26 23:52:48 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,6 +236,7 @@ int icqface::contextmenu(icqcontact *c) {
     int ret = 0, i;
     static int lastr = 0;
     imcontact cont;
+    char buf[64];
 
     if(!c) return 0;
 
@@ -281,17 +282,26 @@ int icqface::contextmenu(icqcontact *c) {
 	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
 
 	if(c->getdesc().pname != rss)
-	    actnames[ACT_MSG]       = getmenuitem(_("Send a message"), 25, key_compose, section_contact);
-	actnames[ACT_HISTORY]   = getmenuitem(_("Event history"), 25, key_history, section_contact);
-	actnames[ACT_REMOVE]    = getmenuitem(_("Remove user"), 25, key_remove, section_contact);
-	actnames[ACT_INFO]      = getmenuitem(_("User's details"), 25, key_info, section_contact);
-	actnames[ACT_EXTERN]    = getmenuitem(_("External actions.."), 25, key_contact_external_action, section_contact);
-	if(lst.inlist(c, csignore))
-	    actnames[ACT_IGNORE]    = getmenuitem(_("Unset ignore user"), 25, key_ignore, section_contact);
-	    else
-		actnames[ACT_IGNORE]    = getmenuitem(_("Ignore user"), 25, key_ignore, section_contact);
+	    actnames[ACT_MSG] = getmenuitem(_("Send a message"), 25, key_compose, section_contact);
+
+	actnames[ACT_HISTORY] = getmenuitem(_("Event history"), 25, key_history, section_contact);
+	actnames[ACT_REMOVE] = getmenuitem(_("Remove user"), 25, key_remove, section_contact);
+	actnames[ACT_INFO] = getmenuitem(_("User's details"), 25, key_info, section_contact);
+	actnames[ACT_EXTERN] = getmenuitem(_("External actions.."), 25, key_contact_external_action, section_contact);
+
+	actnames[ACT_IGNORE] = getmenuitem(lst.inlist(c, csignore) ?
+	    _("Unset ignore user") : _("Ignore user"), 25, key_ignore,
+		section_contact);
+
+	actnames[ACT_PGPKEY] = c->getpgpkey().empty() ?
+	    _(" Assign PGP key..") : _(" Unassign PGP key");
+
+	sprintf(buf, _(" Turn PGP encryption %s"), c->getusepgpkey() ? "OFF" : "ON");
+	actnames[ACT_PGPSWITCH] = buf;
+
 	if(c->getdesc().pname == rss)
-	    actnames[ACT_PING]      = getmenuitem(_("Force check"), 25, key_rss_check, section_contact);
+	    actnames[ACT_PING] = getmenuitem(_("Force check"), 25,
+		key_rss_check, section_contact);
 
     }
 
@@ -323,6 +333,14 @@ int icqface::contextmenu(icqcontact *c) {
 	if(capab.count(hookcapab::contacts)) actions.push_back(ACT_CONTACT);
 	if(capab.count(hookcapab::authrequests)) actions.push_back(ACT_AUTH);
 	if(capab.count(hookcapab::files)) actions.push_back(ACT_FILE);
+
+    #ifdef HAVE_GPGME
+	if(capab.count(hookcapab::pgp)) {
+	    actions.push_back(ACT_PGPKEY);
+	    if(pgp.havekey(c->getpgpkey()))
+		actions.push_back(ACT_PGPSWITCH);
+	}
+    #endif
 
 	if(!actions.empty())
 	    actions.push_back(0);
@@ -943,6 +961,29 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     workarealine(sizeWArea.y1+8);
     workarealine(sizeWArea.y1+12);
 
+#ifdef HAVE_GPGME
+    if(gethook(c->getdesc().pname).getCapabs().count(hookcapab::pgp))
+    if(!c->getpgpkey().empty()) {
+	buf = (string) "[" + string(5, ' ') + c->getpgpkey() + ": ";
+	
+	if(pgp.havekey(c->getpgpkey())) {
+	    buf += _("found");
+	    buf += ", ";
+	    buf += (pgp.enabled(c) ? _("used") : _("not used"));
+	} else {
+	    buf += _("not found");
+	}
+
+	buf += " ]";
+
+	mainw.write(sizeWArea.x2-buf.size()-1, sizeWArea.y1+11,
+	    conf.getcolor(cp_main_text), buf);
+
+	mainw.write(sizeWArea.x2-buf.size()+1, sizeWArea.y1+11,
+	    conf.getcolor(cp_main_highlight), "PGP");
+    }
+#endif
+
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Name"));
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("E-mail"));
@@ -953,7 +994,6 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Age"));
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Languages"));
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Last IP"));
-
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.email);
@@ -971,6 +1011,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
     time_t ls = c->getlastseen();
+    buf = "";
 
     if(c->getstatus() == offline) {
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
@@ -2182,10 +2223,10 @@ bool icqface::eventedit(imevent &ev) {
     saveworkarea();
     clearworkarea();
 
-    workarealine(sizeWArea.y1+2);
+    peerinfo(2, ev.getcontact());
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	_("Outgoing %s to %s"), streventname(ev.gettype()), ev.getcontact().totext().c_str());
+	_("Outgoing %s"), streventname(ev.gettype()));
 
     showeventbottom(ev.getcontact());
 
@@ -2531,30 +2572,38 @@ void icqface::renderchathistory() {
 	}
     }
 
-    text = conf.getprotocolname(passinfo.pname) + " " + c->getdispnick();
+    peerinfo(chatlines+1, passinfo);
+}
+
+void icqface::peerinfo(int line, const imcontact &ic) {
+    workarealine(sizeWArea.y1+line);
+
+    icqcontact *c = clist.get(ic);
+    if(!c) return;
+
+    string text = conf.getprotocolname(passinfo.pname) + " " + c->getdispnick();
     int maxsize = sizeWArea.x2-sizeWArea.x1-10;
+    bool pgpon = false;
 
     if(text.size() > maxsize) {
 	text.erase(maxsize);
 	text += "..";
     }
 
-    bool pgpon = false;
-
 #ifdef HAVE_GPGME
-    if(pgpon = pgp.enabled(passinfo)) text += string(4, ' ');
+    if(pgpon = pgp.enabled(passinfo))
+	text += string(4, ' ');
+#endif
+
     text = (string) "[ " + text + " ]";
 
-    workarealine(sizeWArea.y1+chatlines+1);
-
-    kwriteatf(sizeWArea.x2-text.size()-1, sizeWArea.y1+chatlines+1,
+    kwriteatf(sizeWArea.x2-text.size()-1, sizeWArea.y1+line,
 	conf.getcolor(cp_main_text), "%s", text.c_str());
 
     if(pgpon) {
-	kwriteatf(sizeWArea.x2-6, sizeWArea.y1+chatlines+1,
+	kwriteatf(sizeWArea.x2-6, sizeWArea.y1+line,
 	    conf.getcolor(cp_main_highlight), "PGP");
     }
-#endif
 }
 
 void icqface::chat(const imcontact &ic) {

@@ -29,11 +29,13 @@ string impgp::getkeyinfo(const string &fp, bool secret) {
 	r = key->subkeys->keyid+8;
 	r += ": ";
 	r += key->uids->name;
-	r += " (";
-	r += key->uids->comment;
-	r += ") <";
-	r += key->uids->email;
-	r += ">";
+
+	if(key->uids->comment && strlen(key->uids->comment))
+	    r += (string) " (" + key->uids->comment + ")";
+
+	if(key->uids->email && strlen(key->uids->email))
+	    r += (string) " <" + key->uids->email + ">";
+
 	gpgme_key_release(key);
     }
 
@@ -97,7 +99,10 @@ string impgp::sign(const string &text, const string &keyid, protocolname pname) 
 	    if(!(err = gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0))) {
 		if(!(err = gpgme_data_new(&out))) {
 		    if(!(err = gpgme_op_sign(ctx, in, out, GPGME_SIG_MODE_DETACH))) {
-			auto_ptr<char> p(gpgme_data_release_and_get_mem(out, &n));
+			auto_ptr<char> buf(gpgme_data_release_and_get_mem(out, &n));
+			auto_ptr<char> p(new char[n+1]);
+			strncpy(p.get(), buf.get(), n);
+			p.get()[n] = 0;
 			r = p.get();
 			strip(r);
 		    } else {
@@ -134,10 +139,13 @@ string impgp::verify(string sign, const string &orig) {
 	    if(!gpgme_data_new_from_mem(&dorig, orig.c_str(), orig.size(), 0)) {
 		if(!gpgme_op_verify(ctx, dsign, dorig, 0)) {
 		    if(vr = gpgme_op_verify_result(ctx)) {
-			if(vr->signatures)
-			if(!gpgme_get_key(ctx, vr->signatures->fpr, &key, 0)) {
-			    r = key->subkeys->keyid;
-			    gpgme_key_release(key);
+			if(vr->signatures) {
+			    r = vr->signatures->fpr;
+
+			    if(!gpgme_get_key(ctx, r.c_str(), &key, 0)) {
+				r = key->subkeys->keyid;
+				gpgme_key_release(key);
+			    }
 			}
 		    }
 		}
@@ -201,7 +209,7 @@ string impgp::encrypt(const string &text, const string &keyid, protocolname pnam
 
 	    if(!(err = gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0))) {
 		if(!(err = gpgme_data_new(&out))) {
-		    if(!(err = gpgme_op_encrypt(ctx, keys, gpgme_encrypt_flags_t(0), in, out))) {
+		    if(!(err = gpgme_op_encrypt(ctx, keys, GPGME_ENCRYPT_ALWAYS_TRUST, in, out))) {
 			auto_ptr<char> p(gpgme_data_release_and_get_mem(out, &n));
 			r = p.get();
 			strip(r);

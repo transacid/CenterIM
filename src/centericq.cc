@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.194 2005/01/23 13:21:46 konst Exp $
+* $Id: centericq.cc,v 1.195 2005/01/26 23:52:47 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -365,6 +365,22 @@ void centericq::mainloop() {
 
 	    case ACT_EXTERN:
 		face.userinfoexternal(c->getdesc());
+		break;
+
+	    case ACT_PGPSWITCH:
+		c->setusepgpkey(!c->getusepgpkey());
+		break;
+
+	    case ACT_PGPKEY:
+		text = c->getpgpkey();
+
+		if(!text.empty()) {
+		    c->setpgpkey("");
+		} else {
+		    if(face.selectpgpkey(text, false))
+			c->setpgpkey(text);
+		}
+
 		break;
 
 	    case ACT_MSG:
