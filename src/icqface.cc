@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.181 2003/06/20 19:24:10 konst Exp $
+* $Id: icqface.cc,v 1.182 2003/06/25 20:59:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1041,10 +1041,12 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     bool finished = false, showinfo;
-    icqcontact *c = clist.get(passinfo = realinfo);
     textbrowser tb(conf.getcolor(cp_main_text));
     dialogbox db;
     int k, lastb, b;
+
+    imcontact savepassinfo = passinfo;
+    icqcontact *c = clist.get(passinfo = realinfo);
 
     b = lastb = 0;
     saveworkarea();
@@ -1121,6 +1123,7 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     db.close();
     restoreworkarea();
     status("@");
+    passinfo = savepassinfo;
 }
 
 void icqface::makeprotocolmenu(verticalmenu &m) {

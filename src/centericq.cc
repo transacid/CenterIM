@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.156 2003/05/06 20:27:27 konst Exp $
+* $Id: centericq.cc,v 1.157 2003/06/25 20:59:58 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -432,8 +432,11 @@ void centericq::joindialog() {
 	    if(h.getCapabs().count(hookcapab::channelpasswords))
 		cb.zip = s.password;
 
-	    if(h.getCapabs().count(hookcapab::groupchatservices))
-		cb.street = s.service;
+	    if(h.getCapabs().count(hookcapab::groupchatservices)) {
+		c->setnick(ic.nickname + "@" + s.service);
+		c->setdispnick(c->getnick());
+		c->setdesc(imcontact(c->getnick(), ic.pname));
+	    }
 
 	    cb.requiresauth = true;
 	    c->setbasicinfo(cb);

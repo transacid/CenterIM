@@ -36,6 +36,9 @@ class jabberhook: public abstracthook {
 
 	    agent(const string &ajid, const string &aname, const string &adesc, agent_type atype):
 		jid(ajid), name(aname), desc(adesc), type(atype) {}
+
+	    bool operator == (const string &ajid) const { return jid == ajid; }
+	    bool operator != (const string &ajid) const { return jid != ajid; }
 	};
 
 	vector<agent> agents;
@@ -50,7 +53,6 @@ class jabberhook: public abstracthook {
 	void sendvisibility();
 
 	void checkinlist(imcontact ic);
-	string getchanneljid(icqcontact *c);
 
 	void sendnewuser(const imcontact &c, bool report);
 	void removeuser(const imcontact &ic, bool report);

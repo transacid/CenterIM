@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.47 2003/06/02 16:43:33 konst Exp $
+* $Id: jabberhook.cc,v 1.48 2003/06/25 20:59:59 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,8 @@
 #include "eventmanager.h"
 
 #include <libicq2000/userinfohelpers.h>
+
+#define DEFAULT_CONFSERV "conference.jabber.org"
 
 static void jidsplit(const string &jid, string &user, string &host, string &rest) {
     int pos;
@@ -92,11 +94,11 @@ jabberhook::~jabberhook() {
 }
 
 void jabberhook::init() {
-    manualstatus = conf.getstatus(jabber);
+    manualstatus = conf.getstatus(proto);
 }
 
 void jabberhook::connect() {
-    icqconf::imaccount acc = conf.getourid(jabber);
+    icqconf::imaccount acc = conf.getourid(proto);
     string jid = getourjid();
 
     face.log(_("+ [jab] connecting to the server"));
@@ -117,20 +119,8 @@ void jabberhook::connect() {
 #endif
 
     if(jc->user) {
+	id = -1;
 	jab_start(jc);
-	id = atoi(jab_auth(jc));
-
-	if(!jc || jc->state == JCONN_STATE_OFF) {
-	    face.log(_("+ [jab] unable to connect to the server"));
-	    jab_delete(jc);
-	    jc = 0;
-	}
-
-    } else {
-	face.log(_("+ [jab] incorrect jabber id"));
-	jab_delete(jc);
-	jc = 0;
-
     }
 }
 
@@ -142,6 +132,16 @@ void jabberhook::disconnect() {
 
 void jabberhook::main() {
     jab_poll(jc, 0);
+
+    if(id == -1) {
+	id = atoi(jab_auth(jc));
+
+	if(!jc || jc->state == JCONN_STATE_OFF) {
+	    face.log(_("+ [jab] unable to connect to the server"));
+	    jab_delete(jc);
+	    jc = 0;
+	}
+    }
 
     if(!jc) {
 	statehandler(jc, JCONN_STATE_OFF);
@@ -233,7 +233,7 @@ bool jabberhook::send(const imevent &ev) {
 
 	if(ischannel(c)) {
 	    xmlnode_put_attrib(x, "type", "groupchat");
-	    if(!(cname = getchanneljid(c)).empty())
+	    if(!(cname = c->getdesc().nickname.substr(1)).empty())
 		xmlnode_put_attrib(x, "to", cname.c_str());
 	}
 
@@ -283,7 +283,7 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	xmlnode_free(x);
 
 	if(c = clist.get(ic)) {
-	    imcontact icc(jidtodisp(ic.nickname), jabber);
+	    imcontact icc(jidtodisp(ic.nickname), proto);
 	    if(ic.nickname != icc.nickname) {
 		c->setdesc(icc);
 		c->setdispnick(icc.nickname);
@@ -295,15 +295,17 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 
     } else {
 	if(c = clist.get(ic)) {
-	    cname = getchanneljid(c);
+	    cname = ic.nickname.substr(1);
 
 	    if(!cname.empty()) {
-		cname += "/" + conf.getourid(jabber).nickname;
+		cname += "/" + conf.getourid(proto).nickname;
 
 		auto_ptr<char> ccname(strdup(cname.c_str()));
 		auto_ptr<char> ourjid(strdup(getourjid().c_str()));
 
 		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
+		xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"), "Online", (unsigned) -1);
+
 		jab_send(jc, x);
 		xmlnode_free(x);
 	    }
@@ -344,9 +346,10 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 	xmlnode_free(x);
     } else {
 	if(c = clist.get(ic)) {
-	    cname = getchanneljid(c);
+	    cname = ic.nickname.substr(1);
+
 	    if(!cname.empty()) {
-		cname += "/" + conf.getourid(jabber).nickname;
+		cname += "/" + conf.getourid(proto).nickname;
 		auto_ptr<char> ccname(strdup(cname.c_str()));
 		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
 		xmlnode_put_attrib(x, "type", "unavailable");
@@ -372,7 +375,7 @@ void jabberhook::setautostatus(imstatus st) {
 		case dontdisturb:
 		case occupied:
 		case notavail:
-		    msg = conf.getawaymsg(jabber);
+		    msg = conf.getawaymsg(proto);
 	    }
 
 	    setjabberstatus(ourstatus = st, msg);
@@ -423,7 +426,7 @@ const string &serv, string &err) {
 	port = atoi(jid.substr(pos+1).c_str());
 	jid.erase(pos);
     } else {
-	port = icqconf::defservers[jabber].port;
+	port = icqconf::defservers[proto].port;
     }
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
@@ -503,7 +506,7 @@ void jabberhook::setjabberstatus(imstatus st, const string &msg) {
 
     sendvisibility();
 
-    logger.putourstatus(jabber, getstatus(), ourstatus = st);
+    logger.putourstatus(proto, getstatus(), ourstatus = st);
 }
 
 void jabberhook::sendvisibility() {
@@ -511,7 +514,7 @@ void jabberhook::sendvisibility() {
     icqlist::iterator i;
 
     for(i = lst.begin(); i != lst.end(); ++i)
-    if(i->getdesc().pname == jabber) {
+    if(i->getdesc().pname == proto) {
 	x = jutil_presnew(JPACKET__UNKNOWN, 0, 0);
 	xmlnode_put_attrib(x, "to", jidnormalize(i->getdesc().nickname).c_str());
 
@@ -529,20 +532,6 @@ void jabberhook::sendvisibility() {
 	jab_send(jc, x);
 	xmlnode_free(x);
     }
-}
-
-string jabberhook::getchanneljid(icqcontact *c) {
-    string r;
-    vector<agent>::const_iterator ia = agents.begin();
-
-    while(ia != agents.end() && r.empty()) {
-	if(ia->name == c->getbasicinfo().street)
-	    r = (string) c->getdesc().nickname.substr(1) + "@" +
-		ia->jid;
-	++ia;
-    }
-
-    return r;
 }
 
 void jabberhook::checkinlist(imcontact ic) {
@@ -687,11 +676,10 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	icqcontact *c;
 	string room = params.room.substr(1);
 
-	if(c = clist.get(imcontact(params.room, jabber)))
-	if(!(room = getchanneljid(c)).empty()) {
+	if(c = clist.get(imcontact(params.room, proto))) {
 	    vector<string>::const_iterator im = chatmembers[room].begin();
 	    while(im != chatmembers[room].end()) {
-		foundguys.push_back(c = new icqcontact(imcontact(*im, jabber)));
+		foundguys.push_back(c = new icqcontact(imcontact(*im, proto)));
 		searchdest->additem(conf.getcolor(cp_clist_jabber), c, (string) " " + *im);
 		++im;
 	    }
@@ -725,7 +713,7 @@ void jabberhook::gotsearchresults(xmlnode x) {
 	z = xmlnode_get_tag(y, "email"); if(z) email = xmlnode_get_data(z);
 
 	if(jid) {
-	    c = new icqcontact(imcontact(jidnormalize(jid), jabber));
+	    c = new icqcontact(imcontact(jidnormalize(jid), proto));
 	    icqcontact::basicinfo cb = c->getbasicinfo();
 
 	    if(nick) {
@@ -785,7 +773,7 @@ void jabberhook::gotroster(xmlnode x) {
 	const char *group = xmlnode_get_attrib(y, "group");
 
 	if(alias) {
-	    ic = imcontact(jidtodisp(alias), jabber);
+	    ic = imcontact(jidtodisp(alias), proto);
 	    roster.push_back(jidnormalize(alias));
 
 	    if(!(c = clist.get(ic))) {
@@ -813,7 +801,7 @@ void jabberhook::postlogin() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == jabber)
+	if(c->getdesc().pname == proto)
 	if(ischannel(c))
 	if(c->getbasicinfo().requiresauth)
 	    c->setstatus(available);
@@ -963,37 +951,11 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 }
 
 void jabberhook::gotmessage(const string &type, const string &from, const string &abody) {
-    int pos;
-    string u, h, r, body(abody), ournick;
-    imcontact ic(jidtodisp(from), jabber);
-    icqcontact *c;
+    string body(abody);
+    imcontact ic, chic;
 
-    if(type == "groupchat") {
-	ournick = conf.getourid(jabber).nickname;
-	jidsplit(from, u, h, r);
-
-	if(r == ournick) return; else {
-	    ic = imcontact((string) "#" + u, jabber);
-
-	    if(!r.empty()) body.insert(0, r + ": "); else {
-		if((pos = body.find(" ")) != -1) {
-		    u = body.substr(0, pos);
-		    if(c = clist.get(ic)) h = getchanneljid(c);
-
-		    if(body.substr(pos+1) == "has arrived.") {
-			if(u == ournick) return; else
-			    chatmembers[h].push_back(u);
-
-		    } else if(body.substr(pos+1) == "has left.") {
-			vector<string>::iterator im = find(chatmembers[h].begin(), chatmembers[h].end(), u);
-			if(im != chatmembers[h].end())
-			    chatmembers[h].erase(im);
-
-		    }
-		}
-	    }
-	}
-    }
+    if(clist.get(chic = imcontact((string) "#" + from, proto)))
+	ic = chic;
 
     checkinlist(ic);
     em.store(immessage(ic, imevent::incoming, UTF2KOI(body)));
@@ -1144,7 +1106,7 @@ vector<icqcontact *> jabberhook::getneedsync() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == jabber)
+	if(c->getdesc().pname == proto)
 	if(find(roster.begin(), roster.end(), c->getdesc().nickname) == roster.end())
 	    r.push_back(c);
     }
@@ -1193,7 +1155,7 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
 }
 
 bool jabberhook::isourid(const string &jid) {
-    icqconf::imaccount acc = conf.getourid(jabber);
+    icqconf::imaccount acc = conf.getourid(jhook.proto);
     int pos;
 
     string ourjid = acc.nickname;
@@ -1204,7 +1166,7 @@ bool jabberhook::isourid(const string &jid) {
 }
 
 string jabberhook::getourjid() {
-    icqconf::imaccount acc = conf.getourid(jabber);
+    icqconf::imaccount acc = conf.getourid(jhook.proto);
     string jid = acc.nickname;
     int pos;
 
@@ -1228,13 +1190,13 @@ void jabberhook::statehandler(jconn conn, int state) {
     switch(state) {
 	case JCONN_STATE_OFF:
 	    if(previous_state != JCONN_STATE_OFF) {
-		logger.putourstatus(jabber, jhook.getstatus(), jhook.ourstatus = offline);
+		logger.putourstatus(jhook.proto, jhook.getstatus(), jhook.ourstatus = offline);
 		face.log(_("+ [jab] disconnected"));
 		jhook.jc = 0;
 		jhook.flogged = false;
 		jhook.roster.clear();
 		jhook.agents.clear();
-		clist.setoffline(jabber);
+		clist.setoffline(jhook.proto);
 		face.update();
 	    }
 	    break;
@@ -1258,7 +1220,7 @@ void jabberhook::statehandler(jconn conn, int state) {
 void jabberhook::packethandler(jconn conn, jpacket packet) {
     char *p;
     xmlnode x, y;
-    string from, type, body, ns, id;
+    string from, type, body, ns, id, u, h, s;
     imstatus ust;
     int npos;
 
@@ -1266,7 +1228,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
     p = xmlnode_get_attrib(packet->x, "from"); if(p) from = p;
     p = xmlnode_get_attrib(packet->x, "type"); if(p) type = p;
-    imcontact ic(jidtodisp(from), jabber);
+    imcontact ic(jidtodisp(from), jhook.proto);
 
     switch(packet->type) {
 	case JPACKET_MESSAGE:
@@ -1353,6 +1315,10 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			    }
 			}
 
+			if(find(jhook.agents.begin(), jhook.agents.end(), DEFAULT_CONFSERV) == jhook.agents.end())
+			    jhook.agents.insert(jhook.agents.begin(), agent(DEFAULT_CONFSERV, DEFAULT_CONFSERV,
+				_("Default Jabber conference server"), agent::atGroupchat));
+
 		    } else if(ns == NS_SEARCH || ns == NS_REGISTER) {
 			p = xmlnode_get_attrib(packet->x, "id"); id = p ? p : "";
 
@@ -1433,16 +1399,19 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    if(type == "unavailable")
 		ust = offline;
 
-	    id = "";
-	    if((npos = from.find("@")) != -1) {
-		icqcontact *c = clist.get(imcontact((string) "#" + from.substr(0, npos), jabber));
-		if(c) id = jhook.getchanneljid(c);
-	    }
+	    jidsplit(from, u, h, s);
+	    id = u + "@" + h;
 
-	    if(!id.empty()) {
-		string u, h, s;
-		jidsplit(from, u, h, s);
-		jhook.chatmembers[id].push_back(s);
+	    if(clist.get(imcontact((string) "#" + id, jhook.proto))) {
+		if(ust == offline) {
+		    vector<string>::iterator im = find(jhook.chatmembers[id].begin(), jhook.chatmembers[id].end(), s);
+		    if(im != jhook.chatmembers[id].end())
+			jhook.chatmembers[id].erase(im);
+
+		} else {
+		    jhook.chatmembers[id].push_back(s);
+
+		}
 
 	    } else {
 		icqcontact *c = clist.get(ic);

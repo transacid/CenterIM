@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.132 2003/06/02 18:59:20 konst Exp $
+* $Id: icqhook.cc,v 1.133 2003/06/25 20:59:59 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -112,11 +112,11 @@ icqhook::~icqhook() {
 }
 
 void icqhook::init() {
-    manualstatus = conf.getstatus(icq);
+    manualstatus = conf.getstatus(proto);
 }
 
 void icqhook::connect() {
-    icqconf::imaccount acc = conf.getourid(icq);
+    icqconf::imaccount acc = conf.getourid(proto);
     int i, ptpmin, ptpmax;
     icqcontact *c;
 
@@ -127,7 +127,7 @@ void icqhook::connect() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == icq && c->getdesc().uin) {
+	if(c->getdesc().pname == proto && c->getdesc().uin) {
 	    ContactRef ct(new Contact(c->getdesc().uin));
 	    cli.addContact(ct);
 	}
@@ -179,7 +179,7 @@ void icqhook::resolve() {
     for(int i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == icq)
+	if(c->getdesc().pname == proto)
 	if(c->getdispnick() == i2str(c->getdesc().uin))
 	    toresolve.push_back(c);
     }
@@ -196,7 +196,7 @@ void icqhook::sendinvisible() {
     icqlist::iterator i;
 
     for(i = lst.begin(); i != lst.end(); ++i) {
-	if(i->getdesc().pname == icq) {
+	if(i->getdesc().pname == proto) {
 	    switch(i->getstatus()) {
 		case csvisible:
 		case csinvisible:
@@ -377,7 +377,7 @@ bool icqhook::send(const imevent &ev) {
     ICQMessageEvent *iev;
     icqcontact *c;
 
-    if(ev.getcontact().pname != icq)
+    if(ev.getcontact().pname != proto)
 	uin = 0;
 
     if(!uin)
@@ -436,7 +436,7 @@ bool icqhook::send(const imevent &ev) {
 	    cli.contact_userinfo_change_signal.connect(this, &icqhook::contact_userinfo_change_signal_cb);
 	}
 
-	sev = new SMSMessageEvent(ic, /*ruscrlfconv("kw", */m->getmessage()/*)*/, true);
+	sev = new SMSMessageEvent(ic, siconv(m->getmessage(), conf.getrussian(proto) ? "koi8-u" : DEFAULT_CHARSET, "utf8"), true);
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
