@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.50 2004/01/27 00:14:34 konst Exp $
+* $Id: icqcontacts.cc,v 1.51 2004/02/17 00:34:51 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -106,6 +106,21 @@ void icqcontacts::load() {
 			// Strange dir, doesn't belong to any of the
 			// supported protocols.
 			break;
+
+		    case jabber:
+			if(get(imcontact(ent->d_name+1, pname)))
+			    continue;
+
+			if(string(ent->d_name+1).find("@") == -1) {
+			    string oldname = conf.getdirname() + ent->d_name;
+			    string ndname = oldname + "@jabber.com";
+
+			    if(!access(ndname.c_str(), F_OK))
+				rename(ndname.c_str(), (conf.getdirname() + "_" + ent->d_name).c_str());
+
+			    rename(oldname.c_str(), ndname.c_str());
+			    strcpy(ent->d_name, justfname(ndname).c_str());
+			}
 
 		    default:
 			c = new icqcontact(imcontact(ent->d_name+1, pname));

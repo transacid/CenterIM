@@ -32,11 +32,17 @@ group -> c -> segfault
 
 remove icq password change
 
+ejabberd agent list bug
+
+cicqsync improved, works on freebsd and solaris (?)
+
 /*
 *
 * BUGS
 *
 */
+
+ssl connect hangs
 
 network down -> yahoo disconnect
 
@@ -44,13 +50,15 @@ http://www.dotgnu.org/index.rdf
 
 msn broken pipe bug
 
-ejabberd agent list bug
-
 /*
 *
 * TODO
 *
 */
+
+commandline user-add, sending to non-list users
+
+sounds for specified protocols
 
 not in list users history (see chat with mellon)
 
@@ -60,11 +68,6 @@ no ssl -> no msn
 no iconv -> no protocols that use utf
 
 rss/infocard always online/offline to config dialog
-
-cicqsync:
-
-> gettextize: unknown option --no-changelog
-> Try `gettextize --help' for more information.
 
 icq keywords + other parameters simultaneous search
 
@@ -142,4 +145,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.489 2004/02/15 13:26:20 konst Exp $
+$Id: TODO,v 1.490 2004/02/17 00:34:51 konst Exp $

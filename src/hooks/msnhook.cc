@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.71 2004/02/14 23:43:43 konst Exp $
+* $Id: msnhook.cc,v 1.72 2004/02/17 00:34:51 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -125,8 +125,10 @@ void msnhook::connect() {
     msn_init(&conn, nicknormalize(account.nickname).c_str(), account.password.c_str());
     msn_connect(&conn, account.server.c_str(), account.port);
 
-    fonline = true;
-    flogged = true;
+    if(conn.ready) {
+	fonline = true;
+	flogged = true;
+    }
 }
 
 void msnhook::disconnect() {

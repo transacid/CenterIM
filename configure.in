@@ -82,11 +82,13 @@ if test "$with_ssl" != "no"; then
 	AC_CHECK_LIB(ssl, main)
     else
 	AC_MSG_RESULT([not found or disabled])
+	with_ssl="no"
 
 	AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
 	    CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 	    LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
 	    AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
+	    with_ssl="yes"
 	])
     fi
 fi
@@ -167,7 +169,11 @@ if test "$build_gg" = "yes"; then
 fi
 
 if test "$build_msn" = "yes"; then
-    AC_DEFINE(BUILD_MSN, 1, [build with MSN support])
+    if test "$with_ssl" = "no"; then
+	AC_MSG_ERROR([MSN cannot be built with SSL support turned off, use --disable-msn])
+    else
+	AC_DEFINE(BUILD_MSN, 1, [build with MSN support])
+    fi
 fi
 
 if test "$build_rss" = "yes" -o "$build_lj" = "yes"; then

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.67 2004/02/10 23:55:16 konst Exp $
+* $Id: jabberhook.cc,v 1.68 2004/02/17 00:34:51 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,9 +52,11 @@ static void jidsplit(const string &jid, string &user, string &host, string &rest
 static string jidtodisp(const string &jid) {
     string user, host, rest;
     jidsplit(jid, user, host, rest);
-
+/*
     if(host != "jabber.com" && !host.empty())
 	user += (string) "@" + host;
+*/
+    user += (string) "@" + host;
 
     return user;
 }
@@ -1419,8 +1421,12 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    case 504: /* Remote Server Timeout */
 		    default:
 			if(!jhook.regmode) {
-			    face.log(_("+ [jab] error %d: %s"), code, desc.c_str());
-			    if(!jhook.flogged) {
+			    face.log(desc.empty() ?
+				_("+ [jab] error %d") :
+				_("+ [jab] error %d: %s"),
+				code, desc.c_str());
+
+			    if(!jhook.flogged && code != 501) {
 				close(jhook.jc->fd);
 				jhook.jc->fd = -1;
 			    }
