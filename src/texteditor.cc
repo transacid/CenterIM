@@ -248,7 +248,7 @@ int texteditor::addwindow(char *id) {
     ef->undo->freeitem = &undorecordfree;
 
     ef->markblock = new textblock;
-    memset(ef->markblock, 0, sizeof(ef->markblock));
+    memset(ef->markblock, 0, sizeof(textblock));
 
     ef->sx = ef->x = ef->sy = ef->y = 0;
     ef->modified = ef->markmode = ef->showmarked = false;
@@ -454,7 +454,7 @@ void texteditor::delmark() {
     textblock *mb = curfile->markblock;
 
     if(!mb->x1 && !mb->x2 && !mb->y1 && !mb->y2) return;
-    
+
     for(i = mb->y1; i <= mb->y2; i++) {
 	c = (char *) curfile->lines->at(i-line);
 	
@@ -502,14 +502,14 @@ void texteditor::delmark() {
     }
 
     modification(udelblock, deltext, false, mb->x1, mb->y1);
-    memset(curfile->markblock, 0, sizeof(struct textblock));
+    memset(curfile->markblock, 0, sizeof(textblock));
     setpos(newcol, newrow);
     draw();
 }
 
 void texteditor::clearmark() {
     CHECKLOADED;
-    memset(curfile->markblock, 0, sizeof(struct textblock));
+    memset(curfile->markblock, 0, sizeof(textblock));
     draw();
 }
 
