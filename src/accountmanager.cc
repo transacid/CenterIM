@@ -1,7 +1,7 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.38 2004/11/10 11:24:46 konst Exp $
+* $Id: accountmanager.cc,v 1.39 2004/12/20 00:54:01 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,7 +128,7 @@ void accountmanager::exec() {
 			break;
 
 		    case irc:
-			t.addleaff(n, 0, citem+12, _(" NickServ password : %s "),
+			t.addleaff(n, 0, citem+12, _(" NickServ password (optional) : %s "),
 			    string(account.additional["nickpass"].size(), '*').c_str());
 			break;
 		}

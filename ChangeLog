@@ -1927,3 +1927,35 @@ records of info files.
 The configure script now checks if libcurl has SSL support enabled in
 order to avoid MSN malfunctions. It requires libcurl with SSL, so just
 provide the MSN module with it if you want to use it.
+
+4.13.0
+------
+
+Centericq now builds fine with gcc 3.4.
+
+A new command-line parameter, --debug, was added. This way, there is no need
+anymore to re-build the program in order to enable debug output. However,
+when using this mode, make sure you understand what it says in the log window
+and in ~/.centericq/debug.
+
+There are two passwords for an IRC account now. One is for Nickserv and
+the other one is for regular IRC authentification, which wasn't
+supported before.
+
+Online and free-for-chat mode have the same priority now. So your [f]
+contacts won't stay all the time in the top of the list anymore.
+
+Unicode characters in rtf-encoded icq messages aren't lost anymore.
+Instead, they are recoded into the primary charset. So now, for example,
+Cyrillic sent with gnomeicu, won't disappear.
+
+Segfault when accepting Yahoo! file transfers was fixed.
+
+For online users, centericq now shown the time during which it sees
+those contacts online. Check out the first page of user info for an
+online contact.
+
+Among the other stuff that didn't let me release .13 earlier was my
+moving to Germany. Now I am in Berlin on permanent basis, so if you're
+at the CCC congress that is to take place in a week, Konst can be met
+there :)

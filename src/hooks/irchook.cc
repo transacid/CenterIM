@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.79 2004/11/11 13:42:05 konst Exp $
+* $Id: irchook.cc,v 1.80 2004/12/20 00:54:02 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1239,8 +1239,6 @@ void irchook::needpass(void *conn, void *cli, ...) {
 	    strncpy(pass, acc.password.c_str(), size-1);
 	    pass[size-1] = 0;
 	    face.log(_("+ [irc] password sent"));
-	} else {
-	    face.log(_("+ [irc] password was requested, but it's not set"));
 	}
     }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.234 2004/11/12 14:41:45 konst Exp $
+* $Id: icqface.cc,v 1.235 2004/12/20 00:54:01 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -448,7 +448,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    g = 0;
 	}
 	
-	if((int) c < 100) c = 0;
+	if((unsigned int) c < 100) c = 0;
 
 	if(i) {
 	    switch(action = extk) {
@@ -935,7 +935,7 @@ void icqface::infofriends(dialogbox &db, icqcontact *c) {
 }
 
 void icqface::infogeneral(dialogbox &db, icqcontact *c) {
-    string langs, options;
+    string langs, options, buf;
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
 
@@ -969,12 +969,37 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), langs);
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), c->getlastip());
 
-    if(c->getstatus() == offline) {
-	time_t ls = c->getlastseen();
+    time_t ls = c->getlastseen();
 
+    if(c->getstatus() == offline) {
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
 	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text),
 	    ls ? strdateandtime(ls) : _("Never"));
+
+    } else {
+	int days, hours, minutes, tdiff = timer_current-ls;
+
+	days = (int) (tdiff/86400);
+	hours = (int) ((tdiff-days*86400)/3600);
+	minutes = (int) ((tdiff-days*8600-hours*3600)/60);
+
+	if(days) buf = i2str(days) + " " + _("days");
+
+	if(hours) {
+	    if(!buf.empty()) buf += ", ";
+	    buf += i2str(hours) + " " + _("hours");
+	}
+
+	if(minutes) {
+	    if(!buf.empty()) buf += ", ";
+	    buf += i2str(minutes) + " " + _("min");
+	}
+
+	if(buf.empty())
+	    buf = i2str(tdiff) + " " + _("seconds");
+
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Online"));
+	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text), buf);
     }
 }
 
@@ -1859,11 +1884,8 @@ void icqface::log(const string &atext) {
     if(flog.is_open())
 	flog << text << endl;
 
-    /*
-    *
-    * Add a timestamp if needed
-    *
-    */
+    /*! Add a timestamp if needed
+     */
 
     bool lts, lo;
     conf.getlogoptions(lts, lo);
@@ -1881,7 +1903,7 @@ void icqface::log(const string &atext) {
     while((i = text.find("\n")) != -1) text[i] = ' ';
     while((i = text.find("\r")) != -1) text[i] = ' ';
 
-    while(lastlog.size() > LINES-sizeWArea.y2-2)
+    while((lastlog.size() > LINES-sizeWArea.y2-2) && !lastlog.empty())
 	lastlog.erase(lastlog.begin());
 
     lastlog.push_back(text);
@@ -2025,7 +2047,7 @@ void icqface::quickfind(verticalmenu *multi) {
 			    c = (icqcontact *) cm->getref(i);
 			}
 
-			if((int) c > 100) {
+			if((unsigned int) c > 100) {
 			    string current = c->getdispnick();
 			    len = current.size();
 			    if(len > nick.size()) len = nick.size();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.158 2004/11/11 13:42:05 konst Exp $
+* $Id: icqhook.cc,v 1.159 2004/12/20 00:54:02 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1108,7 +1108,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 
 	text = r->getMessage();
 	if(text.substr(0, 6) == "{\\rtf1")
-	    text = fixicqrtf(striprtf(text));
+	    text = fixicqrtf(striprtf(text, conf.getconvertfrom(proto)));
 
 	em.store(immessage(ic, imevent::incoming, rusconv("wk", text), r->getTime()));
 

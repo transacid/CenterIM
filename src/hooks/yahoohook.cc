@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.111 2004/07/20 06:51:05 konst Exp $
+* $Id: yahoohook.cc,v 1.112 2004/12/20 00:54:02 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -546,7 +546,9 @@ bool yahoohook::knowntransfer(const imfile &fr) const {
 
 void yahoohook::replytransfer(const imfile &fr, bool accept, const string &localpath) {
     if(accept) {
-	sfiles.push_back(strdup(localpath.c_str()));
+	string localname = localpath + "/";
+	localname += fr.getfiles()[0].fname;
+	sfiles.push_back(strdup(localname.c_str()));
 	srfiles[sfiles.back()] = fr;
 	yahoo_get_url_handle(cid, fvalid[fr].c_str(), &get_url, sfiles.back());
 
@@ -756,7 +758,7 @@ void yahoohook::status_changed(int id, char *who, int stat, char *msg, int away)
     yhook.userstatus(who, stat, msg ? msg : "", (bool) away);
 }
 
-void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8) {
+void yahoohook::got_im(int id, char *me, char *who, char *msg, long tm, int stat, int utf8) {
     imcontact ic(who, yahoo);
     string text = cuthtml(msg, chCutBR | chLeaveLinks);
 
@@ -931,13 +933,24 @@ void yahoohook::conf_message(int id, char *who, char *room, char *msg, int utf8)
     if(c) em.store(immessage(c, imevent::incoming, text));
 }
 
-void yahoohook::got_file(int id, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize) {
-    if(!who || !url || !msg || !fname)
+void yahoohook::got_file(int id, char *me, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize) {
+    if(!who || !url)
 	return;
 
+    if(!fname) {
+	fname = strrchr(url, '/');
+	if(fname) fname++;
+	    else return;
+    }
+
+    int pos;
     imfile::record r;
     r.fname = fname;
     r.size = fesize;
+    if(!fesize) r.size = -1;
+
+    if((pos = r.fname.find('?')) != -1)
+	r.fname.erase(pos);
 
     imfile fr(imcontact(who, yahoo), imevent::incoming, "",
 	vector<imfile::record>(1, r));
@@ -959,12 +972,12 @@ void yahoohook::contact_added(int id, char *myid, char *who, char *msg) {
     em.store(imnotification(imcontact(who, yahoo), text));
 }
 
-void yahoohook::typing_notify(int id, char *who, int stat) {
+void yahoohook::typing_notify(int id, char *me, char *who, int stat) {
     icqcontact *c = clist.get(imcontact(who, yahoo));
     if(c) c->setlasttyping(stat ? timer_current : 0);
 }
 
-void yahoohook::game_notify(int id, char *who, int stat) {
+void yahoohook::game_notify(int id, char *me, char *who, int stat) {
 }
 
 void yahoohook::mail_notify(int id, char *from, char *subj, int cnt) {
@@ -981,7 +994,7 @@ void yahoohook::system_message(int id, char *msg) {
     face.log(_("+ [yahoo] system: %s"), msg);
 }
 
-void yahoohook::error(int id, char *err, int fatal) {
+void yahoohook::error(int id, char *err, int fatal, int num) {
     if(fatal) {
 	face.log(_("+ [yahoo] error: %s"), err);
 	yhook.disconnected();
@@ -1108,10 +1121,10 @@ void yahoohook::rejected(int id, char *who, char *msg) {
 void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
 }
 
-void yahoohook::webcam_invite(int id, char *from) {
+void yahoohook::webcam_invite(int id, char *me, char *from) {
 }
 
-void yahoohook::webcam_invite_reply(int id, char *from, int accept) {
+void yahoohook::webcam_invite_reply(int id, char *me, char *from, int accept) {
 }
 
 void yahoohook::webcam_closed(int id, char *who, int reason) {
@@ -1124,6 +1137,17 @@ void yahoohook::webcam_data_request(int id, int send) {
 }
 
 int yahoohook::ylog(char *fmt, ...) {
+    if(conf.getdebug()) {
+	char buf[512];
+	va_list ap;
+
+	va_start(ap, fmt);
+	vsprintf(buf, fmt, ap);
+	va_end(ap);
+
+	face.log(buf);
+    }
+
     return 0;
 }
 
@@ -1163,12 +1187,12 @@ void yahoohook::get_fd(int id, int fd, int error, void *data) {
 
 void yahoohook::get_url(int id, int fd, int error, const char *filename, unsigned long size, void *data) {
     int rsize = 0;
-    const char *localdir = (const char *) data;
+    const char *localname = (const char *) data;
 
     if(!error) {
-	vector<char *>::iterator i = find(yhook.sfiles.begin(), yhook.sfiles.end(), localdir);
+	vector<char *>::iterator i = find(yhook.sfiles.begin(), yhook.sfiles.end(), localname);
 	if(i != yhook.sfiles.end()) {
-	    ofstream f(((string) localdir + "/" + filename).c_str());
+	    ofstream f(localname);
 
 	    if(f.is_open()) {
 		int r;
@@ -1187,13 +1211,14 @@ void yahoohook::get_url(int id, int fd, int error, const char *filename, unsigne
 		error = -1;
 	    }
 
+	    delete *i;
 	    yhook.sfiles.erase(i);
 	}
     }
 
-    map<const char *, imfile>::iterator ir = yhook.srfiles.find(localdir);
+    map<const char *, imfile>::iterator ir = yhook.srfiles.find(localname);
     if(ir != yhook.srfiles.end()) {
-	face.transferupdate(filename, ir->second,
+	face.transferupdate(justfname(localname), ir->second,
 	    error ? icqface::tsError : icqface::tsFinish,
 	    size, rsize);
 
