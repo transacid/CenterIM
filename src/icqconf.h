@@ -69,7 +69,7 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
-	    makelog, fenoughdiskspace, askaway, chatmode;
+	    makelog, fenoughdiskspace, askaway, chatmode, bidi;
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost;
@@ -135,6 +135,9 @@ class icqconf {
 
 	bool getrussian() const { return russian; }
 	void setrussian(bool frussian);
+
+	bool getbidi() const { return bidi; }
+	void setbidi(bool fbidi);
 
 	bool getaskaway() const { return askaway; }
 	void setaskaway(bool faskaway);

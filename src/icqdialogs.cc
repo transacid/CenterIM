@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.79 2002/08/14 10:16:36 konst Exp $
+* $Id: icqdialogs.cc,v 1.80 2002/08/14 12:02:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -769,6 +769,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool makelog = conf.getmakelog();
     bool askaway = conf.getaskaway();
     bool chatmode = conf.getchatmode();
+    bool bidi = conf.getbidi();
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
@@ -803,9 +804,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     while(!finished) {
 	t.clear();
 
-	i = t.addnode(_(" Sound and colors "));
+	i = t.addnode(_(" User interface "));
 	t.addleaff(i, 0, 1, _(" Change sound device to : %s "), strregsound(s));
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
+
+#ifdef USE_FRIBIDI
+	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno[bidi]);
+#endif
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
@@ -896,6 +901,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			tmp = inputstr(_("SMTP server hostname: "), smtp);
 			if(!tmp.empty()) smtp = tmp;
 			break;
+		    case 20: bidi = !bidi; break;
 		}
 		break;
 	    case 1:
@@ -910,6 +916,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
 		conf.setchatmode(chatmode);
+		conf.setbidi(bidi);
 
 		if(conf.getgroupmode() != gmode) {
 		    conf.setgroupmode(gmode);

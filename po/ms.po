@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.9\n"
-"POT-Creation-Date: 2002-08-14 13:12+0300\n"
+"POT-Creation-Date: 2002-08-14 14:34+0300\n"
 "PO-Revision-Date: 2002-04-18 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@ikhlas.com>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
@@ -357,12 +357,12 @@ msgid " IM account manager "
 msgstr " Pengurus akaun IM "
 
 #: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:452
-#: src/icqdialogs.cc:795 src/imcontroller.cc:38
+#: src/icqdialogs.cc:796 src/imcontroller.cc:38
 msgid "Change"
 msgstr "Tukar"
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:452 src/icqdialogs.cc:795
-#: src/icqdialogs.cc:984 src/imcontroller.cc:226
+#: src/accountmanager.cc:43 src/icqdialogs.cc:452 src/icqdialogs.cc:796
+#: src/icqdialogs.cc:991 src/imcontroller.cc:226
 msgid "Done"
 msgstr "Siap"
 
@@ -552,41 +552,41 @@ msgstr "! sebaliknya kita akan kehilangan data dan tetapan"
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Saya seronok dengan mesej away %s yang default bagi %s %s."
 
-#: src/icqconf.cc:714
+#: src/icqconf.cc:723
 msgid "event sending error: not enough parameters"
 msgstr "masalah menghantar peristiwa: parameter tidak mencukupi"
 
-#: src/icqconf.cc:725
+#: src/icqconf.cc:734
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "masalah menghantar peristiwa: hanya UIN dibenarkan dengan protokol icq"
 
-#: src/icqconf.cc:740
+#: src/icqconf.cc:749
 msgid "event sending error: unknown IM type"
 msgstr "masalah menghantar peristiwa: jenis IM tidak dikenali"
 
-#: src/icqconf.cc:762
+#: src/icqconf.cc:771
 msgid "event sending error: unknown event type"
 msgstr "masalah menghantar peristiwa: jenis peristiwa tidak diketahui"
 
-#: src/icqconf.cc:774
+#: src/icqconf.cc:783
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s ke %s telah dimasukkan ke dalam queue"
 
-#: src/icqconf.cc:779
+#: src/icqconf.cc:788
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 "masalah menghantar peristiwa: maklumat penerima tiada dalam senarai anda"
 
-#: src/icqconf.cc:818
+#: src/icqconf.cc:827
 msgid "unknown status character was given"
 msgstr "terima aksara status yang tidak dikenali"
 
-#: src/icqconf.cc:821
+#: src/icqconf.cc:830
 msgid "unknown IM type"
 msgstr "jenis IM tidak dikenali"
 
-#: src/icqconf.cc:824
+#: src/icqconf.cc:833
 msgid "status change error: "
 msgstr "ralat menukar status: "
 
@@ -934,7 +934,7 @@ msgstr " Bahasa Ketiga : %s "
 #.
 #. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
 #.
-#: src/icqdialogs.cc:396 src/icqdialogs.cc:827
+#: src/icqdialogs.cc:396 src/icqdialogs.cc:832
 msgid " Miscellaneous "
 msgstr " Pelbagai "
 
@@ -1028,7 +1028,7 @@ msgstr " [Ctrl-X simpan, Esc batal] "
 msgid " Send file(s) to %s, %lu "
 msgstr " Hantar fail ke %s, %lu "
 
-#: src/icqdialogs.cc:710 src/icqdialogs.cc:983 src/icqface.cc:596
+#: src/icqdialogs.cc:710 src/icqdialogs.cc:990 src/icqface.cc:596
 #: src/icqface.cc:1252 src/imcontroller.cc:226
 msgid "Add"
 msgstr "Tambah"
@@ -1057,162 +1057,168 @@ msgstr "nama fail: "
 msgid "comment: "
 msgstr "komen: "
 
-#: src/icqdialogs.cc:786
+#: src/icqdialogs.cc:787
 msgid " CenterICQ configuration "
 msgstr " Tetapan CenterICQ "
 
-#: src/icqdialogs.cc:806
-msgid " Sound and colors "
-msgstr " Bunyi dan warna "
-
 #: src/icqdialogs.cc:807
+#, fuzzy
+msgid " User interface "
+msgstr " nama pengguna: "
+
+#: src/icqdialogs.cc:808
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Tukar peranti bunyi ke : %s "
 
-#: src/icqdialogs.cc:808
+#: src/icqdialogs.cc:809
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Tukar skima warna ke : %s "
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:812
+#, c-format
+msgid " Enable bidirectional languages support : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:815
 msgid " Contact list "
 msgstr " Senarai hubungan "
 
-#: src/icqdialogs.cc:811
+#: src/icqdialogs.cc:816
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Susun rakan ke dalam kumpulan : %s "
 
-#: src/icqdialogs.cc:812
+#: src/icqdialogs.cc:817
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Sembunyikan pengguna offline : %s "
 
-#: src/icqdialogs.cc:813
+#: src/icqdialogs.cc:818
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Perlukan transliterasi Russia win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:814
+#: src/icqdialogs.cc:819
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-spam: buang mesej dari pengguna yang tiada dalam senarai : %s "
 
-#: src/icqdialogs.cc:815
+#: src/icqdialogs.cc:820
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Quote mesej dalam balasan : %s "
 
-#: src/icqdialogs.cc:816
+#: src/icqdialogs.cc:821
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Periksa peti surat setempat : %s "
 
-#: src/icqdialogs.cc:817
+#: src/icqdialogs.cc:822
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Ingat kata laluan : %s "
 
-#: src/icqdialogs.cc:818
+#: src/icqdialogs.cc:823
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Edit mesej away pada perubahan status : %s "
 
-#: src/icqdialogs.cc:819
+#: src/icqdialogs.cc:824
 #, fuzzy, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Quote mesej dalam balasan : %s "
 
-#: src/icqdialogs.cc:821
+#: src/icqdialogs.cc:826
 msgid " Communications "
 msgstr " Hubungan "
 
-#: src/icqdialogs.cc:822
+#: src/icqdialogs.cc:827
 #, c-format
 msgid " SMTP server : %s "
 msgstr " Pelayan SMTP : %s "
 
-#: src/icqdialogs.cc:828
+#: src/icqdialogs.cc:833
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Masa untuk menetapkan Away secara automatik (min) : %d "
 
-#: src/icqdialogs.cc:829
+#: src/icqdialogs.cc:834
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Masa untuk menetapkan N/A secara automatik (min) : %d "
 
-#: src/icqdialogs.cc:830
+#: src/icqdialogs.cc:835
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Maklumat terperinci IM di dalam fail log ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:861
+#: src/icqdialogs.cc:866
 msgid "Auto Away period (0 - disable): "
 msgstr "Jangkamasa Auto Away (0 - matikan): "
 
-#: src/icqdialogs.cc:865
+#: src/icqdialogs.cc:870
 msgid "Auto N/A period (0 - disable): "
 msgstr "Jangkamasa Auto N.A (0 - matikan): "
 
-#: src/icqdialogs.cc:873
+#: src/icqdialogs.cc:878
 msgid "SOCKS proxy server to use: "
 msgstr "Pelayan proksi SOCKS yang hendak diguna: "
 
-#: src/icqdialogs.cc:877
+#: src/icqdialogs.cc:882
 msgid "SOCKS proxy user name: "
 msgstr "Nama pengguna pelayan proksi SOCKS: "
 
-#: src/icqdialogs.cc:881
+#: src/icqdialogs.cc:886
 msgid "SOCKS proxy password: "
 msgstr "Katalaluan pelayan proksi SOCKS: "
 
-#: src/icqdialogs.cc:896
+#: src/icqdialogs.cc:901
 msgid "SMTP server hostname: "
 msgstr "Nama pelayan SMTP: "
 
-#: src/icqdialogs.cc:948
+#: src/icqdialogs.cc:955
 msgid "Your details have been fetched"
 msgstr "Maklumat anda telah diperolehi"
 
-#: src/icqdialogs.cc:960 src/icqface.cc:290
+#: src/icqdialogs.cc:967 src/icqface.cc:290
 msgid "Organize contact groups"
 msgstr "Susunan kumpulan rakan"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 msgid "Rename"
 msgstr "Namakan semula"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 msgid "rEmove"
 msgstr "uBah"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 msgid "move Up"
 msgstr "ke atas"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 msgid "move Down"
 msgstr "ke bawah"
 
-#: src/icqdialogs.cc:984
+#: src/icqdialogs.cc:991
 msgid "Select"
 msgstr "Pilih"
 
-#: src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1006
 msgid " Groups "
 msgstr " Kumpulan "
 
-#: src/icqdialogs.cc:1014
+#: src/icqdialogs.cc:1021
 msgid "Name for a group to be created: "
 msgstr "Nama kumpulan yang hendak dibuat: "
 
-#: src/icqdialogs.cc:1023
+#: src/icqdialogs.cc:1030
 msgid "New name for the group: "
 msgstr "Nama baru bagu kumpulan: "
 
-#: src/icqdialogs.cc:1033
+#: src/icqdialogs.cc:1040
 msgid "Are you sure want to remove the group?"
 msgstr "Adakah anda pasti untuk memadam kumpulan?"
 
@@ -2014,6 +2020,9 @@ msgstr "emel"
 #, fuzzy
 msgid "notification"
 msgstr "Lokasi"
+
+#~ msgid " Sound and colors "
+#~ msgstr " Bunyi dan warna "
 
 #~ msgid "Notify the user he/she has been added?"
 #~ msgstr "Beritahu rakan yang mereka telah dimasukkan ke dalam senarai?"

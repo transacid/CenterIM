@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2002-08-14 13:12+0300\n"
+"POT-Creation-Date: 2002-08-14 14:34+0300\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
@@ -368,12 +368,12 @@ msgid " IM account manager "
 msgstr " IM accountbeheer "
 
 #: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:452
-#: src/icqdialogs.cc:795 src/imcontroller.cc:38
+#: src/icqdialogs.cc:796 src/imcontroller.cc:38
 msgid "Change"
 msgstr "Verander"
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:452 src/icqdialogs.cc:795
-#: src/icqdialogs.cc:984 src/imcontroller.cc:226
+#: src/accountmanager.cc:43 src/icqdialogs.cc:452 src/icqdialogs.cc:796
+#: src/icqdialogs.cc:991 src/imcontroller.cc:226
 msgid "Done"
 msgstr "Klaar"
 
@@ -565,40 +565,40 @@ msgstr ""
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Ik hou van de standaard CenterICQ %s 'ik ben weg' berichten!!"
 
-#: src/icqconf.cc:714
+#: src/icqconf.cc:723
 msgid "event sending error: not enough parameters"
 msgstr ""
 
-#: src/icqconf.cc:725
+#: src/icqconf.cc:734
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 
-#: src/icqconf.cc:740
+#: src/icqconf.cc:749
 msgid "event sending error: unknown IM type"
 msgstr ""
 
-#: src/icqconf.cc:762
+#: src/icqconf.cc:771
 msgid "event sending error: unknown event type"
 msgstr ""
 
-#: src/icqconf.cc:774
+#: src/icqconf.cc:783
 #, fuzzy, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "+ %s is toegevoegd aan je lijst"
 
-#: src/icqconf.cc:779
+#: src/icqconf.cc:788
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 
-#: src/icqconf.cc:818
+#: src/icqconf.cc:827
 msgid "unknown status character was given"
 msgstr ""
 
-#: src/icqconf.cc:821
+#: src/icqconf.cc:830
 msgid "unknown IM type"
 msgstr ""
 
-#: src/icqconf.cc:824
+#: src/icqconf.cc:833
 msgid "status change error: "
 msgstr ""
 
@@ -947,7 +947,7 @@ msgstr " 3de taal : %s "
 #.
 #. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
 #.
-#: src/icqdialogs.cc:396 src/icqdialogs.cc:827
+#: src/icqdialogs.cc:396 src/icqdialogs.cc:832
 msgid " Miscellaneous "
 msgstr " Overige "
 
@@ -1041,7 +1041,7 @@ msgstr " [Ctrl-X bewaar, Esc annuleer] "
 msgid " Send file(s) to %s, %lu "
 msgstr " Zend bestand(en) naar %s, %lu "
 
-#: src/icqdialogs.cc:710 src/icqdialogs.cc:983 src/icqface.cc:596
+#: src/icqdialogs.cc:710 src/icqdialogs.cc:990 src/icqface.cc:596
 #: src/icqface.cc:1252 src/imcontroller.cc:226
 msgid "Add"
 msgstr "Voeg toe"
@@ -1070,166 +1070,172 @@ msgstr "bestandsnaam: "
 msgid "comment: "
 msgstr "commentaar: "
 
-#: src/icqdialogs.cc:786
+#: src/icqdialogs.cc:787
 msgid " CenterICQ configuration "
 msgstr " CenterICQ configuratie "
 
-#: src/icqdialogs.cc:806
-msgid " Sound and colors "
-msgstr " Geluid en kleuren "
-
 #: src/icqdialogs.cc:807
+#, fuzzy
+msgid " User interface "
+msgstr " gebruikersnaam: "
+
+#: src/icqdialogs.cc:808
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Verander geluidsschema naar : %s "
 
-#: src/icqdialogs.cc:808
+#: src/icqdialogs.cc:809
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Verander kleurenschema naar : %s "
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:812
+#, c-format
+msgid " Enable bidirectional languages support : %s "
+msgstr ""
+
+#: src/icqdialogs.cc:815
 msgid " Contact list "
 msgstr " Contactlijst "
 
-#: src/icqdialogs.cc:811
+#: src/icqdialogs.cc:816
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Organiseer contacten in groepen : %s "
 
-#: src/icqdialogs.cc:812
+#: src/icqdialogs.cc:817
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Verberg offline gebruikers : %s "
 
-#: src/icqdialogs.cc:813
+#: src/icqdialogs.cc:818
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Russische vertaling win1251-koi8 nodig : %s "
 
-#: src/icqdialogs.cc:814
+#: src/icqdialogs.cc:819
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-stalking: verw. ber. van gebruiker niet op lijst : %s "
 
-#: src/icqdialogs.cc:815
+#: src/icqdialogs.cc:820
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Haal origineel bericht aan bij antwoorden : %s "
 
-#: src/icqdialogs.cc:816
+#: src/icqdialogs.cc:821
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Controleer de locale mailbox : %s "
 
-#: src/icqdialogs.cc:817
+#: src/icqdialogs.cc:822
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Bewaar wachtwoorden : %s "
 
-#: src/icqdialogs.cc:818
+#: src/icqdialogs.cc:823
 #, fuzzy, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Haal origineel bericht aan bij antwoorden : %s "
 
-#: src/icqdialogs.cc:819
+#: src/icqdialogs.cc:824
 #, fuzzy, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Haal origineel bericht aan bij antwoorden : %s "
 
-#: src/icqdialogs.cc:821
+#: src/icqdialogs.cc:826
 #, fuzzy
 msgid " Communications "
 msgstr " Locatie "
 
-#: src/icqdialogs.cc:822
+#: src/icqdialogs.cc:827
 #, fuzzy, c-format
 msgid " SMTP server : %s "
 msgstr " Server : %s "
 
-#: src/icqdialogs.cc:828
+#: src/icqdialogs.cc:833
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Zet automatisch afwezigheid periode (min) : %d "
 
-#: src/icqdialogs.cc:829
+#: src/icqdialogs.cc:834
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Zet automatisch niet bereikbaar (min) : %d "
 
-#: src/icqdialogs.cc:830
+#: src/icqdialogs.cc:835
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Gedetailleerde IM gebeurtenissen opslaan in ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:861
+#: src/icqdialogs.cc:866
 msgid "Auto Away period (0 - disable): "
 msgstr "Zet autom. weg in minuten (0 - inactief): "
 
-#: src/icqdialogs.cc:865
+#: src/icqdialogs.cc:870
 msgid "Auto N/A period (0 - disable): "
 msgstr "Zet autom. nt. besch. in minuten (0 - inactief): "
 
-#: src/icqdialogs.cc:873
+#: src/icqdialogs.cc:878
 msgid "SOCKS proxy server to use: "
 msgstr "SOCKS proxy server om te gebruiken: "
 
-#: src/icqdialogs.cc:877
+#: src/icqdialogs.cc:882
 msgid "SOCKS proxy user name: "
 msgstr "SOCKS proxy gebruiker: "
 
-#: src/icqdialogs.cc:881
+#: src/icqdialogs.cc:886
 msgid "SOCKS proxy password: "
 msgstr "SOCKS proxy wachtwoord: "
 
-#: src/icqdialogs.cc:896
+#: src/icqdialogs.cc:901
 #, fuzzy
 msgid "SMTP server hostname: "
 msgstr " gebruikersnaam: "
 
-#: src/icqdialogs.cc:948
+#: src/icqdialogs.cc:955
 msgid "Your details have been fetched"
 msgstr "Je details zijn opgehaald"
 
-#: src/icqdialogs.cc:960 src/icqface.cc:290
+#: src/icqdialogs.cc:967 src/icqface.cc:290
 msgid "Organize contact groups"
 msgstr "Organiseer contactgroepen"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 msgid "Rename"
 msgstr "Hernoem"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 #, fuzzy
 msgid "rEmove"
 msgstr "Verwijder"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 #, fuzzy
 msgid "move Up"
 msgstr "Verwijder"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:990
 msgid "move Down"
 msgstr ""
 
-#: src/icqdialogs.cc:984
+#: src/icqdialogs.cc:991
 msgid "Select"
 msgstr "Selecteer"
 
-#: src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1006
 msgid " Groups "
 msgstr " Groepen "
 
-#: src/icqdialogs.cc:1014
+#: src/icqdialogs.cc:1021
 msgid "Name for a group to be created: "
 msgstr "Naam voor de groep: "
 
-#: src/icqdialogs.cc:1023
+#: src/icqdialogs.cc:1030
 msgid "New name for the group: "
 msgstr "Nieuwe naam voor de groep: "
 
-#: src/icqdialogs.cc:1033
+#: src/icqdialogs.cc:1040
 msgid "Are you sure want to remove the group?"
 msgstr "Ben je zeker dat de groep verwijderd mag worden?"
 
@@ -2032,6 +2038,9 @@ msgstr "e-mail"
 #, fuzzy
 msgid "notification"
 msgstr "Locatie"
+
+#~ msgid " Sound and colors "
+#~ msgstr " Geluid en kleuren "
 
 #~ msgid "Notify the user he/she has been added?"
 #~ msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"

@@ -43,6 +43,7 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
 
     if test -r $with_fribidi/include/fribidi/fribidi.h; then
 	LIBS="$LIBS `$with_fribidi/bin/fribidi-config --libs`"
+	AC_DEFINE(USE_FRIBIDI)
     fi
 fi
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.75 2002/08/10 14:38:05 konst Exp $
+* $Id: icqconf.cc,v 1.76 2002/08/14 12:02:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -171,7 +171,7 @@ void icqconf::loadmainconfig() {
 
     if(f.is_open()) {
 	mailcheck = askaway = false;
-	savepwd = true;
+	savepwd = bidi = true;
 	setsmtphost("");
 
 	while(!f.eof()) {
@@ -194,6 +194,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") chatmode = true; else
+	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    buf = getprotocolname(pname);
@@ -237,6 +238,7 @@ void icqconf::save() {
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
 	    if(getchatmode()) f << "chatmode" << endl;
+	    if(!getbidi()) f << "nobidi" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
 
@@ -658,6 +660,13 @@ int icqconf::getprotcolor(protocolname pname) const {
 
 void icqconf::setrussian(bool frussian) {
     russian = frussian;
+}
+
+void icqconf::setbidi(bool fbidi) {
+    bidi = fbidi;
+#ifdef USE_FRIBIDI
+    use_fribidi = bidi;
+#endif
 }
 
 void icqconf::commandline(int argc, char **argv) {
