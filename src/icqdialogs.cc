@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.58 2002/03/14 14:15:50 konst Exp $
+* $Id: icqdialogs.cc,v 1.59 2002/03/15 12:27:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -581,11 +581,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     w.set_title(conf.getcolor(cp_dialog_highlight),
-#ifdef DEBUG
-	_(" ALL YOUR BASE ARE BELONG TO US ")
-#else
 	_(" CenterICQ configuration ")
-#endif
 	);
 
     db.setwindow(&w, false);

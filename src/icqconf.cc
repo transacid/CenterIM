@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.54 2002/03/15 09:21:19 konst Exp $
+* $Id: icqconf.cc,v 1.55 2002/03/15 12:27:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -881,7 +881,7 @@ void icqconf::checkdiskspace() {
     fenoughdiskspace = true;
 
     if(!statfs(conf.getdirname().c_str(), &st)) {
-	fenoughdiskspace = st.f_bavail*st.f_bsize >= 10240;
+	fenoughdiskspace = ((double) st.f_bavail) * st.f_bsize >= 10240;
     }
 }
 

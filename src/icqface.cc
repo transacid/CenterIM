@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.93 2002/03/14 11:53:30 konst Exp $
+* $Id: icqface.cc,v 1.94 2002/03/15 12:27:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1150,7 +1150,13 @@ void icqface::modelist(contactstatus cs) {
 	    case 1:
 		muins.clear();
 
-		if(multicontacts(_("Select contacts to add to the list"))) {
+		if(multicontacts(
+#ifdef DEBUG
+		    _(" ALL YOUR BASE ARE BELONG TO US ")
+#else
+		    _("Select contacts to add to the list")
+#endif
+		)) {
 		    for(ic = muins.begin(); ic != muins.end(); ic++) {
 			lst.push_back(modelistitem(clist.get(*ic)->getdispnick(), *ic, cs));
 			if(cs == csignore) clist.remove(*ic);

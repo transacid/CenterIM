@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.5 2002/03/15 09:21:20 konst Exp $
+* $Id: aimhook.cc,v 1.6 2002/03/15 12:27:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,12 @@
 #include "icqcontacts.h"
 #include "centericq.h"
 #include "imlogger.h"
+
+#ifdef DEBUG
+#define DLOG(s) face.log("aim %s", s)
+#else
+#define DLOG(s)
+#endif
 
 aimhook ahook;
 
@@ -352,6 +358,7 @@ void aimhook::connected(void *connection, void *cli, ...) {
     firetalk_set_info(ahook.handle, ahook.profile.info.c_str());
 
     ahook.resolve();
+    DLOG("connected");
 }
 
 void aimhook::disconnected(void *connection, void *cli, ...) {
@@ -362,6 +369,7 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
 
     face.log(_("+ [aim] disconnected from the network"));
     face.update();
+    DLOG("disconnected");
 }
 
 void aimhook::connectfailed(void *connection, void *cli, ...) {
@@ -377,6 +385,7 @@ void aimhook::connectfailed(void *connection, void *cli, ...) {
 
     face.log(_("+ [aim] connect failed: %s"), reason);
     face.update();
+    DLOG("connectfailed");
 }
 
 void aimhook::newnick(void *connection, void *cli, ...) {
@@ -394,6 +403,8 @@ void aimhook::newnick(void *connection, void *cli, ...) {
 
 	face.log(_("+ [aim] nickname was changed successfully"));
     }
+
+    DLOG("newnick");
 }
 
 void aimhook::newpass(void *connection, void *cli, ...) {
@@ -411,6 +422,8 @@ void aimhook::newpass(void *connection, void *cli, ...) {
 
 	face.log(_("+ [aim] password was changed successfully"));
     }
+
+    DLOG("newpass");
 }
 
 void aimhook::gotinfo(void *conn, void *cli, ...) {
@@ -433,6 +446,8 @@ void aimhook::gotinfo(void *conn, void *cli, ...) {
 		c->setabout(_("The user has no profile information."));
 	}
     }
+
+    DLOG("gotinfo");
 }
 
 void aimhook::getmessage(void *conn, void *cli, ...) {
@@ -449,6 +464,8 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
 	em.store(immessage(imcontact(sender, aim),
 	    imevent::incoming, rusconv("wk", message)));
     }
+
+    DLOG("getmessage");
 }
 
 void aimhook::userstatus(const string &nickname, imstatus st) {
