@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.7 2001/06/03 13:25:30 konst Exp $
+* $Id: icqface.cc,v 1.8 2001/06/07 08:47:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -898,39 +898,39 @@ string icqface::textstatus(unsigned long st) {
     if(!(st & 0x01FF)) return _("Online"); else return _("Unknown");
 }
 
+#define INPUT_POS       LINES-2
+
 string icqface::inputstr(string q, string defl = "", char passwdchar = 0) {
-    int ln = LINES-2;
-    chtype **sbuf = savelines(0, ln, COLS, ln);
+    screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string ret;
     char *p;
 
     attrset(conf.getcolor(cp_status));
-    mvhline(ln, 0, ' ', COLS);
-    kwriteatf(0, ln, conf.getcolor(cp_status), "%s", q.c_str());
+    mvhline(INPUT_POS, 0, ' ', COLS);
+    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
     il->setpasswordchar(passwdchar);
     il->fm = 0;
 
-    ret = (p = il->open(q.size(), ln, defl.c_str(), COLS-q.size()-1, 2048));
+    ret = (p = il->open(q.size(), INPUT_POS, defl.c_str(), COLS-q.size()-1, 2048));
     delete p;
 
-    restorelines(sbuf, 0, ln, COLS, ln);
+    sa.restore();
     return ret;
 }
 
 string icqface::inputfile(string q, string defl = "") {
-    int ln = LINES-2;
-    chtype **sbuf = savelines(0, ln, COLS, ln);
+    screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string ret;
     char *p, *r;
 
-    mvhline(ln, 0, ' ', COLS);
-    kwriteatf(0, ln, conf.getcolor(cp_status), "%s", q.c_str());
-    kwriteatf(COLS-8, ln, conf.getcolor(cp_status), "[Ctrl-T]");
+    mvhline(INPUT_POS, 0, ' ', COLS);
+    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
+    kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
 
     il->fm = fm;
     il->fm->w->set_title(conf.getcolor(cp_dialog_highlight), _(" enter to select a file, esc to cancel "));
     fm->onlydirs = fm->chroot = false;
-    ret = (p = il->open(q.size(), ln, defl.c_str(), COLS-q.size()-10, 2048));
+    ret = (p = il->open(q.size(), INPUT_POS, defl.c_str(), COLS-q.size()-10, 2048));
 
     if(r = strrchr(p, '/')) {
 	*r = 0;
@@ -939,7 +939,7 @@ string icqface::inputfile(string q, string defl = "") {
 
     delete p;
 
-    restorelines(sbuf, 0, ln, COLS, ln);
+    sa.restore();
     return ret;
 }
 
@@ -957,8 +957,8 @@ void catqstr(string &q, int option, int defl) {
 }
 
 int icqface::ask(string q, int options, int deflt = -1) {
-    int ln = LINES-1, ret;
-    chtype **sbuf = savelines(0, ln, COLS, ln);
+    int ret;
+    screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
 
     q += " (";
     if(options & ASK_YES) catqstr(q, ASK_YES, deflt);
@@ -967,8 +967,8 @@ int icqface::ask(string q, int options, int deflt = -1) {
     q += ") ";
 
     attrset(conf.getcolor(cp_status));
-    mvhline(ln, 0, ' ', COLS);
-    kwriteatf(0, ln, conf.getcolor(cp_status), "%s", q.c_str());
+    mvhline(INPUT_POS, 0, ' ', COLS);
+    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
 
     for(ret = -1; ret == -1; ) {
 	switch(getkey()) {
@@ -990,7 +990,7 @@ int icqface::ask(string q, int options, int deflt = -1) {
 	}
     }
 
-    restorelines(sbuf, 0, ln, COLS, ln);
+    sa.restore();
     return ret;
 }
 
@@ -1558,7 +1558,12 @@ void icqface::acceptfile(unsigned int uin, unsigned long seq, string fname) {
 
 	if(sess = icq_AcceptFileRequest(&icql, uin, seq)) {
 	    log(_("+ file %s from %s, %lu started"), justfname(fname).c_str(), c->getdispnick().c_str(), uin);
-	    ihook.addfile(uin, seq, fname, HIST_MSG_IN);
+
+	    if(!access((filesavedir + "/" + justfname(fname)).c_str(), F_OK)) {
+		log(_("+ already exists, skipping"));
+	    } else {
+		ihook.addfile(uin, seq, fname, HIST_MSG_IN);
+	    }
 	}
     }
 }

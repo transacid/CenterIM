@@ -14,7 +14,7 @@
 
 #include "kkstrtext.h"
 #include "kkfsys.h"
-#include "common.h"
+#include "conscommon.h"
 #include "icq.h"
 
 #define cp_status           1

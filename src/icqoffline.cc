@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.5 2001/06/02 07:12:39 konst Exp $
+* $Id: icqoffline.cc,v 1.6 2001/06/07 08:47:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,7 +191,7 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
     FILE *f, *of;
     char buf[512];
     string url, text, ofname;
-    bool msg, fin = false;
+    bool msg;
 
     totalunsent = 0;
 
@@ -203,12 +203,12 @@ void icqoffline::scan(unsigned long sseq, scanaction act) {
 	    ofname = (string) getenv("HOME") + "/.centericq/tmp." + i2str(getpid());
 	    of = fopen(ofname.c_str(), "w");
 
-	    while(!feof(f) && !fin) {
+	    while(!feof(f)) {
 		freads(f, buf, 512);
 
 		if((string) buf == "\f") {
 		    l = 0;
-		    fin = sendevent(uin, msg, url, text, of, seq, t, act, sseq);
+		    sendevent(uin, msg, url, text, of, seq, t, act, sseq);
 		    text = url = "";
 		} else {
 		    switch(l) {
