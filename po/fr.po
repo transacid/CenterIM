@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-19 15:30+0300\n"
+"POT-Creation-Date: 2004-06-29 23:27+0300\n"
 "PO-Revision-Date: 2002-01-01 01:01+0020\n"
 "Last-Translator: Thomas Nemeth <tnemeth@free.fr>\n"
 "Language-Team: fr <fr@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] impossible de se connecter : "
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:843
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:858
 msgid "could not resolve hostname"
 msgstr "impossible de résoudre le nom d'hôte"
 
@@ -45,100 +45,100 @@ msgstr "impossible de créer la socket"
 msgid "verify the pager host and port entered"
 msgstr "vérifiez le nom d'hôte et le port entrés"
 
-#: src/hooks/yahoohook.cc:400
+#: src/hooks/yahoohook.cc:403
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] déconnexion de la conférence %s"
 
-#: src/hooks/yahoohook.cc:631
+#: src/hooks/yahoohook.cc:634
 msgid "Please join my conference."
 msgstr "Rejoignez ma conférence SVP."
 
-#: src/hooks/yahoohook.cc:644
+#: src/hooks/yahoohook.cc:647
 msgid "Custom status message:"
 msgstr "Notification d'état personnalisée :"
 
-#: src/hooks/yahoohook.cc:648
+#: src/hooks/yahoohook.cc:651
 #, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s"
 msgstr "+ [yahoo] impossible de récupérer le msg d'absence de %s, %s"
 
-#: src/hooks/yahoohook.cc:724
+#: src/hooks/yahoohook.cc:727
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr ""
 "+ [yahoo] connexion impossible : mauvais nom d'utilisateur mot de passe"
 
-#: src/hooks/yahoohook.cc:730
+#: src/hooks/yahoohook.cc:733
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] connexion impossible : le compte est bloqué"
 
-#: src/hooks/yahoohook.cc:731
+#: src/hooks/yahoohook.cc:734
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ pour le réactiver, allez sur %s"
 
-#: src/hooks/yahoohook.cc:735
+#: src/hooks/yahoohook.cc:738
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] autre connexion détectée"
 
-#: src/hooks/yahoohook.cc:741
+#: src/hooks/yahoohook.cc:744
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] le serveur a fermé la socket"
 
-#: src/hooks/yahoohook.cc:863
+#: src/hooks/yahoohook.cc:866
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "L'utilisateur %s vous a invité à la conférence %s, pour parler de : %s"
 
-#: src/hooks/yahoohook.cc:868
+#: src/hooks/yahoohook.cc:871
 msgid "Current conference members are: "
 msgstr "Les membres actuels de la conférence sont : "
 
-#: src/hooks/yahoohook.cc:888
+#: src/hooks/yahoohook.cc:891
 msgid "Auto-joined the conference"
 msgstr "Connexion automatique à la conférence"
 
-#: src/hooks/yahoohook.cc:898
+#: src/hooks/yahoohook.cc:901
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "L'utilisateur %s a décliné votre invitation à rejoindre la conférence"
 
-#: src/hooks/yahoohook.cc:908
+#: src/hooks/yahoohook.cc:911
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "L'utilisateur %s a rejoint la conférence"
 
-#: src/hooks/yahoohook.cc:923
+#: src/hooks/yahoohook.cc:926
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "L'utilisateur %s a quitté la conférence"
 
-#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1177
-#: src/hooks/msnhook.cc:676
+#: src/hooks/yahoohook.cc:961 src/hooks/icqhook.cc:1182
+#: src/hooks/msnhook.cc:680
 msgid "The user has added you to his/her contact list"
 msgstr "L'utilisateur vous a ajouté à sa liste de contacts"
 
-#: src/hooks/yahoohook.cc:962
+#: src/hooks/yahoohook.cc:965
 msgid "the message was: "
 msgstr "message : "
 
-#: src/hooks/yahoohook.cc:980
+#: src/hooks/yahoohook.cc:983
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail de %s, %s"
 
-#: src/hooks/yahoohook.cc:987
+#: src/hooks/yahoohook.cc:990
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] système : %s"
 
-#: src/hooks/yahoohook.cc:992
+#: src/hooks/yahoohook.cc:995
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] erreur : %s"
 
-#: src/hooks/yahoohook.cc:1079
+#: src/hooks/yahoohook.cc:1082
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] la connexion directe a échoué"
 
@@ -151,7 +151,7 @@ msgstr "+ [jab] impossible de se connecter au serveur"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] désenregistrement de l'agent %s"
 
-#: src/hooks/jabberhook.cc:481 src/hooks/icqhook.cc:1231
+#: src/hooks/jabberhook.cc:481 src/hooks/icqhook.cc:1236
 #: src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "Message d'absence : "
@@ -263,30 +263,30 @@ msgstr "+ [icq] déconnecté"
 msgid "icq disconnection reason"
 msgstr "raison de la déconnexion"
 
-#: src/hooks/icqhook.cc:1158
+#: src/hooks/icqhook.cc:1163
 msgid "The user has accepted your authorization request"
 msgstr "L'utilisateur a accepté votre demande d'autorisation"
 
-#: src/hooks/icqhook.cc:1162
+#: src/hooks/icqhook.cc:1167
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "L'utilisateur a refusé votre demande d'autorisation ; raison : "
 
-#: src/hooks/icqhook.cc:1217
+#: src/hooks/icqhook.cc:1222
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] échec SMS vers %s, %s"
 
-#: src/hooks/icqhook.cc:1220
+#: src/hooks/icqhook.cc:1225
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] échec SMS vers %s"
 
-#: src/hooks/icqhook.cc:1235
+#: src/hooks/icqhook.cc:1240
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] impossible de récupérer le msg d'absence depuis %s, %s"
 
-#: src/hooks/icqhook.cc:1379
+#: src/hooks/icqhook.cc:1384
 msgid "Random Chat User"
 msgstr "Interlocuteur aléatoire"
 
@@ -2982,27 +2982,27 @@ msgstr "Sélectionnez les contacts à déplacer"
 msgid "Mass move selected users to.."
 msgstr "Déplacer en bloc les contacts sélectionnés vers..."
 
-#: src/hooks/msnhook.cc:411
+#: src/hooks/msnhook.cc:415
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] affichage inversé des utilisateurs terminé, %d réponse(s)"
 
-#: src/hooks/msnhook.cc:746
+#: src/hooks/msnhook.cc:759
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 "+ [msn] e-mail non lus : %d dans la boite d'entrée, %d dans les dossiers"
 
-#: src/hooks/msnhook.cc:752
+#: src/hooks/msnhook.cc:765
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail de %s, %s"
 
-#: src/hooks/msnhook.cc:839
+#: src/hooks/msnhook.cc:854
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] impossible de se connecter : "
 
-#: src/hooks/msnhook.cc:861
+#: src/hooks/msnhook.cc:876
 msgid "verify the hostname and port"
 msgstr "vérifiez le nom d'hôte et le port"
 
