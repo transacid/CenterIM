@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.54 2002/05/23 07:42:35 konst Exp $
+* $Id: icqcontact.cc,v 1.55 2002/05/26 07:17:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -329,7 +329,7 @@ void icqcontact::load() {
     }
 }
 
-bool icqcontact::isbirthday() {
+bool icqcontact::isbirthday() const {
     bool ret = false;
     time_t curtime = time(0);
     struct tm tbd, *tcur = localtime(&curtime);
@@ -344,8 +344,6 @@ bool icqcontact::isbirthday() {
     if(tbd.tm_mon == tcur->tm_mon) {
 	ret = true;
     }
-
-    remindbirthday(ret);
 
     return ret;
 }

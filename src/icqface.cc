@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.117 2002/05/15 16:35:16 konst Exp $
+* $Id: icqface.cc,v 1.118 2002/05/26 07:17:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -390,8 +390,11 @@ void icqface::fillcontactlist() {
     icqgroup *g = NULL;
     vector<icqgroup>::iterator ig;
 
-    bool online_added = false, groupchange, prevoffline = false, grouponline = true, ontop, iscurrentnode;
+    bool online_added, prevoffline, grouponline, groupchange,
+	ontop, iscurrentnode, birthday;
 
+    grouponline = true;
+    online_added = prevoffline = false;
     nnode = ngroup = prevgid = 0;
 
     iscurrentnode = mcontacts->isnode(mcontacts->getid(mcontacts->menu.getpos()));
@@ -435,7 +438,9 @@ void icqface::fillcontactlist() {
 
 	if(c->getdesc() == contactroot)
 	    continue;
-	    
+
+	c->remindbirthday(birthday = c->isbirthday());
+
 	if(c->getstatus() == offline)
 	if(conf.gethideoffline())
 	if(!c->getmsgcount()) {
@@ -514,7 +519,8 @@ void icqface::fillcontactlist() {
 	}
 
 	dnick = c->getdispnick();
-	if(c->isbirthday()) dnick += " :)";
+
+	if(birthday) dnick += " :)";
 
 	if(conf.getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
 	    !c->getmsgcount() && sc != '!')

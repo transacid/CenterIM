@@ -75,8 +75,6 @@ class icqcontact {
 	void scanhistory();
 	string tosane(const string &p) const;
 
-	void remindbirthday(bool r);
-
     public:
 	icqcontact(imcontact adesc);
 	~icqcontact();
@@ -128,7 +126,7 @@ class icqcontact {
 	void includeintolist();
 	bool inlist() const;
 
-	bool isbirthday();
+	bool isbirthday() const;
 	string getdirname() const;
 
 	char getshortstatus() const;
@@ -143,6 +141,8 @@ class icqcontact {
 	int getgroupid() const;
 
 	const imcontact getdesc() const;
+
+	void remindbirthday(bool r);
 
 	bool operator > (const icqcontact &acontact) const;
 };
