@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.54 2002/02/07 17:33:56 konst Exp $
+* $Id: icqhook.cc,v 1.55 2002/02/08 16:56:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -732,6 +732,12 @@ void icqhook::messageack_cb(MessageEvent *ev) {
     c = clist.get(ic);
 
     if(ev->isFinished()) {
+	/*
+	*
+	* The FINAL decision.
+	*
+	*/
+	
 	switch(ev->getType()) {
 	    case MessageEvent::SMS:
 		if(!ev->isDelivered()) {
@@ -755,6 +761,12 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 		}
 		break;
 	}
+    } else {
+	/*
+	*
+	* Rejected, but there is still something to be done.
+	*
+	*/
     }
 }
 

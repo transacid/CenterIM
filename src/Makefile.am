@@ -1,5 +1,5 @@
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I/home/konst/devel/kktoolbox/kkstrtext -I/home/konst/devel/kktoolbox/kksystr/include -I/home/konst/devel/kktoolbox/kkconsui/include -I/home/konst/devel/libyahoo -I/home/konst/devel/libmsn -I/home/konst/devel/libicq2000 -I$(top_srcdir)/intl
-CPPFLAGS = -DDEBUG
+CPPFLAGS = -DDEBUG -DPACKETDEBUG
 bin_PROGRAMS = centericq
 centericq_SOURCES = centermain.cc icqconf.cc icqcontact.cc icqcontacts.cc icqdialogs.cc icqface.cc icqmlist.cc icqgroup.cc icqgroups.cc imcontact.cc accountmanager.cc imcontroller.cc centericq.cc eventmanager.cc imevents.cc imlogger.cc
 centericq_LDFLAGS = -L/home/konst/devel/kktoolbox/kkstrtext -L/home/konst/devel/kktoolbox/kksystr -L/home/konst/devel/kktoolbox/kkconsui -L/home/konst/devel/libyahoo -L/home/konst/devel/libmsn -L/home/konst/devel/libicq2000
