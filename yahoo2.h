@@ -52,16 +52,16 @@ enum yahoo_log_level  yahoo_get_log_level( void );
  * either strings or ints, depending on the key.  Values passed in
  * are copied, so you can use const/auto/static/pointers/whatever
  * you want.  Parameters are:
- * 	NAME			TYPE		DEFAULT
- *	pager_host		char *		scs.msg.yahoo.com
- *	pager_port		int		5050
- *	filetransfer_host	char *		filetransfer.msg.yahoo.com
- *	filetransfer_port	int		80
- *	webcam_host		char *		webcam.yahoo.com
- *	webcam_port		int		5100
- *	webcam_description	char *		""
- *	local_host		char *		""
- *	conn_type		int		Y_WCM_DSL
+ *      NAME                    TYPE            DEFAULT
+ *      pager_host              char *          scs.msg.yahoo.com
+ *      pager_port              int             5050
+ *      filetransfer_host       char *          filetransfer.msg.yahoo.com
+ *      filetransfer_port       int             80
+ *      webcam_host             char *          webcam.yahoo.com
+ *      webcam_port             int             5100
+ *      webcam_description      char *          ""
+ *      local_host              char *          ""
+ *      conn_type               int             Y_WCM_DSL
  *
  * You should set at least local_host if you intend to use webcams
  */
