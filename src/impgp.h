@@ -33,7 +33,7 @@ class impgp {
 	string verify(string sign, const string &orig);
 
 	string decrypt(string text, protocolname pname);
-	string encrypt(const string &text, const string &keyid);
+	string encrypt(const string &text, const string &keyid, protocolname pname);
 
 	bool enabled(protocolname p) const;
 	bool enabled(const imcontact &ic) const;

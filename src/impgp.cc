@@ -184,23 +184,24 @@ string impgp::decrypt(string text, protocolname pname) {
     return r;
 }
 
-string impgp::encrypt(const string &text, const string &keyid) {
+string impgp::encrypt(const string &text, const string &keyid, protocolname pname) {
     string r;
     gpgme_key_t key;
     gpgme_data_t in, out;
     size_t n;
+    gpgme_error_t err;
 
     if(ctx) {
 	gpgme_set_protocol(ctx, GPGME_PROTOCOL_OpenPGP);
 	gpgme_set_textmode(ctx, 0);
 	gpgme_set_armor(ctx, 1);
 
-	if(!gpgme_get_key(ctx, keyid.c_str(), &key, 0)) {
+	if(!(err = gpgme_get_key(ctx, keyid.c_str(), &key, 0))) {
 	    gpgme_key_t keys[] = { key, 0 };
 
-	    if(!gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0)) {
-		if(!gpgme_data_new(&out)) {
-		    if(!gpgme_op_encrypt(ctx, keys, gpgme_encrypt_flags_t(0), in, out)) {
+	    if(!(err = gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0))) {
+		if(!(err = gpgme_data_new(&out))) {
+		    if(!(err = gpgme_op_encrypt(ctx, keys, gpgme_encrypt_flags_t(0), in, out))) {
 			auto_ptr<char> p(gpgme_data_release_and_get_mem(out, &n));
 			r = p.get();
 			strip(r);
@@ -212,6 +213,12 @@ string impgp::encrypt(const string &text, const string &keyid) {
 	    }
 	    gpgme_key_release(key);
 	}
+    }
+
+    if(err && err != GPG_ERR_CANCELED) {
+	face.log((string) "+ [" + conf.getprotocolname(pname) + "] " +
+	    _("PGP encrypt error: ") + gpgme_strerror(err));
+	gethook(pname).disconnect();
     }
 
     return r;

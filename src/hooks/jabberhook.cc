@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.79 2005/01/24 20:39:07 konst Exp $
+* $Id: jabberhook.cc,v 1.80 2005/01/26 19:36:50 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -264,7 +264,7 @@ bool jabberhook::send(const imevent &ev) {
 
 #ifdef HAVE_GPGME
 	if(pgp.enabled(ev.getcontact())) {
-	    enc = pgp.encrypt(text, c->getpgpkey());
+	    enc = pgp.encrypt(text, c->getpgpkey(), proto);
 	    text = "This message is encrypted.";
 	}
 #endif
