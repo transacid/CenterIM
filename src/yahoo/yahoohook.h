@@ -2,8 +2,9 @@
 #define __YAHOOHOOK_H__
 
 #include "icqconf.h"
+#include "abstracthook.h"
 
-class yahoohook {
+class yahoohook: public abstracthook {
     protected:
 	struct yahoo_context *yahoo;
 	bool fonline;

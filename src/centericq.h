@@ -30,6 +30,8 @@ class centericq {
 
 	const string quotemsg(const string text);
 
+	void setauto(imstatus astatus);
+
     public:
 	centericq();
 	~centericq();

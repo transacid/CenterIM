@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.7 2001/11/16 14:00:19 konst Exp $
+* $Id: icqhook.cc,v 1.8 2001/11/19 20:12:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -622,10 +622,9 @@ unsigned int icqhook::getfinduin(int pos) {
 
 void icqhook::exectimers() {
     time_t timer_current = time(0);
-    int away, na, period;
+    int period;
 
     if(logged()) {
-	conf.getauto(away, na);
 	period = timer_current-timer_keepalive;
 
 	if((!seq_keepalive &&
@@ -656,34 +655,6 @@ void icqhook::exectimers() {
 	    offl.scan(0, osexpired);
 	    time(&timer_resolve);
 	}
-/*
-	else
-	if(away &&
-	(timer_current-cicq.getkeypress() > away*60) &&
-	(icql.icq_Status != STATUS_AWAY) &&
-	(icql.icq_Status != STATUS_NA) &&
-	(icql.icq_Status != STATUS_INVISIBLE)) {
-	    icq_ChangeStatus(&icql, STATUS_AWAY);
-	    face.log(_("+ [icq] automatically set away"));
-	    face.update();
-	}
-	else
-	if(na &&
-	(timer_current-cicq.getkeypress() > na*60) &&
-	(icql.icq_Status != STATUS_NA) &&
-	(icql.icq_Status != STATUS_INVISIBLE)) {
-	    icq_ChangeStatus(&icql, STATUS_NA);
-	    face.log(_("+ [icq] automatically set N/A"));
-	    face.update();
-	}
-	else
-	if((icql.icq_Status != manualstatus) &&
-	(timer_current-cicq.getkeypress() < MINCK0(away, na)*60)) {
-	    icq_ChangeStatus(&icql, manualstatus);
-	    face.log(_("+ [icq] the user is back"));
-	    face.update();
-	}
-*/
 
 	if((timer_current-timer_ack > PERIOD_DISCONNECT) || (n_keepalive > 3)) {
 	    icq_Logout(&icql);

@@ -7,6 +7,7 @@
 #include "cmenus.h"
 
 #include "icqconf.h"
+#include "abstracthook.h"
 
 #define PERIOD_KEEPALIVE        100
 #define PERIOD_SELECT           1
@@ -41,7 +42,7 @@ struct icqfileassociation {
     string fname;
 };
 
-class icqhook {
+class icqhook: public abstracthook {
     protected:
 	bool flogged, connecting, factive;
 	int newuin, n_keepalive;

@@ -110,7 +110,7 @@ unsigned long yahoohook::sendmessage(const icqcontact *c, const string atext) {
     string::iterator is;
 
     for(is = text.begin(); is != text.end(); is++)
-	if(*is < 32) *is = ' ';
+	if((unsigned) *is < 32) *is = ' ';
 
     if(c->getstatus() != offline) {
 	yahoo_cmd_msg(yahoo, conf.getourid(::yahoo).nickname.c_str(),

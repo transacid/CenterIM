@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.34 2001/11/16 14:00:17 konst Exp $
+* $Id: centericq.cc,v 1.35 2001/11/19 20:12:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -680,12 +680,60 @@ bool centericq::idle(int options = 0) {
     return keypressed;
 }
 
+void centericq::setauto(imstatus astatus) {
+    protocolname pname;
+    imstatus stcurrent;
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	abstracthook &hook = gethook(pname);
+	stcurrent = hook.getstatus();
+
+	if(hook.logged())
+	switch(stcurrent) {
+	    case invisible:
+	    case offline:
+		break;
+
+	    default:
+		if(astatus == away && stcurrent == notavail)
+		    break;
+
+		if(astatus != stcurrent) {
+		    hook.setautostatus(astatus);
+		    face.log(_("+ [%s] automatically set %s"),
+			conf.getprotocolname(pname).c_str(),
+			astatus == away ? _("away") : _("n/a"));
+		}
+		break;
+	}
+    }
+
+    face.update();
+}
+
 void centericq::exectimers() {
     time_t timer_current = time(0);
+    int paway, pna;
 
     if(!conf.getourid(icq).empty()) ihook.exectimers();
     if(!conf.getourid(yahoo).empty()) yhook.exectimers();
 
+    conf.getauto(paway, pna);
+
+    if(paway && (timer_current-cicq.getkeypress() > paway*60)) {
+	setauto(away);
+    } else if(na && (timer_current-cicq.getkeypress() > pna*60)) {
+	setauto(notavail);
+    }
+
+/*
+    else  &&
+    (timer_current-cicq.getkeypress() < MINCK0(away, na)*60)) {
+	icq_ChangeStatus(&icql, manualstatus);
+	face.log(_("+ [icq] the user is back"));
+	face.update();
+    }
+*/
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	cicq.checkmail();
 	time(&timer_checkmail);
