@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.73 2002/06/03 15:15:11 konst Exp $
+* $Id: icqdialogs.cc,v 1.74 2002/06/25 13:46:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -239,8 +239,8 @@ bool icqface::finddialog(imsearchparams &s) {
 
 	    case 1:
 		tname = inputstr(_("New profile name: "));
-		proceed = !tname.empty();
 
+		if(proceed = !tname.empty())
 		if(ts.load(tname))
 		    proceed = ask(_("The profile with this name already exists. Do you want to overwrite it?"),
 			ASK_YES | ASK_NO, ASK_NO) == ASK_YES;
