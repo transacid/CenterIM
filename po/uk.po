@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.2\n"
-"POT-Creation-Date: 2003-09-10 00:55+0300\n"
+"POT-Creation-Date: 2003-10-01 11:30+0300\n"
 "PO-Revision-Date: 2002-06-12 12:15+0300\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -15,373 +15,8 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/centericq.cc:151
-msgid "password: "
-msgstr "пароль: "
-
-#: src/centericq.cc:187
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M меню користувача, F3/S зм╕на статусу, F4/G головне меню, Q вих╕д"
-
-#: src/centericq.cc:267
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "╤гнорувати пов╕домлення в╕д %s?"
-
-#: src/centericq.cc:271
-#, fuzzy, c-format
-msgid "Remove %s from the contact list as well?"
-msgstr "+ [aim] видаля╓мо %s з контакт╕в"
-
-#: src/centericq.cc:305
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Справд╕ видалити %s?"
-
-#: src/centericq.cc:313
-msgid "New nickname to show: "
-msgstr "Показувати п╕д такою Кличкою: "
-
-#: src/centericq.cc:322
-msgid "Select a group to move the user to"
-msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
-
-#: src/centericq.cc:340
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ не можу витягти автопов╕домлення, коли не п╕дключен╕ до серверу"
-
-#: src/centericq.cc:404
-#, fuzzy
-msgid "! cannot connect, free disk space is less than 10k"
-msgstr "! на диску менше 10К в╕льного простору, в╕дключ╓мося"
-
-#: src/centericq.cc:436 src/accountmanager.cc:207
-msgid "away message"
-msgstr "автопов╕домлення"
-
-#: src/centericq.cc:447
-#, c-format
-msgid "! support for %s was disabled at build time"
-msgstr ""
-
-#: src/centericq.cc:671
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] нова пошта! %d лист╕в"
-
-#: src/centericq.cc:674
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ останн╓ пов╕домлення в╕д %s"
-
-#: src/centericq.cc:718
-#, c-format
-msgid "+ the %s configuration was changed, reloaded"
-msgstr ""
-
-#: src/centericq.cc:772
-msgid "! another running copy of centericq detected"
-msgstr "! Вже одна коп╕я centericq працю╓"
-
-#: src/centericq.cc:773
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! це може призвести до проблем. номер процесу %lu"
-
-#: src/centericq.cc:897
-msgid "Mobile number: "
-msgstr "Номер моб╕ли: "
-
-#: src/centericq.cc:1038
-msgid "directory to save the file(s) to: "
-msgstr ""
-
-#: src/centericq.cc:1045
-msgid "The specified directory is not writable"
-msgstr ""
-
-#: src/centericq.cc:1049
-msgid "The specified directory does not exist"
-msgstr ""
-
-#: src/centericq.cc:1184
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ ╕стор╕я замовчу╓ про %s"
-
-#: src/centericq.cc:1210
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s вже у контакт-л╕ст╕"
-
-#: src/centericq.cc:1216
-msgid "Select a group to add the user to"
-msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
-
-#: src/centericq.cc:1227
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s додано у контакт-л╕ст"
-
-#: src/centericq.cc:1298
-msgid "+ the user is back"
-msgstr "+ користувач повернувся"
-
-#: src/centericq.cc:1314
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] статус в╕дновлено"
-
-#: src/centericq.cc:1329
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] авто зм╕на статусу: %s"
-
-#: src/centericq.cc:1331
-msgid "away"
-msgstr "в╕д╕йшoв"
-
-#: src/centericq.cc:1331
-msgid "n/a"
-msgstr "н/д"
-
-#: src/centericq.cc:1457
-msgid "! free disk space is less than 10k, going offline"
-msgstr "! на диску менше 10К в╕льного простору, в╕дключ╓мося"
-
-#: src/centericq.cc:1458
-msgid "! otherwise we can lose events and configuration"
-msgstr "! ╕накше можна втратити конф╕гурац╕ю та обл╕к под╕й"
-
-#: src/centericq.cc:1497
-msgid "Invite to conference.."
-msgstr ""
-
-#: src/hooks/yahoohook.cc:117
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] п╕д'╓днання до серверу"
-
-#: src/hooks/yahoohook.cc:125
-#, fuzzy
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] дода╓мо %s в контакти"
-
-#: src/hooks/yahoohook.cc:128 src/hooks/msnhook.cc:744
-msgid "could not resolve hostname"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:129
-msgid "could not create socket"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:130
-msgid "verify the pager host and port entered"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:167
-#, fuzzy
-msgid "+ [yahoo] disconnected"
-msgstr "+ [icq] в╕д'╓днано"
-
-#: src/hooks/yahoohook.cc:292
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] дода╓мо %s в контакти"
-
-#: src/hooks/yahoohook.cc:312
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] видаля╓мо %s з контакт╕в"
-
-#: src/hooks/yahoohook.cc:326
-#, fuzzy, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] п╕д'╓днання до серверу"
-
-#: src/hooks/yahoohook.cc:548
-#, fuzzy, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr "+ [irc] отримання списку каналу завершено, знайдено %d користувач╕в"
-
-#: src/hooks/yahoohook.cc:569
-msgid "Please join my conference."
-msgstr ""
-
-#: src/hooks/yahoohook.cc:580
-msgid "Custom status message:"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:584
-#, fuzzy, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
-
-#: src/hooks/yahoohook.cc:610
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] законектилися"
-
-#: src/hooks/yahoohook.cc:628
-#, fuzzy
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "нев╕рн╕ пароль та ╕м'я користувача"
-
-#: src/hooks/yahoohook.cc:633
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:634
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:700
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:705
-msgid "Current conference members are: "
-msgstr ""
-
-#: src/hooks/yahoohook.cc:723
-msgid "Auto-joined the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:733
-#, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:743
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:758
-#, c-format
-msgid "The user %s has left the conference"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:790 src/hooks/icqhook.cc:1158
-#: src/hooks/msnhook.cc:556
-#, fuzzy
-msgid "The user has added you to his/her contact list"
-msgstr "* Користувач додав Вас до свого контакт-л╕ста"
-
-#: src/hooks/yahoohook.cc:794
-#, fuzzy
-msgid "the message was: "
-msgstr "* Автопов╕домлення:"
-
-#: src/hooks/yahoohook.cc:806
-#, fuzzy, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] законектилися"
-
-#: src/hooks/yahoohook.cc:806
-#, fuzzy, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] законектилися"
-
-#: src/hooks/yahoohook.cc:819
-#, fuzzy, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [msn] електронна пошта в╕д %s <%s>, %s"
-
-#: src/hooks/yahoohook.cc:826
-#, fuzzy, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] пов╕домлення не принято"
-
-#: src/hooks/yahoohook.cc:831
-#, fuzzy, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] пов╕домлення не принято"
-
-#: src/hooks/jabberhook.cc:108
-#, fuzzy
-msgid "+ [jab] connecting to the server"
-msgstr "+ [aim] п╕д'╓днання до серверу"
-
-#: src/hooks/jabberhook.cc:158
-#, fuzzy
-msgid "+ [jab] unable to connect to the server"
-msgstr "+ [aim] не можу законектитися"
-
-#: src/hooks/jabberhook.cc:286
-#, fuzzy, c-format
-msgid "+ [jab] adding %s to the contacts"
-msgstr "+ [aim] дода╓мо %s в контакти"
-
-#: src/hooks/jabberhook.cc:347
-#, fuzzy, c-format
-msgid "+ [jab] removing %s from the contacts"
-msgstr "+ [aim] видаля╓мо %s з контакт╕в"
-
-#: src/hooks/jabberhook.cc:423 src/hooks/icqhook.cc:1212
-#: src/hooks/irchook.cc:572
-#, fuzzy
-msgid "Away message:"
-msgstr "* Автопов╕домлення:"
-
-#: src/hooks/jabberhook.cc:425
-#, fuzzy, c-format
-msgid "+ [jab] no away message from %s, %s"
-msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
-
-#: src/hooks/jabberhook.cc:453
-msgid "Wrong nickname given, cannot register"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:470
-#, fuzzy
-msgid "Unable to connect"
-msgstr "не можу п╕д'╓днатися до сервера"
-
-#: src/hooks/jabberhook.cc:704
-#, fuzzy, c-format
-msgid "+ [jab] conference list fetching finished, %d found"
-msgstr "+ [irc] отримання списку каналу завершено, знайдено %d користувач╕в"
-
-#: src/hooks/jabberhook.cc:758
-#, fuzzy, c-format
-msgid "+ [jab] search finished, %d found"
-msgstr "+ [icq] пошук завершено, знайдено %d користувач╕в"
-
-#: src/hooks/jabberhook.cc:813
-#, fuzzy
-msgid "+ [jab] logged in"
-msgstr "+ [aim] законектилися"
-
-#: src/hooks/jabberhook.cc:1171 src/hooks/irchook.cc:1231
-#, c-format
-msgid "The remote is using %s"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:1213
-#, fuzzy
-msgid "+ [jab] disconnected"
-msgstr "+ [icq] в╕д'╓днано"
-
-#: src/hooks/jabberhook.cc:1351
-msgid "Default Jabber conference server"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:1400
-#, fuzzy, c-format
-msgid "+ [jab] error %d: %s"
-msgstr "+ [yahoo] пов╕домлення не принято"
-
-#: src/hooks/jabberhook.cc:1469
-msgid "The user wants to subscribe to your network presence updates"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:1478
-msgid ""
-"The user has removed you from his contact list (unsubscribed you, using the "
-"Jabber language)"
+#: src/hooks/HTTPClient.cc:276
+msgid "Timed out"
 msgstr ""
 
 #: src/hooks/aimhook.cc:64
@@ -441,81 +76,93 @@ msgstr "+ [aim] пароль в╕д╕слано"
 msgid "+ [icq] connecting to the server"
 msgstr "+ [icq] п╕д'╓днання до серверу"
 
-#: src/hooks/icqhook.cc:1028
+#: src/hooks/icqhook.cc:1025
 msgid "+ [icq] logged in"
 msgstr "+ [icq] законектилися"
 
-#: src/hooks/icqhook.cc:1055
+#: src/hooks/icqhook.cc:1052
 msgid "as requested"
 msgstr "як запитувалося"
 
-#: src/hooks/icqhook.cc:1056
+#: src/hooks/icqhook.cc:1053
 msgid "socket problems"
 msgstr "проблеми socket'╕в"
 
-#: src/hooks/icqhook.cc:1057
+#: src/hooks/icqhook.cc:1054
 msgid "bad username"
 msgstr "нев╕рне ╕м'я користувача"
 
-#: src/hooks/icqhook.cc:1058
+#: src/hooks/icqhook.cc:1055
 msgid "turboing"
 msgstr "зачаст╕ спроби"
 
-#: src/hooks/icqhook.cc:1059
+#: src/hooks/icqhook.cc:1056
 msgid "bad password"
 msgstr "нев╕рний пароль"
 
-#: src/hooks/icqhook.cc:1060
+#: src/hooks/icqhook.cc:1057
 msgid "username and password mismatch"
 msgstr "нев╕рн╕ пароль та ╕м'я користувача"
 
-#: src/hooks/icqhook.cc:1061
+#: src/hooks/icqhook.cc:1058
 msgid "already logged"
 msgstr "вже в мереж╕"
 
-#: src/hooks/icqhook.cc:1074
+#: src/hooks/icqhook.cc:1071
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] в╕д'╓днано"
 
-#: src/hooks/icqhook.cc:1080
+#: src/hooks/icqhook.cc:1077
 msgid "icq disconnection reason"
 msgstr "причина в╕д'╓днання в╕д icq"
 
-#: src/hooks/icqhook.cc:1139
+#: src/hooks/icqhook.cc:1136
 #, fuzzy
 msgid "The user has accepted your authorization request"
 msgstr "* Користувач додав Вас до свого контакт-л╕ста"
 
-#: src/hooks/icqhook.cc:1143
+#: src/hooks/icqhook.cc:1140
 #, fuzzy
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "Порожн╕й запит авторизац╕╖"
 
-#: src/hooks/icqhook.cc:1198
+#: src/hooks/icqhook.cc:1155 src/hooks/msnhook.cc:539
+#: src/hooks/yahoohook.cc:881
+#, fuzzy
+msgid "The user has added you to his/her contact list"
+msgstr "* Користувач додав Вас до свого контакт-л╕ста"
+
+#: src/hooks/icqhook.cc:1195
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] зб╕й в╕дсилання SMS до %s, %s"
 
-#: src/hooks/icqhook.cc:1201
+#: src/hooks/icqhook.cc:1198
 #, fuzzy, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] зб╕й в╕дсилання SMS до %s, %s"
 
-#: src/hooks/icqhook.cc:1216
+#: src/hooks/icqhook.cc:1209 src/hooks/irchook.cc:572
+#: src/hooks/jabberhook.cc:425
+#, fuzzy
+msgid "Away message:"
+msgstr "* Автопов╕домлення:"
+
+#: src/hooks/icqhook.cc:1213
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
 
-#: src/hooks/icqhook.cc:1363
+#: src/hooks/icqhook.cc:1360
 msgid "Random Chat User"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1393
+#: src/hooks/icqhook.cc:1390
 #, fuzzy, c-format
 msgid "+ [icq] search finished, %d found"
 msgstr "+ [icq] пошук завершено, знайдено %d користувач╕в"
 
-#: src/hooks/icqhook.cc:1433
+#: src/hooks/icqhook.cc:1430
 #, fuzzy
 msgid "+ [icq] password was changed successfully"
 msgstr "+ [aim] вдала зм╕на паролю"
@@ -580,6 +227,11 @@ msgstr ""
 msgid "PING reply from the user: %d second(s)"
 msgstr ""
 
+#: src/hooks/irchook.cc:1231 src/hooks/jabberhook.cc:1173
+#, c-format
+msgid "The remote is using %s"
+msgstr ""
+
 #: src/hooks/irchook.cc:1345
 #, fuzzy, c-format
 msgid "%s has joined."
@@ -625,112 +277,754 @@ msgstr ""
 msgid "%s has deopped us."
 msgstr ""
 
+#: src/hooks/jabberhook.cc:108
+#, fuzzy
+msgid "+ [jab] connecting to the server"
+msgstr "+ [aim] п╕д'╓днання до серверу"
+
+#: src/hooks/jabberhook.cc:160
+#, fuzzy
+msgid "+ [jab] unable to connect to the server"
+msgstr "+ [aim] не можу законектитися"
+
+#: src/hooks/jabberhook.cc:288
+#, fuzzy, c-format
+msgid "+ [jab] adding %s to the contacts"
+msgstr "+ [aim] дода╓мо %s в контакти"
+
+#: src/hooks/jabberhook.cc:349
+#, fuzzy, c-format
+msgid "+ [jab] removing %s from the contacts"
+msgstr "+ [aim] видаля╓мо %s з контакт╕в"
+
+#: src/hooks/jabberhook.cc:427
+#, fuzzy, c-format
+msgid "+ [jab] no away message from %s, %s"
+msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
+
+#: src/hooks/jabberhook.cc:455
+msgid "Wrong nickname given, cannot register"
+msgstr ""
+
+#: src/hooks/jabberhook.cc:472
+#, fuzzy
+msgid "Unable to connect"
+msgstr "не можу п╕д'╓днатися до сервера"
+
+#: src/hooks/jabberhook.cc:706
+#, fuzzy, c-format
+msgid "+ [jab] conference list fetching finished, %d found"
+msgstr "+ [irc] отримання списку каналу завершено, знайдено %d користувач╕в"
+
+#: src/hooks/jabberhook.cc:760
+#, fuzzy, c-format
+msgid "+ [jab] search finished, %d found"
+msgstr "+ [icq] пошук завершено, знайдено %d користувач╕в"
+
+#: src/hooks/jabberhook.cc:815
+#, fuzzy
+msgid "+ [jab] logged in"
+msgstr "+ [aim] законектилися"
+
+#: src/hooks/jabberhook.cc:1215
+#, fuzzy
+msgid "+ [jab] disconnected"
+msgstr "+ [icq] в╕д'╓днано"
+
+#: src/hooks/jabberhook.cc:1353
+msgid "Default Jabber conference server"
+msgstr ""
+
+#: src/hooks/jabberhook.cc:1402
+#, fuzzy, c-format
+msgid "+ [jab] error %d: %s"
+msgstr "+ [yahoo] пов╕домлення не принято"
+
+#: src/hooks/jabberhook.cc:1471
+msgid "The user wants to subscribe to your network presence updates"
+msgstr ""
+
+#: src/hooks/jabberhook.cc:1480
+msgid ""
+"The user has removed you from his contact list (unsubscribed you, using the "
+"Jabber language)"
+msgstr ""
+
+#: src/hooks/ljhook.cc:61
+#, fuzzy
+msgid "+ [lj] connecting to the server"
+msgstr "+ [aim] п╕д'╓днання до серверу"
+
+#: src/hooks/ljhook.cc:92
+#, fuzzy
+msgid "+ [lj] disconnected"
+msgstr "+ [icq] в╕д'╓днано"
+
+#: src/hooks/ljhook.cc:339
+#, fuzzy
+msgid "cannot connect"
+msgstr "+ [yahoo] дода╓мо %s в контакти"
+
+#: src/hooks/ljhook.cc:340
+#, fuzzy, c-format
+msgid "+ [lj] HTTP failed: %s"
+msgstr "+ [aim] невдале п╕д'╓днання: %s"
+
+#: src/hooks/ljhook.cc:366
+#, fuzzy
+msgid "+ [lj] logged in"
+msgstr "+ [aim] законектилися"
+
+#: src/hooks/ljhook.cc:376
+#, fuzzy, c-format
+msgid "+ [lj] login failed: %s"
+msgstr "+ [aim] невдале п╕д'╓днання: %s"
+
+#: src/hooks/ljhook.cc:380
+#, c-format
+msgid "+ [lj] posted successully, the id is %s"
+msgstr ""
+
+#: src/hooks/ljhook.cc:382
+#, fuzzy, c-format
+msgid "+ [lj] post error: %s"
+msgstr "+ [yahoo] пов╕домлення не принято"
+
 #: src/hooks/msnhook.cc:121
 msgid "+ [msn] connecting to the server"
 msgstr "+ [msn] п╕д'╓днання до серверу"
 
-#: src/hooks/msnhook.cc:144
-#, fuzzy, c-format
-msgid "+ [msn] %s: stopped typing"
-msgstr "+ [yahoo] законектилися"
-
-#: src/hooks/msnhook.cc:323
+#: src/hooks/msnhook.cc:306
 #, c-format
 msgid "+ [msn] removing %s from the contacts"
 msgstr "+ [msn] видаля╓мо %s з контакт╕в"
 
-#: src/hooks/msnhook.cc:363
+#: src/hooks/msnhook.cc:346
 #, fuzzy, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [irc] отримання списку каналу завершено, знайдено %d користувач╕в"
 
-#: src/hooks/msnhook.cc:635
-#, fuzzy, c-format
-msgid "+ [msn] %s: started typing"
-msgstr "+ [yahoo] законектилися"
-
-#: src/hooks/msnhook.cc:643
+#: src/hooks/msnhook.cc:622
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:650
+#: src/hooks/msnhook.cc:629
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] електронна пошта в╕д %s <%s>, %s"
 
-#: src/hooks/msnhook.cc:711
+#: src/hooks/msnhook.cc:690
 msgid "+ [msn] logged in"
 msgstr "+ [msn] законектилися"
 
-#: src/hooks/msnhook.cc:726
+#: src/hooks/msnhook.cc:704
 msgid "+ [msn] disconnected"
 msgstr "+ [msn] в╕д'╓днано"
 
-#: src/hooks/msnhook.cc:740
+#: src/hooks/msnhook.cc:718
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] дода╓мо %s в контакти"
 
-#: src/hooks/msnhook.cc:758
+#: src/hooks/msnhook.cc:722 src/hooks/yahoohook.cc:159
+msgid "could not resolve hostname"
+msgstr ""
+
+#: src/hooks/msnhook.cc:736
 msgid "verify the hostname and port"
 msgstr ""
 
-#: src/icqcontact.cc:708
+#: src/hooks/rsshook.cc:282
+msgid "coudln't fetch"
+msgstr ""
+
+#: src/hooks/rsshook.cc:311
+msgid "wrong XML"
+msgstr ""
+
+#: src/hooks/rsshook.cc:314
+msgid "no <rss> tag found"
+msgstr ""
+
+#: src/hooks/rsshook.cc:321
+msgid "no <channel> tag found"
+msgstr ""
+
+#: src/hooks/rsshook.cc:328
+#, fuzzy
+msgid "wrong <channel> tag"
+msgstr "На каналах: "
+
+#: src/hooks/rsshook.cc:337
+msgid "success"
+msgstr ""
+
+#: src/hooks/rsshook.cc:356
+#, fuzzy
+msgid "Title: "
+msgstr "Посада"
+
+#: src/hooks/rsshook.cc:357
+msgid "Published on: "
+msgstr ""
+
+#: src/hooks/rsshook.cc:358
+#, fuzzy
+msgid "Category: "
+msgstr "М╕сто: "
+
+#: src/hooks/rsshook.cc:359
+#, fuzzy
+msgid "Author: "
+msgstr "авторизац╕я"
+
+#: src/hooks/rsshook.cc:361
+#, fuzzy
+msgid "Description: "
+msgstr "Посада: "
+
+#: src/hooks/rsshook.cc:362
+#, fuzzy
+msgid "Link: "
+msgstr " uin: "
+
+#: src/hooks/rsshook.cc:363
+#, fuzzy
+msgid "Comments: "
+msgstr "коментар: "
+
+#: src/hooks/yahoohook.cc:145
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] п╕д'╓днання до серверу"
+
+#: src/hooks/yahoohook.cc:156
+#, fuzzy
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] дода╓мо %s в контакти"
+
+#: src/hooks/yahoohook.cc:160
+msgid "could not create socket"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:161
+msgid "verify the pager host and port entered"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:266
+#, fuzzy
+msgid "+ [yahoo] disconnected"
+msgstr "+ [icq] в╕д'╓днано"
+
+#: src/hooks/yahoohook.cc:368
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] дода╓мо %s в контакти"
+
+#: src/hooks/yahoohook.cc:390
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] видаля╓мо %s з контакт╕в"
+
+#: src/hooks/yahoohook.cc:409
+#, fuzzy, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] п╕д'╓днання до серверу"
+
+#: src/hooks/yahoohook.cc:617
+#, fuzzy, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr "+ [irc] отримання списку каналу завершено, знайдено %d користувач╕в"
+
+#: src/hooks/yahoohook.cc:636
+msgid "Please join my conference."
+msgstr ""
+
+#: src/hooks/yahoohook.cc:649
+msgid "Custom status message:"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:653
+#, fuzzy, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
+
+#: src/hooks/yahoohook.cc:679
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] законектилися"
+
+#: src/hooks/yahoohook.cc:697
+#, fuzzy
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "нев╕рн╕ пароль та ╕м'я користувача"
+
+#: src/hooks/yahoohook.cc:702
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:703
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:707
+#, fuzzy
+msgid "+ [yahoo] another logon detected"
+msgstr "+ [yahoo] дода╓мо %s в контакти"
+
+#: src/hooks/yahoohook.cc:786
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:791
+msgid "Current conference members are: "
+msgstr ""
+
+#: src/hooks/yahoohook.cc:811
+msgid "Auto-joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:821
+#, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:831
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:846
+#, c-format
+msgid "The user %s has left the conference"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:885
+#, fuzzy
+msgid "the message was: "
+msgstr "* Автопов╕домлення:"
+
+#: src/hooks/yahoohook.cc:903
+#, fuzzy, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [msn] електронна пошта в╕д %s <%s>, %s"
+
+#: src/hooks/yahoohook.cc:910
+#, fuzzy, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] пов╕домлення не принято"
+
+#: src/hooks/yahoohook.cc:915
+#, fuzzy, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] пов╕домлення не принято"
+
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " Розпорядник акаунт╕в "
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:212 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:222 src/icqdialogs.cc:687 src/icqdialogs.cc:1094
+#: src/imcontroller.cc:71
+msgid "Change"
+msgstr "Зм╕нити"
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:687 src/icqdialogs.cc:1094
+#: src/icqdialogs.cc:1420
+msgid "Done"
+msgstr "Гаразд"
+
+#: src/accountmanager.cc:94
+#, c-format
+msgid " Server : %s "
+msgstr " Сервер : %s "
+
+#: src/accountmanager.cc:97
+#, fuzzy, c-format
+msgid " Secured : %s "
+msgstr " Сервер : %s "
+
+#: src/accountmanager.cc:103
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:108
+#, c-format
+msgid " Login : %s "
+msgstr " Лог╕н : %s "
+
+#: src/accountmanager.cc:114
+#, fuzzy, c-format
+msgid " Password (optional) : %s "
+msgstr " Новий пароль : %s "
+
+#: src/accountmanager.cc:114
+#, c-format
+msgid " Password : %s "
+msgstr " Пароль : %s "
+
+#: src/accountmanager.cc:118
+msgid " Register "
+msgstr " Заре╓струватися "
+
+#: src/accountmanager.cc:124
+#, fuzzy
+msgid " Change nickname "
+msgstr " Кличка "
+
+#: src/accountmanager.cc:125
+msgid " Update user details "
+msgstr " Поновити Ваше ╕нфо "
+
+#: src/accountmanager.cc:128
+msgid " Set away message "
+msgstr " Над╕слати автопов╕домлення  "
+
+#: src/accountmanager.cc:131
+#, fuzzy
+msgid " Synchronize contact list "
+msgstr " Контакт-л╕ст "
+
+#: src/accountmanager.cc:133
+msgid " Drop "
+msgstr " В╕дкинути "
+
+#: src/accountmanager.cc:151
+msgid " user name: "
+msgstr " ╕м'я користувача: "
+
+#: src/accountmanager.cc:156
+msgid " uin: "
+msgstr " uin: "
+
+#: src/accountmanager.cc:161
+msgid " password: "
+msgstr " пароль: "
+
+#: src/accountmanager.cc:169
+msgid "Drop the account information first!"
+msgstr "Спочатку треба скинути ╕нформац╕ю про акаунт"
+
+#: src/accountmanager.cc:183
+msgid "You have to disconnect the service first!"
+msgstr "Спочатку треба в╕д'╓днатися в╕д серв╕су!"
+
+#: src/accountmanager.cc:192
+msgid " server address: "
+msgstr " адреса серверу: "
+
+#: src/accountmanager.cc:207 src/centericq.cc:436
+msgid "away message"
+msgstr "автопов╕домлення"
+
+#: src/accountmanager.cc:214
+#, fuzzy
+msgid "You must be logged in to preform the synchronization"
+msgstr "+ сл╕д п╕д'╓днатися спочатку"
+
+#: src/centericq.cc:151
+msgid "password: "
+msgstr "пароль: "
+
+#: src/centericq.cc:187
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M меню користувача, F3/S зм╕на статусу, F4/G головне меню, Q вих╕д"
+
+#: src/centericq.cc:267
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "╤гнорувати пов╕домлення в╕д %s?"
+
+#: src/centericq.cc:271
+#, fuzzy, c-format
+msgid "Remove %s from the contact list as well?"
+msgstr "+ [aim] видаля╓мо %s з контакт╕в"
+
+#: src/centericq.cc:305
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Справд╕ видалити %s?"
+
+#: src/centericq.cc:313
+msgid "New nickname to show: "
+msgstr "Показувати п╕д такою Кличкою: "
+
+#: src/centericq.cc:322
+msgid "Select a group to move the user to"
+msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
+
+#: src/centericq.cc:340
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ не можу витягти автопов╕домлення, коли не п╕дключен╕ до серверу"
+
+#: src/centericq.cc:404
+#, fuzzy
+msgid "! cannot connect, free disk space is less than 10k"
+msgstr "! на диску менше 10К в╕льного простору, в╕дключ╓мося"
+
+#: src/centericq.cc:447
+#, c-format
+msgid "! support for %s was disabled at build time"
+msgstr ""
+
+#: src/centericq.cc:670
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] нова пошта! %d лист╕в"
+
+#: src/centericq.cc:673
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ останн╓ пов╕домлення в╕д %s"
+
+#: src/centericq.cc:717
+#, c-format
+msgid "+ the %s configuration was changed, reloaded"
+msgstr ""
+
+#: src/centericq.cc:771
+msgid "! another running copy of centericq detected"
+msgstr "! Вже одна коп╕я centericq працю╓"
+
+#: src/centericq.cc:772
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! це може призвести до проблем. номер процесу %lu"
+
+#: src/centericq.cc:896
+msgid "Mobile number: "
+msgstr "Номер моб╕ли: "
+
+#: src/centericq.cc:1037
+msgid "directory to save the file(s) to: "
+msgstr ""
+
+#: src/centericq.cc:1044
+msgid "The specified directory is not writable"
+msgstr ""
+
+#: src/centericq.cc:1048
+msgid "The specified directory does not exist"
+msgstr ""
+
+#: src/centericq.cc:1183
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ ╕стор╕я замовчу╓ про %s"
+
+#: src/centericq.cc:1209
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s вже у контакт-л╕ст╕"
+
+#: src/centericq.cc:1215
+msgid "Select a group to add the user to"
+msgstr "Вибер╕ть групу, в яку треба перем╕стити користувача"
+
+#: src/centericq.cc:1226
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s додано у контакт-л╕ст"
+
+#: src/centericq.cc:1297
+msgid "+ the user is back"
+msgstr "+ користувач повернувся"
+
+#: src/centericq.cc:1313
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] статус в╕дновлено"
+
+#: src/centericq.cc:1328
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] авто зм╕на статусу: %s"
+
+#: src/centericq.cc:1330
+msgid "away"
+msgstr "в╕д╕йшoв"
+
+#: src/centericq.cc:1330
+msgid "n/a"
+msgstr "н/д"
+
+#: src/centericq.cc:1457
+msgid "! free disk space is less than 10k, going offline"
+msgstr "! на диску менше 10К в╕льного простору, в╕дключ╓мося"
+
+#: src/centericq.cc:1458
+msgid "! otherwise we can lose events and configuration"
+msgstr "! ╕накше можна втратити конф╕гурац╕ю та обл╕к под╕й"
+
+#: src/centericq.cc:1502
+msgid "Invite to conference.."
+msgstr ""
+
+#: src/icqconf.cc:147
+#, c-format
+msgid "I do really enjoy the default %s away message of %s %s."
+msgstr "Мен╕ подоба╓ться типове %s автопов╕домлення для %s %s."
+
+#: src/icqconf.cc:688
+msgid "+ launched the openurl command"
+msgstr ""
+
+#: src/icqconf.cc:857
+msgid "event sending error: not enough parameters"
+msgstr "помилка в╕дсилання под╕╖: недостатньо параметр╕в"
+
+#: src/icqconf.cc:868
+msgid "event sending error: only UINs are allowed with icq protocol"
+msgstr "помилка в╕дсилання под╕╖: в icq-протокол╕ дозволяються лише UIN'и"
+
+#: src/icqconf.cc:883
+msgid "event sending error: unknown IM type"
+msgstr "помилка в╕дсилання под╕╖: нев╕домий тип програми"
+
+#: src/icqconf.cc:905
+msgid "event sending error: unknown event type"
+msgstr "помилка в╕дсилання под╕╖: нев╕домий тип под╕╖"
+
+#: src/icqconf.cc:917
+#, c-format
+msgid "%s to %s has been put to the queue"
+msgstr "%s до %s поставлено в чергу"
+
+#: src/icqconf.cc:923
+msgid "event sending error: the destination contact doesn't exist on your list"
+msgstr "помилка в╕дсилання под╕╖: ц╕льовий контакт не ╕сну╓ у вашому л╕ст╕"
+
+#: src/icqconf.cc:965
+msgid "unknown status character was given"
+msgstr "нев╕домий статусний символ"
+
+#: src/icqconf.cc:968
+msgid "unknown IM type"
+msgstr "нев╕домий тип комун╕катора"
+
+#: src/icqconf.cc:971
+msgid "status change error: "
+msgstr "помилка зм╕ни статусу: "
+
+#: src/icqconf.cc:980
+#, fuzzy
+msgid "Usage: "
+msgstr "В╕к: "
+
+#: src/icqconf.cc:982
+#, fuzzy
+msgid "General options:"
+msgstr " Загальне "
+
+#: src/icqconf.cc:983
+msgid ""
+"  --ascii, -a              use ASCII characters for windows and UI controls"
+msgstr ""
+
+#: src/icqconf.cc:984
+msgid "  --basedir, -b <path>     set a custom base directory"
+msgstr ""
+
+#: src/icqconf.cc:985
+msgid "  --bind, -B <host/ip>     bind a custom local IP"
+msgstr ""
+
+#: src/icqconf.cc:986
+#, fuzzy
+msgid "  --help                   display this stuff"
+msgstr " Зм╕нити статус                      s"
+
+#: src/icqconf.cc:987
+msgid "  --version, -v            show the program version info"
+msgstr ""
+
+#: src/icqconf.cc:989
+#, fuzzy
+msgid "Events sending options:"
+msgstr " Параметри CenterICQ"
+
+#: src/icqconf.cc:990
+msgid "  -s, --send <event type>  event type; can be msg, sms or url"
+msgstr ""
+
+#: src/icqconf.cc:991
+msgid "  -S, --status <status>    change the current IM status"
+msgstr ""
+
+#: src/icqconf.cc:992
+msgid ""
+"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
+"or jabber"
+msgstr ""
+
+#: src/icqconf.cc:994
+msgid ""
+"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
+msgstr ""
+
+#: src/icqconf.cc:995
+msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
+msgstr ""
+
+#: src/icqconf.cc:997
+msgid "Report bugs to <centericq-bugs@konst.org.ua>."
+msgstr ""
+
+#: src/icqcontact.cc:711
 msgid "The user has a birthday today"
 msgstr ""
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Jan"
 msgstr "С╕ч"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Feb"
 msgstr "Лют"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Mar"
 msgstr "Бер"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Apr"
 msgstr "Кв╕"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "May"
 msgstr "Тра"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "Jun"
 msgstr "Чер"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "Jul"
 msgstr "Лип"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "Aug"
 msgstr "Сер"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Sep"
 msgstr "Вер"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Oct"
 msgstr "Жов"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Nov"
 msgstr "Лис"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Dec"
 msgstr "Гру"
-
-#: src/icqgroups.cc:66
-msgid "General"
-msgstr "Загальне"
 
 #: src/icqdialogs.cc:44
 msgid "60-above"
@@ -782,8 +1076,8 @@ msgstr ""
 msgid " Search profiles "
 msgstr ""
 
-#: src/icqdialogs.cc:103 src/icqdialogs.cc:983 src/icqdialogs.cc:1520
-#: src/icqface.cc:1548 src/icqface.cc:2149
+#: src/icqdialogs.cc:103 src/icqdialogs.cc:987 src/icqdialogs.cc:1539
+#: src/icqface.cc:1564 src/icqface.cc:2165
 msgid "Remove"
 msgstr "Видалити"
 
@@ -807,12 +1101,6 @@ msgstr ""
 #: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
 msgid "cLear"
 msgstr "очистити"
-
-#: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
-#: src/icqdialogs.cc:687 src/icqdialogs.cc:1088 src/accountmanager.cc:68
-#: src/imcontroller.cc:71
-msgid "Change"
-msgstr "Зм╕нити"
 
 #: src/icqdialogs.cc:212
 msgid "Search/Add"
@@ -1024,31 +1312,31 @@ msgstr "╤м'я: "
 msgid "E-Mail: "
 msgstr "Адреса електронно╖ пошти: "
 
-#: src/icqdialogs.cc:453 src/icqdialogs.cc:715 src/imcontroller.cc:103
+#: src/icqdialogs.cc:453 src/icqdialogs.cc:719 src/imcontroller.cc:103
 msgid "First name: "
 msgstr "╤м'я: "
 
-#: src/icqdialogs.cc:454 src/icqdialogs.cc:716 src/imcontroller.cc:104
+#: src/icqdialogs.cc:454 src/icqdialogs.cc:720 src/imcontroller.cc:104
 msgid "Last name: "
 msgstr "Пр╕звище: "
 
-#: src/icqdialogs.cc:459 src/icqdialogs.cc:748 src/icqdialogs.cc:757
+#: src/icqdialogs.cc:459 src/icqdialogs.cc:752 src/icqdialogs.cc:761
 msgid "City: "
 msgstr "М╕сто: "
 
-#: src/icqdialogs.cc:460 src/icqdialogs.cc:749 src/icqdialogs.cc:758
+#: src/icqdialogs.cc:460 src/icqdialogs.cc:753 src/icqdialogs.cc:762
 msgid "State: "
 msgstr "Штат: "
 
-#: src/icqdialogs.cc:462 src/icqdialogs.cc:761
+#: src/icqdialogs.cc:462 src/icqdialogs.cc:765
 msgid "Company: "
 msgstr "Компан╕я: "
 
-#: src/icqdialogs.cc:463 src/icqdialogs.cc:762
+#: src/icqdialogs.cc:463 src/icqdialogs.cc:766
 msgid "Department: "
 msgstr "В╕дд╕л: "
 
-#: src/icqdialogs.cc:464 src/icqdialogs.cc:763
+#: src/icqdialogs.cc:464 src/icqdialogs.cc:767
 msgid "Position: "
 msgstr "Посада: "
 
@@ -1069,12 +1357,12 @@ msgstr "пароль: "
 msgid "Password: "
 msgstr "Пароль: "
 
-#: src/icqdialogs.cc:479 src/icqdialogs.cc:802
+#: src/icqdialogs.cc:479 src/icqdialogs.cc:806
 #, fuzzy
 msgid "URL: "
 msgstr "URL"
 
-#: src/icqdialogs.cc:480 src/icqdialogs.cc:803
+#: src/icqdialogs.cc:480 src/icqdialogs.cc:807
 msgid "Check frequency: "
 msgstr ""
 
@@ -1165,7 +1453,7 @@ msgstr " Мова N2 : %s "
 msgid " 3rd language : %s "
 msgstr " Мова N3 : %s "
 
-#: src/icqdialogs.cc:620 src/icqdialogs.cc:1158
+#: src/icqdialogs.cc:620 src/icqdialogs.cc:1165
 msgid " Miscellaneous "
 msgstr " Р╕зне "
 
@@ -1207,911 +1495,382 @@ msgstr " %s ╕нформац╕я про вас "
 msgid " %s: details "
 msgstr " ╤нформац╕я про %s "
 
-#: src/icqdialogs.cc:687 src/icqdialogs.cc:1088 src/icqdialogs.cc:1401
-#: src/accountmanager.cc:68
-msgid "Done"
-msgstr "Гаразд"
-
 #
 #: src/icqdialogs.cc:705
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Зачекайте... Ваше ╕нфо все ще не отримано"
 
-#: src/icqdialogs.cc:717
+#: src/icqdialogs.cc:721
 msgid "E-mail: "
 msgstr "Адреса ел.пошти: "
 
-#: src/icqdialogs.cc:728
+#: src/icqdialogs.cc:732
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Дата Вашого народження (дд-мм-рррр): "
 
-#: src/icqdialogs.cc:746
+#: src/icqdialogs.cc:750
 msgid "Age: "
 msgstr "В╕к: "
 
-#: src/icqdialogs.cc:751 src/icqdialogs.cc:760
+#: src/icqdialogs.cc:755 src/icqdialogs.cc:764
 msgid "Street address: "
 msgstr "Адреса: "
 
-#: src/icqdialogs.cc:752 src/icqdialogs.cc:776
+#: src/icqdialogs.cc:756 src/icqdialogs.cc:780
 msgid "Zip code: "
 msgstr "Поштовий ╕ндекс: "
 
-#: src/icqdialogs.cc:753 src/icqdialogs.cc:765
+#: src/icqdialogs.cc:757 src/icqdialogs.cc:769
 msgid "Phone: "
 msgstr "Телефон: "
 
-#: src/icqdialogs.cc:754 src/icqdialogs.cc:766
+#: src/icqdialogs.cc:758 src/icqdialogs.cc:770
 msgid "Fax: "
 msgstr "Факс: "
 
-#: src/icqdialogs.cc:755
+#: src/icqdialogs.cc:759
 msgid "Cellular phone: "
 msgstr "Моб╕ла: "
 
-#: src/icqdialogs.cc:764 src/icqdialogs.cc:768
+#: src/icqdialogs.cc:768 src/icqdialogs.cc:772
 msgid "Homepage: "
 msgstr "Домашня стор╕нка: "
 
-#: src/icqdialogs.cc:774 src/icqface.cc:1131 src/icqface.cc:1136
+#: src/icqdialogs.cc:778 src/icqface.cc:1140 src/icqface.cc:1145
 msgid "About"
 msgstr "Про"
 
-#: src/icqdialogs.cc:796
+#: src/icqdialogs.cc:800
 #, fuzzy
 msgid "New password: "
 msgstr " пароль: "
 
-#: src/icqdialogs.cc:799
+#: src/icqdialogs.cc:803
 #, fuzzy
 msgid "Check the new password: "
 msgstr " Пароль ще раз : %s "
 
-#: src/icqdialogs.cc:877 src/icqdialogs.cc:915
+#: src/icqdialogs.cc:881 src/icqdialogs.cc:919
 msgid "none"
 msgstr "нема"
 
-#: src/icqdialogs.cc:933
+#: src/icqdialogs.cc:937
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [^X зберегти, Esc скасувати] "
 
-#: src/icqdialogs.cc:973
+#: src/icqdialogs.cc:977
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " В╕д╕слати файли для %s, %lu "
 
-#: src/icqdialogs.cc:983 src/icqdialogs.cc:1400 src/icqface.cc:62
-#: src/icqface.cc:737 src/icqface.cc:1548 src/icqface.cc:2149
+#: src/icqdialogs.cc:987 src/icqdialogs.cc:1419 src/icqface.cc:62
+#: src/icqface.cc:746 src/icqface.cc:1564 src/icqface.cc:2165
 msgid "Add"
 msgstr "Додати"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:987
 msgid "Comment"
 msgstr "Коментар"
 
-#: src/icqdialogs.cc:983 src/icqface.cc:2149
+#: src/icqdialogs.cc:987 src/icqface.cc:2165
 msgid "Send"
 msgstr "В╕д╕слати"
 
-#: src/icqdialogs.cc:993
+#: src/icqdialogs.cc:997
 msgid " Files "
 msgstr " Файли "
 
-#: src/icqdialogs.cc:994
+#: src/icqdialogs.cc:998
 msgid " Comment "
 msgstr " Коментар "
 
-#: src/icqdialogs.cc:1006
+#: src/icqdialogs.cc:1010
 msgid "filename: "
 msgstr "який файл: "
 
-#: src/icqdialogs.cc:1013
+#: src/icqdialogs.cc:1017
 msgid "comment: "
 msgstr "коментар: "
 
-#: src/icqdialogs.cc:1079
+#: src/icqdialogs.cc:1085
 msgid " CenterICQ configuration "
 msgstr " Параметри CenterICQ"
 
-#: src/icqdialogs.cc:1099
+#: src/icqdialogs.cc:1105
 #, fuzzy
 msgid " User interface "
 msgstr " ╕м'я користувача: "
 
-#: src/icqdialogs.cc:1100
+#: src/icqdialogs.cc:1106
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Звуковий пристр╕й : %s"
 
-#: src/icqdialogs.cc:1101
+#: src/icqdialogs.cc:1107
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Пал╕тра кольор╕в : %s "
 
-#: src/icqdialogs.cc:1104
+#: src/icqdialogs.cc:1110
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1106
+#: src/icqdialogs.cc:1112
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1108
+#: src/icqdialogs.cc:1114
 msgid " Contact list "
 msgstr " Контакт-л╕ст "
 
-#: src/icqdialogs.cc:1109
+#: src/icqdialogs.cc:1115
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Впрорядковувати контакти в групи: %s "
 
-#: src/icqdialogs.cc:1110
+#: src/icqdialogs.cc:1116
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Не показувати в╕дключених : %s "
 
-#: src/icqdialogs.cc:1111
+#: src/icqdialogs.cc:1117
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " В╕дкидати пов╕домлення в╕д тих, хто не в контакт-лист╕ : %s "
 
-#: src/icqdialogs.cc:1112
+#: src/icqdialogs.cc:1118
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Цитувати пов╕домлення у в╕дпов╕д╕ : %s "
 
-#: src/icqdialogs.cc:1113
+#: src/icqdialogs.cc:1119
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Перев╕ряти поштову скриньку : %s "
 
-#: src/icqdialogs.cc:1114
+#: src/icqdialogs.cc:1120
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Запам'ятовувати парол╕ : %s "
 
-#: src/icqdialogs.cc:1115
+#: src/icqdialogs.cc:1121
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Редагувати автопов╕домлення при зм╕н╕ статусу : %s "
 
-#: src/icqdialogs.cc:1122
+#: src/icqdialogs.cc:1128
 #, fuzzy, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " Режим балачки: %s "
 
-#: src/icqdialogs.cc:1128
+#: src/icqdialogs.cc:1134
 #, fuzzy, c-format
 msgid " Enter key sends message for : %s"
 msgstr " Цитувати пов╕домлення у в╕дпов╕д╕ : %s "
 
-#: src/icqdialogs.cc:1135
+#: src/icqdialogs.cc:1141
 #, fuzzy, c-format
 msgid " Russian win/koi translation for : %s"
 msgstr " Перекодування кирилиц╕ м╕ж Win1251 та Koi-8 : %s "
 
-#: src/icqdialogs.cc:1138
+#: src/icqdialogs.cc:1144
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Режим балачки: %s "
 
-#: src/icqdialogs.cc:1139
+#: src/icqdialogs.cc:1145
 #, c-format
 msgid " Enter key sends message : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1140
+#: src/icqdialogs.cc:1146
 #, fuzzy, c-format
 msgid " Russian win/koi translation : %s "
 msgstr " Перекодування кирилиц╕ м╕ж Win1251 та Koi-8 : %s "
 
-#: src/icqdialogs.cc:1144
+#: src/icqdialogs.cc:1150
+#, fuzzy, c-format
+msgid " Default charset : %s "
+msgstr " В╕дд╕л : %s "
+
+#: src/icqdialogs.cc:1152
 msgid " Communications "
 msgstr " Мережа "
 
-#: src/icqdialogs.cc:1145
+#: src/icqdialogs.cc:1153
 #, c-format
 msgid " SMTP server : %s "
 msgstr " Поштовий сервер: %s "
 
-#: src/icqdialogs.cc:1146
+#: src/icqdialogs.cc:1154
 #, fuzzy, c-format
 msgid " HTTP proxy server : %s "
 msgstr " Поштовий сервер: %s "
 
-#: src/icqdialogs.cc:1147
+#: src/icqdialogs.cc:1155
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1150
+#: src/icqdialogs.cc:1158
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1152
+#: src/icqdialogs.cc:1160
 #, fuzzy
 msgid " Logging "
 msgstr " Лог╕н : %s "
 
-#: src/icqdialogs.cc:1153
+#: src/icqdialogs.cc:1161
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1154
+#: src/icqdialogs.cc:1162
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1155
-#, c-format
-msgid " Typing notifications in the log window : %s "
-msgstr ""
-
-#: src/icqdialogs.cc:1156
+#: src/icqdialogs.cc:1163
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Детальний протокол под╕й в ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:1159
+#: src/icqdialogs.cc:1166
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Зм╕нювати статус на 'В╕д╕йшов' через %d хвилин "
 
-#: src/icqdialogs.cc:1160
+#: src/icqdialogs.cc:1167
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Зм╕нювати статус на 'Недocяжний' через %d хвилин "
 
-#: src/icqdialogs.cc:1187
+#: src/icqdialogs.cc:1194
 msgid "Auto Away period (0 - disable): "
 msgstr "Пер╕од автоматично╖ зм╕ни статусу на 'В╕д╕йшов' (0 - скинути): "
 
-#: src/icqdialogs.cc:1191
+#: src/icqdialogs.cc:1198
 msgid "Auto N/A period (0 - disable): "
 msgstr "Пер╕од автоматично╖ зм╕ни статусу на 'Недосяжний' (0 - скинути): "
 
-#: src/icqdialogs.cc:1217
+#: src/icqdialogs.cc:1207
+msgid "Default charset: "
+msgstr ""
+
+#: src/icqdialogs.cc:1227
 msgid "SMTP server hostname: "
 msgstr "Адреса поштового серверу: "
 
-#: src/icqdialogs.cc:1227
+#: src/icqdialogs.cc:1237
 msgid "Peer-to-peer port range (min-max): "
 msgstr ""
 
-#: src/icqdialogs.cc:1241
+#: src/icqdialogs.cc:1251
 #, fuzzy
 msgid "HTTP proxy server hostname: "
 msgstr "Адреса поштового серверу: "
 
-#: src/icqdialogs.cc:1364
+#: src/icqdialogs.cc:1383
 msgid "Your details have been fetched"
 msgstr "Отримано вашу ╕нформац╕ю користувача"
 
-#: src/icqdialogs.cc:1376
+#: src/icqdialogs.cc:1395
 msgid "Organize contact groups"
 msgstr "Впорядкувати контакти в групи"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "Rename"
 msgstr "Пере╕менувати"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "rEmove"
 msgstr "Видалити"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "move Up"
 msgstr "посунути вгору"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "move Down"
 msgstr "посунути вниз"
 
-#: src/icqdialogs.cc:1401
+#: src/icqdialogs.cc:1420
 msgid "Select"
 msgstr "Вибрати"
 
-#: src/icqdialogs.cc:1416
+#: src/icqdialogs.cc:1435
 msgid " Groups "
 msgstr " Групи "
 
-#: src/icqdialogs.cc:1431
+#: src/icqdialogs.cc:1450
 msgid "Name for a group to be created: "
 msgstr "Назва для ново╖ групи: "
 
-#: src/icqdialogs.cc:1441
+#: src/icqdialogs.cc:1460
 msgid "New name for the group: "
 msgstr "Нова назва групи: "
 
-#: src/icqdialogs.cc:1454
+#: src/icqdialogs.cc:1473
 msgid "Are you sure want to remove the group?"
 msgstr "Справд╕ видалити групу?"
 
-#: src/icqdialogs.cc:1511
+#: src/icqdialogs.cc:1530
 msgid "File transfer status"
 msgstr ""
 
-#: src/icqdialogs.cc:1520
+#: src/icqdialogs.cc:1539
 #, fuzzy
 msgid "Cancel"
 msgstr "Зм╕нити"
 
-#: src/icqdialogs.cc:1549
+#: src/icqdialogs.cc:1568
 #, fuzzy, c-format
 msgid " Incoming from %s "
 msgstr "Вх╕дне %s в╕д %s"
 
-#: src/icqdialogs.cc:1551
+#: src/icqdialogs.cc:1570
 #, fuzzy, c-format
 msgid " Outgoing to %s "
 msgstr "Вих╕дне %s до %s"
 
-#: src/icqdialogs.cc:1559
+#: src/icqdialogs.cc:1578
 msgid "init"
 msgstr ""
 
-#: src/icqdialogs.cc:1560
+#: src/icqdialogs.cc:1579
 msgid "start"
 msgstr ""
 
-#: src/icqdialogs.cc:1561
+#: src/icqdialogs.cc:1580
 #, fuzzy
 msgid "work"
 msgstr "Робота"
 
-#: src/icqdialogs.cc:1562
+#: src/icqdialogs.cc:1581
 #, fuzzy
 msgid "done"
 msgstr "Гаразд"
 
-#: src/icqdialogs.cc:1563
+#: src/icqdialogs.cc:1582
 msgid "err"
 msgstr ""
 
-#: src/icqdialogs.cc:1564
+#: src/icqdialogs.cc:1583
 #, fuzzy
 msgid "abort"
 msgstr "Про"
 
-#: src/icqdialogs.cc:1571
+#: src/icqdialogs.cc:1590
 #, fuzzy
 msgid " of "
 msgstr " В╕дкинути "
 
-#: src/icqdialogs.cc:1604
+#: src/icqdialogs.cc:1623
 msgid "Cannot remove a transfer which is in progress now"
-msgstr ""
-
-#: src/imexternal.cc:130
-#, fuzzy, c-format
-msgid "executed external manual action %s, return code = %d"
-msgstr "виконано розширену д╕ю %s"
-
-#: src/imexternal.cc:162
-#, fuzzy, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "виконано розширену д╕ю %s"
-
-#: src/imlogger.cc:33
-msgid "Offline"
-msgstr "В╕дключений"
-
-#: src/imlogger.cc:34
-msgid "Online"
-msgstr "В еф╕р╕"
-
-#: src/imlogger.cc:35
-msgid "Invisible"
-msgstr "Невидимий"
-
-#: src/imlogger.cc:36
-msgid "Free for chat"
-msgstr "Xoчу попатякати!"
-
-#: src/imlogger.cc:37
-msgid "DND"
-msgstr "Не турбувати"
-
-#: src/imlogger.cc:38
-msgid "Occupied"
-msgstr "Зайнятий"
-
-#: src/imlogger.cc:39
-msgid "N/A"
-msgstr "Недосяжний"
-
-#: src/imlogger.cc:40
-msgid "Away"
-msgstr "В╕д╕йшoв"
-
-#: src/imlogger.cc:48
-msgid "message"
-msgstr "пов╕домлення"
-
-#: src/imlogger.cc:49
-msgid "URL"
-msgstr "URL"
-
-#: src/imlogger.cc:50
-msgid "SMS"
-msgstr "СМС"
-
-#: src/imlogger.cc:51
-msgid "authorization"
-msgstr "авторизац╕я"
-
-#: src/imlogger.cc:52
-msgid "e-mail"
-msgstr "e-mail"
-
-#: src/imlogger.cc:53
-#, fuzzy
-msgid "notification"
-msgstr "М╕сце"
-
-#: src/imlogger.cc:54
-#, fuzzy
-msgid "contacts"
-msgstr "В контакт-л╕ст"
-
-#: src/imlogger.cc:55
-#, fuzzy
-msgid "files"
-msgstr " Файли "
-
-#: src/imlogger.cc:77
-msgid "events log started"
-msgstr "почато протокол"
-
-#: src/imlogger.cc:108
-#, c-format
-msgid "outgoing %s to %s"
-msgstr "вих╕дне %s до %s"
-
-#: src/imlogger.cc:109
-#, c-format
-msgid "incoming %s from %s"
-msgstr "вх╕дне %s в╕д %s"
-
-#: src/imlogger.cc:121
-msgid "ignored"
-msgstr "╕гнору╓ться"
-
-#: src/imlogger.cc:135
-#, c-format
-msgid "%s went online, with status %s"
-msgstr "%s п╕д'╓днався, статус %s"
-
-#: src/imlogger.cc:137
-#, c-format
-msgid "%s went offline"
-msgstr "%s в╕д'╓днався"
-
-#: src/imlogger.cc:139
-#, c-format
-msgid "%s changed status to %s from %s"
-msgstr "%s зм╕нив статус з %s на %s"
-
-#: src/imlogger.cc:168
-#, c-format
-msgid "%s: went online, with status %s"
-msgstr "%s: п╕д'╓днався, статус %s"
-
-#: src/imlogger.cc:170
-#, c-format
-msgid "%s: went offline"
-msgstr "%s: в╕д'╓днався"
-
-#: src/imlogger.cc:172
-#, c-format
-msgid "changed our %s status to %s from %s"
-msgstr "зм╕нено наш %s статус на %s з %s"
-
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " Розпорядник акаунт╕в "
-
-#: src/accountmanager.cc:94
-#, c-format
-msgid " Server : %s "
-msgstr " Сервер : %s "
-
-#: src/accountmanager.cc:97
-#, fuzzy, c-format
-msgid " Secured : %s "
-msgstr " Сервер : %s "
-
-#: src/accountmanager.cc:103
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:108
-#, c-format
-msgid " Login : %s "
-msgstr " Лог╕н : %s "
-
-#: src/accountmanager.cc:114
-#, fuzzy, c-format
-msgid " Password (optional) : %s "
-msgstr " Новий пароль : %s "
-
-#: src/accountmanager.cc:114
-#, c-format
-msgid " Password : %s "
-msgstr " Пароль : %s "
-
-#: src/accountmanager.cc:118
-msgid " Register "
-msgstr " Заре╓струватися "
-
-#: src/accountmanager.cc:124
-#, fuzzy
-msgid " Change nickname "
-msgstr " Кличка "
-
-#: src/accountmanager.cc:125
-msgid " Update user details "
-msgstr " Поновити Ваше ╕нфо "
-
-#: src/accountmanager.cc:128
-msgid " Set away message "
-msgstr " Над╕слати автопов╕домлення  "
-
-#: src/accountmanager.cc:131
-#, fuzzy
-msgid " Synchronize contact list "
-msgstr " Контакт-л╕ст "
-
-#: src/accountmanager.cc:133
-msgid " Drop "
-msgstr " В╕дкинути "
-
-#: src/accountmanager.cc:151
-msgid " user name: "
-msgstr " ╕м'я користувача: "
-
-#: src/accountmanager.cc:156
-msgid " uin: "
-msgstr " uin: "
-
-#: src/accountmanager.cc:161
-msgid " password: "
-msgstr " пароль: "
-
-#: src/accountmanager.cc:169
-msgid "Drop the account information first!"
-msgstr "Спочатку треба скинути ╕нформац╕ю про акаунт"
-
-#: src/accountmanager.cc:183
-msgid "You have to disconnect the service first!"
-msgstr "Спочатку треба в╕д'╓днатися в╕д серв╕су!"
-
-#: src/accountmanager.cc:192
-msgid " server address: "
-msgstr " адреса серверу: "
-
-#: src/accountmanager.cc:214
-#, fuzzy
-msgid "You must be logged in to preform the synchronization"
-msgstr "+ сл╕д п╕д'╓днатися спочатку"
-
-#: src/imcontroller.cc:64
-#, fuzzy, c-format
-msgid " Register on the %s network "
-msgstr " Ре╓страц╕я в мереж╕ ICQ "
-
-#: src/imcontroller.cc:71
-msgid "Go ahead"
-msgstr "Йд╕ть геть"
-
-#: src/imcontroller.cc:87
-#, c-format
-msgid " Password to set : %s "
-msgstr " Новий пароль : %s "
-
-#: src/imcontroller.cc:88
-#, c-format
-msgid " Check the password : %s "
-msgstr " Пароль ще раз : %s "
-
-#: src/imcontroller.cc:91
-#, c-format
-msgid " Server to use : %s "
-msgstr " Сервер: %s "
-
-#: src/imcontroller.cc:100
-msgid "Check the password you entered: "
-msgstr "Введ╕ть вдруге той самий пароль: "
-
-#: src/imcontroller.cc:101
-msgid "Nickname to set: "
-msgstr "Заре╓струватися з кличкою: "
-
-#: src/imcontroller.cc:105
-msgid "Server: "
-msgstr "Сервер: "
-
-#: src/imcontroller.cc:111
-msgid "Passwords do not match"
-msgstr "Парол╕ не сп╕впадають!"
-
-#: src/imcontroller.cc:113
-msgid "Password must be entered"
-msgstr "Сл╕д ввести пароль"
-
-#: src/imcontroller.cc:131 src/imcontroller.cc:192
-msgid " Registration progress "
-msgstr " Ре╓страц╕я "
-
-#: src/imcontroller.cc:134
-#, c-format
-msgid "Connecting to the server %s ..."
-msgstr "Конектимося до серверу %s ..."
-
-#: src/imcontroller.cc:138
-msgid "Sending request"
-msgstr "Надсилання запиту"
-
-#: src/imcontroller.cc:144
-msgid "Timed out waiting for a new uin. Retry?"
-msgstr "Помилка оч╕кування ре╓страц╕╖. Спробувати ще?"
-
-#: src/imcontroller.cc:148
-msgid "Retrying.."
-msgstr "Нова спроба..."
-
-#: src/imcontroller.cc:154
-#, c-format
-msgid "New UIN received, %lu"
-msgstr "Отримано новий номер UIN, %lu"
-
-#: src/imcontroller.cc:170 src/imcontroller.cc:228 src/imcontroller.cc:318
-msgid "Disconnected"
-msgstr "В╕д'╓днано"
-
-#: src/imcontroller.cc:173
-msgid "Unable to connect to the icq server. Retry?"
-msgstr "Не можу п╕д'╓днатися до серверу ICQ. Спробувати ще?"
-
-#: src/imcontroller.cc:194
-#, c-format
-msgid "Trying to register %s at %s ..."
-msgstr ""
-
-#: src/imcontroller.cc:209
-msgid "The Jabber ID was successfully registered"
-msgstr ""
-
-#: src/imcontroller.cc:222
-#, fuzzy
-msgid "Failed"
-msgstr "Ж╕ноча"
-
-#: src/imcontroller.cc:250
-msgid "You must be logged to the ICQ network to update the details"
-msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
-
-#: src/imcontroller.cc:268
-msgid "new MSN friendly nick: "
-msgstr ""
-
-#: src/imcontroller.cc:276
-#, c-format
-msgid "Your friendly nickname has been changed to %s"
-msgstr ""
-
-#: src/imcontroller.cc:280
-#, fuzzy
-msgid "You must be logged to the MSN network to update the friendly nick"
-msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
-
-#: src/imcontroller.cc:297
-#, fuzzy
-msgid "You must be logged to the Jabber network to update your details"
-msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
-
-#: src/imcontroller.cc:308
-#, fuzzy
-msgid " Contact list synchronization "
-msgstr " Контакт-л╕ст "
-
-#: src/imcontroller.cc:309
-msgid "Starting the synchronization process"
-msgstr ""
-
-#: src/imcontroller.cc:313
-#, c-format
-msgid "Attempt #%d"
-msgstr ""
-
-#: src/imcontroller.cc:314
-#, c-format
-msgid ".. %d already synchronized, %d contacts to be stored"
-msgstr ""
-
-#: src/imcontroller.cc:317 src/imcontroller.cc:358
-msgid "Finished"
-msgstr ""
-
-#: src/imcontroller.cc:319
-msgid "Too many attempts, gave up"
-msgstr ""
-
-#: src/imcontroller.cc:341
-msgid " Uploading buddies "
-msgstr ""
-
-#: src/imcontroller.cc:344
-#, fuzzy
-msgid "No contacts to be synchronized"
-msgstr " Контакт-л╕ст "
-
-#: src/imcontroller.cc:345
-msgid ".. all of them are already stored server-side"
-msgstr ""
-
-#: src/imcontroller.cc:349
-#, c-format
-msgid "%d contacts are do be stored server-side. Add them now?"
-msgstr ""
-
-#: src/imcontroller.cc:354
-#, c-format
-msgid ".. adding %s"
-msgstr ""
-
-#: src/imcontroller.cc:360
-msgid "Cancelled"
-msgstr ""
-
-#: src/imcontroller.cc:375
-msgid "registration is not supported"
-msgstr "ре╓страц╕я не п╕дтриму╓ться"
-
-#: src/icqconf.cc:146
-#, c-format
-msgid "I do really enjoy the default %s away message of %s %s."
-msgstr "Мен╕ подоба╓ться типове %s автопов╕домлення для %s %s."
-
-#: src/icqconf.cc:684
-msgid "+ launched the openurl command"
-msgstr ""
-
-#: src/icqconf.cc:851
-msgid "event sending error: not enough parameters"
-msgstr "помилка в╕дсилання под╕╖: недостатньо параметр╕в"
-
-#: src/icqconf.cc:862
-msgid "event sending error: only UINs are allowed with icq protocol"
-msgstr "помилка в╕дсилання под╕╖: в icq-протокол╕ дозволяються лише UIN'и"
-
-#: src/icqconf.cc:877
-msgid "event sending error: unknown IM type"
-msgstr "помилка в╕дсилання под╕╖: нев╕домий тип програми"
-
-#: src/icqconf.cc:899
-msgid "event sending error: unknown event type"
-msgstr "помилка в╕дсилання под╕╖: нев╕домий тип под╕╖"
-
-#: src/icqconf.cc:911
-#, c-format
-msgid "%s to %s has been put to the queue"
-msgstr "%s до %s поставлено в чергу"
-
-#: src/icqconf.cc:917
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr "помилка в╕дсилання под╕╖: ц╕льовий контакт не ╕сну╓ у вашому л╕ст╕"
-
-#: src/icqconf.cc:959
-msgid "unknown status character was given"
-msgstr "нев╕домий статусний символ"
-
-#: src/icqconf.cc:962
-msgid "unknown IM type"
-msgstr "нев╕домий тип комун╕катора"
-
-#: src/icqconf.cc:965
-msgid "status change error: "
-msgstr "помилка зм╕ни статусу: "
-
-#: src/icqconf.cc:974
-#, fuzzy
-msgid "Usage: "
-msgstr "В╕к: "
-
-#: src/icqconf.cc:976
-#, fuzzy
-msgid "General options:"
-msgstr " Загальне "
-
-#: src/icqconf.cc:977
-msgid ""
-"  --ascii, -a              use ASCII characters for windows and UI controls"
-msgstr ""
-
-#: src/icqconf.cc:978
-msgid "  --basedir, -b <path>     set a custom base directory"
-msgstr ""
-
-#: src/icqconf.cc:979
-msgid "  --bind, -B <host/ip>     bind a custom local IP"
-msgstr ""
-
-#: src/icqconf.cc:980
-#, fuzzy
-msgid "  --help                   display this stuff"
-msgstr " Зм╕нити статус                      s"
-
-#: src/icqconf.cc:981
-msgid "  --version, -v            show the program version info"
-msgstr ""
-
-#: src/icqconf.cc:983
-#, fuzzy
-msgid "Events sending options:"
-msgstr " Параметри CenterICQ"
-
-#: src/icqconf.cc:984
-msgid "  -s, --send <event type>  event type; can be msg, sms or url"
-msgstr ""
-
-#: src/icqconf.cc:985
-msgid "  -S, --status <status>    change the current IM status"
-msgstr ""
-
-#: src/icqconf.cc:986
-msgid ""
-"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
-"or jabber"
-msgstr ""
-
-#: src/icqconf.cc:987
-msgid ""
-"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
-msgstr ""
-
-#: src/icqconf.cc:988
-msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
-msgstr ""
-
-#: src/icqconf.cc:990
-msgid "Report bugs to <centericq-bugs@konst.org.ua>."
-msgstr ""
-
-#: src/imevents.cc:278
-msgid "Empty authorization request message"
-msgstr "Порожн╕й запит авторизац╕╖"
-
-#: src/imevents.cc:301
-#, fuzzy
-msgid "* Authorization request : "
-msgstr "авторизац╕я"
-
-#: src/imevents.cc:302
-#, fuzzy
-msgid "* Authorization : "
-msgstr "авторизац╕я"
-
-#: src/imevents.cc:360
-msgid "* SMS : "
-msgstr ""
-
-#: src/imevents.cc:493
-#, fuzzy
-msgid "* Contacts : "
-msgstr " Контакт-л╕ст "
-
-#: src/imevents.cc:498
-msgid "<no nick>"
-msgstr ""
-
-#: src/imevents.cc:573
-msgid "* File transfer"
 msgstr ""
 
 #: src/icqface.cc:40
@@ -2414,479 +2173,769 @@ msgstr " Приховати в╕длючених               F5"
 msgid " Organize contact groups"
 msgstr "Впорядкувати контакти в групи"
 
-#: src/icqface.cc:737 src/icqface.cc:1548
+#: src/icqface.cc:746 src/icqface.cc:1564
 msgid "Details"
 msgstr "╤нфо"
 
-#: src/icqface.cc:737
+#: src/icqface.cc:746
 msgid "Message"
 msgstr "Пов╕домлення"
 
-#: src/icqface.cc:738
+#: src/icqface.cc:747
 msgid "New search"
 msgstr "Новий пошук"
 
-#: src/icqface.cc:753
+#: src/icqface.cc:762
 #, fuzzy
 msgid "Contact to add"
 msgstr " Контакт-л╕ст "
 
-#: src/icqface.cc:763
+#: src/icqface.cc:772
 msgid "Searching contacts.."
 msgstr ""
 
-#: src/icqface.cc:831
+#: src/icqface.cc:840
 msgid "Search results [done]"
 msgstr ""
 
-#: src/icqface.cc:842
+#: src/icqface.cc:851
 #, c-format
 msgid "Information about %s"
 msgstr "╤нформац╕я про %s"
 
-#: src/icqface.cc:900
+#: src/icqface.cc:909
 msgid "Nickname"
 msgstr "Кличка"
 
-#: src/icqface.cc:901
+#: src/icqface.cc:910
 msgid "Name"
 msgstr "╤м'я"
 
-#: src/icqface.cc:902
+#: src/icqface.cc:911
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/icqface.cc:903
+#: src/icqface.cc:912
 msgid "2nd e-mail"
 msgstr "E-mail #2"
 
-#: src/icqface.cc:904
+#: src/icqface.cc:913
 msgid "Old e-mail"
 msgstr "Старе мило"
 
-#: src/icqface.cc:905
+#: src/icqface.cc:914
 msgid "Gender"
 msgstr "Стать"
 
-#: src/icqface.cc:906
+#: src/icqface.cc:915
 msgid "Birthdate"
 msgstr "Народження"
 
-#: src/icqface.cc:907
+#: src/icqface.cc:916
 msgid "Age"
 msgstr "В╕к"
 
-#: src/icqface.cc:908
+#: src/icqface.cc:917
 msgid "Languages"
 msgstr "Мови"
 
-#: src/icqface.cc:909
+#: src/icqface.cc:918
 msgid "Last IP"
 msgstr "Остання IP"
 
-#: src/icqface.cc:930
+#: src/icqface.cc:939
 msgid "Last seen"
 msgstr "Востанн╓"
 
-#: src/icqface.cc:932 src/icqface.cc:1098 src/icqface.cc:1102
+#: src/icqface.cc:941 src/icqface.cc:1107 src/icqface.cc:1111
 msgid "Never"
 msgstr "Н╕коли"
 
-#: src/icqface.cc:945 src/icqface.cc:988
+#: src/icqface.cc:954 src/icqface.cc:997
 msgid "Address"
 msgstr "Адреса"
 
-#: src/icqface.cc:946 src/icqface.cc:989
+#: src/icqface.cc:955 src/icqface.cc:998
 msgid "Location"
 msgstr "М╕сце"
 
-#: src/icqface.cc:947 src/icqface.cc:990
+#: src/icqface.cc:956 src/icqface.cc:999
 msgid "Zip code"
 msgstr "╤ндекс"
 
-#: src/icqface.cc:948 src/icqface.cc:996
+#: src/icqface.cc:957 src/icqface.cc:1005
 msgid "Phone"
 msgstr "Телефон"
 
-#: src/icqface.cc:949 src/icqface.cc:997
+#: src/icqface.cc:958 src/icqface.cc:1006
 msgid "Fax"
 msgstr "Факс"
 
-#: src/icqface.cc:950
+#: src/icqface.cc:959
 msgid "Cellular"
 msgstr "Моб╕ла"
 
-#: src/icqface.cc:951
+#: src/icqface.cc:960
 msgid "Timezone"
 msgstr "Часовий пояс"
 
-#: src/icqface.cc:953 src/icqface.cc:998
+#: src/icqface.cc:962 src/icqface.cc:1007
 msgid "Homepage"
 msgstr "Стор╕нка"
 
-#: src/icqface.cc:992
+#: src/icqface.cc:1001
 msgid "Company"
 msgstr "Компан╕я"
 
-#: src/icqface.cc:993
+#: src/icqface.cc:1002
 msgid "Department"
 msgstr "В╕дд╕л"
 
-#: src/icqface.cc:994 src/icqface.cc:1073
+#: src/icqface.cc:1003 src/icqface.cc:1082
 msgid "Title"
 msgstr "Посада"
 
-#: src/icqface.cc:1038
+#: src/icqface.cc:1047
 msgid "Interests"
 msgstr "╤нтереси"
 
-#: src/icqface.cc:1050
+#: src/icqface.cc:1059
 msgid "Background"
 msgstr "Минуле"
 
-#: src/icqface.cc:1068
+#: src/icqface.cc:1077
 #, fuzzy
 msgid "Handle"
 msgstr "Чолов╕ча"
 
-#: src/icqface.cc:1069
+#: src/icqface.cc:1078
 msgid "RSS doc"
 msgstr ""
 
-#: src/icqface.cc:1070
+#: src/icqface.cc:1079
 msgid "Version"
 msgstr ""
 
-#: src/icqface.cc:1071
+#: src/icqface.cc:1080
 msgid "Encoding"
 msgstr ""
 
-#: src/icqface.cc:1074
+#: src/icqface.cc:1083
 msgid "Link"
 msgstr ""
 
-#: src/icqface.cc:1076
+#: src/icqface.cc:1085
 msgid "Frequency"
 msgstr ""
 
-#: src/icqface.cc:1077
+#: src/icqface.cc:1086
 #, fuzzy
 msgid "Last check"
 msgstr "Востанн╓"
 
-#: src/icqface.cc:1078
+#: src/icqface.cc:1087
 msgid "Next check"
 msgstr ""
 
-#: src/icqface.cc:1079
+#: src/icqface.cc:1088
 #, fuzzy
 msgid "Last result"
 msgstr "як запитувалося"
 
-#: src/icqface.cc:1093
+#: src/icqface.cc:1102
 #, c-format
 msgid "%lu minutes"
 msgstr ""
 
-#: src/icqface.cc:1096
+#: src/icqface.cc:1105
 #, fuzzy
 msgid "Now"
 msgstr "Лис"
 
-#: src/icqface.cc:1123
+#: src/icqface.cc:1132
 #, fuzzy
 msgid "F2 to URLs, F6 external actions, ESC close"
 msgstr "F2 йде за посиланнями, ESC закрива╓"
 
-#: src/icqface.cc:1131 src/icqface.cc:1136
+#: src/icqface.cc:1140 src/icqface.cc:1145
 msgid "Info"
 msgstr "╤нфо"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1140
 msgid "Home"
 msgstr "Д╕м"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1140
 msgid "Work"
 msgstr "Робота"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1140
 msgid "More"
 msgstr "Додатково"
 
-#: src/icqface.cc:1132
+#: src/icqface.cc:1141
 msgid "Retrieve"
 msgstr "Поновити"
 
-#: src/icqface.cc:1132 src/icqface.cc:1136
+#: src/icqface.cc:1141 src/icqface.cc:1145
 msgid "Edit"
 msgstr "Редагувати"
 
-#: src/icqface.cc:1136
+#: src/icqface.cc:1145
 msgid "Check"
 msgstr ""
 
-#: src/icqface.cc:1226
+#: src/icqface.cc:1235
 msgid " [icq] ICQ network"
 msgstr " [icq] Мережа ICQ "
 
-#: src/icqface.cc:1227
+#: src/icqface.cc:1236
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:1228
+#: src/icqface.cc:1237
 msgid " [msn] M$ Messenger"
 msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:1229
+#: src/icqface.cc:1238
 msgid " [aim] AOL TOC"
 msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:1230
+#: src/icqface.cc:1239
 msgid " [irc] IRC"
 msgstr " [irc] IRC"
 
-#: src/icqface.cc:1231
+#: src/icqface.cc:1240
 msgid " [jab] Jabber"
 msgstr ""
 
-#: src/icqface.cc:1268
+#: src/icqface.cc:1242
+msgid " [lj] LiveJournal"
+msgstr ""
+
+#: src/icqface.cc:1283
 msgid " All protocols"
 msgstr ""
 
-#: src/icqface.cc:1269
+#: src/icqface.cc:1284
 #, fuzzy
 msgid " Already logged in only"
 msgstr "вже в мереж╕"
 
-#: src/icqface.cc:1309
+#: src/icqface.cc:1325
 msgid " [o] Online"
 msgstr " [o] В еф╕р╕"
 
-#: src/icqface.cc:1310
+#: src/icqface.cc:1326
 msgid " [_] Offline"
 msgstr " [_] В╕дключений"
 
-#: src/icqface.cc:1311
+#: src/icqface.cc:1327
 msgid " [a] Away"
 msgstr " [a] В╕д╕йшов"
 
-#: src/icqface.cc:1312
+#: src/icqface.cc:1328
 msgid " [d] Do not disturb"
 msgstr " [d] Не турбувaти"
 
-#: src/icqface.cc:1313
+#: src/icqface.cc:1329
 msgid " [n] Not available"
 msgstr " [n] Недocяжний"
 
-#: src/icqface.cc:1314
+#: src/icqface.cc:1330
 msgid " [c] Occupied"
 msgstr " [c] Зайнятий"
 
-#: src/icqface.cc:1315
+#: src/icqface.cc:1331
 msgid " [f] Free for chat"
 msgstr " [f] Xoчу попатякати!"
 
-#: src/icqface.cc:1316
+#: src/icqface.cc:1332
 msgid " [i] Invisible"
 msgstr " [i] Невидимий"
 
-#: src/icqface.cc:1375
+#: src/icqface.cc:1391
 msgid " <Space> or <Enter> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1404
+#: src/icqface.cc:1420
 msgid " <Space> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1548
+#: src/icqface.cc:1564
 msgid "Move to contacts"
 msgstr "В контакт-л╕ст"
 
-#: src/icqface.cc:1560
+#: src/icqface.cc:1576
 msgid "Ignore list"
 msgstr "Список ╕гнорування"
 
-#: src/icqface.cc:1561
+#: src/icqface.cc:1577
 msgid "Visible list"
 msgstr "Список видимост╕"
 
-#: src/icqface.cc:1562
+#: src/icqface.cc:1578
 msgid "Invisible list"
 msgstr "Список невидимост╕"
 
-#: src/icqface.cc:1584
+#: src/icqface.cc:1600
 msgid "Select contacts to add to the list"
 msgstr "Вибер╕ть контакти щоби додати в л╕ст"
 
-#: src/icqface.cc:1589
+#: src/icqface.cc:1605
 #, c-format
 msgid "Remove the %d contacts from the contact list as well?"
 msgstr ""
 
-#: src/icqface.cc:1645
+#: src/icqface.cc:1661
 msgid "Event recipients"
 msgstr "Отримувач╕"
 
-#: src/icqface.cc:1811
+#: src/icqface.cc:1827
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "ШвидкийПошук: набирайте, Meta-S знову шукати, Enter зак╕нчити"
 
-#: src/icqface.cc:1925
+#: src/icqface.cc:1941
 msgid "+ no URLs within the current context"
 msgstr "+ нема╓ посилань"
 
-#: src/icqface.cc:1938
+#: src/icqface.cc:1954
 msgid "URLs within the current context"
 msgstr "Посилання в поточному пов╕домленн╕"
 
-#: src/icqface.cc:1954
+#: src/icqface.cc:1970
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr ""
 
-#: src/icqface.cc:1974
+#: src/icqface.cc:1990
 #, c-format
 msgid "Result of the external action %s:"
 msgstr ""
 
-#: src/icqface.cc:1992
+#: src/icqface.cc:2008
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
 msgstr "^X в╕д╕слати, ^P багатьом, ^O ╕стор╕я, Meta-? ╕нфо, ESC скасувати"
 
-#: src/icqface.cc:1994
+#: src/icqface.cc:2010
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
 msgstr "^X в╕д╕слати, ^P багатьом, ^O ╕стор╕я, Meta-? ╕нфо, ESC скасувати"
 
-#: src/icqface.cc:2020 src/icqface.cc:2454
+#: src/icqface.cc:2036 src/icqface.cc:2470
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Вих╕дне %s до %s"
 
-#: src/icqface.cc:2120
+#: src/icqface.cc:2136
 #, fuzzy
 msgid "Send contacts.."
 msgstr "В контакт-л╕ст"
 
-#: src/icqface.cc:2180
+#: src/icqface.cc:2196
 #, fuzzy
 msgid "file name: "
 msgstr "який файл: "
 
-#: src/icqface.cc:2455
+#: src/icqface.cc:2471
 #, c-format
 msgid "Sent on %s"
 msgstr "В╕д╕слано %s"
 
-#: src/icqface.cc:2458
+#: src/icqface.cc:2474
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Вх╕дне %s в╕д %s"
 
-#: src/icqface.cc:2459
+#: src/icqface.cc:2475
 #, c-format
 msgid "Received on %s"
 msgstr "Отримано %s"
 
-#: src/icqface.cc:2504
+#: src/icqface.cc:2520
 #, fuzzy
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr "F2 йде за посиланнями, ESC закрива╓"
 
-#: src/icqface.cc:2549
+#: src/icqface.cc:2565
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "Отримано %s"
 
-#: src/icqface.cc:2550
+#: src/icqface.cc:2566
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "В╕д╕слано %s"
 
-#: src/icqface.cc:2563
+#: src/icqface.cc:2579
 msgid "ESC or F9 to close"
 msgstr ""
 
-#: src/icqface.cc:2645
+#: src/icqface.cc:2661
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "╤стор╕я з %s, всього под╕й: %d"
 
-#: src/icqface.cc:2648
+#: src/icqface.cc:2664
 #, fuzzy
 msgid "/ search, N again, ESC cancel"
 msgstr "S Пошук, L знову, ESC - скасувати"
 
-#: src/icqface.cc:2654
+#: src/icqface.cc:2670
 msgid "search for: "
 msgstr "шукати:"
 
-#: src/hooks/rsshook.cc:282
-msgid "coudln't fetch"
+#: src/icqgroups.cc:66
+msgid "General"
+msgstr "Загальне"
+
+#: src/imcontroller.cc:64
+#, fuzzy, c-format
+msgid " Register on the %s network "
+msgstr " Ре╓страц╕я в мереж╕ ICQ "
+
+#: src/imcontroller.cc:71
+msgid "Go ahead"
+msgstr "Йд╕ть геть"
+
+#: src/imcontroller.cc:87
+#, c-format
+msgid " Password to set : %s "
+msgstr " Новий пароль : %s "
+
+#: src/imcontroller.cc:88
+#, c-format
+msgid " Check the password : %s "
+msgstr " Пароль ще раз : %s "
+
+#: src/imcontroller.cc:91
+#, c-format
+msgid " Server to use : %s "
+msgstr " Сервер: %s "
+
+#: src/imcontroller.cc:100
+msgid "Check the password you entered: "
+msgstr "Введ╕ть вдруге той самий пароль: "
+
+#: src/imcontroller.cc:101
+msgid "Nickname to set: "
+msgstr "Заре╓струватися з кличкою: "
+
+#: src/imcontroller.cc:105
+msgid "Server: "
+msgstr "Сервер: "
+
+#: src/imcontroller.cc:111
+msgid "Passwords do not match"
+msgstr "Парол╕ не сп╕впадають!"
+
+#: src/imcontroller.cc:113
+msgid "Password must be entered"
+msgstr "Сл╕д ввести пароль"
+
+#: src/imcontroller.cc:131 src/imcontroller.cc:192
+msgid " Registration progress "
+msgstr " Ре╓страц╕я "
+
+#: src/imcontroller.cc:134
+#, c-format
+msgid "Connecting to the server %s ..."
+msgstr "Конектимося до серверу %s ..."
+
+#: src/imcontroller.cc:138
+msgid "Sending request"
+msgstr "Надсилання запиту"
+
+#: src/imcontroller.cc:144
+msgid "Timed out waiting for a new uin. Retry?"
+msgstr "Помилка оч╕кування ре╓страц╕╖. Спробувати ще?"
+
+#: src/imcontroller.cc:148
+msgid "Retrying.."
+msgstr "Нова спроба..."
+
+#: src/imcontroller.cc:154
+#, c-format
+msgid "New UIN received, %lu"
+msgstr "Отримано новий номер UIN, %lu"
+
+#: src/imcontroller.cc:170 src/imcontroller.cc:228 src/imcontroller.cc:318
+msgid "Disconnected"
+msgstr "В╕д'╓днано"
+
+#: src/imcontroller.cc:173
+msgid "Unable to connect to the icq server. Retry?"
+msgstr "Не можу п╕д'╓днатися до серверу ICQ. Спробувати ще?"
+
+#: src/imcontroller.cc:194
+#, c-format
+msgid "Trying to register %s at %s ..."
 msgstr ""
 
-#: src/hooks/rsshook.cc:311
-msgid "wrong XML"
+#: src/imcontroller.cc:209
+msgid "The Jabber ID was successfully registered"
 msgstr ""
 
-#: src/hooks/rsshook.cc:314
-msgid "no <rss> tag found"
-msgstr ""
-
-#: src/hooks/rsshook.cc:321
-msgid "no <channel> tag found"
-msgstr ""
-
-#: src/hooks/rsshook.cc:328
+#: src/imcontroller.cc:222
 #, fuzzy
-msgid "wrong <channel> tag"
-msgstr "На каналах: "
+msgid "Failed"
+msgstr "Ж╕ноча"
 
-#: src/hooks/rsshook.cc:337
-msgid "success"
+#: src/imcontroller.cc:250
+msgid "You must be logged to the ICQ network to update the details"
+msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
+
+#: src/imcontroller.cc:268
+msgid "new MSN friendly nick: "
 msgstr ""
 
-#: src/hooks/rsshook.cc:356
-#, fuzzy
-msgid "Title: "
-msgstr "Посада"
-
-#: src/hooks/rsshook.cc:357
-msgid "Published on: "
+#: src/imcontroller.cc:276
+#, c-format
+msgid "Your friendly nickname has been changed to %s"
 msgstr ""
 
-#: src/hooks/rsshook.cc:358
+#: src/imcontroller.cc:280
 #, fuzzy
-msgid "Category: "
-msgstr "М╕сто: "
+msgid "You must be logged to the MSN network to update the friendly nick"
+msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
 
-#: src/hooks/rsshook.cc:359
+#: src/imcontroller.cc:297
 #, fuzzy
-msgid "Author: "
+msgid "You must be logged to the Jabber network to update your details"
+msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
+
+#: src/imcontroller.cc:308
+#, fuzzy
+msgid " Contact list synchronization "
+msgstr " Контакт-л╕ст "
+
+#: src/imcontroller.cc:309
+msgid "Starting the synchronization process"
+msgstr ""
+
+#: src/imcontroller.cc:313
+#, c-format
+msgid "Attempt #%d"
+msgstr ""
+
+#: src/imcontroller.cc:314
+#, c-format
+msgid ".. %d already synchronized, %d contacts to be stored"
+msgstr ""
+
+#: src/imcontroller.cc:317 src/imcontroller.cc:358
+msgid "Finished"
+msgstr ""
+
+#: src/imcontroller.cc:319
+msgid "Too many attempts, gave up"
+msgstr ""
+
+#: src/imcontroller.cc:341
+msgid " Uploading buddies "
+msgstr ""
+
+#: src/imcontroller.cc:344
+#, fuzzy
+msgid "No contacts to be synchronized"
+msgstr " Контакт-л╕ст "
+
+#: src/imcontroller.cc:345
+msgid ".. all of them are already stored server-side"
+msgstr ""
+
+#: src/imcontroller.cc:349
+#, c-format
+msgid "%d contacts are do be stored server-side. Add them now?"
+msgstr ""
+
+#: src/imcontroller.cc:354
+#, c-format
+msgid ".. adding %s"
+msgstr ""
+
+#: src/imcontroller.cc:360
+msgid "Cancelled"
+msgstr ""
+
+#: src/imcontroller.cc:375
+msgid "registration is not supported"
+msgstr "ре╓страц╕я не п╕дтриму╓ться"
+
+#: src/imevents.cc:278
+msgid "Empty authorization request message"
+msgstr "Порожн╕й запит авторизац╕╖"
+
+#: src/imevents.cc:301
+#, fuzzy
+msgid "* Authorization request : "
 msgstr "авторизац╕я"
 
-#: src/hooks/rsshook.cc:361
+#: src/imevents.cc:302
 #, fuzzy
-msgid "Description: "
-msgstr "Посада: "
+msgid "* Authorization : "
+msgstr "авторизац╕я"
 
-#: src/hooks/rsshook.cc:362
-#, fuzzy
-msgid "Link: "
-msgstr " uin: "
-
-#: src/hooks/rsshook.cc:363
-#, fuzzy
-msgid "Comments: "
-msgstr "коментар: "
-
-#: src/hooks/HTTPClient.cc:245
-msgid "Timed out"
+#: src/imevents.cc:360
+msgid "* SMS : "
 msgstr ""
+
+#: src/imevents.cc:493
+#, fuzzy
+msgid "* Contacts : "
+msgstr " Контакт-л╕ст "
+
+#: src/imevents.cc:498
+msgid "<no nick>"
+msgstr ""
+
+#: src/imevents.cc:573
+msgid "* File transfer"
+msgstr ""
+
+#: src/imexternal.cc:130
+#, fuzzy, c-format
+msgid "executed external manual action %s, return code = %d"
+msgstr "виконано розширену д╕ю %s"
+
+#: src/imexternal.cc:162
+#, fuzzy, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "виконано розширену д╕ю %s"
+
+#: src/imlogger.cc:33
+msgid "Offline"
+msgstr "В╕дключений"
+
+#: src/imlogger.cc:34
+msgid "Online"
+msgstr "В еф╕р╕"
+
+#: src/imlogger.cc:35
+msgid "Invisible"
+msgstr "Невидимий"
+
+#: src/imlogger.cc:36
+msgid "Free for chat"
+msgstr "Xoчу попатякати!"
+
+#: src/imlogger.cc:37
+msgid "DND"
+msgstr "Не турбувати"
+
+#: src/imlogger.cc:38
+msgid "Occupied"
+msgstr "Зайнятий"
+
+#: src/imlogger.cc:39
+msgid "N/A"
+msgstr "Недосяжний"
+
+#: src/imlogger.cc:40
+msgid "Away"
+msgstr "В╕д╕йшoв"
+
+#: src/imlogger.cc:48
+msgid "message"
+msgstr "пов╕домлення"
+
+#: src/imlogger.cc:49
+msgid "URL"
+msgstr "URL"
+
+#: src/imlogger.cc:50
+msgid "SMS"
+msgstr "СМС"
+
+#: src/imlogger.cc:51
+msgid "authorization"
+msgstr "авторизац╕я"
+
+#: src/imlogger.cc:52
+msgid "e-mail"
+msgstr "e-mail"
+
+#: src/imlogger.cc:53
+#, fuzzy
+msgid "notification"
+msgstr "М╕сце"
+
+#: src/imlogger.cc:54
+#, fuzzy
+msgid "contacts"
+msgstr "В контакт-л╕ст"
+
+#: src/imlogger.cc:55
+#, fuzzy
+msgid "files"
+msgstr " Файли "
+
+#: src/imlogger.cc:77
+msgid "events log started"
+msgstr "почато протокол"
+
+#: src/imlogger.cc:108
+#, c-format
+msgid "outgoing %s to %s"
+msgstr "вих╕дне %s до %s"
+
+#: src/imlogger.cc:109
+#, c-format
+msgid "incoming %s from %s"
+msgstr "вх╕дне %s в╕д %s"
+
+#: src/imlogger.cc:121
+msgid "ignored"
+msgstr "╕гнору╓ться"
+
+#: src/imlogger.cc:135
+#, c-format
+msgid "%s went online, with status %s"
+msgstr "%s п╕д'╓днався, статус %s"
+
+#: src/imlogger.cc:137
+#, c-format
+msgid "%s went offline"
+msgstr "%s в╕д'╓днався"
+
+#: src/imlogger.cc:139
+#, c-format
+msgid "%s changed status to %s from %s"
+msgstr "%s зм╕нив статус з %s на %s"
+
+#: src/imlogger.cc:168
+#, c-format
+msgid "%s: went online, with status %s"
+msgstr "%s: п╕д'╓днався, статус %s"
+
+#: src/imlogger.cc:170
+#, c-format
+msgid "%s: went offline"
+msgstr "%s: в╕д'╓днався"
+
+#: src/imlogger.cc:172
+#, c-format
+msgid "changed our %s status to %s from %s"
+msgstr "зм╕нено наш %s статус на %s з %s"
+
+#, fuzzy
+#~ msgid "+ [yahoo] %s: started typing"
+#~ msgstr "+ [yahoo] законектилися"
+
+#, fuzzy
+#~ msgid "+ [yahoo] %s: stopped typing"
+#~ msgstr "+ [yahoo] законектилися"
+
+#, fuzzy
+#~ msgid "+ [msn] %s: stopped typing"
+#~ msgstr "+ [yahoo] законектилися"
+
+#, fuzzy
+#~ msgid "+ [msn] %s: started typing"
+#~ msgstr "+ [yahoo] законектилися"
 
 #, fuzzy
 #~ msgid "+ [icq] %s has requested our away message"
@@ -2920,10 +2969,6 @@ msgstr ""
 
 #~ msgid "SOCKS proxy password: "
 #~ msgstr "Пароль користувача SOCKS-прокс╕: "
-
-#, fuzzy
-#~ msgid "+ [msn] error: %s"
-#~ msgstr "+ [yahoo] пов╕домлення не принято"
 
 #~ msgid "+ [msn] unable to connect to the server"
 #~ msgstr "+ [msn] не можу законектитися"

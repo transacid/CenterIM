@@ -1,2 +1,2 @@
-EXTRA_DIST = online.wav email.wav sms.wav msg.wav url.wav
+EXTRA_DIST = email.wav msg.wav online.wav sms.wav url.wav
 pkgdata_DATA = $(EXTRA_DIST)

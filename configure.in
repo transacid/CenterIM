@@ -42,7 +42,7 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
 
     if test -r $with_fribidi/include/fribidi/fribidi.h; then
 	LIBS="$LIBS `$with_fribidi/bin/fribidi-config --libs`"
-	AC_DEFINE(USE_FRIBIDI)
+	AC_DEFINE(USE_FRIBIDI, 1, [use fribidi])
     fi
 fi
 
@@ -76,7 +76,7 @@ if test "$with_ssl" != "no"; then
     if test -n "$with_openssl" -a "$with_openssl" != "no"; then
 	if test "$with_openssl" = "yes"; then with_openssl="/usr"; fi
 	CFLAGS="$CFLAGS -I${with_openssl}"
-	AC_DEFINE(HAVE_OPENSSL)
+	AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
 	AC_MSG_RESULT([found in $with_openssl])
 	AC_CHECK_LIB(crypto, main)
 	AC_CHECK_LIB(ssl, main)
@@ -86,7 +86,7 @@ if test "$with_ssl" != "no"; then
 	AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
 	    CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 	    LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
-	    AC_DEFINE(HAVE_GNUTLS)
+	    AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
 	])
     fi
 fi
@@ -98,16 +98,19 @@ AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator 
 
 AC_CHECK_HEADERS([hash_map strstream ext/hash_map sstream],,)
 
-AC_CHECK_HEADERS(ext/hash_map,,
-  AC_CHECK_HEADERS(hash_map,, AC_MSG_ERROR([Your libstdc++ installation does not have the extra hash classes])))
+AC_CHECK_HEADERS([ext/hash_map],,
+  [AC_CHECK_HEADERS([hash_map],,
+    AC_MSG_ERROR([Your libstdc++ installation does not have the extra hash classes]))])
 
-AC_CHECK_HEADERS(sstream,,
-  AC_CHECK_HEADERS(strstream,, AC_MSG_ERROR([Your libstdc++ doesn't have the sstream or strstream classes])))
+AC_CHECK_HEADERS([sstream],,
+  [AC_CHECK_HEADERS([strstream],,
+    AC_MSG_ERROR([Your libstdc++ doesn't have the sstream or strstream classes])]))
 
 AC_CHECK_HEADERS(iconv.h)
 
 AC_CHECK_LIB(iconv, iconv,,
-    [AC_CHECK_LIB(c, iconv,, AC_MSG_WARN(libiconv not found - Russian codepages translation in MSN and Jabber will not work))])
+    [AC_CHECK_LIB(c, iconv,,
+	AC_MSG_WARN(libiconv not found: encoding conversion for some protocols won't work))])
 
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
@@ -143,35 +146,35 @@ AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes)
 AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = xyes)
 
 if test "$build_msn" = "yes"; then
-    AC_DEFINE(BUILD_MSN)
+    AC_DEFINE(BUILD_MSN, 1, [build with msn support])
 fi
 
 if test "$build_yahoo" = "yes"; then
-    AC_DEFINE(BUILD_YAHOO)
+    AC_DEFINE(BUILD_YAHOO, 1, [build with yahoo support])
 fi
 
 if test "$build_aim" = "yes"; then
-    AC_DEFINE(BUILD_AIM)
+    AC_DEFINE(BUILD_AIM, 1, [build with aim support])
 fi
 
 if test "$build_irc" = "yes"; then
-    AC_DEFINE(BUILD_IRC)
+    AC_DEFINE(BUILD_IRC, 1, [build with irc support])
 fi
 
 if test "$build_jabber" = "yes"; then
-    AC_DEFINE(BUILD_JABBER)
+    AC_DEFINE(BUILD_JABBER, 1, [build with jabber support])
 fi
 
 if test "$build_rss" = "yes"; then
-    AC_DEFINE(BUILD_RSS)
+    AC_DEFINE(BUILD_RSS, 1, [build the integrated rss feeds reader])
 fi
 
 if test "$build_lj" = "yes"; then
-    AC_DEFINE(BUILD_LJ)
+    AC_DEFINE(BUILD_LJ, 1, [build the integrated livejournal client])
 fi
 
 if test "$build_konst" = "yes"; then
-    AC_DEFINE(BUILD_KONST)
+    AC_DEFINE(BUILD_KONST, 1, [add konst's id by default])
 fi
 
 AC_CONFIG_SUBDIRS(blip-0.1 firetalk-0.1 kkconsui-0.1 kkstrtext-0.1 libicq2000-0.1 libjabber-0.1 libyahoo2-0.1 kksystr-0.1 connwrap-0.1)

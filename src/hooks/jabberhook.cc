@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.53 2003/09/30 11:38:43 konst Exp $
+* $Id: jabberhook.cc,v 1.54 2003/10/01 09:02:22 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -142,17 +142,19 @@ void jabberhook::main() {
     jab_poll(jc, 0);
 
     if(jstate == STATE_CONNECTING) {
-	x = jutil_iqnew(JPACKET__GET, NS_AUTH);
-	cid = jab_getid(jc);
-	xmlnode_put_attrib(x, "id", cid);
-	id = atoi(cid);
+	if(jc) {
+	    x = jutil_iqnew(JPACKET__GET, NS_AUTH);
+	    cid = jab_getid(jc);
+	    xmlnode_put_attrib(x, "id", cid);
+	    id = atoi(cid);
 
-	z = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "username");
-	xmlnode_insert_cdata(z, jc->user->user, (unsigned) -1);
-	jab_send(jc, x);
-	xmlnode_free(x);
+	    z = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "username");
+	    xmlnode_insert_cdata(z, jc->user->user, (unsigned) -1);
+	    jab_send(jc, x);
+	    xmlnode_free(x);
 
-	jstate = STATE_GETAUTH;
+	    jstate = STATE_GETAUTH;
+	}
 
 	if(!jc || jc->state == JCONN_STATE_OFF) {
 	    face.log(_("+ [jab] unable to connect to the server"));

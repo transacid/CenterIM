@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.3\n"
-"POT-Creation-Date: 2003-09-10 00:55+0300\n"
+"POT-Creation-Date: 2003-10-01 11:30+0300\n"
 "PO-Revision-Date: 2002-09-10 22:43+0200\n"
 "Last-Translator: Ovidiu Ghineþ <oghinet@umfiasi.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -13,371 +13,8 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:151
-msgid "password: "
-msgstr "parolã: "
-
-#: src/centericq.cc:187
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M meniu curent, F3/S schimbare status, F4/G meniu general, Q ieºire"
-
-#: src/centericq.cc:267
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignorã evenimentele de la %s?"
-
-#: src/centericq.cc:271
-#, fuzzy, c-format
-msgid "Remove %s from the contact list as well?"
-msgstr "+ [aim] ºtergem pe %s din contacte"
-
-#: src/centericq.cc:305
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Sigur doriþi sã-l ºtergeþi pe %s?"
-
-#: src/centericq.cc:313
-msgid "New nickname to show: "
-msgstr "Noul nickname: "
-
-#: src/centericq.cc:322
-msgid "Select a group to move the user to"
-msgstr "Selectaþi un grup in care-l mutãm"
-
-#: src/centericq.cc:340
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ fiind offline nu puteþi prelua mesaje robot"
-
-#: src/centericq.cc:404
-#, fuzzy
-msgid "! cannot connect, free disk space is less than 10k"
-msgstr "! spaþiu pe disk mai mic de 10k, mergem offline"
-
-#: src/centericq.cc:436 src/accountmanager.cc:207
-msgid "away message"
-msgstr "mesaj robot"
-
-#: src/centericq.cc:447
-#, c-format
-msgid "! support for %s was disabled at build time"
-msgstr ""
-
-#: src/centericq.cc:671
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] poºtã nouã, %d mesaje"
-
-#: src/centericq.cc:674
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ ultimul mesaj de la %s"
-
-#: src/centericq.cc:718
-#, c-format
-msgid "+ the %s configuration was changed, reloaded"
-msgstr ""
-
-#: src/centericq.cc:772
-msgid "! another running copy of centericq detected"
-msgstr "! ruleazã incã o copie a centericq"
-
-#: src/centericq.cc:773
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! aceasta poate cauza probleme. pid %lu"
-
-#: src/centericq.cc:897
-msgid "Mobile number: "
-msgstr "Nr. mobil: "
-
-#: src/centericq.cc:1038
-msgid "directory to save the file(s) to: "
-msgstr ""
-
-#: src/centericq.cc:1045
-msgid "The specified directory is not writable"
-msgstr ""
-
-#: src/centericq.cc:1049
-msgid "The specified directory does not exist"
-msgstr ""
-
-#: src/centericq.cc:1184
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ arhiva lui %s este goalã"
-
-#: src/centericq.cc:1210
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ utilizatorul %s este deja în contacte"
-
-#: src/centericq.cc:1216
-msgid "Select a group to add the user to"
-msgstr "Selectaþi grupul in care-l adaugãm"
-
-#: src/centericq.cc:1227
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s a fost adãugat la contacte"
-
-#: src/centericq.cc:1298
-msgid "+ the user is back"
-msgstr "+ utilizatorul a revenit"
-
-#: src/centericq.cc:1314
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] status restored"
-
-#: src/centericq.cc:1329
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] setãm automat %s"
-
-#: src/centericq.cc:1331
-msgid "away"
-msgstr "away"
-
-#: src/centericq.cc:1331
-msgid "n/a"
-msgstr "n/a"
-
-#: src/centericq.cc:1457
-msgid "! free disk space is less than 10k, going offline"
-msgstr "! spaþiu pe disk mai mic de 10k, mergem offline"
-
-#: src/centericq.cc:1458
-msgid "! otherwise we can lose events and configuration"
-msgstr "! altfel am putea pierdem evenimente si configuraþii"
-
-#: src/centericq.cc:1497
-#, fuzzy
-msgid "Invite to conference.."
-msgstr "Ne auto-alãturãm la conferinþã"
-
-#: src/hooks/yahoohook.cc:117
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] conectare la server"
-
-#: src/hooks/yahoohook.cc:125
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] conectare imposibilã: "
-
-#: src/hooks/yahoohook.cc:128 src/hooks/msnhook.cc:744
-msgid "could not resolve hostname"
-msgstr "could not resolve hostname"
-
-#: src/hooks/yahoohook.cc:129
-msgid "could not create socket"
-msgstr "could not create socket"
-
-#: src/hooks/yahoohook.cc:130
-msgid "verify the pager host and port entered"
-msgstr "verificaþi host-ul ºi portul introdus"
-
-#: src/hooks/yahoohook.cc:167
-msgid "+ [yahoo] disconnected"
-msgstr "+ [yahoo] deconectat"
-
-#: src/hooks/yahoohook.cc:292
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] adãugãm %s la contacte"
-
-#: src/hooks/yahoohook.cc:312
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] ºtergem pe %s din contacte"
-
-#: src/hooks/yahoohook.cc:326
-#, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] pãrãsim conferinþa %s"
-
-#: src/hooks/yahoohook.cc:548
-#, fuzzy, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr ""
-"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
-
-#: src/hooks/yahoohook.cc:569
-#, fuzzy
-msgid "Please join my conference."
-msgstr "Utilizatorul %s s-a alãturat la conferinþã"
-
-#: src/hooks/yahoohook.cc:580
-msgid "Custom status message:"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:584
-#, fuzzy, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
-
-#: src/hooks/yahoohook.cc:610
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] conectat"
-
-#: src/hooks/yahoohook.cc:628
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr "+ [yahoo] conectare imposibilã: username si parolã nepotrivite"
-
-#: src/hooks/yahoohook.cc:633
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr "+ [yahoo] conectare imposibilã: contul a fost blocat"
-
-#: src/hooks/yahoohook.cc:634
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr "+ pt. a reactiva viziteazã %s"
-
-#: src/hooks/yahoohook.cc:700
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr "Utilizatorul %s v-ã invitã la conferinþa %s, subiectul este: %s"
-
-#: src/hooks/yahoohook.cc:705
-msgid "Current conference members are: "
-msgstr "Membrii conferinþei sunt: "
-
-#: src/hooks/yahoohook.cc:723
-msgid "Auto-joined the conference"
-msgstr "Ne auto-alãturãm la conferinþã"
-
-#: src/hooks/yahoohook.cc:733
-#, fuzzy, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr "Utilizatorul %s s-a alãturat la conferinþã"
-
-#: src/hooks/yahoohook.cc:743
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr "Utilizatorul %s s-a alãturat la conferinþã"
-
-#: src/hooks/yahoohook.cc:758
-#, c-format
-msgid "The user %s has left the conference"
-msgstr "Utilizatorul %s a pãrãsit conferinþa"
-
-#: src/hooks/yahoohook.cc:790 src/hooks/icqhook.cc:1158
-#: src/hooks/msnhook.cc:556
-msgid "The user has added you to his/her contact list"
-msgstr "Utilizatorul v-a adãugat la contactele lui/ei"
-
-#: src/hooks/yahoohook.cc:794
-msgid "the message was: "
-msgstr "mesajul a fost: "
-
-#: src/hooks/yahoohook.cc:806
-#, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] %s: a inceput sa tasteze"
-
-#: src/hooks/yahoohook.cc:806
-#, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] %s: s-a oprit din tastat"
-
-#: src/hooks/yahoohook.cc:819
-#, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail de la %s, %s"
-
-#: src/hooks/yahoohook.cc:826
-#, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] sistem: %s"
-
-#: src/hooks/yahoohook.cc:831
-#, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] eroare: %s"
-
-#: src/hooks/jabberhook.cc:108
-#, fuzzy
-msgid "+ [jab] connecting to the server"
-msgstr "+ [aim] conectare la server"
-
-#: src/hooks/jabberhook.cc:158
-#, fuzzy
-msgid "+ [jab] unable to connect to the server"
-msgstr "+ [aim] conectare la server imposibilã"
-
-#: src/hooks/jabberhook.cc:286
-#, fuzzy, c-format
-msgid "+ [jab] adding %s to the contacts"
-msgstr "+ [aim] adãugãm pe %s la contacte"
-
-#: src/hooks/jabberhook.cc:347
-#, fuzzy, c-format
-msgid "+ [jab] removing %s from the contacts"
-msgstr "+ [aim] ºtergem pe %s din contacte"
-
-#: src/hooks/jabberhook.cc:423 src/hooks/icqhook.cc:1212
-#: src/hooks/irchook.cc:572
-msgid "Away message:"
-msgstr "Mesaj robot:"
-
-#: src/hooks/jabberhook.cc:425
-#, fuzzy, c-format
-msgid "+ [jab] no away message from %s, %s"
-msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
-
-#: src/hooks/jabberhook.cc:453
-msgid "Wrong nickname given, cannot register"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:470
-#, fuzzy
-msgid "Unable to connect"
-msgstr "Mutã la contacte"
-
-#: src/hooks/jabberhook.cc:704
-#, fuzzy, c-format
-msgid "+ [jab] conference list fetching finished, %d found"
-msgstr ""
-"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
-
-#: src/hooks/jabberhook.cc:758
-#, fuzzy, c-format
-msgid "+ [jab] search finished, %d found"
-msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
-
-#: src/hooks/jabberhook.cc:813
-#, fuzzy
-msgid "+ [jab] logged in"
-msgstr "+ [aim] conectat"
-
-#: src/hooks/jabberhook.cc:1171 src/hooks/irchook.cc:1231
-#, c-format
-msgid "The remote is using %s"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:1213
-#, fuzzy
-msgid "+ [jab] disconnected"
-msgstr "+ [yahoo] deconectat"
-
-#: src/hooks/jabberhook.cc:1351
-msgid "Default Jabber conference server"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:1400
-#, fuzzy, c-format
-msgid "+ [jab] error %d: %s"
-msgstr "+ [yahoo] eroare: %s"
-
-#: src/hooks/jabberhook.cc:1469
-msgid "The user wants to subscribe to your network presence updates"
-msgstr ""
-
-#: src/hooks/jabberhook.cc:1478
-msgid ""
-"The user has removed you from his contact list (unsubscribed you, using the "
-"Jabber language)"
+#: src/hooks/HTTPClient.cc:276
+msgid "Timed out"
 msgstr ""
 
 #: src/hooks/aimhook.cc:64
@@ -437,79 +74,89 @@ msgstr "+ [aim] parolã trimisã"
 msgid "+ [icq] connecting to the server"
 msgstr "+ [icq] conectare la server"
 
-#: src/hooks/icqhook.cc:1028
+#: src/hooks/icqhook.cc:1025
 msgid "+ [icq] logged in"
 msgstr "+ [icq] conectat"
 
-#: src/hooks/icqhook.cc:1055
+#: src/hooks/icqhook.cc:1052
 msgid "as requested"
 msgstr "as requested"
 
-#: src/hooks/icqhook.cc:1056
+#: src/hooks/icqhook.cc:1053
 msgid "socket problems"
 msgstr "socket problems"
 
-#: src/hooks/icqhook.cc:1057
+#: src/hooks/icqhook.cc:1054
 msgid "bad username"
 msgstr "username greºit"
 
-#: src/hooks/icqhook.cc:1058
+#: src/hooks/icqhook.cc:1055
 msgid "turboing"
 msgstr "turboing"
 
-#: src/hooks/icqhook.cc:1059
+#: src/hooks/icqhook.cc:1056
 msgid "bad password"
 msgstr "parolã greºitã"
 
-#: src/hooks/icqhook.cc:1060
+#: src/hooks/icqhook.cc:1057
 msgid "username and password mismatch"
 msgstr "username si parolã nepotrivite"
 
-#: src/hooks/icqhook.cc:1061
+#: src/hooks/icqhook.cc:1058
 msgid "already logged"
 msgstr "deja conectat"
 
-#: src/hooks/icqhook.cc:1074
+#: src/hooks/icqhook.cc:1071
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] deconectat"
 
-#: src/hooks/icqhook.cc:1080
+#: src/hooks/icqhook.cc:1077
 msgid "icq disconnection reason"
 msgstr "icq motive de deconectare"
 
-#: src/hooks/icqhook.cc:1139
+#: src/hooks/icqhook.cc:1136
 msgid "The user has accepted your authorization request"
 msgstr "Utilizatorul a acceptat cererea dvs. de autorizare"
 
-#: src/hooks/icqhook.cc:1143
+#: src/hooks/icqhook.cc:1140
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "Utilizatorul a respins cererea dvs. de autorizare; mesajul a fost: "
 
-#: src/hooks/icqhook.cc:1198
+#: src/hooks/icqhook.cc:1155 src/hooks/msnhook.cc:539
+#: src/hooks/yahoohook.cc:881
+msgid "The user has added you to his/her contact list"
+msgstr "Utilizatorul v-a adãugat la contactele lui/ei"
+
+#: src/hooks/icqhook.cc:1195
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] SMS eºuat pentru %s, %s"
 
-#: src/hooks/icqhook.cc:1201
+#: src/hooks/icqhook.cc:1198
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] SMS eºuat pentru %s"
 
-#: src/hooks/icqhook.cc:1216
+#: src/hooks/icqhook.cc:1209 src/hooks/irchook.cc:572
+#: src/hooks/jabberhook.cc:425
+msgid "Away message:"
+msgstr "Mesaj robot:"
+
+#: src/hooks/icqhook.cc:1213
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
 
-#: src/hooks/icqhook.cc:1363
+#: src/hooks/icqhook.cc:1360
 msgid "Random Chat User"
 msgstr "Random Chat User"
 
-#: src/hooks/icqhook.cc:1393
+#: src/hooks/icqhook.cc:1390
 #, fuzzy, c-format
 msgid "+ [icq] search finished, %d found"
 msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
 
-#: src/hooks/icqhook.cc:1433
+#: src/hooks/icqhook.cc:1430
 #, fuzzy
 msgid "+ [icq] password was changed successfully"
 msgstr "+ [aim] parolã schimbatã cu succes"
@@ -574,6 +221,11 @@ msgstr ""
 msgid "PING reply from the user: %d second(s)"
 msgstr ""
 
+#: src/hooks/irchook.cc:1231 src/hooks/jabberhook.cc:1173
+#, c-format
+msgid "The remote is using %s"
+msgstr ""
+
 #: src/hooks/irchook.cc:1345
 #, fuzzy, c-format
 msgid "%s has joined."
@@ -619,114 +271,754 @@ msgstr ""
 msgid "%s has deopped us."
 msgstr ""
 
+#: src/hooks/jabberhook.cc:108
+#, fuzzy
+msgid "+ [jab] connecting to the server"
+msgstr "+ [aim] conectare la server"
+
+#: src/hooks/jabberhook.cc:160
+#, fuzzy
+msgid "+ [jab] unable to connect to the server"
+msgstr "+ [aim] conectare la server imposibilã"
+
+#: src/hooks/jabberhook.cc:288
+#, fuzzy, c-format
+msgid "+ [jab] adding %s to the contacts"
+msgstr "+ [aim] adãugãm pe %s la contacte"
+
+#: src/hooks/jabberhook.cc:349
+#, fuzzy, c-format
+msgid "+ [jab] removing %s from the contacts"
+msgstr "+ [aim] ºtergem pe %s din contacte"
+
+#: src/hooks/jabberhook.cc:427
+#, fuzzy, c-format
+msgid "+ [jab] no away message from %s, %s"
+msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
+
+#: src/hooks/jabberhook.cc:455
+msgid "Wrong nickname given, cannot register"
+msgstr ""
+
+#: src/hooks/jabberhook.cc:472
+#, fuzzy
+msgid "Unable to connect"
+msgstr "Mutã la contacte"
+
+#: src/hooks/jabberhook.cc:706
+#, fuzzy, c-format
+msgid "+ [jab] conference list fetching finished, %d found"
+msgstr ""
+"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
+
+#: src/hooks/jabberhook.cc:760
+#, fuzzy, c-format
+msgid "+ [jab] search finished, %d found"
+msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
+
+#: src/hooks/jabberhook.cc:815
+#, fuzzy
+msgid "+ [jab] logged in"
+msgstr "+ [aim] conectat"
+
+#: src/hooks/jabberhook.cc:1215
+#, fuzzy
+msgid "+ [jab] disconnected"
+msgstr "+ [yahoo] deconectat"
+
+#: src/hooks/jabberhook.cc:1353
+msgid "Default Jabber conference server"
+msgstr ""
+
+#: src/hooks/jabberhook.cc:1402
+#, fuzzy, c-format
+msgid "+ [jab] error %d: %s"
+msgstr "+ [yahoo] eroare: %s"
+
+#: src/hooks/jabberhook.cc:1471
+msgid "The user wants to subscribe to your network presence updates"
+msgstr ""
+
+#: src/hooks/jabberhook.cc:1480
+msgid ""
+"The user has removed you from his contact list (unsubscribed you, using the "
+"Jabber language)"
+msgstr ""
+
+#: src/hooks/ljhook.cc:61
+#, fuzzy
+msgid "+ [lj] connecting to the server"
+msgstr "+ [aim] conectare la server"
+
+#: src/hooks/ljhook.cc:92
+#, fuzzy
+msgid "+ [lj] disconnected"
+msgstr "+ [yahoo] deconectat"
+
+#: src/hooks/ljhook.cc:339
+#, fuzzy
+msgid "cannot connect"
+msgstr "+ [yahoo] conectare imposibilã: "
+
+#: src/hooks/ljhook.cc:340
+#, fuzzy, c-format
+msgid "+ [lj] HTTP failed: %s"
+msgstr "+ [aim] conectare eºuatã: %s"
+
+#: src/hooks/ljhook.cc:366
+#, fuzzy
+msgid "+ [lj] logged in"
+msgstr "+ [aim] conectat"
+
+#: src/hooks/ljhook.cc:376
+#, fuzzy, c-format
+msgid "+ [lj] login failed: %s"
+msgstr "+ [aim] conectare eºuatã: %s"
+
+#: src/hooks/ljhook.cc:380
+#, c-format
+msgid "+ [lj] posted successully, the id is %s"
+msgstr ""
+
+#: src/hooks/ljhook.cc:382
+#, fuzzy, c-format
+msgid "+ [lj] post error: %s"
+msgstr "+ [yahoo] eroare: %s"
+
 #: src/hooks/msnhook.cc:121
 msgid "+ [msn] connecting to the server"
 msgstr "+ [msn] conectare la server"
 
-#: src/hooks/msnhook.cc:144
-#, fuzzy, c-format
-msgid "+ [msn] %s: stopped typing"
-msgstr "+ [yahoo] %s: s-a oprit din tastat"
-
-#: src/hooks/msnhook.cc:323
+#: src/hooks/msnhook.cc:306
 #, c-format
 msgid "+ [msn] removing %s from the contacts"
 msgstr "+ [msn] ºtergem pe %s din contacte"
 
-#: src/hooks/msnhook.cc:363
+#: src/hooks/msnhook.cc:346
 #, fuzzy, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr ""
 "+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
 
-#: src/hooks/msnhook.cc:635
-#, fuzzy, c-format
-msgid "+ [msn] %s: started typing"
-msgstr "+ [yahoo] %s: a inceput sa tasteze"
-
-#: src/hooks/msnhook.cc:643
+#: src/hooks/msnhook.cc:622
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:650
+#: src/hooks/msnhook.cc:629
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail de la %s <%s>, %s"
 
-#: src/hooks/msnhook.cc:711
+#: src/hooks/msnhook.cc:690
 msgid "+ [msn] logged in"
 msgstr "+ [msn] conectat"
 
-#: src/hooks/msnhook.cc:726
+#: src/hooks/msnhook.cc:704
 msgid "+ [msn] disconnected"
 msgstr "+ [msn] deconectat"
 
-#: src/hooks/msnhook.cc:740
+#: src/hooks/msnhook.cc:718
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] conectare imposibilã: "
 
-#: src/hooks/msnhook.cc:758
+#: src/hooks/msnhook.cc:722 src/hooks/yahoohook.cc:159
+msgid "could not resolve hostname"
+msgstr "could not resolve hostname"
+
+#: src/hooks/msnhook.cc:736
 #, fuzzy
 msgid "verify the hostname and port"
 msgstr "verificaþi host-ul ºi portul introdus"
 
-#: src/icqcontact.cc:708
+#: src/hooks/rsshook.cc:282
+msgid "coudln't fetch"
+msgstr ""
+
+#: src/hooks/rsshook.cc:311
+msgid "wrong XML"
+msgstr ""
+
+#: src/hooks/rsshook.cc:314
+msgid "no <rss> tag found"
+msgstr ""
+
+#: src/hooks/rsshook.cc:321
+msgid "no <channel> tag found"
+msgstr ""
+
+#: src/hooks/rsshook.cc:328
+#, fuzzy
+msgid "wrong <channel> tag"
+msgstr "Pe canalele: "
+
+#: src/hooks/rsshook.cc:337
+msgid "success"
+msgstr ""
+
+#: src/hooks/rsshook.cc:356
+#, fuzzy
+msgid "Title: "
+msgstr "Titlu"
+
+#: src/hooks/rsshook.cc:357
+msgid "Published on: "
+msgstr ""
+
+#: src/hooks/rsshook.cc:358
+#, fuzzy
+msgid "Category: "
+msgstr "Oraº: "
+
+#: src/hooks/rsshook.cc:359
+#, fuzzy
+msgid "Author: "
+msgstr "* Autorizare : "
+
+#: src/hooks/rsshook.cc:361
+#, fuzzy
+msgid "Description: "
+msgstr "Funcþie: "
+
+#: src/hooks/rsshook.cc:362
+#, fuzzy
+msgid "Link: "
+msgstr "uin: "
+
+#: src/hooks/rsshook.cc:363
+#, fuzzy
+msgid "Comments: "
+msgstr "comentariu: "
+
+#: src/hooks/yahoohook.cc:145
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] conectare la server"
+
+#: src/hooks/yahoohook.cc:156
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] conectare imposibilã: "
+
+#: src/hooks/yahoohook.cc:160
+msgid "could not create socket"
+msgstr "could not create socket"
+
+#: src/hooks/yahoohook.cc:161
+msgid "verify the pager host and port entered"
+msgstr "verificaþi host-ul ºi portul introdus"
+
+#: src/hooks/yahoohook.cc:266
+msgid "+ [yahoo] disconnected"
+msgstr "+ [yahoo] deconectat"
+
+#: src/hooks/yahoohook.cc:368
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] adãugãm %s la contacte"
+
+#: src/hooks/yahoohook.cc:390
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] ºtergem pe %s din contacte"
+
+#: src/hooks/yahoohook.cc:409
+#, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] pãrãsim conferinþa %s"
+
+#: src/hooks/yahoohook.cc:617
+#, fuzzy, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr ""
+"+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
+
+#: src/hooks/yahoohook.cc:636
+#, fuzzy
+msgid "Please join my conference."
+msgstr "Utilizatorul %s s-a alãturat la conferinþã"
+
+#: src/hooks/yahoohook.cc:649
+msgid "Custom status message:"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:653
+#, fuzzy, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
+
+#: src/hooks/yahoohook.cc:679
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] conectat"
+
+#: src/hooks/yahoohook.cc:697
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr "+ [yahoo] conectare imposibilã: username si parolã nepotrivite"
+
+#: src/hooks/yahoohook.cc:702
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr "+ [yahoo] conectare imposibilã: contul a fost blocat"
+
+#: src/hooks/yahoohook.cc:703
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr "+ pt. a reactiva viziteazã %s"
+
+#: src/hooks/yahoohook.cc:707
+#, fuzzy
+msgid "+ [yahoo] another logon detected"
+msgstr "+ [yahoo] conectare imposibilã: "
+
+#: src/hooks/yahoohook.cc:786
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "Utilizatorul %s v-ã invitã la conferinþa %s, subiectul este: %s"
+
+#: src/hooks/yahoohook.cc:791
+msgid "Current conference members are: "
+msgstr "Membrii conferinþei sunt: "
+
+#: src/hooks/yahoohook.cc:811
+msgid "Auto-joined the conference"
+msgstr "Ne auto-alãturãm la conferinþã"
+
+#: src/hooks/yahoohook.cc:821
+#, fuzzy, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr "Utilizatorul %s s-a alãturat la conferinþã"
+
+#: src/hooks/yahoohook.cc:831
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr "Utilizatorul %s s-a alãturat la conferinþã"
+
+#: src/hooks/yahoohook.cc:846
+#, c-format
+msgid "The user %s has left the conference"
+msgstr "Utilizatorul %s a pãrãsit conferinþa"
+
+#: src/hooks/yahoohook.cc:885
+msgid "the message was: "
+msgstr "mesajul a fost: "
+
+#: src/hooks/yahoohook.cc:903
+#, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [yahoo] e-mail de la %s, %s"
+
+#: src/hooks/yahoohook.cc:910
+#, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] sistem: %s"
+
+#: src/hooks/yahoohook.cc:915
+#, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] eroare: %s"
+
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " IM manager conturi "
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:212 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:222 src/icqdialogs.cc:687 src/icqdialogs.cc:1094
+#: src/imcontroller.cc:71
+msgid "Change"
+msgstr "Schimbã"
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:687 src/icqdialogs.cc:1094
+#: src/icqdialogs.cc:1420
+msgid "Done"
+msgstr "Gata"
+
+#: src/accountmanager.cc:94
+#, c-format
+msgid " Server : %s "
+msgstr " Server : %s "
+
+#: src/accountmanager.cc:97
+#, fuzzy, c-format
+msgid " Secured : %s "
+msgstr " Server : %s "
+
+#: src/accountmanager.cc:103
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:108
+#, c-format
+msgid " Login : %s "
+msgstr " Login : %s "
+
+#: src/accountmanager.cc:114
+#, fuzzy, c-format
+msgid " Password (optional) : %s "
+msgstr " Parolã de setat : %s "
+
+#: src/accountmanager.cc:114
+#, c-format
+msgid " Password : %s "
+msgstr " Parolã : %s "
+
+#: src/accountmanager.cc:118
+msgid " Register "
+msgstr " Înregistreazã "
+
+#: src/accountmanager.cc:124
+#, fuzzy
+msgid " Change nickname "
+msgstr " Nickname "
+
+#: src/accountmanager.cc:125
+msgid " Update user details "
+msgstr " Editeazã detalii "
+
+#: src/accountmanager.cc:128
+msgid " Set away message "
+msgstr " Seteazã mesajul robot "
+
+#: src/accountmanager.cc:131
+msgid " Synchronize contact list "
+msgstr " Sincronizare contacte "
+
+#: src/accountmanager.cc:133
+msgid " Drop "
+msgstr " Renunþã "
+
+#: src/accountmanager.cc:151
+msgid " user name: "
+msgstr " nume utilizator: "
+
+#: src/accountmanager.cc:156
+msgid " uin: "
+msgstr "uin: "
+
+#: src/accountmanager.cc:161
+msgid " password: "
+msgstr " parolã: "
+
+#: src/accountmanager.cc:169
+msgid "Drop the account information first!"
+msgstr "Renunþã la informaþiile contului mai întãi!"
+
+#: src/accountmanager.cc:183
+msgid "You have to disconnect the service first!"
+msgstr "Trebuie sã te deconectezi mai întãi!"
+
+#: src/accountmanager.cc:192
+msgid " server address: "
+msgstr " adresã server: "
+
+#: src/accountmanager.cc:207 src/centericq.cc:436
+msgid "away message"
+msgstr "mesaj robot"
+
+#: src/accountmanager.cc:214
+msgid "You must be logged in to preform the synchronization"
+msgstr "Trebuie sã fii conectat pt. a face sincronizarea"
+
+#: src/centericq.cc:151
+msgid "password: "
+msgstr "parolã: "
+
+#: src/centericq.cc:187
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M meniu curent, F3/S schimbare status, F4/G meniu general, Q ieºire"
+
+#: src/centericq.cc:267
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignorã evenimentele de la %s?"
+
+#: src/centericq.cc:271
+#, fuzzy, c-format
+msgid "Remove %s from the contact list as well?"
+msgstr "+ [aim] ºtergem pe %s din contacte"
+
+#: src/centericq.cc:305
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Sigur doriþi sã-l ºtergeþi pe %s?"
+
+#: src/centericq.cc:313
+msgid "New nickname to show: "
+msgstr "Noul nickname: "
+
+#: src/centericq.cc:322
+msgid "Select a group to move the user to"
+msgstr "Selectaþi un grup in care-l mutãm"
+
+#: src/centericq.cc:340
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ fiind offline nu puteþi prelua mesaje robot"
+
+#: src/centericq.cc:404
+#, fuzzy
+msgid "! cannot connect, free disk space is less than 10k"
+msgstr "! spaþiu pe disk mai mic de 10k, mergem offline"
+
+#: src/centericq.cc:447
+#, c-format
+msgid "! support for %s was disabled at build time"
+msgstr ""
+
+#: src/centericq.cc:670
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] poºtã nouã, %d mesaje"
+
+#: src/centericq.cc:673
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ ultimul mesaj de la %s"
+
+#: src/centericq.cc:717
+#, c-format
+msgid "+ the %s configuration was changed, reloaded"
+msgstr ""
+
+#: src/centericq.cc:771
+msgid "! another running copy of centericq detected"
+msgstr "! ruleazã incã o copie a centericq"
+
+#: src/centericq.cc:772
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! aceasta poate cauza probleme. pid %lu"
+
+#: src/centericq.cc:896
+msgid "Mobile number: "
+msgstr "Nr. mobil: "
+
+#: src/centericq.cc:1037
+msgid "directory to save the file(s) to: "
+msgstr ""
+
+#: src/centericq.cc:1044
+msgid "The specified directory is not writable"
+msgstr ""
+
+#: src/centericq.cc:1048
+msgid "The specified directory does not exist"
+msgstr ""
+
+#: src/centericq.cc:1183
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ arhiva lui %s este goalã"
+
+#: src/centericq.cc:1209
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ utilizatorul %s este deja în contacte"
+
+#: src/centericq.cc:1215
+msgid "Select a group to add the user to"
+msgstr "Selectaþi grupul in care-l adaugãm"
+
+#: src/centericq.cc:1226
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s a fost adãugat la contacte"
+
+#: src/centericq.cc:1297
+msgid "+ the user is back"
+msgstr "+ utilizatorul a revenit"
+
+#: src/centericq.cc:1313
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] status restored"
+
+#: src/centericq.cc:1328
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] setãm automat %s"
+
+#: src/centericq.cc:1330
+msgid "away"
+msgstr "away"
+
+#: src/centericq.cc:1330
+msgid "n/a"
+msgstr "n/a"
+
+#: src/centericq.cc:1457
+msgid "! free disk space is less than 10k, going offline"
+msgstr "! spaþiu pe disk mai mic de 10k, mergem offline"
+
+#: src/centericq.cc:1458
+msgid "! otherwise we can lose events and configuration"
+msgstr "! altfel am putea pierdem evenimente si configuraþii"
+
+#: src/centericq.cc:1502
+#, fuzzy
+msgid "Invite to conference.."
+msgstr "Ne auto-alãturãm la conferinþã"
+
+#: src/icqconf.cc:147
+#, c-format
+msgid "I do really enjoy the default %s away message of %s %s."
+msgstr "Îmi place la nebunie mesajul robot pentru %s al %s %s."
+
+#: src/icqconf.cc:688
+msgid "+ launched the openurl command"
+msgstr ""
+
+#: src/icqconf.cc:857
+msgid "event sending error: not enough parameters"
+msgstr "eroare eveniment: parametrii insuficienþi"
+
+#: src/icqconf.cc:868
+msgid "event sending error: only UINs are allowed with icq protocol"
+msgstr "eroare eveniment: icq permite doar UIN-uri"
+
+#: src/icqconf.cc:883
+msgid "event sending error: unknown IM type"
+msgstr "eroare eveniment: IM necunoscut"
+
+#: src/icqconf.cc:905
+msgid "event sending error: unknown event type"
+msgstr "eroare eveniment: eveniment necunoscut"
+
+#: src/icqconf.cc:917
+#, c-format
+msgid "%s to %s has been put to the queue"
+msgstr "%s pentru %s a fost pus la poºtã"
+
+#: src/icqconf.cc:923
+msgid "event sending error: the destination contact doesn't exist on your list"
+msgstr "eroare eveniment: destinatoarul nu este in contactele dvs."
+
+#: src/icqconf.cc:965
+msgid "unknown status character was given"
+msgstr "caracter necunoscut pt. schimbarea statulului"
+
+#: src/icqconf.cc:968
+msgid "unknown IM type"
+msgstr "IM necunoscut"
+
+#: src/icqconf.cc:971
+msgid "status change error: "
+msgstr "eroare schimbare statut: "
+
+#: src/icqconf.cc:980
+#, fuzzy
+msgid "Usage: "
+msgstr "Vârstã: "
+
+#: src/icqconf.cc:982
+#, fuzzy
+msgid "General options:"
+msgstr "General Chat"
+
+#: src/icqconf.cc:983
+msgid ""
+"  --ascii, -a              use ASCII characters for windows and UI controls"
+msgstr ""
+
+#: src/icqconf.cc:984
+msgid "  --basedir, -b <path>     set a custom base directory"
+msgstr ""
+
+#: src/icqconf.cc:985
+msgid "  --bind, -B <host/ip>     bind a custom local IP"
+msgstr ""
+
+#: src/icqconf.cc:986
+#, fuzzy
+msgid "  --help                   display this stuff"
+msgstr " Schimbã statului                    s"
+
+#: src/icqconf.cc:987
+msgid "  --version, -v            show the program version info"
+msgstr ""
+
+#: src/icqconf.cc:989
+#, fuzzy
+msgid "Events sending options:"
+msgstr " Opþiuni configurare CenterICQ"
+
+#: src/icqconf.cc:990
+msgid "  -s, --send <event type>  event type; can be msg, sms or url"
+msgstr ""
+
+#: src/icqconf.cc:991
+msgid "  -S, --status <status>    change the current IM status"
+msgstr ""
+
+#: src/icqconf.cc:992
+msgid ""
+"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
+"or jabber"
+msgstr ""
+
+#: src/icqconf.cc:994
+msgid ""
+"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
+msgstr ""
+
+#: src/icqconf.cc:995
+msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
+msgstr ""
+
+#: src/icqconf.cc:997
+msgid "Report bugs to <centericq-bugs@konst.org.ua>."
+msgstr ""
+
+#: src/icqcontact.cc:711
 msgid "The user has a birthday today"
 msgstr "Astãzi este ziua utilizatorului"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Jan"
 msgstr "Ian"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Feb"
 msgstr "Feb"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Mar"
 msgstr "Mar"
 
-#: src/icqcontact.cc:736
+#: src/icqcontact.cc:739
 msgid "Apr"
 msgstr "Apr"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "May"
 msgstr "Mai"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "Jun"
 msgstr "Iun"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "Jul"
 msgstr "Iun"
 
-#: src/icqcontact.cc:737
+#: src/icqcontact.cc:740
 msgid "Aug"
 msgstr "Aug"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Sep"
 msgstr "Sep"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Oct"
 msgstr "Oct"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Nov"
 msgstr "Noi"
 
-#: src/icqcontact.cc:738
+#: src/icqcontact.cc:741
 msgid "Dec"
 msgstr "Dec"
-
-#: src/icqgroups.cc:66
-msgid "General"
-msgstr "General"
 
 #: src/icqdialogs.cc:44
 msgid "60-above"
@@ -776,8 +1068,8 @@ msgstr "Cãutând bãrbat"
 msgid " Search profiles "
 msgstr " Cautã profile "
 
-#: src/icqdialogs.cc:103 src/icqdialogs.cc:983 src/icqdialogs.cc:1520
-#: src/icqface.cc:1548 src/icqface.cc:2149
+#: src/icqdialogs.cc:103 src/icqdialogs.cc:987 src/icqdialogs.cc:1539
+#: src/icqface.cc:1564 src/icqface.cc:2165
 msgid "Remove"
 msgstr "ªterge"
 
@@ -801,12 +1093,6 @@ msgstr "sAlveazã"
 #: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
 msgid "cLear"
 msgstr "ºterge"
-
-#: src/icqdialogs.cc:212 src/icqdialogs.cc:217 src/icqdialogs.cc:222
-#: src/icqdialogs.cc:687 src/icqdialogs.cc:1088 src/accountmanager.cc:68
-#: src/imcontroller.cc:71
-msgid "Change"
-msgstr "Schimbã"
 
 #: src/icqdialogs.cc:212
 msgid "Search/Add"
@@ -1018,31 +1304,31 @@ msgstr "Nume: "
 msgid "E-Mail: "
 msgstr "E-mail: "
 
-#: src/icqdialogs.cc:453 src/icqdialogs.cc:715 src/imcontroller.cc:103
+#: src/icqdialogs.cc:453 src/icqdialogs.cc:719 src/imcontroller.cc:103
 msgid "First name: "
 msgstr "Prenume: "
 
-#: src/icqdialogs.cc:454 src/icqdialogs.cc:716 src/imcontroller.cc:104
+#: src/icqdialogs.cc:454 src/icqdialogs.cc:720 src/imcontroller.cc:104
 msgid "Last name: "
 msgstr "Nume: "
 
-#: src/icqdialogs.cc:459 src/icqdialogs.cc:748 src/icqdialogs.cc:757
+#: src/icqdialogs.cc:459 src/icqdialogs.cc:752 src/icqdialogs.cc:761
 msgid "City: "
 msgstr "Oraº: "
 
-#: src/icqdialogs.cc:460 src/icqdialogs.cc:749 src/icqdialogs.cc:758
+#: src/icqdialogs.cc:460 src/icqdialogs.cc:753 src/icqdialogs.cc:762
 msgid "State: "
 msgstr "Stat: "
 
-#: src/icqdialogs.cc:462 src/icqdialogs.cc:761
+#: src/icqdialogs.cc:462 src/icqdialogs.cc:765
 msgid "Company: "
 msgstr "Companie: "
 
-#: src/icqdialogs.cc:463 src/icqdialogs.cc:762
+#: src/icqdialogs.cc:463 src/icqdialogs.cc:766
 msgid "Department: "
 msgstr "Departament: "
 
-#: src/icqdialogs.cc:464 src/icqdialogs.cc:763
+#: src/icqdialogs.cc:464 src/icqdialogs.cc:767
 msgid "Position: "
 msgstr "Funcþie: "
 
@@ -1062,12 +1348,12 @@ msgstr "Cuvinte cheie: "
 msgid "Password: "
 msgstr "Parolã: "
 
-#: src/icqdialogs.cc:479 src/icqdialogs.cc:802
+#: src/icqdialogs.cc:479 src/icqdialogs.cc:806
 #, fuzzy
 msgid "URL: "
 msgstr "URL"
 
-#: src/icqdialogs.cc:480 src/icqdialogs.cc:803
+#: src/icqdialogs.cc:480 src/icqdialogs.cc:807
 msgid "Check frequency: "
 msgstr ""
 
@@ -1158,7 +1444,7 @@ msgstr " 2a limbã : %s "
 msgid " 3rd language : %s "
 msgstr " 3a limbã : %s "
 
-#: src/icqdialogs.cc:620 src/icqdialogs.cc:1158
+#: src/icqdialogs.cc:620 src/icqdialogs.cc:1165
 msgid " Miscellaneous "
 msgstr " Diverse "
 
@@ -1200,904 +1486,380 @@ msgstr " Detaliile dvs. %s "
 msgid " %s: details "
 msgstr " %s: detalii "
 
-#: src/icqdialogs.cc:687 src/icqdialogs.cc:1088 src/icqdialogs.cc:1401
-#: src/accountmanager.cc:68
-msgid "Done"
-msgstr "Gata"
-
 #: src/icqdialogs.cc:705
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Stai puþin. Detaliile nu au fost incã preluate"
 
-#: src/icqdialogs.cc:717
+#: src/icqdialogs.cc:721
 msgid "E-mail: "
 msgstr "E-mail: "
 
-#: src/icqdialogs.cc:728
+#: src/icqdialogs.cc:732
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Introdu ziua de naºtere (ZZ-LL-AAAA): "
 
-#: src/icqdialogs.cc:746
+#: src/icqdialogs.cc:750
 msgid "Age: "
 msgstr "Vârstã: "
 
-#: src/icqdialogs.cc:751 src/icqdialogs.cc:760
+#: src/icqdialogs.cc:755 src/icqdialogs.cc:764
 msgid "Street address: "
 msgstr "Adresã: "
 
-#: src/icqdialogs.cc:752 src/icqdialogs.cc:776
+#: src/icqdialogs.cc:756 src/icqdialogs.cc:780
 msgid "Zip code: "
 msgstr "Cod poºtal: "
 
-#: src/icqdialogs.cc:753 src/icqdialogs.cc:765
+#: src/icqdialogs.cc:757 src/icqdialogs.cc:769
 msgid "Phone: "
 msgstr "Telefon: "
 
-#: src/icqdialogs.cc:754 src/icqdialogs.cc:766
+#: src/icqdialogs.cc:758 src/icqdialogs.cc:770
 msgid "Fax: "
 msgstr "Fax: "
 
-#: src/icqdialogs.cc:755
+#: src/icqdialogs.cc:759
 msgid "Cellular phone: "
 msgstr "Telefon mobil: "
 
-#: src/icqdialogs.cc:764 src/icqdialogs.cc:768
+#: src/icqdialogs.cc:768 src/icqdialogs.cc:772
 msgid "Homepage: "
 msgstr "Homepage: "
 
-#: src/icqdialogs.cc:774 src/icqface.cc:1131 src/icqface.cc:1136
+#: src/icqdialogs.cc:778 src/icqface.cc:1140 src/icqface.cc:1145
 msgid "About"
 msgstr "Despre"
 
-#: src/icqdialogs.cc:796
+#: src/icqdialogs.cc:800
 #, fuzzy
 msgid "New password: "
 msgstr " parolã: "
 
-#: src/icqdialogs.cc:799
+#: src/icqdialogs.cc:803
 #, fuzzy
 msgid "Check the new password: "
 msgstr " Verificare parolã : %s "
 
-#: src/icqdialogs.cc:877 src/icqdialogs.cc:915
+#: src/icqdialogs.cc:881 src/icqdialogs.cc:919
 msgid "none"
 msgstr "nimic"
 
-#: src/icqdialogs.cc:933
+#: src/icqdialogs.cc:937
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [Ctrl-X salveazã, Esc anuleazã]"
 
-#: src/icqdialogs.cc:973
+#: src/icqdialogs.cc:977
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Trimite fiºier(e) lui %s, %lu"
 
-#: src/icqdialogs.cc:983 src/icqdialogs.cc:1400 src/icqface.cc:62
-#: src/icqface.cc:737 src/icqface.cc:1548 src/icqface.cc:2149
+#: src/icqdialogs.cc:987 src/icqdialogs.cc:1419 src/icqface.cc:62
+#: src/icqface.cc:746 src/icqface.cc:1564 src/icqface.cc:2165
 msgid "Add"
 msgstr "Adaugã"
 
-#: src/icqdialogs.cc:983
+#: src/icqdialogs.cc:987
 msgid "Comment"
 msgstr "Comentariu"
 
-#: src/icqdialogs.cc:983 src/icqface.cc:2149
+#: src/icqdialogs.cc:987 src/icqface.cc:2165
 msgid "Send"
 msgstr "Trimite"
 
-#: src/icqdialogs.cc:993
+#: src/icqdialogs.cc:997
 msgid " Files "
 msgstr " Fiºiere "
 
-#: src/icqdialogs.cc:994
+#: src/icqdialogs.cc:998
 msgid " Comment "
 msgstr " Comentariu "
 
-#: src/icqdialogs.cc:1006
+#: src/icqdialogs.cc:1010
 msgid "filename: "
 msgstr "nume fiºier: "
 
-#: src/icqdialogs.cc:1013
+#: src/icqdialogs.cc:1017
 msgid "comment: "
 msgstr "comentariu: "
 
-#: src/icqdialogs.cc:1079
+#: src/icqdialogs.cc:1085
 msgid " CenterICQ configuration "
 msgstr " Configurare CenterICQ "
 
-#: src/icqdialogs.cc:1099
+#: src/icqdialogs.cc:1105
 msgid " User interface "
 msgstr " Interfaþa utilizator "
 
-#: src/icqdialogs.cc:1100
+#: src/icqdialogs.cc:1106
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Schimbã dispozitivul de sunet în : %s "
 
-#: src/icqdialogs.cc:1101
+#: src/icqdialogs.cc:1107
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Schimbã schema de culori în : %s "
 
-#: src/icqdialogs.cc:1104
+#: src/icqdialogs.cc:1110
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " Activeazã suportul bidirecþional pt. limbã : %s "
 
-#: src/icqdialogs.cc:1106
+#: src/icqdialogs.cc:1112
 #, fuzzy, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr " Activeazã indicatorul web al statutului : %s "
 
-#: src/icqdialogs.cc:1108
+#: src/icqdialogs.cc:1114
 msgid " Contact list "
 msgstr " Contacte "
 
-#: src/icqdialogs.cc:1109
+#: src/icqdialogs.cc:1115
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Aranjeazã contactele in grupuri : %s "
 
-#: src/icqdialogs.cc:1110
+#: src/icqdialogs.cc:1116
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Ascunde utilizatorii offline : %s "
 
-#: src/icqdialogs.cc:1111
+#: src/icqdialogs.cc:1117
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-spam: omoarã mesajele de la necunoscuþi : %s "
 
-#: src/icqdialogs.cc:1112
+#: src/icqdialogs.cc:1118
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Citeazã mesajul la reply : %s "
 
-#: src/icqdialogs.cc:1113
+#: src/icqdialogs.cc:1119
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Verificã poºta localã : %s "
 
-#: src/icqdialogs.cc:1114
+#: src/icqdialogs.cc:1120
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Salveazã parolele : %s "
 
-#: src/icqdialogs.cc:1115
+#: src/icqdialogs.cc:1121
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Editeazã mesajul robot la schimbarea statulului : %s "
 
-#: src/icqdialogs.cc:1122
+#: src/icqdialogs.cc:1128
 #, fuzzy, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " Mod chat al mesajelor : %s "
 
-#: src/icqdialogs.cc:1128
+#: src/icqdialogs.cc:1134
 #, fuzzy, c-format
 msgid " Enter key sends message for : %s"
 msgstr " Citeazã mesajul la reply : %s "
 
-#: src/icqdialogs.cc:1135
+#: src/icqdialogs.cc:1141
 #, fuzzy, c-format
 msgid " Russian win/koi translation for : %s"
 msgstr " Este necesarã transformarea win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:1138
+#: src/icqdialogs.cc:1144
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Mod chat al mesajelor : %s "
 
-#: src/icqdialogs.cc:1139
+#: src/icqdialogs.cc:1145
 #, c-format
 msgid " Enter key sends message : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1140
+#: src/icqdialogs.cc:1146
 #, fuzzy, c-format
 msgid " Russian win/koi translation : %s "
 msgstr " Este necesarã transformarea win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:1144
+#: src/icqdialogs.cc:1150
+#, fuzzy, c-format
+msgid " Default charset : %s "
+msgstr " Departament : %s "
+
+#: src/icqdialogs.cc:1152
 msgid " Communications "
 msgstr " Comunicaþii "
 
-#: src/icqdialogs.cc:1145
+#: src/icqdialogs.cc:1153
 #, c-format
 msgid " SMTP server : %s "
 msgstr " Server SMTP : %s "
 
-#: src/icqdialogs.cc:1146
+#: src/icqdialogs.cc:1154
 #, fuzzy, c-format
 msgid " HTTP proxy server : %s "
 msgstr " Server SMTP : %s "
 
-#: src/icqdialogs.cc:1147
+#: src/icqdialogs.cc:1155
 #, fuzzy, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr " Activeazã indicatorul web al statutului : %s "
 
-#: src/icqdialogs.cc:1150
+#: src/icqdialogs.cc:1158
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1152
+#: src/icqdialogs.cc:1160
 #, fuzzy
 msgid " Logging "
 msgstr " Login : %s "
 
-#: src/icqdialogs.cc:1153
+#: src/icqdialogs.cc:1161
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1154
+#: src/icqdialogs.cc:1162
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1155
-#, c-format
-msgid " Typing notifications in the log window : %s "
-msgstr ""
-
-#: src/icqdialogs.cc:1156
+#: src/icqdialogs.cc:1163
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Evenimente detaliate în ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:1159
+#: src/icqdialogs.cc:1166
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Schimbare automatã statut în Away (min) : %d "
 
-#: src/icqdialogs.cc:1160
+#: src/icqdialogs.cc:1167
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Schimbare automatã status în N/A (min) : %d "
 
-#: src/icqdialogs.cc:1187
+#: src/icqdialogs.cc:1194
 msgid "Auto Away period (0 - disable): "
 msgstr "Perioadã auto-Away (0 - dezactiveazã): "
 
-#: src/icqdialogs.cc:1191
+#: src/icqdialogs.cc:1198
 msgid "Auto N/A period (0 - disable): "
 msgstr "Perioadã auto-N/A (0 - dezactiveazã): "
 
-#: src/icqdialogs.cc:1217
+#: src/icqdialogs.cc:1207
+msgid "Default charset: "
+msgstr ""
+
+#: src/icqdialogs.cc:1227
 msgid "SMTP server hostname: "
 msgstr "Hostname SMTP server: "
 
-#: src/icqdialogs.cc:1227
+#: src/icqdialogs.cc:1237
 msgid "Peer-to-peer port range (min-max): "
 msgstr ""
 
-#: src/icqdialogs.cc:1241
+#: src/icqdialogs.cc:1251
 #, fuzzy
 msgid "HTTP proxy server hostname: "
 msgstr "Hostname SMTP server: "
 
-#: src/icqdialogs.cc:1364
+#: src/icqdialogs.cc:1383
 msgid "Your details have been fetched"
 msgstr "Detaliile dvs. au fost preluate"
 
-#: src/icqdialogs.cc:1376
+#: src/icqdialogs.cc:1395
 msgid "Organize contact groups"
 msgstr "Organizeazã grupurile de contacte"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "Rename"
 msgstr "Redenumeºte"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "rEmove"
 msgstr "ºtErge"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "move Up"
 msgstr "mutã sUs"
 
-#: src/icqdialogs.cc:1400
+#: src/icqdialogs.cc:1419
 msgid "move Down"
 msgstr "mutã jos"
 
-#: src/icqdialogs.cc:1401
+#: src/icqdialogs.cc:1420
 msgid "Select"
 msgstr "Selecteazã"
 
-#: src/icqdialogs.cc:1416
+#: src/icqdialogs.cc:1435
 msgid " Groups "
 msgstr " Grupuri "
 
-#: src/icqdialogs.cc:1431
+#: src/icqdialogs.cc:1450
 msgid "Name for a group to be created: "
 msgstr "Nume grup de creat: "
 
-#: src/icqdialogs.cc:1441
+#: src/icqdialogs.cc:1460
 msgid "New name for the group: "
 msgstr "Nume nou pt. grup: "
 
-#: src/icqdialogs.cc:1454
+#: src/icqdialogs.cc:1473
 msgid "Are you sure want to remove the group?"
 msgstr "Sigur doriþi sã ºtergeþi grupul?"
 
-#: src/icqdialogs.cc:1511
+#: src/icqdialogs.cc:1530
 msgid "File transfer status"
 msgstr ""
 
-#: src/icqdialogs.cc:1520
+#: src/icqdialogs.cc:1539
 #, fuzzy
 msgid "Cancel"
 msgstr "Schimbã"
 
-#: src/icqdialogs.cc:1549
+#: src/icqdialogs.cc:1568
 #, fuzzy, c-format
 msgid " Incoming from %s "
 msgstr "Primesc %s de la %s"
 
-#: src/icqdialogs.cc:1551
+#: src/icqdialogs.cc:1570
 #, fuzzy, c-format
 msgid " Outgoing to %s "
 msgstr "Trimit %s lui %s"
 
-#: src/icqdialogs.cc:1559
+#: src/icqdialogs.cc:1578
 msgid "init"
 msgstr ""
 
-#: src/icqdialogs.cc:1560
+#: src/icqdialogs.cc:1579
 msgid "start"
 msgstr ""
 
-#: src/icqdialogs.cc:1561
+#: src/icqdialogs.cc:1580
 #, fuzzy
 msgid "work"
 msgstr "Serviciu"
 
-#: src/icqdialogs.cc:1562
+#: src/icqdialogs.cc:1581
 #, fuzzy
 msgid "done"
 msgstr "Gata"
 
-#: src/icqdialogs.cc:1563
+#: src/icqdialogs.cc:1582
 msgid "err"
 msgstr ""
 
-#: src/icqdialogs.cc:1564
+#: src/icqdialogs.cc:1583
 #, fuzzy
 msgid "abort"
 msgstr "Despre"
 
-#: src/icqdialogs.cc:1571
+#: src/icqdialogs.cc:1590
 #, fuzzy
 msgid " of "
 msgstr " Renunþã "
 
-#: src/icqdialogs.cc:1604
+#: src/icqdialogs.cc:1623
 msgid "Cannot remove a transfer which is in progress now"
-msgstr ""
-
-#: src/imexternal.cc:130
-#, fuzzy, c-format
-msgid "executed external manual action %s, return code = %d"
-msgstr "s-a executat acþiunea externã %s"
-
-#: src/imexternal.cc:162
-#, fuzzy, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "s-a executat acþiunea externã %s"
-
-#: src/imlogger.cc:33
-msgid "Offline"
-msgstr "Offline"
-
-#: src/imlogger.cc:34
-msgid "Online"
-msgstr "Online"
-
-#: src/imlogger.cc:35
-msgid "Invisible"
-msgstr "Invizibil"
-
-#: src/imlogger.cc:36
-msgid "Free for chat"
-msgstr "Dispus la discuþii"
-
-#: src/imlogger.cc:37
-msgid "DND"
-msgstr "DND"
-
-#: src/imlogger.cc:38
-msgid "Occupied"
-msgstr "Ocupat"
-
-#: src/imlogger.cc:39
-msgid "N/A"
-msgstr "N/A"
-
-#: src/imlogger.cc:40
-msgid "Away"
-msgstr "Away"
-
-#: src/imlogger.cc:48
-msgid "message"
-msgstr "mesaj"
-
-#: src/imlogger.cc:49
-msgid "URL"
-msgstr "URL"
-
-#: src/imlogger.cc:50
-msgid "SMS"
-msgstr "SMS"
-
-#: src/imlogger.cc:51
-msgid "authorization"
-msgstr "autorizare"
-
-#: src/imlogger.cc:52
-msgid "e-mail"
-msgstr "e-mail"
-
-#: src/imlogger.cc:53
-msgid "notification"
-msgstr "notificare"
-
-#: src/imlogger.cc:54
-#, fuzzy
-msgid "contacts"
-msgstr "Mutã la contacte"
-
-#: src/imlogger.cc:55
-#, fuzzy
-msgid "files"
-msgstr " Fiºiere "
-
-#: src/imlogger.cc:77
-msgid "events log started"
-msgstr "pornim log-ul evenimentelor"
-
-#: src/imlogger.cc:108
-#, c-format
-msgid "outgoing %s to %s"
-msgstr "trimit %s lui %s"
-
-#: src/imlogger.cc:109
-#, c-format
-msgid "incoming %s from %s"
-msgstr "primesc %s de la %s"
-
-#: src/imlogger.cc:121
-msgid "ignored"
-msgstr "ignorat"
-
-#: src/imlogger.cc:135
-#, c-format
-msgid "%s went online, with status %s"
-msgstr "%s este online, cu statului %s"
-
-#: src/imlogger.cc:137
-#, c-format
-msgid "%s went offline"
-msgstr "%s este offline"
-
-#: src/imlogger.cc:139
-#, c-format
-msgid "%s changed status to %s from %s"
-msgstr "%s ºi-a schimbat statutul in %s din %s"
-
-#: src/imlogger.cc:168
-#, c-format
-msgid "%s: went online, with status %s"
-msgstr "%s este online, cu statului %s"
-
-#: src/imlogger.cc:170
-#, c-format
-msgid "%s: went offline"
-msgstr "%s este offline"
-
-#: src/imlogger.cc:172
-#, c-format
-msgid "changed our %s status to %s from %s"
-msgstr "ne-am schimbat statutul %s din %s in %s"
-
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " IM manager conturi "
-
-#: src/accountmanager.cc:94
-#, c-format
-msgid " Server : %s "
-msgstr " Server : %s "
-
-#: src/accountmanager.cc:97
-#, fuzzy, c-format
-msgid " Secured : %s "
-msgstr " Server : %s "
-
-#: src/accountmanager.cc:103
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:108
-#, c-format
-msgid " Login : %s "
-msgstr " Login : %s "
-
-#: src/accountmanager.cc:114
-#, fuzzy, c-format
-msgid " Password (optional) : %s "
-msgstr " Parolã de setat : %s "
-
-#: src/accountmanager.cc:114
-#, c-format
-msgid " Password : %s "
-msgstr " Parolã : %s "
-
-#: src/accountmanager.cc:118
-msgid " Register "
-msgstr " Înregistreazã "
-
-#: src/accountmanager.cc:124
-#, fuzzy
-msgid " Change nickname "
-msgstr " Nickname "
-
-#: src/accountmanager.cc:125
-msgid " Update user details "
-msgstr " Editeazã detalii "
-
-#: src/accountmanager.cc:128
-msgid " Set away message "
-msgstr " Seteazã mesajul robot "
-
-#: src/accountmanager.cc:131
-msgid " Synchronize contact list "
-msgstr " Sincronizare contacte "
-
-#: src/accountmanager.cc:133
-msgid " Drop "
-msgstr " Renunþã "
-
-#: src/accountmanager.cc:151
-msgid " user name: "
-msgstr " nume utilizator: "
-
-#: src/accountmanager.cc:156
-msgid " uin: "
-msgstr "uin: "
-
-#: src/accountmanager.cc:161
-msgid " password: "
-msgstr " parolã: "
-
-#: src/accountmanager.cc:169
-msgid "Drop the account information first!"
-msgstr "Renunþã la informaþiile contului mai întãi!"
-
-#: src/accountmanager.cc:183
-msgid "You have to disconnect the service first!"
-msgstr "Trebuie sã te deconectezi mai întãi!"
-
-#: src/accountmanager.cc:192
-msgid " server address: "
-msgstr " adresã server: "
-
-#: src/accountmanager.cc:214
-msgid "You must be logged in to preform the synchronization"
-msgstr "Trebuie sã fii conectat pt. a face sincronizarea"
-
-#: src/imcontroller.cc:64
-#, fuzzy, c-format
-msgid " Register on the %s network "
-msgstr " Înregistrare reþea ICQ"
-
-#: src/imcontroller.cc:71
-msgid "Go ahead"
-msgstr "Tot inainte"
-
-#: src/imcontroller.cc:87
-#, c-format
-msgid " Password to set : %s "
-msgstr " Parolã de setat : %s "
-
-#: src/imcontroller.cc:88
-#, c-format
-msgid " Check the password : %s "
-msgstr " Verificare parolã : %s "
-
-#: src/imcontroller.cc:91
-#, c-format
-msgid " Server to use : %s "
-msgstr " Server de folosit : %s "
-
-#: src/imcontroller.cc:100
-msgid "Check the password you entered: "
-msgstr "Verificã parola introdusã: "
-
-#: src/imcontroller.cc:101
-msgid "Nickname to set: "
-msgstr "Nickname de setat: "
-
-#: src/imcontroller.cc:105
-msgid "Server: "
-msgstr "Server: "
-
-#: src/imcontroller.cc:111
-msgid "Passwords do not match"
-msgstr "Parolele nu se potrivesc"
-
-#: src/imcontroller.cc:113
-msgid "Password must be entered"
-msgstr "Introduceþi o parolã"
-
-#: src/imcontroller.cc:131 src/imcontroller.cc:192
-msgid " Registration progress "
-msgstr " Progres înregistrare "
-
-#: src/imcontroller.cc:134
-#, c-format
-msgid "Connecting to the server %s ..."
-msgstr "Conectare la serverul %s ..."
-
-#: src/imcontroller.cc:138
-msgid "Sending request"
-msgstr "Trimitem cererea"
-
-#: src/imcontroller.cc:144
-msgid "Timed out waiting for a new uin. Retry?"
-msgstr "Timpul aºtepare uin a expirat. Reîncercãm?"
-
-#: src/imcontroller.cc:148
-msgid "Retrying.."
-msgstr "Reîncercare.."
-
-#: src/imcontroller.cc:154
-#, c-format
-msgid "New UIN received, %lu"
-msgstr "Am primit noul uin, %lu"
-
-#: src/imcontroller.cc:170 src/imcontroller.cc:228 src/imcontroller.cc:318
-msgid "Disconnected"
-msgstr "Deconectat"
-
-#: src/imcontroller.cc:173
-msgid "Unable to connect to the icq server. Retry?"
-msgstr "Nu am putut contacta serverul icq. Reîncercãm?"
-
-#: src/imcontroller.cc:194
-#, c-format
-msgid "Trying to register %s at %s ..."
-msgstr ""
-
-#: src/imcontroller.cc:209
-msgid "The Jabber ID was successfully registered"
-msgstr ""
-
-#: src/imcontroller.cc:222
-#, fuzzy
-msgid "Failed"
-msgstr "Femeie"
-
-#: src/imcontroller.cc:250
-msgid "You must be logged to the ICQ network to update the details"
-msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
-
-#: src/imcontroller.cc:268
-msgid "new MSN friendly nick: "
-msgstr ""
-
-#: src/imcontroller.cc:276
-#, c-format
-msgid "Your friendly nickname has been changed to %s"
-msgstr ""
-
-#: src/imcontroller.cc:280
-#, fuzzy
-msgid "You must be logged to the MSN network to update the friendly nick"
-msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
-
-#: src/imcontroller.cc:297
-#, fuzzy
-msgid "You must be logged to the Jabber network to update your details"
-msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
-
-#: src/imcontroller.cc:308
-msgid " Contact list synchronization "
-msgstr " Sincronizare contacte "
-
-#: src/imcontroller.cc:309
-msgid "Starting the synchronization process"
-msgstr "Începe procesul de sincronizare"
-
-#: src/imcontroller.cc:313
-#, c-format
-msgid "Attempt #%d"
-msgstr "Încercarea #%d"
-
-#: src/imcontroller.cc:314
-#, c-format
-msgid ".. %d already synchronized, %d contacts to be stored"
-msgstr ".. %d deja sincronizat, %d contacte de stocat"
-
-#: src/imcontroller.cc:317 src/imcontroller.cc:358
-msgid "Finished"
-msgstr "Terminat"
-
-#: src/imcontroller.cc:319
-msgid "Too many attempts, gave up"
-msgstr "Prea multe încercãri, renunþ"
-
-#: src/imcontroller.cc:341
-msgid " Uploading buddies "
-msgstr " Uploading buddies "
-
-#: src/imcontroller.cc:344
-#, fuzzy
-msgid "No contacts to be synchronized"
-msgstr " Sincronizare contacte "
-
-#: src/imcontroller.cc:345
-#, fuzzy
-msgid ".. all of them are already stored server-side"
-msgstr "Nici un contact de sincronizat; toate sunt stocate pe server"
-
-#: src/imcontroller.cc:349
-#, c-format
-msgid "%d contacts are do be stored server-side. Add them now?"
-msgstr "%d contacte de stocat pe server. Le adaugãm acum?"
-
-#: src/imcontroller.cc:354
-#, c-format
-msgid ".. adding %s"
-msgstr ".. adãugãm %s"
-
-#: src/imcontroller.cc:360
-msgid "Cancelled"
-msgstr ""
-
-#: src/imcontroller.cc:375
-msgid "registration is not supported"
-msgstr "înregistrarea nu este suportatã"
-
-#: src/icqconf.cc:146
-#, c-format
-msgid "I do really enjoy the default %s away message of %s %s."
-msgstr "Îmi place la nebunie mesajul robot pentru %s al %s %s."
-
-#: src/icqconf.cc:684
-msgid "+ launched the openurl command"
-msgstr ""
-
-#: src/icqconf.cc:851
-msgid "event sending error: not enough parameters"
-msgstr "eroare eveniment: parametrii insuficienþi"
-
-#: src/icqconf.cc:862
-msgid "event sending error: only UINs are allowed with icq protocol"
-msgstr "eroare eveniment: icq permite doar UIN-uri"
-
-#: src/icqconf.cc:877
-msgid "event sending error: unknown IM type"
-msgstr "eroare eveniment: IM necunoscut"
-
-#: src/icqconf.cc:899
-msgid "event sending error: unknown event type"
-msgstr "eroare eveniment: eveniment necunoscut"
-
-#: src/icqconf.cc:911
-#, c-format
-msgid "%s to %s has been put to the queue"
-msgstr "%s pentru %s a fost pus la poºtã"
-
-#: src/icqconf.cc:917
-msgid "event sending error: the destination contact doesn't exist on your list"
-msgstr "eroare eveniment: destinatoarul nu este in contactele dvs."
-
-#: src/icqconf.cc:959
-msgid "unknown status character was given"
-msgstr "caracter necunoscut pt. schimbarea statulului"
-
-#: src/icqconf.cc:962
-msgid "unknown IM type"
-msgstr "IM necunoscut"
-
-#: src/icqconf.cc:965
-msgid "status change error: "
-msgstr "eroare schimbare statut: "
-
-#: src/icqconf.cc:974
-#, fuzzy
-msgid "Usage: "
-msgstr "Vârstã: "
-
-#: src/icqconf.cc:976
-#, fuzzy
-msgid "General options:"
-msgstr "General Chat"
-
-#: src/icqconf.cc:977
-msgid ""
-"  --ascii, -a              use ASCII characters for windows and UI controls"
-msgstr ""
-
-#: src/icqconf.cc:978
-msgid "  --basedir, -b <path>     set a custom base directory"
-msgstr ""
-
-#: src/icqconf.cc:979
-msgid "  --bind, -B <host/ip>     bind a custom local IP"
-msgstr ""
-
-#: src/icqconf.cc:980
-#, fuzzy
-msgid "  --help                   display this stuff"
-msgstr " Schimbã statului                    s"
-
-#: src/icqconf.cc:981
-msgid "  --version, -v            show the program version info"
-msgstr ""
-
-#: src/icqconf.cc:983
-#, fuzzy
-msgid "Events sending options:"
-msgstr " Opþiuni configurare CenterICQ"
-
-#: src/icqconf.cc:984
-msgid "  -s, --send <event type>  event type; can be msg, sms or url"
-msgstr ""
-
-#: src/icqconf.cc:985
-msgid "  -S, --status <status>    change the current IM status"
-msgstr ""
-
-#: src/icqconf.cc:986
-msgid ""
-"  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc "
-"or jabber"
-msgstr ""
-
-#: src/icqconf.cc:987
-msgid ""
-"  -t, --to <destination>   destination UIN or nick (depends on protocol)"
-msgstr ""
-
-#: src/icqconf.cc:988
-msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
-msgstr ""
-
-#: src/icqconf.cc:990
-msgid "Report bugs to <centericq-bugs@konst.org.ua>."
-msgstr ""
-
-#: src/imevents.cc:278
-msgid "Empty authorization request message"
-msgstr "Cerere de autorizare farã conþinut"
-
-#: src/imevents.cc:301
-msgid "* Authorization request : "
-msgstr "* Cerere autorizare : "
-
-#: src/imevents.cc:302
-msgid "* Authorization : "
-msgstr "* Autorizare : "
-
-#: src/imevents.cc:360
-msgid "* SMS : "
-msgstr "* SMS : "
-
-#: src/imevents.cc:493
-#, fuzzy
-msgid "* Contacts : "
-msgstr " Contacte "
-
-#: src/imevents.cc:498
-msgid "<no nick>"
-msgstr ""
-
-#: src/imevents.cc:573
-msgid "* File transfer"
 msgstr ""
 
 #: src/icqface.cc:40
@@ -2394,481 +2156,766 @@ msgstr " Ascunde utilizatorii offline       F5"
 msgid " Organize contact groups"
 msgstr "Organizeazã grupurile de contacte"
 
-#: src/icqface.cc:737 src/icqface.cc:1548
+#: src/icqface.cc:746 src/icqface.cc:1564
 msgid "Details"
 msgstr "Detalii"
 
-#: src/icqface.cc:737
+#: src/icqface.cc:746
 msgid "Message"
 msgstr "Mesaj"
 
-#: src/icqface.cc:738
+#: src/icqface.cc:747
 msgid "New search"
 msgstr "Cãutare nouã"
 
-#: src/icqface.cc:753
+#: src/icqface.cc:762
 #, fuzzy
 msgid "Contact to add"
 msgstr " Contacte "
 
-#: src/icqface.cc:763
+#: src/icqface.cc:772
 msgid "Searching contacts.."
 msgstr "Cãutãm contactele.."
 
-#: src/icqface.cc:831
+#: src/icqface.cc:840
 msgid "Search results [done]"
 msgstr "Rezultatele cautãrii [gata]"
 
-#: src/icqface.cc:842
+#: src/icqface.cc:851
 #, c-format
 msgid "Information about %s"
 msgstr "Informaþii despre %s"
 
-#: src/icqface.cc:900
+#: src/icqface.cc:909
 msgid "Nickname"
 msgstr "Nickname"
 
-#: src/icqface.cc:901
+#: src/icqface.cc:910
 msgid "Name"
 msgstr "Nume"
 
-#: src/icqface.cc:902
+#: src/icqface.cc:911
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/icqface.cc:903
+#: src/icqface.cc:912
 msgid "2nd e-mail"
 msgstr "2a e-mail"
 
-#: src/icqface.cc:904
+#: src/icqface.cc:913
 msgid "Old e-mail"
 msgstr "E-mail vechi"
 
-#: src/icqface.cc:905
+#: src/icqface.cc:914
 msgid "Gender"
 msgstr "Gen"
 
-#: src/icqface.cc:906
+#: src/icqface.cc:915
 msgid "Birthdate"
 msgstr "Ziua de naºtere"
 
-#: src/icqface.cc:907
+#: src/icqface.cc:916
 msgid "Age"
 msgstr "Vârstã"
 
-#: src/icqface.cc:908
+#: src/icqface.cc:917
 msgid "Languages"
 msgstr "Limbi"
 
-#: src/icqface.cc:909
+#: src/icqface.cc:918
 msgid "Last IP"
 msgstr "Ultimul IP"
 
-#: src/icqface.cc:930
+#: src/icqface.cc:939
 msgid "Last seen"
 msgstr "Ultima datã vãzut"
 
-#: src/icqface.cc:932 src/icqface.cc:1098 src/icqface.cc:1102
+#: src/icqface.cc:941 src/icqface.cc:1107 src/icqface.cc:1111
 msgid "Never"
 msgstr "Niciodatã"
 
-#: src/icqface.cc:945 src/icqface.cc:988
+#: src/icqface.cc:954 src/icqface.cc:997
 msgid "Address"
 msgstr "Adresã"
 
-#: src/icqface.cc:946 src/icqface.cc:989
+#: src/icqface.cc:955 src/icqface.cc:998
 msgid "Location"
 msgstr "Locaþie"
 
-#: src/icqface.cc:947 src/icqface.cc:990
+#: src/icqface.cc:956 src/icqface.cc:999
 msgid "Zip code"
 msgstr "Cod poºtal"
 
-#: src/icqface.cc:948 src/icqface.cc:996
+#: src/icqface.cc:957 src/icqface.cc:1005
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:949 src/icqface.cc:997
+#: src/icqface.cc:958 src/icqface.cc:1006
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:950
+#: src/icqface.cc:959
 msgid "Cellular"
 msgstr "Telefon mobil"
 
-#: src/icqface.cc:951
+#: src/icqface.cc:960
 msgid "Timezone"
 msgstr "Fus orar"
 
-#: src/icqface.cc:953 src/icqface.cc:998
+#: src/icqface.cc:962 src/icqface.cc:1007
 msgid "Homepage"
 msgstr "Homepage"
 
-#: src/icqface.cc:992
+#: src/icqface.cc:1001
 msgid "Company"
 msgstr "Companie"
 
-#: src/icqface.cc:993
+#: src/icqface.cc:1002
 msgid "Department"
 msgstr "Departament"
 
-#: src/icqface.cc:994 src/icqface.cc:1073
+#: src/icqface.cc:1003 src/icqface.cc:1082
 msgid "Title"
 msgstr "Titlu"
 
-#: src/icqface.cc:1038
+#: src/icqface.cc:1047
 msgid "Interests"
 msgstr "Interese"
 
-#: src/icqface.cc:1050
+#: src/icqface.cc:1059
 msgid "Background"
 msgstr "Trecut"
 
-#: src/icqface.cc:1068
+#: src/icqface.cc:1077
 #, fuzzy
 msgid "Handle"
 msgstr "Bãrbat"
 
-#: src/icqface.cc:1069
+#: src/icqface.cc:1078
 msgid "RSS doc"
 msgstr ""
 
-#: src/icqface.cc:1070
+#: src/icqface.cc:1079
 msgid "Version"
 msgstr ""
 
-#: src/icqface.cc:1071
+#: src/icqface.cc:1080
 msgid "Encoding"
 msgstr ""
 
-#: src/icqface.cc:1074
+#: src/icqface.cc:1083
 msgid "Link"
 msgstr ""
 
-#: src/icqface.cc:1076
+#: src/icqface.cc:1085
 msgid "Frequency"
 msgstr ""
 
-#: src/icqface.cc:1077
+#: src/icqface.cc:1086
 #, fuzzy
 msgid "Last check"
 msgstr "Ultima datã vãzut"
 
-#: src/icqface.cc:1078
+#: src/icqface.cc:1087
 msgid "Next check"
 msgstr ""
 
-#: src/icqface.cc:1079
+#: src/icqface.cc:1088
 #, fuzzy
 msgid "Last result"
 msgstr "as requested"
 
-#: src/icqface.cc:1093
+#: src/icqface.cc:1102
 #, c-format
 msgid "%lu minutes"
 msgstr ""
 
-#: src/icqface.cc:1096
+#: src/icqface.cc:1105
 #, fuzzy
 msgid "Now"
 msgstr "Noi"
 
-#: src/icqface.cc:1123
+#: src/icqface.cc:1132
 #, fuzzy
 msgid "F2 to URLs, F6 external actions, ESC close"
 msgstr "F2 pt URL-uri, ESC inchide"
 
-#: src/icqface.cc:1131 src/icqface.cc:1136
+#: src/icqface.cc:1140 src/icqface.cc:1145
 msgid "Info"
 msgstr "Info"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1140
 msgid "Home"
 msgstr "Acasã"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1140
 msgid "Work"
 msgstr "Serviciu"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1140
 msgid "More"
 msgstr "Mai multe"
 
-#: src/icqface.cc:1132
+#: src/icqface.cc:1141
 msgid "Retrieve"
 msgstr "Preia"
 
-#: src/icqface.cc:1132 src/icqface.cc:1136
+#: src/icqface.cc:1141 src/icqface.cc:1145
 msgid "Edit"
 msgstr "Editeazã"
 
-#: src/icqface.cc:1136
+#: src/icqface.cc:1145
 msgid "Check"
 msgstr ""
 
-#: src/icqface.cc:1226
+#: src/icqface.cc:1235
 msgid " [icq] ICQ network"
 msgstr " [icq] reþeaua ICQ"
 
-#: src/icqface.cc:1227
+#: src/icqface.cc:1236
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:1228
+#: src/icqface.cc:1237
 msgid " [msn] M$ Messenger"
 msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:1229
+#: src/icqface.cc:1238
 msgid " [aim] AOL TOC"
 msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:1230
+#: src/icqface.cc:1239
 msgid " [irc] IRC"
 msgstr " [irc] IRC"
 
-#: src/icqface.cc:1231
+#: src/icqface.cc:1240
 msgid " [jab] Jabber"
 msgstr ""
 
-#: src/icqface.cc:1268
+#: src/icqface.cc:1242
+msgid " [lj] LiveJournal"
+msgstr ""
+
+#: src/icqface.cc:1283
 msgid " All protocols"
 msgstr ""
 
-#: src/icqface.cc:1269
+#: src/icqface.cc:1284
 #, fuzzy
 msgid " Already logged in only"
 msgstr "deja conectat"
 
-#: src/icqface.cc:1309
+#: src/icqface.cc:1325
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:1310
+#: src/icqface.cc:1326
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:1311
+#: src/icqface.cc:1327
 msgid " [a] Away"
 msgstr " [a] Away"
 
-#: src/icqface.cc:1312
+#: src/icqface.cc:1328
 msgid " [d] Do not disturb"
 msgstr " [d] Nu deranjaþi"
 
-#: src/icqface.cc:1313
+#: src/icqface.cc:1329
 msgid " [n] Not available"
 msgstr " [n] Nedisponibil"
 
-#: src/icqface.cc:1314
+#: src/icqface.cc:1330
 msgid " [c] Occupied"
 msgstr " [c] Ocupat"
 
-#: src/icqface.cc:1315
+#: src/icqface.cc:1331
 msgid " [f] Free for chat"
 msgstr " [f] Deschis la discuþii"
 
-#: src/icqface.cc:1316
+#: src/icqface.cc:1332
 msgid " [i] Invisible"
 msgstr " [i] Invizibil"
 
-#: src/icqface.cc:1375
+#: src/icqface.cc:1391
 msgid " <Space> or <Enter> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1404
+#: src/icqface.cc:1420
 msgid " <Space> confirm, <Esc> cancel "
 msgstr ""
 
-#: src/icqface.cc:1548
+#: src/icqface.cc:1564
 msgid "Move to contacts"
 msgstr "Mutã la contacte"
 
-#: src/icqface.cc:1560
+#: src/icqface.cc:1576
 msgid "Ignore list"
 msgstr "Lista ignorã"
 
-#: src/icqface.cc:1561
+#: src/icqface.cc:1577
 msgid "Visible list"
 msgstr "Lista vizibilã"
 
-#: src/icqface.cc:1562
+#: src/icqface.cc:1578
 msgid "Invisible list"
 msgstr "Lista invizibilã"
 
-#: src/icqface.cc:1584
+#: src/icqface.cc:1600
 msgid "Select contacts to add to the list"
 msgstr "Selecteazã contactele de adãugat la listã"
 
-#: src/icqface.cc:1589
+#: src/icqface.cc:1605
 #, c-format
 msgid "Remove the %d contacts from the contact list as well?"
 msgstr ""
 
-#: src/icqface.cc:1645
+#: src/icqface.cc:1661
 msgid "Event recipients"
 msgstr "Destinatari"
 
-#: src/icqface.cc:1811
+#: src/icqface.cc:1827
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "CautareRapidã: tasteaza pt. gãsire, Alt-S din nou, Enter gata"
 
-#: src/icqface.cc:1925
+#: src/icqface.cc:1941
 msgid "+ no URLs within the current context"
 msgstr "+ nici un URL in contextul curent"
 
-#: src/icqface.cc:1938
+#: src/icqface.cc:1954
 msgid "URLs within the current context"
 msgstr "URL-uri in contextul curent"
 
-#: src/icqface.cc:1954
+#: src/icqface.cc:1970
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr ""
 
-#: src/icqface.cc:1974
+#: src/icqface.cc:1990
 #, c-format
 msgid "Result of the external action %s:"
 msgstr ""
 
-#: src/icqface.cc:1992
+#: src/icqface.cc:2008
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
 msgstr ""
 "Ctrl-X trimite, Ctrl-P multiplu, Ctrl-O arhivã, Alt-? detalii, ESC anuleazã"
 
-#: src/icqface.cc:1994
+#: src/icqface.cc:2010
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X trimite, Ctrl-P multiplu, Ctrl-O arhivã, Alt-? detalii, ESC anuleazã"
 
-#: src/icqface.cc:2020 src/icqface.cc:2454
+#: src/icqface.cc:2036 src/icqface.cc:2470
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Trimit %s lui %s"
 
-#: src/icqface.cc:2120
+#: src/icqface.cc:2136
 #, fuzzy
 msgid "Send contacts.."
 msgstr "Cãutãm contactele.."
 
-#: src/icqface.cc:2180
+#: src/icqface.cc:2196
 #, fuzzy
 msgid "file name: "
 msgstr "nume fiºier: "
 
-#: src/icqface.cc:2455
+#: src/icqface.cc:2471
 #, c-format
 msgid "Sent on %s"
 msgstr "Trimis pe %s"
 
-#: src/icqface.cc:2458
+#: src/icqface.cc:2474
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Primesc %s de la %s"
 
-#: src/icqface.cc:2459
+#: src/icqface.cc:2475
 #, c-format
 msgid "Received on %s"
 msgstr "Primit pe %s"
 
-#: src/icqface.cc:2504
+#: src/icqface.cc:2520
 #, fuzzy
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr "F2 pt URL-uri, ESC inchide"
 
-#: src/icqface.cc:2549
+#: src/icqface.cc:2565
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "Primit pe %s"
 
-#: src/icqface.cc:2550
+#: src/icqface.cc:2566
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "Trimis pe %s"
 
-#: src/icqface.cc:2563
+#: src/icqface.cc:2579
 msgid "ESC or F9 to close"
 msgstr ""
 
-#: src/icqface.cc:2645
+#: src/icqface.cc:2661
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Arhivã pt. %s, %d evenimente in total"
 
-#: src/icqface.cc:2648
+#: src/icqface.cc:2664
 #, fuzzy
 msgid "/ search, N again, ESC cancel"
 msgstr "S cautã, L din nou, ESC anuleazã"
 
-#: src/icqface.cc:2654
+#: src/icqface.cc:2670
 msgid "search for: "
 msgstr "cautã: "
 
-#: src/hooks/rsshook.cc:282
-msgid "coudln't fetch"
+#: src/icqgroups.cc:66
+msgid "General"
+msgstr "General"
+
+#: src/imcontroller.cc:64
+#, fuzzy, c-format
+msgid " Register on the %s network "
+msgstr " Înregistrare reþea ICQ"
+
+#: src/imcontroller.cc:71
+msgid "Go ahead"
+msgstr "Tot inainte"
+
+#: src/imcontroller.cc:87
+#, c-format
+msgid " Password to set : %s "
+msgstr " Parolã de setat : %s "
+
+#: src/imcontroller.cc:88
+#, c-format
+msgid " Check the password : %s "
+msgstr " Verificare parolã : %s "
+
+#: src/imcontroller.cc:91
+#, c-format
+msgid " Server to use : %s "
+msgstr " Server de folosit : %s "
+
+#: src/imcontroller.cc:100
+msgid "Check the password you entered: "
+msgstr "Verificã parola introdusã: "
+
+#: src/imcontroller.cc:101
+msgid "Nickname to set: "
+msgstr "Nickname de setat: "
+
+#: src/imcontroller.cc:105
+msgid "Server: "
+msgstr "Server: "
+
+#: src/imcontroller.cc:111
+msgid "Passwords do not match"
+msgstr "Parolele nu se potrivesc"
+
+#: src/imcontroller.cc:113
+msgid "Password must be entered"
+msgstr "Introduceþi o parolã"
+
+#: src/imcontroller.cc:131 src/imcontroller.cc:192
+msgid " Registration progress "
+msgstr " Progres înregistrare "
+
+#: src/imcontroller.cc:134
+#, c-format
+msgid "Connecting to the server %s ..."
+msgstr "Conectare la serverul %s ..."
+
+#: src/imcontroller.cc:138
+msgid "Sending request"
+msgstr "Trimitem cererea"
+
+#: src/imcontroller.cc:144
+msgid "Timed out waiting for a new uin. Retry?"
+msgstr "Timpul aºtepare uin a expirat. Reîncercãm?"
+
+#: src/imcontroller.cc:148
+msgid "Retrying.."
+msgstr "Reîncercare.."
+
+#: src/imcontroller.cc:154
+#, c-format
+msgid "New UIN received, %lu"
+msgstr "Am primit noul uin, %lu"
+
+#: src/imcontroller.cc:170 src/imcontroller.cc:228 src/imcontroller.cc:318
+msgid "Disconnected"
+msgstr "Deconectat"
+
+#: src/imcontroller.cc:173
+msgid "Unable to connect to the icq server. Retry?"
+msgstr "Nu am putut contacta serverul icq. Reîncercãm?"
+
+#: src/imcontroller.cc:194
+#, c-format
+msgid "Trying to register %s at %s ..."
 msgstr ""
 
-#: src/hooks/rsshook.cc:311
-msgid "wrong XML"
+#: src/imcontroller.cc:209
+msgid "The Jabber ID was successfully registered"
 msgstr ""
 
-#: src/hooks/rsshook.cc:314
-msgid "no <rss> tag found"
-msgstr ""
-
-#: src/hooks/rsshook.cc:321
-msgid "no <channel> tag found"
-msgstr ""
-
-#: src/hooks/rsshook.cc:328
+#: src/imcontroller.cc:222
 #, fuzzy
-msgid "wrong <channel> tag"
-msgstr "Pe canalele: "
+msgid "Failed"
+msgstr "Femeie"
 
-#: src/hooks/rsshook.cc:337
-msgid "success"
+#: src/imcontroller.cc:250
+msgid "You must be logged to the ICQ network to update the details"
+msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
+
+#: src/imcontroller.cc:268
+msgid "new MSN friendly nick: "
 msgstr ""
 
-#: src/hooks/rsshook.cc:356
-#, fuzzy
-msgid "Title: "
-msgstr "Titlu"
-
-#: src/hooks/rsshook.cc:357
-msgid "Published on: "
+#: src/imcontroller.cc:276
+#, c-format
+msgid "Your friendly nickname has been changed to %s"
 msgstr ""
 
-#: src/hooks/rsshook.cc:358
+#: src/imcontroller.cc:280
 #, fuzzy
-msgid "Category: "
-msgstr "Oraº: "
+msgid "You must be logged to the MSN network to update the friendly nick"
+msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
 
-#: src/hooks/rsshook.cc:359
+#: src/imcontroller.cc:297
 #, fuzzy
-msgid "Author: "
+msgid "You must be logged to the Jabber network to update your details"
+msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
+
+#: src/imcontroller.cc:308
+msgid " Contact list synchronization "
+msgstr " Sincronizare contacte "
+
+#: src/imcontroller.cc:309
+msgid "Starting the synchronization process"
+msgstr "Începe procesul de sincronizare"
+
+#: src/imcontroller.cc:313
+#, c-format
+msgid "Attempt #%d"
+msgstr "Încercarea #%d"
+
+#: src/imcontroller.cc:314
+#, c-format
+msgid ".. %d already synchronized, %d contacts to be stored"
+msgstr ".. %d deja sincronizat, %d contacte de stocat"
+
+#: src/imcontroller.cc:317 src/imcontroller.cc:358
+msgid "Finished"
+msgstr "Terminat"
+
+#: src/imcontroller.cc:319
+msgid "Too many attempts, gave up"
+msgstr "Prea multe încercãri, renunþ"
+
+#: src/imcontroller.cc:341
+msgid " Uploading buddies "
+msgstr " Uploading buddies "
+
+#: src/imcontroller.cc:344
+#, fuzzy
+msgid "No contacts to be synchronized"
+msgstr " Sincronizare contacte "
+
+#: src/imcontroller.cc:345
+#, fuzzy
+msgid ".. all of them are already stored server-side"
+msgstr "Nici un contact de sincronizat; toate sunt stocate pe server"
+
+#: src/imcontroller.cc:349
+#, c-format
+msgid "%d contacts are do be stored server-side. Add them now?"
+msgstr "%d contacte de stocat pe server. Le adaugãm acum?"
+
+#: src/imcontroller.cc:354
+#, c-format
+msgid ".. adding %s"
+msgstr ".. adãugãm %s"
+
+#: src/imcontroller.cc:360
+msgid "Cancelled"
+msgstr ""
+
+#: src/imcontroller.cc:375
+msgid "registration is not supported"
+msgstr "înregistrarea nu este suportatã"
+
+#: src/imevents.cc:278
+msgid "Empty authorization request message"
+msgstr "Cerere de autorizare farã conþinut"
+
+#: src/imevents.cc:301
+msgid "* Authorization request : "
+msgstr "* Cerere autorizare : "
+
+#: src/imevents.cc:302
+msgid "* Authorization : "
 msgstr "* Autorizare : "
 
-#: src/hooks/rsshook.cc:361
-#, fuzzy
-msgid "Description: "
-msgstr "Funcþie: "
+#: src/imevents.cc:360
+msgid "* SMS : "
+msgstr "* SMS : "
 
-#: src/hooks/rsshook.cc:362
+#: src/imevents.cc:493
 #, fuzzy
-msgid "Link: "
-msgstr "uin: "
+msgid "* Contacts : "
+msgstr " Contacte "
 
-#: src/hooks/rsshook.cc:363
-#, fuzzy
-msgid "Comments: "
-msgstr "comentariu: "
-
-#: src/hooks/HTTPClient.cc:245
-msgid "Timed out"
+#: src/imevents.cc:498
+msgid "<no nick>"
 msgstr ""
+
+#: src/imevents.cc:573
+msgid "* File transfer"
+msgstr ""
+
+#: src/imexternal.cc:130
+#, fuzzy, c-format
+msgid "executed external manual action %s, return code = %d"
+msgstr "s-a executat acþiunea externã %s"
+
+#: src/imexternal.cc:162
+#, fuzzy, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "s-a executat acþiunea externã %s"
+
+#: src/imlogger.cc:33
+msgid "Offline"
+msgstr "Offline"
+
+#: src/imlogger.cc:34
+msgid "Online"
+msgstr "Online"
+
+#: src/imlogger.cc:35
+msgid "Invisible"
+msgstr "Invizibil"
+
+#: src/imlogger.cc:36
+msgid "Free for chat"
+msgstr "Dispus la discuþii"
+
+#: src/imlogger.cc:37
+msgid "DND"
+msgstr "DND"
+
+#: src/imlogger.cc:38
+msgid "Occupied"
+msgstr "Ocupat"
+
+#: src/imlogger.cc:39
+msgid "N/A"
+msgstr "N/A"
+
+#: src/imlogger.cc:40
+msgid "Away"
+msgstr "Away"
+
+#: src/imlogger.cc:48
+msgid "message"
+msgstr "mesaj"
+
+#: src/imlogger.cc:49
+msgid "URL"
+msgstr "URL"
+
+#: src/imlogger.cc:50
+msgid "SMS"
+msgstr "SMS"
+
+#: src/imlogger.cc:51
+msgid "authorization"
+msgstr "autorizare"
+
+#: src/imlogger.cc:52
+msgid "e-mail"
+msgstr "e-mail"
+
+#: src/imlogger.cc:53
+msgid "notification"
+msgstr "notificare"
+
+#: src/imlogger.cc:54
+#, fuzzy
+msgid "contacts"
+msgstr "Mutã la contacte"
+
+#: src/imlogger.cc:55
+#, fuzzy
+msgid "files"
+msgstr " Fiºiere "
+
+#: src/imlogger.cc:77
+msgid "events log started"
+msgstr "pornim log-ul evenimentelor"
+
+#: src/imlogger.cc:108
+#, c-format
+msgid "outgoing %s to %s"
+msgstr "trimit %s lui %s"
+
+#: src/imlogger.cc:109
+#, c-format
+msgid "incoming %s from %s"
+msgstr "primesc %s de la %s"
+
+#: src/imlogger.cc:121
+msgid "ignored"
+msgstr "ignorat"
+
+#: src/imlogger.cc:135
+#, c-format
+msgid "%s went online, with status %s"
+msgstr "%s este online, cu statului %s"
+
+#: src/imlogger.cc:137
+#, c-format
+msgid "%s went offline"
+msgstr "%s este offline"
+
+#: src/imlogger.cc:139
+#, c-format
+msgid "%s changed status to %s from %s"
+msgstr "%s ºi-a schimbat statutul in %s din %s"
+
+#: src/imlogger.cc:168
+#, c-format
+msgid "%s: went online, with status %s"
+msgstr "%s este online, cu statului %s"
+
+#: src/imlogger.cc:170
+#, c-format
+msgid "%s: went offline"
+msgstr "%s este offline"
+
+#: src/imlogger.cc:172
+#, c-format
+msgid "changed our %s status to %s from %s"
+msgstr "ne-am schimbat statutul %s din %s in %s"
+
+#~ msgid "+ [yahoo] %s: started typing"
+#~ msgstr "+ [yahoo] %s: a inceput sa tasteze"
+
+#~ msgid "+ [yahoo] %s: stopped typing"
+#~ msgstr "+ [yahoo] %s: s-a oprit din tastat"
+
+#, fuzzy
+#~ msgid "+ [msn] %s: stopped typing"
+#~ msgstr "+ [yahoo] %s: s-a oprit din tastat"
+
+#, fuzzy
+#~ msgid "+ [msn] %s: started typing"
+#~ msgstr "+ [yahoo] %s: a inceput sa tasteze"
 
 #, fuzzy
 #~ msgid "+ [icq] %s has requested our away message"
@@ -2902,10 +2949,6 @@ msgstr ""
 
 #~ msgid "SOCKS proxy password: "
 #~ msgstr "Parolã SOCKS proxy"
-
-#, fuzzy
-#~ msgid "+ [msn] error: %s"
-#~ msgstr "+ [yahoo] eroare: %s"
 
 #~ msgid "+ [msn] unable to connect to the server"
 #~ msgstr "+ [msn] conectare la server imposibilã"
