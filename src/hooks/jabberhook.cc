@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.16 2002/11/29 15:57:40 konst Exp $
+* $Id: jabberhook.cc,v 1.17 2002/11/30 09:30:12 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,6 +36,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::flexiblesearch);
     fcapabs.insert(hookcapab::visibility);
+//    fcapabs.insert(hookcapab::conferencing);
 }
 
 jabberhook::~jabberhook() {
@@ -60,7 +61,8 @@ void jabberhook::connect() {
     if((pos = jid.find(":")) != -1)
 	jid.erase(pos);
 
-    jid += "/centericq";
+    if(jid.find("/") == -1)
+	jid += "/centericq";
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(acc.password.c_str()));
@@ -93,7 +95,7 @@ void jabberhook::connect() {
 void jabberhook::disconnect() {
     jab_stop(jc);
     jab_delete(jc);
-    jc = 0;
+    statehandler(jc, JCONN_STATE_OFF);
 }
 
 void jabberhook::main() {
@@ -182,6 +184,12 @@ bool jabberhook::send(const imevent &ev) {
 
 	xmlnode x;
 	x = jutil_msgnew(TMSG_CHAT, cjid.get(), 0, ctext.get());
+
+	if(ischannel(c)) {
+	    xmlnode_put_attrib(x, "type", "groupchat");
+	    xmlnode_put_attrib(x, "to", xmlnode_get_attrib(x, "to")+1);
+	}
+
 	jab_send(jc, x);
 	xmlnode_free(x);
 
@@ -629,6 +637,13 @@ void jabberhook::gotloggedin() {
     face.update();
 }
 
+void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
+    auto_ptr<char> jcid(strdup(confid.nickname.substr(1).c_str()));
+    xmlnode x = jutil_presnew(JPACKET__UNKNOWN, jcid.get(), 0);
+    jab_send(jc, x);
+    xmlnode_free(x);
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
@@ -686,13 +701,13 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    }
 
 	    if(!body.empty()) {
-		jhook.checkinlist(ic);
 		body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
 
-		if(type == "groupchat") {
-		} else {
-		    em.store(immessage(ic, imevent::incoming, body));
-		}
+		if(type == "groupchat")
+		    ic = imcontact((string) "#" + ic.nickname, jabber);
+
+		jhook.checkinlist(ic);
+		em.store(immessage(ic, imevent::incoming, body));
 	    }
 	    break;
 

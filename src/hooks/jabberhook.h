@@ -84,6 +84,9 @@ class jabberhook: public abstracthook {
 	vector<pair<string, string> > getsearchparameters(const string &agentname) const;
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
+
+	void conferencecreate(const imcontact &confid,
+	    const vector<imcontact> &lst);
 };
 
 extern jabberhook jhook;
