@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.20 2003/01/15 15:15:18 konst Exp $
+* $Id: imexternal.cc,v 1.22 2003/01/18 16:46:33 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,8 +123,6 @@ bool imexternal::action::exec(const imcontact &ic, string &outbuf) {
     if(r = enabled)
     if(r = (options & aomanual)) {
 	currentev = new immessage(ic, imevent::incoming, "");
-
-	writescript();
 	int result = execscript();
 
 	sprintf(buf, _("executed external manual action %s, return code = %d"),
@@ -155,8 +153,6 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
 
     if(r) {
 	currentev = ev;
-
-	writescript();
 	result = execscript();
 
 	sprintf(buf, _("executed external action %s, return code = %d"),
@@ -223,16 +219,9 @@ void imexternal::action::substitute() {
 }
 
 void imexternal::action::writescript() {
-    ostrstream tfname;
     ofstream f;
-    int i = 0;
 
-    do {
-	tfname.clear();
-	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0)+i++;
-	sname = string(tfname.str(), tfname.pcount());
-    } while(!access(sname.c_str(), F_OK));
-
+    sname = conf.getdirname() + "centericq-external-tmp." + i2str(getpid());
     f.open(sname.c_str());
 
     if(f.is_open()) {
@@ -261,6 +250,8 @@ int imexternal::action::execscript() {
 	pid = fork();
 
 	if(!pid) {
+	    writescript();
+
 	    if(c = clist.get(currentev->getcontact())) {
 		setenv("SENDER_UIN", i2str(c->getdesc().uin).c_str(), 1);
 
@@ -293,24 +284,28 @@ int imexternal::action::execscript() {
 		close(outpipe[1]);
 	    }
 
+	    r = 0;
 	    text = "";
 
-	    if(options & aostdout) {
-		while(1) {
-		    FD_ZERO(&rfds);
-		    FD_SET(inpipe[0], &rfds);
+//	    if(!(options & aonowait)) {
+		if(options & aostdout) {
+		    while(1) {
+			FD_ZERO(&rfds);
+			FD_SET(inpipe[0], &rfds);
 
-		    if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
-			if(FD_ISSET(inpipe[0], &rfds)) {
-			    if(read(inpipe[0], &ch, 1) != 1) break; else {
-				text += ch;
+			if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
+			    if(FD_ISSET(inpipe[0], &rfds)) {
+				if(read(inpipe[0], &ch, 1) != 1) break; else {
+				    text += ch;
+				}
 			    }
 			}
 		    }
 		}
-	    }
 
-	    waitpid(pid, &r, 0);
+		waitpid(pid, &r, 0);
+		unlink(sname.c_str());
+//	    }
 
 	    close(inpipe[0]);
 	    close(outpipe[1]);
@@ -319,7 +314,6 @@ int imexternal::action::execscript() {
     }
 
     sigaction(SIGCHLD, &osact, 0);
-    unlink(sname.c_str());
     return r;
 }
 
@@ -410,7 +404,8 @@ bool imexternal::action::load(ifstream &f) {
 	    } else if(param == "options") {
 		while(!(param = getword(buf)).empty()) {
 		    if(param == "stdin") options |= aostdin; else
-		    if(param == "stdout") options |= aostdout;
+		    if(param == "stdout") options |= aostdout; else
+		    if(param == "nowait") options |= aonowait;
 		}
 	    }
 	} else if(sect == "exec") {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.152 2003/01/15 15:15:17 konst Exp $
+* $Id: centericq.cc,v 1.153 2003/01/18 16:44:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -641,11 +641,14 @@ void centericq::checkconfigs() {
 }
 
 void centericq::handlesignal(int signum) {
-    int status;
+    int status, pid;
 
     switch(signum) {
 	case SIGCHLD:
-	    while(wait3(&status, WNOHANG, 0) > 0);
+	    while((pid = wait3(&status, WNOHANG, 0)) > 0) {
+		string sname = conf.getdirname() + "centericq-external-tmp." + i2str(pid);
+		unlink(sname.c_str());
+	    }
 	    break;
 
 	case SIGUSR1:
