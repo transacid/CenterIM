@@ -11,6 +11,9 @@ void abstracthook::disconnect() {
 void abstracthook::exectimers() {
 }
 
+void abstracthook::main() {
+}
+
 void abstracthook::setautostatus(imstatus st) {
 }
 

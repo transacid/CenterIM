@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.15 2001/11/14 16:18:15 konst Exp $
+* $Id: icqcontacts.cc,v 1.16 2001/11/21 14:35:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,6 +123,10 @@ void icqcontacts::load() {
 	tuname = tname + "17502151";
 	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
 	add(new icqcontact(imcontact(17502151, icq)));
+
+	tuname = tname + "ythekonst";
+	mkdir(tuname.c_str(), S_IREAD | S_IWRITE | S_IEXEC);
+	add(new icqcontact(imcontact("thekonst", yahoo)));
     }
 
     if(!get(contactroot)) {

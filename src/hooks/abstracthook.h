@@ -9,6 +9,7 @@ class abstracthook {
 	virtual void connect();
 	virtual void disconnect();
 	virtual void exectimers();
+	virtual void main();
 
 	virtual int getsockfd() const;
 	virtual bool online() const;

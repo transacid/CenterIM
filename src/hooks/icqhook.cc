@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.1 2001/11/20 17:08:51 konst Exp $
+* $Id: icqhook.cc,v 1.2 2001/11/21 14:35:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -680,7 +680,8 @@ void icqhook::clearfindresults() {
     founduins.clear();
 }
 
-struct tm *icqhook::maketm(int hour, int minute, int day, int month, int year) {
+struct tm *icqhook::maketm(int hour, int minute, int day,
+int month, int year) const {
     static struct tm msgtm;
     memset(&msgtm, 0, sizeof(msgtm));
     msgtm.tm_min = minute;
@@ -773,6 +774,12 @@ void icqhook::disconnect() {
 
 void icqhook::regnewuin(struct icq_link *link, unsigned long uin) {
     ihook.reguin = uin;
+}
+
+void icqhook::main() {
+    if(enabled()) {
+	icq_HandleServerResponse(&icql);
+    }
 }
 
 bool icqhook::regconnect(const string aserver) {

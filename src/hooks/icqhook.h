@@ -179,6 +179,7 @@ class icqhook: public abstracthook {
 	    int result, unsigned int length, void *data);
 
 	void init(const icqconf::imaccount account);
+	struct tm *maketm(int hour, int minute, int day, int month, int year) const;
 
     public:
 	icqhook();
@@ -189,8 +190,8 @@ class icqhook: public abstracthook {
 
 	void connect();
 	void disconnect();
+	void main();
 
-	struct tm *maketm(int hour, int minute, int day, int month, int year);
 	void exectimers();
 	void setfinddest(verticalmenu *m);
 	unsigned int getfinduin(int pos);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.19 2001/11/14 16:18:15 konst Exp $
+* $Id: icqcontact.cc,v 1.20 2001/11/21 14:35:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -811,6 +811,7 @@ bool icqcontact::islocal() const {
     addrs.push_back("192.");
     addrs.push_back("172.");
     addrs.push_back("154.");
+    addrs.push_back("10.");
 
     lc = lastip;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.36 2001/11/20 17:08:49 konst Exp $
+* $Id: centericq.cc,v 1.37 2001/11/21 14:35:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -628,48 +628,53 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 }
 
 bool centericq::idle(int options = 0) {
-    bool keypressed;
+    bool keypressed, online, fin;
     fd_set fds;
     struct timeval tv;
-    int sockfd;
+    int hsockfd;
+    protocolname pname;
 
-    for(keypressed = false; !keypressed; ) {
+    for(keypressed = fin = false; !keypressed && !fin; ) {
 	timer_keypress = lastkeypress();
 
 	FD_ZERO(&fds);
-	FD_SET(0, &fds);
+	FD_SET(hsockfd = 0, &fds);
+	online = false;
 
 	if(!regmode) {
 	    exectimers();
 
-	    if(ihook.getsockfd()) {
-		FD_SET(ihook.getsockfd(), &fds);
-	    }
+	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		abstracthook &hook = gethook(pname);
+		if(hook.online()) {
+		    FD_SET(hook.getsockfd(), &fds);
+		    online = true;
 
-	    if(yhook.getsockfd()) {
-		FD_SET(yhook.getsockfd(), &fds);
-	    }
-
-	    if(ihook.online() || yhook.online()) {
-		tv.tv_sec = PERIOD_SELECT;
-	    } else {
-		tv.tv_sec = PERIOD_RECONNECT/3;
+		    if(hook.getsockfd() > hsockfd) {
+			hsockfd = hook.getsockfd();
+		    }
+		}
 	    }
 	}
 
+	tv.tv_sec = online ? PERIOD_SELECT : PERIOD_RECONNECT/3;
 	tv.tv_usec = 0;
-	sockfd = max(ihook.getsockfd(), yhook.getsockfd());
-	select(sockfd+1, &fds, 0, 0, &tv);
+
+	select(hsockfd+1, &fds, 0, 0, &tv);
 
 	if(FD_ISSET(0, &fds)) {
 	    keypressed = true;
 	    time(&timer_keypress);
-	} else if(ihook.online() && FD_ISSET(ihook.getsockfd(), &fds)) {
-	    icq_HandleServerResponse(&icql);
-	    if(options & HIDL_SOCKEXIT) break;
-	} else if(yhook.online() && FD_ISSET(yhook.getsockfd(), &fds)) {
-	    yhook.main();
-	    if(options & HIDL_SOCKEXIT) break;
+	}
+
+	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	    abstracthook &hook = gethook(pname);
+
+	    if(hook.online())
+	    if(FD_ISSET(hook.getsockfd(), &fds)) {
+		hook.main();
+		fin = fin || (options & HIDL_SOCKEXIT);
+	    }
 	}
     }
 
