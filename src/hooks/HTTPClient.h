@@ -31,13 +31,14 @@ class HTTPRequestEvent : public MessageEvent {
 	string m_content, m_url, m_httpresp, m_user, m_pass;
 	vector<pair<string, string> > params;
 	map<string, string> authparams;
+	int trycount;
 
 	RequestMethod method;
 	AuthMethod authmethod;
 
     public:
 	HTTPRequestEvent(const string &url, RequestMethod rt = GET)
-	    : MessageEvent(ContactRef()), m_url(url), method(rt) { }
+	    : MessageEvent(ContactRef()), m_url(url), method(rt), trycount(0) { }
 
 	string getContent() const { return m_content; }
 	string getURL() const { return m_url; }

@@ -1,9 +1,9 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.14 2004/06/30 21:17:28 konst Exp $
+* $Id: HTTPClient.cc,v 1.15 2004/07/29 18:00:21 konst Exp $
 *
-* Copyright (C) 2003-4 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,16 @@ void HTTPClient::Connect() {
 
     if(up(m_hostname.substr(0, 7)) == "HTTP://") {
 	m_hostname.erase(0, 7);
+    }
+
+    if((pos = m_hostname.find("@")) != -1) {
+	ev->setAuth(HTTPRequestEvent::Basic, m_hostname.substr(0, pos), "");
+	m_hostname.erase(0, pos+1);
+
+	if((pos = ev->m_user.find(":")) != -1) {
+	    ev->m_pass = ev->m_user.substr(pos+1);
+	    ev->m_user.erase(pos);
+	}
     }
 
     if((pos = m_hostname.find("/")) != -1) {
@@ -174,6 +184,11 @@ void HTTPClient::Parse() {
 
 		case 401:
 		    if(head == "WWW-AUTHENTICATE:") {
+			if(ev->trycount++) {
+			    ev->setHTTPResp("HTTP auth failed");
+			    throw HTTPException("Authentification failed");
+			}
+
 			response.erase(0, npos+1);
 
 			if((npos = response.find(" ")) != -1) {
