@@ -23,6 +23,13 @@ class irchook: public abstracthook {
 	};
 
     protected:
+	enum searchMode {
+	    Channel,
+	    Email
+	};
+
+	searchMode smode;
+
 	bool fonline, flogged;
 	firetalk_t handle;
 	imstatus ourstatus;

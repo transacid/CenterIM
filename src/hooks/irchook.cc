@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.22 2002/05/17 14:42:08 konst Exp $
+* $Id: irchook.cc,v 1.23 2002/06/03 15:15:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -273,6 +273,8 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
     }
 
     if(!params.room.empty()) {
+	smode = Channel;
+
 	while(!(room = getword(rooms)).empty()) {
 	    searchchannels.push_back(room);
 	    ic = find(channels.begin(), channels.end(), room);
@@ -307,6 +309,12 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
 	if(ready)
 	    processnicks();
+
+    } else if(!params.email.empty()) {
+	smode = Email;
+	searchchannels.push_back("");
+	firetalk_im_searchemail(handle, ("*" + params.email + "*").c_str());
+
     }
 }
 
@@ -324,8 +332,8 @@ void irchook::processnicks() {
 	return;
 
     ir = find(channels.begin(), channels.end(), *searchchannels.begin());
-
     foundnicks = ir->nicks;
+
     sort(foundnicks.begin(), foundnicks.end());
 
     if(searchchannels.size() > 1) {
@@ -355,7 +363,8 @@ void irchook::processnicks() {
 	    } else {
 		in++;
 	    }
-	}    }
+	}
+    }
 
     for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
 	dnick = *in;
@@ -799,6 +808,15 @@ void irchook::listextended(void *connection, void *cli, ...) {
 
     ir = find(irhook.channels.begin(), irhook.channels.end(), room);
 
+    if(irhook.smode == Email) {
+	ir = find(irhook.channels.begin(), irhook.channels.end(), "");
+
+	if(ir == irhook.channels.end()) {
+	    irhook.channels.push_back(channelInfo(""));
+	    ir = irhook.channels.end()-1;
+	}
+    }
+
     if(ir != irhook.channels.end()) {
 	name = description;
 	if((npos = name.find(" ")) != -1)
@@ -806,7 +824,7 @@ void irchook::listextended(void *connection, void *cli, ...) {
 
 	email = (string) login + "@" + hostname;
 
-	if(irhook.emailsub.empty() || email.find(irhook.emailsub) != -1) {
+	if(irhook.emailsub.empty() || email.find(irhook.emailsub) != -1 || irhook.smode == Email) {
 	    if(irhook.namesub.empty() || name.find(irhook.namesub) != -1) {
 		text = nickname;
 
@@ -831,18 +849,26 @@ void irchook::endextended(void *connection, void *cli, ...) {
     vector<channelInfo>::iterator ic;
 
     if(!irhook.extlisted.empty()) {
-	ic = find(irhook.channels.begin(), irhook.channels.end(), irhook.extlisted.back());
-	if(ic != irhook.channels.end()) {
-	    if(!ic->joined) {
-		firetalk_chat_part(irhook.handle, irhook.extlisted.back().c_str());
-	    }
+	if(irhook.smode == Channel) {
+	    ic = find(irhook.channels.begin(), irhook.channels.end(), irhook.extlisted.back());
 
-	    for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); is++) {
-		ready = find(irhook.extlisted.begin(), irhook.extlisted.end(), *is) != irhook.extlisted.end();
-	    }
+	    if(ic != irhook.channels.end()) {
+		if(!ic->joined)
+		    firetalk_chat_part(irhook.handle, irhook.extlisted.back().c_str());
 
-	    if(ready) {
-		irhook.processnicks();
+		for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); is++)
+		    ready = find(irhook.extlisted.begin(), irhook.extlisted.end(), *is) != irhook.extlisted.end();
+	    }
+	}
+
+	ready = ready || irhook.smode == Email;
+
+	if(ready) {
+	    irhook.processnicks();
+
+	    if(irhook.smode == Email) {
+		ic = find(irhook.channels.begin(), irhook.channels.end(), "");
+		if(ic != irhook.channels.end()) irhook.channels.erase(ic);
 	    }
 	}
     }
