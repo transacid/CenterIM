@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.106 2002/04/17 16:14:28 konst Exp $
+* $Id: icqface.cc,v 1.107 2002/04/19 08:03:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -387,6 +387,7 @@ void icqface::fillcontactlist() {
     void *savec;
     char prevsc = 'x', sc;
     icqgroup *g = NULL;
+    vector<icqgroup>::iterator ig;
 
     bool online_added = false, groupchange, prevoffline = false, grouponline = true, ontop, iscurrentnode;
 
@@ -398,8 +399,13 @@ void icqface::fillcontactlist() {
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
 
     if(!iscurrentnode && savec) {
-	g = find(groups.begin(), groups.end(), ((icqcontact *) savec)->getgroupid());
-	if(g->iscollapsed() && !((icqcontact *) savec)->getmsgcount()) savec = g;
+	ig = find(groups.begin(), groups.end(), ((icqcontact *) savec)->getgroupid());
+
+	if(ig != groups.end()) {
+	    g = &(*ig);
+	    if(g->iscollapsed() && !((icqcontact *) savec)->getmsgcount())
+		savec = g;
+	}
     }
 
     /* if savec is a group, we need to figure out of it's the top or bottom
@@ -420,7 +426,12 @@ void icqface::fillcontactlist() {
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-	g = find(groups.begin(), groups.end(), c->getgroupid());
+
+	ig = find(groups.begin(), groups.end(), c->getgroupid());
+	if(ig != groups.end()) {
+	    g = &(*ig);
+	}
+
 	if(c->getdesc() == contactroot)
 	    continue;
 	    
