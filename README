@@ -41,8 +41,10 @@ Contents
     8.3. Invisible list
 9. Advanced features
     9.1. Arabic and Hebrew languages support
-    9.2. Protocol debug mode
-    9.3. Latest CVS snapshots
+    9.2. External actions and auto-responses
+	9.2.1. Elizatalk: making fun with your friends
+    9.3. Protocol debug mode
+    9.4. Latest CVS snapshots
 10. Lynx
     10.1. The program homepage
 	10.1.1. Centericq mailing list
@@ -633,10 +635,129 @@ fails to find the library (you'll be reported), try
 "--with-fribidi=<prefix the library was installed with>".
 
   Common "make" and "make install" steps should follow, and finally
-"shalom" or "selam" can be seen well on your monitor :)
+"shalom" or "selam" can be seen well on your monitor :) So don't fight
+there, guys.
 
 
-9.2. Protocol debug mode
+9.2. External actions and auto-responses
+----------------------------------------
+
+  It is possible to make centericq run external programs, scripts and
+whatever to answer and/or process incoming events. Though, some extra
+setup is needed. Let me introduce you with another configuration file,
+named "external" which should reside under the .centericq/ directory in
+your home. Here is an example which demonstrates its options. It's
+recommended just cut'n'paste the following text.
+
+
+[ - $HOME/.centericq/external ---------------------------------------------- ]
+
+#
+# External actions
+# ----------------
+#
+# Every section starts with a line containing the "%action <name>" text.
+# Please note that the <name> of any kind is necessary. It musn't be
+# empty. Inside it the following parameters can be used:
+#
+# event
+# -----
+# Can be "msg", "sms", "url", "online" or "email".
+# Specifying several event types is also supported.
+#
+# proto
+# -----
+# Can be "icq", "yahoo" or "msn". Or combination of these words. "all"
+# can be used as a synonim for all of them.
+#
+# status
+# ------
+# Can be "online", "away", "dnd", "na", "occupied", "ffc" or "invisible".
+# Specifying several ones is possible. "all" stands for all of possible
+# status modes.
+#
+# options
+# -------
+# Possible options for an action are:
+#
+#	stdin		The incoming message text is to be passed to
+#			stdin of the script to be executed.
+#
+#	stdout		The script output is to be sent as a reply
+#			message (if not empty).
+#
+# Then, the section named "%exec" should follow. It contains a piece of
+# script to be executed being copied to a file first.
+#
+
+%action		Simple auto-responder
+
+event		msg
+# Reacts only on events of message type ..
+
+proto		icq yahoo
+# .. only for icq and yahoo protocols
+
+status		away na
+# .. when we are in away or n/a status
+
+options		stdin stdout
+# .. the external commands text (below) reads the message from
+# stdin, then its stdout output is sent as a response to a
+# remote user.
+
+%exec
+
+msg=`cat`
+echo "hello. this is auto-responder. your message was: $msg"
+
+
+[ -------------------------------------------------------------------------- ]
+
+With this simple external actions configuration file centericq will
+perform a simple auto-respond action. You can have as many sections as
+you need. You can call any kind of external scripts and programs. Please
+note that the message text (when "stdin" option is specified for an
+action) can be read with cat command or something similar.
+
+
+9.2.1. Elizatalk: making fun with your friends
+----------------------------------------------
+
+  One of the most intresting and funny uses for external actions in
+centericq is auto-responding chat robots. So far I know only one which
+is called Eliza. Unfortunatelly its doc covers only setup for licq, so
+it'll describe how to make it work with centericq here. Actually, it's
+not difficult thing to do at all.
+
+  First, you'll have to download the elizatalk plugin itself. It's
+homepage can be found at the following URL:
+
+    http://elizatalk.sourceforge.net/
+
+  Let's assume we want it to work with all the IM engines, answer on
+messages only, and it's to be activated as soon as we're switched to
+away mode. All we need is to add one more section.
+
+[ - cut (centericq external actions setup for elizatalk) ------------------- ]
+
+%action		Eliza
+event		msg
+proto		all
+status		away
+options		stdin stdout
+
+%exec
+msg=`cat`
+echo $msg | elizatalk
+
+[ -------------------------------------------------------------------------- ]
+
+Voila! You might also want to read the elizatalk documentation. Though,
+with my great explanations it's not necessary anymore :)
+
+
+9.3. Protocol debug mode
 ------------------------
 
   Actually I have this feature for myself, to track protocol messages
@@ -652,7 +773,7 @@ protocol messages will be visible in the log window, and also they'll be
 written into the ~/.centericq/log file.
 
 
-9.3. Latest CVS snapshots
+9.4. Latest CVS snapshots
 -------------------------
 
   If you wanna always have the recent version of the program, there is

@@ -4,6 +4,8 @@
 *
 */
 
+external auto-respond and events processing actions
+
 gotta see if it's possible to update our own nick
 
 applied patch for MSN cyrillic letters by Walery Studennikov <despair@sama.ru>
@@ -43,9 +45,6 @@ add the link to opensource icq servers to the doc
 communications from the command line, sending messages through
     the already connected program, and other kinds of control
 
-external programs execution on messages' receiving
-    connect eliza
-
 nicks and writing messages to be rendered with fribidi
 
 check auto-disconnect on all IMs after network down
@@ -62,8 +61,6 @@ msn protocol
     new mail announcements
     add user -> set the friendly nick
 
-unificated external actions
-
 > Sorry, another thing I'd like to request, now, that the amount of
 > protocols supported by centericq is growing: How about another
 > status-menu-entry 'All' ? I.e. to set status N/A on all protocols at
@@ -72,12 +69,6 @@ unificated external actions
 "relaxed" re-connect timing
 
 todo and reminders
-
-I'm thinking, like, you can have regex's run on the message body & type,
-and if they match, it pipes it into a perl instance.. I have some experience
-with this..might give it a go..
-
-away messages
 
 -------------------------------------------------------------------------------
 
@@ -92,4 +83,4 @@ so when I press F2 it just opens another screen and CenterICQ doesn't crash.
 
 -------------------------------------------------------------------------------
 
-$Id: TODO,v 1.123 2002/02/19 18:38:03 konst Exp $
+$Id: TODO,v 1.124 2002/02/20 17:11:32 konst Exp $

@@ -7,7 +7,7 @@
 #
 # event
 # -----
-# Can be "msg", "sms", "url", "online" or "email".
+# Can be "msg", "sms", "url" or "online".
 # Specifying several event types is also supported.
 #
 # proto
@@ -25,22 +25,22 @@
 # -------
 # Possible options for an action are:
 #
-#	stdin		The incoming message text is to be passed to
-#			stdin of the script to be executed.
+#       stdin           The incoming message text is to be passed to
+#                       stdin of the script to be executed.
 #
-#	stdout		The script output is to be sent as a reply
-#			message (if not empty).
+#       stdout          The script output is to be sent as a reply
+#                       message (if not empty).
 #
 # Then, the section named "%exec" should follow. It contains a piece of
 # script to be executed being copied to a file first.
 #
 
-%action
+%action         Auto-response
 
-event		msg
-proto		icq
-status		away
-options		stdin stdout
+event           msg
+proto           icq
+status          away
+options         stdin stdout
 
 %exec
 #!/bin/sh

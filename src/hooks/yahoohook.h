@@ -8,7 +8,7 @@ class yahoohook: public abstracthook {
     protected:
 	struct yahoo_context *context;
 	bool fonline;
-	int ourstatus;
+	imstatus ourstatus;
 
 	time_t timer_reconnect;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.38 2002/02/19 18:38:04 konst Exp $
+* $Id: icqconf.cc,v 1.39 2002/02/20 17:11:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "abstracthook.h"
+#include "imexternal.h"
 
 icqconf::icqconf() {
     rs = rscard;
@@ -87,6 +88,7 @@ void icqconf::load() {
     loadmainconfig();
     loadcolors();
     loadactions();
+    external.load();
 }
 
 void icqconf::loadmainconfig() {

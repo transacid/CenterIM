@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.21 2002/02/19 18:38:05 konst Exp $
+* $Id: yahoohook.cc,v 1.22 2002/02/20 17:11:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -102,8 +102,9 @@ void yahoohook::connect() {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
 	    disconnected(context);
 	} else {
+	    ourstatus = available;
 	    yahoo_get_config(context);
-	    if(!yahoo_cmd_logon(context, ourstatus = YAHOO_STATUS_AVAILABLE)) {
+	    if(!yahoo_cmd_logon(context, YAHOO_STATUS_AVAILABLE)) {
 		fonline = true;
 		face.log(_("+ [yahoo] logged in"));
 	    }
@@ -234,19 +235,23 @@ imstatus yahoohook::yahoo2imstatus(int status) const {
 
     switch(status) {
 	case YAHOO_STATUS_AVAILABLE:
-	case YAHOO_STATUS_CUSTOM:
 	    st = available;
 	    break;
+	case YAHOO_STATUS_CUSTOM:
+	    st = freeforchat;
+	    break;
 	case YAHOO_STATUS_BUSY:
-	    st = occupied;
+	    st = dontdisturb;
 	    break;
 	case YAHOO_STATUS_BRB:
 	case YAHOO_STATUS_IDLE:
 	case YAHOO_STATUS_ONPHONE:
 	    st = away;
 	    break;
-	case YAHOO_STATUS_NOTATHOME:
 	case YAHOO_STATUS_NOTATDESK:
+	    st = occupied;
+	    break;
+	case YAHOO_STATUS_NOTATHOME:
 	case YAHOO_STATUS_NOTINOFFICE:
 	case YAHOO_STATUS_ONVACATION:
 	case YAHOO_STATUS_OUTTOLUNCH:
@@ -275,9 +280,9 @@ void yahoohook::setautostatus(imstatus st) {
 	YAHOO_STATUS_INVISIBLE,
 	YAHOO_STATUS_CUSTOM,
 	YAHOO_STATUS_BUSY,
-	YAHOO_STATUS_BUSY,
+	YAHOO_STATUS_NOTATDESK,
 	YAHOO_STATUS_NOTATHOME,
-	YAHOO_STATUS_NOTATDESK
+	YAHOO_STATUS_BRB
     };
 
     if(st == offline) {
@@ -289,15 +294,15 @@ void yahoohook::setautostatus(imstatus st) {
 	    connect();
 	} else {
 	    logger.putourstatus(yahoo, getstatus(), st);
-	    ourstatus = stat2int[st];
+	    ourstatus = st;
 
 	    if(st == available) {
-		yahoo_cmd_set_back_mode(context, ourstatus, "available");
+		yahoo_cmd_set_back_mode(context, stat2int[st], "available");
 	    } else {
-		if(ourstatus == YAHOO_STATUS_IDLE) {
+		if(stat2int[st] == YAHOO_STATUS_IDLE) {
 		    yahoo_cmd_idle(context);
 		} else {
-		    yahoo_cmd_set_away_mode(context, ourstatus, "away");
+		    yahoo_cmd_set_away_mode(context, stat2int[st], "away");
 		}
 	    }
 	}
@@ -305,7 +310,7 @@ void yahoohook::setautostatus(imstatus st) {
 }
 
 imstatus yahoohook::getstatus() const {
-    return online() ? yahoo2imstatus(ourstatus) : offline;
+    return online() ? ourstatus : offline;
 }
 
 // ----------------------------------------------------------------------------

@@ -5,6 +5,7 @@
 #include "icqcontacts.h"
 #include "abstracthook.h"
 #include "imlogger.h"
+#include "imexternal.h"
 
 imeventmanager em;
 
@@ -33,8 +34,12 @@ void imeventmanager::store(const imevent &ev) {
 
 	    if(c) {
 		eventwrite(ev, history);
+
 		c->setmsgcount(c->getmsgcount()+1);
 		c->playsound(ev.gettype());
+
+		external.exec(ev);
+
 		face.relaxedupdate();
 	    }
 	}
