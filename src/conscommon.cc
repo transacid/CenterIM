@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.15 2002/03/05 16:56:12 konst Exp $
+* $Id: conscommon.cc,v 1.16 2002/03/09 18:26:10 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,13 +43,17 @@ void kreinit(int sn) {
 }
 
 void kinterface() {
+#ifdef KTOOL_USE_FRIBIDI
+    // an experimental thingie
+    cout << ((char) 27) << "(K" << flush;
+#endif
+
     initscr();
     nonl();
     cbreak();
     noecho();
     keypad(stdscr, 1);
 //    raw();
-    
     start_color();
     use_default_colors();
     atexit(kendinterface);

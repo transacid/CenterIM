@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.12 2002/03/04 15:27:26 konst Exp $
+* $Id: cmenus.cc,v 1.13 2002/03/09 18:26:09 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -135,7 +135,8 @@ bool verticalmenu::shownelem(int n, int selected) {
 	    if(!selected) mvhline(y1+n-firstdisp, x1, HLINE, x2-x1);
 	} else if(!item.text.empty()) {
 	    mvprintw(y1+n-firstdisp, x1, "");
-	    buf = item.text;
+
+	    buf = item.text; //makebidi(item.text, x2-x1);
 
 	    for(int i = x1; i < x2+extra; i++) {
 		if(i-x1 < buf.size()) {

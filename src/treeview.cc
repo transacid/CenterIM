@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.7 2002/02/19 18:42:40 konst Exp $
+* $Id: treeview.cc,v 1.8 2002/03/09 18:26:10 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -205,7 +205,6 @@ bool treeview::islast(int id) {
 }
 
 void treeview::genmenu(int parent) {
-    char buf[512];
     int nproc = 0;
     vector<treeviewnode>::iterator i, k;
 
@@ -220,31 +219,23 @@ void treeview::genmenu(int parent) {
 
     for(i = items.begin(); i != items.end(); i++) {
 	if(i->parentid == parent) {
-	    buf[0] = 0;
+	    string buf;
 
 	    for(k = nestlevel.begin(); k != nestlevel.end(); k++)
-	    if(!islast(k->id)) {
-		strcat(buf, "\003  ");
-	    } else {
-		strcat(buf, "   ");
-	    }
+		buf += !islast(k->id) ? "\003  " : "   ";
 
-	    if(islast(i->id)) {
-		strcat(buf, "\007\002");
-	    } else {
-		strcat(buf, "\005\002");
-	    }
-
-	    nproc++;
+	    buf += islast(i->id) ? "\007\002" : "\005\002";
+	    buf.insert(0, "\001");
+	    buf += "\001";
 
 	    if(i->isnode && collapsable) {
-		menu.additemf(i->color, 0, "\001%s\001[%c]%s\001", buf,
-		    i->isopen ? '-' : '+', i->text.c_str());
-	    } else {
-		menu.additemf(i->color, 0, "\001%s\001%s\001", buf,
-		    i->text.c_str());
+		buf += (string) "[" + (i->isopen ? '-' : '+') + "]";
 	    }
 
+	    buf += i->text + "\001";
+	    nproc++;
+
+	    menu.additem(i->color, 0, buf);
 	    refdeps.push_back(*i);
 
 	    if(i->isnode) if(!collapsable || (collapsable && i->isopen))
