@@ -57,11 +57,20 @@ if test "$build_gg" = "yes"; then
 	fi
     fi
 
-    AC_C_BIGENDIAN
-
-    if test "x$ac_cv_c_bigendian" = "xyes"; then
-	AC_DEFINE([WORDS_BIGENDIAN])
-    fi
+    AC_MSG_CHECKING(endianness)
+    AC_TRY_COMPILE([
+	#include <sys/param.h>
+    ], [
+	#if (defined(BYTE_ORDER) && defined(BIG_ENDIAN) && (BYTE_ORDER == BIG_ENDIAN)) || defined(_BIG_ENDIAN)
+	    bogus
+	#endif
+    ],[
+	ac_end=little
+    ],[
+	AC_DEFINE(WORDS_BIGENDIAN, [big endian architecture])
+	ac_end=big
+    ])
+    AC_MSG_RESULT($ac_end)
 
     AC_CHECK_HEADERS([stdint.h sys/types.h],,)
 fi
