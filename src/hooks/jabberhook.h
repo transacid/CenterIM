@@ -16,6 +16,8 @@ class jabberhook: public abstracthook {
 	bool flogged, fonline, regmode, regdone;
 	string regerr;
 
+	time_t timer_keepalive;
+
 	map<string, string> roster;
 	map<string, string> awaymsgs;
 	map<string, vector<string> > chatmembers;
@@ -90,6 +92,7 @@ class jabberhook: public abstracthook {
 
 	void connect();
 	void disconnect();
+	void exectimers();
 	void main();
 
 	void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;

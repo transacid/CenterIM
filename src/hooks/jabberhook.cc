@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.69 2004/02/20 20:48:47 konst Exp $
+* $Id: jabberhook.cc,v 1.70 2004/04/13 10:37:50 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@
 #include "icqgroups.h"
 
 #define DEFAULT_CONFSERV "conference.jabber.org"
+#define PERIOD_KEEPALIVE 30
 
 static void jidsplit(const string &jid, string &user, string &host, string &rest) {
     int pos;
@@ -134,6 +135,15 @@ void jabberhook::connect() {
 
 void jabberhook::disconnect() {
     statehandler(jc, JCONN_STATE_OFF);
+}
+
+void jabberhook::exectimers() {
+    if(logged()) {
+	if(timer_current-timer_keepalive > PERIOD_KEEPALIVE) {
+	    jab_send_raw(jc, "  \t  ");
+	    timer_keepalive = timer_current;
+	}
+    }
 }
 
 void jabberhook::main() {
@@ -863,6 +873,8 @@ void jabberhook::postlogin() {
 
     flogged = true;
     ourstatus = available;
+    time(&timer_keepalive);
+
     setautostatus(jhook.manualstatus);
     log(logLogged);
     face.update();

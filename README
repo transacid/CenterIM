@@ -322,9 +322,10 @@ server software and install it on your own. Long live open source!
 2.7. Gadu-gadu
 --------------
 
-  The situation here is even worse than that with Yahoo! So far you can
-register only with the official client that can be downloaded from the
-official site at http://www.gadu-gadu.pl/
+  If you have libjpeg installed in your system and the configure script
+does find it, centericq can register a UIN on this network for you.
+Otherwise you can only register one with the official client that can be
+downloaded from the official site at http://www.gadu-gadu.pl/
 
 
 2.8. MSN
@@ -1077,7 +1078,7 @@ outgoing queue:
 -p or --proto <protocol type>
 
     This one specifies to which IM network the destination contact
-    belongs to. Can be either "icq", "yahoo", "aim", "irc", "jabber"
+    belongs to. Can be either "icq", "yahoo", "aim", "irc", "jab"
     or "lj".
 
 -t or --to
@@ -1132,8 +1133,8 @@ engine is to be affected.
 -p or --protocol <protocol name>
 
     This one specifies to which IM network the destination contact
-    belongs to. Can be either "icq", "yahoo", "aim", "irc" or
-    "jabber".
+    belongs to. Can be either "icq", "yahoo", "aim", "msn", "irc",
+    "jab" or "lj".
 
 Examples:
 
@@ -1178,7 +1179,7 @@ recommended just cut'n'paste the following text.
 #
 # proto
 # -----
-# Can be "icq", "yahoo", "aim", "irc" or "jabber". Or combination
+# Can be "icq", "yahoo", "aim", "irc", "msn", "lj" or "jab". Or combination
 # of these words. "all" can be used as a synonim for all of them.
 #
 # status
@@ -1271,7 +1272,7 @@ EVENT_TYPE
 EVENT_NETWORK
 
     The IM network name through which the event was received. Can be
-    "icq", "yahoo", "aim", "irc" or "jabber".
+    "icq", "yahoo", "aim", "irc", "msn", "lj" or "jab".
 
 CONTACT_UIN
 
@@ -1810,4 +1811,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.96 2004/03/20 16:49:06 konst Exp $
+$Id: README,v 1.97 2004/04/13 10:37:44 konst Exp $
