@@ -20,10 +20,10 @@ void imeventmanager::store(const imevent &ev) {
     icqcontact *c;
     bool proceed;
 
-    logger.putevent(ev);
-
     if(ev.getdirection() == imevent::incoming) {
 	if(!lst.inlist(ev.getcontact(), csignore)) {
+	    logger.putevent(ev);
+
 	    c = clist.get(ev.getcontact());
 
 	    if(!c) {
@@ -51,6 +51,7 @@ void imeventmanager::store(const imevent &ev) {
 	if(hook.logged()) {
 	    if(hook.send(ev)) {
 		eventwrite(ev, history);
+		logger.putevent(ev);
 	    } else {
 		eventwrite(ev, offline);
 	    }

@@ -99,6 +99,7 @@ void imevent::read(ifstream &f) {
 }
 
 string imevent::readblock(ifstream &f) {
+    int pos;
     string rdbuf, r;
 
     while(!f.eof()) {
@@ -106,6 +107,9 @@ string imevent::readblock(ifstream &f) {
 
 	if(rdbuf == "\f") break;
 	if(f.eof() && rdbuf.empty()) break;
+
+	while((pos = rdbuf.find_first_of(evlinebreak)) != -1)
+	    rdbuf.erase(pos, 1);
 
 	if(!r.empty()) r += evlinebreak;
 	r += rdbuf;
