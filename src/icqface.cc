@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.124 2002/07/15 15:20:35 konst Exp $
+* $Id: icqface.cc,v 1.125 2002/07/17 12:18:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1691,6 +1691,7 @@ void icqface::renderchathistory() {
     histentry h;
 
     icqcontact *c = clist.get(passinfo);
+    if(!c) return;
 
     count = 0;
 
@@ -1783,7 +1784,7 @@ void icqface::chat(const imcontact &ic) {
 
     status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
 
-    for(bool finished = false; !finished; ) {
+    for(bool finished = false; !finished && clist.get(ic); ) {
 	renderchathistory();
 
 	editdone = false;
