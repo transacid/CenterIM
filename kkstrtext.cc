@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.41 2004/12/25 16:08:00 konst Exp $
+* $Id: kkstrtext.cc,v 1.42 2004/12/26 02:18:15 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1059,6 +1059,9 @@ string striprtf(const string &s, const string &charset) {
     for(string::const_iterator i = s.begin(); i != s.end(); ++i) {
 	if(!isalpha(*i) && !isdigit(*i)) bprint = true;
 
+char cc = *i;
+const char *rr = r.c_str();
+
 	if(bspec) {
 	    spec += *i;
 
@@ -1107,7 +1110,7 @@ string striprtf(const string &s, const string &charset) {
 		break;
 
 	    case 'u':
-		if(bprint) {
+		if(!bparen && bprint) {
 		    if(pre == '\\') {
 			unichar = "";
 			bunicode = true;
