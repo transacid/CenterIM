@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.34 2002/11/22 19:11:55 konst Exp $
+* $Id: imcontroller.cc,v 1.35 2002/11/28 14:25:50 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -503,7 +503,16 @@ void imsearchparams::save(const string &prname) const {
 	    << email << "\t"
 	    << room << "\t"
 	    << (sincelast ? "1" : "0") << "\t"
-	    << (reverse ? "1" : "0") << endl;
+	    << (reverse ? "1" : "0") << "\t"
+	    << service << "\t";
+
+	vector<pair<string, string> >::const_iterator
+	    ifp = flexparams.begin();
+
+	while(ifp != flexparams.end()) {
+	    of << ifp->first << "\t" << ifp->second << "\t";
+	    ++ifp;
+	}
 
 	of.close();
     }
@@ -524,7 +533,7 @@ static string getfield(string &buf) {
 
 bool imsearchparams::load(const string &prname) {
     ifstream f(conf.getconfigfname("search-profiles").c_str());
-    string buf;
+    string buf, flexparam;
     bool r = false;
 
     if(f.is_open()) {
@@ -553,6 +562,12 @@ bool imsearchparams::load(const string &prname) {
 		room = getfield(buf);
 		sincelast = getfield(buf) == "1";
 		reverse = getfield(buf) == "1";
+		service = getfield(buf);
+
+		while(!buf.empty())
+		    if(!(flexparam = getfield(buf)).empty())
+			flexparams.push_back(make_pair(flexparam, getfield(buf)));
+
 		break;
 	    }
 	}

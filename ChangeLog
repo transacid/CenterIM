@@ -1266,3 +1266,26 @@ it's not on the list.
 
 A long-awaited interface feature to open an event in the full-screen
 mode was added. Check out the F9 key in the message view mode.
+
+4.8.9
+-----
+
+Due to the effort of Barnaby Gray, our fellow libicq2000 author, who
+eliminated the need for the libsigc++ in order to compile his library,
+centericq now does neither. I.e. we can count minus one additional
+requirement. Cheers.
+
+The F9 and F2 keys that execute full-screenizing of an event and showing
+its URLs respectively, now work in the chat mode too, acting with the
+latest incoming event from the remote user.
+
+Wrong Jabber IDs specification used to lead to segfaults. Fixed.
+
+The "Find/add users" dialog was improved. In the searach by nick/UIN mode
+now it's possible to send messages to users without adding them to the
+permanent contact list.
+
+A segfault was fixed which appeared on pressing F9 in user's details
+view mode.
+
+Jabber users directory search was implemented.

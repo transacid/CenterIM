@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.94 2002/11/27 17:34:02 konst Exp $
+* $Id: icqdialogs.cc,v 1.95 2002/11/28 14:25:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -336,6 +336,7 @@ bool icqface::finddialog(imsearchparams &s) {
 			ts.pname)) != penabled.end()) {
 			    s = ts;
 			    ipname = ipfname;
+			    protchanged = true;
 			}
 		    }
 		}
@@ -356,8 +357,9 @@ bool icqface::finddialog(imsearchparams &s) {
 	    case 2:
 		s = imsearchparams();
 		s.pname = *ipname;
+		protchanged = true;
 		break;
-
+		
 	    case 3:
 		switch(i) {
 		    case 1:

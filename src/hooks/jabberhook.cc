@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.13 2002/11/27 17:34:05 konst Exp $
+* $Id: jabberhook.cc,v 1.14 2002/11/28 14:25:50 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -502,8 +502,6 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 		ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
 	    ++ip;
 	}
-
-	xmlnode_insert_cdata(xmlnode_insert_tag(y, ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
 
 	jab_send(jc, x);
 	xmlnode_free(x);
