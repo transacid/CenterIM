@@ -3,6 +3,7 @@
 #include <netdb.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <errno.h>
 
 #ifdef HAVE_OPENSSL
 
