@@ -19,11 +19,19 @@ GnuTLS support (update the README and the web page)
 *
 */
 
+> When I change a jabber contact's nickname to include non-ASCII characters
+> (e.g. "Gabri?l Demo") centericq itself works fine, but the nickname is
+> messed up when using a different jabber client (e.g. gabber). I suspect the
+> jabber standards prescribe UTF8 as the encoding for contact names in
+> rosters but centericq is violating this requirement.
+
 /*
 *
 * TODO
 *
 */
+
+user info external progs
 
 server hostname guess from the JID
 
@@ -45,4 +53,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.392 2002/12/30 09:04:44 konst Exp $
+$Id: TODO,v 1.393 2003/01/05 12:01:59 konst Exp $
