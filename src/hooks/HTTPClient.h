@@ -42,9 +42,11 @@ class HTTPClient : public SocketClient {
 	Translator m_transl;
 	Buffer m_recv;
 
-	std::string m_hostname, m_resource, m_content;
-	unsigned short m_port;
+	std::string m_hostname, m_proxy_hostname;
+	std::string m_resource, m_content, m_redirect;
+	unsigned short m_port, m_proxy_port;
 	time_t m_last_operation, m_timeout;
+	int m_code;
 
 	void Init();
 	void Parse();
@@ -70,6 +72,12 @@ class HTTPClient : public SocketClient {
 	void SendEvent(MessageEvent* ev);
 
 	void socket_cb(int fd, SocketEvent::Mode m);
+
+	void setProxyServerHost(const string& host) { m_proxy_hostname = host; }
+	string getProxyServerHost() const { return m_proxy_hostname; }
+
+	void setProxyServerPort(const unsigned short& port) { m_proxy_port = port; }
+	unsigned short getProxyServerPort() const { return m_proxy_port; }
 };
 
 class HTTPException : public std::exception {

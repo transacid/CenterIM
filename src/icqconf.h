@@ -74,7 +74,7 @@ class icqconf {
 	vector<icqgroup> groups;
 	vector<imaccount> accounts;
 
-	unsigned short socksport, smtpport;
+	unsigned short socksport, smtpport, httpport;
 
 	int autoaway, autona, ptpmin, ptpmax;
 
@@ -85,7 +85,7 @@ class icqconf {
 	bool chatmode[protocolname_size], russian[protocolname_size];
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
-	    argv0, smtphost, bindhost, proxyhost;
+	    argv0, smtphost, bindhost, httphost;
 
 	regsound rs;
 	regcolor rc;
@@ -173,6 +173,10 @@ class icqconf {
 	string getsmtphost() const;
 	unsigned int getsmtpport() const;
 	void setsmtphost(const string &asmtphost);
+
+	string gethttphost() const;
+	unsigned int gethttpport() const;
+	void sethttphost(const string &ahttphost);
 
 	void getsocksuser(string &name, string &pass) const;
 	void setsocksuser(const string &name, const string &pass);

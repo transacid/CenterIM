@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.120 2003/07/22 20:58:23 konst Exp $
+* $Id: icqdialogs.cc,v 1.121 2003/07/23 23:21:03 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1050,6 +1050,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     conf.getpeertopeer(ptpmin, ptpmax);
     bool ptp = ptpmax;
 
+    string http = conf.gethttphost();
+    if(!http.empty()) http += ":" + i2str(conf.gethttpport());
+
     icqconf::groupmode gmode = conf.getgroupmode();
 
     bool chatmode[protocolname_size], rus[protocolname_size];
@@ -1131,6 +1134,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
+	t.addleaff(i, 0, 24, _(" HTTP server : %s "), http.c_str());
 	t.addleaff(i, 0, 21, _(" Enable peer-to-peer communications : %s "), stryesno(ptp));
 
 	if(ptp)
@@ -1224,6 +1228,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			}
 			break;
 		    case 23: emacs = !emacs; break;
+		    case 24:
+			tmp = inputstr(_("HTTP server hostname: "), http);
+			if(!tmp.empty()) http = tmp;
+			break;
 		}
 		break;
 	    case 1:
@@ -1255,6 +1263,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		}
 
 		conf.setsmtphost(smtp);
+		conf.sethttphost(smtp);
 		conf.save();
 		break;
 	}

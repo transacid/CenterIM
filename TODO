@@ -15,6 +15,8 @@ run -> connect failed -> doesn't reconnect
 gettext (GNU gettext) 0.11.5
 jabber is unable to join a conference using a full JID
 jabber names (user and conference) are not case sensitive
+http redirect processing
+http proxy for rss
 
 /*
 *
@@ -33,10 +35,6 @@ status change -> all of them (already logged only), moved to the top
 * TODO
 *
 */
-
-http client
-    redirect processing
-    proxy
 
 link to OSD script to README
 check if hash auth is supported by jabber server
@@ -88,7 +86,6 @@ Follows is the same proxy server badly configured and therefore open:
 <<< Connection closed by foreign host.
 <<< $ 
 
-
 specific status lists for every protocol, extend the standard statuses
 
 jabber connect problem. if the server replies nothing, it stucks the
@@ -104,4 +101,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.441 2003/07/22 20:58:14 konst Exp $
+$Id: TODO,v 1.442 2003/07/23 23:21:03 konst Exp $

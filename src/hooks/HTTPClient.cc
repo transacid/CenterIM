@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.3 2003/07/13 18:10:28 konst Exp $
+* $Id: HTTPClient.cc,v 1.4 2003/07/23 23:21:04 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,7 +26,8 @@
 
 #ifdef BUILD_RSS
 
-HTTPClient::HTTPClient() : m_recv(&m_transl), m_state(NOT_CONNECTED), m_timeout(50) {
+HTTPClient::HTTPClient() : m_recv(&m_transl), m_state(NOT_CONNECTED),
+m_timeout(50), m_proxy_port(8080) {
     m_socket = new TCPSocket();
     Init();
 }
@@ -45,11 +46,11 @@ void HTTPClient::Connect() {
 
     int pos;
     HTTPRequestEvent *ev = *m_queue.begin();
+    m_hostname = !m_redirect.empty() ? m_redirect : ev->getURL();
 
-    m_hostname = ev->getURL();
     m_port = 80;
     m_resource = "/";
-    m_content = "";
+    m_content = m_redirect = "";
     m_recv.clear();
 
     if(up(m_hostname.substr(0, 7)) == "HTTP://") {
@@ -67,10 +68,14 @@ void HTTPClient::Connect() {
     }
 
     try {
-	SignalLog(LogEvent::WARN, (string) "Connecting to " + m_hostname + ":" + i2str(m_port));
+	if(m_proxy_hostname.empty()) {
+	    m_socket->setRemoteHost(m_hostname.c_str());
+	    m_socket->setRemotePort(m_port);
+	} else {
+	    m_socket->setRemoteHost(m_proxy_hostname.c_str());
+	    m_socket->setRemotePort(m_proxy_port);
+	}
 
-	m_socket->setRemoteHost(m_hostname.c_str());
-	m_socket->setRemotePort(m_port);
 	m_socket->setBindHost(m_bindhost.c_str());
 	m_socket->setBlocking(false);
 	m_socket->Connect();
@@ -95,7 +100,7 @@ void HTTPClient::Connect() {
 }
 
 void HTTPClient::Parse() {
-    int code, npos;
+    int npos;
     string response;
 
     while(1) {
@@ -117,21 +122,35 @@ void HTTPClient::Parse() {
 	SignalLog(LogEvent::DIRECTPACKET, log);
 
 	if(m_state == WAITING_FOR_HEADER) {
-	    code = 0;
+	    m_code = 0;
 
 	    if((npos = response.find(" ")) != -1) {
-		code = strtoul(response.substr(npos+1).c_str(), 0, 0);
+		m_code = strtoul(response.substr(npos+1).c_str(), 0, 0);
 	    }
 
-	    if(code != 200) {
-		HTTPRequestEvent *ev = *m_queue.begin();
-		dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(response.substr(npos+1));
-		throw ParseException("Didn't receive HTTP OK");
+	    switch(m_code) {
+		case 200:
+		case 301:
+		    break;
+		    break;
+		default:
+		    HTTPRequestEvent *ev = *m_queue.begin();
+		    dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(response.substr(npos+1));
+		    throw HTTPException("Didn't receive HTTP OK");
 	    }
 
 	    m_state = RECEIVING_HEADER;
 
 	} else if(m_state == RECEIVING_HEADER) {
+	    if(m_code == 301)
+	    if((npos = response.find(" ")) != -1)
+	    if(up(response.substr(0, npos)) == "LOCATION:") {
+		m_redirect = response.substr(npos+1);
+		m_socket->Disconnect();
+		m_state = NOT_CONNECTED;
+		Connect();
+	    }
+
 	    if(response.empty()) m_state = RECEIVING_CONTENT;
 
 	} else if(m_state == RECEIVING_CONTENT) {
@@ -160,9 +179,16 @@ void HTTPClient::Send(Buffer &b) {
 
 void HTTPClient::SendRequest() {
     Buffer b(&m_transl);
-    b.Pack((string) "GET " + m_resource + " HTTP/1.0\r\n");
-    b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
-    b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n\r\n");
+
+    if(m_proxy_hostname.empty()) {
+	b.Pack((string) "GET " + m_resource + " HTTP/1.0\r\n");
+	b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n");
+    } else {
+	b.Pack((string) "GET " + m_hostname + m_resource + " HTTP/1.0\r\n");
+    }
+
+    b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n\r\n");
+
     Send(b);
     m_state = WAITING_FOR_HEADER;
 }

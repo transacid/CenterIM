@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.109 2003/07/22 20:58:23 konst Exp $
+* $Id: icqconf.cc,v 1.110 2003/07/23 23:21:03 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -212,6 +212,7 @@ void icqconf::loadmainconfig() {
 	    if((param == "usegroups") || (param == "group1")) fgroupmode = group1; else
 	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "smtp") setsmtphost(buf); else
+	    if(param == "http") sethttphost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") initmultiproto(chatmode, buf); else
 	    if(param == "russian") initmultiproto(russian, buf); else
@@ -287,7 +288,8 @@ void icqconf::save() {
 	    if(logtimestamps) f << "logtimestamps" << endl;
 	    if(logonline) f << "logonline" << endl;
 
-	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
+	    f << "smtp\t" << getsmtphost() << ":" << getsmtpport() << endl;
+	    f << "http\t" << gethttphost() << ":" << gethttpport() << endl;
 	    f << "ptp\t" << ptpmin << "-" << ptpmax << endl;
 
 	    switch(getgroupmode()) {
@@ -772,7 +774,7 @@ void icqconf::commandline(int argc, char **argv) {
 
 	} else if((args == "-P") || (args == "--http-proxy")) {
 	    if(argv[++i]) {
-		proxyhost = argv[i];
+//                proxyhost = argv[i];
 //                cw_setproxy(proxyhost.c_str());
 	    }
 
@@ -1016,12 +1018,42 @@ void icqconf::setsmtphost(const string &asmtphost) {
     }
 }
 
+void icqconf::sethttphost(const string &ahttphost) {
+    int pos;
+
+    httphost = "";
+    httpport = 0;
+
+    if(!ahttphost.empty()) {
+	if((pos = ahttphost.find(":")) != -1) {
+	    httphost = ahttphost.substr(0, pos);
+	    httpport = atol(ahttphost.substr(pos+1).c_str());
+	} else {
+	    httphost = ahttphost;
+	    httpport = 8080;
+	}
+    }
+
+    if(httphost.empty() || !httpport) {
+	httphost = getsmtphost();
+	httpport = getsmtpport();
+    }
+}
+
 string icqconf::getsmtphost() const {
     return smtphost.empty() ? "localhost" : smtphost;
 }
 
 unsigned int icqconf::getsmtpport() const {
     return smtpport ? smtpport : 25;
+}
+
+string icqconf::gethttphost() const {
+    return httphost;
+}
+
+unsigned int icqconf::gethttpport() const {
+    return httpport ? httpport : 8080;
 }
 
 void icqconf::checkdiskspace() {
