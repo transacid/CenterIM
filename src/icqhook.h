@@ -6,6 +6,8 @@
 #include "kkiproc.h"
 #include "cmenus.h"
 
+#include "icqcommon.h"
+
 #define PERIOD_KEEPALIVE        100
 #define PERIOD_SELECT           1
 #define PERIOD_TCP              1
@@ -157,6 +159,12 @@ class icqhook {
 	static void userfound(struct icq_link *link, unsigned long uin,
 	    const char *nick, const char *first, const char *last,
 	    const char *email, char auth);
+	static void wpfound(struct icq_link *link, unsigned short seq2,
+	    unsigned long uin, const char *nick, const char *first,
+	    const char *last, const char *email, char auth, char status);
+	static void wpfound(struct icq_link *link, unsigned long uin,
+	    const char *nick, const char *first, const char *last,
+	    const char *email, char auth, char status);
 	static void searchdone(struct icq_link *link);
 	static void requestnotify(struct icq_link *link, unsigned long id,
 	    int result, unsigned int length, void *data);

@@ -17,6 +17,8 @@
 #include "conscommon.h"
 #include "icq.h"
 
+#include "icqcommon.h"
+
 #define cp_status           1
 
 #define cp_dialog_text      2
@@ -66,7 +68,7 @@ class icqconf {
 	unsigned int uin, port, socksport;
 
 	int autoaway, autona;
-	bool hideoffline, quote, savepwd, antispam, mailcheck;
+	bool hideoffline, quote, savepwd, antispam, mailcheck, serveronly;
 
 	string password, rnick, rfname, rlname, remail, server;
 	string sockshost, socksuser, sockspass, openurlcommand;
@@ -120,6 +122,9 @@ class icqconf {
 
 	bool getmailcheck();
 	void setmailcheck(bool fmc);
+
+	bool getserveronly();
+	void setserveronly(bool fso);
 
 	void setauto(int away, int na);
 	void getauto(int &away, int &na);

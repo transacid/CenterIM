@@ -10,6 +10,8 @@
 #include "kkfsys.h"
 #include "icqcontact.h"
 
+#include "icqcommon.h"
+
 class centericq {
     public:
 	enum msgmode {
@@ -20,7 +22,6 @@ class centericq {
 
     protected:
 	static void handlesignal(int signum);
-	static void termresize(void);
 
 	void checkparallel();
 	const string quotemsg(const string text);

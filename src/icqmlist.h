@@ -6,6 +6,8 @@
 #include "cmenus.h"
 #include "linkedlist.h"
 
+#include "icqcommon.h"
+
 enum contactstatus {csignore = 1, csvisible = 2, csinvisible = 3};
 
 class icqlistitem {

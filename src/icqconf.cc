@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.7 2001/08/21 09:33:12 konst Exp $
+* $Id: icqconf.cc,v 1.8 2001/09/24 11:56:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,7 +24,7 @@
 
 #include <sys/types.h>
 #include <dirent.h>
-#include <fstream.h>
+#include <fstream>
 
 #include "icqconf.h"
 #include "icqhist.h"
@@ -73,7 +73,7 @@ void icqconf::loadmainconfig() {
     ifstream f(fname.c_str());
 
     if(f.is_open()) {
-	savepwd = mailcheck = false;
+	savepwd = mailcheck = serveronly = false;
 
 	while(!f.eof()) {
 	    getline(f, buf);
@@ -96,6 +96,8 @@ void icqconf::loadmainconfig() {
 		antispam = true;
 	    } else if(param == "mailcheck") {
 		mailcheck = true;
+	    } else if(param == "serveronly") {
+		serveronly = true;
 	    } else if(param == "server") {
 		setserver(buf);
 	    } else if(param == "quotemsgs") {
@@ -141,6 +143,7 @@ void icqconf::savemainconfig(unsigned int fuin = 0) {
 	if(getquote()) f << "quotemsgs" << endl;
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
+	if(getserveronly()) f << "serveronly" << endl;
 
 	f.close();
     }
@@ -264,13 +267,13 @@ void icqconf::loadsounds() {
 
 	    switch(rs) {
 		case rscard:
-		    fo << "*\tmsg\tplay " << SHARE_DIR << "/centericq/msg.wav" << endl;
-		    fo << "*\turl\tplay " << SHARE_DIR << "/centericq/url.wav" << endl;
-		    fo << "*\tfile\tplay " << SHARE_DIR << "/centericq/file.wav" << endl;
-		    fo << "*\tchat\tplay " << SHARE_DIR << "/centericq/chat.wav" << endl;
-		    fo << "*\temail\tplay " << SHARE_DIR << "/centericq/email.wav" << endl;
-		    fo << "*\tonline\tplay " << SHARE_DIR << "/centericq/online.wav" << endl;
-		    fo << "*\tcont\tplay " << SHARE_DIR << "/centericq/cont.wav" << endl;
+		    fo << "*\tmsg\tplay " << SHARE_DIR << "/msg.wav" << endl;
+		    fo << "*\turl\tplay " << SHARE_DIR << "/url.wav" << endl;
+		    fo << "*\tfile\tplay " << SHARE_DIR << "/file.wav" << endl;
+		    fo << "*\tchat\tplay " << SHARE_DIR << "/chat.wav" << endl;
+		    fo << "*\temail\tplay " << SHARE_DIR << "/email.wav" << endl;
+		    fo << "*\tonline\tplay " << SHARE_DIR << "/online.wav" << endl;
+		    fo << "*\tcont\tplay " << SHARE_DIR << "/cont.wav" << endl;
 		    break;
 		case rsspeaker:
 		    fo << "*\tmsg\t!spk1" << endl;
@@ -325,8 +328,8 @@ void icqconf::loadactions() {
 
 	    of << "openurl\t";
 	    of << "(if test ! -z \"`ps x | grep /netscape | grep -v grep`\"; ";
-	    of << "then netscape -remote 'openURL($url$, new-window)' -display 0:0; else ";
-	    of << "netscape \"$url$\" -display 0:0; fi) >/dev/null 2>&1 &" << endl;
+	    of << "then DISPLAY=0:0 netscape -remote 'openURL($url$, new-window)'; else ";
+	    of << "DISPLAY=0:0 netscape \"$url$\"; fi) >/dev/null 2>&1 &" << endl;
 
 	    of.close();
 	}
@@ -537,4 +540,12 @@ void icqconf::openurl(const string url) {
 	torun.replace(npos, 5, url);
 
     system(torun.c_str());
+}
+
+bool icqconf::getserveronly() {
+    return serveronly;
+}
+
+void icqconf::setserveronly(bool fso) {
+    serveronly = fso;
 }

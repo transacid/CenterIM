@@ -6,6 +6,8 @@
 #include "cmenus.h"
 #include "kkfsys.h"
 
+#include "icqcommon.h"
+
 #define HIST_MSG_OUT            2
 #define HIST_MSG_IN             4
 #define HIST_HISTORYMODE        8

@@ -523,8 +523,12 @@ first, install fribidi library, and then run ./configure --with-fribidi
 before running make. You can download the library from
 http://imagic.weizmann.ac.il/~dov/freesw/FriBidi
 
-3.37.28
--------
+4.0.0
+------
 
 Fixed some compilation problems centericq caused with C++ compilers
 that have no support for namespaces.
+
+Applied patch by Pavel Gubin <pg@cedar.ie.tusur.ru> which fixes the bug
+causing centericq not to return from autoAway/autoNA mode when only one
+of the timeouts is set.

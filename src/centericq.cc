@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.11 2001/08/21 09:33:12 konst Exp $
+* $Id: centericq.cc,v 1.12 2001/09/24 11:56:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,8 +63,6 @@ void centericq::exec() {
     sact.sa_handler = &handlesignal;
     sigaction(SIGINT, &sact, 0);
     sigaction(SIGCHLD, &sact, 0);
-
-    kt_resize_event = &termresize;
 
     conf.initpairs();
     conf.load();
@@ -314,6 +312,7 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_HISTORY: face.history(c->getuin()); break;
 	    case ACT_MSG:
+		text = "";
 		if(c->getmsgcount()) {
 		    face.read(c->getuin());
 		} else if(c->getuin() && !c->isnonicq()) {
@@ -347,19 +346,35 @@ void centericq::changestatus() {
 }
 
 void centericq::find() {
-    static string email, nick, first, last;
-    static unsigned int uin = 0;
+    static icqface::searchparameters s;
     bool ret = true;
 
     while(ret) {
-	if(ret = face.finddialog(uin, nick, email, first, last)) {
-	    if(uin) {
-		icq_SendSearchUINReq(&icql, uin);
-	    } else {
-		icq_SendSearchReq(&icql, email.c_str(),
-		    nick.c_str(), first.c_str(),
-		    last.c_str());
+	if(ret = face.finddialog(s)) {
+	    if(s.uin) {
+		icq_SendSearchUINReq(&icql, s.uin);
+	    } else
+	    if(!s.email.empty() || !s.nick.empty()
+	    || !s.firstname.empty() || !s.lastname.empty()) {
+
+		icq_SendSearchReq(&icql, s.email.c_str(),
+		    s.nick.c_str(), s.firstname.c_str(),
+		    s.lastname.c_str());
+
+	    } else
+	    if(s.minage || s.maxage || s.country || s.language
+	    || !s.city.empty() || !s.state.empty() || !s.company.empty()
+	    || !s.department.empty() || !s.position.empty() || s.onlineonly) {
+
+		icq_SendWhitePagesSearchReq(&icql, s.firstname.c_str(),
+		    s.lastname.c_str(), s.nick.c_str(), s.email.c_str(),
+		    s.minage, s.maxage, s.gender, s.language, s.city.c_str(),
+		    s.state.c_str(), s.country, s.company.c_str(),
+		    s.department.c_str(), s.position.c_str(),
+		    s.onlineonly ? 1 : 0);
+
 	    }
+
 	    ret = face.findresults();
 	}
     }
@@ -399,7 +414,10 @@ void centericq::updatedetails() {
 
 	c->getinfo(fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, fzip, fcountry);
 	c->getmoreinfo(fage, fgender, fhomepage, flang1, flang2, flang3, fbday, fbmonth, fbyear);
-	c->getworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, fwzip, fwcountry, fcompany, fdepartment, fjob, foccupation, fwhomepage);
+
+	c->getworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, fwzip,
+	    fwcountry, fcompany, fdepartment, fjob, foccupation, fwhomepage);
+
 	fabout = c->getabout();
 
 	icq_UpdateUserInfo(&icql, c->getnick().c_str(), fname.c_str(),
@@ -407,6 +425,11 @@ void centericq::updatedetails() {
 
 	icq_UpdateMetaInfoHomepage(&icql, fage, fhomepage.c_str(),
 	    fbyear, fbmonth, fbday, flang1, flang2, flang3, fgender);
+
+	icq_UpdateMetaInfoWork(&icql, fwcity.c_str(), fwstate.c_str(),
+	    fwphone.c_str(), fwfax.c_str(), fwaddress.c_str(),
+	    fcompany.c_str(), fdepartment.c_str(), fjob.c_str(),
+	    fwhomepage.c_str(), foccupation, fwcountry, fwzip);
 
 	icq_UpdateMetaInfoSet(&icql, c->getnick().c_str(), fname.c_str(),
 	    lname.c_str(), fprimemail.c_str(), fsecemail.c_str(),
@@ -638,10 +661,4 @@ const string centericq::quotemsg(const string text) {
     }
 
     return ret;
-}
-
-void centericq::termresize(void) {
-    face.done();
-    face.init();
-    face.draw();
 }

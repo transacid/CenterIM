@@ -27,11 +27,10 @@
 
 #include "linkedlist.h"
 #include "icqcontact.h"
+#include "icqcommon.h"
 
 class icqcontacts: public linkedlist {
     protected:
-	linkedlist visuins;
-
 	static int clistsort(void *p1, void *p2);
 
     public:

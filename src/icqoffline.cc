@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.7 2001/08/17 19:11:59 konst Exp $
+* $Id: icqoffline.cc,v 1.8 2001/09/24 11:56:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -81,7 +81,7 @@ void icqoffline::sendurl(unsigned int uin, string url, string text) {
 
     if(f) {
 	unsigned long seq = icq_SendURL(&icql, uin, url.c_str(), text.c_str(),
-	    c->getstatus() != STATUS_OFFLINE ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+	    c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
 
 	fprintf(f, "\f\nURL\n");
 	fprintf(f, "%lu\n%lu\n", seq, time(0));

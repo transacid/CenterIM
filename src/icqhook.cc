@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.7 2001/08/17 19:11:59 konst Exp $
+* $Id: icqhook.cc,v 1.8 2001/09/24 11:56:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,8 +82,11 @@ void icqhook::init(struct icq_link *link) {
     link->icq_MetaUserAffiliations = &metauseraffiliations;
     link->icq_WrongPassword = &wrongpass;
     link->icq_InvalidUIN = &invaliduin;
+
     link->icq_UserFound = &userfound;
-    link->icq_SearchDone = &searchdone;
+    link->icq_WhitePagesFound = &wpfound;
+    link->icq_SearchDone = link->icq_WhitePagesDone = &searchdone;
+
     link->icq_Log = &log;
     link->icq_RequestNotify = &requestnotify;
     link->icq_RecvContact = &contact;
@@ -487,6 +490,12 @@ void icqhook::searchdone(struct icq_link *link) {
     face.log(_("+ search done"));
 }
 
+void icqhook::wpfound(struct icq_link *link, unsigned short seq2,
+unsigned long uin, const char *nick, const char *first,
+const char *last, const char *email, char auth, char status) {
+    ihook.userfound(link, uin, nick, first, last, email, auth);
+}
+
 void icqhook::requestnotify(struct icq_link *link, unsigned long id,
 int result, unsigned int length, void *data) {
     vector<icqfileassociation>::iterator i;
@@ -559,7 +568,7 @@ unsigned int icqhook::getfinduin(int pos) {
     return r;
 }
 
-#define MIN(x, y)       (x > y ? y : x)
+#define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
 
 void icqhook::exectimers() {
     time_t timer_current = time(0);
@@ -618,7 +627,7 @@ void icqhook::exectimers() {
 	}
 	else
 	if((icql.icq_Status != manualstatus) &&
-	(timer_current-timer_keypress < MIN(away, na)*60)) {
+	(timer_current-timer_keypress < MINCK0(away, na)*60)) {
 	    icq_ChangeStatus(&icql, manualstatus);
 	    face.log(_("+ the user is back"));
 	    face.update();

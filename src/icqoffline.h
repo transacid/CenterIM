@@ -2,11 +2,11 @@
 #define __ICQOFFLINE_H_
 
 #include <stdio.h>
-#include <string>
-#include <vector>
 
 #include "icq.h"
 #include "icqhook.h"
+
+#include "icqcommon.h"
 
 enum scanaction {osresend, ossendall, osremove, osexpired};
 

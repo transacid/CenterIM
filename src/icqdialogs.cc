@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.7 2001/08/21 09:33:12 konst Exp $
+* $Id: icqdialogs.cc,v 1.8 2001/09/24 11:56:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,7 +82,7 @@ bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
 	    db.gettree()->addleaff(ndet, 0, (void *)  6, _(" First name : %s "), rfname.c_str());
 	    db.gettree()->addleaff(ndet, 0, (void *)  7, _(" Last name : %s "), rlname.c_str());
 	} else {
-	    db.gettree()->addleaff(ndet, 0, (void *) 10, _(" UIN : %s "), ruin ? i2str(ruin).c_str() : "");
+	    db.gettree()->addleaff(ndet, 0, (void *) 10, _(" UIN : %s "), strint(ruin));
 	    db.gettree()->addleaff(ndet, 0, (void *)  2, _(" Password : %s "), phidden.assign(rpasswd.size(), '*').c_str());
 	}
 
@@ -181,8 +181,8 @@ bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
     return success;
 }
 
-bool icqface::finddialog(unsigned int &uin, string &nick, string &email, string &first, string &last) {
-    int n, b;
+bool icqface::finddialog(searchparameters &s) {
+    int n, b, i;
     bool finished = false, ret = false;
     dialogbox db;
 
@@ -199,36 +199,71 @@ bool icqface::finddialog(unsigned int &uin, string &nick, string &email, string 
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("Change"), _("Done"), 0));
+	_("Clear"), _("Change"), _("Search"), 0));
 
     db.idle = &dialogidle;
+    treeview &tree = *db.gettree();
+    db.getbar()->item = 1;
 
     while(!finished) {
-	db.gettree()->clear();
-	
-	int nuin = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" by UIN "));
-	int ninfo = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" by Details "));
+	tree.clear();
 
-	db.gettree()->addleaff(nuin,  0, 0, _(" UIN : %s "), uin ? i2str(uin).c_str() : "");
-	db.gettree()->addleaff(ninfo, 0, 0, _(" Nickname : %s "), nick.c_str());
-	db.gettree()->addleaff(ninfo, 0, 0, _(" E-Mail : %s "), email.c_str());
-	db.gettree()->addleaff(ninfo, 0, 0, _(" First name : %s "), first.c_str());
-	db.gettree()->addleaff(ninfo, 0, 0, _(" Last name : %s "), last.c_str());
+	int nuin = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" UIN "));
+	int ninfo = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Details "));
+	int nloc = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Location "));
+	int nwork = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Work "));
+	int nonl = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Online only "));
 
-	finished = !db.open(n, b);
+	tree.addleaff(nuin, 0, (void *) 10, _(" UIN : %s "), strint(s.uin));
+
+	tree.addleaff(ninfo, 0, (void *) 11, _(" Nickname : %s "), s.nick.c_str());
+	tree.addleaff(ninfo, 0, (void *) 12, _(" E-Mail : %s "), s.email.c_str());
+	tree.addleaff(ninfo, 0, (void *) 13, _(" First name : %s "), s.firstname.c_str());
+	tree.addleaff(ninfo, 0, (void *) 14, _(" Last name : %s "), s.lastname.c_str());
+	tree.addleaff(ninfo, 0, (void *) 15, _(" Min. age : %s "), strint(s.minage));
+	tree.addleaff(ninfo, 0, (void *) 16, _(" Max. age : %s "), strint(s.maxage));
+	tree.addleaff(ninfo, 0, (void *) 17, _(" Gender : %s "), strgender(s.gender));
+	tree.addleaff(ninfo, 0, (void *) 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
+
+	tree.addleaff(nloc, 0, (void *) 19, _(" City : %s "), s.city.c_str());
+	tree.addleaff(nloc, 0, (void *) 20, _(" State : %s "), s.state.c_str());
+	tree.addleaff(nloc, 0, (void *) 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
+
+	tree.addleaff(nwork, 0, (void *) 22, _(" Company : %s "), s.company.c_str());
+	tree.addleaff(nwork, 0, (void *) 23, _(" Department : %s "), s.department.c_str());
+	tree.addleaff(nwork, 0, (void *) 24, _(" Position : %s "), s.position.c_str());
+
+	tree.addleaff(nonl, 0, (void *) 25, " %s ", stryesno(s.onlineonly));
+
+	finished = !db.open(n, b, (void **) &i);
 
 	if(!finished)
 	switch(b) {
 	    case 0:
-		switch(n) {
-		    case 2: uin = atol(inputstr(_("UIN: "), uin ? i2str(uin) : "").c_str()); break;
-		    case 4: nick = inputstr(_("Nickname: "), nick); break;
-		    case 5: email = inputstr(_("E-Mail: "), email); break;
-		    case 6: first = inputstr(_("First name: "), first); break;
-		    case 7: last = inputstr(_("Last name: "), last); break;
-		}
+		s = searchparameters();
 		break;
 	    case 1:
+		switch(i) {
+		    case 10: s.uin = atol(inputstr(_("UIN: "), strint(s.uin)).c_str()); break;
+		    case 11: s.nick = inputstr(_("Nickname: "), s.nick); break;
+		    case 12: s.email = inputstr(_("E-Mail: "), s.email); break;
+		    case 13: s.firstname = inputstr(_("First name: "), s.firstname); break;
+		    case 14: s.lastname = inputstr(_("Last name: "), s.lastname); break;
+		    case 15: s.minage = atol(inputstr(_("Minimal age: "), strint(s.minage)).c_str()); break;
+		    case 16: s.maxage = atol(inputstr(_("Maximal age: "), strint(s.maxage)).c_str()); break;
+		    case 17: selectgender(s.gender); break;
+		    case 18: selectlanguage(s.language); break;
+		    case 19: s.city = inputstr(_("City: "), s.city); break;
+		    case 20: s.state = inputstr(_("State: "), s.state); break;
+		    case 21: selectcountry(s.country); break;
+		    case 22: s.company = inputstr(_("Company: "), s.company); break;
+		    case 23: s.department = inputstr(_("Department: "), s.department); break;
+		    case 24: s.position = inputstr(_("Position: "), s.position); break;
+		    case 25: s.onlineonly = !s.onlineonly; break;
+		}
+		break;
+
+	    case 2:
 		ret = finished = true;
 		break;
 	}
@@ -277,13 +312,13 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     tree->addleaff(ngen, 0, 0, _(" Old e-mail : %s "), foldemail.c_str());
     tree->addleaff(ngen, 0, 0, _(" Gender : %s "), strgender(fgender));
     tree->addleaff(ngen, 0, 0, _(" Birthdate : %s "), getbdate(fbday, fbmonth, fbyear).c_str());
-    tree->addleaff(ngen, 0, 0, _(" Age : %s "), fage ? i2str(fage).c_str() : "");
+    tree->addleaff(ngen, 0, 0, _(" Age : %s "), strint(fage));
 
     tree->addleaff(nhome, 0, 0, _(" City : %s "), fcity.c_str());
     tree->addleaff(nhome, 0, 0, _(" State : %s "), fstate.c_str());
     tree->addleaff(nhome, 0, 0, _(" Country : %s "), fcountry ? icq_GetCountryName(fcountry) : "");
     tree->addleaff(nhome, 0, 0, _(" Street address : %s "), fstreet.c_str());
-    tree->addleaff(nhome, 0, 0, _(" Zip code : %s "), fzip ? i2str(fzip).c_str() : "");
+    tree->addleaff(nhome, 0, 0, _(" Zip code : %s "), strint(fzip));
     tree->addleaff(nhome, 0, 0, _(" Phone : %s "), fphone.c_str());
     tree->addleaff(nhome, 0, 0, _(" Fax : %s "), ffax.c_str());
     tree->addleaff(nhome, 0, 0, _(" Cellular phone : %s "), fcellular.c_str());
@@ -391,13 +426,13 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 		    }
 
 		    break;
-		case 10: fage = atoi(inputstr(_("Age: "), fage ? i2str(fage) : "").c_str()); break;
+		case 10: fage = atoi(inputstr(_("Age: "), strint(fage)).c_str()); break;
 
 		case 12: fcity = inputstr(_("City: "), fcity); break;
 		case 13: fstate = inputstr(_("State: "), fstate); break;
 		case 14: selectcountry(fcountry); break;
 		case 15: fstreet = inputstr(_("Street address: "), fstreet); break;
-		case 16: fzip = strtoul(inputstr(_("Zip code: "), fzip ? i2str(fzip) : "").c_str(), 0, 0); break;
+		case 16: fzip = strtoul(inputstr(_("Zip code: "), strint(fzip)).c_str(), 0, 0); break;
 		case 17: fphone = inputstr(_("Phone: "), fphone); break;
 		case 18: ffax = inputstr(_("Fax: "), ffax); break;
 		case 19: fcellular = inputstr(_("Cellular phone: "), fcellular); break;
@@ -618,6 +653,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
     bool mailcheck = conf.getmailcheck();
+    bool serveronly = conf.getserveronly();
 
     dialogbox db;
 
@@ -656,6 +692,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	db.gettree()->addleaff(nopt, 0, (void *) 13, _(" Remember ICQ password : %s "), stryesno(savepwd));
 	db.gettree()->addleaff(nopt, 0, (void *) 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
 	db.gettree()->addleaff(nopt, 0, (void *) 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
+	db.gettree()->addleaff(nopt, 0, (void *) 16, _(" Send all events through server : %s "), stryesno(serveronly));
 
 	db.gettree()->addleaff(ncomm, 0, (void *) 7, _(" ICQ server address : %s "), serv.c_str());
 	db.gettree()->addleaff(ncomm, 0, (void *) 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
@@ -716,6 +753,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
+		    case 16: serveronly = !serveronly; break;
 		}
 		break;
 	    case 1:
@@ -727,6 +765,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.sethideoffline(hideoffl);
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
+		conf.setserveronly(serveronly);
 		icq_Russian = rus ? 1 : 0;
 
 		if(socks) conf.setsockshost(prserv);

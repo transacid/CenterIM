@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.11 2001/08/21 09:33:12 konst Exp $
+* $Id: icqface.cc,v 1.12 2001/09/24 11:56:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -59,6 +59,11 @@ const char *strgender(unsigned char fgender) {
     }
 }
 
+const char *strint(unsigned int i) {
+    static string s;
+    return i ? (s = i2str(i)).c_str() : "";
+}
+
 string getbdate(unsigned char bday, unsigned char bmonth, unsigned char byear) {
     string ret;
 
@@ -89,16 +94,20 @@ string getbdate(unsigned char bday, unsigned char bmonth, unsigned char byear) {
     return ret;
 }
 
-icqface::icqface(): mainscreenblock(false), inited(false), onlinefolder(false) {
+icqface::icqface() {
     kinterface();
     raw();
     workareas.freeitem = &freeworkareabuf;
+    kt_resize_event = &termresize;
 
 #ifdef DEBUG
     time_t logtime = time(0);
-    flog.open(((string) getenv("HOME") + "/.centericq/log").c_str(), _IO_APPEND);
+    flog.clear();
+    flog.open(((string) getenv("HOME") + "/.centericq/log").c_str(), ios::app);
     if(flog.is_open()) flog << endl << "-- centericq log started on " << ctime(&logtime);
 #endif
+
+    mainscreenblock = inited = onlinefolder = dotermresize = false;
 }
 
 icqface::~icqface() {
@@ -453,6 +462,7 @@ void icqface::getregdata(string &nick, string &fname, string &lname, string &ema
 bool icqface::findresults() {
     bool finished = false, ret = false;
     unsigned int ffuin;
+    icqcontact *c;
     dialogbox db;
     int r, b;
 
@@ -488,10 +498,20 @@ bool icqface::findresults() {
 		if(ffuin = ihook.getfinduin(r)) cicq.userinfo(ffuin);
 		break;
 	    case 1:
-		if(ffuin = ihook.getfinduin(r))
-		if(!clist.get(ffuin)) {
-		    clist.addnew(ffuin, false);
-		    face.update();
+		if(ffuin = ihook.getfinduin(r)) {
+		    if(!(c = clist.get(ffuin))) {
+			if(ask(_("Notify the user he/she has been added?"),
+			ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+			    icq_AlertAddUser(&icql, ffuin);
+			    log(_("+ the notification has been sent to %lu"), ffuin);
+			}
+
+			clist.addnew(ffuin, false);
+			face.update();
+		    } else {
+			log(_("+ user %s, %lu is already on the list"),
+			    c->getnick().c_str(), ffuin);
+		    }
 		}
 		break;
 	    case 2:
@@ -1516,24 +1536,32 @@ struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false) {
 	    db.getmenu()->additemf(" %15lu   %s", cur->uin, cur->nick);
 	}
 
-	if(fin = !db.open(n, b)) b = -1; else
-	if(cur = (icqcontactmsg *) lst.at(n-1))
-	switch(b) {
-	    case 0:
-		cicq.userinfo(cur->uin);
-		break;
-	    case 1:
-		if(!clist.get(cur->uin)) {
-		    clist.addnew(cur->uin, false);
-		    c = clist.get(cur->uin);
-		    c->setdispnick(cur->nick);
-		}
+	if(fin = !db.open(n, b)) {
+	    b = -1;
+	} else {
+	    cur = (icqcontactmsg *) lst.at(n-1);
 
-		lst.remove(n-1);
-		break;
-	    case 2:
-		fin = true;
-		break;
+	    switch(b) {
+		case 0:
+		    if(cur) cicq.userinfo(cur->uin);
+		    break;
+
+		case 1:
+		    if(cur) {
+			if(!clist.get(cur->uin)) {
+			    clist.addnew(cur->uin, false);
+			    c = clist.get(cur->uin);
+			    c->setdispnick(cur->nick);
+			}
+
+			lst.remove(n-1);
+		    }
+		    break;
+
+		case 2:
+		    fin = true;
+		    break;
+	    }
 	}        
     }
 
@@ -1999,6 +2027,14 @@ void icqface::showextractedurls() {
 
 void icqface::menuidle(verticalmenu *m) {
     ihook.idle();
+
+    if(face.dotermresize)
+	if(m == &face.mcontacts->menu) {
+	    face.done();
+	    face.init();
+	    face.draw();
+	    face.dotermresize = false;
+	}
 }
 
 void icqface::dialogidle(dialogbox *caller) {
@@ -2124,16 +2160,20 @@ void icqface::textinputidle(textinputline *il) {
     ihook.idle();
 }
 
-// ----------------------------------------------------------------------------
-
-icqprogress::icqprogress(): curline(0), w(0) {
+void icqface::termresize(void) {
+    face.dotermresize = true;
 }
 
-icqprogress::~icqprogress() {
+// ----------------------------------------------------------------------------
+
+icqface::icqprogress::icqprogress(): curline(0), w(0) {
+}
+
+icqface::icqprogress::~icqprogress() {
     delete w;
 }
 
-void icqprogress::log(const char *fmt, ...) {
+void icqface::icqprogress::log(const char *fmt, ...) {
     va_list ap;
     char buf[1024];
 
@@ -2149,7 +2189,7 @@ void icqprogress::log(const char *fmt, ...) {
     w->write(2, 1+curline++, buf);
 }
 
-void icqprogress::show(string title = "") {
+void icqface::icqprogress::show(string title = "") {
     if(!w) {
 	w = new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
@@ -2159,6 +2199,6 @@ void icqprogress::show(string title = "") {
     w->open();
 }
 
-void icqprogress::hide() {
+void icqface::icqprogress::hide() {
     w->close();
 }

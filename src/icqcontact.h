@@ -12,6 +12,8 @@
 
 #include "icq.h"
 
+#include "icqcommon.h"
+
 #define SOUND_COUNT     7
 
 class icqcontact {

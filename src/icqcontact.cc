@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.6 2001/08/17 19:11:59 konst Exp $
+* $Id: icqcontact.cc,v 1.7 2001/09/24 11:56:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -733,5 +733,5 @@ void icqcontact::setmsgdirect(bool flag) {
 }
 
 bool icqcontact::getmsgdirect() const {
-    return msgdirect;
+    return msgdirect && !conf.getserveronly();
 }

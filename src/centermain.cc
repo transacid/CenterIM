@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.6 2001/08/17 19:11:58 konst Exp $
+* $Id: centermain.cc,v 1.7 2001/09/24 11:56:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -53,8 +53,7 @@ int main(int argc, char **argv) {
 
     try {
 
-#if defined(HAVE_SETLOCALE) && defined(ENABLE_NLS)
-	setlocale(LC_ALL, "");
+#ifdef ENABLE_NLS
 	bindtextdomain("centericq", LOCALE_DIR);
 	textdomain("centericq");
 #endif

@@ -6,6 +6,8 @@
 #include "icq.h"
 #include "icqhist.h"
 
+#include "icqcommon.h"
+
 #include "dialogbox.h"
 #include "textinputline.h"
 #include "texteditor.h"
@@ -58,21 +60,38 @@
 
 extern class centericq cicq;
 
-class icqprogress {
-    protected:
-	textwindow *w;
-	int curline;
-
-    public:
-	icqprogress();
-	~icqprogress();
-
-	void log(const char *fmt, ...);
-	void show(string title = "");
-	void hide();
-};
-
 class icqface {
+    public:
+	class icqprogress {
+	    protected:
+		textwindow *w;
+		int curline;
+
+	    public:
+		icqprogress();
+		~icqprogress();
+
+		void log(const char *fmt, ...);
+		void show(string title = "");
+		void hide();
+	} progress;
+
+	struct searchparameters {
+	    searchparameters() {
+		onlineonly = false;
+		uin = 0;
+		minage = maxage = country = 0;
+		gender = language = 0;
+	    };
+
+	    bool onlineonly;
+	    unsigned int uin;
+	    unsigned short minage, maxage, country;
+	    unsigned char gender, language;
+	    string firstname, lastname, nick, city, state;
+	    string company, department, position, email;
+	};
+
     protected:
 	treeview *mcontacts;
 	textinputline *il;
@@ -83,7 +102,7 @@ class icqface {
 
 	linkedlist workareas;
 
-	bool editdone, mainscreenblock, inited, onlinefolder;
+	bool editdone, mainscreenblock, inited, onlinefolder, dotermresize;
 	int extk, totalunread;
 	unsigned int passuin;
 
@@ -103,6 +122,8 @@ class icqface {
 	static void textinputidle(textinputline *il);
 	static void freeworkareabuf(void *p);
 	static void detailsidle(dialogbox *db);
+
+	static void termresize(void);
 
 	void infoclear(dialogbox &db, icqcontact *c, unsigned int uin);
 	void infogeneral(dialogbox &db, icqcontact *c);
@@ -131,7 +152,6 @@ class icqface {
 
     public:
 	list<unsigned int> muins;
-	icqprogress progress;
 
 	icqface();
 	~icqface();
@@ -176,7 +196,7 @@ class icqface {
 	void getregdata(string &nick, string &fname, string &lname, string &email);
 	bool updateconf(regsound &s, regcolor &c);
 
-	bool finddialog(unsigned int &uin, string &nick, string &email, string &first, string &last);
+	bool finddialog(searchparameters &s);
 	bool findresults();
 
 	bool updatedetails(icqcontact *c = 0);
@@ -202,5 +222,6 @@ const char *strgender(unsigned char fgender);
 const char *stryesno(bool i);
 const char *strregsound(regsound s);
 const char *strregcolor(regcolor c);
+const char *strint(unsigned int i);
 
 #endif
