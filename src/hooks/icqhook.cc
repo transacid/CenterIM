@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.32 2001/12/27 07:53:22 konst Exp $
+* $Id: icqhook.cc,v 1.33 2002/01/17 08:54:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,7 +29,7 @@
 #include "accountmanager.h"
 #include "centericq.h"
 
-#include "userinfoconstants.h"
+#include "libicq2000/userinfoconstants.h"
 
 #define PERIOD_ICQPOLL  5
 
@@ -61,6 +61,7 @@ icqhook::icqhook() {
     cli.newuin.connect(slot(this, &icqhook::newuin_cb));
     cli.rate.connect(slot(this, &icqhook::rate_cb));
     cli.statuschanged.connect(slot(this, &icqhook::statuschanged_cb));
+    cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
 
 #ifdef DEBUG
     cli.logger.connect(slot(this, &icqhook::logger_cb));
@@ -98,13 +99,15 @@ void icqhook::connect() {
 	}
     }
 
+    cli.setLoginServerHost(acc.server);
+    cli.setLoginServerPort(acc.port);
+
     cli.setUIN(acc.uin);
     cli.setPassword(acc.password);
 
     face.log(_("+ [icq] connecting to the server"));
 
-    cli.setInvisible(manualstatus == invisible);
-    cli.setStatus(stat2int[manualstatus]);
+    cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
 
     time(&timer_reconnect);
     fonline = true;
@@ -313,8 +316,7 @@ void icqhook::setautostatus(imstatus st) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
-	    cli.setInvisible(st == invisible);
-	    cli.setStatus(stat2int[st]);
+	    cli.setStatus(stat2int[st], st == invisible);
 	}
     } else {
 	if(getstatus() != offline) {
@@ -334,6 +336,13 @@ imstatus icqhook::getstatus() const {
 }
 
 bool icqhook::regconnect(const string aserv) {
+    int pos;
+
+    if((pos = aserv.find(":")) != -1) {
+	cli.setLoginServerHost(aserv.substr(0, pos));
+	cli.setLoginServerPort(strtoul(aserv.substr(pos+1).c_str(), 0, 0));
+    }
+
     return true;
 }
 
@@ -409,6 +418,20 @@ const string icqhook::getcountryname(int code) const {
 
     return "";
 }
+
+/*
+void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
+    searchdest = &dest;
+
+    if(!params.email.empty()) {
+	cli.lookupContacts(params.email);
+    } else if(!params.nick.empty() || !params.firstname.empty() || !params.lastname.empty()) {
+	cli.lookupContacts(params.nick, params.firstname, params.lastname);
+    } else {
+	face.log(_("+ [icq] not enough search information given"));
+    }
+}
+*/
 
 // ----------------------------------------------------------------------------
 
@@ -514,19 +537,35 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 	}
 
     } else if(ev->getType() == MessageEvent::AuthAck) {
+
+    } else if(ev->getType() == MessageEvent::AwayMessage) {
+	AwayMessageEvent *r;
+	if(r = dynamic_cast<AwayMessageEvent *>(ev)) {
+	    em.store(immessage(ic, imevent::incoming,
+		string() + _("* Away message:") + "\n\n" +
+		rusconv("wk", r->getMessage())));
+	}
+
     }
 
     return true;
 }
 
 void icqhook::messageack_cb(MessageEvent *ev) {
-    Contact *ic;
+    imcontact ic;
+    icqcontact *c;
 
-    if(ev->isFinished() && ev->isDelivered()) {
-	if(ev->getType() != MessageEvent::AwayMessage) {
-	    if(ic = ev->getContact()) {
-//                busy.erase(ic->getUIN());
-	    }
+    ic = imcontact(ev->getContact()->getUIN(), icq);
+    c = clist.get(ic);
+
+    if(ev->isFinished()) {
+	switch(ev->getType()) {
+	    case MessageEvent::SMS:
+		if(!ev->isDelivered()) {
+		    face.log(_("+ [icq] failed SMS to %s, %s"),
+			c->getdispnick().c_str(), ic.totext().c_str());
+		}
+		break;
 	}
     }
 }
@@ -678,6 +717,9 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 	case ContactListEvent::MessageQueueChanged:
 	    break;
+
+	case ContactListEvent::ServerBasedContact:
+	    break;
     }
 }
 
@@ -732,4 +774,8 @@ void icqhook::socket_cb(SocketEvent *ev) {
 
 void icqhook::statuschanged_cb(MyStatusChangeEvent *ev) {
     face.update();
+}
+
+void icqhook::want_auto_resp_cb(AwayMessageEvent *ev) {
+    ev->setMessage("");
 }

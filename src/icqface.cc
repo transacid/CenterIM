@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.62 2001/12/20 11:36:18 konst Exp $
+* $Id: icqface.cc,v 1.63 2002/01/17 08:54:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -418,7 +418,7 @@ void icqface::fillcontactlist() {
     }
 }
 
-bool icqface::findresults() {
+bool icqface::findresults(const imsearchparams &sp) {
     bool finished = false, ret = false;
     unsigned int ffuin;
     icqcontact *c;
@@ -435,10 +435,9 @@ bool icqface::findresults() {
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	conf.getcolor(cp_main_selected), _("Details"), _("Add"),
 	_("New search"), 0));
-/*
-    ihook.clearfindresults();
-    ihook.setfinddest(db.getmenu());
-*/
+
+//    gethook(sp.pname).lookup(sp, *db.getmenu());
+
     db.addautokeys();
     db.idle = &dialogidle;
     db.redraw();
@@ -450,8 +449,8 @@ bool icqface::findresults() {
 
     while(!finished) {
 	finished = !db.open(r, b);
-//        ihook.setfinddest(0);
-	
+//        gethook(sp.pname).stoplookup();
+
 	if(!finished)
 	switch(b) {
 	    case 0:

@@ -11,12 +11,7 @@ Q: "Who are you?" - a question usually addressed to the user "konst"
 
 A: I usually answer "Santa Claus".
 
-Q: What is the "ICQ" contact list item?
-
-A: It's a special kind of contact you receive system messages from.
-   For example, someone has requested your authorization to add you
-   to his contact list or someone has added you. You'll be noticed
-   with that item.
+/* *** */
 
 Q: How can I request someone's authorization to add him to my
    contact list?
@@ -24,15 +19,21 @@ Q: How can I request someone's authorization to add him to my
 A: There is no need to ask for authorization to add somebody with
    centericq ;) It adds people quietly.
 
+/* *** */
+
 Q: What about implementing such a neat <blah-blah> feature in centericq?
 
 A: Hey, centericq is GPL and opensource, so feel free to contribute.
    Don't wait for the author/maintainer to implement it, just do it
    yourself and send a patch.
 
+/* *** */
+
 Q: Can't build it under FreeBSD..
 
 A: Use gmake instead of make
+
+/* *** */
 
 Q: (by Paonia Ezrine, paonia@home.welcomehome.org)
    When I run centericq in a xterm or from the console it is fine but
@@ -58,9 +59,13 @@ A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
    
    and it is ok
 
+/* *** */
+
 Q: How do I authorize someone's request with centericq?
 
 A: You'll see as soon as someone requests it.
+
+/* *** */
 
 Q: I can't use Ctrl-O to view history and Ctrl-Y to delete a line under
    FreeBSD
@@ -69,6 +74,8 @@ A: Execute the following before starting centericq:
     stty dsusp undef
     stty discard undef
 
+/* *** */
+
 Q: I can't get out from a dialog or a menu. When I press ESC, nothing
    happens.
 
@@ -76,10 +83,14 @@ A: Have you ever used mc (Midnight commander)? It requires users to
    press ESC twice to close a dialog, menu, etc. It's not a problem, but
    just a terminal specific issue.
 
+/* *** */
+
 Q: How do I enable logging the protocol info, etc?
 
 A: Compile the program with the -DDEBUG parameter.
    [konst@morgue]$ CFLAGS=-DDEBUG CXXFLAGS=-DDEBUG ./configure && make
+
+/* *** */
 
 Q: Centericq compiles way too slow on my box. What's wrong?
 
@@ -87,31 +98,94 @@ A: C++ compiler optimization being a rather slow thing is on by default.
    To turn it off, do the following.
    [konst@morgue]$ CXXFLAGS=-O0 ./configure && make
 
-Q: The following error message is displayed every time I try to build
-   the software. What's wrong?
+/* *** */
 
-    /usr/bin/ld: cannot find -lcurses
-    collect2: ld returned 1 exit status
-    make[2]: *** [centericq] Error 1
-    make[2]: Leaving directory `/home/me/centericq/src'
-    make[1]: *** [install-recursive] Error 1
-    make[1]: Leaving directory `/home/me/centericq/src'
-    make: *** [install-recursive] Error 1
+Q: From: jeff covey <jeff.covey@pobox.com>
 
-A: You either miss an ncurses library or haven't got appropriate backward
-   compatibility links established. The latter is more possible. To fix
-   this issue the following commands from the root user:
+  if i understand the faq correctly, centericq makes esc into escesc
+  because some terminals don't map esc properly. could the use of esc or
+  escesc be made a configuration choice? for me, hitting escape twice is
+  reallyreally annoyingannoying, especially if i'm two menus in, and to
+  get out, i have to hit escape four times in a rowrowrowrow.
 
-    # cd /usr/lib
-    # ln -sf libncurses.a libcurses.a
+A: From: lanzz@lanzz.org
 
-   If this doesn't help, you do miss the whole ncurses library. Get it either
-   from your Linux distribution package or from
-   http://www.gnu.org/software/ncurses/ncurses.html
+  it's a limitation of the console. keys like f1..f12, the arrows, etc,
+  generate sequences of characters starting with esc. if the application
+  was to handle esc as cancel unconditionally, you'll have arrows
+  cancelling your dialogs. so the app must do one of these things to
+  avoid that:
 
-Q: I cannot login to the icq network. I specified login.icq.com:5190 in
-   the configuration settings. What's wrong?
+  1. require esc-esc instead of single esc, as that disambiguates it
+     from the function keys
 
-A: The server you specified is wrong. You can only use icq.mirabilis.com:4000
-   with centericq, because login.icq.com is for another version of the
-   protocol.
+  2. have a certain timeout and accepting the esc as a cancel only if
+     there wasn't a function sequence after the esc during the timeout
+
+  3. switch keyboard to raw or medium-raw mode and do keycode mapping
+     internally
+
+  as 2. is annoying and sluggish (at least to me) and 3. is too much
+  work for too little gain, i think the current situation with double
+  esc is the best choice. centericq was using timeout esc in the past (i
+  think it's the default way ncurses handles esc) and at least i'm happy
+  with the change :)
+
+  perhaps there could be a configurable choice between double-esc and
+  timeout, if that doesn't complicate the input routines too much.
+
+/* *** */
+
+Q: I got the same problem as a few other people here :
+
+   > checking for libsigc++ - version >= 1.0.1... 1.0.1
+   > checking if libsigc++ sane... no
+   > configure: error: You need to have the libsigc++ libraries
+	installed - see the README for more information
+
+   It would be great, if we could get this problem solved ... for
+   everybuddy. If it has to do with an error in centericq 4.5 (I really
+   assume this) drop me a line as soon as you find out ;-)
+
+A: From: Jeffers, Eugene C <eugene.jeffers@eds.com>
+
+   I got a solution. It came from Karl on the SIGC mailing list:
+
+   > You likely don't have /usr/local/lib in your library path. This
+   > is a FAQ.
+
+   > Q: I am trying to compile a application which uses libsigc++,
+   > it finds the library but then says the library isn't sane.
+   > What is going on?
+
+   > checking for libsigc++ - version >= 1.0.1... 1.0.1
+   > checking if libsigc++ sane... no
+
+   > A: This is likely the first library you have had installed outside
+   > the default paths. The linker searchs the library paths when
+   > compiling a program. When configure attempted to compile a
+   > sample program it found that libsigc++ was not in that path.
+   > To correct this problem, either add the path to libsigc.so
+   > (usually /usr/local/lib) to /etc/ld.so.conf, or set your
+   > environment to have LD_LIBRARY_PATH equal to the library path.
+
+   > -Karl
+
+   # export LD_LIBRARY_PATH=/usr/local/lib
+   # ./configure && make && make install
+
+/* *** */
+
+Q: From: staale@lorentzen.org
+
+   > + [icq] connecting to the server
+   > + [icq] disconnected, turboing
+
+   > Msn works fine.
+
+   > I've tried different icq-servers, with no luck. Anyone with a
+   > clue to what this can be?
+
+A: It means exactly "turboing". You're loggin in and out too fast, so
+   that the server turns on DoS attack protection. All you can do is
+   to try again in half an hour.

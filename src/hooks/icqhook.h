@@ -2,8 +2,9 @@
 #define __ICQHOOK_H__
 
 #include "abstracthook.h"
-#include "Client.h"
-#include "events.h"
+
+#include "libicq2000/Client.h"
+#include "libicq2000/events.h"
 
 using namespace ICQ2000;
 
@@ -27,6 +28,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	void logger_cb(LogEvent *ev);
 	void socket_cb(SocketEvent *ev);
 	void statuschanged_cb(MyStatusChangeEvent *ev);
+	void want_auto_resp_cb(AwayMessageEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
 	const string getcountryname(int code) const;
@@ -62,6 +64,8 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	bool regconnect(const string aserv);
 	bool regattempt(unsigned int &auin, const string apassword);
+
+//        void lookup(const imsearchparams &params, verticalmenu &dest);
 };
 
 extern icqhook ihook;

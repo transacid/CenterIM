@@ -3,6 +3,7 @@
 
 #include "imcontact.h"
 #include "imevents.h"
+#include "imcontroller.h"
 
 enum hookcapabilities {
     hoptCanNotify = 2,
@@ -47,6 +48,8 @@ class abstracthook {
 
 	virtual bool isdirectopen(const imcontact c) const;
 	virtual void requestinfo(const imcontact c);
+
+//        virtual vector<> lookup(const imsearchparams &params, verticalmenu &dest);
 
 	int getcapabilities() const;
 };

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.38 2001/12/13 11:28:35 konst Exp $
+* $Id: icqdialogs.cc,v 1.39 2002/01/17 08:54:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -85,13 +85,15 @@ bool icqface::finddialog(imsearchparams &s) {
 	switch(*ipname) {
 	    case icq:
 		i = tree.addnode(_(" UIN "));
-		tree.addleaff(i, 0, 10, _(" UIN : %s "), strint(s.uin));
+		tree.addleaff(i, 0, 10, " %s ", strint(s.uin));
+
 /*
 		i = tree.addnode(_(" Details "));
 		tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
 		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
 		tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
 		tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
+
 		tree.addleaff(i, 0, 15, _(" Min. age : %s "), strint(s.minage));
 		tree.addleaff(i, 0, 16, _(" Max. age : %s "), strint(s.maxage));
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.62 2001/12/20 16:26:56 konst Exp $
+* $Id: centericq.cc,v 1.63 2002/01/17 08:54:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -300,12 +300,15 @@ void centericq::find() {
 	if(ret = face.finddialog(s)) {
 	    switch(s.pname) {
 		case icq:
-//                    ihook.sendsearchreq(s);
-//                    ret = face.findresults();
 		    if(s.uin) {
 			addcontact(imcontact(s.uin, s.pname));
 			ret = false;
+/*
+		    } else {
+			ret = face.findresults(s);
+*/
 		    }
+
 		    break;
 
 		case msn:
@@ -832,9 +835,16 @@ void centericq::setauto(imstatus astatus) {
     protocolname pname;
     imstatus stcurrent;
     static bool autoset = false;
+    bool nautoset;
 
     if((astatus == available) && !autoset)
 	return;
+
+    nautoset = autoset;
+
+    if(autoset && (astatus == available)) {
+	face.log(_("+ the user is back"));
+    }
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	abstracthook &hook = gethook(pname);
@@ -848,16 +858,16 @@ void centericq::setauto(imstatus astatus) {
 
 	    default:
 		if(autoset && (astatus == available)) {
-		    face.log(_("+ the user is back"));
+		    face.log(_("+ [%s] status restored"));
 		    hook.restorestatus();
-		    autoset = false;
+		    nautoset = false;
 		} else {
 		    if(astatus == away && stcurrent == notavail)
 			break;
 
 		    if(!autoset && (astatus != stcurrent)) {
 			hook.setautostatus(astatus);
-			autoset = true;
+			nautoset = true;
 
 			face.log(_("+ [%s] automatically set %s"),
 			    conf.getprotocolname(pname).c_str(),
@@ -867,6 +877,8 @@ void centericq::setauto(imstatus astatus) {
 		break;
 	}
     }
+
+    autoset = nautoset;
 }
 
 #define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)

@@ -19,7 +19,7 @@
 #include "kkstrtext.h"
 #include "conf.h"
 
-#define PERIOD_RECONNECT        30
+#define PERIOD_RECONNECT        40
 
 #ifdef ENABLE_NLS
 

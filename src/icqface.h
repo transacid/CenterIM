@@ -178,7 +178,7 @@ class icqface {
 	bool updateconf(regsound &s, regcolor &c);
 
 	bool finddialog(imsearchparams &s);
-	bool findresults();
+	bool findresults(const imsearchparams &sp);
 
 	bool updatedetails(icqcontact *c = 0);
 	bool sendfiles(const imcontact cinfo, string &msg, linkedlist &flist);
