@@ -31,6 +31,8 @@ class imexternal {
 		void execscript();
 		void respond();
 
+		static const string geteventname(imevent::imeventtype et);
+
 	    public:
 		action();
 		~action();

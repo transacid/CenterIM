@@ -43,9 +43,10 @@ Contents
     9.1. Arabic and Hebrew languages support
     9.2. Sending events from the command line
     9.3. External actions and auto-responses
-	9.3.1. Elizatalk: making fun with your friends
-	9.3.2. Remote control with external actions
-	9.3.3. Forwarding events
+	9.3.1. IM answering machine
+	9.3.2. Elizatalk: making fun with your friends
+	9.3.3. Remote control with external actions
+	9.3.4. Forwarding events
     9.4. Protocol debug mode
     9.5. Latest CVS snapshots
 10. Lynx
@@ -703,8 +704,8 @@ recommended just cut'n'paste the following text.
 #
 # event
 # -----
-# Can be "msg", "sms", "url", "online" or "email".
-# Specifying several event types is also supported.
+# Can be "msg", "sms", "url", or "online". Specifying several event types
+# is also supported. "all" stands for all the event types.
 #
 # proto
 # -----
@@ -779,8 +780,98 @@ several actions, all of them are executed. If there is a need only in
 one, you can always perform necessary checks in "%exec" so that only one
 sends a reply.
 
+Also, the script from the %exec section when executed has the following
+environment variables imported by centericq:
 
-9.3.1. Elizatalk: making fun with your friends
+EVENT_TYPE
+
+    The type of the received event. Can be "msg", "sms", "url" or
+    "online".
+
+EVENT_NETWORK
+
+    The IM network name through which the event was received. Can be
+    "icq", "msn" or "yahoo".
+
+SENDER_UIN
+
+    If an event is received through ICQ equals to the sender's UIN.
+    Otherwise empty.
+
+SENDER_NICK
+
+    Set to sender's real nickname. Real means that if you renamed the
+    user in your contact list, this parameter will be equal to the
+    original one, and not to what you set.
+
+SENDER_INFODIR
+
+    The most intresting parameter. Using it, you can access further
+    information about the user. Every time an external action is
+    executed it is set to the user's information directory under your
+    ~/.centericq/ directory. It makes it easier to access "about" and
+    "info" files under it. Fetching lines from certain positions of the
+    latter allows to get details. It's enough to take a look at an
+    "info" file of any user to find out what lines mean. Here I'll
+    describe the most useful ones:
+
+    - the 2nd and 3rd lines contain user's first and last names 
+	respectively;
+    - the 4th one contains user's e-mail address;
+    - the 7th has the home city;
+    - the 8th is used for the home state name;
+    - the 9th is used for the home phone number;
+    - the user's home country resides in the 14th line;
+    - etc;
+
+To read a certain line from the info file I recommend to use the
+following shell command: "head -n <N> $SENDER_INFODIR/info | tail -n 1",
+where N is the line number. Below the real examples go.
+
+    fname=`head -n 2 $SENDER_INFODIR/info | tail -n 1`
+    # to fetch sender's first name
+
+    fname=`head -n 3 $SENDER_INFODIR/info | tail -n 1`
+    # to fetch sender's last name
+
+The example from the next section demonstrates usage of the environment
+variables on an example of a simple answering machine :)
+
+
+9.3.1. IM answering machine
+---------------------------
+
+  This simple setup will answer on incoming messages automatically when
+you're away from your computer and your IM mode is set to Away or N/A.
+
+[ - cut (centericq external actions setup for an IM answering machine) ----- ]
+
+%action		Answering machine
+event		msg
+proto		all
+status		away na
+options		stdout
+
+%exec
+#!/bin/sh
+
+fname=`head -n 2 $SENDER_INFODIR/info | tail -n 1`
+lname=`head -n 3 $SENDER_INFODIR/info | tail -n 1`
+
+cat <<EOF
+Hello, $fname $lname!
+
+Unfortunatelly, I'm not near my box now, but I'll certainly contact you
+as soon as I get here.
+
+--
+me
+EOF
+
+[ -------------------------------------------------------------------------- ]
+
+
+9.3.2. Elizatalk: making fun with your friends
 ----------------------------------------------
 
   One of the most intresting and funny uses for external actions in
@@ -816,7 +907,7 @@ Voila! You might also want to read the elizatalk documentation. Though,
 with my great explanations it's not necessary anymore :)
 
 
-9.3.2. Remote control with external actions
+9.3.3. Remote control with external actions
 -------------------------------------------
 
   Another useful thing you can make with external actions is remote
@@ -853,7 +944,7 @@ esac
 [ -------------------------------------------------------------------------- ]
 
 
-9.3.3. Forwarding events
+9.3.4. Forwarding events
 ------------------------
 
   The same way it's possible to setup forwarding of events to other

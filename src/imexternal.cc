@@ -3,6 +3,7 @@
 #include "abstracthook.h"
 #include "eventmanager.h"
 #include "imlogger.h"
+#include "icqcontacts.h"
 
 #include <strstream>
 #include <sys/wait.h>
@@ -142,13 +143,25 @@ void imexternal::action::writescript() {
 
 void imexternal::action::execscript() {
     int inpipe[2], outpipe[2], pid;
-    string text, buf;
+    string text;
+    char ch;
     ifstream pout;
+    icqcontact *c;
+    fd_set rfds;
 
     if(!pipe(inpipe) && !pipe(outpipe)) {
 	pid = fork();
 
 	if(!pid) {
+	    if(c = clist.get(currentev->getcontact())) {
+		setenv("SENDER_UIN", i2str(c->getdesc().uin).c_str(), 1);
+		setenv("SENDER_NICK", c->getnick().c_str(), 1);
+		setenv("SENDER_INFODIR", c->getdirname().c_str(), 1);
+
+		setenv("EVENT_TYPE", geteventname(currentev->gettype()).c_str(), 1);
+		setenv("EVENT_NETWORK", conf.getprotocolname(c->getdesc().pname).c_str(), 1);
+	    }
+
 	    dup2(inpipe[1], STDOUT_FILENO);
 	    dup2(outpipe[0], STDIN_FILENO);
 
@@ -180,9 +193,14 @@ void imexternal::action::execscript() {
 
 		if(pout.is_open()) {
 		    while(!pout.eof()) {
-			getstring(pout, buf);
-			if(!text.empty()) text += "\n";
-			text += buf;
+			FD_ZERO(&rfds);
+			FD_SET(inpipe[0], &rfds);
+
+			if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
+			    if(FD_ISSET(inpipe[0], &rfds))
+			    if((ch = pout.get()) != EOF)
+				text += ch;
+			}
 		    }
 
 		    pout.close();
@@ -228,28 +246,24 @@ bool imexternal::action::load(ifstream &f) {
 
 	    if(param == "event") {
 		while(!(param = getword(buf)).empty()) {
-		    if(param == "msg") event.push_back(imevent::message); else
-		    if(param == "url") event.push_back(imevent::url); else
-		    if(param == "sms") event.push_back(imevent::sms); else
-		    if(param == "online") event.push_back(imevent::online); else
-		    if(param == "all") {
-			event.push_back(imevent::message);
-			event.push_back(imevent::url);
-			event.push_back(imevent::sms);
-			event.push_back(imevent::online);
+		    for(imevent::imeventtype et = imevent::message; et != imevent::imeventtype_size; (int) et += 1) {
+			if((param == geteventname(et))
+			|| (param == "all")) {
+			    event.push_back(et);
+			}
 		    }
 		}
+
 	    } else if(param == "proto") {
 		while(!(param = getword(buf)).empty()) {
-		    if(param == "icq") proto.push_back(icq); else
-		    if(param == "msn") proto.push_back(msn); else
-		    if(param == "yahoo") proto.push_back(yahoo); else
-		    if(param == "all") {
-			proto.push_back(icq);
-			proto.push_back(msn);
-			proto.push_back(yahoo);
+		    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
+			if((param == conf.getprotocolname(pname))
+			|| (param == "all")) {
+			    proto.push_back(pname);
+			}
 		    }
 		}
+
 	    } else if(param == "status") {
 		while(!(param = getword(buf)).empty()) {
 		    if(param == "online") status.push_back(available); else
@@ -269,6 +283,7 @@ bool imexternal::action::load(ifstream &f) {
 			status.push_back(invisible);
 		    }
 		}
+
 	    } else if(param == "options") {
 		while(!(param = getword(buf)).empty()) {
 		    if(param == "stdin") options |= aostdin; else
@@ -296,4 +311,19 @@ const imexternal::actioninfo imexternal::action::getinfo() const {
     r.enabled = enabled;
 
     return r;
+}
+
+const string imexternal::action::geteventname(imevent::imeventtype et) {
+    switch(et) {
+	case imevent::message:
+	    return "msg";
+	case imevent::url:
+	    return "url";
+	case imevent::sms:
+	    return "sms";
+	case imevent::online:
+	    return "online";
+    }
+
+    return "";
 }

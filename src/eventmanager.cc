@@ -20,6 +20,8 @@ void imeventmanager::store(const imevent &ev) {
     icqcontact *c;
     bool proceed;
 
+    logger.putevent(ev);
+
     if(ev.getdirection() == imevent::incoming) {
 	if(!lst.inlist(ev.getcontact(), csignore)) {
 	    c = clist.get(ev.getcontact());
@@ -56,8 +58,6 @@ void imeventmanager::store(const imevent &ev) {
 	    eventwrite(ev, offline);
 	}
     }
-
-    logger.putevent(ev);
 }
 
 // if incoming, store to the history immediately
