@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.1\n"
-"POT-Creation-Date: 2002-05-16 11:05+0300\n"
+"POT-Creation-Date: 2002-05-18 12:09+0300\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -225,10 +225,12 @@ msgid " Nickname "
 msgstr "Ник "
 
 #: src/icqdialogs.cc:126
+#, c-format
 msgid " Channel : %s "
 msgstr " Канал : %s "
 
 #: src/icqdialogs.cc:128
+#, c-format
 msgid " Name : %s "
 msgstr " Имя : %s "
 
@@ -528,6 +530,7 @@ msgid " Edit away message on status change : %s "
 msgstr " Редактировать away сообщения при переключении статуса : %s "
 
 #: src/icqdialogs.cc:646
+#, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Чат-режим при общении : %s "
 
@@ -1616,7 +1619,7 @@ msgstr "+ [irc] рассоединение"
 msgid "+ [irc] connect failed: %s"
 msgstr "+ [irc] не удалось соединиться: %s"
 
-#: src/hooks/irchook.cc:637
+#: src/hooks/irchook.cc:638
 msgid "On channels: "
 msgstr "На каналах: "
 

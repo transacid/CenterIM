@@ -926,3 +926,24 @@ documented both in README and in the man page. It allows to specify
 another base directory for the IM details and makes it possible to use
 different identities under the same UNIX account.
 
+4.7.2
+-----
+
+Chat messaging mode was implemented. Along with the text being typed you
+can see history of previous messages without invoking the history
+facility. It's possible to turn it on with the configuration dialog.
+
+Fixed a bug resulted in eating up disk space when it's not possible to
+re-send events for quite a long time (several days, let's say). It kept
+on adding newline characters after each attempt.
+
+E-mail and name substring search options were added to the irc find
+mode.
+
+The "Move to group.." item was removed from the context menu of a user
+which is not in list. Only "Add to list" can be used there.
+
+Away messages didn't get recoded from koi8 to win1251, fixed.
+
+Switching IM status to offline (_) from the command line was broken.
+Fixed.
