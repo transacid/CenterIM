@@ -90,6 +90,9 @@ const string ui2str(int i);
 bool getconf(string &st, string &buf, ifstream &f);
 bool getstring(istream &f, string &buf);
 
+const string unmime(const string text);
+const string mime(const string text);
+
 __KTOOL_BEGIN_C
 
 int kwordcount(const char *strin, const char *delim);

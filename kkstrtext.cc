@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.9 2001/11/04 12:17:51 konst Exp $
+* $Id: kkstrtext.cc,v 1.10 2001/11/13 17:13:31 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -248,6 +248,23 @@ time_t str2time(char *sdate, char *mask, time_t *t) {
     *t = mktime(s);
     free(s);
     return *t;
+}
+
+const string unmime(const string text) {
+    string r;
+    char *buf = new char[text.size()+1];
+    strcpy(buf, text.c_str());
+    r = unmime(buf);
+    delete buf;
+    return r;
+}
+
+const string mime(const string text) {
+    string r;
+    char *buf = new char[text.size()*3+1];
+    r = mime(buf, text.c_str());
+    delete buf;
+    return r;
 }
 
 char *unmime(char *text) {
