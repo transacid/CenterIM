@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.142 2002/12/05 17:05:20 konst Exp $
+* $Id: centericq.cc,v 1.143 2002/12/06 13:07:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -234,10 +234,12 @@ void centericq::mainloop() {
 		    sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
 		    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 			lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
-			sprintf(buf, _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
-			if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
-			    clist.remove(c->getdesc());
-			    face.update();
+			if(!ischannel(c)) {
+			    sprintf(buf, _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
+			    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
+				clist.remove(c->getdesc());
+				face.update();
+			    }
 			}
 		    }
 		}

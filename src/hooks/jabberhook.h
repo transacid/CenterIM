@@ -16,6 +16,7 @@ class jabberhook: public abstracthook {
 
 	vector<string> roster;
 	map<string, string> awaymsgs;
+	map<string, vector<string> > chatmembers;
 	vector<icqcontact *> foundguys;
 
 	struct agent {
@@ -61,6 +62,9 @@ class jabberhook: public abstracthook {
 	void gotagentinfo(xmlnode x);
 	void gotsearchresults(xmlnode x);
 	void gotloggedin();
+	void postlogin();
+	void gotroster(xmlnode x);
+	void gotmessage(const string &type, const string &from, const string &body);
 
     public:
 	jabberhook();

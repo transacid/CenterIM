@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.23 2002/12/05 17:05:21 konst Exp $
+* $Id: jabberhook.cc,v 1.24 2002/12/06 13:07:41 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -218,6 +218,9 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
     icqcontact *c;
     string cname;
 
+    if(!logged())
+	return;
+
     if(!ischannel(ic)) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
 	if(find(roster.begin(), roster.end(), cjid.get()) != roster.end())
@@ -241,6 +244,7 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	if(c = clist.get(ic)) {
 	    cname = getchanneljid(c);
 	    if(!cname.empty()) {
+		cname += "/" + conf.getourid(jabber).nickname;
 		auto_ptr<char> ccname(strdup(cname.c_str()));
 		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
 		jab_send(jc, x);
@@ -252,6 +256,11 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 
 void jabberhook::removeuser(const imcontact &ic, bool report) {
     xmlnode x, y, z;
+    icqcontact *c;
+    string cname;
+
+    if(!logged())
+	return;
 
     if(!ischannel(ic)) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
@@ -277,6 +286,20 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 	jab_send(jc, x);
 	xmlnode_free(x);
     } else {
+	if(c = clist.get(ic)) {
+	    cname = getchanneljid(c);
+	    if(!cname.empty()) {
+		cname += "/" + conf.getourid(jabber).nickname;
+		auto_ptr<char> ccname(strdup(cname.c_str()));
+		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
+		xmlnode_put_attrib(x, "type", "unavailable");
+		jab_send(jc, x);
+		xmlnode_free(x);
+
+		map<string, vector<string> >::iterator icm = chatmembers.find(ic.nickname);
+		if(icm != chatmembers.end()) chatmembers.erase(icm);
+	    }
+	}
     }
 }
 
@@ -490,7 +513,7 @@ string jabberhook::getchanneljid(icqcontact *c) {
     while(ia != agents.end() && r.empty()) {
 	if(ia->name == c->getbasicinfo().street)
 	    r = (string) c->getdesc().nickname.substr(1) + "@" +
-		ia->jid + "/" + conf.getourid(jabber).nickname;
+		ia->jid;
 	++ia;
     }
 
@@ -603,14 +626,14 @@ void jabberhook::gotagentinfo(xmlnode x) {
 void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     xmlnode x, y;
 
+    searchdest = &dest;
+
     while(!foundguys.empty()) {
 	delete foundguys.back();
 	foundguys.pop_back();
     }
 
     if(!params.service.empty()) {
-	searchdest = &dest;
-
 	x = jutil_iqnew(JPACKET__SET, NS_SEARCH);
 	xmlnode_put_attrib(x, "id", "Lookup");
 
@@ -636,6 +659,27 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
 	jab_send(jc, x);
 	xmlnode_free(x);
+
+    } else if(!params.room.empty()) {
+	icqcontact *c;
+	string room = params.room.substr(1);
+
+	if(c = clist.get(imcontact(params.room, jabber)))
+	if(!(room = getchanneljid(c)).empty()) {
+	    vector<string>::const_iterator im = chatmembers[room].begin();
+	    while(im != chatmembers[room].end()) {
+		foundguys.push_back(c = new icqcontact(imcontact(*im, jabber)));
+		searchdest->additem(conf.getcolor(cp_clist_jabber), c, (string) " " + *im);
+		++im;
+	    }
+	}
+
+	face.findready();
+	face.log(_("+ [jab] conference list fetching finished, %d found"),
+	    foundguys.size());
+
+	searchdest->redraw();
+	searchdest = 0;
     }
 }
 
@@ -690,22 +734,62 @@ void jabberhook::gotsearchresults(xmlnode x) {
 void jabberhook::gotloggedin() {
     xmlnode x;
 
-    jhook.flogged = true;
-    jhook.ourstatus = available;
-    jhook.setautostatus(jhook.manualstatus);
-
-    x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
-    xmlnode_put_attrib(x, "id", "Roster");
-    jab_send(jc, x);
-    xmlnode_free(x);
-
     x = jutil_iqnew(JPACKET__GET, NS_AGENTS);
     xmlnode_put_attrib(x, "id", "Agent List");
     jab_send(jc, x);
     xmlnode_free(x);
 
+    x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
+    xmlnode_put_attrib(x, "id", "Roster");
+    jab_send(jc, x);
+    xmlnode_free(x);
+}
+
+void jabberhook::gotroster(xmlnode x) {
+    xmlnode y;
+    imcontact ic;
+
+    for(y = xmlnode_get_tag(x, "item"); y; y = xmlnode_get_nextsibling(y)) {
+	const char *alias = xmlnode_get_attrib(y, "jid");
+	const char *sub = xmlnode_get_attrib(y, "subscription");
+	const char *name = xmlnode_get_attrib(y, "name");
+	const char *group = xmlnode_get_attrib(y, "group");
+
+	if(alias) {
+	    ic = imcontact(jidtodisp(alias), jabber);
+	    roster.push_back(jidnormalize(alias));
+
+	    if(!clist.get(ic)) {
+		icqcontact *c = clist.addnew(ic, false);
+		if(name) {
+		    icqcontact::basicinfo cb = c->getbasicinfo();
+		    cb.fname = name;
+		    c->setbasicinfo(cb);
+		}
+	    }
+	}
+    }
+
+    postlogin();
+}
+
+void jabberhook::postlogin() {
+    int i;
+    icqcontact *c;
+
+    flogged = true;
+    ourstatus = available;
+    setautostatus(jhook.manualstatus);
     face.log(_("+ [jab] logged in"));
     face.update();
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == jabber)
+	if(ischannel(c))
+	    c->setstatus(available);
+    }
 }
 
 void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
@@ -746,6 +830,44 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
     xmlnode_free(x);
 }
 
+void jabberhook::gotmessage(const string &type, const string &from, const string &abody) {
+    int pos;
+    string u, h, r, body(abody), ournick;
+    imcontact ic(jidtodisp(from), jabber);
+    icqcontact *c;
+
+    if(type == "groupchat") {
+	ournick = conf.getourid(jabber).nickname;
+	jidsplit(from, u, h, r);
+
+	if(r == ournick) return; else {
+	    ic = imcontact((string) "#" + u, jabber);
+
+	    if(!r.empty()) body.insert(0, r + ": "); else {
+		if((pos = body.find(" ")) != -1) {
+		    u = body.substr(0, pos);
+		    if(c = clist.get(ic)) h = getchanneljid(c);
+
+		    if(body.substr(pos+1) == "has arrived.") {
+			if(u == ournick) return; else
+			    chatmembers[h].push_back(u);
+
+		    } else if(body.substr(pos+1) == "has left.") {
+			vector<string>::iterator im = find(chatmembers[h].begin(), chatmembers[h].end(), u);
+			if(im != chatmembers[h].end())
+			    chatmembers[h].erase(im);
+
+		    }
+		}
+	    }
+	}
+    }
+
+    checkinlist(ic);
+    body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
+    em.store(immessage(ic, imevent::incoming, body));
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
@@ -756,12 +878,11 @@ void jabberhook::statehandler(jconn conn, int state) {
 	    if(previous_state != JCONN_STATE_OFF) {
 		logger.putourstatus(jabber, jhook.getstatus(), jhook.ourstatus = offline);
 		face.log(_("+ [jab] disconnected"));
-		clist.setoffline(jabber);
-		face.update();
-
 		jhook.jc = 0;
 		jhook.flogged = false;
 		jhook.roster.clear();
+		clist.setoffline(jabber);
+		face.update();
 	    }
 	    break;
 
@@ -802,19 +923,8 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		body = (string) xmlnode_get_data (x) + ": " + body;
 	    }
 
-	    if(!body.empty()) {
-		if(type == "groupchat") {
-		    string u, h, r;
-		    jidsplit(ic.nickname, u, h, r);
-
-		    if(r != conf.getourid(jabber).nickname) ic = imcontact((string) "#" + u, jabber);
-			else return;
-		}
-
-		jhook.checkinlist(ic);
-		body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
-		em.store(immessage(ic, imevent::incoming, body));
-	    }
+	    if(!body.empty())
+		jhook.gotmessage(type, from, body);
 	    break;
 
 	case JPACKET_IQ:
@@ -840,26 +950,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    p = xmlnode_get_attrib(x, "xmlns"); if(p) ns = p;
 
 		    if(ns == NS_ROSTER) {
-			for(y = xmlnode_get_tag(x, "item"); y; y = xmlnode_get_nextsibling(y)) {
-			    const char *alias = xmlnode_get_attrib(y, "jid");
-			    const char *sub = xmlnode_get_attrib(y, "subscription");
-			    const char *name = xmlnode_get_attrib(y, "name");
-			    const char *group = xmlnode_get_attrib(y, "group");
-
-			    if(alias) {
-				ic = imcontact(jidtodisp(alias), jabber);
-				jhook.roster.push_back(jidnormalize(alias));
-
-				if(!clist.get(ic)) {
-				    icqcontact *c = clist.addnew(ic, false);
-				    if(name) {
-					icqcontact::basicinfo cb = c->getbasicinfo();
-					cb.fname = name;
-					c->setbasicinfo(cb);
-				    }
-				}
-			    }
-			}
+			jhook.gotroster(x);
 
 		    } else if(ns == NS_AGENTS) {
 			for(y = xmlnode_get_tag(x, "agent"); y; y = xmlnode_get_nextsibling(y)) {

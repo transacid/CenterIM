@@ -17,6 +17,7 @@ Contents
     2.5. IRC accounts
 	2.5.1. IRC channels
     2.6. Jabber accounts
+	2.6.1. Jabber groupchat conferences
     2.7. Updating details
 3. User interface
     3.1. The ESC key
@@ -272,13 +273,12 @@ field.
 2.5.1. IRC channels
 -------------------
 
-  IRC channel control is done with the "Channel manager" dialog which
-can be invoked with selection of the respective item under the "irc"
-node in the account manager dialog. It's possible to join or leave
-channels there as soon as to control their visibility on the contact
-list. When a channel is shown on the contact list you can talk on it
-just like in any other IRC client. To send a server command, start it
-with the "/" symbol.
+  IRC channels behave theirselves like usual contacts, though the set of
+actions possible to perform upon them is different. Using the F2-menu
+and hotkeys it's possible to join or leave a channel, view the list of
+users, etc. Please note, in order to stay on a channel you should have
+it on your contact list. As soon as a channel is deleted, you leave it
+automatically.
 
 
 2.6. Jabber accounts
@@ -288,6 +288,12 @@ with the "/" symbol.
 solution. Since the version 4.8.8 it's been supported by centericq. Due
 to its being open and developed by the wide community, centericq can
 register new nicknames in it very easily.
+
+
+2.6.1. Jabber groupchat conferences
+-----------------------------------
+
+   Like IRC channels, they're controlled like usual contacts, too.
 
 
 2.7. Updating details
@@ -1670,4 +1676,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.70 2002/11/30 23:57:21 konst Exp $
+$Id: README,v 1.71 2002/12/06 13:07:40 konst Exp $
