@@ -193,7 +193,7 @@ class icqface {
 	string inputstr(string q, string defl = "", char passwdchar = 0);
 	string inputfile(string q, string defl = "");
 
-	void quickfind();
+	void quickfind(verticalmenu *multi = 0);
 };
 
 extern icqface face;

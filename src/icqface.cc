@@ -1765,7 +1765,10 @@ bool icqface::multicontacts(string head, list<unsigned int> &lst) {
 		    if(c != lst.end()) lst.erase(c); else lst.push_back(ffuin);
 		}
 		break;
-	    case  0:
+	    case -3:
+		quickfind(&m);
+		break;
+	    case 0:
 		ret = false;
 	    default:
 		finished = true;
@@ -1844,22 +1847,32 @@ string icqface::quotemsg(string text) {
     return ret;
 }
 
-void icqface::quickfind() {
+void icqface::quickfind(verticalmenu *multi = 0) {
     bool fin;
-    string nick, disp;
-    int k, i, len;
+    string nick, disp, upnick, upcurrent;
+    string::iterator is;
+    int k, i, len, lx, ly;
     bool found;
     icqcontact *c;
+    verticalmenu *cm = (multi ? multi : &mcontacts->menu);
 
     status(_("QuickSearch: type to find, Alt-S find again, Enter finish"));
 
+    if(multi) {
+	lx = WORKAREA_X1+2;
+	ly = WORKAREA_Y2;
+    } else {
+	lx = 2;
+	ly = LINES-2;
+    }
+
     for(fin = false; !fin; ) {
 	attrset(conf.getcolor(cp_main_frame));
-	mvhline(LINES-2, 2, HLINE, 23);
+	mvhline(ly, lx, HLINE, 23);
 	disp = nick;
 	if(disp.size() > 18) disp.replace(0, disp.size()-18, "");
-	kwriteatf(2, LINES-2, conf.getcolor(cp_main_highlight), "[ %s ]", disp.c_str());
-	kgotoxy(4+disp.size(), LINES-2);
+	kwriteatf(lx, ly, conf.getcolor(cp_main_highlight), "[ %s ]", disp.c_str());
+	kgotoxy(lx+2+disp.size(), ly);
 	refresh();
 
 	if(ihook.idle())
@@ -1874,18 +1887,21 @@ void icqface::quickfind() {
 		break;
 	    default:
 		if(isprint(k) || (k == ALT('s'))) {
-		    i = mcontacts->menu.getpos()+2;
+		    i = cm->getpos() + (multi ? 1 : 2);
 
 		    if(isprint(k)) {
-			nick += k;
 			i--;
+			nick += k;
 		    }
+
+		    for(is = nick.begin(), upnick = ""; is != nick.end(); is++)
+			upnick += toupper(*is);
 
 		    bool fin = false;
 		    bool fpass = true;
 
 		    for(; !fin; i++) {
-			if(i >= mcontacts->menu.getcount()) {
+			if(i >= cm->getcount()) {
 			    if(fpass) {
 				i = 0;
 				fpass = false;
@@ -1894,27 +1910,35 @@ void icqface::quickfind() {
 			    }
 			}
 
-			c = (icqcontact *) mcontacts->getref(i);
+			if(multi) c = clist.get((unsigned int) cm->getref(i));
+			else c = (icqcontact *) mcontacts->getref(i);
 
 			if((int) c > 10) {
-			    len = c->getdispnick().size();
+			    string current = c->getdispnick();
+			    len = current.size();
 			    if(len > nick.size()) len = nick.size();
+			    current.erase(len);
 
-			    if(!c->getdispnick().compare(nick, 0, len)) {
-				mcontacts->menu.setpos(i-1);
+			    for(is = current.begin(), upcurrent = "";
+			    is != current.end(); is++)
+				    upcurrent += toupper(*is);
+
+			    if(upnick == upcurrent) {
+				cm->setpos(i - (multi ? 0 : 1));
 				break;
 			    }
 			}
 		    }
 
-		    mcontacts->redraw();
+		    if(!multi) mcontacts->redraw();
+		    else cm->redraw();
 		}
 		break;
 	}
     }
 
     attrset(conf.getcolor(cp_main_frame));
-    mvhline(LINES-2, 2, HLINE, 23);
+    mvhline(ly, lx, HLINE, 23);
 }
 
 void icqface::extracturls(const string buf) {
@@ -2035,6 +2059,8 @@ int icqface::multiplekeys(verticalmenu *m, int k) {
 	case 'x':
 	case 'X':
 	    return -2;
+	case ALT('s'):
+	    return -3;
     }
     return -1;
 }
