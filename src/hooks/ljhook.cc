@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.10 2003/10/12 23:14:48 konst Exp $
+* $Id: ljhook.cc,v 1.11 2003/10/12 23:28:20 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -473,109 +473,114 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	}
 
     } else if(ie->second == reqGetFriends) {
-	int fcount = atoi(params["friend_count"].c_str()), i, k;
-	string username, name, birthday, bd;
-	icqcontact::basicinfo bi;
-	icqcontact::moreinfo mi;
+	if(params["success"] == "OK") {
+	    int fcount = atoi(params["friend_count"].c_str()), i, k;
+	    string username, name, birthday, bd;
+	    icqcontact::basicinfo bi;
+	    icqcontact::moreinfo mi;
 
-	for(i = 1; i <= fcount; i++) {
-	    username = params[(string) "friend_" + i2str(i) + "_user"];
-	    name = UTF2KOI(params[(string) "friend_" + i2str(i) + "_name"]);
-	    birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
+	    for(i = 1; i <= fcount; i++) {
+		username = params[(string) "friend_" + i2str(i) + "_user"];
+		name = UTF2KOI(params[(string) "friend_" + i2str(i) + "_name"]);
+		birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
 
-	    bool found = false;
+		bool found = false;
 
-	    for(k = 0; k < clist.count && !found; k++) {
-		c = (icqcontact *) clist.at(k);
-		if(c->getdesc().pname == rss) {
-		    found = (c->getworkinfo().homepage == getfeedurl(username));
+		for(k = 0; k < clist.count && !found; k++) {
+		    c = (icqcontact *) clist.at(k);
+		    if(c->getdesc().pname == rss) {
+			found = (c->getworkinfo().homepage == getfeedurl(username));
+		    }
+		}
+
+		if(!found)
+		if(c = clist.addnew(imcontact(0, rss), false)) {
+		    icqcontact::workinfo wi = c->getworkinfo();
+		    wi.homepage = getfeedurl(username);
+		    c->setworkinfo(wi);
+
+		    icqcontact::moreinfo mi = c->getmoreinfo();
+		    mi.checkfreq = 120;
+		    c->setmoreinfo(mi);
+
+		    c->setnick(username + "@lj");
+		    c->setdispnick(c->getnick());
+		    c->save();
+		}
+
+		bi = c->getbasicinfo();
+		bi.fname = getword(name);
+		bi.lname = name;
+		c->setbasicinfo(bi);
+
+		if(!birthday.empty()) {
+		    mi = c->getmoreinfo();
+		    k = 0;
+
+		    while(!(bd = getrword(birthday, "-")).empty())
+		    switch(k++) {
+			case 0: mi.birth_day = atoi(bd.c_str()); break;
+			case 1: mi.birth_month = atoi(bd.c_str()); break;
+			case 2: mi.birth_year = atoi(bd.c_str()); break;
+		    }
+
+		    c->setmoreinfo(mi);
 		}
 	    }
 
-	    if(!found)
-	    if(c = clist.addnew(imcontact(0, rss), false)) {
-		icqcontact::workinfo wi = c->getworkinfo();
-		wi.homepage = getfeedurl(username);
-		c->setworkinfo(wi);
+	    fcount = atoi(params["friendof_count"].c_str());
+	    bool foempty = friendof.empty();
 
-		icqcontact::moreinfo mi = c->getmoreinfo();
-		mi.checkfreq = 120;
-		c->setmoreinfo(mi);
+	    map<string, string> nfriendof;
+	    map<string, string>::const_iterator in;
+	    vector<string>::iterator il;
+	    char buf[512];
 
-		c->setnick(username + "@lj");
-		c->setdispnick(c->getnick());
-		c->save();
+	    for(i = 1; i <= fcount; i++) {
+		username = params[(string) "friendof_" + i2str(i) + "_user"];
+		name = UTF2KOI(params[(string) "friendof_" + i2str(i) + "_name"]);
+		nfriendof[username] = name;
 	    }
 
-	    bi = c->getbasicinfo();
-	    bi.fname = getword(name);
-	    bi.lname = name;
-	    c->setbasicinfo(bi);
+	    for(in = nfriendof.begin(); in != nfriendof.end(); ++in)
+	    if(find(friendof.begin(), friendof.end(), in->first) == friendof.end()) {
+		friendof.push_back(in->first);
 
-	    if(!birthday.empty()) {
-		mi = c->getmoreinfo();
-		k = 0;
+		if(!foempty) {
+		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
 
-		while(!(bd = getrword(birthday, "-")).empty())
-		switch(k++) {
-		    case 0: mi.birth_day = atoi(bd.c_str()); break;
-		    case 1: mi.birth_month = atoi(bd.c_str()); break;
-		    case 2: mi.birth_year = atoi(bd.c_str()); break;
+		    sprintf(buf, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
+			in->first.c_str(), in->second.c_str(), bd.c_str());
+
+		    em.store(imnotification(self, buf));
+		}
+	    }
+
+	    for(il = friendof.begin(); il != friendof.end(); ) {
+		if(nfriendof.find(*il) == nfriendof.end()) {
+		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
+		    sprintf(buf, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
+			il->c_str(), bd.c_str());
+		    em.store(imnotification(self, buf));
+		    friendof.erase(il);
+		    il = friendof.begin();
+		} else {
+		    ++il;
+		}
+	    }
+
+	    if(c = clist.get(self)) {
+		bi = c->getbasicinfo();
+		vector<string>::const_iterator ifo = friendof.begin();
+		bi.zip = "";
+
+		while(ifo != friendof.end()) {
+		    bi.zip += *ifo + " ";
+		    ++ifo;
 		}
 
-		c->setmoreinfo(mi);
+		c->setbasicinfo(bi);
 	    }
-	}
-
-	fcount = atoi(params["friendof_count"].c_str());
-	bool foempty = friendof.empty();
-
-	map<string, string> nfriendof;
-	map<string, string>::const_iterator in;
-	vector<string>::const_iterator il;
-	char buf[512];
-
-	for(i = 1; i <= fcount; i++) {
-	    username = params[(string) "friendof_" + i2str(i) + "_user"];
-	    name = UTF2KOI(params[(string) "friendof_" + i2str(i) + "_name"]);
-	    nfriendof[username] = name;
-	}
-
-	for(in = nfriendof.begin(); in != nfriendof.end(); ++in)
-	if(find(friendof.begin(), friendof.end(), in->first) == friendof.end()) {
-	    friendof.push_back(in->first);
-
-	    if(!foempty) {
-		bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
-
-		sprintf(buf, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
-		    in->first.c_str(), in->second.c_str(), bd.c_str());
-
-		em.store(imnotification(self, buf));
-	    }
-	}
-
-	for(il = friendof.begin(); il != friendof.end(); ++il)
-	if(nfriendof.find(*il) == nfriendof.end()) {
-	    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
-
-	    sprintf(buf, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
-		il->c_str(), bd.c_str());
-
-	    em.store(imnotification(self, buf));
-	}
-
-	if(c = clist.get(self)) {
-	    bi = c->getbasicinfo();
-	    vector<string>::const_iterator ifo = friendof.begin();
-	    bi.zip = "";
-
-	    while(ifo != friendof.end()) {
-		bi.zip += *ifo + " ";
-		++ifo;
-	    }
-
-	    c->setbasicinfo(bi);
 	}
 
     } else if(ie->second == reqDelFriend) {
