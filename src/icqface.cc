@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.203 2003/11/24 09:19:49 konst Exp $
+* $Id: icqface.cc,v 1.204 2003/11/25 23:53:38 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -423,6 +423,7 @@ int icqface::generalmenu() {
 
     if(conf.getgroupmode() != icqconf::nogroups) {
 	m.additem(0, ACT_ORG_GROUPS, _(" Organize contact groups"));
+	m.additem(0, ACT_MASS_MOVE, _(" Mass group move.."));
     }
 
     m.setpos(lastitem);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.176 2003/11/21 16:51:49 konst Exp $
+* $Id: centericq.cc,v 1.177 2003/11/25 23:53:37 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,6 +184,9 @@ void centericq::mainloop() {
 		break;
 	    case ACT_ORG_GROUPS:
 		face.organizegroups();
+		break;
+	    case ACT_MASS_MOVE:
+		massmove();
 		break;
 	    case ACT_TRANSFERS:
 		face.transfermonitor();
@@ -1594,6 +1597,27 @@ void centericq::createconference(const imcontact &ic) {
 
 	abstracthook &hook = gethook(ic.pname);
 	hook.conferencecreate(nc, face.muins);
+    }
+}
+
+void centericq::massmove() {
+    int gid;
+    vector<imcontact>::iterator im;
+    icqcontact *c;
+
+    face.muins.clear();
+    face.multicontacts();
+
+    if(!face.muins.empty())
+    if(gid = face.selectgroup(_("Mass move selected users to.."))) {
+	for(im = face.muins.begin(); im != face.muins.end(); ++im) {
+	    if(c = clist.get(*im)) {
+		c->setgroupid(gid);
+	    }
+	}
+
+	face.fillcontactlist();
+	face.update();
     }
 }
 

@@ -51,6 +51,7 @@ class centericq {
 	void createconference(const imcontact &ic);
 
 	void defaultcontacts(bool rus);
+	void massmove();
 
     public:
 	centericq();
