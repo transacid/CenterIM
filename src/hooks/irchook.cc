@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.51 2002/10/06 12:14:54 konst Exp $
+* $Id: irchook.cc,v 1.52 2002/10/06 21:12:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -663,7 +663,7 @@ bool irchook::knowntransfer(const imfile &fr) const {
     return transferinfo.find(fr) != transferinfo.end();
 }
 
-void irchook::replytransfer(const imfile &fr, bool accept, const string &localpath = "") {
+void irchook::replytransfer(const imfile &fr, bool accept, const string &localpath) {
     if(accept) {
 	transferinfo[fr].second = localpath;
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.148 2002/10/06 12:14:53 konst Exp $
+* $Id: icqface.cc,v 1.149 2002/10/06 21:12:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1225,7 +1225,7 @@ string icqface::inputfile(const string &q, const string &defl) {
     return r;
 }
 
-string icqface::inputdir(const string &q, const string &defl = "") {
+string icqface::inputdir(const string &q, const string &defl) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
     string r;
 
