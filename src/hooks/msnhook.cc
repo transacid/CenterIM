@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.27 2002/09/01 11:21:42 konst Exp $
+* $Id: msnhook.cc,v 1.28 2002/09/02 15:48:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -293,10 +293,16 @@ void msnhook::statuschanged(void *data) {
 	}
 
 	if(d->friendlyhandle) {
-	    if(c->getnick() == ic.nickname)
 	    if(c->getdispnick() == ic.nickname) {
 		string fn = unmime((string) d->friendlyhandle);
 		c->setdispnick(fn);
+
+		icqcontact::basicinfo bi = c->getbasicinfo();
+
+		if(bi.fname.empty() && (fn != bi.email)) {
+		    bi.fname = fn;
+		    c->setbasicinfo(bi);
+		}
 	    }
 	}
 
