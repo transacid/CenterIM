@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.124 2002/09/24 16:20:47 konst Exp $
+* $Id: centericq.cc,v 1.125 2002/09/26 09:42:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -513,7 +513,13 @@ void centericq::checkmail() {
     if(!stat(fname, &st))
     if(st.st_size != fsize) {
 
-	if(fsize != -1) {
+	if(fsize != -1 && st.st_size > fsize) {
+	    /*
+	    *
+	    * I.e. only if mailbox has grown after the recent check.
+	    *
+	    */
+
 	    if(f = fopen(fname, "r")) {
 		prevempty = header = true;
 
