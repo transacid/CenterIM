@@ -125,7 +125,8 @@ void textinputline::exec() {
 	    if(!keymove(lastkey))
 	    switch(lastkey) {
 		case '\r':
-		    historyadd(value);
+		    if(!passwordchar)
+			historyadd(value);
 		    fin = true;
 		    break;
 		case KEY_DC:
@@ -168,7 +169,7 @@ void textinputline::exec() {
 		    }
 		    break;
 		case ALT('h'):
-		    exechistory();
+		    if(!passwordchar) exechistory();
 		    break;
 		case KEY_BACKSPACE:
 		case CTRL('h'):
