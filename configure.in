@@ -99,6 +99,7 @@ case "$host_os" in
 	;;
 esac
 
+AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
 AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator exception utility],,
@@ -111,6 +112,8 @@ AC_CHECK_HEADERS(ext/hash_map,,
 
 AC_CHECK_HEADERS(sstream,,
   AC_CHECK_HEADERS(strstream,, AC_MSG_ERROR([Your libstdc++ doesn't have the sstream or strstream classes])))
+
+AC_LANG_RESTORE
 
 AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.4.0 firetalk-0.1 libyahoo2-0.1 libjabber-0.1 connwrap-0.1 blip-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
