@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.19 2002/07/03 14:38:56 konst Exp $
+* $Id: conscommon.cc,v 1.20 2002/07/06 15:16:59 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,10 @@
 */
 
 #include "conscommon.h"
+#ifdef __sun__
+#include <sys/termio.h>
+#include <sys/filio.h>
+#endif
 
 bool kintf_graph = true, kintf_refresh = true;
 
