@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+#
+# Centericq specific functions
+#
+
+sub cicq_adduser {
+    $uin = shift;
+    system("mkdir -p $ENV{HOME}/.centericq/$uin");
+}
+
+sub cicq_addhistoryitem {
+    my ($touin, $fromuin, $timestamp, $text) = (shift, shift, shift, shift);
+    print "$touin, $fromuin, $timestamp\n$text\n";
+}
+
+#
+# Other icq clients related functions
+#
+
+sub licq {
+    open(F, '<', "$ENV{HOME}/.licq/users.conf") or die "cannot find licq users file";
+
+    while(<F>) {
+	chomp;
+	$buf = $_;
+
+	if($buf =~ m/^User[0-9]+ = ([0-9]+)$/) {
+	    cicq_adduser($1);
+	}
+    }
+
+    close F;
+}
+
+licq

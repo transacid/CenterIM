@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.21 2001/10/03 21:41:37 konst Exp $
+* $Id: icqface.cc,v 1.22 2001/10/05 16:14:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1020,11 +1020,15 @@ void icqface::saveworkarea() {
 }
 
 void icqface::restoreworkarea() {
+    int i;
     chtype **workareabuf = (chtype **) workareas.at(workareas.count-1);
 
-    if(workareabuf) {
-	for(int i = 0; i <= WORKAREA_Y2-WORKAREA_Y1; i++)
-	mvaddchnstr(WORKAREA_Y1+i, WORKAREA_X1, workareabuf[i], WORKAREA_X2-WORKAREA_X1+1);
+    if(workareabuf && !dotermresize) {
+	for(i = 0; i <= WORKAREA_Y2-WORKAREA_Y1; i++) {
+	    mvaddchnstr(WORKAREA_Y1+i, WORKAREA_X1,
+		workareabuf[i], WORKAREA_X2-WORKAREA_X1+1);
+	}
+
 	refresh();
     }
 
