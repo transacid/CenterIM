@@ -21,7 +21,7 @@ class icqcontact {
 	unsigned int uin;
 	unsigned short seq2;
 	int status, nmsgs, fupdated, infotryn;
-	bool finlist, reqauth, webaware, pubip, nonicq, direct;
+	bool finlist, reqauth, webaware, pubip, nonicq, direct, msgdirect;
 	time_t lastread, lastseen;
 
 	string sound[SOUND_COUNT];
@@ -52,7 +52,6 @@ class icqcontact {
 	void setseq2(unsigned short fseq2);
 	void setnick(string fnick);
 	void setdispnick(string fnick);
-	void setdirect(bool flag);
 
 	void setinfo(string fname, string lname, string fprimemail,
 	    string fsecemail, string foldemail, string fcity,
@@ -126,7 +125,12 @@ class icqcontact {
 	void excludefromlist();
 	void includeintolist();
 	bool inlist();
+
+	void setdirect(bool flag);
 	bool getdirect();
+
+	void setmsgdirect(bool flag);
+	bool getmsgdirect();
 	
 	bool isnonicq();
 	bool isbirthday();

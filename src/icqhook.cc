@@ -1,3 +1,27 @@
+/*
+*
+* centericq icq protocol handling class
+* $Id: icqhook.cc,v 1.5 2001/06/02 07:12:39 konst Exp $
+*
+* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+* USA
+*
+*/
+
 #include "icqhook.h"
 #include "icqface.h"
 #include "icqhist.h"
@@ -292,6 +316,7 @@ unsigned long real_ip, unsigned char tcp_flag) {
 	c->setstatus(status);
 	c->setlastip(lastip);
 	c->setdirect(tcp_flag == 0x04);
+	c->setmsgdirect(tcp_flag == 0x04);
 	c->setlastseen();
 
 	if((curtime-ihook.logontime > 15)) {
