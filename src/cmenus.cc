@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.6 2001/08/18 08:26:27 konst Exp $
+* $Id: cmenus.cc,v 1.7 2001/10/19 17:02:10 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,13 +26,13 @@
 
 verticalmenu::verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int pscolor) {
     initmembers();
-    setcolors(pncolor, pscolor);
+    setcolor(pncolor, pscolor);
     setcoord(px1, py1, px2, py2);
 }
 
 verticalmenu::verticalmenu(int pncolor = 0, int pscolor = 0) {
     initmembers();
-    setcolors(pncolor, pscolor);
+    setcolor(pncolor, pscolor);
 }
 
 void verticalmenu::initmembers() {
@@ -42,7 +42,7 @@ void verticalmenu::initmembers() {
     clearonfocuslost = cycled = false;
 }
 
-void verticalmenu::setcolors(int pncolor, int pscolor) {
+void verticalmenu::setcolor(int pncolor, int pscolor) {
     ncolor = pncolor, scolor = pscolor;
 }
 
@@ -368,7 +368,7 @@ void verticalmenu::setpos(int cur, int first = -1) {
     if(first != -1) firstdisp = first;
 }
 
-void verticalmenu::setcolor(int pos, int color) {
+void verticalmenu::setitemcolor(int pos, int color) {
     if((pos >= 0) && (pos < items.size())) {
         items[pos].color = color;
     }
@@ -622,7 +622,7 @@ void horizontalmenu::restoreline() {
 
 verticalmenu *horizontalmenu::pulldown(int n) {
     if((n >= 0) && (n < menus.size())) {
-        menus[n].menu.setcolors(ncolor, scolor);
+        menus[n].menu.setcolor(ncolor, scolor);
         menus[n].menu.otherkeys = &menu_otherkeys;
         menus[n].menu.cycled = true;
         menus[n].menu.setwindow(textwindow(getx(n)-1, coordy+1, getx(n)+2, coordy+6, fcolor));

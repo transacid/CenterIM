@@ -83,7 +83,7 @@ class verticalmenu: public abstractuicontrol {
 	int getpos();
 	void getpos(int &cur, int &first);
 	void setpos(int cur, int first = -1);
-	void setcolor(int pos, int color);
+	void setitemcolor(int pos, int color);
 	void setwindow(textwindow nwindow);
 	void remove(int pos);
 
@@ -91,7 +91,7 @@ class verticalmenu: public abstractuicontrol {
 	void scale();
 	void close();
 	void setcoord(int nx1, int ny1, int nx2, int ny2);
-	void setcolors(int pncolor, int pscolor);
+	void setcolor(int pncolor, int pscolor);
 
     friend class horizontalmenu;
 };

@@ -14,14 +14,11 @@ fileselector::~fileselector() {
 }
 
 void fileselector::setcolor(int acnormal, int acselected, int accurrent,
-int acfile, int acdir = 0, int acframe = 0) {
+int acfile) {
     cnormal = acnormal;
     cselected = acselected;
     cfile = acfile;
     ccurrent = accurrent;
-
-    if(!(cdir = acdir)) cdir = acfile;
-    if(!(cframe = acframe)) cframe = acnormal;
 }
 
 void fileselector::generatemenu() {
@@ -68,7 +65,11 @@ void fileselector::generatemenu() {
 
 	if(find(selected.begin(), selected.end(),
 	dcurrent + i->fname) != selected.end()) {
-	    m.setcolor(m.getcount()-1, cselected);
+	    m.setitemcolor(m.getcount()-1, cselected);
+	}
+
+	if(i->fname == setdcurrent) {
+	    m.setpos(m.getcount()-1);
 	}
     }
 }
@@ -109,6 +110,7 @@ void fileselector::exec() {
 
 	if(!fin) {
 	    if(i = (item *) m.getref(n-1)) {
+		setdcurrent = "";
 		if(!chdir(i->fname.c_str())) {
 		    di = dhistitem();
 		    di.dirname = dcurrent;
@@ -123,16 +125,19 @@ void fileselector::exec() {
 			    dhist.erase(dhist.end()-1);
 			    chdir((dcurrent = di.dirname).c_str());
 			    m.setpos(di.pos, di.fpos);
+			} else {
+			    setdcurrent = justfname(di.dirname.substr(0,
+				di.dirname.size()-1));
 			}
 		    } else {
 			dhist.push_back(di);
 		    }
 		} else {
-		    if(!(options & FSEL_MULTI)) {
-			selected.push_back(dcurrent + i->fname);
+		    if(fin = (!S_ISDIR(i->mode) || (options & FSEL_DIRSELECT))) {
+			if(!(options & FSEL_MULTI)) {
+			    selected.push_back(dcurrent + i->fname);
+			}
 		    }
-
-		    fin = true;
 		}
 	    }
 	}
@@ -180,10 +185,10 @@ int fileselector::menukeys(verticalmenu *m, int k) {
 
 			if(si != instance->selected.end()) {
 			    instance->selected.erase(si);
-			    m->setcolor(m->getpos(), instance->cnormal);
+			    m->setitemcolor(m->getpos(), instance->cnormal);
 			} else {
 			    instance->selected.push_back(fname);
-			    m->setcolor(m->getpos(), instance->cselected);
+			    m->setitemcolor(m->getpos(), instance->cselected);
 			}
 
 			m->setpos(m->getpos()+1);
@@ -195,6 +200,26 @@ int fileselector::menukeys(verticalmenu *m, int k) {
     }
 
     return -1;
+}
+
+void fileselector::setoptions(int noptions) {
+    options = noptions;
+}
+
+void fileselector::setstartpoint(const string aspoint) {
+    spoint = aspoint;
+}
+
+void fileselector::setwindow(textwindow awindow) {
+    w = awindow;
+}
+
+vector<string> fileselector::getselected() {
+    return selected;
+}
+
+int fileselector::getlastkey() {
+    return m.getlastkey();
 }
 
 // ----------------------------------------------------------------------------
@@ -238,4 +263,12 @@ bool fileselector::item::operator < (const item &aitem) const {
 
 bool fileselector::item::operator > (const item &aitem) const {
     return compare(aitem) < 0;
+}
+
+bool fileselector::item::operator == (const string &afname) const {
+    return afname == fname;
+}
+
+bool fileselector::item::operator != (const string &afname) const {
+    return !(*this == afname);
 }

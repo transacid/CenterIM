@@ -45,6 +45,38 @@ bool textinputline::keymove(int key) {
     return r;
 }
 
+void textinputline::exechistory() {
+    vector<string>::iterator i;
+    static verticalmenu m;
+    int wy1, wx2, n;
+
+    if(!history.empty()) {
+	m.clear();
+	m.setcolor(histcolor, histcurcolor);
+
+	for(i = history.begin(), wx2 = 0; i != history.end(); i++) {
+	    m.additem(" " + *i);
+	    if(wx2 < i->size()) wx2 = i->size();
+	}
+
+	wy1 = y1 < LINES/2 ? y1 : y1-history.size()-2;
+        if(wy1 < 1) wy1 = 1;
+
+	wx2 += x1+3;
+	if(wx2 > COLS-1) wx2 = COLS-1;
+
+	m.setwindow(textwindow(x1, wy1, wx2, 0, histcolor));
+	m.scale();
+	n = m.open();
+	m.close();
+    
+	if(n) {
+	    value = history[n-1];
+	    position = 0;
+	}
+    }
+}
+
 void textinputline::redraw() {
     int displen;
 
@@ -74,12 +106,12 @@ void textinputline::redraw() {
 }
 
 void textinputline::exec() {
-    bool fin, go, fresh;
+    bool fin, go;
     vector<string> sel;
     vector<string>::iterator isel;
 
     screenbuffer.save(x1, y1, x2, y2);
-    fresh = true;
+    firstiter = true;
 
     for(fin = false; !fin; ) {
 	redraw();
@@ -129,6 +161,9 @@ void textinputline::exec() {
 			}
 		    }
 		    break;
+		case ALT('h'):
+		    exechistory();
+		    break;
 		case KEY_BACKSPACE:
 		case CTRL('h'):
 		    if(position) {
@@ -140,7 +175,7 @@ void textinputline::exec() {
 		    break;
 		default:
 		    if((lastkey > 31) && (lastkey < 256)) {
-			if(fresh) {
+			if(firstiter) {
 			    value = string(1, (char) lastkey);
 			    position = 1;
 			} else {
@@ -149,7 +184,7 @@ void textinputline::exec() {
 		    }
 	    }
 
-	    fresh = false;
+	    firstiter = false;
 	} else {
 	    if(idle) {
 		(*idle)(*this);
@@ -159,4 +194,43 @@ void textinputline::exec() {
 }
 
 void textinputline::close() {
+}
+
+void textinputline::historyadd(const string buf) {
+    while(history.size() > TEXTINPUT_HIST_LIMIT)
+	history.erase(history.begin());
+
+    history.push_back(buf);
+}
+
+void textinputline::setvalue(const string buf) {
+    value = buf;
+}
+
+const string textinputline::getvalue() {
+    return value;
+}
+
+void textinputline::setpasswordchar(char npc) {
+    passwordchar = npc;
+}
+
+void textinputline::setcolor(int acolor, int ahistcolor = 0,
+int ahistcurcolor = 0) {
+    color = acolor;
+
+    if(!(histcolor = ahistcolor)) histcolor = color;
+    if(!(histcurcolor = ahistcurcolor)) histcurcolor = 0;
+}
+
+void textinputline::connectselector(fileselector &fsel) {
+    selector = &fsel;
+}
+
+void textinputline::removeselector() {
+    selector = 0;
+}
+
+int textinputline::getlastkey() {
+    return lastkey;
 }

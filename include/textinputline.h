@@ -5,6 +5,8 @@
 
 __KTOOL_BEGIN_NAMESPACE
 
+#define TEXTINPUT_HIST_LIMIT	100
+
 class textinputline: public abstractuicontrol {
     public:
 	int (*otherkeys)(textinputline &caller, int k);
@@ -12,37 +14,34 @@ class textinputline: public abstractuicontrol {
 
     private:
 	vector<string> history;
-	int length, position, beginpos, color, lastkey;
+	int length, position, beginpos, lastkey;
+	int color, histcolor, histcurcolor;
 	string value;
 	char passwordchar;
 	fileselector *selector;
+	bool firstiter;
 
 	bool keymove(int key);
 	void redraw();
+	void exechistory();
 
     public:
 	textinputline();
 	~textinputline();
 
-	void historyadd(const string buf)
-	    { history.push_back(buf); }
-	void setvalue(const string buf)
-	    { value = buf; }
-	const string getvalue()
-	    { return value; }
-	void setpasswordchar(char npc)
-	    { passwordchar = npc; }
-	void setcolor(int nclr)
-	    { color = nclr; }
-	void connectselector(fileselector &fsel)
-	    { selector = &fsel; }
-	void removeselector()
-	    { selector = 0; }
+	void historyadd(const string buf);
+
+	void setvalue(const string buf);
+	const string getvalue();
 
 	void setcoords(int x, int y, int len);
+	void setcolor(int acolor, int ahistcolor = 0, int ahistcurcolor = 0);
+	void setpasswordchar(char npc);
 
-	int getlastkey()
-	    { return lastkey; }
+	void connectselector(fileselector &fsel);
+	void removeselector();
+
+	int getlastkey();
 
 	void exec();
 	void close();

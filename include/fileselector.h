@@ -37,16 +37,18 @@ class fileselector: public abstractuicontrol {
 
 		bool operator < (const item &aitem) const;
 		bool operator > (const item &aitem) const;
+		bool operator == (const string &afname) const;
+		bool operator != (const string &afname) const;
 	};
 
 	int options;
-	int cnormal, cselected, cfile, cdir, cframe, ccurrent;
+	int cnormal, cselected, cfile, ccurrent;
 
 	vector<dhistitem> dhist;
 	vector<string> selected;
 	list<item> items;
 
-	string spoint, dcurrent;
+	string spoint, dcurrent, setdcurrent;
 	bool finish;
 
 	verticalmenu m;
@@ -60,19 +62,13 @@ class fileselector: public abstractuicontrol {
 	fileselector();
 	~fileselector();
 
-	void setoptions(int noptions)
-	    { options = noptions; }
-	void setstartpoint(const string aspoint)
-	    { spoint = aspoint; }
-	void setwindow(textwindow awindow)
-	    { w = awindow; }
-	void setcolor(int acnormal, int acselected, int accurrent,
-	    int acfile, int acdir = 0, int acframe = 0);
+	void setoptions(int noptions);
+	void setstartpoint(const string aspoint);
+	void setwindow(textwindow awindow);
+	void setcolor(int acnormal, int acselected, int accurrent, int acfile);
 
-	vector<string> getselected()
-	    { return selected; }
-	int getlastkey()
-	    { return m.getlastkey(); }
+	vector<string> getselected();
+	int getlastkey();
 
 	void exec();
 	void close();
