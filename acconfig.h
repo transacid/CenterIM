@@ -5,4 +5,3 @@
 #undef HAVE_STPCPY
 #undef ENABLE_NLS
 #undef USE_FRIBIDI
-#undef DARWIN

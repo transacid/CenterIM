@@ -13,6 +13,7 @@
 
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <regex.h>
 
@@ -22,14 +23,13 @@
 #include "kkstrtext.h"
 #include "conf.h"
 
-
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(DARWIN)
 #include <sys/param.h>
+
+#ifdef BSD
 #include <sys/mount.h>
 #else
 #include <sys/vfs.h>
 #endif
-
 
 #define PERIOD_RECONNECT        40
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.66 2002/09/24 16:20:47 konst Exp $
+* $Id: icqcontact.cc,v 1.67 2002/10/17 17:36:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -145,7 +145,7 @@ void icqcontact::save() {
 	|| access(aboutname.c_str(), F_OK);
 
     if(modified && conf.enoughdiskspace()) {
-	mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
+	mkdir(getdirname().c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
 
 	if(!access(getdirname().c_str(), W_OK)) {
 	    f.open(lrname.c_str());

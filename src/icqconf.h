@@ -1,10 +1,9 @@
 #ifndef __ICQCONF_H__
 #define __ICQCONF_H__
 
-#include <unistd.h>
+#include "icqcommon.h"
+
 #include <stdio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <fcntl.h>
 #include <dirent.h>
 

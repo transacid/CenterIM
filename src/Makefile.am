@@ -2,9 +2,9 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I/home/konst/devel/kkt
 bin_PROGRAMS = centericq
 centericq_SOURCES = accountmanager.cc centericq.cc centermain.cc eventmanager.cc icqconf.cc icqcontact.cc icqcontacts.cc icqdialogs.cc icqface.cc icqgroup.cc icqgroups.cc icqhist.cc icqmlist.cc imcontact.cc imcontroller.cc imevents.cc imexternal.cc imlogger.cc
 centericq_LDFLAGS = -L/home/konst/devel/kktoolbox/kkconsui -L/home/konst/devel/kktoolbox/kkstrtext -L/home/konst/devel/kktoolbox/kksystr -L/home/konst/devel/libicq2000 -L/home/konst/devel/libmsn -L/home/konst/devel/firetalk -L/home/konst/devel/libyahoo2
-centericq_LDADD = $(top_srcdir)/src/hooks/libhooks.a  -lkkconsui -lkkstrtext -lkksystr -llibicq2000 -llibmsn -lfiretalk -llibyahoo2 @LIBS@ @INTLLIBS@
+centericq_LDADD = $(top_srcdir)/src/hooks/libhooks.a  -lkkconsui -lkkstrtext -lkksystr -llibicq2000 -llibmsn -lfiretalk -llibyahoo2  @INTLLIBS@
 SUBDIRS = hooks
 EXTRA_DIST = accountmanager.cc centericq.cc centermain.cc eventmanager.cc icqconf.cc icqcontact.cc icqcontacts.cc icqdialogs.cc icqface.cc icqgroup.cc icqgroups.cc icqhist.cc icqmlist.cc imcontact.cc imcontroller.cc imevents.cc imexternal.cc imlogger.cc accountmanager.h centericq.h eventmanager.h icqcommon.h icqconf.h icqcontact.h icqcontacts.h icqface.h icqgroup.h icqgroups.h icqhist.h icqmlist.h imcontact.h imcontroller.h imevents.h imexternal.h imlogger.h
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\" $(GLIB_CFLAGS) @SIGC_CFLAGS@
-LDFLAGS = @SIGC_LIBS@ $(GLIB_LIBS)
+AM_CPPFLAGS = -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\"
+LDFLAGS = $(GLIB_LIBS)

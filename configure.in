@@ -1,10 +1,15 @@
 AC_INIT(src/centericq.cc)
 AM_INIT_AUTOMAKE(centericq, 4.8.6)
 
+AC_CANONICAL_HOST
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP
 AC_PROG_RANLIB
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 
 AM_CONFIG_HEADER(config.h)
 
@@ -19,7 +24,7 @@ AC_ARG_ENABLE(locales-fix,
 ###     sigc++ check
 
 AM_PATH_SIGC(1.0.0,
-    [CXXFLAGS="$CXXFLAGS $SIGC_CFLAGS"],
+    [CPPFLAGS="$CPPFLAGS $SIGC_CFLAGS" LIBS="$LIBS $SIGC_LIBS"],
     [AC_MSG_ERROR([You need to have the libsigc++ libraries installed - see the README for more information])])
 
 ###     use option --with-fribidi to compile with fribidi support
@@ -47,9 +52,6 @@ if test -n "$with_fribidi" -a "$with_fribidi" != "no"; then
     fi
 fi
 
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-
 AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator exception utility],,
   AC_MSG_ERROR([You need to have the libstdc++ headers installed]))
 
@@ -61,12 +63,7 @@ AC_CHECK_HEADERS(ext/hash_map,,
 AC_CHECK_HEADERS(sstream,,
   AC_CHECK_HEADERS(strstream,, AC_MSG_ERROR([Your libstdc++ doesn't have the sstream or strstream classes])))
 
-AC_LANG_RESTORE
-
 AC_CHECK_HEADERS(iconv.h)
-
-AC_CHECK_LIB(ncurses, initscr,,
-    [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
 
 AC_CHECK_LIB(iconv, iconv,,
     [AC_CHECK_LIB(c, iconv,, AC_MSG_WARN(libiconv not found - Russian codepages translation in MSN will not work))])
@@ -74,12 +71,20 @@ AC_CHECK_LIB(iconv, iconv,,
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 
-uout=`uname | grep Darwin`
-if test ! -z "$uout"; then
-    AC_DEFINE(DARWIN)
-fi
+AC_LANG_RESTORE
 
-AM_PATH_GLIB(1.2.0,, AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
+AC_CHECK_LIB(ncurses, initscr,,
+    [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
+
+AM_PATH_GLIB(1.2.0, [ CPPFLAGS="$CPPFLAGS $GLIB_CFLAGS" ], AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
+
+case "$host_os" in
+	darwin*)
+	    LIBS=`for i in $LIBS; do echo $i | grep -v pthread; done`
+	    LIBS="$LIBS -L/sw/lib -flat_namespace"
+	    CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS -I/sw/include"
+	;;
+esac
 
 AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.3.3 libmsn-0.1 firetalk-0.1 libyahoo2-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.112 2002/10/16 18:28:29 konst Exp $
+* $Id: icqhook.cc,v 1.113 2002/10/17 17:36:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1186,27 +1186,26 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
 	updateinforecord(ic, c);
 
     } else {
-#ifndef DARWIN
-// FIXME - Darwin lacks inet_ntop
-	char buf[64];
+	char *p;
 	string lastip, sbuf;
-	int ip;
+	struct in_addr addr;
 
-	if(inet_ntop(AF_INET, &(ip = ntohl(ic->getExtIP())), buf, 64))
-	    lastip = buf;
+	addr.s_addr = ntohl(ic->getExtIP());
+	if(p = inet_ntoa(addr)) lastip = p;
 
-	if(lastip.find_first_not_of(".0") != -1)
-	if(inet_ntop(AF_INET, &(ip = ntohl(ic->getLanIP())), buf, 64)) {
-	    sbuf = buf;
-	
-	    if(sbuf.find_first_not_of(".0") != -1 && lastip != sbuf) {
-		if(!lastip.empty()) lastip += " ";
-		lastip += sbuf;
+	if(lastip.find_first_not_of(".0") != -1) {
+	    addr.s_addr = ntohl(ic->getLanIP());
+	    if(p = inet_ntoa(addr)) {
+		sbuf = p;
+
+		if(sbuf.find_first_not_of(".0") != -1 && lastip != sbuf) {
+		    if(!lastip.empty()) lastip += " ";
+		    lastip += sbuf;
+		}
 	    }
 
 	    c->setlastip(lastip);
 	}
-#endif
     }
 }
 
