@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.115 2002/05/10 20:21:37 konst Exp $
+* $Id: icqface.cc,v 1.116 2002/05/11 15:41:58 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -607,15 +607,16 @@ bool icqface::findresults(const imsearchparams &sp) {
 		case 1:
 		    if(r) {
 			bool existed;
-			imcontact cont = ((icqcontact *) db.getmenu()->getref(r-1))->getdesc();
+			if(c = (icqcontact *) db.getmenu()->getref(r-1)) {
+			    imcontact cont = c->getdesc();
+			    existed = (c = clist.get(cont));
+			    if(!existed) c = clist.addnew(cont);
 
-			existed = (c = clist.get(cont));
-			if(!existed) c = clist.addnew(cont);
-
-			if(c)
-			if(!cicq.sendevent(immessage(cont, imevent::outgoing, ""), icqface::ok))
-			if(!existed)
-			    clist.remove(cont);
+			    if(c)
+			    if(!cicq.sendevent(immessage(cont, imevent::outgoing, ""), icqface::ok))
+			    if(!existed)
+				clist.remove(cont);
+			}
 		    }
 		    break;
 
