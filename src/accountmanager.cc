@@ -131,7 +131,7 @@ void accountmanager::exec() {
 
     clist.checkdefault();
     conf.save();
-    face.update();
+    face.relaxedupdate();
     fopen = false;
 }
 

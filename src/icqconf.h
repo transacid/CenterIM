@@ -66,8 +66,8 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    serveronly, usegroups, russian;
 
-	string rnick, rfname, rlname, remail,
-	    sockshost, socksuser, sockspass, openurlcommand;
+	string sockshost, socksuser, sockspass,
+	    openurlcommand, basedir;
 
 	regsound rs;
 	regcolor rc;
@@ -145,6 +145,8 @@ class icqconf {
 
 	const string getdirname() const;
 	const string getconfigfname(const string fname) const;
+
+	void commandline(int argc, char **argv);
 };
 
 extern icqconf conf;

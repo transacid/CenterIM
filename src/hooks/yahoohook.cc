@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.10 2001/12/03 18:16:52 konst Exp $
+* $Id: yahoohook.cc,v 1.11 2001/12/05 17:13:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,7 +26,6 @@
 #include "icqmlist.h"
 #include "icqface.h"
 #include "icqcontacts.h"
-#include "icqoffline.h"
 #include "accountmanager.h"
 #include "yahoolib.h"
 #include "centericq.h"
@@ -37,7 +36,7 @@ yahoohook::yahoohook() {
     fonline = false;
     timer_reconnect = 0;
     yahoo = 0;
-    manualstatus = conf.getstatus(::yahoo);
+//    manualstatus = conf.getstatus(::yahoo);
 }
 
 yahoohook::~yahoohook() {
@@ -151,24 +150,31 @@ struct tm *yahoohook::timestamp() {
     return localtime(&t);
 }
 
-unsigned long yahoohook::sendmessage(const icqcontact *c, const string atext) {
-    string text = atext;
-    string::iterator is;
+bool yahoohook::send(const imcontact &cont, const imevent &ev) {
+    icqcontact *c = clist.get(cont);
+    const immessage *m;
 
-    for(is = text.begin(); is != text.end(); is++)
-	if((unsigned) *is < 32) *is = ' ';
+    if(c)
+    if(ev.gettype() == imevent::message)
+    if(m = static_cast<const immessage *>(&ev)) {
+	string text = m->gettext();
+	string::iterator is;
 
-    text = rusconv("kw", text);
+	for(is = text.begin(); is != text.end(); is++)
+	    if((unsigned) *is < 32) *is = ' ';
 
-    if(c->getstatus() != offline) {
-	yahoo_cmd_msg(yahoo, conf.getourid(::yahoo).nickname.c_str(),
-	    c->getdesc().nickname.c_str(), text.c_str());
-    } else {
-	yahoo_cmd_msg_offline(yahoo, conf.getourid(::yahoo).nickname.c_str(),
-	    c->getdesc().nickname.c_str(), text.c_str());
+	if(c->getstatus() != offline) {
+	    yahoo_cmd_msg(yahoo, conf.getourid(::yahoo).nickname.c_str(),
+		cont.nickname.c_str(), text.c_str());
+	} else {
+	    yahoo_cmd_msg_offline(yahoo, conf.getourid(::yahoo).nickname.c_str(),
+		cont.nickname.c_str(), text.c_str());
+	}
+
+	return true;
     }
 
-    return 1;
+    return false;
 }
 
 bool yahoohook::online() const {
@@ -331,19 +337,13 @@ void yahoohook::recvbounced(yahoo_context *y, const char *nick) {
 void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg) {
     imcontact ic(nick, ::yahoo);
 
-    if(strlen(msg))
-    if(!lst.inlist(ic, csignore)) {
-	hist.putmessage(ic, rusconv("wk", msg), HIST_MSG_IN, timestamp());
+    if(strlen(msg)) {
+	em.store(immessage(ic, imevent::incoming, msg));
 	icqcontact *c = clist.get(ic);
 
-	if(c) {
-	    if(c->getstatus() == offline) {
-		c->setstatus(available);
-	    }
-
-	    c->setmsgcount(c->getmsgcount()+1);
-	    c->playsound(EVT_MSG);
-	    face.relaxedupdate();
+	if(c)
+	if(c->getstatus() == offline) {
+	    c->setstatus(available);
 	}
     }
 }

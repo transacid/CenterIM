@@ -2,6 +2,7 @@
 #define __ABSTRACTHOOK_H__
 
 #include "icqcontact.h"
+#include "imevents.h"
 
 enum hookcapabilities {
     hoptCanNotify = 2
@@ -28,8 +29,7 @@ class abstracthook {
 	virtual bool isconnecting() const;
 	virtual bool enabled() const;
 
-	virtual unsigned long sendmessage(const icqcontact *c,
-	    const string text);
+	virtual bool send(const imcontact &cont, const imevent &ev);
 
 	virtual void sendnewuser(const imcontact c);
 	virtual void removeuser(const imcontact ic);

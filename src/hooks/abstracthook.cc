@@ -57,9 +57,8 @@ bool abstracthook::enabled() const {
     return false;
 }
 
-unsigned long abstracthook::sendmessage(const icqcontact *c,
-const string text) {
-    return 0;
+bool abstracthook::send(const imcontact &cont, const imevent &ev) {
+    return false;
 }
 
 void abstracthook::sendnewuser(const imcontact c) {

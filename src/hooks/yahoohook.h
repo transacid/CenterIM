@@ -44,7 +44,7 @@ class yahoohook: public abstracthook {
 	void sendnewuser(const imcontact ic);
 	void removeuser(const imcontact ic);
 
-	unsigned long sendmessage(const icqcontact *c, const string text);
+	bool send(const imcontact &cont, const imevent &ev);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;

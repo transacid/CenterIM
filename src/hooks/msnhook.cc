@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.7 2001/12/03 16:30:18 konst Exp $
+* $Id: msnhook.cc,v 1.8 2001/12/05 17:13:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,13 +27,14 @@
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "accountmanager.h"
+#include "eventmanager.h"
 
 msnhook mhook;
 
 #define TIMESTAMP maketm(d->hour-1, d->minute, d->day, d->month, d->year)
 
 msnhook::msnhook() {
-    manualstatus = conf.getstatus(msn);
+//    manualstatus = conf.getstatus(msn);
     status = offline;
     fonline = false;
     timer_reconnect = 0;
@@ -145,13 +146,19 @@ bool msnhook::enabled() const {
     return true;
 }
 
-unsigned long msnhook::sendmessage(const icqcontact *c, const string text) {
-    if(c->getstatus() != offline) {
-	MSN_SendMessage(c->getnick().c_str(), text.c_str());
-	return 1;
+bool msnhook::send(const imcontact &cont, const imevent &ev) {
+    if(ev.gettype() == imevent::message) {
+	const immessage *m = static_cast<const immessage *>(&ev);
+	icqcontact *c = clist.get(cont);
+
+	if(c && m)
+	if(c->getstatus() != offline) {
+	    MSN_SendMessage(cont.nickname.c_str(), m->gettext().c_str());
+	    return true;
+	}
     }
 
-    return 0;
+    return false;
 }
 
 void msnhook::sendnewuser(const imcontact c) {
@@ -227,25 +234,20 @@ void msnhook::messaged(void *data) {
     imcontact ic(d->sender, msn);
     icqcontact *c;
 
-    if(strlen(d->msg))
-    if(!lst.inlist(ic, csignore)) {
-	if(!(c = clist.get(ic)))
+    if(strlen(d->msg)) {
+	c = clist.get(ic);
+
+	if(!c)
 	if(c = clist.addnew(ic))
 	if(d->friendlyhandle) {
 	    c->setdispnick(d->friendlyhandle);
 	}
 
-	hist.putmessage(ic, d->msg, HIST_MSG_IN, TIMESTAMP);
-	c = clist.get(ic);
+	em.store(immessage(ic, imevent::incoming, d->msg));
 
-	if(c) {
-	    if(c->getstatus() == offline) {
-		c->setstatus(available);
-	    }
-
-	    c->setmsgcount(c->getmsgcount()+1);
-	    c->playsound(EVT_MSG);
-	    face.relaxedupdate();
+	if(c)
+	if(c->getstatus() == offline) {
+	    c->setstatus(available);
 	}
     }
 }

@@ -1,10 +1,6 @@
 #ifndef __ICQFACE_H__
 #define __ICQFACE_H__
 
-#include <fstream>
-
-#include "icqhist.h"
-
 #include "icqcommon.h"
 
 #include "dialogbox.h"
@@ -65,6 +61,11 @@ extern class centericq cicq;
 
 class icqface {
     public:
+	enum eventviewresult {
+	    cancel, forward, reply, ok, open,
+	    accept, reject, eventviewresult_size
+	};
+
 	class icqprogress {
 	    protected:
 		textwindow *w;
@@ -92,12 +93,11 @@ class icqface {
 	bool editdone, mainscreenblock, inited, onlinefolder,
 	    dotermresize, fneedupdate;
 
-	int extk, totalunread;
+	int extk;
 
 	imcontact passinfo;
 
-	string rnick, rfname, rlname, remail;
-
+    protected:
 	static int editmsgkeys(texteditor &e, int k);
 	static int editaboutkeys(texteditor &e, int k);
 	static int contactskeys(verticalmenu &m, int k);
@@ -120,9 +120,6 @@ class icqface {
 	void infointerests(dialogbox &db, icqcontact *c);
 	void infoabout(dialogbox &db, icqcontact *c);
 
-	bool checkicqmessage(const imcontact ic, const string text, bool &ret, int options);
-	int showicq(unsigned int uin, const string text, char imt, int options = 0);
-
 	void gendetails(treeview *tree, icqcontact *c = 0);
 	void selectgender(imgender &f);
 /*
@@ -138,6 +135,7 @@ class icqface {
 
 	void showextractedurls();
 	void extracturls(const string buf);
+
 	int groupmanager(const string text, bool sel);
 
     public:
@@ -171,15 +169,7 @@ class icqface {
 	int contextmenu(icqcontact *c);
 	int generalmenu();
 
-	bool editmsg(const imcontact cinfo, string &text);
-	bool editurl(const imcontact cinfo, string &url, string &text);
-	void read(const imcontact cinfo);
-	void history(const imcontact cinfo);
 	void modelist(contactstatus cs);
-
-	bool showevent(const imcontact cinfo, int direction, time_t &lastread);
-	int showmsg(const imcontact cinfo, const string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	int showurl(const imcontact cinfo, const string url, const string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
 
 	bool multicontacts(const string head = "");
 	void userinfo(const imcontact cinfo, const imcontact realinfo);
@@ -204,6 +194,9 @@ class icqface {
 	int selectgroup(const string text);
 	void organizegroups();
 	void makeprotocolmenu(verticalmenu &m);
+
+	bool eventedit(imevent &ev);
+	eventviewresult eventview(const imevent *ev);
 };
 
 extern icqface face;
@@ -215,14 +208,22 @@ const char *strregcolor(regcolor c);
 const char *strint(unsigned int i);
 
 static const char *stryesno[true+1] = {
-    _("No"),
-    _("Yes")
+    _("no"), _("yes")
 };
 
 static const char *strgender[imgender_size] = {
     _("Not specified"),
     _("Male"),
     _("Female")
+};
+
+static const char *eventnames[imevent::imeventtype_size] = {
+    _("message"), _("URL"), _("SMS"), _("authorization")
+};
+
+static const char *eventviewresultnames[icqface::eventviewresult_size] = {
+    "", _("Fwd"), _("Reply"), _("Next"), _("Ok"),
+    _("Open"), _("Accept"), _("Reject")
 };
 
 #endif

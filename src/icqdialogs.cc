@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.33 2001/12/04 17:11:46 konst Exp $
+* $Id: icqdialogs.cc,v 1.34 2001/12/05 17:13:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,7 +24,6 @@
 
 #include "icqface.h"
 #include "icqconf.h"
-#include "icqhist.h"
 #include "centericq.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"

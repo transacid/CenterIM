@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.12 2001/12/04 17:11:48 konst Exp $
+* $Id: icqhook.cc,v 1.13 2001/12/05 17:13:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,7 +36,7 @@
 icqhook ihook;
 
 icqhook::icqhook() {
-    manualstatus = conf.getstatus(icq);
+//    manualstatus = conf.getstatus(icq);
     fcapabilities = hoptCanNotify;
     timer_reconnect = 0;
     fonline = false;
@@ -180,14 +180,26 @@ bool icqhook::enabled() const {
     return true;
 }
 
-unsigned long icqhook::sendmessage(const icqcontact *c, const string text) {
-    NormalMessageEvent *sv;
-    Contact ic(c->getdesc().uin);
+bool icqhook::send(const imcontact &cont, const imevent &ev) {
+    Contact ic(cont.uin);
 
-    sv = new NormalMessageEvent(&ic, rusconv("kw", text));
-    cli.SendEvent(sv);
+    if(ev.gettype() == imevent::message) {
+	const immessage *m = static_cast<const immessage *> (&ev);
+	cli.SendEvent(new NormalMessageEvent(&ic, m->gettext()));
+    } else if(ev.gettype() == imevent::url) {
+	const imurl *m = static_cast<const imurl *> (&ev);
+	cli.SendEvent(new URLMessageEvent(&ic, m->getdescription(), m->geturl()));
+    } else if(ev.gettype() == imevent::sms) {
+	const imsms *m = static_cast<const imsms *> (&ev);
+	cli.SendEvent(new SMSMessageEvent(&ic, m->gettext(), false));
+    } else if(ev.gettype() == imevent::authorization) {
+	const imauthorization *m = static_cast<const imauthorization *> (&ev);
+	cli.SendEvent(new AuthReqEvent(&ic, m->gettext()));
+    } else {
+	return false;
+    }
 
-    return 1;
+    return true;
 }
 
 void icqhook::sendnewuser(const imcontact c) {
@@ -236,8 +248,31 @@ bool icqhook::regconnect(const string aserv) {
 }
 
 bool icqhook::regattempt(unsigned int &auin, const string apassword) {
+    fd_set fds;
+    struct timeval tv;
+    int hsockfd;
+    time_t regtimeout = time(0);
+
+    reguin = 0;
     cli.setPassword(apassword);
     cli.RegisterUIN();
+
+    while(!reguin && (time(0)-regtimeout < 60)) {
+	hsockfd = 0;
+	FD_ZERO(&fds);
+	getsockets(fds, hsockfd);
+
+	tv.tv_sec = 30;
+	tv.tv_usec = 0;
+
+	select(hsockfd+1, &fds, 0, 0, &tv);
+
+	if(isoursocket(fds)) {
+	    main();
+	}
+    }
+
+    return (bool) reguin;
 }
 
 imstatus icqhook::icq2imstatus(const Status st) const {
@@ -315,43 +350,27 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
 }
 
 bool icqhook::messaged_cb(MessageEvent *ev) {
-    icqcontact *c;
     NormalMessageEvent *nev;
     imcontact ic;
     time_t t;
 
-    c = 0;
     ic = imcontact(ev->getContact()->getUIN(), icq);
 
-    if(!lst.inlist(ic, csignore)) {
-	switch(ev->getType()) {
-	    case MessageEvent::Normal:
-		if(nev = dynamic_cast<NormalMessageEvent*>(ev)) {
-		    hist.putmessage(ic, rusconv("wk", nev->getMessage()),
-			HIST_MSG_IN, localtime(&(t = nev->getTime())));
+    switch(ev->getType()) {
+	case MessageEvent::Normal:
+	    if(nev = dynamic_cast<NormalMessageEvent*>(ev)) {
+		em.store(immessage(ic, imevent::incoming, nev->getMessage()));
+	    }
+	    break;
 
-		    c = clist.get(ic);
-
-		    if(c) {
-			c->playsound(EVT_MSG);
-		    }
-		}
-		break;
-
-	    case MessageEvent::URL:
-	    case MessageEvent::SMS:
-	    case MessageEvent::SMS_Response:
-	    case MessageEvent::SMS_Receipt:
-	    case MessageEvent::AuthReq:
-	    case MessageEvent::AuthAck:
-		face.log("! received something we don't support yet");
-		break;
-	}
-
-	if(c) {
-	    c->setmsgcount(c->getmsgcount()+1);
-	    face.relaxedupdate();
-	}
+	case MessageEvent::URL:
+	case MessageEvent::SMS:
+	case MessageEvent::SMS_Response:
+	case MessageEvent::SMS_Receipt:
+	case MessageEvent::AuthReq:
+	case MessageEvent::AuthAck:
+	    face.log("! received something we don't support yet");
+	    break;
     }
 
     return true;
@@ -418,7 +437,8 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cminfo.birth_month = hpage.birth_month;
 		cminfo.birth_year = hpage.birth_year;
 
-		if(c->getnick() == c->getdispnick()) {
+		if((c->getnick() == c->getdispnick())
+		|| (c->getdispnick() == i2str(ev->getUIN()))) {
 		    c->setdispnick(ic->getAlias());
 		}
 
@@ -426,6 +446,8 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		c->setbasicinfo(cbinfo);
 		c->setmoreinfo(cminfo);
 		c->setabout(ic->getAboutInfo());
+
+		face.relaxedupdate();
 	    }
 	    break;
 

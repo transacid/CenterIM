@@ -1,4 +1,5 @@
 #include "icqgroups.h"
+#include "icqconf.h"
 
 icqgroups::icqgroups() {
 }
@@ -7,7 +8,7 @@ icqgroups::~icqgroups() {
 }
 
 const string icqgroups::getfname() const {
-    return (string) getenv("HOME") + "/.centericq/groups";
+    return conf.getdirname() + "/groups";
 }
 
 void icqgroups::load() {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.29 2001/12/04 17:11:45 konst Exp $
+* $Id: icqcontact.cc,v 1.30 2001/12/05 17:13:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -22,7 +22,6 @@
 *
 */
 
-#include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqgroups.h"
 #include "icqconf.h"
@@ -34,19 +33,22 @@
 
 icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;
+    imevent::imeventtype ie;
     int i;
 
     clear();
-    for(i = 0; i < SOUND_COUNT; i++) sound[i] = "";
     nmsgs = lastread = 0;
     finlist = true;
+
+    for(ie = imevent::message; ie != imevent::imeventtype_size; (int) ie += 1)
+	sound[ie] = "";
 
     cdesc = adesc;
 
     switch(cdesc.pname) {
 	case infocard:
 	    if(!cdesc.uin) {
-		fname = (string) getenv("HOME") + "/.centericq/n";
+		fname = conf.getdirname() + "/n";
 
 		for(i = 1; ; i++) {
 		    tname = fname + i2str(i);
@@ -84,7 +86,7 @@ const string icqcontact::tosane(const string p) const {
 const string icqcontact::getdirname() const {
     string ret;
 
-    ret = (string) getenv("HOME") + "/.centericq/";
+    ret = conf.getdirname();
 
     switch(cdesc.pname) {
 	case infocard:
@@ -478,75 +480,71 @@ void icqcontact::setabout(const string data) {
     fupdated++;
 }
 
-void icqcontact::setsound(int event, const string sf) {
-    if(event <= SOUND_COUNT) {
-	sound[event] = sf;
-    }
+void icqcontact::setsound(imevent::imeventtype event, const string sf) {
+    sound[event] = sf;
 }
 
-void icqcontact::playsound(int event) const {
+void icqcontact::playsound(imevent::imeventtype event) const {
     string sf = sound[event], cline;
     int i;
 
-    if(event <= SOUND_COUNT) {
-	if(sf.size()) {
-	    if(sf[0] == '!') {
-		time_t lastmelody = 0;
+    if(sf.size()) {
+	if(sf[0] == '!') {
+	    time_t lastmelody = 0;
 
-		if(time(0)-lastmelody < 5) return;
-		time(&lastmelody);
+	    if(time(0)-lastmelody < 5) return;
+	    time(&lastmelody);
 
-		if(sf.substr(1) == "spk1") {
-		    for(i = 0; i < 3; i++) {
-			if(i) delay(90);
-			setbeep((i+1)*100, 60);
-			printf("\a");
-			fflush(stdout);
-		    }
-		} else if(sf.substr(1) == "spk2") {
-		    for(i = 0; i < 2; i++) {
-			if(i) delay(90);
-			setbeep((i+1)*300, 60);
-			printf("\a");
-			fflush(stdout);
-		    }
-		} else if(sf.substr(1) == "spk3") {
-		    for(i = 3; i > 0; i--) {
-			setbeep((i+1)*200, 60-i*10);
-			printf("\a");
-			fflush(stdout);
-			delay(90-i*10);
-		    }
-		} else if(sf.substr(1) == "spk4") {
-		    for(i = 0; i < 4; i++) {
-			setbeep((i+1)*400, 60);
-			printf("\a");
-			fflush(stdout);
-			delay(90);
-		    }
-		} else if(sf.substr(1) == "spk5") {
-		    for(i = 0; i < 4; i++) {
-			setbeep((i+1)*250, 60+i);
-			printf("\a");
-			fflush(stdout);
-			delay(90-i*5);
-		    }
+	    if(sf.substr(1) == "spk1") {
+		for(i = 0; i < 3; i++) {
+		    if(i) delay(90);
+		    setbeep((i+1)*100, 60);
+		    printf("\a");
+		    fflush(stdout);
 		}
-	    } else {
-		static int pid = 0;
-
-		if(pid) kill(pid, SIGKILL);
-		pid = fork();
-		if(!pid) {
-		    string cline = sf + " >/dev/null 2>&1";
-		    execlp("/bin/sh", "/bin/sh", "-c", cline.c_str(), 0);
-		    exit(0);
+	    } else if(sf.substr(1) == "spk2") {
+		for(i = 0; i < 2; i++) {
+		    if(i) delay(90);
+		    setbeep((i+1)*300, 60);
+		    printf("\a");
+		    fflush(stdout);
+		}
+	    } else if(sf.substr(1) == "spk3") {
+		for(i = 3; i > 0; i--) {
+		    setbeep((i+1)*200, 60-i*10);
+		    printf("\a");
+		    fflush(stdout);
+		    delay(90-i*10);
+		}
+	    } else if(sf.substr(1) == "spk4") {
+		for(i = 0; i < 4; i++) {
+		    setbeep((i+1)*400, 60);
+		    printf("\a");
+		    fflush(stdout);
+		    delay(90);
+		}
+	    } else if(sf.substr(1) == "spk5") {
+		for(i = 0; i < 4; i++) {
+		    setbeep((i+1)*250, 60+i);
+		    printf("\a");
+		    fflush(stdout);
+		    delay(90-i*5);
 		}
 	    }
-	} else if(cdesc != contactroot) {
-	    icqcontact *c = clist.get(contactroot);
-	    c->playsound(event);
+	} else {
+	    static int pid = 0;
+
+	    if(pid) kill(pid, SIGKILL);
+	    pid = fork();
+	    if(!pid) {
+		string cline = sf + " >/dev/null 2>&1";
+		execlp("/bin/sh", "/bin/sh", "-c", cline.c_str(), 0);
+		exit(0);
+	    }
 	}
+    } else if(cdesc != contactroot) {
+	icqcontact *c = clist.get(contactroot);
+	c->playsound(event);
     }
 }
 

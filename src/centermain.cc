@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.12 2001/11/26 13:02:51 konst Exp $
+* $Id: centermain.cc,v 1.13 2001/12/05 17:13:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,8 +27,6 @@
 #include "yahoohook.h"
 #include "icqface.h"
 #include "icqconf.h"
-#include "icqhist.h"
-#include "icqoffline.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqgroups.h"
@@ -37,8 +35,6 @@ centericq cicq;
 icqconf conf;
 icqcontacts clist;
 icqface face;
-icqhistory hist;
-icqoffline offl;
 icqlist lst;
 icqgroups groups;
 
@@ -61,7 +57,7 @@ int main(int argc, char **argv) {
 	textdomain(PACKAGE);
 #endif
 
-	cicq.commandline(argc, argv);
+	conf.commandline(argc, argv);
 	cicq.exec();
 
     } catch(int errcode) {

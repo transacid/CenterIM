@@ -12,8 +12,7 @@
 
 #include "icqcommon.h"
 #include "imcontact.h"
-
-#define SOUND_COUNT     7
+#include "imevents.h"
 
 enum imgender {
     genderUnspec,
@@ -59,7 +58,7 @@ class icqcontact {
 	bool finlist;
 	time_t lastread, lastseen;
 
-	string sound[SOUND_COUNT];
+	string sound[imevent::imeventtype_size];
 	string nick, about, dispnick, postponed, lastip;
 
 	basicinfo binfo;
@@ -105,8 +104,8 @@ class icqcontact {
 	void unsetupdated();
 	void setmsgcount(int n);
 
-	void setsound(int event, const string sf);
-	void playsound(int event) const;
+	void setsound(imevent::imeventtype event, const string sf);
+	void playsound(imevent::imeventtype event) const;
 
 	void clear();
 	void load();

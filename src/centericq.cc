@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.46 2001/12/03 16:30:14 konst Exp $
+* $Id: centericq.cc,v 1.47 2001/12/05 17:13:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,11 +24,9 @@
 
 #include "centericq.h"
 #include "icqconf.h"
-#include "icqhist.h"
 #include "icqhook.h"
 #include "yahoohook.h"
 #include "icqface.h"
-#include "icqoffline.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
@@ -42,23 +40,6 @@ centericq::centericq() {
 }
 
 centericq::~centericq() {
-}
-
-void centericq::commandline(int argc, char **argv) {
-    int i;
-
-    for(i = 1; i < argc; i++) {
-	string args = argv[i];
-	if((args == "-a") || (args == "--ascii")) {
-	    kintf_graph = 0;
-	} else {
-	    kendinterface();
-	    cout << "centericq command line parameters:" << endl << endl;
-	    cout << "\t--ascii or -a : use characters for windows and UI controls" << endl;
-	    cout << "\tanything else : display this stuff" << endl;
-	    exit(0);
-	}
-    }
 }
 
 void centericq::exec() {
@@ -201,11 +182,14 @@ void centericq::mainloop() {
 
 	switch(action) {
 	    case ACT_URL:
+	    /*
 		url = text = "";
 		if(face.editurl(c->getdesc(), url, text))
 		    for(i = face.muins.begin(); i != face.muins.end(); i++)
 			offl.sendurl(*i, url, text);
+	    */
 		break;
+
 	    case ACT_IGNORE:
 		sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
@@ -218,9 +202,6 @@ void centericq::mainloop() {
 		if(c->getstatus() != offline) {
 		    sendfiles(c->getdesc());
 		}
-		break;
-	    case ACT_CONTACT:
-//                sendcontacts(c->getdesc());
 		break;
 	    case ACT_EDITUSER:
 		nonicq(c->getdesc().uin);
@@ -248,22 +229,26 @@ void centericq::mainloop() {
 		    face.update();
 		}
 		break;
+
 	    case ACT_GROUPMOVE:
 		if(gid = face.selectgroup(_("Select a group to move the user to"))) {
 		    c->setgroupid(gid);
 		    face.fillcontactlist();
 		}
 		break;
+
 	    case ACT_HISTORY:
+/*
 		if(c->getdesc().pname != infocard)
 		    face.history(c->getdesc());
+*/
 		break;
+
 	    case ACT_MSG:
-		text = "";
 		if(c->getmsgcount()) {
-		    face.read(c->getdesc());
+		    readevents(c->getdesc());
 		} else if(c->getdesc() != contactroot && c->getdesc().pname != infocard) {
-		    message(c->getdesc(), text, scratch);
+//                    message(c->getdesc(), text, scratch);
 		}
 		break;
 	}
@@ -289,7 +274,11 @@ void centericq::find() {
 	    switch(s.pname) {
 		case icq:
 //                    ihook.sendsearchreq(s);
-		    ret = face.findresults();
+//                    ret = face.findresults();
+		    if(s.uin) {
+			addcontact(imcontact(s.uin, s.pname));
+			ret = false;
+		    }
 		    break;
 
 		case msn:
@@ -458,7 +447,7 @@ void centericq::checkmail() {
 	    if(mcount) {
 		face.log(_("+ new mail arrived, %d messages"), mcount);
 		face.log(_("+ last msg from %s"), lastfrom.c_str());
-		clist.get(contactroot)->playsound(EVT_EMAIL);
+		clist.get(contactroot)->playsound(imevent::email);
 	    }
 	}
 
@@ -479,7 +468,7 @@ void centericq::handlesignal(int signum) {
 }
 
 void centericq::checkparallel() {
-    string pidfname = (string) getenv("HOME") + "/.centericq/pid", fname;
+    string pidfname = conf.getdirname() + "/pid", fname;
     int pid = 0;
     char exename[512];
 
@@ -507,22 +496,48 @@ void centericq::checkparallel() {
     }
 }
 
-bool centericq::message(const imcontact cinfo, const string text, msgmode mode) {
-    icqcontact *c = (icqcontact *) clist.get(cinfo);
-    vector<imcontact>::iterator i;
-    char buf[512];
-    string stext;
-    bool ret = true;
+void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
+    string text, fwdnote;
+    imevent *sendev;
 
     face.muins.clear();
+    fwdnote = ev->getcontact().totext() + " wrote:\n\n";
 
-    switch(mode) {
-	case reply:
-	    face.muins.push_back(cinfo);
-	    stext = conf.getquote() ? quotemsg(text) : "";
-	    break;
+    if(ev->gettype() == imevent::message) {
+	const immessage *m = dynamic_cast<const immessage *>(&ev);
+	text = m->gettext();
 
-	case forward:
+	if(r == icqface::reply) {
+	    if(conf.getquote()) text = quotemsg(text);
+	} else if(r == icqface::forward) {
+	    text = fwdnote + text;
+	}
+
+	sendev = new immessage(m->getcontact(), imevent::outgoing, text);
+
+    } else if(ev->gettype() == imevent::url) {
+	const imurl *m = dynamic_cast<const imrul *>(&ev);
+	text = m->getdescription();
+
+	if(r == icqface::forward) {
+	    
+	}
+
+	sendev = new imurl(m->getcontact, imevent::outgoing, m->geturl(), m->getdescription());
+
+    } else {
+	sendev = 0;
+    }
+
+    if(sendev) {
+	switch(r) {
+	    case icqface::reply:
+	    case icqface::ok:
+		face.muins.push_back(ev.getcontact());
+		break;
+	}
+    }
+}
 	    sprintf(buf,
 		_("%s wrote:"),
 		c ? c->getdesc().totext().c_str() : "I"
@@ -554,6 +569,64 @@ bool centericq::message(const imcontact cinfo, const string text, msgmode mode) 
     }
 
     return ret;
+}
+
+void centericq::readevents(const imcontact &cont) {
+    vector<imevent *> events;
+    vector<imevent *>::iterator iev;
+    icqcontact *c = clist.get(cont);
+    icqface::eventviewresult r;
+    bool fin;
+
+    if(c) {
+	fin = false;
+
+	while(c->getmsgcount() && !fin) {
+	    events = em.getevents(cont, c->getlastread());
+
+	    for(iev = events.begin(); (iev != events.end()) && !fin; iev++) {
+		r = face.eventview(*iev);
+
+		switch(r) {
+		    case icqface::forward:
+			sendevent();
+			break;
+
+		    case icqface::reply:
+			break;
+
+		    case icqface::open:
+			break;
+
+		    case icqface::accept:
+			break;
+
+		    case icqface::reject:
+			break;
+
+		    case icqface::ok:
+			break;
+
+		    case icqface::cancel:
+			fin = true;
+			break;
+		}
+
+		c->setlastread((*iev)->gettimestamp());
+	    }
+
+	    for(iev = events.begin(); iev != events.end(); iev++) {
+		delete *iev;
+		events.erase(iev);
+	    }
+	}
+
+	c->save();
+	face.relaxedupdate();
+    }
+}
+
+void centericq::history(const imcontact &cont) {
 }
 
 const string centericq::quotemsg(const string text) {
@@ -732,7 +805,7 @@ void centericq::exectimers() {
     }
 
     if(timer_current-timer_resend > PERIOD_RESEND) {
-	offl.scan(0, osexpired);
+//        offl.scan(0, osexpired);
 	time(&timer_resend);
     }
 

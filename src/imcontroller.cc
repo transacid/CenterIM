@@ -23,7 +23,7 @@ bool imcontroller::icqregdialog() {
     ruin = 0;
     finished = success = false;
     rnick = rfname = rlname = remail = rpasswd = "";
-    rserver = "icq.mirabilis.com:4000";
+    rserver = "login.icq.com:5190";
 
     db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
 	clr(cp_dialog_frame), TW_CENTERED, clr(cp_dialog_highlight),

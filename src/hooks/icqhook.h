@@ -46,9 +46,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	bool isconnecting() const;
 	bool enabled() const;
 
-	unsigned long sendmessage(const icqcontact *c,
-	    const string text);
-
+	bool send(const imcontact &cont, const imevent &ev);
 	void sendnewuser(const imcontact c);
 
 	void setautostatus(imstatus st);

@@ -10,6 +10,7 @@
 #include "icqcontact.h"
 
 #include "icqcommon.h"
+#include "eventmanager.h"
 
 #define HIDL_SOCKEXIT   2
 
@@ -38,8 +39,6 @@ class centericq {
 	centericq();
 	~centericq();
 
-	bool message(const imcontact cinfo, const string text, msgmode mode);
-
 	void commandline(int argc, char **argv);
 	void exec();
 	void reg();
@@ -57,6 +56,9 @@ class centericq {
 
 	bool idle(int options = 0);
 	void exectimers();
+
+	void readevents(const imcontact &cont);
+	void history(const imcontact &cont);
 };
 
 extern centericq cicq;

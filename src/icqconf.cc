@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.25 2001/12/03 16:30:15 konst Exp $
+* $Id: icqconf.cc,v 1.26 2001/12/05 17:13:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,9 +27,7 @@
 #include <fstream>
 
 #include "icqconf.h"
-#include "icqhist.h"
 #include "icqface.h"
-#include "icqcontact.h"
 #include "icqcontacts.h"
 
 icqconf::icqconf() {
@@ -39,6 +37,8 @@ icqconf::icqconf() {
 
     hideoffline = antispam = usegroups = russian = false;
     savepwd = mailcheck = true;
+
+    basedir = (string) getenv("HOME") + "/.centericq/";
 }
 
 icqconf::~icqconf() {
@@ -272,14 +272,16 @@ void icqconf::loadcolors() {
 
 void icqconf::loadsounds() {
     string tname = getconfigfname("sounds"), buf, suin, skey;
-    int event, n, ffuin;
+    int n, ffuin;
     icqcontact *c;
-    int i, k;
+    int i;
+    imevent::imeventtype it;
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-	for(k = 0; k < SOUND_COUNT; k++) {
-	    c->setsound(k, "");
+
+	for(it = imevent::message; it != imevent::imeventtype_size; (int) it += 1) {
+	    c->setsound(it, "");
 	}
     }
 
@@ -296,7 +298,7 @@ void icqconf::loadsounds() {
 	    fo << "# yahoo_<nickname>\tfor yahoo" << endl;
 	    fo << "# msn_<nickname>\tmsn contacts" << endl << "#" << endl;
 
-	    fo << "# <event>\tcan be either msg, url, file, chat, cont, online or email" << endl;
+	    fo << "# <event>\tcan be either msg, url, online or email" << endl;
 	    fo << "# <command>\tcommand line to be executed to play a sound" << endl << endl;
 
 	    switch(rs) {
@@ -332,11 +334,11 @@ void icqconf::loadsounds() {
 	    suin = getword(buf);
 	    skey = getword(buf);
 
-	    if(skey == "msg") event = EVT_MSG; else
-	    if(skey == "url") event = EVT_URL; else
-	    if(skey == "email") event = EVT_EMAIL; else
-	    if(skey == "online") event = EVT_ONLINE; else
-	    if(skey == "chat") event = EVT_CHAT; else continue;
+	    if(skey == "msg") it = imevent::message; else
+	    if(skey == "url") it = imevent::url; else
+	    if(skey == "email") it = imevent::email; else
+	    if(skey == "online") it = imevent::online; else
+		continue;
 
 	    if(suin != "*") {
 		if((i = suin.find("_")) != -1) {
@@ -351,7 +353,7 @@ void icqconf::loadsounds() {
 		c = clist.get(contactroot);
 	    }
 
-	    if(c) c->setsound(event, buf);
+	    if(c) c->setsound(it, buf);
 	}
 
 	fi.close();
@@ -599,7 +601,7 @@ int icqconf::getprotcolor(protocolname pname) const {
 }
 
 const string icqconf::getdirname() const {
-    return (string) getenv("HOME") + "/.centericq/";
+    return basedir;
 }
 
 const string icqconf::getconfigfname(const string fname) const {
@@ -612,6 +614,29 @@ bool icqconf::getrussian() const {
 
 void icqconf::setrussian(bool frussian) {
     russian = frussian;
+}
+
+void icqconf::commandline(int argc, char **argv) {
+    int i;
+
+    for(i = 1; i < argc; i++) {
+	string args = argv[i];
+
+	if((args == "-a") || (args == "--ascii")) {
+	    kintf_graph = 0;
+	} else if((args == "-b") || (args == "--basedir")) {
+	    if(argv[++i]) {
+		basedir = argv[i];
+		if(basedir.substr(basedir.size()-1) != "/") basedir += "/";
+	    }
+	} else {
+	    kendinterface();
+	    cout << "centericq command line parameters:" << endl << endl;
+	    cout << "\t--ascii or -a : use characters for windows and UI controls" << endl;
+	    cout << "\tanything else : display this stuff" << endl;
+	    exit(0);
+	}
+    }
 }
 
 // ----------------------------------------------------------------------------
