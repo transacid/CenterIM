@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2002-08-11 01:18+0300\n"
+"POT-Creation-Date: 2002-08-14 13:12+0300\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
@@ -72,84 +72,99 @@ msgstr ""
 msgid "+ [aim] password sent"
 msgstr " wachtwoord: "
 
-#: src/hooks/icqhook.cc:125
+#: src/hooks/icqhook.cc:128
 msgid "+ [icq] connecting to the server"
 msgstr "+ [icq] verbinden met server"
 
-#: src/hooks/icqhook.cc:777
+#: src/hooks/icqhook.cc:846
 msgid "+ [icq] logged in"
 msgstr "+ [icq] ingelogd"
 
-#: src/hooks/icqhook.cc:804
+#: src/hooks/icqhook.cc:873
 msgid "as requested"
 msgstr "zoals gevraagd"
 
-#: src/hooks/icqhook.cc:805
+#: src/hooks/icqhook.cc:874
 msgid "socket problems"
 msgstr "socket probleem"
 
-#: src/hooks/icqhook.cc:806
+#: src/hooks/icqhook.cc:875
 msgid "bad username"
 msgstr "foute gebruikersnaam"
 
-#: src/hooks/icqhook.cc:807
+#: src/hooks/icqhook.cc:876
 msgid "turboing"
 msgstr "turboing"
 
-#: src/hooks/icqhook.cc:808
+#: src/hooks/icqhook.cc:877
 msgid "bad password"
 msgstr "fout wachtwoord"
 
-#: src/hooks/icqhook.cc:809
+#: src/hooks/icqhook.cc:878
 msgid "username and password mismatch"
 msgstr "gebruikersnaam en wachtwoord verkeerd"
 
-#: src/hooks/icqhook.cc:810
+#: src/hooks/icqhook.cc:879
 msgid "already logged"
 msgstr "al gelogd"
 
-#: src/hooks/icqhook.cc:823
+#: src/hooks/icqhook.cc:892
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] verbinding verbroken"
 
-#: src/hooks/icqhook.cc:829
+#: src/hooks/icqhook.cc:898
 #, fuzzy
 msgid "icq disconnection reason"
 msgstr "+ [icq] verbinding verbroken"
 
-#: src/hooks/icqhook.cc:906 src/hooks/yahoohook.cc:552
+#: src/hooks/icqhook.cc:968
+#, fuzzy
+msgid "The user has accepted your authorization request"
+msgstr "* De gebruiker heeft je toegevoegd"
+
+#: src/hooks/icqhook.cc:974
+#, fuzzy
+msgid "The user has rejected your authorization request; the message was: "
+msgstr "Lege authorisatie aanvraag"
+
+#: src/hooks/icqhook.cc:997 src/hooks/yahoohook.cc:552
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "* De gebruiker heeft je toegevoegd"
 
-#: src/hooks/icqhook.cc:937
+#: src/hooks/icqhook.cc:1028
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] gefaald SMS naar %s, %s"
 
-#: src/hooks/icqhook.cc:947 src/hooks/irchook.cc:514
+#: src/hooks/icqhook.cc:1038 src/hooks/irchook.cc:514
 #, fuzzy
 msgid "Away message:"
 msgstr "* Afwezigheidsbericht:"
 
-#: src/hooks/icqhook.cc:951
+#: src/hooks/icqhook.cc:1042
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] kan 'ben weg' bericht van %s niet ophalen, %s"
 
-#: src/hooks/icqhook.cc:1083
+#: src/hooks/icqhook.cc:1174
 #, fuzzy, c-format
 msgid "%s requested our away message, sent the response"
 msgstr "%lu 'ben weg' bericht is opgevraagd, verzonden."
 
-#: src/hooks/icqhook.cc:1099
+#: src/hooks/icqhook.cc:1190
 msgid "Random Chat User"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1129
+#: src/hooks/icqhook.cc:1220
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
 msgstr "+ [icq] whitepages zoektocht gereed, %d gevonden"
+
+#: src/hooks/icqhook.cc:1272
+#, c-format
+msgid "+ [icq] auto-requesting authorization to store %lu"
+msgstr ""
 
 #: src/hooks/irchook.cc:90
 #, fuzzy
@@ -194,7 +209,7 @@ msgstr ""
 msgid "Kicked by %s; reason: %s"
 msgstr ""
 
-#: src/hooks/irchook.cc:1089
+#: src/hooks/irchook.cc:1095
 #, c-format
 msgid "The user has changed their nick from %s to %s"
 msgstr ""
@@ -352,13 +367,13 @@ msgstr "+ [yahoo] teruggekeerd bericht"
 msgid " IM account manager "
 msgstr " IM accountbeheer "
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:446
-#: src/icqdialogs.cc:788 src/imcontroller.cc:38
+#: src/accountmanager.cc:43 src/icqdialogs.cc:169 src/icqdialogs.cc:452
+#: src/icqdialogs.cc:795 src/imcontroller.cc:38
 msgid "Change"
 msgstr "Verander"
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:446 src/icqdialogs.cc:788
-#: src/icqdialogs.cc:977 src/imcontroller.cc:193
+#: src/accountmanager.cc:43 src/icqdialogs.cc:452 src/icqdialogs.cc:795
+#: src/icqdialogs.cc:984 src/imcontroller.cc:226
 msgid "Done"
 msgstr "Klaar"
 
@@ -399,37 +414,47 @@ msgstr " Verander afwezigheidsbericht "
 msgid " Channel manager "
 msgstr " IM accountbeheer "
 
-#: src/accountmanager.cc:98
+#: src/accountmanager.cc:99
+#, fuzzy
+msgid " Synchronize contact list "
+msgstr " Contactlijst "
+
+#: src/accountmanager.cc:101
 msgid " Drop "
 msgstr " Weggooien "
 
-#: src/accountmanager.cc:116
+#: src/accountmanager.cc:119
 msgid " user name: "
 msgstr " gebruikersnaam: "
 
-#: src/accountmanager.cc:121
+#: src/accountmanager.cc:124
 msgid " uin: "
 msgstr " uin: "
 
-#: src/accountmanager.cc:126
+#: src/accountmanager.cc:129
 msgid " password: "
 msgstr " wachtwoord: "
 
-#: src/accountmanager.cc:133
+#: src/accountmanager.cc:136
 msgid "Drop the account information first!"
 msgstr "Eerst accountinfo weggooien!"
 
-#: src/accountmanager.cc:147
+#: src/accountmanager.cc:150
 msgid "You have to disconnect the service first!"
 msgstr "Eerst service ontkoppelen! (disconnect)"
 
-#: src/accountmanager.cc:156
+#: src/accountmanager.cc:159
 msgid " server address: "
 msgstr " server adres: "
 
-#: src/accountmanager.cc:171 src/centericq.cc:337
+#: src/accountmanager.cc:174 src/centericq.cc:337
 msgid "away message"
 msgstr "Afwezigheidsbericht"
+
+#: src/accountmanager.cc:185
+#, fuzzy
+msgid "You must be logged in to preform the synchronization"
+msgstr "+ log in om gebruikers te vinden/toe te voegen"
 
 #: src/centericq.cc:120
 msgid "password: "
@@ -500,48 +525,38 @@ msgstr "+ gebruiker %s staat al in je lijst"
 msgid "Select a group to add the user to"
 msgstr "Selecteer een groep"
 
-#: src/centericq.cc:897
-msgid "Notify the user he/she has been added?"
-msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:900
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ het bericht is verzonden naar %lu"
-
-#: src/centericq.cc:911
+#: src/centericq.cc:901
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s is toegevoegd aan je lijst"
 
-#: src/centericq.cc:982
+#: src/centericq.cc:972
 msgid "+ the user is back"
 msgstr "+ de gebruiker is terug"
 
-#: src/centericq.cc:998
+#: src/centericq.cc:988
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status hersteld"
 
-#: src/centericq.cc:1013
+#: src/centericq.cc:1003
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] automatisch op %s gezet"
 
-#: src/centericq.cc:1015
+#: src/centericq.cc:1005
 msgid "away"
 msgstr "weg"
 
-#: src/centericq.cc:1015
+#: src/centericq.cc:1005
 msgid "n/a"
 msgstr "niet ber."
 
-#: src/centericq.cc:1138
+#: src/centericq.cc:1128
 msgid "! free disk space is less than 10k, going offline"
 msgstr ""
 
-#: src/centericq.cc:1139
+#: src/centericq.cc:1129
 msgid "! otherwise we can lose events and configuration"
 msgstr ""
 
@@ -587,55 +602,55 @@ msgstr ""
 msgid "status change error: "
 msgstr ""
 
-#: src/icqcontact.cc:687
+#: src/icqcontact.cc:695
 msgid "The user has a birthday today"
 msgstr ""
 
-#: src/icqcontact.cc:715
+#: src/icqcontact.cc:723
 msgid "Jan"
 msgstr "Jan"
 
-#: src/icqcontact.cc:715
+#: src/icqcontact.cc:723
 msgid "Feb"
 msgstr "Feb"
 
-#: src/icqcontact.cc:715
+#: src/icqcontact.cc:723
 msgid "Mar"
 msgstr "Maa"
 
-#: src/icqcontact.cc:715
+#: src/icqcontact.cc:723
 msgid "Apr"
 msgstr "Apr"
 
-#: src/icqcontact.cc:716
+#: src/icqcontact.cc:724
 msgid "May"
 msgstr "Mei"
 
-#: src/icqcontact.cc:716
+#: src/icqcontact.cc:724
 msgid "Jun"
 msgstr "Jun"
 
-#: src/icqcontact.cc:716
+#: src/icqcontact.cc:724
 msgid "Jul"
 msgstr "Jul"
 
-#: src/icqcontact.cc:716
+#: src/icqcontact.cc:724
 msgid "Aug"
 msgstr "Aug"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:725
 msgid "Sep"
 msgstr "Sep"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:725
 msgid "Oct"
 msgstr "Okt"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:725
 msgid "Nov"
 msgstr "Nov"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:725
 msgid "Dec"
 msgstr "Dec"
 
@@ -643,8 +658,8 @@ msgstr "Dec"
 msgid " Search profiles "
 msgstr ""
 
-#: src/icqdialogs.cc:71 src/icqdialogs.cc:703 src/icqface.cc:1247
-#: src/imcontroller.cc:193
+#: src/icqdialogs.cc:71 src/icqdialogs.cc:710 src/icqface.cc:1252
+#: src/imcontroller.cc:226
 msgid "Remove"
 msgstr "Verwijder"
 
@@ -806,7 +821,7 @@ msgstr ""
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:290 src/icqdialogs.cc:468
+#: src/icqdialogs.cc:290 src/icqdialogs.cc:474
 msgid "Nickname: "
 msgstr "Nickname: "
 
@@ -814,31 +829,31 @@ msgstr "Nickname: "
 msgid "E-Mail: "
 msgstr "E-Mail: "
 
-#: src/icqdialogs.cc:292 src/icqdialogs.cc:473 src/imcontroller.cc:69
+#: src/icqdialogs.cc:292 src/icqdialogs.cc:479 src/imcontroller.cc:69
 msgid "First name: "
 msgstr "Voornaam: "
 
-#: src/icqdialogs.cc:293 src/icqdialogs.cc:474 src/imcontroller.cc:70
+#: src/icqdialogs.cc:293 src/icqdialogs.cc:480 src/imcontroller.cc:70
 msgid "Last name: "
 msgstr "Achternaam: "
 
-#: src/icqdialogs.cc:298 src/icqdialogs.cc:506 src/icqdialogs.cc:515
+#: src/icqdialogs.cc:298 src/icqdialogs.cc:512 src/icqdialogs.cc:521
 msgid "City: "
 msgstr "Plaats: "
 
-#: src/icqdialogs.cc:299 src/icqdialogs.cc:507 src/icqdialogs.cc:516
+#: src/icqdialogs.cc:299 src/icqdialogs.cc:513 src/icqdialogs.cc:522
 msgid "State: "
 msgstr "Provincie: "
 
-#: src/icqdialogs.cc:301 src/icqdialogs.cc:519
+#: src/icqdialogs.cc:301 src/icqdialogs.cc:525
 msgid "Company: "
 msgstr "Bedrijf: "
 
-#: src/icqdialogs.cc:302 src/icqdialogs.cc:520
+#: src/icqdialogs.cc:302 src/icqdialogs.cc:526
 msgid "Department: "
 msgstr "Afdeling: "
 
-#: src/icqdialogs.cc:303 src/icqdialogs.cc:521
+#: src/icqdialogs.cc:303 src/icqdialogs.cc:527
 msgid "Position: "
 msgstr "Positie: "
 
@@ -929,287 +944,292 @@ msgstr " 2de taal : %s "
 msgid " 3rd language : %s "
 msgstr " 3de taal : %s "
 
-#: src/icqdialogs.cc:396
-#, fuzzy, c-format
-msgid " Random chat group : %s "
-msgstr " Organiseer contacten in groepen : %s "
+#.
+#. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
+#.
+#: src/icqdialogs.cc:396 src/icqdialogs.cc:827
+msgid " Miscellaneous "
+msgstr " Overige "
 
-#: src/icqdialogs.cc:397
+#: src/icqdialogs.cc:399
 #, c-format
 msgid " Enable web status indicator : %s "
 msgstr ""
 
 #: src/icqdialogs.cc:400
+#, fuzzy, c-format
+msgid " Random chat group : %s "
+msgstr " Organiseer contacten in groepen : %s "
+
+#: src/icqdialogs.cc:402
+#, fuzzy, c-format
+msgid " Authorization required : %s "
+msgstr "authorisatie"
+
+#: src/icqdialogs.cc:406
 msgid " About "
 msgstr " Over "
 
-#: src/icqdialogs.cc:416
+#: src/icqdialogs.cc:422
 msgid "Fetching your details"
 msgstr "Details ophalen"
 
-#: src/icqdialogs.cc:430
+#: src/icqdialogs.cc:436
 #, fuzzy, c-format
 msgid " Your %s details "
 msgstr " Je details "
 
-#: src/icqdialogs.cc:433
+#: src/icqdialogs.cc:439
 #, c-format
 msgid " %s: details "
 msgstr " %s: details "
 
-#: src/icqdialogs.cc:463
+#: src/icqdialogs.cc:469
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Even wachten. Bezig met ophalen..."
 
-#: src/icqdialogs.cc:475
+#: src/icqdialogs.cc:481
 msgid "E-mail: "
 msgstr "E-mail: "
 
-#: src/icqdialogs.cc:486
+#: src/icqdialogs.cc:492
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Geboortedatum (DD-MM-JJJJ): "
 
-#: src/icqdialogs.cc:504
+#: src/icqdialogs.cc:510
 msgid "Age: "
 msgstr "Leeftijd: "
 
-#: src/icqdialogs.cc:509 src/icqdialogs.cc:518
+#: src/icqdialogs.cc:515 src/icqdialogs.cc:524
 msgid "Street address: "
 msgstr "Straat: "
 
-#: src/icqdialogs.cc:510 src/icqdialogs.cc:534
+#: src/icqdialogs.cc:516 src/icqdialogs.cc:540
 msgid "Zip code: "
 msgstr "Postcode: "
 
-#: src/icqdialogs.cc:511 src/icqdialogs.cc:523
+#: src/icqdialogs.cc:517 src/icqdialogs.cc:529
 msgid "Phone: "
 msgstr "Telefoon: "
 
-#: src/icqdialogs.cc:512 src/icqdialogs.cc:524
+#: src/icqdialogs.cc:518 src/icqdialogs.cc:530
 msgid "Fax: "
 msgstr "Fax: "
 
-#: src/icqdialogs.cc:513
+#: src/icqdialogs.cc:519
 msgid "Cellular phone: "
 msgstr "GSM nummer: "
 
-#: src/icqdialogs.cc:522 src/icqdialogs.cc:526
+#: src/icqdialogs.cc:528 src/icqdialogs.cc:532
 msgid "Homepage: "
 msgstr "Homepage: "
 
-#: src/icqdialogs.cc:532 src/icqface.cc:911
+#: src/icqdialogs.cc:538 src/icqface.cc:916
 msgid "About"
 msgstr "Over"
 
-#: src/icqdialogs.cc:600 src/icqdialogs.cc:636
+#: src/icqdialogs.cc:607 src/icqdialogs.cc:643
 msgid "none"
 msgstr "geen"
 
-#: src/icqdialogs.cc:654
+#: src/icqdialogs.cc:661
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [Ctrl-X bewaar, Esc annuleer] "
 
-#: src/icqdialogs.cc:693
+#: src/icqdialogs.cc:700
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Zend bestand(en) naar %s, %lu "
 
-#: src/icqdialogs.cc:703 src/icqdialogs.cc:976 src/icqface.cc:591
-#: src/icqface.cc:1247 src/imcontroller.cc:193
+#: src/icqdialogs.cc:710 src/icqdialogs.cc:983 src/icqface.cc:596
+#: src/icqface.cc:1252 src/imcontroller.cc:226
 msgid "Add"
 msgstr "Voeg toe"
 
-#: src/icqdialogs.cc:703
+#: src/icqdialogs.cc:710
 msgid "Comment"
 msgstr "Commentaar"
 
-#: src/icqdialogs.cc:703
+#: src/icqdialogs.cc:710
 msgid "Send"
 msgstr "Zend"
 
-#: src/icqdialogs.cc:713
+#: src/icqdialogs.cc:720
 msgid " Files "
 msgstr " Bestanden "
 
-#: src/icqdialogs.cc:714
+#: src/icqdialogs.cc:721
 msgid " Comment "
 msgstr " Commentaar "
 
-#: src/icqdialogs.cc:726
+#: src/icqdialogs.cc:733
 msgid "filename: "
 msgstr "bestandsnaam: "
 
-#: src/icqdialogs.cc:733
+#: src/icqdialogs.cc:740
 msgid "comment: "
 msgstr "commentaar: "
 
-#: src/icqdialogs.cc:779
+#: src/icqdialogs.cc:786
 msgid " CenterICQ configuration "
 msgstr " CenterICQ configuratie "
 
-#: src/icqdialogs.cc:799
+#: src/icqdialogs.cc:806
 msgid " Sound and colors "
 msgstr " Geluid en kleuren "
 
-#: src/icqdialogs.cc:800
+#: src/icqdialogs.cc:807
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Verander geluidsschema naar : %s "
 
-#: src/icqdialogs.cc:801
+#: src/icqdialogs.cc:808
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Verander kleurenschema naar : %s "
 
-#: src/icqdialogs.cc:803
+#: src/icqdialogs.cc:810
 msgid " Contact list "
 msgstr " Contactlijst "
 
-#: src/icqdialogs.cc:804
+#: src/icqdialogs.cc:811
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Organiseer contacten in groepen : %s "
 
-#: src/icqdialogs.cc:805
+#: src/icqdialogs.cc:812
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Verberg offline gebruikers : %s "
 
-#: src/icqdialogs.cc:806
+#: src/icqdialogs.cc:813
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Russische vertaling win1251-koi8 nodig : %s "
 
-#: src/icqdialogs.cc:807
+#: src/icqdialogs.cc:814
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-stalking: verw. ber. van gebruiker niet op lijst : %s "
 
-#: src/icqdialogs.cc:808
+#: src/icqdialogs.cc:815
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Haal origineel bericht aan bij antwoorden : %s "
 
-#: src/icqdialogs.cc:809
+#: src/icqdialogs.cc:816
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Controleer de locale mailbox : %s "
 
-#: src/icqdialogs.cc:810
+#: src/icqdialogs.cc:817
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Bewaar wachtwoorden : %s "
 
-#: src/icqdialogs.cc:811
+#: src/icqdialogs.cc:818
 #, fuzzy, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Haal origineel bericht aan bij antwoorden : %s "
 
-#: src/icqdialogs.cc:812
+#: src/icqdialogs.cc:819
 #, fuzzy, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Haal origineel bericht aan bij antwoorden : %s "
 
-#: src/icqdialogs.cc:814
+#: src/icqdialogs.cc:821
 #, fuzzy
 msgid " Communications "
 msgstr " Locatie "
 
-#: src/icqdialogs.cc:815
+#: src/icqdialogs.cc:822
 #, fuzzy, c-format
 msgid " SMTP server : %s "
 msgstr " Server : %s "
 
-#.
-#. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
-#.
-#: src/icqdialogs.cc:820
-msgid " Miscellaneous "
-msgstr " Overige "
-
-#: src/icqdialogs.cc:821
+#: src/icqdialogs.cc:828
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Zet automatisch afwezigheid periode (min) : %d "
 
-#: src/icqdialogs.cc:822
+#: src/icqdialogs.cc:829
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Zet automatisch niet bereikbaar (min) : %d "
 
-#: src/icqdialogs.cc:823
+#: src/icqdialogs.cc:830
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Gedetailleerde IM gebeurtenissen opslaan in ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:854
+#: src/icqdialogs.cc:861
 msgid "Auto Away period (0 - disable): "
 msgstr "Zet autom. weg in minuten (0 - inactief): "
 
-#: src/icqdialogs.cc:858
+#: src/icqdialogs.cc:865
 msgid "Auto N/A period (0 - disable): "
 msgstr "Zet autom. nt. besch. in minuten (0 - inactief): "
 
-#: src/icqdialogs.cc:866
+#: src/icqdialogs.cc:873
 msgid "SOCKS proxy server to use: "
 msgstr "SOCKS proxy server om te gebruiken: "
 
-#: src/icqdialogs.cc:870
+#: src/icqdialogs.cc:877
 msgid "SOCKS proxy user name: "
 msgstr "SOCKS proxy gebruiker: "
 
-#: src/icqdialogs.cc:874
+#: src/icqdialogs.cc:881
 msgid "SOCKS proxy password: "
 msgstr "SOCKS proxy wachtwoord: "
 
-#: src/icqdialogs.cc:889
+#: src/icqdialogs.cc:896
 #, fuzzy
 msgid "SMTP server hostname: "
 msgstr " gebruikersnaam: "
 
-#: src/icqdialogs.cc:941
+#: src/icqdialogs.cc:948
 msgid "Your details have been fetched"
 msgstr "Je details zijn opgehaald"
 
-#: src/icqdialogs.cc:953 src/icqface.cc:290
+#: src/icqdialogs.cc:960 src/icqface.cc:290
 msgid "Organize contact groups"
 msgstr "Organiseer contactgroepen"
 
-#: src/icqdialogs.cc:976
+#: src/icqdialogs.cc:983
 msgid "Rename"
 msgstr "Hernoem"
 
-#: src/icqdialogs.cc:976
+#: src/icqdialogs.cc:983
 #, fuzzy
 msgid "rEmove"
 msgstr "Verwijder"
 
-#: src/icqdialogs.cc:976
+#: src/icqdialogs.cc:983
 #, fuzzy
 msgid "move Up"
 msgstr "Verwijder"
 
-#: src/icqdialogs.cc:976
+#: src/icqdialogs.cc:983
 msgid "move Down"
 msgstr ""
 
-#: src/icqdialogs.cc:977
+#: src/icqdialogs.cc:984
 msgid "Select"
 msgstr "Selecteer"
 
-#: src/icqdialogs.cc:992
+#: src/icqdialogs.cc:999
 msgid " Groups "
 msgstr " Groepen "
 
-#: src/icqdialogs.cc:1007
+#: src/icqdialogs.cc:1014
 msgid "Name for a group to be created: "
 msgstr "Naam voor de groep: "
 
-#: src/icqdialogs.cc:1016
+#: src/icqdialogs.cc:1023
 msgid "New name for the group: "
 msgstr "Nieuwe naam voor de groep: "
 
-#: src/icqdialogs.cc:1026
+#: src/icqdialogs.cc:1033
 msgid "Are you sure want to remove the group?"
 msgstr "Ben je zeker dat de groep verwijderd mag worden?"
 
@@ -1352,291 +1372,291 @@ msgstr " Toon offline gebruikers            F5"
 msgid " Hide offline users                 F5"
 msgstr " Verberg offline gebruikers         F5"
 
-#: src/icqface.cc:591 src/icqface.cc:1247
+#: src/icqface.cc:596 src/icqface.cc:1252
 msgid "Details"
 msgstr "Details"
 
-#: src/icqface.cc:591
+#: src/icqface.cc:596
 #, fuzzy
 msgid "Message"
 msgstr "bericht"
 
-#: src/icqface.cc:592
+#: src/icqface.cc:597
 msgid "New search"
 msgstr "Opnieuw"
 
-#: src/icqface.cc:598
+#: src/icqface.cc:603
 msgid "Searching contacts.."
 msgstr ""
 
-#: src/icqface.cc:664
+#: src/icqface.cc:669
 msgid "Search results [done]"
 msgstr ""
 
-#: src/icqface.cc:675
+#: src/icqface.cc:680
 #, c-format
 msgid "Information about %s"
 msgstr "Informatie over %s"
 
-#: src/icqface.cc:733
+#: src/icqface.cc:738
 msgid "Nickname"
 msgstr "Nickname"
 
-#: src/icqface.cc:734
+#: src/icqface.cc:739
 msgid "Name"
 msgstr "Naam"
 
-#: src/icqface.cc:735
+#: src/icqface.cc:740
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: src/icqface.cc:736
+#: src/icqface.cc:741
 msgid "2nd e-mail"
 msgstr "2de e-mail"
 
-#: src/icqface.cc:737
+#: src/icqface.cc:742
 msgid "Old e-mail"
 msgstr "Oude e-mail"
 
-#: src/icqface.cc:738
+#: src/icqface.cc:743
 msgid "Gender"
 msgstr "Geslacht"
 
-#: src/icqface.cc:739
+#: src/icqface.cc:744
 msgid "Birthdate"
 msgstr "Geb. datum"
 
-#: src/icqface.cc:740
+#: src/icqface.cc:745
 msgid "Age"
 msgstr "Leeftijd"
 
-#: src/icqface.cc:741
+#: src/icqface.cc:746
 msgid "Languages"
 msgstr "Talen"
 
-#: src/icqface.cc:742
+#: src/icqface.cc:747
 msgid "Last IP"
 msgstr "Laatste IP"
 
-#: src/icqface.cc:763
+#: src/icqface.cc:768
 msgid "Last seen"
 msgstr "Laatst gezien"
 
-#: src/icqface.cc:765
+#: src/icqface.cc:770
 msgid "Never"
 msgstr "Nooit"
 
-#: src/icqface.cc:778 src/icqface.cc:821
+#: src/icqface.cc:783 src/icqface.cc:826
 msgid "Address"
 msgstr "Adres"
 
-#: src/icqface.cc:779 src/icqface.cc:822
+#: src/icqface.cc:784 src/icqface.cc:827
 msgid "Location"
 msgstr "Locatie"
 
-#: src/icqface.cc:780 src/icqface.cc:823
+#: src/icqface.cc:785 src/icqface.cc:828
 msgid "Zip code"
 msgstr "Postcode"
 
-#: src/icqface.cc:781 src/icqface.cc:829
+#: src/icqface.cc:786 src/icqface.cc:834
 msgid "Phone"
 msgstr "Telefoon"
 
-#: src/icqface.cc:782 src/icqface.cc:830
+#: src/icqface.cc:787 src/icqface.cc:835
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:783
+#: src/icqface.cc:788
 msgid "Cellular"
 msgstr "GSM"
 
-#: src/icqface.cc:784
+#: src/icqface.cc:789
 msgid "Timezone"
 msgstr "Tijdzone"
 
-#: src/icqface.cc:786 src/icqface.cc:831
+#: src/icqface.cc:791 src/icqface.cc:836
 msgid "Homepage"
 msgstr "Homepage"
 
-#: src/icqface.cc:825
+#: src/icqface.cc:830
 msgid "Company"
 msgstr "Bedrijf"
 
-#: src/icqface.cc:826
+#: src/icqface.cc:831
 msgid "Department"
 msgstr "Afdeling"
 
-#: src/icqface.cc:827
+#: src/icqface.cc:832
 msgid "Title"
 msgstr "Titel"
 
-#: src/icqface.cc:871
+#: src/icqface.cc:876
 msgid "Interests"
 msgstr "Hobby's"
 
-#: src/icqface.cc:883
+#: src/icqface.cc:888
 msgid "Background"
 msgstr "Achtergrond"
 
-#: src/icqface.cc:904 src/icqface.cc:1891
+#: src/icqface.cc:909 src/icqface.cc:1896
 msgid "F2 to URLs, ESC close"
 msgstr "F2 naar URLs, ESC sluiten"
 
-#: src/icqface.cc:911
+#: src/icqface.cc:916
 msgid "Info"
 msgstr "Info"
 
-#: src/icqface.cc:911
+#: src/icqface.cc:916
 msgid "Home"
 msgstr "Thuis"
 
-#: src/icqface.cc:911
+#: src/icqface.cc:916
 msgid "Work"
 msgstr "Werk"
 
-#: src/icqface.cc:911
+#: src/icqface.cc:916
 msgid "More"
 msgstr "Meer"
 
-#: src/icqface.cc:912
+#: src/icqface.cc:917
 msgid "Retrieve"
 msgstr "Haal op"
 
-#: src/icqface.cc:912
+#: src/icqface.cc:917
 msgid "Edit"
 msgstr "Bewerk"
 
-#: src/icqface.cc:982
+#: src/icqface.cc:987
 msgid " [icq] ICQ network"
 msgstr " [icq] ICQ netwerk"
 
-#: src/icqface.cc:983
+#: src/icqface.cc:988
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:984
+#: src/icqface.cc:989
 msgid " [msn] M$ Messenger"
 msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:985
+#: src/icqface.cc:990
 msgid " [aim] AOL TOC"
 msgstr ""
 
-#: src/icqface.cc:986
+#: src/icqface.cc:991
 msgid " [irc] IRC"
 msgstr ""
 
-#: src/icqface.cc:1017
+#: src/icqface.cc:1022
 msgid " [all] All of them"
 msgstr ""
 
-#: src/icqface.cc:1038
+#: src/icqface.cc:1043
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:1039
+#: src/icqface.cc:1044
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:1040
+#: src/icqface.cc:1045
 msgid " [a] Away"
 msgstr " [a] Weg"
 
-#: src/icqface.cc:1041
+#: src/icqface.cc:1046
 msgid " [d] Do not disturb"
 msgstr " [d] Niet storen"
 
-#: src/icqface.cc:1042
+#: src/icqface.cc:1047
 msgid " [n] Not available"
 msgstr " [n] Niet beschikbaar"
 
-#: src/icqface.cc:1043
+#: src/icqface.cc:1048
 msgid " [c] Occupied"
 msgstr " [c] Bezig"
 
-#: src/icqface.cc:1044
+#: src/icqface.cc:1049
 msgid " [f] Free for chat"
 msgstr " [f] Vrij voor klets"
 
-#: src/icqface.cc:1045
+#: src/icqface.cc:1050
 msgid " [i] Invisible"
 msgstr " [i] Onzichtbaar"
 
-#: src/icqface.cc:1103
+#: src/icqface.cc:1108
 msgid " enter to select a file, esc to cancel "
 msgstr " enter om een bestand te selecteren, esc sluit "
 
-#: src/icqface.cc:1247
+#: src/icqface.cc:1252
 msgid "Move to contacts"
 msgstr "Verplaats naar contacten"
 
-#: src/icqface.cc:1259
+#: src/icqface.cc:1264
 msgid "Ignore list"
 msgstr "Negeerlijst"
 
-#: src/icqface.cc:1260
+#: src/icqface.cc:1265
 msgid "Visible list"
 msgstr "Zichtbaar lijst"
 
-#: src/icqface.cc:1261
+#: src/icqface.cc:1266
 msgid "Invisible list"
 msgstr "Niet-zichtbaar lijst"
 
-#: src/icqface.cc:1276
+#: src/icqface.cc:1281
 msgid "Select contacts to add to the list"
 msgstr "Selecteer contacten om toe te voegen"
 
-#: src/icqface.cc:1325
+#: src/icqface.cc:1330
 msgid "Event recipients"
 msgstr "Gebeurtenis-ontvanger"
 
-#: src/icqface.cc:1452
+#: src/icqface.cc:1457
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "SnelVinden: tik gegevens, Alt-S zoekt opnieuw, Enter sluit af"
 
-#: src/icqface.cc:1566
+#: src/icqface.cc:1571
 msgid "+ no URLs within the current context"
 msgstr "+ geen URLs in de huidige context"
 
-#: src/icqface.cc:1579
+#: src/icqface.cc:1584
 msgid "URLs within the current context"
 msgstr "URLs in de huidige context"
 
-#: src/icqface.cc:1610 src/icqface.cc:1909
+#: src/icqface.cc:1615 src/icqface.cc:1914
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "(%s) Uitgaand bericht naar %s"
 
-#: src/icqface.cc:1613 src/icqface.cc:1797
+#: src/icqface.cc:1618 src/icqface.cc:1802
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X zend, Ctrl-P meerdere, Ctrl-O geschiedenis, Alt-? details, ESC stop"
 
-#: src/icqface.cc:1910
+#: src/icqface.cc:1915
 #, c-format
 msgid "Sent on %s"
 msgstr "Verzonden op %s"
 
-#: src/icqface.cc:1913
+#: src/icqface.cc:1918
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Inkomende %s van %s"
 
-#: src/icqface.cc:1914
+#: src/icqface.cc:1919
 #, c-format
 msgid "Received on %s"
 msgstr "Ontvangen op %s"
 
-#: src/icqface.cc:2015
+#: src/icqface.cc:2020
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Geschiedenis van %s, %d totaal"
 
-#: src/icqface.cc:2018
+#: src/icqface.cc:2023
 msgid "S search, L again, ESC cancel"
 msgstr "S zoek, L opnieuw, ESC stop"
 
-#: src/icqface.cc:2024
+#: src/icqface.cc:2029
 msgid "search for: "
 msgstr "zoeken naar: "
 
@@ -1721,7 +1741,7 @@ msgstr "Bezig met proberen..."
 msgid "New UIN received, %lu"
 msgstr "Nieuwe UIN ontvangen, %lu"
 
-#: src/imcontroller.cc:136
+#: src/imcontroller.cc:136 src/imcontroller.cc:179
 msgid "Disconnected"
 msgstr "Disconnected"
 
@@ -1733,48 +1753,70 @@ msgstr "Kan niet verbinden met de icq server. Herproberen?"
 msgid "You must be logged to the ICQ network to update the details"
 msgstr "Je moet ingelogd zijn op het ICQ netwerk om je details bij te werken"
 
-#: src/imcontroller.cc:187
+#: src/imcontroller.cc:170
+#, fuzzy
+msgid " Contact list synchronization "
+msgstr " Contactlijst "
+
+#: src/imcontroller.cc:171
+msgid "Starting the synchronization process"
+msgstr ""
+
+#: src/imcontroller.cc:175
+#, c-format
+msgid "Attempt #%d, %d contacts to be stored server-side"
+msgstr ""
+
+#: src/imcontroller.cc:178
+msgid "Finished"
+msgstr ""
+
+#: src/imcontroller.cc:180
+msgid "Too many attempts, gave up"
+msgstr ""
+
+#: src/imcontroller.cc:220
 #, fuzzy
 msgid " IRC channels manager "
 msgstr " IM accountbeheer "
 
-#: src/imcontroller.cc:193
+#: src/imcontroller.cc:226
 msgid "Join/leave"
 msgstr ""
 
-#: src/imcontroller.cc:193
+#: src/imcontroller.cc:226
 #, fuzzy
 msgid "Show on the list"
 msgstr " Contactlijst "
 
-#: src/imcontroller.cc:207
+#: src/imcontroller.cc:240
 #, fuzzy
 msgid " Channels "
 msgstr "Verander"
 
-#: src/imcontroller.cc:210
+#: src/imcontroller.cc:243
 #, fuzzy
 msgid "joined"
 msgstr "genegeerd"
 
-#: src/imcontroller.cc:210
+#: src/imcontroller.cc:243
 msgid "not joined"
 msgstr ""
 
-#: src/imcontroller.cc:211
+#: src/imcontroller.cc:244
 #, fuzzy
 msgid "shown"
 msgstr "Telefoon"
 
-#: src/imcontroller.cc:211
+#: src/imcontroller.cc:244
 msgid "hidden"
 msgstr ""
 
-#: src/imcontroller.cc:221
+#: src/imcontroller.cc:254
 msgid "channel name to add: "
 msgstr ""
 
-#: src/imcontroller.cc:263
+#: src/imcontroller.cc:296
 msgid "registration is not supported"
 msgstr "registratie werkt nog niet"
 
@@ -1990,6 +2032,12 @@ msgstr "e-mail"
 #, fuzzy
 msgid "notification"
 msgstr "Locatie"
+
+#~ msgid "Notify the user he/she has been added?"
+#~ msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"
+
+#~ msgid "+ the notification has been sent to %lu"
+#~ msgstr "+ het bericht is verzonden naar %lu"
 
 #, fuzzy
 #~ msgid "unable to connect to the pager host"
