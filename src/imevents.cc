@@ -556,7 +556,10 @@ string imfile::gettext() const {
 
     for(vector<record>::const_iterator i = files.begin(); i != files.end(); ++i) {
 	r += i->fname;
-	if(i->size) r += (string) " (" + i2str(i->size) + ")";
+
+	if(i->size != -1)       // -1 means the size is unknown
+	    r += (string) " (" + i2str(i->size) + ")";
+
 	if(i+1 != files.end())
 	    r += ", ";
     }

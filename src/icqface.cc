@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.145 2002/09/24 16:20:47 konst Exp $
+* $Id: icqface.cc,v 1.146 2002/09/30 16:13:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -382,7 +382,11 @@ int icqface::generalmenu() {
 	_(" Hide offline users                 F5"));
 
     if(conf.getgroupmode() != icqconf::nogroups) {
-	m.additem(0,  ACT_ORG_GROUPS, (string) " " + _("Organize contact groups"));
+	m.additem(0, ACT_ORG_GROUPS, _(" Organize contact groups"));
+    }
+
+    if(!transfers.empty()) {
+	m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
     }
 
     m.setpos(lastitem);
@@ -1863,7 +1867,7 @@ bool icqface::eventedit(imevent &ev) {
     } else if(ev.gettype() == imevent::file) {
 	dialogbox db;
 	int baritem, mitem;
-	bool finished = false;
+	bool finished = false, floop = true;
 	vector<imfile::record>::const_iterator ir;
 
 	imfile *m = static_cast<imfile *>(&ev);
@@ -1890,11 +1894,16 @@ bool icqface::eventedit(imevent &ev) {
 
 	while(!finished && !r) {
 	    db.getmenu()->clear();
-	    for(ir = m->getfiles().begin(); ir != m->getfiles().end(); ++ir) {
-		db.getmenu()->additemf(" %s", ir->fname.c_str());
-	    }
 
-	    finished = !db.open(mitem, baritem);
+	    for(ir = m->getfiles().begin(); ir != m->getfiles().end(); ++ir)
+		db.getmenu()->additemf(" %s", ir->fname.c_str());
+
+	    if(floop) {
+		baritem = 0;
+		floop = false;
+	    } else {
+		finished = !db.open(mitem, baritem);
+	    }
 
 	    if(!finished) {
 		vector<imfile::record> files = m->getfiles();

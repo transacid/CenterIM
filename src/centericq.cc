@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.125 2002/09/26 09:42:27 konst Exp $
+* $Id: centericq.cc,v 1.126 2002/09/30 16:13:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -855,11 +855,12 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, b
 		    break;
 
 		case imevent::file:
-		    tmp = face.inputdir(_("directory to save the file(s) to: "));
+		    tmp = face.inputdir(_("directory to save the file(s) to: "), getenv("HOME"));
 
-		    if(enough = tmp.empty() && !access(tmp.c_str(), X_OK)) {
+		    if(enough = (!tmp.empty() && !access(tmp.c_str(), X_OK))) {
 			if(enough = !access(tmp.c_str(), W_OK)) {
-			    gethook(ev.getcontact().pname).replytransfer(*static_cast<const imfile *>(&ev), true, tmp);
+			    const imfile *f = static_cast<const imfile *>(&ev);
+			    gethook(ev.getcontact().pname).replytransfer(*f, true, tmp);
 			} else {
 			    face.status(_("The specified directory is not writable"));
 			}

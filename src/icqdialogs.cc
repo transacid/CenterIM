@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.88 2002/09/19 17:09:00 konst Exp $
+* $Id: icqdialogs.cc,v 1.89 2002/09/30 16:13:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1137,4 +1137,95 @@ int icqface::groupmanager(const string &text, bool sel) {
     db.close();
     unblockmainscreen();
     return r;
+}
+
+void icqface::transfermonitor() {
+    dialogbox db;
+    int n, b, incid, outid, cid;
+    vector<filetransferitem>::const_iterator it;
+    string fitem;
+
+    incid = outid = -1;
+
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
+	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+
+    w.set_titlef(conf.getcolor(cp_dialog_highlight), " %s ", _("File transfer status"));
+
+    db.setwindow(&w, false);
+
+    db.settree(new treeview(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
+	conf.getcolor(cp_dialog_text)));
+
+    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), _("Cancel"), 0));
+
+    db.addautokeys();
+
+    db.idle = &dialogidle;
+    blockmainscreen();
+    treeview &t = *db.gettree();
+
+    db.addkey(KEY_DC, 0);
+
+    for(bool fin = false; !fin; ) {
+	t.clear();
+
+	for(it = transfers.begin(); it != transfers.end(); ++it) {
+	    switch(it->direct) {
+		case imevent::incoming:
+		    if(incid < 0) incid = t.addnode(_(" Incoming "));
+		    cid = incid;
+		    break;
+		case imevent::outgoing:
+		    if(outid < 0) outid = t.addnode(_(" Outgoing "));
+		    cid = outid;
+		    break;
+	    }
+
+	    fitem = it->fname;
+
+	    if(it->btotal > 0)
+		fitem += (string) ", " +
+		    i2str(it->btotal) + " " + _("bytes total");
+
+	    fitem += (string) ", " + i2str(it->bdone) + " " + _("done");
+
+	    t.addleaff(cid, 0, it-transfers.begin(), " %s ", fitem.c_str());
+	}
+
+	fin = !db.open(n, b, (void **) &n);
+
+	if(!fin)
+	switch(b) {
+	    case 0:
+		break;
+	}
+    }
+
+    db.close();
+    unblockmainscreen();
+}
+
+void icqface::transferupdate(const imcontact &c, const string &fname,
+imevent::imdirection dir, transferstatus st, int btotal, int bdone) {
+
+    vector<filetransferitem>::iterator i = transfers.begin();
+
+    while(i != transfers.end()) {
+	if(i->cont == c && i->fname == fname && i->direct == dir)
+	    break;
+    }
+
+    if(i == transfers.end()) {
+	transfers.push_back(filetransferitem());
+	i = transfers.end()-1;
+	i->cont = c;
+	i->fname = fname;
+	i->direct = dir;
+    }
+
+    if(btotal) i->btotal = btotal;
+    if(bdone) i->bdone = bdone;
 }

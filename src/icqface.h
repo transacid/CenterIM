@@ -24,7 +24,8 @@ enum interfaceAction {
     ACT_MENU, ACT_IGNORELIST, ACT_DETAILS, ACT_GMENU, ACT_CONF, ACT_RENAME,
     ACT_PING, ACT_EDITUSER, ACT_VISIBLELIST, ACT_INVISLIST, ACT_QUICKFIND,
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
-    ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE
+    ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
+    ACT_TRANSFERS
 };
 
 extern class centericq cicq;
@@ -34,6 +35,15 @@ class icqface {
 	enum eventviewresult {
 	    ok, next, cancel, forward, reply, open, accept, reject, info,
 	    add, prev, eventviewresult_size
+	};
+
+	enum transferstatus {
+	    tsInit,
+	    tsStart,
+	    tsProgress,
+	    tsFinish,
+	    tsError,
+	    tsCancel
 	};
 
 	class icqprogress {
@@ -74,6 +84,17 @@ class icqface {
 	time_t chatlastread;
 
 	imcontact passinfo;
+
+	struct filetransferitem {
+	    imcontact cont;
+	    imevent::imdirection direct;
+	    string fname;
+	    int btotal, bdone;
+
+	    filetransferitem(): btotal(0), bdone(0) { }
+	};
+
+	vector<filetransferitem> transfers;
 
     protected:
 	static int editmsgkeys(texteditor &e, int k);
@@ -182,8 +203,10 @@ class icqface {
 	void quickfind(verticalmenu *multi = 0);
 
 	int selectgroup(const string &text);
-	void organizegroups();
+
 	void makeprotocolmenu(verticalmenu &m);
+
+	void organizegroups();
 
 	void histmake(const vector<imevent *> &hist);
 	bool histexec(imevent *&im);
@@ -195,6 +218,12 @@ class icqface {
 
 	bool edit(string &txt, const string &header);
 	void chat(const imcontact &ic);
+
+	void transferupdate(const imcontact &c, const string &fname,
+	    imevent::imdirection dir, transferstatus st, int btotal,
+	    int bdone);
+
+	void transfermonitor();
 };
 
 extern icqface face;
