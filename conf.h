@@ -10,7 +10,7 @@
 #endif
 
 #ifdef __GNUC__
-    #ifdef HAVE_G_CONFIG_H
+    #ifdef HAVE__G_CONFIG_H
 	#include <_G_config.h>
     #endif
 #if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 9)
@@ -21,8 +21,8 @@
 
 #ifdef __KTOOL_USE_NAMESPACES
 
-#define __KTOOL_BEGIN_NAMESPACE		namespace ktool {
-#define __KTOOL_END_NAMESPACE		}
+#define __KTOOL_BEGIN_NAMESPACE         namespace ktool {
+#define __KTOOL_END_NAMESPACE           }
 
 using namespace std;
 
@@ -33,7 +33,7 @@ using namespace std;
 
 #endif
 
-#define __KTOOL_BEGIN_C			extern "C" {
-#define __KTOOL_END_C			}
+#define __KTOOL_BEGIN_C                 extern "C" {
+#define __KTOOL_END_C                   }
 
 #endif
