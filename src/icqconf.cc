@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.93 2002/11/22 19:11:46 konst Exp $
+* $Id: icqconf.cc,v 1.94 2002/11/25 11:50:50 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -96,7 +96,15 @@ void icqconf::setourid(const imaccount &im) {
 	    i->port = defservers[i->pname].port;
 	}
 
-	if(!i->port) i->port = defservers[i->pname].port;
+	if(!i->port)
+	    i->port = defservers[i->pname].port;
+
+	switch(i->pname) {
+	    case icq:
+		if(i->password.size() > 8)
+		    i->password = i->password.substr(0, 8);
+		break;
+	}
 
 	gethook(i->pname).ouridchanged(*i);
     }
@@ -897,7 +905,7 @@ void icqconf::usage() const {
     cout << endl << _("General options:") << endl;
     cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
-    cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
+//    cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
     cout << _("  --help                   display this stuff") << endl;
 
     cout << endl << _("Events sending options:") << endl;
