@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.83 2003/10/01 00:27:45 konst Exp $
+* $Id: icqcontact.cc,v 1.84 2003/10/01 23:01:52 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,8 +63,6 @@ icqcontact::icqcontact(const imcontact adesc) {
 
 		cdesc.uin = i;
 	    }
-	    load();
-	    break;
 
 	default:
 	    load();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.7 2003/09/26 07:13:23 konst Exp $
+* $Id: HTTPClient.cc,v 1.8 2003/10/01 23:01:52 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -131,7 +131,7 @@ void HTTPClient::Parse() {
 	    switch(m_code) {
 		case 200:
 		case 301:
-		    break;
+		case 302:
 		    break;
 		default:
 		    HTTPRequestEvent *ev = *m_queue.begin();
@@ -142,7 +142,7 @@ void HTTPClient::Parse() {
 	    m_state = RECEIVING_HEADER;
 
 	} else if(m_state == RECEIVING_HEADER) {
-	    if(m_code == 301)
+	    if(m_code == 301 || m_code == 302)
 	    if((npos = response.find(" ")) != -1)
 	    if(up(response.substr(0, npos)) == "LOCATION:") {
 		m_redirect = response.substr(npos+1);
@@ -299,20 +299,10 @@ void HTTPClient::clearoutMessagesPoll() {
 void HTTPClient::SendEvent(MessageEvent* ev) {
     HTTPRequestEvent *rev = dynamic_cast<HTTPRequestEvent*>(ev);
     if(rev) {
-	bool found = false;
-	list<HTTPRequestEvent*>::const_iterator ir = m_queue.begin();
+	m_queue.push_back(rev);
 
-	while((ir != m_queue.end()) && !found) {
-	    found = ((*ir)->getURL() == rev->getURL());
-	    ++ir;
-	}
-
-	if(!found) {
-	    m_queue.push_back(rev);
-
-	    if(m_state == NOT_CONNECTED) {
-		Connect();
-	    }
+	if(m_state == NOT_CONNECTED) {
+	    Connect();
 	}
     }
 }

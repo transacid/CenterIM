@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.5 2003/10/01 18:48:11 konst Exp $
+* $Id: ljhook.cc,v 1.6 2003/10/01 23:01:52 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,8 +88,8 @@ void ljhook::connect() {
 void ljhook::disconnect() {
     if(fonline) {
 	fonline = false;
+	face.log(_("+ [lj] disconnected"));
 	if(flogged) {
-	    face.log(_("+ [lj] disconnected"));
 	    icqcontact *c = clist.get(self);
 	    if(c) c->setstatus(offline);
 	    flogged = false;
@@ -296,6 +296,7 @@ void ljhook::requestfriends() {
     ev->addParam("mode", "getfriends");
     ev->addParam("user", username);
     ev->addParam("hpassword", md5pass);
+    ev->addParam("includefriendof", "1");
 
     httpcli.SendEvent(ev);
     sent[ev] = reqGetFriends;
@@ -396,20 +397,26 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	}
 
     } else if(ie->second == reqGetFriends) {
+	if(params["success"] != "OK") {
+	    face.log(_("+ [lj] error requesting friends list"));
+	}
+
 	int fcount = atoi(params["friend_count"].c_str()), i;
 	string friendbase = (string) "http://" + conf.getourid(proto).server + "/users/";
 
-	for(i = 0; i < fcount; i++) {
-	    string username = (string) "friend_" + i2str(i) + "_user";
-	    string name = (string) "friend_" + i2str(i) + "_name";
-	    string birthday = (string) "friend_" + i2str(i) + "_birthday";
+	for(i = 1; i < fcount+1; i++) {
+	    string username = params[(string) "friend_" + i2str(i) + "_user"];
+	    string name = params[(string) "friend_" + i2str(i) + "_name"];
+	    string birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
 
 	    string feed = friendbase + username + "/rss/";
-	    bool found;
+	    bool found = false;
 
-	    for(int k = 0, found = false; k < clist.count && !found; k++) {
+	    for(int k = 0; k < clist.count && !found; k++) {
 		c = (icqcontact *) clist.at(k);
-		found = (c->getworkinfo().homepage == feed);
+		if(c->getdesc().pname == rss) {
+		    found = (c->getworkinfo().homepage == feed);
+		}
 	    }
 
 	    if(!found)
@@ -426,9 +433,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		c->setdispnick(c->getnick());
 		c->save();
 	    }
-
 	}
-
     }
 
     if(ie != sent.end()) sent.erase(ie);
