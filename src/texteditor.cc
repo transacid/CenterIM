@@ -180,6 +180,7 @@ int texteditor::save(FILE *f, const char *linebreak) {
 int texteditor::save(ofstream &f, const string linebreak) {
     char *buf = save(linebreak.c_str());
     f.write(buf, strlen(buf));
+    delete buf;
     f.close();
     modified = false;
     return 0;
