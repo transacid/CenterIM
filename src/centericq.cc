@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.24 2001/10/26 13:56:48 konst Exp $
+* $Id: centericq.cc,v 1.25 2001/10/29 17:40:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -302,7 +302,7 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_ADD:
 		if(!c->inlist()) {
-		    c = adduin(c->getuin());
+		    adduin(c->getuin());
 		}
 		break;
 	}
@@ -727,13 +727,13 @@ icqcontact *centericq::adduin(unsigned int uin) {
     }
 
     if(conf.getusegroups()) {
-        groupid = face.selectgroup(_("Select a group to add the user to"));
-        if(!groupid) return 0;
+	groupid = face.selectgroup(_("Select a group to add the user to"));
+	if(!groupid) return 0;
     }
 
     if(icql.icq_Status != STATUS_OFFLINE) {
-        if(face.ask(_("Notify the user he/she has been added?"),
-        ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+	if(face.ask(_("Notify the user he/she has been added?"),
+	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
 	    icq_AlertAddUser(&icql, uin);
 	    face.log(_("+ the notification has been sent to %lu"), uin);
 	}

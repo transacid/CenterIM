@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Centericq 3.20.5 \n"
-"POT-Creation-Date: 2001-10-19 20:06+0300\n"
+"POT-Creation-Date: 2001-10-29 10:30+0200\n"
 "PO-Revision-Date: 2001 Feb 5 10:30 EET\n"
 "Last-Translator: Ovidiu Ghinet <oghinet@doctor.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,77 +69,77 @@ msgstr "Ignora toate evenimentele de la %s (%lu)?"
 msgid "Select a group to move the user to"
 msgstr "Selecteaza un grup in care sa muti utilizatorul"
 
-#: src/centericq.cc:306 src/centericq.cc:734
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Selecteaza contactele de adaugat"
-
-#: src/centericq.cc:322
+#: src/centericq.cc:314
 #, c-format
 msgid "Are you sure want to remove %s (%lu)?"
 msgstr "Sunteti sigur ca doriti sa-l stergeti pe %s (%lu)?"
 
-#: src/centericq.cc:329
+#: src/centericq.cc:321
 msgid "New nickname to show: "
 msgstr "Noul nickname: "
 
-#: src/centericq.cc:488
+#: src/centericq.cc:480
 #, c-format
 msgid "+ sending file %s to %s, %lu"
 msgstr "+ trimitem fisierul %s lui %s, %lu"
 
-#: src/centericq.cc:492
+#: src/centericq.cc:484
 msgid "+ remote client doesn't support file transfers"
 msgstr "+ clientul apelat nu suporta transferul de fisiere"
 
-#: src/centericq.cc:501
+#: src/centericq.cc:493
 msgid "+ cannot send contacts in offline mode"
 msgstr "+ nu putem trimite contacte in modul offline"
 
-#: src/centericq.cc:507
+#: src/centericq.cc:499
 #, fuzzy
 msgid "Contacts to send"
 msgstr "Contacte de la %s, %lu"
 
-#: src/centericq.cc:617
+#: src/centericq.cc:609
 #, c-format
 msgid "+ new mail arrived, %d messages"
 msgstr "+ aveti posta noua, %d messages"
 
-#: src/centericq.cc:618
+#: src/centericq.cc:610
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ ultimul mesaj de la %s"
 
-#: src/centericq.cc:650
+#: src/centericq.cc:642
 msgid "! another running copy of centericq detected"
 msgstr "! o alta copie a centericq a fost detectata in functiune"
 
-#: src/centericq.cc:651
+#: src/centericq.cc:643
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! aceata poate cauza probleme. pid %lu"
 
-#: src/centericq.cc:681
+#: src/centericq.cc:673
 #, c-format
 msgid "%s (%lu) wrote:"
 msgstr "%s (%lu) a scris:"
 
-#: src/centericq.cc:730
+#: src/centericq.cc:723
 #, fuzzy, c-format
 msgid "+ user %s, %lu is already on the list"
 msgstr "+ %s a fost adaugat la lista visibila"
 
-#: src/centericq.cc:739
+#: src/centericq.cc:730
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Selecteaza contactele de adaugat"
+
+#: src/centericq.cc:735
 msgid "Notify the user he/she has been added?"
 msgstr "Anunta utilizatorul ca el/ea a fost adaugat?"
 
-#: src/centericq.cc:742
+#: src/centericq.cc:738
 #, fuzzy, c-format
 msgid "+ the notification has been sent to %lu"
 msgstr "+ notificarea a fost trimisa  lui %lu"
 
-#: src/centericq.cc:748
+#: src/centericq.cc:749
 #, fuzzy, c-format
 msgid "+ %lu has been added to the list"
 msgstr "+ %s a fost adaugat la lista visibila"
@@ -154,8 +154,8 @@ msgid "Change"
 msgstr "Schimba"
 
 #: src/icqdialogs.cc:61 src/icqdialogs.cc:381 src/icqdialogs.cc:688
-#: src/icqdialogs.cc:862 src/icqface.cc:1353 src/icqface.cc:1434
-#: src/icqface.cc:1481
+#: src/icqdialogs.cc:862 src/icqface.cc:1351 src/icqface.cc:1432
+#: src/icqface.cc:1479
 msgid "Done"
 msgstr "Gata"
 
@@ -613,12 +613,12 @@ msgstr " Despre [Ctrl-X salveaza, Esc anuleaza] "
 msgid " Send file(s) to %s, %lu "
 msgstr " Trimite fisierul(ele) lui %s, %lu "
 
-#: src/icqdialogs.cc:612 src/icqdialogs.cc:862 src/icqface.cc:472
-#: src/icqface.cc:1523 src/icqface.cc:1708
+#: src/icqdialogs.cc:612 src/icqdialogs.cc:862 src/icqface.cc:469
+#: src/icqface.cc:1521 src/icqface.cc:1706
 msgid "Add"
 msgstr "Adauga"
 
-#: src/icqdialogs.cc:612 src/icqdialogs.cc:862 src/icqface.cc:1708
+#: src/icqdialogs.cc:612 src/icqdialogs.cc:862 src/icqface.cc:1706
 msgid "Remove"
 msgstr "Sterge"
 
@@ -739,7 +739,7 @@ msgstr "Perioada auto N/A (0 - dezactivare): "
 msgid "Your ICQ details have been fetched"
 msgstr "Detaliile dumneavoastra ICQ au fost citite"
 
-#: src/icqdialogs.cc:839 src/icqface.cc:263
+#: src/icqdialogs.cc:839 src/icqface.cc:260
 msgid "Organize contact groups"
 msgstr "Organizare grupuri contacte"
 
@@ -862,515 +862,515 @@ msgstr "Nov"
 msgid "Dec"
 msgstr "Dec"
 
-#: src/icqface.cc:198 src/icqface.cc:206 src/icqface.cc:220
+#: src/icqface.cc:195 src/icqface.cc:203 src/icqface.cc:217
 msgid " Events history         h"
 msgstr " Arhiva                 h"
 
-#: src/icqface.cc:200 src/icqface.cc:215
+#: src/icqface.cc:197 src/icqface.cc:212
 msgid " Send a message     enter"
 msgstr " Trimite un mesaj   enter"
 
-#: src/icqface.cc:201
+#: src/icqface.cc:198
 msgid " Send an URL            u"
 msgstr " Trimite un URL         u"
 
-#: src/icqface.cc:202
+#: src/icqface.cc:199
 #, fuzzy
 msgid " Send contacts          c"
 msgstr " Trimite un URL         u"
 
-#: src/icqface.cc:203
+#: src/icqface.cc:200
 msgid " Send a file            f"
 msgstr "Trimite un fisier       f"
 
-#: src/icqface.cc:205 src/icqface.cc:219 src/icqface.cc:224
+#: src/icqface.cc:202 src/icqface.cc:216 src/icqface.cc:221
 msgid " User's details         ?"
 msgstr " Detaliile utiliz.      ?"
 
-#: src/icqface.cc:208 src/icqface.cc:222
+#: src/icqface.cc:205 src/icqface.cc:219
 msgid " Ignore user"
 msgstr " Ignora utiliz."
 
-#: src/icqface.cc:209 src/icqface.cc:221 src/icqface.cc:225
+#: src/icqface.cc:206 src/icqface.cc:218 src/icqface.cc:222
 msgid " Remove user          del"
 msgstr " Sterge utiliz.       del"
 
-#: src/icqface.cc:212
+#: src/icqface.cc:209
 msgid " Move to group.."
 msgstr " Muta in grupul.."
 
-#: src/icqface.cc:217
+#: src/icqface.cc:214
 msgid " Add to list            a"
 msgstr " Adauga la lista        a"
 
-#: src/icqface.cc:226
+#: src/icqface.cc:223
 msgid " Edit details"
 msgstr " Introdu detaliile"
 
-#: src/icqface.cc:247
+#: src/icqface.cc:244
 msgid " Change ICQ status                   s"
 msgstr " Schimba statutul ICQ                s"
 
-#: src/icqface.cc:248
+#: src/icqface.cc:245
 msgid " Go to contact..                 alt-s"
 msgstr " Dute la contacte..              alt-s"
 
-#: src/icqface.cc:249
+#: src/icqface.cc:246
 msgid " Update your details"
 msgstr " Inoieste detaliile"
 
-#: src/icqface.cc:250
+#: src/icqface.cc:247
 msgid " Find/add users"
 msgstr " Cauta/adauga utiliz."
 
-#: src/icqface.cc:251
+#: src/icqface.cc:248
 msgid " CenterICQ config options"
 msgstr " Optiuni configurare CenterICQ"
 
-#: src/icqface.cc:252
+#: src/icqface.cc:249
 msgid " Add non-icq contact"
 msgstr " Adauga un contact non-icq"
 
-#: src/icqface.cc:254
+#: src/icqface.cc:251
 msgid " View/edit ignore list"
 msgstr " Vazi/editeaza lista ignora"
 
-#: src/icqface.cc:255
+#: src/icqface.cc:252
 #, fuzzy
 msgid " View/edit invisible list"
 msgstr " Vezi/editeaza lista visibila"
 
-#: src/icqface.cc:256
+#: src/icqface.cc:253
 msgid " View/edit visible list"
 msgstr " Vezi/editeaza lista visibila"
 
-#: src/icqface.cc:259
+#: src/icqface.cc:256
 #, fuzzy
 msgid " Show offline users                 F5"
 msgstr " Redenumeste utiliz.                F5"
 
-#: src/icqface.cc:260
+#: src/icqface.cc:257
 #, fuzzy
 msgid " Hide offline users                 F5"
 msgstr " Ascunde utilizatorii offline       F5 "
 
-#: src/icqface.cc:472 src/icqface.cc:1230 src/icqface.cc:1241
-#: src/icqface.cc:1523 src/icqface.cc:1708
+#: src/icqface.cc:469 src/icqface.cc:1228 src/icqface.cc:1239
+#: src/icqface.cc:1521 src/icqface.cc:1706
 msgid "Details"
 msgstr "Detalii"
 
-#: src/icqface.cc:473
+#: src/icqface.cc:470
 msgid "New search"
 msgstr "O noua cautare"
 
-#: src/icqface.cc:522
+#: src/icqface.cc:519
 #, c-format
 msgid "Information about %lu, %s"
 msgstr "Informatiii despre %lu, %s"
 
-#: src/icqface.cc:523
+#: src/icqface.cc:520
 msgid "Non-ICQ"
 msgstr "Non-ICQ"
 
-#: src/icqface.cc:563
+#: src/icqface.cc:560
 msgid "Nickname"
 msgstr "Nickname"
 
-#: src/icqface.cc:564
+#: src/icqface.cc:561
 msgid "Name"
 msgstr "Nume"
 
-#: src/icqface.cc:565
+#: src/icqface.cc:562
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/icqface.cc:566
+#: src/icqface.cc:563
 msgid "2nd e-mail"
 msgstr "A doua adresa e-mail"
 
-#: src/icqface.cc:567
+#: src/icqface.cc:564
 msgid "Old e-mail"
 msgstr "Adresa veche de e-mail"
 
-#: src/icqface.cc:568
+#: src/icqface.cc:565
 msgid "Gender"
 msgstr "Gen"
 
-#: src/icqface.cc:569
+#: src/icqface.cc:566
 msgid "Birthdate"
 msgstr "Data nasterii"
 
-#: src/icqface.cc:570
+#: src/icqface.cc:567
 msgid "Age"
 msgstr "Varsta"
 
-#: src/icqface.cc:571
+#: src/icqface.cc:568
 msgid "Languages"
 msgstr "Limbi cunoscute"
 
-#: src/icqface.cc:572
+#: src/icqface.cc:569
 msgid "Last IP"
 msgstr "Ultimul IP"
 
-#: src/icqface.cc:602
+#: src/icqface.cc:599
 msgid "Last seen"
 msgstr "Ultima data"
 
-#: src/icqface.cc:604
+#: src/icqface.cc:601
 msgid "Never"
 msgstr "Niciodata"
 
-#: src/icqface.cc:625 src/icqface.cc:681
+#: src/icqface.cc:622 src/icqface.cc:678
 msgid "Address"
 msgstr "Adresa"
 
-#: src/icqface.cc:626 src/icqface.cc:682
+#: src/icqface.cc:623 src/icqface.cc:679
 msgid "Location"
 msgstr "Localizare"
 
-#: src/icqface.cc:627 src/icqface.cc:683
+#: src/icqface.cc:624 src/icqface.cc:680
 msgid "Zip code"
 msgstr "Cod postal"
 
-#: src/icqface.cc:628 src/icqface.cc:690
+#: src/icqface.cc:625 src/icqface.cc:687
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:629 src/icqface.cc:691
+#: src/icqface.cc:626 src/icqface.cc:688
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:630
+#: src/icqface.cc:627
 msgid "Cellular"
 msgstr "Telefon mobil"
 
-#: src/icqface.cc:631
+#: src/icqface.cc:628
 msgid "Timezone"
 msgstr "Fus orar"
 
-#: src/icqface.cc:633 src/icqface.cc:692
+#: src/icqface.cc:630 src/icqface.cc:689
 msgid "Homepage"
 msgstr "Pagina web"
 
-#: src/icqface.cc:685
+#: src/icqface.cc:682
 msgid "Company"
 msgstr "Compania"
 
-#: src/icqface.cc:686
+#: src/icqface.cc:683
 msgid "Department"
 msgstr "Departamentul"
 
-#: src/icqface.cc:687
+#: src/icqface.cc:684
 msgid "Occupation"
 msgstr "Ocupatia"
 
-#: src/icqface.cc:688
+#: src/icqface.cc:685
 msgid "Title"
 msgstr "Titlu"
 
-#: src/icqface.cc:759
+#: src/icqface.cc:756
 msgid "Interests"
 msgstr "Interese"
 
-#: src/icqface.cc:767
+#: src/icqface.cc:764
 msgid "Affiliations"
 msgstr "Afiliatii"
 
-#: src/icqface.cc:777
+#: src/icqface.cc:774
 msgid "Background/Past"
 msgstr "Fundal/Trecut"
 
-#: src/icqface.cc:799 src/icqface.cc:1346
+#: src/icqface.cc:796 src/icqface.cc:1344
 msgid "F2 to URLs, ESC close"
 msgstr "F2 spre URL-uri, ESC inchide"
 
-#: src/icqface.cc:805
+#: src/icqface.cc:802
 msgid "Info"
 msgstr "Info"
 
-#: src/icqface.cc:805
+#: src/icqface.cc:802
 msgid "Home"
 msgstr "Acasa"
 
-#: src/icqface.cc:805
+#: src/icqface.cc:802
 msgid "Work"
 msgstr "Serviciu"
 
-#: src/icqface.cc:805
+#: src/icqface.cc:802
 msgid "More"
 msgstr "Mai multe"
 
-#: src/icqface.cc:805
+#: src/icqface.cc:802
 msgid "About"
 msgstr "Despre"
 
-#: src/icqface.cc:806
+#: src/icqface.cc:803
 msgid "Retrieve"
 msgstr "Citeste"
 
-#: src/icqface.cc:806
+#: src/icqface.cc:803
 msgid "Edit"
 msgstr "Editeaza"
 
-#: src/icqface.cc:866
+#: src/icqface.cc:863
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:867
+#: src/icqface.cc:864
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:868
+#: src/icqface.cc:865
 msgid " [a] Away"
 msgstr " [a] Away"
 
-#: src/icqface.cc:869
+#: src/icqface.cc:866
 msgid " [d] Do not disturb"
 msgstr " [d] Nu deranjati"
 
-#: src/icqface.cc:870
+#: src/icqface.cc:867
 msgid " [n] Not available"
 msgstr " [n] Nedisponibil"
 
-#: src/icqface.cc:871
+#: src/icqface.cc:868
 msgid " [c] Occupied"
 msgstr " [c] Ocupat"
 
-#: src/icqface.cc:872
+#: src/icqface.cc:869
 msgid " [f] Free for chat"
 msgstr " [f] Free for chat"
 
-#: src/icqface.cc:873
+#: src/icqface.cc:870
 msgid " [i] Invisible"
 msgstr " [i] Invizibil"
 
-#: src/icqface.cc:905
+#: src/icqface.cc:902
 msgid "Connecting.."
 msgstr "Conectare.."
 
-#: src/icqface.cc:906
+#: src/icqface.cc:903
 msgid "Offline"
 msgstr "Offline"
 
-#: src/icqface.cc:907
+#: src/icqface.cc:904
 msgid "Invisible"
 msgstr "Invizibil"
 
-#: src/icqface.cc:908
+#: src/icqface.cc:905
 msgid "Free for chat"
 msgstr "Free for chat"
 
-#: src/icqface.cc:909
+#: src/icqface.cc:906
 #, fuzzy
 msgid "Do not disturb"
 msgstr " [d] Nu deranjati"
 
-#: src/icqface.cc:910
+#: src/icqface.cc:907
 msgid "Occupied"
 msgstr "Ocupat"
 
-#: src/icqface.cc:911
+#: src/icqface.cc:908
 msgid "Not avail"
 msgstr "Nediponibil"
 
-#: src/icqface.cc:912
+#: src/icqface.cc:909
 msgid "Away"
 msgstr "Away"
 
-#: src/icqface.cc:913
+#: src/icqface.cc:910
 msgid "Online"
 msgstr "Online"
 
-#: src/icqface.cc:913
+#: src/icqface.cc:910
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: src/icqface.cc:946
+#: src/icqface.cc:943
 msgid " enter to select a file, esc to cancel "
 msgstr " enter pt. a selecta un fisier, esc pt. a anula"
 
-#: src/icqface.cc:1089 src/icqface.cc:1423
+#: src/icqface.cc:1086 src/icqface.cc:1421
 #, c-format
 msgid "URL to %s, %lu"
 msgstr "URL pentru %s, %lu"
 
-#: src/icqface.cc:1103 src/icqface.cc:1143
+#: src/icqface.cc:1100 src/icqface.cc:1140
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X trimite, Ctrl-P multiple, Ctrl-O arhiva, Alt-? detalii,ESC anuleaza"
 
-#: src/icqface.cc:1141
+#: src/icqface.cc:1138
 #, c-format
 msgid "Writing a message to %s, %lu"
 msgstr "Scrie un mesaj lui %s, %lu"
 
-#: src/icqface.cc:1196
+#: src/icqface.cc:1194
 #, fuzzy, c-format
 msgid "+ authorization sent to %lu"
 msgstr "+ autorizare trimisa lui %lu"
 
-#: src/icqface.cc:1226
+#: src/icqface.cc:1224
 #, c-format
 msgid "Authorization request from %lu"
 msgstr "Cerere de autorizare de la %lu"
 
-#: src/icqface.cc:1230 src/icqface.cc:1241
+#: src/icqface.cc:1228 src/icqface.cc:1239
 msgid "Add to the list"
 msgstr "Adauga la lista"
 
-#: src/icqface.cc:1230 src/icqface.cc:1480
+#: src/icqface.cc:1228 src/icqface.cc:1478
 msgid "Accept"
 msgstr "Accepta"
 
-#: src/icqface.cc:1231 src/icqface.cc:1242 src/icqface.cc:1477
-#: src/icqface.cc:1524
+#: src/icqface.cc:1229 src/icqface.cc:1240 src/icqface.cc:1475
+#: src/icqface.cc:1522
 msgid "Ok"
 msgstr "OK"
 
-#: src/icqface.cc:1231
+#: src/icqface.cc:1229
 msgid "Ignore"
 msgstr "Ignora"
 
-#: src/icqface.cc:1237
+#: src/icqface.cc:1235
 #, c-format
 msgid "You were added to %lu's list"
 msgstr "Ai fost adaugat la lista lui %lu"
 
-#: src/icqface.cc:1242 src/icqface.cc:1357 src/icqface.cc:1437
-#: src/icqface.cc:1481 src/icqface.cc:1524
+#: src/icqface.cc:1240 src/icqface.cc:1355 src/icqface.cc:1435
+#: src/icqface.cc:1479 src/icqface.cc:1522
 msgid "Next"
 msgstr "Urmatorul"
 
-#: src/icqface.cc:1353 src/icqface.cc:1357 src/icqface.cc:1434
-#: src/icqface.cc:1437
+#: src/icqface.cc:1351 src/icqface.cc:1355 src/icqface.cc:1432
+#: src/icqface.cc:1435
 msgid "Fwd"
 msgstr "Fwd"
 
-#: src/icqface.cc:1353 src/icqface.cc:1357
+#: src/icqface.cc:1351 src/icqface.cc:1355
 msgid "Reply"
 msgstr "Reply"
 
-#: src/icqface.cc:1363
+#: src/icqface.cc:1361
 #, c-format
 msgid "Message from %s, %lu"
 msgstr "Mesaj de la %s, %lu"
 
-#: src/icqface.cc:1366 src/icqface.cc:1417
+#: src/icqface.cc:1364 src/icqface.cc:1415
 #, c-format
 msgid "%s, rcvd on %s"
 msgstr "%s, primit %s"
 
-#: src/icqface.cc:1371
+#: src/icqface.cc:1369
 #, c-format
 msgid "Message to %s, %lu"
 msgstr "Mesaj pentru %s,%lu"
 
-#: src/icqface.cc:1376 src/icqface.cc:1427
+#: src/icqface.cc:1374 src/icqface.cc:1425
 #, c-format
 msgid "Sent on %s"
 msgstr "Trimis %s"
 
-#: src/icqface.cc:1414
+#: src/icqface.cc:1412
 #, c-format
 msgid "URL from %s, %lu"
 msgstr "URl de la %s, %lu"
 
-#: src/icqface.cc:1434 src/icqface.cc:1437
+#: src/icqface.cc:1432 src/icqface.cc:1435
 msgid "Open"
 msgstr "Deschide"
 
-#: src/icqface.cc:1473
+#: src/icqface.cc:1471
 #, c-format
 msgid "File from %s, %lu"
 msgstr "Fisier de la %s, %lu"
 
-#: src/icqface.cc:1480
+#: src/icqface.cc:1478
 msgid "Refuse"
 msgstr "Refuz"
 
-#: src/icqface.cc:1516
+#: src/icqface.cc:1514
 #, c-format
 msgid "Contacts from %s, %lu"
 msgstr "Contacte de la %s, %lu"
 
-#: src/icqface.cc:1578
+#: src/icqface.cc:1576
 msgid "save file(s) in: "
 msgstr "salveaza fisierul(ele) in: "
 
-#: src/icqface.cc:1584
+#: src/icqface.cc:1582
 #, c-format
 msgid "+ file %s from %s, %lu started"
 msgstr "+ file %s de la %s, %lu incepe"
 
-#: src/icqface.cc:1587
+#: src/icqface.cc:1585
 msgid "+ already exists, skipping"
 msgstr "+ exista deja, sarim peste"
 
-#: src/icqface.cc:1599
+#: src/icqface.cc:1597
 #, c-format
 msgid "+ file from %s, %lu refused"
 msgstr "+ fisier de la %s, %lu refuzat"
 
-#: src/icqface.cc:1629
+#: src/icqface.cc:1627
 #, c-format
 msgid "History items for %s, %lu"
 msgstr "Arhiva pentru %s, %lu"
 
-#: src/icqface.cc:1632
+#: src/icqface.cc:1630
 msgid "ICQ system messages history"
 msgstr "Arhiva sistemului ICQ"
 
-#: src/icqface.cc:1636
+#: src/icqface.cc:1634
 msgid "S search, L again, ESC cancel"
 msgstr "S cauta, L din nou, ESC anuleaza"
 
-#: src/icqface.cc:1641
+#: src/icqface.cc:1639
 #, fuzzy
 msgid "search for: "
 msgstr "cautare dupa: "
 
-#: src/icqface.cc:1651
+#: src/icqface.cc:1649
 msgid "+ search string not found"
 msgstr "+ termenul de cautat nu a fost gasit"
 
-#: src/icqface.cc:1665
+#: src/icqface.cc:1663
 #, c-format
 msgid "+ no history items for %s, %lu"
 msgstr "+ nimic in arhiva pentru %s, %lu"
 
-#: src/icqface.cc:1708
+#: src/icqface.cc:1706
 msgid "Move to contacts"
 msgstr "Muta la contacte"
 
-#: src/icqface.cc:1720
+#: src/icqface.cc:1718
 msgid "ICQ Ignore list"
 msgstr "Lista ignora ICQ"
 
-#: src/icqface.cc:1721
+#: src/icqface.cc:1719
 msgid "ICQ Visible list"
 msgstr "Lista vizibila ICQ"
 
-#: src/icqface.cc:1721
+#: src/icqface.cc:1719
 msgid "ICQ Invisible list"
 msgstr "Lista vizibila ICQ"
 
-#: src/icqface.cc:1735
+#: src/icqface.cc:1733
 msgid "Select contacts to add to the list"
 msgstr "Selecteaza contactele de adaugat"
 
-#: src/icqface.cc:1788
+#: src/icqface.cc:1786
 msgid "Event recipients"
 msgstr "Recipiente"
 
-#: src/icqface.cc:1895
+#: src/icqface.cc:1893
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "Cautare rapida: tasteaza pt. a gasii, Alt-S gaseste iar, Enter termina"
 
-#: src/icqface.cc:1998
+#: src/icqface.cc:1996
 msgid "+ no URLs within the current context"
 msgstr "+ nici un URL in acest context"
 
-#: src/icqface.cc:2011
+#: src/icqface.cc:2009
 msgid "URLs within the current context"
 msgstr "URL-uri in acest context"
 
