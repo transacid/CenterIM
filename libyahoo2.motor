@@ -23,39 +23,41 @@ library/static
 automake
 %file fsource crypt.c
 1
-%file fsource yahoo_httplib.c
+%file fsource libyahoo2.c
 1
 %file fsource md5.c
 1
-%file fsource libyahoo2.c
+%file fsource sha.c
 1
 %file fsource yahoo_list.c
 1
+%file fsource yahoo_httplib.c
+1
 %file fsource yahoo_util.c
-1
-%file fheader yahoo_httplib.h
-1
-%file fheader md5.h
 1
 %file fheader libyahoo2.h
 1
+%file fheader md5.h
+1
+%file fheader sha.h
+1
 %file fheader yahoo2_callbacks.h
+1
+%file fheader yahoo_debug.h
+1
+%file fheader yahoo_httplib.h
+1
+%file fheader yahoo2_types.h
 1
 %file fheader yahoo_list.h
 1
 %file fheader yahoo_util.h
 1
-%file fheader yahoo2_types.h
+%file fbuild Makefile.am
 1
 %file fbuild configure.in
 1
-%file fbuild Makefile.am
-1
 %file fmisc libyahoo2.motor
-1
-%file dheader ../connwrap
-1
-%file dheader ../connwrap-0.1
 1
 %editor
 %breakpoints
@@ -65,5 +67,3 @@ ncurses_watchactive	0
 distdir	
 tagbrowser_scope	2
 tagbrowser_filter	csgtfmednuv
-distparam	target i386-pc-linux-gnu
-distparam0	target i386-pc-linux-gnu
