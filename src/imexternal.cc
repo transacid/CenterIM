@@ -106,8 +106,13 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
 	writescript();
 	result = execscript();
 
-	if(!option)
+	if(!option) {
 	    respond();
+
+	} else {
+	    substitute();
+
+	}
 
 	sprintf(buf, _("executed external action %s, return code = %d"),
 	    name.c_str(), result);
@@ -138,6 +143,28 @@ void imexternal::action::respond() {
 	if(ev) {
 	    em.store(*ev);
 	    delete ev;
+	}
+    }
+}
+
+void imexternal::action::substitute() {
+    if((options & aostdout) && !output.empty()) {
+	if(currentev->gettype() == imevent::message) {
+	    const immessage *m = static_cast<const immessage *>(currentev);
+	    *currentev = immessage(m->getcontact(), m->getdirection(), output);
+
+	} else if(currentev->gettype() == imevent::url) {
+	    const imurl *m = static_cast<const imurl *>(currentev);
+	    *currentev = imurl(m->getcontact(), m->getdirection(), m->geturl(), output);
+
+	} else if(currentev->gettype() == imevent::sms) {
+	    const imsms *m = static_cast<const imsms *>(currentev);
+	    *currentev = imsms(m->getcontact(), m->getdirection(), output, m->getphone());
+
+	} else if(currentev->gettype() == imevent::authorization) {
+	    const imauthorization *m = static_cast<const imauthorization *>(currentev);
+	    *currentev = imauthorization(m->getcontact(), m->getdirection(), m->getauthtype(), output);
+
 	}
     }
 }
@@ -239,8 +266,9 @@ void imexternal::action::enable() {
 }
 
 bool imexternal::action::load(ifstream &f) {
-    int pos, i;
+    int pos, npos, i;
     string buf, sect, param, aname;
+    bool action;
 
     static const struct {
 	const char *name;
@@ -252,30 +280,34 @@ bool imexternal::action::load(ifstream &f) {
     };
 
     while(getconf(sect, buf, f, sect == "exec")) {
-	if((i = sect.find_first_of(" \t")) == -1)
-	    i = sect.size();
+	if((npos = sect.find_first_of(" \t")) == -1)
+	    npos = sect.size();
 
-	aname = sect.substr(0, i);
+	aname = sect.substr(0, npos);
 
-	for(i = 0; actions[i].name; i++) {
-	    if(aname == actions[i].name) {
-		if(!(options & actions[i].option))
-		    options |= actions[i].option;
+	if(!(action = aname == "action"))
+	    for(i = 0; actions[i].name && !action; i++)
+		action = aname == actions[i].name;
 
-		aname = "action";
-		break;
-	    }
-	}
-
-	if(aname == "action") {
+	if(action) {
 	    param = getword(buf);
 
 	    if(name.empty()) {
-		name = leadcut(sect.substr(7));
+		name = leadcut(sect.substr(npos+1));
+
 	    } else {
-		if(name != leadcut(sect.substr(7))) {
+		if(name != leadcut(sect.substr(npos+1))) {
 		    // another "action" section
 		    f.seekg(pos, ios::beg);
+		    break;
+		}
+
+	    }
+
+	    for(i = 0; actions[i].name; i++) {
+		if(aname == actions[i].name) {
+		    if(!(options & actions[i].option))
+			options |= actions[i].option;
 		    break;
 		}
 	    }

@@ -28,11 +28,13 @@ class imexternal {
 		bool enabled;
 		string name, code, sname, output;
 
-		const imevent *currentev;
+		imevent *currentev;
 
 		void writescript();
 		int execscript();
+
 		void respond();
+		void substitute();
 
 		static string geteventname(imevent::imeventtype et);
 
