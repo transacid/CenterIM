@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.89 2004/08/09 22:52:59 konst Exp $
+* $Id: msnhook.cc,v 1.90 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -600,9 +600,8 @@ void msnhook::sendmsn(MSN::SwitchboardServerConnection *conn, const qevent *ctx)
 // ----------------------------------------------------------------------------
 
 static void log(const string &s) {
-#ifdef DEBUG
-    face.log(s);
-#endif
+    if(conf.getdebug())
+	face.log(s);
 }
 
 void MSN::ext::log(int writing, const char* buf) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.41 2004/04/11 16:32:28 konst Exp $
+* $Id: aimhook.cc,v 1.42 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,12 +31,6 @@
 #include "icqcontacts.h"
 #include "imlogger.h"
 #include "eventmanager.h"
-
-#ifdef DEBUG
-#define DLOG(s) face.log("aim %s", s)
-#else
-#define DLOG(s)
-#endif
 
 aimhook ahook;
 
@@ -389,8 +383,6 @@ void aimhook::newpass(void *connection, void *cli, ...) {
 	conf.setourid(acc);
 	ahook.log(logPasswordChanged);
     }
-
-    DLOG("newpass");
 }
 
 void aimhook::gotinfo(void *conn, void *cli, ...) {
@@ -413,8 +405,6 @@ void aimhook::gotinfo(void *conn, void *cli, ...) {
 		c->setabout(_("The user has no profile information."));
 	}
     }
-
-    DLOG("gotinfo");
 }
 
 void aimhook::getmessage(void *conn, void *cli, ...) {
@@ -431,8 +421,6 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
 	em.store(immessage(imcontact(sender, aim),
 	    imevent::incoming, ahook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))));
     }
-
-    DLOG("getmessage");
 }
 
 void aimhook::userstatus(const string &nickname, imstatus st) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.21 2004/06/19 13:17:57 konst Exp $
+* $Id: rsshook.cc,v 1.22 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -50,9 +50,9 @@ rsshook::~rsshook() {
 void rsshook::init() {
     httpcli.messageack.connect(this, &rsshook::messageack_cb);
     httpcli.socket.connect(this, &rsshook::socket_cb);
-#ifdef DEBUG
-    httpcli.logger.connect(this, &rsshook::logger_cb);
-#endif
+
+    if(conf.getdebug())
+	httpcli.logger.connect(this, &rsshook::logger_cb);
 }
 
 void rsshook::exectimers() {
@@ -466,9 +466,8 @@ void rsshook::logger_cb(LogEvent *ev) {
     switch(ev->getType()) {
 	case LogEvent::PACKET:
 	case LogEvent::DIRECTPACKET:
-#if PACKETDEBUG
-	    face.log(ev->getMessage());
-#endif
+	    if(conf.getdebug())
+		face.log(ev->getMessage());
 	    break;
 
 	default:

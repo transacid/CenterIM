@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.136 2004/11/09 23:49:59 konst Exp $
+* $Id: icqconf.cc,v 1.137 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,8 @@ icqconf::icqconf() {
     autoaway = autona = 0;
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
-	logonline = emacs = proxyssl = proxyconnect = notitles = false;
+	logonline = emacs = proxyssl = proxyconnect = notitles =
+	debug = false;
 
     savepwd = mailcheck = fenoughdiskspace = true;
 
@@ -1096,6 +1097,9 @@ void icqconf::commandline(int argc, char **argv) {
 	    if(strlen(argv[i]))
 		st = argv[i][0];
 
+	} else if((args == "-d") || (args == "--debug")) {
+	    debug = true;
+
 	} else if((args == "-v") || (args == "--version")) {
 	    cout << PACKAGE << " " << VERSION << endl
 		<< "Written by Konstantin Klyagin." << endl
@@ -1276,6 +1280,7 @@ void icqconf::usage() const {
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
     cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
     cout << _("  --no-xtitles, -T         disable xterm titles") << endl;
+    cout << _("  --debug, -d              enables debug info logging") << endl;
     cout << _("  --help                   display this stuff") << endl;
     cout << _("  --version, -v            show the program version info") << endl;
 

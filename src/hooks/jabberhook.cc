@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.75 2004/09/27 22:17:32 konst Exp $
+* $Id: jabberhook.cc,v 1.76 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -122,9 +122,8 @@ void jabberhook::connect() {
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);
 
-#if PACKETDEBUG
-    jab_logger(jc, &jlogger);
-#endif
+    if(conf.getdebug())
+	jab_logger(jc, &jlogger);
 
     if(jc->user) {
 	fonline = true;
@@ -520,9 +519,8 @@ const string &serv, string &err) {
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);
 
-#if PACKETDEBUG
-    jab_logger(jc, &jlogger);
-#endif
+    if(conf.getdebug())
+	jab_logger(jc, &jlogger);
 
     jc->cw_state = CW_CONNECT_BLOCKING;
     jab_start(jc);

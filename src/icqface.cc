@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.232 2004/11/09 23:49:59 konst Exp $
+* $Id: icqface.cc,v 1.233 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -120,13 +120,13 @@ icqface::~icqface() {
 	for(int i = 0; i < LINES; i++) printf("\n");
     }
 
-#ifdef DEBUG
-    if(flog.is_open()) flog.close();
-#endif
+    if(conf.getdebug())
+    if(flog.is_open())
+	flog.close();
 }
 
 void icqface::init() {
-#ifdef DEBUG
+    if(conf.getdebug())
     if(!flog.is_open()) {
 	time_t logtime = time(0);
 
@@ -134,7 +134,6 @@ void icqface::init() {
 	if(flog.is_open())
 	    flog << endl << "-- centericq debug log started on " << ctime(&logtime);
     }
-#endif
 
     /* Calculate various sizes and coordinates */
 
@@ -1856,10 +1855,9 @@ void icqface::log(const string &atext) {
     int i;
     string text = atext;
 
-#ifdef DEBUG
+    if(conf.getdebug())
     if(flog.is_open())
 	flog << text << endl;
-#endif
 
     /*
     *

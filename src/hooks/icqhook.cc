@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.157 2004/08/04 17:45:35 konst Exp $
+* $Id: icqhook.cc,v 1.158 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -86,10 +86,6 @@ icqhook::icqhook(): abstracthook(icq) {
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
     cli.self_contact_status_change_signal.connect(this, &icqhook::self_contact_status_change_cb);
     cli.sbl_received.connect(this, &icqhook::sbl_received_cb);
-
-#ifdef DEBUG
-    cli.logger.connect(this, &icqhook::logger_cb);
-#endif
 }
 
 icqhook::~icqhook() {
@@ -113,6 +109,9 @@ icqhook::~icqhook() {
 
 void icqhook::init() {
     manualstatus = conf.getstatus(proto);
+
+    if(conf.getdebug())
+	cli.logger.connect(this, &icqhook::logger_cb);
 }
 
 void icqhook::connect() {
@@ -1321,9 +1320,7 @@ void icqhook::logger_cb(LogEvent *ev) {
     switch(ev->getType()) {
 	case LogEvent::PACKET:
 	case LogEvent::DIRECTPACKET:
-#if PACKETDEBUG
 	    face.log(ev->getMessage());
-#endif
 	    break;
 
 	default:

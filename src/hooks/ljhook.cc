@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.27 2004/08/04 17:45:35 konst Exp $
+* $Id: ljhook.cc,v 1.28 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,9 +48,10 @@ void ljhook::init() {
     manualstatus = conf.getstatus(proto);
     httpcli.messageack.connect(this, &ljhook::messageack_cb);
     httpcli.socket.connect(this, &ljhook::socket_cb);
-#ifdef DEBUG
-    httpcli.logger.connect(this, &ljhook::logger_cb);
-#endif
+
+    if(conf.getdebug())
+	httpcli.logger.connect(this, &ljhook::logger_cb);
+
     journals = vector<string>(1, conf.getourid(proto).nickname);
 }
 
@@ -745,9 +746,7 @@ void ljhook::logger_cb(LogEvent *ev) {
     switch(ev->getType()) {
 	case LogEvent::PACKET:
 	case LogEvent::DIRECTPACKET:
-#if PACKETDEBUG
 	    face.log(ev->getMessage());
-#endif
 	    break;
 
 	default:

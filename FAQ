@@ -3,7 +3,7 @@
 * The centericq FAQ (frequently asked questions)
 * by Konstantin Klyagin <konst@konst.org.ua>
 *
-* $Id: FAQ,v 1.16 2003/07/16 00:19:37 konst Exp $
+* $Id: FAQ,v 1.17 2004/11/11 13:42:05 konst Exp $
 *
 */
 
@@ -81,8 +81,7 @@ A: Have you ever used mc (Midnight commander)? It requires users to
 
 Q: How do I enable logging the protocol info, etc?
 
-A: Compile the program with the -DDEBUG parameter.
-   [konst@morgue]$ CFLAGS=-DDEBUG CXXFLAGS=-DDEBUG ./configure && make
+A: Run centericq with --debug flag.
 
 /* *** */
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.78 2004/11/10 11:24:46 konst Exp $
+* $Id: irchook.cc,v 1.79 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,12 +34,6 @@
 #include "eventmanager.h"
 
 #include <iterator>
-
-#ifdef DEBUG
-#define DLOG(s) face.log("irc %s", s)
-#else
-#define DLOG(s)
-#endif
 
 // ----------------------------------------------------------------------------
 
@@ -125,9 +119,8 @@ void irchook::init() {
     firetalk_subcode_register_reply_callback(handle, "PING", &subreply);
     firetalk_subcode_register_reply_callback(handle, "VERSION", &subreply);
 
-#ifdef DEBUG
-    firetalk_register_callback(handle, FC_LOG, &fclog);
-#endif
+    if(conf.getdebug())
+	firetalk_register_callback(handle, FC_LOG, &fclog);
 }
 
 void irchook::connect() {
@@ -791,8 +784,6 @@ void irchook::newnick(void *conn, void *cli, ...) {
 
 	face.log(_("+ [irc] nickname was changed successfully"));
     }
-
-    DLOG("newnick");
 }
 
 void irchook::gotinfo(void *conn, void *cli, ...) {
@@ -841,8 +832,6 @@ void irchook::gotinfo(void *conn, void *cli, ...) {
 	if(c->getstatus() == offline)
 	    c->setstatus(available);
     }
-
-    DLOG("gotinfo");
 }
 
 void irchook::gotchannels(void *conn, void *cli, ...) {
@@ -865,8 +854,6 @@ void irchook::gotchannels(void *conn, void *cli, ...) {
 	if(c->getstatus() == offline)
 	    c->setstatus(available);
     }
-
-    DLOG("gotchannels");
 }
 
 void irchook::getmessage(void *conn, void *cli, ...) {
@@ -891,8 +878,6 @@ void irchook::getmessage(void *conn, void *cli, ...) {
 	em.store(immessage(imcontact(sender, irc),
 	    imevent::incoming, irhook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))));
     }
-
-    DLOG("getmessage");
 }
 
 void irchook::getaction(void *conn, void *cli, ...) {
@@ -910,8 +895,6 @@ void irchook::getaction(void *conn, void *cli, ...) {
 	    ((string) "* " + sender + " " + 
 		irhook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))).c_str()));
     }
-    
-    DLOG("getaction");
 }
 
 void irchook::buddyonline(void *conn, void *cli, ...) {
@@ -925,8 +908,6 @@ void irchook::buddyonline(void *conn, void *cli, ...) {
     if(strlen(nick)) {
 	irhook.userstatus(nick, available);
     }
-
-    DLOG("buddyonline");
 }
 
 void irchook::buddyoffline(void *conn, void *cli, ...) {
@@ -940,8 +921,6 @@ void irchook::buddyoffline(void *conn, void *cli, ...) {
     if(strlen(nick)) {
 	irhook.userstatus(nick, offline);
     }
-
-    DLOG("buddyoffline");
 }
 
 void irchook::buddyaway(void *conn, void *cli, ...) {
@@ -957,8 +936,6 @@ void irchook::buddyaway(void *conn, void *cli, ...) {
 	irhook.userstatus(nick, away);
 	if(msg) irhook.awaymessages[nick] = irhook.rushtmlconv("wk", msg);
     }
-
-    DLOG("buddyaway");
 }
 
 void irchook::listmember(void *connection, void *cli, ...) {
@@ -996,8 +973,6 @@ void irchook::chatnames(void *connection, void *cli, ...) {
     vector<channelInfo>::iterator ic;
     vector<string>::iterator is;
     bool ready = true;
-
-    DLOG("chatnames");
 
     va_start(ap, cli);
     char *croom = va_arg(ap, char *);
