@@ -286,7 +286,7 @@ void jab_send_raw(jconn j, const char *str)
  */
 void jab_recv(jconn j)
 {
-    static char buf[4096];
+    static char buf[32768];
     int len;
 
     if(!j || j->state == JCONN_STATE_OFF)
