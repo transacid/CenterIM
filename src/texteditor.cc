@@ -83,7 +83,7 @@ int texteditor::load(const string abuf, const string id) {
 
     setfnum(newfn);
 
-    breakintolines(buf, lst, wrap ? x2-x1 : 0);
+    breakintolines(buf, lst, wrap ? x2-x1-1 : 0);
 
     curfile->lines->empty();
     for(i = lst.begin(); i != lst.end(); i++) {
