@@ -247,8 +247,8 @@ enum firetalk_error firetalk_getsockets(const enum firetalk_protocol prot, int *
 
 #ifndef FIRETALK
 extern enum firetalk_error firetalkerror;
-/* internal function, exported because dan reed is lazy */
-int firetalk_internal_connect_host(const char * const host, const uint16_t port);
+/* internal function, exported because dan reed is lazy 
+int firetalk_internal_connect_host(const char * const host, const uint16_t port); */
 #endif
 
 #define FF_SUBSTANDARD                  0x0001

@@ -22,6 +22,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
+
 typedef struct s_firetalk_handle * firetalk_t;
 #define _HAVE_FIRETALK_T
 
