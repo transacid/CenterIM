@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.28 2001/12/19 15:13:29 konst Exp $
+* $Id: icqhook.cc,v 1.29 2001/12/19 17:07:59 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -574,9 +574,16 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 		MainHomeInfo &home = ic->getMainHomeInfo();
 		HomepageInfo &hpage = ic->getHomepageInfo();
+		WorkInfo &work = ic->getWorkInfo();
+		PersonalInterestInfo &pint = ic->getPersonalInterestInfo();
+		BackgroundInfo &backg = ic->getBackgroundInfo();
+		EmailInfo &email = ic->getEmailInfo();
 
 		icqcontact::basicinfo cbinfo = c->getbasicinfo();
 		icqcontact::moreinfo cminfo = c->getmoreinfo();
+		icqcontact::workinfo cwinfo = c->getworkinfo();
+
+		/* basic information */
 
 		cbinfo.fname = rusconv("wk", ic->getFirstName());
 		cbinfo.lname = rusconv("wk", ic->getLastName());
@@ -593,6 +600,8 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
 		cbinfo.country = getcountryname(home.country);
 
+		/* more information */
+
 		cminfo.age = hpage.age;
 
 		cminfo.gender =
@@ -605,6 +614,19 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cminfo.birth_month = hpage.birth_month;
 		cminfo.birth_year = hpage.birth_year;
 
+		/* work information */
+
+		cwinfo.city = rusconv("wk", work.city);
+		cwinfo.state = rusconv("wk", work.state);
+		cwinfo.street = rusconv("wk", work.street);
+		cwinfo.company = rusconv("wk", work.company_name);
+		cwinfo.dept = rusconv("wk", work.company_dept);
+		cwinfo.position = rusconv("wk", work.company_position);
+		cwinfo.homepage = rusconv("wk", work.company_web);
+
+		cwinfo.zip = strtoul(work.zip.c_str(), 0, 0);
+		cwinfo.country = getcountryname(work.country);
+
 		string nick = rusconv("wk", ic->getAlias());
 
 		if((c->getnick() == c->getdispnick())
@@ -615,6 +637,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		c->setnick(nick);
 		c->setbasicinfo(cbinfo);
 		c->setmoreinfo(cminfo);
+		c->setworkinfo(cwinfo);
 		c->setabout(rusconv("wk", ic->getAboutInfo()));
 
 		face.relaxedupdate();
