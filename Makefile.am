@@ -1,10 +1,17 @@
 noinst_LIBRARIES = libfiretalk.a
-EXTRA_DIST = aim.c firetalk.c irc.c oscar.c safestring.c toc.c aim.h firetalk-int.h firetalk.h irc.h oscar.h safestring.h toc.h
+EXTRA_DIST = aim.c irc.c toc.c firetalk.c safestring.c oscar.c aim.h irc.h toc.h firetalk-int.h firetalk.h safestring.h oscar.h
 AUTOMAKE_OPTIONS = foreign
 
 if BUILD_FIRETALK
 
-libfiretalk_a_SOURCES =  aim.c firetalk.c irc.c oscar.c safestring.c toc.c
+libfiretalk_a_SOURCES =  aim.c irc.c toc.c firetalk.c safestring.c oscar.c
+
+else
+
+libfiretalk_a_LIBADD = dummy.o
+
+dummy.c:
+	touch dummy.c
 
 endif
 
