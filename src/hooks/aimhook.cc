@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.20 2002/08/24 11:54:26 konst Exp $
+* $Id: aimhook.cc,v 1.21 2002/08/25 12:08:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,7 +184,7 @@ void aimhook::sendnewuser(const imcontact &ic) {
     if(online()) {
 	face.log(_("+ [aim] adding %s to the contacts"), ic.nickname.c_str());
 	firetalk_im_add_buddy(handle, ic.nickname.c_str());
-	firetalk_im_upload_buddies(handle);
+	firetalk_save_config(handle);
 	requestinfo(ic);
     }
 }
@@ -192,7 +192,8 @@ void aimhook::sendnewuser(const imcontact &ic) {
 void aimhook::removeuser(const imcontact &ic) {
     if(online()) {
 	face.log(_("+ [aim] removing %s from the contacts"), ic.nickname.c_str());
-	firetalk_im_remove_buddy(handle, mime(ic.nickname).c_str());
+	firetalk_im_remove_buddy(handle, ic.nickname.c_str());
+	firetalk_save_config(handle);
     }
 }
 
