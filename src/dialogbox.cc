@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.13 2002/11/23 15:42:08 konst Exp $
+* $Id: dialogbox.cc,v 1.14 2003/10/19 23:25:05 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -93,6 +93,7 @@ bool dialogbox::open(int &menuitem, int &baritem, void **ref) {
 
     if(menu) {
 	menuitem = menu->open();
+	if(ref) *ref = menu->getref(menuitem-1);
 	ret = menuitem || (menu->getlastkey() != KEY_ESC);
     } else if(tree) {
 	void *r;
@@ -281,7 +282,6 @@ int dialogbox::menukeys(verticalmenu &caller, int k) {
 		    it->tree->menu.redraw();
 		}
 	    }
-	    break;
 
 	default:
 	    i = find(it->kba.begin(), it->kba.end(), k);

@@ -78,7 +78,7 @@ class treeview : public abstractuicontrol {
 
 	void clear();
 
-	virtual void redraw();
+	void redraw();
 	void *open(int *n);
 
 	void setcur(int id);

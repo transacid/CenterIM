@@ -14,7 +14,7 @@ class screenarea {
     public:
 	screenarea();
 	screenarea(int fx1, int fy1, int fx2, int fy2);
-	~screenarea();
+	virtual ~screenarea();
 
 	void save();
 	void save(int fx1, int fy1, int fx2, int fy2);

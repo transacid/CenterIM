@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.9 2002/03/30 17:47:54 konst Exp $
+* $Id: treeview.cc,v 1.10 2003/10/19 23:25:05 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -248,7 +248,6 @@ void treeview::genmenu(int parent) {
 }
 
 void treeview::redraw() {
-    screenbuffer.save();
     genmenu(0);
     menu.redraw();
 }
