@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.30 2002/12/11 18:47:32 konst Exp $
+* $Id: jabberhook.cc,v 1.31 2002/12/11 19:10:03 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -285,6 +285,8 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	    }
 	    c->setnick("");
 	}
+
+	requestinfo(c);
 
     } else {
 	if(c = clist.get(ic)) {
