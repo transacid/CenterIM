@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.31 2002/03/22 18:20:13 konst Exp $
+* $Id: yahoohook.cc,v 1.32 2002/03/23 11:34:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -228,6 +228,8 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 		conf.getourid(yahoo).nickname.c_str(), group, "");
 	}
     }
+
+    requestinfo(ic);
 }
 
 void yahoohook::removeuser(const imcontact &ic) {
@@ -309,6 +311,21 @@ void yahoohook::setautostatus(imstatus st) {
 
 imstatus yahoohook::getstatus() const {
     return online() ? ourstatus : offline;
+}
+
+void yahoohook::requestinfo(const imcontact &ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(c) {
+	icqcontact::moreinfo m = c->getmoreinfo();
+	icqcontact::basicinfo b = c->getbasicinfo();
+
+	m.homepage = "http://profiles.yahoo.com/" + ic.nickname;
+	b.email = ic.nickname + "@yahoo.com";
+
+	c->setbasicinfo(b);
+	c->setmoreinfo(m);
+    }
 }
 
 // ----------------------------------------------------------------------------

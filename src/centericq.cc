@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.81 2002/03/21 17:43:42 konst Exp $
+* $Id: centericq.cc,v 1.82 2002/03/23 11:34:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -357,6 +357,8 @@ void centericq::find() {
 
 		case infocard:
 		    c = clist.addnew(imcontact(0, infocard), true);
+		    c->setnick(s.nick);
+		    c->setdispnick(s.nick);
 
 		    if(face.updatedetails(c)) {
 			addcontact(c->getdesc());
@@ -368,6 +370,7 @@ void centericq::find() {
 			c->save();
 		    }
 
+		    face.update();
 		    ret = false;
 		    break;
 	    }

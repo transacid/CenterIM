@@ -43,6 +43,7 @@ class msnhook : public abstracthook {
 
 	void sendnewuser(const imcontact &c);
 	void removeuser(const imcontact &ic);
+	void requestinfo(const imcontact &ic);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;

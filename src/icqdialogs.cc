@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.59 2002/03/15 12:27:45 konst Exp $
+* $Id: icqdialogs.cc,v 1.60 2002/03/23 11:34:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,7 +40,7 @@ bool icqface::finddialog(imsearchparams &s) {
     vector<protocolname>::iterator ipname;
 
     for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
-	if(gethook(apname).online() || apname == infocard) {
+	if(gethook(apname).logged() || apname == infocard) {
 	    penabled.push_back(apname);
 	}
     }
@@ -174,17 +174,18 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     icqcontact::moreinfo mi = c->getmoreinfo();
     icqcontact::workinfo wi = c->getworkinfo();
     string about = c->getabout();
+    bool ourdetails = c->getdesc() == contactroot;
 
     tree->menu.getpos(saveitem, savefirst);
     tree->clear();
 
     i = tree->addnode(_(" General "));
 
-    if((passinfo.pname == infocard) || (gethook(passinfo.pname).getcapabilities() & hoptCanChangeNick)) {
+    if((passinfo.pname == infocard) || (gethook(passinfo.pname).getcapabilities() & hoptCanChangeNick) || !ourdetails) {
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
     }
 
-    if(!(passinfo.pname == aim) && (c->getdesc() == contactroot)) {
+    if(!(passinfo.pname == aim) && (c->getdesc() == contactroot) || !ourdetails) {
 
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
 	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
@@ -262,7 +263,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
-    if(!c->getdesc().uin) {
+    if(c->getdesc() == contactroot) {
 	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" Your %s details "),
 	    conf.getprotocolname(upname).c_str());
     } else {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.21 2002/03/22 18:20:13 konst Exp $
+* $Id: msnhook.cc,v 1.22 2002/03/23 11:34:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -166,6 +166,8 @@ void msnhook::sendnewuser(const imcontact &c) {
     if(logged()) {
 	MSN_AddContact(c.nickname.c_str());
     }
+
+    requestinfo(c);
 }
 
 void msnhook::setautostatus(imstatus st) {
@@ -240,6 +242,23 @@ imstatus msnhook::msn2imstatus(int st) {
 	    return available;
     }
 }
+
+void msnhook::requestinfo(const imcontact &ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(c) {
+	icqcontact::moreinfo m = c->getmoreinfo();
+	icqcontact::basicinfo b = c->getbasicinfo();
+
+	b.email = ic.nickname;
+	if(b.email.find("@") == -1) b.email += "@hotmail.com";
+	m.homepage = "http://members.msn.com/" + b.email;
+
+	c->setbasicinfo(b);
+	c->setmoreinfo(m);
+    }
+}
+
 
 // ----------------------------------------------------------------------------
 
