@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.91 2002/10/06 12:14:53 konst Exp $
+* $Id: icqdialogs.cc,v 1.92 2002/10/07 17:33:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1141,9 +1141,12 @@ int icqface::groupmanager(const string &text, bool sel) {
 
 void icqface::transfermonitor() {
     dialogbox db;
-    int n, b, np, incid, outid, cid;
+    int n, b, np, cid;
     vector<filetransferitem>::iterator it;
     string fitem;
+
+    vector< pair< pair<imcontact, imevent::imdirection>, int> > nodes;
+    vector< pair< pair<imcontact, imevent::imdirection>, int> >::iterator in;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
@@ -1170,18 +1173,29 @@ void icqface::transfermonitor() {
 
     for(bool fin = false; !fin; ) {
 	t.clear();
-	incid = outid = -1;
+	nodes.clear();
 
 	for(it = transfers.begin(); it != transfers.end(); ++it) {
-	    switch(it->fr.getdirection()) {
-		case imevent::incoming:
-		    if(incid < 0) incid = t.addnode(_(" Incoming "));
-		    cid = incid;
+	    pair<imcontact, imevent::imdirection>
+		contdir(it->fr.getcontact(), it->fr.getdirection());
+
+	    for(in = nodes.begin(); in != nodes.end(); ++in)
+		if(in->first.first == contdir.first
+		&& in->first.second == contdir.second)
 		    break;
-		case imevent::outgoing:
-		    if(outid < 0) outid = t.addnode(_(" Outgoing "));
-		    cid = outid;
-		    break;
+
+	    if(in != nodes.end()) {
+		cid = in->second;
+
+	    } else {
+		if(contdir.second == imevent::incoming) {
+		    cid = t.addnodef(_(" Incoming from %s "), contdir.first.totext().c_str());
+		} else {
+		    cid = t.addnodef(_(" Outgoing to %s "), contdir.first.totext().c_str());
+		}
+
+		nodes.push_back(make_pair(contdir, cid));
+
 	    }
 
 	    switch(it->status) {
@@ -1193,12 +1207,11 @@ void icqface::transfermonitor() {
 		case icqface::tsCancel: fitem = _("abort"); break;
 	    }
 
-	    fitem = (string) "[" + fitem + "] " + it->fname;
+	    fitem = (string) "[" + fitem + "] " + it->fname + ", " +
+		i2str(it->bdone);
 
 	    if(it->btotal > 0)
-		fitem += (string) ", " + i2str(it->btotal) + " " + _("total");
-
-	    fitem += (string) ", " + i2str(it->bdone) + " " + _("done");
+		fitem += (string) _(" of ") + i2str(it->btotal);
 
 	    int limit = sizeDlg.width-9;
 
