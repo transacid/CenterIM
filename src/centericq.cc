@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.90 2002/04/08 15:59:57 konst Exp $
+* $Id: centericq.cc,v 1.91 2002/04/08 16:06:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -305,7 +305,7 @@ void centericq::changestatus() {
     imstatus st;
     protocolname ipname, pname;
     bool proceed, setaway;
-    string tmp;
+    string tmp, prompt;
     icqconf::imaccount ia;
 
     if(face.changestatus(pname, st)) {
@@ -321,16 +321,17 @@ void centericq::changestatus() {
 		    (gethook(pname).getcapabilities() & hoptCanSetAwayMsg);
 	    }
 
-	    if(setaway) {
-		switch(st) {
-		    case away:
-		    case notavail:
-		    case occupied:
-		    case dontdisturb:
-			proceed = setaway = face.edit(tmp = conf.getawaymsg(pname),
-			    conf.getprotocolname(pname) + ": " + _("away message"));
-			break;
-		}
+	    if(setaway)
+	    switch(st) {
+		case away:
+		case notavail:
+		case occupied:
+		case dontdisturb:
+		    if(pname != proto_all)
+			prompt = conf.getprotocolname(pname) + ": ";
+		    prompt += _("away message");
+		    proceed = setaway = face.edit(tmp = conf.getawaymsg(pname), prompt);
+		    break;
 	    }
 
 	    if(proceed)
