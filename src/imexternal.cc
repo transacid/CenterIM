@@ -150,20 +150,20 @@ void imexternal::action::respond() {
 void imexternal::action::substitute() {
     if((options & aostdout) && !output.empty()) {
 	if(currentev->gettype() == imevent::message) {
-	    const immessage *m = static_cast<const immessage *>(currentev);
-	    *currentev = immessage(m->getcontact(), m->getdirection(), output);
+	    immessage *m = static_cast<immessage *>(currentev);
+	    *m = immessage(m->getcontact(), m->getdirection(), output);
 
 	} else if(currentev->gettype() == imevent::url) {
-	    const imurl *m = static_cast<const imurl *>(currentev);
-	    *currentev = imurl(m->getcontact(), m->getdirection(), m->geturl(), output);
+	    imurl *m = static_cast<imurl *>(currentev);
+	    *m = imurl(m->getcontact(), m->getdirection(), m->geturl(), output);
 
 	} else if(currentev->gettype() == imevent::sms) {
-	    const imsms *m = static_cast<const imsms *>(currentev);
-	    *currentev = imsms(m->getcontact(), m->getdirection(), output, m->getphone());
+	    imsms *m = static_cast<imsms *>(currentev);
+	    *m = imsms(m->getcontact(), m->getdirection(), output, m->getphone());
 
 	} else if(currentev->gettype() == imevent::authorization) {
-	    const imauthorization *m = static_cast<const imauthorization *>(currentev);
-	    *currentev = imauthorization(m->getcontact(), m->getdirection(), m->getauthtype(), output);
+	    imauthorization *m = static_cast<imauthorization *>(currentev);
+	    *m = imauthorization(m->getcontact(), m->getdirection(), m->getauthtype(), output);
 
 	}
     }

@@ -79,15 +79,15 @@ void imeventmanager::store(const imevent &cev) {
 
 	if(proceed) {
 	    if(hook->send(ev)) {
-		eventwrite(ev, history);
-		logger.putevent(ev);
+		eventwrite(cev, history);
+		logger.putevent(cev);
 		time(&lastevent);
 		recentlysent++;
 	    } else {
-		eventwrite(ev, offline);
+		eventwrite(cev, offline);
 	    }
 	} else {
-	    eventwrite(ev, offline);
+	    eventwrite(cev, offline);
 	}
     }
 }
