@@ -88,6 +88,7 @@ const string i2str(int i);
 const string ui2str(int i);
 
 bool getconf(string &st, string &buf, ifstream &f);
+bool getstring(istream &f, string &buf);
 
 __KTOOL_BEGIN_C
 

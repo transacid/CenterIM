@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.8 2001/10/31 16:51:34 konst Exp $
+* $Id: kkstrtext.cc,v 1.9 2001/11/04 12:17:51 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -938,21 +938,38 @@ bool getconf(string &st, string &buf, ifstream &f) {
     static string sect;
 
     while(!f.eof() && !ret) {
-        getline(f, buf);
+	getstring(f, buf);
 
-        if(buf.size())
-        switch(buf[0]) {
-            case '%':
-                sect = buf.substr(1);
-                break;
-            case '#':
-                break;
-            default:
-                ret = buf.size();
-                break;
-        }
+	if(buf.size())
+	switch(buf[0]) {
+	    case '%':
+		sect = buf.substr(1);
+		break;
+	    case '#':
+		break;
+	    default:
+		ret = buf.size();
+		break;
+	}
     }
 
     st = sect;
     return ret;
+}
+
+bool getstring(istream &f, string &sbuf) {
+    static char buf[2048];
+    bool r;
+
+    if(r = !f.eof()) {
+	sbuf = "";
+
+	do {
+	    f.clear();
+	    f.getline(buf, 2048);
+	    sbuf += buf;
+	} while(!f.good() && !f.eof());
+    }
+
+    return r;
 }
