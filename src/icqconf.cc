@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.103 2003/05/04 22:12:41 konst Exp $
+* $Id: icqconf.cc,v 1.104 2003/05/05 21:11:52 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -51,7 +51,8 @@ icqconf::icqconf() {
 
     savepwd = mailcheck = fenoughdiskspace = logtyping = true;
 
-    memset(&chatmode, 0, sizeof(chatmode));
+    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	chatmode[pname] = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }

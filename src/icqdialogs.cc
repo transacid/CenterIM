@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.109 2003/05/05 20:54:10 konst Exp $
+* $Id: icqdialogs.cc,v 1.110 2003/05/05 21:11:52 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1060,7 +1060,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	tmp = "";
 	for(pname = icq; pname != protocolname_size; (int) pname += 1)
-	    if(chatmode[pname])
+	    if(chatmode[pname] && !conf.getourid(pname).empty())
 		tmp += conf.getprotocolname(pname) + " ";
 
 	t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
@@ -1198,23 +1198,21 @@ void icqface::selectchatmode(bool chatmode[]) {
     bool r, finished = false;
 
     protocolname pname;
-    icqconf::imaccount ia;
     protocolname tempchatmode[protocolname_size];
 
     i = 0;
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	ia = conf.getourid(pname);
-	if(!ia.empty()) {
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	if(!conf.getourid(pname).empty())
 	    tempchatmode[i++] = pname;
-	}
-    }
+
     protmax = i;
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
 
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-9, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
+    m.setwindow(textwindow(4, LINES-9, 18, LINES-6, conf.getcolor(cp_dialog_menu)));
 
     m.idle = &menuidle;
     m.otherkeys = &multiplekeys;
