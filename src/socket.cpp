@@ -205,7 +205,8 @@ namespace ICQ2000
 
     unsigned char buffer[max_receive_size];
 
-    int ret = recv(m_socketDescriptor, (char *) buffer, max_receive_size, SEND_FLAGS);
+    int ret = recv(m_socketDescriptor, (char *) buffer, max_receive_size, 0);
+
     if (ret <= 0) {
       if (ret == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) return false;
 
