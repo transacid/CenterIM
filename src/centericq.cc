@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.171 2003/10/19 23:24:34 konst Exp $
+* $Id: centericq.cc,v 1.172 2003/10/21 00:29:45 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -598,20 +598,22 @@ bool centericq::updateconf() {
 }
 
 void centericq::checkmail() {
-    const char *fname = getenv("MAIL");
+    if(!getenv("MAIL"))
+	return;
+
     struct stat st;
     int mcount = 0;
     char buf[512];
-    string lastfrom;
+    string lastfrom, fname(getenv("MAIL"));
     bool prevempty, header;
     FILE *f;
 
     static int fsize = -1;
     static int oldcount = -1;
 
-    if(conf.getmailcheck() && fname)
-    if(!stat(fname, &st))
-    if(st.st_size != fsize) {
+    if(conf.getmailcheck())
+    if(!stat(fname.c_str(), &st)) 
+    if(st.st_size != fsize && (st.st_mode & S_IFREG)) {
 
 	if(fsize != -1 && st.st_size > fsize) {
 	    /*
@@ -620,7 +622,7 @@ void centericq::checkmail() {
 	    *
 	    */
 
-	    if(f = fopen(fname, "r")) {
+	    if(f = fopen(fname.c_str(), "r")) {
 		prevempty = header = true;
 
 		while(!feof(f)) {
@@ -656,6 +658,55 @@ void centericq::checkmail() {
 	}
 
 	fsize = st.st_size;
+
+    } else if(st.st_mode & S_IFDIR) {
+	DIR *d;
+	struct dirent *e;
+	string dname;
+	time_t last = -1;
+
+	dname = (string) fname + "/new/";
+
+	if(!stat(dname.c_str(), &st) && st.st_mode & S_IFDIR)
+	if(d = opendir(dname.c_str())) {
+	    fname = "";
+
+	    while((e = readdir(d)))
+	    if(!stat((dname+e->d_name).c_str(), &st) && (st.st_mode & S_IFREG)) {
+		mcount++;
+		if(st.st_mtime >= last) {
+		    last = st.st_mtime;
+		    fname = dname + e->d_name;
+		}
+	    }
+
+	    closedir(d);
+
+	    if(f = fopen(fname.c_str(), "r")) {
+		header = true;
+		while(header && !feof(f)) {
+		    freads(f, buf, 512);
+		    if(!strncmp(buf, "From: ", 6)) {
+			lastfrom = strim(buf+6);
+			header = false; // we're done
+		    }
+		}
+		fclose(f);
+	    }
+
+	    if(mcount && (oldcount == -1 || (mcount > oldcount)))  {
+		const struct tm *lt;
+		lt = localtime(&timer_current);
+
+		face.log(_("+ [%02d:%02d:%02d] new mail arrived, %d messages"),
+		    lt->tm_hour, lt->tm_min, lt->tm_sec, mcount);
+
+		face.log(_("+ last msg from %s"), lastfrom.c_str());
+		clist.get(contactroot)->playsound(imevent::email);
+	    }
+
+	    oldcount = mcount;
+	}
     }
 }
 
@@ -1200,11 +1251,13 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
 	    wi.homepage = ic.nickname;
 	    c->setworkinfo(wi);
 
-	    string bfeed = ic.nickname;
-	    getrword(bfeed, "/");
-	    c->setnick(getrword(bfeed, "/") + "@lj");
-	    c->setdispnick(c->getnick());
-	    gethook(ic.pname).sendnewuser(c);
+	    if(!ic.nickname.empty()) {
+		string bfeed = ic.nickname;
+		getrword(bfeed, "/");
+		c->setnick(getrword(bfeed, "/") + "@lj");
+		c->setdispnick(c->getnick());
+		gethook(ic.pname).sendnewuser(c);
+	    }
 
 	} else {
 	    c = clist.addnew(ic, false);

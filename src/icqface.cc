@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.197 2003/10/19 23:24:34 konst Exp $
+* $Id: icqface.cc,v 1.198 2003/10/21 00:29:46 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -367,6 +367,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actions.push_back(ACT_REMOVE);
 	actions.push_back(ACT_IGNORE);
 	actions.push_back(ACT_INFO);
+	actions.push_back(ACT_EDITUSER);
 	actions.push_back(ACT_PING);
 
 	if(conf.getgroupmode() != icqconf::nogroups)
