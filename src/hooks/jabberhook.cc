@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.81 2005/01/26 23:52:48 konst Exp $
+* $Id: jabberhook.cc,v 1.82 2005/02/10 13:28:26 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1365,11 +1365,17 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		body = (string) xmlnode_get_data (x) + ": " + body;
 	    }
 
-	    if(x = xmlnode_get_tag(packet->x, "x"))
-	    if(p = xmlnode_get_attrib(x, "xmlns"))
-	    if((string) p == "jabber:x:encrypted")
-	    if(p = xmlnode_get_data(x))
-		enc = p;
+	    /* there can be multiple <x> tags. we're looking for one with
+	       xmlns = jabber:x:encrypted */
+
+	    for(x = xmlnode_get_firstchild(packet->x); x; x = xmlnode_get_nextsibling(x)) {
+		if((p = xmlnode_get_name(x)) && !strcmp(p, "x"))
+		if((p = xmlnode_get_attrib(x, "xmlns")) && !strcmp(p, "jabber:x:encrypted"))
+		if(p = xmlnode_get_data(x)) {
+		    enc = p;
+		    break;
+		}
+	    }
 
 	    if(!body.empty())
 		jhook.gotmessage(type, from, body, enc);
