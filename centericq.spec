@@ -1,5 +1,5 @@
-Version: 4.1.0
-Summary: Console ncurses based IM client. ICQ and Yahoo protocols are supported.
+Version: 4.2.0
+Summary: Console ncurses based IM client. ICQ, Yahoo and MSN protocols are supported.
 Name: centericq
 Release: 3
 Copyright: GPL
@@ -11,16 +11,16 @@ BuildRoot: /var/tmp/%{name}-buildroot/
 
 %description
 centericq is a text mode menu- and window-driven IM interface. Currently
-ICQ and Yahoo protocols are supported. It allows you to send, receive, and
-forward messages, URLs and, contacts, mass message send, search for
-users (including extended "whitepages search"), view users' details,
-maintain your contact list directly from the program (including non-icq
-contacts), view the messages history, register a new UIN and update your
-details, be informed on receiving email messages, automatically set away
-after the defined period of inactivity (on any console), and have your own
-ignore, visible and invisible lists. It can also associate events with
-sounds, has support for Hebrew and Arabic languages and allows to arrange
-contacts into groups.
+ICQ, Yahoo and MSN protocols are supported. It allows you to send,
+receive, and forward messages, URLs and, contacts, mass message send,
+search for users (including extended "whitepages search"), view users'
+details, maintain your contact list directly from the program (including
+non-icq contacts), view the messages history, register a new UIN and
+update your details, be informed on receiving email messages,
+automatically set away after the defined period of inactivity (on any
+console), and have your own ignore, visible and invisible lists. It can
+also associate events with sounds, has support for Hebrew and Arabic
+languages and allows to arrange contacts into groups.
 
 %prep
 %setup
