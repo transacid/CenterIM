@@ -93,6 +93,8 @@ bool getstring(istream &f, string &buf);
 string unmime(const string &text);
 string mime(const string &text);
 
+string ruscase(const string &s, const string &mode);
+
 __KTOOL_BEGIN_C
 
 int kwordcount(const char *strin, const char *delim);

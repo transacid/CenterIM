@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.14 2002/03/04 15:27:27 konst Exp $
+* $Id: kkstrtext.cc,v 1.15 2002/03/05 15:28:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -768,7 +768,7 @@ int ltabmargin(bool fake, int curpos, const char *p = 0) {
 }
 
 void breakintolines(const string &text, vector<string> &lst, int linelen = 0) {
-    int npos, dpos, tpos, i;
+    int npos, dpos, tpos;
     string sub;
 
     tpos = 0;
@@ -781,8 +781,13 @@ void breakintolines(const string &text, vector<string> &lst, int linelen = 0) {
 	if(linelen)
 	if(npos-tpos > linelen) {
 	    npos = tpos+linelen;
-	    if((dpos = text.substr(tpos, npos-tpos).find_last_of(" \t")) != -1)
-		npos = tpos+dpos;
+	    sub = text.substr(tpos, npos-tpos);
+
+	    if((dpos = sub.find_last_of(" \t")) != -1)
+		if(sub.substr(0, dpos).find_first_not_of("\t ") != -1)
+		    npos = tpos+dpos;
+		else
+		    npos = tpos+dpos+1;
 	}
 
 	sub = text.substr(tpos, npos-tpos);
@@ -795,9 +800,8 @@ void breakintolines(const string &text, vector<string> &lst, int linelen = 0) {
 	    sub.erase(npos, 1);
 
 	while((dpos = sub.find("\t")) != -1) {
-	    i = rtabmargin(false, dpos)-dpos;
 	    sub.erase(dpos, 1);
-	    sub.insert(dpos, string(i, ' '));
+	    sub.insert(dpos, string(rtabmargin(false, dpos)-dpos, ' '));
 	}
 
 	lst.push_back(sub);
@@ -986,6 +990,44 @@ bool getstring(istream &f, string &sbuf) {
 	    f.getline(buf, 2048);
 	    sbuf += buf;
 	} while(!f.good() && !f.eof());
+    }
+
+    return r;
+}
+
+string ruscase(const string &s, const string &mode) {
+    static const struct {
+	string lower, upper;
+    } rustable = {
+	"ÁÂ×ÇÄÅÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØßÙÜÀÑ",
+	"áâ÷çäåöúéêëìíîïğòóôõæèãşûıøÿùüàñ"
+    };
+
+    string r, tfrom, tto;
+    int pos, tpos;
+
+    if(mode == "tolower") {
+	tfrom = rustable.upper;
+	tto = rustable.lower;
+    } else if(mode == "toupper") {
+	tfrom = rustable.lower;
+	tto = rustable.upper;
+    } else {
+	return s;
+    }
+
+    for(r = s; (pos = r.find_first_of(tfrom)) != -1; ) {
+	char c = r[pos];
+	tpos = tfrom.find(c);
+	r.replace(pos, 1, tto[tpos]);
+    }
+
+    pos = 0;
+
+    while((pos = r.find_first_not_of(tfrom, pos)) != -1) {
+	if(mode == "tolower") r[pos] = tolower(r[pos]); else
+	if(mode == "toupper") r[pos] = toupper(r[pos]);
+	pos++;
     }
 
     return r;
