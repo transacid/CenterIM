@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.85 2003/10/01 00:27:46 konst Exp $
+* $Id: yahoohook.cc,v 1.86 2003/10/02 09:07:15 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,6 +41,7 @@
 
 #include <netdb.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 #define PERIOD_REFRESH          60
 
