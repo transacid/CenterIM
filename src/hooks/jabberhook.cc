@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.78 2005/01/24 00:23:31 konst Exp $
+* $Id: jabberhook.cc,v 1.79 2005/01/24 20:39:07 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1088,7 +1088,7 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
     if(c) {
 	if(!enc.empty()) {
 	    c->setusepgpkey(true);
-	    if(pgp.enabled(ic)) body = pgp.decrypt(enc, proto);
+	    if(pgp.enabled(proto)) body = pgp.decrypt(enc, proto);
 		else c->setusepgpkey(false);
 	} else {
 	    c->setusepgpkey(false);
