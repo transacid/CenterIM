@@ -60,7 +60,7 @@ class icqcontact {
 	imcontact cdesc;
 	imstatus status;
 
-	int nmsgs, fupdated, groupid;
+	int nmsgs, fupdated, groupid, fhistoffset;
 	bool finlist;
 	time_t lastread, lastseen;
 
@@ -133,6 +133,9 @@ class icqcontact {
 
 	void setpostponed(const string apostponed);
 	const string getpostponed() const;
+
+	int gethistoffset() const;
+	void sethistoffset(int aoffset);
 
 	void setgroupid(int agroupid);
 	int getgroupid() const;

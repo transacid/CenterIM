@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.43 2002/02/05 10:41:09 konst Exp $
+* $Id: icqcontact.cc,v 1.44 2002/02/18 19:07:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     int i;
 
     clear();
-    nmsgs = lastread = 0;
+    nmsgs = lastread = fhistoffset = 0;
     status = offline;
     finlist = true;
 
@@ -110,13 +110,16 @@ const string icqcontact::getdirname() const {
 }
 
 void icqcontact::clear() {
-    nmsgs = fupdated = groupid = 0;
+    nmsgs = fupdated = groupid = fhistoffset = 0;
     finlist = true;
     cdesc = contactroot;
 
     binfo = basicinfo();
     minfo = moreinfo();
     winfo = workinfo();
+
+    interests.clear();
+    background.clear();
 
     nick = dispnick = about = "";
     lastseen = 0;
@@ -372,24 +375,39 @@ bool icqcontact::inlist() const {
 void icqcontact::scanhistory() {
     string fn = getdirname() + "history";
     char buf[512];
-    int line;
+    int line, pos;
     FILE *f = fopen(fn.c_str(), "r");
     bool docount;
 
-    nmsgs = 0;
+    setmsgcount(0);
+    sethistoffset(0);
+
     if(f) {
 	while(!feof(f)) {
 	    freads(f, buf, 512);
 
-	    if((string) buf == "\f") line = 0; else
-	    switch(line) {
-		case 1: docount = ((string) buf == "IN"); break;
-		case 4: if(docount && (atol(buf) > lastread)) nmsgs++; break;
+	    if((string) buf == "\f") {
+		line = 0;
+		pos = ftell(f);
+	    } else {
+		switch(line) {
+		    case 1:
+			docount = ((string) buf == "IN");
+			break;
+		    case 4:
+			if(docount && (atol(buf) > lastread)) {
+			    nmsgs++;
+			    if(!gethistoffset()) sethistoffset(pos);
+			}
+			break;
+		}
 	    }
 
 	    line++;
 	}
+
 	fclose(f);
+	if(!gethistoffset()) sethistoffset(pos);
     }
 }
 
@@ -620,6 +638,14 @@ int icqcontact::getgroupid() const {
 
 const imcontact icqcontact::getdesc() const {
     return cdesc;
+}
+
+int icqcontact::gethistoffset() const {
+    return fhistoffset;
+}
+
+void icqcontact::sethistoffset(int aoffset) {
+    fhistoffset = aoffset;
 }
 
 // ----------------------------------------------------------------------------

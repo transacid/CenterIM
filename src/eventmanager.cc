@@ -70,6 +70,10 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 	fhist.open((c->getdirname() + "history").c_str());
 
 	if(fhist.is_open()) {
+	    if(lastread) {
+		fhist.seekg(c->gethistoffset(), ios::beg);
+	    }
+
 	    while(!fhist.eof()) {
 		rev = eventread(fhist);
 
@@ -111,6 +115,8 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 	fhist.open(fname.c_str(), ios::app);
 
 	if(fhist.is_open()) {
+//            c->sethistoffset(fhist.seekg(0, ios::cur));
+
 	    if(ev.gettype() == imevent::message) {
 		const immessage *m = static_cast<const immessage *>(&ev);
 		m->write(fhist);
