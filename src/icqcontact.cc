@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.63 2002/08/22 10:51:53 konst Exp $
+* $Id: icqcontact.cc,v 1.64 2002/08/24 11:54:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -308,6 +308,11 @@ void icqcontact::load() {
 	    }
 	}
 	fclose(f);
+
+    } else {
+	if(cdesc.uin)
+	    nick = i2str(cdesc.uin);
+
     }
 
     if(f = fopen((fn = tname + "/about").c_str(), "r")) {
@@ -330,12 +335,11 @@ void icqcontact::load() {
     if(!isbirthday())
 	unlink((tname + "/congratulated").c_str());
 
-    if(nick.empty()) {
-	if(cdesc.uin) nick = i2str(cdesc.uin);
-	else nick = cdesc.nickname;
-    }
+    if(nick.empty())
+	nick = cdesc.nickname;
 
-    if(dispnick.empty()) dispnick = nick;
+    if(dispnick.empty())
+	dispnick = nick;
 
     if(conf.getgroupmode() != icqconf::nogroups)
     if(find(groups.begin(), groups.end(), groupid) == groups.end()) {

@@ -343,13 +343,14 @@ void imsms::write(ofstream &f) const {
 }
 
 void imsms::read(ifstream &f) {
-    text = "";
     getstring(f, phone);
+    text = readblock(f);
 
-    if(!phone.empty() && phone.substr(0, 1) != "+")
-	text += phone + "\n";
-
-    text += readblock(f);
+    if(!phone.empty() && phone.substr(0, 1) != "+") {
+	if(!text.empty()) phone += "\n" + text;
+	text = phone;
+	phone = "";
+    }
 }
 
 bool imsms::empty() const {

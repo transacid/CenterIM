@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.132 2002/08/22 18:13:13 konst Exp $
+* $Id: icqface.cc,v 1.133 2002/08/24 11:54:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -190,81 +190,110 @@ void icqface::update() {
 
 int icqface::contextmenu(icqcontact *c) {
     int ret = 0, i, capab;
-    /*static */int elem = 0;
+    static int lastr = 0;
     imcontact cont;
+
+    if(!c) return 0;
 
     verticalmenu m(conf.getcolor(cp_main_text),
 	conf.getcolor(cp_main_selected));
 
-    m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
-	sizeWArea.y1+6, conf.getcolor(cp_main_text)));
+    static map<int, string> actnames;
 
-    if(!c) return 0;
+    if(actnames.empty()) {
+	actnames[ACT_URL]       = _(" Send an URL            u");
+	actnames[ACT_SMS]       = _(" Send an SMS");
+	actnames[ACT_AUTH]      = _(" Request authorization");
+	actnames[ACT_INFO]      = _(" User's details         ?");
+	actnames[ACT_EDITUSER]  = _(" Edit details           e");
+	actnames[ACT_FETCHAWAY] = _(" Fetch away message     f");
+	actnames[ACT_IGNORE]    = _(" Ignore user            i");
+	actnames[ACT_ADD]       = _(" Add to list            a");
+	actnames[ACT_RENAME]    = _(" Rename contact         r");
+	actnames[ACT_GROUPMOVE] = _(" Move to group..");
+    }
+
+    if(ischannel(c)) {
+	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+33,
+	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
+
+	actnames[ACT_MSG]       = _(" Send a channel message   enter");
+	actnames[ACT_HISTORY]   = _(" Channel chat history         h");
+	actnames[ACT_REMOVE]    = _(" Remove channel             del");
+    } else {
+	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
+	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
+
+	actnames[ACT_MSG]       = _(" Send a message     enter");
+	actnames[ACT_HISTORY]   = _(" Events history         h");
+	actnames[ACT_REMOVE]    = _(" Remove user          del");
+    }
 
     cont = c->getdesc();
     capab = gethook(cont.pname).getcapabilities();
 
+    vector<int> actions;
+    vector<int>::const_iterator ia;
+
     if(!ischannel(cont)) {
 	if(cont != contactroot) {
-	    if(cont.pname != infocard)
-		m.additem(0, ACT_MSG, _(" Send a message     enter"));
+	    if(cont.pname != infocard) actions.push_back(ACT_MSG);
+	    if(capab & hoptCanSendURL) actions.push_back(ACT_URL);
+	    if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
+	    if(capab & hoptAuthReqSend) actions.push_back(ACT_AUTH);
 
-	    if(capab & hoptCanSendURL)
-		m.additem(0, ACT_URL, _(" Send an URL            u"));
+	    if(!actions.empty())
+		actions.push_back(0);
 
-	    if(!conf.getourid(icq).empty())
-		m.additem(0, ACT_SMS, _(" Send an SMS"));
-
-	    if(capab & hoptAuthReqSend)
-		m.additem(0, ACT_AUTH, _(" Request authorization"));
-
-	    if(!m.empty()) m.addline();
-
-	    m.additem(0, ACT_INFO, _(" User's details         ?"));
-	    m.additem(0, ACT_EDITUSER, _(" Edit details"));
+	    actions.push_back(ACT_INFO);
+	    actions.push_back(ACT_EDITUSER);
 
 	    if(c->getstatus() != offline)
 	    if(capab & hoptCanFetchAwayMsg)
-		m.additem(0, ACT_FETCHAWAY, _(" Fetch away message"));
+		actions.push_back(ACT_FETCHAWAY);
 	}
 
-	m.additem(0, ACT_HISTORY, _(" Events history         h"));
+	actions.push_back(ACT_HISTORY);
 
 	if(cont != contactroot) {
-	    m.addline();
-
-	    m.additem(0, ACT_IGNORE, _(" Ignore user"));
-
-	    if(!c->inlist()) {
-		m.additem(0, ACT_ADD, _(" Add to list            a"));
-	    }
+	    actions.push_back(0);
+	    actions.push_back(ACT_IGNORE);
+	    if(!c->inlist()) actions.push_back(ACT_ADD);
 	}
 
 	if(c->getdesc() != contactroot) {
-	    m.additem(0, ACT_REMOVE, _(" Remove user          del"));
-	    m.additem(0, ACT_RENAME, _(" Rename contact         r"));
+	    actions.push_back(ACT_REMOVE);
+	    actions.push_back(ACT_RENAME);
 
 	    if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
-		m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
+		actions.push_back(ACT_GROUPMOVE);
 	}
 
     } else {
-	m.additem(0, ACT_MSG,     _(" Send a channel message   enter"));
-	m.additem(0, ACT_HISTORY, _(" Channel chat history         h"));
-	m.additem(0, ACT_REMOVE,  _(" Remove channel             del"));
+	actions.push_back(ACT_MSG);
+	actions.push_back(ACT_HISTORY);
+	actions.push_back(ACT_REMOVE);
 
 	if(conf.getgroupmode() != icqconf::nogroups)
-	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
+	    actions.push_back(ACT_GROUPMOVE);
+    }
+
+    for(ia = actions.begin(); ia != actions.end(); ++ia) {
+	if(*ia) {
+	    m.additem(0, *ia, actnames[*ia].c_str());
+	    if(*ia == lastr) m.setpos(m.getcount()-1);
+	} else {
+	    m.addline();
+	}
     }
 
     m.scale();
     m.idle = &menuidle;
-    m.setpos(elem);
-    i = m.open();
+    i = (int) m.getref(m.open()-1);
     m.close();
-    elem = i-1;
 
-    return (int) m.getref(elem);
+    if(i) lastr = i;
+    return i;
 }
 
 int icqface::generalmenu() {
@@ -1691,9 +1720,6 @@ bool icqface::eventedit(imevent &ev) {
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
 
-	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
-	    c->setpostponed(r ? "" : p.get());
-
     }
 
     editdone = false;
@@ -2168,8 +2194,8 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case 'f':
 	case 'F':
-	    if(capab & hoptCanSendFile)
-		face.extk = ACT_FILE;
+	    if(capab & hoptCanFetchAwayMsg)
+		face.extk = ACT_FETCHAWAY;
 	    break;
 
 	case 'm':
@@ -2194,23 +2220,21 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 		face.extk = ACT_RENAME;
 	    break;
 
-#if 0
-	case 'c':
-	case 'C':
-	    ihook.saveserverbasedcl();
+	case 'e':
+	case 'E':
+	    if(c) face.extk = ACT_EDITUSER;
 	    break;
 
-	case 'd':
-	case 'D':
-	    ihook.readserverbasedcl();
+	case 'i':
+	case 'I':
+	    if(c) face.extk = ACT_IGNORE;
 	    break;
-#endif
 
 	case ALT('s'):
 	case '/': face.extk = ACT_QUICKFIND; break;
     }
 
-    if(k && face.extk && (strchr("?rRqQsShHmMuUgGaAfFcC/", k)
+    if(k && face.extk && (strchr("?rRqQsShHmMuUgGaAfFcCeEiI/", k)
 	|| (k == KEY_DC)
 	|| (k == KEY_F(2))
 	|| (k == KEY_F(3))
