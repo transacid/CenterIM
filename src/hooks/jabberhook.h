@@ -16,7 +16,7 @@ class jabberhook: public abstracthook {
 	bool flogged, fonline, regmode, regdone;
 	string regerr;
 
-	vector<string> roster;
+	map<string, string> roster;
 	map<string, string> awaymsgs;
 	map<string, vector<string> > chatmembers;
 
@@ -59,8 +59,6 @@ class jabberhook: public abstracthook {
 
 	void setjabberstatus(imstatus st, const string &msg);
 	void sendvisibility();
-
-	void checkinlist(imcontact ic);
 
 	void sendnewuser(const imcontact &c, bool report);
 	void removeuser(const imcontact &ic, bool report);
@@ -124,6 +122,7 @@ class jabberhook: public abstracthook {
 	void updatecontact(icqcontact *c);
 
 	void requestversion(const imcontact &c);
+	void renamegroup(const string &oldname, const string &newname);
 };
 
 extern jabberhook jhook;

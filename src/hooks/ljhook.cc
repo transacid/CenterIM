@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.18 2003/11/21 00:35:34 konst Exp $
+* $Id: ljhook.cc,v 1.19 2003/11/22 19:14:34 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -278,7 +278,7 @@ bool ljhook::send(const imevent &sev) {
 	    ev->addParam("password", acc.password);
 	    ev->addParam("do_login", "0");
 	    ev->addParam("subject", "");
-	    ev->addParam("body", sev.gettext());
+	    ev->addParam("body", KOI2UTF(sev.gettext()));
 	    ev->addParam("subjecticon", "none");
 	    ev->addParam("prop_opt_preformatted", "1");
 	    ev->addParam("submitpost", "1");

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.132 2003/11/21 00:35:33 konst Exp $
+* $Id: icqdialogs.cc,v 1.133 2003/11/22 19:14:32 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1475,6 +1475,8 @@ int icqface::groupmanager(const string &text, bool sel) {
 		if(n) {
 		    i = groups.begin()+n-1;
 		    gname = inputstr(_("New name for the group: "), i->getname());
+
+		    if(input.getlastkey() != KEY_ESC)
 		    if(!gname.empty()) {
 			i->rename(gname);
 			touched = true;

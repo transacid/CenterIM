@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contacts group class
-* $Id: icqgroup.cc,v 1.6 2003/11/05 14:54:26 konst Exp $
+* $Id: icqgroup.cc,v 1.7 2003/11/22 19:14:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,8 +79,9 @@ void icqgroup::exchange(int nid) {
 }
 
 void icqgroup::rename(const string &aname) {
-    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
-	gethook(pname).renamegroup(name, aname);
-
+    string oldname = name;
     name = aname;
+
+    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	gethook(pname).renamegroup(oldname, name);
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.95 2003/11/21 00:35:35 konst Exp $
+* $Id: yahoohook.cc,v 1.96 2003/11/22 19:14:34 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -360,11 +360,10 @@ void yahoohook::sendnewuser(const imcontact &ic, bool report) {
 		if(report)
 		    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
 
-		string groupname = "centericq";
 		vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(ic)->getgroupid());
-		if(ig != groups.end()) groupname = ig->getname();
-
-		yahoo_add_buddy(cid, ic.nickname.c_str(), groupname.c_str());
+		if(ig != groups.end()) {
+		    yahoo_add_buddy(cid, ic.nickname.c_str(), ig->getname().c_str());
+		}
 	    }
 	}
     }
@@ -759,10 +758,7 @@ void yahoohook::got_buddies(int id, YList *buds) {
 
     for(buddy = buds; buddy; buddy = y_list_next(buddy)) {
 	yahoo_buddy *bud = static_cast<yahoo_buddy *>(buddy->data);
-
-	if(bud->group) {
-	    clist.updateEntry(imcontact(bud->id, yahoo), bud->group);
-	}
+	clist.updateEntry(imcontact(bud->id, yahoo), bud->group ? bud->group : "");
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.59 2003/11/21 16:51:49 konst Exp $
+* $Id: jabberhook.cc,v 1.60 2003/11/22 19:14:33 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "icqface.h"
 #include "imlogger.h"
 #include "eventmanager.h"
+#include "icqgroups.h"
 
 #include <libicq2000/userinfohelpers.h>
 
@@ -282,13 +283,12 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 
     if(!ischannel(ic)) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
-	if(find(roster.begin(), roster.end(), cjid.get()) != roster.end())
+	if(roster.find(cjid.get()) != roster.end())
 	    return;
 
 	if(report)
 	    face.log(_("+ [jab] adding %s to the contacts"), ic.nickname.c_str());
 
-	roster.push_back(cjid.get());
 	x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
 	jab_send(jc, x);
 	xmlnode_free(x);
@@ -297,6 +297,18 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	y = xmlnode_get_tag(x, "query");
 	z = xmlnode_insert_tag(y, "item");
 	xmlnode_put_attrib(z, "jid", cjid.get());
+
+	roster[cjid.get()] = "";
+
+	if(c = clist.get(ic)) {
+	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
+	    if(ig != groups.end()) {
+		z = xmlnode_insert_tag(z, "group");
+		xmlnode_insert_cdata(z, ig->getname().c_str(), (unsigned) -1);
+		roster[cjid.get()] = ig->getname();
+	    }
+	}
+
 	jab_send(jc, x);
 	xmlnode_free(x);
 
@@ -341,12 +353,11 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 
     if(!ischannel(ic)) {
 	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
-	vector<string>::iterator ir = find(roster.begin(), roster.end(), cjid.get());
 
-	if(ir == roster.end())
-	    return;
+	map<string, string>::iterator ir = roster.find(cjid.get());
 
-	roster.erase(ir);
+	if(ir == roster.end()) return;
+	    else roster.erase(ir);
 
 	if(find(agents.begin(), agents.end(), cjid.get()) != agents.end()) {
 	    if(report) face.log(_("+ [jab] unregistering from the %s agent"), cjid.get());
@@ -471,6 +482,8 @@ const string &serv, string &err) {
 	port = icqconf::defservers[proto].port;
     }
 
+    regmode = true;
+
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(pass.c_str()));
 
@@ -496,7 +509,6 @@ const string &serv, string &err) {
 	err = _("Unable to connect");
 
     } else {
-	regmode = true;
 	regdone = false;
 	regerr = "";
 
@@ -573,15 +585,6 @@ void jabberhook::sendvisibility() {
 	jab_send(jc, x);
 	xmlnode_free(x);
     }
-}
-
-void jabberhook::checkinlist(imcontact ic) {
-    icqcontact *c = clist.get(ic);
-
-    if(c)
-    if(c->inlist())
-    if(find(roster.begin(), roster.end(), jidnormalize(ic.nickname)) != roster.end())
-	sendnewuser(ic, false);
 }
 
 vector<string> jabberhook::getservices(servicetype::enumeration st) const {
@@ -735,6 +738,24 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     }
 }
 
+void jabberhook::renamegroup(const string &oldname, const string &newname) {
+    map<string, string>::iterator ir = roster.begin();
+
+    while(ir != roster.end()) {
+	if(ir->second == oldname) {
+	    icqcontact *c = clist.get(imcontact(jidtodisp(ir->first), proto));
+	    if(c) {
+		updatecontact(c);
+		ir->second = newname;
+	    }
+	}
+
+	++ir;
+    }
+}
+
+// ----------------------------------------------------------------------------
+
 void jabberhook::gotsearchresults(xmlnode x) {
     xmlnode y, z;
     const char *jid, *nick, *first, *last, *email;
@@ -803,7 +824,7 @@ void jabberhook::gotloggedin() {
 }
 
 void jabberhook::gotroster(xmlnode x) {
-    xmlnode y;
+    xmlnode y, z;
     imcontact ic;
     icqcontact *c;
 
@@ -811,18 +832,20 @@ void jabberhook::gotroster(xmlnode x) {
 	const char *alias = xmlnode_get_attrib(y, "jid");
 	const char *sub = xmlnode_get_attrib(y, "subscription");
 	const char *name = xmlnode_get_attrib(y, "name");
-	const char *group = xmlnode_get_attrib(y, "group");
+	const char *group = 0;
+
+	z = xmlnode_get_tag(y, "group");
+	if(z) group = xmlnode_get_data(z);
 
 	if(alias) {
 	    ic = imcontact(jidtodisp(alias), proto);
-	    roster.push_back(jidnormalize(alias));
+	    clist.updateEntry(ic, group ? group : "");
 
-	    if(!(c = clist.get(ic))) {
-		c = clist.addnew(ic, false);
-		requestinfo(ic);
-	    }
+	    if(name)
+	    if(c = clist.get(ic))
+		c->setdispnick(UTF2KOI(name));
 
-	    if(name) c->setdispnick(UTF2KOI(name));
+	    roster[jidnormalize(alias)] = group ? group : "";
 	}
     }
 
@@ -1002,7 +1025,6 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
 	if(!r.empty()) body.insert(0, r + ": ");
     }
 
-    checkinlist(ic);
     em.store(immessage(ic, imevent::incoming, UTF2KOI(body)));
 }
 
@@ -1017,6 +1039,12 @@ void jabberhook::updatecontact(icqcontact *c) {
 	y = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "item");
 	xmlnode_put_attrib(y, "jid", cjid.get());
 	xmlnode_put_attrib(y, "name", cname.get());
+
+	vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
+	if(ig != groups.end()) {
+	    y = xmlnode_insert_tag(y, "group");
+	    xmlnode_insert_cdata(y, ig->getname().c_str(), (unsigned) -1);
+	}
 
 	jab_send(jc, x);
 	xmlnode_free(x);
@@ -1152,7 +1180,7 @@ vector<icqcontact *> jabberhook::getneedsync() {
 	c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == proto)
-	if(find(roster.begin(), roster.end(), c->getdesc().nickname) == roster.end())
+	if(roster.find(c->getdesc().nickname) == roster.end())
 	    r.push_back(c);
     }
 
@@ -1252,6 +1280,7 @@ void jabberhook::statehandler(jconn conn, int state) {
 	    break;
 
 	case JCONN_STATE_ON:
+	    if(jhook.regmode) jhook.fonline = true;
 	    break;
 
 	default:
