@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.107 2002/04/19 08:03:35 konst Exp $
+* $Id: icqface.cc,v 1.108 2002/04/20 21:07:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -529,22 +529,23 @@ void icqface::fillcontactlist() {
 		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
 
-	if(savec && c->getmsgcount() && ontop) savec = 0;
+//        if(savec && c->getmsgcount() && ontop) savec = 0;
     }
 
     if(!mainscreenblock) mcontacts->redraw();
 
-    if(!savec || (!onlinefolder && online_added && conf.gethideoffline())) {
+    if(!savec || ontop || (!onlinefolder && online_added && conf.gethideoffline())) {
 	mcontacts->menu.setpos(0);
-    } else
-    for(i = 0; i < mcontacts->menu.getcount(); i++) {
-	id = mcontacts->getid(i);
-	if(mcontacts->getref(id) == savec) {
-	    if(! grouponline) grouponline = true; else {
+
+    } else if(savec) {
+	for(i = 0; i < mcontacts->menu.getcount(); i++)
+	if(mcontacts->getref(mcontacts->getid(i)) == savec) {
+	    if(!grouponline) grouponline = true; else {
 		mcontacts->menu.setpos(i);
 		break;
 	    }
 	}
+
     }
 
     onlinefolder = online_added;

@@ -43,6 +43,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}-%{version}-filelist
 %defattr(-, root, root)
 
-%doc README COPYING INSTALL TODO ChangeLog FAQ AUTHORS
+%doc README COPYING INSTALL TODO ChangeLog FAQ AUTHORS THANKS
 
 %changelog

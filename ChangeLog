@@ -878,13 +878,13 @@ Kogan <kogan@omskelecom.ru>
 4.7.1
 -----
 
-Seems like I just cannot stop adding protocols. Thus, support for IRC
-was implemented in this version. It doesn't (yet?) support talking on
-channels and intended only for private messaging. Though, you can enter
-channels to be visible for other users staying on them. Channels are
-controlled with the "Channel manager" dialog which can be ivoked from
-the account manager. It's also possible to fetch a list of users on
-channels with the find/add dialog.
+Seems like I just cannot stop adding support for protocols. Thus,
+support for IRC was implemented in this version. It doesn't (yet?)
+support talking on channels and intended only for private messaging.
+Though, you can enter channels to be visible for other users staying on
+them. Channels are controlled with the "Channel manager" dialog which
+can be ivoked from the account manager. It's also possible to fetch a
+list of users on channels with the find/add dialog.
 
 Since libicq2000 now does support visible and invisible lists, so does
 centericq.
@@ -917,3 +917,6 @@ group manager dialog.
 
 It's also now possible to send messages to found users from the find
 results list without adding them to the contact list.
+
+The crash with the "Broken pipe" message which happened after network
+interface's going down was fixed.

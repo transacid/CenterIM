@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.34 2002/04/09 15:48:13 konst Exp $
+* $Id: yahoohook.cc,v 1.35 2002/04/20 21:07:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -72,8 +72,6 @@ void yahoohook::initcontext(const icqconf::imaccount account) {
     face.log(_("+ initializing %s engine"),
 	conf.getprotocolname(account.pname).c_str());
 
-    alarm(5);
-
     if(context = yahoo_init(account.nickname.c_str(), account.password.c_str(),
     &options)) {
 	context->yahoo_Disconnected = &disconnected;
@@ -108,8 +106,6 @@ void yahoohook::initcontext(const icqconf::imaccount account) {
 	    face.log((string) "+ [yahoo] " + err);
 	}
     }
-
-    alarm(0);
 }
 
 void yahoohook::connect() {
@@ -121,9 +117,7 @@ void yahoohook::connect() {
     if(context) {
 	face.log(_("+ [yahoo] connecting to the server"));
 
-	alarm(5);
 	r = yahoo_connect(context);
-	alarm(0);
 
 	if(!r) {
 	    face.log(_("+ [yahoo] unable to connect to the server"));
