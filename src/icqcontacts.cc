@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.12 2001/11/11 14:30:14 konst Exp $
+* $Id: icqcontacts.cc,v 1.13 2001/11/12 16:55:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,8 +25,10 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqconf.h"
-#include "icqhook.h"
 #include "icqgroups.h"
+
+#include "icqhook.h"
+#include "yahoohook.h"
 
 icqcontacts::icqcontacts() {
 }
@@ -43,17 +45,34 @@ icqcontact *icqcontacts::addnew(const imcontact cinfo, bool notinlist = true) {
 	    c->setdispnick(i2str(cinfo.uin));
 	    c->save();
 	    add(c);
+	    break;
 
-	    if(notinlist) {
-		c->excludefromlist();
-	    } else {
-		c->includeintolist();
-	    }
+	case yahoo:
+	    c->setnick(cinfo.nickname);
+	    c->setdispnick(cinfo.nickname);
+	    c->save();
+	    add(c);
 	    break;
 
 	case infocard:
 	    c->save();
 	    add(c);
+	    break;
+    }
+
+    if(c)
+    if(notinlist) {
+	c->excludefromlist();
+    } else {
+	c->includeintolist();
+    }
+
+    switch(cinfo.pname) {
+	case icq:
+	    icq_SendNewUser(&icql, cinfo.uin);
+	    break;
+	case yahoo:
+	    yhook.sendnewuser(cinfo);
 	    break;
     }
 
@@ -72,20 +91,34 @@ void icqcontacts::load() {
     empty();
 
     if(d = opendir(tname.c_str())) {
-	while(ent = readdir(d))
-	if(strspn(ent->d_name+1, "0123456789") == strlen(ent->d_name)-1) {
+	while(ent = readdir(d)) {
 	    tuname = tname + ent->d_name;
 	    stat(tuname.c_str(), &st);
 
 	    if(S_ISDIR(st.st_mode)) {
 		c = 0;
 
-		if(ent->d_name[0] == 'n') {
-		    c = new icqcontact(imcontact(atol(ent->d_name+1),
-			infocard));
-		} else if(strchr("0123456789", ent->d_name[0])) {
-		    c = new icqcontact(imcontact(atol(ent->d_name),
-			icq));
+		switch(ent->d_name[0]) {
+		    case 'n':
+			c = new icqcontact(imcontact(atol(ent->d_name+1),
+			    infocard));
+			break;
+		    case 'y':
+			c = new icqcontact(imcontact(ent->d_name+1, yahoo));
+			c->setnick(ent->d_name+1);
+			break;
+		    case '0':
+		    case '1':
+		    case '2':
+		    case '3':
+		    case '4':
+		    case '5':
+		    case '6':
+		    case '7':
+		    case '8':
+		    case '9':
+			c = new icqcontact(imcontact(atol(ent->d_name), icq));
+			break;
 		}
 
 		if(c) clist.add(c);
@@ -101,10 +134,8 @@ void icqcontacts::load() {
 	add(new icqcontact(imcontact(17502151, icq)));
     }
 
-    cinfo = contactroot;
-
-    if(!get(cinfo)) {
-	add(new icqcontact(cinfo));
+    if(!get(contactroot)) {
+	add(new icqcontact(contactroot));
     }
 }
 

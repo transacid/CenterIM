@@ -7,12 +7,12 @@
 #include "cmenus.h"
 
 #include "icqcommon.h"
+#include "icqcontact.h"
 
 #define PERIOD_KEEPALIVE        100
 #define PERIOD_SELECT           1
 #define PERIOD_TCP              1
 #define PERIOD_RESOLVE          40
-#define PERIOD_RECONNECT        30
 #define PERIOD_DISCONNECT       130
 #define PERIOD_RESEND           15
 #define PERIOD_CHECKMAIL        30
@@ -25,6 +25,11 @@
 #define MAX_TCPMSG_SIZE         7000
 
 #define HIDL_SOCKEXIT   2
+
+static char status2char[imstatus_size] = {
+    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a', 'a',
+    'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'
+};
 
 struct icqfileassociation {
     icqfileassociation(unsigned int fuin, unsigned long fseq,
@@ -39,7 +44,7 @@ struct icqfileassociation {
 
 class icqhook {
     protected:
-	bool flogged, connecting;
+	bool flogged, connecting, factive;
 	int newuin, n_keepalive, manualstatus;
 	unsigned long seq_keepalive;
 	time_t timer_keepalive, timer_tcp, timer_resolve;
@@ -51,6 +56,8 @@ class icqhook {
 	vector<icqfileassociation> files;
 
 	void disconnected(struct icq_link *link, int reason);
+
+	imstatus icq2imstatus(int status) const;
 
     public:
 	icqhook();
@@ -64,8 +71,6 @@ class icqhook {
 	void postreg();
 	void connect(int status = -2);
 
-	bool logged();
-	bool isconnecting();
 	struct tm *maketm(int hour, int minute, int day, int month, int year);
 	void exectimers();
 	void setfinddest(verticalmenu *m);
@@ -78,6 +83,11 @@ class icqhook {
 
 	int getsockfd() const;
 	bool online() const;
+	bool logged() const;
+	bool isconnecting() const;
+	bool enabled() const;
+
+	unsigned long sendmessage(const icqcontact *c, const string text);
 
 	static void loggedin(struct icq_link *link);
 	static void ildisconnected(struct icq_link *link, int reason);

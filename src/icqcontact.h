@@ -17,13 +17,35 @@
 
 #define SOUND_COUNT     7
 
+enum imstatus {
+    offline = 0,
+    available,
+    invisible,
+    freeforchat,
+    dontdisturb,
+    occupied,
+    notavail,
+    away,
+    berightback,
+    outtolunch,
+    steppedout,
+    busy,
+    onphone,
+    notathome,
+    notatdesk,
+    notinoffice,
+    onvacation,
+    
+    imstatus_size
+};
+
 class icqcontact {
     protected:
 	imcontact cdesc;
-
 	unsigned short seq2;
+	imstatus status;
 
-	int status, nmsgs, fupdated, infotryn, groupid;
+	int nmsgs, fupdated, infotryn, groupid;
 	bool finlist, reqauth, webaware, pubip, direct, msgdirect;
 	time_t lastread, lastseen;
 
@@ -48,7 +70,7 @@ class icqcontact {
 	icqcontact(imcontact adesc);
 	~icqcontact();
 
-	void setstatus(int fstatus);
+	void setstatus(imstatus fstatus);
 	void setlastread(time_t flastread);
 	void setlastseen();
 

@@ -4,7 +4,7 @@
 #include "icqcommon.h"
 
 enum protocolname {
-    icq,
+    icq = 0,
     yahoo,
     infocard
 };
@@ -22,6 +22,8 @@ struct imcontact {
     bool operator != (const imcontact &ainfo) const;
 
     bool empty() const;
+    const string totext() const;
+    const string getshortservicename() const;
 };
 
 extern imcontact contactroot;

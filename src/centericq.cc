@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.28 2001/11/11 14:30:12 konst Exp $
+* $Id: centericq.cc,v 1.29 2001/11/12 16:55:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,13 +83,6 @@ void centericq::exec() {
 	    conf.getsocksuser(socksuser, sockspass);
 	    conf.savemainconfig(ihook.getreguin());
 	}
-    } else {
-/*
-	if(!conf.getsavepwd()) {
-	    string cpass = face.inputstr(_("Password: "), "", '*');
-	    if(cpass.empty()) exit(0); else conf.setpassword(cpass);
-	}
-*/
     }
 
     conf.checkdir();
@@ -236,11 +229,21 @@ void centericq::mainloop() {
 	c = face.mainloop(action);
 
 	switch(action) {
-	    case ACT_IGNORELIST: face.modelist(csignore); break;
-	    case ACT_VISIBLELIST: face.modelist(csvisible); break;
-	    case ACT_INVISLIST: face.modelist(csinvisible); break;
-	    case ACT_STATUS: changestatus(); break;
-	    case ACT_ORG_GROUPS: face.organizegroups(); break;
+	    case ACT_IGNORELIST:
+		face.modelist(csignore);
+		break;
+	    case ACT_VISIBLELIST:
+		face.modelist(csvisible);
+		break;
+	    case ACT_INVISLIST:
+		face.modelist(csinvisible);
+		break;
+	    case ACT_STATUS:
+		changestatus();
+		break;
+	    case ACT_ORG_GROUPS:
+		face.organizegroups();
+		break;
 	    case ACT_HIDEOFFLINE:
 		conf.sethideoffline(!conf.gethideoffline());
 		conf.savemainconfig();
@@ -252,9 +255,15 @@ void centericq::mainloop() {
 	    case ACT_FIND:
 		if(ihook.logged()) find();
 		break;
-	    case ACT_CONF: updateconf(); break;
-	    case ACT_NONICQ: nonicq(0); break;
-	    case ACT_QUICKFIND: face.quickfind(); break;
+	    case ACT_CONF:
+		updateconf();
+		break;
+	    case ACT_NONICQ:
+		nonicq(0);
+		break;
+	    case ACT_QUICKFIND:
+		face.quickfind();
+		break;
 	    case ACT_QUIT:
 		if(icql.icq_Status != STATUS_OFFLINE) {
 		    icq_Logout(&icql);
@@ -267,19 +276,19 @@ void centericq::mainloop() {
 
 	if(!c) continue;
 
-	if(c->getdesc().uin && (c->getdesc().pname == icq))
+	if(c->getdesc() != contactroot)
+	if(c->getdesc().pname == icq)
 	switch(action) {
-
 	    case ACT_URL:
 		url = "";
 		text = "";
 		if(face.editurl(c->getdesc(), url, text))
-		for(i = face.muins.begin(); i != face.muins.end(); i++)
-		    offl.sendurl(*i, url, text);
+		    for(i = face.muins.begin(); i != face.muins.end(); i++)
+			offl.sendurl(*i, url, text);
 		break;
 
 	    case ACT_IGNORE:
-		sprintf(buf, _("Ignore all events from %s (%lu)?"), c->getdispnick().c_str(), c->getdesc().uin);
+		sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
 
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 		    lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
@@ -307,7 +316,6 @@ void centericq::mainloop() {
 		    face.fillcontactlist();
 		}
 		break;
-
 	}
 	
 	if(c->getdesc().pname == infocard)
@@ -320,23 +328,25 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_ADD:
 		if(!c->inlist()) {
-		    adduin(c->getdesc().uin);
+		    addcontact(c->getdesc());
 		}
 		break;
 	}
 
-	if(c->getdesc().uin)
+	if(c->getdesc() != contactroot)
 	switch(action) {
-	    case ACT_INFO: userinfo(c->getdesc()); break;
-	    case ACT_REMOVE:
-		sprintf(buf, _("Are you sure want to remove %s (%lu)?"),
-		    c->getdispnick().c_str(), c->getdesc().uin);
+	    case ACT_INFO:
+		userinfo(c->getdesc());
+		break;
 
+	    case ACT_REMOVE:
+		sprintf(buf, _("Are you sure want to remove %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 		    clist.remove(c->getdesc());
 		    face.update();
 		}
 		break;
+
 	    case ACT_RENAME:
 		text = face.inputstr(_("New nickname to show: "), c->getdispnick());
 		if(text.size()) {
@@ -352,7 +362,7 @@ void centericq::mainloop() {
 		text = "";
 		if(c->getmsgcount()) {
 		    face.read(c->getdesc());
-		} else if(c->getdesc().uin && (c->getdesc().pname != infocard)) {
+		} else if(c->getdesc() != contactroot && c->getdesc().pname != infocard) {
 		    message(c->getdesc(), text, scratch);
 		}
 		break;
@@ -361,8 +371,20 @@ void centericq::mainloop() {
 }
 
 void centericq::changestatus() {
-    int old;
+    imstatus st;
+    protocolname pname;
 
+    if(face.changestatus(pname, st)) {
+	switch(pname) {
+	    case icq:
+		break;
+	    case yahoo:
+		break;
+	}
+
+	face.update();
+    }
+/*
     ihook.setmanualstatus(face.changestatus(old = icql.icq_Status));
 
     if(ihook.getmanualstatus() != old) {
@@ -380,6 +402,7 @@ void centericq::changestatus() {
 
 	face.update();
     }
+*/
 }
 
 void centericq::find() {
@@ -741,15 +764,14 @@ const string centericq::quotemsg(const string text) {
     return ret;
 }
 
-icqcontact *centericq::adduin(unsigned int uin) {
+icqcontact *centericq::addcontact(const imcontact ic) {
     icqcontact *c;
     int groupid = 0;
-    imcontact cinfo(uin, icq);
+    bool notify;
 
-    if(c = clist.get(cinfo)) {
+    if(c = clist.get(ic)) {
 	if(c->inlist()) {
-	    face.log(_("+ user %s, %lu is already on the list"),
-		c->getnick().c_str(), uin);
+	    face.log(_("+ user %s is already on the list"), ic.totext().c_str());
 	    return 0;
 	}
     }
@@ -759,22 +781,33 @@ icqcontact *centericq::adduin(unsigned int uin) {
 	if(!groupid) return 0;
     }
 
-    if(icql.icq_Status != STATUS_OFFLINE) {
+    switch(ic.pname) {
+	case icq:
+	    notify = ihook.online();
+	    break;
+	case yahoo:
+	    notify = false;
+	default:
+	    notify = false;
+	    break;
+    }
+
+    if(notify) {
 	if(face.ask(_("Notify the user he/she has been added?"),
 	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    icq_AlertAddUser(&icql, uin);
-	    face.log(_("+ the notification has been sent to %lu"), uin);
+	    icq_AlertAddUser(&icql, ic.uin);
+	    face.log(_("+ the notification has been sent to %lu"), ic.uin);
 	}
     }
 
     if(!c) {
-	c = clist.addnew(cinfo, false);
+	c = clist.addnew(ic, false);
     } else {
 	c->includeintolist();
     }
 
     c->setgroupid(groupid);
-    face.log(_("+ %lu has been added to the list"), uin);
+    face.log(_("+ %s has been added to the list"), ic.totext().c_str());
     face.update();
 
     return c;
@@ -809,18 +842,21 @@ bool centericq::idle(int options = 0) {
 	    tv.tv_sec = PERIOD_RECONNECT/3;
 	}
 
-	select(max(ihook.getsockfd(), yhook.getsockfd()) + 1, &fds, 0, 0, &tv);
+	sockfd = max(ihook.getsockfd(), yhook.getsockfd());
+	select(sockfd+1, &fds, 0, 0, &tv);
 
 	if(FD_ISSET(0, &fds)) {
 	    keypressed = true;
 	    time(&timer_keypress);
 	}
 
+	if(ihook.online())
 	if(FD_ISSET(ihook.getsockfd(), &fds)) {
 	    icq_HandleServerResponse(&icql);
 	    if(options & HIDL_SOCKEXIT) break;
 	}
 
+	if(yhook.online())
 	if(FD_ISSET(yhook.getsockfd(), &fds)) {
 	    yhook.main();
 	    if(options & HIDL_SOCKEXIT) break;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.16 2001/11/11 14:30:14 konst Exp $
+* $Id: icqcontact.cc,v 1.17 2001/11/12 16:55:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,6 @@ icqcontact::icqcontact(const imcontact adesc) {
     for(i = 0; i < SOUND_COUNT; i++) sound[i] = "";
     seq2 = nmsgs = lastread = 0;
     finlist = true;
-    status = STATUS_OFFLINE;
 
     cdesc = adesc;
 
@@ -58,6 +57,7 @@ icqcontact::icqcontact(const imcontact adesc) {
 	    break;
 
 	case icq:
+	case yahoo:
 	    load();
 	    scanhistory();
 	    break;
@@ -81,12 +81,17 @@ const string icqcontact::tosane(const string p) const {
 const string icqcontact::getdirname() const {
     string ret;
 
+    ret = (string) getenv("HOME") + "/.centericq/";
+
     switch(cdesc.pname) {
 	case infocard:
-	    ret = (string) getenv("HOME") + "/.centericq/n" + i2str(cdesc.uin);
+	    ret += "n" + i2str(cdesc.uin);
 	    break;
 	case icq:
-	    ret = (string) getenv("HOME") + "/.centericq/" + i2str(cdesc.uin);
+	    ret += i2str(cdesc.uin);
+	    break;
+	case yahoo:
+	    ret += "y" + cdesc.nickname;
 	    break;
     }
 
@@ -98,9 +103,8 @@ void icqcontact::clear() {
 
     seq2 = nmsgs = fupdated = infotryn = groupid = 0;
     finlist = true;
-    status = STATUS_OFFLINE;
+    status = offline;
     direct = false;
-
     cdesc = contactroot;
 
     nick = dispnick = firstname = lastname = primemail = secemail = oldemail =
@@ -131,68 +135,66 @@ void icqcontact::save() {
 	    fclose(f);
 	}
 
-	if(cdesc.uin) {
-	    if(f = fopen((tname = fn + "/info").c_str(), "w")) {
-		fprintf(f, "%s\n", nick.c_str());
-		fprintf(f, "%s\n", firstname.c_str());
-		fprintf(f, "%s\n", lastname.c_str());
-		fprintf(f, "%s\n", primemail.c_str());
-		fprintf(f, "%s\n", secemail.c_str());
-		fprintf(f, "%s\n", oldemail.c_str());
-		fprintf(f, "%s\n", city.c_str());
-		fprintf(f, "%s\n", state.c_str());
-		fprintf(f, "%s\n", phone.c_str());
-		fprintf(f, "%s\n", fax.c_str());
-		fprintf(f, "%s\n", street.c_str());
-		fprintf(f, "%s\n", cellular.c_str());
-		fprintf(f, "%lu\n", zip);
-		fprintf(f, "%lu\n", country);
-		fprintf(f, "%s\n", wcity.c_str());
-		fprintf(f, "%s\n", wstate.c_str());
-		fprintf(f, "%s\n", wphone.c_str());
-		fprintf(f, "%s\n", wfax.c_str());
-		fprintf(f, "%s\n", waddress.c_str());
-		fprintf(f, "%lu\n", wzip);
-		fprintf(f, "%lu\n", wcountry);
-		fprintf(f, "%s\n", company.c_str());
-		fprintf(f, "%s\n", department.c_str());
-		fprintf(f, "%s\n", job.c_str());
-		fprintf(f, "%lu\n", occupation);
-		fprintf(f, "%s\n", whomepage.c_str());
-		fprintf(f, "%d\n", age);
-		fprintf(f, "%d\n", gender);
-		fprintf(f, "%s\n", homepage.c_str());
-		fprintf(f, "%d\n", lang1);
-		fprintf(f, "%d\n", lang2);
-		fprintf(f, "%d\n", lang3);
-		fprintf(f, "%d\n", bday);
-		fprintf(f, "%d\n", bmonth);
-		fprintf(f, "%d\n", byear);
-		fprintf(f, "%s\n", fint[0].c_str());
-		fprintf(f, "%s\n", fint[1].c_str());
-		fprintf(f, "%s\n", fint[2].c_str());
-		fprintf(f, "%s\n", fint[3].c_str());
-		fprintf(f, "%s\n", faf[0].c_str());
-		fprintf(f, "%s\n", faf[1].c_str());
-		fprintf(f, "%s\n", faf[2].c_str());
-		fprintf(f, "%s\n", faf[3].c_str());
-		fprintf(f, "%c%c%c\n", reqauth ? '1' : '0', webaware ? '1' : '0', pubip ? '1' : '0');
-		fprintf(f, "%s\n", lastip.c_str());
-		fprintf(f, "%s\n", dispnick.c_str());
-		fprintf(f, "%lu\n", lastseen);
-		fprintf(f, "%s\n", fbg[0].c_str());
-		fprintf(f, "%s\n", fbg[1].c_str());
-		fprintf(f, "%s\n", fbg[2].c_str());
-		fprintf(f, "%s\n", fbg[3].c_str());
-		fprintf(f, "%d\n", groupid);
-		fprintf(f, "%d\n", utimezone);
-		fclose(f);
-	    }
+	if(f = fopen((tname = fn + "/info").c_str(), "w")) {
+	    fprintf(f, "%s\n", nick.c_str());
+	    fprintf(f, "%s\n", firstname.c_str());
+	    fprintf(f, "%s\n", lastname.c_str());
+	    fprintf(f, "%s\n", primemail.c_str());
+	    fprintf(f, "%s\n", secemail.c_str());
+	    fprintf(f, "%s\n", oldemail.c_str());
+	    fprintf(f, "%s\n", city.c_str());
+	    fprintf(f, "%s\n", state.c_str());
+	    fprintf(f, "%s\n", phone.c_str());
+	    fprintf(f, "%s\n", fax.c_str());
+	    fprintf(f, "%s\n", street.c_str());
+	    fprintf(f, "%s\n", cellular.c_str());
+	    fprintf(f, "%lu\n", zip);
+	    fprintf(f, "%lu\n", country);
+	    fprintf(f, "%s\n", wcity.c_str());
+	    fprintf(f, "%s\n", wstate.c_str());
+	    fprintf(f, "%s\n", wphone.c_str());
+	    fprintf(f, "%s\n", wfax.c_str());
+	    fprintf(f, "%s\n", waddress.c_str());
+	    fprintf(f, "%lu\n", wzip);
+	    fprintf(f, "%lu\n", wcountry);
+	    fprintf(f, "%s\n", company.c_str());
+	    fprintf(f, "%s\n", department.c_str());
+	    fprintf(f, "%s\n", job.c_str());
+	    fprintf(f, "%lu\n", occupation);
+	    fprintf(f, "%s\n", whomepage.c_str());
+	    fprintf(f, "%d\n", age);
+	    fprintf(f, "%d\n", gender);
+	    fprintf(f, "%s\n", homepage.c_str());
+	    fprintf(f, "%d\n", lang1);
+	    fprintf(f, "%d\n", lang2);
+	    fprintf(f, "%d\n", lang3);
+	    fprintf(f, "%d\n", bday);
+	    fprintf(f, "%d\n", bmonth);
+	    fprintf(f, "%d\n", byear);
+	    fprintf(f, "%s\n", fint[0].c_str());
+	    fprintf(f, "%s\n", fint[1].c_str());
+	    fprintf(f, "%s\n", fint[2].c_str());
+	    fprintf(f, "%s\n", fint[3].c_str());
+	    fprintf(f, "%s\n", faf[0].c_str());
+	    fprintf(f, "%s\n", faf[1].c_str());
+	    fprintf(f, "%s\n", faf[2].c_str());
+	    fprintf(f, "%s\n", faf[3].c_str());
+	    fprintf(f, "%c%c%c\n", reqauth ? '1' : '0', webaware ? '1' : '0', pubip ? '1' : '0');
+	    fprintf(f, "%s\n", lastip.c_str());
+	    fprintf(f, "%s\n", dispnick.c_str());
+	    fprintf(f, "%lu\n", lastseen);
+	    fprintf(f, "%s\n", fbg[0].c_str());
+	    fprintf(f, "%s\n", fbg[1].c_str());
+	    fprintf(f, "%s\n", fbg[2].c_str());
+	    fprintf(f, "%s\n", fbg[3].c_str());
+	    fprintf(f, "%d\n", groupid);
+	    fprintf(f, "%d\n", utimezone);
+	    fclose(f);
+	}
 
-	    if(f = fopen((tname = fn + "/about").c_str(), "w")) {
-		fprintf(f, "%s", about.c_str());
-		fclose(f);
-	    }
+	if(f = fopen((tname = fn + "/about").c_str(), "w")) {
+	    fprintf(f, "%s", about.c_str());
+	    fclose(f);
 	}
 
 	if(!finlist)
@@ -298,8 +300,8 @@ void icqcontact::load() {
 
     finlist = stat((fn = tname + "/excluded").c_str(), &st);
 
-    if(!nick.size()) nick = i2str(cdesc.uin);
-    if(!dispnick.size()) dispnick = i2str(cdesc.uin);
+    if(nick.empty()) nick = i2str(cdesc.uin);
+    if(dispnick.empty()) dispnick = nick;
 
     if(conf.getusegroups())
     if(find(groups.begin(), groups.end(), groupid) == groups.end()) {
@@ -332,6 +334,12 @@ void icqcontact::remove() {
     struct stat st;
     DIR *d;
 
+    switch(cdesc.pname) {
+	case yahoo:
+	    yhook.removeuser(cdesc);
+	    break;
+    }
+
     if(d = opendir(dname.c_str())) {
 	while(e = readdir(d)) {
 	    fname = dname + "/" + e->d_name;
@@ -346,20 +354,17 @@ void icqcontact::remove() {
 void icqcontact::excludefromlist() {
     FILE *f;
     string fname = getdirname() + "/excluded";
-    if(f = fopen(fname.c_str(), "w")) fclose(f);
-    finlist = false;
+
+    if(cdesc.pname != infocard) {
+	if(f = fopen(fname.c_str(), "w")) fclose(f);
+	finlist = false;
+    }
 }
 
 void icqcontact::includeintolist() {
     string fname = getdirname() + "/excluded";
     unlink(fname.c_str());
     finlist = true;
-
-    switch(cdesc.pname) {
-	case icq:
-	    icq_SendNewUser(&icql, cdesc.uin);
-	    break;
-    }
 }
 
 bool icqcontact::inlist() const {
@@ -390,7 +395,7 @@ void icqcontact::scanhistory() {
     }
 }
 
-void icqcontact::setstatus(int fstatus) {
+void icqcontact::setstatus(imstatus fstatus) {
     status = fstatus;
 }
 
@@ -711,16 +716,7 @@ string &nbg4) const {
 }
 
 char icqcontact::getshortstatus() const {
-    if((unsigned long) STATUS_OFFLINE == status) return '_'; else
-    if((status & STATUS_INVISIBLE) == STATUS_INVISIBLE) return 'i'; else
-    if((status & STATUS_FREE_CHAT) == STATUS_FREE_CHAT) return 'f'; else
-    if((status & STATUS_DND) == STATUS_DND) return 'd'; else
-    if((status & STATUS_OCCUPIED) == STATUS_OCCUPIED) return 'c'; else
-    if((status & STATUS_NA) == STATUS_NA) return 'n'; else
-    if((status & STATUS_AWAY) == STATUS_AWAY) return 'a'; else {
-	return 'o';
-    }
-//    if(!(status & 0x01FF)) return 'o'; else return '_';
+    return status2char[status];
 }
 
 int icqcontact::getinfotryn() const {

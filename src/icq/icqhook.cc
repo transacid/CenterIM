@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.2 2001/11/11 14:30:17 konst Exp $
+* $Id: icqhook.cc,v 1.3 2001/11/12 16:55:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -49,7 +49,7 @@ icqhook::icqhook() {
     finddest = 0;
 
     seq_keepalive = n_keepalive = 0;
-    flogged = connecting = false;
+    flogged = connecting = factive = false;
 }
 
 icqhook::~icqhook() {
@@ -90,6 +90,8 @@ void icqhook::init(struct icq_link *link) {
     link->icq_Log = &log;
     link->icq_RequestNotify = &requestnotify;
     link->icq_RecvContact = &contact;
+
+    factive = true;
 }
 
 void icqhook::connect(int status = -2) {
@@ -186,7 +188,7 @@ void icqhook::disconnected(struct icq_link *link, int reason) {
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-	c->setstatus(STATUS_OFFLINE);
+	c->setstatus(offline);
 	c->setseq2(0);
     }
 
@@ -359,7 +361,7 @@ unsigned long real_ip, unsigned char tcp_flag) {
     }
 
     if(c) {
-	c->setstatus(status);
+	c->setstatus(ihook.icq2imstatus(status));
 	c->setlastip(lastip);
 	c->setdirect(tcp_flag == 0x04);
 	c->setmsgdirect(tcp_flag == 0x04);
@@ -378,7 +380,7 @@ void icqhook::useroffline(struct icq_link *link, unsigned long uin) {
     imcontact cinfo(uin, icq);
 
     if(c = clist.get(cinfo)) {
-	c->setstatus(STATUS_OFFLINE);
+	c->setstatus(offline);
 	face.update();
     }
 }
@@ -389,7 +391,7 @@ unsigned long status) {
     imcontact cinfo(uin, icq);
 
     if(c = clist.get(cinfo)) {
-	c->setstatus(status);
+	c->setstatus(ihook.icq2imstatus(status));
 	face.update();
     }
 }
@@ -725,14 +727,37 @@ void icqhook::setmanualstatus(int st) {
     manualstatus = st;
 }
 
-bool icqhook::isconnecting() {
+bool icqhook::isconnecting() const {
     return connecting;
 }
 
 int icqhook::getsockfd() const {
-    return online() ? icq_GetSock(&icql) : 0;
+    return online() ? icq_GetSok(&icql) : 0;
 }
 
 bool icqhook::online() const {
     return connecting || logged();
+}
+
+unsigned long icqhook::sendmessage(const icqcontact *c, const string text) {
+    return icq_SendMessage(&icql, c->getdesc().uin, text.c_str(),
+	c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+}
+
+imstatus icqhook::icq2imstatus(int status) const {
+    imstatus st = available;
+
+    if((unsigned long) STATUS_OFFLINE == status) st = offline; else
+    if((status & STATUS_INVISIBLE) == STATUS_INVISIBLE) st = invisible; else
+    if((status & STATUS_FREE_CHAT) == STATUS_FREE_CHAT) st = freeforchat; else
+    if((status & STATUS_DND) == STATUS_DND) st = dontdisturb; else
+    if((status & STATUS_OCCUPIED) == STATUS_OCCUPIED) st = occupied; else
+    if((status & STATUS_NA) == STATUS_NA) st = notavail; else
+    if((status & STATUS_AWAY) == STATUS_AWAY) st = away;
+
+    return st;
+}
+
+bool icqhook::enabled() const {
+    return factive;
 }

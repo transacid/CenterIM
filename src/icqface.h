@@ -112,8 +112,6 @@ class icqface {
 
 	string rnick, rfname, rlname, remail;
 
-	string textstatus(unsigned long st);
-
 	static int editmsgkeys(texteditor &e, int k);
 	static int editaboutkeys(texteditor &e, int k);
 	static int contactskeys(verticalmenu &m, int k);
@@ -136,7 +134,7 @@ class icqface {
 	void infointerests(dialogbox &db, icqcontact *c);
 	void infoabout(dialogbox &db, icqcontact *c);
 
-	bool checkicqmessage(unsigned int uin, const string text, bool &ret, int options);
+	bool checkicqmessage(const imcontact ic, const string text, bool &ret, int options);
 	int showicq(unsigned int uin, const string text, char imt, int options = 0);
 
 	void gendetails(treeview *tree, icqcontact *c = 0);
@@ -176,7 +174,7 @@ class icqface {
 	void log(const char *fmt, ...);
 	void status(string text);
 
-	int changestatus(int old);
+	bool changestatus(protocolname &pname, imstatus &st);
 	int contextmenu(icqcontact *c);
 	int generalmenu();
 

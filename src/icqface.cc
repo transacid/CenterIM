@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.32 2001/11/11 14:30:14 konst Exp $
+* $Id: icqface.cc,v 1.33 2001/11/12 16:55:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,7 +24,6 @@
 
 #include "icqface.h"
 #include "icqconf.h"
-#include "icqhook.h"
 #include "icqhist.h"
 #include "centericq.h"
 #include "icqcontact.h"
@@ -32,6 +31,9 @@
 #include "icqmlist.h"
 #include "icqoffline.h"
 #include "icqgroups.h"
+
+#include "icqhook.h"
+#include "yahoohook.h"
 
 const char *stryesno(bool i) {
     return i ? _("yes") : _("no");
@@ -161,7 +163,7 @@ void icqface::draw() {
 void icqface::showtopbar() {
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-
+/*
     string spadd(COLS-strlen(VERSION)-textstatus(icql.icq_Status).size()-
 	i2str(offl.getunsentcount()).size()-i2str(icql.icq_Uin).size()-
 	32, ' ');
@@ -172,6 +174,7 @@ void icqface::showtopbar() {
 	    textstatus(icql.icq_Status).c_str(),
 	    offl.getunsentcount(),
 	    spadd.c_str(), icql.icq_Uin);
+*/
 }
 
 void icqface::update() {
@@ -191,42 +194,58 @@ int icqface::contextmenu(icqcontact *c) {
 
     if(!c) return 0;
 
+    if(c->getdesc() == contactroot) {
+	m.additem(0, ACT_HISTORY, _(" Events history         h"));
+    }
+
+    if(m.empty())
+    if(c->inlist())
     switch(c->getdesc().pname) {
 	case icq:
-	    if(!c->getdesc().uin) {
-		m.additem(0, ACT_HISTORY,  _(" Events history         h"));
-	    } else if(c->inlist()) {
-		m.additem(0, ACT_MSG,      _(" Send a message     enter"));
-		m.additem(0, ACT_URL,      _(" Send an URL            u"));
-		m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
-		m.additem(0, ACT_FILE,     _(" Send a file            f"));
-		m.addline();
-		m.additem(0, ACT_INFO,     _(" User's details         ?"));
-		m.additem(0, ACT_HISTORY,  _(" Events history         h"));
-		m.addline();
-		m.additem(0, ACT_IGNORE,   _(" Ignore user"));
-		m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
+	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
+	    m.additem(0, ACT_URL,      _(" Send an URL            u"));
+	    m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
+	    m.additem(0, ACT_FILE,     _(" Send a file            f"));
+	    m.addline();
+	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
+	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
+	    m.addline();
+	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
+	    m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
 
-		if(conf.getusegroups()) {
-		    m.additem(0,  ACT_GROUPMOVE,_(" Move to group.."));
-		}
-	    } else if(!c->inlist()) {
-		m.additem(0, ACT_MSG,      _(" Send a message     enter"));
-		m.addline();
-		m.additem(0, ACT_ADD,      _(" Add to list            a"));
-		m.addline();
-		m.additem(0, ACT_INFO,     _(" User's details         ?"));
-		m.additem(0, ACT_HISTORY,  _(" Events history         h"));
-		m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
-		m.additem(0, ACT_IGNORE,   _(" Ignore user"));
+	    if(conf.getusegroups()) {
+		m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
 	    }
 	    break;
 
-	case infocard:
+	case yahoo:
+	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
+	    m.addline();
 	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
+	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
+	    m.addline();
+	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
 	    m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
-	    m.additem(0, ACT_EDITUSER, _(" Edit details"));
 	    break;
+
+	case infocard:
+	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
+	    m.additem(0, ACT_REMOVE,    _(" Remove user          del"));
+	    m.additem(0, ACT_EDITUSER,  _(" Edit details"));
+	    break;
+    }
+
+    if(m.empty()) {
+	if(!c->inlist()) {
+	    m.additem(0, ACT_MSG,       _(" Send a message     enter"));
+	    m.addline();
+	    m.additem(0, ACT_ADD,       _(" Add to list            a"));
+	    m.addline();
+	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
+	    m.additem(0, ACT_HISTORY,   _(" Events history         h"));
+	    m.additem(0, ACT_REMOVE,    _(" Remove user          del"));
+	    m.additem(0, ACT_IGNORE,    _(" Ignore user"));
+	}
     }
 
     m.scale();
@@ -355,7 +374,8 @@ void icqface::fillcontactlist() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(!c->getdesc().uin) continue;
+	if(c->getdesc() == contactroot)
+	    continue;
 
 	if((c->getstatus() == STATUS_OFFLINE) && 
 	conf.gethideoffline() && !c->getmsgcount()) {
@@ -372,8 +392,8 @@ void icqface::fillcontactlist() {
 
 	if(groupchange && !strchr("!N", sc)) {
 	    ngroup = mcontacts->addnode(0, conf.getcolor(cp_main_highlight),
-		/*(void *) (10+c->getgroupid())*/ 0, " " + find(groups.begin(),
-		groups.end(), c->getgroupid())->getname() + " ");
+		0, " " + find(groups.begin(), groups.end(),
+		c->getgroupid())->getname() + " ");
 	}
 
 	if(groupchange || (sc != '#')) {
@@ -384,27 +404,23 @@ void icqface::fillcontactlist() {
 		case 'O':
 		    nnode = conf.gethideoffline() && conf.getusegroups() ?
 			ngroup : mcontacts->addnode(ngroup,
-			    conf.getcolor(cp_main_highlight),
-				/*(void *) 1*/ 0, " Online ");
+			    conf.getcolor(cp_main_highlight), 0, " Online ");
 
 		    online_added = true;
 		    break;
 		case '_':
 		    nnode = mcontacts->addnode(ngroup,
-			conf.getcolor(cp_main_highlight),
-			    /*(void *) 2*/ 0, " Offline ");
+			conf.getcolor(cp_main_highlight), 0, " Offline ");
 		    break;
 		case '!':
 		    ngroup = 0;
 		    nnode = mcontacts->addnode(ngroup,
-			conf.getcolor(cp_main_highlight),
-			    /*(void *) 3*/ 0, " Not in list ");
+			conf.getcolor(cp_main_highlight), 0, " Not in list ");
 		    break;
 		case 'N':
 		    ngroup = 0;
 		    nnode = mcontacts->addnode(ngroup,
-			conf.getcolor(cp_main_highlight),
-			    /*(void *) 4*/ 0, " Non-ICQ ");
+			conf.getcolor(cp_main_highlight), 0, " Non-ICQ ");
 		    break;
 	    }
 
@@ -422,8 +438,7 @@ void icqface::fillcontactlist() {
 	} else {
 	    mcontacts->addleaff(nnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
-		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ",
-		c->getshortstatus(), dnick.c_str());
+		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
     }
 
@@ -446,8 +461,9 @@ void icqface::fillcontactlist() {
 
     onlinefolder = online_added;
 
-    if(!mainscreenblock)
+    if(!mainscreenblock) {
 	mcontacts->menu.redraw();
+    }
 }
 
 void icqface::getregdata(string &nick, string &fname, string &lname, string &email) {
@@ -500,7 +516,7 @@ bool icqface::findresults() {
 		break;
 	    case 1:
 		if(ffuin = ihook.getfinduin(r)) {
-		    cicq.adduin(ffuin);
+		    cicq.addcontact(imcontact(ffuin, icq));
 		}
 		break;
 	    case 2:
@@ -523,10 +539,8 @@ void icqface::infoclear(dialogbox &db, icqcontact *c, unsigned int uin) {
 
     db.redraw();
 
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1,
-	conf.getcolor(cp_main_highlight), _("Information about %lu, %s"), uin,
-	c->getdesc().pname == infocard ?
-	    _("Non-ICQ") : textstatus(c->getstatus()).c_str());
+    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	_("Information about %s"), c->getdesc().totext().c_str());
 
     workarealine(WORKAREA_Y1+2);
     workarealine(WORKAREA_Y2-2);
@@ -869,59 +883,48 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
     restoreworkarea();
 }
 
-int icqface::changestatus(int old) {
+bool icqface::changestatus(protocolname &pname, imstatus &st) {
+    int i;
+    bool r;
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
-    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27, WORKAREA_Y1+9, conf.getcolor(cp_main_text)));
+
+    m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,
+	WORKAREA_Y1+9, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-    m.additem(_(" [o] Online"));
-    m.additem(_(" [_] Offline"));
-    m.additem(_(" [a] Away"));
-    m.additem(_(" [d] Do not disturb"));
-    m.additem(_(" [n] Not available"));
-    m.additem(_(" [c] Occupied"));
-    m.additem(_(" [f] Free for chat"));
-    m.additem(_(" [i] Invisible"));
 
-    switch(old) {
-	case STATUS_ONLINE      : m.setpos(0); break;
-	case STATUS_OFFLINE     : m.setpos(1); break;
-	case STATUS_AWAY        : m.setpos(2); break;
-	case STATUS_DND         : m.setpos(3); break;
-	case STATUS_NA          : m.setpos(4); break;
-	case STATUS_OCCUPIED    : m.setpos(5); break;
-	case STATUS_FREE_CHAT   : m.setpos(6); break;
-	case STATUS_INVISIBLE   : m.setpos(7); break;
+    if(ihook.enabled()) m.additem(0, icq, _(" [icq] ICQ network"));
+    if(yhook.enabled()) m.additem(0, yahoo, _(" [yahoo] Yahoo Instant Messenger"));
+
+    m.scale();
+
+    if(m.getcount() < 2) {
+	i = 1;
+    } else {
+	i = m.open();
+	m.close();
     }
 
-    int i = m.open();
-    m.close();
+    if(r = i) {
+	pname = (protocolname) ((int) m.getref(i));
+	m.clear();
 
-    switch(i) {
-	case 0: i = old; break;
-	case 1: i = STATUS_ONLINE; break;
-	case 2: i = STATUS_OFFLINE; break;
-	case 3: i = STATUS_AWAY; break;
-	case 4: i = STATUS_DND; break;
-	case 5: i = STATUS_NA; break;
-	case 6: i = STATUS_OCCUPIED; break;
-	case 7: i = STATUS_FREE_CHAT; break;
-	case 8: i = STATUS_INVISIBLE; break;
+	m.additem(0, available,     _(" [o] Online"));
+	m.additem(0, offline,       _(" [_] Offline"));
+	m.additem(0, away,          _(" [a] Away"));
+	m.additem(0, dontdisturb,   _(" [d] Do not disturb"));
+	m.additem(0, notavail,      _(" [n] Not available"));
+	m.additem(0, occupied,      _(" [c] Occupied"));
+	m.additem(0, freeforchat,   _(" [f] Free for chat"));
+	m.additem(0, invisible,     _(" [i] Invisible"));
+
+	m.scale();
+
+	i = m.open();
+	m.close();
     }
 
-    return i;
-}
-
-string icqface::textstatus(unsigned long st) {
-    if(ihook.isconnecting()) return _("Connecting.."); else
-    if((unsigned long) STATUS_OFFLINE == st) return _("Offline"); else
-    if((st & STATUS_INVISIBLE) == STATUS_INVISIBLE) return _("Invisible"); else
-    if((st & STATUS_FREE_CHAT) == STATUS_FREE_CHAT) return _("Free for chat"); else
-    if((st & STATUS_DND) == STATUS_DND) return _("Do not disturb"); else
-    if((st & STATUS_OCCUPIED) == STATUS_OCCUPIED) return _("Occupied"); else
-    if((st & STATUS_NA) == STATUS_NA) return _("Not avail"); else
-    if((st & STATUS_AWAY) == STATUS_AWAY) return _("Away"); else
-    if(!(st & 0x01FF)) return _("Online"); else return _("Unknown");
+    return r;
 }
 
 #define INPUT_POS       LINES-2
@@ -1177,14 +1180,16 @@ bool icqface::editmsg(const imcontact cinfo, string &text) {
     return editdone;
 }
 
-bool icqface::checkicqmessage(unsigned int uin, const string atext, bool &ret, int options) {
+bool icqface::checkicqmessage(const imcontact ic, const string atext, bool &ret, int options) {
     bool proceed = true, fin;
     icqcontact *c;
     char cc;
     int i;
     string text = atext;
+    unsigned long uin;
 
-    if(!uin && !text.empty()) {
+    if(ic == contactroot)
+    if(!text.empty()) {
 	cc = text[0];
 	text.replace(0, 1, "");
 	uin = atol(text.c_str());
@@ -1201,7 +1206,7 @@ bool icqface::checkicqmessage(unsigned int uin, const string atext, bool &ret, i
 		cicq.userinfo(imcontact(uin, icq));
 		break;
 	    case 1:
-		cicq.adduin(uin);
+		cicq.addcontact(imcontact(uin, icq));
 		break;
 	    case 2:
 		switch(cc) {
@@ -1288,7 +1293,8 @@ bool icqface::showevent(const imcontact cinfo, int direction, time_t &lastread) 
 	case EVT_MSG:
 	    proceed = true;
 	    hist.getmessage(text);
-	    if(checkicqmessage(cinfo.uin, text, ret, direction)) {
+
+	    if(checkicqmessage(cinfo, text, ret, direction)) {
 		i = showmsg(cinfo, text, *localtime(&lastread),
 		    tm, dir, direction & HIST_HISTORYMODE);
 
@@ -1569,7 +1575,7 @@ bool inhistory = false) {
 
 		case 1:
 		    if(cur)
-		    if(c = cicq.adduin(cur->uin)) {
+		    if(c = cicq.addcontact(imcontact(cur->uin, icq))) {
 			c->setdispnick(cur->nick);
 			lst.remove(n-1);
 		    }
@@ -1685,7 +1691,7 @@ void icqface::history(const imcontact cinfo) {
 	db.close();
 	restoreworkarea();
     } else {
-	log(_("+ no history items for %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
+	log(_("+ no history items for %s"), c->getdesc().totext().c_str());
     }
 
     db.close();

@@ -48,7 +48,7 @@ class centericq {
 	void nonicq(int id);
 	void checkmail();
 
-	icqcontact *adduin(unsigned int uin);
+	icqcontact *addcontact(const imcontact ic);
 
 	bool idle(int options = 0);
 	void exectimers();

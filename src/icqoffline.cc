@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.10 2001/11/11 14:30:16 konst Exp $
+* $Id: icqoffline.cc,v 1.11 2001/11/12 16:55:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,8 +27,10 @@
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqconf.h"
-#include "icqhook.h"
 #include "icqface.h"
+
+#include "icqhook.h"
+#include "yahoohook.h"
 
 icqoffline::icqoffline() {
 }
@@ -60,13 +62,25 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext) {
 		lst.erase(lst.begin());
 	    }
 
-	    seq = icq_SendMessage(&icql, cinfo.uin, text.c_str(),
-		c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+	    switch(cinfo.pname) {
+		case icq:
+		    seq = ihook.sendmessage(c, text);
+		    break;
+		case yahoo:
+		    seq = yhook.sendmessage(c, text);
+		    break;
+	    }
 
 	    fprintf(f, "\f\nMSG\n");
 	    fprintf(f, "%lu\n%lu\n", seq, time(0));
 	    fprintf(f, "%s\n", text.c_str());
 	    totalunsent++;
+
+	    switch(cinfo.pname) {
+		case yahoo:
+		    offl.scan(seq, osremove);
+		    break;
+	    }
 
 	    if(lst.empty()) break;
 	}
