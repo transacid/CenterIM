@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.42 2003/04/21 22:41:32 konst Exp $
+* $Id: jabberhook.cc,v 1.43 2003/04/22 21:50:48 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1401,9 +1401,13 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    case 504: /* Remote Server Timeout */
 		    default:
 			if(!jhook.regmode) {
-			    face.log(_("[jab] error %d: %s"), code, desc.c_str());
+			    face.log(_("+ [jab] error %d: %s"), code, desc.c_str());
+			    close(jhook.jc->fd);
+			    jhook.jc->fd = -1;
+
 			} else {
 			    jhook.regerr = desc;
+
 			}
 		}
 

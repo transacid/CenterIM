@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.44 2002/12/20 17:28:43 konst Exp $
+* $Id: imcontroller.cc,v 1.45 2003/04/22 21:50:47 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,6 +184,7 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 bool imcontroller::jabberregistration(icqconf::imaccount &account) {
     bool success;
     string err;
+    int pos;
 
     if(success = regdialog(account.pname)) {
 	unlink((conf.getdirname() + "jabber-infoset").c_str());
@@ -195,6 +196,15 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
 	if(success = jhook.regnick(rnick, rpasswd, rserver, err)) {
 	    account.nickname = rnick;
 	    account.password = rpasswd;
+	    account.server = rserver;
+
+	    if((pos = account.server.find(":")) != -1) {
+		account.port = atoi(account.server.substr(pos+1).c_str());
+		account.server.erase(pos);
+	    } else {
+		account.port = icqconf::defservers[jabber].port;
+	    }
+
 	    face.progress.log(_("The Jabber ID was successfully registered"));
 
 	    conf.checkdir();
