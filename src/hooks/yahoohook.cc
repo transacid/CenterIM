@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.84 2003/09/30 11:38:44 konst Exp $
+* $Id: yahoohook.cc,v 1.85 2003/10/01 00:27:46 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -727,7 +727,9 @@ void yahoohook::got_buddies(int id, YList *buds) {
     int i;
 
     for(buddy = buds; buddy; buddy = y_list_next(buddy)) {
-	string id = static_cast<yahoo_buddy*>(buddy->data)->id;
+	yahoo_buddy *bud = static_cast<yahoo_buddy*>(buddy->data);
+	string id = bud->id;
+
 	if(find(nicks.begin(), nicks.end(), id) == nicks.end()) {
 	    nicks.push_back(id);
 	}
@@ -859,6 +861,9 @@ void yahoohook::conf_message(int id, char *who, char *room, char *msg, int utf8)
 }
 
 void yahoohook::got_file(int id, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize) {
+    if(!who || !url || !msg || !fname)
+	return;
+
     imfile::record r;
     r.fname = fname;
     r.size = fesize;

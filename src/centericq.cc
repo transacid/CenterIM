@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.167 2003/09/30 11:38:40 konst Exp $
+* $Id: centericq.cc,v 1.168 2003/10/01 00:27:44 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,7 @@
 
 centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
-      timer_autosave(0), regmode(false)
+      timer_autosave(/*time(0)*/0), regmode(false)
 {
 }
 

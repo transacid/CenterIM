@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.117 2003/09/30 11:38:40 konst Exp $
+* $Id: icqconf.cc,v 1.118 2003/10/01 00:27:45 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -723,7 +723,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 
 string icqconf::getprotocolprefix(protocolname pname) const {
     static const string pprefixes[protocolname_size] = {
-	"", "y", "m", "a", "i", "j", "r", "n"
+	"", "y", "m", "a", "i", "j", "r", "l", "n"
     };
 
     return pprefixes[pname];

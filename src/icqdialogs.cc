@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.125 2003/09/30 11:38:41 konst Exp $
+* $Id: icqdialogs.cc,v 1.126 2003/10/01 00:27:45 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1312,9 +1312,17 @@ void icqface::selectproto(bool prots[], bool irss) {
     i = 0;
     memcpy(aprots, prots, sizeof(aprots));
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1)
-	if(!conf.getourid(pname).empty() || (irss && gethook(pname).getCapabs().count(hookcapab::nochat)))
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	if(!irss)
+	if(gethook(pname).getCapabs().count(hookcapab::nochat))
+	    continue;
+
+	if(pname == infocard)
+	    continue;
+
+	if(!conf.getourid(pname).empty() || irss)
 	    tempprots[i++] = pname;
+    }
 
     protmax = i;
 

@@ -19,6 +19,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	enum RequestType {
 	    reqLogin,
 	    reqPost,
+	    reqGetFriends,
 	    reqDone
 	};
 
@@ -27,6 +28,8 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	void socket_cb(SocketEvent *ev);
 	void messageack_cb(MessageEvent *ev);
 	void logger_cb(LogEvent *ev);
+
+	void requestfriends();
 
     public:
 	ljhook();

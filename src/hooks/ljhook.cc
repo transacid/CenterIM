@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.2 2003/09/30 11:38:43 konst Exp $
+* $Id: ljhook.cc,v 1.3 2003/10/01 00:27:45 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,7 +29,12 @@
 #include "ljhook.h"
 #include "icqface.h"
 
+#include <sys/utsname.h>
+
 ljhook lhook;
+
+#define KOI2UTF(x) siconv(x, conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf8")
+#define UTF2KOI(x) siconv(x, "utf8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())
 
 ljhook::ljhook(): abstracthook(livejournal), fonline(false) {
     fcapabs.insert(hookcapab::nochat);
@@ -62,12 +67,22 @@ void ljhook::connect() {
     ev->addParam("mode", "login");
     ev->addParam("user", username = acc.nickname);
     ev->addParam("hpassword", md5pass);
-    ev->addParam("clientversion", (string) PACKAGE + "/" + VERSION);
+
+    struct utsname un;
+    string clientver;
+
+    if(!uname(&un)) clientver = un.sysname;
+	else clientver = "GNU";
+
+    clientver += string("-") + PACKAGE + "/" + VERSION;
+
+    ev->addParam("clientversion", clientver);
 
     self = imcontact(username + "@lj", livejournal);
 
     fonline = true;
     httpcli.SendEvent(ev);
+    sent[ev] = reqLogin;
 }
 
 void ljhook::disconnect() {
@@ -195,28 +210,25 @@ bool ljhook::send(const imevent &ev) {
 	const immessage *m = static_cast<const immessage *> (&ev);
 	HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
 
-    ev->addParam("mode", "login");
-    ev->addParam("user", username);
-    ev->addParam("hpassword", md5pass);
-    ev->addParam("clientversion", (string) PACKAGE + "/" + VERSION);
-
-/*
 	ev->addParam("mode", "postevent");
 	ev->addParam("user", username);
 	ev->addParam("hpassword", md5pass);
-	ev->addParam("event", m->gettext());
+	ev->addParam("event", KOI2UTF(m->gettext()));
 
 	time_t t = m->gettimestamp();
 	struct tm *tm = localtime(&t);
 
-	ev->addParam("year", i2str(tm->tm_year));
-	ev->addParam("mon", i2str(tm->tm_mon));
+	ev->addParam("year", i2str(tm->tm_year+1900));
+	ev->addParam("mon", i2str(tm->tm_mon+1));
 	ev->addParam("day", i2str(tm->tm_mday));
 	ev->addParam("hour", i2str(tm->tm_hour));
 	ev->addParam("min", i2str(tm->tm_min));
-*/
+
+	ev->addParam("lineendings", "unix");
+	ev->addParam("subject", "");
 
 	httpcli.SendEvent(ev);
+	sent[ev] = reqPost;
 	return true;
     }
 
@@ -269,6 +281,19 @@ void ljhook::updatecontact(icqcontact *c) {
 
 // ----------------------------------------------------------------------------
 
+void ljhook::requestfriends() {
+    HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
+
+    ev->addParam("mode", "getfriends");
+    ev->addParam("user", username);
+    ev->addParam("hpassword", md5pass);
+
+    httpcli.SendEvent(ev);
+    sent[ev] = reqGetFriends;
+}
+
+// ----------------------------------------------------------------------------
+
 void ljhook::socket_cb(SocketEvent *ev) {
     vector<int>::iterator i;
 
@@ -301,6 +326,10 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
     if(!rev) return;
 
+    map<HTTPRequestEvent *, RequestType>::iterator ie = sent.find(rev);
+
+    if(ie == sent.end()) return;
+
     int npos;
     string content = rev->getContent(), pname;
     map<string, string> params;
@@ -329,7 +358,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    else content = "";
     }
 
-    if(isconnecting()) {
+    if(isconnecting() && ie->second == reqLogin) {
 	fonline = true;
 
 	if(params["success"] == "OK") {
@@ -341,11 +370,30 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    icqcontact *c = clist.get(self);
 	    if(!c) c = clist.addnew(self, false);
 	    c->setstatus(available);
+	    requestfriends();
 
 	} else {
 	    face.log(_("+ [lj] login failed: %s"), params["errmsg"].c_str());
 	}
+    } else if(ie->second == reqPost) {
+	if(params["success"] == "OK") {
+	    face.log(_("+ [lj] posted successully, the id is %s"), params["itemid"].c_str());
+	} else {
+	    face.log(_("+ [lj] post error: %s"), params["errmsg"].c_str());
+	}
+
+    } else if(ie->second == reqGetFriends) {
+	int fcount = atoi(params["friend_count"].c_str()), i;
+
+	for(i = 0; i < fcount; i++) {
+	    string username = (string) "friend_" + i2str(i) + "_user";
+	    string name = (string) "friend_" + i2str(i) + "_name";
+	    string birthday = (string) "friend_" + i2str(i) + "_birthday";
+	}
+
     }
+
+    if(ie != sent.end()) sent.erase(ie);
 }
 
 void ljhook::logger_cb(LogEvent *ev) {
