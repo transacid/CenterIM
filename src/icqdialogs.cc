@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.42 2002/01/18 18:01:44 konst Exp $
+* $Id: icqdialogs.cc,v 1.43 2002/01/19 13:02:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,7 +236,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
     if(!c) {
 	status(_("Fetching your details"));
 	c = clist.get(contactroot);
-	if(mainscreenblock) return false;
+//        if(mainscreenblock) return false;
 	    // Another dialog is already on top
     }
 
@@ -276,12 +276,10 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	about = c->getabout();
 
 	if(!b) {
-/*
-	    if(!c->getdesc().uin && (c->updated() < 5)) {
-		status(_("Wait a moment. Your ICQ details haven't been fetched yet"));
+	    if((c->getdesc() == contactroot) && !c->updated()) {
+		status(_("Wait a moment. Your details haven't been fetched yet"));
 		continue;
 	    } else
-*/
 	    switch(citem) {
 		case 10:
 		    c->setnick(inputstr(_("Nickname: "), c->getnick()));
@@ -678,10 +676,10 @@ void icqface::detailsidle(dialogbox &db) {
 
     if(!cicq.idle(HIDL_SOCKEXIT))
     if(c = clist.get(contactroot))
-    if(c->updated() >= 5) {
+    if(c->updated()) {
 	face.gendetails(db.gettree());
 	db.gettree()->redraw();
-	face.status(_("Your ICQ details have been fetched"));
+	face.status(_("Your details have been fetched"));
     }
 }
 

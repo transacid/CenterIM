@@ -31,6 +31,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	void statuschanged_cb(MyStatusChangeEvent *ev);
 	void want_auto_resp_cb(AwayMessageEvent *ev);
 	void search_result_cb(SearchResultEvent *ev);
+	void detailschanged_cb(MyDetailsChangeEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
 

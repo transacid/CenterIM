@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.37 2002/01/18 18:01:44 konst Exp $
+* $Id: icqhook.cc,v 1.38 2002/01/19 13:02:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -64,6 +64,7 @@ icqhook::icqhook() {
     cli.statuschanged.connect(slot(this, &icqhook::statuschanged_cb));
     cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
     cli.search_result.connect(slot(this, &icqhook::search_result_cb));
+    cli.detailschanged.connect(slot(this, &icqhook::detailschanged_cb));
 
 #ifdef DEBUG
     cli.logger.connect(slot(this, &icqhook::logger_cb));
@@ -430,9 +431,14 @@ imstatus icqhook::icq2imstatus(const Status st) const {
 
 void icqhook::requestinfo(const imcontact c) {
     if(logged()) {
-	Contact ic(c.uin);
-	cli.addContact(ic);
-	cli.fetchDetailContactInfo(cli.getContact(c.uin));
+	if(c == imcontact(conf.getourid(icq).uin, icq)) {
+	    // Our info is requested
+	    cli.fetchSelfDetails();
+	} else {
+	    Contact ic(c.uin);
+	    cli.addContact(ic);
+	    cli.fetchDetailContactInfo(cli.getContact(c.uin));
+	}
     }
 }
 
@@ -462,6 +468,71 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 }
 
 void icqhook::sendupdateuserinfo(const icqcontact &c) {
+    Contact *ic = cli.getSelfContact();
+
+    MainHomeInfo &home = ic->getMainHomeInfo();
+    HomepageInfo &hpage = ic->getHomepageInfo();
+    WorkInfo &work = ic->getWorkInfo();
+
+    icqcontact::basicinfo cbinfo = c.getbasicinfo();
+    icqcontact::moreinfo cminfo = c.getmoreinfo();
+    icqcontact::workinfo cwinfo = c.getworkinfo();
+
+    /* basic information */
+
+    ic->setAlias(rusconv("kw", c.getnick()));
+    ic->setFirstName(rusconv("kw", cbinfo.fname));
+    ic->setLastName(rusconv("kw", cbinfo.lname));
+    ic->setEmail(rusconv("kw", cbinfo.email));
+
+    ic->setAboutInfo(rusconv("kw", c.getabout()));
+
+    home.city = rusconv("kw", cbinfo.city);
+    home.state = rusconv("kw", cbinfo.state);
+    home.phone = rusconv("kw", cbinfo.phone);
+    home.fax = rusconv("kw", cbinfo.fax);
+    home.street = rusconv("kw", cbinfo.street);
+    home.cellular = rusconv("kw", cbinfo.cellular);
+
+    home.zip = i2str(cbinfo.zip);
+    home.country = cbinfo.country;
+
+    /* more information */
+
+    hpage.age = cminfo.age;
+
+    hpage.sex =
+	cminfo.gender == genderFemale ? SEX_FEMALE :
+	cminfo.gender == genderMale ? SEX_MALE :
+	    SEX_UNSPECIFIED;
+
+    hpage.homepage = rusconv("kw", cminfo.homepage);
+    hpage.birth_day = cminfo.birth_day;
+    hpage.birth_month = cminfo.birth_month;
+    hpage.birth_year = cminfo.birth_year;
+
+    hpage.lang1 = cminfo.lang1;
+    hpage.lang2 = cminfo.lang2;
+    hpage.lang3 = cminfo.lang3;
+
+    /* work information */
+
+    work.city = rusconv("kw", cwinfo.city);
+    work.state = rusconv("kw", cwinfo.state);
+    work.street = rusconv("kw", cwinfo.street);
+    work.company_name = rusconv("kw", cwinfo.company);
+    work.company_dept = rusconv("kw", cwinfo.dept);
+    work.company_position = rusconv("kw", cwinfo.position);
+    work.company_web = rusconv("kw", cwinfo.homepage);
+
+    work.zip = i2str(cwinfo.zip);
+    work.country = cwinfo.country;
+
+    ic->setMainHomeInfo(home);
+    ic->setHomepageInfo(hpage);
+    ic->setWorkInfo(work);
+
+    cli.uploadSelfDetails();
 }
 
 // ----------------------------------------------------------------------------
@@ -474,6 +545,19 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     face.log(_("+ [icq] logged in"));
     face.update();
+
+    string buf;
+    ifstream f(conf.getconfigfname("icq-infoset").c_str());
+
+    if(f.is_open()) {
+	getstring(f, buf); cli.getSelfContact()->setAlias(buf);
+	getstring(f, buf); cli.getSelfContact()->setEmail(buf);
+	getstring(f, buf); cli.getSelfContact()->setFirstName(buf);
+	getstring(f, buf); cli.getSelfContact()->setLastName(buf);
+	f.close();
+	cli.uploadSelfDetails();
+	unlink(conf.getconfigfname("icq-infoset").c_str());
+    }
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {
@@ -651,6 +735,9 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 		if(!c) {
 		    c = clist.get(contactroot);
+		    if(ev->getUIN() == conf.getourid(icq).uin) {
+			ic = cli.getSelfContact();
+		    }
 		}
 
 		MainHomeInfo &home = ic->getMainHomeInfo();
@@ -845,4 +932,9 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 		ev->getContactList().size());
 	}
     }
+}
+
+void icqhook::detailschanged_cb(MyDetailsChangeEvent *ev) {
+    UserInfoChangeEvent cl(cli.getSelfContact());
+    contactlist_cb(&cl);
 }

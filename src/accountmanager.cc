@@ -25,8 +25,8 @@ void accountmanager::exec() {
     dialogbox db;
     protocolname pname;
     icqconf::imaccount account;
-    int n, b, i, citem, action;
-    string spname;
+    int n, b, i, citem, action, pos;
+    string spname, tmp;
     bool fin, proceed;
 
     face.blockmainscreen();
@@ -63,6 +63,13 @@ void accountmanager::exec() {
 			    account.nickname.c_str());
 			break;
 		    case icq:
+			if(!account.server.empty() && account.port) {
+			    tmp = account.server + ":" + i2str(account.port);
+			} else {
+			    tmp = "";
+			}
+
+			t.addleaff(n, 0, citem+9, _(" Server : %s "), tmp.c_str());
 			t.addleaff(n, 0, citem+2, _(" UIN : %s "),
 			    account.uin ? i2str(account.uin).c_str() : "");
 			break;
@@ -118,6 +125,20 @@ void accountmanager::exec() {
 			account = icqconf::imaccount(pname);
 		    } else {
 			face.status(_("You have to disconnect the service first!"));
+		    }
+		    break;
+		case 9:
+		    tmp = account.server + ":" + i2str(account.port);
+		    tmp = face.inputstr(spname + _(" server address: "), tmp);
+
+		    if(!tmp.empty()) {
+			if((pos = tmp.find(":")) != -1) {
+			    account.server = tmp.substr(0, pos);
+			    account.port = strtoul(tmp.substr(pos+1).c_str(), 0, 0);
+			} else {
+			    account.server = tmp;
+			    account.port = 0;
+			}
 		    }
 		    break;
 	    }
