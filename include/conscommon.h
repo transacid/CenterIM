@@ -93,7 +93,6 @@ void kgotoxy(int x, int y);
 void hidecursor();
 void showcursor();
 void setbeep(int freq, int duration);
-void delay(int milisec);
 int kwherex();
 int kwherey();
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.24 2002/08/24 08:40:03 konst Exp $
+* $Id: conscommon.cc,v 1.25 2002/12/15 15:45:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -212,13 +212,6 @@ void setbeep(int freq, int duration) {
     if(duration == -2) printf("\e[11]");
 
     fflush(stdout);
-}
-
-void delay(int milisec) {
-    struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = milisec*1000;
-    select(0, 0, 0, 0, &tv);
 }
 
 int string2key(const string &adef) {
