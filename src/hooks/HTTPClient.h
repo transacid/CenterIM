@@ -13,16 +13,18 @@ using namespace ICQ2000;
 
 class HTTPRequestEvent : public MessageEvent {
     private:
-	std::string m_content, m_url;
+	std::string m_content, m_url, m_httpresp;
 
     public:
 	HTTPRequestEvent(const string &url): MessageEvent(ContactRef()), m_url(url) { }
 
 	string getContent() const { return m_content; }
 	string getURL() const { return m_url; }
+	string getHTTPResp() const { return m_httpresp; }
 	MessageType getType() const { return Normal; }
 
 	void setContent(const string &content) { m_content = content; }
+	void setHTTPResp(const string &resp) { m_httpresp = resp; }
 };
 
 class HTTPClient : public SocketClient {

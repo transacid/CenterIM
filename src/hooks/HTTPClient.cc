@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.1 2003/07/12 17:16:40 konst Exp $
+* $Id: HTTPClient.cc,v 1.2 2003/07/13 16:00:09 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,7 +26,7 @@
 
 #ifdef BUILD_RSS
 
-HTTPClient::HTTPClient() : m_recv(&m_transl), m_state(NOT_CONNECTED), m_timeout(30) {
+HTTPClient::HTTPClient() : m_recv(&m_transl), m_state(NOT_CONNECTED), m_timeout(50) {
     m_socket = new TCPSocket();
     Init();
 }
@@ -49,6 +49,8 @@ void HTTPClient::Connect() {
     m_hostname = ev->getURL();
     m_port = 80;
     m_resource = "/";
+    m_content = "";
+    m_recv.clear();
 
     if(up(m_hostname.substr(0, 7)) == "HTTP://") {
 	m_hostname.erase(0, 7);
@@ -65,6 +67,8 @@ void HTTPClient::Connect() {
     }
 
     try {
+	SignalLog(LogEvent::WARN, (string) "Connecting to " + m_hostname + ":" + i2str(m_port));
+
 	m_socket->setRemoteHost(m_hostname.c_str());
 	m_socket->setRemotePort(m_port);
 	m_socket->setBindHost(m_bindhost.c_str());
@@ -115,8 +119,16 @@ void HTTPClient::Parse() {
 	if(m_state == WAITING_FOR_HEADER) {
 	    code = 0;
 
-	    if((npos = response.find(" ")) != -1) code = strtoul(response.substr(npos+1).c_str(), 0, 0);
-	    if(code != 200) throw ParseException("Didn't receive HTTP OK");
+	    if((npos = response.find(" ")) != -1) {
+		code = strtoul(response.substr(npos+1).c_str(), 0, 0);
+	    }
+
+	    if(code != 200) {
+		HTTPRequestEvent *ev = *m_queue.begin();
+		dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(response.substr(npos+1));
+		throw ParseException("Didn't receive HTTP OK");
+	    }
+
 	    m_state = RECEIVING_HEADER;
 
 	} else if(m_state == RECEIVING_HEADER) {
@@ -148,12 +160,15 @@ void HTTPClient::Send(Buffer &b) {
 
 void HTTPClient::SendRequest() {
     Buffer b(&m_transl);
-    b.Pack("GET " + m_resource + " HTTP/1.0\nHost: " + m_hostname + "\n\n");
+    b.Pack((string) "GET " + m_resource + " HTTP/1.0\r\n");
+    b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
+    b.Pack((string) "Host: " + m_hostname + ":" + i2str(m_port) + "\r\n\r\n");
     Send(b);
     m_state = WAITING_FOR_HEADER;
 }
 
 void HTTPClient::Disconnect() {
+    SignalLog(LogEvent::WARN, "HTTP disconnected");
     m_socket->Disconnect();
     m_state = NOT_CONNECTED;
     if(m_socket->getSocketHandle() > -1) SignalRemoveSocket(m_socket->getSocketHandle());
@@ -199,6 +214,15 @@ void HTTPClient::check_timeout() {
     time_t now = time(0);
 
     if(now-m_last_operation > m_timeout) {
+	MessageEvent *ev = *m_queue.begin();
+	ev->setDelivered(false);
+	ev->setFinished(true);
+	dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(_("Timed out"));
+	ev->setDeliveryFailureReason(MessageEvent::Failed);
+	messageack.emit(ev);
+
+	delete ev;
+	m_queue.pop_front();
 	Disconnect();
     }
 }
@@ -229,6 +253,10 @@ void HTTPClient::SendEvent(MessageEvent* ev) {
 
 	if(!found) {
 	    m_queue.push_back(rev);
+
+	    if(m_state == NOT_CONNECTED) {
+		Connect();
+	    }
 	}
     }
 }

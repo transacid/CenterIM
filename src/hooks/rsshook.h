@@ -6,6 +6,7 @@
 #ifdef BUILD_RSS
 
 #include "HTTPClient.h"
+#include <libicq2000/Xml.h>
 
 class rsshook: public abstracthook, public sigslot::has_slots<> {
     protected:
@@ -16,6 +17,10 @@ class rsshook: public abstracthook, public sigslot::has_slots<> {
 	void socket_cb(SocketEvent *ev);
 	void messageack_cb(MessageEvent *ev);
 	void logger_cb(LogEvent *ev);
+
+	void fetchRSSParam(string &base, XmlBranch *i, const string &enc,
+	    const string &name, const string &title,
+	    const string &postfix = "\n");
 
     public:
 	rsshook();

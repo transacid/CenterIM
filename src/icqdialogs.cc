@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.117 2003/07/12 17:14:22 konst Exp $
+* $Id: icqdialogs.cc,v 1.118 2003/07/13 16:00:08 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -173,24 +173,26 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     string tname, act;
     imsearchparams ts;
 
-    for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
-	if(subj == fschannel)
-	if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
-	    continue;
+    if(subj != fsrss) {
+	for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
+	    if(subj == fschannel)
+	    if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
+		continue;
 
-	if(gethook(apname).logged() || apname == infocard) {
-	    penabled.push_back(apname);
+	    if(gethook(apname).logged() || apname == infocard) {
+		penabled.push_back(apname);
+	    }
 	}
-    }
 
-    if(penabled.empty()) {
-	log(_("+ you must be logged in first"));
-	return false;
-    }
+	if(penabled.empty()) {
+	    log(_("+ you must be logged in first"));
+	    return false;
+	}
 
-    if((ipname = find(penabled.begin(), penabled.end(), s.pname)) == penabled.end()) {
-	ipname = penabled.begin();
-	s.pname = *ipname;
+	if((ipname = find(penabled.begin(), penabled.end(), s.pname)) == penabled.end()) {
+	    ipname = penabled.begin();
+	    s.pname = *ipname;
+	}
     }
 
     blockmainscreen();

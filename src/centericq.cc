@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.159 2003/07/12 17:14:21 konst Exp $
+* $Id: centericq.cc,v 1.160 2003/07/13 16:00:08 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -482,8 +482,9 @@ void centericq::joindialog() {
 
 void centericq::linkfeed() {
     icqcontact *c;
-    static imsearchparams s;
+    imsearchparams s;
 
+    s.pname = rss;
     s.checkfrequency = 2;
 
     if(face.finddialog(s, icqface::fsrss)) {

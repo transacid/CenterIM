@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.36 2003/07/12 17:14:23 konst Exp $
+* $Id: abstracthook.cc,v 1.37 2003/07/13 16:00:09 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -167,9 +167,9 @@ vector<pair<string, string> > abstracthook::getregparameters(const string &agent
 void abstracthook::updatecontact(icqcontact *c) {
 }
 
-string abstracthook::rushtmlconv(const string &tdir, const string &text) {
+string abstracthook::rushtmlconv(const string &tdir, const string &text, bool rus) {
     int pos;
-    string r = rusconv(tdir, text);
+    string r = rus ? rusconv(tdir, text) : text;
 
     if(tdir == "kw") {
 	pos = 0;

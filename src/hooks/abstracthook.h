@@ -55,7 +55,7 @@ class abstracthook {
 	set<hookcapab::enumeration> fcapabs;
 
 	string rusconv(const string &tdir, const string &text);
-	string rushtmlconv(const string &tdir, const string &text);
+	string rushtmlconv(const string &tdir, const string &text, bool rus = true);
 	string ruscrlfconv(const string &tdir, const string &text);
 	Encoding guessencoding(const string &text);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.183 2003/07/12 17:14:22 konst Exp $
+* $Id: icqface.cc,v 1.184 2003/07/13 16:00:08 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1062,24 +1062,29 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     icqcontact::moreinfo mi = c->getmoreinfo();
     icqcontact::workinfo wi = c->getworkinfo();
 
-    workarealine(sizeWArea.y1+5);
-    workarealine(sizeWArea.y1+8);
+    workarealine(sizeWArea.y1+7);
+    workarealine(sizeWArea.y1+10);
 
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Handle"));
     mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("RSS doc"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("Version"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("Encoding"));
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("Title"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Link"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("Title"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Link"));
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Frequency"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+9, conf.getcolor(cp_main_highlight), _("Last check"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Next check"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Frequency"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+11, conf.getcolor(cp_main_highlight), _("Last check"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Next check"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Last result"));
 
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), wi.homepage);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.city);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), bi.state);
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), bi.fname);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+6, conf.getcolor(cp_main_text), mi.homepage);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+7, conf.getcolor(cp_main_text), bi.fname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), mi.homepage);
 
     string freq, last, next;
     char buf[512];
@@ -1095,9 +1100,10 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
 	freq = next = _("Never");
     }
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), freq);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), last);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), next);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), freq);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf.getcolor(cp_main_text), last);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), next);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), bi.lname);
 }
 
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
@@ -1192,7 +1198,11 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 		    gethook(cinfo.pname).ping(c);
 		    b = lastb;
 		    continue;
-		case 3: updatedetails(c); showinfo = true; break;
+		case 3:
+		    updatedetails(c, c->getdesc().pname);
+		    showinfo = true;
+		    b = lastb;
+		    continue;
 	    }
 
 	    refresh();
