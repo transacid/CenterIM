@@ -130,8 +130,6 @@ class icqface {
 	void selectlanguage(unsigned short &f);
 	void selectagerange(ICQ2000::AgeRange &r);
 
-	void editabout(string &fabout);
-
 	void saveworkarea();
 	void restoreworkarea();
 	void clearworkarea();
@@ -141,6 +139,8 @@ class icqface {
 	void extracturls(const string buf);
 
 	int groupmanager(const string text, bool sel);
+
+	void edit(string &txt, const string header);
 
     public:
 	vector<imcontact> muins;

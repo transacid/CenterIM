@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.47 2002/02/05 16:15:32 konst Exp $
+* $Id: icqdialogs.cc,v 1.48 2002/02/05 17:20:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -349,7 +349,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 		case 37: selectlanguage(mi.lang2); break;
 		case 38: selectlanguage(mi.lang3); break;
 
-		case 39: editabout(about); break;
+		case 39: edit(about, _("About")); break;
 		case 40: bi.requiresauth = !bi.requiresauth; break;
 	    }
 
@@ -444,10 +444,10 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     if(i) r = (ICQ2000::AgeRange) ((int) m.getref(i-1));
 }
 
-void icqface::editabout(string &fabout) {
+void icqface::edit(string &txt, const string header) {
     texteditor se;
     textwindow w(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" About [Ctrl-X save, Esc cancel] "));
+    w.set_title(conf.getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
     w.open();
 
     editdone = false;
@@ -457,12 +457,12 @@ void icqface::editabout(string &fabout) {
     se.otherkeys = &editaboutkeys;
     se.wrap = true;
 
-    se.load(fabout, "");
+    se.load(txt, "");
     se.open();
 
     if(editdone) {
 	char *ctext = se.save("\r\n");
-	fabout = ctext;
+	txt = ctext;
 	delete ctext;
     }
 

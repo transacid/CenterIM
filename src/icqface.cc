@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.77 2002/02/05 10:41:09 konst Exp $
+* $Id: icqface.cc,v 1.78 2002/02/05 17:20:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -921,6 +921,11 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 
 	if(r = i) {
 	    st = (imstatus) ((int) m.getref(i-1));
+
+	    if(gethook(pname).getcapabilities() & hoptCanSetAwayMsg)
+	    if(st == away) {
+		
+	    }
 	}
     }
 
