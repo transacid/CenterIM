@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.7 2002/03/15 15:15:38 konst Exp $
+* $Id: aimhook.cc,v 1.8 2002/03/17 17:22:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -295,7 +295,6 @@ void aimhook::saveprofile() {
 
 void aimhook::loadprofile() {
     string buf, fname;
-    ifstream f;
 
     profile = ourprofile();
     fname = conf.getconfigfname("aim-profile");
@@ -307,10 +306,13 @@ void aimhook::loadprofile() {
 	saveprofile();
     }
 
-    f.open(fname.c_str());
+    ifstream f(fname.c_str());
+
     if(f.is_open()) {
-	while(getline(f, buf)) {
-	    profile.info += buf + "\n";
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    if(!profile.info.empty()) profile.info += "\n";
+	    profile.info += buf;
 	}
     }
 }
