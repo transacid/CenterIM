@@ -46,7 +46,6 @@ class irchook: public abstracthook {
 	static void buddyonline(void *conn, void *cli, ...);
 	static void buddyoffline(void *conn, void *cli, ...);
 	static void buddyaway(void *conn, void *cli, ...);
-	static void buddynickchanged(void *conn, void *cli, ...);
 	static void connectfailed(void *connection, void *cli, ...);
 	static void listmember(void *connection, void *cli, ...);
 	static void log(void *connection, void *cli, ...);

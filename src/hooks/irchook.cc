@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.8 2002/04/07 14:11:24 konst Exp $
+* $Id: irchook.cc,v 1.9 2002/04/07 15:13:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -68,7 +68,6 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_IM_BUDDYOFFLINE, &buddyoffline);
     firetalk_register_callback(handle, FC_IM_BUDDYAWAY, &buddyaway);
     firetalk_register_callback(handle, FC_IM_BUDDYUNAWAY, &buddyonline);
-    firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &buddynickchanged);
     firetalk_register_callback(handle, FC_CHAT_LISTMEMBER, &listmember);
     firetalk_register_callback(handle, FC_CHAT_NAMES, &chatnames);
 
@@ -655,32 +654,6 @@ void irchook::buddyaway(void *conn, void *cli, ...) {
     }
 
     DLOG("buddyaway");
-}
-
-void irchook::buddynickchanged(void *conn, void *cli, ...) {
-    va_list ap;
-
-    va_start(ap, cli);
-    char *oldnick = va_arg(ap, char *);
-    char *newnick = va_arg(ap, char *);
-    va_end(ap);
-/*
-    if(oldnick && newnick)
-    if(strlen(oldnick) && strlen(newnick)) {
-	icqcontact *c = clist.get(imcontact(oldnick, irc));
-
-	if(c) {
-	    if(c->getnick() == c->getdispnick()) {
-		c->setdispnick(newnick);
-	    }
-
-	    c->setnick(newnick);
-
-	    face.log(_("+ [irc] user %s changed their nick to %s"),
-		oldnick, newnick);
-	}
-    }
-*/
 }
 
 void irchook::listmember(void *connection, void *cli, ...) {

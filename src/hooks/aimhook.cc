@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.12 2002/04/03 17:40:56 konst Exp $
+* $Id: aimhook.cc,v 1.13 2002/04/07 15:13:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -66,7 +66,6 @@ void aimhook::init() {
     firetalk_register_callback(handle, FC_IM_BUDDYAWAY, &buddyaway);
     firetalk_register_callback(handle, FC_IM_BUDDYUNAWAY, &buddyonline);
     firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
-    firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &buddynickchanged);
 }
 
 void aimhook::connect() {
@@ -495,30 +494,5 @@ void aimhook::needpass(void *conn, void *cli, ...) {
 	strncpy(pass, acc.password.c_str(), size-1);
 	pass[size-1] = 0;
 	face.log(_("+ [aim] password sent"));
-    }
-}
-
-void aimhook::buddynickchanged(void *conn, void *cli, ...) {
-    va_list ap;
-
-    va_start(ap, cli);
-    char *oldnick = va_arg(ap, char *);
-    char *newnick = va_arg(ap, char *);
-    va_end(ap);
-
-    if(oldnick && newnick)
-    if(strlen(oldnick) && strlen(newnick)) {
-	icqcontact *c = clist.get(imcontact(oldnick, aim));
-
-	if(c) {
-	    if(c->getnick() == c->getdispnick()) {
-		c->setdispnick(newnick);
-	    }
-
-	    c->setnick(newnick);
-
-	    face.log(_("+ [aim] user %s changed their nick to %s"),
-		oldnick, newnick);
-	}
     }
 }
