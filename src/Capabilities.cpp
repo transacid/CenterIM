@@ -141,7 +141,7 @@ namespace ICQ2000 {
     set_capability_flag( ICQ );
     set_capability_flag( ICQServerRelay );
     set_capability_flag( ICQRTF );
-    set_capability_flag( ICQUnknown2 );
+//    set_capability_flag( ICQUnknown2 );
   }
 
   void Capabilities::clear()
