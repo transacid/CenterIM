@@ -49,6 +49,7 @@ class icqconf {
 	    string nickname, server, password;
 	    unsigned long uin, port;
 	    protocolname pname;
+	    map<string, string> additional;
 
 	    void write(ofstream &f);
 	    void read(const string &spec);

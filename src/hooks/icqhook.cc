@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.91 2002/08/09 17:10:57 konst Exp $
+* $Id: icqhook.cc,v 1.92 2002/08/10 14:38:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,6 +128,7 @@ void icqhook::connect() {
 
     cli.setUIN(acc.uin);
     cli.setPassword(acc.password);
+    cli.setWebAware(acc.additional["webaware"] == "1");
 
     sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
@@ -597,7 +598,14 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ic->setHomepageInfo(hpage);
     ic->setWorkInfo(work);
 
+    icqconf::imaccount acc = conf.getourid(icq);
+    acc.additional["webaware"] = cbinfo.webaware ? "1" : "0";
+    acc.additional["randomgroup"] = i2str(cbinfo.randomgroup);
+    conf.setourid(acc);
+
+    cli.setWebAware(cbinfo.webaware);
     cli.setRandomChatGroup(cbinfo.randomgroup);
+
     cli.uploadSelfDetails();
     cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
 }
@@ -763,6 +771,8 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     time(&timer_poll);
     logger.putourstatus(icq, offline, manualstatus);
+
+    cli.setRandomChatGroup(strtoul(conf.getourid(icq).additional["randomgroup"].c_str(), 0, 0));
 
     face.log(_("+ [icq] logged in"));
     face.update();
@@ -1126,8 +1136,16 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 
 void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
     if(!ev->isTransientDetail()) {
-	updateinforecord(cli.getSelfContact(), clist.get(contactroot));
+	icqcontact *c = clist.get(contactroot);
+
+	updateinforecord(cli.getSelfContact(), c);
 	updateinforecord(cli.getSelfContact(), clist.get(imcontact(cli.getUIN(), icq)));
+
+	icqconf::imaccount im = conf.getourid(icq);
+	icqcontact::basicinfo cbinfo = c->getbasicinfo();
+	cbinfo.webaware = im.additional["webaware"] == "1";
+	cbinfo.randomgroup = strtoul(im.additional["randomgroup"].c_str(), 0, 0);
+	c->setbasicinfo(cbinfo);
     }
 }
 

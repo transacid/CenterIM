@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.74 2002/08/05 12:54:17 konst Exp $
+* $Id: icqconf.cc,v 1.75 2002/08/10 14:38:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -624,33 +624,24 @@ string icqconf::getprotocolprefix(protocolname pname) const {
 }
 
 imstatus icqconf::getstatus(protocolname pname) {
-    string fname, buf;
-    ifstream f;
     imstatus st = available;
+    map<string, string>::iterator ia;
+    imaccount a = getourid(pname);
 
-    fname = getconfigfname("status-" + getprotocolname(pname));
-    f.open(fname.c_str());
-
-    if(f.is_open()) {
-	getstring(f, buf);
-	st = (imstatus) ((int) atol(buf.c_str()));
-	f.close();
+    if((ia = a.additional.find("status")) != a.additional.end()) {
+	if(!ia->second.empty()) {
+	    for(st = offline; st != imstatus_size && imstatus2char[st] != ia->second[0]; (int) st += 1);
+	    if(st == imstatus_size) st = available;
+	}
     }
 
     return st;
 }
 
 void icqconf::savestatus(protocolname pname, imstatus st) {
-    string fname;
-    ofstream f;
-
-    fname = getconfigfname("status-" + getprotocolname(pname));
-    f.open(fname.c_str());
-
-    if(f.is_open()) {
-	f << (int) st << endl;
-	f.close();
-    }
+    imaccount im = getourid(pname);
+    im.additional["status"] = string(1, imstatus2char[st]);
+    setourid(im);
 }
 
 int icqconf::getprotcolor(protocolname pname) const {
@@ -924,6 +915,7 @@ bool icqconf::imaccount::empty() const {
 
 void icqconf::imaccount::write(ofstream &f) {
     string prefix = conf.getprotocolname(pname) + "_";
+    map<string, string>::iterator ia;
 
     f << endl;
     if(!nickname.empty()) f << prefix << "nick\t" << nickname << endl;
@@ -933,6 +925,10 @@ void icqconf::imaccount::write(ofstream &f) {
 	f << prefix << "server\t" << server;
 	if(port) f << ":" << port;
 	f << endl;
+    }
+
+    for(ia = additional.begin(); ia != additional.end(); ia++) {
+	f << prefix << ia->first << "\t" << ia->second << endl;
     }
 }
 
@@ -958,6 +954,8 @@ void icqconf::imaccount::read(const string &spec) {
 	    if(pname == icq)
 	    if(server == "icq.mirabilis.com")
 		server = "";
+	} else {
+	    additional[spname] = buf;
 	}
     }
 }

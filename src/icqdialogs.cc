@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.77 2002/08/09 17:10:56 konst Exp $
+* $Id: icqdialogs.cc,v 1.78 2002/08/10 14:38:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -393,8 +393,8 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
 	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
 
-	i = tree->addnode(_(" Random chat group "));
-	tree->addleaff(i, 0, 42, " %s ", strrandomgroup[bi.randomgroup]);
+	tree->addleaff(i, 0, 42, _(" Random chat group : %s "), strrandomgroup[bi.randomgroup]);
+	tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno[bi.webaware]);
     }
 
     i = tree->addnode(_(" About "));
@@ -533,6 +533,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		case 40: bi.requiresauth = !bi.requiresauth; break;
 		case 41: wi.zip = inputstr(_("Zip code: "), wi.zip); break;
 		case 42: selectrandomgroup(bi.randomgroup); break;
+		case 43: bi.webaware = !bi.webaware; break;
 	    }
 
 	    c->setbasicinfo(bi);

@@ -116,15 +116,18 @@ void accountmanager::exec() {
 		    tmp = face.inputstr(spname + _(" user name: "), account.nickname);
 		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) account.nickname = tmp;
 		    break;
+
 		case 2:
 		    i = strtoul(face.inputstr(spname + _(" uin: "), i2str(account.uin)).c_str(), 0, 0);
 		    if(face.getlastinputkey() != KEY_ESC && i) account.uin = i;
 		    break;
+
 		case 5:
 		    tmp = face.inputstr(spname + _(" password: "), account.password, '*');
 		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty())
 			account.password = tmp;
 		    break;
+
 		case 6:
 		    if(!account.empty()) {
 			face.status(_("Drop the account information first!"));
@@ -132,6 +135,7 @@ void accountmanager::exec() {
 			imcontrol.registration(account);
 		    }
 		    break;
+
 		case 7:
 		    imcontrol.updateinfo(account);
 		    break;
@@ -174,7 +178,9 @@ void accountmanager::exec() {
 		    break;
 	    }
 
-	    conf.setourid(account);
+	    if(action != 7) {
+		conf.setourid(account);
+	    }
 	}
     }
 
