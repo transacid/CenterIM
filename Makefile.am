@@ -1,4 +1,4 @@
-EXTRA_DIST = centericq.1 config.rpath centericq.motor ABOUT-NLS AUTHORS COPYING ChangeLog FAQ INSTALL NEWS README THANKS TODO centericq.spec
+EXTRA_DIST = acconfig.h centericq.1 centericq.motor config.rpath FAQ NEWS TODO README THANKS AUTHORS INSTALL ABOUT-NLS ChangeLog COPYING centericq.spec
 SUBDIRS = intl po contrib misc share src
 AUTOMAKE_OPTIONS = foreign
 man_MANS = centericq.1

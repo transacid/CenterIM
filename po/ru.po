@@ -340,44 +340,37 @@ msgstr ""
 "\"отписался\" от вас"
 
 #: src/hooks/ljhook.cc:61
-#, fuzzy
 msgid "+ [lj] connecting to the server"
-msgstr "+ [jab] соединение с сервером"
+msgstr "+ [lj] соединение с сервером"
 
 #: src/hooks/ljhook.cc:92
-#, fuzzy
 msgid "+ [lj] disconnected"
-msgstr "+ [jab] рассоединение"
+msgstr "+ [lj] рассоединение"
 
 #: src/hooks/ljhook.cc:339
-#, fuzzy
 msgid "cannot connect"
-msgstr "+ [msn] невозможно соединиться: "
+msgstr "невозможно соединиться"
 
 #: src/hooks/ljhook.cc:340
-#, fuzzy, c-format
 msgid "+ [lj] HTTP failed: %s"
-msgstr "+ [aim] не удалось соединиться: %s"
+msgstr "+ [lj] ошибка HTTP: %s"
 
 #: src/hooks/ljhook.cc:366
-#, fuzzy
 msgid "+ [lj] logged in"
-msgstr "+ [jab] вход в систему состоялся"
+msgstr "+ [lj] вход в систему состоялся"
 
 #: src/hooks/ljhook.cc:376
-#, fuzzy, c-format
 msgid "+ [lj] login failed: %s"
-msgstr "+ [aim] не удалось соединиться: %s"
+msgstr "+ [lj] не удалось соединиться: %s"
 
 #: src/hooks/ljhook.cc:380
 #, c-format
 msgid "+ [lj] posted successully, the id is %s"
-msgstr ""
+msgstr "+ [lj] отправлено удачно, id = %s"
 
 #: src/hooks/ljhook.cc:382
-#, fuzzy, c-format
 msgid "+ [lj] post error: %s"
-msgstr "+ [jab] ошибка %d: %s"
+msgstr "+ [lj] ошибка отправки: %s"
 
 #: src/hooks/msnhook.cc:121
 msgid "+ [msn] connecting to the server"
@@ -546,9 +539,8 @@ msgid "+ to reactivate visit %s"
 msgstr "+ чтобы реактивировать его, посетите %s"
 
 #: src/hooks/yahoohook.cc:707
-#, fuzzy
 msgid "+ [yahoo] another logon detected"
-msgstr "+ [yahoo] невозможно соединиться: "
+msgstr "+ [yahoo] кто-то еще вошел под этим ником"
 
 #: src/hooks/yahoohook.cc:786
 #, c-format
@@ -1650,9 +1642,8 @@ msgid " Russian win/koi translation : %s "
 msgstr " Перекодировка win1251-koi8 : %s "
 
 #: src/icqdialogs.cc:1150
-#, fuzzy, c-format
 msgid " Default charset : %s "
-msgstr " Отдел : %s "
+msgstr " Основная кодировка : %s "
 
 #: src/icqdialogs.cc:1152
 msgid " Communications "
@@ -1717,7 +1708,7 @@ msgstr " Авто-N/A после (0 - выкл): "
 
 #: src/icqdialogs.cc:1207
 msgid "Default charset: "
-msgstr ""
+msgstr "Основная кодировка: "
 
 #: src/icqdialogs.cc:1227
 msgid "SMTP server hostname: "
