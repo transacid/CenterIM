@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.66 2002/04/25 17:04:40 konst Exp $
+* $Id: icqconf.cc,v 1.67 2002/04/26 12:42:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,8 +41,8 @@ icqconf::icqconf() {
 
     autoaway = autona = 0;
 
-    hideoffline = antispam = russian = makelog = askaway = false;
-    savepwd = mailcheck = fenoughdiskspace = chatmode = true;
+    hideoffline = antispam = russian = makelog = askaway = chatmode = false;
+    savepwd = mailcheck = fenoughdiskspace = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }

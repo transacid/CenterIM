@@ -88,7 +88,7 @@ class icqface {
 	linkedlist workareas;
 
 	bool editdone, mainscreenblock, inited, onlinefolder,
-	    dotermresize, fneedupdate, detailsfetched;
+	    dotermresize, fneedupdate, detailsfetched, inchat;
 
 	int extk, chatlines;
 
@@ -108,6 +108,7 @@ class icqface {
 	static void textinputidle(textinputline &il);
 	static void freeworkareabuf(void *p);
 	static void detailsidle(dialogbox &db);
+	static void editchatidle(texteditor &e);
 
 	static void termresize(void);
 

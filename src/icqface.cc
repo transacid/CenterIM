@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.109 2002/04/25 17:04:40 konst Exp $
+* $Id: icqface.cc,v 1.110 2002/04/26 12:42:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -65,7 +65,7 @@ const char *strgroupmode(icqconf::groupmode gmode) {
 
 icqface::icqface() {
     workareas.freeitem = &freeworkareabuf;
-    mainscreenblock = inited = onlinefolder = dotermresize = false;
+    mainscreenblock = inited = onlinefolder = dotermresize = inchat = false;
     mcontacts = 0;
 }
 
@@ -1651,16 +1651,16 @@ bool icqface::eventedit(imevent &ev) {
 }
 
 void icqface::renderchathistory() {
-    int count;
+    int count, chatmargin;
     string text;
     char buf[64];
     time_t t;
 
     vector<imevent *> events;
-    vector<imevent *>::reverse_iterator i;
-
     typedef pair<imevent::imdirection, vector<string> > histentry;
     vector<histentry> toshow;
+    vector<histentry>::iterator ir;
+    vector<string>::reverse_iterator il;
     histentry h;
 
     icqcontact *c = clist.get(passinfo);
@@ -1668,56 +1668,99 @@ void icqface::renderchathistory() {
     count = 0;
     events = em.getevents(passinfo, 0);
 
+    if(events.size()) {
+	c->setlastread(events.back()->gettimestamp());
+    }
+
     while(events.size() > chatlines) {
 	delete events.front();
 	events.erase(events.begin());
     }
 
-    for(i = events.rend(); i != events.rbegin() && count < chatlines; i--) {
-	text = (string) + " " + time2str(&(t = (*i)->gettimestamp()), "DD.MM hh:mm", buf) + " ";
-	text += (*i)->gettext();
+    while(events.size()) {
+	if(count < chatlines) {
+	    text = (string) time2str(&(t = events.back()->gettimestamp()), "DD.MM hh:mm", buf) + " ";
+	    text += events.back()->gettext();
 
-	h = histentry();
-	h.first = imevent::outgoing;
-	breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-2);
+	    h = histentry();
+	    h.first = events.back()->getdirection();
+	    breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-2);
+	    toshow.push_back(h);
 
-	count += h.second.size();
+	    count += h.second.size();
+	}
+
+	delete events.back();
+	events.erase(events.end()-1);
     }
 
+    chatmargin = sizeWArea.y1+chatlines;
+    text = string(sizeWArea.x2-sizeWArea.x1-2, ' ');
 
+    attrset(conf.getcolor(cp_main_text));
+    for(count = 0; count < chatlines; count++)
+	mvprintw(chatmargin-count, sizeWArea.x1+2, "%s", text.c_str());
 
-    while(events.size()) {
-	delete events.front();
-	events.erase(events.begin());
+    for(count = 0, ir = toshow.begin(); ir != toshow.end() && count < chatlines; ir++) {
+	switch(ir->first) {
+	    case imevent::incoming: attrset(conf.getcolor(cp_main_text)); break;
+	    case imevent::outgoing: attrset(conf.getcolor(cp_main_highlight)); break;
+	}
+
+	for(il = ir->second.rbegin(); il != ir->second.rend() && count < chatlines; il++) {
+	    mvprintw(chatmargin-count, sizeWArea.x1+2, "%s", il->c_str());
+	    count++;
+	}
     }
 }
 
 void icqface::chat(const imcontact &ic) {
     texteditor editor;
-//    immessage m;
+    imevent *sendev;
 
     icqcontact *c = clist.get(ic);
     if(!c) return;
 
-    passinfo = ic;
-    chatlines = sizeWArea.y2-4;
-    workarealine(sizeWArea.y1+chatlines);
+    saveworkarea();
+    clearworkarea();
 
-    editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines, sizeWArea.x2, sizeWArea.y2);
+    inchat = true;
+    passinfo = ic;
+    chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.75);
+    workarealine(sizeWArea.y1+chatlines+1);
+
+    editor.addscheme(cp_main_text, cp_main_text, 0, 0);
+    editor.otherkeys = &editmsgkeys;
+    editor.idle = &editchatidle;
+    editor.wrap = true;
+    editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
 
     for(bool finished = false; !finished; ) {
+	status(_("Ctrl-X send, Ctrl-O history, Alt-? details, ESC exit"));
 	renderchathistory();
+
+	editdone = false;
 	editor.open();
-
-/*
 	auto_ptr<char> p(editor.save("\r\n"));
-	*m = immessage(ev.getcontact(), imevent::outgoing, p.get());
 
-	if(c = clist.get()))
-	    c->setpostponed(r ? "" : p.get());
-*/
+	editor.close();
+	editor.load("", "");
+
+	if(editdone) {
+	    auto_ptr<imevent> ev(new immessage(ic, imevent::outgoing, p.get()));
+	    em.store(*ev.get());
+
+	} else {
+	    finished = true;
+	}
+
+	c->setpostponed(editdone ? "" : p.get());
     }
+
+    restoreworkarea();
+    status("");
+    inchat = false;
 }
 
 icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewresult> abuttons) {
@@ -2115,7 +2158,8 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    delete p;
 	    if(face.editdone) return -1; else break;
 	case CTRL('p'):
-	    face.multicontacts("");
+	    if(!face.inchat)
+		face.multicontacts("");
 	    break;
 	case CTRL('o'):
 	    cicq.history(face.passinfo);
@@ -2150,6 +2194,17 @@ int icqface::findreskeys(dialogbox &db, int k) {
 
 void icqface::editidle(texteditor &e) {
     cicq.idle();
+}
+
+void icqface::editchatidle(texteditor &e) {
+    icqcontact *c;
+
+    cicq.idle(HIDL_SOCKEXIT);
+
+    if(c = clist.get(face.passinfo))
+    if(c->getmsgcount()) {
+	face.renderchathistory();
+    }
 }
 
 void icqface::textinputidle(textinputline &il) {

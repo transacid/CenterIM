@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.97 2002/04/24 15:26:46 konst Exp $
+* $Id: centericq.cc,v 1.98 2002/04/26 12:42:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -287,13 +287,18 @@ void centericq::mainloop() {
 
 	    case ACT_MSG:
 	    case 0:
-		if(c->getmsgcount()) {
-		    readevents(c->getdesc());
+		if(conf.getchatmode()) {
+		    face.chat(c->getdesc());
+
 		} else {
-		    if(c->getdesc() != contactroot)
-		    if(c->getdesc().pname != infocard) {
-			sendevent(immessage(c->getdesc(), imevent::outgoing,
-			    c->getpostponed()), icqface::ok);
+		    if(c->getmsgcount()) {
+			readevents(c->getdesc());
+		    } else {
+			if(c->getdesc() != contactroot)
+			if(c->getdesc().pname != infocard) {
+			    sendevent(immessage(c->getdesc(), imevent::outgoing,
+				c->getpostponed()), icqface::ok);
+			}
 		    }
 		}
 		break;

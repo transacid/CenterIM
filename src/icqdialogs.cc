@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.68 2002/04/18 14:27:24 konst Exp $
+* $Id: icqdialogs.cc,v 1.69 2002/04/26 12:42:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -590,6 +590,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool mailcheck = conf.getmailcheck();
     bool makelog = conf.getmakelog();
     bool askaway = conf.getaskaway();
+    bool chatmode = conf.getchatmode();
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
@@ -637,6 +638,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno[mailcheck]);
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno[savepwd]);
 	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno[askaway]);
+	t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno[chatmode]);
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -704,6 +706,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
+		    case 16: chatmode = !chatmode; break;
 		    case 17:
 			gmode =
 			    gmode == icqconf::group1 ? icqconf::group2 :
@@ -728,6 +731,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setrussian(rus);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
+		conf.setchatmode(chatmode);
 
 		if(conf.getgroupmode() != gmode) {
 		    conf.setgroupmode(gmode);
