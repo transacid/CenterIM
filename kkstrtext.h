@@ -34,18 +34,18 @@ void nothingfree(void *p);
 int stringcompare(void *s1, void *s2);
 int intcompare(void *s1, void *s2);
 
-const string leadcut(string base, string delim = "\t\n\r ");
-const string trailcut(string base, string delim = "\t\n\r ");
+string leadcut(const string &base, const string &delim = "\t\n\r ");
+string trailcut(const string &base, const string &delim = "\t\n\r ");
 
-const string getword(string &base, string delim = "\t\n\r ");
-const string getrword(string &base, string delim = "\t\n\r ");
+string getword(string &base, const string &delim = "\t\n\r ");
+string getrword(string &base, const string &delim = "\t\n\r ");
 
-const string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ");
-const string getrwordquote(string &base, string quote = "\"", string delim = "\t\n\r ");
+string getwordquote(string &base, const string &quote = "\"", const string &delim = "\t\n\r ");
+string getrwordquote(string &base, const string &quote = "\"", const string &delim = "\t\n\r ");
 
 int rtabmargin(bool fake, int curpos, const char *p = 0);
 int ltabmargin(bool fake, int curpos, const char *p = 0);
-void breakintolines(string text, vector<string> &lst, int linelen = 0);
+void breakintolines(const string &text, vector<string> &lst, int linelen = 0);
 
 void find_gather_quoted(vector<quotedblock> &lst, const string &str,
     const string &quote, const string &escape);
@@ -60,18 +60,18 @@ int find_quoted_first_of(const string &str, const string &needle,
 void splitlongtext(string text, vector<string> &lst,
     int size = 440, const string cont = "\n[continued]");
 
-const string strdateandtime(time_t stamp, string fmt = "");
-const string strdateandtime(struct tm *tms, string fmt = "");
+string strdateandtime(time_t stamp, const string &fmt = "");
+string strdateandtime(struct tm *tms, const string &fmt = "");
 
-bool iswholeword(const string s, int so, int eo);
+bool iswholeword(const string &s, int so, int eo);
 
-int hex2int(const string ahex);
+int hex2int(const string &ahex);
 
-vector<int> getquotelayout(const string haystack, const string qs,
-    const string aescs);
+vector<int> getquotelayout(const string &haystack, const string &qs,
+    const string &aescs);
 
-vector<int> getsymbolpositions(const string haystack,
-    const string needles, const string qoutes, const string esc);
+vector<int> getsymbolpositions(const string &haystack,
+    const string &needles, const string &qoutes, const string &esc);
 
 #define VGETSTRING(c, fmt) \
     { \
@@ -81,17 +81,17 @@ vector<int> getsymbolpositions(const string haystack,
 	va_end(vgs__ap); \
     }
 
-const string justfname(const string fname);
-const string justpathname(const string fname);
-const string textscreen(const string text);
-const string i2str(int i);
-const string ui2str(int i);
+string justfname(const string &fname);
+string justpathname(const string &fname);
+string textscreen(const string &text);
+string i2str(int i);
+string ui2str(int i);
 
 bool getconf(string &st, string &buf, ifstream &f, bool passemptylines = false);
 bool getstring(istream &f, string &buf);
 
-const string unmime(const string text);
-const string mime(const string text);
+string unmime(const string &text);
+string mime(const string &text);
 
 __KTOOL_BEGIN_C
 
