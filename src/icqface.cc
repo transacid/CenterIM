@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.59 2001/12/13 11:28:35 konst Exp $
+* $Id: icqface.cc,v 1.60 2001/12/14 16:30:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -610,9 +610,14 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Fax"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+13, conf.getcolor(cp_main_highlight), _("Homepage"));
 
-    if(wi.city.size()) {
-	if(wi.state.size()) wi.city += ", ";
+    if(!wi.state.empty()) {
+	if(wi.city.size()) wi.city += ", ";
 	wi.city += wi.state;
+    }
+
+    if(!wi.country.empty()) {
+	if(wi.city.size()) wi.city += ", ";
+	wi.city += wi.country;
     }
 
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), wi.street);
