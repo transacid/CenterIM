@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.48 2003/11/21 16:51:49 konst Exp $
+* $Id: icqcontacts.cc,v 1.49 2003/11/22 23:58:55 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -283,6 +283,10 @@ void icqcontacts::updateEntry(const imcontact &ic, const string &groupname) {
 	if(ig != groups.end()) gid = ig->getid();
 	    else gid = groups.add(groupname);
 
-	c->setgroupid(gid);
+    } else {
+	gid = 1;
+
     }
+
+    c->setgroupid(gid);
 }

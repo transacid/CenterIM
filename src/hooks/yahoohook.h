@@ -91,7 +91,7 @@ class yahoohook: public abstracthook {
 	static struct tm *timestamp();
 	static imstatus yahoo2imstatus(int status);
 
-	string decode(const string &text, bool utf);
+	string decode(string text, bool utf);
 
 	YList *getmembers(const string &room);
 	void userstatus(const string &nick, int st, const string &message, bool away);

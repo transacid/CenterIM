@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.96 2003/11/22 19:14:34 konst Exp $
+* $Id: yahoohook.cc,v 1.97 2003/11/22 23:58:56 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -551,12 +551,22 @@ vector<icqcontact *> yahoohook::getneedsync() {
     return r;
 }
 
-string yahoohook::decode(const string &text, bool utf) {
-    if(utf)
-	return siconv(text, "utf-8",
-	    conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
+string yahoohook::decode(string text, bool utf) {
+    int npos, mpos;
 
-    return rushtmlconv("wk", text);
+    if(utf) text = siconv(text, "utf-8",
+	conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
+
+    text = rushtmlconv("wk", text);
+
+    while((npos = text.find("\e[")) != -1) {
+	if((mpos = text.substr(npos).find("m")) == -1)
+	    mpos = text.size()-npos-1;
+
+	text.erase(npos, mpos+1);
+    }
+
+    return text;
 }
 
 bool yahoohook::knowntransfer(const imfile &fr) const {
@@ -712,17 +722,6 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    yhook.flogged = true;
 	    logger.putourstatus(yahoo, offline, yhook.ourstatus = yhook.manualstatus);
 	    face.log(_("+ [yahoo] logged in"));
-
-	    for(int i = 0; i < clist.count; i++) {
-		icqcontact *c = (icqcontact *) clist.at(i);
-		imcontact ic = c->getdesc();
-
-		if(ic.pname == yahoo)
-		if(!c->inlist()) {
-		    yhook.sendnewuser(ic);
-		}
-	    }
-
 	    time(&yhook.timer_refresh);
 	    yhook.setautostatus(yhook.manualstatus);
 	    break;
