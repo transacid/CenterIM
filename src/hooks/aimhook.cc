@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.21 2002/08/25 12:08:04 konst Exp $
+* $Id: aimhook.cc,v 1.22 2002/08/26 14:05:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,8 +38,7 @@
 aimhook ahook;
 
 aimhook::aimhook()
-    : handle(firetalk_create_handle(FP_AIMTOC, 0)),
-      fonline(false), flogged(false), ourstatus(offline)
+    : handle(0), fonline(false), flogged(false), ourstatus(offline)
 {
     fcapabilities =
 	hoptCanSetAwayMsg |
@@ -53,6 +52,19 @@ aimhook::~aimhook() {
 
 void aimhook::init() {
     manualstatus = conf.getstatus(aim);
+}
+
+void aimhook::connect() {
+    icqconf::imaccount acc = conf.getourid(aim);
+    face.log(_("+ [aim] connecting to the server"));
+
+    if(handle) {
+	firetalk_register_callback(handle, FC_DISCONNECT, 0);
+	firetalk_disconnect(handle);
+	firetalk_destroy_handle(handle);
+    }
+
+    handle = firetalk_create_handle(FP_AIMTOC, 0);
 
     firetalk_register_callback(handle, FC_CONNECTED, &connected);
     firetalk_register_callback(handle, FC_CONNECTFAILED, &connectfailed);
@@ -66,15 +78,6 @@ void aimhook::init() {
     firetalk_register_callback(handle, FC_IM_BUDDYAWAY, &buddyaway);
     firetalk_register_callback(handle, FC_IM_BUDDYUNAWAY, &buddyonline);
     firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
-}
-
-void aimhook::connect() {
-    icqconf::imaccount acc = conf.getourid(aim);
-    face.log(_("+ [aim] connecting to the server"));
-
-    firetalk_register_callback(handle, FC_DISCONNECT, 0);
-    firetalk_disconnect(handle);
-    firetalk_register_callback(handle, FC_DISCONNECT, &disconnected);
 
     fonline = firetalk_signon(handle, acc.server.c_str(), acc.port, acc.nickname.c_str()) == FE_SUCCESS;
 
