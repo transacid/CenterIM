@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.39 2004/01/27 00:14:34 konst Exp $
+* $Id: aimhook.cc,v 1.40 2004/01/27 00:43:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,7 +191,7 @@ bool aimhook::send(const imevent &ev) {
 void aimhook::sendnewuser(const imcontact &ic) {
     if(logged())
     if(find(buddies.begin(), buddies.end(), ic.nickname) == buddies.end()) {
-	face.log(_("+ [aim] adding %s to the contacts"), ic.nickname.c_str());
+	log(logContactAdd, ic.nickname.c_str());
 	firetalk_im_add_buddy(handle, ic.nickname.c_str());
 	firetalk_save_config(handle);
 	requestinfo(ic);
@@ -204,11 +204,7 @@ void aimhook::removeuser(const imcontact &ic) {
 
 void aimhook::removeuser(const imcontact &ic, bool report) {
     if(online()) {
-	if(report) {
-	    face.log(_("+ [aim] removing %s from the contacts"),
-		ic.nickname.c_str());
-	}
-
+	if(report) log(logContactRemove, ic.nickname.c_str());
 	firetalk_im_remove_buddy(handle, ic.nickname.c_str());
 	firetalk_save_config(handle);
     }
@@ -355,8 +351,7 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
     ahook.fonline = false;
     logger.putourstatus(aim, ahook.getstatus(), offline);
     clist.setoffline(aim);
-
-    face.log(_("+ [aim] disconnected"));
+    ahook.log(logDisconnected);
     face.update();
 }
 
@@ -392,8 +387,7 @@ void aimhook::newpass(void *connection, void *cli, ...) {
 	icqconf::imaccount acc = conf.getourid(aim);
 	acc.password = pass;
 	conf.setourid(acc);
-
-	face.log(_("+ [aim] password was changed successfully"));
+	ahook.log(logPasswordChanged);
     }
 
     DLOG("newpass");

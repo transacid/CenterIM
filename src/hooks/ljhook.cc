@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.21 2004/01/27 00:14:35 konst Exp $
+* $Id: ljhook.cc,v 1.22 2004/01/27 00:43:30 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -98,7 +98,7 @@ void ljhook::connect() {
 void ljhook::disconnect() {
     if(fonline) {
 	fonline = false;
-	face.log(_("+ [lj] disconnected"));
+	log(logDisconnected);
 	if(flogged) {
 	    flogged = false;
 	    icqcontact *c = clist.get(self);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.141 2004/01/27 00:14:34 konst Exp $
+* $Id: icqhook.cc,v 1.142 2004/01/27 00:43:30 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1251,10 +1251,7 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
 
     ident = cont.totext();
     if(c) ident += " (" + c->getdispnick() + ")";
-/*
-    face.log(_("+ [icq] %s has requested our away message"), ident.c_str());
-    sprintf(buf, _("%s requested our away message, sent the response"), ident.c_str());
-*/
+
     logger.putmessage(buf);
     ev->setAwayMessage(rusconv("kw", conf.getawaymsg(icq)));
 }
@@ -1297,10 +1294,7 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 
 	if(ev->isFinished() && searchdest) {
 	    face.findready();
-
-	    face.log(_("+ [icq] search finished, %d found"),
-		ev->getContactList().size());
-
+	    log(logSearchFinished, ev->getContactList().size());
 	    searchdest = 0;
 	}
     }
@@ -1337,8 +1331,7 @@ void icqhook::password_changed_cb(PasswordChangeEvent *ev) {
 	icqconf::imaccount acc = conf.getourid(icq);
 	acc.password = ev->getPassword();
 	conf.setourid(acc);
-
-	face.log(_("+ [icq] password was changed successfully"));
+	log(logPasswordChanged);
     }
 }
 

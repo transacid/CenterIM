@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.76 2004/01/27 00:14:35 konst Exp $
+* $Id: irchook.cc,v 1.77 2004/01/27 00:43:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -531,9 +531,7 @@ void irchook::processnicks() {
     }
 
     face.findready();
-
-    face.log(_("+ [irc] channel members list fetching finished, %d found"),
-	foundguys.size());
+    log(logConfMembers, foundguys.size());
 
     searchdest->redraw();
     searchdest = 0;
@@ -760,7 +758,7 @@ void irchook::disconnected(void *conn, void *cli, ...) {
     for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ++ic)
 	ic->fetched = false;
 
-    face.log(_("+ [irc] disconnected"));
+    irhook.log(logDisconnected);
     face.update();
 }
 

@@ -364,36 +364,44 @@ msgid "%s has deopped us."
 msgstr "%s снял с нас статус оператора"
 
 #: src/hooks/abstracthook.cc:343
+#, fuzzy
 msgid "connecting to the server"
-msgstr "соединение с сервером"
+msgstr "+ [lj] соединение с сервером"
 
 #: src/hooks/abstracthook.cc:344
+#, fuzzy
 msgid "logged in"
-msgstr "вход в систему состоялся"
+msgstr "+ [lj] вход в систему состоялся"
 
 #: src/hooks/abstracthook.cc:345
+#, fuzzy, c-format
 msgid "search finished, %d found"
-msgstr "поиск завершен, %d найдено"
+msgstr "+ [icq] поиск завершен, %d найдено"
 
 #: src/hooks/abstracthook.cc:346
+#, fuzzy
 msgid "password was changed successfully"
-msgstr "пароль был изменен успешно"
+msgstr "+ [icq] пароль был изменен успешно"
 
 #: src/hooks/abstracthook.cc:347
+#, fuzzy
 msgid "disconnected"
-msgstr "рассоединение"
+msgstr "Рассоединение"
 
 #: src/hooks/abstracthook.cc:348
+#, fuzzy, c-format
 msgid "adding %s to the contacts"
-msgstr "добавление %s в список"
+msgstr "+ [aim] добавление %s в список"
 
 #: src/hooks/abstracthook.cc:349
+#, fuzzy, c-format
 msgid "removing %s from the contacts"
-msgstr "удаление %s из списка"
+msgstr "+ [aim] удаление %s из списка"
 
 #: src/hooks/abstracthook.cc:350
+#, fuzzy, c-format
 msgid "members list fetching finished, %d found"
-msgstr "вывод списка завершен, %d найдено"
+msgstr "+ [yahoo] вывод списка завершен, %d найдено"
 
 #: src/icqcontact.cc:713
 msgid "The user has a birthday today"
@@ -1712,6 +1720,7 @@ msgid "Disconnected"
 msgstr "Рассоединение"
 
 #: src/imcontroller.cc:177
+#, fuzzy
 msgid "Unable to connect to icq server. Retry?"
 msgstr "Невозможно соединиться с сервером. Повторить попытку?"
 
@@ -2745,16 +2754,19 @@ msgid "+ [lj] %s was added to friends"
 msgstr "+ [lj] %s добавлен в список друзей"
 
 #: src/hooks/gaduhook.cc:120
+#, fuzzy, c-format
 msgid "+ [gg] cannot resolve %s"
-msgstr "+ [gg] не удалось найти %s"
+msgstr "+ [irc] не удалось соединиться: %s"
 
 #: src/hooks/gaduhook.cc:162
+#, fuzzy
 msgid "+ [gg] connection to the server failed"
-msgstr "+ [gg] соединение с сервером не удалось"
+msgstr "+ [lj] соединение с сервером"
 
 #: src/hooks/gaduhook.cc:233
+#, fuzzy
 msgid "+ [gg] connection lost"
-msgstr "+ [gg] соединение прервано"
+msgstr "+ [lj] соединение с сервером"
 
 #: src/centericq.cc:133
 msgid "password: "
@@ -2906,3 +2918,75 @@ msgstr "Выберите контакты для перемещения"
 #: src/centericq.cc:1632
 msgid "Mass move selected users to.."
 msgstr "Переместить выбранные контакты.."
+
+#~ msgid "+ [yahoo] connecting to the server"
+#~ msgstr "+ [yahoo] соединение с сервером"
+
+#~ msgid "+ [yahoo] disconnected"
+#~ msgstr "+ [yahoo] рассоединение"
+
+#~ msgid "+ [yahoo] adding %s to the contacts"
+#~ msgstr "+ [yahoo] добавление %s в список"
+
+#~ msgid "+ [yahoo] removing %s from the contacts"
+#~ msgstr "+ [yahoo] удаление %s из списка"
+
+#~ msgid "+ [yahoo] logged in"
+#~ msgstr "+ [yahoo] вход в систему состоялся"
+
+#~ msgid "+ [yahoo] search finished, %d found"
+#~ msgstr "+ [yahoo] поиск закончен, %d найдено"
+
+#~ msgid "+ [jab] connecting to the server"
+#~ msgstr "+ [jab] соединение с сервером"
+
+#~ msgid "+ [jab] adding %s to the contacts"
+#~ msgstr "+ [jab] добавление %s в список"
+
+#~ msgid "+ [jab] removing %s from the contacts"
+#~ msgstr "+ [jab] удаление %s из списка"
+
+#~ msgid "+ [jab] conference list fetching finished, %d found"
+#~ msgstr "+ [jab] вывод списка завершен, %d найдено"
+
+#~ msgid "+ [jab] search finished, %d found"
+#~ msgstr "+ [jab] поиск закончен, %d найдено"
+
+#~ msgid "+ [jab] logged in"
+#~ msgstr "+ [jab] вход в систему состоялся"
+
+#~ msgid "+ [jab] disconnected"
+#~ msgstr "+ [jab] рассоединение"
+
+#~ msgid "+ [aim] connecting to the server"
+#~ msgstr "+ [aim] соединение с сервером"
+
+#~ msgid "+ [aim] logged in"
+#~ msgstr "+ [aim] вход в систему состоялся"
+
+#~ msgid "+ [aim] disconnected"
+#~ msgstr "+ [aim] рассоединение"
+
+#~ msgid "+ [aim] password was changed successfully"
+#~ msgstr "+ [aim] пароль бы изменен успешно"
+
+#~ msgid "+ [icq] connecting to the server"
+#~ msgstr "+ [icq] соединение с сервером"
+
+#~ msgid "+ [icq] logged in"
+#~ msgstr "+ [icq] вход в систему состоялся"
+
+#~ msgid "+ [irc] connecting to the server"
+#~ msgstr "+ [irc] соединение с сервером"
+
+#~ msgid "+ [irc] channel members list fetching finished, %d found"
+#~ msgstr "+ [irc] поиск по каналам закончен, %d найдено"
+
+#~ msgid "+ [irc] logged in"
+#~ msgstr "+ [irc] вход в систему состоялся"
+
+#~ msgid "+ [irc] disconnected"
+#~ msgstr "+ [irc] рассоединение"
+
+#~ msgid "+ [lj] disconnected"
+#~ msgstr "+ [lj] рассоединение"

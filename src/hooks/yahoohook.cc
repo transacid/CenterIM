@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.102 2004/01/27 00:14:35 konst Exp $
+* $Id: yahoohook.cc,v 1.103 2004/01/27 00:43:30 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -256,7 +256,7 @@ void yahoohook::disconnected() {
 	logger.putourstatus(proto, getstatus(), ourstatus = offline);
 	clist.setoffline(proto);
 	fonline = false;
-	face.log(_("+ [yahoo] disconnected"));
+	log(logDisconnected);
 	face.update();
     }
 }
@@ -357,9 +357,7 @@ void yahoohook::sendnewuser(const imcontact &ic, bool report) {
 		found = ic.nickname == static_cast<yahoo_buddy *>(bud->data)->id;
 
 	    if(!found) {
-		if(report)
-		    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
-
+		if(report) log(logContactAdd, ic.nickname.c_str());
 		vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(ic)->getgroupid());
 		if(ig != groups.end()) {
 		    yahoo_add_buddy(cid, ic.nickname.c_str(), ig->getname().c_str());
@@ -378,9 +376,7 @@ void yahoohook::removeuser(const imcontact &ic) {
 void yahoohook::removeuser(const imcontact &ic, bool report) {
     if(logged()) {
 	if(!ischannel(ic)) {
-	    if(report)
-		face.log(_("+ [yahoo] removing %s from the contacts"),
-		    ic.nickname.c_str());
+	    if(report) log(logContactRemove, ic.nickname.c_str());
 
 	    const YList *buddies = yahoo_get_buddylist(cid);
 	    const YList *bud = 0;
@@ -608,8 +604,7 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	}
 
 	face.findready();
-	face.log(_("+ [yahoo] members list fetching finished, %d found"),
-	    searchdest->getcount());
+	log(logConfMembers, searchdest->getcount());
 
 	searchdest->redraw();
 	searchdest = 0;
@@ -836,7 +831,7 @@ void yahoohook::got_search_result(int id, int found, int start, int total, YList
 
     if(start + found >= total) {
 	face.findready();
-	face.log(_("+ [yahoo] search finished, %d found"), yhook.foundguys.size());
+	yhook.log(logSearchFinished, yhook.foundguys.size());
 	yhook.searchdest = 0;
     } else {
 	yahoo_search_again(yhook.cid, -1);

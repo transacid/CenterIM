@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.63 2004/01/27 00:14:35 konst Exp $
+* $Id: jabberhook.cc,v 1.64 2004/01/27 00:43:30 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -285,8 +285,7 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	if(roster.find(cjid.get()) != roster.end())
 	    return;
 
-	if(report)
-	    face.log(_("+ [jab] adding %s to the contacts"), ic.nickname.c_str());
+	if(report) log(logContactAdd, ic.nickname.c_str());
 
 	x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
 	jab_send(jc, x);
@@ -370,19 +369,19 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 
 	}
 
-	    if(report) face.log(_("+ [jab] removing %s from the contacts"), ic.nickname.c_str());
+	if(report) log(logContactRemove, ic.nickname.c_str());
 
-	    x = jutil_presnew(JPACKET__UNSUBSCRIBE, cjid.get(), 0);
-	    jab_send(jc, x);
-	    xmlnode_free(x);
+	x = jutil_presnew(JPACKET__UNSUBSCRIBE, cjid.get(), 0);
+	jab_send(jc, x);
+	xmlnode_free(x);
 
-	    x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
-	    y = xmlnode_get_tag(x, "query");
-	    z = xmlnode_insert_tag(y, "item");
-	    xmlnode_put_attrib(z, "jid", cjid.get());
-	    xmlnode_put_attrib(z, "subscription", "remove");
-	    jab_send(jc, x);
-	    xmlnode_free(x);
+	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	y = xmlnode_get_tag(x, "query");
+	z = xmlnode_insert_tag(y, "item");
+	xmlnode_put_attrib(z, "jid", cjid.get());
+	xmlnode_put_attrib(z, "subscription", "remove");
+	jab_send(jc, x);
+	xmlnode_free(x);
 
     } else {
 	if(c = clist.get(ic)) {
@@ -732,8 +731,7 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	}
 
 	face.findready();
-	face.log(_("+ [jab] conference list fetching finished, %d found"),
-	    foundguys.size());
+	log(logConfMembers, foundguys.size());
 
 	searchdest->redraw();
 	searchdest = 0;
@@ -804,8 +802,7 @@ void jabberhook::gotsearchresults(xmlnode x) {
 
     face.findready();
 
-    face.log(_("+ [jab] search finished, %d found"),
-	foundguys.size());
+    log(logSearchFinished, foundguys.size());
 
     searchdest->redraw();
     searchdest = 0;
@@ -1250,7 +1247,7 @@ void jabberhook::statehandler(jconn conn, int state) {
 	case JCONN_STATE_OFF:
 	    if(previous_state != JCONN_STATE_OFF) {
 		logger.putourstatus(jhook.proto, jhook.getstatus(), jhook.ourstatus = offline);
-		face.log(_("+ [jab] disconnected"));
+		jhook.log(logDisconnected);
 		jhook.flogged = jhook.fonline = false;
 		jhook.roster.clear();
 		jhook.agents.clear();
