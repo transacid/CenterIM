@@ -27,6 +27,10 @@ void icqgroups::load() {
 	    if(gid && !buf.empty()) {
 		push_back(icqgroup(gid, buf));
 	    }
+	    else if(gid) {
+	        icqgroup *g = find(begin(), end(), gid);
+	        if(g) g->changecollapsed();
+	    }
 	}
 
 	f.close();
@@ -48,7 +52,8 @@ void icqgroups::save() {
 	    for(i = begin(); i != end(); i++) {
 		f << i->getid() << "\t" << i->getname() << endl;
 	    }
-
+            for(i = begin(); i != end(); i++)
+                if(i->iscollapsed()) f << i->getid() << endl;
 	    f.close();
 	}
     }

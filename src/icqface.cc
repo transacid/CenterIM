@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.102 2002/04/11 17:14:35 konst Exp $
+* $Id: icqface.cc,v 1.103 2002/04/15 16:46:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -295,12 +295,23 @@ int icqface::generalmenu() {
 
 icqcontact *icqface::mainloop(int &action) {
     int i, curid;
-    icqcontact *c = 0;
+    icqcontact *c = 0; icqgroup *g;
     bool fin;
 
     for(fin = false; !fin; ) {
 	extk = ACT_MSG;
+
+	/* Obtain the (icqcontact *) from the treeview. If a node is
+	   selected, throw out the contact and obtain the correct (icqgroup *). */
+
 	c = (icqcontact *) mcontacts->open(&i);
+
+	if(mcontacts->isnode(i) && c) {
+		c = NULL;
+		g = (icqgroup *) mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
+	}
+	else g = NULL;
+	
 	if((int) c < 100) c = 0;
 
 	if(i) {
@@ -322,10 +333,24 @@ icqcontact *icqface::mainloop(int &action) {
 		    case ACT_MSG:
 			curid = mcontacts->getid(mcontacts->menu.getpos());
 
+			/* kkconsui::treeview has collapsing built in, but when doing it
+			   this way contacts with pending messages get moved to the top
+			   even if their group is colapsed. */
+			
 			if(mcontacts->isnodeopen(curid)) {
 			    mcontacts->closenode(curid);
 			} else {
 			    mcontacts->opennode(curid);
+			}
+
+			/* Handling of collapse events should happen in centericq::
+			   mainloop, but as it stands this method doesn't handle
+			   icqgroups, only icqcontacts, so we'll deal with collapsing
+			   here. */
+			   
+			if(g) {
+			    g->changecollapsed();
+			    update();
 			}
 			break;
 		    case ACT_QUIT:
@@ -346,11 +371,12 @@ icqcontact *icqface::mainloop(int &action) {
     return c;
 }
 
+
 #define ADDGROUP(nn) { \
     if(groupchange && !strchr("!", sc)) \
 	ngroup = mcontacts->addnode(nn, conf.getcolor(cp_main_highlight), \
-	    0, " " + find(groups.begin(), groups.end(), \
-	    c->getgroupid())->getname() + " "); \
+	g, " " + g->getname()  + " " \
+	+ (g->iscollapsed() ? "(" + string(i2str(g->getcount(c->getstatus() != offline, !conf.gethideoffline() && !(c->getstatus() != offline && conf.getgroupmode() == icqconf::group2)))) +  ") " : "")); \
 }
 
 void icqface::fillcontactlist() {
@@ -359,20 +385,42 @@ void icqface::fillcontactlist() {
     icqcontact *c;
     void *savec;
     char prevsc = 'x', sc;
-    bool online_added = false, groupchange;
+    icqgroup *g = NULL;
+    bool online_added = false, groupchange, prevoffline = false, grouponline = true, ontop;
 
     nnode = ngroup = prevgid = 0;
+    ontop = !mcontacts->menu.getpos();
 
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
+
+    if(!mcontacts->isnode(mcontacts->getid(mcontacts->menu.getpos())) && savec) {
+	g = find(groups.begin(), groups.end(), ((icqcontact *) savec)->getgroupid());
+	if(g->iscollapsed() && !((icqcontact *) savec)->getmsgcount()) savec = g;
+    }
+
+    /* if savec is a group, we need to figure out of it's the top or bottom
+       one when we're in groupmode mode 2. */
+
+    if(savec && mcontacts->isnode(mcontacts->getid(mcontacts->menu.getpos()))
+    && conf.getgroupmode() == icqconf::group2) {
+	for(i = 0; i < mcontacts->getcount(); i++) {
+	    if(mcontacts->getref(mcontacts->getid(i)) == savec) {
+		if(mcontacts->getid(i) != mcontacts->getid(mcontacts->menu.getpos()))
+		    grouponline = false;
+		break;
+	    }
+	}
+    }
+
     mcontacts->clear();
     clist.order();
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-
+	g = find(groups.begin(), groups.end(), c->getgroupid());
 	if(c->getdesc() == contactroot)
 	    continue;
-
+	    
 	if(c->getstatus() == offline)
 	if(conf.gethideoffline())
 	if(!c->getmsgcount()) {
@@ -383,7 +431,9 @@ void icqface::fillcontactlist() {
 
 	groupchange =
 	    (conf.getgroupmode() != icqconf::nogroups) &&
-	    (c->getgroupid() != prevgid) &&
+	    ((c->getgroupid() != prevgid) ||
+	    ((conf.getgroupmode() == icqconf::group2) && 
+		(prevoffline == false) && (c->getstatus() == offline))) &&
 	    (sc != '#');
 
 	if(conf.getgroupmode() == icqconf::group1)
@@ -409,18 +459,22 @@ void icqface::fillcontactlist() {
 			break;
 		}
 
+		/* Hide 'offline' and 'online' items when in group mode 1 and the current
+		   group is collapsed */
+
 		if(n != -1) {
 		    switch(sc) {
 			case 'O':
-			    nnode = conf.gethideoffline() && (conf.getgroupmode() != icqconf::nogroups) ?
+			    nnode = (conf.getgroupmode() == icqconf::group1 && g->iscollapsed()) ||
+			     (conf.gethideoffline() && (conf.getgroupmode() != icqconf::nogroups)) ?
 				n : mcontacts->addnode(n,
 				    conf.getcolor(cp_main_highlight), 0, " Online ");
 
 			    online_added = true;
 			    break;
 			case '_':
-			    nnode = mcontacts->addnode(n,
-				conf.getcolor(cp_main_highlight), 0, " Offline ");
+			    nnode = (conf.getgroupmode() == icqconf::group1 && g->iscollapsed())  ? 
+				n : mcontacts->addnode(n, conf.getcolor(cp_main_highlight), 0, " Offline ");
 			    break;
 			case '!':
 			    ngroup = 0;
@@ -440,11 +494,16 @@ void icqface::fillcontactlist() {
 	    }
 
 	    if(groupchange) prevgid = c->getgroupid();
+	    prevoffline = (c->getstatus() == offline) ? true : false;
 	    prevsc = sc;
 	}
 
 	dnick = c->getdispnick();
 	if(c->isbirthday()) dnick += " :)";
+
+	if(conf.getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
+	    !c->getmsgcount() && sc != '!')
+		continue;
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
@@ -455,6 +514,8 @@ void icqface::fillcontactlist() {
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
 		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
+
+	if(savec && c->getmsgcount() && ontop) savec = 0;
     }
 
     if(!mainscreenblock) mcontacts->redraw();
@@ -465,8 +526,10 @@ void icqface::fillcontactlist() {
     for(i = 0; i < mcontacts->menu.getcount(); i++) {
 	id = mcontacts->getid(i);
 	if(mcontacts->getref(id) == savec) {
-	    mcontacts->menu.setpos(i);
-	    break;
+	    if(! grouponline) grouponline = true; else {
+		mcontacts->menu.setpos(i);
+		break;
+	    }
 	}
     }
 
@@ -1399,8 +1462,9 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 				break;
 			    }
 			}
-
-			if(multi) {
+			
+			if(mcontacts->isnode(i)) c = 0;
+			else if(multi) {
 			    imcontact *cnt = (imcontact *) cm->getref(i);
 			    if(cnt) c = clist.get(*cnt);
 			} else {
@@ -1830,8 +1894,11 @@ void icqface::textbrowseridle(textbrowser &b) {
 }
 
 int icqface::contactskeys(verticalmenu &m, int k) {
-    icqcontact *c = (icqcontact *) face.mcontacts->getref(m.getpos()+1);
-    int capab;
+    icqcontact *c = NULL;
+    int id, capab;
+    id = face.mcontacts->getid(face.mcontacts->menu.getpos());
+    if(id != -1 && ! face.mcontacts->isnode(id))
+	c = (icqcontact *) face.mcontacts->getref(m.getpos()+1);
 
     face.extk = capab = 0;
 
