@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.94 2002/08/15 08:25:43 konst Exp $
+* $Id: icqhook.cc,v 1.95 2002/08/15 11:26:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1273,7 +1273,10 @@ void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
 
 	while(i != lst.end()) {
 	    imcontact cont((*i)->getUIN(), icq);
-	    if(!clist.get(cont)) clist.addnew(cont, false);
+	    if(!clist.get(cont)) {
+		cli.addContact(*i);
+		clist.addnew(cont, false);
+	    }
 	    ++i;
 	}
 
