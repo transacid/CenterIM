@@ -5,7 +5,7 @@
 
 __KTOOL_BEGIN_NAMESPACE
 
-#define TEXTINPUT_HIST_LIMIT	100
+#define TEXTINPUT_HIST_LIMIT    100
 
 class textinputline: public abstractuicontrol {
     public:
@@ -32,7 +32,7 @@ class textinputline: public abstractuicontrol {
 	void historyadd(const string buf);
 
 	void setvalue(const string buf);
-	const string getvalue();
+	const string getvalue() const;
 
 	void setcoords(int x, int y, int len);
 	void setcolor(int acolor, int ahistcolor = 0, int ahistcurcolor = 0);
@@ -41,7 +41,7 @@ class textinputline: public abstractuicontrol {
 	void connectselector(fileselector &fsel);
 	void removeselector();
 
-	int getlastkey();
+	int getlastkey() const;
 
 	void exec();
 	void close();

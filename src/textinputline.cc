@@ -213,7 +213,7 @@ void textinputline::setvalue(const string buf) {
     value = buf;
 }
 
-const string textinputline::getvalue() {
+const string textinputline::getvalue() const {
     return value;
 }
 
@@ -237,6 +237,6 @@ void textinputline::removeselector() {
     selector = 0;
 }
 
-int textinputline::getlastkey() {
+int textinputline::getlastkey() const {
     return lastkey;
 }
