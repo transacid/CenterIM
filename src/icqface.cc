@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.12 2001/09/24 11:56:38 konst Exp $
+* $Id: icqface.cc,v 1.13 2001/09/25 13:07:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -296,6 +296,7 @@ int icqface::generalmenu() {
     m.additem(_(" Add non-icq contact"));
     m.addline();
     m.additem(_(" View/edit ignore list"));
+    m.additem(_(" View/edit invisible list"));
     m.additem(_(" View/edit visible list"));
     m.setpos(lastitem);
 
@@ -306,14 +307,15 @@ int icqface::generalmenu() {
 	lastitem = i-1;
 
 	switch(i) {
-	    case 1: return ACT_STATUS;
-	    case 2: return ACT_QUICKFIND;
-	    case 3: return ACT_DETAILS;
-	    case 4: return ACT_FIND;
-	    case 5: return ACT_CONF;
-	    case 6: return ACT_NONICQ;
-	    case 8: return ACT_IGNORELIST;
-	    case 9: return ACT_VISIBLELIST;
+	    case  1: return ACT_STATUS;
+	    case  2: return ACT_QUICKFIND;
+	    case  3: return ACT_DETAILS;
+	    case  4: return ACT_FIND;
+	    case  5: return ACT_CONF;
+	    case  6: return ACT_NONICQ;
+	    case  8: return ACT_IGNORELIST;
+	    case  9: return ACT_INVISIBLELIST;
+	    case 10: return ACT_VISIBLELIST;
 	}
     }
 }
