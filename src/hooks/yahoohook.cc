@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.53 2002/08/28 11:50:37 konst Exp $
+* $Id: yahoohook.cc,v 1.54 2002/09/04 14:33:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -257,8 +257,6 @@ void yahoohook::removeuser(const imcontact &ic) {
 		    bud = buddies;
 		}
 	    }
-
-	    yahoo_refresh(cid);
 	} else {
 	    face.log(_("+ [yahoo] leaving the %s conference"), ic.nickname.c_str());
 	    yahoo_conference_logoff(cid, getmembers(who.get()+1), who.get()+1);

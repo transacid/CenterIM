@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.135 2002/09/02 15:48:39 konst Exp $
+* $Id: icqface.cc,v 1.136 2002/09/04 14:33:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2055,7 +2055,13 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     }
 
     elem = mitem;
-    if(r == add) extk = elem;
+
+    switch(r) {
+	case add:
+	case info:
+	    extk = elem;
+	    break;
+    }
 
     db.close();
     restoreworkarea();
