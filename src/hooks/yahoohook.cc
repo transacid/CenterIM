@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.92 2003/11/05 14:54:28 konst Exp $
+* $Id: yahoohook.cc,v 1.93 2003/11/06 14:32:51 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -68,9 +68,9 @@ yahoohook::yahoohook() : abstracthook(yahoo), fonline(false), cid(0) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::synclist);
+    fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::conferencing);
-    fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::conferencesaretemporary);
 
     pager_host[0] = pager_port[0] = filetransfer_host[0] =
@@ -386,15 +386,11 @@ void yahoohook::removeuser(const imcontact &ic, bool report) {
 	    const YList *buddies = yahoo_get_buddylist(cid);
 	    const YList *bud = 0;
 
-	    for(bud = buddies; bud; ) {
-		if(ic.nickname == static_cast<yahoo_buddy *>(bud->data)->id) {
+	    for(bud = buddies; bud; bud = y_list_next(bud)) {
+		if(ic.nickname == ((yahoo_buddy *) bud->data)->id)
 		    yahoo_remove_buddy(cid,
-			static_cast<yahoo_buddy *>(bud->data)->id,
-			static_cast<yahoo_buddy *>(bud->data)->group);
-
-		} else {
-		    bud = y_list_next(bud);
-		}
+			((yahoo_buddy *) bud->data)->id,
+			((yahoo_buddy *) bud->data)->group);
 	    }
 	} else {
 	    if(report)
@@ -596,7 +592,15 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
     searchdest = &dest;
 
-    if(!params.room.empty()) {
+    if(!params.kwords.empty()) {
+	yahoo_search(cid, YAHOO_SEARCH_KEYWORD, params.kwords.c_str(),
+		params.gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
+
+    } else if(!params.firstname.empty()) {
+	yahoo_search(cid, YAHOO_SEARCH_NAME, params.firstname.c_str(),
+		params.gender, YAHOO_AGERANGE_NONE, params.photo ? 1 : 0, 1);
+
+    } else if(!params.room.empty()) {
 	room = params.room.substr(1);
 	i = confmembers[room].begin();
 
@@ -614,10 +618,6 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
 	searchdest->redraw();
 	searchdest = 0;
-
-    } else if(!params.kwords.empty()) {
-	yahoo_search(cid, YAHOO_SEARCH_KEYWORD, params.kwords.c_str(),
-		YAHOO_GENDER_NONE, YAHOO_AGERANGE_NONE, 0, 1);
 
     }
 }
@@ -695,7 +695,9 @@ void yahoohook::updatecontact(icqcontact *c) {
 
 void yahoohook::renamegroup(const string &oldname, const string &newname) {
     if(logged()) {
-	yahoo_group_rename(cid, oldname.c_str(), newname.c_str());
+	string tempname = oldname + "___" + i2str(getpid()) + "_temp";
+	yahoo_group_rename(cid, oldname.c_str(), tempname.c_str());
+	yahoo_group_rename(cid, tempname.c_str(), newname.c_str());
     }
 }
 
@@ -725,13 +727,13 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:
-	    yhook.fonline = false;
+	    yhook.fonline = yhook.fonline = false;
 	    yahoo_close(yhook.cid);
 	    face.log(_("+ [yahoo] cannot login: username and password mismatch"));
 	    break;
 
 	case YAHOO_LOGIN_LOCK:
-	    yhook.fonline = false;
+	    yhook.fonline = yhook.fonline = false;
 	    yahoo_close(yhook.cid);
 	    face.log(_("+ [yahoo] cannot login: the account has been blocked"));
 	    face.log(_("+ to reactivate visit %s"), url);
@@ -801,7 +803,7 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
 	icqcontact::basicinfo binfo = c->getbasicinfo();
 	icqcontact::moreinfo minfo = c->getmoreinfo();
 
-	if(!fc->id || !fc->location || !fc->gender)
+	if(!fc->id || !fc->gender)
 	    continue;
 
 	c->setnick(fc->id);
@@ -811,23 +813,27 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
 	if(sg == "MALE") minfo.gender = genderMale;
 	else if(sg == "FEMALE") minfo.gender = genderFemale;
 
-	binfo.street = fc->location;
 	minfo.age = fc->age;
+	if(fc->location) binfo.street = fc->location;
 
 	line = (false ? "o " : "  ") + c->getnick();
 
-	if(line.size() > 20) line.resize(20);
-	else line += string(20-line.size(), ' ');
+	if(fc->age || fc->location || strlen(fc->gender) >= 4) {
+	    line += " <";
+	    if(fc->age) line += i2str(fc->age);
 
-	line += " <";
-	if(fc->age) line += i2str(fc->age);
+	    if(strlen(fc->gender) >= 4) {
+		if(fc->age) line += ", ";
+		line += fc->gender;
+	    }
 
-	if(fc->location && strlen(fc->location)) {
-	    if(fc->age) line += ", ";
-	    line += fc->location;
+	    if(fc->location && strlen(fc->location)) {
+		if(fc->age || strlen(fc->gender) >= 4) line += ", ";
+		line += fc->location;
+	    }
+
+	    line += ">";
 	}
-
-	line += ">";
 
 	c->setbasicinfo(binfo);
 	c->setmoreinfo(minfo);
@@ -837,9 +843,14 @@ void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
     }
 
     yhook.searchdest->redraw();
-    face.findready();
-    face.log(_("+ [yahoo] search finished, %d found"), yhook.foundguys.size());
-    yhook.searchdest = 0;
+
+    if(yr->start+yr->found >= yr->total) {
+	face.findready();
+	face.log(_("+ [yahoo] search finished, %d found"), yhook.foundguys.size());
+	yhook.searchdest = 0;
+    } else {
+	yahoo_search_again(yhook.cid);
+    }
 }
 
 void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList *members) {

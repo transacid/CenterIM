@@ -12,7 +12,7 @@
 #include "imevents.h"
 
 enum imgender {
-    genderUnspec,
+    genderUnspec = 0,
     genderMale,
     genderFemale,
     imgender_size
