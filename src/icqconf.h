@@ -64,7 +64,7 @@ class icqconf {
 	unsigned int uin, port, socksport;
 
 	int autoaway, autona;
-	bool hideoffline, quote, savepwd, antispam;
+	bool hideoffline, quote, savepwd, antispam, mailcheck;
 
 	string password, rnick, rfname, rlname, remail, server;
 	string sockshost, socksuser, sockspass, openurlcommand;
@@ -115,6 +115,9 @@ class icqconf {
 
 	bool getantispam();
 	void setantispam(bool fas);
+
+	bool getmailcheck();
+	void setmailcheck(bool fmc);
 
 	void setauto(int away, int na);
 	void getauto(int &away, int &na);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.4 2001/06/02 07:12:39 konst Exp $
+* $Id: icqconf.cc,v 1.5 2001/06/29 23:43:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,7 +33,8 @@
 #include "icqcontacts.h"
 
 icqconf::icqconf(): uin(0), rs(rscard), rc(rcdark), autoaway(0),
-autona(0), hideoffline(false), savepwd(true), antispam(false) {
+autona(0), hideoffline(false), savepwd(true), antispam(false),
+mailcheck(true) {
     setserver(ICQ_SERVER);
 }
 
@@ -93,6 +94,8 @@ void icqconf::loadmainconfig() {
 		autona = atol(buf.c_str());
 	    } else if(param == "antispam") {
 		antispam = true;
+	    } else if(param == "mailcheck") {
+		mailcheck = true;
 	    } else if(param == "server") {
 		setserver(buf);
 	    } else if(param == "quotemsgs") {
@@ -137,6 +140,7 @@ void icqconf::savemainconfig(unsigned int fuin = 0) {
 	if(hideoffline) f << "hideoffline" << endl;
 	if(getquote()) f << "quotemsgs" << endl;
 	if(getantispam()) f << "antispam" << endl;
+	if(getmailcheck()) f << "mailcheck" << endl;
 
 	f.close();
     }
@@ -312,7 +316,7 @@ void icqconf::loadactions() {
 	    of << "# Possible actions are: openurl" << endl << endl;
 
 	    of << "openurl\t";
-	    of << "(if test ! -z \"`ps x | egrep '[0-9]:[0-9][0-9] netscape'`\"; ";
+	    of << "(if test ! -z \"`ps x | grep /netscape | grep -v grep`\"; ";
 	    of << "then netscape -remote 'openURL($url$, new-window)' -display 0:0; else ";
 	    of << "netscape \"$url$\" -display 0:0; fi) >/dev/null 2>&1 &" << endl;
 
@@ -501,6 +505,14 @@ bool icqconf::getantispam() {
 
 void icqconf::setantispam(bool fas) {
     antispam = fas;
+}
+
+bool icqconf::getmailcheck() {
+    return mailcheck;
+}
+
+void icqconf::setmailcheck(bool fmc) {
+    mailcheck = fmc;
 }
 
 void icqconf::openurl(const string url) {

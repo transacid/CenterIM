@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.8 2001/06/03 13:25:30 konst Exp $
+* $Id: centericq.cc,v 1.9 2001/06/29 23:43:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -539,7 +539,7 @@ void centericq::checkmail() {
     bool prevempty, header;
     FILE *f;
 
-    if(fname)
+    if(conf.getmailcheck() && fname)
     if(!stat(fname, &st))
     if(st.st_size != fsize) {
 
@@ -595,7 +595,7 @@ void centericq::checkparallel() {
 	f.close();
     }
 
-    if(!(fname = readlink((string) "/proc/" + i2str(pid) + "/exe")).empty()) {
+    if(!(fname = readlink((string) "/proc/" + i2str(pid) + "/exe")).empty() && (pid != getpid())) {
 	if(justfname(fname) == "centericq") {
 	    face.log(_("! another running copy of centericq detected"));
 	    face.log(_("! this may cause problems. pid %lu"), pid);

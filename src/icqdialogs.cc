@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.4 2001/06/02 07:12:39 konst Exp $
+* $Id: icqdialogs.cc,v 1.5 2001/06/29 23:43:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -615,6 +615,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     bool socks = !conf.getsockshost().empty();
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
+    bool mailcheck = conf.getmailcheck();
 
     dialogbox db;
 
@@ -652,6 +653,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 	db.gettree()->addleaff(nopt, 0, (void *)  8, _(" Quote a message on reply : %s "), stryesno(quote));
 	db.gettree()->addleaff(nopt, 0, (void *) 13, _(" Remember ICQ password : %s "), stryesno(savepwd));
 	db.gettree()->addleaff(nopt, 0, (void *) 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
+	db.gettree()->addleaff(nopt, 0, (void *) 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
 
 	db.gettree()->addleaff(ncomm, 0, (void *) 7, _(" ICQ server address : %s "), serv.c_str());
 	db.gettree()->addleaff(ncomm, 0, (void *) 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
@@ -711,6 +713,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 			break;
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
+		    case 15: mailcheck = !mailcheck; break;
 		}
 		break;
 	    case 1:
@@ -721,6 +724,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setauto(aaway, ana);
 		conf.sethideoffline(hideoffl);
 		conf.setantispam(antispam);
+		conf.setmailcheck(mailcheck);
 		icq_Russian = rus ? 1 : 0;
 
 		if(socks) conf.setsockshost(prserv);

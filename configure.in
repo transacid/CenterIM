@@ -1,13 +1,8 @@
 AC_INIT(aclocal.m4)
-AM_INIT_AUTOMAKE(centericq, 3.29.13)
-
-AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(centericq, 3.34.15)
 
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
-
-AC_CONFIG_SUBDIRS( icqlib-1.2 kkstrtext-0.1 kkconsui-0.1 kksystr-0.1)
-ALL_LINGUAS="zh_TW.Big5 ru ro pt_BR pl hu de cs"
-AM_GNU_GETTEXT
-AC_OUTPUT(Makefile share/Makefile src/Makefile po/Makefile.in intl/Makefile)
+AC_CONFIG_SUBDIRS( kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 icqlib-1.2)
+AC_OUTPUT(Makefile share/Makefile src/Makefile)

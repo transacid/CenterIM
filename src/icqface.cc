@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.8 2001/06/07 08:47:00 konst Exp $
+* $Id: icqface.cc,v 1.9 2001/06/29 23:43:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -91,6 +91,7 @@ string getbdate(unsigned char bday, unsigned char bmonth, unsigned char byear) {
 
 icqface::icqface(): mainscreenblock(false), inited(false), onlinefolder(false) {
     kinterface();
+    raw();
     workareas.freeitem = &freeworkareabuf;
 
 #ifdef DEBUG
@@ -177,8 +178,7 @@ int icqface::contextmenu(icqcontact *c) {
     int ret = 0, i;
     static int elem = 0;
 
-    verticalmenu m(WORKAREA_X1+1, WORKAREA_Y1+1,
-	WORKAREA_X1+27, WORKAREA_Y1+2, conf.getcolor(cp_main_text),
+    verticalmenu m(conf.getcolor(cp_main_text),
 	conf.getcolor(cp_main_selected));
 
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+27,

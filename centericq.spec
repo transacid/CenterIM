@@ -1,4 +1,4 @@
-Version: 3.29.12
+Version: 3.34.15
 Summary: Console ncurses based ICQ client
 Name: centericq
 Release: 3
@@ -29,7 +29,7 @@ make
 rm -rf $RPM_BUILD_ROOT
 make prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_BUILD_ROOT/etc install
 find $RPM_BUILD_ROOT/usr -type f -print | grep -v '\/(README|COPYING|INSTALL|TODO|ChangeLog|AUTHORS|FAQ)$' | \
-    sed "s@^$RPM_BUILD_ROOT@@g" > %{name}-%{version}-filelist
+    sed "s@^$RPM_BUILD_ROOT@@g" | sed "s/^\(.*\)$/\1\*/" > %{name}-%{version}-filelist
 
 %clean
 rm -rf $RPM_BUILD_ROOT

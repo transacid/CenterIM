@@ -62,8 +62,21 @@ Q: How do I authorize someone's request with centericq?
 
 A: You'll see as soon as someone requests it.
 
-Q: I can't use Ctrl-O to view history and Ctrl-Y to delete a line under FreeBSD
+Q: I can't use Ctrl-O to view history and Ctrl-Y to delete a line under
+   FreeBSD
 
 A: Execute the following before starting centericq:
     stty dsusp undef
     stty discard undef
+
+Q: I can't get out from a dialog or a menu. When I press ESC, nothing
+   happens.
+
+A: Have you ever used mc (Midnight commander)? It requires users to
+   press ESC twice to close a dialog, menu, etc. It's not a problem, but
+   just a terminal specific issue.
+
+Q: How do I enable logging the protocol info, etc?
+
+A: Compile the program with the -DDEBUG parameter.
+   [konst@morgue]$ CFLAGS=-DDEBUG CXXFLAGS=-DDEBUG ./configure && make
