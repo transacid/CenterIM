@@ -144,3 +144,4 @@ static void shaHashBlock(SHA_CTX *ctx) {
   ctx->H[3] += D;
   ctx->H[4] += E;
 }
+

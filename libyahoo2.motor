@@ -14,7 +14,7 @@ library/static
 %arguments
 
 %cflags
-
+-DSTDC_HEADERS -DUSE_STRUCT_CALLBACKS
 %lflags
 
 %gettextized
@@ -33,8 +33,6 @@ automake
 1
 %file fsource yahoo_util.c
 1
-%file fheader libyahoo2.h
-1
 %file fheader sha.h
 1
 %file fheader yahoo2_callbacks.h
@@ -48,6 +46,8 @@ automake
 %file fheader yahoo_list.h
 1
 %file fheader yahoo_util.h
+1
+%file fheader yahoo2.h
 1
 %file fbuild Makefile.am
 1

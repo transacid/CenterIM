@@ -45,14 +45,13 @@ enum yahoo_status {
 	YAHOO_STATUS_OFFLINE = 0x5a55aa56, /* don't ask */
 	YAHOO_STATUS_NOTIFY = 0x16
 };
-#define YAHOO_STATUS_GAME       0x2             /* Games don't fit into the regular status model */
+#define YAHOO_STATUS_GAME	0x2 		/* Games don't fit into the regular status model */
 
 enum yahoo_login_status {
 	YAHOO_LOGIN_OK = 0,
 	YAHOO_LOGIN_PASSWD = 13,
 	YAHOO_LOGIN_LOCK = 14,
 	YAHOO_LOGIN_DUPL = 99,
-	YAHOO_LOGIN_UNKNOWN_AUTH = -2,
 	YAHOO_LOGIN_SOCK = -1
 };
 
@@ -111,8 +110,8 @@ enum yahoo_connection_type {
 };
 
 enum yahoo_webcam_direction_type {
-	YAHOO_WEBCAM_DOWNLOAD=0,
-	YAHOO_WEBCAM_UPLOAD
+        YAHOO_WEBCAM_DOWNLOAD=0,
+        YAHOO_WEBCAM_UPLOAD
 };
 
 /* chat member attribs */
@@ -122,12 +121,15 @@ enum yahoo_webcam_direction_type {
 #define YAHOO_CHAT_DUNNO 0x400
 #define YAHOO_CHAT_WEBCAM 0x10
 
+enum yahoo_webcam_conn_type { Y_WCM_DIALUP, Y_WCM_DSL, Y_WCM_T1 };
+
 struct yahoo_webcam {
 	int direction;     /* Uploading or downloading */
 	int conn_type;     /* 0=Dialup, 1=DSL/Cable, 2=T1/Lan */
 
 	char *user;        /* user we are viewing */
 	char *server;      /* webcam server to connect to */
+	int   port;        /* webcam port to connect on */
 	char *key;         /* key to connect to the server with */
 	char *description; /* webcam description */
 	char *my_ip;       /* own ip number */
@@ -164,6 +166,8 @@ struct yahoo_data {
 
 	char  *rawbuddylist;
 	char  *ignorelist;
+
+	void  *server_settings;
 
 	int   lsearch_type;
 	char  *lsearch_text;

@@ -25,12 +25,26 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
+#if STDC_HEADERS
+# include <string.h>
+#else
+# if !HAVE_STRCHR
+#  define strchr index
+#  define strrchr rindex
+# endif
+char *strchr (), *strrchr ();
+# if !HAVE_MEMCPY
+#  define memcpy(d, s, n) bcopy ((s), (d), (n))
+#  define memmove(d, s, n) bcopy ((s), (d), (n))
+# endif
+#endif
+
 
 #include <errno.h>
 #include <unistd.h>
 #include <ctype.h>
-#include "libyahoo2.h"
+#include "yahoo2.h"
 #include "yahoo2_callbacks.h"
 #include "yahoo_httplib.h"
 #include "yahoo_util.h"
@@ -45,9 +59,9 @@
 
 #ifdef USE_STRUCT_CALLBACKS
 extern struct yahoo_callbacks *yc;
-#define YAHOO_CALLBACK(x)       yc->x
+#define YAHOO_CALLBACK(x)	yc->x
 #else
-#define YAHOO_CALLBACK(x)       x
+#define YAHOO_CALLBACK(x)	x
 #endif
 
 extern enum yahoo_log_level log_level;
@@ -64,7 +78,7 @@ int yahoo_tcp_readline(char *ptr, int maxlen, int fd)
 		} while(rc == -1 && errno == EINTR);
 
 		if (rc == 1) {
-			if(c == '\r')                   /* get rid of \r */
+			if(c == '\r')			/* get rid of \r */
 				continue;
 			*ptr = c;
 			if (c == '\n')
@@ -72,9 +86,9 @@ int yahoo_tcp_readline(char *ptr, int maxlen, int fd)
 			ptr++;
 		} else if (rc == 0) {
 			if (n == 1)
-				return (0);             /* EOF, no data */
+				return (0);		/* EOF, no data */
 			else
-				break;                  /* EOF, w/ data */
+				break;			/* EOF, w/ data */
 		} else {
 			return -1;
 		}
@@ -244,7 +258,7 @@ char *yahoo_xmldecode(const char *instr)
 			for (i=0; i<5; i++) 
 				if(!strncmp(instr+ipos, entitymap[i][0], 
 					       strlen(entitymap[i][0]))) {
-					str[bpos++] = entitymap[i][1][0];
+				       	str[bpos++] = entitymap[i][1][0];
 					ipos += strlen(entitymap[i][0]);
 					break;
 				}
