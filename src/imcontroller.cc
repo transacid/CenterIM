@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.40 2002/12/10 18:58:55 konst Exp $
+* $Id: imcontroller.cc,v 1.41 2002/12/11 22:43:55 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -260,12 +260,14 @@ void imcontroller::msnupdateprofile() {
 
 void imcontroller::jabberupdateprofile() {
     if(jhook.logged()) {
+	icqcontact *c;
+
+	(c = clist.get(contactroot))->clear();
 	jhook.requestinfo(imcontact(conf.getourid(jabber).nickname, jabber));
 
-	if(face.updatedetails(0, jabber)) {
-	    icqcontact *c = clist.get(contactroot);
+	if(face.updatedetails(0, jabber))
 	    jhook.sendupdateuserinfo(*c);
-	}
+
     } else {
 	face.status(_("You must be logged to the Jabber network to update your details"));
     }

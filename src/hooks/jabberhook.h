@@ -30,7 +30,7 @@ class jabberhook: public abstracthook {
 	    };
 
 	    enum param_type { ptSearch, ptRegister, param_type_size };
-	    enum agent_type { atSearch, atTransport, atGroupchat, atUnknown } type;
+	    enum agent_type { atSearch, atTransport, atGroupchat, atStandard, atUnknown } type;
 
 	    agent_params params[param_type_size];
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.52 2002/12/11 10:46:23 konst Exp $
+* $Id: msnhook.cc,v 1.53 2002/12/11 22:43:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -662,9 +662,11 @@ int ext_connect_socket(const char *hostname, int port) {
     struct sockaddr_in sa;
     struct hostent *hp;
     int a, s;
+    string msgerr = _("+ [msn] cannot connect: ");
 
     hp = gethostbyname(hostname);
     if(!hp) {
+	face.log(msgerr + _("could not resolve hostname"));
 	errno = ECONNREFUSED;
 	return -1;
     }
@@ -678,6 +680,7 @@ int ext_connect_socket(const char *hostname, int port) {
 	return -1;
 
     if(connect(s, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
+	face.log(msgerr + _("verify the hostname and port"));
 	close(s);
 	return -1;
     }

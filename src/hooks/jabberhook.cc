@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.31 2002/12/11 19:10:03 konst Exp $
+* $Id: jabberhook.cc,v 1.32 2002/12/11 22:43:55 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -618,6 +618,8 @@ void jabberhook::gotagentinfo(xmlnode x) {
 		    ia->params[pt].paramnames.push_back(make_pair(name, data));
 		}
 	    }
+
+	    if(ia->params[pt].paramnames.empty()) agents.erase(ia);
 	    break;
 	}
 	++ia;
@@ -798,6 +800,9 @@ void jabberhook::postlogin() {
 	if(c->getbasicinfo().requiresauth)
 	    c->setstatus(available);
     }
+
+    agents.insert(agents.begin(), agent("vcard", "Jabber VCard", "", agent::atStandard));
+    agents.begin()->params[agent::ptRegister].enabled = true;
 }
 
 void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
@@ -807,35 +812,62 @@ void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontac
     xmlnode_free(x);
 }
 
+static void vcput(xmlnode x, const string &name, const string &val) {
+    xmlnode_insert_cdata(xmlnode_insert_tag(x, name.c_str()),
+	val.c_str(), (unsigned int) -1);
+}
+
 void jabberhook::sendupdateuserinfo(const icqcontact &c) {
     xmlnode x, y;
     icqcontact::reginfo ri = c.getreginfo();
-
-    x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
-    xmlnode_put_attrib(x, "id", "Register");
-
-    y = xmlnode_get_tag(x, "query");
+    string buf;
 
     vector<agent>::const_iterator ia = agents.begin();
+
     while(ia != agents.end()) {
 	if(ia->name == ri.service) {
-	    xmlnode_put_attrib(x, "to", ia->jid.c_str());
-	    xmlnode_insert_cdata(xmlnode_insert_tag(y, "key"),
-		ia->params[agent::ptRegister].key.c_str(), (unsigned int) -1);
+	    if(ia->type == agent::atStandard) {
+		x = jutil_iqnew(JPACKET__SET, NS_VCARD);
+		y = xmlnode_get_tag(x, "vCard");
+
+		icqcontact::basicinfo bi = c.getbasicinfo();
+		icqcontact::moreinfo mi = c.getmoreinfo();
+		icqcontact::workinfo wi = c.getworkinfo();
+
+		vcput(y, "DESC", c.getabout());
+		vcput(y, "EMAIL", bi.email);
+		vcput(y, "URL", mi.homepage);
+		vcput(y, "TITLE", wi.position);
+		vcput(y, "AGE", i2str(mi.age));
+		vcput(y, "HOMECELL", bi.cellular);
+
+		if(!(buf = bi.fname).empty()) buf += " " + bi.lname;
+		vcput(y, "FN", buf);
+
+	    } else {
+		x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
+		xmlnode_put_attrib(x, "id", "Register");
+		y = xmlnode_get_tag(x, "query");
+
+		xmlnode_put_attrib(x, "to", ia->jid.c_str());
+		xmlnode_insert_cdata(xmlnode_insert_tag(y, "key"),
+		    ia->params[agent::ptRegister].key.c_str(), (unsigned int) -1);
+
+		vector<pair<string, string> >::const_iterator ip = ri.params.begin();
+		while(ip != ri.params.end()) {
+		    xmlnode_insert_cdata(xmlnode_insert_tag(y,
+			ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
+		    ++ip;
+		}
+
+	    }
+
+	    jab_send(jc, x);
+	    xmlnode_free(x);
 	    break;
 	}
 	++ia;
     }
-
-    vector<pair<string, string> >::const_iterator ip = ri.params.begin();
-    while(ip != ri.params.end()) {
-	xmlnode_insert_cdata(xmlnode_insert_tag(y,
-	    ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
-	++ip;
-    }
-
-    jab_send(jc, x);
-    xmlnode_free(x);
 }
 
 void jabberhook::gotmessage(const string &type, const string &from, const string &abody) {
@@ -955,6 +987,7 @@ void jabberhook::statehandler(jconn conn, int state) {
 		jhook.jc = 0;
 		jhook.flogged = false;
 		jhook.roster.clear();
+		jhook.agents.clear();
 		clist.setoffline(jabber);
 		face.update();
 	    }

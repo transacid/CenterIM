@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.146 2002/12/11 10:46:22 konst Exp $
+* $Id: centericq.cc,v 1.147 2002/12/11 22:43:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -247,7 +247,7 @@ void centericq::mainloop() {
 
 	    case ACT_EDITUSER:
 		c->save();
-		if(face.updatedetails(c)) {
+		if(face.updatedetails(c, c->getdesc().pname)) {
 		    if(c->getdesc().pname == infocard)
 			c->setdispnick(c->getnick());
 

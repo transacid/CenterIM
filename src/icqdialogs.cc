@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.99 2002/12/05 17:05:20 konst Exp $
+* $Id: icqdialogs.cc,v 1.100 2002/12/11 22:43:54 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -497,15 +497,19 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	i = tree->addnode(_(" Registration service "));
 	tree->addleaff(i, 0, 46, " %s ", ri.service.c_str());
 
-	i = tree->addnode(_(" Registration parameters "));
+	if(!ri.params.empty()) {
+	    i = tree->addnode(_(" Registration parameters "));
 
-	vector<pair<string, string> >::const_iterator ir = ri.params.begin();
+	    vector<pair<string, string> >::const_iterator ir = ri.params.begin();
 
-	while(ir != ri.params.end()) {
-	    tree->addleaff(i, 0, 100+(ir-ri.params.begin()), " %s : %s ",
-		ir->first.c_str(), ir->second.c_str());
-	    ++ir;
+	    while(ir != ri.params.end()) {
+		tree->addleaff(i, 0, 100+(ir-ri.params.begin()), " %s : %s ",
+		    ir->first.c_str(), ir->second.c_str());
+		++ir;
+	    }
 	}
+
+	i = 0;
 
     } else if(passinfo.pname == infocard || capab.count(hookcapab::changenick) || !ourdetails) {
 	if(!i) i = tree->addnode(_(" General "));
@@ -513,7 +517,8 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 
     }
 
-    if(passinfo.pname == icq && c->getdesc() == contactroot || !ourdetails) {
+    if(passinfo.pname == icq && c->getdesc() == contactroot || !ourdetails ||
+    (ourdetails && capab.count(hookcapab::flexiblereg) && ri.params.empty())) {
 	if(!i) i = tree->addnode(_(" General "));
 
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
@@ -563,14 +568,15 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
 	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
 
-	i = tree->addnode(_(" Miscellaneous "));
-
-	if(ourdetails) {
-	    tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno(bi.webaware));
-	    tree->addleaff(i, 0, 42, _(" Random chat group : %s "), strrandomgroup(bi.randomgroup));
-	    tree->addleaff(i, 0, 45, _(" Store contact list server-side : %s "), stryesno(bi.autosync));
-	} else {
-	    tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno(bi.requiresauth));
+	if(passinfo.pname == icq) {
+	    i = tree->addnode(_(" Miscellaneous "));
+	    if(ourdetails) {
+		tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno(bi.webaware));
+		tree->addleaff(i, 0, 42, _(" Random chat group : %s "), strrandomgroup(bi.randomgroup));
+		tree->addleaff(i, 0, 45, _(" Store contact list server-side : %s "), stryesno(bi.autosync));
+	    } else {
+		tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno(bi.requiresauth));
+	    }
 	}
     }
 
