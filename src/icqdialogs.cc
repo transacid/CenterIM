@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.22 2001/11/14 16:18:15 konst Exp $
+* $Id: icqdialogs.cc,v 1.23 2001/11/14 18:09:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,7 +24,6 @@
 
 #include "icqface.h"
 #include "icqconf.h"
-#include "icqhook.h"
 #include "icqhist.h"
 #include "centericq.h"
 #include "icqcontact.h"
@@ -32,165 +31,42 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 
-/*
-bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
-    bool finished, newuin, success, socks = false;
-    int nmode, ndet, nopt, n, i, b, nproxy;
-    string phidden, pcheck, socksuser, sockspass, psockscheck, tmp;
-    string serv = conf.getservername() + ":" + i2str(conf.getserverport());
-    string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
-    dialogbox db;
-
-    if(conf.getsockshost().empty()) prserv = "";
-
-    finished = success = false;
-    icq_Russian = 0;
-    newuin = true;
-    ruin = 0;
-    rnick = rfname = rlname = remail = "";
-
-    db.setwindow(new textwindow(0, 0, BIGDIALOG_WIDTH, BIGDIALOG_HEIGHT,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED,
-	conf.getcolor(cp_dialog_highlight), _(" Register on ICQ network ")));
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
-	conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_text)));
-
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
-	_("Change"), _("Done"), 0));
-    db.addautokeys();
-
-    treeview &t = *db.gettree();
-
-    while(!finished) {
-	t.clear();
-	nmode = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Mode "));
-	ndet  = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Details "));
-	nopt  = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Options "));
-
-	t.addleaff(nmode, 0, 1, _(" Registration mode : %s "),
-	newuin ? _("new uin") : _("existing user"));
-
-	t.addleaff(nopt, 0, 12, _(" Server address : %s "), serv.c_str());
-	t.addleaff(nopt, 0, 13, _(" Use SOCKS proxy : %s "), stryesno(socks));
-	t.addleaff(nopt, 0,  8, _(" Sound device : %s "), strregsound(conf.getregsound()));
-	t.addleaff(nopt, 0,  9, _(" Initial color scheme : %s "), strregcolor(conf.getregcolor()));
-	t.addleaff(nopt, 0, 11, _(" Russian translation win1251-koi8 needed : %s "), stryesno(icq_Russian == 1));
-
-	if(newuin) {
-	    t.addleaff(ndet, 0,  2, _(" Password to set : %s "), phidden.assign(rpasswd.size(), '*').c_str());
-	    t.addleaff(ndet, 0,  3, _(" Check the password : %s "), phidden.assign(pcheck.size(), '*').c_str());
-	    t.addleaff(ndet, 0,  4, _(" Nickname : %s "), rnick.c_str());
-	    t.addleaff(ndet, 0,  5, _(" E-Mail : %s "), remail.c_str());
-	    t.addleaff(ndet, 0,  6, _(" First name : %s "), rfname.c_str());
-	    t.addleaff(ndet, 0,  7, _(" Last name : %s "), rlname.c_str());
-	} else {
-	    t.addleaff(ndet, 0, 10, _(" UIN : %s "), strint(ruin));
-	    t.addleaff(ndet, 0,  2, _(" Password : %s "), phidden.assign(rpasswd.size(), '*').c_str());
-	}
-
-	t.addleaff(ndet, 0, 20, _(" Remember ICQ password : %s "), stryesno(conf.getsavepwd()));
-
-	if(socks) {
-	    conf.getsocksuser(socksuser, sockspass);
-	    nproxy = t.addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
-	    t.addleaff(nproxy, 0, 14, _(" Proxy server address : %s "), prserv.c_str());
-	    t.addleaff(nproxy, 0, 17, _(" Proxy user name : %s "), socksuser.c_str());
-	    t.addleaff(nproxy, 0, 16, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
-	    t.addleaff(nproxy, 0, 18, _(" Check the password : %s "), phidden.assign(psockscheck.size(), '*').c_str());
-	}
-
-	void *p;
-	finished = !db.open(n, b, &p);
-	i = (int) p;
-
-	if(!finished)
-	switch(b) {
-	    case 0:
-		switch(i) {
-		    case 1: newuin = !newuin; break;
-		    case 2: rpasswd = inputstr(_("Password: "), rpasswd, '*'); break;
-		    case 3: pcheck = inputstr(_("Check the password you entered: "), pcheck, '*'); break;
-		    case 4: rnick = inputstr(_("Nickname to set: "), rnick); break;
-		    case 5: remail = inputstr(_("E-Mail: "), remail); break;
-		    case 6: rfname = inputstr(_("First name: "), rfname); break;
-		    case 7: rlname = inputstr(_("Last name: "), rlname); break;
-		    case 8:
-			conf.setregsound(
-			    conf.getregsound() == rscard ? rsspeaker :
-			    conf.getregsound() == rsspeaker ? rsdisable :
-			    rscard);
-			break;
-		    case 9:
-			conf.setregcolor(
-			    conf.getregcolor() == rcdark ? rcblue :
-			    conf.getregcolor() == rcblue ? rcdark : rcblue);
-			break;
-		    case 10:
-			ruin = atol(inputstr(_("Existing UIN: "), i2str(ruin)).c_str());
-			break;
-		    case 11:
-			icq_Russian = icq_Russian == 1 ? 0 : 1;
-			break;
-		    case 12:
-			tmp = inputstr(_("ICQ server to use: "), serv);
-			if(!tmp.empty()) serv = tmp;
-			break;
-		    case 13: socks = !socks; break;
-		    case 14:
-			tmp = inputstr(_("SOCKS proxy server to use: "), prserv);
-			if(!tmp.empty()) prserv = tmp;
-			break;
-		    case 16:
-			sockspass = inputstr(_("SOCKS proxy password: "), sockspass, '*');
-			conf.setsocksuser(socksuser, sockspass);
-			break;
-		    case 17:
-			socksuser = inputstr(_("SOCKS proxy user name: "), socksuser);
-			conf.setsocksuser(socksuser, sockspass);
-			break;
-		    case 18:
-			psockscheck = inputstr(_("Check the SOCKS proxy password: "), psockscheck, '*');
-			break;
-		    case 20: conf.setsavepwd(!conf.getsavepwd()); break;
-		}
-		break;
-	    case 1:
-		if(newuin && (rpasswd != pcheck)) {
-		    status(_("Passwords do not match"));
-		} else if(newuin && (sockspass != psockscheck)) {
-		    status(_("SOCKS proxy passwords do not match"));
-		} else {
-		    if(socks) {
-			conf.setsockshost(prserv);
-		    } else {
-			conf.setsockshost("");
-		    }
-
-		    conf.setserver(serv);
-		    finished = success = true;
-
-		    if(newuin) ruin = 0; else
-		    if(!newuin && !ruin) success = false;
-		}
-		break;
-	}
-    }
-
-    db.close();
-
-    return success;
-}
-*/
+#include "icqhook.h"
+#include "yahoohook.h"
 
 bool icqface::finddialog(searchparameters &s) {
     int n, b, i;
-    bool finished = false, ret = false;
+    int nuin, ninfo, nloc, nwork, nonl;
+    bool finished, ret, proceed;
     dialogbox db;
+    vector<protocolname> penabled;
+    vector<protocolname>::iterator ipname;
+
+    for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
+	proceed = false;
+
+	switch(apname) {
+	    case icq: proceed = ihook.online(); break;
+	    case yahoo: proceed = yhook.online(); break;
+	}
+
+	if(proceed) {
+	    penabled.push_back(apname);
+	}
+    }
+
+    if(penabled.empty()) {
+	log(_("+ you must be logged in to find/add users"));
+	return false;
+    }
+
+    if((ipname = find(penabled.begin(), penabled.end(),
+    s.pname)) == penabled.end()) {
+	ipname = penabled.begin();
+    }
 
     blockmainscreen();
+    finished = ret = false;
 
     db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
@@ -198,7 +74,7 @@ bool icqface::finddialog(searchparameters &s) {
 
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
@@ -213,32 +89,43 @@ bool icqface::finddialog(searchparameters &s) {
     while(!finished) {
 	tree.clear();
 
-	int nuin = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" UIN "));
-	int ninfo = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Details "));
-	int nloc = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Location "));
-	int nwork = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Work "));
-	int nonl = tree.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Online only "));
+	i = tree.addnode(0, 0, 0, _(" Network "));
+	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(*ipname) + " ");
 
-	tree.addleaff(nuin, 0, 10, _(" UIN : %s "), strint(s.uin));
+	switch(*ipname) {
+	    case icq:
+		i = tree.addnode(0, 0, 0, _(" UIN "));
+		tree.addleaff(i, 0, 10, _(" UIN : %s "), strint(s.uin));
 
-	tree.addleaff(ninfo, 0, 11, _(" Nickname : %s "), s.nick.c_str());
-	tree.addleaff(ninfo, 0, 12, _(" E-Mail : %s "), s.email.c_str());
-	tree.addleaff(ninfo, 0, 13, _(" First name : %s "), s.firstname.c_str());
-	tree.addleaff(ninfo, 0, 14, _(" Last name : %s "), s.lastname.c_str());
-	tree.addleaff(ninfo, 0, 15, _(" Min. age : %s "), strint(s.minage));
-	tree.addleaff(ninfo, 0, 16, _(" Max. age : %s "), strint(s.maxage));
-	tree.addleaff(ninfo, 0, 17, _(" Gender : %s "), strgender(s.gender));
-	tree.addleaff(ninfo, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
+		i = tree.addnode(0, 0, 0, _(" Details "));
+		tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
+		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
+		tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
+		tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
+		tree.addleaff(i, 0, 15, _(" Min. age : %s "), strint(s.minage));
+		tree.addleaff(i, 0, 16, _(" Max. age : %s "), strint(s.maxage));
+		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
+		tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
 
-	tree.addleaff(nloc, 0, 19, _(" City : %s "), s.city.c_str());
-	tree.addleaff(nloc, 0, 20, _(" State : %s "), s.state.c_str());
-	tree.addleaff(nloc, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
+		i = tree.addnode(0, 0, 0, _(" Location "));
+		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
+		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
+		tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
 
-	tree.addleaff(nwork, 0, 22, _(" Company : %s "), s.company.c_str());
-	tree.addleaff(nwork, 0, 23, _(" Department : %s "), s.department.c_str());
-	tree.addleaff(nwork, 0, 24, _(" Position : %s "), s.position.c_str());
+		i = tree.addnode(0, 0, 0, _(" Work "));
+		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
+		tree.addleaff(i, 0, 23, _(" Department : %s "), s.department.c_str());
+		tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
 
-	tree.addleaff(nonl, 0, 25, " %s ", stryesno(s.onlineonly));
+		i = tree.addnode(0, 0, 0, _(" Online only "));
+		tree.addleaff(i, 0, 25, " %s ", stryesno(s.onlineonly));
+		break;
+
+	    case yahoo:
+		i = tree.addnode(0, 0, 0, _(" Nickname "));
+		tree.addleaf(i, 0, 11, " " + s.nick + " ");
+		break;
+	}
 
 	finished = !db.open(n, b, (void **) &i);
 
@@ -249,6 +136,11 @@ bool icqface::finddialog(searchparameters &s) {
 		break;
 	    case 1:
 		switch(i) {
+		    case 1:
+			if(++ipname == penabled.end()) {
+			    ipname = penabled.begin();
+			}
+			break;
 		    case 10: s.uin = atol(inputstr(_("UIN: "), strint(s.uin)).c_str()); break;
 		    case 11: s.nick = inputstr(_("Nickname: "), s.nick); break;
 		    case 12: s.email = inputstr(_("E-Mail: "), s.email); break;
@@ -270,6 +162,7 @@ bool icqface::finddialog(searchparameters &s) {
 
 	    case 2:
 		ret = finished = true;
+		s.pname = *ipname;
 		break;
 	}
     }

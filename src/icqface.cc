@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.36 2001/11/14 16:21:31 konst Exp $
+* $Id: icqface.cc,v 1.37 2001/11/14 18:09:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -889,11 +889,25 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
     restoreworkarea();
 }
 
+void icqface::makeprotocolmenu(verticalmenu &m) {
+    icqconf::imaccount ia;
+    protocolname ipname;
+
+    for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
+	ia = conf.getourid(ipname);
+
+	if(!ia.empty())
+	switch(ipname) {
+	    case icq: m.additem(0, icq, _(" [icq] ICQ network")); break;
+	    case yahoo: m.additem(0, yahoo, _(" [yahoo] YAIM")); break;
+	}
+    }
+}
+
 bool icqface::changestatus(protocolname &pname, imstatus &st) {
     int i;
     bool r;
     verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
-    protocolname ipname;
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
@@ -903,16 +917,7 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 	WORKAREA_Y1+9, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-
-    for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
-	icqconf::imaccount ia = conf.getourid(ipname);
-
-	if(!ia.empty())
-	switch(ipname) {
-	    case icq: m.additem(0, icq, _(" [icq] ICQ network")); break;
-	    case yahoo: m.additem(0, yahoo, _(" [yahoo] YAIM")); break;
-	}
-    }
+    makeprotocolmenu(m);
 
     m.scale();
 

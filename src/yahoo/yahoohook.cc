@@ -143,8 +143,7 @@ void yahoohook::sendnewuser(const imcontact ic) {
 
 void yahoohook::removeuser(const imcontact ic) {
     if(yahoo)
-    if(online())
-    if(yahoo_isbuddy(yahoo, ic.nickname.c_str())) {
+    if(online()) {
 	yahoo_remove_buddy(yahoo, ic.nickname.c_str(),
 	    conf.getourid(::yahoo).nickname.c_str(), "group", "");
     }

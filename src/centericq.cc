@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.31 2001/11/14 16:18:14 konst Exp $
+* $Id: centericq.cc,v 1.32 2001/11/14 18:09:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -226,7 +226,7 @@ void centericq::mainloop() {
 		manager.exec();
 		break;
 	    case ACT_FIND:
-		if(ihook.logged()) find();
+		find();
 		break;
 	    case ACT_CONF:
 		updateconf();
@@ -335,31 +335,37 @@ void centericq::find() {
 
     while(ret) {
 	if(ret = face.finddialog(s)) {
-	    if(s.uin) {
+	    switch(s.pname) {
+		case icq:
+		    if(s.uin) {
+			icq_SendSearchUINReq(&icql, s.uin);
+		    } else
+		    if(s.minage || s.maxage || s.country || s.language
+		    || !s.city.empty() || !s.state.empty() || !s.company.empty()
+		    || !s.department.empty() || !s.position.empty() || s.onlineonly) {
+			icq_SendWhitePagesSearchReq(&icql, s.firstname.c_str(),
+			    s.lastname.c_str(), s.nick.c_str(), s.email.c_str(),
+			    s.minage, s.maxage, s.gender, s.language, s.city.c_str(),
+			    s.state.c_str(), s.country, s.company.c_str(),
+			    s.department.c_str(), s.position.c_str(),
+			    s.onlineonly ? 1 : 0);
 
-		icq_SendSearchUINReq(&icql, s.uin);
+		    } else {
+			icq_SendSearchReq(&icql, s.email.c_str(),
+			    s.nick.c_str(), s.firstname.c_str(),
+			    s.lastname.c_str());
+		    }
 
-	    } else
-	    if(s.minage || s.maxage || s.country || s.language
-	    || !s.city.empty() || !s.state.empty() || !s.company.empty()
-	    || !s.department.empty() || !s.position.empty() || s.onlineonly) {
+		    ret = face.findresults();
+		    break;
 
-		icq_SendWhitePagesSearchReq(&icql, s.firstname.c_str(),
-		    s.lastname.c_str(), s.nick.c_str(), s.email.c_str(),
-		    s.minage, s.maxage, s.gender, s.language, s.city.c_str(),
-		    s.state.c_str(), s.country, s.company.c_str(),
-		    s.department.c_str(), s.position.c_str(),
-		    s.onlineonly ? 1 : 0);
-
-	    } else {
-
-		icq_SendSearchReq(&icql, s.email.c_str(),
-		    s.nick.c_str(), s.firstname.c_str(),
-		    s.lastname.c_str());
-
+		case yahoo:
+		    if(!s.nick.empty()) {
+			addcontact(imcontact(s.nick, yahoo));
+			ret = false;
+		    }
+		    break;
 	    }
-
-	    ret = face.findresults();
 	}
     }
 }

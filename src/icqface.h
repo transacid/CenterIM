@@ -93,6 +93,7 @@ class icqface {
 	    unsigned char gender, language;
 	    string firstname, lastname, nick, city, state;
 	    string company, department, position, email;
+	    protocolname pname;
 	};
 
     protected:
@@ -195,8 +196,6 @@ class icqface {
 	bool multicontacts(const string head = "");
 	void userinfo(const imcontact cinfo, const imcontact realinfo);
 
-//        bool regdialog(unsigned int &ruin, string &rpasswd);
-//        void getregdata(string &nick, string &fname, string &lname, string &email);
 	bool updateconf(regsound &s, regcolor &c);
 
 	bool finddialog(searchparameters &s);
@@ -216,6 +215,7 @@ class icqface {
 
 	int selectgroup(const string text);
 	void organizegroups();
+	void makeprotocolmenu(verticalmenu &m);
 };
 
 extern icqface face;
