@@ -29,8 +29,8 @@ static sslsock *addsock(int fd) {
     p = &socks[sockcount-1];
 
     if(!ctx) {
-	OpenSSL_add_all_algorithms();
 	SSL_load_error_strings();
+	OpenSSL_add_all_algorithms();
 	ctx = SSL_CTX_new(SSLv23_method());
     }
 
