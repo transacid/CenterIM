@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.112 2002/05/01 20:53:34 konst Exp $
+* $Id: icqface.cc,v 1.113 2002/05/08 18:26:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -599,7 +599,7 @@ bool icqface::findresults(const imsearchparams &sp) {
 		case 0:
 		    if(r) {
 			c = (icqcontact *) db.getmenu()->getref(r-1);
-			cicq.userinfo(c->getdesc());
+			if(c) cicq.userinfo(c->getdesc());
 		    }
 		    break;
 
@@ -621,7 +621,7 @@ bool icqface::findresults(const imsearchparams &sp) {
 		case 2:
 		    if(r) {
 			c = (icqcontact *) db.getmenu()->getref(r-1);
-			cicq.addcontact(c->getdesc());
+			if(c) cicq.addcontact(c->getdesc());
 		    }
 		    break;
 
@@ -1764,9 +1764,11 @@ void icqface::chat(const imcontact &ic) {
 	c->setpostponed(editdone ? "" : p.get());
     }
 
+    c->save();
     restoreworkarea();
     status("");
     inchat = false;
+    update();
 }
 
 icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewresult> abuttons) {

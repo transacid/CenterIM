@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.69 2002/04/26 12:42:25 konst Exp $
+* $Id: icqdialogs.cc,v 1.70 2002/05/08 18:26:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -122,8 +122,9 @@ bool icqface::finddialog(imsearchparams &s) {
 	}
 
 	if(*ipname == irc && s.nick.empty()) {
-	    i = tree.addnode(_(" Channel "));
-	    tree.addleaf(i, 0, 26, " " + s.room + " ");
+	    i = tree.addnode(_(" Details "));
+	    tree.addleaff(i, 0, 26, " Channel : %s ", s.room.c_str());
+	    if(!s.room.empty()) tree.addleaff(i, 0, 12, " E-Mail : %s ", s.email.c_str());
 	}
 
 	finished = !db.open(n, b, (void **) &i);

@@ -26,10 +26,10 @@ class irchook: public abstracthook {
 	bool fonline, flogged;
 	firetalk_t handle;
 	imstatus ourstatus;
-	string ircname;
+	string ircname, emailsub;
 
 	vector<channelInfo> channels;
-	vector<string> searchchannels;
+	vector<string> searchchannels, extlisted;
 	map<string, string> awaymessages;
 	vector<icqcontact *> foundguys;
 
@@ -52,6 +52,8 @@ class irchook: public abstracthook {
 	static void listmember(void *connection, void *cli, ...);
 	static void log(void *connection, void *cli, ...);
 	static void chatnames(void *connection, void *cli, ...);
+	static void listextended(void *connection, void *cli, ...);
+	static void endextended(void *connection, void *cli, ...);
 
     public:
 	irchook();

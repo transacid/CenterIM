@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.17 2002/05/01 20:15:36 konst Exp $
+* $Id: irchook.cc,v 1.18 2002/05/08 18:26:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -70,6 +70,8 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_IM_BUDDYAWAY, &buddyaway);
     firetalk_register_callback(handle, FC_IM_BUDDYUNAWAY, &buddyonline);
     firetalk_register_callback(handle, FC_CHAT_LISTMEMBER, &listmember);
+    firetalk_register_callback(handle, FC_CHAT_LIST_EXTENDED, &listextended);
+    firetalk_register_callback(handle, FC_CHAT_END_EXTENDED, &endextended);
     firetalk_register_callback(handle, FC_CHAT_NAMES, &chatnames);
 
 #ifdef DEBUG
@@ -253,52 +255,71 @@ void irchook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
 }
 
 void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
-    vector<channelInfo>::iterator ic;
     string rooms = params.room, room;
     bool ready = true;
+    vector<channelInfo>::iterator ic;
 
     searchdest = &dest;
+
+    emailsub = params.email;
     searchchannels.clear();
+    extlisted.clear();
 
     while(!foundguys.empty()) {
 	delete foundguys.back();
 	foundguys.pop_back();
     }
 
-    while(!(room = getword(rooms)).empty()) {
-	searchchannels.push_back(room);
-	ic = find(channels.begin(), channels.end(), room);
+    if(!params.room.empty()) {
+	while(!(room = getword(rooms)).empty()) {
+	    searchchannels.push_back(room);
+	    ic = find(channels.begin(), channels.end(), room);
 
-	if(ic == channels.end()) {
-	    channels.push_back(channelInfo(room));
-	    ic = channels.end()-1;
+	    if(ic == channels.end()) {
+		channels.push_back(channelInfo(room));
+		ic = channels.end()-1;
+	    }
+
+	    if(!ic->joined) {
+		firetalk_chat_join(handle, room.c_str());
+		ready = false;
+	    }
+
+	    if(emailsub.empty()) {
+		if(ic->fetched) {
+		    ic->nicks.clear();
+		    firetalk_chat_listmembers(handle, room.c_str());
+		} else {
+		    ready = false;
+		}
+
+	    } else {
+		ready = false;
+		if(ic->joined) {
+		    ic->nicks.clear();
+		    firetalk_chat_requestextended(handle, params.room.c_str());
+		}
+
+	    }
 	}
 
-	if(!ic->joined) {
-	    firetalk_chat_join(handle, room.c_str());
-	    ready = false;
-	}
-
-	if(ic->fetched) {
-	    ic->nicks.clear();
-	    firetalk_chat_listmembers(handle, room.c_str());
-	} else {
-	    ready = false;
-	}
-    }
-
-    if(ready) {
-	processnicks();
+	if(ready)
+	    processnicks();
     }
 }
 
 void irchook::processnicks() {
+    string dnick;
     char *nick;
     vector<string> foundnicks;
     vector<string>::iterator in, isn;
     vector<channelInfo>::iterator ir;
     bool remove;
     icqcontact *c;
+    int npos;
+
+    if(!searchdest)
+	return;
 
     ir = find(channels.begin(), channels.end(), *searchchannels.begin());
 
@@ -336,8 +357,15 @@ void irchook::processnicks() {
     }
 
     for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
-	c = new icqcontact(imcontact(*in, irc));
-	c->setdispnick(*in);
+	dnick = *in;
+
+	if(!emailsub.empty()) {
+	    npos = dnick.find("<");
+	    if(npos > 0) dnick.erase(npos-1);
+	}
+
+	c = new icqcontact(imcontact(dnick, irc));
+	c->setdispnick(dnick);
 
 	searchdest->additem(conf.getcolor(cp_clist_irc), c, (string) " " + *in);
 	foundguys.push_back(c);
@@ -720,14 +748,15 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 	ic->fetched = true;
 	ic->nicks.clear();
 
-	firetalk_chat_listmembers(irhook.handle, croom);
-
-	if(!ic->joined) {
-	    firetalk_chat_part(irhook.handle, croom);
+	if(irhook.emailsub.empty()) {
+	    firetalk_chat_listmembers(irhook.handle, croom);
+	    if(!ic->joined) firetalk_chat_part(irhook.handle, croom);
+	} else {
+	    firetalk_chat_requestextended(irhook.handle, croom);
 	}
     }
 
-    if(irhook.searchdest) {
+    if(irhook.searchdest && irhook.emailsub.empty()) {
 	for(is = irhook.searchchannels.begin(); is != irhook.searchchannels.end(); is++) {
 	    ic = find(irhook.channels.begin(), irhook.channels.end(), *is);
 
@@ -740,6 +769,59 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 
 	if(ready) {
 	    irhook.processnicks();
+	}
+    }
+}
+
+void irchook::listextended(void *connection, void *cli, ...) {
+    va_list ap;
+    string text, email;
+    vector<channelInfo>::iterator ir;
+    vector<string>::iterator is;
+
+    va_start(ap, cli);
+    char *nickname = va_arg(ap, char *);
+    char *room = va_arg(ap, char *);
+    char *login = va_arg(ap, char *);
+    char *hostname = va_arg(ap, char *);
+    char *net = va_arg(ap, char *);
+    char *description = va_arg(ap, char *);
+    va_end(ap);
+
+    ir = find(irhook.channels.begin(), irhook.channels.end(), room);
+
+    if(ir != irhook.channels.end()) {
+	email = (string) login + "@" + hostname;
+
+	if(irhook.emailsub.empty() || email.find(irhook.emailsub) != -1) {
+	    text = (string) nickname + " <" + email + ">";
+	    ir->nicks.push_back(text);
+	}
+    }
+
+    if(find(irhook.extlisted.begin(), irhook.extlisted.end(), room) == irhook.extlisted.end())
+	irhook.extlisted.push_back(room);
+}
+
+void irchook::endextended(void *connection, void *cli, ...) {
+    bool ready = true;
+    vector<string>::iterator is;
+    vector<channelInfo>::iterator ic;
+
+    if(!irhook.extlisted.empty()) {
+	ic = find(irhook.channels.begin(), irhook.channels.end(), irhook.extlisted.back());
+	if(ic != irhook.channels.end()) {
+	    if(!ic->joined) {
+		firetalk_chat_part(irhook.handle, irhook.extlisted.back().c_str());
+	    }
+
+	    for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); is++) {
+		ready = find(irhook.extlisted.begin(), irhook.extlisted.end(), *is) != irhook.extlisted.end();
+	    }
+
+	    if(ready) {
+		irhook.processnicks();
+	    }
 	}
     }
 }

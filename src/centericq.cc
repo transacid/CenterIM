@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.99 2002/05/02 16:49:02 konst Exp $
+* $Id: centericq.cc,v 1.100 2002/05/08 18:26:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1158,7 +1158,11 @@ string rushtmlconv(const string &tdir, const string &text) {
 	pos = 0;
 	while((pos = r.find_first_of("&<>", pos)) != -1) {
 	    switch(r[pos]) {
-		case '&': r.replace(pos, 1, "&amp;"); break;
+		case '&':
+		    if(r.substr(pos, 4) != "&lt;"
+		    && r.substr(pos, 4) != "&gt;")
+			r.replace(pos, 1, "&amp;");
+		    break;
 		case '<': r.replace(pos, 1, "&lt;"); break;
 		case '>': r.replace(pos, 1, "&gt;"); break;
 	    }
@@ -1168,9 +1172,9 @@ string rushtmlconv(const string &tdir, const string &text) {
     } else if(tdir == "wk") {
 	pos = 0;
 	while((pos = r.find("&", pos)) != -1) {
-	    if(r.substr(pos+1, 3) == "amp;") r.replace(pos, 5, "&"); else
-	    if(r.substr(pos+1, 2) == "lt;") r.replace(pos, 4, "<"); else
-	    if(r.substr(pos+1, 2) == "gt;") r.replace(pos, 4, ">"); 
+	    if(r.substr(pos+1, 4) == "amp;") r.replace(pos, 5, "&"); else
+	    if(r.substr(pos+1, 3) == "lt;") r.replace(pos, 4, "<"); else
+	    if(r.substr(pos+1, 3) == "gt;") r.replace(pos, 4, ">"); 
 	    pos++;
 	}
     }
