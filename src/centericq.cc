@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.40 2001/11/26 13:02:51 konst Exp $
+* $Id: centericq.cc,v 1.41 2001/11/26 15:48:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -261,8 +261,13 @@ void centericq::find() {
 		    ret = face.findresults();
 		    break;
 
-		case yahoo:
 		case msn:
+		    if(s.nick.size() > 12)
+		    if(s.nick.substr(s.nick.size()-12) == "@hotmail.com") {
+			s.nick.erase(s.nick.size()-12);
+		    }
+
+		case yahoo:
 		    if(!s.nick.empty()) {
 			addcontact(imcontact(s.nick, s.pname));
 			ret = false;
@@ -592,9 +597,9 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	c = clist.addnew(ic, false);
     } else {
 	c->includeintolist();
-	gethook(c->getdesc().pname).sendnewuser(c->getdesc());
     }
 
+    gethook(c->getdesc().pname).sendnewuser(c->getdesc());
     c->setgroupid(groupid);
     face.log(_("+ %s has been added to the list"), ic.totext().c_str());
     face.update();

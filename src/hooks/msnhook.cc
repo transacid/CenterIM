@@ -44,7 +44,7 @@ void msnhook::connect() {
 	face.log(_("+ [msn] logged in"));
 	fonline = true;
 	status = available;
-//        setautostatus(manualstatus);
+	setautostatus(manualstatus);
     } else {
 	face.log(_("+ [msn] unable to connect to the server"));
     }
@@ -120,21 +120,21 @@ bool msnhook::enabled() const {
 }
 
 unsigned long msnhook::sendmessage(const icqcontact *c, const string text) {
-    return MSN_SendMessage(c->getnick().c_str(), text.c_str());
+    return !MSN_SendMessage(c->getnick().c_str(), text.c_str()) ? 1 : 0;
 }
 
 void msnhook::sendnewuser(const imcontact c) {
-    if(online()) {
+    if(logged()) {
 	MSN_AddContact(c.nickname.c_str());
     }
 }
 
 void msnhook::setautostatus(imstatus st) {
     static int stat2int[imstatus_size] = {
+	USER_FLN,
 	USER_NLN,
-	USER_FLN,
 	USER_HDN,
-	USER_FLN,
+	USER_NLN,
 	USER_BSY,
 	USER_BSY,
 	USER_AWY,
@@ -160,9 +160,6 @@ imstatus msnhook::getstatus() const {
 
 imstatus msnhook::msn2imstatus(int st) const {
     switch(st) {
-	case USER_NLN:
-	    return offline;
-
 	case USER_HDN:
 	    return invisible;
 
@@ -181,6 +178,7 @@ imstatus msnhook::msn2imstatus(int st) const {
 	case USER_FLN:
 	    return offline;
 
+	case USER_NLN:
 	default:
 	    return available;
     }
@@ -233,6 +231,8 @@ void msnhook::statuschanged(void *data) {
 }
 
 void msnhook::authrequested(void *data) {
+    MSN_AuthMessage *msg = (MSN_AuthMessage *) data;
+    MSN_AuthorizeContact(msg->conn, msg->requestor);
 }
 
 void msnhook::disconnected(void *data) {
@@ -251,6 +251,7 @@ void msnhook::disconnected(void *data) {
 	}
     }
 
+    mhook.status = offline;
     time(&mhook.timer_reconnect);
     face.update();
 }
