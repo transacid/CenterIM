@@ -92,6 +92,8 @@ class icqface {
 
 	int extk, chatlines;
 
+	time_t chatlastread;
+
 	imcontact passinfo;
 
     protected:

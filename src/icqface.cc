@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.110 2002/04/26 12:42:25 konst Exp $
+* $Id: icqface.cc,v 1.111 2002/05/01 20:02:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1665,8 +1665,10 @@ void icqface::renderchathistory() {
 
     icqcontact *c = clist.get(passinfo);
 
+    c->sethistoffset(0);
     count = 0;
-    events = em.getevents(passinfo, 0);
+    events = em.getevents(passinfo, chatlastread);
+    chatlastread = 0;
 
     if(events.size()) {
 	c->setlastread(events.back()->gettimestamp());
@@ -1681,6 +1683,7 @@ void icqface::renderchathistory() {
 	if(count < chatlines) {
 	    text = (string) time2str(&(t = events.back()->gettimestamp()), "DD.MM hh:mm", buf) + " ";
 	    text += events.back()->gettext();
+	    chatlastread = t-1;
 
 	    h = histentry();
 	    h.first = events.back()->getdirection();
@@ -1724,6 +1727,7 @@ void icqface::chat(const imcontact &ic) {
     saveworkarea();
     clearworkarea();
 
+    chatlastread = 0;
     inchat = true;
     passinfo = ic;
     chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.75);
@@ -1736,8 +1740,9 @@ void icqface::chat(const imcontact &ic) {
     editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
 
+    status(_("Ctrl-X send, Ctrl-O history, Alt-? details, ESC exit"));
+
     for(bool finished = false; !finished; ) {
-	status(_("Ctrl-X send, Ctrl-O history, Alt-? details, ESC exit"));
 	renderchathistory();
 
 	editdone = false;
