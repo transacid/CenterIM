@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.89 2002/03/01 17:15:23 konst Exp $
+* $Id: icqface.cc,v 1.90 2002/03/03 17:12:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -923,9 +923,12 @@ bool icqface::changestatus(protocolname &pname, imstatus &st) {
 	    m.additem(0, *im, statustext[im-mst.begin()]);
 
 	    if(pname != proto_all)
-	    if(gethook(pname).getstatus() == *im) {
+	    if(gethook(pname).getstatus() == *im)
 		m.setpos(m.getcount()-1);
-	    }
+	}
+
+	if(pname == proto_all) {
+	    m.setpos(0);
 	}
 
 	m.scale();
