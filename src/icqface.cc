@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.219 2004/03/27 12:05:53 konst Exp $
+* $Id: icqface.cc,v 1.220 2004/03/28 11:38:03 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1723,8 +1723,11 @@ const set<protocolname> &protos, contactstatus cs) {
     string head = ahead;
 
     imcontact ic;
-    vector<imcontact>::iterator c;
+    vector<imcontact>::iterator c, cc;
     vector<imcontact> mlst;
+
+    map<int, bool> groupcheck;
+    icqcontact *cont;
 
     verticalmenu m(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2,
 	conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
@@ -1754,13 +1757,33 @@ const set<protocolname> &protos, contactstatus cs) {
 	m.getpos(saveelem, savefirst);
 	m.clear();
 
-	for(c = mlst.begin(); c != mlst.end(); ++c) {
-	    icqcontact *cont = (icqcontact *) clist.get(*c);
+	vector<icqgroup>::iterator ig = groups.begin();
 
-	    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
-		find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
-		cont->getdispnick().c_str()
-	    );
+	while(ig != groups.end()) {
+	    bool headadded = conf.getgroupmode() == icqconf::nogroups;
+
+	    for(c = mlst.begin(); c != mlst.end(); ++c) {
+		cont = (icqcontact *) clist.get(*c);
+
+		if(cont->getgroupid() == ig->getid()) {
+		    if(!headadded) {
+			if(groupcheck.find(ig->getid()) == groupcheck.end())
+			    groupcheck[ig->getid()] = false;
+
+			m.additemf(conf.getcolor(cp_main_highlight), 0, "\002[%c]\002\002 %s",
+			    groupcheck[ig->getid()] ? 'x' : ' ',
+			    ig->getname().c_str());
+
+			headadded = true;
+		    }
+
+		    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
+			find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
+			cont->getdispnick().c_str());
+		}
+	    }
+
+	    ++ig;
 	}
 
 	m.setpos(saveelem, savefirst);
@@ -1771,10 +1794,28 @@ const set<protocolname> &protos, contactstatus cs) {
 		    ic = ((icqcontact *) m.getref(m.getpos()))->getdesc();
 		    c = find(muins.begin(), muins.end(), ic);
 
-		    if(c != muins.end()) {
-			muins.erase(c);
-		    } else {
-			muins.push_back(ic);
+		    if(c != muins.end()) muins.erase(c);
+			else muins.push_back(ic);
+
+		    cont = clist.get(ic);
+		    groupcheck[cont->getgroupid()] = false;
+
+		} else {
+		    int gid = ((icqcontact *) m.getref(m.getpos()+1))->getgroupid();
+		    groupcheck[gid] = !groupcheck[gid];
+
+		    for(c = mlst.begin(); c != mlst.end(); ++c) {
+			cont = (icqcontact *) clist.get(*c);
+
+			if(cont->getgroupid() == gid) {
+			    cc = find(muins.begin(), muins.end(), *c);
+
+			    if(groupcheck[gid] && cc == muins.end()) {
+				muins.push_back(*c);
+			    } else if(!groupcheck[gid] && cc != muins.end()) {
+				muins.erase(cc);
+			    }
+			}
 		    }
 		}
 		break;
