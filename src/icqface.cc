@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.22 2001/10/05 16:14:26 konst Exp $
+* $Id: icqface.cc,v 1.23 2001/10/09 18:07:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -199,6 +199,7 @@ int icqface::contextmenu(icqcontact *c) {
     } else if(!c->isnonicq() && c->getuin() && c->inlist()) { 
 	m.additem(0, (void *) ACT_MSG,      _(" Send a message     enter"));
 	m.additem(0, (void *) ACT_URL,      _(" Send an URL            u"));
+	m.additem(0, (void *) ACT_CONTACT,  _(" Send contacts          c"));
 	m.additem(0, (void *) ACT_FILE,     _(" Send a file            f"));
 	m.addline();
 	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
@@ -212,7 +213,6 @@ int icqface::contextmenu(icqcontact *c) {
 	}
     } else if(!c->isnonicq() && c->getuin() && !c->inlist()) {
 	m.additem(0, (void *) ACT_MSG,      _(" Send a message     enter"));
-	m.additem(0, (void *) ACT_URL,      _(" Send URL               u"));
 	m.addline();
 	m.additem(0, (void *) ACT_ADD,      _(" Add to list            a"));
 	m.addline();

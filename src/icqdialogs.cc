@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.13 2001/10/04 17:14:22 konst Exp $
+* $Id: icqdialogs.cc,v 1.14 2001/10/09 18:07:01 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -394,6 +394,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	if(!b) {
 	    if(!c->getuin() && (c->updated() < 5)) {
 		status(_("Wait a moment. Your ICQ details haven't been fetched yet"));
+		continue;
 	    } else
 	    switch(n) {
 		case  0: finished = true; break;

@@ -5,8 +5,10 @@
 # various flavours of icq client software to centericq format.
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
-# 2001
+# $Id $
 #
+
+use Time::Local;
 
 my $ourUIN = 0;
 
@@ -55,7 +57,7 @@ sub cicq_addhistoryitem {
 }
 
 #
-# Other icq clients related functions
+# LICQ specific functions
 #
 
 sub licq_conv_history {
@@ -114,7 +116,7 @@ sub licq {
     }
 
     open(F, '<', "$ENV{HOME}/.licq/users.conf")
-	or die "cannot find licq users file";
+	or die "cannot find licq users file $ENV{HOME}/.licq/users.conf";
 
     while(<F>) {
 	chomp; $buf = $_;
@@ -128,6 +130,119 @@ sub licq {
     close F;
 }
 
+#
+# GnomeICU specific functions
+#
+
+sub gnomeicu {
+    $contsection = 0;
+    $fname = "$ENV{HOME}/.gnome/GnomeICU";
+
+    open(F, '<', $fname)
+	or die "cannot find GnomeICU config file $fname";
+
+    while(<F>) {
+	chomp;
+	$buf = $_;
+
+	if($contsection) {
+	    if($buf =~ m/^([0-9]+)=.+$/) {
+		cicq_adduser($1);
+	    }
+	} else {
+	    $contsection = $buf =~ m/^\[NewContacts\]$/;
+	}
+    }
+
+    close F;
+}
+
+#
+# Micq specific functions
+#
+
+#
+# KXicq2 specific functions
+#
+
+sub kxicq2 {
+    if(open(F, '<', "$ENV{HOME}/.kde/share/config/kxicq2rc")) {
+	while(<F>) {
+	    chomp; $buf = $_;
+	    if($buf =~ m/^UIN=([0-9]+)$/) {
+		$ourUIN = $1;
+		last;
+	    }
+	}
+
+	close F;
+    }
+
+    $fname = "$ENV{HOME}/.kde/share/apps/kxicq2/contacts.kxicq";
+
+    open(F, '<', $fname)
+	or die "cannot find kxicq2 contacts file $fname";
+
+    while(<F>) {
+	chomp; $buf = $_;
+
+	if($buf =~ m/^UIN=([0-9]+)$/) {
+	    cicq_adduser($1);
+	}
+    }
+
+    close F;
+
+    #
+    # Now convert messages history
+    #
+
+    $fname = "$ENV{HOME}/.kde/share/apps/kxicq2/messages.kxicq2";
+
+    local $uto = 0;
+    local $ufrom = 0;
+    local $utimestamp = 0;
+    local $text = "";
+    local $msgmode = "R";
+
+    if(open(F, '<', $fname)) {
+	while(<F>) {
+	    chomp; $buf = $_;
+
+	    if($buf =~ m/^\[Message [0-9]+\]$/) {
+		cicq_addhistoryitem($uto, $ufrom, $timestamp, $text)
+		    if $text ne "";
+		$text = "";
+	    } elsif($buf =~ m/Options=[0-9]+ [0-9]+ ([0-9]+) [0-9]+$/) {
+		$msgmode = $1 ? "S" : "R";
+	    } elsif($buf =~ m/Uin=([0-9]+)$/) {
+		if($msgmode eq "R") {
+		    $ufrom = $1;
+		    $uto = $ourUIN;
+		} else {
+		    $ufrom = $ourUIN;
+		    $uto = $1;
+		}
+	    } elsif($buf =~ m/DateTime=([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+)$/) {
+		$timestamp = timelocal(0, $5, $4, $1, $2, $3);
+	    } elsif($buf =~ m/Message=(.+)$/) {
+		$text = $1;
+		$text =~ s/\\r//g;
+		$text =~ s/\\n/\n/g;
+	    }
+	}
+
+	cicq_addhistoryitem($uto, $ufrom, $timestamp, $text)
+	    if $text ne "";
+
+	close F;
+    }
+}
+
+#
+# Kicq specific functions
+#
+
 sub usage {
 
     print <<EOF
@@ -135,7 +250,7 @@ Centericq contact list and history convertor usage:
     $0 <client>
 
 Where <client> is the name of program you can to convert from.
-Can be: licq.
+Can be: licq, kxicq2, gnomeicu.
 
 EOF
 
@@ -144,9 +259,14 @@ EOF
 my $flavour = $ARGV[0];
 
 if($flavour eq "licq") {
-    print "Converting from Licq.. ";
-    licq
-    print "done.\n";
+    print "Converting from $flavour.. ";
+    licq; print "done.\n";
+} elsif($flavour eq "kxicq2") {
+    print "Converting from $flavour.. ";
+    kxicq2; print "done.\n";
+} elsif($flavour eq "gnomeicu") {
+    print "Converting from $flavour.. ";
+    gnomeicu; print "done.\n";
 } else {
     usage
 }

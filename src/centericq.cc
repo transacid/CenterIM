@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.21 2001/10/03 10:43:23 konst Exp $
+* $Id: centericq.cc,v 1.22 2001/10/09 18:07:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -302,8 +302,15 @@ void centericq::mainloop() {
 	switch(action) {
 	    case ACT_ADD:
 		if(!c->inlist()) {
-		    c->includeintolist();
-		    face.update();
+		    if(conf.getusegroups()) {
+			gid = face.selectgroup(_("Select a group to add the user to"));
+			if(gid) c->setgroupid(gid);
+		    }
+
+		    if(gid || !conf.getusegroups()) {
+			c->includeintolist();
+			face.update();
+		    }
 		}
 		break;
 	}
