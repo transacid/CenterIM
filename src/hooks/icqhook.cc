@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.127 2002/12/17 16:09:40 konst Exp $
+* $Id: icqhook.cc,v 1.128 2002/12/23 09:18:27 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -147,6 +147,7 @@ void icqhook::connect() {
 	cli.setAcceptInDC(true);
 	cli.setPortRangeLowerBound(ptpmin);
 	cli.setPortRangeUpperBound(ptpmax);
+	cli.setUsePortRange(true);
     } else {
 	cli.setAcceptInDC(false);
     }
