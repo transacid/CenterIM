@@ -1041,6 +1041,10 @@ enum firetalk_error irc_im_evil(client_t c, const char * const who) {
 	return FE_SUCCESS;
 }
 
+enum firetalk_error irc_im_searchemail(client_t c, const char * const email) {
+	return irc_send_printf(c,"WHO %s",email);
+}
+
 enum firetalk_error irc_get_info(client_t c, const char * const nickname) {
 	struct s_irc_whois *whoistemp;
 

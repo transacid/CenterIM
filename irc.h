@@ -62,6 +62,7 @@ enum firetalk_error irc_im_remove_deny(client_t c, const char * const nickname);
 enum firetalk_error irc_im_upload_buddies(client_t c);
 enum firetalk_error irc_im_upload_denies(client_t c);
 enum firetalk_error irc_im_evil(client_t c, const char * const who);
+enum firetalk_error irc_im_searchemail(client_t c, const char * const email);
 
 enum firetalk_error irc_subcode_send_request(client_t c, const char * const to, const char * const command, const char * const args);
 enum firetalk_error irc_subcode_send_reply(client_t c, const char * const to, const char * const command, const char * const args);

@@ -106,6 +106,7 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		toc_im_send_message,
 		toc_im_send_action,
 		toc_im_evil,
+		0,
 		toc_chat_join,
 		toc_chat_part,
 		toc_chat_invite,
@@ -146,6 +147,7 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		irc_im_send_message,
 		irc_im_send_action,
 		irc_im_evil,
+		irc_im_searchemail,
 		irc_chat_join,
 		irc_chat_part,
 		irc_chat_invite,
@@ -2077,6 +2079,18 @@ enum firetalk_error firetalk_im_evil(firetalk_t conn, const char * const who) {
 		return FE_NOTCONNECTED;
 
 	return protocol_functions[conn->protocol].im_evil(conn->handle,who);
+}
+
+enum firetalk_error firetalk_im_searchemail(firetalk_t conn, const char * const email) {
+#ifdef DEBUG
+	if (firetalk_check_handle(conn) != FE_SUCCESS)
+		return FE_BADHANDLE;
+#endif
+
+	if (conn->connected != FCS_ACTIVE)
+		return FE_NOTCONNECTED;
+
+	return protocol_functions[conn->protocol].im_searchemail(conn->handle,email);
 }
 
 enum firetalk_error firetalk_chat_join(firetalk_t conn, const char * const room) {

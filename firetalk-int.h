@@ -170,6 +170,7 @@ struct s_firetalk_protocol_functions {
 	enum firetalk_error (*im_send_message)(client_t, const char * const, const char * const, const int);
 	enum firetalk_error (*im_send_action)(client_t, const char * const, const char * const, const int);
 	enum firetalk_error (*im_evil)(client_t, const char * const);
+	enum firetalk_error (*im_searchemail)(client_t, const char * const);
 	enum firetalk_error (*chat_join)(client_t, const char * const);
 	enum firetalk_error (*chat_part)(client_t, const char * const);
 	enum firetalk_error (*chat_invite)(client_t, const char * const, const char * const, const char * const);
