@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.34 2002/12/12 16:47:53 konst Exp $
+* $Id: jabberhook.cc,v 1.35 2002/12/12 17:58:50 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -537,6 +537,7 @@ void jabberhook::checkinlist(imcontact ic) {
 	}
     } else {
 	clist.addnew(ic);
+	requestinfo(ic);
     }
 }
 
@@ -807,6 +808,30 @@ void jabberhook::postlogin() {
 
     agents.insert(agents.begin(), agent("vcard", "Jabber VCard", "", agent::atStandard));
     agents.begin()->params[agent::ptRegister].enabled = true;
+
+    string buf;
+    ifstream f(conf.getconfigfname("jabber-infoset").c_str());
+
+    if(f.is_open()) {
+	icqcontact *c = clist.get(contactroot);
+
+	c->clear();
+	icqcontact::basicinfo bi = c->getbasicinfo();
+	icqcontact::reginfo ri = c->getreginfo();
+
+	ri.service = agents.begin()->name;
+	getstring(f, buf); c->setnick(buf);
+	getstring(f, buf); bi.email = buf;
+	getstring(f, buf); bi.fname = buf;
+	getstring(f, buf); bi.lname = buf;
+	f.close();
+
+	c->setbasicinfo(bi);
+	c->setreginfo(ri);
+
+	sendupdateuserinfo(*c);
+	unlink(conf.getconfigfname("jabber-infoset").c_str());
+    }
 }
 
 void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {

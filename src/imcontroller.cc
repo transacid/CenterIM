@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.41 2002/12/11 22:43:55 konst Exp $
+* $Id: imcontroller.cc,v 1.42 2002/12/12 17:58:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,11 +79,9 @@ bool imcontroller::regdialog(protocolname pname) {
 	i = db.gettree()->addnode(_(" Details "));
 	t.addleaff(i, 0, 4, _(" Nickname : %s "), rnick.c_str());
 
-	if(pname == icq) {
-	    t.addleaff(i, 0, 5, _(" E-Mail : %s "), remail.c_str());
-	    t.addleaff(i, 0, 6, _(" First name : %s "), rfname.c_str());
-	    t.addleaff(i, 0, 7, _(" Last name : %s "), rlname.c_str());
-	}
+	t.addleaff(i, 0, 5, _(" E-Mail : %s "), remail.c_str());
+	t.addleaff(i, 0, 6, _(" First name : %s "), rfname.c_str());
+	t.addleaff(i, 0, 7, _(" Last name : %s "), rlname.c_str());
 
 	i = db.gettree()->addnode(_(" Password "));
 	t.addleaff(i, 0, 2, _(" Password to set : %s "), string(rpasswd.size(), '*').c_str());
@@ -188,6 +186,7 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
     string err;
 
     if(success = regdialog(account.pname)) {
+	unlink((conf.getdirname() + "jabber-infoset").c_str());
 	face.progress.show(_(" Registration progress "));
 
 	face.progress.log(_("Trying to register %s at %s ..."),
@@ -197,6 +196,16 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
 	    account.nickname = rnick;
 	    account.password = rpasswd;
 	    face.progress.log(_("The Jabber ID was successfully registered"));
+
+	    conf.checkdir();
+	    ofstream f((conf.getdirname() + "jabber-infoset").c_str());
+	    if(f.is_open()) {
+		f << rnick << endl <<
+		    remail << endl <<
+		    rfname << endl <<
+		    rlname << endl;
+		f.close();
+	    }
 
 	} else {
 	    string msgerr = _("Failed");
