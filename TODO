@@ -8,6 +8,10 @@ chat mode -> mass forward -> next message goes to all, not to the remote
 
 irc channels in chat mode
 
+sending icq events in occupied and dnd modes
+
+cvs 1.10 -> cicqsync should produce error msg and bail out
+
 /*
 *
 * BUGS
@@ -45,8 +49,6 @@ SSL secured communications
 
 scriptable protocols actions
 
-cvs 1.10 -> cicqsync should produce error msg and bail out
-
 try to implement the daemon mode
     substitute another "face" class
 	hooks call only face.log && update methods
@@ -57,4 +59,4 @@ nicks and writing messages to be rendered with fribidi
 
 todo and reminders
 
-$Id: TODO,v 1.223 2002/06/27 13:57:21 konst Exp $
+$Id: TODO,v 1.224 2002/06/28 11:51:28 konst Exp $
