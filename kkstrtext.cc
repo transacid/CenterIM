@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.34 2003/12/11 22:44:51 konst Exp $
+* $Id: kkstrtext.cc,v 1.35 2004/01/15 20:25:31 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -924,8 +924,8 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
     return atext;
 }
 
-string cuthtml(const string &html, bool cutbrs) {
-    string r, tag;
+string cuthtml(const string &html, int flags) {
+    string r, tag, buf, token;
     int npos, pos, tpos;
 
     for(pos = 0; (npos = html.find("<", pos)) != -1; pos = npos) {
@@ -937,11 +937,33 @@ string cuthtml(const string &html, bool cutbrs) {
 
 	    tag = html.substr(tpos+1, npos-tpos-2);
 	    if(tag.substr(0, 1) == "/") tag.erase(0, 1);
-
 	    tag = leadcut(trailcut(tag, "/ \n\r"), "/ \n\r");
 
-	    if(tag == "BR" || tag == "br") r += cutbrs ? "\n" : "<br>";
-		else if(cutbrs && (tag == "P" || tag == "p")) r += "\n\n";
+	    buf = ruscase(tag, "toupper");
+	    token = getword(buf);
+
+	    if(token == "BR") r += (flags & chCutBR) ? "\n" : "<br>";
+		else if((flags & chCutBR) && token == "P") r += "\n\n";
+
+	    if(flags & chLeaveLinks) {
+		getword(tag);
+
+		if(token == "A") {
+		    if((tpos = buf.find("HREF")) != -1)
+		    if((tpos = buf.substr(tpos).find("\"")) != -1) {
+			tag.erase(0, tpos+1);
+			r += "[ href: " + getword(tag, "\"") + " ] ";
+		    }
+
+		} else if(token == "IMG") {
+		    if((tpos = buf.find("SRC")) != -1)
+		    if((tpos = buf.substr(tpos).find("\"")) != -1) {
+			tag.erase(0, tpos+1);
+			r += " [ img: " + getword(tag, "\"") + " ]";
+		    }
+
+		}
+	    }
 
 	} else {
 	    r += html.substr(tpos);

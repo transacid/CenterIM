@@ -108,7 +108,11 @@ string fromutf8(const string &text);
 
 string ruscase(const string &s, const string &mode);
 string siconv(const string &text, const string &fromcs, const string &tocs);
-string cuthtml(const string &html, bool cutbrs = false);
+
+const int chCutBR = 1;
+const int chLeaveLinks = 2;
+
+string cuthtml(const string &html, int flags = 0);
 
 __KTOOL_BEGIN_C
 
