@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.111 2002/10/04 16:58:53 konst Exp $
+* $Id: icqhook.cc,v 1.112 2002/10/16 18:28:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1186,6 +1186,8 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
 	updateinforecord(ic, c);
 
     } else {
+#ifndef DARWIN
+// FIXME - Darwin lacks inet_ntop
 	char buf[64];
 	string lastip, sbuf;
 	int ip;
@@ -1204,6 +1206,7 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
 
 	    c->setlastip(lastip);
 	}
+#endif
     }
 }
 

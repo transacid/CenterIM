@@ -1197,3 +1197,20 @@ A patch to get rid of recently appeared problems with AIM was applied.
 Thanks to MP <centericq@blackcore.net>. Yeah, I'm fond of the open
 source development principle.
 
+4.8.6
+-----
+
+Now all the "Not in list" buddies in Yahoo, AIM and MSN networks are
+removed from the remote list where they get temporarely added in order
+to not to appear next time on the persistent list.
+
+Fixed the segfault problem in the Yahoo module. The crashes were caused
+by the latest version of the official client on remote.
+
+Fixed several nicknames-related bugs in the MSN module. Now friendly
+nicknames with spaces are shown correctly, as well as it's possible to
+set a nickname for yourself that contains spaces. Also the nicknames on
+the list get updated as soon as a remote changes their nick.
+
+The program now compiles and works well on the MacOS X/Darwin platform.
+

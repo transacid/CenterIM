@@ -8,6 +8,8 @@
 #include <fcntl.h>
 #include <dirent.h>
 
+#include "config.h"
+
 #include "kkstrtext.h"
 #include "kkfsys.h"
 #include "conscommon.h"

@@ -2,7 +2,6 @@
 #define __ICQMLIST_H__
 
 #include "kkstrtext.h"
-#include "kkfsys.h"
 #include "cmenus.h"
 
 #include "icqcommon.h"

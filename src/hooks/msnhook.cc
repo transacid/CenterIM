@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.36 2002/10/15 15:29:43 konst Exp $
+* $Id: msnhook.cc,v 1.37 2002/10/16 18:28:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -330,11 +330,23 @@ vector<icqcontact *> msnhook::getneedsync() {
 }
 
 void msnhook::sendupdateuserinfo(const icqcontact &c) {
-    MSN_Set_Friendly_Handle(c.getnick());
+    int pos;
+    string nick = mime(c.getnick());
+
+    while((pos = nick.find("+")) != -1)
+	nick.replace(pos, 1, "%20");
+
+    MSN_Set_Friendly_Handle(nick.c_str());
 }
 
 void msnhook::checkfriendly(icqcontact *c, const string friendlynick) {
-    friendlynicks[c->getdesc().nickname] = friendlynick;
+    string oldnick = friendlynicks[c->getdesc().nickname];
+    friendlynicks[c->getdesc().nickname] = unmime(friendlynick);
+
+    if(!oldnick.empty()
+    && c->getdispnick() == oldnick
+    && c->getbasicinfo().fname == oldnick)
+	requestinfo(c);
 }
 
 // ----------------------------------------------------------------------------

@@ -3,7 +3,6 @@
 
 #include "kkstrtext.h"
 #include "cmenus.h"
-#include "kkfsys.h"
 
 #include "icqcommon.h"
 #include "imcontact.h"

@@ -50,10 +50,11 @@ Contents
     7.2. URLs
     7.3. SMSes
     7.4. Contacts
-    7.5. E-mail express messages
-    7.6. WebPager messages
-    7.7. Away messages
-    7.8. Events history
+    7.5. Files
+    7.6. E-mail express messages
+    7.7. WebPager messages
+    7.8. Away messages
+    7.9. Events history
 8. Ignore, visible and invisible lists
     8.1. Ignore list
     8.2. Visible list
@@ -107,7 +108,7 @@ for Hebrew and Arabic languages and allows to arrange contacts into
 groups.
 
   Centericq is known to build and work well under Linux, FreeBSD,
-OpenBSD and NetBSD.
+OpenBSD, NetBSD, Sun Solaris and MacOS X/Darwin.
 
 
 1.1. Creation history
@@ -811,7 +812,18 @@ list or receive contacts from someone else using the program's
 interface. Much easier than typing or cut'n'pasting UINs.
 
 
-7.5. E-mail express messages
+7.5. Files
+----------
+
+  It's only possible to send files to your remote buddies within the IRC
+network so far. In order to do it, it's enough to choose the "Send
+file(s)" item from the context menu (the one ivoked with F2), and point
+out the files you want to send. In order to receive files you should
+press the "Accept" button in the dialog you'll see as soon as someone
+sends a file to you.
+
+
+7.6. E-mail express messages
 ----------------------------
 
   This kind of events is ICQ specific. There is no way to receive them
@@ -831,7 +843,7 @@ SMTP. If it's behind a firewall you have no chance to get your message
 delivered.
 
 
-7.6. WebPager messages
+7.7. WebPager messages
 ----------------------
 
   ICQ network does also allow sending messages to icq clients from their
@@ -842,7 +854,7 @@ your own by the URL of the following look: http://web.icq.com/wwp?Uin=<UIN>
 is not online he's supposed to received them as soon as he logs in.
 
 
-7.7. Away messages
+7.8. Away messages
 ------------------
 
   Another feature of IM networks supported by centericq is away
@@ -862,7 +874,7 @@ someone's away message (it's possible even when a person has the
 fetch away messages of users that are offline.
 
 
-7.8. Events history
+7.9. Events history
 -------------------
 
   All of events sent and received with centericq are held in its
@@ -1460,7 +1472,7 @@ would rather want to use it instead of direct mailing to me.
   To subscribe go to the centericq home page (URL is above) or send a
 message to cicq-request@linuxpl.org with "subscribe" in the subject
 field. To post a message to the list, send it to cicq@linuxpl.org after
-you subscribe. The archive can be found at http://linuxpl.org/cicq
+you subscribe. The archive can be found at http://eloy.linux.net.pl/cicq/
 
 
 10.1.2. German fan-club of the program :-)
@@ -1623,4 +1635,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.63 2002/09/20 17:17:54 konst Exp $
+$Id: README,v 1.64 2002/10/16 18:28:19 konst Exp $

@@ -6,7 +6,7 @@
 #include <fstream>
 
 #include "kkstrtext.h"
-#include "kkfsys.h"
+#include "icqconf.h"
 #include "icqcontact.h"
 
 #include "eventmanager.h"

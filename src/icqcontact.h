@@ -6,8 +6,6 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-#include "kkstrtext.h"
-#include "kkfsys.h"
 #include "cmenus.h"
 
 #include "imcontact.h"
