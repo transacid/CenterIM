@@ -874,3 +874,46 @@ in the Yahoo! engine.
 Finally, a bug caused centericq to freeze (for protocols' activities)
 after "Ctrl-L" was fixed with a patch sent by Sergey A.
 Kogan <kogan@omskelecom.ru>
+
+4.7.1
+-----
+
+Seems like I just cannot stop adding protocols. Thus, support for IRC
+was implemented in this version. It doesn't (yet?) support talking on
+channels and intended only for private messaging. Though, you can enter
+channels to be visible for other users staying on them. Channels are
+controlled with the "Channel manager" dialog which can be ivoked from
+the account manager. It's also possible to fetch a list of users on
+channels with the find/add dialog.
+
+Since libicq2000 now does support visible and invisible lists, so does
+centericq.
+
+Now centericq can ask away messages when you change your IM status. This
+behaviour is controlled with the respective option of the configuration
+dialog.
+
+Feature to change current IM status from the command line was added.
+
+The auto-away/auto-N/A behaved weird on remotely connected sessions.
+Fixed.
+
+All the lists of contacts such as contact list, search results, multiple
+recipients selection now highlight users from various networks with
+appropriate colors and have the quick-find feature which is possible to
+be activate with "/" or alt-s.
+
+ICQ invisible status of contacts wasn't shown. Fixed.
+
+The bug which made it impossible to send SMS-es to oneself from the
+command line was fixed.
+
+Applied the collapsable groups patch from Bertram Bourdrez
+<bourdrez@casema.net>. So now a contact list group can be collapsed or
+expanded by pressing Enter on its header.
+
+Now it's possible to move groups up and down the contact list with the
+group manager dialog.
+
+It's also now possible to send messages to found users from the find
+results list without adding them to the contact list.

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.94 2002/04/17 16:01:24 konst Exp $
+* $Id: centericq.cc,v 1.95 2002/04/18 09:05:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -948,10 +948,9 @@ void centericq::setauto(imstatus astatus) {
     protocolname pname;
     imstatus stcurrent;
     static bool autoset = false;
-    bool nautoset;
+    bool nautoset, changed = false;
 
-    if((astatus == available) && !autoset)
-	return;
+    if(astatus == available && !autoset) return;
 
     nautoset = autoset;
 
@@ -959,11 +958,6 @@ void centericq::setauto(imstatus astatus) {
 	face.log(_("+ the user is back"));
 	nautoset = false;
     }
-
-
-    face.log("timer_keypress = %lu, idle time = %lu",
-	timer_keypress, time(0)-timer_keypress);
-
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	abstracthook &hook = gethook(pname);
@@ -982,6 +976,7 @@ void centericq::setauto(imstatus astatus) {
 
 		    hook.restorestatus();
 		    nautoset = false;
+		    changed = true;
 		} else {
 		    if(astatus == away && stcurrent == notavail)
 			break;
@@ -989,7 +984,7 @@ void centericq::setauto(imstatus astatus) {
 		    if(astatus != stcurrent)
 		    if(!autoset || (autoset && (stcurrent == away))) {
 			hook.setautostatus(astatus);
-			nautoset = true;
+			nautoset = changed = true;
 
 			face.log(_("+ [%s] automatically set %s"),
 			    conf.getprotocolname(pname).c_str(),
@@ -1000,8 +995,10 @@ void centericq::setauto(imstatus astatus) {
 	}
     }
 
-    autoset = nautoset;
-    face.update();
+    if(changed) {
+	autoset = nautoset;
+	face.relaxedupdate();
+    }
 }
 
 #define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
@@ -1070,14 +1067,33 @@ void centericq::exectimers() {
 	conf.getauto(paway, pna);
 
 	if(paway || pna) {
-	    if(paway && (timer_current-timer_keypress > paway*60))
-		setauto(away);
+	    imstatus toset = offline;
+	    static map<imstatus, bool> autostat;
 
-	    if(pna && (timer_current-timer_keypress > pna*60))
-		setauto(notavail);
+	    if(autostat.empty()) {
+		autostat[available] = false;
+		autostat[notavail] = false;
+		autostat[away] = false;
+	    }
+
+	    if(paway && timer_current-timer_keypress > paway*60)
+		toset = away;
+
+	    if(pna && timer_current-timer_keypress > pna*60)
+		toset = notavail;
 
 	    if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
-		setauto(available);
+		toset = available;
+
+	    if(toset != offline && !autostat[toset]) {
+		setauto(toset);
+
+		if(toset == available) {
+		    autostat[away] = autostat[notavail] = false;
+		} else {
+		    autostat[toset] = true;
+		}
+	    }
 	}
     }
 

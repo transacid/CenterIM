@@ -4,9 +4,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: centericq 4.6.9\n"
+"Project-Id-Version: centericq 4.7.1\n"
 "POT-Creation-Date: 2002-04-17 19:05+0300\n"
-"PO-Revision-Date: 2002-04-01 11:44-0500\n"
+"PO-Revision-Date: 2002-04-17 21:01-0500\n"
 "Last-Translator: Leonardo Boshell <p@kapcoweb.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,20 +40,21 @@ msgid "%s to %s has been put to the queue"
 msgstr "%s a %s ha sido colocado en cola"
 
 #: src/icqconf.cc:840
-msgid "event sending error: the destination contact doesn't exist on your list"
+msgid ""
+"event sending error: the destination contact doesn't exist on your list"
 msgstr "evento enviando error: el contacto de destino no existe en su lista"
 
 #: src/icqconf.cc:879
 msgid "unknown status character was given"
-msgstr ""
+msgstr "fue entregado un carácter de status desconocido"
 
 #: src/icqconf.cc:882
 msgid "unknown IM type"
-msgstr ""
+msgstr "tipo de IM desconocido"
 
 #: src/icqconf.cc:885
 msgid "status change error: "
-msgstr ""
+msgstr "error en el cambio de status: "
 
 #: src/icqcontact.cc:681
 msgid "Jan"
@@ -218,9 +219,8 @@ msgid " Nickname "
 msgstr " Alias "
 
 #: src/icqdialogs.cc:125
-#, fuzzy
 msgid " Channel "
-msgstr "Cambiar"
+msgstr " Canal "
 
 #: src/icqdialogs.cc:143
 msgid "UIN: "
@@ -263,9 +263,8 @@ msgid "Position: "
 msgstr "Posición: "
 
 #: src/icqdialogs.cc:158
-#, fuzzy
 msgid "Channel: "
-msgstr "Cambiar"
+msgstr "Canal: "
 
 #: src/icqdialogs.cc:189
 msgid " General "
@@ -511,9 +510,9 @@ msgid " Remember passwords : %s "
 msgstr " Recordar contraseñas : %s "
 
 #: src/icqdialogs.cc:635
-#, fuzzy, c-format
+#, c-format
 msgid " Edit away message on status change : %s "
-msgstr " Citar el mensaje original en la respuesta : %s "
+msgstr " Editar el mensaje de ausencia al cambiar de status : %s "
 
 #: src/icqdialogs.cc:637
 msgid " Communications "
@@ -583,7 +582,6 @@ msgid "Rename"
 msgstr "Renombrar"
 
 #: src/icqdialogs.cc:797
-#, fuzzy
 msgid "rEmove"
 msgstr "Eliminar"
 
@@ -745,9 +743,8 @@ msgid "Details"
 msgstr "Detalles"
 
 #: src/icqface.cc:562
-#, fuzzy
 msgid "Message"
-msgstr "mensaje"
+msgstr "Mensaje"
 
 #: src/icqface.cc:563
 msgid "New search"
@@ -904,7 +901,7 @@ msgstr " [aim] AOL TOC"
 
 #: src/icqface.cc:949
 msgid " [irc] IRC"
-msgstr ""
+msgstr " [irc] IRC"
 
 #: src/icqface.cc:980
 msgid " [all] All of them"
@@ -989,7 +986,8 @@ msgid "Outgoing %s to %s"
 msgstr "Evento saliente %s a %s"
 
 #: src/icqface.cc:1576
-msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
+msgid ""
+"Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X enviar, Ctrl-P múltiple, Ctrl-O historial, Alt-? detalles, ESC "
 "cancelar"
@@ -1063,9 +1061,8 @@ msgid " Set away message "
 msgstr " Establecer mensaje de ausencia "
 
 #: src/accountmanager.cc:96
-#, fuzzy
 msgid " Channel manager "
-msgstr " Administrador de cuentas IM "
+msgstr " Administrador de canales "
 
 #: src/accountmanager.cc:98
 msgid " Drop "
@@ -1194,20 +1191,19 @@ msgstr "Debe encontrarse conectado a la red AIM para actualizar su perfil"
 
 #: src/imcontroller.cc:191
 msgid " IRC channels (join/leave) "
-msgstr ""
+msgstr " Canales IRC (unirse/abandonar) "
 
 #: src/imcontroller.cc:197
 msgid "Join/Leave"
-msgstr ""
+msgstr "Unirse/Abandonar"
 
 #: src/imcontroller.cc:211
-#, fuzzy
 msgid " Channels "
-msgstr "Cambiar"
+msgstr " Canales "
 
 #: src/imcontroller.cc:223
 msgid "channel name to add: "
-msgstr ""
+msgstr "nombre del canal a agregar: "
 
 #: src/imcontroller.cc:258
 msgid "registration is not supported"
@@ -1276,9 +1272,9 @@ msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] no se puede consultar el mensaje de ausencia de %s, %s"
 
 #: src/hooks/icqhook.cc:1045
-#, fuzzy, c-format
+#, c-format
 msgid "%s requested our away message, sent the response"
-msgstr "%lu solicitó nuestro mensaje de ausencia de icq, enviada la respuesta"
+msgstr "%s solicitó nuestro mensaje de ausencia, enviada la respuesta"
 
 #: src/hooks/icqhook.cc:1083
 #, c-format
@@ -1288,7 +1284,7 @@ msgstr "+ [icq] búsqueda en las páginas blancas finalizada, %d resultados"
 #: src/hooks/yahoohook.cc:72
 #, c-format
 msgid "+ initializing %s engine"
-msgstr ""
+msgstr "+ inicializando motor %s"
 
 #: src/hooks/yahoohook.cc:99
 msgid "unable to connect to the pager host"
@@ -1564,9 +1560,8 @@ msgid "+ [aim] disconnected from the network"
 msgstr "+ [aim] desconectado de la red"
 
 #: src/hooks/aimhook.cc:367
-#, fuzzy
 msgid "aim connection failed"
-msgstr "+ [aim] conexión fallida: %s"
+msgstr "conexión con aim falló"
 
 #: src/hooks/aimhook.cc:369
 #, c-format
@@ -1586,48 +1581,45 @@ msgid "+ [aim] password sent"
 msgstr "+ [aim] contraseña enviada"
 
 #: src/hooks/irchook.cc:82
-#, fuzzy
 msgid "+ [irc] connecting to the server"
-msgstr "+ [icq] conectándose al servidor"
+msgstr "+ [irc] conectándose al servidor"
 
 #: src/hooks/irchook.cc:94
-#, fuzzy
 msgid "+ [irc] unable to connect to the server"
-msgstr "+ [aim] no fue posible conectarse al servidor"
+msgstr "+ [irc] no fue posible conectarse al servidor"
 
 #: src/hooks/irchook.cc:194
-#, fuzzy, c-format
+#, c-format
 msgid "+ [irc] adding %s to the contacts"
-msgstr "+ [aim] agregando %s a los contactos"
+msgstr "+ [irc] agregando %s a los contactos"
 
 #: src/hooks/irchook.cc:202
-#, fuzzy, c-format
+#, c-format
 msgid "+ [irc] removing %s from the contacts"
-msgstr "+ [aim] removiendo %s de los contactos"
+msgstr "+ [irc] removiendo a %s de los contactos"
 
 #: src/hooks/irchook.cc:347
-#, fuzzy, c-format
+#, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr "+ [icq] búsqueda en las páginas blancas finalizada, %d resultados"
+msgstr ""
+"+ [irc] terminó la consulta de la lista de miembros del canal, %d encontrados"
 
 #: src/hooks/irchook.cc:478
-#, fuzzy
 msgid "+ [irc] logged in"
-msgstr "+ [icq] conectado"
+msgstr "+ [irc] conectado"
 
 #: src/hooks/irchook.cc:507
-#, fuzzy
 msgid "+ [irc] disconnected from the network"
-msgstr "+ [aim] desconectado de la red"
+msgstr "+ [irc] desconectado de la red"
 
 #: src/hooks/irchook.cc:521
-#, fuzzy, c-format
+#, c-format
 msgid "+ [irc] connect failed: %s"
-msgstr "+ [aim] conexión fallida: %s"
+msgstr "+ [irc] conexión fallida: %s"
 
 #: src/hooks/irchook.cc:605
 msgid "On channels: "
-msgstr ""
+msgstr "En los canales: "
 
 #: src/icqface.h:218
 msgid "yes"
