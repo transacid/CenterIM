@@ -50,3 +50,12 @@ void icqgroups::save() {
 	f.close();
     }
 }
+
+int icqgroups::add(const string aname) {
+    int i;
+
+    for(i = 1; find(begin(), end(), i) != end(); i++);
+    push_back(icqgroup(i, aname));
+
+    return i;
+}

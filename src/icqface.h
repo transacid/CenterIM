@@ -57,6 +57,7 @@
 #define ACT_INVISLIST   -31
 #define ACT_QUICKFIND   -32
 #define ACT_CONTACT     -33
+#define ACT_GROUPMOVE   -34
 
 extern class centericq cicq;
 

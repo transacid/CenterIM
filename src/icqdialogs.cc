@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.9 2001/09/30 19:22:05 konst Exp $
+* $Id: icqdialogs.cc,v 1.10 2001/09/30 22:42:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -836,13 +836,15 @@ int icqface::selectgroup(const string text) {
     db.idle = &dialogidle;
     blockmainscreen();
     treeview &t = *db.gettree();
+    db.getbar()->item = 2;
 
     for(bool fin = false; !fin && !r; ) {
 	t.clear();
 	ngrp = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Groups "));
 
 	for(i = groups.begin(); i != groups.end(); i++) {
-	    t.addleaf(ngrp, 0, (void *) (i-groups.begin()+1), i->getname());
+	    t.addleaff(ngrp, 0, (void *) (i-groups.begin()+1),
+		" %s ", i->getname().c_str());
 	}
 
 	fin = !db.open(n, b, (void **) &n);
@@ -861,7 +863,7 @@ int icqface::selectgroup(const string text) {
 		break;
 
 	    case 2:
-		i = groups.begin()-1;
+		i = groups.begin()+n-1;
 		r = i->getid();
 		break;
 	}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.16 2001/09/30 19:22:06 konst Exp $
+* $Id: icqface.cc,v 1.17 2001/09/30 22:42:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,8 +31,7 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqoffline.h"
-
-#include <regex.h>
+#include "icqgroups.h"
 
 const char *stryesno(bool i) {
     return i ? _("yes") : _("no");
@@ -196,32 +195,35 @@ int icqface::contextmenu(icqcontact *c) {
     if(!c) return 0;
 
     if(!c->getuin()) {
-	m.additem(_(" Events history         h"));
+	m.additem(0, (void *) ACT_HISTORY,  _(" Events history         h"));
     } else if(!c->isnonicq() && c->getuin() && c->inlist()) { 
-	m.additem(_(" Send a message     enter"));
-	m.additem(_(" Send an URL            u"));
+	m.additem(0, (void *) ACT_MSG,      _(" Send a message     enter"));
+	m.additem(0, (void *) ACT_URL,      _(" Send an URL            u"));
+	m.additem(0, (void *) ACT_FILE,     _(" Send a file            f"));
 	m.addline();
-	m.additem(_(" Send a file            f"));
+	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
+	m.additem(0, (void *) ACT_HISTORY,  _(" Events history         h"));
 	m.addline();
-	m.additem(_(" User's details         ?"));
-	m.additem(_(" Events history         h"));
-	m.additem(_(" Remove user          del"));
-	m.additem(_(" Ignore user"));
-	m.additem(_(" Rename user            r"));
+	m.additem(0, (void *) ACT_IGNORE,   _(" Ignore user"));
+	m.additem(0, (void *) ACT_REMOVE,   _(" Remove user          del"));
+
+	if(conf.getusegroups()) {
+	    m.additem(0, (void *) ACT_GROUPMOVE,_(" Move to group.."));
+	}
     } else if(!c->isnonicq() && c->getuin() && !c->inlist()) {
-	m.additem(_(" Send a message     enter"));
-	m.additem(_(" Send URL               u"));
+	m.additem(0, (void *) ACT_MSG,      _(" Send a message     enter"));
+	m.additem(0, (void *) ACT_URL,      _(" Send URL               u"));
 	m.addline();
-	m.additem(_(" Add to list            a"));
+	m.additem(0, (void *) ACT_ADD,      _(" Add to list            a"));
 	m.addline();
-	m.additem(_(" User's details         ?"));
-	m.additem(_(" Events history         h"));
-	m.additem(_(" Remove user          del"));
-	m.additem(_(" Ignore user"));
+	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
+	m.additem(0, (void *) ACT_HISTORY,  _(" Events history         h"));
+	m.additem(0, (void *) ACT_REMOVE,   _(" Remove user          del"));
+	m.additem(0, (void *) ACT_IGNORE,   _(" Ignore user"));
     } else if(c->isnonicq()) {
-	m.additem(_(" User's details         ?"));
-	m.additem(_(" Remove user          del"));
-	m.additem(_(" Edit details"));
+	m.additem(0, (void *) ACT_INFO,     _(" User's details         ?"));
+	m.additem(0, (void *) ACT_REMOVE,   _(" Remove user          del"));
+	m.additem(0, (void *) ACT_EDITUSER, _(" Edit details"));
     }
 
     m.scale();
@@ -231,40 +233,7 @@ int icqface::contextmenu(icqcontact *c) {
     m.close();
     elem = i-1;
 
-    if(!c->getuin()) {
-	switch(i) {
-	    case 1: ret = ACT_HISTORY; break;
-	}
-    } else if(!c->isnonicq() && c->getuin() && c->inlist()) { 
-	switch(i) {
-	    case  1: ret = ACT_MSG; break;
-	    case  2: ret = ACT_URL; break;
-	    case  4: ret = ACT_FILE; break;
-	    case  6: ret = ACT_INFO; break;
-	    case  7: ret = ACT_HISTORY; break;
-	    case  8: ret = ACT_REMOVE; break;
-	    case  9: ret = ACT_IGNORE; break;
-	    case 10: ret = ACT_RENAME; break;
-	}
-    } else if(!c->isnonicq() && c->getuin() && !c->inlist()) {
-	switch(i) {
-	    case  1: ret = ACT_MSG; break;
-	    case  2: ret = ACT_URL; break;
-	    case  4: ret = ACT_ADD; break;
-	    case  6: ret = ACT_INFO; break;
-	    case  7: ret = ACT_HISTORY; break;
-	    case  8: ret = ACT_REMOVE; break;
-	    case  9: ret = ACT_IGNORE; break;
-	}
-    } else if(c->isnonicq()) {
-	switch(i) {
-	    case 1: ret = ACT_INFO; break;
-	    case 2: ret = ACT_REMOVE; break;
-	    case 3: ret = ACT_EDITUSER; break;
-	}
-    }
-
-    return ret;
+    return (int) m.getref(elem);
 }
 
 int icqface::generalmenu() {
@@ -359,14 +328,15 @@ icqcontact *icqface::mainloop(int &action) {
 }
 
 void icqface::fillcontactlist() {
-    int i, id, thisnode = 0;
+    int i, id, nnode, ngroup, prevgid;
     string dnick;
     icqcontact *c;
     void *savec;
     char prevsc = 'x', sc;
-    bool online_added = false;
+    bool online_added = false, groupchange;
 
     totalunread = 0;
+    nnode = ngroup = prevgid = 0;
 
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
     mcontacts->clear();
@@ -387,21 +357,36 @@ void icqface::fillcontactlist() {
 	}
 
 	totalunread += c->getmsgcount();
+	groupchange = conf.getusegroups() && (c->getgroupid() != prevgid);
+	sc = SORTCHAR(c);
 
-	if((sc = SORTCHAR(c)) != '#') {
+	if(groupchange) {
+	    ngroup = mcontacts->addnode(0, conf.getcolor(cp_main_highlight),
+		0, " " + find(groups.begin(), groups.end(),
+		c->getgroupid())->getname() + " ");
+	}
+
+	if(groupchange || (sc != '#')) {
 	    if(strchr("candifo", sc)) sc = 'O';
 
-	    if(sc != prevsc)
+	    if((sc != prevsc) || groupchange)
 	    switch(sc) {
 		case 'O':
-		    thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 1, " Online ");
+		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 1, " Online ");
 		    online_added = true;
 		    break;
-		case '_': thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 2, " Offline "); break;
-		case '!': thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 3, " Not in list "); break;
-		case 'N': thisnode = mcontacts->addnode(0, conf.getcolor(cp_main_highlight), (void *) 4, " Non-ICQ "); break;
+		case '_':
+		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 2, " Offline ");
+		    break;
+		case '!':
+		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 3, " Not in list ");
+		    break;
+		case 'N':
+		    nnode = mcontacts->addnode(ngroup, conf.getcolor(cp_main_highlight), (void *) 4, " Non-ICQ ");
+		    break;
 	    }
 
+	    if(groupchange) prevgid = c->getgroupid();
 	    prevsc = sc;
 	}
 
@@ -409,15 +394,14 @@ void icqface::fillcontactlist() {
 	if(c->isbirthday()) dnick += " :)";
 
 	if(c->getstatus() == STATUS_OFFLINE) {
-	    mcontacts->addleaff(thisnode,
+	    mcontacts->addleaff(nnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
-		c, "%.*s %d %s ", c->getmsgcount() ? 1 : 0, "#",
-		    c->getgroupid(), dnick.c_str());
+		c, "%.*s %s ", c->getmsgcount() ? 1 : 0, "#", dnick.c_str());
 	} else {
-	    mcontacts->addleaff(thisnode,
+	    mcontacts->addleaff(nnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : 0,
-		c, "%s[%c] %d %s ", c->getmsgcount() ? "#" : " ",
-		c->getshortstatus(), c->getgroupid(), dnick.c_str());
+		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ",
+		c->getshortstatus(), dnick.c_str());
 	}
     }
 

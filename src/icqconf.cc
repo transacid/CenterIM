@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.9 2001/09/30 07:45:39 konst Exp $
+* $Id: icqconf.cc,v 1.10 2001/09/30 22:42:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -108,6 +108,8 @@ void icqconf::loadmainconfig() {
 		socksuser = buf;
 	    } else if(param == "sockspass") {
 		sockspass = buf;
+	    } else if(param == "usegroups") {
+		usegroups = true;
 	    }
 	}
 
@@ -144,6 +146,7 @@ void icqconf::savemainconfig(unsigned int fuin = 0) {
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
 	if(getserveronly()) f << "serveronly" << endl;
+	if(getusegroups()) f << "usegroups" << endl;
 
 	f.close();
     }

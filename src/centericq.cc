@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.18 2001/09/30 19:22:04 konst Exp $
+* $Id: centericq.cc,v 1.19 2001/09/30 22:42:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -86,10 +86,10 @@ void centericq::exec() {
     }
 
     conf.checkdir();
-    clist.load();
     conf.load();
-    lst.load();
     groups.load();
+    clist.load();
+    lst.load();
 
     face.done();
     face.init();
@@ -206,7 +206,7 @@ void centericq::reg() {
 void centericq::mainloop() {
     bool finished = false;
     string text, url;
-    int action, old;
+    int action, old, gid;
     icqcontact *c;
     char buf[512];
     list<unsigned int>::iterator i;
@@ -245,6 +245,7 @@ void centericq::mainloop() {
 
 	if(c->getuin() && !c->isnonicq())
 	switch(action) {
+
 	    case ACT_URL:
 		url = "";
 		text = "";
@@ -262,11 +263,26 @@ void centericq::mainloop() {
 		}
 		break;
 
-	    case ACT_FILE: if(c->getstatus() != STATUS_OFFLINE) sendfiles(c->getuin()); break;
-	    case ACT_CHAT: break;
+	    case ACT_FILE:
+		if(c->getstatus() != STATUS_OFFLINE) {
+		    sendfiles(c->getuin());
+		}
+		break;
+
+	    case ACT_CHAT:
+		break;
+
 	    case ACT_CONTACT:
 		sendcontacts(c->getuin());
 		break;
+
+	    case ACT_GROUPMOVE:
+		if(gid = face.selectgroup(_("Select a group to move the user to"))) {
+		    c->setgroupid(gid);
+		    face.fillcontactlist();
+		}
+		break;
+
 	}
 	
 	if(c->isnonicq())
