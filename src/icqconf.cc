@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.57 2002/03/15 15:44:32 konst Exp $
+* $Id: icqconf.cc,v 1.58 2002/03/24 12:32:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -229,7 +229,7 @@ void icqconf::save() {
 	if(getquote()) f << "quotemsgs" << endl;
 	if(getantispam()) f << "antispam" << endl;
 	if(getmailcheck()) f << "mailcheck" << endl;
-	f << getsmtphost() << ":" << dec << getsmtpport() << endl;
+	f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
 
 	switch(getgroupmode()) {
 	    case group1: f << "group1" << endl; break;
