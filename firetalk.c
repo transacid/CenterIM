@@ -2348,11 +2348,11 @@ enum firetalk_error firetalk_subcode_register_reply_callback(firetalk_t conn, co
 	return FE_SUCCESS;
 }
 
-enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nickname, const char * const filename) {
+enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nickname, const char * const filename, void **fhandle) {
 	struct s_firetalk_file *iter;
 	struct stat s;
 	struct sockaddr_in addr;
-	char args[256];
+	char args[1024], *p, *cp;
 	unsigned int l;
 
 #ifdef DEBUG
@@ -2410,8 +2410,15 @@ enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nick
 	conn->file_head->port = ntohs(addr.sin_port);
 	conn->file_head->next = iter;
 	conn->file_head->type = FF_TYPE_DCC;
-	safe_snprintf(args,256,"SEND %s %lu %u %ld",conn->file_head->filename,conn->localip,conn->file_head->port,conn->file_head->size);
-	return firetalk_subcode_send_request(conn,nickname,"DCC",args);
+
+	*fhandle = conn->file_head;
+
+	cp = conn->file_head->filename;
+	while(p = strstr(cp, "/"))
+	    cp = p+1;
+
+	sprintf(args, "SEND %s %lu %lu %ld", cp, conn->localip, conn->file_head->port, conn->file_head->size);
+	return firetalk_subcode_send_request(conn, nickname, "DCC", args);
 }
 
 enum firetalk_error firetalk_file_accept(firetalk_t conn, void *filehandle, void *clientfilestruct, const char * const localfile) {

@@ -228,7 +228,7 @@ enum firetalk_error firetalk_subcode_send_request(firetalk_t conn, const char * 
 enum firetalk_error firetalk_subcode_register_request_callback(firetalk_t conn, const char * const command, void (*callback)(firetalk_t, void *, const char * const, const char * const, const char * const));
 enum firetalk_error firetalk_subcode_register_reply_callback(firetalk_t conn, const char * const command, void (*callback)(firetalk_t, void *, const char * const, const char * const, const char * const));
 
-enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nickname, const char * const filename);
+enum firetalk_error firetalk_file_offer(firetalk_t conn, const char * const nickname, const char * const filename, void **fhandle);
 enum firetalk_error firetalk_file_accept(firetalk_t conn, void *filehandle, void *clientfilestruct, const char * const localfile);
 enum firetalk_error firetalk_file_refuse(firetalk_t conn, void *filehandle);
 enum firetalk_error firetalk_file_cancel(firetalk_t conn, void *filehandle);
