@@ -1,4 +1,4 @@
-.TH CENTERICQ 1 "March 7, 2002"
+.TH CENTERICQ 1 "March 28, 2002"
 
 .SH NAME
 \fBcentericq\fP \- a text mode based IM client for Linux, *BSD and possibly,
@@ -51,7 +51,7 @@ Currently only "msg", "url" and "sms" are supported.
 .TP
 \fB\-p\fR, \fB\-\-proto\fR <protocol type>
 This one specifies to which IM network the destination contact
-beyongs. Can be "icq", "yahoo" or "msn".
+beyongs. Can be "icq", "yahoo", "aim" or "msn".
 .TP
 \fB\-t\fR, \fB\-\-to\fR <nickname or UIN>
 Finally, with this one you specify nickname or UIN of the
@@ -59,8 +59,25 @@ destination contact. For icq it's possible to specify 0 to send
 events to yourself. Only SMSes are known to be possible to be sent
 to oneself though.
 
+.PP
+
+The message text is read from the standard input, so use pipes in shell
+to pass it. For example, you can say "hi" to me through the ICQ network
+with the following command:
+
+    \fB$ echo "hi" | centericq -s msg -p icq -t 17502151\fR
+
+In case you want to send an URL, the URL itself and its description are
+separated with a newline character the following way:
+
+    \fB$ echo -e "http://konst.org.ua/\\nMy modest homepage." \
+    | centericq -s url -p icq -t 17502151\fR
+
+Please note, that all three parameters are required in order to queue an
+event.
+
 .SH VERSION
-centericq 4.6.5
+centericq 4.6.6
 
 .SH BUG REPORT
 Report any bugs to centericq-bugs@konst.org.ua
