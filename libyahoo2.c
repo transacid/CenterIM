@@ -3076,6 +3076,10 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 	int k, n;
 	int start=0, found=0, total=0;
 	YList *contacts=NULL;
+ 	struct yahoo_input_data *pyid = find_input_by_id_and_type(yid->yd->client_id, YAHOO_CONNECTION_PAGER);
+ 
+ 	if(!pyid)
+ 		return;
 
 	if(!over)
 		return;
@@ -3087,9 +3091,9 @@ static void yahoo_process_search_connection(struct yahoo_input_data *yid, int ov
 			p++;
 			n = atoi(p);
 			switch(k) {
-				case 0: found = yid->ys->lsearch_nfound = n; break;
-				case 2: start = yid->ys->lsearch_nstart = n; break;
-				case 3: total = yid->ys->lsearch_ntotal = n; break;
+				case 0: found = pyid->ys->lsearch_nfound = n; break;
+				case 2: start = pyid->ys->lsearch_nstart = n; break;
+				case 3: total = pyid->ys->lsearch_ntotal = n; break;
 			}
 		}
 
