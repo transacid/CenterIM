@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.14 2002/03/05 10:33:52 konst Exp $
+* $Id: conscommon.cc,v 1.15 2002/03/05 16:56:12 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -247,7 +247,7 @@ extern "C" {
 
 string makebidi(const string &buf, int lpad = 0) {
     FriBidiChar *us, *out_us;
-    char *outstring;
+    char *outstring, *cbuf;
     int size;
     FriBidiCharType base;
     string r, pad;
@@ -257,17 +257,20 @@ string makebidi(const string &buf, int lpad = 0) {
     us = new FriBidiChar[size];
     out_us = new FriBidiChar[size];
     outstring = new char[size];
+    cbuf = strdup(buf.c_str());
+	// really sick thing
 
     base = FRIBIDI_TYPE_N;
-    fribidi_iso8859_8_to_unicode((guchar *) buf.c_str(), us);
+    fribidi_iso8859_8_to_unicode(cbuf, buf.size(), us);
     fribidi_log2vis(us, buf.size(), &base, out_us, 0, 0, 0);
-    fribidi_unicode_to_iso8859_8(out_us, buf.size(), (guchar *) outstring);
+    fribidi_unicode_to_iso8859_8(out_us, buf.size(), outstring);
 
     r = outstring;
 
     delete us;
     delete out_us;
     delete outstring;
+    delete cbuf;
 
     if(lpad) {
 	pad.assign(lpad-r.size(), ' ');
