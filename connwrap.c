@@ -155,8 +155,7 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	if ( !(*state & CW_CONNECT_WANT_SOMETHING))
 	    rc = connect(sockfd, serv_addr, addrlen);
 	else{ /* check if the socket is connected correctly */
-	    socklen_t optlen = sizeof(int);
-	    int optval;
+	    int optlen = sizeof(int), optval;
 	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)
 	    return -1;
 	}
@@ -201,8 +200,7 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
     if ( !(*state & CW_CONNECT_WANT_SOMETHING))
 	rc = connect(sockfd, serv_addr, addrlen);
     else{ /* check if the socket is connected correctly */
-	socklen_t optlen = sizeof(int);
-	int optval;
+	int optlen = sizeof(int), optval;
 	if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)
 	    return -1;
 	*state = 0;
