@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.104 2003/05/05 21:11:52 konst Exp $
+* $Id: icqconf.cc,v 1.105 2003/05/06 20:27:27 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,13 +46,15 @@ icqconf::icqconf() {
 
     autoaway = autona = 0;
 
-    hideoffline = antispam = russian = makelog = askaway =
-	logtimestamps = logonline = emacs = false;
+    hideoffline = antispam = makelog = askaway = logtimestamps =
+	logonline = emacs = false;
 
     savepwd = mailcheck = fenoughdiskspace = logtyping = true;
 
-    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = true;
+	russian[pname] = false;
+    }
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }
@@ -215,7 +217,7 @@ void icqconf::loadmainconfig() {
 
 	    if(param == "hideoffline") hideoffline = true; else
 	    if(param == "emacs") emacs = true; else
-	    if(param == "russian") russian = true; else
+	    if(param == "russian") initmultiproto(russian, buf); else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
@@ -228,7 +230,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "log") makelog = true; else
-	    if(param == "chatmode") initchatmode(buf); else
+	    if(param == "chatmode") initmultiproto(chatmode, buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
 	    if(param == "logtyping") logtyping = true; else
@@ -271,7 +273,6 @@ void icqconf::save() {
 
 	    getauto(away, na);
 
-	    if(russian) f << "russian" << endl;
 	    if(away) f << "autoaway\t" << i2str(away) << endl;
 	    if(na) f << "autona\t" << i2str(na) << endl;
 	    if(hideoffline) f << "hideoffline" << endl;
@@ -282,12 +283,22 @@ void icqconf::save() {
 	    if(getaskaway()) f << "askaway" << endl;
 
 	    param = "";
+
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
-		if(getchatmode(pname))
-		    param += (string) " " + conf.getprotocolname(pname);
+		if(getchatmode(pname)) param += (string) " " + conf.getprotocolname(pname);
 
 	    if(!param.empty())
 		f << "chatmode" << param << endl;
+
+	    param = "";
+
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(getrussian(pname)) param += (string) " " + conf.getprotocolname(pname);
+
+	    if(!param.empty())
+		f << "russian" << param << endl;
+
+	    if(russian) f << "russian" << endl;
 
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtyping) f << "logtyping" << endl;
@@ -642,6 +653,14 @@ void icqconf::setchatmode(protocolname pname, bool fchatmode) {
     chatmode[pname] = fchatmode;
 }
 
+bool icqconf::getrussian(protocolname pname) {
+    return russian[pname];
+}
+
+void icqconf::setrussian(protocolname pname, bool frussian) {
+    russian[pname] = frussian;
+}
+
 void icqconf::openurl(const string &url) {
     int npos;
     string torun = openurlcommand;
@@ -725,10 +744,6 @@ int icqconf::getprotcolor(protocolname pname) const {
 	case   jabber : return getcolor(cp_clist_jabber);
 	default       : return getcolor(cp_main_text);
     }
-}
-
-void icqconf::setrussian(bool frussian) {
-    russian = frussian;
 }
 
 void icqconf::setbidi(bool fbidi) {
@@ -964,24 +979,20 @@ void icqconf::setgroupmode(icqconf::groupmode amode) {
     fgroupmode = amode;
 }
 
-void icqconf::initchatmode(string buf) {
+void icqconf::initmultiproto(bool p[], string buf) {
     string w;
-    memset(&chatmode, 0, sizeof(chatmode));
+    protocolname pname;
 
-    if(buf.empty()) {
-	for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
-	    chatmode[pname] = true;
+    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	p[pname] = buf.empty();
 
-    } else {
-	while(!(w = getword(buf)).empty()) {
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
-		if(getprotocolname(pname) == w) {
-		    chatmode[pname] = true;
-		    break;
-		}
+    while(!(w = getword(buf)).empty()) {
+	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	    if(getprotocolname(pname) == w) {
+		p[pname] = true;
+		break;
 	    }
 	}
-
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.155 2003/05/04 22:12:41 konst Exp $
+* $Id: centericq.cc,v 1.156 2003/05/06 20:27:27 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -67,7 +67,8 @@ void centericq::exec() {
 
 	if(p)
 	if(((string) p).substr(0, 2) == "ru")
-	    conf.setrussian(true);
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+		conf.setrussian(pname, true);
 
 	if(updateconf()) {
 	    manager.exec();
@@ -1425,131 +1426,6 @@ void centericq::createconference(const imcontact &ic) {
 }
 
 // ----------------------------------------------------------------------------
-
-string rushtmlconv(const string &tdir, const string &text) {
-    int pos;
-    string r = rusconv(tdir, text);
-
-    if(tdir == "kw") {
-	pos = 0;
-	while((pos = r.find_first_of("&<>", pos)) != -1) {
-	    switch(r[pos]) {
-		case '&':
-		    if(r.substr(pos, 4) != "&lt;"
-		    && r.substr(pos, 4) != "&gt;")
-			r.replace(pos, 1, "&amp;");
-		    break;
-		case '<': r.replace(pos, 1, "&lt;"); break;
-		case '>': r.replace(pos, 1, "&gt;"); break;
-	    }
-	    pos++;
-	}
-
-    } else if(tdir == "wk") {
-	pos = 0;
-	while((pos = r.find("&", pos)) != -1) {
-	    if(r.substr(pos+1, 4) == "amp;") r.replace(pos, 5, "&"); else
-	    if(r.substr(pos+1, 3) == "lt;") r.replace(pos, 4, "<"); else
-	    if(r.substr(pos+1, 3) == "gt;") r.replace(pos, 4, ">"); 
-	    pos++;
-	}
-    }
-
-    return r;
-}
-
-string ruscrlfconv(const string &tdir, const string &text) {
-    string r = rusconv(tdir, text);
-    int pos;
-
-    for(pos = 0; (pos = r.find("\r")) != -1; pos++) {
-	r.erase(pos, 1);
-    }
-
-    return r;
-}
-
-string rusconv(const string &tdir, const string &text) {
-    if(!conf.getrussian())
-	return text;
-
-    string r;
-
-    static unsigned char kw[] = {
-	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
-	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
-	160,161,162,184,164,165,166,167,168,169,170,171,172,173,174,175,
-	176,177,178,168,180,181,182,183,184,185,186,187,188,189,190,191,
-	254,224,225,246,228,229,244,227,245,232,233,234,235,236,237,238,
-	239,255,240,241,242,243,230,226,252,251,231,248,253,249,247,250,
-	222,192,193,214,196,197,212,195,213,200,201,202,203,204,205,206,
-	207,223,208,209,210,211,198,194,220,219,199,216,221,217,215,218
-    };
-
-    static unsigned char wk[] = {
-	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
-	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
-	160,161,162,163,164,165,166,167,179,169,170,171,172,173,174,175,
-	176,177,178,179,180,181,182,183,163,185,186,187,188,189,190,191,
-	225,226,247,231,228,229,246,250,233,234,235,236,237,238,239,240,
-	242,243,244,245,230,232,227,254,251,253,255,249,248,252,224,241,
-	193,194,215,199,196,197,214,218,201,202,203,204,205,206,207,208,
-	210,211,212,213,198,200,195,222,219,221,223,217,216,220,192,209
-    };
-
-    unsigned char c;
-    string::const_iterator i;
-    unsigned char *table = 0;
-
-#ifdef HAVE_ICONV_H
-    if(tdir == "kw") r = siconv(text, "koi8-u", "cp1251"); else
-    if(tdir == "wk") r = siconv(text, "cp1251", "koi8-u"); else
-#endif
-	r = text;
-
-    if(text == r) {
-	if(tdir == "kw") table = kw; else
-	if(tdir == "wk") table = wk;
-
-	if(table) {
-	    r = "";
-
-	    for(i = text.begin(); i != text.end(); ++i) {
-		c = (unsigned char) *i;
-		c &= 0377;
-		if(c & 0200) c = table[c & 0177];
-		r += c;
-	    }
-	}
-    }
-
-    return r;
-}
-
-Encoding guessencoding(const string &text) {
-    if(!conf.getrussian())
-	return encKOI;
-
-    string::const_iterator ic = text.begin();
-    int utf, latin, third;
-
-    utf = latin = 0;
-
-    while(ic != text.end()) {
-	unsigned char c = (unsigned) *ic;
-
-	if(c > 32 && c < 127) latin++; else
-	if(c > 127 && c < 192) utf++;
-
-	++ic;
-    }
-
-    third = (int) text.size()/3;
-
-    if(utf > third) return encUTF; else
-    if(latin > third) return encUnknown; else
-	return encKOI;
-}
 
 bool ischannel(const imcontact &cont) {
     if(cont.nickname.substr(0, 1) == "#")

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.110 2003/05/05 21:11:52 konst Exp $
+* $Id: icqdialogs.cc,v 1.111 2003/05/06 20:27:28 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -231,6 +231,9 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	if(protchanged) {
 	    if(users) {
 		services = gethook(s.pname).getservices(servicetype::search);
+
+		if((iservice = find(services.begin(), services.end(), s.service)) == services.end())
+		    s.service = "";
 
 		if(s.service.empty())
 		if((iservice = services.begin()) != services.end()) {
@@ -980,14 +983,13 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
 }
 
 bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
-    bool finished, success;
+    bool finished, success, hasany;
     int nopt, n, i, b, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
+    protocolname pname;
     string tmp, phidden;
     string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
-    protocolname pname;
 
     bool quote = conf.getquote();
-    bool rus = conf.getrussian();
     bool savepwd = conf.getsavepwd();
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
@@ -1006,9 +1008,15 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
-    bool chatmode[protocolname_size];
-    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+    bool chatmode[protocolname_size], rus[protocolname_size];
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = conf.getchatmode(pname);
+	rus[pname] = conf.getrussian(pname);
+    }
+
+    for(hasany = false, pname = icq; pname != protocolname_size && !hasany; (int) pname += 1)
+	hasany = !conf.getourid(pname).empty();
 
     dialogbox db;
 
@@ -1051,19 +1059,30 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
 	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
-	t.addleaff(i, 0,  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
 	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno(quote));
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
 	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno(askaway));
 
-	tmp = "";
-	for(pname = icq; pname != protocolname_size; (int) pname += 1)
-	    if(chatmode[pname] && !conf.getourid(pname).empty())
-		tmp += conf.getprotocolname(pname) + " ";
+	if(hasany) {
+	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(chatmode[pname] && !conf.getourid(pname).empty())
+		    tmp += conf.getprotocolname(pname) + " ";
 
-	t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
+	    t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
+
+	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(rus[pname] && !conf.getourid(pname).empty())
+		    tmp += conf.getprotocolname(pname) + " ";
+
+	    t.addleaff(i, 0,  3, _(" Russian translation for : %s "), tmp.c_str());
+
+	} else {
+	    t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno(chatmode[icq]));
+	    t.addleaff(i, 0,  3, _(" Russian translation : %s "), stryesno(rus[icq]));
+
+	}
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -1101,7 +1120,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			    c == icqconf::rcdark ? icqconf::rcblue :
 				icqconf::rcdontchange;
 			break;
-		    case 3: rus = !rus; break;
+		    case 3:
+			if(hasany) selectproto(rus); else
+			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+				rus[pname] = !rus[pname];
+			break;
 		    case 4:
 			tmp = inputstr(_("Auto Away period (0 - disable): "), i2str(aaway));
 			if(tmp.size()) aaway = atol(tmp.c_str());
@@ -1119,7 +1142,12 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
-		    case 16: selectchatmode(chatmode); break;
+		    case 16:
+			if(hasany) selectproto(chatmode); else
+			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+				chatmode[pname] = !chatmode[pname];
+			break;
+
 		    case 17:
 			gmode =
 			    gmode == icqconf::group1 ? icqconf::group2 :
@@ -1162,12 +1190,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setemacs(emacs);
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
-		conf.setrussian(rus);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
 
-		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    conf.setchatmode(pname, chatmode[pname]);
+		    conf.setrussian(pname, rus[pname]);
+		}
 
 		conf.setbidi(bidi);
 		conf.setlogoptions(logtimestamps, logonline, logtyping);
@@ -1192,7 +1221,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     return success;
 }
 
-void icqface::selectchatmode(bool chatmode[]) {
+void icqface::selectproto(bool chatmode[]) {
     static int saveelem = 0;
     int i, protmax;
     bool r, finished = false;

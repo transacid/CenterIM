@@ -1405,3 +1405,34 @@ Shells others than /bin/sh didn't work in external actions. Fixed.
 
 In the adding to visible/invisible list selection box contacts that are
 already on the list are not shown anymore.
+
+4.9.3
+-----
+
+The old nickname didn't appear in the change nickname input line which
+was invoked from the Account manager dialog.
+
+Logging became more configurable. Now from the configuration dialog it's
+possible to enable/disable such facilities like log messages timestamping,
+showing of users going online and offline and "user is typing"
+notifications.
+
+The --bind command parameter was added. Using it it's possible to specify
+a custom IP centericq should use for outgoing connections.
+
+Several patches from Julien LEMOINE <speedblue@debian.org> were applied.
+Among them there was emacs key bindings config option.
+
+The join/part IRC messages are now visible, as well as channel topics.
+
+MSN status related problems were fixed. Like when user set "one the phone"
+or "lunch" status centericq used to show them as being offline.
+
+Minor problems in the Jabber module were fixed. Also, now the program shows
+a list of users on a channel.
+
+A patch from Mark Verboom <mark@verboom.net> was applied. It allows to
+enable chat mode only for specified protocols.
+
+It's possible to enable Russian translation only for selected protocols
+now as well.

@@ -45,12 +45,22 @@ struct servicetype {
 
 class abstracthook {
     protected:
+	enum Encoding {
+	    encUTF, encKOI, encUnknown
+	};
+
+	protocolname proto;
 	imstatus manualstatus;
 	verticalmenu *searchdest;
 	set<hookcapab::enumeration> fcapabs;
 
+	string rusconv(const string &tdir, const string &text);
+	string rushtmlconv(const string &tdir, const string &text);
+	string ruscrlfconv(const string &tdir, const string &text);
+	Encoding guessencoding(const string &text);
+
     public:
-	abstracthook();
+	abstracthook(protocolname aproto);
 
 	virtual void init();
 

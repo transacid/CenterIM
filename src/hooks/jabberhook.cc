@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.45 2003/05/04 22:12:42 konst Exp $
+* $Id: jabberhook.cc,v 1.46 2003/05/06 20:27:30 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,14 +63,14 @@ static string jidtodisp(const string &jid) {
     return user;
 }
 
-#define KOI2UTF(x) siconv(x, conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET, "utf8")
-#define UTF2KOI(x) siconv(x, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET)
+#define KOI2UTF(x) siconv(x, conf.getrussian(jabber) ? "koi8-u" : DEFAULT_CHARSET, "utf8")
+#define UTF2KOI(x) siconv(x, "utf8", conf.getrussian(jabber) ? "koi8-u" : DEFAULT_CHARSET)
 
 // ----------------------------------------------------------------------------
 
 jabberhook jhook;
 
-jabberhook::jabberhook(): jc(0), flogged(false) {
+jabberhook::jabberhook(): abstracthook(jabber), jc(0), flogged(false) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::authrequests);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.62 2003/04/21 22:41:32 konst Exp $
+* $Id: msnhook.cc,v 1.63 2003/05/06 20:27:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -92,7 +92,7 @@ static const char *stat2name(imstatus st) {
 
 // ----------------------------------------------------------------------------
 
-msnhook::msnhook() {
+msnhook::msnhook(): abstracthook(msn) {
     ourstatus = offline;
     fonline = false;
 
@@ -259,7 +259,7 @@ bool msnhook::send(const imevent &ev) {
     }
 
     icqcontact *c = clist.get(ev.getcontact());
-    text = siconv(text, conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET, "utf8");
+    text = siconv(text, conf.getrussian(msn) ? "koi8-u" : DEFAULT_CHARSET, "utf8");
 
     if(c)
     if(c->getstatus() != offline || !c->inlist()) {
@@ -613,7 +613,7 @@ void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, m
 
     mhook.checkinlist(ic);
 
-    string text = siconv(msg->body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
+    string text = siconv(msg->body, "utf8", conf.getrussian(msn) ? "koi8-u" : DEFAULT_CHARSET);
     em.store(immessage(ic, imevent::incoming, text));
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.129 2002/12/23 14:33:53 konst Exp $
+* $Id: icqhook.cc,v 1.130 2003/05/06 20:27:29 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -49,7 +49,7 @@ static const Status stat2int[imstatus_size] = {
     STATUS_AWAY
 };
 
-icqhook::icqhook() {
+icqhook::icqhook(): abstracthook(icq) {
     fonline = false;
     blockmode = Normal;
 

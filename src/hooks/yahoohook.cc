@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.77 2003/04/21 22:41:33 konst Exp $
+* $Id: yahoohook.cc,v 1.78 2003/05/06 20:27:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,7 +52,7 @@ static int stat2int[imstatus_size] = {
     YAHOO_STATUS_IDLE,
 };
 
-yahoohook::yahoohook() : fonline(false) {
+yahoohook::yahoohook() : abstracthook(yahoo), fonline(false) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::synclist);
@@ -68,7 +68,7 @@ yahoohook::~yahoohook() {
 }
 
 void yahoohook::init() {
-    manualstatus = conf.getstatus(yahoo);
+    manualstatus = conf.getstatus(proto);
 
     static struct yahoo_callbacks c;
 
@@ -101,7 +101,7 @@ void yahoohook::init() {
 }
 
 void yahoohook::connect() {
-    icqconf::imaccount acc = conf.getourid(yahoo);
+    icqconf::imaccount acc = conf.getourid(proto);
     int r;
 
     strcpy(pager_host, acc.server.c_str());
@@ -156,8 +156,8 @@ void yahoohook::disconnect() {
 }
 
 void yahoohook::disconnected() {
-    logger.putourstatus(yahoo, getstatus(), ourstatus = offline);
-    clist.setoffline(yahoo);
+    logger.putourstatus(proto, getstatus(), ourstatus = offline);
+    clist.setoffline(proto);
     userenc.clear();
     fonline = false;
     face.log(_("+ [yahoo] disconnected"));
@@ -378,7 +378,7 @@ void yahoohook::setautostatus(imstatus st) {
 	    connect();
 
 	} else {
-	    logger.putourstatus(yahoo, getstatus(), ourstatus = st);
+	    logger.putourstatus(proto, getstatus(), ourstatus = st);
 
 	    if(st == freeforchat) {
 		auto_ptr<char> msg(strdup("free for chat"));
@@ -388,7 +388,7 @@ void yahoohook::setautostatus(imstatus st) {
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], 0, 0);
 
 	    } else {
-		auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(yahoo)).c_str()));
+		auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(proto)).c_str()));
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
 
 	    }
@@ -416,7 +416,7 @@ void yahoohook::requestinfo(const imcontact &ic) {
 }
 
 void yahoohook::userstatus(const string &nick, int st, const string &message, bool away) {
-    imcontact ic(nick, yahoo);
+    imcontact ic(nick, proto);
     icqcontact *c = clist.get(ic);
 
     awaymessages[nick] = rusconv("wk", message);
@@ -473,7 +473,7 @@ vector<icqcontact *> yahoohook::getneedsync() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == yahoo) {
+	if(c->getdesc().pname == proto) {
 	    for(found = false, bud = buddies; bud && *bud && !found; bud++) {
 		found = c->getdesc().nickname == (string) (*bud)->id;
 	    }
@@ -493,7 +493,7 @@ string yahoohook::encanalyze(const string &nick, const string &text) {
 	userenc[nick] = guessencoding(text);
 
     switch(yhook.userenc[nick]) {
-	case encUTF: return siconv(text, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
+	case encUTF: return siconv(text, "utf8", conf.getrussian(proto) ? "koi8-u" : DEFAULT_CHARSET);
 	default: return rushtmlconv("wk", text);
     }
 
@@ -531,7 +531,7 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	i = confmembers[room].begin();
 
 	while(i != confmembers[room].end()) {
-	    if(c = clist.get(imcontact(*i, yahoo)))
+	    if(c = clist.get(imcontact(*i, proto)))
 		searchdest->additem(conf.getcolor(cp_clist_yahoo),
 		    c, (string) " " + *i);
 
@@ -694,7 +694,9 @@ void yahoohook::got_conf_invite(guint32 id, char *who, char *room, char *msg, ch
     }
 
     sprintf(buf, _("The user %s has invited you to the %s conference, the topic there is: %s"),
-	rusconv("wk", inviter).c_str(), rusconv("wk", room).c_str(), rusconv("wk", msg).c_str());
+	yhook.rusconv("wk", inviter).c_str(),
+	yhook.rusconv("wk", room).c_str(),
+	yhook.rusconv("wk", msg).c_str());
 
     text = (string) buf + "\n\n" + _("Current conference members are: ");
     yhook.confmembers[room].push_back(inviter);

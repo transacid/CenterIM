@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.33 2002/12/16 17:58:55 konst Exp $
+* $Id: aimhook.cc,v 1.34 2003/05/06 20:27:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,8 @@
 aimhook ahook;
 
 aimhook::aimhook()
-    : handle(0), fonline(false), flogged(false), ourstatus(offline)
+    : abstracthook(aim), handle(0), fonline(false), flogged(false),
+      ourstatus(offline)
 {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::changepassword);
@@ -447,7 +448,7 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
 	em.store(immessage(imcontact(sender, aim),
-	    imevent::incoming, rushtmlconv("wk", cuthtml(message, true))));
+	    imevent::incoming, ahook.rushtmlconv("wk", cuthtml(message, true))));
     }
 
     DLOG("getmessage");

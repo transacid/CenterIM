@@ -77,9 +77,11 @@ class icqconf {
 
 	int autoaway, autona, ptpmin, ptpmax;
 
-	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
+	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
-	    logonline, logtyping, emacs, chatmode[protocolname_size];
+	    logonline, logtyping, emacs;
+
+	bool chatmode[protocolname_size], russian[protocolname_size];
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost, bindhost;
@@ -98,6 +100,8 @@ class icqconf {
 	    const string &dest, const string &number) const;
 
 	void externalstatuschange(char st, const string &proto) const;
+
+	void initmultiproto(bool p[], string buf);
 
     public:
 	icqconf();
@@ -146,8 +150,8 @@ class icqconf {
 	bool getmakelog() const { return makelog; }
 	void setmakelog(bool slog);
 
-	bool getrussian() const { return russian; }
-	void setrussian(bool frussian);
+	bool getrussian(protocolname pname);
+	void setrussian(protocolname pname, bool frussian);
 
 	bool getbidi() const { return bidi; }
 	void setbidi(bool fbidi);
@@ -157,7 +161,6 @@ class icqconf {
 
 	bool getchatmode(protocolname pname);
 	void setchatmode(protocolname pname, bool fchatmode);
-	void initchatmode(string buf);
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);
