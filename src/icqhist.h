@@ -2,9 +2,9 @@
 #define __ICQHIST_H__
 
 #include "icq.h"
-#include "konst.string.h"
-#include "konst.ui.menu.h"
-#include "konst.fs.h"
+#include "kkstrtext.h"
+#include "cmenus.h"
+#include "kkfsys.h"
 
 #define HIST_MSG_OUT            2
 #define HIST_MSG_IN             4
@@ -40,7 +40,7 @@ class icqhistory {
 	};
 
 	FILE *open(unsigned int uin, const char *mode);
-	linkedlist opens;
+	vector<storedopen> opens;
 
     public:
 	icqhistory();

@@ -3,8 +3,8 @@
 
 #include "icq.h"
 
-#include "konst.process.h"
-#include "konst.ui.menu.h"
+#include "kkiproc.h"
+#include "cmenus.h"
 
 #define PERIOD_KEEPALIVE        100
 #define PERIOD_SELECT           1
@@ -43,7 +43,9 @@ class icqhook {
 	time_t timer_offline, timer_reconnect, timer_ack, timer_checkmail;
 	time_t logontime;
 	verticalmenu *finddest;
-	linkedlist founduins, files;
+
+	vector<unsigned long> founduins;
+	vector<icqfileassociation> files;
 
     public:
 	icqhook();

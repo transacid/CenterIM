@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.5 2001/06/02 07:12:39 konst Exp $
+* $Id: icqhook.cc,v 1.6 2001/06/03 13:25:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,9 +45,6 @@ seq_keepalive(0), n_keepalive(0), connecting(false) {
     timer_offline = timer_ack = timer_keypress = c;
 
     timer_reconnect = timer_checkmail = 0;
-
-    founduins.freeitem = &nothingfree;
-    files.freeitem = &charpointerfree;
 }
 
 icqhook::~icqhook() {
@@ -145,7 +142,7 @@ void icqhook::loggedin(struct icq_link *link) {
     offl.scan(0, ossendall);
     face.update();
     face.log(_("+ logged in"));
-    ihook.files.empty();
+    ihook.files.clear();
 }
 
 void icqhook::disconnected(struct icq_link *link) {
@@ -475,7 +472,7 @@ const char *email, char auth) {
 	rnick.c_str(), rname.c_str(), remail.c_str());
 
 	ihook.finddest->redraw();
-	ihook.founduins.add((void *) uin);
+	ihook.founduins.push_back(uin);
     }
 }
 
@@ -485,39 +482,37 @@ void icqhook::searchdone(struct icq_link *link) {
 
 void icqhook::requestnotify(struct icq_link *link, unsigned long id,
 int result, unsigned int length, void *data) {
-    int i;
+    vector<icqfileassociation>::iterator i;
 
-    for(i = 0; i < ihook.files.count; i++) {
-	icqfileassociation *a = (icqfileassociation *) ihook.files.at(i);
-
-	if(a->seq == id) {
-	    icqcontact *c = (icqcontact *) clist.get(a->uin);
+    for(i = ihook.files.begin(); i != ihook.files.end(); i++) {
+	if(i->seq == id) {
+	    icqcontact *c = (icqcontact *) clist.get(i->uin);
 
 	    if(!c) return;
 
 	    if((result == length) && !result) {
 		face.log(_("+ file %s refused by %s, %lu"),
-		    justfname(a->fname).c_str(),
+		    justfname(i->fname).c_str(),
 		    c->getdispnick().c_str(),
 		    c->getuin());
 		return;
 	    } else {
 		if(result == ICQ_NOTIFY_FILE)
 		if(length == FILE_STATUS_NEXT_FILE) {
-		    if(a->seq == id) {
-			if(a->dir == HIST_MSG_IN) {
+		    if(i->seq == id) {
+			if(i->dir == HIST_MSG_IN) {
 			    face.log(_("+ file %s from %s, %lu received"),
-				justfname(a->fname).c_str(),
+				justfname(i->fname).c_str(),
 				c->getdispnick().c_str(),
-				a->uin);
+				i->uin);
 			} else {
 			    face.log(_("+ file %s to %s, %lu sent"),
-				justfname(a->fname).c_str(),
+				justfname(i->fname).c_str(),
 				c->getdispnick().c_str(),
-				a->uin);
+				i->uin);
 			}
 
-			ihook.files.remove(i);
+			ihook.files.erase(i);
 			return;
 		    }
 		}
@@ -552,7 +547,7 @@ unsigned char level, const char *str) {
 }
 
 unsigned int icqhook::getfinduin(int pos) {
-    return (unsigned int) founduins.at(pos-1);
+    return founduins[pos-1];
 }
 
 #define MIN(x, y)       (x > y ? y : x)
@@ -686,7 +681,7 @@ void icqhook::setfinddest(verticalmenu *m) {
 }
 
 void icqhook::clearfindresults() {
-    founduins.empty();
+    founduins.clear();
 }
 
 struct tm *icqhook::maketm(int hour, int minute, int day, int month, int year) {
@@ -701,7 +696,7 @@ struct tm *icqhook::maketm(int hour, int minute, int day, int month, int year) {
 }
 
 void icqhook::addfile(unsigned int uin, unsigned long seq, string fname, int dir) {
-    files.add(new icqfileassociation(uin, seq, fname, dir));
+    files.push_back(icqfileassociation(uin, seq, fname, dir));
 }
 
 int icqhook::getmanualstatus() {

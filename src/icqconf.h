@@ -12,10 +12,9 @@
 #include <list>
 #include <algorithm>
 
-#include "konst.list.h"
-#include "konst.string.h"
-#include "konst.fs.h"
-#include "konst.ui.func.h"
+#include "kkstrtext.h"
+#include "kkfsys.h"
+#include "common.h"
 #include "icq.h"
 
 #define cp_status           1

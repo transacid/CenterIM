@@ -1,8 +1,7 @@
 #ifndef __ICQCONTACTS_H__
 #define __ICQCONTACTS_H__
 
-#include "konst.list.h"
-#include "konst.ui.menu.h"
+#include "cmenus.h"
 
 /*
 *
@@ -26,31 +25,32 @@
 
 #define SORT_CONTACTS   "#ofidcan_!N"
 
+#include "linkedlist.h"
 #include "icqcontact.h"
 
 class icqcontacts: public linkedlist {
     protected:
-        linkedlist visuins;
+	linkedlist visuins;
 
-        static int clistsort(void *p1, void *p2);
+	static int clistsort(void *p1, void *p2);
 
     public:
-        icqcontacts();
-        ~icqcontacts();
+	icqcontacts();
+	~icqcontacts();
 
-        void remove(unsigned int uin, bool nonicq = false);
-        void load();
-        void save();
-        void send();
-        void nonicq(int id);
-        void order();
+	void remove(unsigned int uin, bool nonicq = false);
+	void load();
+	void save();
+	void send();
+	void nonicq(int id);
+	void order();
 
-        icqcontact* addnew(unsigned int uin,
-            bool notinlist = true,
-            bool nonicq = false);
+	icqcontact* addnew(unsigned int uin,
+	    bool notinlist = true,
+	    bool nonicq = false);
 
-        icqcontact *get(unsigned int uin, bool nonicq = false);
-        icqcontact *getseq2(unsigned short seq2);
+	icqcontact *get(unsigned int uin, bool nonicq = false);
+	icqcontact *getseq2(unsigned short seq2);
 };
 
 extern icqcontacts clist;

@@ -6,11 +6,9 @@
 #include <string>
 #include <dirent.h>
 
-#include "konst.list.h"
-#include "konst.string.h"
-#include "konst.fs.h"
-#include "konst.ui.func.h"
-#include "konst.ui.menu.h"
+#include "kkstrtext.h"
+#include "kkfsys.h"
+#include "cmenus.h"
 
 #include "icq.h"
 

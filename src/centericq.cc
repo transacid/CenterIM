@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.7 2001/06/02 07:12:39 konst Exp $
+* $Id: centericq.cc,v 1.8 2001/06/03 13:25:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -104,6 +104,7 @@ void centericq::exec() {
 	}
 
 	face.draw();
+	checkparallel();
 	mainloop();
     }
 
@@ -580,5 +581,34 @@ void centericq::handlesignal(int signum) {
 	case SIGCHLD:
 	    while(wait3(&status, WNOHANG, 0) > 0);
 	    break;
+    }
+}
+
+void centericq::checkparallel() {
+    string pidfname = (string) getenv("HOME") + "/.centericq/pid", fname;
+    int pid = 0;
+    char exename[512];
+
+    ifstream f(pidfname.c_str());
+    if(f.is_open()) {
+	f >> pid;
+	f.close();
+    }
+
+    if(!(fname = readlink((string) "/proc/" + i2str(pid) + "/exe")).empty()) {
+	if(justfname(fname) == "centericq") {
+	    face.log(_("! another running copy of centericq detected"));
+	    face.log(_("! this may cause problems. pid %lu"), pid);
+	}
+    } else {
+	pid = 0;
+    }
+
+    if(!pid) {
+	ofstream of(pidfname.c_str());
+	if(of.is_open()) {
+	    of << getpid() << endl;
+	    of.close();
+	}
     }
 }

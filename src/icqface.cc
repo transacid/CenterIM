@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.6 2001/06/02 07:12:39 konst Exp $
+* $Id: icqface.cc,v 1.7 2001/06/03 13:25:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,7 +32,6 @@
 #include "icqmlist.h"
 #include "icqoffline.h"
 
-#include "konst.socket.h"
 #include <regex.h>
 
 const char *stryesno(bool i) {

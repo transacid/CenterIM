@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.4 2001/06/02 07:12:39 konst Exp $
+* $Id: icqhist.cc,v 1.5 2001/06/03 13:25:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -106,7 +106,7 @@ bool icqhistory::opencontact(unsigned int uin, time_t lastread = 0) {
     FILE *f;
 
     if(f = open(uin, "r")) {
-	opens.add(new storedopen(f));
+	opens.push_back(storedopen(f));
     } else {
 	ret = false;
     }
@@ -116,7 +116,7 @@ bool icqhistory::opencontact(unsigned int uin, time_t lastread = 0) {
 
 int icqhistory::setpos(int n) {
     char buf[512];
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
 
     rewind(so->f);
     so->rn = 0;
@@ -139,7 +139,7 @@ int icqhistory::setposlastread(time_t lr) {
     int ml = 0, fpos;
     char buf[512];
     bool finished;
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
 
     for(so->rn = 0, rewind(so->f), finished = false; !feof(so->f) && !finished; ) {
 	freads(so->f, buf, 512);
@@ -195,7 +195,7 @@ int &dir) {
     bool finished, mread = false;
     time_t t;
     struct tm tm;
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
 
     so->lastevent.clear();
 
@@ -244,7 +244,7 @@ int &dir) {
 }
 
 void icqhistory::getmessage(string &text) {
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
     vector<string>::iterator i;
 
     for(i = so->lastevent.begin(), text = ""; i != so->lastevent.end(); i++) {
@@ -254,7 +254,7 @@ void icqhistory::getmessage(string &text) {
 }
 
 void icqhistory::geturl(string &url, string &text) {
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
     vector<string>::iterator i;
 
     url = text = "";
@@ -267,7 +267,7 @@ void icqhistory::geturl(string &url, string &text) {
 }
 
 void icqhistory::getfile(unsigned long &seq, string &fname, int &fsize) {
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
     int i;
 
     for(i = 0; i < so->lastevent.size(); i++)
@@ -283,7 +283,7 @@ void icqhistory::getcontact(icqcontactmsg **cont) {
     const char *p;
     icqcontactmsg *cc;
     vector<string>::iterator i;
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
 
     *cont = 0;
 
@@ -310,10 +310,10 @@ void icqhistory::getcontact(icqcontactmsg **cont) {
 }
 
 void icqhistory::closecontact() {
-    if(opens.count) {
-	storedopen *so = (storedopen *) opens.at(opens.count-1);
+    if(!opens.empty()) {
+	vector<storedopen>::iterator so = opens.end()-1;
 	fclose(so->f);
-	opens.remove(opens.count-1);
+	opens.erase(so);
     }
 }
 
@@ -373,6 +373,6 @@ void icqhistory::fillmenu(unsigned int uin, verticalmenu *m) {
 }
 
 int icqhistory::getpos() {
-    storedopen *so = (storedopen *) opens.at(opens.count-1);
+    vector<storedopen>::iterator so = opens.end()-1;
     return so->rn;
 }

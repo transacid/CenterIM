@@ -6,12 +6,11 @@
 #include "icq.h"
 #include "icqhist.h"
 
-#include "konst.ui.dlg.h"
-#include "konst.ui.input.h"
-#include "konst.ui.edit.h"
-#include "konst.ui.text.h"
-#include "konst.ui.fm.h"
-#include "konst.socket.h"
+#include "dialogbox.h"
+#include "textinputline.h"
+#include "texteditor.h"
+#include "textbrowser.h"
+#include "filemanager.h"
 
 #include "icqconf.h"
 #include "icqcontact.h"

@@ -6,33 +6,34 @@
 #include <sys/wait.h>
 #include <fstream>
 
-#include "konst.socket.h"
-#include "konst.string.h"
+#include "kkstrtext.h"
+#include "kkfsys.h"
 #include "icqcontact.h"
 
 class centericq {
     protected:
-        static void handlesignal(int signum);
+	static void handlesignal(int signum);
+	void checkparallel();
 
     public:
-        centericq();
-        ~centericq();
+	centericq();
+	~centericq();
 
-        void sendmsg(unsigned int uin, string text);
-        void sendurl(unsigned int uin, string url, string text);
-        void fwdmsg(unsigned int uin, string text);
-        void commandline(int argc, char **argv);
-        void exec();
-        void reg();
-        void mainloop();
-        void userinfo(unsigned int uin, bool nonicq = false);
-        void changestatus();
-        void updatedetails();
-        void updateconf();
-        void sendfiles(unsigned int uin);
-        void find();
-        void nonicq(int id);
-        void checkmail();
+	void sendmsg(unsigned int uin, string text);
+	void sendurl(unsigned int uin, string url, string text);
+	void fwdmsg(unsigned int uin, string text);
+	void commandline(int argc, char **argv);
+	void exec();
+	void reg();
+	void mainloop();
+	void userinfo(unsigned int uin, bool nonicq = false);
+	void changestatus();
+	void updatedetails();
+	void updateconf();
+	void sendfiles(unsigned int uin);
+	void find();
+	void nonicq(int id);
+	void checkmail();
 };
 
 extern centericq cicq;
