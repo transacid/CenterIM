@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 
-#define PROXY_TIMEOUT   30
+#define PROXY_TIMEOUT   10
     // HTTP proxy timeout in seconds (for the CONNECT method)
 
 #ifdef HAVE_OPENSSL
@@ -130,6 +130,8 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 	err = cw_connect(sockfd, (struct sockaddr *) &paddr, sizeof(paddr), proxy_ssl);
     }
 
+    errno = ECONNREFUSED;
+
     if(!err) {
 	struct sockaddr_in *sin = (struct sockaddr_in *) serv_addr;
 	char *ip = inet_ntoa(sin->sin_addr), c;
@@ -152,6 +154,9 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 	    tv.tv_usec = 0;
 
 	    err = select(sockfd+1, &rfds, 0, 0, &tv);
+
+	    if(err < 1) err = -1;
+
 	    if(err != -1 && FD_ISSET(sockfd, &rfds)) {
 		err = read(sockfd, &c, 1);
 		if(err != -1) {
@@ -177,6 +182,10 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 	    err = 0;
 
 	fcntl(sockfd, F_SETFL, fl);
+	if(fl & O_NONBLOCK) {
+	    errno = EINPROGRESS;
+	    err = -1;
+	}
     }
 
     in_http_connect = 0;
