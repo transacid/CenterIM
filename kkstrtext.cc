@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.12 2002/02/23 11:34:07 konst Exp $
+* $Id: kkstrtext.cc,v 1.13 2002/02/28 12:07:00 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -784,13 +784,6 @@ void breakintolines(string text, vector<string> &lst, int linelen = 0) {
 	if((npos = text.find("\n")) == -1)
 	    npos = text.size();
 
-	while((dpos = text.substr(0, npos).find("\t")) != -1) {
-	    i = rtabmargin(false, dpos)-dpos;
-	    npos += i-1;
-	    text.erase(dpos, 1);
-	    text.insert(dpos, sub.assign(i, ' '));
-	}
-
 	if(linelen)
 	if(npos > linelen) {
 	    npos = linelen;
@@ -803,6 +796,12 @@ void breakintolines(string text, vector<string> &lst, int linelen = 0) {
 
 	if(text.substr(0, 1).find_first_of("\n ") != -1)
 	    text.erase(0, 1);
+
+	while((dpos = sub.find("\t")) != -1) {
+	    i = rtabmargin(false, dpos)-dpos;
+	    sub.erase(dpos, 1);
+	    sub.insert(dpos, string(i, ' '));
+	}
 
 	lst.push_back(sub);
     }
