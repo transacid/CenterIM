@@ -1240,3 +1240,29 @@ The Yahoo! module was extended with the the feature to send and receive
 files, view conference members and creating own conferences. Before it
 was only possible to join to conferences being created by others. Also
 it's now possible to fetch custom status messages in the network.
+
+4.8.8
+-----
+
+Fixed a bug resulted into inability to read events received through the
+e-mail gateway and the ICQ web pager.
+
+The MSN contact list items' duplication problem was fixed.
+
+Support for the 6th protocol - Jabber, was added. It's already possible
+to send and receive messages, read away messages, maintain contact list
+and register new nicks. I heard a lot about the standard, but then after
+studying it a little, I didn't get disappointed, for it's really nicely
+designed. So, centericq is now delivering the power of the free
+communication standards to all the console freaks (like myself).
+
+The build problem under the Redhat 8.0 distribution was fixed.
+
+The "Not in list" contact list node is handled in a nicer way now. When
+centericq is unable to read the status of a contact which is not
+included into the permanent contact list, it just doesn't show it
+eliminating cases when an offline contact is shown online just because
+it's not on the list.
+
+A long-awaited interface feature to open an event in the full-screen
+mode was added. Check out the F9 key in the message view mode.
