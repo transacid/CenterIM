@@ -57,6 +57,12 @@ if test "$build_gg" = "yes"; then
 	fi
     fi
 
+    AC_C_BIGENDIAN
+
+    if test "x$ac_cv_c_bigendian" = "xyes"; then
+	AC_DEFINE([WORDS_BIGENDIAN])
+    fi
+
     AC_CHECK_HEADERS([stdint.h sys/types.h],,)
 fi
 
