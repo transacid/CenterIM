@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.146 2004/02/22 13:03:59 konst Exp $
+* $Id: icqhook.cc,v 1.147 2004/03/07 13:44:41 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,6 +83,7 @@ icqhook::icqhook(): abstracthook(icq) {
     cli.search_result.connect(this, &icqhook::search_result_cb);
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
     cli.self_contact_status_change_signal.connect(this, &icqhook::self_contact_status_change_cb);
+    cli.sbl_received.connect(this, &icqhook::sbl_received_cb);
 
 #ifdef DEBUG
     cli.logger.connect(this, &icqhook::logger_cb);
@@ -154,8 +155,13 @@ void icqhook::connect() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == proto && c->getdesc().uin)
+	if(c->getdesc().pname == proto && c->getdesc().uin) {
+	    icqcontact::basicinfo bi = c->getbasicinfo();
+	    bi.authawait = true;
+	    c->setbasicinfo(bi);
+
 	    addContact(c->getdesc().uin, groups.getname(c->getgroupid()));
+	}
     }
 
     fonline = true;
@@ -491,11 +497,22 @@ void icqhook::sendnewuser(const imcontact &ic) {
 	    ContactRef cont = addContact(ic.uin, groups.getname(cc->getgroupid()));
 	    cli.fetchSimpleContactInfo(cont);
 	    cli.fetchDetailContactInfo(cont);
-	    cli.uploadServerBasedContact(cont);
+
+	    if(sblrecv) {
+		ContactTree::Group &g = cli.getContactTree().lookup_group_containing_contact(cont);
+
+		cont->setServerSideInfo(g.get_id(), 0);
+		cont->setServerBased(true);
+		cont->setAuthAwait(cc->getbasicinfo().authawait);
+
+		cli.uploadServerBasedContact(cont);
+	    }
 
 	    lastadd = timer_current;
+
 	} else {
 	    uinstosend.push_back(ic);
+
 	}
     }
 }
@@ -916,6 +933,63 @@ void icqhook::processemailevent(const string &sender, const string &email, const
     }
 }
 
+void icqhook::updatecontact(icqcontact *c) {
+    if(sblrecv) {
+	ContactTree &tree = cli.getContactTree();
+	ContactRef ic = tree[c->getdesc().uin];
+
+	if(ic.get()) {
+	    string gname = groups.getname(c->getgroupid());
+	    ContactTree::Group &oldg = tree.lookup_group_containing_contact(ic);
+	    ContactTree::Group *newg = 0;
+
+	    if(oldg.get_label() != gname) {
+		ContactTree::iterator curr = tree.begin();
+		while(curr != tree.end()) {
+		    if((*curr).get_label() == gname) {
+			newg = &(*curr);
+			break;
+		    }
+		    ++curr;
+		}
+
+		cli.removeServerBasedContact(ic);
+
+		if(!newg) newg = &(tree.add_group(gname));
+		tree.relocate_contact(ic, oldg, *newg);
+
+		ic->setServerSideInfo(newg->get_id(), ic->getServerSideID());
+		ic->setAuthAwait(c->getbasicinfo().authawait);
+
+		cli.uploadServerBasedContact(ic);
+	    }
+	}
+    }
+}
+
+void icqhook::renamegroup(const string &oldname, const string &newname) {
+    if(logged()) {
+/*
+	ContactTree::Group *gp = 0;
+	ContactTree &ct = cli.getContactTree();
+
+	ContactTree::iterator curr = ct.begin();
+	while(curr != ct.end()) {
+	    if((*curr).get_label() == oldname) {
+		gp = &(*curr);
+		break;
+	    }
+	    ++curr;
+	}
+
+	if(gp) {
+	    gp->set_label(newname);
+	    cli.uploadServerBasedGroup(*gp);
+	}
+*/
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -1034,6 +1108,13 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	    icqcontact::basicinfo bi = c->getbasicinfo();
 	    bi.authawait = false;
 	    c->setbasicinfo(bi);
+
+	    ContactRef cr = cli.getContactTree()[ic.uin];
+	    if(cr.get()) {
+		cr->setAuthAwait(false);
+		cli.removeServerBasedContact(cr);
+		cli.uploadServerBasedContact(cr);
+	    }
 	}
 
 	if(r->isGranted()) {
@@ -1278,6 +1359,9 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 	    line += " " + binfo.fname + " " + binfo.lname;
 	    if(!binfo.email.empty()) line += " <" + binfo.email + ">";
 
+	    binfo.requiresauth = cont->getAuthReq();
+	    binfo.authawait = cont->getAuthAwait();
+
 	    c->setbasicinfo(binfo);
 
 	    foundguys.push_back(c);
@@ -1317,7 +1401,9 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
     face.update();
 }
+
 /*
+
 void icqhook::password_changed_cb(PasswordChangeEvent *ev) {
     if(ev->isSuccess()) {
 	icqconf::imaccount acc = conf.getourid(icq);
@@ -1327,25 +1413,63 @@ void icqhook::password_changed_cb(PasswordChangeEvent *ev) {
     }
 }
 
-void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
-    const ContactList &lst = ev->getContactList();
-    ContactList::const_iterator i = lst.begin();
-    icqcontact *c;
+*/
 
-    if(ev->getType() == ServerBasedContactEvent::Fetch) {
-	while(i != lst.end()) {
-	    imcontact cont((*i)->getUIN(), icq);
-	    if(!clist.get(cont)) clist.addnew(cont, false);
-	    ++i;
+void icqhook::sbl_received_cb(SBLReceivedEvent *ev) {
+    icqcontact *cc;
+    ContactTree &tree = cli.getContactTree();
+    ContactTree::iterator curr = ev->tree.begin();
+
+    sblrecv = false;
+
+    while(curr != ev->tree.end()) {
+	ContactTree::Group *lg = 0;
+
+	ContactTree::iterator igl = tree.begin();
+	while(igl != tree.end()) {
+	    if((*igl).get_label() == (*curr).get_label()) {
+		lg = &(*igl);
+		break;
+	    }
+	    ++igl;
 	}
 
-    } else if(ev->getType() == ServerBasedContactEvent::Upload) {
+	if(!lg) {
+	    lg = &(tree.add_group((*curr).get_label(), (*curr).get_id()));
+	} else {
+	    lg->set_id((*curr).get_id());
+	}
 
-    } else if(ev->getType() == ServerBasedContactEvent::Remove) {
+	ContactTree::Group::iterator ig = curr->begin();
+	while(ig != curr->end()) {
+	    imcontact ic((*ig)->getUIN(), proto);
+	    clist.updateEntry(ic, (*curr).get_label());
 
+	    ContactRef nc = tree[ic.uin];
+	    if(nc.get()) {
+		ContactTree::Group &cg = tree.lookup_group_containing_contact(nc);
+		tree.relocate_contact(nc, cg, *lg);
+	    } else {
+		nc = lg->add(new Contact(ic.uin));
+		nc->setAuthAwait((*ig)->getAuthAwait());
+	    }
+
+	    if(cc = clist.get(ic)) {
+		icqcontact::basicinfo bi = cc->getbasicinfo();
+		bi.authawait = nc->getAuthAwait();
+		cc->setbasicinfo(bi);
+	    }
+
+	    nc->setServerBased(true);
+	    nc->setServerSideInfo((*ig)->getServerSideGroupID(), (*ig)->getServerSideID());
+
+	    ++ig;
+	}
+	++curr;
     }
+
+    sblrecv = true;
 }
-*/
 
 ContactRef icqhook::addContact(unsigned int uin, const string &groupname) {
     ContactTree& ct = cli.getContactTree();

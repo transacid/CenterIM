@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.212 2004/02/26 08:07:30 konst Exp $
+* $Id: icqface.cc,v 1.213 2004/03/07 13:44:41 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -587,6 +587,10 @@ void icqface::fillcontactlist() {
 	ig = find(groups.begin(), groups.end(), c->getgroupid());
 	if(ig != groups.end()) {
 	    g = &(*ig);
+	} else {
+	    cout << "WTF! no group found, id = " << c->getgroupid() << endl;
+	    cout << "uin = " << c->getdesc().uin << endl;
+	    cout << "nick = " << c->getdesc().nickname << endl;
 	}
 
 	if(c->getdesc() == contactroot)
@@ -829,7 +833,7 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
 		case 2:
 		    if(r) {
 			c = (icqcontact *) db.getmenu()->getref(r-1);
-			if(c) cicq.addcontact(c->getdesc());
+			if(c) cicq.addcontact(c->getdesc(), c->getbasicinfo().requiresauth);
 		    }
 		    break;
 
@@ -2681,14 +2685,14 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 
 void icqface::fullscreenize(const imevent *ev) {
     textwindow w(0, 1, COLS, LINES-1, conf.getcolor(cp_main_text), TW_NOBORDER);
-    w.open();
+    textbrowser tb(0, 4, COLS, LINES-1, conf.getcolor(cp_main_text));
 
     int k;
     char buf[512], *fmt = 0;
     vector<string> lines;
     vector<string>::const_iterator il;
 
-    breakintolines(ev->gettext(), lines, COLS);
+    w.open();
 
     switch(ev->getdirection()) {
 	case imevent::incoming: fmt = _("%s from %s, received on %s"); break;
@@ -2701,17 +2705,14 @@ void icqface::fullscreenize(const imevent *ev) {
 
     w.write(0, 1, conf.getcolor(cp_main_highlight), buf);
 
-    for(il = lines.begin(); il != lines.end() && (il-lines.begin() < LINES-1); ++il)
-	w.write(0, il-lines.begin()+3, *il);
+    tb.setbuf(ev->gettext());
 
     blockmainscreen();
-    status(_("ESC or F9 to close"));
+    status(_("ESC or F9 to close, Up/Down and PgUp/PgDn to scroll"));
 
-    do {
-	cicq.idle();
-	k = getkey();
-
-    } while(k != KEY_ESC && k != KEY_F(9));
+    tb.idle = &textbrowseridle;
+    tb.otherkeys = &fullscreenkeys;
+    tb.open();
 
     unblockmainscreen();
     status("@");
@@ -3117,6 +3118,15 @@ int icqface::statuskeys(verticalmenu &m, int k) {
     char *p = strchr(status_order, k);
     if (p)
 	return (1 + p - status_order);
+    return -1;
+}
+
+int icqface::fullscreenkeys(textbrowser &m, int k) {
+    switch(k) {
+	case KEY_F(9):
+	    return 0;
+    }
+
     return -1;
 }
 

@@ -51,7 +51,9 @@ class icqcontacts: public linkedlist {
 
 	void setoffline(protocolname pname);
 
-	icqcontact* addnew(const imcontact &adesc, bool notinlist = true);
+	icqcontact* addnew(const imcontact &adesc,
+	    bool notinlist = true, int agroupid = 0,
+	    bool reqauth = false);
 
 	icqcontact *get(const imcontact &adesc);
 	icqcontact *getmobile(const string &anumber);

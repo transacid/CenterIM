@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.181 2004/02/01 17:52:09 konst Exp $
+* $Id: centericq.cc,v 1.182 2004/03/07 13:44:40 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1291,7 +1291,7 @@ string centericq::quotemsg(const string &text) {
     return ret;
 }
 
-icqcontact *centericq::addcontact(const imcontact &ic) {
+icqcontact *centericq::addcontact(const imcontact &ic, bool reqauth) {
     icqcontact *c;
     int groupid = 0;
 
@@ -1301,6 +1301,12 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
 	    return 0;
 	}
     }
+
+    imauthorization auth(ic, imevent::outgoing, imauthorization::Request, "");
+
+    if(reqauth)
+    if(!face.eventedit(auth))
+	return 0;
 
     if(conf.getgroupmode() != icqconf::nogroups) {
 	groupid = face.selectgroup(_("Select a group to add the user to"));
@@ -1323,15 +1329,18 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
 	    }
 
 	} else {
-	    c = clist.addnew(ic, false);
+	    c = clist.addnew(ic, false, groupid, reqauth);
 	}
 
     } else {
-	c->includeintolist();
+	c->includeintolist(groupid, reqauth);
 
     }
 
-    c->setgroupid(groupid);
+    if(reqauth) {
+	em.store(auth);
+    }
+
     face.log(_("+ %s has been added to the list"), c->getdesc().totext().c_str());
     face.relaxedupdate();
 

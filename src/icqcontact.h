@@ -23,12 +23,12 @@ class icqcontact {
 	struct basicinfo {
 	    basicinfo()
 		: country(0), requiresauth(false), webaware(false),
-		  authawait(false), autosync(true), randomgroup(0) { };
+		  authawait(false), randomgroup(0) { };
 
 	    string fname, lname, email, city, state, phone, fax;
 	    string street, cellular, zip;
 	    unsigned short country, randomgroup;
-	    bool requiresauth, webaware, authawait, autosync;
+	    bool requiresauth, webaware, authawait;
 	};
 
 	struct moreinfo {
@@ -135,6 +135,7 @@ class icqcontact {
 	void save();
 	void remove();
 	void excludefromlist();
+	void includeintolist(int agroupid, bool reqauth);
 	void includeintolist();
 	bool inlist() const;
 

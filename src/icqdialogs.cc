@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.139 2004/02/21 15:31:00 konst Exp $
+* $Id: icqdialogs.cc,v 1.140 2004/03/07 13:44:41 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -657,7 +657,6 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	    if(ourdetails) {
 		tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno(bi.webaware));
 		tree->addleaff(i, 0, 42, _(" Random chat group : %s "), strrandomgroup(bi.randomgroup));
-		tree->addleaff(i, 0, 45, _(" Store contact list server-side : %s "), stryesno(bi.autosync));
 	    } else {
 		tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno(bi.requiresauth));
 	    }
@@ -817,7 +816,6 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		case 42: selectrandomgroup(bi.randomgroup); break;
 		case 43: bi.webaware = !bi.webaware; break;
 		case 44: bi.requiresauth = !bi.requiresauth; break;
-		case 45: bi.autosync = !bi.autosync; break;
 		case 46: {
 		    abstracthook &h = gethook(passinfo.pname);
 		    vector<string> servs = h.getservices(servicetype::registration);

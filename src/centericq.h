@@ -69,7 +69,7 @@ class centericq {
 	void joindialog();
 	void linkfeed();
 
-	icqcontact *addcontact(const imcontact &ic);
+	icqcontact *addcontact(const imcontact &ic, bool reqauth = false);
 
 	bool idle(int options = 0);
 	void exectimers();

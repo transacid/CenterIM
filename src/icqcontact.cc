@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.91 2004/02/22 13:03:59 konst Exp $
+* $Id: icqcontact.cc,v 1.92 2004/03/07 13:44:40 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -387,6 +387,13 @@ void icqcontact::excludefromlist() {
     string fname = getdirname() + "excluded";
     if(f = fopen(fname.c_str(), "w")) fclose(f);
     finlist = false;
+}
+
+void icqcontact::includeintolist(int agroupid, bool reqauth) {
+    binfo.requiresauth = binfo.authawait = reqauth;
+    if(groupid) groupid = agroupid;
+
+    includeintolist();
 }
 
 void icqcontact::includeintolist() {

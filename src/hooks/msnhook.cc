@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.75 2004/02/26 08:07:30 konst Exp $
+* $Id: msnhook.cc,v 1.76 2004/03/07 13:44:41 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -473,12 +473,12 @@ bool msnhook::getfevent(invitation_ftp *fhandle, imfile &fr) {
 }
 
 void msnhook::updatecontact(icqcontact *c) {
-    string gname, nick = c->getdesc().nickname;
+    string gname, nick = nicknormalize(c->getdesc().nickname);
     vector<msnbuddy>::const_iterator ib = find(slst["FL"].begin(), slst["FL"].end(), nick);
 
     if(ib != slst["FL"].end() && logged() && conf.getgroupmode() != icqconf::nogroups)
     if(mhook.findgroup(c->getdesc(), gname) != ib->gid) {
-	msn_del_from_list(&conn, "FL", nicknormalize(nick).c_str());
+	msn_del_from_list(&conn, "FL", nick.c_str());
 	sendnewuser(c->getdesc());
     }
 }

@@ -115,6 +115,7 @@ class icqface {
 	static int findreskeys(dialogbox &db, int k);
 	static int eventviewkeys(dialogbox &db, int k);
 	static int statuskeys(verticalmenu &m, int k);
+	static int fullscreenkeys(textbrowser &m, int k);
 
 	static void editidle(texteditor &e);
 	static void textbrowseridle(textbrowser &b);

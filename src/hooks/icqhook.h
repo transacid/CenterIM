@@ -21,7 +21,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	} blockmode;
 
 	time_t timer_poll, timer_resolve;
-	bool fonline, flogged;
+	bool fonline, flogged, sblrecv;
 	unsigned int reguin;
 	SearchResultEvent *searchevent;
 
@@ -43,6 +43,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void want_auto_resp_cb(ICQMessageEvent *ev);
 	void search_result_cb(SearchResultEvent *ev);
 //        void server_based_contact_list_cb(ServerBasedContactEvent *ev);
+	void sbl_received_cb(SBLReceivedEvent *ev);
 	void self_contact_userinfo_change_cb(UserInfoChangeEvent *ev);
 	void self_contact_status_change_cb(StatusChangeEvent *ev);
 //        void password_changed_cb(PasswordChangeEvent *ev);
@@ -91,6 +92,9 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);
+
+	void updatecontact(icqcontact *c);
+	void renamegroup(const string &oldname, const string &newname);
 };
 
 extern icqhook ihook;
