@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.1 2001/06/27 13:42:07 konst Exp $
+* $Id: conscommon.cc,v 1.2 2001/06/29 23:33:56 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,7 +45,7 @@ void kinterface() {
     cbreak();
     noecho();
     keypad(stdscr, 1);
-    raw();
+//    raw();
     
     start_color();
     atexit(kendinterface);

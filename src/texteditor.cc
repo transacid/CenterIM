@@ -58,7 +58,7 @@
 #define EM_CTRL       4
 #define EM_MANUAL     8
 
-#define CHECKLOADED(a)	if(!getfcount()) return a;
+#define CHECKLOADED	if(!getfcount()) return;
 
 texteditor::texteditor():
 otherkeys(0), fn(-1), wrap(false), abscol(0), idle(0),
@@ -353,7 +353,7 @@ void texteditor::addblock(int x1, int y1, int x2, int y2, int color) {
 }
 
 void texteditor::startmark() {
-    CHECKLOADED();
+    CHECKLOADED;
     curfile->markmode = curfile->showmarked = true;
     curfile->markreverse = false;
     curfile->markblock->x1 = curfile->markblock->x2 = CURCOL;
@@ -363,14 +363,14 @@ void texteditor::startmark() {
 }
 
 void texteditor::endmark() {
-    CHECKLOADED();
+    CHECKLOADED;
     marktext();
     curfile->markmode = false;
 }
 
 void texteditor::marktext() {
     bool corrx, corry, sameline;
-    CHECKLOADED();
+    CHECKLOADED;
 
     if(curfile->markreverse) {
 	corrx = curfile->markblock->x2 >= CURCOL;
@@ -400,7 +400,7 @@ void texteditor::marktext() {
 
 void texteditor::copymark(FILE *f) {
     int i;
-    CHECKLOADED();
+    CHECKLOADED;
 
     for(i = curfile->markblock->y1; i <= curfile->markblock->y2; i++) {
 
@@ -437,7 +437,7 @@ void texteditor::copymark(char *p, int maxlen) {
 }
 
 void texteditor::delmark() {
-    CHECKLOADED();
+    CHECKLOADED;
 
     int i, newcol, newrow, line = 0;
     char *c, *p, *sl, *el;
@@ -499,7 +499,7 @@ void texteditor::delmark() {
 }
 
 void texteditor::clearmark() {
-    CHECKLOADED();
+    CHECKLOADED;
     memset(curfile->markblock, 0, sizeof(struct textblock));
     draw();
 }
@@ -521,7 +521,7 @@ void texteditor::insert(FILE *f) {
 }
 
 void texteditor::insert(char *p) {
-    CHECKLOADED();
+    CHECKLOADED;
     if(p) {
 	char *sl = strdup(CURSTRING), *el = strdup(CURSTRING+CURCOL);
 	char *curpos = p, buf[1024], *s;
@@ -1686,7 +1686,6 @@ bool texteditor::find(const char *needle, const char *options, int *col, int *li
 }
 
 bool texteditor::ismark() {
-    CHECKLOADED(false);
     return curfile ? curfile->markmode : false;
 }
 
@@ -1756,7 +1755,7 @@ void texteditor::clearlight(int fn) {
 }
 
 void texteditor::switchmark() {
-    CHECKLOADED();
+    CHECKLOADED;
 
     if(ismark()) endmark();
     else startmark();
@@ -1767,7 +1766,7 @@ void texteditor::shiftident(int x1, int y1, int x2, int y2, int delta) {
     char *p, *newp;
     string origtext, repltext;
 
-    CHECKLOADED();
+    CHECKLOADED;
     if(!delta) return;
     if(x1) starty++;
     if(!x2) endy--;
@@ -1807,7 +1806,7 @@ void texteditor::shiftident(int x1, int y1, int x2, int y2, int delta) {
 }
 
 void texteditor::shiftident(int delta) {
-    CHECKLOADED();
+    CHECKLOADED;
     shiftident(curfile->markblock->x1, curfile->markblock->y1,
     curfile->markblock->x2, curfile->markblock->y2, delta);
 }
@@ -1819,7 +1818,7 @@ void texteditor::undo() {
     bool firstpass = true, finished = false;
     undolog = show = false;
 
-    CHECKLOADED();    
+    CHECKLOADED;
     while(curfile->undo->count && !finished) {
 	ur = (undorecord *) curfile->undo->at(curfile->undo->count-1);
 
@@ -1903,7 +1902,7 @@ int texteditor::findhighline(void *p1, void *p2) {
 }
 
 void texteditor::shiftmarkedblock(int delta) {
-    CHECKLOADED();
+    CHECKLOADED;
     if(CURLINE <= curfile->markblock->y1) {
 	curfile->markblock->y1 += delta;
 	curfile->markblock->y2 += delta;
