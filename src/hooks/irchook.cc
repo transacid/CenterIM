@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.29 2002/07/07 22:58:18 konst Exp $
+* $Id: irchook.cc,v 1.30 2002/07/08 16:16:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -78,6 +78,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_CHAT_LEFT, &chatleft);
     firetalk_register_callback(handle, FC_CHAT_KICKED, &chatkicked);
     firetalk_register_callback(handle, FC_ERROR, &errorhandler);
+    firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &nickchanged);
 
 #ifdef DEBUG
     firetalk_register_callback(handle, FC_LOG, &log);
@@ -554,6 +555,29 @@ void irchook::rawcommand(const string &cmd) {
     }
 }
 
+void irchook::channelfatal(const string &room, const char *fmt, ...) {
+    va_list ap;
+    char buf[1024];
+    vector<channelInfo>::iterator i;
+
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    va_end(ap);
+
+    i = find(channels.begin(), channels.end(),
+	(string) (room.substr(0, 1) != "#" ? "#" : "") + room);
+
+    if(i != channels.end()) {
+	imcontact cont(room, irc);
+	icqcontact *c = clist.get(cont);
+	if(!c) c = clist.addnew(cont);
+	c->setstatus(offline);
+	i->joined = i->fetched = false;
+	i->contactlist = true;
+	em.store(immessage(cont, imevent::incoming, buf));
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void irchook::userstatus(const string &nickname, imstatus st) {
@@ -1015,29 +1039,32 @@ void irchook::errorhandler(void *connection, void *cli, ...) {
 	    if(strlen(subject))
 		irhook.channelfatal(subject, _("* %s"), description);
 	    break;
+	case FE_BADUSER:
+	    // Cannot fetch user's info
+	    if(subject)
+	    if(strlen(subject))
+	    if(c = clist.get(imcontact(subject, irc)))
+		c->setstatus(offline);
+	    break;
     }
 }
 
-void irchook::channelfatal(const string &room, const char *fmt, ...) {
+void irchook::nickchanged(void *connection, void *cli, ...) {
     va_list ap;
-    char buf[1024];
-    vector<channelInfo>::iterator i;
+    icqcontact *c;
 
-    va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    va_start(ap, cli);
+    char *oldnick = va_arg(ap, char *);
+    char *newnick = va_arg(ap, char *);
     va_end(ap);
 
-    i = find(channels.begin(), channels.end(),
-	(string) (room.substr(0, 1) != "#" ? "#" : "") + room);
-
-    if(i != channels.end()) {
-	imcontact cont(room, irc);
-	icqcontact *c = clist.get(cont);
-	if(!c) c = clist.addnew(cont);
-	c->setstatus(offline);
-	i->joined = i->fetched = false;
-	i->contactlist = true;
-	em.store(immessage(cont, imevent::incoming, buf));
+    if(oldnick && newnick) {
+	if(c = clist.get(imcontact(oldnick, irc)))
+	if(!c->inlist()) {
+	    c->setnick(newnick);
+	    if(c->getdispnick() == oldnick)
+		c->setdispnick(newnick);
+	}
     }
 }
 

@@ -66,6 +66,7 @@ class irchook: public abstracthook {
 	static void chatleft(void *connection, void *cli, ...);
 	static void chatkicked(void *connection, void *cli, ...);
 	static void errorhandler(void *connection, void *cli, ...);
+	static void nickchanged(void *connection, void *cli, ...);
 
 	void rawcommand(const string &cmd);
 	void channelfatal(const string &room, const char *fmt, ...);

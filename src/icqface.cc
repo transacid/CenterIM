@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.121 2002/07/03 15:31:04 konst Exp $
+* $Id: icqface.cc,v 1.122 2002/07/08 16:16:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -591,16 +591,16 @@ bool icqface::findresults(const imsearchparams &sp) {
 	conf.getcolor(cp_main_selected), _("Details"), _("Message"), _("Add"),
 	_("New search"), 0));
 
-    gethook(sp.pname).lookup(sp, *db.getmenu());
-
     db.addautokeys();
     db.redraw();
 
-    db.idle = &dialogidle;
-    db.otherkeys = &findreskeys;
-
     mainw.write(sizeWArea.x1+2, sizeWArea.y1,
 	conf.getcolor(cp_main_highlight), _("Searching contacts.."));
+
+    gethook(sp.pname).lookup(sp, *db.getmenu());
+
+    db.idle = &dialogidle;
+    db.otherkeys = &findreskeys;
 
     workarealine(sizeWArea.y1+2);
     workarealine(sizeWArea.y2-2);
