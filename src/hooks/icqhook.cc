@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.50 2002/02/05 10:41:10 konst Exp $
+* $Id: icqhook.cc,v 1.51 2002/02/05 16:15:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -464,11 +464,11 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     !params.city.empty() || !params.state.empty() ||
     !params.company.empty() || !params.department.empty() ||
     !params.position.empty() || params.onlineonly ||
-    params.country || params.minage || params.maxage ||
-    params.language || (sex != ICQ2000::SEX_UNSPECIFIED)) {
+    params.country || params.language ||
+    (sex != ICQ2000::SEX_UNSPECIFIED) || (params.agerange != range_NoRange)) {
 	searchevent = cli.searchForContacts(params.nick, params.firstname,
-	    params.lastname, params.email, params.minage, params.maxage,
-	    sex, params.language, params.city, params.state, params.country,
+	    params.lastname, params.email, params.agerange, sex,
+	    params.language, params.city, params.state, params.country,
 	    params.company, params.department, params.position,
 	    params.onlineonly);
     } else {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.46 2002/02/05 10:41:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.47 2002/02/05 16:15:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -93,8 +93,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
 		tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
 
-		tree.addleaff(i, 0, 15, _(" Min. age : %s "), strint(s.minage));
-		tree.addleaff(i, 0, 16, _(" Max. age : %s "), strint(s.maxage));
+		tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange[s.agerange]);
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
 		tree.addleaff(i, 0, 18, _(" Language : %s "), strlanguage(s.language));
 
@@ -138,8 +137,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 12: s.email = inputstr(_("E-Mail: "), s.email); break;
 		    case 13: s.firstname = inputstr(_("First name: "), s.firstname); break;
 		    case 14: s.lastname = inputstr(_("Last name: "), s.lastname); break;
-		    case 15: s.minage = atol(inputstr(_("Minimal age: "), strint(s.minage)).c_str()); break;
-		    case 16: s.maxage = atol(inputstr(_("Maximal age: "), strint(s.maxage)).c_str()); break;
+		    case 15: selectagerange(s.agerange); break;
 		    case 17: selectgender(s.gender); break;
 		    case 18: selectlanguage(s.language); break;
 		    case 19: s.city = inputstr(_("City: "), s.city); break;
@@ -424,6 +422,26 @@ void icqface::selectgender(imgender &f) {
     m.close();
 
     if(i) f = (imgender) ((int) m.getref(i-1));
+}
+
+void icqface::selectagerange(ICQ2000::AgeRange &r) {
+    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-8, 18, LINES-3, conf.getcolor(cp_dialog_menu)));
+
+    for(ICQ2000::AgeRange i = ICQ2000::range_NoRange; i <= ICQ2000::range_60_above; (int) i += 1) {
+	const char *p = stragerange[i];
+
+	if(i == ICQ2000::range_NoRange)
+	    p = _("none");
+
+	m.additemf(0, (int) i, " %s", p);
+	if(i == r) m.setpos(m.getcount()-1);
+    }
+
+    int i = m.open();
+    m.close();
+
+    if(i) r = (ICQ2000::AgeRange) ((int) m.getref(i-1));
 }
 
 void icqface::editabout(string &fabout) {

@@ -128,6 +128,7 @@ class icqface {
 
 	void selectcountry(unsigned short &f);
 	void selectlanguage(unsigned short &f);
+	void selectagerange(ICQ2000::AgeRange &r);
 
 	void editabout(string &fabout);
 
@@ -226,6 +227,16 @@ static const char *strgender[imgender_size] = {
     _("Not specified"),
     _("Male"),
     _("Female")
+};
+
+static const char *stragerange[ICQ2000::range_60_above+1] = {
+  "",
+  "18-22",
+  "23-29",
+  "30-39",
+  "40-49",
+  "50-59",
+  _("60-above")
 };
 
 static const char *eventviewresultnames[icqface::eventviewresult_size] = {

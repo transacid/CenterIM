@@ -2,6 +2,7 @@
 #define __IMCONTROLLER_H__
 
 #include "icqconf.h"
+#include <libicq2000/constants.h>
 
 struct imsearchparams {
     imsearchparams() {
@@ -9,11 +10,13 @@ struct imsearchparams {
 	uin = 0;
 	minage = maxage = country = language = 0;
 	gender = genderUnspec;
+	agerange = ICQ2000::range_NoRange;
     };
 
     bool onlineonly;
     unsigned int uin;
     unsigned short minage, maxage, country, language;
+    ICQ2000::AgeRange agerange;
     imgender gender;
     string firstname, lastname, nick, city, state;
     string company, department, position, email;
