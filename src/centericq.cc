@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.70 2002/02/23 10:00:37 konst Exp $
+* $Id: centericq.cc,v 1.71 2002/02/24 19:54:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -866,6 +866,7 @@ void centericq::setauto(imstatus astatus) {
 
     if(autoset && (astatus == available)) {
 	face.log(_("+ the user is back"));
+	nautoset = false;
     }
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
