@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.28 2004/11/09 23:49:59 konst Exp $
+* $Id: imexternal.cc,v 1.29 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -236,7 +236,7 @@ void imexternal::action::writescript() {
 	sname = tfname.str();
 #else
 	sname = string(tfname.str(), tfname.pcount());
-	tfname.freeze(false); // memory leak fixed
+	tfname.freeze(false);
 #endif
     } while(!access(sname.c_str(), F_OK));
 
@@ -468,6 +468,8 @@ string imexternal::action::geteventname(imevent::imeventtype et) {
 	    return "sms";
 	case imevent::online:
 	    return "online";
+	case imevent::offline:
+	    return "offline";
 	case imevent::notification:
 	    return "notification";
 	case imevent::authorization:

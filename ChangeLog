@@ -1959,3 +1959,24 @@ Among the other stuff that didn't let me release .13 earlier was my
 moving to Germany. Now I am in Berlin on permanent basis, so if you're
 at the CCC congress that is to take place in a week, Konst can be met
 there :)
+
+4.14.0
+------
+
+Because of the mistake I made in the previous version, the 'u' letter was
+eaten by the RTF parser when processing messages from windows icq clients.
+It looked for unicode chars, but ate all 'u' characters it used to found.
+Fixed that.
+
+A memory leak problem when checking RSS was fixed.
+
+Gadu-Gadu module used to produce a segfault when it was unable to obtain
+a registration token from the server. Now it doesn't crash, though the
+impossibility to register a new UIN is still there. The serve simply
+doesn't find an appropriate document by the registration URL. Too bad.
+
+Applied a small patch by Paul Chitescu so that it's now possible to start
+centericq with all protocols set to offline.
+
+Another type of external event was added. Now you can execute your actions
+when someone goes offline. Hope someone finds that useful.

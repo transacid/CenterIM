@@ -20,8 +20,8 @@ class imevent {
 
     public:
 	enum imeventtype {
-	    message, url, sms, authorization, online, email, notification,
-	    contacts, file, xml, imeventtype_size
+	    message, url, sms, authorization, online, offline, email,
+	    notification, contacts, file, xml, imeventtype_size
 	};
 
 	enum imdirection {

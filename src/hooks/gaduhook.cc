@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.12 2004/08/05 18:39:34 konst Exp $
+* $Id: gaduhook.cc,v 1.13 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -415,6 +415,8 @@ bool gaduhook::regattempt(unsigned int &auin, const string &apassword, const str
     string token, tokenid;
 
     th = gg_token(0);
+    if(!th) return false;
+
     token = handletoken(th);
     tokenid = ((struct gg_token *) th->data)->tokenid;
     gg_token_free(th);

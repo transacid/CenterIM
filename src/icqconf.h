@@ -127,6 +127,8 @@ class icqconf {
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug;
 
+	bool startoffline;
+
 	bool chatmode[protocolname_size];
 	bool cpconvert[protocolname_size];
 	bool entersends[protocolname_size];

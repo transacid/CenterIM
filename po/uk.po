@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-19 17:58+0200\n"
+"POT-Creation-Date: 2005-01-18 23:15+0100\n"
 "PO-Revision-Date: 2002-06-12 12:15+0300\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -422,55 +422,55 @@ msgstr "+ [msn] видаля╓мо %s з контакт╕в"
 msgid "members list fetching finished, %d found"
 msgstr "+ [irc] отримання списку каналу завершено, знайдено %d користувач╕в"
 
-#: src/icqcontact.cc:762
+#: src/icqcontact.cc:766
 msgid "The user has a birthday today"
 msgstr ""
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Jan"
 msgstr "С╕ч"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Feb"
 msgstr "Лют"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Mar"
 msgstr "Бер"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Apr"
 msgstr "Кв╕"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "May"
 msgstr "Тра"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Jun"
 msgstr "Чер"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Jul"
 msgstr "Лип"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Aug"
 msgstr "Сер"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Sep"
 msgstr "Вер"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Oct"
 msgstr "Жов"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Nov"
 msgstr "Лис"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Dec"
 msgstr "Гру"
 
@@ -1868,123 +1868,128 @@ msgstr "Треба бути п╕д'╓днаним до мереж╕ ICQ щоби поновити ╕нформац╕ю"
 msgid "registration is not supported"
 msgstr "ре╓страц╕я не п╕дтриму╓ться"
 
-#: src/icqconf.cc:159
+#: src/icqconf.cc:161
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Мен╕ подоба╓ться типове %s автопов╕домлення для %s %s."
 
-#: src/icqconf.cc:965
+#: src/icqconf.cc:969
 #, c-format
 msgid "+ launched the %s action command"
 msgstr ""
 
-#: src/icqconf.cc:1143
+#: src/icqconf.cc:1153
 msgid "event sending error: not enough parameters"
 msgstr "помилка в╕дсилання под╕╖: недостатньо параметр╕в"
 
-#: src/icqconf.cc:1154
+#: src/icqconf.cc:1164
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "помилка в╕дсилання под╕╖: в icq-протокол╕ дозволяються лише UIN'и"
 
-#: src/icqconf.cc:1169
+#: src/icqconf.cc:1179
 msgid "event sending error: unknown IM type"
 msgstr "помилка в╕дсилання под╕╖: нев╕домий тип програми"
 
-#: src/icqconf.cc:1191
+#: src/icqconf.cc:1201
 msgid "event sending error: unknown event type"
 msgstr "помилка в╕дсилання под╕╖: нев╕домий тип под╕╖"
 
-#: src/icqconf.cc:1208
+#: src/icqconf.cc:1218
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s до %s поставлено в чергу"
 
-#: src/icqconf.cc:1214
+#: src/icqconf.cc:1224
 #, fuzzy
 msgid "event sending error: error creating directory for the contact"
 msgstr "помилка в╕дсилання под╕╖: недостатньо параметр╕в"
 
-#: src/icqconf.cc:1261
+#: src/icqconf.cc:1271
 msgid "unknown status character was given"
 msgstr "нев╕домий статусний символ"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "unknown IM type"
 msgstr "нев╕домий тип комун╕катора"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "status change error: "
 msgstr "помилка зм╕ни статусу: "
 
-#: src/icqconf.cc:1276
+#: src/icqconf.cc:1286
 #, fuzzy
 msgid "Usage: "
 msgstr "В╕к: "
 
-#: src/icqconf.cc:1278
+#: src/icqconf.cc:1288
 #, fuzzy
 msgid "General options:"
 msgstr " Загальне "
 
-#: src/icqconf.cc:1279
+#: src/icqconf.cc:1289
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 
-#: src/icqconf.cc:1280
+#: src/icqconf.cc:1290
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr ""
 
-#: src/icqconf.cc:1281
+#: src/icqconf.cc:1291
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr ""
 
-#: src/icqconf.cc:1282
+#: src/icqconf.cc:1292
 msgid "  --no-xtitles, -T         disable xterm titles"
 msgstr ""
 
-#: src/icqconf.cc:1283
+#: src/icqconf.cc:1293
+msgid ""
+"  --offline, -o            set all protocols status to offline upon start"
+msgstr ""
+
+#: src/icqconf.cc:1294
 msgid "  --debug, -d              enables debug info logging"
 msgstr ""
 
-#: src/icqconf.cc:1284
+#: src/icqconf.cc:1295
 #, fuzzy
 msgid "  --help                   display this stuff"
 msgstr " Зм╕нити статус                      s"
 
-#: src/icqconf.cc:1285
+#: src/icqconf.cc:1296
 msgid "  --version, -v            show the program version info"
 msgstr ""
 
-#: src/icqconf.cc:1287
+#: src/icqconf.cc:1298
 #, fuzzy
 msgid "Events sending options:"
 msgstr " Параметри CenterICQ"
 
-#: src/icqconf.cc:1288
+#: src/icqconf.cc:1299
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 
-#: src/icqconf.cc:1289
+#: src/icqconf.cc:1300
 msgid "  -S, --status <status>    change the current IM status"
 msgstr ""
 
-#: src/icqconf.cc:1290
+#: src/icqconf.cc:1301
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
 msgstr ""
 
-#: src/icqconf.cc:1292
+#: src/icqconf.cc:1303
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 
-#: src/icqconf.cc:1293
+#: src/icqconf.cc:1304
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 
-#: src/icqconf.cc:1295
+#: src/icqconf.cc:1306
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.137 2004/11/11 13:42:05 konst Exp $
+* $Id: icqconf.cc,v 1.138 2005/01/18 23:20:16 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -50,6 +50,8 @@ icqconf::icqconf() {
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = proxyssl = proxyconnect = notitles =
 	debug = false;
+
+    startoffline = false;
 
     savepwd = mailcheck = fenoughdiskspace = true;
 
@@ -610,6 +612,7 @@ void icqconf::loadsounds() {
     soundnames.push_back(eventsound(imevent::sms, "sms"));
     soundnames.push_back(eventsound(imevent::url, "url"));
     soundnames.push_back(eventsound(imevent::online, "online"));
+    soundnames.push_back(eventsound(imevent::offline, "offline"));
     soundnames.push_back(eventsound(imevent::email, "email"));
 
     for(i = 0; i < clist.count; i++) {
@@ -647,6 +650,7 @@ void icqconf::loadsounds() {
 		    fo << "*\turl\tplay " << SHARE_DIR << "/url.wav" << endl;
 		    fo << "*\temail\tplay " << SHARE_DIR << "/email.wav" << endl;
 		    fo << "*\tonline\tplay " << SHARE_DIR << "/online.wav" << endl;
+		    fo << "*\toffline\tplay " << SHARE_DIR << "/offline.wav" << endl;
 		    fo << "*\tsms\tplay " << SHARE_DIR << "/sms.wav" << endl;
 		    break;
 
@@ -1009,6 +1013,9 @@ string icqconf::getprotocolprefix(protocolname pname) const {
 }
 
 imstatus icqconf::getstatus(protocolname pname) {
+    if(startoffline)
+	return offline;
+
     imstatus st = available;
     map<string, string>::iterator ia;
     imaccount a = getourid(pname);
@@ -1079,6 +1086,9 @@ void icqconf::commandline(int argc, char **argv) {
 
 	} else if((args == "-T") || (args == "--no-xtitles")) {
 	    notitles = true;
+
+	} else if((args == "-o") || (args == "--offline")) {
+	    startoffline = true;
 
 	} else if((args == "-s") || (args == "--send")) {
 	    if(argv[++i]) event = argv[i];
@@ -1280,6 +1290,7 @@ void icqconf::usage() const {
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
     cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
     cout << _("  --no-xtitles, -T         disable xterm titles") << endl;
+    cout << _("  --offline, -o            set all protocols status to offline upon start") << endl;
     cout << _("  --debug, -d              enables debug info logging") << endl;
     cout << _("  --help                   display this stuff") << endl;
     cout << _("  --version, -v            show the program version info") << endl;

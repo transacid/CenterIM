@@ -1,7 +1,7 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.35 2004/11/09 23:49:59 konst Exp $
+* $Id: imevents.cc,v 1.36 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -41,7 +41,7 @@ static const string sdirection[imevent::imdirection_size] = {
 };
 
 static const string seventtype[imevent::imeventtype_size] = {
-    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE", "CONT", "FILE", "XML"
+    "MSG", "URL", "SMS", "AUTH", "", "", "EMAIL", "NOTE", "CONT", "FILE", "XML"
 };
 
 // -- basic imevent class -----------------------------------------------------

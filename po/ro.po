@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-19 17:58+0200\n"
+"POT-Creation-Date: 2005-01-18 23:15+0100\n"
 "PO-Revision-Date: 2002-09-10 22:43+0200\n"
 "Last-Translator: Ovidiu Ghineþ <oghinet@umfiasi.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -414,55 +414,55 @@ msgid "members list fetching finished, %d found"
 msgstr ""
 "+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
 
-#: src/icqcontact.cc:762
+#: src/icqcontact.cc:766
 msgid "The user has a birthday today"
 msgstr "Astãzi este ziua utilizatorului"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Jan"
 msgstr "Ian"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Feb"
 msgstr "Feb"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Mar"
 msgstr "Mar"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Apr"
 msgstr "Apr"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "May"
 msgstr "Mai"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Jun"
 msgstr "Iun"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Jul"
 msgstr "Iun"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Aug"
 msgstr "Aug"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Sep"
 msgstr "Sep"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Oct"
 msgstr "Oct"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Nov"
 msgstr "Noi"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Dec"
 msgstr "Dec"
 
@@ -1854,123 +1854,128 @@ msgstr "Trebuie sã fii conectat la reþeaua ICQ pt a edita detaliile"
 msgid "registration is not supported"
 msgstr "înregistrarea nu este suportatã"
 
-#: src/icqconf.cc:159
+#: src/icqconf.cc:161
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Îmi place la nebunie mesajul robot pentru %s al %s %s."
 
-#: src/icqconf.cc:965
+#: src/icqconf.cc:969
 #, c-format
 msgid "+ launched the %s action command"
 msgstr ""
 
-#: src/icqconf.cc:1143
+#: src/icqconf.cc:1153
 msgid "event sending error: not enough parameters"
 msgstr "eroare eveniment: parametrii insuficienþi"
 
-#: src/icqconf.cc:1154
+#: src/icqconf.cc:1164
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "eroare eveniment: icq permite doar UIN-uri"
 
-#: src/icqconf.cc:1169
+#: src/icqconf.cc:1179
 msgid "event sending error: unknown IM type"
 msgstr "eroare eveniment: IM necunoscut"
 
-#: src/icqconf.cc:1191
+#: src/icqconf.cc:1201
 msgid "event sending error: unknown event type"
 msgstr "eroare eveniment: eveniment necunoscut"
 
-#: src/icqconf.cc:1208
+#: src/icqconf.cc:1218
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s pentru %s a fost pus la poºtã"
 
-#: src/icqconf.cc:1214
+#: src/icqconf.cc:1224
 #, fuzzy
 msgid "event sending error: error creating directory for the contact"
 msgstr "eroare eveniment: parametrii insuficienþi"
 
-#: src/icqconf.cc:1261
+#: src/icqconf.cc:1271
 msgid "unknown status character was given"
 msgstr "caracter necunoscut pt. schimbarea statulului"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "unknown IM type"
 msgstr "IM necunoscut"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "status change error: "
 msgstr "eroare schimbare statut: "
 
-#: src/icqconf.cc:1276
+#: src/icqconf.cc:1286
 #, fuzzy
 msgid "Usage: "
 msgstr "Vârstã: "
 
-#: src/icqconf.cc:1278
+#: src/icqconf.cc:1288
 #, fuzzy
 msgid "General options:"
 msgstr "General Chat"
 
-#: src/icqconf.cc:1279
+#: src/icqconf.cc:1289
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 
-#: src/icqconf.cc:1280
+#: src/icqconf.cc:1290
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr ""
 
-#: src/icqconf.cc:1281
+#: src/icqconf.cc:1291
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr ""
 
-#: src/icqconf.cc:1282
+#: src/icqconf.cc:1292
 msgid "  --no-xtitles, -T         disable xterm titles"
 msgstr ""
 
-#: src/icqconf.cc:1283
+#: src/icqconf.cc:1293
+msgid ""
+"  --offline, -o            set all protocols status to offline upon start"
+msgstr ""
+
+#: src/icqconf.cc:1294
 msgid "  --debug, -d              enables debug info logging"
 msgstr ""
 
-#: src/icqconf.cc:1284
+#: src/icqconf.cc:1295
 #, fuzzy
 msgid "  --help                   display this stuff"
 msgstr " Schimbã statului                    s"
 
-#: src/icqconf.cc:1285
+#: src/icqconf.cc:1296
 msgid "  --version, -v            show the program version info"
 msgstr ""
 
-#: src/icqconf.cc:1287
+#: src/icqconf.cc:1298
 #, fuzzy
 msgid "Events sending options:"
 msgstr " Opþiuni configurare CenterICQ"
 
-#: src/icqconf.cc:1288
+#: src/icqconf.cc:1299
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 
-#: src/icqconf.cc:1289
+#: src/icqconf.cc:1300
 msgid "  -S, --status <status>    change the current IM status"
 msgstr ""
 
-#: src/icqconf.cc:1290
+#: src/icqconf.cc:1301
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
 msgstr ""
 
-#: src/icqconf.cc:1292
+#: src/icqconf.cc:1303
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr ""
 
-#: src/icqconf.cc:1293
+#: src/icqconf.cc:1304
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 
-#: src/icqconf.cc:1295
+#: src/icqconf.cc:1306
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 

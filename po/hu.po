@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-19 17:58+0200\n"
+"POT-Creation-Date: 2005-01-18 23:15+0100\n"
 "PO-Revision-Date: 2004-01-12 20:47+0100\n"
 "Last-Translator: Mihály Gyulai <gyulai@fbi.hu>\n"
 "Language-Team: hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -409,55 +409,55 @@ msgstr "+ [aim] %s eltávolítása a kapcsolatok közül"
 msgid "members list fetching finished, %d found"
 msgstr "+ [yahoo] névsor leszedése kész, %d darab"
 
-#: src/icqcontact.cc:762
+#: src/icqcontact.cc:766
 msgid "The user has a birthday today"
 msgstr "Ma van a születésnapja"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Jan"
 msgstr "Jan"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Feb"
 msgstr "Feb"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Mar"
 msgstr "Márc"
 
-#: src/icqcontact.cc:790
+#: src/icqcontact.cc:794
 msgid "Apr"
 msgstr "Ápr"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "May"
 msgstr "Máj"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Jun"
 msgstr "Jún"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Jul"
 msgstr "Júl"
 
-#: src/icqcontact.cc:791
+#: src/icqcontact.cc:795
 msgid "Aug"
 msgstr "Aug"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Sep"
 msgstr "Szept"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Oct"
 msgstr "Okt"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Nov"
 msgstr "Nov"
 
-#: src/icqcontact.cc:792
+#: src/icqcontact.cc:796
 msgid "Dec"
 msgstr "Dec"
 
@@ -1819,107 +1819,112 @@ msgstr "Az adatok frissítéséhez elõbb be kell jelentkezni a Jabber hálózatba."
 msgid "registration is not supported"
 msgstr "a bejegyzés nincs támogatva"
 
-#: src/icqconf.cc:159
+#: src/icqconf.cc:161
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Meg vagyok elégedve az alap %s távolléti okkal: %s %s"
 
-#: src/icqconf.cc:965
+#: src/icqconf.cc:969
 #, c-format
 msgid "+ launched the %s action command"
 msgstr "+ %s mûvelet elindítva"
 
-#: src/icqconf.cc:1143
+#: src/icqconf.cc:1153
 msgid "event sending error: not enough parameters"
 msgstr "eseményküldési hiba: kevés paraméter"
 
-#: src/icqconf.cc:1154
+#: src/icqconf.cc:1164
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "eseményküldési hiba: csak az UIN engedélyezett az icq protokollon"
 
-#: src/icqconf.cc:1169
+#: src/icqconf.cc:1179
 msgid "event sending error: unknown IM type"
 msgstr "eseményküldési hiba: ismeretlen IM típus"
 
-#: src/icqconf.cc:1191
+#: src/icqconf.cc:1201
 msgid "event sending error: unknown event type"
 msgstr "eseményküldési hiba: ismeretlen esemény típus"
 
-#: src/icqconf.cc:1208
+#: src/icqconf.cc:1218
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s %s részére bekerült a pufferbe"
 
-#: src/icqconf.cc:1214
+#: src/icqconf.cc:1224
 #, fuzzy
 msgid "event sending error: error creating directory for the contact"
 msgstr "eseményküldési hiba: kevés paraméter"
 
-#: src/icqconf.cc:1261
+#: src/icqconf.cc:1271
 msgid "unknown status character was given"
 msgstr "ismeretlen állapotkarakter"
 
-#: src/icqconf.cc:1264
+#: src/icqconf.cc:1274
 msgid "unknown IM type"
 msgstr "ismeretlen IM típus"
 
-#: src/icqconf.cc:1267
+#: src/icqconf.cc:1277
 msgid "status change error: "
 msgstr "az állapot megváltoztatása sikertelen:"
 
-#: src/icqconf.cc:1276
+#: src/icqconf.cc:1286
 msgid "Usage: "
 msgstr "Használat: "
 
-#: src/icqconf.cc:1278
+#: src/icqconf.cc:1288
 msgid "General options:"
 msgstr "Általános"
 
-#: src/icqconf.cc:1279
+#: src/icqconf.cc:1289
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr ""
 "  --ascii, -a              ASCII karakterek használata ablakok és egyebek "
 "beállításához"
 
-#: src/icqconf.cc:1280
+#: src/icqconf.cc:1290
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <útvonal>  alapkönyvtár megadása"
 
-#: src/icqconf.cc:1281
+#: src/icqconf.cc:1291
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <gépnév/ip>   helyi IP cím hozzárendelés"
 
-#: src/icqconf.cc:1282
+#: src/icqconf.cc:1292
 msgid "  --no-xtitles, -T         disable xterm titles"
 msgstr ""
 
-#: src/icqconf.cc:1283
+#: src/icqconf.cc:1293
+msgid ""
+"  --offline, -o            set all protocols status to offline upon start"
+msgstr ""
+
+#: src/icqconf.cc:1294
 msgid "  --debug, -d              enables debug info logging"
 msgstr ""
 
-#: src/icqconf.cc:1284
+#: src/icqconf.cc:1295
 msgid "  --help                   display this stuff"
 msgstr "  --help                   megjelenik ez a szöveg"
 
-#: src/icqconf.cc:1285
+#: src/icqconf.cc:1296
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            a program verziójának kiírása"
 
-#: src/icqconf.cc:1287
+#: src/icqconf.cc:1298
 msgid "Events sending options:"
 msgstr "Eseményküldési opciók:"
 
-#: src/icqconf.cc:1288
+#: src/icqconf.cc:1299
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr ""
 "  -s, --send <eseménytípus>  az eseménytípus lehet: üzenet, SMS vagy URL"
 
-#: src/icqconf.cc:1289
+#: src/icqconf.cc:1300
 msgid "  -S, --status <status>    change the current IM status"
 msgstr "  -S, --status <állapot>   IM állapot módosítása"
 
-#: src/icqconf.cc:1290
+#: src/icqconf.cc:1301
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, "
 "jabber or lj"
@@ -1927,16 +1932,16 @@ msgstr ""
 "  -p, --proto <protocol>   protokol típus; lehet ICQ, YAHOO, AIM,IRC, JABBER "
 "vagy lj"
 
-#: src/icqconf.cc:1292
+#: src/icqconf.cc:1303
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr "  -t, --to <cél>           a protokolltól függõen UIN vagy név"
 
-#: src/icqconf.cc:1293
+#: src/icqconf.cc:1304
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr "  -n, --number <tel.szám>  eseményközlés céljaként megadott mobilszám"
 
-#: src/icqconf.cc:1295
+#: src/icqconf.cc:1306
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr "Hibák jelentése angolul ide: <centericq-bugs@konst.org.ua>."
 

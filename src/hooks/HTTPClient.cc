@@ -1,7 +1,7 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.18 2005/01/07 22:22:21 konst Exp $
+* $Id: HTTPClient.cc,v 1.19 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -320,7 +320,7 @@ void HTTPClient::SendRequest() {
 	b.Pack((string) "Proxy-Authorization: Basic " + ba.get() + "\r\n");
     }
 
-    b.Pack((string) "Connection: keep-alive\r\n");
+//    b.Pack((string) "Connection: keep-alive\r\n");
     b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
 
     if(!ev->m_user.empty()) {

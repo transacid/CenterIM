@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.100 2004/11/09 23:49:59 konst Exp $
+* $Id: icqcontact.cc,v 1.101 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -498,9 +498,13 @@ void icqcontact::scanhistory() {
 void icqcontact::setstatus(imstatus fstatus, bool reflect) {
     if(status != fstatus) {
 	if(!ischannel(cdesc)) {
-	    if(status == offline) {
-		external.exec(imrawevent(imevent::online, cdesc, imevent::incoming));
-		playsound(imevent::online);
+	    if(fstatus != offline && status == offline
+	    || fstatus == offline && status != offline) {
+		imevent::imeventtype et =
+		    status == offline ? imevent::online : imevent::offline;
+
+		external.exec(imrawevent(et, cdesc, imevent::incoming));
+		playsound(et);
 	    }
 
 	} else if(reflect) {
