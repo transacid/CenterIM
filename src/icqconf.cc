@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.67 2002/04/26 12:42:24 konst Exp $
+* $Id: icqconf.cc,v 1.68 2002/05/02 16:49:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -253,97 +253,54 @@ void icqconf::save() {
 }
 
 void icqconf::loadcolors() {
-    FILE *f;
-    char buf[512], sub[512], *p;
     string tname = getconfigfname("colorscheme");
-    int nfg, nbg, npair;
 
-    if(access(tname.c_str(), F_OK))
-    if(f = fopen(tname.c_str(), "w")) {
-	switch(conf.getregcolor()) {
-	    case rcdark:
-		fprintf(f, "status\tblack/white\n");
-		fprintf(f, "dialog_text\tblack/white\n");
-		fprintf(f, "dialog_menu\tblack/white\n");
-		fprintf(f, "dialog_selected\twhite/transparent\tbold\n");
-		fprintf(f, "dialog_highlight\tred/white\n");
-		fprintf(f, "dialog_frame\tblue/white\n");
-		fprintf(f, "main_text\tcyan/transparent\n");
-		fprintf(f, "main_menu\tgreen/transparent\n");
-		fprintf(f, "main_selected\tblack/white\n");
-		fprintf(f, "main_highlight\tyellow/transparent\tbold\n");
-		fprintf(f, "main_frame\tblue/transparent\tbold\n");
-		fprintf(f, "clist_icq\tgreen/transparent\n");
-		fprintf(f, "clist_msn\tcyan/transparent\n");
-		fprintf(f, "clist_yahoo\tmagenta/transparent\n");
-		fprintf(f, "clist_infocard\twhite/transparent\n");
-		fprintf(f, "clist_aim\tyellow/transparent\n");
-		fprintf(f, "clist_irc\tblue/transparent\n");
-		break;
+    switch(conf.getregcolor()) {
+	case rcdark:
+	    schemer.push(cp_status, "status black/white");
+	    schemer.push(cp_dialog_text, "dialog_text   black/white");
+	    schemer.push(cp_dialog_menu, "dialog_menu   black/white");
+	    schemer.push(cp_dialog_selected, "dialog_selected   white/transparent   bold");
+	    schemer.push(cp_dialog_highlight, "dialog_highlight red/white");
+	    schemer.push(cp_dialog_frame, "dialog_frame blue/white");
+	    schemer.push(cp_main_text, "main_text   cyan/transparent");
+	    schemer.push(cp_main_menu, "main_menu   green/transparent");
+	    schemer.push(cp_main_selected, "main_selected   black/white");
+	    schemer.push(cp_main_highlight, "main_highlight yellow/transparent  bold");
+	    schemer.push(cp_main_frame, "main_frame blue/transparent    bold");
+	    schemer.push(cp_clist_icq, "clist_icq   green/transparent");
+	    schemer.push(cp_clist_yahoo, "clist_yahoo   magenta/transparent");
+	    schemer.push(cp_clist_infocard, "clist_infocard white/transparent");
+	    schemer.push(cp_clist_msn, "clist_msn   cyan/transparent");
+	    schemer.push(cp_clist_aim, "clist_aim   yellow/transparent");
+	    schemer.push(cp_clist_irc, "clist_irc    blue/transparent");
+	    break;
 
-	    case rcblue:
-		fprintf(f, "status\tblack/white\n");
-		fprintf(f, "dialog_text\tblack/cyan\n");
-		fprintf(f, "dialog_menu\tblack/cyan\n");
-		fprintf(f, "dialog_selected\twhite/black\tbold\n");
-		fprintf(f, "dialog_highlight\twhite/cyan\tbold\n");
-		fprintf(f, "dialog_frame\tblack/cyan\n");
-		fprintf(f, "main_text\twhite/blue\n");
-		fprintf(f, "main_menu\twhite/blue\n");
-		fprintf(f, "main_selected\tblack/cyan\n");
-		fprintf(f, "main_highlight\twhite/blue\tbold\n");
-		fprintf(f, "main_frame\tblue/blue\tbold\n");
-		fprintf(f, "clist_icq\tgreen/blue\n");
-		fprintf(f, "clist_yahoo\tmagenta/blue\n");
-		fprintf(f, "clist_msn\tcyan/blue\n");
-		fprintf(f, "clist_infocard\twhite/blue\n");
-		fprintf(f, "clist_aim\tyellow/blue\n");
-		fprintf(f, "clist_irc\tblue/blue\tbold\n");
-		break;
-	}
-	fclose(f);
+	case rcblue:
+	    schemer.push(cp_status, "status  black/white");
+	    schemer.push(cp_dialog_text, "dialog_text black/cyan");
+	    schemer.push(cp_dialog_menu, "dialog_menu black/cyan");
+	    schemer.push(cp_dialog_selected, "dialog_selected white/black bold");
+	    schemer.push(cp_dialog_highlight, "dialog_highlight    white/cyan  bold");
+	    schemer.push(cp_dialog_frame, "dialog_frame    black/cyan");
+	    schemer.push(cp_main_text, "main_text   white/blue");
+	    schemer.push(cp_main_menu, "main_menu   white/blue");
+	    schemer.push(cp_main_selected, "main_selected   black/cyan");
+	    schemer.push(cp_main_highlight, "main_highlight  white/blue  bold");
+	    schemer.push(cp_main_frame, "main_frame  blue/blue   bold");
+	    schemer.push(cp_clist_icq, "clist_icq   green/blue");
+	    schemer.push(cp_clist_yahoo, "clist_yahoo magenta/blue");
+	    schemer.push(cp_clist_msn, "clist_msn   cyan/blue");
+	    schemer.push(cp_clist_infocard, "clist_infocard  white/blue");
+	    schemer.push(cp_clist_aim, "clist_aim   yellow/blue");
+	    schemer.push(cp_clist_irc, "clist_irc   blue/blue   bold");
+	    break;
     }
 
-    if(f = fopen(tname.c_str(), "r")) {
-	boldcolors.clear();
-
-	while(!feof(f)) {
-	    freads(f, buf, 512);
-	    sscanf(buf, "%s", sub);
-	    tname = sub;
-
-	    sscanf(buf+tname.size(), "%s", sub);
-	    if(p = strchr(sub, '/')) {
-		*p = 0;
-		nfg = findcolor(sub);
-		nbg = findcolor(p+1);
-	    }
-
-	    if(tname == "status") npair = cp_status; else
-	    if(tname == "dialog_text") npair = cp_dialog_text; else
-	    if(tname == "dialog_menu") npair = cp_dialog_menu; else
-	    if(tname == "dialog_selected") npair = cp_dialog_selected; else
-	    if(tname == "dialog_highlight") npair = cp_dialog_highlight; else
-	    if(tname == "dialog_frame") npair = cp_dialog_frame; else
-	    if(tname == "main_text") npair = cp_main_text; else
-	    if(tname == "main_menu") npair = cp_main_menu; else
-	    if(tname == "main_selected") npair = cp_main_selected; else
-	    if(tname == "main_highlight") npair = cp_main_highlight; else
-	    if(tname == "main_frame") npair = cp_main_frame; else
-	    if(tname == "clist_icq") npair = cp_clist_icq; else
-	    if(tname == "clist_yahoo") npair = cp_clist_yahoo; else
-	    if(tname == "clist_msn") npair = cp_clist_msn; else
-	    if(tname == "clist_infocard") npair = cp_clist_infocard; else
-	    if(tname == "clist_aim") npair = cp_clist_aim; else
-	    if(tname == "clist_irc") npair = cp_clist_irc; else
-	    continue;
-
-	    init_pair(npair, nfg, nbg);
-	    if(!strcmp(buf+strlen(buf)-4, "bold")) {
-		boldcolors.push_back(npair);
-	    }
-	}
-	fclose(f);
+    if(access(tname.c_str(), F_OK)) {
+	schemer.save(tname);
+    } else {
+	schemer.load(tname);
     }
 }
 
@@ -524,35 +481,6 @@ icqconf::regsound icqconf::getregsound() const {
 
 void icqconf::setregsound(icqconf::regsound s) {
     rs = s;
-}
-
-void icqconf::initpairs() {
-    boldcolors.clear();
-
-    boldcolors.push_back(cp_dialog_selected);
-    boldcolors.push_back(cp_main_highlight);
-    boldcolors.push_back(cp_main_frame);
-
-    init_pair(cp_status, COLOR_BLACK, COLOR_WHITE);
-
-    init_pair(cp_dialog_text, COLOR_BLACK, COLOR_WHITE);
-    init_pair(cp_dialog_menu, COLOR_BLACK, COLOR_WHITE);
-    init_pair(cp_dialog_selected, COLOR_WHITE, COLOR_BLACK);
-    init_pair(cp_dialog_highlight, COLOR_RED, COLOR_WHITE);
-    init_pair(cp_dialog_frame, COLOR_BLUE, COLOR_WHITE);
-
-    init_pair(cp_main_text, COLOR_CYAN, COLOR_BLACK);
-    init_pair(cp_main_menu, COLOR_GREEN, COLOR_BLACK);
-    init_pair(cp_main_selected, COLOR_BLACK, COLOR_WHITE);
-    init_pair(cp_main_highlight, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(cp_main_frame, COLOR_BLUE, COLOR_BLACK);
-
-    init_pair(cp_clist_icq, COLOR_GREEN, COLOR_BLACK);
-    init_pair(cp_clist_msn, COLOR_CYAN, COLOR_BLACK);
-    init_pair(cp_clist_yahoo, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
-    init_pair(cp_clist_aim, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(cp_clist_irc, COLOR_BLUE, COLOR_BLACK);
 }
 
 void icqconf::setauto(int away, int na) {

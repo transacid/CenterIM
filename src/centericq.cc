@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.98 2002/04/26 12:42:24 konst Exp $
+* $Id: centericq.cc,v 1.99 2002/05/02 16:49:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -57,7 +57,6 @@ void centericq::exec() {
     kinterface();
     raw();
 
-    conf.initpairs();
     conf.load();
     face.init();
 

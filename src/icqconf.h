@@ -11,6 +11,7 @@
 #include "kkstrtext.h"
 #include "kkfsys.h"
 #include "conscommon.h"
+#include "colorschemer.h"
 
 #include "icqgroup.h"
 #include "icqcontact.h"
@@ -62,8 +63,6 @@ class icqconf {
 	vector<icqgroup> groups;
 	vector<imaccount> accounts;
 
-	list<int> boldcolors;
-
 	unsigned short socksport, smtpport;
 
 	int autoaway, autona;
@@ -77,6 +76,8 @@ class icqconf {
 	regsound rs;
 	regcolor rc;
 	groupmode fgroupmode;
+
+	colorschemer<cicq_colorpairs> schemer;
 
 	void loadmainconfig();
 
@@ -94,10 +95,7 @@ class icqconf {
 	void checkdir();
 	void load();
 
-	int getcolor(int npair) const {
-	    return find(boldcolors.begin(), boldcolors.end(), npair) != boldcolors.end()
-		? boldcolor(npair) : normalcolor(npair);
-	}
+	int getcolor(cicq_colorpairs cp) const { return schemer[cp]; }
 
 	int getprotcolor(protocolname pname) const;
 
@@ -106,8 +104,6 @@ class icqconf {
 	void loadcolors();
 	void loadsounds();
 	void loadactions();
-
-	void initpairs();
 
 	regcolor getregcolor() const;
 	void setregcolor(regcolor c);
