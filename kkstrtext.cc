@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.20 2002/03/14 11:56:41 konst Exp $
+* $Id: kkstrtext.cc,v 1.21 2002/03/14 12:25:50 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -894,7 +894,7 @@ string iconv(const string &text, const string &fromcs, const string &tocs) {
     return text;
 }
 
-string cuthtml(const string &html) {
+string cuthtml(const string &html, bool cutbrs) {
     string r, tag;
     int npos, pos, tpos;
 
@@ -908,8 +908,9 @@ string cuthtml(const string &html) {
 	    tag = html.substr(tpos+1, npos-tpos-2);
 	    if(tag.substr(0, 1) == "/") tag.erase(0, 1);
 
-	    if((tag == "br") || (tag == "BR"))
-		r += "<br>";
+	    if((tag == "br") || (tag == "BR")) {
+		r += cutbrs ? "\n" : "<br>";
+	    }
 	}
     }
 

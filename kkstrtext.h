@@ -101,7 +101,7 @@ string mime(const string &text);
 
 string ruscase(const string &s, const string &mode);
 string iconv(const string &text, const string &fromcs, const string &tocs);
-string cuthtml(const string &html);
+string cuthtml(const string &html, bool cutbrs = false);
 
 __KTOOL_BEGIN_C
 
