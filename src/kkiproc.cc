@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.3 2001/08/03 09:21:14 konst Exp $
+* $Id: kkiproc.cc,v 1.4 2001/11/04 12:17:51 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,7 +79,9 @@ time_t lastkeypress() {
 	if(!strncmp(tname, "/dev/tty", 8) && isdigit(tname[8])) {
 	    setutent();
 	    while((u = getutent()))
-	    if(u->ut_type == USER_PROCESS && strlen(u->ut_line) > 3 && !strncmp(u->ut_line, "tty", 3) && isdigit(u->ut_line[3]) && *u->ut_user && issuchpid(u->ut_pid)) {
+	    if(u->ut_type == USER_PROCESS && strlen(u->ut_line) > 3 &&
+	    !strncmp(u->ut_line, "tty", 3) &&
+	    isdigit(u->ut_line[3]) && *u->ut_user && issuchpid(u->ut_pid)) {
 		sprintf(tname, "/dev/%s", u->ut_line);
 		if(!stat(tname, &s) && s.st_atime > t) t = s.st_atime;
 	    }
