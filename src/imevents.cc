@@ -150,6 +150,7 @@ immessage::immessage(const imevent &ev) {
     timestamp = ev.timestamp;
 
     const immessage *m = dynamic_cast<const immessage *>(&ev);
+
     if(m) {
 	text = m->text;
     }
@@ -323,6 +324,7 @@ imsms::imsms(const imevent &ev) {
     timestamp = ev.timestamp;
 
     const imsms *m = dynamic_cast<const imsms *>(&ev);
+
     if(m) {
 	text = m->text;
     }
@@ -370,6 +372,7 @@ imemail::imemail(const imevent &ev) {
     timestamp = ev.timestamp;
 
     const imemail *m = dynamic_cast<const imemail *>(&ev);
+
     if(m) {
 	text = m->text;
     }
