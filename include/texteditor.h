@@ -41,7 +41,7 @@ typedef enum {
 
 // text highlight entry
 
-class hlight { public:
+struct hlight {
     hl_kind kind;
     int color;
     string text;
@@ -68,7 +68,7 @@ struct editfile {
     bool modified, markmode, markreverse, showmarked;
 };
 
-class colorscheme { public:
+struct colorscheme {
     vector<hlight> hl;
     vector<int> difcolors;
 
@@ -78,7 +78,7 @@ class colorscheme { public:
     bool bold;
 };
 
-class undorecord { public:
+struct undorecord {
     tundoaction action;
     bool prevconnected;
     int x, y;
@@ -116,7 +116,7 @@ class texteditor: public abstractuicontrol {
 
 	void scancomments(bool visible);
 
-	void modification(tundoaction action, string data,
+	void modification(tundoaction action, const string data,
 	    bool connected = false, int curx = -1, int cury = -1);
 
 	bool endofline();
@@ -191,8 +191,10 @@ class texteditor: public abstractuicontrol {
 	void clearmark();
 	void copymark(FILE *f);
 	void copymark(char *p, int maxlen);
+
 	void insert(FILE *f);
-	void insert(char *p);
+	void insert(const string buf);
+
 	void delmark();
 	void undo();
 	

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.6 2001/10/16 15:43:57 konst Exp $
+* $Id: dialogbox.cc,v 1.7 2001/10/25 13:05:09 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,11 +191,7 @@ bool dialogbox::open() {
 
 void dialogbox::redraw() {
     if(window) {
-	if(first) {
-	    window->open();
-	} else {
-	    window->redraw();
-	}
+	if(window->isopen()) window->redraw(); else window->open();
 
 	if(bar) {
 	    if(window->isbordered()) {

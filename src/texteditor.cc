@@ -258,7 +258,7 @@ int texteditor::addwindow(char *id) {
     return files->count-1;
 }
 
-void texteditor::modification(tundoaction action, string data,
+void texteditor::modification(tundoaction action, const string data,
 bool connected = false, int curx = -1, int cury = -1) {
     if(undolog && !data.empty()) {
 	undorecord *ur = new undorecord;
@@ -529,14 +529,15 @@ void texteditor::insert(FILE *f) {
     }
 }
 
-void texteditor::insert(char *p) {
+void texteditor::insert(const string abuf) {
     CHECKLOADED;
-    if(p) {
-	char *sl = strdup(CURSTRING), *el = strdup(CURSTRING+CURCOL);
-	char *curpos = p, buf[1024], *s;
-	int line = 0;
+
+    if(!abuf.empty()) {
+	char *sl = strdup(CURSTRING), *el = strdup(CURSTRING+CURCOL), buf[1024], *s;
+	const char *curpos = abuf.c_str();
 	bool firstpass = true;
-    
+	int line = 0;
+
 	sl[CURCOL] = 0;
 
 	while(1) {
@@ -564,7 +565,7 @@ void texteditor::insert(char *p) {
 	delete el;
 	delete sl;
 
-	modification(uinsblock, p);
+	modification(uinsblock, abuf);
     }
 }
 
@@ -766,8 +767,8 @@ int texteditor::count_clrcodes(char *cp, int pos) {
 void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
     if(!show) return;
 
-    int i, n, inscount, bcolor, sxinscount, printed, j, lastoccur, q, eolstart = 0, npos, offs;
-    char *cs, *cp, *sr, *nr, *r, ins[3] = "\001 ", *buf;
+    int i, n, inscount, bcolor, sxinscount, printed, j, lastoccur, q, eolstart, npos, offs;
+    char *cs, *sr, *nr, *r, ins[3] = "\001 ";
 
     vector<int> layout;
     vector<int>::iterator iq;
@@ -776,11 +777,14 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
     const char *p;
 
     if(!(cs = (char *) curfile->lines->at(ln))) return;
-    cp = new char[eolstart = strlen(cs)*3+16];
-    buf = new char[strlen(cs)*3+16];
+    char cp[i = (strlen(cs)+1)*4];
+    char buf[i];
+
+    eolstart = i;
 
     strcpy(cp, cs);
-    inscount = sxinscount = bcolor = buf[0] = 0;
+    buf[0] = 0;
+    inscount = sxinscount = bcolor = 0;
 
     highline *hline = (highline *) curfile->highlines->find(&(i = ln+1), &findhighline);
     
@@ -952,9 +956,6 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
     if(printed < 0) printed = 0; else
     if(printed > distance) printed = distance;
     mvhline(y1+ln-curfile->sy, x1+extrax+printed, ' ', distance-printed);
-
-    delete cp;
-    delete buf;
 }
 
 void texteditor::draw(int fromline) {
