@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.59 2002/02/19 18:38:05 konst Exp $
+* $Id: icqhook.cc,v 1.60 2002/02/21 17:29:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -960,18 +960,6 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 		updateinforecord(cli.getContact(ev->getUIN()), c);
 	    }
-	    break;
-
-	case ContactListEvent::UserAdded:
-	    break;
-
-	case ContactListEvent::UserRemoved:
-	    break;
-
-	case ContactListEvent::MessageQueueChanged:
-	    break;
-
-	case ContactListEvent::ServerBasedContact:
 	    break;
     }
 }

@@ -2,7 +2,8 @@
 #define __IMCONTROLLER_H__
 
 #include "icqconf.h"
-#include <libicq2000/constants.h>
+
+#include <libicq2000/userinfoconstants.h>
 
 struct imsearchparams {
     imsearchparams() {

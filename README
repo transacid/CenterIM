@@ -43,6 +43,7 @@ Contents
     9.1. Arabic and Hebrew languages support
     9.2. External actions and auto-responses
 	9.2.1. Elizatalk: making fun with your friends
+	9.2.2. Remote control with external actions
     9.3. Protocol debug mode
     9.4. Latest CVS snapshots
 10. Lynx
@@ -773,6 +774,43 @@ echo $msg | elizatalk
 
 Voila! You might also want to read the elizatalk documentation. Though,
 with my great explanations it's not necessary anymore :)
+
+
+9.2.2. Remote control with external actions
+-------------------------------------------
+
+  Another useful thing you can make with external actions is remote
+control for your servers or workstations. You can write an action which
+will report you various diagnostic messages or perform administrative
+tasks reacting on special pre-defined commands that only you may know.
+So you just add a section to your ~/.centericq/external file, and leave
+centericq running. Of course, the commands can be requested through any
+of supported IM networks, though it's also configurable.
+
+  The following example can report free disk space, uptime and files
+listing under your ~/.centericq/ directory. The commands are "df",
+"uptime" and "ls" respectively. As soon as centericq receives them it
+answers with external commands' answers. It won't reply any other
+messages.
+
+[ - cut (centericq external actions setup for simple remote control) ------- ]
+
+%action		Remote control
+event		msg
+proto		all
+status		all
+options		stdin stdout
+
+%exec
+#!/bin/sh
+
+case `cat` in
+    ls) ls -l ~/.centericq/;;
+    df) df -h;;
+    uptime) uptime;;
+esac
+
+[ -------------------------------------------------------------------------- ]
 
 
 9.3. Protocol debug mode
