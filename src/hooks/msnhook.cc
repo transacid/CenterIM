@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.73 2004/02/20 20:48:47 konst Exp $
+* $Id: msnhook.cc,v 1.74 2004/02/21 15:31:00 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -334,11 +334,7 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 
 void msnhook::requestinfo(const imcontact &ic) {
     icqcontact *c = clist.get(ic);
-
-    if(!c) {
-	c = clist.get(contactroot);
-	c->clear();
-    }
+    if(!c) c = clist.get(contactroot);
 
     icqcontact::moreinfo m = c->getmoreinfo();
     icqcontact::basicinfo b = c->getbasicinfo();

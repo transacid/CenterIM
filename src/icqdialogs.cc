@@ -1,9 +1,9 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.138 2004/02/20 20:48:47 konst Exp $
+* $Id: icqdialogs.cc,v 1.139 2004/02/21 15:31:00 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1185,7 +1185,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 26, _(" Switch to language preset : %s "), iconvlang->c_str());
 	t.addleaff(i, 0, 27, _(" Convert from : %s "), convertfrom.c_str());
 	t.addleaff(i, 0, 28, _(" Convert to : %s "), convertto.c_str());
-	t.addleaff(i, 0,  3, _(" For protocols : %s "), tmp.c_str());
+
+	if(hasany) {
+	    t.addleaff(i, 0,  3, _(" For protocols : %s"), tmp.c_str());
+	}
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
@@ -1343,13 +1346,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 27:
 			convertfrom = inputstr(_("Charset to convert messages from: "), convertfrom);
-			if(input.getlastkey() == '\r')
-			    iconvlang = convlanguages.begin();
+			if(input.getlastkey() == '\r') iconvlang = convlanguages.begin();
 			break;
 		    case 28:
 			convertto = inputstr(_("Charset to convert messages to: "), convertto);
-			if(input.getlastkey() == '\r')
-			    iconvlang = convlanguages.begin();
+			if(input.getlastkey() == '\r') iconvlang = convlanguages.begin();
 			break;
 		}
 		break;
@@ -1369,7 +1370,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    conf.setchatmode(pname, chatmode[pname]);
 		    conf.setentersends(pname, entersends[pname]);
-		    conf.setcpconvert(pname, conv[pname] && (!convertfrom.empty() || !convertto.empty()));
+
+		    bool bconv = conv[pname] && (!convertfrom.empty() || !convertto.empty());
+		    conf.setcpconvert(pname, bconv || !hasany);
 		}
 
 		conf.setbidi(bidi);
@@ -1409,15 +1412,18 @@ void icqface::selectproto(bool prots[], bool irss) {
     memcpy(aprots, prots, sizeof(aprots));
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!irss)
-	if(gethook(pname).getCapabs().count(hookcapab::nochat))
-	    continue;
+	if(!irss || pname != rss) {
+	    if(gethook(pname).getCapabs().count(hookcapab::nochat))
+		continue;
+
+	    if(conf.getourid(pname).empty())
+		continue;
+	}
 
 	if(!gethook(pname).enabled())
 	    continue;
 
-	if(!conf.getourid(pname).empty() || irss)
-	    tempprots[i++] = pname;
+	tempprots[i++] = pname;
     }
 
     protmax = i;
