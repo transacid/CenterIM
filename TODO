@@ -11,6 +11,12 @@ they say online sounds don't work
 age is not respected for whitepages search
 away messages
 commented out socks until it really works
+https:// urls are not fetched out from context as well
+
+libicq2000: add ourselves to the contact list, and then try to update details
+    contact list -> self details conflict
+
+write about email express and away messages in README
 
 /*
 *
@@ -22,9 +28,6 @@ contrib/ doesn't go to rpm dists
 
 X window resize -> sometimes segfaults
 
-libicq2000: add ourselves to the contact list, and then try to update details
-    contact list -> self details conflict
-
 remove trash from mobile addr helps to send SMSes
 
 /*
@@ -32,8 +35,6 @@ remove trash from mobile addr helps to send SMSes
 * TODO
 *
 */
-
-write about email express and away messages in README
 
 communications from the command line, sending messages through
     the already connected program, and other kinds of control
@@ -87,4 +88,4 @@ so when I press F2 it just opens another screen and CenterICQ doesn't crash.
 
 -------------------------------------------------------------------------------
 
-$Id: TODO,v 1.114 2002/02/08 16:56:45 konst Exp $
+$Id: TODO,v 1.115 2002/02/13 15:42:34 konst Exp $

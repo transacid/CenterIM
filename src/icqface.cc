@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.80 2002/02/06 17:30:36 konst Exp $
+* $Id: icqface.cc,v 1.81 2002/02/13 15:42:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1406,7 +1406,7 @@ void icqface::extracturls(const string buf) {
     const char *pp = buf.c_str();
 
     extractedurls.clear();
-    if(!regcomp(&r, "(http://[^ ,\t\n]+|ftp://[^, \t\n]+|www\\.[^, \t\n]+)", REG_EXTENDED)) {
+    if(!regcomp(&r, "(http://[^ ,\t\n]+|https://[^ ,\t\n]+|ftp://[^, \t\n]+|www\\.[^, \t\n]+)", REG_EXTENDED)) {
 	while(!regexec(&r, buf.substr(pos).c_str(), 1, rm, 0)) {
 	    extractedurls.push_back(buf.substr(pos+rm[0].rm_so, rm[0].rm_eo-rm[0].rm_so));
 	    pos += rm[0].rm_eo;

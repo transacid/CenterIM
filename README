@@ -32,7 +32,9 @@ Contents
     7.2. URLs
     7.3. SMSes
     7.4. Files
-    7.5. Events history
+    7.5. E-mail express messages
+    7.6. Away messages
+    7.7. Events history
 8. Ignore, visible and invisible lists
     8.1. Ignore list
     8.2. Visible list
@@ -522,7 +524,42 @@ wrong, the program will tell you by displaying a message in the log
 window.
 
 
-7.5. Events history
+7.5. E-mail express messages
+----------------------------
+
+  This kind of events is ICQ specific. There is no way to receive them
+with Yahoo! or MSN protocols. E-mail express is a service provided by
+Mirabilis to make it possible to send messages through e-mail to logged
+in ICQ users. A gate, indeed.
+
+  The principle is simple. To send such a message you use an e-mail
+client application, and you receive one with an ICQ client. The
+destination e-mail address looks like this <UIN>@pager.icq.com, where
+UIN is the receiver's ICQ number. If a person is not online, they'll get
+the message as soon as connect to the ICQ network.
+
+
+7.6. Away messages
+------------------
+
+  Another feature of ICQ network supported by centericq is away
+messages. It's quite a useful way to explain to everybody why you're
+away from your box right now. To read your reason for being away they
+just have to use the feature to fetch an away message in their ICQ
+client application.
+
+  It's possible to set such a message from the account manager dialog
+invoked from the global menu. There is a "Set away message" item for IM
+engines that support such a feature.
+
+  With centericq you can also read away messages of others. To fetch
+someone's away message (it's possible even when a person has the
+"available/online" status) just select the respective item in the
+"current user" context menu (invoked with F2 or "m"). It's impossible to
+fetch away messages of users that are offline.
+
+
+7.7. Events history
 -------------------
 
   All of events sent and received with centericq are held in its
