@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui abstract ui control class
-* $Id: abstractui.cc,v 1.6 2002/10/06 12:15:11 konst Exp $
+* $Id: abstractui.cc,v 1.7 2003/11/05 09:10:27 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,7 +25,7 @@
 #include "abstractui.h"
 
 abstractuicontrol::abstractuicontrol()
-: fisopen(false), aborted(false), emacs(false), x1(0), x2(0), y1(0), y2(0)
+: fisopen(false), aborted(false), emacs(false), finished(false), x1(0), x2(0), y1(0), y2(0)
 { }
 
 abstractuicontrol::abstractuicontrol(const abstractuicontrol &a)

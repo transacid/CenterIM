@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.18 2003/07/22 21:50:35 konst Exp $
+* $Id: cmenus.cc,v 1.19 2003/11/05 09:10:27 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,13 +24,15 @@
 
 #include "cmenus.h"
 
-verticalmenu::verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int pscolor) {
+verticalmenu::verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int pscolor)
+: abstractuicontrol() {
     initmembers();
     setcolor(pncolor, pscolor);
     setcoords(px1, py1, px2, py2);
 }
 
-verticalmenu::verticalmenu(int pncolor, int pscolor) {
+verticalmenu::verticalmenu(int pncolor, int pscolor)
+: abstractuicontrol() {
     initmembers();
     setcolor(pncolor, pscolor);
 }
