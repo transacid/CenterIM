@@ -1,4 +1,5 @@
 #include "icqgroup.h"
+#include "icqgroups.h"
 
 icqgroup::icqgroup(int aid, const string &aname) {
     id = aid;
@@ -9,27 +10,45 @@ icqgroup::icqgroup(int aid, const string &aname) {
 icqgroup::~icqgroup() {
 }
 
-bool icqgroup::operator == (int aid) const {
-    return id == aid;
-}
-
-bool icqgroup::operator != (int aid) const {
-    return !(*this == aid);
-}
-
-void icqgroup::changecollapsed() {
-    if(collapsed == false) { collapsed = true; }
-    else { collapsed = false; }
-}
-
 int icqgroup::getcount(bool countonline, bool countoffline) {
-    int counter = 0;
-    for(int i = 0; i < clist.count; i++) {
-        icqcontact *c = (icqcontact *) clist.at(i);
-        if(c->getgroupid() == id) {
-            if(countoffline && c->getstatus() == offline) counter++;
-            if(countonline && c->getstatus() != offline) counter++;
-        }
+    int i, counter;
+
+    for(i = counter = 0; i < clist.count; i++) {
+	icqcontact *c = (icqcontact *) clist.at(i);
+
+	if(c->getgroupid() == id) {
+	    if(countoffline && c->getstatus() == offline) counter++;
+	    if(countonline && c->getstatus() != offline) counter++;
+	}
     }
+
     return counter;
+}
+
+void icqgroup::moveup() {
+    if(id > 1) exchange(id-1);
+}
+
+void icqgroup::movedown() {
+    if(id < groups.size()) exchange(id+1);
+}
+
+void icqgroup::exchange(int nid) {
+    int i;
+    icqcontact *c;
+    vector<icqgroup>::iterator ig;
+
+    ig = find(groups.begin(), groups.end(), nid);
+
+    if(ig != groups.end()) {
+	for(i = 0; i < clist.count; i++) {
+	    c = (icqcontact *) clist.at(i);
+
+	    if(c->getgroupid() == id) c->setgroupid(nid); else
+	    if(c->getgroupid() == nid) c->setgroupid(id);
+	}
+
+	ig->id = id;
+	id = nid;
+    }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.65 2002/04/08 15:59:57 konst Exp $
+* $Id: icqdialogs.cc,v 1.66 2002/04/17 09:55:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -792,10 +792,11 @@ int icqface::groupmanager(const string &text, bool sel) {
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("Add"), _("Rename"), _("Remove"), sel ? _("Select") : _("Done"), 0));
+	_("Add"), _("Rename"), _("rEmove"), _("move Up"), _("move Down"),
+	sel ? _("Select") : _("Done"), 0));
 
     db.addautokeys();
-    db.getbar()->item = 3;
+    db.getbar()->item = 5;
 
     r = 0;
     db.idle = &dialogidle;
@@ -808,6 +809,8 @@ int icqface::groupmanager(const string &text, bool sel) {
     for(bool fin = false; !fin && !r; ) {
 	t.clear();
 	ngrp = t.addnode(_(" Groups "));
+
+	sort(groups.begin(), groups.end());
 
 	for(i = groups.begin(); i != groups.end(); i++) {
 	    b = i-groups.begin()+1;
@@ -848,6 +851,22 @@ int icqface::groupmanager(const string &text, bool sel) {
 		break;
 
 	    case 3:
+		if(n) {
+		    i = groups.begin()+n-1;
+		    i->moveup();
+		    n--;
+		}
+		break;
+
+	    case 4:
+		if(n) {
+		    i = groups.begin()+n-1;
+		    i->movedown();
+		    n++;
+		}
+		break;
+
+	    case 5:
 		if(n) {
 		    i = groups.begin()+n-1;
 		    r = i->getid();

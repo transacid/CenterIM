@@ -17,10 +17,9 @@ class icqgroups: private vector<icqgroup> {
 	int add(const string &aname);
 	void remove(int gid);
 
-	iterator begin()
-	    { return vector<icqgroup>::begin(); }
-	iterator end()
-	    { return vector<icqgroup>::end(); }
+	int size() const { return vector<icqgroup>::size(); }
+	iterator begin() { return vector<icqgroup>::begin(); }
+	iterator end() { return vector<icqgroup>::end(); }
 };
 
 extern icqgroups groups;
