@@ -9,6 +9,8 @@ AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 
 if test "$build_yahoo" = "yes"; then
     AC_PROG_CXX
+    AC_CHECK_HEADERS(inttypes.h stdint.h)
+    AC_C_BIGENDIAN
 fi
 
 AC_OUTPUT(Makefile)
