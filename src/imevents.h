@@ -12,10 +12,12 @@ class imevent {
     friend class imauthorization;
     friend class imemailexpress;
     friend class imemail;
+    friend class imnotification;
 
     public:
 	enum imeventtype {
-	    message, url, sms, authorization, online, email, imeventtype_size
+	    message, url, sms, authorization, online, email, notification,
+	    imeventtype_size
 	};
 
 	enum imdirection {
@@ -139,6 +141,23 @@ class imemail: public imevent {
     public:
 	imemail(const imevent &ev);
 	imemail(const imcontact &acont, imdirection adirection, const string &atext);
+
+	string gettext() const;
+
+	bool empty() const;
+	bool contains(const string &atext) const;
+
+	void write(ofstream &f) const;
+	void read(ifstream &f);
+};
+
+class imnotification: public imevent {
+    protected:
+	string text;
+
+    public:
+	imnotification(const imevent &ev);
+	imnotification(const imcontact &acont, const string &atext);
 
 	string gettext() const;
 

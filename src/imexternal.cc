@@ -315,6 +315,8 @@ string imexternal::action::geteventname(imevent::imeventtype et) {
 	    return "sms";
 	case imevent::online:
 	    return "online";
+	case imevent::notification:
+	    return "notification";
     }
 
     return "";

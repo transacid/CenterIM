@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.56 2002/07/08 16:16:14 konst Exp $
+* $Id: icqcontact.cc,v 1.57 2002/07/10 09:23:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -684,9 +684,7 @@ void icqcontact::remindbirthday(bool r) {
 	    f.open(tname.c_str());
 	    if(f.is_open()) f.close();
 
-	    em.store(immessage(getdesc(), imevent::incoming,
-		string() + _("* The user has a birthday today")));
-
+	    em.store(imnotification(getdesc(), _("The user has a birthday today")));
 	    congratulated = true;
 	}
 

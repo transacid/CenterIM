@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.30 2002/07/08 16:16:15 konst Exp $
+* $Id: irchook.cc,v 1.31 2002/07/10 09:23:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -492,8 +492,8 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 }
 
 void irchook::requestawaymsg(const imcontact &ic) {
-    em.store(immessage(ic, imevent::incoming, string() +
-	_("* Away message:") + "\n\n" + awaymessages[ic.nickname]));
+    em.store(imnotification(ic, string() +
+	_("Away message:") + "\n\n" + awaymessages[ic.nickname]));
 }
 
 void irchook::saveconfig() const {
@@ -574,7 +574,7 @@ void irchook::channelfatal(const string &room, const char *fmt, ...) {
 	c->setstatus(offline);
 	i->joined = i->fetched = false;
 	i->contactlist = true;
-	em.store(immessage(cont, imevent::incoming, buf));
+	em.store(imnotification(cont, buf));
     }
 }
 
@@ -1018,7 +1018,7 @@ void irchook::chatkicked(void *connection, void *cli, ...) {
     char *reason = va_arg(ap, char *);
     va_end(ap);
 
-    irhook.channelfatal(room, _("* Kicked by %s; reason: %s"),
+    irhook.channelfatal(room, _("Kicked by %s; reason: %s"),
 	by, rushtmlconv("wk", reason).c_str());
 }
 
@@ -1037,7 +1037,7 @@ void irchook::errorhandler(void *connection, void *cli, ...) {
 	    // Cannot join channel
 	    if(subject)
 	    if(strlen(subject))
-		irhook.channelfatal(subject, _("* %s"), description);
+		irhook.channelfatal(subject, "%s", description);
 	    break;
 	case FE_BADUSER:
 	    // Cannot fetch user's info

@@ -957,8 +957,10 @@ recommended just cut'n'paste the following text.
 #
 # event
 # -----
-# Can be "msg", "sms", "url", or "online". Specifying several event types
-# is also supported. "all" stands for all the event types.
+# Can be "msg", "sms", "url", "online" or "notification". The latter
+# means centericq's own notifications, such as birthday reminders,
+# away messages, and other stuff. Specifying several event types is
+# also allowed. "all" stands for all the event types.
 #
 # proto
 # -----
@@ -1038,8 +1040,8 @@ environment variables imported by centericq:
 
 EVENT_TYPE
 
-    The type of the received event. Can be "msg", "sms", "url" or
-    "online".
+    The type of the received event. Can be "msg", "sms", "url",
+    "online" or "notification".
 
 EVENT_NETWORK
 

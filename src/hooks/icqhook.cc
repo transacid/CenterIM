@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.86 2002/07/03 15:31:05 konst Exp $
+* $Id: icqhook.cc,v 1.87 2002/07/10 09:23:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -873,8 +873,8 @@ void icqhook::messaged_cb(MessageEvent *ev) {
     } else if(ev->getType() == MessageEvent::UserAdd) {
 	UserAddEvent *r;
 	if(r = dynamic_cast<UserAddEvent *>(ev)) {
-	    em.store(immessage(ic, imevent::incoming,
-		string() + _("* The user has added you to his/her contact list")));
+	    em.store(imnotification(ic,
+		_("The user has added you to his/her contact list")));
 	}
 
     }
@@ -915,8 +915,7 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 		    AwayMessageEvent *r;
 
 		    if(r = dynamic_cast<AwayMessageEvent *>(ev)) {
-			em.store(immessage(ic, imevent::incoming,
-			    string() + _("* Away message:") + "\n\n" +
+			em.store(imnotification(ic, string() + _("Away message:") + "\n\n" +
 			    rusconv("wk", r->getAwayMessage())));
 		    }
 		} else {

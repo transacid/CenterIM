@@ -1006,3 +1006,9 @@ processing code of the respective module. Thanks to KF
 
 The cicqconv migration script now does also support micq. Thanks to
 Artur Komarov <artur@emd.ru>
+
+The centericq's own notification messages class used for such events as
+birthday reminders, away messages and other stuff, was separated from
+usual messages. That was done to avoid external handler's reacting on
+such messages like they were received from one of your contacts.
+

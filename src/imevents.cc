@@ -10,7 +10,7 @@ static const string sdirection[imevent::imdirection_size] = {
 };
 
 static const string seventtype[imevent::imeventtype_size] = {
-    "MSG", "URL", "SMS", "AUTH", "", "EMAIL"
+    "MSG", "URL", "SMS", "AUTH", "", "EMAIL", "NOTE"
 };
 
 // -- basic imevent class -----------------------------------------------------
@@ -134,6 +134,8 @@ imevent *imevent::getevent() const {
 	    return new imauthorization(*this);
 	case email:
 	    return new imemail(*this);
+	case notification:
+	    return new imnotification(*this);
 	default:
 	    return 0;
     }
@@ -364,6 +366,46 @@ void imemail::write(ofstream &f) const {
 }
 
 void imemail::read(ifstream &f) {
+    text = readblock(f);
+}
+
+// -- imnotification class ----------------------------------------------------
+
+imnotification::imnotification(const imcontact &acont, const string &atext)
+: imevent(acont, incoming, notification), text(atext) {
+}
+
+imnotification::imnotification(const imevent &ev) {
+    type = notification;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
+
+    const imnotification *m = dynamic_cast<const imnotification *>(&ev);
+
+    if(m) {
+	text = m->text;
+    }
+}
+
+string imnotification::gettext() const {
+    return (string) "* " + text;
+}
+
+bool imnotification::empty() const {
+    return text.empty();
+}
+
+bool imnotification::contains(const string &atext) const {
+    return text.find(atext) != -1;
+}
+
+void imnotification::write(ofstream &f) const {
+    imevent::write(f);
+    f << text << endl;
+}
+
+void imnotification::read(ifstream &f) {
     text = readblock(f);
 }
 
