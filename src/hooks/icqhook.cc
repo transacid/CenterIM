@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.79 2002/04/15 09:27:08 konst Exp $
+* $Id: icqhook.cc,v 1.80 2002/04/16 13:11:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -72,6 +72,7 @@ icqhook::icqhook() {
     cli.rate.connect(slot(this, &icqhook::rate_cb));
     cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
     cli.search_result.connect(slot(this, &icqhook::search_result_cb));
+    cli.server_based_contact_list.connect(slot(this, &icqhook::server_based_contact_list_cb));
     cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
     cli.self_contact_status_change_signal.connect(slot(this, &icqhook::self_contact_status_change_cb));
 
@@ -96,6 +97,7 @@ icqhook::~icqhook() {
     cli.want_auto_resp.clear();
     cli.self_contact_userinfo_change_signal.clear();
     cli.self_contact_status_change_signal.clear();
+    cli.server_based_contact_list.clear();
 }
 
 void icqhook::init() {
@@ -730,6 +732,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
     }
 
     resolve();
+//    cli.fetchServerBasedContactList();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {
@@ -1082,4 +1085,20 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 
 void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
     face.update();
+}
+
+void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
+    const ContactList &lst = ev->getContactList();
+    ContactList::const_iterator i = lst.begin();
+
+    while(i != lst.end()) {
+	imcontact cont((*i)->getUIN(), icq);
+
+	if(!clist.get(cont))
+	    clist.addnew(cont, true);
+
+	i++;
+    }
+
+//    cli.uploadServerBasedContactList();
 }

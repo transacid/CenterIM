@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.103 2002/04/15 16:46:28 konst Exp $
+* $Id: icqface.cc,v 1.104 2002/04/16 13:11:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -386,14 +386,17 @@ void icqface::fillcontactlist() {
     void *savec;
     char prevsc = 'x', sc;
     icqgroup *g = NULL;
-    bool online_added = false, groupchange, prevoffline = false, grouponline = true, ontop;
+
+    bool online_added = false, groupchange, prevoffline = false, grouponline = true, ontop, iscurrentnode;
 
     nnode = ngroup = prevgid = 0;
-    ontop = !mcontacts->menu.getpos();
+
+    iscurrentnode = mcontacts->isnode(mcontacts->getid(mcontacts->menu.getpos()));
+    ontop = !mcontacts->menu.getpos() && iscurrentnode;
 
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
 
-    if(!mcontacts->isnode(mcontacts->getid(mcontacts->menu.getpos())) && savec) {
+    if(!iscurrentnode && savec) {
 	g = find(groups.begin(), groups.end(), ((icqcontact *) savec)->getgroupid());
 	if(g->iscollapsed() && !((icqcontact *) savec)->getmsgcount()) savec = g;
     }
@@ -401,8 +404,7 @@ void icqface::fillcontactlist() {
     /* if savec is a group, we need to figure out of it's the top or bottom
        one when we're in groupmode mode 2. */
 
-    if(savec && mcontacts->isnode(mcontacts->getid(mcontacts->menu.getpos()))
-    && conf.getgroupmode() == icqconf::group2) {
+    if(savec && iscurrentnode && conf.getgroupmode() == icqconf::group2) {
 	for(i = 0; i < mcontacts->getcount(); i++) {
 	    if(mcontacts->getref(mcontacts->getid(i)) == savec) {
 		if(mcontacts->getid(i) != mcontacts->getid(mcontacts->menu.getpos()))

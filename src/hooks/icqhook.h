@@ -36,6 +36,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	void socket_cb(SocketEvent *ev);
 	void want_auto_resp_cb(ICQMessageEvent *ev);
 	void search_result_cb(SearchResultEvent *ev);
+	void server_based_contact_list_cb(ServerBasedContactEvent *ev);
 	void self_contact_userinfo_change_cb(UserInfoChangeEvent *ev);
 	void self_contact_status_change_cb(StatusChangeEvent *ev);
 
