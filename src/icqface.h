@@ -90,6 +90,7 @@ class icqface {
 	    imevent::imdirection direct;
 	    string fname;
 	    int btotal, bdone;
+	    transferstatus status;
 
 	    filetransferitem(): btotal(0), bdone(0) { }
 	};
@@ -110,6 +111,7 @@ class icqface {
 	static void textinputidle(textinputline &il);
 	static void freeworkareabuf(void *p);
 	static void detailsidle(dialogbox &db);
+	static void transferidle(dialogbox &db);
 	static void editchatidle(texteditor &e);
 
 	static void termresize(void);

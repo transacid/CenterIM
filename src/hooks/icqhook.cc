@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.110 2002/09/24 16:20:48 konst Exp $
+* $Id: icqhook.cc,v 1.111 2002/10/04 16:58:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -218,12 +218,12 @@ void icqhook::exectimers() {
 	if(tcurrent-timer_poll > PERIOD_ICQPOLL) {
 	    cli.Poll();
 	    sendinvisible();
-	    time(&timer_poll);
+	    timer_poll = tcurrent;
 	}
 
 	if(tcurrent-timer_resolve > PERIOD_RESOLVE) {
 	    resolve();
-	    time(&timer_resolve);
+	    timer_resolve = tcurrent;
 	}
     }
 }
@@ -942,7 +942,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
     time(&timer_poll);
-    timer_resolve = time(0)-PERIOD_RESOLVE+3;
+    timer_resolve = timer_poll-PERIOD_RESOLVE+3;
 
     logger.putourstatus(icq, offline, manualstatus);
 

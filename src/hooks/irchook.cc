@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.49 2002/09/30 16:13:13 konst Exp $
+* $Id: irchook.cc,v 1.50 2002/10/04 16:58:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -225,7 +225,7 @@ bool irchook::send(const imevent &ev) {
 		r.fname = ir->fname;
 		r.size = ir->size;
 
-		imfile fr(c->getdesc(), imevent::incoming, "",
+		imfile fr(c->getdesc(), imevent::outgoing, "",
 		    vector<imfile::record>(1, r));
 
 		firetalk_file_offer(handle, c->getdesc().nickname.c_str(),
@@ -655,7 +655,7 @@ void irchook::requestversion(const imcontact &c) {
 void irchook::ping(const imcontact &c) {
     if(logged()) {
 	firetalk_subcode_send_request(handle, c.nickname.c_str(), "PING", 0);
-	pingtime[up(c.nickname)] = time(0);
+	time(&pingtime[up(c.nickname)]);
     }
 }
 

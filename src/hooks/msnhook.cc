@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.34 2002/09/24 16:20:49 konst Exp $
+* $Id: msnhook.cc,v 1.35 2002/10/04 16:58:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -151,8 +151,8 @@ bool msnhook::send(const imevent &ev) {
     }
 
     icqcontact *c = clist.get(ev.getcontact());
-//    text = siconv(text, conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET, "utf8");
-    text = toutf8(rusconv("kw", text));
+    text = siconv(text, conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET, "utf8");
+//    text = toutf8(rusconv("kw", text));
 
     if(c)
     if(c->getstatus() != offline) {
@@ -340,7 +340,8 @@ void msnhook::messaged(void *data) {
 	    mhook.checkfriendly(c, d->friendlyhandle);
 	}
 
-	text = rusconv("wk", fromutf8(d->msg));
+//        text = rusconv("wk", fromutf8(d->msg));
+	text = siconv(d->msg, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
 	em.store(immessage(ic, imevent::incoming, text));
 
 	if(c)

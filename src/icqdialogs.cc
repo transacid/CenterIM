@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.89 2002/09/30 16:13:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.90 2002/10/04 16:58:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1142,7 +1142,7 @@ int icqface::groupmanager(const string &text, bool sel) {
 void icqface::transfermonitor() {
     dialogbox db;
     int n, b, incid, outid, cid;
-    vector<filetransferitem>::const_iterator it;
+    vector<filetransferitem>::iterator it;
     string fitem;
 
     incid = outid = -1;
@@ -1159,15 +1159,15 @@ void icqface::transfermonitor() {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Cancel"), 0));
+	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), 0));
 
     db.addautokeys();
 
-    db.idle = &dialogidle;
+    db.idle = &transferidle;
     blockmainscreen();
     treeview &t = *db.gettree();
 
-    db.addkey(KEY_DC, 0);
+    db.addkey(KEY_DC, 1);
 
     for(bool fin = false; !fin; ) {
 	t.clear();
@@ -1184,13 +1184,30 @@ void icqface::transfermonitor() {
 		    break;
 	    }
 
-	    fitem = it->fname;
+	    switch(it->status) {
+		case icqface::tsInit: fitem = _("init"); break;
+		case icqface::tsStart: fitem = _("start"); break;
+		case icqface::tsProgress: fitem = _("work"); break;
+		case icqface::tsFinish: fitem = _("done"); break;
+		case icqface::tsError: fitem = _("err"); break;
+		case icqface::tsCancel: fitem = _("abort"); break;
+	    }
+
+	    fitem = (string) "[" + fitem + "] " + it->fname;
 
 	    if(it->btotal > 0)
-		fitem += (string) ", " +
-		    i2str(it->btotal) + " " + _("bytes total");
+		fitem += (string) ", " + i2str(it->btotal) + " " + _("total");
 
-	    fitem += (string) ", " + i2str(it->bdone) + " " + _("done");
+	    if(it->status == icqface::tsProgress)
+		fitem += (string) ", " + i2str(it->bdone) + " " + _("done");
+
+	    int limit = sizeDlg.width-8;
+
+	    if(fitem.size() > limit) {
+		int pos = fitem.find("] ");
+		fitem.erase(pos+2, fitem.size()-limit+2);
+		fitem.insert(pos+2, "..");
+	    }
 
 	    t.addleaff(cid, 0, it-transfers.begin(), " %s ", fitem.c_str());
 	}
@@ -1200,6 +1217,22 @@ void icqface::transfermonitor() {
 	if(!fin)
 	switch(b) {
 	    case 0:
+		break;
+	    case 1:
+		it = transfers.begin() + (int) db.getmenu()->getref(n-1);
+		switch(it->status) {
+		    case icqface::tsInit:
+		    case icqface::tsStart:
+		    case icqface::tsProgress:
+			status(_("Cannot remove a transfer which is in progress now"));
+			break;
+
+		    case icqface::tsFinish:
+		    case icqface::tsError:
+		    case icqface::tsCancel:
+			transfers.erase(it);
+			break;
+		}
 		break;
 	}
     }
@@ -1216,6 +1249,7 @@ imevent::imdirection dir, transferstatus st, int btotal, int bdone) {
     while(i != transfers.end()) {
 	if(i->cont == c && i->fname == fname && i->direct == dir)
 	    break;
+	++i;
     }
 
     if(i == transfers.end()) {
@@ -1228,4 +1262,5 @@ imevent::imdirection dir, transferstatus st, int btotal, int bdone) {
 
     if(btotal) i->btotal = btotal;
     if(bdone) i->bdone = bdone;
+    i->status = st;
 }

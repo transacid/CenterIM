@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.146 2002/09/30 16:13:10 konst Exp $
+* $Id: icqface.cc,v 1.147 2002/10/04 16:58:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2387,6 +2387,17 @@ void icqface::dialogidle(dialogbox &caller) {
 
 void icqface::textbrowseridle(textbrowser &b) {
     cicq.idle();
+}
+
+void icqface::transferidle(dialogbox &b) {
+    time_t tstart = time(0);
+
+    while(!cicq.idle(HIDL_SOCKEXIT)) {
+	if(time(0)-tstart > 3) {
+	    b.gettree()->abort();
+	    break;
+	}
+    }
 }
 
 int icqface::contactskeys(verticalmenu &m, int k) {

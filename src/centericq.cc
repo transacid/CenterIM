@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.126 2002/09/30 16:13:08 konst Exp $
+* $Id: centericq.cc,v 1.127 2002/10/04 16:58:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,7 +38,6 @@ centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
       regmode(false)
 {
-//    timer_keypress = time(0)-50;
 }
 
 centericq::~centericq() {
@@ -173,6 +172,9 @@ void centericq::mainloop() {
 	    case ACT_ORG_GROUPS:
 		face.organizegroups();
 		break;
+	    case ACT_TRANSFERS:
+		face.transfermonitor();
+		break;
 	    case ACT_HIDEOFFLINE:
 		conf.sethideoffline(!conf.gethideoffline());
 		face.update();
@@ -284,6 +286,7 @@ void centericq::mainloop() {
 		if(gid = face.selectgroup(_("Select a group to move the user to"))) {
 		    c->setgroupid(gid);
 		    face.fillcontactlist();
+		    face.update();
 		}
 		break;
 
@@ -1287,18 +1290,18 @@ void centericq::exectimers() {
 	    face.relaxedupdate();
 	}
 
-	time(&timer_resend);
+	timer_resend = timer_current;
     }
 
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	cicq.checkmail();
-	time(&timer_checkmail);
+	timer_checkmail = timer_current;
     }
 
     if(face.updaterequested())
     if(timer_current-timer_update > PERIOD_DISPUPDATE) {
 	face.update();
-	time(&timer_update);
+	timer_update = timer_current;
     }
 }
 

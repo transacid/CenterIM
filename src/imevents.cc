@@ -17,11 +17,11 @@ static const string seventtype[imevent::imeventtype_size] = {
 
 // -- basic imevent class -----------------------------------------------------
 
-imevent::imevent(): timestamp(time(0)) {
+imevent::imevent() {
 }
 
 imevent::imevent(const imcontact &acont, imdirection adir, imeventtype atype)
-: contact(acont), direction(adir), timestamp(time(0)), type(atype) {
+: contact(acont), direction(adir), type(atype), timestamp(time(0)) {
 }
 
 imevent::imevent(ifstream &f) {
