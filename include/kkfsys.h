@@ -35,6 +35,7 @@
 const string readlink(const string fname);
 const string pathfind(const string name, string path, int amode = F_OK);
 bool mksubdirs(string dir);
+bool samefile(const string fname1, const string fname2);
 
 __KTOOL_BEGIN_C
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkfsys file system related routines
-* $Id: kkfsys.cc,v 1.3 2001/08/18 07:30:43 konst Exp $
+* $Id: kkfsys.cc,v 1.4 2001/08/23 11:35:20 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -172,4 +172,17 @@ const string readlink(const string fname) {
     } else {
 	return "";
     }
+}
+
+bool samefile(const string fname1, const string fname2) {
+    bool r;
+    struct stat st1, st2;
+
+    if(r = !stat(fname1.c_str(), &st1) && !stat(fname2.c_str(), &st2)) {
+	r = st1.st_ino == st2.st_ino;
+    } else {
+	r = fname1 == fname2;
+    }
+
+    return r;
 }
