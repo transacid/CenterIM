@@ -32,14 +32,14 @@ void nothingfree(void *p);
 int stringcompare(void *s1, void *s2);
 int intcompare(void *s1, void *s2);
 
-string leadcut(string base, string delim = "\t\n\r ");
-string trailcut(string base, string delim = "\t\n\r ");
+const string leadcut(string base, string delim = "\t\n\r ");
+const string trailcut(string base, string delim = "\t\n\r ");
 
-string getword(string &base, string delim = "\t\n\r ");
-string getrword(string &base, string delim = "\t\n\r ");
+const string getword(string &base, string delim = "\t\n\r ");
+const string getrword(string &base, string delim = "\t\n\r ");
 
-string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ");
-string getrwordquote(string &base, string quote = "\"", string delim = "\t\n\r ");
+const string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ");
+const string getrwordquote(string &base, string quote = "\"", string delim = "\t\n\r ");
 
 int rtabmargin(bool fake, int curpos, const char *p = 0);
 int ltabmargin(bool fake, int curpos, const char *p = 0);
@@ -58,8 +58,10 @@ int find_quoted_first_of(const string &str, const string &needle,
 void splitlongtext(string text, vector<string> &lst,
     int size = 440, const string cont = "\n[continued]");
 
-string strdateandtime(time_t stamp, string fmt = "");
-string strdateandtime(struct tm *tms, string fmt = "");
+const string strdateandtime(time_t stamp, string fmt = "");
+const string strdateandtime(struct tm *tms, string fmt = "");
+
+bool iswholeword(const string s, int so, int eo);
 
 __KTOOL_BEGIN_C
 
@@ -113,12 +115,12 @@ char *mime(char *dst, const char *src);
 
 int parseformat(char *command, char *quotes, char *fmt, ...);
 
-string justfname(const string fname);
-string justpathname(const string fname);
+const string justfname(const string fname);
+const string justpathname(const string fname);
 
-string textscreen(const string text);
-string i2str(int i);
-string ui2str(int i);
+const string textscreen(const string text);
+const string i2str(int i);
+const string ui2str(int i);
 
 __KTOOL_END_C
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: kkstrtext.cc,v 1.3 2001/08/03 09:21:14 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -479,11 +479,11 @@ int stralone(char *buf, char *startword, int wordlen, char *delim) {
     return leftdelim && rightdelim;
 }
 
-string justfname(const string fname) {
+const string justfname(const string fname) {
     return fname.substr(fname.rfind("/")+1);
 }
 
-string justpathname(const string fname) {
+const string justpathname(const string fname) {
     int pos;
     
     if((pos = fname.rfind("/")) != -1) {
@@ -513,26 +513,26 @@ int intcompare(void *s1, void *s2) {
     return (int) s1 != (int) s2;
 }
 
-string i2str(int i) {
+const string i2str(int i) {
     char buf[64];
     sprintf(buf, "%d", i);
     return (string) buf;
 }
 
-string ui2str(int i) {
+const string ui2str(int i) {
     char buf[64];
     sprintf(buf, "%du", i);
     return (string) buf;
 }
 
-string textscreen(string text) {
+const string textscreen(string text) {
     for(int i = 0; i < text.size(); i++)
     if(!isalnum(text[i])) text.insert(i++, "\\");
     
     return text;
 }
 
-string leadcut(string base, string delim = "\t\n\r ") {
+const string leadcut(string base, string delim = "\t\n\r ") {
     while(!base.empty()) {
 	if(strchr(delim.c_str(), base[0])) {
 	    base.replace(0, 1, "");
@@ -541,7 +541,7 @@ string leadcut(string base, string delim = "\t\n\r ") {
     return base;
 }
 
-string trailcut(string base, string delim = "\t\n\r ") {
+const string trailcut(string base, string delim = "\t\n\r ") {
     while(!base.empty()) {
 	if(strchr(delim.c_str(), base[base.size()-1])) {
 	    base.resize(base.size()-1);
@@ -551,7 +551,7 @@ string trailcut(string base, string delim = "\t\n\r ") {
     return base;
 }
 
-string getword(string &base, string delim = "\t\n\r ") {
+const string getword(string &base, string delim = "\t\n\r ") {
     string sub;
     int i;
 
@@ -569,7 +569,7 @@ string getword(string &base, string delim = "\t\n\r ") {
     return sub;
 }
 
-string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ") {
+const string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ") {
     string sub;
     bool inquote = false;
     int i;
@@ -591,7 +591,7 @@ string getwordquote(string &base, string quote = "\"", string delim = "\t\n\r ")
     return sub;
 }
 
-string getrword(string &base, string delim = "\t\n\r ") {
+const string getrword(string &base, string delim = "\t\n\r ") {
     string sub;
     int i;
 
@@ -609,7 +609,7 @@ string getrword(string &base, string delim = "\t\n\r ") {
     return sub;
 }
 
-string getrwordquote(string &base, string quote = "\"", string delim = "\t\n\r ") {
+const string getrwordquote(string &base, string quote = "\"", string delim = "\t\n\r ") {
     string sub;
     bool inquote = false;
     int i;
@@ -813,11 +813,11 @@ void splitlongtext(string text, vector<string> &lst, int size = 440, const strin
     }
 }
 
-string strdateandtime(time_t stamp, string fmt = "") {
+const string strdateandtime(time_t stamp, string fmt = "") {
     return strdateandtime(localtime(&stamp), fmt);
 }
 
-string strdateandtime(struct tm *tms, string fmt = "") {
+const string strdateandtime(struct tm *tms, string fmt = "") {
     char buf[512];
     time_t current_time = time(0);
     time_t when = mktime(tms);
@@ -833,4 +833,14 @@ string strdateandtime(struct tm *tms, string fmt = "") {
 
     strftime(buf, 512, fmt.c_str(), tms);
     return buf;
+}
+
+bool iswholeword(const string s, int so, int eo) {
+    bool rm, lm;
+    const string wdelims = "[](),.; <>-+{}=|&%~*/:?@";
+
+    lm = !so || (wdelims.find(s.substr(so-1, 1)) != -1);
+    rm = (eo == s.size()-1) || (wdelims.find(s.substr(eo, 1)) != -1);
+
+    return rm && lm;
 }
