@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.19 2002/03/11 13:06:49 konst Exp $
+* $Id: msnhook.cc,v 1.20 2002/03/21 17:43:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -95,20 +95,6 @@ void msnhook::disconnect() {
 }
 
 void msnhook::exectimers() {
-    time_t tcurrent = time(0);
-
-    if(logged()) {
-    } else {
-	if(tcurrent-timer_reconnect > PERIOD_RECONNECT && conf.enoughdiskspace()) {
-	    if(online() && !logged()) {
-		disconnect();
-	    } else if(manualstatus != offline) {
-		if(!manager.isopen()) {
-		    connect();
-		}
-	    }
-	}
-    }
 }
 
 void msnhook::main() {

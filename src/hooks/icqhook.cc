@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.69 2002/03/15 15:15:38 konst Exp $
+* $Id: icqhook.cc,v 1.70 2002/03/21 17:43:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -122,7 +122,6 @@ void icqhook::connect() {
 
     sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
-    logger.putourstatus(icq, offline, manualstatus);
 
     time(&timer_reconnect);
     fonline = true;
@@ -130,7 +129,6 @@ void icqhook::connect() {
 }
 
 void icqhook::disconnect() {
-    logger.putourstatus(icq, getstatus(), offline);
     cli.setStatus(STATUS_OFFLINE);
 }
 
@@ -181,16 +179,6 @@ void icqhook::exectimers() {
 	    cli.Poll();
 	    sendinvisible();
 	    time(&timer_poll);
-	}
-    } else {
-	if(tcurrent-timer_reconnect > PERIOD_RECONNECT && conf.enoughdiskspace()) {
-	    if(online() && !logged()) {
-		disconnect();
-	    } else if(manualstatus != offline) {
-		if(!manager.isopen()) {
-		    connect();
-		}
-	    }
 	}
     }
 }
@@ -677,6 +665,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
     time(&timer_poll);
+    logger.putourstatus(icq, offline, manualstatus);
 
     face.log(_("+ [icq] logged in"));
     face.update();
@@ -718,13 +707,19 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     wfds.clear();
     efds.clear();
 
+    logger.putourstatus(icq, getstatus(), offline);
+
     clist.setoffline(icq);
     fonline = false;
 
     msg = _("+ [icq] disconnected");
+
     if(!reasons[ev->getReason()].empty()) {
 	msg += ", ";
 	msg += reasons[ev->getReason()];
+
+	logger.putmessage((string) _("icq disconnection reason") + ": " +
+	    reasons[ev->getReason()]);
     }
 
     face.log(msg);

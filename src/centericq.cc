@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.80 2002/03/14 15:15:48 konst Exp $
+* $Id: centericq.cc,v 1.81 2002/03/21 17:43:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -859,7 +859,7 @@ bool centericq::idle(int options = 0) {
 	    }
 	}
 
-	tv.tv_sec = online ? PERIOD_SELECT : PERIOD_RECONNECT/3;
+	tv.tv_sec = face.updaterequested() ? 1 : 30;
 	tv.tv_usec = 0;
 
 	select(hsockfd+1, &rfds, &wfds, &efds, &tv);
@@ -944,13 +944,61 @@ void centericq::exectimers() {
     time_t timer_current = time(0);
     protocolname pname;
     int paway, pna;
-    bool fonline;
+    bool fonline = false;
+
+    /*
+    *
+    * Execute regular actions for all the hooks.
+    *
+    */
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	if(!conf.getourid(pname).empty()) {
-	    gethook(pname).exectimers();
+	    abstracthook &hook = gethook(pname);
+
+	    /*
+	    *
+	    * A hook's own action goes first.
+	    *
+	    */
+
+	    hook.exectimers();
+
+	    static map<protocolname, reconnectInfo> reconnect;
+
+	    if(!hook.logged()) {
+		/*
+		*
+		* Any need to try auto re-connecting?
+		*
+		*/
+
+		if(timer_current-reconnect[pname].timer > reconnect[pname].period) {
+		    time(&reconnect[pname].timer);
+		    reconnect[pname].period += reconnect[pname].period/2;
+
+		    if(hook.online()) {
+			hook.disconnect();
+
+		    } else if(conf.getstatus(pname) != offline) {
+			if(conf.enoughdiskspace() && !manager.isopen()) {
+			    hook.connect();
+			}
+
+		    }
+		}
+	    } else {
+		reconnect[pname] = reconnectInfo();
+		fonline = true;
+	    }
 	}
     }
+
+    /*
+    *
+    * How let's find out how are the auto-away mode is doing.
+    *
+    */
 
     conf.getauto(paway, pna);
 
@@ -965,40 +1013,37 @@ void centericq::exectimers() {
 	    setauto(available);
     }
 
-    if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
-	cicq.checkmail();
-	time(&timer_checkmail);
-    }
-
     if(timer_current-timer_resend > PERIOD_RESEND) {
 	/*
 	*
-	* We'll check for free disk space here too
+	* We'll check for free disk space here too.
 	*
 	*/
 
 	conf.checkdiskspace();
 
-	for(pname = icq, fonline = false; pname != protocolname_size; (int) pname += 1)
-	    fonline = fonline || (gethook(pname).getstatus() != offline);
-
-	if(!conf.enoughdiskspace() && fonline) {
+	if(fonline && !conf.enoughdiskspace()) {
 	    for(pname = icq; pname != protocolname_size; (int) pname += 1)
-		gethook(pname).setstatus(offline);
+		gethook(pname).disconnect();
 
 	    face.log(_("! free disk space is less than 10k, going offline"));
 	    face.log(_("! otherwise we can lose events and configuration"));
+	} else {
+	    /*
+	    *
+	    * Re-send the idle IM events.
+	    *
+	    */
+
+	    em.resend();
+	    face.relaxedupdate();
+	    time(&timer_resend);
 	}
+    }
 
-	/*
-	*
-	* Now try to re-send unsent events
-	*
-	*/
-
-	em.resend();
-	face.relaxedupdate();
-	time(&timer_resend);
+    if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
+	cicq.checkmail();
+	time(&timer_checkmail);
     }
 
     if(face.updaterequested())

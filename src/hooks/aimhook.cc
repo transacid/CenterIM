@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.8 2002/03/17 17:22:56 konst Exp $
+* $Id: aimhook.cc,v 1.9 2002/03/21 17:43:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,20 +94,6 @@ void aimhook::disconnect() {
 }
 
 void aimhook::exectimers() {
-    time_t tcurrent = time(0);
-
-    if(logged()) {
-    } else {
-	if(tcurrent-timer_reconnect > PERIOD_RECONNECT && conf.enoughdiskspace()) {
-	    if(online() && !logged()) {
-		disconnect();
-	    } else if(manualstatus != offline) {
-		if(!manager.isopen()) {
-		    connect();
-		}
-	    }
-	}
-    }
 }
 
 void aimhook::main() {

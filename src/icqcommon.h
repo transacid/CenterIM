@@ -52,12 +52,8 @@ using namespace std;
 
 #endif
 
-#define PERIOD_KEEPALIVE        100
-#define PERIOD_SELECT           1
 #define PERIOD_RESEND           20
 #define PERIOD_CHECKMAIL        30
-#define PERIOD_SOCKSALIVE       30
-#define PERIOD_WAIT_KEEPALIVE   15
 #define PERIOD_DISPUPDATE       2
 
 #endif
