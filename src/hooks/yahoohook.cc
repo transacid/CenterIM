@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.38 2002/07/03 09:44:55 konst Exp $
+* $Id: yahoohook.cc,v 1.39 2002/07/03 09:58:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -364,13 +364,14 @@ void yahoohook::userstatus(yahoo_context *y, struct yahoo_idstatus *rec) {
 	    c = clist.addnew(ic, false);
 	}
 
-	logger.putonline(ic, c->getstatus(), yhook.yahoo2imstatus(rec->status));
-	c->setstatus(yhook.yahoo2imstatus(rec->status));
-	if(rec->status_msg)
-	    c->setabout(rusconv("wk", rec->status_msg));
+	if(c) {
+	    logger.putonline(ic, c->getstatus(), yhook.yahoo2imstatus(rec->status));
 
-	if(c->getstatus() != offline) {
-	    c->setlastseen();
+	    c->setstatus(yhook.yahoo2imstatus(rec->status));
+	    if(c->getstatus() != offline)
+		c->setlastseen();
+
+	    c->setabout(rec->status_msg ? rusconv("wk", rec->status_msg) : "");
 	}
     }
 }
