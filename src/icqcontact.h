@@ -61,7 +61,7 @@ class icqcontact {
 	imstatus status;
 
 	int nmsgs, fupdated, groupid, fhistoffset;
-	bool finlist;
+	bool finlist, congratulated;
 	time_t lastread, lastseen;
 
 	string sound[imevent::imeventtype_size];
@@ -74,6 +74,8 @@ class icqcontact {
 
 	void scanhistory();
 	string tosane(const string &p) const;
+
+	void remindbirthday(bool r);
 
     public:
 	icqcontact(imcontact adesc);
@@ -126,7 +128,7 @@ class icqcontact {
 	void includeintolist();
 	bool inlist() const;
 
-	bool isbirthday() const;
+	bool isbirthday();
 	string getdirname() const;
 
 	char getshortstatus() const;

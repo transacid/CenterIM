@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.53 2002/04/03 17:40:54 konst Exp $
+* $Id: icqcontact.cc,v 1.54 2002/05/23 07:42:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -42,6 +42,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     nmsgs = lastread = fhistoffset = 0;
     status = offline;
     finlist = true;
+    congratulated = false;
 
     for(ie = imevent::message; ie != imevent::imeventtype_size; (int) ie += 1)
 	sound[ie] = "";
@@ -312,6 +313,9 @@ void icqcontact::load() {
 
     finlist = stat((fn = tname + "/excluded").c_str(), &st);
 
+    if(!isbirthday())
+	unlink((tname + "/congratulated").c_str());
+
     if(nick.empty()) {
 	if(cdesc.uin) nick = i2str(cdesc.uin);
 	else nick = cdesc.nickname;
@@ -325,7 +329,7 @@ void icqcontact::load() {
     }
 }
 
-bool icqcontact::isbirthday() const {
+bool icqcontact::isbirthday() {
     bool ret = false;
     time_t curtime = time(0);
     struct tm tbd, *tcur = localtime(&curtime);
@@ -340,6 +344,8 @@ bool icqcontact::isbirthday() const {
     if(tbd.tm_mon == tcur->tm_mon) {
 	ret = true;
     }
+
+    remindbirthday(ret);
 
     return ret;
 }
@@ -659,6 +665,30 @@ int icqcontact::gethistoffset() const {
 
 void icqcontact::sethistoffset(int aoffset) {
     fhistoffset = aoffset;
+}
+
+void icqcontact::remindbirthday(bool r) {
+    string tname = getdirname() + "congratulated";
+    ofstream f;
+
+    if(!congratulated && r) {
+	congratulated = !access(tname.c_str(), F_OK);
+
+	if(!congratulated) {
+	    f.open(tname.c_str());
+	    if(f.is_open()) f.close();
+
+	    em.store(immessage(getdesc(), imevent::incoming,
+		string() + _("* The user has a birthday today")));
+
+	    congratulated = true;
+	}
+
+    } else if(congratulated && !r) {
+	congratulated = false;
+	unlink(tname.c_str());
+
+    }
 }
 
 // ----------------------------------------------------------------------------
