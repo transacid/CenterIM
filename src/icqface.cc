@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.214 2004/03/09 21:46:26 konst Exp $
+* $Id: icqface.cc,v 1.215 2004/03/13 11:18:51 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -244,17 +244,17 @@ int icqface::contextmenu(icqcontact *c) {
     static map<int, string> actnames;
 
     if(actnames.empty()) {
-	actnames[ACT_URL]       = _(" Send an URL            u");
+	actnames[ACT_URL]       = getmenuitem(_("Send an URL"), 25, key_send_url, section_contact);
 	actnames[ACT_SMS]       = _(" Send an SMS");
-	actnames[ACT_CONTACT]   = _(" Send contacts          c");
+	actnames[ACT_CONTACT]   = getmenuitem(_("Send contacts"), 25, key_send_contact, section_contact);
 	actnames[ACT_AUTH]      = _(" Request authorization");
-	actnames[ACT_EDITUSER]  = _(" Edit details           e");
-	actnames[ACT_FETCHAWAY] = _(" Fetch away message     f");
-	actnames[ACT_ADD]       = _(" Add to list            a");
-	actnames[ACT_RENAME]    = _(" Rename contact         r");
+	actnames[ACT_EDITUSER]  = getmenuitem(_("Edit details"), 25, key_edit, section_contact);
+	actnames[ACT_FETCHAWAY] = getmenuitem(_("Fetch away message"), 25, key_fetch_away_message, section_contact);
+	actnames[ACT_ADD]       = getmenuitem(_("Add to list"), 25, key_add, section_contact);
+	actnames[ACT_RENAME]    = getmenuitem(_("Rename contact"), 25, key_rename, section_contact);
 	actnames[ACT_GROUPMOVE] = _(" Move to group..");
 	actnames[ACT_PING]      = _(" Ping");
-	actnames[ACT_VERSION]   = _(" Fetch version info     v");
+	actnames[ACT_VERSION]   = getmenuitem(_("Fetch version info"), 25, key_rename, section_contact);
 	actnames[ACT_FILE]      = _(" Send file(s)");
 	actnames[ACT_CONFER]    = _(" Invite to conference..");
     }
@@ -264,45 +264,34 @@ int icqface::contextmenu(icqcontact *c) {
 	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
 
 	actnames[ACT_MSG]       = _(" Send a channel message   enter");
-	actnames[ACT_HISTORY]   = _(" Channel chat history         h");
+	actnames[ACT_HISTORY]   = getmenuitem(_("Channel chat history"), 25, key_history, section_contact);
 	actnames[ACT_REMOVE]    = _(" Remove channel             del");
 	actnames[ACT_JOIN]      = _(" Join channel");
 	actnames[ACT_LEAVE]     = _(" Leave channel");
-	actnames[ACT_INFO]      = _(" List nicknames               ?");
+	actnames[ACT_INFO]      = getmenuitem(_("List nichnames"), 25, key_info, section_contact);
 
 	if(lst.inlist(c, csignore))
-	    actnames[ACT_IGNORE]    = _(" UnBlock channel messages     i");
+	    actnames[ACT_IGNORE]    = getmenuitem(_("UnBlock channel messages"), 25, key_ignore, section_contact);
 	else
-	    actnames[ACT_IGNORE]    = _(" Block channel messages       i");
+	    actnames[ACT_IGNORE]    = getmenuitem(_("Block channel messages"), 25, key_ignore, section_contact);
 
     } else {
 	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
 	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
 
-	if(c->getdesc().pname != rss) {
-	    actnames[ACT_MSG]       = _(" Send a message     enter");
-	    actnames[ACT_HISTORY]   = _(" Events history         h");
-	    actnames[ACT_REMOVE]    = _(" Remove user          del");
-	    actnames[ACT_INFO]      = _(" User's details         ?");
-	    actnames[ACT_EXTERN]    = _(" External actions..    f6");
-
-	    if(lst.inlist(c, csignore))
-		actnames[ACT_IGNORE]    = _(" Unset ignore user      i");
+	if(c->getdesc().pname != rss)
+	    actnames[ACT_MSG]       = getmenuitem(_("Send a message"), 25, key_compose, section_contact);
+	actnames[ACT_HISTORY]   = getmenuitem(_("Event history"), 25, key_history, section_contact);
+	actnames[ACT_REMOVE]    = getmenuitem(_("Remove user"), 25, key_remove, section_contact);
+	actnames[ACT_INFO]      = getmenuitem(_("User's details"), 25, key_info, section_contact);
+	actnames[ACT_EXTERN]    = getmenuitem(_("External actions.."), 25, key_contact_external_action, section_contact);
+	if(lst.inlist(c, csignore))
+	    actnames[ACT_IGNORE]    = getmenuitem(_("Unset ignore user"), 25, key_ignore, section_contact);
 	    else
-		actnames[ACT_IGNORE]    = _(" Ignore user            i");
+		actnames[ACT_IGNORE]    = getmenuitem(_("Ignore user"), 25, key_ignore, section_contact);
+	if(c->getdesc().pname == rss)
+	    actnames[ACT_PING]      = getmenuitem(_("Force check"), 25, key_rss_check, section_contact);
 
-	} else {
-	    actnames[ACT_HISTORY]   = _(" Events history         h");
-	    actnames[ACT_REMOVE]    = _(" Remove feed          del");
-	    actnames[ACT_INFO]      = _(" Feed information       ?");
-	    actnames[ACT_EXTERN]    = _(" External actions..    f6");
-	    actnames[ACT_PING]      = _(" Force check            c");
-
-	    if(lst.inlist(c, csignore))
-		actnames[ACT_IGNORE]    = _(" Unset ignore feed      i");
-	    else
-		actnames[ACT_IGNORE]    = _(" Ignore feed            i");
-	}
     }
 
     cont = c->getdesc();
@@ -399,8 +388,8 @@ int icqface::generalmenu() {
     m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+40, sizeWArea.y1+11, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-    m.additem(0, ACT_STATUS,    _(" Change status                       s"));
-    m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
+    m.additem(0, ACT_STATUS,    getmenuitem(_("Change status"), 38, key_change_status, section_contact));
+    m.additem(0, ACT_QUICKFIND, getmenuitem(_("Go to contact.."), 38, key_quickfind, section_contact));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
     m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
     m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
@@ -415,9 +404,10 @@ int icqface::generalmenu() {
     m.additem(0, ACT_INVISLIST,     _(" View/edit invisible list"));
     m.additem(0, ACT_VISIBLELIST,   _(" View/edit visible list"));
     m.addline();
-    m.additem(0, ACT_HIDEOFFLINE, conf.gethideoffline() ?
-	_(" Show offline users                 F5") :
-	_(" Hide offline users                 F5"));
+    if(conf.gethideoffline())
+    	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Show offline users"), 38, key_hide_offline, section_contact));
+    else
+	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Hide offline users"), 38, key_hide_offline, section_contact));
 
     if(conf.getgroupmode() != icqconf::nogroups) {
 	m.additem(0, ACT_ORG_GROUPS, _(" Organize contact groups"));
@@ -1185,7 +1175,9 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     saveworkarea();
     clearworkarea();
 
-    status(_("F2 to URLs, F6 external actions, ESC close"));
+    status(action2key(key_show_urls, section_info) + _(" to URLs, ")
+	    + action2key(key_user_external_action, section_info)
+	    + _(" external actions, esc close"));
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
@@ -2087,11 +2079,15 @@ void icqface::userinfoexternal(const imcontact &ic) {
 }
 
 void icqface::showeventbottom(const imcontact &ic) {
-    if(ischannel(ic)) {
-	status(_("^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"));
-    } else {
-	status(_("^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"));
-    }
+    status(action2key(key_send_message, section_editor) + _(" send, ")
+	+ action2key(key_multiple_recipients, section_editor) + _(" multi, ")
+	+ action2key(key_history, section_editor) + _(" history, ")
+	+ action2key(key_show_urls, section_editor) + _(" URLs, ")
+	+ action2key(key_fullscreen, section_editor) + _(" expand, ")
+	+ action2key(key_info, section_editor)
+	+ (ischannel(ic) ? _(" members, ") : _(" details, "))
+	+ action2key(key_quit, section_editor)
+	+ (ischannel(ic) ? _(" close") : _(" cancel")));
 }
 
 bool icqface::eventedit(imevent &ev) {
@@ -2791,7 +2787,9 @@ bool icqface::histexec(imevent *&im) {
 	    _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(), mhist.getcount());
 
-	status(_("/ search, N again, ESC cancel"));
+	status(action2key(key_search, section_history) + _(" search,")
+	    + action2key(key_search_again, section_history) + _(" again,")
+	    + _(" esc cancel"));
 
 	while(!fin) {
 	    if(db.open(k)) {
@@ -2885,6 +2883,71 @@ void icqface::transferidle(dialogbox &b) {
     }
 }
 
+string icqface::getmenuitem(string mtext, int width, int key, int section) {
+    string text = " " + mtext + " ";
+    string keyname = action2key(key, section);
+    int i = keyname.size()+text.size();
+
+    if (i > width)
+	return text;
+
+    for (; i < width; i++)
+	text += " ";
+
+    text += keyname;
+
+    return text;
+}
+
+int icqface::key2action(int k, int s) {
+    for(vector<icqconf::keybinding>::size_type i = 0; i < icqconf::keys.size(); i++)
+	if(k == icqconf::keys[i].key && s == icqconf::keys[i].section)
+	    return icqconf::keys[i].action;
+
+    return -1;
+}
+
+string icqface::action2key(int a, int s) {
+    string key;
+    ostringstream o;
+    vector<icqconf::keybinding>::size_type i = 0;
+
+    for( ; i < icqconf::keys.size(); i++)
+	if(a == icqconf::keys[i].action && s == icqconf::keys[i].section)
+	    break;
+
+    if(icqconf::keys[i].key == '\r')
+	return "enter";
+    else if(icqconf::keys[i].key == ALT('\r'))
+	return "alt-enter";
+    else if(icqconf::keys[i].key == CTRL(' '))
+	return "^space";
+    else if(icqconf::keys[i].key == ALT(' '))
+	return "alt-space";
+    else if(icqconf::keys[i].key == 339)
+	return "pageup";
+    else if(icqconf::keys[i].key == 338)
+	return "pagedown";
+    else if(icqconf::keys[i].key == 9)
+	return "tab";
+    else if(icqconf::keys[i].key == 27)
+	return "esc";
+    else if(icqconf::keys[i].key == 331)
+	return "insert";
+    else if(icqconf::keys[i].key == KEY_DC)
+	return "del";
+    else if(icqconf::keys[i].alt && icqconf::keys[i].ctrl)
+        o << "F" << (icqconf::keys[i].key-KEY_F0);
+    else if(icqconf::keys[i].alt)
+	o << "alt-" << (char)icqconf::keys[i].key;
+    else if(icqconf::keys[i].ctrl)
+	o << "^" << (char)(icqconf::keys[i].key+64);
+    else
+	o << (char)icqconf::keys[i].key;
+
+    return o.str();
+}
+
 int icqface::contactskeys(verticalmenu &m, int k) {
     icqcontact *c = NULL;
 
@@ -2901,112 +2964,88 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	capab = gethook(c->getdesc().pname).getCapabs();
     }
 
-    switch(k) {
-	case '?':
+    switch(face.key2action(k, section_contact)) {
+	case key_info:
 	    face.extk = ACT_INFO;
 	    break;
 
-	case KEY_DC:
+	case key_remove:
 	    face.extk = ACT_REMOVE;
 	    break;
 
-	case 'q':
-	case 'Q':
+	case key_quit:
 	    face.extk = ACT_QUIT;
 	    break;
 
-	case 'u':
-	case 'U':
+	case key_send_url:
 	    if(capab.count(hookcapab::urls))
 		face.extk = ACT_URL;
 	    break;
 
-	case 's':
-	case 'S':
-	case KEY_F(3):
+	case key_change_status:
 	    face.extk = ACT_STATUS;
 	    break;
 
-	case 'h':
-	case 'H':
+	case key_history:
 	    face.extk = ACT_HISTORY;
 	    break;
 
-	case 'a':
-	case 'A': face.extk = ACT_ADD; break;
+	case key_add: face.extk = ACT_ADD; break;
 
-	case 'c':
-	case 'C':
+	case key_send_contact:
 	    if(capab.count(hookcapab::contacts))
 		face.extk = ACT_CONTACT;
-
+	    break;
+	case key_rss_check:
 	    if(c && c->getdesc().pname == rss)
 		face.extk = ACT_PING;
-
 	    break;
 
-	case 'f':
-	case 'F':
+	case key_fetch_away_message:
 	    if(capab.count(hookcapab::fetchaway))
 		face.extk = ACT_FETCHAWAY;
 	    break;
 
-	case 'm':
-	case 'M':
-	case KEY_F(2):
+	case key_user_menu:
 	    face.extk = ACT_MENU;
 	    break;
 
-	case 'g':
-	case 'G':
-	case KEY_F(4):
+	case key_general_menu:
 	    face.extk = ACT_GMENU;
 	    break;
 
-	case KEY_F(5):
+	case key_hide_offline:
 	    face.extk = ACT_HIDEOFFLINE;
 	    break;
 
-	case KEY_F(6):
+	case key_contact_external_action:
 	    if(!ischannel(c) && c)
 		face.extk = ACT_EXTERN;
 	    break;
 
-	case 'r':
-	case 'R':
+	case key_rename:
 	    if(!ischannel(c) && c)
 		face.extk = ACT_RENAME;
 	    break;
 
-	case 'v':
-	case 'V':
+	case key_version:
 	    if(capab.count(hookcapab::version))
 		face.extk = ACT_VERSION;
 	    break;
 
-	case 'e':
-	case 'E':
+	case key_edit:
 	    if(!ischannel(c) && c)
 		face.extk = ACT_EDITUSER;
 	    break;
 
-	case 'i':
-	case 'I':
+	case key_ignore:
 	    if(c) face.extk = ACT_IGNORE;
 	    break;
 
-	case ALT('s'):
-	case '/': face.extk = ACT_QUICKFIND; break;
+	case key_quickfind: face.extk = ACT_QUICKFIND; break;
     }
 
-    if(k && face.extk && (strchr("?rRqQsShHmMuUgGaAfFcCeEiIvV/", k)
-	|| (k == KEY_DC)
-	|| (k == KEY_F(2))
-	|| (k == KEY_F(3))
-	|| (k == KEY_F(4))
-	|| (k == KEY_F(5))
-	|| (k == KEY_F(6))
-	|| (k == ALT('s')))) {
+    if(face.extk && face.key2action(k, section_contact) != -1) {
 	return m.getpos()+1;
     } else {
 	return -1;
@@ -3030,13 +3069,10 @@ int icqface::multiplekeys(verticalmenu &m, int k) {
 int icqface::historykeys(dialogbox &db, int k) {
     static string sub;
 
-    switch(k) {
-	case 's':
-	case 'S':
-	case '/':
+    switch(face.key2action(k, section_history)) {
+	case key_search:
 	    return -2;
-	case 'n':
-	case 'N':
+	case key_search_again:
 	    return -3;
     }
 
@@ -3046,31 +3082,31 @@ int icqface::historykeys(dialogbox &db, int k) {
 int icqface::editmsgkeys(texteditor &e, int k) {
     char *p;
 
-    switch(k) {
+    switch(face.key2action(k, section_editor)) {
 	case '\r':
 	    if(!conf.getentersends(face.passinfo.pname))
 		break;
-	case CTRL('x'):
+	case key_send_message:
 	    p = e.save("");
 	    face.editdone = strlen(p);
 	    delete p;
 	    if(face.editdone) return -1; else break;
-	case CTRL('p'):
+	case key_multiple_recipients:
 	    face.multicontacts("");
 	    break;
-	case CTRL('o'):
+	case key_history:
 	    cicq.history(face.passinfo);
 	    break;
-	case ALT('?'):
+	case key_info:
 	    cicq.userinfo(face.passinfo);
 	    break;
-	case KEY_F(2):
+	case key_show_urls:
 	    face.showextractedurls(); break;
-	case KEY_F(9):
+	case key_fullscreen:
 	    if(face.passevent)
 		face.fullscreenize(face.passevent);
 	    break;
-	case 27:
+	case key_quit:
 	    return -1;
     }
 
@@ -3078,20 +3114,20 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 }
 
 int icqface::userinfokeys(dialogbox &db, int k) {
-    switch(k) {
-	case KEY_F(2): face.showextractedurls(); break;
-	case KEY_F(6): face.userinfoexternal(face.passinfo); break;
+    switch(face.key2action(k, section_info)) {
+	case key_show_urls: face.showextractedurls(); break;
+	case key_user_external_action: face.userinfoexternal(face.passinfo); break;
     }
 
     return -1;
 }
 
 int icqface::eventviewkeys(dialogbox &db, int k) {
-    switch(k) {
-	case KEY_F(2):
+    switch(face.key2action(k, section_history)) {
+	case key_show_urls:
 	    face.showextractedurls();
 	    break;
-	case KEY_F(9):
+	case key_fullscreen:
 	    face.fullscreenize(face.passevent);
 	    break;
     }
@@ -3100,11 +3136,8 @@ int icqface::eventviewkeys(dialogbox &db, int k) {
 }
 
 int icqface::findreskeys(dialogbox &db, int k) {
-    switch(k) {
-	case ALT('s'):
-	case '/':
-	    return -3;
-    }
+    if (face.key2action(k, section_history) == key_search)
+	return -3;
 
     return -1;
 }

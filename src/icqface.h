@@ -161,6 +161,8 @@ class icqface {
 	bool sprofmanager(string &name, string &act);
 	void showeventbottom(const imcontact &ic);
 
+	string getmenuitem(string text, int width, int key, int section);
+
 	void invokelist(string &s, vector<string> &v, const string &def, textwindow *w);
 	bool setljparams(imxmlevent *ev);
 	void multichange(bool conv[], bool newstate);
@@ -195,6 +197,9 @@ class icqface {
 
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();
+
+	int key2action(int k, int s);
+	string action2key(int a, int s);
 
 	void log(const string &text);
 	void log(const char *fmt, ...);

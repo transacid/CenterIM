@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.127 2004/03/09 21:46:26 konst Exp $
+* $Id: icqconf.cc,v 1.128 2004/03/13 11:18:51 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -190,10 +190,184 @@ void icqconf::checkdir() {
 
 void icqconf::load() {
     loadmainconfig();
+    loadkeys();
     loadcolors();
     loadactions();
     external.load();
 }
+
+vector<icqconf::keybinding> icqconf::keys;
+
+void icqconf::loadkeys() {
+    int x;
+    string fname = getconfigfname("keybindings"), buf, param;
+    struct keybinding k;
+    ifstream f;
+
+    if(access(fname.c_str(), F_OK)) {
+	ofstream of(fname.c_str());
+
+	if(of.is_open()) {
+	    of << "# This file contains keybinding configuration for centericq" << endl;
+	    of << "# Every line should look like: bind <section> <key> <command>" << endl << endl;
+	    of << "bind contact\t?\tinfo" << endl;
+	    of << "bind contact\tq\tquit" << endl;
+	    of << "bind contact\t<F3>\tchange_status" << endl;
+	    of << "bind contact\ts\tchange_status" << endl;
+	    of << "bind contact\th\thistory" << endl;
+	    of << "bind contact\tf\tfetch_away_message" << endl;
+	    of << "bind contact\t<F2>\tuser_menu" << endl;
+	    of << "bind contact\tm\tuser_menu" << endl;
+	    of << "bind contact\t<F4>\tgeneral_menu" << endl;
+	    of << "bind contact\tg\tgeneral_menu" << endl;
+	    of << "bind contact\t<F5>\thide_offline" << endl;
+	    of << "bind contact\t<F6>\tcontact_external_action" << endl;
+	    of << "bind contact\ta\tadd" << endl;
+	    of << "bind contact\t<delete> remove" << endl;
+	    of << "bind contact\t<enter> compose" << endl;
+	    of << "bind contact\tc\tsend_contact" << endl;
+	    of << "bind contact\tc\trss_check" << endl;
+	    of << "bind contact\tu\tsend_url" << endl;
+	    of << "bind contact\tr\trename" << endl;
+	    of << "bind contact\tv\tversion" << endl;
+	    of << "bind contact\te\tedit" << endl;
+	    of << "bind contact\ti\tignore" << endl;
+	    of << "bind contact\t\\as\tquickfind" << endl;
+	    of << "bind contact\t/\tquickfind" << endl << endl;
+	    of << "bind history\t/\tsearch" << endl;
+	    of << "bind history\ts\tsearch" << endl;
+	    of << "bind history\tn\tsearch_again" << endl;
+	    of << "bind history\t<F2>\tshow_urls" << endl;
+	    of << "bind history\t<F9>\tfullscreen" << endl << endl;
+	    of << "bind editor\t\\cx\tsend_message" << endl;
+	    of << "bind editor\t<esc>\tquit" << endl;
+	    of << "bind editor\t\\cp\tmultiple_recipients" << endl;
+	    of << "bind editor\t\\co\thistory" << endl;
+	    of << "bind editor\t\\a?\tinfo" << endl;
+	    of << "bind editor\t<F2>\tshow_urls" << endl;
+	    of << "bind editor\t<F9>\tfullscreen" << endl << endl;
+	    of << "bind info\t<F2>\tshow_urls" << endl;
+	    of << "bind info\t<F6>\tuser_external_action" << endl;
+
+	    of.close();
+	}
+    }
+
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+
+	while(!f.eof()) {
+	    getstring(f, buf);
+
+	    if(buf.empty() || buf[0] == '#') continue;
+
+	    k.ctrl = false;
+	    k.alt = false;
+
+	    param = getword(buf);	/* first word is always bind */
+
+	    param = getword(buf);	/* read section */
+	    if(param == "contact")
+		k.section = section_contact; else
+	    if(param == "history")
+		k.section = section_history; else
+	    if (param == "editor")
+		k.section = section_editor; else
+	    if (param == "info")
+		k.section = section_info;
+
+	    param = getword(buf);	/* key */
+	    if(param == "\\c<space>" || param == "\\C<space>" || param == "^<space>") {
+		k.ctrl = true;
+		k.key = CTRL(' ');
+	    } else if(param == "\\a<enter>" || param == "\\A<enter>" || param == "@<enter>") {
+		k.alt = true;
+		k.key = ALT('\r');
+	    } else if(param == "\\a<space>" || param == "\\A<space>" || param == "@<space>") {
+		k.ctrl = true;
+		k.key = ALT(' ');
+	    } else if(param[0] == '\\') {
+		if(param[1] == 'c' || param[1] == 'C') {
+		    k.ctrl = true;
+		    k.key = CTRL(param[2]);
+		} else if(param[1] == 'a' || param[1] == 'A') {
+		    k.alt = true;
+		    k.key = ALT(param[2]);
+		} else if(param[1] == '\\') {
+		    k.key = '\\';
+		} else if(param[1] == '@') {
+		    k.key = '@';
+		} else if(param[1] == '^') {
+		    k.key = '^';
+		}
+	    } else if(param[0] == '^') {
+		k.ctrl = true;
+		k.key = CTRL(param[1]);
+	    } else if(param[0] == '@') {
+		k.alt = true;
+		k.key = ALT(param[1]);
+	    } else if(param == "<delete>")
+		k.key = KEY_DC;
+	    else if(param == "<enter>")
+		k.key = '\r';
+	    else if(param == "<esc>")
+		k.key = 27;
+	    else if(param == "<space>")
+		k.key = ' ';
+	    else if(param == "<backspace>")
+		k.key = '\b';
+	    else if(param == "<pageup>")
+		k.key = 339;
+	    else if(param == "<pagedown>")
+		k.key = 338;
+	    else if(param == "<tab>")
+		k.key = 9;
+	    else if(param == "<insert>")
+		k.key = 331;
+	    else if(param[0] == '<' && param[1] == 'F') {
+		k.alt = true;
+		k.ctrl = true;
+		k.key = KEY_F(param[2]-'0');
+	    } else
+		k.key = param[0];
+
+	    param = getword(buf);	/* action */
+	    if(param == "info") k.action = key_info; else
+	    if(param == "remove") k.action = key_remove; else
+	    if(param == "quit") k.action = key_quit; else
+	    if(param == "change_status") k.action = key_change_status; else
+	    if(param == "history") k.action = key_history; else
+	    if(param == "fetch_away_message") k.action = key_fetch_away_message; else
+	    if(param == "user_menu") k.action = key_user_menu; else
+	    if(param == "general_menu") k.action = key_general_menu; else
+	    if(param == "hide_offline") k.action = key_hide_offline; else
+	    if(param == "contact_external_action") k.action = key_contact_external_action; else
+	    if(param == "add") k.action = key_add; else
+	    if(param == "remove") k.action = key_remove; else
+	    if(param == "send_message") k.action = key_send_message; else
+	    if(param == "send_contact") k.action = key_send_contact; else
+	    if(param == "send_url") k.action = key_send_url; else
+	    if(param == "rename") k.action = key_rename; else
+	    if(param == "version") k.action = key_version; else
+	    if(param == "fullscreen") k.action = key_fullscreen; else
+	    if(param == "edit") k.action = key_edit; else
+	    if(param == "ignore") k.action = key_ignore; else
+	    if(param == "quickfind") k.action = key_quickfind; else
+	    if(param == "search") k.action = key_search; else
+	    if(param == "compose") k.action = key_compose; else
+	    if(param == "search_again") k.action = key_search_again; else
+	    if(param == "show_urls") k.action = key_show_urls; else
+	    if(param == "rss_check") k.action = key_rss_check; else
+	    if(param == "multiple_recipients") k.action = key_multiple_recipients; else
+	    if(param == "user_external_action") k.action = key_user_external_action;
+
+	    keys.push_back(k);
+	}
+	f.close();
+    }
+}
+
 
 void icqconf::loadmainconfig() {
     string fname = getconfigfname("config"), buf, param, rbuf;

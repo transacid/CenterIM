@@ -4,6 +4,7 @@
 # rewritten by Emmanuel le Chevoir <manu42@free.fr> Apr, 2002
 # updated   by Emmanuel le Chevoir <manu42@free.fr> Oct, 2002
 # updated   by Thomas Nemeth <tnemeth@free.fr> Jun, 2003
+# updated   by Thomas Nemeth <tnemeth@free.fr> Mar, 2004
 #
 # Some terms, such as irc ones, mainly, have been left in english.
 # This is intentional, as we (french people) use them "as is".
@@ -2861,7 +2862,7 @@ msgstr ""
 #: src/centericq.cc:259
 #, c-format
 msgid "Ignore all events from %s?"
-msgstr "Ignorer tous les évènements en provenance de %s ?"
+msgstr "Ignorer tous les évènements venant de %s ?"
 
 #: src/centericq.cc:263
 #, c-format
@@ -2979,7 +2980,7 @@ msgstr "absent"
 
 #: src/centericq.cc:1439
 msgid "n/a"
-msgstr "n/a"
+msgstr "n/d"
 
 #: src/centericq.cc:1566
 msgid "! free disk space is less than 10k, going offline"
@@ -3026,233 +3027,3 @@ msgstr "+ [yahoo] impossible de se connecter : "
 #: src/hooks/msnhook.cc:799
 msgid "verify the hostname and port"
 msgstr "vérifiez le nom d'hôte et le port entrés"
-
-#~ msgid " Russian win/koi translation for : %s"
-#~ msgstr " Traduction Russe win1251-koi8 nécessaire : %s "
-
-#~ msgid " Russian win/koi translation : %s "
-#~ msgstr " Traduction Russe win1251-koi8 nécessaire : %s "
-
-#, fuzzy
-#~ msgid " Default charset : %s "
-#~ msgstr " Secteur : %s "
-
-#~ msgid "+ [yahoo] connecting to the server"
-#~ msgstr "+ [yahoo] connexion au serveur"
-
-#~ msgid "+ [yahoo] disconnected"
-#~ msgstr "+ [yahoo] déconnecté"
-
-#~ msgid "+ [yahoo] adding %s to the contacts"
-#~ msgstr "+ [yahoo] ajout de %s aux contacts"
-
-#~ msgid "+ [yahoo] removing %s from the contacts"
-#~ msgstr "+ [yahoo] suppression de %s des contacts"
-
-#~ msgid "+ [yahoo] logged in"
-#~ msgstr "+ [yahoo] connecté"
-
-#, fuzzy
-#~ msgid "+ [yahoo] search finished, %d found"
-#~ msgstr "+ [jab] recherche terminée, %d réponse(s)"
-
-#~ msgid "+ [jab] connecting to the server"
-#~ msgstr "+ [jab] connexion au serveur"
-
-#~ msgid "+ [jab] adding %s to the contacts"
-#~ msgstr "+ [jab] ajout de %s aux contacts"
-
-#~ msgid "+ [jab] removing %s from the contacts"
-#~ msgstr "+ [jab] suppresion de %s des contacts"
-
-#~ msgid "+ [jab] conference list fetching finished, %d found"
-#~ msgstr ""
-#~ "+ [jab] récupération de la liste des membres terminée, %d réponse(s)"
-
-#~ msgid "+ [jab] search finished, %d found"
-#~ msgstr "+ [jab] recherche terminée, %d réponse(s)"
-
-#~ msgid "+ [jab] logged in"
-#~ msgstr "+ [jab] connecté"
-
-#~ msgid "+ [jab] disconnected"
-#~ msgstr "+ [jab] déconnecté"
-
-#~ msgid "+ [aim] connecting to the server"
-#~ msgstr "+ [aim] connexion au serveur"
-
-#~ msgid "+ [aim] removing %s from the contacts"
-#~ msgstr "+ [aim] suppresion de %s des contacts"
-
-#~ msgid "+ [aim] logged in"
-#~ msgstr "+ [aim] connecté"
-
-#~ msgid "+ [aim] disconnected"
-#~ msgstr "+ [aim] déconnecté"
-
-#~ msgid "+ [aim] password was changed successfully"
-#~ msgstr "+ [aim] le mot de passe a été changé avec succès"
-
-#~ msgid "+ [icq] connecting to the server"
-#~ msgstr "+ [icq] connexion au serveur"
-
-#~ msgid "+ [icq] logged in"
-#~ msgstr "+ [icq] connecté"
-
-#~ msgid "+ [irc] connecting to the server"
-#~ msgstr "+ [irc] connexion au serveur"
-
-#~ msgid "+ [irc] channel members list fetching finished, %d found"
-#~ msgstr ""
-#~ "+ [irc] récupération de la liste des membres du chan terminée, %d réponse"
-#~ "(s)"
-
-#~ msgid "+ [irc] logged in"
-#~ msgstr "+ [irc] connecté"
-
-#~ msgid "+ [irc] disconnected"
-#~ msgstr "+ [irc] déconnecté"
-
-#, fuzzy
-#~ msgid "+ [lj] disconnected"
-#~ msgstr "+ [jab] déconnecté"
-
-#~ msgid " Synchronize contact list "
-#~ msgstr " Synchroniser la liste de contacts "
-
-#~ msgid "You must be logged in to preform the synchronization"
-#~ msgstr "Vous devez être connecté pour synchroniser"
-
-#~ msgid " Contact list synchronization "
-#~ msgstr "Synchronisation de la liste des contacts"
-
-#~ msgid "Starting the synchronization process"
-#~ msgstr "Début de la synchronisation"
-
-#~ msgid "Attempt #%d"
-#~ msgstr "Essai n%d"
-
-#~ msgid ".. %d already synchronized, %d contacts to be stored"
-#~ msgstr "... %d déjà synchronisés, %d contacts à enregistrer"
-
-#~ msgid "Finished"
-#~ msgstr "Terminé"
-
-#~ msgid "Too many attempts, gave up"
-#~ msgstr "Trop de tentatives, opération annulée"
-
-#~ msgid " Uploading buddies "
-#~ msgstr " Export des amis "
-
-#~ msgid "No contacts to be synchronized"
-#~ msgstr "Pas de contact à synchroniser"
-
-#~ msgid ".. all of them are already stored server-side"
-#~ msgstr "... tous sont déjà sauvés sur le serveur"
-
-#~ msgid "%d contacts are do be stored server-side. Add them now?"
-#~ msgstr "%d contacts à exporter sur le serveur, les ajouter maintenant ?"
-
-#~ msgid ".. adding %s"
-#~ msgstr "... ajout de %s"
-
-#~ msgid "Cancelled"
-#~ msgstr "Annulé"
-
-#, fuzzy
-#~ msgid "Friend list"
-#~ msgstr "Liste des contacts ignorés"
-
-#~ msgid "+ [msn] connecting to the server"
-#~ msgstr "+ [msn] connexion au serveur"
-
-#~ msgid "+ [msn] logged in"
-#~ msgstr "+ [msn] connecté"
-
-#~ msgid "+ [msn] disconnected"
-#~ msgstr "+ [msn] déconnecté"
-
-#~ msgid "+ [yahoo] %s: started typing"
-#~ msgstr "+ [yahoo] %s : début de frappe"
-
-#~ msgid "+ [yahoo] %s: stopped typing"
-#~ msgstr "+ [yahoo] %s : fin de frappe"
-
-#~ msgid "+ [msn] %s: stopped typing"
-#~ msgstr "+ [msn] %s : fin de frappe"
-
-#~ msgid "+ [msn] %s: started typing"
-#~ msgstr "+ [msn] %s : début de frappe"
-
-#~ msgid " Typing notifications in the log window : %s "
-#~ msgstr " Notification de frappe dans la fenêtre journal : %s "
-
-#, fuzzy
-#~ msgid "+ [icq] %s has requested our away message"
-#~ msgstr "%s a demandé votre message d'absence, réponse envoyée"
-
-#~ msgid "%s requested our away message, sent the response"
-#~ msgstr "%s a demandé votre message d'absence, réponse envoyée"
-
-#~ msgid " [all] All of them"
-#~ msgstr " [all] Tous"
-
-#~ msgid "+ [jab] incorrect jabber id"
-#~ msgstr "+ [jab] identifiant jabber incorrect"
-
-#~ msgid " enter to select a file, esc to cancel "
-#~ msgstr " <entrée> pour sélectionner un fichier, <esc> annuler"
-
-#~ msgid " space to select a directory, esc to cancel "
-#~ msgstr " <espace> pour sélectionner un répertoire, <esc> annuler"
-
-#~ msgid "F2 to URLs, ESC close"
-#~ msgstr "F2 pour les URLS, ESC pour fermer"
-
-#~ msgid "SOCKS proxy server to use: "
-#~ msgstr "Relais SOCKS  utiliser : "
-
-#~ msgid "SOCKS proxy user name: "
-#~ msgstr "nom d'utilisateur relais SOCKS : "
-
-#~ msgid "SOCKS proxy password: "
-#~ msgstr "mot de passe SOCKS : "
-
-#~ msgid "+ [msn] unable to connect to the server"
-#~ msgstr "+ [msn] Impossible de se connecter au serveur"
-
-#~ msgid "+ [msn] connecting with %s"
-#~ msgstr "+ [msn] connexion avec %s"
-
-#~ msgid " Channel manager "
-#~ msgstr " gestionnaire de chans "
-
-#~ msgid " IRC channels manager "
-#~ msgstr " Gestionnaire de chans"
-
-#~ msgid "Password"
-#~ msgstr "Mot de passe"
-
-#~ msgid "Show"
-#~ msgstr "Montrer"
-
-#~ msgid " Channels "
-#~ msgstr " Chans "
-
-#~ msgid "not joined"
-#~ msgstr "non joint"
-
-#~ msgid "shown"
-#~ msgstr "affichs"
-
-#~ msgid "hidden"
-#~ msgstr "masqus"
-
-#~ msgid "channel name to add: "
-#~ msgstr "nom du chan  ajouter: "
-
-#~ msgid "+ [aim] disconnected from the network"
-#~ msgstr "+ [aim] dconnect du rseau"
-
-#~ msgid "+ [irc] disconnected from the network"
-#~ msgstr "+ [irc] dconnect du rseau"

@@ -43,6 +43,40 @@ enum cicq_colorpairs {
     cp_clist_gadu
 };
 
+enum cicq_keybindings {
+    section_contact,
+    section_history,
+    section_editor,
+    section_info,
+    key_info,
+    key_quit,
+    key_change_status,
+    key_history,
+    key_fetch_away_message,
+    key_user_menu,
+    key_general_menu,
+    key_hide_offline,
+    key_contact_external_action,
+    key_add,
+    key_fullscreen,
+    key_remove,
+    key_send_message,
+    key_compose,
+    key_send_contact,
+    key_send_url,
+    key_rename,
+    key_version,
+    key_edit,
+    key_ignore,
+    key_quickfind,
+    key_search,
+    key_search_again,
+    key_show_urls,
+    key_rss_check,
+    key_multiple_recipients,
+    key_user_external_action
+};
+
 class icqconf {
     public:
 	enum regsound { rscard, rsspeaker, rsdisable, rsdontchange };
@@ -52,6 +86,11 @@ class icqconf {
 	struct imserver {
 	    string server;
 	    int port, secureport;
+	};
+
+	struct keybinding {
+	    int section, key, action;
+	    bool alt, ctrl;
 	};
 
 	struct imaccount {
@@ -73,6 +112,8 @@ class icqconf {
 	};
 
 	static imserver defservers[];
+
+	static vector<keybinding> keys;
 
     protected:
 	vector<icqgroup> groups;
@@ -125,6 +166,7 @@ class icqconf {
 
 	void save();
 
+	void loadkeys();
 	void loadcolors();
 	void loadsounds();
 	void loadactions();

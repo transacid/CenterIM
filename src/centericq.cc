@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.182 2004/03/07 13:44:40 konst Exp $
+* $Id: centericq.cc,v 1.183 2004/03/13 11:18:51 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -168,7 +168,12 @@ void centericq::mainloop() {
     face.draw();
 
     while(!finished) {
-	face.status(_("F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"));
+	face.status(face.action2key(key_user_menu, section_contact) + _(" contact menu, ")
+		    + face.action2key(key_change_status, section_contact) + _(" change status, ")
+		    + face.action2key(key_general_menu, section_contact) + _(" general actions, ")
+		    + face.action2key(key_quit, section_contact) + _(" quit"));
+
+
 	c = face.mainloop(action);
 
 	switch(action) {
