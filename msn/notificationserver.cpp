@@ -733,7 +733,8 @@ public:
 	connectinfo * info = (connectinfo *) data;
 	this->removeCallback(trid);
 	
-	if (args.size() >= 3 && args[0] != "VER" || args[2] != "MSNP8") // if either *differs*...
+	if (args.size() >= 3)
+	if (args[0] != "VER" || args[2] != "MSNP8") // if either *differs*...
 	{
 	    ext::showError(NULL, "Protocol negotiation failed");
 	    delete info;

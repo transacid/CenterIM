@@ -16,7 +16,7 @@ ALL_FILES := $(strip $(SOURCES) $(HEADERS) $(MISCF) $(DOCS))
 ALL_DIRS := $(sort $(dir $(ALL_FILES)))
 PROJNAME = libmsn
 PROJVER = 0.1
-INCLDIRS = ../connwrap 
+INCLDIRS = ../connwrap ../connwrap-0.1 
 DIST_TARGZ := $(PROJNAME)-$(PROJVER).tar.gz
 LIB = liblibmsn.a
 WANT = WANT_AUTOCONF=2.1 WANT_AUTOMAKE=1.4 CFLAGS="-O0 -g" CXXFLAGS="-O0 -g"
