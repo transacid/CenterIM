@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.47 2002/12/09 12:30:46 konst Exp $
+* $Id: msnhook.cc,v 1.48 2002/12/09 16:01:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -316,7 +316,11 @@ void msnhook::checkinlist(imcontact ic) {
 	    mhook.sendnewuser(ic);
 	}
     } else {
-	clist.addnew(ic);
+	c = clist.addnew(ic);
+    }
+
+    if(c) {
+	c->setstatus(available);
     }
 }
 

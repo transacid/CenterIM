@@ -1,7 +1,7 @@
- /*
+/*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.167 2002/12/09 10:24:02 konst Exp $
+* $Id: icqface.cc,v 1.168 2002/12/09 16:01:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -342,12 +342,13 @@ int icqface::contextmenu(icqcontact *c) {
     } else {
 	actions.push_back(ACT_MSG);
 	actions.push_back(ACT_HISTORY);
-	actions.push_back(ACT_INFO);
 	actions.push_back(ACT_REMOVE);
 	actions.push_back(ACT_IGNORE);
 
-	icqcontact *c = clist.get(cont);
-	if(c) actions.push_back((c->getstatus() != offline) ? ACT_LEAVE : ACT_JOIN);
+	if(gethook(cont.pname).logged()) {
+	    actions.push_back(ACT_INFO);
+	    actions.push_back((c->getstatus() != offline) ? ACT_LEAVE : ACT_JOIN);
+	}
 
 	if(conf.getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
