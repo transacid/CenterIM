@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.84 2002/09/03 10:02:07 konst Exp $
+* $Id: icqdialogs.cc,v 1.85 2002/09/05 17:50:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -577,6 +577,7 @@ void icqface::selectcountry(unsigned short &f) {
 
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-16, 30, LINES-3, conf.getcolor(cp_dialog_menu)));
+    m.idle = &menuidle;
 
     for(i = 0; i < ICQ2000::Country_table_size; i++) {
 	m.additem(0, (int) ICQ2000::Country_table[i].code,
@@ -597,6 +598,7 @@ void icqface::selectlanguage(unsigned short &f) {
     int i;
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-13, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
+    m.idle = &menuidle;
 
     for(i = 0; i < ICQ2000::Language_table_size; i++) {
 	m.additemf(" %s", ICQ2000::Language_table[i]);
@@ -612,11 +614,12 @@ void icqface::selectlanguage(unsigned short &f) {
 void icqface::selectrandomgroup(unsigned short &f) {
     int i;
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-13, 20, LINES-3, conf.getcolor(cp_dialog_menu)));
+    m.setwindow(textwindow(4, LINES-15, 20, LINES-3, conf.getcolor(cp_dialog_menu)));
+    m.idle = &menuidle;
 
     m.additemf(" %s", _("none"));
 
-    for(i = 1; i <= ((int) ICQ2000::group_SeekingMen)+1; i++) {
+    for(i = 1; i <= ((int) ICQ2000::group_SeekingMen); i++) {
 	m.additemf(" %s", strrandomgroup[i]);
     }
 
@@ -630,6 +633,7 @@ void icqface::selectrandomgroup(unsigned short &f) {
 void icqface::selectgender(imgender &f) {
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-8, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
+    m.idle = &menuidle;
 
     for(imgender i = genderUnspec; i != imgender_size; (int) i += 1) {
 	m.additemf(0, (int) i, " %s", strgender[i]);
@@ -645,6 +649,7 @@ void icqface::selectgender(imgender &f) {
 void icqface::selectagerange(ICQ2000::AgeRange &r) {
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-8, 18, LINES-3, conf.getcolor(cp_dialog_menu)));
+    m.idle = &menuidle;
 
     for(ICQ2000::AgeRange i = ICQ2000::range_NoRange; i <= ICQ2000::range_60_above; (int) i += 1) {
 	const char *p = stragerange[i];
