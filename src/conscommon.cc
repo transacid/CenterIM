@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.16 2002/03/09 18:26:10 konst Exp $
+* $Id: conscommon.cc,v 1.17 2002/03/25 19:46:13 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -74,10 +74,9 @@ int getkey() {
 
     refresh();
 
-    FD_ZERO(&rd);
-    FD_SET(STDIN_FILENO, &rd);
-
     while(!fin) {
+	FD_ZERO(&rd);
+	FD_SET(STDIN_FILENO, &rd);
 	while(!select(STDIN_FILENO+1, &rd, 0, 0, 0));
 	ioctl(STDIN_FILENO, FIONREAD, &r);
 
@@ -101,6 +100,7 @@ int getkey() {
 	    case CTRL('l'):
 		endwin();
 		refresh();
+		fin=1;
 		break;
 	    default:
 		fin = 1;
