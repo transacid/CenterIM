@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.6 2002/03/03 09:12:29 konst Exp $
+* $Id: kkiproc.cc,v 1.7 2002/03/04 09:25:45 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,7 +45,7 @@ time_t lastkeypress() {
 #ifdef __linux__
 
     struct utmp *u;
-    char tname[12];
+    char tname[32];
 
     if(readlink("/proc/self/fd/0", tname, 12) != -1) {
 	if(!strncmp(tname, "/dev/tty", 8) && isdigit(tname[8])) {
@@ -57,12 +57,14 @@ time_t lastkeypress() {
 		    case LOGIN_PROCESS:
 			if(strlen(u->ut_line) > 3)
 			if(!strncmp(u->ut_line, "tty", 3))
-			if(isdigit(u->ut_line[3]))
-			if(*u->ut_user && !kill(u->ut_pid, 0)) {
-			    sprintf(tname, "/dev/%s", u->ut_line);
-			    if(!stat(tname, &s))
-			    if(s.st_atime > t) {
-				t = s.st_atime;
+			if(isdigit(u->ut_line[3])) {
+			    sprintf(tname, "/proc/%lu", u->ut_pid);
+
+			    if(*u->ut_user && !access(tname, F_OK)) {
+				sprintf(tname, "/dev/%s", u->ut_line);
+				if(!stat(tname, &s))
+				if(s.st_atime > t)
+				    t = s.st_atime;
 			    }
 			}
 			break;
