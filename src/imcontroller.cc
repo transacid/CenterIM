@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.52 2004/02/20 20:48:47 konst Exp $
+* $Id: imcontroller.cc,v 1.53 2004/04/01 08:01:13 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "irchook.h"
 #include "jabberhook.h"
 #include "msnhook.h"
+#include "gaduhook.h"
 #include "icqcontacts.h"
 #include "eventmanager.h"
 
@@ -304,6 +305,23 @@ void imcontroller::jabberupdateprofile() {
 #endif
 }
 
+void imcontroller::gaduupdateprofile() {
+#ifdef BUILD_GADU
+    if(ghook.logged()) {
+	icqcontact *c;
+
+	(c = clist.get(contactroot))->clear();
+	ghook.requestinfo(imcontact(conf.getourid(gadu).uin, jabber));
+
+	if(face.updatedetails(0, gadu))
+	    ghook.sendupdateuserinfo(*c);
+
+    } else {
+	face.status(_("You must be logged to the Jabber network to update your details"));
+    }
+#endif
+}
+
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq:
@@ -326,6 +344,7 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
 	case aim: aimupdateprofile(); break;
 	case msn: msnupdateprofile(); break;
 	case jabber: jabberupdateprofile(); break;
+	case gadu: gaduupdateprofile(); break;
     }
 }
 

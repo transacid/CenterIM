@@ -50,6 +50,7 @@ class imcontroller {
 	void aimupdateprofile();
 	void msnupdateprofile();
 	void jabberupdateprofile();
+	void gaduupdateprofile();
 
     public:
 	imcontroller();

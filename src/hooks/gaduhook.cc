@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.4 2004/03/20 16:49:08 konst Exp $
+* $Id: gaduhook.cc,v 1.5 2004/04/01 08:01:13 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,6 +37,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+
+#define PERIOD_PING  50
 
 imstatus gg2imstatus(int st) {
     imstatus imst;
@@ -140,6 +142,12 @@ void gaduhook::disconnect() {
 }
 
 void gaduhook::exectimers() {
+    if(logged()) {
+	if(timer_current-timer_ping > PERIOD_PING) {
+	    gg_ping(sess);
+	    timer_ping = timer_current;
+	}
+    }
 }
 
 void gaduhook::main() {
@@ -157,6 +165,7 @@ void gaduhook::main() {
 	switch(e->type) {
 	    case GG_EVENT_CONN_SUCCESS:
 		flogged = true;
+		time(&timer_ping);
 		userlistsend();
 		log(logLogged);
 		face.update();
@@ -427,6 +436,29 @@ void gaduhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 }
 
 void gaduhook::sendupdateuserinfo(const icqcontact &c) {
+    gg_pubdir50_t req;
+
+    if(req = gg_pubdir50_new(GG_PUBDIR50_WRITE)) {
+	icqcontact::basicinfo bi = c.getbasicinfo();
+	icqcontact::moreinfo mi = c.getmoreinfo();
+
+	gg_pubdir50_add(req, GG_PUBDIR50_NICKNAME, c.getnick().c_str());
+	gg_pubdir50_add(req, GG_PUBDIR50_FIRSTNAME, bi.fname.c_str());
+	gg_pubdir50_add(req, GG_PUBDIR50_LASTNAME, bi.lname.c_str());
+	gg_pubdir50_add(req, GG_PUBDIR50_CITY, bi.city.c_str());
+
+	switch(mi.gender) {
+	    case genderMale:
+		gg_pubdir50_add(req, GG_PUBDIR50_GENDER, GG_PUBDIR50_GENDER_SET_MALE);
+		break;
+	    case genderFemale:
+		gg_pubdir50_add(req, GG_PUBDIR50_GENDER, GG_PUBDIR50_GENDER_SET_FEMALE);
+		break;
+	}
+
+	gg_pubdir50(sess, req);
+	gg_pubdir50_free(req);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -456,6 +488,10 @@ void gaduhook::searchdone(void *p) {
 	    p = gg_pubdir50_get(sp, i, GG_PUBDIR50_STATUS);
 	    if(p && atoi(p) != GG_STATUS_NOT_AVAIL) line = "o ";
 		else line = "  ";
+
+	    line += c->getnick();
+	    if(line.size() > 12) line.resize(12);
+	    else line += string(12-line.size(), ' ');
 
 	    line += " " + binfo.fname + " " + binfo.lname;
 

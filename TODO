@@ -12,6 +12,10 @@ no reaction on keys - default configs weren't created
 
 groups in multi-selection
 
+gadu-gadu:
+    disconnects
+    user info change
+
 /*
 *
 * BUGS
@@ -24,13 +28,21 @@ jabber keepalive
 
 http://www.dotgnu.org/index.rdf
 
-gadu-gadu disconnects
+yahoo cannot login if the password starts with ^
+
+enter sends doesn't work anymore
+
+multiple selection is too slow
 
 /*
 *
 * TODO
 *
 */
+
+gadu-gadu:
+    find/add
+    registration
 
 commandline user-add, sending to non-list users
 
@@ -112,4 +124,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.503 2004/03/28 11:38:03 konst Exp $
+$Id: TODO,v 1.504 2004/04/01 08:01:12 konst Exp $

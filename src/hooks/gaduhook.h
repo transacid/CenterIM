@@ -9,6 +9,7 @@ struct gg_session;
 
 class gaduhook: public abstracthook {
     protected:
+	time_t timer_ping;
 	struct gg_session *sess;
 	bool flogged;
 

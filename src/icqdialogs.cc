@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.142 2004/03/27 12:05:53 konst Exp $
+* $Id: icqdialogs.cc,v 1.143 2004/04/01 08:01:13 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -661,6 +661,13 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 		tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno(bi.requiresauth));
 	    }
 	}
+    } else if(passinfo.pname == gadu) {
+	CHECKGENERAL;
+
+	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
+	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
+	tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
+	tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender(mi.gender));
     }
 
     if(passinfo.pname == rss) {
