@@ -165,15 +165,11 @@ void imcontroller::icqupdatedetails() {
 void imcontroller::aimupdateprofile() {
     icqcontact *c = clist.get(contactroot);
 
-    if(ahook.logged()) {
-	c->clear();
-	ahook.requestinfo(imcontact(conf.getourid(aim).uin, aim));
+    c->clear();
+    ahook.requestinfo(imcontact(conf.getourid(aim).uin, aim));
 
-	if(face.updatedetails(0, aim)) {
-	    ahook.sendupdateuserinfo(*c, "");
-	}
-    } else {
-	face.status(_("You must be logged to the AIM network to update your profile"));
+    if(face.updatedetails(0, aim)) {
+	ahook.sendupdateuserinfo(*c, "");
     }
 }
 
