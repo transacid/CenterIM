@@ -8,10 +8,12 @@ AC_PROG_CXX
 AC_PROG_CPP
 AC_PROG_RANLIB
 
+AM_CONFIG_HEADER(config.h)
+
+AM_PATH_GLIB(1.2.0, [ CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS" ], AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
+
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-
-AM_CONFIG_HEADER(config.h)
 
 ###     use option --enable-locales-fix to fix problems with double-byte
 ###     encodings on systems with broken locale, iscntrl()
@@ -75,8 +77,6 @@ AC_CHECK_LIB(ncurses, initscr,,
     [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
 
 AC_LANG_RESTORE
-
-AM_PATH_GLIB(1.2.0, [ CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS" ], AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
 
 case "$host_os" in
 	darwin*)

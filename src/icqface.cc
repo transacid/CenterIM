@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.153 2002/11/19 18:13:31 konst Exp $
+* $Id: icqface.cc,v 1.154 2002/11/21 21:13:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -213,10 +213,10 @@ void icqface::showtopbar() {
 	    ia = conf.getourid(pname);
 
 	    if(!ia.empty()) {
-		buf += "  " + conf.getprotocolname(pname) + ":[";
+		buf += " " + conf.getprotocolname(pname) + "<";
 
 		buf += imstatus2char[gethook(pname).getstatus()];
-		buf += "]";
+		buf += ">";
 	    }
 	}
     }

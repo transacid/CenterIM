@@ -7,12 +7,23 @@
 
 class jabberhook: public abstracthook {
     protected:
-	imstatus status;
+	imstatus ourstatus;
 	jconn jc;
 	bool flogged;
+	int id;
+
+	vector<string> roster;
 
 	static void statehandler(jconn conn, int state);
 	static void packethandler(jconn conn, jpacket packet);
+
+	static string jidnormalize(const string &jid);
+	static string jidtodisp(const string &jid);
+	static void jidsplit(const string &jid, string &user, string &host, string &rest);
+
+	void setjabberstatus(imstatus st, const string &msg);
+	void sendnewuser(const imcontact &c, bool report);
+	void removeuser(const imcontact &ic, bool report);
 
     public:
 	jabberhook();
@@ -38,6 +49,7 @@ class jabberhook: public abstracthook {
 	void removeuser(const imcontact &ic);
 
 	void setautostatus(imstatus st);
+	imstatus getstatus() const;
 
 	void requestinfo(const imcontact &c);
 };

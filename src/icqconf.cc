@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.90 2002/11/19 18:13:28 konst Exp $
+* $Id: icqconf.cc,v 1.91 2002/11/21 21:13:06 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -302,7 +302,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_msn, "clist_msn   cyan/transparent");
 	    schemer.push(cp_clist_aim, "clist_aim   yellow/transparent");
 	    schemer.push(cp_clist_irc, "clist_irc    blue/transparent");
-	    schemer.push(cp_clist_jabber, "clist_irc    red/transparent");
+	    schemer.push(cp_clist_jabber, "clist_jabber    red/transparent");
 	    break;
 
 	case rcblue:
@@ -323,7 +323,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_infocard, "clist_infocard  white/blue");
 	    schemer.push(cp_clist_aim, "clist_aim   yellow/blue");
 	    schemer.push(cp_clist_irc, "clist_irc   blue/blue   bold");
-	    schemer.push(cp_clist_jabber, "clist_irc    red/blue");
+	    schemer.push(cp_clist_jabber, "clist_jabber    red/blue");
 	    break;
     }
 
@@ -615,7 +615,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "irc", "jabber", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "jab", "infocard"
     };
 
     return ptextnames[pname];
@@ -646,7 +646,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 
 string icqconf::getprotocolprefix(protocolname pname) const {
     static const string pprefixes[protocolname_size] = {
-	"", "y", "m", "a", "i", "n"
+	"", "y", "m", "a", "i", "j", "n"
     };
 
     return pprefixes[pname];

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.69 2002/11/01 18:05:45 konst Exp $
+* $Id: icqcontact.cc,v 1.70 2002/11/21 21:13:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -92,22 +92,11 @@ string icqcontact::getdirname() const {
 
     switch(cdesc.pname) {
 	case infocard:
-	    ret += "n" + i2str(cdesc.uin);
-	    break;
 	case icq:
-	    ret += i2str(cdesc.uin);
+	    ret += conf.getprotocolprefix(cdesc.pname) + i2str(cdesc.uin);
 	    break;
-	case yahoo:
-	    ret += "y" + cdesc.nickname;
-	    break;
-	case msn:
-	    ret += "m" + cdesc.nickname;
-	    break;
-	case aim:
-	    ret += "a" + cdesc.nickname;
-	    break;
-	case irc:
-	    ret += "i" + cdesc.nickname;
+	default:
+	    ret += conf.getprotocolprefix(cdesc.pname) + cdesc.nickname;
 	    break;
     }
 

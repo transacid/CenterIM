@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.133 2002/11/11 14:32:16 konst Exp $
+* $Id: centericq.cc,v 1.134 2002/11/21 21:13:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -421,14 +421,6 @@ void centericq::find() {
 		    }
 		    break;
 
-		case yahoo:
-		case aim:
-		    if(!s.nick.empty()) {
-			addcontact(imcontact(s.nick, s.pname));
-			ret = false;
-		    }
-		    break;
-
 		case infocard:
 		    c = clist.addnew(imcontact(0, infocard), true);
 		    c->setnick(s.nick);
@@ -446,6 +438,12 @@ void centericq::find() {
 
 		    face.update();
 		    ret = false;
+		    break;
+		default:
+		    if(!s.nick.empty()) {
+			addcontact(imcontact(s.nick, s.pname));
+			ret = false;
+		    }
 		    break;
 	    }
 	}
@@ -1464,8 +1462,8 @@ string rusconv(const string &tdir, const string &text) {
     unsigned char *table = 0;
 
 #ifdef HAVE_ICONV_H
-    if(tdir == "kw") r = siconv(text, "koi8-r", "cp1251"); else
-    if(tdir == "wk") r = siconv(text, "cp1251", "koi8-r"); else
+    if(tdir == "kw") r = siconv(text, "koi8-u", "cp1251"); else
+    if(tdir == "wk") r = siconv(text, "cp1251", "koi8-u"); else
 #endif
 	r = text;
 
