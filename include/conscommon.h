@@ -27,9 +27,9 @@
 #define color(c)        COLOR_PAIR(c)
 
 #ifdef LOCALES_HACK
-#define	KT_DISP_FILTER(c)	( ((c > ' ') && (c != '\177')) ? c : ' ' )
+#define KT_DISP_FILTER(c)       ( ((c > ' ') && (c != '\177')) ? c : ' ' )
 #else
-#define KT_DISP_FILTER(c)	(!iscntrl(c) ? c : ' ')
+#define KT_DISP_FILTER(c)       (!iscntrl(c) ? c : ' ')
 #endif
 
 #define VLINE           kintf_graph ? ACS_VLINE         : '|'
@@ -60,6 +60,7 @@
 #define CONTROL_PRESSED 4
 
 extern bool kintf_graph, kintf_refresh;
+extern void (*kt_resize_event)(void);
 
 void printchar(char c);
 void printstring(const string s);
@@ -71,10 +72,7 @@ __KTOOL_BEGIN_C
 
 void kinterface();
 void kendinterface();
-  
-extern void (*kinputidle)(void);
-char *kinput(unsigned int size, char *buf);
-  
+
 int keypressed();
 int emacsbind(int k);
 

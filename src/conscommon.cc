@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.5 2001/08/18 14:33:20 konst Exp $
+* $Id: conscommon.cc,v 1.6 2001/08/21 09:31:36 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,7 +26,7 @@
 
 bool kintf_graph = true, kintf_refresh = true;
 
-void (*kinputidle)(void);
+void (*kt_resize_event)(void);
 
 void kreinit(int sn) {
     struct winsize size;
@@ -34,6 +34,9 @@ void kreinit(int sn) {
     if(ioctl(fileno(stdout), TIOCGWINSZ, &size) == 0) {
 	resizeterm(size.ws_row, size.ws_col);
 	wrefresh(curscr);
+
+	if(kt_resize_event)
+	    kt_resize_event();
     }
 
     signal(sn, &kreinit);
@@ -52,6 +55,7 @@ void kinterface() {
 //      nodelay(stdscr, TRUE);
     ESCDELAY = 0;
     signal(SIGWINCH, &kreinit);
+    kt_resize_event = 0;
 }
 
 void kendinterface() {
@@ -139,77 +143,6 @@ void printstring(const string s) {
 	ds += KT_DISP_FILTER(s[i]);
 
     printw("%s", s.c_str());
-}
-
-char *kinput(unsigned int size, char *buf) {
-    int c, x, y;
-    unsigned int offset = 0, i;
-    char t[size], go, finish = 0;
-
-    refresh();
-    strcpy(buf, "");
-
-    while(!finish) {
-	if(kinputidle) go = keypressed(); else go = 1;
-      
-	if(go) switch(c = getkey()) {
-	    case '\r' :
-		finish = 1;
-		break;
-	  
-	    case KEY_LEFT :
-		if(offset > 0) {
-		    offset--;
-		    kgotoxy(kwherex() - 1, kwherey());
-		}
-		break;
-
-	    case KEY_RIGHT :
-		if(offset < strlen(buf)) printchar(buf[offset++]);
-		break;
-
-	    case KEY_DC :
-		if(strlen(buf) > 0 && offset < strlen(buf)) {
-		    x = kwherex(); y = kwherey();
-		    for(i = offset + 1; i < strlen(buf); i++) printchar(buf[i]);
-		    printw(" ");
-		    kgotoxy(x, y);
-		    refresh();
-
-		    t[0] = 0;
-		    for(i = 0; i < strlen(buf); i++)
-		    if(i != offset) sprintf(t, "%s%c", t, buf[i]);
-		    strcpy(buf, t);
-		}
-		break;
-	  
-	    case KEY_BACKSPACE : case 8 :
-		if(strlen(buf) && offset > 0) {
-		    offset--;
-		    kgotoxy(kwherex() - 1, kwherey());
-		    x = kwherex(); y = kwherey();
-		    for(i = offset + 1; i < strlen(buf); i++) printchar(buf[i]);
-		    printw(" ");
-		    kgotoxy(x, y);
-		    refresh();
-
-		    t[0] = 0;
-		    for(i = 0; i < strlen(buf); i++)
-		    if(i != offset) sprintf(t, "%s%c", t, buf[i]);
-		    strcpy(buf, t);
-		}
-		break;
-      
-	    default :
-		if(strlen(buf) < size && c > 31 && c < 255) {
-		    printchar(c);
-		    refresh();
-		    offset++;
-		    sprintf(buf, "%s%c", buf, c);
-		}
-	} else if(kinputidle) (*kinputidle)();
-    }
-    return buf;
 }
 
 int kwherex() {
