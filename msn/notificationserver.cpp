@@ -375,7 +375,7 @@ namespace MSN
     {
 	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
-	buf_ << "ADD " << trid++ << " " << "FL" << " " << buddyName << " " << buddyName <<  groupID << "\r\n";
+	buf_ << "ADD " << trid++ << " " << "FL" << " " << buddyName << " " << buddyName <<  " "  << groupID << "\r\n";
 	write(buf_);
     }
     
@@ -383,7 +383,7 @@ namespace MSN
     {
 	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
-	buf_ << "REM " << trid++ << " " << "FL" << " " << buddyName << groupID << "\r\n";
+	buf_ << "REM " << trid++ << " " << "FL" << " " << buddyName << " " << groupID << "\r\n";
 	write(buf_);
     }
     
@@ -391,7 +391,7 @@ namespace MSN
     {
 	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
-	buf_ << "ADG " << trid++ << encodeURL(groupName) << " " << 0 << "\r\n";
+	buf_ << "ADG " << trid++ << " " << encodeURL(groupName) << " " << 0 << "\r\n";
 	write(buf_);        
     }
     
@@ -399,7 +399,7 @@ namespace MSN
     {
 	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
-	buf_ << "RMG " << trid++ << groupID << "\r\n";
+	buf_ << "RMG " << trid++ << " " << groupID << "\r\n";
 	write(buf_);
     }
     
@@ -407,7 +407,7 @@ namespace MSN
     {
 	assert(connectionStatus >= NS_CONNECTED);
 	std::ostringstream buf_;
-	buf_ << "REG " << trid++ << groupID << " " << encodeURL(newGroupName) << " " << 0 << "\r\n";
+	buf_ << "REG " << trid++ << " " << groupID << " " << encodeURL(newGroupName) << " " << 0 << "\r\n";
 	write(buf_);
     }
     
