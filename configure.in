@@ -60,6 +60,8 @@ AC_CHECK_HEADERS(sstream,,
 
 AC_LANG_RESTORE
 
+AC_CHECK_HEADERS(iconv.h)
+
 AC_CHECK_LIB(ncurses, main, LIBS="$LIBS -lncurses", LIBS="$LIBS -lcurses")
 
 AC_CONFIG_SUBDIRS(kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 libyahoo-0.1 libmsn-0.1 libicq2000-0.3)

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.13 2002/01/30 17:25:41 konst Exp $
+* $Id: msnhook.cc,v 1.14 2002/02/16 14:17:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -81,7 +81,7 @@ void msnhook::connect() {
     }
 
     time(&mhook.timer_reconnect);
-    msn_Russian = 0;
+//    msn_Russian = 0;
 }
 
 void msnhook::disconnect() {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.19 2002/01/24 15:11:29 konst Exp $
+* $Id: yahoohook.cc,v 1.20 2002/02/16 14:17:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -277,7 +277,7 @@ void yahoohook::setautostatus(imstatus st) {
 	YAHOO_STATUS_BUSY,
 	YAHOO_STATUS_BUSY,
 	YAHOO_STATUS_NOTATHOME,
-	YAHOO_STATUS_IDLE
+	YAHOO_STATUS_NOTATDESK
     };
 
     if(st == offline) {
