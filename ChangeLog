@@ -1100,3 +1100,32 @@ Schlich <wolfram@schlich.org> for pointing this out.
 Fixed a bug that caused Yahoo! users raise from the dead (re-appear on
 the list) when a user attempted to delete a contact which had been added
 in the same session, i.e. without logging off.
+
+4.8.3
+-----
+
+Bug-fixes in the AIM part. These include the repaired feature to remove
+contacts from the contact list as well as the connect procedure that got
+broken on some boxes. Now the both things must work fine.
+
+The command line parameter "--version" has been added.
+
+The modifications in the previous version broke the command-line sending
+SMS to oneself feature. During fixing this one, I thought about another
+useful feature.. See below.
+
+Now it's possible to send SMSes to any phone number from the command
+line with the -n (--number) parameter. Also, if the ICQ login
+information is specified, it's possible to send SMSes to contact of any
+kind on your list through the ICQ network. This means that if a phone
+number is entered for a Yahoo, MSN or infocard contact, you're now able
+to send them an SMS with centericq.
+
+The contact list synchronization feature was modified, so that now it
+doesn't send authorization requests automatically. It appeared that the
+ICQ server allows to store contacts server-side without it ;) Though
+instead of requesting it automatically, it's now possible to request one
+manually with the corresponding menu item that was added recently.
+
+Several interface related issues noticed were fixed.
+
