@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.112 2003/05/07 22:23:09 konst Exp $
+* $Id: icqdialogs.cc,v 1.113 2003/05/09 09:40:24 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -300,7 +300,7 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 
 	    default:
 		if((s.pname == msn && !s.reverse)
-		|| (s.pname != msn && s.reverse)) {
+		|| (s.pname != msn)) {
 		    i = tree.addnode(_(" Nickname "));
 		    tree.addleaf(i, 0, 11, " " + s.nick + " ");
 		}
