@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <sys/time.h>
 #include <time.h>
@@ -85,6 +86,8 @@ const string justpathname(const string fname);
 const string textscreen(const string text);
 const string i2str(int i);
 const string ui2str(int i);
+
+bool getconf(string &st, string &buf, ifstream &f);
 
 __KTOOL_BEGIN_C
 

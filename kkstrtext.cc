@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.7 2001/10/24 11:24:20 konst Exp $
+* $Id: kkstrtext.cc,v 1.8 2001/10/31 16:51:34 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -931,4 +931,28 @@ int hex2int(const string ahex) {
     }
 
     return r;
+}
+
+bool getconf(string &st, string &buf, ifstream &f) {
+    bool ret = false;
+    static string sect;
+
+    while(!f.eof() && !ret) {
+        getline(f, buf);
+
+        if(buf.size())
+        switch(buf[0]) {
+            case '%':
+                sect = buf.substr(1);
+                break;
+            case '#':
+                break;
+            default:
+                ret = buf.size();
+                break;
+        }
+    }
+
+    st = sect;
+    return ret;
 }
