@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.83 2002/04/22 09:30:39 konst Exp $
+* $Id: icqhook.cc,v 1.84 2002/05/10 20:21:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1045,7 +1045,7 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
     sprintf(buf, _("%s requested our away message, sent the response"), ident.c_str());
 
     logger.putmessage(buf);
-    ev->setAwayMessage(conf.getawaymsg(icq));
+    ev->setAwayMessage(rusconv("kw", conf.getawaymsg(icq)));
 }
 
 void icqhook::search_result_cb(SearchResultEvent *ev) {

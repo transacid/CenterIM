@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.19 2002/05/09 10:44:33 konst Exp $
+* $Id: irchook.cc,v 1.20 2002/05/10 20:21:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -521,7 +521,9 @@ void irchook::connected(void *conn, void *cli, ...) {
     }
 
     for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ic++) {
-	firetalk_chat_join(irhook.handle, ic->name.c_str());
+	if(ic->joined) {
+	    firetalk_chat_join(irhook.handle, ic->name.c_str());
+	}
     }
 
     irhook.ourstatus = available;
@@ -751,11 +753,13 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 	ic->fetched = true;
 	ic->nicks.clear();
 
-	if(irhook.emailsub.empty() && irhook.namesub.empty()) {
-	    firetalk_chat_listmembers(irhook.handle, croom);
-	    if(!ic->joined) firetalk_chat_part(irhook.handle, croom);
-	} else {
-	    firetalk_chat_requestextended(irhook.handle, croom);
+	if(irhook.searchdest) {
+	    if(irhook.emailsub.empty() && irhook.namesub.empty()) {
+		firetalk_chat_listmembers(irhook.handle, croom);
+		if(!ic->joined) firetalk_chat_part(irhook.handle, croom);
+	    } else {
+		firetalk_chat_requestextended(irhook.handle, croom);
+	    }
 	}
     }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.114 2002/05/09 11:41:07 konst Exp $
+* $Id: icqface.cc,v 1.115 2002/05/10 20:21:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -239,7 +239,8 @@ int icqface::contextmenu(icqcontact *c) {
     if(c->getdesc() != contactroot) {
 	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
 	m.additem(0, ACT_RENAME, _(" Rename contact         r"));
-	if(conf.getgroupmode() != icqconf::nogroups)
+
+	if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
 	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
     }
 
