@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.19 2001/11/16 14:00:18 konst Exp $
+* $Id: icqconf.cc,v 1.20 2001/11/23 15:10:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,7 +37,7 @@ icqconf::icqconf() {
     rc = rcdark;
     autoaway = autona = 0;
 
-    hideoffline = antispam = usegroups = false;
+    hideoffline = antispam = usegroups = russian = false;
     savepwd = mailcheck = true;
 }
 
@@ -88,9 +88,7 @@ void icqconf::loadmainconfig() {
 	    param = getword(buf);
 
 	    if(param == "hideoffline") hideoffline = true; else
-	    if(param == "russian") {
-		icq_Russian = yahoo_Russian = 1;
-	    } else
+	    if(param == "russian") russian = true; else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
@@ -161,7 +159,7 @@ void icqconf::save() {
 
 	getauto(away, na);
 
-	if(icq_Russian) f << "russian" << endl;
+	if(russian) f << "russian" << endl;
 	if(away) f << "autoaway\t" << i2str(away) << endl;
 	if(na) f << "autona\t" << i2str(na) << endl;
 	if(hideoffline) f << "hideoffline" << endl;
@@ -207,7 +205,8 @@ void icqconf::loadcolors() {
 		fprintf(f, "main_highlight\tyellow/black\tbold\n");
 		fprintf(f, "main_frame\tblue/black\tbold\n");
 		fprintf(f, "clist_icq\tgreen/black\n");
-		fprintf(f, "clist_yahoo\tcyan/black\n");
+		fprintf(f, "clist_msn\tcyan/black\n");
+		fprintf(f, "clist_yahoo\tyellow/black\n");
 		fprintf(f, "clist_infocard\twhite/black\n");
 		fprintf(f, "clist_root\tred/black\tbold\n");
 
@@ -225,7 +224,8 @@ void icqconf::loadcolors() {
 		fprintf(f, "main_highlight\twhite/blue\tbold\n");
 		fprintf(f, "main_frame\tblue/blue\tbold\n");
 		fprintf(f, "clist_icq\tgreen/blue\n");
-		fprintf(f, "clist_yahoo\tcyan/blue\n");
+		fprintf(f, "clist_yahoo\tyahoo/blue\n");
+		fprintf(f, "clist_msn\tcyan/blue\n");
 		fprintf(f, "clist_infocard\twhite/blue\n");
 		fprintf(f, "clist_root\tred/blue\tbold\n");
 		break;
@@ -261,6 +261,7 @@ void icqconf::loadcolors() {
 	    if(tname == "main_frame") npair = cp_main_frame; else
 	    if(tname == "clist_icq") npair = cp_clist_icq; else
 	    if(tname == "clist_yahoo") npair = cp_clist_yahoo; else
+	    if(tname == "clist_msn") npair = cp_clist_msn; else
 	    if(tname == "clist_infocard") npair = cp_clist_infocard; else
 	    if(tname == "clist_root") npair = cp_clist_root; else
 	    continue;
@@ -430,7 +431,8 @@ void icqconf::initpairs() {
     init_pair(cp_main_frame, COLOR_BLUE, COLOR_BLACK);
 
     init_pair(cp_clist_icq, COLOR_GREEN, COLOR_BLACK);
-    init_pair(cp_clist_yahoo, COLOR_CYAN, COLOR_BLACK);
+    init_pair(cp_clist_msn, COLOR_CYAN, COLOR_BLACK);
+    init_pair(cp_clist_yahoo, COLOR_YELLOW, COLOR_BLACK);
     init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
     init_pair(cp_clist_root, COLOR_RED, COLOR_BLACK);
 }
@@ -580,10 +582,16 @@ void icqconf::savestatus(protocolname pname, imstatus st) {
 
 int icqconf::getprotcolor(protocolname pname) const {
     switch(pname) {
-	case icq: return getcolor(cp_clist_icq);
-	case yahoo: return getcolor(cp_clist_yahoo);
-	case infocard: return getcolor(cp_clist_infocard);
-	default: return getcolor(cp_main_text);
+	case icq:
+	    return getcolor(cp_clist_icq);
+	case yahoo:
+	    return getcolor(cp_clist_yahoo);
+	case infocard:
+	    return getcolor(cp_clist_infocard);
+	case msn:
+	    return getcolor(cp_clist_msn);
+	default:
+	    return getcolor(cp_main_text);
     }
 }
 
@@ -593,6 +601,14 @@ const string icqconf::getdirname() const {
 
 const string icqconf::getconfigfname(const string fname) const {
     return getdirname() + fname;
+}
+
+bool icqconf::getrussian() const {
+    return russian;
+}
+
+void icqconf::setrussian(bool frussian) {
+    russian = frussian;
 }
 
 // ----------------------------------------------------------------------------

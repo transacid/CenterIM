@@ -43,11 +43,30 @@ struct icqfileassociation {
 };
 
 class icqhook: public abstracthook {
+    public:
+	struct searchparameters {
+	    searchparameters() {
+		onlineonly = false;
+		uin = 0;
+		minage = maxage = country = 0;
+		gender = language = 0;
+	    };
+
+	    bool onlineonly;
+	    unsigned int uin;
+	    unsigned short minage, maxage, country;
+	    unsigned char gender, language;
+	    string firstname, lastname, nick, city, state;
+	    string company, department, position, email;
+	    protocolname pname;
+	};
+
     protected:
 	bool flogged, connecting, factive;
-	int newuin, n_keepalive;
+	int newuin, n_keepalive, sockfd;
 	unsigned long seq_keepalive, reguin;
-	imstatus manualstatus;
+
+	struct icq_link icql;
 
 	time_t timer_keepalive, timer_tcp, timer_resolve, timer_offline,
 	    timer_reconnect, timer_ack, logontime;
@@ -179,7 +198,6 @@ class icqhook: public abstracthook {
 	    int result, unsigned int length, void *data);
 
 	void init(const icqconf::imaccount account);
-	struct tm *maketm(int hour, int minute, int day, int month, int year) const;
 
     public:
 	icqhook();
@@ -199,7 +217,9 @@ class icqhook: public abstracthook {
 
 	void addfile(unsigned int uin, unsigned long seq, string fname, int dir);
 
-	int getsockfd() const;
+	void getsockets(fd_set &fds, int &hsocket) const;
+	bool isoursocket(fd_set &fds) const;
+
 	bool online() const;
 	bool logged() const;
 	bool isconnecting() const;
@@ -209,11 +229,25 @@ class icqhook: public abstracthook {
 	void sendnewuser(const imcontact desc);
 
 	void setautostatus(imstatus st);
-	void setstatus(imstatus st);
 	imstatus getstatus() const;
+
+	void sendcontactlist();
+	bool isdirectopen(const imcontact c);
+
+	void sendinforeq(icqcontact *c, unsigned long uin);
+	void sendauth(unsigned long uin);
+
+	bool acceptfile(unsigned long uin, unsigned long seq);
+	void refusefile(unsigned long uin, unsigned long seq);
+
+	unsigned long sendurl(const imcontact c, const string url,
+	    const string text, bool direct);
+
+	void sendupdateuserinfo(icqcontact *c);
+	void sendsearchreq(const searchparameters s);
+	void sendalert(const imcontact c);
 };
 
 extern icqhook ihook;
-extern struct icq_link icql;
 
 #endif

@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.10 2001/11/11 14:30:12 konst Exp $
+* $Id: centermain.cc,v 1.11 2001/11/23 15:10:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -44,10 +44,11 @@ icqoffline offl;
 icqlist lst;
 icqgroups groups;
 
-struct icq_link icql;
-
 #ifdef ENABLE_NLS
-#include <locale.h>
+
+//#include <locale.h>
+#include <libintl.h>
+
 #endif
 
 int main(int argc, char **argv) {

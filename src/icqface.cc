@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.41 2001/11/21 18:03:49 konst Exp $
+* $Id: icqface.cc,v 1.42 2001/11/23 15:10:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -866,12 +866,8 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 		    break;
 		case 5:
 		    switch(cinfo.pname) {
-			case infocard:
-			    updatedetails(c);
-			    break;
-			case icq:
-			    c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
-			    break;
+			case infocard: updatedetails(c); break;
+			case icq: ihook.sendinforeq(c, cinfo.uin); break;
 		    }
 
 		    b = lastb;
@@ -1254,8 +1250,8 @@ bool icqface::checkicqmessage(const imcontact ic, const string atext, bool &ret,
 	    case 2:
 		switch(cc) {
 		    case ICQM_REQUEST:
-			icq_SendAuthMsg(&icql, uin);
-			log(_("+ authorization sent to %lu"), uin);
+			ihook.sendauth(uin);
+			log(_("+ [icq] authorization sent to %lu"), uin);
 			break;
 		    case ICQM_ADDED: break;
 		}
@@ -1345,7 +1341,7 @@ bool icqface::showevent(const imcontact cinfo, int direction, time_t &lastread) 
 		    case -1: ret = false; break;
 		    case 0:
 			cicq.message(dir == HIST_MSG_IN ?
-			    cinfo : imcontact(icql.icq_Uin, icq),
+			    cinfo : imcontact(conf.getourid(icq).uin, icq),
 				text, centericq::forward);
 			break;
 		    case 1:
@@ -1369,7 +1365,7 @@ bool icqface::showevent(const imcontact cinfo, int direction, time_t &lastread) 
 		case 1:
 		    text = url + "\n\n" + text;
 		    cicq.message(dir == HIST_MSG_IN ?
-			cinfo : imcontact(icql.icq_Uin, icq),
+			cinfo : imcontact(conf.getourid(icq).uin, icq),
 			text, centericq::forward);
 		    break;
 		case 2:
@@ -1636,7 +1632,6 @@ bool inhistory = false) {
 void icqface::acceptfile(const imcontact cinfo, unsigned long seq,
 const string fname) {
     if(ihook.logged()) {
-	icq_FileSession *sess;
 	static string filesavedir;
 	icqcontact *c = (icqcontact *) clist.get(cinfo);
 
@@ -1646,7 +1641,7 @@ const string fname) {
 	chdir(getenv("HOME"));
 	chdir(filesavedir.c_str());
 
-	if(sess = icq_AcceptFileRequest(&icql, cinfo.uin, seq)) {
+	if(ihook.acceptfile(cinfo.uin, seq)) {
 	    log(_("+ file %s from %s, %lu started"),
 		justfname(fname).c_str(), c->getdispnick().c_str(),
 		cinfo.uin);
@@ -1663,7 +1658,7 @@ const string fname) {
 void icqface::refusefile(const imcontact cinfo, unsigned long seq) {
     if(ihook.logged()) {
 	icqcontact *c = (icqcontact *) clist.get(cinfo);
-	icq_RefuseFileRequest(&icql, cinfo.uin, seq, "refused");
+	ihook.refusefile(cinfo.uin, seq);
 	log(_("+ file from %s, %lu refused"), c->getdispnick().c_str(), cinfo.uin);
     }
 }
@@ -1831,7 +1826,7 @@ void icqface::modelist(contactstatus cs) {
 
     db.close();
     restoreworkarea();
-    clist.send();
+    ihook.sendcontactlist();
 }
 
 bool icqface::multicontacts(const string ahead = "") {

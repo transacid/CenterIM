@@ -3,7 +3,6 @@
 
 #include <fstream>
 
-#include "icq.h"
 #include "icqhist.h"
 
 #include "icqcommon.h"
@@ -17,6 +16,7 @@
 #include "icqconf.h"
 #include "icqcontact.h"
 #include "icqmlist.h"
+#include "icqhook.h"
 
 #define DIALOG_WIDTH    60
 #define DIALOG_HEIGHT   15
@@ -78,23 +78,6 @@ class icqface {
 		void show(string title = "");
 		void hide();
 	} progress;
-
-	struct searchparameters {
-	    searchparameters() {
-		onlineonly = false;
-		uin = 0;
-		minage = maxage = country = 0;
-		gender = language = 0;
-	    };
-
-	    bool onlineonly;
-	    unsigned int uin;
-	    unsigned short minage, maxage, country;
-	    unsigned char gender, language;
-	    string firstname, lastname, nick, city, state;
-	    string company, department, position, email;
-	    protocolname pname;
-	};
 
     protected:
 	treeview *mcontacts;
@@ -201,7 +184,7 @@ class icqface {
 
 	bool updateconf(regsound &s, regcolor &c);
 
-	bool finddialog(searchparameters &s);
+	bool finddialog(icqhook::searchparameters &s);
 	bool findresults();
 
 	bool updatedetails(icqcontact *c = 0);

@@ -5,13 +5,17 @@
 
 class abstracthook {
     protected:
+	imstatus manualstatus;
+
     public:
 	virtual void connect();
 	virtual void disconnect();
 	virtual void exectimers();
 	virtual void main();
 
-	virtual int getsockfd() const;
+	virtual void getsockets(fd_set &fds, int &hsocket) const;
+	virtual bool isoursocket(fd_set &fds) const;
+
 	virtual bool online() const;
 	virtual bool logged() const;
 	virtual bool isconnecting() const;
@@ -25,8 +29,11 @@ class abstracthook {
 	virtual void setautostatus(imstatus st);
 	virtual void setstatus(imstatus st);
 	virtual imstatus getstatus() const;
+
+	virtual bool isdirectopen(const imcontact c) const;
 };
 
 abstracthook &gethook(protocolname pname);
+struct tm *maketm(int hour, int minute, int day, int month, int year);
 
 #endif

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.14 2001/11/20 17:08:50 konst Exp $
+* $Id: icqoffline.cc,v 1.15 2001/11/23 15:10:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -94,8 +94,7 @@ const string text, FILE *of = 0) {
     FILE *f = of ? of : open(cinfo, "a");
 
     if(f) {
-	unsigned long seq = icq_SendURL(&icql, cinfo.uin, url.c_str(), text.c_str(),
-	    c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+	unsigned long seq = ihook.sendurl(cinfo, url, text, c->getmsgdirect());
 
 	fprintf(f, "\f\nURL\n");
 	fprintf(f, "%lu\n%lu\n", seq, time(0));

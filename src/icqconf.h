@@ -12,9 +12,6 @@
 #include "kkfsys.h"
 #include "conscommon.h"
 
-#include "icq.h"
-#include "yahoolib.h"
-
 #include "icqgroup.h"
 #include "icqcontact.h"
 
@@ -33,6 +30,7 @@
 #define cp_clist_yahoo          13
 #define cp_clist_infocard       14
 #define cp_clist_root           15
+#define cp_clist_msn            16
 
 #ifndef VERSION
 #define VERSION "devel"
@@ -70,7 +68,7 @@ class icqconf {
 	int autoaway, autona;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
-	    serveronly, usegroups;
+	    serveronly, usegroups, russian;
 
 	string rnick, rfname, rlname, remail,
 	    sockshost, socksuser, sockspass, openurlcommand;
@@ -123,6 +121,9 @@ class icqconf {
 
 	bool getsavepwd() const;
 	void setsavepwd(bool ssave);
+
+	bool getrussian() const;
+	void setrussian(bool frussian);
 
 	bool getusegroups() const { return usegroups; }
 	void setusegroups(bool ausegroups) { usegroups = ausegroups; }

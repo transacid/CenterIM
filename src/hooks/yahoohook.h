@@ -9,7 +9,6 @@ class yahoohook: public abstracthook {
 	struct yahoo_context *yahoo;
 	bool fonline;
 	int ourstatus;
-	imstatus manualstatus;
 
 	time_t timer_reconnect;
 
@@ -35,7 +34,9 @@ class yahoohook: public abstracthook {
 	void exectimers();
 	void disconnect();
 
-	int getsockfd() const;
+	void getsockets(fd_set &fds, int &hsocket) const;
+	bool isoursocket(fd_set &fds) const;
+
 	bool online() const;
 	bool logged() const;
 	bool enabled() const;
@@ -46,7 +47,6 @@ class yahoohook: public abstracthook {
 	unsigned long sendmessage(const icqcontact *c, const string text);
 
 	void setautostatus(imstatus st);
-	void setstatus(imstatus st);
 	imstatus getstatus() const;
 };
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.17 2001/11/21 18:03:49 konst Exp $
+* $Id: icqcontacts.cc,v 1.18 2001/11/23 15:10:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -164,41 +164,6 @@ void icqcontacts::save() {
 	    string fname = c->getdirname() + "/offline";
 	    if(access(fname.c_str(), F_OK)) c->remove();
 	}
-    }
-}
-
-void icqcontacts::send() {
-    int i;
-    icqcontact *c;
-
-    if(ihook.online()) {
-	icq_ContactClear(&icql);
-    }
-
-    for(i = 0; i < count; i++) {
-	c = (icqcontact *) at(i);
-
-	if(c->getdesc() != contactroot)
-	switch(c->getdesc().pname) {
-	    case icq:
-		if(ihook.online()) {
-		    icq_ContactAdd(&icql, c->getdesc().uin);
-		    icq_ContactSetVis(&icql, c->getdesc().uin,
-			lst.inlist(c->getdesc(), csvisible) ? ICQ_CONT_VISIBLE :
-			lst.inlist(c->getdesc(), csinvisible) ? ICQ_CONT_INVISIBLE :
-			ICQ_CONT_NORMAL);
-		}
-		break;
-	    case yahoo:
-//                yhook.sendnewuser(c->getdesc());
-		break;
-	}
-    }
-
-    if(ihook.online()) {
-	icq_SendContactList(&icql);
-	icq_SendVisibleList(&icql);
-	icq_SendInvisibleList(&icql);
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.21 2001/11/21 18:03:49 konst Exp $
+* $Id: icqcontact.cc,v 1.22 2001/11/23 15:10:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -749,18 +749,11 @@ void icqcontact::setmsgdirect(bool flag) {
 }
 
 bool icqcontact::getmsgdirect() const {
-    bool specific = false;
-
-    switch(cdesc.pname) {
-	case icq:
-	    specific = icq_TCPLinkOpen(&icql, cdesc.uin);
-	    break;
-	case yahoo:
-	    return true;
+    if(cdesc.pname == icq) {
+	return msgdirect && (!conf.getserveronly() || ihook.isdirectopen(cdesc) || islocal());
     }
 
-    return
-	msgdirect && (!conf.getserveronly() || specific || islocal());
+    return status != offline;
 }
 
 void icqcontact::setgroupid(int agroupid) {

@@ -58,6 +58,7 @@ void accountmanager::exec() {
 
 		switch(pname) {
 		    case yahoo:
+		    case msn:
 			t.addleaff(n, 0, citem+1, _(" Login : %s "),
 			    account.nickname.c_str());
 			break;

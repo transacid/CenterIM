@@ -10,8 +10,6 @@
 #include "kkfsys.h"
 #include "cmenus.h"
 
-#include "icq.h"
-
 #include "icqcommon.h"
 #include "imcontact.h"
 

@@ -1,13 +1,14 @@
 #ifndef __ICQHIST_H__
 #define __ICQHIST_H__
 
-#include "icq.h"
 #include "kkstrtext.h"
 #include "cmenus.h"
 #include "kkfsys.h"
 
 #include "icqcommon.h"
 #include "imcontact.h"
+
+#include "icq.h"
 
 #define HIST_MSG_OUT            2
 #define HIST_MSG_IN             4

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.27 2001/11/20 17:08:50 konst Exp $
+* $Id: icqdialogs.cc,v 1.28 2001/11/23 15:10:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@
 #include "icqhook.h"
 #include "yahoohook.h"
 
-bool icqface::finddialog(searchparameters &s) {
+bool icqface::finddialog(icqhook::searchparameters &s) {
     int n, b, i;
     int nuin, ninfo, nloc, nwork, nonl;
     bool finished, ret;
@@ -125,7 +125,7 @@ bool icqface::finddialog(searchparameters &s) {
 	if(!finished)
 	switch(b) {
 	    case 0:
-		s = searchparameters();
+		s = icqhook::searchparameters();
 		break;
 	    case 1:
 		switch(i) {
@@ -676,8 +676,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
 		conf.setantispam(antispam);
 		conf.setmailcheck(mailcheck);
 		conf.setserveronly(serveronly);
-
-		icq_Russian = yahoo_Russian = rus ? 1 : 0;
+		conf.setrussian(rus);
 
 		if(conf.getusegroups() != usegroups) {
 		    conf.setusegroups(usegroups);

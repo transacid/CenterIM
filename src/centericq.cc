@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.38 2001/11/21 18:03:48 konst Exp $
+* $Id: centericq.cc,v 1.39 2001/11/23 15:10:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,7 +79,7 @@ void centericq::exec() {
 
 	if(p)
 	if(((string) p).substr(0, 2) == "ru")
-	    icq_Russian = yahoo_Russian = true;
+	    conf.setrussian(true);
 
 	if(updateconf()) {
 	    manager.exec();
@@ -250,32 +250,14 @@ void centericq::changestatus() {
 }
 
 void centericq::find() {
-    static icqface::searchparameters s;
+    static icqhook::searchparameters s;
     bool ret = true;
 
     while(ret) {
 	if(ret = face.finddialog(s)) {
 	    switch(s.pname) {
 		case icq:
-		    if(s.uin) {
-			icq_SendSearchUINReq(&icql, s.uin);
-		    } else
-		    if(s.minage || s.maxage || s.country || s.language
-		    || !s.city.empty() || !s.state.empty() || !s.company.empty()
-		    || !s.department.empty() || !s.position.empty() || s.onlineonly) {
-			icq_SendWhitePagesSearchReq(&icql, s.firstname.c_str(),
-			    s.lastname.c_str(), s.nick.c_str(), s.email.c_str(),
-			    s.minage, s.maxage, s.gender, s.language, s.city.c_str(),
-			    s.state.c_str(), s.country, s.company.c_str(),
-			    s.department.c_str(), s.position.c_str(),
-			    s.onlineonly ? 1 : 0);
-
-		    } else {
-			icq_SendSearchReq(&icql, s.email.c_str(),
-			    s.nick.c_str(), s.firstname.c_str(),
-			    s.lastname.c_str());
-		    }
-
+		    ihook.sendsearchreq(s);
 		    ret = face.findresults();
 		    break;
 
@@ -301,11 +283,7 @@ void centericq::userinfo(const imcontact cinfo) {
 
 	switch(cinfo.pname) {
 	    case icq:
-		if(ihook.online()) {
-		    c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
-		}
-		break;
-	    case yahoo:
+		if(ihook.online()) ihook.sendinforeq(c, cinfo.uin);
 		break;
 	}
     }
@@ -321,7 +299,7 @@ void centericq::sendfiles(const imcontact cinfo) {
     unsigned long seq;
     icqcontact *c = (icqcontact *) clist.get(cinfo);
     linkedlist flist;
-
+/*
     if(c->getdirect()) {
 	if(face.sendfiles(cinfo, msg, flist)) {
 	    char **files = 0;
@@ -338,7 +316,7 @@ void centericq::sendfiles(const imcontact cinfo) {
 	    face.log(_("+ sending file %s to %s, %lu"),
 		justfname(files[0]).c_str(), c->getdispnick().c_str(), cinfo.uin);
 	}
-    } else {
+    } else*/ {
 	face.log(_("+ remote client doesn't support file transfers"));
     }
 }
@@ -346,9 +324,9 @@ void centericq::sendfiles(const imcontact cinfo) {
 void centericq::sendcontacts(const imcontact cinfo) {
     icqcontactmsg *m, *n, *cont;
     vector<imcontact>::iterator i;
-
-    if(icql.icq_Status == STATUS_OFFLINE) {
-	face.log(_("+ cannot send contacts in offline mode"));
+/*
+    if(ihook.getstatus() == offline) */{
+	face.log(_("+ [icq] cannot send contacts in offline mode"));
 	return;
     }
 
@@ -367,7 +345,7 @@ void centericq::sendcontacts(const imcontact cinfo) {
 	    m->next = 0;
 	}
 
-	icq_SendContact(&icql, cinfo.uin, cont, ICQ_SEND_THRUSERVER);
+//        icq_SendContact(&icql, cinfo.uin, cont, ICQ_SEND_THRUSERVER);
 
 	for(m = cont; m; ) {
 	    n = (icqcontactmsg *) m->next;
@@ -604,7 +582,7 @@ icqcontact *centericq::addcontact(const imcontact ic) {
     if(notify) {
 	if(face.ask(_("Notify the user he/she has been added?"),
 	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    icq_AlertAddUser(&icql, ic.uin);
+	    ihook.sendalert(ic);
 	    face.log(_("+ the notification has been sent to %lu"), ic.uin);
 	}
     }
@@ -643,14 +621,9 @@ bool centericq::idle(int options = 0) {
 	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		abstracthook &hook = gethook(pname);
 
-		if(hook.online())
-		if(hook.getsockfd()) {
-		    FD_SET(hook.getsockfd(), &fds);
+		if(hook.online()) {
+		    hook.getsockets(fds, hsockfd);
 		    online = true;
-
-		    if(hook.getsockfd() > hsockfd) {
-			hsockfd = hook.getsockfd();
-		    }
 		}
 	    }
 	}
@@ -668,8 +641,7 @@ bool centericq::idle(int options = 0) {
 	    abstracthook &hook = gethook(pname);
 
 	    if(hook.online())
-	    if(hook.getsockfd())
-	    if(FD_ISSET(hook.getsockfd(), &fds)) {
+	    if(hook.isoursocket(fds)) {
 		hook.main();
 		fin = fin || (options & HIDL_SOCKEXIT);
 	    }

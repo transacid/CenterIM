@@ -46,7 +46,6 @@ class icqcontacts: public linkedlist {
 	void remove(const imcontact adesc);
 	void load();
 	void save();
-	void send();
 	void nonicq(int id);
 	void order();
 	void rearrange();

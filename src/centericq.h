@@ -1,7 +1,6 @@
 #ifndef __CENTERICQ_H__
 #define __CENTERICQ_H__
 
-#include "icq.h"
 #include <signal.h>
 #include <sys/wait.h>
 #include <fstream>

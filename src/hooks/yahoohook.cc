@@ -4,6 +4,7 @@
 #include "icqcontacts.h"
 #include "icqoffline.h"
 #include "accountmanager.h"
+#include "yahoolib.h"
 
 yahoohook::yahoohook() {
     fonline = false;
@@ -63,12 +64,12 @@ void yahoohook::connect() {
 	    if(!yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE)) {
 		fonline = true;
 		face.log(_("+ [yahoo] logged in"));
-		clist.send();
 		offl.scan(0, ossendall);
 	    }
 	}
     }
 
+    yahoo_Russian = conf.getrussian() ? 1 : 0;
     time(&timer_reconnect);
 }
 
@@ -78,8 +79,15 @@ void yahoohook::main() {
     }
 }
 
-int yahoohook::getsockfd() const {
-    return (yahoo && fonline) ? yahoo->sockfd : 0;
+void yahoohook::getsockets(fd_set &fds, int &hsocket) const {
+    if(online()) {
+	FD_SET(yahoo->sockfd, &fds);
+	hsocket = max(yahoo->sockfd, hsocket);
+    }
+}
+
+bool yahoohook::isoursocket(fd_set &fds) const {
+    return online() && FD_ISSET(yahoo->sockfd, &fds);
 }
 
 void yahoohook::disconnect() {
@@ -239,10 +247,6 @@ void yahoohook::setautostatus(imstatus st) {
     }
 }
 
-void yahoohook::setstatus(imstatus st) {
-    setautostatus(manualstatus = st);
-}
-
 imstatus yahoohook::getstatus() const {
     return online() ? yahoo2imstatus(ourstatus) : offline;
 }
@@ -266,6 +270,7 @@ void yahoohook::disconnected(yahoo_context *y) {
     }
 
     time(&yhook.timer_reconnect);
+    face.update();
 }
 
 void yahoohook::userlogon(yahoo_context *y, const char *nick, int status) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.3 2001/11/21 18:03:50 konst Exp $
+* $Id: icqhook.cc,v 1.4 2001/11/23 15:10:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,7 +37,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define TIMESTAMP ihook.maketm(hour-1, minute, day, month, year)
+#define TIMESTAMP maketm(hour-1, minute, day, month, year)
 
 icqhook::icqhook() {
     time_t c = time(0);
@@ -120,20 +120,19 @@ void icqhook::connect() {
     }
 
     connecting = true;
-//    face.update();
-//    icq_Disconnect(&icql);
     face.log(_("+ [icq] connecting to the server"));
 
     if(icq_Connect(&icql, acc.server.c_str(), acc.port) != -1) {
+	sockfd = icq_GetSok(&icql);
 	icq_Login(&icql, icql.icq_Status = STATUS_ONLINE);
     } else {
 	face.log(_("+ [icq] unable to connect to the server"));
 	icql.icq_Status = (unsigned int) STATUS_OFFLINE;
 	connecting = false;
-//        face.update();
     }
 
     time(&timer_reconnect);
+    icq_Russian = conf.getrussian() ? 1 : 0;
 }
 
 void icqhook::loggedin(struct icq_link *link) {
@@ -165,7 +164,7 @@ void icqhook::loggedin(struct icq_link *link) {
 	    getstring(f, rfname);
 	    getstring(f, rlname);
 
-	    icq_UpdateNewUserInfo(&icql, rnick.c_str(), rfname.c_str(),
+	    icq_UpdateNewUserInfo(&ihook.icql, rnick.c_str(), rfname.c_str(),
 		rlname.c_str(), remail.c_str());
 
 	    f.close();
@@ -173,7 +172,7 @@ void icqhook::loggedin(struct icq_link *link) {
 	}
     }
 
-    clist.send();
+    ihook.sendcontactlist();
     ihook.files.clear();
 }
 
@@ -682,18 +681,6 @@ void icqhook::clearfindresults() {
     founduins.clear();
 }
 
-struct tm *icqhook::maketm(int hour, int minute, int day,
-int month, int year) const {
-    static struct tm msgtm;
-    memset(&msgtm, 0, sizeof(msgtm));
-    msgtm.tm_min = minute;
-    msgtm.tm_hour = hour;
-    msgtm.tm_mday = day;
-    msgtm.tm_mon = month-1;
-    msgtm.tm_year = year-1900;
-    return &msgtm;
-}
-
 void icqhook::addfile(unsigned int uin, unsigned long seq, string fname, int dir) {
     files.push_back(icqfileassociation(uin, seq, fname, dir));
 }
@@ -702,8 +689,15 @@ bool icqhook::isconnecting() const {
     return connecting;
 }
 
-int icqhook::getsockfd() const {
-    return online() ? icq_GetSok(&icql) : 0;
+void icqhook::getsockets(fd_set &fds, int &hsocket) const {
+    if(online()) {
+	FD_SET(sockfd, &fds);
+	hsocket = max(sockfd, hsocket);
+    }
+}
+
+bool icqhook::isoursocket(fd_set &fds) const {
+    return online() && FD_ISSET(sockfd, &fds);
 }
 
 bool icqhook::online() const {
@@ -733,10 +727,6 @@ imstatus icqhook::icq2imstatus(int status) const {
 
 bool icqhook::enabled() const {
     return factive;
-}
-
-void icqhook::setstatus(imstatus st) {
-    setautostatus(manualstatus = st);
 }
 
 void icqhook::setautostatus(imstatus st) {
@@ -843,4 +833,121 @@ void icqhook::sendnewuser(const imcontact ic) {
     if(enabled()) {
 	icq_SendNewUser(&icql, ic.uin);
     }
+}
+
+void icqhook::sendcontactlist() {
+    int i;
+    icqcontact *c;
+
+    if(logged()) {
+	icq_ContactClear(&icql);
+
+	for(i = 0; i < clist.count; i++) {
+	    c = (icqcontact *) clist.at(i);
+
+	    if(c->getdesc() != contactroot)
+	    if(c->getdesc().pname == icq) {
+		icq_ContactAdd(&icql, c->getdesc().uin);
+		icq_ContactSetVis(&icql, c->getdesc().uin,
+		    lst.inlist(c->getdesc(), csvisible) ? ICQ_CONT_VISIBLE :
+		    lst.inlist(c->getdesc(), csinvisible) ? ICQ_CONT_INVISIBLE :
+		    ICQ_CONT_NORMAL);
+	    }
+	}
+
+	icq_SendContactList(&icql);
+	icq_SendVisibleList(&icql);
+	icq_SendInvisibleList(&icql);
+    }
+}
+
+bool icqhook::isdirectopen(const imcontact c) {
+    return (bool) icq_TCPLinkOpen(&icql, c.uin);
+}
+
+void icqhook::sendinforeq(icqcontact *c, unsigned long uin) {
+    c->setseq2(icq_SendMetaInfoReq(&icql, c->getdesc().uin));
+}
+
+void icqhook::sendauth(unsigned long uin) {
+    icq_SendAuthMsg(&icql, uin);
+}
+
+bool icqhook::acceptfile(unsigned long uin, unsigned long seq) {
+    return (bool) icq_AcceptFileRequest(&icql, uin, seq);
+}
+
+void icqhook::refusefile(unsigned long uin, unsigned long seq) {
+    icq_RefuseFileRequest(&icql, uin, seq, "refused");
+}
+
+unsigned long icqhook::sendurl(const imcontact c, const string url,
+const string text, bool direct) {
+    return icq_SendURL(&icql, c.uin, url.c_str(), text.c_str(),
+	direct ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+}
+
+void icqhook::sendupdateuserinfo(icqcontact *c) {
+    string fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate;
+    string fphone, ffax, fstreet, fcellular, fhomepage, fwcity, fwstate;
+    string fwphone, fwfax, fwaddress, fcompany, fdepartment, fjob;
+    string fwhomepage, icat1, int1, icat2, int2, icat3, int3, icat4;
+    string int4, fabout;
+
+    unsigned char flang1, flang2, flang3, fbyear, fbmonth, fbday, fage, fgender;
+    unsigned long fzip, fwzip;
+    unsigned short fcountry, fwcountry, foccupation;
+
+    c->getinfo(fname, lname, fprimemail, fsecemail, foldemail, fcity, fstate, fphone, ffax, fstreet, fcellular, fzip, fcountry);
+
+    c->getmoreinfo(fage, fgender, fhomepage, flang1, flang2, flang3, fbday, fbmonth, fbyear);
+
+    c->getworkinfo(fwcity, fwstate, fwphone, fwfax, fwaddress, fwzip,
+	fwcountry, fcompany, fdepartment, fjob, foccupation, fwhomepage);
+
+    fabout = c->getabout();
+
+    icq_UpdateUserInfo(&icql, c->getnick().c_str(), fname.c_str(),
+	lname.c_str(), fprimemail.c_str());
+
+    icq_UpdateMetaInfoHomepage(&icql, fage, fhomepage.c_str(),
+	fbyear, fbmonth, fbday, flang1, flang2, flang3, fgender);
+
+    icq_UpdateMetaInfoWork(&icql, fwcity.c_str(), fwstate.c_str(),
+	fwphone.c_str(), fwfax.c_str(), fwaddress.c_str(),
+	fcompany.c_str(), fdepartment.c_str(), fjob.c_str(),
+	fwhomepage.c_str(), foccupation, fwcountry, fwzip);
+
+    icq_UpdateMetaInfoSet(&icql, c->getnick().c_str(), fname.c_str(),
+	lname.c_str(), fprimemail.c_str(), fsecemail.c_str(),
+	foldemail.c_str(), fcity.c_str(), fstate.c_str(), fphone.c_str(),
+	ffax.c_str(), fstreet.c_str(), fcellular.c_str(), fzip, fcountry,
+	0);
+
+    icq_UpdateMetaInfoAbout(&icql, fabout.c_str());
+}
+
+void icqhook::sendsearchreq(const searchparameters s) {
+    if(s.uin) {
+	icq_SendSearchUINReq(&icql, s.uin);
+    } else
+    if(s.minage || s.maxage || s.country || s.language
+    || !s.city.empty() || !s.state.empty() || !s.company.empty()
+    || !s.department.empty() || !s.position.empty() || s.onlineonly) {
+	icq_SendWhitePagesSearchReq(&icql, s.firstname.c_str(),
+	    s.lastname.c_str(), s.nick.c_str(), s.email.c_str(),
+	    s.minage, s.maxage, s.gender, s.language, s.city.c_str(),
+	    s.state.c_str(), s.country, s.company.c_str(),
+	    s.department.c_str(), s.position.c_str(),
+	    s.onlineonly ? 1 : 0);
+
+    } else {
+	icq_SendSearchReq(&icql, s.email.c_str(),
+	    s.nick.c_str(), s.firstname.c_str(),
+	    s.lastname.c_str());
+    }
+}
+
+void icqhook::sendalert(const imcontact im) {
+    icq_AlertAddUser(&icql, im.uin);
 }
