@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.130 2002/08/16 16:48:27 konst Exp $
+* $Id: icqface.cc,v 1.131 2002/08/21 09:52:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -214,6 +214,9 @@ int icqface::contextmenu(icqcontact *c) {
 
 	    if(capab & hoptCanSendSMS)
 		m.additem(0, ACT_SMS, _(" Send an SMS"));
+
+	    if(capab & hoptAuthReqSend)
+		m.additem(0, ACT_AUTH, _(" Request authorization"));
 
 	    if(!m.empty()) m.addline();
 
@@ -1669,6 +1672,21 @@ bool icqface::eventedit(imevent &ev) {
 
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = imsms(ev.getcontact(), imevent::outgoing, p.get());
+
+	if(c = clist.get(ev.getcontact()))
+	    c->setpostponed(r ? "" : p.get());
+
+    } else if(ev.gettype() == imevent::authorization) {
+	imauthorization *m = static_cast<imauthorization *>(&ev);
+
+	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
+	editor.load(m->getmessage(), "");
+	editor.open();
+
+	r = editdone;
+
+	auto_ptr<char> p(editor.save("\r\n"));
+	*m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
 
 	if(c = clist.get(ev.getcontact()))
 	    c->setpostponed(r ? "" : p.get());

@@ -17,7 +17,8 @@ enum hookcapabilities {
       hoptCanChangePassword = 512,
        hoptCanUpdateDetails = 1024,
 	    hoptNoPasswords = 2048,
-  hoptControlableVisibility = 4096
+  hoptControlableVisibility = 4096,
+	    hoptAuthReqSend = 8192
 };
 
 class abstracthook {

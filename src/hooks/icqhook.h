@@ -98,7 +98,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	void sendupdateuserinfo(const icqcontact &c);
 
 	void synclist();
-	void getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored, vector<icqcontact *> &needauth);
+	void getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored);
 	void sendaddauth();
 };
 

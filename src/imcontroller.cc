@@ -168,19 +168,15 @@ void imcontroller::icqsynclist() {
     bool fin;
     int synchronized, attempt = 1;
     string msg;
-    vector<icqcontact *> needauth, tobestored;
+    vector<icqcontact *> tobestored;
 
     face.progress.show(_(" Contact list synchronization "));
     face.progress.log(_("Starting the synchronization process"));
 
     for(fin = false; !fin; ) {
-	ihook.getsyncstatus(synchronized, tobestored, needauth);
+	ihook.getsyncstatus(synchronized, tobestored);
 	face.progress.log(_("Attempt #%d"), attempt);
 	face.progress.log(_(".. %d already synchronized, %d contacts to be stored"), synchronized, tobestored.size());
-
-	if(!needauth.empty()) {
-	    face.progress.log(_(".. %d contacts require authorization"), needauth.size());
-	}
 
 	msg = "";
 	if(tobestored.empty()) msg = _("Finished");
@@ -198,15 +194,6 @@ void imcontroller::icqsynclist() {
 	}
 
 	attempt++;
-    }
-
-    if(!needauth.empty()) {
-	char buf[512];
-	sprintf(buf, _("%d contacts require authorization to be added. Request it now?"), needauth.size());
-
-	if(face.ask(buf, ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    ihook.sendaddauth();
-	}
     }
 
     face.progress.hide();

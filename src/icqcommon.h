@@ -58,7 +58,7 @@ using namespace std;
 #define PERIOD_CHECKMAIL        30
 #define PERIOD_DISPUPDATE       2
 
-#define PERIOD_ATONCE           4
-#define MAX_ATONCE              6
+#define PERIOD_ATONCE           5
+#define MAX_ATONCE              10
 
 #endif

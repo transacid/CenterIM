@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.114 2002/08/19 08:25:17 konst Exp $
+* $Id: centericq.cc,v 1.115 2002/08/21 09:52:04 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -204,6 +204,11 @@ void centericq::mainloop() {
 	    case ACT_SMS:
 		sendevent(imsms(c->getdesc(), imevent::outgoing,
 		    c->getpostponed()), icqface::ok);
+		break;
+
+	    case ACT_AUTH:
+		sendevent(imauthorization(c->getdesc(), imevent::outgoing,
+		    imauthorization::Request, ""), icqface::ok);
 		break;
 
 	    case ACT_IGNORE:
@@ -650,6 +655,26 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 		sendev = new immessage(m->getcontact(), imevent::outgoing, "");
 		break;
 	}
+
+    } else if(ev.gettype() == imevent::authorization) {
+	const imauthorization *m = dynamic_cast<const imauthorization *>(&ev);
+
+	text = m->getmessage();
+
+	switch(r) {
+	    case icqface::ok:
+		sendev = new imauthorization(m->getcontact(), imevent::outgoing,
+		    m->getauthtype(), text);
+		break;
+
+	    case icqface::forward:
+		text = fwdnote + m->gettext();
+	    case icqface::reply:
+		/* reply to an URL is a message */
+		sendev = new immessage(m->getcontact(), imevent::outgoing, text);
+		break;
+	}
+
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = dynamic_cast<const imsms *>(&ev);
 

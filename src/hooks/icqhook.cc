@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.103 2002/08/21 08:26:57 konst Exp $
+* $Id: icqhook.cc,v 1.104 2002/08/21 09:52:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -62,6 +62,7 @@ icqhook::icqhook() {
 	hoptCanUpdateDetails |
 	hoptChangableServer |
 	hoptCanSyncList |
+	hoptAuthReqSend |
 	hoptControlableVisibility;
 
     cli.setServerSideGroup("centericq", 0x0666);
@@ -123,7 +124,8 @@ void icqhook::connect() {
 	c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == icq && c->getdesc().uin) {
-	    cli.addContact(new Contact(c->getdesc().uin));
+	    ContactRef ct(new Contact(c->getdesc().uin));
+	    cli.addContact(ct);
 	}
     }
 
@@ -840,11 +842,11 @@ void icqhook::synclist() {
     */
 
     ContactList tcl;
-    vector<icqcontact *> tobestored, needauth;
+    vector<icqcontact *> tobestored;
     vector<icqcontact *>::iterator ic;
 
     cli.contact_userinfo_change_signal.clear();
-    getsyncstatus(s, tobestored, needauth);
+    getsyncstatus(s, tobestored);
 
     for(ic = tobestored.begin(); ic != tobestored.end(); ++ic) {
 	ContactRef ct = cli.getContact((*ic)->getdesc().uin);
@@ -886,7 +888,7 @@ void icqhook::synclist() {
     blockmode = Normal;
 }
 
-void icqhook::getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored, vector<icqcontact *> &needauth) {
+void icqhook::getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored) {
     ContactList &cl = cli.getContactList();
     ContactList::iterator ic = cl.begin();
 
@@ -900,14 +902,8 @@ void icqhook::getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored,
 	if(c)
 	if(c->inlist()) {
 	    if(!(*ic)->getServerBased()) {
-		if(!(*ic)->getAuthAwait()) {
-		    tobestored.push_back(c);
+		tobestored.push_back(c);
 
-		} else if(!c->getbasicinfo().authawait) {
-		    if(find(needauth.begin(), needauth.end(), c) == needauth.end())
-			needauth.push_back(c);
-
-		}
 	    } else {
 		synchronized++;
 
@@ -916,24 +912,6 @@ void icqhook::getsyncstatus(int &synchronized, vector<icqcontact *> &tobestored,
 
 	++ic;
     }
-}
-
-void icqhook::sendaddauth() {
-    int synchronized;
-    ContactList tcl;
-    ContactRef ct;
-    vector<icqcontact *> tobestored, needauth;
-    vector<icqcontact *>::const_iterator in;
-
-    getsyncstatus(synchronized, tobestored, needauth);
-
-    for(in = needauth.begin(); in != needauth.end(); ++in) {
-	ct = cli.getContact((*in)->getdesc().uin);
-	ct->setAuthAwait(false);
-	tcl.add(ct);
-    }
-
-    cli.uploadServerBasedContactList(tcl);
 }
 
 // ----------------------------------------------------------------------------
@@ -1371,42 +1349,7 @@ void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
     } else if(ev->getType() == ServerBasedContactEvent::Upload) {
 	syncstatus = ackUpload;
 
-	map<unsigned int, ServerBasedContactEvent::UploadResult> r = ev->getUploadResults();
-
-	while(i != lst.end()) {
-	    if(r[(*i)->getUIN()] == ServerBasedContactEvent::AuthRequired) {
-		c = clist.get(imcontact((*i)->getUIN(), icq));
-
-		if(c) {
-		    icqcontact::basicinfo bi = c->getbasicinfo();
-
-		    if(blockmode == Normal) {
-			if(!bi.authawait) {
-			    face.log(_("+ [icq] auto-requesting authorization to store %lu"), (*i)->getUIN());
-			    em.store(imauthorization(c->getdesc(), imevent::outgoing, imauthorization::Request));
-			    cli.uploadServerBasedContactList(*i);
-			}
-
-		    } else if(blockmode == SyncList) {
-			ContactRef ct = cli.getContact((*i)->getUIN());
-			if(ct.get()) {
-			    ct->setAuthAwait(true);
-			    bi.authawait = false;
-			    c->setbasicinfo(bi);
-			    // So that it doesn't get into the next upload
-			    // packet sent..
-			}
-
-		    }
-		}
-	    }
-	    ++i;
-	}
-
     } else if(ev->getType() == ServerBasedContactEvent::Remove) {
-	while(i != lst.end()) {
-	    ++i;
-	}
 
     }
 }
