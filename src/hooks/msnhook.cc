@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.50 2002/12/10 18:11:42 konst Exp $
+* $Id: msnhook.cc,v 1.51 2002/12/10 18:58:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -226,6 +226,16 @@ bool msnhook::send(const imevent &ev) {
 
 void msnhook::sendnewuser(const imcontact &ic) {
     if(logged()) {
+	icqcontact *c;
+	imcontact icc(nicktodisp(ic.nickname), msn);
+
+	if(icc.nickname != ic.nickname)
+	if(c = clist.get(ic)) {
+	    c->setdesc(icc);
+	    c->setnick(icc.nickname);
+	    c->setdispnick(icc.nickname);
+	}
+
 	msn_add_to_list(&conn, "FL", nicknormalize(ic.nickname).c_str());
     }
 
@@ -281,8 +291,11 @@ void msnhook::requestinfo(const imcontact &ic) {
     c->setmoreinfo(m);
     c->setbasicinfo(b);
 
-    if(!friendlynicks[ic.nickname].empty())
+    if(!friendlynicks[ic.nickname].empty()) {
+	bool sn = c->getnick() == c->getdispnick();
 	c->setnick(friendlynicks[ic.nickname]);
+	if(sn) c->setdispnick(c->getnick());
+    }
 
     face.relaxedupdate();
 }
@@ -330,7 +343,7 @@ vector<icqcontact *> msnhook::getneedsync() {
 }
 
 void msnhook::sendupdateuserinfo(const icqcontact &c) {
-    msn_set_friendlyname(&conn, c.getdispnick().c_str());
+    msn_set_friendlyname(&conn, c.getnick().c_str());
 }
 
 void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool forcefetch) {
@@ -340,8 +353,10 @@ void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool force
     friendlynicks[c->getdesc().nickname] = newnick;
     c->setnick(newnick);
 
-    if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick || c->getdispnick() == c->getdesc().nickname))
+    if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick || c->getdispnick() == c->getdesc().nickname)) {
 	c->setdispnick(newnick);
+	face.relaxedupdate();
+    }
 }
 
 void msnhook::checkinlist(imcontact ic) {
@@ -470,6 +485,10 @@ void ext_got_BLP(msnconn * conn, char c) {
 void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname) {
     log("ext_new_RL_entry");
     mhook.slst["RL"].push_back(make_pair(username, friendlyname));
+
+    imcontact ic(nicktodisp(username), msn);
+    mhook.checkinlist(ic);
+    em.store(imnotification(ic, _("The user has added you to his/her contact list")));
 }
 
 void ext_new_list_entry(msnconn *conn, const char *lst, const char *username) {
@@ -492,7 +511,7 @@ void ext_del_list_entry(msnconn *conn, const char *lst, const char *username) {
 
 void ext_show_error(msnconn * conn, const char * msg) {
     log("ext_show_error");
-    face.log(_("+ [msn] error: %s"), msg);
+    log(msg);
 }
 
 void ext_buddy_set(msnconn * conn, const char * buddy, const char * friendlyname, const char * status) {
@@ -573,6 +592,7 @@ void ext_new_mail_arrived(msnconn *conn, const char *from, const char *subject) 
 
 void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv) {
     log("ext_filetrans_invite");
+    return;
 
     imfile::record r;
     r.fname = inv->filename;

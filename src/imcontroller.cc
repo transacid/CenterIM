@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.39 2002/12/09 09:21:02 konst Exp $
+* $Id: imcontroller.cc,v 1.40 2002/12/10 18:58:55 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -242,11 +242,11 @@ void imcontroller::aimupdateprofile() {
 void imcontroller::msnupdateprofile() {
     if(mhook.logged()) {
 	mhook.requestinfo(imcontact(conf.getourid(msn).nickname, msn));
-	string tmp = face.inputstr(_("new MSN friendly nick: "), clist.get(contactroot)->getdispnick());
+	string tmp = face.inputstr(_("new MSN friendly nick: "), clist.get(contactroot)->getnick());
 
 	if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
 	    icqcontact *c = clist.get(contactroot);
-	    c->setdispnick(tmp);
+	    c->setnick(tmp);
 	    mhook.sendupdateuserinfo(*c);
 
 	    char buf[512];

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.26 2002/12/10 18:11:42 konst Exp $
+* $Id: jabberhook.cc,v 1.27 2002/12/10 18:58:56 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -276,6 +276,15 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	xmlnode_put_attrib(z, "jid", cjid.get());
 	jab_send(jc, x);
 	xmlnode_free(x);
+
+	imcontact icc(jidtodisp(ic.nickname), jabber);
+	if(ic.nickname != icc.nickname)
+	if(c = clist.get(ic)) {
+	    c->setdesc(icc);
+	    c->setnick(icc.nickname);
+	    c->setdispnick(icc.nickname);
+	}
+
     } else {
 	if(c = clist.get(ic)) {
 	    cname = getchanneljid(c);
