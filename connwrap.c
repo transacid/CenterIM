@@ -24,6 +24,8 @@
 
 #endif
 
+static int in_http_connect = 0;
+
 #ifdef HAVE_OPENSSL
 
 static SSL_CTX *ctx = 0;
@@ -32,7 +34,6 @@ typedef struct { int fd; SSL *ssl; } sslsock;
 
 static sslsock *socks = 0;
 static int sockcount = 0;
-static int in_http_connect = 0;
 
 static sslsock *getsock(int fd) {
     int i;
@@ -60,7 +61,7 @@ static sslsock *addsock(int fd) {
 	OpenSSL_add_all_algorithms();
 #endif
 
-	ctx = SSL_CTX_new(SSLv23_client_method());
+	ctx = SSL_CTX_new(SSLv23_method());
     }
 
     p->ssl = SSL_new(ctx);
