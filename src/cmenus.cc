@@ -1,7 +1,7 @@
 /*
 *
-* kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.9 2001/10/31 16:51:33 konst Exp $
+* kkconsui various textmode menus classes
+* $Id: cmenus.cc,v 1.10 2001/11/01 16:11:50 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -220,7 +220,7 @@ void verticalmenu::scale() {
 
 int verticalmenu::open() {
     bool finished = false;
-    int go, k, ret;
+    int go, k;
 
     if(!window.empty()) window.open();
 
@@ -245,8 +245,7 @@ int verticalmenu::open() {
 	
 		case 27:
 		    checkclear();
-		    finished = true;
-		    ret = 0;
+		    return 0;
 		    break;
 	
 		case KEY_UP:
@@ -353,7 +352,7 @@ int verticalmenu::open() {
 	}
     }
 
-    return (items.empty() || !ret) ? 0 : curelem+1;
+    return curelem+1;
 }
 
 int verticalmenu::getcount() {
