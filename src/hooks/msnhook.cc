@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.44 2002/11/26 12:24:52 konst Exp $
+* $Id: msnhook.cc,v 1.45 2002/12/09 09:21:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,34 +30,28 @@
 #include "eventmanager.h"
 #include "imlogger.h"
 
+#include "msn_bittybits.h"
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+
 msnhook mhook;
 
-#define TIMESTAMP maketm(d->hour-1, d->minute, d->day, d->month, d->year)
+static const char * stat2name[imstatus_size] = {
+    "FLN", "NLN", "HDN", "NLN", "BSY", "BSY", "BRB", "AWY"
+};
 
 msnhook::msnhook() {
-    status = offline;
+    ourstatus = offline;
     fonline = false;
 
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::directadd);
-
-    for(int i = MSN_RNG; i != MSN_NUM_EVENTS; i++) {
-	msn_event[i] = 0;
-    }
-
-    MSN_RegisterCallback(MSN_MSG, &messaged);
-    MSN_RegisterCallback(MSN_ILN, &statuschanged);
-    MSN_RegisterCallback(MSN_NLN, &statuschanged);
-    MSN_RegisterCallback(MSN_FLN, &statuschanged);
-    MSN_RegisterCallback(MSN_AUTH, &authrequested);
-    MSN_RegisterCallback(MSN_OUT, &disconnected);
-    MSN_RegisterCallback(MSN_RNG, &ring);
-    MSN_RegisterCallback(MSN_MAIL, &mailed);
-
-#ifdef DEBUG
-    MSN_RegisterCallback(MSN_LOG, &log);
-#endif
 }
 
 msnhook::~msnhook() {
@@ -72,52 +66,81 @@ void msnhook::connect() {
 
     face.log(_("+ [msn] connecting to the server"));
 
-    if(!MSN_Login(account.nickname.c_str(), account.password.c_str(),
-    account.server.c_str(), account.port)) {
-	face.log(_("+ [msn] logged in"));
-	fonline = true;
-	status = available;
-	setautostatus(manualstatus);
-    } else {
-	face.log(_("+ [msn] unable to connect to the server"));
-    }
+    msn_init(&conn, account.nickname.c_str(), account.password.c_str());
+    msn_connect(&conn, account.server.c_str(), account.port);
 
-    msn_Russian = conf.getrussian();
+    fonline = true;
+    flogged = false;
 }
 
 void msnhook::disconnect() {
-    if(online()) {
-	disconnected(0);
-    }
+    msn_clean_up(&conn);
 }
 
 void msnhook::exectimers() {
 }
 
 void msnhook::main() {
-    if(online()) {
-	MSN_Main();
+    vector<int>::const_iterator i;
+    fd_set rs, ws;
+    struct timeval tv;
+    int hsock;
+
+    FD_ZERO(&rs);
+    FD_ZERO(&ws);
+
+    tv.tv_sec = tv.tv_usec = 0;
+    hsock = 0;
+
+    for(i = rfds.begin(); i != rfds.end(); ++i) {
+	FD_SET(*i, &rs);
+	hsock = max(hsock, *i);
+    }
+
+    for(i = wfds.begin(); i != wfds.end(); ++i) {
+	FD_SET(*i, &ws);
+	hsock = max(hsock, *i);
+    }
+
+    if(select(hsock+1, &rs, &ws, 0, &tv) > 0) {
+	for(i = rfds.begin(); i != rfds.end(); ++i)
+	    if(FD_ISSET(*i, &rs)) {
+		msn_handle_incoming(*i, 1, 0);
+		return;
+	    }
+
+	for(i = wfds.begin(); i != wfds.end(); ++i)
+	    if(FD_ISSET(*i, &ws)) {
+		msn_handle_incoming(*i, 0, 1);
+		return;
+	    }
     }
 }
 
-void msnhook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
-    vector<int> sockets = MSN_GetSockets();
-    vector<int>::iterator i;
+void msnhook::getsockets(fd_set &rf, fd_set &wf, fd_set &efds, int &hsocket) const {
+    vector<int>::const_iterator i;
 
-    for(i = sockets.begin(); i != sockets.end(); ++i) {
+    for(i = rfds.begin(); i != rfds.end(); ++i) {
 	hsocket = max(hsocket, *i);
-	FD_SET(*i, &rfds);
+	FD_SET(*i, &rf);
+    }
+
+    for(i = wfds.begin(); i != wfds.end(); ++i) {
+	hsocket = max(hsocket, *i);
+	FD_SET(*i, &wf);
     }
 }
 
-bool msnhook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
-    vector<int> sockets = MSN_GetSockets();
-    vector<int>::iterator i;
+bool msnhook::isoursocket(fd_set &rf, fd_set &wf, fd_set &efds) const {
+    vector<int>::const_iterator i;
 
-    for(i = sockets.begin(); i != sockets.end(); ++i) {
-	if(FD_ISSET(*i, &rfds))
+    for(i = rfds.begin(); i != rfds.end(); ++i)
+	if(FD_ISSET(*i, &rf))
 	    return true;
-    }
+
+    for(i = wfds.begin(); i != wfds.end(); ++i)
+	if(FD_ISSET(*i, &wf))
+	    return true;
 
     return false;
 }
@@ -127,11 +150,11 @@ bool msnhook::online() const {
 }
 
 bool msnhook::logged() const {
-    return fonline;
+    return fonline && flogged;
 }
 
 bool msnhook::isconnecting() const {
-    return false;
+    return fonline && !flogged;
 }
 
 bool msnhook::enabled() const {
@@ -154,7 +177,7 @@ bool msnhook::send(const imevent &ev) {
 
     if(c)
     if(c->getstatus() != offline || !c->inlist()) {
-	MSN_SendMessage(ev.getcontact().nickname.c_str(), text.c_str());
+	msn_send_IM(&conn, ev.getcontact().nickname.c_str(), text.c_str());
 	return true;
     }
 
@@ -163,30 +186,19 @@ bool msnhook::send(const imevent &ev) {
 
 void msnhook::sendnewuser(const imcontact &c) {
     if(logged()) {
-	MSN_AddContact(c.nickname.c_str());
+	msn_add_to_list(&conn, "FL", c.nickname.c_str());
     }
 
     requestinfo(c);
 }
 
 void msnhook::setautostatus(imstatus st) {
-    static int stat2int[imstatus_size] = {
-	USER_FLN,
-	USER_NLN,
-	USER_HDN,
-	USER_NLN,
-	USER_BSY,
-	USER_BSY,
-	USER_AWY,
-	USER_IDL
-    };
-
     if(st != offline) {
 	if(getstatus() == offline) {
 	    connect();
 	} else {
-	    logger.putourstatus(msn, status, st);
-	    MSN_ChangeState(stat2int[status = st]);
+	    logger.putourstatus(msn, ourstatus, st);
+	    msn_set_state(&conn, stat2name[ourstatus = st]);
 	}
     } else {
 	if(getstatus() != offline) {
@@ -196,7 +208,7 @@ void msnhook::setautostatus(imstatus st) {
 }
 
 imstatus msnhook::getstatus() const {
-    return status;
+    return online() ? ourstatus : offline;
 }
 
 void msnhook::removeuser(const imcontact &ic) {
@@ -208,90 +220,51 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 	if(report)
 	    face.log(_("+ [msn] removing %s from the contacts"), ic.nickname.c_str());
 
-	MSN_RemoveContact(ic.nickname.c_str());
+	msn_del_from_list(&conn, "FL", ic.nickname.c_str());
     }
-}
-
-bool msnhook::isourid(const string &nick) {
-    string s1, s2;
-    icqconf::imaccount account = conf.getourid(msn);
-
-    s1 = nick, s2 = account.nickname;
-
-    if(s1.find("@") == -1) s1 += "@hotmail.com";
-    if(s2.find("@") == -1) s2 += "@hotmail.com";
-
-    return (s1 == s2);
-}
-
-imstatus msnhook::msn2imstatus(int st) {
-    switch(st) {
-	case USER_HDN:
-	    return invisible;
-
-	case USER_BSY:
-	case USER_PHN:
-	    return occupied;
-
-	case USER_IDL:
-	case USER_BRB:
-	case USER_AWY:
-	    return away;
-
-	case USER_LUN:
-	    return notavail;
-
-	case USER_FLN:
-	    return offline;
-
-	case USER_NLN:
-	default:
-	    return available;
-    }
-
-    return offline;
 }
 
 void msnhook::requestinfo(const imcontact &ic) {
     icqcontact *c = clist.get(ic);
 
-    if(c) {
-	icqcontact::moreinfo m = c->getmoreinfo();
-	icqcontact::basicinfo b = c->getbasicinfo();
-
-	b.email = ic.nickname;
-	if(b.email.find("@") == -1) b.email += "@hotmail.com";
-	m.homepage = "http://members.msn.com/" + b.email;
-
-	if(!friendlynicks[ic.nickname].empty()) {
-	    c->setdispnick(friendlynicks[ic.nickname]);
-	    b.fname = friendlynicks[ic.nickname];
-	}
-
-	c->setbasicinfo(b);
-	c->setmoreinfo(m);
-
-	face.relaxedupdate();
+    if(!c) {
+	c = clist.get(contactroot);
+	c->clear();
     }
+
+    icqcontact::moreinfo m = c->getmoreinfo();
+    icqcontact::basicinfo b = c->getbasicinfo();
+
+    b.email = ic.nickname;
+    if(b.email.find("@") == -1) b.email += "@hotmail.com";
+    m.homepage = "http://members.msn.com/" + b.email;
+
+    if(!friendlynicks[ic.nickname].empty()) {
+	c->setdispnick(friendlynicks[ic.nickname]);
+	b.fname = friendlynicks[ic.nickname];
+    }
+
+    c->setbasicinfo(b);
+    c->setmoreinfo(m);
+
+    face.relaxedupdate();
 }
 
 void msnhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     if(params.reverse) {
-	vector< pair<string, string> > rl = MSN_GetLSTUsers("RL");
-	vector< pair<string, string> >::const_iterator i = rl.begin();
+	vector<pair<string, string> >::const_iterator i = slst["RL"].begin();
 
-	while(i != rl.end()) {
+	while(i != slst["RL"].end()) {
 	    icqcontact *c = new icqcontact(imcontact(i->first, msn));
 	    c->setdispnick(i->second);
 
 	    dest.additem(conf.getcolor(cp_clist_msn), c, (string) " " + i->first);
 	    ++i;
 	}
-
 	face.findready();
 
 	face.log(_("+ [msn] reverse users listing finished, %d found"),
-	    rl.size());
+	    slst["RL"].size());
 
 	dest.redraw();
     }
@@ -301,15 +274,14 @@ vector<icqcontact *> msnhook::getneedsync() {
     int i;
     vector<icqcontact *> r;
     bool found;
-    vector< pair<string, string> > fl = MSN_GetLSTUsers("FL");
 
     for(i = 0; i < clist.count; i++) {
 	icqcontact *c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == msn) {
-	    vector< pair<string, string> >::const_iterator fi = fl.begin();
+	    vector<pair<string, string> >::const_iterator fi = slst["FL"].begin();
 
-	    for(found = false; fi != fl.end() && !found; ++fi)
+	    for(found = false; fi != slst["FL"].end() && !found; ++fi)
 		found = c->getdesc().nickname == fi->first;
 
 	    if(!found)
@@ -321,26 +293,316 @@ vector<icqcontact *> msnhook::getneedsync() {
 }
 
 void msnhook::sendupdateuserinfo(const icqcontact &c) {
-    int pos;
-    string nick = mime(c.getnick());
-
-    while((pos = nick.find("+")) != -1)
-	nick.replace(pos, 1, "%20");
-
-    MSN_Set_Friendly_Handle(nick.c_str());
+    msn_set_friendlyname(&conn, c.getdispnick().c_str());
 }
 
 void msnhook::checkfriendly(icqcontact *c, const string friendlynick, bool forcefetch) {
     string oldnick = friendlynicks[c->getdesc().nickname];
-    friendlynicks[c->getdesc().nickname] = unmime(friendlynick);
+    string newnick = unmime(friendlynick);
 
-    if(forcefetch || (!oldnick.empty()
-    && c->getdispnick() == oldnick
-    && c->getbasicinfo().fname == oldnick))
+    friendlynicks[c->getdesc().nickname] = newnick;
+
+    if(forcefetch || (oldnick != newnick && c->getdispnick() == oldnick || c->getdispnick() == c->getdesc().nickname))
 	requestinfo(c);
 }
 
+void msnhook::checkinlist(imcontact ic) {
+    icqcontact *c = clist.get(ic);
+    vector<icqcontact *> notremote = getneedsync();
+
+    if(c) {
+	if(c->inlist())
+	if(find(notremote.begin(), notremote.end(), c) != notremote.end()) {
+	    mhook.sendnewuser(ic);
+	}
+    } else {
+	clist.addnew(ic);
+    }
+}
+
 // ----------------------------------------------------------------------------
+
+static imstatus msn2imstatus(const string &sname) {
+    for(imstatus st = offline; st != imstatus_size; (int) st += 1)
+	if(sname == stat2name[st]) return st;
+
+    return offline;
+}
+
+static void log(const string &s) {
+#ifdef DEBUG
+    face.log(s);
+#endif
+}
+
+void ext_register_sock(int s, int reading, int writing) {
+    log("ext_register_sock");
+    if(reading) mhook.rfds.push_back(s);
+    if(writing) mhook.wfds.push_back(s);
+}
+
+void ext_unregister_sock(int s) {
+    log("ext_unregister_sock");
+    vector<int>::iterator i;
+
+    i = find(mhook.rfds.begin(), mhook.rfds.end(), s);
+    if(i != mhook.rfds.end()) mhook.rfds.erase(i);
+
+    i = find(mhook.wfds.begin(), mhook.wfds.end(), s);
+    if(i != mhook.wfds.end()) mhook.wfds.erase(i);
+}
+
+void ext_got_friendlyname(msnconn * conn, const char * friendlyname) {
+    log("ext_got_friendlyname");
+
+    if(friendlyname)
+    if(strlen(friendlyname))
+	mhook.friendlynicks[conf.getourid(msn).nickname] = friendlyname;
+}
+
+void ext_got_info(msnconn *conn, syncinfo *info) {
+    log("ext_got_info");
+
+    llist *lst;
+    userdata *ud;
+    imcontact ic;
+
+    for(lst = info->fl; lst; lst = lst->next) {
+	ud = (userdata *) lst->data;
+	ic = imcontact(ud->username, msn);
+
+	if(!clist.get(ic)) clist.addnew(ic, false);
+	mhook.slst["FL"].push_back(make_pair(ud->username, ud->friendlyname));
+    }
+
+    for(lst = info->rl; lst; lst = lst->next) {
+	ud = (userdata *) lst->data;
+	mhook.slst["RL"].push_back(make_pair(ud->username, ud->friendlyname));
+    }
+
+    mhook.setautostatus(mhook.ourstatus);
+}
+
+void ext_latest_serial(msnconn * conn, int serial) {
+    log("ext_latest_serial");
+}
+
+void ext_got_GTC(msnconn * conn, char c) {
+    log("ext_got_GTC");
+}
+
+void ext_got_BLP(msnconn * conn, char c) {
+    log("ext_got_BLP");
+}
+
+void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname) {
+    log("ext_new_RL_entry");
+    mhook.slst["RL"].push_back(make_pair(username, friendlyname));
+}
+
+void ext_new_list_entry(msnconn *conn, const char *lst, const char *username) {
+    log("ext_new_list_entry");
+    mhook.slst[lst].push_back(make_pair(username, string()));
+}
+
+void ext_del_list_entry(msnconn *conn, const char *lst, const char *username) {
+    log("ext_del_list_entry");
+
+    vector<pair<string, string> >::iterator i = mhook.slst[lst].begin();
+    while(i != mhook.slst[lst].end()) {
+	if(i->first == username) {
+	    mhook.slst[lst].erase(i);
+	    i = mhook.slst[lst].begin();
+	}
+	++i;
+    }
+}
+
+void ext_show_error(msnconn * conn, const char * msg) {
+    log("ext_show_error");
+    face.log(_("+ [msn] error: %s"), msg);
+}
+
+void ext_buddy_set(msnconn * conn, const char * buddy, const char * friendlyname, const char * status) {
+    log("ext_buddy_set");
+    imcontact ic(buddy, msn);
+    icqcontact *c = clist.get(ic);
+    bool forcefetch;
+
+    if(forcefetch = !c)
+	c = clist.addnew(ic, false);
+
+    if(friendlyname)
+	mhook.checkfriendly(c, friendlyname, forcefetch);
+
+    logger.putonline(ic, c->getstatus(), msn2imstatus(status));
+    c->setstatus(msn2imstatus(status));
+}
+
+void ext_buddy_offline(msnconn * conn, const char * buddy) {
+    log("ext_buddy_offline");
+    ext_buddy_set(conn, buddy, 0, "FLN");
+}
+
+void ext_got_SB(msnconn * conn, void * tag) {
+    log("ext_got_SB");
+}
+
+void ext_user_joined(msnconn * conn, char * username, char * friendlyname, int is_initial) {
+    log("ext_user_joined");
+}
+
+void ext_user_left(msnconn * conn, char * username) {
+    log("ext_user_left");
+}
+
+void ext_got_IM(msnconn * conn, const char * username, const char * friendlyname, message * msg) {
+    log("ext_got_IM");
+    imcontact ic(username, msn);
+
+    mhook.checkinlist(ic);
+
+    string text = siconv(msg->body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
+    em.store(immessage(ic, imevent::incoming, text));
+}
+
+void ext_IM_failed(msnconn * conn) {
+    log("ext_IM_failed");
+}
+
+void ext_typing_user(msnconn *conn, const char *username, const char *friendlyname) {
+    log("ext_typing_user");
+/*
+
+about every 4 seconds, if a user is typing, they should send a "typing"
+notification
+
+    icqcontact *c = clist.get(imcontact(username, msn));
+
+    if(c) {
+	face.log(_("+ [msn] %s, %s: typing"), username, friendlyname);
+    }
+*/
+}
+
+void ext_initial_email(msnconn * conn, int unread_inbox, int unread_folders) {
+    log("ext_initial_email");
+
+    face.log(_("+ [msn] unread e-mail: %d in inbox, %d in folders"),
+	unread_inbox, unread_folders);
+}
+
+void ext_new_mail_arrived(msnconn * conn, const char * from, const char * subject) {
+    log("ext_new_mail_arrived");
+
+    face.log(_("+ [msn] e-mail from %s, %s"), from, subject);
+    clist.get(contactroot)->playsound(imevent::email);
+}
+
+void ext_filetrans_invite(msnconn * conn, char * username, char * friendlyname, invitation_ftp * inv) {
+    log("ext_filetrans_invite");
+}
+
+void ext_filetrans_progress(invitation_ftp * inv, char * status, unsigned long sent, unsigned long total) {
+    log("ext_filetrans_progress");
+}
+
+void ext_filetrans_failed(invitation_ftp * inv, int error, char * message) {
+    log("ext_filetrans_failed");
+}
+
+void ext_filetrans_success(invitation_ftp * inv) {
+    log("ext_filetrans_success");
+}
+
+void ext_new_connection(msnconn *conn) {
+    log("ext_new_connection");
+    if(conn->type == CONN_NS) {
+	msn_sync_lists(conn, 0);
+	logger.putourstatus(msn, offline, mhook.ourstatus = mhook.manualstatus);
+	mhook.flogged = true;
+	face.log(_("+ [msn] logged in"));
+	face.update();
+    }
+}
+
+void ext_closing_connection(msnconn * conn) {
+    log("ext_closing_connection");
+    if(conn->type == CONN_NS) {
+	mhook.rfds.clear();
+	mhook.wfds.clear();
+	logger.putourstatus(msn, mhook.getstatus(), mhook.ourstatus = offline);
+	clist.setoffline(msn);
+	mhook.fonline = false;
+	face.log(_("+ [msn] disconnected"));
+	face.update();
+    }
+}
+
+void ext_changed_state(msnconn * conn, char * state) {
+    log("ext_changed_state");
+}
+
+int ext_connect_socket(const char * hostname, int port) {
+    log("ext_connect_socket");
+    struct sockaddr_in sa;
+    struct hostent *hp;
+    int a, s;
+
+    hp = gethostbyname(hostname);
+    if(!hp) {
+	errno = ECONNREFUSED;
+	return -1;
+    }
+
+    memset(&sa, 0, sizeof(sa));
+    memcpy((char *) &sa.sin_addr, hp->h_addr, hp->h_length);
+    sa.sin_family = hp->h_addrtype;
+    sa.sin_port = htons((u_short) port);
+
+    if((s = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
+	return -1;
+
+    if(connect(s, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
+	close(s);
+	return -1;
+    }
+
+    return s;
+}
+
+int ext_server_socket(int port) {
+    log("ext_server_socket");
+    int s;
+    struct sockaddr_in addr;
+
+    if((s = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	return -1;
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+
+    if(bind(s, (sockaddr *) &addr, sizeof(addr)) < 0 || listen(s, 1) < 0) {
+	close(s);
+	return -1;
+    }
+
+    return s;
+}
+
+char * ext_get_IP() {
+    log("ext_get_IP");
+    struct hostent *hn;
+    char buf2[1024];
+
+    gethostname(buf2, 1024);
+    hn = gethostbyname(buf2);
+
+    return inet_ntoa(*((struct in_addr*) hn->h_addr));
+}
+
+#if 0
 
 void msnhook::messaged(void *data) {
     MSN_InstantMessage *d = (MSN_InstantMessage *) data;
@@ -367,74 +629,9 @@ void msnhook::messaged(void *data) {
     }
 }
 
-void msnhook::statuschanged(void *data) {
-    MSN_StatusChange *d = (MSN_StatusChange *) data;
-    imcontact ic(d->handle, msn);
-    icqcontact *c = clist.get(ic);
-    bool forcefetch;
-
-    if(!isourid(d->handle)) {
-	if(forcefetch = !c)
-	    c = clist.addnew(ic, false);
-
-	if(d->friendlyhandle)
-	    mhook.checkfriendly(c, d->friendlyhandle, forcefetch);
-
-	logger.putonline(ic, c->getstatus(), msn2imstatus(d->newStatus));
-	c->setstatus(msn2imstatus(d->newStatus));
-    }
-}
-
 void msnhook::authrequested(void *data) {
     MSN_AuthMessage *msg = (MSN_AuthMessage *) data;
     MSN_AuthorizeContact(msg->conn, msg->requestor);
 }
 
-void msnhook::disconnected(void *data) {
-    int i;
-    icqcontact *c;
-
-    if(mhook.online()) {
-	MSN_Logout();
-	face.log(_("+ [msn] disconnected"));
-	mhook.fonline = false;
-    }
-
-    clist.setoffline(msn);
-    mhook.status = offline;
-    face.update();
-}
-
-void msnhook::log(void *data) {
-    face.log("%s", (const char *) data);
-}
-
-void msnhook::ring(void *data) {
-    MSN_Ring *ring = (MSN_Ring *) data;
-
-    if(ring->mode == outgoing) {
-	face.log(_("+ [msn] connecting with %s"), ring->handle.c_str());
-    } else {
-	face.log(_("+ [msn] connection from %s"), ring->handle.c_str());
-    }
-}
-
-#define cutdata(s) if(strlen(s) > 300) s[300] = 0;
-
-void msnhook::mailed(void *data) {
-    MSN_MailNotification *mail = (MSN_MailNotification *) data;
-
-    if(mail->from) {
-	char buf[1024];
-
-	cutdata(mail->from);
-	cutdata(mail->fromaddr);
-	cutdata(mail->subject);
-
-	sprintf(buf, _("+ [msn] e-mail from %s <%s>, %s"),
-	    mail->from, mail->fromaddr, mail->subject);
-
-	face.log(buf);
-	clist.get(contactroot)->playsound(imevent::email);
-    }
-}
+#endif

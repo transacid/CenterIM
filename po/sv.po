@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.8.4\n"
-"POT-Creation-Date: 2002-12-03 16:04+0200\n"
+"POT-Creation-Date: 2002-12-08 13:45+0200\n"
 "PO-Revision-Date: 2002-09-10 22:40+0200\n"
 "Last-Translator: Mattias Webjörn Eriksson <mattias@webjorn.org>\n"
 "Language-Team: swedish <sv@li.org>\n"
@@ -132,8 +132,8 @@ msgstr "+ [icq] misslyckat SMS till %s, %s"
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] misslyckades att SMS:a till %s"
 
-#: src/hooks/icqhook.cc:1147 src/hooks/irchook.cc:560
-#: src/hooks/jabberhook.cc:310
+#: src/hooks/icqhook.cc:1147 src/hooks/irchook.cc:570
+#: src/hooks/jabberhook.cc:359
 msgid "Away message:"
 msgstr "Frånvarumeddelande:"
 
@@ -156,109 +156,105 @@ msgstr "Slumpmässig chatanvändare"
 msgid "+ [icq] search finished, %d found"
 msgstr "+ [icq] whitepages sökning klar, %d hittade"
 
-#: src/hooks/irchook.cc:119
+#: src/hooks/irchook.cc:131
 msgid "+ [irc] connecting to the server"
 msgstr "+ [irc] ansluter till servern"
 
-#: src/hooks/irchook.cc:131
+#: src/hooks/irchook.cc:143
 msgid "+ [irc] unable to connect to the server"
 msgstr "+ [irc] kunde inte ansluta till servern"
 
-#: src/hooks/irchook.cc:479
+#: src/hooks/irchook.cc:505
 #, c-format
 msgid "+ [irc] channel members list fetching finished, %d found"
 msgstr "+ [irc] hämtade listan över kanalmedlemmarna, %d stycken"
 
-#: src/hooks/irchook.cc:730
+#: src/hooks/irchook.cc:695
 msgid "+ [irc] logged in"
 msgstr "+ [irc] inloggad"
 
-#: src/hooks/irchook.cc:768
+#: src/hooks/irchook.cc:733
 #, fuzzy
 msgid "+ [irc] disconnected"
 msgstr "+ [icq] frånkopplad"
 
-#: src/hooks/irchook.cc:782
+#: src/hooks/irchook.cc:747
 #, c-format
 msgid "+ [irc] connect failed: %s"
 msgstr "+ [irc] uppkoppling misslyckades: %s"
 
-#: src/hooks/irchook.cc:799
+#: src/hooks/irchook.cc:764
 msgid "+ [irc] nickname was changed successfully"
 msgstr "+ [irc] smeknamnet ändrades"
 
-#: src/hooks/irchook.cc:870
+#: src/hooks/irchook.cc:835
 msgid "On channels: "
 msgstr "På kanaler: "
 
-#: src/hooks/irchook.cc:1159
+#: src/hooks/irchook.cc:1122
 #, c-format
 msgid "Kicked by %s; reason: %s"
 msgstr "Sparkad av %s; anledning: %s"
 
-#: src/hooks/irchook.cc:1214
+#: src/hooks/irchook.cc:1177
 #, c-format
 msgid "The user has changed their nick from %s to %s"
 msgstr "Användaren har ändrat sitt smeknamn från %s till %s"
 
-#: src/hooks/irchook.cc:1234
+#: src/hooks/irchook.cc:1197
 msgid "+ [irc] password sent"
 msgstr "+ [irc] lösenord skickat"
 
-#: src/hooks/irchook.cc:1236
+#: src/hooks/irchook.cc:1199
 msgid "+ [irc] password was requested, but it's not set"
 msgstr "+ [irc] begärde lösenord, men det är inte satt"
 
-#: src/hooks/irchook.cc:1260
+#: src/hooks/irchook.cc:1223
 #, c-format
 msgid "PING reply from the user: %d second(s)"
 msgstr ""
 
-#: src/hooks/irchook.cc:1265
+#: src/hooks/irchook.cc:1228
 #, c-format
 msgid "The remote is using %s"
 msgstr ""
 
-#: src/hooks/msnhook.cc:73
+#: src/hooks/msnhook.cc:67
 msgid "+ [msn] connecting to the server"
 msgstr "+ [msn] ansluter till servern"
 
-#: src/hooks/msnhook.cc:77
-msgid "+ [msn] logged in"
-msgstr "+ [msn] inloggad"
-
-#: src/hooks/msnhook.cc:82
-msgid "+ [msn] unable to connect to the server"
-msgstr "+ [msn] kunde inte ansluta till servern"
-
-#: src/hooks/msnhook.cc:209
+#: src/hooks/msnhook.cc:221
 #, c-format
 msgid "+ [msn] removing %s from the contacts"
 msgstr "+ [msn] tar bort %s från kontaktlistan"
 
-#: src/hooks/msnhook.cc:293
+#: src/hooks/msnhook.cc:266
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] klar med att reversera användarlistan, %d funna"
 
-#: src/hooks/msnhook.cc:399
+#: src/hooks/msnhook.cc:423
+#, fuzzy, c-format
+msgid "+ [msn] error: %s"
+msgstr "+ [yahoo] fel: %s"
+
+#: src/hooks/msnhook.cc:491
+#, c-format
+msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
+msgstr ""
+
+#: src/hooks/msnhook.cc:498
+#, fuzzy, c-format
+msgid "+ [msn] e-mail from %s, %s"
+msgstr "+ [msn] e-post från %s <%s>, %s"
+
+#: src/hooks/msnhook.cc:524
+msgid "+ [msn] logged in"
+msgstr "+ [msn] inloggad"
+
+#: src/hooks/msnhook.cc:537
 msgid "+ [msn] disconnected"
 msgstr "+ [msn] frånkopplad"
-
-#: src/hooks/msnhook.cc:416
-#, c-format
-msgid "+ [msn] connecting with %s"
-msgstr "+ [msn] ansluter med %s"
-
-#: src/hooks/msnhook.cc:418
-#, c-format
-msgid "+ [msn] connection from %s"
-msgstr "+ [msn] ansluter från %s"
-
-#: src/hooks/msnhook.cc:434
-#, c-format
-msgid "+ [msn] e-mail from %s <%s>, %s"
-msgstr "+ [msn] e-post från %s <%s>, %s"
 
 #: src/hooks/yahoohook.cc:108
 msgid "+ [yahoo] connecting to the server"
@@ -393,7 +389,7 @@ msgstr "+ [yahoo] system: %s"
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] fel: %s"
 
-#: src/centericq.cc:121 src/imcontroller.cc:396
+#: src/centericq.cc:121
 msgid "password: "
 msgstr "lösenord: "
 
@@ -403,122 +399,127 @@ msgid ""
 msgstr ""
 "F2/M kontaktmeny, F3/S ändra status, F4/G allmänna funktioner, Q avsluta"
 
-#: src/centericq.cc:228
+#: src/centericq.cc:234
 #, c-format
 msgid "Ignore all events from %s?"
 msgstr "Ignorera alla händelser från %s?"
 
-#: src/centericq.cc:260
+#: src/centericq.cc:238
+#, fuzzy, c-format
+msgid "Remove %s from the contact list as well?"
+msgstr "+ [aim] tar bort %s från kontaktlistan"
+
+#: src/centericq.cc:272
 #, c-format
 msgid "Are you sure want to remove %s?"
 msgstr "Är du säker på att du vill ta bort %s?"
 
-#: src/centericq.cc:268
+#: src/centericq.cc:280
 msgid "New nickname to show: "
 msgstr "Nytt smeknamn: "
 
-#: src/centericq.cc:276
+#: src/centericq.cc:288
 msgid "Select a group to move the user to"
 msgstr "Välj en grupp att flytta användaren till"
 
-#: src/centericq.cc:294
+#: src/centericq.cc:306
 msgid "+ cannot fetch away messages being offline"
 msgstr "+ Du måste vara ansluten för att hämta frånvarumeddelande"
 
-#: src/accountmanager.cc:207 src/centericq.cc:364
+#: src/accountmanager.cc:204 src/centericq.cc:376
 msgid "away message"
 msgstr "frånvarumeddelande"
 
-#: src/centericq.cc:533
+#: src/centericq.cc:570
 #, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
 msgstr "+ [%02d:%02d:%02d] ny e-post, %d meddelanden"
 
-#: src/centericq.cc:536
+#: src/centericq.cc:573
 #, c-format
 msgid "+ last msg from %s"
 msgstr "+ sista meddelandet från %s"
 
-#: src/centericq.cc:578
+#: src/centericq.cc:615
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:617
+#: src/centericq.cc:654
 msgid "! another running copy of centericq detected"
 msgstr "! en annan instans av centericq har upptäckts"
 
-#: src/centericq.cc:618
+#: src/centericq.cc:655
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! detta kan innebära problem. pid %lu"
 
-#: src/centericq.cc:742
+#: src/centericq.cc:779
 msgid "Mobile number: "
 msgstr "Mobilnummer: "
 
-#: src/centericq.cc:883
+#: src/centericq.cc:920
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:890
+#: src/centericq.cc:927
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:894
+#: src/centericq.cc:931
 msgid "The specified directory does not exist"
 msgstr ""
 
-#: src/centericq.cc:1029
+#: src/centericq.cc:1066
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ inga tidigare meddelanden från %s"
 
-#: src/centericq.cc:1055
+#: src/centericq.cc:1092
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ användaren finns redan på listan"
 
-#: src/centericq.cc:1061
+#: src/centericq.cc:1098
 msgid "Select a group to add the user to"
 msgstr "Välj en grupp att lägga till en användare"
 
-#: src/centericq.cc:1072
+#: src/centericq.cc:1109
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s har lagts till kontaktlistan"
 
-#: src/centericq.cc:1143
+#: src/centericq.cc:1180
 msgid "+ the user is back"
 msgstr "+ användaren är tillbaka"
 
-#: src/centericq.cc:1159
+#: src/centericq.cc:1196
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status återställd"
 
-#: src/centericq.cc:1174
+#: src/centericq.cc:1211
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] satte automatiskt %s"
 
-#: src/centericq.cc:1176
+#: src/centericq.cc:1213
 msgid "away"
 msgstr "iväg"
 
-#: src/centericq.cc:1176
+#: src/centericq.cc:1213
 msgid "n/a"
 msgstr "icke tillgänglig"
 
-#: src/centericq.cc:1302
+#: src/centericq.cc:1339
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! det finns mindre än 10k ledigt diskutrymme, kopplar ned"
 
-#: src/centericq.cc:1303
+#: src/centericq.cc:1340
 msgid "! otherwise we can lose events and configuration"
 msgstr "! annars kan händelser och inställningar gå förlorade"
 
-#: src/centericq.cc:1351
+#: src/centericq.cc:1378
 #, fuzzy
 msgid "Invite to conference.."
 msgstr "Anslöt automatiskt till konfernesen"
@@ -527,13 +528,13 @@ msgstr "Anslöt automatiskt till konfernesen"
 msgid " IM account manager "
 msgstr " IM kontohanterare"
 
-#: src/accountmanager.cc:68 src/icqdialogs.cc:207 src/icqdialogs.cc:555
-#: src/icqdialogs.cc:905 src/imcontroller.cc:71
+#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:626 src/icqdialogs.cc:999 src/imcontroller.cc:71
 msgid "Change"
 msgstr "Ändra"
 
-#: src/accountmanager.cc:68 src/icqdialogs.cc:555 src/icqdialogs.cc:905
-#: src/icqdialogs.cc:1091 src/imcontroller.cc:355
+#: src/accountmanager.cc:68 src/icqdialogs.cc:626 src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1185
 msgid "Done"
 msgstr "Klar"
 
@@ -585,42 +586,38 @@ msgid " Set away message "
 msgstr " Frånvarumeddelande "
 
 #: src/accountmanager.cc:128
-msgid " Channel manager "
-msgstr " Kanalhanterare "
-
-#: src/accountmanager.cc:131
 msgid " Synchronize contact list "
 msgstr " Synkronisera kontaktlistan "
 
-#: src/accountmanager.cc:133
+#: src/accountmanager.cc:130
 msgid " Drop "
 msgstr " Ta bort nuvarande inställningar"
 
-#: src/accountmanager.cc:151
+#: src/accountmanager.cc:148
 msgid " user name: "
 msgstr " användarnamn: "
 
-#: src/accountmanager.cc:156
+#: src/accountmanager.cc:153
 msgid " uin: "
 msgstr " uin: "
 
-#: src/accountmanager.cc:161
+#: src/accountmanager.cc:158
 msgid " password: "
 msgstr " lösenord: "
 
-#: src/accountmanager.cc:169
+#: src/accountmanager.cc:166
 msgid "Drop the account information first!"
 msgstr "Ta bort kontoinformationen först!"
 
-#: src/accountmanager.cc:183
+#: src/accountmanager.cc:180
 msgid "You have to disconnect the service first!"
 msgstr "Du måste koppla från tjänsten först!"
 
-#: src/accountmanager.cc:192
+#: src/accountmanager.cc:189
 msgid " server address: "
 msgstr " server adress: "
 
-#: src/accountmanager.cc:218
+#: src/accountmanager.cc:211
 msgid "You must be logged in to preform the synchronization"
 msgstr "Du måste vara inloggad för att kunna utföra synkroniseringen"
 
@@ -727,55 +724,55 @@ msgstr ""
 msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 msgstr ""
 
-#: src/icqcontact.cc:699
+#: src/icqcontact.cc:716
 msgid "The user has a birthday today"
 msgstr "Användaren har födelsedag idag"
 
-#: src/icqcontact.cc:727
+#: src/icqcontact.cc:744
 msgid "Jan"
 msgstr "jan"
 
-#: src/icqcontact.cc:727
+#: src/icqcontact.cc:744
 msgid "Feb"
 msgstr "feb"
 
-#: src/icqcontact.cc:727
+#: src/icqcontact.cc:744
 msgid "Mar"
 msgstr "mar"
 
-#: src/icqcontact.cc:727
+#: src/icqcontact.cc:744
 msgid "Apr"
 msgstr "apr"
 
-#: src/icqcontact.cc:728
+#: src/icqcontact.cc:745
 msgid "May"
 msgstr "maj"
 
-#: src/icqcontact.cc:728
+#: src/icqcontact.cc:745
 msgid "Jun"
 msgstr "jun"
 
-#: src/icqcontact.cc:728
+#: src/icqcontact.cc:745
 msgid "Jul"
 msgstr "jul"
 
-#: src/icqcontact.cc:728
+#: src/icqcontact.cc:745
 msgid "Aug"
 msgstr "aug"
 
-#: src/icqcontact.cc:729
+#: src/icqcontact.cc:746
 msgid "Sep"
 msgstr "sep"
 
-#: src/icqcontact.cc:729
+#: src/icqcontact.cc:746
 msgid "Oct"
 msgstr "okt"
 
-#: src/icqcontact.cc:729
+#: src/icqcontact.cc:746
 msgid "Nov"
 msgstr "nov"
 
-#: src/icqcontact.cc:729
+#: src/icqcontact.cc:746
 msgid "Dec"
 msgstr "dec"
 
@@ -827,8 +824,8 @@ msgstr "Letar efter en man"
 msgid " Search profiles "
 msgstr " Sök profiler "
 
-#: src/icqdialogs.cc:104 src/icqdialogs.cc:819 src/icqdialogs.cc:1210
-#: src/icqface.cc:1416 src/icqface.cc:1938 src/imcontroller.cc:355
+#: src/icqdialogs.cc:104 src/icqdialogs.cc:913 src/icqdialogs.cc:1304
+#: src/icqface.cc:1423 src/icqface.cc:1955
 msgid "Remove"
 msgstr "Ta bort"
 
@@ -836,637 +833,678 @@ msgstr "Ta bort"
 msgid "Load"
 msgstr "Ladda"
 
-#: src/icqdialogs.cc:184
-msgid "+ you must be logged in to find/add users"
+#: src/icqdialogs.cc:188
+#, fuzzy
+msgid "+ you must be logged in first"
 msgstr "+ du måste vara inloggad för att kunna söka/lägga till användare"
 
-#: src/icqdialogs.cc:198
+#: src/icqdialogs.cc:209
 msgid " Find/add user(s) "
 msgstr " Sök/lägg till användare "
 
-#: src/icqdialogs.cc:207
+#: src/icqdialogs.cc:211
 msgid "lOad"
 msgstr "Ladda(O)"
 
-#: src/icqdialogs.cc:207
+#: src/icqdialogs.cc:211
 msgid "sAve"
 msgstr "Spara(A)"
 
-#: src/icqdialogs.cc:207
+#: src/icqdialogs.cc:211 src/icqdialogs.cc:217
 msgid "cLear"
 msgstr "Rensa(L)"
 
-#: src/icqdialogs.cc:207
+#: src/icqdialogs.cc:211
 msgid "Search/Add"
 msgstr "Sök/Lägg till"
 
-#: src/icqdialogs.cc:231
+#: src/icqdialogs.cc:215
+msgid " Join create a channel/conference "
+msgstr ""
+
+#: src/icqdialogs.cc:217
+#, fuzzy
+msgid "Join/Create"
+msgstr "Anslut/Lämna"
+
+#: src/icqdialogs.cc:251
 msgid " Network "
 msgstr " Nätverk "
 
-#: src/icqdialogs.cc:236
+#: src/icqdialogs.cc:257
 msgid " UIN "
 msgstr " UIN "
 
-#: src/icqdialogs.cc:240 src/icqdialogs.cc:304 src/imcontroller.cc:79
+#: src/icqdialogs.cc:261 src/icqdialogs.cc:325 src/imcontroller.cc:79
 #: src/imcontroller.cc:92
 msgid " Details "
 msgstr " Detaljer "
 
-#: src/icqdialogs.cc:241 src/icqdialogs.cc:443 src/imcontroller.cc:80
+#: src/icqdialogs.cc:262 src/icqdialogs.cc:512 src/imcontroller.cc:80
 #, c-format
 msgid " Nickname : %s "
 msgstr " Smeknamn : %s "
 
-#: src/icqdialogs.cc:242 src/icqdialogs.cc:311 src/imcontroller.cc:83
+#: src/icqdialogs.cc:263 src/icqdialogs.cc:332 src/imcontroller.cc:83
 #, c-format
 msgid " E-Mail : %s "
 msgstr " E-post : %s "
 
-#: src/icqdialogs.cc:243 src/icqdialogs.cc:450 src/imcontroller.cc:84
+#: src/icqdialogs.cc:264 src/icqdialogs.cc:519 src/imcontroller.cc:84
 #, c-format
 msgid " First name : %s "
 msgstr " Förnamn : %s "
 
-#: src/icqdialogs.cc:244 src/icqdialogs.cc:451 src/imcontroller.cc:85
+#: src/icqdialogs.cc:265 src/icqdialogs.cc:520 src/imcontroller.cc:85
 #, c-format
 msgid " Last name : %s "
 msgstr " Efternamn : %s "
 
-#: src/icqdialogs.cc:246
+#: src/icqdialogs.cc:267
 #, c-format
 msgid " Age range : %s "
 msgstr " Åldersgrupp : %s "
 
-#: src/icqdialogs.cc:247 src/icqdialogs.cc:453
+#: src/icqdialogs.cc:268 src/icqdialogs.cc:523
 #, c-format
 msgid " Gender : %s "
 msgstr " Kön : %s "
 
-#: src/icqdialogs.cc:248
+#: src/icqdialogs.cc:269
 #, c-format
 msgid " Language : %s "
 msgstr " Språk : %s "
 
-#: src/icqdialogs.cc:251
+#: src/icqdialogs.cc:272
 msgid " Location "
 msgstr " Hemvist "
 
-#: src/icqdialogs.cc:252 src/icqdialogs.cc:458 src/icqdialogs.cc:470
+#: src/icqdialogs.cc:273 src/icqdialogs.cc:528 src/icqdialogs.cc:540
 #, c-format
 msgid " City : %s "
 msgstr " Stad/Ort : %s "
 
-#: src/icqdialogs.cc:253 src/icqdialogs.cc:459 src/icqdialogs.cc:471
+#: src/icqdialogs.cc:274 src/icqdialogs.cc:529 src/icqdialogs.cc:541
 #, c-format
 msgid " State : %s "
 msgstr " Delstat : %s "
 
-#: src/icqdialogs.cc:254 src/icqdialogs.cc:460 src/icqdialogs.cc:472
+#: src/icqdialogs.cc:275 src/icqdialogs.cc:530 src/icqdialogs.cc:542
 #, c-format
 msgid " Country : %s "
 msgstr " Land : %s "
 
-#: src/icqdialogs.cc:257 src/icqdialogs.cc:469
+#: src/icqdialogs.cc:278 src/icqdialogs.cc:539
 msgid " Work "
 msgstr " Arbete "
 
-#: src/icqdialogs.cc:258 src/icqdialogs.cc:477
+#: src/icqdialogs.cc:279 src/icqdialogs.cc:547
 #, c-format
 msgid " Company : %s "
 msgstr " Företag : %s "
 
-#: src/icqdialogs.cc:259 src/icqdialogs.cc:478
+#: src/icqdialogs.cc:280 src/icqdialogs.cc:548
 #, c-format
 msgid " Department : %s "
 msgstr " Avdelning : %s "
 
-#: src/icqdialogs.cc:260 src/icqdialogs.cc:479
+#: src/icqdialogs.cc:281 src/icqdialogs.cc:549
 #, c-format
 msgid " Position : %s "
 msgstr " Titel : %s "
 
-#: src/icqdialogs.cc:262
+#: src/icqdialogs.cc:283
 msgid " Online only "
 msgstr " Endast anslutna "
 
-#: src/icqdialogs.cc:267
+#: src/icqdialogs.cc:288
 msgid " Random chat group "
 msgstr " Slumpmässig chatgrupp "
 
-#: src/icqdialogs.cc:272
+#: src/icqdialogs.cc:293
 msgid " Keywords "
 msgstr " Nyckelord "
 
-#: src/icqdialogs.cc:279
+#: src/icqdialogs.cc:300
 msgid " Nickname "
 msgstr " Smeknamn "
 
-#: src/icqdialogs.cc:285
+#: src/icqdialogs.cc:306
 #, fuzzy
 msgid " Search service "
 msgstr " Sök profiler "
 
-#: src/icqdialogs.cc:288
+#: src/icqdialogs.cc:309
 #, fuzzy
 msgid " Search parameters "
 msgstr " Sök profiler "
 
-#: src/icqdialogs.cc:305
+#: src/icqdialogs.cc:326
 #, c-format
 msgid " Channel : %s "
 msgstr " Kanal : %s "
 
-#: src/icqdialogs.cc:308
+#: src/icqdialogs.cc:329
 #, c-format
 msgid " Name : %s "
 msgstr " Namn : %s "
 
-#: src/icqdialogs.cc:314
+#: src/icqdialogs.cc:335
 msgid " Joined since the last check only "
 msgstr " Ansluten sedan den sista kollen "
 
-#: src/icqdialogs.cc:320
+#: src/icqdialogs.cc:341
 msgid " Show users who have you on their list "
 msgstr " Visa de användare, som har dig på listan "
 
-#: src/icqdialogs.cc:344
+#: src/icqdialogs.cc:346
+msgid " Name/Title "
+msgstr ""
+
+#: src/icqdialogs.cc:351 src/imcontroller.cc:88
+msgid " Password "
+msgstr " Lösenord "
+
+#: src/icqdialogs.cc:356
+#, fuzzy
+msgid " Service "
+msgstr " Sök profiler "
+
+#: src/icqdialogs.cc:384
 msgid "New profile name: "
 msgstr "Nytt filnamn: "
 
-#: src/icqdialogs.cc:348
+#: src/icqdialogs.cc:388
 msgid "The profile with this name already exists. Do you want to overwrite it?"
 msgstr "En profil med detta namn finns redan. Vill du skriva över den?"
 
-#: src/icqdialogs.cc:375
+#: src/icqdialogs.cc:415
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:376 src/icqdialogs.cc:577
+#: src/icqdialogs.cc:416 src/icqdialogs.cc:649
 msgid "Nickname: "
 msgstr "Smeknamn: "
 
-#: src/icqdialogs.cc:377 src/imcontroller.cc:104
+#: src/icqdialogs.cc:416
+#, fuzzy
+msgid "Name/Title: "
+msgstr "Namn: "
+
+#: src/icqdialogs.cc:417 src/imcontroller.cc:104
 msgid "E-Mail: "
 msgstr "E-post: "
 
-#: src/icqdialogs.cc:378 src/icqdialogs.cc:582 src/imcontroller.cc:105
+#: src/icqdialogs.cc:418 src/icqdialogs.cc:654 src/imcontroller.cc:105
 msgid "First name: "
 msgstr "Förnamn: "
 
-#: src/icqdialogs.cc:379 src/icqdialogs.cc:583 src/imcontroller.cc:106
+#: src/icqdialogs.cc:419 src/icqdialogs.cc:655 src/imcontroller.cc:106
 msgid "Last name: "
 msgstr "Efternamn: "
 
-#: src/icqdialogs.cc:384 src/icqdialogs.cc:615 src/icqdialogs.cc:624
+#: src/icqdialogs.cc:424 src/icqdialogs.cc:687 src/icqdialogs.cc:696
 msgid "City: "
 msgstr "Stad/ort: "
 
-#: src/icqdialogs.cc:385 src/icqdialogs.cc:616 src/icqdialogs.cc:625
+#: src/icqdialogs.cc:425 src/icqdialogs.cc:688 src/icqdialogs.cc:697
 msgid "State: "
 msgstr "Delstat: "
 
-#: src/icqdialogs.cc:387 src/icqdialogs.cc:628
+#: src/icqdialogs.cc:427 src/icqdialogs.cc:700
 msgid "Company: "
 msgstr "Företag: "
 
-#: src/icqdialogs.cc:388 src/icqdialogs.cc:629
+#: src/icqdialogs.cc:428 src/icqdialogs.cc:701
 msgid "Department: "
 msgstr "Avdelning: "
 
-#: src/icqdialogs.cc:389 src/icqdialogs.cc:630
+#: src/icqdialogs.cc:429 src/icqdialogs.cc:702
 msgid "Position: "
 msgstr "Titel: "
 
-#: src/icqdialogs.cc:391
+#: src/icqdialogs.cc:431
 msgid "Channel: "
 msgstr "Kanal: "
 
-#: src/icqdialogs.cc:392
+#: src/icqdialogs.cc:432
 msgid "Name: "
 msgstr "Namn: "
 
-#: src/icqdialogs.cc:394
+#: src/icqdialogs.cc:434
 msgid "Keywords: "
 msgstr "Nyckelord: "
 
-#: src/icqdialogs.cc:442 src/icqdialogs.cc:448
+#: src/icqdialogs.cc:443 src/imcontroller.cc:101
+msgid "Password: "
+msgstr "Lösenord: "
+
+#: src/icqdialogs.cc:497
+#, fuzzy
+msgid " Registration service "
+msgstr " Registrering pågår "
+
+#: src/icqdialogs.cc:500
+#, fuzzy
+msgid " Registration parameters "
+msgstr " Registrering pågår "
+
+#: src/icqdialogs.cc:511 src/icqdialogs.cc:517
 msgid " General "
 msgstr " Allmänt "
 
-#: src/icqdialogs.cc:452
+#: src/icqdialogs.cc:521
 #, c-format
 msgid " E-mail : %s "
 msgstr " E-post : %s "
 
-#: src/icqdialogs.cc:454
+#: src/icqdialogs.cc:524
 #, c-format
 msgid " Birthdate : %s "
 msgstr " Födelsedag : %s "
 
-#: src/icqdialogs.cc:455
+#: src/icqdialogs.cc:525
 #, c-format
 msgid " Age : %s "
 msgstr " Ålder : %s "
 
-#: src/icqdialogs.cc:457
+#: src/icqdialogs.cc:527
 msgid " Home "
 msgstr " Hem "
 
-#: src/icqdialogs.cc:463 src/icqdialogs.cc:475
+#: src/icqdialogs.cc:533 src/icqdialogs.cc:545
 #, c-format
 msgid " Street address : %s "
 msgstr " Gatuadress : %s "
 
-#: src/icqdialogs.cc:464 src/icqdialogs.cc:476
+#: src/icqdialogs.cc:534 src/icqdialogs.cc:546
 #, c-format
 msgid " Zip code : %s "
 msgstr " Zip kod : %s "
 
-#: src/icqdialogs.cc:465 src/icqdialogs.cc:481
+#: src/icqdialogs.cc:535 src/icqdialogs.cc:551
 #, c-format
 msgid " Phone : %s "
 msgstr " Telefon : %s "
 
-#: src/icqdialogs.cc:466 src/icqdialogs.cc:482
+#: src/icqdialogs.cc:536 src/icqdialogs.cc:552
 #, c-format
 msgid " Fax : %s "
 msgstr " Fax : %s "
 
-#: src/icqdialogs.cc:467
+#: src/icqdialogs.cc:537
 #, c-format
 msgid " Cellular phone : %s "
 msgstr " Mobiltelefon : %s "
 
-#: src/icqdialogs.cc:480 src/icqdialogs.cc:485
+#: src/icqdialogs.cc:550 src/icqdialogs.cc:555
 #, c-format
 msgid " Homepage : %s "
 msgstr " Hemsida : %s "
 
-#: src/icqdialogs.cc:484
+#: src/icqdialogs.cc:554
 msgid " More "
 msgstr " Mer "
 
-#: src/icqdialogs.cc:487
+#: src/icqdialogs.cc:557
 #, c-format
 msgid " 1st language : %s "
 msgstr " 1:a språk : %s "
 
-#: src/icqdialogs.cc:490
+#: src/icqdialogs.cc:560
 #, c-format
 msgid " 2nd language : %s "
 msgstr " 2:a språk : %s "
 
-#: src/icqdialogs.cc:493
+#: src/icqdialogs.cc:563
 #, c-format
 msgid " 3rd language : %s "
 msgstr " 3:e språk : %s "
 
-#: src/icqdialogs.cc:496 src/icqdialogs.cc:938
+#: src/icqdialogs.cc:566 src/icqdialogs.cc:1032
 msgid " Miscellaneous "
 msgstr " Allmänt "
 
-#: src/icqdialogs.cc:499
+#: src/icqdialogs.cc:569
 #, c-format
 msgid " Enable web status indicator : %s "
 msgstr " Aktivera webstatus indikator : %s "
 
-#: src/icqdialogs.cc:500
+#: src/icqdialogs.cc:570
 #, c-format
 msgid " Random chat group : %s "
 msgstr " Slumpmässig chatgrupp : %s "
 
-#: src/icqdialogs.cc:501
+#: src/icqdialogs.cc:571
 #, c-format
 msgid " Store contact list server-side : %s "
 msgstr " Spara kontaktlistan på servern : %s "
 
-#: src/icqdialogs.cc:503
+#: src/icqdialogs.cc:573
 #, c-format
 msgid " Authorization required : %s "
 msgstr " Obligatorisk attest : %s "
 
-#: src/icqdialogs.cc:508
+#: src/icqdialogs.cc:578
 msgid " About "
 msgstr " Om "
 
-#: src/icqdialogs.cc:525
+#: src/icqdialogs.cc:596
 msgid "Fetching your details"
 msgstr "Hämta dina detaljer"
 
-#: src/icqdialogs.cc:539
+#: src/icqdialogs.cc:610
 #, c-format
 msgid " Your %s details "
 msgstr " Dina %s detaljer "
 
-#: src/icqdialogs.cc:542
+#: src/icqdialogs.cc:613
 #, c-format
 msgid " %s: details "
 msgstr " %s: detaljer "
 
-#: src/icqdialogs.cc:572
+#: src/icqdialogs.cc:644
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Vänta. Dina detaljer har inte hämtats än"
 
-#: src/icqdialogs.cc:584
+#: src/icqdialogs.cc:656
 msgid "E-mail: "
 msgstr "E-post: "
 
-#: src/icqdialogs.cc:595
+#: src/icqdialogs.cc:667
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Ange födelsedag (DD-MM-YYYY): "
 
-#: src/icqdialogs.cc:613
+#: src/icqdialogs.cc:685
 msgid "Age: "
 msgstr "Ålder: "
 
-#: src/icqdialogs.cc:618 src/icqdialogs.cc:627
+#: src/icqdialogs.cc:690 src/icqdialogs.cc:699
 msgid "Street address: "
 msgstr "Gatuadress: "
 
-#: src/icqdialogs.cc:619 src/icqdialogs.cc:643
+#: src/icqdialogs.cc:691 src/icqdialogs.cc:715
 msgid "Zip code: "
 msgstr "Zip kod: "
 
-#: src/icqdialogs.cc:620 src/icqdialogs.cc:632
+#: src/icqdialogs.cc:692 src/icqdialogs.cc:704
 msgid "Phone: "
 msgstr "Telefon: "
 
-#: src/icqdialogs.cc:621 src/icqdialogs.cc:633
+#: src/icqdialogs.cc:693 src/icqdialogs.cc:705
 msgid "Fax: "
 msgstr "Fax: "
 
-#: src/icqdialogs.cc:622
+#: src/icqdialogs.cc:694
 msgid "Cellular phone: "
 msgstr "Mobiltelefon: "
 
-#: src/icqdialogs.cc:631 src/icqdialogs.cc:635
+#: src/icqdialogs.cc:703 src/icqdialogs.cc:707
 msgid "Homepage: "
 msgstr "Hemsida: "
 
-#: src/icqdialogs.cc:641 src/icqface.cc:1049
+#: src/icqdialogs.cc:713 src/icqface.cc:1056
 msgid "About"
 msgstr "Om"
 
-#: src/icqdialogs.cc:714 src/icqdialogs.cc:752
+#: src/icqdialogs.cc:808 src/icqdialogs.cc:846
 msgid "none"
 msgstr "ingen"
 
-#: src/icqdialogs.cc:770
+#: src/icqdialogs.cc:864
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [Ctrl-X spara, Esc avbryt] "
 
-#: src/icqdialogs.cc:809
+#: src/icqdialogs.cc:903
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Skicka fil(er) till %s, %lu "
 
-#: src/icqdialogs.cc:819 src/icqdialogs.cc:1090 src/icqface.cc:61
-#: src/icqface.cc:708 src/icqface.cc:1416 src/icqface.cc:1938
-#: src/imcontroller.cc:355
+#: src/icqdialogs.cc:913 src/icqdialogs.cc:1184 src/icqface.cc:61
+#: src/icqface.cc:715 src/icqface.cc:1423 src/icqface.cc:1955
 msgid "Add"
 msgstr "Lägg till"
 
-#: src/icqdialogs.cc:819
+#: src/icqdialogs.cc:913
 msgid "Comment"
 msgstr "Kommentar"
 
-#: src/icqdialogs.cc:819 src/icqface.cc:1938
+#: src/icqdialogs.cc:913 src/icqface.cc:1955
 msgid "Send"
 msgstr "Sänd"
 
-#: src/icqdialogs.cc:829
+#: src/icqdialogs.cc:923
 msgid " Files "
 msgstr " Filer "
 
-#: src/icqdialogs.cc:830
+#: src/icqdialogs.cc:924
 msgid " Comment "
 msgstr " Kommentar "
 
-#: src/icqdialogs.cc:842
+#: src/icqdialogs.cc:936
 msgid "filename: "
 msgstr "filnamn: "
 
-#: src/icqdialogs.cc:849
+#: src/icqdialogs.cc:943
 msgid "comment: "
 msgstr "kommentar: "
 
-#: src/icqdialogs.cc:896
+#: src/icqdialogs.cc:990
 msgid " CenterICQ configuration "
 msgstr " CenterICQ inställningar "
 
-#: src/icqdialogs.cc:916
+#: src/icqdialogs.cc:1010
 msgid " User interface "
 msgstr " Användargränssnitt "
 
-#: src/icqdialogs.cc:917
+#: src/icqdialogs.cc:1011
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Ändra ljudenhet till : %s "
 
-#: src/icqdialogs.cc:918
+#: src/icqdialogs.cc:1012
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Ändra färgschema till: %s "
 
-#: src/icqdialogs.cc:921
+#: src/icqdialogs.cc:1015
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " Aktivera bidirektionellt språkstöd : %s "
 
-#: src/icqdialogs.cc:924
+#: src/icqdialogs.cc:1018
 msgid " Contact list "
 msgstr " Kontaktlista "
 
-#: src/icqdialogs.cc:925
+#: src/icqdialogs.cc:1019
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Arrangera kontakterna i grupper : %s "
 
-#: src/icqdialogs.cc:926
+#: src/icqdialogs.cc:1020
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Göm icke anslutna användare : %s "
 
-#: src/icqdialogs.cc:927
+#: src/icqdialogs.cc:1021
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Rysk översättning win1251-koi8 : %s "
 
-#: src/icqdialogs.cc:928
+#: src/icqdialogs.cc:1022
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anti-spam: Släng medd. från icke listade användare : %s "
 
-#: src/icqdialogs.cc:929
+#: src/icqdialogs.cc:1023
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Citera meddelanden vid svar : %s "
 
-#: src/icqdialogs.cc:930
+#: src/icqdialogs.cc:1024
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Kolla den lokala brevlådan : %s "
 
-#: src/icqdialogs.cc:931
+#: src/icqdialogs.cc:1025
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Spara lösenord : %s "
 
-#: src/icqdialogs.cc:932
+#: src/icqdialogs.cc:1026
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Editera frånvarumeddelande vid statusförändring : %s "
 
-#: src/icqdialogs.cc:933
+#: src/icqdialogs.cc:1027
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Chat meddelande läge : %s "
 
-#: src/icqdialogs.cc:935
+#: src/icqdialogs.cc:1029
 msgid " Communications "
 msgstr " Kommunikation "
 
-#: src/icqdialogs.cc:936
+#: src/icqdialogs.cc:1030
 #, c-format
 msgid " SMTP server : %s "
 msgstr " SMTP server : %s "
 
-#: src/icqdialogs.cc:939
+#: src/icqdialogs.cc:1033
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Sätt frånvarande automatiskt efter viss tid (min) : %d "
 
-#: src/icqdialogs.cc:940
+#: src/icqdialogs.cc:1034
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Sätt icke tillgänglig automatiskt efter viss tid (min) : %d "
 
-#: src/icqdialogs.cc:941
+#: src/icqdialogs.cc:1035
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Detaljerad IM händelselog i ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:964
+#: src/icqdialogs.cc:1058
 msgid "Auto Away period (0 - disable): "
 msgstr "Automatisk frånvaroperiod (0 - ): "
 
-#: src/icqdialogs.cc:968
+#: src/icqdialogs.cc:1062
 msgid "Auto N/A period (0 - disable): "
 msgstr "Automatisk icke tillgänglig (0 - ): "
 
-#: src/icqdialogs.cc:976
+#: src/icqdialogs.cc:1070
 msgid "SOCKS proxy server to use: "
 msgstr "Använd SOCKS proxy server: "
 
-#: src/icqdialogs.cc:980
+#: src/icqdialogs.cc:1074
 msgid "SOCKS proxy user name: "
 msgstr "SOCKS proxy användarnamn: "
 
-#: src/icqdialogs.cc:984
+#: src/icqdialogs.cc:1078
 msgid "SOCKS proxy password: "
 msgstr "SOCKS proxy lösenord: "
 
-#: src/icqdialogs.cc:999
+#: src/icqdialogs.cc:1093
 msgid "SMTP server hostname: "
 msgstr "SMTP server: "
 
-#: src/icqdialogs.cc:1054
+#: src/icqdialogs.cc:1148
 msgid "Your details have been fetched"
 msgstr "Dina detaljer har hämtats"
 
-#: src/icqdialogs.cc:1066
+#: src/icqdialogs.cc:1160
 msgid "Organize contact groups"
 msgstr "Organisera kontaktgrupper"
 
-#: src/icqdialogs.cc:1090
+#: src/icqdialogs.cc:1184
 msgid "Rename"
 msgstr "Ändra"
 
-#: src/icqdialogs.cc:1090
+#: src/icqdialogs.cc:1184
 msgid "rEmove"
 msgstr "Ta bort(E)"
 
-#: src/icqdialogs.cc:1090
+#: src/icqdialogs.cc:1184
 msgid "move Up"
 msgstr "Upp(U)"
 
-#: src/icqdialogs.cc:1090
+#: src/icqdialogs.cc:1184
 msgid "move Down"
 msgstr "Ned(D)"
 
-#: src/icqdialogs.cc:1091
+#: src/icqdialogs.cc:1185
 msgid "Select"
 msgstr "Välj"
 
-#: src/icqdialogs.cc:1106
+#: src/icqdialogs.cc:1200
 msgid " Groups "
 msgstr " Grupper "
 
-#: src/icqdialogs.cc:1121
+#: src/icqdialogs.cc:1215
 msgid "Name for a group to be created: "
 msgstr "Skapa en ny grupp med namn: "
 
-#: src/icqdialogs.cc:1131
+#: src/icqdialogs.cc:1225
 msgid "New name for the group: "
 msgstr "Nytt namn för gruppen: "
 
-#: src/icqdialogs.cc:1144
+#: src/icqdialogs.cc:1238
 msgid "Are you sure want to remove the group?"
 msgstr "Är du säker på att du vill ta bort gruppen?"
 
-#: src/icqdialogs.cc:1201
+#: src/icqdialogs.cc:1295
 msgid "File transfer status"
 msgstr ""
 
-#: src/icqdialogs.cc:1210
+#: src/icqdialogs.cc:1304
 #, fuzzy
 msgid "Cancel"
 msgstr "Avbryten"
 
-#: src/icqdialogs.cc:1239
+#: src/icqdialogs.cc:1333
 #, fuzzy, c-format
 msgid " Incoming from %s "
 msgstr "Inkommande %s från %s"
 
-#: src/icqdialogs.cc:1241
+#: src/icqdialogs.cc:1335
 #, fuzzy, c-format
 msgid " Outgoing to %s "
 msgstr "Utgående %s till %s"
 
-#: src/icqdialogs.cc:1249
+#: src/icqdialogs.cc:1343
 msgid "init"
 msgstr ""
 
-#: src/icqdialogs.cc:1250
+#: src/icqdialogs.cc:1344
 msgid "start"
 msgstr ""
 
-#: src/icqdialogs.cc:1251
+#: src/icqdialogs.cc:1345
 #, fuzzy
 msgid "work"
 msgstr "Arbete"
 
-#: src/icqdialogs.cc:1252
+#: src/icqdialogs.cc:1346
 #, fuzzy
 msgid "done"
 msgstr "Klar"
 
-#: src/icqdialogs.cc:1253
+#: src/icqdialogs.cc:1347
 msgid "err"
 msgstr ""
 
-#: src/icqdialogs.cc:1254
+#: src/icqdialogs.cc:1348
 #, fuzzy
 msgid "abort"
 msgstr "Om"
 
-#: src/icqdialogs.cc:1261
+#: src/icqdialogs.cc:1355
 #, fuzzy
 msgid " of "
 msgstr " Ta bort nuvarande inställningar"
 
-#: src/icqdialogs.cc:1294
+#: src/icqdialogs.cc:1388
 msgid "Cannot remove a transfer which is in progress now"
 msgstr ""
 
@@ -1583,466 +1621,491 @@ msgid " Fetch away message     f"
 msgstr " Hämta frånvaro medd.   f"
 
 #: src/icqface.cc:256
-msgid " Ignore user            i"
-msgstr " Ignorera användaren  del"
-
-#: src/icqface.cc:257
 msgid " Add to list            a"
 msgstr " Lägg till i listan     a"
 
-#: src/icqface.cc:258
+#: src/icqface.cc:257
 msgid " Rename contact         r"
 msgstr " Byt namn på kontakten  r"
 
-#: src/icqface.cc:259
+#: src/icqface.cc:258
 msgid " Move to group.."
 msgstr " Flytta till en grupp.."
 
-#: src/icqface.cc:260
+#: src/icqface.cc:259
 msgid " Ping"
 msgstr ""
 
-#: src/icqface.cc:261
+#: src/icqface.cc:260
 msgid " Fetch version info"
 msgstr ""
 
-#: src/icqface.cc:262
+#: src/icqface.cc:261
 #, fuzzy
 msgid " Send file(s)"
 msgstr " Skicka fil(er) till %s, %lu "
 
-#: src/icqface.cc:263
+#: src/icqface.cc:262
 #, fuzzy
 msgid " Invite to conference.."
 msgstr "Anslöt automatiskt till konfernesen"
 
-#: src/icqface.cc:270
+#: src/icqface.cc:269
 msgid " Send a channel message   enter"
 msgstr " Skicka ett kanal medd.   enter"
 
-#: src/icqface.cc:271
+#: src/icqface.cc:270
 msgid " Channel chat history         h"
 msgstr " Kanal chat historik          h"
 
-#: src/icqface.cc:272
+#: src/icqface.cc:271
 msgid " Remove channel             del"
 msgstr " Ta bort kanalen            del"
 
-#: src/icqface.cc:273
+#: src/icqface.cc:272
 #, fuzzy
 msgid " Join channel"
 msgstr "På kanaler: "
 
-#: src/icqface.cc:274
+#: src/icqface.cc:273
 msgid " Leave channel"
 msgstr ""
 
-#: src/icqface.cc:275
+#: src/icqface.cc:274
 #, fuzzy
 msgid " List nicknames               ?"
 msgstr " Göm icke anslutna användare        F5"
 
-#: src/icqface.cc:280
+#: src/icqface.cc:277
+#, fuzzy
+msgid " UnBlock channel messages     i"
+msgstr " Skicka ett kanal medd.   enter"
+
+#: src/icqface.cc:279
+#, fuzzy
+msgid " Block channel messages       i"
+msgstr " Skicka ett kanal medd.   enter"
+
+#: src/icqface.cc:285
 msgid " Send a message     enter"
 msgstr " Skicka ett medd.   enter"
 
-#: src/icqface.cc:281
+#: src/icqface.cc:286
 msgid " Events history         h"
 msgstr " Händelsehistorik       h"
 
-#: src/icqface.cc:282
+#: src/icqface.cc:287
 msgid " Remove user          del"
 msgstr " Ta bort användaren   del"
 
-#: src/icqface.cc:283
+#: src/icqface.cc:288
 msgid " User's details         ?"
 msgstr " Detaljer               ?"
 
-#: src/icqface.cc:376
+#: src/icqface.cc:291
+#, fuzzy
+msgid " Unset ignore user      i"
+msgstr " Ignorera användaren  del"
+
+#: src/icqface.cc:293
+msgid " Ignore user            i"
+msgstr " Ignorera användaren  del"
+
+#: src/icqface.cc:382
 msgid " Change status                       s"
 msgstr " Ändra status                        s"
 
-#: src/icqface.cc:377
+#: src/icqface.cc:383
 msgid " Go to contact..                 alt-s"
 msgstr " Gå till kontakt..               alt-s"
 
-#: src/icqface.cc:378
+#: src/icqface.cc:384
 msgid " Accounts.."
 msgstr " Konton.."
 
-#: src/icqface.cc:379
+#: src/icqface.cc:385
 msgid " Find/add users"
 msgstr " Sök/lägg till användare"
 
-#: src/icqface.cc:380
+#: src/icqface.cc:386
+#, fuzzy
+msgid " Join channel/conference"
+msgstr "På kanaler: "
+
+#: src/icqface.cc:387
 msgid " CenterICQ config options"
 msgstr " CenterICQ inställningar"
 
-#: src/icqface.cc:382
+#: src/icqface.cc:389
 msgid " View/edit ignore list"
 msgstr " Läs/editera svartlistade"
 
-#: src/icqface.cc:383
+#: src/icqface.cc:390
 msgid " View/edit invisible list"
 msgstr " Läs/editera osynliga"
 
-#: src/icqface.cc:384
+#: src/icqface.cc:391
 msgid " View/edit visible list"
 msgstr " Läs/editera synliga"
 
-#: src/icqface.cc:387
+#: src/icqface.cc:394
 msgid " Show offline users                 F5"
 msgstr " Visa icke anslutna användare       F5"
 
-#: src/icqface.cc:388
+#: src/icqface.cc:395
 msgid " Hide offline users                 F5"
 msgstr " Göm icke anslutna användare        F5"
 
-#: src/icqface.cc:391
+#: src/icqface.cc:398
 #, fuzzy
 msgid " Organize contact groups"
 msgstr "Organisera kontaktgrupper"
 
-#: src/icqface.cc:395
+#: src/icqface.cc:402
 msgid " File transfers monitor"
 msgstr ""
 
-#: src/icqface.cc:708 src/icqface.cc:1416
+#: src/icqface.cc:715 src/icqface.cc:1423
 msgid "Details"
 msgstr "Detaljer"
 
-#: src/icqface.cc:708
+#: src/icqface.cc:715
 msgid "Message"
 msgstr "Meddelande"
 
-#: src/icqface.cc:709
+#: src/icqface.cc:716
 msgid "New search"
 msgstr "Ny sökning"
 
-#: src/icqface.cc:724
+#: src/icqface.cc:731
 #, fuzzy
 msgid "Contact to add"
 msgstr " Kontaktlista "
 
-#: src/icqface.cc:734
+#: src/icqface.cc:741
 msgid "Searching contacts.."
 msgstr "Söker kontakter.."
 
-#: src/icqface.cc:802
+#: src/icqface.cc:809
 msgid "Search results [done]"
 msgstr "Sökresultat [klar]"
 
-#: src/icqface.cc:813
+#: src/icqface.cc:820
 #, c-format
 msgid "Information about %s"
 msgstr "Information om %s"
 
-#: src/icqface.cc:871
+#: src/icqface.cc:878
 msgid "Nickname"
 msgstr "Smeknamn"
 
-#: src/icqface.cc:872
+#: src/icqface.cc:879
 msgid "Name"
 msgstr "Namn"
 
-#: src/icqface.cc:873
+#: src/icqface.cc:880
 msgid "E-mail"
 msgstr "E-post"
 
-#: src/icqface.cc:874
+#: src/icqface.cc:881
 msgid "2nd e-mail"
 msgstr "Sekundär e-post"
 
-#: src/icqface.cc:875
+#: src/icqface.cc:882
 msgid "Old e-mail"
 msgstr "Gammal e-post"
 
-#: src/icqface.cc:876
+#: src/icqface.cc:883
 msgid "Gender"
 msgstr "Kön"
 
-#: src/icqface.cc:877
+#: src/icqface.cc:884
 msgid "Birthdate"
 msgstr "Födelsedag"
 
-#: src/icqface.cc:878
+#: src/icqface.cc:885
 msgid "Age"
 msgstr "Ålder"
 
-#: src/icqface.cc:879
+#: src/icqface.cc:886
 msgid "Languages"
 msgstr "Språk"
 
-#: src/icqface.cc:880
+#: src/icqface.cc:887
 msgid "Last IP"
 msgstr "Senaste IP"
 
-#: src/icqface.cc:901
+#: src/icqface.cc:908
 msgid "Last seen"
 msgstr "Sågs senast"
 
-#: src/icqface.cc:903
+#: src/icqface.cc:910
 msgid "Never"
 msgstr "Aldrig"
 
-#: src/icqface.cc:916 src/icqface.cc:959
+#: src/icqface.cc:923 src/icqface.cc:966
 msgid "Address"
 msgstr "Adress"
 
-#: src/icqface.cc:917 src/icqface.cc:960
+#: src/icqface.cc:924 src/icqface.cc:967
 msgid "Location"
 msgstr "Hemvist"
 
-#: src/icqface.cc:918 src/icqface.cc:961
+#: src/icqface.cc:925 src/icqface.cc:968
 msgid "Zip code"
 msgstr "Zip kod"
 
-#: src/icqface.cc:919 src/icqface.cc:967
+#: src/icqface.cc:926 src/icqface.cc:974
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:920 src/icqface.cc:968
+#: src/icqface.cc:927 src/icqface.cc:975
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:921
+#: src/icqface.cc:928
 msgid "Cellular"
 msgstr "Mobiltelefon"
 
-#: src/icqface.cc:922
+#: src/icqface.cc:929
 msgid "Timezone"
 msgstr "Tidszon"
 
-#: src/icqface.cc:924 src/icqface.cc:969
+#: src/icqface.cc:931 src/icqface.cc:976
 msgid "Homepage"
 msgstr "Hemsida"
 
-#: src/icqface.cc:963
+#: src/icqface.cc:970
 msgid "Company"
 msgstr "Företag"
 
-#: src/icqface.cc:964
+#: src/icqface.cc:971
 msgid "Department"
 msgstr "Avdelning"
 
-#: src/icqface.cc:965
+#: src/icqface.cc:972
 msgid "Title"
 msgstr "Titel"
 
-#: src/icqface.cc:1009
+#: src/icqface.cc:1016
 msgid "Interests"
 msgstr "Intressen"
 
-#: src/icqface.cc:1021
+#: src/icqface.cc:1028
 msgid "Background"
 msgstr "Bakgrund"
 
-#: src/icqface.cc:1042
+#: src/icqface.cc:1049
 msgid "F2 to URLs, ESC close"
 msgstr "F2 för URL:er, ESC för att stänga"
 
-#: src/icqface.cc:1049
+#: src/icqface.cc:1056
 msgid "Info"
 msgstr "Info"
 
-#: src/icqface.cc:1049
+#: src/icqface.cc:1056
 msgid "Home"
 msgstr "Hem"
 
-#: src/icqface.cc:1049
+#: src/icqface.cc:1056
 msgid "Work"
 msgstr "Arbete"
 
-#: src/icqface.cc:1049
+#: src/icqface.cc:1056
 msgid "More"
 msgstr "Mer"
 
-#: src/icqface.cc:1050
+#: src/icqface.cc:1057
 msgid "Retrieve"
 msgstr "Hämta"
 
-#: src/icqface.cc:1050
+#: src/icqface.cc:1057
 msgid "Edit"
 msgstr "Editera"
 
-#: src/icqface.cc:1120
+#: src/icqface.cc:1127
 msgid " [icq] ICQ network"
 msgstr " [icq] ICQ nätverket"
 
-#: src/icqface.cc:1121
+#: src/icqface.cc:1128
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:1122
+#: src/icqface.cc:1129
 msgid " [msn] M$ Messenger"
 msgstr " [msn] M$ Messenger"
 
-#: src/icqface.cc:1123
+#: src/icqface.cc:1130
 msgid " [aim] AOL TOC"
 msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:1124
+#: src/icqface.cc:1131
 msgid " [irc] IRC"
 msgstr " [irc] IRC"
 
-#: src/icqface.cc:1125
+#: src/icqface.cc:1132
 msgid " [jab] Jabber"
 msgstr ""
 
-#: src/icqface.cc:1156
+#: src/icqface.cc:1163
 msgid " [all] All of them"
 msgstr " [alla] Alla tjänster"
 
-#: src/icqface.cc:1177
+#: src/icqface.cc:1184
 msgid " [o] Online"
 msgstr " [o] Online"
 
-#: src/icqface.cc:1178
+#: src/icqface.cc:1185
 msgid " [_] Offline"
 msgstr " [_] Offline"
 
-#: src/icqface.cc:1179
+#: src/icqface.cc:1186
 msgid " [a] Away"
 msgstr " [a] Away"
 
-#: src/icqface.cc:1180
+#: src/icqface.cc:1187
 msgid " [d] Do not disturb"
 msgstr " [d] Do not disturb"
 
-#: src/icqface.cc:1181
+#: src/icqface.cc:1188
 msgid " [n] Not available"
 msgstr " [n] Not available"
 
-#: src/icqface.cc:1182
+#: src/icqface.cc:1189
 msgid " [c] Occupied"
 msgstr " [c] Occupied"
 
-#: src/icqface.cc:1183
+#: src/icqface.cc:1190
 msgid " [f] Free for chat"
 msgstr " [f] Free for chat"
 
-#: src/icqface.cc:1184
+#: src/icqface.cc:1191
 msgid " [i] Invisible"
 msgstr " [i] Invisible"
 
-#: src/icqface.cc:1243
+#: src/icqface.cc:1250
 msgid " enter to select a file, esc to cancel "
 msgstr " tryck enter för att välja en fil, esc för avbryta "
 
-#: src/icqface.cc:1272
+#: src/icqface.cc:1279
 #, fuzzy
 msgid " space to select a directory, esc to cancel "
 msgstr " tryck enter för att välja en fil, esc för avbryta "
 
-#: src/icqface.cc:1416
+#: src/icqface.cc:1423
 msgid "Move to contacts"
 msgstr "Flytta till kontakter"
 
-#: src/icqface.cc:1428
+#: src/icqface.cc:1435
 msgid "Ignore list"
 msgstr "Svarta listan"
 
-#: src/icqface.cc:1429
+#: src/icqface.cc:1436
 msgid "Visible list"
 msgstr "Synliga listan"
 
-#: src/icqface.cc:1430
+#: src/icqface.cc:1437
 msgid "Invisible list"
 msgstr "Osynliga listan"
 
-#: src/icqface.cc:1452
+#: src/icqface.cc:1459
 msgid "Select contacts to add to the list"
 msgstr "Välj kontakter att lägga till lista"
 
-#: src/icqface.cc:1501
+#: src/icqface.cc:1464
+#, c-format
+msgid "Remove the %d contacts from the contact list as well?"
+msgstr ""
+
+#: src/icqface.cc:1518
 msgid "Event recipients"
 msgstr "Händelse mottagare"
 
-#: src/icqface.cc:1646
+#: src/icqface.cc:1663
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr "Snabbsökning: skriv för att söka, Alt-S sök igen, Enter avsluta"
 
-#: src/icqface.cc:1760
+#: src/icqface.cc:1777
 msgid "+ no URLs within the current context"
 msgstr "+ inga URL:er inom gällande kontext"
 
-#: src/icqface.cc:1773
+#: src/icqface.cc:1790
 msgid "URLs within the current context"
 msgstr "URL:er inom gällande kontext"
 
-#: src/icqface.cc:1787
+#: src/icqface.cc:1804
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? members, ESC close"
 msgstr ""
 "Ctrl-X sänd, Ctrl-P välj flera, Ctrl-O historia, Alt-? detaljer, ESC avbryt"
 
-#: src/icqface.cc:1789
+#: src/icqface.cc:1806
 #, fuzzy
 msgid ""
 "^X send, ^P multi, ^O history, F2 URLs, F9 expand, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X sänd, Ctrl-P välj flera, Ctrl-O historia, Alt-? detaljer, ESC avbryt"
 
-#: src/icqface.cc:1813 src/icqface.cc:2239
+#: src/icqface.cc:1830 src/icqface.cc:2256
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Utgående %s till %s"
 
-#: src/icqface.cc:1909
+#: src/icqface.cc:1926
 msgid "Send contacts.."
 msgstr "Sänd kontakter.."
 
-#: src/icqface.cc:1969
+#: src/icqface.cc:1986
 #, fuzzy
 msgid "file name: "
 msgstr "filnamn: "
 
-#: src/icqface.cc:2240
+#: src/icqface.cc:2257
 #, c-format
 msgid "Sent on %s"
 msgstr "Sänt på %s"
 
-#: src/icqface.cc:2243
+#: src/icqface.cc:2260
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Inkommande %s från %s"
 
-#: src/icqface.cc:2244
+#: src/icqface.cc:2261
 #, c-format
 msgid "Received on %s"
 msgstr "Mottaget %s"
 
-#: src/icqface.cc:2289
+#: src/icqface.cc:2306
 #, fuzzy
 msgid "F2 to URLs, F9 to full-screenize, ESC close"
 msgstr "F2 för URL:er, ESC för att stänga"
 
-#: src/icqface.cc:2333
+#: src/icqface.cc:2350
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "Mottaget %s"
 
-#: src/icqface.cc:2334
+#: src/icqface.cc:2351
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "Sänt på %s"
 
-#: src/icqface.cc:2347
+#: src/icqface.cc:2364
 msgid "ESC or F9 to close"
 msgstr ""
 
-#: src/icqface.cc:2429
+#: src/icqface.cc:2446
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Historia för %s, %d händelser totalt"
 
-#: src/icqface.cc:2432
+#: src/icqface.cc:2449
 #, fuzzy
 msgid "/ search, N again, ESC cancel"
 msgstr "S sök, L igen, ESC avbryt"
 
-#: src/icqface.cc:2438
+#: src/icqface.cc:2455
 msgid "search for: "
 msgstr "sök för: "
 
@@ -2059,10 +2122,6 @@ msgstr " Registrera dig på ICQ "
 msgid "Go ahead"
 msgstr "Kör"
 
-#: src/imcontroller.cc:88
-msgid " Password "
-msgstr " Lösenord "
-
 #: src/imcontroller.cc:89
 #, c-format
 msgid " Password to set : %s "
@@ -2077,10 +2136,6 @@ msgstr " Kontrollera lösenordet : %s "
 #, c-format
 msgid " Server to use : %s "
 msgstr " Server : %s "
-
-#: src/imcontroller.cc:101
-msgid "Password: "
-msgstr "Lösenord: "
 
 #: src/imcontroller.cc:102
 msgid "Check the password you entered: "
@@ -2128,7 +2183,7 @@ msgstr "Försöker igen.."
 msgid "New UIN received, %lu"
 msgstr "Nytt UIN mottaget, %lu"
 
-#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:287
+#: src/imcontroller.cc:172 src/imcontroller.cc:208 src/imcontroller.cc:290
 msgid "Disconnected"
 msgstr "Nedkopplad"
 
@@ -2155,124 +2210,81 @@ msgid "You must be logged to the ICQ network to update the details"
 msgstr ""
 "Du måste vara ansluten till ICQ nätverket för att kunna uppdatera detaljerna"
 
-#: src/imcontroller.cc:243
+#: src/imcontroller.cc:245
 msgid "new MSN friendly nick: "
 msgstr ""
 
-#: src/imcontroller.cc:252
+#: src/imcontroller.cc:253
 #, c-format
 msgid "Your friendly nickname has been changed to %s"
 msgstr ""
 
-#: src/imcontroller.cc:256
+#: src/imcontroller.cc:257
 #, fuzzy
 msgid "You must be logged to the MSN network to update the friendly nick"
 msgstr ""
 "Du måste vara ansluten till ICQ nätverket för att kunna uppdatera detaljerna"
 
-#: src/imcontroller.cc:267
+#: src/imcontroller.cc:270
 #, fuzzy
 msgid "You must be logged to the Jabber network to update your details"
 msgstr ""
 "Du måste vara ansluten till ICQ nätverket för att kunna uppdatera detaljerna"
 
-#: src/imcontroller.cc:277
+#: src/imcontroller.cc:280
 msgid " Contact list synchronization "
 msgstr " Kontaktliste synkronisering "
 
-#: src/imcontroller.cc:278
+#: src/imcontroller.cc:281
 msgid "Starting the synchronization process"
 msgstr "Startar synkroniseringsprocessen"
 
-#: src/imcontroller.cc:282
+#: src/imcontroller.cc:285
 #, c-format
 msgid "Attempt #%d"
 msgstr "Försök #%d"
 
-#: src/imcontroller.cc:283
+#: src/imcontroller.cc:286
 #, c-format
 msgid ".. %d already synchronized, %d contacts to be stored"
 msgstr ".. %d är redan synkroniserade, %d kontakter kvar att spara"
 
-#: src/imcontroller.cc:286 src/imcontroller.cc:327
+#: src/imcontroller.cc:289 src/imcontroller.cc:330
 msgid "Finished"
 msgstr "Avslutad"
 
-#: src/imcontroller.cc:288
+#: src/imcontroller.cc:291
 msgid "Too many attempts, gave up"
 msgstr "För många försök, gav upp"
 
-#: src/imcontroller.cc:310
+#: src/imcontroller.cc:313
 msgid " Uploading buddies "
 msgstr " Tankar upp polare "
 
-#: src/imcontroller.cc:313
+#: src/imcontroller.cc:316
 #, fuzzy
 msgid "No contacts to be synchronized"
 msgstr "Inga kontakter att synkronisa"
 
-#: src/imcontroller.cc:314
+#: src/imcontroller.cc:317
 msgid ".. all of them are already stored server-side"
 msgstr ".. alla är redan sparade på servern"
 
-#: src/imcontroller.cc:318
+#: src/imcontroller.cc:321
 #, c-format
 msgid "%d contacts are do be stored server-side. Add them now?"
 msgstr "%d kontakter skall sparas på servern. Lägga till dem nu?"
 
-#: src/imcontroller.cc:323
+#: src/imcontroller.cc:326
 #, c-format
 msgid ".. adding %s"
 msgstr ".. lägger till %s"
 
-#: src/imcontroller.cc:329
+#: src/imcontroller.cc:332
 msgid "Cancelled"
 msgstr "Avbryten"
 
-#: src/imcontroller.cc:349
-msgid " IRC channels manager "
-msgstr " IRC Kanalhanterare   "
-
-#: src/imcontroller.cc:355
-#, fuzzy
-msgid "Password"
-msgstr " Lösenord "
-
-#: src/imcontroller.cc:355
-#, fuzzy
-msgid "Join/Part"
-msgstr "Anslut/Lämna"
-
-#: src/imcontroller.cc:355
-#, fuzzy
-msgid "Show"
-msgstr "sedd"
-
-#: src/imcontroller.cc:369
-msgid " Channels "
-msgstr " Kanaler "
-
-#: src/imcontroller.cc:372
-msgid "joined"
-msgstr "anslöt"
-
-#: src/imcontroller.cc:372
-msgid "not joined"
-msgstr "anslöt inte"
-
-#: src/imcontroller.cc:373
-msgid "shown"
-msgstr "sedd"
-
-#: src/imcontroller.cc:373
-msgid "hidden"
-msgstr "gömd"
-
-#: src/imcontroller.cc:383
-msgid "channel name to add: "
-msgstr "lägg till följande kanalnamn: "
-
-#: src/imcontroller.cc:432
+#: src/imcontroller.cc:347
 msgid "registration is not supported"
 msgstr "registrering stöds inte"
 
@@ -2422,70 +2434,116 @@ msgstr "%s: kopplade ned (offline)"
 msgid "changed our %s status to %s from %s"
 msgstr "ändrade %s status till %s från %s"
 
-#: src/hooks/jabberhook.cc:57
+#: src/hooks/jabberhook.cc:58
 #, fuzzy
 msgid "+ [jab] connecting to the server"
 msgstr "+ [aim] ansluter till servern"
 
-#: src/hooks/jabberhook.cc:89
+#: src/hooks/jabberhook.cc:90
 #, fuzzy
 msgid "+ [jab] incorrect jabber id"
 msgstr "+ [yahoo] frånkopplad"
 
-#: src/hooks/jabberhook.cc:93
+#: src/hooks/jabberhook.cc:94
 #, fuzzy
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ [aim] kunde inte ansluta till servern"
 
-#: src/hooks/jabberhook.cc:224
+#: src/hooks/jabberhook.cc:230
 #, fuzzy, c-format
 msgid "+ [jab] adding %s to the contacts"
 msgstr "+ [aim] lägger till %s till kontaktlistan"
 
-#: src/hooks/jabberhook.cc:247
+#: src/hooks/jabberhook.cc:273
 #, fuzzy, c-format
 msgid "+ [jab] removing %s from the contacts"
 msgstr "+ [aim] tar bort %s från kontaktlistan"
 
-#: src/hooks/jabberhook.cc:312
+#: src/hooks/jabberhook.cc:361
 #, fuzzy, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ [icq] kunde inte hämta frånvarumeddelande från %s, %s"
 
-#: src/hooks/jabberhook.cc:344
+#: src/hooks/jabberhook.cc:393
 #, fuzzy
 msgid "Unable to connect"
 msgstr "Kunde inte ansluta till personsökarvärden"
 
-#: src/hooks/jabberhook.cc:616
+#: src/hooks/jabberhook.cc:678
+#, fuzzy, c-format
+msgid "+ [jab] conference list fetching finished, %d found"
+msgstr "+ [irc] hämtade listan över kanalmedlemmarna, %d stycken"
+
+#: src/hooks/jabberhook.cc:727
 #, fuzzy, c-format
 msgid "+ [jab] search finished, %d found"
 msgstr "+ [icq] whitepages sökning klar, %d hittade"
 
-#: src/hooks/jabberhook.cc:640
+#: src/hooks/jabberhook.cc:783
 #, fuzzy
 msgid "+ [jab] logged in"
 msgstr "+ [aim] inloggad"
 
-#: src/hooks/jabberhook.cc:660
+#: src/hooks/jabberhook.cc:880
 #, fuzzy
 msgid "+ [jab] disconnected"
 msgstr "+ [yahoo] frånkopplad"
 
-#: src/hooks/jabberhook.cc:829
+#: src/hooks/jabberhook.cc:1038
 #, fuzzy, c-format
 msgid "[jab] error %d: %s"
 msgstr "+ [yahoo] fel: %s"
 
-#: src/hooks/jabberhook.cc:879
+#: src/hooks/jabberhook.cc:1088
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:889
+#: src/hooks/jabberhook.cc:1098
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
 msgstr ""
+
+#~ msgid "+ [msn] unable to connect to the server"
+#~ msgstr "+ [msn] kunde inte ansluta till servern"
+
+#~ msgid "+ [msn] connecting with %s"
+#~ msgstr "+ [msn] ansluter med %s"
+
+#~ msgid "+ [msn] connection from %s"
+#~ msgstr "+ [msn] ansluter från %s"
+
+#~ msgid " Channel manager "
+#~ msgstr " Kanalhanterare "
+
+#~ msgid " IRC channels manager "
+#~ msgstr " IRC Kanalhanterare   "
+
+#, fuzzy
+#~ msgid "Password"
+#~ msgstr " Lösenord "
+
+#, fuzzy
+#~ msgid "Show"
+#~ msgstr "sedd"
+
+#~ msgid " Channels "
+#~ msgstr " Kanaler "
+
+#~ msgid "joined"
+#~ msgstr "anslöt"
+
+#~ msgid "not joined"
+#~ msgstr "anslöt inte"
+
+#~ msgid "shown"
+#~ msgstr "sedd"
+
+#~ msgid "hidden"
+#~ msgstr "gömd"
+
+#~ msgid "channel name to add: "
+#~ msgstr "lägg till följande kanalnamn: "
 
 #~ msgid "+ [aim] disconnected from the network"
 #~ msgstr "+ [aim] frånkopplad från tjänsten"

@@ -2,28 +2,36 @@
 #define __MSNHOOK_H__
 
 #include "abstracthook.h"
-#include "libmsn.h"
+
+#include "msn_core.h"
 
 class msnhook : public abstracthook {
+
+    friend void ext_register_sock(int s, int reading, int writing);
+    friend void ext_unregister_sock(int s);
+    friend void ext_new_connection(msnconn *conn);
+    friend void ext_closing_connection(msnconn * conn);
+    friend void ext_buddy_set(msnconn *conn, const char *buddy, const char *friendlyname, const char *status);
+    friend void ext_got_info(msnconn *conn, syncinfo *info);
+    friend void ext_got_friendlyname(msnconn *conn, const char *friendlyname);
+    friend void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname);
+    friend void ext_new_list_entry(msnconn *conn, const char *lst, const char *username);
+    friend void ext_del_list_entry(msnconn *conn, const char *lst, const char *username);
+    friend void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, message *msg);
+
     protected:
-	imstatus status;
-	bool fonline;
+	imstatus ourstatus;
+	bool fonline, flogged;
+	msnconn conn;
 
+	vector<int> rfds, wfds;
 	map<string, string> friendlynicks;
-
-	static void messaged(void *data);
-	static void statuschanged(void *data);
-	static void authrequested(void *data);
-	static void disconnected(void *data);
-	static void log(void *data);
-	static void ring(void *data);
-	static void mailed(void *data);
-
-	static imstatus msn2imstatus(int st);
-	static bool isourid(const string &nick);
+	map<string, vector<pair<string, string> > > slst;
 
 	void checkfriendly(icqcontact *c, const string friendlynick,
 	    bool forcefetch = false);
+
+	void checkinlist(imcontact ic);
 
 	void removeuser(const imcontact &ic, bool report);
 
@@ -38,8 +46,8 @@ class msnhook : public abstracthook {
 	void exectimers();
 	void main();
 
-	void getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const;
-	bool isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const;
+	void getsockets(fd_set &rf, fd_set &wf, fd_set &ef, int &hsocket) const;
+	bool isoursocket(fd_set &rf, fd_set &wf, fd_set &ef) const;
 
 	bool online() const;
 	bool logged() const;

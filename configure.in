@@ -114,7 +114,7 @@ case "$host_os" in
 	;;
 esac
 
-AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.4.0 libmsn-0.1 firetalk-0.1 libyahoo2-0.1 libjabber-0.1 connwrap-0.1)
+AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.4.0 firetalk-0.1 libyahoo2-0.1 libjabber-0.1 connwrap-0.1 blip-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)
