@@ -1,0 +1,48 @@
+#
+# External actions
+# ----------------
+#
+# Every section starts with a line containing the "%action" text. Inside
+# it the following parameters can be used:
+#
+# event
+# -----
+# Can be "msg", "sms", "url", "online" or "email".
+# Specifying several event types is also supported.
+#
+# proto
+# -----
+# Can be "icq", "yahoo" or "msn". Or combination of these words. "all"
+# can be used as a synonim for all of them.
+#
+# status
+# ------
+# Can be "online", "away", "dnd", "na", "occupied", "ffc" or "invisible".
+# Specifying several ones is possible. "all" stands for all of possible
+# status modes.
+#
+# options
+# -------
+# Possible options for an action are:
+#
+#	stdin		The incoming message text is to be passed to
+#			stdin of the script to be executed.
+#
+#	stdout		The script output is to be sent as a reply
+#			message (if not empty).
+#
+# Then, the section named "%exec" should follow. It contains a piece of
+# script to be executed being copied to a file first.
+#
+
+%action
+
+event		msg
+proto		icq
+status		away
+options		stdin stdout
+
+%exec
+#!/bin/sh
+echo "have you written '${icq_message}' and your uin is ${icq_uin}? ok."
+
