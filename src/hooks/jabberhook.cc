@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.20 2002/12/03 14:01:36 konst Exp $
+* $Id: jabberhook.cc,v 1.21 2002/12/03 16:04:57 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -775,8 +775,17 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 				if(alias && name && desc) {
 				    jhook.agents.push_back(agent(alias, name, desc, atype));
+
 				    if(atype == agent::search) {
 					x = jutil_iqnew (JPACKET__GET, NS_SEARCH);
+					xmlnode_put_attrib(x, "to", alias);
+					xmlnode_put_attrib(x, "id", "Agent info");
+					jab_send(conn, x);
+					xmlnode_free(x);
+				    }
+
+				    if(xmlnode_get_tag(y, "register")) {
+					x = jutil_iqnew (JPACKET__GET, NS_REGISTER);
 					xmlnode_put_attrib(x, "to", alias);
 					xmlnode_put_attrib(x, "id", "Agent info");
 					jab_send(conn, x);
