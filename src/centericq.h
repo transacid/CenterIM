@@ -48,7 +48,6 @@ class centericq {
 	string quotemsg(const string &text);
 
 	void setauto(imstatus astatus);
-	void joinleave(icqcontact *c);
 	void createconference(const imcontact &ic);
 
     public:
@@ -64,6 +63,7 @@ class centericq {
 	bool updateconf();
 
 	void find();
+	void joindialog();
 
 	icqcontact *addcontact(const imcontact &ic);
 

@@ -19,9 +19,19 @@ class jabberhook: public abstracthook {
 	vector<icqcontact *> foundguys;
 
 	struct agent {
-	    string jid, name, desc, instruction, key;
-	    enum agent_type { search, transport, groupchat, unknown } type;
-	    vector<string> searchparams;
+	    string jid, name, desc;
+
+	    struct agent_params {
+		bool enabled;
+		string instruction, key;
+		vector<pair<string, string> > paramnames;
+		agent_params(): enabled(false) {}
+	    };
+
+	    enum param_type { ptSearch, ptRegister, param_type_size };
+	    enum agent_type { atSearch, atTransport, atGroupchat, atUnknown } type;
+
+	    agent_params params[param_type_size];
 
 	    agent(const string &ajid, const string &aname, const string &adesc, agent_type atype):
 		jid(ajid), name(aname), desc(adesc), type(atype) {}
@@ -36,6 +46,8 @@ class jabberhook: public abstracthook {
 	static string jidnormalize(const string &jid);
 	static string jidtodisp(const string &jid);
 	static void jidsplit(const string &jid, string &user, string &host, string &rest);
+
+	vector<pair<string, string> > getservparams(const string &agentname, agent::param_type pt) const;
 
 	void setjabberstatus(imstatus st, const string &msg);
 	void sendvisibility();
@@ -68,25 +80,28 @@ class jabberhook: public abstracthook {
 
 	bool send(const imevent &ev);
 
-	void sendnewuser(const imcontact &c);
+	void sendnewuser(const imcontact &ic);
 	void removeuser(const imcontact &ic);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;
 
-	void requestinfo(const imcontact &c);
-	void requestawaymsg(const imcontact &c);
+	void requestinfo(const imcontact &ic);
+	void requestawaymsg(const imcontact &ic);
 
 	bool regnick(const string &nick, const string &pass,
 	    const string &serv, string &err);
 
-	vector<string> getsearchservices() const;
+	vector<string> getservices(servicetype::enumeration st) const;
 	vector<pair<string, string> > getsearchparameters(const string &agentname) const;
+	vector<pair<string, string> > getregparameters(const string &agentname) const;
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 
 	void conferencecreate(const imcontact &confid,
 	    const vector<imcontact> &lst);
+
+	void sendupdateuserinfo(const icqcontact &c);
 };
 
 extern jabberhook jhook;

@@ -91,6 +91,9 @@ class irchook: public abstracthook {
 	void rawcommand(const string &cmd);
 	void channelfatal(string room, const char *fmt, ...);
 
+	vector<channelInfo> getautochannels() const;
+	void setautochannels(vector<channelInfo> &achannels);
+
     public:
 	irchook();
 	~irchook();
@@ -127,9 +130,6 @@ class irchook: public abstracthook {
 	void sendupdateuserinfo(icqcontact &c, const string &newpass);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
-
-	vector<channelInfo> getautochannels() const;
-	void setautochannels(vector<channelInfo> &achannels);
 
 	void ouridchanged(const icqconf::imaccount &ia);
 

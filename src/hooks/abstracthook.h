@@ -25,7 +25,15 @@ struct hookcapab {
 	cltemporary,
 	directadd,
 	flexiblesearch,
+	flexiblereg,
 	ssl
+    };
+};
+
+struct servicetype {
+    enum enumeration {
+	search,
+	registration
     };
 };
 
@@ -88,8 +96,10 @@ class abstracthook {
 	virtual void conferencecreate(const imcontact &confid,
 	    const vector<imcontact> &lst);
 
-	virtual vector<string> getsearchservices() const;
+	virtual vector<string> getservices(servicetype::enumeration st) const;
+
 	virtual vector<pair<string, string> > getsearchparameters(const string &agentname) const;
+	virtual vector<pair<string, string> > getregparameters(const string &agentname) const;
 };
 
 abstracthook &gethook(protocolname pname);

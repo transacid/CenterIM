@@ -56,6 +56,11 @@ class icqcontact {
 	    unsigned short country;
 	};
 
+	struct reginfo {
+	    string service;
+	    vector<pair<string, string> > params;
+	};
+
     protected:
 	imcontact cdesc;
 	imstatus status;
@@ -70,6 +75,7 @@ class icqcontact {
 	basicinfo binfo;
 	moreinfo minfo;
 	workinfo winfo;
+	reginfo rinfo;
 	vector<string> interests, background;
 
 	void scanhistory();
@@ -89,6 +95,7 @@ class icqcontact {
 	void setbasicinfo(const basicinfo &ainfo);
 	void setmoreinfo(const moreinfo &ainfo);
 	void setworkinfo(const workinfo &ainfo);
+	void setreginfo(const reginfo &ainfo);
 	void setinterests(const vector<string> &ainterests);
 	void setbackground(const vector<string> &abackground);
 	void setabout(const string &data);
@@ -97,6 +104,7 @@ class icqcontact {
 	const basicinfo &getbasicinfo() const { return binfo; }
 	const moreinfo &getmoreinfo() const { return minfo; }
 	const workinfo &getworkinfo() const { return winfo; }
+	const reginfo &getreginfo() const { return rinfo; }
 	const vector<string> &getinterests() const { return interests; }
 	const vector<string> &getbackground() const { return background; }
 

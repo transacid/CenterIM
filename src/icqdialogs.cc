@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.96 2002/11/28 18:29:32 konst Exp $
+* $Id: icqdialogs.cc,v 1.97 2002/12/04 17:44:24 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -159,7 +159,7 @@ bool icqface::sprofmanager(string &name, string &act) {
     return r;
 }
 
-bool icqface::finddialog(imsearchparams &s) {
+bool icqface::finddialog(imsearchparams &s, bool users) {
     int n, b, i;
     int nuin, ninfo, nloc, nwork, nonl;
     bool finished, ret, proceed;
@@ -175,6 +175,10 @@ bool icqface::finddialog(imsearchparams &s) {
     imsearchparams ts;
 
     for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
+	if(!users)
+	if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
+	    continue;
+
 	if(gethook(apname).logged() || apname == infocard) {
 	    penabled.push_back(apname);
 	}
@@ -194,22 +198,30 @@ bool icqface::finddialog(imsearchparams &s) {
     finished = ret = false;
 
     db.setwindow(new textwindow(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED,
-	conf.getcolor(cp_dialog_highlight), _(" Find/add user(s) ")));
+	conf.getcolor(cp_dialog_frame), TW_CENTERED));
 
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
 	conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
-	_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
+    if(users) {
+	db.getwindow()->set_title(conf.getcolor(cp_dialog_highlight), _(" Find/add user(s) "));
+	db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+	    _("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
+	db.getbar()->item = 3;
+
+    } else {
+	db.getwindow()->set_title(conf.getcolor(cp_dialog_highlight), _(" Join create a channel/conference "));
+	db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+	    _("cLear"), _("Change"), _("Join/Create"), 0));
+	db.getbar()->item = 1;
+
+    }
 
     db.addautokeys();
     db.idle = &dialogidle;
     treeview &tree = *db.gettree();
-    db.getbar()->item = 3;
 
     bool protchanged = true;
 
@@ -217,7 +229,7 @@ bool icqface::finddialog(imsearchparams &s) {
 	tree.clear();
 
 	if(protchanged) {
-	    services = gethook(s.pname).getsearchservices();
+	    services = gethook(s.pname).getservices(servicetype::search);
 
 	    if(s.service.empty())
 	    if((iservice = services.begin()) != services.end()) {
@@ -231,6 +243,7 @@ bool icqface::finddialog(imsearchparams &s) {
 	i = tree.addnode(_(" Network "));
 	tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname) + " ");
 
+	if(users)
 	switch(s.pname) {
 	    case icq:
 		i = tree.addnode(_(" UIN "));
@@ -300,7 +313,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		break;
 	}
 
-	if(s.pname == irc && s.nick.empty()) {
+	if(users && s.pname == irc && s.nick.empty()) {
 	    i = tree.addnode(_(" Details "));
 	    tree.addleaff(i, 0, 26, _(" Channel : %s "), s.room.c_str());
 
@@ -316,12 +329,19 @@ bool icqface::finddialog(imsearchparams &s) {
 	    }
 	}
 
-	if(s.pname == msn && s.nick.empty()) {
+	if(users && s.pname == msn && s.nick.empty()) {
 	    i = tree.addnode(_(" Show users who have you on their list "));
 	    tree.addleaff(i, 0, 30, " %s ", stryesno(s.reverse));
 	}
 
+	if(!users) {
+	    i = tree.addnode(_(" Name/Title "));
+	    tree.addleaf(i, 0, 11, " " + s.nick + " ");
+	}
+
 	finished = !db.open(n, b, (void **) &i);
+
+	if(!users) b += 2;
 
 	if(!finished)
 	switch(b) {
@@ -373,7 +393,7 @@ bool icqface::finddialog(imsearchparams &s) {
 			break;
 
 		    case 10: s.uin = atol(inputstr(_("UIN: "), strint(s.uin)).c_str()); break;
-		    case 11: s.nick = inputstr(_("Nickname: "), s.nick); break;
+		    case 11: s.nick = inputstr(users ? _("Nickname: ") : _("Name/Title: "), s.nick); break;
 		    case 12: s.email = inputstr(_("E-Mail: "), s.email); break;
 		    case 13: s.firstname = inputstr(_("First name: "), s.firstname); break;
 		    case 14: s.lastname = inputstr(_("Last name: "), s.lastname); break;
@@ -428,17 +448,45 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
     icqcontact::workinfo wi = c->getworkinfo();
+    icqcontact::reginfo ri = c->getreginfo();
+
     string about = c->getabout();
     bool ourdetails = c->getdesc() == contactroot;
+
+    abstracthook &h = gethook(passinfo.pname);
+    set<hookcapab::enumeration> capab = h.getCapabs();
 
     tree->menu.getpos(saveitem, savefirst);
     tree->clear();
 
     i = 0;
 
-    if(passinfo.pname == infocard
-    || gethook(passinfo.pname).getCapabs().count(hookcapab::changenick)
-    || !ourdetails) {
+    if(capab.count(hookcapab::flexiblereg) && ourdetails) {
+	if(ri.service.empty()) {
+	    vector<string> servs = h.getservices(servicetype::registration);
+	    if(!servs.empty()) ri.service = servs[0]; else return;
+	}
+
+	if(ri.params.empty()) {
+	    ri.params = h.getregparameters(ri.service);
+	}
+
+	c->setreginfo(ri);
+
+	i = tree->addnode(_(" Registration service "));
+	tree->addleaff(i, 0, 46, " %s ", ri.service.c_str());
+
+	i = tree->addnode(_(" Registration parameters "));
+
+	vector<pair<string, string> >::const_iterator ir = ri.params.begin();
+
+	while(ir != ri.params.end()) {
+	    tree->addleaff(i, 0, 100+(ir-ri.params.begin()), " %s : %s ",
+		ir->first.c_str(), ir->second.c_str());
+	    ++ir;
+	}
+
+    } else if(passinfo.pname == infocard || capab.count(hookcapab::changenick) || !ourdetails) {
 	if(!i) i = tree->addnode(_(" General "));
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
 
@@ -450,6 +498,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
 	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
 	tree->addleaff(i, 0, 13, _(" E-mail : %s "), bi.email.c_str());
+
 	tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender(mi.gender));
 	tree->addleaff(i, 0, 15, _(" Birthdate : %s "), mi.strbirthdate().c_str());
 	tree->addleaff(i, 0, 16, _(" Age : %s "), strint(mi.age));
@@ -517,6 +566,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
     icqcontact::basicinfo bi;
     icqcontact::workinfo wi;
     icqcontact::moreinfo mi;
+    icqcontact::reginfo ri;
     bool finished = false, ret = false, msb;
     int n, b, citem;
     dialogbox db;
@@ -565,6 +615,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 	bi = c->getbasicinfo();
 	mi = c->getmoreinfo();
 	wi = c->getworkinfo();
+	ri = c->getreginfo();
 	about = c->getabout();
 
 	if(!b) {
@@ -645,11 +696,33 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		case 43: bi.webaware = !bi.webaware; break;
 		case 44: bi.requiresauth = !bi.requiresauth; break;
 		case 45: bi.autosync = !bi.autosync; break;
+		case 46: {
+		    abstracthook &h = gethook(passinfo.pname);
+		    vector<string> servs = h.getservices(servicetype::registration);
+		    vector<string>::const_iterator is = find(servs.begin(), servs.end(), ri.service);
+
+		    if(is != servs.end()) {
+			if(++is == servs.end()) is = servs.begin();
+			if(*is != ri.service) {
+			    ri.service = *is;
+			    ri.params.clear();
+			}
+		    }
+
+		    } break;
+
+		default:
+		    if(citem >= 100) {
+			vector<pair<string, string> >::iterator ifp = ri.params.begin()+citem-100;
+			ifp->second = inputstr(ifp->first + ": ", ifp->second);
+		    }
+		    break;
 	    }
 
 	    c->setbasicinfo(bi);
 	    c->setmoreinfo(mi);
 	    c->setworkinfo(wi);
+	    c->setreginfo(ri);
 	    c->setabout(about);
 	} else {
 	    ret = (c->getdesc() != contactroot) || c->updated();

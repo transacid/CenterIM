@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.57 2002/11/30 23:33:45 konst Exp $
+* $Id: irchook.cc,v 1.58 2002/12/04 17:44:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -65,6 +65,7 @@ irchook::irchook()
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::cltemporary);
     fcapabs.insert(hookcapab::directadd);
+    fcapabs.insert(hookcapab::conferencing);
 }
 
 irchook::~irchook() {
@@ -258,9 +259,17 @@ bool irchook::send(const imevent &ev) {
 }
 
 void irchook::sendnewuser(const imcontact &ic) {
-    if(online() && !ischannel(ic)) {
-	firetalk_im_add_buddy(handle, ic.nickname.c_str());
-	requestinfo(ic);
+    if(online()) {
+	if(!ischannel(ic)) {
+	    firetalk_im_add_buddy(handle, ic.nickname.c_str());
+	    requestinfo(ic);
+	} else {
+	    vector<channelInfo> ch = getautochannels();
+	    if(find(ch.begin(), ch.end(), ic.nickname) == ch.end()) {
+		ch.push_back(ic.nickname);
+		setautochannels(ch);
+	    }
+	}
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.163 2002/11/30 10:06:30 konst Exp $
+* $Id: icqface.cc,v 1.164 2002/12/04 17:44:25 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -338,13 +338,8 @@ int icqface::contextmenu(icqcontact *c) {
 	if(conf.getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
 
-	vector<irchook::channelInfo> channels(irhook.getautochannels());
-	vector<irchook::channelInfo>::const_iterator ic =
-	    find(channels.begin(), channels.end(), cont.nickname);
-
-	if(ic != channels.end()) {
-	    actions.push_back(ic->joined ? ACT_LEAVE : ACT_JOIN);
-	}
+	icqcontact *c = clist.get(cont);
+	if(c) actions.push_back((c->getstatus() != offline) ? ACT_LEAVE : ACT_JOIN);
     }
 
     for(ia = actions.begin(); ia != actions.end(); ++ia) {
@@ -377,6 +372,7 @@ int icqface::generalmenu() {
     m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
     m.additem(0, ACT_FIND,      _(" Find/add users"));
+    m.additem(0, ACT_JOINDIALOG, _(" Join channel/conference"));
     m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
     m.addline();
     m.additem(0, ACT_IGNORELIST,    _(" View/edit ignore list"));
@@ -1450,9 +1446,19 @@ void icqface::modelist(contactstatus cs) {
 		muins.clear();
 
 		if(multicontacts(_("Select contacts to add to the list"), ps)) {
+		    bool removecl;
+
+		    if(cs == csignore) {
+			char buf[512];
+			sprintf(buf, _("Remove the %d contacts from the contact list as well?"), muins.size());
+			removecl = face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES;
+		    }
+
 		    for(ic = muins.begin(); ic != muins.end(); ++ic) {
 			lst.push_back(modelistitem(clist.get(*ic)->getdispnick(), *ic, cs));
-			if(cs == csignore) clist.remove(*ic);
+
+			if(removecl && cs == csignore)
+			    clist.remove(*ic);
 		    }
 
 		    lst.fillmenu(db.getmenu(), cs);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.139 2002/11/30 10:06:30 konst Exp $
+* $Id: centericq.cc,v 1.140 2002/12/04 17:44:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -186,6 +186,9 @@ void centericq::mainloop() {
 	    case ACT_FIND:
 		find();
 		break;
+	    case ACT_JOINDIALOG:
+		joindialog();
+		break;
 	    case ACT_CONF:
 		updateconf();
 		break;
@@ -228,7 +231,11 @@ void centericq::mainloop() {
 		sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 		    lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
-		    clist.remove(c->getdesc());
+
+		    sprintf(buf, _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
+		    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES)
+			clist.remove(c->getdesc());
+
 		    face.update();
 		}
 		break;
@@ -310,7 +317,7 @@ void centericq::mainloop() {
 
 	    case ACT_JOIN:
 	    case ACT_LEAVE:
-		joinleave(c);
+		c->setstatus((c->getstatus() == offline) ? available : offline);
 		break;
 
 	    case ACT_MSG:
@@ -385,6 +392,19 @@ void centericq::changestatus() {
 
 	    face.update();
 	}
+    }
+}
+
+void centericq::joindialog() {
+    static imsearchparams s;
+
+    if(face.finddialog(s, false)) {
+	imcontact ic(s.nick, s.pname);
+
+	if(ic.nickname.substr(0, 1) != "#")
+	    ic.nickname.insert(0, "#");
+
+	cicq.addcontact(ic);
     }
 }
 
@@ -1328,16 +1348,6 @@ void centericq::exectimers() {
     }
 }
 
-void centericq::joinleave(icqcontact *c) {
-    vector<irchook::channelInfo> channels = irhook.getautochannels();
-    vector<irchook::channelInfo>::iterator ic = ::find(channels.begin(), channels.end(), c->getdesc().nickname);
-
-    if(ic != channels.end()) {
-	ic->joined = !ic->joined;
-	irhook.setautochannels(channels);
-    }
-}
-
 void centericq::createconference(const imcontact &ic) {
     int apid = 0;
     imcontact confid("", ic.pname);
@@ -1487,4 +1497,12 @@ Encoding guessencoding(const string &text) {
     if(utf > third) return encUTF; else
     if(latin > third) return encUnknown; else
 	return encKOI;
+}
+
+bool ischannel(const imcontact &cont) {
+    if(cont.nickname.substr(0, 1) == "#")
+    if(gethook(cont.pname).getCapabs().count(hookcapab::conferencing))
+	return true;
+
+    return false;
 }

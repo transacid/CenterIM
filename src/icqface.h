@@ -25,7 +25,7 @@ enum interfaceAction {
     ACT_PING, ACT_EDITUSER, ACT_VISIBLELIST, ACT_INVISLIST, ACT_QUICKFIND,
     ACT_FILE, ACT_GROUPMOVE, ACT_ORG_GROUPS, ACT_HIDEOFFLINE, ACT_FETCHAWAY,
     ACT_EMAIL, ACT_AUTH, ACT_CONTACT, ACT_VERSION, ACT_JOIN, ACT_LEAVE,
-    ACT_CONFER, ACT_TRANSFERS
+    ACT_CONFER, ACT_TRANSFERS, ACT_JOINDIALOG
 };
 
 extern class centericq cicq;
@@ -188,9 +188,11 @@ class icqface {
 
 	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
 
-	bool finddialog(imsearchparams &s);
+	bool finddialog(imsearchparams &s, bool users = true);
 	bool findresults(const imsearchparams &sp, bool auto = false);
 	void findready();
+
+	bool conferencedialog(protocolname &pname, string &name);
 
 	bool updatedetails(icqcontact *c = 0, protocolname upname = icq);
 	bool sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist);

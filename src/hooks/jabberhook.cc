@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.21 2002/12/03 16:04:57 konst Exp $
+* $Id: jabberhook.cc,v 1.22 2002/12/04 17:44:27 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,11 +35,11 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::authrequests);
     fcapabs.insert(hookcapab::directadd);
     fcapabs.insert(hookcapab::flexiblesearch);
+    fcapabs.insert(hookcapab::flexiblereg);
     fcapabs.insert(hookcapab::visibility);
     fcapabs.insert(hookcapab::ssl);
-    fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changedetails);
-//    fcapabs.insert(hookcapab::conferencing);
+    fcapabs.insert(hookcapab::conferencing);
 }
 
 jabberhook::~jabberhook() {
@@ -285,11 +285,17 @@ void jabberhook::setautostatus(imstatus st) {
 }
 
 void jabberhook::requestinfo(const imcontact &ic) {
+    icqcontact *c = clist.get(ic);
+
+    if(!c) {
+	c = clist.get(contactroot);
+	c->setabout("");
+    }
+
     vector<icqcontact *>::const_iterator ifc = foundguys.begin();
 
     while(ifc != foundguys.end()) {
 	if((*ifc)->getdesc() == ic) {
-	    icqcontact *c = clist.get(contactroot);
 	    c->clear();
 	    c->setbasicinfo((*ifc)->getbasicinfo());
 	    c->setdispnick((*ifc)->getdispnick());
@@ -470,60 +476,76 @@ void jabberhook::checkinlist(imcontact ic) {
     }
 }
 
-vector<string> jabberhook::getsearchservices() const {
+vector<string> jabberhook::getservices(servicetype::enumeration st) const {
     vector<agent>::const_iterator ia = agents.begin();
     vector<string> r;
+    agent::param_type pt;
+
+    switch(st) {
+	case servicetype::search: pt = agent::ptSearch; break;
+	case servicetype::registration: pt = agent::ptRegister; break;
+	default: return r;
+    }
 
     while(ia != agents.end()) {
-	if(ia->type == agent::search)
-	    r.push_back(ia->name);
+	if(ia->params[pt].enabled) r.push_back(ia->name);
 	++ia;
     }
 
     return r;
 }
 
-vector<pair<string, string> > jabberhook::getsearchparameters(const string &agentname) const {
+vector<pair<string, string> > jabberhook::getservparams(const string &agentname, agent::param_type pt) const {
     vector<agent>::const_iterator ia = agents.begin();
-    vector<pair<string, string> > r;
 
     while(ia != agents.end()) {
 	if(ia->name == agentname)
-	if(ia->type == agent::search) {
-	    vector<string>::const_iterator isp = ia->searchparams.begin();
-	    while(isp != ia->searchparams.end()) {
-		r.push_back(make_pair(*isp, string()));
-		++isp;
-	    }
-	}
+	if(ia->params[pt].enabled)
+	    return ia->params[pt].paramnames;
 
 	++ia;
     }
 
-    return r;
+    return vector<pair<string, string> >();
+}
+
+vector<pair<string, string> > jabberhook::getsearchparameters(const string &agentname) const {
+    return getservparams(agentname, agent::ptSearch);
+}
+
+vector<pair<string, string> > jabberhook::getregparameters(const string &agentname) const {
+    return getservparams(agentname, agent::ptRegister);
 }
 
 void jabberhook::gotagentinfo(xmlnode x) {
     xmlnode y;
-    string name, data;
-    const char *from = xmlnode_get_attrib(x, "from"), *p;
+    string name, data, ns;
+    agent::param_type pt;
     vector<agent>::iterator ia = jhook.agents.begin();
+    const char *from = xmlnode_get_attrib(x, "from"), *p;
 
     if(!from) return;
 
     while(ia != jhook.agents.end()) {
 	if(ia->jid == from)
 	if(y = xmlnode_get_tag(x, "query")) {
-	    ia->searchparams.clear();
+	    p = xmlnode_get_attrib(y, "xmlns"); if(p) ns = p;
+
+	    if(ns == NS_SEARCH) pt = agent::ptSearch; else
+	    if(ns == NS_REGISTER) pt = agent::ptRegister; else
+		break;
+
+	    ia->params[pt].enabled = true;
+	    ia->params[pt].paramnames.clear();
 
 	    for(y = xmlnode_get_firstchild(y); y; y = xmlnode_get_nextsibling(y)) {
 		p = xmlnode_get_name(y); name = p ? p : "";
 		p = xmlnode_get_data(y); data = p ? p : "";
 
-		if(name == "instructions") ia->instruction = data; else
-		if(name == "key") ia->key = data; else
+		if(name == "instructions") ia->params[pt].instruction = data; else
+		if(name == "key") ia->params[pt].key = data; else
 		if(!name.empty()) {
-		    ia->searchparams.push_back(name);
+		    ia->params[pt].paramnames.push_back(make_pair(name, data));
 		}
 	    }
 	    break;
@@ -554,7 +576,7 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	    if(ia->name == params.service) {
 		xmlnode_put_attrib(x, "to", ia->jid.c_str());
 		xmlnode_insert_cdata(xmlnode_insert_tag(y, "key"),
-		    ia->key.c_str(), (unsigned int) -1);
+		    ia->params[agent::atSearch].key.c_str(), (unsigned int) -1);
 		break;
 	    }
 	    ++ia;
@@ -644,6 +666,37 @@ void jabberhook::gotloggedin() {
 void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
     auto_ptr<char> jcid(strdup(confid.nickname.substr(1).c_str()));
     xmlnode x = jutil_presnew(JPACKET__UNKNOWN, jcid.get(), 0);
+    jab_send(jc, x);
+    xmlnode_free(x);
+}
+
+void jabberhook::sendupdateuserinfo(const icqcontact &c) {
+    xmlnode x, y;
+    icqcontact::reginfo ri = c.getreginfo();
+
+    x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
+    xmlnode_put_attrib(x, "id", "Register");
+
+    y = xmlnode_get_tag(x, "query");
+
+    vector<agent>::const_iterator ia = agents.begin();
+    while(ia != agents.end()) {
+	if(ia->name == ri.service) {
+	    xmlnode_put_attrib(x, "to", ia->jid.c_str());
+	    xmlnode_insert_cdata(xmlnode_insert_tag(y, "key"),
+		ia->params[agent::ptRegister].key.c_str(), (unsigned int) -1);
+	    break;
+	}
+	++ia;
+    }
+
+    vector<pair<string, string> >::const_iterator ip = ri.params.begin();
+    while(ip != ri.params.end()) {
+	xmlnode_insert_cdata(xmlnode_insert_tag(y,
+	    ip->first.c_str()), ip->second.c_str(), (unsigned int) -1);
+	++ip;
+    }
+
     jab_send(jc, x);
     xmlnode_free(x);
 }
@@ -767,16 +820,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 				const char *name = xmlnode_get_tag_data(y, "name");
 				const char *desc = xmlnode_get_tag_data(y, "description");
 				const char *service = xmlnode_get_tag_data(y, "service");
-				agent::agent_type atype = agent::unknown;
+				agent::agent_type atype = agent::atUnknown;
 
-				if(xmlnode_get_tag(y, "groupchat")) atype = agent::groupchat; else
-				if(xmlnode_get_tag(y, "transport")) atype = agent::transport; else
-				if(xmlnode_get_tag(y, "search")) atype = agent::search;
+				if(xmlnode_get_tag(y, "groupchat")) atype = agent::atGroupchat; else
+				if(xmlnode_get_tag(y, "transport")) atype = agent::atTransport; else
+				if(xmlnode_get_tag(y, "search")) atype = agent::atSearch;
 
 				if(alias && name && desc) {
 				    jhook.agents.push_back(agent(alias, name, desc, atype));
 
-				    if(atype == agent::search) {
+				    if(atype == agent::atSearch) {
 					x = jutil_iqnew (JPACKET__GET, NS_SEARCH);
 					xmlnode_put_attrib(x, "to", alias);
 					xmlnode_put_attrib(x, "id", "Agent info");
@@ -795,12 +848,19 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			    }
 			}
 
-		    } else if(ns == NS_SEARCH) {
+		    } else if(ns == NS_SEARCH || ns == NS_REGISTER) {
 			p = xmlnode_get_attrib(packet->x, "id"); id = p ? p : "";
+
 			if(id == "Agent info") {
 			    jhook.gotagentinfo(packet->x);
 			} else if(id == "Lookup") {
 			    jhook.gotsearchresults(packet->x);
+			} else if(id == "Register") {
+			    x = jutil_iqnew(JPACKET__GET, NS_REGISTER);
+			    xmlnode_put_attrib(x, "to", from.c_str());
+			    xmlnode_put_attrib(x, "id", "Agent info");
+			    jab_send(conn, x);
+			    xmlnode_free(x);
 			}
 
 		    }
