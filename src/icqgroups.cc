@@ -15,6 +15,7 @@ void icqgroups::load() {
     string buf;
     ifstream f;
     int gid;
+    vector<icqgroup>::iterator ig;
 
     clear();
     f.open(getfname().c_str());
@@ -24,12 +25,13 @@ void icqgroups::load() {
 	    getstring(f, buf);
 	    gid = atol(getword(buf).c_str());
 
-	    if(gid && !buf.empty()) {
-		push_back(icqgroup(gid, buf));
-	    }
-	    else if(gid) {
-	        icqgroup *g = find(begin(), end(), gid);
-	        if(g) g->changecollapsed();
+	    if(gid) {
+		if(!buf.empty()) {
+		    push_back(icqgroup(gid, buf));
+		} else {
+		    ig = find(begin(), end(), gid);
+		    if(ig != end()) ig->changecollapsed();
+		}
 	    }
 	}
 
