@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.18 2002/03/06 23:49:30 konst Exp $
+* $Id: kkstrtext.cc,v 1.19 2002/03/11 13:44:42 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,6 +23,10 @@
 */
 
 #include "kkstrtext.h"
+
+#ifdef HAVE_ICONV_H
+#include <iconv.h>
+#endif
 
 int kwordcount(const char *strin, const char *delim) {
     int count = 0, i = 0, slen = strlen(strin);
@@ -1039,4 +1043,40 @@ string ruscase(const string &s, const string &mode) {
     }
 
     return r;
+}
+
+string iconv(const string &text, const string &fromcs, const string &tocs) {
+#ifdef HAVE_ICONV_H
+    iconv_t cd = iconv_open(tocs.c_str(), fromcs.c_str());
+
+    if(((int) cd) != -1) {
+	string r;
+	size_t inleft, outleft, soutleft;
+	char *inbuf, *outbuf, *sinbuf, *soutbuf;
+
+	sinbuf = inbuf = strdup(text.c_str());
+	inleft = strlen(inbuf);
+
+	soutleft = outleft = inleft*4;
+	soutbuf = outbuf = new char[outleft];
+
+	iconv(cd,
+#ifdef ICONV_CONST
+	    (const char **)
+#endif
+	    &inbuf, &inleft, &outbuf, &outleft);
+
+	iconv_close(cd);
+
+	soutbuf[soutleft-outleft] = 0;
+	r = soutbuf;
+
+	delete soutbuf;
+	delete sinbuf;
+
+	return r;
+    }
+#endif
+
+    return text;
 }
