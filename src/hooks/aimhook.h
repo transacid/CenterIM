@@ -37,6 +37,7 @@ class aimhook: public abstracthook {
 	static void buddyaway(void *conn, void *cli, ...);
 	static void buddynickchanged(void *conn, void *cli, ...);
 	static void needpass(void *conn, void *cli, ...);
+	static void connectfailed(void *connection, void *cli, ...);
 
     public:
 	aimhook();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.57 2002/03/14 11:53:30 konst Exp $
+* $Id: icqdialogs.cc,v 1.58 2002/03/14 14:15:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -164,10 +164,11 @@ bool icqface::finddialog(imsearchparams &s) {
     return ret;
 }
 
-void icqface::gendetails(treeview *tree, icqcontact *c, protocolname pname) {
+void icqface::gendetails(treeview *tree, icqcontact *c) {
     int saveitem, savefirst, i;
 
     if(!c) c = clist.get(contactroot);
+    detailsfetched = false;
 
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
@@ -179,11 +180,11 @@ void icqface::gendetails(treeview *tree, icqcontact *c, protocolname pname) {
 
     i = tree->addnode(_(" General "));
 
-    if((pname == infocard) || (gethook(pname).getcapabilities() & hoptCanChangeNick)) {
+    if((passinfo.pname == infocard) || (gethook(passinfo.pname).getcapabilities() & hoptCanChangeNick)) {
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
     }
 
-    if(!(pname == aim) && (c->getdesc() == contactroot)) {
+    if(!(passinfo.pname == aim) && (c->getdesc() == contactroot)) {
 
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
 	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
@@ -256,7 +257,10 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 	blockmainscreen();
     }
 
-    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    passinfo.pname = upname;
+
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
+	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
     if(!c->getdesc().uin) {
 	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" Your %s details "),
@@ -279,7 +283,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
     db.addautokeys();
 
     while(!finished) {
-	gendetails(db.gettree(), c, upname);
+	gendetails(db.gettree(), c);
 	finished = !db.open(n, b, (void **) &citem);
 	if(finished) continue;
 
@@ -733,13 +737,16 @@ int icqface::editaboutkeys(texteditor &e, int k) {
 void icqface::detailsidle(dialogbox &db) {
     icqcontact *c;
 
-    if(!cicq.idle(HIDL_SOCKEXIT))
+    if(!face.detailsfetched)
     if(c = clist.get(contactroot))
     if(c->updated()) {
 	face.gendetails(db.gettree());
 	db.gettree()->redraw();
 	face.status(_("Your details have been fetched"));
+	face.detailsfetched = true;
     }
+
+    cicq.idle(HIDL_SOCKEXIT);
 }
 
 int icqface::selectgroup(const string &text) {

@@ -88,7 +88,7 @@ class icqface {
 	linkedlist workareas;
 
 	bool editdone, mainscreenblock, inited, onlinefolder,
-	    dotermresize, fneedupdate;
+	    dotermresize, fneedupdate, detailsfetched;
 
 	int extk;
 
@@ -117,7 +117,7 @@ class icqface {
 	void infointerests(dialogbox &db, icqcontact *c);
 	void infoabout(dialogbox &db, icqcontact *c);
 
-	void gendetails(treeview *tree, icqcontact *c = 0, protocolname pname = icq);
+	void gendetails(treeview *tree, icqcontact *c = 0);
 	void selectgender(imgender &f);
 
 	void selectcountry(unsigned short &f);

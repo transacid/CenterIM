@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.2 2002/03/14 12:23:51 konst Exp $
+* $Id: aimhook.cc,v 1.3 2002/03/14 14:15:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -50,7 +50,7 @@ void aimhook::init() {
     manualstatus = conf.getstatus(aim);
 
     firetalk_register_callback(handle, FC_CONNECTED, &connected);
-    firetalk_register_callback(handle, FC_CONNECTFAILED, &disconnected);
+    firetalk_register_callback(handle, FC_CONNECTFAILED, &connectfailed);
     firetalk_register_callback(handle, FC_DISCONNECT, &disconnected);
     firetalk_register_callback(handle, FC_NEWNICK, &newnick);
     firetalk_register_callback(handle, FC_PASSCHANGED, &newpass);
@@ -194,6 +194,7 @@ void aimhook::sendnewuser(const imcontact &ic) {
 	face.log(_("+ [aim] adding %s to the contacts"), ic.nickname.c_str());
 	firetalk_im_add_buddy(handle, ic.nickname.c_str());
 	firetalk_im_upload_buddies(handle);
+	requestinfo(ic);
     }
 }
 
@@ -244,7 +245,11 @@ void aimhook::requestinfo(const imcontact &c) {
     if(c != imcontact(conf.getourid(aim).uin, aim)) {
 	firetalk_im_get_info(handle, c.nickname.c_str());
     } else {
-	// Our own details set has been requested
+	/*
+	*
+	* Our own details set has been requested
+	*
+	*/
 
 	icqcontact *cc = clist.get(contactroot);
 	icqconf::imaccount acc = conf.getourid(aim);
@@ -359,6 +364,21 @@ void aimhook::disconnected(void *connection, void *cli, ...) {
     face.update();
 }
 
+void aimhook::connectfailed(void *connection, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    int err = va_arg(ap, int);
+    char *reason = va_arg(ap, char *);
+    va_end(ap);
+
+    ahook.fonline = false;
+    time(&ahook.timer_reconnect);
+
+    face.log(_("+ [aim] connect failed: %s"), reason);
+    face.update();
+}
+
 void aimhook::newnick(void *connection, void *cli, ...) {
     va_list ap;
 
@@ -417,6 +437,13 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
 
     imcontact ic(sender, aim);
     em.store(immessage(ic, imevent::incoming, rusconv("wk", message)));
+
+    icqcontact *c = clist.get(ic);
+
+    if(c)
+    if(c->getstatus() == offline) {
+	c->setstatus(available);
+    }
 }
 
 void aimhook::userstatus(const string &nickname, imstatus st) {

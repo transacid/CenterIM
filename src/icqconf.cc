@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.51 2002/03/14 11:53:29 konst Exp $
+* $Id: icqconf.cc,v 1.52 2002/03/14 14:15:50 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -60,18 +60,21 @@ icqconf::imaccount icqconf::getourid(protocolname pname) {
     i = find(accounts.begin(), accounts.end(), pname);
     im = i == accounts.end() ? imaccount(pname) : *i;
 
-    im.awaymsg = "";
-    fname = conf.getconfigfname("awaymsg-" + getprotocolname(im.pname));
-    f.open(fname.c_str());
+    if(!im.empty()) {
+	fname = conf.getconfigfname("awaymsg-" + getprotocolname(im.pname));
+	im.awaymsg = "";
 
-    if(f.is_open()) {
-	while(!f.eof()) {
-	    getstring(f, buf);
-	    if(!im.awaymsg.empty()) im.awaymsg += "\n";
-	    im.awaymsg += buf;
+	f.open(fname.c_str());
+
+	if(f.is_open()) {
+	    while(!f.eof()) {
+		getstring(f, buf);
+		if(!im.awaymsg.empty()) im.awaymsg += "\n";
+		im.awaymsg += buf;
+	    }
+
+	    f.close();
 	}
-
-	f.close();
     }
 
     return im;
@@ -264,7 +267,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_msn\tcyan/transparent\n");
 		fprintf(f, "clist_yahoo\tmagenta/transparent\n");
 		fprintf(f, "clist_infocard\twhite/transparent\n");
-		fprintf(f, "clist_aim\tred/transparent\n");
+		fprintf(f, "clist_aim\tyellow/transparent\n");
 		break;
 
 	    case rcblue:
@@ -283,7 +286,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_yahoo\tmagenta/blue\n");
 		fprintf(f, "clist_msn\tcyan/blue\n");
 		fprintf(f, "clist_infocard\twhite/blue\n");
-		fprintf(f, "clist_aim\tred/blue\n");
+		fprintf(f, "clist_aim\tyellow/blue\n");
 		break;
 	}
 	fclose(f);
@@ -517,7 +520,7 @@ void icqconf::initpairs() {
     init_pair(cp_clist_msn, COLOR_CYAN, COLOR_BLACK);
     init_pair(cp_clist_yahoo, COLOR_YELLOW, COLOR_BLACK);
     init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
-    init_pair(cp_clist_aim, COLOR_RED, COLOR_BLACK);
+    init_pair(cp_clist_aim, COLOR_YELLOW, COLOR_BLACK);
 }
 
 void icqconf::setauto(int away, int na) {
