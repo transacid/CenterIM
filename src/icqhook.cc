@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.9 2001/09/30 07:45:40 konst Exp $
+* $Id: icqhook.cc,v 1.10 2001/09/30 23:11:02 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -62,7 +62,7 @@ void icqhook::init(struct icq_link *link) {
     icq_LogLevel = ICQ_LOG_MESSAGE;
 #endif
     link->icq_Logged = &loggedin;
-    link->icq_Disconnected = &disconnected;
+    link->icq_Disconnected = &ildisconnected;
     link->icq_RecvMessage = &message;
     link->icq_RecvURL = &url;
     link->icq_RecvWebPager = &webpager;
@@ -155,6 +155,11 @@ void icqhook::loggedin(struct icq_link *link) {
     ihook.files.clear();
 }
 
+void icqhook::ildisconnected(struct icq_link *link) {
+    ihook.disconnected(link);
+    face.log(_("+ disconnected"));
+}
+
 void icqhook::disconnected(struct icq_link *link) {
     ihook.flogged = false;
     link->icq_Status = (long unsigned int) STATUS_OFFLINE;
@@ -162,7 +167,7 @@ void icqhook::disconnected(struct icq_link *link) {
     int i;
     icqcontact *c;
 
-    ihook.connecting = false;
+    connecting = false;
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
@@ -173,7 +178,6 @@ void icqhook::disconnected(struct icq_link *link) {
     icql.icq_UDPSok = -1;
     time(&ihook.timer_reconnect);
     face.update();
-    face.log(_("+ disconnected"));
 }
 
 void icqhook::regdisconnected(struct icq_link *link) {
@@ -445,12 +449,12 @@ unsigned short bcat4, const char *back4) {
 }
 
 void icqhook::wrongpass(struct icq_link *link) {
-    disconnected(link);
+    ihook.disconnected(link);
     face.log(_("+ server reported a problem: wrong password"));
 }
 
 void icqhook::invaliduin(struct icq_link *link) {
-    disconnected(link);
+    ihook.disconnected(link);
     face.log(_("+ server reported a problem: invalid uin"));
 }
 
@@ -645,9 +649,13 @@ void icqhook::exectimers() {
 	}
 	
 	if(connecting && (timer_current-timer_reconnect > PERIOD_RECONNECT)) {
+	    icq_Disconnect(&icql);
+	    disconnected(&icql);
+/*
 	    icql.icq_Status = (long unsigned int) STATUS_OFFLINE;
 	    icql.icq_UDPSok = -1;
 	    connecting = false;
+*/
 	}
     }
 
