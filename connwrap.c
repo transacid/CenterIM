@@ -88,14 +88,24 @@ static char *bindaddr = 0;
 int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl) {
     int rc;
     struct sockaddr_in ba;
-    struct hostent *he;
 
     if(bindaddr)
-    if(strlen(bindaddr))
-    if(he = gethostbyname(bindaddr)) {
-	ba.sin_addr.s_addr = *he->h_addr;
-	ba.sin_port = 0;
-	rc = bind(sockfd, (struct sockaddr *) &ba, sizeof(ba));
+    if(strlen(bindaddr)) {
+#ifdef HAVE_INET_ATON
+	struct in_addr addr;
+	rc = inet_aton(bindaddr, &addr);
+	ba.sin_addr.s_addr = addr.s_addr;
+#else
+	rc = inet_pton(AF_INET, bindaddr, &ba);
+#endif
+
+	if(rc) {
+	    ba.sin_port = 0;
+	    rc = bind(sockfd, (struct sockaddr *) &ba, sizeof(ba));
+	} else {
+	    rc = -1;
+	}
+
 	if(rc) return rc;
     }
 
