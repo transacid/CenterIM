@@ -24,6 +24,8 @@ finish the doc
 user is on "not in list", and there is an attempt to press "add to the
 list" in "ICQ" -> complains
 
+applied a patch for processing various byte orders, so that the program
+doesn't bail out with sigbus working on sparc
 
 /*
 *
@@ -84,4 +86,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.48 2001/11/04 12:03:27 konst Exp $
+$Id: TODO,v 1.49 2001/11/06 17:21:53 konst Exp $

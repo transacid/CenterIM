@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.13 2001/10/17 18:17:56 konst Exp $
+* $Id: icqcontact.cc,v 1.14 2001/11/06 17:21:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -740,7 +740,11 @@ void icqcontact::setmsgdirect(bool flag) {
 }
 
 bool icqcontact::getmsgdirect() const {
-    return msgdirect && !conf.getserveronly();
+    return
+	msgdirect &&
+	(!conf.getserveronly() ||
+	icq_TCPLinkOpen(&icql, uin) ||
+	islocal());
 }
 
 void icqcontact::setgroupid(int agroupid) {
@@ -764,4 +768,32 @@ const string icqcontact::gettimezone() const {
     r += (string) ", " + ctime(&rt);
 
     return r;
+}
+
+bool icqcontact::islocal() const {
+    vector<string> addrs;
+    vector<string>::iterator i;
+    string lc, a;
+
+    /*
+    *
+    * I know, it's stupid. Just a fast solution.
+    *
+    */
+
+    addrs.push_back("127.");
+    addrs.push_back("192.");
+    addrs.push_back("172.");
+    addrs.push_back("154.");
+
+    lc = lastip;
+
+    while(!lc.empty()) {
+	a = getword(lc);
+	for(i = addrs.begin(); i != addrs.end(); i++) {
+	    if(a.substr(0, i->size()) == *i) return true;
+	}
+    }
+
+    return false;
 }

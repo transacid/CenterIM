@@ -39,6 +39,7 @@ class icqcontact {
 
 	void scanhistory();
 	const string tosane(const string p) const;
+	bool islocal() const;
 
     public:
 	icqcontact(unsigned int fuin, bool nonicq = false);
