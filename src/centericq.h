@@ -11,6 +11,8 @@
 
 #include "icqcommon.h"
 
+#define HIDL_SOCKEXIT   2
+
 class centericq {
     public:
 	enum msgmode {
@@ -58,5 +60,7 @@ class centericq {
 };
 
 extern centericq cicq;
+
+const string rusconv(const string tdir, const string text);
 
 #endif

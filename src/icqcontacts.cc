@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.21 2001/11/30 18:55:24 konst Exp $
+* $Id: icqcontacts.cc,v 1.22 2001/12/03 16:30:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -262,5 +262,16 @@ void icqcontacts::rearrange() {
 	if(::find(groups.begin(), groups.end(), c->getgroupid()) == groups.end()) {
 	    c->setgroupid(1);
 	}
+    }
+}
+
+void icqcontacts::setoffline(protocolname pname) {
+    int i;
+    icqcontact *c;
+
+    for(i = 0; i < count; i++) {
+	c = (icqcontact *) at(i);
+	if(c->getdesc().pname == pname)
+	    c->setstatus(offline);
     }
 }

@@ -8,21 +8,14 @@
 #include "icqcommon.h"
 #include "imcontact.h"
 
-#include "icq.h"
-
 #define HIST_MSG_OUT            2
 #define HIST_MSG_IN             4
 #define HIST_HISTORYMODE        8
 
-#define ICQMAIL_WEBPAGER        0
-#define ICQMAIL_EXPRESS         1
-
 #define EVT_MSG                 0
 #define EVT_URL                 1
-#define EVT_FILE                2
 #define EVT_CHAT                3
 #define EVT_EMAIL               4
-#define EVT_CONTACT             5
 #define EVT_ONLINE              6
 
 #define ICQM_REQUEST    'R'
@@ -54,7 +47,6 @@ class icqhistory {
 	void puturl(const imcontact cinfo, const string url, const string desc, int dir, struct tm *timestamp);
 	void putfile(const imcontact cinfo, unsigned long seq, const string fname, int fsize, int dir, struct tm *timestamp);
 	void putmail(const string nick, const string email, const string msg, int mailt, struct tm *timestamp);
-	void putcontact(const imcontact cinfo, icqcontactmsg *cont, int dir, struct tm *timestamp);
 
 	bool opencontact(const imcontact cinfo, time_t lastread = 0);
 	int setpos(int n);
@@ -64,7 +56,6 @@ class icqhistory {
 	void getmessage(string &text);
 	void geturl(string &url, string &text);
 	void getfile(unsigned long &seq, string &fname, int &fsize);
-	void getcontact(icqcontactmsg **cont);
 	void closecontact();
 
 	int getpos();

@@ -3,11 +3,18 @@
 
 #include "icqcontact.h"
 
+enum hookcapabilities {
+    hoptCanNotify = 2
+};
+
 class abstracthook {
     protected:
 	imstatus manualstatus;
+	int fcapabilities;
 
     public:
+	abstracthook();
+
 	virtual void connect();
 	virtual void disconnect();
 	virtual void exectimers();
@@ -32,6 +39,9 @@ class abstracthook {
 	virtual imstatus getstatus() const;
 
 	virtual bool isdirectopen(const imcontact c) const;
+	virtual void requestinfo(const imcontact c);
+
+	int getcapabilities() const;
 };
 
 abstracthook &gethook(protocolname pname);

@@ -22,7 +22,7 @@ class icqcontact {
 	imstatus status;
 
 	int nmsgs, fupdated, infotryn, groupid;
-	bool finlist, reqauth, webaware, pubip, direct, msgdirect;
+	bool finlist, reqauth, webaware, pubip, msgdirect;
 	time_t lastread, lastseen;
 
 	string sound[SOUND_COUNT];
@@ -125,9 +125,6 @@ class icqcontact {
 	void excludefromlist();
 	void includeintolist();
 	bool inlist() const;
-
-	void setdirect(bool flag);
-	bool getdirect() const;
 
 	void setmsgdirect(bool flag);
 	bool getmsgdirect() const;

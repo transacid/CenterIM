@@ -146,7 +146,8 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 
 void imcontroller::icqupdatedetails() {
     icqcontact *c = clist.get(contactroot);
-
+    face.status(_("Disabled"));
+/*
     if(ihook.logged()) {
 	c->clear();
 	ihook.sendinforeq(c, conf.getourid(icq).uin);
@@ -157,6 +158,7 @@ void imcontroller::icqupdatedetails() {
     } else {
 	face.status(_("You must be logged to the ICQ network to update the details"));
     }
+*/
 }
 
 void imcontroller::registration(icqconf::imaccount &account) {

@@ -1,204 +1,41 @@
 #ifndef __ICQHOOK_H__
 #define __ICQHOOK_H__
 
-#include "icq.h"
-
-#include "kkiproc.h"
-#include "cmenus.h"
-
-#include "icqconf.h"
 #include "abstracthook.h"
+#include "Client.h"
 
-#define MAX_UDPMSG_SIZE         440
-#define MAX_TCPMSG_SIZE         7000
+using namespace ICQ2000;
 
-#define HIDL_SOCKEXIT   2
-
-struct icqfileassociation {
-    icqfileassociation(unsigned int fuin, unsigned long fseq,
-	const string ffname, int fdir):
-	    uin(fuin), seq(fseq), fname(ffname), dir(fdir) {};
-
-    int dir;
-    unsigned int uin;
-    unsigned long seq;
-    string fname;
-};
-
-class icqhook: public abstracthook {
-    public:
-	struct searchparameters {
-	    searchparameters() {
-		onlineonly = false;
-		uin = 0;
-		minage = maxage = country = 0;
-		gender = language = 0;
-	    };
-
-	    bool onlineonly;
-	    unsigned int uin;
-	    unsigned short minage, maxage, country;
-	    unsigned char gender, language;
-	    string firstname, lastname, nick, city, state;
-	    string company, department, position, email;
-	    protocolname pname;
-	};
-
+class icqhook: public abstracthook, public SigC::Object {
     protected:
-	bool flogged, connecting, factive;
-	int newuin, n_keepalive, sockfd;
-	unsigned long seq_keepalive, reguin;
+	Client cli;
+	set<int> fds;
+	time_t timer_reconnect, timer_ping;
+	bool fonline, flogged;
+	unsigned int reguin;
 
-	struct icq_link icql;
+	void connected_cb(ConnectedEvent *ev);
+	void disconnected_cb(DisconnectedEvent *ev);
+	bool messaged_cb(MessageEvent *ev);
+	void messageack_cb(MessageEvent *ev);
+	void away_message_cb(AwayMsgEvent *ev);
+	void contactlist_cb(ContactListEvent *ev);
+	void newuin_cb(NewUINEvent *ev);
+	void rate_cb(RateInfoChangeEvent *ev);
+	void logger_cb(LogEvent *ev);
+	void socket_cb(SocketEvent *ev);
+	void statuschanged_cb(MyStatusChangeEvent *ev);
 
-	time_t timer_keepalive, timer_tcp, timer_resolve, timer_offline,
-	    timer_reconnect, timer_ack, logontime;
-
-	verticalmenu *finddest;
-
-	vector<unsigned long> founduins;
-	vector<icqfileassociation> files;
-
-	void disconnected(struct icq_link *link, int reason);
-
-	imstatus icq2imstatus(int status) const;
-
-	static void loggedin(struct icq_link *link);
-
-	static void ildisconnected(struct icq_link *link, int reason);
-
-	static void message(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, const char *msg);
-
-	static void contact(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, icqcontactmsg *c);
-
-	static void url(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, const char *url,
-	    const char *descr);
-
-	static void webpager(struct icq_link *link,unsigned char hour,
-	    unsigned char minute, unsigned char day, unsigned char month,
-	    unsigned short year, const char *nick, const char *email,
-	    const char *msg);
-
-	static void mailexpress(struct icq_link *link,unsigned char hour,
-	    unsigned char minute, unsigned char day, unsigned char month,
-	    unsigned short year, const char *nick, const char *email,
-	    const char *msg);
-
-	static void chat(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, const char *descr,
-	    unsigned long seq/*, const char *session, unsigned long port*/);
-
-	static void file(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, const char *descr,
-	    const char *filename, unsigned long filesize, unsigned long seq);
-
-	static void added(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, const char *nick,
-	    const char *first, const char *last, const char *email);
-
-	static void auth(struct icq_link *link, unsigned long uin,
-	    unsigned char hour, unsigned char minute, unsigned char day,
-	    unsigned char month, unsigned short year, const char *nick,
-	    const char *first, const char *last, const char *email,
-	    const char *reason);
-
-	static void useronline(struct icq_link *link, unsigned long uin,
-	    unsigned long status, unsigned long ip, unsigned short port,
-	    unsigned long real_ip, unsigned char tcp_flag);
-
-	static void useroffline(struct icq_link *link, unsigned long uin);
-
-	static void userstatus(struct icq_link *link, unsigned long uin,
-	    unsigned long status);
-
-	static void wrongpass(struct icq_link *link);
-
-	static void invaliduin(struct icq_link *link);
-
-	static void regnewuin(struct icq_link *link, unsigned long uin);
-
-	static void log(struct icq_link *link, time_t time, unsigned char level,
-	    const char *str);
-
-	static void metauserinfo(struct icq_link *link, unsigned short seq2,
-	    const char *nick, const char *first, const char *last,
-	    const char *pri_eml, const char *sec_eml, const char *old_eml,
-	    const char *city, const char *state, const char *phone,
-	    const char *fax, const char *street, const char *cellular,
-	    unsigned long zip, unsigned short country, unsigned char timezone,
-	    unsigned char auth);
-
-	static void metauserabout(struct icq_link *link, unsigned short seq2,
-	    const char *about);
-
-	static void metauserwork(struct icq_link *link, unsigned short seq2,
-	    const char *fwcity, const char *fwstate, const char *fwphone,
-	    const char *fwfax, const char *fwaddress, unsigned long fwzip,
-	    unsigned short fwcountry, const char *fcompany,
-	    const char *fdepartment, const char *fjob,
-	    unsigned short foccupation, const char *fwhomepage);
-
-	static void metausermore(struct icq_link *link, unsigned short seq2,
-	    unsigned short fage, unsigned char fgender, const char *fhomepage,
-	    unsigned char byear, unsigned char bmonth, unsigned char bday,
-	    unsigned char flang1, unsigned char flang2, unsigned char flang3);
-
-	static void metauserinterests(struct icq_link *link,
-	    unsigned short seq2, unsigned char num, unsigned short icat1,
-	    const char *int1, unsigned short icat2, const char *int2,
-	    unsigned short icat3, const char *int3, unsigned short icat4,
-	    const char *int4);
-
-	static void metauseraffiliations(struct icq_link *link,
-	    unsigned short seq2, unsigned char anum, unsigned short acat1,
-	    const char *aff1, unsigned short acat2, const char *aff2,
-	    unsigned short acat3, const char *aff3, unsigned short acat4,
-	    const char *aff4, unsigned char bnum, unsigned short bcat1,
-	    const char *back1, unsigned short bcat2, const char *back2,
-	    unsigned short bcat3, const char *back3, unsigned short bcat4,
-	    const char *back4);
-
-	static void userfound(struct icq_link *link, unsigned long uin,
-	    const char *nick, const char *first, const char *last,
-	    const char *email, char auth);
-
-	static void wpfound(struct icq_link *link, unsigned short seq2,
-	    unsigned long uin, const char *nick, const char *first,
-	    const char *last, const char *email, char auth, char status);
-
-	static void searchdone(struct icq_link *link);
-
-	static void requestnotify(struct icq_link *link, unsigned long id,
-	    int result, unsigned int length, void *data);
-
-	void init(const icqconf::imaccount account);
+	imstatus icq2imstatus(const Status st) const;
 
     public:
 	icqhook();
 	~icqhook();
 
-	bool regconnect(const string aserver);
-	bool regattempt(unsigned long &uin, const string password);
-
 	void connect();
 	void disconnect();
-	void main();
-
 	void exectimers();
-	void setfinddest(verticalmenu *m);
-	unsigned int getfinduin(int pos);
-	void clearfindresults();
-
-	void addfile(unsigned int uin, unsigned long seq, string fname, int dir);
+	void main();
 
 	void getsockets(fd_set &fds, int &hsocket) const;
 	bool isoursocket(fd_set &fds) const;
@@ -208,27 +45,18 @@ class icqhook: public abstracthook {
 	bool isconnecting() const;
 	bool enabled() const;
 
-	unsigned long sendmessage(const icqcontact *c, const string text);
-	void sendnewuser(const imcontact desc);
+	unsigned long sendmessage(const icqcontact *c,
+	    const string text);
+
+	void sendnewuser(const imcontact c);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;
 
-	void sendcontactlist();
-	bool isdirectopen(const imcontact c);
+	void requestinfo(const imcontact c);
 
-	void sendinforeq(icqcontact *c, unsigned long uin);
-	void sendauth(unsigned long uin);
-
-	bool acceptfile(unsigned long uin, unsigned long seq);
-	void refusefile(unsigned long uin, unsigned long seq);
-
-	unsigned long sendurl(const imcontact c, const string url,
-	    const string text, bool direct);
-
-	void sendupdateuserinfo(icqcontact *c);
-	void sendsearchreq(const searchparameters s);
-	void sendalert(const imcontact c);
+	bool regconnect(const string aserv);
+	bool regattempt(unsigned int &auin, const string apassword);
 };
 
 extern icqhook ihook;

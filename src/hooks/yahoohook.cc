@@ -1,3 +1,27 @@
+/*
+*
+* centericq yahoo! protocol handling class
+* $Id: yahoohook.cc,v 1.9 2001/12/03 16:30:18 konst Exp $
+*
+* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+* USA
+*
+*/
+
 #include "yahoohook.h"
 #include "icqmlist.h"
 #include "icqface.h"
@@ -5,6 +29,7 @@
 #include "icqoffline.h"
 #include "accountmanager.h"
 #include "yahoolib.h"
+#include "centericq.h"
 
 yahoohook yhook;
 
@@ -132,6 +157,8 @@ unsigned long yahoohook::sendmessage(const icqcontact *c, const string atext) {
 
     for(is = text.begin(); is != text.end(); is++)
 	if((unsigned) *is < 32) *is = ' ';
+
+    text = rusconv("kw", text);
 
     if(c->getstatus() != offline) {
 	yahoo_cmd_msg(yahoo, conf.getourid(::yahoo).nickname.c_str(),
@@ -269,13 +296,7 @@ void yahoohook::disconnected(yahoo_context *y) {
 	yhook.fonline = false;
     }
 
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-	if(c->getdesc().pname == ::yahoo) {
-	    c->setstatus(offline);
-	}
-    }
-
+    clist.setoffline(::yahoo);
     time(&yhook.timer_reconnect);
     face.update();
 }
@@ -312,7 +333,7 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 
     if(strlen(msg))
     if(!lst.inlist(ic, csignore)) {
-	hist.putmessage(ic, msg, HIST_MSG_IN, timestamp());
+	hist.putmessage(ic, rusconv("wk", msg), HIST_MSG_IN, timestamp());
 	icqcontact *c = clist.get(ic);
 
 	if(c) {

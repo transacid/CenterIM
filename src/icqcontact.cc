@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.27 2001/11/29 17:42:23 konst Exp $
+* $Id: icqcontact.cc,v 1.28 2001/12/03 16:30:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -111,7 +111,6 @@ void icqcontact::clear() {
     seq2 = nmsgs = fupdated = infotryn = groupid = 0;
     finlist = true;
     status = offline;
-    direct = false;
     cdesc = contactroot;
     msgdirect = !conf.getserveronly();
 
@@ -674,14 +673,6 @@ int icqcontact::updated() const {
     return fupdated;
 }
 
-void icqcontact::setdirect(bool flag) {
-    direct = flag;
-}
-
-bool icqcontact::getdirect() const {
-    return direct && (status != STATUS_OFFLINE);
-}
-
 void icqcontact::setlastseen() {
     time(&lastseen);
 }
@@ -775,6 +766,7 @@ int icqcontact::getgroupid() const {
 
 const string icqcontact::gettimezone() const {
     string r;
+/*
     time_t t = time(0), rt;
 
     r = (utimezone > 0 ? "-" : "+");
@@ -784,6 +776,7 @@ const string icqcontact::gettimezone() const {
     rt -= utimezone*1800;
 
     r += (string) ", " + ctime(&rt);
+*/
 
     return r;
 }

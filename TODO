@@ -25,11 +25,35 @@ X window resize -> sometimes segfaults
 
 messages written in a hook's being offline are sent twice
 
+----------------------------------------------------------------------------
+> > Not too sure if this is a bug or just a "change", but since 4.2.0 my
+> > status seems to reset back to "online" for ICQ and Yahoo (MSN seems to
+> > always stay) every now and again. Also, it doesn't remember the status
+> > for ICQ and Yahoo (again, fine with MSN) if it's restarted.
+>
+> What do you select so that it becomes online again?
+
+Nothing, I just come back a few hours later and find a barrage of messages
+because it's gone from away, NA or invisible back to online.
+
+> What if you set
+> "offline" manually? It should not try to connect again.
+
+Yes, it stays off-line. It's only in modes like away, NA and invisible.
+After a few hours they seem to go back to online. Same with restarting the
+client.
+----------------------------------------------------------------------------
+
+segfault on invisible list add
+
 /*
 *
 * TODO
 *
 */
+
+event manager class instead of hist/offline
+    face.show/edit msg/url -> naher
 
 описать URLs для IM библиотек в доке
 
@@ -104,4 +128,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.72 2001/11/30 11:32:16 konst Exp $
+$Id: TODO,v 1.73 2001/12/03 16:30:12 konst Exp $

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.18 2001/11/29 17:42:23 konst Exp $
+* $Id: icqoffline.cc,v 1.19 2001/12/03 16:30:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,43 +48,24 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext, FILE *of = 0
     icqcontact *c = clist.get(cinfo);
     unsigned long seq;
     FILE *f = of ? of : open(cinfo, "a");
-    vector<string> lst;
     string text = atext;
 
     if(f) {
-	if(!c->getmsgdirect()) {
-	    splitlongtext(text, lst, MAX_UDPMSG_SIZE, "\r\n[continued]");
+	if(gethook(cinfo.pname).logged()) {
+	    seq = gethook(cinfo.pname).sendmessage(c, text);
+	} else {
+	    seq = 0;
 	}
 
-	while(1) {
-	    if(!lst.empty()) {
-		text = *lst.begin();
-		lst.erase(lst.begin());
-	    }
-
-	    if(gethook(cinfo.pname).logged()) {
-		seq = gethook(cinfo.pname).sendmessage(c, text);
-	    } else {
-		seq = 0;
-	    }
-
-	    fprintf(f, "\f\nMSG\n");
-	    fprintf(f, "%lu\n%lu\n", seq, time(0));
-	    fprintf(f, "%s\n", text.c_str());
-	    totalunsent++;
-	    processed++;
-
-	    if(lst.empty()) break;
-	}
+	fprintf(f, "\f\nMSG\n");
+	fprintf(f, "%lu\n%lu\n", seq, time(0));
+	fprintf(f, "%s\n", text.c_str());
+	totalunsent++;
+	processed++;
 
 	if(!of) fclose(f);
 
-	switch(cinfo.pname) {
-	    case yahoo:
-	    case msn:
-		if(seq) offl.scan(seq, osremove);
-		break;
-	}
+	if(seq) offl.scan(seq, osremove);
 
 	face.showtopbar();
     }
@@ -96,7 +77,7 @@ const string text, FILE *of = 0) {
     FILE *f = of ? of : open(cinfo, "a");
 
     if(f) {
-	unsigned long seq = ihook.sendurl(cinfo, url, text, c->getmsgdirect());
+	unsigned long seq = 0;//ihook.sendurl(cinfo, url, text, c->getmsgdirect());
 
 	fprintf(f, "\f\nURL\n");
 	fprintf(f, "%lu\n%lu\n", seq, time(0));
@@ -115,7 +96,6 @@ bool icqoffline::sendevent(const imcontact cinfo, bool msg, const string url,
 const string atext, FILE *of, unsigned long seq, time_t tm, scanaction act,
 unsigned long sseq) {
     icqcontact *c = clist.get(cinfo);
-    vector<string> lst;
     bool send, save;
     string text = atext;
 
@@ -127,24 +107,12 @@ unsigned long sseq) {
 	    case osresend:
 		if(send = (sseq == seq)) {
 		    c->setmsgdirect(false);
-
-		    if(c->getdesc().pname == icq)
-		    if(text.size() > MAX_UDPMSG_SIZE) {
-			splitlongtext(text, lst,
-			    MAX_UDPMSG_SIZE, "\r\n[continued]");
-		    }
 		}
 		break;
 
 	    case osexpired:
 		if(send = (time(0)-tm > PERIOD_RESEND)) {
 		    c->setmsgdirect(false);
-
-		    if(c->getdesc().pname == icq)
-		    if(text.size() > MAX_UDPMSG_SIZE) {
-			splitlongtext(text, lst,
-			    MAX_UDPMSG_SIZE, "\r\n[continued]");
-		    }
 		}
 		break;
 

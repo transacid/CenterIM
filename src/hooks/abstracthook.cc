@@ -4,6 +4,10 @@
 #include "yahoohook.h"
 #include "msnhook.h"
 
+abstracthook::abstracthook() {
+    fcapabilities = 0;
+}
+
 void abstracthook::connect() {
 }
 
@@ -70,6 +74,13 @@ bool abstracthook::isdirectopen(const imcontact c) const {
 }
 
 void abstracthook::removeuser(const imcontact ic) {
+}
+
+int abstracthook::getcapabilities() const {
+    return fcapabilities;
+}
+
+void abstracthook::requestinfo(const imcontact c) {
 }
 
 // ----------------------------------------------------------------------------

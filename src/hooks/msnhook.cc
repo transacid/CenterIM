@@ -1,3 +1,27 @@
+/*
+*
+* centericq MSN protocol handling class
+* $Id: msnhook.cc,v 1.7 2001/12/03 16:30:18 konst Exp $
+*
+* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+* USA
+*
+*/
+
 #include "msnhook.h"
 #include "icqconf.h"
 #include "icqface.h"
@@ -51,7 +75,7 @@ void msnhook::connect() {
     }
 
     time(&mhook.timer_reconnect);
-    msn_Russian = conf.getrussian() ? 1 : 0;
+    msn_Russian = 0;
 }
 
 void msnhook::disconnect() {
@@ -259,13 +283,7 @@ void msnhook::disconnected(void *data) {
 	mhook.fonline = false;
     }
 
-    for(i = 0; i < clist.count; i++) {
-	c = (icqcontact *) clist.at(i);
-	if(c->getdesc().pname == msn) {
-	    c->setstatus(offline);
-	}
-    }
-
+    clist.setoffline(msn);
     mhook.status = offline;
     time(&mhook.timer_reconnect);
     face.update();

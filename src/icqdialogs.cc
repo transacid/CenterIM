@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.31 2001/11/29 17:42:23 konst Exp $
+* $Id: icqdialogs.cc,v 1.32 2001/12/03 16:30:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@
 #include "icqhook.h"
 #include "yahoohook.h"
 
-bool icqface::finddialog(icqhook::searchparameters &s) {
+bool icqface::finddialog(imsearchparams &s) {
     int n, b, i;
     int nuin, ninfo, nloc, nwork, nonl;
     bool finished, ret;
@@ -98,12 +98,12 @@ bool icqface::finddialog(icqhook::searchparameters &s) {
 		tree.addleaff(i, 0, 15, _(" Min. age : %s "), strint(s.minage));
 		tree.addleaff(i, 0, 16, _(" Max. age : %s "), strint(s.maxage));
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
-		tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
+//                tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
 
 		i = tree.addnode(_(" Location "));
 		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
 		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
-		tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
+//                tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
 
 		i = tree.addnode(_(" Work "));
 		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
@@ -126,7 +126,7 @@ bool icqface::finddialog(icqhook::searchparameters &s) {
 	if(!finished)
 	switch(b) {
 	    case 0:
-		s = icqhook::searchparameters();
+		s = imsearchparams();
 		break;
 	    case 1:
 		switch(i) {
@@ -204,7 +204,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     i = tree->addnode(_(" Home "));
     tree->addleaff(i, 0, 0, _(" City : %s "), fcity.c_str());
     tree->addleaff(i, 0, 0, _(" State : %s "), fstate.c_str());
-    tree->addleaff(i, 0, 0, _(" Country : %s "), fcountry ? icq_GetCountryName(fcountry) : "");
+//    tree->addleaff(i, 0, 0, _(" Country : %s "), fcountry ? icq_GetCountryName(fcountry) : "");
     tree->addleaff(i, 0, 0, _(" Street address : %s "), fstreet.c_str());
     tree->addleaff(i, 0, 0, _(" Zip code : %s "), strint(fzip));
     tree->addleaff(i, 0, 0, _(" Phone : %s "), fphone.c_str());
@@ -214,11 +214,11 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     i = tree->addnode(_(" Work "));
     tree->addleaff(i, 0, 0, _(" City : %s "), fwcity.c_str());
     tree->addleaff(i, 0, 0, _(" State : %s "), fwstate.c_str());
-    tree->addleaff(i, 0, 0, _(" Country : %s "), fwcountry ? icq_GetCountryName(fwcountry) : "");
+//    tree->addleaff(i, 0, 0, _(" Country : %s "), fwcountry ? icq_GetCountryName(fwcountry) : "");
     tree->addleaff(i, 0, 0, _(" Street address : %s "), fwaddress.c_str());
     tree->addleaff(i, 0, 0, _(" Company : %s "), fcompany.c_str());
     tree->addleaff(i, 0, 0, _(" Department : %s "), fdepartment.c_str());
-    tree->addleaff(i, 0, 0, _(" Occupation : %s "), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
+//    tree->addleaff(i, 0, 0, _(" Occupation : %s "), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
     tree->addleaff(i, 0, 0, _(" Position : %s "), fjob.c_str());
     tree->addleaff(i, 0, 0, _(" Homepage : %s "), fwhomepage.c_str());
     tree->addleaff(i, 0, 0, _(" Phone : %s "), fwphone.c_str());
@@ -226,9 +226,9 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
 
     i = tree->addnode(_(" More "));
     tree->addleaff(i, 0, 0, _(" Homepage : %s "), fhomepage.c_str());
-    tree->addleaff(i, 0, 0, _(" 1st language : %s "), flang1 ? icq_GetMetaLanguageName(flang1) : "");
-    tree->addleaff(i, 0, 0, _(" 2nd language : %s "), flang2 ? icq_GetMetaLanguageName(flang2) : "");
-    tree->addleaff(i, 0, 0, _(" 3rd language : %s "), flang3 ? icq_GetMetaLanguageName(flang3) : "");
+//    tree->addleaff(i, 0, 0, _(" 1st language : %s "), flang1 ? icq_GetMetaLanguageName(flang1) : "");
+//    tree->addleaff(i, 0, 0, _(" 2nd language : %s "), flang2 ? icq_GetMetaLanguageName(flang2) : "");
+//    tree->addleaff(i, 0, 0, _(" 3rd language : %s "), flang3 ? icq_GetMetaLanguageName(flang3) : "");
 
     i = tree->addnode(_(" About "));
     tree->addleaff(i, 0, 0, " %s ", fabout.c_str());
@@ -382,6 +382,7 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 }
 
 void icqface::selectcountry(unsigned short &f) {
+/*
     int i;
 
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
@@ -402,9 +403,11 @@ void icqface::selectcountry(unsigned short &f) {
     m.close();
 
     if(i) f = (unsigned short) ((int) m.getref(i-1));
+*/
 }
 
 void icqface::selectlanguage(unsigned char &f) {
+/*
     int i;
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-13, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
@@ -415,9 +418,11 @@ void icqface::selectlanguage(unsigned char &f) {
     m.close();
     
     if(i) f = i-1;
+*/
 }
 
 void icqface::selectoccupation(unsigned short &f) {
+/*
     int i;
     verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
     m.setwindow(textwindow(4, LINES-16, 35, LINES-1, conf.getcolor(cp_dialog_menu)));
@@ -442,6 +447,7 @@ void icqface::selectoccupation(unsigned short &f) {
 	    f = icq_MetaOccupation[i-2].code;
 	    break;
     }
+*/
 }
 
 void icqface::selectgender(unsigned char &f) {

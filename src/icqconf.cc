@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.24 2001/11/30 11:32:21 konst Exp $
+* $Id: icqconf.cc,v 1.25 2001/12/03 16:30:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -334,7 +334,6 @@ void icqconf::loadsounds() {
 
 	    if(skey == "msg") event = EVT_MSG; else
 	    if(skey == "url") event = EVT_URL; else
-	    if(skey == "file") event = EVT_FILE; else
 	    if(skey == "email") event = EVT_EMAIL; else
 	    if(skey == "online") event = EVT_ONLINE; else
 	    if(skey == "chat") event = EVT_CHAT; else continue;

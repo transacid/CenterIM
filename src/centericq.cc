@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.45 2001/11/30 11:32:20 konst Exp $
+* $Id: centericq.cc,v 1.46 2001/12/03 16:30:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -157,7 +157,7 @@ void centericq::mainloop() {
     face.draw();
 
     while(!finished) {
-	face.status(_("F2/M current contact menu, F3/S change icq status, F4/G general actions, Q quit"));
+	face.status(_("F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"));
 	c = face.mainloop(action);
 
 	switch(action) {
@@ -220,7 +220,7 @@ void centericq::mainloop() {
 		}
 		break;
 	    case ACT_CONTACT:
-		sendcontacts(c->getdesc());
+//                sendcontacts(c->getdesc());
 		break;
 	    case ACT_EDITUSER:
 		nonicq(c->getdesc().uin);
@@ -281,14 +281,14 @@ void centericq::changestatus() {
 }
 
 void centericq::find() {
-    static icqhook::searchparameters s;
+    static imsearchparams s;
     bool ret = true;
 
     while(ret) {
 	if(ret = face.finddialog(s)) {
 	    switch(s.pname) {
 		case icq:
-		    ihook.sendsearchreq(s);
+//                    ihook.sendsearchreq(s);
 		    ret = face.findresults();
 		    break;
 
@@ -325,7 +325,7 @@ void centericq::userinfo(const imcontact cinfo) {
 
 	switch(cinfo.pname) {
 	    case icq:
-		if(ihook.online()) ihook.sendinforeq(c, cinfo.uin);
+//                if(ihook.online()) ihook.sendinforeq(c, cinfo.uin);
 		break;
 	}
     }
@@ -360,40 +360,6 @@ void centericq::sendfiles(const imcontact cinfo) {
 	}
     } else*/ {
 	face.log(_("+ remote client doesn't support file transfers"));
-    }
-}
-
-void centericq::sendcontacts(const imcontact cinfo) {
-    icqcontactmsg *m, *n, *cont;
-    vector<imcontact>::iterator i;
-/*
-    if(ihook.getstatus() == offline) */{
-	face.log(_("+ [icq] cannot send contacts in offline mode"));
-	return;
-    }
-
-    face.muins.clear();
-
-    if(face.multicontacts(_("Contacts to send")))
-    if(!face.muins.empty()) {
-	for(m = 0, i = face.muins.begin(); i != face.muins.end(); i++) {
-	    n = new icqcontactmsg;
-	    if(m) m->next = n; else cont = n;
-	    m = n;
-
-	    m->uin = i->uin;
-	    strncpy(m->nick, clist.get(*i)->getnick().c_str(), 12);
-	    m->nick[11] = 0;
-	    m->next = 0;
-	}
-
-//        icq_SendContact(&icql, cinfo.uin, cont, ICQ_SEND_THRUSERVER);
-
-	for(m = cont; m; ) {
-	    n = (icqcontactmsg *) m->next;
-	    delete m;
-	    m = n;
-	}
     }
 }
 
@@ -581,9 +547,6 @@ bool centericq::message(const imcontact cinfo, const string text, msgmode mode) 
 		face.muins.push_back(cinfo);
 	    }
 
-	    if(stext.size() > MAX_TCPMSG_SIZE)
-		stext.resize(MAX_TCPMSG_SIZE);
-
 	    for(i = face.muins.begin(); i != face.muins.end(); i++) {
 		offl.sendmsg(*i, stext);
 	    }
@@ -626,15 +589,12 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	if(!groupid) return 0;
     }
 
-    switch(ic.pname) {
-	case icq: notify = ihook.online(); break;
-	default: notify = false; break;
-    }
+    abstracthook &hook = gethook(c->getdesc().pname);
 
-    if(notify) {
+    if(hook.getcapabilities() & hoptCanNotify) {
 	if(face.ask(_("Notify the user he/she has been added?"),
 	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    ihook.sendalert(ic);
+//            ihook.sendalert(ic);
 	    face.log(_("+ the notification has been sent to %lu"), ic.uin);
 	}
     }
@@ -645,7 +605,7 @@ icqcontact *centericq::addcontact(const imcontact ic) {
 	c->includeintolist();
     }
 
-    gethook(c->getdesc().pname).sendnewuser(c->getdesc());
+    hook.sendnewuser(c->getdesc());
     c->setgroupid(groupid);
     face.log(_("+ %s has been added to the list"), ic.totext().c_str());
     face.update();
@@ -781,4 +741,49 @@ void centericq::exectimers() {
 	face.update();
 	time(&timer_update);
     }
+}
+
+// ----------------------------------------------------------------------------
+
+const string rusconv(const string tdir, const string text) {
+    static unsigned char kw[] = {
+	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
+	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
+	160,161,162,184,164,165,166,167,168,169,170,171,172,173,174,175,
+	176,177,178,168,180,181,182,183,184,185,186,187,188,189,190,191,
+	254,224,225,246,228,229,244,227,245,232,233,234,235,236,237,238,
+	239,255,240,241,242,243,230,226,252,251,231,248,253,249,247,250,
+	222,192,193,214,196,197,212,195,213,200,201,202,203,204,205,206,
+	207,223,208,209,210,211,198,194,220,219,199,216,221,217,215,218
+    };
+
+    static unsigned char wk[] = {
+	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
+	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
+	160,161,162,163,164,165,166,167,179,169,170,171,172,173,174,175,
+	176,177,178,179,180,181,182,183,163,185,186,187,188,189,190,191,
+	225,226,247,231,228,229,246,250,233,234,235,236,237,238,239,240,
+	242,243,244,245,230,232,227,254,251,253,255,249,248,252,224,241,
+	193,194,215,199,196,197,214,218,201,202,203,204,205,206,207,208,
+	210,211,212,213,198,200,195,222,219,221,223,217,216,220,192,209
+    };
+
+    string r;
+    unsigned char c;
+    string::const_iterator i;
+    unsigned char *table = 0;
+
+    if(tdir == "kw") table = kw; else
+    if(tdir == "wk") table = wk;
+
+    if(conf.getrussian() && table) {
+	for(i = text.begin(); i != text.end(); i++) {
+	    c = (unsigned char) *i;
+	    c &= 0377;
+	    if(c & 0200) c = table[c & 0177];
+	    r += c;
+	}
+    }
+
+    return r;
 }

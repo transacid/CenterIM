@@ -50,6 +50,8 @@ class icqcontacts: public linkedlist {
 	void rearrange();
 	void checkdefault();
 
+	void setoffline(protocolname pname);
+
 	icqcontact* addnew(const imcontact adesc, bool notinlist = true);
 
 	icqcontact *get(const imcontact adesc);

@@ -7,10 +7,14 @@
 #include <fstream>
 #include <algorithm>
 #include <list>
+#include <set>
 
+#include <sys/time.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <regex.h>
 
+#include "kkiproc.h"
 #include "kkstrtext.h"
 #include "conf.h"
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.11 2001/11/30 11:32:22 konst Exp $
+* $Id: icqhist.cc,v 1.12 2001/12/03 16:30:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,26 +82,6 @@ const string fname, int fsize, int dir, struct tm *timestamp) {
 
 void icqhistory::putmail(const string nick, const string email,
 const string msg, int mailt, struct tm *timestamp) {
-}
-
-void icqhistory::putcontact(const imcontact cinfo, icqcontactmsg *conts,
-int dir, struct tm *timestamp) {
-    FILE *f = open(cinfo, "a");
-    icqcontactmsg *cont;
-    char buf[64];
-
-    if(f) {
-	fprintf(f, "\f\n");
-	fprintf(f, "%s\nCONTACT\n", dir == HIST_MSG_OUT ? "OUT" : "IN");
-	fprintf(f, "%lu\n%lu\n", mktime(timestamp), time(0));
-
-	for(cont = conts; cont; ) {
-	    fprintf(f, "%s\t%lu\n", mime(buf, cont->nick), cont->uin);
-	    cont = (icqcontactmsg *) cont->next;
-	}
-
-	fclose(f);
-    }
 }
 
 bool icqhistory::opencontact(const imcontact cinfo, time_t lastread = 0) {
@@ -218,9 +198,7 @@ int icqhistory::readevent(int &event, time_t &lastread, struct tm &sent, int &di
 		break;
 	    case 2:
 		if(!strcmp(buf, "URL")) thisevent = EVT_URL; else
-		if(!strcmp(buf, "MSG")) thisevent = EVT_MSG; else
-		if(!strcmp(buf, "FILE")) thisevent = EVT_FILE; else
-		if(!strcmp(buf, "CONTACT")) thisevent = EVT_CONTACT;
+		if(!strcmp(buf, "MSG")) thisevent = EVT_MSG;
 		break;
 	    case 3:
 		memcpy(&tm, localtime(&(t = atol(buf))), sizeof(tm));
@@ -280,37 +258,6 @@ void icqhistory::getfile(unsigned long &seq, string &fname, int &fsize) {
     }
 }
 
-void icqhistory::getcontact(icqcontactmsg **cont) {
-    int len;
-    const char *p;
-    icqcontactmsg *cc;
-    vector<string>::iterator i;
-    vector<storedopen>::iterator so = opens.end()-1;
-
-    *cont = 0;
-
-    for(i = so->lastevent.begin(); i != so->lastevent.end(); i++)
-    if(p = strrchr(i->c_str(), '\t')) {
-	if(!*cont) {
-	    cc = new icqcontactmsg;
-	    *cont = cc;
-	} else {
-	    cc->next = new icqcontactmsg;
-	    cc = (icqcontactmsg *) cc->next;
-	    cc->next = 0;
-	}
-
-	cc->uin = strtoul(p+1, 0, 0);
-	len = p-i->c_str();
-	if(len > 31) len = 31;
-	strncpy(cc->nick, i->c_str(), len);
-	cc->nick[len] = 0;
-	unmime(cc->nick);
-	strim(cc->nick);
-	cc->next = 0;
-    }
-}
-
 void icqhistory::closecontact() {
     if(!opens.empty()) {
 	vector<storedopen>::iterator so = opens.end()-1;
@@ -323,7 +270,6 @@ void icqhistory::fillmenu(const imcontact cinfo, verticalmenu *m) {
     int event, dir, color, i, n = 0;
     struct tm tm;
     string text, url;
-    icqcontactmsg *contact, *curcont;
     time_t lastread = 0;
     char buf[512];
 
@@ -341,13 +287,6 @@ void icqhistory::fillmenu(const imcontact cinfo, verticalmenu *m) {
 		case EVT_URL:
 		    geturl(url, text);
 		    text = url + " " + text;
-		    break;
-		case EVT_CONTACT:
-		    getcontact(&contact);
-		    for(curcont = contact; curcont; curcont = (icqcontactmsg *) curcont->next) {
-			if(text.size()) text += ", ";
-			text += (string) curcont->nick + " " + i2str(curcont->uin);
-		    }
 		    break;
 	    }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.46 2001/11/28 19:08:10 konst Exp $
+* $Id: icqface.cc,v 1.47 2001/12/03 16:30:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -179,10 +179,7 @@ void icqface::showtopbar() {
 
 	    if(!ia.empty()) {
 		buf += "  " + conf.getprotocolname(pname) + ":[";
-/*
-		if(!ia.nickname.empty()) buf += ia.nickname; else
-		if(ia.uin) buf += i2str(ia.uin);
-*/
+
 		buf += imstatus2char[gethook(pname).getstatus()];
 		buf += "]";
 	    }
@@ -283,7 +280,7 @@ int icqface::generalmenu() {
     m.setwindow(textwindow(WORKAREA_X1, WORKAREA_Y1, WORKAREA_X1+40, WORKAREA_Y1+11, conf.getcolor(cp_main_text)));
 
     m.idle = &menuidle;
-    m.additem(0, ACT_STATUS,    _(" Change ICQ status                   s"));
+    m.additem(0, ACT_STATUS,    _(" Change status                       s"));
     m.additem(0, ACT_QUICKFIND, _(" Go to contact..                 alt-s"));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
     m.additem(0, ACT_FIND,      _(" Find/add users"));
@@ -495,10 +492,10 @@ bool icqface::findresults() {
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	conf.getcolor(cp_main_selected), _("Details"), _("Add"),
 	_("New search"), 0));
-
+/*
     ihook.clearfindresults();
     ihook.setfinddest(db.getmenu());
-
+*/
     db.addautokeys();
     db.idle = &dialogidle;
     db.redraw();
@@ -510,19 +507,23 @@ bool icqface::findresults() {
 
     while(!finished) {
 	finished = !db.open(r, b);
-	ihook.setfinddest(0);
+//        ihook.setfinddest(0);
 	
 	if(!finished)
 	switch(b) {
 	    case 0:
+/*
 		if(ffuin = ihook.getfinduin(r)) {
 		    cicq.userinfo(imcontact(ffuin, icq));
 		}
+*/
 		break;
 	    case 1:
+/*
 		if(ffuin = ihook.getfinduin(r)) {
 		    cicq.addcontact(imcontact(ffuin, icq));
 		}
+*/
 		break;
 	    case 2:
 		ret = finished = true;
@@ -595,7 +596,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+10, conf.getcolor(cp_main_highlight), _("Age"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Languages"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+13, conf.getcolor(cp_main_highlight), _("Last IP"));
-
+/*
     tmp = flang1 ? icq_GetMetaLanguageName(flang1) : "";
 
     if(flang2) {
@@ -607,7 +608,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	if(tmp.size()) tmp += ", ";
 	tmp += icq_GetMetaLanguageName(flang3);
     }
-
+*/
     fname = fname + " " + lname;
 
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), c->getnick());
@@ -663,12 +664,12 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
 	if(tmp.size()) tmp += ", ";
 	tmp += fstate;
     }
-    
+/*    
     if(fcountry) {
 	if(tmp.size()) tmp += ", ";
 	tmp += icq_GetCountryName(fcountry);
     }
-
+*/
     x += 10;
     mainw.write(x, WORKAREA_Y1+2, conf.getcolor(cp_main_text), fstreet);
     mainw.write(x, WORKAREA_Y1+3, conf.getcolor(cp_main_text), tmp);
@@ -720,18 +721,18 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 	if(fwcity.size()) fwcity += ", ";
 	fwcity += fwstate;
     }
-    
+/*    
     if(fwcountry) {
 	if(fwcity.size()) fwcity += ", ";
 	fwcity += icq_GetCountryName(fwcountry);
     }
-    
+*/
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+2, conf.getcolor(cp_main_text), fwaddress);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+3, conf.getcolor(cp_main_text), fwcity);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), fwzip ? i2str(fwzip) : "");
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), fcompany);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+7, conf.getcolor(cp_main_text), fdepartment);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
+//    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), foccupation ? icq_GetMetaOccupationName(foccupation) : "");
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), fjob);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+11, conf.getcolor(cp_main_text), fwphone);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), fwfax);
@@ -788,6 +789,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 	text += "\n\n";
     }
 
+/*
     if(baf) {
 	text += (string) "* " + _("Affiliations") + "\n";
 
@@ -806,6 +808,7 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 	    text += (string) icq_GetMetaBackgroundName(nbg[i]) + ": " + bg[i] + "\n";
 	}
     }
+*/
 
     db.getbrowser()->setbuf(text);
 }
@@ -865,8 +868,13 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 		    break;
 		case 5:
 		    switch(cinfo.pname) {
-			case infocard: updatedetails(c); break;
-			case icq: ihook.sendinforeq(c, cinfo.uin); break;
+			case infocard:
+			    updatedetails(c);
+			    break;
+
+			default:
+			    gethook(cinfo.pname).requestinfo(cinfo);
+			    break;
 		    }
 
 		    b = lastb;
@@ -1254,7 +1262,7 @@ bool icqface::checkicqmessage(const imcontact ic, const string atext, bool &ret,
 	    case 2:
 		switch(cc) {
 		    case ICQM_REQUEST:
-			ihook.sendauth(uin);
+//                        ihook.sendauth(uin);
 			log(_("+ [icq] authorization sent to %lu"), uin);
 			break;
 		    case ICQM_ADDED: break;
@@ -1328,7 +1336,6 @@ bool icqface::showevent(const imcontact cinfo, int direction, time_t &lastread) 
     struct tm tm;
     bool ret, proceed;
     unsigned long seq;
-    icqcontactmsg *cont;
 
     if(ret = ((n = hist.readevent(event, lastread, tm, dir)) != -1))
     if(((dir == HIST_MSG_IN) && (direction & HIST_MSG_IN)) || ((dir == HIST_MSG_OUT) && (direction & HIST_MSG_OUT)))
@@ -1374,22 +1381,6 @@ bool icqface::showevent(const imcontact cinfo, int direction, time_t &lastread) 
 		    break;
 		case 2:
 		    break;
-	    }
-	    break;
-	case EVT_FILE:
-	    hist.getfile(seq, text, fsize);
-	    i = showfile(cinfo, seq, text, fsize, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
-	    switch(i) {
-		case -1: ret = false; break;
-		case 0: acceptfile(cinfo, seq, text); break;
-		case 1: refusefile(cinfo, seq); break;
-	    }
-	    break;
-	case EVT_CONTACT:
-	    hist.getcontact(&cont);
-	    i = showcontact(cinfo, cont, *localtime(&lastread), tm, dir, direction & HIST_HISTORYMODE);
-	    switch(i) {
-		case -1: ret = false; break;
 	    }
 	    break;
     }
@@ -1515,156 +1506,6 @@ int inout = HIST_MSG_IN, bool inhistory = false) {
     restoreworkarea();
 
     return b;
-}
-
-int icqface::showfile(const imcontact cinfo, unsigned long seq,
-const string fname, int fsize, struct tm &recvtm, struct tm &senttm,
-int inout = HIST_MSG_IN, bool inhistory = false) {
-    int i, b;
-    icqcontact *c = clist.get(cinfo);
-    dialogbox db;
-
-    saveworkarea();
-    clearworkarea();
-
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
-	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
-    db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
-
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-    _("File from %s, %lu"), c->getdispnick().c_str(), cinfo.uin);
-
-    if(inhistory)
-	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), _("Ok"), 0));
-    else
-	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), _("Accept"), _("Refuse"), 
-	c->getmsgcount() ? _("Next") : _("Done"), 0));
-
-    db.redraw();
-    workarealine(WORKAREA_Y1+2);
-    workarealine(WORKAREA_Y2-2);
-
-    db.addautokeys();
-    db.idle = &dialogidle;
-    db.getbrowser()->setbuf(fname);
-    if(!db.open(i, b)) b = -1;
-    db.close();
-
-    restoreworkarea();
-
-    if(inhistory) b = 2;
-    return b;
-}
-
-int icqface::showcontact(const imcontact cinfo, icqcontactmsg *cont,
-struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN,
-bool inhistory = false) {
-    int n, b, i;
-    dialogbox db;
-    icqcontactmsg *cur, *prev;
-    icqcontact *c = clist.get(cinfo);
-    linkedlist lst;
-
-    lst.freeitem = &nothingfree;
-    for(cur = cont; cur; cur = (icqcontactmsg *) cur->next) {
-	lst.add(cur);
-    }
-
-    saveworkarea();
-    clearworkarea();
-
-    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
-    _("Contacts from %s"), cinfo.totext().c_str());
-
-    db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
-	WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
-    db.setmenu(new verticalmenu(conf.getcolor(cp_main_text),
-	conf.getcolor(cp_main_selected)));
-    db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), _("Details"), _("Add"),
-	inhistory ? _("Ok") : _("Next"), 0));
-
-    db.addautokeys();
-    db.getbar()->item = 2;
-    db.idle = &dialogidle;
-    db.redraw();
-    workarealine(WORKAREA_Y1+2);
-    workarealine(WORKAREA_Y2-2);
-
-    for(bool fin = false; !fin; ) {
-	db.getmenu()->clear();
-	for(i = 0; i < lst.count; i++) {
-	    cur = (icqcontactmsg *) lst.at(i);
-	    db.getmenu()->additemf(" %15lu   %s", cur->uin, cur->nick);
-	}
-
-	if(fin = !db.open(n, b)) {
-	    b = -1;
-	} else {
-	    cur = (icqcontactmsg *) lst.at(n-1);
-
-	    switch(b) {
-		case 0:
-		    if(cur) {
-			cicq.userinfo(imcontact(cur->uin, icq));
-		    }
-		    break;
-
-		case 1:
-		    if(cur)
-		    if(c = cicq.addcontact(imcontact(cur->uin, icq))) {
-			c->setdispnick(cur->nick);
-			lst.remove(n-1);
-		    }
-		    break;
-
-		case 2:
-		    fin = true;
-		    break;
-	    }
-	}        
-    }
-
-    db.close();
-    restoreworkarea();
-
-    return b;
-}
-
-void icqface::acceptfile(const imcontact cinfo, unsigned long seq,
-const string fname) {
-    if(ihook.logged()) {
-	static string filesavedir;
-	icqcontact *c = (icqcontact *) clist.get(cinfo);
-
-	if(!filesavedir.size()) filesavedir = (string) getenv("HOME");
-	filesavedir = inputstr(_("save file(s) in: "), filesavedir);
-
-	chdir(getenv("HOME"));
-	chdir(filesavedir.c_str());
-
-	if(ihook.acceptfile(cinfo.uin, seq)) {
-	    log(_("+ file %s from %s, %lu started"),
-		justfname(fname).c_str(), c->getdispnick().c_str(),
-		cinfo.uin);
-
-	    if(!access((filesavedir + "/" + justfname(fname)).c_str(), F_OK)) {
-		log(_("+ already exists, skipping"));
-	    } else {
-		ihook.addfile(cinfo.uin, seq, fname, HIST_MSG_IN);
-	    }
-	}
-    }
-}
-
-void icqface::refusefile(const imcontact cinfo, unsigned long seq) {
-    if(ihook.logged()) {
-	icqcontact *c = (icqcontact *) clist.get(cinfo);
-	ihook.refusefile(cinfo.uin, seq);
-	log(_("+ file from %s, %lu refused"), c->getdispnick().c_str(), cinfo.uin);
-    }
 }
 
 void icqface::history(const imcontact cinfo) {
@@ -1830,7 +1671,6 @@ void icqface::modelist(contactstatus cs) {
 
     db.close();
     restoreworkarea();
-    ihook.sendcontactlist();
 }
 
 bool icqface::multicontacts(const string ahead = "") {

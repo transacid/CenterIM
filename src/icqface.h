@@ -17,6 +17,7 @@
 #include "icqcontact.h"
 #include "icqmlist.h"
 #include "icqhook.h"
+#include "imcontroller.h"
 
 #define DIALOG_WIDTH    60
 #define DIALOG_HEIGHT   15
@@ -178,17 +179,13 @@ class icqface {
 	bool showevent(const imcontact cinfo, int direction, time_t &lastread);
 	int showmsg(const imcontact cinfo, const string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
 	int showurl(const imcontact cinfo, const string url, const string text, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	int showfile(const imcontact cinfo, unsigned long seq, const string fname, int fsize, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	int showcontact(const imcontact cinfo, icqcontactmsg *cont, struct tm &recvtm, struct tm &senttm, int inout = HIST_MSG_IN, bool inhistory = false);
-	void acceptfile(const imcontact cinfo, unsigned long seq, const string fname);
-	void refusefile(const imcontact cinfo, unsigned long seq);
 
 	bool multicontacts(const string head = "");
 	void userinfo(const imcontact cinfo, const imcontact realinfo);
 
 	bool updateconf(regsound &s, regcolor &c);
 
-	bool finddialog(icqhook::searchparameters &s);
+	bool finddialog(imsearchparams &s);
 	bool findresults();
 
 	bool updatedetails(icqcontact *c = 0);
