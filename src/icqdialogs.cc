@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.144 2004/07/20 22:16:40 konst Exp $
+* $Id: icqdialogs.cc,v 1.145 2004/07/31 00:00:15 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1100,6 +1100,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool askaway = conf.getaskaway();
     bool bidi = conf.getbidi();
     bool emacs = conf.getemacs();
+    bool proxyconnect = conf.getproxyconnect();
 
     bool logtimestamps, logonline;
     conf.getlogoptions(logtimestamps, logonline);
@@ -1232,6 +1233,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
 	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
+
+	if(!httpproxy.empty())
+	    t.addleaff(i, 0, 11, _(" Proxy only for HTTP (rss and lj) : %s "), stryesno(!proxyconnect));
+
 	t.addleaff(i, 0, 21, _(" Enable peer-to-peer communications : %s "), stryesno(ptp));
 
 	if(ptp)
@@ -1283,6 +1288,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 8: quote = !quote; break;
 		    case 9: logtimestamps = !logtimestamps; break;
 		    case 10: logonline = !logonline; break;
+		    case 11: proxyconnect = !proxyconnect; break;
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
@@ -1379,6 +1385,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmailcheck(mailcheck);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
+		conf.setproxyconnect(proxyconnect);
 		conf.setcharsets(convertfrom, convertto);
 
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {

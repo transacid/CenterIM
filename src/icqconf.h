@@ -125,7 +125,7 @@ class icqconf {
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
-	    logonline, emacs;
+	    logonline, emacs, proxyconnect, proxyssl;
 
 	bool chatmode[protocolname_size];
 	bool cpconvert[protocolname_size];
@@ -154,6 +154,7 @@ class icqconf {
 	void initmultiproto(bool p[], string buf, bool excludenochat);
 
 	void selfsignal(int signum) const;
+	void setproxy();
 
     public:
 	icqconf();
@@ -202,6 +203,12 @@ class icqconf {
 
 	bool getmakelog() const { return makelog; }
 	void setmakelog(bool slog);
+
+	bool getproxyconnect() const { return proxyconnect; }
+	void setproxyconnect(bool proxyconnect);
+
+	bool getproxyssl() const { return proxyssl; }
+	void setproxyssl(bool sproxyssl);
 
 	bool getcpconvert(protocolname pname) const;
 	void setcpconvert(protocolname pname, bool fcpconvert);

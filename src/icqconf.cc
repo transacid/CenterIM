@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.132 2004/07/27 07:38:32 konst Exp $
+* $Id: icqconf.cc,v 1.133 2004/07/31 00:00:15 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,7 @@ icqconf::icqconf() {
     autoaway = autona = 0;
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
-	logonline = emacs = false;
+	logonline = emacs = proxyssl = proxyconnect = false;
 
     savepwd = mailcheck = fenoughdiskspace = true;
 
@@ -404,6 +404,8 @@ void icqconf::loadmainconfig() {
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
+	    if(param == "proxy_connect") proxyconnect = true; else
+	    if(param == "proxy_ssl") proxyssl = true; else
 	    if(param == "chatmode") initmultiproto(chatmode, buf, true); else
 	    if(param == "entersends") initmultiproto(entersends, buf, true); else
 	    if(param == "nonimonline") initmultiproto(nonimonline, buf, false); else
@@ -438,6 +440,7 @@ void icqconf::loadmainconfig() {
 	    }
 	}
 
+	setproxy();
 	f.close();
     }
 }
@@ -516,6 +519,8 @@ void icqconf::save() {
 	    }
 
 	    if(getmakelog()) f << "log" << endl;
+	    if(getproxyconnect()) f << "proxy_connect" << endl;
+	    if(getproxyssl()) f << "proxy_ssl" << endl;
 
 	    vector<imaccount>::iterator ia;
 	    for(ia = accounts.begin(); ia != accounts.end(); ++ia)
@@ -1071,12 +1076,6 @@ void icqconf::commandline(int argc, char **argv) {
 		cw_setbind(bindhost.c_str());
 	    }
 
-	} else if((args == "-P") || (args == "--http-proxy")) {
-	    if(argv[++i]) {
-//                proxyhost = argv[i];
-//                cw_setproxy(proxyhost.c_str());
-	    }
-
 	} else if((args == "-s") || (args == "--send")) {
 	    if(argv[++i]) event = argv[i];
 
@@ -1287,8 +1286,29 @@ void icqconf::usage() const {
     cout << endl << _("Report bugs to <centericq-bugs@konst.org.ua>.") << endl;
 }
 
+void icqconf::setproxy() {
+    if(getproxyconnect()) {
+	cw_setproxy(gethttpproxyhost().c_str(), gethttpproxyport(),
+	    gethttpproxyuser().c_str(),
+	    gethttpproxypasswd().c_str());
+
+    } else {
+	cw_setproxy(0, 0, 0, 0);
+
+    }
+}
+
 void icqconf::setmakelog(bool slog) {
     makelog = slog;
+}
+
+void icqconf::setproxyconnect(bool sproxy) {
+    proxyconnect = sproxy;
+    setproxy();
+}
+
+void icqconf::setproxyssl(bool sproxyssl) {
+    proxyssl = sproxyssl;
 }
 
 void icqconf::setgroupmode(icqconf::groupmode amode) {
