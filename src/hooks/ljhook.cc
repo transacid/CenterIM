@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.9 2003/10/12 11:39:03 konst Exp $
+* $Id: ljhook.cc,v 1.10 2003/10/12 23:14:48 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -100,6 +100,11 @@ void ljhook::disconnect() {
 }
 
 void ljhook::exectimers() {
+    if(logged())
+    if(timer_current-timer_getfriends >= 120) {
+	requestfriends();
+	timer_getfriends = timer_current;
+    }
 }
 
 void ljhook::main() {
@@ -455,7 +460,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    if(!params["message"].empty())
 		em.store(imnotification(self, _("Message from the server: ") + params["message"]));
 
-	    requestfriends();
+	    timer_getfriends = 0;
 
 	} else {
 	    face.log(_("+ [lj] login failed: %s"), params["errmsg"].c_str());
@@ -468,10 +473,6 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	}
 
     } else if(ie->second == reqGetFriends) {
-	if(params["success"] != "OK") {
-	    face.log(_("+ [lj] error requesting friends list"));
-	}
-
 	int fcount = atoi(params["friend_count"].c_str()), i, k;
 	string username, name, birthday, bd;
 	icqcontact::basicinfo bi;
@@ -529,19 +530,39 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	fcount = atoi(params["friendof_count"].c_str());
 	bool foempty = friendof.empty();
 
+	map<string, string> nfriendof;
+	map<string, string>::const_iterator in;
+	vector<string>::const_iterator il;
+	char buf[512];
+
 	for(i = 1; i <= fcount; i++) {
 	    username = params[(string) "friendof_" + i2str(i) + "_user"];
 	    name = UTF2KOI(params[(string) "friendof_" + i2str(i) + "_name"]);
+	    nfriendof[username] = name;
+	}
 
-	    if(find(friendof.begin(), friendof.end(), username) == friendof.end()) {
-		friendof.push_back(username);
+	for(in = nfriendof.begin(); in != nfriendof.end(); ++in)
+	if(find(friendof.begin(), friendof.end(), in->first) == friendof.end()) {
+	    friendof.push_back(in->first);
 
-		if(!foempty) {
-		    char buf[512];
-		    sprintf(buf, _("The user %s (%s) has added you to his/her friend list"), username.c_str(), name.c_str());
-		    em.store(imnotification(self, buf));
-		}
+	    if(!foempty) {
+		bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
+
+		sprintf(buf, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
+		    in->first.c_str(), in->second.c_str(), bd.c_str());
+
+		em.store(imnotification(self, buf));
 	    }
+	}
+
+	for(il = friendof.begin(); il != friendof.end(); ++il)
+	if(nfriendof.find(*il) == nfriendof.end()) {
+	    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
+
+	    sprintf(buf, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
+		il->c_str(), bd.c_str());
+
+	    em.store(imnotification(self, buf));
 	}
 
 	if(c = clist.get(self)) {

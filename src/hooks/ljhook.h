@@ -15,6 +15,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	vector<int> rfds, wfds, efds;
 	bool fonline, flogged;
 	imcontact self;
+	time_t timer_getfriends;
 
 	verticalmenu *sdest;
 	string lookfor;
