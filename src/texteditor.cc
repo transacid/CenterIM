@@ -1512,6 +1512,8 @@ void texteditor::inschar(int k) {
 void texteditor::setpos(int col, int line) {
     bool drawneeded = false;
 
+    CHECKLOADED;
+
     if(line >= curfile->lines->count)
 	line = curfile->lines->count-1;
 
@@ -1703,7 +1705,7 @@ bool texteditor::ismark() {
 }
 
 char *texteditor::getline(int ln) {
-    return (char *) curfile->lines->at(ln);
+    return (char *) (getfcount() ? curfile->lines->at(ln) : 0);
 }
 
 void texteditor::putline(int ln, const char *newline) {
