@@ -32,9 +32,9 @@ if test "$build_aim" = "yes" -o "$build_irc" = "yes"; then
 
     if test "$have_aton" = "yes"; then
 	AC_DEFINE(HAVE_INET_ATON)
-        AC_MSG_RESULT(yes)
+	AC_MSG_RESULT(yes)
     else
-        AC_MSG_RESULT(no)
+	AC_MSG_RESULT(no)
     fi
 fi
 
