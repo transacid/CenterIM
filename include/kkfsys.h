@@ -15,7 +15,7 @@
 #include "conf.h"
 #include "kkstrtext.h"
 
-#ifdef BSD
+#ifndef HAVE_FTW_H
 
 #define FTW_F           1
 #define FTW_D           2

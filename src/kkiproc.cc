@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.10 2002/07/09 12:30:08 konst Exp $
+* $Id: kkiproc.cc,v 1.11 2003/04/02 09:54:47 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,10 @@
 #ifdef __sun__
 #include <sys/termio.h>
 #include <sys/filio.h>
+#endif
+
+#ifdef __CYGWIN__
+#include <sys/socket.h>
 #endif
 
 void detach(char *logfile) {
