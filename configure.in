@@ -1,11 +1,19 @@
 AC_INIT(aclocal.m4)
-AM_INIT_AUTOMAKE(centericq, 3.35.22)
+AM_INIT_AUTOMAKE(centericq, 3.35.25)
 
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 
 AM_CONFIG_HEADER(config.h)
+
+###	use option --enable-locales-fix to fix problems with double-byte
+###	encodings on systems with broken locale, iscntrl()
+
+AC_ARG_ENABLE(locales-fix,
+	[  --enable-locales-fix    enables workaround for broken locales. use this
+			  option if some of characters in your texts in Chinese
+			  or Japanese diappear])
 
 ###     use option --with-fribidi to compile with fribidi support
 AC_ARG_WITH(fribidi,

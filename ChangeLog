@@ -522,3 +522,9 @@ Basic Hebrew and Arabic languages support was added. To enable it,
 first, install fribidi library, and then run ./configure --with-fribidi
 before running make. You can download the library from
 http://imagic.weizmann.ac.il/~dov/freesw/FriBidi
+
+3.35.23
+-------
+
+Fixed some compilation problems centericq caused with C++ compilers
+that have no support for namespaces.
