@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.31 2002/07/10 09:23:33 konst Exp $
+* $Id: irchook.cc,v 1.32 2002/07/10 16:07:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1052,18 +1052,21 @@ void irchook::errorhandler(void *connection, void *cli, ...) {
 void irchook::nickchanged(void *connection, void *cli, ...) {
     va_list ap;
     icqcontact *c;
+    char buf[100];
 
     va_start(ap, cli);
     char *oldnick = va_arg(ap, char *);
     char *newnick = va_arg(ap, char *);
     va_end(ap);
 
-    if(oldnick && newnick) {
+    if(oldnick && newnick)
+    if(strcmp(oldnick, newnick)) {
 	if(c = clist.get(imcontact(oldnick, irc)))
 	if(!c->inlist()) {
 	    c->setnick(newnick);
-	    if(c->getdispnick() == oldnick)
-		c->setdispnick(newnick);
+	    if(c->getdispnick() == oldnick) c->setdispnick(newnick);
+	    sprintf(buf, _("The user has changed their nick from %s to %s"), oldnick, newnick);
+	    em.store(imnotification(c->getdesc(), buf));
 	}
     }
 }

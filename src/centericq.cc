@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.103 2002/06/27 13:56:44 konst Exp $
+* $Id: centericq.cc,v 1.104 2002/07/10 16:07:22 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1042,14 +1042,14 @@ void centericq::exectimers() {
 
 	    static map<protocolname, reconnectInfo> reconnect;
 
-	    if(!hook.logged()) {
+	    if(timer_current-reconnect[pname].timer > reconnect[pname].period) {
 		/*
 		*
 		* Any need to try auto re-connecting?
 		*
 		*/
 
-		if(timer_current-reconnect[pname].timer > reconnect[pname].period) {
+		if(!hook.logged()) {
 		    time(&reconnect[pname].timer);
 		    reconnect[pname].period += reconnect[pname].period/2;
 
@@ -1062,10 +1062,10 @@ void centericq::exectimers() {
 			}
 
 		    }
+		} else {
+		    fonline = true;
+		    reconnect[pname] = reconnectInfo();
 		}
-	    } else {
-		fonline = true;
-		reconnect[pname] = reconnectInfo();
 	    }
 	}
     }
