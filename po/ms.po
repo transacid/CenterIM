@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.9\n"
-"POT-Creation-Date: 2002-12-28 01:47+0200\n"
+"POT-Creation-Date: 2002-12-29 18:48+0200\n"
 "PO-Revision-Date: 2002-04-18 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@ikhlas.com>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
@@ -63,86 +63,86 @@ msgstr "+ [%02d:%02d:%02d] mail baru diterima, %d mesej"
 msgid "+ last msg from %s"
 msgstr "+ mesej terakhir dari %s"
 
-#: src/centericq.cc:628
+#: src/centericq.cc:630
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:667
+#: src/centericq.cc:669
 msgid "! another running copy of centericq detected"
 msgstr "! ada centericq lain sedang dilarikan"
 
-#: src/centericq.cc:668
+#: src/centericq.cc:670
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! ini mungkin menyebabkan masalah. pid %lu"
 
-#: src/centericq.cc:792
+#: src/centericq.cc:794
 msgid "Mobile number: "
 msgstr "Nombor telefon bimbit: "
 
-#: src/centericq.cc:933
+#: src/centericq.cc:935
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:940
+#: src/centericq.cc:942
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:944
+#: src/centericq.cc:946
 msgid "The specified directory does not exist"
 msgstr ""
 
-#: src/centericq.cc:1079
+#: src/centericq.cc:1081
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ tiada sejarah bagi %s"
 
-#: src/centericq.cc:1105
+#: src/centericq.cc:1107
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ pengguna %s telah berada dalam senarai rakan"
 
-#: src/centericq.cc:1111
+#: src/centericq.cc:1113
 msgid "Select a group to add the user to"
 msgstr "PIlih kumpulan untuk masukkan rakan"
 
-#: src/centericq.cc:1122
+#: src/centericq.cc:1124
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s telah dimasukkan ke senarai"
 
-#: src/centericq.cc:1193
+#: src/centericq.cc:1195
 msgid "+ the user is back"
 msgstr "+ pengguna telah kembali"
 
-#: src/centericq.cc:1209
+#: src/centericq.cc:1211
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status restored"
 
-#: src/centericq.cc:1224
+#: src/centericq.cc:1226
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] telah ditetapkan secara automatik %s"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "away"
 msgstr "away"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1354
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! ruang storan kurang dari 10k, offline"
 
-#: src/centericq.cc:1353
+#: src/centericq.cc:1355
 msgid "! otherwise we can lose events and configuration"
 msgstr "! sebaliknya kita akan kehilangan data dan tetapan"
 
-#: src/centericq.cc:1392
+#: src/centericq.cc:1394
 msgid "Invite to conference.."
 msgstr ""
 
@@ -1156,6 +1156,11 @@ msgstr "mod 1"
 #: src/icqface.cc:102
 msgid "mode 2"
 msgstr "mod 2"
+
+#: src/icqface.cc:226
+#, c-format
+msgid "CENTERICQ %s   UNSENT: %lu"
+msgstr ""
 
 #: src/icqface.cc:250
 msgid " Send an URL            u"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CenterICQ 4.8.4\n"
-"POT-Creation-Date: 2002-12-28 01:47+0200\n"
+"POT-Creation-Date: 2002-12-29 18:48+0200\n"
 "PO-Revision-Date: 2002-09-10 22:40+0200\n"
 "Last-Translator: Mattias Webjörn Eriksson <mattias@webjorn.org>\n"
 "Language-Team: swedish <sv@li.org>\n"
@@ -64,86 +64,86 @@ msgstr "+ [%02d:%02d:%02d] ny e-post, %d meddelanden"
 msgid "+ last msg from %s"
 msgstr "+ sista meddelandet från %s"
 
-#: src/centericq.cc:628
+#: src/centericq.cc:630
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr ""
 
-#: src/centericq.cc:667
+#: src/centericq.cc:669
 msgid "! another running copy of centericq detected"
 msgstr "! en annan instans av centericq har upptäckts"
 
-#: src/centericq.cc:668
+#: src/centericq.cc:670
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! detta kan innebära problem. pid %lu"
 
-#: src/centericq.cc:792
+#: src/centericq.cc:794
 msgid "Mobile number: "
 msgstr "Mobilnummer: "
 
-#: src/centericq.cc:933
+#: src/centericq.cc:935
 msgid "directory to save the file(s) to: "
 msgstr ""
 
-#: src/centericq.cc:940
+#: src/centericq.cc:942
 msgid "The specified directory is not writable"
 msgstr ""
 
-#: src/centericq.cc:944
+#: src/centericq.cc:946
 msgid "The specified directory does not exist"
 msgstr ""
 
-#: src/centericq.cc:1079
+#: src/centericq.cc:1081
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ inga tidigare meddelanden från %s"
 
-#: src/centericq.cc:1105
+#: src/centericq.cc:1107
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ användaren finns redan på listan"
 
-#: src/centericq.cc:1111
+#: src/centericq.cc:1113
 msgid "Select a group to add the user to"
 msgstr "Välj en grupp att lägga till en användare"
 
-#: src/centericq.cc:1122
+#: src/centericq.cc:1124
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s har lagts till kontaktlistan"
 
-#: src/centericq.cc:1193
+#: src/centericq.cc:1195
 msgid "+ the user is back"
 msgstr "+ användaren är tillbaka"
 
-#: src/centericq.cc:1209
+#: src/centericq.cc:1211
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] status återställd"
 
-#: src/centericq.cc:1224
+#: src/centericq.cc:1226
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] satte automatiskt %s"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "away"
 msgstr "iväg"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "n/a"
 msgstr "icke tillgänglig"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1354
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! det finns mindre än 10k ledigt diskutrymme, kopplar ned"
 
-#: src/centericq.cc:1353
+#: src/centericq.cc:1355
 msgid "! otherwise we can lose events and configuration"
 msgstr "! annars kan händelser och inställningar gå förlorade"
 
-#: src/centericq.cc:1392
+#: src/centericq.cc:1394
 #, fuzzy
 msgid "Invite to conference.."
 msgstr "Anslöt automatiskt till konfernesen"
@@ -1151,6 +1151,11 @@ msgstr "läge 1"
 #: src/icqface.cc:102
 msgid "mode 2"
 msgstr "läge 2"
+
+#: src/icqface.cc:226
+#, c-format
+msgid "CENTERICQ %s   UNSENT: %lu"
+msgstr ""
 
 #: src/icqface.cc:250
 msgid " Send an URL            u"

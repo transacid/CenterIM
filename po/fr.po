@@ -18,7 +18,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-12-28 01:47+0200\n"
+"POT-Creation-Date: 2002-12-29 18:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,86 +77,86 @@ msgstr "+ [%02d:%02d:%02d] nouveau mail reçu, %d messages"
 msgid "+ last msg from %s"
 msgstr "+ dernier message de : %s"
 
-#: src/centericq.cc:628
+#: src/centericq.cc:630
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ la configuration de %s a changé"
 
-#: src/centericq.cc:667
+#: src/centericq.cc:669
 msgid "! another running copy of centericq detected"
 msgstr "! un autre centericq est déjà lancé"
 
-#: src/centericq.cc:668
+#: src/centericq.cc:670
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! cela peut poser problème. pid %lu"
 
-#: src/centericq.cc:792
+#: src/centericq.cc:794
 msgid "Mobile number: "
 msgstr "Téléphone portable : "
 
-#: src/centericq.cc:933
+#: src/centericq.cc:935
 msgid "directory to save the file(s) to: "
 msgstr "répertoire où sauver le(s) fichier(s): "
 
-#: src/centericq.cc:940
+#: src/centericq.cc:942
 msgid "The specified directory is not writable"
 msgstr "Le répertoire donné n'a pas les droits en écriture"
 
-#: src/centericq.cc:944
+#: src/centericq.cc:946
 msgid "The specified directory does not exist"
 msgstr "Le répertoire donné n'existe pas"
 
-#: src/centericq.cc:1079
+#: src/centericq.cc:1081
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ pas d'historique pour %s"
 
-#: src/centericq.cc:1105
+#: src/centericq.cc:1107
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ l'utilisateur %s est déjà dans la liste"
 
-#: src/centericq.cc:1111
+#: src/centericq.cc:1113
 msgid "Select a group to add the user to"
 msgstr "Sélectionnez un groupe où ajouter l'utilisateur"
 
-#: src/centericq.cc:1122
+#: src/centericq.cc:1124
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s a été ajouté à la liste"
 
-#: src/centericq.cc:1193
+#: src/centericq.cc:1195
 msgid "+ the user is back"
 msgstr "+ l'utilisateur est de retour"
 
-#: src/centericq.cc:1209
+#: src/centericq.cc:1211
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] état précédent rétabli"
 
-#: src/centericq.cc:1224
+#: src/centericq.cc:1226
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] mode automatique : %s"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "away"
 msgstr "absent"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "n/a"
 msgstr "n/a"
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1354
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! espace disponible sur le disque < 10k, déconnexion"
 
-#: src/centericq.cc:1353
+#: src/centericq.cc:1355
 msgid "! otherwise we can lose events and configuration"
 msgstr "! pour éviter la perte de messages ou de la configuration"
 
-#: src/centericq.cc:1392
+#: src/centericq.cc:1394
 msgid "Invite to conference.."
 msgstr "Inviter à une conférence..."
 
@@ -1157,6 +1157,11 @@ msgstr "mode 1"
 #: src/icqface.cc:102
 msgid "mode 2"
 msgstr "mode 2"
+
+#: src/icqface.cc:226
+#, c-format
+msgid "CENTERICQ %s   UNSENT: %lu"
+msgstr ""
 
 #: src/icqface.cc:250
 msgid " Send an URL            u"

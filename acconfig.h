@@ -6,3 +6,4 @@
 #undef USE_FRIBIDI
 #undef HAVE_STPCPY
 #undef HAVE_OPENSSL
+#undef HAVE_GNUTLS

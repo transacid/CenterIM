@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.0\n"
-"POT-Creation-Date: 2002-12-28 01:47+0200\n"
+"POT-Creation-Date: 2002-12-29 18:48+0200\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -64,86 +64,86 @@ msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
 msgid "+ last msg from %s"
 msgstr "+ последнее сообщение от %s"
 
-#: src/centericq.cc:628
+#: src/centericq.cc:630
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
 msgstr "+ конфигурация %s изменена, перечитываем"
 
-#: src/centericq.cc:667
+#: src/centericq.cc:669
 msgid "! another running copy of centericq detected"
 msgstr "! обнаружена работающая копия centericq"
 
-#: src/centericq.cc:668
+#: src/centericq.cc:670
 #, c-format
 msgid "! this may cause problems. pid %lu"
 msgstr "! это может вызвать проблемы. pid %lu"
 
-#: src/centericq.cc:792
+#: src/centericq.cc:794
 msgid "Mobile number: "
 msgstr "Номер мобильного телефона: "
 
-#: src/centericq.cc:933
+#: src/centericq.cc:935
 msgid "directory to save the file(s) to: "
 msgstr "директория для файл(ов): "
 
-#: src/centericq.cc:940
+#: src/centericq.cc:942
 msgid "The specified directory is not writable"
 msgstr "Не хватает прав на запись для указанного каталога"
 
-#: src/centericq.cc:944
+#: src/centericq.cc:946
 msgid "The specified directory does not exist"
 msgstr "Указанный каталог не существует"
 
-#: src/centericq.cc:1079
+#: src/centericq.cc:1081
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ история для %s пуста"
 
-#: src/centericq.cc:1105
+#: src/centericq.cc:1107
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ %s уже есть в списке"
 
-#: src/centericq.cc:1111
+#: src/centericq.cc:1113
 msgid "Select a group to add the user to"
 msgstr "Выберите группу для контакта"
 
-#: src/centericq.cc:1122
+#: src/centericq.cc:1124
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s добавлен в список"
 
-#: src/centericq.cc:1193
+#: src/centericq.cc:1195
 msgid "+ the user is back"
 msgstr "+ пользователь вернулся"
 
-#: src/centericq.cc:1209
+#: src/centericq.cc:1211
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус восстановлен"
 
-#: src/centericq.cc:1224
+#: src/centericq.cc:1226
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматический переход в %s"
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "away"
 msgstr ""
 
-#: src/centericq.cc:1226
+#: src/centericq.cc:1228
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1352
+#: src/centericq.cc:1354
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободного места на диске осталось < 10k, рассоединение"
 
-#: src/centericq.cc:1353
+#: src/centericq.cc:1355
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе мы можем терять события и глючить"
 
-#: src/centericq.cc:1392
+#: src/centericq.cc:1394
 msgid "Invite to conference.."
 msgstr "Пригласить на конференцию.."
 
@@ -1140,6 +1140,11 @@ msgstr "режим 1"
 #: src/icqface.cc:102
 msgid "mode 2"
 msgstr "режим 2"
+
+#: src/icqface.cc:226
+#, c-format
+msgid "CENTERICQ %s   UNSENT: %lu"
+msgstr ""
 
 #: src/icqface.cc:250
 msgid " Send an URL            u"
