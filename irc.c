@@ -746,6 +746,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 					case 473: /* ERR_INVITEONLYCHAN */
 					case 474: /* ERR_BANNEDFROMCHAN */
 					case 475: /* ERR_BADCHANNELKEY */
+					case 477:
 						firetalk_callback_error(c,FE_ROOMUNAVAILABLE,&args[3][1],args[4]);
 						break;
 					case 412: /* ERR_NOTEXTTOSEND */
