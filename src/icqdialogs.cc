@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.130 2003/10/31 00:55:52 konst Exp $
+* $Id: icqdialogs.cc,v 1.131 2003/11/05 09:07:38 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -372,7 +372,21 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 	    }
 	}
 
-	if((subj == fsuser) && s.pname == msn && s.nick.empty()) {
+	if((subj == fsuser) && s.pname == yahoo && s.nick.empty()) {
+	    i = tree.addnode(_(" Details "));
+
+	    if(s.kwords.empty()) tree.addleaff(i, 0, 27, _(" Name : %s "), s.firstname.c_str());
+	    if(s.firstname.empty()) tree.addleaff(i, 0, 29, _(" Keywords : %s "), s.kwords.c_str());
+
+	    i = tree.addnode(_(" Options "));
+
+	    tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
+	    tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange(s.agerange));
+	    tree.addleaff(i, 0, 35, _(" Users with photos only : %s "), stryesno(s.photo));
+	}
+
+	if((subj == fsuser) && s.nick.empty()
+	&& (s.pname == msn || s.pname == livejournal)) {
 	    i = tree.addnode(_(" Show users who have you on their list "));
 	    tree.addleaff(i, 0, 30, " %s ", stryesno(s.reverse));
 	}
@@ -479,6 +493,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 		    case 32: s.password = inputstr(_("Password: "), s.password, '*'); break;
 		    case 33: s.url = inputstr(_("URL: "), s.url); break;
 		    case 34: s.checkfrequency = atol(inputstr(_("Check frequency: "), strint(s.checkfrequency)).c_str()); break;
+		    case 35: s.photo = !s.photo;
 		}
 
 		if(i >= 100) {

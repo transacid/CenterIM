@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.16 2003/10/31 00:55:54 konst Exp $
+* $Id: ljhook.cc,v 1.17 2003/11/05 09:07:43 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -221,6 +221,8 @@ bool ljhook::enabled() const {
 }
 
 bool ljhook::send(const imevent &sev) {
+    if(!logged()) return false;
+
     if(sev.gettype() == imevent::xml) {
 	const imxmlevent *m = static_cast<const imxmlevent *> (&sev);
 	HTTPRequestEvent *ev = 0;
@@ -370,12 +372,37 @@ void ljhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	foundguys.pop_back();
     }
 
-    HTTPRequestEvent *ev = new HTTPRequestEvent(getfeedurl(params.nick));
-    httpcli.SendEvent(ev);
-    sent[ev] = reqLookup;
+    if(params.reverse) {
+	icqcontact *c = clist.get(self);
 
-    sdest = &dest;
-    lookfor = params.nick;
+	if(c) {
+	    string lst = c->getbasicinfo().zip, buf;
+	    while(!(buf = getword(lst)).empty()) {
+		imcontact ic(0, rss);
+		ic.nickname = getfeedurl(buf);
+		c = new icqcontact(ic);
+
+		c->setnick(buf + "@lj");
+		c->setdispnick(c->getnick());
+		c->excludefromlist();
+
+		dest.additem(conf.getcolor(cp_clist_rss), c, (string) " " + c->getnick());
+		foundguys.push_back(c);
+	    }
+
+	    face.findready();
+	    face.log(_("+ [lj] user lookup finished"));
+	    dest.redraw();
+	}
+
+    } else {
+	HTTPRequestEvent *ev = new HTTPRequestEvent(getfeedurl(params.nick));
+	httpcli.SendEvent(ev);
+	sent[ev] = reqLookup;
+
+	sdest = &dest;
+	lookfor = params.nick;
+    }
 }
 
 void ljhook::stoplookup() {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.173 2003/10/31 00:55:52 konst Exp $
+* $Id: centericq.cc,v 1.174 2003/11/05 09:07:37 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -903,10 +903,13 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
 	} else if(r == icqface::forward) {
 	    text = fwdnote + text;
+	    sendev = new immessage(m->getcontact(), imevent::outgoing, text);
 
 	}
 
-	sendev = new imxmlevent(m->getcontact(), imevent::outgoing, text);
+	if(!sendev) {
+	    sendev = new imxmlevent(m->getcontact(), imevent::outgoing, text);
+	}
 
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = dynamic_cast<const imurl *>(&ev);
@@ -1014,6 +1017,9 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	}
 
 	if(proceed) {
+	    if(r == icqface::forward)
+		sendev->setcontact(imcontact());
+
 	    if(proceed = face.eventedit(*sendev))
 	    if(proceed = !sendev->empty()) {
 		for(i = face.muins.begin(); i != face.muins.end(); ++i) {

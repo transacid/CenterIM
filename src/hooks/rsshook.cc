@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.16 2003/10/31 00:55:54 konst Exp $
+* $Id: rsshook.cc,v 1.17 2003/11/05 09:07:43 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,10 +88,8 @@ void rsshook::exectimers() {
 }
 
 bool rsshook::send(const imevent &ev) {
-    if(ev.gettype() == imevent::xml && islivejournal(ev.getcontact())) {
-	gethook(livejournal).send(ev);
-	return true;
-    }
+    if(ev.gettype() == imevent::xml && islivejournal(ev.getcontact()))
+	return gethook(livejournal).send(ev);
 
     return false;
 }

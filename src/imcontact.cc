@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM contact basic info class
-* $Id: imcontact.cc,v 1.19 2003/07/24 17:39:05 konst Exp $
+* $Id: imcontact.cc,v 1.20 2003/11/05 09:07:41 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -77,21 +77,15 @@ bool imcontact::operator != (protocolname apname) const {
 }
 
 bool imcontact::empty() const {
-    return (!uin && pname == icq) || (nickname.empty() && pname == yahoo);
+    return !uin && nickname.empty();
 }
 
 string imcontact::totext() const {
     string r;
 
-    if(*this == contactroot) {
-	r = "[self]";
-    } else {
-	if(uin) {
-	    r = "[" + conf.getprotocolname(pname) + "] " + i2str(uin);
-	} else {
-	    r = "[" + conf.getprotocolname(pname) + "] " + nickname;
-	}
-    }
+    if(!uin && nickname.empty()) r = "...";
+    else if(uin) r = "[" + conf.getprotocolname(pname) + "] " + i2str(uin);
+    else r = "[" + conf.getprotocolname(pname) + "] " + nickname;
 
     return r;
 }

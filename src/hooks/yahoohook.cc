@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.90 2003/10/15 23:40:21 konst Exp $
+* $Id: yahoohook.cc,v 1.91 2003/11/05 09:07:44 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -122,6 +122,7 @@ void yahoohook::init() {
     c.ext_yahoo_webcam_closed = &webcam_closed;
     c.ext_yahoo_webcam_viewer = &webcam_viewer;
     c.ext_yahoo_webcam_data_request = &webcam_data_request;
+    c.ext_yahoo_search_result = &search_result;
     c.ext_yahoo_log = &log;
 
     yahoo_register_callbacks(&c);
@@ -391,7 +392,6 @@ void yahoohook::removeuser(const imcontact &ic, bool report) {
 			static_cast<yahoo_buddy *>(bud->data)->id,
 			static_cast<yahoo_buddy *>(bud->data)->group);
 
-		    bud = buddies;
 		} else {
 		    bud = y_list_next(bud);
 		}
@@ -589,10 +589,15 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
     icqcontact *c;
     vector<string>::const_iterator i;
 
+    while(!foundguys.empty()) {
+	delete foundguys.back();
+	foundguys.pop_back();
+    }
+
     searchdest = &dest;
-    room = params.room.substr(1);
 
     if(!params.room.empty()) {
+	room = params.room.substr(1);
 	i = confmembers[room].begin();
 
 	while(i != confmembers[room].end()) {
@@ -602,15 +607,19 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
 	    ++i;
 	}
+
+	face.findready();
+	face.log(_("+ [yahoo] members list fetching finished, %d found"),
+	    searchdest->getcount());
+
+	searchdest->redraw();
+	searchdest = 0;
+
+    } else if(!params.kwords.empty()) {
+	yahoo_search(cid, YAHOO_SEARCH_KEYWORD, params.kwords.c_str(),
+		YAHOO_GENDER_NONE, YAHOO_AGERANGE_NONE, 0, 1);
+
     }
-
-    face.findready();
-
-    face.log(_("+ [yahoo] members list fetching finished, %d found"),
-	searchdest->getcount());
-
-    searchdest->redraw();
-    searchdest = 0;
 }
 
 void yahoohook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
@@ -697,7 +706,7 @@ void yahoohook::login_response(int id, int succ, char *url) {
 
 	case YAHOO_LOGIN_DUPL:
 	    face.log(_("+ [yahoo] another logon detected"));
-	    yhook.disconnected();
+	    yahoo_logoff(yhook.cid);
 	    break;
 
 	case YAHOO_LOGIN_SOCK:
@@ -761,6 +770,53 @@ void yahoohook::got_im(int id, char *who, char *msg, long tm, int stat, int utf8
     if(!text.empty()) {
 	em.store(immessage(ic, imevent::incoming, text));
     }
+}
+
+void yahoohook::search_result(int id, struct yahoo_search_result *yr) {
+    for(YList *ir = yr->contacts; ir; ir = ir->next) {
+	yahoo_found_contact *fc = (yahoo_found_contact *) ir->data;
+	icqcontact *c = new icqcontact(imcontact(fc->id, yahoo));
+
+	icqcontact::basicinfo binfo = c->getbasicinfo();
+	icqcontact::moreinfo minfo = c->getmoreinfo();
+
+	c->setnick(fc->id);
+	c->setdispnick(c->getnick());
+
+	string sg = up(fc->gender);
+
+	if(sg == "MALE") minfo.gender = genderMale;
+	else if(sg == "FEMALE") minfo.gender = genderFemale;
+
+	minfo.age = fc->age;
+	binfo.street = fc->location;
+
+	string line = (false ? "o " : "  ") + c->getnick();
+
+	if(line.size() > 15) line.resize(15);
+	else line += string(15-line.size(), ' ');
+
+	line += " <";
+	if(fc->age) line += i2str(fc->age);
+
+	if(fc->location && strlen(fc->location)) {
+	    if(fc->age) line += ", ";
+	    line += fc->location;
+	}
+
+	line += ">";
+
+	c->setbasicinfo(binfo);
+	c->setmoreinfo(minfo);
+
+	yhook.foundguys.push_back(c);
+	yhook.searchdest->additem(conf.getcolor(cp_clist_yahoo), c, line);
+	yhook.searchdest->redraw();
+    }
+
+    face.findready();
+    face.log(_("+ [yahoo] search finished, %d found"), yhook.foundguys.size());
+    yhook.searchdest = 0;
 }
 
 void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList *members) {

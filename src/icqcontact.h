@@ -87,7 +87,7 @@ class icqcontact {
 	icqcontact(imcontact adesc);
 	~icqcontact();
 
-	void setstatus(imstatus fstatus);
+	void setstatus(imstatus fstatus, bool reflect = true);
 	void setlastread(time_t flastread);
 	void setlastseen();
 

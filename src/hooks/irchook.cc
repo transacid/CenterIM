@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.73 2003/10/19 23:24:35 konst Exp $
+* $Id: irchook.cc,v 1.74 2003/11/05 09:07:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -77,7 +77,7 @@ void irchook::init() {
 	if(ischannel(c))
 	if(c->getbasicinfo().requiresauth) {
 	    channels.push_back(channelInfo(c->getdesc().nickname));
-	    channels.back().joined = 1;
+	    channels.back().joined = true;
 	    channels.back().passwd = c->getbasicinfo().zip;
 	}
     }
@@ -115,6 +115,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_FILE_ERROR, &fileerror);
     firetalk_register_callback(handle, FC_CHAT_USER_JOINED, &chatuserjoined);
     firetalk_register_callback(handle, FC_CHAT_USER_LEFT, &chatuserleft);
+    firetalk_register_callback(handle, FC_CHAT_USER_KICKED, &chatuserkicked);
     firetalk_register_callback(handle, FC_CHAT_GOTTOPIC, &chatgottopic);
     firetalk_register_callback(handle, FC_CHAT_USER_OPPED, &chatuseropped);
     firetalk_register_callback(handle, FC_CHAT_USER_DEOPPED, &chatuserdeopped);
@@ -222,7 +223,7 @@ bool irchook::isconnecting() const {
 
 bool irchook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
-    string text;
+    string text, cmd;
 
     if(c) {
 	if(ev.gettype() == imevent::message) {
@@ -253,22 +254,31 @@ bool irchook::send(const imevent &ev) {
 	    return true;
 	}
 
-	if(up(text.substr(0, 4)) == "/ME ") {
-	    text.erase(0, 4);
-	    if (ischannel(c)) {
-		return firetalk_chat_send_action(handle,
-		    c->getdesc().nickname.c_str(),
-			text.c_str(), 0) == FE_SUCCESS;
+	if(text.substr(0, 1) == "/") {
+	    text.erase(0, 1);
+	    cmd = up(getword(text));
+
+	    if(cmd == "ME") {
+		if(ischannel(c)) return firetalk_chat_send_action(handle,
+		    c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+		else return firetalk_im_send_action(handle,
+		    c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+
+	    } else if(cmd == "KICK") {
+		text = cmd + " " + c->getdesc().nickname + " " + text;
+
+	    } else if(cmd == "OP") {
+		text = (string) "mode " + c->getdesc().nickname + " +o " + text;
+
+	    } else if(cmd == "DEOP") {
+		text = (string) "mode " + c->getdesc().nickname + " -o " + text;
+
 	    } else {
-		return firetalk_im_send_action(handle,
-		    c->getdesc().nickname.c_str(),
-			text.c_str(), 0) == FE_SUCCESS;
+		text.insert(0, cmd + " ");
+
 	    }
 
-	} else if(text.substr(0, 1) == "/") {
-	    rawcommand(text.substr(1));
-	    return true;
-
+	    rawcommand(text);
 	}
 
 	if(ischannel(c)) {
@@ -1153,7 +1163,7 @@ void irchook::chatjoined(void *connection, void *cli, ...) {
     va_end(ap);
 
     icqcontact *c = clist.get(imcontact(room, irc));
-    if(c) c->setstatus(available);
+    if(c) c->setstatus(available, false);
 }
 
 void irchook::chatleft(void *connection, void *cli, ...) {
@@ -1164,7 +1174,7 @@ void irchook::chatleft(void *connection, void *cli, ...) {
     va_end(ap);
 
     icqcontact *c = clist.get(imcontact(room, irc));
-    if(c) c->setstatus(offline);
+    if(c) c->setstatus(offline, false);
 }
 
 void irchook::chatkicked(void *connection, void *cli, ...) {
@@ -1416,6 +1426,32 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
 	char buf[512];
 
 	sprintf(buf, _("%s has left"), who); text = buf;
+
+	if(reason)
+	if(strlen(reason)) {
+	    sprintf(buf, _("reason: %s"), reason);
+	    text += (string) "; " + buf + ".";
+	}
+
+	em.store(imnotification(imcontact(room, irc), text));
+    }
+}
+
+void irchook::chatuserkicked(void *conn, void *cli, ...) {
+    va_list ap;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *who = va_arg(ap, char *);
+    char *by = va_arg(ap, char *);
+    char *reason = va_arg(ap, char *);
+    va_end(ap);
+
+    if(conf.getourid(irc).nickname != who) {
+	string text;
+	char buf[512];
+
+	sprintf(buf, _("%s has been kicked by %s"), who, by); text = buf;
 
 	if(reason)
 	if(strlen(reason)) {

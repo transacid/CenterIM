@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.47 2003/10/15 23:40:18 konst Exp $
+* $Id: imcontroller.cc,v 1.48 2003/11/05 09:07:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -452,7 +452,9 @@ void imsearchparams::save(const string &prname) const {
 	    << room << "\t"
 	    << (sincelast ? "1" : "0") << "\t"
 	    << (reverse ? "1" : "0") << "\t"
-	    << service << "\t";
+	    << service << "\t"
+	    << (photo ? "1" : "0") << "\t"
+	    << kwords;
 
 	vector<pair<string, string> >::const_iterator
 	    ifp = flexparams.begin();
@@ -511,6 +513,8 @@ bool imsearchparams::load(const string &prname) {
 		sincelast = getfield(buf) == "1";
 		reverse = getfield(buf) == "1";
 		service = getfield(buf);
+		photo = getfield(buf) == "1";
+		kwords = getfield(buf);
 
 		while(!buf.empty())
 		    if(!(flexparam = getfield(buf)).empty())

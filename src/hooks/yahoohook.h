@@ -33,6 +33,7 @@ class yahoohook: public abstracthook {
 	vector<yfd> rfds, wfds;
 	vector<pair<Action, string> > tobedone;
 
+	vector<icqcontact *> foundguys;
 	vector<char *> sfiles;
 	map<const char *, imfile> srfiles;
 
@@ -65,6 +66,7 @@ class yahoohook: public abstracthook {
 	static void error(int id, char *err, int fatal);
 	static void got_ignore(int id, YList * igns);
 	static void got_cookies(int id);
+	static void search_result(int id, struct yahoo_search_result *yr);
 	static void chat_cat_xml(int id, char *xml);
 	static void chat_join(int id, char *room, char *topic, YList *members);
 	static void chat_userjoin(int id, char *room, struct yahoo_chat_member *who);

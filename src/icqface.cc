@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.200 2003/10/31 00:55:52 konst Exp $
+* $Id: icqface.cc,v 1.201 2003/11/05 09:07:39 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2524,7 +2524,9 @@ vector<eventviewresult> abuttons, bool nobuttons) {
     vector<eventviewresult>::iterator ia;
 
     if(!nobuttons) {
-	if(ev->gettype() == imevent::message || ev->gettype() == imevent::notification) {
+	if(ev->gettype() == imevent::message
+	|| ev->gettype() == imevent::notification
+	|| ev->gettype() == imevent::xml) {
 	    actions.push_back(forward);
 
 	    if(ev->getdirection() == imevent::incoming)

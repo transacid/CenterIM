@@ -10,13 +10,17 @@ offline lj messages lose parameters
 
 lj comments posting
 
+yahoo remove -> crash
+
+lj search for friendof's
+
+irc doesn't remove nicks of those who were kicked
+
 /*
 *
 * BUGS
 *
 */
-
-forward xml message to icq
 
 icq sync list
 
@@ -32,13 +36,10 @@ user is added to the list
 *
 */
 
-yahoo remove -> crash
-
-lj search for friendof's
-
 yahoo search
-
-irc doesn't remove nicks of those who left a channel
+	GET /interests?.oc=m&.kw=iasi&.sb=0&.g=0&.ar=0&.pg=y HTTP/1.1
+	User-Agent: Mozilla/4.01 [en] (Win95; I)
+	Host: members.yahoo.com
 
 organize contact groups -> multi-contact operations
 
@@ -112,4 +113,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.465 2003/10/31 00:55:50 konst Exp $
+$Id: TODO,v 1.466 2003/11/05 09:07:36 konst Exp $
