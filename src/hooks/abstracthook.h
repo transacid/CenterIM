@@ -5,7 +5,9 @@
 #include "imevents.h"
 
 enum hookcapabilities {
-    hoptCanNotify = 2
+    hoptCanNotify = 2,
+    hoptCanSendURL = 4,
+    hoptCanSendFile = 8
 };
 
 class abstracthook {

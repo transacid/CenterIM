@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.16 2001/12/07 10:53:28 konst Exp $
+* $Id: icqhook.cc,v 1.17 2001/12/07 11:27:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,8 @@ icqhook ihook;
 icqhook::icqhook() {
     timer_reconnect = 0;
     fonline = false;
+
+    fcapabilities = hoptCanSendURL;
 
     cli.connected.connect(slot(this, &icqhook::connected_cb));
     cli.disconnected.connect(slot(this, &icqhook::disconnected_cb));

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.53 2001/12/07 11:06:14 konst Exp $
+* $Id: icqface.cc,v 1.54 2001/12/07 11:27:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -154,7 +154,7 @@ void icqface::update() {
 }
 
 int icqface::contextmenu(icqcontact *c) {
-    int ret = 0, i;
+    int ret = 0, i, capab;
     static int elem = 0;
 
     verticalmenu m(conf.getcolor(cp_main_text),
@@ -164,6 +164,7 @@ int icqface::contextmenu(icqcontact *c) {
 	WORKAREA_Y1+6, conf.getcolor(cp_main_text)));
 
     if(!c) return 0;
+    capab = gethook(c->getdesc().pname).getcapabilities();
 
     if(c->getdesc() == contactroot) {
 	m.additem(0, ACT_HISTORY, _(" Events history         h"));
@@ -172,9 +173,16 @@ int icqface::contextmenu(icqcontact *c) {
     if(m.empty())
     if(c->inlist())
     switch(c->getdesc().pname) {
-	case icq:
+	case infocard:
+	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
+	    m.additem(0, ACT_EDITUSER,  _(" Edit details"));
+	    break;
+
+	default:
 	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
-	    m.additem(0, ACT_URL,      _(" Send an URL            u"));
+
+	    if(capab & hoptCanSendURL)
+		m.additem(0, ACT_URL,      _(" Send an URL            u"));
 /*
 	    m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
 	    m.additem(0, ACT_FILE,     _(" Send a file            f"));
@@ -184,21 +192,6 @@ int icqface::contextmenu(icqcontact *c) {
 	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
 	    m.addline();
 	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
-	    break;
-
-	case yahoo:
-	case msn:
-	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
-	    m.addline();
-	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
-	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
-	    m.addline();
-	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
-	    break;
-
-	case infocard:
-	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
-	    m.additem(0, ACT_EDITUSER,  _(" Edit details"));
 	    break;
     }
 
@@ -1628,51 +1621,87 @@ void icqface::textbrowseridle(textbrowser &b) {
 }
 
 int icqface::contactskeys(verticalmenu &m, int k) {
-    switch(k) {
-	case '?': face.extk = ACT_INFO; break;
+    icqcontact *c = (icqcontact *) face.mcontacts->getref(m.getpos()+1);
+    int capab;
 
-	case KEY_DC: face.extk = ACT_REMOVE; break;
+    face.extk = capab = 0;
+
+    if(c)
+    if(c->getdesc() != contactroot) {
+	capab = gethook(c->getdesc().pname).getcapabilities();
+    }
+
+    switch(k) {
+	case '?':
+	    face.extk = ACT_INFO;
+	    break;
+
+	case KEY_DC:
+	    face.extk = ACT_REMOVE;
+	    break;
 
 	case 'q':
-	case 'Q': face.extk = ACT_QUIT; break;
+	case 'Q':
+	    face.extk = ACT_QUIT;
+	    break;
 
 	case 'u':
-	case 'U': face.extk = ACT_URL; break;
+	case 'U':
+	    if(capab & hoptCanSendURL)
+		face.extk = ACT_URL;
+	    break;
 
 	case 's':
 	case 'S':
-	case KEY_F(3): face.extk = ACT_STATUS; break;
+	case KEY_F(3):
+	    face.extk = ACT_STATUS;
+	    break;
 
 	case 'h':
-	case 'H': face.extk = ACT_HISTORY; break;
+	case 'H':
+	    face.extk = ACT_HISTORY;
+	    break;
 
 	case 'a':
 	case 'A': face.extk = ACT_ADD; break;
 
 	case 'f':
-	case 'F': face.extk = ACT_FILE; break;
+	case 'F':
+	    if(capab & hoptCanSendFile)
+		face.extk = ACT_FILE;
+	    break;
 
 	case 'm':
 	case 'M':
-	case KEY_F(2): face.extk = ACT_MENU; break;
+	case KEY_F(2):
+	    face.extk = ACT_MENU;
+	    break;
 
 	case 'g':
 	case 'G':
-	case KEY_F(4): face.extk = ACT_GMENU; break;
+	case KEY_F(4):
+	    face.extk = ACT_GMENU;
+	    break;
 
-	case KEY_F(5): face.extk = ACT_HIDEOFFLINE; break;
+	case KEY_F(5):
+	    face.extk = ACT_HIDEOFFLINE;
+	    break;
 
 	case 'r':
-	case 'R': face.extk = ACT_RENAME; break;
+	case 'R':
+	    face.extk = ACT_RENAME;
+	    break;
 
 	case 'c':
-	case 'C': face.extk = ACT_CONTACT; break;
+	case 'C':
+//            face.extk = ACT_CONTACT;
+	    break;
 	
 	case ALT('s'):
 	case '/': face.extk = ACT_QUICKFIND; break;
     }
 
-    if(k && (strchr("?rRqQsShHmMuUgGaAfFcC/", k)
+    if(k && face.extk && (strchr("?rRqQsShHmMuUgGaAfFcC/", k)
 	|| (k == KEY_DC)
 	|| (k == KEY_F(2))
 	|| (k == KEY_F(3))
