@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.201 2003/11/05 09:07:39 konst Exp $
+* $Id: icqface.cc,v 1.202 2003/11/23 01:09:34 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1424,6 +1424,8 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	if(pnames.size() > 1) {
 	    m.setpos(0);
 	}
+
+	m.otherkeys = &statuskeys;
 
 	m.scale();
 
@@ -3081,6 +3083,14 @@ int icqface::findreskeys(dialogbox &db, int k) {
 	    return -3;
     }
 
+    return -1;
+}
+
+int icqface::statuskeys(verticalmenu &m, int k) {
+    char *status_order = "o_adncfi";	// Shortcuts for status
+    char *p = strchr(status_order, k);
+    if (p)
+	return (1 + p - status_order);
     return -1;
 }
 

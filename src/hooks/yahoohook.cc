@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.97 2003/11/22 23:58:56 konst Exp $
+* $Id: yahoohook.cc,v 1.98 2003/11/23 01:09:35 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,7 +37,7 @@
 #include "accountmanager.h"
 #include "eventmanager.h"
 
-#include "libyahoo2.h"
+#include "yahoo2.h"
 
 #include <netdb.h>
 #include <sys/socket.h>
@@ -1105,7 +1105,7 @@ void yahoohook::chat_message(int id, char *who, char *room, char *msg, int msgty
 void yahoohook::rejected(int id, char *who, char *msg) {
 }
 
-void yahoohook::got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
+void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
 }
 
 void yahoohook::webcam_invite(int id, char *from) {

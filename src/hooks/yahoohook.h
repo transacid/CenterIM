@@ -6,6 +6,8 @@
 #ifdef BUILD_YAHOO
 
 #include "icqconf.h"
+
+#define USE_STRUCT_CALLBACKS
 #include "yahoo2_callbacks.h"
 
 class yahoohook: public abstracthook {
@@ -72,7 +74,7 @@ class yahoohook: public abstracthook {
 	static void chat_userleave(int id, char *room, char *who);
 	static void chat_message(int id, char *who, char *room, char *msg, int msgtype, int utf8);
 	static void rejected(int id, char *who, char *msg);
-	static void got_webcam_image(int id, const char * who, unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
+	static void got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp);
 	static void webcam_invite(int id, char *from);
 	static void webcam_invite_reply(int id, char *from, int accept);
 	static void webcam_closed(int id, char *who, int reason);
