@@ -101,7 +101,7 @@ bool imexternal::action::exec(const imevent &ev) {
 void imexternal::action::respond() {
     imevent *ev;
 
-    if((options | aostdout) && !output.empty()) {
+    if((options & aostdout) && !output.empty()) {
 	ev = 0;
 
 	switch(currentev->gettype()) {
@@ -163,7 +163,7 @@ void imexternal::action::execscript() {
 	    close(outpipe[0]);
 	    close(inpipe[1]);
 
-	    if(options | aostdin) {
+	    if(options & aostdin) {
 		if(currentev->gettype() == imevent::message) {
 		    const immessage *m = static_cast<const immessage *>(currentev);
 		    text = m->gettext();
@@ -173,9 +173,10 @@ void imexternal::action::execscript() {
 		close(outpipe[1]);
 	    }
 
-	    if(options | aostdout) {
+	    text = "";
+
+	    if(options & aostdout) {
 		pout.attach(inpipe[0]);
-		text = "";
 
 		if(pout.is_open()) {
 		    while(!pout.eof()) {

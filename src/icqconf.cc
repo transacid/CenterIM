@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.40 2002/02/22 13:02:16 konst Exp $
+* $Id: icqconf.cc,v 1.41 2002/02/22 13:47:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -762,6 +762,8 @@ void icqconf::constructevent(const string event, const string proto, const strin
 	}
 
 	ev = new imurl(cdest, imevent::outgoing, url, text);
+    } else if(event == "sms") {
+	ev = new imsms(cdest, imevent::outgoing, text);
     } else {
 	cout << _("event sending error: unknown event type") << endl;
 	exit(1);
@@ -792,9 +794,16 @@ void icqconf::constructevent(const string event, const string proto, const strin
 }
 
 void icqconf::usage() const {
-    cout << "Usage: " << argv0 << " [OPTION].." << endl << endl;
-    cout << "\t--ascii or -a : use characters for windows and UI controls" << endl;
-    cout << "\t--help : display this stuff" << endl;
+    cout << "Usage: " << argv0 << " [OPTION].." << endl;
+
+    cout << endl << "General options:" << endl;
+    cout << "  --ascii, -a              use characters for windows and UI controls" << endl;
+    cout << "  --help                   display this stuff" << endl;
+
+    cout << endl << "Events sending options:" << endl;
+    cout << "  -s, --send <event type>  event type; can be msg, sms or url" << endl;
+    cout << "  -p, --proto <protocol>   protocol type; can be icq, yahoo or msn" << endl;
+    cout << "  -t, --to <destination>   destination UIN or nick (depends on protocol)" << endl;
 
     cout << endl << "Report bugs to <centericq-bugs@konst.org.ua>." << endl;
 }

@@ -41,11 +41,13 @@ Contents
     8.3. Invisible list
 9. Advanced features
     9.1. Arabic and Hebrew languages support
-    9.2. External actions and auto-responses
-	9.2.1. Elizatalk: making fun with your friends
-	9.2.2. Remote control with external actions
-    9.3. Protocol debug mode
-    9.4. Latest CVS snapshots
+    9.2. Sending events from the command line
+    9.3. External actions and auto-responses
+	9.3.1. Elizatalk: making fun with your friends
+	9.3.2. Remote control with external actions
+	9.3.3. Forwarding events
+    9.4. Protocol debug mode
+    9.5. Latest CVS snapshots
 10. Lynx
     10.1. The program homepage
 	10.1.1. Centericq mailing list
@@ -640,7 +642,45 @@ fails to find the library (you'll be reported), try
 there, guys.
 
 
-9.2. External actions and auto-responses
+9.2. Sending events from the command line
+-----------------------------------------
+
+  In fact, it's not really sending. Centericq just allows you to put an
+event to the outgoing queue from another process with command line
+options. To have the event sent immediately centericq must be running,
+otherwise all of your queued events will be sent as soon as the program
+is launched and connected to the corresponding IM network. Also the
+destination contact must present on your contact list.
+
+  The following command line options are used to put an event to the
+outgoing queue:
+
+-s or --send <event type>
+
+    This parameter specifies the type of event you want to send.
+    Currently only "msg", "url" and "sms" are supported.
+
+-p or --proto <protocol type>
+
+    This one specifies to which IM network the destination contact
+    beyongs. Can be "icq", "yahoo" or "msn".
+
+-t or --to
+
+    Finally, which this one you specify nickname or UIN of the
+    destination contact.
+
+The message text is read from the standard input, so use pipes in shell
+to pass it. For example, you can say "hi" to me through the ICQ network
+with the following command:
+
+    $ echo "hi" | centericq -s msg -p icq -t 17502151
+
+Please note, that all three parameters are required in order to queue an
+event.
+
+
+9.3. External actions and auto-responses
 ----------------------------------------
 
   It is possible to make centericq run external programs, scripts and
@@ -740,7 +780,7 @@ one, you can always perform necessary checks in "%exec" so that only one
 sends a reply.
 
 
-9.2.1. Elizatalk: making fun with your friends
+9.3.1. Elizatalk: making fun with your friends
 ----------------------------------------------
 
   One of the most intresting and funny uses for external actions in
@@ -776,7 +816,7 @@ Voila! You might also want to read the elizatalk documentation. Though,
 with my great explanations it's not necessary anymore :)
 
 
-9.2.2. Remote control with external actions
+9.3.2. Remote control with external actions
 -------------------------------------------
 
   Another useful thing you can make with external actions is remote
@@ -813,7 +853,42 @@ esac
 [ -------------------------------------------------------------------------- ]
 
 
-9.3. Protocol debug mode
+9.3.3. Forwarding events
+------------------------
+
+  The same way it's possible to setup forwarding of events to other
+contacts, or with SMSes when you are away from centericq. The forwarding
+is to be performed with the centericq command line options described
+below, which allow to send events from out the program.
+
+  The following example shows a simple setup for forwarding incoming icq
+messages when you're away to a cellular phone with SMS.
+
+[ - cut (centericq external actions setup for simple events forwarding) ---- ]
+
+%action		ICQ messages forwarding
+event		msg
+proto		icq
+status		away na
+options		stdin
+
+%exec
+#!/bin/sh
+
+msg=`cat`
+echo $msg | centericq -s sms -p icq -t <put an uin here>
+
+[ -------------------------------------------------------------------------- ]
+
+Please note that you must have an UIN on your contact list that has your
+cellular phone number associated with it. Such an inconveniece exists
+because of an ability to send SMSes only through ICQ network. Also, you
+can easily forward your incoming events to any other IM contacts, emails
+with the mail(1) command. In fact, everything you can access from the
+command line is possible to be used here.
+
+
+9.4. Protocol debug mode
 ------------------------
 
   Actually I have this feature for myself, to track protocol messages
@@ -829,7 +904,7 @@ protocol messages will be visible in the log window, and also they'll be
 written into the ~/.centericq/log file.
 
 
-9.4. Latest CVS snapshots
+9.5. Latest CVS snapshots
 -------------------------
 
   If you wanna always have the recent version of the program, there is
