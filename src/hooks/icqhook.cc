@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.60 2002/02/21 17:29:08 konst Exp $
+* $Id: icqhook.cc,v 1.61 2002/02/26 11:06:26 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -321,17 +321,12 @@ bool icqhook::send(const imevent &ev) {
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = static_cast<const imsms *> (&ev);
 	ic->setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
-	cli.SendEvent(new SMSMessageEvent(ic, rusconv("kw", m->gettext()), false));
+	cli.SendEvent(new SMSMessageEvent(ic, rusconv("kw", m->gettext()), true));
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
 	cli.SendEvent(new AuthAckEvent(ic,
 	    rusconv("kw", m->gettext()), m->getgranted()));
-
-    } else if(ev.gettype() == imevent::sms) {
-	const imsms *m = static_cast<const imsms *> (&ev);
-	cli.SendEvent(new SMSMessageEvent(ic, rusconv("kw", m->gettext()),
-	    true));
 
     } else {
 	return false;
@@ -789,17 +784,6 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 		em.store(imsms(c->getdesc(), imevent::incoming,
 		    rusconv("wk", r->getMessage())));
 	    }
-	}
-
-    } else if(ev->getType() == MessageEvent::SMS_Receipt) {
-	SMSReceiptEvent *r;
-	if(r = dynamic_cast<SMSReceiptEvent *>(ev)) {
-	    face.log("sms receipt %s", r->delivered() ? "delivered" : "failed");
-	    face.log(r->getMessage());
-	    face.log(r->getMessageId());
-	    face.log(r->getDestination());
-	    face.log(r->getSubmissionTime());
-	    face.log(r->getDeliveryTime());
 	}
 
     } else if(ev->getType() == MessageEvent::AuthReq) {
