@@ -74,7 +74,7 @@ AC_CHECK_LIB(nsl, gethostbyname)
 
 AM_PATH_GLIB(1.2.0,, AC_MSG_ERROR([glib is required in order to compile centericq - download it from ftp://ftp.gtk.org/pub/gtk]))
 
-AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.6 libmsn-0.1 firetalk-0.1 libyahoo2-0.1)
+AC_CONFIG_SUBDIRS(kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 libmsn-0.1 libicq2000-0.6 firetalk-0.1 libyahoo2-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)
