@@ -179,6 +179,7 @@ struct s_firetalk_protocol_functions {
 	enum firetalk_error (*chat_kick)(client_t, const char * const, const char * const, const char * const);
 	enum firetalk_error (*chat_send_message)(client_t, const char * const, const char * const, const int);
 	enum firetalk_error (*chat_send_action)(client_t, const char * const, const char * const, const int);
+	enum firetalk_error (*chat_requestextended)(client_t, const char * const);
 	enum firetalk_error (*subcode_send_request)(client_t, const char * const, const char * const, const char * const);
 	enum firetalk_error (*subcode_send_reply)(client_t, const char * const, const char * const, const char * const);
 	const char * const (*room_normalize)(const char * const);
@@ -211,6 +212,8 @@ void firetalk_callback_eviled(client_t c, const int newevil, const char * const 
 void firetalk_callback_newnick(client_t c, const char * const nickname);
 void firetalk_callback_passchanged(client_t c);
 void firetalk_callback_user_nickchanged(client_t c, const char * const oldnick, const char * const newnick);
+void firetalk_callback_chat_list_extended(client_t c, const char * const nickname, const char * const room, const char * const login, const char * const hostname, const char * const net, const char * const description);
+void firetalk_callback_chat_end_extended(client_t c);
 void firetalk_callback_chat_joined(client_t c, const char * const room);
 void firetalk_callback_chat_left(client_t c, const char * const room);
 void firetalk_callback_chat_kicked(client_t c, const char * const room, const char * const by, const char * const reason);

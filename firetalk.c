@@ -115,6 +115,7 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		toc_chat_kick,
 		toc_chat_send_message,
 		toc_chat_send_action,
+		0,
 		toc_subcode_send_request,
 		toc_subcode_send_reply,
 		aim_normalize_room_name,
@@ -154,6 +155,7 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		irc_chat_kick,
 		irc_chat_send_message,
 		irc_chat_send_action,
+		irc_chat_requestextended,
 		irc_subcode_send_request,
 		irc_subcode_send_reply,
 		irc_normalize_room_name,
@@ -1031,6 +1033,26 @@ void firetalk_callback_chat_getmessage(client_t c, const char * const room, cons
 		return;
 	if (conn->callbacks[FC_CHAT_GETMESSAGE])
 		conn->callbacks[FC_CHAT_GETMESSAGE](conn,conn->clientstruct,room,from,automessage,message);
+	return;
+}
+
+void firetalk_callback_chat_list_extended(client_t c, const char * const nickname, const char * const room, const char * const login, const char * const hostname, const char * const net, const char * const description) {
+	struct s_firetalk_handle *conn;
+	conn = firetalk_find_handle(c);
+	if (conn == NULL)
+		return;
+	if (conn->callbacks[FC_CHAT_LIST_EXTENDED])
+		conn->callbacks[FC_CHAT_LIST_EXTENDED](conn,conn->clientstruct, nickname, room, login, hostname, net, description);
+	return;
+}
+
+void firetalk_callback_chat_end_extended(client_t c) {
+	struct s_firetalk_handle *conn;
+	conn = firetalk_find_handle(c);
+	if (conn == NULL)
+		return;
+	if (conn->callbacks[FC_CHAT_END_EXTENDED])
+		conn->callbacks[FC_CHAT_END_EXTENDED](conn,conn->clientstruct);
 	return;
 }
 
@@ -2091,6 +2113,24 @@ enum firetalk_error firetalk_chat_part(firetalk_t conn, const char * const room)
 		return FE_ROOMUNAVAILABLE;
 
 	return protocol_functions[conn->protocol].chat_part(conn->handle,normalroom);
+}
+
+enum firetalk_error firetalk_chat_requestextended(firetalk_t conn, const char * const room) {
+	const char *normalroom;
+
+#ifdef DEBUG
+	if (firetalk_check_handle(conn) != FE_SUCCESS)
+		return FE_BADHANDLE;
+#endif
+
+	if (conn->connected != FCS_ACTIVE)
+		return FE_NOTCONNECTED;
+
+	normalroom = protocol_functions[conn->protocol].room_normalize(room);
+	if (!normalroom)
+		return FE_ROOMUNAVAILABLE;
+
+	return protocol_functions[conn->protocol].chat_requestextended(conn->handle,normalroom);
 }
 
 enum firetalk_error firetalk_chat_send_message(firetalk_t conn, const char * const room, const char * const message, const int auto_flag) {

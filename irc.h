@@ -51,6 +51,7 @@ enum firetalk_error irc_chat_set_topic(client_t c, const char * const room, cons
 enum firetalk_error irc_chat_op(client_t c, const char * const room, const char * const who);
 enum firetalk_error irc_chat_deop(client_t c, const char * const room, const char * const who);
 enum firetalk_error irc_chat_kick(client_t c, const char * const room, const char * const who, const char * const reason);
+enum firetalk_error irc_chat_requestextended(client_t c, const char * const room);
 
 enum firetalk_error irc_im_send_message(client_t c, const char * const dest, const char * const message, const int auto_flag);
 enum firetalk_error irc_im_send_action(client_t c, const char * const dest, const char * const message, const int auto_flag);

@@ -119,6 +119,10 @@ enum firetalk_callback {
 		/* void *connection, void *clientstruct, char *room, char *oldnick, char *newnick */
 	FC_CHAT_LISTMEMBER,
 		/* void *connection, vodi *clientstruct, char *room, char *membername, int opped */
+	FC_CHAT_LIST_EXTENDED,
+		/* void *connection, void *clientstruct, char *nickname, char *room, char *login, char *hostname, char *net, char *description */
+	FC_CHAT_END_EXTENDED,
+		/* void *connection, void *clientstruct */
 	FC_CHAT_NAMES,
 		/* void *connection, vodi *clientstruct, char *room */
 	FC_FILE_OFFER,
@@ -211,6 +215,7 @@ enum firetalk_error firetalk_chat_op(firetalk_t conn, const char * const room, c
 enum firetalk_error firetalk_chat_deop(firetalk_t conn, const char * const room, const char * const who);
 enum firetalk_error firetalk_chat_kick(firetalk_t conn, const char * const room, const char * const who, const char * const reason);
 enum firetalk_error firetalk_chat_listmembers(firetalk_t conn, const char * const room);
+enum firetalk_error firetalk_chat_requestextended(firetalk_t conn, const char * const room);
 
 enum firetalk_error firetalk_im_internal_add_buddy(firetalk_t conn, const char * const nickname);
 enum firetalk_error firetalk_im_internal_add_deny(firetalk_t conn, const char * const nickname);

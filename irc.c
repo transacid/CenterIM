@@ -655,6 +655,9 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 							whoisiter = whoisiter->next;
 						}
 						break;
+					case 315:
+						firetalk_callback_chat_end_extended(c);
+						break;
 					case 318: /* RPL_ENDOFWHOIS */
 						whoisiter = c->whois_head;
 						whoisiter2 = NULL;
@@ -686,6 +689,9 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 						break;
 					case 319:
 						firetalk_callback_gotchannels(c, args[3], args[4]);
+						break;
+					case 352:
+						firetalk_callback_chat_list_extended(c, args[7], args[3], args[4], args[5], args[6], args[9]);
 						break;
 					case 366:
 						firetalk_callback_chat_names(c, args[3]);
@@ -994,6 +1000,10 @@ enum firetalk_error irc_chat_kick(client_t c, const char * const room, const cha
 		return irc_send_printf(c,"KICK %s %s :%s",room,who,reason);
 	else
 		return irc_send_printf(c,"KICK %s %s",room,who);
+}
+
+enum firetalk_error irc_chat_requestextended(client_t c, const char * const room) {
+	return irc_send_printf(c,"WHO %s", room);
 }
 
 enum firetalk_error irc_im_add_buddy(client_t c, const char * const nickname) {
