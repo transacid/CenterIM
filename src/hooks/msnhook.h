@@ -25,35 +25,35 @@ class msnhook : public abstracthook {
     friend void MSN::ext::registerSocket(int s, int reading, int writing);
     friend void MSN::ext::unregisterSocket(int s);
     friend void MSN::ext::showError(MSN::Connection * conn, string msg);
-    friend void MSN::ext::buddyChangedStatus(MSN::Connection * conn, string buddy, string friendlyname, string state);
-    friend void MSN::ext::buddyOffline(MSN::Connection * conn, string buddy);
+    friend void MSN::ext::buddyChangedStatus(MSN::Connection * conn, MSN::Passport buddy, string friendlyname, MSN::BuddyStatus state);
+    friend void MSN::ext::buddyOffline(MSN::Connection * conn, MSN::Passport buddy);
     friend void MSN::ext::log(int writing, const char* buf);
     friend void MSN::ext::gotFriendlyName(MSN::Connection * conn, string friendlyname);
     friend void MSN::ext::gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data);
     friend void MSN::ext::gotLatestListSerial(MSN::Connection * conn, int serial);
     friend void MSN::ext::gotGTC(MSN::Connection * conn, char c);
     friend void MSN::ext::gotBLP(MSN::Connection * conn, char c);
-    friend void MSN::ext::gotNewReverseListEntry(MSN::Connection * conn, string username, string friendlyname);
-    friend void MSN::ext::addedListEntry(MSN::Connection * conn, string lst, string username, int groupID);
-    friend void MSN::ext::removedListEntry(MSN::Connection * conn, string lst, string username, int groupID);
+    friend void MSN::ext::gotNewReverseListEntry(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname);
+    friend void MSN::ext::addedListEntry(MSN::Connection * conn, std::string list, MSN::Passport buddy, int groupID);
+    friend void MSN::ext::removedListEntry(MSN::Connection * conn, std::string list, MSN::Passport buddy, int groupID);
     friend void MSN::ext::addedGroup(MSN::Connection * conn, string groupName, int groupID);
     friend void MSN::ext::removedGroup(MSN::Connection * conn, int groupID);
     friend void MSN::ext::renamedGroup(MSN::Connection * conn, int groupID, string newGroupName);
     friend void MSN::ext::gotSwitchboard(MSN::Connection * conn, void * tag);
-    friend void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, string username, string friendlyname, int is_initial);
-    friend void MSN::ext::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, string username);
-    friend void MSN::ext::gotInstantMessage(MSN::SwitchboardServerConnection * conn, string username, string friendlyname, MSN::Message * msg);
+    friend void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial);
+    friend void MSN::ext::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy);
+    friend void MSN::ext::gotInstantMessage(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, MSN::Message * msg);
     friend void MSN::ext::failedSendingMessage(MSN::Connection * conn);
-    friend void MSN::ext::buddyTyping(MSN::Connection * conn, string username, string friendlyname);
+    friend void MSN::ext::buddyTyping(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname);
     friend void MSN::ext::gotInitialEmailNotification(MSN::Connection * conn, int unread_inbox, int unread_folders);
     friend void MSN::ext::gotNewEmailNotification(MSN::Connection * conn, string from, string subject);
-    friend void MSN::ext::gotFileTransferInvitation(MSN::Connection * conn, string username, string friendlyname, MSN::FileTransferInvitation * inv);
+    friend void MSN::ext::gotFileTransferInvitation(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname, MSN::FileTransferInvitation * inv);
     friend void MSN::ext::fileTransferProgress(MSN::FileTransferInvitation * inv, string status, unsigned long recv, unsigned long total);
     friend void MSN::ext::fileTransferFailed(MSN::FileTransferInvitation * inv, int error, string message);
     friend void MSN::ext::fileTransferSucceeded(MSN::FileTransferInvitation * inv);
     friend void MSN::ext::gotNewConnection(MSN::Connection * conn);
     friend void MSN::ext::closingConnection(MSN::Connection * conn);
-    friend void MSN::ext::changedStatus(MSN::Connection * conn, string state);
+    friend void MSN::ext::changedStatus(MSN::Connection * conn, MSN::BuddyStatus state);
     friend int MSN::ext::connectToServer(string server, int port, bool *connected);
     friend int MSN::ext::listenOnPort(int port);
     friend string MSN::ext::getOurIP();
@@ -61,7 +61,7 @@ class msnhook : public abstracthook {
 
     protected:
 	imstatus ourstatus;
-	bool fonline, flogged, readinfo;
+	bool fonline, flogged, readinfo, lasterror;
 	MSN::NotificationServerConnection *conn;
 	time_t timer_ping;
 
@@ -80,6 +80,7 @@ class msnhook : public abstracthook {
 
 	void removeuser(const imcontact &ic, bool report);
 	bool getfevent(MSN::FileTransferInvitation *fhandle, imfile &fr);
+	void statusupdate(string buddy, string friendlyname, imstatus status);
 
     public:
 	msnhook();

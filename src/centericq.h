@@ -34,6 +34,7 @@ class centericq {
 	bool regmode;
 
 	map<string, time_t> configstats;
+	map<protocolname, reconnectInfo> reconnect;
 
 	static void handlesignal(int signum);
 

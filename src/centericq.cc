@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.189 2004/06/10 23:17:31 konst Exp $
+* $Id: centericq.cc,v 1.190 2004/06/12 14:52:11 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -452,6 +452,7 @@ void centericq::changestatus() {
 			    conf.setawaymsg(*ipname, tmp);
 
 		    hook.setstatus(st);
+		    reconnect[*ipname].timer = timer_current;
 
 		}
 	    }
@@ -1496,8 +1497,6 @@ void centericq::exectimers() {
 
 	    hook.exectimers();
 
-	    static map<protocolname, reconnectInfo> reconnect;
-
 	    if(timer_current-reconnect[pname].timer > reconnect[pname].period) {
 		/*
 		*
@@ -1506,7 +1505,7 @@ void centericq::exectimers() {
 		*/
 
 		if(!hook.logged()) {
-		    time(&reconnect[pname].timer);
+		    reconnect[pname].timer = timer_current;
 
 		    if(reconnect[pname].period < 180)
 			reconnect[pname].period += reconnect[pname].period/2;
