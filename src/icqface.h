@@ -47,6 +47,7 @@
 #define ACT_ORG_GROUPS  -35
 #define ACT_HIDEOFFLINE -36
 #define ACT_FETCHAWAY   -37
+#define ACT_EMAIL       -38
 
 extern class centericq cicq;
 
