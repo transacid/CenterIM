@@ -1,23 +1,6 @@
 DONE
 
-дифференцировать direct communications и msgs though server
-
-change the default openurl action to following
-openurl (if test ! -z "`ps x | egrep '[0-9]:[0-9][0-9] netscape'`"; then netscape -remote 'openURL($url$, new-window)' -display 0:0; else netscape "$url$" -display 0:0; fi) >/dev/null 2>&1 &
-
-add the GNU copyright notice
-warn on running the second copy in parallel
-
-одно сообщение заколдобилось - посланное следом ушло, но не попало в хистори
-
-While receiving a file with the same filename twice, the existing file
-will not be overwritten
-
-man page
-
 TODO
-
-filemanager doesn't go inside symlinked dirs
 
 update work section info
 todo and reminders
@@ -47,4 +30,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.14 2001/06/07 09:35:25 konst Exp $
+$Id: TODO,v 1.15 2001/06/07 09:50:01 konst Exp $
