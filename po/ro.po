@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-28 00:32+0100\n"
+"POT-Creation-Date: 2005-02-03 01:26+0100\n"
 "PO-Revision-Date: 2002-09-10 22:43+0200\n"
 "Last-Translator: Ovidiu Ghineþ <oghinet@umfiasi.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] conectare imposibilã: "
 
-#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:910
 msgid "could not resolve hostname"
 msgstr "could not resolve hostname"
 
@@ -102,7 +102,7 @@ msgid "The user %s has left the conference"
 msgstr "Utilizatorul %s a pãrãsit conferinþa"
 
 #: src/hooks/yahoohook.cc:965 src/hooks/icqhook.cc:1181
-#: src/hooks/msnhook.cc:713
+#: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "Utilizatorul v-a adãugat la contactele lui/ei"
 
@@ -1314,7 +1314,7 @@ msgstr "mutã sUs"
 msgid "move Down"
 msgstr "mutã jos"
 
-#: src/icqdialogs.cc:1557 src/icqdialogs.cc:1987
+#: src/icqdialogs.cc:1557 src/icqdialogs.cc:2066
 msgid "Select"
 msgstr "Selecteazã"
 
@@ -1498,14 +1498,33 @@ msgstr ""
 msgid "Current mood: "
 msgstr ""
 
-#: src/icqdialogs.cc:1980
+#: src/icqdialogs.cc:1976
+#, fuzzy
+msgid "pgp key quick search"
+msgstr " Contacte "
+
+#: src/icqdialogs.cc:1978
+#, fuzzy, c-format
+msgid "PGP key search: type to find, %s find again, Enter finish"
+msgstr "CautareRapidã: tasteaza pt. gãsire, Alt-S din nou, Enter gata"
+
+#: src/icqdialogs.cc:2059
 msgid " Select PGP key to use "
 msgstr ""
 
-#: src/icqdialogs.cc:1998
+#: src/icqdialogs.cc:2080
 #, fuzzy
 msgid " Use no key"
 msgstr "Informaþii utilizator"
+
+#: src/icqdialogs.cc:2094
+msgid "pgp key selection"
+msgstr ""
+
+#: src/icqdialogs.cc:2096
+#, c-format
+msgid "PGP key selection: %s for quick lookup"
+msgstr ""
 
 #: src/imexternal.cc:128
 #, fuzzy, c-format
@@ -3130,45 +3149,45 @@ msgstr "Selecteazã contactele de adãugat la listã"
 msgid "Mass move selected users to.."
 msgstr ""
 
-#: src/hooks/msnhook.cc:430
+#: src/hooks/msnhook.cc:431
 #, fuzzy, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr ""
 "+ [irc] preluarea listei membrilor canalului s-a încheiat, %d rezultate"
 
-#: src/hooks/msnhook.cc:793
+#: src/hooks/msnhook.cc:794
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:799
+#: src/hooks/msnhook.cc:800
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail de la %s <%s>, %s"
 
-#: src/hooks/msnhook.cc:905
+#: src/hooks/msnhook.cc:906
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ [yahoo] conectare imposibilã: "
 
-#: src/hooks/msnhook.cc:929
+#: src/hooks/msnhook.cc:930
 #, fuzzy
 msgid "verify the hostname and port"
 msgstr "verificaþi host-ul ºi portul introdus"
 
-#: src/impgp.cc:67
+#: src/impgp.cc:71
 msgid "PGP passphrase required: "
 msgstr ""
 
-#: src/impgp.cc:70
+#: src/impgp.cc:74
 msgid "incorrect PGP passphrase"
 msgstr ""
 
-#: src/impgp.cc:121
+#: src/impgp.cc:125
 msgid "PGP sign error: "
 msgstr ""
 
-#: src/impgp.cc:228
+#: src/impgp.cc:232
 msgid "PGP encrypt error: "
 msgstr ""
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.90 2004/11/11 13:42:05 konst Exp $
+* $Id: msnhook.cc,v 1.91 2005/02/03 02:02:37 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -136,6 +136,7 @@ void msnhook::connect() {
 }
 
 void msnhook::disconnect() {
+    fonline = false;
     if(conn.connectionState() != MSN::NotificationServerConnection::NS_DISCONNECTED)
 	conn.disconnect();
 }

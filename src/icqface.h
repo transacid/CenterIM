@@ -114,6 +114,7 @@ class icqface {
 	static int userinfokeys(dialogbox &db, int k);
 	static int findreskeys(dialogbox &db, int k);
 	static int eventviewkeys(dialogbox &db, int k);
+	static int findpgpkeys(dialogbox &db, int k);
 	static int statuskeys(verticalmenu &m, int k);
 	static int fullscreenkeys(textbrowser &m, int k);
 
@@ -170,6 +171,7 @@ class icqface {
 
 	string extracttime(const imevent &ev);
 	void peerinfo(int line, const imcontact &ic);
+	void findpgpkey(dialogbox &db, const vector<string> &items);
 
     public:
 	int extk;

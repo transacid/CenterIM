@@ -2,7 +2,7 @@
 # of a project. For more information visit http://thekonst.net/motor
 
 %version
-4.15.0
+4.20.0
 %template
 terminal program/C++
 %vcsname
@@ -12,7 +12,7 @@ CVS
 %vcsmodule
 centericq
 %arguments
--b ~/.centericq_tst -o -d
+-b ~/.centericq_tst -d -o
 %cflags
 
 %lflags
@@ -328,8 +328,7 @@ default	1
 %editor
 %breakpoints
 %watch
-p1
-p2
+i
 %desktop
 ncurses_watchactive	0
 distdir	/home/konst/devel

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-28 00:32+0100\n"
+"POT-Creation-Date: 2005-02-03 01:26+0100\n"
 "PO-Revision-Date: 2002-01-01 01:01+0020\n"
 "Last-Translator: Thomas Nemeth <tnemeth@free.fr>\n"
 "Language-Team: fr <fr@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] impossible de se connecter : "
 
-#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:910
 msgid "could not resolve hostname"
 msgstr "impossible de résoudre le nom d'hôte"
 
@@ -115,7 +115,7 @@ msgid "The user %s has left the conference"
 msgstr "L'utilisateur %s a quitté la conférence"
 
 #: src/hooks/yahoohook.cc:965 src/hooks/icqhook.cc:1181
-#: src/hooks/msnhook.cc:713
+#: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "L'utilisateur vous a ajouté à sa liste de contacts"
 
@@ -1307,7 +1307,7 @@ msgstr "monter"
 msgid "move Down"
 msgstr "Descendre"
 
-#: src/icqdialogs.cc:1557 src/icqdialogs.cc:1987
+#: src/icqdialogs.cc:1557 src/icqdialogs.cc:2066
 msgid "Select"
 msgstr "Sélectionner"
 
@@ -1484,14 +1484,34 @@ msgstr "Actuellement : "
 msgid "Current mood: "
 msgstr "Humeur actuelle : "
 
-#: src/icqdialogs.cc:1980
+#: src/icqdialogs.cc:1976
+#, fuzzy
+msgid "pgp key quick search"
+msgstr " Liste des contacts "
+
+#: src/icqdialogs.cc:1978
+#, fuzzy, c-format
+msgid "PGP key search: type to find, %s find again, Enter finish"
+msgstr ""
+"Quicksearch : entrez un nom, <Alt-S> chercher à nouveau, <entrée> terminer"
+
+#: src/icqdialogs.cc:2059
 msgid " Select PGP key to use "
 msgstr ""
 
-#: src/icqdialogs.cc:1998
+#: src/icqdialogs.cc:2080
 #, fuzzy
 msgid " Use no key"
 msgstr "Infos contact"
+
+#: src/icqdialogs.cc:2094
+msgid "pgp key selection"
+msgstr ""
+
+#: src/icqdialogs.cc:2096
+#, c-format
+msgid "PGP key selection: %s for quick lookup"
+msgstr ""
 
 #: src/imexternal.cc:128
 #, c-format
@@ -3090,43 +3110,43 @@ msgstr "Sélectionnez les contacts à déplacer"
 msgid "Mass move selected users to.."
 msgstr "Déplacer en bloc les contacts sélectionnés vers..."
 
-#: src/hooks/msnhook.cc:430
+#: src/hooks/msnhook.cc:431
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] affichage inversé des utilisateurs terminé, %d réponse(s)"
 
-#: src/hooks/msnhook.cc:793
+#: src/hooks/msnhook.cc:794
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 "+ [msn] e-mail non lus : %d dans la boite d'entrée, %d dans les dossiers"
 
-#: src/hooks/msnhook.cc:799
+#: src/hooks/msnhook.cc:800
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail de %s, %s"
 
-#: src/hooks/msnhook.cc:905
+#: src/hooks/msnhook.cc:906
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] impossible de se connecter : "
 
-#: src/hooks/msnhook.cc:929
+#: src/hooks/msnhook.cc:930
 msgid "verify the hostname and port"
 msgstr "vérifiez le nom d'hôte et le port"
 
-#: src/impgp.cc:67
+#: src/impgp.cc:71
 msgid "PGP passphrase required: "
 msgstr ""
 
-#: src/impgp.cc:70
+#: src/impgp.cc:74
 msgid "incorrect PGP passphrase"
 msgstr ""
 
-#: src/impgp.cc:121
+#: src/impgp.cc:125
 msgid "PGP sign error: "
 msgstr ""
 
-#: src/impgp.cc:228
+#: src/impgp.cc:232
 msgid "PGP encrypt error: "
 msgstr ""
 

@@ -1980,3 +1980,29 @@ centericq with all protocols set to offline.
 
 Another type of external event was added. Now you can execute your actions
 when someone goes offline. Hope someone finds that useful.
+
+4.20.0
+------
+
+PGP encryption support was implemented for the Jabber module. In a nutshell
+this means that with a proper setup your communications get a way more secure.
+GPGME library is needed to build the PGP support.
+
+Fixed the RTF parser that takes charge when a message from a Windows ICQ
+client is received. One problem was that it used to treat backspace characters
+wrong sometimes. Another problem with utf-16 was fixed with a patch submitted
+by Vadim Nosovsky.
+
+After ICQ dual login detection centericq used to try re-connecting, though it
+wasn't supposed to. Fixed.
+
+During a long time noone reported me the bug related to libicq2000's header
+files getting installed each time "make install" was run for centericq. Finally
+Wolfram Schlich noted this one, so I fixed it.
+
+Logging on Yahoo! didn't work on Sun Sparc machines. Fixed that. That might
+also revive Gadu-Gadu on bigendian architectures.
+
+A couple of interface related bugs were fixed, such as a mistake in the group
+organization dialog as well as not clearing pending messages for contacts in
+non-chat communication mode.

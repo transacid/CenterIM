@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.149 2005/01/27 00:27:42 konst Exp $
+* $Id: icqdialogs.cc,v 1.150 2005/02/03 02:02:37 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1968,13 +1968,92 @@ bool icqface::setljparams(imxmlevent *ev) {
     return r;
 }
 
+void icqface::findpgpkey(dialogbox &db, const vector<string> &items) {
+    bool fin;
+    string sub, upsub;
+    int k, i;
+
+    xtermtitle(_("pgp key quick search"));
+
+    status(_("PGP key search: type to find, %s find again, Enter finish"),
+	getstatkey(key_quickfind, section_contact).c_str());
+
+    textwindow *w = db.getwindow();
+    verticalmenu *cm = db.getmenu();
+
+    for(fin = false; !fin; ) {
+	attrset(conf.getcolor(cp_dialog_frame));
+	mvhline(w->y2-2, w->x1+1, HLINE, w->x2-w->x1-2);
+	kwriteatf(w->x1+2, w->y2-2, conf.getcolor(cp_dialog_highlight), "[ %s ]", sub.c_str());
+	kgotoxy(w->x1+4+sub.size(), w->y2-2);
+	refresh();
+
+	if(cicq.idle())
+	switch(k = getkey()) {
+	    case KEY_ESC:
+	    case '\r':
+		fin = true;
+		break;
+
+	    case KEY_BACKSPACE:
+	    case CTRL('h'):
+		if(!sub.empty()) sub.resize(sub.size()-1);
+		    else fin = true;
+		break;
+
+	    default:
+		if(isprint(k) || key2action(k, section_contact) == key_quickfind) {
+		    i = cm->getpos()+1;
+
+		    if(isprint(k)) {
+			i--;
+			sub += k;
+		    }
+
+		    if(i <= items.size()) {
+			upsub = up(sub);
+			vector<string>::const_iterator it = items.begin()+i;
+			bool passed = false;
+
+			while(1) {
+			    if(it == items.end()) {
+				if(!passed) {
+				    passed = true;
+				    it = items.begin();
+				    continue;
+				} else {
+				    break;
+				}
+			    }
+
+			    if(it->find(upsub) != -1) {
+				cm->setpos(it-items.begin());
+				break;
+			    }
+			    ++it;
+			}
+
+			cm->redraw();
+		    }
+		}
+		break;
+	}
+    }
+
+    attrset(conf.getcolor(cp_dialog_frame));
+    mvhline(w->y2-2, w->x1+1, HLINE, w->x2-w->x1-2);
+    refresh();
+}
+
 bool icqface::selectpgpkey(string &keyid, bool secretonly) {
     bool r = false;
+
+#ifdef HAVE_GPGME
     int n, b;
     dialogbox db;
     bool msb;
-
-#ifdef HAVE_GPGME
+    string buf;
+    vector<string> items;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), _(" Select PGP key to use "));
@@ -1987,7 +2066,10 @@ bool icqface::selectpgpkey(string &keyid, bool secretonly) {
 	conf.getcolor(cp_dialog_selected), _("Select"), 0));
 
     db.addautokeys();
+
     db.idle = &dialogidle;
+    db.otherkeys = &findpgpkeys;
+
     verticalmenu &m = *db.getmenu();
 
     if(!(msb = mainscreenblock)) blockmainscreen();
@@ -1996,9 +2078,12 @@ bool icqface::selectpgpkey(string &keyid, bool secretonly) {
     vector<string>::const_iterator i = keys.begin();
 
     m.additemf(0, 0, _(" Use no key"));
+    items.push_back("");
 
     while(i != keys.end()) {
-	m.additem(0, 0, (string) " " + pgp.getkeyinfo(*i, secretonly));
+	buf = pgp.getkeyinfo(*i, secretonly);
+	m.additem(0, 0, (string) " " + buf);
+	items.push_back(up(buf));
 	if(*i == keyid) m.setpos(m.getcount()-1);
 	++i;
     }
@@ -2006,10 +2091,19 @@ bool icqface::selectpgpkey(string &keyid, bool secretonly) {
     keys.insert(keys.begin(), "");
 
     for(bool fin = false; !fin && !r; ) {
+	xtermtitle(_("pgp key selection"));
+
+	status(_("PGP key selection: %s for quick lookup"),
+	    getstatkey(key_quickfind, section_contact).c_str());
+
 	fin = !db.open(n, b);
 
 	if(!fin) {
-	    if(!b) {
+	    if(n < 1) {
+		if(n == -3)
+		    findpgpkey(db, items);
+
+	    } else if(!b) {
 		keyid = keys[n-1];
 		r = fin = true;
 	    }

@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: centericq 4.9.11\n"
+"Project-Id-Version: centericq 4.20.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-28 00:32+0100\n"
+"POT-Creation-Date: 2005-02-03 01:26+0100\n"
 "PO-Revision-Date: 2004-02-08 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] невозможно соединиться: "
 
-#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:910
 msgid "could not resolve hostname"
 msgstr "невозможно определить IP хоста"
 
@@ -99,7 +99,7 @@ msgid "The user %s has left the conference"
 msgstr "Пользователь %s покинул конференцию"
 
 #: src/hooks/yahoohook.cc:965 src/hooks/icqhook.cc:1181
-#: src/hooks/msnhook.cc:713
+#: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "Пользователь добавил вас в свой список контактов"
 
@@ -1288,7 +1288,7 @@ msgstr "Вверх"
 msgid "move Down"
 msgstr "Вниз"
 
-#: src/icqdialogs.cc:1557 src/icqdialogs.cc:1987
+#: src/icqdialogs.cc:1557 src/icqdialogs.cc:2066
 msgid "Select"
 msgstr "Выбрать"
 
@@ -1465,14 +1465,32 @@ msgstr "Играет в данный момент: "
 msgid "Current mood: "
 msgstr "Текущее настроение: "
 
-#: src/icqdialogs.cc:1980
-msgid " Select PGP key to use "
-msgstr ""
+#: src/icqdialogs.cc:1976
+msgid "pgp key quick search"
+msgstr "быстрый поиск pgp-ключа"
 
-#: src/icqdialogs.cc:1998
-#, fuzzy
+#: src/icqdialogs.cc:1978
+#, c-format
+msgid "PGP key search: type to find, %s find again, Enter finish"
+msgstr ""
+"Быстрый поиск PGP ключа: набирайте для поиска, %s повторить, Enter завершить"
+
+#: src/icqdialogs.cc:2059
+msgid " Select PGP key to use "
+msgstr " Выберите PGP ключ "
+
+#: src/icqdialogs.cc:2080
 msgid " Use no key"
-msgstr "Инфо"
+msgstr " Не использовать ключ"
+
+#: src/icqdialogs.cc:2094
+msgid "pgp key selection"
+msgstr "выбор pgp ключа"
+
+#: src/icqdialogs.cc:2096
+#, c-format
+msgid "PGP key selection: %s for quick lookup"
+msgstr "Выбор PGP ключа: %s для быстрого поиска"
 
 #: src/imexternal.cc:128
 #, c-format
@@ -1501,18 +1519,16 @@ msgid "Free for chat"
 msgstr "Не прочь поболтать"
 
 #: src/imcontact.cc:101
-#, fuzzy
 msgid "Do not disturb"
-msgstr " [d] Не беспокоить"
+msgstr "Не беспокоить"
 
 #: src/imcontact.cc:102 src/imlogger.cc:38
 msgid "Occupied"
 msgstr "Занят"
 
 #: src/imcontact.cc:103
-#, fuzzy
 msgid "Not available"
-msgstr " [n] Недоступен"
+msgstr "Недоступен"
 
 #: src/imcontact.cc:104 src/imlogger.cc:40
 msgid "Away"
@@ -1655,23 +1671,23 @@ msgid " Import friend list : %s "
 msgstr " Добавить друзей в контакт-лист : %s "
 
 #: src/accountmanager.cc:134
-#, fuzzy, c-format
+#, c-format
 msgid " NickServ password (optional) : %s "
-msgstr " Пароль (не обязательно) : %s "
+msgstr " Пароль NickServ (не обязательно) : %s "
 
 #: src/accountmanager.cc:140
 msgid " Register "
 msgstr " Регистрация "
 
 #: src/accountmanager.cc:145
-#, fuzzy, c-format
+#, c-format
 msgid " OpenPGP key: %s "
-msgstr " Пол : %s "
+msgstr " OpenPGP ключ : %s "
 
 #: src/accountmanager.cc:150
-#, fuzzy, c-format
+#, c-format
 msgid " Key passphrase: %s "
-msgstr " Ключевые слова : %s "
+msgstr " Ключевая фраза : %s "
 
 #: src/accountmanager.cc:158
 msgid " Change nickname "
@@ -1723,7 +1739,7 @@ msgstr " приоритет: "
 
 #: src/accountmanager.cc:281
 msgid "PGP key passphrase: "
-msgstr ""
+msgstr "Ключевая фраза для PGP: "
 
 #: src/imcontroller.cc:65
 #, c-format
@@ -1925,10 +1941,12 @@ msgstr "  --no-xtitles, -T         не менять заголовок окна xterm"
 msgid ""
 "  --offline, -o            set all protocols status to offline upon start"
 msgstr ""
+"  --offline, -o            установить статус всех протоколов в offline при "
+"старте"
 
 #: src/icqconf.cc:1292
 msgid "  --debug, -d              enables debug info logging"
-msgstr ""
+msgstr "  --debug, -d              включить запись отладочной информации"
 
 #: src/icqconf.cc:1293
 msgid "  --help                   display this stuff"
@@ -2207,16 +2225,16 @@ msgstr "Игнорировать"
 
 #: src/icqface.cc:297
 msgid " Assign PGP key.."
-msgstr ""
+msgstr " Задать PGP ключ.."
 
 #: src/icqface.cc:297
 msgid " Unassign PGP key"
-msgstr ""
+msgstr " Сбросить PGP ключ"
 
 #: src/icqface.cc:299
 #, c-format
 msgid " Turn PGP encryption %s"
-msgstr ""
+msgstr " Установить PGP-шифрование %s"
 
 #: src/icqface.cc:303
 msgid "Force check"
@@ -2333,21 +2351,19 @@ msgstr "Следующие пользователи добавили вас в списки своих друзей: "
 
 #: src/icqface.cc:970
 msgid "found"
-msgstr ""
+msgstr "найден"
 
 #: src/icqface.cc:972
 msgid "used"
-msgstr ""
+msgstr "используется"
 
 #: src/icqface.cc:972
-#, fuzzy
 msgid "not used"
-msgstr "Игнорировать"
+msgstr "не использ."
 
 #: src/icqface.cc:974
-#, fuzzy
 msgid "not found"
-msgstr "тэг <rss> не найден"
+msgstr "не найден"
 
 #: src/icqface.cc:989
 msgid "E-mail"
@@ -2391,19 +2407,19 @@ msgstr "Никогда"
 
 #: src/icqface.cc:1028
 msgid "days"
-msgstr ""
+msgstr "дней"
 
 #: src/icqface.cc:1032
 msgid "hours"
-msgstr ""
+msgstr "часов"
 
 #: src/icqface.cc:1037
 msgid "min"
-msgstr ""
+msgstr "мин"
 
 #: src/icqface.cc:1041
 msgid "seconds"
-msgstr ""
+msgstr "секунд"
 
 #: src/icqface.cc:1057 src/icqface.cc:1100
 msgid "Address"
@@ -2675,9 +2691,9 @@ msgstr ""
 "%s посл, %s получ, %s история, %s ссылки, %s разверн, %s детали, %s отмена"
 
 #: src/icqface.cc:2229
-#, fuzzy, c-format
+#, c-format
 msgid "Outgoing %s"
-msgstr " Посылка %s "
+msgstr "Редактирование %s "
 
 #: src/icqface.cc:2355
 msgid "Send contacts.."
@@ -3041,62 +3057,41 @@ msgstr "Выберите контакты для перемещения"
 msgid "Mass move selected users to.."
 msgstr "Переместить выбранные контакты.."
 
-#: src/hooks/msnhook.cc:430
+#: src/hooks/msnhook.cc:431
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] чтение списка завершено, %d найдено"
 
-#: src/hooks/msnhook.cc:793
+#: src/hooks/msnhook.cc:794
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr "+ [msn] нечитаная почта: %d в inbox, %d в фолдерах"
 
-#: src/hooks/msnhook.cc:799
+#: src/hooks/msnhook.cc:800
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] e-mail от %s, %s"
 
-#: src/hooks/msnhook.cc:905
+#: src/hooks/msnhook.cc:906
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] невозможно соединиться: "
 
-#: src/hooks/msnhook.cc:929
+#: src/hooks/msnhook.cc:930
 msgid "verify the hostname and port"
 msgstr "проверьте имя хоста и порт"
 
-#: src/impgp.cc:67
+#: src/impgp.cc:71
 msgid "PGP passphrase required: "
-msgstr ""
+msgstr "Ключевая фраза необходима для PGP: "
 
-#: src/impgp.cc:70
+#: src/impgp.cc:74
 msgid "incorrect PGP passphrase"
-msgstr ""
+msgstr "неверная ключевая фраза для PGP"
 
-#: src/impgp.cc:121
+#: src/impgp.cc:125
 msgid "PGP sign error: "
-msgstr ""
+msgstr "Ошибка PGP-подписи: "
 
-#: src/impgp.cc:228
+#: src/impgp.cc:232
 msgid "PGP encrypt error: "
-msgstr ""
-
-#~ msgid " [o] Online"
-#~ msgstr " [o] На линии"
-
-#~ msgid " [a] Away"
-#~ msgstr " [a] Отсутствие"
-
-#~ msgid " [c] Occupied"
-#~ msgstr " [c] Занят"
-
-#~ msgid " [f] Free for chat"
-#~ msgstr " [f] Не прочь поболтать"
-
-#~ msgid " [i] Invisible"
-#~ msgstr " [i] Невидимость"
-
-#~ msgid "+ [irc] password was requested, but it's not set"
-#~ msgstr "+ [irc] пароль был запрошен, но в настройках он не указан"
-
-#~ msgid " NickServ password : %s "
-#~ msgstr " Пароль NickServ : %s "
+msgstr "Ошибка PGP-шифрования: "

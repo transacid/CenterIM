@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.13.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-28 00:32+0100\n"
+"POT-Creation-Date: 2005-02-03 01:26+0100\n"
 "PO-Revision-Date: 2001-02-10 20:50+0100\n"
 "Last-Translator: Florian Mueller <me@flo.s-s-f.de>\n"
 "Language-Team: German <???>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:155 src/hooks/msnhook.cc:910
 msgid "could not resolve hostname"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgid "The user %s has left the conference"
 msgstr ""
 
 #: src/hooks/yahoohook.cc:965 src/hooks/icqhook.cc:1181
-#: src/hooks/msnhook.cc:713
+#: src/hooks/msnhook.cc:714
 #, fuzzy
 msgid "The user has added you to his/her contact list"
 msgstr "Hat dich in ihre/seine Kontaktliste aufgenommen"
@@ -1351,7 +1351,7 @@ msgstr "Löschen"
 msgid "move Down"
 msgstr ""
 
-#: src/icqdialogs.cc:1557 src/icqdialogs.cc:1987
+#: src/icqdialogs.cc:1557 src/icqdialogs.cc:2066
 msgid "Select"
 msgstr ""
 
@@ -1537,12 +1537,31 @@ msgstr ""
 msgid "Current mood: "
 msgstr ""
 
-#: src/icqdialogs.cc:1980
+#: src/icqdialogs.cc:1976
+#, fuzzy
+msgid "pgp key quick search"
+msgstr "Unterhaltungen von %s, %lu"
+
+#: src/icqdialogs.cc:1978
+#, fuzzy, c-format
+msgid "PGP key search: type to find, %s find again, Enter finish"
+msgstr "Schnellsuche: Tippen um zu finden, Alt-S wieder Suchen, Enter Ende"
+
+#: src/icqdialogs.cc:2059
 msgid " Select PGP key to use "
 msgstr ""
 
-#: src/icqdialogs.cc:1998
+#: src/icqdialogs.cc:2080
 msgid " Use no key"
+msgstr ""
+
+#: src/icqdialogs.cc:2094
+msgid "pgp key selection"
+msgstr ""
+
+#: src/icqdialogs.cc:2096
+#, c-format
+msgid "PGP key selection: %s for quick lookup"
 msgstr ""
 
 #: src/imexternal.cc:128
@@ -3199,43 +3218,43 @@ msgstr "Wähle Kontakte zum Aufnehmen in die Liste"
 msgid "Mass move selected users to.."
 msgstr ""
 
-#: src/hooks/msnhook.cc:430
+#: src/hooks/msnhook.cc:431
 #, fuzzy, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/msnhook.cc:793
+#: src/hooks/msnhook.cc:794
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr ""
 
-#: src/hooks/msnhook.cc:799
+#: src/hooks/msnhook.cc:800
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/msnhook.cc:905
+#: src/hooks/msnhook.cc:906
 #, fuzzy
 msgid "+ [msn] cannot connect: "
 msgstr "+ Verbinde mit dem ICQ-Server"
 
-#: src/hooks/msnhook.cc:929
+#: src/hooks/msnhook.cc:930
 msgid "verify the hostname and port"
 msgstr ""
 
-#: src/impgp.cc:67
+#: src/impgp.cc:71
 msgid "PGP passphrase required: "
 msgstr ""
 
-#: src/impgp.cc:70
+#: src/impgp.cc:74
 msgid "incorrect PGP passphrase"
 msgstr ""
 
-#: src/impgp.cc:121
+#: src/impgp.cc:125
 msgid "PGP sign error: "
 msgstr ""
 
-#: src/impgp.cc:228
+#: src/impgp.cc:232
 msgid "PGP encrypt error: "
 msgstr ""
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.241 2005/02/01 00:12:58 konst Exp $
+* $Id: icqface.cc,v 1.242 2005/02/03 02:02:37 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2043,7 +2043,7 @@ void icqface::quickfind(verticalmenu *multi) {
 		break;
 
 	    default:
-		if(isprint(k) || (k == ALT('s'))) {
+		if(isprint(k) || (key2action(k, section_contact) == key_quickfind)) {
 		    i = cm->getpos() + (multi ? 1 : 2);
 
 		    if(isprint(k)) {
@@ -3264,11 +3264,25 @@ int icqface::multiplekeys(verticalmenu &m, int k) {
 	case 'x':
 	case 'X':
 	    return -2;
-	case ALT('s'):
-	case ALT('S'):
 	case '/':
 	    return -3;
     }
+
+    if(face.key2action(k, section_contact) == key_quickfind)
+	return -3;
+
+    return -1;
+}
+
+int icqface::findpgpkeys(dialogbox &db, int k) {
+    int r;
+
+    r = face.key2action(k, section_contact);
+    switch(r) {
+	case key_quickfind:
+	    return -3;
+    }
+
     return -1;
 }
 
