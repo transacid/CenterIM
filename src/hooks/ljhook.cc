@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.11 2003/10/12 23:28:20 konst Exp $
+* $Id: ljhook.cc,v 1.12 2003/10/15 23:40:20 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -35,8 +35,8 @@
 
 ljhook lhook;
 
-#define KOI2UTF(x) siconv(x, conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf8")
-#define UTF2KOI(x) siconv(x, "utf8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())
+#define KOI2UTF(x) siconv(x, conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf-8")
+#define UTF2KOI(x) siconv(x, "utf-8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())
 
 ljhook::ljhook(): abstracthook(livejournal), fonline(false), sdest(0) {
     fcapabs.insert(hookcapab::nochat);
@@ -247,6 +247,7 @@ void ljhook::sendnewuser(const imcontact &ic) {
     icqcontact *c;
 
     if(logged())
+    if(ic.pname == rss)
     if(c = clist.get(ic))
     if((npos = c->getnick().find("@lj")) != -1) {
 	HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
@@ -444,12 +445,6 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    }
 
 	    icqcontact::basicinfo bi = c->getbasicinfo();
-
-	    string fullname = params["name"];
-	    bi.fname = getword(fullname);
-	    bi.lname = fullname;
-
-	    c->setbasicinfo(bi);
 	    c->setstatus(available);
 
 	    string buf;
@@ -476,8 +471,8 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	if(params["success"] == "OK") {
 	    int fcount = atoi(params["friend_count"].c_str()), i, k;
 	    string username, name, birthday, bd;
-	    icqcontact::basicinfo bi;
 	    icqcontact::moreinfo mi;
+	    icqcontact::basicinfo bi;
 
 	    for(i = 1; i <= fcount; i++) {
 		username = params[(string) "friend_" + i2str(i) + "_user"];
@@ -509,12 +504,10 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		}
 
 		bi = c->getbasicinfo();
-		bi.fname = getword(name);
-		bi.lname = name;
-		c->setbasicinfo(bi);
+		mi = c->getmoreinfo();
+		bi.email = name;
 
 		if(!birthday.empty()) {
-		    mi = c->getmoreinfo();
 		    k = 0;
 
 		    while(!(bd = getrword(birthday, "-")).empty())
@@ -524,8 +517,10 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 			case 2: mi.birth_year = atoi(bd.c_str()); break;
 		    }
 
-		    c->setmoreinfo(mi);
 		}
+
+		c->setmoreinfo(mi);
+		c->setbasicinfo(bi);
 	    }
 
 	    fcount = atoi(params["friendof_count"].c_str());
@@ -570,7 +565,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    }
 
 	    if(c = clist.get(self)) {
-		bi = c->getbasicinfo();
+		icqcontact::basicinfo bi = c->getbasicinfo();
 		vector<string>::const_iterator ifo = friendof.begin();
 		bi.zip = "";
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.71 2003/10/11 14:28:12 konst Exp $
+* $Id: irchook.cc,v 1.72 2003/10/15 23:40:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -89,7 +89,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_IM_GOTINFO, &gotinfo);
     firetalk_register_callback(handle, FC_IM_GOTCHANNELS, &gotchannels);
     firetalk_register_callback(handle, FC_IM_GETMESSAGE, &getmessage);
-    firetalk_register_callback(handle, FC_IM_GETACTION, &getmessage);
+    firetalk_register_callback(handle, FC_IM_GETACTION, &getaction);
     firetalk_register_callback(handle, FC_IM_BUDDYONLINE, &buddyonline);
     firetalk_register_callback(handle, FC_IM_BUDDYOFFLINE, &buddyoffline);
     firetalk_register_callback(handle, FC_IM_BUDDYAWAY, &buddyaway);
@@ -99,6 +99,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_CHAT_END_EXTENDED, &endextended);
     firetalk_register_callback(handle, FC_CHAT_NAMES, &chatnames);
     firetalk_register_callback(handle, FC_CHAT_GETMESSAGE, &chatmessage);
+    firetalk_register_callback(handle, FC_CHAT_GETACTION, &chataction);
     firetalk_register_callback(handle, FC_CHAT_JOINED, &chatjoined);
     firetalk_register_callback(handle, FC_CHAT_LEFT, &chatleft);
     firetalk_register_callback(handle, FC_CHAT_KICKED, &chatkicked);
@@ -250,6 +251,20 @@ bool irchook::send(const imevent &ev) {
 	    }
 
 	    return true;
+	}
+
+	if(text.substr(0, 4) == "/me " || text.substr(0, 4) == "/Me " ||
+	    text.substr(0, 4) == "/ME " || text.substr(0, 4) == "/mE ") {
+	    text = text.substr(4);
+	    if (ischannel(c)) {
+	        return firetalk_chat_send_action(handle,
+                    c->getdesc().nickname.c_str(),
+                        text.c_str(), 0) == FE_SUCCESS;
+	    } else {
+	        return firetalk_im_send_action(handle,
+	            c->getdesc().nickname.c_str(),
+                        text.c_str(), 0) == FE_SUCCESS;
+	    }
 	}
 
 	if(text.substr(0, 1) == "/") {
@@ -870,6 +885,25 @@ void irchook::getmessage(void *conn, void *cli, ...) {
     DLOG("getmessage");
 }
 
+void irchook::getaction(void *conn, void *cli, ...) {
+    va_list ap;
+  
+    va_start(ap, cli);
+    char *sender = va_arg(ap, char *);
+    int automessage_flag = va_arg(ap, int);
+    char *message = va_arg(ap, char *);
+    va_end(ap);
+    
+    if(sender && message)
+    if(strlen(sender) && strlen(message)) {
+        em.store(immessage(imcontact(sender, irc), imevent::incoming, 
+	    ((string) "* " + sender + " " + 
+	        irhook.rushtmlconv("wk", cuthtml(message, true))).c_str()));
+    }
+    
+    DLOG("getaction");
+}
+
 void irchook::buddyonline(void *conn, void *cli, ...) {
     va_list ap;
 
@@ -1090,6 +1124,27 @@ void irchook::chatmessage(void *connection, void *cli, ...) {
 	getmessage(connection, cli, room, automessage, imsg.c_str());
     }
 }
+
+void irchook::chataction(void *connection, void *cli, ...) {
+    va_list ap;
+    string imsg;
+
+    va_start(ap, cli);
+    char *room = va_arg(ap, char *);
+    char *from = va_arg(ap, char *);
+    int automessage = va_arg(ap, int);
+    char *msg = va_arg(ap, char *);
+    va_end(ap);
+
+    if(from && msg)
+    if(strlen(from) && strlen(msg))
+    if(clist.get(imcontact(room, irc))) {
+        em.store(immessage(imcontact(room, irc), imevent::incoming,
+	    ((string) "* " + from + " " +
+	        irhook.rushtmlconv("wk", cuthtml(msg, true))).c_str()));
+    }
+}
+
 
 void irchook::chatjoined(void *connection, void *cli, ...) {
     va_list ap;

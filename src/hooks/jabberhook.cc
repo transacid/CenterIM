@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.54 2003/10/01 09:02:22 konst Exp $
+* $Id: jabberhook.cc,v 1.55 2003/10/15 23:40:20 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -69,8 +69,8 @@ static string jidtodisp(const string &jid) {
     return user;
 }
 
-#define KOI2UTF(x) siconv(x, conf.getrussian(jabber) ? "koi8-u" : conf.getdefcharset(), "utf8")
-#define UTF2KOI(x) siconv(x, "utf8", conf.getrussian(jabber) ? "koi8-u" : conf.getdefcharset())
+#define KOI2UTF(x) siconv(x, conf.getrussian(jabber) ? "koi8-u" : conf.getdefcharset(), "utf-8")
+#define UTF2KOI(x) siconv(x, "utf-8", conf.getrussian(jabber) ? "koi8-u" : conf.getdefcharset())
 
 // ----------------------------------------------------------------------------
 

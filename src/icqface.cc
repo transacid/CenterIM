@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.195 2003/10/11 14:28:11 konst Exp $
+* $Id: icqface.cc,v 1.196 2003/10/15 23:40:18 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -907,6 +907,37 @@ void commaform(string &text) {
     }
 }
 
+void icqface::infolivejournal(dialogbox &db, icqcontact *c) {
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
+
+    workarealine(sizeWArea.y1+5);
+    workarealine(sizeWArea.y1+12);
+
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Name"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("URL"));
+
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), mi.homepage);
+
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("This is your LiveJournal account."));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Use it to post new entries to your journal."));
+}
+
+void icqface::infofriends(dialogbox &db, icqcontact *c) {
+    string text, buf;
+    icqcontact::basicinfo bi = c->getbasicinfo();
+
+    text += (string) "* " + _("Friend list") + "\n";
+    while(!(buf = getword(bi.zip)).empty()) {
+	text += (string) "  " + buf + "\n";
+    }
+
+    db.getbrowser()->setbuf(text);
+}
+
 void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     string langs, options;
     icqcontact::basicinfo bi = c->getbasicinfo();
@@ -1125,8 +1156,19 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), bi.lname);
 }
 
+void icqface::infoljrss(dialogbox &db, icqcontact *c) {
+    icqcontact::basicinfo bi = c->getbasicinfo();
+    icqcontact::moreinfo mi = c->getmoreinfo();
+
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Birthdate"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Full name"));
+
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), mi.strbirthdate());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.email);
+}
+
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
-    bool finished = false, showinfo;
+    bool finished = false, showinfo, lj = false;
     textbrowser tb(conf.getcolor(cp_main_text));
     dialogbox db;
     int k, lastb, b;
@@ -1143,21 +1185,32 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
-    if(cinfo.pname != rss) {
-	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
-	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
-    } else {
+    if(cinfo.pname == rss) {
+	if(c->getnick().size() > 3)
+	    lj = c->getnick().substr(c->getnick().size()-3) == "@lj";
+
 	if(c->inlist() && realinfo != contactroot) {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-		_("Info"), _("About"), _("Check"), _("Edit"), 0));
+		_("Info"), _("About"), _("Check"), _("Edit"), lj ? _("LJ") : 0, 0));
 	} else {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 		_("Info"), _("About"), _("Retreive"), 0));
 	}
+
+    } else if(cinfo.pname == livejournal) {
+	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
+	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+	    _("Info"), _("Friends"), 0));
+
+
+    } else {
+	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
+	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
+	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
+
     }
 
     showinfo = true;
@@ -1182,8 +1235,33 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	    db.setbrowser(0);
 	    infoclear(db, c, cinfo);
 
-	    if(cinfo.pname != rss)
-	    switch(b) {
+	    if(cinfo.pname == rss) switch(b) {
+		case 0: inforss(db, c); break;
+		case 1: 
+		    db.setbrowser(&tb, false);
+		    infoabout(db, c);
+		    infoclear(db, c, cinfo);
+		    break;
+		case 2:
+		    gethook(cinfo.pname).ping(c);
+		    b = lastb;
+		    continue;
+		case 3:
+		    updatedetails(c, c->getdesc().pname);
+		    showinfo = true;
+		    b = lastb;
+		    continue;
+		case 4: infoljrss(db, c); break;
+
+	    } else if(cinfo.pname == livejournal) switch(b) {
+		case 0: infolivejournal(db, c); break;
+		case 1:
+		    db.setbrowser(&tb, false);
+		    infofriends(db, c);
+		    infoclear(db, c, cinfo);
+		    break;
+
+	    } else switch(b) {
 		case 0: infogeneral(db, c); break;
 		case 1: infohome(db, c); break;
 		case 2: infowork(db, c); break;
@@ -1212,23 +1290,8 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 		    b = lastb;
 		    continue;
 
-	    } else switch(b) {
-		case 0: inforss(db, c); break;
-		case 1: 
-		    db.setbrowser(&tb, false);
-		    infoabout(db, c);
-		    infoclear(db, c, cinfo);
-		    break;
-		case 2:
-		    gethook(cinfo.pname).ping(c);
-		    b = lastb;
-		    continue;
-		case 3:
-		    updatedetails(c, c->getdesc().pname);
-		    showinfo = true;
-		    b = lastb;
-		    continue;
 	    }
+
 
 	    refresh();
 	    showinfo = false;

@@ -119,7 +119,6 @@ case "$host_os" in
 	;;
 esac
 
-AC_ARG_ENABLE(msn,    [  --disable-msn      Build without MSN], build_msn="$enableval", build_msn="yes")
 AC_ARG_ENABLE(yahoo,  [  --disable-yahoo    Build without Yahoo!], build_yahoo="$enableval", build_yahoo="yes")
 AC_ARG_ENABLE(aim,    [  --disable-aim      Build without AIM], build_aim="$enableval", build_aim="yes")
 AC_ARG_ENABLE(irc,    [  --disable-irc      Build without IRC], build_irc="$enableval", build_irc="yes")
@@ -129,17 +128,12 @@ AC_ARG_ENABLE(lj,     [  --disable-lj       Build without LiveJournal client], b
 
 AC_ARG_ENABLE(konst,  [  --disable-konst    Don't add contact list items supplied by author by default], build_konst="$enableval", build_konst="yes")
 
-AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
 AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = xyes)
 AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes)
 AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = xyes)
-
-if test "$build_msn" = "yes"; then
-    AC_DEFINE(BUILD_MSN, 1, [build with msn support])
-fi
 
 if test "$build_yahoo" = "yes"; then
     AC_DEFINE(BUILD_YAHOO, 1, [build with yahoo support])

@@ -132,6 +132,9 @@ class icqface {
 	void infoabout(dialogbox &db, icqcontact *c);
 
 	void inforss(dialogbox &db, icqcontact *c);
+	void infolivejournal(dialogbox &db, icqcontact *c);
+	void infofriends(dialogbox &db, icqcontact *c);
+	void infoljrss(dialogbox &db, icqcontact *c);
 
 	void gendetails(treeview *tree, icqcontact *c = 0);
 

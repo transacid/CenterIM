@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.127 2003/10/11 14:28:11 konst Exp $
+* $Id: icqdialogs.cc,v 1.128 2003/10/15 23:40:18 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1317,7 +1317,7 @@ void icqface::selectproto(bool prots[], bool irss) {
 	if(gethook(pname).getCapabs().count(hookcapab::nochat))
 	    continue;
 
-	if(pname == infocard)
+	if(!gethook(pname).enabled())
 	    continue;
 
 	if(!conf.getourid(pname).empty() || irss)

@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.89 2003/10/15 20:09:04 konst Exp $
+* $Id: yahoohook.cc,v 1.90 2003/10/15 23:40:21 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -557,7 +557,7 @@ vector<icqcontact *> yahoohook::getneedsync() {
 
 string yahoohook::decode(const string &text, bool utf) {
     if(utf)
-	return siconv(text, "utf8",
+	return siconv(text, "utf-8",
 	    conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
 
     return rushtmlconv("wk", text);

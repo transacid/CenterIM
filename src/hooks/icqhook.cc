@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.137 2003/09/30 11:38:43 konst Exp $
+* $Id: icqhook.cc,v 1.138 2003/10/15 23:40:19 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -435,7 +435,7 @@ bool icqhook::send(const imevent &ev) {
 	    cli.contact_userinfo_change_signal.connect(this, &icqhook::contact_userinfo_change_signal_cb);
 	}
 
-	sev = new SMSMessageEvent(ic, siconv(m->getmessage(), conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf8"), true);
+	sev = new SMSMessageEvent(ic, siconv(m->getmessage(), conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf-8"), true);
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
@@ -1114,7 +1114,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 
 	if(c) {
 	    em.store(imsms(c, imevent::incoming, siconv(r->getMessage(),
-		"utf8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())));
+		"utf-8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())));
 	}
 
     } else if(ev->getType() == MessageEvent::AuthReq) {

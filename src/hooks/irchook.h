@@ -56,6 +56,7 @@ class irchook: public abstracthook {
 	static void gotinfo(void *conn, void *cli, ...);
 	static void gotchannels(void *conn, void *cli, ...);
 	static void getmessage(void *conn, void *cli, ...);
+	static void getaction(void *conn, void *cli, ...);
 	static void buddyonline(void *conn, void *cli, ...);
 	static void buddyoffline(void *conn, void *cli, ...);
 	static void buddyaway(void *conn, void *cli, ...);
@@ -66,6 +67,7 @@ class irchook: public abstracthook {
 	static void listextended(void *connection, void *cli, ...);
 	static void endextended(void *connection, void *cli, ...);
 	static void chatmessage(void *connection, void *cli, ...);
+	static void chataction(void *connection, void *cli, ...);
 	static void chatjoined(void *connection, void *cli, ...);
 	static void chatleft(void *connection, void *cli, ...);
 	static void chatkicked(void *connection, void *cli, ...);
