@@ -307,7 +307,7 @@ void texteditor::addhighlight(int nscheme, string text, int color, hl_kind kind)
 	    s.synt_quote = text;
 	    s.qcolor = color;
 
-	    if(i = text.find(" ")) {
+	    if((i = text.find(" ")) != -1) {
 		s.synt_qescape = text.substr(i+1);
 		s.synt_quote.resize(i);
 	    }
@@ -863,7 +863,7 @@ void texteditor::showline(int ln, int startx, int distance, int extrax = 0) {
 		    if(qchar) strinsert(cp, eolstart, "\002");
 		    break;
 		}
-		
+
 		if(!qchar) {
 		    qchar = *p;
 		    qpos = p-cp;
