@@ -7,7 +7,6 @@
 #include <fstream>
 #include <algorithm>
 #include <list>
-#include <set>
 
 #include <sys/time.h>
 #include <sys/types.h>

@@ -1,6 +1,8 @@
 #ifndef __ICQHOOK_H__
 #define __ICQHOOK_H__
 
+#include <set>
+
 #include "abstracthook.h"
 #include "Client.h"
 

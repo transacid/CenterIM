@@ -1,16 +1,15 @@
 #ifndef __ICQCONTACT_H_
 #define __ICQCONTACT_H_
 
+#include "icqcommon.h"
+
 #include <sys/stat.h>
-#include <sys/types.h>
-#include <string>
 #include <dirent.h>
 
 #include "kkstrtext.h"
 #include "kkfsys.h"
 #include "cmenus.h"
 
-#include "icqcommon.h"
 #include "imcontact.h"
 #include "imevents.h"
 
