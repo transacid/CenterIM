@@ -4,6 +4,8 @@
 #include "yahoohook.h"
 #include "msnhook.h"
 
+#include <time.h>
+
 abstracthook::abstracthook() {
     fcapabilities = 0;
     searchdest = 0;
