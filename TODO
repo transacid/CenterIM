@@ -11,6 +11,7 @@
 */
 
 does icq go down after several unsuccessful acks?
+    check auto-disconnect on all IMs after network down
 
 something's wrong with sprintf and msn
 
@@ -24,8 +25,13 @@ MSN: 3rd person invitation from other party -> centericq segfault
 *
 */
 
+documentation: port numbers for IM services. for firewalls setup.
+
+scriptable protocols actions
+
+cvs 1.10 -> cicqsync should produce error msg and bail out
+
 sending smses through email gws, the server reports the email to send it
-to
 
 try to implement the daemon mode
     substitute another "face" class
@@ -37,8 +43,6 @@ crash test with zero disk space
 ability to specify server/port for yahoo
 
 nicks and writing messages to be rendered with fribidi
-
-check auto-disconnect on all IMs after network down
 
 hooks should have their own sets of statuses
 
@@ -59,4 +63,4 @@ msn protocol
 
 todo and reminders
 
-$Id: TODO,v 1.134 2002/02/25 17:08:30 konst Exp $
+$Id: TODO,v 1.135 2002/02/26 16:50:23 konst Exp $
