@@ -1,4 +1,4 @@
-/* $Id: http.c,v 1.2 2004/04/11 16:35:02 konst Exp $ */
+/* $Id: http.c,v 1.3 2005/01/23 13:22:37 konst Exp $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -353,7 +353,7 @@ int gg_http_watch_fd(struct gg_http *h)
 			h->body_size = 0;
 			line = h->header;
 			*tmp = 0;
-			
+
 			gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-HEADER-----\n%s\n=> -----END-HTTP-HEADER-----\n", h->header);
 
 			while (line) {
