@@ -1,3 +1,11 @@
+/*
+*
+* centericq core routines
+*
+* $Id: centericq.cc,v 1.2 2001/04/07 10:22:40 konst Exp $
+*
+*/
+
 #include "centericq.h"
 #include "icqconf.h"
 #include "icqhist.h"
