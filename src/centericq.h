@@ -43,6 +43,7 @@ class centericq {
 	string quotemsg(const string &text);
 
 	void setauto(imstatus astatus);
+	void joinleave(icqcontact *c);
 
     public:
 	centericq();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.120 2002/09/13 13:15:52 konst Exp $
+* $Id: centericq.cc,v 1.121 2002/09/23 09:04:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,6 +25,7 @@
 #include "centericq.h"
 #include "icqconf.h"
 #include "icqhook.h"
+#include "irchook.h"
 #include "yahoohook.h"
 #include "icqface.h"
 #include "icqcontact.h"
@@ -143,7 +144,7 @@ void centericq::inithooks() {
 }
 
 void centericq::mainloop() {
-    bool finished = false;
+    bool finished = false, r;
     string text, url;
     int action, old, gid;
     icqcontact *c;
@@ -251,9 +252,18 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_INFO:
-		if(c->getdesc() != contactroot)
-		if(!ischannel(c))
-		    userinfo(c->getdesc());
+		if(c->getdesc() != contactroot) {
+		    if(!ischannel(c)) {
+			userinfo(c->getdesc());
+
+		    } else {
+			imsearchparams s;
+			s.pname = c->getdesc().pname;
+			s.room = c->getdesc().nickname;
+			face.findresults(s);
+
+		    }
+		}
 		break;
 
 	    case ACT_REMOVE:
@@ -301,6 +311,11 @@ void centericq::mainloop() {
 
 	    case ACT_PING:
 		gethook(c->getdesc().pname).ping(c->getdesc());
+		break;
+
+	    case ACT_JOIN:
+	    case ACT_LEAVE:
+		joinleave(c);
 		break;
 
 	    case ACT_MSG:
@@ -1244,6 +1259,16 @@ void centericq::exectimers() {
     if(timer_current-timer_update > PERIOD_DISPUPDATE) {
 	face.update();
 	time(&timer_update);
+    }
+}
+
+void centericq::joinleave(icqcontact *c) {
+    vector<irchook::channelInfo> channels = irhook.getautochannels();
+    vector<irchook::channelInfo>::iterator ic = ::find(channels.begin(), channels.end(), c->getdesc().nickname);
+
+    if(ic != channels.end()) {
+	ic->joined = !ic->joined;
+	irhook.setautochannels(channels);
     }
 }
 

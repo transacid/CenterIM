@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.141 2002/09/13 13:15:53 konst Exp $
+* $Id: icqface.cc,v 1.142 2002/09/23 09:04:17 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,7 @@
 #include "icqgroups.h"
 #include "abstracthook.h"
 #include "imlogger.h"
+#include "irchook.h"
 
 #include <libicq2000/userinfohelpers.h>
 
@@ -246,7 +247,6 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_SMS]       = _(" Send an SMS");
 	actnames[ACT_CONTACT]   = _(" Send contacts          c");
 	actnames[ACT_AUTH]      = _(" Request authorization");
-	actnames[ACT_INFO]      = _(" User's details         ?");
 	actnames[ACT_EDITUSER]  = _(" Edit details           e");
 	actnames[ACT_FETCHAWAY] = _(" Fetch away message     f");
 	actnames[ACT_IGNORE]    = _(" Ignore user            i");
@@ -264,6 +264,9 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_MSG]       = _(" Send a channel message   enter");
 	actnames[ACT_HISTORY]   = _(" Channel chat history         h");
 	actnames[ACT_REMOVE]    = _(" Remove channel             del");
+	actnames[ACT_JOIN]      = _(" Join channel");
+	actnames[ACT_LEAVE]     = _(" Leave channel");
+	actnames[ACT_INFO]      = _(" List nicknames               ?");
     } else {
 	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
 	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
@@ -271,6 +274,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_MSG]       = _(" Send a message     enter");
 	actnames[ACT_HISTORY]   = _(" Events history         h");
 	actnames[ACT_REMOVE]    = _(" Remove user          del");
+	actnames[ACT_INFO]      = _(" User's details         ?");
     }
 
     cont = c->getdesc();
@@ -320,10 +324,19 @@ int icqface::contextmenu(icqcontact *c) {
     } else {
 	actions.push_back(ACT_MSG);
 	actions.push_back(ACT_HISTORY);
+	actions.push_back(ACT_INFO);
 	actions.push_back(ACT_REMOVE);
 
 	if(conf.getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
+
+	vector<irchook::channelInfo> channels(irhook.getautochannels());
+	vector<irchook::channelInfo>::const_iterator ic =
+	    find(channels.begin(), channels.end(), cont.nickname);
+
+	if(ic != channels.end()) {
+	    actions.push_back(ic->joined ? ACT_LEAVE : ACT_JOIN);
+	}
     }
 
     for(ia = actions.begin(); ia != actions.end(); ++ia) {
@@ -2146,7 +2159,7 @@ bool icqface::histexec(imevent *&im) {
     dialogbox db;
     bool r, fin;
     int k;
-    string sub;
+    static string sub;
 
     r = fin = false;
 
@@ -2185,7 +2198,7 @@ bool icqface::histexec(imevent *&im) {
 	    _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(), mhist.getcount());
 
-	status(_("S search, L again, ESC cancel"));
+	status(_("/ search, N again, ESC cancel"));
 
 	while(!fin) {
 	    if(db.open(k)) {
@@ -2380,6 +2393,7 @@ int icqface::multiplekeys(verticalmenu &m, int k) {
 	case 'X':
 	    return -2;
 	case ALT('s'):
+	case ALT('S'):
 	case '/':
 	    return -3;
     }
@@ -2392,9 +2406,10 @@ int icqface::historykeys(dialogbox &db, int k) {
     switch(k) {
 	case 's':
 	case 'S':
+	case '/':
 	    return -2;
-	case 'l':
-	case 'L':
+	case 'n':
+	case 'N':
 	    return -3;
     }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.32 2002/09/20 17:18:02 konst Exp $
+* $Id: msnhook.cc,v 1.33 2002/09/23 09:04:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -255,11 +255,13 @@ void msnhook::requestinfo(const imcontact &ic) {
 	if(b.email.find("@") == -1) b.email += "@hotmail.com";
 	m.homepage = "http://members.msn.com/" + b.email;
 
+	if(!friendlynicks[ic.nickname].empty()) {
+	    c->setdispnick(friendlynicks[ic.nickname]);
+	    b.fname = friendlynicks[ic.nickname];
+	}
+
 	c->setbasicinfo(b);
 	c->setmoreinfo(m);
-
-	if(!friendlynicks[ic.nickname].empty())
-	    c->setdispnick(friendlynicks[ic.nickname]);
 
 	face.relaxedupdate();
     }
@@ -316,19 +318,6 @@ void msnhook::sendupdateuserinfo(const icqcontact &c) {
 
 void msnhook::checkfriendly(icqcontact *c, const string friendlynick) {
     friendlynicks[c->getdesc().nickname] = friendlynick;
-/*
-    if(friendlynick != c->getdesc().nickname) {
-	string fn = unmime(friendlynick);
-	c->setdispnick(fn);
-
-	icqcontact::basicinfo bi = c->getbasicinfo();
-
-	if(bi.fname.empty() && (fn != bi.email)) {
-	    bi.fname = fn;
-	    c->setbasicinfo(bi);
-	}
-    }
-*/
 }
 
 // ----------------------------------------------------------------------------
