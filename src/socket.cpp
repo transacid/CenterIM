@@ -93,6 +93,8 @@ namespace ICQ2000
     Disconnect();
   }
 
+  extern "C" int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl);
+
   void TCPSocket::Connect() {
     if (m_state != NOT_CONNECTED) throw SocketException("Already connected");
 
@@ -103,7 +105,7 @@ namespace ICQ2000
 
     fcntlSetup();
 
-    if (connect(m_socketDescriptor,(struct sockaddr *)&remoteAddr,sizeof(struct sockaddr)) == -1) {
+    if (cw_connect(m_socketDescriptor,(struct sockaddr *)&remoteAddr,sizeof(struct sockaddr), 0) == -1) {
       if (errno == EINPROGRESS) {
 	m_state = NONBLOCKING_CONNECT;
 	return; // non-blocking connect
