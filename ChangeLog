@@ -993,8 +993,6 @@ list.
 4.7.8
 -----
 
-Fixed a segfault in the Yahoo! module.
-
 Now the source should compile well on Solaris OS. Thanks to Jochen
 Kmietsch <jochen.kmietsch@tu-clausthal.de> for initial portings efforts
 and to Lion Templin <lion@leonine.com> for providing an account on a
@@ -1011,4 +1009,11 @@ The centericq's own notification messages class used for such events as
 birthday reminders, away messages and other stuff, was separated from
 usual messages. That was done to avoid external handler's reacting on
 such messages like they were received from one of your contacts.
+
+The yahoo library used by the program was changed to the one of new
+generation. It would not happen unless the yahoo guys would leave their
+old protocol working. So one day centericq's yahoo support just became
+outdated and unusable. Anyway, now it's back, up and running, with
+several new features such as settable server address and port, and
+conferencing support.
 
