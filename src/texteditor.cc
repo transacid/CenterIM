@@ -549,6 +549,7 @@ int dstralone(const char *buf, const char *startword, int wordlen, const char *d
 
 void texteditor::scancomments(bool visible) {
     int sl, el, i;
+    const char *rsub, *lsub;
     hl_kind hk;
 
     curfile->blocks->empty();
@@ -576,8 +577,10 @@ void texteditor::scancomments(bool visible) {
 	    const char *sub = p;
 
 	    while(1) {
-		const char *lsub = strqstr(sub, lc.c_str(), colors.synt_quote.c_str());
-		const char *rsub = strqstr(sub, rc.c_str(), colors.synt_quote.c_str());
+		lsub = strqstr(sub, lc.c_str(), colors.synt_quote.c_str());
+
+                if(tb) rsub = strstr(sub, rc.c_str());
+                else rsub = strqstr(sub, rc.c_str(), colors.synt_quote.c_str());
 		
 		if(rsub && (((rsub < lsub) && lsub) || !lsub)) {
 		    sub = rsub;
