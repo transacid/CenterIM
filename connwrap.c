@@ -18,7 +18,6 @@
 #ifdef HAVE_OPENSSL
 
 static SSL_CTX *ctx = 0;
-static char *bindaddr = 0;
 
 typedef struct { int fd; SSL *ssl; } sslsock;
 
@@ -82,6 +81,8 @@ static void delsock(int fd) {
 }
 
 #endif
+
+static char *bindaddr = 0;
 
 int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl) {
     int rc;
