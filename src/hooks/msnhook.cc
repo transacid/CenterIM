@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.26 2002/08/28 11:50:37 konst Exp $
+* $Id: msnhook.cc,v 1.27 2002/09/01 11:21:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -270,12 +270,7 @@ void msnhook::messaged(void *data) {
     if(!isourid(d->sender))
     if(strlen(d->msg)) {
 	c = clist.get(ic);
-
-	if(!c)
-	if(c = clist.addnew(ic))
-	if(d->friendlyhandle) {
-	    c->setdispnick(unmime((string) d->friendlyhandle));
-	}
+	if(!c) c = clist.addnew(ic);
 
 	text = siconv(d->msg, "utf8", conf.getrussian() ? "koi8-r" : DEFAULT_CHARSET);
 	em.store(immessage(ic, imevent::incoming, text));
@@ -295,8 +290,13 @@ void msnhook::statuschanged(void *data) {
     if(!isourid(d->handle)) {
 	if(!c) {
 	    c = clist.addnew(ic, false);
-	    if(d->friendlyhandle) {
-		c->setdispnick(unmime((string) d->friendlyhandle));
+	}
+
+	if(d->friendlyhandle) {
+	    if(c->getnick() == ic.nickname)
+	    if(c->getdispnick() == ic.nickname) {
+		string fn = unmime((string) d->friendlyhandle);
+		c->setdispnick(fn);
 	    }
 	}
 
