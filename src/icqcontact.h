@@ -23,7 +23,7 @@ enum imgender {
 class icqcontact {
     public:
 	struct basicinfo {
-	    basicinfo(): zip(0) {};
+	    basicinfo(): zip(0), country(0) {};
 
 	    string fname, lname, email, city, state, phone, fax, street, cellular;
 	    unsigned int zip;
@@ -31,7 +31,10 @@ class icqcontact {
 	};
 
 	struct moreinfo {
-	    moreinfo(): gender(genderUnspec), age(0) {};
+	    moreinfo():
+		gender(genderUnspec), age(0), birth_day(0),
+		birth_month(0), birth_year(0), lang1(0), lang2(0), lang3(0),
+		timezone(0) {};
 
 	    unsigned char age;
 	    imgender gender;
@@ -45,7 +48,7 @@ class icqcontact {
 	};
 
 	struct workinfo {
-	    workinfo(): zip(0) {};
+	    workinfo(): zip(0), country(0) {};
 
 	    string city, state, phone, fax, street, company;
 	    string dept, position, homepage;
