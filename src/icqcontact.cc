@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.41 2002/01/25 16:44:53 konst Exp $
+* $Id: icqcontact.cc,v 1.42 2002/01/26 14:01:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -623,18 +623,11 @@ const imcontact icqcontact::getdesc() const {
 
 const string icqcontact::moreinfo::strtimezone() const {
     string r;
-    time_t t = time(0), rt;
-/*
-    r = (timezone > 0 ? "-" : "+");
-    r += i2str(abs(timezone/2)) + ":" + (timezone%2 ? "30" : "00");
-*/
 
-    r = ICQ2000::UserInfoHelpers::getTimezoneIDtoString(timezone);
-
-    rt = t + getsystemtimezone()*1800;
-    rt -= timezone*1800;
-
-    r += (string) ", " + ctime(&rt);
+    if(timezone <= 24 && timezone >= -24) {
+	r = ICQ2000::UserInfoHelpers::getTimezoneIDtoString(timezone) + ", " +
+	    ICQ2000::UserInfoHelpers::getTimezonetoLocaltime(timezone);
+    }
 
     return r;
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.44 2002/01/24 15:11:29 konst Exp $
+* $Id: icqhook.cc,v 1.45 2002/01/26 14:01:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,7 @@
 #include "imlogger.h"
 
 #include "libicq2000/userinfoconstants.h"
+#include "libicq2000/userinfohelpers.h"
 
 #define PERIOD_ICQPOLL  5
 
@@ -500,7 +501,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
 
     home.zip = i2str(cbinfo.zip);
     home.country = cbinfo.country;
-    home.timezone = getsystemtimezone();
+    home.timezone = UserInfoHelpers::getSystemTimezone();
 
     /* more information */
 
@@ -561,7 +562,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 	getstring(f, buf); cli.getSelfContact()->setLastName(buf);
 	f.close();
 
-	cli.getSelfContact()->getMainHomeInfo().timezone = getsystemtimezone();
+	cli.getSelfContact()->getMainHomeInfo().timezone = UserInfoHelpers::getSystemTimezone();
 	cli.uploadSelfDetails();
 
 	unlink(conf.getconfigfname("icq-infoset").c_str());

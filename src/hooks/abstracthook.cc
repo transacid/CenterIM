@@ -126,22 +126,3 @@ struct tm *maketm(int hour, int minute, int day, int month, int year) {
     msgtm.tm_year = year-1900;
     return &msgtm;
 }
-
-/*
-*
-* Timezone related function
-* The code was taken from licq
-*
-*/
-
-char getsystemtimezone() {
-    time_t t = time(NULL);
-    struct tm *tzone = localtime(&t);
-    int nTimezone = 0;
-
-    nTimezone = timezone + (tzone->tm_isdst == 1 ? 3600 : 0);
-    nTimezone /= 900;
-    if(nTimezone > 23) return 23-nTimezone;
-
-    return nTimezone;
-}
