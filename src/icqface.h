@@ -173,7 +173,7 @@ class icqface {
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();
 
-	void log(const string &text);
+	void log(const string &text, bool nochange = false);
 	void log(const char *fmt, ...);
 
 	void status(const string &text);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.105 2003/05/06 20:27:27 konst Exp $
+* $Id: icqconf.cc,v 1.106 2003/05/09 13:13:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -217,7 +217,6 @@ void icqconf::loadmainconfig() {
 
 	    if(param == "hideoffline") hideoffline = true; else
 	    if(param == "emacs") emacs = true; else
-	    if(param == "russian") initmultiproto(russian, buf); else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
@@ -231,6 +230,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") initmultiproto(chatmode, buf); else
+	    if(param == "russian") initmultiproto(russian, buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
 	    if(param == "logtyping") logtyping = true; else
@@ -297,8 +297,6 @@ void icqconf::save() {
 
 	    if(!param.empty())
 		f << "russian" << param << endl;
-
-	    if(russian) f << "russian" << endl;
 
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtyping) f << "logtyping" << endl;
