@@ -920,3 +920,9 @@ results list without adding them to the contact list.
 
 The crash with the "Broken pipe" message which happened after network
 interface's going down was fixed.
+
+The existing but not documented before -b parameter was finally
+documented both in README and in the man page. It allows to specify
+another base directory for the IM details and makes it possible to use
+different identities under the same UNIX account.
+
