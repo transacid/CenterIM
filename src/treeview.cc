@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.5 2001/10/30 17:49:56 konst Exp $
+* $Id: treeview.cc,v 1.6 2001/11/15 16:49:13 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -63,10 +63,22 @@ int treeview::addnodef(int parent, int color, void *ref, const char *fmt, ...) {
     return addnode(parent, color, ref, buf);
 }
 
+int treeview::addnodef(const char *fmt, ...) {
+    string buf;
+    VGETSTRING(buf, fmt);
+    return addnode(buf);
+}
+
 int treeview::addleaff(int parent, int color, void *ref, const char *fmt, ...) {
     string buf;
     VGETSTRING(buf, fmt);
     return addleaf(parent, color, ref, buf);
+}
+
+int treeview::addleaff(const char *fmt, ...) {
+    string buf;
+    VGETSTRING(buf, fmt);
+    return addleaf(buf);
 }
 
 int treeview::addnodef(int parent, int color, int ref, const char *fmt, ...) {
@@ -79,6 +91,10 @@ int treeview::addleaff(int parent, int color, int ref, const char *fmt, ...) {
     string buf;
     VGETSTRING(buf, fmt);
     return addleaf(parent, color, (void *) ref, buf);
+}
+
+int treeview::addnode(const string text) {
+    return addnode(0, 0, 0, text);
 }
 
 int treeview::addnode(int parent, int color, void *ref, const string text) {
@@ -94,6 +110,10 @@ int treeview::addnode(int parent, int color, void *ref, const string text) {
 
     items.push_back(node);
     return node.id;
+}
+
+int treeview::addleaf(const string text) {
+    addleaf(0, 0, 0, text);
 }
 
 int treeview::addleaf(int parent, int color, void *ref, const string text) {
@@ -303,7 +323,7 @@ void treeview::setcur(int id) {
     if(!menu.getcount()) genmenu(0);
 
     if((i = find(refdeps.begin(), refdeps.end(), id)) != refdeps.end()) {
-        menu.setpos(i-refdeps.begin());
+	menu.setpos(i-refdeps.begin());
     }
 }
 
