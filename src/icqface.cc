@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.224 2004/06/19 13:17:56 konst Exp $
+* $Id: icqface.cc,v 1.225 2004/06/21 13:04:10 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2862,6 +2862,7 @@ bool icqface::histexec(imevent *&im) {
 		switch(k) {
 		    case -2:
 			sub = face.inputstr(_("search for: "), sub);
+			if(input.getlastkey() == KEY_ESC) break;
 		    case -3:
 			if(!sub.empty())
 			for(k = mhist.getpos()+1; k < mhist.getcount(); k++) {

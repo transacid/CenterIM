@@ -61,7 +61,7 @@ class msnhook : public abstracthook {
 
     protected:
 	imstatus ourstatus;
-	bool fonline, flogged, readinfo, lasterror;
+	bool fonline, flogged, readinfo;
 	MSN::NotificationServerConnection *conn;
 	time_t timer_ping;
 

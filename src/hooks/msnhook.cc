@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.80 2004/06/18 06:49:13 konst Exp $
+* $Id: msnhook.cc,v 1.81 2004/06/21 13:04:10 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -86,7 +86,7 @@ static MSN::BuddyStatus stat2buddy(imstatus st) {
 
 // ----------------------------------------------------------------------------
 
-msnhook::msnhook(): abstracthook(msn), conn(0), lasterror(false) {
+msnhook::msnhook(): abstracthook(msn), conn(0) {
     ourstatus = offline;
     fonline = false;
 
@@ -118,8 +118,7 @@ void msnhook::connect() {
     readinfo = flogged = false;
     fonline = true;
 
-    if(lasterror)
-	delete conn;
+    if(conn) delete conn;
 
     try {
 	conn = new MSN::NotificationServerConnection(nicknormalize(account.nickname), account.password);
@@ -130,7 +129,7 @@ void msnhook::connect() {
 
 void msnhook::disconnect() {
     delete conn;
-    lasterror = false;
+    conn = 0;
 }
 
 void msnhook::exectimers() {
@@ -696,7 +695,6 @@ void MSN::ext::removedListEntry(MSN::Connection * conn, string lst, MSN::Passpor
 
 void MSN::ext::showError(MSN::Connection * conn, string msg) {
     ::log(msg);
-    mhook.lasterror = true;
 }
 
 void MSN::ext::buddyChangedStatus(MSN::Connection * conn, MSN::Passport buddy, string friendlyname, MSN::BuddyStatus state) {
