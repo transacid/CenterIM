@@ -208,6 +208,7 @@ void fileselector::setoptions(int noptions) {
 
 void fileselector::setstartpoint(const string aspoint) {
     spoint = aspoint;
+    dcurrent = "";
 }
 
 void fileselector::setwindow(textwindow awindow) {
