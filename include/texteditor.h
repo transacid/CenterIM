@@ -148,8 +148,8 @@ class texteditor: public abstractuicontrol {
 	texteditor();
 	~texteditor();
 
-	int load(string buf, char *id);
-	int load(FILE *f, char *id);
+	int load(string buf, const string id);
+	int load(FILE *f, const string id);
 	int load(ifstream &f, const string id);
 	    // loads a file from char* or FILE opening
 	    // a new editor window

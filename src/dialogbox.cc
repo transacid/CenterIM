@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.2 2001/06/03 21:12:05 konst Exp $
+* $Id: dialogbox.cc,v 1.3 2001/08/09 08:32:59 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -111,9 +111,8 @@ textbrowser *dialogbox::getbrowser() {
 bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
     bool ret = false;
 
-    if(first) redraw();
-
     dialogbox_specimen = this;
+    if(first) redraw();
 
     if(menu) {
 	menuitem = menu->open();
@@ -133,6 +132,8 @@ bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
 
 	for(bool fin = false; !fin; ) {
 	    proceed = idle ? keypressed() : true;
+	    dialogbox_specimen = this;
+
 	    if(proceed)
 	    switch(k = getkey()) {
 		case KEY_LEFT:

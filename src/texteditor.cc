@@ -73,8 +73,8 @@ texteditor::~texteditor() {
     delete files;
 }
 
-int texteditor::load(string buf, char *id) {
-    int newfn = addwindow(id), k;
+int texteditor::load(string buf, const string id) {
+    int newfn = addwindow(strdup(id.c_str())), k;
     vector<string> lst;
     vector<string>::iterator i;
 
@@ -91,7 +91,7 @@ int texteditor::load(string buf, char *id) {
     return newfn;
 }
 
-int texteditor::load(FILE *f, char *id) {
+int texteditor::load(FILE *f, const string id) {
     int i = -1;
     struct stat st;
     char *p = 0;
@@ -102,7 +102,7 @@ int texteditor::load(FILE *f, char *id) {
 	fseek(f, 0, SEEK_SET);
 	fread(p, st.st_size, 1, f);
 	p[st.st_size] = 0;
-	i = load(p, id);
+	i = load(p, strdup(id.c_str()));
 	delete p;
     }
 
