@@ -1,7 +1,8 @@
 msn protocol
-    add koi8-win1251
-    "initializing connection" message
-    sometimes exits attempting to send msg :(
+    authorization
+
+yahoo
+    disconnect on "got zero length" ?
 
 /*
 *
@@ -9,6 +10,22 @@ msn protocol
 *
 */
 
+color hightlight for different IM protocols in multi selection box
+
+sounds for every protocol and every contact
+
+msn protocol
+    add koi8-win1251 - check
+    "initializing connection" message
+
+adding non-icq is now done through the find/add dialog
+
+> Also, where is the menu option to rename a contact? I know the
+> shortcut is R though.
+
+Also make a context menu for MSN contacts.
+
+possibility to put info card to any kind of a group
 
 /*
 *
@@ -18,13 +35,6 @@ msn protocol
 
 check for open direct tcp connection doesn't work
     fixed? check
-
-> When I try to select add non-icq contact, it seg faults
-
-> Also, where is the menu option to rename a contact? I know the
-> shortcut is R though.
-
-Also make a context menu for MSN contacts.
 
 test cicqsync under freebsd
 
@@ -60,17 +70,17 @@ forward note for yahoo contacts contains "(0)"
 this seems similar to mirabilis icq group mode 2, which i suggested
 a while ago. i'd also be happy about it.
 
-shouldn't the status be displayed though, perhaps next to the corresponding
-network userid -- like "icq[o]:2374527825343  yahoo[o]:someuser"
-
 icq починить file send
-
-color hightlight for different IM protocols in multi selection box
 
 flavour of face.update() with internal time check a-la "don't update
 more frequently than once in 5 secs".
 
 update README
+
+> Sorry, another thing I'd like to request, now, that the amount of
+> protocols supported by centericq is growing: How about another
+> status-menu-entry 'All' ? I.e. to set status N/A on all protocols at
+> the same time..
 
 auto-respond
 
@@ -84,7 +94,6 @@ hold some user info locally so that to be able to send "you were added"
 in correct way
 
 update security info
-auto-response
 
 try to make msgs to go in order of being written
 control the contact list having been sent
@@ -113,4 +122,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.67 2001/11/26 23:39:32 konst Exp $
+$Id: TODO,v 1.68 2001/11/27 16:33:07 konst Exp $

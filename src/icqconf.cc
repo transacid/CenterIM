@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.22 2001/11/26 13:02:51 konst Exp $
+* $Id: icqconf.cc,v 1.23 2001/11/27 16:33:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -294,11 +294,16 @@ void icqconf::loadsounds() {
 
 	if(fo.is_open()) {
 	    fo << "# This file contains sound configuration for centericq" << endl;
-	    fo << "# Every line should look like: <uin> <event> <command>" << endl << endl;
+	    fo << "# Every line should look like: <id> <event> <command>" << endl << "#" << endl;
 
-	    fo << "# <uin>      uin of specific user or *" << endl;
-	    fo << "# <event>    can be either msg, url, file, chat, cont, online or email" << endl;
-	    fo << "# <command>  command line to be executed to play a sound" << endl << endl;
+	    fo << "# <id>\tid of a contact; can be one of the following" << endl;
+	    fo << "# *\tmeans default sound for all the contacts" << endl;
+	    fo << "# icq_<uin>\tfor icq contacts" << endl;
+	    fo << "# yahoo_<nickname>\tfor yahoo" << endl;
+	    fo << "# msn_<nickname>\tmsn contacts" << endl << "#" << endl;
+
+	    fo << "# <event>\tcan be either msg, url, file, chat, cont, online or email" << endl;
+	    fo << "# <command>\tcommand line to be executed to play a sound" << endl << endl;
 
 	    switch(rs) {
 		case rscard:
@@ -310,14 +315,13 @@ void icqconf::loadsounds() {
 		    fo << "*\tonline\tplay " << SHARE_DIR << "/online.wav" << endl;
 		    fo << "*\tcont\tplay " << SHARE_DIR << "/cont.wav" << endl;
 		    break;
+
 		case rsspeaker:
 		    fo << "*\tmsg\t!spk1" << endl;
 		    fo << "*\turl\t!spk2" << endl;
 		    fo << "*\tfile\t!spk3" << endl;
 		    fo << "*\tchat\t!spk4" << endl;
 		    fo << "*\temail\t!spk5" << endl;
-		    fo << "*\tonline\t!spk6" << endl;
-		    fo << "*\tcont\t!spk7" << endl;
 		    break;
 	    }
 
@@ -342,8 +346,14 @@ void icqconf::loadsounds() {
 	    if(skey == "chat") event = EVT_CHAT; else continue;
 
 	    if(suin != "*") {
-		c = (ffuin = atol(suin.c_str())) ?
-		    clist.get(imcontact(ffuin, icq)) : 0;
+		if((i = suin.find("_")) != -1) {
+		    skey = suin.substr(0, i);
+		    suin.erase(0, i+1);
+
+		    if(skey == "icq") c = clist.get(imcontact(strtoul(suin.c_str(), 0, 0), icq)); else
+		    if(skey == "yahoo") c = clist.get(imcontact(suin, yahoo)); else
+		    if(skey == "msn") c = clist.get(imcontact(suin, msn));
+		}
 	    } else {
 		c = clist.get(contactroot);
 	    }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.29 2001/11/26 13:02:52 konst Exp $
+* $Id: icqdialogs.cc,v 1.30 2001/11/27 16:33:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,7 +43,7 @@ bool icqface::finddialog(icqhook::searchparameters &s) {
     vector<protocolname>::iterator ipname;
 
     for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
-	if(gethook(apname).online()) {
+	if(gethook(apname).online() || apname == infocard) {
 	    penabled.push_back(apname);
 	}
     }
@@ -63,7 +63,7 @@ bool icqface::finddialog(icqhook::searchparameters &s) {
 
     db.setwindow(new textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED,
-	conf.getcolor(cp_dialog_highlight), _(" Find user(s) ")));
+	conf.getcolor(cp_dialog_highlight), _(" Find/add user(s) ")));
 
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
@@ -72,7 +72,7 @@ bool icqface::finddialog(icqhook::searchparameters &s) {
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("cLear"), _("Change"), _("Search"), 0));
+	_("cLear"), _("Change"), _("Search/Add"), 0));
 
     db.addautokeys();
     db.idle = &dialogidle;
@@ -555,7 +555,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
 
     bool quote = conf.getquote();
-    bool rus = icq_Russian == 1;
+    bool rus = conf.getrussian();
     bool savepwd = conf.getsavepwd();
     bool socks = !conf.getsockshost().empty();
     bool hideoffl = conf.gethideoffline();

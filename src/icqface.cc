@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.43 2001/11/26 13:02:52 konst Exp $
+* $Id: icqface.cc,v 1.44 2001/11/27 16:33:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -224,22 +224,20 @@ int icqface::contextmenu(icqcontact *c) {
 	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
 	    m.addline();
 	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
-	    m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
 	    break;
 
 	case yahoo:
+	case msn:
 	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
 	    m.addline();
 	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
 	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));
 	    m.addline();
 	    m.additem(0, ACT_IGNORE,   _(" Ignore user"));
-	    m.additem(0, ACT_REMOVE,   _(" Remove user          del"));
 	    break;
 
 	case infocard:
 	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
-	    m.additem(0, ACT_REMOVE,    _(" Remove user          del"));
 	    m.additem(0, ACT_EDITUSER,  _(" Edit details"));
 	    break;
     }
@@ -252,15 +250,16 @@ int icqface::contextmenu(icqcontact *c) {
 	    m.addline();
 	    m.additem(0, ACT_INFO,      _(" User's details         ?"));
 	    m.additem(0, ACT_HISTORY,   _(" Events history         h"));
-	    m.additem(0, ACT_REMOVE,    _(" Remove user          del"));
 	    m.additem(0, ACT_IGNORE,    _(" Ignore user"));
 	}
     }
 
-    if(c->getdesc().pname != infocard)
-    if(c->getdesc() != contactroot)
-    if(conf.getusegroups()) {
-	m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
+    if(c->getdesc() != contactroot) {
+	m.additem(0, ACT_REMOVE, _(" Remove user          del"));
+	m.additem(0, ACT_RENAME, _(" Rename contact       r"));
+	if(conf.getusegroups()) {
+	    m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
+	}
     }
 
     m.scale();
@@ -286,7 +285,6 @@ int icqface::generalmenu() {
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
     m.additem(0, ACT_FIND,      _(" Find/add users"));
     m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
-    m.additem(0, ACT_NONICQ,    _(" Add non-icq contact"));
     m.addline();
     m.additem(0, ACT_IGNORELIST,    _(" View/edit ignore list"));
     m.additem(0, ACT_INVISLIST,     _(" View/edit invisible list"));
@@ -406,7 +404,7 @@ void icqface::fillcontactlist() {
 	    (c->getgroupid() != prevgid) &&
 	    (sc != '#');
 
-	if(groupchange && !strchr("!N", sc)) {
+	if(groupchange && !strchr("!", sc)) {
 	    ngroup = mcontacts->addnode(0, conf.getcolor(cp_main_highlight),
 		0, " " + find(groups.begin(), groups.end(),
 		c->getgroupid())->getname() + " ");
@@ -432,11 +430,6 @@ void icqface::fillcontactlist() {
 		    ngroup = 0;
 		    nnode = mcontacts->addnode(ngroup,
 			conf.getcolor(cp_main_highlight), 0, " Not in list ");
-		    break;
-		case 'N':
-		    ngroup = 0;
-		    nnode = mcontacts->addnode(ngroup,
-			conf.getcolor(cp_main_highlight), 0, " Non-ICQ ");
 		    break;
 	    }
 
@@ -1874,9 +1867,12 @@ bool icqface::multicontacts(const string ahead = "") {
 	for(c = mlst.begin(); c != mlst.end(); c++) {
 	    icqcontact *cont = (icqcontact *) clist.get(*c);
 
-	    m.additemf(0, (imcontact *) &(*c), " [%c] %s",
-		find(muins.begin(), muins.end(), *c) != muins.end()
-		? 'x' : ' ', cont->getdispnick().c_str());
+	    m.additemf(
+		conf.getprotcolor(c->pname),
+		(imcontact *) &(*c), " [%c] %s",
+		find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
+		cont->getdispnick().c_str()
+	    );
 	}
 
 	m.setpos(saveelem, savefirst);

@@ -24,7 +24,6 @@
 
 #define SORTCHAR(c) ( \
     c->getmsgcount() ? '#' : \
-    (c->getdesc().pname == infocard) ? 'N' : \
     !c->inlist() ? '!' : \
     c->getshortstatus() \
 )

@@ -24,6 +24,7 @@ msnhook::msnhook() {
     MSN_RegisterCallback(MSN_FLN, &statuschanged);
     MSN_RegisterCallback(MSN_AUTH, &authrequested);
     MSN_RegisterCallback(MSN_OUT, &disconnected);
+    MSN_RegisterCallback(MSN_RNG, &ring);
 //    MSN_RegisterCallback(MSN_MAIL, &mail_callback);
 
 #ifdef DEBUG
@@ -50,6 +51,7 @@ void msnhook::connect() {
     }
 
     time(&mhook.timer_reconnect);
+    msn_Russian = conf.getrussian() ? 1 : 0;
 }
 
 void msnhook::disconnect() {
@@ -258,4 +260,14 @@ void msnhook::disconnected(void *data) {
 
 void msnhook::log(const char *event, const char *cause) {
     face.log("%s: %s", event, cause);
+}
+
+void msnhook::ring(void *data) {
+    MSN_Ring *ring = (MSN_Ring *) data;
+
+    if(ring->mode == outgoing) {
+	face.log(_("+ [msn] connecting with %s"), ring->handle.c_str());
+    } else {
+	face.log(_("+ [msn] connection from %s"), ring->handle.c_str());
+    }
 }

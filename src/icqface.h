@@ -51,7 +51,6 @@
 #define ACT_GMENU       -25
 #define ACT_CONF        -26
 #define ACT_RENAME      -27
-#define ACT_NONICQ      -28
 #define ACT_EDITUSER    -29
 #define ACT_VISIBLELIST -30
 #define ACT_INVISLIST   -31

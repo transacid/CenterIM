@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.41 2001/11/26 15:48:52 konst Exp $
+* $Id: centericq.cc,v 1.42 2001/11/27 16:33:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -155,9 +155,6 @@ void centericq::mainloop() {
 	    case ACT_CONF:
 		updateconf();
 		break;
-	    case ACT_NONICQ:
-		nonicq(0);
-		break;
 	    case ACT_QUICKFIND:
 		face.quickfind();
 		break;
@@ -272,6 +269,11 @@ void centericq::find() {
 			addcontact(imcontact(s.nick, s.pname));
 			ret = false;
 		    }
+		    break;
+
+		case infocard:
+		    nonicq(0);
+		    ret = false;
 		    break;
 	    }
 	}
@@ -391,17 +393,23 @@ bool centericq::updateconf() {
 
 void centericq::nonicq(int id) {
     icqcontact *c;
+    bool done = false;
 
     if(!id) {
 	c = clist.addnew(imcontact(0, infocard), true);
 
 	if(face.updatedetails(c)) {
-	    c->save();
-	} else {
+	    addcontact(c->getdesc());
+	}
+
+	if(!c->inlist()) {
 	    clist.remove(c->getdesc());
+	} else {
+	    c->save();
 	}
     } else {
 	c = clist.get(imcontact(id, infocard));
+
 	if(face.updatedetails(c)) {
 	    c->setdispnick(c->getnick());
 	    c->save();

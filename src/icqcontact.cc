@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.24 2001/11/26 23:30:34 konst Exp $
+* $Id: icqcontact.cc,v 1.25 2001/11/27 16:33:08 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -356,11 +356,8 @@ void icqcontact::remove() {
 void icqcontact::excludefromlist() {
     FILE *f;
     string fname = getdirname() + "/excluded";
-
-    if(cdesc.pname != infocard) {
-	if(f = fopen(fname.c_str(), "w")) fclose(f);
-	finlist = false;
-    }
+    if(f = fopen(fname.c_str(), "w")) fclose(f);
+    finlist = false;
 }
 
 void icqcontact::includeintolist() {
