@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.57 2002/12/18 18:05:40 konst Exp $
+* $Id: msnhook.cc,v 1.58 2002/12/28 13:26:47 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -685,6 +685,7 @@ void ext_closing_connection(msnconn *conn) {
 	clist.setoffline(msn);
 	mhook.fonline = false;
 	mhook.typing.clear();
+	mhook.slst.clear();
 	face.log(_("+ [msn] disconnected"));
 	face.update();
     }

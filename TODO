@@ -12,6 +12,11 @@
 
 colorscheme auto-reread -> bold attributes don't get reloaded
 
+Something that I just noticed the last couple of days (affects 4.90 and
+4.91) that I'm guessing has something to do the with new MSN libraries that
+are being used.   When using the "$SENDER_NICK" value in the "external"
+file, it now matches the MSN 'nickname' not the account name.
+
 /*
 *
 * TODO
@@ -38,4 +43,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.389 2002/12/23 14:33:53 konst Exp $
+$Id: TODO,v 1.390 2002/12/28 13:26:33 konst Exp $

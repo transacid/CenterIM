@@ -18,412 +18,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-12-27 14:37+0200\n"
+"POT-Creation-Date: 2002-12-28 01:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: ENCODING\n"
-
-#: src/hooks/aimhook.cc:60
-msgid "+ [aim] connecting to the server"
-msgstr "+ [aim] connexion au serveur"
-
-#: src/hooks/aimhook.cc:89
-msgid "+ [aim] unable to connect to the server"
-msgstr "+ [aim] impossible de se connecter au serveur"
-
-#: src/hooks/aimhook.cc:190
-#, c-format
-msgid "+ [aim] adding %s to the contacts"
-msgstr "+ [aim] ajout de %s aux contacts"
-
-#: src/hooks/aimhook.cc:204
-#, c-format
-msgid "+ [aim] removing %s from the contacts"
-msgstr "+ [aim] suppresion de %s des contacts"
-
-#: src/hooks/aimhook.cc:302
-#, c-format
-msgid "I do really enjoy the default AIM profile of centericq %s."
-msgstr "Le profil AIM par défaut de centericq %s me convient très bien."
-
-#: src/hooks/aimhook.cc:354
-msgid "+ [aim] logged in"
-msgstr "+ [aim] connecté"
-
-#: src/hooks/aimhook.cc:371
-#, fuzzy
-msgid "+ [aim] disconnected"
-msgstr "+ [icq] déconnecté"
-
-#: src/hooks/aimhook.cc:389
-msgid "aim connection failed"
-msgstr "la connexion à aim a échoué"
-
-#: src/hooks/aimhook.cc:391
-#, c-format
-msgid "+ [aim] connect failed: %s"
-msgstr "+ [aim] la connexion a échoué : %s"
-
-#: src/hooks/aimhook.cc:408
-msgid "+ [aim] password was changed successfully"
-msgstr "+ [aim] le mot de passe a été changé avec succès"
-
-#: src/hooks/aimhook.cc:431
-msgid "The user has no profile information."
-msgstr "l'utilisateur n'a pas d'information dans son profil"
-
-#: src/hooks/aimhook.cc:524
-msgid "+ [aim] password sent"
-msgstr "+ [aim] mot de passe envoyé"
-
-#: src/hooks/icqhook.cc:154
-msgid "+ [icq] connecting to the server"
-msgstr "+ [icq] connexion au serveur"
-
-#: src/hooks/icqhook.cc:1027
-msgid "+ [icq] logged in"
-msgstr "+ [icq] connecté"
-
-#: src/hooks/icqhook.cc:1054
-msgid "as requested"
-msgstr "comme demandé"
-
-#: src/hooks/icqhook.cc:1055
-msgid "socket problems"
-msgstr "problème de socket"
-
-#: src/hooks/icqhook.cc:1056
-msgid "bad username"
-msgstr "mauvais nom d'utilisateur"
-
-#: src/hooks/icqhook.cc:1057
-msgid "turboing"
-msgstr "turboing"
-
-#: src/hooks/icqhook.cc:1058
-msgid "bad password"
-msgstr "mot de passe incorrect"
-
-#: src/hooks/icqhook.cc:1059
-msgid "username and password mismatch"
-msgstr "le nom d'utilisateur et mot le passe ne correspondent pas"
-
-#: src/hooks/icqhook.cc:1060
-msgid "already logged"
-msgstr "déjà connecté"
-
-#: src/hooks/icqhook.cc:1073
-msgid "+ [icq] disconnected"
-msgstr "+ [icq] déconnecté"
-
-#: src/hooks/icqhook.cc:1079
-msgid "icq disconnection reason"
-msgstr "raison de la déconnexion"
-
-#: src/hooks/icqhook.cc:1138
-msgid "The user has accepted your authorization request"
-msgstr "L'utilisateur a accepté votre demande d'autorisation"
-
-#: src/hooks/icqhook.cc:1142
-msgid "The user has rejected your authorization request; the message was: "
-msgstr "L'utilisateur a refusé votre demande d'autorisation; raison :"
-
-#: src/hooks/icqhook.cc:1157 src/hooks/msnhook.cc:520
-#: src/hooks/yahoohook.cc:780
-msgid "The user has added you to his/her contact list"
-msgstr "L'utilisateur vous a ajouté à sa liste de contacts"
-
-#: src/hooks/icqhook.cc:1197
-#, c-format
-msgid "+ [icq] failed SMS to %s, %s"
-msgstr "+ [icq] échec SMS vers %s, %s"
-
-#: src/hooks/icqhook.cc:1200
-#, c-format
-msgid "+ [icq] failed SMS to %s"
-msgstr "+ [icq] échec SMS vers %s"
-
-#: src/hooks/icqhook.cc:1211 src/hooks/irchook.cc:562
-#: src/hooks/jabberhook.cc:410
-msgid "Away message:"
-msgstr "message d'absence :"
-
-#: src/hooks/icqhook.cc:1215
-#, c-format
-msgid "+ [icq] cannot fetch away msg from %s, %s"
-msgstr "+ [icq] impossible de récupérer le msg d'absence depuis %s, %s"
-
-#: src/hooks/icqhook.cc:1346
-#, c-format
-msgid "%s requested our away message, sent the response"
-msgstr "%s a demandé votre message d'absence, réponse envoyée"
-
-#: src/hooks/icqhook.cc:1361
-msgid "Random Chat User"
-msgstr ""
-
-#: src/hooks/icqhook.cc:1391
-#, fuzzy, c-format
-msgid "+ [icq] search finished, %d found"
-msgstr "+ [icq] recherche terminée, %d réponse(s)"
-
-#: src/hooks/icqhook.cc:1431
-#, fuzzy
-msgid "+ [icq] password was changed successfully"
-msgstr "+ [aim] le mot de passe a été changé avec succès"
-
-#: src/hooks/irchook.cc:123
-msgid "+ [irc] connecting to the server"
-msgstr "+ [irc] connexion au serveur"
-
-#: src/hooks/irchook.cc:135
-msgid "+ [irc] unable to connect to the server"
-msgstr "+ [irc] impossible de se connecter au serveur"
-
-#: src/hooks/irchook.cc:497
-#, c-format
-msgid "+ [irc] channel members list fetching finished, %d found"
-msgstr ""
-"+ [irc] récupération de la liste des membres du chan terminée, %d réponse(s)"
-
-#: src/hooks/irchook.cc:687
-msgid "+ [irc] logged in"
-msgstr "+ [irc] connecté"
-
-#: src/hooks/irchook.cc:725
-#, fuzzy
-msgid "+ [irc] disconnected"
-msgstr "+ [icq] déconnecté"
-
-#: src/hooks/irchook.cc:739
-#, c-format
-msgid "+ [irc] connect failed: %s"
-msgstr "+ [irc] la connexion a échoué : %s"
-
-#: src/hooks/irchook.cc:756
-msgid "+ [irc] nickname was changed successfully"
-msgstr "+ [irc] votre nickname a été changé"
-
-#: src/hooks/irchook.cc:827
-msgid "On channels: "
-msgstr "sur les chans: "
-
-#: src/hooks/irchook.cc:1114
-#, c-format
-msgid "Kicked by %s; reason: %s"
-msgstr "Kické par %s; raison: %s"
-
-#: src/hooks/irchook.cc:1170
-#, c-format
-msgid "The user has changed their nick from %s to %s"
-msgstr "%s a changé de nick. Il s'appelle maintenant %s"
-
-#: src/hooks/irchook.cc:1190
-msgid "+ [irc] password sent"
-msgstr "+ [irc] mot de passe envoyé"
-
-#: src/hooks/irchook.cc:1192
-msgid "+ [irc] password was requested, but it's not set"
-msgstr "+ [irc] password was requested, but it's not set"
-
-#: src/hooks/irchook.cc:1216
-#, c-format
-msgid "PING reply from the user: %d second(s)"
-msgstr "Réponse au PING : %d seconde(s)"
-
-#: src/hooks/irchook.cc:1221 src/hooks/jabberhook.cc:1195
-#, c-format
-msgid "The remote is using %s"
-msgstr "L'utilisateur distant utilise %s"
-
-#: src/hooks/msnhook.cc:86
-msgid "+ [msn] connecting to the server"
-msgstr "+ [msn] connexion au serveur"
-
-#: src/hooks/msnhook.cc:105
-#, fuzzy, c-format
-msgid "+ [msn] %s: stopped typing"
-msgstr "+ [yahoo] %s: fin de frappe"
-
-#: src/hooks/msnhook.cc:283
-#, c-format
-msgid "+ [msn] removing %s from the contacts"
-msgstr "+ [msn] suppression de %s des contacts"
-
-#: src/hooks/msnhook.cc:320
-#, c-format
-msgid "+ [msn] reverse users listing finished, %d found"
-msgstr "+ [msn] affichage inversé des utilisateurs terminé, %d réponse(s)"
-
-#: src/hooks/msnhook.cc:598
-#, fuzzy, c-format
-msgid "+ [msn] %s: started typing"
-msgstr "+ [yahoo] %s: début de frappe"
-
-#: src/hooks/msnhook.cc:606
-#, c-format
-msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
-msgstr ""
-
-#: src/hooks/msnhook.cc:613
-#, fuzzy, c-format
-msgid "+ [msn] e-mail from %s, %s"
-msgstr "+ [msn] e-mail de %s <%s>, %s"
-
-#: src/hooks/msnhook.cc:674
-msgid "+ [msn] logged in"
-msgstr "+ [msn] connecté"
-
-#: src/hooks/msnhook.cc:688
-msgid "+ [msn] disconnected"
-msgstr "+ [msn] déconnecté"
-
-#: src/hooks/msnhook.cc:702
-#, fuzzy
-msgid "+ [msn] cannot connect: "
-msgstr "+ [yahoo] impossible de se connecter: "
-
-#: src/hooks/msnhook.cc:706 src/hooks/yahoohook.cc:120
-msgid "could not resolve hostname"
-msgstr "impossible de résoudre le nom d'hôte"
-
-#: src/hooks/msnhook.cc:720
-#, fuzzy
-msgid "verify the hostname and port"
-msgstr "vérifiez le nom d'hôte et le port entrés"
-
-#: src/hooks/yahoohook.cc:109
-msgid "+ [yahoo] connecting to the server"
-msgstr "+ [yahoo] connexion au serveur"
-
-#: src/hooks/yahoohook.cc:117
-msgid "+ [yahoo] cannot connect: "
-msgstr "+ [yahoo] impossible de se connecter: "
-
-#: src/hooks/yahoohook.cc:121
-msgid "could not create socket"
-msgstr "impossible de créer la socket"
-
-#: src/hooks/yahoohook.cc:122
-msgid "verify the pager host and port entered"
-msgstr "vérifiez le nom d'hôte et le port entrés"
-
-#: src/hooks/yahoohook.cc:159
-msgid "+ [yahoo] disconnected"
-msgstr "+ [yahoo] déconnecté"
-
-#: src/hooks/yahoohook.cc:284
-#, c-format
-msgid "+ [yahoo] adding %s to the contacts"
-msgstr "+ [yahoo] ajout de %s aux contacts"
-
-#: src/hooks/yahoohook.cc:304
-#, c-format
-msgid "+ [yahoo] removing %s from the contacts"
-msgstr "+ [yahoo] suppression de %s des contacts"
-
-#: src/hooks/yahoohook.cc:318
-#, c-format
-msgid "+ [yahoo] leaving the %s conference"
-msgstr "+ [yahoo] déconnexion de la conférence %s"
-
-#: src/hooks/yahoohook.cc:541
-#, c-format
-msgid "+ [yahoo] members list fetching finished, %d found"
-msgstr "+ [yahoo] récupération de la liste des membres terminée, %d réponse(s)"
-
-#: src/hooks/yahoohook.cc:562
-msgid "Please join my conference."
-msgstr "Rejoignez ma conférence SVP"
-
-#: src/hooks/yahoohook.cc:573
-msgid "Custom status message:"
-msgstr "Notification d'état personnalisée:"
-
-#: src/hooks/yahoohook.cc:577
-#, c-format
-msgid "+ [yahoo] cannot fetch away msg from %s, %s"
-msgstr "+ [yahoo] impossible de récupérer le msg d'absence de %s, %s"
-
-#: src/hooks/yahoohook.cc:603
-msgid "+ [yahoo] logged in"
-msgstr "+ [yahoo] connecté"
-
-#: src/hooks/yahoohook.cc:620
-msgid "+ [yahoo] cannot login: username and password mismatch"
-msgstr ""
-"+ [yahoo] connexion impossible: l'utilisateur et le mot de passe ne "
-"correspondent pas"
-
-#: src/hooks/yahoohook.cc:625
-msgid "+ [yahoo] cannot login: the account has been blocked"
-msgstr "+ [yahoo] connexion impossible: le compte est bloqué"
-
-#: src/hooks/yahoohook.cc:626
-#, c-format
-msgid "+ to reactivate visit %s"
-msgstr "+ pour le réactiver, allez sur %s"
-
-#: src/hooks/yahoohook.cc:692
-#, c-format
-msgid ""
-"The user %s has invited you to the %s conference, the topic there is: %s"
-msgstr "L'utilisateur %s vous a invité à la conférence %s, pour parler de: %s"
-
-#: src/hooks/yahoohook.cc:695
-msgid "Current conference members are: "
-msgstr "Les membres actuels de la conférence sont: "
-
-#: src/hooks/yahoohook.cc:713
-msgid "Auto-joined the conference"
-msgstr "Connexion automatique à la conférence"
-
-#: src/hooks/yahoohook.cc:723
-#, c-format
-msgid "The user %s has declined your invitation to join the conference"
-msgstr "L'utilisateur %s a décliné votre invitation à rejoindre la conférence"
-
-#: src/hooks/yahoohook.cc:733
-#, c-format
-msgid "The user %s has joined the conference"
-msgstr "L'utilisateur %s a rejoint la conférence"
-
-#: src/hooks/yahoohook.cc:748
-#, c-format
-msgid "The user %s has left the conference"
-msgstr "L'utilisateur %s a quitté la conférence"
-
-#: src/hooks/yahoohook.cc:784
-msgid "the message was: "
-msgstr "message :"
-
-#: src/hooks/yahoohook.cc:796
-#, c-format
-msgid "+ [yahoo] %s: started typing"
-msgstr "+ [yahoo] %s: début de frappe"
-
-#: src/hooks/yahoohook.cc:796
-#, c-format
-msgid "+ [yahoo] %s: stopped typing"
-msgstr "+ [yahoo] %s: fin de frappe"
-
-#: src/hooks/yahoohook.cc:809
-#, c-format
-msgid "+ [yahoo] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail de %s, %s"
-
-#: src/hooks/yahoohook.cc:816
-#, c-format
-msgid "+ [yahoo] system: %s"
-msgstr "+ [yahoo] système: %s"
-
-#: src/hooks/yahoohook.cc:821
-#, c-format
-msgid "+ [yahoo] error: %s"
-msgstr "+ [yahoo] erreur: %s"
 
 #: src/centericq.cc:121
 msgid "password: "
@@ -558,102 +159,6 @@ msgstr "! pour éviter la perte de messages ou de la configuration"
 #: src/centericq.cc:1392
 msgid "Invite to conference.."
 msgstr "Inviter à une conférence..."
-
-#: src/accountmanager.cc:62
-msgid " IM account manager "
-msgstr " gestionnaire de comptes de messagerie "
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
-#: src/icqdialogs.cc:643 src/icqdialogs.cc:1023 src/imcontroller.cc:71
-msgid "Change"
-msgstr "Changer"
-
-#: src/accountmanager.cc:68 src/icqdialogs.cc:643 src/icqdialogs.cc:1023
-#: src/icqdialogs.cc:1220
-msgid "Done"
-msgstr "Terminé"
-
-#: src/accountmanager.cc:91
-#, c-format
-msgid " Server : %s "
-msgstr " Serveur : %s "
-
-#: src/accountmanager.cc:94
-#, fuzzy, c-format
-msgid " Secured : %s "
-msgstr " Serveur : %s "
-
-#: src/accountmanager.cc:100
-#, c-format
-msgid " UIN : %s "
-msgstr " UIN : %s "
-
-#: src/accountmanager.cc:105
-#, c-format
-msgid " Login : %s "
-msgstr " Identifiant : %s "
-
-#: src/accountmanager.cc:111
-#, c-format
-msgid " Password (optional) : %s "
-msgstr " Mot de passe (optionnel) : %s "
-
-#: src/accountmanager.cc:111
-#, c-format
-msgid " Password : %s "
-msgstr " Mot de passe : %s "
-
-#: src/accountmanager.cc:115
-msgid " Register "
-msgstr " S'enregistrer "
-
-#: src/accountmanager.cc:121
-msgid " Change nickname "
-msgstr " Changer le nick "
-
-#: src/accountmanager.cc:122
-msgid " Update user details "
-msgstr " Mettre à jour les informations "
-
-#: src/accountmanager.cc:125
-msgid " Set away message "
-msgstr " Définir le message d'absence "
-
-#: src/accountmanager.cc:128
-msgid " Synchronize contact list "
-msgstr " Synchroniser la liste de contacts "
-
-#: src/accountmanager.cc:130
-msgid " Drop "
-msgstr " Supprimer "
-
-#: src/accountmanager.cc:148
-msgid " user name: "
-msgstr " nom d'utilisateur: "
-
-#: src/accountmanager.cc:153
-msgid " uin: "
-msgstr " uin: "
-
-#: src/accountmanager.cc:158
-msgid " password: "
-msgstr " mot de passe: "
-
-#: src/accountmanager.cc:166
-msgid "Drop the account information first!"
-msgstr "Commencez par supprimer les informations du compte !"
-
-#: src/accountmanager.cc:180
-msgid "You have to disconnect the service first!"
-msgstr "Vous devez vous déconnecter du service d'abord !"
-
-#: src/accountmanager.cc:189
-msgid " server address: "
-msgstr " adresse du serveur: "
-
-#: src/accountmanager.cc:211
-msgid "You must be logged in to preform the synchronization"
-msgstr "+ vous devez être connecté pour synchroniser"
 
 #: src/icqconf.cc:153
 #, c-format
@@ -890,6 +395,11 @@ msgstr "sAuver"
 #: src/icqdialogs.cc:211 src/icqdialogs.cc:217
 msgid "cLear"
 msgstr "effacer"
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:211 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:643 src/icqdialogs.cc:1023 src/imcontroller.cc:71
+msgid "Change"
+msgstr "Changer"
 
 #: src/icqdialogs.cc:211
 msgid "Search/Add"
@@ -1240,6 +750,11 @@ msgstr " Vos infos %s "
 #, c-format
 msgid " %s: details "
 msgstr " %s: informations "
+
+#: src/accountmanager.cc:68 src/icqdialogs.cc:643 src/icqdialogs.cc:1023
+#: src/icqdialogs.cc:1220
+msgid "Done"
+msgstr "Terminé"
 
 #: src/icqdialogs.cc:661
 msgid "Wait a moment. Your details haven't been fetched yet"
@@ -2156,6 +1671,92 @@ msgstr "Chercher: "
 msgid "General"
 msgstr "Général"
 
+#: src/accountmanager.cc:62
+msgid " IM account manager "
+msgstr " gestionnaire de comptes de messagerie "
+
+#: src/accountmanager.cc:91
+#, c-format
+msgid " Server : %s "
+msgstr " Serveur : %s "
+
+#: src/accountmanager.cc:94
+#, fuzzy, c-format
+msgid " Secured : %s "
+msgstr " Serveur : %s "
+
+#: src/accountmanager.cc:100
+#, c-format
+msgid " UIN : %s "
+msgstr " UIN : %s "
+
+#: src/accountmanager.cc:105
+#, c-format
+msgid " Login : %s "
+msgstr " Identifiant : %s "
+
+#: src/accountmanager.cc:111
+#, c-format
+msgid " Password (optional) : %s "
+msgstr " Mot de passe (optionnel) : %s "
+
+#: src/accountmanager.cc:111
+#, c-format
+msgid " Password : %s "
+msgstr " Mot de passe : %s "
+
+#: src/accountmanager.cc:115
+msgid " Register "
+msgstr " S'enregistrer "
+
+#: src/accountmanager.cc:121
+msgid " Change nickname "
+msgstr " Changer le nick "
+
+#: src/accountmanager.cc:122
+msgid " Update user details "
+msgstr " Mettre à jour les informations "
+
+#: src/accountmanager.cc:125
+msgid " Set away message "
+msgstr " Définir le message d'absence "
+
+#: src/accountmanager.cc:128
+msgid " Synchronize contact list "
+msgstr " Synchroniser la liste de contacts "
+
+#: src/accountmanager.cc:130
+msgid " Drop "
+msgstr " Supprimer "
+
+#: src/accountmanager.cc:148
+msgid " user name: "
+msgstr " nom d'utilisateur: "
+
+#: src/accountmanager.cc:153
+msgid " uin: "
+msgstr " uin: "
+
+#: src/accountmanager.cc:158
+msgid " password: "
+msgstr " mot de passe: "
+
+#: src/accountmanager.cc:166
+msgid "Drop the account information first!"
+msgstr "Commencez par supprimer les informations du compte !"
+
+#: src/accountmanager.cc:180
+msgid "You have to disconnect the service first!"
+msgstr "Vous devez vous déconnecter du service d'abord !"
+
+#: src/accountmanager.cc:189
+msgid " server address: "
+msgstr " adresse du serveur: "
+
+#: src/accountmanager.cc:211
+msgid "You must be logged in to preform the synchronization"
+msgstr "+ vous devez être connecté pour synchroniser"
+
 #: src/imcontroller.cc:64
 #, fuzzy, c-format
 msgid " Register on the %s network "
@@ -2328,6 +1929,288 @@ msgstr "Annulé"
 msgid "registration is not supported"
 msgstr "enregistrement non supporté"
 
+#: src/hooks/icqhook.cc:154
+msgid "+ [icq] connecting to the server"
+msgstr "+ [icq] connexion au serveur"
+
+#: src/hooks/icqhook.cc:1027
+msgid "+ [icq] logged in"
+msgstr "+ [icq] connecté"
+
+#: src/hooks/icqhook.cc:1054
+msgid "as requested"
+msgstr "comme demandé"
+
+#: src/hooks/icqhook.cc:1055
+msgid "socket problems"
+msgstr "problème de socket"
+
+#: src/hooks/icqhook.cc:1056
+msgid "bad username"
+msgstr "mauvais nom d'utilisateur"
+
+#: src/hooks/icqhook.cc:1057
+msgid "turboing"
+msgstr "turboing"
+
+#: src/hooks/icqhook.cc:1058
+msgid "bad password"
+msgstr "mot de passe incorrect"
+
+#: src/hooks/icqhook.cc:1059
+msgid "username and password mismatch"
+msgstr "le nom d'utilisateur et mot le passe ne correspondent pas"
+
+#: src/hooks/icqhook.cc:1060
+msgid "already logged"
+msgstr "déjà connecté"
+
+#: src/hooks/icqhook.cc:1073
+msgid "+ [icq] disconnected"
+msgstr "+ [icq] déconnecté"
+
+#: src/hooks/icqhook.cc:1079
+msgid "icq disconnection reason"
+msgstr "raison de la déconnexion"
+
+#: src/hooks/icqhook.cc:1138
+msgid "The user has accepted your authorization request"
+msgstr "L'utilisateur a accepté votre demande d'autorisation"
+
+#: src/hooks/icqhook.cc:1142
+msgid "The user has rejected your authorization request; the message was: "
+msgstr "L'utilisateur a refusé votre demande d'autorisation; raison :"
+
+#: src/hooks/icqhook.cc:1157 src/hooks/msnhook.cc:520
+#: src/hooks/yahoohook.cc:780
+msgid "The user has added you to his/her contact list"
+msgstr "L'utilisateur vous a ajouté à sa liste de contacts"
+
+#: src/hooks/icqhook.cc:1197
+#, c-format
+msgid "+ [icq] failed SMS to %s, %s"
+msgstr "+ [icq] échec SMS vers %s, %s"
+
+#: src/hooks/icqhook.cc:1200
+#, c-format
+msgid "+ [icq] failed SMS to %s"
+msgstr "+ [icq] échec SMS vers %s"
+
+#: src/hooks/icqhook.cc:1211 src/hooks/irchook.cc:562
+#: src/hooks/jabberhook.cc:410
+msgid "Away message:"
+msgstr "message d'absence :"
+
+#: src/hooks/icqhook.cc:1215
+#, c-format
+msgid "+ [icq] cannot fetch away msg from %s, %s"
+msgstr "+ [icq] impossible de récupérer le msg d'absence depuis %s, %s"
+
+#: src/hooks/icqhook.cc:1346
+#, c-format
+msgid "%s requested our away message, sent the response"
+msgstr "%s a demandé votre message d'absence, réponse envoyée"
+
+#: src/hooks/icqhook.cc:1361
+msgid "Random Chat User"
+msgstr ""
+
+#: src/hooks/icqhook.cc:1391
+#, fuzzy, c-format
+msgid "+ [icq] search finished, %d found"
+msgstr "+ [icq] recherche terminée, %d réponse(s)"
+
+#: src/hooks/icqhook.cc:1431
+#, fuzzy
+msgid "+ [icq] password was changed successfully"
+msgstr "+ [aim] le mot de passe a été changé avec succès"
+
+#: src/hooks/yahoohook.cc:109
+msgid "+ [yahoo] connecting to the server"
+msgstr "+ [yahoo] connexion au serveur"
+
+#: src/hooks/yahoohook.cc:117
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ [yahoo] impossible de se connecter: "
+
+#: src/hooks/msnhook.cc:707 src/hooks/yahoohook.cc:120
+msgid "could not resolve hostname"
+msgstr "impossible de résoudre le nom d'hôte"
+
+#: src/hooks/yahoohook.cc:121
+msgid "could not create socket"
+msgstr "impossible de créer la socket"
+
+#: src/hooks/yahoohook.cc:122
+msgid "verify the pager host and port entered"
+msgstr "vérifiez le nom d'hôte et le port entrés"
+
+#: src/hooks/yahoohook.cc:159
+msgid "+ [yahoo] disconnected"
+msgstr "+ [yahoo] déconnecté"
+
+#: src/hooks/yahoohook.cc:284
+#, c-format
+msgid "+ [yahoo] adding %s to the contacts"
+msgstr "+ [yahoo] ajout de %s aux contacts"
+
+#: src/hooks/yahoohook.cc:304
+#, c-format
+msgid "+ [yahoo] removing %s from the contacts"
+msgstr "+ [yahoo] suppression de %s des contacts"
+
+#: src/hooks/yahoohook.cc:318
+#, c-format
+msgid "+ [yahoo] leaving the %s conference"
+msgstr "+ [yahoo] déconnexion de la conférence %s"
+
+#: src/hooks/yahoohook.cc:541
+#, c-format
+msgid "+ [yahoo] members list fetching finished, %d found"
+msgstr "+ [yahoo] récupération de la liste des membres terminée, %d réponse(s)"
+
+#: src/hooks/yahoohook.cc:562
+msgid "Please join my conference."
+msgstr "Rejoignez ma conférence SVP"
+
+#: src/hooks/yahoohook.cc:573
+msgid "Custom status message:"
+msgstr "Notification d'état personnalisée:"
+
+#: src/hooks/yahoohook.cc:577
+#, c-format
+msgid "+ [yahoo] cannot fetch away msg from %s, %s"
+msgstr "+ [yahoo] impossible de récupérer le msg d'absence de %s, %s"
+
+#: src/hooks/yahoohook.cc:603
+msgid "+ [yahoo] logged in"
+msgstr "+ [yahoo] connecté"
+
+#: src/hooks/yahoohook.cc:620
+msgid "+ [yahoo] cannot login: username and password mismatch"
+msgstr ""
+"+ [yahoo] connexion impossible: l'utilisateur et le mot de passe ne "
+"correspondent pas"
+
+#: src/hooks/yahoohook.cc:625
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr "+ [yahoo] connexion impossible: le compte est bloqué"
+
+#: src/hooks/yahoohook.cc:626
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr "+ pour le réactiver, allez sur %s"
+
+#: src/hooks/yahoohook.cc:692
+#, c-format
+msgid ""
+"The user %s has invited you to the %s conference, the topic there is: %s"
+msgstr "L'utilisateur %s vous a invité à la conférence %s, pour parler de: %s"
+
+#: src/hooks/yahoohook.cc:695
+msgid "Current conference members are: "
+msgstr "Les membres actuels de la conférence sont: "
+
+#: src/hooks/yahoohook.cc:713
+msgid "Auto-joined the conference"
+msgstr "Connexion automatique à la conférence"
+
+#: src/hooks/yahoohook.cc:723
+#, c-format
+msgid "The user %s has declined your invitation to join the conference"
+msgstr "L'utilisateur %s a décliné votre invitation à rejoindre la conférence"
+
+#: src/hooks/yahoohook.cc:733
+#, c-format
+msgid "The user %s has joined the conference"
+msgstr "L'utilisateur %s a rejoint la conférence"
+
+#: src/hooks/yahoohook.cc:748
+#, c-format
+msgid "The user %s has left the conference"
+msgstr "L'utilisateur %s a quitté la conférence"
+
+#: src/hooks/yahoohook.cc:784
+msgid "the message was: "
+msgstr "message :"
+
+#: src/hooks/yahoohook.cc:796
+#, c-format
+msgid "+ [yahoo] %s: started typing"
+msgstr "+ [yahoo] %s: début de frappe"
+
+#: src/hooks/yahoohook.cc:796
+#, c-format
+msgid "+ [yahoo] %s: stopped typing"
+msgstr "+ [yahoo] %s: fin de frappe"
+
+#: src/hooks/yahoohook.cc:809
+#, c-format
+msgid "+ [yahoo] e-mail from %s, %s"
+msgstr "+ [yahoo] e-mail de %s, %s"
+
+#: src/hooks/yahoohook.cc:816
+#, c-format
+msgid "+ [yahoo] system: %s"
+msgstr "+ [yahoo] système: %s"
+
+#: src/hooks/yahoohook.cc:821
+#, c-format
+msgid "+ [yahoo] error: %s"
+msgstr "+ [yahoo] erreur: %s"
+
+#: src/hooks/msnhook.cc:86
+msgid "+ [msn] connecting to the server"
+msgstr "+ [msn] connexion au serveur"
+
+#: src/hooks/msnhook.cc:105
+#, fuzzy, c-format
+msgid "+ [msn] %s: stopped typing"
+msgstr "+ [yahoo] %s: fin de frappe"
+
+#: src/hooks/msnhook.cc:283
+#, c-format
+msgid "+ [msn] removing %s from the contacts"
+msgstr "+ [msn] suppression de %s des contacts"
+
+#: src/hooks/msnhook.cc:320
+#, c-format
+msgid "+ [msn] reverse users listing finished, %d found"
+msgstr "+ [msn] affichage inversé des utilisateurs terminé, %d réponse(s)"
+
+#: src/hooks/msnhook.cc:598
+#, fuzzy, c-format
+msgid "+ [msn] %s: started typing"
+msgstr "+ [yahoo] %s: début de frappe"
+
+#: src/hooks/msnhook.cc:606
+#, c-format
+msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
+msgstr ""
+
+#: src/hooks/msnhook.cc:613
+#, fuzzy, c-format
+msgid "+ [msn] e-mail from %s, %s"
+msgstr "+ [msn] e-mail de %s <%s>, %s"
+
+#: src/hooks/msnhook.cc:674
+msgid "+ [msn] logged in"
+msgstr "+ [msn] connecté"
+
+#: src/hooks/msnhook.cc:689
+msgid "+ [msn] disconnected"
+msgstr "+ [msn] déconnecté"
+
+#: src/hooks/msnhook.cc:703
+#, fuzzy
+msgid "+ [msn] cannot connect: "
+msgstr "+ [yahoo] impossible de se connecter: "
+
+#: src/hooks/msnhook.cc:721
+#, fuzzy
+msgid "verify the hostname and port"
+msgstr "vérifiez le nom d'hôte et le port entrés"
+
 #: src/imevents.cc:278
 msgid "Empty authorization request message"
 msgstr "Message de demande d'autorisation vide"
@@ -2355,11 +2238,6 @@ msgstr "<pas de nick>"
 #: src/imevents.cc:573
 msgid "* File transfer"
 msgstr "* Transfert de fichier"
-
-#: src/imexternal.cc:133
-#, c-format
-msgid "executed external action %s, return code = %d"
-msgstr "action externe %s terminée, code de retour: %d"
 
 #: src/imlogger.cc:32
 msgid "Offline"
@@ -2472,6 +2350,128 @@ msgstr "%s s'est déconnecté"
 #, c-format
 msgid "changed our %s status to %s from %s"
 msgstr "état %s changé de %s pour %s"
+
+#: src/imexternal.cc:133
+#, c-format
+msgid "executed external action %s, return code = %d"
+msgstr "action externe %s terminée, code de retour: %d"
+
+#: src/hooks/aimhook.cc:60
+msgid "+ [aim] connecting to the server"
+msgstr "+ [aim] connexion au serveur"
+
+#: src/hooks/aimhook.cc:89
+msgid "+ [aim] unable to connect to the server"
+msgstr "+ [aim] impossible de se connecter au serveur"
+
+#: src/hooks/aimhook.cc:190
+#, c-format
+msgid "+ [aim] adding %s to the contacts"
+msgstr "+ [aim] ajout de %s aux contacts"
+
+#: src/hooks/aimhook.cc:204
+#, c-format
+msgid "+ [aim] removing %s from the contacts"
+msgstr "+ [aim] suppresion de %s des contacts"
+
+#: src/hooks/aimhook.cc:302
+#, c-format
+msgid "I do really enjoy the default AIM profile of centericq %s."
+msgstr "Le profil AIM par défaut de centericq %s me convient très bien."
+
+#: src/hooks/aimhook.cc:354
+msgid "+ [aim] logged in"
+msgstr "+ [aim] connecté"
+
+#: src/hooks/aimhook.cc:371
+#, fuzzy
+msgid "+ [aim] disconnected"
+msgstr "+ [icq] déconnecté"
+
+#: src/hooks/aimhook.cc:389
+msgid "aim connection failed"
+msgstr "la connexion à aim a échoué"
+
+#: src/hooks/aimhook.cc:391
+#, c-format
+msgid "+ [aim] connect failed: %s"
+msgstr "+ [aim] la connexion a échoué : %s"
+
+#: src/hooks/aimhook.cc:408
+msgid "+ [aim] password was changed successfully"
+msgstr "+ [aim] le mot de passe a été changé avec succès"
+
+#: src/hooks/aimhook.cc:431
+msgid "The user has no profile information."
+msgstr "l'utilisateur n'a pas d'information dans son profil"
+
+#: src/hooks/aimhook.cc:524
+msgid "+ [aim] password sent"
+msgstr "+ [aim] mot de passe envoyé"
+
+#: src/hooks/irchook.cc:123
+msgid "+ [irc] connecting to the server"
+msgstr "+ [irc] connexion au serveur"
+
+#: src/hooks/irchook.cc:135
+msgid "+ [irc] unable to connect to the server"
+msgstr "+ [irc] impossible de se connecter au serveur"
+
+#: src/hooks/irchook.cc:497
+#, c-format
+msgid "+ [irc] channel members list fetching finished, %d found"
+msgstr ""
+"+ [irc] récupération de la liste des membres du chan terminée, %d réponse(s)"
+
+#: src/hooks/irchook.cc:687
+msgid "+ [irc] logged in"
+msgstr "+ [irc] connecté"
+
+#: src/hooks/irchook.cc:725
+#, fuzzy
+msgid "+ [irc] disconnected"
+msgstr "+ [icq] déconnecté"
+
+#: src/hooks/irchook.cc:739
+#, c-format
+msgid "+ [irc] connect failed: %s"
+msgstr "+ [irc] la connexion a échoué : %s"
+
+#: src/hooks/irchook.cc:756
+msgid "+ [irc] nickname was changed successfully"
+msgstr "+ [irc] votre nickname a été changé"
+
+#: src/hooks/irchook.cc:827
+msgid "On channels: "
+msgstr "sur les chans: "
+
+#: src/hooks/irchook.cc:1114
+#, c-format
+msgid "Kicked by %s; reason: %s"
+msgstr "Kické par %s; raison: %s"
+
+#: src/hooks/irchook.cc:1170
+#, c-format
+msgid "The user has changed their nick from %s to %s"
+msgstr "%s a changé de nick. Il s'appelle maintenant %s"
+
+#: src/hooks/irchook.cc:1190
+msgid "+ [irc] password sent"
+msgstr "+ [irc] mot de passe envoyé"
+
+#: src/hooks/irchook.cc:1192
+msgid "+ [irc] password was requested, but it's not set"
+msgstr "+ [irc] password was requested, but it's not set"
+
+#: src/hooks/irchook.cc:1216
+#, c-format
+msgid "PING reply from the user: %d second(s)"
+msgstr "Réponse au PING : %d seconde(s)"
+
+#: src/hooks/irchook.cc:1221 src/hooks/jabberhook.cc:1195
+#, c-format
+msgid "The remote is using %s"
+msgstr "L'utilisateur distant utilise %s"
 
 #: src/hooks/jabberhook.cc:100
 #, fuzzy
