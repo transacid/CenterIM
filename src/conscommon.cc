@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.9 2001/10/31 16:51:33 konst Exp $
+* $Id: conscommon.cc,v 1.10 2001/11/04 12:17:50 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -219,7 +219,7 @@ int string2key(const string adef) {
     if((ck = d).find("-") != -1) ck = getrword(d, "-");
 
     if(!ck.empty()) {
-	if((ck.size() > 1) && (toupper(ck[0]) == 'F')) {
+	if((ck.size() > 1) && (::toupper(ck[0]) == 'F')) {
 	    ck.erase(0, 1);
 	    r = atol(ck.c_str());
 	} else {
@@ -228,7 +228,7 @@ int string2key(const string adef) {
     }
 
     if(!d.empty() && r) {
-	for(ic = d.begin(); ic != d.end(); *ic = toupper(*ic), ic++);
+	for(ic = d.begin(); ic != d.end(); *ic = ::toupper(*ic), ic++);
 
 	if(d == "CTRL") r = CTRL(r); else
 	if(d == "ALT") r = ALT(r);
@@ -289,7 +289,7 @@ int findcolor(const string s) {
     string colors[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE", ""};
     string ls = s;
 
-    for(is = ls.begin(); is != ls.end(); *is = toupper(*is), is++);
+    for(is = ls.begin(); is != ls.end(); *is = ::toupper(*is), is++);
     for(i = 0; !colors[i].empty() && (ls != colors[i]); i++);
 
     return i;

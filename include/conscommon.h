@@ -10,12 +10,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <ncurses.h>
+#include <ctype.h>
 
 #undef box
 #undef clear

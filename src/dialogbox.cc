@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.8 2001/10/30 17:49:55 konst Exp $
+* $Id: dialogbox.cc,v 1.9 2001/11/04 12:17:50 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -244,8 +244,8 @@ void dialogbox::addautokeys() {
 	for(i = bar->items.begin(); i != bar->items.end(); i++) {
 	    for(c = i->begin(); (c != i->end()) && !isupper(*c); c++);
 	    key = c == i->end() ? key = *i->begin() : *c;
-	    addkey(tolower(key), i-bar->items.begin());
-	    addkey(toupper(key), i-bar->items.begin());
+	    addkey(::tolower(key), i-bar->items.begin());
+	    addkey(::toupper(key), i-bar->items.begin());
 	}
     }
 }
