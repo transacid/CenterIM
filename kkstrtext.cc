@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.25 2002/07/03 14:38:58 konst Exp $
+* $Id: kkstrtext.cc,v 1.26 2002/08/21 21:39:01 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -598,7 +598,7 @@ void breakintolines(string text, vector<string> &lst, int linelen) {
 		}
 
 		sub = i->substr(nlen + ((dpos != -1) ? 1 : 0));
-		i->erase(nlen);
+		i->erase(nlen+1);
 		lst.insert(i+1, sub);
 		i = lst.begin();
 	    }
