@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.175 2003/01/19 00:52:03 konst Exp $
+* $Id: icqface.cc,v 1.176 2003/04/16 23:38:06 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1601,6 +1601,25 @@ void icqface::log(const string &atext) {
     if(flog.is_open())
 	flog << text << endl;
 #endif
+
+    /*
+    *
+    * Add a timestamp if needed
+    *
+    */
+
+    bool lts, lo, lt;
+    conf.getlogoptions(lts, lo, lt);
+
+    if(lts)
+    if(text.size() > 3)
+    if(ispunct(text[0]) && isspace(text[1]) && !isspace(text[2])) {
+	time_t t;
+	char stime[64];
+	time(&t);
+	strftime(stime, 64, "%R ", localtime(&t));
+	text.insert(2, stime);
+    }
 
     while((i = text.find("\n")) != -1) text[i] = ' ';
     while((i = text.find("\r")) != -1) text[i] = ' ';

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.59 2003/01/19 00:52:04 konst Exp $
+* $Id: msnhook.cc,v 1.60 2003/04/16 23:38:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -97,16 +97,21 @@ void msnhook::disconnect() {
 }
 
 void msnhook::exectimers() {
-    time_t t = time(0);
-    map<string, time_t>::iterator it = typing.begin();
+    bool lts, lo, lt;
+    conf.getlogoptions(lts, lo, lt);
 
-    while(it != typing.end()) {
-	if(t-it->second > 6) {
-	    face.log(_("+ [msn] %s: stopped typing"), it->first.c_str());
-	    typing.erase(it);
-	    it = typing.begin();
-	} else {
-	    ++it;
+    if(lt) {
+	time_t t = time(0);
+	map<string, time_t>::iterator it = typing.begin();
+
+	while(it != typing.end()) {
+	    if(t-it->second > 6) {
+		face.log(_("+ [msn] %s: stopped typing"), it->first.c_str());
+		typing.erase(it);
+		it = typing.begin();
+	    } else {
+		++it;
+	    }
 	}
     }
 }
@@ -299,6 +304,9 @@ void msnhook::requestinfo(const imcontact &ic) {
 
     b.email = nicknormalize(ic.nickname);
     m.homepage = "http://members.msn.com/" + b.email;
+
+    if(ic.nickname == conf.getourid(msn).nickname)
+	c->setnick(friendlynicks[ic.nickname]);
 
     c->setmoreinfo(m);
     c->setbasicinfo(b);

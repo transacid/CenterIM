@@ -1,4 +1,4 @@
-EXTRA_DIST = ChangeLog COPYING INSTALL FAQ README
+EXTRA_DIST = FAQ README INSTALL ChangeLog COPYING
 
 contribdir = $(pkgdatadir)/contrib/spanish
 contrib_DATA = $(EXTRA_DIST)

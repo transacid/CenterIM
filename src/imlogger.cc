@@ -1,7 +1,7 @@
 /*
 *
 * centericq events logger class
-* $Id: imlogger.cc,v 1.6 2002/11/22 19:11:57 konst Exp $
+* $Id: imlogger.cc,v 1.7 2003/04/16 23:38:07 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,6 +26,7 @@
 #include "icqconf.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
+#include "icqface.h"
 
 static const char* imstatus2name(imstatus st) {
     switch(st) {
@@ -128,23 +129,30 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
     string name;
     icqcontact *c;
 
-    if(checkopen()) {
-	if(st != oldst) {
-	    if(oldst == offline) {
-		fmt = _("%s went online, with status %s");
-	    } else if(st == offline) {
-		fmt = _("%s went offline");
-	    } else {
-		fmt = _("%s changed status to %s from %s");
-	    }
+    if(st != oldst) {
+	if(oldst == offline) {
+	    fmt = _("%s went online, with status %s");
+	} else if(st == offline) {
+	    fmt = _("%s went offline");
+	} else {
+	    fmt = _("%s changed status to %s from %s");
+	}
 
-	    name = cont.totext();
-	    if(c = clist.get(cont)) {
-		name += " (" + c->getdispnick() + ")";
-	    }
+	name = cont.totext();
+	if(c = clist.get(cont)) {
+	    name += " (" + c->getdispnick() + ")";
+	}
 
-	    sprintf(buf, fmt, name.c_str(), imstatus2name(st), imstatus2name(oldst));
+	sprintf(buf, fmt, name.c_str(), imstatus2name(st), imstatus2name(oldst));
+
+	if(checkopen()) {
 	    putmessage(buf);
+	}
+
+	bool lts, lo, lt;
+	conf.getlogoptions(lts, lo, lt);
+	if(lo) {
+	    face.log((string) "+ " + buf);
 	}
     }
 }

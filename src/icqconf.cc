@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.97 2002/12/23 14:33:53 konst Exp $
+* $Id: icqconf.cc,v 1.98 2003/04/16 23:38:05 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -45,8 +45,10 @@ icqconf::icqconf() {
 
     autoaway = autona = 0;
 
-    hideoffline = antispam = russian = makelog = askaway = chatmode = false;
-    savepwd = mailcheck = fenoughdiskspace = true;
+    hideoffline = antispam = russian = makelog = askaway = chatmode =
+	logtimestamps = logonline = false;
+
+    savepwd = mailcheck = fenoughdiskspace = logtyping = true;
 
     basedir = (string) getenv("HOME") + "/.centericq/";
 }
@@ -197,7 +199,7 @@ void icqconf::loadmainconfig() {
     protocolname pname;
 
     if(f.is_open()) {
-	mailcheck = askaway = false;
+	mailcheck = askaway = logtyping = false;
 	savepwd = bidi = true;
 	setsmtphost("");
 	setpeertopeer(0, 65535);
@@ -224,6 +226,9 @@ void icqconf::loadmainconfig() {
 	    if(param == "chatmode") chatmode = true; else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
+	    if(param == "logtyping") logtyping = true; else
+	    if(param == "logtimestamps") logtimestamps = true; else
+	    if(param == "logonline") logonline = true; else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
 		ptpmax = atoi(buf.c_str());
@@ -271,6 +276,9 @@ void icqconf::save() {
 	    if(getaskaway()) f << "askaway" << endl;
 	    if(getchatmode()) f << "chatmode" << endl;
 	    if(!getbidi()) f << "nobidi" << endl;
+	    if(logtyping) f << "logtyping" << endl;
+	    if(logtimestamps) f << "logtimestamps" << endl;
+	    if(logonline) f << "logonline" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << dec << getsmtpport() << endl;
 	    f << "ptp\t" << ptpmin << "-" << ptpmax << endl;

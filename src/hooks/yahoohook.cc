@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.74 2003/01/15 15:15:18 konst Exp $
+* $Id: yahoohook.cc,v 1.75 2003/04/16 23:38:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -85,13 +85,17 @@ void yahoohook::init() {
     c.yahoo_conf_message = &conf_message;
     c.yahoo_got_file = &got_file;
     c.yahoo_contact_added = &contact_added;
-    c.yahoo_typing_notify = &typing_notify;
     c.yahoo_game_notify = &game_notify;
     c.yahoo_mail_notify = &mail_notify;
     c.yahoo_system_message = &system_message;
     c.yahoo_error = &error;
     c.yahoo_add_input = &add_input;
     c.yahoo_remove_input = &remove_input;
+
+    bool lts, lo, lt;
+    conf.getlogoptions(lts, lo, lt);
+    if(lt)
+	c.yahoo_typing_notify = &typing_notify;
 
     yahoo_register_callbacks(&c);
 }

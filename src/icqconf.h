@@ -78,7 +78,8 @@ class icqconf {
 	int autoaway, autona, ptpmin, ptpmax;
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck, russian,
-	    makelog, fenoughdiskspace, askaway, chatmode, bidi;
+	    makelog, fenoughdiskspace, askaway, chatmode, bidi, logtimestamps,
+	    logonline, logtyping;
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
 	    argv0, smtphost, bindhost;
@@ -196,6 +197,12 @@ class icqconf {
 	void checkdiskspace();
 
 	string getbindhost() const { return bindhost; }
+
+	void getlogoptions(bool &flogtimestamps, bool &flogonline, bool &flogtyping)
+	    { flogtimestamps = logtimestamps, flogonline = logonline, flogtyping = logtyping; }
+
+	void setlogoptions(bool flogtimestamps, bool flogonline, bool flogtyping)
+	    { logtimestamps = flogtimestamps, logonline = flogonline, logtyping = flogtyping; }
 };
 
 extern icqconf conf;

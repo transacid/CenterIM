@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.105 2002/12/17 16:09:40 konst Exp $
+* $Id: icqdialogs.cc,v 1.106 2003/04/16 23:38:06 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -996,6 +996,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool chatmode = conf.getchatmode();
     bool bidi = conf.getbidi();
 
+    bool logtimestamps, logonline, logtyping;
+    conf.getlogoptions(logtimestamps, logonline, logtyping);
+
     int ptpmin, ptpmax;
     conf.getpeertopeer(ptpmin, ptpmax);
     bool ptp = ptpmax;
@@ -1035,9 +1038,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 1, _(" Change sound device to : %s "), strregsound(s));
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
 
-#ifdef USE_FRIBIDI
+    #ifdef USE_FRIBIDI
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
-#endif
+    #endif
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
@@ -1057,10 +1060,15 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	if(ptp)
 	    t.addleaff(i, 0, 22, _(" Port range to use for peer-to-peer : %s "), (i2str(ptpmin) + "-" + i2str(ptpmax)).c_str());
 
+	i = t.addnode(_(" Logging "));
+	t.addleaff(i, 0, 9, _(" Timestamps in the log window : %s "), stryesno(logtimestamps));
+	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
+	t.addleaff(i, 0, 11, _(" Typing notifications in the log window : %s "), stryesno(logtyping));
+	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
+
 	i = t.addnode(_(" Miscellaneous "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
-	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
 
 	void *p;
 	finished = !db.open(n, b, &p);
@@ -1093,6 +1101,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 6: hideoffl = !hideoffl; break;
 		    case 7: askaway = !askaway; break;
 		    case 8: quote = !quote; break;
+		    case 9: logtimestamps = !logtimestamps; break;
+		    case 10: logonline = !logonline; break;
+		    case 11: logtyping = !logtyping; break;
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
@@ -1142,6 +1153,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setaskaway(askaway);
 		conf.setchatmode(chatmode);
 		conf.setbidi(bidi);
+		conf.setlogoptions(logtimestamps, logonline, logtyping);
 
 		if(ptp) conf.setpeertopeer(ptpmin, ptpmax);
 		    else conf.setpeertopeer(0, 0);

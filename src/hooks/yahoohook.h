@@ -4,7 +4,7 @@
 #include "icqconf.h"
 #include "abstracthook.h"
 
-#include "glib.h"
+#include "pseudoglib.h"
 
 class yahoohook: public abstracthook {
     protected:
