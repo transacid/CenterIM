@@ -27,7 +27,7 @@ struct _GSList {
 
 #define G_MAXINT        INT_MAX
 
-#define g_free(mem)          {free(mem); mem = 0;}
+#define g_free(mem)          free(mem)
 #define g_malloc0(size)      ((gpointer) calloc(size, 1))
 #define g_new0(type, count)  ((type *) g_malloc0 ((unsigned) sizeof (type) * (count)))
 #define g_strdup(s)          (gchar *) strdup(s)
