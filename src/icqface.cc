@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.238 2005/01/23 13:21:46 konst Exp $
+* $Id: icqface.cc,v 1.239 2005/01/25 01:15:12 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2539,8 +2539,10 @@ void icqface::renderchathistory() {
 	text += "..";
     }
 
-    bool pgpon = pgp.enabled(passinfo);
-    if(pgpon) text += string(4, ' ');
+    bool pgpon = false;
+
+#ifdef HAVE_GPGME
+    if(pgpon = pgp.enabled(passinfo)) text += string(4, ' ');
     text = (string) "[ " + text + " ]";
 
     workarealine(sizeWArea.y1+chatlines+1);
@@ -2552,6 +2554,7 @@ void icqface::renderchathistory() {
 	kwriteatf(sizeWArea.x2-6, sizeWArea.y1+chatlines+1,
 	    conf.getcolor(cp_main_highlight), "PGP");
     }
+#endif
 }
 
 void icqface::chat(const imcontact &ic) {

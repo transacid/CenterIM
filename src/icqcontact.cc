@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.102 2005/01/23 13:21:46 konst Exp $
+* $Id: icqcontact.cc,v 1.103 2005/01/25 01:15:12 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -168,7 +168,7 @@ void icqcontact::save() {
 		    tosane(binfo.lname) << endl <<
 		    tosane(binfo.email) << endl <<
 		    options << endl <<
-		    endl <<
+		    pgpkey << endl <<
 		    tosane(binfo.city) << endl <<
 		    tosane(binfo.state) << endl <<
 		    tosane(binfo.phone) << endl <<
@@ -272,7 +272,7 @@ void icqcontact::load() {
 		    binfo.requiresauth = (buf.find('a') != -1);
 		    binfo.authawait = (buf.find('w') != -1);
 		    break;
-		case  5: break;
+		case  5: pgpkey = buf; break;
 		case  6: binfo.city = buf; break;
 		case  7: binfo.state = buf; break;
 		case  8: binfo.phone = buf; break;

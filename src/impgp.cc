@@ -207,6 +207,13 @@ string impgp::encrypt(const string &text, const string &keyid) {
     return r;
 }
 
+bool impgp::havekey(const string &keyid) const {
+    gpgme_key_t key;
+    bool r = !gpgme_get_key(ctx, keyid.c_str(), &key, 1);
+    if(r) gpgme_key_release(key);
+    return r;
+}
+
 bool impgp::enabled(protocolname pname) const {
     return gethook(pname).getCapabs().count(hookcapab::pgp)
 	&& !conf.getourid(pname).additional["pgpkey"].empty();
@@ -216,9 +223,11 @@ bool impgp::enabled(const imcontact &ic) const {
     bool r = false;
     icqcontact *c;
 
-    if(c = clist.get(ic)) {
-	r = enabled(ic.pname) && c->getusepgpkey() && !c->getpgpkey().empty();
-    }
+    if(c = clist.get(ic))
+	r = enabled(ic.pname)
+	    && c->getusepgpkey()
+	    && !c->getpgpkey().empty()
+	    && havekey(c->getpgpkey());
 
     return r;
 }

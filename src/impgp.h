@@ -17,6 +17,7 @@ class impgp {
 	static string passphrase[protocolname_size];
 
 	void strip(string &r);
+	bool havekey(const string &keyid) const;
 
 	static gpgme_error_t passphrase_cb(void *hook, const char *uidhint,
 	    const char *info, int prevbad, int fd);
