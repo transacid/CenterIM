@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.52 2001/12/07 12:34:11 konst Exp $
+* $Id: centericq.cc,v 1.53 2001/12/07 13:07:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -476,7 +476,14 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
     sendev = 0;
     face.muins.clear();
-    fwdnote = ev.getcontact().totext() + " wrote:\n\n";
+
+    if(ev.getdirection() == imevent::incoming) {
+	fwdnote = ev.getcontact().totext();
+    } else {
+	fwdnote = "I";
+    }
+
+    fwdnote += " wrote:\n\n";
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = dynamic_cast<const immessage *>(&ev);
