@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.32 2002/07/10 16:07:22 konst Exp $
+* $Id: irchook.cc,v 1.33 2002/07/12 18:01:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -555,7 +555,7 @@ void irchook::rawcommand(const string &cmd) {
     }
 }
 
-void irchook::channelfatal(const string &room, const char *fmt, ...) {
+void irchook::channelfatal(string room, const char *fmt, ...) {
     va_list ap;
     char buf[1024];
     vector<channelInfo>::iterator i;
@@ -564,8 +564,10 @@ void irchook::channelfatal(const string &room, const char *fmt, ...) {
     vsprintf(buf, fmt, ap);
     va_end(ap);
 
-    i = find(channels.begin(), channels.end(),
-	(string) (room.substr(0, 1) != "#" ? "#" : "") + room);
+    if(room.substr(0, 1) != "#")
+	room.insert(0, "#");
+
+    i = find(channels.begin(), channels.end(), room);
 
     if(i != channels.end()) {
 	imcontact cont(room, irc);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.71 2002/07/09 12:29:17 konst Exp $
+* $Id: icqconf.cc,v 1.72 2002/07/12 18:01:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -72,7 +72,7 @@ void icqconf::setourid(const imaccount &im) {
 	int port;
     } defservers[protocolname_size] = {
 	{ "login.icq.com", 5190 },
-	{ "", 0 },
+	{ "scs.yahoo.com", 5050 },
 	{ "messenger.hotmail.com", 1863 },
 	{ "toc.oscar.aol.com", 9898 },
 	{ "irc.openprojects.net", 6667 }

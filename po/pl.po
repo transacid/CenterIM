@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.99.3\n"
-"POT-Creation-Date: 2002-07-09 13:36+0300\n"
+"POT-Creation-Date: 2002-07-12 18:38+0300\n"
 "PO-Revision-Date: 2001-10-01 15:27--18892017\n"
 "Last-Translator: Karol Makowski <spaceman@bsdzine.org>\n"
 "Language-Team: Polish <pl@dl.cku.pwr.wroc.pl>\n"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "bad password"
 msgstr "Has³o: "
 
-#: src/hooks/icqhook.cc:760 src/hooks/yahoohook.cc:100
+#: src/hooks/icqhook.cc:760
 msgid "username and password mismatch"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr "+ roz³±czony"
 
 #: src/hooks/icqhook.cc:877
 #, fuzzy
-msgid "* The user has added you to his/her contact list"
+msgid "The user has added you to his/her contact list"
 msgstr "doda³(a) Ciê do swojej listy kontaktowej"
 
 #: src/hooks/icqhook.cc:908
@@ -128,22 +128,22 @@ msgstr "doda³(a) Ciê do swojej listy kontaktowej"
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ plik %s do  %s, %lu wys³any"
 
-#: src/hooks/icqhook.cc:919 src/hooks/irchook.cc:496
+#: src/hooks/icqhook.cc:918 src/hooks/irchook.cc:496
 #, fuzzy
-msgid "* Away message:"
+msgid "Away message:"
 msgstr "Strona"
 
-#: src/hooks/icqhook.cc:923
+#: src/hooks/icqhook.cc:922
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1055
+#: src/hooks/icqhook.cc:1054
 #, c-format
 msgid "%s requested our away message, sent the response"
 msgstr ""
 
-#: src/hooks/icqhook.cc:1095
+#: src/hooks/icqhook.cc:1094
 #, c-format
 msgid "+ [icq] whitepages search finished, %d found"
 msgstr ""
@@ -163,37 +163,37 @@ msgstr "+ brak po³±czenia z serwerem icq"
 msgid "+ [irc] channel members list fetching finished, %d found"
 msgstr ""
 
-#: src/hooks/irchook.cc:601
+#: src/hooks/irchook.cc:603
 #, fuzzy
 msgid "+ [irc] logged in"
 msgstr "+ zarejstrowany"
 
-#: src/hooks/irchook.cc:638
+#: src/hooks/irchook.cc:640
 #, fuzzy
 msgid "+ [irc] disconnected from the network"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/irchook.cc:652
+#: src/hooks/irchook.cc:654
 #, fuzzy, c-format
 msgid "+ [irc] connect failed: %s"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/irchook.cc:669
+#: src/hooks/irchook.cc:671
 msgid "+ [irc] nickname was changed successfully"
 msgstr ""
 
-#: src/hooks/irchook.cc:740
+#: src/hooks/irchook.cc:742
 msgid "On channels: "
 msgstr ""
 
-#: src/hooks/irchook.cc:1021
+#: src/hooks/irchook.cc:1023
 #, c-format
-msgid "* Kicked by %s; reason: %s"
+msgid "Kicked by %s; reason: %s"
 msgstr ""
 
-#: src/hooks/irchook.cc:1040
+#: src/hooks/irchook.cc:1070
 #, c-format
-msgid "* %s"
+msgid "The user has changed their nick from %s to %s"
 msgstr ""
 
 #: src/hooks/msnhook.cc:74
@@ -231,54 +231,80 @@ msgstr "+ trwa ³±czenie z serwerem icq"
 msgid "+ [msn] connection from %s"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/msnhook.cc:353
+#: src/hooks/msnhook.cc:359
 #, fuzzy, c-format
 msgid "+ [msn] e-mail from %s <%s>, %s"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/yahoohook.cc:72
-#, c-format
-msgid "+ initializing %s engine"
-msgstr ""
-
-#: src/hooks/yahoohook.cc:97
-#, fuzzy
-msgid "unable to connect to the pager host"
-msgstr "+ brak po³±czenia z serwerem icq"
-
-#: src/hooks/yahoohook.cc:118
+#: src/hooks/yahoohook.cc:99
 #, fuzzy
 msgid "+ [yahoo] connecting to the server"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/yahoohook.cc:123
+#: src/hooks/yahoohook.cc:107
 #, fuzzy
-msgid "+ [yahoo] unable to connect to the server"
-msgstr "+ brak po³±czenia z serwerem icq"
+msgid "+ [yahoo] cannot connect: "
+msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/yahoohook.cc:135
+#: src/hooks/yahoohook.cc:110
+msgid "could not resolve hostname"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:111
+msgid "could not create socket"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:112
+msgid "verify the pager host and port entered"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:143
 #, fuzzy
-msgid "+ [yahoo] logged in"
-msgstr "+ zarejstrowany"
+msgid "+ [yahoo] disconnected"
+msgstr "+ roz³±czony"
 
-#: src/hooks/yahoohook.cc:226
+#.
+#. if(context->buddies && context->buddies[0]) {
+#. group = context->buddies[0]->group;
+#. } else {
+#. group = "group";
+#. }
+#.
+#. struct yahoo_buddy **lst = get_buddylist(cid);
+#.
+#. !yahoo_isbuddy(context, ic.nickname.c_str())
+#: src/hooks/yahoohook.cc:210
 #, fuzzy, c-format
 msgid "+ [yahoo] adding %s to the contacts"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/yahoohook.cc:238
+#: src/hooks/yahoohook.cc:224
 #, fuzzy, c-format
 msgid "+ [yahoo] removing %s from the contacts"
 msgstr "+ trwa ³±czenie z serwerem icq"
 
-#: src/hooks/yahoohook.cc:340
-msgid "+ [yahoo] disconnected from the network"
+#: src/hooks/yahoohook.cc:347
+#, fuzzy
+msgid "+ [yahoo] logged in"
+msgstr "+ zarejstrowany"
+
+#: src/hooks/yahoohook.cc:352
+msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:380
-#, fuzzy
-msgid "+ [yahoo] bounced msg"
-msgstr "+ trwa ³±czenie z serwerem icq"
+#: src/hooks/yahoohook.cc:357
+msgid "+ [yahoo] cannot login: the account has been blocked"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:358
+#, c-format
+msgid "+ to reactivate visit %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:424
+#, c-format
+msgid "[yahoo] error: %s"
+msgstr ""
 
 #: src/accountmanager.cc:37
 msgid " IM account manager "
@@ -532,55 +558,55 @@ msgstr ""
 msgid "status change error: "
 msgstr ""
 
-#: src/icqcontact.cc:688
-msgid "* The user has a birthday today"
+#: src/icqcontact.cc:687
+msgid "The user has a birthday today"
 msgstr ""
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:715
 msgid "Jan"
 msgstr "Sty"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:715
 msgid "Feb"
 msgstr "Luty"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:715
 msgid "Mar"
 msgstr "Marz"
 
-#: src/icqcontact.cc:717
+#: src/icqcontact.cc:715
 msgid "Apr"
 msgstr "Kwie"
 
-#: src/icqcontact.cc:718
+#: src/icqcontact.cc:716
 msgid "May"
 msgstr "Maj"
 
-#: src/icqcontact.cc:718
+#: src/icqcontact.cc:716
 msgid "Jun"
 msgstr "Czerw"
 
-#: src/icqcontact.cc:718
+#: src/icqcontact.cc:716
 msgid "Jul"
 msgstr "Lip"
 
-#: src/icqcontact.cc:718
+#: src/icqcontact.cc:716
 msgid "Aug"
 msgstr "Sier"
 
-#: src/icqcontact.cc:719
+#: src/icqcontact.cc:717
 msgid "Sep"
 msgstr "Wrze"
 
-#: src/icqcontact.cc:719
+#: src/icqcontact.cc:717
 msgid "Oct"
 msgstr "Pa¼"
 
-#: src/icqcontact.cc:719
+#: src/icqcontact.cc:717
 msgid "Nov"
 msgstr "List"
 
-#: src/icqcontact.cc:719
+#: src/icqcontact.cc:717
 msgid "Dec"
 msgstr "Gru"
 
@@ -1729,7 +1755,7 @@ msgstr ""
 msgid "registration is not supported"
 msgstr " Przebieg rejstracji "
 
-#: src/imevents.cc:241
+#: src/imevents.cc:243
 #, fuzzy
 msgid "Empty authorization request message"
 msgstr "Pro¶ba o autoryzacjê od %lu"
@@ -1887,10 +1913,27 @@ msgstr ""
 msgid "authorization"
 msgstr ""
 
-#: src/imlogger.h:41
+#: src/imlogger.h:42
 #, fuzzy
 msgid "e-mail"
 msgstr "E-mail"
+
+#: src/imlogger.h:42
+#, fuzzy
+msgid "notification"
+msgstr "Lokalizacja"
+
+#, fuzzy
+#~ msgid "unable to connect to the pager host"
+#~ msgstr "+ brak po³±czenia z serwerem icq"
+
+#, fuzzy
+#~ msgid "+ [yahoo] unable to connect to the server"
+#~ msgstr "+ brak po³±czenia z serwerem icq"
+
+#, fuzzy
+#~ msgid "+ [yahoo] bounced msg"
+#~ msgstr "+ trwa ³±czenie z serwerem icq"
 
 #, fuzzy
 #~ msgid " Channel "

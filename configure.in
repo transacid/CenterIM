@@ -64,13 +64,15 @@ AC_LANG_RESTORE
 
 AC_CHECK_HEADERS(iconv.h)
 
+AM_PATH_GLIB(1.2.0)
+
 AC_CHECK_LIB(ncurses, initscr,, AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program)))
 
-AC_CHECK_LIB(iconv, iconv)
+AC_CHECK_LIB(iconv, iconv,, AC_MSG_WARN(libiconv not found - Russian translation in MSN will not work))
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 
-AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.6 libmsn-0.1 libyahoo-0.1 firetalk-0.1)
+AC_CONFIG_SUBDIRS(kkconsui-0.1 kkstrtext-0.1 kksystr-0.1 libicq2000-0.6 libmsn-0.1 firetalk-0.1 libyahoo2-0.1)
 ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)

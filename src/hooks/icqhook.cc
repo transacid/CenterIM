@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.87 2002/07/10 09:23:32 konst Exp $
+* $Id: icqhook.cc,v 1.88 2002/07/12 18:01:44 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -740,12 +740,12 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
 	cli.getSelfContact()->getMainHomeInfo().timezone = UserInfoHelpers::getSystemTimezone();
 	cli.uploadSelfDetails();
+	cli.fetchServerBasedContactList();
 
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
 
     resolve();
-//    cli.fetchServerBasedContactList();
 }
 
 void icqhook::disconnected_cb(DisconnectedEvent *ev) {

@@ -69,7 +69,7 @@ class irchook: public abstracthook {
 	static void nickchanged(void *connection, void *cli, ...);
 
 	void rawcommand(const string &cmd);
-	void channelfatal(const string &room, const char *fmt, ...);
+	void channelfatal(string room, const char *fmt, ...);
 
     public:
 	irchook();
