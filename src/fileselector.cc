@@ -284,7 +284,9 @@ short fileselector::item::compare(const item &aitem) const {
 
     if(S_ISDIR(st[0].st_mode) && !S_ISDIR(st[1].st_mode)) r = 1; else
     if(!S_ISDIR(st[0].st_mode) && S_ISDIR(st[1].st_mode)) r = -1; else {
-	r = -strcmp(fname.c_str(), aitem.fname.c_str());
+	if(fname[0] == '.' && aitem.fname[0] != '.') r = 1; else
+	if(fname[0] != '.' && aitem.fname[0] == '.') r = -1; else
+	    r = -strcmp(fname.c_str(), aitem.fname.c_str());
     }
 
     return r;
