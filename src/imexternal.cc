@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.17 2002/11/22 19:11:57 konst Exp $
+* $Id: imexternal.cc,v 1.18 2002/12/29 10:17:16 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -230,7 +230,10 @@ int imexternal::action::execscript() {
 	if(!pid) {
 	    if(c = clist.get(currentev->getcontact())) {
 		setenv("SENDER_UIN", i2str(c->getdesc().uin).c_str(), 1);
-		setenv("SENDER_NICK", c->getnick().c_str(), 1);
+
+		if(c->getdesc().uin) setenv("SENDER_NICK", c->getnick().c_str(), 1);
+		    else setenv("SENDER_NICK", c->getdesc().nickname.c_str(), 1);
+
 		setenv("SENDER_INFODIR", c->getdirname().c_str(), 1);
 
 		setenv("EVENT_TYPE", geteventname(currentev->gettype()).c_str(), 1);

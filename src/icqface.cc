@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.171 2002/12/27 12:30:00 konst Exp $
+* $Id: icqface.cc,v 1.172 2002/12/29 10:17:16 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -223,7 +223,7 @@ void icqface::showtopbar() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvprintw(0, 2, "CENTERICQ %s   UNSENT: %lu", VERSION, em.getunsentcount());
+    mvprintw(0, 2, _("CENTERICQ %s   UNSENT: %lu"), VERSION, em.getunsentcount());
     mvprintw(0, COLS-buf.size()-2, "%s", buf.c_str());
 }
 

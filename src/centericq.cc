@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.149 2002/12/26 22:56:54 konst Exp $
+* $Id: centericq.cc,v 1.150 2002/12/29 10:17:16 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -614,6 +614,8 @@ void centericq::checkconfigs() {
 			conf.loadsounds();
 			break;
 		    case 1:
+			endwin();
+			initscr();
 			conf.loadcolors();
 			face.redraw();
 			break;
