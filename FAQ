@@ -86,3 +86,25 @@ Q: Centericq compiles way too slow on my box. What's wrong?
 A: C++ compiler optimization being a rather slow thing is on by default.
    To turn it off, do the following.
    [konst@morgue]$ CXXFLAGS=-O0 ./configure && make
+
+Q: The following error message is displayed every time I try to build
+   the software. What's wrong?
+
+    /usr/bin/ld: cannot find -lcurses
+    collect2: ld returned 1 exit status
+    make[2]: *** [centericq] Error 1
+    make[2]: Leaving directory `/home/me/centericq/src'
+    make[1]: *** [install-recursive] Error 1
+    make[1]: Leaving directory `/home/me/centericq/src'
+    make: *** [install-recursive] Error 1
+
+A: You either miss an ncurses library or haven't got appropriate backward
+   compatibility links established. The latter is more possible. To fix
+   this issue the following commands from the root user:
+
+    # cd /usr/lib
+    # ln -sf libncurses.a libcurses.a
+
+   If this doesn't help, you do miss the whole ncurses library. Get it either
+   from your Linux distribution package or from
+   http://www.gnu.org/software/ncurses/ncurses.html
