@@ -416,8 +416,15 @@ client_t irc_create_handle() {
 enum firetalk_error irc_signon(client_t c, const char * const nickname) {
 	const char *username, *hostname, *servername, *realname;
 	struct s_firetalk_handle *conn;
+	char pass[128];
 
 	conn = firetalk_find_handle(c);
+
+	firetalk_callback_needpass(c, pass, 128);
+
+	if(strlen(pass))
+	if(irc_send_printf(c, "PASS %s", pass) != FE_SUCCESS)
+	    return FE_PACKET;
 
 	username = getenv("USER");
 	hostname = getenv("HOSTNAME");
@@ -564,8 +571,9 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 				}
 				if (!strcasecmp(irc_get_nickname(args[0]),"NickServ")) {
 					if ((strstr(args[3],"IDENTIFY") != NULL) && (strstr(args[3],"/msg") != NULL) && (strstr(args[3],"HELP") == NULL)) {
+						/*
 						c->identified = 0;
-						/* nickserv seems to be asking us to identify ourselves, and we have a password */
+						// nickserv seems to be asking us to identify ourselves, and we have a password
 						if (!c->password) {
 							c->password = safe_malloc(128);
 							firetalk_callback_needpass(c,c->password,128);
@@ -574,6 +582,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 							irc_internal_disconnect(c,FE_PACKET);
 							return FE_PACKET;
 						}
+						*/
 					}
 					if ((strstr(args[3],"Password changed") != NULL) && (c->passchange != 0)) {
 						/* successful change */
