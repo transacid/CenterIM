@@ -33,6 +33,8 @@ class icqhook: public abstracthook, public SigC::Object {
 	icqhook();
 	~icqhook();
 
+	void init();
+
 	void connect();
 	void disconnect();
 	void exectimers();
@@ -46,7 +48,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	bool isconnecting() const;
 	bool enabled() const;
 
-	bool send(const imcontact &cont, const imevent &ev);
+	bool send(const imevent &ev);
 	void sendnewuser(const imcontact c);
 
 	void setautostatus(imstatus st);

@@ -47,7 +47,7 @@ using namespace std;
 #define PERIOD_TCP              1
 #define PERIOD_RESOLVE          40
 #define PERIOD_DISCONNECT       130
-#define PERIOD_RESEND           15
+#define PERIOD_RESEND           20
 #define PERIOD_CHECKMAIL        30
 #define PERIOD_WAITNEWUIN       20
 #define PERIOD_SOCKSALIVE       30

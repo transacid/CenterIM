@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.30 2001/12/05 17:13:46 konst Exp $
+* $Id: icqcontact.cc,v 1.31 2001/12/06 16:56:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     switch(cdesc.pname) {
 	case infocard:
 	    if(!cdesc.uin) {
-		fname = conf.getdirname() + "/n";
+		fname = conf.getdirname() + "n";
 
 		for(i = 1; ; i++) {
 		    tname = fname + i2str(i);
@@ -103,6 +103,7 @@ const string icqcontact::getdirname() const {
 	    break;
     }
 
+    ret += "/";
     return ret;
 }
 
@@ -127,7 +128,7 @@ void icqcontact::save() {
     mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
 
     if(!access(getdirname().c_str(), W_OK)) {
-	tname = getdirname() + "/lastread";
+	tname = getdirname() + "lastread";
 	f.open(tname.c_str());
 	if(f.is_open()) {
 	    f << lastread << endl;
@@ -135,7 +136,7 @@ void icqcontact::save() {
 	    f.clear();
 	}
 
-	tname = getdirname() + "/info";
+	tname = getdirname() + "info";
 	f.open(tname.c_str());
 	if(f.is_open()) {
 	    f << nick << endl <<
@@ -195,7 +196,7 @@ void icqcontact::save() {
 	    f.clear();
 	}
 
-	tname = getdirname() + "/about";
+	tname = getdirname() + "about";
 	f.open(tname.c_str());
 	if(f.is_open()) {
 	    f << about;
@@ -204,7 +205,7 @@ void icqcontact::save() {
 	}
 
 	if(!finlist) {
-	    tname = getdirname() + "/excluded";
+	    tname = getdirname() + "excluded";
 	    f.open(tname.c_str());
 	    if(f.is_open()) f.close();
 	}
@@ -349,13 +350,13 @@ void icqcontact::remove() {
 
 void icqcontact::excludefromlist() {
     FILE *f;
-    string fname = getdirname() + "/excluded";
+    string fname = getdirname() + "excluded";
     if(f = fopen(fname.c_str(), "w")) fclose(f);
     finlist = false;
 }
 
 void icqcontact::includeintolist() {
-    unlink((getdirname() + "/excluded").c_str());
+    unlink((getdirname() + "excluded").c_str());
     finlist = true;
 }
 
@@ -364,7 +365,7 @@ bool icqcontact::inlist() const {
 }
 
 void icqcontact::scanhistory() {
-    string fn = getdirname() + "/history";
+    string fn = getdirname() + "history";
     char buf[512];
     int line;
     FILE *f = fopen(fn.c_str(), "r");

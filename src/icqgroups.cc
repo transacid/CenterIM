@@ -8,7 +8,7 @@ icqgroups::~icqgroups() {
 }
 
 const string icqgroups::getfname() const {
-    return conf.getdirname() + "/groups";
+    return conf.getdirname() + "groups";
 }
 
 void icqgroups::load() {
@@ -21,7 +21,7 @@ void icqgroups::load() {
 
     if(f.is_open()) {
 	while(!f.eof()) {
-	    getline(f, buf);
+	    getstring(f, buf);
 	    gid = atol(getword(buf).c_str());
 
 	    if(gid && !buf.empty()) {

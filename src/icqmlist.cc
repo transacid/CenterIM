@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.8 2001/12/05 17:13:48 konst Exp $
+* $Id: icqmlist.cc,v 1.9 2001/12/06 16:56:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,7 +32,7 @@ icqlist::~icqlist() {
 }
 
 const string icqlist::getfname() const {
-    return conf.getdirname() + "/modelist";
+    return conf.getdirname() + "modelist";
 }
 	
 void icqlist::load() {

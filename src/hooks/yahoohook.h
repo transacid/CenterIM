@@ -6,7 +6,7 @@
 
 class yahoohook: public abstracthook {
     protected:
-	struct yahoo_context *yahoo;
+	struct yahoo_context *context;
 	bool fonline;
 	int ourstatus;
 
@@ -23,11 +23,13 @@ class yahoohook: public abstracthook {
 	static struct tm *timestamp();
 
 	imstatus yahoo2imstatus(int status) const;
-	void init(const icqconf::imaccount account);
+	void initcontext(const icqconf::imaccount account);
 
     public:
 	yahoohook();
 	~yahoohook();
+
+	void init();
 
 	void connect();
 	void main();
@@ -44,7 +46,7 @@ class yahoohook: public abstracthook {
 	void sendnewuser(const imcontact ic);
 	void removeuser(const imcontact ic);
 
-	bool send(const imcontact &cont, const imevent &ev);
+	bool send(const imevent &ev);
 
 	void setautostatus(imstatus st);
 	imstatus getstatus() const;

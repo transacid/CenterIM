@@ -90,7 +90,7 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
     bool fin, success;
 
     if(success = icqregdialog()) {
-	unlink((conf.getdirname() + "/icq-infoset").c_str());
+	unlink((conf.getdirname() + "icq-infoset").c_str());
 	face.progress.show(_(" Registration progress "));
 
 	for(fin = false; !fin; ) {
@@ -119,7 +119,7 @@ bool imcontroller::icqregistration(icqconf::imaccount &account) {
 			account.password = rpasswd;
 
 			conf.checkdir();
-			ofstream f((conf.getdirname() + "/icq-infoset").c_str());
+			ofstream f((conf.getdirname() + "icq-infoset").c_str());
 			if(f.is_open()) {
 			    f << rnick << endl <<
 				remail << endl <<

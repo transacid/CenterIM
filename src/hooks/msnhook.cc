@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.8 2001/12/05 17:13:50 konst Exp $
+* $Id: msnhook.cc,v 1.9 2001/12/06 16:56:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,6 @@ msnhook mhook;
 #define TIMESTAMP maketm(d->hour-1, d->minute, d->day, d->month, d->year)
 
 msnhook::msnhook() {
-//    manualstatus = conf.getstatus(msn);
     status = offline;
     fonline = false;
     timer_reconnect = 0;
@@ -58,6 +57,10 @@ msnhook::msnhook() {
 }
 
 msnhook::~msnhook() {
+}
+
+void msnhook::init() {
+    manualstatus = conf.getstatus(msn);
 }
 
 void msnhook::connect() {
@@ -146,14 +149,14 @@ bool msnhook::enabled() const {
     return true;
 }
 
-bool msnhook::send(const imcontact &cont, const imevent &ev) {
+bool msnhook::send(const imevent &ev) {
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *>(&ev);
-	icqcontact *c = clist.get(cont);
+	icqcontact *c = clist.get(ev.getcontact());
 
 	if(c && m)
 	if(c->getstatus() != offline) {
-	    MSN_SendMessage(cont.nickname.c_str(), m->gettext().c_str());
+	    MSN_SendMessage(ev.getcontact().nickname.c_str(), m->gettext().c_str());
 	    return true;
 	}
     }

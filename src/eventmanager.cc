@@ -6,41 +6,42 @@
 
 imeventmanager em;
 
+imeventmanager::imeventmanager() {
+    unsent = 0;
+}
+
+imeventmanager::~imeventmanager() {
+}
+
 void imeventmanager::store(const imevent &ev) {
     icqcontact *c;
-    ofstream fhist;
 
-    if(!lst.inlist(ev.getcontact(), csignore)) {
-	c = clist.get(ev.getcontact());
+    if(ev.getdirection() == imevent::incoming) {
+	if(!lst.inlist(ev.getcontact(), csignore)) {
+	    c = clist.get(ev.getcontact());
 
-	if(!c && !conf.getantispam()) {
-	    c = clist.addnew(ev.getcontact());
-	}
-
-	if(c) {
-	    fhist.open((c->getdirname() + "/history").c_str(), ios::app);
-
-	    if(fhist.is_open()) {
-		if(ev.gettype() == imevent::message) {
-		    const immessage *m = static_cast<const immessage *>(&ev);
-		    m->write(fhist);
-		} else if(ev.gettype() == imevent::url) {
-		    const imurl *m = static_cast<const imurl *>(&ev);
-		    m->write(fhist);
-		} else if(ev.gettype() == imevent::sms) {
-		    const imsms *m = static_cast<const imsms *>(&ev);
-		    m->write(fhist);
-		} else if(ev.gettype() == imevent::authorization) {
-		    const imauthorization *m = static_cast<const imauthorization *>(&ev);
-		    m->write(fhist);
-		}
-
-		fhist.close();
+	    if(!c && !conf.getantispam()) {
+		c = clist.addnew(ev.getcontact());
 	    }
 
-	    c->setmsgcount(c->getmsgcount()+1);
-	    c->playsound(ev.gettype());
-	    face.relaxedupdate();
+	    if(c) {
+		eventwrite(ev, history);
+		c->setmsgcount(c->getmsgcount()+1);
+		c->playsound(ev.gettype());
+		face.relaxedupdate();
+	    }
+	}
+    } else if(ev.getdirection() == imevent::outgoing) {
+	abstracthook &hook = gethook(ev.getcontact().pname);
+
+	if(hook.logged()) {
+	    if(hook.send(ev)) {
+		eventwrite(ev, history);
+	    } else {
+		eventwrite(ev, offline);
+	    }
+	} else {
+	    eventwrite(ev, offline);
 	}
     }
 }
@@ -51,30 +52,24 @@ void imeventmanager::store(const imevent &ev) {
 // void accept(const imcontact cont);
 
 vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastread) const {
-    imevent ev;
     ifstream fhist;
+    imevent *rev;
     vector<imevent *> r;
     icqcontact *c = clist.get(cont);
 
     if(c) {
-	ev.setcontact(cont);
-	fhist.open((c->getdirname() + "/history").c_str());
+	fhist.open((c->getdirname() + "history").c_str());
 
 	if(fhist.is_open()) {
 	    while(!fhist.eof()) {
-		ev.read(fhist);
+		rev = eventread(fhist);
+		rev->setcontact(cont);
 
-		if(ev.gettimestamp() >= lastread) {
-		    if(ev.gettype() == imevent::message) {
-			immessage *m = new immessage(ev);
-			m->read(fhist);
-			r.push_back(m);
-		    } else if(ev.gettype() == imevent::url) {
-			imurl *m = new imurl(ev);
-			m->read(fhist);
-			r.push_back(m);
-		    } else if(ev.gettype() == imevent::sms) {
-		    } else if(ev.gettype() == imevent::authorization) {
+		if(rev) {
+		    if(rev->gettimestamp() > lastread) {
+			r.push_back(rev);
+		    } else {
+			delete rev;
 		    }
 		}
 	    }
@@ -87,13 +82,107 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
     return r;
 }
 
-// for history, event viewing, etc
+void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
+    ofstream fhist;
+    string fname;
+    icqcontact *c;
 
-void imeventmanager::resend() {
+    if(c = clist.get(ev.getcontact())) {
+	switch(mode) {
+	    case history:
+		fname = c->getdirname() + "history";
+		break;
+	    case offline:
+		fname = c->getdirname() + "offline";
+		unsent++;
+		break;
+	}
+
+	fhist.open(fname.c_str(), ios::app);
+
+	if(fhist.is_open()) {
+	    if(ev.gettype() == imevent::message) {
+		const immessage *m = static_cast<const immessage *>(&ev);
+		m->write(fhist);
+	    } else if(ev.gettype() == imevent::url) {
+		const imurl *m = static_cast<const imurl *>(&ev);
+		m->write(fhist);
+	    } else if(ev.gettype() == imevent::sms) {
+		const imsms *m = static_cast<const imsms *>(&ev);
+		m->write(fhist);
+	    } else if(ev.gettype() == imevent::authorization) {
+		const imauthorization *m = static_cast<const imauthorization *>(&ev);
+		m->write(fhist);
+	    }
+
+	    fhist.close();
+	}
+    }
 }
 
-// call every certain period of time
+imevent *imeventmanager::eventread(ifstream &f) const {
+    imevent *rev, ev;
+
+    rev = 0;
+    ev.read(f);
+
+    if(ev.gettype() == imevent::message) {
+	rev = new immessage(ev);
+	rev->read(f);
+    } else if(ev.gettype() == imevent::url) {
+	rev = new imurl(ev);
+	rev->read(f);
+    } else if(ev.gettype() == imevent::sms) {
+    } else if(ev.gettype() == imevent::authorization) {
+    }
+
+    return rev;
+}
+
+void imeventmanager::resend() {
+    icqcontact *c;
+    imevent *rev;
+    string fname, tfname;
+    ifstream f;
+    int i;
+
+    unsent = 0;
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+
+	fname = c->getdirname() + "offline";
+	tfname = fname + "_";
+
+	if(!access(fname.c_str(), F_OK))
+	if(!rename(fname.c_str(), tfname.c_str())) {
+	    f.open(tfname.c_str());
+
+	    if(f.is_open()) {
+		while(!f.eof()) {
+		    rev = eventread(f);
+		    rev->setcontact(c->getdesc());
+
+		    if(rev) {
+			if(rev->gettimestamp() > PERIOD_RESEND) {
+			    store(*rev);
+			} else {
+			    eventwrite(*rev, offline);
+			}
+
+			delete rev;
+		    }
+		}
+
+		f.close();
+		f.clear();
+	    }
+
+	    unlink(tfname.c_str());
+	}
+    }
+}
 
 int imeventmanager::getunsentcount() const {
-    return 0;
+    return unsent;
 }

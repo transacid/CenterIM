@@ -3,19 +3,21 @@
 
 // -- serialization constants -------------------------------------------------
 
-static const char *sdirection[imevent::imdirection_size] = {
+static const string evlinebreak = "\r\n";
+
+static const string sdirection[imevent::imdirection_size] = {
     "IN", "OUT"
 };
 
-static const char *convdirection[imevent::imdirection_size] = {
-    "wk", "kw"
-};
-
-static const char *seventtype[imevent::imeventtype_size] = {
-    "MSG", "SMS", "AUTH", "", ""
+static const string seventtype[imevent::imeventtype_size] = {
+    "MSG", "URL", "SMS", "AUTH", "", ""
 };
 
 // -- basic imevent class -----------------------------------------------------
+
+imevent::imevent() {
+    time(&timestamp);
+}
 
 imevent::imeventtype imevent::gettype() const {
     return type;
@@ -52,22 +54,49 @@ void imevent::write(ofstream &f) const {
 void imevent::read(ifstream &f) {
     string rdbuf;
 
-    getline(f, rdbuf);
+    getstring(f, rdbuf);
     if(rdbuf == "\f")
-	getline(f, rdbuf);
+	getstring(f, rdbuf);
 
     for(direction = incoming; direction != imdirection_size; (int) direction += 1)
 	if(sdirection[direction] == rdbuf) break;
 
-    getline(f, rdbuf);
-    for(type = message; type != imeventtype_size; (int) type += 1)
-	if(seventtype[type] == rdbuf) break;
+    getstring(f, rdbuf);
+    type = imeventtype_size;
 
-    getline(f, rdbuf);
+    if(rdbuf != "") {
+	for(type = message; type != imeventtype_size; (int) type += 1)
+	    if(seventtype[type] == rdbuf) break;
+    }
+
+    getstring(f, rdbuf);
     timestamp = strtoul(rdbuf.c_str(), 0, 0);
 
-    getline(f, rdbuf);
+    getstring(f, rdbuf);
 	// skip the second stamp
+
+    if(direction == imdirection_size || type == imeventtype_size) {
+	while(!f.eof() && rdbuf != "\f")
+	    getstring(f, rdbuf);
+
+	read(f);
+    }
+}
+
+const string imevent::readblock(ifstream &f) {
+    string rdbuf, r;
+
+    while(!f.eof()) {
+	getstring(f, rdbuf);
+
+	if(rdbuf == "\f") break;
+	if(f.eof() && rdbuf.empty()) break;
+
+	if(!r.empty()) r += evlinebreak;
+	r += rdbuf;
+    }
+
+    return r;
 }
 
 // -- immessage class ---------------------------------------------------------
@@ -89,6 +118,11 @@ immessage::immessage(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+
+    const immessage *m = dynamic_cast<const immessage *>(&ev);
+    if(m) {
+	text = m->text;
+    }
 }
 
 const string immessage::gettext() const {
@@ -97,21 +131,11 @@ const string immessage::gettext() const {
 
 void immessage::write(ofstream &f) const {
     imevent::write(f);
-    f << rusconv(convdirection[direction], text) << endl;
+    f << text << endl;
 }
 
 void immessage::read(ifstream &f) {
-    string rdbuf;
-
-    while(!f.eof()) {
-	getline(f, rdbuf);
-	if(rdbuf != "\f") {
-	    if(!text.empty()) text += "\n";
-	    text += rdbuf;
-	} else {
-	    break;
-	}
-    }
+    text = readblock(f);
 }
 
 // -- imurl class -------------------------------------------------------------
@@ -134,6 +158,13 @@ imurl::imurl(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+
+    const imurl *m = dynamic_cast<const imurl *>(&ev);
+
+    if(m) {
+	url = m->url;
+	description = m->description;
+    }
 }
 
 const string imurl::geturl() const {
@@ -146,24 +177,15 @@ const string imurl::getdescription() const {
 
 void imurl::write(ofstream &f) const {
     imevent::write(f);
-    f << rusconv(convdirection[direction], url) << endl <<
-	rusconv(convdirection[direction], description) << endl;
+    f << url << endl <<
+	description << endl;
 }
 
 void imurl::read(ifstream &f) {
     string rdbuf;
 
-    getline(f, url);
-
-    while(!f.eof()) {
-	getline(f, rdbuf);
-	if(rdbuf != "\f") {
-	    if(!description.empty()) description += "\n";
-	    description += rdbuf;
-	} else {
-	    break;
-	}
-    }
+    getstring(f, url);
+    description = readblock(f);
 }
 
 // -- imauthorization class ---------------------------------------------------
@@ -184,6 +206,12 @@ imauthorization::imauthorization(const imevent &ev) {
     contact = ev.contact;
     direction = ev.direction;
     timestamp = ev.timestamp;
+
+    const imauthorization *m = dynamic_cast<const imauthorization *>(&ev);
+
+    if(m) {
+	text = m->text;
+    }
 }
 
 const string imauthorization::gettext() const {
@@ -192,19 +220,9 @@ const string imauthorization::gettext() const {
 
 void imauthorization::write(ofstream &f) const {
     imevent::write(f);
-    f << rusconv(convdirection[direction], text) << endl;
+    f << text << endl;
 }
 
 void imauthorization::read(ifstream &f) {
-    string rdbuf;
-
-    while(!f.eof()) {
-	getline(f, rdbuf);
-	if(rdbuf != "\f") {
-	    if(!text.empty()) text += "\n";
-	    text += rdbuf;
-	} else {
-	    break;
-	}
-    }
+    text = readblock(f);
 }

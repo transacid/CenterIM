@@ -16,6 +16,8 @@ class abstracthook {
     public:
 	abstracthook();
 
+	virtual void init();
+
 	virtual void connect();
 	virtual void disconnect();
 	virtual void exectimers();
@@ -29,7 +31,7 @@ class abstracthook {
 	virtual bool isconnecting() const;
 	virtual bool enabled() const;
 
-	virtual bool send(const imcontact &cont, const imevent &ev);
+	virtual bool send(const imevent &ev);
 
 	virtual void sendnewuser(const imcontact c);
 	virtual void removeuser(const imcontact ic);

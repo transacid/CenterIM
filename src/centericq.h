@@ -9,8 +9,8 @@
 #include "kkfsys.h"
 #include "icqcontact.h"
 
-#include "icqcommon.h"
 #include "eventmanager.h"
+#include "icqface.h"
 
 #define HIDL_SOCKEXIT   2
 
@@ -29,6 +29,7 @@ class centericq {
 	static void handlesignal(int signum);
 
 	void checkparallel();
+	void inithooks();
 	bool checkpasswords();
 
 	const string quotemsg(const string text);
@@ -46,8 +47,7 @@ class centericq {
 	void userinfo(const imcontact cinfo);
 	void changestatus();
 	bool updateconf();
-	void sendfiles(const imcontact cinfo);
-	void sendcontacts(const imcontact cinfo);
+
 	void find();
 	void nonicq(int id);
 	void checkmail();
@@ -59,6 +59,8 @@ class centericq {
 
 	void readevents(const imcontact &cont);
 	void history(const imcontact &cont);
+
+	void sendevent(const imevent &ev, icqface::eventviewresult r);
 };
 
 extern centericq cicq;

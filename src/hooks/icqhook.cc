@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.13 2001/12/05 17:13:49 konst Exp $
+* $Id: icqhook.cc,v 1.14 2001/12/06 16:56:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -36,7 +36,6 @@
 icqhook ihook;
 
 icqhook::icqhook() {
-//    manualstatus = conf.getstatus(icq);
     fcapabilities = hoptCanNotify;
     timer_reconnect = 0;
     fonline = false;
@@ -69,6 +68,10 @@ icqhook::~icqhook() {
     cli.newuin.clear();
     cli.rate.clear();
     cli.statuschanged.clear();
+}
+
+void icqhook::init() {
+    manualstatus = conf.getstatus(icq);
 }
 
 void icqhook::connect() {
@@ -180,21 +183,23 @@ bool icqhook::enabled() const {
     return true;
 }
 
-bool icqhook::send(const imcontact &cont, const imevent &ev) {
-    Contact ic(cont.uin);
+bool icqhook::send(const imevent &ev) {
+    Contact ic(ev.getcontact().uin);
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
-	cli.SendEvent(new NormalMessageEvent(&ic, m->gettext()));
+	cli.SendEvent(new NormalMessageEvent(&ic, rusconv("kw", m->gettext())));
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *> (&ev);
-	cli.SendEvent(new URLMessageEvent(&ic, m->getdescription(), m->geturl()));
+	cli.SendEvent(new URLMessageEvent(&ic,
+	    rusconv("kw", m->getdescription()),
+	    rusconv("kw", m->geturl())));
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = static_cast<const imsms *> (&ev);
-	cli.SendEvent(new SMSMessageEvent(&ic, m->gettext(), false));
+	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	cli.SendEvent(new AuthReqEvent(&ic, m->gettext()));
+	cli.SendEvent(new AuthReqEvent(&ic, rusconv("kw", m->gettext())));
     } else {
 	return false;
     }
@@ -350,27 +355,34 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
 }
 
 bool icqhook::messaged_cb(MessageEvent *ev) {
-    NormalMessageEvent *nev;
     imcontact ic;
     time_t t;
 
     ic = imcontact(ev->getContact()->getUIN(), icq);
 
-    switch(ev->getType()) {
-	case MessageEvent::Normal:
-	    if(nev = dynamic_cast<NormalMessageEvent*>(ev)) {
-		em.store(immessage(ic, imevent::incoming, nev->getMessage()));
-	    }
-	    break;
-
-	case MessageEvent::URL:
-	case MessageEvent::SMS:
-	case MessageEvent::SMS_Response:
-	case MessageEvent::SMS_Receipt:
-	case MessageEvent::AuthReq:
-	case MessageEvent::AuthAck:
-	    face.log("! received something we don't support yet");
-	    break;
+    if(ev->getType() == MessageEvent::Normal) {
+	NormalMessageEvent *r;
+	if(r = dynamic_cast<NormalMessageEvent *>(ev)) {
+	    em.store(immessage(ic, imevent::incoming,
+		rusconv("wk", r->getMessage())));
+	}
+    } else if(ev->getType() == MessageEvent::URL) {
+	URLMessageEvent *r;
+	if(r = dynamic_cast<URLMessageEvent *>(ev)) {
+	    em.store(imurl(ic, imevent::incoming,
+		rusconv("wk", r->getURL()),
+		rusconv("wk", r->getMessage())));
+	}
+    } else if(ev->getType() == MessageEvent::SMS) {
+    } else if(ev->getType() == MessageEvent::SMS_Response) {
+    } else if(ev->getType() == MessageEvent::SMS_Receipt) {
+    } else if(ev->getType() == MessageEvent::AuthReq) {
+	AuthReqEvent *r;
+	if(r = dynamic_cast<AuthReqEvent *>(ev)) {
+	    em.store(imauthorization(ic, imevent::incoming,
+		rusconv("wk", r->getMessage())));
+	}
+    } else if(ev->getType() == MessageEvent::AuthAck) {
     }
 
     return true;
@@ -437,12 +449,14 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		cminfo.birth_month = hpage.birth_month;
 		cminfo.birth_year = hpage.birth_year;
 
+		string nick = rusconv("wk", ic->getAlias());
+
 		if((c->getnick() == c->getdispnick())
 		|| (c->getdispnick() == i2str(ev->getUIN()))) {
-		    c->setdispnick(ic->getAlias());
+		    c->setdispnick(nick);
 		}
 
-		c->setnick(ic->getAlias());
+		c->setnick(nick);
 		c->setbasicinfo(cbinfo);
 		c->setmoreinfo(cminfo);
 		c->setabout(ic->getAboutInfo());

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.49 2001/12/05 17:13:47 konst Exp $
+* $Id: icqface.cc,v 1.50 2001/12/06 16:56:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -60,7 +60,7 @@ icqface::icqface() {
 #ifdef DEBUG
     time_t logtime = time(0);
     flog.clear();
-    flog.open((conf.getdirname() + "/log").c_str(), ios::app);
+    flog.open((conf.getdirname() + "log").c_str(), ios::app);
     if(flog.is_open()) flog << endl << "-- centericq log started on " << ctime(&logtime);
 #endif
 
@@ -91,11 +91,13 @@ void icqface::init() {
 
     mainw = textwindow(0, 1, COLS-1, LINES-2, conf.getcolor(cp_main_frame));
 
-    selector.setcolor(
-	conf.getcolor(cp_dialog_menu),
+    selector.setcolor(conf.getcolor(cp_dialog_menu),
 	conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_selected),
 	conf.getcolor(cp_dialog_frame));
+
+    mhist = verticalmenu(conf.getcolor(cp_main_text),
+	conf.getcolor(cp_main_selected));
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
@@ -1333,7 +1335,77 @@ void icqface::showextractedurls() {
 }
 
 bool icqface::eventedit(imevent &ev) {
-    return false;
+    bool r;
+    texteditor editor;
+    icqcontact *c;
+
+    editdone = r = false;
+    passinfo = ev.getcontact();
+
+    editor.addscheme(cp_main_text, cp_main_text, 0, 0);
+    editor.otherkeys = &editmsgkeys;
+    editor.idle = &editidle;
+    editor.wrap = true;
+
+    saveworkarea();
+    clearworkarea();
+
+    workarealine(WORKAREA_Y1+2);
+
+    mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	_("Outgoing %s to %s"), eventnames[ev.gettype()],
+	ev.getcontact().totext().c_str());
+
+    status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
+
+    if(ev.gettype() == imevent::message) {
+	immessage *m = static_cast<immessage *>(&ev);
+
+	editor.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2, WORKAREA_Y2);
+	editor.load(m->gettext(), "");
+	editor.open();
+
+	r = editdone;
+
+	char *p = editor.save("\r\n");
+	*m = immessage(ev.getcontact(), imevent::outgoing, p);
+
+	if(c = clist.get(ev.getcontact()))
+	    c->setpostponed(r ? "" : p);
+
+	delete p;
+
+    } else if(ev.gettype() == imevent::url) {
+	static textinputline urlinp;
+	imurl *m = static_cast<imurl *>(&ev);
+
+	urlinp.setvalue(m->geturl());
+	urlinp.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2-WORKAREA_X1-2);
+	urlinp.setcolor(conf.getcolor(cp_main_highlight));
+	urlinp.idle = &textinputidle;
+
+	workarealine(WORKAREA_Y1+4);
+
+	urlinp.exec();
+
+	string url = urlinp.getlastkey() != KEY_ESC ? urlinp.getvalue() : "";
+
+	if(!url.empty()) {
+	    editor.setcoords(WORKAREA_X1+2, WORKAREA_Y1+5, WORKAREA_X2, WORKAREA_Y2);
+	    editor.load(m->getdescription(), "");
+	    editor.open();
+
+	    r = editdone;
+
+	    char *p = editor.save("\r\n");
+	    *m = imurl(ev.getcontact(), imevent::outgoing, url, p);
+	    delete p;
+	}
+    }
+
+    restoreworkarea();
+    status("");
+    return r;
 }
 
 icqface::eventviewresult icqface::eventview(const imevent *ev) {
@@ -1350,21 +1422,29 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
 	const immessage *m = static_cast<const immessage *>(ev);
 	text = m->gettext();
 	actions.push_back(forward);
-	actions.push_back(reply);
+	if(ev->getdirection() == imevent::incoming) {
+	    actions.push_back(reply);
+	}
 	actions.push_back(ok);
     } else if(ev->gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *>(ev);
 	text = m->geturl() + "\n\n" + m->getdescription();
 	actions.push_back(forward);
 	actions.push_back(open);
-	actions.push_back(reply);
+	if(ev->getdirection() == imevent::incoming) {
+	    actions.push_back(reply);
+	}
 	actions.push_back(ok);
     } else if(ev->gettype() == imevent::sms) {
-	actions.push_back(reply);
+	if(ev->getdirection() == imevent::incoming) {
+	    actions.push_back(reply);
+	}
 	actions.push_back(ok);
     } else if(ev->gettype() == imevent::authorization) {
-	actions.push_back(accept);
-	actions.push_back(reject);
+	if(ev->getdirection() == imevent::incoming) {
+	    actions.push_back(accept);
+	    actions.push_back(reject);
+	}
 	actions.push_back(ok);
     }
 
@@ -1420,8 +1500,102 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
     }
 
     db.close();
-
     restoreworkarea();
+
+    return r;
+}
+
+void icqface::histmake(const vector<imevent *> &hist) {
+    vector<imevent *>::const_reverse_iterator i;
+    string text;
+    time_t t;
+    char buf[64];
+    int color;
+
+    mhist.clear();
+    mhist.setpos(0);
+
+    for(i = hist.rbegin(); i != hist.rend(); i++) {
+	imevent &ev = **i;
+
+	color = 0;
+
+	text = (string) + " " +
+	    time2str(&(t = ev.gettimestamp()), "DD.MM hh:mm", buf) + " ";
+
+	if(ev.gettype() == imevent::message) {
+	    const immessage *m = static_cast<const immessage *>(&ev);
+	    text += m->gettext();
+	} else if(ev.gettype() == imevent::url) {
+	    const imurl *m = static_cast<const imurl *>(&ev);
+	    text += m->geturl() + " " + m->getdescription();
+	}
+
+	if(ev.getdirection() == imevent::incoming) {
+	    color = conf.getcolor(cp_main_text);
+	} else if(ev.getdirection() == imevent::outgoing) {
+	    color = conf.getcolor(cp_main_highlight);
+	}
+
+	mhist.additem(color, (void *) *i, text);
+    }
+}
+
+bool icqface::histexec(imevent *&im) {
+    dialogbox db;
+    bool r, fin;
+    int k;
+    string sub;
+
+    r = fin = false;
+
+    if(!mhist.empty()) {
+	db.setwindow(new textwindow(WORKAREA_X1, WORKAREA_Y1+2, WORKAREA_X2,
+	    WORKAREA_Y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+
+	db.setmenu(&mhist, false);
+
+	db.idle = &dialogidle;
+	db.otherkeys = &historykeys;
+
+	saveworkarea();
+	clearworkarea();
+
+	db.redraw();
+	workarealine(WORKAREA_Y1+2);
+
+	im = static_cast<imevent *> (mhist.getref(0));
+
+	mainw.writef(WORKAREA_X1+2, WORKAREA_Y1, conf.getcolor(cp_main_highlight),
+	    _("History items for %s"), im->getcontact().totext().c_str());
+
+	status(_("S search, L again, ESC cancel"));
+
+	while(!fin) {
+	    if(db.open(k)) {
+		switch(k) {
+		    case -2:
+			sub = face.inputstr(_("search for: "), sub);
+		    case -3:
+			break;
+
+		    default:
+			if(mhist.getref(k-1)) {
+			    im = static_cast<imevent *> (mhist.getref(k-1));
+			    r = fin = true;
+			}
+			break;
+		}
+	    } else {
+		r = false;
+		fin = true;
+	    }
+	}
+
+	db.close();
+	restoreworkarea();
+    }
+
     return r;
 }
 

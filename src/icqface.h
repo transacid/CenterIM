@@ -85,6 +85,8 @@ class icqface {
 	textinputline input;
 	textwindow mainw;
 	fileselector selector;
+	verticalmenu mhist;
+
 	ofstream flog;
 	vector<string> extractedurls;
 
@@ -195,6 +197,9 @@ class icqface {
 	void organizegroups();
 	void makeprotocolmenu(verticalmenu &m);
 
+	void histmake(const vector<imevent *> &hist);
+	bool histexec(imevent *&im);
+
 	bool eventedit(imevent &ev);
 	eventviewresult eventview(const imevent *ev);
 };
@@ -222,7 +227,7 @@ static const char *eventnames[imevent::imeventtype_size] = {
 };
 
 static const char *eventviewresultnames[icqface::eventviewresult_size] = {
-    "", _("Fwd"), _("Reply"), _("Next"), _("Ok"),
+    "", _("Fwd"), _("Reply"), _("Ok"),
     _("Open"), _("Accept"), _("Reject")
 };
 

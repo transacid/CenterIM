@@ -8,6 +8,9 @@ abstracthook::abstracthook() {
     fcapabilities = 0;
 }
 
+void abstracthook::init() {
+}
+
 void abstracthook::connect() {
 }
 
@@ -57,7 +60,7 @@ bool abstracthook::enabled() const {
     return false;
 }
 
-bool abstracthook::send(const imcontact &cont, const imevent &ev) {
+bool abstracthook::send(const imevent &ev) {
     return false;
 }
 

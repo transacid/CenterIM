@@ -23,6 +23,8 @@ class msnhook : public abstracthook {
 	msnhook();
 	~msnhook();
 
+	void init();
+
 	void connect();
 	void disconnect();
 	void exectimers();
@@ -36,7 +38,7 @@ class msnhook : public abstracthook {
 	bool isconnecting() const;
 	bool enabled() const;
 
-	bool send(const imcontact &cont, const imevent &ev);
+	bool send(const imevent &ev);
 
 	void sendnewuser(const imcontact c);
 	void removeuser(const imcontact ic);

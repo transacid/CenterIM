@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.26 2001/12/05 17:13:46 konst Exp $
+* $Id: icqconf.cc,v 1.27 2001/12/06 16:56:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -78,7 +78,7 @@ void icqconf::loadmainconfig() {
 	savepwd = true;
 
 	while(!f.eof()) {
-	    getline(f, buf);
+	    getstring(f, buf);
 	    rbuf = buf;
 	    param = getword(buf);
 
@@ -328,7 +328,7 @@ void icqconf::loadsounds() {
     ifstream fi(tname.c_str());
     if(fi.is_open()) {
 	while(!fi.eof()) {
-	    getline(fi, buf);
+	    getstring(fi, buf);
 	    if(buf.empty() || (buf.substr(0, 1) == "#")) continue;
 
 	    suin = getword(buf);
@@ -382,7 +382,7 @@ void icqconf::loadactions() {
     ifstream f(fname.c_str());
     if(f.is_open()) {
 	while(!f.eof()) {
-	    getline(f, buf);
+	    getstring(f, buf);
 	    name = getword(buf);
 
 	    if(name == "openurl") {
@@ -564,7 +564,7 @@ imstatus icqconf::getstatus(protocolname pname) {
     f.open(fname.c_str());
 
     if(f.is_open()) {
-	getline(f, buf);
+	getstring(f, buf);
 	st = (imstatus) ((int) atol(buf.c_str()));
 	f.close();
     }

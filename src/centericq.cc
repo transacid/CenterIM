@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.47 2001/12/05 17:13:45 konst Exp $
+* $Id: centericq.cc,v 1.48 2001/12/06 16:56:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -82,6 +82,7 @@ void centericq::exec() {
 
 	face.draw();
 	checkparallel();
+	inithooks();
 
 	if(checkpasswords()) {
 	    mainloop();
@@ -125,6 +126,14 @@ bool centericq::checkpasswords() {
 
     regmode = false;
     return r;
+}
+
+void centericq::inithooks() {
+    protocolname pname;
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	gethook(pname).init();
+    }
 }
 
 void centericq::mainloop() {
@@ -182,12 +191,7 @@ void centericq::mainloop() {
 
 	switch(action) {
 	    case ACT_URL:
-	    /*
-		url = text = "";
-		if(face.editurl(c->getdesc(), url, text))
-		    for(i = face.muins.begin(); i != face.muins.end(); i++)
-			offl.sendurl(*i, url, text);
-	    */
+		sendevent(imurl(c->getdesc(), imevent::outgoing, "", ""), icqface::ok);
 		break;
 
 	    case ACT_IGNORE:
@@ -198,11 +202,13 @@ void centericq::mainloop() {
 		    face.update();
 		}
 		break;
+
 	    case ACT_FILE:
 		if(c->getstatus() != offline) {
-		    sendfiles(c->getdesc());
+//                    sendfiles(c->getdesc());
 		}
 		break;
+
 	    case ACT_EDITUSER:
 		nonicq(c->getdesc().uin);
 		break;
@@ -238,17 +244,15 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_HISTORY:
-/*
-		if(c->getdesc().pname != infocard)
-		    face.history(c->getdesc());
-*/
+		history(c->getdesc());
 		break;
 
 	    case ACT_MSG:
 		if(c->getmsgcount()) {
 		    readevents(c->getdesc());
-		} else if(c->getdesc() != contactroot && c->getdesc().pname != infocard) {
-//                    message(c->getdesc(), text, scratch);
+		} else {
+		    sendevent(immessage(c->getdesc(), imevent::outgoing,
+			c->getpostponed()), icqface::ok);
 		}
 		break;
 	}
@@ -321,34 +325,6 @@ void centericq::userinfo(const imcontact cinfo) {
 
     if(c) {
 	face.userinfo(cinfo, realuin);
-    }
-}
-
-void centericq::sendfiles(const imcontact cinfo) {
-    int i;
-    string msg;
-    unsigned long seq;
-    icqcontact *c = (icqcontact *) clist.get(cinfo);
-    linkedlist flist;
-/*
-    if(c->getdirect()) {
-	if(face.sendfiles(cinfo, msg, flist)) {
-	    char **files = 0;
-
-	    for(i = 0; i < flist.count; i++) {
-		files = (char **) realloc(files, (i+1)*sizeof(char *));
-		files[i] = strdup((char *) flist.at(i));
-		files[i+1] = 0;
-	    }
-
-	    seq = icq_SendFileRequest(&icql, cinfo.uin, msg.c_str(), files);
-	    ihook.addfile(cinfo.uin, seq, files[0], HIST_MSG_OUT);
-
-	    face.log(_("+ sending file %s to %s, %lu"),
-		justfname(files[0]).c_str(), c->getdispnick().c_str(), cinfo.uin);
-	}
-    } else*/ {
-	face.log(_("+ remote client doesn't support file transfers"));
     }
 }
 
@@ -468,7 +444,7 @@ void centericq::handlesignal(int signum) {
 }
 
 void centericq::checkparallel() {
-    string pidfname = conf.getdirname() + "/pid", fname;
+    string pidfname = conf.getdirname() + "pid", fname;
     int pid = 0;
     char exename[512];
 
@@ -497,78 +473,77 @@ void centericq::checkparallel() {
 }
 
 void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
+    bool proceed;
     string text, fwdnote;
     imevent *sendev;
+    icqcontact *c;
+    vector<imcontact>::iterator i;
 
+    sendev = 0;
     face.muins.clear();
-    fwdnote = ev->getcontact().totext() + " wrote:\n\n";
+    fwdnote = ev.getcontact().totext() + " wrote:\n\n";
 
-    if(ev->gettype() == imevent::message) {
+    if(ev.gettype() == imevent::message) {
 	const immessage *m = dynamic_cast<const immessage *>(&ev);
+
 	text = m->gettext();
 
 	if(r == icqface::reply) {
-	    if(conf.getquote()) text = quotemsg(text);
+	    if(conf.getquote()) {
+		text = quotemsg(text);
+	    } else {
+		text = "";
+	    }
 	} else if(r == icqface::forward) {
 	    text = fwdnote + text;
 	}
 
 	sendev = new immessage(m->getcontact(), imevent::outgoing, text);
 
-    } else if(ev->gettype() == imevent::url) {
-	const imurl *m = dynamic_cast<const imrul *>(&ev);
+    } else if(ev.gettype() == imevent::url) {
+	const imurl *m = dynamic_cast<const imurl *>(&ev);
+
 	text = m->getdescription();
 
-	if(r == icqface::forward) {
-	    
+	switch(r) {
+	    case icqface::forward:
+		text = fwdnote + text;
+		sendev = new imurl(m->getcontact(), imevent::outgoing,
+		    m->geturl(), text);
+		break;
+
+	    case icqface::reply:
+		/* reply to an URL is a message */
+		sendev = new immessage(m->getcontact(), imevent::outgoing, "");
+		break;
 	}
-
-	sendev = new imurl(m->getcontact, imevent::outgoing, m->geturl(), m->getdescription());
-
-    } else {
-	sendev = 0;
     }
 
-    if(sendev) {
+    if(proceed = sendev) {
 	switch(r) {
+	    case icqface::forward:
+		if(proceed = face.multicontacts())
+		    proceed = !face.muins.empty();
+		break;
 	    case icqface::reply:
 	    case icqface::ok:
 		face.muins.push_back(ev.getcontact());
 		break;
 	}
-    }
-}
-	    sprintf(buf,
-		_("%s wrote:"),
-		c ? c->getdesc().totext().c_str() : "I"
-	    );
 
-	    stext = (string) buf + "\n\n" + text;
-
-	    if(ret = face.multicontacts()) {
-		ret = !face.muins.empty();
-	    }
-	    break;
-
-	case scratch:
-	    face.muins.push_back(cinfo);
-	    stext = text;
-	    break;
-    }
-
-    if(ret) {
-	if(ret = face.editmsg(*face.muins.begin(), stext)) {
-	    if(face.muins.empty()) {
-		face.muins.push_back(cinfo);
-	    }
-
-	    for(i = face.muins.begin(); i != face.muins.end(); i++) {
-		offl.sendmsg(*i, stext);
+	if(proceed) {
+	    if(face.eventedit(*sendev)) {
+		for(i = face.muins.begin(); i != face.muins.end(); i++) {
+		    sendev->setcontact(*i);
+		    em.store(*sendev);
+		}
 	    }
 	}
     }
 
-    return ret;
+    if(sendev) {
+	delete sendev;
+    }
 }
 
 void centericq::readevents(const imcontact &cont) {
@@ -576,57 +551,85 @@ void centericq::readevents(const imcontact &cont) {
     vector<imevent *>::iterator iev;
     icqcontact *c = clist.get(cont);
     icqface::eventviewresult r;
-    bool fin;
+    bool fin, enough;
 
     if(c) {
 	fin = false;
 
 	while(c->getmsgcount() && !fin) {
 	    events = em.getevents(cont, c->getlastread());
+	    fin = events.empty();
 
 	    for(iev = events.begin(); (iev != events.end()) && !fin; iev++) {
-		r = face.eventview(*iev);
+		if((*iev)->getdirection() == imevent::incoming) {
+		    enough = false;
 
-		switch(r) {
-		    case icqface::forward:
-			sendevent();
-			break;
+		    while(!enough) {
+			r = face.eventview(*iev);
 
-		    case icqface::reply:
-			break;
+			switch(r) {
+			    case icqface::forward:
+				sendevent(**iev, r);
+				break;
 
-		    case icqface::open:
-			break;
+			    case icqface::reply:
+				sendevent(**iev, r);
+				enough = true;
+				break;
 
-		    case icqface::accept:
-			break;
+			    case icqface::ok:
+				enough = true;
+				break;
 
-		    case icqface::reject:
-			break;
-
-		    case icqface::ok:
-			break;
-
-		    case icqface::cancel:
-			fin = true;
-			break;
+			    case icqface::cancel:
+				fin = true;
+				break;
+			}
+		    }
 		}
 
 		c->setlastread((*iev)->gettimestamp());
 	    }
 
-	    for(iev = events.begin(); iev != events.end(); iev++) {
-		delete *iev;
-		events.erase(iev);
+	    while(!events.empty()) {
+		delete *events.begin();
+		events.erase(events.begin());
 	    }
 	}
 
 	c->save();
-	face.relaxedupdate();
+	face.update();
     }
 }
 
 void centericq::history(const imcontact &cont) {
+    vector<imevent *> events;
+    icqface::eventviewresult r;
+    imevent *im;
+
+    events = em.getevents(cont, 0);
+
+    if(!events.empty()) {
+	face.histmake(events);
+
+	while(face.histexec(im)) {
+	    r = face.eventview(im);
+
+	    switch(r) {
+		case icqface::forward:
+		case icqface::reply:
+		    sendevent(*im, r);
+		    break;
+	    }
+	}
+    } else {
+	face.log(_("+ no history items for %s"), cont.totext().c_str());
+    }
+
+    while(!events.empty()) {
+	delete *events.begin();
+	events.erase(events.begin());
+    }
 }
 
 const string centericq::quotemsg(const string text) {
@@ -805,7 +808,8 @@ void centericq::exectimers() {
     }
 
     if(timer_current-timer_resend > PERIOD_RESEND) {
-//        offl.scan(0, osexpired);
+	em.resend();
+	face.relaxedupdate();
 	time(&timer_resend);
     }
 

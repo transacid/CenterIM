@@ -24,7 +24,11 @@ class imevent {
 	imdirection direction;
 	time_t timestamp;
 
+	const string readblock(ifstream &f);
+
     public:
+	imevent();
+
 	imeventtype gettype() const;
 	imdirection getdirection() const;
 	imcontact getcontact() const;

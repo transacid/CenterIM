@@ -5,23 +5,23 @@
 
 class imeventmanager {
     private:
+	int unsent;
+
+	enum eventwritemode { history, offline };
+
+	void eventwrite(const imevent &ev, eventwritemode mode);
+	imevent *eventread(ifstream &f) const;
+
     public:
+	imeventmanager();
+	~imeventmanager();
+
 	void store(const imevent &ev);
-	    // if incoming, store to the history immediately
-	    // if outgoing, return id
-// recode here -> rusconv("kw", text)
-// produce sounds here too
-// ignores messages from contacts on ignore list
-// increases contact's message count and calls face.relaxedupdate()
-
-
-//        void accept(const imcontact cont);
 
 	vector<imevent *> getevents(const imcontact &cont, time_t lastread) const;
-	    // for history, event viewing, etc
 
 	void resend();
-	    // call every certain period of time
+
 	int getunsentcount() const;
 };
 
