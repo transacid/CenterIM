@@ -23,21 +23,24 @@ void yahoohook::init(const icqconf::imaccount account) {
     face.log("+ initializing %s engine",
 	conf.getprotocolname(account.pname).c_str());
 
-    yahoo = yahoo_init(account.nickname.c_str(),
-	account.password.c_str(), &options);
-
-    yahoo->yahoo_Disconnected = &disconnected;
-    yahoo->yahoo_UserLogon = &userlogon;
-    yahoo->yahoo_UserLogoff = &userlogoff;
-    yahoo->yahoo_UserStatus = &userstatus;
-    yahoo->yahoo_RecvBounced = &recvbounced;
-    yahoo->yahoo_RecvMessage = &recvmessage;
+    if(yahoo = yahoo_init(account.nickname.c_str(), account.password.c_str(),
+    &options)) {
+	yahoo->yahoo_Disconnected = &disconnected;
+	yahoo->yahoo_UserLogon = &userlogon;
+	yahoo->yahoo_UserLogoff = &userlogoff;
+	yahoo->yahoo_UserStatus = &userstatus;
+	yahoo->yahoo_RecvBounced = &recvbounced;
+	yahoo->yahoo_RecvMessage = &recvmessage;
 
 #ifdef DEBUG
-    yahoo->yahoo_Log = &log;
+	yahoo->yahoo_Log = &log;
 #else
-    yahoo->yahoo_Log = 0;
+	yahoo->yahoo_Log = 0;
 #endif
+    } else {
+	face.log("+ unable to init %s engine",
+	    conf.getprotocolname(account.pname).c_str());
+    }
 }
 
 void yahoohook::connect() {

@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -57,24 +57,21 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = @host_alias@
-host_triplet = @host@
-BUILD_INCLUDED_LIBINTL = @BUILD_INCLUDED_LIBINTL@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
 CXX = @CXX@
 DATADIRNAME = @DATADIRNAME@
 GENCAT = @GENCAT@
-GLIBC21 = @GLIBC21@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
 INSTOBJEXT = @INSTOBJEXT@
-INTLBISON = @INTLBISON@
+INTLDEPS = @INTLDEPS@
 INTLLIBS = @INTLLIBS@
 INTLOBJS = @INTLOBJS@
-INTL_LIBTOOL_SUFFIX_PREFIX = @INTL_LIBTOOL_SUFFIX_PREFIX@
-LIBICONV = @LIBICONV@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MSGFMT = @MSGFMT@
@@ -85,11 +82,12 @@ RANLIB = @RANLIB@
 USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+l = @l@
 
-INCLUDES = -I$(top_srcdir)/src/icq -I$(top_srcdir)/src/yahoo -I$(top_srcdir)/src/infocard -I$(top_srcdir)/src -I/home/konst/devel/icqlib -I/home/konst/devel/kktoolbox/kkstrtext -I/home/konst/devel/kktoolbox/kksystr/include -I/home/konst/devel/kktoolbox/kkconsui/include -I/home/konst/devel/libyahoo -I$(top_srcdir)/intl
+INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/icq -I$(top_srcdir)/src/yahoo -I/home/konst/devel/icqlib -I/home/konst/devel/kktoolbox/kkstrtext -I/home/konst/devel/kktoolbox/kkconsui -I/home/konst/devel/kktoolbox/kkconsui/include -I/home/konst/devel/kktoolbox/kkconsui/../kkstrtext -I/home/konst/devel/kktoolbox/kkconsui/../kkstrtext-0.1 -I/home/konst/devel/kktoolbox/kksystr -I/home/konst/devel/kktoolbox/kksystr/include -I/home/konst/devel/kktoolbox/kksystr/../kkstrtext -I/home/konst/devel/kktoolbox/kksystr/../kkstrtext-0.1 -I/home/konst/devel/libyahoo -I$(top_srcdir)/intl
 noinst_LIBRARIES = libicq.a
 libicq_a_SOURCES = icqhook.cc
-EXTRA_DIST = icqhook.cc icqhook.h
+EXTRA_DIST = icqhook.cc icqhandle.h icqhook.h
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
