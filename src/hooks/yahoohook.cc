@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.110 2004/07/18 21:59:40 konst Exp $
+* $Id: yahoohook.cc,v 1.111 2004/07/20 06:51:05 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -296,11 +296,11 @@ bool yahoohook::send(const imevent &ev) {
     if(c) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
-	    if(m) text = rushtmlconv("kw", m->gettext());
+	    if(m) text = rushtmlconv("ku", m->gettext());
 
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
-	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+	    if(m) text = rushtmlconv("ku", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
 
 	} else if(ev.gettype() == imevent::file) {
 	    const imfile *m = static_cast<const imfile *>(&ev);
@@ -460,7 +460,7 @@ void yahoohook::setautostatus(imstatus st) {
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], 0, 0);
 
 	    } else {
-		auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(proto)).c_str()));
+		auto_ptr<char> msg(strdup(rusconv("ku", conf.getawaymsg(proto)).c_str()));
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
 
 	    }
