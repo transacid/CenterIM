@@ -65,8 +65,10 @@ class irchook: public abstracthook {
 	static void chatjoined(void *connection, void *cli, ...);
 	static void chatleft(void *connection, void *cli, ...);
 	static void chatkicked(void *connection, void *cli, ...);
+	static void errorhandler(void *connection, void *cli, ...);
 
 	void rawcommand(const string &cmd);
+	void channelfatal(const string &room, const char *fmt, ...);
 
     public:
 	irchook();

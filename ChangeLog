@@ -975,9 +975,17 @@ IRC channels. To add a channel to the list you have to set "Show on the
 contact list" for it.
 
 ICQ events sent to users with status "Occupied" or "DND" were lost.
-Fixed.
+Fixed. Missed the workaround in the libicq2000.
 
 The cicqsync script now refuses to work with CVS version <= 1.10
 
 Bugs in the Yahoo! engine were fixed. They resulted into adding contacts
-with strange names to the list.
+with strange names to the list. Eventually the Yahoo! support in
+centericq became unusable because of some minor changes in the contact
+list transmission protocol part. It was a really stupid bug of the Yahoo
+library the program uses, and I immediately fixed it.
+
+In the IRC module there was a problem with not detecting the case of
+inability to join a channel, and it also was silent when a user was
+kicked. Fixed, so that now it's detected and reported to the contact
+list.

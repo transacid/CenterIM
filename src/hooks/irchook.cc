@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.28 2002/07/03 15:31:06 konst Exp $
+* $Id: irchook.cc,v 1.29 2002/07/07 22:58:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -77,6 +77,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_CHAT_JOINED, &chatjoined);
     firetalk_register_callback(handle, FC_CHAT_LEFT, &chatleft);
     firetalk_register_callback(handle, FC_CHAT_KICKED, &chatkicked);
+    firetalk_register_callback(handle, FC_ERROR, &errorhandler);
 
 #ifdef DEBUG
     firetalk_register_callback(handle, FC_LOG, &log);
@@ -356,7 +357,8 @@ void irchook::processnicks() {
 	return;
 
     ir = find(channels.begin(), channels.end(), *searchchannels.begin());
-    foundnicks = ir->nicks;
+    if(ir != channels.end())
+	foundnicks = ir->nicks;
 
     sort(foundnicks.begin(), foundnicks.end());
 
@@ -918,28 +920,26 @@ void irchook::endextended(void *connection, void *cli, ...) {
     vector<string>::iterator is;
     vector<channelInfo>::iterator ic;
 
-    if(!irhook.extlisted.empty()) {
-	if(irhook.smode == Channel) {
-	    ic = find(irhook.channels.begin(), irhook.channels.end(), irhook.extlisted.back());
+    if(irhook.smode == Channel && !irhook.extlisted.empty()) {
+	ic = find(irhook.channels.begin(), irhook.channels.end(), irhook.extlisted.back());
 
-	    if(ic != irhook.channels.end()) {
-		if(!ic->joined)
-		    firetalk_chat_part(irhook.handle, irhook.extlisted.back().c_str());
+	if(ic != irhook.channels.end()) {
+	    if(!ic->joined)
+		firetalk_chat_part(irhook.handle, irhook.extlisted.back().c_str());
 
-		for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); is++)
-		    ready = find(irhook.extlisted.begin(), irhook.extlisted.end(), *is) != irhook.extlisted.end();
-	    }
+	    for(is = irhook.searchchannels.begin(); ready && is != irhook.searchchannels.end(); is++)
+		ready = find(irhook.extlisted.begin(), irhook.extlisted.end(), *is) != irhook.extlisted.end();
 	}
+    }
 
-	ready = ready || irhook.smode == Email;
+    ready = ready || irhook.smode == Email;
 
-	if(ready) {
-	    irhook.processnicks();
+    if(ready) {
+	irhook.processnicks();
 
-	    if(irhook.smode == Email) {
-		ic = find(irhook.channels.begin(), irhook.channels.end(), "");
-		if(ic != irhook.channels.end()) irhook.channels.erase(ic);
-	    }
+	if(irhook.smode == Email) {
+	    ic = find(irhook.channels.begin(), irhook.channels.end(), "");
+	    if(ic != irhook.channels.end()) irhook.channels.erase(ic);
 	}
     }
 }
@@ -987,7 +987,6 @@ void irchook::chatleft(void *connection, void *cli, ...) {
 
 void irchook::chatkicked(void *connection, void *cli, ...) {
     va_list ap;
-    char buf[512];
 
     va_start(ap, cli);
     char *room = va_arg(ap, char *);
@@ -995,14 +994,50 @@ void irchook::chatkicked(void *connection, void *cli, ...) {
     char *reason = va_arg(ap, char *);
     va_end(ap);
 
-    icqcontact *c = clist.get(imcontact(room, irc));
-    if(c) {
+    irhook.channelfatal(room, _("* Kicked by %s; reason: %s"),
+	by, rushtmlconv("wk", reason).c_str());
+}
+
+void irchook::errorhandler(void *connection, void *cli, ...) {
+    va_list ap;
+    icqcontact *c;
+
+    va_start(ap, cli);
+    int error = va_arg(ap, int);
+    char *subject = va_arg(ap, char *);
+    char *description = va_arg(ap, char *);
+    va_end(ap);
+
+    switch(error) {
+	case FE_ROOMUNAVAILABLE:
+	    // Cannot join channel
+	    if(subject)
+	    if(strlen(subject))
+		irhook.channelfatal(subject, _("* %s"), description);
+	    break;
+    }
+}
+
+void irchook::channelfatal(const string &room, const char *fmt, ...) {
+    va_list ap;
+    char buf[1024];
+    vector<channelInfo>::iterator i;
+
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    va_end(ap);
+
+    i = find(channels.begin(), channels.end(),
+	(string) (room.substr(0, 1) != "#" ? "#" : "") + room);
+
+    if(i != channels.end()) {
+	imcontact cont(room, irc);
+	icqcontact *c = clist.get(cont);
+	if(!c) c = clist.addnew(cont);
 	c->setstatus(offline);
-
-	sprintf(buf, _("* Kicked by %s; reason: %s"), by,
-	    rushtmlconv("wk", reason).c_str());
-
-	em.store(immessage(imcontact(room, irc), imevent::incoming, buf));
+	i->joined = i->fetched = false;
+	i->contactlist = true;
+	em.store(immessage(cont, imevent::incoming, buf));
     }
 }
 

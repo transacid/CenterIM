@@ -1,7 +1,7 @@
 /*
 *
 * centericq main() function
-* $Id: centermain.cc,v 1.15 2002/06/20 15:11:34 konst Exp $
+* $Id: centermain.cc,v 1.16 2002/07/07 22:58:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
 #ifdef ENABLE_NLS
 	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE, LOCALE_DIR);
+	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 #endif
 

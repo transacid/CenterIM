@@ -6,5 +6,5 @@ centericq_LDADD = $(top_srcdir)/src/hooks/libhooks.a -lkkstrtext -lkkconsui -lkk
 SUBDIRS = hooks
 EXTRA_DIST = centericq.cc centermain.cc icqconf.cc icqcontact.cc icqcontacts.cc icqdialogs.cc icqface.cc icqmlist.cc icqgroup.cc icqgroups.cc imcontact.cc accountmanager.cc imcontroller.cc imevents.cc eventmanager.cc imlogger.cc imexternal.cc centericq.h icqcommon.h icqconf.h icqcontact.h icqcontacts.h icqface.h icqmlist.h icqgroup.h icqgroups.h accountmanager.h imcontact.h imcontroller.h imevents.h eventmanager.h imlogger.h imexternal.h
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALE_DIR=\"$(datadir)/locale\" @SIGC_CFLAGS@
+AM_CPPFLAGS = -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\" @SIGC_CFLAGS@
 LDFLAGS = @SIGC_LIBS@
