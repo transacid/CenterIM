@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.137 2002/09/09 11:03:16 konst Exp $
+* $Id: icqface.cc,v 1.138 2002/09/10 07:49:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1824,9 +1824,12 @@ void icqface::renderchathistory() {
 	    || events.back()->gettype() == imevent::contacts) {
 		bool fin, enough;
 		fin = enough = false;
+		saveworkarea();
 
 		while(!fin && !enough)
 		    cicq.readevent(*events.back(), enough, fin);
+
+		restoreworkarea();
 	    }
 	}
 
