@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.22 2002/03/21 17:44:41 konst Exp $
+* $Id: kkstrtext.cc,v 1.23 2002/04/04 07:24:20 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -912,6 +912,9 @@ string cuthtml(const string &html, bool cutbrs) {
 	    if((tag == "br") || (tag == "BR")) {
 		r += cutbrs ? "\n" : "<br>";
 	    }
+	} else {
+	    r += html.substr(tpos);
+	    npos = html.size();
 	}
     }
 
