@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.25 2003/01/20 02:20:16 konst Exp $
+* $Id: imexternal.cc,v 1.26 2004/03/15 22:36:37 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,7 +29,11 @@
 #include "imlogger.h"
 #include "icqcontacts.h"
 
+#ifdef HAVE_SSTREAM
+#include <sstream>
+#else
 #include <strstream>
+#endif
 #include <sys/wait.h>
 
 imexternal external;
@@ -223,14 +227,23 @@ void imexternal::action::substitute() {
 }
 
 void imexternal::action::writescript() {
-    ostrstream tfname;
+#ifdef HAVE_SSTREAM
+    std::ostringstream tfname;
+#else
+    std::ostrstream tfname;
+#endif
     ofstream f;
     int i = 0;
 
     do {
 	tfname.clear();
 	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0)+i++;
+#ifdef HAVE_SSTREAM
+ 	sname = tfname.str();
+#else
 	sname = string(tfname.str(), tfname.pcount());
+ 	stfname.freeze(false); // memory leak fixed
+#endif
     } while(!access(sname.c_str(), F_OK));
 
     f.open(sname.c_str());

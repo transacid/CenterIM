@@ -1739,45 +1739,46 @@ LiveJournal can now use the http proxy setting from configuration. Patch by
 Ivan Daniluk.
 
 Support for the Polish Gadu-Gadu IM was added. Can be disabled like any other
-using 
+using --disable-gg command line parameter for configure.
 
-libiconv is not linked
+libiconv linking problems were fixed.
 
-The problem is that in the Join Channel selection dialog, the "service"
-reads the name of the service (e.g. "Text Conferencing") rather than the
-jid (e.g. "conference.jabber.com"). Well, maybe that's not a problem, but
+A problem with Jabber conferences was fixed. In the "Join Channel" dialog
+the service textual description was used instead of chat service name.
 
-codepages conversion extended
+Codepages conversion was extended. Now it's possible to specify charsets
+from and to which you'd like your messages to be (de-/en-)coded. Must be of
+great use for those languages that use different charsets on different
+platforms, just like koi8 and cp1251 for Russian.
 
-new libicq2000
+The -v command line parameter now lists protocols that were enabled on
+the build time.
 
--v lists built-in protocols
+ICQ password change was removed, for it's broken.
 
-group -> c -> segfault
+A bug was fixed that caused centericq not to work properly with eJabberd
+servers.
 
-remove icq password change
+The cicqsync script was improved, so that it works on *BSD and Solaris
+systems now.
 
-ejabberd agent list bug
+Search load bug was fixed. It caused some searches to load incorrectly.
 
-cicqsync improved, works on freebsd and solaris (?)
+The configure script now checks if SSL support is on before enabling the
+MSN module. SSL is really necessary for MSN to function, so there is no
+joke about it.
 
-search load bug
+Now it's possible to use wildcards for protocols in the sounds configuration
+file. Patch by Marc Thoben.
 
-configuration -> set koi8-r -> reverts to koi8-r
+"Sent on" timestamps are now displayed for protocols that support it. Patch
+by by Heitham Omar.
 
-remove --without-ssl from .spec
+Now it's possible to scroll a message in the full-screen mode invoked with F9.
 
-no ssl -> no msn
+Another useful option was added to the configuration dialog. Now you can
+make your non-IM contacts such as rss feeds and infocards show up as being
+online all the time. The option is called "Always online non-IM contacts"
+and it's possible to chose protocols to be shown always online.
 
-sounds for specified protocols
-patch by Marc Thoben
-
-cut jabber dispnicks by default
-
-sent timestamps patch by Heitham Omar
-
-fullscreen message scroll
-
-rss/infocard always online/offline to config dialog
-
-keybindings patch
+Configurable key bindings patch by Daniel Kraus was applied.

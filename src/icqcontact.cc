@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.93 2004/03/09 23:00:36 konst Exp $
+* $Id: icqcontact.cc,v 1.94 2004/03/15 22:36:36 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,7 +31,11 @@
 #include "eventmanager.h"
 
 #include <time.h>
+#ifdef HAVE_SSTREAM
+#include <sstream>
+#else
 #include <strstream>
+#endif
 
 icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;
@@ -417,7 +421,11 @@ void icqcontact::scanhistory() {
     int pos, backstep, r;
     FILE *f = fopen(fn.c_str(), "r");
     struct stat st;
+#ifdef HAVE_SSTREAM
+    stringstream evdata;
+#else
     strstream evdata;
+#endif
 
     sethasevents(false);
 
