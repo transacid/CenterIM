@@ -85,7 +85,7 @@ class icqconf {
 	void usage() const;
 
 	void constructevent(const string &event, const string &proto,
-	    const string &dest) const;
+	    const string &dest, const string &number) const;
 
 	void externalstatuschange(char st, const string &proto) const;
 

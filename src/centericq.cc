@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.115 2002/08/21 09:52:04 konst Exp $
+* $Id: centericq.cc,v 1.116 2002/08/22 18:13:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -677,8 +677,9 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
     } else if(ev.gettype() == imevent::sms) {
 	const imsms *m = dynamic_cast<const imsms *>(&ev);
+	string phone = m->getphone();
 
-	if(c = clist.get(ev.getcontact())) {
+	if(phone.empty() && (c = clist.get(ev.getcontact()))) {
 	    icqcontact::basicinfo b = c->getbasicinfo();
 
 	    if(b.cellular.find_first_of("0123456789") == -1) {
@@ -691,9 +692,11 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 		c->setbasicinfo(b);
 		c->save();
 	    }
+
+	    phone = b.cellular;
 	}
 
-	text = m->gettext();
+	text = m->getmessage();
 
 	if(r == icqface::reply) {
 	    if(conf.getquote()) {
@@ -705,7 +708,7 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	    text = fwdnote + text;
 	}
 
-	sendev = new imsms(m->getcontact(), imevent::outgoing, text);
+	sendev = new imsms(m->getcontact(), imevent::outgoing, text, phone);
     }
 
     if(proceed = sendev) {

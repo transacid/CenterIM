@@ -309,8 +309,8 @@ bool imauthorization::contains(const string &atext) const {
 
 // -- imsms class -------------------------------------------------------------
 
-imsms::imsms(const imcontact &acont, imdirection adirection, const string &atext)
-: imevent(acont, adirection, sms), text(atext) {
+imsms::imsms(const imcontact &acont, imdirection adirection, const string &atext, const string &aphone)
+: imevent(acont, adirection, sms), text(atext), phone(aphone) {
 }
 
 imsms::imsms(const imevent &ev) {
@@ -323,6 +323,7 @@ imsms::imsms(const imevent &ev) {
 
     if(m) {
 	text = m->text;
+	phone = m->phone;
     }
 }
 
@@ -330,17 +331,25 @@ string imsms::gettext() const {
     return (string) _("* SMS : ")  + text;
 }
 
-string imsms::getmessage() const {
-    return text;
-}
-
 void imsms::write(ofstream &f) const {
     imevent::write(f);
+
+    if(!phone.empty()) {
+	if(phone.substr(0, 1) != "+") f << "+";
+	f << phone << endl;
+    }
+
     f << text << endl;
 }
 
 void imsms::read(ifstream &f) {
-    text = readblock(f);
+    text = "";
+    getstring(f, phone);
+
+    if(!phone.empty() && phone.substr(0, 1) != "+")
+	text += phone + "\n";
+
+    text += readblock(f);
 }
 
 bool imsms::empty() const {

@@ -45,15 +45,27 @@ void imeventmanager::store(const imevent &ev) {
 	    }
 	}
     } else if(ev.getdirection() == imevent::outgoing) {
-	abstracthook &hook = gethook(ev.getcontact().pname);
+	abstracthook *hook;
+
+	// All the SMSes are to be sent through the icqhook class..
+
+	if(ev.gettype() == imevent::sms) {
+	    hook = &gethook(icq);
+	} else {
+	    hook = &gethook(ev.getcontact().pname);
+	}
+
+	// Some self-flood protection..
 
 	if(time(0)-lastevent > PERIOD_ATONCE)
 	    recentlysent = 0;
 
-	proceed = hook.logged() && recentlysent < MAX_ATONCE;
+	proceed = hook->logged() && recentlysent < MAX_ATONCE;
+
+	// 3.. 2.. 1.. LAUNCH!
 
 	if(proceed) {
-	    if(hook.send(ev)) {
+	    if(hook->send(ev)) {
 		eventwrite(ev, history);
 		logger.putevent(ev);
 		time(&lastevent);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.40 2002/08/16 16:48:28 konst Exp $
+* $Id: irchook.cc,v 1.41 2002/08/22 18:13:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,8 @@
 #include "icqcontacts.h"
 #include "centericq.h"
 #include "imlogger.h"
+
+#include <iterator>
 
 #ifdef DEBUG
 #define DLOG(s) face.log("irc %s", s)
@@ -349,7 +351,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 void irchook::processnicks() {
     string dnick;
     char *nick;
-    vector<string> foundnicks, prelastfound;
+    vector<string> foundnicks;
     static vector<string> lastfoundnicks;
     vector<string>::iterator in, isn;
     vector<channelInfo>::iterator ir;
@@ -396,20 +398,20 @@ void irchook::processnicks() {
 	}
     }
 
-    prelastfound = foundnicks;
-
     if(searchsincelast) {
-	for(in = foundnicks.begin(); in != foundnicks.end(); ) {
-	    if(find(lastfoundnicks.begin(), lastfoundnicks.end(), *in) != lastfoundnicks.end()) {
-		foundnicks.erase(in);
-		in = foundnicks.begin();
-	    } else {
-		in++;
-	    }
-	}
-    }
+	vector<string> tnicks;
+	insert_iterator< vector<string> > tins(tnicks, tnicks.begin());
 
-    lastfoundnicks = prelastfound;
+	set_difference(foundnicks.begin(), foundnicks.end(),
+	    lastfoundnicks.begin(), lastfoundnicks.end(), tins);
+
+	lastfoundnicks = foundnicks;
+	foundnicks = tnicks;
+
+    } else {
+	lastfoundnicks = foundnicks;
+
+    }
 
     for(in = foundnicks.begin(); in != foundnicks.end(); ++in) {
 	dnick = *in;

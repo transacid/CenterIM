@@ -98,15 +98,16 @@ class imurl: public imevent {
 
 class imsms: public imevent {
     protected:
-	string text;
+	string text, phone;
 
     public:
 	imsms(const imevent &ev);
 	imsms(const imcontact &acont, imdirection adirection,
-	    const string &atext);
+	    const string &atext, const string &aphone = "");
 
 	string gettext() const;
-	string getmessage() const;
+	string getmessage() const { return text; }
+	string getphone() const { return phone; }
 
 	bool empty() const;
 	bool contains(const string &atext) const;

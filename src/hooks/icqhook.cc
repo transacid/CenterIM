@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.105 2002/08/22 10:51:53 konst Exp $
+* $Id: icqhook.cc,v 1.106 2002/08/22 18:13:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -55,7 +55,6 @@ icqhook::icqhook() {
 
     fcapabilities =
 	hoptCanSendURL |
-	hoptCanSendSMS |
 	hoptCanSetAwayMsg |
 	hoptCanFetchAwayMsg |
 	hoptCanChangeNick |
@@ -342,6 +341,9 @@ bool icqhook::send(const imevent &ev) {
     ICQMessageEvent *iev;
     icqcontact *c;
 
+    if(ev.getcontact().pname != icq)
+	uin = 0;
+
     if(!uin)
 	ic = cli.getSelfContact();
 
@@ -362,9 +364,15 @@ bool icqhook::send(const imevent &ev) {
 	const imsms *m = static_cast<const imsms *> (&ev);
 
 	if(!uin) {
-	    if(ic->getMainHomeInfo().getMobileNo().empty()) {
-		cli.fetchSelfDetailContactInfo();
-		return false;
+	    if(m->getphone().empty()) {
+		if(ic->getMainHomeInfo().getMobileNo().empty()) {
+		    cli.fetchSelfDetailContactInfo();
+		    return false;
+		}
+	    } else {
+		ic = new Contact(m->getphone());
+		ic->setMobileNo(m->getphone());
+		cli.addContact(ic);
 	    }
 
 	} else {
@@ -1096,17 +1104,18 @@ void icqhook::messageack_cb(MessageEvent *ev) {
     }
 
     if(ev->isFinished()) {
-	/*
-	*
-	* The FINAL decision.
-	*
-	*/
-	
+	// The FINAL decision.
+
 	switch(ev->getType()) {
 	    case MessageEvent::SMS:
 		if(!ev->isDelivered()) {
-		    face.log(_("+ [icq] failed SMS to %s, %s"),
-			c->getdispnick().c_str(), ic.totext().c_str());
+		    if(ev->getContact()->getUIN()) {
+			face.log(_("+ [icq] failed SMS to %s, %s"),
+			    c->getdispnick().c_str(), ic.totext().c_str());
+		    } else {
+			face.log(_("+ [icq] failed SMS to %s"),
+			    ev->getContact()->getAlias().c_str());
+		    }
 		}
 		break;
 

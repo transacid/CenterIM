@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.79 2002/08/20 16:12:09 konst Exp $
+* $Id: icqconf.cc,v 1.80 2002/08/22 18:13:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -671,7 +671,7 @@ void icqconf::setbidi(bool fbidi) {
 
 void icqconf::commandline(int argc, char **argv) {
     int i;
-    string event, proto, dest;
+    string event, proto, dest, number;
     char st = 0;
 
     argv0 = argv[0];
@@ -697,6 +697,9 @@ void icqconf::commandline(int argc, char **argv) {
 	} else if((args == "-t") || (args == "--to")) {
 	    if(argv[++i]) dest = argv[i];
 
+	} else if((args == "-n") || (args == "--number")) {
+	    if(argv[++i]) number = argv[i];
+
 	} else if((args == "-S") || (args == "--status")) {
 	    if(argv[++i])
 	    if(strlen(argv[i]))
@@ -716,11 +719,19 @@ void icqconf::commandline(int argc, char **argv) {
 	}
     }
 
-    constructevent(event, proto, dest);
+    if(!number.empty()) {
+	if(event.empty()) event = "sms";
+	if(proto.empty()) proto = "icq";
+	dest = "0";
+    }
+
+    constructevent(event, proto, dest, number);
     externalstatuschange(st, proto);
 }
 
-void icqconf::constructevent(const string &event, const string &proto, const string &dest) const {
+void icqconf::constructevent(const string &event, const string &proto,
+const string &dest, const string &number) const {
+
     imevent *ev = 0;
     imcontact cdest;
     string text, buf;
@@ -774,7 +785,7 @@ void icqconf::constructevent(const string &event, const string &proto, const str
 
 	ev = new imurl(cdest, imevent::outgoing, url, text);
     } else if(event == "sms") {
-	ev = new imsms(cdest, imevent::outgoing, text);
+	ev = new imsms(cdest, imevent::outgoing, text, number);
     } else {
 	cout << _("event sending error: unknown event type") << endl;
 	exit(1);
@@ -789,7 +800,8 @@ void icqconf::constructevent(const string &event, const string &proto, const str
 
 	    char buf[512];
 	    sprintf(buf, _("%s to %s has been put to the queue"),
-		eventnames[ev->gettype()], c->getdesc().totext().c_str());
+		eventnames[ev->gettype()],
+		number.empty() ? c->getdesc().totext().c_str() : number.c_str());
 
 	    cout << buf << endl;
 	} else {

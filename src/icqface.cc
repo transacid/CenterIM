@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.131 2002/08/21 09:52:04 konst Exp $
+* $Id: icqface.cc,v 1.132 2002/08/22 18:13:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -212,7 +212,7 @@ int icqface::contextmenu(icqcontact *c) {
 	    if(capab & hoptCanSendURL)
 		m.additem(0, ACT_URL, _(" Send an URL            u"));
 
-	    if(capab & hoptCanSendSMS)
+	    if(!conf.getourid(icq).empty())
 		m.additem(0, ACT_SMS, _(" Send an SMS"));
 
 	    if(capab & hoptAuthReqSend)
@@ -341,6 +341,9 @@ icqcontact *icqface::mainloop(int &action) {
 	    }                
 
 	    if(c) {
+		if(action == ACT_MSG && c->getdesc().pname == infocard)
+		    action = ACT_SMS;
+
 		if(action == ACT_MENU)
 		if(!(action = contextmenu(c))) continue;
 	    } else {
@@ -1600,6 +1603,7 @@ bool icqface::eventedit(imevent &ev) {
     bool r;
     texteditor editor;
     icqcontact *c;
+    string msg;
 
     editdone = r = false;
     passinfo = ev.getcontact();
@@ -1615,8 +1619,7 @@ bool icqface::eventedit(imevent &ev) {
     workarealine(sizeWArea.y1+2);
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	_("Outgoing %s to %s"), eventnames[ev.gettype()],
-	ev.getcontact().totext().c_str());
+	_("Outgoing %s to %s"), eventnames[ev.gettype()], ev.getcontact().totext().c_str());
 
     status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
 
@@ -1624,7 +1627,7 @@ bool icqface::eventedit(imevent &ev) {
 	immessage *m = static_cast<immessage *>(&ev);
 
 	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
-	editor.load(m->gettext(), "");
+	editor.load(msg = m->gettext(), "");
 	editor.open();
 
 	r = editdone;
@@ -1632,7 +1635,7 @@ bool icqface::eventedit(imevent &ev) {
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = immessage(ev.getcontact(), imevent::outgoing, p.get());
 
-	if(c = clist.get(ev.getcontact()))
+	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
 	    c->setpostponed(r ? "" : p.get());
 
     } else if(ev.gettype() == imevent::url) {
@@ -1665,22 +1668,22 @@ bool icqface::eventedit(imevent &ev) {
 	imsms *m = static_cast<imsms *>(&ev);
 
 	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
-	editor.load(m->gettext(), "");
+	editor.load(msg = m->getmessage(), "");
 	editor.open();
 
 	r = editdone;
 
 	auto_ptr<char> p(editor.save("\r\n"));
-	*m = imsms(ev.getcontact(), imevent::outgoing, p.get());
+	*m = imsms(ev.getcontact(), imevent::outgoing, p.get(), m->getphone());
 
-	if(c = clist.get(ev.getcontact()))
+	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
 	    c->setpostponed(r ? "" : p.get());
 
     } else if(ev.gettype() == imevent::authorization) {
 	imauthorization *m = static_cast<imauthorization *>(&ev);
 
 	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
-	editor.load(m->getmessage(), "");
+	editor.load(msg = m->getmessage(), "");
 	editor.open();
 
 	r = editdone;
@@ -1688,7 +1691,7 @@ bool icqface::eventedit(imevent &ev) {
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
 
-	if(c = clist.get(ev.getcontact()))
+	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
 	    c->setpostponed(r ? "" : p.get());
 
     }
