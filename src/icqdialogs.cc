@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.36 2001/12/07 18:11:01 konst Exp $
+* $Id: icqdialogs.cc,v 1.37 2001/12/08 10:33:32 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -181,7 +181,10 @@ void icqface::gendetails(treeview *tree, icqcontact *c = 0) {
     tree->clear();
 
     i = tree->addnode(_(" General "));
-    tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
+
+    if(c->getdesc().pname == infocard)
+	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
+
     tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
     tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
     tree->addleaff(i, 0, 13, _(" E-mail : %s "), bi.email.c_str());
@@ -275,10 +278,12 @@ bool icqface::updatedetails(icqcontact *c = 0) {
 	about = c->getabout();
 
 	if(!b) {
+/*
 	    if(!c->getdesc().uin && (c->updated() < 5)) {
 		status(_("Wait a moment. Your ICQ details haven't been fetched yet"));
 		continue;
 	    } else
+*/
 	    switch(citem) {
 		case 10:
 		    c->setnick(inputstr(_("Nickname: "), c->getnick()));
