@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.92 2002/04/08 16:24:36 konst Exp $
+* $Id: centericq.cc,v 1.93 2002/04/11 17:14:34 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1123,6 +1123,34 @@ void centericq::exectimers() {
 }
 
 // ----------------------------------------------------------------------------
+
+string rushtmlconv(const string &tdir, const string &text) {
+    int pos;
+    string r = rusconv(tdir, text);
+
+    if(tdir == "kw") {
+	pos = 0;
+	while((pos = r.find_first_of("&<>", pos)) != -1) {
+	    switch(r[pos]) {
+		case '&': r.replace(pos, 1, "&amp;"); break;
+		case '<': r.replace(pos, 1, "&lt;"); break;
+		case '>': r.replace(pos, 1, "&gt;"); break;
+	    }
+	    pos++;
+	}
+
+    } else if(tdir == "wk") {
+	pos = 0;
+	while((pos = r.find("&", pos)) != -1) {
+	    if(r.substr(pos+1, 3) == "amp;") r.replace(pos, 5, "&"); else
+	    if(r.substr(pos+1, 2) == "lt;") r.replace(pos, 4, "<"); else
+	    if(r.substr(pos+1, 2) == "gt;") r.replace(pos, 4, ">"); 
+	    pos++;
+	}
+    }
+
+    return r;
+}
 
 string rusconv(const string &tdir, const string &text) {
     string r;

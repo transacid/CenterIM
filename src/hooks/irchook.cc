@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.13 2002/04/10 08:49:00 konst Exp $
+* $Id: irchook.cc,v 1.14 2002/04/11 17:14:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -173,11 +173,11 @@ bool irchook::send(const imevent &ev) {
     if(c) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
-	    if(m) text = rusconv("kw", m->gettext());
+	    if(m) text = rushtmlconv("kw", m->gettext());
 
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
-	    if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rushtmlconv("kw", m->getdescription());
 
 	}
 
@@ -456,17 +456,13 @@ void irchook::userstatus(const string &nickname, imstatus st) {
 	imcontact ic(nickname, irc);
 	icqcontact *c = clist.get(ic);
 
-	if(!c) {
-	    c = clist.addnew(ic, false);
-	}
-
+	if(c)
 	if(st != c->getstatus()) {
 	    logger.putonline(ic, c->getstatus(), st);
 	    c->setstatus(st);
 
-	    if(c->getstatus() != offline) {
+	    if(c->getstatus() != offline)
 		c->setlastseen();
-	    }
 	}
     }
 }
@@ -618,7 +614,7 @@ void irchook::getmessage(void *conn, void *cli, ...) {
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
 	em.store(immessage(imcontact(sender, irc),
-	    imevent::incoming, rusconv("wk", message)));
+	    imevent::incoming, rushtmlconv("wk", message)));
     }
 
     DLOG("getmessage");
@@ -665,7 +661,7 @@ void irchook::buddyaway(void *conn, void *cli, ...) {
     if(nick)
     if(strlen(nick)) {
 	irhook.userstatus(nick, away);
-	if(msg) irhook.awaymessages[nick] = rusconv("wk", msg);
+	if(msg) irhook.awaymessages[nick] = rushtmlconv("wk", msg);
     }
 
     DLOG("buddyaway");

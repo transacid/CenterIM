@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.101 2002/04/09 15:48:12 konst Exp $
+* $Id: icqface.cc,v 1.102 2002/04/11 17:14:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1146,11 +1146,9 @@ void icqface::modelist(contactstatus cs) {
     workarealine(sizeWArea.y2-2);
 
     mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	cs == csignore ?
-	    _("Ignore list") :
-	cs == csvisible ?
-	    _("Visible list") :
-	    _("Invisible list"));
+	cs == csignore      ? _("Ignore list") :
+	cs == csvisible     ? _("Visible list") :
+	cs == csinvisible   ? _("Invisible list") : "");
 
     lst.fillmenu(db.getmenu(), cs);
 

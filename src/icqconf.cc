@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.64 2002/04/08 15:59:57 konst Exp $
+* $Id: icqconf.cc,v 1.65 2002/04/11 17:14:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -276,6 +276,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_yahoo\tmagenta/transparent\n");
 		fprintf(f, "clist_infocard\twhite/transparent\n");
 		fprintf(f, "clist_aim\tyellow/transparent\n");
+		fprintf(f, "clist_irc\tblue/transparent\n");
 		break;
 
 	    case rcblue:
@@ -295,6 +296,7 @@ void icqconf::loadcolors() {
 		fprintf(f, "clist_msn\tcyan/blue\n");
 		fprintf(f, "clist_infocard\twhite/blue\n");
 		fprintf(f, "clist_aim\tyellow/blue\n");
+		fprintf(f, "clist_irc\tblue/blue\tbold\n");
 		break;
 	}
 	fclose(f);
@@ -663,6 +665,14 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
     }
 
     return protocolname_size;
+}
+
+string icqconf::getprotocolprefix(protocolname pname) const {
+    static const string pprefixes[protocolname_size] = {
+	"", "y", "m", "a", "i", "n"
+    };
+
+    return pprefixes[pname];
 }
 
 imstatus icqconf::getstatus(protocolname pname) {

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.76 2002/04/09 15:48:13 konst Exp $
+* $Id: icqhook.cc,v 1.77 2002/04/11 17:14:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -57,7 +57,8 @@ icqhook::icqhook() {
 	hoptCanFetchAwayMsg |
 	hoptCanChangeNick |
 	hoptCanUpdateDetails |
-	hoptChangableServer;
+	hoptChangableServer |
+	hoptControlableVisibility;
 
     cli.connected.connect(slot(this, &icqhook::connected_cb));
     cli.disconnected.connect(slot(this, &icqhook::disconnected_cb));

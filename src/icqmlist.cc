@@ -1,7 +1,7 @@
 /*
 *
 * centericq user mode list class
-* $Id: icqmlist.cc,v 1.13 2002/04/08 13:45:45 konst Exp $
+* $Id: icqmlist.cc,v 1.14 2002/04/11 17:14:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,6 +24,7 @@
 
 #include "icqmlist.h"
 #include "icqconf.h"
+#include "abstracthook.h"
 
 icqlist::icqlist() {
 }
@@ -87,14 +88,10 @@ void icqlist::save() {
 	    for(i = begin(); i != end(); i++) {
 		f << (int) i->getstatus() << "\t";
 		f << mime(i->getnick()) << "\t";
+		f << conf.getprotocolprefix(i->getdesc().pname);
 
-		switch(i->getdesc().pname) {
-		    case icq: f << i->getdesc().uin; break;
-		    case yahoo: f << "y"; break;
-		    case msn: f << "m"; break;
-		    case aim: f << "a"; break;
-		    case irc: f << "i"; break;
-		}
+		if(i->getdesc().uin)
+		    f << i->getdesc().uin;
 
 		f << endl;
 	    }
@@ -105,7 +102,9 @@ void icqlist::save() {
 }
 
 void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
+    int capab;
     vector<modelistitem>::iterator i;
+
     m->clear();
     menucontents.clear();
 

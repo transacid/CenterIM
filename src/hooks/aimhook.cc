@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.14 2002/04/10 08:48:59 konst Exp $
+* $Id: aimhook.cc,v 1.15 2002/04/11 17:14:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -163,11 +163,11 @@ bool aimhook::send(const imevent &ev) {
     if(c->getstatus() != offline) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
-	    if(m) text = rusconv("kw", m->gettext());
+	    if(m) text = rushtmlconv("kw", m->gettext());
 
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
-	    if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+	    if(m) text = rushtmlconv("kw", m->geturl()) + "\n\n" + rushtmlconv("kw", m->getdescription());
 
 	}
 
@@ -416,7 +416,7 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
 	em.store(immessage(imcontact(sender, aim),
-	    imevent::incoming, rusconv("wk", cuthtml(message, true))));
+	    imevent::incoming, rushtmlconv("wk", cuthtml(message, true))));
     }
 
     DLOG("getmessage");

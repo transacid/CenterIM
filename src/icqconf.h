@@ -163,6 +163,7 @@ class icqconf {
 
 	string getprotocolname(protocolname pname) const;
 	protocolname getprotocolbyletter(char letter) const;
+	string getprotocolprefix(protocolname pname) const;
 
 	int getouridcount() const { return accounts.size(); }
 	imaccount getourid(protocolname pname);
