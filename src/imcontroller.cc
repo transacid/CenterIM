@@ -236,7 +236,7 @@ void imcontroller::synclist(protocolname pname) {
     face.progress.show(_(" Uploading buddies "));
 
     if(tosync.empty()) {
-	face.progress.log(_("No contacts to be synchronize"));
+	face.progress.log(_("No contacts to be synchronized"));
 	face.progress.log(_(".. all of them are already stored server-side"));
 
     } else {

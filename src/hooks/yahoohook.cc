@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.63 2002/11/18 16:32:12 konst Exp $
+* $Id: yahoohook.cc,v 1.64 2002/11/19 18:13:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -289,7 +289,6 @@ void yahoohook::sendnewuser(const imcontact &ic, bool report) {
 		    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
 
 		yahoo_add_buddy(cid, who.get(), group.get());
-		yahoo_refresh(cid);
 	    }
 	}
     }
@@ -319,8 +318,6 @@ void yahoohook::removeuser(const imcontact &ic, bool report) {
 		    bud = buddies;
 		}
 	    }
-
-	    yahoo_refresh(cid);
 	} else {
 	    if(report)
 		face.log(_("+ [yahoo] leaving the %s conference"),

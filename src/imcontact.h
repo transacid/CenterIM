@@ -10,6 +10,7 @@ enum protocolname {
     msn,
     aim,
     irc,
+    jabber,
     infocard,
 
     protocolname_size

@@ -5,6 +5,7 @@
 #include "msnhook.h"
 #include "aimhook.h"
 #include "irchook.h"
+#include "jabberhook.h"
 
 #include <time.h>
 
@@ -137,6 +138,7 @@ abstracthook &gethook(protocolname pname) {
 	case msn: return mhook;
 	case aim: return ahook;
 	case irc: return irhook;
+	case jabber: return jhook;
     }
 
     return abshook;

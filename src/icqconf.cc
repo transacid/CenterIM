@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.89 2002/11/18 12:22:45 konst Exp $
+* $Id: icqconf.cc,v 1.90 2002/11/19 18:13:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -75,7 +75,8 @@ void icqconf::setourid(const imaccount &im) {
 	{ "scs.yahoo.com", 5050 },
 	{ "messenger.hotmail.com", 1863 },
 	{ "toc.oscar.aol.com", 9898 },
-	{ "irc.openprojects.net", 6667 }
+	{ "irc.openprojects.net", 6667 },
+	{ "jabber.com", 5222 }
     };
 
     i = find(accounts.begin(), accounts.end(), im.pname);
@@ -301,6 +302,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_msn, "clist_msn   cyan/transparent");
 	    schemer.push(cp_clist_aim, "clist_aim   yellow/transparent");
 	    schemer.push(cp_clist_irc, "clist_irc    blue/transparent");
+	    schemer.push(cp_clist_jabber, "clist_irc    red/transparent");
 	    break;
 
 	case rcblue:
@@ -321,6 +323,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_infocard, "clist_infocard  white/blue");
 	    schemer.push(cp_clist_aim, "clist_aim   yellow/blue");
 	    schemer.push(cp_clist_irc, "clist_irc   blue/blue   bold");
+	    schemer.push(cp_clist_jabber, "clist_irc    red/blue");
 	    break;
     }
 
@@ -612,7 +615,7 @@ void icqconf::openurl(const string &url) {
 
 string icqconf::getprotocolname(protocolname pname) const {
     static const string ptextnames[protocolname_size] = {
-	"icq", "yahoo", "msn", "aim", "irc", "infocard"
+	"icq", "yahoo", "msn", "aim", "irc", "jabber", "infocard"
     };
 
     return ptextnames[pname];
@@ -625,6 +628,7 @@ protocolname icqconf::getprotocolbyletter(char letter) const {
 	case 'i': return irc;
 	case 'm': return msn;
 	case 'n': return infocard;
+	case 'j': return jabber;
 	case '0':
 	case '1':
 	case '2':
@@ -677,6 +681,7 @@ int icqconf::getprotcolor(protocolname pname) const {
 	case      msn : return getcolor(cp_clist_msn);
 	case      aim : return getcolor(cp_clist_aim);
 	case      irc : return getcolor(cp_clist_irc);
+	case   jabber : return getcolor(cp_clist_jabber);
 	default       : return getcolor(cp_main_text);
     }
 }
@@ -901,7 +906,7 @@ void icqconf::usage() const {
     cout << endl << _("Events sending options:") << endl;
     cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;
     cout << _("  -S, --status <status>    change the current IM status") << endl;
-    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc") << endl;
+    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc or jabber") << endl;
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
 
