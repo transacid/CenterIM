@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.69 2004/02/03 23:11:06 konst Exp $
+* $Id: msnhook.cc,v 1.70 2004/02/08 09:37:36 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,6 +34,7 @@
 #include "eventmanager.h"
 #include "imlogger.h"
 #include "connwrap.h"
+#include "icqgroups.h"
 
 #include "msn_bittybits.h"
 
@@ -262,6 +263,8 @@ bool msnhook::send(const imevent &ev) {
 
 void msnhook::sendnewuser(const imcontact &ic) {
     if(logged()) {
+	int gid = -1;
+	string gname;
 	icqcontact *c;
 	imcontact icc(nicktodisp(ic.nickname), msn);
 
@@ -272,7 +275,24 @@ void msnhook::sendnewuser(const imcontact &ic) {
 	    c->setdispnick(icc.nickname);
 	}
 
-	msn_add_to_list(&conn, "FL", nicknormalize(ic.nickname).c_str(), 0);
+	if(c = clist.get(ic)) {
+	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
+	    if(ig != groups.end()) {
+		gname = ig->getname();
+		map<int, string>::const_iterator im = mgroups.begin();
+		while(im != mgroups.end() && gid == -1) {
+		    if(im->second == ig->getname())
+			gid = im->first;
+		    ++im;
+		}
+	    }
+	}
+
+	if(gid != -1) {
+	    msn_add_to_list(&conn, "FL", nicknormalize(ic.nickname).c_str(), gid);
+	} else {
+	    msn_add_group(&conn, gname.c_str());
+	}
     }
 
     requestinfo(ic);
@@ -443,6 +463,26 @@ bool msnhook::getfevent(invitation_ftp *fhandle, imfile &fr) {
     return false;
 }
 
+void msnhook::updatecontact(icqcontact *c) {
+    if(logged() && conf.getgroupmode() != icqconf::nogroups) {
+	msn_del_from_list(&conn, "FL", nicknormalize(c->getdesc().nickname).c_str());
+	sendnewuser(c->getdesc());
+    }
+}
+
+void msnhook::renamegroup(const string &oldname, const string &newname) {
+    if(logged()) {
+	map<int, string>::const_iterator im = mgroups.begin();
+	while(im != mgroups.end()) {
+	    if(im->second == oldname) {
+		msn_rename_group(&conn, im->first, newname.c_str());
+		break;
+	    }
+	    ++im;
+	}
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 static void log(const string &s) {
@@ -530,6 +570,11 @@ void ext_got_info(msnconn *conn, syncinfo *info) {
 	mhook.slst["RL"].push_back(make_pair(ud->username, ud->friendlyname));
     }
 
+    for(pl = info->grp, mhook.mgroups.clear(); pl; pl = pl->next) {
+	groupdata *gd = (groupdata *) pl->data;
+	mhook.mgroups[gd->number] = gd->title;
+    }
+
     mhook.setautostatus(mhook.ourstatus);
 }
 
@@ -547,7 +592,7 @@ void ext_got_BLP(msnconn * conn, char c) {
 
 void ext_new_RL_entry(msnconn *conn, const char *username, const char *friendlyname) {
     log("ext_new_RL_entry");
-//    msn_add_to_list(&mhook.conn, "AL", username);
+    msn_add_to_list(&mhook.conn, "AL", username);
 
     imcontact ic(nicktodisp(username), msn);
     mhook.checkinlist(ic);
@@ -756,13 +801,13 @@ int ext_do_connect_socket(const char *hostname, int port, int ssl) {
 }
 
 int ext_connect_socket_ssl(const char *hostname, int port) {
-	log("ext_connect_socket_ssl");
-	return ext_do_connect_socket(hostname, port, 1);
+    log("ext_connect_socket_ssl");
+    return ext_do_connect_socket(hostname, port, 1);
 }
 
 int ext_connect_socket(const char *hostname, int port) {
-	log("ext_connect_socket");
-	return ext_do_connect_socket(hostname, port, 0);
+    log("ext_connect_socket");
+    return ext_do_connect_socket(hostname, port, 0);
 }
 
 int ext_server_socket(int port) {
@@ -802,6 +847,35 @@ void ext_protocol_log(const char *buf, int readev, int writeev) {
     } else if(writeev) {
 	log(string("[OUT] ") + buf);
     }
+}
+
+void ext_new_group(msnconn * conn, const char * name, int id) {
+    int i;
+    icqcontact *c;
+
+    mhook.mgroups[id] = name;
+
+    vector<icqgroup>::const_iterator ig = groups.begin();
+
+    while(ig != groups.end()) {
+	if(ig->getname() == name) {
+	    for(i = 0; i < clist.count; i++) {
+		c = (icqcontact *) clist.at(i);
+		if(c->getgroupid() == ig->getid())
+		    mhook.sendnewuser(c->getdesc());
+	    }
+	    break;
+	}
+	++ig;
+    }
+}
+
+void ext_renamed_group(msnconn * conn, const char * name, int id) {
+    mhook.mgroups[id] = name;
+}
+
+void ext_del_group(msnconn * conn, const char * name, int id) {
+    mhook.mgroups.erase(id);
 }
 
 #endif

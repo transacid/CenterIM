@@ -25,6 +25,9 @@ class msnhook : public abstracthook {
     friend void ext_filetrans_progress(invitation_ftp *inv, const char *status, unsigned long sent, unsigned long total);
     friend void ext_filetrans_failed(invitation_ftp *inv, int error, const char *message);
     friend void ext_filetrans_success(invitation_ftp *inv);
+    friend void ext_new_group(msnconn *conn, const char *name, int id);
+    friend void ext_del_group(msnconn *conn, const char *name, int id);
+    friend void ext_renamed_group(msnconn * conn, const char *name, int id);
 
     protected:
 	imstatus ourstatus;
@@ -32,6 +35,7 @@ class msnhook : public abstracthook {
 	msnconn conn;
 
 	vector<int> rfds, wfds;
+	map<int, string> mgroups;
 	map<string, string> friendlynicks;
 	map<string, vector<pair<string, string> > > slst;
 	map<imfile, pair<invitation_ftp *, string> > transferinfo;
@@ -80,6 +84,9 @@ class msnhook : public abstracthook {
 	bool knowntransfer(const imfile &fr) const;
 	void replytransfer(const imfile &fr, bool accept, const string &localpath = string());
 	void aborttransfer(const imfile &fr);
+
+	void updatecontact(icqcontact *c);
+	void renamegroup(const string &oldname, const string &newname);
 };
 
 extern msnhook mhook;

@@ -43,14 +43,6 @@ struct servicetype {
     };
 };
 
-struct groupoperation {
-    enum enumeration {
-	add,
-	remove,
-	rename
-    };
-};
-
 class abstracthook {
     protected:
 	enum Encoding {

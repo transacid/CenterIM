@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: centericq 4.9.10\n"
-"POT-Creation-Date: 2004-02-04 11:52+0200\n"
-"PO-Revision-Date: 2002-09-10 01:22+0300\n"
+"Project-Id-Version: centericq 4.9.11\n"
+"POT-Creation-Date: 2004-02-08 11:19+0200\n"
+"PO-Revision-Date: 2004-02-08 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] невозможно соединиться: "
 
-#: src/hooks/yahoohook.cc:162 src/hooks/msnhook.cc:736
+#: src/hooks/yahoohook.cc:162 src/hooks/msnhook.cc:781
 msgid "could not resolve hostname"
 msgstr "невозможно определить IP хоста"
 
@@ -98,7 +98,7 @@ msgid "The user %s has left the conference"
 msgstr "Пользователь %s покинул конференцию"
 
 #: src/hooks/yahoohook.cc:948 src/hooks/icqhook.cc:1065
-#: src/hooks/msnhook.cc:554
+#: src/hooks/msnhook.cc:599
 msgid "The user has added you to his/her contact list"
 msgstr "Пользователь добавил вас в свой список контактов"
 
@@ -1037,18 +1037,16 @@ msgid "comment: "
 msgstr "комментарий: "
 
 #: src/icqdialogs.cc:1115
-#, fuzzy
 msgid "None"
-msgstr "Готово"
+msgstr "Нет"
 
 #: src/icqdialogs.cc:1116
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: src/icqdialogs.cc:1117
-#, fuzzy
 msgid "Polish"
-msgstr "Оправить"
+msgstr "Польский"
 
 #: src/icqdialogs.cc:1146
 msgid " CenterICQ configuration "
@@ -1080,27 +1078,23 @@ msgstr " Кнопки а-ля emacs в редакторе : %s "
 
 #: src/icqdialogs.cc:1175
 msgid " Codepages conversion "
-msgstr ""
+msgstr " Перекодировка сообщений "
 
 #: src/icqdialogs.cc:1182
-#, fuzzy, c-format
 msgid " Switch to language preset : %s "
-msgstr " 1й язык : %s "
+msgstr " Установить автоматически для : %s "
 
 #: src/icqdialogs.cc:1183
-#, fuzzy, c-format
 msgid " Convert from : %s "
-msgstr " Страна : %s "
+msgstr " Конвертировать из : %s "
 
 #: src/icqdialogs.cc:1184
-#, fuzzy, c-format
 msgid " Convert to : %s "
-msgstr " Страна : %s "
+msgstr " Конвертировать в : %s "
 
 #: src/icqdialogs.cc:1185
-#, fuzzy, c-format
 msgid " For protocols : %s "
-msgstr " Все протоколы "
+msgstr " Для протоколов : %s "
 
 #: src/icqdialogs.cc:1187
 msgid " Contact list "
@@ -1236,11 +1230,11 @@ msgstr "Имя HTTP прокси-сервера: "
 
 #: src/icqdialogs.cc:1342
 msgid "Charset to convert messages from: "
-msgstr ""
+msgstr "Кодовая страница, из которой конвертировать: "
 
 #: src/icqdialogs.cc:1347
 msgid "Charset to convert messages to: "
-msgstr ""
+msgstr "Кодовая страница, в которую конвертировать: "
 
 #: src/icqdialogs.cc:1476
 msgid "Your details have been fetched"
@@ -2940,39 +2934,23 @@ msgstr "Выберите контакты для перемещения"
 msgid "Mass move selected users to.."
 msgstr "Переместить выбранные контакты.."
 
-#: src/hooks/msnhook.cc:347
-#, fuzzy, c-format
+#: src/hooks/msnhook.cc:367
 msgid "+ [msn] reverse users listing finished, %d found"
-msgstr "вывод списка завершен, %d найдено"
+msgstr "+ [msn] чтение списка завершено, %d найдено"
 
-#: src/hooks/msnhook.cc:637
+#: src/hooks/msnhook.cc:682
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
-msgstr ""
+msgstr "+ [msn] нечитаная почта: %d в inbox, %d в фолдерах"
 
-#: src/hooks/msnhook.cc:644
-#, fuzzy, c-format
+#: src/hooks/msnhook.cc:689
 msgid "+ [msn] e-mail from %s, %s"
-msgstr "+ [yahoo] e-mail от %s, %s"
+msgstr "+ [msn] e-mail от %s, %s"
 
-#: src/hooks/msnhook.cc:732
-#, fuzzy
+#: src/hooks/msnhook.cc:777
 msgid "+ [msn] cannot connect: "
-msgstr "+ [yahoo] невозможно соединиться: "
+msgstr "+ [msn] невозможно соединиться: "
 
-#: src/hooks/msnhook.cc:750
-#, fuzzy
+#: src/hooks/msnhook.cc:795
 msgid "verify the hostname and port"
 msgstr "проверьте имя хоста и порт"
-
-#~ msgid " Russian win/koi translation for : %s"
-#~ msgstr " Перекодировка win1251-koi8 для : %s "
-
-#~ msgid " Russian win/koi translation : %s "
-#~ msgstr " Перекодировка win1251-koi8 : %s "
-
-#~ msgid " Default charset : %s "
-#~ msgstr " Основная кодировка : %s "
-
-#~ msgid "Default charset: "
-#~ msgstr "Основная кодировка: "

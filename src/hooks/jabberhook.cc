@@ -1,9 +1,9 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.65 2004/02/01 17:52:10 konst Exp $
+* $Id: jabberhook.cc,v 1.66 2004/02/08 09:37:36 konst Exp $
 *
-* Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
