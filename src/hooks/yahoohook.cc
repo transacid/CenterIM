@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.37 2002/07/03 09:16:53 konst Exp $
+* $Id: yahoohook.cc,v 1.38 2002/07/03 09:44:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -128,7 +128,10 @@ void yahoohook::connect() {
 
 	    if(!yahoo_cmd_logon(context, stat2int[ourstatus = available])) {
 		fonline = true;
-		setstatus(manualstatus);
+
+		if(manualstatus != ourstatus)
+		    setstatus(manualstatus);
+
 		face.log(_("+ [yahoo] logged in"));
 	    }
 	}
@@ -342,26 +345,29 @@ void yahoohook::disconnected(yahoo_context *y) {
     face.update();
 }
 
-void yahoohook::userlogon(yahoo_context *y, const char *nick, int status) {
-    yhook.userstatus(yhook.context, nick, status);
+void yahoohook::userlogon(yahoo_context *y, struct yahoo_idstatus *rec) {
+    yhook.userstatus(yhook.context, rec);
 }
 
-void yahoohook::userlogoff(yahoo_context *y, const char *nick) {
-    yhook.userstatus(yhook.context, nick, -1);
+void yahoohook::userlogoff(yahoo_context *y, struct yahoo_idstatus *rec) {
+    yhook.userstatus(yhook.context, rec);
 }
 
-void yahoohook::userstatus(yahoo_context *y, const char *nick, int status) {
-    if(nick)
-    if(strlen(nick)) {
-	imcontact ic(nick, yahoo);
+void yahoohook::userstatus(yahoo_context *y, struct yahoo_idstatus *rec) {
+    if(rec->id)
+    if(strlen(rec->id)) {
+	imcontact ic(rec->id, yahoo);
 	icqcontact *c = clist.get(ic);
 
-	if(!c) {
+	if(!c)
+	if(conf.getourid(yahoo).nickname != rec->id) {
 	    c = clist.addnew(ic, false);
 	}
 
-	logger.putonline(ic, c->getstatus(), yhook.yahoo2imstatus(status));
-	c->setstatus(yhook.yahoo2imstatus(status));
+	logger.putonline(ic, c->getstatus(), yhook.yahoo2imstatus(rec->status));
+	c->setstatus(yhook.yahoo2imstatus(rec->status));
+	if(rec->status_msg)
+	    c->setabout(rusconv("wk", rec->status_msg));
 
 	if(c->getstatus() != offline) {
 	    c->setlastseen();
@@ -385,13 +391,5 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 }
 
 void yahoohook::log(yahoo_context *y, const char *msg) {
-    static string s;
-
-    s += msg;
-
-    if(!s.empty())
-    if(s.substr(s.size()-1) == "\n") {
-	face.log(s);
-	s = "";
-    }
+    face.log(msg);
 }

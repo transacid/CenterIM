@@ -11,9 +11,9 @@ class yahoohook: public abstracthook {
 	imstatus ourstatus;
 
 	static void disconnected(yahoo_context *y);
-	static void userlogon(yahoo_context *y, const char *nick, int status);
-	static void userlogoff(yahoo_context *y, const char *nick);
-	static void userstatus(yahoo_context *y, const char *nick, int status);
+	static void userlogon(yahoo_context *y, struct yahoo_idstatus *rec);
+	static void userlogoff(yahoo_context *y, struct yahoo_idstatus *rec);
+	static void userstatus(yahoo_context *y, struct yahoo_idstatus *rec);
 	static void recvbounced(yahoo_context *y, const char *nick);
 	static void recvmessage(yahoo_context *y, const char *nick, const char *msg);
 	static void log(yahoo_context *y, const char *msg);
