@@ -9,7 +9,7 @@ struct imsearchparams {
     imsearchparams() {
 	onlineonly = sincelast = false;
 	uin = 0;
-	minage = maxage = country = language = 0;
+	minage = maxage = country = language = randomgroup = 0;
 	gender = genderUnspec;
 	agerange = ICQ2000::range_NoRange;
     };
@@ -21,10 +21,10 @@ struct imsearchparams {
     protocolname pname;
     bool onlineonly, sincelast;
     unsigned int uin;
-    unsigned short minage, maxage, country, language;
+    unsigned short minage, maxage, country, language, randomgroup;
     ICQ2000::AgeRange agerange;
     imgender gender;
-    string firstname, lastname, nick, city, state;
+    string firstname, lastname, nick, city, state, kwords;
     string company, department, position, email, room;
 
     void save(const string &prname) const;

@@ -18,7 +18,7 @@ imcontact::imcontact(const string &anick, protocolname apname) {
 }
 
 imcontact::imcontact(const icqcontact *c) {
-    *this = c->getdesc();
+    if(c) *this = c->getdesc();
 }
 
 bool imcontact::operator == (const imcontact &ainfo) const {

@@ -47,6 +47,7 @@ class icqhook: public abstracthook, public SigC::Object {
 	void resolve();
 	void sendinvisible();
 	void updateinforecord(ContactRef ic, icqcontact *c);
+	void processemailevent(const string &sender, const string &email, const string &message);
 
     public:
 	icqhook();

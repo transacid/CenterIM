@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.90 2002/07/16 09:03:29 konst Exp $
+* $Id: icqhook.cc,v 1.91 2002/08/09 17:10:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -503,7 +503,13 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	params.gender == genderFemale ? ICQ2000::SEX_FEMALE :
 	ICQ2000::SEX_UNSPECIFIED;
 
-    if(!params.email.empty() || params.minage || params.maxage ||
+    if(!params.kwords.empty()) {
+	searchevent = cli.searchForContacts(params.kwords);
+
+    } else if(params.randomgroup) {
+	searchevent = cli.searchForContacts((ICQ2000::RandomChatGroup) params.randomgroup);
+
+    } else if(!params.email.empty() || params.minage || params.maxage ||
     !params.city.empty() || !params.state.empty() ||
     !params.company.empty() || !params.department.empty() ||
     !params.position.empty() || params.onlineonly ||
@@ -514,9 +520,11 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	    params.language, params.city, params.state, params.country,
 	    params.company, params.department, params.position,
 	    params.onlineonly);
+
     } else {
 	searchevent = cli.searchForContacts(params.nick, params.firstname,
 	    params.lastname);
+
     }
 }
 
@@ -589,6 +597,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ic->setHomepageInfo(hpage);
     ic->setWorkInfo(work);
 
+    cli.setRandomChatGroup(cbinfo.randomgroup);
     cli.uploadSelfDetails();
     cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
 }
@@ -716,6 +725,37 @@ void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
     }
 }
 
+void icqhook::processemailevent(const string &sender, const string &email, const string &message) {
+    icqcontact *c = clist.getemail(email);
+
+    if(!c)
+    if(c = clist.addnew(imcontact(0, infocard), true)) {
+	c->setdispnick(email);
+	c->setnick(email);
+
+	icqcontact::basicinfo b = c->getbasicinfo();
+
+	if(sender != email) {
+	    int pos = sender.find(" ");
+
+	    if(pos != -1) {
+		b.fname = sender.substr(0, pos);
+		b.lname = sender.substr(pos+1);
+	    } else {
+		b.fname = sender;
+	    }
+	}
+
+	b.email = email;
+	c->setbasicinfo(b);
+    }
+
+    if(c) {
+	em.store(imemail(c, imevent::incoming,
+	    rusconv("wk", message)));
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -839,34 +879,14 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	EmailExEvent *r;
 
 	if(r = dynamic_cast<EmailExEvent *>(ev)) {
-	    icqcontact *c = clist.getemail(r->getEmail());
+	    processemailevent(r->getSender(), r->getEmail(), r->getMessage());
+	}
 
-	    if(!c)
-	    if(c = clist.addnew(imcontact(0, infocard), true)) {
-		c->setdispnick(r->getEmail());
-		c->setnick(r->getEmail());
+    } else if(ev->getType() == MessageEvent::WebPager) {
+	WebPagerEvent *r;
 
-		icqcontact::basicinfo b = c->getbasicinfo();
-
-		if(r->getSender() != r->getEmail()) {
-		    int pos = r->getSender().find(" ");
-
-		    if(pos != -1) {
-			b.fname = r->getSender().substr(0, pos);
-			b.lname = r->getSender().substr(pos+1);
-		    } else {
-			b.fname = r->getSender();
-		    }
-		}
-
-		b.email = r->getEmail();
-		c->setbasicinfo(b);
-	    }
-
-	    if(c) {
-		em.store(imemail(c, imevent::incoming,
-		    rusconv("wk", r->getMessage())));
-	    }
+	if(r = dynamic_cast<WebPagerEvent *>(ev)) {
+	    processemailevent(r->getSender(), r->getEmail(), r->getMessage());
 	}
 
     } else if(ev->getType() == MessageEvent::UserAdd) {
@@ -1065,12 +1085,18 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 	    icqcontact *c = new icqcontact(imcontact(cont->getUIN(), icq));
 	    icqcontact::basicinfo binfo = c->getbasicinfo();
 
-	    c->setnick(rusconv("wk", cont->getAlias()));
-	    c->setdispnick(c->getnick());
+	    if(ev->getSearchType() == SearchResultEvent::RandomChat) {
+		binfo.fname = _("Random Chat User");
 
-	    binfo.fname = rusconv("wk", cont->getFirstName());
-	    binfo.lname = rusconv("wk", cont->getLastName());
-	    binfo.email = rusconv("wk", cont->getEmail());
+	    } else {
+		c->setnick(rusconv("wk", cont->getAlias()));
+		c->setdispnick(c->getnick());
+
+		binfo.fname = rusconv("wk", cont->getFirstName());
+		binfo.lname = rusconv("wk", cont->getLastName());
+		binfo.email = rusconv("wk", cont->getEmail());
+
+	    }
 
 	    c->setbasicinfo(binfo);
 

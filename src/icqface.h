@@ -15,6 +15,7 @@
 #include "imcontroller.h"
 
 #include <libicq2000/userinfohelpers.h>
+#include <libicq2000/constants.h>
 
 #define ASK_YES         2
 #define ASK_NO          4
@@ -123,11 +124,12 @@ class icqface {
 	void infoabout(dialogbox &db, icqcontact *c);
 
 	void gendetails(treeview *tree, icqcontact *c = 0);
-	void selectgender(imgender &f);
 
+	void selectgender(imgender &f);
 	void selectcountry(unsigned short &f);
 	void selectlanguage(unsigned short &f);
 	void selectagerange(ICQ2000::AgeRange &r);
+	void selectrandomgroup(unsigned short &f);
 
 	void saveworkarea();
 	void restoreworkarea();
@@ -241,6 +243,20 @@ static const char *stragerange[ICQ2000::range_60_above+1] = {
   "40-49",
   "50-59",
   _("60-above")
+};
+
+static const char *strrandomgroup[ICQ2000::group_SeekingMen+2] = {
+    "",
+    _("General Chat"),
+    _("Romance"),
+    _("Games"),
+    _("Students"),
+    _("20 Something"),
+    _("30 Something"),
+    _("40 Something"),
+    _("50 Plus"),
+    _("Seeking Women"),
+    _("Seeking Men")
 };
 
 static const char *eventviewresultnames[icqface::eventviewresult_size] = {

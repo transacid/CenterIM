@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.76 2002/08/06 14:44:37 konst Exp $
+* $Id: icqdialogs.cc,v 1.77 2002/08/09 17:10:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -184,7 +184,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, " %s ", strint(s.uin));
 
-		if(!s.uin) {
+		if(!s.uin && !s.randomgroup && s.kwords.empty()) {
 		    i = tree.addnode(_(" Details "));
 		    tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
 		    tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
@@ -209,6 +209,16 @@ bool icqface::finddialog(imsearchparams &s) {
 
 		    i = tree.addnode(_(" Online only "));
 		    tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
+		}
+
+		if(!s.uin && s.kwords.empty()) {
+		    i = tree.addnode(_(" Random chat group "));
+		    tree.addleaff(i, 0, 28, " %s ", strrandomgroup[s.randomgroup]);
+		} 
+
+		if(!s.uin && !s.randomgroup) {
+		    i = tree.addnode(_(" Keywords "));
+		    tree.addleaff(i, 0, 29, " %s ", s.kwords.c_str());
 		}
 		break;
 
@@ -294,6 +304,8 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 25: s.onlineonly = !s.onlineonly; break;
 		    case 26: s.room = inputstr(_("Channel: "), s.room); break;
 		    case 27: s.firstname = inputstr(_("Name: "), s.firstname); break;
+		    case 28: selectrandomgroup(s.randomgroup); break;
+		    case 29: s.kwords = inputstr(_("Keywords: "), s.kwords); break;
 		}
 		break;
 
@@ -381,6 +393,8 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 38, _(" 3rd language : %s "),
 	    ICQ2000::UserInfoHelpers::getLanguageIDtoString(mi.lang3).c_str());
 
+	i = tree->addnode(_(" Random chat group "));
+	tree->addleaff(i, 0, 42, " %s ", strrandomgroup[bi.randomgroup]);
     }
 
     i = tree->addnode(_(" About "));
@@ -502,7 +516,6 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		case 26: wi.state = inputstr(_("State: "), wi.state); break;
 		case 27: selectcountry(wi.country); break;
 		case 28: wi.street = inputstr(_("Street address: "), wi.street); break;
-		case 41: wi.zip = inputstr(_("Zip code: "), wi.zip); break;
 		case 29: wi.company = inputstr(_("Company: "), wi.company); break;
 		case 30: wi.dept = inputstr(_("Department: "), wi.dept); break;
 		case 31: wi.position = inputstr(_("Position: "), wi.position); break;
@@ -518,6 +531,8 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 
 		case 39: edit(about, _("About")); break;
 		case 40: bi.requiresauth = !bi.requiresauth; break;
+		case 41: wi.zip = inputstr(_("Zip code: "), wi.zip); break;
+		case 42: selectrandomgroup(bi.randomgroup); break;
 	    }
 
 	    c->setbasicinfo(bi);
@@ -573,6 +588,24 @@ void icqface::selectlanguage(unsigned short &f) {
     i = m.open();
     m.close();
     
+    if(i) f = i-1;
+}
+
+void icqface::selectrandomgroup(unsigned short &f) {
+    int i;
+    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-13, 20, LINES-3, conf.getcolor(cp_dialog_menu)));
+
+    m.additemf(" %s", _("none"));
+
+    for(i = 1; i <= ((int) ICQ2000::group_SeekingMen)+1; i++) {
+	m.additemf(" %s", strrandomgroup[i]);
+    }
+
+    m.setpos(f);
+    i = m.open();
+    m.close();
+
     if(i) f = i-1;
 }
 
