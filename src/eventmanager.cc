@@ -122,23 +122,7 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 	fhist.open(fname.c_str(), ios::app);
 
 	if(fhist.is_open()) {
-	    if(ev.gettype() == imevent::message) {
-		const immessage *m = static_cast<const immessage *>(&ev);
-		m->write(fhist);
-	    } else if(ev.gettype() == imevent::url) {
-		const imurl *m = static_cast<const imurl *>(&ev);
-		m->write(fhist);
-	    } else if(ev.gettype() == imevent::sms) {
-		const imsms *m = static_cast<const imsms *>(&ev);
-		m->write(fhist);
-	    } else if(ev.gettype() == imevent::authorization) {
-		const imauthorization *m = static_cast<const imauthorization *>(&ev);
-		m->write(fhist);
-	    } else if(ev.gettype() == imevent::email) {
-		const imemail *m = static_cast<const imemail *>(&ev);
-		m->write(fhist);
-	    }
-
+	    ev.write(fhist);
 	    fhist.close();
 	}
 

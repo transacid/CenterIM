@@ -35,6 +35,10 @@ time_t imevent::gettimestamp() const {
     return timestamp;
 }
 
+const string imevent::gettext() const {
+    return "";
+}
+
 void imevent::settimestamp(time_t atimestamp) {
     timestamp = atimestamp;
 }
@@ -207,6 +211,10 @@ const string imurl::geturl() const {
 
 const string imurl::getdescription() const {
     return description;
+}
+
+const string imurl::gettext() const {
+    return url + "\n----\n" + description;
 }
 
 void imurl::write(ofstream &f) const {

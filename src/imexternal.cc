@@ -178,11 +178,7 @@ void imexternal::action::execscript() {
 	    close(inpipe[1]);
 
 	    if(options & aostdin) {
-		if(currentev->gettype() == imevent::message) {
-		    const immessage *m = static_cast<const immessage *>(currentev);
-		    text = m->gettext();
-		}
-
+		text = currentev->gettext();
 		write(outpipe[1], text.c_str(), text.size());
 		close(outpipe[1]);
 	    }

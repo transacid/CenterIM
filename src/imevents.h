@@ -43,6 +43,8 @@ class imevent {
 
 	imevent *getevent() const;
 
+	virtual const string gettext() const;
+
 	virtual bool empty() const;
 	virtual bool contains(const string atext) const;
 
@@ -81,6 +83,8 @@ class imurl: public imevent {
 
 	const string geturl() const;
 	const string getdescription() const;
+
+	const string gettext() const;
 
 	bool empty() const;
 	bool contains(const string atext) const;

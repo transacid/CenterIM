@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.83 2002/02/22 13:02:16 konst Exp $
+* $Id: icqface.cc,v 1.84 2002/02/23 13:13:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1542,52 +1542,46 @@ icqface::eventviewresult icqface::eventview(const imevent *ev) {
     vector<eventviewresult>::iterator ia;
 
     if(ev->gettype() == imevent::message) {
-	const immessage *m = static_cast<const immessage *>(ev);
-	text = m->gettext();
-
 	actions.push_back(forward);
+
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
+
 	actions.push_back(ok);
 
     } else if(ev->gettype() == imevent::url) {
-	const imurl *m = static_cast<const imurl *>(ev);
-	text = m->geturl() + "\n\n" + m->getdescription();
-
 	actions.push_back(forward);
 	actions.push_back(open);
+
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
+
 	actions.push_back(ok);
 
     } else if(ev->gettype() == imevent::sms) {
-	const imsms *m = static_cast<const imsms *>(ev);
-	text = m->gettext();
-
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(reply);
 	}
+
 	actions.push_back(ok);
 
     } else if(ev->gettype() == imevent::authorization) {
-	const imauthorization *m = static_cast<const imauthorization *>(ev);
-	text = m->gettext();
-
 	if(ev->getdirection() == imevent::incoming) {
 	    actions.push_back(accept);
 	    actions.push_back(reject);
 	}
+
 	actions.push_back(ok);
 
     } else if(ev->gettype() == imevent::email) {
-	const imemail *m = static_cast<const imemail *>(ev);
-	text = m->gettext();
-
 	actions.push_back(forward);
 	actions.push_back(ok);
+
     }
+
+    text = ev->gettext();
 
     saveworkarea();
     clearworkarea();
@@ -1663,25 +1657,8 @@ void icqface::histmake(const vector<imevent *> &hist) {
 
 	color = 0;
 
-	text = (string) + " " +
-	    time2str(&(t = ev.gettimestamp()), "DD.MM hh:mm", buf) + " ";
-
-	if(ev.gettype() == imevent::message) {
-	    const immessage *m = static_cast<const immessage *>(&ev);
-	    text += m->gettext();
-	} else if(ev.gettype() == imevent::url) {
-	    const imurl *m = static_cast<const imurl *>(&ev);
-	    text += m->geturl() + " " + m->getdescription();
-	} else if(ev.gettype() == imevent::sms) {
-	    const imsms *m = static_cast<const imsms *>(&ev);
-	    text += m->gettext();
-	} else if(ev.gettype() == imevent::authorization) {
-	    const imauthorization *m = static_cast<const imauthorization *>(&ev);
-	    text += m->gettext();
-	} else if(ev.gettype() == imevent::email) {
-	    const imemail *m = static_cast<const imemail *>(&ev);
-	    text += m->gettext();
-	}
+	text = (string) + " " + time2str(&(t = ev.gettimestamp()), "DD.MM hh:mm", buf) + " ";
+	text += ev.gettext();
 
 	if(ev.getdirection() == imevent::incoming) {
 	    color = conf.getcolor(cp_main_text);
