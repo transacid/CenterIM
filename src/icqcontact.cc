@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.78 2002/12/12 14:14:33 konst Exp $
+* $Id: icqcontact.cc,v 1.79 2002/12/15 15:45:19 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -553,14 +553,14 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 
 	    if(sf.substr(1) == "spk1") {
 		for(i = 0; i < 3; i++) {
-		    if(i) delay(90);
+		    if(i) usleep(90000);
 		    setbeep((i+1)*100, 60);
 		    printf("\a");
 		    fflush(stdout);
 		}
 	    } else if(sf.substr(1) == "spk2") {
 		for(i = 0; i < 2; i++) {
-		    if(i) delay(90);
+		    if(i) usleep(90000);
 		    setbeep((i+1)*300, 60);
 		    printf("\a");
 		    fflush(stdout);
@@ -570,21 +570,21 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 		    setbeep((i+1)*200, 60-i*10);
 		    printf("\a");
 		    fflush(stdout);
-		    delay(90-i*10);
+		    usleep(90000-i*10000);
 		}
 	    } else if(sf.substr(1) == "spk4") {
 		for(i = 0; i < 4; i++) {
 		    setbeep((i+1)*400, 60);
 		    printf("\a");
 		    fflush(stdout);
-		    delay(90);
+		    usleep(90000);
 		}
 	    } else if(sf.substr(1) == "spk5") {
 		for(i = 0; i < 4; i++) {
 		    setbeep((i+1)*250, 60+i);
 		    printf("\a");
 		    fflush(stdout);
-		    delay(90-i*5);
+		    usleep(90000-i*5000);
 		}
 	    }
 	} else {
