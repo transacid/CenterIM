@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.13 2001/09/26 09:58:34 konst Exp $
+* $Id: centericq.cc,v 1.14 2001/09/26 14:23:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -659,10 +659,12 @@ icqcontact *centericq::adduin(unsigned int uin) {
 	face.log(_("+ user %s, %lu is already on the list"), c->getnick().c_str(), uin);
 	c = 0;
     } else {
-	if(face.ask(_("Notify the user he/she has been added?"),
-	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-	    icq_AlertAddUser(&icql, uin);
-	    face.log(_("+ the notification has been sent to %lu"), uin);
+	if(icql.icq_Status != STATUS_OFFLINE) {
+	    if(face.ask(_("Notify the user he/she has been added?"),
+	    ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
+		icq_AlertAddUser(&icql, uin);
+		face.log(_("+ the notification has been sent to %lu"), uin);
+	    }
 	}
 
 	c = clist.addnew(uin, false);
