@@ -5,13 +5,137 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 3.13.3\n"
-"POT-Creation-Date: 2002-01-26 18:13+0200\n"
+"POT-Creation-Date: 2002-01-27 15:03+0200\n"
 "PO-Revision-Date: 2001-07-08 05:03+02:00\n"
 "Last-Translator: Leandro Noferini <lnoferin@cybervalley.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+# src/centericq.cc:65 src/icqdialogs.cc:87
+#: src/centericq.cc:115
+#, fuzzy
+msgid "password: "
+msgstr "Password: "
+
+# src/centericq.cc:201
+#: src/centericq.cc:150
+#, fuzzy
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M menù contatto attuale, F3/S cambia lo stato icq, F4/G azioni generali, "
+"Q termina"
+
+# src/centericq.cc:241
+#: src/centericq.cc:204
+#, fuzzy, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignoro tutti gli eventi provenienti da %s (%lu)?"
+
+# src/centericq.cc:285
+#: src/centericq.cc:243
+#, fuzzy, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Sei sicuro di voler eliminare %s (%lu)?"
+
+# src/centericq.cc:292
+#: src/centericq.cc:251
+msgid "New nickname to show: "
+msgstr "Nuovo soprannome da mostrare: "
+
+#: src/centericq.cc:259
+msgid "Select a group to move the user to"
+msgstr ""
+
+# src/centericq.cc:549
+#: src/centericq.cc:425
+#, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ è arrivata nuova posta, %d messaggi"
+
+# src/centericq.cc:550
+#: src/centericq.cc:426
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ l'ultimo messaggio da %s"
+
+#: src/centericq.cc:460
+msgid "! another running copy of centericq detected"
+msgstr ""
+
+#: src/centericq.cc:461
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr ""
+
+# src/icqdialogs.cc:561
+#: src/centericq.cc:536
+#, fuzzy
+msgid "Mobile number: "
+msgstr "nome file: "
+
+# src/icqface.cc:1613
+#: src/centericq.cc:719
+#, fuzzy, c-format
+msgid "+ no history items for %s"
+msgstr "+ nessun elemento di storia per %s, %lu"
+
+# src/icqface.cc:1151
+#: src/centericq.cc:745
+#, fuzzy, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %lu è stato aggiunto alla lista"
+
+# src/icqface.cc:1682
+#: src/centericq.cc:751
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Seleziona i contatti da aggiungere alla lista"
+
+#: src/centericq.cc:758
+msgid "Notify the user he/she has been added?"
+msgstr ""
+
+# src/icqface.cc:1157
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:761
+#, fuzzy, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ autorizzazione inviata a %lu"
+
+# src/icqface.cc:1151
+#: src/centericq.cc:773
+#, fuzzy, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %lu è stato aggiunto alla lista"
+
+# src/icqhook.cc:594
+#: src/centericq.cc:845
+msgid "+ the user is back"
+msgstr "+ l'utente è tornato"
+
+#: src/centericq.cc:860
+#, c-format
+msgid "+ [%s] status restored"
+msgstr ""
+
+# src/icqhook.cc:587
+#: src/centericq.cc:874
+#, fuzzy, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ imposta automaticamente N/A"
+
+# src/icqface.cc:874
+#: src/centericq.cc:876
+#, fuzzy
+msgid "away"
+msgstr "Assente"
+
+#: src/centericq.cc:876
+msgid "n/a"
+msgstr ""
 
 # src/icqface.cc:48
 #: src/icqcontact.cc:639
@@ -1505,130 +1629,6 @@ msgstr ""
 msgid "+ [yahoo] bounced msg"
 msgstr "+ connessione al server icq"
 
-# src/centericq.cc:65 src/icqdialogs.cc:87
-#: src/centericq.cc:115
-#, fuzzy
-msgid "password: "
-msgstr "Password: "
-
-# src/centericq.cc:201
-#: src/centericq.cc:150
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M menù contatto attuale, F3/S cambia lo stato icq, F4/G azioni generali, "
-"Q termina"
-
-# src/centericq.cc:241
-#: src/centericq.cc:204
-#, fuzzy, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignoro tutti gli eventi provenienti da %s (%lu)?"
-
-# src/centericq.cc:285
-#: src/centericq.cc:243
-#, fuzzy, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Sei sicuro di voler eliminare %s (%lu)?"
-
-# src/centericq.cc:292
-#: src/centericq.cc:251
-msgid "New nickname to show: "
-msgstr "Nuovo soprannome da mostrare: "
-
-#: src/centericq.cc:259
-msgid "Select a group to move the user to"
-msgstr ""
-
-# src/centericq.cc:549
-#: src/centericq.cc:425
-#, c-format
-msgid "+ new mail arrived, %d messages"
-msgstr "+ è arrivata nuova posta, %d messaggi"
-
-# src/centericq.cc:550
-#: src/centericq.cc:426
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ l'ultimo messaggio da %s"
-
-#: src/centericq.cc:460
-msgid "! another running copy of centericq detected"
-msgstr ""
-
-#: src/centericq.cc:461
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr ""
-
-# src/icqdialogs.cc:561
-#: src/centericq.cc:536
-#, fuzzy
-msgid "Mobile number: "
-msgstr "nome file: "
-
-# src/icqface.cc:1613
-#: src/centericq.cc:719
-#, fuzzy, c-format
-msgid "+ no history items for %s"
-msgstr "+ nessun elemento di storia per %s, %lu"
-
-# src/icqface.cc:1151
-#: src/centericq.cc:745
-#, fuzzy, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %lu è stato aggiunto alla lista"
-
-# src/icqface.cc:1682
-#: src/centericq.cc:751
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Seleziona i contatti da aggiungere alla lista"
-
-#: src/centericq.cc:758
-msgid "Notify the user he/she has been added?"
-msgstr ""
-
-# src/icqface.cc:1157
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:761
-#, fuzzy, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ autorizzazione inviata a %lu"
-
-# src/icqface.cc:1151
-#: src/centericq.cc:773
-#, fuzzy, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %lu è stato aggiunto alla lista"
-
-# src/icqhook.cc:594
-#: src/centericq.cc:845
-msgid "+ the user is back"
-msgstr "+ l'utente è tornato"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ [%s] status restored"
-msgstr ""
-
-# src/icqhook.cc:587
-#: src/centericq.cc:874
-#, fuzzy, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ imposta automaticamente N/A"
-
-# src/icqface.cc:874
-#: src/centericq.cc:876
-#, fuzzy
-msgid "away"
-msgstr "Assente"
-
-#: src/centericq.cc:876
-msgid "n/a"
-msgstr ""
-
 # src/icqhook.cc:73
 #: src/hooks/msnhook.cc:70
 #, fuzzy
@@ -1780,45 +1780,6 @@ msgstr "Accetta"
 msgid "Reject"
 msgstr ""
 
-# src/icqface.cc:868
-#: src/imcontact.h:44
-msgid "Offline"
-msgstr "Sconnesso"
-
-# src/icqface.cc:875
-#: src/imcontact.h:45
-msgid "Online"
-msgstr "Connesso"
-
-# src/icqface.cc:869
-#: src/imcontact.h:46
-msgid "Invisible"
-msgstr "Invisibile"
-
-# src/icqface.cc:870
-#: src/imcontact.h:47
-msgid "Free for chat"
-msgstr "Disponibile per chat"
-
-#: src/imcontact.h:48
-msgid "DND"
-msgstr ""
-
-# src/icqface.cc:872
-#: src/imcontact.h:49
-msgid "Occupied"
-msgstr "Occupato"
-
-#: src/imcontact.h:50
-msgid "N/A"
-msgstr ""
-
-# src/icqface.cc:874
-#: src/imcontact.h:51
-#, fuzzy
-msgid "Away"
-msgstr "Assente"
-
 # src/icqface.cc:598 src/icqface.cc:655
 #: src/imlogger.h:30
 #, fuzzy
@@ -1836,6 +1797,31 @@ msgstr ""
 #: src/imlogger.h:30
 msgid "authorization"
 msgstr ""
+
+# src/icqface.cc:868
+#~ msgid "Offline"
+#~ msgstr "Sconnesso"
+
+# src/icqface.cc:875
+#~ msgid "Online"
+#~ msgstr "Connesso"
+
+# src/icqface.cc:869
+#~ msgid "Invisible"
+#~ msgstr "Invisibile"
+
+# src/icqface.cc:870
+#~ msgid "Free for chat"
+#~ msgstr "Disponibile per chat"
+
+# src/icqface.cc:872
+#~ msgid "Occupied"
+#~ msgstr "Occupato"
+
+# src/icqface.cc:874
+#, fuzzy
+#~ msgid "Away"
+#~ msgstr "Assente"
 
 # src/icqface.cc:650
 #~ msgid "Occupation"

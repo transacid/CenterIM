@@ -6,12 +6,120 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-01-26 18:13+0200\n"
+"POT-Creation-Date: 2002-01-27 15:03+0200\n"
 "Last-Translator: Paulo Oliveira Filho <paulo.oliveira.filho@mail.com>\n"
 "Language-Team: Brazilian <???>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: iso-8859-1\n"
+
+#: src/centericq.cc:115
+#, fuzzy
+msgid "password: "
+msgstr "Senha: "
+
+#: src/centericq.cc:150
+#, fuzzy
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M opções do contato atual, F3/S mudar status do ICQ, F4/G ações gerais, Q "
+"sair"
+
+#: src/centericq.cc:204
+#, fuzzy, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignorar todos os eventos de %s (%lu)?"
+
+#: src/centericq.cc:243
+#, fuzzy, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Você tem certeza que deseja remover %s (%lu)?"
+
+#: src/centericq.cc:251
+msgid "New nickname to show: "
+msgstr "Novo apelido a exibir: "
+
+#: src/centericq.cc:259
+msgid "Select a group to move the user to"
+msgstr ""
+
+#: src/centericq.cc:425
+#, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ novo mail chegou, %d mensagens"
+
+#: src/centericq.cc:426
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ última msg de %s"
+
+#: src/centericq.cc:460
+msgid "! another running copy of centericq detected"
+msgstr ""
+
+#: src/centericq.cc:461
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr ""
+
+#: src/centericq.cc:536
+#, fuzzy
+msgid "Mobile number: "
+msgstr "nome do arquivo: "
+
+#: src/centericq.cc:719
+#, fuzzy, c-format
+msgid "+ no history items for %s"
+msgstr "+ não existem items no histórico para %s, %lu"
+
+#: src/centericq.cc:745
+#, fuzzy, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %lu foi adicionar para a lista"
+
+#: src/centericq.cc:751
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Selecione os contatos para adicionar a lista"
+
+#: src/centericq.cc:758
+msgid "Notify the user he/she has been added?"
+msgstr ""
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:761
+#, fuzzy, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ autorização enviada para %lu"
+
+#: src/centericq.cc:773
+#, fuzzy, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %lu foi adicionar para a lista"
+
+#: src/centericq.cc:845
+msgid "+ the user is back"
+msgstr "+ o usuário está de volta"
+
+#: src/centericq.cc:860
+#, c-format
+msgid "+ [%s] status restored"
+msgstr ""
+
+#: src/centericq.cc:874
+#, fuzzy, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ automaticamente setar NÃO DISPONÍVEL (n/a)"
+
+#: src/centericq.cc:876
+#, fuzzy
+msgid "away"
+msgstr "Afastado (away)"
+
+#: src/centericq.cc:876
+msgid "n/a"
+msgstr ""
 
 #: src/icqcontact.cc:639
 msgid "Jan"
@@ -1253,114 +1361,6 @@ msgstr ""
 msgid "+ [yahoo] bounced msg"
 msgstr "+ conectando para o servidor ICQ"
 
-#: src/centericq.cc:115
-#, fuzzy
-msgid "password: "
-msgstr "Senha: "
-
-#: src/centericq.cc:150
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M opções do contato atual, F3/S mudar status do ICQ, F4/G ações gerais, Q "
-"sair"
-
-#: src/centericq.cc:204
-#, fuzzy, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignorar todos os eventos de %s (%lu)?"
-
-#: src/centericq.cc:243
-#, fuzzy, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Você tem certeza que deseja remover %s (%lu)?"
-
-#: src/centericq.cc:251
-msgid "New nickname to show: "
-msgstr "Novo apelido a exibir: "
-
-#: src/centericq.cc:259
-msgid "Select a group to move the user to"
-msgstr ""
-
-#: src/centericq.cc:425
-#, c-format
-msgid "+ new mail arrived, %d messages"
-msgstr "+ novo mail chegou, %d mensagens"
-
-#: src/centericq.cc:426
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ última msg de %s"
-
-#: src/centericq.cc:460
-msgid "! another running copy of centericq detected"
-msgstr ""
-
-#: src/centericq.cc:461
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr ""
-
-#: src/centericq.cc:536
-#, fuzzy
-msgid "Mobile number: "
-msgstr "nome do arquivo: "
-
-#: src/centericq.cc:719
-#, fuzzy, c-format
-msgid "+ no history items for %s"
-msgstr "+ não existem items no histórico para %s, %lu"
-
-#: src/centericq.cc:745
-#, fuzzy, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %lu foi adicionar para a lista"
-
-#: src/centericq.cc:751
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Selecione os contatos para adicionar a lista"
-
-#: src/centericq.cc:758
-msgid "Notify the user he/she has been added?"
-msgstr ""
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:761
-#, fuzzy, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ autorização enviada para %lu"
-
-#: src/centericq.cc:773
-#, fuzzy, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %lu foi adicionar para a lista"
-
-#: src/centericq.cc:845
-msgid "+ the user is back"
-msgstr "+ o usuário está de volta"
-
-#: src/centericq.cc:860
-#, c-format
-msgid "+ [%s] status restored"
-msgstr ""
-
-#: src/centericq.cc:874
-#, fuzzy, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ automaticamente setar NÃO DISPONÍVEL (n/a)"
-
-#: src/centericq.cc:876
-#, fuzzy
-msgid "away"
-msgstr "Afastado (away)"
-
-#: src/centericq.cc:876
-msgid "n/a"
-msgstr ""
-
 #: src/hooks/msnhook.cc:70
 #, fuzzy
 msgid "+ [msn] connecting to the server"
@@ -1490,39 +1490,6 @@ msgstr "Aceitar"
 msgid "Reject"
 msgstr ""
 
-#: src/imcontact.h:44
-msgid "Offline"
-msgstr "Offline"
-
-#: src/imcontact.h:45
-msgid "Online"
-msgstr "Online"
-
-#: src/imcontact.h:46
-msgid "Invisible"
-msgstr "Invisível"
-
-#: src/imcontact.h:47
-msgid "Free for chat"
-msgstr "Livre para batepapo"
-
-#: src/imcontact.h:48
-msgid "DND"
-msgstr ""
-
-#: src/imcontact.h:49
-msgid "Occupied"
-msgstr "Ocupado"
-
-#: src/imcontact.h:50
-msgid "N/A"
-msgstr ""
-
-#: src/imcontact.h:51
-#, fuzzy
-msgid "Away"
-msgstr "Afastado (away)"
-
 #: src/imlogger.h:30
 #, fuzzy
 msgid "message"
@@ -1539,6 +1506,25 @@ msgstr ""
 #: src/imlogger.h:30
 msgid "authorization"
 msgstr ""
+
+#~ msgid "Offline"
+#~ msgstr "Offline"
+
+#~ msgid "Online"
+#~ msgstr "Online"
+
+#~ msgid "Invisible"
+#~ msgstr "Invisível"
+
+#~ msgid "Free for chat"
+#~ msgstr "Livre para batepapo"
+
+#~ msgid "Occupied"
+#~ msgstr "Ocupado"
+
+#, fuzzy
+#~ msgid "Away"
+#~ msgstr "Afastado (away)"
 
 #~ msgid "Occupation"
 #~ msgstr "Ocupação"

@@ -41,14 +41,14 @@ static char imstatus2char[imstatus_size] = {
 };
 
 static char* imstatus2name[imstatus_size] = {
-    _("Offline"),
-    _("Online"),
-    _("Invisible"),
-    _("Free for chat"),
-    _("DND"),
-    _("Occupied"),
-    _("N/A"),
-    _("Away")
+    "Offline",
+    "Online",
+    "Invisible",
+    "Free for chat",
+    "DND",
+    "Occupied",
+    "N/A",
+    "Away"
 };
 
 struct imcontact {
