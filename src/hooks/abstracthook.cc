@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.44 2003/09/30 11:38:42 konst Exp $
+* $Id: abstracthook.cc,v 1.45 2003/10/05 15:55:35 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -200,7 +200,9 @@ string abstracthook::rushtmlconv(const string &tdir, const string &text, bool ru
 	    if(r.substr(pos+1, 5) == "#150;") r.replace(pos, 6, "-"); else
 	    if(r.substr(pos+1, 5) == "#151;") r.replace(pos, 6, "--"); else
 	    if(r.substr(pos+1, 5) == "#146;") r.replace(pos, 6, "`"); else
+	    if(r.substr(pos+1, 4) == "#39;") r.replace(pos, 5, "'"); else
 	    if(r.substr(pos+1, 6) == "#8211;") r.replace(pos, 7, "--"); else
+	    if(r.substr(pos+1, 6) == "#8230;") r.replace(pos, 7, "..."); else
 	    if(r.substr(pos+1, 7) == "hellip;") r.replace(pos, 8, "..."); else
 	    if(r.substr(pos+1, 6) == "laquo;") r.replace(pos, 7, "<<"); else
 	    if(r.substr(pos+1, 6) == "raquo;") r.replace(pos, 7, ">>"); else
