@@ -25,8 +25,8 @@
 
 /* Fucking ncurses stuff */
 
-#define boldcolor(c)		COLOR_PAIR(c)|A_BOLD
-#define normalcolor(c)		COLOR_PAIR(c)
+#define boldcolor(c)            COLOR_PAIR(c)|A_BOLD
+#define normalcolor(c)          COLOR_PAIR(c)
 
 #ifdef LOCALES_HACK
 #define KT_DISP_FILTER(c)       ( ((c > ' ') && (c != '\177')) ? c : ' ' )
@@ -65,11 +65,11 @@ extern bool kintf_graph, kintf_refresh;
 extern void (*kt_resize_event)(void);
 
 void printchar(char c);
-void printstring(const string s);
-int string2key(const string adef);
+void printstring(const string &s);
+int string2key(const string &adef);
 
-const string makebidi(const string buf, int lpad = 0);
-int findcolor(const string s);
+string makebidi(const string &buf, int lpad = 0);
+int findcolor(const string &s);
 
 __KTOOL_BEGIN_C
 

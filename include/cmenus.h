@@ -65,12 +65,12 @@ class verticalmenu: public abstractuicontrol {
 	//   \009 == URCORNER [ ^| ]
 
 	void additemf(const char *fmt, ...);
-	void additem(const string text);
+	void additem(const string &text);
 
-	void additem(int color, void *ref, const string text);
+	void additem(int color, void *ref, const string &text);
 	void additemf(int color, void *ref, const char *fmt, ...);
 
-	void additem(int color, int ref, const string text);
+	void additem(int color, int ref, const string &text);
 	void additemf(int color, int ref, const char *fmt, ...);
 
 	void addline();

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.12 2002/02/25 10:42:01 konst Exp $
+* $Id: conscommon.cc,v 1.13 2002/03/04 15:27:26 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -136,7 +136,7 @@ void printchar(char c) {
     printw("%c", KT_DISP_FILTER(c));
 }
 
-void printstring(const string s) {
+void printstring(const string &s) {
     int i;
     string ds;
 
@@ -210,7 +210,7 @@ void delay(int milisec) {
     select(0, 0, 0, 0, &tv);
 }
 
-int string2key(const string adef) {
+int string2key(const string &adef) {
     int r;
     string d, ck;
     string::iterator ic;
@@ -244,7 +244,7 @@ extern "C" {
 #include <fribidi/fribidi.h>
 }
 
-const string makebidi(const string buf, int lpad = 0) {
+string makebidi(const string &buf, int lpad = 0) {
     FriBidiChar *us, *out_us;
     char *outstring;
     int size;
@@ -278,13 +278,13 @@ const string makebidi(const string buf, int lpad = 0) {
 
 #else
 
-const string makebidi(const string buf, int lpad = 0) {
+string makebidi(const string &buf, int lpad = 0) {
     return buf;
 }
 
 #endif
 
-int findcolor(const string s) {
+int findcolor(const string &s) {
     int i;
     string::iterator is;
 

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.6 2001/10/30 17:49:55 konst Exp $
+* $Id: textbrowser.cc,v 1.7 2002/03/04 15:27:26 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -75,7 +75,7 @@ void textbrowser::draw(int line) {
     refresh();
 }
 
-void textbrowser::setbuf(const string p) {
+void textbrowser::setbuf(const string &p) {
     line = 0;
     breakintolines(p, lines, x2-x1-1);
     if((endline = lines.size()-y2+y1+1) < 0) endline = 0;

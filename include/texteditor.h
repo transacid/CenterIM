@@ -116,7 +116,7 @@ class texteditor: public abstractuicontrol {
 
 	void scancomments(bool visible);
 
-	void modification(tundoaction action, const string data,
+	void modification(tundoaction action, const string &data,
 	    bool connected = false, int curx = -1, int cury = -1);
 
 	bool endofline();

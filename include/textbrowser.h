@@ -32,7 +32,7 @@ class textbrowser: public abstractuicontrol {
 	int open();
 
 	bool empty();
-	void setbuf(const string p);
+	void setbuf(const string &p);
 };
 
 __KTOOL_END_NAMESPACE

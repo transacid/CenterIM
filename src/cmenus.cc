@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmode menus classes
-* $Id: cmenus.cc,v 1.11 2002/02/27 20:58:20 konst Exp $
+* $Id: cmenus.cc,v 1.12 2002/03/04 15:27:26 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -67,11 +67,11 @@ void verticalmenu::additemf(const char *fmt, ...) {
     additem(buf);
 }
 
-void verticalmenu::additem(const string text) {
+void verticalmenu::additem(const string &text) {
     additem(ncolor, 0, text);
 }
 
-void verticalmenu::additem(int color, void *ref, const string text) {
+void verticalmenu::additem(int color, void *ref, const string &text) {
     verticalmenuitem i;
     i.text = text;
     i.color = color ? color : ncolor;
@@ -86,7 +86,7 @@ void verticalmenu::additemf(int color, void *ref, const char *fmt, ...) {
     additem(color, ref, buf);
 }
 
-void verticalmenu::additem(int color, int ref, const string text) {
+void verticalmenu::additem(int color, int ref, const string &text) {
     additem(color, (void *) ref, text);
 }
 

@@ -259,7 +259,7 @@ int texteditor::addwindow(char *id) {
     return files->count-1;
 }
 
-void texteditor::modification(tundoaction action, const string data,
+void texteditor::modification(tundoaction action, const string &data,
 bool connected = false, int curx = -1, int cury = -1) {
     if(undolog && !data.empty()) {
 	undorecord *ur = new undorecord;
