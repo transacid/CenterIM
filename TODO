@@ -21,11 +21,18 @@ LJ delete friend notifications
 
 LJ birthdays
 
+yahoo disconnect fix by Chris Drake
+
 /*
 *
 * BUGS
 *
 */
+
+jabber
+	distinquish transports from contacts
+	<registered/> doesn't mean an input line
+	unregister - SENT: <iq id="jcl_19" to="msn.jabber.com" type="set"><query xmlns="jabber:iq:register"><remove/></query></iq>
 
 icq sync list
 
@@ -40,6 +47,8 @@ user is added to the list
 * TODO
 *
 */
+
+appy the yahoo patch
 
 birthday in LJ user info
 
@@ -117,4 +126,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.458 2003/10/12 23:14:47 konst Exp $
+$Id: TODO,v 1.459 2003/10/14 20:36:24 konst Exp $
