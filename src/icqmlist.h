@@ -8,6 +8,7 @@
 #include "imcontact.h"
 
 enum contactstatus {
+    csnone = -1,
     csignore = 1,
     csvisible,
     csinvisible

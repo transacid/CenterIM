@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.173 2003/01/05 21:47:33 konst Exp $
+* $Id: icqface.cc,v 1.174 2003/01/16 17:22:41 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1460,7 +1460,7 @@ void icqface::modelist(contactstatus cs) {
 	    case 1:
 		muins.clear();
 
-		if(multicontacts(_("Select contacts to add to the list"), ps)) {
+		if(multicontacts(_("Select contacts to add to the list"), ps, cs)) {
 		    bool removecl;
 
 		    if(cs == csignore) {
@@ -1502,7 +1502,9 @@ void icqface::modelist(contactstatus cs) {
     restoreworkarea();
 }
 
-bool icqface::multicontacts(const string &ahead, const set<protocolname> &protos) {
+bool icqface::multicontacts(const string &ahead,
+const set<protocolname> &protos, contactstatus cs) {
+
     int i, savefirst, saveelem;
     bool ret = true, finished = false;
     string head = ahead;
@@ -1526,7 +1528,9 @@ bool icqface::multicontacts(const string &ahead, const set<protocolname> &protos
 	icqcontact *c = (icqcontact *) clist.at(i);
 	imcontact desc = c->getdesc();
 
-	if(!desc.empty() && (protos.empty() || protos.count(desc.pname)))
+	if(!desc.empty())
+	if(protos.empty() || protos.count(desc.pname))
+	if(!lst.inlist(desc, cs))
 	    mlst.push_back(desc);
     }
 

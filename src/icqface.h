@@ -183,7 +183,10 @@ class icqface {
 
 	void modelist(contactstatus cs);
 
-	bool multicontacts(const string &head = "", const set<protocolname> &protos = set<protocolname>());
+	bool multicontacts(const string &head = "",
+	    const set<protocolname> &protos = set<protocolname>(),
+	    contactstatus cs = csnone);
+
 	void userinfo(const imcontact &cinfo, const imcontact &realinfo);
 
 	bool updateconf(icqconf::regsound &s, icqconf::regcolor &c);
