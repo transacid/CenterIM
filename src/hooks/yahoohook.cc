@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.67 2002/11/23 09:28:50 konst Exp $
+* $Id: yahoohook.cc,v 1.68 2002/11/25 16:29:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -583,10 +583,13 @@ void yahoohook::checkinlist(imcontact ic) {
     icqcontact *c = clist.get(ic);
     vector<icqcontact *> notremote = getneedsync();
 
-    if(c)
-    if(c->inlist())
-    if(find(notremote.begin(), notremote.end(), c) != notremote.end()) {
-	sendnewuser(c, false);
+    if(c) {
+	if(c->inlist())
+	if(find(notremote.begin(), notremote.end(), c) != notremote.end()) {
+	    sendnewuser(ic, false);
+	}
+    } else {
+	clist.addnew(ic);
     }
 }
 

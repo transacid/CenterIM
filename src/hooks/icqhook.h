@@ -10,7 +10,7 @@
 
 using namespace ICQ2000;
 
-class icqhook: public abstracthook, public SigC::Object {
+class icqhook: public abstracthook, public sigslot::has_slots<> {
     protected:
 	Client cli;
 

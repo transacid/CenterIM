@@ -3,4 +3,4 @@ CPPFLAGS = -DDEBUG -DPACKETDEBUG
 noinst_LIBRARIES = libhooks.a
 libhooks_a_SOURCES = abstracthook.cc aimhook.cc icqhook.cc irchook.cc msnhook.cc yahoohook.cc jabberhook.cc
 EXTRA_DIST = abstracthook.cc aimhook.cc icqhook.cc irchook.cc msnhook.cc yahoohook.cc jabberhook.cc abstracthook.h aimhook.h icqhook.h irchook.h msnhook.h yahoohook.h jabberhook.h
-AM_CPPFLAGS = $(GLIB_CFLAGS) @SIGC_CFLAGS@
+AM_CPPFLAGS = $(GLIB_CFLAGS)

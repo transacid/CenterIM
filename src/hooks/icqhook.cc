@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.119 2002/11/23 10:40:12 konst Exp $
+* $Id: icqhook.cc,v 1.120 2002/11/25 16:29:49 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -67,44 +67,44 @@ icqhook::icqhook() {
 
     cli.setServerSideGroup("centericq", 0x0666);
 
-    cli.connected.connect(slot(this, &icqhook::connected_cb));
-    cli.disconnected.connect(slot(this, &icqhook::disconnected_cb));
-    cli.socket.connect(slot(this, &icqhook::socket_cb));
-    cli.messaged.connect(slot(this, &icqhook::messaged_cb));
-    cli.messageack.connect(slot(this, &icqhook::messageack_cb));
-    cli.contactlist.connect(slot(this, &icqhook::contactlist_cb));
-    cli.contact_userinfo_change_signal.connect(slot(this, &icqhook::contact_userinfo_change_signal_cb));
-    cli.contact_status_change_signal.connect(slot(this, &icqhook::contact_status_change_signal_cb));
-    cli.newuin.connect(slot(this, &icqhook::newuin_cb));
-    cli.rate.connect(slot(this, &icqhook::rate_cb));
-    cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
-    cli.search_result.connect(slot(this, &icqhook::search_result_cb));
-    cli.server_based_contact_list.connect(slot(this, &icqhook::server_based_contact_list_cb));
-    cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
-    cli.self_contact_status_change_signal.connect(slot(this, &icqhook::self_contact_status_change_cb));
+    cli.connected.connect(this, &icqhook::connected_cb);
+    cli.disconnected.connect(this, &icqhook::disconnected_cb);
+    cli.socket.connect(this, &icqhook::socket_cb);
+    cli.messaged.connect(this, &icqhook::messaged_cb);
+    cli.messageack.connect(this, &icqhook::messageack_cb);
+    cli.contactlist.connect(this, &icqhook::contactlist_cb);
+    cli.contact_userinfo_change_signal.connect(this, &icqhook::contact_userinfo_change_signal_cb);
+    cli.contact_status_change_signal.connect(this, &icqhook::contact_status_change_signal_cb);
+    cli.newuin.connect(this, &icqhook::newuin_cb);
+    cli.rate.connect(this, &icqhook::rate_cb);
+    cli.want_auto_resp.connect(this, &icqhook::want_auto_resp_cb);
+    cli.search_result.connect(this, &icqhook::search_result_cb);
+    cli.server_based_contact_list.connect(this, &icqhook::server_based_contact_list_cb);
+    cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
+    cli.self_contact_status_change_signal.connect(this, &icqhook::self_contact_status_change_cb);
 
 #ifdef DEBUG
-    cli.logger.connect(slot(this, &icqhook::logger_cb));
+    cli.logger.connect(this, &icqhook::logger_cb);
 #endif
 }
 
 icqhook::~icqhook() {
-    cli.logger.clear();
-    cli.connected.clear();
-    cli.disconnected.clear();
-    cli.socket.clear();
-    cli.messaged.clear();
-    cli.messageack.clear();
-    cli.contactlist.clear();
-    cli.contact_userinfo_change_signal.clear();
-    cli.contact_status_change_signal.clear();
-    cli.newuin.clear();
-    cli.rate.clear();
-    cli.search_result.clear();
-    cli.want_auto_resp.clear();
-    cli.self_contact_userinfo_change_signal.clear();
-    cli.self_contact_status_change_signal.clear();
-    cli.server_based_contact_list.clear();
+    cli.logger.disconnect(this);
+    cli.connected.disconnect(this);
+    cli.disconnected.disconnect(this);
+    cli.socket.disconnect(this);
+    cli.messaged.disconnect(this);
+    cli.messageack.disconnect(this);
+    cli.contactlist.disconnect(this);
+    cli.contact_userinfo_change_signal.disconnect(this);
+    cli.contact_status_change_signal.disconnect(this);
+    cli.newuin.disconnect(this);
+    cli.rate.disconnect(this);
+    cli.search_result.disconnect(this);
+    cli.want_auto_resp.disconnect(this);
+    cli.self_contact_userinfo_change_signal.disconnect(this);
+    cli.self_contact_status_change_signal.disconnect(this);
+    cli.server_based_contact_list.disconnect(this);
 }
 
 void icqhook::init() {
@@ -139,7 +139,7 @@ void icqhook::connect() {
 
     face.log(_("+ [icq] connecting to the server"));
 
-    cli.self_contact_userinfo_change_signal.clear();
+    cli.self_contact_userinfo_change_signal.disconnect(this);
 
     cli.setUIN(acc.uin);
     cli.setPassword(acc.password);
@@ -148,7 +148,7 @@ void icqhook::connect() {
     sendinvisible();
     cli.setStatus(stat2int[manualstatus], manualstatus == invisible);
 
-    cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
+    cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
 
     fonline = true;
     flogged = false;
@@ -379,9 +379,9 @@ bool icqhook::send(const imevent &ev) {
 	    }
 
 	} else {
-	    cli.contact_userinfo_change_signal.clear();
+	    cli.contact_userinfo_change_signal.disconnect(this);
 	    ic->setMobileNo(clist.get(ev.getcontact())->getbasicinfo().cellular);
-	    cli.contact_userinfo_change_signal.connect(slot(this, &icqhook::contact_userinfo_change_signal_cb));
+	    cli.contact_userinfo_change_signal.connect(this, &icqhook::contact_userinfo_change_signal_cb);
 	}
 
 	sev = new SMSMessageEvent(ic, ruscrlfconv("kw", m->getmessage()), true);
@@ -620,7 +620,7 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ContactRef ic = cli.getSelfContact();
 
-    cli.self_contact_userinfo_change_signal.clear();
+    cli.self_contact_userinfo_change_signal.disconnect(this);
 
     Contact::MainHomeInfo &home = ic->getMainHomeInfo();
     Contact::HomepageInfo &hpage = ic->getHomepageInfo();
@@ -697,7 +697,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     cli.setRandomChatGroup(cbinfo.randomgroup);
 
     cli.uploadSelfDetails();
-    cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
+    cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
 }
 
 void icqhook::requestawaymsg(const imcontact &c) {
@@ -876,7 +876,7 @@ void icqhook::synclist() {
     vector<icqcontact *> tobestored;
     vector<icqcontact *>::iterator ic;
 
-    cli.contact_userinfo_change_signal.clear();
+    cli.contact_userinfo_change_signal.disconnect(this);
     getsyncstatus(s, tobestored);
 
     for(ic = tobestored.begin(); ic != tobestored.end() && tcl.size() <= 10; ++ic) {
@@ -887,7 +887,7 @@ void icqhook::synclist() {
 	}
     }
 
-    cli.contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
+    cli.contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
     cli.uploadServerBasedContactList(tcl);
 
     while(syncstatus != ackFetch && logged() && time(0)-t <= 30) {

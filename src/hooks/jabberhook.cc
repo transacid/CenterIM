@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.10 2002/11/23 10:40:13 konst Exp $
+* $Id: jabberhook.cc,v 1.11 2002/11/25 16:29:52 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -371,10 +371,14 @@ void jabberhook::jidsplit(const string &jid, string &user, string &host, string 
 void jabberhook::checkinlist(imcontact ic) {
     icqcontact *c = clist.get(ic);
 
-    if(c)
-    if(c->inlist())
-    if(find(roster.begin(), roster.end(), jidnormalize(ic.nickname)) != roster.end())
-	sendnewuser(ic, false);
+    if(c) {
+	if(c->inlist()) {
+	    if(find(roster.begin(), roster.end(), jidnormalize(ic.nickname)) != roster.end())
+		sendnewuser(ic, false);
+	}
+    } else {
+	clist.addnew(ic);
+    }
 }
 
 // ----------------------------------------------------------------------------
