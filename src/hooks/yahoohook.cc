@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.107 2004/06/10 19:13:13 konst Exp $
+* $Id: yahoohook.cc,v 1.108 2004/06/19 13:17:57 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -734,6 +734,7 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	case YAHOO_LOGIN_DUPL:
 	    face.log(_("+ [yahoo] another logon detected"));
 	    yahoo_logoff(yhook.cid);
+	    yhook.manualstatus = offline;
 	    break;
 
 	case YAHOO_LOGIN_SOCK:

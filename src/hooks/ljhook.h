@@ -41,6 +41,7 @@ class ljhook: public abstracthook, public sigslot::has_slots<> {
 	void requestfriends();
 
 	string getfeedurl(const string &nick) const;
+	string getoldfeedurl(const string &nick) const;
 
     public:
 	ljhook();

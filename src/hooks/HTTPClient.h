@@ -13,17 +13,27 @@
 using namespace ICQ2000;
 
 class HTTPRequestEvent : public MessageEvent {
+    friend class HTTPClient;
+
     public:
 	enum RequestMethod {
 	    GET,
 	    POST
 	};
 
+	enum AuthMethod {
+	    Basic,
+	    User,
+	    Digest
+	};
+
     private:
-	string m_content, m_url, m_httpresp;
+	string m_content, m_url, m_httpresp, m_user, m_pass;
 	vector<pair<string, string> > params;
+	map<string, string> authparams;
 
 	RequestMethod method;
+	AuthMethod authmethod;
 
     public:
 	HTTPRequestEvent(const string &url, RequestMethod rt = GET)
@@ -38,6 +48,9 @@ class HTTPRequestEvent : public MessageEvent {
 
 	void setContent(const string &content) { m_content = content; }
 	void setHTTPResp(const string &resp) { m_httpresp = resp; }
+
+	void setAuth(AuthMethod am, const string &user, const string &pass)
+	    { authmethod = am; m_user = user; m_pass = pass; }
 
 	void addParam(const string pname, const string pval)
 	    { params.push_back(make_pair(mime(pname), mime(pval))); }
@@ -83,6 +96,7 @@ class HTTPClient : public SocketClient {
 	void Disconnect();
 
 	void check_timeout();
+	string strMethod(HTTPRequestEvent::RequestMethod m);
 
     public:
 	HTTPClient();
@@ -100,7 +114,7 @@ class HTTPClient : public SocketClient {
 
 	void socket_cb(int fd, SocketEvent::Mode m);
 
-	string base64_encode(string in, int inlen);
+	string base64_encode(const string &in);
 
 	void setProxyServerHost(const string& host) { m_proxy_hostname = host; }
 	string getProxyServerHost() const { return m_proxy_hostname; }

@@ -1,9 +1,9 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.24 2004/02/01 17:52:10 konst Exp $
+* $Id: ljhook.cc,v 1.25 2004/06/19 13:17:57 konst Exp $
 *
-* Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-4 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -593,7 +593,14 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		for(k = 0; k < clist.count && !found; k++) {
 		    c = (icqcontact *) clist.at(k);
 		    if(c->getdesc().pname == rss) {
-			found = (c->getworkinfo().homepage == getfeedurl(username));
+			icqcontact::workinfo wi = c->getworkinfo();
+
+			if(wi.homepage == getoldfeedurl(username)) {
+			    wi.homepage = getfeedurl(username);
+			    c->setworkinfo(wi);
+			}
+
+			found = (wi.homepage == getfeedurl(username));
 		    }
 		}
 
@@ -745,6 +752,10 @@ void ljhook::logger_cb(LogEvent *ev) {
 }
 
 string ljhook::getfeedurl(const string &nick) const {
+    return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/data/rss?auth=digest";
+}
+
+string ljhook::getoldfeedurl(const string &nick) const {
     return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/rss/";
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.20 2004/02/01 17:52:10 konst Exp $
+* $Id: rsshook.cc,v 1.21 2004/06/19 13:17:57 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -216,11 +216,19 @@ void rsshook::ping(const imcontact &ic) {
     if(!url.empty()) {
 	httpcli.setProxyServerHost(conf.gethttpproxyhost());
 	httpcli.setProxyServerPort(conf.gethttpproxyport());
-	if (!conf.gethttpproxyuser().empty()) {
+
+	if(!conf.gethttpproxyuser().empty()) {
 	    httpcli.setProxyServerUser(conf.gethttpproxyuser());
 	    httpcli.setProxyServerPasswd(conf.gethttpproxypasswd());
 	}
-	httpcli.SendEvent(new HTTPRequestEvent(url));
+
+	HTTPRequestEvent *ev = new HTTPRequestEvent(url);
+	if(islivejournal(ic)) {
+	    icqconf::imaccount acc = conf.getourid(livejournal);
+	    ev->setAuth(HTTPRequestEvent::Digest, acc.nickname, acc.password);
+	}
+
+	httpcli.SendEvent(ev);
     }
 }
 

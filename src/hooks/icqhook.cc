@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.153 2004/06/18 13:26:42 konst Exp $
+* $Id: icqhook.cc,v 1.154 2004/06/19 13:17:57 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1036,7 +1036,7 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
 	_("turboing"),
 	_("bad password"),
 	_("username and password mismatch"),
-	_("already logged"),
+	_("dual login detected"),
 	""
     };
 
@@ -1057,6 +1057,9 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
 
 	logger.putmessage((string) _("icq disconnection reason") + ": " +
 	    reasons[ev->getReason()]);
+
+	if(ev->getReason() == DisconnectedEvent::FAILED_DUALLOGIN)
+	    manualstatus = offline;
     }
 
     face.log(msg);
@@ -1069,7 +1072,7 @@ static string fixicqrtf(string msg) {
 
     static char *emoticons[] = {
 	":-)", ":-O", ":-|", ":-\\", ":-(", ":-*", "8-/", ":~(",
-	";-)", ">:-O", ":`(", ":-X", ":-P", "B-)", "O:-)", ":-))"
+	";-)", ">:-O", ":`(", ":-X", ":-P", "B-)", "O:-)", ":-D"
     };
 
     while((pos = msg.find("<##icqimage")) != -1) {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bg\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-16 17:25+0300\n"
+"POT-Creation-Date: 2004-06-19 15:30+0300\n"
 "PO-Revision-Date: 2004-02-29 16:37+0200\n"
 "Last-Translator: Stefan Ilivanov <ep98@mail.bg>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -69,65 +69,65 @@ msgstr "+ за да активирате, посетете %s"
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] невъзможно свързване: "
 
-#: src/hooks/yahoohook.cc:740
+#: src/hooks/yahoohook.cc:741
 #, fuzzy
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] ГРЕШКА: %s"
 
-#: src/hooks/yahoohook.cc:862
+#: src/hooks/yahoohook.cc:863
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Потребител %s Ви кани на чат %s, Темата е: %s"
 
-#: src/hooks/yahoohook.cc:867
+#: src/hooks/yahoohook.cc:868
 msgid "Current conference members are: "
 msgstr "Участници в чат: "
 
-#: src/hooks/yahoohook.cc:887
+#: src/hooks/yahoohook.cc:888
 msgid "Auto-joined the conference"
 msgstr "Автоматично влизане в чат"
 
-#: src/hooks/yahoohook.cc:897
+#: src/hooks/yahoohook.cc:898
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Потребител %s отказа покана за чат"
 
-#: src/hooks/yahoohook.cc:907
+#: src/hooks/yahoohook.cc:908
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Потребител %s влезе в чат"
 
-#: src/hooks/yahoohook.cc:922
+#: src/hooks/yahoohook.cc:923
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Потребител %s излезе от чат"
 
-#: src/hooks/yahoohook.cc:957 src/hooks/icqhook.cc:1148
+#: src/hooks/yahoohook.cc:958 src/hooks/icqhook.cc:1177
 #: src/hooks/msnhook.cc:676
 msgid "The user has added you to his/her contact list"
 msgstr "Потребителят ви добави към нейната/неговата листа"
 
-#: src/hooks/yahoohook.cc:961
+#: src/hooks/yahoohook.cc:962
 msgid "the message was: "
 msgstr "съобщение:"
 
-#: src/hooks/yahoohook.cc:979
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail от %s, %s"
 
-#: src/hooks/yahoohook.cc:986
+#: src/hooks/yahoohook.cc:987
 #, c-format
 msgid "+ [yahoo] system: %s"
 msgstr "+ [yahoo] система: %s"
 
-#: src/hooks/yahoohook.cc:991
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "+ [yahoo] error: %s"
 msgstr "+ [yahoo] ГРЕШКА: %s"
 
-#: src/hooks/yahoohook.cc:1078
+#: src/hooks/yahoohook.cc:1079
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] изключен"
@@ -141,7 +141,7 @@ msgstr "+ [jab] невъзможно свързване с сървера"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] изтрит %s от списъка"
 
-#: src/hooks/jabberhook.cc:481 src/hooks/icqhook.cc:1202
+#: src/hooks/jabberhook.cc:481 src/hooks/icqhook.cc:1231
 #: src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "'няма ме' съобщение:"
@@ -239,8 +239,8 @@ msgid "username and password mismatch"
 msgstr "грешна парола и/или потребителско име"
 
 #: src/hooks/icqhook.cc:1039
-msgid "already logged"
-msgstr "вече е в системата"
+msgid "dual login detected"
+msgstr ""
 
 #: src/hooks/icqhook.cc:1052
 msgid "+ [icq] disconnected"
@@ -250,32 +250,32 @@ msgstr "+ [icq] изключен"
 msgid "icq disconnection reason"
 msgstr "причина за изключването icq"
 
-#: src/hooks/icqhook.cc:1129
+#: src/hooks/icqhook.cc:1158
 msgid "The user has accepted your authorization request"
 msgstr "Потребителят ви даде разрешение за да го добавите в листата си"
 
-#: src/hooks/icqhook.cc:1133
+#: src/hooks/icqhook.cc:1162
 msgid "The user has rejected your authorization request; the message was: "
 msgstr ""
 "Потребителят отказа да ви даде разрешение за да го добавите в листата си; "
 "обяснение: "
 
-#: src/hooks/icqhook.cc:1188
+#: src/hooks/icqhook.cc:1217
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] невъзможно да се изпрати SMS до %s, %s"
 
-#: src/hooks/icqhook.cc:1191
+#: src/hooks/icqhook.cc:1220
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] невъзможно да се изпрати SMS до %s"
 
-#: src/hooks/icqhook.cc:1206
+#: src/hooks/icqhook.cc:1235
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] невъзможно изтегляне на 'няма ме' съобщение %s, %s"
 
-#: src/hooks/icqhook.cc:1350
+#: src/hooks/icqhook.cc:1379
 msgid "Random Chat User"
 msgstr "Пройзволен чат потребител"
 
@@ -413,55 +413,55 @@ msgstr "+ [msn] изтриване на %s от списъка"
 msgid "members list fetching finished, %d found"
 msgstr "+ [yahoo] изтеглянето на списъка свърши, %d намерени"
 
-#: src/icqcontact.cc:748
+#: src/icqcontact.cc:752
 msgid "The user has a birthday today"
 msgstr "Потребителят има Рожден ден"
 
-#: src/icqcontact.cc:776
+#: src/icqcontact.cc:780
 msgid "Jan"
 msgstr "Януари"
 
-#: src/icqcontact.cc:776
+#: src/icqcontact.cc:780
 msgid "Feb"
 msgstr "Февруари"
 
-#: src/icqcontact.cc:776
+#: src/icqcontact.cc:780
 msgid "Mar"
 msgstr "Март"
 
-#: src/icqcontact.cc:776
+#: src/icqcontact.cc:780
 msgid "Apr"
 msgstr "Април"
 
-#: src/icqcontact.cc:777
+#: src/icqcontact.cc:781
 msgid "May"
 msgstr "Май"
 
-#: src/icqcontact.cc:777
+#: src/icqcontact.cc:781
 msgid "Jun"
 msgstr "Юни"
 
-#: src/icqcontact.cc:777
+#: src/icqcontact.cc:781
 msgid "Jul"
 msgstr "Юли"
 
-#: src/icqcontact.cc:777
+#: src/icqcontact.cc:781
 msgid "Aug"
 msgstr "Август"
 
-#: src/icqcontact.cc:778
+#: src/icqcontact.cc:782
 msgid "Sep"
 msgstr "Септември"
 
-#: src/icqcontact.cc:778
+#: src/icqcontact.cc:782
 msgid "Oct"
 msgstr "Октомври"
 
-#: src/icqcontact.cc:778
+#: src/icqcontact.cc:782
 msgid "Nov"
 msgstr "Ноември"
 
-#: src/icqcontact.cc:778
+#: src/icqcontact.cc:782
 msgid "Dec"
 msgstr "Декември"
 
@@ -518,7 +518,7 @@ msgid " Search profiles "
 msgstr "Търсене на профили"
 
 #: src/icqdialogs.cc:103 src/icqdialogs.cc:1028 src/icqdialogs.cc:1670
-#: src/icqface.cc:1642 src/icqface.cc:2330
+#: src/icqface.cc:1641 src/icqface.cc:2329
 msgid "Remove"
 msgstr "Изтриване"
 
@@ -997,8 +997,8 @@ msgstr "Мобилен телефон: "
 msgid "Homepage: "
 msgstr "Страница: "
 
-#: src/icqdialogs.cc:820 src/icqface.cc:1192 src/icqface.cc:1196
-#: src/icqface.cc:1208
+#: src/icqdialogs.cc:820 src/icqface.cc:1191 src/icqface.cc:1195
+#: src/icqface.cc:1207
 msgid "About"
 msgstr "Относно"
 
@@ -1024,8 +1024,8 @@ msgid " Send file(s) to %s, %lu "
 msgstr "Изпращане на файл(ове) на %s, %lu"
 
 #: src/icqdialogs.cc:1028 src/icqdialogs.cc:1548 src/icqface.cc:60
-#: src/icqface.cc:746 src/icqface.cc:749 src/icqface.cc:1642
-#: src/icqface.cc:2330
+#: src/icqface.cc:745 src/icqface.cc:748 src/icqface.cc:1641
+#: src/icqface.cc:2329
 msgid "Add"
 msgstr "Добави"
 
@@ -1033,7 +1033,7 @@ msgstr "Добави"
 msgid "Comment"
 msgstr "Коментар"
 
-#: src/icqdialogs.cc:1028 src/icqface.cc:2330
+#: src/icqdialogs.cc:1028 src/icqface.cc:2329
 msgid "Send"
 msgstr "Изпрати"
 
@@ -1513,7 +1513,7 @@ msgstr "Няма ме"
 msgid "message"
 msgstr "съобщение"
 
-#: src/imlogger.cc:49 src/icqface.cc:915
+#: src/imlogger.cc:49 src/icqface.cc:914
 msgid "URL"
 msgstr "Връзка:"
 
@@ -2248,385 +2248,385 @@ msgstr "Управление на контактни групи"
 msgid " Mass group move.."
 msgstr " Премести цяла група.."
 
-#: src/icqface.cc:745 src/icqface.cc:749 src/icqface.cc:1642
+#: src/icqface.cc:744 src/icqface.cc:748 src/icqface.cc:1641
 msgid "Details"
 msgstr "Инфо"
 
-#: src/icqface.cc:745
+#: src/icqface.cc:744
 msgid "Message"
 msgstr "Съобщение"
 
-#: src/icqface.cc:746 src/icqface.cc:750
+#: src/icqface.cc:745 src/icqface.cc:749
 msgid "New search"
 msgstr "Ново търсене"
 
-#: src/icqface.cc:764
+#: src/icqface.cc:763
 msgid "Contact to add"
 msgstr "Контакти за добавяне"
 
-#: src/icqface.cc:774
+#: src/icqface.cc:773
 msgid "Searching contacts.."
 msgstr "търсене на контакти.."
 
-#: src/icqface.cc:845
+#: src/icqface.cc:844
 msgid "Search results [done]"
 msgstr "Резултат от търсенето [завършен]"
 
-#: src/icqface.cc:856
+#: src/icqface.cc:855
 #, c-format
 msgid "Information about %s"
 msgstr "Информация за %s"
 
-#: src/icqface.cc:913 src/icqface.cc:946
+#: src/icqface.cc:912 src/icqface.cc:945
 msgid "Nickname"
 msgstr "Прякор"
 
-#: src/icqface.cc:914 src/icqface.cc:947
+#: src/icqface.cc:913 src/icqface.cc:946
 msgid "Name"
 msgstr "Име"
 
-#: src/icqface.cc:921
+#: src/icqface.cc:920
 msgid "This is your LiveJournal account. Use it to"
 msgstr ""
 
-#: src/icqface.cc:922
+#: src/icqface.cc:921
 msgid "post new entries to your journal."
 msgstr ""
 
-#: src/icqface.cc:929
+#: src/icqface.cc:928
 msgid "The following users have you listed as their friend:"
 msgstr ""
 
-#: src/icqface.cc:948
+#: src/icqface.cc:947
 msgid "E-mail"
 msgstr "Поща"
 
-#: src/icqface.cc:949
+#: src/icqface.cc:948
 msgid "2nd e-mail"
 msgstr "2-ра поща"
 
-#: src/icqface.cc:950
+#: src/icqface.cc:949
 msgid "Old e-mail"
 msgstr "Стара поща"
 
-#: src/icqface.cc:951
+#: src/icqface.cc:950
 msgid "Gender"
 msgstr "Пол"
 
-#: src/icqface.cc:952 src/icqface.cc:1160
+#: src/icqface.cc:951 src/icqface.cc:1159
 msgid "Birthdate"
 msgstr "Рожден ден"
 
-#: src/icqface.cc:953
+#: src/icqface.cc:952
 msgid "Age"
 msgstr "Години"
 
-#: src/icqface.cc:954
+#: src/icqface.cc:953
 msgid "Languages"
 msgstr "Езици"
 
-#: src/icqface.cc:955
+#: src/icqface.cc:954
 msgid "Last IP"
 msgstr "IP-адрес"
 
-#: src/icqface.cc:976
+#: src/icqface.cc:975
 msgid "Last seen"
 msgstr "Последно видян"
 
-#: src/icqface.cc:978 src/icqface.cc:1144 src/icqface.cc:1148
+#: src/icqface.cc:977 src/icqface.cc:1143 src/icqface.cc:1147
 msgid "Never"
 msgstr "Никога"
 
-#: src/icqface.cc:991 src/icqface.cc:1034
+#: src/icqface.cc:990 src/icqface.cc:1033
 msgid "Address"
 msgstr "Адрес"
 
-#: src/icqface.cc:992 src/icqface.cc:1035
+#: src/icqface.cc:991 src/icqface.cc:1034
 msgid "Location"
 msgstr "Място"
 
-#: src/icqface.cc:993 src/icqface.cc:1036
+#: src/icqface.cc:992 src/icqface.cc:1035
 msgid "Zip code"
 msgstr "Индекс"
 
-#: src/icqface.cc:994 src/icqface.cc:1042
+#: src/icqface.cc:993 src/icqface.cc:1041
 msgid "Phone"
 msgstr "Телефон"
 
-#: src/icqface.cc:995 src/icqface.cc:1043
+#: src/icqface.cc:994 src/icqface.cc:1042
 msgid "Fax"
 msgstr "Факс"
 
-#: src/icqface.cc:996
+#: src/icqface.cc:995
 msgid "Cellular"
 msgstr "Мобилен"
 
-#: src/icqface.cc:997
+#: src/icqface.cc:996
 msgid "Timezone"
 msgstr "Време"
 
-#: src/icqface.cc:999 src/icqface.cc:1044
+#: src/icqface.cc:998 src/icqface.cc:1043
 msgid "Homepage"
 msgstr "Страница"
 
-#: src/icqface.cc:1038
+#: src/icqface.cc:1037
 msgid "Company"
 msgstr "Компания"
 
-#: src/icqface.cc:1039
+#: src/icqface.cc:1038
 msgid "Department"
 msgstr "Отдел"
 
-#: src/icqface.cc:1040 src/icqface.cc:1119
+#: src/icqface.cc:1039 src/icqface.cc:1118
 msgid "Title"
 msgstr "Длъжност"
 
-#: src/icqface.cc:1084
+#: src/icqface.cc:1083
 msgid "Interests"
 msgstr "Интереси"
 
-#: src/icqface.cc:1096
+#: src/icqface.cc:1095
 msgid "Background"
 msgstr "Предишен опит"
 
-#: src/icqface.cc:1114
+#: src/icqface.cc:1113
 msgid "Handle"
 msgstr "Название"
 
-#: src/icqface.cc:1115
+#: src/icqface.cc:1114
 msgid "RSS doc"
 msgstr ""
 
-#: src/icqface.cc:1116
+#: src/icqface.cc:1115
 msgid "Version"
 msgstr "Версия"
 
-#: src/icqface.cc:1117
+#: src/icqface.cc:1116
 msgid "Encoding"
 msgstr "Кодировка"
 
-#: src/icqface.cc:1120
+#: src/icqface.cc:1119
 msgid "Link"
 msgstr "Връзка"
 
-#: src/icqface.cc:1122
+#: src/icqface.cc:1121
 msgid "Frequency"
 msgstr "Честота"
 
-#: src/icqface.cc:1123
+#: src/icqface.cc:1122
 msgid "Last check"
 msgstr "Предишна проверка"
 
-#: src/icqface.cc:1124
+#: src/icqface.cc:1123
 msgid "Next check"
 msgstr "Следваща проверка"
 
-#: src/icqface.cc:1125
+#: src/icqface.cc:1124
 msgid "Last result"
 msgstr "Последен резултат"
 
-#: src/icqface.cc:1139
+#: src/icqface.cc:1138
 #, c-format
 msgid "%lu minutes"
 msgstr "%lu минути"
 
-#: src/icqface.cc:1142
+#: src/icqface.cc:1141
 msgid "Now"
 msgstr "Сега"
 
-#: src/icqface.cc:1161
+#: src/icqface.cc:1160
 #, fuzzy
 msgid "Full name"
 msgstr "име на файл: "
 
-#: src/icqface.cc:1180
+#: src/icqface.cc:1179
 #, fuzzy, c-format
 msgid "%s to URLs, %s external actions, %s close"
 msgstr "F2 показва връзки, F6 външни програми, ESC затвори"
 
-#: src/icqface.cc:1192 src/icqface.cc:1196 src/icqface.cc:1202
-#: src/icqface.cc:1208
+#: src/icqface.cc:1191 src/icqface.cc:1195 src/icqface.cc:1201
+#: src/icqface.cc:1207
 msgid "Info"
 msgstr "Инфо"
 
-#: src/icqface.cc:1192
+#: src/icqface.cc:1191
 msgid "Check"
 msgstr "Проверка"
 
-#: src/icqface.cc:1192 src/icqface.cc:1209
+#: src/icqface.cc:1191 src/icqface.cc:1208
 msgid "Edit"
 msgstr "Редактирай"
 
-#: src/icqface.cc:1192
+#: src/icqface.cc:1191
 msgid "LJ"
 msgstr ""
 
-#: src/icqface.cc:1196
+#: src/icqface.cc:1195
 #, fuzzy
 msgid "Retreive"
 msgstr "Обнови"
 
-#: src/icqface.cc:1202
+#: src/icqface.cc:1201
 #, fuzzy
 msgid "Friend of"
 msgstr "Пропадна"
 
-#: src/icqface.cc:1208
+#: src/icqface.cc:1207
 msgid "Home"
 msgstr "Дом"
 
-#: src/icqface.cc:1208
+#: src/icqface.cc:1207
 msgid "Work"
 msgstr "Работа"
 
-#: src/icqface.cc:1208
+#: src/icqface.cc:1207
 msgid "More"
 msgstr "Още"
 
-#: src/icqface.cc:1209
+#: src/icqface.cc:1208
 msgid "Retrieve"
 msgstr "Обнови"
 
-#: src/icqface.cc:1310
+#: src/icqface.cc:1309
 msgid " [icq] ICQ network"
 msgstr " [icq] Мрежа ICQ "
 
-#: src/icqface.cc:1311
+#: src/icqface.cc:1310
 msgid " [yahoo] YAIM"
 msgstr ""
 
-#: src/icqface.cc:1312
+#: src/icqface.cc:1311
 msgid " [msn] M$ Messenger"
 msgstr ""
 
-#: src/icqface.cc:1313
+#: src/icqface.cc:1312
 msgid " [aim] AOL TOC"
 msgstr ""
 
-#: src/icqface.cc:1314
+#: src/icqface.cc:1313
 msgid " [irc] IRC"
 msgstr ""
 
-#: src/icqface.cc:1315
+#: src/icqface.cc:1314
 msgid " [jab] Jabber"
 msgstr ""
 
-#: src/icqface.cc:1317
+#: src/icqface.cc:1316
 msgid " [lj] LiveJournal"
 msgstr ""
 
-#: src/icqface.cc:1318
+#: src/icqface.cc:1317
 msgid " [gg] Gadu-Gadu"
 msgstr ""
 
-#: src/icqface.cc:1359
+#: src/icqface.cc:1358
 msgid " All protocols"
 msgstr "Всички протоколи"
 
-#: src/icqface.cc:1360
+#: src/icqface.cc:1359
 msgid " Already logged in only"
 msgstr "Само включените"
 
-#: src/icqface.cc:1401
+#: src/icqface.cc:1400
 msgid " [o] Online"
 msgstr " [o] На линия"
 
-#: src/icqface.cc:1402
+#: src/icqface.cc:1401
 msgid " [_] Offline"
 msgstr "[_] Изключен"
 
-#: src/icqface.cc:1403
+#: src/icqface.cc:1402
 msgid " [a] Away"
 msgstr " [a] Няма ме"
 
-#: src/icqface.cc:1404
+#: src/icqface.cc:1403
 msgid " [d] Do not disturb"
 msgstr " [d] Не ме тормози"
 
-#: src/icqface.cc:1405
+#: src/icqface.cc:1404
 msgid " [n] Not available"
 msgstr " [n] Недостъпен"
 
-#: src/icqface.cc:1406
+#: src/icqface.cc:1405
 msgid " [c] Occupied"
 msgstr " [c] Зает"
 
-#: src/icqface.cc:1407
+#: src/icqface.cc:1406
 msgid " [f] Free for chat"
 msgstr " [f] Свободен за чат"
 
-#: src/icqface.cc:1408
+#: src/icqface.cc:1407
 msgid " [i] Invisible"
 msgstr " [i] Невидим"
 
-#: src/icqface.cc:1469
+#: src/icqface.cc:1468
 msgid " <Space> or <Enter> confirm, <Esc> cancel "
 msgstr " <шпация> или <Enter> избери, <Esc> откажи"
 
-#: src/icqface.cc:1498
+#: src/icqface.cc:1497
 msgid " <Space> confirm, <Esc> cancel "
 msgstr " <шпация> потвърди, <Esc> откажи"
 
-#: src/icqface.cc:1642
+#: src/icqface.cc:1641
 msgid "Move to contacts"
 msgstr "Преместо в контакти"
 
-#: src/icqface.cc:1654
+#: src/icqface.cc:1653
 msgid "Ignore list"
 msgstr "Лист с игнорираните контакти (Игнорирани)"
 
-#: src/icqface.cc:1655
+#: src/icqface.cc:1654
 msgid "Visible list"
 msgstr "Да Ви виждат при статус невидим (Видима Листа)"
 
-#: src/icqface.cc:1656
+#: src/icqface.cc:1655
 msgid "Invisible list"
 msgstr "Да не ви виждат списък (Невидим)"
 
-#: src/icqface.cc:1678
+#: src/icqface.cc:1677
 msgid "Select contacts to add to the list"
 msgstr "Изберете контакти които да добавите в листата"
 
-#: src/icqface.cc:1683
+#: src/icqface.cc:1682
 #, c-format
 msgid "Remove the %d contacts from the contact list as well?"
 msgstr "Желаете ли да изтриете този %d от контактната листа също?"
 
-#: src/icqface.cc:1742
+#: src/icqface.cc:1741
 msgid "Event recipients"
 msgstr "Получатели"
 
-#: src/icqface.cc:1958
+#: src/icqface.cc:1957
 #, fuzzy, c-format
 msgid "QuickSearch: type to find, %s find again, Enter finish"
 msgstr "Бързо търсене: напишете какво търсите, Alt-S повторете, Enter за край"
 
-#: src/icqface.cc:2073
+#: src/icqface.cc:2072
 msgid "+ no URLs within the current context"
 msgstr "+ няма връзки за текущия контекст"
 
-#: src/icqface.cc:2086
+#: src/icqface.cc:2085
 msgid "URLs within the current context"
 msgstr "Връзки в текущия контекст"
 
-#: src/icqface.cc:2102
+#: src/icqface.cc:2101
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr "+ не са зададени външни програми за %s"
 
-#: src/icqface.cc:2122
+#: src/icqface.cc:2121
 #, c-format
 msgid "Result of the external action %s:"
 msgstr "Резултат от външна програма %s:"
 
-#: src/icqface.cc:2140
+#: src/icqface.cc:2139
 #, fuzzy, c-format
 msgid "%s send, %s multi, %s history, %s URLs, %s expand, %s members, %s close"
 msgstr ""
 "^X изпрати, ^P на повече, ^O история, F2 връзки, F9 разшири, Alt-? членове, "
 "ESC отказ"
 
-#: src/icqface.cc:2141
+#: src/icqface.cc:2140
 #, fuzzy, c-format
 msgid ""
 "%s send, %s multi, %s history, %s URLs, %s expand, %s details, %s cancel"
@@ -2634,122 +2634,122 @@ msgstr ""
 "^X изпрати, ^P на повече, ^O история, F2 връзки, F9 разшири, Alt-? детали, "
 "ESC отказ"
 
-#: src/icqface.cc:2175 src/icqface.cc:2655
+#: src/icqface.cc:2174 src/icqface.cc:2654
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Изходящи %s към %s"
 
-#: src/icqface.cc:2301
+#: src/icqface.cc:2300
 msgid "Send contacts.."
 msgstr "Изпращане на контакти.."
 
-#: src/icqface.cc:2361
+#: src/icqface.cc:2360
 msgid "file name: "
 msgstr "име на файл: "
 
-#: src/icqface.cc:2656
+#: src/icqface.cc:2655
 #, c-format
 msgid "Sent on %s"
 msgstr "Изпратено на %s"
 
-#: src/icqface.cc:2659
+#: src/icqface.cc:2658
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Входящи %s от %s"
 
-#: src/icqface.cc:2660
+#: src/icqface.cc:2659
 #, c-format
 msgid "Received on %s"
 msgstr "Получено на %s"
 
-#: src/icqface.cc:2706
+#: src/icqface.cc:2705
 #, fuzzy, c-format
 msgid "%s to URLs, %s to full-screenize, %s close"
 msgstr "F2 за връзка, F9 на цял екран, ESC затвори"
 
-#: src/icqface.cc:2753
+#: src/icqface.cc:2752
 #, c-format
 msgid "%s from %s, received on %s"
 msgstr "%s от %s, получено на %s"
 
-#: src/icqface.cc:2754
+#: src/icqface.cc:2753
 #, c-format
 msgid "%s to %s, sent on %s"
 msgstr "%s към %s, изпратено %s"
 
-#: src/icqface.cc:2767
+#: src/icqface.cc:2766
 #, c-format
 msgid "%s or %s to close, Up/Down and PgUp/PgDn to scroll"
 msgstr ""
 
-#: src/icqface.cc:2853
+#: src/icqface.cc:2852
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "История за %s, всички %d съобщения"
 
-#: src/icqface.cc:2856
+#: src/icqface.cc:2855
 #, fuzzy, c-format
 msgid "%s search, %s again, %s cancel"
 msgstr "/ търсе, N отново, ESC откажи"
 
-#: src/icqface.cc:2865
+#: src/icqface.cc:2864
 msgid "search for: "
 msgstr "търсене за: "
 
-#: src/hooks/rsshook.cc:302
+#: src/hooks/rsshook.cc:310
 #, fuzzy
 msgid "couldn't fetch"
 msgstr "невъзможност да изтегли"
 
-#: src/hooks/rsshook.cc:333
+#: src/hooks/rsshook.cc:341
 msgid "wrong XML"
 msgstr "грешен XML"
 
-#: src/hooks/rsshook.cc:336
+#: src/hooks/rsshook.cc:344
 msgid "no <rss> tag found"
 msgstr "не <rss> таг не е открит"
 
-#: src/hooks/rsshook.cc:346
+#: src/hooks/rsshook.cc:354
 msgid "no <channel> tag found"
 msgstr "не <канал> таг не е открит"
 
-#: src/hooks/rsshook.cc:352
+#: src/hooks/rsshook.cc:360
 msgid "wrong <channel> tag"
 msgstr "неправилен таг <канал>"
 
-#: src/hooks/rsshook.cc:364
+#: src/hooks/rsshook.cc:372
 msgid "success"
 msgstr "успешно"
 
-#: src/hooks/rsshook.cc:384
+#: src/hooks/rsshook.cc:392
 msgid "Title: "
 msgstr "Заглавие: "
 
-#: src/hooks/rsshook.cc:385
+#: src/hooks/rsshook.cc:393
 msgid "Published on: "
 msgstr "Публиковано на: "
 
-#: src/hooks/rsshook.cc:386
+#: src/hooks/rsshook.cc:394
 msgid "Category: "
 msgstr "Категория: "
 
-#: src/hooks/rsshook.cc:387
+#: src/hooks/rsshook.cc:395
 msgid "Author: "
 msgstr "Автор: "
 
-#: src/hooks/rsshook.cc:389
+#: src/hooks/rsshook.cc:397
 msgid "Description: "
 msgstr "Описание: "
 
-#: src/hooks/rsshook.cc:390
+#: src/hooks/rsshook.cc:398
 msgid "Link: "
 msgstr "Връзка: "
 
-#: src/hooks/rsshook.cc:391
+#: src/hooks/rsshook.cc:399
 msgid "Comments: "
 msgstr "Коментари: "
 
-#: src/hooks/ljhook.cc:406 src/hooks/ljhook.cc:723
+#: src/hooks/ljhook.cc:406 src/hooks/ljhook.cc:730
 #, fuzzy
 msgid "+ [lj] user lookup finished"
 msgstr "+ [jab] търсенето завърши, %d намерени"
@@ -2783,7 +2783,7 @@ msgstr ""
 msgid "+ [lj] post error: %s"
 msgstr "+ [jab] ГРЕШКА %d: %s"
 
-#: src/hooks/ljhook.cc:659
+#: src/hooks/ljhook.cc:666
 #, fuzzy, c-format
 msgid ""
 "The user %s (%s) has added you to his/her friend list\n"
@@ -2791,7 +2791,7 @@ msgid ""
 "Journal address: %s"
 msgstr "Потребителят ви добави към нейната/неговата листа"
 
-#: src/hooks/ljhook.cc:669
+#: src/hooks/ljhook.cc:676
 #, fuzzy, c-format
 msgid ""
 "The user %s has removed you from his/her friend list\n"
@@ -2799,19 +2799,19 @@ msgid ""
 "Journal address: %s"
 msgstr "Потребител %s Ви кани на чат %s, Темата е: %s"
 
-#: src/hooks/ljhook.cc:695
+#: src/hooks/ljhook.cc:702
 msgid "+ [lj] error deleting friend"
 msgstr ""
 
-#: src/hooks/ljhook.cc:697
+#: src/hooks/ljhook.cc:704
 msgid "+ [lj] the user has been removed from your friend list"
 msgstr ""
 
-#: src/hooks/ljhook.cc:702
+#: src/hooks/ljhook.cc:709
 msgid "+ [lj] couldn't add friend"
 msgstr ""
 
-#: src/hooks/ljhook.cc:704
+#: src/hooks/ljhook.cc:711
 #, fuzzy, c-format
 msgid "+ [lj] %s was added to friends"
 msgstr "+ %s бе добавен в списъка"
@@ -2909,77 +2909,77 @@ msgstr "! това може да създаде проблем. pid %lu"
 msgid "Mobile number: "
 msgstr "Мобилен телефон: "
 
-#: src/centericq.cc:1140
+#: src/centericq.cc:1141
 msgid "directory to save the file(s) to: "
 msgstr "директория за запис на файл(ове)): "
 
-#: src/centericq.cc:1147
+#: src/centericq.cc:1148
 msgid "The specified directory is not writable"
 msgstr "В указаната директория неможе да се записва"
 
-#: src/centericq.cc:1151
+#: src/centericq.cc:1152
 msgid "The specified directory does not exist"
 msgstr "Указаната директория не съществува"
 
-#: src/centericq.cc:1286
+#: src/centericq.cc:1287
 #, c-format
 msgid "+ no history items for %s"
 msgstr "+ няма предишни съобщения за %s"
 
-#: src/centericq.cc:1312
+#: src/centericq.cc:1313
 #, c-format
 msgid "+ user %s is already on the list"
 msgstr "+ потребител %s вече е в листата ви"
 
-#: src/centericq.cc:1324
+#: src/centericq.cc:1325
 msgid "Select a group to add the user to"
 msgstr "Избери група в която да добавите контакта"
 
-#: src/centericq.cc:1356
+#: src/centericq.cc:1357
 #, c-format
 msgid "+ %s has been added to the list"
 msgstr "+ %s бе добавен в списъка"
 
-#: src/centericq.cc:1427
+#: src/centericq.cc:1428
 msgid "+ the user is back"
 msgstr "+ потребителя се върна"
 
-#: src/centericq.cc:1443
+#: src/centericq.cc:1444
 #, c-format
 msgid "+ [%s] status restored"
 msgstr "+ [%s] статус възтановен"
 
-#: src/centericq.cc:1458
+#: src/centericq.cc:1459
 #, c-format
 msgid "+ [%s] automatically set %s"
 msgstr "+ [%s] автоматичен преход в %s"
 
-#: src/centericq.cc:1460
+#: src/centericq.cc:1461
 msgid "away"
 msgstr "няма ме"
 
-#: src/centericq.cc:1460
+#: src/centericq.cc:1461
 msgid "n/a"
 msgstr ""
 
-#: src/centericq.cc:1585
+#: src/centericq.cc:1586
 msgid "! free disk space is less than 10k, going offline"
 msgstr "! свободното място на диска е под 10к, изключване"
 
-#: src/centericq.cc:1586
+#: src/centericq.cc:1587
 msgid "! otherwise we can lose events and configuration"
 msgstr "! иначе може да се изгубят събития и промени"
 
-#: src/centericq.cc:1630
+#: src/centericq.cc:1631
 msgid "Invite to conference.."
 msgstr "Покана за чат"
 
-#: src/centericq.cc:1651
+#: src/centericq.cc:1652
 #, fuzzy
 msgid "Select contacts to move"
 msgstr "Изберете контакти които да добавите в листата"
 
-#: src/centericq.cc:1653
+#: src/centericq.cc:1654
 msgid "Mass move selected users to.."
 msgstr "Премести всички избрани контакти в"
 
@@ -3005,6 +3005,9 @@ msgstr "+ [msn] невъзможно свързване: "
 #: src/hooks/msnhook.cc:861
 msgid "verify the hostname and port"
 msgstr "проверете хоста и порта"
+
+#~ msgid "already logged"
+#~ msgstr "вече е в системата"
 
 #~ msgid ""
 #~ "event sending error: the destination contact doesn't exist on your list"

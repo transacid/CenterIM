@@ -9,6 +9,7 @@ national chars problems fixed
 gg segfault
 
 new cool MSN library by Mark Rowe
+    note the dependency on libcurl
 
 jab ssl connection hang fix by iulica
 
@@ -16,18 +17,22 @@ patch from Daniel Lublin (see mail) - keep postponed msgs
 
 icq rtf messages (msg from Sergei Dolmatov) - now both cyrillic and latin chars are seen
 
-commandline user-add, sending to not listed users
+commandline auto user-add, sending to not listed users
 
 mass group move minor problem: select users -> esc ->
     proposes to chose a group anyway
+
+icq emoticons
+
+LJ RSS with auth so that friends-only records can also be seen
+
+another login detected -> don't connect anymore
 
 /*
 *
 * BUGS
 *
 */
-
-icq smiles и переносы строки в icq/rtf
 
 http://www.dotgnu.org/index.rdf
 
@@ -41,17 +46,9 @@ http://www.dotgnu.org/index.rdf
 *
 */
 
-libmsn build problems, check on various pratforms, --disable-msn
-
-configure path to curl -> the new libmsn update
-
 msn other users' joins to the conversation
 
-another login detected -> don't connect anymore
-
 local and remote charsets. ability to specify only one
-
-LJ RSS with auth so that friends-only records can also be seen
 
 not in list users history (see chat with mellon)
 
@@ -129,4 +126,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.514 2004/06/18 06:49:13 konst Exp $
+$Id: TODO,v 1.515 2004/06/19 13:17:54 konst Exp $

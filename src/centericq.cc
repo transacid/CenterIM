@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.190 2004/06/12 14:52:11 konst Exp $
+* $Id: centericq.cc,v 1.191 2004/06/19 13:17:56 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1075,6 +1075,7 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	delete sendev;
     }
 
+    face.update();
     return proceed;
 }
 

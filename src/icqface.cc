@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.223 2004/06/10 19:13:13 konst Exp $
+* $Id: icqface.cc,v 1.224 2004/06/19 13:17:56 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -675,8 +675,7 @@ void icqface::fillcontactlist() {
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
 		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, "%s%s%s ", c->hasevents() ? "#" : " ",
-		c->getpostponed().empty() ? "" : ">", dnick.c_str());
+		c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
 	} else {
 	    char *fmt = "%s[%c]%s%s ";

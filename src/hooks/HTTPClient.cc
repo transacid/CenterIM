@@ -1,9 +1,9 @@
 /*
 *
 * centericq HTTP protocol handling class
-* $Id: HTTPClient.cc,v 1.12 2004/02/10 23:55:16 konst Exp $
+* $Id: HTTPClient.cc,v 1.13 2004/06/19 13:17:57 konst Exp $
 *
-* Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-4 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 */
 
 #include "HTTPClient.h"
+
+#include <md5.h>
 
 #ifdef BUILD_RSS
 
@@ -99,7 +101,8 @@ void HTTPClient::Connect() {
     }
 
     if(m_state == NOT_CONNECTED) {
-	MessageEvent *ev = *m_queue.begin();
+	MessageEvent *ev = m_queue.front();
+
 	ev->setDelivered(false);
 	ev->setFinished(true);
 	ev->setDeliveryFailureReason(MessageEvent::Failed);
@@ -112,7 +115,8 @@ void HTTPClient::Connect() {
 
 void HTTPClient::Parse() {
     int npos;
-    string response;
+    string response, head, val;
+    HTTPRequestEvent *ev = m_queue.front();
 
     while(1) {
 	response = "";
@@ -143,23 +147,70 @@ void HTTPClient::Parse() {
 		case 200:
 		case 301:
 		case 302:
+		case 401:
 		    break;
 		default:
-		    HTTPRequestEvent *ev = *m_queue.begin();
-		    dynamic_cast<HTTPRequestEvent*>(ev)->setHTTPResp(response.substr(npos+1));
+		    ev->setHTTPResp(response.substr(npos+1));
 		    throw HTTPException("Didn't receive HTTP OK");
 	    }
 
 	    m_state = RECEIVING_HEADER;
 
 	} else if(m_state == RECEIVING_HEADER) {
-	    if(m_code == 301 || m_code == 302)
 	    if((npos = response.find(" ")) != -1)
-	    if(up(response.substr(0, npos)) == "LOCATION:") {
-		m_redirect = response.substr(npos+1);
-		m_socket->Disconnect();
-		m_state = NOT_CONNECTED;
-		Connect();
+		head = up(response.substr(0, npos));
+
+	    switch(m_code) {
+		case 301:
+		case 302:
+		    if(head == "LOCATION:") {
+			m_redirect = response.substr(npos+1);
+			m_socket->Disconnect();
+			m_state = NOT_CONNECTED;
+			Connect();
+		    }
+		    break;
+
+		case 401:
+		    if(head == "WWW-AUTHENTICATE:") {
+			response.erase(0, npos+1);
+
+			if((npos = response.find(" ")) != -1) {
+			    head = up(response.substr(0, npos));
+			    response.erase(0, npos+1);
+
+			    if(head == "DIGEST")
+				ev->authmethod = HTTPRequestEvent::Digest;
+
+			    while(!response.empty()) {
+				if((npos = response.find("=")) != -1) {
+				    head = response.substr(0, npos);
+				    response.erase(0, npos+1);
+
+				    if(response.substr(0, 1) == "\"") {
+					response.erase(0, 1);
+					if((npos = response.find("\"")) != -1)
+					    val = response.substr(0, npos);
+				    } else {
+					if((npos = response.find(",")) != -1)
+					    val = response.substr(0, npos);
+				    }
+
+				    ev->authparams[head] = val;
+				    response.erase(0, npos+1);
+
+				    while(response.substr(0, 1).find_first_of(", \t") != -1)
+					response.erase(0, 1);
+
+				} else break;
+			    }
+
+			    m_socket->Disconnect();
+			    m_state = NOT_CONNECTED;
+			    Connect();
+			}
+		    }
+		    break;
 	    }
 
 	    if(response.empty()) m_state = RECEIVING_CONTENT;
@@ -192,11 +243,12 @@ static char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			     "abcdefghijklmnopqrstuvwxyz"
 			     "0123456789._";
 
-string HTTPClient::base64_encode(const string in, int inlen) {
+string HTTPClient::base64_encode(const string &in) {
     string out;
     int j = 0;
+    int inlen = in.size();
 
-    for (; inlen >= 3; inlen -= 3) {
+    for(; inlen >= 3; inlen -= 3) {
 	out += base64digits[ in[j] >> 2 ];
 	out += base64digits[ ((in[j] << 4) & 0x30) | (in[j+1] >> 4) ];
 	out += base64digits[ ((in[j+1] << 2) & 0x3c) | (in[j+2] >> 6) ];
@@ -204,13 +256,13 @@ string HTTPClient::base64_encode(const string in, int inlen) {
 	j += 3;
     }
 
-    if (inlen > 0) {
+    if(inlen > 0) {
 	unsigned char fragment;
 
 	out += base64digits[in[j] >> 2];
 	fragment = (in[j] << 4) & 0x30;
 
-	if (inlen > 1)
+	if(inlen > 1)
 	    fragment |= in[j+1] >> 4;
 
 	out += base64digits[fragment];
@@ -221,15 +273,43 @@ string HTTPClient::base64_encode(const string in, int inlen) {
     return out;
 }
 
+string HTTPClient::strMethod(HTTPRequestEvent::RequestMethod m) {
+    string r;
+
+    switch(m) {
+	case HTTPRequestEvent::GET: r = "GET"; break;
+	case HTTPRequestEvent::POST: r = "POST"; break;
+    }
+
+    return r;
+}
+
+static string getMD5(const string &s) {
+    md5_state_t state;
+    md5_byte_t digest[16];
+    char hexdigest[3];
+    string r;
+    int a;
+	
+    md5_init(&state);
+    md5_append(&state, (md5_byte_t *) s.c_str(), s.size());
+    md5_finish(&state, digest);
+
+    for(a = 0; a < 16; a++) {
+	sprintf(hexdigest, "%02x", digest[a]);
+	r += hexdigest;
+    }
+
+    return r;
+}
+
 void HTTPClient::SendRequest() {
     Buffer b;
     HTTPRequestEvent *ev = m_queue.front();
-    string rq, userpasswd;
+    string rq, cnonce;
+    int i;
 
-    switch(ev->getMethod()) {
-	case HTTPRequestEvent::GET: rq = "GET"; break;
-	case HTTPRequestEvent::POST: rq = "POST"; break;
-    }
+    rq = strMethod(ev->getMethod());
 
     if(m_proxy_hostname.empty()) {
 	b.Pack(rq + " " + m_resource + " HTTP/1.0\r\n");
@@ -238,15 +318,63 @@ void HTTPClient::SendRequest() {
 	b.Pack(rq + " http://" + m_hostname + m_resource + " HTTP/1.0\r\n");
     }
 
-    if (!m_proxy_user.empty()) {
-	userpasswd = (string)m_proxy_user + ":" + m_proxy_passwd;
-
-	if (!(m_proxy_hostname.empty())) {
-	    b.Pack((string) "Proxy-Authorization: Basic " + base64_encode(userpasswd, userpasswd.size()) + "\r\n");
-	};
+    if(!m_proxy_user.empty() && !m_proxy_hostname.empty()) {
+	b.Pack((string) "Proxy-Authorization: Basic " + base64_encode(m_proxy_user + ":" + m_proxy_passwd) + "\r\n");
     }
 
     b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
+
+    if(!ev->m_user.empty()) {
+	rq = "";
+
+	switch(ev->authmethod) {
+	    case HTTPRequestEvent::Basic:
+		rq = (string) "Basic " + base64_encode(ev->m_user + ":" + ev->m_pass);
+		break;
+
+	    case HTTPRequestEvent::User:
+		rq = (string) "User " + ev->m_user + ":" + ev->m_pass;
+		break;
+
+	    case HTTPRequestEvent::Digest:
+		if(!ev->authparams.empty()) {
+		    rq = "Digest ";
+
+		    for(i = 0; i < 8; i++) {
+			char c = randlimit(0, 15);
+			if(c < 10) c += 48; else c += 87;
+			cnonce += c;
+		    }
+
+		    ev->authparams["username"] = ev->m_user;
+		    ev->authparams["uri"] = ev->m_url;
+		    ev->authparams["nc"] = "00000001";
+		    ev->authparams["cnonce"] = cnonce;
+
+		    string a1 = ev->m_user + ":" + ev->authparams["realm"] + ":" + ev->m_pass;
+		    string a2 = strMethod(ev->getMethod()) + ":" + ev->m_url;
+
+		    string mid = (string) ":" + ev->authparams["nonce"] + ":" +
+			ev->authparams["nc"] + ":" + cnonce + ":" +
+			ev->authparams["qop"] + ":";
+
+		    ev->authparams["response"] = getMD5(getMD5(a1) + mid + getMD5(a2));
+
+		    map<string, string>::const_iterator ia = ev->authparams.begin();
+		    while(ia != ev->authparams.end()) {
+			if(ia != ev->authparams.begin()) rq += ", ";
+			rq += ia->first + "=\"" + ia->second + "\"";
+			++ia;
+		    }
+		}
+
+		break;
+	}
+
+	if(!rq.empty()) {
+	    b.Pack((string) "Authorization: " + rq + "\r\n");
+	}
+    }
 
     if(ev->getMethod() == HTTPRequestEvent::POST) {
 	int len = 0;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.96 2004/06/10 19:13:13 konst Exp $
+* $Id: icqcontact.cc,v 1.97 2004/06/19 13:17:56 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -144,8 +144,7 @@ void icqcontact::save() {
     modified = modified
 	|| access(lrname.c_str(), F_OK)
 	|| access(infoname.c_str(), F_OK)
-	|| access(aboutname.c_str(), F_OK)
-	|| access(postponedname.c_str(), F_OK);
+	|| access(aboutname.c_str(), F_OK);
 
     if(modified && conf.enoughdiskspace()) {
 	mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
@@ -228,11 +227,15 @@ void icqcontact::save() {
 		f.clear();
 	    }
 
-	    f.open(postponedname.c_str());
-	    if(f.is_open()) {
-		f << postponed;
-		f.close();
-		f.clear();
+	    if(!postponed.empty()) {
+		f.open(postponedname.c_str());
+		if(f.is_open()) {
+		    f << postponed;
+		    f.close();
+		    f.clear();
+		}
+	    } else {
+		unlink(postponedname.c_str());
 	    }
 
 	    if(!finlist) {
@@ -705,6 +708,7 @@ bool icqcontact::operator > (const icqcontact &acontact) const {
 
 void icqcontact::setpostponed(const string &apostponed) {
     postponed = apostponed;
+    modified = true;
 }
 
 string icqcontact::getpostponed() const {
