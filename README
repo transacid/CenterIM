@@ -1,38 +1,320 @@
+Centericq. Documentation.
 
-Hello. I'm glad to present you my program, centerICQ. It's an ICQ
-client program for Linux, known to work under FreeBSD and OpenBSD as
-well. You should just take a look at its work screen to realize that
-you've never seen the same program before. If one of the reasons you
-like Linux for is the possibility to work only in text mode, you'll like
-it.
+Contents
+--------
 
-Here is the list of most intresting features of centerICQ.
-With this program you're able to:
+1. Introduction
+    1.1. Creation history
+    1.2. Features overview
+2. UIN registration
+3. User interface
+    3.1. The ESC key
+    3.2. The main screen
+    3.3. Menus
+    3.4. Dialogs
+4. Configuration
+    4.1. Migrating from other ICQ software
+    4.2. Event sounds
+    4.3. URL open action (web browser support)
+5. Online status
+    5.1. "Auto Away" and "Auto N/A"
+6. Contact list
+    6.1. Finding and adding users
+        6.1.1. Some useful hints
+    6.2. Removing users
+    6.3. Users' details
+    6.4. Groups of contacts
+7. Sending and receiving events
+    7.1. Messages
+    7.2. URLs
+    7.3. Contacts
+    7.4. Files
+    7.5. Events history
+8. Ignore, visible and invisible lists
+    8.1. Ignore list
+    8.2. Visible list
+    8.3. Invisible list
+9. Advanced features
+    9.1. Arabic and Hebrew languages support
+    9.2. Protocol debug mode
+10. Lynx
+    10.1. The program homepage
+    10.2. Konst.org.ua
+    10.3. Other programs I write
+    10.4. ICQ
 
-- have useful text mode menu- and window-driven interface
-- view contact list as a menu
-- send/receive messages, URLs, files and contacts
-- view messages history
-- search for users, view users' details
-- register new UINs
-- maintain your contact list directly from the program
-- be informed when your mailbox is replanished with new messages
-- automatically set Away and then N/A after defined period of inactivity
-- have your own ignore list
-- forward messages
-- associate events with sounds
-- send mass messages
-- add non-icq contacts to your list
 
-Also, if you have a soundcard, you can examine $(HOME)/.centericq/sound file
-that you'll find there after installation to learn how to set sounds for
-events and customize it for users personally.
+1. Introduction
+---------------
 
-Feel free to contact me with e-mail at konst@konst.org.ua if you have any
-comments or suggestions about this program and not only about it.
+  Centericq is a text mode menu- and window-driven ICQ interface. It
+allows you to send, receive, and forward messages, URLs and, contacts,
+mass message send, search for users (including extended "whitepages
+search"), view users' details, maintain your contact list directly from
+the program (including non-icq contacts), view the messages history,
+register a new UIN and update your details, be informed on receiving
+email messages, automatically set away after the defined period of
+inactivity (on any console), and have your own ignore, visible and
+invisible lists. It can also associate events with sounds, has support
+for Hebrew and Arabic languages and allows to arrange contacts into
+groups.
 
-Also it's strongly recommended to read the FAQ file included into the
-distribution.
+  Centericq is known to build and work well under Linux, FreeBSD,
+OpenBSD and NetBSD.
 
---
-konst
+
+1.1. Creation history
+---------------------
+
+  This program was written because of a very simple cause. I just
+couldn't find any console based ICQ clients with really useful user
+interface. When I started it I had quite a slow computer at home. Having
+X window running on it took incredibly a lot of resources making whole
+the system really slow. I didn't like an idea of launching it just to be
+on ICQ, but there were several good programs only for X. For console
+they had only mICQ and zicq. The former was ok, but its interface made
+me cry. I know, it's of quite a UNIX style, and I don't have anything
+against command line, but typing nicks and uins all the time was
+terrible. The second thingie, zicq, was an attempt to implement menus
+and windows for ICQ in text-mode, but its author couldn't go further
+than just splitting the screen into two windows, one with contact list
+and another with usual mICQ output :) Actually it was all based on mICQ
+code. I don't wanna say mICQ was bad, for it was the first ICQ client
+for Linux, and its author made a great job exploring and sniffing the
+ICQ protocol.
+
+  After looking at freshmeat and some "icq for linux" pages the hope to
+find something worth was finally lost. I decided to put some effort into
+making a program which would be really useful for me. It took me about
+two weeks to write and then 1 week to test before releasing the first
+version.
+
+  Since that time the software suffered a lot of changes, including
+rewrite resulted into the version 3.0.0. Now I'm continuing to develop
+it, going the standard way of adding new features and fixing bugs. And
+feedback from users helps me a lot in it.
+
+
+1.2. Features overview
+----------------------
+
+  Centericq has almost all the functionality including extended issues
+that Mirabilis client have. Now it's one of the most full-featured
+clients for UNIX.
+
+  Beside simple things like sending and receiving messages, changing
+online status and basic user information, centericq has such advanced
+features like "White pages" search, an ability to update almost all the
+fields in user's details, send URL, files, contacts, etc. I hope you
+enjoy it a lot :)
+
+
+2. UIN registration
+-------------------
+
+  To be able to use ICQ you should have a UIN (I think it stands for
+something like "user identification number"). When you start centericq
+for the first time the registration dialog appears. You can either use
+an already existing UIN or register a new one. Actually, all the fields
+the dialog has are self-descriptive. Some attention should only be paid
+to the "server address" field. The default value it has is quite ok. In
+the majority of cases you do not need to change it. The only exception
+is if you have your own ICQ server on LAN. I received quite a bunch of
+"bug-reports" saying that centericq didn't work with "login.icq.com"
+server. No wonder it didn't. Erm, I would be quite surprised if it did
+:) The point is that login.icq.com is used for new Mirabilis client
+software which uses a new version of the protocol.
+
+  Russian speaking users should pay attention to the "Russian
+translation" item of the registration dialog. It's vital to set its
+value to "yes" to be able to use cyrillic. In most cases. Unless you use
+win1251 as a default charset, about what I doubt a lot :) Unfortunatelly
+we have two different encodings for our language, koi8-r is default for
+UNIX like systems and win1251 is used in Windows. Since ICQ comes from
+Windows we need to recode every sent and received message in order for
+it to be readable.
+
+
+3. User interface
+-----------------
+
+  The text UI centericq has, as well as UI of other programs for console
+I have written, is very simple. There are menus, windows, menus and
+input lines. In the bottom line of the screen there is a status bar. It
+usually contains hints about what to press to invoke various menus,
+dialogs, and perform various actions.
+
+
+3.1. The ESC key
+----------------
+
+  This key is used for termination of input, if you wanna cancel the
+operation you wanted to perform. Say, if "send message" operation is
+chosen (invoked just with a press of "Enter" on a contact), an editor
+window appears. As status bar says, you can use "Ctrl-X" to send it, and
+ESC to cancel. The only hint is that you have to press the ESC key
+twice. It's a common practice for console based UNIX programs (Midnight
+commander is a good example), because checking for only one ESC would
+spoil arrow key processing. The point is that they have correspond
+sequences that start with an ASCII#27 character which is actually ESC.
+
+
+3.2. The main screen
+--------------------
+
+  The main screen of centericq consists of three parts. First is contact
+list which is situated to the left. Next is information window which is
+used to show received events, users' details, and also to edit events
+that are going to be sent. And the smallest one is a log window in which
+you can see messages about what centericq is doing right now.
+
+
+3.3. Menus
+----------
+
+  No need to say, menus is a common way to provide a user with an
+ability to select one (or several) items from a certain list. To make a
+difference between single and multiple choice menu you gotta just have a
+look at the items. If square brackets stand next to items text in every
+line, a multiple selection is requested. Otherwise you can only select
+one item. To do it, just press "Enter" on it. To make a mutiple
+selection, press "Space" on items and use "Enter" to finish the
+selection. ESC does also work in all menus to cancel the selection.
+
+
+3.4. Dialogs
+------------
+
+  Every dialog in centericq has a tree-like view. When I was about to
+write classes for form-based input, I remembered that there was a
+"treeview" class written by me before. So, I decided to use it for
+dialogs and was right. There was no need to re-design the whole form in
+case I need to add some controls, or so. I just add it as a node or a
+leaf it scrolls, and nothing gets spoiled. Everything really nice is
+always simple :)
+
+
+4. Configuration
+----------------
+
+  The major parts of centericq settings can be found in the
+"Configuration" dialog which can be invoked by selecting an appropriate
+items in the global menu (the one you see on pressing F4). There are
+only three things you should setup from outside the program with
+modifying the program's configuration files. They are event sounds,
+actions (see below) and color schemes.
+
+  With the "Configuration" dialog you can turn on and off various
+features, as well as change the ICQ server address and adjust network
+settings. All the items there are self-explanatory and their meaning is
+quite obvious. I suppose the program users are usually not dumb :) so I
+won't cover all of the items here in the documentation.
+
+
+4.1. Migrating from other ICQ software
+--------------------------------------
+
+  If you decided to migrate to centericq from another ICQ software or
+have a need to you something else in parallel, there is a way to convert
+the contact list. This means you can migrate without loosing your
+contacts and history.
+
+  How to do it? There is a perl script named cicqconv. It's usually
+installed on "make install" under @prefix@/bin (/usr/local/bin in the
+majority of cases). Its usage is very simple. You should only pass one
+parameter to it, telling from what kind of ICQ software it's to convert
+your data. To see the list of supported software, run the script without
+parameters.
+
+
+4.2. Event sounds
+-----------------
+
+  As it was said before, centericq can play sounds on various events.
+It's done the following way. Upon, say, receiving a message, centericq
+executes an external command. Actually it can be whatever you want, but
+original idea is to execute a command line WAV player.
+
+  There are three WAV sound files which centericq has by default. They
+are sounds taken from Mirabilis ICQ. When you set "Change sound device
+to" item to "sound card", the program generates a file named sounds in
+the .centericq/ directory in your home folder. The default file has
+commands to execute a "play" utility (from sox package) with a name of a
+file to play, one of the default ones. If you wanna change the player or
+a sound simply edit ~/.centericq/sounds.
+
+  If you use ESD (Enlightenment Sound Daemon) to have some extra sound
+facilities such as mixing streams, or playing on another computer, you
+might wish to change the "play" command to "esdplay".
+
+
+4.3. URL open action (web browser support)
+------------------------------------------
+
+  Centericq can extract URLs from messages and user information records
+for you. And it also can launch your preferred web browser to view them.
+No need to have a big attention to notice "F2 to URLs" text in the
+status bar when you view either a message or user's details. The "open
+URL" action starts right after you make a selection in the menu invoked.
+The ~/.centericq/actions file is responsible for this. By default it has
+a command to execute netscape, but you can change to whatever you want.
+Please only note that you cannot put lynx or any other text mode based
+browser starting in the same console there. The commands from "actions"
+run in parallel with centericq, so please only pass your URLs to scripts
+or to X based browsers, but to nothing interactive.
+
+
+5. Online status
+----------------
+
+  With centericq you can be either on or off the ICQ network. The status
+can be changed with the "Status" menu invoked either with F3 or "S" key
+or from the global menu. It provides you with a choice to switch between
+online statuses along with an ability to go offline. If one of online
+statuses if selected when you're offline, centericq will connect and
+switch the status to what was chosen.
+
+  With an online status you can indicate to those who are in touch with
+you your being away, occupied, free for chat, not available, etc.
+
+
+5.1. "Auto Away" and "Auto N/A"
+-------------------------------
+
+  Also there is a way to switch status to Away and N/A (not available)
+after a certain period of inactivity, to show your friends or colleagues
+you're somewhere away from computer.
+
+  The very useful thing about is that centericq detects inactivity for
+all the consoles if you use it locally. So it won't change your status
+if you're just working in another console and only don't tweak it.
+
+  The auto periods can be changed with the "Configuration" dialog. Zero
+value means the feature is off.
+
+
+6. Contact list
+---------------
+
+  The list of your contacts is displayed to the left on the centericq
+main screen, and has a tree-like structure. There are "Online" and,
+unless the "Hide offline users" options is on, "Offline" nodes. Also it
+always has an item named "ICQ" which is used to receive various system
+messages, such as authorization requests, "you were added" messages, and
+so on.
+
+
+6.1. Finding and adding users
+-----------------------------
+
+6.1.1. Some useful hints
+------------------------
+
+6.2. Removing users
+-------------------
+
+6.3. Users' details
+-------------------
+
+6.4. Groups of contacts
+-----------------------

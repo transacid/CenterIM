@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.14 2001/10/09 18:07:01 konst Exp $
+* $Id: icqdialogs.cc,v 1.15 2001/10/15 06:01:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -60,44 +60,46 @@ bool icqface::regdialog(unsigned int &ruin, string &rpasswd) {
 	conf.getcolor(cp_dialog_selected),
 	_("Change"), _("Done"), 0));
 
-    while(!finished) {
-	db.gettree()->clear();
-	nmode = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Mode "));
-	ndet  = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Details "));
-	nopt  = db.gettree()->addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Options "));
+    treeview &t = *db.gettree();
 
-	db.gettree()->addleaff(nmode, 0, (void *) 1, _(" Registration mode : %s "),
+    while(!finished) {
+	t.clear();
+	nmode = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Mode "));
+	ndet  = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Details "));
+	nopt  = t.addnode(0, conf.getcolor(cp_dialog_highlight), 0, _(" Options "));
+
+	t.addleaff(nmode, 0, (void *) 1, _(" Registration mode : %s "),
 	newuin ? _("new uin") : _("existing user"));
 
-	db.gettree()->addleaff(nopt, 0, (void *) 12, _(" Server address : %s "), serv.c_str());
-	db.gettree()->addleaff(nopt, 0, (void *) 13, _(" Use SOCKS proxy : %s "), stryesno(socks));
-	db.gettree()->addleaff(nopt, 0, (void *)  8, _(" Sound device : %s "), strregsound(conf.getregsound()));
-	db.gettree()->addleaff(nopt, 0, (void *)  9, _(" Initial color scheme : %s "), strregcolor(conf.getregcolor()));
-	db.gettree()->addleaff(nopt, 0, (void *) 11, _(" Russian translation win1251-koi8 needed : %s "), stryesno(icq_Russian == 1));
+	t.addleaff(nopt, 0, (void *) 12, _(" Server address : %s "), serv.c_str());
+	t.addleaff(nopt, 0, (void *) 13, _(" Use SOCKS proxy : %s "), stryesno(socks));
+	t.addleaff(nopt, 0, (void *)  8, _(" Sound device : %s "), strregsound(conf.getregsound()));
+	t.addleaff(nopt, 0, (void *)  9, _(" Initial color scheme : %s "), strregcolor(conf.getregcolor()));
+	t.addleaff(nopt, 0, (void *) 11, _(" Russian translation win1251-koi8 needed : %s "), stryesno(icq_Russian == 1));
 
 	if(newuin) {
-	    db.gettree()->addleaff(ndet, 0, (void *)  2, _(" Password to set : %s "), phidden.assign(rpasswd.size(), '*').c_str());
-	    db.gettree()->addleaff(ndet, 0, (void *)  3, _(" Check the password : %s "), phidden.assign(pcheck.size(), '*').c_str());
-	    db.gettree()->addleaff(ndet, 0, (void *)  4, _(" Nickname : %s "), rnick.c_str());
-	    db.gettree()->addleaff(ndet, 0, (void *)  5, _(" E-Mail : %s "), remail.c_str());
-	    db.gettree()->addleaff(ndet, 0, (void *)  6, _(" First name : %s "), rfname.c_str());
-	    db.gettree()->addleaff(ndet, 0, (void *)  7, _(" Last name : %s "), rlname.c_str());
+	    t.addleaff(ndet, 0, (void *)  2, _(" Password to set : %s "), phidden.assign(rpasswd.size(), '*').c_str());
+	    t.addleaff(ndet, 0, (void *)  3, _(" Check the password : %s "), phidden.assign(pcheck.size(), '*').c_str());
+	    t.addleaff(ndet, 0, (void *)  4, _(" Nickname : %s "), rnick.c_str());
+	    t.addleaff(ndet, 0, (void *)  5, _(" E-Mail : %s "), remail.c_str());
+	    t.addleaff(ndet, 0, (void *)  6, _(" First name : %s "), rfname.c_str());
+	    t.addleaff(ndet, 0, (void *)  7, _(" Last name : %s "), rlname.c_str());
 	} else {
-	    db.gettree()->addleaff(ndet, 0, (void *) 10, _(" UIN : %s "), strint(ruin));
-	    db.gettree()->addleaff(ndet, 0, (void *)  2, _(" Password : %s "), phidden.assign(rpasswd.size(), '*').c_str());
+	    t.addleaff(ndet, 0, (void *) 10, _(" UIN : %s "), strint(ruin));
+	    t.addleaff(ndet, 0, (void *)  2, _(" Password : %s "), phidden.assign(rpasswd.size(), '*').c_str());
 	}
 
-	db.gettree()->addleaff(ndet, 0, (void *) 20,
+	t.addleaff(ndet, 0, (void *) 20,
 	    _(" Remember ICQ password : %s "),
 	    stryesno(conf.getsavepwd()));
 
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);
-	    nproxy = db.gettree()->addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
-	    db.gettree()->addleaff(nproxy, 0, (void *) 14, _(" Proxy server address : %s "), prserv.c_str());
-	    db.gettree()->addleaff(nproxy, 0, (void *) 17, _(" Proxy user name : %s "), socksuser.c_str());
-	    db.gettree()->addleaff(nproxy, 0, (void *) 16, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
-	    db.gettree()->addleaff(nproxy, 0, (void *) 18, _(" Check the password : %s "), phidden.assign(psockscheck.size(), '*').c_str());
+	    nproxy = t.addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
+	    t.addleaff(nproxy, 0, (void *) 14, _(" Proxy server address : %s "), prserv.c_str());
+	    t.addleaff(nproxy, 0, (void *) 17, _(" Proxy user name : %s "), socksuser.c_str());
+	    t.addleaff(nproxy, 0, (void *) 16, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
+	    t.addleaff(nproxy, 0, (void *) 18, _(" Check the password : %s "), phidden.assign(psockscheck.size(), '*').c_str());
 	}
 
 	void *p;
