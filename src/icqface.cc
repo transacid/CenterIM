@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.52 2001/12/07 10:53:27 konst Exp $
+* $Id: icqface.cc,v 1.53 2001/12/07 11:06:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -175,8 +175,10 @@ int icqface::contextmenu(icqcontact *c) {
 	case icq:
 	    m.additem(0, ACT_MSG,      _(" Send a message     enter"));
 	    m.additem(0, ACT_URL,      _(" Send an URL            u"));
+/*
 	    m.additem(0, ACT_CONTACT,  _(" Send contacts          c"));
 	    m.additem(0, ACT_FILE,     _(" Send a file            f"));
+*/
 	    m.addline();
 	    m.additem(0, ACT_INFO,     _(" User's details         ?"));
 	    m.additem(0, ACT_HISTORY,  _(" Events history         h"));

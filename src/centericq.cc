@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.50 2001/12/07 10:53:26 konst Exp $
+* $Id: centericq.cc,v 1.51 2001/12/07 11:06:14 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -503,6 +503,7 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	switch(r) {
 	    case icqface::forward:
 		text = fwdnote + text;
+	    case icqface::ok:
 		sendev = new imurl(m->getcontact(), imevent::outgoing,
 		    m->geturl(), text);
 		break;
