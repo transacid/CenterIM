@@ -19,8 +19,6 @@
 
 __KTOOL_BEGIN_C
 
-int checkpid(const char *pidfile);
-bool issuchpid(int pid);
 int dataready(int fd, int dowait);
 
 time_t lastkeypress();

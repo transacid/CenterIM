@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.5 2002/02/05 10:50:00 konst Exp $
+* $Id: kkiproc.cc,v 1.6 2002/03/03 09:12:29 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -25,35 +25,7 @@
 #include "kkiproc.h"
 
 #include <sys/ioctl.h>
-
-bool issuchpid(int pid) {
-    string pdir = "/proc/" + i2str(pid);
-    return !access(pdir.c_str(), F_OK);
-}
-
-int checkpid(char *pidfile) {
-    FILE *f;
-    char dir[20], curdir[500];
-    int pid;
-
-    if((f = fopen(pidfile, "r"))) {
-	fscanf(f, "%s", dir);
-	pid = atoi(dir);
-	fclose(f);
-
-	getcwd(curdir, 500);
-	sprintf(dir, "/proc/%d", pid);
-	if(!chdir(dir)) return 0; else chdir(curdir);
-    }
-
-    if((f = fopen(pidfile, "w"))) {
-	fprintf(f, "%d", getpid());
-	fclose(f);
-	return 1;
-    }
-
-    return 0;
-}
+#include <signal.h>
 
 void detach(char *logfile) {
     if(logfile) freopen(logfile, "w", stdout);
@@ -86,7 +58,7 @@ time_t lastkeypress() {
 			if(strlen(u->ut_line) > 3)
 			if(!strncmp(u->ut_line, "tty", 3))
 			if(isdigit(u->ut_line[3]))
-			if(*u->ut_user && issuchpid(u->ut_pid)) {
+			if(*u->ut_user && !kill(u->ut_pid, 0)) {
 			    sprintf(tname, "/dev/%s", u->ut_line);
 			    if(!stat(tname, &s))
 			    if(s.st_atime > t) {
