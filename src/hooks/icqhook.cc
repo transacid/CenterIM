@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.72 2002/04/03 17:40:56 konst Exp $
+* $Id: icqhook.cc,v 1.73 2002/04/07 13:21:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -64,11 +64,14 @@ icqhook::icqhook() {
     cli.messaged.connect(slot(this, &icqhook::messaged_cb));
     cli.messageack.connect(slot(this, &icqhook::messageack_cb));
     cli.contactlist.connect(slot(this, &icqhook::contactlist_cb));
+    cli.contact_userinfo_change_signal.connect(slot(this, &icqhook::contact_userinfo_change_signal_cb));
+    cli.contact_status_change_signal.connect(slot(this, &icqhook::contact_status_change_signal_cb));
     cli.newuin.connect(slot(this, &icqhook::newuin_cb));
     cli.rate.connect(slot(this, &icqhook::rate_cb));
     cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
     cli.search_result.connect(slot(this, &icqhook::search_result_cb));
-    cli.self_event.connect(slot(this, &icqhook::self_event_cb));
+    cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
+    cli.self_contact_status_change_signal.connect(slot(this, &icqhook::self_contact_status_change_cb));
 
 #ifdef DEBUG
     cli.logger.connect(slot(this, &icqhook::logger_cb));
@@ -83,11 +86,14 @@ icqhook::~icqhook() {
     cli.messaged.clear();
     cli.messageack.clear();
     cli.contactlist.clear();
+    cli.contact_userinfo_change_signal.clear();
+    cli.contact_status_change_signal.clear();
     cli.newuin.clear();
     cli.rate.clear();
-    cli.self_event.clear();
     cli.search_result.clear();
     cli.want_auto_resp.clear();
+    cli.self_contact_userinfo_change_signal.clear();
+    cli.self_contact_status_change_signal.clear();
 }
 
 void icqhook::init() {
@@ -103,8 +109,7 @@ void icqhook::connect() {
 	c = (icqcontact *) clist.at(i);
 
 	if(c->getdesc().pname == icq) {
-	    Contact ic(c->getdesc().uin);
-	    cli.addContact(ic);
+	    cli.addContact(new Contact(c->getdesc().uin));
 	}
     }
 
@@ -147,26 +152,45 @@ void icqhook::resolve() {
 }
 
 void icqhook::sendinvisible() {
+    vector<visInfo> todo, nvislist;
+    vector<visInfo>::iterator iv, it;
     icqlist::iterator i;
-    Contact *c;
-    int k;
-/*
-    for(k = 0; k < clist.count; k++) {
-	if(c = cli.getContact(((icqcontact *) clist.at(k))->getdesc().uin)) {
-	    c->setInvisible(false);
+
+    for(i = lst.begin(); i != lst.end(); i++) {
+	if(i->getdesc().pname == icq) {
+	    switch(i->getstatus()) {
+		case csvisible:
+		case csinvisible:
+		    todo.push_back(pair<unsigned int, contactstatus>
+			(i->getdesc().uin, i->getstatus()));
+		    break;
+	    }
 	}
     }
 
-    for(i = lst.begin(); i != lst.end(); i++) {
-	switch(i->getstatus()) {
-	    case csinvisible:
-		if(c = cli.getContact(i->getdesc().uin)) {
-		    c->setInvisible(true);
-		}
-		break;
+    nvislist = todo;
+
+    for(iv = vislist.begin(); iv != vislist.end(); iv++) {
+	it = find(todo.begin(), todo.end(), *iv);
+
+	if(it != todo.end()) {
+	    todo.erase(it);
+	} else {
+	    switch(iv->second) {
+		case csvisible: cli.removeVisible(iv->first); break;
+		case csinvisible: cli.removeInvisible(iv->first); break;
+	    }
 	}
     }
-*/
+
+    for(it = todo.begin(); it != todo.end(); it++) {
+	switch(it->second) {
+	    case csvisible: cli.addVisible(new Contact(it->first)); break;
+	    case csinvisible: cli.addInvisible(new Contact(it->first)); break;
+	}
+    }
+
+    vislist = nvislist;
 }
 
 void icqhook::exectimers() {
@@ -288,9 +312,9 @@ bool icqhook::enabled() const {
 
 bool icqhook::send(const imevent &ev) {
     unsigned int uin = ev.getcontact().uin;
-    Contact *ic = cli.getContact(uin);
+    ContactRef ic = cli.getContact(uin);
 
-    if(!ic) {
+    if(!ic.get()) {
 	return false;
     }
 
@@ -323,8 +347,7 @@ bool icqhook::send(const imevent &ev) {
 
 void icqhook::sendnewuser(const imcontact &c) {
     if(logged()) {
-	Contact ic(c.uin);
-	cli.addContact(ic);
+	cli.addContact(new Contact(c.uin));
 	cli.fetchDetailContactInfo(cli.getContact(c.uin));
     }
 }
@@ -426,11 +449,10 @@ void icqhook::requestinfo(const imcontact &c) {
 	    // Our info is requested
 	    cli.fetchSelfDetailContactInfo();
 	} else {
-	    Contact *icont = cli.getContact(c.uin);
+	    ContactRef icont = cli.getContact(c.uin);
 
-	    if(!icont) {
-		Contact ic(c.uin);
-		cli.addContact(ic);
+	    if(!icont.get()) {
+		cli.addContact(new Contact(c.uin));
 	    } else {
 		cli.fetchDetailContactInfo(icont);
 	    }
@@ -465,11 +487,13 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 }
 
 void icqhook::sendupdateuserinfo(const icqcontact &c) {
-    Contact *ic = cli.getSelfContact();
+    ContactRef ic = cli.getSelfContact();
 
-    MainHomeInfo &home = ic->getMainHomeInfo();
-    HomepageInfo &hpage = ic->getHomepageInfo();
-    WorkInfo &work = ic->getWorkInfo();
+    cli.self_contact_userinfo_change_signal.clear();
+
+    Contact::MainHomeInfo &home = ic->getMainHomeInfo();
+    Contact::HomepageInfo &hpage = ic->getHomepageInfo();
+    Contact::WorkInfo &work = ic->getWorkInfo();
 
     icqcontact::basicinfo cbinfo = c.getbasicinfo();
     icqcontact::moreinfo cminfo = c.getmoreinfo();
@@ -532,25 +556,26 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ic->setWorkInfo(work);
 
     cli.uploadSelfDetails();
+    cli.self_contact_userinfo_change_signal.connect(slot(this, &icqhook::self_contact_userinfo_change_cb));
 }
 
 void icqhook::requestawaymsg(const imcontact &c) {
-    Contact *ic = cli.getContact(c.uin);
+    ContactRef ic = cli.getContact(c.uin);
 
-    if(ic) {
+    if(ic.get()) {
 	MessageEvent *ev = new AwayMessageEvent(ic);
 	cli.SendEvent(ev);
     }
 }
 
-void icqhook::updateinforecord(Contact *ic, icqcontact *c) {
-    if(ic && c) {
-	MainHomeInfo &home = ic->getMainHomeInfo();
-	HomepageInfo &hpage = ic->getHomepageInfo();
-	WorkInfo &work = ic->getWorkInfo();
-	PersonalInterestInfo &pint = ic->getPersonalInterestInfo();
-	BackgroundInfo &backg = ic->getBackgroundInfo();
-	EmailInfo &email = ic->getEmailInfo();
+void icqhook::updateinforecord(ContactRef ic, icqcontact *c) {
+    if(ic.get() && c) {
+	Contact::MainHomeInfo &home = ic->getMainHomeInfo();
+	Contact::HomepageInfo &hpage = ic->getHomepageInfo();
+	Contact::WorkInfo &work = ic->getWorkInfo();
+	Contact::PersonalInterestInfo &pint = ic->getPersonalInterestInfo();
+	Contact::BackgroundInfo &backg = ic->getBackgroundInfo();
+	Contact::EmailInfo &email = ic->getEmailInfo();
 
 	icqcontact::basicinfo cbinfo = c->getbasicinfo();
 	icqcontact::moreinfo cminfo = c->getmoreinfo();
@@ -611,7 +636,7 @@ void icqhook::updateinforecord(Contact *ic, icqcontact *c) {
 
 	string sbuf;
 	vector<string> pintinfo;
-	list<PersonalInterestInfo::Interest>::iterator ii;
+	list<Contact::PersonalInterestInfo::Interest>::iterator ii;
 
 	for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
 	    sbuf = UserInfoHelpers::getInterestsIDtoString(ii->first);
@@ -627,7 +652,7 @@ void icqhook::updateinforecord(Contact *ic, icqcontact *c) {
 	/* education background */
 
 	vector<string> backginfo;
-	list<BackgroundInfo::School>::iterator isc;
+	list<Contact::BackgroundInfo::School>::iterator isc;
 
 	for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
 	    sbuf = UserInfoHelpers::getBackgroundIDtoString(isc->first);
@@ -724,7 +749,7 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     face.update();
 }
 
-bool icqhook::messaged_cb(MessageEvent *ev) {
+void icqhook::messaged_cb(MessageEvent *ev) {
     imcontact ic;
     time_t t;
 
@@ -818,8 +843,6 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 	}
 
     }
-
-    return true;
 }
 
 void icqhook::messageack_cb(MessageEvent *ev) {
@@ -851,7 +874,7 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 		    if(r = dynamic_cast<AwayMessageEvent *>(ev)) {
 			em.store(immessage(ic, imevent::incoming,
 			    string() + _("* Away message:") + "\n\n" +
-			    rusconv("wk", r->getMessage())));
+			    rusconv("wk", r->getAwayMessage())));
 		    }
 		} else {
 		    face.log(_("+ [icq] cannot fetch away msg from %s, %s"),
@@ -869,64 +892,65 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 }
 
 void icqhook::contactlist_cb(ContactListEvent *ev) {
+}
+
+void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
     char buf[64];
     string lastip, sbuf;
     int ip;
 
-    switch(ev->getType()) {
-	case ContactListEvent::StatusChange:
-	    if(dynamic_cast<StatusChangeEvent*>(ev))
-	    if(c) {
-		Contact *ic = cli.getContact(ev->getUIN());
-		StatusChangeEvent *tev = dynamic_cast<StatusChangeEvent*>(ev);
+    if(dynamic_cast<StatusChangeEvent*>(ev))
+    if(c) {
+	ContactRef ic = cli.getContact(ev->getUIN());
+	StatusChangeEvent *tev = dynamic_cast<StatusChangeEvent*>(ev);
+	imstatus nst = icq2imstatus(tev->getStatus());
 
-		logger.putonline(c->getdesc(),
-		    c->getstatus(),
-		    icq2imstatus(tev->getStatus()));
+	if(ic->isInvisible()) nst = invisible;
 
-		c->setstatus(icq2imstatus(tev->getStatus()));
+	logger.putonline(c->getdesc(), c->getstatus(), nst);
+	c->setstatus(nst);
 
-		if(c->getstatus() != offline) {
-		    c->setlastseen();
+	if(c->getstatus() != offline) {
+	    c->setlastseen();
 
-		    if(inet_ntop(AF_INET, &(ip = ntohl(ic->getExtIP())), buf, 64)) {
-			lastip = buf;
-		    }
+	    if(inet_ntop(AF_INET, &(ip = ntohl(ic->getExtIP())), buf, 64)) {
+		lastip = buf;
+	    }
 
-		    if(lastip.find_first_not_of(".0") != -1) {
-			if(inet_ntop(AF_INET, &(ip = ntohl(ic->getLanIP())), buf, 64)) {
-			    sbuf = buf;
+	    if(lastip.find_first_not_of(".0") != -1) {
+		if(inet_ntop(AF_INET, &(ip = ntohl(ic->getLanIP())), buf, 64)) {
+		    sbuf = buf;
 
-			    if(sbuf.find_first_not_of(".0") != -1) {
-				if(lastip != sbuf) {
-				    if(!lastip.empty()) lastip += " ";
-				    lastip += sbuf;
-				}
-			    }
+		    if(sbuf.find_first_not_of(".0") != -1) {
+			if(lastip != sbuf) {
+			    if(!lastip.empty()) lastip += " ";
+			    lastip += sbuf;
 			}
-
-			c->setlastip(lastip);
 		    }
 		}
-	    }
-	    break;
 
-	case ContactListEvent::UserInfoChange:
-	    if(dynamic_cast<UserInfoChangeEvent*>(ev)) {
-		if(!c) {
-		    c = clist.get(contactroot);
-		    /*
-		    *
-		    * In case we wanna look up info about a user which
-		    * is not on our contact list.
-		    *
-		    */
-		}
-
-		updateinforecord(cli.getContact(ev->getUIN()), c);
+		c->setlastip(lastip);
 	    }
-	    break;
+	}
+    }
+}
+
+void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
+    icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
+
+    if(!c) {
+	c = clist.get(contactroot);
+	/*
+	*
+	* In case we wanna look up info about a user which
+	* is not on our contact list.
+	*
+	*/
+    }
+
+    if(!ev->isTransientDetail()) {
+	updateinforecord(cli.getContact(ev->getUIN()), c);
     }
 }
 
@@ -979,21 +1003,21 @@ void icqhook::socket_cb(SocketEvent *ev) {
     }
 }
 
-void icqhook::want_auto_resp_cb(AwayMessageEvent *ev) {
+void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
     char buf[128];
 
     sprintf(buf, _("%lu requested our icq away message, sent the response"), ev->getSenderUIN());
     logger.putmessage(buf);
 
-    ev->setMessage(conf.getawaymsg(icq));
+    ev->setAwayMessage(conf.getawaymsg(icq));
 }
 
 void icqhook::search_result_cb(SearchResultEvent *ev) {
     if(ev == searchevent) {
 	string line;
-	Contact *c = ev->getLastContactAdded();
+	ContactRef c = ev->getLastContactAdded();
 
-	if(searchdest && c) {
+	if(searchdest && c.get()) {
 	    line = (c->getStatus() == STATUS_ONLINE ? "o " : "  ") +
 		rusconv("wk", c->getAlias());
 
@@ -1018,15 +1042,13 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
     }
 }
 
-void icqhook::self_event_cb(SelfEvent *ev) {
-    switch(ev->getType()) {
-	case SelfEvent::MyStatusChange:
-	    face.update();
-	    break;
-
-	case SelfEvent::MyUserInfoChange:
-	    updateinforecord(cli.getSelfContact(), clist.get(contactroot));
-	    updateinforecord(cli.getSelfContact(), clist.get(imcontact(cli.getUIN(), icq)));
-	    break;
+void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
+    if(!ev->isTransientDetail()) {
+	updateinforecord(cli.getSelfContact(), clist.get(contactroot));
+	updateinforecord(cli.getSelfContact(), clist.get(imcontact(cli.getUIN(), icq)));
     }
+}
+
+void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
+    face.update();
 }

@@ -2,6 +2,7 @@
 #define __ICQHOOK_H__
 
 #include "abstracthook.h"
+#include "icqmlist.h"
 
 #include "libicq2000/Client.h"
 #include "libicq2000/events.h"
@@ -19,24 +20,30 @@ class icqhook: public abstracthook, public SigC::Object {
 	unsigned int reguin;
 	SearchResultEvent *searchevent;
 
+	typedef pair<unsigned int, contactstatus> visInfo;
+	vector<visInfo> vislist;
+
 	void connected_cb(ConnectedEvent *ev);
 	void disconnected_cb(DisconnectedEvent *ev);
-	bool messaged_cb(MessageEvent *ev);
+	void messaged_cb(MessageEvent *ev);
 	void messageack_cb(MessageEvent *ev);
 	void contactlist_cb(ContactListEvent *ev);
+	void contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev);
+	void contact_status_change_signal_cb(StatusChangeEvent *ev);
 	void newuin_cb(NewUINEvent *ev);
 	void rate_cb(RateInfoChangeEvent *ev);
 	void logger_cb(LogEvent *ev);
 	void socket_cb(SocketEvent *ev);
-	void want_auto_resp_cb(AwayMessageEvent *ev);
+	void want_auto_resp_cb(ICQMessageEvent *ev);
 	void search_result_cb(SearchResultEvent *ev);
-	void self_event_cb(SelfEvent *ev);
+	void self_contact_userinfo_change_cb(UserInfoChangeEvent *ev);
+	void self_contact_status_change_cb(StatusChangeEvent *ev);
 
 	imstatus icq2imstatus(const Status st) const;
 
 	void resolve();
 	void sendinvisible();
-	void updateinforecord(Contact *ic, icqcontact *c);
+	void updateinforecord(ContactRef ic, icqcontact *c);
 
     public:
 	icqhook();

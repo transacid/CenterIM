@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.87 2002/04/04 14:41:43 konst Exp $
+* $Id: centericq.cc,v 1.88 2002/04/07 13:21:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,10 +32,6 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 #include "accountmanager.h"
-
-#ifdef HAVE_ICONV_H
-#include <iconv.h>
-#endif
 
 centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
@@ -1127,8 +1123,8 @@ string rusconv(const string &tdir, const string &text) {
 #else
 
     if(conf.getrussian()) {
-	if(tdir == "kw") r = iconv(text, "koi8-r", "cp1251"); else
-	if(tdir == "wk") r = iconv(text, "cp1251", "koi8-r"); else
+	if(tdir == "kw") r = siconv(text, "koi8-r", "cp1251"); else
+	if(tdir == "wk") r = siconv(text, "cp1251", "koi8-r"); else
 	    r = text;
     } else {
 	r = text;

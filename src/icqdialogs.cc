@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.63 2002/04/03 17:40:54 konst Exp $
+* $Id: icqdialogs.cc,v 1.64 2002/04/07 13:21:25 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,7 +174,6 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     int saveitem, savefirst, i;
 
     if(!c) c = clist.get(contactroot);
-    detailsfetched = false;
 
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
@@ -277,6 +276,8 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s: details "),
 	    c->getdesc().totext().c_str());
     }
+
+    detailsfetched = (c->getdesc() != contactroot);
 
     db.setwindow(&w, false);
 
