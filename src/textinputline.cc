@@ -60,7 +60,7 @@ void textinputline::exechistory() {
 	}
 
 	wy1 = y1 < LINES/2 ? y1 : y1-history.size()-2;
-        if(wy1 < 1) wy1 = 1;
+	if(wy1 < 1) wy1 = 1;
 
 	wx2 += x1+3;
 	if(wx2 > COLS-1) wx2 = COLS-1;
@@ -103,6 +103,7 @@ void textinputline::redraw() {
 	string(length-displen, ' '));
 
     kgotoxy(x1+position-beginpos, y1);
+    refresh();
 }
 
 void textinputline::exec() {
