@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.78 2002/08/19 08:25:17 konst Exp $
+* $Id: icqconf.cc,v 1.79 2002/08/20 16:12:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -701,6 +701,14 @@ void icqconf::commandline(int argc, char **argv) {
 	    if(argv[++i])
 	    if(strlen(argv[i]))
 		st = argv[i][0];
+
+	} else if((args == "-v") || (args == "--version")) {
+	    cout << PACKAGE << " " << VERSION << endl
+		<< "Written by Konstantin Klyagin." << endl << endl
+		<< "This is free software; see the source for copying conditions.  There is NO" << endl
+		<< "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." << endl;
+
+	    exit(0);
 
 	} else {
 	    usage();

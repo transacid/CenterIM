@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.99 2002/08/17 14:08:40 konst Exp $
+* $Id: icqhook.cc,v 1.100 2002/08/20 16:12:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -340,9 +340,11 @@ bool icqhook::send(const imevent &ev) {
     ICQMessageEvent *iev;
     icqcontact *c;
 
-    if(!ic.get()) {
+    if(!uin)
+	ic = cli.getSelfContact();
+
+    if(!ic.get())
 	return false;
-    }
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
@@ -358,7 +360,6 @@ bool icqhook::send(const imevent &ev) {
 	const imsms *m = static_cast<const imsms *> (&ev);
 
 	if(!uin) {
-	    ic = cli.getSelfContact();
 	    if(ic->getMainHomeInfo().getMobileNo().empty()) {
 		cli.fetchSelfDetailContactInfo();
 		return false;
@@ -1312,7 +1313,7 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 	    searchdest->redraw();
 	}
 
-	if(ev->isFinished()) {
+	if(ev->isFinished() && searchdest) {
 	    face.findready();
 
 	    face.log(_("+ [icq] whitepages search finished, %d found"),
