@@ -261,6 +261,10 @@ string imauthorization::gettext() const {
     return (string) _("* Authorization: ") + text;
 }
 
+string imauthorization::getmessage() const {
+    return text;
+}
+
 void imauthorization::write(ofstream &f) const {
     imevent::write(f);
 

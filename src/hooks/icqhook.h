@@ -16,6 +16,13 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	vector<int> rfds, wfds, efds;
 
+	enum {
+	    reqUpload,
+	    ackUpload,
+	    reqFetch,
+	    ackFetch
+	} syncstatus;
+
 	time_t timer_poll;
 	bool fonline, flogged;
 	unsigned int reguin;
@@ -84,6 +91,9 @@ class icqhook: public abstracthook, public SigC::Object {
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);
+
+	void synclist();
+	void getsyncstatus(int &tobestored);
 };
 
 extern icqhook ihook;

@@ -95,6 +95,9 @@ void accountmanager::exec() {
 		    if(pname == irc)
 			t.addnode(n, 0, citem+11, _(" Channel manager "));
 
+		    if(capab & hoptCanSyncList)
+			t.addnode(n, 0, citem+12, _(" Synchronize contact list "));
+
 		    t.addnode(n, 0, citem+8, _(" Drop "));
 		}
 	    }
@@ -175,6 +178,15 @@ void accountmanager::exec() {
 
 		case 11:
 		    imcontrol.channels(account);
+		    break;
+
+		case 12:
+		    if(!hook.online()) {
+			face.status(_("You must be logged in to preform the synchronization"));
+		    } else {
+			imcontrol.synclist(account);
+			fin = true;
+		    }
 		    break;
 	    }
 

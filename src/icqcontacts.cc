@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.36 2002/06/20 15:11:34 konst Exp $
+* $Id: icqcontacts.cc,v 1.37 2002/08/14 10:16:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@ icqcontacts::icqcontacts() {
 icqcontacts::~icqcontacts() {
 }
 
-icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist ) {
+icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist) {
     icqcontact *c = new icqcontact(cinfo);
 
     switch(cinfo.pname) {
@@ -52,7 +52,6 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist ) {
 	    break;
     }
 
-    gethook(cinfo.pname).sendnewuser(cinfo);
     c->save();
     add(c);
 
@@ -62,6 +61,8 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist ) {
     } else {
 	c->includeintolist();
     }
+
+    gethook(cinfo.pname).sendnewuser(cinfo);
 
     return c;
 }

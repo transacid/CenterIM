@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.128 2002/08/06 14:44:38 konst Exp $
+* $Id: icqface.cc,v 1.129 2002/08/14 10:16:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -541,9 +541,14 @@ void icqface::fillcontactlist() {
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
 		c, "%s%s ", c->getmsgcount() ? "#" : " ", dnick.c_str());
 	} else {
+	    char *fmt = "%s[%c] %s ";
+
+	    if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c> %s "; else
+	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c} %s ";
+
 	    mcontacts->addleaff(nnode,
 		c->getmsgcount() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
-		c, "%s[%c] %s ", c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
+		c, fmt, c->getmsgcount() ? "#" : " ", c->getshortstatus(), dnick.c_str());
 	}
 
 //        if(savec && c->getmsgcount() && ontop) savec = 0;
@@ -723,7 +728,7 @@ void commaform(string &text) {
 }
 
 void icqface::infogeneral(dialogbox &db, icqcontact *c) {
-    string langs;
+    string langs, options;
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
 
@@ -1281,7 +1286,6 @@ void icqface::modelist(contactstatus cs) {
 
 		    lst.fillmenu(db.getmenu(), cs);
 		    db.getmenu()->redraw();
-		    face.update();
 		}
 		break;
 	    case 2:
@@ -1295,10 +1299,11 @@ void icqface::modelist(contactstatus cs) {
 		    lst.del(it.getdesc(), cs);
 		    lst.fillmenu(db.getmenu(), cs);
 		    db.getmenu()->redraw();
-		    face.update();
 		}
 		break;
 	}
+
+	face.relaxedupdate();
     }
 
     db.close();
@@ -2168,11 +2173,18 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 		face.extk = ACT_RENAME;
 	    break;
 
+#if 0
 	case 'c':
 	case 'C':
-//            face.extk = ACT_CONTACT;
+	    ihook.saveserverbasedcl();
 	    break;
-	
+
+	case 'd':
+	case 'D':
+	    ihook.readserverbasedcl();
+	    break;
+#endif
+
 	case ALT('s'):
 	case '/': face.extk = ACT_QUICKFIND; break;
     }

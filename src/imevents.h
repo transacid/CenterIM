@@ -125,6 +125,8 @@ class imauthorization: public imevent {
 	    bool granted, const string &atext);
 
 	string gettext() const;
+	string getmessage() const;
+
 	bool getgranted() const;
 
 	bool empty() const;

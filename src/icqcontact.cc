@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.57 2002/07/10 09:23:31 konst Exp $
+* $Id: icqcontact.cc,v 1.58 2002/08/14 10:16:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -150,11 +150,15 @@ void icqcontact::save() {
 	    tname = getdirname() + "info";
 	    f.open(tname.c_str());
 	    if(f.is_open()) {
+		string options;
+		if(binfo.requiresauth) options += "a";
+		if(binfo.authawait) options += "w";
+
 		f << nick << endl <<
 		    tosane(binfo.fname) << endl <<
 		    tosane(binfo.lname) << endl <<
 		    tosane(binfo.email) << endl <<
-		    endl <<
+		    options << endl <<
 		    endl <<
 		    tosane(binfo.city) << endl <<
 		    tosane(binfo.state) << endl <<
@@ -243,7 +247,10 @@ void icqcontact::load() {
 		case  1: binfo.fname = buf; break;
 		case  2: binfo.lname = buf; break;
 		case  3: binfo.email = buf; break;
-		case  4: break;
+		case  4:
+		    binfo.requiresauth = (strstr(buf, "a") != 0);
+		    binfo.authawait = (strstr(buf, "w") != 0);
+		    break;
 		case  5: break;
 		case  6: binfo.city = buf; break;
 		case  7: binfo.state = buf; break;
@@ -375,6 +382,7 @@ void icqcontact::excludefromlist() {
 }
 
 void icqcontact::includeintolist() {
+    gethook(cdesc.pname).sendnewuser(cdesc);
     unlink((getdirname() + "excluded").c_str());
     finlist = true;
 }

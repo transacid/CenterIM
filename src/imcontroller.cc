@@ -162,6 +162,39 @@ void imcontroller::icqupdatedetails() {
     }
 }
 
+void imcontroller::icqsynclist() {
+    bool fin;
+    int tobestored, attempt = 1;
+    string msg;
+
+    face.progress.show(_(" Contact list synchronization "));
+    face.progress.log(_("Starting the synchronization process"), tobestored);
+
+    for(fin = false; !fin; ) {
+	ihook.getsyncstatus(tobestored);
+	face.progress.log(_("Attempt #%d, %d contacts to be stored server-side"), attempt, tobestored);
+
+	msg = "";
+	if(!tobestored) msg = _("Finished");
+	else if(!ihook.logged()) msg = _("Disconnected");
+	else if(attempt > 10) msg = _("Too many attempts, gave up");
+
+	if(!msg.empty()) {
+	    face.progress.log("%s", msg.c_str());
+	    fin = true;
+	    sleep(2);
+	}
+
+	if(!fin) {
+	    ihook.synclist();
+	}
+
+	attempt++;
+    }
+
+    face.progress.hide();
+}
+
 void imcontroller::aimupdateprofile() {
     icqcontact *c = clist.get(contactroot);
 
@@ -275,6 +308,12 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
 void imcontroller::channels(icqconf::imaccount &account) {
     switch(account.pname) {
 	case irc: ircchannels(); break;
+    }
+}
+
+void imcontroller::synclist(icqconf::imaccount &account) {
+    switch(account.pname) {
+	case icq: icqsynclist(); break;
     }
 }
 

@@ -43,6 +43,7 @@ class imcontroller {
 	void icqupdatedetails();
 	void aimupdateprofile();
 	void ircchannels();
+	void icqsynclist();
 
     public:
 	imcontroller();
@@ -51,6 +52,7 @@ class imcontroller {
 	void registration(icqconf::imaccount &account);
 	void updateinfo(icqconf::imaccount &account);
 	void channels(icqconf::imaccount &account);
+	void synclist(icqconf::imaccount &account);
 };
 
 extern imcontroller imcontrol;

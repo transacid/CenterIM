@@ -6,7 +6,7 @@
 #include "imcontroller.h"
 
 enum hookcapabilities {
-	      hoptCanNotify = 2,
+	    hoptCanSyncList = 2,
 	     hoptCanSendURL = 4,
 	    hoptCanSendFile = 8,
 	     hoptCanSendSMS = 16,

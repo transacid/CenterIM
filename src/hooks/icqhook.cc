@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.92 2002/08/10 14:38:06 konst Exp $
+* $Id: icqhook.cc,v 1.93 2002/08/14 10:16:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -57,7 +57,10 @@ icqhook::icqhook() {
 	hoptCanChangeNick |
 	hoptCanUpdateDetails |
 	hoptChangableServer |
+	hoptCanSyncList |
 	hoptControlableVisibility;
+
+    cli.setServerSideGroup("centericq", 0x0666);
 
     cli.connected.connect(slot(this, &icqhook::connected_cb));
     cli.disconnected.connect(slot(this, &icqhook::disconnected_cb));
@@ -111,7 +114,7 @@ void icqhook::connect() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	if(c->getdesc().pname == icq) {
+	if(c->getdesc().pname == icq && c->getdesc().uin) {
 	    cli.addContact(new Contact(c->getdesc().uin));
 	}
     }
@@ -354,7 +357,7 @@ bool icqhook::send(const imevent &ev) {
 
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	sev = new AuthAckEvent(ic, ruscrlfconv("kw", m->gettext()), m->getgranted());
+	sev = new AuthAckEvent(ic, ruscrlfconv("kw", m->getmessage()), m->getgranted());
 
     } else {
 	return false;
@@ -372,13 +375,28 @@ bool icqhook::send(const imevent &ev) {
 }
 
 void icqhook::sendnewuser(const imcontact &c) {
-    if(logged()) {
+    if(logged() && c.uin) {
 	cli.addContact(new Contact(c.uin));
+	cli.fetchSimpleContactInfo(cli.getContact(c.uin));
 	cli.fetchDetailContactInfo(cli.getContact(c.uin));
+
+	icqcontact *cc = clist.get(c);
+	if(cc)
+	if(cc->inlist()) {
+	    cli.uploadServerBasedContactList(cli.getContact(c.uin));
+	}
     }
 }
 
 void icqhook::removeuser(const imcontact &c) {
+    if(cli.getContact(c.uin).get()) {
+	icqcontact *cc = clist.get(c);
+	if(cc)
+	if(cc->inlist()) {
+	    cli.removeServerBasedContactList(cli.getContact(c.uin));
+	}
+    }
+
     cli.removeContact(c.uin);
 }
 
@@ -474,7 +492,7 @@ imstatus icqhook::icq2imstatus(const Status st) const {
 }
 
 void icqhook::requestinfo(const imcontact &c) {
-    if(logged()) {
+    if(logged() && c.uin) {
 	if(c == imcontact(conf.getourid(icq).uin, icq)) {
 	    // Our info is requested
 	    cli.fetchSelfDetailContactInfo();
@@ -484,6 +502,7 @@ void icqhook::requestinfo(const imcontact &c) {
 	    if(!icont.get()) {
 		cli.addContact(new Contact(c.uin));
 	    } else {
+		cli.fetchSimpleContactInfo(icont);
 		cli.fetchDetailContactInfo(icont);
 	    }
 	}
@@ -597,6 +616,7 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ic->setMainHomeInfo(home);
     ic->setHomepageInfo(hpage);
     ic->setWorkInfo(work);
+    ic->setAuthReq(cbinfo.requiresauth);
 
     icqconf::imaccount acc = conf.getourid(icq);
     acc.additional["webaware"] = cbinfo.webaware ? "1" : "0";
@@ -764,6 +784,55 @@ void icqhook::processemailevent(const string &sender, const string &email, const
     }
 }
 
+void icqhook::synclist() {
+    fd_set srfds, swfds, sefds;
+    struct timeval tv;
+    int hsockfd;
+    time_t t = time(0);
+
+    syncstatus = reqUpload;
+    cli.uploadServerBasedContactList();
+
+    while(syncstatus != ackFetch && logged() && time(0)-t <= 30) {
+	hsockfd = 0;
+
+	FD_ZERO(&srfds);
+	FD_ZERO(&swfds);
+	FD_ZERO(&sefds);
+
+	getsockets(srfds, swfds, sefds, hsockfd);
+
+	tv.tv_sec = 10;
+	tv.tv_usec = 0;
+
+	select(hsockfd+1, &srfds, &swfds, &sefds, &tv);
+
+	if(isoursocket(srfds, swfds, sefds)) {
+	    main();
+
+	    switch(syncstatus) {
+		case ackUpload:
+		    syncstatus = reqFetch;
+		    cli.fetchServerBasedContactList();
+		    break;
+	    }
+	}
+    }
+}
+
+void icqhook::getsyncstatus(int &tobestored) {
+    ContactList &cl = cli.getContactList();
+    ContactList::iterator ic = cl.begin();
+
+    tobestored = 0;
+
+    while(ic != cl.end()) {
+	if(!(*ic)->getServerBased() && !(*ic)->getAuthAwait())
+	    tobestored++;
+	++ic;
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void icqhook::connected_cb(ConnectedEvent *ev) {
@@ -789,11 +858,11 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
 	cli.getSelfContact()->getMainHomeInfo().timezone = UserInfoHelpers::getSystemTimezone();
 	cli.uploadSelfDetails();
-	cli.fetchServerBasedContactList();
 
 	unlink(conf.getconfigfname("icq-infoset").c_str());
     }
 
+    cli.fetchServerBasedContactList();
     resolve();
 }
 
@@ -883,6 +952,28 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	if(r = dynamic_cast<AuthReqEvent *>(ev)) {
 	    em.store(imauthorization(ic, imevent::incoming, false,
 		rusconv("wk", r->getMessage())));
+	}
+
+    } else if(ev->getType() == MessageEvent::AuthAck) {
+	AuthAckEvent *r;
+	if(r = dynamic_cast<AuthAckEvent *>(ev)) {
+	    icqcontact *c = clist.get(ic);
+	    if(c) {
+		icqcontact::basicinfo bi = c->getbasicinfo();
+		bi.authawait = false;
+		c->setbasicinfo(bi);
+	    }
+
+	    if(r->isGranted()) {
+		em.store(imnotification(ic, _("The user has accepted your authorization request")));
+//                toUpload.add(ev->getContact());
+//                time(&timer_upload);
+
+	    } else {
+		em.store(imnotification(ic, (string)
+		    _("The user has rejected your authorization request; the message was: ") + r->getMessage()));
+
+	    }
 	}
 
     } else if(ev->getType() == MessageEvent::EmailEx) {
@@ -1156,15 +1247,45 @@ void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
 void icqhook::server_based_contact_list_cb(ServerBasedContactEvent *ev) {
     const ContactList &lst = ev->getContactList();
     ContactList::const_iterator i = lst.begin();
+    icqcontact *c;
 
-    while(i != lst.end()) {
-	imcontact cont((*i)->getUIN(), icq);
+    if(ev->getType() == ServerBasedContactEvent::Fetch) {
+	syncstatus = ackFetch;
 
-	if(!clist.get(cont))
-	    clist.addnew(cont, true);
+	while(i != lst.end()) {
+	    imcontact cont((*i)->getUIN(), icq);
+	    if(!clist.get(cont)) clist.addnew(cont, false);
+	    ++i;
+	}
 
-	i++;
+    } else if(ev->getType() == ServerBasedContactEvent::Upload) {
+	syncstatus = ackUpload;
+
+	map<unsigned int, ServerBasedContactEvent::UploadResult> r = ev->getUploadResults();
+
+	while(i != lst.end()) {
+	    if(r[(*i)->getUIN()] == ServerBasedContactEvent::AuthRequired) {
+		c = clist.get(imcontact((*i)->getUIN(), icq));
+		if(c) {
+		    icqcontact::basicinfo bi = c->getbasicinfo();
+		    if(!bi.authawait) {
+			face.log(_("+ [icq] auto-requesting authorization to store %lu"), (*i)->getUIN());
+
+			cli.SendEvent(new AuthReqEvent(*i, "Please accept my authorization to add you to my contact list."));
+			cli.uploadServerBasedContactList(*i);
+
+			bi.authawait = true;
+			c->setbasicinfo(bi);
+		    }
+		}
+	    }
+	    ++i;
+	}
+
+    } else if(ev->getType() == ServerBasedContactEvent::Remove) {
+	while(i != lst.end()) {
+	    ++i;
+	}
+
     }
-
-//    cli.uploadServerBasedContactList();
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.110 2002/08/06 14:44:37 konst Exp $
+* $Id: centericq.cc,v 1.111 2002/08/14 10:16:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -889,16 +889,6 @@ icqcontact *centericq::addcontact(const imcontact &ic) {
     if(conf.getgroupmode() != icqconf::nogroups) {
 	groupid = face.selectgroup(_("Select a group to add the user to"));
 	if(!groupid) return 0;
-    }
-
-    abstracthook &hook = gethook(ic.pname);
-
-    if(hook.getcapabilities() & hoptCanNotify) {
-	if(face.ask(_("Notify the user he/she has been added?"),
-	ASK_YES | ASK_NO, ASK_YES) == ASK_YES) {
-//            ihook.sendalert(ic);
-	    face.log(_("+ the notification has been sent to %lu"), ic.uin);
-	}
     }
 
     if(!c) {
