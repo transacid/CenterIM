@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.66 2003/04/18 20:56:21 konst Exp $
+* $Id: irchook.cc,v 1.67 2003/04/20 12:08:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1402,7 +1402,7 @@ void irchook::chatuseropped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[512];
-    sprintf(_("%s has been opped by %s."), who, by);
+    sprintf(buf, _("%s has been opped by %s."), who, by);
     em.store(imnotification(imcontact(room, irc), buf));
 }
 
@@ -1416,7 +1416,7 @@ void irchook::chatuserdeopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[512];
-    sprintf(_("%s has been deopped by %s."), who, by);
+    sprintf(buf, _("%s has been deopped by %s."), who, by);
     em.store(imnotification(imcontact(room, irc), buf));
 }
 
@@ -1429,7 +1429,7 @@ void irchook::chatopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[512];
-    sprintf(_("%s has opped us."), by);
+    sprintf(buf, _("%s has opped us."), by);
     em.store(imnotification(imcontact(room, irc), buf));
 }
 
@@ -1442,7 +1442,7 @@ void irchook::chatdeopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[512];
-    sprintf(_("%s has deopped us."), by);
+    sprintf(buf, _("%s has deopped us."), by);
     em.store(imnotification(imcontact(room, irc), buf));
 }
 
