@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.52 2004/03/07 13:44:41 konst Exp $
+* $Id: icqcontacts.cc,v 1.53 2004/06/10 23:17:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,7 +88,7 @@ void icqcontacts::load() {
     imcontact cinfo;
     protocolname pname;
 
-    empty();
+//    empty();
 
     if(d = opendir(conf.getdirname().c_str())) {
 	while(ent = readdir(d)) {
@@ -137,7 +137,8 @@ void icqcontacts::load() {
 		}
 
 		if(c) {
-		    clist.add(c);
+		    if(!get(c->getdesc())) add(c);
+			else delete c;
 		}
 	    }
 	}

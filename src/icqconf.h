@@ -153,6 +153,8 @@ class icqconf {
 	void externalstatuschange(char st, const string &proto) const;
 	void initmultiproto(bool p[], string buf);
 
+	void selfsignal(int signum) const;
+
     public:
 	icqconf();
 	~icqconf();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.130 2004/03/17 19:08:31 konst Exp $
+* $Id: icqconf.cc,v 1.131 2004/06/10 23:17:31 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -267,9 +267,9 @@ void icqconf::loadkeys() {
 	    k.ctrl = false;
 	    k.alt = false;
 
-	    param = getword(buf);	/* first word is always bind */
+	    param = getword(buf);       /* first word is always bind */
 
-	    param = getword(buf);	/* read section */
+	    param = getword(buf);       /* read section */
 	    if(param == "contact")
 		k.section = section_contact; else
 	    if(param == "history")
@@ -279,7 +279,7 @@ void icqconf::loadkeys() {
 	    if (param == "info")
 		k.section = section_info;
 
-	    param = getword(buf);	/* key */
+	    param = getword(buf);       /* key */
 	    if(param == "\\c<space>" || param == "\\C<space>" || param == "^<space>") {
 		k.ctrl = true;
 		k.key = CTRL(' ');
@@ -334,7 +334,7 @@ void icqconf::loadkeys() {
 	    } else
 		k.key = param[0];
 
-	    param = getword(buf);	/* action */
+	    param = getword(buf);       /* action */
 	    if(param == "info") k.action = key_info; else
 	    if(param == "remove") k.action = key_remove; else
 	    if(param == "quit") k.action = key_quit; else
@@ -1189,6 +1189,11 @@ const string &dest, const string &number) const {
     if(ev) {
 	icqcontact *c = new icqcontact(cdest);
 
+	if(access(c->getdirname().c_str(), X_OK)) {
+	    mkdir(c->getdirname().c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+	    selfsignal(SIGUSR2);
+	}
+
 	if(!access(c->getdirname().c_str(), X_OK)) {
 	    clist.add(c);
 	    em.store(*ev);
@@ -1200,7 +1205,7 @@ const string &dest, const string &number) const {
 
 	    cout << buf << endl;
 	} else {
-	    cout << _("event sending error: the destination contact doesn't exist on your list") << endl;
+	    cout << _("event sending error: error creating directory for the contact") << endl;
 	    exit(1);
 	}
 
@@ -1211,10 +1216,23 @@ const string &dest, const string &number) const {
     }
 }
 
+void icqconf::selfsignal(int signum) const {
+    int rpid;
+    ifstream f(conf.getconfigfname("pid").c_str());
+
+    if(f.is_open()) {
+	f >> rpid;
+	f.close();
+
+	if(rpid > 0) {
+	    kill(rpid, signum);
+	}
+    }
+}
+
 void icqconf::externalstatuschange(char st, const string &proto) const {
     imstatus imst;
     protocolname pname;
-    int rpid;
 
     if(st) {
 	for(pname = icq; pname != protocolname_size; (int) pname += 1)
@@ -1228,19 +1246,11 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 	try {
 	    if(pname != protocolname_size) {
 		if(imst != imstatus_size) {
-		    ifstream f(conf.getconfigfname("pid").c_str());
-		    if(f.is_open()) {
-			f >> rpid;
-			f.close();
+		    string sfname = conf.getconfigfname((string) "status-" + proto);
+		    ofstream sf(sfname.c_str());
+		    if(sf.is_open()) sf << imstatus2char[imst], sf.close();
 
-			if(rpid > 0) {
-			    string sfname = conf.getconfigfname((string) "status-" + proto);
-			    ofstream sf(sfname.c_str());
-			    if(sf.is_open()) sf << imstatus2char[imst], sf.close();
-
-			    kill(rpid, SIGUSR1);
-			}
-		    }
+		    selfsignal(SIGUSR1);
 		} else {
 		    throw _("unknown status character was given");
 		}

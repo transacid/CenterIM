@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.188 2004/06/10 19:13:13 konst Exp $
+* $Id: centericq.cc,v 1.189 2004/06/10 23:17:31 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -789,8 +789,11 @@ void centericq::handlesignal(int signum) {
 	    cicq.rereadstatus();
 	    break;
 
-	case SIGALRM:
 	case SIGUSR2:
+	    clist.load();
+	    break;
+
+	case SIGALRM:
 	    break;
 
 	case SIGTERM:
@@ -1645,8 +1648,8 @@ void centericq::massmove() {
     icqcontact *c;
 
     face.muins.clear();
-    face.multicontacts(_("Select contacts to move"));
 
+    if(face.multicontacts(_("Select contacts to move")))
     if(!face.muins.empty())
     if(gid = face.selectgroup(_("Mass move selected users to.."))) {
 	for(im = face.muins.begin(); im != face.muins.end(); ++im) {
