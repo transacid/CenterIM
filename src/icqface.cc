@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.178 2003/05/09 13:13:49 konst Exp $
+* $Id: icqface.cc,v 1.179 2003/05/10 12:58:28 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1593,7 +1593,7 @@ void icqface::log(const char *fmt, ...) {
     va_end(ap);
 }
 
-void icqface::log(const string &atext, bool nochange) {
+void icqface::log(const string &atext) {
     int i;
     string text = atext;
 
@@ -1611,7 +1611,6 @@ void icqface::log(const string &atext, bool nochange) {
     bool lts, lo, lt;
     conf.getlogoptions(lts, lo, lt);
 
-    if(!nochange)
     if(lts)
     if(text.size() > 3)
     if(ispunct(text[0]) && isspace(text[1]) && !isspace(text[2])) {
@@ -2585,9 +2584,14 @@ void icqface::menuidle(verticalmenu &m) {
 	    flog = face.lastlog;
 	    face.lastlog.clear();
 
-	    for(il = flog.begin(); il != flog.end(); ++il)
-		face.log(*il, true);
+	    bool lts, lo, lt;
+	    conf.getlogoptions(lts, lo, lt);
+	    conf.setlogoptions(false, lo, lt);
 
+	    for(il = flog.begin(); il != flog.end(); ++il)
+		face.log(*il);
+
+	    conf.setlogoptions(lts, lo, lt);
 	    face.dotermresize = false;
 	}
     }
