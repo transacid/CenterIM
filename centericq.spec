@@ -12,8 +12,8 @@ Requires: ncurses >= 4.2, libsigc++ >= 1.0.0
 
 %description
 centericq is a text mode menu- and window-driven IM interface. Currently
-ICQ, Yahoo and MSN protocols are supported. It allows you to send,
-receive, and forward messages, URLs and, contacts, mass message send,
+ICQ2000, Yahoo and MSN protocols are supported. It allows you to send,
+receive, and forward messages, URLs and, SMSes, mass message send,
 search for users (including extended "whitepages search"), view users'
 details, maintain your contact list directly from the program (including
 non-icq contacts), view the messages history, register a new UIN and

@@ -654,3 +654,18 @@ resulted to program's bailing out with segfault on every attempt to browse
 events history. So this is a bugfix.
 
 Passwords remembering worked horribly. Fixed.
+
+4.5
+---
+
+This release adds a very important improvement. ICQ communications were
+moved to the library of ickle client, written by Barnaby Gray
+<barnaby@beedesign.co.uk>. Since the library supports the icq2000
+protocol, this version centericq doesn't loose messages unlike previous
+ones. Also it's now possible to send SMSes. Though, the library is not
+complete yet, so features such as finding users, updating details,
+sending contacts and files are now gone. Temporary.
+
+Another major rewrite the event processing system suffered. Now events
+are processed in a nicer way, and the code is what I can now be proud
+about, again, unlike previous versions.
