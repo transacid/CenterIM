@@ -133,7 +133,7 @@ AC_ARG_WITH(curl,
 
 if test ! -z "$CURL_CONFIG"; then
     CFLAGS="$CFLAGS `$CURL_CONFIG --cflags`"
-    LDFLAGS="$LDFLAGS `$CURL_CONFIG --libs`"
+#    LDFLAGS="$LDFLAGS `$CURL_CONFIG --libs`"
     LIBS="$LIBS `$CURL_CONFIG --libs`"
 fi
 
