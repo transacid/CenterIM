@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.62 2002/08/21 21:38:48 konst Exp $
+* $Id: icqcontact.cc,v 1.63 2002/08/22 10:51:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -118,6 +118,7 @@ string icqcontact::getdirname() const {
 void icqcontact::clear() {
     nmsgs = fupdated = groupid = fhistoffset = 0;
     finlist = true;
+    modified = false;
     cdesc = contactroot;
 
     binfo = basicinfo();
@@ -132,23 +133,29 @@ void icqcontact::clear() {
 }
 
 void icqcontact::save() {
-    string tname;
     ofstream f;
 
-    if(conf.enoughdiskspace()) {
+    string lrname = getdirname() + "lastread";
+    string infoname = getdirname() + "info";
+    string aboutname = getdirname() + "about";
+
+    modified = modified
+	|| access(lrname.c_str(), F_OK)
+	|| access(infoname.c_str(), F_OK)
+	|| access(aboutname.c_str(), F_OK);
+
+    if(modified && conf.enoughdiskspace()) {
 	mkdir(getdirname().c_str(), S_IREAD | S_IWRITE | S_IEXEC);
 
 	if(!access(getdirname().c_str(), W_OK)) {
-	    tname = getdirname() + "lastread";
-	    f.open(tname.c_str());
+	    f.open(lrname.c_str());
 	    if(f.is_open()) {
 		f << lastread << endl;
 		f.close();
 		f.clear();
 	    }
 
-	    tname = getdirname() + "info";
-	    f.open(tname.c_str());
+	    f.open(infoname.c_str());
 	    if(f.is_open()) {
 		string options;
 		if(binfo.requiresauth) options += "a";
@@ -211,8 +218,7 @@ void icqcontact::save() {
 		f.clear();
 	    }
 
-	    tname = getdirname() + "about";
-	    f.open(tname.c_str());
+	    f.open(aboutname.c_str());
 	    if(f.is_open()) {
 		f << about;
 		f.close();
@@ -220,11 +226,12 @@ void icqcontact::save() {
 	    }
 
 	    if(!finlist) {
-		tname = getdirname() + "excluded";
-		f.open(tname.c_str());
+		f.open((getdirname() + "excluded").c_str());
 		if(f.is_open()) f.close();
 	    }
 	}
+
+	modified = false;
     }
 }
 
@@ -455,15 +462,19 @@ void icqcontact::setnick(const string &fnick) {
 	cdesc.nickname = fnick;
 	rename(dir.c_str(), getdirname().c_str());
     }
+
+    modified = true;
 }
 
 void icqcontact::setdispnick(const string &fnick) {
     dispnick = fnick;
+    modified = true;
 }
 
 void icqcontact::setlastread(time_t flastread) {
     lastread = flastread;
     scanhistory();
+    modified = true;
 }
 
 void icqcontact::unsetupdated() {
@@ -473,36 +484,43 @@ void icqcontact::unsetupdated() {
 void icqcontact::setmsgcount(int n) {
     nmsgs = n;
     face.relaxedupdate();
+    modified = true;
 }
 
 void icqcontact::setbasicinfo(const basicinfo &ainfo) {
     binfo = ainfo;
     fupdated++;
+    modified = true;
 }
 
 void icqcontact::setmoreinfo(const moreinfo &ainfo) {
     minfo = ainfo;
     fupdated++;
+    modified = true;
 }
 
 void icqcontact::setworkinfo(const workinfo &ainfo) {
     winfo = ainfo;
     fupdated++;
+    modified = true;
 }
 
 void icqcontact::setinterests(const vector<string> &ainterests) {
     interests = ainterests;
     fupdated++;
+    modified = true;
 }
 
 void icqcontact::setbackground(const vector<string> &abackground) {
     background = abackground;
     fupdated++;
+    modified = true;
 }
 
 void icqcontact::setabout(const string &data) {
     about = data;
     fupdated++;
+    modified = true;
 }
 
 void icqcontact::setsound(imevent::imeventtype event, const string &sf) {
@@ -576,6 +594,7 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 void icqcontact::setlastip(const string &flastip) {
     lastip = flastip;
     fupdated++;
+    modified = true;
 }
 
 string icqcontact::getabout() const {
@@ -613,6 +632,7 @@ int icqcontact::updated() const {
 void icqcontact::setlastseen() {
     time(&lastseen);
     fupdated++;
+    modified = true;
 }
 
 time_t icqcontact::getlastseen() const {

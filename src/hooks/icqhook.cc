@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.104 2002/08/21 09:52:05 konst Exp $
+* $Id: icqhook.cc,v 1.105 2002/08/22 10:51:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -848,7 +848,7 @@ void icqhook::synclist() {
     cli.contact_userinfo_change_signal.clear();
     getsyncstatus(s, tobestored);
 
-    for(ic = tobestored.begin(); ic != tobestored.end(); ++ic) {
+    for(ic = tobestored.begin(); ic != tobestored.end() && tcl.size() <= 10; ++ic) {
 	ContactRef ct = cli.getContact((*ic)->getdesc().uin);
 	if(ct.get()) {
 	    ct->setAlias((*ic)->getnick());
@@ -920,7 +920,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
     flogged = true;
 
     time(&timer_poll);
-    time(&timer_resolve);
+    timer_resolve = time(0)-PERIOD_RESOLVE+3;
 
     logger.putourstatus(icq, offline, manualstatus);
 
