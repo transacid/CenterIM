@@ -85,6 +85,7 @@ class icqface {
 	time_t chatlastread;
 
 	imcontact passinfo;
+	const imevent *passevent;
 
 	struct filetransferitem {
 	    string fname;
@@ -219,8 +220,10 @@ class icqface {
 
 	bool eventedit(imevent &ev);
 
-	eventviewresult eventview(const imevent *ev, bool zoom = false,
+	eventviewresult eventview(const imevent *ev,
 	    vector<eventviewresult> abuttons = vector<eventviewresult>());
+
+	void fullscreenize(const imevent *ev);
 
 	bool edit(string &txt, const string &header);
 	void chat(const imcontact &ic);

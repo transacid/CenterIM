@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.158 2002/11/23 10:40:10 konst Exp $
+* $Id: icqface.cc,v 1.159 2002/11/23 15:40:43 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -699,7 +699,7 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     saveworkarea();
     clearworkarea();
 
-    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+    db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
 	conf.getcolor(cp_main_selected)));
@@ -1020,7 +1020,7 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 
     status(_("F2 to URLs, ESC close"));
 
-    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+    db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
@@ -1384,7 +1384,7 @@ void icqface::modelist(contactstatus cs) {
     saveworkarea();
     clearworkarea();
 
-    db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+    db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
     db.setmenu(new verticalmenu(conf.getcolor(cp_main_text),
@@ -1891,7 +1891,7 @@ bool icqface::eventedit(imevent &ev) {
 
 	imfile *m = static_cast<imfile *>(&ev);
 
-	db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 	db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
 	    conf.getcolor(cp_main_selected)));
@@ -2120,7 +2120,7 @@ void icqface::chat(const imcontact &ic) {
     update();
 }
 
-icqface::eventviewresult icqface::eventview(const imevent *ev, bool zoom,
+icqface::eventviewresult icqface::eventview(const imevent *ev,
 vector<eventviewresult> abuttons) {
 
     string title_event, title_timestamp, text;
@@ -2191,36 +2191,26 @@ vector<eventviewresult> abuttons) {
 	    break;
     }
 
-    if(!zoom) {
-	clearworkarea();
+    clearworkarea();
 
-	db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+3, sizeWArea.x2,
-	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+    db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2,
+	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
-	db.setbar(bar = new horizontalbar(conf.getcolor(cp_main_highlight),
-	    conf.getcolor(cp_main_selected), 0));
+    db.setbar(bar = new horizontalbar(conf.getcolor(cp_main_highlight),
+	conf.getcolor(cp_main_selected), 0));
 
-	bar->item = actions.size()-1;
+    bar->item = actions.size()-1;
 
-	for(ia = actions.begin(); ia != actions.end(); ++ia)
-	    bar->items.push_back(geteventviewresult(*ia));
+    for(ia = actions.begin(); ia != actions.end(); ++ia)
+	bar->items.push_back(geteventviewresult(*ia));
 
-	mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	    title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
+	title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
 
-	mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
-	    title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
+	title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());
 
-	db.addautokeys();
-
-    } else {
-	db.setwindow(new textwindow(0, 0, COLS, LINES,
-	    conf.getcolor(cp_main_text), TW_NOBORDER));
-
-    }
-
-    db.otherkeys = &userinfokeys;
-    db.idle = &dialogidle;
+    db.addautokeys();
 
     if(ev->gettype() == imevent::contacts) {
 	const imcontacts *m = static_cast<const imcontacts *>(ev);
@@ -2242,16 +2232,19 @@ vector<eventviewresult> abuttons) {
 	db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
 	db.getbrowser()->setbuf(text);
 	extracturls(text);
-	status(_("F2 to URLs, ESC close"));
+	status(_("F2 to URLs, F9 to full-screenize, ESC close"));
 
     }
 
     db.redraw();
 
-    if(!zoom) {
-	workarealine(sizeWArea.y1+3);
-	workarealine(sizeWArea.y2-2);
-    }
+    workarealine(sizeWArea.y1+3);
+    workarealine(sizeWArea.y2-2);
+
+    db.otherkeys = &userinfokeys;
+    db.idle = &dialogidle;
+
+    passevent = ev;
 
     if(db.open(mitem, baritem)) {
 	r = actions[baritem];
@@ -2269,6 +2262,44 @@ vector<eventviewresult> abuttons) {
     }
 
     return r;
+}
+
+void icqface::fullscreenize(const imevent *ev) {
+    textwindow w(0, 1, COLS, LINES-1, conf.getcolor(cp_main_text), TW_NOBORDER);
+    w.open();
+
+    char buf[512], *fmt = 0;
+    vector<string> lines;
+    vector<string>::const_iterator il;
+
+    breakintolines(ev->gettext(), lines, COLS);
+
+    switch(ev->getdirection()) {
+	case imevent::incoming: fmt = _("%s from %s, received on %s"); break;
+	case imevent::outgoing: fmt = _("%s to %s, sent on %s"); break;
+    }
+
+    sprintf(buf, fmt, streventname(ev->gettype()),
+	ev->getcontact().totext().c_str(),
+	strdateandtime(ev->gettimestamp()).c_str());
+
+    w.write(0, 1, conf.getcolor(cp_main_highlight), buf);
+
+    for(il = lines.begin(); il != lines.end() && (il-lines.begin() < LINES-1); ++il)
+	w.write(0, il-lines.begin()+3, *il);
+
+    blockmainscreen();
+    status(_("ESC to close"));
+
+    do {
+	cicq.idle();
+
+    } while(getkey() != KEY_ESC);
+
+    unblockmainscreen();
+    status("");
+
+    w.close();
 }
 
 void icqface::histmake(const vector<imevent *> &hist) {
@@ -2308,7 +2339,7 @@ bool icqface::histexec(imevent *&im) {
     r = fin = false;
 
     if(!mhist.empty()) {
-	db.setwindow(new textwindow(sizeWArea.x1, sizeWArea.y1+2, sizeWArea.x2,
+	db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
 	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
 
 	db.setmenu(&mhist, false);
@@ -2599,6 +2630,7 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 int icqface::userinfokeys(dialogbox &db, int k) {
     switch(k) {
 	case KEY_F(2): face.showextractedurls(); break;
+	case KEY_F(9): face.fullscreenize(face.passevent); break;
     }
 
     return -1;

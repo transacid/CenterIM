@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.136 2002/11/22 20:23:40 konst Exp $
+* $Id: centericq.cc,v 1.137 2002/11/23 15:40:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -850,7 +850,7 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, const vector<ic
 }
 
 icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, bool &fin, const vector<icqface::eventviewresult> &buttons) {
-    icqface::eventviewresult r = face.eventview(&ev, false, buttons);
+    icqface::eventviewresult r = face.eventview(&ev, buttons);
 
     imcontact cont = ev.getcontact();
     string nickname, tmp;
