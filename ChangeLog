@@ -1789,3 +1789,31 @@ online all the time. The option is called "Always online non-IM contacts"
 and it's possible to chose protocols to be shown always online.
 
 Configurable key bindings patch by Daniel Kraus was applied.
+
+4.9.12
+------
+
+On MacOS and Sun systems there was a problem using --disable-proto
+parameters of the configure script. Been there, fixed that.
+
+It was impossible to turn on character set conversion for the LJ
+protocol. Fixed.
+
+Another nasty bug was related to the new configurable keybindings
+feature. Default configuration files were not created on a fresh run and
+also in case the program couldn't find them, so it was a real trouble.
+
+Now, invoking the multi-contacts selection dialog, you'll see groups and
+be able to select/deselect whole groups as well.
+
+The support for Gadu-gadu did also suffer some important changes. Now
+one can change their info on the network and search for other users. A
+new yet important feature was added: now, if there is libjpeg installed
+in the system, it's possible to register new UINs.
+
+The "Enter key sends" feature lost its functionality in the previous
+version. Fixed.
+
+MSN used to crash on long messages. Fixed as well.
+
+Jabber module now sends keepalive packets from time to time.

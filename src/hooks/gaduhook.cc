@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.6 2004/04/11 16:32:28 konst Exp $
+* $Id: gaduhook.cc,v 1.7 2004/04/13 21:19:55 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,7 +39,9 @@
 #include <netinet/in.h>
 
 #ifdef HAVE_JPEGLIB_H
+extern "C" {
 #include <jpeglib.h>
+}
 #endif
 
 #define PERIOD_PING  50

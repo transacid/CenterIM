@@ -178,7 +178,7 @@ if test "$build_gg" = "yes"; then
 	    AC_CHECK_HEADERS(jpeglib.h,
 	    [
 		AC_DEFINE(HAVE_LIBJPEG, 1, [define if you have libjpeg])
-		LDFLAGS="-ljpeg $LDFLAGS"
+		LIBS="-ljpeg $LIBS"
 		have_libjpeg=yes
 	    ])
 	])
