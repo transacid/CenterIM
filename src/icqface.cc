@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.161 2002/11/25 22:55:18 konst Exp $
+* $Id: icqface.cc,v 1.162 2002/11/26 12:24:50 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -711,10 +711,31 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     db.addautokeys();
     db.redraw();
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1,
-	conf.getcolor(cp_main_highlight), _("Searching contacts.."));
+    abstracthook &h = gethook(sp.pname);
 
-    gethook(sp.pname).lookup(sp, *db.getmenu());
+    if(!sp.nick.empty() && h.getCapabs().count(hookcapab::directadd)) {
+	imcontact ic(sp.nick, sp.pname);
+	static icqcontact *singlec = 0, *c;
+
+	delete singlec;
+	singlec = 0;
+
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1,
+	    conf.getcolor(cp_main_highlight), _("Contact to add"));
+
+	c = clist.get(ic);
+	if(!c) c = singlec = new icqcontact(ic);
+
+	db.getmenu()->additem(conf.getprotcolor(sp.pname),
+	    c, (string) " " + sp.nick);
+
+    } else {
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1,
+	    conf.getcolor(cp_main_highlight), _("Searching contacts.."));
+
+	h.lookup(sp, *db.getmenu());
+
+    }
 
     db.idle = &dialogidle;
     db.otherkeys = &findreskeys;
@@ -724,7 +745,7 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
 
     while(!finished) {
 	finished = !db.open(r, b);
-	gethook(sp.pname).stoplookup();
+	h.stoplookup();
 
 	if(!finished) {
 	    if(r == -3) {
@@ -1903,7 +1924,6 @@ bool icqface::eventedit(imevent &ev) {
 	db.addkey(KEY_DC, 1);
 
 	db.addautokeys();
-	db.otherkeys = &userinfokeys;
 	db.idle = &dialogidle;
 
 	db.redraw();
@@ -2258,7 +2278,7 @@ vector<eventviewresult> abuttons) {
     workarealine(sizeWArea.y1+3);
     workarealine(sizeWArea.y2-2);
 
-    db.otherkeys = &userinfokeys;
+    db.otherkeys = &eventviewkeys;
     db.idle = &dialogidle;
 
     passevent = ev;
@@ -2654,8 +2674,22 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 
 int icqface::userinfokeys(dialogbox &db, int k) {
     switch(k) {
-	case KEY_F(2): face.showextractedurls(); break;
-	case KEY_F(9): face.fullscreenize(face.passevent); break;
+	case KEY_F(2):
+	    face.showextractedurls();
+	    break;
+    }
+
+    return -1;
+}
+
+int icqface::eventviewkeys(dialogbox &db, int k) {
+    switch(k) {
+	case KEY_F(2):
+	    face.showextractedurls();
+	    break;
+	case KEY_F(9):
+	    face.fullscreenize(face.passevent);
+	    break;
     }
 
     return -1;

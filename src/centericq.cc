@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.137 2002/11/23 15:40:43 konst Exp $
+* $Id: centericq.cc,v 1.138 2002/11/26 12:24:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -397,28 +397,7 @@ void centericq::find() {
 	if(ret = face.finddialog(s)) {
 	    switch(s.pname) {
 		case icq:
-		    if(s.uin) {
-			addcontact(imcontact(s.uin, s.pname));
-			ret = false;
-		    } else {
-			ret = face.findresults(s);
-		    }
-
-		    break;
-
-		case msn:
-		    if(s.nick.size() > 12)
-		    if(s.nick.substr(s.nick.size()-12) == "@hotmail.com") {
-			s.nick.erase(s.nick.size()-12);
-		    }
-
-		case irc:
-		    if(!s.nick.empty()) {
-			addcontact(imcontact(s.nick, s.pname));
-			ret = false;
-		    } else {
-			ret = face.findresults(s);
-		    }
+		    ret = face.findresults(s);
 		    break;
 
 		case infocard:
@@ -439,11 +418,9 @@ void centericq::find() {
 		    face.update();
 		    ret = false;
 		    break;
+
 		default:
-		    if(!s.nick.empty()) {
-			addcontact(imcontact(s.nick, s.pname));
-			ret = false;
-		    }
+		    ret = face.findresults(s);
 		    break;
 	    }
 	}

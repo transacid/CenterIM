@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.120 2002/11/25 16:29:49 konst Exp $
+* $Id: icqhook.cc,v 1.121 2002/11/26 12:24:51 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -590,7 +590,10 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	params.gender == genderFemale ? ICQ2000::SEX_FEMALE :
 	ICQ2000::SEX_UNSPECIFIED;
 
-    if(!params.kwords.empty()) {
+    if(params.uin) {
+	searchevent = cli.searchForContacts(params.uin);
+
+    } else if(!params.kwords.empty()) {
 	searchevent = cli.searchForContacts(rusconv("kw", params.kwords));
 
     } else if(params.randomgroup) {
@@ -1322,7 +1325,7 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 	if(ev->isFinished() && searchdest) {
 	    face.findready();
 
-	    face.log(_("+ [icq] whitepages search finished, %d found"),
+	    face.log(_("+ [icq] search finished, %d found"),
 		ev->getContactList().size());
 
 	    searchdest = 0;

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.55 2002/11/23 10:40:12 konst Exp $
+* $Id: irchook.cc,v 1.56 2002/11/26 12:24:51 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -64,6 +64,7 @@ irchook::irchook()
     fcapabs.insert(hookcapab::version);
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::cltemporary);
+    fcapabs.insert(hookcapab::directadd);
 }
 
 irchook::~irchook() {

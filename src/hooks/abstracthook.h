@@ -22,7 +22,8 @@ struct hookcapab {
 	version,
 	ping,
 	conferencing,
-	cltemporary
+	cltemporary,
+	directadd
     };
 };
 

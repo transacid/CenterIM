@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.68 2002/11/25 16:29:54 konst Exp $
+* $Id: yahoohook.cc,v 1.69 2002/11/26 12:24:52 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -58,6 +58,7 @@ yahoohook::yahoohook() : fonline(false) {
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::conferencing);
+    fcapabs.insert(hookcapab::directadd);
 
     pager_host[0] = pager_port[0] = filetransfer_host[0] = filetransfer_port[0] = 0;
 }

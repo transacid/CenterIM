@@ -107,6 +107,7 @@ class icqface {
 	static int historykeys(dialogbox &m, int k);
 	static int userinfokeys(dialogbox &db, int k);
 	static int findreskeys(dialogbox &db, int k);
+	static int eventviewkeys(dialogbox &db, int k);
 
 	static void editidle(texteditor &e);
 	static void textbrowseridle(textbrowser &b);

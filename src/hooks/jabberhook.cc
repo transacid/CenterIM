@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.11 2002/11/25 16:29:52 konst Exp $
+* $Id: jabberhook.cc,v 1.12 2002/11/26 12:24:51 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -33,6 +33,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::authrequests);
+    fcapabs.insert(hookcapab::directadd);
 }
 
 jabberhook::~jabberhook() {
@@ -48,10 +49,16 @@ void jabberhook::connect() {
     int pos;
 
     face.log(_("+ [jab] connecting to the server"));
-    jid = acc.nickname + "@" + acc.server + "/centericq";
+
+    jid = acc.nickname;
+
+    if(jid.find("@") == -1)
+	jid += (string) "@" + acc.server;
 
     if((pos = jid.find(":")) != -1)
 	jid.erase(pos);
+
+    jid += "/centericq";
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(acc.password.c_str()));
@@ -67,8 +74,12 @@ void jabberhook::connect() {
     jab_logger(jc, &jlogger);
 #endif
 
-    jab_start(jc);
-    id = atoi(jab_auth(jc));
+    if(jc->user) {
+	jab_start(jc);
+	id = atoi(jab_auth(jc));
+    } else {
+	face.log(_("+ [jab] incorrect jabber id"));
+    }
 
     if(!jc || jc->state == JCONN_STATE_OFF) {
 	face.log(_("+ [jab] unable to connect to the server"));
