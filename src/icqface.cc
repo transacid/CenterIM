@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.65 2002/01/18 16:04:01 konst Exp $
+* $Id: icqface.cc,v 1.66 2002/01/19 15:36:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -656,8 +656,7 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+6, conf.getcolor(cp_main_highlight), _("Company"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+7, conf.getcolor(cp_main_highlight), _("Department"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Occupation"));
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+9, conf.getcolor(cp_main_highlight), _("Title"));
+    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+8, conf.getcolor(cp_main_highlight), _("Title"));
 
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+11, conf.getcolor(cp_main_highlight), _("Phone"));
     mainw.write(WORKAREA_X1+2, WORKAREA_Y1+12, conf.getcolor(cp_main_highlight), _("Fax"));
@@ -678,7 +677,7 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+4, conf.getcolor(cp_main_text), wi.zip ? i2str(wi.zip) : "");
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+6, conf.getcolor(cp_main_text), wi.company);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+7, conf.getcolor(cp_main_text), wi.dept);
-    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+9, conf.getcolor(cp_main_text), wi.position);
+    mainw.write(WORKAREA_X1+14, WORKAREA_Y1+8, conf.getcolor(cp_main_text), wi.position);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+11, conf.getcolor(cp_main_text), wi.phone);
     mainw.write(WORKAREA_X1+14, WORKAREA_Y1+12, conf.getcolor(cp_main_text), wi.fax);
 
@@ -702,12 +701,12 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 
     if(!data.empty()) {
 	text += (string) "* " + _("Interests") + "\n";
-	commacat(text, *data.begin(), true);
 
-	for(i = data.begin()+1; i != data.end(); i++)
-	    commacat(text, *i);
+	for(i = data.begin(); i != data.end(); i++) {
+	    text += " + " + *i + "\n";
+	}
 
-	text += "\n\n";
+	text += "\n";
     }
 
     data = c->getbackground();
@@ -716,9 +715,9 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 	text += (string) "* " + _("Background") + "\n";
 
 	for(i = data.begin(); i != data.end(); i++)
-	    text += *i + "\n";
+	    text += " + " + *i + "\n";
 
-	text += "\n\n";
+	text += "\n";
     }
 
     commaform(text);

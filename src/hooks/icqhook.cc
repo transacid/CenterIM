@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.38 2002/01/19 13:02:40 konst Exp $
+* $Id: icqhook.cc,v 1.39 2002/01/19 15:36:03 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -61,10 +61,9 @@ icqhook::icqhook() {
     cli.contactlist.connect(slot(this, &icqhook::contactlist_cb));
     cli.newuin.connect(slot(this, &icqhook::newuin_cb));
     cli.rate.connect(slot(this, &icqhook::rate_cb));
-    cli.statuschanged.connect(slot(this, &icqhook::statuschanged_cb));
     cli.want_auto_resp.connect(slot(this, &icqhook::want_auto_resp_cb));
     cli.search_result.connect(slot(this, &icqhook::search_result_cb));
-    cli.detailschanged.connect(slot(this, &icqhook::detailschanged_cb));
+    cli.self_event.connect(slot(this, &icqhook::self_event_cb));
 
 #ifdef DEBUG
     cli.logger.connect(slot(this, &icqhook::logger_cb));
@@ -81,7 +80,9 @@ icqhook::~icqhook() {
     cli.contactlist.clear();
     cli.newuin.clear();
     cli.rate.clear();
-    cli.statuschanged.clear();
+    cli.self_event.clear();
+    cli.search_result.clear();
+    cli.want_auto_resp.clear();
 }
 
 void icqhook::init() {
@@ -433,7 +434,7 @@ void icqhook::requestinfo(const imcontact c) {
     if(logged()) {
 	if(c == imcontact(conf.getourid(icq).uin, icq)) {
 	    // Our info is requested
-	    cli.fetchSelfDetails();
+	    cli.fetchSelfDetailContactInfo();
 	} else {
 	    Contact ic(c.uin);
 	    cli.addContact(ic);
@@ -804,16 +805,37 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		vector<string> pintinfo;
 		list<PersonalInterestInfo::Interest>::iterator ii;
 
-		for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++)
-		    pintinfo.push_back(rusconv("wk", ii->second));
+		for(ii = pint.interests.begin(); ii != pint.interests.end(); ii++) {
+		    int k = ii->first-Interests_offset;
+
+		    if(k >= 0 && k < Interests_table_size) {
+			sbuf = (string) Interests_table[k] + ": ";
+		    } else {
+			sbuf = "";
+		    }
+
+		    sbuf += rusconv("wk", ii->second);
+		    pintinfo.push_back(sbuf);
+		}
 
 		/* education background */
 
 		vector<string> backginfo;
 		list<BackgroundInfo::School>::iterator isc;
 
-		for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++)
-		    backginfo.push_back(rusconv("wk", isc->second));
+		for(isc = backg.schools.begin(); isc != backg.schools.end(); isc++) {
+		    sbuf = "";
+
+		    for(int k = 0; k < Background_table_size; k++) {
+			if(Background_table[k].code == isc->first) {
+			    sbuf = (string) Background_table[k].name + ": ";
+			    break;
+			}
+		    }
+
+		    sbuf += rusconv("wk", isc->second);
+		    if(!sbuf.empty()) backginfo.push_back(sbuf);
+		}
 
 		/* nicknames stuff */
 
@@ -899,10 +921,6 @@ void icqhook::socket_cb(SocketEvent *ev) {
     }
 }
 
-void icqhook::statuschanged_cb(MyStatusChangeEvent *ev) {
-    face.update();
-}
-
 void icqhook::want_auto_resp_cb(AwayMessageEvent *ev) {
     ev->setMessage("");
 }
@@ -934,7 +952,17 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
     }
 }
 
-void icqhook::detailschanged_cb(MyDetailsChangeEvent *ev) {
-    UserInfoChangeEvent cl(cli.getSelfContact());
-    contactlist_cb(&cl);
+void icqhook::self_event_cb(SelfEvent *ev) {
+    switch(ev->getType()) {
+	case SelfEvent::MyStatusChange:
+	    face.update();
+	    break;
+
+	case SelfEvent::MyUserInfoChange:
+	    {
+		UserInfoChangeEvent cl(cli.getSelfContact());
+		contactlist_cb(&cl);
+	    }
+	    break;
+    }
 }
