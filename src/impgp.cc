@@ -185,7 +185,7 @@ string impgp::encrypt(const string &text, const string &keyid) {
 	gpgme_set_textmode(ctx, 0);
 	gpgme_set_armor(ctx, 1);
 
-	if(!gpgme_get_key(ctx, keyid.c_str(), &key, 1)) {
+	if(!gpgme_get_key(ctx, keyid.c_str(), &key, 0)) {
 	    gpgme_key_t keys[] = { key, 0 };
 
 	    if(!gpgme_data_new_from_mem(&in, text.c_str(), text.size(), 0)) {
@@ -209,7 +209,7 @@ string impgp::encrypt(const string &text, const string &keyid) {
 
 bool impgp::havekey(const string &keyid) const {
     gpgme_key_t key;
-    bool r = !gpgme_get_key(ctx, keyid.c_str(), &key, 1);
+    bool r = !gpgme_get_key(ctx, keyid.c_str(), &key, 0);
     if(r) gpgme_key_release(key);
     return r;
 }
