@@ -51,6 +51,8 @@ class imcontroller {
 	void icqupdatedetails();
 	void aimupdateprofile();
 	void msnupdateprofile();
+	void jabberupdateprofile();
+
 	void ircchannels();
 
 	void icqsynclist();

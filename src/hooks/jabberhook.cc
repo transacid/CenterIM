@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.19 2002/11/30 23:33:45 konst Exp $
+* $Id: jabberhook.cc,v 1.20 2002/12/03 14:01:36 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,6 +37,8 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::flexiblesearch);
     fcapabs.insert(hookcapab::visibility);
     fcapabs.insert(hookcapab::ssl);
+    fcapabs.insert(hookcapab::changenick);
+    fcapabs.insert(hookcapab::changedetails);
 //    fcapabs.insert(hookcapab::conferencing);
 }
 

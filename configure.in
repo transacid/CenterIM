@@ -1,5 +1,5 @@
 AC_INIT(src/centericq.cc)
-AM_INIT_AUTOMAKE(centericq, 4.8.9)
+AM_INIT_AUTOMAKE(centericq, 4.9.0)
 
 AC_CANONICAL_HOST
 
@@ -74,7 +74,7 @@ if test -n "$with_openssl" -a "$with_openssl" != "no"; then
     if test "$with_openssl" = "yes"; then with_openssl="/usr"; fi
     CFLAGS="$CFLAGS -I${with_openssl}"
     LDFLAGS="$LDFLAGS -L${with_openssl}"
-    LIBS="$LIBS -lssl"
+    LIBS="$LIBS -lssl -lcrypto"
     AC_DEFINE(HAVE_OPENSSL)
     AC_MSG_RESULT([found in $with_openssl])
 else

@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.35 2002/11/28 14:25:50 konst Exp $
+* $Id: imcontroller.cc,v 1.36 2002/12/03 14:01:36 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -257,6 +257,17 @@ void imcontroller::msnupdateprofile() {
     }
 }
 
+void imcontroller::jabberupdateprofile() {
+    if(jhook.logged()) {
+	if(face.updatedetails(0, jabber)) {
+	    icqcontact *c = clist.get(contactroot);
+//            jhook.sendupdateuserinfo(*c);
+	}
+    } else {
+	face.status(_("You must be logged to the Jabber network to update your details"));
+    }
+}
+
 void imcontroller::icqsynclist() {
     bool fin;
     int synchronized, attempt = 1;
@@ -428,6 +439,7 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
 	case icq: icqupdatedetails(); break;
 	case aim: aimupdateprofile(); break;
 	case msn: msnupdateprofile(); break;
+	case jabber: jabberupdateprofile(); break;
     }
 }
 
