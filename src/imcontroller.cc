@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.54 2004/04/11 16:32:28 konst Exp $
+* $Id: imcontroller.cc,v 1.55 2004/07/08 23:52:48 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -317,7 +317,7 @@ void imcontroller::gaduupdateprofile() {
 	    ghook.sendupdateuserinfo(*c);
 
     } else {
-	face.status(_("You must be logged to the Jabber network to update your details"));
+	face.status(_("You must be logged to the Gadu-Gadu network to update your details"));
     }
 #endif
 }

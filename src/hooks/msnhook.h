@@ -76,6 +76,7 @@ class msnhook : public abstracthook {
 	};
 
 	map<string, vector<msnbuddy> > slst;
+	map<string, MSN::SwitchboardServerConnection *> lconn;
 
 	vector<int> rfds, wfds;
 	map<int, string> mgroups;
@@ -91,6 +92,8 @@ class msnhook : public abstracthook {
 	void removeuser(const imcontact &ic, bool report);
 	bool getfevent(MSN::FileTransferInvitation *fhandle, imfile &fr);
 	void statusupdate(string buddy, string friendlyname, imstatus status);
+
+	void sendmsn(MSN::SwitchboardServerConnection *conn, const qevent *ctx);
 
     public:
 	msnhook();

@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.8 2004/06/10 19:13:13 konst Exp $
+* $Id: gaduhook.cc,v 1.9 2004/07/08 23:52:48 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,7 +52,7 @@ imstatus gg2imstatus(int st) {
     switch(st) {
 	case GG_STATUS_INVISIBLE: imst = invisible; break;
 	case GG_STATUS_BUSY: imst = occupied; break;
-	case GG_STATUS_NOT_AVAIL: imst = notavail; break;
+	case GG_STATUS_NOT_AVAIL: imst = offline; break;
 	default: imst = available; break;
     }
 
@@ -68,11 +68,9 @@ int imstatus2gg(imstatus st) {
 	    break;
 	case dontdisturb:
 	case occupied:
-	    gst = GG_STATUS_BUSY;
-	    break;
 	case notavail:
 	case away:
-	    gst = GG_STATUS_NOT_AVAIL;
+	    gst = GG_STATUS_BUSY;
 	    break;
 	case freeforchat:
 	case available:
@@ -135,10 +133,12 @@ void gaduhook::connect() {
 
 void gaduhook::cutoff() {
     if(sess) {
+	gg_change_status(sess, GG_STATUS_NOT_AVAIL);
 	gg_logoff(sess);
 	gg_free_session(sess);
 	sess = 0;
     }
+
     clist.setoffline(proto);
 }
 

@@ -8,13 +8,21 @@ patch for LJ import friends by Alexander Kanevskiy
 
 multicontacts not all contacts showing
 
+GG disconnect on setting status to N/A
+
+msn opens a new connection for each message!
+
+when LJ friends import is off don't delete users from the server
+
+set postponed -> if there are only spaces and line-feeds, consider the message empty
+
+hang on start
+
 /*
 *
 * BUGS
 *
 */
-
-msn opens a new connection for each message!
 
 http://www.dotgnu.org/index.rdf
 
@@ -22,13 +30,17 @@ http://www.dotgnu.org/index.rdf
 "jabber.host.com/announce/motd", которые нужны как воздух в случае
 админского логина ;)
 
+check for ssl support in libcurl
+
+cannot send to contacts with "@" in nicknames
+
 /*
 *
 * TODO
 *
 */
 
-when LJ friends import is off don't delete users from the server
+xterm/putty window headers like in emerge
 
 msn file transfers
 
@@ -109,4 +121,4 @@ try to implement the daemon mode
 
 todo and reminders
 
-$Id: TODO,v 1.520 2004/07/03 08:21:12 konst Exp $
+$Id: TODO,v 1.521 2004/07/08 23:52:48 konst Exp $

@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.85 2004/06/30 21:17:28 konst Exp $
+* $Id: msnhook.cc,v 1.86 2004/07/08 23:52:48 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -133,7 +133,8 @@ void msnhook::connect() {
 }
 
 void msnhook::disconnect() {
-    conn.disconnect();
+    if(conn.connectionState() != MSN::NotificationServerConnection::NS_DISCONNECTED)
+	conn.disconnect();
 }
 
 void msnhook::exectimers() {
@@ -257,7 +258,10 @@ bool msnhook::send(const imevent &ev) {
 
 	    try {
 		qevent *ctx = new qevent(qevent::qeFile, rcpt, ir->fname);
-		conn.requestSwitchboardConnection(ctx);
+
+		if(lconn.find(rcpt) != lconn.end()) sendmsn(lconn[rcpt], ctx);
+		    else conn.requestSwitchboardConnection(ctx);
+
 	    } catch(...) {
 	    }
 	}
@@ -272,7 +276,10 @@ bool msnhook::send(const imevent &ev) {
     if(c->getstatus() != offline || !c->inlist()) {
 	try {
 	    qevent *ctx = new qevent(qevent::qeMsg, rcpt, text);
-	    conn.requestSwitchboardConnection(ctx);
+
+	    if(lconn.find(rcpt) != lconn.end()) sendmsn(lconn[rcpt], ctx);
+		else conn.requestSwitchboardConnection(ctx);
+
 	} catch(...) {
 	}
 
@@ -566,6 +573,25 @@ void msnhook::statusupdate(string buddy, string friendlyname, imstatus status) {
 
 // ----------------------------------------------------------------------------
 
+void msnhook::sendmsn(MSN::SwitchboardServerConnection *conn, const qevent *ctx) {
+    MSN::FileTransferInvitation *inv;
+
+    switch(ctx->type) {
+	case msnhook::qevent::qeMsg:
+	    conn->sendMessage(ctx->text);
+	    break;
+
+	case msnhook::qevent::qeFile:
+	    inv = conn->sendFile(ctx->text);
+//                if(inv) mhook.transferinfo[] = inv;
+	    break;
+    }
+
+    delete ctx;
+}
+
+// ----------------------------------------------------------------------------
+
 static void log(const string &s) {
 #ifdef DEBUG
     face.log(s);
@@ -726,19 +752,8 @@ void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, 
     ::log("MSN::ext::buddyJoinedConversation");
     if(conn->auth.tag) {
 	const msnhook::qevent *ctx = static_cast<const msnhook::qevent *>(conn->auth.tag);
-	FileTransferInvitation *inv;
-
-	switch(ctx->type) {
-	    case msnhook::qevent::qeMsg:
-		conn->sendMessage(ctx->text);
-		break;
-	    case msnhook::qevent::qeFile:
-		inv = conn->sendFile(ctx->text);
-//                if(inv) mhook.transferinfo[] = inv;
-		break;
-	}
-
-	delete ctx;
+	mhook.lconn[ctx->nick] = conn;
+	mhook.sendmsn(conn, ctx);
 	conn->auth.tag = 0;
     }
 }
@@ -838,18 +853,35 @@ void MSN::ext::gotNewConnection(MSN::Connection * conn) {
 void MSN::ext::closingConnection(MSN::Connection * conn) {
     ::log("MSN::ext::closingConnection");
 
-    if(conn == &mhook.conn && !mhook.destroying) {
-	mhook.rfds.clear();
-	mhook.wfds.clear();
+    MSN::SwitchboardServerConnection *swc;
 
-	logger.putourstatus(msn, mhook.getstatus(), mhook.ourstatus = offline);
-	clist.setoffline(msn);
+    if(swc = dynamic_cast<MSN::SwitchboardServerConnection *>(conn)) {
+	map<string, MSN::SwitchboardServerConnection *>::const_iterator ic = mhook.lconn.begin();
+	while(ic != mhook.lconn.end()) {
+	    if(swc == ic->second) {
+		mhook.lconn.erase(ic->first);
+		break;
+	    }
+	    ++ic;
+	}
 
-	mhook.fonline = false;
-	mhook.slst.clear();
-	mhook.log(abstracthook::logDisconnected);
+    } else if(conn == &mhook.conn) {
+	if(!mhook.destroying) {
+	    mhook.rfds.clear();
+	    mhook.wfds.clear();
+	    mhook.lconn.clear();
+	    mhook.slst.clear();
 
-	face.update();
+	    if(mhook.logged()) {
+		logger.putourstatus(msn, mhook.getstatus(), mhook.ourstatus = offline);
+		clist.setoffline(msn);
+
+		mhook.fonline = false;
+		mhook.log(abstracthook::logDisconnected);
+
+		face.update();
+	    }
+	}
     }
 
     unregisterSocket(conn->sock);

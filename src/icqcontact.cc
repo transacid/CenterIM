@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.97 2004/06/19 13:17:56 konst Exp $
+* $Id: icqcontact.cc,v 1.98 2004/07/08 23:52:48 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -707,7 +707,9 @@ bool icqcontact::operator > (const icqcontact &acontact) const {
 }
 
 void icqcontact::setpostponed(const string &apostponed) {
-    postponed = apostponed;
+    if(apostponed.find_first_not_of(" \r\n") != -1) postponed = apostponed;
+	else postponed = "";
+
     modified = true;
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq contact list class
-* $Id: icqcontacts.cc,v 1.53 2004/06/10 23:17:31 konst Exp $
+* $Id: icqcontacts.cc,v 1.54 2004/07/08 23:52:48 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,7 +79,7 @@ icqcontact *icqcontacts::addnew(const imcontact &cinfo, bool notinlist, int agro
 }
 
 void icqcontacts::load() {
-    string tuname, fname;
+    string tuname, fname, dname;
     struct dirent *ent;
     struct stat st;
     DIR *d;
@@ -92,22 +92,23 @@ void icqcontacts::load() {
 
     if(d = opendir(conf.getdirname().c_str())) {
 	while(ent = readdir(d)) {
-	    tuname = conf.getdirname() + ent->d_name;
-	    stat(tuname.c_str(), &st);
+	    dname = ent->d_name;
+	    tuname = conf.getdirname() + dname;
 
+	    if(!stat(tuname.c_str(), &st))
 	    if(S_ISDIR(st.st_mode)) {
 		c = 0;
-		pname = conf.getprotocolbyletter(ent->d_name[0]);
+		pname = conf.getprotocolbyletter(dname[0]);
 
 		switch(pname) {
 		    case icq:
-			c = new icqcontact(imcontact(atol(ent->d_name), pname));
+			c = new icqcontact(imcontact(atol(dname.c_str()), pname));
 			break;
 
 		    case infocard:
 		    case rss:
 		    case gadu:
-			c = new icqcontact(imcontact(atol(ent->d_name+1), pname));
+			c = new icqcontact(imcontact(atol(dname.c_str()+1), pname));
 			break;
 
 		    case protocolname_size:
@@ -116,23 +117,23 @@ void icqcontacts::load() {
 			break;
 
 		    case jabber:
-			if(get(imcontact(ent->d_name+1, pname)))
+			if(get(imcontact(dname.substr(1), pname)))
 			    continue;
 
-			if(string(ent->d_name+1).find("@") == -1) {
-			    string oldname = conf.getdirname() + ent->d_name;
+			if(dname.substr(1).find("@") == -1) {
+			    string oldname = conf.getdirname() + dname;
 			    string ndname = oldname + "@jabber.com";
 
 			    if(!access(ndname.c_str(), F_OK))
-				rename(ndname.c_str(), (conf.getdirname() + "_" + ent->d_name).c_str());
+				rename(ndname.c_str(), (conf.getdirname() + "_" + dname).c_str());
 
 			    rename(oldname.c_str(), ndname.c_str());
-			    strcpy(ent->d_name, justfname(ndname).c_str());
+			    dname = justfname(ndname);
 			}
 
 		    default:
-			c = new icqcontact(imcontact(ent->d_name+1, pname));
-			c->setnick(ent->d_name+1);
+			c = new icqcontact(imcontact(dname.substr(1), pname));
+			c->setnick(dname.substr(1));
 			break;
 		}
 

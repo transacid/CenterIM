@@ -1,9 +1,9 @@
 /*
 *
 * centericq account manager dialog implementation
-* $Id: accountmanager.cc,v 1.35 2004/07/03 08:21:12 konst Exp $
+* $Id: accountmanager.cc,v 1.36 2004/07/08 23:52:48 konst Exp $
 *
-* Copyright (C) 2001-4 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

@@ -1,9 +1,9 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.25 2004/06/19 13:17:57 konst Exp $
+* $Id: ljhook.cc,v 1.26 2004/07/08 23:52:48 konst Exp $
 *
-* Copyright (C) 2003-4 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -332,6 +332,7 @@ void ljhook::removeuser(const imcontact &ic) {
     icqcontact *c;
 
     if(logged())
+    if(conf.getourid(proto).additional["importfriends"] == "1")
     if(c = clist.get(ic))
     if((npos = c->getnick().find("@lj")) != -1) {
 	string nick = c->getnick().substr(0, npos);
