@@ -89,6 +89,7 @@ class icqconf {
 	bool chatmode[protocolname_size];
 	bool cpconvert[protocolname_size];
 	bool entersends[protocolname_size];
+	bool nonimonline[protocolname_size];
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
 	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
@@ -172,6 +173,9 @@ class icqconf {
 
 	bool getentersends(protocolname pname);
 	void setentersends(protocolname pname, bool fentersends);
+
+	bool getnonimonline(protocolname pname);
+	void setnonimonline(protocolname pname, bool fnonimonline);
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);

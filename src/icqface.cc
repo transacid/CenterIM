@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.213 2004/03/07 13:44:41 konst Exp $
+* $Id: icqface.cc,v 1.214 2004/03/09 21:46:26 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -587,10 +587,6 @@ void icqface::fillcontactlist() {
 	ig = find(groups.begin(), groups.end(), c->getgroupid());
 	if(ig != groups.end()) {
 	    g = &(*ig);
-	} else {
-	    cout << "WTF! no group found, id = " << c->getgroupid() << endl;
-	    cout << "uin = " << c->getdesc().uin << endl;
-	    cout << "nick = " << c->getdesc().nickname << endl;
 	}
 
 	if(c->getdesc() == contactroot)

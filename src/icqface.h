@@ -146,7 +146,9 @@ class icqface {
 	void selectlanguage(unsigned short &f);
 	void selectagerange(ICQ2000::AgeRange &r);
 	void selectrandomgroup(unsigned short &f);
-	void selectproto(bool prots[], bool irss = false);
+
+	enum spmode { spIMonly, spIMplusRSS, spnonIM };
+	void selectproto(bool prots[], spmode mode = spIMonly);
 
 	void workarealine(int l, chtype c = HLINE);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.147 2004/03/07 13:44:41 konst Exp $
+* $Id: icqhook.cc,v 1.148 2004/03/09 21:46:26 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -498,7 +498,7 @@ void icqhook::sendnewuser(const imcontact &ic) {
 	    cli.fetchSimpleContactInfo(cont);
 	    cli.fetchDetailContactInfo(cont);
 
-	    if(sblrecv) {
+	    if(sblrecv && cc->inlist()) {
 		ContactTree::Group &g = cli.getContactTree().lookup_group_containing_contact(cont);
 
 		cont->setServerSideInfo(g.get_id(), 0);

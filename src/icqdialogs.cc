@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.140 2004/03/07 13:44:41 konst Exp $
+* $Id: icqdialogs.cc,v 1.141 2004/03/09 21:46:26 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1124,12 +1124,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     icqconf::groupmode gmode = conf.getgroupmode();
 
     bool chatmode[protocolname_size], conv[protocolname_size],
-	entersends[protocolname_size];
+	entersends[protocolname_size], nonimonline[protocolname_size];
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = conf.getchatmode(pname);
 	entersends[pname] = conf.getentersends(pname);
 	conv[pname] = conf.getcpconvert(pname);
+	nonimonline[pname] = conf.getnonimonline(pname);
     }
 
     for(hasany = false, pname = icq; pname != protocolname_size && !hasany; (int) pname += 1)
@@ -1216,6 +1217,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	}
 
+	for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+	    if(nonimonline[pname]) tmp += conf.getprotocolname(pname) + " ";
+
+	t.addleaff(i, 0, 29, _(" Always online non-IM contacts for : %s"), tmp.c_str());
+
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
 	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
@@ -1253,7 +1259,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 				icqconf::rcdontchange;
 			break;
 		    case 3:
-			if(hasany) selectproto(conv, true); else
+			if(hasany) selectproto(conv, spIMplusRSS); else
 			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
 				conv[pname] = !conv[pname];
 			break;
@@ -1350,6 +1356,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			convertto = inputstr(_("Charset to convert messages to: "), convertto);
 			if(input.getlastkey() == '\r') iconvlang = convlanguages.begin();
 			break;
+		    case 29:
+			selectproto(nonimonline, spnonIM);
+			break;
 		}
 		break;
 	    case 1:
@@ -1368,6 +1377,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    conf.setchatmode(pname, chatmode[pname]);
 		    conf.setentersends(pname, entersends[pname]);
+		    conf.setnonimonline(pname, nonimonline[pname]);
 
 		    bool bconv = conv[pname] && (!convertfrom.empty() || !convertto.empty());
 		    conf.setcpconvert(pname, bconv || !hasany);
@@ -1397,7 +1407,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     return success;
 }
 
-void icqface::selectproto(bool prots[], bool irss) {
+void icqface::selectproto(bool prots[], spmode mode) {
     static int saveelem = 0;
     int i, protmax;
     bool r, finished = false;
@@ -1410,16 +1420,27 @@ void icqface::selectproto(bool prots[], bool irss) {
     memcpy(aprots, prots, sizeof(aprots));
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!irss || pname != rss) {
-	    if(gethook(pname).getCapabs().count(hookcapab::nochat))
+	if(mode == spnonIM) {
+	    if(pname != infocard)
+	    if(!gethook(pname).getCapabs().count(hookcapab::nochat))
 		continue;
 
-	    if(conf.getourid(pname).empty())
+	    if(pname == livejournal)
+		continue;
+
+	} else {
+	    if(mode != spIMplusRSS || pname != rss) {
+		if(gethook(pname).getCapabs().count(hookcapab::nochat))
+		    continue;
+
+		if(conf.getourid(pname).empty())
+		    continue;
+
+	    }
+
+	    if(!gethook(pname).enabled())
 		continue;
 	}
-
-	if(!gethook(pname).enabled())
-	    continue;
 
 	tempprots[i++] = pname;
     }

@@ -1,9 +1,9 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.126 2004/02/20 20:48:47 konst Exp $
+* $Id: icqconf.cc,v 1.127 2004/03/09 21:46:26 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -54,8 +54,7 @@ icqconf::icqconf() {
 
     for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = true;
-	cpconvert[pname] = false;
-	entersends[pname] = false;
+	cpconvert[pname] = entersends[pname] = nonimonline[pname] = false;
     }
 
     basedir = (string) getenv("HOME") + "/.centericq/";
@@ -230,6 +229,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") initmultiproto(chatmode, buf); else
 	    if(param == "entersends") initmultiproto(entersends, buf); else
+	    if(param == "nonimonline") initmultiproto(nonimonline, buf); else
 	    if(param == "russian" || param == "convert") initmultiproto(cpconvert, buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
@@ -303,6 +303,12 @@ void icqconf::save() {
 		if(getentersends(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "entersends" << param << endl;
+
+	    param = "";
+	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+		if(getnonimonline(pname)) param += (string) " " + conf.getprotocolname(pname);
+	    if(!param.empty())
+		f << "nonimonline" << param << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
@@ -703,6 +709,14 @@ bool icqconf::getentersends(protocolname pname) {
 
 void icqconf::setentersends(protocolname pname, bool fentersends) {
     entersends[pname] = fentersends;
+}
+
+bool icqconf::getnonimonline(protocolname pname) {
+    return nonimonline[pname];
+}
+
+void icqconf::setnonimonline(protocolname pname, bool fnonimonline) {
+    nonimonline[pname] = fnonimonline;
 }
 
 bool icqconf::getcpconvert(protocolname pname) const {
