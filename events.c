@@ -1,4 +1,4 @@
-/* $Id: events.c,v 1.1 2004/01/26 23:49:53 konst Exp $ */
+/* $Id: events.c,v 1.2 2004/06/10 19:20:08 konst Exp $ */
 
 /*
  *  (C) Copyright 2001-2003 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -271,7 +271,7 @@ static int gg_handle_recv_msg(struct gg_header *h, struct gg_event *e, struct gg
 	/* przeanalizuj dodatkowe opcje */
 	while (p < packet_end) {
 		switch (*p) {
-			case 0x01:		/* konferencja */
+			case 0x01:              /* konferencja */
 			{
 				struct gg_msg_recipients *m = (void*) p;
 				uint32_t i, count;
@@ -304,7 +304,7 @@ static int gg_handle_recv_msg(struct gg_header *h, struct gg_event *e, struct gg
 				break;
 			}
 
-			case 0x02:		/* richtext */
+			case 0x02:              /* richtext */
 			{
 				unsigned short len;
 				char *buf;
@@ -340,7 +340,7 @@ static int gg_handle_recv_msg(struct gg_header *h, struct gg_event *e, struct gg
 				break;
 			}
 
-			case 0x04:		/* image_request */
+			case 0x04:              /* image_request */
 			{
 				struct gg_msg_image_request *i = (void*) p;
 
@@ -358,7 +358,7 @@ static int gg_handle_recv_msg(struct gg_header *h, struct gg_event *e, struct gg
 				return 0;
 			}
 
-			case 0x05:		/* image_reply */
+			case 0x05:              /* image_reply */
 			case 0x06:
 			{
 				if (p + sizeof(struct gg_msg_image_reply) + 1 > packet_end) {
@@ -494,7 +494,7 @@ static int gg_watch_fd_connected(struct gg_session *sess, struct gg_event *e)
 				for (i = 0; i < count; i++) {
 					e->event.notify[i].uin = gg_fix32(e->event.notify[i].uin);
 					e->event.notify[i].status = gg_fix32(e->event.notify[i].status);
-					e->event.notify[i].remote_port = gg_fix16(e->event.notify[i].remote_port);		
+					e->event.notify[i].remote_port = gg_fix16(e->event.notify[i].remote_port);              
 				}
 			}
 
@@ -905,7 +905,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 				sess->client_version = NULL;
 			}
 
-    			gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-QUERY-----\n%s\n=> -----END-HTTP-QUERY-----\n", buf);
+			gg_debug(GG_DEBUG_MISC, "=> -----BEGIN-HTTP-QUERY-----\n%s\n=> -----END-HTTP-QUERY-----\n", buf);
 	 
 			/* zapytanie jest krótkie, wiêc zawsze zmie¶ci siê
 			 * do bufora gniazda. je¶li write() zwróci mniej,
@@ -1018,9 +1018,9 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 				e->event.msg.sender = 0;
 				e->event.msg.message = sysmsg_buf;
 			}
-	
+
 			close(sess->fd);
-	
+
 			gg_debug(GG_DEBUG_TRAFFIC, "// gg_watch_fd() received http data (%s)\n", buf);
 
 			/* analizujemy otrzymane dane. */
@@ -1264,7 +1264,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 
 		case GG_STATE_READING_KEY:
 		{
-			struct gg_header *h;			
+			struct gg_header *h;                    
 			struct gg_welcome *w;
 			struct gg_login60 l;
 			unsigned int hash;
@@ -1447,7 +1447,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 
 				gg_debug(GG_DEBUG_MISC, "// gg_watch_fd() watch_fd_connected failed (errno=%d, %s)\n", errno, strerror(errno));
 
- 				if (errno == EAGAIN) {
+				if (errno == EAGAIN) {
 					e->type = GG_EVENT_NONE;
 					res = 0;
 				} else
