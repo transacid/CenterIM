@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.125 2002/12/13 11:08:44 konst Exp $
+* $Id: icqhook.cc,v 1.126 2002/12/16 17:58:55 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -58,6 +58,7 @@ icqhook::icqhook() {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::changenick);
+//    fcapabs.insert(hookcapab::changepassword);
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::synclist);
     fcapabs.insert(hookcapab::authrequests);
@@ -366,7 +367,26 @@ bool icqhook::send(const imevent &ev) {
 
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
-	sev = new NormalMessageEvent(ic, ruscrlfconv("kw", m->gettext()));
+	string text = m->gettext(), sub;
+
+	if(ic->getStatus() == STATUS_OFFLINE)
+	if(text.size() > 450) {
+	    while(!text.empty()) {
+		if(text.size() > 450) {
+		    sub = text.substr(0, 450);
+		    text.erase(0, 450);
+		} else {
+		    sub = text;
+		    text = "";
+		}
+
+		cli.SendEvent(new NormalMessageEvent(ic, ruscrlfconv("kw", sub)));
+	    }
+
+	    return true;
+	}
+
+	sev = new NormalMessageEvent(ic, ruscrlfconv("kw", text));
 
     } else if(ev.gettype() == imevent::url) {
 	const imurl *m = static_cast<const imurl *> (&ev);
@@ -712,6 +732,9 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
 
     cli.uploadSelfDetails();
     cli.self_contact_userinfo_change_signal.connect(this, &icqhook::self_contact_userinfo_change_cb);
+
+    if(!c.getreginfo().password.empty())
+	cli.changePassword(c.getreginfo().password);
 }
 
 void icqhook::requestawaymsg(const imcontact &c) {

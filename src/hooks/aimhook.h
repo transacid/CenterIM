@@ -69,7 +69,7 @@ class aimhook: public abstracthook {
 	imstatus getstatus() const;
 
 	void requestinfo(const imcontact &c);
-	void sendupdateuserinfo(icqcontact &c, const string &newpass);
+	void sendupdateuserinfo(icqcontact &c);
 
 	vector<icqcontact *> getneedsync();
 };

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.32 2002/12/12 14:14:34 konst Exp $
+* $Id: aimhook.cc,v 1.33 2002/12/16 17:58:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -270,13 +270,13 @@ void aimhook::requestinfo(const imcontact &c) {
     }
 }
 
-void aimhook::sendupdateuserinfo(icqcontact &c, const string &newpass) {
+void aimhook::sendupdateuserinfo(icqcontact &c) {
     icqconf::imaccount acc = conf.getourid(aim);
 
-    if(!newpass.empty())
-    if(newpass != acc.password) {
-	firetalk_set_password(handle, acc.password.c_str(), newpass.c_str());
-    }
+    if(!c.getreginfo().password.empty())
+    if(c.getreginfo().password != acc.password)
+	firetalk_set_password(handle, acc.password.c_str(),
+	    c.getreginfo().password.c_str());
 
     profile.info = c.getabout();
     firetalk_set_info(handle, profile.info.c_str());

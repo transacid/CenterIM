@@ -57,7 +57,7 @@ class icqcontact {
 	};
 
 	struct reginfo {
-	    string service;
+	    string service, password;
 	    vector<pair<string, string> > params;
 	};
 

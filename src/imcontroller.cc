@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.42 2002/12/12 17:58:49 konst Exp $
+* $Id: imcontroller.cc,v 1.43 2002/12/16 17:58:54 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -242,10 +242,7 @@ void imcontroller::aimupdateprofile() {
 
     c->clear();
     ahook.requestinfo(imcontact(conf.getourid(aim).nickname, aim));
-
-    if(face.updatedetails(0, aim)) {
-	ahook.sendupdateuserinfo(*c, "");
-    }
+    if(face.updatedetails(0, aim)) ahook.sendupdateuserinfo(*c);
 }
 
 void imcontroller::msnupdateprofile() {

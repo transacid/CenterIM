@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.103 2002/12/13 11:08:44 konst Exp $
+* $Id: icqdialogs.cc,v 1.104 2002/12/16 17:58:54 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -349,7 +349,7 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	    if(!s.nick.empty()) {
 		if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords)) {
 		    i = tree.addnode(_(" Password "));
-		    tree.addleaf(i, 0, 32, " " + s.password + " ");
+		    tree.addleaf(i, 0, 32, " " + string(s.password.size(), '*') + " ");
 		}
 
 		if(gethook(s.pname).getCapabs().count(hookcapab::groupchatservices)) {
@@ -461,6 +461,8 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
     return ret;
 }
 
+#define CHECKGENERAL if(!i) i = tree->addnode(_(" General "));
+
 void icqface::gendetails(treeview *tree, icqcontact *c) {
     int saveitem, savefirst, i;
 
@@ -514,13 +516,19 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
     }
 
     if(passinfo.pname == infocard || capab.count(hookcapab::changenick) || !ourdetails) {
-	if(!i) i = tree->addnode(_(" General "));
+	CHECKGENERAL;
 	tree->addleaff(i, 0, 10, _(" Nickname : %s "), c->getnick().c_str());
+    }
+
+    if(capab.count(hookcapab::changepassword) && ourdetails) {
+	CHECKGENERAL;
+	tree->addleaff(i, 0, 47, _(" Change password : %s "),
+	    string(ri.password.size(), '*').c_str());
     }
 
     if(passinfo.pname == icq && c->getdesc() == contactroot || !ourdetails ||
     (ourdetails && capab.count(hookcapab::flexiblereg) && ri.params.empty())) {
-	if(!i) i = tree->addnode(_(" General "));
+	CHECKGENERAL;
 
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
 	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
@@ -739,7 +747,13 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		    }
 
 		    } break;
+		case 47:
+		    ri.password = inputstr(_("New password: "), ri.password, '*');
 
+		    if(!ri.password.empty())
+		    if(inputstr(_("Check the new password: "), "", '*') != ri.password)
+			ri.password = "";
+		    break;
 		default:
 		    if(citem >= 100) {
 			vector<pair<string, string> >::iterator ifp = ri.params.begin()+citem-100;
