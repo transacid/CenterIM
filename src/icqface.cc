@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.245 2005/02/14 21:09:35 iulica Exp $
+* $Id: icqface.cc,v 1.246 2005/02/14 21:40:04 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2228,15 +2228,13 @@ void icqface::userinfoexternal(const imcontact &ic) {
 
 void icqface::showeventbottom(const imcontact &ic) {
     const char *text = ischannel(ic) ?
-	_("%s send, %s multi, %s history, %s/%s prev/next chat, %s URLs, %s expand, %s members, %s close") :
-	_("%s send, %s multi, %s history, %s/%s prev/next chat, %s URLs, %s expand, %s details, %s cancel");
+	_("%s send, %s multi, %s history, %s URLs, %s expand, %s members, %s close") :
+	_("%s send, %s multi, %s history, %s URLs, %s expand, %s details, %s cancel");
 
     status(text,
 	getstatkey(key_send_message, section_editor).c_str(),
 	getstatkey(key_multiple_recipients, section_editor).c_str(),
 	getstatkey(key_history, section_editor).c_str(),
-	getstatkey(key_prev_chat, section_editor).c_str(),
-	getstatkey(key_next_chat, section_editor).c_str(),
 	getstatkey(key_show_urls, section_editor).c_str(),
 	getstatkey(key_fullscreen, section_editor).c_str(),
 	getstatkey(key_info, section_editor).c_str(),
