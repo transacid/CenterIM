@@ -1,7 +1,7 @@
 /*
 *
 * centericq rss handling class
-* $Id: rsshook.cc,v 1.12 2003/09/30 11:38:44 konst Exp $
+* $Id: rsshook.cc,v 1.13 2003/10/05 23:01:20 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -275,7 +275,7 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 
 		string content = rev->getContent(), enc;
 
-		bi.city = bi.state = "";
+		bi.city = bi.state = bi.lname = "";
 
 		if(!ev->isDelivered() || content.empty()) {
 		    bi.lname = rev->getHTTPResp();
@@ -284,6 +284,7 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 		    content = "";
 		}
 
+		if(bi.lname.empty())
 		if((k = content.find("<?xml")) != -1) {
 		    string xmlspec = content.substr(k+6);
 
@@ -307,25 +308,30 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 		string::iterator is = content.begin();
 		auto_ptr<XmlNode> top(XmlNode::parse(is, content.end()));
 
-		if(!top.get()) {
-		    if(!content.empty()) bi.lname = _("wrong XML");
+		if(bi.lname.empty()) {
+		    if(!top.get()) {
+			if(!content.empty()) bi.lname = _("wrong XML");
 
-		} else if(top->getTag() != "rss" && top->getTag() != "rdf::RDF") {
-		    if(!content.empty()) bi.lname = _("no <rss> tag found");
+		    } else if(top->getTag() != "rss" && top->getTag() != "rdf::RDF") {
+			if(!content.empty()) bi.lname = _("no <rss> tag found");
 
+		    }
 		}
 
+		if(bi.lname.empty())
 		if(top.get()) {
 		    rss = dynamic_cast<XmlBranch*>(top.get());
+
 		    if(rss == NULL || !rss->exists("channel")) {
 			if(!content.empty()) bi.lname = _("no <channel> tag found");
-		    }
 
-		    bi.city = top.get()->getAttrib("version");
+		    } else {
+			bi.city = top.get()->getAttrib("version");
+			channel = rss->getBranch("channel");
+			if(!channel) {
+			    if(!content.empty()) bi.lname = _("wrong <channel> tag");
+			}
 
-		    channel = rss->getBranch("channel");
-		    if(!channel) {
-			if(!content.empty()) bi.lname = _("wrong <channel> tag");
 		    }
 		}
 
@@ -333,6 +339,7 @@ void rsshook::messageack_cb(MessageEvent *ev) {
 		vector<string>::iterator ii;
 		string text;
 
+		if(bi.lname.empty())
 		if(channel) {
 		    bi.lname = _("success");
 
