@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.44 2005/01/31 15:21:56 konst Exp $
+* $Id: kkstrtext.cc,v 1.45 2005/02/01 00:13:24 konst Exp $
 *
 * Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1122,7 +1122,7 @@ string striprtf(const string &s, const string &charset) {
 			r += *i;
 		    }
 		}
-                break;
+		break;
 	    default:
 		if(!bparen) {
 		    if(bunicode) {
@@ -1133,9 +1133,13 @@ string striprtf(const string &s, const string &charset) {
 			    if(unichar.substr(0, 4).find_first_not_of("0123456789") == -1) {
 				long l = strtol(unichar.substr(0, 4).c_str(), 0, 0);
 				char ubuf[sizeof(long)+4];
+			    #ifdef HAVE_ICONV
 				memcpy(ubuf, "\xff\xfe", 2);
 				memcpy(ubuf+2, &l, sizeof(long));
 				memcpy(ubuf+sizeof(long)*2, "\x0a\x00", 2);
+			    #else
+				strcpy(ubuf, unichar.substr(4).c_str());
+			    #endif
 				r += siconv(ubuf , "utf-16", charset);
 			    }
 			}
