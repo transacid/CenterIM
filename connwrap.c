@@ -1,5 +1,8 @@
 #include "connwrap.h"
 
+#include <netdb.h>
+#include <string.h>
+
 #ifdef HAVE_OPENSSL
 
 #include <openssl/ssl.h>
@@ -15,6 +18,7 @@
 #ifdef HAVE_OPENSSL
 
 static SSL_CTX *ctx = 0;
+static char *bindaddr = 0;
 
 typedef struct { int fd; SSL *ssl; } sslsock;
 
@@ -80,9 +84,20 @@ static void delsock(int fd) {
 #endif
 
 int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl) {
-#ifdef HAVE_OPENSSL
     int rc;
+    struct sockaddr_in ba;
+    struct hostent *he;
 
+    if(bindaddr)
+    if(strlen(bindaddr))
+    if(he = gethostbyname(bindaddr)) {
+	ba.sin_addr.s_addr = *he->h_addr;
+	ba.sin_port = 0;
+	rc = bind(sockfd, (struct sockaddr *) &ba, sizeof(ba));
+	if(rc) return rc;
+    }
+
+#ifdef HAVE_OPENSSL
     if(ssl) {
 	rc = connect(sockfd, serv_addr, addrlen);
 
@@ -145,4 +160,9 @@ int cw_close(int fd) {
     delsock(fd);
 #endif
     close(fd);
+}
+
+void cw_setbind(const char *abindaddr) {
+    if(bindaddr) free(bindaddr);
+    bindaddr = strdup(abindaddr);
 }
