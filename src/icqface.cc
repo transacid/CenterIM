@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.198 2003/10/21 00:29:46 konst Exp $
+* $Id: icqface.cc,v 1.199 2003/10/21 00:40:28 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -931,9 +931,10 @@ void icqface::infofriends(dialogbox &db, icqcontact *c) {
     string text, buf;
     icqcontact::basicinfo bi = c->getbasicinfo();
 
-    text += (string) "* " + _("Friend list") + "\n";
+    text += (string) "* " + _("The following users have you listed as their friend:") + " ";
     while(!(buf = getword(bi.zip)).empty()) {
-	text += (string) "  " + buf + "\n";
+	text += buf;
+	if(!bi.zip.empty()) text += ", ";
     }
 
     db.getbrowser()->setbuf(text);
@@ -1203,7 +1204,7 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     } else if(cinfo.pname == livejournal) {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-	    _("Info"), _("Friends"), 0));
+	    _("Info"), _("Friend of"), 0));
 
 
     } else {
