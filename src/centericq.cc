@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.130 2002/10/28 15:52:53 konst Exp $
+* $Id: centericq.cc,v 1.131 2002/10/29 09:49:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1402,9 +1402,11 @@ string ruscrlfconv(const string &tdir, const string &text) {
 }
 
 string rusconv(const string &tdir, const string &text) {
+    if(!conf.getrussian())
+	return text;
+
     string r;
 
-#ifndef HAVE_ICONV_H
     static unsigned char kw[] = {
 	128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
 	144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,
@@ -1431,30 +1433,27 @@ string rusconv(const string &tdir, const string &text) {
     string::const_iterator i;
     unsigned char *table = 0;
 
-    if(tdir == "kw") table = kw; else
-    if(tdir == "wk") table = wk;
-
-    if(conf.getrussian() && table) {
-	for(i = text.begin(); i != text.end(); ++i) {
-	    c = (unsigned char) *i;
-	    c &= 0377;
-	    if(c & 0200) c = table[c & 0177];
-	    r += c;
-	}
-    } else {
-	r = text;
-    }
-#else
-
-    if(conf.getrussian()) {
-	if(tdir == "kw") r = siconv(text, "koi8-r", "cp1251"); else
-	if(tdir == "wk") r = siconv(text, "cp1251", "koi8-r"); else
-	    r = text;
-    } else {
-	r = text;
-    }
-
+#ifdef HAVE_ICONV_H
+    if(tdir == "kw") r = siconv(text, "koi8-r", "cp1251"); else
+    if(tdir == "wk") r = siconv(text, "cp1251", "koi8-r"); else
 #endif
+	r = text;
+
+    if(text == r) {
+	if(tdir == "kw") table = kw; else
+	if(tdir == "wk") table = wk;
+
+	if(table) {
+	    r = "";
+
+	    for(i = text.begin(); i != text.end(); ++i) {
+		c = (unsigned char) *i;
+		c &= 0377;
+		if(c & 0200) c = table[c & 0177];
+		r += c;
+	    }
+	}
+    }
 
     return r;
 }
