@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.82 2003/09/28 12:56:02 konst Exp $
+* $Id: yahoohook.cc,v 1.83 2003/09/28 21:29:48 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -726,6 +726,11 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    yhook.fonline = false;
 	    face.log(_("+ [yahoo] cannot login: the account has been blocked"));
 	    face.log(_("+ to reactivate visit %s"), url);
+	    break;
+
+	case YAHOO_LOGIN_DUPL:
+	    face.log(_("+ [yahoo] another logon detected"));
+	    yhook.disconnected();
 	    break;
     }
 

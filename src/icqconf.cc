@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.115 2003/09/26 07:13:22 konst Exp $
+* $Id: icqconf.cc,v 1.116 2003/09/28 21:29:48 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -75,7 +75,7 @@ icqconf::imaccount icqconf::getourid(protocolname pname) const {
 
 icqconf::imserver icqconf::defservers[protocolname_size] = {
     { "login.icq.com", 5190, 0 },
-    { "scs.yahoo.com", 5050, 0 },
+    { "scs.msg.yahoo.com", 5050, 0 },
     { "messenger.hotmail.com", 1863, 0 },
     { "toc.oscar.aol.com", 9898, 0 },
     { "irc.oftc.net", 6667, 0 },
@@ -1144,6 +1144,11 @@ void icqconf::imaccount::read(const string &spec) {
 	    if(pname == icq)
 	    if(server == "icq.mirabilis.com")
 		server = "";
+
+	    if(pname == yahoo)
+	    if(server == "scs.yahoo.com")
+		server = "";
+
 	} else {
 	    additional[spname] = buf;
 	}
