@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.26 2001/10/19 17:00:13 konst Exp $
+* $Id: icqface.cc,v 1.27 2001/10/24 16:37:31 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -149,9 +149,6 @@ void icqface::done() {
 }
 
 void icqface::draw() {
-    int i;
-    string pass;
-
     mainw.open();
     mainw.separatex(25);
     workarealine(WORKAREA_Y2);
