@@ -187,6 +187,18 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_got_im)(int id, char *who, char *msg, long tm
 
 
 /*
+ * Name: ext_yahoo_got_search_result
+ *      Called when the search result received from server
+ * Params:
+ *      id  - the id that identifies the server connection
+ *      yr  - the yahoo_search_result structure
+ */
+void YAHOO_CALLBACK_TYPE(ext_yahoo_search_result)(int id, struct yahoo_search_result *yr);
+
+
+
+
+/*
  * Name: ext_yahoo_got_conf_invite
  *      Called when remote user sends you a conference invitation.
  * Params:

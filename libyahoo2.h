@@ -125,6 +125,9 @@ void yahoo_webcam_invite(int id, const char *who);
 void yahoo_send_file(int id, const char *who, const char *msg, const char *name, unsigned long size,
 		yahoo_get_fd_callback callback, void *data);
 
+void yahoo_search(int id, int t, const char *text, int g, int ar,
+		int photos, int yahoo_only);
+
 /* returns a socket fd to a url for downloading a file. */
 void yahoo_get_url_handle(int id, const char *url, 
 		yahoo_get_url_handle_callback callback, void *data);

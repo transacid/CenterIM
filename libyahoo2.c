@@ -2770,6 +2770,69 @@ static void yahoo_process_yab_connection(struct yahoo_input_data *yid)
 		YAHOO_CALLBACK(ext_yahoo_got_buddies)(yd->client_id, yd->buddies);
 }
 
+static void yahoo_process_search_connection(struct yahoo_input_data *yid)
+{
+    struct yahoo_found_contact *yct;
+    struct yahoo_search_result *yr;
+    char *p = yid->rxqueue, *np, *cp;
+    int k, n;
+
+    if(strcmp(yid->rxqueue+yid->rxlen-5, "\004\005\004\003\002"))
+	return;
+
+    yr = y_new0(struct yahoo_search_result, 1);
+
+    if(p = strstr(p, "\r\n\r\n")) {
+	p += 4;
+
+	for(k = 0; (p = strchr(p, 4)) && (k < 4); k++) {
+	    p++;
+	    n = atoi(p);
+	    switch(k) {
+		case 0: yr->found = n; break;
+		case 3: yr->total = n; break;
+	    }
+	}
+
+	if(p) p++;
+
+	for(k = 0; *p; ) {
+	    cp = p;
+	    np = strchr(p, 4);
+
+	    if(!np) np = p+strlen(p)+1;
+	    *np = 0;
+	    p = np+1;
+
+	    switch(k++) {
+		case 1:
+		    if(strlen(cp) > 2) {
+			yct = y_new0(struct yahoo_found_contact, 1);
+			yr->contacts = y_list_append(yr->contacts, yct);
+			yct->id = cp+2;
+		    } else {
+			*p = 0;
+		    }
+
+		    break;
+		case 3: yct->gender = cp; break;
+		case 4: yct->age = atoi(cp); break;
+		case 5: yct->location = cp; k = 0; break;
+	    }
+	}
+    }
+
+    YAHOO_CALLBACK(ext_yahoo_search_result)(yid->yd->client_id, yr);
+
+    while(yr->contacts) {
+	    YList *nl = yr->contacts->next;
+	    y_list_free_1(yr->contacts);
+	    yr->contacts = nl;
+    }
+
+    FREE(yr);
+}
+
 static void _yahoo_webcam_connected(int fd, int error, void *d)
 {
 	struct yahoo_input_data *yid = d;
@@ -2930,7 +2993,8 @@ static void (*yahoo_process_connection[])(struct yahoo_input_data *) = {
 	yahoo_process_yab_connection,
 	yahoo_process_webcam_master_connection,
 	yahoo_process_webcam_connection,
-	yahoo_process_chatcat_connection
+	yahoo_process_chatcat_connection,
+	yahoo_process_search_connection
 };
 
 int yahoo_read_ready(int id, int fd, void *data)
@@ -3885,6 +3949,27 @@ void yahoo_webcam_invite(int id, const char *who)
 	yahoo_send_packet(yid->fd, pkt, 0);
 
 	yahoo_packet_free(pkt);
+}
+
+void yahoo_search(int id, int t, const char *text, int g, int ar, int photos, int yahoo_only)
+{
+	struct yahoo_data *yd = find_conn_by_id(id);
+	struct yahoo_input_data *yid;
+	char url[1024];
+	char buff[1024];
+
+	if(!yd)
+		return;
+
+	yid = y_new0(struct yahoo_input_data, 1);
+	yid->yd = yd;
+	yid->type = YAHOO_CONNECTION_SEARCH;
+
+	snprintf(url, 1024, "http://members.yahoo.com/interests?.oc=m&.kw=%s&.sb=0&.g=%d&.ar=0&.pg=y", text, g);
+	snprintf(buff, sizeof(buff), "Y=%s; T=%s", yd->cookie_y, yd->cookie_t);
+
+	inputs = y_list_prepend(inputs, yid);
+	yahoo_http_get(yid->yd->client_id, url, buff, _yahoo_http_connected, yid);
 }
 
 struct send_file_data {

@@ -106,7 +106,8 @@ enum yahoo_connection_type {
 	YAHOO_CONNECTION_YAB,
 	YAHOO_CONNECTION_WEBCAM_MASTER,
 	YAHOO_CONNECTION_WEBCAM,
-	YAHOO_CONNECTION_CHATCAT
+	YAHOO_CONNECTION_CHATCAT,
+	YAHOO_CONNECTION_SEARCH
 };
 
 enum yahoo_webcam_direction_type {
@@ -182,6 +183,34 @@ struct yahoo_buddy {
 	char *id;
 	char *real_name;
 	struct yab *yab_entry;
+};
+
+enum yahoo_search_type {
+	YAHOO_SEARCH_KEYWORD = 0,
+	YAHOO_SEARCH_NAME,
+	YAHOO_SEARCH_YID
+};
+
+enum yahoo_search_gender {
+	YAHOO_GENDER_NONE = 0,
+	YAHOO_GENDER_MALE,
+	YAHOO_GENDER_FEMALE
+};
+
+enum yahoo_search_agerange {
+	YAHOO_AGERANGE_NONE = 0
+};
+
+struct yahoo_search_result {
+	int found, total;
+	YList *contacts;
+};
+
+struct yahoo_found_contact {
+	char *id;
+	char *gender;
+	char *location;
+	int age;
 };
 
 /*
