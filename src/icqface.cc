@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.159 2002/11/23 15:40:43 konst Exp $
+* $Id: icqface.cc,v 1.160 2002/11/23 16:07:00 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2268,6 +2268,7 @@ void icqface::fullscreenize(const imevent *ev) {
     textwindow w(0, 1, COLS, LINES-1, conf.getcolor(cp_main_text), TW_NOBORDER);
     w.open();
 
+    int k;
     char buf[512], *fmt = 0;
     vector<string> lines;
     vector<string>::const_iterator il;
@@ -2289,12 +2290,13 @@ void icqface::fullscreenize(const imevent *ev) {
 	w.write(0, il-lines.begin()+3, *il);
 
     blockmainscreen();
-    status(_("ESC to close"));
+    status(_("ESC or F9 to close"));
 
     do {
 	cicq.idle();
+	k = getkey();
 
-    } while(getkey() != KEY_ESC);
+    } while(k != KEY_ESC && k != KEY_F(9));
 
     unblockmainscreen();
     status("");
