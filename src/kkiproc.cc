@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.4 2001/11/04 12:17:51 konst Exp $
+* $Id: kkiproc.cc,v 1.5 2002/02/05 10:50:00 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -78,13 +78,25 @@ time_t lastkeypress() {
     if(readlink("/proc/self/fd/0", tname, 12) != -1) {
 	if(!strncmp(tname, "/dev/tty", 8) && isdigit(tname[8])) {
 	    setutent();
-	    while((u = getutent()))
-	    if(u->ut_type == USER_PROCESS && strlen(u->ut_line) > 3 &&
-	    !strncmp(u->ut_line, "tty", 3) &&
-	    isdigit(u->ut_line[3]) && *u->ut_user && issuchpid(u->ut_pid)) {
-		sprintf(tname, "/dev/%s", u->ut_line);
-		if(!stat(tname, &s) && s.st_atime > t) t = s.st_atime;
+
+	    while((u = getutent())) {
+		switch(u->ut_type) {
+		    case USER_PROCESS:
+		    case LOGIN_PROCESS:
+			if(strlen(u->ut_line) > 3)
+			if(!strncmp(u->ut_line, "tty", 3))
+			if(isdigit(u->ut_line[3]))
+			if(*u->ut_user && issuchpid(u->ut_pid)) {
+			    sprintf(tname, "/dev/%s", u->ut_line);
+			    if(!stat(tname, &s))
+			    if(s.st_atime > t) {
+				t = s.st_atime;
+			    }
+			}
+			break;
+		}
 	    }
+
 	    endutent();
 	} else {
 	    if(!stat(tname, &s)) t = s.st_atime; else time(&t);
