@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.148 2002/12/12 14:14:33 konst Exp $
+* $Id: centericq.cc,v 1.149 2002/12/26 22:56:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -513,7 +513,7 @@ bool centericq::updateconf() {
 	    conf.setregsound(snd);
 	    unlink(conf.getconfigfname("sounds").c_str());
 	    conf.loadsounds();
-	    configstats["sound"] = 0;
+	    configstats.erase("sound");
 	}
 
 	if(clr != icqconf::rcdontchange) {
@@ -523,7 +523,7 @@ bool centericq::updateconf() {
 	    face.done();
 	    face.init();
 	    face.draw();
-	    configstats["colorscheme"] = 0;
+	    configstats.erase("colorscheme");
 	}
 
 	face.update();
