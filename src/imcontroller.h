@@ -5,7 +5,11 @@
 
 class imcontroller {
     protected:
-	void icqregdialog(unsigned int &ruin, string &rpasswd);
+	unsigned long ruin;
+	string rnick, rfname, rlname, remail, rpasswd;
+
+    protected:
+	bool icqregdialog(unsigned int &ruin, string &rpasswd);
 
 	void icqregistration(icqconf::imaccount &account);
 	void icqupdatedetails(icqconf::imaccount &account);
