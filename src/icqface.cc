@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.240 2005/01/26 23:52:48 konst Exp $
+* $Id: icqface.cc,v 1.241 2005/02/01 00:12:58 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2243,7 +2243,7 @@ bool icqface::eventedit(imevent &ev) {
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = immessage(ev.getcontact(), imevent::outgoing, p.get());
 
-	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
+	if(c = clist.get(ev.getcontact()))
 	    c->setpostponed(r ? "" : p.get());
 
     } else if(ev.gettype() == imevent::xml) {
@@ -2265,7 +2265,7 @@ bool icqface::eventedit(imevent &ev) {
 	    if(!setljparams(m))
 		continue;
 
-	    if((c = clist.get(ev.getcontact())) && (msg != p.get()))
+	    if(c = clist.get(ev.getcontact()))
 		c->setpostponed(r ? "" : p.get());
 
 	    break;
@@ -2309,7 +2309,7 @@ bool icqface::eventedit(imevent &ev) {
 	auto_ptr<char> p(editor.save("\r\n"));
 	*m = imsms(ev.getcontact(), imevent::outgoing, p.get(), m->getphone());
 
-	if((c = clist.get(ev.getcontact())) && (msg != p.get()))
+	if(c = clist.get(ev.getcontact()))
 	    c->setpostponed(r ? "" : p.get());
 
     } else if(ev.gettype() == imevent::authorization) {
