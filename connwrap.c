@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <sys/time.h>
 
 #define PROXY_TIMEOUT   10
     // HTTP proxy timeout in seconds (for the CONNECT method)
