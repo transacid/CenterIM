@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.98 2002/12/05 14:01:12 konst Exp $
+* $Id: icqdialogs.cc,v 1.99 2002/12/05 17:05:20 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -185,7 +185,7 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
     }
 
     if(penabled.empty()) {
-	log(_("+ you must be logged in to find/add users"));
+	log(_("+ you must be logged in first"));
 	return false;
     }
 
@@ -229,12 +229,20 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	tree.clear();
 
 	if(protchanged) {
-	    services = gethook(s.pname).getservices(servicetype::search);
+	    if(users) {
+		services = gethook(s.pname).getservices(servicetype::search);
 
-	    if(s.service.empty())
-	    if((iservice = services.begin()) != services.end()) {
-		s.service = *iservice;
-		s.flexparams = gethook(s.pname).getsearchparameters(s.service);
+		if(s.service.empty())
+		if((iservice = services.begin()) != services.end()) {
+		    s.service = *iservice;
+		    s.flexparams = gethook(s.pname).getsearchparameters(s.service);
+		}
+	    } else {
+		services = gethook(s.pname).getservices(servicetype::groupchat);
+
+		if(s.service.empty())
+		if((iservice = services.begin()) != services.end())
+		    s.service = *iservice;
 	    }
 
 	    protchanged = false;
@@ -338,10 +346,16 @@ bool icqface::finddialog(imsearchparams &s, bool users) {
 	    i = tree.addnode(_(" Name/Title "));
 	    tree.addleaf(i, 0, 11, " " + s.nick + " ");
 
-	    if(!s.nick.empty())
-	    if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords)) {
-		i = tree.addnode(_(" Password "));
-		tree.addleaf(i, 0, 32, " " + s.password + " ");
+	    if(!s.nick.empty()) {
+		if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords)) {
+		    i = tree.addnode(_(" Password "));
+		    tree.addleaf(i, 0, 32, " " + s.password + " ");
+		}
+
+		if(gethook(s.pname).getCapabs().count(hookcapab::groupchatservices)) {
+		    i = tree.addnode(_(" Service "));
+		    tree.addleaf(i, 0, 31, " " + s.service + " ");
+		}
 	    }
 	}
 

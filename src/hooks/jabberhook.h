@@ -51,7 +51,9 @@ class jabberhook: public abstracthook {
 
 	void setjabberstatus(imstatus st, const string &msg);
 	void sendvisibility();
+
 	void checkinlist(imcontact ic);
+	string getchanneljid(icqcontact *c);
 
 	void sendnewuser(const imcontact &c, bool report);
 	void removeuser(const imcontact &ic, bool report);

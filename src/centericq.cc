@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.141 2002/12/05 14:01:11 konst Exp $
+* $Id: centericq.cc,v 1.142 2002/12/05 17:05:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -409,11 +409,15 @@ void centericq::joindialog() {
 
 	icqcontact *c = cicq.addcontact(ic);
 	if(c) {
-	    if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords)) {
-		icqcontact::basicinfo cb = c->getbasicinfo();
+	    icqcontact::basicinfo cb = c->getbasicinfo();
+
+	    if(gethook(s.pname).getCapabs().count(hookcapab::channelpasswords))
 		cb.zip = s.password;
-		c->setbasicinfo(cb);
-	    }
+
+	    if(gethook(s.pname).getCapabs().count(hookcapab::groupchatservices))
+		cb.street = s.service;
+
+	    c->setbasicinfo(cb);
 	    c->setstatus(available);
 	}
     }

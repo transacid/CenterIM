@@ -27,14 +27,16 @@ struct hookcapab {
 	flexiblesearch,
 	flexiblereg,
 	ssl,
-	channelpasswords
+	channelpasswords,
+	groupchatservices
     };
 };
 
 struct servicetype {
     enum enumeration {
 	search,
-	registration
+	registration,
+	groupchat
     };
 };
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.59 2002/12/05 14:01:13 konst Exp $
+* $Id: irchook.cc,v 1.60 2002/12/05 17:05:21 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -606,7 +606,6 @@ void irchook::channelfatal(string room, const char *fmt, ...) {
 	if(!c) c = clist.addnew(cont);
 	c->setstatus(offline);
 	i->joined = i->fetched = false;
-//        i->contactlist = true;
 	em.store(imnotification(cont, buf));
     }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.22 2002/12/04 17:44:27 konst Exp $
+* $Id: jabberhook.cc,v 1.23 2002/12/05 17:05:21 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -40,6 +40,7 @@ jabberhook::jabberhook(): jc(0), flogged(false) {
     fcapabs.insert(hookcapab::ssl);
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::conferencing);
+    fcapabs.insert(hookcapab::groupchatservices);
 }
 
 jabberhook::~jabberhook() {
@@ -149,7 +150,7 @@ bool jabberhook::enabled() const {
 bool jabberhook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
 
-    string text;
+    string text, cname;
 
     if(c) {
 	if(ev.gettype() == imevent::message) {
@@ -191,7 +192,8 @@ bool jabberhook::send(const imevent &ev) {
 
 	if(ischannel(c)) {
 	    xmlnode_put_attrib(x, "type", "groupchat");
-	    xmlnode_put_attrib(x, "to", xmlnode_get_attrib(x, "to")+1);
+	    if(!(cname = getchanneljid(c)).empty())
+		xmlnode_put_attrib(x, "to", cname.c_str());
 	}
 
 	jab_send(jc, x);
@@ -213,51 +215,69 @@ void jabberhook::removeuser(const imcontact &ic) {
 
 void jabberhook::sendnewuser(const imcontact &ic, bool report) {
     xmlnode x, y, z;
-    auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+    icqcontact *c;
+    string cname;
 
-    if(find(roster.begin(), roster.end(), cjid.get()) != roster.end())
-	return;
+    if(!ischannel(ic)) {
+	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+	if(find(roster.begin(), roster.end(), cjid.get()) != roster.end())
+	    return;
 
-    roster.push_back(cjid.get());
+	if(report)
+	    face.log(_("+ [jab] adding %s to the contacts"), ic.nickname.c_str());
 
-    if(report)
-	face.log(_("+ [jab] adding %s to the contacts"), ic.nickname.c_str());
+	roster.push_back(cjid.get());
+	x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
+	jab_send(jc, x);
+	xmlnode_free(x);
 
-    x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
-    jab_send(jc, x);
-    xmlnode_free(x);
-
-    x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
-    y = xmlnode_get_tag(x, "query");
-    z = xmlnode_insert_tag(y, "item");
-    xmlnode_put_attrib(z, "jid", cjid.get());
-    jab_send(jc, x);
-    xmlnode_free(x);
+	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	y = xmlnode_get_tag(x, "query");
+	z = xmlnode_insert_tag(y, "item");
+	xmlnode_put_attrib(z, "jid", cjid.get());
+	jab_send(jc, x);
+	xmlnode_free(x);
+    } else {
+	if(c = clist.get(ic)) {
+	    cname = getchanneljid(c);
+	    if(!cname.empty()) {
+		auto_ptr<char> ccname(strdup(cname.c_str()));
+		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
+		jab_send(jc, x);
+		xmlnode_free(x);
+	    }
+	}
+    }
 }
 
 void jabberhook::removeuser(const imcontact &ic, bool report) {
     xmlnode x, y, z;
-    auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
 
-    vector<string>::iterator ir = find(roster.begin(), roster.end(), cjid.get());
-    if(ir == roster.end()) return;
-    roster.erase(ir);
+    if(!ischannel(ic)) {
+	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+	vector<string>::iterator ir = find(roster.begin(), roster.end(), cjid.get());
 
-    if(report)
-	face.log(_("+ [jab] removing %s from the contacts"), ic.nickname.c_str());
+	if(ir == roster.end())
+	    return;
 
-    x = jutil_presnew(JPACKET__UNSUBSCRIBE, cjid.get(), 0);
+	if(report)
+	    face.log(_("+ [jab] removing %s from the contacts"), ic.nickname.c_str());
 
-    jab_send(jc, x);
-    xmlnode_free(x);
+	roster.erase(ir);
+	x = jutil_presnew(JPACKET__UNSUBSCRIBE, cjid.get(), 0);
 
-    x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
-    y = xmlnode_get_tag(x, "query");
-    z = xmlnode_insert_tag(y, "item");
-    xmlnode_put_attrib(z, "jid", cjid.get());
-    xmlnode_put_attrib(z, "subscription", "remove");
-    jab_send(jc, x);
-    xmlnode_free(x);
+	jab_send(jc, x);
+	xmlnode_free(x);
+
+	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	y = xmlnode_get_tag(x, "query");
+	z = xmlnode_insert_tag(y, "item");
+	xmlnode_put_attrib(z, "jid", cjid.get());
+	xmlnode_put_attrib(z, "subscription", "remove");
+	jab_send(jc, x);
+	xmlnode_free(x);
+    } else {
+    }
 }
 
 void jabberhook::setautostatus(imstatus st) {
@@ -463,6 +483,20 @@ void jabberhook::jidsplit(const string &jid, string &user, string &host, string 
     }
 }
 
+string jabberhook::getchanneljid(icqcontact *c) {
+    string r;
+    vector<agent>::const_iterator ia = agents.begin();
+
+    while(ia != agents.end() && r.empty()) {
+	if(ia->name == c->getbasicinfo().street)
+	    r = (string) c->getdesc().nickname.substr(1) + "@" +
+		ia->jid + "/" + conf.getourid(jabber).nickname;
+	++ia;
+    }
+
+    return r;
+}
+
 void jabberhook::checkinlist(imcontact ic) {
     icqcontact *c = clist.get(ic);
 
@@ -479,12 +513,23 @@ void jabberhook::checkinlist(imcontact ic) {
 vector<string> jabberhook::getservices(servicetype::enumeration st) const {
     vector<agent>::const_iterator ia = agents.begin();
     vector<string> r;
+
     agent::param_type pt;
 
     switch(st) {
-	case servicetype::search: pt = agent::ptSearch; break;
-	case servicetype::registration: pt = agent::ptRegister; break;
-	default: return r;
+	case servicetype::search:
+	    pt = agent::ptSearch;
+	    break;
+	case servicetype::registration:
+	    pt = agent::ptRegister;
+	    break;
+	case servicetype::groupchat:
+	    while(ia != agents.end()) {
+		if(ia->type == agent::atGroupchat) r.push_back(ia->name);
+		++ia;
+	    }
+	default:
+	    return r;
     }
 
     while(ia != agents.end()) {
@@ -758,12 +803,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    }
 
 	    if(!body.empty()) {
-		body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
+		if(type == "groupchat") {
+		    string u, h, r;
+		    jidsplit(ic.nickname, u, h, r);
 
-		if(type == "groupchat")
-		    ic = imcontact((string) "#" + ic.nickname, jabber);
+		    if(r != conf.getourid(jabber).nickname) ic = imcontact((string) "#" + u, jabber);
+			else return;
+		}
 
 		jhook.checkinlist(ic);
+		body = siconv(body, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
 		em.store(immessage(ic, imevent::incoming, body));
 	    }
 	    break;
