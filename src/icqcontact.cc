@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.40 2002/01/22 11:59:15 konst Exp $
+* $Id: icqcontact.cc,v 1.41 2002/01/25 16:44:53 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,7 @@
 #include "abstracthook.h"
 
 #include <time.h>
+#include <libicq2000/userinfohelpers.h>
 
 icqcontact::icqcontact(const imcontact adesc) {
     string fname, tname;
@@ -623,9 +624,12 @@ const imcontact icqcontact::getdesc() const {
 const string icqcontact::moreinfo::strtimezone() const {
     string r;
     time_t t = time(0), rt;
-
+/*
     r = (timezone > 0 ? "-" : "+");
     r += i2str(abs(timezone/2)) + ":" + (timezone%2 ? "30" : "00");
+*/
+
+    r = ICQ2000::UserInfoHelpers::getTimezoneIDtoString(timezone);
 
     rt = t + getsystemtimezone()*1800;
     rt -= timezone*1800;
