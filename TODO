@@ -14,16 +14,9 @@ yahoo
     disconnect on "got zero length" ?
 	too many sockets?
 
-check for open direct tcp connection doesn't work
-    fixed? check
-
 test cicqsync under freebsd
 
-file sending is limited to 1k/s
-
 X window resize -> sometimes segfaults
-
-messages written in a hook's being offline are sent twice
 
 ----------------------------------------------------------------------------
 > > Not too sure if this is a bug or just a "change", but since 4.2.0 my
@@ -54,9 +47,6 @@ segfault on invisible list add
 
 contact list statistics :)
 
-event manager class instead of hist/offline
-    face.show/edit msg/url -> naher
-
 описать URLs для IM библиотек в доке
 
 check ignore list
@@ -81,8 +71,6 @@ msn protocol
 this seems similar to mirabilis icq group mode 2, which i suggested
 a while ago. i'd also be happy about it.
 
-icq починить file send
-
 update README
 
 > Sorry, another thing I'd like to request, now, that the amount of
@@ -98,36 +86,14 @@ how to use cicqsync -> to the doc
 
 login/logout history
 
-hold some user info locally so that to be able to send "you were added"
-in correct way
-
-update security info
-
-try to make msgs to go in order of being written
-control the contact list having been sent
-
 todo and reminders
 
-chat req and cancel. segfault
-cannot resolve the server from the first time -> lotta sockets
-
-ctrl-y and other editor commands -> FAQ
-emacs key-bindings
 launch programs
 
 I'm thinking, like, you can have regex's run on the message body & type,
 and if they match, it pipes it into a perl instance.. I have some experience
 with this..might give it a go..
 
-file progress indicator
-
-|- Online
-|  +- [o] konst
-|  |  +- 40% filename.ext
-|  +- [o] ezdagor
-+- ICQ
-
-chat
 away messages
 
-$Id: TODO,v 1.74 2001/12/03 18:16:52 konst Exp $
+$Id: TODO,v 1.75 2001/12/06 18:30:54 konst Exp $

@@ -123,17 +123,10 @@ void imeventmanager::eventwrite(const imevent &ev, eventwritemode mode) {
 imevent *imeventmanager::eventread(ifstream &f) const {
     imevent *rev, ev;
 
-    rev = 0;
     ev.read(f);
 
-    if(ev.gettype() == imevent::message) {
-	rev = new immessage(ev);
+    if(rev = ev.getevent()) {
 	rev->read(f);
-    } else if(ev.gettype() == imevent::url) {
-	rev = new imurl(ev);
-	rev->read(f);
-    } else if(ev.gettype() == imevent::sms) {
-    } else if(ev.gettype() == imevent::authorization) {
     }
 
     return rev;

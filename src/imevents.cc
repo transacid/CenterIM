@@ -99,6 +99,25 @@ const string imevent::readblock(ifstream &f) {
     return r;
 }
 
+bool imevent::empty() const {
+    return false;
+}
+
+imevent *imevent::getevent() const {
+    switch(type) {
+	case message:
+	    return new immessage(*this);
+	case url:
+	    return new imurl(*this);
+	case sms:
+	    return new imsms(*this);
+	case authorization:
+	    return new imauthorization(*this);
+	default:
+	    return 0;
+    }
+}
+
 // -- immessage class ---------------------------------------------------------
 
 immessage::immessage() {
@@ -136,6 +155,10 @@ void immessage::write(ofstream &f) const {
 
 void immessage::read(ifstream &f) {
     text = readblock(f);
+}
+
+bool immessage::empty() const {
+    return text.empty();
 }
 
 // -- imurl class -------------------------------------------------------------
@@ -188,17 +211,23 @@ void imurl::read(ifstream &f) {
     description = readblock(f);
 }
 
+bool imurl::empty() const {
+    return url.empty() && description.empty();
+}
+
 // -- imauthorization class ---------------------------------------------------
 
 imauthorization::imauthorization() {
     type = authorization;
 }
 
-imauthorization::imauthorization(const imcontact acont, imdirection adirection, const string atext) {
+imauthorization::imauthorization(const imcontact acont, imdirection adirection,
+bool agranted, const string atext) {
     type = authorization;
     contact = acont;
     direction = adirection;
     text = atext;
+    granted = agranted;
 }
 
 imauthorization::imauthorization(const imevent &ev) {
@@ -211,6 +240,7 @@ imauthorization::imauthorization(const imevent &ev) {
 
     if(m) {
 	text = m->text;
+	granted = m->granted;
     }
 }
 
@@ -220,9 +250,67 @@ const string imauthorization::gettext() const {
 
 void imauthorization::write(ofstream &f) const {
     imevent::write(f);
-    f << text << endl;
+
+    f << (granted ? "1" : "0") << endl <<
+	text << endl;
 }
 
 void imauthorization::read(ifstream &f) {
+    string rdbuf;
+
+    getstring(f, rdbuf);
     text = readblock(f);
+
+    granted = rdbuf == "1";
+}
+
+bool imauthorization::empty() const {
+    return false;
+}
+
+bool imauthorization::getgranted() const {
+    return granted;
+}
+
+// -- imsms class -------------------------------------------------------------
+
+imsms::imsms() {
+    type = sms;
+}
+
+imsms::imsms(const imcontact acont, imdirection adirection,
+const string atext) {
+    type = sms;
+    contact = acont;
+    direction = adirection;
+    text = atext;
+}
+
+imsms::imsms(const imevent &ev) {
+    type = sms;
+    contact = ev.contact;
+    direction = ev.direction;
+    timestamp = ev.timestamp;
+
+    const imsms *m = dynamic_cast<const imsms *>(&ev);
+    if(m) {
+	text = m->text;
+    }
+}
+
+const string imsms::gettext() const {
+    return text;
+}
+
+void imsms::write(ofstream &f) const {
+    imevent::write(f);
+    f << text << endl;
+}
+
+void imsms::read(ifstream &f) {
+    text = readblock(f);
+}
+
+bool imsms::empty() const {
+    return text.empty();
 }

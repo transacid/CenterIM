@@ -37,6 +37,10 @@ class imevent {
 	void settimestamp(time_t atimestamp);
 	void setcontact(const imcontact &acontact);
 
+	imevent *getevent() const;
+
+	virtual bool empty() const;
+
 	virtual void write(ofstream &f) const;
 	virtual void read(ifstream &f);
 };
@@ -52,6 +56,8 @@ class immessage: public imevent {
 	    const string atext);
 
 	const string gettext() const;
+
+	bool empty() const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -70,24 +76,45 @@ class imurl: public imevent {
 	const string geturl() const;
 	const string getdescription() const;
 
+	bool empty() const;
+
 	void write(ofstream &f) const;
 	void read(ifstream &f);
 };
 
-class imsms: public immessage {
+class imsms: public imevent {
+    protected:
+	string text;
+
+    public:
+	imsms();
+	imsms(const imevent &ev);
+	imsms(const imcontact acont, imdirection adirection,
+	    const string atext);
+
+	const string gettext() const;
+
+	bool empty() const;
+
+	void write(ofstream &f) const;
+	void read(ifstream &f);
 };
 
 class imauthorization: public imevent {
     protected:
 	string text;
+	bool granted;
 
     public:
 	imauthorization();
 	imauthorization(const imevent &ev);
 	imauthorization(const imcontact acont, imdirection adirection,
-	    const string atext);
+	    bool granted, const string atext);
 
 	const string gettext() const;
+	bool getgranted() const;
+
+	bool empty() const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);

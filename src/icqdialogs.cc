@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.34 2001/12/05 17:13:47 konst Exp $
+* $Id: icqdialogs.cc,v 1.35 2001/12/06 18:30:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -88,7 +88,7 @@ bool icqface::finddialog(imsearchparams &s) {
 	    case icq:
 		i = tree.addnode(_(" UIN "));
 		tree.addleaff(i, 0, 10, _(" UIN : %s "), strint(s.uin));
-
+/*
 		i = tree.addnode(_(" Details "));
 		tree.addleaff(i, 0, 11, _(" Nickname : %s "), s.nick.c_str());
 		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
@@ -97,12 +97,12 @@ bool icqface::finddialog(imsearchparams &s) {
 		tree.addleaff(i, 0, 15, _(" Min. age : %s "), strint(s.minage));
 		tree.addleaff(i, 0, 16, _(" Max. age : %s "), strint(s.maxage));
 		tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
-//                tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
+		tree.addleaff(i, 0, 18, _(" Language : %s "), s.language ? icq_GetMetaLanguageName(s.language) : "");
 
 		i = tree.addnode(_(" Location "));
 		tree.addleaff(i, 0, 19, _(" City : %s "), s.city.c_str());
 		tree.addleaff(i, 0, 20, _(" State : %s "), s.state.c_str());
-//                tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
+		tree.addleaff(i, 0, 21, _(" Country : %s "), s.country ? icq_GetCountryName(s.country) : "");
 
 		i = tree.addnode(_(" Work "));
 		tree.addleaff(i, 0, 22, _(" Company : %s "), s.company.c_str());
@@ -111,6 +111,7 @@ bool icqface::finddialog(imsearchparams &s) {
 
 		i = tree.addnode(_(" Online only "));
 		tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
+*/
 		break;
 
 	    case yahoo:

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.50 2001/12/06 16:56:32 konst Exp $
+* $Id: icqface.cc,v 1.51 2001/12/06 18:30:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -743,6 +743,7 @@ void icqface::userinfo(const imcontact cinfo, const imcontact realinfo) {
 
     db.close();
     restoreworkarea();
+    status("");
 }
 
 void icqface::makeprotocolmenu(verticalmenu &m) {
@@ -1719,7 +1720,7 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    face.multicontacts("");
 	    break;
 	case CTRL('o'):
-//            face.history(face.passinfo);
+	    cicq.history(face.passinfo);
 	    break;
 	case ALT('?'):
 	    cicq.userinfo(face.passinfo);

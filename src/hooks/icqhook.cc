@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.14 2001/12/06 16:56:34 konst Exp $
+* $Id: icqhook.cc,v 1.15 2001/12/06 18:30:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -199,7 +199,8 @@ bool icqhook::send(const imevent &ev) {
 	cli.SendEvent(new SMSMessageEvent(&ic, rusconv("kw", m->gettext()), false));
     } else if(ev.gettype() == imevent::authorization) {
 	const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	cli.SendEvent(new AuthReqEvent(&ic, rusconv("kw", m->gettext())));
+	cli.SendEvent(new AuthAckEvent(&ic,
+	    rusconv("kw", m->gettext()), m->getgranted()));
     } else {
 	return false;
     }
@@ -379,7 +380,7 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
     } else if(ev->getType() == MessageEvent::AuthReq) {
 	AuthReqEvent *r;
 	if(r = dynamic_cast<AuthReqEvent *>(ev)) {
-	    em.store(imauthorization(ic, imevent::incoming,
+	    em.store(imauthorization(ic, imevent::incoming, false,
 		rusconv("wk", r->getMessage())));
 	}
     } else if(ev->getType() == MessageEvent::AuthAck) {

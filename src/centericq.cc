@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.48 2001/12/06 16:56:30 konst Exp $
+* $Id: centericq.cc,v 1.49 2001/12/06 18:30:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -532,7 +532,8 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	}
 
 	if(proceed) {
-	    if(face.eventedit(*sendev)) {
+	    if(face.eventedit(*sendev))
+	    if(!sendev->empty()) {
 		for(i = face.muins.begin(); i != face.muins.end(); i++) {
 		    sendev->setcontact(*i);
 		    em.store(*sendev);
@@ -564,7 +565,7 @@ void centericq::readevents(const imcontact &cont) {
 		if((*iev)->getdirection() == imevent::incoming) {
 		    enough = false;
 
-		    while(!enough) {
+		    while(!enough && !fin) {
 			r = face.eventview(*iev);
 
 			switch(r) {
@@ -583,6 +584,18 @@ void centericq::readevents(const imcontact &cont) {
 
 			    case icqface::cancel:
 				fin = true;
+				break;
+
+			    case icqface::accept:
+				em.store(imauthorization(cont,
+				    imevent::outgoing, true, "accepted"));
+				enough = true;
+				break;
+
+			    case icqface::reject:
+				em.store(imauthorization(cont,
+				    imevent::outgoing, false, "rejected"));
+				enough = true;
 				break;
 			}
 		    }
@@ -620,6 +633,16 @@ void centericq::history(const imcontact &cont) {
 		case icqface::reply:
 		    sendevent(*im, r);
 		    break;
+
+		case icqface::accept:
+		    em.store(imauthorization(cont, imevent::outgoing,
+			true, "accepted"));
+		    break;
+
+		case icqface::reject:
+		    em.store(imauthorization(cont, imevent::outgoing,
+			false, "rejected"));
+		    break;
 	    }
 	}
     } else {
@@ -630,6 +653,8 @@ void centericq::history(const imcontact &cont) {
 	delete *events.begin();
 	events.erase(events.begin());
     }
+
+    face.status("");
 }
 
 const string centericq::quotemsg(const string text) {
