@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.151 2004/06/10 19:13:13 konst Exp $
+* $Id: icqhook.cc,v 1.152 2004/06/18 12:43:00 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1063,6 +1063,24 @@ void icqhook::disconnected_cb(DisconnectedEvent *ev) {
     face.update();
 }
 
+static string fixicqrtf(string msg) {
+    int pos, bpos, n;
+    string sub;
+
+    while((pos = msg.find("<##icqimage")) != -1) {
+	msg.erase(pos, 11);
+	if((bpos = msg.find(">", pos)) != -1) {
+	    sub = msg.substr(pos, bpos-pos);
+	    if(sub.size() > 2) sub.erase(0, sub.size()-2);
+	    n = hex2int(sub);
+	    msg.erase(pos, bpos-pos+1);
+	    msg.insert(pos, (string) "image#" + i2str(n));
+	}
+    }
+
+    return msg;
+}
+
 void icqhook::messaged_cb(MessageEvent *ev) {
     imcontact ic;
     time_t t;
@@ -1075,7 +1093,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 
 	text = r->getMessage();
 	if(text.substr(0, 6) == "{\\rtf1")
-	    text = striprtf(text);
+	    text += (string) " --- " + fixicqrtf(text) + " --- " + fixicqrtf(striprtf(text));
 
 	em.store(immessage(ic, imevent::incoming, rusconv("wk", text), r->getTime()));
 
