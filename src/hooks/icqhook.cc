@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.48 2002/01/30 11:32:22 konst Exp $
+* $Id: icqhook.cc,v 1.49 2002/01/30 17:25:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -634,10 +634,12 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 
 	    if(!c)
 	    if(c = clist.addnew(imcontact(0, infocard), true)) {
-		c->setdispnick("mobile");
 		icqcontact::basicinfo b = c->getbasicinfo();
 		b.cellular = r->getSender();
+
 		c->setbasicinfo(b);
+
+		c->setdispnick(b.cellular);
 		c->setnick(b.cellular);
 	    }
 
@@ -674,21 +676,24 @@ bool icqhook::messaged_cb(MessageEvent *ev) {
 
 	    if(!c)
 	    if(c = clist.addnew(imcontact(0, infocard), true)) {
-		c->setdispnick("email_express");
+		c->setdispnick(r->getEmail());
+		c->setnick(r->getEmail());
+
 		icqcontact::basicinfo b = c->getbasicinfo();
 
-		b.email = r->getEmail();
-		int pos = r->getSender().find(" ");
+		if(r->getSender() != r->getEmail()) {
+		    int pos = r->getSender().find(" ");
 
-		if(pos != -1) {
-		    b.fname = r->getSender().substr(0, pos);
-		    b.lname = r->getSender().substr(pos+1);
-		} else {
-		    b.fname = r->getSender();
+		    if(pos != -1) {
+			b.fname = r->getSender().substr(0, pos);
+			b.lname = r->getSender().substr(pos+1);
+		    } else {
+			b.fname = r->getSender();
+		    }
 		}
 
+		b.email = r->getEmail();
 		c->setbasicinfo(b);
-		c->setnick(r->getEmail());
 	    }
 
 	    if(c) {

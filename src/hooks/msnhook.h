@@ -16,6 +16,7 @@ class msnhook : public abstracthook {
 	static void disconnected(void *data);
 	static void log(void *data);
 	static void ring(void *data);
+	static void mailed(void *data);
 
 	static imstatus msn2imstatus(int st);
 	static bool isourid(const string nick);

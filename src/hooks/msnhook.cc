@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.12 2002/01/18 16:04:03 konst Exp $
+* $Id: msnhook.cc,v 1.13 2002/01/30 17:25:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,7 @@
 #include "icqcontacts.h"
 #include "accountmanager.h"
 #include "eventmanager.h"
+#include "centericq.h"
 #include "imlogger.h"
 
 msnhook mhook;
@@ -50,7 +51,7 @@ msnhook::msnhook() {
     MSN_RegisterCallback(MSN_AUTH, &authrequested);
     MSN_RegisterCallback(MSN_OUT, &disconnected);
     MSN_RegisterCallback(MSN_RNG, &ring);
-//    MSN_RegisterCallback(MSN_MAIL, &mail_callback);
+    MSN_RegisterCallback(MSN_MAIL, &mailed);
 
 #ifdef DEBUG
     MSN_RegisterCallback(MSN_LOG, &log);
@@ -151,13 +152,22 @@ bool msnhook::enabled() const {
 }
 
 bool msnhook::send(const imevent &ev) {
+    string text;
+
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *>(&ev);
+	if(m) text = rusconv("kw", m->gettext());
+    } else if(ev.gettype() == imevent::url) {
+	const imurl *m = static_cast<const imurl *>(&ev);
+	if(m) text = rusconv("kw", m->geturl()) + "\n\n" + rusconv("kw", m->getdescription());
+    }
+
+    if(!text.empty()) {
 	icqcontact *c = clist.get(ev.getcontact());
 
-	if(c && m)
+	if(c)
 	if(c->getstatus() != offline) {
-	    MSN_SendMessage(ev.getcontact().nickname.c_str(), m->gettext().c_str());
+	    MSN_SendMessage(ev.getcontact().nickname.c_str(), text.c_str());
 	    return true;
 	}
     }
@@ -323,5 +333,19 @@ void msnhook::ring(void *data) {
 	face.log(_("+ [msn] connecting with %s"), ring->handle.c_str());
     } else {
 	face.log(_("+ [msn] connection from %s"), ring->handle.c_str());
+    }
+}
+
+void msnhook::mailed(void *data) {
+    MSN_MailNotification *mail = (MSN_MailNotification *) data;
+
+    if(mail->from) {
+	char buf[1024];
+
+	sprintf(buf, _("+ [msn] e-mail from %s <%s>, %s"),
+	    mail->from, mail->fromaddr, mail->subject);
+
+	face.log(buf);
+	clist.get(contactroot)->playsound(imevent::email);
     }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.73 2002/01/29 18:20:14 konst Exp $
+* $Id: icqface.cc,v 1.74 2002/01/30 17:25:41 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -195,19 +195,16 @@ int icqface::contextmenu(icqcontact *c) {
     capab = gethook(cont.pname).getcapabilities();
 
     if(cont != contactroot) {
-	if(cont.pname != infocard) {
+	if(cont.pname != infocard)
 	    m.additem(0, ACT_MSG, _(" Send a message     enter"));
-	}
 
-	if(capab & hoptCanSendURL) {
+	if(capab & hoptCanSendURL)
 	    m.additem(0, ACT_URL, _(" Send an URL            u"));
-	}
 
-	if(capab & hoptCanSendSMS) {
+	if(capab & hoptCanSendSMS)
 	    m.additem(0, ACT_SMS, _(" Send an SMS"));
-	}
 
-	m.addline();
+	if(!m.empty()) m.addline();
 
 	m.additem(0, ACT_INFO, _(" User's details         ?"));
 	m.additem(0, ACT_EDITUSER, _(" Edit details"));
