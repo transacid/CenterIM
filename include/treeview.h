@@ -11,21 +11,20 @@
 
 __KTOOL_BEGIN_NAMESPACE
 
-class treeviewnode {
-    public:
-	int id, parentid, color;
-	bool isnode, isopen;
-	string text;
-	void *ref;
-
-	bool operator == (const int aid);
-	bool operator == (const void *aref);
-	bool operator != (const int aid);
-	bool operator != (const void *aref);
-};
-
 class treeview : public abstractuicontrol {
     private:
+	struct treeviewnode {
+	    int id, parentid, color;
+	    bool isnode, isopen;
+	    string text;
+	    void *ref;
+
+	    bool operator == (const int aid);
+	    bool operator == (const void *aref);
+	    bool operator != (const int aid);
+	    bool operator != (const void *aref);
+	};
+
 	int bgcolor, selectcolor, nodecolor, leafcolor, idseq;
 
 	vector<treeviewnode> items;

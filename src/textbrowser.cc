@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textbrowser class
-* $Id: textbrowser.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
+* $Id: textbrowser.cc,v 1.4 2001/08/03 09:21:14 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -65,7 +65,7 @@ void textbrowser::draw(int line) {
 
     for(i = line; (i-line < y2-y1) && (i < lines.size()); i++) {
 	mvprintw(y1+i-line, x1, "");
-	printstring(lines[i]);
+	printstring(makebidi(lines[i]));
 	for(int k = lines[i].size(); k < x2-x1; k++) printw(" ");
     }
 

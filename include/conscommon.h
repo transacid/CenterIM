@@ -55,19 +55,11 @@
 
 extern bool kintf_graph, kintf_refresh;
 
-__KTOOL_BEGIN_NAMESPACE
-
 void printchar(char c);
 void printstring(string s);
+int string2key(const string adef);
 
-__KTOOL_END_NAMESPACE
-
-#ifdef __KTOOL_USE_NAMESPACES
-
-using ktool::printchar;
-using ktool::printstring;
-
-#endif
+const string makebidi(const string buf, int lpad = 0);
 
 __KTOOL_BEGIN_C
 
@@ -92,9 +84,6 @@ void setbeep(int freq, int duration);
 void delay(int milisec);
 int kwherex();
 int kwherey();
-
-// chtype **savelines(int x1, int y1, int x2, int y2);
-// void restorelines(chtype **scrbuf, int x1, int y1, int x2, int y2);
 
 __KTOOL_END_C
 

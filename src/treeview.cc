@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui treeview class
-* $Id: treeview.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
+* $Id: treeview.cc,v 1.4 2001/08/03 09:21:14 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -311,18 +311,18 @@ void treeview::setcoord(int nx1, int ny1, int nx2, int ny2) {
 
 // ----------------------------------------------------------------------------
 
-bool ktool::treeviewnode::operator == (const int aid) {
+bool treeview::treeviewnode::operator == (const int aid) {
     return id == aid;
 }
 
-bool ktool::treeviewnode::operator == (const void *aref) {
+bool treeview::treeviewnode::operator == (const void *aref) {
     return ref == aref;
 }
 
-bool ktool::treeviewnode::operator != (const int aid) {
+bool treeview::treeviewnode::operator != (const int aid) {
     return id != aid;
 }
 
-bool ktool::treeviewnode::operator != (const void *aref) {
+bool treeview::treeviewnode::operator != (const void *aref) {
     return ref != aref;
 }
