@@ -44,6 +44,9 @@ typedef void * client_t;
 #define SHUT_RDWR 2
 #endif
 
+#ifndef MSG_DONTWAIT
+#define MSG_DONTWAIT 0
+#endif
 
 typedef void (*ptrtofnct)(firetalk_t, void *, ...);
 
