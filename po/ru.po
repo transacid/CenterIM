@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.2.0\n"
-"POT-Creation-Date: 2001-12-08 17:11+0200\n"
+"POT-Creation-Date: 2001-12-10 13:11+0200\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -14,148 +14,51 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:115
-msgid "password: "
-msgstr "пароль: "
-
-#: src/centericq.cc:150
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
-
-#: src/centericq.cc:204
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Игнорировать сообщения от %s?"
-
-#: src/centericq.cc:238
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Вы действительно хотите удалить %s?"
-
-#: src/centericq.cc:245
-msgid "New nickname to show: "
-msgstr "Новый ник для показа в списке: "
-
-#: src/centericq.cc:253
-msgid "Select a group to move the user to"
-msgstr "Выберите новую группу для пользователя"
-
-#: src/centericq.cc:417
-#, c-format
-msgid "+ new mail arrived, %d messages"
-msgstr "+ получена новая почта, %d сообщений"
-
-#: src/centericq.cc:418
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ последнее сообщение от %s"
-
-#: src/centericq.cc:452
-msgid "! another running copy of centericq detected"
-msgstr "! обнаружена работающая копия centericq"
-
-#: src/centericq.cc:453
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! это может вызвать проблемы. pid %lu"
-
-#: src/centericq.cc:528
-#, fuzzy
-msgid "Mobile number: "
-msgstr "имя файла: "
-
-#: src/centericq.cc:711
-#, fuzzy, c-format
-msgid "+ no history items for %s"
-msgstr "+ последнее сообщение от %s"
-
-#: src/centericq.cc:737
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s уже есть в списке"
-
-#: src/centericq.cc:743
-msgid "Select a group to add the user to"
-msgstr "Выберите группу для контакта"
-
-#: src/centericq.cc:750
-msgid "Notify the user he/she has been added?"
-msgstr "Уведомить пользователя о том, что он был добавлен?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:753
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ уведомление послано %lu"
-
-#: src/centericq.cc:765
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s добавлен в список"
-
-#: src/centericq.cc:838
-msgid "+ the user is back"
-msgstr "+ пользователь вернулся"
-
-#: src/centericq.cc:848
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] автоматический переход в %s"
-
-#: src/centericq.cc:850
-msgid "away"
-msgstr ""
-
-#: src/centericq.cc:850
-msgid "n/a"
-msgstr ""
-
-#: src/icqcontact.cc:640
+#: src/icqcontact.cc:608
 msgid "Jan"
 msgstr "Янв"
 
-#: src/icqcontact.cc:640
+#: src/icqcontact.cc:608
 msgid "Feb"
 msgstr "Фев"
 
-#: src/icqcontact.cc:640
+#: src/icqcontact.cc:608
 msgid "Mar"
 msgstr "Мар"
 
-#: src/icqcontact.cc:640
+#: src/icqcontact.cc:608
 msgid "Apr"
 msgstr "Апр"
 
-#: src/icqcontact.cc:641
+#: src/icqcontact.cc:609
 msgid "May"
 msgstr "Май"
 
-#: src/icqcontact.cc:641
+#: src/icqcontact.cc:609
 msgid "Jun"
 msgstr "Июн"
 
-#: src/icqcontact.cc:641
+#: src/icqcontact.cc:609
 msgid "Jul"
 msgstr "Июл"
 
-#: src/icqcontact.cc:641
+#: src/icqcontact.cc:609
 msgid "Aug"
 msgstr "Авг"
 
-#: src/icqcontact.cc:642
+#: src/icqcontact.cc:610
 msgid "Sep"
 msgstr "Сен"
 
-#: src/icqcontact.cc:642
+#: src/icqcontact.cc:610
 msgid "Oct"
 msgstr "Окт"
 
-#: src/icqcontact.cc:642
+#: src/icqcontact.cc:610
 msgid "Nov"
 msgstr "Ноя"
 
-#: src/icqcontact.cc:642
+#: src/icqcontact.cc:610
 msgid "Dec"
 msgstr "Дек"
 
@@ -1143,39 +1046,39 @@ msgstr ""
 msgid "+ [icq] connecting to the server"
 msgstr "+ [icq] соединение с сервером"
 
-#: src/hooks/icqhook.cc:364
+#: src/hooks/icqhook.cc:372
 msgid "+ [icq] logged in"
 msgstr "+ [icq] вход в систему состоялся"
 
-#: src/hooks/icqhook.cc:372
+#: src/hooks/icqhook.cc:380
 msgid "as requested"
 msgstr ""
 
-#: src/hooks/icqhook.cc:373
+#: src/hooks/icqhook.cc:381
 msgid "socket problems"
 msgstr ""
 
-#: src/hooks/icqhook.cc:374
+#: src/hooks/icqhook.cc:382
 msgid "bad username"
 msgstr "неправильное имя пользователя"
 
-#: src/hooks/icqhook.cc:375
+#: src/hooks/icqhook.cc:383
 msgid "turboing"
 msgstr ""
 
-#: src/hooks/icqhook.cc:376
+#: src/hooks/icqhook.cc:384
 msgid "bad password"
 msgstr "неправильный пароль"
 
-#: src/hooks/icqhook.cc:377
+#: src/hooks/icqhook.cc:385
 msgid "username and password mismatch"
 msgstr ""
 
-#: src/hooks/icqhook.cc:378
+#: src/hooks/icqhook.cc:386
 msgid "already logged"
 msgstr ""
 
-#: src/hooks/icqhook.cc:386
+#: src/hooks/icqhook.cc:396
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] рассоединение"
 
@@ -1205,10 +1108,107 @@ msgstr "+ [yahoo] удаление %s из списка"
 msgid "+ [yahoo] disconnected from the network"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:339
+#: src/hooks/yahoohook.cc:342
 #, fuzzy
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] отброшено сообщение к %s"
+
+#: src/centericq.cc:115
+msgid "password: "
+msgstr "пароль: "
+
+#: src/centericq.cc:150
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
+
+#: src/centericq.cc:204
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Игнорировать сообщения от %s?"
+
+#: src/centericq.cc:241
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Вы действительно хотите удалить %s?"
+
+#: src/centericq.cc:249
+msgid "New nickname to show: "
+msgstr "Новый ник для показа в списке: "
+
+#: src/centericq.cc:257
+msgid "Select a group to move the user to"
+msgstr "Выберите новую группу для пользователя"
+
+#: src/centericq.cc:421
+#, c-format
+msgid "+ new mail arrived, %d messages"
+msgstr "+ получена новая почта, %d сообщений"
+
+#: src/centericq.cc:422
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ последнее сообщение от %s"
+
+#: src/centericq.cc:456
+msgid "! another running copy of centericq detected"
+msgstr "! обнаружена работающая копия centericq"
+
+#: src/centericq.cc:457
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! это может вызвать проблемы. pid %lu"
+
+#: src/centericq.cc:532
+#, fuzzy
+msgid "Mobile number: "
+msgstr "имя файла: "
+
+#: src/centericq.cc:715
+#, fuzzy, c-format
+msgid "+ no history items for %s"
+msgstr "+ последнее сообщение от %s"
+
+#: src/centericq.cc:741
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s уже есть в списке"
+
+#: src/centericq.cc:747
+msgid "Select a group to add the user to"
+msgstr "Выберите группу для контакта"
+
+#: src/centericq.cc:754
+msgid "Notify the user he/she has been added?"
+msgstr "Уведомить пользователя о том, что он был добавлен?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:757
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ уведомление послано %lu"
+
+#: src/centericq.cc:769
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s добавлен в список"
+
+#: src/centericq.cc:842
+msgid "+ the user is back"
+msgstr "+ пользователь вернулся"
+
+#: src/centericq.cc:852
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] автоматический переход в %s"
+
+#: src/centericq.cc:854
+msgid "away"
+msgstr ""
+
+#: src/centericq.cc:854
+msgid "n/a"
+msgstr ""
 
 #: src/hooks/msnhook.cc:69
 msgid "+ [msn] connecting to the server"

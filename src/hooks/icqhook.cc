@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.21 2001/12/09 11:04:38 konst Exp $
+* $Id: icqhook.cc,v 1.22 2001/12/10 14:00:43 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -526,17 +526,17 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		icqcontact::basicinfo cbinfo = c->getbasicinfo();
 		MainHomeInfo &home = ic->getMainHomeInfo();
 
-		cbinfo.fname = ic->getFirstName();
-		cbinfo.lname = ic->getLastName();
-		cbinfo.email = ic->getEmail();
-		cbinfo.city = home.city;
-		cbinfo.state = home.state;
-		cbinfo.phone = home.phone;
-		cbinfo.fax = home.fax;
-		cbinfo.street = home.street;
+		cbinfo.fname = rusconv("wk", ic->getFirstName());
+		cbinfo.lname = rusconv("wk", ic->getLastName());
+		cbinfo.email = rusconv("wk", ic->getEmail());
+		cbinfo.city = rusconv("wk", home.city);
+		cbinfo.state = rusconv("wk", home.state);
+		cbinfo.phone = rusconv("wk", home.phone);
+		cbinfo.fax = rusconv("wk", home.fax);
+		cbinfo.street = rusconv("wk", home.street);
 
 		if(!home.cellular.empty())
-		    cbinfo.cellular = home.cellular;
+		    cbinfo.cellular = rusconv("wk", home.cellular);
 
 		cbinfo.zip = strtoul(home.zip.c_str(), 0, 0);
 		cbinfo.country = getcountryname(home.country);
@@ -546,7 +546,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 
 		cminfo.age = hpage.age;
 		cminfo.gender = genderUnspec;
-		cminfo.homepage = hpage.homepage;
+		cminfo.homepage = rusconv("wk", hpage.homepage);
 		cminfo.birth_day = hpage.birth_day;
 		cminfo.birth_month = hpage.birth_month;
 		cminfo.birth_year = hpage.birth_year;
@@ -561,7 +561,7 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		c->setnick(nick);
 		c->setbasicinfo(cbinfo);
 		c->setmoreinfo(cminfo);
-		c->setabout(ic->getAboutInfo());
+		c->setabout(rusconv("wk", ic->getAboutInfo()));
 
 		face.relaxedupdate();
 	    }

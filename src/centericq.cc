@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.58 2001/12/08 23:14:28 konst Exp $
+* $Id: centericq.cc,v 1.59 2001/12/10 14:00:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,7 +34,7 @@
 #include "accountmanager.h"
 
 centericq::centericq() {
-    timer_keypress = time(0);
+    timer_keypress = time(0)-50;
     timer_checkmail = timer_update = timer_resend = 0;
     regmode = false;
 }
@@ -780,7 +780,7 @@ bool centericq::idle(int options = 0) {
     protocolname pname;
 
     for(keypressed = fin = false; !keypressed && !fin; ) {
-	timer_keypress = lastkeypress();
+//        timer_keypress = lastkeypress();
 
 	FD_ZERO(&fds);
 	FD_SET(hsockfd = 0, &fds);
@@ -827,6 +827,9 @@ void centericq::setauto(imstatus astatus) {
     imstatus stcurrent;
     static bool autoset = false;
 
+    if((astatus == available) && !autoset)
+	return;
+
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	abstracthook &hook = gethook(pname);
 	stcurrent = hook.getstatus();
@@ -838,14 +841,15 @@ void centericq::setauto(imstatus astatus) {
 		break;
 
 	    default:
-		if(astatus == available && autoset) {
+		if(autoset && (astatus == available)) {
 		    face.log(_("+ the user is back"));
+		    hook.restorestatus();
 		    autoset = false;
 		} else {
 		    if(astatus == away && stcurrent == notavail)
 			break;
 
-		    if(astatus != stcurrent) {
+		    if(!autoset && (astatus != stcurrent)) {
 			hook.setautostatus(astatus);
 			autoset = true;
 

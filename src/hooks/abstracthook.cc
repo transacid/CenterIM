@@ -26,6 +26,10 @@ void abstracthook::main() {
 void abstracthook::setautostatus(imstatus st) {
 }
 
+void abstracthook::restorestatus() {
+    setautostatus(manualstatus);
+}
+
 void abstracthook::setstatus(imstatus st) {
     setautostatus(manualstatus = st);
 

@@ -40,6 +40,8 @@ class abstracthook {
 	virtual void removeuser(const imcontact ic);
 
 	virtual void setautostatus(imstatus st);
+	virtual void restorestatus();
+
 	virtual void setstatus(imstatus st);
 	virtual imstatus getstatus() const;
 

@@ -62,7 +62,7 @@ AC_LANG_RESTORE
 
 AC_CHECK_LIB(ncurses, main, LIBS="$LIBS -lncurses", LIBS="$LIBS -lcurses")
 
-AC_CONFIG_SUBDIRS(kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 libyahoo-0.1 libmsn-0.1 libicq2000-0.1)
+AC_CONFIG_SUBDIRS(kkstrtext-0.1 kksystr-0.1 kkconsui-0.1 libyahoo-0.1 libmsn-0.1 libicq2000-0.1)
 ALL_LINGUAS="zh_TW.Big5 ru ro pt_BR pl it hu es de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)

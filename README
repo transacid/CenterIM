@@ -6,6 +6,7 @@ Contents
 1. Introduction
     1.1. Creation history
     1.2. Features overview
+    1.3. Requirements
 2. UIN registration
     2.1. Updating details
 3. User interface
@@ -22,7 +23,7 @@ Contents
     5.1. "Auto Away" and "Auto N/A"
 6. Contact list
     6.1. Finding and adding users
-        6.1.1. Some useful hints
+	6.1.1. Some useful hints
     6.2. Removing users
     6.3. Users' details
     6.4. Groups of contacts
@@ -44,7 +45,7 @@ Contents
 	10.1.1. Centericq mailing list
     10.2. Konst.org.ua
     10.3. Other programs I write
-    10.4. ICQ
+    10.4. IM protocols
 
 
 1. Introduction
@@ -110,6 +111,20 @@ online status and basic user information, centericq advanced features
 such as "White pages" search, an ability to update almost all the fields
 in user's details, send URL, files, contacts, etc. I hope you enjoy it a
 lot :)
+
+
+1.3. Requirements
+-----------------
+
+In order to build the software the following libraries are required:
+
+ncurses (at least 4.2 version)
+    A CRT screen handling and optimization package.
+    http://dickey.his.com/ncurses/ncurses.html
+
+libsigc++ (at least 1.0.0)
+    The Typesafe Signal Framework for C++.
+    http://libsigc.sourceforge.net/
 
 
 2. UIN registration
@@ -638,20 +653,26 @@ There is also an "articles" section at
     http://konst.org.ua/articles/
 
 
-10.4. ICQ
----------
+10.4. IM protocols
+------------------
 
-  Since centericq is only a console based Linux clone of an original
-software made by Israeli company named "Mirabilis", you might wish to
-know more about it. So, visit the ICQ website at
+  Here I want to say thanks to authors of libraries I used for the
+supported IM protocols support in centericq.
+
+  Barnaby Gray <barnaby@beedesign.co.uk>, who wrote a great library
+  for icq2000 protocol and a GTK+ based ICQ client for UNIX.
+  http://ickle.sourceforge.net/
+
+  Shane P. Brady <shane@jxie.com>, for his MSN library.
+
+  Douglas Winslow <douglas@min.net>, for the Yahoo! protocol
+  implmentation.
+
+  Since centericq only contains support for the ICQ protocol taken from
+the original software made by Israeli company named "Mirabilis", you might
+wish to know more about it. So, visit the ICQ website at
 
     http://www.icq.com/
 
 It provides information about the company itself along with a lot of
 community services including SMS messaging, web directory, and so on.
-
-  If you're intrested in technical aspects of ICQ communications
-protocol, visit the following URLs:
-
-    http://www.student.nada.kth.se/~d95-mih/icq/
-    http://www.algonet.se/~henisak/icq/icqv5.html

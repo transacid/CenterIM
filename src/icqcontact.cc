@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.32 2001/12/08 10:18:33 konst Exp $
+* $Id: icqcontact.cc,v 1.33 2001/12/10 14:00:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -421,51 +421,19 @@ void icqcontact::setmsgcount(int n) {
     face.relaxedupdate();
 }
 
-#define recode(f) binfo.f = rusconv("wk", binfo.f)
-
 void icqcontact::setbasicinfo(const basicinfo &ainfo) {
     binfo = ainfo;
     fupdated++;
-
-    recode(fname);
-    recode(lname);
-    recode(email);
-    recode(city);
-    recode(state);
-    recode(phone);
-    recode(fax);
-    recode(street);
-    recode(cellular);
-    recode(country);
 }
-
-#undef recode
-#define recode(f) minfo.f = rusconv("wk", minfo.f)
 
 void icqcontact::setmoreinfo(const moreinfo &ainfo) {
     minfo = ainfo;
     fupdated++;
-
-    recode(homepage);
 }
-
-#undef recode
-#define recode(f) winfo.f = rusconv("wk", winfo.f)
 
 void icqcontact::setworkinfo(const workinfo &ainfo) {
     winfo = ainfo;
     fupdated++;
-
-    recode(city);
-    recode(state);
-    recode(phone);
-    recode(fax);
-    recode(street);
-    recode(country);
-    recode(company);
-    recode(dept);
-    recode(position);
-    recode(homepage);
 }
 
 const icqcontact::basicinfo &icqcontact::getbasicinfo() const {
@@ -481,7 +449,7 @@ const icqcontact::workinfo &icqcontact::getworkinfo() const {
 }
 
 void icqcontact::setabout(const string data) {
-    about = rusconv("wk", data);
+    about = data;
     fupdated++;
 }
 
