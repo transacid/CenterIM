@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.24 2001/12/13 11:28:36 konst Exp $
+* $Id: icqhook.cc,v 1.25 2001/12/13 13:25:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,6 +174,7 @@ void icqhook::main() {
 	for(i = fds.begin(); i != fds.end(); i++) {
 	    if(FD_ISSET(*i, &s)) {
 		cli.socket_cb(*i, SocketEvent::READ);
+		break;
 	    }
 	}
     }
