@@ -6,13 +6,119 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.0\n"
-"POT-Creation-Date: 2002-03-07 14:49+0200\n"
+"POT-Creation-Date: 2002-03-08 09:23+0200\n"
 "PO-Revision-Date: 2002-03-05 10:25+01:00\n"
 "Last-Translator: Tiger!P <tigerp@tigerp.net>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/centericq.cc:118
+msgid "password: "
+msgstr "wachtwoord: "
+
+#: src/centericq.cc:153
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M huidig contact menu, F3/S status veranderen, F4/G globaal menu, Q einde"
+
+#: src/centericq.cc:207
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Alles van %s negeren?"
+
+#: src/centericq.cc:246
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Weet je zeker dat je %s wil verwijderen?"
+
+#: src/centericq.cc:254
+msgid "New nickname to show: "
+msgstr "Nieuwe naam om te tonen: "
+
+#: src/centericq.cc:262
+msgid "Select a group to move the user to"
+msgstr "Selecteer een groep om de gebruiker naartoe te verplaatsen"
+
+#: src/centericq.cc:279
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ kan de 'ben weg' berichten niet ophalen als je 'offline' bent"
+
+#: src/centericq.cc:456
+#, fuzzy, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ nieuwe mail binnengekomen, %d berichten"
+
+#: src/centericq.cc:459
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ laatste bericht van %s"
+
+#: src/centericq.cc:494
+msgid "! another running copy of centericq detected"
+msgstr "! er draait al een centericq"
+
+#: src/centericq.cc:495
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! dit kan problemen veroorzaken. PID %lu"
+
+#: src/centericq.cc:570
+msgid "Mobile number: "
+msgstr "GSM nummer: "
+
+#: src/centericq.cc:753
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ geen geschiedenis van %s"
+
+#: src/centericq.cc:779
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ gebruiker %s staat al in je lijst"
+
+#: src/centericq.cc:785
+msgid "Select a group to add the user to"
+msgstr "Selecteer een groep"
+
+#: src/centericq.cc:792
+msgid "Notify the user he/she has been added?"
+msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:795
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ het bericht is verzonden naar %lu"
+
+#: src/centericq.cc:807
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s is toegevoegd aan je lijst"
+
+#: src/centericq.cc:879
+msgid "+ the user is back"
+msgstr "+ de gebruiker is terug"
+
+#: src/centericq.cc:895
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] status hersteld"
+
+#: src/centericq.cc:909
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] automatisch op %s gezet"
+
+#: src/centericq.cc:911
+msgid "away"
+msgstr "weg"
+
+#: src/centericq.cc:911
+msgid "n/a"
+msgstr "niet ber."
 
 #: src/icqconf.cc:175
 #, c-format
@@ -1238,112 +1344,6 @@ msgstr "+ [yahoo] disconnected van het netwerk"
 #: src/hooks/yahoohook.cc:362
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] teruggekeerd bericht"
-
-#: src/centericq.cc:118
-msgid "password: "
-msgstr "wachtwoord: "
-
-#: src/centericq.cc:153
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M huidig contact menu, F3/S status veranderen, F4/G globaal menu, Q einde"
-
-#: src/centericq.cc:207
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Alles van %s negeren?"
-
-#: src/centericq.cc:246
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Weet je zeker dat je %s wil verwijderen?"
-
-#: src/centericq.cc:254
-msgid "New nickname to show: "
-msgstr "Nieuwe naam om te tonen: "
-
-#: src/centericq.cc:262
-msgid "Select a group to move the user to"
-msgstr "Selecteer een groep om de gebruiker naartoe te verplaatsen"
-
-#: src/centericq.cc:279
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ kan de 'ben weg' berichten niet ophalen als je 'offline' bent"
-
-#: src/centericq.cc:456
-#, fuzzy, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ nieuwe mail binnengekomen, %d berichten"
-
-#: src/centericq.cc:459
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ laatste bericht van %s"
-
-#: src/centericq.cc:494
-msgid "! another running copy of centericq detected"
-msgstr "! er draait al een centericq"
-
-#: src/centericq.cc:495
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! dit kan problemen veroorzaken. PID %lu"
-
-#: src/centericq.cc:570
-msgid "Mobile number: "
-msgstr "GSM nummer: "
-
-#: src/centericq.cc:753
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ geen geschiedenis van %s"
-
-#: src/centericq.cc:779
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ gebruiker %s staat al in je lijst"
-
-#: src/centericq.cc:785
-msgid "Select a group to add the user to"
-msgstr "Selecteer een groep"
-
-#: src/centericq.cc:792
-msgid "Notify the user he/she has been added?"
-msgstr "De gebruiker inlichten dat hij/zij is toegevoegd?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:795
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ het bericht is verzonden naar %lu"
-
-#: src/centericq.cc:807
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s is toegevoegd aan je lijst"
-
-#: src/centericq.cc:879
-msgid "+ the user is back"
-msgstr "+ de gebruiker is terug"
-
-#: src/centericq.cc:895
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] status hersteld"
-
-#: src/centericq.cc:909
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] automatisch op %s gezet"
-
-#: src/centericq.cc:911
-msgid "away"
-msgstr "weg"
-
-#: src/centericq.cc:911
-msgid "n/a"
-msgstr "niet ber."
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"
