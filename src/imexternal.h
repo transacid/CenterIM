@@ -25,6 +25,7 @@ class imexternal {
 		int options;
 		bool enabled;
 		string name, code, sname, output;
+
 		const imevent *currentev;
 
 		void writescript();

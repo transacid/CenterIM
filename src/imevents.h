@@ -147,4 +147,10 @@ class imemail: public imevent {
 	void read(ifstream &f);
 };
 
+class imrawevent: public imevent {
+    public:
+	imrawevent();
+	imrawevent(imeventtype atype, const imcontact acont, imdirection adirection);
+};
+
 #endif

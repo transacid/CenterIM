@@ -387,3 +387,16 @@ void imemail::write(ofstream &f) const {
 void imemail::read(ifstream &f) {
     text = readblock(f);
 }
+
+// -- imrawevent class --------------------------------------------------------
+
+imrawevent::imrawevent() {
+}
+
+imrawevent::imrawevent(imeventtype atype, const imcontact acont,
+imdirection adirection) {
+    type = atype;
+    contact = acont;
+    direction = adirection;
+    time(&timestamp);
+}

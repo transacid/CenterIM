@@ -41,6 +41,7 @@ void imexternal::ssave() const {
 int imexternal::exec(const imevent &ev) {
     vector<action>::iterator i;
     int r = 0;
+    imcontact c;
 
     for(i = actions.begin(); i != actions.end(); i++) {
 	if(i->exec(ev)) r++;
@@ -230,7 +231,7 @@ bool imexternal::action::load(ifstream &f) {
     int pos;
     string buf, sect, param;
 
-    while(getconf(sect, buf, f)) {
+    while(getconf(sect, buf, f, sect == "exec")) {
 	if(sect.substr(0, 6) == "action") {
 	    param = getword(buf);
 

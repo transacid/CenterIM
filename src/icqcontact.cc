@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.45 2002/02/21 17:29:07 konst Exp $
+* $Id: icqcontact.cc,v 1.46 2002/02/23 11:18:48 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -28,6 +28,7 @@
 #include "centericq.h"
 #include "icqface.h"
 #include "abstracthook.h"
+#include "imexternal.h"
 
 #include <time.h>
 #include <libicq2000/userinfohelpers.h>
@@ -415,8 +416,10 @@ void icqcontact::scanhistory() {
 
 void icqcontact::setstatus(imstatus fstatus) {
     if(status != fstatus) {
-	if(status == offline)
+	if(status == offline) {
+	    external.exec(imrawevent(imevent::online, cdesc, imevent::incoming));
 	    playsound(imevent::online);
+	}
 
 	status = fstatus;
 	face.relaxedupdate();
