@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui textwindow class
-* $Id: textwindow.cc,v 1.6 2002/03/30 17:47:54 konst Exp $
+* $Id: textwindow.cc,v 1.7 2002/05/22 16:28:54 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,6 +43,13 @@ int noptions = 0, int tcolor = 0, const char *tfmt = 0, ...) {
 	va_end(ap);
 	set_title(tcolor, buf);
     }
+}
+
+textwindow::textwindow(const textwindow &aw): abstractuicontrol(aw) {
+    title = aw.title;
+    wc = aw.wc;
+    tc = aw.tc;
+    options = aw.options;
 }
 
 textwindow::~textwindow() {

@@ -18,6 +18,7 @@ class textwindow: public abstractuicontrol {
 	
     public:
 	textwindow();
+	textwindow(const textwindow &aw);
 	textwindow(int xx1, int yy1, int xx2, int yy2, int wcolor,
 	    int noptions = 0, int tcolor = 0, const char *tfmt = 0, ...);
 	~textwindow();
