@@ -39,9 +39,9 @@
 #define normalcolor(c)          COLOR_PAIR(c)
 
 #ifdef LOCALES_HACK
-#define KT_DISP_FILTER(c)       ( ((c > ' ') && (c != '\177')) ? c : ' ' )
+#define KT_DISP_FILTER(c)       ( (((unsigned char) c > ' ') && (c != '\177')) ? c : ' ' )
 #else
-#define KT_DISP_FILTER(c)       (!iscntrl(c) ? c : ' ')
+#define KT_DISP_FILTER(c)       (isprint((unsigned char) c) ? c : ' ')
 #endif
 
 #define VLINE           kintf_graph ? ACS_VLINE         : '|'
