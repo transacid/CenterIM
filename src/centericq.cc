@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.96 2002/04/22 09:30:39 konst Exp $
+* $Id: centericq.cc,v 1.97 2002/04/24 15:26:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -527,6 +527,10 @@ void centericq::handlesignal(int signum) {
 
 	case SIGUSR1:
 	    cicq.rereadstatus();
+	    break;
+
+	case SIGALRM:
+	case SIGUSR2:
 	    break;
     }
 }
