@@ -18,6 +18,8 @@ enum protocolname {
     protocolname_size
 };
 
+ENUM_PLUSPLUS(protocolname)
+
 enum imstatus {
     offline = 0,
     available,
@@ -29,6 +31,8 @@ enum imstatus {
     away,
     imstatus_size
 };
+
+ENUM_PLUSPLUS(imstatus)
 
 static char imstatus2char[imstatus_size] = {
     '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a'

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.135 2004/09/27 22:17:31 konst Exp $
+* $Id: icqconf.cc,v 1.136 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -52,7 +52,7 @@ icqconf::icqconf() {
 
     savepwd = mailcheck = fenoughdiskspace = true;
 
-    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(protocolname pname = icq; pname != protocolname_size; pname++) {
 	chatmode[pname] = true;
 	cpconvert[pname] = entersends[pname] = nonimonline[pname] = false;
     }
@@ -420,7 +420,7 @@ void icqconf::loadmainconfig() {
 		ptpmin = atoi(getword(buf, "-").c_str());
 		ptpmax = atoi(buf.c_str());
 	    } else {
-		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		for(pname = icq; pname != protocolname_size; pname++) {
 		    buf = getprotocolname(pname);
 		    if(param.substr(0, buf.size()) == buf) {
 			im = getourid(pname);
@@ -432,7 +432,7 @@ void icqconf::loadmainconfig() {
 	}
 
 	if(fromcharset.empty() && tocharset.empty())
-	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	for(pname = icq; pname != protocolname_size; pname++) {
 	    if(getcpconvert(pname)) {
 		fromcharset = "cp1251";
 		tocharset = "koi8-r";
@@ -473,25 +473,25 @@ void icqconf::save() {
 	    if(getaskaway()) f << "askaway" << endl;
 
 	    param = "";
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		if(getchatmode(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "chatmode" << param << endl;
 
 	    param = "";
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		if(getentersends(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "entersends" << param << endl;
 
 	    param = "";
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		if(getnonimonline(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "nonimonline" << param << endl;
 
 	    param = "";
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		if(getcpconvert(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "convert" << param << endl;
@@ -614,7 +614,7 @@ void icqconf::loadsounds() {
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
 
-	for(it = imevent::message; it != imevent::imeventtype_size; (int) it += 1) {
+	for(it = imevent::message; it != imevent::imeventtype_size; it++) {
 	    c->setsound(it, "");
 	}
     }
@@ -692,7 +692,7 @@ void icqconf::loadsounds() {
 		    imcontact ic;
 		    protocolname pname;
 
-		    for(pname = icq; pname != protocolname_size && skey != getprotocolname(pname); (int) pname += 1);
+		    for(pname = icq; pname != protocolname_size && skey != getprotocolname(pname); pname++);
 
 		    if(pname != protocolname_size) {
 			if(suin == "*") {
@@ -1014,7 +1014,7 @@ imstatus icqconf::getstatus(protocolname pname) {
 
     if((ia = a.additional.find("status")) != a.additional.end()) {
 	if(!ia->second.empty()) {
-	    for(st = offline; st != imstatus_size && imstatus2char[st] != ia->second[0]; (int) st += 1);
+	    for(st = offline; st != imstatus_size && imstatus2char[st] != ia->second[0]; st++);
 	    if(st == imstatus_size) st = available;
 	}
     }
@@ -1101,7 +1101,7 @@ void icqconf::commandline(int argc, char **argv) {
 		<< "Written by Konstantin Klyagin." << endl
 		<< "Built-in protocols are:";
 
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		if(gethook(pname).enabled()) cout << " " << conf.getprotocolname(pname);
 
 	    cout << endl << endl
@@ -1154,7 +1154,7 @@ const string &dest, const string &number) const {
     } else {
 	protocolname pname;
 
-	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	for(pname = icq; pname != protocolname_size; pname++) {
 	    if(getprotocolname(pname) == proto) {
 		cdest = imcontact(dest, pname);
 		break;
@@ -1237,11 +1237,11 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
     protocolname pname;
 
     if(st) {
-	for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	for(pname = icq; pname != protocolname_size; pname++)
 	    if(getprotocolname(pname) == proto)
 		break;
 
-	for(imst = offline; imst != imstatus_size; (int) imst += 1)
+	for(imst = offline; imst != imstatus_size; imst++)
 	    if(imstatus2char[imst] == st)
 		break;
 
@@ -1323,11 +1323,11 @@ void icqconf::initmultiproto(bool p[], string buf, bool excludenochat) {
     string w;
     protocolname pname;
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+    for(pname = icq; pname != protocolname_size; pname++)
 	p[pname] = buf.empty();
 
     while(!(w = getword(buf)).empty()) {
-	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	for(pname = icq; pname != protocolname_size; pname++) {
 	    if(getprotocolname(pname) == w) {
 		if(excludenochat) {
 		    p[pname] = !gethook(pname).getCapabs().count(hookcapab::nochat);

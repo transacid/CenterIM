@@ -1,7 +1,7 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.34 2004/04/11 16:32:28 konst Exp $
+* $Id: imevents.cc,v 1.35 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -111,14 +111,14 @@ void imevent::read(ifstream &f) {
     if(rdbuf == "\f")
 	getstring(f, rdbuf);
 
-    for(direction = incoming; direction != imdirection_size; (int) direction += 1)
+    for(direction = incoming; direction != imdirection_size; direction++)
 	if(sdirection[direction] == rdbuf) break;
 
     getstring(f, rdbuf);
     type = imeventtype_size;
 
     if(rdbuf != "") {
-	for(type = message; type != imeventtype_size; (int) type += 1)
+	for(type = message; type != imeventtype_size; type++)
 	    if(seventtype[type] == rdbuf) break;
     }
 

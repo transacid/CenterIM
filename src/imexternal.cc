@@ -1,7 +1,7 @@
 /*
 *
 * centericq external actions handling class
-* $Id: imexternal.cc,v 1.27 2004/03/20 16:49:08 konst Exp $
+* $Id: imexternal.cc,v 1.28 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -393,7 +393,7 @@ bool imexternal::action::load(ifstream &f) {
 
 	    if(param == "event") {
 		while(!(param = getword(buf)).empty()) {
-		    for(imevent::imeventtype et = imevent::message; et != imevent::imeventtype_size; (int) et += 1) {
+		    for(imevent::imeventtype et = imevent::message; et != imevent::imeventtype_size; et++) {
 			if((param == geteventname(et))
 			|| (param == "all")) {
 			    event.insert(et);
@@ -403,7 +403,7 @@ bool imexternal::action::load(ifstream &f) {
 
 	    } else if(param == "proto") {
 		while(!(param = getword(buf)).empty()) {
-		    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
+		    for(protocolname pname = icq; pname != protocolname_size; pname++) {
 			if((param == conf.getprotocolname(pname))
 			|| (param == "all")) {
 			    proto.insert(pname);

@@ -78,4 +78,13 @@ using namespace std;
 string up(string s);
 string lo(string s);
 
+/*! .. and defines.
+ */
+
+#define ENUM_PLUSPLUS(tp) \
+    inline tp& operator ++(tp &p, int) { \
+	int t = p; \
+	return p = static_cast<tp>(++t); \
+    }
+
 #endif

@@ -63,6 +63,9 @@ class imevent {
 	virtual void read(ifstream &f);
 };
 
+ENUM_PLUSPLUS(imevent::imeventtype)
+ENUM_PLUSPLUS(imevent::imdirection)
+
 class immessage: public imevent {
     protected:
 	string text;

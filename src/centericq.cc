@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.192 2004/07/27 07:38:32 konst Exp $
+* $Id: centericq.cc,v 1.193 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -71,7 +71,7 @@ void centericq::exec() {
 	if(p)
 	if(rus = (((string) p).substr(0, 2) == "ru")) {
 	    conf.setcharsets("cp1251", "koi8-r");
-	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		conf.setcpconvert(pname, true);
 	}
 
@@ -124,7 +124,7 @@ bool centericq::checkpasswords() {
 
     r = regmode = true;
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	if(gethook(pname).enabled() && !gethook(pname).getCapabs().count(hookcapab::optionalpassword)) {
 	    if(!(ia = conf.getourid(pname)).empty()) {
 		if(ia.password.empty()) {
@@ -152,7 +152,7 @@ bool centericq::checkpasswords() {
 void centericq::inithooks() {
     protocolname pname;
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	gethook(pname).init();
     }
 }
@@ -844,7 +844,7 @@ void centericq::rereadstatus() {
     protocolname pname;
     icqconf::imaccount ia;
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	ia = conf.getourid(pname);
 
 	if(!ia.empty()) {
@@ -857,7 +857,7 @@ void centericq::rereadstatus() {
 		f >> cst, f.close(), f.clear();
 		unlink(fname.c_str());
 
-		for(st = offline; st != imstatus_size; (int) st += 1) {
+		for(st = offline; st != imstatus_size; st++) {
 		    if(imstatus2char[st] == cst) {
 			gethook(pname).setstatus(st);
 			break;
@@ -1381,7 +1381,7 @@ bool centericq::idle(int options ) {
 	if(!regmode) {
 	    exectimers();
 
-	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	    for(pname = icq; pname != protocolname_size; pname++) {
 		abstracthook &hook = gethook(pname);
 
 		if(hook.online()) {
@@ -1400,7 +1400,7 @@ bool centericq::idle(int options ) {
 	    keypressed = true;
 	    time(&timer_keypress);
 	} else {
-	    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	    for(pname = icq; pname != protocolname_size; pname++) {
 		abstracthook &hook = gethook(pname);
 
 		if(hook.online())
@@ -1430,7 +1430,7 @@ void centericq::setauto(imstatus astatus) {
 	nautoset = false;
     }
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	abstracthook &hook = gethook(pname);
 	stcurrent = hook.getstatus();
 
@@ -1487,7 +1487,7 @@ void centericq::exectimers() {
     *
     */
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	if(!conf.getourid(pname).empty() || (pname == rss)) {
 	    abstracthook &hook = gethook(pname);
 
@@ -1581,7 +1581,7 @@ void centericq::exectimers() {
 
 	if(!conf.enoughdiskspace()) {
 	    if(fonline) {
-		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		for(pname = icq; pname != protocolname_size; pname++)
 		    gethook(pname).disconnect();
 
 		face.log(_("! free disk space is less than 10k, going offline"));

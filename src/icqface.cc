@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.231 2004/09/27 22:17:31 konst Exp $
+* $Id: icqface.cc,v 1.232 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -208,7 +208,7 @@ void icqface::showtopbar() {
     protocolname pname;
     icqconf::imaccount ia;
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	ia = conf.getourid(pname);
 
 	if(!ia.empty()) {
@@ -1320,7 +1320,7 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
 	""
     };
 
-    for(ipname = icq; ipname != protocolname_size; (int) ipname += 1) {
+    for(ipname = icq; ipname != protocolname_size; ipname++) {
 	ia = conf.getourid(ipname);
 
 	if(!ia.empty()) {
@@ -1343,7 +1343,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 
     m.idle = &menuidle;
 
-    for(protcount = 0, pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(protcount = 0, pname = icq; pname != protocolname_size; pname++) {
 	if(!conf.getourid(pname).empty()) {
 	    protcount++;
 	    onechoice = pname;
@@ -1372,12 +1372,12 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
     if(r = i) {
 	switch(choice) {
 	    case -1:
-		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		for(pname = icq; pname != protocolname_size; pname++)
 		    if(!conf.getourid(pname).empty())
 			pnames.push_back(pname);
 		break;
 	    case -2:
-		for(pname = icq; pname != protocolname_size; (int) pname += 1)
+		for(pname = icq; pname != protocolname_size; pname++)
 		    if(!conf.getourid(pname).empty())
 		    if(gethook(pname).getstatus() != offline)
 			pnames.push_back(pname);
@@ -1658,7 +1658,7 @@ void icqface::modelist(contactstatus cs) {
 
     set<protocolname> ps;
     if(cs == csvisible || cs == csinvisible) {
-	for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
+	for(protocolname pname = icq; pname != protocolname_size; pname++)
 	    if(gethook(pname).getCapabs().count(hookcapab::visibility))
 		ps.insert(pname);
     }

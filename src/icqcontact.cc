@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.99 2004/09/27 22:17:31 konst Exp $
+* $Id: icqcontact.cc,v 1.100 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -48,7 +48,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     finlist = true;
     congratulated = false;
 
-    for(ie = imevent::message; ie != imevent::imeventtype_size; (int) ie += 1)
+    for(ie = imevent::message; ie != imevent::imeventtype_size; ie++)
 	sound[ie] = "";
 
     cdesc = adesc;

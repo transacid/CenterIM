@@ -18,6 +18,8 @@ enum imgender {
     imgender_size
 };
 
+ENUM_PLUSPLUS(imgender)
+
 class icqcontact {
     public:
 	struct basicinfo {

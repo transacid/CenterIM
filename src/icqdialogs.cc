@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.145 2004/07/31 00:00:15 konst Exp $
+* $Id: icqdialogs.cc,v 1.146 2004/11/09 23:49:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,7 +174,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     imsearchparams ts;
 
     if(subj != fsrss) {
-	for(protocolname apname = icq; apname != protocolname_size; (int) apname += 1) {
+	for(protocolname apname = icq; apname != protocolname_size; apname++) {
 	    if(subj == fschannel)
 	    if(!gethook(apname).getCapabs().count(hookcapab::conferencing))
 		continue;
@@ -937,7 +937,7 @@ void icqface::selectgender(imgender &f) {
     m.setwindow(textwindow(4, LINES-8, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
-    for(imgender i = genderUnspec; i != imgender_size; (int) i += 1) {
+    for(imgender i = genderUnspec; i != imgender_size; i++) {
 	m.additemf(0, (int) i, " %s", strgender(i));
 	if(i == f) m.setpos(m.getcount()-1);
     }
@@ -953,7 +953,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     m.setwindow(textwindow(4, LINES-8, 18, LINES-3, conf.getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
-    for(ICQ2000::AgeRange i = ICQ2000::RANGE_NORANGE; i <= ICQ2000::RANGE_60_ABOVE; (int) i += 1) {
+    for(ICQ2000::AgeRange i = ICQ2000::RANGE_NORANGE; i <= ICQ2000::RANGE_60_ABOVE; i = ICQ2000::AgeRange(i+1)) {
 	const char *p = stragerange(i);
 
 	if(i == ICQ2000::RANGE_NORANGE)
@@ -1073,11 +1073,11 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
 void icqface::multichange(bool conv[], bool newstate) {
     protocolname pname;
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+    for(pname = icq; pname != protocolname_size; pname++)
 	if((!conf.getourid(pname).empty() || pname == rss) && conv[pname]) break;
 
     if(pname == protocolname_size || !newstate) {
-	for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	for(pname = icq; pname != protocolname_size; pname++)
 	    if(!conf.getourid(pname).empty() || pname == rss)
 		conv[pname] = newstate;
     }
@@ -1134,14 +1134,14 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool chatmode[protocolname_size], conv[protocolname_size],
 	entersends[protocolname_size], nonimonline[protocolname_size];
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	chatmode[pname] = conf.getchatmode(pname);
 	entersends[pname] = conf.getentersends(pname);
 	conv[pname] = conf.getcpconvert(pname);
 	nonimonline[pname] = conf.getnonimonline(pname);
     }
 
-    for(hasany = false, pname = icq; pname != protocolname_size && !hasany; (int) pname += 1)
+    for(hasany = false, pname = icq; pname != protocolname_size && !hasany; pname++)
 	hasany = !conf.getourid(pname).empty();
 
     dialogbox db;
@@ -1184,7 +1184,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Codepages conversion "));
 
-	for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+	for(tmp = "", pname = icq; pname != protocolname_size; pname++)
 	if(conv[pname])
 	if(!conf.getourid(pname).empty() || pname == rss)
 	    tmp += conf.getprotocolname(pname) + " ";
@@ -1207,13 +1207,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno(askaway));
 
 	if(hasany) {
-	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(tmp = "", pname = icq; pname != protocolname_size; pname++)
 		if(chatmode[pname] && !conf.getourid(pname).empty())
 		    tmp += conf.getprotocolname(pname) + " ";
 
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
 
-	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+	    for(tmp = "", pname = icq; pname != protocolname_size; pname++)
 		if(entersends[pname] && !conf.getourid(pname).empty())
 		    tmp += conf.getprotocolname(pname) + " ";
 
@@ -1225,7 +1225,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	}
 
-	for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+	for(tmp = "", pname = icq; pname != protocolname_size; pname++)
 	    if(nonimonline[pname]) tmp += conf.getprotocolname(pname) + " ";
 
 	t.addleaff(i, 0, 29, _(" Always online non-IM contacts for : %s"), tmp.c_str());
@@ -1272,7 +1272,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 3:
 			if(hasany) selectproto(conv, spIMplusRSS); else
-			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+			    for(pname = icq; pname != protocolname_size; pname++)
 				conv[pname] = !conv[pname];
 			break;
 		    case 4:
@@ -1294,7 +1294,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 15: mailcheck = !mailcheck; break;
 		    case 16:
 			if(hasany) selectproto(chatmode); else
-			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+			    for(pname = icq; pname != protocolname_size; pname++)
 				chatmode[pname] = !chatmode[pname];
 			break;
 
@@ -1334,7 +1334,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 25:
 			if(hasany) selectproto(entersends); else
-			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+			    for(pname = icq; pname != protocolname_size; pname++)
 				entersends[pname] = !entersends[pname];
 			break;
 		    case 26:
@@ -1388,7 +1388,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setproxyconnect(proxyconnect);
 		conf.setcharsets(convertfrom, convertto);
 
-		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+		for(pname = icq; pname != protocolname_size; pname++) {
 		    conf.setchatmode(pname, chatmode[pname]);
 		    conf.setentersends(pname, entersends[pname]);
 		    conf.setnonimonline(pname, nonimonline[pname]);
@@ -1433,7 +1433,7 @@ void icqface::selectproto(bool prots[], spmode mode) {
     i = 0;
     memcpy(aprots, prots, sizeof(aprots));
 
-    for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+    for(pname = icq; pname != protocolname_size; pname++) {
 	if(mode == spnonIM) {
 	    if(pname != infocard)
 	    if(!gethook(pname).getCapabs().count(hookcapab::nochat))
