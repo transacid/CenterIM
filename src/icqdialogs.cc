@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.16 2001/10/16 15:38:05 konst Exp $
+* $Id: icqdialogs.cc,v 1.17 2001/10/19 17:00:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -644,6 +644,8 @@ bool icqface::sendfiles(unsigned int uin, string &msg, linkedlist &flist) {
 	    case 3:
 		finished = true;
 		break;
+	} else {
+	    flist.empty();
 	}
     }
 

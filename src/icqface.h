@@ -122,7 +122,7 @@ class icqface {
 
 	static void editidle(texteditor *e);
 	static void textbrowseridle(textbrowser *b);
-	static void textinputidle(textinputline *il);
+	static void textinputidle(textinputline &il);
 	static void freeworkareabuf(void *p);
 	static void detailsidle(dialogbox *db);
 

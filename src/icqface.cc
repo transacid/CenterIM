@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.25 2001/10/18 18:58:22 konst Exp $
+* $Id: icqface.cc,v 1.26 2001/10/19 17:00:13 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -925,36 +925,39 @@ const string icqface::inputstr(const string q, string defl = "", char passwdchar
     input.setpasswordchar(passwdchar);
     input.removeselector();
     input.setvalue(defl);
-    input.setcoords();
-    input.exec(q.size(), INPUT_POS, COLS-q.size()-1);
+    input.setcoords(q.size(), INPUT_POS, COLS-q.size());
+    input.exec();
 
     sa.restore();
     return input.getvalue();
 }
 
-const string icqface::inputfile(string q, string defl = "") {
+const string icqface::inputfile(const string q, const string defl = "") {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
-    string ret;
-    char *p, *r;
+    string r;
 
     mvhline(INPUT_POS, 0, ' ', COLS);
     kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
     kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
 
-    il->fm = fm;
-    il->fm->w->set_title(conf.getcolor(cp_dialog_highlight), _(" enter to select a file, esc to cancel "));
-    fm->onlydirs = fm->chroot = false;
-    ret = (p = il->open(q.size(), INPUT_POS, defl.c_str(), COLS-q.size()-10, 2048));
+    selector.setwindow(textwindow(0, 0, DIALOG_WIDTH, DIALOG_HEIGHT,
+	conf.getcolor(cp_dialog_frame), TW_CENTERED,
+	conf.getcolor(cp_dialog_highlight),
+	_(" enter to select a file, esc to cancel ")));
 
-    if(r = strrchr(p, '/')) {
-	*r = 0;
-	fm->setstartpoint(p);
+    input.connectselector(selector);
+
+    input.setcoords(q.size(), INPUT_POS, COLS-q.size()-8);
+    input.setvalue(defl);
+    input.exec();
+    r = input.getvalue();
+
+    if(r.rfind("/") != -1) {
+	selector.setstartpoint(r.substr(0, r.find("/")));
     }
 
-    delete p;
-
     sa.restore();
-    return ret;
+    return r;
 }
 
 void catqstr(string &q, int option, int defl) {
@@ -1061,16 +1064,20 @@ void icqface::workarealine(int l, chtype c = HLINE) {
 
 bool icqface::editurl(unsigned int uin, string &url, string &text) {
     bool finished = false;
-    char *ctext, *curl;
+    static textinputline urlinp;
+    char *ctext;
+    int i;
 
     saveworkarea();
     clearworkarea();
 
     editdone = false;
     texteditor *se = new texteditor;
-    textinputline *il = new textinputline(conf.getcolor(cp_main_highlight));
 
-    il->idle = &textinputidle;
+    urlinp.setvalue(url);
+    urlinp.setcoords(WORKAREA_X1+2, WORKAREA_Y1+3, WORKAREA_X2-WORKAREA_X1-1);
+    urlinp.setcolor(conf.getcolor(cp_main_highlight));
+    urlinp.idle = &textinputidle;
 
     se->setcoords(WORKAREA_X1+2, WORKAREA_Y1+5, WORKAREA_X2, WORKAREA_Y2);
     se->addscheme(cp_main_text, cp_main_text, 0, 0);
@@ -1084,12 +1091,12 @@ bool icqface::editurl(unsigned int uin, string &url, string &text) {
     workarealine(WORKAREA_Y1+2);
     workarealine(WORKAREA_Y1+4);
 
-    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+2, conf.getcolor(cp_main_text),
-	curl = il->open(WORKAREA_X1+2, WORKAREA_Y1+3, url.c_str(),
-	WORKAREA_X2-WORKAREA_X1-2, 512)
-    );
+    urlinp.exec();
+    url = urlinp.getlastkey() != KEY_ESC ? urlinp.getvalue() : "";
 
-    if(curl[0]) {
+    mainw.write(WORKAREA_X1+2, WORKAREA_Y1+2, conf.getcolor(cp_main_text), url);
+
+    if(!url.empty()) {
 	muins.clear();
 	muins.push_back(uin);
 	passuin = uin;
@@ -1101,7 +1108,6 @@ bool icqface::editurl(unsigned int uin, string &url, string &text) {
 	if(editdone) {
 	    ctext = se->save("\r\n");
 	    text = ctext;
-	    url = curl;
 	    delete ctext;
 	}
 
@@ -1111,13 +1117,10 @@ bool icqface::editurl(unsigned int uin, string &url, string &text) {
     }
 
     delete se;
-    delete il;
-    delete curl;
 
     restoreworkarea();
     status("");
 
-    int i;
     while((i = url.find("À")) != -1)
 	url.replace(i, 1, ".");
 
@@ -2153,7 +2156,7 @@ void icqface::editidle(texteditor *e) {
     ihook.idle();
 }
 
-void icqface::textinputidle(textinputline *il) {
+void icqface::textinputidle(textinputline &il) {
     ihook.idle();
 }
 
