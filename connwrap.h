@@ -32,6 +32,8 @@ int cw_close(int fd);
 void cw_setproxy(const char *aproxyhost, int aproxyport, const char *aproxyuser, const char *aproxypass);
 void cw_setbind(const char *abindaddr);
 
+char *cw_base64_encode(const char *in);
+
 #ifdef __cplusplus
 }
 #endif

@@ -91,11 +91,7 @@ static void delsock(int fd) {
 
 #endif
 
-static char *bindaddr = 0;
-static char *proxyhost = 0;
-static char *proxyuser = 0;
-static char *proxypass = 0;
-
+static char *bindaddr = 0, *proxyhost = 0, *proxyuser = 0, *proxypass = 0;
 static int proxyport = 3128;
 static int proxy_ssl = 0;
 
@@ -142,7 +138,21 @@ int cw_http_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen) {
 	SOCKOUT(ip);
 	SOCKOUT(":");
 	SOCKOUT(buf);
-	SOCKOUT(" HTTP/1.0\n\n");
+	SOCKOUT(" HTTP/1.0\r\n");
+
+	if(proxyuser) {
+	    char *b;
+	    SOCKOUT("Proxy-Authorization: Basic ");
+
+	    sprintf(buf, "%s:%s", proxyuser, proxypass);
+	    b = cw_base64_encode(buf);
+	    SOCKOUT(b);
+	    free(b);
+
+	    SOCKOUT("\r\n");
+	}
+
+	SOCKOUT("\r\n");
 
 	buf[0] = 0;
 
@@ -384,4 +394,39 @@ void cw_setproxy(const char *aproxyhost, int aproxyport, const char *aproxyuser,
     if(aproxyuser && strlen(aproxyuser)) proxyuser = strdup(aproxyuser);
     if(aproxypass && strlen(aproxypass)) proxypass = strdup(aproxypass);
     proxyport = aproxyport;
+}
+
+char *cw_base64_encode(const char *in) {
+    static char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._";
+
+    int j = 0;
+    int inlen = strlen(in);
+    char *out = (char *) malloc(inlen*4+1), c;
+
+    for(out[0] = 0; inlen >= 3; inlen -= 3) {
+	strncat(out, &base64digits[ in[j] >> 2 ], 1);
+	strncat(out, &base64digits[ ((in[j] << 4) & 0x30) | (in[j+1] >> 4) ], 1);
+	strncat(out, &base64digits[ ((in[j+1] << 2) & 0x3c) | (in[j+2] >> 6) ], 1);
+	strncat(out, &base64digits[ in[j+2] & 0x3f ], 1);
+	j += 3;
+    }
+
+    if(inlen > 0) {
+	unsigned char fragment;
+
+	strncat(out, &base64digits[in[j] >> 2], 1);
+	fragment = (in[j] << 4) & 0x30;
+
+	if(inlen > 1)
+	    fragment |= in[j+1] >> 4;
+
+	strncat(out, &base64digits[fragment], 1);
+
+	c = (inlen < 2) ? '-' : base64digits[ (in[j+1] << 2) & 0x3c ];
+	strncat(out, &c, 1);
+	c = '-';
+	strncat(out, &c, 1);
+    }
+    
+    return out;
 }
