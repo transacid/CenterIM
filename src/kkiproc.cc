@@ -1,7 +1,7 @@
 /*
 *
 * kkiproc inter-process communications related routines
-* $Id: kkiproc.cc,v 1.7 2002/03/04 09:25:45 konst Exp $
+* $Id: kkiproc.cc,v 1.8 2002/04/04 07:24:20 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -46,8 +46,11 @@ time_t lastkeypress() {
 
     struct utmp *u;
     char tname[32];
+    int tlen;
 
-    if(readlink("/proc/self/fd/0", tname, 12) != -1) {
+    if((tlen = readlink("/proc/self/fd/0", tname, 12)) != -1) {
+	tname[tlen] = 0;
+
 	if(!strncmp(tname, "/dev/tty", 8) && isdigit(tname[8])) {
 	    setutent();
 
@@ -73,9 +76,15 @@ time_t lastkeypress() {
 
 	    endutent();
 	} else {
-	    if(!stat(tname, &s)) t = s.st_atime; else time(&t);
+	    if(!stat(tname, &s)) {
+		t = s.st_atime;
+	    } else {
+		time(&t);
+	    }
 	}
-    } else time(&t);
+    } else {
+	time(&t);
+    }
 
 #else
 
