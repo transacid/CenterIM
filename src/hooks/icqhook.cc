@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.149 2004/03/22 21:10:18 konst Exp $
+* $Id: icqhook.cc,v 1.150 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -575,7 +575,7 @@ bool icqhook::regconnect(const string &aserv) {
     return true;
 }
 
-bool icqhook::regattempt(unsigned int &auin, const string &apassword) {
+bool icqhook::regattempt(unsigned int &auin, const string &apassword, const string &email) {
     fd_set srfds, swfds, sefds;
     struct timeval tv;
     int hsockfd;

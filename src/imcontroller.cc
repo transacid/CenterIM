@@ -1,7 +1,7 @@
 /*
 *
 * centericq protocol specific user interface related routines
-* $Id: imcontroller.cc,v 1.53 2004/04/01 08:01:13 konst Exp $
+* $Id: imcontroller.cc,v 1.54 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -144,7 +144,7 @@ bool imcontroller::uinreg(icqconf::imaccount &account) {
 		    face.progress.log(_("Sending request"));
 
 		    while(!ruin && !fin) {
-			fin = hook.regattempt(ruin, rpasswd);
+			fin = hook.regattempt(ruin, rpasswd, remail);
 
 			if(!fin) {
 			    if(fin = (face.ask(_("Timed out waiting for a new uin. Retry?"),
@@ -325,7 +325,9 @@ void imcontroller::gaduupdateprofile() {
 void imcontroller::registration(icqconf::imaccount &account) {
     switch(account.pname) {
 	case icq:
-//        case gadu:
+#ifdef HAVE_LIBJPEG
+	case gadu:
+#endif
 	    uinreg(account);
 	    break;
 	case jabber:

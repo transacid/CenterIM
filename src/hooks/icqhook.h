@@ -88,7 +88,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void requestawaymsg(const imcontact &c);
 
 	bool regconnect(const string &aserv);
-	bool regattempt(unsigned int &auin, const string &apassword);
+	bool regattempt(unsigned int &auin, const string &apassword, const string &email);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);

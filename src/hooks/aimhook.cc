@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.40 2004/01/27 00:43:30 konst Exp $
+* $Id: aimhook.cc,v 1.41 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -171,7 +171,7 @@ bool aimhook::send(const imevent &ev) {
     string text;
 
     if(c)
-    if(c->getstatus() != offline) {
+    if(c->getstatus() != offline || !c->inlist()) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
 	    if(m) text = rushtmlconv("kw", m->gettext());

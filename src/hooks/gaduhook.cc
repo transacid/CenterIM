@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.5 2004/04/01 08:01:13 konst Exp $
+* $Id: gaduhook.cc,v 1.6 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,6 +37,10 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+
+#ifdef HAVE_JPEGLIB_H
+#include <jpeglib.h>
+#endif
 
 #define PERIOD_PING  50
 
@@ -133,6 +137,7 @@ void gaduhook::cutoff() {
 	gg_free_session(sess);
 	sess = 0;
     }
+    clist.setoffline(proto);
 }
 
 void gaduhook::disconnect() {
@@ -357,59 +362,27 @@ bool gaduhook::regconnect(const string &aserv) {
     return true;
 }
 
-bool gaduhook::regattempt(unsigned int &auin, const string &apassword) {
+bool gaduhook::regattempt(unsigned int &auin, const string &apassword, const string &email) {
     fd_set rd, wr, ex;
-    struct gg_http *h;
+    struct gg_http *th, *rh;
     struct gg_pubdir *p;
     struct gg_token *t;
     bool r = false;
-    int wret;
-    string tokenid;
+    string token, tokenid;
 
-    enum {
-	phToken, phRegister, phEnd
-    } phase = phToken;
+    th = gg_token(0);
+    token = handletoken(th);
+    tokenid = ((struct gg_token *) th->data)->tokenid;
+    gg_token_free(th);
 
-    h = gg_token(1);
-
-    while(h && phase != phEnd) {
-	FD_ZERO(&rd);
-	FD_ZERO(&wr);
-	FD_ZERO(&ex);
-
-	if(h->check & GG_CHECK_READ) FD_SET(h->fd, &rd);
-	if(h->check & GG_CHECK_WRITE) FD_SET(h->fd, &wr);
-	FD_SET(h->fd, &ex);
-
-	if(select(h->fd + 1, &rd, &wr, &ex, 0) == -1 || FD_ISSET(h->fd, &ex))
-	    break;
-
-	if(FD_ISSET(h->fd, &rd) || FD_ISSET(h->fd, &wr)) {
-	    switch(phase) {
-		case phToken: wret = gg_token_watch_fd(h); break;
-		case phRegister: wret = gg_register_watch_fd(h); break;
-	    }
-
-	    if(wret == -1 || h->state == GG_STATE_ERROR)
-		break;
-
-	    if(h->state == GG_STATE_DONE)
-	    switch(phase) {
-		case phToken:
-		    t = (struct gg_token *) h->data;
-		    tokenid = t->tokenid;
-//                    gg_register3("", password.c_str(), tokenid, const char *tokenval, int async);
-		    break;
-		case phRegister:
-		    p = (struct gg_pubdir *) h->data;
-		    r = !p->success;
-		    auin = p->uin;
-		    break;
-	    }
+    if((r = !token.empty())) {
+	rh = gg_register3(email.c_str(), apassword.c_str(), tokenid.c_str(), token.c_str(), 0);
+	if((r = rh)) {
+	    auin = ((struct gg_pubdir *) th->data)->uin;
+	    gg_free_register(rh);
 	}
     }
 
-    gg_free_register(h);
     return r;
 }
 
@@ -598,6 +571,343 @@ unsigned int ip, int port, int version) {
 
 	c->setstatus(gg2imstatus(status));
     }
+}
+
+// ----------------------------------------------------------------------------
+
+const int token_char_height = 12; 
+const char token_id_char[] = {"0123456789abcdef"};
+const char token_id[][15] = {
+"..####..",
+".##..##.",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+".##..##.",
+"..####..",
+
+"...##",
+"..###",
+"#####",
+"...##",
+"...##",
+"...##",
+"...##",
+"...##",
+"...##",
+"...##",
+"...##",
+"...##",
+
+"..####..",
+".##..##.",
+"##....##",
+"##....##",
+"......##",
+".....##.",
+"....##..",
+"...##...",
+"..##....",
+".##.....",
+"##......",
+"########",
+
+"..####..",
+".##..##.",
+"##....##",
+"##....##",
+".....##.",
+"...###..",
+".....##.",
+"......##",
+"##....##",
+"##....##",
+".##..##.",
+"..####..",
+
+".....##.",
+"....###.",
+"...####.",
+"...#.##.",
+"..##.##.",
+"..#..##.",
+".##..##.",
+"##...##.",
+"########",
+".....##.",
+".....##.",
+".....##.",
+
+".#######",
+".##.....",
+".##.....",
+"##......",
+"######..",
+"##...##.",
+"......##",
+"......##",
+"......##",
+"##....##",
+"##...##.",
+".#####..",
+
+"..#####.",
+".##...##",
+".#.....#",
+"##......",
+"##.###..",
+"###..##.",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+".##..##.",
+"..####..",
+
+"########",
+"......##",
+".....##.",
+".....##.",
+"....##..",
+"....##..",
+"...##...",
+"...##...",
+"...##...",
+"..##....",
+"..##....",
+"..##....",
+
+"..####..",
+".##..##.",
+"##....##",
+"##....##",
+".##..##.",
+"..####..",
+".##..##.",
+"##....##",
+"##....##",
+"##....##",
+".##..##.",
+"..####..",
+
+"..####..",
+".##..##.",
+"##....##",
+"##....##",
+"##....##",
+"##....##",
+".##..###",
+"..###.##",
+"......##",
+"#.....#.",
+"##...##.",
+".#####..",
+
+"........",
+"........",
+"........",
+"........",
+".#####..",
+"##...##.",
+".....##.",
+".######.",
+"##...##.",
+"##...##.",
+"##...##.",
+".####.##",
+
+"##.....",
+"##.....",
+"##.....",
+"##.....",
+"######.",
+"##...##",
+"##...##",
+"##...##",
+"##...##",
+"##...##",
+"##...##",
+"######.",
+
+".......",
+".......",
+".......",
+".......",
+".#####.",
+"##...##",
+"##...##",
+"##.....",
+"##.....",
+"##...##",
+"##...##",
+".#####.",
+
+".....##",
+".....##",
+".....##",
+".....##",
+".######",
+"##...##",
+"##...##",
+"##...##",
+"##...##",
+"##...##",
+"##...##",
+".######",
+
+".......",
+".......",
+".......",
+".......",
+".#####.",
+"##...##",
+"##...##",
+"#######",
+"##.....",
+"##....#",
+"##...##",
+".#####.",
+
+"..###",
+".##..",
+".##..",
+".##..",
+"#####",
+".##..",
+".##..",
+".##..",
+".##..",
+".##..",
+".##..",
+".##.."};
+
+static int token_check(int nr, int x, int y, const char *ocr, int maxx, int maxy) {
+    int i;
+
+    for(i = nr*token_char_height; i < (nr+1)*token_char_height; i++, y++) {
+	int j, xx = x;
+
+	for(j = 0; token_id[i][j] && j + xx < maxx; j++, xx++) {
+	    if(token_id[i][j] != ocr[y * (maxx + 1) + xx])
+		return 0;
+	}
+    }
+
+    return 1;
+}
+
+static char *token_ocr(const char *ocr, int width, int height, int length) {
+    int x, y, count = 0;
+    char *token;
+
+    token = (char *) malloc(length + 1);
+    memset(token, 0, length + 1);
+
+    for(x = 0; x < width; x++) {
+	for(y = 0; y < height - token_char_height; y++) {
+	    int result = 0, token_part = 0;
+
+	    do {
+		result = token_check(token_part++, x, y, ocr, width, height);
+	    } while(!result && token_part < 16);
+
+	    if(result && count < length)
+		token[count++] = token_id_char[token_part - 1];
+	}
+    }
+
+    if(count == length)
+	return token;
+
+    free(token);
+
+    return NULL;
+}
+
+string gaduhook::handletoken(struct gg_http *h) {
+    struct gg_token *t;
+    string fname, r;
+
+    if(!h)
+	return "";
+
+    if(gg_token_watch_fd(h) || h->state == GG_STATE_ERROR)
+	return "";
+
+    if(h->state != GG_STATE_DONE)
+	return "";
+
+    if(!(t = (struct gg_token *) h->data) || !h->body)
+	return "";
+
+    fname = (getenv("TMPDIR") ? getenv("TMPDIR") : "/tmp");
+    fname += "/gg.token." + i2str(getpid());
+
+    ofstream bf(fname.c_str());
+
+    if(bf.is_open()) {
+	bf.write(h->body, h->body_size);
+	bf.close();
+    } else {
+	return "";
+    }
+
+#ifdef HAVE_LIBJPEG
+
+    struct jpeg_decompress_struct j;
+    struct jpeg_error_mgr e;
+    JSAMPROW buf[1];
+    int size, i;
+    char *token, *tmp;
+    FILE *f;
+    int ih = 0;
+
+    if(!(f = fopen(fname.c_str(), "rb")))
+	return "";
+
+    j.err = jpeg_std_error(&e);
+    jpeg_create_decompress(&j);
+    jpeg_stdio_src(&j, f);
+    jpeg_read_header(&j, TRUE);
+    jpeg_start_decompress(&j);
+
+    size = j.output_width * j.output_components;
+    buf[0] = (JSAMPLE *) malloc(size);
+
+    token = (char *) malloc((j.output_width + 1) * j.output_height);
+
+    while(j.output_scanline < j.output_height) {
+	jpeg_read_scanlines(&j, buf, 1);
+
+	for(i = 0; i < j.output_width; i++, ih++)
+	    token[ih] = (buf[0][i*3] + buf[0][i*3+1] + buf[0][i*3+2] < 384) ? '#' : '.';
+
+	token[ih++] = 0;
+    }
+
+    if((tmp = token_ocr(token, j.output_width, j.output_height, t->length))) {
+	r = tmp;
+	free(tmp);
+    }
+
+    free(token);
+
+    jpeg_finish_decompress(&j);
+    jpeg_destroy_decompress(&j);
+
+    free(buf[0]);
+    fclose(f);
+
+    unlink(fname.c_str());
+
+#endif
+
+    return r;
 }
 
 #endif

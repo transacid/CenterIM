@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.55 2004/03/27 12:05:53 konst Exp $
+* $Id: abstracthook.cc,v 1.56 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -333,7 +333,7 @@ bool abstracthook::regconnect(const string &aserv) {
     return false;
 }
 
-bool abstracthook::regattempt(unsigned int &auin, const string &apassword) {
+bool abstracthook::regattempt(unsigned int &auin, const string &apassword, const string &email) {
     return false;
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.221 2004/04/04 19:57:03 konst Exp $
+* $Id: icqface.cc,v 1.222 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2704,7 +2704,7 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 	status(_("%s to URLs, %s to full-screenize, %s close"),
 	    getstatkey(key_show_urls, section_history).c_str(),
 	    getstatkey(key_fullscreen, section_history).c_str(),
-	    getstatkey(key_quit, section_history).c_str());
+	    getstatkey(key_quit, section_editor).c_str());
     }
 
     db.redraw();
@@ -2854,7 +2854,7 @@ bool icqface::histexec(imevent *&im) {
 	status(_("%s search, %s again, %s cancel"),
 	    getstatkey(key_search, section_history).c_str(),
 	    getstatkey(key_search_again, section_history).c_str(),
-	    getstatkey(key_quit, section_history).c_str());
+	    getstatkey(key_quit, section_editor).c_str());
 
 	while(!fin) {
 	    if(db.open(k)) {
@@ -3254,7 +3254,7 @@ int icqface::eventviewkeys(dialogbox &db, int k) {
 }
 
 int icqface::findreskeys(dialogbox &db, int k) {
-    if (face.key2action(k, section_history) == key_search)
+    if(face.key2action(k, section_contact) == key_quickfind)
 	return -3;
 
     return -1;

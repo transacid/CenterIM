@@ -156,7 +156,7 @@ class abstracthook {
 	virtual void renamegroup(const string &oldname, const string &newname);
 
 	virtual bool regconnect(const string &aserv);
-	virtual bool regattempt(unsigned int &auin, const string &apassword);
+	virtual bool regattempt(unsigned int &auin, const string &apassword, const string &email);
 };
 
 abstracthook &gethook(protocolname pname);

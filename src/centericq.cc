@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.186 2004/03/27 12:05:52 konst Exp $
+* $Id: centericq.cc,v 1.187 2004/04/11 16:32:27 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1323,7 +1323,7 @@ icqcontact *centericq::addcontact(const imcontact &ic, bool reqauth) {
 
     if(!c) {
 	if(ic.pname == rss) {
-	    c = clist.addnew(imcontact(0, rss), false);
+	    c = clist.addnew(imcontact(0, rss), false, groupid);
 	    icqcontact::workinfo wi = c->getworkinfo();
 	    wi.homepage = ic.nickname;
 	    c->setworkinfo(wi);

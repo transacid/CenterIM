@@ -1,7 +1,7 @@
 /*
 *
 * centericq events serialization classes
-* $Id: imevents.cc,v 1.33 2004/03/15 22:36:37 konst Exp $
+* $Id: imevents.cc,v 1.34 2004/04/11 16:32:28 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -556,15 +556,17 @@ void imcontacts::write(ofstream &f) const {
 }
 
 void imcontacts::read(ifstream &f) {
-#ifdef HAVE_SSTREAM
-    stringstream st;
-#else
-    strstream st;
-#endif
     string buf;
     int pos;
 
+#ifdef HAVE_SSTREAM
+    ostringstream ost;
+    ost << readblock(f);
+    istringstream st(ost.str());
+#else
+    strstream st;
     st << readblock(f);
+#endif
 
     while(getline(st, buf)) {
 	while((pos = buf.find_first_of("\r\n")) != -1)
@@ -648,15 +650,17 @@ void imfile::write(ofstream &f) const {
 }
 
 void imfile::read(ifstream &f) {
-#ifdef HAVE_SSTREAM
-    stringstream st;
-#else
-    strstream st;
-#endif
     string buf;
     int pos, line = 0;
 
+#ifdef HAVE_SSTREAM
+    ostringstream ost;
+    ost << readblock(f);
+    istringstream st(ost.str());
+#else
+    strstream st;
     st << readblock(f);
+#endif
 
     while(getline(st, buf)) {
 	while((pos = buf.find_first_of("\r\n")) != -1)

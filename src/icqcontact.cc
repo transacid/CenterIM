@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.94 2004/03/15 22:36:36 konst Exp $
+* $Id: icqcontact.cc,v 1.95 2004/04/11 16:32:27 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -421,13 +421,9 @@ void icqcontact::scanhistory() {
     int pos, backstep, r;
     FILE *f = fopen(fn.c_str(), "r");
     struct stat st;
-#ifdef HAVE_SSTREAM
-    stringstream evdata;
-#else
-    strstream evdata;
-#endif
 
     sethasevents(false);
+    stat(fn.c_str(), &st);
 
     if(f) {
 	fseek(f, 0, SEEK_END);
@@ -446,12 +442,18 @@ void icqcontact::scanhistory() {
 	    block.insert(0, buf);
 
 	    if((r = block.find("\f\nIN\n")) != -1) {
-		if(!stat(fn.c_str(), &st)) {
-		    pos = st.st_size-block.size()+r;
-		}
+		pos = st.st_size-block.size()+r;
 
 		block.erase(0, r+2);
+
+	    #ifdef HAVE_SSTREAM
+		ostringstream oevdata;
+		oevdata << block;
+		istringstream evdata(oevdata.str());
+	    #else
+		strstream evdata;
 		evdata << block;
+	    #endif
 
 		for(r = 0; (r < 3) && getline(evdata, block); r++);
 		if(r == 3) sethasevents(strtoul(block.c_str(), 0, 0) > lastread);

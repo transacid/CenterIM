@@ -19,6 +19,8 @@ class gaduhook: public abstracthook {
 	void usernotify(unsigned int uin, int status, const char *desc,
 	    unsigned int ip, int port, int version);
 
+	string handletoken(struct gg_http *h);
+
 	void cutoff();
 
     public:
@@ -52,7 +54,7 @@ class gaduhook: public abstracthook {
 	void requestawaymsg(const imcontact &c);
 
 	bool regconnect(const string &aserv);
-	bool regattempt(unsigned int &auin, const string &apassword);
+	bool regattempt(unsigned int &auin, const string &apassword, const string &email);
 
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 	void sendupdateuserinfo(const icqcontact &c);
