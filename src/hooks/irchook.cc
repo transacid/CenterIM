@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.18 2002/05/08 18:26:16 konst Exp $
+* $Id: irchook.cc,v 1.19 2002/05/09 10:44:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -262,6 +262,8 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
     searchdest = &dest;
 
     emailsub = params.email;
+    namesub = params.firstname;
+
     searchchannels.clear();
     extlisted.clear();
 
@@ -285,7 +287,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 		ready = false;
 	    }
 
-	    if(emailsub.empty()) {
+	    if(emailsub.empty() && namesub.empty()) {
 		if(ic->fetched) {
 		    ic->nicks.clear();
 		    firetalk_chat_listmembers(handle, room.c_str());
@@ -353,16 +355,17 @@ void irchook::processnicks() {
 	    } else {
 		in++;
 	    }
-	}
-    }
+	}    }
 
     for(in = foundnicks.begin(); in != foundnicks.end(); in++) {
 	dnick = *in;
 
-	if(!emailsub.empty()) {
-	    npos = dnick.find("<");
-	    if(npos > 0) dnick.erase(npos-1);
-	}
+	npos = 0;
+
+	if(!emailsub.empty()) npos = dnick.rfind("<"); else
+	if(!namesub.empty()) npos =  dnick.rfind("[");
+
+	if(npos > 0) dnick.erase(npos-1);
 
 	c = new icqcontact(imcontact(dnick, irc));
 	c->setdispnick(dnick);
@@ -748,7 +751,7 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 	ic->fetched = true;
 	ic->nicks.clear();
 
-	if(irhook.emailsub.empty()) {
+	if(irhook.emailsub.empty() && irhook.namesub.empty()) {
 	    firetalk_chat_listmembers(irhook.handle, croom);
 	    if(!ic->joined) firetalk_chat_part(irhook.handle, croom);
 	} else {
@@ -756,7 +759,7 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 	}
     }
 
-    if(irhook.searchdest && irhook.emailsub.empty()) {
+    if(irhook.searchdest && irhook.emailsub.empty() && irhook.namesub.empty()) {
 	for(is = irhook.searchchannels.begin(); is != irhook.searchchannels.end(); is++) {
 	    ic = find(irhook.channels.begin(), irhook.channels.end(), *is);
 
@@ -775,9 +778,10 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 
 void irchook::listextended(void *connection, void *cli, ...) {
     va_list ap;
-    string text, email;
+    string text, email, name;
     vector<channelInfo>::iterator ir;
     vector<string>::iterator is;
+    int npos;
 
     va_start(ap, cli);
     char *nickname = va_arg(ap, char *);
@@ -791,11 +795,24 @@ void irchook::listextended(void *connection, void *cli, ...) {
     ir = find(irhook.channels.begin(), irhook.channels.end(), room);
 
     if(ir != irhook.channels.end()) {
+	name = description;
+	if((npos = name.find(" ")) != -1)
+	    name.erase(0, npos+1);
+
 	email = (string) login + "@" + hostname;
 
 	if(irhook.emailsub.empty() || email.find(irhook.emailsub) != -1) {
-	    text = (string) nickname + " <" + email + ">";
-	    ir->nicks.push_back(text);
+	    if(irhook.namesub.empty() || name.find(irhook.namesub) != -1) {
+		text = nickname;
+
+		if(!irhook.emailsub.empty()) {
+		    text += " <" + email + ">";
+		} else if(!irhook.namesub.empty()) {
+		    text += " [" + name + "]";
+		}
+
+		ir->nicks.push_back(text);
+	    }
 	}
     }
 

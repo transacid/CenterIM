@@ -26,7 +26,7 @@ class irchook: public abstracthook {
 	bool fonline, flogged;
 	firetalk_t handle;
 	imstatus ourstatus;
-	string ircname, emailsub;
+	string ircname, emailsub, namesub;
 
 	vector<channelInfo> channels;
 	vector<string> searchchannels, extlisted;

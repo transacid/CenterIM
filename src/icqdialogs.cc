@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.70 2002/05/08 18:26:15 konst Exp $
+* $Id: icqdialogs.cc,v 1.71 2002/05/09 10:44:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -123,8 +123,11 @@ bool icqface::finddialog(imsearchparams &s) {
 
 	if(*ipname == irc && s.nick.empty()) {
 	    i = tree.addnode(_(" Details "));
-	    tree.addleaff(i, 0, 26, " Channel : %s ", s.room.c_str());
-	    if(!s.room.empty()) tree.addleaff(i, 0, 12, " E-Mail : %s ", s.email.c_str());
+	    tree.addleaff(i, 0, 26, _(" Channel : %s "), s.room.c_str());
+	    if(!s.room.empty()) {
+		tree.addleaff(i, 0, 27, _(" Name : %s "), s.firstname.c_str());
+		tree.addleaff(i, 0, 12, _(" E-Mail : %s "), s.email.c_str());
+	    }
 	}
 
 	finished = !db.open(n, b, (void **) &i);
@@ -157,6 +160,7 @@ bool icqface::finddialog(imsearchparams &s) {
 		    case 24: s.position = inputstr(_("Position: "), s.position); break;
 		    case 25: s.onlineonly = !s.onlineonly; break;
 		    case 26: s.room = inputstr(_("Channel: "), s.room); break;
+		    case 27: s.firstname = inputstr(_("Name: "), s.firstname); break;
 		}
 		break;
 
