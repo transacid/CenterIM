@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Centericq 3.20.5 \n"
-"POT-Creation-Date: 2002-03-07 01:21+0200\n"
+"POT-Creation-Date: 2002-03-07 14:49+0200\n"
 "PO-Revision-Date: 2001 Feb 5 10:30 EET\n"
 "Last-Translator: Ovidiu Ghinet <oghinet@doctor.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,145 +14,33 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/centericq.cc:118
-#, fuzzy
-msgid "password: "
-msgstr "Parola: "
-
-#: src/centericq.cc:153
-#, fuzzy
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr ""
-"F2/M meniu contact curent, F3/S schimba statutul icq, F4/G meniu general, Q "
-"Iesire"
-
-#: src/centericq.cc:207
-#, fuzzy, c-format
-msgid "Ignore all events from %s?"
-msgstr "Ignora toate evenimentele de la %s (%lu)?"
-
-#: src/centericq.cc:246
-#, fuzzy, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Sunteti sigur ca doriti sa-l stergeti pe %s (%lu)?"
-
-#: src/centericq.cc:254
-msgid "New nickname to show: "
-msgstr "Noul nickname: "
-
-#: src/centericq.cc:262
-msgid "Select a group to move the user to"
-msgstr "Selecteaza un grup in care sa muti utilizatorul"
-
-#: src/centericq.cc:279
-msgid "+ cannot fetch away messages being offline"
-msgstr ""
-
-#: src/centericq.cc:456
-#, fuzzy, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ aveti posta noua, %d messages"
-
-#: src/centericq.cc:459
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ ultimul mesaj de la %s"
-
-#: src/centericq.cc:494
-msgid "! another running copy of centericq detected"
-msgstr "! o alta copie a centericq a fost detectata in functiune"
-
-#: src/centericq.cc:495
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! aceata poate cauza probleme. pid %lu"
-
-#: src/centericq.cc:570
-#, fuzzy
-msgid "Mobile number: "
-msgstr "numele fisierului: "
-
-#: src/centericq.cc:753
-#, fuzzy, c-format
-msgid "+ no history items for %s"
-msgstr "+ nimic in arhiva pentru %s, %lu"
-
-#: src/centericq.cc:779
-#, fuzzy, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s a fost adaugat la lista visibila"
-
-#: src/centericq.cc:785
-#, fuzzy
-msgid "Select a group to add the user to"
-msgstr "Selecteaza contactele de adaugat"
-
-#: src/centericq.cc:792
-msgid "Notify the user he/she has been added?"
-msgstr "Anunta utilizatorul ca el/ea a fost adaugat?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:795
-#, fuzzy, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ notificarea a fost trimisa  lui %lu"
-
-#: src/centericq.cc:807
-#, fuzzy, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s a fost adaugat la lista visibila"
-
-#: src/centericq.cc:879
-msgid "+ the user is back"
-msgstr "+ utilizatorul s-a intors"
-
-#: src/centericq.cc:895
-#, c-format
-msgid "+ [%s] status restored"
-msgstr ""
-
-#: src/centericq.cc:909
-#, fuzzy, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ statutul a fost shimbat automat in N/A Nedisponibil"
-
-#: src/centericq.cc:911
-#, fuzzy
-msgid "away"
-msgstr "Away"
-
-#: src/centericq.cc:911
-msgid "n/a"
-msgstr ""
-
 #: src/icqconf.cc:175
 #, c-format
 msgid "I do really enjoy the default away message of centericq %s."
 msgstr ""
 
-#: src/icqconf.cc:724
+#: src/icqconf.cc:723
 msgid "event sending error: not enough parameters"
 msgstr ""
 
-#: src/icqconf.cc:741
+#: src/icqconf.cc:734
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 
-#: src/icqconf.cc:750
+#: src/icqconf.cc:743
 msgid "event sending error: unknown IM type"
 msgstr ""
 
-#: src/icqconf.cc:771
+#: src/icqconf.cc:764
 msgid "event sending error: unknown event type"
 msgstr ""
 
-#: src/icqconf.cc:783
+#: src/icqconf.cc:776
 #, fuzzy, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "+ %s a fost adaugat la lista visibila"
 
-#: src/icqconf.cc:788
+#: src/icqconf.cc:781
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 
@@ -1409,6 +1297,118 @@ msgstr ""
 #, fuzzy
 msgid "+ [yahoo] bounced msg"
 msgstr "+ conectare la serverul icq"
+
+#: src/centericq.cc:118
+#, fuzzy
+msgid "password: "
+msgstr "Parola: "
+
+#: src/centericq.cc:153
+#, fuzzy
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr ""
+"F2/M meniu contact curent, F3/S schimba statutul icq, F4/G meniu general, Q "
+"Iesire"
+
+#: src/centericq.cc:207
+#, fuzzy, c-format
+msgid "Ignore all events from %s?"
+msgstr "Ignora toate evenimentele de la %s (%lu)?"
+
+#: src/centericq.cc:246
+#, fuzzy, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Sunteti sigur ca doriti sa-l stergeti pe %s (%lu)?"
+
+#: src/centericq.cc:254
+msgid "New nickname to show: "
+msgstr "Noul nickname: "
+
+#: src/centericq.cc:262
+msgid "Select a group to move the user to"
+msgstr "Selecteaza un grup in care sa muti utilizatorul"
+
+#: src/centericq.cc:279
+msgid "+ cannot fetch away messages being offline"
+msgstr ""
+
+#: src/centericq.cc:456
+#, fuzzy, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ aveti posta noua, %d messages"
+
+#: src/centericq.cc:459
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ ultimul mesaj de la %s"
+
+#: src/centericq.cc:494
+msgid "! another running copy of centericq detected"
+msgstr "! o alta copie a centericq a fost detectata in functiune"
+
+#: src/centericq.cc:495
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! aceata poate cauza probleme. pid %lu"
+
+#: src/centericq.cc:570
+#, fuzzy
+msgid "Mobile number: "
+msgstr "numele fisierului: "
+
+#: src/centericq.cc:753
+#, fuzzy, c-format
+msgid "+ no history items for %s"
+msgstr "+ nimic in arhiva pentru %s, %lu"
+
+#: src/centericq.cc:779
+#, fuzzy, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s a fost adaugat la lista visibila"
+
+#: src/centericq.cc:785
+#, fuzzy
+msgid "Select a group to add the user to"
+msgstr "Selecteaza contactele de adaugat"
+
+#: src/centericq.cc:792
+msgid "Notify the user he/she has been added?"
+msgstr "Anunta utilizatorul ca el/ea a fost adaugat?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:795
+#, fuzzy, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ notificarea a fost trimisa  lui %lu"
+
+#: src/centericq.cc:807
+#, fuzzy, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s a fost adaugat la lista visibila"
+
+#: src/centericq.cc:879
+msgid "+ the user is back"
+msgstr "+ utilizatorul s-a intors"
+
+#: src/centericq.cc:895
+#, c-format
+msgid "+ [%s] status restored"
+msgstr ""
+
+#: src/centericq.cc:909
+#, fuzzy, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ statutul a fost shimbat automat in N/A Nedisponibil"
+
+#: src/centericq.cc:911
+#, fuzzy
+msgid "away"
+msgstr "Away"
+
+#: src/centericq.cc:911
+msgid "n/a"
+msgstr ""
 
 #: src/hooks/msnhook.cc:74
 #, fuzzy
