@@ -1341,9 +1341,8 @@ MSN phone information fetching was implemented.
 
 Another discovered feature of the ICQ network was that if a remote user
 is not online currently, then a message for him which gets stored
-server-side is cut to 450 bytes. Centericq now has a workaround for
-such a situation: it splits offline messages into pieces 450 bytes
-each.
+server-side is cut to 450 bytes. Centericq now has a workaround for such
+a situation: it splits offline messages into pieces 450 bytes each.
 
 The password change option was implemented in ICQ and AIM modules. Look
 at the "Update details" dialogs.
@@ -1354,7 +1353,8 @@ Users on the ignore list should have been ignored even if they sent add
 notifications or authorization requests, but they were not. Now they are.
 
 Jabber registration caused segfault if there was a space in the "Login"
-field. Now "wrong jabber id" problem is reported in such a situation.
+field. Now, the "wrong jabber id" problem is reported in such a
+situation.
 
 When you had your own Jabber contact on centericq contact list, it
 wasn't possible to update details. Fixed.
@@ -1363,3 +1363,4 @@ Adding and reading information about server-side contacts when they're
 read as a bunch of the first connect with centericq is now done slower,
 with necessary timeouts and stuff. Because of this workaround the server
 is supposed not to kick us out because of flood anymore.
+
