@@ -30,7 +30,7 @@ class irchook: public abstracthook {
 
 	searchMode smode;
 
-	bool fonline, flogged, searchsincelast;
+	bool fonline, flogged, searchsincelast, sentpass;
 	firetalk_t handle;
 	imstatus ourstatus;
 	string ircname, emailsub, namesub;
@@ -67,6 +67,7 @@ class irchook: public abstracthook {
 	static void chatkicked(void *connection, void *cli, ...);
 	static void errorhandler(void *connection, void *cli, ...);
 	static void nickchanged(void *connection, void *cli, ...);
+	static void needpass(void *conn, void *cli, ...);
 
 	void rawcommand(const string &cmd);
 	void channelfatal(string room, const char *fmt, ...);
@@ -107,6 +108,8 @@ class irchook: public abstracthook {
 
 	vector<channelInfo> getautochannels() const;
 	void setautochannels(vector<channelInfo> &achannels);
+
+	void ouridchanged(const icqconf::imaccount &ia);
 };
 
 extern irchook irhook;

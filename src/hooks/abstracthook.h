@@ -15,7 +15,7 @@ enum hookcapabilities {
 	  hoptCanChangeNick = 128,
       hoptCanChangePassword = 512,
        hoptCanUpdateDetails = 1024,
-	    hoptNoPasswords = 2048,
+	   hoptOptionalPass = 2048,
  hoptControllableVisibility = 4096,
 	    hoptAuthReqSend = 8192
 };
@@ -66,6 +66,7 @@ class abstracthook {
 	int getcapabilities() const;
 
 	virtual vector<icqcontact *> getneedsync();
+	virtual void ouridchanged(const icqconf::imaccount &ia);
 };
 
 abstracthook &gethook(protocolname pname);

@@ -107,6 +107,9 @@ vector<icqcontact *> abstracthook::getneedsync() {
     return vector<icqcontact *>();
 }
 
+void abstracthook::ouridchanged(const icqconf::imaccount &ia) {
+}
+
 // ----------------------------------------------------------------------------
 
 abstracthook &gethook(protocolname pname) {

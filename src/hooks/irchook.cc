@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.43 2002/08/30 17:31:59 konst Exp $
+* $Id: irchook.cc,v 1.44 2002/09/01 11:03:12 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,6 +37,18 @@
 #define DLOG(s)
 #endif
 
+static string up(string s) {
+    int k;
+    string r;
+
+    for(k = 0; k < s.size(); k++)
+	r += toupper(s[k]);
+
+    return r;
+}
+
+// ----------------------------------------------------------------------------
+
 irchook irhook;
 
 irchook::irchook()
@@ -47,7 +59,7 @@ irchook::irchook()
 	hoptCanSetAwayMsg |
 	hoptCanFetchAwayMsg |
 	hoptCanChangeNick |
-	hoptNoPasswords;
+	hoptOptionalPass;
 }
 
 irchook::~irchook() {
@@ -80,6 +92,7 @@ void irchook::init() {
     firetalk_register_callback(handle, FC_CHAT_KICKED, &chatkicked);
     firetalk_register_callback(handle, FC_ERROR, &errorhandler);
     firetalk_register_callback(handle, FC_IM_USER_NICKCHANGED, &nickchanged);
+    firetalk_register_callback(handle, FC_NEEDPASS, &needpass);
 
 #ifdef DEBUG
     firetalk_register_callback(handle, FC_LOG, &log);
@@ -192,15 +205,14 @@ bool irchook::send(const imevent &ev) {
 
 	}
 
-	if(ischannel(c)) {
-	    if(text.substr(0, 1) == "/") {
-		rawcommand(text.substr(1));
-		return true;
+	if(text.substr(0, 1) == "/") {
+	    rawcommand(text.substr(1));
+	    return true;
+	}
 
-	    } else {
-		return firetalk_chat_send_message(handle,
-		    c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
-	    }
+	if(ischannel(c)) {
+	    return firetalk_chat_send_message(handle,
+		c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
 
 	} else {
 	    return firetalk_im_send_message(handle,
@@ -598,6 +610,12 @@ void irchook::channelfatal(string room, const char *fmt, ...) {
     }
 }
 
+void irchook::ouridchanged(const icqconf::imaccount &ia) {
+    if(logged()) {
+	firetalk_set_nickname(handle, ia.nickname.c_str());
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void irchook::userstatus(const string &nickname, imstatus st) {
@@ -643,6 +661,7 @@ void irchook::connected(void *conn, void *cli, ...) {
     irhook.ourstatus = available;
     irhook.setautostatus(irhook.manualstatus);
     irhook.awaymessages.clear();
+    irhook.sentpass = false;
 }
 
 void irchook::disconnected(void *conn, void *cli, ...) {
@@ -777,8 +796,16 @@ void irchook::getmessage(void *conn, void *cli, ...) {
 
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
+	if(!irhook.sentpass)
+	if(up(sender) == "NICKSERV") {
+	    char buf[512];
+	    needpass(0, 0, buf, 512);
+	    firetalk_im_send_message(irhook.handle, "NickServ",
+		((string) "identify " + buf).c_str(), 0);
+	}
+
 	em.store(immessage(imcontact(sender, irc),
-	    imevent::incoming, rushtmlconv("wk", message)));
+	    imevent::incoming, rushtmlconv("wk", cuthtml(message, true))));
     }
 
     DLOG("getmessage");
@@ -1099,17 +1126,30 @@ void irchook::nickchanged(void *connection, void *cli, ...) {
     }
 }
 
-// ----------------------------------------------------------------------------
+void irchook::needpass(void *conn, void *cli, ...) {
+    va_list ap;
 
-static string up(string s) {
-    int k;
-    string r;
+    va_start(ap, cli);
+    char *pass = va_arg(ap, char *);
+    int size = va_arg(ap, int);
+    va_end(ap);
 
-    for(k = 0; k < s.size(); k++)
-	r += toupper(s[k]);
+    if(pass) {
+	icqconf::imaccount acc = conf.getourid(irc);
 
-    return r;
+	if(!acc.password.empty()) {
+	    strncpy(pass, acc.password.c_str(), size-1);
+	    pass[size-1] = 0;
+	    face.log(_("+ [irc] password sent"));
+	} else {
+	    face.log(_("+ [irc] password was requested, but it's not set"));
+	}
+
+	irhook.sentpass = true;
+    }
 }
+
+// ----------------------------------------------------------------------------
 
 bool irchook::channelInfo::operator != (const string &aname) const {
     return up(aname) != up(name);

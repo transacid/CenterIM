@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.80 2002/08/22 18:13:12 konst Exp $
+* $Id: icqconf.cc,v 1.81 2002/09/01 11:03:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -99,6 +99,8 @@ void icqconf::setourid(const imaccount &im) {
 	}
 
 	if(!i->port) i->port = defservers[i->pname].port;
+
+	gethook(i->pname).ouridchanged(*i);
     }
 }
 

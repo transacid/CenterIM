@@ -78,10 +78,9 @@ void accountmanager::exec() {
 			break;
 		}
 
-		if(!(capab & hoptNoPasswords)) {
-		    t.addleaff(n, 0, citem+5, _(" Password : %s "),
-			string(account.password.size(), '*').c_str());
-		}
+		t.addleaff(n, 0, citem+5, (capab & hoptOptionalPass) ?
+		    _(" Password (optional) : %s ") : _(" Password : %s "),
+		    string(account.password.size(), '*').c_str());
 
 		if(account.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
@@ -127,7 +126,8 @@ void accountmanager::exec() {
 
 		case 5:
 		    tmp = face.inputstr(spname + _(" password: "), account.password, '*');
-		    if(face.getlastinputkey() != KEY_ESC && !tmp.empty())
+		    if(face.getlastinputkey() != KEY_ESC &&
+		      (!tmp.empty() || (capab & hoptOptionalPass)))
 			account.password = tmp;
 		    break;
 

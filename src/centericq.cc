@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.117 2002/08/30 17:31:56 konst Exp $
+* $Id: centericq.cc,v 1.118 2002/09/01 11:03:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -110,7 +110,7 @@ bool centericq::checkpasswords() {
     r = regmode = true;
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
-	if(!(gethook(pname).getcapabilities() & hoptNoPasswords)) {
+	if(!(gethook(pname).getcapabilities() & hoptOptionalPass)) {
 	    if(!(ia = conf.getourid(pname)).empty()) {
 		if(ia.password.empty()) {
 		    conf.setsavepwd(false);
