@@ -18,6 +18,7 @@
  */
 
 #include "libxode.h"
+#include "connwrap.h"
 
 /* socket.c
  *
@@ -93,6 +94,98 @@ int make_netsocket(u_short port, char *host, int type, int ssl)
     return(s);
 }
 
+void change_socket_to_blocking(int s)
+     /* make socket blocking */
+{
+    int val;
+    val = fcntl(s, F_GETFL, 0);
+    fcntl(s, F_SETFL, val & (~O_NONBLOCK));
+}
+
+void change_socket_to_nonblocking(int s)
+     /* make socket non-blocking */
+{
+    int val;
+    val = fcntl(s, F_GETFL, 0);
+    fcntl(s, F_SETFL, val | O_NONBLOCK);
+}
+
+/* socket.c
+ *
+ * Simple wrapper to make non-blocking client socket creation easy.
+ * type = NETSOCKET_SERVER is local listening socket
+ * type = NETSOCKET_CLIENT is connection socket
+ * type = NETSOCKET_UDP
+ */
+
+int make_nb_netsocket(u_short port, char *host, int type, int ssl, int* state)
+{
+    int s, flag = 1;
+    struct sockaddr_in sa;
+    struct in_addr *saddr;
+    int socket_type;
+
+    /* is this a UDP socket or a TCP socket? */
+    socket_type = (type == NETSOCKET_UDP)?SOCK_DGRAM:SOCK_STREAM;
+
+    bzero((void *)&sa,sizeof(struct sockaddr_in));
+
+    if((s = socket(AF_INET,socket_type,0)) < 0)
+	return(-1);
+    if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&flag, sizeof(flag)) < 0)
+	return(-1);
+    change_socket_to_nonblocking(s);
+
+    saddr = make_addr(host);
+    if(saddr == NULL)
+	return(-1);
+    sa.sin_family = AF_INET;
+    sa.sin_port = htons(port);
+
+    if(type == NETSOCKET_SERVER)
+    {
+	/* bind to specific address if specified */
+	if(host != NULL)
+	    sa.sin_addr.s_addr = saddr->s_addr;
+
+	if(bind(s,(struct sockaddr*)&sa,sizeof sa) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
+    }
+    if(type == NETSOCKET_CLIENT)
+    {
+	int rc;
+	sa.sin_addr.s_addr = saddr->s_addr;
+	rc = cw_nb_connect(s,(struct sockaddr*)&sa,sizeof sa,ssl, state);
+	if (rc == -1 )
+	{
+	    close(s);
+	    return(-1);
+	}
+    }
+    if(type == NETSOCKET_UDP)
+    {
+	/* bind to all addresses for now */
+	if(bind(s,(struct sockaddr*)&sa,sizeof sa) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
+
+	/* specify default recipient for read/write */
+	sa.sin_addr.s_addr = saddr->s_addr;
+	if(cw_connect(s,(struct sockaddr*)&sa,sizeof sa,ssl) < 0)
+	{
+	    close(s);
+	    return(-1);
+	}
+    }
+
+
+    return(s);
+}
 
 struct in_addr *make_addr(char *host)
 {

@@ -57,6 +57,7 @@ jconn jab_new(char *user, char *pass, int port, int ssl)
     j->port = port;
 
     j->state = JCONN_STATE_OFF;
+    j->cw_state = 0;
     j->id = 1;
     j->fd = -1;
     j->ssl = ssl;
@@ -127,18 +128,33 @@ void jab_start(jconn j)
     xmlnode x;
     char *t,*t2;
 
-    if(!j || j->state != JCONN_STATE_OFF) return;
-
-    j->parser = XML_ParserCreate(NULL);
-    XML_SetUserData(j->parser, (void *)j);
-    XML_SetElementHandler(j->parser, startElement, endElement);
-    XML_SetCharacterDataHandler(j->parser, charData);
-
-    j->fd = make_netsocket(j->port, j->user->server, NETSOCKET_CLIENT, j->ssl);
-    if(j->fd < 0) {
-	STATE_EVT(JCONN_STATE_OFF)
+    if(!j || (j->state != JCONN_STATE_OFF && j->state != JCONN_STATE_CONNECTING) ) return;
+    
+    if (!(j->cw_state & CW_CONNECT_WANT_SOMETHING)) { /* same as state != JCONN_STATE_CONNECTING */
+	j->parser = XML_ParserCreate(NULL);
+	XML_SetUserData(j->parser, (void *)j);
+	XML_SetElementHandler(j->parser, startElement, endElement);
+	XML_SetCharacterDataHandler(j->parser, charData);
+	
+	j->fd = make_nb_netsocket(j->port, j->user->server, NETSOCKET_CLIENT, j->ssl, &j->cw_state);
+	if(j->fd < 0) {
+	    STATE_EVT(JCONN_STATE_OFF);
+	    return;
+	}
+    }
+    else { /* subsequent calls to cw_nb_connect until it finishes negociation */
+	if (cw_nb_connect(j->fd, 0, 0, j->ssl, &j->cw_state)) {
+	    STATE_EVT(JCONN_STATE_OFF);
+	    return;
+	}
+    }
+    if (j->cw_state & CW_CONNECT_WANT_SOMETHING){ /* check if it finished negociation */
+	j->state = JCONN_STATE_CONNECTING;
+	STATE_EVT(JCONN_STATE_CONNECTING);
 	return;
     }
+    change_socket_to_blocking(j->fd);
+    
     j->state = JCONN_STATE_CONNECTED;
     STATE_EVT(JCONN_STATE_CONNECTED)
 

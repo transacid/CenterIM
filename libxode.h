@@ -151,6 +151,8 @@ int pool_size(pool p); /* returns total bytes allocated in this pool */
 
 #ifndef WIN32
 int make_netsocket(u_short port, char *host, int type, int ssl);
+int make_nb_netsocket(u_short port, char *host, int type, int ssl, int * state);
+void change_socket_to_blocking(int socket);
 struct in_addr *make_addr(char *host);
 int set_fd_close_on_exec(int fd, int flag);
 #endif

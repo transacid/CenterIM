@@ -38,6 +38,7 @@
 #include <time.h>
 
 #include "libxode.h"
+#include "connwrap.h"
 
 #ifndef INCL_JABBER_H
 #define INCL_JABBER_H
@@ -261,12 +262,14 @@ char*   jutil_regkey(char *key, char *seed);             /* pass a seed to gener
 #define JCONN_STATE_CONNECTED 1
 #define JCONN_STATE_ON        2
 #define JCONN_STATE_AUTH      3
+#define JCONN_STATE_CONNECTING 4
 
 typedef struct jconn_struct
 {
     /* Core structure */
     pool        p;             /* Memory allocation pool */
     int         state;     /* Connection state flag */
+    int         cw_state;     /* Low level connection state flag */
     int         fd;            /* Connection file descriptor */
     int         port;
     int         ssl;
