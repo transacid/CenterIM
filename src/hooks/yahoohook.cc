@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.59 2002/10/28 11:29:41 konst Exp $
+* $Id: yahoohook.cc,v 1.60 2002/10/28 11:44:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -154,6 +154,7 @@ void yahoohook::disconnect() {
 void yahoohook::disconnected() {
     logger.putourstatus(yahoo, getstatus(), ourstatus = offline);
     clist.setoffline(yahoo);
+    userenc.clear();
     fonline = false;
     face.log(_("+ [yahoo] disconnected"));
     face.update();

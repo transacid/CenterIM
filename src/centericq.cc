@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.128 2002/10/28 11:29:39 konst Exp $
+* $Id: centericq.cc,v 1.129 2002/10/28 11:41:15 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1475,14 +1475,17 @@ Encoding guessencoding(const string &text) {
     utf = latin = 0;
 
     while(ic != text.end()) {
-	if((unsigned) *ic < 127) latin++; else
-	if((unsigned) *ic < 208) utf++;
+	unsigned char c = (unsigned) *ic;
+
+	if(c > 206) utf++; else
+	if(c > 32 && c > 127) latin++;
+
 	++ic;
     }
 
     third = (int) text.size()/3;
 
     if(text.size()-latin < third) return encUnknown; else
-    if(text.size()-utf < third) return encUTF; else
+    if(utf > third) return encUTF; else
 	return encKOI;
 }
