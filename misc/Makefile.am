@@ -1,2 +1,2 @@
-EXTRA_DIST = cicqconv
-bin_SCRIPTS = cicqconv
+EXTRA_DIST = cicqconv cicqsync
+bin_SCRIPTS = cicqconv cicqsync
