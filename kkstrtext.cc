@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.21 2002/03/14 12:25:50 konst Exp $
+* $Id: kkstrtext.cc,v 1.22 2002/03/21 17:44:41 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -595,11 +595,12 @@ void breakintolines(string text, vector<string> &lst, int linelen) {
 	for(i = lst.begin(); i != lst.end(); i++) {
 	    if(i->size() > linelen) {
 		sub = i->substr(0, nlen = linelen);
+
 		if((dpos = sub.rfind(" ")) != -1) {
 		    if(dpos) nlen = dpos; else nlen = 1;
 		}
 
-		sub = i->substr(nlen+1);
+		sub = i->substr(nlen + ((dpos != -1) ? 1 : 0));
 		i->erase(nlen);
 		lst.insert(i+1, sub);
 		i = lst.begin();
