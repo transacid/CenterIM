@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-05 00:58+0300\n"
+"POT-Creation-Date: 2004-08-05 20:23+0300\n"
 "PO-Revision-Date: 2002-06-12 12:15+0300\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -160,35 +160,35 @@ msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
 msgid "Wrong nickname given, cannot register"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:530
+#: src/hooks/jabberhook.cc:534
 #, fuzzy
 msgid "Unable to connect"
 msgstr "не можу п╕д'╓днатися до сервера"
 
-#: src/hooks/jabberhook.cc:1226 src/hooks/irchook.cc:1297
+#: src/hooks/jabberhook.cc:1230 src/hooks/irchook.cc:1297
 #, c-format
 msgid "The remote is using %s"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1408
+#: src/hooks/jabberhook.cc:1412
 msgid "Default Jabber conference server"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1458
+#: src/hooks/jabberhook.cc:1462
 #, fuzzy, c-format
 msgid "+ [jab] error %d"
 msgstr "+ [yahoo] пов╕домлення не принято"
 
-#: src/hooks/jabberhook.cc:1459
+#: src/hooks/jabberhook.cc:1463
 #, fuzzy, c-format
 msgid "+ [jab] error %d: %s"
 msgstr "+ [yahoo] пов╕домлення не принято"
 
-#: src/hooks/jabberhook.cc:1532
+#: src/hooks/jabberhook.cc:1536
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 
-#: src/hooks/jabberhook.cc:1546
+#: src/hooks/jabberhook.cc:1550
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
@@ -2735,45 +2735,41 @@ msgstr "Вх╕дне %s в╕д %s"
 msgid "Received on %s"
 msgstr "Отримано %s"
 
-#: src/icqface.cc:2686
-msgid "view"
-msgstr ""
-
-#: src/icqface.cc:2712
+#: src/icqface.cc:2709
 #, fuzzy, c-format
 msgid "%s to URLs, %s to full-screenize, %s close"
 msgstr "F2 йде за посиланнями, ESC закрива╓"
 
-#: src/icqface.cc:2760
+#: src/icqface.cc:2757
 #, fuzzy, c-format
 msgid "%s from %s, received on %s"
 msgstr "Отримано %s"
 
-#: src/icqface.cc:2761
+#: src/icqface.cc:2758
 #, fuzzy, c-format
 msgid "%s to %s, sent on %s"
 msgstr "В╕д╕слано %s"
 
-#: src/icqface.cc:2770
+#: src/icqface.cc:2767
 msgid "full-screen view"
 msgstr ""
 
-#: src/icqface.cc:2776
+#: src/icqface.cc:2773
 #, c-format
 msgid "%s or %s to close, Up/Down and PgUp/PgDn to scroll"
 msgstr ""
 
-#: src/icqface.cc:2862
+#: src/icqface.cc:2859
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "╤стор╕я з %s, всього под╕й: %d"
 
-#: src/icqface.cc:2868
+#: src/icqface.cc:2865
 #, fuzzy, c-format
 msgid "%s search, %s again, %s cancel"
 msgstr "S Пошук, L знову, ESC - скасувати"
 
-#: src/icqface.cc:2877
+#: src/icqface.cc:2874
 msgid "search for: "
 msgstr "шукати:"
 
@@ -2925,7 +2921,7 @@ msgstr "+ [msn] з'╓днання з %s"
 
 #: src/hooks/gaduhook.cc:399
 #, fuzzy, c-format
-msgid "+ [jgg] no away message from %s, %s"
+msgid "+ [gg] no away message from %s, %s"
 msgstr "+ [icq] не можу витягти автопов╕домлення в╕д %s, %s"
 
 #: src/centericq.cc:135

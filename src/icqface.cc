@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.229 2004/07/27 07:38:32 konst Exp $
+* $Id: icqface.cc,v 1.230 2004/08/05 18:39:34 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -2682,9 +2682,6 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
 	title_timestamp.c_str(), extracttime(*ev).c_str());
-
-    xtermtitle(((string) _("view") + " " + title_event).c_str(),
-	streventname(ev->gettype()), ev->getcontact().totext().c_str());
 
     db.addautokeys();
 

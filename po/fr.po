@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-05 00:58+0300\n"
+"POT-Creation-Date: 2004-08-05 20:23+0300\n"
 "PO-Revision-Date: 2002-01-01 01:01+0020\n"
 "Last-Translator: Thomas Nemeth <tnemeth@free.fr>\n"
 "Language-Team: fr <fr@li.org>\n"
@@ -165,35 +165,35 @@ msgstr "+ [jab] pas de message d'absence de %s, %s"
 msgid "Wrong nickname given, cannot register"
 msgstr "Mauvaus pseudo donné, impossible de s'enregistrer"
 
-#: src/hooks/jabberhook.cc:530
+#: src/hooks/jabberhook.cc:534
 msgid "Unable to connect"
 msgstr "Connexion impossible"
 
-#: src/hooks/jabberhook.cc:1226 src/hooks/irchook.cc:1297
+#: src/hooks/jabberhook.cc:1230 src/hooks/irchook.cc:1297
 #, c-format
 msgid "The remote is using %s"
 msgstr "L'utilisateur distant utilise %s"
 
-#: src/hooks/jabberhook.cc:1408
+#: src/hooks/jabberhook.cc:1412
 msgid "Default Jabber conference server"
 msgstr "Serveur de conférence jabber par défaut"
 
-#: src/hooks/jabberhook.cc:1458
+#: src/hooks/jabberhook.cc:1462
 #, fuzzy, c-format
 msgid "+ [jab] error %d"
 msgstr "+ [jab] erreur %d : %s"
 
-#: src/hooks/jabberhook.cc:1459
+#: src/hooks/jabberhook.cc:1463
 #, c-format
 msgid "+ [jab] error %d: %s"
 msgstr "+ [jab] erreur %d : %s"
 
-#: src/hooks/jabberhook.cc:1532
+#: src/hooks/jabberhook.cc:1536
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 "L'utilisateur veut s'inscrire à votre notification de présence sur le réseau"
 
-#: src/hooks/jabberhook.cc:1546
+#: src/hooks/jabberhook.cc:1550
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
@@ -2686,45 +2686,41 @@ msgstr "%s reçu de %s"
 msgid "Received on %s"
 msgstr "Reçu le %s"
 
-#: src/icqface.cc:2686
-msgid "view"
-msgstr ""
-
-#: src/icqface.cc:2712
+#: src/icqface.cc:2709
 #, fuzzy, c-format
 msgid "%s to URLs, %s to full-screenize, %s close"
 msgstr "F2 pour les URLS, F9 pour plein écran, ESC pour fermer"
 
-#: src/icqface.cc:2760
+#: src/icqface.cc:2757
 #, c-format
 msgid "%s from %s, received on %s"
 msgstr "%s de %s, reçu le %s"
 
-#: src/icqface.cc:2761
+#: src/icqface.cc:2758
 #, c-format
 msgid "%s to %s, sent on %s"
 msgstr "%s à %s, Envoyé le %s"
 
-#: src/icqface.cc:2770
+#: src/icqface.cc:2767
 msgid "full-screen view"
 msgstr ""
 
-#: src/icqface.cc:2776
+#: src/icqface.cc:2773
 #, c-format
 msgid "%s or %s to close, Up/Down and PgUp/PgDn to scroll"
 msgstr ""
 
-#: src/icqface.cc:2862
+#: src/icqface.cc:2859
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Historique pour %s, %d événements au total"
 
-#: src/icqface.cc:2868
+#: src/icqface.cc:2865
 #, fuzzy, c-format
 msgid "%s search, %s again, %s cancel"
 msgstr "/ chercher, N encore, ESC annuler"
 
-#: src/icqface.cc:2877
+#: src/icqface.cc:2874
 msgid "search for: "
 msgstr "Chercher : "
 
@@ -2871,7 +2867,7 @@ msgstr "+ [gg] connexion de perdue"
 
 #: src/hooks/gaduhook.cc:399
 #, fuzzy, c-format
-msgid "+ [jgg] no away message from %s, %s"
+msgid "+ [gg] no away message from %s, %s"
 msgstr "+ [jab] pas de message d'absence de %s, %s"
 
 #: src/centericq.cc:135

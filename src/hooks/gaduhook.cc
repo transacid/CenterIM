@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.11 2004/08/04 17:45:34 konst Exp $
+* $Id: gaduhook.cc,v 1.12 2004/08/05 18:39:34 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -396,7 +396,7 @@ void gaduhook::requestawaymsg(const imcontact &ic) {
 	if(!am.empty()) {
 	    em.store(imnotification(ic, (string) _("Away message:") + "\n\n" + am));
 	} else {
-	    face.log(_("+ [jgg] no away message from %s, %s"),
+	    face.log(_("+ [gg] no away message from %s, %s"),
 		c->getdispnick().c_str(), ic.totext().c_str());
 	}
     }
