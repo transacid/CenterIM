@@ -1135,7 +1135,13 @@ written into the ~/.centericq/log file.
 -----------------------
 
   Another (better) way to log what is going on in your centericq, is
-possible to be enabled with the "Detailed IM events log"
+possible to be enabled with the "Detailed IM events log" item in the
+Configuration dialog. When enabled, centericq produces a log file named
+.centericq/log under your home directory. It contains messages about users'
+logging in and out, receiving and sending messages, changed your own IM
+status, and other blah. The file's format is quite clear, so any kind of
+automatic parsing tool can be written without a problem. Though in this
+case you should keep in mind the messages are locale dependent.
 
 
 9.6. Latest CVS snapshots
