@@ -118,6 +118,10 @@ imevent *imevent::getevent() const {
     }
 }
 
+bool imevent::contains(const string text) const {
+    return false;
+}
+
 // -- immessage class ---------------------------------------------------------
 
 immessage::immessage() {
@@ -159,6 +163,10 @@ void immessage::read(ifstream &f) {
 
 bool immessage::empty() const {
     return text.empty();
+}
+
+bool immessage::contains(const string atext) const {
+    return text.find(atext) != -1;
 }
 
 // -- imurl class -------------------------------------------------------------
@@ -213,6 +221,10 @@ void imurl::read(ifstream &f) {
 
 bool imurl::empty() const {
     return url.empty() && description.empty();
+}
+
+bool imurl::contains(const string atext) const {
+    return (url.find(atext) != -1) || (description.find(atext) != -1);
 }
 
 // -- imauthorization class ---------------------------------------------------
@@ -272,6 +284,10 @@ bool imauthorization::getgranted() const {
     return granted;
 }
 
+bool imauthorization::contains(const string atext) const {
+    return text.find(atext) != -1;
+}
+
 // -- imsms class -------------------------------------------------------------
 
 imsms::imsms() {
@@ -313,4 +329,8 @@ void imsms::read(ifstream &f) {
 
 bool imsms::empty() const {
     return text.empty();
+}
+
+bool imsms::contains(const string atext) const {
+    return text.find(atext) != -1;
 }

@@ -40,6 +40,7 @@ class imevent {
 	imevent *getevent() const;
 
 	virtual bool empty() const;
+	virtual bool contains(const string atext) const;
 
 	virtual void write(ofstream &f) const;
 	virtual void read(ifstream &f);
@@ -58,6 +59,7 @@ class immessage: public imevent {
 	const string gettext() const;
 
 	bool empty() const;
+	bool contains(const string atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -77,6 +79,7 @@ class imurl: public imevent {
 	const string getdescription() const;
 
 	bool empty() const;
+	bool contains(const string atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -95,6 +98,7 @@ class imsms: public imevent {
 	const string gettext() const;
 
 	bool empty() const;
+	bool contains(const string atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
@@ -115,6 +119,7 @@ class imauthorization: public imevent {
 	bool getgranted() const;
 
 	bool empty() const;
+	bool contains(const string atext) const;
 
 	void write(ofstream &f) const;
 	void read(ifstream &f);
