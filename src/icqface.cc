@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.113 2002/05/08 18:26:15 konst Exp $
+* $Id: icqface.cc,v 1.114 2002/05/09 11:41:07 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1721,6 +1721,7 @@ void icqface::renderchathistory() {
 void icqface::chat(const imcontact &ic) {
     texteditor editor;
     imevent *sendev;
+    vector<imcontact>::iterator i;
 
     icqcontact *c = clist.get(ic);
     if(!c) return;
@@ -1731,6 +1732,10 @@ void icqface::chat(const imcontact &ic) {
     chatlastread = 0;
     inchat = true;
     passinfo = ic;
+
+    muins.clear();
+    muins.push_back(passinfo);
+
     chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.75);
     workarealine(sizeWArea.y1+chatlines+1);
 
@@ -1741,7 +1746,7 @@ void icqface::chat(const imcontact &ic) {
     editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
 
-    status(_("Ctrl-X send, Ctrl-O history, Alt-? details, ESC exit"));
+    status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
 
     for(bool finished = false; !finished; ) {
 	renderchathistory();
@@ -1755,7 +1760,14 @@ void icqface::chat(const imcontact &ic) {
 
 	if(editdone) {
 	    auto_ptr<imevent> ev(new immessage(ic, imevent::outgoing, p.get()));
-	    em.store(*ev.get());
+
+	    for(i = muins.begin(); i != muins.end(); i++) {
+		ev.get()->setcontact(*i);
+		em.store(*ev.get());
+	    }
+
+	    muins.clear();
+	    muins.push_back(passinfo);
 
 	} else {
 	    finished = true;
@@ -2166,8 +2178,7 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    delete p;
 	    if(face.editdone) return -1; else break;
 	case CTRL('p'):
-	    if(!face.inchat)
-		face.multicontacts("");
+	    face.multicontacts("");
 	    break;
 	case CTRL('o'):
 	    cicq.history(face.passinfo);
