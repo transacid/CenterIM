@@ -14,7 +14,8 @@ Contents
     2.2. Yahoo! accounts
     2.3. MSN accounts
     2.4. AIM accounts
-    2.5. Updating details
+    2.5. IRC accounts
+    2.6. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -31,6 +32,7 @@ Contents
 	4.5.2. Yahoo!
 	4.5.3. MSN
 	4.5.4. AIM TOC
+	4.5.5. IRC
 5. Online status
     5.1. "Auto Away" and "Auto N/A"
 6. Contact list
@@ -75,8 +77,8 @@ Contents
 ---------------
 
   Centericq is a text mode menu- and window-driven IM interface. ICQ,
-Yahoo!, MSN and AIM TOC protocols are now supported. It allows you to
-send, receive, and forward messages, URLs, SMSes and, contacts, mass
+Yahoo!, MSN, AIM TOC and IRC protocols are now supported. It allows you
+to send, receive, and forward messages, URLs, SMSes and, contacts, mass
 message send, search for users (including extended "whitepages search"),
 view users' details, maintain your contact list directly from the
 program (including non-icq contacts), view the messages history,
@@ -218,7 +220,11 @@ forget to set your profile information with "Update your details" item
 in the Account manager dialog.
 
 
-2.5. Updating details
+2.5. IRC accounts
+-----------------
+
+
+2.6. Updating details
 ---------------------
 
   If you have just registered on the ICQ network only basic fields of
@@ -466,6 +472,10 @@ they go.
 
   Hostname: toc.oscar.aol.com
   Port: 9898
+
+
+4.5.5. IRC
+----------
 
 
 5. Online status
@@ -797,7 +807,7 @@ outgoing queue:
 -p or --proto <protocol type>
 
     This one specifies to which IM network the destination contact
-    beyongs. Can be "icq", "yahoo", "msn" or "aim".
+    beyongs. Can be "icq", "yahoo", "msn", "aim" or "irc".
 
 -t or --to
 
@@ -850,7 +860,7 @@ recommended just cut'n'paste the following text.
 #
 # proto
 # -----
-# Can be "icq", "yahoo", "msn" or "aim". Or combination of these
+# Can be "icq", "yahoo", "msn", "aim" or "irc". Or combination of these
 # words. "all" can be used as a synonim for all of them.
 #
 # status
@@ -932,7 +942,7 @@ EVENT_TYPE
 EVENT_NETWORK
 
     The IM network name through which the event was received. Can be
-    "icq", "msn" or "yahoo".
+    "icq", "msn", "yahoo", "aim" or "irc".
 
 SENDER_UIN
 
@@ -1249,7 +1259,7 @@ IM protocols support in centericq.
   implmentation.
 
   Ian Gulliver <ian@penguinhosting.net> for the nice Firetalk library
-  used by centericq to provide the AIM service.
+  used by centericq to provide the AIM and IRC services.
 
   Since centericq contains support for the ICQ protocol taken from the
 original software made by Israeli company named "Mirabilis", you might

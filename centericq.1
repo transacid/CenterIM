@@ -1,8 +1,8 @@
-.TH CENTERICQ 1 "March 28, 2002"
+.TH CENTERICQ 1 "April 4, 2002"
 
 .SH NAME
 \fBcentericq\fP \- a text mode based IM client for Linux, *BSD and possibly,
-other Unices. ICQ2000, Yahoo!, MSN and AIM TOC protocols are now supported.
+other Unices. ICQ2000, Yahoo!, MSN, AIM TOC and IRC protocols are now supported.
 
 .SH SYNOPSIS
 .B "centericq "
@@ -16,18 +16,19 @@ This manual page documents briefly the
 command.
 .PP
 \fBcentericq\fP is a text mode menu- and window-driven IM interface.
-Currently ICQ2000, Yahoo!, MSN and AIM protocols are supported. It allows you
-to send, receive, and forward messages, URLs, SMSes and, contacts, mass
-message send, search for users (including extended "whitepages search"), view
-users' details, maintain your contact list directly from the program (including
-non-icq contacts), view the messages history, register a new UIN and update
-your details, be informed on receiving email messages, automatically set away
-after the defined period of inactivity (on any console), and have your own
-ignore, visible and invisible lists. It can also associate events with
-sounds, add events to the outgoing queue from command line, define external
+Currently ICQ2000, Yahoo!, MSN, AIM and IRC protocols are supported. It
+allows you to send, receive, and forward messages, URLs, SMSes and,
+contacts, mass message send, search for users (including extended
+"whitepages search"), view users' details, maintain your contact list
+directly from the program (including non-icq contacts), view the
+messages history, register a new UIN and update your details, be
+informed on receiving email messages, automatically set away after the
+defined period of inactivity (on any console), and have your own ignore,
+visible and invisible lists. It can also associate events with sounds,
+add events to the outgoing queue from command line, define external
 event processing actions (like events auto-forwarding or elizatalk), has
-support for Hebrew and Arabic languages and allows to arrange contacts into
-groups.
+support for Hebrew and Arabic languages and allows to arrange contacts
+into groups.
 
 .SH OPTIONS
 .TP
@@ -51,7 +52,7 @@ Currently only "msg", "url" and "sms" are supported.
 .TP
 \fB\-p\fR, \fB\-\-proto\fR <protocol type>
 This one specifies to which IM network the destination contact
-beyongs. Can be "icq", "yahoo", "aim" or "msn".
+beyongs. Can be "icq", "yahoo", "aim", "msn" or "irc".
 .TP
 \fB\-t\fR, \fB\-\-to\fR <nickname or UIN>
 Finally, with this one you specify nickname or UIN of the
@@ -77,7 +78,7 @@ Please note, that all three parameters are required in order to queue an
 event.
 
 .SH VERSION
-centericq 4.6.6
+centericq 4.7.0
 
 .SH BUG REPORT
 Report any bugs to centericq-bugs@konst.org.ua

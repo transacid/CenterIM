@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.2 2002/04/04 14:41:43 konst Exp $
+* $Id: irchook.cc,v 1.3 2002/04/04 17:21:23 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -548,7 +548,9 @@ void irchook::chatnames(void *connection, void *cli, ...) {
 	if(ir != irhook.rooms.end()) {
 	    firetalk_chat_listmembers(irhook.handle, croom);
 	    firetalk_chat_part(irhook.handle, croom);
+
 	    ir->fetched = true;
+	    sort(ir->nicks.begin(), ir->nicks.end());
 
 	    if(find(irhook.rooms.begin(), irhook.rooms.end(), false) == irhook.rooms.end()) {
 		/*
