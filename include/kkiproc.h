@@ -29,4 +29,10 @@ const char *getcurtty();
 
 __KTOOL_END_C
 
+#ifdef __sun__
+
+void setenv(const string &name, const string &value, int replace);
+
+#endif
+
 #endif
