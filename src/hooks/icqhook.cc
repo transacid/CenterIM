@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.19 2001/12/08 10:18:34 konst Exp $
+* $Id: icqhook.cc,v 1.20 2001/12/08 22:59:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -567,16 +567,22 @@ void icqhook::rate_cb(RateInfoChangeEvent *ev) {
 }
 
 void icqhook::logger_cb(LogEvent *ev) {
-    if(ev->getType() != LogEvent::PACKET) {
-	face.log(ev->getMessage());
+    switch(ev->getType()) {
+	case LogEvent::PACKET:
+	case LogEvent::DIRECTPACKET:
+	    break;
+
+	default:
+	    face.log(ev->getMessage());
+	    break;
     }
 }
 
 void icqhook::socket_cb(SocketEvent *ev) {
-    if(dynamic_cast<AddSocketHandleEvent*>(ev) != NULL) {
+    if(dynamic_cast<AddSocketHandleEvent*>(ev)) {
 	AddSocketHandleEvent *cev = dynamic_cast<AddSocketHandleEvent*>(ev);
 	fds.insert(cev->getSocketHandle());
-    } else if(dynamic_cast<RemoveSocketHandleEvent*>(ev) != NULL) {
+    } else if(dynamic_cast<RemoveSocketHandleEvent*>(ev)) {
 	RemoveSocketHandleEvent *cev = dynamic_cast<RemoveSocketHandleEvent*>(ev);
 	fds.erase(cev->getSocketHandle());
     }

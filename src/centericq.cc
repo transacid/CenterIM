@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.56 2001/12/08 10:33:32 konst Exp $
+* $Id: centericq.cc,v 1.57 2001/12/08 22:59:19 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -524,7 +524,7 @@ void centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	if(c = clist.get(ev.getcontact())) {
 	    icqcontact::basicinfo b = c->getbasicinfo();
 
-	    if(b.cellular.find_first_of("0123456789") != -1) {
+	    if(b.cellular.find_first_of("0123456789") == -1) {
 		b.cellular = face.inputstr(_("Mobile number: "), b.cellular);
 
 		if((b.cellular.find_first_of("0123456789") == -1)
@@ -699,16 +699,17 @@ void centericq::history(const imcontact &cont) {
 		}
 	    }
 	}
+
+	face.status("");
+
+	while(!events.empty()) {
+	    delete *events.begin();
+	    events.erase(events.begin());
+	}
+
     } else {
 	face.log(_("+ no history items for %s"), cont.totext().c_str());
     }
-
-    while(!events.empty()) {
-	delete *events.begin();
-	events.erase(events.begin());
-    }
-
-    face.status("");
 }
 
 const string centericq::quotemsg(const string text) {

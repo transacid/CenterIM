@@ -1,5 +1,5 @@
 AC_INIT(aclocal.m4)
-AM_INIT_AUTOMAKE(centericq, 4.2.1)
+AM_INIT_AUTOMAKE(centericq, 4.5)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -58,7 +58,7 @@ AC_CHECK_HEADERS(sstream,,
 
 AC_LANG_RESTORE
 
-AC_CONFIG_SUBDIRS(libicq2000-0.1 kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 libyahoo-0.1 libmsn-0.1)
+AC_CONFIG_SUBDIRS(kkstrtext-0.1 kkconsui-0.1 kksystr-0.1 libyahoo-0.1 libmsn-0.1 libicq2000-0.1)
 ALL_LINGUAS="zh_TW.Big5 ru ro pt_BR pl it hu es de cs"
 AM_GNU_GETTEXT
 AC_OUTPUT(Makefile contrib/Makefile contrib/spanish/Makefile misc/Makefile share/Makefile src/Makefile src/hooks/Makefile po/Makefile.in intl/Makefile)

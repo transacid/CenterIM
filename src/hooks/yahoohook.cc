@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.13 2001/12/06 17:20:58 konst Exp $
+* $Id: yahoohook.cc,v 1.14 2001/12/08 22:59:20 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -336,7 +336,7 @@ void yahoohook::userstatus(yahoo_context *y, const char *nick, int status) {
 }
 
 void yahoohook::recvbounced(yahoo_context *y, const char *nick) {
-    face.log(_("+ [yahoo] bounced msg to %s"), nick);
+    face.log(_("+ [yahoo] bounced msg"));
 }
 
 void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg) {
