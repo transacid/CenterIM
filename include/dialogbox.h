@@ -16,6 +16,8 @@ __KTOOL_BEGIN_NAMESPACE
 
 class dialogbox {
     protected:
+	static dialogbox *it;
+
         class keybarassociation {
             public:
                 int key, baritem;

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.4 2001/08/06 21:32:45 konst Exp $
+* $Id: cmenus.cc,v 1.5 2001/08/18 07:30:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -203,9 +203,6 @@ void verticalmenu::showall() {
 }
 
 void verticalmenu::redraw() {
-//    if(!window.empty())
-//	window.redraw();
-
     showall();
     kgotoxy(x1, y1+curelem-firstdisp);
 
@@ -414,12 +411,15 @@ verticalmenu::~verticalmenu() {
 
 // --------------------------------------------------------------------------
 
+horizontalmenu *currenthmenu;
+
 horizontalmenu::horizontalmenu(int x, int y, int normcolor, int selcolor, int framecolor) {
     ncolor = normcolor;
     scolor = selcolor;
     fcolor = framecolor;
     coordy = y;
     coordx = x;
+    otherkeys = 0;
 }
 
 horizontalmenu::horizontalmenu() {
@@ -438,7 +438,11 @@ int horizontalmenu::menu_otherkeys(verticalmenu *ref, int k) {
         case KEY_RIGHT : return HM_RIGHT;
         case KEY_LEFT  : return HM_LEFT;
         case KEY_F(10) : return HM_CLOSE;
+	default:
+	    currenthmenu->finished = currenthmenu->otherkeys(currenthmenu, k);
+	    return currenthmenu->finished ? 0 : -1;
     }
+
     return -1;
 }
 
@@ -524,7 +528,7 @@ void horizontalmenu::moveelem(int old) {
 }
 
 bool horizontalmenu::open(int *hor, int *pulld) {
-    bool finished = false, done = false;
+    bool done = false;
     int ch, osel, oact = 0;
     verticalmenu *m;
 
@@ -532,7 +536,7 @@ bool horizontalmenu::open(int *hor, int *pulld) {
     saveline();
     draw();
 
-    while(!finished) {
+    for(finished = false; !finished; ) {
         if(!oact) {
             ch = getkey();
             if(emacs) ch = emacsbind(ch);
@@ -547,17 +551,22 @@ bool horizontalmenu::open(int *hor, int *pulld) {
                 if(++selected >= menus.size()) selected = 0;
                 moveelem(osel);
                 break;
+
             case KEY_LEFT:
                 if(--selected < 0) selected = menus.size()-1;
                 moveelem(osel);
                 break;
+
             case '\r':
             case KEY_DOWN:
                 m = pulldown(selected);
+
                 if(!m->items.empty()) {
                     m->scale();
                     m->x2 = m->x1 + menulen(selected) + 1;
                     m->window.x2 = m->x2;
+		    currenthmenu = this;
+
                     int r = m->open();
 
                     switch(r) {
@@ -574,16 +583,23 @@ bool horizontalmenu::open(int *hor, int *pulld) {
 
                     m->close();
                     if(r == HM_RIGHT || r == HM_LEFT) continue;
-                 } else if(!oact) {
+                } else if(!oact) {
                     if(pulld) *pulld = 0;
                     if(hor) *hor = selected+1;
                     done = finished = true;
-                 }
-                 break;
+                }
+                break;
+
             case KEY_F(10):
             case 27:
-                 finished = true;
-                 break;
+                finished = true;
+                break;
+
+            default:
+                if(otherkeys) {
+                    done = finished = (*otherkeys)(this, ch);
+                }
+                break;
         }
 
         if(oact == KEY_RIGHT || oact == KEY_LEFT) oact = '\r'; else oact = 0;
@@ -618,14 +634,16 @@ verticalmenu *horizontalmenu::pulldown(int n) {
 
 // --------------------------------------------------------------------------
 
-ktool::horizontalmenuitem::horizontalmenuitem() {
+using ktool::horizontalmenuitem;
+
+horizontalmenuitem::horizontalmenuitem() {
 }
 
-ktool::horizontalmenuitem::horizontalmenuitem(const horizontalmenuitem &a) {
+horizontalmenuitem::horizontalmenuitem(const horizontalmenuitem &a) {
     text = a.text;
     color = a.color;
     menu = a.menu;
 }
 
-ktool::horizontalmenuitem::~horizontalmenuitem() {
+horizontalmenuitem::~horizontalmenuitem() {
 }

@@ -110,9 +110,10 @@ class horizontalmenu: public abstractuicontrol {
     protected:
 	vector<horizontalmenuitem> menus;
 	int ncolor, scolor, fcolor, coordy, coordx, selected;
-	
+	bool finished;
+
 	static int menu_otherkeys(verticalmenu *ref, int k);
-	
+
 	void draw();
 	void moveelem(int old);
 	void saveline();
@@ -122,7 +123,7 @@ class horizontalmenu: public abstractuicontrol {
 	int menulen(int n);
 
     public:
-	int (*otherkeys)(horizontalmenu *caller, int k);
+	bool (*otherkeys)(horizontalmenu *caller, int k);
 	void (*idle)(horizontalmenu *caller);
 
 	horizontalmenu(int x, int y, int normcolor, int selcolor, int framecolor);

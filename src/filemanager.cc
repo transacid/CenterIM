@@ -202,8 +202,10 @@ void filemanager::open() {
 
     selected->empty();
     getcwd(curdir, MAXLEN);
-    chdir(startpoint);
+
+    if(chdir(startpoint)) startpoint[0] = 0;
     if(!startpoint[0]) strcpy(startpoint, curdir);
+
     fillmenu();
 
     while(ch = m->open()) {

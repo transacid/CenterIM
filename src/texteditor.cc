@@ -163,7 +163,6 @@ char *texteditor::save(const char *linebreak) {
 	    strcat(buf, p);
     }
 
-    modified = false;
     return buf;
 }
 
@@ -171,6 +170,7 @@ int texteditor::save(FILE *f, const char *linebreak) {
     char *buf = save(linebreak);
     fwrite(buf, strlen(buf), 1, f);
     delete buf;
+    modified = false;
     return 0;
 }
 
@@ -178,6 +178,7 @@ int texteditor::save(ofstream &f, const string linebreak) {
     char *buf = save(linebreak.c_str());
     f.write(buf, strlen(buf));
     f.close();
+    modified = false;
     return 0;
 }
 
@@ -354,18 +355,24 @@ void texteditor::addblock(int x1, int y1, int x2, int y2, int color) {
 
 void texteditor::startmark() {
     CHECKLOADED;
-    curfile->markmode = curfile->showmarked = true;
-    curfile->markreverse = false;
-    curfile->markblock->x1 = curfile->markblock->x2 = CURCOL;
-    curfile->markblock->y1 = curfile->markblock->y2 = CURLINE;
-    curfile->markblock->color = colors.blockcolor;
-    draw();
+
+    if(!curfile->markmode) {
+	curfile->markmode = curfile->showmarked = true;
+	curfile->markreverse = false;
+	curfile->markblock->x1 = curfile->markblock->x2 = CURCOL;
+	curfile->markblock->y1 = curfile->markblock->y2 = CURLINE;
+	curfile->markblock->color = colors.blockcolor;
+	draw();
+    }
 }
 
 void texteditor::endmark() {
     CHECKLOADED;
-    marktext();
-    curfile->markmode = false;
+
+    if(curfile->markmode) {
+	marktext();
+	curfile->markmode = false;
+    }
 }
 
 void texteditor::marktext() {
@@ -682,7 +689,8 @@ void texteditor::hl_comment(char *cp, char *txt, int color) {
 
 void texteditor::hl_comment(char *cp, int st, int pend, int color) {
     int i, delcount = 0;
-    char ins[5] = "\001 ", origclr = -1;
+    char ins[5] = "\001 ";
+    int origclr = -1;
 
     if(color) {
 	for(i = 0; (i <= pend) && (i < strlen(cp)); i++)
@@ -1913,14 +1921,16 @@ void texteditor::shiftmarkedblock(int delta) {
 
 // --------------------------------------------------------------------------
 
-bool ktool::hlight::operator == (const hl_kind &k) const {
+using ktool::hlight;
+
+bool hlight::operator == (const hl_kind &k) const {
     return kind == k;
 }
 
-bool ktool::hlight::operator != (const hl_kind &k) const {
+bool hlight::operator != (const hl_kind &k) const {
     return kind != k;
 }
 
-bool ktool::hlight::operator < (const hlight &ah) const {
+bool hlight::operator < (const hlight &ah) const {
     return kind == h_eol;
 }

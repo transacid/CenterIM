@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui dialogbox class
-* $Id: dialogbox.cc,v 1.3 2001/08/09 08:32:59 konst Exp $
+* $Id: dialogbox.cc,v 1.4 2001/08/18 07:30:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -24,7 +24,7 @@
 
 #include "dialogbox.h"
 
-dialogbox *dialogbox_specimen;
+dialogbox *dialogbox::it;
 
 dialogbox::dialogbox(): menu(0), tree(0), window(0), bar(0), browser(0),
 idle(0), otherkeys(0), first(true) {
@@ -111,7 +111,7 @@ textbrowser *dialogbox::getbrowser() {
 bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
     bool ret = false;
 
-    dialogbox_specimen = this;
+    it = this;
     if(first) redraw();
 
     if(menu) {
@@ -132,7 +132,7 @@ bool dialogbox::open(int &menuitem, int &baritem, void **ref = 0) {
 
 	for(bool fin = false; !fin; ) {
 	    proceed = idle ? keypressed() : true;
-	    dialogbox_specimen = this;
+	    it = this;
 
 	    if(proceed)
 	    switch(k = getkey()) {
@@ -230,8 +230,8 @@ void dialogbox::addkey(int key, int baritem) {
 }
 
 void dialogbox::menuidle(verticalmenu *caller) {
-    if(dialogbox_specimen->idle) {
-	dialogbox_specimen->idle(dialogbox_specimen);
+    if(it->idle) {
+	it->idle(it);
     } else {
 	fd_set fds;
 	FD_ZERO(&fds);
@@ -241,8 +241,8 @@ void dialogbox::menuidle(verticalmenu *caller) {
 }
 
 void dialogbox::browseridle(textbrowser *caller) {
-    if(dialogbox_specimen->idle) {
-	dialogbox_specimen->idle(dialogbox_specimen);
+    if(it->idle) {
+	it->idle(it);
     } else {
 	fd_set fds;
 	FD_ZERO(&fds);
@@ -254,47 +254,52 @@ void dialogbox::browseridle(textbrowser *caller) {
 int dialogbox::menukeys(verticalmenu *caller, int k) {
     list<keybarassociation>::iterator i;
     bool found;
+    int ip;
+    dialogbox *sit;
 
     switch(k) {
 	case KEY_LEFT:
 	case KEY_RIGHT:
-	    if(dialogbox_specimen->bar) {
-		dialogbox_specimen->bar->movebar(k);
-		dialogbox_specimen->bar->redraw();
+	    if(it->bar) {
+		it->bar->movebar(k);
+		it->bar->redraw();
 	    }
 	    break;
 	case '-':
 	case '+':
-	    if(dialogbox_specimen->tree)
-	    if(dialogbox_specimen->tree->collapsable) {
-		int nid = dialogbox_specimen->tree->getid(dialogbox_specimen->tree->menu.getpos());
+	    if(it->tree)
+	    if(it->tree->collapsable) {
+		int nid = it->tree->getid(it->tree->menu.getpos());
 
-		if(dialogbox_specimen->tree->isnode(nid)) {
-		    if(dialogbox_specimen->tree->isnodeopen(nid)) dialogbox_specimen->tree->closenode(nid);
-		    else dialogbox_specimen->tree->opennode(nid);
+		if(it->tree->isnode(nid)) {
+		    if(it->tree->isnodeopen(nid)) it->tree->closenode(nid);
+		    else it->tree->opennode(nid);
 
-		    dialogbox_specimen->tree->menu.redraw();
+		    it->tree->menu.redraw();
 		}
 	    }
 	    break;
 
 	default:
-	    i = find(dialogbox_specimen->kba.begin(), dialogbox_specimen->kba.end(), k);
+	    i = find(it->kba.begin(), it->kba.end(), k);
 
-	    if(i != dialogbox_specimen->kba.end()) {
-		if(dialogbox_specimen->bar) {
-		    dialogbox_specimen->bar->item = i->baritem;
-		    dialogbox_specimen->bar->redraw();
+	    if(i != it->kba.end()) {
+		if(it->bar) {
+		    it->bar->item = i->baritem;
+		    it->bar->redraw();
 		}
 
-		if(dialogbox_specimen->menu) {
-		    return dialogbox_specimen->menu->getpos()+1;
-		} else if(dialogbox_specimen->tree) {
-		    return dialogbox_specimen->tree->menu.getpos()+1;
+		if(it->menu) {
+		    return it->menu->getpos()+1;
+		} else if(it->tree) {
+		    return it->tree->menu.getpos()+1;
 		}
 	    } else {
-		if(dialogbox_specimen->otherkeys) {
-		    return dialogbox_specimen->otherkeys(dialogbox_specimen, k);
+		if(it->otherkeys) {
+		    sit = it;
+		    ip = it->otherkeys(it, k);
+		    it = sit;
+		    return ip;
 		}
 	    }
 	    break;
@@ -306,31 +311,36 @@ int dialogbox::menukeys(verticalmenu *caller, int k) {
 int dialogbox::browserkeys(textbrowser *caller, int k) {
     list<keybarassociation>::iterator i;
     bool found;
+    int ip;
+    dialogbox *sit;
 
     switch(k) {
 	case KEY_LEFT:
 	case KEY_RIGHT:
-	    if(dialogbox_specimen->bar) {
-		dialogbox_specimen->bar->movebar(k);
-		dialogbox_specimen->bar->redraw();
+	    if(it->bar) {
+		it->bar->movebar(k);
+		it->bar->redraw();
 	    }
 	    break;
 	case '\r':
 	    return 1;
 
 	default:
-	    i = find(dialogbox_specimen->kba.begin(), dialogbox_specimen->kba.end(), k);
+	    i = find(it->kba.begin(), it->kba.end(), k);
 
-	    if(i != dialogbox_specimen->kba.end()) {
-		if(dialogbox_specimen->bar) {
-		    dialogbox_specimen->bar->item = i->baritem;
-		    dialogbox_specimen->bar->redraw();
+	    if(i != it->kba.end()) {
+		if(it->bar) {
+		    it->bar->item = i->baritem;
+		    it->bar->redraw();
 		}
 
 		return 1;
 	    } else {
-		if(dialogbox_specimen->otherkeys) {
-		    return dialogbox_specimen->otherkeys(dialogbox_specimen, k);
+		if(it->otherkeys) {
+		    sit = it;
+		    ip = it->otherkeys(it, k);
+		    it = sit;
+		    return ip;
 		}
 	    }
 	    break;
