@@ -14,7 +14,7 @@ class msnhook : public abstracthook {
 	static void statuschanged(void *data);
 	static void authrequested(void *data);
 	static void disconnected(void *data);
-	static void log(const char *event, const char *cause);
+	static void log(void *data);
 	static void ring(void *data);
 
 	imstatus msn2imstatus(int st) const;

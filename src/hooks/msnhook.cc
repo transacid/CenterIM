@@ -28,7 +28,7 @@ msnhook::msnhook() {
 //    MSN_RegisterCallback(MSN_MAIL, &mail_callback);
 
 #ifdef DEBUG
-    MSN_RegisterErrorOutput(&log);
+    MSN_RegisterCallback(MSN_LOG, &log);
 #endif
 }
 
@@ -209,7 +209,7 @@ void msnhook::messaged(void *data) {
 
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_MSG);
-	    face.update();
+	    face.relaxedupdate();
 	}
     }
 }
@@ -228,8 +228,6 @@ void msnhook::statuschanged(void *data) {
     if(c->getstatus() != offline) {
 	c->setlastseen();
     }
-
-    face.update();
 }
 
 void msnhook::authrequested(void *data) {
@@ -258,8 +256,8 @@ void msnhook::disconnected(void *data) {
     face.update();
 }
 
-void msnhook::log(const char *event, const char *cause) {
-    face.log("%s: %s", event, cause);
+void msnhook::log(void *data) {
+    face.log("%s", (const char *) data);
 }
 
 void msnhook::ring(void *data) {

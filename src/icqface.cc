@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.45 2001/11/28 09:34:32 konst Exp $
+* $Id: icqface.cc,v 1.46 2001/11/28 19:08:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -195,6 +195,7 @@ void icqface::showtopbar() {
 void icqface::update() {
     showtopbar();
     fillcontactlist();
+    fneedupdate = false;
 }
 
 int icqface::contextmenu(icqcontact *c) {
@@ -2286,4 +2287,12 @@ void icqface::icqprogress::show(const string title = "") {
 
 void icqface::icqprogress::hide() {
     w->close();
+}
+
+void icqface::relaxedupdate() {
+    fneedupdate = true;
+}
+
+bool icqface::updaterequested() {
+    return fneedupdate;
 }

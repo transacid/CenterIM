@@ -88,7 +88,9 @@ class icqface {
 
 	linkedlist workareas;
 
-	bool editdone, mainscreenblock, inited, onlinefolder, dotermresize;
+	bool editdone, mainscreenblock, inited, onlinefolder,
+	    dotermresize, fneedupdate;
+
 	int extk, totalunread;
 
 	imcontact passinfo;
@@ -151,6 +153,9 @@ class icqface {
 	void draw();
 	void update();
 	void showtopbar();
+
+	void relaxedupdate();
+	bool updaterequested();
 
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();

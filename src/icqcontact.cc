@@ -1,7 +1,7 @@
 /*
 *
 * centericq single icq contact class
-* $Id: icqcontact.cc,v 1.25 2001/11/27 16:33:08 konst Exp $
+* $Id: icqcontact.cc,v 1.26 2001/11/28 19:08:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -27,6 +27,8 @@
 #include "icqgroups.h"
 #include "icqconf.h"
 #include "centericq.h"
+#include "icqface.h"
+
 #include "icqhook.h"
 #include "yahoohook.h"
 
@@ -394,7 +396,10 @@ void icqcontact::scanhistory() {
 }
 
 void icqcontact::setstatus(imstatus fstatus) {
-    status = fstatus;
+    if(status != fstatus) {
+	status = fstatus;
+	face.relaxedupdate();
+    }
 }
 
 void icqcontact::setnick(const string fnick) {
@@ -421,6 +426,7 @@ void icqcontact::unsetupdated() {
 
 void icqcontact::setmsgcount(int n) {
     nmsgs = n;
+    face.relaxedupdate();
 }
 
 void icqcontact::getinfo(string &fname, string &lname, string &fprimemail,

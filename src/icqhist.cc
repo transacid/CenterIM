@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages history handling class
-* $Id: icqhist.cc,v 1.8 2001/11/11 14:30:15 konst Exp $
+* $Id: icqhist.cc,v 1.9 2001/11/28 19:08:10 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -42,6 +42,7 @@ FILE *icqhistory::open(const imcontact cinfo, const char *mode) {
     }
 
     string fname = c->getdirname() + "/history";
+
     return fopen(fname.c_str(), mode);
 }
 

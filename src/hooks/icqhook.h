@@ -9,18 +9,6 @@
 #include "icqconf.h"
 #include "abstracthook.h"
 
-#define PERIOD_KEEPALIVE        100
-#define PERIOD_SELECT           1
-#define PERIOD_TCP              1
-#define PERIOD_RESOLVE          40
-#define PERIOD_DISCONNECT       130
-#define PERIOD_RESEND           15
-#define PERIOD_CHECKMAIL        30
-#define PERIOD_WAITNEWUIN       20
-#define PERIOD_SOCKSALIVE       30
-#define PERIOD_WAIT_KEEPALIVE   15
-#define PERIOD_CLIST_RESEND     5
-
 #define MAX_UDPMSG_SIZE         440
 #define MAX_TCPMSG_SIZE         7000
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.5 2001/11/26 13:02:54 konst Exp $
+* $Id: icqhook.cc,v 1.6 2001/11/28 19:08:11 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -148,7 +148,6 @@ void icqhook::loggedin(struct icq_link *link) {
     ihook.n_keepalive = 0;
 
     offl.scan(0, ossendall);
-    face.update();
     face.log(_("+ [icq] logged in"));
 
     string fname = conf.getdirname() + "/icq-infoset",
@@ -175,6 +174,8 @@ void icqhook::loggedin(struct icq_link *link) {
 
     ihook.sendcontactlist();
     ihook.files.clear();
+
+    face.relaxedupdate();
 }
 
 void icqhook::ildisconnected(struct icq_link *link, int reason) {
@@ -201,7 +202,6 @@ void icqhook::disconnected(struct icq_link *link, int reason) {
     int i;
     icqcontact *c;
 
-//    link->icq_UDPSok = -1;
     link->icq_Status = (long unsigned int) STATUS_OFFLINE;
 
     ihook.flogged = ihook.connecting = false;
@@ -231,7 +231,7 @@ unsigned char month, unsigned short year, const char *msg) {
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_MSG);
-	    face.update();
+	    face.relaxedupdate();
 	}
     }
 }
@@ -248,7 +248,6 @@ unsigned char month, unsigned short year, icqcontactmsg *cont) {
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_CONTACT);
-	    face.update();
 	}
     }
 }
@@ -265,7 +264,6 @@ unsigned short year, const char *url, const char *descr) {
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_URL);
-	    face.update();
 	}
     }
 }
@@ -312,7 +310,6 @@ const char *filename, unsigned long filesize, unsigned long seq) {
 	if(c) {
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_FILE);
-	    face.update();
 	}
     }
 }
@@ -330,7 +327,6 @@ const char *first, const char *last, const char *email) {
 	text += (string) _("has added you to his/her contact list");
 	hist.putmessage(contactroot, text, HIST_MSG_IN, TIMESTAMP);
 	clist.get(contactroot)->setmsgcount(clist.get(contactroot)->getmsgcount()+1);
-	face.update();
     }
 }
 
@@ -348,7 +344,6 @@ const char *reason) {
 	text += (string) _("has requested your authorization to add you to his/her contact list. The reason was: ") + reason;
 	hist.putmessage(contactroot, text, HIST_MSG_IN, TIMESTAMP);
 	clist.get(contactroot)->setmsgcount(clist.get(contactroot)->getmsgcount()+1);
-	face.update();
     }
 }
 
@@ -387,8 +382,6 @@ unsigned long real_ip, unsigned char tcp_flag) {
 	if((curtime-ihook.logontime > 15)) {
 	    c->playsound(EVT_ONLINE);
 	}
-
-	face.update();
     }
 }
 
@@ -398,7 +391,6 @@ void icqhook::useroffline(struct icq_link *link, unsigned long uin) {
 
     if(c = clist.get(cinfo)) {
 	c->setstatus(offline);
-	face.update();
     }
 }
 
@@ -409,7 +401,6 @@ unsigned long status) {
 
     if(c = clist.get(cinfo)) {
 	c->setstatus(ihook.icq2imstatus(status));
-	face.update();
     }
 }
 
@@ -426,7 +417,7 @@ unsigned char auth) {
 
 	if(c->getdispnick() == i2str(c->getdesc().uin)) {
 	    c->setdispnick(nick);
-	    face.update();
+	    face.relaxedupdate();
 	}
 
 	c->setinfo(first, last, pri_eml, sec_eml, old_eml, city, state, phone, fax, street, cellular, zip, country);

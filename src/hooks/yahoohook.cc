@@ -298,8 +298,6 @@ void yahoohook::userstatus(yahoo_context *y, const char *nick, int status) {
     if(c->getstatus() != offline) {
 	c->setlastseen();
     }
-
-    face.update();
 }
 
 void yahoohook::recvbounced(yahoo_context *y, const char *nick) {
@@ -321,7 +319,7 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 
 	    c->setmsgcount(c->getmsgcount()+1);
 	    c->playsound(EVT_MSG);
-	    face.update();
+	    face.relaxedupdate();
 	}
     }
 }

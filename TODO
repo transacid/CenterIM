@@ -3,12 +3,16 @@ msn protocol
 
 yahoo
     disconnect on "got zero length" ?
+	too many sockets?
 
 /*
 *
 * DONE
 *
 */
+
+flavour of face.update() with internal time check a-la "don't update
+more frequently than once in 5 secs".
 
 color hightlight for different IM protocols in multi selection box
 
@@ -27,6 +31,8 @@ Also make a context menu for MSN contacts.
 
 possibility to put info card to any kind of a group
 
+forward note for yahoo contacts contains "(0)"
+
 /*
 *
 * BUGS
@@ -39,15 +45,12 @@ check for open direct tcp connection doesn't work
 test cicqsync under freebsd
 
 file sending is limited to 1k/s
-X window resize -> sometimes segfaults
 
-segfaults on update details under rh62 (?)
+X window resize -> sometimes segfaults
 
 check ignore list
     visible list   \ allow to add only IMs that support it
     invisible list /
-
-forward note for yahoo contacts contains "(0)"
 
 /*
 *
@@ -71,9 +74,6 @@ this seems similar to mirabilis icq group mode 2, which i suggested
 a while ago. i'd also be happy about it.
 
 icq починить file send
-
-flavour of face.update() with internal time check a-la "don't update
-more frequently than once in 5 secs".
 
 update README
 
@@ -122,4 +122,4 @@ file progress indicator
 chat
 away messages
 
-$Id: TODO,v 1.68 2001/11/27 16:33:07 konst Exp $
+$Id: TODO,v 1.69 2001/11/28 19:08:09 konst Exp $

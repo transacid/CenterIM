@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.42 2001/11/27 16:33:07 konst Exp $
+* $Id: centericq.cc,v 1.43 2001/11/28 19:08:09 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -37,7 +37,7 @@
 
 centericq::centericq() {
     timer_keypress = time(0);
-    timer_checkmail = 0;
+    timer_checkmail = timer_update = 0;
     regmode = false;
 }
 
@@ -521,9 +521,12 @@ bool centericq::message(const imcontact cinfo, const string text, msgmode mode) 
 	    face.muins.push_back(cinfo);
 	    stext = conf.getquote() ? quotemsg(text) : "";
 	    break;
+
 	case forward:
-	    sprintf(buf, _("%s (%lu) wrote:"),
-		c ? c->getdispnick().c_str() : "I", cinfo.uin);
+	    sprintf(buf,
+		_("%s wrote:"),
+		c ? c->getdesc().totext().c_str() : "I"
+	    );
 
 	    stext = (string) buf + "\n\n" + text;
 
@@ -531,6 +534,7 @@ bool centericq::message(const imcontact cinfo, const string text, msgmode mode) 
 		ret = !face.muins.empty();
 	    }
 	    break;
+
 	case scratch:
 	    face.muins.push_back(cinfo);
 	    stext = text;
@@ -731,5 +735,11 @@ void centericq::exectimers() {
     if(timer_current-timer_checkmail > PERIOD_CHECKMAIL) {
 	cicq.checkmail();
 	time(&timer_checkmail);
+    }
+
+    if(face.updaterequested())
+    if(timer_current-timer_update > PERIOD_DISPUPDATE) {
+	face.update();
+	time(&timer_update);
     }
 }

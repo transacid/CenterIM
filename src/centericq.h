@@ -20,7 +20,7 @@ class centericq {
 	};
 
     protected:
-	time_t timer_checkmail, timer_keypress;
+	time_t timer_checkmail, timer_keypress, timer_update;
 	bool regmode;
 
 	static void handlesignal(int signum);
