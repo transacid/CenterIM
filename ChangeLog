@@ -1130,3 +1130,36 @@ manually with the corresponding menu item that was added recently.
 
 Several interface related issues noticed were fixed.
 
+4.8.4
+-----
+
+Sending and receiving contacts feature was implemented.
+
+The contacts selection box in visible/invisible list adding mode now
+contains only items from the networks that support the feature. So far
+it's only ICQ, though.
+
+IRC NickServ authentification was implemented. The optional password
+field was added which can be filled up if necessary.
+
+Now, if the "Edit away message on status change" is enabled and all the
+away messages are the same for all the protocols that support the
+feature, it is displayed in the message edit box.
+
+In the MSN the whole contact list is now read as soon as login is
+performed. Friendly nicks are substituted.
+
+Added two types of external actions that are executed before sending and
+receiving events. It gives users a possibility to process messages
+before they get to contactlist or history. Can be useful for on-fly
+ecryption/decryption as well as for other aims.
+
+The "Find/add users" dialog in the MSN mode was extended with one more
+parameter that allows to browse users who have us on their contact
+lists.
+
+MSN contact-lists synchronization feature was added.
+
+The "Prev" button was added to the event view dialog in the history
+browsing mode, so that it's possible to navigate the history in both
+directions.

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.82 2002/09/02 09:20:12 konst Exp $
+* $Id: icqconf.cc,v 1.83 2002/09/10 16:37:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -819,7 +819,7 @@ const string &dest, const string &number) const {
 
 	    char buf[512];
 	    sprintf(buf, _("%s to %s has been put to the queue"),
-		eventnames[ev->gettype()],
+		streventname(ev->gettype()),
 		number.empty() ? c->getdesc().totext().c_str() : number.c_str());
 
 	    cout << buf << endl;

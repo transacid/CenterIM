@@ -1049,9 +1049,10 @@ recommended just cut'n'paste the following text.
 # External actions
 # ----------------
 #
-# Every section starts with a line containing the "%action <name>" text.
-# Please note that the <name> of any kind is necessary. It musn't be
-# empty. Inside it the following parameters can be used:
+# Every section starts with a line containing the "%action <name>",
+# "%pre-send <name>" or "%pre-receive <name>" text. Please note that
+# the <name> of any kind is necessary. It musn't be empty. Inside it
+# the following parameters can be used:
 #
 # event
 # -----
@@ -1114,6 +1115,13 @@ perform a simple auto-respond action. You can have as many sections as
 you need. You can call any kind of external scripts and programs. Please
 note that the message text (when "stdin" option is specified for an
 action) can be read with cat command or something similar.
+
+Please also note it's possible to define actions that get invoked before
+the event is written to the history (and delivered to the contact list)
+as well as before it gets sent. It can be modified or prevented from
+further processing, i.e. from showing on the contact list or actual
+sending. The latter is done with returning a non-zero return code in the
+%exec section.
 
 Every time something is to be executed the "%exec" section's contents
 are copied to a temporary file, and the latter is processed with the
@@ -1611,4 +1619,4 @@ pleasure I get during the process.
 views of the nature in places where you live, baseball tickets ;) are
 also welcome.
 
-$Id: README,v 1.60 2002/09/09 11:03:16 konst Exp $
+$Id: README,v 1.61 2002/09/10 16:37:29 konst Exp $

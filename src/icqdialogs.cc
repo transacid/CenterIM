@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.85 2002/09/05 17:50:10 konst Exp $
+* $Id: icqdialogs.cc,v 1.86 2002/09/10 16:37:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -30,6 +30,39 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 #include "abstracthook.h"
+
+#include <libicq2000/userinfohelpers.h>
+#include <libicq2000/constants.h>
+
+const char *stragerange(ICQ2000::AgeRange r) {
+    switch(r) {
+	case ICQ2000::range_18_22: return "18-22";
+	case ICQ2000::range_23_29: return "23-29";
+	case ICQ2000::range_30_39: return "30-39";
+	case ICQ2000::range_40_49: return "40-49";
+	case ICQ2000::range_50_59: return "50-59";
+	case ICQ2000::range_60_above: return _("60-above");
+    }
+
+    return "";
+}
+
+const char *strrandomgroup(short unsigned int gr) {
+    switch((ICQ2000::RandomChatGroup) gr) {
+	case ICQ2000::group_GeneralChat: return _("General Chat");
+	case ICQ2000::group_Romance: return _("Romance");
+	case ICQ2000::group_Games: return _("Games");
+	case ICQ2000::group_Students: return _("Students");
+	case ICQ2000::group_20: return _("20 Something");
+	case ICQ2000::group_30: return _("30 Something");
+	case ICQ2000::group_40: return _("40 Something");
+	case ICQ2000::group_50Plus: return _("50 Plus");
+	case ICQ2000::group_SeekingWomen: return _("Seeking Women");
+	case ICQ2000::group_SeekingMen: return _("Seeking Men");
+    }
+
+    return "";
+}
 
 bool icqface::sprofmanager(string &name, string &act) {
     dialogbox db;
@@ -191,8 +224,8 @@ bool icqface::finddialog(imsearchparams &s) {
 		    tree.addleaff(i, 0, 13, _(" First name : %s "), s.firstname.c_str());
 		    tree.addleaff(i, 0, 14, _(" Last name : %s "), s.lastname.c_str());
 
-		    tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange[s.agerange]);
-		    tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender[s.gender]);
+		    tree.addleaff(i, 0, 15, _(" Age range : %s "), stragerange(s.agerange));
+		    tree.addleaff(i, 0, 17, _(" Gender : %s "), strgender(s.gender));
 		    tree.addleaff(i, 0, 18, _(" Language : %s "),
 			ICQ2000::UserInfoHelpers::getLanguageIDtoString(s.language).c_str());
 
@@ -208,12 +241,12 @@ bool icqface::finddialog(imsearchparams &s) {
 		    tree.addleaff(i, 0, 24, _(" Position : %s "), s.position.c_str());
 
 		    i = tree.addnode(_(" Online only "));
-		    tree.addleaff(i, 0, 25, " %s ", stryesno[s.onlineonly]);
+		    tree.addleaff(i, 0, 25, " %s ", stryesno(s.onlineonly));
 		}
 
 		if(!s.uin && s.kwords.empty()) {
 		    i = tree.addnode(_(" Random chat group "));
-		    tree.addleaff(i, 0, 28, " %s ", strrandomgroup[s.randomgroup]);
+		    tree.addleaff(i, 0, 28, " %s ", strrandomgroup(s.randomgroup));
 		} 
 
 		if(!s.uin && !s.randomgroup) {
@@ -242,13 +275,13 @@ bool icqface::finddialog(imsearchparams &s) {
 
 	    if(!s.room.empty()) {
 		i = tree.addnode(_(" Joined since the last check only "));
-		tree.addleaff(i, 0, 16, " %s ", stryesno[s.sincelast]);
+		tree.addleaff(i, 0, 16, " %s ", stryesno(s.sincelast));
 	    }
 	}
 
 	if(s.pname == msn && s.nick.empty()) {
 	    i = tree.addnode(_(" Show users who have you on their list "));
-	    tree.addleaff(i, 0, 30, " %s ", stryesno[s.reverse]);
+	    tree.addleaff(i, 0, 30, " %s ", stryesno(s.reverse));
 	}
 
 	finished = !db.open(n, b, (void **) &i);
@@ -358,7 +391,7 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 11, _(" First name : %s "), bi.fname.c_str());
 	tree->addleaff(i, 0, 12, _(" Last name : %s "), bi.lname.c_str());
 	tree->addleaff(i, 0, 13, _(" E-mail : %s "), bi.email.c_str());
-	tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender[mi.gender]);
+	tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender(mi.gender));
 	tree->addleaff(i, 0, 15, _(" Birthdate : %s "), mi.strbirthdate().c_str());
 	tree->addleaff(i, 0, 16, _(" Age : %s "), strint(mi.age));
 
@@ -404,11 +437,11 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	i = tree->addnode(_(" Miscellaneous "));
 
 	if(ourdetails) {
-	    tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno[bi.webaware]);
-	    tree->addleaff(i, 0, 42, _(" Random chat group : %s "), strrandomgroup[bi.randomgroup]);
-	    tree->addleaff(i, 0, 45, _(" Store contact list server-side : %s "), stryesno[bi.autosync]);
+	    tree->addleaff(i, 0, 43, _(" Enable web status indicator : %s "), stryesno(bi.webaware));
+	    tree->addleaff(i, 0, 42, _(" Random chat group : %s "), strrandomgroup(bi.randomgroup));
+	    tree->addleaff(i, 0, 45, _(" Store contact list server-side : %s "), stryesno(bi.autosync));
 	} else {
-	    tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno[bi.requiresauth]);
+	    tree->addleaff(i, 0, 44, _(" Authorization required : %s "), stryesno(bi.requiresauth));
 	}
     }
 
@@ -620,7 +653,7 @@ void icqface::selectrandomgroup(unsigned short &f) {
     m.additemf(" %s", _("none"));
 
     for(i = 1; i <= ((int) ICQ2000::group_SeekingMen); i++) {
-	m.additemf(" %s", strrandomgroup[i]);
+	m.additemf(" %s", strrandomgroup(i));
     }
 
     m.setpos(f);
@@ -636,7 +669,7 @@ void icqface::selectgender(imgender &f) {
     m.idle = &menuidle;
 
     for(imgender i = genderUnspec; i != imgender_size; (int) i += 1) {
-	m.additemf(0, (int) i, " %s", strgender[i]);
+	m.additemf(0, (int) i, " %s", strgender(i));
 	if(i == f) m.setpos(m.getcount()-1);
     }
 
@@ -652,7 +685,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     m.idle = &menuidle;
 
     for(ICQ2000::AgeRange i = ICQ2000::range_NoRange; i <= ICQ2000::range_60_above; (int) i += 1) {
-	const char *p = stragerange[i];
+	const char *p = stragerange(i);
 
 	if(i == ICQ2000::range_NoRange)
 	    p = _("none");
@@ -824,19 +857,19 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
 
 #ifdef USE_FRIBIDI
-	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno[bidi]);
+	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
 #endif
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
-	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno[hideoffl]);
-	t.addleaff(i, 0,  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno[rus]);
-	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno[antispam]);
-	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno[quote]);
-	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno[mailcheck]);
-	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno[savepwd]);
-	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno[askaway]);
-	t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno[chatmode]);
+	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
+	t.addleaff(i, 0,  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
+	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
+	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno(quote));
+	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
+	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
+	t.addleaff(i, 0,  7, _(" Edit away message on status change : %s "), stryesno(askaway));
+	t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno(chatmode));
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -847,7 +880,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Miscellaneous "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
-	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno[makelog]);
+	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
 /*
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);

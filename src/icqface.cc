@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.138 2002/09/10 07:49:48 konst Exp $
+* $Id: icqface.cc,v 1.139 2002/09/10 16:37:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -31,6 +31,35 @@
 #include "icqgroups.h"
 #include "abstracthook.h"
 #include "imlogger.h"
+
+#include <libicq2000/userinfohelpers.h>
+
+const char *stryesno(bool b) {
+    return b ? _("yes") : _("no");
+}
+
+const char *strgender(imgender g) {
+    return g == genderMale ? _("Male") :
+	genderFemale ? _("Female") :
+	    _("Not specified");
+}
+
+const char *seteventviewresult(icqface::eventviewresult r) {
+    switch(r) {
+	case icqface::ok: return _("Ok");
+	case icqface::next: return _("Next");
+	case icqface::forward: return _("Fwd");
+	case icqface::reply: return _("Reply");
+	case icqface::open: return _("Open");
+	case icqface::accept: return _("Accept");
+	case icqface::reject: return _("Reject");
+	case icqface::info: return _("User info");
+	case icqface::add: return _("Add");
+	case icqface::prev: return _("Prev");
+    }
+
+    return "";
+}
 
 const char *strregsound(icqconf::regsound s) {
     return s == icqconf::rscard ? _("sound card") :
@@ -787,7 +816,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.email);
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), strgender[mi.gender]);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), strgender(mi.gender));
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
 
@@ -1658,7 +1687,7 @@ bool icqface::eventedit(imevent &ev) {
     workarealine(sizeWArea.y1+2);
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	_("Outgoing %s to %s"), eventnames[ev.gettype()], ev.getcontact().totext().c_str());
+	_("Outgoing %s to %s"), streventname(ev.gettype()), ev.getcontact().totext().c_str());
 
     status(_("Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"));
 
@@ -1997,7 +2026,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     bar->item = actions.size()-1;
 
     for(ia = actions.begin(); ia != actions.end(); ++ia) {
-	bar->items.push_back(eventviewresultnames[*ia]);
+	bar->items.push_back(seteventviewresult(*ia));
     }
 
     switch(ev->getdirection()) {
@@ -2012,7 +2041,7 @@ icqface::eventviewresult icqface::eventview(const imevent *ev, vector<eventviewr
     }
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
-	title_event.c_str(), eventnames[ev->gettype()], ev->getcontact().totext().c_str());
+	title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
 
     mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
 	title_timestamp.c_str(), strdateandtime(ev->gettimestamp()).c_str());

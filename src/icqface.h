@@ -14,9 +14,6 @@
 #include "icqmlist.h"
 #include "imcontroller.h"
 
-#include <libicq2000/userinfohelpers.h>
-#include <libicq2000/constants.h>
-
 #define ASK_YES         2
 #define ASK_NO          4
 #define ASK_CANCEL      8
@@ -228,47 +225,8 @@ const char *strregsound(icqconf::regsound s);
 const char *strregcolor(icqconf::regcolor c);
 const char *strint(unsigned int i);
 const char *strgroupmode(icqconf::groupmode gmode);
-
-static const char *stryesno[true+1] = {
-    _("no"), _("yes")
-};
-
-static const char *strgender[imgender_size] = {
-    _("Not specified"),
-    _("Male"),
-    _("Female")
-};
-
-static const char *stragerange[ICQ2000::range_60_above+1] = {
-  "",
-  "18-22",
-  "23-29",
-  "30-39",
-  "40-49",
-  "50-59",
-  _("60-above")
-};
-
-static const char *strrandomgroup[ICQ2000::group_SeekingMen+2] = {
-    "",
-    _("General Chat"),
-    _("Romance"),
-    _("Games"),
-    _("Students"),
-    _("20 Something"),
-    _("30 Something"),
-    _("40 Something"),
-    _("50 Plus"),
-    _("Seeking Women"),
-    _("Seeking Men")
-};
-
-static const char *eventviewresultnames[icqface::eventviewresult_size] = {
-    _("Ok"), _("Next"), "",
-    _("Fwd"), _("Reply"),
-    _("Open"), _("Accept"),
-    _("Reject"), _("User info"),
-    _("Add"), _("Prev")
-};
+const char *stryesno(bool b);
+const char *strgender(imgender g);
+const char *seteventviewresult(icqface::eventviewresult r);
 
 #endif

@@ -3,6 +3,34 @@
 #include "icqcontacts.h"
 #include "icqmlist.h"
 
+static const char* imstatus2name(imstatus st) {
+    switch(st) {
+	case offline: return _("Offline");
+	case available: return _("Online");
+	case invisible: return _("Invisible");
+	case freeforchat: return _("Free for chat");
+	case dontdisturb: return _("DND");
+	case occupied: return _("Occupied");
+	case notavail: return _("N/A");
+	case away: return _("Away");
+    }
+
+    return "";
+};
+
+const char *streventname(imevent::imeventtype type) {
+    switch(type) {
+	case imevent::message: return _("message");
+	case imevent::url: return _("URL");
+	case imevent::sms: return _("SMS");
+	case imevent::authorization: return _("authorization");
+	case imevent::email: return _("e-mail");
+	case imevent::notification: return _("notification");
+	case imevent::contacts: return _("contacts");
+    }
+    return "";
+};
+
 imlogger logger;
 
 imlogger::imlogger() {
@@ -59,7 +87,7 @@ void imlogger::putevent(const imevent &ev) {
 	    name += " (" + c->getdispnick() + ")";
 	}
 
-	sprintf(buf, fmt, eventnames[ev.gettype()], name.c_str());
+	sprintf(buf, fmt, streventname(ev.gettype()), name.c_str());
 	text = buf;
 
 	if(lst.inlist(ev.getcontact(), csignore)) {
@@ -90,7 +118,7 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 		name += " (" + c->getdispnick() + ")";
 	    }
 
-	    sprintf(buf, fmt, name.c_str(), imstatus2name[st], imstatus2name[oldst]);
+	    sprintf(buf, fmt, name.c_str(), imstatus2name(st), imstatus2name(oldst));
 	    putmessage(buf);
 	}
     }
@@ -110,7 +138,7 @@ const imstatus &st) {
 		fmt = _("changed our %s status to %s from %s");
 	    }
 
-	    sprintf(buf, fmt, conf.getprotocolname(pname).c_str(), imstatus2name[st], imstatus2name[oldst]);
+	    sprintf(buf, fmt, conf.getprotocolname(pname).c_str(), imstatus2name(st), imstatus2name(oldst));
 	    putmessage(buf);
 	}
     }
