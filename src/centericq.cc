@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.57 2001/12/08 22:59:19 konst Exp $
+* $Id: centericq.cc,v 1.58 2001/12/08 23:14:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -216,6 +216,7 @@ void centericq::mainloop() {
 		break;
 
 	    case ACT_EDITUSER:
+		c->save();
 		if(face.updatedetails(c)) {
 		    c->setdispnick(c->getnick());
 		    c->save();
@@ -230,10 +231,12 @@ void centericq::mainloop() {
 		    addcontact(c->getdesc());
 		}
 		break;
+
 	    case ACT_INFO:
 		if(c->getdesc() != contactroot)
 		    userinfo(c->getdesc());
 		break;
+
 	    case ACT_REMOVE:
 		sprintf(buf, _("Are you sure want to remove %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
@@ -241,6 +244,7 @@ void centericq::mainloop() {
 		    face.update();
 		}
 		break;
+
 	    case ACT_RENAME:
 		text = face.inputstr(_("New nickname to show: "), c->getdispnick());
 		if(text.size()) {
