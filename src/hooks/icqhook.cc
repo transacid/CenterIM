@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.41 2002/01/21 14:24:49 konst Exp $
+* $Id: icqhook.cc,v 1.42 2002/01/21 17:25:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -817,13 +817,17 @@ void icqhook::contactlist_cb(ContactListEvent *ev) {
 		    int k = ii->first-Interests_offset;
 
 		    if(k >= 0 && k < Interests_table_size) {
-			sbuf = (string) Interests_table[k] + ": ";
+			sbuf = (string) Interests_table[k];
 		    } else {
 			sbuf = "";
 		    }
 
-		    sbuf += rusconv("wk", ii->second);
-		    pintinfo.push_back(sbuf);
+		    if(!ii->second.empty()) {
+			if(!sbuf.empty()) sbuf += ": ";
+			sbuf += rusconv("wk", ii->second);
+		    }
+
+		    if(!sbuf.empty()) pintinfo.push_back(sbuf);
 		}
 
 		/* education background */

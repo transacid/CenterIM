@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.67 2002/01/21 14:24:48 konst Exp $
+* $Id: icqface.cc,v 1.68 2002/01/21 17:25:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -717,8 +717,6 @@ void icqface::infointerests(dialogbox &db, icqcontact *c) {
 
 	for(i = data.begin(); i != data.end(); i++)
 	    text += " + " + *i + "\n";
-
-	text += "\n";
     }
 
     commaform(text);
@@ -1317,7 +1315,7 @@ void icqface::quickfind(verticalmenu *multi = 0) {
 		    bool fpass = true;
 
 		    for(; !fin; i++) {
-			if(i >= cm->getcount()) {
+			if(i > cm->getcount()) {
 			    if(fpass) {
 				i = 0;
 				fpass = false;
