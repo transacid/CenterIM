@@ -1,7 +1,7 @@
 /*
 *
 * centericq livejournal protocol handling class (sick)
-* $Id: ljhook.cc,v 1.23 2004/01/30 00:02:18 konst Exp $
+* $Id: ljhook.cc,v 1.24 2004/02/01 17:52:10 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -34,9 +34,6 @@
 #include <sys/utsname.h>
 
 ljhook lhook;
-
-#define KOI2UTF(x) siconv(x, conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset(), "utf-8")
-#define UTF2KOI(x) siconv(x, "utf-8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset())
 
 #define PERIOD_FRIENDS  3600
 
@@ -246,7 +243,7 @@ bool ljhook::send(const imevent &asev) {
 	    ev->addParam("mode", "postevent");
 	    ev->addParam("user", username);
 	    ev->addParam("hpassword", md5pass);
-	    ev->addParam("event", KOI2UTF(m->gettext()));
+	    ev->addParam("event", rusconv("ku", m->gettext()));
 	    ev->addParam("ver", "1");
 
 	    time_t t = m->gettimestamp();
@@ -263,9 +260,9 @@ bool ljhook::send(const imevent &asev) {
 	    ev->addParam("allowmask", "0");
 
 	    if(!m->field_empty("journal")) ev->addParam("usejournal", m->getfield("journal"));
-	    if(!m->field_empty("subject")) ev->addParam("subject", KOI2UTF(m->getfield("subject")));
-	    if(!m->field_empty("mood")) ev->addParam("prop_current_mood", KOI2UTF(m->getfield("mood")));
-	    if(!m->field_empty("music")) ev->addParam("prop_current_music", KOI2UTF(m->getfield("music")));
+	    if(!m->field_empty("subject")) ev->addParam("subject", rusconv("ku", m->getfield("subject")));
+	    if(!m->field_empty("mood")) ev->addParam("prop_current_mood", rusconv("ku", m->getfield("mood")));
+	    if(!m->field_empty("music")) ev->addParam("prop_current_music", rusconv("ku", m->getfield("music")));
 	    if(!m->field_empty("picture")) ev->addParam("prop_picture_keyword", m->getfield("picture"));
 
 	    if(!m->field_empty("preformatted")) ev->addParam("prop_opt_preformatted", "1");
@@ -291,7 +288,7 @@ bool ljhook::send(const imevent &asev) {
 	    ev->addParam("password", acc.password);
 	    ev->addParam("do_login", "0");
 	    ev->addParam("subject", "");
-	    ev->addParam("body", KOI2UTF(sev->gettext()));
+	    ev->addParam("body", rusconv("ku", sev->gettext()));
 	    ev->addParam("subjecticon", "none");
 	    ev->addParam("prop_opt_preformatted", "1");
 	    ev->addParam("submitpost", "1");
@@ -588,7 +585,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
 	    for(i = 1; i <= count; i++) {
 		username = params[(string) "friend_" + i2str(i) + "_user"];
-		name = UTF2KOI(params[(string) "friend_" + i2str(i) + "_name"]);
+		name = rusconv("uk", params[(string) "friend_" + i2str(i) + "_name"]);
 		birthday = params[(string) "friend_" + i2str(i) + "_birthday"];
 
 		bool found = false;
@@ -648,7 +645,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
 	    for(i = 1; i <= count; i++) {
 		username = params[(string) "friendof_" + i2str(i) + "_user"];
-		name = UTF2KOI(params[(string) "friendof_" + i2str(i) + "_name"]);
+		name = rusconv("uk", params[(string) "friendof_" + i2str(i) + "_name"]);
 		nfriendof[username] = name;
 	    }
 

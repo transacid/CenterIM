@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.135 2004/01/27 00:14:34 konst Exp $
+* $Id: icqdialogs.cc,v 1.136 2004/02/01 17:52:09 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1062,6 +1062,19 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
     return flist.count;
 }
 
+void icqface::multichange(bool conv[], bool newstate) {
+    protocolname pname;
+
+    for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	if((!conf.getourid(pname).empty() || pname == rss) && conv[pname]) break;
+
+    if(pname == protocolname_size || !newstate) {
+	for(pname = icq; pname != protocolname_size; (int) pname += 1)
+	    if(!conf.getourid(pname).empty() || pname == rss)
+		conv[pname] = newstate;
+    }
+}
+
 bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool finished, success, hasany;
     int nopt, n, i, b, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
@@ -1098,17 +1111,24 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	    httpproxy += ":" + i2str(conf.gethttpproxyport());
     }
 
-    string defcharset = conf.getdefcharset();
+    vector<string> convlanguages;
+    convlanguages.push_back(_("None"));
+    convlanguages.push_back(_("Russian"));
+    convlanguages.push_back(_("Polish"));
+    vector<string>::const_iterator iconvlang = convlanguages.begin();
+
+    string convertfrom = conf.getconvertfrom();
+    string convertto = conf.getconvertto();
 
     icqconf::groupmode gmode = conf.getgroupmode();
 
-    bool chatmode[protocolname_size], rus[protocolname_size],
+    bool chatmode[protocolname_size], conv[protocolname_size],
 	entersends[protocolname_size];
 
     for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = conf.getchatmode(pname);
 	entersends[pname] = conf.getentersends(pname);
-	rus[pname] = conf.getrussian(pname);
+	conv[pname] = conf.getcpconvert(pname);
     }
 
     for(hasany = false, pname = icq; pname != protocolname_size && !hasany; (int) pname += 1)
@@ -1152,6 +1172,18 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     #endif
 	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
 
+	i = t.addnode(_(" Codepages conversion "));
+
+	for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
+	if(conv[pname])
+	if(!conf.getourid(pname).empty() || pname == rss)
+	    tmp += conf.getprotocolname(pname) + " ";
+
+	t.addleaff(i, 0, 26, _(" Switch to language preset : %s "), iconvlang->c_str());
+	t.addleaff(i, 0, 27, _(" Convert from : %s "), convertfrom.c_str());
+	t.addleaff(i, 0, 28, _(" Convert to : %s "), convertto.c_str());
+	t.addleaff(i, 0,  3, _(" For protocols : %s "), tmp.c_str());
+
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
 	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
@@ -1174,21 +1206,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	    t.addleaff(i, 0, 25, _(" Enter key sends message for : %s"), tmp.c_str());
 
-	    for(tmp = "", pname = icq; pname != protocolname_size; (int) pname += 1)
-		if(rus[pname])
-		if(!conf.getourid(pname).empty() || pname == rss)
-		    tmp += conf.getprotocolname(pname) + " ";
-
-	    t.addleaff(i, 0,  3, _(" Russian win/koi translation for : %s"), tmp.c_str());
-
 	} else {
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode : %s "), stryesno(chatmode[icq]));
 	    t.addleaff(i, 0, 25, _(" Enter key sends message : %s "), stryesno(entersends[icq]));
-	    t.addleaff(i, 0,  3, _(" Russian win/koi translation : %s "), stryesno(rus[icq]));
 
 	}
-
-	t.addleaff(i, 0, 11, _(" Default charset : %s "), defcharset.c_str());
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -1227,9 +1249,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 				icqconf::rcdontchange;
 			break;
 		    case 3:
-			if(hasany) selectproto(rus, true); else
+			if(hasany) selectproto(conv, true); else
 			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
-				rus[pname] = !rus[pname];
+				conv[pname] = !conv[pname];
 			break;
 		    case 4:
 			tmp = inputstr(_("Auto Away period (0 - disable): "), i2str(aaway));
@@ -1244,10 +1266,6 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 8: quote = !quote; break;
 		    case 9: logtimestamps = !logtimestamps; break;
 		    case 10: logonline = !logonline; break;
-		    case 11:
-			tmp = inputstr(_("Default charset: "), defcharset);
-			if(!tmp.empty()) defcharset = tmp;
-			break;
 		    case 13: savepwd = !savepwd; break;
 		    case 14: antispam = !antispam; break;
 		    case 15: mailcheck = !mailcheck; break;
@@ -1296,6 +1314,40 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			    for(pname = icq; pname != protocolname_size; (int) pname += 1)
 				entersends[pname] = !entersends[pname];
 			break;
+		    case 26:
+			iconvlang++;
+			if(iconvlang == convlanguages.end())
+			    iconvlang = convlanguages.begin();
+
+			switch(iconvlang-convlanguages.begin()) {
+			    case 0:
+				convertto = convertfrom = "";
+				// multichange(conv, false);
+				break;
+
+			    case 1:
+				convertfrom = "cp1251";
+				convertto = "koi8-r";
+				multichange(conv, true);
+				break;
+
+			    case 2:
+				convertfrom = "cp1250";
+				convertto = "iso-8859-2";
+				multichange(conv, true);
+				break;
+			}
+			break;
+		    case 27:
+			convertfrom = inputstr(_("Charset to convert messages from: "), convertfrom);
+			if(input.getlastkey() == '\r')
+			    iconvlang = convlanguages.begin();
+			break;
+		    case 28:
+			convertto = inputstr(_("Charset to convert messages to: "), convertto);
+			if(input.getlastkey() == '\r')
+			    iconvlang = convlanguages.begin();
+			break;
 		}
 		break;
 	    case 1:
@@ -1309,12 +1361,12 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmailcheck(mailcheck);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
-		conf.setdefcharset(defcharset);
+		conf.setcharsets(convertfrom, convertto);
 
 		for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 		    conf.setchatmode(pname, chatmode[pname]);
 		    conf.setentersends(pname, entersends[pname]);
-		    conf.setrussian(pname, rus[pname]);
+		    conf.setcpconvert(pname, conv[pname] && (!convertfrom.empty() || !convertto.empty()));
 		}
 
 		conf.setbidi(bidi);

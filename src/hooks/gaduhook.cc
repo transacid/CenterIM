@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.1 2004/01/27 00:47:18 konst Exp $
+* $Id: gaduhook.cc,v 1.2 2004/02/01 17:52:09 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -29,6 +29,7 @@
 #include "eventmanager.h"
 #include "gaduhook.h"
 #include "icqface.h"
+#include "imlogger.h"
 
 #include "libgadu.h"
 
@@ -133,6 +134,7 @@ void gaduhook::cutoff() {
 void gaduhook::disconnect() {
     cutoff();
     log(logDisconnected);
+    logger.putourstatus(proto, getstatus(), offline);
 }
 
 void gaduhook::exectimers() {
@@ -145,6 +147,7 @@ void gaduhook::main() {
 
     struct gg_event *e;
     struct gg_notify_reply *nr;
+    string text;
 
     e = gg_watch_fd(sess);
 
@@ -167,9 +170,11 @@ void gaduhook::main() {
 		break;
 
 	    case GG_EVENT_MSG:
-		if(e->event.msg.sender && e->event.msg.message)
+		if(e->event.msg.sender && e->event.msg.message) {
+		    text = rusconv("wk", (const char *) e->event.msg.message);
 		    em.store(immessage(imcontact(e->event.msg.sender, gadu),
-			imevent::incoming, (const char *) e->event.msg.message));
+			imevent::incoming, text));
+		}
 		break;
 
 	    case GG_EVENT_NOTIFY:
@@ -307,8 +312,12 @@ void gaduhook::setautostatus(imstatus st) {
 	if(getstatus() != offline) disconnect();
 
     } else {
-	if(getstatus() != offline) gg_change_status(sess, imstatus2gg(st));
-	    else connect();
+	if(getstatus() != offline) {
+	    gg_change_status(sess, imstatus2gg(st));
+	    logger.putourstatus(proto, getstatus(), st);
+	} else {
+	    connect();
+	}
 
     }
 }

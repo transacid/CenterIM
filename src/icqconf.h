@@ -86,12 +86,13 @@ class icqconf {
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs;
 
-	bool chatmode[protocolname_size], russian[protocolname_size],
-	    entersends[protocolname_size];
+	bool chatmode[protocolname_size];
+	bool cpconvert[protocolname_size];
+	bool entersends[protocolname_size];
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
 	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
-	    defcharset;
+	    fromcharset, tocharset;
 
 	map<string, string> actions;
 
@@ -157,8 +158,8 @@ class icqconf {
 	bool getmakelog() const { return makelog; }
 	void setmakelog(bool slog);
 
-	bool getrussian(protocolname pname);
-	void setrussian(protocolname pname, bool frussian);
+	bool getcpconvert(protocolname pname) const;
+	void setcpconvert(protocolname pname, bool fcpconvert);
 
 	bool getbidi() const { return bidi; }
 	void setbidi(bool fbidi);
@@ -227,8 +228,10 @@ class icqconf {
 	void setlogoptions(bool flogtimestamps, bool flogonline)
 	    { logtimestamps = flogtimestamps, logonline = flogonline; }
 
-	const char *getdefcharset() const { return defcharset.c_str(); }
-	void setdefcharset(const string &adefcharset) { defcharset = adefcharset; }
+	void setcharsets(const string &from, const string &to);
+
+	const char *getconvertfrom(protocolname pname = protocolname_size) const;
+	const char *getconvertto(protocolname pname = protocolname_size) const;
 };
 
 extern icqconf conf;

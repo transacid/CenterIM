@@ -160,6 +160,7 @@ class icqface {
 
 	void invokelist(string &s, vector<string> &v, const string &def, textwindow *w);
 	bool setljparams(imxmlevent *ev);
+	void multichange(bool conv[], bool newstate);
 
     public:
 	int extk;

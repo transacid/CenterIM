@@ -1,7 +1,7 @@
 /*
 *
 * centericq IM protocol abstraction class
-* $Id: abstracthook.cc,v 1.50 2004/01/27 00:14:34 konst Exp $
+* $Id: abstracthook.cc,v 1.51 2004/02/01 17:52:09 konst Exp $
 *
 * Copyright (C) 2001,2002,2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -177,7 +177,7 @@ string abstracthook::rushtmlconv(const string &tdir, const string &text, bool ru
     int pos;
     string r = rus ? rusconv(tdir, text) : text;
 
-    if(tdir == "kw") {
+    if(tdir == "kw" || tdir == "ku") {
 	pos = 0;
 	while((pos = r.find_first_of("&<>", pos)) != -1) {
 	    switch(r[pos]) {
@@ -192,7 +192,7 @@ string abstracthook::rushtmlconv(const string &tdir, const string &text, bool ru
 	    pos++;
 	}
 
-    } else if(tdir == "wk") {
+    } else if(tdir == "wk" || tdir == "uk") {
 	pos = 0;
 	while((pos = r.find("&", pos)) != -1) {
 	    if(r.substr(pos+1, 4) == "amp;") r.replace(pos, 5, "&"); else
@@ -229,9 +229,6 @@ string abstracthook::ruscrlfconv(const string &tdir, const string &text) {
 }
 
 string abstracthook::rusconv(const string &tdir, const string &text) {
-    if(!conf.getrussian(proto))
-	return text;
-
     string r;
 
     static unsigned char kw[] = {
@@ -261,8 +258,10 @@ string abstracthook::rusconv(const string &tdir, const string &text) {
     unsigned char *table = 0;
 
 #ifdef HAVE_ICONV
-    if(tdir == "kw") r = siconv(text, "koi8-u", "cp1251"); else
-    if(tdir == "wk") r = siconv(text, "cp1251", "koi8-u"); else
+    if(tdir == "kw") r = siconv(text, conf.getconvertto(proto), conf.getconvertfrom(proto)); else
+    if(tdir == "wk") r = siconv(text, conf.getconvertfrom(proto), conf.getconvertto(proto)); else
+    if(tdir == "ku") r = siconv(text, conf.getconvertto(proto), "utf-8"); else
+    if(tdir == "uk") r = siconv(text, "utf-8", conf.getconvertto(proto)); else
 #endif
 	r = text;
 

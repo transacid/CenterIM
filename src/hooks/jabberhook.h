@@ -76,6 +76,12 @@ class jabberhook: public abstracthook {
 	static string getourjid();
 	string jidnormalize(const string &jid) const;
 
+	void vcput(xmlnode x, const string &name, const string &val);
+	void vcputphone(xmlnode x, const string &type, const string &place, const string &number);
+	void vcputaddr(xmlnode x, const string &place, const string &street,
+	    const string &locality, const string &region, const string &pcode,
+	    unsigned short country);
+
     public:
 	jabberhook();
 	~jabberhook();

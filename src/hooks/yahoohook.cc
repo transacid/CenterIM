@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.103 2004/01/27 00:43:30 konst Exp $
+* $Id: yahoohook.cc,v 1.104 2004/02/01 17:52:10 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -526,11 +526,7 @@ YList *yahoohook::getmembers(const string &room) {
 string yahoohook::decode(string text, bool utf) {
     int npos, mpos;
 
-    if(utf) {
-	text = siconv(text, "utf-8", conf.getrussian(proto) ? "koi8-u" : conf.getdefcharset());
-    } else {
-	text = rushtmlconv("wk", text);
-    }
+    text = rushtmlconv(utf ? "uk" : "wk", text);
 
     while((npos = text.find("\e[")) != -1) {
 	if((mpos = text.substr(npos).find("m")) == -1)

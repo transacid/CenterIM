@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.180 2004/01/27 00:14:34 konst Exp $
+* $Id: centericq.cc,v 1.181 2004/02/01 17:52:09 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -69,9 +69,11 @@ void centericq::exec() {
 	char *p = getenv("LANG");
 
 	if(p)
-	if(rus = (((string) p).substr(0, 2) == "ru"))
+	if(rus = (((string) p).substr(0, 2) == "ru")) {
+	    conf.setcharsets("cp1251", "koi8-r");
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
-		conf.setrussian(pname, true);
+		conf.setcpconvert(pname, true);
+	}
 
 	if(updateconf()) {
 	    manager.exec();

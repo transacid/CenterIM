@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.123 2004/01/27 00:14:34 konst Exp $
+* $Id: icqconf.cc,v 1.124 2004/02/01 17:52:09 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -54,7 +54,7 @@ icqconf::icqconf() {
 
     for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1) {
 	chatmode[pname] = true;
-	russian[pname] = false;
+	cpconvert[pname] = false;
 	entersends[pname] = false;
     }
 
@@ -207,7 +207,6 @@ void icqconf::loadmainconfig() {
 	savepwd = bidi = true;
 	setsmtphost("");
 	setpeertopeer(0, 65535);
-	defcharset = "ISO-8859-1";
 
 	while(!f.eof()) {
 	    getstring(f, buf);
@@ -231,12 +230,13 @@ void icqconf::loadmainconfig() {
 	    if(param == "log") makelog = true; else
 	    if(param == "chatmode") initmultiproto(chatmode, buf); else
 	    if(param == "entersends") initmultiproto(entersends, buf); else
-	    if(param == "russian") initmultiproto(russian, buf); else
+	    if(param == "russian" || param == "convert") initmultiproto(cpconvert, buf); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
 	    if(param == "logtimestamps") logtimestamps = true; else
-	    if(param == "defcharset") setdefcharset(buf); else
 	    if(param == "logonline") logonline = true; else
+	    if(param == "fromcharset") fromcharset = buf; else
+	    if(param == "tocharset") tocharset = buf; else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
 		ptpmax = atoi(buf.c_str());
@@ -249,6 +249,14 @@ void icqconf::loadmainconfig() {
 			setourid(im);
 		    }
 		}
+	    }
+	}
+
+	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
+	    if(getcpconvert(pname)) {
+		fromcharset = "cp1251";
+		tocharset = "koi8-r";
+		break;
 	    }
 	}
 
@@ -282,7 +290,6 @@ void icqconf::save() {
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
-	    f << "defcharset\t" << getdefcharset() << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
@@ -298,9 +305,9 @@ void icqconf::save() {
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; (int) pname += 1)
-		if(getrussian(pname)) param += (string) " " + conf.getprotocolname(pname);
+		if(getcpconvert(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
-		f << "russian" << param << endl;
+		f << "convert" << param << endl;
 
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
@@ -348,8 +355,8 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_main_selected, "main_selected   black/white");
 	    schemer.push(cp_main_highlight, "main_highlight yellow/transparent  bold");
 	    schemer.push(cp_main_frame, "main_frame blue/transparent    bold");
-	    schemer.push(cp_main_history_incoming, "main_history_incoming  cyan/transparent");
-	    schemer.push(cp_main_history_outgoing, "main_history_outgoing  yellow/transparent  bold");
+	    schemer.push(cp_main_history_incoming, "main_history_incoming  yellow/transparent    bold");
+	    schemer.push(cp_main_history_outgoing, "main_history_outgoing  cyan/transparent");
 	    schemer.push(cp_clist_icq, "clist_icq   green/transparent");
 	    schemer.push(cp_clist_yahoo, "clist_yahoo   magenta/transparent");
 	    schemer.push(cp_clist_infocard, "clist_infocard white/transparent");
@@ -686,12 +693,12 @@ void icqconf::setentersends(protocolname pname, bool fentersends) {
     entersends[pname] = fentersends;
 }
 
-bool icqconf::getrussian(protocolname pname) {
-    return russian[pname];
+bool icqconf::getcpconvert(protocolname pname) const {
+    return cpconvert[pname];
 }
 
-void icqconf::setrussian(protocolname pname, bool frussian) {
-    russian[pname] = frussian;
+void icqconf::setcpconvert(protocolname pname, bool fcpconvert) {
+    cpconvert[pname] = fcpconvert;
 }
 
 string icqconf::execaction(const string &name, const string &param) {
@@ -1172,6 +1179,21 @@ void icqconf::checkdiskspace() {
 #endif
 	fenoughdiskspace = ((double) st.f_bavail) * st.f_bsize >= 10240;
     }
+}
+
+void icqconf::setcharsets(const string &from, const string &to) {
+    fromcharset = from;
+    tocharset = to;
+}
+
+const char *icqconf::getconvertfrom(protocolname pname) const {
+    if(pname != protocolname_size && !getcpconvert(pname)) return "iso-8859-1";
+    return fromcharset.c_str();
+}
+
+const char *icqconf::getconvertto(protocolname pname) const {
+    if(pname != protocolname_size && !getcpconvert(pname)) return "iso-8859-1";
+    return tocharset.c_str();
 }
 
 // ----------------------------------------------------------------------------
