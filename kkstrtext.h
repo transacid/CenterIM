@@ -19,6 +19,10 @@
 #include <iconv.h>
 #endif
 
+//
+// Gives out a number with the both limits _included_
+//
+
 #define randlimit(l, h) ((int)((float)rand()/(float)RAND_MAX*(float)(h+1-l)+(float)l))
 
 #define SWAPVAL(v1, v2) { \
