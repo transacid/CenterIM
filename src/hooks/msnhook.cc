@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.81 2004/06/21 13:04:10 konst Exp $
+* $Id: msnhook.cc,v 1.82 2004/06/24 08:30:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -86,15 +86,18 @@ static MSN::BuddyStatus stat2buddy(imstatus st) {
 
 // ----------------------------------------------------------------------------
 
-msnhook::msnhook(): abstracthook(msn), conn(0) {
+msnhook::msnhook(): abstracthook(msn), conn() {
     ourstatus = offline;
     fonline = false;
+    destroying = false;
 
     fcapabs.insert(hookcapab::changedetails);
     fcapabs.insert(hookcapab::directadd);
 }
 
 msnhook::~msnhook() {
+    destroying = true;
+    conn.disconnect();
 }
 
 void msnhook::init() {
@@ -118,25 +121,21 @@ void msnhook::connect() {
     readinfo = flogged = false;
     fonline = true;
 
-    if(conn) delete conn;
-
     try {
-	conn = new MSN::NotificationServerConnection(nicknormalize(account.nickname), account.password);
-	conn->connect(account.server, account.port);
+	conn.connect(account.server, account.port, nicknormalize(account.nickname), account.password);
     } catch(...) {
     }
 }
 
 void msnhook::disconnect() {
-    delete conn;
-    conn = 0;
+    conn.disconnect();
 }
 
 void msnhook::exectimers() {
     if(logged()) {
 	if(timer_current-timer_ping > PERIOD_PING) {
 	    try {
-		conn->sendPing();
+		conn.sendPing();
 		timer_ping = timer_current;
 	    } catch(...) {
 	    }
@@ -158,14 +157,14 @@ void msnhook::main() {
 	if(select(hsock+1, &rs, &ws, &es, &tv) > 0) {
 	    for(i = rfds.begin(); i != rfds.end(); ++i)
 		if(FD_ISSET(*i, &rs)) {
-		    c = conn->connectionWithSocket(*i);
+		    c = conn.connectionWithSocket(*i);
 		    if(c) c->dataArrivedOnSocket();
 		    return;
 		}
 
 	    for(i = wfds.begin(); i != wfds.end(); ++i)
 		if(FD_ISSET(*i, &ws)) {
-		    c = conn->connectionWithSocket(*i);
+		    c = conn.connectionWithSocket(*i);
 
 		    if(c) {
 			if(!c->isConnected()) {
@@ -266,7 +265,8 @@ bool msnhook::send(const imevent &ev) {
 	string rcpt = nicknormalize(ev.getcontact().nickname);
 
 	try {
-	    conn->sendMessage(rcpt, text);
+	    pair<string, string> *ctx = new pair<string, string>(rcpt, text);
+	    conn.requestSwitchboardConnection(ctx);
 	} catch(...) {
 	}
 
@@ -315,9 +315,9 @@ void msnhook::sendnewuser(const imcontact &ic) {
 
 	try {
 	    if(gid != -1) {
-		conn->addToGroup(nicknormalize(ic.nickname), gid);
+		conn.addToGroup(nicknormalize(ic.nickname), gid);
 	    } else {
-		conn->addGroup(gname);
+		conn.addGroup(gname);
 	    }
 	} catch(...) {
 	}
@@ -333,7 +333,7 @@ void msnhook::setautostatus(imstatus st) {
 	} else {
 	    logger.putourstatus(msn, ourstatus, st);
 	    try {
-		conn->setState(stat2buddy(ourstatus = st));
+		conn.setState(stat2buddy(ourstatus = st));
 	    } catch(...) {
 	    }
 	}
@@ -362,7 +362,7 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 	    log(logContactRemove, ic.nickname.c_str());
 
 	try {
-	    conn->removeFromGroup(nicknormalize(ic.nickname), ib->gid);
+	    conn.removeFromGroup(nicknormalize(ic.nickname), ib->gid);
 
 	    for(i = 0, found = false; i < clist.count && !found; i++) {
 		icqcontact *c = (icqcontact *) clist.at(i);
@@ -371,7 +371,7 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 	    }
 
 	    if(!found)
-		conn->removeGroup(ib->gid);
+		conn.removeGroup(ib->gid);
 	} catch(...) {
 	}
     }
@@ -438,7 +438,7 @@ vector<icqcontact *> msnhook::getneedsync() {
 
 void msnhook::sendupdateuserinfo(const icqcontact &c) {
     try {
-	conn->setFriendlyName(c.getnick());
+	conn.setFriendlyName(c.getnick());
     } catch(...) {
     }
 }
@@ -516,7 +516,7 @@ void msnhook::updatecontact(icqcontact *c) {
     if(ib != slst["FL"].end() && logged() && conf.getgroupmode() != icqconf::nogroups)
     if(mhook.findgroup(c->getdesc(), gname) != ib->gid) {
 	try {
-	    conn->removeFromList("FL", nick.c_str());
+	    conn.removeFromList("FL", nick.c_str());
 	} catch(...) {
 	}
 
@@ -530,7 +530,7 @@ void msnhook::renamegroup(const string &oldname, const string &newname) {
 	while(im != mgroups.end()) {
 	    if(im->second == oldname) {
 		try {
-		    conn->renameGroup(im->first, newname);
+		    conn.renameGroup(im->first, newname);
 		} catch(...) {
 		}
 
@@ -666,7 +666,7 @@ void MSN::ext::gotNewReverseListEntry(MSN::Connection * conn, MSN::Passport budd
     ::log("MSN::ext::gotNewReverseListEntry");
 
     try {
-	mhook.conn->addToList("AL", buddy);
+	mhook.conn.addToList("AL", buddy);
     } catch(...) {
     }
 
@@ -707,12 +707,22 @@ void MSN::ext::buddyOffline(MSN::Connection * conn, MSN::Passport buddy) {
     mhook.statusupdate(buddy, "", offline);
 }
 
-void MSN::ext::gotSwitchboard(MSN::Connection * conn, void * tag) {
+void MSN::ext::gotSwitchboard(MSN::SwitchboardServerConnection * conn, const void * tag) {
     ::log("MSN::ext::gotSwitchboard");
+    if(tag) {
+	const pair<string, string> *ctx = static_cast<const pair<string, string> *>(tag);
+	conn->inviteUser(ctx->first);
+    }
 }
 
 void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial) {
     ::log("MSN::ext::buddyJoinedConversation");
+    if(conn->auth.tag) {
+	const pair<string, string> *ctx = static_cast<const pair<string, string> *>(conn->auth.tag);
+	conn->sendMessage(ctx->second);
+	delete ctx;
+	conn->auth.tag = 0;
+    }
 }
 
 void MSN::ext::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy) {
@@ -810,7 +820,7 @@ void MSN::ext::gotNewConnection(MSN::Connection * conn) {
 void MSN::ext::closingConnection(MSN::Connection * conn) {
     ::log("MSN::ext::closingConnection");
 
-    if(conn == mhook.conn) {
+    if(conn == &mhook.conn && !mhook.destroying) {
 	mhook.rfds.clear();
 	mhook.wfds.clear();
 

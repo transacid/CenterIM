@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.154 2004/06/19 13:17:57 konst Exp $
+* $Id: icqhook.cc,v 1.155 2004/06/24 08:30:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1084,7 +1084,7 @@ static string fixicqrtf(string msg) {
 	    msg.erase(pos, bpos-pos+1);
 
 	    if(n >= 0 && n <= 15) {
-		msg.insert(pos, (string) " " + emoticons[n]);
+		msg.insert(pos, emoticons[n]);
 	    }
 	}
     }
@@ -1104,7 +1104,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 
 	text = r->getMessage();
 	if(text.substr(0, 6) == "{\\rtf1")
-	    text = striprtf(fixicqrtf(text));
+	    text = fixicqrtf(striprtf(text));
 
 	em.store(immessage(ic, imevent::incoming, rusconv("wk", text), r->getTime()));
 

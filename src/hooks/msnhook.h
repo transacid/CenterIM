@@ -39,7 +39,7 @@ class msnhook : public abstracthook {
     friend void MSN::ext::addedGroup(MSN::Connection * conn, string groupName, int groupID);
     friend void MSN::ext::removedGroup(MSN::Connection * conn, int groupID);
     friend void MSN::ext::renamedGroup(MSN::Connection * conn, int groupID, string newGroupName);
-    friend void MSN::ext::gotSwitchboard(MSN::Connection * conn, void * tag);
+    friend void MSN::ext::gotSwitchboard(MSN::SwitchboardServerConnection * conn, const void * tag);
     friend void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial);
     friend void MSN::ext::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy);
     friend void MSN::ext::gotInstantMessage(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, MSN::Message * msg);
@@ -61,8 +61,8 @@ class msnhook : public abstracthook {
 
     protected:
 	imstatus ourstatus;
-	bool fonline, flogged, readinfo;
-	MSN::NotificationServerConnection *conn;
+	bool fonline, flogged, readinfo, destroying;
+	MSN::NotificationServerConnection conn;
 	time_t timer_ping;
 
 	map<string, vector<msnbuddy> > slst;
