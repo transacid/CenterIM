@@ -3,6 +3,8 @@
  *
  * Some code copyright (C) 2002, Philip S Tellis <philip . tellis AT gmx . net>
  *
+ * Yahoo Search copyright (C) 2003, Konstantin Klyagin <konst@konst.org.ua>
+ *
  * Much of this code was taken and adapted from the yahoo module for
  * gaim released under the GNU GPL.  This code is also released under the 
  * GNU GPL.
@@ -17,7 +19,6 @@
  *                  2001, Valdis Kletnieks
  *                  2002, Sean Egan <bj91704@binghamton.edu>
  *                  2002, Toby Gray <toby.gray@ntlworld.com>
- *                  2003, Konstantin Klyagin <konst@konst.org.ua>
  *
  * This library also uses code from other libraries, namely:
  *     Portions from libfaim copyright 1998, 1999 Adam Fritzler
@@ -109,7 +110,7 @@ int yahoo_log_message(char * fmt, ...)
 	va_start(ap, fmt);
 	vsnprintf(out, sizeof(out), fmt, ap);
 	va_end(ap);
-	return YAHOO_CALLBACK(ext_yahoo_log)(out);
+	return YAHOO_CALLBACK(ext_yahoo_log)("%s", out);
 }
 
 int yahoo_connect(char * host, int port)
@@ -117,7 +118,12 @@ int yahoo_connect(char * host, int port)
 	return YAHOO_CALLBACK(ext_yahoo_connect)(host, port);
 }
 
-enum yahoo_log_level log_level = YAHOO_LOG_NONE;
+static enum yahoo_log_level log_level = YAHOO_LOG_NONE;
+
+enum yahoo_log_level yahoo_get_log_level()
+{
+	return log_level;
+}
 
 int yahoo_set_log_level(enum yahoo_log_level level)
 {
@@ -211,10 +217,23 @@ struct yahoo_packet {
 	YList *hash;
 };
 
+struct yahoo_search_state {
+	int   lsearch_type;
+	char  *lsearch_text;
+	int   lsearch_gender;
+	int   lsearch_agerange;
+	int   lsearch_photo;
+	int   lsearch_yahoo_only;
+	int   lsearch_nstart;
+	int   lsearch_nfound;
+	int   lsearch_ntotal;
+};
+
 struct yahoo_input_data {
 	struct yahoo_data *yd;
 	struct yahoo_webcam *wcm;
 	struct yahoo_webcam_data *wcd;
+	struct yahoo_search_state *ys;
 
 	int   fd;
 	enum yahoo_connection_type type;
@@ -628,7 +647,7 @@ static void yahoo_dump_unhandled(struct yahoo_packet *pkt)
 
 static void yahoo_packet_dump(unsigned char *data, int len)
 {
-	if(log_level >= YAHOO_LOG_DEBUG) {
+	if(yahoo_get_log_level() >= YAHOO_LOG_DEBUG) {
 		int i;
 		for (i = 0; i < len; i++) {
 			if ((i % 8 == 0) && i)
@@ -712,8 +731,11 @@ static int yahoo_send_packet(int fd, struct yahoo_packet *pkt, int extra_pad)
 		ret = write(fd, data, len);
 	} while(ret == -1 && errno==EINTR);
 
-	LOG(("wrote packet"));
-
+	if (ret == -1)  {
+		LOG(("wrote packet: ERR %s", strerror(errno)));
+	} else {
+		LOG(("wrote packet: OK"));
+	}
 	FREE(data);
 
 	return ret;
@@ -746,7 +768,11 @@ static int yahoo_send_data(int fd, char *data, int len)
 		ret = write(fd, data, len);
 	} while(ret == -1 && errno==EINTR);
 
-	LOG(("wrote data"));
+	if (ret == -1)  {
+		LOG(("wrote data: ERR %s", strerror(errno)));
+	} else {
+		LOG(("wrote data: OK"));
+	}
 
 	return ret;
 }
@@ -780,6 +806,10 @@ static void yahoo_input_close(struct yahoo_input_data *yid)
 	yahoo_free_webcam(yid->wcm);
 	if(yid->wcd)
 		FREE(yid->wcd);
+	if(yid->ys) {
+		FREE(yid->ys->lsearch_text);
+		FREE(yid->ys);
+	}
 	FREE(yid);
 }
 
@@ -1090,6 +1120,7 @@ static void yahoo_process_chat(struct yahoo_input_data *yid, struct yahoo_packet
 	int  utf8 = 0;
 	int  firstjoin = 0;
 	int  membercount = 0;
+	int  chaterr=0;
 	YList *l;
 	
 	yahoo_dump_unhandled(pkt);
@@ -1161,9 +1192,23 @@ static void yahoo_process_chat(struct yahoo_input_data *yid, struct yahoo_packet
 			/* Message type */
 			msgtype = atoi(pair->value);
 		}
+		if (pair->key == 114) {
+			/* message error not sure what all the pair values mean */
+			/* but -1 means no session in room */
+			chaterr= atoi(pair->value);
+		}
 	}
 
 	if(!room) {
+		if (pkt->service == YAHOO_SERVICE_CHATLOGOUT) { /* yahoo originated chat logout */
+			YAHOO_CALLBACK(ext_yahoo_chat_yahoologout)(yid->yd->client_id);
+			return ;
+		}
+		if (pkt->service == YAHOO_SERVICE_COMMENT && chaterr)  {
+			YAHOO_CALLBACK(ext_yahoo_chat_yahooerror)(yid->yd->client_id);
+			return ;
+		}
+
 		WARNING(("We didn't get a room name, ignoring packet"));
 		return;
 	}
@@ -1174,7 +1219,7 @@ static void yahoo_process_chat(struct yahoo_input_data *yid, struct yahoo_packet
 			WARNING(("Count of members doesn't match No. of members we got"));
 		}
 		if(firstjoin && members) {
-			YAHOO_CALLBACK(ext_yahoo_chat_join)(yid->yd->client_id, room, topic, members);
+			YAHOO_CALLBACK(ext_yahoo_chat_join)(yid->yd->client_id, room, topic, members, yid->fd);
 		} else if(who) {
 			if(y_list_length(members) != 1) {
 				WARNING(("Got more than 1 member on a normal join"));
@@ -1221,7 +1266,10 @@ static void yahoo_process_message(struct yahoo_input_data *yid, struct yahoo_pac
 	for (l = pkt->hash; l; l = l->next) {
 		struct yahoo_pair *pair = l->data;
 		if (pair->key == 1 || pair->key == 4)
-			message->from = pair->value;
+		{
+			if(!message->from)
+				message->from = pair->value;
+		}
 		else if (pair->key == 5)
 			message->to = pair->value;
 		else if (pair->key == 15)
@@ -1564,11 +1612,7 @@ static void yahoo_process_auth_pre_0x0b(struct yahoo_input_data *yid,
 }
 
 /*
- * New auth protocol cracked by Sean Egan from the Gaim team
- * Dude you Rock!
- *
- * I should say thanks again to gaim without which this library
- * would not have been possible
+ * New auth protocol cracked by Cerulean Studios and sent in to Gaim
  */
 static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *seed, const char *sn)
 {
@@ -1695,7 +1739,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 		/* Bad.  Abort.
 		 */
 		if ((magic_cnt + 1 > magic_len) || 
-		    (magic_cnt > magic_len))
+				(magic_cnt > magic_len))
 			break;
 
 		byte1 = magic[magic_cnt];
@@ -1753,10 +1797,10 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 
 		if (times == 0) {
 			value |= (bl & 0xff) << 8; 
-			value |= (bl & 0xff00) >> 8;           
+			value |= (bl & 0xff00) >> 8;
 		} else { 
 			value |= (bl & 0xff) << 24; 
-			value |= (bl & 0xff00) << 8;           
+			value |= (bl & 0xff00) << 8;
 			break; 
 		} 
 
@@ -1765,7 +1809,8 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 
 	/* Dump magic key into a char for SHA1 action. */
 		
-	memcpy(&magic_key_char[0], &value, sizeof(int));
+	for(x = 0; x < sizeof(int); x++, value>>=8) 
+		magic_key_char[x] = value & 0xff;
 
 	/* Get password and crypt hashes as per usual. */
 	md5_init(&ctx);
@@ -1970,7 +2015,7 @@ static void yahoo_process_auth(struct yahoo_input_data *yid, struct yahoo_packet
 	char *seed = NULL;
 	char *sn   = NULL;
 	YList *l = pkt->hash;
-	int m = 1;
+	int m = 0;
 
 	while (l) {
 		struct yahoo_pair *pair = l->data;
@@ -2499,7 +2544,7 @@ static struct yahoo_packet * yahoo_getdata(struct yahoo_input_data * yid)
 	pkt->service = yahoo_get16(yid->rxqueue + pos); pos += 2;
 	pkt->status = yahoo_get32(yid->rxqueue + pos); pos += 4;
 	DEBUG_MSG(("Yahoo Service: 0x%02x Status: %d", pkt->service,
-		       pkt->status));
+				pkt->status));
 	pkt->id = yahoo_get32(yid->rxqueue + pos); pos += 4;
 
 	yd->session_id = pkt->id;
@@ -2764,7 +2809,7 @@ static int yahoo_get_webcam_data(struct yahoo_input_data *yid)
 		case 0x00:
 			/* user requests to view webcam (uploading) */
 			if (yid->wcd->data_size &&
-			    yid->wcm->direction == YAHOO_WEBCAM_UPLOAD) {
+				yid->wcm->direction == YAHOO_WEBCAM_UPLOAD) {
 				end = begin;
 				while (end <= yid->rxlen &&
 					yid->rxqueue[end++] != 13);
@@ -2867,7 +2912,7 @@ static void yahoo_process_pager_connection(struct yahoo_input_data *yid, int ove
 	int id = yd->client_id;
 
 	if(over)
-	    return;
+		return;
 
 	while (find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER) 
 			&& (pkt = yahoo_getdata(yid)) != NULL) {
@@ -2885,7 +2930,7 @@ static void yahoo_process_ft_connection(struct yahoo_input_data *yid, int over)
 static void yahoo_process_chatcat_connection(struct yahoo_input_data *yid, int over)
 {
 	if(over)
-	    return;
+		return;
 
 	if (strstr((char*)yid->rxqueue+(yid->rxlen-20), "</content>")) {
 		YAHOO_CALLBACK(ext_yahoo_chat_cat_xml)(yid->yd->client_id, (char*)yid->rxqueue);
@@ -2901,7 +2946,7 @@ static void yahoo_process_yab_connection(struct yahoo_input_data *yid, int over)
 	int id = yd->client_id;
 
 	if(over)
-	    return;
+		return;
 
 	while(find_input_by_id_and_type(id, YAHOO_CONNECTION_YAB) 
 			&& (yab = yahoo_getyab(yid)) != NULL) {
@@ -2935,70 +2980,82 @@ static void yahoo_process_yab_connection(struct yahoo_input_data *yid, int over)
 
 static void yahoo_process_search_connection(struct yahoo_input_data *yid, int over)
 {
-    struct yahoo_found_contact *yct;
-    struct yahoo_search_result *yr;
-    char *p = yid->rxqueue, *np, *cp;
-    int k, n;
+	struct yahoo_found_contact *yct;
+	char *p = (char *)yid->rxqueue, *np, *cp;
+	int k, n;
+	int start, found, total;
+	YList *contacts = 0;
 
-    if(!over)
-	return;
+	struct yahoo_input_data *pyid = find_input_by_id_and_type(yid->yd->client_id, YAHOO_CONNECTION_PAGER);
 
-    yr = y_new0(struct yahoo_search_result, 1);
+	if(!pyid)
+		return;
 
-    if(p)
-    if(p = strstr(p, "\r\n\r\n")) {
-	p += 4;
+	if(!over)
+		return;
 
-	for(k = 0; (p = strchr(p, 4)) && (k < 4); k++) {
-	    p++;
-	    n = atoi(p);
-	    switch(k) {
-		case 0: yr->found = yid->yd->lsearch_nfound = n; break;
-		case 2: yr->start = yid->yd->lsearch_nstart = n; break;
-		case 3: yr->total = yid->yd->lsearch_ntotal = n; break;
-	    }
+	if(p && (p=strstr(p, "\r\n\r\n"))) {
+		p += 4;
+
+		for(k = 0; (p = strchr(p, 4)) && (k < 4); k++) {
+			p++;
+			n = atoi(p);
+			switch(k) {
+				case 0: found = pyid->ys->lsearch_nfound = n; break;
+				case 2: start = pyid->ys->lsearch_nstart = n; break;
+				case 3: total = pyid->ys->lsearch_ntotal = n; break;
+			}
+		}
+
+		if(p)
+			p++;
+
+		k=0;
+		while(p && *p) {
+			cp = p;
+			np = strchr(p, 4);
+
+			if(!np)
+				break;
+			*np = 0;
+			p = np+1;
+
+			switch(k++) {
+				case 1:
+					if(strlen(cp) > 2 && y_list_length(contacts) < total) {
+						yct = y_new0(struct yahoo_found_contact, 1);
+						contacts = y_list_append(contacts, yct);
+						yct->id = cp+2;
+					} else {
+						*p = 0;
+					}
+					break;
+				case 2: 
+					yct->online = !strcmp(cp, "2") ? 1 : 0;
+					break;
+				case 3: 
+					yct->gender = cp;
+					break;
+				case 4: 
+					yct->age = atoi(cp);
+					break;
+				case 5: 
+					if(cp != "\005")
+						yct->location = cp;
+					k = 0;
+					break;
+			}
+		}
 	}
 
-	if(p) p++;
+	YAHOO_CALLBACK(ext_yahoo_got_search_result)(yid->yd->client_id, found, start, total, contacts);
 
-	if(p)
-	for(k = 0; *p; ) {
-	    cp = p;
-	    np = strchr(p, 4);
-
-	    if(!np) break;
-	    *np = 0;
-	    p = np+1;
-
-	    switch(k++) {
-		case 1:
-		    if(strlen(cp) > 2
-		    && y_list_length(yr->contacts) < yr->total) {
-			yct = y_new0(struct yahoo_found_contact, 1);
-			yr->contacts = y_list_append(yr->contacts, yct);
-			yct->id = cp+2;
-		    } else {
-			*p = 0;
-		    }
-
-		    break;
-		case 2: yct->online = !strcmp(cp, "2") ? 1 : 0; break;
-		case 3: yct->gender = cp; break;
-		case 4: yct->age = atoi(cp); break;
-		case 5: if(cp != "\005") yct->location = cp; k = 0; break;
-	    }
+	while(contacts) {
+		YList *node = contacts;
+		contacts = y_list_remove_link(contacts, node);
+		free(node->data);
+		y_list_free_1(node);
 	}
-    }
-
-    YAHOO_CALLBACK(ext_yahoo_search_result)(yid->yd->client_id, yr);
-
-    while(yr->contacts) {
-	    YList *nl = yr->contacts->next;
-	    y_list_free_1(yr->contacts);
-	    yr->contacts = nl;
-    }
-
-    FREE(yr);
 }
 
 static void _yahoo_webcam_connected(int fd, int error, void *d)
@@ -3136,7 +3193,7 @@ static void yahoo_process_webcam_master_connection(struct yahoo_input_data *yid,
 	struct yahoo_server_settings *yss;
 
 	if(over)
-	    return;
+		return;
 
 	server = yahoo_getwebcam_master(yid);
 
@@ -3160,7 +3217,7 @@ static void yahoo_process_webcam_connection(struct yahoo_input_data *yid, int ov
 	int fd = yid->fd;
 
 	if(over)
-	    return;
+		return;
 
 	/* as long as we still have packets available keep processing them */
 	while (find_input_by_id_and_fd(id, fd) 
@@ -3288,9 +3345,12 @@ static void yahoo_connected(int fd, int error, void *data)
 	if(fd < 0)
 		return;
 
-	pkt = yahoo_packet_new(YAHOO_SERVICE_VERIFY, YAHOO_STATUS_AVAILABLE, yd->session_id);
+	pkt = yahoo_packet_new(YAHOO_SERVICE_AUTH, YAHOO_STATUS_AVAILABLE, yd->session_id);
 	NOTICE(("Sending initial packet"));
+
+	yahoo_packet_hash(pkt, 1, yd->user);
 	yahoo_send_packet(fd, pkt, 0);
+
 	yahoo_packet_free(pkt);
 
 	yid = y_new0(struct yahoo_input_data, 1);
@@ -3984,7 +4044,7 @@ void yahoo_chat_logon(int id, const char *from, const char *room, const char *ro
 }
 
 
-void yahoo_chat_message(int id, const char *from, const char *room, const char *msg, const int msgtype, const int utf8)
+void  yahoo_chat_message(int id, const char *from, const char *room, const char *msg, const int msgtype, const int utf8)
 {
 	struct yahoo_input_data *yid = find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER);
 	struct yahoo_data *yd;
@@ -4164,14 +4224,15 @@ static void yahoo_search_internal(int id, int t, const char *text, int g, int ar
 	.ar=1 - 13-18, 2 - 18-25, 3 - 25-35, 4 - 35-50, 5 - 50-70, 6 - 70+
 	*/
 
-	snprintf(buff, sizeof(buff), "&.sq=%20&.tt=%d&.ss=%d", total, startpos);
+	snprintf(buff, sizeof(buff), "&.sq=%%20&.tt=%d&.ss=%d", total, startpos);
 
 	ctext = strdup(text);
-	while(p = strchr(ctext, ' ')) *p = '+';
+	while((p = strchr(ctext, ' ')))
+		*p = '+';
 
 	snprintf(url, 1024, "http://members.yahoo.com/interests?.oc=m&.kw=%s&.sb=%d&.g=%d&.ar=0%s%s%s",
-	    ctext, t, g, photo ? "&.p=y" : "", yahoo_only ? "&.pg=y" : "",
-	    startpos ? buff : "");
+			ctext, t, g, photo ? "&.p=y" : "", yahoo_only ? "&.pg=y" : "",
+			startpos ? buff : "");
 
 	FREE(ctext);
 
@@ -4181,35 +4242,48 @@ static void yahoo_search_internal(int id, int t, const char *text, int g, int ar
 	yahoo_http_get(yid->yd->client_id, url, buff, _yahoo_http_connected, yid);
 }
 
-void yahoo_search(int id, int t, const char *text, int g, int ar, int photo, int yahoo_only)
+void yahoo_search(int id, enum yahoo_search_type t, const char *text, enum yahoo_search_gender g, enum yahoo_search_agerange ar,
+		int photo, int yahoo_only)
 {
-	struct yahoo_data *yd = find_conn_by_id(id);
+	struct yahoo_input_data *yid = find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER);
+	struct yahoo_search_state *yss;
 
-	if(!yd)
-	    return;
+	if(!yid)
+		return;
 
-	FREE(yd->lsearch_text);
-	yd->lsearch_type = t;
-	yd->lsearch_text = strdup(text);
-	yd->lsearch_gender = g;
-	yd->lsearch_agerange = ar;
-	yd->lsearch_photo = photo;
-	yd->lsearch_yahoo_only = yahoo_only;
+	if(!yid->ys)
+		yid->ys = y_new0(struct yahoo_search_state, 1);
+
+	yss = yid->ys;
+
+	FREE(yss->lsearch_text);
+	yss->lsearch_type = t;
+	yss->lsearch_text = strdup(text);
+	yss->lsearch_gender = g;
+	yss->lsearch_agerange = ar;
+	yss->lsearch_photo = photo;
+	yss->lsearch_yahoo_only = yahoo_only;
 
 	yahoo_search_internal(id, t, text, g, ar, photo, yahoo_only, 0, 0);
 }
 
-void yahoo_search_again(int id)
+void yahoo_search_again(int id, int start)
 {
-	struct yahoo_data *yd = find_conn_by_id(id);
+	struct yahoo_input_data *yid = find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER);
+	struct yahoo_search_state *yss;
 
-	if(!yd)
-	    return;
+	if(!yid || !yid->ys)
+		return;
 
-	yahoo_search_internal(id, yd->lsearch_type, yd->lsearch_text,
-	    yd->lsearch_gender, yd->lsearch_agerange, yd->lsearch_photo,
-	    yd->lsearch_yahoo_only, yd->lsearch_nstart+yd->lsearch_nfound,
-	    yd->lsearch_ntotal);
+	yss = yid->ys;
+
+	if(start == -1)
+		start = yss->lsearch_nstart + yss->lsearch_nfound;
+
+	yahoo_search_internal(id, yss->lsearch_type, yss->lsearch_text, 
+			yss->lsearch_gender, yss->lsearch_agerange, 
+			yss->lsearch_photo, yss->lsearch_yahoo_only, 
+			start, yss->lsearch_ntotal);
 }
 
 struct send_file_data {

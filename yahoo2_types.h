@@ -49,6 +49,7 @@ enum yahoo_status {
 
 enum yahoo_login_status {
 	YAHOO_LOGIN_OK = 0,
+	YAHOO_LOGIN_UNAME = 3,
 	YAHOO_LOGIN_PASSWD = 13,
 	YAHOO_LOGIN_LOCK = 14,
 	YAHOO_LOGIN_DUPL = 99,
@@ -168,16 +169,6 @@ struct yahoo_data {
 	char  *ignorelist;
 
 	void  *server_settings;
-
-	int   lsearch_type;
-	char  *lsearch_text;
-	int   lsearch_gender;
-	int   lsearch_agerange;
-	int   lsearch_photo;
-	int   lsearch_yahoo_only;
-	int   lsearch_nstart;
-	int   lsearch_nfound;
-	int   lsearch_ntotal;
 };
 
 struct yab {
@@ -213,11 +204,6 @@ enum yahoo_search_gender {
 
 enum yahoo_search_agerange {
 	YAHOO_AGERANGE_NONE = 0
-};
-
-struct yahoo_search_result {
-	int found, start, total;
-	YList *contacts;
 };
 
 struct yahoo_found_contact {

@@ -34,6 +34,7 @@ int  yahoo_get_fd(int id);
 /* says how much logging to do */
 /* see yahoo2_types.h for the different values */
 int  yahoo_set_log_level(enum yahoo_log_level level);
+enum yahoo_log_level  yahoo_get_log_level( void );
 
 /* these functions should be self explanatory */
 /* who always means the buddy you're acting on */
@@ -155,16 +156,15 @@ void yahoo_send_file(int id, const char *who, const char *msg, const char *name,
 
 /* send a search request
  */
-void yahoo_search(int id, int t, const char *text, int g, int ar,
+void yahoo_search(int id, enum yahoo_search_type t, const char *text, enum yahoo_search_gender g, enum yahoo_search_agerange ar,
 		int photo, int yahoo_only);
 
 /* continue last search
- * should be called if only (yr->start+yr->found >= yr->total)
+ * should be called if only (start+found >= total)
  *
- * where yr is a pointer to a yahoo_search_result passed to
- * the search_result callback
+ * where the above three are passed to ext_yahoo_got_search_result
  */
-void yahoo_search_again(int id);
+void yahoo_search_again(int id, int start);
 
 /* returns a socket fd to a url for downloading a file. */
 void yahoo_get_url_handle(int id, const char *url, 
