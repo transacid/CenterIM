@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.46 2002/02/28 01:14:45 konst Exp $
+* $Id: icqconf.cc,v 1.47 2002/02/28 09:10:40 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -102,6 +102,7 @@ void icqconf::loadmainconfig() {
     if(f.is_open()) {
 	mailcheck = false;
 	savepwd = true;
+	setsmtphost("");
 
 	while(!f.eof()) {
 	    getstring(f, buf);
