@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.60 2002/12/05 17:05:21 konst Exp $
+* $Id: irchook.cc,v 1.61 2002/12/09 12:05:29 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,8 +79,10 @@ void irchook::init() {
 
     for(i = 0; i < clist.count; i++) {
 	icqcontact *c = (icqcontact *) clist.at(i);
+
 	if(c->getdesc().pname == irc)
-	if(ischannel(c)) {
+	if(ischannel(c))
+	if(c->getbasicinfo().requiresauth) {
 	    channels.push_back(channelInfo(c->getdesc().nickname));
 	    channels.back().joined = 1;
 	    channels.back().passwd = c->getbasicinfo().zip;

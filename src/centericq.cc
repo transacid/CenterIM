@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.143 2002/12/06 13:07:40 konst Exp $
+* $Id: centericq.cc,v 1.144 2002/12/09 12:05:28 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -322,7 +322,12 @@ void centericq::mainloop() {
 
 	    case ACT_JOIN:
 	    case ACT_LEAVE:
-		c->setstatus((c->getstatus() == offline) ? available : offline);
+		{
+		    icqcontact::basicinfo cb = c->getbasicinfo();
+		    cb.requiresauth = c->getstatus() == offline;
+		    c->setstatus(cb.requiresauth ? available : offline);
+		    c->setbasicinfo(cb);
+		}
 		break;
 
 	    case ACT_MSG:
@@ -419,6 +424,7 @@ void centericq::joindialog() {
 	    if(gethook(s.pname).getCapabs().count(hookcapab::groupchatservices))
 		cb.street = s.service;
 
+	    cb.requiresauth = true;
 	    c->setbasicinfo(cb);
 	    c->setstatus(available);
 	}

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.24 2002/12/06 13:07:41 konst Exp $
+* $Id: jabberhook.cc,v 1.25 2002/12/09 12:05:30 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -788,6 +788,7 @@ void jabberhook::postlogin() {
 
 	if(c->getdesc().pname == jabber)
 	if(ischannel(c))
+	if(c->getbasicinfo().requiresauth)
 	    c->setstatus(available);
     }
 }

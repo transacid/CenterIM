@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.45 2002/12/09 09:21:02 konst Exp $
+* $Id: msnhook.cc,v 1.46 2002/12/09 12:05:30 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -448,15 +448,15 @@ void ext_got_SB(msnconn * conn, void * tag) {
     log("ext_got_SB");
 }
 
-void ext_user_joined(msnconn * conn, char * username, char * friendlyname, int is_initial) {
+void ext_user_joined(msnconn *conn, const char *username, const char *friendlyname, int is_initial) {
     log("ext_user_joined");
 }
 
-void ext_user_left(msnconn * conn, char * username) {
+void ext_user_left(msnconn *conn, const char *username) {
     log("ext_user_left");
 }
 
-void ext_got_IM(msnconn * conn, const char * username, const char * friendlyname, message * msg) {
+void ext_got_IM(msnconn *conn, const char *username, const char *friendlyname, message *msg) {
     log("ext_got_IM");
     imcontact ic(username, msn);
 
@@ -466,7 +466,7 @@ void ext_got_IM(msnconn * conn, const char * username, const char * friendlyname
     em.store(immessage(ic, imevent::incoming, text));
 }
 
-void ext_IM_failed(msnconn * conn) {
+void ext_IM_failed(msnconn *conn) {
     log("ext_IM_failed");
 }
 
@@ -485,33 +485,33 @@ notification
 */
 }
 
-void ext_initial_email(msnconn * conn, int unread_inbox, int unread_folders) {
+void ext_initial_email(msnconn *conn, int unread_inbox, int unread_folders) {
     log("ext_initial_email");
 
     face.log(_("+ [msn] unread e-mail: %d in inbox, %d in folders"),
 	unread_inbox, unread_folders);
 }
 
-void ext_new_mail_arrived(msnconn * conn, const char * from, const char * subject) {
+void ext_new_mail_arrived(msnconn *conn, const char *from, const char *subject) {
     log("ext_new_mail_arrived");
 
     face.log(_("+ [msn] e-mail from %s, %s"), from, subject);
     clist.get(contactroot)->playsound(imevent::email);
 }
 
-void ext_filetrans_invite(msnconn * conn, char * username, char * friendlyname, invitation_ftp * inv) {
+void ext_filetrans_invite(msnconn *conn, const char *username, const char *friendlyname, invitation_ftp *inv) {
     log("ext_filetrans_invite");
 }
 
-void ext_filetrans_progress(invitation_ftp * inv, char * status, unsigned long sent, unsigned long total) {
+void ext_filetrans_progress(invitation_ftp *inv, const char *status, unsigned long sent, unsigned long total) {
     log("ext_filetrans_progress");
 }
 
-void ext_filetrans_failed(invitation_ftp * inv, int error, char * message) {
+void ext_filetrans_failed(invitation_ftp *inv, int error, const char *message) {
     log("ext_filetrans_failed");
 }
 
-void ext_filetrans_success(invitation_ftp * inv) {
+void ext_filetrans_success(invitation_ftp *inv) {
     log("ext_filetrans_success");
 }
 
@@ -526,7 +526,7 @@ void ext_new_connection(msnconn *conn) {
     }
 }
 
-void ext_closing_connection(msnconn * conn) {
+void ext_closing_connection(msnconn *conn) {
     log("ext_closing_connection");
     if(conn->type == CONN_NS) {
 	mhook.rfds.clear();
@@ -539,11 +539,11 @@ void ext_closing_connection(msnconn * conn) {
     }
 }
 
-void ext_changed_state(msnconn * conn, char * state) {
+void ext_changed_state(msnconn *conn, const char *state) {
     log("ext_changed_state");
 }
 
-int ext_connect_socket(const char * hostname, int port) {
+int ext_connect_socket(const char *hostname, int port) {
     log("ext_connect_socket");
     struct sockaddr_in sa;
     struct hostent *hp;
@@ -601,37 +601,3 @@ char * ext_get_IP() {
 
     return inet_ntoa(*((struct in_addr*) hn->h_addr));
 }
-
-#if 0
-
-void msnhook::messaged(void *data) {
-    MSN_InstantMessage *d = (MSN_InstantMessage *) data;
-    imcontact ic(d->sender, msn);
-    icqcontact *c;
-    string text;
-    bool forcefetch;
-
-    if(!isourid(d->sender))
-    if(strlen(d->msg)) {
-	c = clist.get(ic);
-
-	if(forcefetch = !c)
-	    c = clist.addnew(ic);
-
-	if(c->inlist() && c->getstatus() == offline)
-	    mhook.sendnewuser(ic);
-
-	if(d->friendlyhandle)
-	    mhook.checkfriendly(c, d->friendlyhandle, forcefetch);
-
-	text = siconv(d->msg, "utf8", conf.getrussian() ? "koi8-u" : DEFAULT_CHARSET);
-	em.store(immessage(ic, imevent::incoming, text));
-    }
-}
-
-void msnhook::authrequested(void *data) {
-    MSN_AuthMessage *msg = (MSN_AuthMessage *) data;
-    MSN_AuthorizeContact(msg->conn, msg->requestor);
-}
-
-#endif

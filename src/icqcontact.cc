@@ -1,7 +1,7 @@
 /*
 *
 * centericq single IM contact class
-* $Id: icqcontact.cc,v 1.75 2002/12/05 14:01:12 konst Exp $
+* $Id: icqcontact.cc,v 1.76 2002/12/09 12:05:29 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -453,7 +453,7 @@ void icqcontact::setstatus(imstatus fstatus) {
 	} else {
 	    abstracthook &h = gethook(cdesc.pname);
 	    if(fstatus == offline) h.removeuser(cdesc);
-		else h.sendnewuser(cdesc);
+	    else h.sendnewuser(cdesc);
 
 	}
 
