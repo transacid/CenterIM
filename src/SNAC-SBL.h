@@ -193,6 +193,7 @@ namespace ICQ2000 {
      std::string m_group_name;
      unsigned short m_group_id;
      std::vector<unsigned short> m_ids;
+     const ContactRef &m_cont;
 
    protected:
     void OutputBody(Buffer& b) const;
@@ -200,6 +201,8 @@ namespace ICQ2000 {
    public:
     SBLUpdateEntrySNAC(const std::string &group_name,
 		       unsigned short group_id, const std::vector<unsigned short> &ids);
+
+    SBLUpdateEntrySNAC(const ContactRef &c);
 
     unsigned short Subtype() const { return SNAC_SBL_Update_Entry; }
   };

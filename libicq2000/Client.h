@@ -227,7 +227,7 @@ namespace ICQ2000
     void ICBMCookieCache_expired_cb(MessageEvent *ev);
     void dccache_expired_cb(DirectClient *dc);
     void ftcache_expired_cb(FileTransferClient *ftc);
-    void reqidcache_expired_cb(	RequestIDCacheValue *v );
+    void reqidcache_expired_cb( RequestIDCacheValue *v );
     void dc_connected_cb(SocketClient *dc);
     void dc_log_cb(LogEvent *ev);
     void dc_socket_cb(SocketEvent *ev);
@@ -273,6 +273,8 @@ namespace ICQ2000
      * @see disconnected, ConnectedEvent
      */
     sigslot::signal1<ConnectedEvent*> connected;
+
+    sigslot::signal1<SBLReceivedEvent*> sbl_received;
 
     /**
      *  The signal to connect to for listening to DisconnectedEvent's.
@@ -427,6 +429,8 @@ namespace ICQ2000
     void uploadServerBasedContact(const ContactRef& c);
     void uploadServerBasedGroup(const ContactTree::Group& gp);
     void uploadServerBasedContactList();
+
+    void updateServerBasedContact(const ContactRef& c);
 
     void removeServerBasedContact(const ContactRef& c);
     void removeServerBasedGroup(const ContactTree::Group& gp);

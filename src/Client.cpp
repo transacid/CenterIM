@@ -872,6 +872,8 @@ namespace ICQ2000
   
   void Client::mergeSBL(ContactTree& tree)
   {
+    SBLReceivedEvent ev(tree);
+    sbl_received.emit(&ev);
     /*
     ContactTree::iterator curr = tree.begin();
     while (curr != tree.end())
@@ -1535,15 +1537,15 @@ namespace ICQ2000
 	switch( *ir ) {
 	case SBLEditACKSNAC::Success:
 	  SignalLog(LogEvent::INFO, "Server-based contact list modification succeeded\n");
-	  //      updresults.push_back(ServerBasedContactEvent::Success);
+	  //updresults.push_back(ServerBasedContactEvent::Success);
 	  break;
 	case SBLEditACKSNAC::Failed:
 	  SignalLog(LogEvent::INFO, "Server-based contact list modification failed\n");
-	  //      updresults.push_back(ServerBasedContactEvent::Failed);
+	  //updresults.push_back(ServerBasedContactEvent::Failed);
 	  break;
 	case SBLEditACKSNAC::AuthRequired:
-	  SignalLog(LogEvent::INFO, "Succeeded, though authentification is required to perform the server-based modification\n");
-	  //      updresults.push_back(ServerBasedContactEvent::AuthRequired);
+	  SignalLog(LogEvent::INFO, "Failed, authentification is required to add a user\n");
+	  //updresults.push_back(ServerBasedContactEvent::AuthRequired);
 	  break;
 	case SBLEditACKSNAC::AlreadyExists:
 	  SignalLog(LogEvent::INFO, "Already exists on the server-based contact list\n");
@@ -2263,10 +2265,8 @@ namespace ICQ2000
 
     FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
     FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-
     ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(c);
     FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
-
     FLAPwrapSNAC( b, SBLAddEntrySNAC(c) );
     FLAPwrapSNAC( b, SBLCommitEditSNAC() );
 
@@ -2276,10 +2276,37 @@ namespace ICQ2000
     Send(b);
   }
 
+  void Client::updateServerBasedContact(const ContactRef& c)
+  {
+    Buffer b;
+
+    FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
+    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
+    ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(c);
+    FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
+    FLAPwrapSNAC( b, SBLUpdateEntrySNAC(c) );
+    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
+
+    Send(b);
+  }
+
   void Client::uploadServerBasedGroup(const ContactTree::Group& gp)
   {
+    Buffer b;
+
+    FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
+    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
+
+    std::vector<unsigned short> ids;
+    for(ContactTree::Group::const_iterator ic = gp.begin(); ic != gp.end(); ++ic)
+	ids.push_back((*ic)->getServerSideID());
+
+    FLAPwrapSNAC( b, SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), ids) );
+    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
+
+    Send(b);
   }
-  
+
   void Client::uploadServerBasedContactList()
   {
     Buffer b;

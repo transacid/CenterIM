@@ -265,31 +265,55 @@ namespace ICQ2000 {
   SBLUpdateEntrySNAC::SBLUpdateEntrySNAC(const string &group_name,
 					 unsigned short group_id,
 					 const std::vector<unsigned short> &ids)
-    : m_group_name(group_name), m_group_id(group_id), m_ids(ids)
+    : m_group_name(group_name), m_group_id(group_id), m_ids(ids), m_cont(0)
+  { }
+
+  SBLUpdateEntrySNAC::SBLUpdateEntrySNAC(const ContactRef &c)
+    : m_cont(c), m_group_id(0)
   { }
 
   void SBLUpdateEntrySNAC::OutputBody(Buffer& b) const {
-    b << (unsigned short) m_group_name.size();
-    b.Pack(m_group_name);
-    b << m_group_id;
-    b << (unsigned short) 0x0000;
-    b << (unsigned short) 0x0001;
+    if(!m_cont.get()) {
+      b << (unsigned short) m_group_name.size();
+      b.Pack(m_group_name);
+      b << m_group_id;
+      b << (unsigned short) 0x0000;
+      b << (unsigned short) 0x0001;
 
-    if(m_ids.empty()) {
+      if(m_ids.empty()) {
+	b << (unsigned short) 0x0000;
+
+      } else {
+	b << (unsigned short) (4 + m_ids.size()*2);
+	b << (unsigned short) 0x00c8;
+	b << (unsigned short) (m_ids.size()*2);
+	// raw-coded TLV, found no suitable data structures in TLV.h
+
+	std::vector<unsigned short>::const_iterator curr = m_ids.begin();
+	while (curr != m_ids.end()) {
+	  b << (unsigned short) *curr;
+	  ++curr;
+	}
+
+      }
+    } else {
+      string suin = m_cont->getStringUIN();
+
+      b << (unsigned short) suin.size();
+      b.Pack(suin);
+      b << m_cont->getServerSideGroupID();
+      b << m_cont->getServerSideID();
       b << (unsigned short) 0x0000;
 
-    } else {
-      b << (unsigned short) (4 + m_ids.size()*2);
-      b << (unsigned short) 0x00c8;
-      b << (unsigned short) (m_ids.size()*2);
-      // raw-coded TLV, found no suitable data structures in TLV.h
+      Buffer::marker m = b.getAutoSizeShortMarker();
 
-      std::vector<unsigned short>::const_iterator curr = m_ids.begin();
-      while (curr != m_ids.end()) {
-	b << (unsigned short) *curr;
-	++curr;
+      // Auth awaiting TLV
+      if(m_cont->getAuthAwait()) {
+	b << TLV_AuthAwaited;
+	b << (unsigned short) 0x0000;
       }
 
+      b.setAutoSizeMarker(m);
     }
   }
 
@@ -370,10 +394,10 @@ namespace ICQ2000 {
       b >> errcode;
 
       switch(errcode) {
-        case 0x0000: m_results.push_back(Success); break;
-        case 0x0003: m_results.push_back(AlreadyExists); break;
-        case 0x000a: m_results.push_back(Failed); break;
-        case 0x000e: m_results.push_back(AuthRequired); break;
+	case 0x0000: m_results.push_back(Success); break;
+	case 0x0003: m_results.push_back(AlreadyExists); break;
+	case 0x000a: m_results.push_back(Failed); break;
+	case 0x000e: m_results.push_back(AuthRequired); break;
       }
     }
   }

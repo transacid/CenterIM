@@ -39,7 +39,7 @@ namespace ICQ2000
     day = days[tm->tm_mon] + tm->tm_mday - 1;
     
     /* adjust for leap years */
-    day += (year - (epoch - (epoch % 4))) / 4;
+    day += ((year - (epoch - (epoch % 4)))-1) / 4;
     day -= (year - (epoch - (epoch % 100))) / 100;
     day += (year - (epoch - (epoch % 400))) / 400;
     

@@ -85,6 +85,8 @@ namespace ICQ2000 {
     _ContactTree_Group(const _ContactTree_Group& gp);
 
     unsigned short get_id() const;
+    void set_id(unsigned short i) { m_id = i; }
+
     std::string get_label() const;
     void set_label(const std::string& l);
 

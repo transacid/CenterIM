@@ -342,6 +342,17 @@ namespace ICQ2000 {
     EventType getType() const;
   };
 
+  /* Konst's temporary SBL hack */
+
+  class SBLReceivedEvent : public Event
+  {
+   public:
+    SBLReceivedEvent(const ContactTree &atree): tree(atree)
+	{ }
+
+    ContactTree tree;
+  };
+
   // ============================================================================
   //  ContactEvents (status change, user info change)
   // ============================================================================
@@ -779,7 +790,7 @@ namespace ICQ2000 {
     unsigned int getTotalFiles() const;
     unsigned int getCurrFile() const;
    
-    void setTotalSize(unsigned int t_size);	
+    void setTotalSize(unsigned int t_size);     
     void setSize(unsigned int size);
     void setPos(unsigned int pos);
     void setTotalPos(unsigned int pos);
@@ -926,8 +937,8 @@ namespace ICQ2000 {
     };
     
    private:
-    unsigned short m_code;	
-    unsigned short m_rateclass;	
+    unsigned short m_code;      
+    unsigned short m_rateclass; 
     unsigned int m_windowsize;
     unsigned int m_clear;
     unsigned int m_alert;
@@ -938,15 +949,15 @@ namespace ICQ2000 {
 
    public:
     RateInfoChangeEvent(unsigned short code, unsigned short rateclass, 
-                        unsigned int windowsize,unsigned int clear,
-                        unsigned int alert,unsigned int limit,
-                        unsigned int disconnect,unsigned int currentavg,
-                        unsigned int maxavg);
+			unsigned int windowsize,unsigned int clear,
+			unsigned int alert,unsigned int limit,
+			unsigned int disconnect,unsigned int currentavg,
+			unsigned int maxavg);
     
     /// get the code
-    unsigned short getCode() const { return m_code; }	
+    unsigned short getCode() const { return m_code; }   
     /// get the rate class
-    unsigned short getRateClass() const { return m_rateclass; }	
+    unsigned short getRateClass() const { return m_rateclass; } 
     /// get the size of the window
     unsigned int getWindowSize() const { return m_windowsize; }
     /// get clear (?)
