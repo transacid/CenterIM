@@ -9,12 +9,13 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/param.h>
 #include <regex.h>
 
 #include "conf.h"
 #include "kkstrtext.h"
 
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(DARWIN)
+#ifdef BSD
 
 #define FTW_F           1
 #define FTW_D           2

@@ -5,9 +5,4 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 
-uout=`uname | grep Darwin`
-if test ! -z "$uout"; then
-    AC_DEFINE(DARWIN)
-fi
-
 AC_OUTPUT(Makefile include/Makefile src/Makefile)
