@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.36 2002/02/06 16:36:07 konst Exp $
+* $Id: icqconf.cc,v 1.37 2002/02/07 10:55:42 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -61,9 +61,12 @@ icqconf::imaccount icqconf::getourid(protocolname pname) {
     f.open(fname.c_str());
 
     if(f.is_open()) {
-	getstring(f, buf);
-	if(!im.awaymsg.empty()) im.awaymsg += "\n";
-	im.awaymsg += buf;
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    if(!im.awaymsg.empty()) im.awaymsg += "\n";
+	    im.awaymsg += buf;
+	}
+
 	f.close();
     }
 
