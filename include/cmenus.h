@@ -34,10 +34,12 @@ class verticalmenu: public abstractuicontrol {
 	void showall();
 
 	void checkclear();
-        void intredraw();
+	void intredraw();
 
     public:
-	bool clearonfocuslost, cycled;
+	bool clearonfocuslost;
+	bool cycled;
+	bool exitonedges;
 
 	int (*otherkeys)(verticalmenu &caller, int k);
 	    // function called on pressing of non-standard menu keys

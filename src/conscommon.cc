@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.8 2001/09/18 12:17:59 konst Exp $
+* $Id: conscommon.cc,v 1.9 2001/10/31 16:51:33 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -282,3 +282,15 @@ const string makebidi(const string buf, int lpad = 0) {
 }
 
 #endif
+
+int findcolor(const string s) {
+    int i;
+    string::iterator is;
+    string colors[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE", ""};
+    string ls = s;
+
+    for(is = ls.begin(); is != ls.end(); *is = toupper(*is), is++);
+    for(i = 0; !colors[i].empty() && (ls != colors[i]); i++);
+
+    return i;
+}

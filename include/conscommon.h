@@ -69,6 +69,7 @@ void printstring(const string s);
 int string2key(const string adef);
 
 const string makebidi(const string buf, int lpad = 0);
+int findcolor(const string s);
 
 __KTOOL_BEGIN_C
 

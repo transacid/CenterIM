@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui various textmodem menus classes
-* $Id: cmenus.cc,v 1.8 2001/10/30 17:49:54 konst Exp $
+* $Id: cmenus.cc,v 1.9 2001/10/31 16:51:33 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -39,7 +39,7 @@ void verticalmenu::initmembers() {
     firstdisp = curelem = 0;
     idle = 0;
     otherkeys = 0;
-    clearonfocuslost = cycled = false;
+    clearonfocuslost = cycled = exitonedges = false;
 }
 
 void verticalmenu::setcolor(int pncolor, int pscolor) {
@@ -241,7 +241,6 @@ int verticalmenu::open() {
 		case '\r':
 		    finished = true;
 		    checkclear();
-		    if(items.empty()) ret = 0; else ret = curelem+1;
 		    break;
 	
 		case 27:
@@ -266,6 +265,8 @@ int verticalmenu::open() {
 
 			    refresh();
 			}
+		    } else if(exitonedges) {
+			finished = true;
 		    } else if(cycled) {
 			curelem = items.size()-1;
 			if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
@@ -293,6 +294,8 @@ int verticalmenu::open() {
 				if(!lastone) shownelem(curelem = savecur, 1);
 				refresh();
 			    }
+			} else if(exitonedges) {
+			    finished = true;
 			} else if(cycled) {
 			    curelem = firstdisp = 0;
 			    intredraw();
@@ -301,28 +304,39 @@ int verticalmenu::open() {
 		    break;
 	
 		case KEY_PPAGE:
-		    if((curelem -= y2-y1) < 0) curelem = 0;
+		    if((curelem -= y2-y1) < 0) {
+			if(finished = exitonedges) continue;
+			curelem = 0;
+		    }
+
 		    firstdisp = curelem;
 		    intredraw();
 		    break;
-	
+
 		case KEY_NPAGE:
 		    if(!items.empty()) {
-			if((curelem += y2-y1) > items.size()-1) curelem = items.size()-1;
+			if((curelem += y2-y1) > items.size()-1) {
+			    if(finished = exitonedges) continue;
+			    curelem = items.size()-1;
+			}
+
 			if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
 		    }
+
 		    intredraw();
 		    break;
       
 		case KEY_HOME:
 		    curelem = firstdisp = 0;
 		    intredraw();
+		    finished = finished || exitonedges;
 		    break;
 
 		case KEY_END:
 		    curelem = items.size()-1;
 		    if((firstdisp = curelem-y2+y1+1) < 0) firstdisp = 0;
 		    intredraw();
+		    finished = finished || exitonedges;
 		    break;
       
 		default:
@@ -339,7 +353,7 @@ int verticalmenu::open() {
 	}
     }
 
-    return ret;
+    return (items.empty() || !ret) ? 0 : curelem+1;
 }
 
 int verticalmenu::getcount() {
