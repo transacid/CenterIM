@@ -146,7 +146,6 @@ void imexternal::action::execscript() {
     int inpipe[2], outpipe[2], pid;
     string text;
     char ch;
-    ifstream pout;
     icqcontact *c;
     fd_set rfds;
 
@@ -186,21 +185,17 @@ void imexternal::action::execscript() {
 	    text = "";
 
 	    if(options & aostdout) {
-		pout.attach(inpipe[0]);
+		while(1) {
+		    FD_ZERO(&rfds);
+		    FD_SET(inpipe[0], &rfds);
 
-		if(pout.is_open()) {
-		    while(!pout.eof()) {
-			FD_ZERO(&rfds);
-			FD_SET(inpipe[0], &rfds);
-
-			if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
-			    if(FD_ISSET(inpipe[0], &rfds))
-			    if((ch = pout.get()) != EOF)
+		    if(select(inpipe[0]+1, &rfds, 0, 0, 0) < 0) break; else {
+			if(FD_ISSET(inpipe[0], &rfds)) {
+			    if(read(inpipe[0], &ch, 1) != 1) break; else {
 				text += ch;
+			    }
 			}
 		    }
-
-		    pout.close();
 		}
 	    }
 
