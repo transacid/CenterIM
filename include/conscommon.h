@@ -66,7 +66,7 @@
 #define ALTL_PRESSED    8
 #define CONTROL_PRESSED 4
 
-extern bool kintf_graph, kintf_refresh;
+extern bool kintf_graph, kintf_refresh, use_fribidi;
 extern void (*kt_resize_event)(void);
 
 void printchar(char c);

@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.22 2002/07/16 16:20:25 konst Exp $
+* $Id: conscommon.cc,v 1.23 2002/08/14 12:03:43 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -26,6 +26,10 @@
 #include <iostream>
 
 bool kintf_graph = true, kintf_refresh = true;
+
+#ifdef KTOOL_USE_FRIBIDI
+bool use_fribidi = true;
+#endif
 
 void (*kt_resize_event)(void);
 
@@ -253,6 +257,8 @@ extern "C" {
 }
 
 string makebidi(const string &buf, int lpad = 0) {
+    if(!use_fribidi) return buf;
+
     FriBidiChar *us, *out_us;
     char *outstring, *cbuf;
     int size;
