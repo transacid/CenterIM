@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.46 2002/12/09 12:05:30 konst Exp $
+* $Id: msnhook.cc,v 1.47 2002/12/09 12:30:46 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -591,7 +591,7 @@ int ext_server_socket(int port) {
     return s;
 }
 
-char * ext_get_IP() {
+char *ext_get_IP() {
     log("ext_get_IP");
     struct hostent *hn;
     char buf2[1024];
@@ -600,4 +600,12 @@ char * ext_get_IP() {
     hn = gethostbyname(buf2);
 
     return inet_ntoa(*((struct in_addr*) hn->h_addr));
+}
+
+void ext_protocol_log(const char *buf, int readev, int writeev) {
+    if(readev) {
+	log(string("[IN] ") + buf);
+    } else if(writeev) {
+	log(string("[OUT] ") + buf);
+    }
 }
