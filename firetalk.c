@@ -1190,6 +1190,15 @@ void firetalk_callback_chat_user_kicked(client_t c, const char * const room, con
 	return;
 }
 
+void firetalk_callback_chat_names(client_t c, const char * const room) {
+	struct s_firetalk_handle *conn;
+	conn = firetalk_find_handle(c);
+	if (conn == NULL)
+		return;
+	if (conn->callbacks[FC_CHAT_NAMES])
+		conn->callbacks[FC_CHAT_NAMES](conn,conn->clientstruct,room);
+}
+
 void firetalk_callback_subcode_request(client_t c, const char * const from, const char * const command, char *args) {
 	struct s_firetalk_handle *conn;
 	struct s_firetalk_subcode_callback *iter;
@@ -2551,8 +2560,9 @@ enum firetalk_error firetalk_select_custom(int n, fd_set *fd_read, fd_set *fd_wr
 				firetalk_callback_disconnect(fchandle->handle,FE_DISCONNECT);
 			else {
 				fchandle->bufferpos += length;
+				fchandle->buffer[fchandle->bufferpos] = 0;
 
-				firetalk_callback_log(fchandle->handle,fchandle->buffer);
+				firetalk_callback_log(fchandle->handle, fchandle->buffer);
 
 				if (fchandle->connected == FCS_ACTIVE)
 					protocol_functions[fchandle->protocol].got_data(fchandle->handle,fchandle->buffer,&fchandle->bufferpos);

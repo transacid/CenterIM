@@ -128,17 +128,27 @@ static char *irc_html_to_irc(const char * const string) {
 					output[o++] = string[i++];
 				break;
 			case '\r':
+			case '\n':
+				output[o++] = ' ';
+				i++;
+				break;
+/*
+			case '\r':
 				output[o++] = '\020';
 				output[o++] = 'r';
+				i++;
 				break;
 			case '\n':
 				output[o++] = '\020';
 				output[o++] = 'n';
+				i++;
 				break;
 			case '\020':
 				output[o++] = '\020';
 				output[o++] = '\020';
+				i++;
 				break;
+*/
 			default:
 				output[o++] = string[i++];
 				break;
@@ -673,6 +683,9 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 							}
 							buddyiter = buddyiter->next;
 						}
+						break;
+					case 366:
+						firetalk_callback_chat_names(c, args[3]);
 						break;
 					case 401: /* ERR_NOSUCHNICK */
 					case 441: /* ERR_USERNOTINCHANNEL */
