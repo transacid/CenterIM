@@ -1,7 +1,7 @@
 /*
 *
 * kkstrtext string related and text processing routines
-* $Id: kkstrtext.cc,v 1.32 2003/07/16 23:41:10 konst Exp $
+* $Id: kkstrtext.cc,v 1.33 2003/10/05 15:56:12 konst Exp $
 *
 * Copyright (C) 1999-2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -944,9 +944,11 @@ string cuthtml(const string &html, bool cutbrs) {
 	    tag = html.substr(tpos+1, npos-tpos-2);
 	    if(tag.substr(0, 1) == "/") tag.erase(0, 1);
 
-	    if((tag == "br") || (tag == "BR")) {
-		r += cutbrs ? "\n" : "<br>";
-	    }
+	    tag = leadcut(trailcut(tag, "/ \n\r"), "/ \n\r");
+
+	    if(tag == "BR" || tag == "br") r += cutbrs ? "\n" : "<br>";
+		else if(cutbrs && (tag == "P" || tag == "p")) r += "\n\n";
+
 	} else {
 	    r += html.substr(tpos);
 	    npos = html.size();
