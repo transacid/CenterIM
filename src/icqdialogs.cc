@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.147 2005/01/23 13:21:46 konst Exp $
+* $Id: icqdialogs.cc,v 1.148 2005/01/27 00:25:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1992,7 +1992,7 @@ bool icqface::selectpgpkey(string &keyid, bool secretonly) {
 
     if(!(msb = mainscreenblock)) blockmainscreen();
 
-    vector<string> keys = pgp.getkeys(true);
+    vector<string> keys = pgp.getkeys(secretonly);
     vector<string>::const_iterator i = keys.begin();
 
     m.additemf(0, 0, _(" Use no key"));
