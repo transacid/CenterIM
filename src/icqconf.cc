@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.17 2001/11/15 10:03:27 konst Exp $
+* $Id: icqconf.cc,v 1.18 2001/11/15 16:46:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -407,8 +407,11 @@ bool icqconf::gethideoffline() const {
 
 void icqconf::initpairs() {
     boldcolors.clear();
+
     boldcolors.push_back(cp_dialog_selected);
     boldcolors.push_back(cp_main_highlight);
+    boldcolors.push_back(cp_main_frame);
+    boldcolors.push_back(cp_clist_root);
 
     init_pair(cp_status, COLOR_BLACK, COLOR_WHITE);
 
@@ -423,6 +426,11 @@ void icqconf::initpairs() {
     init_pair(cp_main_selected, COLOR_BLACK, COLOR_WHITE);
     init_pair(cp_main_highlight, COLOR_YELLOW, COLOR_BLACK);
     init_pair(cp_main_frame, COLOR_BLUE, COLOR_BLACK);
+
+    init_pair(cp_clist_icq, COLOR_GREEN, COLOR_BLACK);
+    init_pair(cp_clist_yahoo, COLOR_CYAN, COLOR_BLACK);
+    init_pair(cp_clist_infocard, COLOR_WHITE, COLOR_BLACK);
+    init_pair(cp_clist_root, COLOR_RED, COLOR_BLACK);
 }
 
 void icqconf::setauto(int away, int na) {

@@ -2,6 +2,7 @@
 #include "icqmlist.h"
 #include "icqface.h"
 #include "icqcontacts.h"
+#include "icqoffline.h"
 
 yahoohook::yahoohook() {
     fonline = false;
@@ -62,6 +63,7 @@ void yahoohook::connect() {
 	    yahoo_cmd_logon(yahoo, ourstatus = YAHOO_STATUS_AVAILABLE);
 	    face.log(_("+ [yahoo] logged in"));
 	    clist.send();
+	    offl.scan(0, ossendall);
 	}
     }
 }
@@ -110,10 +112,13 @@ unsigned long yahoohook::sendmessage(const icqcontact *c, const string atext) {
     for(is = text.begin(); is != text.end(); is++)
 	if(*is < 32) *is = ' ';
 
-    yahoo_cmd_msg(yahoo,
-	conf.getourid(::yahoo).nickname.c_str(),
-	c->getdesc().nickname.c_str(),
-	text.c_str());
+    if(c->getstatus() != offline) {
+	yahoo_cmd_msg(yahoo, conf.getourid(::yahoo).nickname.c_str(),
+	    c->getdesc().nickname.c_str(), text.c_str());
+    } else {
+	yahoo_cmd_msg_offline(yahoo, conf.getourid(::yahoo).nickname.c_str(),
+	    c->getdesc().nickname.c_str(), text.c_str());
+    }
 
     return 1;
 }
@@ -138,6 +143,7 @@ void yahoohook::sendnewuser(const imcontact ic) {
 	}
 
 	if(!yahoo_isbuddy(yahoo, ic.nickname.c_str())) {
+	    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
 	    yahoo_add_buddy(yahoo, ic.nickname.c_str(),
 		conf.getourid(::yahoo).nickname.c_str(), group, "");
 	}
@@ -147,6 +153,7 @@ void yahoohook::sendnewuser(const imcontact ic) {
 void yahoohook::removeuser(const imcontact ic) {
     if(yahoo)
     if(online()) {
+	face.log(_("+ [yahoo] removing %s from the contacts"), ic.nickname.c_str());
 	yahoo_remove_buddy(yahoo, ic.nickname.c_str(),
 	    conf.getourid(::yahoo).nickname.c_str(), "group", "");
     }
@@ -191,7 +198,7 @@ bool yahoohook::enabled() const {
     return (bool) yahoo;
 }
 
-void yahoohook::setstatus(imstatus st) {
+void yahoohook::setautostatus(imstatus st) {
     if(st == offline) {
 	if(getstatus() != offline) {
 	    disconnect();
@@ -202,8 +209,10 @@ void yahoohook::setstatus(imstatus st) {
 	} else {
 	}
     }
+}
 
-    manualstatus = st;
+void yahoohook::setstatus(imstatus st) {
+    setautostatus(manualstatus = st);
 }
 
 imstatus yahoohook::getstatus() const {
@@ -268,7 +277,7 @@ void yahoohook::recvmessage(yahoo_context *y, const char *nick, const char *msg)
 	icqcontact *c = clist.get(ic);
 
 	if(c) {
-	    if(c->getstatus() != offline) {
+	    if(c->getstatus() == offline) {
 		c->setstatus(available);
 	    }
 

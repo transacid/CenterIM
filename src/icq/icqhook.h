@@ -210,6 +210,7 @@ class icqhook {
 
 	unsigned long sendmessage(const icqcontact *c, const string text);
 
+	void setautostatus(imstatus st);
 	void setstatus(imstatus st);
 	imstatus getstatus() const;
 };

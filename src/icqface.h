@@ -169,11 +169,14 @@ class icqface {
 	void draw();
 	void update();
 	void showtopbar();
+
 	icqcontact *mainloop(int &action);
 	void fillcontactlist();
-	void log(string text);
+
+	void log(const string text);
 	void log(const char *fmt, ...);
-	void status(string text);
+
+	void status(const string text);
 
 	bool changestatus(protocolname &pname, imstatus &st);
 	int contextmenu(icqcontact *c);

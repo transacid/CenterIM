@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.24 2001/11/15 10:03:27 konst Exp $
+* $Id: icqdialogs.cc,v 1.25 2001/11/15 16:46:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -582,7 +582,7 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     db.setwindow(&w, false);
 
     db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_text),
+	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
@@ -597,38 +597,33 @@ bool icqface::updateconf(regsound &s, regcolor &c) {
     while(!finished) {
 	t.clear();
 
-	n = conf.getcolor(cp_dialog_highlight);
+	i = t.addnode(_(" Sound and colors "));
+	t.addleaff(i, 0, 1, _(" Change sound device to : %s "), strregsound(s));
+	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
 
-	nconf = t.addnode(0, n, 0, _(" Configuration "));
-	ncl = t.addnode(0, n, 0, _(" Contact list "));
-	nfeat = t.addnode(0, n, 0, _(" Features "));
-	ncomm = t.addnode(0, n, 0, _(" Communications "));
-	noth = t.addnode(0, n, 0, _(" Other "));
+	i = t.addnode(_(" Contact list "));
+	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
+	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
+	t.addleaff(i, 0,  3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
+	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
+	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno(quote));
+	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
+	t.addleaff(i, 0, 16, _(" Send all events through server : %s "), stryesno(serveronly));
+	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
 
-	t.addleaff(nconf, 0, 1, _(" Change sound device to : %s "), strregsound(s));
-	t.addleaff(nconf, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
+	i = t.addnode(_(" Communications "));
+	t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
 
-	t.addleaff(ncl, 0, 17, _(" Arrange contacts into groups : %s "), stryesno(usegroups));
-	t.addleaff(ncl, 0, 6, _(" Hide offline users : %s "), stryesno(hideoffl));
-
-	t.addleaff(ncomm, 0, 9, _(" Use SOCKS proxy : %s "), stryesno(socks));
-
-	t.addleaff(nfeat, 0, 3, _(" Russian translation win1251-koi8 needed : %s "), stryesno(rus));
-	t.addleaff(nfeat, 0, 8, _(" Quote a message on reply : %s "), stryesno(quote));
-	t.addleaff(nfeat, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
-	t.addleaff(nfeat, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
-	t.addleaff(nfeat, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
-	t.addleaff(nfeat, 0, 16, _(" Send all events through server : %s "), stryesno(serveronly));
-
-	t.addleaff(noth, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
-	t.addleaff(noth, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
+	i = t.addnode(_(" Miscellaneous "));
+	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
+	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
 
 	if(socks) {
 	    conf.getsocksuser(socksuser, sockspass);
-	    nproxy = t.addnode(0,conf.getcolor(cp_dialog_highlight),0, _(" SOCKS proxy settings "));
-	    t.addleaff(nproxy, 0, 10, _(" Proxy server address : %s "), prserv.c_str());
-	    t.addleaff(nproxy, 0, 11, _(" Proxy user name : %s "), socksuser.c_str());
-	    t.addleaff(nproxy, 0, 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
+	    i = t.addnode(_(" SOCKS proxy settings "));
+	    t.addleaff(i, 0, 10, _(" Proxy server address : %s "), prserv.c_str());
+	    t.addleaff(i, 0, 11, _(" Proxy user name : %s "), socksuser.c_str());
+	    t.addleaff(i, 0, 12, _(" Proxy password : %s "), phidden.assign(sockspass.size(), '*').c_str());
 	}
 
 	void *p;

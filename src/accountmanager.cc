@@ -2,6 +2,7 @@
 #include "icqface.h"
 #include "icqhook.h"
 #include "yahoohook.h"
+#include "imcontroller.h"
 
 #define getcolor(c)     conf.getcolor(c)
 
@@ -21,6 +22,8 @@ void accountmanager::exec() {
     string spname;
     bool fin, proceed;
 
+    face.blockmainscreen();
+
     db.setwindow(new textwindow(0, 0, BIGDIALOG_WIDTH, BIGDIALOG_HEIGHT,
 	getcolor(cp_dialog_frame), TW_CENTERED,
 	getcolor(cp_dialog_highlight), _(" IM account manager ")));
@@ -32,6 +35,7 @@ void accountmanager::exec() {
 	getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
 
     db.addautokeys();
+    db.idle = &face.dialogidle;
 
     treeview &t = *db.gettree();
 
@@ -90,6 +94,12 @@ void accountmanager::exec() {
 		    account.password = face.inputstr(spname + _(" password: "),
 			account.password, '*');
 		    break;
+		case 6:
+		    imcontrol.registration(account);
+		    break;
+		case 7:
+		    imcontrol.updateinfo(account);
+		    break;
 		case 8:
 		    proceed = true;
 
@@ -111,7 +121,8 @@ void accountmanager::exec() {
     }
 
     db.close();
-    face.update();
+    face.unblockmainscreen();
 
     conf.save();
+    face.update();
 }

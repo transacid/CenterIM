@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.37 2001/11/14 18:09:46 konst Exp $
+* $Id: icqface.cc,v 1.38 2001/11/15 16:46:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -241,12 +241,6 @@ int icqface::contextmenu(icqcontact *c) {
 	    break;
     }
 
-    if(c->getdesc().pname != infocard)
-    if(c->getdesc() != contactroot)
-    if(conf.getusegroups()) {
-	m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
-    }
-
     if(m.empty()) {
 	if(!c->inlist()) {
 	    m.additem(0, ACT_MSG,       _(" Send a message     enter"));
@@ -258,6 +252,12 @@ int icqface::contextmenu(icqcontact *c) {
 	    m.additem(0, ACT_REMOVE,    _(" Remove user          del"));
 	    m.additem(0, ACT_IGNORE,    _(" Ignore user"));
 	}
+    }
+
+    if(c->getdesc().pname != infocard)
+    if(c->getdesc() != contactroot)
+    if(conf.getusegroups()) {
+	m.additem(0, ACT_GROUPMOVE, _(" Move to group.."));
     }
 
     m.scale();
@@ -1926,8 +1926,9 @@ void icqface::log(const char *fmt, ...) {
     va_end(ap);
 }
 
-void icqface::log(string text) {
+void icqface::log(const string atext) {
     int i;
+    string text = atext;
 
 #ifdef DEBUG
     if(flog.is_open()) flog << text << endl;
@@ -1952,7 +1953,7 @@ void icqface::log(string text) {
     }
 }
 
-void icqface::status(string text) {
+void icqface::status(const string text) {
     attrset(conf.getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
     kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", text.c_str());

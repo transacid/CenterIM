@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.32 2001/11/14 18:09:46 konst Exp $
+* $Id: centericq.cc,v 1.33 2001/11/15 16:46:54 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -38,6 +38,7 @@
 centericq::centericq() {
     timer_keypress = time(0);
     timer_checkmail = 0;
+    regmode = false;
 }
 
 centericq::~centericq() {
@@ -73,8 +74,18 @@ void centericq::exec() {
     conf.load();
     face.init();
 
-    if(!conf.getouridcount()) {
-	manager.exec();
+    if(regmode = !conf.getouridcount()) {
+	char *p = getenv("LANG");
+
+	if(p)
+	if(((string) p).substr(0, 2) == "ru")
+	    icq_Russian = yahoo_Russian = true;
+
+	if(updateconf()) {
+	    manager.exec();
+	}
+
+	regmode = false;
     }
 
     if(conf.getouridcount()) {
@@ -99,93 +110,6 @@ void centericq::exec() {
 
     face.done();
     conf.save();
-}
-
-void centericq::reg() {
-/*
-    unsigned int ruin;
-    int sockfd;
-    bool finished;
-    string rpasswd, nick, fname, lname, email, socksuser, sockspass;
-    fd_set fds;
-    FILE *f;
-
-    if(face.regdialog(ruin, rpasswd)) {
-	if(!ruin) {
-	    face.progress.show(_(" Registration progress "));
-	    face.getregdata(nick, fname, lname, email);
-	    icq_Init(&icql, ruin, rpasswd.c_str(), nick.c_str());
-
-	    if(!conf.getsockshost().empty()) {
-		conf.getsocksuser(socksuser, sockspass);
-
-		icq_SetProxy(&icql, conf.getsockshost().c_str(),
-		    conf.getsocksport(), socksuser.empty() ? 0 : 1,
-		    socksuser.c_str(), sockspass.c_str());
-	    }
-
-	   ihook.reginit(&icql);
-
-	    for(finished = false; !finished; ) {
-		face.progress.log(_("Connecting to the server %s ..."),
-		    conf.getservername().c_str());
-
-		if(icq_Connect(&icql, conf.getservername().c_str(), conf.getserverport()) != -1) {
-		    while(!finished) {
-			face.progress.log(_("Sending request"));
-			icq_RegNewUser(&icql, rpasswd.c_str());
-
-			time_t spent = time(0);
-
-			while(!ihook.getreguin() && !finished) {
-			    struct timeval tv;
-			    tv.tv_sec = 5;
-			    tv.tv_usec = 0;
-
-			    if(time(0)-spent > PERIOD_WAITNEWUIN) {
-				if(face.ask(_("Timed out waiting for a new uin. Retry?"), ASK_YES | ASK_NO, ASK_YES) == ASK_NO) {
-				    exit(0);
-				} else {
-				    face.progress.log(_("Retrying.."));
-				    icq_RegNewUser(&icql, rpasswd.c_str());
-				    time(&spent);
-				}
-			    }
-
-			    FD_ZERO(&fds);
-			    FD_SET((sockfd = icq_GetSok(&icql)), &fds);
-			    select(sockfd+1, &fds, 0, 0, &tv);
-			    if(FD_ISSET(sockfd, &fds)) {
-				icq_HandleServerResponse(&icql);
-			    }
-			}
-
-			if(!finished) {
-			    face.progress.log(_("New UIN received, %lu"), ihook.getreguin());
-			    finished = true;
-			}
-		    }
-
-		    face.progress.log(_("Disconnected"));
-		    icq_Disconnect(&icql);
-		    ihook.regdisconnected(&icql, 0);
-		    sleep(2);
-		} else {
-		    if(face.ask(_("Unable to connect to the icq server. Retry?"),
-		    ASK_YES | ASK_NO) == ASK_NO) {
-			finished = true;
-		    }
-		}
-	    }
-
-	    conf.registerinfo(ihook.getreguin(), rpasswd, nick, fname, lname, email);
-	    face.progress.hide();
-	} else {
-	    ihook.setreguin(ruin);
-	    conf.registerinfo(ruin, rpasswd, nick, fname, lname, email);
-	}
-    }
-*/
 }
 
 void centericq::mainloop() {
@@ -378,7 +302,16 @@ void centericq::userinfo(const imcontact cinfo) {
 	c = clist.get(contactroot);
 	realuin = contactroot;
 	c->clear();
-	c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
+
+	switch(cinfo.pname) {
+	    case icq:
+		if(ihook.online()) {
+		    c->setseq2(icq_SendMetaInfoReq(&icql, cinfo.uin));
+		}
+		break;
+	    case yahoo:
+		break;
+	}
     }
 
     if(c) {
@@ -494,11 +427,13 @@ void centericq::sendcontacts(const imcontact cinfo) {
     }
 }
 
-void centericq::updateconf() {
+bool centericq::updateconf() {
+    bool r;
+
     regsound snd = rsdontchange;
     regcolor clr = rcdontchange;
 
-    if(face.updateconf(snd, clr)) {
+    if(r = face.updateconf(snd, clr)) {
 	if(snd != rsdontchange) {
 	    conf.setregsound(snd);
 	    unlink(conf.getconfigfname("sounds").c_str());
@@ -516,6 +451,8 @@ void centericq::updateconf() {
 
 	face.update();
     }
+
+    return r;
 }
 
 void centericq::nonicq(int id) {
@@ -748,27 +685,29 @@ bool centericq::idle(int options = 0) {
 
     for(keypressed = false; !keypressed; ) {
 	timer_keypress = lastkeypress();
-	exectimers();
 
 	FD_ZERO(&fds);
 	FD_SET(0, &fds);
 
-	if(ihook.getsockfd()) {
-	    FD_SET(ihook.getsockfd(), &fds);
-	}
+	if(!regmode) {
+	    exectimers();
 
-	if(yhook.getsockfd()) {
-	    FD_SET(yhook.getsockfd(), &fds);
+	    if(ihook.getsockfd()) {
+		FD_SET(ihook.getsockfd(), &fds);
+	    }
+
+	    if(yhook.getsockfd()) {
+		FD_SET(yhook.getsockfd(), &fds);
+	    }
+
+	    if(ihook.online() || yhook.online()) {
+		tv.tv_sec = PERIOD_SELECT;
+	    } else {
+		tv.tv_sec = PERIOD_RECONNECT/3;
+	    }
 	}
 
 	tv.tv_usec = 0;
-
-	if(ihook.online() || yhook.online()) {
-	    tv.tv_sec = PERIOD_SELECT;
-	} else {
-	    tv.tv_sec = PERIOD_RECONNECT/3;
-	}
-
 	sockfd = max(ihook.getsockfd(), yhook.getsockfd());
 	select(sockfd+1, &fds, 0, 0, &tv);
 

@@ -22,6 +22,7 @@ class centericq {
 
     protected:
 	time_t timer_checkmail, timer_keypress;
+	bool regmode;
 
 	static void handlesignal(int signum);
 
@@ -42,7 +43,7 @@ class centericq {
 	void userinfo(const imcontact cinfo);
 	void changestatus();
 	void updatedetails();
-	void updateconf();
+	bool updateconf();
 	void sendfiles(const imcontact cinfo);
 	void sendcontacts(const imcontact cinfo);
 	void find();

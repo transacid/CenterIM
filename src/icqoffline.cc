@@ -1,7 +1,7 @@
 /*
 *
 * centericq messages sending/auto-postponing class
-* $Id: icqoffline.cc,v 1.12 2001/11/13 17:08:13 konst Exp $
+* $Id: icqoffline.cc,v 1.13 2001/11/15 16:46:55 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -44,10 +44,10 @@ FILE *icqoffline::open(const imcontact cinfo, const char *mode) {
     return fopen(fname.c_str(), mode);
 }
 
-void icqoffline::sendmsg(const imcontact cinfo, const string atext) {
+void icqoffline::sendmsg(const imcontact cinfo, const string atext, FILE *of = 0) {
     icqcontact *c = clist.get(cinfo);
     unsigned long seq;
-    FILE *f = open(cinfo, "a");
+    FILE *f = of ? of : open(cinfo, "a");
     vector<string> lst;
     string text = atext;
 
@@ -63,12 +63,8 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext) {
 	    }
 
 	    switch(cinfo.pname) {
-		case icq:
-		    seq = ihook.sendmessage(c, text);
-		    break;
-		case yahoo:
-		    seq = yhook.sendmessage(c, text);
-		    break;
+		case icq: seq = ihook.sendmessage(c, text); break;
+		case yahoo: seq = yhook.logged() ? yhook.sendmessage(c, text) : 0; break;
 	    }
 
 	    fprintf(f, "\f\nMSG\n");
@@ -79,11 +75,11 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext) {
 	    if(lst.empty()) break;
 	}
 
-	fclose(f);
+	if(!of) fclose(f);
 
 	switch(cinfo.pname) {
 	    case yahoo:
-		offl.scan(seq, osremove);
+		if(seq) offl.scan(seq, osremove);
 		break;
 	}
 
@@ -91,9 +87,10 @@ void icqoffline::sendmsg(const imcontact cinfo, const string atext) {
     }
 }
 
-void icqoffline::sendurl(const imcontact cinfo, const string url, const string text) {
+void icqoffline::sendurl(const imcontact cinfo, const string url,
+const string text, FILE *of = 0) {
     icqcontact *c = clist.get(cinfo);
-    FILE *f = open(cinfo, "a");
+    FILE *f = of ? of : open(cinfo, "a");
 
     if(f) {
 	unsigned long seq = icq_SendURL(&icql, cinfo.uin, url.c_str(), text.c_str(),
@@ -103,7 +100,8 @@ void icqoffline::sendurl(const imcontact cinfo, const string url, const string t
 	fprintf(f, "%lu\n%lu\n", seq, time(0));
 	fprintf(f, "%s\n", url.c_str());
 	fprintf(f, "%s\n", text.c_str());
-	fclose(f);
+
+	if(!of) fclose(f);
 
 	totalunsent++;
 	face.showtopbar();
@@ -136,6 +134,7 @@ unsigned long sseq) {
 		    }
 		}
 		break;
+
 	    case osexpired:
 		if(send = (time(0)-tm > PERIOD_RESEND)) {
 		    c->setmsgdirect(false);
@@ -147,6 +146,7 @@ unsigned long sseq) {
 		    }
 		}
 		break;
+
 	    case osremove:
 		if(sseq == seq) {
 		    time_t t = time(0);
@@ -161,34 +161,24 @@ unsigned long sseq) {
 		    send = false;
 		}
 		break;
+
 	    case ossendall:
 		break;
 	}
 
 	if(msg && text.size()) {
-	    if(save)
-	    while(1) {
-		if(!lst.empty()) {
-		    text = *lst.begin();
-		    lst.erase(lst.begin());
-		}
-
-		if(send)
-		    seq = icq_SendMessage(&icql, cinfo.uin, text.c_str(), way);
-
+	    if(save && send) {
+		sendmsg(c->getdesc(), text, of);
+	    } else if(save && !send) {
 		fprintf(of, "\f\nMSG\n");
 		fprintf(of, "%lu\n%lu\n", seq, tm);
 		fprintf(of, "%s\n", text.c_str());
 		processed++;
-
-		if(lst.empty()) break;
 	    }
 	} else if(!msg && url.size()) {
-	    if(send) {
-		seq = icq_SendURL(&icql, cinfo.uin, url.c_str(), text.c_str(), way);
-	    }
-
-	    if(save) {
+	    if(save && send) {
+		sendurl(c->getdesc(), url, text, of);
+	    } else if(save && !send) {
 		fprintf(of, "\f\nURL\n");
 		fprintf(of, "%lu\n%lu\n", seq, tm);
 		fprintf(of, "%s\n", url.c_str());

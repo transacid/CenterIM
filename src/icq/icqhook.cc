@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.5 2001/11/14 16:18:16 konst Exp $
+* $Id: icqhook.cc,v 1.6 2001/11/15 16:46:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -140,20 +140,6 @@ void icqhook::reginit(struct icq_link *link) {
 void icqhook::loggedin(struct icq_link *link) {
     ihook.flogged = true;
     ihook.connecting = false;
-/*
-    if(ihook.getreguin()) {
-	string nick, fname, lname, email;
-	face.getregdata(nick, fname, lname, email);
-
-	if(nick.size() || fname.size() || lname.size() || email.size()) {
-	    icq_UpdateNewUserInfo(&icql, nick.c_str(), fname.c_str(),
-	    lname.c_str(), email.c_str());
-	}
-
-	cicq.updatedetails();
-	ihook.setreguin(0);
-    }
-*/
     ihook.timer_resolve = time(0)-PERIOD_RESOLVE+5;
 
     time(&ihook.logontime);
@@ -751,8 +737,10 @@ bool icqhook::online() const {
 }
 
 unsigned long icqhook::sendmessage(const icqcontact *c, const string text) {
-    return icq_SendMessage(&icql, c->getdesc().uin, text.c_str(),
-	c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER);
+    return online() ?
+	icq_SendMessage(&icql, c->getdesc().uin, text.c_str(),
+	    c->getmsgdirect() ? ICQ_SEND_BESTWAY : ICQ_SEND_THRUSERVER)
+	: 0;
 }
 
 imstatus icqhook::icq2imstatus(int status) const {
@@ -774,6 +762,10 @@ bool icqhook::enabled() const {
 }
 
 void icqhook::setstatus(imstatus st) {
+    setautostatus(manualstatus = st);
+}
+
+void icqhook::setautostatus(imstatus st) {
     static int stat2int[imstatus_size] = {
 	STATUS_OFFLINE,
 	STATUS_ONLINE,
@@ -796,8 +788,6 @@ void icqhook::setstatus(imstatus st) {
 	    disconnect();
 	}
     }
-
-    manualstatus = st;
 }
 
 imstatus icqhook::getstatus() const {

@@ -30,8 +30,8 @@ class icqoffline {
 	icqoffline();
 	~icqoffline();
 
-	void sendmsg(imcontact cinfo, const string text);
-	void sendurl(imcontact cinfo, const string url, const string text);
+	void sendmsg(imcontact cinfo, const string text, FILE *of = 0);
+	void sendurl(imcontact cinfo, const string url, const string text, FILE *of = 0);
 
 	void scan(unsigned long sseq, scanaction act);
 
