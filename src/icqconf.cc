@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.68 2002/05/02 16:49:02 konst Exp $
+* $Id: icqconf.cc,v 1.69 2002/05/07 22:48:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -834,7 +834,7 @@ void icqconf::usage() const {
     cout << endl << "Events sending options:" << endl;
     cout << "  -s, --send <event type>  event type; can be msg, sms or url" << endl;
     cout << "  -S, --status <status>    change the current IM status" << endl;
-    cout << "  -p, --proto <protocol>   protocol type; can be icq, yahoo or msn" << endl;
+    cout << "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim or irc" << endl;
     cout << "  -t, --to <destination>   destination UIN or nick (depends on protocol)" << endl;
 
     cout << endl << "Report bugs to <centericq-bugs@konst.org.ua>." << endl;
