@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.52 2002/03/14 14:15:50 konst Exp $
+* $Id: icqconf.cc,v 1.53 2002/03/14 14:31:24 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -23,7 +23,6 @@
 */
 
 #include <sys/types.h>
-#include <sys/vfs.h>
 #include <dirent.h>
 #include <fstream>
 

@@ -13,7 +13,8 @@ Contents
     2.1. ICQ accounts
     2.2. Yahoo! accounts
     2.3. MSN accounts
-    2.4. Updating details
+    2.4. AIM accounts
+    2.5. Updating details
 3. User interface
     3.1. The ESC key
     3.2. The main screen
@@ -68,16 +69,17 @@ Contents
 ---------------
 
   Centericq is a text mode menu- and window-driven IM interface. ICQ,
-Yahoo! and MSN protocols are now supported. It allows you to send, receive,
-and forward messages, URLs, SMSes and, contacts, mass message send, search
-for users (including extended "whitepages search"), view users' details,
-maintain your contact list directly from the program (including non-icq
-contacts), view the messages history, register a new UIN and update your
-details, be informed on receiving email messages, automatically set away
-after the defined period of inactivity (on any console), and have your own
-ignore, visible and invisible lists. It can also associate events with
-sounds, has support for Hebrew and Arabic languages and allows to arrange
-contacts into groups.
+Yahoo!, MSN and AIM TOC protocols are now supported. It allows you to
+send, receive, and forward messages, URLs, SMSes and, contacts, mass
+message send, search for users (including extended "whitepages search"),
+view users' details, maintain your contact list directly from the
+program (including non-icq contacts), view the messages history,
+register a new UIN and update your details, be informed on receiving
+email messages, automatically set away after the defined period of
+inactivity (on any console), and have your own ignore, visible and
+invisible lists. It can also associate events with sounds, has support
+for Hebrew and Arabic languages and allows to arrange contacts into
+groups.
 
   Centericq is known to build and work well under Linux, FreeBSD,
 OpenBSD and NetBSD.
@@ -121,7 +123,7 @@ lot in it.
 
   Centericq's ICQ module has almost all the functionality including
 extended issues that Mirabilis client has. Speaking of other protocols,
-it has quite enough support for Yahoo! and MSN.
+it has quite full support for features of Yahoo!, MSN and AIM.
 
   Beside simple things like sending and receiving messages, changing
 online status and basic user information, centericq advanced features
@@ -201,7 +203,16 @@ http://chat.msn.com/ though it seems that they block access from Linux
 based web browsers.
 
 
-2.4. Updating details
+2.4. MSN accounts
+-----------------
+
+  AIM accounts can be created with the AOL's web interface at
+http://aim.aol.com/ by clicking on the "New user" link. Don't also
+forget to set your profile information with "Update your details" item
+in the Account manager dialog.
+
+
+2.5. Updating details
 ---------------------
 
   If you have just registered on the ICQ network only basic fields of
@@ -213,9 +224,9 @@ You can fill in information that will be visible to other ICQ users.
 They also will be able to find you with specifying what you filled in
 their "find users" requests.
 
-  It's possible to update your ICQ details any time you're online with
-the dialog. Details within other networks are possible to be updated
-with respective web interfaces, I believe.
+  It's possible to update your ICQ and AIM details any time you're
+online with the dialog. Details within other networks are possible to be
+updated with respective web interfaces, I believe.
 
 
 3. User interface
@@ -1172,6 +1183,9 @@ IM protocols support in centericq.
 
   Douglas Winslow <douglas@min.net>, for the Yahoo! protocol
   implmentation.
+
+  Ian Gulliver <ian@penguinhosting.net> for the nice Firetalk library
+  used by centericq to provide the AIM service.
 
   Since centericq only contains support for the ICQ protocol taken from
 the original software made by Israeli company named "Mirabilis", you might

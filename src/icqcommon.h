@@ -19,6 +19,15 @@
 #include "kkstrtext.h"
 #include "conf.h"
 
+
+#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__)
+#include <sys/param.h>
+#include <sys/mount.h>
+#else
+#include <sys/vfs.h>
+#endif
+
+
 #define PERIOD_RECONNECT        40
 
 #ifdef ENABLE_NLS
