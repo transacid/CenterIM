@@ -156,9 +156,9 @@ void accountmanager::exec() {
 		    break;
 
 		case 10:
-		    if(face.edit(tmp = account.awaymsg,
+		    if(face.edit(tmp = conf.getawaymsg(pname),
 		    spname + ": " + _("away message"))) {
-			account.awaymsg = tmp;
+			conf.setawaymsg(pname, tmp);
 		    }
 		    break;
 	    }

@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.55 2002/03/15 12:27:45 konst Exp $
+* $Id: icqconf.cc,v 1.56 2002/03/15 15:15:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -51,36 +51,98 @@ icqconf::~icqconf() {
 }
 
 icqconf::imaccount icqconf::getourid(protocolname pname) {
-    ifstream f;
     imaccount im;
-    string buf, fname;
     vector<imaccount>::iterator i;
 
     i = find(accounts.begin(), accounts.end(), pname);
     im = i == accounts.end() ? imaccount(pname) : *i;
 
-    if(!im.empty()) {
-	fname = conf.getconfigfname("awaymsg-" + getprotocolname(im.pname));
-	im.awaymsg = "";
+    return im;
+}
 
-	f.open(fname.c_str());
+void icqconf::setourid(const imaccount &im) {
+    vector<imaccount>::iterator i;
 
-	if(f.is_open()) {
-	    while(!f.eof()) {
-		getstring(f, buf);
-		if(!im.awaymsg.empty()) im.awaymsg += "\n";
-		im.awaymsg += buf;
+    i = find(accounts.begin(), accounts.end(), im.pname);
+
+    if(i != accounts.end()) {
+	if(im.empty()) {
+	    accounts.erase(i);
+	} else {
+	    *i = im;
+	}
+    } else {
+	if(!im.empty()) {
+	    accounts.push_back(im);
+	    i = accounts.end()-1;
+
+	    if(i->server.empty())
+	    switch(i->pname) {
+		case icq:
+		    i->server = "login.icq.com";
+		    i->port = 5190;
+		    break;
+		case msn:
+		    i->server = "messenger.hotmail.com";
+		    i->port = 1863;
+		    break;
+		case aim:
+		    i->server = "toc.oscar.aol.com";
+		    i->port = 9898;
+		    break;
 	    }
-
-	    f.close();
 	}
     }
-
-    return im;
 }
 
 int icqconf::getouridcount() const {
     return accounts.size();
+}
+
+string icqconf::getawaymsg(protocolname pname) {
+    string r, buf, fname;
+    ifstream f;
+
+    if(!(gethook(pname).getcapabilities() & hoptCanSetAwayMsg))
+	return "";
+
+    fname = conf.getconfigfname("awaymsg-" + getprotocolname(pname));
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    if(!r.empty()) r += "\n";
+	    r += buf;
+	}
+
+	f.close();
+    }
+
+    if(r.empty()) {
+	char buf[512];
+
+	sprintf(buf, _("I do really enjoy the default %s away message of %s %s."),
+	    getprotocolname(pname).c_str(), PACKAGE, VERSION);
+
+	setawaymsg(pname, r = buf);
+    }
+}
+
+void icqconf::setawaymsg(protocolname pname, const string &amsg) {
+    string fname;
+    ofstream f;
+
+    if(!(gethook(pname).getcapabilities() & hoptCanSetAwayMsg))
+	return;
+
+    fname = conf.getconfigfname("awaymsg-" + getprotocolname(pname));
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	f << amsg;
+	f.close();
+    }
 }
 
 void icqconf::checkdir() {
@@ -138,59 +200,6 @@ void icqconf::loadmainconfig() {
 	}
 
 	f.close();
-    }
-}
-
-void icqconf::setourid(const imaccount &im) {
-    vector<imaccount>::iterator i;
-
-    i = find(accounts.begin(), accounts.end(), im.pname);
-
-    if(i != accounts.end()) {
-	if(im.empty()) {
-	    accounts.erase(i);
-	} else {
-	    *i = im;
-	}
-    } else {
-	if(!im.empty()) {
-	    accounts.push_back(im);
-	    i = accounts.end()-1;
-
-	    if(i->server.empty())
-	    switch(i->pname) {
-		case icq:
-		    i->server = "login.icq.com";
-		    i->port = 5190;
-		    break;
-		case msn:
-		    i->server = "messenger.hotmail.com";
-		    i->port = 1863;
-		    break;
-		case aim:
-		    i->server = "toc.oscar.aol.com";
-		    i->port = 9898;
-		    break;
-	    }
-	}
-    }
-
-    if(i != accounts.end()) {
-	if(gethook(i->pname).getcapabilities() & hoptCanSetAwayMsg) {
-	    if(i->awaymsg.empty()) {
-		char buf[512];
-		sprintf(buf, _("I do really enjoy the default away message of centericq %s."), VERSION);
-		i->awaymsg = buf;
-	    }
-
-	    string fname = conf.getconfigfname("awaymsg-" + getprotocolname(i->pname));
-	    ofstream f(fname.c_str());
-
-	    if(f.is_open()) {
-		f << i->awaymsg;
-		f.close();
-	    }
-	}
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.6 2002/03/15 12:27:45 konst Exp $
+* $Id: aimhook.cc,v 1.7 2002/03/15 15:15:38 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -225,7 +225,7 @@ void aimhook::setautostatus(imstatus st) {
 		    case notavail:
 		    case occupied:
 			firetalk_set_away(ahook.handle,
-			    conf.getourid(aim).awaymsg.c_str());
+			    conf.getawaymsg(aim).c_str());
 			break;
 
 		    default:
@@ -441,7 +441,7 @@ void aimhook::gotinfo(void *conn, void *cli, ...) {
 	icqcontact *c = clist.get(imcontact(nick, aim));
 
 	if(c) {
-	    c->setabout(cuthtml(info));
+	    c->setabout(cuthtml(info, true));
 	    if(c->getabout().empty())
 		c->setabout(_("The user has no profile information."));
 	}
@@ -462,7 +462,7 @@ void aimhook::getmessage(void *conn, void *cli, ...) {
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
 	em.store(immessage(imcontact(sender, aim),
-	    imevent::incoming, rusconv("wk", message)));
+	    imevent::incoming, rusconv("wk", cuthtml(message, true))));
     }
 
     DLOG("getmessage");

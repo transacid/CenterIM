@@ -42,7 +42,7 @@ class icqconf {
 	    imaccount();
 	    imaccount(protocolname apname);
 
-	    string nickname, server, password, awaymsg;
+	    string nickname, server, password;
 	    unsigned long uin, port;
 	    protocolname pname;
 
@@ -153,6 +153,9 @@ class icqconf {
 	imaccount getourid(protocolname pname);
 	void setourid(const imaccount &im);
 	int getouridcount() const;
+
+	string getawaymsg(protocolname pname);
+	void setawaymsg(protocolname pname, const string &amsg);
 
 	string getdirname() const;
 	string getconfigfname(const string &fname) const;
