@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.131 2004/06/10 23:17:31 konst Exp $
+* $Id: icqconf.cc,v 1.132 2004/07/27 07:38:32 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -404,10 +404,10 @@ void icqconf::loadmainconfig() {
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
-	    if(param == "chatmode") initmultiproto(chatmode, buf); else
-	    if(param == "entersends") initmultiproto(entersends, buf); else
-	    if(param == "nonimonline") initmultiproto(nonimonline, buf); else
-	    if(param == "russian" || param == "convert") initmultiproto(cpconvert, buf); else
+	    if(param == "chatmode") initmultiproto(chatmode, buf, true); else
+	    if(param == "entersends") initmultiproto(entersends, buf, true); else
+	    if(param == "nonimonline") initmultiproto(nonimonline, buf, false); else
+	    if(param == "russian" || param == "convert") initmultiproto(cpconvert, buf, false); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
 	    if(param == "logtimestamps") logtimestamps = true; else
@@ -1295,7 +1295,7 @@ void icqconf::setgroupmode(icqconf::groupmode amode) {
     fgroupmode = amode;
 }
 
-void icqconf::initmultiproto(bool p[], string buf) {
+void icqconf::initmultiproto(bool p[], string buf, bool excludenochat) {
     string w;
     protocolname pname;
 
@@ -1305,7 +1305,11 @@ void icqconf::initmultiproto(bool p[], string buf) {
     while(!(w = getword(buf)).empty()) {
 	for(pname = icq; pname != protocolname_size; (int) pname += 1) {
 	    if(getprotocolname(pname) == w) {
-		p[pname] = true;
+		if(excludenochat) {
+		    p[pname] = !gethook(pname).getCapabs().count(hookcapab::nochat);
+		} else {
+		    p[pname] = true;
+		}
 		break;
 	    }
 	}

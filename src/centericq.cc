@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.191 2004/06/19 13:17:56 konst Exp $
+* $Id: centericq.cc,v 1.192 2004/07/27 07:38:32 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -174,6 +174,7 @@ void centericq::mainloop() {
 	    face.getstatkey(key_general_menu, section_contact).c_str(),
 	    face.getstatkey(key_quit, section_contact).c_str());
 
+	face.xtermtitle();
 	c = face.mainloop(action);
 
 	switch(action) {

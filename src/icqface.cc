@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.228 2004/07/20 22:16:40 konst Exp $
+* $Id: icqface.cc,v 1.229 2004/07/27 07:38:32 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -190,6 +190,7 @@ void icqface::init() {
 void icqface::done() {
     kt_resize_event = 0;
     workareas.empty();
+    xtermtitlereset();
 }
 
 void icqface::draw() {
@@ -2864,8 +2865,6 @@ bool icqface::histexec(imevent *&im) {
 
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), buf);
 
-	xtermtitle(buf);
-
 	status(_("%s search, %s again, %s cancel"),
 	    getstatkey(key_search, section_history).c_str(),
 	    getstatkey(key_search_again, section_history).c_str(),
@@ -3340,7 +3339,7 @@ void icqface::xtermtitle(const string &text) {
 
     if(term == "xterm" || term == "Eterm" || term == "aterm"
     || term == "rxvt" || term == "screen")
-	cout << "\x1b]1;\x07\x1b]2;" << "centericq: " << text << "\x07" << flush;
+	cout << "\x1b]1;\x07\x1b]2;" << "centericq" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
 }
 
 void icqface::xtermtitle(const char *fmt, ...) {

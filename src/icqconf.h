@@ -151,7 +151,7 @@ class icqconf {
 	    const string &dest, const string &number) const;
 
 	void externalstatuschange(char st, const string &proto) const;
-	void initmultiproto(bool p[], string buf);
+	void initmultiproto(bool p[], string buf, bool excludenochat);
 
 	void selfsignal(int signum) const;
 

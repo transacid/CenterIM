@@ -208,7 +208,7 @@ class icqface {
 	void status(const string &text);
 	void status(const char *fmt, ...);
 
-	void xtermtitle(const string &text);
+	void xtermtitle(const string &text = "");
 	void xtermtitle(const char *fmt, ...);
 	void xtermtitlereset();
 

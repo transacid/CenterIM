@@ -1,7 +1,7 @@
 /*
 *
 * centericq MSN protocol handling class
-* $Id: msnhook.cc,v 1.86 2004/07/08 23:52:48 konst Exp $
+* $Id: msnhook.cc,v 1.87 2004/07/27 07:38:32 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -155,6 +155,10 @@ void msnhook::main() {
     struct timeval tv;
     int hsock = 0;
     MSN::Connection *c;
+
+    FD_ZERO(&rs);
+    FD_ZERO(&ws);
+    FD_ZERO(&es);
 
     getsockets(rs, ws, es, hsock);
     tv.tv_sec = tv.tv_usec = 0;
