@@ -73,7 +73,7 @@ class icqconf {
 	    makelog, fenoughdiskspace, askaway, chatmode, bidi;
 
 	string sockshost, socksuser, sockspass, openurlcommand, basedir,
-	    argv0, smtphost;
+	    argv0, smtphost, bindhost;
 
 	regsound rs;
 	regcolor rc;
@@ -183,6 +183,8 @@ class icqconf {
 
 	bool enoughdiskspace() const { return fenoughdiskspace; }
 	void checkdiskspace();
+
+	string getbindhost() const { return bindhost; }
 };
 
 extern icqconf conf;

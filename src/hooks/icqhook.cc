@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.115 2002/11/11 23:41:48 konst Exp $
+* $Id: icqhook.cc,v 1.116 2002/11/18 12:22:49 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -132,6 +132,8 @@ void icqhook::connect() {
 
     if(!conf.getsmtphost().empty()) cli.setSMTPServerHost(conf.getsmtphost());
     if(conf.getsmtpport()) cli.setSMTPServerPort(conf.getsmtpport());
+
+    if(!conf.getbindhost().empty()) cli.setClientBindHost(conf.getbindhost());
 
     face.log(_("+ [icq] connecting to the server"));
 

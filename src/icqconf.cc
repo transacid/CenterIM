@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.88 2002/11/01 18:05:45 konst Exp $
+* $Id: icqconf.cc,v 1.89 2002/11/18 12:22:45 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -711,6 +711,11 @@ void icqconf::commandline(int argc, char **argv) {
 		if(basedir.substr(basedir.size()-1) != "/") basedir += "/";
 	    }
 
+	} else if((args == "-B") || (args == "--bind")) {
+	    if(argv[++i]) {
+		bindhost = argv[i];
+	    }
+
 	} else if((args == "-s") || (args == "--send")) {
 	    if(argv[++i]) event = argv[i];
 
@@ -890,6 +895,7 @@ void icqconf::usage() const {
     cout << endl << _("General options:") << endl;
     cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
+    cout << _("  --bind, -B <host/ip>     bind a custom local IP") << endl;
     cout << _("  --help                   display this stuff") << endl;
 
     cout << endl << _("Events sending options:") << endl;
