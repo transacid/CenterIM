@@ -608,7 +608,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 						while (buddyiter) {
 							if (irc_compare_nicks(args[3],buddyiter->nickname) == 0) {
 								buddyiter->tempint2 = 1;
-								firetalk_callback_im_buddyaway(c,args[3],1);
+								firetalk_callback_im_buddyaway(c,args[3],args[4],1);
 							}
 							buddyiter = buddyiter->next;
 						}
@@ -679,7 +679,7 @@ enum firetalk_error irc_got_data(client_t c, unsigned char * buffer, unsigned sh
 						while (buddyiter) {
 							if (irc_compare_nicks(args[3],buddyiter->nickname) == 0) {
 								if (buddyiter->tempint2 == 0)
-									firetalk_callback_im_buddyaway(c,buddyiter->nickname,0);
+									firetalk_callback_im_buddyaway(c,buddyiter->nickname,"",0);
 							}
 							buddyiter = buddyiter->next;
 						}
@@ -884,10 +884,10 @@ enum firetalk_error irc_got_data_connecting(client_t c, unsigned char * buffer, 
 		} else {
 			switch (atoi(args[1])) {
 				case 376:
-                        	case 422:
+				case 422:
 					firetalk_callback_doinit(c,c->nickname);
 					firetalk_callback_connected(c);
-                                        break;
+					break;
 				case 431:
 				case 432:
 				case 436:

@@ -390,7 +390,7 @@ static char *toc_quote(const char * const string, const int outside_flag) {
 
 	length = strlen(string);
 	if (outside_flag == 1) {
- 		newcounter = 1;
+		newcounter = 1;
 		output[0] = '"';
 	} else
 		newcounter = 0;
@@ -1103,7 +1103,7 @@ got_data_start:
 		}
 		firetalk_callback_im_buddyonline(c,args[1],args[2][0] == 'T' ? 1 : 0);
 		firetalk_callback_user_nickchanged(c,args[1],args[1]);
-		firetalk_callback_im_buddyaway(c,args[1],args[6][2] == 'U' ? 1 : 0);
+		firetalk_callback_im_buddyaway(c,args[1],"",args[6][2] == 'U' ? 1 : 0);
 		firetalk_callback_idleinfo(c,args[1],atol(args[5]));
 	} else if (strcmp(arg0,"GOTO_URL") == 0) {
 		struct s_toc_infoget *i;

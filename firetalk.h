@@ -82,7 +82,7 @@ enum firetalk_callback {
 	FC_IM_BUDDYOFFLINE,
 		/* void *connection, void *clientstruct, char *nickname */
 	FC_IM_BUDDYAWAY,
-		/* void *connection, void *clientstruct, char *nickname */
+		/* void *connection, void *clientstruct, char *nickname, char *msg */
 	FC_IM_BUDDYUNAWAY,
 		/* void *connection, void *clientstruct, char *nickname */
 	FC_IM_LISTBUDDY,

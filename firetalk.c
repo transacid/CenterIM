@@ -735,7 +735,7 @@ void firetalk_callback_im_buddyonline(client_t c, const char * const nickname, c
 	return;
 }
 
-void firetalk_callback_im_buddyaway(client_t c, const char * const nickname, const int away) {
+void firetalk_callback_im_buddyaway(client_t c, const char * const nickname, const char * const msg, const int away) {
 	struct s_firetalk_handle *conn;
 	struct s_firetalk_buddy *buddyiter;
 
@@ -750,7 +750,7 @@ void firetalk_callback_im_buddyaway(client_t c, const char * const nickname, con
 			if (buddyiter->away != away && (buddyiter->online == 1)) {
 				buddyiter->away = away;
 				if ((away == 1) && (conn->callbacks[FC_IM_BUDDYAWAY] != NULL))
-					conn->callbacks[FC_IM_BUDDYAWAY](conn,conn->clientstruct,nickname);
+					conn->callbacks[FC_IM_BUDDYAWAY](conn,conn->clientstruct,nickname,msg);
 				else if ((away == 0) && (conn->callbacks[FC_IM_BUDDYUNAWAY] != NULL))
 					conn->callbacks[FC_IM_BUDDYUNAWAY](conn,conn->clientstruct,nickname);
 				return;
