@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.16 2001/11/08 10:26:19 konst Exp $
+* $Id: icqhook.cc,v 1.1 2001/11/08 16:46:39 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *

@@ -34,16 +34,6 @@
 #define VERSION "devel"
 #endif
 
-/*
-#ifndef SHARE_DIR
-#define SHARE_DIR "/usr/local/share"
-#endif
-
-#ifndef LOCALE_DIR
-#define LOCALE_DIR "/usr/local/share/locale"
-#endif
-*/
-
 #define ICQ_SERVER      "icq.mirabilis.com:4000"
 
 enum regsound {rscard, rsspeaker, rsdisable, rsdontchange};

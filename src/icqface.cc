@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.30 2001/11/08 10:26:18 konst Exp $
+* $Id: icqface.cc,v 1.31 2001/11/08 16:46:37 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -810,7 +810,7 @@ void icqface::userinfo(const contactinfo cinfo, const contactinfo realinfo) {
     db.setbar(new horizontalbar(WORKAREA_X1+2, WORKAREA_Y2-1,
 	conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 	_("Info"), _("Home"), _("Work"), _("More"), _("About"),
-	!cinfo.type != contactinfo::infocard ? _("Retrieve") : _("Edit"), 0));
+	cinfo.type != contactinfo::infocard ? _("Retrieve") : _("Edit"), 0));
 
     db.addautokeys();
     db.idle = &dialogidle;
