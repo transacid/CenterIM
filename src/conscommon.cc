@@ -1,7 +1,7 @@
 /*
 *
 * kkconsui common routines
-* $Id: conscommon.cc,v 1.17 2002/03/25 19:46:13 konst Exp $
+* $Id: conscommon.cc,v 1.18 2002/03/26 16:14:34 konst Exp $
 *
 * Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -97,11 +97,13 @@ int getkey() {
 
 		fin = 1;
 		break;
+
 	    case CTRL('l'):
 		endwin();
 		refresh();
-		fin=1;
+		fin = 1;
 		break;
+
 	    default:
 		fin = 1;
 		break;
