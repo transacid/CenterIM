@@ -6,126 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: centericq 4.6.5\n"
-"POT-Creation-Date: 2002-03-26 14:28+0200\n"
+"POT-Creation-Date: 2002-03-31 12:25+0300\n"
 "PO-Revision-Date: 2000-10-25 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <konst@konst.org.ua>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: src/centericq.cc:119
-msgid "password: "
-msgstr "пароль: "
-
-#: src/centericq.cc:154
-msgid ""
-"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
-msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
-
-#: src/centericq.cc:208
-#, c-format
-msgid "Ignore all events from %s?"
-msgstr "Игнорировать сообщения от %s?"
-
-#: src/centericq.cc:247
-#, c-format
-msgid "Are you sure want to remove %s?"
-msgstr "Вы действительно хотите удалить %s?"
-
-#: src/centericq.cc:255
-msgid "New nickname to show: "
-msgstr "Новый ник для показа в списке: "
-
-#: src/centericq.cc:263
-msgid "Select a group to move the user to"
-msgstr "Выберите новую группу для пользователя"
-
-#: src/centericq.cc:280
-msgid "+ cannot fetch away messages being offline"
-msgstr "+ невозможно запросить away-сообщение, будучи в offline"
-
-#: src/centericq.cc:465
-#, c-format
-msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
-
-#: src/centericq.cc:468
-#, c-format
-msgid "+ last msg from %s"
-msgstr "+ последнее сообщение от %s"
-
-#: src/centericq.cc:503
-msgid "! another running copy of centericq detected"
-msgstr "! обнаружена работающая копия centericq"
-
-#: src/centericq.cc:504
-#, c-format
-msgid "! this may cause problems. pid %lu"
-msgstr "! это может вызвать проблемы. pid %lu"
-
-#: src/centericq.cc:579
-msgid "Mobile number: "
-msgstr "Номер мобильного телефона: "
-
-#: src/centericq.cc:775
-#, c-format
-msgid "+ no history items for %s"
-msgstr "+ история для %s пуста"
-
-#: src/centericq.cc:801
-#, c-format
-msgid "+ user %s is already on the list"
-msgstr "+ %s уже есть в списке"
-
-#: src/centericq.cc:807
-msgid "Select a group to add the user to"
-msgstr "Выберите группу для контакта"
-
-#: src/centericq.cc:814
-msgid "Notify the user he/she has been added?"
-msgstr "Уведомить пользователя о том, что он был добавлен?"
-
-#.            ihook.sendalert(ic);
-#: src/centericq.cc:817
-#, c-format
-msgid "+ the notification has been sent to %lu"
-msgstr "+ уведомление послано %lu"
-
-#: src/centericq.cc:829
-#, c-format
-msgid "+ %s has been added to the list"
-msgstr "+ %s добавлен в список"
-
-#: src/centericq.cc:901
-msgid "+ the user is back"
-msgstr "+ пользователь вернулся"
-
-#: src/centericq.cc:917
-#, c-format
-msgid "+ [%s] status restored"
-msgstr "+ [%s] статус восстановлен"
-
-#: src/centericq.cc:931
-#, c-format
-msgid "+ [%s] automatically set %s"
-msgstr "+ [%s] автоматический переход в %s"
-
-#: src/centericq.cc:933
-msgid "away"
-msgstr ""
-
-#: src/centericq.cc:933
-msgid "n/a"
-msgstr ""
-
-#: src/centericq.cc:1033
-msgid "! free disk space is less than 10k, going offline"
-msgstr "! свободного места на диске осталось < 10k, рассоединение"
-
-#: src/centericq.cc:1034
-msgid "! otherwise we can lose events and configuration"
-msgstr "! иначе мы можем терять события и глючить"
 
 #: src/icqconf.cc:125
 #, c-format
@@ -134,30 +21,30 @@ msgstr ""
 "Мне действительно нравится сообщение для %s, которое centericq %s %s "
 "устанавливает по умолчанию."
 
-#: src/icqconf.cc:750
+#: src/icqconf.cc:772
 msgid "event sending error: not enough parameters"
 msgstr "ошибка отсылки события: недостаточно параметров"
 
-#: src/icqconf.cc:761
+#: src/icqconf.cc:783
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr ""
 "ошибка отсылки события: для указанного протокола разрешены только номера "
 "(UIN)"
 
-#: src/icqconf.cc:776
+#: src/icqconf.cc:798
 msgid "event sending error: unknown IM type"
 msgstr "ошибка отсылки события: неизвестная IM сеть"
 
-#: src/icqconf.cc:798
+#: src/icqconf.cc:820
 msgid "event sending error: unknown event type"
 msgstr "ошибка отсылки события: неизвестный тип события"
 
-#: src/icqconf.cc:810
+#: src/icqconf.cc:832
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "очередь пополнилась на %s к %s"
 
-#: src/icqconf.cc:815
+#: src/icqconf.cc:837
 msgid "event sending error: the destination contact doesn't exist on your list"
 msgstr ""
 "ошибка отсылки события: контакт назначения не найдем в вашем списке контактов"
@@ -222,8 +109,8 @@ msgstr " Поиск/добавление контактов "
 msgid "cLear"
 msgstr "Очистить"
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:72 src/icqdialogs.cc:281
-#: src/icqdialogs.cc:595 src/imcontroller.cc:37
+#: src/accountmanager.cc:43 src/icqdialogs.cc:72 src/icqdialogs.cc:282
+#: src/icqdialogs.cc:597 src/imcontroller.cc:37
 msgid "Change"
 msgstr "Изменить"
 
@@ -301,17 +188,17 @@ msgstr " Страна : %s "
 msgid " Work "
 msgstr " Работа "
 
-#: src/icqdialogs.cc:108 src/icqdialogs.cc:216
+#: src/icqdialogs.cc:108 src/icqdialogs.cc:217
 #, c-format
 msgid " Company : %s "
 msgstr " Компания : %s "
 
-#: src/icqdialogs.cc:109 src/icqdialogs.cc:217
+#: src/icqdialogs.cc:109 src/icqdialogs.cc:218
 #, c-format
 msgid " Department : %s "
 msgstr " Отдел : %s "
 
-#: src/icqdialogs.cc:110 src/icqdialogs.cc:218
+#: src/icqdialogs.cc:110 src/icqdialogs.cc:219
 #, c-format
 msgid " Position : %s "
 msgstr " Должность : %s "
@@ -328,7 +215,7 @@ msgstr "Ник "
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:137 src/icqdialogs.cc:303
+#: src/icqdialogs.cc:137 src/icqdialogs.cc:304
 msgid "Nickname: "
 msgstr "Ник: "
 
@@ -336,31 +223,31 @@ msgstr "Ник: "
 msgid "E-Mail: "
 msgstr "E-Mail: "
 
-#: src/icqdialogs.cc:139 src/icqdialogs.cc:308 src/imcontroller.cc:67
+#: src/icqdialogs.cc:139 src/icqdialogs.cc:309 src/imcontroller.cc:67
 msgid "First name: "
 msgstr "Имя: "
 
-#: src/icqdialogs.cc:140 src/icqdialogs.cc:309 src/imcontroller.cc:68
+#: src/icqdialogs.cc:140 src/icqdialogs.cc:310 src/imcontroller.cc:68
 msgid "Last name: "
 msgstr "Фамилия: "
 
-#: src/icqdialogs.cc:144 src/icqdialogs.cc:341 src/icqdialogs.cc:350
+#: src/icqdialogs.cc:144 src/icqdialogs.cc:342 src/icqdialogs.cc:351
 msgid "City: "
 msgstr "Город: "
 
-#: src/icqdialogs.cc:145 src/icqdialogs.cc:342 src/icqdialogs.cc:351
+#: src/icqdialogs.cc:145 src/icqdialogs.cc:343 src/icqdialogs.cc:352
 msgid "State: "
 msgstr "Область/штат/провинция: "
 
-#: src/icqdialogs.cc:147 src/icqdialogs.cc:354
+#: src/icqdialogs.cc:147 src/icqdialogs.cc:356
 msgid "Company: "
 msgstr "Компания: "
 
-#: src/icqdialogs.cc:148 src/icqdialogs.cc:355
+#: src/icqdialogs.cc:148 src/icqdialogs.cc:357
 msgid "Department: "
 msgstr "Отдел: "
 
-#: src/icqdialogs.cc:149 src/icqdialogs.cc:356
+#: src/icqdialogs.cc:149 src/icqdialogs.cc:358
 msgid "Position: "
 msgstr "Должность: "
 
@@ -392,17 +279,17 @@ msgstr " Дом "
 msgid " Street address : %s "
 msgstr " Адрес : %s "
 
-#: src/icqdialogs.cc:204
+#: src/icqdialogs.cc:204 src/icqdialogs.cc:216
 #, c-format
 msgid " Zip code : %s "
 msgstr " Индекс : %s "
 
-#: src/icqdialogs.cc:205 src/icqdialogs.cc:220
+#: src/icqdialogs.cc:205 src/icqdialogs.cc:221
 #, c-format
 msgid " Phone : %s "
 msgstr " Телефон : %s "
 
-#: src/icqdialogs.cc:206 src/icqdialogs.cc:221
+#: src/icqdialogs.cc:206 src/icqdialogs.cc:222
 #, c-format
 msgid " Fax : %s "
 msgstr " Факс : %s "
@@ -412,205 +299,205 @@ msgstr " Факс : %s "
 msgid " Cellular phone : %s "
 msgstr " Мобильный телефон : %s "
 
-#: src/icqdialogs.cc:219 src/icqdialogs.cc:224
+#: src/icqdialogs.cc:220 src/icqdialogs.cc:225
 #, c-format
 msgid " Homepage : %s "
 msgstr " Страничка : %s "
 
-#: src/icqdialogs.cc:223
+#: src/icqdialogs.cc:224
 msgid " More "
 msgstr " Дополнительно "
 
-#: src/icqdialogs.cc:226
+#: src/icqdialogs.cc:227
 #, c-format
 msgid " 1st language : %s "
 msgstr " 1й язык : %s "
 
-#: src/icqdialogs.cc:229
+#: src/icqdialogs.cc:230
 #, c-format
 msgid " 2nd language : %s "
 msgstr " 2й язык : %s "
 
-#: src/icqdialogs.cc:232
+#: src/icqdialogs.cc:233
 #, c-format
 msgid " 3rd language : %s "
 msgstr " 3й язык : %s "
 
-#: src/icqdialogs.cc:237
+#: src/icqdialogs.cc:238
 msgid " About "
 msgstr " О себе "
 
-#: src/icqdialogs.cc:253
+#: src/icqdialogs.cc:254
 msgid "Fetching your details"
 msgstr "Запрашиваем персональные детали.."
 
-#: src/icqdialogs.cc:267
+#: src/icqdialogs.cc:268
 #, c-format
 msgid " Your %s details "
 msgstr " Ваша %s информация "
 
-#: src/icqdialogs.cc:270
+#: src/icqdialogs.cc:271
 #, c-format
 msgid " %s: details "
 msgstr " %s: детали "
 
-#: src/accountmanager.cc:43 src/icqdialogs.cc:281 src/icqdialogs.cc:595
-#: src/icqdialogs.cc:777
+#: src/accountmanager.cc:43 src/icqdialogs.cc:282 src/icqdialogs.cc:597
+#: src/icqdialogs.cc:779
 msgid "Done"
 msgstr "Готово"
 
-#: src/icqdialogs.cc:298
+#: src/icqdialogs.cc:299
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Подождите минуточку. Ваша информация еще не получена"
 
-#: src/icqdialogs.cc:310
+#: src/icqdialogs.cc:311
 msgid "E-mail: "
 msgstr ""
 
-#: src/icqdialogs.cc:321
+#: src/icqdialogs.cc:322
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Дата рождения (DD-MM-YYYY): "
 
-#: src/icqdialogs.cc:339
+#: src/icqdialogs.cc:340
 msgid "Age: "
 msgstr "Возраст"
 
-#: src/icqdialogs.cc:344 src/icqdialogs.cc:353
+#: src/icqdialogs.cc:345 src/icqdialogs.cc:354
 msgid "Street address: "
 msgstr "Адрес: "
 
-#: src/icqdialogs.cc:345
+#: src/icqdialogs.cc:346 src/icqdialogs.cc:355
 msgid "Zip code: "
 msgstr "Индекс: "
 
-#: src/icqdialogs.cc:346 src/icqdialogs.cc:358
+#: src/icqdialogs.cc:347 src/icqdialogs.cc:360
 msgid "Phone: "
 msgstr "Телефон: "
 
-#: src/icqdialogs.cc:347 src/icqdialogs.cc:359
+#: src/icqdialogs.cc:348 src/icqdialogs.cc:361
 msgid "Fax: "
 msgstr "Факс: "
 
-#: src/icqdialogs.cc:348
+#: src/icqdialogs.cc:349
 msgid "Cellular phone: "
 msgstr "Мобильный телефон: "
 
-#: src/icqdialogs.cc:357 src/icqdialogs.cc:361
+#: src/icqdialogs.cc:359 src/icqdialogs.cc:363
 msgid "Homepage: "
 msgstr "Страничка: "
 
-#: src/icqdialogs.cc:367 src/icqface.cc:787
+#: src/icqdialogs.cc:369 src/icqface.cc:787
 msgid "About"
 msgstr "О себе"
 
-#: src/icqdialogs.cc:450
+#: src/icqdialogs.cc:452
 msgid "none"
 msgstr "нет"
 
-#: src/icqdialogs.cc:465
+#: src/icqdialogs.cc:467
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [Ctrl-X сохранить, Esc отмена] "
 
-#: src/icqdialogs.cc:502
+#: src/icqdialogs.cc:504
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Посылка файла(ов) %s, %lu"
 
-#: src/icqdialogs.cc:512 src/icqdialogs.cc:777 src/icqface.cc:498
+#: src/icqdialogs.cc:514 src/icqdialogs.cc:779 src/icqface.cc:498
 #: src/icqface.cc:1122
 msgid "Add"
 msgstr "Добавить"
 
-#: src/icqdialogs.cc:512 src/icqdialogs.cc:777 src/icqface.cc:1122
+#: src/icqdialogs.cc:514 src/icqdialogs.cc:779 src/icqface.cc:1122
 msgid "Remove"
 msgstr "Удалить"
 
-#: src/icqdialogs.cc:512
+#: src/icqdialogs.cc:514
 msgid "Comment"
 msgstr "Комментарий"
 
-#: src/icqdialogs.cc:512
+#: src/icqdialogs.cc:514
 msgid "Send"
 msgstr "Послать"
 
-#: src/icqdialogs.cc:522
+#: src/icqdialogs.cc:524
 msgid " Files "
 msgstr " Файлы "
 
-#: src/icqdialogs.cc:523
+#: src/icqdialogs.cc:525
 msgid " Comment "
 msgstr " Комментарий "
 
-#: src/icqdialogs.cc:535
+#: src/icqdialogs.cc:537
 msgid "filename: "
 msgstr "имя файла: "
 
-#: src/icqdialogs.cc:542
+#: src/icqdialogs.cc:544
 msgid "comment: "
 msgstr "комментарий: "
 
-#: src/icqdialogs.cc:586
+#: src/icqdialogs.cc:588
 msgid " CenterICQ configuration "
 msgstr " Настройки Centericq "
 
-#: src/icqdialogs.cc:606
+#: src/icqdialogs.cc:608
 msgid " Sound and colors "
 msgstr " Звук и цвета "
 
-#: src/icqdialogs.cc:607
+#: src/icqdialogs.cc:609
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Звуковое устройство : %s "
 
-#: src/icqdialogs.cc:608
+#: src/icqdialogs.cc:610
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Цветовая схема : %s "
 
-#: src/icqdialogs.cc:610
+#: src/icqdialogs.cc:612
 msgid " Contact list "
 msgstr "Список контактов "
 
-#: src/icqdialogs.cc:611
+#: src/icqdialogs.cc:613
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Поддержка групп контактов : %s "
 
-#: src/icqdialogs.cc:612
+#: src/icqdialogs.cc:614
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Не показывать тех, кто не на линии (offline) : %s "
 
-#: src/icqdialogs.cc:613
+#: src/icqdialogs.cc:615
 #, c-format
 msgid " Russian translation win1251-koi8 needed : %s "
 msgstr " Перекодировка win1251-koi8 требуется : %s "
 
-#: src/icqdialogs.cc:614
+#: src/icqdialogs.cc:616
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Не принимать сообщения от юзеров, что не в списке : %s "
 
-#: src/icqdialogs.cc:615
+#: src/icqdialogs.cc:617
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Цитировать сообщения при ответе : %s "
 
-#: src/icqdialogs.cc:616
+#: src/icqdialogs.cc:618
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Проверять локальный почтовый ящик : %s "
 
-#: src/icqdialogs.cc:617
+#: src/icqdialogs.cc:619
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Помнить пароли : %s "
 
-#: src/icqdialogs.cc:619
+#: src/icqdialogs.cc:621
 msgid " Communications "
 msgstr " Связь "
 
-#: src/icqdialogs.cc:620
+#: src/icqdialogs.cc:622
 #, c-format
 msgid " SMTP server : %s "
 msgstr " SMTP сервер : %s "
@@ -618,78 +505,78 @@ msgstr " SMTP сервер : %s "
 #.
 #. t.addleaff(i, 0, 9, _(" Use SOCKS proxy : %s "), stryesno[socks]);
 #.
-#: src/icqdialogs.cc:625
+#: src/icqdialogs.cc:627
 msgid " Miscellaneous "
 msgstr " Прочее "
 
-#: src/icqdialogs.cc:626
+#: src/icqdialogs.cc:628
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Автоматически Away после (мин) : %d "
 
-#: src/icqdialogs.cc:627
+#: src/icqdialogs.cc:629
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Автоматически N/A после (мин) : %d "
 
-#: src/icqdialogs.cc:628
+#: src/icqdialogs.cc:630
 #, c-format
 msgid " Detailed IM events log in ~/.centericq/log : %s "
 msgstr " Подробный журнал в ~/.centericq/log : %s "
 
-#: src/icqdialogs.cc:659
+#: src/icqdialogs.cc:661
 msgid "Auto Away period (0 - disable): "
 msgstr " Авто-away после (0 - выкл): "
 
-#: src/icqdialogs.cc:663
+#: src/icqdialogs.cc:665
 msgid "Auto N/A period (0 - disable): "
 msgstr " Авто-N/A после (0 - выкл): "
 
-#: src/icqdialogs.cc:670
+#: src/icqdialogs.cc:672
 msgid "SOCKS proxy server to use: "
 msgstr "Соединяться через SOCKS прокси сервер: "
 
-#: src/icqdialogs.cc:674
+#: src/icqdialogs.cc:676
 msgid "SOCKS proxy user name: "
 msgstr "Имя пользователя на SOCKS прокси: "
 
-#: src/icqdialogs.cc:678
+#: src/icqdialogs.cc:680
 msgid "SOCKS proxy password: "
 msgstr "Пароль на SOCKS прокси: "
 
-#: src/icqdialogs.cc:692
+#: src/icqdialogs.cc:694
 msgid "SMTP server hostname: "
 msgstr "Имя SMTP сервера: "
 
-#: src/icqdialogs.cc:742
+#: src/icqdialogs.cc:744
 msgid "Your details have been fetched"
 msgstr "Ваша информация получена успешно"
 
-#: src/icqdialogs.cc:754 src/icqface.cc:282
+#: src/icqdialogs.cc:756 src/icqface.cc:282
 msgid "Organize contact groups"
 msgstr "Управление группами контактов"
 
-#: src/icqdialogs.cc:777
+#: src/icqdialogs.cc:779
 msgid "Rename"
 msgstr "Переименовать"
 
-#: src/icqdialogs.cc:777
+#: src/icqdialogs.cc:779
 msgid "Select"
 msgstr "Выбрать"
 
-#: src/icqdialogs.cc:792
+#: src/icqdialogs.cc:794
 msgid " Groups "
 msgstr " Группы "
 
-#: src/icqdialogs.cc:805
+#: src/icqdialogs.cc:807
 msgid "Name for a group to be created: "
 msgstr "Название для новой группы: "
 
-#: src/icqdialogs.cc:814
+#: src/icqdialogs.cc:816
 msgid "New name for the group: "
 msgstr "Новое имя группы: "
 
-#: src/icqdialogs.cc:824
+#: src/icqdialogs.cc:826
 msgid "Are you sure want to remove the group?"
 msgstr "Вы действительно хотите удалить группу?"
 
@@ -930,7 +817,7 @@ msgstr "Интересы"
 msgid "Background"
 msgstr "Прошлый опыт"
 
-#: src/icqface.cc:780 src/icqface.cc:1621
+#: src/icqface.cc:780 src/icqface.cc:1615
 msgid "F2 to URLs, ESC close"
 msgstr "F2 показать ссылки, ESC закрыть"
 
@@ -1030,66 +917,62 @@ msgstr "Список visible пользователей"
 msgid "Invisible list"
 msgstr "Список invisible пользователей"
 
-#: src/icqface.cc:1155
-msgid " ALL YOUR BASE ARE BELONG TO US "
-msgstr ""
-
-#: src/icqface.cc:1157
+#: src/icqface.cc:1153
 msgid "Select contacts to add to the list"
 msgstr "Выберите контакты для добавления в список"
 
-#: src/icqface.cc:1208
+#: src/icqface.cc:1202
 msgid "Event recipients"
 msgstr "Получатели"
 
-#: src/icqface.cc:1337
+#: src/icqface.cc:1331
 msgid "QuickSearch: type to find, Alt-S find again, Enter finish"
 msgstr ""
 "Быстрый переход: набирайте для поиска, Alt-S повторить, Enter завершить"
 
-#: src/icqface.cc:1449
+#: src/icqface.cc:1443
 msgid "+ no URLs within the current context"
 msgstr "+ не ни одной ссылки в данном контексте"
 
-#: src/icqface.cc:1462
+#: src/icqface.cc:1456
 msgid "URLs within the current context"
 msgstr "Ссылки в текущем контексте"
 
-#: src/icqface.cc:1493 src/icqface.cc:1639
+#: src/icqface.cc:1487 src/icqface.cc:1633
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "Исходящее %s к %s"
 
-#: src/icqface.cc:1496
+#: src/icqface.cc:1490
 msgid "Ctrl-X send, Ctrl-P multiple, Ctrl-O history, Alt-? details, ESC cancel"
 msgstr ""
 "Ctrl-X послать, Ctrl-P получатели, Ctrl-O история, Alt-? детали, ESC отмена"
 
-#: src/icqface.cc:1640
+#: src/icqface.cc:1634
 #, c-format
 msgid "Sent on %s"
 msgstr "Послано %s"
 
-#: src/icqface.cc:1643
+#: src/icqface.cc:1637
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "Входящее %s от %s"
 
-#: src/icqface.cc:1644
+#: src/icqface.cc:1638
 #, c-format
 msgid "Received on %s"
 msgstr "Получено %s"
 
-#: src/icqface.cc:1745
+#: src/icqface.cc:1739
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "История для %s, всего %d сообщений"
 
-#: src/icqface.cc:1748
+#: src/icqface.cc:1742
 msgid "S search, L again, ESC cancel"
 msgstr "S поиск, L опять, ESC отмена"
 
-#: src/icqface.cc:1754
+#: src/icqface.cc:1748
 msgid "search for: "
 msgstr "искать: "
 
@@ -1367,6 +1250,119 @@ msgstr "+ [yahoo] рассоединение"
 #: src/hooks/yahoohook.cc:375
 msgid "+ [yahoo] bounced msg"
 msgstr "+ [yahoo] сообщение не принято"
+
+#: src/centericq.cc:119
+msgid "password: "
+msgstr "пароль: "
+
+#: src/centericq.cc:154
+msgid ""
+"F2/M current contact menu, F3/S change status, F4/G general actions, Q quit"
+msgstr "F2/M текущий контакт, F3/S сменить статус, F4/G главное меню, Q выход"
+
+#: src/centericq.cc:208
+#, c-format
+msgid "Ignore all events from %s?"
+msgstr "Игнорировать сообщения от %s?"
+
+#: src/centericq.cc:247
+#, c-format
+msgid "Are you sure want to remove %s?"
+msgstr "Вы действительно хотите удалить %s?"
+
+#: src/centericq.cc:255
+msgid "New nickname to show: "
+msgstr "Новый ник для показа в списке: "
+
+#: src/centericq.cc:263
+msgid "Select a group to move the user to"
+msgstr "Выберите новую группу для пользователя"
+
+#: src/centericq.cc:280
+msgid "+ cannot fetch away messages being offline"
+msgstr "+ невозможно запросить away-сообщение, будучи в offline"
+
+#: src/centericq.cc:465
+#, c-format
+msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
+msgstr "+ [%02d:%02d:%02d] получена новая почта, %d сообщений"
+
+#: src/centericq.cc:468
+#, c-format
+msgid "+ last msg from %s"
+msgstr "+ последнее сообщение от %s"
+
+#: src/centericq.cc:503
+msgid "! another running copy of centericq detected"
+msgstr "! обнаружена работающая копия centericq"
+
+#: src/centericq.cc:504
+#, c-format
+msgid "! this may cause problems. pid %lu"
+msgstr "! это может вызвать проблемы. pid %lu"
+
+#: src/centericq.cc:579
+msgid "Mobile number: "
+msgstr "Номер мобильного телефона: "
+
+#: src/centericq.cc:775
+#, c-format
+msgid "+ no history items for %s"
+msgstr "+ история для %s пуста"
+
+#: src/centericq.cc:801
+#, c-format
+msgid "+ user %s is already on the list"
+msgstr "+ %s уже есть в списке"
+
+#: src/centericq.cc:807
+msgid "Select a group to add the user to"
+msgstr "Выберите группу для контакта"
+
+#: src/centericq.cc:814
+msgid "Notify the user he/she has been added?"
+msgstr "Уведомить пользователя о том, что он был добавлен?"
+
+#.            ihook.sendalert(ic);
+#: src/centericq.cc:817
+#, c-format
+msgid "+ the notification has been sent to %lu"
+msgstr "+ уведомление послано %lu"
+
+#: src/centericq.cc:828
+#, c-format
+msgid "+ %s has been added to the list"
+msgstr "+ %s добавлен в список"
+
+#: src/centericq.cc:900
+msgid "+ the user is back"
+msgstr "+ пользователь вернулся"
+
+#: src/centericq.cc:916
+#, c-format
+msgid "+ [%s] status restored"
+msgstr "+ [%s] статус восстановлен"
+
+#: src/centericq.cc:930
+#, c-format
+msgid "+ [%s] automatically set %s"
+msgstr "+ [%s] автоматический переход в %s"
+
+#: src/centericq.cc:932
+msgid "away"
+msgstr ""
+
+#: src/centericq.cc:932
+msgid "n/a"
+msgstr ""
+
+#: src/centericq.cc:1032
+msgid "! free disk space is less than 10k, going offline"
+msgstr "! свободного места на диске осталось < 10k, рассоединение"
+
+#: src/centericq.cc:1033
+msgid "! otherwise we can lose events and configuration"
+msgstr "! иначе мы можем терять события и глючить"
 
 #: src/hooks/msnhook.cc:74
 msgid "+ [msn] connecting to the server"
