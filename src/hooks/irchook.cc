@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.15 2002/04/17 16:01:26 konst Exp $
+* $Id: irchook.cc,v 1.16 2002/04/22 08:18:00 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -191,7 +191,6 @@ bool irchook::send(const imevent &ev) {
 
 void irchook::sendnewuser(const imcontact &ic) {
     if(online()) {
-	face.log(_("+ [irc] adding %s to the contacts"), ic.nickname.c_str());
 	firetalk_im_add_buddy(handle, ic.nickname.c_str());
 	requestinfo(ic);
     }
@@ -199,7 +198,6 @@ void irchook::sendnewuser(const imcontact &ic) {
 
 void irchook::removeuser(const imcontact &ic) {
     if(online()) {
-	face.log(_("+ [irc] removing %s from the contacts"), ic.nickname.c_str());
 	firetalk_im_remove_buddy(handle, ic.nickname.c_str());
     }
 }
