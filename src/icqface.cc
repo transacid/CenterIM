@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.244 2005/02/13 12:10:56 iulica Exp $
+* $Id: icqface.cc,v 1.245 2005/02/14 21:09:35 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -456,15 +456,13 @@ bool icqface::next_chat(bool next) {
   return true;
 }
 
-icqcontact *icqface::find_next_chat(int *idx) {
+icqcontact *icqface::find_next_chat() {
   if (find_next_action == 0) return 0;
   int i;
   if (last_selected){
     for(i = 0; i < clist.count && clist.at(i) != last_selected; i++)
       ;
     i += find_next_action;
-    if (i <= 0) i = clist.count -1;
-    else if (i >= clist.count) i = 0;
   }
   else i = find_next_action == 1 ? 0 : clist.count -1;
 
@@ -474,7 +472,6 @@ icqcontact *icqface::find_next_chat(int *idx) {
     if (c->isopenedforchat() || c->hasevents()) {
       find_next_action = 0;
       extk = ACT_MSG;
-      if (idx) *idx = i;
       return c;
     }
   }
@@ -493,14 +490,14 @@ icqcontact *icqface::mainloop(int &action) {
 
 	/* Obtain the (icqcontact *) from the treeview. If a node is
 	   selected, throw out the contact and obtain the correct (icqgroup *). */
-	c = find_next_chat(); //check if next_chat was called from inside a chat window
-	if (!c){
+	
+	if (!(c = c1 = find_next_chat())){ //check if next_chat was called from inside a chat window
 	    last_selected = 0; // next_chat (if called) was called from contacts menu so there was no last selected contact
-	  c = (icqcontact *) mcontacts->open(&i);
-          if (c1 = find_next_chat(&i)) c = c1; //check if next_chat was called from contacts menu
+	    c = (icqcontact *) mcontacts->open(&i);
+	    if ((c1 = find_next_chat())) c = c1; //check if next_chat was called from contacts menu
         }
 
-	if(mcontacts->isnode(i) && c) {
+	if(!c1 && c && mcontacts->isnode(i)) {
 	    c = 0;
 	    g = (icqgroup *) mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
 	} else {
@@ -2231,8 +2228,8 @@ void icqface::userinfoexternal(const imcontact &ic) {
 
 void icqface::showeventbottom(const imcontact &ic) {
     const char *text = ischannel(ic) ?
-	_("%s send, %s multi, %s history, %s prev chat, %s next chat, %s URLs, %s expand, %s members, %s close") :
-	_("%s send, %s multi, %s history, %s prev chat, %s next chat, %s URLs, %s expand, %s details, %s cancel");
+	_("%s send, %s multi, %s history, %s/%s prev/next chat, %s URLs, %s expand, %s members, %s close") :
+	_("%s send, %s multi, %s history, %s/%s prev/next chat, %s URLs, %s expand, %s details, %s cancel");
 
     status(text,
 	getstatkey(key_send_message, section_editor).c_str(),

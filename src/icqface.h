@@ -206,7 +206,7 @@ class icqface {
 	bool updaterequested();
 
   
-	icqcontact *find_next_chat(int *idx = 0);
+	icqcontact *find_next_chat();
 	bool next_chat(bool next = true);
   
 	icqcontact *mainloop(int &action);
