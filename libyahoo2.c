@@ -620,7 +620,10 @@ static void yahoo_process_notify(struct yahoo_data *yd, struct yahoo_packet *pkt
 			game = pair->value;
 		l = l->next;
 	}
-	
+
+	if (!msg)
+	    return;
+
 	if (!g_strncasecmp(msg, "TYPING", strlen("TYPING"))) {
 		int typ=0;
 		if (*stat == '1')
