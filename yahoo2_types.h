@@ -57,6 +57,9 @@ enum yahoo_login_status {
 };
 
 enum yahoo_error {
+	E_UNKNOWN = -1,
+	E_CONNECTION = -2,
+	E_SYSTEM = -3,
 	E_CUSTOM = 0,
 
 	/* responses from ignore buddy */

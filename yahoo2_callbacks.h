@@ -170,6 +170,7 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_status_changed)(int id, char *who, int stat, 
  * 	Called when remote user sends you a message.
  * Params:
  * 	id   - the id that identifies the server connection
+ * 	me   - the identity the message was sent to
  * 	who  - the handle of the remote user
  * 	msg  - the message - NULL if stat == 2
  * 	tm   - timestamp of message if offline
@@ -179,7 +180,7 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_status_changed)(int id, char *who, int stat, 
  * 				5
  * 	utf8 - whether the message is encoded as utf8 or not
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_got_im)(int id, char *who, char *msg, long tm, int stat, int utf8);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_got_im)(int id, char *me, char *who, char *msg, long tm, int stat, int utf8);
 
 
 
@@ -369,6 +370,7 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_conf_message)(int id, char *who, char *room, 
  * 	Called when someone sends you a file
  * Params:
  * 	id   - the id that identifies the server connection
+ * 	me   - the identity the file was sent to
  * 	who  - the user who sent the file
  * 	url  - the file url
  * 	expires  - the expiry date of the file on the server (timestamp)
@@ -376,7 +378,7 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_conf_message)(int id, char *who, char *room, 
  * 	fname- the file name if direct transfer
  * 	fsize- the file size if direct transfer
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_got_file)(int id, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_got_file)(int id, char *me, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize);
 
 
 
@@ -413,10 +415,11 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_rejected)(int id, char *who, char *msg);
  * 	Called when remote user starts or stops typing.
  * Params:
  * 	id   - the id that identifies the server connection
+ * 	me   - the handle of the identity the notification is sent to
  * 	who  - the handle of the remote user
  * 	stat - 1 if typing, 0 if stopped typing
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_typing_notify)(int id, char *who, int stat);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_typing_notify)(int id, char *me, char *who, int stat);
 
 
 
@@ -426,10 +429,11 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_typing_notify)(int id, char *who, int stat);
  * 	Called when remote user starts or stops a game.
  * Params:
  * 	id   - the id that identifies the server connection
+ * 	me   - the handle of the identity the notification is sent to
  * 	who  - the handle of the remote user
  * 	stat - 1 if game, 0 if stopped gaming
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_game_notify)(int id, char *who, int stat);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_game_notify)(int id, char *me, char *who, int stat);
 
 
 
@@ -502,9 +506,10 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_got_webcam_image)(int id, const char * who,
  * 	Called when you get a webcam invitation
  * Params:
  * 	id   - the id that identifies the server connection
+ * 	me   - identity the invitation is to
  * 	from - who the invitation is from
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_invite)(int id, char *from);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_invite)(int id, char *me, char *from);
 
 
 
@@ -514,10 +519,11 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_invite)(int id, char *from);
  * 	Called when you get a response to a webcam invitation
  * Params:
  * 	id   - the id that identifies the server connection
+ * 	me   - identity the invitation response is to
  * 	from - who the invitation response is from
  *	accept - 0 (decline), 1 (accept)
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_invite_reply)(int id, char *from, int accept);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_invite_reply)(int id, char *me, char *from, int accept);
 
 
 
@@ -559,8 +565,9 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_got_search_result)(int id, int found, int sta
  * 	id   - the id that identifies the server connection
  * 	err  - the error message
  * 	fatal- whether this error is fatal to the connection or not
+ * 	num  - Which error is this
  */
-void YAHOO_CALLBACK_TYPE(ext_yahoo_error)(int id, char *err, int fatal);
+void YAHOO_CALLBACK_TYPE(ext_yahoo_error)(int id, char *err, int fatal, int num);
 
 
 
