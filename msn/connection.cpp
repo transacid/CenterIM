@@ -191,12 +191,12 @@ namespace MSN
             assert(errno != EAGAIN);
             
             ext::showError(this, strerror(errno));                
-            delete this;            
+//            delete this;            
         }
         else if (amountRead == 0)
         {
             ext::showError(this, "Connection closed by remote endpoint.");
-            delete this;
+//            delete this;
         }
         else
         {
