@@ -1,7 +1,7 @@
 /*
 *
 * centericq yahoo! protocol handling class
-* $Id: yahoohook.cc,v 1.40 2002/07/12 18:01:45 konst Exp $
+* $Id: yahoohook.cc,v 1.41 2002/07/13 11:18:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -173,7 +173,12 @@ bool yahoohook::send(const imevent &ev) {
 	auto_ptr<char> who(strdup(ev.getcontact().nickname.c_str()));
 	auto_ptr<char> what(strdup(text.c_str()));
 
-	yahoo_send_im(cid, who.get(), what.get(), strlen(what.get()));
+	if(!ischannel(c)) {
+	    yahoo_send_im(cid, who.get(), what.get(), strlen(what.get()));
+	} else {
+	    yahoo_conference_message(cid, getmembers(who.get()+1), who.get()+1, what.get());
+	}
+
 	return true;
     }
 
@@ -195,24 +200,17 @@ bool yahoohook::isconnecting() const {
 void yahoohook::sendnewuser(const imcontact &ic) {
     char *group;
 
-    if(yahoo)
-    if(online()) {
-/*
-	if(context->buddies && context->buddies[0]) {
-	    group = context->buddies[0]->group;
-	} else {
-	    group = "group";
-	}
-
-	struct yahoo_buddy **lst = get_buddylist(cid);
-*/
-	if(1/*!yahoo_isbuddy(context, ic.nickname.c_str())*/) {
+    if(online() && !ischannel(ic)) {
+	if(logged()) {
 	    face.log(_("+ [yahoo] adding %s to the contacts"), ic.nickname.c_str());
 
 	    auto_ptr<char> who(strdup(ic.nickname.c_str()));
 	    auto_ptr<char> group(strdup("centericq"));
 
 	    yahoo_add_buddy(cid, who.get(), group.get());
+	    yahoo_refresh(cid);
+	} else {
+	    tobeadded.push_back(ic.nickname);
 	}
     }
 
@@ -220,13 +218,18 @@ void yahoohook::sendnewuser(const imcontact &ic) {
 }
 
 void yahoohook::removeuser(const imcontact &ic) {
-    if(online()) {
-	face.log(_("+ [yahoo] removing %s from the contacts"), ic.nickname.c_str());
-
+    if(logged()) {
 	auto_ptr<char> who(strdup(ic.nickname.c_str()));
 	auto_ptr<char> group(strdup("centericq"));
 
-	yahoo_remove_buddy(cid, who.get(), group.get());
+	if(!ischannel(ic)) {
+	    face.log(_("+ [yahoo] removing %s from the contacts"), ic.nickname.c_str());
+	    yahoo_remove_buddy(cid, who.get(), group.get());
+	    yahoo_refresh(cid);
+	} else {
+	    face.log(_("+ [yahoo] leaving the %s conference"), ic.nickname.c_str());
+	    yahoo_conference_logoff(cid, getmembers(who.get()+1), who.get()+1);
+	}
     }
 }
 
@@ -288,12 +291,8 @@ void yahoohook::setautostatus(imstatus st) {
 		auto_ptr<char> msg(strdup("available"));
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 0);
 	    } else {
-		/*if(stat2int[st] == YAHOO_STATUS_IDLE) {
-		    yahoo_cmd_idle(context);
-		} else*/ {
-		    auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(yahoo)).c_str()));
-		    yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
-		}
+		auto_ptr<char> msg(strdup(rusconv("kw", conf.getawaymsg(yahoo)).c_str()));
+		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
 	    }
 	}
     }
@@ -336,15 +335,51 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
     }
 }
 
+char **yahoohook::getmembers(const string &room) {
+    int i;
+    static char **smemb = 0;
+    vector<string>::iterator ic;
+    map<string, vector<string> >::iterator im;
+
+    if(smemb) {
+	for(i = 0; smemb[i]; delete smemb[i++]);
+	delete smemb;
+	smemb = 0;
+    }
+
+    if((im = confmembers.find(room)) != confmembers.end()) {
+	smemb = new char*[im->second.size()+1];
+	smemb[im->second.size()+1] = 0;
+	for(ic = im->second.begin(); ic != im->second.end(); ic++) {
+	    smemb[ic-im->second.begin()] = strdup(ic->c_str());
+	}
+    } else {
+	smemb = new char*[1];
+	smemb[0] = 0;
+    }
+
+    return smemb;
+}
+
 // ----------------------------------------------------------------------------
 
 void yahoohook::login_done(guint32 id, int succ, char *url) {
+    vector<string>::iterator in;
+
     switch(succ) {
 	case YAHOO_LOGIN_OK:
 	    yhook.flogged = true;
+
 	    logger.putourstatus(yahoo, offline,
 		yhook.yahoo2imstatus(yahoo_current_status(yhook.cid)));
+
 	    face.log(_("+ [yahoo] logged in"));
+
+	    for(in = yhook.tobeadded.begin(); in != yhook.tobeadded.end(); ++in)
+		yhook.sendnewuser(imcontact(*in, yahoo));
+
+	    yhook.tobeadded.clear();
+
 	    break;
 
 	case YAHOO_LOGIN_PASSWD:
@@ -364,17 +399,34 @@ void yahoohook::login_done(guint32 id, int succ, char *url) {
 
 void yahoohook::got_buddies(guint32 id, struct yahoo_buddy **buds) {
     struct yahoo_buddy **buddy;
+    vector<string> nicks;
+    vector<string>::iterator in;
+    icqconf::imaccount acc = conf.getourid(yahoo);
     icqcontact *c;
+    int i;
 
     for(buddy = buds; buddy && *buddy; buddy++) {
-	struct yahoo_buddy *bud = *buddy;
-	imcontact ic(bud->id, yahoo);
-
-	c = clist.get(ic);
-	if(!c) {
-	    clist.addnew(ic, false);
+	if(find(nicks.begin(), nicks.end(), (*buddy)->id) == nicks.end()) {
+	    nicks.push_back((*buddy)->id);
 	}
     }
+
+    for(i = 0; i < clist.count; i++) {
+	c = (icqcontact *) clist.at(i);
+
+	if(c->getdesc().pname == yahoo && !ischannel(c)) {
+	    in = find(nicks.begin(), nicks.end(), c->getdesc().nickname);
+
+	    if(in == nicks.end()) {
+//                yhook.sendnewuser(c);
+	    } else {
+		nicks.erase(in);
+	    }
+	}
+    }
+
+    for(in = nicks.begin(); in != nicks.end(); ++in)
+	clist.addnew(imcontact(*in, yahoo), false);
 }
 
 void yahoohook::status_changed(guint32 id, char *who, int stat, char *msg, int away) {
@@ -383,28 +435,86 @@ void yahoohook::status_changed(guint32 id, char *who, int stat, char *msg, int a
 
 void yahoohook::got_im(guint32 id, char *who, char *msg, long tm, int stat) {
     imcontact ic(who, yahoo);
-    em.store(immessage(ic, imevent::incoming, rusconv("wk", msg)));
+    string text = rusconv("wk", cuthtml(msg, true));
+
+    if(!text.empty()) {
+	em.store(immessage(ic, imevent::incoming, text));
+    }
 }
 
 void yahoohook::got_conf_invite(guint32 id, char *who, char *room, char *msg, char **members) {
+    string confname = (string) "#" + room, text;
+    char buf[1024];
+    int i;
+
+    imcontact cont(confname, yahoo);
+    icqcontact *c = clist.get(cont);
+    if(!c) c = clist.addnew(cont);
+
+    sprintf(buf, _("The user %s has invited you to the %s conference:"),
+	rusconv("wk", who).c_str(), rusconv("wk", room).c_str());
+
+    text = (string) buf + "\n" + rushtmlconv("wk", msg) + "\n\n";
+    text += _("Current conference members are: ");
+
+    for(i = 1; members[i]; i++) {
+	yhook.confmembers[room].push_back(members[i]);
+	text += rushtmlconv("wk", members[i]);
+	if(members[i+1]) text += ", ";
+    }
+
+    c->setstatus(available);
+    em.store(imnotification(cont, text));
+/*
+    em.store(imnotification(cont, _("Auto-joined the conference")));
+    yahoo_conference_logon(yhook.cid, yhook.getmembers(room), room);
+*/
 }
 
 void yahoohook::conf_userdecline(guint32 id, char *who, char *room, char *msg) {
 }
 
 void yahoohook::conf_userjoin(guint32 id, char *who, char *room) {
+    icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
+    char buf[512];
+
+    if(c) {
+	sprintf(buf, _("The user %s has joined the conference"),
+	    rushtmlconv("wk", who).c_str());
+	em.store(imnotification(c, buf));
+    }
 }
 
 void yahoohook::conf_userleave(guint32 id, char *who, char *room) {
+    icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
+    char buf[512];
+
+    if(c) {
+	sprintf(buf, _("The user %s has left the conference"),
+	    rushtmlconv("wk", who).c_str());
+	em.store(imnotification(c, buf));
+    }
 }
 
 void yahoohook::conf_message(guint32 id, char *who, char *room, char *msg) {
+    icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
+
+    string text = rusconv("wk", cuthtml(msg, true));
+    if(c) em.store(immessage(c, imevent::incoming, text));
 }
 
 void yahoohook::got_file(guint32 id, char *who, char *url, long expires, char *msg, char *fname, long fesize) {
 }
 
 void yahoohook::contact_added(guint32 id, char *myid, char *who, char *msg) {
+    string text = _("The user has added you to his/her contact list");
+
+    if(msg)
+    if(strlen(msg)) {
+	text += (string) ", " + _("the message was: ") + msg;
+    }
+
+    em.store(imnotification(imcontact(who, yahoo), text));
 }
 
 void yahoohook::typing_notify(guint32 id, char *who, int stat) {
@@ -414,16 +524,21 @@ void yahoohook::game_notify(guint32 id, char *who, int stat) {
 }
 
 void yahoohook::mail_notify(guint32 id, char *from, char *subj, int cnt) {
+    char buf[1024];
+
+    sprintf(buf, _("+ [yahoo] e-mail from %s, %s"), from, subj);
+    face.log(buf);
+
+    clist.get(contactroot)->playsound(imevent::email);
 }
 
 void yahoohook::system_message(guint32 id, char *msg) {
+    face.log(_("[yahoo] system: %s"), msg);
 }
 
 void yahoohook::error(guint32 id, char *err, int fatal) {
-    if(fatal) {
-	face.log(_("[yahoo] error: %s"), err);
-	yhook.disconnect();
-    }
+    face.log(_("[yahoo] error: %s"), err);
+    if(fatal) yhook.disconnect();
 }
 
 void yahoohook::add_input(guint32 id, int fd) {

@@ -10,6 +10,8 @@ class yahoohook: public abstracthook {
     protected:
 	bool fonline, flogged;
 	int cid;
+	vector<string> tobeadded;
+	map<string, vector<string> > confmembers;
 
 	static void login_done(guint32 id, int succ, char *url);
 	static void got_buddies(guint32 id, struct yahoo_buddy **buds);
@@ -32,6 +34,7 @@ class yahoohook: public abstracthook {
 
 	static struct tm *timestamp();
 
+	char **getmembers(const string &room);
 	imstatus yahoo2imstatus(int status) const;
 	void userstatus(const string &nick, int st, const string &message, bool away);
 

@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.104 2002/07/10 16:07:22 konst Exp $
+* $Id: centericq.cc,v 1.105 2002/07/13 11:18:56 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1257,9 +1257,7 @@ string rusconv(const string &tdir, const string &text) {
 }
 
 bool ischannel(const imcontact &cont) {
-    return (cont.nickname.substr(0, 1) == "#") && (cont.pname == irc);
-}
-
-bool ischannel(const icqcontact *c) {
-    return c ? ischannel(c->getdesc()) : false;
+    return
+	(cont.nickname.substr(0, 1) == "#") &&
+	(cont.pname == irc || cont.pname == yahoo);
 }

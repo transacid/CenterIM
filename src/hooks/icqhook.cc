@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.88 2002/07/12 18:01:44 konst Exp $
+* $Id: icqhook.cc,v 1.89 2002/07/13 11:18:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -145,15 +145,13 @@ void icqhook::disconnect() {
 void icqhook::resolve() {
     int i;
     icqcontact *c;
-    imcontact cont;
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-	cont = c->getdesc();
 
-	if(cont.pname == icq)
+	if(c->getdesc().pname == icq)
 	if(c->getdispnick() == i2str(c->getdesc().uin)) {
-	    requestinfo(cont);
+	    requestinfo(c);
 	}
     }
 }
@@ -824,7 +822,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	    }
 
 	    if(c) {
-		em.store(imsms(c->getdesc(), imevent::incoming,
+		em.store(imsms(c, imevent::incoming,
 		    rusconv("wk", r->getMessage())));
 	    }
 	}
@@ -865,7 +863,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	    }
 
 	    if(c) {
-		em.store(imemail(c->getdesc(), imevent::incoming,
+		em.store(imemail(c, imevent::incoming,
 		    rusconv("wk", r->getMessage())));
 	    }
 	}
@@ -946,7 +944,7 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
 
 	if(ic->isInvisible()) nst = invisible;
 
-	logger.putonline(c->getdesc(), c->getstatus(), nst);
+	logger.putonline(c, c->getstatus(), nst);
 	c->setstatus(nst);
 
 	if(c->getstatus() != offline)

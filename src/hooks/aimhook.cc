@@ -1,7 +1,7 @@
 /*
 *
 * centericq AIM protocol handling class
-* $Id: aimhook.cc,v 1.18 2002/05/13 16:46:08 konst Exp $
+* $Id: aimhook.cc,v 1.19 2002/07/13 11:18:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -299,15 +299,13 @@ void aimhook::loadprofile() {
 void aimhook::resolve() {
     int i;
     icqcontact *c;
-    imcontact cont;
 
     for(i = 0; i < clist.count; i++) {
 	c = (icqcontact *) clist.at(i);
-	cont = c->getdesc();
 
-	if(cont.pname == aim)
+	if(c->getdesc().pname == aim)
 	if(c->getabout().empty()) {
-	    requestinfo(cont);
+	    requestinfo(c);
 	}
     }
 }

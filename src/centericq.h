@@ -77,6 +77,5 @@ string rushtmlconv(const string &tdir, const string &text);
 string ruscrlfconv(const string &tdir, const string &text);
 
 bool ischannel(const imcontact &cont);
-bool ischannel(const icqcontact *c);
 
 #endif

@@ -43,10 +43,13 @@ static char imstatus2char[imstatus_size] = {
     'a', 'a', 'c', 'a', 'n', 'n', 'n', 'n'*/
 };
 
+class icqcontact;
+
 struct imcontact {
     imcontact();
     imcontact(unsigned long auin, protocolname apname);
     imcontact(const string &anick, protocolname apname);
+    imcontact(const icqcontact *c);
 
     string nickname;
     unsigned long uin;

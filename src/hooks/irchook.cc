@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.33 2002/07/12 18:01:44 konst Exp $
+* $Id: irchook.cc,v 1.34 2002/07/13 11:18:57 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1068,7 +1068,7 @@ void irchook::nickchanged(void *connection, void *cli, ...) {
 	    c->setnick(newnick);
 	    if(c->getdispnick() == oldnick) c->setdispnick(newnick);
 	    sprintf(buf, _("The user has changed their nick from %s to %s"), oldnick, newnick);
-	    em.store(imnotification(c->getdesc(), buf));
+	    em.store(imnotification(c, buf));
 	}
     }
 }
