@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.84 2002/03/26 15:42:00 konst Exp $
+* $Id: centericq.cc,v 1.85 2002/04/01 16:58:33 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -32,6 +32,10 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 #include "accountmanager.h"
+
+#ifdef HAVE_ICONV_H
+#include <iconv.h>
+#endif
 
 centericq::centericq()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
