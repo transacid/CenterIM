@@ -1,197 +1,162 @@
-/*
-*
-* kkconsui textinputline class
-* $Id: textinputline.cc,v 1.3 2001/06/27 13:42:07 konst Exp $
-*
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or (at
-* your option) any later version.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-* USA
-*
-*/
-
 #include "textinputline.h"
 
-textinputline::textinputline(int clr = 0):
-ncolor(clr), fm(0), passwordchar(0), idle(0), otherkeys(0) {
-    history = new linkedlist;
-    history->freeitem = &charpointerfree;
+textinputline::textinputline() {
+    beginpos = length = position = 0;
+    idle = 0;
+    otherkeys = 0;
+    passwordchar = 0;
+    selector = 0;
 }
 
 textinputline::~textinputline() {
-    delete history;
 }
 
-void textinputline::drawcheck(bool redraw) {
-    bool toleft = pos < visiblestart;
-    bool toright = pos >= visiblestart+visiblelen;
+void textinputline::setcoords(int x, int y, int len) {
+    x1 = x;
+    y1 = y2 = y;
+    length = len;
+    x2 = x1+length;
+}
 
-    if(toleft || toright) {
-	if(toleft)  while((visiblestart -= visiblelen) > pos);
-	if(toright) while((visiblestart += visiblelen) < pos);
+bool textinputline::keymove(int key) {
+    bool r = true;
 
-	if(visiblestart < 0) {
-	    visiblestart = 0;
-	} else if(visiblestart > strlen(actualstr)-visiblelen) {
-	    visiblestart = strlen(actualstr)-visiblelen;
-	}
-
-	draw();
-    } else {
-	mvprintw(y1, x1+pos-visiblestart, "");
-	if(redraw) draw(); else refresh();
+    switch(key) {
+	case KEY_LEFT:
+	case CTRL('b'):
+	    if(--position < 0) position = 0;
+	    break;
+	case KEY_RIGHT:
+	case CTRL('f'):
+	    if(++position > value.size()) position = value.size();
+	    break;
+	case KEY_HOME:
+	case CTRL('a'):
+	    position = 0;
+	    break;
+	case KEY_END:
+	case CTRL('e'):
+	    position = value.size();
+	    break;
+	default:
+	    r = false;
     }
+
+    return r;
 }
 
-void textinputline::draw() {
-    int alen = strlen(actualstr)-visiblestart > visiblelen ? visiblelen : strlen(actualstr)-visiblestart;
+void textinputline::redraw() {
+    int displen;
 
-    if(passwordchar) {
-	memset(visiblestr, passwordchar, visiblelen);
-    } else {
-	strncpy(visiblestr, actualstr+visiblestart, alen);
+    if(position > value.size()) {
+	position = value.size();
     }
 
-    visiblestr[alen] = 0;
-    attrset(ncolor);
-    mvprintw(y1, x1, "%s", visiblestr);
-    for(int i = 0; i < visiblelen-alen; i++) printw(" ");
-    mvprintw(y1, x1+pos-visiblestart, "");
-    refresh();
+    if(position < beginpos) {
+	beginpos = position;
+    }
+
+    while(position > beginpos+length-1) {
+	beginpos++;
+    }
+
+    displen = value.length()-beginpos;
+    if(displen > length) displen = length;
+
+    attrset(color);
+    kgotoxy(x1, y1);
+
+    printstring((passwordchar ? string(displen, passwordchar) :
+	value.substr(beginpos, displen)) +
+	string(length-displen, ' '));
+
+    kgotoxy(x1+position-beginpos, y1);
 }
 
-char *textinputline::open(int x, int y, const char *buf, int pvisiblelen, int pactuallen) {
-    bool finished = false, firstpass = true;
-    int go;
-    
-    actualstr = new char[ (actuallen = pactuallen) + 1];
-    visiblestr = new char[ (visiblelen = pvisiblelen) + 1];
-    x1 = x, y1 = y, x2 = x+visiblelen, y2 = y1+visiblelen;
-    visiblestart = pos = 0, strcpy(actualstr, buf);
+void textinputline::exec() {
+    bool fin, go, fresh;
+    vector<string> sel;
+    vector<string>::iterator isel;
+
     screenbuffer.save(x1, y1, x2, y2);
-    draw();
+    fresh = true;
 
-    while(!finished) {
-	if(idle) go = keypressed(); else go = 1;
+    for(fin = false; !fin; ) {
+	redraw();
+	go = idle ? keypressed() : true;
 
-	if(go) switch(lastkey = getkey()) {
-	    case KEY_LEFT:
-		if(pos) {
-		    pos--;
-		    drawcheck(false);
-		}
-		break;
-		
-	    case KEY_RIGHT:
-		if(pos != strlen(actualstr)) {
-		    pos++;
-		    drawcheck(false);
-		}
-		break;
-		
-	    case KEY_HOME:
-	    case CTRL('a'):
-		pos = 0;
-		drawcheck(false);
-		break;
-		
-	    case KEY_END:
-	    case CTRL('e'):
-		pos = strlen(actualstr);
-		drawcheck(false);
-		break;
-		
-	    case '\r':
-		history->add(strdup(actualstr));
-		finished = true;
-		break;
-		
-	    case KEY_DC:
-		if(firstpass) {
-		    actualstr[0] = 0;
-		    pos = 0;
-		} else if(pos < strlen(actualstr)) {
-		    strcut(actualstr, pos, 1);
-		}
-		
-		drawcheck(true);
-		break;
-		
-	    case CTRL('t'):
-		if(fm) {
-		    int x = kwherex(), y = kwherey();
-		    fm->open();
-		    char *p = (char *) fm->selected->at(0);
-		    if(p) setbuf(p);
-		    kgotoxy(x, y);
-		}
-		break;
-		
-	    case KEY_BACKSPACE:
-	    case CTRL('h'):
-		if(pos > 0) {
-		    strcut(actualstr, --pos, 1);
-		    drawcheck(true);
-		}
-		break;
-		
-	    case 27:
-		actualstr[0] = 0;
-		finished = true;
-		break;
-		
-	    default:
-		if((lastkey > 31) && (lastkey < 256)) {
-		    if(firstpass) {
-			sprintf(actualstr, "%c", lastkey);
-			pos = 1;
-			drawcheck(true);
-		    } else if(strlen(actualstr) < actuallen) {
-			strcinsert(actualstr, pos++, lastkey);
-			drawcheck(true);
+	if(go) {
+	    lastkey = getkey();
+
+	    if(!keymove(lastkey))
+	    switch(lastkey) {
+		case '\r':
+		    historyadd(value);
+		    fin = true;
+		    break;
+		case KEY_DC:
+		    value.replace(position, 1, "");
+		    break;
+		case CTRL('k'):
+		    value = "";
+		    break;
+		case CTRL('u'):
+		    value.replace(0, position, "");
+		    position = 0;
+		    break;
+		case CTRL('t'):
+		    if(selector) {
+			selector->exec();
+			selector->close();
+
+			if(strchr("\r ", selector->getlastkey())) {
+			    sel = selector->getselected();
+
+			    if(!sel.empty()) {
+				position = 0;
+
+				if(sel.size() == 1) {
+				    value = sel[0];
+				} else {
+				    value = "";
+				    for(isel = sel.begin();
+				    isel != sel.end(); isel++) {
+					if(!value.empty()) value += " ";
+					value += "\"" + *isel + "\"";
+				    }
+				}
+			    }
+			}
 		    }
-		} else if(otherkeys) {
-		    if((*otherkeys)(this, lastkey));
-		}
+		    break;
+		case KEY_BACKSPACE:
+		case CTRL('h'):
+		    if(position) {
+			value.replace(--position, 1, "");
+		    }
+		    break;
+		case KEY_ESC:
+		    fin = true;
+		    break;
+		default:
+		    if((lastkey > 31) && (lastkey < 256)) {
+			if(fresh) {
+			    value = string(1, (char) lastkey);
+			    position = 1;
+			} else {
+			    value.insert(position++, string(1, (char) lastkey));
+			}
+		    }
+	    }
+
+	    fresh = false;
 	} else {
-	    if(idle) (*idle)(this);
+	    if(idle) {
+		(*idle)(*this);
+	    }
 	}
-
-	firstpass = false;
     }
-
-    screenbuffer.restore();
-
-    delete visiblestr;
-    return actualstr;
-}
-
-void textinputline::setbuf(const char *buf) {
-    visiblestart = pos = 0;
-    strncpy(actualstr, buf, actuallen);
-    actualstr[actuallen] = 0;
-    draw();
-}
-
-void textinputline::setpasswordchar(const char npc) {
-    passwordchar = npc;
 }
 
 void textinputline::close() {
-}
-
-int textinputline::getlastkey() {
-    return lastkey;
 }
