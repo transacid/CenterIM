@@ -1,7 +1,7 @@
 /*
 *
 * centericq icq protocol handling class
-* $Id: icqhook.cc,v 1.113 2002/10/17 17:36:25 konst Exp $
+* $Id: icqhook.cc,v 1.114 2002/10/23 12:57:35 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -587,7 +587,7 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	ICQ2000::SEX_UNSPECIFIED;
 
     if(!params.kwords.empty()) {
-	searchevent = cli.searchForContacts(params.kwords);
+	searchevent = cli.searchForContacts(rusconv("kw", params.kwords));
 
     } else if(params.randomgroup) {
 	searchevent = cli.searchForContacts((ICQ2000::RandomChatGroup) params.randomgroup);
@@ -598,15 +598,17 @@ void icqhook::lookup(const imsearchparams &params, verticalmenu &dest) {
     !params.position.empty() || params.onlineonly ||
     params.country || params.language ||
     (sex != ICQ2000::SEX_UNSPECIFIED) || (params.agerange != range_NoRange)) {
-	searchevent = cli.searchForContacts(params.nick, params.firstname,
-	    params.lastname, params.email, params.agerange, sex,
-	    params.language, params.city, params.state, params.country,
-	    params.company, params.department, params.position,
-	    params.onlineonly);
+	searchevent = cli.searchForContacts(rusconv("kw", params.nick),
+	    rusconv("kw", params.firstname), rusconv("kw", params.lastname),
+	    rusconv("kw", params.email), params.agerange, sex,
+	    params.language, rusconv("kw", params.city),
+	    rusconv("kw", params.state), params.country,
+	    rusconv("kw", params.company), rusconv("kw", params.department),
+	    rusconv("kw", params.position), params.onlineonly);
 
     } else {
-	searchevent = cli.searchForContacts(params.nick, params.firstname,
-	    params.lastname);
+	searchevent = cli.searchForContacts(rusconv("kw", params.nick),
+	    rusconv("kw", params.firstname), rusconv("kw", params.lastname));
 
     }
 }
