@@ -279,7 +279,7 @@ namespace ICQ2000 {
 
   UserInfoCapabilitiesTLV::UserInfoCapabilitiesTLV()
   {
-    m_capabilities.default_icq2000_capabilities();
+    m_capabilities.default_icq2002_capabilities();
   }
   
   unsigned short UserInfoCapabilitiesTLV::Length() const
