@@ -1,7 +1,7 @@
 /*
 *
 * centericq IRC protocol handling class
-* $Id: irchook.cc,v 1.16 2002/04/22 08:18:00 konst Exp $
+* $Id: irchook.cc,v 1.17 2002/05/01 20:15:36 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -276,6 +276,7 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
 	if(!ic->joined) {
 	    firetalk_chat_join(handle, room.c_str());
+	    ready = false;
 	}
 
 	if(ic->fetched) {
