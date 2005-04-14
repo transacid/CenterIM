@@ -125,7 +125,7 @@ fi
 
 AC_ARG_WITH(gpgme,
     [  --with-gpgme=[DIR]    gpgme-config in DIR],
-    [ if test "$withval" = "no"; then GPGME_CONFIG=""; else GPGME_CONFIG="$withval"; fi ],
+    [ if test "$withval" = "no"; then GPGME_CONFIG=""; else GPGME_CONFIG="$withval/bin/gpgme-config"; fi ],
     [ AC_PATH_PROG(GPGME_CONFIG,
 	gpgme-config)])
 
