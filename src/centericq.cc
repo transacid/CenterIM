@@ -1,7 +1,7 @@
 /*
 *
 * centericq core routines
-* $Id: centericq.cc,v 1.196 2005/02/19 17:51:05 konst Exp $
+* $Id: centericq.cc,v 1.197 2005/05/02 15:23:58 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -161,10 +161,12 @@ void centericq::mainloop() {
     face.draw();
 
     while(!finished) {
-	face.status(_("%s contact menu, %s change status, %s general actions, %s quit"),
+	face.status(_("%s contact menu, %s status, %s general, %s/%s next/prev chat, %s quit"),
 	    face.getstatkey(key_user_menu, section_contact).c_str(),
 	    face.getstatkey(key_change_status, section_contact).c_str(),
 	    face.getstatkey(key_general_menu, section_contact).c_str(),
+	    face.getstatkey(key_next_chat, section_contact).c_str(),
+	    face.getstatkey(key_prev_chat, section_contact).c_str(),
 	    face.getstatkey(key_quit, section_contact).c_str());
 
 	face.xtermtitle();

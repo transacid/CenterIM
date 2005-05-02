@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.246 2005/02/14 21:40:04 iulica Exp $
+* $Id: icqface.cc,v 1.247 2005/05/02 15:23:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -181,7 +181,7 @@ void icqface::init() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvhline(LINES-1, 0, ' ', COLS);
+    mvhline(LINES, 0, ' ', COLS);
 
     inited = true;
     kt_resize_event = &termresize;
@@ -495,7 +495,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    last_selected = 0; // next_chat (if called) was called from contacts menu so there was no last selected contact
 	    c = (icqcontact *) mcontacts->open(&i);
 	    if ((c1 = find_next_chat())) c = c1; //check if next_chat was called from contacts menu
-        }
+	}
 
 	if(!c1 && c && mcontacts->isnode(i)) {
 	    c = 0;
@@ -1055,7 +1055,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text),
 	    ls ? strdateandtime(ls) : _("Never"));
 
-    } else {
+    } else if(c->getdesc() != contactroot) {
 	int days, hours, minutes, tdiff = timer_current-ls;
 
 	days = (int) (tdiff/86400);
@@ -2228,17 +2228,18 @@ void icqface::userinfoexternal(const imcontact &ic) {
 
 void icqface::showeventbottom(const imcontact &ic) {
     const char *text = ischannel(ic) ?
-	_("%s send, %s multi, %s history, %s URLs, %s expand, %s members, %s close") :
-	_("%s send, %s multi, %s history, %s URLs, %s expand, %s details, %s cancel");
+	_("%s send, %s multi, %s/%s pr/nxt chat, %s hist, %s URLs, %s expand, %s memb") :
+	_("%s send, %s multi, %s/%s pr/nxt chat, %s hist, %s URLs, %s expand, %s info");
 
     status(text,
 	getstatkey(key_send_message, section_editor).c_str(),
 	getstatkey(key_multiple_recipients, section_editor).c_str(),
+	getstatkey(key_prev_chat, section_contact).c_str(),
+	getstatkey(key_next_chat, section_contact).c_str(),
 	getstatkey(key_history, section_editor).c_str(),
 	getstatkey(key_show_urls, section_editor).c_str(),
 	getstatkey(key_fullscreen, section_editor).c_str(),
-	getstatkey(key_info, section_editor).c_str(),
-	getstatkey(key_quit, section_editor).c_str());
+	getstatkey(key_info, section_editor).c_str());
 }
 
 bool icqface::eventedit(imevent &ev) {
@@ -3239,7 +3240,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    face.extk = ACT_DUMMY;
 	    face.next_chat(true);
 	    break;
-            
+	    
 	case key_prev_chat:
 	    face.extk = ACT_DUMMY;
 	    face.next_chat(false);

@@ -12,15 +12,21 @@ CVS
 %vcsmodule
 centericq
 %arguments
--b ~/.centericq_tst -d
+-b ~/.centericq_tst
 %cflags
 
 %lflags
 
 %gettextized
-1
+0
 %makemode
 automake
+%file fsource src/centericq.cc
+1
+%file fsource src/hooks/rsshook.cc
+1
+%file fsource src/hooks/HTTPClient.cc
+1
 %file fsource src/hooks/yahoohook.cc
 1
 %file fsource src/hooks/jabberhook.cc
@@ -29,7 +35,13 @@ automake
 1
 %file fsource src/hooks/icqhook.cc
 1
+%file fsource src/hooks/gaduhook.cc
+1
 %file fsource src/hooks/irchook.cc
+1
+%file fsource src/hooks/ljhook.cc
+1
+%file fsource src/hooks/msnhook.cc
 1
 %file fsource src/hooks/abstracthook.cc
 1
@@ -61,25 +73,13 @@ automake
 1
 %file fsource src/imevents.cc
 1
+%file fsource src/impgp.cc
+1
 %file fsource src/icqface.cc
 1
 %file fsource src/centermain.cc
 1
 %file fsource src/icqgroup.cc
-1
-%file fsource src/hooks/rsshook.cc
-1
-%file fsource src/hooks/HTTPClient.cc
-1
-%file fsource src/hooks/ljhook.cc
-1
-%file fsource src/hooks/gaduhook.cc
-1
-%file fsource src/centericq.cc
-1
-%file fsource src/hooks/msnhook.cc
-1
-%file fsource src/impgp.cc
 1
 %file fheader src/icqmlist.h
 1
@@ -87,11 +87,21 @@ automake
 1
 %file fheader src/icqcommon.h
 1
+%file fheader src/hooks/ljhook.h
+1
+%file fheader src/hooks/rsshook.h
+1
+%file fheader src/hooks/HTTPClient.h
+1
 %file fheader src/hooks/yahoohook.h
 1
 %file fheader src/hooks/aimhook.h
 1
+%file fheader src/hooks/msnhook.h
+1
 %file fheader src/hooks/jabberhook.h
+1
+%file fheader src/hooks/gaduhook.h
 1
 %file fheader src/hooks/icqhook.h
 1
@@ -119,6 +129,8 @@ automake
 1
 %file fheader src/icqconf.h
 1
+%file fheader src/impgp.h
+1
 %file fheader src/icqface.h
 1
 %file fheader src/icqgroups.h
@@ -126,18 +138,6 @@ automake
 %file fheader src/icqhist.h
 1
 %file fheader src/imexternal.h
-1
-%file fheader src/hooks/rsshook.h
-1
-%file fheader src/hooks/HTTPClient.h
-1
-%file fheader src/hooks/ljhook.h
-1
-%file fheader src/hooks/gaduhook.h
-1
-%file fheader src/hooks/msnhook.h
-1
-%file fheader src/impgp.h
 1
 %file fdoc po/ChangeLog
 1
@@ -161,8 +161,6 @@ automake
 1
 %file fdoc COPYING
 1
-%file fdoc POLICY
-1
 %file fbuild src/hooks/Makefile.am
 1
 %file fbuild src/Makefile.am
@@ -178,6 +176,8 @@ automake
 %file fbuild config.h.in
 1
 %file fbuild centericq.spec
+1
+%file fmisc po/bg.po
 1
 %file fmisc po/de.po
 1
@@ -209,9 +209,13 @@ automake
 1
 %file fmisc po/pt_BR.po
 1
+%file fmisc misc/cicqsync.1
+1
 %file fmisc misc/cicqconv
 1
 %file fmisc misc/cicqsync
+1
+%file fmisc misc/cicqconv.1
 1
 %file fmisc share/online.wav
 1
@@ -219,23 +223,19 @@ automake
 1
 %file fmisc share/sms.wav
 1
+%file fmisc share/offline.wav
+1
 %file fmisc share/msg.wav
 1
 %file fmisc share/url.wav
+1
+%file fmisc POLICY
 1
 %file fmisc centericq.1
 1
 %file fmisc centericq.motor
 1
-%file fmisc config.rpath
-1
-%file fmisc misc/cicqconv.1
-1
-%file fmisc misc/cicqsync.1
-1
-%file fmisc po/bg.po
-1
-%file fmisc share/offline.wav
+%file flib connwrap
 1
 %file flib firetalk
 1
@@ -243,19 +243,19 @@ automake
 1
 %file flib kkstrtext
 1
+%file flib kksystr
+1
+%file flib libgadu
+1
 %file flib libicq2000
 1
 %file flib libjabber
 1
+%file flib libmsn
+1
 %file flib libyahoo2
 1
-%file flib kksystr
-1
-%file flib connwrap
-1
-%file flib libgadu
-1
-%file flib libmsn
+%file fconnectedlib connwrap
 1
 %file fconnectedlib firetalk
 1
@@ -263,49 +263,73 @@ automake
 1
 %file fconnectedlib kkstrtext
 1
-%file fconnectedlib libicq2000
-1
-%file fconnectedlib libjabber
-param	jabber
-help	Jabber support
-default	1
-%file fconnectedlib libyahoo2
-param	yahoo
-help	Yahoo! support
-default	1
 %file fconnectedlib kksystr
-1
-%file fconnectedlib connwrap
 1
 %file fconnectedlib libgadu
 1
+%file fconnectedlib libicq2000
+1
+%file fconnectedlib libjabber
+1
 %file fconnectedlib libmsn
 1
-%file dheader /home/konst/devel/firetalk
-1
-%file dheader /home/konst/devel/kktoolbox/kkconsui/include
-1
-%file dheader /home/konst/devel/kktoolbox/kkstrtext
-1
-%file dheader /home/konst/devel/libicq2000
-1
-%file dheader /home/konst/devel/libjabber
-1
-%file dheader /home/konst/devel/libyahoo2
+%file fconnectedlib libyahoo2
 1
 %file dheader src
 1
 %file dheader src/hooks
 1
+%file dheader /home/konst/devel/connwrap
+1
+%file dheader /home/konst/devel/firetalk
+1
+%file dheader /home/konst/devel/firetalk/../connwrap
+1
+%file dheader /home/konst/devel/firetalk/../connwrap-0.1
+1
+%file dheader /home/konst/devel/kktoolbox/kkconsui
+1
+%file dheader /home/konst/devel/kktoolbox/kkconsui/include
+1
+%file dheader /home/konst/devel/kktoolbox/kkconsui/../kkstrtext
+1
+%file dheader /home/konst/devel/kktoolbox/kkconsui/../kkstrtext-0.1
+1
+%file dheader /home/konst/devel/kktoolbox/kkstrtext
+1
+%file dheader /home/konst/devel/kktoolbox/kksystr
+1
 %file dheader /home/konst/devel/kktoolbox/kksystr/include
 1
-%file dheader /home/konst/devel/connwrap
+%file dheader /home/konst/devel/kktoolbox/kksystr/../kkstrtext
+1
+%file dheader /home/konst/devel/kktoolbox/kksystr/../kkstrtext-0.1
 1
 %file dheader /home/konst/devel/libgadu
 1
+%file dheader /home/konst/devel/libicq2000
+1
 %file dheader /home/konst/devel/libicq2000/libicq2000
 1
+%file dheader /home/konst/devel/libjabber
+1
+%file dheader /home/konst/devel/libjabber/../connwrap
+1
+%file dheader /home/konst/devel/libjabber/../connwrap-0.1
+1
 %file dheader /home/konst/devel/libmsn
+1
+%file dheader /home/konst/devel/libmsn/../connwrap
+1
+%file dheader /home/konst/devel/libmsn/../connwrap-0.1
+1
+%file dheader /home/konst/devel/libyahoo2
+1
+%file dheader /home/konst/devel/libyahoo2/../connwrap
+1
+%file dheader /home/konst/devel/libyahoo2/../connwrap-0.1
+1
+%file dlib /home/konst/devel/connwrap
 1
 %file dlib /home/konst/devel/firetalk
 1
@@ -313,27 +337,24 @@ default	1
 1
 %file dlib /home/konst/devel/kktoolbox/kkstrtext
 1
+%file dlib /home/konst/devel/kktoolbox/kksystr
+1
+%file dlib /home/konst/devel/libgadu
+1
 %file dlib /home/konst/devel/libicq2000
 1
 %file dlib /home/konst/devel/libjabber
 1
-%file dlib /home/konst/devel/libyahoo2
-1
-%file dlib /home/konst/devel/kktoolbox/kksystr
-1
-%file dlib /home/konst/devel/connwrap
-1
-%file dlib /home/konst/devel/libgadu
-1
 %file dlib /home/konst/devel/libmsn
+1
+%file dlib /home/konst/devel/libyahoo2
 1
 %editor
 %breakpoints
 %watch
-p
 %desktop
 ncurses_watchactive	0
-distdir	/home/konst/devel
+distdir	
 tagbrowser_scope	2
 tagbrowser_filter	csgtfmednuvpx
 distparam0	rpmtarget i386-pc-linux-gnu
