@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.140 2005/02/13 12:10:55 iulica Exp $
+* $Id: icqconf.cc,v 1.141 2005/05/20 13:21:36 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1229,7 +1229,7 @@ const string &dest, const string &number) const {
 	    exit(1);
 	}
 
-	delete c;
+	//delete c;
 	delete ev;
 
 	exit(0);
