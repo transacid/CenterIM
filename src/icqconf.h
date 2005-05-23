@@ -40,7 +40,16 @@ enum cicq_colorpairs {
     cp_clist_jabber,
     cp_clist_rss,
     cp_clist_lj,
-    cp_clist_gadu
+    cp_clist_gadu,
+    cp_clist_online,
+    cp_clist_offline,
+    cp_clist_away,
+    cp_clist_dnd,
+    cp_clist_na,
+    cp_clist_occupied,
+    cp_clist_free_for_chat,
+    cp_clist_invisible,
+    cp_clist_not_in_list
 };
 
 enum cicq_keybindings {
@@ -84,6 +93,7 @@ class icqconf {
 	enum regsound { rscard, rsspeaker, rsdisable, rsdontchange };
 	enum regcolor { rcdark, rcblue, rcdontchange };
 	enum groupmode { group1, group2, nogroups };
+	enum colormode { cmproto, cmstatus };
 
 	struct imserver {
 	    string server;
@@ -145,6 +155,7 @@ class icqconf {
 	regsound rs;
 	regcolor rc;
 	groupmode fgroupmode;
+	colormode cm;
 
 	colorschemer<cicq_colorpairs> schemer;
 
@@ -171,6 +182,8 @@ class icqconf {
 
 	int getprotcolor(protocolname pname) const;
 
+	int getstatuscolor(imstatus status) const;
+
 	void save();
 
 	void loadkeys();
@@ -183,6 +196,9 @@ class icqconf {
 
 	regsound getregsound() const;
 	void setregsound(regsound s);
+
+	colormode getcolormode() const;
+	void setcolormode(colormode c);
 
 	bool getemacs() const { return emacs; }
 	void setemacs(bool fem);

@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.83 2005/02/19 17:51:05 konst Exp $
+* $Id: jabberhook.cc,v 1.84 2005/05/23 14:16:53 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -136,7 +136,16 @@ void jabberhook::connect() {
 }
 
 void jabberhook::disconnect() {
+    // announce it to  everyone else
+    setjabberstatus(offline, "");
+
+    // announce it to the user
     statehandler(jc, JCONN_STATE_OFF);
+
+    // close the connection
+    jab_stop(jc);
+    delete(jc);
+    jc = 0;
 }
 
 void jabberhook::exectimers() {
@@ -582,6 +591,11 @@ void jabberhook::setjabberstatus(imstatus st, string msg) {
 	case invisible:
 	    xmlnode_put_attrib(x, "type", "invisible");
 	    break;
+
+	case offline:
+	    xmlnode_put_attrib(x, "type", "unavailable");
+	    break;
+
     }
 
     map<string, string> add = conf.getourid(proto).additional;

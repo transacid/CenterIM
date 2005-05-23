@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.247 2005/05/02 15:23:59 konst Exp $
+* $Id: icqface.cc,v 1.248 2005/05/23 14:16:52 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -79,6 +79,15 @@ const char *strregcolor(icqconf::regcolor c) {
     switch(c) {
 	case icqconf::rcdark: return _("dark");
 	case icqconf::rcblue: return _("blue");
+    }
+
+    return _("don't change");
+}
+
+const char *strcolormode(icqconf::colormode cm) {
+    switch(cm) {
+	case icqconf::cmproto : return _("protocol");
+	case icqconf::cmstatus : return _("status");
     }
 
     return _("don't change");
@@ -601,6 +610,8 @@ void icqface::fillcontactlist() {
 
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
 
+    int ccolor = conf.getcolor(cp_main_text);
+
     if(!iscurrentnode && savec) {
 	ig = find(groups.begin(), groups.end(), ((icqcontact *) savec)->getgroupid());
 
@@ -728,9 +739,15 @@ void icqface::fillcontactlist() {
 	    !c->hasevents() && sc != '!')
 		continue;
 
+	if(conf.getcolormode() == icqconf::cmstatus) {
+	    ccolor = conf.getstatuscolor(c->getstatus());
+	} else {
+	    ccolor = conf.getprotcolor(c->getdesc().pname);
+	}
+
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
+		c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
 		c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {
@@ -747,7 +764,7 @@ void icqface::fillcontactlist() {
 	    }
 
 	    mcontacts->addleaff(nnode,
-		c->hasevents() ? conf.getcolor(cp_main_highlight) : conf.getprotcolor(c->getdesc().pname),
+		c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
 		c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
 		c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
@@ -2234,8 +2251,8 @@ void icqface::showeventbottom(const imcontact &ic) {
     status(text,
 	getstatkey(key_send_message, section_editor).c_str(),
 	getstatkey(key_multiple_recipients, section_editor).c_str(),
-	getstatkey(key_prev_chat, section_contact).c_str(),
-	getstatkey(key_next_chat, section_contact).c_str(),
+	getstatkey(key_prev_chat, section_editor).c_str(),
+	getstatkey(key_next_chat, section_editor).c_str(),
 	getstatkey(key_history, section_editor).c_str(),
 	getstatkey(key_show_urls, section_editor).c_str(),
 	getstatkey(key_fullscreen, section_editor).c_str(),
@@ -2487,8 +2504,8 @@ string icqface::extracttime(const imevent &ev) {
     time_t t, ts;
     char buf[64];
 
-    ds1 = time2str(&(t = ev.gettimestamp()), "DD.MM hh:mm", buf);
-    ds2 = time2str(&(ts = ev.getsenttimestamp()), "DD.MM hh:mm", buf);
+    ds1 = time2str(&(t = ev.gettimestamp()), "DD.MM.YY hh:mm", buf);
+    ds2 = time2str(&(ts = ev.getsenttimestamp()), "DD.MM.YY hh:mm", buf);
 
     r = ds1 + " ";
     tdiff = ts-t;

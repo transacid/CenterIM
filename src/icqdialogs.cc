@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class, dialogs related part
-* $Id: icqdialogs.cc,v 1.150 2005/02/03 02:02:37 konst Exp $
+* $Id: icqdialogs.cc,v 1.151 2005/05/23 14:16:52 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -1131,6 +1131,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     string convertto = conf.getconvertto();
 
     icqconf::groupmode gmode = conf.getgroupmode();
+    icqconf::colormode cm = conf.getcolormode();
 
     bool chatmode[protocolname_size], conv[protocolname_size],
 	entersends[protocolname_size], nonimonline[protocolname_size];
@@ -1230,6 +1231,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	    if(nonimonline[pname]) tmp += conf.getprotocolname(pname) + " ";
 
 	t.addleaff(i, 0, 29, _(" Always online non-IM contacts for : %s"), tmp.c_str());
+	t.addleaff(i, 0, 30, _(" Color contacts according to: %s "), strcolormode(cm));
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
@@ -1373,6 +1375,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 29:
 			selectproto(nonimonline, spnonIM);
 			break;
+		    case 30:
+			cm = (cm == icqconf::cmproto ? icqconf::cmstatus : icqconf::cmproto );
 		}
 		break;
 	    case 1:
@@ -1408,6 +1412,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    conf.setgroupmode(gmode);
 		    clist.rearrange();
 		}
+		conf.setcolormode(cm);
 
 		conf.setsmtphost(smtp);
 		conf.sethttpproxyhost(httpproxy);

@@ -165,9 +165,6 @@ class icqface {
 	bool sprofmanager(string &name, string &act);
 	void showeventbottom(const imcontact &ic);
 
-	int key2action(int k, int s);
-	string action2key(int a, int s, int n = 1) const;
-
 	void invokelist(string &s, vector<string> &v, const string &def, textwindow *w);
 	bool setljparams(imxmlevent *ev);
 	void multichange(bool conv[], bool newstate);
@@ -205,6 +202,8 @@ class icqface {
 	void relaxedupdate();
 	bool updaterequested();
 
+	int key2action(int k, int s);
+	string action2key(int a, int s, int n = 1) const;
   
 	icqcontact *find_next_chat();
 	bool next_chat(bool next = true);
@@ -293,6 +292,7 @@ string getbdate(unsigned char fbday, unsigned char fbmonth, unsigned char fbyear
 
 const char *strregsound(icqconf::regsound s);
 const char *strregcolor(icqconf::regcolor c);
+const char *strcolormode(icqconf::colormode cm);
 const char *strint(unsigned int i);
 const char *strgroupmode(icqconf::groupmode gmode);
 const char *stryesno(bool b);

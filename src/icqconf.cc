@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.141 2005/05/20 13:21:36 iulica Exp $
+* $Id: icqconf.cc,v 1.142 2005/05/23 14:16:52 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -43,6 +43,7 @@
 icqconf::icqconf() {
     rs = rscard;
     rc = rcdark;
+    cm = cmproto;
     fgroupmode = nogroups;
 
     autoaway = autona = 0;
@@ -263,7 +264,6 @@ void icqconf::loadkeys() {
     f.open(fname.c_str());
 
     if(f.is_open()) {
-
 	while(!f.eof()) {
 	    getstring(f, buf);
 
@@ -370,14 +370,53 @@ void icqconf::loadkeys() {
 	    if(param == "rss_check") k.action = key_rss_check; else
 	    if(param == "multiple_recipients") k.action = key_multiple_recipients; else
 	    if(param == "user_external_action") k.action = key_user_external_action;
-	    else continue;
+		else continue;
 
 	    keys.push_back(k);
 	}
+
 	f.close();
     }
+/*
+    if(face.action2key(key_info, section_contact).empty()) keys.push_back(keybinding()); else
+    if(face.action2key(key_quit, section_contact).empty()) 
+    if(face.action2key(key_change_status, section_contact).empty()) 
+    if(face.action2key(key_history, section_contact).empty()) 
+    if(face.action2key(key_fetch_away_message, section_contact).empty()) 
+    if(face.action2key(key_user_menu, section_contact).empty()) 
+    if(face.action2key(key_general_menu, section_contact).empty()) 
+    if(face.action2key(key_hide_offline, section_contact).empty()) 
+    if(face.action2key(key_contact_external_action, section_contact).empty()) 
+    if(face.action2key(key_add, section_contact).empty()) 
+    if(face.action2key(key_remove, section_contact).empty()) 
+    if(face.action2key(key_compose, section_contact).empty()) 
+    if(face.action2key(key_send_contact, section_contact).empty()) 
+    if(face.action2key(key_rss_check, section_contact).empty()) 
+    if(face.action2key(key_send_url, section_contact).empty()) 
+    if(face.action2key(key_rename, section_contact).empty()) 
+    if(face.action2key(key_version, section_contact).empty()) 
+    if(face.action2key(key_edit, section_contact).empty()) 
+    if(face.action2key(key_ignore, section_contact).empty()) 
+    if(face.action2key(key_quickfind, section_contact).empty()) 
+    if(face.action2key(key_next_chat, section_contact).empty()) 
+    if(face.action2key(key_prev_chat, section_contact).empty()) 
+    if(face.action2key(key_search, section_history).empty()) 
+    if(face.action2key(key_search_again, section_history).empty()) 
+    if(face.action2key(key_show_urls, section_history).empty()) 
+    if(face.action2key(key_fullscreen, section_history).empty()) 
+    if(face.action2key(key_send_message, section_editor).empty()) 
+    if(face.action2key(key_quit, section_editor).empty()) 
+    if(face.action2key(key_multiple_recipients, section_editor).empty()) 
+    if(face.action2key(key_history, section_editor).empty()) 
+    if(face.action2key(key_next_chat, section_editor).empty()) 
+    if(face.action2key(key_prev_chat, section_editor).empty()) 
+    if(face.action2key(key_info, section_editor).empty()) 
+    if(face.action2key(key_show_urls, section_editor).empty()) 
+    if(face.action2key(key_fullscreen, section_editor).empty()) 
+    if(face.action2key(key_show_urls, section_info).empty()) 
+    if(face.action2key(key_user_external_action, section_info).empty()) {}
+*/
 }
-
 
 void icqconf::loadmainconfig() {
     string fname = getconfigfname("config"), buf, param, rbuf;
@@ -408,6 +447,8 @@ void icqconf::loadmainconfig() {
 	    if(param == "sockspass") sockspass = buf; else
 	    if((param == "usegroups") || (param == "group1")) fgroupmode = group1; else
 	    if(param == "group2") fgroupmode = group2; else
+	    if(param == "protocolormode") cm = icqconf::cmproto; else
+	    if(param == "statuscolormode") cm = icqconf::cmstatus; else
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
@@ -525,6 +566,15 @@ void icqconf::save() {
 		case group2: f << "group2" << endl; break;
 	    }
 
+	    switch(getcolormode()) {
+		case cmproto:
+		    f << "protocolormode" << endl;
+		    break;
+		case cmstatus:
+		    f << "statuscolormode" << endl;
+		    break;
+	    }
+
 	    if(getmakelog()) f << "log" << endl;
 	    if(getproxyconnect()) f << "proxy_connect" << endl;
 	    if(getproxyssl()) f << "proxy_ssl" << endl;
@@ -566,6 +616,14 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_rss, "clist_rss    white/transparent   bold");
 	    schemer.push(cp_clist_lj, "clist_lj    cyan/transparent   bold");
 	    schemer.push(cp_clist_gadu, "clist_gg    blue/transparent   bold");
+	    schemer.push(cp_clist_online, "clist_online   green/transparent   bold");
+	    schemer.push(cp_clist_offline, "clist_offline   red/transparent   bold");
+	    schemer.push(cp_clist_away, "clist_away   yellow/transparent   bold");
+	    schemer.push(cp_clist_dnd, "clist_dnd   cyan/transparent   bold");
+	    schemer.push(cp_clist_na, "clist_na   blue/transparent   bold");
+	    schemer.push(cp_clist_free_for_chat, "clist_free_for_chat   green/transparent   bold");
+	    schemer.push(cp_clist_invisible, "clist_invisible   grey/transparent   bold");
+	    schemer.push(cp_clist_not_in_list, "clist_not_in_list   white/transparent   bold");
 	    break;
 
 	case rcblue:
@@ -592,6 +650,14 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_rss, "clist_rss    white/blue   bold");
 	    schemer.push(cp_clist_lj, "clist_lj    cyan/blue   bold");
 	    schemer.push(cp_clist_gadu, "clist_gg    blue/blue   bold");
+	    schemer.push(cp_clist_online, "clist_online   green/transparent   bold");
+	    schemer.push(cp_clist_offline, "clist_offline   red/transparent   bold");
+	    schemer.push(cp_clist_away, "clist_away   yellow/transparent   bold");
+	    schemer.push(cp_clist_dnd, "clist_dnd   cyan/transparent   bold");
+	    schemer.push(cp_clist_na, "clist_na   blue/transparent   bold");
+	    schemer.push(cp_clist_free_for_chat, "clist_free_for_chat   green/transparent   bold");
+	    schemer.push(cp_clist_invisible, "clist_invisible   grey/transparent   bold");
+	    schemer.push(cp_clist_not_in_list, "clist_not_in_list   white/transparent   bold");
 	    break;
     }
 
@@ -800,6 +866,14 @@ icqconf::regsound icqconf::getregsound() const {
 
 void icqconf::setregsound(icqconf::regsound s) {
     rs = s;
+}
+
+icqconf::colormode icqconf::getcolormode() const {
+    return cm;
+}
+
+void icqconf::setcolormode(colormode c) {
+    cm = c;
 }
 
 void icqconf::setauto(int away, int na) {
@@ -1052,6 +1126,20 @@ int icqconf::getprotcolor(protocolname pname) const {
 	case rss : return getcolor(cp_clist_rss);
 	case livejournal : return getcolor(cp_clist_lj);
 	case gadu : return getcolor(cp_clist_gadu);
+	default : return getcolor(cp_main_text);
+    }
+}
+
+int icqconf::getstatuscolor(imstatus status) const {
+    switch(status) {
+        case offline : return getcolor(cp_clist_offline);
+        case available : return getcolor(cp_clist_online);
+        case invisible : return getcolor(cp_clist_invisible);
+        case freeforchat : return getcolor(cp_clist_free_for_chat);
+        case dontdisturb : return getcolor(cp_clist_dnd);
+        case occupied : return getcolor(cp_clist_occupied);
+        case notavail : return getcolor(cp_clist_na);
+        case away : return getcolor(cp_clist_away);
 	default : return getcolor(cp_main_text);
     }
 }
