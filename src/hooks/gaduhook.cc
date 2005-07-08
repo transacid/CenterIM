@@ -1,7 +1,7 @@
 /*
 *
 * centericq gadu-gadu protocol handling class
-* $Id: gaduhook.cc,v 1.13 2005/01/18 23:20:17 konst Exp $
+* $Id: gaduhook.cc,v 1.14 2005/07/08 09:49:17 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -906,8 +906,10 @@ string gaduhook::handletoken(struct gg_http *h) {
     if(!(t = (struct gg_token *) h->data) || !h->body)
 	return "";
 
-    fname = (getenv("TMPDIR") ? getenv("TMPDIR") : "/tmp");
-    fname += "/gg.token." + i2str(getpid());
+    do {
+	fname = (getenv("TMPDIR") ? getenv("TMPDIR") : "/tmp");
+	fname += "/gg.token." + i2str(getpid()) + i2str(time(0));
+    } while(!access(fname.c_str(), F_OK));
 
     ofstream bf(fname.c_str());
 
