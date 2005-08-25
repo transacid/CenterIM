@@ -70,6 +70,7 @@ struct s_toc_connection {
 	int gotconfig;
 	char    *profstr;
 	size_t  proflen;
+	int permit_mode;
 	struct {
 		char    *command,
 			*ect;
@@ -108,6 +109,12 @@ typedef struct s_toc_connection *client_t;
 #define TOC_SIGNON_LENGTH 24
 #define TOC_HOST_SIGNON_LENGTH 4
 #define TOC_USERNAME_MAXLEN 16
+
+#define TOC_HTML_MAXLEN 65536
+#define TOC_CLIENTSEND_MAXLEN (2*1024)
+#define TOC_SERVERSEND_MAXLEN (8*1024)
+#define ECT_TOKEN       "<font ECT=\""
+#define ECT_ENDING      "\"></font>"
 
 static char lastinfo[TOC_USERNAME_MAXLEN + 1] = "";
 
@@ -1569,166 +1576,513 @@ got_data_start:
 	goto got_data_start;
 }
 
-enum firetalk_error   toc_got_data_connecting(client_t c, unsigned char *buffer, unsigned short *bufferpos) {
-	char data[8192 - TOC_HEADER_LENGTH + 1];
+static struct {
+	enum firetalk_error fte;
+	unsigned char   hastarget:1;
+	const char      *str;
+} toc2_errors[] = {
+  /* General Errors */
+	/* 900 */ {     FE_UNKNOWN,             0, NULL },
+	/* 901 */ {     FE_USERUNAVAILABLE,     1, NULL },
+			/* TOC1 $1 not currently available */
+			/* TOC2 User Not Logged In
+				You can only send Instant Messanges to, or Chat with, buddies who are currently signed on. You need to wait and try again later when your buddy is signed on.
+			*/
+	/* 902 */ {     FE_USERUNAVAILABLE,     1, "You have either tried to warn someone you haven't sent a message to yet, or you have already warned them too many times today." },
+			/* TOC1 Warning of $1 not currently available */
+			/* TOC2 Warning Not Allowed
+				You have either tried to warn someone you haven't sent an Instant Message to yet; or, you have already warned them too many times today.
+			*/
+	/* 903 */ {     FE_TOOFAST,             0, "You are sending commands too fast." },
+			/* TOC1 A message has been dropped, you are exceeding the server speed limit */
+			/* TOC2 Server Limit Exceeded
+				If you send messages too fast, you will exceed the server's capacity to handle them. Please try to send your message again.
+			*/
+	/* 904 */ {     FE_UNKNOWN,             0, NULL },
+	/* 905 */ {     FE_UNKNOWN,             0, NULL },
+	/* 906 */ {     FE_UNKNOWN,             0, NULL },
+	/* 907 */ {     FE_UNKNOWN,             0, NULL },
+	/* 908 */ {     FE_UNKNOWN,             0, NULL },
+	/* 909 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* Admin Errors */
+	/* 910 */ {     FE_UNKNOWN,             0, NULL },
+	/* 911 */ {     FE_BADUSER,             0, NULL },
+	/* 912 */ {     FE_UNKNOWN,             0, NULL },
+	/* 913 */ {     FE_UNKNOWN,             0, NULL },
+	/* 914 */ {     FE_UNKNOWN,             0, NULL },
+	/* 915 */ {     FE_UNKNOWN,             0, NULL },
+	/* 916 */ {     FE_UNKNOWN,             0, NULL },
+	/* 917 */ {     FE_UNKNOWN,             0, NULL },
+	/* 918 */ {     FE_UNKNOWN,             0, NULL },
+	/* 919 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* Unknown */
+	/* 920 */ {     FE_UNKNOWN,             0, NULL },
+	/* 921 */ {     FE_UNKNOWN,             0, NULL },
+	/* 922 */ {     FE_UNKNOWN,             0, NULL },
+	/* 923 */ {     FE_UNKNOWN,             0, NULL },
+	/* 924 */ {     FE_UNKNOWN,             0, NULL },
+	/* 925 */ {     FE_UNKNOWN,             0, NULL },
+	/* 926 */ {     FE_UNKNOWN,             0, NULL },
+	/* 927 */ {     FE_UNKNOWN,             0, NULL },
+	/* 928 */ {     FE_UNKNOWN,             0, NULL },
+	/* 929 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* Buddy List Errors */
+	/* 930 */ {     FE_UNKNOWN,             0, "The Buddy List server is unavailable at this time. Wait a few minutes, and try to sign on again." },
+			/* TOC1 UNDOCUMENTED */
+			/* TOC2 Buddy List Server is Unavailable
+				The Buddy List server is unavailable at this time, and your AIM Express (TM) connection will be closed.
+				Wait a few minutes, and try to sign on again.
+			*/
+	/* 931 */ {     FE_UNKNOWN,             0, NULL },
+	/* 932 */ {     FE_UNKNOWN,             0, NULL },
+	/* 933 */ {     FE_UNKNOWN,             0, NULL },
+	/* 934 */ {     FE_UNKNOWN,             0, NULL },
+	/* 935 */ {     FE_UNKNOWN,             0, NULL },
+	/* 936 */ {     FE_UNKNOWN,             0, NULL },
+	/* 937 */ {     FE_UNKNOWN,             0, NULL },
+	/* 938 */ {     FE_UNKNOWN,             0, NULL },
+	/* 939 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* Unknown */
+	/* 940 */ {     FE_UNKNOWN,             0, NULL },
+	/* 941 */ {     FE_UNKNOWN,             0, NULL },
+	/* 942 */ {     FE_UNKNOWN,             0, NULL },
+	/* 943 */ {     FE_UNKNOWN,             0, NULL },
+	/* 944 */ {     FE_UNKNOWN,             0, NULL },
+	/* 945 */ {     FE_UNKNOWN,             0, NULL },
+	/* 946 */ {     FE_UNKNOWN,             0, NULL },
+	/* 947 */ {     FE_UNKNOWN,             0, NULL },
+	/* 948 */ {     FE_UNKNOWN,             0, NULL },
+	/* 949 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* Chat Errors */
+	/* 950 */ {     FE_ROOMUNAVAILABLE,     1, NULL },
+			/* TOC1 Chat in $1 is unavailable. */
+			/* TOC2 User Unavailable
+				You can only Chat with buddies who are currently signed on and available. AOL Instant Messenger users have the option to put up an "Unavailable" notice, indicating that they are away from their computer or simply too busy to answer messages.
+				You need to wait and try again later when your buddy is available.
+			*/
+	/* 951 */ {     FE_UNKNOWN,             0, NULL },
+	/* 952 */ {     FE_UNKNOWN,             0, NULL },
+	/* 953 */ {     FE_UNKNOWN,             0, NULL },
+	/* 954 */ {     FE_UNKNOWN,             0, NULL },
+	/* 955 */ {     FE_UNKNOWN,             0, NULL },
+	/* 956 */ {     FE_UNKNOWN,             0, NULL },
+	/* 957 */ {     FE_UNKNOWN,             0, NULL },
+	/* 958 */ {     FE_UNKNOWN,             0, NULL },
+	/* 959 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* IM & Info Errors */
+	/* 960 */ {     FE_TOOFAST,             1, "You are sending messages too fast." },
+			/* TOC1 You are sending message too fast to $1 */
+			/* TOC2 Server Limit Exceeded
+				Sending messages too fast will exceed the server's capacity to handle them.
+			*/
+	/* 961 */ {     FE_INCOMINGERROR,       1, "You missed a message because it was too big." },
+			/* TOC1 You missed an im from $1 because it was too big. */
+			/* TOC2 Server Limit Exceeded
+				The sender sent their messages too fast, exceeding the server's capacity to handle them.
+			*/
+	/* 962 */ {     FE_INCOMINGERROR,       1, "You missed a message because it was sent too fast." },
+			/* TOC1 You missed an im from $1 because it was sent too fast. */
+			/* TOC2 Server Limit Exceeded
+				The Instant Messenging system is designed to accommodate normal conversions, consisting of a few lines of text at a time. Larger messages, like a magazine article or a full-length letter, might get dropped. Please ask the sender to send their message through e-mail instead.
+			*/
+	/* 963 */ {     FE_UNKNOWN,             0, NULL },
+	/* 964 */ {     FE_UNKNOWN,             0, NULL },
+	/* 965 */ {     FE_UNKNOWN,             0, NULL },
+	/* 966 */ {     FE_UNKNOWN,             0, NULL },
+	/* 967 */ {     FE_UNKNOWN,             0, NULL },
+	/* 968 */ {     FE_UNKNOWN,             0, NULL },
+	/* 969 */ {     FE_UNKNOWN,             0, NULL },
+
+
+  /* Dir Errors */
+	/* 970 */ {     FE_SUCCESS,             0, NULL },
+			/* TOC1 Failure */
+			/* TOC2 UNDOCUMENTED */
+	/* 971 */ {     FE_USERINFOUNAVAILABLE, 0, "Too many matches." },
+			/* TOC1 Too many matches */
+			/* TOC2 UNDOCUMENTED */
+	/* 972 */ {     FE_USERINFOUNAVAILABLE, 0, "Need more qualifiers." },
+			/* TOC1 Need more qualifiers */
+			/* TOC2 UNDOCUMENTED */
+	/* 973 */ {     FE_USERINFOUNAVAILABLE, 0, "Directory service unavailable." },
+			/* TOC1 Dir service temporarily unavailable */
+			/* TOC2 UNDOCUMENTED */
+	/* 974 */ {     FE_USERINFOUNAVAILABLE, 0, "Email lookup restricted." },
+			/* TOC1 Email lookup restricted */
+			/* TOC2 UNDOCMENTED */
+	/* 975 */ {     FE_USERINFOUNAVAILABLE, 0, "Keyword ignored." },
+			/* TOC1 Keyword Ignored */
+			/* TOC2 UNDOCUMENTED */
+	/* 976 */ {     FE_USERINFOUNAVAILABLE, 0, "No keywords." },
+			/* TOC1 No Keywords */
+			/* TOC2 UNDOCUMENTED */
+	/* 977 */ {     FE_SUCCESS,             0, NULL },
+			/* TOC1 Language not supported */
+			/* TOC2 UNDOCUMENTED */
+	/* 978 */ {     FE_USERINFOUNAVAILABLE, 0, "Country not supported." },
+			/* TOC1 Country not supported */
+			/* TOC2 UNDOCUMENTED */
+	/* 979 */ {     FE_USERINFOUNAVAILABLE, 0, "Failure unknown." },
+			/* TOC1 Failure unknown $1 */
+			/* TOC2 UNDOCUMENTED */
+
+
+  /* Auth errors */
+	/* 980 */ {     FE_BADUSERPASS,         0, "The Screen Name or Password was incorrect. Passwords are case sensitive, so make sure your caps lock key isn't on." },
+			/* TOC1 Incorrect nickname or password. */
+			/* TOC2 Incorrect Screen Name or Password
+				The Screen Name or Password was incorrect. Passwords are case sensitive, so make sure your caps lock key isn't on.
+				AIM Express (TM) uses your AIM Screen Name and Password, not your AOL Password. If you need an AIM password please visit AOL Instant Messenger.
+				Forgot your password? Click here.
+			*/
+	/* 981 */ {     FE_SERVER,              0, "The service is unavailable currently. Please try again in a few minutes." },
+			/* TOC1 The service is temporarily unavailable. */
+			/* TOC2 Service Offline
+				The service is unavailable currently. Please try again in a few minutes.
+			*/
+	/* 982 */ {     FE_BLOCKED,             0, "Your warning level is too high to sign on." },
+			/* TOC1 Your warning level is currently too high to sign on. */
+			/* TOC2 Warning Level too High
+				Your warning level is current too high to sign on. You will need to wait between a few minutes and several hours before you can log back in.
+			*/
+	/* 983 */ {     FE_BLOCKED,             0, "You have been connected and disconnecting too frequently. Wait 10 minutes and try again. If you continue to try, you will need to wait even longer." },
+			/* TOC1 You have been connecting and disconnecting too frequently.  Wait 10 minutes and try again. If you continue to try, you will need to wait even longer. */
+			/* TOC2 Connecting too Frequently
+				You have been connecting and disconnecting too frequently. You will need to wait around 10 minutes before you will be allowed to sign on again.
+			*/
+	/* 984 */ {     FE_UNKNOWN,             0, NULL },
+	/* 985 */ {     FE_UNKNOWN,             0, NULL },
+	/* 986 */ {     FE_UNKNOWN,             0, NULL },
+	/* 987 */ {     FE_UNKNOWN,             0, NULL },
+	/* 988 */ {     FE_UNKNOWN,             0, NULL },
+	/* 989 */ {     FE_UNKNOWN,             0, "An unknown signon error has occured. Please wait 10 minutes and try again." },
+			/* TOC1 An unknown signon error has occurred $1 */
+			/* TOC2 Unknown Error
+				An unknown signon error has occured. Please wait 10 minutes and try again.
+			*/
+
+
+  /* Client Errors */
+	/* 990 */ {     FE_UNKNOWN,             0, NULL },
+	/* 991 */ {     FE_UNKNOWN,             0, NULL },
+	/* 992 */ {     FE_UNKNOWN,             0, NULL },
+	/* 993 */ {     FE_UNKNOWN,             0, NULL },
+	/* 994 */ {     FE_UNKNOWN,             0, NULL },
+	/* 995 */ {     FE_UNKNOWN,             0, NULL },
+	/* 996 */ {     FE_UNKNOWN,             0, NULL },
+	/* 997 */ {     FE_UNKNOWN,             0, NULL },
+	/* 998 */ {     FE_UNKNOWN,             0, "The service believes you are using an outdated client; this is possibly an attempt to block third-party programs such as the one you are using. Check your software's web site for an updated version." },
+			/* TOC1 UNDOCUMENTED */
+			/* TOC2 AIM Express (TM) Update
+				Your browser is using a cached version of Quick Buddy that is now outdated. To remedy this, simply quit or close your browser and re-launch it. The next time you load Quick Buddy, it will be automatically updated.
+			*/
+	/* 999 */ {     FE_UNKNOWN,             0, NULL },
+};
+
+static char **toc_parse_args2(char *str, const int maxargs, const char sep) {
+	static char *args[256];
+	int     curarg = 0;
+	char    *colon;
+
+	while ((curarg < (maxargs-1)) && (curarg < 256)
+		&& ((colon = strchr(str, sep)) != NULL)) {
+		args[curarg++] = str;
+		*colon = 0;
+		str = colon+1;
+	}
+	args[curarg++] = str;
+	args[curarg] = NULL;
+	return(args);
+}
+
+static const char *toc_make_fake_cap(const unsigned char *const str, const int len) {
+	static char buf[sizeof("FFFFFFFF-cccc-dddd-eeee-ffffgggghhhh")];
+	const int ar[] = { 9, 11, 14, 16, 19, 21, 24, 26, 28, 30, 32, 34 };
+	const int maxlen = 12;
+	int     i;
+
+	strcpy(buf, "FFFFFFFF-0000-0000-0000-000000000000");
+	for (i = 0; (i < len) && (i < maxlen); i++) {
+		char    b[3];
+
+		sprintf(b, "%02X", str[i]);
+		memcpy(buf+ar[i], b, 2);
+	}
+	return(buf);
+}
+
+enum firetalk_error toc_got_data_connecting(client_t c, unsigned char *buffer, unsigned short *bufferpos) {
+	char data[TOC_SERVERSEND_MAXLEN - TOC_HEADER_LENGTH + 1];
 	char password[128];
-	enum firetalk_error   r;
+	enum firetalk_error r;
 	unsigned short length;
 	char *arg0;
 	char **args;
 	char *tempchr1;
-	char *tempchr2;
-	int permit_mode;
 	firetalk_t fchandle;
 
 got_data_connecting_start:
 	
-	r = toc_find_packet(c,buffer,bufferpos,data,c->connectstate == 0 ? SFLAP_FRAME_SIGNON : SFLAP_FRAME_DATA,&length);
+	r = toc_find_packet(c, buffer, bufferpos, data, (c->connectstate==0)?SFLAP_FRAME_SIGNON:SFLAP_FRAME_DATA, &length);
 	if (r == FE_NOTFOUND)
-		return FE_SUCCESS;
+		return(FE_SUCCESS);
 	else if (r != FE_SUCCESS)
-		return r;
+		return(r);
 
 	switch (c->connectstate) {
-		case 0: /* we're waiting for the flap version number */
-			if (length != TOC_HOST_SIGNON_LENGTH) {
-				firetalk_callback_connectfailed(c,FE_PACKETSIZE,"Host signon length incorrect");
-				return FE_PACKETSIZE;
-			}
-			if (data[0] != '\0' || data[1] != '\0' || data[2] != '\0' || data[3] != '\1') {
-				firetalk_callback_connectfailed(c,FE_VERSION,NULL);
-				return FE_VERSION;
-			}
-			srand((unsigned int) time(NULL));
-			c->local_sequence = (unsigned short) 1+(unsigned short) (65536.0*rand()/(RAND_MAX+1.0));
+	  case 0: /* we're waiting for the flap version number */
+		if (length != TOC_HOST_SIGNON_LENGTH) {
+			firetalk_callback_connectfailed(c, FE_PACKETSIZE, "Host signon length incorrect");
+			return(FE_PACKETSIZE);
+		}
+		if ((data[0] != 0) || (data[1] != 0) || (data[2] != 0) || (data[3] != 1)) {
+			firetalk_callback_connectfailed(c, FE_VERSION, NULL);
+			return(FE_VERSION);
+		}
+#if 0
+		srand((unsigned int) time(NULL));
+		c->local_sequence = (unsigned short)1+(unsigned short)(65536.0*rand()/(RAND_MAX+1.0));
+#else
+		c->local_sequence = 31337;
+#endif
 
-			length = toc_fill_header((unsigned char *) data,SFLAP_FRAME_SIGNON,++c->local_sequence,toc_fill_signon((unsigned char *)&data[TOC_HEADER_LENGTH],c->nickname));
+		length = toc_fill_header((unsigned char *)data, SFLAP_FRAME_SIGNON, ++c->local_sequence, toc_fill_signon((unsigned char *)&data[TOC_HEADER_LENGTH], c->nickname));
+
+		fchandle = firetalk_find_handle(c);
+#ifdef DEBUG_ECHO
+		toc_echo_send(c, "got_data_connecting", data, length);
+#endif
+		firetalk_internal_send_data(fchandle, data, length, 0);
+
+		firetalk_callback_needpass(c, password, sizeof(password));
+
+		c->connectstate = 1;
+		{
+			int     sn = tolower(c->nickname[0]) - 'a' + 1,
+				pw = tolower(password[0]) - 'a' + 1,
+				A = sn*7696 + 738816,
+				B = sn*746512,
+				C = pw*A,
+				magic = C - A + B + 71665152;
+
+			if (!isdigit(c->nickname[0]))                   /* AIM Express */
+			  r = toc_send_printf(c, "toc2_login "
+				 "login.oscar.aol.com"  // authorizer host      [login.oscar.aol.com]
+				" 29999"                // authorizer port      [29999]
+				" %s"                   // username
+				" %S"                   // roasted, armored password
+				" English"              // language             [English]
+				" %s"                   // client version
+				" 160"                  // unknown number       [160]
+				" %S"                   // country code         [US]
+				" %s"                   // unknown string       [""]
+				" %s"                   // unknown string       [""]
+				" 3"                    // unknown number       [3]
+				" 0"                    // unknown number       [0]
+				" 30303"                // unknown number       [30303]
+				" -kentucky"            // unknown flag         [-kentucky]
+				" -utf8"                // unknown flag         [-utf8]
+				" -preakness"           // this enables us to talk to ICQ users
+				" %i",                  // magic number based on username and password
+					c->nickname,
+					toc_hash_password(password),
+					PACKAGE_NAME ":" PACKAGE_VERSION ":contact " PACKAGE_BUGREPORT,
+					"US",
+					"",
+					"",
+					magic);
+			else                                            /* ICQ2Go */
+			  r = toc_send_printf(c, "toc2_login "
+				 "login.icq.com"        // authorizer host      [login.icq.com]
+				" 5190"                 // authorizer port      [5190]
+				" %S"                   // username
+				" %S"                   // roasted, armored password
+				" en"                   // language             [en]
+				" %s"                   // client version
+				" 135"                  // unknown number       [135]
+				" %s"                   // country code         ["US"]
+				" %s"                   // unknown string       [""]
+				" %s"                   // unknown string       [""]
+				" 30"                   // unknown number       [30]
+				" 2"                    // unknown number       [2]
+				" 321"                  // unknown number       [321]
+				" -utf8"                // unknown flag         [-utf8]
+				" -preakness"           // this enables us to talk to ICQ users
+				" %i",                  // magic number based on username and password
+					c->nickname,
+					toc_hash_password(password),
+					PACKAGE_NAME ":" PACKAGE_VERSION ":contact " PACKAGE_BUGREPORT,
+					"US",
+					"",
+					"",
+					magic);
+		}
+		if (r != FE_SUCCESS) {
+			firetalk_callback_connectfailed(c,r,NULL);
+			return(r);
+		}
+		break;
+	  case 1:
+		arg0 = toc_get_arg0(data);
+		if (strcmp(arg0, "SIGN_ON") != 0) {
+			if (strcmp(arg0, "ERROR") == 0) {
+				args = toc_parse_args2(data, 3, ':');
+				if (args[1] != NULL) {
+					int     err = atoi(args[1]);
+
+					if ((err >= 900) && (err <= 999)) {
+						err -= 900;
+						firetalk_callback_connectfailed(c, toc2_errors[err].fte, toc2_errors[err].str);
+						return(toc2_errors[err].fte);
+					}
+				}
+			}
+			firetalk_callback_connectfailed(c, FE_UNKNOWN, NULL);
+			return(FE_UNKNOWN);
+		}
+		c->connectstate = 2;
+		break;
+	  case 2:
+	  case 3:
+		arg0 = toc_get_arg0(data);
+		if (arg0 == NULL)
+			return(FE_SUCCESS);
+		if (strcmp(arg0, "NICK") == 0) {
+			/* NICK:<Nickname> */
+
+			args = toc_parse_args2(data, 2, ':');
+			if (args[1]) {
+				free(c->nickname);
+				c->nickname = strdup(args[1]);
+				if (c->nickname == NULL)
+					abort();
+			}
+			c->connectstate = 3;
+		} else if (strcmp(arg0, "CONFIG2") == 0) {
+			/* CONFIG2:<config> */
+			char    *nl, *curgroup = strdup("Saved buddy");
 
 			fchandle = firetalk_find_handle(c);
-#ifdef DEBUG_ECHO
-			toc_echo_send(c, "got_data_connecting", data, length);
+			args = toc_parse_args2(data, 2, ':');
+			if (!args[1]) {
+				firetalk_callback_connectfailed(c, FE_INVALIDFORMAT, "CONFIG2");
+				return(FE_INVALIDFORMAT);
+			}
+			tempchr1 = args[1];
+			c->permit_mode = 0;
+			while ((nl = strchr(tempchr1, '\n'))) {
+				*nl = 0;
+
+				if (tempchr1[1] == ':') {
+					/* b:ACCOUNT:REAL NAME:?:CELL PHONE SLOT NUMBER:w:NOTES */
+
+					args = toc_parse_args2(tempchr1, 4, ':');
+
+					switch (args[0][0]) {
+					  case 'g':     /* Buddy Group (All Buddies until the next g or the end of config are in this group.) */
+						free(curgroup);
+						curgroup = strdup(args[1]);
+						break;
+					  case 'b':     /* A Buddy */
+					  case 'a':     /* another kind of buddy */
+						if (strcmp(curgroup, "Mobile Device") != 0)
+							firetalk_im_add_buddy(fchandle, args[1]/*, curgroup*/);
+						break;
+					  case 'p':     /* Person on permit list */
+						toc_send_printf(c, "toc_add_permit %s", args[1]);
+						break;
+					  case 'd':     /* Person on deny list */
+						firetalk_im_internal_add_deny(fchandle, args[1]);
+						break;
+					  case 'm':     /* Permit/Deny Mode.  Possible values are 1 - Permit All 2 - Deny All 3 - Permit Some 4 - Deny Some */
+						c->permit_mode = atoi(args[1]);
+						break;
+					}
+				}
+				tempchr1 = nl+1;
+			}
+			free(curgroup);
+
+			if ((c->permit_mode < 1) || (c->permit_mode > 5))
+				c->permit_mode = 4;
+
+			toc_send_printf(c, "toc2_set_pdmode %i", c->permit_mode);
+			c->gotconfig = 1;
+		} else {
+			firetalk_callback_connectfailed(c, FE_WEIRDPACKET, data);
+			return(FE_WEIRDPACKET);
+		}
+
+		if ((c->gotconfig == 1) && (c->connectstate == 3)) {
+#ifdef ENABLE_GETREALNAME
+			char    realname[128];
 #endif
-			firetalk_internal_send_data(fchandle,data,length,0);
 
-			firetalk_callback_needpass(c,password,128);
-
-			c->connectstate = 1;
-			r = toc_send_printf(c,"toc_signon login.oscar.aol.com 5190 %s %s english \"libfiretalk v" LIBFIRETALK_VERSION "\"",c->nickname,toc_hash_password(password));
+			/* ask the client to handle its init */
+			firetalk_callback_doinit(c, c->nickname);
+			if (toc_im_upload_buddies(c) != FE_SUCCESS) {
+				firetalk_callback_connectfailed(c, FE_PACKET, "Error uploading buddies");
+				return(FE_PACKET);
+			}
+			if (toc_im_upload_denies(c) != FE_SUCCESS) {
+				firetalk_callback_connectfailed(c, FE_PACKET, "Error uploading denies");
+				return(FE_PACKET);
+			}
+			r = toc_send_printf(c, "toc_init_done");
 			if (r != FE_SUCCESS) {
-				firetalk_callback_connectfailed(c,r,NULL);
-				return r;
+				firetalk_callback_connectfailed(c, r, "Finalizing initialization");
+				return(r);
 			}
-			break;
-		case 1:
-			arg0 = toc_get_arg0(data);
-			if (strcmp(arg0,"SIGN_ON") != 0) {
-				if (strcmp(arg0,"ERROR") == 0) {
-					args = toc_parse_args(data,3);
-					if (args[1]) {
-						switch (atoi(args[1])) {
-							case 980:
-								firetalk_callback_connectfailed(c,FE_BADUSERPASS,NULL);
-								return FE_BADUSERPASS;
-							case 981:
-								firetalk_callback_connectfailed(c,FE_SERVER,NULL);
-								return FE_SERVER;
-							case 982:
-								firetalk_callback_connectfailed(c,FE_BLOCKED,"Your warning level is too high to sign on");
-								return FE_BLOCKED;
-							case 983:
-								firetalk_callback_connectfailed(c,FE_BLOCKED,"You have been connecting and disconnecting too frequently");
-								return FE_BLOCKED;
-						}
-					}
-				}
-				firetalk_callback_connectfailed(c,FE_UNKNOWN,NULL);
-				return FE_UNKNOWN;
+
+			r = toc_send_printf(c, "toc_set_caps %S %S",
+				"094613494C7F11D18222444553540000",
+				toc_make_fake_cap(PACKAGE_STRING, strlen(PACKAGE_STRING)));
+			if (r != FE_SUCCESS) {
+				firetalk_callback_connectfailed(c, r, "Setting capabilities");
+				return(r);
 			}
-			c->connectstate = 2;
-			break;
-		case 2:
-		case 3:
-			arg0 = toc_get_arg0(data);
-			if (arg0 == NULL)
-				return FE_SUCCESS;
-			if (strcmp(arg0,"NICK") == 0) {
-				args = toc_parse_args(data,2);
-				if (args[1]) {
-					if (c->nickname)
-						free(c->nickname);
-					c->nickname = safe_strdup(args[1]);
-				}
-				c->connectstate = 3;
-			} else if (strcmp(arg0,"CONFIG") == 0) {
-				fchandle = firetalk_find_handle(c);
-				args = toc_parse_args(data,2);
-				if (!args[1]) {
-					firetalk_callback_connectfailed(c,FE_INVALIDFORMAT,"CONFIG");
-					return FE_INVALIDFORMAT;
-				}
-				tempchr1 = args[1];
-				permit_mode = 0;
-				c->gotconfig = 1;
-				while ((tempchr2 = strchr(tempchr1,'\n'))) {
-					/* rather stupidly, we have to tell it everything back that it just told us.  how dumb */
-					tempchr2[0] = '\0';
-					switch (tempchr1[0]) {
-						case 'm':    /* permit mode */
-							permit_mode = ((int) (tempchr1[2] - '1')) + 1;
-							break;
-						case 'd':    /* deny */
-							firetalk_im_internal_add_deny(fchandle,&tempchr1[2]);
-							break;
-						case 'b':    /* buddy */
-							firetalk_im_internal_add_buddy(fchandle,&tempchr1[2]);
-							break;
-					}
-					tempchr1 = &tempchr2[1];
-				}
-				if (permit_mode != 4)
-					r = toc_send_printf(c,"toc_add_deny");
-					if (r != FE_SUCCESS) {
-						firetalk_callback_connectfailed(c,r,NULL);
-						return r;
-					}
-			} else {
-				firetalk_callback_connectfailed(c,FE_WIERDPACKET,arg0);
-				return FE_WIERDPACKET;
-			}
-			if (c->gotconfig == 1 && c->connectstate == 3) {
-				/* ask the client to handle its init */
-				firetalk_callback_doinit(c,c->nickname);
-				if (toc_im_upload_buddies(c) != FE_SUCCESS) {
-					firetalk_callback_connectfailed(c,FE_PACKET,"Error uploading buddies");
-					return FE_PACKET;
-				}
-				if (toc_im_upload_denies(c) != FE_SUCCESS) {
-					firetalk_callback_connectfailed(c,FE_PACKET,"Error uploading denies");
-					return FE_PACKET;
-				}
-				r = toc_send_printf(c,"toc_set_dir :");
-				if (r != FE_SUCCESS) {
-					firetalk_callback_connectfailed(c,r,NULL);
-					return r;
-				}
-				r = toc_send_printf(c,"toc_init_done");
-				if (r != FE_SUCCESS) {
-					firetalk_callback_connectfailed(c,r,NULL);
-					return r;
+
+#ifdef ENABLE_GETREALNAME
+			firetalk_getrealname(c, realname, sizeof(realname));
+			if (*realname != 0) {
+				char    *first, *mid, *last;
+
+				first = strtok(realname, " ");
+				mid = strtok(NULL, " ");
+				last = strtok(NULL, " ");
+
+				if (mid == NULL)
+					mid = "";
+				if (last == NULL) {
+					last = mid;
+					mid = "";
 				}
 
-				c->online = 1;
-
-				r = toc_send_printf(c,"toc_set_caps 09461343-4C7F-11D1-8222-444553540000");
+				/* first name:middle name:last name:maiden name:city:state:country:email:allow web searches */
+				r = toc_send_printf(c, "toc_set_dir \"%S:%S:%S\"", first, mid, last);
 				if (r != FE_SUCCESS) {
-					firetalk_callback_connectfailed(c,r,NULL);
-					return r;
+					firetalk_callback_connectfailed(c, r, "Setting directory information");
+					return(r);
 				}
-				firetalk_callback_connected(c);
-				return FE_SUCCESS;
 			}
-			break;
+#endif
 
+			firetalk_callback_connected(c);
+			return(FE_SUCCESS);
+		}
+		break;
 	}
 	goto got_data_connecting_start;
 }
