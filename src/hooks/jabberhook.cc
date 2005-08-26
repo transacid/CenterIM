@@ -1,7 +1,7 @@
 /*
 *
 * centericq Jabber protocol handling class
-* $Id: jabberhook.cc,v 1.84 2005/05/23 14:16:53 konst Exp $
+* $Id: jabberhook.cc,v 1.85 2005/08/26 11:01:49 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -109,16 +109,18 @@ void jabberhook::connect() {
     icqconf::imaccount acc = conf.getourid(proto);
     string jid = getourjid();
 
+
     log(logConnecting);
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(acc.password.c_str()));
+		auto_ptr<char> cserver(strdup(acc.server.c_str()));
 
     regmode = flogged = fonline = false;
 
     if(jc) delete jc;
 
-    jc = jab_new(cjid.get(), cpass.get(), acc.port,
+    jc = jab_new(cjid.get(), cpass.get(), cserver.get(), acc.port,
 	acc.additional["ssl"] == "1" ? 1 : 0);
 
     jab_packet_handler(jc, &packethandler);
@@ -529,8 +531,9 @@ const string &serv, string &err) {
 
     auto_ptr<char> cjid(strdup(jid.c_str()));
     auto_ptr<char> cpass(strdup(pass.c_str()));
+    auto_ptr<char> cserver(strdup(serv.c_str()));
 
-    jc = jab_new(cjid.get(), cpass.get(), port, 0);
+    jc = jab_new(cjid.get(), cpass.get(), cserver.get(), port, 0);
 
     if(!jc->user) {
 	err = _("Wrong nickname given, cannot register");
