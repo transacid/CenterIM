@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <time.h>
 #include <fcntl.h>
 #include <errno.h>
+#include "toc2_uuids.h"
 
 /* Structures */
 
@@ -38,9 +39,10 @@ struct s_toc_room {
 	struct s_toc_room *next;
 	int exchange;
 	char *name;
-	char *id;
-	int invited;
-	int joined;
+	long    id;
+	unsigned char
+		invited:1,
+		joined:1;
 };
 
 #define TOC_HTML_MAXLEN 65536
@@ -130,10 +132,10 @@ static char *toc_hash_password(const char *const password);
 static int toc_internal_disconnect(client_t c, const int error);
 static int toc_internal_add_room(client_t c, const char *const name, const int exchange);
 static int toc_internal_find_exchange(client_t c, const char *const name);
-static int toc_internal_set_joined(client_t c, const char *const name, const int exchange);
-static int toc_internal_set_id(client_t c, const char *const name, const int exchange, const char *const id);
-static char *toc_internal_find_room_id(client_t c, const char *const name);
-static char *toc_internal_find_room_name(client_t c, const char *const id);
+static int toc_internal_set_joined(client_t c, const long id);
+static int toc_internal_set_id(client_t c, const char *const name, const int exchange, const long id);
+static int toc_internal_find_room_id(client_t c, const char *const name);
+static char *toc_internal_find_room_name(client_t c, const long id);
 static char **toc_parse_args(char *const instring, int maxargs);
 static int toc_internal_split_exchange(const char *const string);
 static char *toc_internal_split_name(const char *const string);
@@ -190,7 +192,55 @@ const char
 	return(buf);
 }
 
-#include <assert.h>
+static void toc_uuid(const char *const uuid, int *A1, int *A2, int *B, int *C, int *D, int *E1, int *E2, int *E3) {
+	if (strlen(uuid) <= 4) {
+		*A1 = 0x0946;
+		*A2 = strtol(uuid, NULL, 16);
+		*B = 0x4C7F;
+		*C = 0x11D1;
+		*D = 0x8222;
+		*E1 = 0x4445;
+		*E2 = 0x5354;
+		*E3 = 0x0000;
+	} else {
+		char    buf[5];
+
+		buf[4] = 0;
+		strncpy(buf, uuid+0, 4);
+		*A1 = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+4, 4);
+		*A2 = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+9, 4);
+		*B = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+14, 4);
+		*C = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+19, 4);
+		*D = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+24, 4);
+		*E1 = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+28, 4);
+		*E2 = strtol(buf, NULL, 16);
+		strncpy(buf, uuid+32, 4);
+		*E3 = strtol(buf, NULL, 16);
+	}
+}
+
+static int toc_cap(int A1, int A2, int B, int C, int D, int E1, int E2, int E3) {
+	int     j;
+
+	for (j = 0; j < sizeof(toc_uuids)/sizeof(*toc_uuids); j++)
+		if (((toc_uuids[j].A1 == A1) || (toc_uuids[j].A1 == -1))
+		 && ((toc_uuids[j].A2 == A2) || (toc_uuids[j].A2 == -1))
+		 && ((toc_uuids[j].B  == B)  || (toc_uuids[j].B  == -1))
+		 && ((toc_uuids[j].C  == C)  || (toc_uuids[j].C  == -1))
+		 && ((toc_uuids[j].D  == D)  || (toc_uuids[j].D  == -1))
+		 && ((toc_uuids[j].E1 == E1) || (toc_uuids[j].E1 == -1))
+		 && ((toc_uuids[j].E2 == E2) || (toc_uuids[j].E2 == -1))
+		 && ((toc_uuids[j].E3 == E3) || (toc_uuids[j].E3 == -1)))
+		return(j);
+	return(-1);
+}
+
 #ifdef DEBUG_ECHO
 static void toc_echof(client_t c, const char *const where, const char *const format, ...) {
 	va_list ap;
@@ -214,13 +264,9 @@ static void toc_echo_send(client_t c, const char *const where, const char *const
 	unsigned short  sequence,
 			length;
 
-	assert(_length > 4);
-
 	length = toc_get_length_from_header(data);
 	ft = toc_get_frame_type_from_header(data);
 	sequence = toc_get_sequence_from_header(data);
-
-	assert(length == (_length-6));
 
 	toc_echof(c, where, "frame=%X, sequence=out:%i, length=%i, value=[%.*s]\n",
 		ft, sequence, length, length, data+TOC_HEADER_LENGTH);
@@ -260,7 +306,6 @@ enum firetalk_error   toc_find_packet(client_t c, unsigned char *buffer, unsigne
 		char    buf[1024*8];
 		int     j;
 
-		assert(length < sizeof(buf));
 		memmove(buf, outbuffer, length+1);
 		for (j = 0; j < length; j++)
 			if (buf[j] == 0)
@@ -663,48 +708,40 @@ static int toc_internal_add_room(client_t c, const char *const name, const int e
 	struct s_toc_room *iter;
 
 	iter = c->room_head;
-	c->room_head = safe_malloc(sizeof(struct s_toc_room));
+	c->room_head = calloc(1, sizeof(struct s_toc_room));
+	if (c->room_head == NULL)
+		abort();
+
 	c->room_head->next = iter;
-	c->room_head->name = safe_strdup(name);
-	c->room_head->id = NULL;
-	c->room_head->invited = 0;
-	c->room_head->joined = 0;
+	c->room_head->name = strdup(name);
+	if (c->room_head->name == NULL)
+		abort();
 	c->room_head->exchange = exchange;
-	return FE_SUCCESS;
+	return(FE_SUCCESS);
 }
 
-static int toc_internal_set_joined(client_t c, const char *const name, const int exchange) {
+static int toc_internal_set_joined(client_t c, const long id) {
 	struct s_toc_room *iter;
 
-	iter = c->room_head;
-
-	while (iter) {
-		if (iter->joined == 0) {
-			if ((iter->exchange == exchange) && (toc_compare_nicks(iter->name,name) == 0)) {
+	for (iter = c->room_head; iter != NULL; iter = iter->next)
+		if (iter->joined == 0)
+			if (iter->id == id) {
 				iter->joined = 1;
-				return FE_SUCCESS;
+				return(FE_SUCCESS);
 			}
-		}
-		iter = iter->next;
-	}
-	return FE_NOTFOUND;
+	return(FE_NOTFOUND);
 }
 
-static int toc_internal_set_id(client_t c, const char *const name, const int exchange, const char *const id) {
+static int toc_internal_set_id(client_t c, const char *const name, const int exchange, const long id) {
 	struct s_toc_room *iter;
 
-	iter = c->room_head;
-
-	while (iter) {
-		if (iter->joined == 0) {
-			if ((iter->exchange == exchange) && (toc_compare_nicks(iter->name,name) == 0)) {
-				iter->id = safe_strdup(id);
-				return FE_SUCCESS;
+	for (iter = c->room_head; iter != NULL; iter = iter->next)
+		if (iter->joined == 0)
+			if ((iter->exchange == exchange) && (toc_compare_nicks(iter->name, name) == 0)) {
+				iter->id = id;
+				return(FE_SUCCESS);
 			}
-		}
-		iter = iter->next;
-	}
-	return FE_NOTFOUND;
+	return(FE_NOTFOUND);
 }
 	
 static int toc_internal_find_exchange(client_t c, const char *const name) {
@@ -723,7 +760,7 @@ static int toc_internal_find_exchange(client_t c, const char *const name) {
 	return 0;
 }
 
-static char *toc_internal_find_room_id(client_t c, const char *const name) {
+static int toc_internal_find_room_id(client_t c, const char *const name) {
 	struct s_toc_room *iter;
 	char *namepart;
 	int exchange;
@@ -731,35 +768,26 @@ static char *toc_internal_find_room_id(client_t c, const char *const name) {
 	namepart = toc_internal_split_name(name);
 	exchange = toc_internal_split_exchange(name);
 
-	iter = c->room_head;
-
-	while (iter) {
+	for (iter = c->room_head; iter != NULL; iter = iter->next)
 		if (iter->exchange == exchange)
-			if (toc_compare_nicks(iter->name,namepart) == 0)
-				return iter->id;
-		iter = iter->next;
-	}
-
+			if (toc_compare_nicks(iter->name, namepart) == 0)
+				return(iter->id);
 	firetalkerror = FE_NOTFOUND;
-	return NULL;
+	return(0);
 }
 
-static char *toc_internal_find_room_name(client_t c, const char *const id) {
+static char *toc_internal_find_room_name(client_t c, const long id) {
 	struct s_toc_room *iter;
-	static char newname[2048];
+	static char newname[TOC_CLIENTSEND_MAXLEN];
 
-	iter = c->room_head;
-
-	while (iter) {
-		if (toc_compare_nicks(iter->id,id) == 0) {
-			safe_snprintf(newname,2048,"%d:%s",iter->exchange,iter->name);
-			return newname;
+	for (iter = c->room_head; iter != NULL; iter = iter->next)
+		if (iter->id == id) {
+			snprintf(newname, sizeof(newname), "%d:%s", 
+				iter->exchange, iter->name);
+			return(newname);
 		}
-		iter = iter->next;
-	}
-
 	firetalkerror = FE_NOTFOUND;
-	return NULL;
+	return(NULL);
 }
 
 static int toc_internal_split_exchange(const char *const string) {
@@ -1287,295 +1315,6 @@ enum firetalk_error   toc_im_evil(client_t c, const char *const who) {
 	return toc_send_printf(c,"toc_evil %s norm",who);
 }
 
-enum firetalk_error   toc_got_data(client_t c, unsigned char *buffer, unsigned short *bufferpos) {
-	char *tempchr1;
-	char *tempchr2;
-	char *tempchr3;
-	char data[8192 - TOC_HEADER_LENGTH + 1];
-	char *arg0;
-	char **args;
-	enum firetalk_error   r;
-	unsigned short l;
-
-got_data_start:
-
-	r = toc_find_packet(c,buffer,bufferpos,data,SFLAP_FRAME_DATA,&l);
-	if (r == FE_NOTFOUND)
-		return FE_SUCCESS;
-	else if (r != FE_SUCCESS)
-		return r;
-
-	arg0 = toc_get_arg0(data);
-	if (!arg0)
-		return FE_SUCCESS;
-	if (strcmp(arg0,"ERROR") == 0) {
-		args = toc_parse_args(data,3);
-		if (!args[1]) {
-			(void) toc_internal_disconnect(c,FE_INVALIDFORMAT);
-			return FE_INVALIDFORMAT;
-		}
-		switch (atoi(args[1])) {
-			case 901:
-				firetalk_callback_error(c,FE_USERUNAVAILABLE,args[2],NULL);
-				break;
-			case 902:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,args[2],NULL);
-				break;
-			case 903:
-				firetalk_callback_error(c,FE_TOOFAST,NULL,NULL);
-				break;
-			case 911:
-				if (c->passchange != 0) {
-					c->passchange--;
-					firetalk_callback_error(c,FE_NOCHANGEPASS,NULL,NULL);
-				} else
-					firetalk_callback_error(c,FE_BADUSER,NULL,NULL);
-				break;
-			case 915:
-				firetalk_callback_error(c,FE_TOOFAST,NULL,NULL);
-				break;
-			case 950:
-				firetalk_callback_error(c,FE_ROOMUNAVAILABLE,args[2],NULL);
-				break;
-			case 960:
-				firetalk_callback_error(c,FE_TOOFAST,args[2],NULL);
-				break;
-			case 961:
-				firetalk_callback_error(c,FE_INCOMINGERROR,args[2],"Message too big.");
-				break;
-			case 962:
-				firetalk_callback_error(c,FE_INCOMINGERROR,args[2],"Message sent too fast.");
-				break;
-			case 970:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,NULL);
-				break;
-			case 971:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Too many matches.");
-				break;
-			case 972:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Need more qualifiers.");
-				break;
-			case 973:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Directory service unavailable.");
-				break;
-			case 974:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Email lookup restricted.");
-				break;
-			case 975:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Keyword ignored.");
-				break;
-			case 976:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"No keywords.");
-				break;
-			case 977:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Language not supported.");
-				break;
-			case 978:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,"Country not supported.");
-				break;
-			case 979:
-				firetalk_callback_error(c,FE_USERINFOUNAVAILABLE,NULL,NULL);
-				break;
-			case 980:
-				firetalk_callback_error(c,FE_BADUSERPASS,NULL,NULL);
-				break;
-			case 981:
-				firetalk_callback_error(c,FE_UNKNOWN,NULL,"Service temporarily unavailable.");
-				break;
-			case 982:
-				firetalk_callback_error(c,FE_BLOCKED,NULL,"Your warning level is too high to sign on.");
-				break;
-			case 983:
-				firetalk_callback_error(c,FE_BLOCKED,NULL,"You have been connected and disconnecting too frequently.  Wait 10 minutes.");
-				break;
-			case 989:
-				firetalk_callback_error(c,FE_UNKNOWN,NULL,NULL);
-				break;
-			default:
-				firetalk_callback_error(c,FE_UNKNOWN,NULL,NULL);
-				break;
-		}
-	} else if (strcmp(arg0,"PAUSE") == 0) {
-		c->connectstate = 1;
-		firetalk_internal_set_connectstate(c,FCS_WAITING_SIGNON);
-	} else if (strcmp(arg0,"IM_IN") == 0) {
-		args = toc_parse_args(data,4);
-		if ((args[1] == NULL) || (args[2] == NULL) || (args[3] == NULL)) {
-			(void) toc_internal_disconnect(c,FE_INVALIDFORMAT);
-			return FE_INVALIDFORMAT;
-		}
-		(void) aim_handle_ect(c,args[1],args[3],args[2][0] == 'T' ? 1 : 0);
-		if (strlen(args[3]) > 0) {
-			char *mestart;
-
-			if (strncasecmp(args[3],"/me ",4) == 0)
-				firetalk_callback_im_getaction(c,args[1],args[2][0] == 'T' ? 1 : 0,&args[3][4]);
-			else if ((mestart = strstr(args[3],">/me ")) != NULL)
-				firetalk_callback_im_getaction(c,args[1],args[2][0] == 'T' ? 1 : 0,&mestart[5]);
-			else {
-				if (args[2][0] == 'T') /* interpolate only auto-messages */
-					firetalk_callback_im_getmessage(c,args[1],1,aim_interpolate_variables(args[3],c->nickname));
-				else
-					firetalk_callback_im_getmessage(c,args[1],0,args[3]);
-			}
-		}
-	} else if (strcmp(arg0,"UPDATE_BUDDY") == 0) {
-		args = toc_parse_args(data,7);
-		if (!args[1] || !args[2] || !args[3] || !args[4] || !args[5] || !args[6]) {
-			(void) toc_internal_disconnect(c,FE_INVALIDFORMAT);
-			return FE_INVALIDFORMAT;
-		}
-		firetalk_callback_im_buddyonline(c,args[1],args[2][0] == 'T' ? 1 : 0);
-		firetalk_callback_user_nickchanged(c,args[1],args[1]);
-		firetalk_callback_im_buddyaway(c,args[1],"",args[6][2] == 'U' ? 1 : 0);
-		firetalk_callback_idleinfo(c,args[1],atol(args[5]));
-	} else if (strcmp(arg0,"GOTO_URL") == 0) {
-		struct s_toc_infoget *i;
-		/* create a new infoget object and set it to connecting state */
-		args = toc_parse_args(data,3);
-		if (!args[1] || !args[2]) {
-			(void) toc_internal_disconnect(c,FE_INVALIDFORMAT);
-			return FE_INVALIDFORMAT;
-		}
-		i = c->infoget_head;
-		c->infoget_head = safe_malloc(sizeof(struct s_toc_infoget));
-#define TOC_HTTP_REQUEST "GET /%s HTTP/1.0\r\n\r\n"
-
-		safe_snprintf(c->infoget_head->buffer,TOC_HTML_MAXLEN,TOC_HTTP_REQUEST,args[2]);
-		c->infoget_head->buflen = strlen(c->infoget_head->buffer);
-		c->infoget_head->next = i;
-		c->infoget_head->state = TOC_STATE_CONNECTING;
-		c->infoget_head->sockfd = firetalk_internal_connect(firetalk_internal_remotehost4(c)
-#ifdef _FC_USE_IPV6
-				, firetalk_internal_remotehost6(c)
-#endif
-				);
-		if (c->infoget_head->sockfd == -1) {
-			firetalk_callback_error(c,FE_CONNECT,lastinfo[0] == '\0' ? NULL : lastinfo,"Failed to connect to info server");
-			free(c->infoget_head);
-			c->infoget_head = i;
-			return FE_SUCCESS;
-		}
-	} else if (strcmp(arg0,"EVILED") == 0) {
-		args = toc_parse_args(data,3);
-		if (!args[1]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"EVILED");
-			return FE_SUCCESS;
-		}
-		firetalk_callback_eviled(c,atoi(args[1]),args[2]);
-	} else if (strcmp(arg0,"CHAT_JOIN") == 0) {
-		int i;
-		args = toc_parse_args(data,3);
-		if (!args[1] || !args[2]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"CHAT_JOIN");
-			return FE_SUCCESS;
-		}
-		i = toc_internal_find_exchange(c,args[2]);
-		if (i != 0)
-			if (toc_internal_set_id(c,args[2],i,args[1]) == FE_SUCCESS)
-				if (toc_internal_set_joined(c,args[2],i) == FE_SUCCESS)
-					firetalk_callback_chat_joined(c,toc_internal_find_room_name(c,args[1]));
-	} else if (strcmp(arg0,"CHAT_LEFT") == 0) {
-		args = toc_parse_args(data,2);
-		if (!args[1]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"CHAT_LEFT");
-			return FE_SUCCESS;
-		}
-		firetalk_callback_chat_left(c,toc_internal_find_room_name(c,args[1]));
-	} else if (strcmp(arg0,"CHAT_IN") == 0) {
-		char *mestart;
-
-		args = toc_parse_args(data,5);
-		if (!args[1] || !args[2] || !args[3] || !args[4]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"CHAT_IN");
-			return FE_SUCCESS;
-		}
-#ifdef DEBUG_ECHO
-			toc_echof(c, "got_data", "CHAT_IN args[1]=%s, args[2]=%s, args[3]=%s, args[4]=%s\n",
-				args[1], args[2], args[3], args[4]);
-#endif
-		if (strncasecmp(args[4],"<HTML><PRE>",11) == 0) {
-			args[4] = &args[4][11];
-			if ((tempchr1 = strchr(args[4],'<')))
-				tempchr1[0] = '\0';
-		}
-		if (strncasecmp(args[4],"/me ",4) == 0)
-			firetalk_callback_chat_getaction(c,toc_internal_find_room_name(c,args[1]),args[2],0,&args[4][4]);
-		else if ((mestart = strstr(args[4],">/me ")) != NULL)
-			firetalk_callback_chat_getaction(c,toc_internal_find_room_name(c,args[1]),args[2],0,&mestart[5]);
-		else
-			firetalk_callback_chat_getmessage(c,toc_internal_find_room_name(c,args[1]),args[2],0,args[4]);
-	} else if (strcmp(arg0,"CHAT_INVITE") == 0) {
-		args = toc_parse_args(data,5);
-		if (!args[1] || !args[2] || !args[3] || !args[4]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"CHAT_INVITE");
-			return FE_SUCCESS;
-		}
-		if (toc_internal_add_room(c,args[1],4) == FE_SUCCESS)
-			if (toc_internal_set_room_invited(c,args[1],1) == FE_SUCCESS)
-				if (toc_internal_set_id(c,args[1],4,args[2]) == FE_SUCCESS)
-					firetalk_callback_chat_invited(c,args[1],args[3],args[4]);
-	} else if (strcmp(arg0,"CHAT_UPDATE_BUDDY") == 0) {
-		args = toc_parse_args(data,4);
-		if (!args[1] || !args[2] || !args[3]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"CHAT_UPDATE_BUDDY");
-			return FE_SUCCESS;
-		}
-		tempchr1 = args[3];
-		tempchr3 = toc_internal_find_room_name(c,args[1]);
-		while ((tempchr2 = strchr(tempchr1,':'))) {
-			/* cycle through list of buddies */
-			tempchr2[0] = '\0';
-			if (args[2][0] == 'T')
-				firetalk_callback_chat_user_joined(c,tempchr3,tempchr1,0);
-			else
-				firetalk_callback_chat_user_left(c,tempchr3,tempchr1,NULL);
-			tempchr1 = tempchr2 + 1;
-		}
-		if (args[2][0] == 'T') {
-			firetalk_callback_chat_user_joined(c,tempchr3,tempchr1,0);
-			firetalk_callback_chat_user_joined(c,tempchr3,NULL,0);
-		} else
-			firetalk_callback_chat_user_left(c,tempchr3,tempchr1,NULL);
-	} else if (strcmp(arg0,"ADMIN_NICK_STATUS") == 0) {
-		/* ignore this one */
-	} else if (strcmp(arg0,"DIR_STATUS") == 0) {
-		/* ignore this one */
-	} else if (strcmp(arg0,"NICK") == 0) {
-		args = toc_parse_args(data,2);
-		if (!args[1]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"NICK");
-			return FE_SUCCESS;
-		}
-		firetalk_callback_user_nickchanged(c,c->nickname,args[1]);
-		free(c->nickname);
-		c->nickname = safe_strdup(args[1]);
-		firetalk_callback_newnick(c,args[1]);
-	} else if (strcmp(arg0,"ADMIN_PASSWD_STATUS") == 0) {
-		c->passchange--;
-		args = toc_parse_args(data,3);
-		if (!args[1]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"ADMIN_PASSWD_STATUS");
-			return FE_SUCCESS;
-		}
-		if (atoi(args[1]) != 0)
-			firetalk_callback_error(c,FE_NOCHANGEPASS,NULL,NULL);
-		else
-			firetalk_callback_passchanged(c);
-	} else if (strcmp(arg0,"RVOUS_PROPOSE") == 0) {
-		args = toc_parse_args(data,255);
-		if (!args[1] || !args[2] || !args[3] || !args[4] || !args[5] || !args[6] || !args[7] || !args[8]) {
-			firetalk_callback_error(c,FE_INVALIDFORMAT,NULL,"RVOUS_PROPOSE");
-			return FE_SUCCESS;
-		}
-		if (strcmp(args[2],"09461343-4C7F-11D1-8222-444553540000") == 0)
-			firetalk_callback_file_offer(c,args[1],toc_get_tlv_value(args,9,10001),-1,args[7],NULL,(uint16_t)atoi(args[8]),FF_TYPE_RAW);
-	} else
-		firetalk_callback_error(c,FE_WIERDPACKET,NULL,arg0);
-
-	goto got_data_start;
-}
-
 static struct {
 	enum firetalk_error fte;
 	unsigned char   hastarget:1;
@@ -1789,6 +1528,35 @@ static struct {
 				Your browser is using a cached version of Quick Buddy that is now outdated. To remedy this, simply quit or close your browser and re-launch it. The next time you load Quick Buddy, it will be automatically updated.
 			*/
 	/* 999 */ {     FE_UNKNOWN,             0, NULL },
+};
+
+static struct {
+	const char *name;
+	const int val;
+} toc_firstcaps[] = {
+	{ "WinAIM_COMPAT",      0x0000 },
+	{ "ICQ2Go_COMPAT_AIM",  0x0002 },
+	{ "ICQ2Go_COMPAT_ICQ",  0x0210 },
+};
+
+static struct {
+	const char *name;
+	const int val;
+} toc_barts[] = {
+	{ "BUDDY_ICON_SMALL",   0 },
+	{ "BUDDY_ICON",         1 },
+	{ "STATUS_TEXT",        2 },
+	{ "ARRIVE_SOUND",       3 },
+	{ "DEPART_SOUND",       96 },
+	{ "IM_BACKGROUND",      128 },
+	{ "IM_CHROME",          129 },
+	{ "IM_SKIN",            130 },
+	{ "IM_SOUND",           131 },
+	{ "BL_BACKGROUND",      256 },
+	{ "BL_IMAGE",           257 },
+	{ "BL_SKIN",            258 },
+	{ "SMILEY_SET",         1024 },
+	{ "MAIL_STATIONERY",    1025 },
 };
 
 static char **toc_parse_args2(char *str, const int maxargs, const char sep) {
@@ -2087,6 +1855,580 @@ got_data_connecting_start:
 	goto got_data_connecting_start;
 }
 
+enum firetalk_error toc_got_data(client_t c, unsigned char *buffer, unsigned short *bufferpos) {
+	char *tempchr1;
+	char data[TOC_SERVERSEND_MAXLEN - TOC_HEADER_LENGTH + 1];
+	char *arg0;
+	char **args;
+	enum firetalk_error r;
+	unsigned short l;
+
+  got_data_start:
+	r = toc_find_packet(c, buffer, bufferpos, data, SFLAP_FRAME_DATA, &l);
+	if (r == FE_NOTFOUND)
+		return(FE_SUCCESS);
+	else if (r != FE_SUCCESS)
+		return(r);
+
+	arg0 = toc_get_arg0(data);
+	if (arg0 == NULL)
+		return(FE_SUCCESS);
+	if (strcmp(arg0, "ERROR") == 0) {
+		/* ERROR:<Error Code>:Var args */
+		int     err;
+
+		args = toc_parse_args2(data, 3, ':');
+		if (args[1] == NULL) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+		err = atoi(args[1]);
+		if ((err < 900) || (err > 999)) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+		if (err == 911) {
+			/* TOC1 Error validating input */
+			/* TOC2 UNDOCUMENTED */
+			if (c->passchange != 0) {
+				c->passchange--;
+				firetalk_callback_error(c, FE_NOCHANGEPASS, NULL, NULL);
+				goto got_data_start;
+			}
+		}
+		err -= 900;
+		if (toc2_errors[err].fte != FE_SUCCESS)
+			firetalk_callback_error(c, toc2_errors[err].fte,
+				toc2_errors[err].hastarget?args[2]:NULL,
+				toc2_errors[err].str?toc2_errors[err].str:(toc2_errors[err].fte == FE_UNKNOWN)?args[1]:NULL);
+	} else if (strcmp(arg0, "IM_IN_ENC2") == 0) {
+		/* IM_IN:<Source User>:<Auto Response T/F?>:<Message> */
+		/* 1 source
+		** 2 'T'=auto, 'F'=normal
+		** 3 UNKNOWN TOGGLE
+		** 4 UNKNORN TOGGLE
+		** 5 user class
+		** 6 UNKNOWN TOGGLE from toc2_send_im_enc arg 2
+		** 7 encoding [toc2_send_im_enc arg 3] "A"=ASCII "L"=Latin1 "U"=UTF8
+		** 8 language, for example "en"
+		** 9 message
+		** 
+		** Cell phone   IM_IN_ENC2:+number:F:F:F: C,:F:L:en:message
+		** Spam bot     IM_IN_ENC2:buddysn:F:F:F: U,:F:A:en:message
+		** naim 0.11.6  IM_IN_ENC2:buddysn:F:F:F: O,:F:A:en:message
+		** naim 0.12.0  IM_IN_ENC2:buddysn:F:F:T: O,:F:A:en:message
+		** WinAIM       IM_IN_ENC2:buddysn:F:F:T: O,:F:A:en:<HTML><BODY BGCOLOR="#ffffff"><FONT LANG="0">message</FONT></BODY></HTML>
+		** ICQ user     IM_IN_ENC2:useruin:F:F:T: I,:F:A:en:message
+		**                                 | | |  |  | |  |
+		**                                 | | |  |  | |  language, limited to real languages (either two-letter code or "x-bad"), set by sender in toc2_send_im_enc
+		**                                 | | |  |  | character encoding, can be A L or U, set by sender in toc2_send_im_enc
+		**                                 | | |  |  unknown meaning, can be T or F, set by sender in toc2_send_im_enc
+		**                                 | | |  class, see UPDATE_BUDDY2 below
+		**                                 | | seems to be T for TOC2/Oscar and F for cell phones and TOC1
+		**                                 | unknown, always seems to be F
+		**                                 away status, T when away and F normally
+		*/
+		char    *name, *message;
+		int     isauto;
+
+		args = toc_parse_args2(data, 10, ':');
+		if ((args[1] == NULL) || (args[2] == NULL) || (args[9] == NULL)) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+
+		name = args[1];
+		isauto = (args[2][0]=='T')?1:0;
+		message = args[9];
+
+		aim_handle_ect(c, name, message, isauto);
+		if (*message != 0) {
+			char    *mestart;
+
+			if (strncasecmp(message, "/me ",4) == 0)
+				firetalk_callback_im_getaction(c, name, isauto,
+					message+4);
+			else if ((mestart = strstr(message, ">/me ")) != NULL)
+				firetalk_callback_im_getaction(c, name, isauto,
+					mestart+5);
+			else {
+#if defined(DEBUG_ECHO) && defined(HAVE_ASPRINTF)
+				char    *A, *B, *C, *encoding, *newmessage = NULL;
+
+				if (args[5][0] == ' ')
+					A = "";
+				else if (args[5][0] == 'A')
+					A = "AOL ";
+				else
+					A = "unknown0 ";
+
+				if (args[5][1] == ' ')
+					B = "";
+				else if (args[5][1] == 'A')
+					B = "ADMINISTRATOR";
+				else if (args[5][1] == 'C')
+					B = "WIRELESS";
+				else if (args[5][1] == 'I')
+					B = "ICQ";
+				else if (args[5][1] == 'O')
+					B = "OSCAR_FREE";
+				else if (args[5][1] == 'U')
+					B = "DAMNED_TRANSIENT";
+				else
+					B = "unknown1";
+
+				if ((args[5][2] == ' ') || (args[5][2] == 0) || (args[5][2] == ','))
+					C = "";
+				else if (args[5][1] == 'U')
+					C = " UNAVAILABLE";
+				else
+					C = " unknown2";
+
+				if (args[7][0] == 'A')
+					encoding = "ASCII";
+				else if (args[7][0] == 'L')
+					encoding = "Latin1";
+				else if (args[7][0] == 'U')
+					encoding = "UTF8";
+				else
+					encoding = "unknown";
+
+				asprintf(&newmessage, "[%s%s%s, %s, %s %s %s %s] %s",
+					A, B, C,
+					encoding,
+					args[2], args[3], args[4], args[6],
+					message);
+				message = newmessage;
+#endif
+				if (isauto) /* interpolate only auto-messages */
+					firetalk_callback_im_getmessage(c,
+						name, 1, aim_interpolate_variables(message, c->nickname));
+				else
+					firetalk_callback_im_getmessage(c,
+						name, 0, message);
+#if defined(DEBUG_ECHO) && defined(HAVE_ASPRINTF)
+				free(message);
+#endif
+			}
+		}
+		firetalk_callback_im_buddyonline(c, name, 1);
+#ifdef ENABLE_TYPING
+		firetalk_callback_typing(c, name, 0);
+#endif
+	} else if (strcmp(arg0, "CLIENT_EVENT2") == 0) {
+		/* 1 source
+		** 2 status
+		*/
+		char    *name;
+		int     typinginfo;
+
+		args = toc_parse_args2(data, 3, ':');
+		if (!args[1] || !args[2]) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+
+		name = args[1];
+		typinginfo = atol(args[2]);
+
+#ifdef ENABLE_TYPING
+		firetalk_callback_typing(c, name, typinginfo);
+#endif
+	} else if (strcmp(arg0, "UPDATE_BUDDY2") == 0) {
+		/* UPDATE_BUDDY:<Buddy User>:<Online? T/F>:<Evil Amount>:<Signon Time>:<IdleTime>:<UC>:<status code> */
+		/* 1 source
+		** 2 'T'=online, 'F'=offline
+		** 3 warning level out of 100
+		** 4 signon time in seconds since epoch
+		** 5 idle time in minutes
+		** 6 flags: ABC; A in 'A'=AOL user;
+		**      B in 'A'=admin, 'C'=cell phone, 'I'=ICQ, 'O'=normal, 'U'=unconfirmed;
+		**      C in 'U'=away
+		** 7 status code, used in ICQ
+		*/
+		char    *name;
+		int     isaway;
+		long    online, warn, idle;
+
+		args = toc_parse_args2(data, 8, ':');
+		if (!args[1] || !args[2] || !args[3] || !args[4] || !args[5]
+			|| !args[6] || !args[7]) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+
+		name = args[1];
+		online = (args[2][0]=='T')?atol(args[4]):0;
+		isaway = (args[6][2]=='U')?1:0;
+		warn = atol(args[3]);
+		idle = atol(args[5]);
+		
+		firetalk_callback_im_buddyonline(c, name, online);
+		if (online != 0) {
+			firetalk_callback_im_buddyaway(c, name, "", isaway);
+			firetalk_callback_idleinfo(c, name, idle);
+#ifdef ENABLE_WARNINFO
+			firetalk_callback_warninfo(c, name, warn);
+#endif
+		} else {
+		}
+	} else if (strcmp(arg0, "BUDDY_CAPS2") == 0) {
+		/* 1 source
+		** 2 capabilities separated by commas
+		*/
+		char    capstring[1024],
+			*name, **caps;
+		int     i, firstcap;
+
+		args = toc_parse_args2(data, 3, ':');
+		if (!args[1] || !args[2]) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+
+		name = args[1];
+		caps = toc_parse_args2(args[2], 255, ',');
+		firstcap = strtol(caps[0], NULL, 16);
+		for (i = 0; i < sizeof(toc_firstcaps)/sizeof(*toc_firstcaps); i++)
+			if (toc_firstcaps[i].val == firstcap) {
+				snprintf(capstring, sizeof(capstring), "%s", toc_firstcaps[i].name);
+				break;
+			}
+		if (i == sizeof(toc_firstcaps)/sizeof(*toc_firstcaps))
+			snprintf(capstring, sizeof(capstring), "UNKNOWN_TYPE_%X", firstcap);
+
+		for (i = 1; (caps[i] != NULL) && (*caps[i] != 0); i++) {
+			int     j, A1, A2, B, C, D, E1, E2, E3;
+
+			toc_uuid(caps[i], &A1, &A2, &B, &C, &D, &E1, &E2, &E3);
+			j = toc_cap(A1, A2, B, C, D, E1, E2, E3);
+			if (j != -1) {
+				if (strcmp(toc_uuids[j].name, "THIRD_PARTY_RANGE") != 0)
+					snprintf(capstring+strlen(capstring), sizeof(capstring)-strlen(capstring),
+						" %s", toc_uuids[j].name);
+				else {
+					snprintf(capstring+strlen(capstring), sizeof(capstring)-strlen(capstring),
+						" +[%c%c%c%c%c%c%c%c%c%c%c%c", B>>8, B&0xFF, C>>8, C&0xFF, D>>8, D&0xFF, E1>>8, E1&0xFF, E2>>8, E2&0xFF, E3>>8, E3&0xFF);
+					snprintf(capstring+strlen(capstring), sizeof(capstring)-strlen(capstring), "]");
+				}
+			} else {
+				if (strlen(caps[i]) > 4)
+					snprintf(capstring+strlen(capstring), sizeof(capstring)-strlen(capstring),
+						" ?[%04X%04X-%04X-%04X-%04X-%04X%04X%04X]", A1, A2, B, C, D, E1, E2, E3);
+				else
+					snprintf(capstring+strlen(capstring), sizeof(capstring)-strlen(capstring),
+						" UNKNOWN_CAP_%04X", A2);
+			}
+		}
+#ifdef ENABLE_CAPABILITIES
+		firetalk_callback_capabilities(c, name, capstring);
+#endif
+	} else if (strcmp(arg0, "BART2") == 0) {
+		/* 1 source
+		** 2 base64-encoded strings, unidentified
+		*/
+		char    **barts;
+		int     i;
+
+		args = toc_parse_args2(data, 3, ':');
+		barts = toc_parse_args2(args[2], 255, ' ');
+		for (i = 0; (barts[i] != NULL) && (barts[i+1] != NULL) && (barts[i+2] != NULL); i += 3) {
+			int     j, flag = atoi(barts[i]), type = atoi(barts[i+1]);
+
+			for (j = 0; j < sizeof(toc_barts)/sizeof(*toc_barts); j++)
+				if (toc_barts[j].val == type) {
+#ifdef DEBUG_ECHO
+					toc_echof(c, "got_data", "BART %i %i: %s: %s [%s]\n", flag, type, toc_barts[j].name, barts[i+2], firetalk_debase64(args[i+2]));
+#endif
+					break;
+				}
+		}
+	} else if (strcmp(arg0, "NICK") == 0) {
+		/* NICK:<Nickname>
+		**    Tells you your correct nickname (ie how it should be capitalized and
+		**    spacing)
+		*/
+		args = toc_parse_args2(data, 2, ':');
+		if (!args[1]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "NICK");
+			return(FE_SUCCESS);
+		}
+		firetalk_callback_user_nickchanged(c, c->nickname, args[1]);
+		free(c->nickname);
+		c->nickname = strdup(args[1]);
+		if (c->nickname == NULL)
+			abort();
+		firetalk_callback_newnick(c, args[1]);
+	} else if (strcmp(arg0, "EVILED") == 0) {
+		/* EVILED:<new evil>:<name of eviler, blank if anonymous>
+		**    The user was just eviled.
+		*/
+		args = toc_parse_args2(data, 3, ':');
+		if (!args[1]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "EVILED");
+			return(FE_SUCCESS);
+		}
+
+		firetalk_callback_eviled(c, atoi(args[1]), args[2]);
+	} else if (strcmp(arg0, "CHAT_JOIN") == 0) {
+		/* CHAT_JOIN:<Chat Room Id>:<Chat Room Name>
+		**    We were able to join this chat room.  The Chat Room Id is
+		**    internal to TOC.
+		*/
+		long    id;
+		char    *name;
+		int     exchange, ret;
+
+		args = toc_parse_args2(data, 3, ':');
+		if (!args[1] || !args[2]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "CHAT_JOIN");
+			return(FE_SUCCESS);
+		}
+		id = atol(args[1]);
+		name = args[2];
+		exchange = toc_internal_find_exchange(c, name);
+
+		ret = toc_internal_set_id(c, name, exchange, id);
+		ret = toc_internal_set_joined(c, id);
+		firetalk_callback_chat_joined(c, toc_internal_find_room_name(c, id));
+	} else if (strcmp(arg0, "CHAT_IN_ENC") == 0) {
+		/* CHAT_IN:<Chat Room Id>:<Source User>:<Whisper? T/F>:<Message>
+		**    A chat message was sent in a chat room.
+		*/
+		/* 1 room ID
+		** 2 source
+		** 3 'T'=private, 'F'=public
+		** 4 unknown
+		** 5 language
+		** 6 message
+		*/
+		long    id;
+		char    *source, *message, *mestart;
+
+		args = toc_parse_args2(data, 7, ':');
+		if (!args[1] || !args[2] || !args[3] || !args[4] || !args[5] || !args[6]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "CHAT_IN_ENC");
+			return(FE_SUCCESS);
+		}
+		id = atol(args[1]);
+		source = args[2];
+		message = args[6];
+
+		if (strncasecmp(message, "<HTML><PRE>", 11) == 0) {
+			message += 11;
+			if ((tempchr1 = strchr(message, '<')))
+				*tempchr1 = 0;
+		}
+		if (strncasecmp(message, "/me ", 4) == 0)
+			firetalk_callback_chat_getaction(c,
+				toc_internal_find_room_name(c, id),
+				source, 0, message+4);
+		else if ((mestart = strstr(message, ">/me ")) != NULL)
+			firetalk_callback_chat_getaction(c,
+				toc_internal_find_room_name(c, id),
+				source, 0, mestart+5);
+		else
+			firetalk_callback_chat_getmessage(c,
+				toc_internal_find_room_name(c, id),
+				source, 0, message);
+	} else if (strcmp(arg0, "CHAT_UPDATE_BUDDY") == 0) {
+		/* CHAT_UPDATE_BUDDY:<Chat Room Id>:<Inside? T/F>:<User 1>:<User 2>...
+		**    This one command handles arrival/departs from a chat room.  The
+		**    very first message of this type for each chat room contains the
+		**    users already in the room.
+		*/
+		int     joined;
+		long    id;
+		char    *recip,
+			*source,
+			*colon;
+
+		args = toc_parse_args2(data, 4, ':');
+		if (!args[1] || !args[2] || !args[3]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "CHAT_UPDATE_BUDDY");
+			return(FE_SUCCESS);
+		}
+		joined = (args[2][0]=='T')?1:0;
+		id = atol(args[1]);
+		recip = toc_internal_find_room_name(c, id);
+		source = args[3];
+/*
+		while ((colon = strchr(source, ':'))) {
+			*colon = 0;
+			if (joined)
+				firetalk_callback_chat_user_joined(c, recip, source);
+			else
+				firetalk_callback_chat_user_left(c, recip, source, NULL);
+			source = colon+1;
+		}
+		if (joined) {
+			firetalk_callback_chat_user_joined(c, recip, source);
+			firetalk_callback_chat_user_joined(c, recip, NULL);
+		} else
+			firetalk_callback_chat_user_left(c, recip, source, NULL);
+*/
+	} else if (strcmp(arg0, "CHAT_INVITE") == 0) {
+		/* CHAT_INVITE:<Chat Room Name>:<Chat Room Id>:<Invite Sender>:<Message>
+		**    We are being invited to a chat room.
+		*/
+		args = toc_parse_args2(data, 5, ':');
+		if (!args[1] || !args[2] || !args[3] || !args[4]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "CHAT_INVITE");
+			return(FE_SUCCESS);
+		}
+		if (toc_internal_add_room(c, args[1], 4) == FE_SUCCESS)
+			if (toc_internal_set_room_invited(c, args[1], 1) == FE_SUCCESS)
+				if (toc_internal_set_id(c, args[1], 4, atol(args[2])) == FE_SUCCESS)
+					firetalk_callback_chat_invited(c, args[1], args[3], args[4]);
+	} else if (strcmp(arg0, "CHAT_LEFT") == 0) {
+		/* CHAT_LEFT:<Chat Room Id>
+		**    Tells tic connection to chat room has been dropped
+		*/
+		args = toc_parse_args2(data, 2, ':');
+		if (!args[1]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "CHAT_LEFT");
+			return(FE_SUCCESS);
+		}
+		firetalk_callback_chat_left(c, toc_internal_find_room_name(c, atol(args[1])));
+	} else if (strcmp(arg0, "GOTO_URL") == 0) {
+		/* GOTO_URL:<Window Name>:<Url>
+		**    Goto a URL.  Window Name is the suggested internal name of the window
+		**    to use.  (Java supports this.)
+		*/
+		struct s_toc_infoget *i;
+
+		/* create a new infoget object and set it to connecting state */
+		args = toc_parse_args2(data, 3, ':');
+		if (!args[1] || !args[2]) {
+			toc_internal_disconnect(c, FE_INVALIDFORMAT);
+			return(FE_INVALIDFORMAT);
+		}
+
+		i = c->infoget_head;
+		c->infoget_head = calloc(1, sizeof(struct s_toc_infoget));
+		if (c->infoget_head == NULL)
+			abort();
+		snprintf(c->infoget_head->buffer, TOC_HTML_MAXLEN, "GET /%s HTTP/1.0\r\n\r\n", args[2]);
+		c->infoget_head->buflen = strlen(c->infoget_head->buffer);
+		c->infoget_head->next = i;
+		c->infoget_head->state = TOC_STATE_CONNECTING;
+		c->infoget_head->sockfd = firetalk_internal_connect(firetalk_internal_remotehost4(c)
+#ifdef _FC_USE_IPV6
+				, firetalk_internal_remotehost6(c)
+#endif
+				);
+		if (c->infoget_head->sockfd == -1) {
+			firetalk_callback_error(c, FE_CONNECT, (lastinfo[0]=='\0')?NULL:lastinfo, "Failed to connect to info server");
+			free(c->infoget_head);
+			c->infoget_head = i;
+			return(FE_SUCCESS);
+		}
+	} else if (strcmp(arg0, "NEW_BUDDY_REPLY2") == 0) {
+		/* NEW_BUDDY_REPLY2:19033926:added */
+	} else if (strcmp(arg0, "UPDATED2") == 0) {
+		/* UPDATED2:a:19033926:Buddy */
+	} else if (strcmp(arg0, "DIR_STATUS") == 0) {
+		/* DIR_STATUS:<Return Code>:<Optional args>
+		**    <Return Code> is always 0 for success status.
+		*/
+		args = toc_parse_args2(data, 2, ':');
+		if (args[1] == NULL) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "DIR_STATUS with no status code");
+			return(FE_SUCCESS);
+		}
+		switch (atoi(args[1])) {
+		  case 0:
+		  case 1:
+			break;
+		  case 2:
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "DIR_STATUS failed, invalid format");
+			break;
+		  default:
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "DIR_STATUS with unknown code");
+			break;
+		}
+	} else if (strcmp(arg0, "ADMIN_NICK_STATUS") == 0) {
+		/* ADMIN_NICK_STATUS:<Return Code>:<Optional args>
+		**    <Return Code> is always 0 for success status.
+		*/
+	} else if (strcmp(arg0, "ADMIN_PASSWD_STATUS") == 0) {
+		/* ADMIN_PASSWD_STATUS:<Return Code>:<Optional args>
+		**    <Return Code> is always 0 for success status.
+		*/
+		c->passchange--;
+		args = toc_parse_args2(data, 3, ':');
+		if (!args[1]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "ADMIN_PASSWD_STATUS");
+			return(FE_SUCCESS);
+		}
+		if (atoi(args[1]) != 0)
+			firetalk_callback_error(c, FE_NOCHANGEPASS, NULL, NULL);
+		else
+			firetalk_callback_passchanged(c);
+	} else if (strcmp(arg0, "PAUSE") == 0) {
+		/* PAUSE
+		**    Tells TIC to pause so we can do migration
+		*/
+		c->connectstate = 1;
+		firetalk_internal_set_connectstate(c, FCS_WAITING_SIGNON);
+	} else if (strcmp(arg0, "RVOUS_PROPOSE") == 0) {
+		/* RVOUS_PROPOSE:<user>:<uuid>:<cookie>:<seq>:<rip>:<pip>:<vip>:<port>
+		**               [:tlv tag1:tlv value1[:tlv tag2:tlv value2[:...]]]
+		**    Another user has proposed that we rendezvous with them to
+		**    perform the service specified by <uuid>.  They want us
+		**    to connect to them, we have their rendezvous ip, their
+		**    proposer_ip, and their verified_ip. The tlv values are
+		**    base64 encoded.
+		*/
+		int     j, A1, A2, B, C, D, E1, E2, E3;
+
+		args = toc_parse_args2(data, 255, ':');
+		if (!args[1] || !args[2] || !args[3] || !args[4] || !args[5] || !args[6] || !args[7] || !args[8]) {
+			firetalk_callback_error(c, FE_INVALIDFORMAT, NULL, "RVOUS_PROPOSE");
+			return(FE_SUCCESS);
+		}
+#ifdef DEBUG_ECHO
+		{
+			int     i;
+
+			toc_echof(c, "got_data", "RVOUS_PROPOSE\n1user=[%s]\n2uuid=%s\n3cookie=[%s]\n4seq=%s\n5rendezvous_ip=%s\n6proposer_ip=%s\n7verified_ip=%s\n8port=%s\n",
+				args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+			for (i = 9; args[i] && args[i+1]; i += 2)
+				toc_echof(c, "got_data", "RVOUS_PROPOSE\n%itype=%s\n%ivalue=%s [%s]\n", i, args[i], i+1, args[i+1], firetalk_debase64(args[i+1]));
+		}
+#endif
+		toc_uuid(args[2], &A1, &A2, &B, &C, &D, &E1, &E2, &E3);
+		j = toc_cap(A1, A2, B, C, D, E1, E2, E3);
+		if (j == -1)
+			firetalk_callback_error(c, FE_WEIRDPACKET, NULL, "Unknown rendezvous UUID");
+		else {
+			if (strcmp(toc_uuids[j].name, "FILE_TRANSFER") == 0) {
+				const char *message, *file;
+
+				if ((message = toc_get_tlv_value(args, 9, 12)) != NULL)
+					firetalk_callback_im_getmessage(c, args[1], 0, message);
+
+				if ((file = toc_get_tlv_value(args, 9, 10001)) != NULL) {
+					unsigned long   size = ntohl(*((uint32_t *)(file+4)));
+
+					firetalk_callback_file_offer(c,
+						/* from */      args[1],                /* user */
+						/* filename */  file+8,                 /* filename */
+						/* size */      size,
+						/* ipstring */  args[7],                /* verified_ip */
+						/* ip6string */ NULL,
+						/* port */      (uint16_t)atoi(args[8]),/* port */
+						/* type */      FF_TYPE_RAW);
+				}
+			} else
+				firetalk_callback_error(c, FE_WEIRDPACKET, NULL, "Unhandled rendezvous UUID, do we have a capability set we do not actually support?");
+		}
+	} else
+		firetalk_callback_error(c, FE_WEIRDPACKET, NULL, data);
+
+	goto got_data_start;
+}
+
 enum firetalk_error   toc_periodic(struct s_firetalk_handle *const c) {
 	struct s_toc_connection *conn;
 	long idle;
@@ -2130,13 +2472,6 @@ enum firetalk_error toc_chat_join(client_t c, const char *const room, const char
 	}
 }
 
-enum firetalk_error   toc_chat_part(client_t c, const char *const room) {
-	char *temp = toc_internal_find_room_id(c,room);
-	if (!temp)
-		return FE_ROOMUNAVAILABLE;
-	return toc_send_printf(c,"toc_chat_leave %s",temp);
-}
-
 enum firetalk_error   toc_chat_set_topic(client_t c, const char *const room, const char *const topic) {
 	return FE_SUCCESS;
 }
@@ -2157,17 +2492,14 @@ enum firetalk_error   toc_chat_send_message(client_t c, const char *const room, 
 	if (strlen(message) > 232)
 		return(FE_PACKETSIZE);
 
-	if (strcasecmp(room, ":RAW") == 0) {
-		if (auto_flag != 1)
-			return(toc_send_printf(c, "%S", message));
-		else
-			return(FE_SUCCESS);
-	} else {
-		char *temp = toc_internal_find_room_id(c,room);
+	if (strcasecmp(room, ":RAW") == 0)
+		return(toc_send_printf(c, "%S", message));
+	else {
+		int     id = toc_internal_find_room_id(c,room);
 
-		if (!temp)
-			return FE_ROOMUNAVAILABLE;
-		return toc_send_printf(c,"toc_chat_send %s %s",temp,message);
+		if (id == 0)
+			return(FE_ROOMUNAVAILABLE);
+		return(toc_send_printf(c, "toc_chat_send %i %s", id, message));
 	}
 }
 
@@ -2183,12 +2515,11 @@ enum firetalk_error   toc_chat_send_action(client_t c, const char *const room, c
 }
 
 enum firetalk_error   toc_chat_invite(client_t c, const char *const room, const char *const who, const char *const message) {
-	char *roomid;
-	roomid = toc_internal_find_room_id(c,room);
-	if (roomid != NULL)
-		return toc_send_printf(c,"toc_chat_invite %s %s %s",toc_internal_find_room_id(c,room),message,who);
-	else
-		return FE_NOTFOUND;
+	int     id = toc_internal_find_room_id(c,room);
+
+	if (id != 0)
+		return(toc_send_printf(c, "toc_chat_invite %i %s %s", id, message, who));
+	return(FE_NOTFOUND);
 }
 
 void    ect_prof(client_t c, const char *const command,

@@ -109,7 +109,7 @@ static const struct s_firetalk_protocol_functions protocol_functions[FP_MAX] = {
 		toc_im_evil,
 		0,
 		toc_chat_join,
-		toc_chat_part,
+		0,
 		toc_chat_invite,
 		toc_chat_set_topic,
 		toc_chat_op,

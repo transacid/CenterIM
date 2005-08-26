@@ -46,7 +46,6 @@ enum firetalk_error   toc_im_send_action(client_t c, const char * const dest, co
 enum firetalk_error   toc_im_evil(client_t c, const char * const who);
 
 enum firetalk_error   toc_chat_join(client_t c, const char * const room, const char * const password);
-enum firetalk_error   toc_chat_part(client_t c, const char * const room);
 enum firetalk_error   toc_chat_set_topic(client_t c, const char * const room, const char * const topic);
 enum firetalk_error   toc_chat_op(client_t c, const char * const room, const char * const who);
 enum firetalk_error   toc_chat_deop(client_t c, const char * const room, const char * const who);
