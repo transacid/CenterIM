@@ -267,10 +267,11 @@ char*   jutil_regkey(char *key, char *seed);             /* pass a seed to gener
 typedef struct jconn_struct
 {
     /* Core structure */
-    pool        p;             /* Memory allocation pool */
+    pool        p;         /* Memory allocation pool */
     int         state;     /* Connection state flag */
-    int         cw_state;     /* Low level connection state flag */
-    int         fd;            /* Connection file descriptor */
+    int         cw_state;  /* Low level connection state flag */
+    int         fd;        /* Connection file descriptor */
+		char*				server;    /* The server we'll connect too */
     int         port;
     int         ssl;
     jid         user;      /* User info */
@@ -294,7 +295,7 @@ typedef void (*jconn_state_h)(jconn j, int state);
 typedef void (*jconn_packet_h)(jconn j, jpacket p);
 typedef void (*jconn_logger)(jconn j, int inout, const char *p);
 
-jconn jab_new(char *user, char *pass, int port, int ssl);
+jconn jab_new(char *user, char *pass, char *server, int port, int ssl);
 void jab_delete(jconn j);
 void jab_state_handler(jconn j, jconn_state_h h);
 void jab_packet_handler(jconn j, jconn_packet_h h);
