@@ -1,7 +1,7 @@
 /*
 *
 * centericq user interface class
-* $Id: icqface.cc,v 1.248 2005/05/23 14:16:52 konst Exp $
+* $Id: icqface.cc,v 1.249 2005/08/28 01:33:21 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -3509,7 +3509,7 @@ void icqface::xtermtitle(const string &text) {
 	string term = getenv("TERM") ? getenv("TERM") : "";
 
 	if(term == "xterm" || term == "Eterm" || term == "aterm"
-	|| term == "rxvt" || term == "screen")
+	|| term == "rxvt" || term.substr(0, 6) == "screen")
 	    cout << "\x1b]1;\x07\x1b]2;" << "centericq" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
     }
 }

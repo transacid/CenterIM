@@ -1,7 +1,7 @@
 /*
 *
 * centericq event manager class
-* $Id: eventmanager.cc,v 1.26 2004/07/27 07:38:32 konst Exp $
+* $Id: eventmanager.cc,v 1.27 2005/08/28 01:33:21 konst Exp $
 *
 * Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -107,6 +107,7 @@ void imeventmanager::store(const imevent &cev) {
 	    if(hook->send(ev)) {
 		eventwrite(cev, history);
 		logger.putevent(cev);
+		face.xtermtitle();
 		time(&lastevent);
 		recentlysent++;
 	    } else {
