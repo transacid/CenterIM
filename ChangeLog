@@ -2006,3 +2006,30 @@ also revive Gadu-Gadu on bigendian architectures.
 A couple of interface related bugs were fixed, such as a mistake in the group
 organization dialog as well as not clearing pending messages for contacts in
 non-chat communication mode.
+
+4.21.0
+------
+
+AIM changed its protocol again, so all TOC clients did not work. This release
+fixes the inability to connect to the AIM network.
+
+Some Jabber bugs were fixed. PGP works better, and it's also possible to
+connect to Google Talk. Ian Johannesen sent the patch for the latter.
+
+Chat window cycling patch from Iulian Ciorascu was applied. Don't forget
+to update your keybindings file if you want to use it. Simply add the
+following two lines to it:
+----
+bind editor     \cn     next_chat
+bind editor     \cb     prev_chat
+----
+
+Applied two patches from David Riebenbauer. One makes centericq change
+Jabber status to unavailable before disconnecting, and adds the coloring of
+contacts according to the procotol (configurable from the configuration
+dialog).
+
+Since autoconf/automake authors finally started to maintain backwards
+compatibility, I've updated the cicqsync so that it uses the current
+versions of the tools. The reason is that running specific versions for
+better compatibility doesn't work anymore :)
