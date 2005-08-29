@@ -2058,7 +2058,7 @@ enum firetalk_error toc_got_data(client_t c, unsigned char *buffer, unsigned sho
 		}
 
 		name = args[1];
-		online = (args[2][0]=='T')?atol(args[4]):0;
+		online = (args[2][0]=='T')?1:0;
 		isaway = (args[6][2]=='U')?1:0;
 		warn = atol(args[3]);
 		idle = atol(args[5]);

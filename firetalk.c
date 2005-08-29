@@ -1828,9 +1828,6 @@ enum firetalk_error firetalk_im_add_buddy(firetalk_t conn, const char * const ni
 		return FE_BADHANDLE;
 #endif
 
-	if (conn->connected != FCS_ACTIVE)
-		return FE_NOTCONNECTED;
-
 	ret = firetalk_im_internal_add_buddy(conn,nickname);
 	if (ret != FE_SUCCESS)
 		return ret;
