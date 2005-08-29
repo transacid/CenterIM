@@ -6,7 +6,7 @@
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 #
-# $Id: cicqsync,v 1.40 2004/07/08 23:52:48 konst Exp $
+# $Id: cicqsync,v 1.41 2005/08/29 09:00:22 konst Exp $
 #
 
 CROOT=":pserver:anonymous@cvs.thekonst.net:/home/konst/cvs/root"
@@ -36,14 +36,14 @@ checkutils() {
 	exit 1
     fi
 
-    ver=1.4
+#    ver=1.4
     for i in automake aclocal; do
 	r=`which $i-$ver 2>&1`
 	eval $i=$i
 	if test -f "$r"; then eval $i=$i-$ver; fi
     done
 
-    ver=2.13
+#    ver=2.13
     for i in autoconf autoheader; do
 	r=`which $i-$ver 2>&1`
 	eval $i=$i
