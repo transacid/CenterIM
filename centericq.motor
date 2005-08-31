@@ -12,7 +12,7 @@ CVS
 %vcsmodule
 centericq
 %arguments
--b ~/.centericq_tst -o
+-b ~/.centericq_tst -o -d
 %cflags
 
 %lflags
@@ -350,13 +350,14 @@ automake
 %file dlib /home/konst/devel/libyahoo2
 1
 %editor
+/home/konst/devel/centericq/Makefile.am	0	11
 %breakpoints
 %watch
 *buddyiter
 nickname
 %desktop
 ncurses_watchactive	0
-distdir	
+distdir	/home/konst/devel/
 tagbrowser_scope	2
 tagbrowser_filter	csgtfmednuvpx
 distparam0	rpmtarget i386-pc-linux-gnu
