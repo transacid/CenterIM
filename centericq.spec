@@ -1,8 +1,8 @@
-Version: 4.20.0
+Version: 4.21.0
 Summary: Console ncurses based IM client. ICQ, Yahoo!, MSN, AIM, IRC, Gadu-Gadu and Jabber protocols are supported. Internal RSS reader and LiveJournal client are also provided.
 Name: centericq
+License: GPL
 Release: 1
-Copyright: GPL
 Group: Applications/Communication
 Source: http://konst.org.ua/download/%{name}-%{version}.tar.gz
 URL: http://konst.org.ua/centericq/

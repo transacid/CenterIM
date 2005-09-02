@@ -2,7 +2,7 @@
 # of a project. For more information visit http://thekonst.net/motor
 
 %version
-4.20.0
+4.21.0
 %template
 terminal program/C++
 %vcsname
@@ -18,7 +18,7 @@ centericq
 %lflags
 
 %gettextized
-0
+1
 %makemode
 automake
 %file fsource src/centericq.cc
@@ -350,7 +350,6 @@ automake
 %file dlib /home/konst/devel/libyahoo2
 1
 %editor
-/home/konst/devel/centericq/Makefile.am	0	11
 %breakpoints
 %watch
 *buddyiter

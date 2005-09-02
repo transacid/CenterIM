@@ -2025,11 +2025,11 @@ bind editor     \cb     prev_chat
 ----
 
 Applied two patches from David Riebenbauer. One makes centericq change
-Jabber status to unavailable before disconnecting, and adds the coloring of
+Jabber status to unavailable before disconnecting, and adds coloring of
 contacts according to the procotol (configurable from the configuration
 dialog).
 
-Since autoconf/automake authors finally started to maintain backwards
+Since autoconf/automake authors finally started to maintain backward
 compatibility, I've updated the cicqsync so that it uses the current
 versions of the tools. The reason is that running specific versions for
 better compatibility doesn't work anymore :)

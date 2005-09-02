@@ -1,7 +1,7 @@
 /*
 *
 * centericq configuration handling routines
-* $Id: icqconf.cc,v 1.142 2005/05/23 14:16:52 konst Exp $
+* $Id: icqconf.cc,v 1.143 2005/09/02 15:20:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
 *
@@ -83,7 +83,7 @@ icqconf::imserver icqconf::defservers[protocolname_size] = {
     { "messenger.hotmail.com", 1863, 0 },
     { "toc.oscar.aol.com", 9898, 0 },
     { "irc.oftc.net", 6667, 0 },
-    { "jabber.com", 5222, 5223 },
+    { "jabber.org", 5222, 5223 },
     { "", 0, 0 },
     { "livejournal.com", 80, 0 },
     { "appmsg.gadu-gadu.pl", 80 }
