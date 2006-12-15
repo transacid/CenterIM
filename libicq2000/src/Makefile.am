@@ -1,0 +1,6 @@
+INCLUDES = -I$(top_srcdir)/libicq2000
+CPPFLAGS = 
+noinst_LIBRARIES = libsrc.a
+libsrc_a_SOURCES =  ContactTree.cpp ContactList.cpp SNAC-MSG.cpp Translator.cpp SNAC-UIN.cpp MessageHandler.cpp SocketClient.cpp UserInfoBlock.cpp TLV.cpp SNAC.cpp version.cpp SNAC-BOS.cpp Xml.cpp SNAC-BUD.cpp exceptions.cpp Client.cpp Contact.cpp socket.cpp ICQ.cpp SNAC-SBL.cpp ICBMCookie.cpp time_extra.cpp DirectClient.cpp SNAC-base.cpp SNAC-LOC.cpp FileTransferClient.cpp buffer.cpp SMTPClient.cpp SNAC-SRV.cpp events.cpp SNAC-GEN.cpp Capabilities.cpp
+EXTRA_DIST = ContactTree.cpp ContactList.cpp SNAC-MSG.cpp Translator.cpp SNAC-UIN.cpp MessageHandler.cpp SocketClient.cpp UserInfoBlock.cpp TLV.cpp SNAC.cpp version.cpp SNAC-BOS.cpp Xml.cpp SNAC-BUD.cpp exceptions.cpp Client.cpp Contact.cpp socket.cpp ICQ.cpp SNAC-SBL.cpp ICBMCookie.cpp time_extra.cpp DirectClient.cpp SNAC-base.cpp SNAC-LOC.cpp FileTransferClient.cpp buffer.cpp SMTPClient.cpp SNAC-SRV.cpp events.cpp SNAC-GEN.cpp Capabilities.cpp FileTransferClient.h Capabilities.h ICQ.h TLV.h Xml.h Cache.h SNAC.h DirectClient.h sstream_fix.h ICBMCookieCache.h SeqNumCache.h SocketClient.h SNAC-BOS.h SNAC-BUD.h SNAC-GEN.h SNAC-LOC.h SNAC-MSG.h SNAC-SBL.h SNAC-SRV.h SNAC-UIN.h UserInfoBlock.h DCCache.h RequestIDCache.h buffer.h SMTPClient.h MessageHandler.h SNAC-base.h ICBMCookie.h socket.h FTCache.h
+SUBDIRS = 

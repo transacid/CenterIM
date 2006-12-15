@@ -1,0 +1,267 @@
+
+,--------------------------------------------------------------------,
+|                                                                    |
+|              libicq2000 - The C++ ICQ2000/2001 Library             |
+|                                                                    |
+`--------------------------------------------------------------------'
+
+   Version 0.3.2                    http://libicq2000.sourceforge.net/
+
+
+
+
+
+ --------------------------------------------------------------------
+ - Contents                                                         -
+ --------------------------------------------------------------------
+
+1. Features
+
+2. Installation
+- 1. Prerequisites
+- 2. Compiling
+- 3. Installation
+
+3. History
+
+4. Clients
+
+5. More info for developers
+- 1. Contributing to libicq2000
+- 2. Anonymous CVS
+- 3. API
+
+6. Comments, bug fixes, etc..
+
+7. License
+
+
+ --------------------------------------------------------------------
+ - Features                                                         -
+ --------------------------------------------------------------------
+
+libicq2000 is an opensource C++ library being developed to support the
+icq2000/2001 protocol. It is easy for developers to use as the
+backbone for their clients' connection to the ICQ network - all the
+protocol work is abstracted away in one nice object-orientated
+interface.
+
+libicq2000 supports:
+- Message sending/receiving
+- URL sending/receiving
+- SMS sending/receiving, including delivery reports
+  (SMTP gateway delivery too)
+- Status changes
+- Authorisation Requests
+- "You were added" messages
+- Fetching user info from server (both basic and advanced)
+- Fetching away messages
+- Setting custom away messages
+- Direct Connections
+- Invisibility, including visible/invisible lists
+- Ignore lists
+
+See the TODO for information about planned features in
+progress. Please don't duplicate requests for features already
+mentioned in the TODO. Send legitimate feature requests to the
+libicq2000-devel mailing list on sourceforge:
+<libicq2000-devel@lists.sourceforge.net> (you don't need to
+subscribe to post).
+
+libicq2000 is in no way affiliated with 'ICQ' or 'Mirabilis'.
+
+
+ --------------------------------------------------------------------
+ - Installation                                                     -
+ --------------------------------------------------------------------
+
+   ------------------------------------------------------------------
+   - Prerequisites                                                  -
+   ------------------------------------------------------------------
+
+You will need:
+* libstdc++ library (the standard C++ library)
+
+Distribution   Packages required
+------------   -----------------
+Redhat 7.1     libstdc++-2.96-81.i386.rpm, libstdc++-devel-2.96-81.i386.rpm
+
+Other          I'd appreciate any input from people on success/failures.
+Redhats
+
+For RPM distributions (Redhat, SuSE, etc..) - make sure you install
+the 'development' RPMs for all these libraries as well. Usually these
+are called library-devel.rpm or similar. I'm trying to build up a list
+of the names of the rpms that are required, so send me info about what
+you needed for your distribution if it's not already here.
+
+Debian         libstdc++2.10 and libstdc++2.10-dev
+(+ Progeny,
+ etc..)        
+
+Sources for these libraries can be found at the following addresses:
+libstdc++: http://www.gnu.org/software/gcc/libstdc++/ 
+           (should have come with your version of gcc)
+
+   ------------------------------------------------------------------
+   - Compiling                                                      -
+   ------------------------------------------------------------------
+
+Generic configure instructions can be found in INSTALL. These are the
+brief instructions for libicq2000:
+
+1. Type './configure'
+
+2. Type 'make' to compile the package
+
+On some systems that don't have gmake as the default make you might
+have to install and explicitly use that (usually named as gmake in
+that case).
+
+   ------------------------------------------------------------------
+   - Installation                                                   -
+   ------------------------------------------------------------------
+
+1. Type 'make install' as root to install the libraries.
+
+Easy as that.
+
+
+ --------------------------------------------------------------------
+ - History                                                          -
+ --------------------------------------------------------------------
+
+libicq2000 started life out as part of the gtk-- client
+ickle. (http://ickle.sourceforge.net).
+
+Since the 0.3.0 release of ickle, libicq2000 has been split off into
+it's own release schedule, CVS tree and sourceforge project.
+
+It was always designed to work as a separate library, it seemed now
+that there was enough demand for it to warrant splitting development
+off.
+
+
+ --------------------------------------------------------------------
+ - Clients                                                          -
+ --------------------------------------------------------------------
+
+Known clients that use this library are:
+
+* ickle - a gtkmm graphical client
+  http://ickle.sourceforge.net/
+
+* CenterICQ - a console client
+  http://konst.org.ua/centericq/
+
+* ICQv7-t - an ICQ transport for Jabber
+  http://icqv7-t.sourceforge.net/
+
+* IcyJuice - a Mac OS X graphical client
+  http://www.mitzpettel.com/software/icyjuice.html
+
+* Fire - a Mac OS X graphical client
+  http://www.epicware.com/fire.html
+
+* Proteus - a Mac OS X graphical client
+  http://www.indigofield.com/
+
+
+ --------------------------------------------------------------------
+ - More info for developers                                         -
+ --------------------------------------------------------------------
+
+   ------------------------------------------------------------------
+   - Contributing to libicq2000                                     -
+   ------------------------------------------------------------------
+
+In the spirit of opensource libicq2000 is a community effort with
+contributions welcomely accepted. If it's just a small patch for a bug
+fix, or you are wishing to help out more big time in the development
+please feel free to contribute.
+
+I'd prefer patches and development related questions to go to the
+sourceforge libicq20000-devel mailing list - so they can be seen by
+all the developers rather than just me. I'd suggest subscribing,
+although you can post even if you aren't subscribed.
+<libicq2000-devel@users.sourceforge.net>
+
+For submitting patches, please:
+
+a) Make sure you are working on a recent checked out copy of the
+   anonymous CVS, often the problem has been fixed already.
+
+b) Follow code conventions in the layout of the code as it is at the
+   moment.
+
+c) Produce the diff by running 'cvs diff -uN > my-patch.diff'
+
+d) Email the diff to <libicq2000-devel@lists.sourceforge.net>
+
+I am happy to add developers to the sourceforge project, so they are
+able to checkout CVS with write access and contribute directly back
+into CVS. This will be a lot easier for both you and me in the long
+run, rather than exchanging patches constantly.
+
+
+   ------------------------------------------------------------------
+   - Anonymous CVS                                                  -
+   ------------------------------------------------------------------
+
+If you are interested in using libicq2000 with your client, I'd
+recommend looking at the latest CVS:
+http://sourceforge.net/cvs/?group_id=36654
+
+The modulename is libicq2000. Once you have checked out the sources,
+you must run the autogen.sh file to generate configure.
+
+Beware though - the CVS is often unstable inbetween releases. Please
+subscribe to the libicq2000-devel mailing list on sourceforge to stay
+up to date on what is going on in CVS. You will also probably want to
+subscribe to libicq2000-commits, so you can see what work is being
+done on the source. If you find a problem in CVS please check back in
+the archives for libicq2000-devel to check it hasn't already been
+acknowledged/solved.
+
+   ------------------------------------------------------------------
+   - API                                                            -
+   ------------------------------------------------------------------
+
+You can find doxygen generated documentation on the libicq2000
+homepage (the API link on the right).
+
+The API should be more stable now, and I am aiming to avoid breaking
+backward compatability in future as much as possible from now onwards.
+
+The examples directory contains the shell example, which shows how to
+use the library from the shell simply and how the socket callbacks
+interact.
+
+Other good sources of information are the ickle sourcecode, which
+should support all the latest features of the API.
+
+ --------------------------------------------------------------------
+ - Comments, bug reports, etc..                                     -
+ --------------------------------------------------------------------
+
+Bug reports and development related comments should be sent to:
+  <libicq2000-devel@lists.sourceforge.net>
+(You don't need to be subscribed to post to the list)
+
+To keep up to date with the CVS subscribe to:
+  <libicq2000-commits@lists.sourceforge.net>
+This will automatically send you a brief summary of commits to CVS
+when they are made.
+
+You can send me mail to:
+  <barnaby@beedesign.co.uk>
+Although the list is the preferred option.
+
+I am available on icq (ICQ# 12137587 Alias bee).
+
+ --------------------------------------------------------------------
+ - License                                                          -
+ --------------------------------------------------------------------
+
+libicq2000 is released under the GNU LGPL license, see COPYING for
+copying conditions.
