@@ -1,7 +1,7 @@
 EXTRA_DIST = libmsn.motor ChangeLog AUTHORS COPYING INSTALL NEWS README
 SUBDIRS = msn
 INCLUDES = -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
-CPPFLAGS = 
+AM_CPPFLAGS = 
 noinst_LIBRARIES = liblibmsn.a
 AUTOMAKE_OPTIONS = foreign
 liblibmsn_a_SOURCES = 

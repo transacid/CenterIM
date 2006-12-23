@@ -5,4 +5,4 @@ libkksystr_a_LIBADD =  src/kkfsys.o src/kkiproc.o
 SUBDIRS = include src
 EXTRA_DIST = 
 AUTOMAKE_OPTIONS = foreign
-CPPFLAGS = 
+AM_CPPFLAGS = 

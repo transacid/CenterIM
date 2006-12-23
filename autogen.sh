@@ -15,6 +15,7 @@ sh libtoolize --copy --force --automake
 TOP=$PWD
 traverse=`find $PWD -name "configure.[ia][nc]" -print`
 for i in $traverse; do
+	echo Changing directory to `dirname $i`
 	pushd `dirname $i` > /dev/null
 
 	if test "$PWD" = "$TOP"; then
@@ -22,8 +23,8 @@ for i in $traverse; do
 	else
 		sh aclocal $ACLOCAL_FLAGS
 	fi
-	headneeded=`grep AM_CONFIG_HEADER configure.ac`
-	if test ! -z "$headneeded"; then autoheader; fi
+	headneeded=`grep -E "A(M|C)_CONFIG_HEADER" configure.[ia][nc]`
+	if test ! -z "$headneeded"; then sh autoheader; fi
 	sh autoconf
 	sh automake --add-missing --copy
 

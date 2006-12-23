@@ -12,6 +12,8 @@ AC_ISC_POSIX
 
 AC_CANONICAL_HOST
 
+AC_GNU_SOURCE
+
 ########################
 # Checks for programs. #
 ########################
@@ -22,6 +24,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION([0.16.1])
 AC_PROG_YACC
 AC_PROG_GCC_TRADITIONAL
 
