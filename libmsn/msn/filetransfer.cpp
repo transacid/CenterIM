@@ -24,17 +24,21 @@
 #include <msn/message.h>
 #include <msn/errorcodes.h>
 #include <msn/externals.h>
+#include <msn/notificationserver.h>
 
 #ifndef WIN32
 #include <unistd.h>
+#include <time.h>
+#include <sys/types.h>
+#include <sys/time.h>
 #include <sys/socket.h>
 #else
 #include <winsock.h>
 #include <io.h>
 #endif
 
-#include <cassert>
 #include <cerrno>
+#include <cassert>
 
 namespace MSN 
 {
@@ -54,7 +58,7 @@ namespace MSN
     
     void FileTransferInvitation::invitationWasCanceled(const std::string & body)
     {
-        ext::fileTransferFailed(this, 0, "Cancelled by remote user");
+        this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferFailed(this, 0, "Cancelled by remote user");
         if (this->invitationWasSent())
         {
             this->switchboardConnection->invitationsSent.remove(this);
@@ -75,28 +79,28 @@ namespace MSN
                                                                                  std::string(tmp), FileTransferConnection::MSNFTP_SEND, this);
         FileTransferConnection * conn = new FileTransferConnection(auth);
         
-        ext::fileTransferProgress(this, "Sending IP address", 0, 0);
+        this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferProgress(this, "Sending IP address", 0, 0);
         
-        while((conn->sock = ext::listenOnPort(port)) < 0)
+        while((conn->sock = this->switchboardConnection->myNotificationServer()->externalCallbacks.listenOnPort(port)) < 0)
         {
             port++;
             if (port > 6911)
             {
-                ext::fileTransferFailed(this, errno, strerror(errno));
+                this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferFailed(this, errno, strerror(errno));
                 this->switchboardConnection->invitationsSent.remove(this);
                 conn->disconnect();
                 return;
             }
         }
         
-        ext::registerSocket(conn->sock, 1, 0);
+        this->switchboardConnection->myNotificationServer()->externalCallbacks.registerSocket(conn->sock, 1, 0);
         
         this->switchboardConnection->addFileTransferConnection(conn);
         
         std::ostringstream buf_;
         buf_ << "Invitation-Command: ACCEPT\r\n";
         buf_ << "Invitation-Cookie: " << this->cookie << "\r\n";
-        buf_ << "IP-Address: " << ext::getOurIP() << "\r\n";
+        buf_ << "IP-Address: " << this->switchboardConnection->myNotificationServer()->externalCallbacks.getOurIP() << "\r\n";
         buf_ << "Port: " << port << "\r\n";
         buf_ << "AuthCookie: " << conn->auth.cookie << "\r\n";
         buf_ << "Launch-Application: FALSE\r\n";
@@ -119,7 +123,7 @@ namespace MSN
         
         if (cookie.empty() || remote.empty() || port_c.empty())
         {
-            ext::fileTransferFailed(this, 0, "Missing parameters");
+            this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferFailed(this, 0, "Missing parameters");
             this->switchboardConnection->invitationsReceived.remove(this);
             return;
         }
@@ -132,23 +136,23 @@ namespace MSN
         
         std::ostringstream buf_;
         buf_ << "Connecting to " << remote << ":" << port << "\n";
-        ext::fileTransferProgress(this, buf_.str(), 0, 0);
+        this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferProgress(this, buf_.str(), 0, 0);
         
-        conn->sock = ext::connectToServer(remote, port, &conn->connected);
+        conn->sock = this->switchboardConnection->myNotificationServer()->externalCallbacks.connectToServer(remote, port, &conn->connected);
         
         if (conn->sock < 0)
         {
-            ext::fileTransferFailed(this, errno, strerror(errno));
+            this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferFailed(this, errno, strerror(errno));
             this->switchboardConnection->invitationsReceived.remove(this);
             return;
         }
 
         if (! conn->isConnected())
-            ext::registerSocket(conn->sock, 0, 1);
+            this->switchboardConnection->myNotificationServer()->externalCallbacks.registerSocket(conn->sock, 0, 1);
         else
-            ext::registerSocket(conn->sock, 1, 0);
+            this->switchboardConnection->myNotificationServer()->externalCallbacks.registerSocket(conn->sock, 1, 0);
         
-        ext::fileTransferProgress(this, "Connected", 0, 0);
+        this->switchboardConnection->myNotificationServer()->externalCallbacks.fileTransferProgress(this, "Connected", 0, 0);
         this->switchboardConnection->addFileTransferConnection(conn);
         
         conn->write("VER MSNFTP\r\n");
@@ -156,10 +160,17 @@ namespace MSN
     
     void FileTransferConnection::disconnect()
     {
+        Connection::disconnect();
+        
+        if (this->auth.fd)
+        {
+            fclose(this->auth.fd);
+            this->auth.fd = NULL;
+        }
+        
         this->auth.inv->switchboardConnection->removeFileTransferConnection(this);
         delete this->auth.inv;
         this->auth.inv = NULL;
-        Connection::disconnect();
     }
     
     FileTransferConnection::~FileTransferConnection()
@@ -170,8 +181,8 @@ namespace MSN
     void FileTransferConnection::socketConnectionCompleted()
     {
         Connection::socketConnectionCompleted();
-        ext::unregisterSocket(this->sock);
-        ext::registerSocket(this->sock, 1, 0);
+        this->myNotificationServer()->externalCallbacks.unregisterSocket(this->sock);
+        this->myNotificationServer()->externalCallbacks.registerSocket(this->sock, 1, 0);
     }    
     
     void FileTransferConnection::socketIsWritable()
@@ -223,18 +234,18 @@ namespace MSN
         if ((s = accept(this->sock, NULL, NULL)) < 0)
         {
             perror("Could not accept()\n");
-            ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
+            this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, strerror(errno));
             this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
             return;
         }
         
-        ext::unregisterSocket(this->sock);
+        this->myNotificationServer()->externalCallbacks.unregisterSocket(this->sock);
         close(this->sock);
         
         this->sock = s;
-        ext::registerSocket(this->sock, 1, 0);
+        this->myNotificationServer()->externalCallbacks.registerSocket(this->sock, 1, 0);
         
-        ext::fileTransferProgress(this->auth.inv, "Connected", 0, 0);
+        this->myNotificationServer()->externalCallbacks.fileTransferProgress(this->auth.inv, "Connected", 0, 0);
         
         this->auth.connected = 1;
         this->connected = true;        
@@ -250,14 +261,15 @@ namespace MSN
                 
         if (args[0] == "VER")
         {
-            this->write("VER MSNFTP\r\n");
-            ext::fileTransferProgress(this->auth.inv, "Negotiating", 0, 0);
+            if (this->write("VER MSNFTP\r\n") != strlen("VER MSNFTP\r\n"))
+                return;
+            this->myNotificationServer()->externalCallbacks.fileTransferProgress(this->auth.inv, "Negotiating", 0, 0);
         }
         else if (args[0] == "USR")
         {
             if (args[2] != this->auth.cookie)  // if they DIFFER
             {
-                ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, strerror(errno));
                 this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
                 return;
             }
@@ -272,16 +284,16 @@ namespace MSN
             if (this->auth.fd == NULL)
             {
                 perror("fopen() failed");
-                ext::fileTransferFailed(this->auth.inv, errno, "Could not open file for reading");
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, "Could not open file for reading");
                 this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
                 return;
             }
             
             // OK, now we lose control, but the next round of the polling loop will
             // say that the socket is writable, and then the fun starts...
-            ext::fileTransferProgress(this->auth.inv, "Sending data", 0, 0);
-            ext::unregisterSocket(this->sock);
-            ext::registerSocket(this->sock, 0, 1);                        
+            this->myNotificationServer()->externalCallbacks.fileTransferProgress(this->auth.inv, "Sending data", 0, 0);
+            this->myNotificationServer()->externalCallbacks.unregisterSocket(this->sock);
+            this->myNotificationServer()->externalCallbacks.registerSocket(this->sock, 0, 1);                        
         }
     }
     
@@ -309,55 +321,46 @@ namespace MSN
             blockHeader[1] = (blockLength >> 0) & 0xff;
             blockHeader[2] = (blockLength >> 8) & 0xff;
             
-            if (this->write(std::string((char *) &blockHeader[bytesWritten], 3 - bytesWritten), false) < 0)
+            if (this->write(std::string((char *) &blockHeader[bytesWritten], 3 - bytesWritten), false) != 3)
             {
-                ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, strerror(errno));
                 goto cleanup;
             }
             
             if (fread(readBuffer, sizeof(unsigned char), blockLength, this->auth.fd) < 0)
             {
-                ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, strerror(errno));
                 goto cleanup;
             }
             
-            if (this->write(std::string((char *) readBuffer, blockLength), false) < 0)
+            if ((blockLength = this->write(std::string((char *) readBuffer, blockLength), false)) < 0)
             {
-                ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, strerror(errno));
                 goto cleanup;
             }
             this->auth.bytes_done += blockLength;
         }
         free(readBuffer);
-        ext::fileTransferProgress(this->auth.inv, "Sending file", this->auth.bytes_done, this->auth.inv->fileSize);
+        this->myNotificationServer()->externalCallbacks.fileTransferProgress(this->auth.inv, "Sending file", this->auth.bytes_done, this->auth.inv->fileSize);
         return;
 cleanup:
             ;
         this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
         if (readBuffer)
             free(readBuffer);
+        if (this->auth.fd)
+        {
+            fclose(this->auth.fd);
+            this->auth.fd = NULL;
+        }
     }
     
     void FileTransferConnection::handleSend_Bye()
     {
-        if (! this->isWholeLineAvailable())
-            return;
+        this->myNotificationServer()->externalCallbacks.fileTransferSucceeded(this->auth.inv);
         
-        std::vector<std::string> args;
-        ext::fileTransferSucceeded(this->auth.inv);
-        
-        args = this->getLine();
-        this->readBuffer = this->readBuffer.substr(this->readBuffer.find("\r\n") + 2);
-
-        if (args.size() > 0)
-        {
-            printf("%s", args[0].c_str());
-            if (args.size() > 1)
-                printf(" %s", args[1].c_str());
-            printf("\n");
-        }
-        
-        this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);        
+        this->auth.inv->switchboardConnection->invitationsSent.remove(this->auth.inv);
+        this->disconnect();
     }
     
     
@@ -382,7 +385,7 @@ cleanup:
             std::ostringstream buf_;
             buf_ << "USR " << this->auth.username << " " << this->auth.cookie << "\r\n";
             this->write(buf_);
-            ext::fileTransferProgress(this->auth.inv, "Negotiating", 0, 0);
+            this->myNotificationServer()->externalCallbacks.fileTransferProgress(this->auth.inv, "Negotiating", 0, 0);
             return;
         } 
         else if (args[0] == "FIL")
@@ -396,7 +399,7 @@ cleanup:
         return;
 error:
             ;
-        ext::fileTransferFailed(this->auth.inv, errno, strerror(errno));
+        this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, errno, strerror(errno));
         this->switchboardConnection()->invitationsReceived.remove(this->auth.inv);
     }
     
@@ -422,17 +425,17 @@ error:
                 // Transfer completed block
                 if (blockHeader[1] != 0 || blockHeader[2] != 0)
                 {
-                    ext::fileTransferFailed(this->auth.inv, 0, "Invalid block header.\n");
+                    this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, 0, "Invalid block header.\n");
                     goto cleanup;
                 }
                 this->write("BYE 16777989\r\n");
-                ext::fileTransferSucceeded(this->auth.inv);
+                this->myNotificationServer()->externalCallbacks.fileTransferSucceeded(this->auth.inv);
                 
                 goto cleanup;
             }
             else if (blockHeader[0] != 0U)
             {
-                ext::fileTransferFailed(this->auth.inv, 0, "Invalid block header.");
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, 0, "Invalid block header.");
                 goto cleanup;
             }
             
@@ -440,7 +443,7 @@ error:
             blockLength = ((unsigned char) blockHeader[1]) | ((unsigned char) blockHeader[2]) << 8;
             if (blockLength > MAX_FTP_BLOCK_SIZE)
             {
-                ext::fileTransferFailed(this->auth.inv, 0, "Block size greater than largest expected block size.");
+                this->myNotificationServer()->externalCallbacks.fileTransferFailed(this->auth.inv, 0, "Block size greater than largest expected block size.");
                 goto cleanup;
             }
             
@@ -459,15 +462,20 @@ error:
                 // that indicates success isnt sent...
                 
                 this->write("BYE 16777989\r\n");
-                ext::fileTransferSucceeded(this->auth.inv);
+                this->myNotificationServer()->externalCallbacks.fileTransferSucceeded(this->auth.inv);
                 goto cleanup;
             }
-            ext::fileTransferProgress(this->auth.inv, "Receiving file", this->auth.bytes_done, this->auth.inv->fileSize);
+            this->myNotificationServer()->externalCallbacks.fileTransferProgress(this->auth.inv, "Receiving file", this->auth.bytes_done, this->auth.inv->fileSize);
         }
         return;
 cleanup:
             ;
         this->auth.inv->switchboardConnection->invitationsReceived.remove(this->auth.inv);
+        if (this->auth.fd)
+        {
+            fclose(this->auth.fd);
+            this->auth.fd = NULL;
+        }
     }
     
     void FileTransferInvitation::rejectTransfer()

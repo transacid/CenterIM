@@ -26,6 +26,7 @@
 #include <msn/externals.h>
 #include <msn/filetransfer.h>
 
+#include <stdio.h>
 #include <sys/stat.h>
 #include <algorithm>
 #include <cassert>
@@ -35,20 +36,20 @@ namespace MSN
     std::map<std::string, void (SwitchboardServerConnection::*)(std::vector<std::string> &)> SwitchboardServerConnection::commandHandlers;
     
     SwitchboardServerConnection::SwitchboardServerConnection(AuthData & auth_, NotificationServerConnection & n)
-        : Connection(), auth(auth_), connectionStatus(SB_DISCONNECTED), notificationServer(n)
+        : Connection(), auth(auth_), _connectionState(SB_DISCONNECTED), notificationServer(n)
     {
         registerCommandHandlers();
     }
     
     SwitchboardServerConnection::~SwitchboardServerConnection()
     {
-        if (connectionStatus != SB_DISCONNECTED)
+        if (this->connectionState() != SB_DISCONNECTED)
             this->disconnect();
     }
         
     Connection *SwitchboardServerConnection::connectionWithSocket(int fd)
     {
-        assert(connectionStatus >= SB_CONNECTING);
+        this->assertConnectionStateIsAtLeast(SB_CONNECTING);
         std::list<FileTransferConnection *> & list = _fileTransferConnections;
         std::list<FileTransferConnection *>::iterator i = list.begin();
         
@@ -65,22 +66,19 @@ namespace MSN
     
     void SwitchboardServerConnection::addFileTransferConnection(FileTransferConnection *c)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         _fileTransferConnections.push_back(c);
     }
 
     void SwitchboardServerConnection::removeFileTransferConnection(FileTransferConnection *c)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         _fileTransferConnections.remove(c);
     }
 
-    /**
-     *  @todo  FIX THIS.  Delete shouldn't be here.
-     */    
     void SwitchboardServerConnection::removeFileTransferConnection(FileTransferInvitation *inv)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         std::list<FileTransferConnection *> & list = _fileTransferConnections;
         std::list<FileTransferConnection *>::iterator i = list.begin();        
         for (i = list.begin(); i != list.end(); i++)
@@ -120,13 +118,13 @@ public:
     void SwitchboardServerConnection::addCallback(SwitchboardServerCallback callback,
                                                    int trid, void *data)
     {
-        assert(connectionStatus >= SB_CONNECTING);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTING);        
         this->callbacks[trid] = std::make_pair(callback, data);
     }
 
     void SwitchboardServerConnection::removeCallback(int trid)
     {
-        assert(connectionStatus >= SB_CONNECTING);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTING);        
         this->callbacks.erase(trid);
     }
     
@@ -143,7 +141,7 @@ public:
     
     void SwitchboardServerConnection::dispatchCommand(std::vector<std::string> & args)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         std::map<std::string, void (SwitchboardServerConnection::*)(std::vector<std::string> &)>::iterator i = commandHandlers.find(args[0]);
         if (i != commandHandlers.end())
             (this->*commandHandlers[args[0]])(args);
@@ -151,11 +149,11 @@ public:
     
     void SwitchboardServerConnection::sendMessage(const Message *msg)
     {
-        assert(connectionStatus >= SB_READY);        
+        this->assertConnectionStateIsAtLeast(SB_READY);        
         std::string s = msg->asString();
         
         std::ostringstream buf_;
-        buf_ << "MSG " << trid++ << " N " << (int) s.size() << "\r\n" << s;
+        buf_ << "MSG " << this->trID++ << " A " << (int) s.size() << "\r\n" << s;
         this->write(buf_);
     }
 
@@ -167,7 +165,7 @@ public:
     
     void SwitchboardServerConnection::handleInvite(Passport from, const std::string & friendly, const std::string & mime, const std::string & body)
     {
-        assert(connectionStatus >= SB_READY);        
+        this->assertConnectionStateIsAtLeast(SB_READY);        
         Message::Headers headers = Message::Headers(body);
         std::string command = headers["Invitation-Command"];
         std::string cookie = headers["Invitation-Cookie"];
@@ -181,7 +179,7 @@ public:
         } 
         else if (inv == NULL)
         {
-//            printf("Very odd - just got a %s out of mid-air...\n", command.c_str()); 
+            printf("Very odd - just got a %s out of mid-air...\n", command.c_str()); 
         }
         else if (command == "ACCEPT")
         {
@@ -191,13 +189,13 @@ public:
         {
             inv->invitationWasCanceled(body);
         } else {
-//            printf("Argh, don't support %s yet!\n", command.c_str());
+            printf("Argh, don't support %s yet!\n", command.c_str());
         }
     }
     
     void SwitchboardServerConnection::handleNewInvite(Passport & from, const std::string & friendly, const std::string & mime, const std::string & body)
     {
-        assert(connectionStatus >= SB_READY);        
+        this->assertConnectionStateIsAtLeast(SB_READY);        
         Message::Headers headers = Message::Headers(body);
         std::string appname;
         std::string filename;
@@ -211,12 +209,12 @@ public:
         {
             invg = new FileTransferInvitation(Invitation::MSNFTP, headers["Invitation-Cookie"], from, 
                                               this, filename, atol(filesize.c_str()));
-            ext::gotFileTransferInvitation(this, from, friendly, static_cast<FileTransferInvitation *>(invg));
+            this->myNotificationServer()->externalCallbacks.gotFileTransferInvitation(this, from, friendly, static_cast<FileTransferInvitation *>(invg));
         }
         
         if (invg == NULL)
         {
-            ext::showError(this, "Unknown invitation type!");
+            this->myNotificationServer()->externalCallbacks.showError(this, "Unknown invitation type!");
             return;
         }
         
@@ -225,11 +223,11 @@ public:
     
     void SwitchboardServerConnection::handle_BYE(std::vector<std::string> & args)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         std::list<Passport> & list = this->users;
         std::list<Passport>::iterator i;
         
-        ext::buddyLeftConversation(this, args[1]);
+        this->myNotificationServer()->externalCallbacks.buddyLeftConversation(this, args[1]);
         
         for (i = list.begin(); i != list.end(); i++)
         {
@@ -249,32 +247,32 @@ public:
     
     void SwitchboardServerConnection::handle_JOI(std::vector<std::string> & args)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         if (args[1] == this->auth.username)
             return;
         
-        if (this->auth.sessionID.empty() && connectionStatus == SB_WAITING_FOR_USERS)
-            connectionStatus = SB_READY;
+        if (this->auth.sessionID.empty() && this->connectionState() == SB_WAITING_FOR_USERS)
+            this->setConnectionState(SB_READY);
         
         this->users.push_back(args[1]);
-        ext::buddyJoinedConversation(this, args[1], decodeURL(args[2]), 0);
+        this->myNotificationServer()->externalCallbacks.buddyJoinedConversation(this, args[1], decodeURL(args[2]), 0);
     }
     
     void SwitchboardServerConnection::handle_NAK(std::vector<std::string> & args)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
-        ext::failedSendingMessage(this);
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
+        this->myNotificationServer()->externalCallbacks.failedSendingMessage(this);
     }
     
     void SwitchboardServerConnection::handle_MSG(std::vector<std::string> & args)
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         Connection::handle_MSG(args);
     }
     
     void SwitchboardServerConnection::sendTypingNotification()
     {
-        assert(connectionStatus >= SB_READY);        
+        this->assertConnectionStateIsAtLeast(SB_READY);        
         std::ostringstream buf_, msg_;
         msg_ << "MIME-Version: 1.0\r\n";
         msg_ << "Content-Type: text/x-msmsgscontrol\r\n";
@@ -283,54 +281,60 @@ public:
         msg_ << "\r\n";
         size_t msg_length = msg_.str().size();
         
-        buf_ << "MSG " << trid++ << " U " << (int) msg_length << "\r\n" << msg_.str();
+        buf_ << "MSG " << this->trID++ << " U " << (int) msg_length << "\r\n" << msg_.str();
         
         write(buf_);        
     }
     
     void SwitchboardServerConnection::inviteUser(Passport userName)
     {
-        assert(connectionStatus >= SB_WAITING_FOR_USERS);        
+        this->assertConnectionStateIsAtLeast(SB_WAITING_FOR_USERS);        
         std::ostringstream buf_;
-        buf_ << "CAL " << trid++ << " " << userName << "\r\n";
+        buf_ << "CAL " << this->trID++ << " " << userName << "\r\n";
         write(buf_);        
     }
     
     void SwitchboardServerConnection::connect(const std::string & hostname, unsigned int port)
     {
-        assert(connectionStatus == SB_DISCONNECTED);
+        this->assertConnectionStateIs(SB_DISCONNECTED);
 
-        if ((this->sock = ext::connectToServer(hostname, port, &this->connected)) == -1)
+        if ((this->sock = this->myNotificationServer()->externalCallbacks.connectToServer(hostname, port, &this->connected)) == -1)
         {
-            ext::showError(this, "Could not connect to switchboard server");
+            this->myNotificationServer()->externalCallbacks.showError(this, "Could not connect to switchboard server");
             return;
         }
         
-        ext::registerSocket(this->sock, 1, 1);
-        connectionStatus = SB_CONNECTING;
+        this->myNotificationServer()->externalCallbacks.registerSocket(this->sock, 1, 1);
+        this->setConnectionState(SB_CONNECTING);
+        
+        if (this->connected)
+            this->socketConnectionCompleted();
+        
         std::ostringstream buf_;
         if (this->auth.sessionID.empty())
         {
-            buf_ << "USR " << trid << " " << this->auth.username << " " << this->auth.cookie << "\r\n";
-            this->write(buf_);
-            this->addCallback(&SwitchboardServerConnection::callback_InviteUsers, trid, NULL);
+            buf_ << "USR " << this->trID << " " << this->auth.username << " " << this->auth.cookie << "\r\n";
+            if (this->write(buf_) != buf_.str().size())
+                return;
+            this->addCallback(&SwitchboardServerConnection::callback_InviteUsers, this->trID, NULL);
         } 
         else
         {
-            buf_ << "ANS " << trid << " " << this->auth.username << " " << this->auth.cookie << " " << this->auth.sessionID << "\r\n";
-            this->write(buf_);
-            ext::gotNewConnection(this);
-            this->addCallback(&SwitchboardServerConnection::callback_AnsweredCall, trid, NULL);
+            buf_ << "ANS " << this->trID << " " << this->auth.username << " " << this->auth.cookie << " " << this->auth.sessionID << "\r\n";
+            if (this->write(buf_) != buf_.str().size())
+                return;
+            this->myNotificationServer()->externalCallbacks.gotNewConnection(this);
+            this->addCallback(&SwitchboardServerConnection::callback_AnsweredCall, this->trID, NULL);
         }
         
-        trid++;    
+        this->trID++;    
     }
     
     void SwitchboardServerConnection::disconnect()
     {
-        assert(connectionStatus != SB_DISCONNECTED);
+        this->assertConnectionStateIsNot(SB_DISCONNECTED);
         notificationServer.removeSwitchboardConnection(this);
-        ext::closingConnection(this);
+        this->myNotificationServer()->externalCallbacks.closingConnection(this);
         
         std::list<FileTransferConnection *> list = _fileTransferConnections;
         std::list<FileTransferConnection *>::iterator i = list.begin();
@@ -338,22 +342,23 @@ public:
         {
             removeFileTransferConnection(*i);
         }
+        this->callbacks.clear();
         Connection::disconnect();
-        connectionStatus = SB_DISCONNECTED;
+        this->setConnectionState(SB_DISCONNECTED);
     }    
     
     void SwitchboardServerConnection::socketConnectionCompleted()
     {
-        assert(connectionStatus == SB_CONNECTING);
+        this->assertConnectionStateIs(SB_CONNECTING);
         Connection::socketConnectionCompleted();
-        ext::unregisterSocket(this->sock);
-        ext::registerSocket(this->sock, 1, 0);
-        connectionStatus = SB_WAITING_FOR_USERS;
+        this->myNotificationServer()->externalCallbacks.unregisterSocket(this->sock);
+        this->myNotificationServer()->externalCallbacks.registerSocket(this->sock, 1, 0);
+        this->setConnectionState(SB_WAITING_FOR_USERS);
     }
     
     void SwitchboardServerConnection::handleIncomingData()
     {
-        assert(connectionStatus >= SB_CONNECTED);        
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);        
         while (this->isWholeLineAvailable())
         {                
             std::vector<std::string> args = this->getLine();
@@ -397,7 +402,7 @@ public:
     
     void SwitchboardServerConnection::callback_InviteUsers(std::vector<std::string> & args, int trid, void *)
     {    
-        assert(connectionStatus >= SB_CONNECTED);
+        this->assertConnectionStateIsAtLeast(SB_CONNECTED);
         this->removeCallback(trid);
         
         if (args[2] != "OK")
@@ -407,13 +412,13 @@ public:
             return;
         }
         
-        ext::gotSwitchboard(this, this->auth.tag);
-        ext::gotNewConnection(this);
+        this->myNotificationServer()->externalCallbacks.gotSwitchboard(this, this->auth.tag);
+        this->myNotificationServer()->externalCallbacks.gotNewConnection(this);
     }
     
     void SwitchboardServerConnection::callback_AnsweredCall(std::vector<std::string> & args, int trid, void * data)
     {
-        assert(connectionStatus == SB_WAITING_FOR_USERS);        
+        this->assertConnectionStateIs(SB_WAITING_FOR_USERS);        
         if (args.size() >= 3 && args[0] == "ANS" && args[2] == "OK")
             return;
         
@@ -431,23 +436,23 @@ public:
                 return;
             
             this->users.push_back(args[4]);
-            ext::buddyJoinedConversation(this, args[4], decodeURL(args[5]), 1);
+            this->myNotificationServer()->externalCallbacks.buddyJoinedConversation(this, args[4], decodeURL(args[5]), 1);
             if (args[2] == args[3])
             {
                 this->removeCallback(trid);
-                connectionStatus = SB_READY;
+                this->setConnectionState(SB_READY);
             }
         }
     }
     
     FileTransferInvitation *SwitchboardServerConnection::sendFile(const std::string path)
     {
-        assert(connectionStatus == SB_READY);        
+        this->assertConnectionStateIs(SB_READY);        
         struct stat st_info;
         
         if (stat(path.c_str(), &st_info) < 0)
         { 
-            ext::showError(this, "Could not open file"); 
+            this->myNotificationServer()->externalCallbacks.showError(this, "Could not open file"); 
             return NULL; 
         }
         
@@ -486,7 +491,7 @@ public:
         
         delete msg;
         
-        ext::fileTransferProgress(inv, "Negotiating connection", 0, 0);
+        this->myNotificationServer()->externalCallbacks.fileTransferProgress(inv, "Negotiating connection", 0, 0);
         
         return inv;
     }

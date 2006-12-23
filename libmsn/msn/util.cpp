@@ -21,7 +21,7 @@
  */
 
 #include <msn/util.h>
-#include <cerrno>
+#include <errno.h>
 #include <cctype>
 
 namespace MSN 

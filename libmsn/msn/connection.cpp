@@ -25,19 +25,23 @@
 #include <msn/util.h>
 #include <msn/passport.h>
 #include <msn/externals.h>
+#include <msn/notificationserver.h>
 
 #ifndef WIN32
-#include <sys/socket.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/socket.h>
 #else
 #include <winsock.h>
 #include <io.h>
 #endif
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <cerrno>
 #include <time.h>
 #include <cassert>
-#include <cerrno>
 
 namespace MSN
 {
@@ -45,7 +49,7 @@ namespace MSN
     static std::vector<std::string> errors;
 
     Connection::Connection() 
-        : sock(0), connected(false), trid(1), user_data(NULL)
+        : sock(0), connected(false), trID(1), user_data(NULL)
     {
         srand((unsigned int) time(NULL));
 
@@ -112,15 +116,19 @@ namespace MSN
     
     void Connection::disconnect()
     {
-        ext::unregisterSocket(this->sock);
+        this->myNotificationServer()->externalCallbacks.unregisterSocket(this->sock);
         ::close(this->sock);
+        this->sock = -1;
+        this->writeBuffer.erase();
+        this->readBuffer.erase();
+        this->trID = 1;
     }
     
     std::vector<std::string> Connection::getLine()
     {
         assert(this->isWholeLineAvailable());
         std::string s = this->readBuffer.substr(0, this->readBuffer.find("\r\n"));
-        ext::log(0, (s + "\n").c_str());
+        this->myNotificationServer()->externalCallbacks.log(0, (s + "\n").c_str());
         return splitString(s, " ");
     }
     
@@ -131,7 +139,7 @@ namespace MSN
     
     void Connection::errorOnSocket(int errno_)
     {
-        ext::showError(this, strerror(errno_));
+        this->myNotificationServer()->externalCallbacks.showError(this, strerror(errno_));
         this->disconnect();
     }
     
@@ -140,8 +148,8 @@ namespace MSN
         this->connected = true;
         
         // We know that we are connected, so this will try writing to the network.
-        this->write(this->writeBuffer, 1);
-        this->writeBuffer = "";
+        size_t writtenLength = this->write(this->writeBuffer, 1);
+        this->writeBuffer = this->writeBuffer.substr(writtenLength);
     }
         
     size_t Connection::write(std::string s, bool log) throw (std::runtime_error)
@@ -151,12 +159,12 @@ namespace MSN
         else
         {
             if (log)
-                ext::log(1, s.c_str());
+                this->myNotificationServer()->externalCallbacks.log(1, s.c_str());
             
             size_t written = 0;
             while (written < s.size())
             {
-                size_t newWritten = ::write(this->sock, s.substr(written).c_str(), (int) (s.size() - written));
+                size_t newWritten = ::send(this->sock, s.substr(written).c_str(), (int) (s.size() - written), 0);
                 if (newWritten <= 0)
                 {
                     if (errno == EAGAIN)
@@ -167,7 +175,10 @@ namespace MSN
                 written += newWritten;
             }
             if (written != s.size())
-                throw std::runtime_error(strerror(errno));
+            {
+                this->errorOnSocket(errno);
+                return written;
+            }
         }
         return s.size();
     }
@@ -176,27 +187,29 @@ namespace MSN
     {
         std::string s = ss.str();
         size_t result = write(s, log);
-        ss.clear();
         return result;        
     }
         
     void Connection::dataArrivedOnSocket()
     {
         char tempReadBuffer[8192];
-        int amountRead = ::read(this->sock, &tempReadBuffer, 8192);
+        int amountRead = ::recv(this->sock, &tempReadBuffer, 8192, 0);
         if (amountRead < 0)
         {
+            if (errno == EAGAIN)
+                return;
+            
             // We shouldn't get EAGAIN here because dataArrivedOnSocket
             // is only called when select/poll etc has told us that
             // the socket is readable.
-            assert(errno != EAGAIN);
+            // assert(errno != EAGAIN);
             
-            ext::showError(this, strerror(errno));                
+            this->myNotificationServer()->externalCallbacks.showError(this, strerror(errno));                
             this->disconnect();            
         }
         else if (amountRead == 0)
         {
-            ext::showError(this, "Connection closed by remote endpoint.");
+            this->myNotificationServer()->externalCallbacks.showError(this, "Connection closed by remote endpoint.");
             this->disconnect();
         }
         else
@@ -208,7 +221,7 @@ namespace MSN
             }
             catch (std::exception & e)
             {
-                ext::showError(this, e.what());
+                this->myNotificationServer()->externalCallbacks.showError(this, e.what());
             }
         }
     }
@@ -244,7 +257,7 @@ namespace MSN
     {
         Message msg = Message(body, mime);
         
-        ext::gotInstantMessage(static_cast<SwitchboardServerConnection *>(this),
+        this->myNotificationServer()->externalCallbacks.gotInstantMessage(static_cast<SwitchboardServerConnection *>(this),
                                args[1], decodeURL(args[2]), &msg);
     }
     
@@ -265,7 +278,7 @@ namespace MSN
         if (! unreadFolder.empty())
             unreadFolderCount = decimalFromString(unreadFolder);
         
-        ext::gotInitialEmailNotification(this, unreadInboxCount, unreadFolderCount);
+        this->myNotificationServer()->externalCallbacks.gotInitialEmailNotification(this, unreadInboxCount, unreadFolderCount);
     }
 
     
@@ -277,7 +290,7 @@ namespace MSN
         std::string from = headers["From-Addr"];
         std::string subject = headers["Subject"];
         
-        ext::gotNewEmailNotification(this, from, subject);
+        this->myNotificationServer()->externalCallbacks.gotNewEmailNotification(this, from, subject);
     }
 
     
@@ -288,13 +301,13 @@ namespace MSN
 
     void Connection::message_typing_user(std::vector<std::string> & args, std::string mime, std::string body)
     {
-        ext::buddyTyping(this, args[1], decodeURL(args[2]));        
+        this->myNotificationServer()->externalCallbacks.buddyTyping(this, args[1], decodeURL(args[2]));        
     }   
     
     void Connection::showError(int errorCode)
     {
         std::ostringstream buf_;
-        buf_ << "An error has occurred while communicating with the MSN Messenger server: " << errors[errorCode] << " (code " << errorCode << ")";
-        ext::showError(this, buf_.str());        
+        buf_ << "Error code: " << errorCode << " (" << errors[errorCode] << ")";
+        this->myNotificationServer()->externalCallbacks.showError(this, buf_.str());        
     }
 }

@@ -27,15 +27,15 @@
 #include <list>
 #include <msn/switchboardserver.h>
 
-/** \mainpage libmsn 3.1.1 Reference
+/** \mainpage libmsn 3.2 Reference
  *
  * <code>libmsn</code> is a C++ library for Microsoft's MSN Messenger service. It
  * provides a high-level interface that allows an application to access instant
  * messaging features with ease.  For more information, please visit the
- * <a href='http://libmsn.bluewire.org.nz'><code>libmsn</code></a> homepage.
+ * <a href='http://libmsn.bdash.net.nz'><code>libmsn</code></a> homepage.
  *
  * It is recommended that you read the
- * <a href='http://libmsn.bluewire.org.nz/overview.php'>library overview</a>
+ * <a href='http://libmsn.bdash.net.nz/overview.php'>library overview</a>
  * before reading the reference documentation.  The library overview will
  * familiarise you with the architecture and core data-types of <code>libmsn</code>,
  * and will make the reference documentation much more understandable.
