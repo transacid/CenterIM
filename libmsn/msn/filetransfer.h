@@ -164,9 +164,9 @@ public:
         virtual void socketIsWritable();
         virtual void socketConnectionCompleted();
         virtual void dataArrivedOnSocket();
+        virtual NotificationServerConnection *myNotificationServer() { return switchboardConnection()->myNotificationServer(); };        
 protected:
         virtual void handleIncomingData();
-
 private:
         void handleSend();
         void handleReceive();

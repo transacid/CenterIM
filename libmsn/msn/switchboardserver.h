@@ -28,6 +28,7 @@
 #include <msn/connection.h>
 #include <msn/passport.h>
 #include <string>
+#include <cassert>
 
 namespace MSN
 {
@@ -40,6 +41,8 @@ namespace MSN
      */
     class SwitchboardServerConnection : public Connection
     {
+        friend class FileTransferConnection;        
+        friend class FileTransferInvitation;
 private:
         typedef void (SwitchboardServerConnection::*SwitchboardServerCallback)(std::vector<std::string> & args, int trid, void *);
 public:
@@ -141,10 +144,16 @@ public:
             SB_READY
         };
         
-        SwitchboardServerState connectionState() const { return this->connectionStatus; };
+        SwitchboardServerState connectionState() const { return this->_connectionState; };
+        virtual NotificationServerConnection *myNotificationServer() { return &notificationServer; };        
 protected:
         virtual void handleIncomingData();
-        SwitchboardServerState connectionStatus;
+        SwitchboardServerState _connectionState;
+
+        void setConnectionState(SwitchboardServerState s) { this->_connectionState = s; };
+        void assertConnectionStateIs(SwitchboardServerState s) { assert(this->_connectionState == s); };
+        void assertConnectionStateIsNot(SwitchboardServerState s) { assert(this->_connectionState != s); };
+        void assertConnectionStateIsAtLeast(SwitchboardServerState s) { assert(this->_connectionState >= s); };
 private:
         NotificationServerConnection & notificationServer;
         std::list<FileTransferConnection *> _fileTransferConnections;

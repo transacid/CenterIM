@@ -35,6 +35,7 @@ namespace MSN
     class callback;
     class Message;
     class Passport;
+    class NotificationServerConnection;
     
     /** An abstract base class that represents a connection to another computer.
      *
@@ -68,7 +69,7 @@ public:
 protected:
         /** The transaction ID of the next command to be sent.
          */
-        int trid;
+        int trID;
         
         std::string readBuffer;
 public: 
@@ -143,6 +144,8 @@ public:
         /** Is this Connection connected to a remote endpoint?
          */
         bool isConnected() { return this->connected; };
+        virtual NotificationServerConnection *myNotificationServer() = 0;        
+
 protected:
          /** Process a @c <code>MSG</code> command.
           *

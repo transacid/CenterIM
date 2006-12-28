@@ -86,7 +86,7 @@ static MSN::BuddyStatus stat2buddy(imstatus st) {
 
 // ----------------------------------------------------------------------------
 
-msnhook::msnhook(): abstracthook(msn), conn() {
+msnhook::msnhook(): abstracthook(msn), conn(cb) {
     ourstatus = offline;
     fonline = false;
     destroying = false;
@@ -605,19 +605,19 @@ static void log(const string &s) {
 	face.log(s);
 }
 
-void MSN::ext::log(int writing, const char* buf) {
+void msncallbacks::log(int writing, const char* buf) {
     string pref = writing ? "OUT" : "IN";
     ::log((string) "[" + pref + "] " + buf);
 }
 
-void MSN::ext::registerSocket(int s, int reading, int writing) {
-    ::log("MSN::ext::registerSocket");
+void msncallbacks::registerSocket(int s, int reading, int writing) {
+    ::log("msncallbacks::registerSocket");
     if(reading) mhook.rfds.push_back(s);
     if(writing) mhook.wfds.push_back(s);
 }
 
-void MSN::ext::unregisterSocket(int s) {
-    ::log("MSN::ext::unregisterSocket");
+void msncallbacks::unregisterSocket(int s) {
+    ::log("msncallbacks::unregisterSocket");
     vector<int>::iterator i;
 
     i = find(mhook.rfds.begin(), mhook.rfds.end(), s);
@@ -627,14 +627,14 @@ void MSN::ext::unregisterSocket(int s) {
     if(i != mhook.wfds.end()) mhook.wfds.erase(i);
 }
 
-void MSN::ext::gotFriendlyName(MSN::Connection * conn, string friendlyname) {
-    ::log("MSN::ext::gotFriendlyName");
+void msncallbacks::gotFriendlyName(MSN::Connection * conn, string friendlyname) {
+    ::log("msncallbacks::gotFriendlyName");
     if(!friendlyname.empty())
 	mhook.friendlynicks[conf.getourid(msn).nickname] = friendlyname;
 }
 
-void MSN::ext::gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data) {
-    ::log("MSN::ext::gotBuddyListInfo");
+void msncallbacks::gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data) {
+    ::log("msncallbacks::gotBuddyListInfo");
     imcontact ic;
     bool found;
 
@@ -689,20 +689,20 @@ void MSN::ext::gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::L
     face.update();
 }
 
-void MSN::ext::gotLatestListSerial(MSN::Connection * conn, int serial) {
-    ::log("MSN::ext::gotLatestListSerial");
+void msncallbacks::gotLatestListSerial(MSN::Connection * conn, int serial) {
+    ::log("msncallbacks::gotLatestListSerial");
 }
 
-void MSN::ext::gotGTC(MSN::Connection * conn, char c) {
-    ::log("MSN::ext::gotGTC");
+void msncallbacks::gotGTC(MSN::Connection * conn, char c) {
+    ::log("msncallbacks::gotGTC");
 }
 
-void MSN::ext::gotBLP(MSN::Connection * conn, char c) {
-    ::log("MSN::ext::gotBLP");
+void msncallbacks::gotBLP(MSN::Connection * conn, char c) {
+    ::log("msncallbacks::gotBLP");
 }
 
-void MSN::ext::gotNewReverseListEntry(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname) {
-    ::log("MSN::ext::gotNewReverseListEntry");
+void msncallbacks::gotNewReverseListEntry(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname) {
+    ::log("msncallbacks::gotNewReverseListEntry");
 
     try {
 	mhook.conn.addToList("AL", buddy);
@@ -714,13 +714,13 @@ void MSN::ext::gotNewReverseListEntry(MSN::Connection * conn, MSN::Passport budd
     em.store(imnotification(ic, _("The user has added you to his/her contact list")));
 }
 
-void MSN::ext::addedListEntry(MSN::Connection * conn, string lst, MSN::Passport buddy, int groupID) {
-    ::log("MSN::ext::addedListEntry");
+void msncallbacks::addedListEntry(MSN::Connection * conn, string lst, MSN::Passport buddy, int groupID) {
+    ::log("msncallbacks::addedListEntry");
     mhook.slst[lst].push_back(msnbuddy(buddy, "", groupID));
 }
 
-void MSN::ext::removedListEntry(MSN::Connection * conn, string lst, MSN::Passport buddy, int groupID) {
-    ::log("MSN::ext::removedListEntry");
+void msncallbacks::removedListEntry(MSN::Connection * conn, string lst, MSN::Passport buddy, int groupID) {
+    ::log("msncallbacks::removedListEntry");
     vector<msnbuddy>::iterator i = mhook.slst[lst].begin();
     while(i != mhook.slst[lst].end()) {
 	if(i->nick == buddy) {
@@ -732,22 +732,22 @@ void MSN::ext::removedListEntry(MSN::Connection * conn, string lst, MSN::Passpor
     }
 }
 
-void MSN::ext::showError(MSN::Connection * conn, string msg) {
+void msncallbacks::showError(MSN::Connection * conn, string msg) {
     ::log(msg);
 }
 
-void MSN::ext::buddyChangedStatus(MSN::Connection * conn, MSN::Passport buddy, string friendlyname, MSN::BuddyStatus state) {
-    ::log("MSN::ext::buddyChangedStatus");
+void msncallbacks::buddyChangedStatus(MSN::Connection * conn, MSN::Passport buddy, string friendlyname, MSN::BuddyStatus state) {
+    ::log("msncallbacks::buddyChangedStatus");
     mhook.statusupdate(buddy, friendlyname, buddy2stat(state));
 }
 
-void MSN::ext::buddyOffline(MSN::Connection * conn, MSN::Passport buddy) {
-    ::log("MSN::ext::buddyOffline");
+void msncallbacks::buddyOffline(MSN::Connection * conn, MSN::Passport buddy) {
+    ::log("msncallbacks::buddyOffline");
     mhook.statusupdate(buddy, "", offline);
 }
 
-void MSN::ext::gotSwitchboard(MSN::SwitchboardServerConnection * conn, const void * tag) {
-    ::log("MSN::ext::gotSwitchboard");
+void msncallbacks::gotSwitchboard(MSN::SwitchboardServerConnection * conn, const void * tag) {
+    ::log("msncallbacks::gotSwitchboard");
 
     if(tag) {
 	const msnhook::qevent *ctx = static_cast<const msnhook::qevent *>(tag);
@@ -755,8 +755,8 @@ void MSN::ext::gotSwitchboard(MSN::SwitchboardServerConnection * conn, const voi
     }
 }
 
-void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial) {
-    ::log("MSN::ext::buddyJoinedConversation");
+void msncallbacks::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, int is_initial) {
+    ::log("msncallbacks::buddyJoinedConversation");
     if(conn->auth.tag) {
 	const msnhook::qevent *ctx = static_cast<const msnhook::qevent *>(conn->auth.tag);
 	mhook.lconn[ctx->nick] = conn;
@@ -765,12 +765,12 @@ void MSN::ext::buddyJoinedConversation(MSN::SwitchboardServerConnection * conn, 
     }
 }
 
-void MSN::ext::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy) {
-    ::log("MSN::ext::buddyLeftConversation");
+void msncallbacks::buddyLeftConversation(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy) {
+    ::log("msncallbacks::buddyLeftConversation");
 }
 
-void MSN::ext::gotInstantMessage(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, MSN::Message * msg) {
-    ::log("MSN::ext::gotInstantMessage");
+void msncallbacks::gotInstantMessage(MSN::SwitchboardServerConnection * conn, MSN::Passport buddy, std::string friendlyname, MSN::Message * msg) {
+    ::log("msncallbacks::gotInstantMessage");
     imcontact ic(nicktodisp(buddy), msn);
 
     mhook.checkinlist(ic);
@@ -779,30 +779,30 @@ void MSN::ext::gotInstantMessage(MSN::SwitchboardServerConnection * conn, MSN::P
     em.store(immessage(ic, imevent::incoming, text));
 }
 
-void MSN::ext::failedSendingMessage(MSN::Connection * conn) {
-    ::log("MSN::ext::failedSendingMessage");
+void msncallbacks::failedSendingMessage(MSN::Connection * conn) {
+    ::log("msncallbacks::failedSendingMessage");
 }
 
-void MSN::ext::buddyTyping(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname) {
-    ::log("MSN::ext::buddyTyping");
+void msncallbacks::buddyTyping(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname) {
+    ::log("msncallbacks::buddyTyping");
     icqcontact *c = clist.get(imcontact(nicktodisp(buddy), msn));
     if(c) c->setlasttyping(timer_current);
 }
 
-void MSN::ext::gotInitialEmailNotification(MSN::Connection * conn, int unread_inbox, int unread_folders) {
-    ::log("MSN::ext::gotInitialEmailNotification");
+void msncallbacks::gotInitialEmailNotification(MSN::Connection * conn, int unread_inbox, int unread_folders) {
+    ::log("msncallbacks::gotInitialEmailNotification");
     face.log(_("+ [msn] unread e-mail: %d in inbox, %d in folders"),
 	unread_inbox, unread_folders);
 }
 
-void MSN::ext::gotNewEmailNotification(MSN::Connection * conn, string from, string subject) {
-    ::log("MSN::ext::gotNewEmailNotification");
+void msncallbacks::gotNewEmailNotification(MSN::Connection * conn, string from, string subject) {
+    ::log("msncallbacks::gotNewEmailNotification");
     face.log(_("+ [msn] e-mail from %s, %s"), from.c_str(), subject.c_str());
     clist.get(contactroot)->playsound(imevent::email);
 }
 
-void MSN::ext::gotFileTransferInvitation(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname, MSN::FileTransferInvitation * inv) {
-    ::log("MSN::ext::gotFileTransferInvitation");
+void msncallbacks::gotFileTransferInvitation(MSN::Connection * conn, MSN::Passport buddy, std::string friendlyname, MSN::FileTransferInvitation * inv) {
+    ::log("msncallbacks::gotFileTransferInvitation");
     if(!mhook.fcapabs.count(hookcapab::files))
 	return;
 
@@ -821,8 +821,8 @@ void MSN::ext::gotFileTransferInvitation(MSN::Connection * conn, MSN::Passport b
     face.transferupdate(inv->fileName, fr, icqface::tsInit, inv->fileSize, 0);
 }
 
-void MSN::ext::fileTransferProgress(MSN::FileTransferInvitation * inv, string status, unsigned long recv, unsigned long total) {
-    ::log("MSN::ext::fileTransferProgress");
+void msncallbacks::fileTransferProgress(MSN::FileTransferInvitation * inv, string status, unsigned long recv, unsigned long total) {
+    ::log("msncallbacks::fileTransferProgress");
     imfile fr;
 
     if(mhook.getfevent(inv, fr)) {
@@ -831,8 +831,8 @@ void MSN::ext::fileTransferProgress(MSN::FileTransferInvitation * inv, string st
     }
 }
 
-void MSN::ext::fileTransferFailed(MSN::FileTransferInvitation * inv, int error, string message) {
-    ::log("MSN::ext::fileTransferFailed");
+void msncallbacks::fileTransferFailed(MSN::FileTransferInvitation * inv, int error, string message) {
+    ::log("msncallbacks::fileTransferFailed");
     imfile fr;
 
     if(mhook.getfevent(inv, fr)) {
@@ -841,8 +841,8 @@ void MSN::ext::fileTransferFailed(MSN::FileTransferInvitation * inv, int error, 
     }
 }
 
-void MSN::ext::fileTransferSucceeded(MSN::FileTransferInvitation * inv) {
-    ::log("MSN::ext::fileTransferSucceeded");
+void msncallbacks::fileTransferSucceeded(MSN::FileTransferInvitation * inv) {
+    ::log("msncallbacks::fileTransferSucceeded");
     imfile fr;
 
     if(mhook.getfevent(inv, fr)) {
@@ -851,14 +851,14 @@ void MSN::ext::fileTransferSucceeded(MSN::FileTransferInvitation * inv) {
     }
 }
 
-void MSN::ext::gotNewConnection(MSN::Connection * conn) {
-    ::log("MSN::ext::gotNewConnection");
+void msncallbacks::gotNewConnection(MSN::Connection * conn) {
+    ::log("msncallbacks::gotNewConnection");
     if(dynamic_cast<MSN::NotificationServerConnection *>(conn))
 	dynamic_cast<MSN::NotificationServerConnection *>(conn)->synchronizeLists();
 }
 
-void MSN::ext::closingConnection(MSN::Connection * conn) {
-    ::log("MSN::ext::closingConnection");
+void msncallbacks::closingConnection(MSN::Connection * conn) {
+    ::log("msncallbacks::closingConnection");
 
     MSN::SwitchboardServerConnection *swc;
 
@@ -894,12 +894,12 @@ void MSN::ext::closingConnection(MSN::Connection * conn) {
     unregisterSocket(conn->sock);
 }
 
-void MSN::ext::changedStatus(MSN::Connection * conn, MSN::BuddyStatus state) {
-    ::log("MSN::ext::changedStatus");
+void msncallbacks::changedStatus(MSN::Connection * conn, MSN::BuddyStatus state) {
+    ::log("msncallbacks::changedStatus");
 }
 
-int MSN::ext::connectToServer(string server, int port, bool *connected) {
-    ::log("MSN::ext::connectToServer");
+int msncallbacks::connectToServer(string server, int port, bool *connected) {
+    ::log("msncallbacks::connectToServer");
     struct sockaddr_in sa;
     struct hostent *hp;
     int a, s;
@@ -936,8 +936,8 @@ int MSN::ext::connectToServer(string server, int port, bool *connected) {
     return s;
 }
 
-int MSN::ext::listenOnPort(int port) {
-    ::log("MSN::ext::listenOnPort");
+int msncallbacks::listenOnPort(int port) {
+    ::log("msncallbacks::listenOnPort");
     int s;
     struct sockaddr_in addr;
 
@@ -956,8 +956,8 @@ int MSN::ext::listenOnPort(int port) {
     return s;
 }
 
-string MSN::ext::getOurIP() {
-    ::log("MSN::ext::getOurIP");
+string msncallbacks::getOurIP() {
+    ::log("msncallbacks::getOurIP");
     struct hostent *hn;
     char buf2[1024];
 
@@ -967,13 +967,13 @@ string MSN::ext::getOurIP() {
     return inet_ntoa(*((struct in_addr*) hn->h_addr));
 }
 
-string MSN::ext::getSecureHTTPProxy() {
-    ::log("MSN::ext::getSecureHTTPProxy");
+string msncallbacks::getSecureHTTPProxy() {
+    ::log("msncallbacks::getSecureHTTPProxy");
     return "";
 }
 
-void MSN::ext::addedGroup(MSN::Connection * conn, string groupName, int groupID) {
-    ::log("MSN::ext::addedGroup");
+void msncallbacks::addedGroup(MSN::Connection * conn, string groupName, int groupID) {
+    ::log("msncallbacks::addedGroup");
     int i;
     icqcontact *c;
 
@@ -994,13 +994,13 @@ void MSN::ext::addedGroup(MSN::Connection * conn, string groupName, int groupID)
     }
 }
 
-void MSN::ext::renamedGroup(MSN::Connection * conn, int groupID, string newGroupName) {
-    ::log("MSN::ext::renamedGroup");
+void msncallbacks::renamedGroup(MSN::Connection * conn, int groupID, string newGroupName) {
+    ::log("msncallbacks::renamedGroup");
     mhook.mgroups[groupID] = newGroupName;
 }
 
-void MSN::ext::removedGroup(MSN::Connection * conn, int groupID) {
-    ::log("MSN::ext::removedGroup");
+void msncallbacks::removedGroup(MSN::Connection * conn, int groupID) {
+    ::log("msncallbacks::removedGroup");
     mhook.mgroups.erase(groupID);
 }
 

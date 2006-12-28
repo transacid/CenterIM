@@ -29,6 +29,7 @@
 #include <msn/buddy.h>
 #include <msn/passport.h>
 #include <stdexcept>
+#include <msn/externals.h>
 
 namespace MSN
 {    
@@ -154,15 +155,15 @@ public:
 public:
         /** Create a NotificationServerConnection with the specified authentication data
          */
-        NotificationServerConnection(AuthData & auth_);
+        NotificationServerConnection(AuthData & auth_, Callbacks & cb);
         
         /** Create a NotificationServerConnection with the specified @a username and 
          *  @a password.
          */
-        NotificationServerConnection(Passport username, std::string password);
+        NotificationServerConnection(Passport username, std::string password, Callbacks & cb);
         
         /** Create a NotificationServerConnection with no specified username or password. */
-        NotificationServerConnection();
+        NotificationServerConnection(Callbacks & cb);
         
         virtual ~NotificationServerConnection();
         virtual void dispatchCommand(std::vector<std::string> & args);
@@ -283,11 +284,17 @@ public:
             NS_ONLINE
         };
 
-        NotificationServerState connectionState() const { return this->connectionStatus; };
+        NotificationServerState connectionState() const { return this->_connectionState; };
+        Callbacks & externalCallbacks;
+        virtual NotificationServerConnection *myNotificationServer() { return this; };        
 protected:
         virtual void handleIncomingData();
-        NotificationServerState connectionStatus;
-
+        NotificationServerState _connectionState;
+        
+        void setConnectionState(NotificationServerState s) { this->_connectionState = s; };
+        void assertConnectionStateIs(NotificationServerState s) { assert(this->_connectionState == s); };
+        void assertConnectionStateIsNot(NotificationServerState s) { assert(this->_connectionState != s); };
+        void assertConnectionStateIsAtLeast(NotificationServerState s) { assert(this->_connectionState >= s); };        
 private:
         std::list<SwitchboardServerConnection *> _switchboardConnections;
         std::map<int, std::pair<NotificationServerCallback, void *> > callbacks;
