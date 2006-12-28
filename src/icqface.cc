@@ -747,27 +747,48 @@ void icqface::fillcontactlist() {
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
-		c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
+		    c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+		    c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {
-	    char *fmt = "%s[%c]%s%s ";
 
-	    if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
-	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c}%s%s ";
+	    if(conf.getcolormode() == icqconf::cmstatus) {
+		char *fmt = "%s[%s]%s%s ";
 
-	    char shortstatus = c->getshortstatus();
+		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%s>%s%s "; else
+		    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%s}%s%s ";
 
-	    if(c->getlasttyping()) {
-		if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
+		std::string protoletter = getprotocolchar(c->getdesc().pname);
+
+		if(c->getlasttyping()) {
+		    if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
+		    else protoletter.append("T");
+		}
+
+		mcontacts->addleaff(nnode,
+			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), protoletter.c_str(),
+			c->getpostponed().empty() ? " " : ">", dnick.c_str());
+
+	    } else {
+		char *fmt = "%s[%c]%s%s ";
+
+		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
+		    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c}%s%s ";
+
+		char shortstatus = c->getshortstatus();
+
+		if(c->getlasttyping()) {
+		    if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
 		    else shortstatus = 'T';
+		}
+
+		mcontacts->addleaff(nnode,
+			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
+			c->getpostponed().empty() ? " " : ">", dnick.c_str());
+
 	    }
-
-	    mcontacts->addleaff(nnode,
-		c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
-		c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
-		c->getpostponed().empty() ? " " : ">", dnick.c_str());
-
 	}
     }
 
@@ -3351,6 +3372,17 @@ int icqface::findpgpkeys(dialogbox &db, int k) {
     }
 
     return -1;
+}
+
+string icqface::getprotocolchar(protocolname pname) const {
+    static const string pprefixes[protocolname_size] = {
+	"i", "y", "m", "a", "#", "j", "r", "l", "g", "n"
+    };
+
+    if(pname > protocolname_size)
+      return "x";
+
+    return pprefixes[pname];
 }
 
 int icqface::historykeys(dialogbox &db, int k) {
