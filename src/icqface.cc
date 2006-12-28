@@ -3207,7 +3207,7 @@ string icqface::action2key(int a, int s, int n) const {
     else if(icqconf::keys[i].key == 9)
 	return "tab";
     else if(icqconf::keys[i].key == 27)
-	return "esc";
+	return "esc-esc";
     else if(icqconf::keys[i].key == 331)
 	return "insert";
     else if(icqconf::keys[i].key == KEY_DC)
