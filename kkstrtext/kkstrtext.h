@@ -87,7 +87,7 @@ vector<int> getsymbolpositions(const string &haystack,
     { \
 	va_list vgs__ap; char vgs__buf[1024]; \
 	va_start(vgs__ap, fmt); \
-	vsprintf(vgs__buf, fmt, vgs__ap); c = vgs__buf; \
+	vsnprintf(vgs__buf, 1024, fmt, vgs__ap); c = vgs__buf; \
 	va_end(vgs__ap); \
     }
 
