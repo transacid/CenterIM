@@ -907,8 +907,8 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
 	    r += soutbuf;
 	    text.erase(0, text.size()-inleft);
 
-	    delete soutbuf;
-	    delete sinbuf;
+	    delete[] soutbuf;
+	    free(sinbuf);
 
 	    if(res == -1 && errno != EILSEQ)
 		break;
