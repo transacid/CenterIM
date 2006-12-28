@@ -428,6 +428,7 @@ void icqconf::loadmainconfig() {
 	mailcheck = askaway = false;
 	savepwd = bidi = true;
 	setsmtphost("");
+	setbrowser("");
 	setpeertopeer(0, 65535);
 
 	while(!f.eof()) {
@@ -450,6 +451,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "protocolormode") cm = icqconf::cmproto; else
 	    if(param == "statuscolormode") cm = icqconf::cmstatus; else
 	    if(param == "smtp") setsmtphost(buf); else
+	    if(param == "browser") setbrowser(browser); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "proxy_connect") proxyconnect = true; else
@@ -552,6 +554,7 @@ void icqconf::save() {
 	    if(logonline) f << "logonline" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << getsmtpport() << endl;
+	    f << "browser\t" << getbrowser() << endl;
 
 	    if(!gethttpproxyhost().empty())
 		if (!gethttpproxyuser().empty())
@@ -796,16 +799,12 @@ void icqconf::loadsounds() {
 }
 
 void icqconf::loadactions() {
-    string fname = getconfigfname("actions"), buf, name, browser;
+    string fname = getconfigfname("actions"), buf, name;
     ifstream f;
     bool cont;
 
     if(access(fname.c_str(), F_OK)) {
 	buf = getenv("PATH") ? getenv("PATH") : "";
-
-	if(pathfind(browser = "mozilla", buf, X_OK).empty()) {
-	    browser = "netscape";
-	}
 
 	ofstream of(fname.c_str());
 
@@ -1448,6 +1447,13 @@ void icqconf::initmultiproto(bool p[], string buf, bool excludenochat) {
     }
 }
 
+void icqconf::setbrowser(const string &abrowser) {
+  if (!abrowser.empty())
+    browser = abrowser;
+  else
+    browser = "mozilla";
+}
+
 void icqconf::setsmtphost(const string &asmtphost) {
     int pos;
 
@@ -1498,6 +1504,10 @@ void icqconf::sethttpproxyhost(const string &ahttpproxyhost) {
     }
 
     setproxy();
+}
+
+string icqconf::getbrowser() const {
+  return browser.empty() ? "mozilla" : browser;
 }
 
 string icqconf::getsmtphost() const {

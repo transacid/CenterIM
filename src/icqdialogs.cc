@@ -1091,6 +1091,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     string tmp, phidden;
 
     string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
+    string browser = conf.getbrowser();
 
     bool quote = conf.getquote();
     bool savepwd = conf.getsavepwd();
@@ -1235,6 +1236,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
+	t.addleaff(i, 0, 31, _(" HTTP browser : %s "), browser.c_str());
 	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
 
 	if(!httpproxy.empty())
@@ -1377,6 +1379,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 30:
 			cm = (cm == icqconf::cmproto ? icqconf::cmstatus : icqconf::cmproto );
+		    case 31:
+		        tmp = inputstr(_("HTTP browser to use: "), browser);
+			if(!tmp.empty()) browser = browser;
+		        break;
 		}
 		break;
 	    case 1:
@@ -1415,6 +1421,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setcolormode(cm);
 
 		conf.setsmtphost(smtp);
+		conf.setbrowser(browser);
 		conf.sethttpproxyhost(httpproxy);
 		conf.save();
 		break;

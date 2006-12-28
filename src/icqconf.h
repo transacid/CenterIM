@@ -148,7 +148,7 @@ class icqconf {
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
 	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
-	    fromcharset, tocharset;
+	    fromcharset, tocharset, browser;
 
 	map<string, string> actions;
 
@@ -258,6 +258,9 @@ class icqconf {
 	string getsmtphost() const;
 	unsigned int getsmtpport() const;
 	void setsmtphost(const string &asmtphost);
+
+	string getbrowser() const;
+	void setbrowser(const string &abrowser);
 
 	string gethttpproxyhost() const;
 	unsigned int gethttpproxyport() const;
