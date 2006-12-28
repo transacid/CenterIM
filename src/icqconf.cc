@@ -1389,7 +1389,7 @@ void icqconf::usage() const {
     cout << endl << _("Events sending options:") << endl;
     cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;
     cout << _("  -S, --status <status>    change the current IM status") << endl;
-    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, jabber or lj") << endl;
+    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc, jab, rss, lj, gg or infocard") << endl;
 
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
