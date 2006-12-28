@@ -101,7 +101,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 	conf.getcolor(cp_dialog_selected)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Remove"), _("Load"), 0));
+	conf.getcolor(cp_dialog_selected), _("Remove"), _("Load"), (char*)0));
 
     db.addkey(KEY_DC, 0);
 
@@ -210,17 +210,17 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     switch(subj) {
 	case fsuser:
 	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-		_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
+		_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), (char*)0));
 	    break;
 
 	case fschannel:
 	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-		_("cLear"), _("Change"), _("Join/Create"), 0));
+		_("cLear"), _("Change"), _("Join/Create"), (char*)0));
 	    break;
 
 	case fsrss:
 	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-		_("cLear"), _("Change"), _("lInk"), 0));
+		_("cLear"), _("Change"), _("lInk"), (char*)0));
 	    break;
     }
 
@@ -727,7 +727,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
 
     db.idle = &detailsidle;
     db.addautokeys();
@@ -1026,7 +1026,7 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("Add"), _("Remove"), _("Comment"), _("Send"), 0));
+	_("Add"), _("Remove"), _("Comment"), _("Send"), (char*)0));
 
     db.addkey(KEY_IC, 0);
     db.addkey(KEY_DC, 1);
@@ -1165,7 +1165,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
 
     db.idle = &dialogidle;
     db.addautokeys();
@@ -1566,7 +1566,7 @@ int icqface::groupmanager(const string &text, bool sel) {
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
 	_("Add"), _("Rename"), _("rEmove"), _("move Up"), _("move Down"),
-	sel ? _("Select") : _("Done"), 0));
+	sel ? _("Select") : _("Done"), (char*)0));
 
     db.addautokeys();
     db.getbar()->item = 5;
@@ -1687,7 +1687,7 @@ void icqface::transfermonitor() {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), 0));
+	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), (char*)0));
 
     db.getbar()->item = 1;
     db.addautokeys();
@@ -1899,7 +1899,7 @@ bool icqface::setljparams(imxmlevent *ev) {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-	_("Change"), _("Detect music"), _("Post"), _("cAncel"), 0));
+	_("Change"), _("Detect music"), _("Post"), _("cAncel"), (char*)0));
 
     db.addautokeys();
     db.idle = &dialogidle;

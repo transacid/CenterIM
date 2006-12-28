@@ -836,11 +836,11 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     if(!h.getCapabs().count(hookcapab::nochat)) {
 	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	    conf.getcolor(cp_main_selected), _("Details"), _("Message"),
-	    _("Add"), fauto ? 0 : _("New search"), 0));
+	    _("Add"), fauto ? 0 : _("New search"), (char*)0));
     } else {
 	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	    conf.getcolor(cp_main_selected), _("Details"), _("Add"),
-	    fauto ? 0 : _("New search"), 0));
+	    fauto ? 0 : _("New search"), (char*)0));
     }
 
     db.addautokeys();
@@ -1332,24 +1332,24 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	if(c->inlist() && realinfo != contactroot) {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-		_("Info"), _("About"), _("Check"), _("Edit"), islivejournal(c) ? _("LJ") : 0, 0));
+		_("Info"), _("About"), _("Check"), _("Edit"), islivejournal(c) ? _("LJ") : 0, (char*)0));
 	} else {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-		_("Info"), _("About"), _("Retreive"), 0));
+		_("Info"), _("About"), _("Retreive"), (char*)0));
 	}
 
     } else if(cinfo.pname == livejournal) {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-	    _("Info"), _("Friend of"), 0));
+	    _("Info"), _("Friend of"), (char*)0));
 
 
     } else {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
-	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
+	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), (char*)0));
 
     }
 
@@ -1771,7 +1771,7 @@ void icqface::modelist(contactstatus cs) {
 
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	conf.getcolor(cp_main_selected),
-	_("Details"), _("Add"), _("Remove"), _("Move to contacts"), 0));
+	_("Details"), _("Add"), _("Remove"), _("Move to contacts"), (char*)0));
 
     db.addautokeys();
     db.idle = &dialogidle;
@@ -2457,7 +2457,7 @@ bool icqface::eventedit(imevent &ev) {
 	    conf.getcolor(cp_main_selected)));
 	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	    conf.getcolor(cp_main_selected),
-	    _("Add"), _("Remove"), _("Send"), 0));
+	    _("Add"), _("Remove"), _("Send"), (char*)0));
 
 	db.addkey(KEY_IC, 0);
 	db.addkey(KEY_DC, 1);
