@@ -53,7 +53,7 @@
 
 #define MAX_STRLEN    10240
 #define ALONE_DELIM   " ;(){}[].,:-+*/^?!=<>"
-#define NONCHAR_DELIM " ;(){}[].,:-+*/^?!=<>\"'"
+#define NONCHAR_DELIM " ;(){}[].,:-+*/^?!=<>\"'_"
 #define WORD_DELIM    " ,"
 
 #define EM_TAB        2
@@ -1128,6 +1128,7 @@ void texteditor::edbackspace() {
 }
 
 void texteditor::eddelword() {
+    // This is the kkconsui original version: it does not skip whitespace
     char *p = CURSTRING, *e;
     string deltext, n;
     int count;
@@ -1166,6 +1167,52 @@ void texteditor::eddelword() {
     }
 }
 
+void texteditor::eddelwordemacs() { 
+    // This is the "emacs-compliant" version, it skips all whitespace
+    char *p = CURSTRING, *e;
+    string deltext, n;
+    int count = 0;
+
+    if(!strlen(p)) {
+	if(CURLINE < curfile->lines->count-1) {
+	    eddelline();
+	    eddelwordemacs();
+	}
+    } else if(CURCOL == strlen(p)) {
+	if(CURLINE < curfile->lines->count-1) {
+	    eddel();
+	    if(currentchar() == ' ') eddelword();
+	}
+    } else {
+	n = p;
+	deltext = n.substr(CURCOL);
+	    
+	// skip whitespace
+	if(currentchar() == ' ') {
+	    count = strspn(p+CURCOL, " ");
+	    n.replace(CURCOL, count, "");
+	    curfile->lines->replace(CURLINE, strdup(n.c_str()));
+	}
+
+	n = p = CURSTRING;
+
+	if(!(e = strpbrk(&p[CURCOL], NONCHAR_DELIM))) e = p + strlen(p);
+
+	if((count = e-p-curfile->sx-curfile->x)) {
+	    n.replace(CURCOL, count, "");
+	} else {
+	    count += strspn(n.substr(CURCOL).c_str(), NONCHAR_DELIM);
+	    n.replace(CURCOL, strspn(n.c_str()+CURCOL, NONCHAR_DELIM), "");
+	}
+
+	deltext.resize(count);
+	curfile->lines->replace(CURLINE, strdup(n.c_str()));
+	modification(udelchar, deltext);
+	draw(curfile->y);
+	updatecursor();
+    }
+}
+
 void texteditor::eddelline() {
     char *p = (char *) curfile->lines->at(CURLINE);
     string deltext = (string) p + "\n";
@@ -1191,6 +1238,91 @@ void texteditor::eddelline() {
     abscol = 0;
     draw(curfile->y);
     updatecursor();
+}
+
+void texteditor::eddelbegofline() {
+    char *p = CURSTRING;
+    string deltext, n;
+    int count = 0;
+
+    if(CURCOL == 0 && CURLINE) { // We're at the beginning of the line
+	edmove(KEY_UP);
+	edmove(KEY_END);
+	eddel();
+    } else if(CURCOL == strlen(p)) { // We're at the end
+	eddelline();
+    } else {
+	n = p;
+	deltext = (string) p;
+	
+	n.replace(curfile->sx, CURCOL, "");
+	
+	edmove(KEY_HOME);
+
+	curfile->lines->replace(CURLINE, strdup(n.c_str()));
+	modification(udelchar, deltext);
+	draw(curfile->y);
+	updatecursor();
+    }
+    
+}
+
+void texteditor::eddelendofline() {
+    char *p = CURSTRING;
+    string deltext, n;
+    int count = 0;
+
+    if(CURCOL == 0) { // We're at the beginning of the line
+	eddelline();
+    } else if (CURCOL == strlen(p)) { // We're at the end
+	eddel();
+    } else {
+	n = p;
+	deltext = (string) p + "\n";
+	
+	count = strlen(p) - CURCOL;
+	n.replace(CURCOL, count, "");
+
+	curfile->lines->replace(CURLINE, strdup(n.c_str()));
+	modification(udelchar, deltext);
+	draw(curfile->y);
+	updatecursor();
+    }
+    
+}
+
+void texteditor::edtransposechar() {
+    char *p = CURSTRING;
+    string deltext;
+    char tmp;
+
+    if (CURCOL == 0) return;
+    else if (CURCOL == strlen(p)) {
+	deltext = (string) p;
+	
+	tmp = p[CURCOL-2];
+	p[CURCOL-2] = p[CURCOL-1];
+	p[CURCOL-1] = tmp;
+	
+	curfile->lines->replace(CURLINE, strdup(p));
+	modification(udelchar, deltext);
+	draw(curfile->y);
+	updatecursor();
+    } else {
+	deltext = (string) p;
+	
+	tmp = p[CURCOL-1];
+	p[CURCOL-1] = p[CURCOL];
+	p[CURCOL] = tmp;
+	
+	setpos(CURCOL+1, CURLINE);
+
+	curfile->lines->replace(CURLINE, strdup(p));
+	modification(udelchar, deltext);
+	draw(curfile->y);
+	updatecursor();
+    }
+    
 }
 
 void texteditor::edenter(bool countspaces) {
@@ -1437,6 +1569,65 @@ void texteditor::edmove(int k, int options) {
 		    draw();
 		}
 		break;
+	    case KEY_EMACS_BEG_OF_BUFFER:
+		setpos(0, 0);
+		break;
+	    case KEY_EMACS_END_OF_BUFFER:
+		p = (char *) curfile->lines->at(curfile->lines->count-1);
+		i = strlen(p);
+		setpos(i, curfile->lines->count-1);
+		break;
+	    case KEY_EMACS_FORWARD_WORD:
+		if(endofline() && CURLINE < curfile->lines->count-1) {
+		    setpos(0, CURLINE+1);
+		    p = CURSTRING;
+		    if(strchr(NONCHAR_DELIM, p[CURCOL])) {
+			i = strspn(p+CURCOL, NONCHAR_DELIM);
+			setpos(CURCOL+i, CURLINE);
+		    }
+		} else if(endofline() && CURLINE == curfile->lines->count-1)
+		    return;
+		i = 0;
+		if(strchr(NONCHAR_DELIM, p[CURCOL])) 
+		    i = strspn(p+CURCOL, NONCHAR_DELIM);
+		i += strcspn(p+CURCOL+i, NONCHAR_DELIM);
+		setpos(CURCOL+i, CURLINE);
+		break;
+	    case KEY_EMACS_BACKWARD_WORD:
+		if(CURCOL == 0 && CURLINE > 0 && curfile->lines->count) {
+		    setpos(strlen((char *)curfile->lines->at(CURLINE-1)), 
+			   CURLINE-1);
+		}
+		
+		if(CURCOL > 0) {
+		    char *s;
+		    int len, offset = 0;
+
+		    p = CURSTRING;
+		    len = CURCOL;
+		    s = (char *)malloc(len+1);
+
+		    for(i = 0; i < len; i++) {
+			s[i] = p[len-i-1];
+		    }
+		    s[len] = '\0';
+
+		    if(strchr(NONCHAR_DELIM, p[CURCOL]) || 
+		       strchr(NONCHAR_DELIM, p[CURCOL-1]))
+			offset = strspn(s, NONCHAR_DELIM);
+
+		    offset += strcspn(s+offset, NONCHAR_DELIM);
+
+		    if(offset == CURCOL && strchr(NONCHAR_DELIM, p[0])) {
+			setpos(strlen((char *)curfile->lines->at(CURLINE-1)), 
+			       CURLINE-1);
+			edmove(KEY_EMACS_BACKWARD_WORD);
+		    } else
+			setpos(CURCOL-offset, CURLINE);
+
+		    if(s) free(s);
+		}
+		break;
 	}
     }
 
@@ -1615,6 +1806,10 @@ int texteditor::open() {
 		case KEY_END:
 		case KEY_PPAGE:
 		case KEY_NPAGE:
+		case KEY_EMACS_BEG_OF_BUFFER:
+		case KEY_EMACS_END_OF_BUFFER:
+		case KEY_EMACS_FORWARD_WORD:
+		case KEY_EMACS_BACKWARD_WORD:
 		    edmove(k, EM_TAB | EM_CTRL | EM_MANUAL);
 		    updatecursor();
 		    break;
@@ -1640,6 +1835,18 @@ int texteditor::open() {
 			break;
 		    case CTRL('y'):
 			eddelline();
+			break;
+		    case KEY_EMACS_C_U:
+			eddelbegofline();
+			break;
+		    case KEY_EMACS_C_K:
+			eddelendofline();
+			break;
+		    case KEY_EMACS_C_T:
+			edtransposechar();
+			break;
+		    case KEY_EMACS_M_D:
+			eddelwordemacs();
 			break;
 		    case KEY_TAB:
 			inschar('\t');

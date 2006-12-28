@@ -133,7 +133,11 @@ class texteditor: public abstractuicontrol {
 	void edenter(bool countspaces = true);
 	void edbackspace();
 	void eddelline();
+	void eddelbegofline();
+	void eddelendofline();
+	void edtransposechar();
 	void eddelword();
+	void eddelwordemacs();
 
 	void inschar(int k);
 
