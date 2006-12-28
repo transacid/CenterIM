@@ -2147,7 +2147,7 @@ void texteditor::undorecordfree(void *p) {
 }
 
 int texteditor::findint(void *p1, void *p2) {
-    return *(int *) p1 != (int) p2;
+    return *(int *) p1 != (long) p2;
 }
 
 int texteditor::findhighline(void *p1, void *p2) {

@@ -894,7 +894,7 @@ void icqface::selectcountry(unsigned short &f) {
     i = m.open();
     m.close();
 
-    if(i) f = (unsigned short) ((int) m.getref(i-1));
+    if(i) f = (unsigned short) ((long) m.getref(i-1));
 }
 
 void icqface::selectlanguage(unsigned short &f) {
@@ -946,7 +946,7 @@ void icqface::selectgender(imgender &f) {
     int i = m.open();
     m.close();
 
-    if(i) f = (imgender) ((int) m.getref(i-1));
+    if(i) f = (imgender) ((long) m.getref(i-1));
 }
 
 void icqface::selectagerange(ICQ2000::AgeRange &r) {
@@ -967,7 +967,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     int i = m.open();
     m.close();
 
-    if(i) r = (ICQ2000::AgeRange) ((int) m.getref(i-1));
+    if(i) r = (ICQ2000::AgeRange) ((long) m.getref(i-1));
 }
 
 bool icqface::edit(string &txt, const string &header) {
@@ -1258,7 +1258,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	void *p;
 	finished = !db.open(n, b, &p);
-	i = (int) p;
+	i = (long) p;
 
 	if(!finished)
 	switch(b) {
@@ -1757,7 +1757,7 @@ void icqface::transfermonitor() {
 	    it = transfers.end();
 
 	    if(!db.gettree()->isnode(db.gettree()->getid(np-1)))
-		it = transfers.begin() + (int) db.getmenu()->getref(n-1);
+		it = transfers.begin() + (long) db.getmenu()->getref(n-1);
 
 	    switch(b) {
 		case 0:
