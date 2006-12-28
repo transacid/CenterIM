@@ -346,7 +346,7 @@ void jab_poll(jconn j, int timeout)
     struct timeval tv;
     int r;
 
-    if (!j || j->state == JCONN_STATE_OFF)
+    if (!j || j->state == JCONN_STATE_OFF || j->fd == -1)
 	return;
 
     FD_ZERO(&fds);
