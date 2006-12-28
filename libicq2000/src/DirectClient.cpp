@@ -162,6 +162,7 @@ namespace ICQ2000 {
 
       m_recv.setLittleEndian();
       m_recv >> length;
+      if (length == 0) return; // short read, toss it back (nothing to do)
       if (length > Incoming_Packet_Limit) throw ParseException("Received too long incoming packet");
       if (m_recv.remains() < length) return; // waiting for more of the packet
 
