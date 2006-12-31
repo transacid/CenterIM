@@ -561,7 +561,8 @@ public:
         while (this->isWholeLineAvailable())
         {
             std::vector<std::string> args = this->getLine();
-            if (args[0] == "MSG" || args[0] == "NOT" || args[0] == "IPG")
+            if ((args.size() >= 4 && args[0] == "MSG") ||
+                (args.size() >= 2 && (args[0] == "NOT" || args[0] == "IPG")))
             {
                 int dataLength;
                 if (args[0] == "MSG")
