@@ -889,10 +889,10 @@ void jabberhook::gotloggedin() {
 
     flogged = true;
 
-    x = jutil_iqnew(JPACKET__GET, NS_AGENTS);
-    xmlnode_put_attrib(x, "id", "Agent List");
-    jab_send(jc, x);
-    xmlnode_free(x);
+//  x = jutil_iqnew(JPACKET__GET, NS_AGENTS);
+//  xmlnode_put_attrib(x, "id", "Agent List");
+//  jab_send(jc, x);
+//  xmlnode_free(x);
 
     x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
     xmlnode_put_attrib(x, "id", "Roster");
