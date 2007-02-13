@@ -1103,7 +1103,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool bidi = conf.getbidi();
     bool emacs = conf.getemacs();
     bool proxyconnect = conf.getproxyconnect();
-
+    bool timestampstothesecond = conf.gettimestampstothesecond();
     bool logtimestamps, logonline;
     conf.getlogoptions(logtimestamps, logonline);
 
@@ -1249,6 +1249,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Logging "));
 	t.addleaff(i, 0, 9, _(" Timestamps in the log window : %s "), stryesno(logtimestamps));
+	t.addleaff(i, 0, 48, _(" Timestamps include seconds : %s "), stryesno(timestampstothesecond));
 	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
 
@@ -1383,8 +1384,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		        tmp = inputstr(_("HTTP browser to use: "), browser);
 			if(!tmp.empty()) browser = browser;
 		        break;
-		}
-		break;
+ 		    case 48:
+		        timestampstothesecond = !timestampstothesecond; break;
+  		}
+  		break;
 	    case 1:
 		finished = success = true;
 		conf.setquote(quote);
@@ -1397,6 +1400,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
 		conf.setproxyconnect(proxyconnect);
+		conf.settimestampstothesecond(timestampstothesecond);
 		conf.setcharsets(convertfrom, convertto);
 
 		for(pname = icq; pname != protocolname_size; pname++) {

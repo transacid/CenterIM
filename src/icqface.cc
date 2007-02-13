@@ -2003,7 +2003,7 @@ void icqface::log(const string &atext) {
 	time_t t;
 	char stime[64];
 	time(&t);
-	strftime(stime, 64, "%R ", localtime(&t));
+	strftime(stime, 64, conf.getlogtimestampformat(), localtime(&t));
 	text.insert(2, stime);
     }
 
@@ -2525,8 +2525,8 @@ string icqface::extracttime(const imevent &ev) {
     time_t t, ts;
     char buf[64];
 
-    ds1 = time2str(&(t = ev.gettimestamp()), "DD.MM.YY hh:mm", buf);
-    ds2 = time2str(&(ts = ev.getsenttimestamp()), "DD.MM.YY hh:mm", buf);
+    ds1 = time2str(&(t = ev.gettimestamp()), conf.gettimestampformat(), buf);
+    ds2 = time2str(&(ts = ev.getsenttimestamp()), conf.gettimestampformat(), buf);
 
     r = ds1 + " ";
     tdiff = ts-t;
@@ -2963,9 +2963,9 @@ void icqface::histmake(const vector<imevent *> &hist) {
 
 	t = ev.gettimestamp();
 	ts = ev.getsenttimestamp();
-	text = (string) + " " + time2str(&t, "DD.MM hh:mm", buf) + " ";
+	text = (string) + " " + time2str(&t, conf.gettimestampformat(), buf) + " ";
 	if ((t - ts) > 0) 
-	    text += (string) + "[" + time2str(&ts, "DD.MM hh:mm", buf) + "] ";
+	    text += (string) + "[" + time2str(&ts, conf.gettimestampformat(), buf) + "] ";
 	text += ev.gettext();
 
 	if(ev.getdirection() == imevent::incoming) {

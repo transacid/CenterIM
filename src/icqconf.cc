@@ -41,6 +41,11 @@
 #include "connwrap.h"
 
 icqconf::icqconf() {
+    DEFAULT_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm";
+    DEFAULT_LOGTIMESTAMP_FORMAT = "%R ";
+    SECONDS_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm:ss";
+    SECONDS_LOGTIMESTAMP_FORMAT = "%T ";
+
     rs = rscard;
     rc = rcdark;
     cm = cmproto;
@@ -50,8 +55,11 @@ icqconf::icqconf() {
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = proxyssl = proxyconnect = notitles =
-	debug = false;
+	debug = timestampstothesecond = false;
 
+    timestampformat = DEFAULT_TIMESTAMP_FORMAT;
+    logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
+ 
     startoffline = false;
 
     savepwd = mailcheck = fenoughdiskspace = true;
@@ -466,6 +474,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "logonline") logonline = true; else
 	    if(param == "fromcharset") fromcharset = buf; else
 	    if(param == "tocharset") tocharset = buf; else
+	    if(param == "timestampstothesecond") settimestampstothesecond(true); else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
 		ptpmax = atoi(buf.c_str());
@@ -551,6 +560,7 @@ void icqconf::save() {
 
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
+	    if(timestampstothesecond) f << "timestampstothesecond" << endl;
 	    if(logonline) f << "logonline" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << getsmtpport() << endl;
@@ -935,6 +945,17 @@ void icqconf::setsavepwd(bool ssave) {
 
 void icqconf::sethideoffline(bool fho) {
     hideoffline = fho;
+}
+
+void icqconf::settimestampstothesecond(bool ttts) {
+    timestampstothesecond = ttts;
+    if (timestampstothesecond) {
+        timestampformat = SECONDS_TIMESTAMP_FORMAT;
+	logtimestampformat = SECONDS_LOGTIMESTAMP_FORMAT;
+    } else {
+        timestampformat = DEFAULT_TIMESTAMP_FORMAT;
+	logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
+    }
 }
 
 void icqconf::setemacs(bool fem) {
