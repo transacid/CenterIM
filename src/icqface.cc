@@ -401,7 +401,7 @@ int icqface::contextmenu(icqcontact *c) {
 
     m.scale();
     m.idle = &menuidle;
-    i = (int) m.getref(m.open()-1);
+    i = (long) m.getref(m.open()-1);
     m.close();
 
     if(i) lastr = i;
@@ -450,7 +450,7 @@ int icqface::generalmenu() {
 
     if(i) {
 	lastitem = i-1;
-	r = (int) m.getref(lastitem);
+	r = (long) m.getref(lastitem);
     }
 
     return r;
@@ -513,7 +513,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    g = 0;
 	}
 	
-	if((unsigned int) c < 100) c = 0;
+	if((unsigned long) c < 100) c = 0;
 
 	if(i) {
 	    switch(action = extk) {
@@ -747,27 +747,48 @@ void icqface::fillcontactlist() {
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
-		c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
+		    c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+		    c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {
-	    char *fmt = "%s[%c]%s%s ";
 
-	    if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
-	    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c}%s%s ";
+	    if(conf.getcolormode() == icqconf::cmstatus) {
+		char *fmt = "%s[%s]%s%s ";
 
-	    char shortstatus = c->getshortstatus();
+		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%s>%s%s "; else
+		    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%s}%s%s ";
 
-	    if(c->getlasttyping()) {
-		if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
+		std::string protoletter = getprotocolchar(c->getdesc().pname);
+
+		if(c->getlasttyping()) {
+		    if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
+		    else protoletter.append("T");
+		}
+
+		mcontacts->addleaff(nnode,
+			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), protoletter.c_str(),
+			c->getpostponed().empty() ? " " : ">", dnick.c_str());
+
+	    } else {
+		char *fmt = "%s[%c]%s%s ";
+
+		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
+		    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c}%s%s ";
+
+		char shortstatus = c->getshortstatus();
+
+		if(c->getlasttyping()) {
+		    if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
 		    else shortstatus = 'T';
+		}
+
+		mcontacts->addleaff(nnode,
+			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
+			c->getpostponed().empty() ? " " : ">", dnick.c_str());
+
 	    }
-
-	    mcontacts->addleaff(nnode,
-		c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
-		c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
-		c->getpostponed().empty() ? " " : ">", dnick.c_str());
-
 	}
     }
 
@@ -815,11 +836,11 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     if(!h.getCapabs().count(hookcapab::nochat)) {
 	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	    conf.getcolor(cp_main_selected), _("Details"), _("Message"),
-	    _("Add"), fauto ? 0 : _("New search"), 0));
+	    _("Add"), fauto ? 0 : _("New search"), (char*)0));
     } else {
 	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	    conf.getcolor(cp_main_selected), _("Details"), _("Add"),
-	    fauto ? 0 : _("New search"), 0));
+	    fauto ? 0 : _("New search"), (char*)0));
     }
 
     db.addautokeys();
@@ -1311,24 +1332,24 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
 	if(c->inlist() && realinfo != contactroot) {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-		_("Info"), _("About"), _("Check"), _("Edit"), islivejournal(c) ? _("LJ") : 0, 0));
+		_("Info"), _("About"), _("Check"), _("Edit"), islivejournal(c) ? _("LJ") : 0, (char*)0));
 	} else {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-		_("Info"), _("About"), _("Retreive"), 0));
+		_("Info"), _("About"), _("Retreive"), (char*)0));
 	}
 
     } else if(cinfo.pname == livejournal) {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
-	    _("Info"), _("Friend of"), 0));
+	    _("Info"), _("Friend of"), (char*)0));
 
 
     } else {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
 	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
 	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
-	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), 0));
+	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), (char*)0));
 
     }
 
@@ -1484,7 +1505,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	m.scale();
 
 	i = m.open();
-	choice = (int) m.getref(i-1);
+	choice = (long) m.getref(i-1);
 
 	m.close();
     }
@@ -1539,7 +1560,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	m.close();
 
 	if(r = i) {
-	    st = (imstatus) ((int) m.getref(i-1));
+	    st = (imstatus) ((long) m.getref(i-1));
 	}
     }
 
@@ -1750,7 +1771,7 @@ void icqface::modelist(contactstatus cs) {
 
     db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	conf.getcolor(cp_main_selected),
-	_("Details"), _("Add"), _("Remove"), _("Move to contacts"), 0));
+	_("Details"), _("Add"), _("Remove"), _("Move to contacts"), (char*)0));
 
     db.addautokeys();
     db.idle = &dialogidle;
@@ -1982,7 +2003,7 @@ void icqface::log(const string &atext) {
 	time_t t;
 	char stime[64];
 	time(&t);
-	strftime(stime, 64, "%R ", localtime(&t));
+	strftime(stime, 64, conf.getlogtimestampformat(), localtime(&t));
 	text.insert(2, stime);
     }
 
@@ -2003,7 +2024,7 @@ void icqface::log(const string &atext) {
 	    mvaddchnstr(i-1, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
 	}
 
-	delete logline;
+	delete[] logline;
 
 	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
 	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);
@@ -2132,7 +2153,7 @@ void icqface::quickfind(verticalmenu *multi) {
 			    c = (icqcontact *) cm->getref(i);
 			}
 
-			if((unsigned int) c > 100) {
+			if((unsigned long) c > 100) {
 			    string current = c->getdispnick();
 			    len = current.size();
 			    if(len > nick.size()) len = nick.size();
@@ -2436,7 +2457,7 @@ bool icqface::eventedit(imevent &ev) {
 	    conf.getcolor(cp_main_selected)));
 	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
 	    conf.getcolor(cp_main_selected),
-	    _("Add"), _("Remove"), _("Send"), 0));
+	    _("Add"), _("Remove"), _("Send"), (char*)0));
 
 	db.addkey(KEY_IC, 0);
 	db.addkey(KEY_DC, 1);
@@ -2504,8 +2525,8 @@ string icqface::extracttime(const imevent &ev) {
     time_t t, ts;
     char buf[64];
 
-    ds1 = time2str(&(t = ev.gettimestamp()), "DD.MM.YY hh:mm", buf);
-    ds2 = time2str(&(ts = ev.getsenttimestamp()), "DD.MM.YY hh:mm", buf);
+    ds1 = time2str(&(t = ev.gettimestamp()), conf.gettimestampformat(), buf);
+    ds2 = time2str(&(ts = ev.getsenttimestamp()), conf.gettimestampformat(), buf);
 
     r = ds1 + " ";
     tdiff = ts-t;
@@ -2942,9 +2963,9 @@ void icqface::histmake(const vector<imevent *> &hist) {
 
 	t = ev.gettimestamp();
 	ts = ev.getsenttimestamp();
-	text = (string) + " " + time2str(&t, "DD.MM hh:mm", buf) + " ";
+	text = (string) + " " + time2str(&t, conf.gettimestampformat(), buf) + " ";
 	if ((t - ts) > 0) 
-	    text += (string) + "[" + time2str(&ts, "DD.MM hh:mm", buf) + "] ";
+	    text += (string) + "[" + time2str(&ts, conf.gettimestampformat(), buf) + "] ";
 	text += ev.gettext();
 
 	if(ev.getdirection() == imevent::incoming) {
@@ -3186,7 +3207,7 @@ string icqface::action2key(int a, int s, int n) const {
     else if(icqconf::keys[i].key == 9)
 	return "tab";
     else if(icqconf::keys[i].key == 27)
-	return "esc";
+	return "esc-esc";
     else if(icqconf::keys[i].key == 331)
 	return "insert";
     else if(icqconf::keys[i].key == KEY_DC)
@@ -3351,6 +3372,17 @@ int icqface::findpgpkeys(dialogbox &db, int k) {
     }
 
     return -1;
+}
+
+string icqface::getprotocolchar(protocolname pname) const {
+    static const string pprefixes[protocolname_size] = {
+	"i", "y", "m", "a", "#", "j", "r", "l", "g", "n"
+    };
+
+    if(pname > protocolname_size)
+      return "x";
+
+    return pprefixes[pname];
 }
 
 int icqface::historykeys(dialogbox &db, int k) {

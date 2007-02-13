@@ -887,10 +887,12 @@ void jabberhook::gotsearchresults(xmlnode x) {
 void jabberhook::gotloggedin() {
     xmlnode x;
 
-    x = jutil_iqnew(JPACKET__GET, NS_AGENTS);
-    xmlnode_put_attrib(x, "id", "Agent List");
-    jab_send(jc, x);
-    xmlnode_free(x);
+    flogged = true;
+
+//  x = jutil_iqnew(JPACKET__GET, NS_AGENTS);
+//  xmlnode_put_attrib(x, "id", "Agent List");
+//  jab_send(jc, x);
+//  xmlnode_free(x);
 
     x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
     xmlnode_put_attrib(x, "id", "Roster");
@@ -935,7 +937,6 @@ void jabberhook::postlogin() {
     int i;
     icqcontact *c;
 
-    flogged = true;
     ourstatus = available;
     time(&timer_keepalive);
 

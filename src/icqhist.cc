@@ -294,7 +294,7 @@ void icqhistory::fillmenu(const imcontact cinfo, verticalmenu *m) {
 
 	    if(text.size()) {
 		if(text.size() > COLS) text.erase(COLS);
-		text = (string) " " + time2str(&lastread, "DD.MM hh:mm", buf) + " " + text;
+		text = (string) " " + time2str(&lastread, conf.gettimestampformat(), buf) + " " + text;
 		color = dir == HIST_MSG_IN ? conf.getcolor(cp_main_text) : conf.getcolor(cp_main_highlight);
 
 		histentry h;

@@ -137,7 +137,8 @@ class icqconf {
 
 	bool hideoffline, quote, savepwd, antispam, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
-	    logonline, emacs, proxyconnect, proxyssl, notitles, debug;
+	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
+	    timestampstothesecond;
 
 	bool startoffline;
 
@@ -148,8 +149,13 @@ class icqconf {
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
 	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
-	    fromcharset, tocharset;
+	    fromcharset, tocharset, browser;
 
+	char *DEFAULT_TIMESTAMP_FORMAT, *DEFAULT_LOGTIMESTAMP_FORMAT,
+	  *SECONDS_TIMESTAMP_FORMAT, *SECONDS_LOGTIMESTAMP_FORMAT;
+
+	char *timestampformat, *logtimestampformat;
+	
 	map<string, string> actions;
 
 	regsound rs;
@@ -248,6 +254,12 @@ class icqconf {
 	bool getnonimonline(protocolname pname);
 	void setnonimonline(protocolname pname, bool fnonimonline);
 
+	bool gettimestampstothesecond() const { return timestampstothesecond; }
+	void settimestampstothesecond(bool ftimestampstothesecond);
+
+	char *gettimestampformat() const { return timestampformat; } ;
+	char *getlogtimestampformat() const { return logtimestampformat; } ;
+
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);
 
@@ -258,6 +270,9 @@ class icqconf {
 	string getsmtphost() const;
 	unsigned int getsmtpport() const;
 	void setsmtphost(const string &asmtphost);
+
+	string getbrowser() const;
+	void setbrowser(const string &abrowser);
 
 	string gethttpproxyhost() const;
 	unsigned int gethttpproxyport() const;

@@ -101,7 +101,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 	conf.getcolor(cp_dialog_selected)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Remove"), _("Load"), 0));
+	conf.getcolor(cp_dialog_selected), _("Remove"), _("Load"), (char*)0));
 
     db.addkey(KEY_DC, 0);
 
@@ -210,17 +210,17 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     switch(subj) {
 	case fsuser:
 	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-		_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), 0));
+		_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), (char*)0));
 	    break;
 
 	case fschannel:
 	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-		_("cLear"), _("Change"), _("Join/Create"), 0));
+		_("cLear"), _("Change"), _("Join/Create"), (char*)0));
 	    break;
 
 	case fsrss:
 	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-		_("cLear"), _("Change"), _("lInk"), 0));
+		_("cLear"), _("Change"), _("lInk"), (char*)0));
 	    break;
     }
 
@@ -727,7 +727,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
 
     db.idle = &detailsidle;
     db.addautokeys();
@@ -894,7 +894,7 @@ void icqface::selectcountry(unsigned short &f) {
     i = m.open();
     m.close();
 
-    if(i) f = (unsigned short) ((int) m.getref(i-1));
+    if(i) f = (unsigned short) ((long) m.getref(i-1));
 }
 
 void icqface::selectlanguage(unsigned short &f) {
@@ -946,7 +946,7 @@ void icqface::selectgender(imgender &f) {
     int i = m.open();
     m.close();
 
-    if(i) f = (imgender) ((int) m.getref(i-1));
+    if(i) f = (imgender) ((long) m.getref(i-1));
 }
 
 void icqface::selectagerange(ICQ2000::AgeRange &r) {
@@ -967,7 +967,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     int i = m.open();
     m.close();
 
-    if(i) r = (ICQ2000::AgeRange) ((int) m.getref(i-1));
+    if(i) r = (ICQ2000::AgeRange) ((long) m.getref(i-1));
 }
 
 bool icqface::edit(string &txt, const string &header) {
@@ -1026,7 +1026,7 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
-	_("Add"), _("Remove"), _("Comment"), _("Send"), 0));
+	_("Add"), _("Remove"), _("Comment"), _("Send"), (char*)0));
 
     db.addkey(KEY_IC, 0);
     db.addkey(KEY_DC, 1);
@@ -1091,6 +1091,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     string tmp, phidden;
 
     string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
+    string browser = conf.getbrowser();
 
     bool quote = conf.getquote();
     bool savepwd = conf.getsavepwd();
@@ -1102,7 +1103,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool bidi = conf.getbidi();
     bool emacs = conf.getemacs();
     bool proxyconnect = conf.getproxyconnect();
-
+    bool timestampstothesecond = conf.gettimestampstothesecond();
     bool logtimestamps, logonline;
     conf.getlogoptions(logtimestamps, logonline);
 
@@ -1164,7 +1165,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
 
     db.idle = &dialogidle;
     db.addautokeys();
@@ -1235,6 +1236,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Communications "));
 	t.addleaff(i, 0, 19, _(" SMTP server : %s "), smtp.c_str());
+	t.addleaff(i, 0, 31, _(" HTTP browser : %s "), browser.c_str());
 	t.addleaff(i, 0, 24, _(" HTTP proxy server : %s "), httpproxy.c_str());
 
 	if(!httpproxy.empty())
@@ -1247,6 +1249,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Logging "));
 	t.addleaff(i, 0, 9, _(" Timestamps in the log window : %s "), stryesno(logtimestamps));
+	t.addleaff(i, 0, 48, _(" Timestamps include seconds : %s "), stryesno(timestampstothesecond));
 	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
 
@@ -1256,7 +1259,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	void *p;
 	finished = !db.open(n, b, &p);
-	i = (int) p;
+	i = (long) p;
 
 	if(!finished)
 	switch(b) {
@@ -1377,8 +1380,14 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 30:
 			cm = (cm == icqconf::cmproto ? icqconf::cmstatus : icqconf::cmproto );
-		}
-		break;
+		    case 31:
+		        tmp = inputstr(_("HTTP browser to use: "), browser);
+			if(!tmp.empty()) browser = browser;
+		        break;
+ 		    case 48:
+		        timestampstothesecond = !timestampstothesecond; break;
+  		}
+  		break;
 	    case 1:
 		finished = success = true;
 		conf.setquote(quote);
@@ -1391,6 +1400,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
 		conf.setproxyconnect(proxyconnect);
+		conf.settimestampstothesecond(timestampstothesecond);
 		conf.setcharsets(convertfrom, convertto);
 
 		for(pname = icq; pname != protocolname_size; pname++) {
@@ -1415,6 +1425,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setcolormode(cm);
 
 		conf.setsmtphost(smtp);
+		conf.setbrowser(browser);
 		conf.sethttpproxyhost(httpproxy);
 		conf.save();
 		break;
@@ -1559,7 +1570,7 @@ int icqface::groupmanager(const string &text, bool sel) {
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
 	conf.getcolor(cp_dialog_selected),
 	_("Add"), _("Rename"), _("rEmove"), _("move Up"), _("move Down"),
-	sel ? _("Select") : _("Done"), 0));
+	sel ? _("Select") : _("Done"), (char*)0));
 
     db.addautokeys();
     db.getbar()->item = 5;
@@ -1680,7 +1691,7 @@ void icqface::transfermonitor() {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), 0));
+	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), (char*)0));
 
     db.getbar()->item = 1;
     db.addautokeys();
@@ -1750,7 +1761,7 @@ void icqface::transfermonitor() {
 	    it = transfers.end();
 
 	    if(!db.gettree()->isnode(db.gettree()->getid(np-1)))
-		it = transfers.begin() + (int) db.getmenu()->getref(n-1);
+		it = transfers.begin() + (long) db.getmenu()->getref(n-1);
 
 	    switch(b) {
 		case 0:
@@ -1892,7 +1903,7 @@ bool icqface::setljparams(imxmlevent *ev) {
 	conf.getcolor(cp_dialog_text)));
 
     db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-	_("Change"), _("Detect music"), _("Post"), _("cAncel"), 0));
+	_("Change"), _("Detect music"), _("Post"), _("cAncel"), (char*)0));
 
     db.addautokeys();
     db.idle = &dialogidle;

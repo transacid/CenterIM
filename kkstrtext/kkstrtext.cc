@@ -431,7 +431,7 @@ int stringcompare(void *s1, void *s2) {
 }
 
 int intcompare(void *s1, void *s2) {
-    return (int) s1 != (int) s2;
+    return (long) s1 != (long) s2;
 }
 
 string i2str(int i) {
@@ -885,7 +885,7 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
 #ifdef HAVE_ICONV
     iconv_t cd = iconv_open(tocs.c_str(), fromcs.c_str());
 
-    if(((int) cd) != -1) {
+    if(((long) cd) != -1) {
 	string r, text(atext);
 	size_t inleft, outleft, soutleft;
 	char *inbuf, *outbuf, *sinbuf, *soutbuf;
@@ -907,8 +907,8 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
 	    r += soutbuf;
 	    text.erase(0, text.size()-inleft);
 
-	    delete soutbuf;
-	    delete sinbuf;
+	    delete[] soutbuf;
+	    free(sinbuf);
 
 	    if(res == -1 && errno != EILSEQ)
 		break;

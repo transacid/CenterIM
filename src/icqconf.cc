@@ -41,6 +41,11 @@
 #include "connwrap.h"
 
 icqconf::icqconf() {
+    DEFAULT_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm";
+    DEFAULT_LOGTIMESTAMP_FORMAT = "%R ";
+    SECONDS_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm:ss";
+    SECONDS_LOGTIMESTAMP_FORMAT = "%T ";
+
     rs = rscard;
     rc = rcdark;
     cm = cmproto;
@@ -50,8 +55,11 @@ icqconf::icqconf() {
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = proxyssl = proxyconnect = notitles =
-	debug = false;
+	debug = timestampstothesecond = false;
 
+    timestampformat = DEFAULT_TIMESTAMP_FORMAT;
+    logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
+ 
     startoffline = false;
 
     savepwd = mailcheck = fenoughdiskspace = true;
@@ -428,6 +436,7 @@ void icqconf::loadmainconfig() {
 	mailcheck = askaway = false;
 	savepwd = bidi = true;
 	setsmtphost("");
+	setbrowser("");
 	setpeertopeer(0, 65535);
 
 	while(!f.eof()) {
@@ -450,6 +459,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "protocolormode") cm = icqconf::cmproto; else
 	    if(param == "statuscolormode") cm = icqconf::cmstatus; else
 	    if(param == "smtp") setsmtphost(buf); else
+	    if(param == "browser") setbrowser(browser); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "proxy_connect") proxyconnect = true; else
@@ -464,6 +474,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "logonline") logonline = true; else
 	    if(param == "fromcharset") fromcharset = buf; else
 	    if(param == "tocharset") tocharset = buf; else
+	    if(param == "timestampstothesecond") settimestampstothesecond(true); else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
 		ptpmax = atoi(buf.c_str());
@@ -549,9 +560,11 @@ void icqconf::save() {
 
 	    if(!getbidi()) f << "nobidi" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
+	    if(timestampstothesecond) f << "timestampstothesecond" << endl;
 	    if(logonline) f << "logonline" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << getsmtpport() << endl;
+	    f << "browser\t" << getbrowser() << endl;
 
 	    if(!gethttpproxyhost().empty())
 		if (!gethttpproxyuser().empty())
@@ -796,16 +809,12 @@ void icqconf::loadsounds() {
 }
 
 void icqconf::loadactions() {
-    string fname = getconfigfname("actions"), buf, name, browser;
+    string fname = getconfigfname("actions"), buf, name;
     ifstream f;
     bool cont;
 
     if(access(fname.c_str(), F_OK)) {
 	buf = getenv("PATH") ? getenv("PATH") : "";
-
-	if(pathfind(browser = "mozilla", buf, X_OK).empty()) {
-	    browser = "netscape";
-	}
 
 	ofstream of(fname.c_str());
 
@@ -936,6 +945,17 @@ void icqconf::setsavepwd(bool ssave) {
 
 void icqconf::sethideoffline(bool fho) {
     hideoffline = fho;
+}
+
+void icqconf::settimestampstothesecond(bool ttts) {
+    timestampstothesecond = ttts;
+    if (timestampstothesecond) {
+        timestampformat = SECONDS_TIMESTAMP_FORMAT;
+	logtimestampformat = SECONDS_LOGTIMESTAMP_FORMAT;
+    } else {
+        timestampformat = DEFAULT_TIMESTAMP_FORMAT;
+	logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
+    }
 }
 
 void icqconf::setemacs(bool fem) {
@@ -1390,7 +1410,7 @@ void icqconf::usage() const {
     cout << endl << _("Events sending options:") << endl;
     cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;
     cout << _("  -S, --status <status>    change the current IM status") << endl;
-    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, aim, irc, jabber or lj") << endl;
+    cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc, jab, rss, lj, gg or infocard") << endl;
 
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
@@ -1448,6 +1468,13 @@ void icqconf::initmultiproto(bool p[], string buf, bool excludenochat) {
     }
 }
 
+void icqconf::setbrowser(const string &abrowser) {
+  if (!abrowser.empty())
+    browser = abrowser;
+  else
+    browser = "mozilla";
+}
+
 void icqconf::setsmtphost(const string &asmtphost) {
     int pos;
 
@@ -1498,6 +1525,10 @@ void icqconf::sethttpproxyhost(const string &ahttpproxyhost) {
     }
 
     setproxy();
+}
+
+string icqconf::getbrowser() const {
+  return browser.empty() ? "mozilla" : browser;
 }
 
 string icqconf::getsmtphost() const {

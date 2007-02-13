@@ -57,6 +57,14 @@
 
 #define KEY_TAB 9
 #define KEY_ESC 27
+#define KEY_EMACS_C_U 800
+#define KEY_EMACS_C_K 801
+#define KEY_EMACS_C_T 802
+#define KEY_EMACS_M_D 803
+#define KEY_EMACS_BEG_OF_BUFFER 804
+#define KEY_EMACS_END_OF_BUFFER 805
+#define KEY_EMACS_FORWARD_WORD  806
+#define KEY_EMACS_BACKWARD_WORD 807
 
 #ifndef CTRL
 #define CTRL(x) ((x) & 0x1F)

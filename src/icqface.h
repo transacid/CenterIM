@@ -173,6 +173,8 @@ class icqface {
 	void peerinfo(int line, const imcontact &ic);
 	void findpgpkey(dialogbox &db, const vector<string> &items);
 
+  string getprotocolchar(protocolname pname) const;
+
     public:
 	int extk;
 	vector<imcontact> muins;

@@ -138,7 +138,14 @@ int emacsbind(int k) {
 	case CTRL('a'): return KEY_HOME;
 	case CTRL('e'): return KEY_END;
 	case CTRL('v'): return KEY_NPAGE;
-	case CTRL('k'): return CTRL('y');
+	case CTRL('u'): return KEY_EMACS_C_U;
+	case CTRL('k'): return KEY_EMACS_C_K;
+	case CTRL('t'): return KEY_EMACS_C_T;
+	case ALT('d'): return KEY_EMACS_M_D;
+	case ALT('<'): return KEY_EMACS_BEG_OF_BUFFER;
+	case ALT('>'): return KEY_EMACS_END_OF_BUFFER;
+	case ALT('f'): return KEY_EMACS_FORWARD_WORD;
+	case ALT('b'): return KEY_EMACS_BACKWARD_WORD;
 	default: return k;
     }
 }

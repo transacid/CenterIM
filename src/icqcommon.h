@@ -30,7 +30,9 @@
 
 #include <sys/param.h>
 
-#ifdef BSD
+#ifdef __GNU__
+#include <sys/statfs.h>
+#elif defined BSD
 #include <sys/mount.h>
 #else
 #include <sys/vfs.h>
