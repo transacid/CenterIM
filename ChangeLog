@@ -2039,3 +2039,64 @@ Since autoconf/automake authors finally started to maintain backward
 compatibility, I've updated the cicqsync so that it uses the current
 versions of the tools. The reason is that running specific versions for
 better compatibility doesn't work anymore :)
+
+Changes since 4.21.0
+--------------------
+
+  * Update and cleanup of autotools related stuff, based on a patch by Mark
+    Pustjens <mark@unkie.org>
+  * add an autogen.sh so other repositories than Konst's CVS can be used
+  * apply patch by Mark Pustjens <mark@unkie.org> to update libmsn
+  * if the contact list is colored by contact status the letter between the
+    [] brackets now show a letter which tells about the protocol of the
+    contact
+    For example a jabber contact:
+       [j] nickname
+  * Apply a patch by Magnus Henoch <mange@freemail.hu>, which makes centericq
+    not close the connection when it receives a failure unrelated to
+    authentication.
+  * Apply patch by Romain FRANCOISE <romain@orebokech.com> to add
+    more emacs bindings :
+      o M-< : go to the beginning of the buffer
+      o M-> : go to the end of the buffer
+      o M-b : move one word backwards
+      o M-f : move one word forwards
+      o M-d : delete one word
+      o C-t : transpose two characters
+  * Apply patch by Julien Lemoine <speedblue@debian.org> which allows the user
+    to select a HTTP browser in the configuration dialog
+  * Apply a patch by Julien Lemoine <speedblue@debian.org> to fix the list of
+    protocols in the help command
+  * Apply a patch by Julien Lemoine <speedblue@debian.org> to display esc-esc
+    instead of esc
+  * apply patch from Andreas Jochens <aj@andaco.de> to fix an amd64 buid problem
+  * apply a patch from Julien Lemoine <speedblue@debian.org> that ports
+    several security fixes from libadu:
+    * Fix endianess errors (may allow remote attackers to cause a denial of 
+      service), CAN-2005-2448
+    * Fix memory alignment errors (may allows remote attackers to cause a 
+      denial of service (bus error) on
+      certain architectures such as SPARC via an incoming message, CAN-2005-2370
+    * Fix Multiple integer signedness errors (may allow remote attackers to 
+      cause a denial of service or execute arbitrary code.), CAN-2005-2369
+  * apply patch from Steve Langasek <vorlon@debian.org> to fix memory
+    handling clean-ups
+  * apply patch from "Steve Langasek" <vorlon@debian.org> to fix remotely
+    segfaultable DOS
+  * apply a batch by Julien Lemoine <speedblue@debian.org> that fixes a
+    buffer overflow in ktools by replacing vsprintf with vsnprintf
+  * apply patch by Julien Lemoine <speedblue@debian.org> that fixes a
+    compile error
+  * applied patch from <temnota@kmv.ru> to fix segv in libjabber when
+    registering new account
+  * apply a patch by Julien Lemoine<speedblue@debian.org> to fix a segv in MSN
+  * patch by Charles Plessy <charles-debian-nospam@plessy.org>
+    copied from
+    http://forum.centericq.de/viewtopic.php?p=2295&sid=74c3dc27a23192ccc07a8af8b0a4a758
+    which says "While connecting to server, centericq requests agents list,
+    but due to this feature is deprected, recieves 503 error, thus breaking
+    connection. "
+  * patch by  Sebastien Delafond <seb@debian.org> which sdd user setting to
+    display timestamps up to the second.
+
+
