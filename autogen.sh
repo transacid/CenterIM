@@ -16,7 +16,7 @@ TOP=$PWD
 traverse=`find $PWD -name "configure.[ia][nc]" -print`
 for i in $traverse; do
 	echo Changing directory to `dirname $i`
-	pushd `dirname $i` > /dev/null
+	cd `dirname $i` > /dev/null
 
 	if test "$PWD" = "$TOP"; then
 		sh aclocal -I m4 $ACLOCAL_FLAGS
@@ -28,7 +28,7 @@ for i in $traverse; do
 	sh autoconf
 	sh automake --add-missing --copy
 
-	popd > /dev/null
+	cd - > /dev/null
 done
 
 echo
