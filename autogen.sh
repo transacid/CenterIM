@@ -17,6 +17,13 @@ traverse=`find $PWD -name "configure.[ia][nc]" -print`
 for i in $traverse; do
 	echo Changing directory to `dirname $i`
 	cd `dirname $i` > /dev/null
+    if test "`dirname $i`" = "$TOP/kkstrtext"; then
+        #config.rpath is needed for AM_ICONV
+        #Here we should do autopoint to get the config.rpath,
+        #yet it would complain about missing po and intl directories,
+        #so we simply copy config.rpath from the top directory
+        sh cp $TOP/config.rpath .
+    fi
 
 	if test "$PWD" = "$TOP"; then
 		sh aclocal -I m4 $ACLOCAL_FLAGS
