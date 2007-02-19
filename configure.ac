@@ -31,27 +31,91 @@ AC_PROG_GCC_TRADITIONAL
 #########################
 # Checks for libraries. #
 #########################
-AC_ARG_ENABLE(yahoo,  [  --disable-yahoo    Build without Yahoo!], build_yahoo="$enableval", build_yahoo="yes")
-AC_ARG_ENABLE(aim,    [  --disable-aim      Build without AIM], build_aim="$enableval", build_aim="yes")
-AC_ARG_ENABLE(irc,    [  --disable-irc      Build without IRC], build_irc="$enableval", build_irc="yes")
-AC_ARG_ENABLE(jabber, [  --disable-jabber   Build without Jabber], build_jabber="$enableval", build_jabber="yes")
-AC_ARG_ENABLE(gg,     [  --disable-gg       Build without Gadu-Gadu], build_gg="$enableval", build_gg="yes")
-AC_ARG_ENABLE(msn,    [  --disable-msn      Build without MSN], build_msn="$enableval", build_msn="yes")
-AC_ARG_ENABLE(rss,    [  --disable-rss      Build without RSS reader], build_rss="$enableval", build_rss="yes")
-AC_ARG_ENABLE(lj,     [  --disable-lj       Build without LiveJournal client], build_lj="$enableval", build_lj="yes")
-AC_ARG_ENABLE(locales-fix, [  --enable-locales-fix    enables workaround for broken locales. use this option if some of characters in your texts in Chinese or Japanese diappear])
+AC_ARG_ENABLE(yahoo,
+              AS_HELP_STRING([--disable-yahoo], [Build without Yahoo!]),
+              build_yahoo="$enableval",
+              build_yahoo="yes"
+              )
+AC_ARG_ENABLE(aim,
+              AS_HELP_STRING([--disable-aim], [Build without AIM]),
+              build_aim="$enableval",
+              build_aim="yes"
+              )
+AC_ARG_ENABLE(irc,
+              AS_HELP_STRING([--disable-irc], [Build without IRC]),
+              build_irc="$enableval",
+              build_irc="yes"
+              )
+AC_ARG_ENABLE(jabber,
+              AS_HELP_STRING([--disable-jabber], [Build without Jabber]),
+              build_jabber="$enableval",
+              build_jabber="yes"
+              )
+AC_ARG_ENABLE(gg,
+              AS_HELP_STRING([--disable-gg], [Build without Gadu-Gadu]),
+              build_gg="$enableval",
+              build_gg="yes"
+              )
+AC_ARG_ENABLE(msn,
+              AS_HELP_STRING([--disable-msn], [Build without MSN]),
+              build_msn="$enableval",
+              build_msn="yes"
+              )
+AC_ARG_ENABLE(rss,
+              AS_HELP_STRING([--disable-rss], [Build without RSS reader]),
+              build_rss="$enableval",
+              build_rss="yes"
+              )
+AC_ARG_ENABLE(lj,
+              AS_HELP_STRING([--disable-lj], [Build without LiveJournal client]),
+              build_lj="$enableval",
+              build_lj="yes"
+              )
+AC_ARG_ENABLE(locales-fix,
+              AS_HELP_STRING([--enable-locales-fix], [enables workaround for
+                              broken locales. use this option if some of
+                              characters in your texts in Chinese or Japanese
+                              diappear])
+              )
 
-AC_ARG_WITH(fribidi,  [  --with-fribidi=[DIR]   enable Hebrew and Arabic support using fribidi library in DIR], [with_fribidi=$withval], [with_fribidi=no])
-AC_ARG_WITH(ssl,      [  --with-ssl         enable SSL secured connections using either OpenSSL or GnuTLS], [with_ssl=$withval], [with_ssl=no]) 
-AC_ARG_WITH(openssl,  [  --with-openssl=[DIR]   enable SSL secured connections using the OpenSSL library in DIR (optional)], [with_openssl=$withval], [with_openssl=no])
-AC_ARG_WITH(openssl,  [  --with-gpgme=[PATH]   path to gpgme-config (auto)], [with_gpgme=$withval], [with_gpgme=no])
-AC_ARG_WITH(curl,     [  --with-curl=[PATH]  path to curl-config (auto)], [with_curl=$withval], [with_curl=no])
-AC_ARG_WITH(libjpeg,  [  --without-libjpeg  Compile without JPEG token support (for Gadu-Gadu registration)])
+AC_ARG_WITH(fribidi,
+            AS_HELP_STRING([--with-fribidi=[DIR]], [enable Hebrew and Arabic
+                            support using fribidi library in DIR]),
+            [with_fribidi=$withval],
+            [with_fribidi=no]
+            )
+AC_ARG_WITH(ssl,
+            AS_HELP_STRING([--with-ssl], [enable SSL secured connections using
+                            either OpenSSL or GnuTLS]),
+            [with_ssl=$withval],
+            [with_ssl=no]
+            )
+AC_ARG_WITH(openssl,
+            AS_HELP_STRING([--with-openssl=[DIR]], [enable SSL secured
+                            connections using the OpenSSL library in DIR
+                            (optional)]),
+            [with_openssl=$withval],
+            [with_openssl=no]
+            )
+AC_ARG_WITH(gpgme,
+            AS_HELP_STRING([--with-gpgme=[PATH]], [path to gpgme-config (auto)]),
+            [with_gpgme=$withval],
+            [with_gpgme=no]
+            )
+AC_ARG_WITH(curl,
+            AS_HELP_STRING([--with-curl=[PATH]], [path to curl-config (auto)]),
+            [with_curl=$withval],
+            [with_curl=no]
+            )
+AC_ARG_WITH(libjpeg,
+            AS_HELP_STRING([--without-libjpeg], [Compile without JPEG token
+                            support (for Gadu-Gadu registration)])
+            )
 
 #####################
 # Check for fribidi #
 #####################
-AC_MSG_CHECKING(wether to use fribidi)
+AC_MSG_CHECKING(whether to use fribidi)
 FRIBIDI_LIBS=""
 FRIBIDI_CFLAGS=""
 FRIBIDI_PC="" 
