@@ -43,8 +43,8 @@ AC_ARG_ENABLE(locales-fix, [  --enable-locales-fix    enables workaround for bro
 
 AC_ARG_WITH(fribidi,  [  --with-fribidi=[DIR]   enable Hebrew and Arabic support using fribidi library in DIR], [with_fribidi=$withval], [with_fribidi=no])
 AC_ARG_WITH(ssl,      [  --with-ssl         enable SSL secured connections using either OpenSSL or GnuTLS], [with_ssl=$withval], [with_ssl=no]) 
-AC_ARG_WITH(openssl,  [  --with-openssl=[DIR]   enable SSL secured connections using the OpenSSL library in DIR (optional)], [with_openssl=$withval], [with_openssl=no])
-AC_ARG_WITH(openssl,  [  --with-gpgme=[PATH]   path to gpgme-config (auto)], [with_gpgme=$withval], [with_gpgme=no])
+AC_ARG_WITH(openssl,  [  --with-openssl=[DIR]   enable SSL secured connections using the OpenSSL library in DIR (optional)], [with_openssl=$withval])
+AC_ARG_WITH(gpgme,  [  --with-gpgme=[PATH]   path to gpgme-config (auto)], [with_gpgme=$withval], [with_gpgme=no])
 AC_ARG_WITH(curl,     [  --with-curl=[PATH]  path to curl-config (auto)], [with_curl=$withval], [with_curl=no])
 AC_ARG_WITH(libjpeg,  [  --without-libjpeg  Compile without JPEG token support (for Gadu-Gadu registration)])
 
@@ -96,19 +96,19 @@ if test "$with_ssl" != "no"; then
 		if test "$with_openssl" = "yes"; then 
 			with_openssl="/usr"
 		fi
-		CFLAGS="$CFLAGS -I${with_openssl}"
+		AC_MSG_RESULT([found in $with_openssl])
+                CFLAGS="$CFLAGS -I${with_openssl}"
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
 		AC_CHECK_LIB(crypto, main)
 		AC_CHECK_LIB(ssl, main)
-		AC_MSG_RESULT([found in $with_openssl])
 	else
-		with_ssl="no"
+		AC_MSG_RESULT([not found or disabled])
+	        with_ssl="no"
 
 		AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
 			CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 			LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
 			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls]) with_ssl="yes" ])
-		AC_MSG_RESULT([not found or disabled])
 	fi
 else 
 	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
