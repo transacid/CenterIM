@@ -1,6 +1,5 @@
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/../kkstrtext -I$(top_srcdir)/../kkstrtext-0.1
 noinst_LIBRARIES = libkkconsui.a
-EXTRA_DIST = config.guess config.sub
 SUBDIRS = include src
 AM_CPPFLAGS = 
 libkkconsui_a_SOURCES = 
