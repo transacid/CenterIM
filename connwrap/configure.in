@@ -12,7 +12,7 @@ AC_PROG_CXX
 
 AC_ARG_WITH(ssl, [  --with-ssl              enable SSL secured connections using either OpenSSL
 			  or GnuTLS],
-	[with_ssl=$withval])
+	[with_ssl=$withval], [with_ssl=no])
 
 if test "$with_ssl" != "no"; then
     AC_ARG_WITH(openssl,

@@ -160,19 +160,19 @@ if test "$with_ssl" != "no"; then
 		if test "$with_openssl" = "yes"; then 
 			with_openssl="/usr"
 		fi
-		CFLAGS="$CFLAGS -I${with_openssl}"
+		AC_MSG_RESULT([found in $with_openssl])
+                CFLAGS="$CFLAGS -I${with_openssl}"
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
 		AC_CHECK_LIB(crypto, main)
 		AC_CHECK_LIB(ssl, main)
-		AC_MSG_RESULT([found in $with_openssl])
 	else
-		with_ssl="no"
+		AC_MSG_RESULT([not found or disabled])
+	        with_ssl="no"
 
 		AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
 			CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 			LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
 			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls]) with_ssl="yes" ])
-		AC_MSG_RESULT([not found or disabled])
 	fi
 else 
 	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
