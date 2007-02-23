@@ -3,6 +3,7 @@ AM_INIT_AUTOMAKE(firetalk, 0.1)
 
 AC_PROG_RANLIB
 AC_PROG_CC
+AC_PROG_CXX
 
 AC_ARG_ENABLE(aim, [  --disable-aim   Build without AIM], build_aim="$enableval", build_aim="yes")
 AC_ARG_ENABLE(irc, [  --disable-irc   Build without IRC], build_irc="$enableval", build_irc="yes")
@@ -10,7 +11,6 @@ AC_ARG_ENABLE(irc, [  --disable-irc   Build without IRC], build_irc="$enableval"
 AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_aim" = xyes -o "x$build_irc" = xyes)
 
 if test "$build_aim" = "yes" -o "$build_irc" = "yes"; then
-    AC_PROG_CXX
 
     AC_CHECK_HEADERS(stdint.h)
 
