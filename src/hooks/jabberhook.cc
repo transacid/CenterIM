@@ -112,15 +112,21 @@ void jabberhook::connect() {
 
     log(logConnecting);
 
-    auto_ptr<char> cjid(strdup(jid.c_str()));
-    auto_ptr<char> cpass(strdup(acc.password.c_str()));
-		auto_ptr<char> cserver(strdup(acc.server.c_str()));
+    /* TODO: is there really a need for COPYING these char-arrays
+     * shoudn't it be possible to feed the c_str() directly into jab_new
+     * and get rid of the copying ?
+     */
+    char *cjid = strdup(jid.c_str());
+    char *cpass = strdup(acc.password.c_str());
+    char *cserver = strdup(acc.server.c_str());
 
     regmode = flogged = fonline = false;
 
-    if(jc) delete jc;
+    if(jc){
+      jab_delete(jc);
+    }
 
-    jc = jab_new(cjid.get(), cpass.get(), cserver.get(), acc.port,
+    jc = jab_new(cjid, cpass, cserver, acc.port,
 	acc.additional["ssl"] == "1" ? 1 : 0);
 
     jab_packet_handler(jc, &packethandler);
@@ -135,6 +141,10 @@ void jabberhook::connect() {
 	statehandler(0, -1);
 	jab_start(jc);
     }
+
+    free (cjid);
+    free (cpass);
+    free (cserver);
 }
 
 void jabberhook::disconnect() {
@@ -146,7 +156,7 @@ void jabberhook::disconnect() {
 
     // close the connection
     jab_stop(jc);
-    delete(jc);
+    jab_delete(jc);
     jc = 0;
 }
 
@@ -248,18 +258,18 @@ bool jabberhook::send(const imevent &ev) {
 
 	} else if(ev.gettype() == imevent::authorization) {
 	    const imauthorization *m = static_cast<const imauthorization *> (&ev);
-	    auto_ptr<char> cjid(strdup(jidnormalize(ev.getcontact().nickname).c_str()));
+	    char *cjid = strdup(jidnormalize(ev.getcontact().nickname).c_str());
 	    xmlnode x = 0;
 
 	    switch(m->getauthtype()) {
 		case imauthorization::Granted:
-		    x = jutil_presnew(JPACKET__SUBSCRIBED, cjid.get(), 0);
+		    x = jutil_presnew(JPACKET__SUBSCRIBED, cjid, 0);
 		    break;
 		case imauthorization::Rejected:
-		    x = jutil_presnew(JPACKET__UNSUBSCRIBED, cjid.get(), 0);
+		    x = jutil_presnew(JPACKET__UNSUBSCRIBED, cjid, 0);
 		    break;
 		case imauthorization::Request:
-		    x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
+		    x = jutil_presnew(JPACKET__SUBSCRIBE, cjid, 0);
 		    break;
 	    }
 
@@ -267,6 +277,8 @@ bool jabberhook::send(const imevent &ev) {
 		jab_send(jc, x);
 		xmlnode_free(x);
 	    }
+
+	    free(cjid);
 
 	    return true;
 	}
@@ -280,10 +292,11 @@ bool jabberhook::send(const imevent &ev) {
 	}
 #endif
 
-	auto_ptr<char> cjid(strdup(jidnormalize(c->getdesc().nickname).c_str()));
-	auto_ptr<char> ctext(strdup(text.c_str()));
+	/* TODO: do these really needs to be copied? */
+	char *cjid = strdup(jidnormalize(c->getdesc().nickname).c_str());
+	char *ctext = strdup(text.c_str());
 
-	xmlnode x = jutil_msgnew(TMSG_CHAT, cjid.get(), 0, ctext.get());
+	xmlnode x = jutil_msgnew(TMSG_CHAT, cjid, 0, ctext);
 
 	if(ischannel(c)) {
 	    xmlnode_put_attrib(x, "type", "groupchat");
@@ -299,6 +312,9 @@ bool jabberhook::send(const imevent &ev) {
 
 	jab_send(jc, x);
 	xmlnode_free(x);
+
+	free (cjid);
+	free (ctext);
 
 	return true;
     }
@@ -323,30 +339,31 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	return;
 
     if(!ischannel(ic)) {
-	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
-	if(roster.find(cjid.get()) != roster.end()) {
+	char *cjid = strdup(jidnormalize(ic.nickname).c_str());
+	if(roster.find(cjid) != roster.end()) {
+	    free (cjid);
 	    return;
 	}
 
 	if(report) log(logContactAdd, ic.nickname.c_str());
 
-	x = jutil_presnew(JPACKET__SUBSCRIBE, cjid.get(), 0);
+	x = jutil_presnew(JPACKET__SUBSCRIBE, cjid, 0);
 	jab_send(jc, x);
 	xmlnode_free(x);
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
 	y = xmlnode_get_tag(x, "query");
 	z = xmlnode_insert_tag(y, "item");
-	xmlnode_put_attrib(z, "jid", cjid.get());
+	xmlnode_put_attrib(z, "jid", cjid);
 
-	roster[cjid.get()] = "";
+	roster[cjid] = "";
 
 	if(c = clist.get(ic)) {
 	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
 	    if(ig != groups.end()) {
 		z = xmlnode_insert_tag(z, "group");
 		xmlnode_insert_cdata(z, ig->getname().c_str(), (unsigned) -1);
-		roster[cjid.get()] = ig->getname();
+		roster[cjid] = ig->getname();
 	    }
 	}
 
@@ -367,7 +384,8 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	}
 
 	requestinfo(c);
-
+	
+	free (cjid);
     } else {
 	if(c = clist.get(ic)) {
 	    cname = ic.nickname.substr(1);
@@ -375,11 +393,14 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	    if(!cname.empty()) {
 		cname += "/" + conf.getourid(proto).nickname;
 
-		auto_ptr<char> ccname(strdup(cname.c_str()));
-		auto_ptr<char> ourjid(strdup(getourjid().c_str()));
+		char *ccname = strdup(cname.c_str());
+		char *ourjid = strdup(getourjid().c_str());
 
-		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
+		x = jutil_presnew(JPACKET__UNKNOWN, ccname, 0);
 		xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"), "Online", (unsigned) -1);
+
+		free (ccname);
+		free (ourjid);
 
 		jab_send(jc, x);
 		xmlnode_free(x);
@@ -397,18 +418,18 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 	return;
 
     if(!ischannel(ic)) {
-	auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+	char *cjid = strdup(jidnormalize(ic.nickname).c_str());
 
-	map<string, string>::iterator ir = roster.find(cjid.get());
+	map<string, string>::iterator ir = roster.find(cjid);
 
 	if(ir == roster.end()) return;
 	    else roster.erase(ir);
 
-	if(find(agents.begin(), agents.end(), cjid.get()) != agents.end()) {
-	    if(report) face.log(_("+ [jab] unregistering from the %s agent"), cjid.get());
+	if(find(agents.begin(), agents.end(), cjid) != agents.end()) {
+	    if(report) face.log(_("+ [jab] unregistering from the %s agent"), cjid);
 
 	    x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
-	    xmlnode_put_attrib(x, "to", cjid.get());
+	    xmlnode_put_attrib(x, "to", cjid);
 	    y = xmlnode_get_tag(x, "query");
 	    xmlnode_insert_tag(y, "remove");
 	    jab_send(jc, x);
@@ -418,17 +439,19 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 
 	if(report) log(logContactRemove, ic.nickname.c_str());
 
-	x = jutil_presnew(JPACKET__UNSUBSCRIBE, cjid.get(), 0);
+	x = jutil_presnew(JPACKET__UNSUBSCRIBE, cjid, 0);
 	jab_send(jc, x);
 	xmlnode_free(x);
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
 	y = xmlnode_get_tag(x, "query");
 	z = xmlnode_insert_tag(y, "item");
-	xmlnode_put_attrib(z, "jid", cjid.get());
+	xmlnode_put_attrib(z, "jid", cjid);
 	xmlnode_put_attrib(z, "subscription", "remove");
 	jab_send(jc, x);
 	xmlnode_free(x);
+
+	free (cjid);
 
     } else {
 	if(c = clist.get(ic)) {
@@ -436,11 +459,13 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 
 	    if(!cname.empty()) {
 		cname += "/" + conf.getourid(proto).nickname;
-		auto_ptr<char> ccname(strdup(cname.c_str()));
-		x = jutil_presnew(JPACKET__UNKNOWN, ccname.get(), 0);
+		char *ccname = strdup(cname.c_str());
+		x = jutil_presnew(JPACKET__UNKNOWN, ccname, 0);
 		xmlnode_put_attrib(x, "type", "unavailable");
 		jab_send(jc, x);
 		xmlnode_free(x);
+
+		free(ccname);
 
 		map<string, vector<string> >::iterator icm = chatmembers.find(ic.nickname);
 		if(icm != chatmembers.end()) chatmembers.erase(icm);
@@ -485,12 +510,13 @@ void jabberhook::requestinfo(const imcontact &ic) {
 	    }
 
 	} else {
-	    auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+	    char *cjid = strdup(jidnormalize(ic.nickname).c_str());
 	    xmlnode x = jutil_iqnew(JPACKET__GET, NS_VCARD);
-	    xmlnode_put_attrib(x, "to", cjid.get());
+	    xmlnode_put_attrib(x, "to", cjid);
 	    xmlnode_put_attrib(x, "id", "VCARDreq");
 	    jab_send(jc, x);
 	    xmlnode_free(x);
+	    free (cjid);
 
 	}
     }
@@ -529,11 +555,16 @@ const string &serv, string &err) {
 
     regmode = true;
 
-    auto_ptr<char> cjid(strdup(jid.c_str()));
-    auto_ptr<char> cpass(strdup(pass.c_str()));
-    auto_ptr<char> cserver(strdup(serv.c_str()));
+    /* TODO: do these really need to be copied ??? */
+    char *cjid = strdup(jid.c_str());
+    char *cpass = strdup(pass.c_str());
+    char *cserver = strdup(serv.c_str());
 
-    jc = jab_new(cjid.get(), cpass.get(), cserver.get(), port, 0);
+    jc = jab_new(cjid, cpass, cserver, port, 0);
+
+    free (cjid);
+    free (cpass);
+    free (cserver);
 
     if(!jc->user) {
 	err = _("Wrong nickname given, cannot register");
@@ -982,10 +1013,11 @@ void jabberhook::postlogin() {
 }
 
 void jabberhook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
-    auto_ptr<char> jcid(strdup(confid.nickname.substr(1).c_str()));
-    xmlnode x = jutil_presnew(JPACKET__UNKNOWN, jcid.get(), 0);
+    char *jcid = strdup(confid.nickname.substr(1).c_str());
+    xmlnode x = jutil_presnew(JPACKET__UNKNOWN, jcid, 0);
     jab_send(jc, x);
     xmlnode_free(x);
+    free (jcid);
 }
 
 void jabberhook::vcput(xmlnode x, const string &name, const string &val) {
@@ -1128,13 +1160,13 @@ void jabberhook::updatecontact(icqcontact *c) {
     xmlnode x, y;
 
     if(logged()) {
-	auto_ptr<char> cjid(strdup(jidnormalize(c->getdesc().nickname).c_str()));
-	auto_ptr<char> cname(strdup(rusconv("ku", c->getdispnick()).c_str()));
+	char *cjid = strdup(jidnormalize(c->getdesc().nickname).c_str());
+        char *cname = strdup(rusconv("ku", c->getdispnick()).c_str());
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
 	y = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "item");
-	xmlnode_put_attrib(y, "jid", cjid.get());
-	xmlnode_put_attrib(y, "name", cname.get());
+	xmlnode_put_attrib(y, "jid", cjid);
+	xmlnode_put_attrib(y, "name", cname);
 
 	vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
 	if(ig != groups.end()) {
@@ -1144,6 +1176,8 @@ void jabberhook::updatecontact(icqcontact *c) {
 
 	jab_send(jc, x);
 	xmlnode_free(x);
+	free (cjid);
+	free (cname);
     }
 }
 
@@ -1257,12 +1291,13 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 }
 
 void jabberhook::requestversion(const imcontact &ic) {
-    auto_ptr<char> cjid(strdup(jidnormalize(ic.nickname).c_str()));
+    char *cjid = strdup(jidnormalize(ic.nickname).c_str());
     xmlnode x = jutil_iqnew(JPACKET__GET, NS_VERSION);
-    xmlnode_put_attrib(x, "to", cjid.get());
+    xmlnode_put_attrib(x, "to", cjid);
     xmlnode_put_attrib(x, "id", "versionreq");
     jab_send(jc, x);
     xmlnode_free(x);
+    free (cjid);
 }
 
 void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
@@ -1622,18 +1657,20 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			imauthorization::Request, _("The user wants to subscribe to your network presence updates")));
 
 		} else {
-		    auto_ptr<char> cfrom(strdup(from.c_str()));
-		    x = jutil_presnew(JPACKET__SUBSCRIBED, cfrom.get(), 0);
+		    char *cfrom = strdup(from.c_str());
+		    x = jutil_presnew(JPACKET__SUBSCRIBED, cfrom, 0);
 		    jab_send(jhook.jc, x);
 		    xmlnode_free(x);
+		    free (cfrom);
 		}
 
 	    } else if(type == "unsubscribe") {
-		auto_ptr<char> cfrom(strdup(from.c_str()));
-		x = jutil_presnew(JPACKET__UNSUBSCRIBED, cfrom.get(), 0);
+		char *cfrom = strdup(from.c_str());
+		x = jutil_presnew(JPACKET__UNSUBSCRIBED, cfrom, 0);
 		jab_send(jhook.jc, x);
 		xmlnode_free(x);
 		em.store(imnotification(ic, _("The user has removed you from his contact list (unsubscribed you, using the Jabber language)")));
+		free (cfrom);
 
 	    }
 

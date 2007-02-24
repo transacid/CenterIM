@@ -1357,7 +1357,10 @@ void icqhook::socket_cb(SocketEvent *ev) {
 }
 
 void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
-    char buf[128];
+    /* TODO: something should probably be logged here, but
+     * logging an UNITIALIZED BUFFER seems pretty stupid to me
+     */
+    /* char buf[128]; */
     string ident;
     imcontact cont = imcontact(ev->getSenderUIN(), icq);
     icqcontact *c = clist.get(cont);
@@ -1365,7 +1368,7 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
     ident = cont.totext();
     if(c) ident += " (" + c->getdispnick() + ")";
 
-    logger.putmessage(buf);
+    /* logger.putmessage(buf); */
     ev->setAwayMessage(rusconv("kw", conf.getawaymsg(icq)));
 }
 

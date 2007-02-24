@@ -47,7 +47,8 @@ char *trimlead(char *str, char *chr) {
 }
 
 char *trimtrail(char *str, char *chr) {
-    while(strchr(chr, str[strlen(str)-1]) && strlen(str)) str[strlen(str)-1] = 0;
+    while(strlen(str) && strchr(chr, str[strlen(str)-1])) 
+      str[strlen(str)-1] = 0;
     return str;
 }
 
@@ -416,7 +417,8 @@ string justpathname(const string &fname) {
 
 void charpointerfree(void *p) {
     char *cp = (char *) p;
-    if(cp) delete cp;
+    if(cp) 
+        free (cp);
 }
 
 void nothingfree(void *p) {

@@ -160,9 +160,9 @@ void icqcontact::save() {
 
 	    f.open(infoname.c_str());
 	    if(f.is_open()) {
-		string options;
+      	        string options(""); /* set initial value */
 		if(binfo.requiresauth) options += "a";
-		if(binfo.authawait) options += "w";
+		if(binfo.authawait) options += "w";   
 		if(usepgpkey) options += "p";
 
 		f << nick << endl <<

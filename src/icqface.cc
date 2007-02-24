@@ -2316,11 +2316,13 @@ bool icqface::eventedit(imevent &ev) {
 	editor.open();
 	r = editdone;
 
-	auto_ptr<char> p(editor.save("\r\n"));
-	*m = immessage(ev.getcontact(), imevent::outgoing, p.get());
+	/* TODO, should we relly use a pointer here ? */
+	char *p = editor.save("\r\n");
+	*m = immessage(ev.getcontact(), imevent::outgoing, p);
 
 	if(c = clist.get(ev.getcontact()))
-	    c->setpostponed(r ? "" : p.get());
+	    c->setpostponed(r ? "" : p);
+	free (p);
 
     } else if(ev.gettype() == imevent::xml) {
 	editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
@@ -2333,17 +2335,20 @@ bool icqface::eventedit(imevent &ev) {
 	    editor.open();
 	    r = editdone;
 
-	    auto_ptr<char> p(editor.save("\r\n"));
-	    m->setfield("text", p.get());
+	    char *p = editor.save("\r\n");
+	    m->setfield("text", p);
 
 	    if(r)
-	    if(ev.getcontact().pname == livejournal)
-	    if(!setljparams(m))
-		continue;
+	      if(ev.getcontact().pname == livejournal)
+		if(!setljparams(m)){
+		  free(p);
+		  continue;
+		}
 
 	    if(c = clist.get(ev.getcontact()))
-		c->setpostponed(r ? "" : p.get());
+		c->setpostponed(r ? "" : p);
 
+	    free(p);
 	    break;
 	}
 
@@ -2369,8 +2374,9 @@ bool icqface::eventedit(imevent &ev) {
 
 	    r = editdone;
 
-	    auto_ptr<char> p(editor.save("\r\n"));
-	    *m = imurl(ev.getcontact(), imevent::outgoing, url, p.get());
+	    char *p = editor.save("\r\n");
+	    *m = imurl(ev.getcontact(), imevent::outgoing, url, p);
+	    free (p);
 	}
 
     } else if(ev.gettype() == imevent::sms) {
@@ -2395,9 +2401,10 @@ bool icqface::eventedit(imevent &ev) {
 	    editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
 	    editor.load(msg = m->getmessage(), "");
 	    editor.open();
-	    auto_ptr<char> p(editor.save("\r\n"));
-	    *m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p.get());
+	    char *p = editor.save("\r\n");
+	    *m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, p);
 	    r = editdone;
+	    free(p);
 	} else {
 	    *m = imauthorization(ev.getcontact(), imevent::outgoing, imauthorization::Request, "");
 	    r = true;
@@ -2579,7 +2586,7 @@ void icqface::renderchathistory() {
     }
 
     while(events.size() > chatlines) {
-	delete *events.begin();
+	delete events.front();
 	events.erase(events.begin());
     }
 
@@ -3406,7 +3413,7 @@ int icqface::editmsgkeys(texteditor &e, int k) {
     if(k == '\r' && conf.getentersends(face.passinfo.pname)) {
 	p = e.save("");
 	face.editdone = strlen(p);
-	delete p;
+	free(p);
 	if(face.editdone) return -1; else return 0;
     }
 
@@ -3414,7 +3421,7 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	case key_send_message:
 	    p = e.save("");
 	    face.editdone = strlen(p);
-	    delete p;
+	    free(p);
 	    if(face.editdone) return -1; else break;
 	case key_multiple_recipients:
 	    face.multicontacts("");

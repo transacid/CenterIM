@@ -1031,13 +1031,15 @@ bool texteditor::fix_x(bool tab) {
     if(tab) {
 	int rm = rtabmargin(true, CURCOL, CURSTRING);
 	char *p = CURSTRING;
-	
-	if(p[CURCOL-1] == ' ')
-	if(strspn(p+CURCOL, " ") >= rm-CURCOL)
-	if(CURCOL != ltabmargin(true, rm, p)) {
-	    //if(rm <= curfile->sx+x2-x1) curfile->x = rm-curfile->sx;
-	    curfile->x += rm-curfile->x;
-	}
+
+	/* if CURCOL is 0 we'll be outside of the array => not good */
+	if(CURCOL > 0)
+	  if(p[CURCOL-1] == ' ')
+	    if(strspn(p+CURCOL, " ") >= rm-CURCOL)
+	      if(CURCOL != ltabmargin(true, rm, p)) {
+		//if(rm <= curfile->sx+x2-x1) curfile->x = rm-curfile->sx;
+		curfile->x += rm-curfile->x;
+	      }
     }
 
     return osx != curfile->sx;
@@ -1081,7 +1083,7 @@ void texteditor::eddel(bool usetabs) {
 			curfile->lines->replace(CURLINE, newline);
 		    }
 
-		    delete anext;
+		    free(anext);
 		} else {
 		    if(next) nextlen = strlen(next); else nextlen = 0;
 		    char *newline = new char[nextlen+strlen(p)+1];
@@ -2136,7 +2138,7 @@ void texteditor::editfilefree(void *p) {
 	delete ef->highlines;
 	delete ef->undo;
 	delete ef->markblock;
-	delete ef->id;
+	free (ef->id) ;	 /* this is allocated by a c-routine => must deallocated with free */
 	delete ef;
     }
 }

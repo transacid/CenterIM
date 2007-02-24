@@ -264,8 +264,10 @@ void yahoohook::exectimers() {
     for(it = tobedone.begin(); it != tobedone.end(); ++it) {
 	switch(it->first) {
 	    case tbdConfLogon:
-		auto_ptr<char> room(strdup(it->second.c_str()));
-		yahoo_conference_logon(cid, 0, getmembers(it->second), room.get());
+	      /* TODO: investigate if copy is really needed here */
+		char *room = strdup(it->second.c_str());
+		yahoo_conference_logon(cid, 0, getmembers(it->second), room);
+		free (room);
 		break;
 	}
     }
@@ -453,15 +455,18 @@ void yahoohook::setautostatus(imstatus st) {
 	    logger.putourstatus(proto, getstatus(), ourstatus = st);
 
 	    if(st == freeforchat) {
-		auto_ptr<char> msg(strdup("free for chat"));
-		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 0);
+               /* TODO copy should not be needed here ?*/
+		char *msg = strdup("free for chat");
+		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg, 0);
+		free (msg);
 
 	    } else if(st != away) {
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], 0, 0);
 
 	    } else {
-		auto_ptr<char> msg(strdup(rusconv("ku", conf.getawaymsg(proto)).c_str()));
-		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg.get(), 1);
+		char *msg = strdup(rusconv("ku", conf.getawaymsg(proto)).c_str());
+		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg, 1);
+		free (msg);
 
 	    }
 	}

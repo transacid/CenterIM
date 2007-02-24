@@ -89,6 +89,7 @@ namespace ICQ2000 {
     m_tag_id = 0;
     m_server_based = false;
     m_authreq = false;
+    m_authawait = false;
   }
 
   unsigned int Contact::getUIN() const { return m_uin; }

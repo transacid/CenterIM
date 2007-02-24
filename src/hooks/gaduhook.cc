@@ -126,6 +126,7 @@ void gaduhook::init() {
 void gaduhook::connect() {
     icqconf::imaccount acc = conf.getourid(proto);
     static struct gg_login_params lp;
+    /* TODO investigate this, auto_ptr will free with delete, but allocated by malloc */
     static auto_ptr<char> pass(strdup(acc.password.c_str()));
 
     memset(&lp, 0, sizeof(lp));
@@ -142,6 +143,7 @@ void gaduhook::connect() {
 	lp.password = pass.get();
 	lp.async = 1;
 
+	/* TODO investigate this, auto_ptr will free with delete, but allocated by malloc */
 	static auto_ptr<char> descr(strdup(rusconv("kw", conf.getawaymsg(proto)).c_str()));
 
 	lp.status_descr = descr.get();
@@ -601,6 +603,7 @@ void gaduhook::userlistsend() {
     }
 
     auto_ptr<uin_t> cuins(new uin_t[uins.size()]);
+    /* TODO: allocated with new[], but will be freed by delete */
     auto_ptr<char> ctypes(new char[uins.size()]);
 
     for(vector<uin_t>::const_iterator iu = uins.begin(); iu != uins.end(); ++iu) {

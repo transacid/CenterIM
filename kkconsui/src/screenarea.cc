@@ -80,7 +80,7 @@ void screenarea::restore(int fx1, int fy1, int fx2, int fy2) {
 
 void screenarea::freebuffer() {
     while(!buffer.empty()) {
-	delete *buffer.begin();
+	delete[] buffer.front();
 	buffer.erase(buffer.begin());
     }
 }

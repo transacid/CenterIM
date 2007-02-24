@@ -283,7 +283,7 @@ string makebidi(const string &buf, int lpad) {
     delete us;
     delete out_us;
     delete outstring;
-    delete cbuf;
+    free (cbuf); /* allocated by c-routine */
 
     if(lpad) {
 	pad.assign(lpad-r.size(), ' ');

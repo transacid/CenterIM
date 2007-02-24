@@ -47,16 +47,19 @@ void linkedlist::add(void *p) {
 }
 
 void linkedlist::insert(int n, void *p) {
-    flinkedlist *l = flist, *k = new flinkedlist;
-    
     if(n <= count) {
+        flinkedlist *l = flist, *k = new flinkedlist;
+
 	for(i = 0; i < n-1; i++, l = l->next);
 	k->data = l->data;
 	l->data = p;
 	k->next = l->next;
 	l->next = k;
 	count++;
-    } else add(p);
+    }
+    else{
+      add(p);
+    }
 }
 
 void linkedlist::remove(int n) {
@@ -89,7 +92,7 @@ void linkedlist::empty() {
     for(i = 0, l = flist; i < count && l; i++) {
 	p = l;
 	l = l->next;
-	if(freeitem) freeitem(p->data); else free(p->data);
+	if(freeitem) freeitem(p->data); else delete (p->data);
 	delete p;
     }
 
