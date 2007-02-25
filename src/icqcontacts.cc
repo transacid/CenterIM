@@ -28,7 +28,15 @@
 #include "icqgroups.h"
 #include "abstracthook.h"
 
+
+/* Function used to delete icqcontact when removed from the list */
+static void deletecontact(void *contact){
+  icqcontact *c = (icqcontact *)contact;
+  delete c;
+}
+
 icqcontacts::icqcontacts() {
+  freeitem = deletecontact;
 }
 
 icqcontacts::~icqcontacts() {
