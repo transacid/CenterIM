@@ -92,7 +92,7 @@ void linkedlist::empty() {
     for(i = 0, l = flist; i < count && l; i++) {
 	p = l;
 	l = l->next;
-	if(freeitem) freeitem(p->data); else delete (p->data);
+	if(freeitem) freeitem(p->data); else free(p->data);
 	delete p;
     }
 
