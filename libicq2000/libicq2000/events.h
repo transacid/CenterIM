@@ -367,9 +367,9 @@ namespace ICQ2000 {
      */
     enum EventType {
       StatusChange,
-      UserInfoChange,
+      UserInfoChange
     };
-    
+
    protected:
     /**
      *  The contact this event refers to.

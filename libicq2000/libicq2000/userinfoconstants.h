@@ -154,7 +154,7 @@ enum Language
   LANGUAGE_AFRIKAANS     = 56,
   LANGUAGE_PERSIAN       = 57,
   LANGUAGE_ALBANIAN      = 58,
-  LANGUAGE_ARMENIAN      = 59,
+  LANGUAGE_ARMENIAN      = 59
 };
 
 enum Country
@@ -401,9 +401,9 @@ enum Country
   COUNTRY_YUGOSLAVIA                         = 381,
   COUNTRY_ZAIRE                              = 243,
   COUNTRY_ZAMBIA                             = 260,
-  COUNTRY_ZIMBABWE                           = 263,
+  COUNTRY_ZIMBABWE                           = 263
 };
- 
+
 enum Interest
 {
   INTEREST_ART                     = 100,
@@ -456,7 +456,7 @@ enum Interest
   INTEREST_AUDIO_AND_VISUAL        = 147,
   INTEREST_SPORTING_AND_ATHLETICS  = 148,
   INTEREST_PUBLISHING              = 149,
-  INTEREST_HOME_AUTOMATION         = 150,
+  INTEREST_HOME_AUTOMATION         = 150
 };
 
 enum Background
@@ -468,7 +468,7 @@ enum Background
   BACKGROUND_MILITARY              = 304,
   BACKGROUND_PAST_WORK_PLACE       = 305,
   BACKGROUND_PAST_ORGANIZATION     = 306,
-  BACKGROUND_OTHER                 = 399,
+  BACKGROUND_OTHER                 = 399
 };
 
 
@@ -480,7 +480,7 @@ enum AgeRange
   RANGE_30_39    = 3,
   RANGE_40_49    = 4,
   RANGE_50_59    = 5,
-  RANGE_60_ABOVE = 6,
+  RANGE_60_ABOVE = 6
 };
 
 }

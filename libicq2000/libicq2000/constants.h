@@ -34,7 +34,7 @@ enum Status
   STATUS_OCCUPIED,
   STATUS_DND,
   STATUS_FREEFORCHAT,
-  STATUS_OFFLINE,
+  STATUS_OFFLINE
 };
 
 static const unsigned int SMS_Max_Length = 160;

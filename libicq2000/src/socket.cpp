@@ -183,7 +183,7 @@ namespace ICQ2000
     int ret;
     unsigned int sent = 0;
 
-    unsigned char data[b.size()];
+    unsigned char *data = (unsigned char *) malloc(b.size());
     copy( b.begin(), b.end(), data );
 
     while (sent < b.size())
@@ -193,11 +193,13 @@ namespace ICQ2000
 	m_state = NOT_CONNECTED;
 	close(m_socketDescriptor);
 	m_socketDescriptor_valid = false;
+	free(data);
 	throw SocketException("Sending on socket");
       }
-    
+
       sent += ret;
     }
+    free(data);
   }
 
   bool TCPSocket::Recv(Buffer& b) {

@@ -791,8 +791,8 @@ void texteditor::showline(int ln, int startx, int distance, int extrax) {
     const char *p;
 
     if(!(cs = (char *) curfile->lines->at(ln))) return;
-    char cp[i = (strlen(cs)+1)*4];
-    char buf[i];
+    char *cp = (char *) malloc(i = ((strlen(cs)+1)*4)*sizeof(char));
+    char *buf = (char *) malloc(i);
 
     eolstart = i;
 
@@ -970,6 +970,9 @@ void texteditor::showline(int ln, int startx, int distance, int extrax) {
     if(printed < 0) printed = 0; else
     if(printed > distance) printed = distance;
     mvhline(y1+ln-curfile->sy, x1+extrax+printed, ' ', distance-printed);
+
+    free (buf);
+    free (cp);
 }
 
 void texteditor::draw(int fromline) {
