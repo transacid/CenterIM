@@ -138,7 +138,7 @@ class msnhook : public abstracthook {
 
     public:
 	msnhook();
-	~msnhook();
+	virtual ~msnhook();
 
 	void init();
 

@@ -24,8 +24,8 @@ class icqcontact {
     public:
 	struct basicinfo {
 	    basicinfo()
-		: country(0), requiresauth(false), webaware(false),
-		  authawait(false), randomgroup(0) { };
+              : country(0), randomgroup(0), requiresauth(false), 
+		  webaware(false), authawait(false)  { };
 
 	    string fname, lname, email, city, state, phone, fax;
 	    string street, cellular, zip;
@@ -123,8 +123,8 @@ class icqcontact {
 	bool hasevents() const { return fhasevents; }
 	void sethasevents(bool n) { fhasevents = n; }
 	bool isopenedforchat() const { return openedforchat; }
-	bool setopenedforchat(bool n) { openedforchat = n; }
-	bool toggleopenedforchat() { openedforchat = !openedforchat; }
+	void setopenedforchat(bool n) { openedforchat = n; }
+	void toggleopenedforchat() { openedforchat = !openedforchat; }
 
 	string getnick() const;
 	string getdispnick() const;

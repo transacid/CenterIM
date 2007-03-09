@@ -27,7 +27,8 @@
 
 char *strcut(char *strin, int frompos, int count) {
     if(count > 0) {
-	if(count > strlen(strin)-frompos) count = strlen(strin)-frompos;
+	if(count > strlen(strin)-frompos) 
+	    count = strlen(strin)-frompos;
 	char *buf = (char *) malloc(strlen(strin) - frompos - count + 1);
 	memcpy(buf, strin + frompos + count, strlen(strin) - frompos - count);
 	memcpy(strin + frompos, buf, strlen(strin) - frompos - count);
@@ -60,13 +61,13 @@ char *time2str(const time_t *t, char *mask, char *sout) {
     struct tm *s;
     char ch, b[10], b1[20];
     int len, i, j;
-
+    
     sout[0] = 0;
     s = localtime(t);
-
+    
     for(i = 0; i < strlen(mask); i++) {
 	len = 0;
-    
+	
 	if(strchr("DMYhms", ch = mask[i])) {
 	    j = i; len = 1;
 	    while(mask[++j] == ch) len++;
@@ -99,9 +100,9 @@ time_t str2time(char *sdate, char *mask, time_t *t) {
     struct tm *s;
     int i, len, j, k;
     char ch, b[10];
-
+    
     s = (struct tm*) malloc(sizeof(struct tm));
-  
+    
     for(i = 0; i < strlen(mask); i++) {
 	len = 0;
     
@@ -761,8 +762,8 @@ string strdateandtime(time_t stamp, const string &fmt) {
 
 string strdateandtime(struct tm *tms, const string &fmt) {
     char buf[512];
-    time_t current_time = time(0);
-    time_t when = mktime(tms);
+    /*time_t current_time = time(0);*/
+    /*time_t when = mktime(tms);*/
     string afmt = fmt;
 
     if(afmt.empty()) {

@@ -35,7 +35,7 @@
 aimhook ahook;
 
 aimhook::aimhook()
-    : abstracthook(aim), handle(0), fonline(false), flogged(false),
+    : abstracthook(aim), fonline(false), flogged(false), handle(0), 
       ourstatus(offline)
 {
     fcapabs.insert(hookcapab::setaway);

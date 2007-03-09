@@ -76,7 +76,7 @@ texteditor::~texteditor() {
 }
 
 int texteditor::load(const string abuf, const string id) {
-    int newfn = addwindow(strdup(id.c_str())), k;
+    int newfn = addwindow(strdup(id.c_str()));
     string buf = abuf;
     vector<string> lst;
     vector<string>::iterator i;
@@ -479,7 +479,6 @@ void texteditor::delmark() {
 	    
 	} else {
 	    char *lch = (char *) curfile->lines->at(i-line);
-	    int li = strlen(lch);
 
 	    deltext += "\n";
 	    if(i == mb->y1) deltext += lch+mb->x1; else deltext += lch;
@@ -621,7 +620,6 @@ int dstralone(const char *buf, const char *startword, int wordlen, const char *d
 void texteditor::scancomments(bool visible) {
     int sl, el, i;
     const char *rsub, *lsub;
-    hl_kind hk;
 
     curfile->blocks->empty();
     
@@ -881,6 +879,13 @@ void texteditor::showline(int ln, int startx, int distance, int extrax) {
 			hi->color);
 		    
 		    break;
+
+                case h_quotes:
+                case h_comment:
+                    /* TODO: should these be handled,
+                     * are they possible to get here at all ?
+                     */
+                    break;
 	    }
 	}
 

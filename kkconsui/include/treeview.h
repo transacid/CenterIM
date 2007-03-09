@@ -44,7 +44,7 @@ class treeview : public abstractuicontrol {
 	treeview(int nx1, int ny1, int nx2, int ny2, int nbgcolor, int nselectcolor, int nnodecolor, int nleafcolor);
 	treeview(int nbgcolor, int nselectcolor, int nnodecolor, int nleafcolor);
 	treeview();
-	~treeview();
+	virtual ~treeview();
 
 	bool empty();
 

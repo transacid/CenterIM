@@ -23,7 +23,7 @@ class horizontalbar : public abstractuicontrol {
 
 	horizontalbar(int x, int y, int nc, int sc, ...);
 	horizontalbar(int nc, int sc, ...);
-	~horizontalbar();
+	virtual ~horizontalbar();
 
 	void movebar(int k);
 	virtual void redraw();

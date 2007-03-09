@@ -1,13 +1,15 @@
 #include "connwrap.h"
 
-#include <stdio.h>
-#include <netdb.h>
-#include <string.h>
-#include <netinet/in.h>
-#include <errno.h>
 #include <arpa/inet.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 #define PROXY_TIMEOUT   10
     // HTTP proxy timeout in seconds (for the CONNECT method)
@@ -380,7 +382,7 @@ int cw_close(int fd) {
 #ifdef HAVE_OPENSSL
     delsock(fd);
 #endif
-    close(fd);
+    return close(fd);
 }
 
 #define FREEVAR(v) if(v) free(v), v = 0;

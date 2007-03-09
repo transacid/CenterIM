@@ -98,6 +98,7 @@ class abstracthook {
 
     public:
 	abstracthook(protocolname aproto);
+        virtual ~abstracthook();
 
 	virtual void init();
 
