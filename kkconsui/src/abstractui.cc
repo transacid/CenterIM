@@ -25,7 +25,7 @@
 #include "abstractui.h"
 
 abstractuicontrol::abstractuicontrol()
-: fisopen(false), aborted(false), emacs(false), finished(false), x1(0), x2(0), y1(0), y2(0)
+: fisopen(false), finished(false), aborted(false), emacs(false), x1(0), x2(0), y1(0), y2(0)
 { }
 
 abstractuicontrol::abstractuicontrol(const abstractuicontrol &a)

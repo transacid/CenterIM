@@ -7,7 +7,7 @@
 
 static fileselector *instance;
 
-fileselector::fileselector(): idle(0), otherkeys(0) {
+fileselector::fileselector(): otherkeys(0), idle(0) {
 }
 
 fileselector::~fileselector() {

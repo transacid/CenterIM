@@ -26,8 +26,8 @@
 
 dialogbox *dialogbox::it;
 
-dialogbox::dialogbox(): menu(0), tree(0), window(0), bar(0), browser(0),
-idle(0), otherkeys(0), first(true) {
+dialogbox::dialogbox(): first(true), menu(0), tree(0), window(0), bar(0), browser(0),
+otherkeys(0), idle(0) {
     freemenu = freetree = freewindow = freebar = freebrowser = false;
 }
 
@@ -108,7 +108,7 @@ bool dialogbox::open(int &menuitem, int &baritem, void **ref) {
 	int k;
 	menuitem = 0;
 
-	for(bool fin = false; !fin; ) {
+	for(fin = false; !fin; ) {
 	    proceed = idle ? keypressed() : true;
 	    it = this;
 
@@ -257,7 +257,6 @@ void dialogbox::browseridle(textbrowser &caller) {
 
 int dialogbox::menukeys(verticalmenu &caller, int k) {
     list<keybarassociation>::iterator i;
-    bool found;
     int ip;
     dialogbox *sit;
 
@@ -313,7 +312,6 @@ int dialogbox::menukeys(verticalmenu &caller, int k) {
 
 int dialogbox::browserkeys(textbrowser &caller, int k) {
     list<keybarassociation>::iterator i;
-    bool found;
     int ip;
     dialogbox *sit;
 

@@ -61,7 +61,7 @@ class fileselector: public abstractuicontrol {
 
     public:
 	fileselector();
-	~fileselector();
+	virtual ~fileselector();
 
 	void setoptions(int noptions);
 	void setstartpoint(const string &aspoint);

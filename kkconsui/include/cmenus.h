@@ -50,7 +50,7 @@ class verticalmenu: public abstractuicontrol {
 
 	verticalmenu(int px1, int py1, int px2, int py2, int pncolor, int pscolor);
 	verticalmenu(int pncolor = 0, int pscolor = 0);
-	~verticalmenu();
+	virtual ~verticalmenu();
 
 	// following special characters are valid in the items text:
 
@@ -132,7 +132,7 @@ class horizontalmenu: public abstractuicontrol {
 
 	horizontalmenu(int x, int y, int normcolor, int selcolor, int framecolor);
 	horizontalmenu();
-	~horizontalmenu();
+	virtual ~horizontalmenu();
 
 	void additemf(int color, const char *fmt, ...);
 	void additemf(const char *fmt, ...);

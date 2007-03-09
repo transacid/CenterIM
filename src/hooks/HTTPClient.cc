@@ -29,8 +29,8 @@
 
 #ifdef BUILD_RSS
 
-HTTPClient::HTTPClient() : m_recv(), m_state(NOT_CONNECTED),
-m_timeout(50), m_proxy_port(8080) {
+HTTPClient::HTTPClient() : m_state(NOT_CONNECTED), m_recv(), 
+m_proxy_port(8080), m_timeout(50)  {
     m_socket = new TCPSocket();
     Init();
 }

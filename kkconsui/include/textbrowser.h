@@ -23,7 +23,7 @@ class textbrowser: public abstractuicontrol {
 	
 	textbrowser(int nx1, int ny1, int nx2, int ny2, int clr);
 	textbrowser(int clr = 0);
-	~textbrowser();
+	virtual ~textbrowser();
 
 	void setcolor(int clr);
 	void setcoords(int nx1, int ny1, int nx2, int ny2);

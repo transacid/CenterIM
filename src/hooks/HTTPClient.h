@@ -38,8 +38,8 @@ class HTTPRequestEvent : public MessageEvent {
 
     public:
 	HTTPRequestEvent(const string &url, RequestMethod rt = GET)
-	    : MessageEvent(ContactRef()), m_url(url), method(rt),
-	      authTries(0), connectTries(0) { }
+	    : MessageEvent(ContactRef()), m_url(url), 
+	      authTries(0), connectTries(0), method(rt) { }
 
 	string getContent() const { return m_content; }
 	string getURL() const { return m_url; }
