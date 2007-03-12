@@ -327,6 +327,7 @@ esac
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
+AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_irc" = xyes -o "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = xyes)
 AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = xyes)
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
@@ -452,7 +453,18 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/hooks/Makefile
                  intl/Makefile
-                 po/Makefile.in])
+                 po/Makefile.in
+                 libmsn/Makefile
+                 libyahoo2/Makefile
+                 libgadu/Makefile
+                 connwrap/Makefile
+                 libjabber/Makefile
+                 firetalk/Makefile
+                 kkstrtext/Makefile
+                 kksystr/Makefile
+                 kkconsui/Makefile
+                 libicq2000/Makefile
+                 ])
 
 AC_OUTPUT
 
