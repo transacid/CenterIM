@@ -453,18 +453,7 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/hooks/Makefile
                  intl/Makefile
-                 po/Makefile.in
-                 libmsn/Makefile
-                 libyahoo2/Makefile
-                 libgadu/Makefile
-                 connwrap/Makefile
-                 libjabber/Makefile
-                 firetalk/Makefile
-                 kkstrtext/Makefile
-                 kksystr/Makefile
-                 kkconsui/Makefile
-                 libicq2000/Makefile
-                 ])
+                 po/Makefile.in])
 
 AC_OUTPUT
 
