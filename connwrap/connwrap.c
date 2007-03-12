@@ -1,5 +1,6 @@
 #include "connwrap.h"
 
+#include <stdio.h>
 #include <netdb.h>
 #include <string.h>
 #include <netinet/in.h>
