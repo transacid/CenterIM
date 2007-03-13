@@ -16,6 +16,8 @@
 #include <sys/ioctl.h>
 #include <ncurses.h>
 #include <ctype.h>
+#include <wchar.h>
+#include <iconv.h>
 
 #ifdef __sun__
 #include <sys/termio.h>
