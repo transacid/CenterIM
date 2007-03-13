@@ -74,6 +74,15 @@ void kendinterface() {
 
 int getkey() {
     int k, n, fin = 0, r = 0;
+#ifdef HAVE_ICONV
+    char c_ch[8] = "";
+    char final_ch[8] = "";
+    wchar_t o_wch[2] = { 0, 0 };
+    size_t nch = 0, wlen = 8, clen = 8;
+    iconv_t cd = 0;
+    char f_enc[] = "UTF-8";
+    char t_enc[] = "ISO_8859-15";
+#endif
     fd_set rd;
     struct timeval tv;
 
@@ -85,7 +94,22 @@ int getkey() {
 	while(!select(STDIN_FILENO+1, &rd, 0, 0, 0));
 	ioctl(STDIN_FILENO, FIONREAD, &r);
 
-	switch(k = getch()) {
+#ifdef HAVE_ICONV
+    k = get_wch( o_wch );
+    nch = wcstombs( c_ch, o_wch,  8 );
+    if( nch >= 0 ) {
+        wlen
+        cd = iconv_open( f_enc, t_enc );
+        iconv(cd, c_ch, &wlen, final_ch, &clen);
+        iconv_close( cd );
+        k = final_ch[0];
+    } else {
+        k = 0;
+    }
+#else
+    k = getch();
+#endif
+	switch(k) {
 	    case 27:
 		tv.tv_sec = 10;
 		tv.tv_usec = 0;
