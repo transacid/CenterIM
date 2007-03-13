@@ -187,7 +187,7 @@ GPGME_CXXFLAGS=""
 GPGME_LIBS=""
 have_gpgme=no
 
-if true; then
+if x"$with_gpgme" = x"no"; then
 	AC_MSG_RESULT([])
 
 	if test -x "$with_gpgme"; then
