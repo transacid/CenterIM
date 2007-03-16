@@ -181,14 +181,13 @@ fi
 ###################
 # Check for gpgme #
 ###################
-AC_MSG_CHECKING(for gpgme)
 GPGME_CFLAGS=""
 GPGME_CXXFLAGS=""
 GPGME_LIBS=""
 have_gpgme=no
 
-if true; then
-	AC_MSG_RESULT([])
+if test x"$with_gpgme" = x"no"; then
+    AC_MSG_CHECKING(for gpgme)
 
 	if test -x "$with_gpgme"; then
 		GPGME_CONFIG= "$with_gpgme"
@@ -197,7 +196,9 @@ if true; then
 	fi
 
 	if test x$GPGME_CONFIG = xno; then
-		AC_MSG_ERROR([*** gpgme-config not found])
+        AC_MSG_RESULT([no])
+    else
+        AC_MSG_RESULT([yes])
 	fi
 
 	save_CFLAGS="$CFLAGS"
@@ -220,7 +221,7 @@ if true; then
 			return 1;
 		}
 	], opengpg_avail=yes, opengpg_avail=no, opengpg_avail=no)
-	AC_MSG_RESULT($opengpg_avail)
+	AC_MSG_RESULT([$opengpg_avail])
 
 	if test "$opengpg_avail" != "yes"; then
 		CFLAGS="$save_CFLAGS"
@@ -327,6 +328,7 @@ esac
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
+AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_irc" = xyes -o "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = xyes)
 AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = xyes)
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)

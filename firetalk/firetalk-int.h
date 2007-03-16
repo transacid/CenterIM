@@ -190,8 +190,8 @@ struct s_firetalk_protocol_functions {
 	enum firetalk_error (*chat_requestextended)(client_t, const char * const);
 	enum firetalk_error (*subcode_send_request)(client_t, const char * const, const char * const, const char * const);
 	enum firetalk_error (*subcode_send_reply)(client_t, const char * const, const char * const, const char * const);
-	const char * const (*room_normalize)(const char * const);
-	client_t (*create_handle)();
+	const char * (*room_normalize)(const char * const);
+	client_t (*create_handle)( void );
 	void (*destroy_handle)(client_t);
 	void (*signon_init)(client_t);
 };
@@ -277,6 +277,6 @@ void firetalk_internal_set_connectstate(client_t c, enum firetalk_connectstate f
 enum firetalk_error firetalk_check_handle(struct s_firetalk_handle *c);
 #endif
 enum firetalk_error firetalk_set_timeout(unsigned int seconds);
-enum firetalk_error firetalk_clear_timeout();
+enum firetalk_error firetalk_clear_timeout( void );
 
 #endif
