@@ -1098,7 +1098,6 @@ static string fixicqrtf(string msg) {
 
 void icqhook::messaged_cb(MessageEvent *ev) {
     imcontact ic;
-    time_t t;
     string text;
 
     ic = imcontact(ev->getContact()->getUIN(), icq);

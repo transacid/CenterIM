@@ -18,7 +18,7 @@ class abstractuicontrol {
 
 	abstractuicontrol();
 	abstractuicontrol(const abstractuicontrol &a);
-	~abstractuicontrol();
+	virtual ~abstractuicontrol();
 
 	virtual bool empty() const;
 	bool getaborted() const;

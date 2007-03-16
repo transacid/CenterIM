@@ -23,7 +23,7 @@ class textwindow: public abstractuicontrol {
 	textwindow(const textwindow &aw);
 	textwindow(int xx1, int yy1, int xx2, int yy2, int wcolor,
 	    int noptions = 0, int tcolor = 0, const char *tfmt = 0, ...);
-	~textwindow();
+	virtual ~textwindow();
 
 	void write(int x, int y, int c, const string &text);
 	void write(int x, int y, const string &text);

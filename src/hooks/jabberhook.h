@@ -86,7 +86,7 @@ class jabberhook: public abstracthook {
 
     public:
 	jabberhook();
-	~jabberhook();
+	virtual ~jabberhook();
 
 	void init();
 

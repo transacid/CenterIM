@@ -46,6 +46,9 @@ abstracthook::abstracthook(protocolname aproto)
     : proto(aproto), searchdest(0)
 { }
 
+abstracthook::~abstracthook() {
+}
+
 void abstracthook::init() {
 }
 
