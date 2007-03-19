@@ -70,6 +70,8 @@ icqconf::icqconf() {
     }
 
     basedir = (string) getenv("HOME") + "/.centericq/";
+		
+		screensocketpath = "/var/run/screen";
 }
 
 icqconf::~icqconf() {
@@ -449,6 +451,8 @@ void icqconf::loadmainconfig() {
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
+			if(param == "screenna") screenna = true; else
+			if(param == "screensocketpath") screensocketpath = buf; else
 	    if(param == "mailcheck") mailcheck = true; else
 	    if(param == "quotemsgs") quote = true; else
 	    if(param == "sockshost") setsockshost(buf); else
@@ -530,6 +534,8 @@ void icqconf::save() {
 	    if(getantispam()) f << "antispam" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
+			if(getscreenna()) f << "screenna" << endl;
+			if(!screensocketpath.empty()) f << "screensocketpath\t" << screensocketpath << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
@@ -899,6 +905,22 @@ void icqconf::getauto(int &away, int &na) const {
 
     if(away == na)
 	away = 0;
+}
+
+bool icqconf::getscreenna() const {
+	return screenna;
+}
+
+void icqconf::setscreenna(bool sna) {
+	screenna = sna;
+}
+
+string icqconf::getscreensocketpath() const {
+	return screensocketpath;
+}
+
+void icqconf::setscreensocketpath(string path) {
+	screensocketpath = path;
 }
 
 void icqconf::setquote(bool use) {

@@ -1545,40 +1545,91 @@ void centericq::exectimers() {
     * How let's find out how are the auto-away mode is doing.
     *
     */
-
-    if(fonline) {
 	conf.getauto(paway, pna);
+	
+	if(fonline && (paway || pna || conf.getscreenna())) {
+		imstatus toset = offline;
+		static map<imstatus, bool> autostat;
 
-	if(paway || pna) {
-	    imstatus toset = offline;
-	    static map<imstatus, bool> autostat;
-
-	    if(autostat.empty()) {
-		autostat[available] = false;
-		autostat[notavail] = false;
-		autostat[away] = false;
-	    }
-
-	    if(paway && timer_current-timer_keypress > paway*60)
-		toset = away;
-
-	    if(pna && timer_current-timer_keypress > pna*60)
-		toset = notavail;
-
-	    if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
-		toset = available;
-
-	    if(toset != offline && !autostat[toset]) {
-		setauto(toset);
-
-		if(toset == available) {
-		    autostat[away] = autostat[notavail] = false;
-		} else {
-		    autostat[toset] = true;
+		if(autostat.empty()) {
+			autostat[available] = false;
+			autostat[notavail] = false;
+			autostat[away] = false;
 		}
-	    }
+
+		/*
+		 * Use auto-away or auto-na?
+		 */
+		if(paway || pna) {
+			if(paway && timer_current-timer_keypress > paway*60)
+				toset = away;
+
+			if(pna && timer_current-timer_keypress > pna*60)
+				toset = notavail;
+
+			if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
+				toset = available;
+		}
+
+		/*
+		 * Check if we are still attached to our screen session
+		 */
+		if (conf.getscreenna()) {
+			// this section is based on the patch of danne@wiberg.nu
+			// See: http://www.wiberg.nu/software/cicq-patches/centericq-4.20.0-screenaway.patch
+
+			const char *screen_socket_path;
+			char *screen_socket_name, *screen_user;
+			char screen_socket[256];
+			int screen_attached = 0; /* Screen is attached by default */
+
+			/* Check if we're really running centerim in a screen session */
+			if((screen_socket_name=getenv("STY")) != NULL) {
+				/*
+				 * Construct socket path, e.g.:
+				 * /var/run/screen/S-oliver/1234.centerim
+				 */
+				screen_socket_path = conf.getscreensocketpath().c_str();
+				screen_user=getenv("USER");
+				sprintf(screen_socket, "%s/S-%s/%s", screen_socket_path, screen_user, screen_socket_name);
+
+				/* Check if the socket path really exists */
+				if(!conf.getscreensocketpath().empty()
+					&& !access(conf.getscreensocketpath().c_str(), X_OK)) {
+					screen_attached = access(screen_socket, X_OK);
+					
+					/* Screen is no longer attached, change status to N/A */
+					if(screen_attached != 0) {
+						toset = notavail;
+	
+						if(autostat[notavail] == false) /* We just changed to away */
+							face.log(_("+ Set N/A after screen detach"));
+					} else { /* Screen is attached */
+						/* The user attached the screen */
+						if (autostat[notavail] == true) {
+							toset = available;
+						}
+					}
+				} else {
+					face.log(_("! Screen socket path doesn't exist!"));
+					face.log(_("! Correct path or disable screen auto presence change"));
+				}
+			}
+		}
+		
+		/*
+		 * Check if the status needs to be changed
+		 */
+		if(toset != offline && !autostat[toset]) {
+			setauto(toset);
+
+			if(toset == available) {
+				autostat[away] = autostat[notavail] = false;
+			} else {
+				autostat[toset] = true;
+			}
+		}
 	}
-    }
 
     if(timer_current-timer_resend > PERIOD_RESEND) {
 	/*

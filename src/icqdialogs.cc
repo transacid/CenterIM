@@ -1092,7 +1092,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
     string browser = conf.getbrowser();
-
+		string screensocketpath = conf.getscreensocketpath();
+		
+		bool screenna = conf.getscreenna();
     bool quote = conf.getquote();
     bool savepwd = conf.getsavepwd();
     bool hideoffl = conf.gethideoffline();
@@ -1253,10 +1255,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
 
-	i = t.addnode(_(" Miscellaneous "));
+	i = t.addnode(_(" Auto Presence Status "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
-
+	t.addleaff(i, 0, 49, _(" Automatically set N/A when screen is detached : %s "), stryesno(screenna));
+	if (screenna)
+		t.addleaff(i, 0, 50, _(" Screen socket path : %s "), screensocketpath.c_str());
+	
 	void *p;
 	finished = !db.open(n, b, &p);
 	i = (long) p;
@@ -1386,6 +1391,16 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		        break;
  		    case 48:
 		        timestampstothesecond = !timestampstothesecond; break;
+		        
+		    case 49:
+		    	screenna = !screenna; break;
+		    case 50:
+		    	screensocketpath = inputstr(_("Screen socket path: "), screensocketpath);
+		    	if (screensocketpath.empty() || access(screensocketpath.c_str(), X_OK)) {
+		    		status(_("Choosen screen socket path doesn't exist!"));
+		    		screenna = false;
+		    	}
+		    	break;
   		}
   		break;
 	    case 1:
@@ -1393,6 +1408,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setquote(quote);
 		conf.setsavepwd(savepwd);
 		conf.setauto(aaway, ana);
+		conf.setscreenna(screenna);
+		conf.setscreensocketpath(screensocketpath);
 		conf.sethideoffline(hideoffl);
 		conf.setemacs(emacs);
 		conf.setantispam(antispam);

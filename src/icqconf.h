@@ -135,7 +135,7 @@ class icqconf {
 
 	int autoaway, autona, ptpmin, ptpmax;
 
-	bool hideoffline, quote, savepwd, antispam, mailcheck,
+	bool hideoffline, quote, savepwd, antispam, screenna, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
 	    timestampstothesecond;
@@ -149,7 +149,7 @@ class icqconf {
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
 	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
-	    fromcharset, tocharset, browser;
+	    fromcharset, tocharset, browser, screensocketpath;
 
 	char *DEFAULT_TIMESTAMP_FORMAT, *DEFAULT_LOGTIMESTAMP_FORMAT,
 	  *SECONDS_TIMESTAMP_FORMAT, *SECONDS_LOGTIMESTAMP_FORMAT;
@@ -221,6 +221,12 @@ class icqconf {
 	void getauto(int &away, int &na) const;
 	void setauto(int away, int na);
 
+	bool getscreenna() const;
+	void setscreenna(bool screenna);
+
+	string getscreensocketpath() const;
+	void setscreensocketpath(string path);
+	
 	bool getquote() const { return quote; }
 	void setquote(bool use);
 
