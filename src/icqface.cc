@@ -230,7 +230,7 @@ void icqface::showtopbar() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvprintw(0, 0, _(" CENTERICQ %s  UNSENT: %lu"), VERSION, em.getunsentcount());
+    mvprintw(0, 0, _(" CENTERIM %s  UNSENT: %lu"), VERSION, em.getunsentcount());
     mvprintw(0, COLS-buf.size()-1, "%s", buf.c_str());
 }
 
@@ -419,7 +419,7 @@ int icqface::generalmenu() {
     m.additem(0, ACT_STATUS,    getmenuitem(_("Change status"), 38, key_change_status, section_contact));
     m.additem(0, ACT_QUICKFIND, getmenuitem(_("Go to contact.."), 38, key_quickfind, section_contact));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
-    m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
+    m.additem(0, ACT_CONF,      _(" CenterIM config options"));
     m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
     m.addline();
     m.additem(0, ACT_FIND,      _(" Find/add users"));
@@ -3549,7 +3549,7 @@ void icqface::xtermtitle(const string &text) {
 
 	if(term == "xterm" || term == "Eterm" || term == "aterm"
 	|| term == "rxvt" || term.substr(0, 6) == "screen")
-	    cout << "\x1b]1;\x07\x1b]2;" << "centericq" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
+	    cout << "\x1b]1;\x07\x1b]2;" << "centerim" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
     }
 }
 
