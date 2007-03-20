@@ -2,7 +2,7 @@
 #define __IMPGP_H__
 
 #include "icqcommon.h"
-#undef HAVE_GPGME
+
 #ifdef HAVE_GPGME
 
 #include "imcontact.h"
