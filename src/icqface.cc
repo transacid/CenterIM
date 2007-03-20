@@ -2573,7 +2573,7 @@ void icqface::renderchathistory() {
 	count = st.st_size-chatlines*(sizeWArea.x2-sizeWArea.x1)*2;
 	if(count < 0) count = 0;
     }
-
+    
     c->sethistoffset(count);
 
     count = 0;

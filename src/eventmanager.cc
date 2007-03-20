@@ -31,6 +31,8 @@
 #include "imlogger.h"
 #include "imexternal.h"
 
+#include <time.h>
+
 imeventmanager em;
 
 imeventmanager::imeventmanager(): unsent(0), lastevent(0), recentlysent(0) {
@@ -129,9 +131,7 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 	fhist.open((c->getdirname() + "history").c_str());
 
 	if(fhist.is_open()) {
-	    if(lastread) {
-		fhist.seekg(c->gethistoffset(), ios::beg);
-	    }
+	   fhist.seekg(c->gethistoffset(), ios::beg);
 
 	    while(!fhist.eof()) {
 		rev = eventread(fhist);
@@ -150,7 +150,7 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 	} else {
 	}
     }
-
+    
     return r;
 }
 
