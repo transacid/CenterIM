@@ -31,8 +31,6 @@
 #include "imlogger.h"
 #include "imexternal.h"
 
-#include <time.h>
-
 imeventmanager em;
 
 imeventmanager::imeventmanager(): unsent(0), lastevent(0), recentlysent(0) {
