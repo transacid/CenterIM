@@ -1,6 +1,6 @@
 /*
 *
-* centericq core routines
+* centerim core routines
 * $Id: centericq.cc,v 1.197 2005/05/02 15:23:58 konst Exp $
 *
 * Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
@@ -22,7 +22,7 @@
 *
 */
 
-#include "centericq.h"
+#include "centerim.h"
 #include "icqconf.h"
 #include "icqhook.h"
 #include "irchook.h"
@@ -37,16 +37,16 @@
 #include "accountmanager.h"
 #include "imexternal.h"
 
-centericq::centericq()
+centerim::centerim()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
       timer_autosave(0), regmode(false)
 {
 }
 
-centericq::~centericq() {
+centerim::~centerim() {
 }
 
-void centericq::exec() {
+void centerim::exec() {
     struct sigaction sact;
 
     memset(&sact, 0, sizeof(sact));
@@ -110,7 +110,7 @@ void centericq::exec() {
     conf.save();
 }
 
-bool centericq::checkpasswords() {
+bool centerim::checkpasswords() {
     protocolname pname;
     icqconf::imaccount ia;
     bool r;
@@ -142,7 +142,7 @@ bool centericq::checkpasswords() {
     return r;
 }
 
-void centericq::inithooks() {
+void centerim::inithooks() {
     protocolname pname;
 
     for(pname = icq; pname != protocolname_size; pname++) {
@@ -150,7 +150,7 @@ void centericq::inithooks() {
     }
 }
 
-void centericq::mainloop() {
+void centerim::mainloop() {
     bool finished = false, r;
     string text, url;
     int action, old, gid;
@@ -399,7 +399,7 @@ void centericq::mainloop() {
     }
 }
 
-void centericq::changestatus() {
+void centerim::changestatus() {
     imstatus st;
     bool proceed, setaway;
     string tmp, prompt, awaymsg;
@@ -474,7 +474,7 @@ void centericq::changestatus() {
     }
 }
 
-void centericq::joindialog() {
+void centerim::joindialog() {
     static imsearchparams s;
     icqcontact *c;
 
@@ -507,7 +507,7 @@ void centericq::joindialog() {
     }
 }
 
-void centericq::linkfeed() {
+void centerim::linkfeed() {
     icqcontact *c;
     imsearchparams s;
 
@@ -531,7 +531,7 @@ void centericq::linkfeed() {
     }
 }
 
-void centericq::find() {
+void centerim::find() {
     static imsearchparams s;
     bool ret = true;
     icqcontact *c;
@@ -566,7 +566,7 @@ void centericq::find() {
     }
 }
 
-void centericq::userinfo(const imcontact &cinfo) {
+void centerim::userinfo(const imcontact &cinfo) {
     if(ischannel(cinfo)) {
 	imsearchparams s;
 	s.pname = cinfo.pname;
@@ -591,7 +591,7 @@ void centericq::userinfo(const imcontact &cinfo) {
     }
 }
 
-bool centericq::updateconf() {
+bool centerim::updateconf() {
     bool r;
 
     icqconf::regsound snd = icqconf::rsdontchange;
@@ -621,7 +621,7 @@ bool centericq::updateconf() {
     return r;
 }
 
-void centericq::checkmail() {
+void centerim::checkmail() {
     if(!getenv("MAIL"))
 	return;
 
@@ -743,7 +743,7 @@ void centericq::checkmail() {
     }
 }
 
-void centericq::checkconfigs() {
+void centerim::checkconfigs() {
     static const char *configs[] = {
 	"sounds", "colorscheme", "actions", "external", "keybindings", 0
     };
@@ -786,14 +786,14 @@ void centericq::checkconfigs() {
     }
 }
 
-void centericq::handlesignal(int signum) {
+void centerim::handlesignal(int signum) {
     int status, pid;
 
     switch(signum) {
 	case SIGCHLD:
 	    while((pid = wait3(&status, WNOHANG, 0)) > 0) {
 		// In case the child was a nowait external action
-		string sname = conf.getdirname() + "centericq-external-tmp." + i2str(pid);
+		string sname = conf.getdirname() + "centerim-external-tmp." + i2str(pid);
 		unlink(sname.c_str());
 	    }
 	    break;
@@ -822,7 +822,7 @@ void centericq::handlesignal(int signum) {
     }
 }
 
-void centericq::checkparallel() {
+void centerim::checkparallel() {
     string pidfname = conf.getdirname() + "pid", fname;
     int pid = 0;
     char exename[512];
@@ -834,8 +834,8 @@ void centericq::checkparallel() {
     }
 
     if(!(fname = readlink((string) "/proc/" + i2str(pid) + "/exe")).empty() && (pid != getpid())) {
-	if(justfname(fname) == "centericq") {
-	    face.log(_("! another running copy of centericq detected"));
+	if(justfname(fname) == "centerim") {
+	    face.log(_("! another running copy of centerim detected"));
 	    face.log(_("! this may cause problems. pid %lu"), pid);
 	}
     } else {
@@ -851,7 +851,7 @@ void centericq::checkparallel() {
     }
 }
 
-void centericq::rereadstatus() {
+void centerim::rereadstatus() {
     protocolname pname;
     icqconf::imaccount ia;
 
@@ -879,7 +879,7 @@ void centericq::rereadstatus() {
     }
 }
 
-bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
+bool centerim::sendevent(const imevent &ev, icqface::eventviewresult r) {
     bool proceed;
     string text, fwdnote;
     imevent *sendev;
@@ -1091,12 +1091,12 @@ bool centericq::sendevent(const imevent &ev, icqface::eventviewresult r) {
     return proceed;
 }
 
-icqface::eventviewresult centericq::readevent(const imevent &ev, const vector<icqface::eventviewresult> &buttons) {
+icqface::eventviewresult centerim::readevent(const imevent &ev, const vector<icqface::eventviewresult> &buttons) {
     bool b1, b2;
     return readevent(ev, b1, b2, buttons);
 }
 
-icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, bool &fin, const vector<icqface::eventviewresult> &buttons) {
+icqface::eventviewresult centerim::readevent(const imevent &ev, bool &enough, bool &fin, const vector<icqface::eventviewresult> &buttons) {
     icqface::eventviewresult r = face.eventview(&ev, buttons);
 
     imcontact cont = ev.getcontact();
@@ -1197,7 +1197,7 @@ icqface::eventviewresult centericq::readevent(const imevent &ev, bool &enough, b
     return r;
 }
 
-void centericq::readevents(const imcontact cont) {
+void centerim::readevents(const imcontact cont) {
     vector<imevent *> events;
     vector<imevent *>::iterator iev;
     icqcontact *c = clist.get(cont);
@@ -1235,7 +1235,7 @@ void centericq::readevents(const imcontact cont) {
     }
 }
 
-void centericq::history(const imcontact &cont) {
+void centerim::history(const imcontact &cont) {
     icqface::eventviewresult r;
     imevent *im;
     bool enough;
@@ -1300,7 +1300,7 @@ void centericq::history(const imcontact &cont) {
     }
 }
 
-string centericq::quotemsg(const string &text) {
+string centerim::quotemsg(const string &text) {
     string ret;
     vector<string> lines;
     vector<string>::iterator i;
@@ -1316,7 +1316,7 @@ string centericq::quotemsg(const string &text) {
     return ret;
 }
 
-icqcontact *centericq::addcontact(const imcontact &ic, bool reqauth) {
+icqcontact *centerim::addcontact(const imcontact &ic, bool reqauth) {
     icqcontact *c;
     int groupid = 0;
 
@@ -1372,7 +1372,7 @@ icqcontact *centericq::addcontact(const imcontact &ic, bool reqauth) {
     return c;
 }
 
-bool centericq::idle(int options ) {
+bool centerim::idle(int options ) {
     bool keypressed, online, fin;
     fd_set rfds, wfds, efds;
     struct timeval tv;
@@ -1426,7 +1426,7 @@ bool centericq::idle(int options ) {
     return keypressed;
 }
 
-void centericq::setauto(imstatus astatus) {
+void centerim::setauto(imstatus astatus) {
     protocolname pname;
     imstatus stcurrent;
     static bool autoset = false;
@@ -1485,7 +1485,7 @@ void centericq::setauto(imstatus astatus) {
 
 #define MINCK0(x, y)       (x ? (y ? (x > y ? y : x) : x) : y)
 
-void centericq::exectimers() {
+void centerim::exectimers() {
     protocolname pname;
     int paway, pna;
     bool fonline = false;
@@ -1680,7 +1680,7 @@ void centericq::exectimers() {
     }
 }
 
-void centericq::createconference(const imcontact &ic) {
+void centerim::createconference(const imcontact &ic) {
     int apid = 0;
     imcontact confid("", ic.pname);
 
@@ -1705,7 +1705,7 @@ void centericq::createconference(const imcontact &ic) {
     }
 }
 
-void centericq::massmove() {
+void centerim::massmove() {
     int gid;
     vector<imcontact>::iterator im;
     icqcontact *c;

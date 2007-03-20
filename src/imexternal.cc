@@ -1,6 +1,6 @@
 /*
 *
-* centericq external actions handling class
+* centerim external actions handling class
 * $Id: imexternal.cc,v 1.29 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
@@ -231,7 +231,7 @@ void imexternal::action::writescript() {
 
     do {
 	tfname.clear();
-	tfname << conf.getdirname() << "centericq-external-tmp." << dec << time(0)+i++;
+	tfname << conf.getdirname() << "centerim-external-tmp." << dec << time(0)+i++;
 #ifdef HAVE_SSTREAM
 	sname = tfname.str();
 #else
@@ -286,7 +286,7 @@ int imexternal::action::execscript() {
 	    }
 
 	    if(options & aonowait) {
-		string nsname = conf.getdirname() + "centericq-external-tmp." + i2str(getpid());
+		string nsname = conf.getdirname() + "centerim-external-tmp." + i2str(getpid());
 		rename(sname.c_str(), nsname.c_str());
 		sname = nsname;
 

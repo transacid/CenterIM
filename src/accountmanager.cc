@@ -1,6 +1,6 @@
 /*
 *
-* centericq account manager dialog implementation
+* centerim account manager dialog implementation
 * $Id: accountmanager.cc,v 1.43 2005/01/26 23:52:46 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

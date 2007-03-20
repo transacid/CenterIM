@@ -1,6 +1,6 @@
 /*
 *
-* centericq MSN protocol handling class
+* centerim MSN protocol handling class
 * $Id: msnhook.cc,v 1.91 2005/02/03 02:02:37 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

@@ -1,6 +1,6 @@
 /*
 *
-* centericq user interface class, dialogs related part
+* centerim user interface class, dialogs related part
 * $Id: icqdialogs.cc,v 1.151 2005/05/23 14:16:52 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
@@ -24,7 +24,7 @@
 
 #include "icqface.h"
 #include "icqconf.h"
-#include "centericq.h"
+#include "centerim.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
@@ -1158,7 +1158,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     textwindow w(0, 0, sizeBigDlg.width, sizeBigDlg.height,
 	conf.getcolor(cp_dialog_frame), TW_CENTERED);
 
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterICQ configuration "));
+    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterIM configuration "));
 
     db.setwindow(&w, false);
 
@@ -1253,7 +1253,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 9, _(" Timestamps in the log window : %s "), stryesno(logtimestamps));
 	t.addleaff(i, 0, 48, _(" Timestamps include seconds : %s "), stryesno(timestampstothesecond));
 	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
-	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centericq/log : %s "), stryesno(makelog));
+	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centerim/log : %s "), stryesno(makelog));
 
 	i = t.addnode(_(" Auto Presence Status "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);

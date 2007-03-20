@@ -1,6 +1,6 @@
 /*
 *
-* centericq single IM contact class
+* centerim single IM contact class
 * $Id: icqcontact.cc,v 1.105 2005/02/13 12:10:55 iulica Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

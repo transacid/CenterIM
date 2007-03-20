@@ -1,6 +1,6 @@
 /*
 *
-* centericq IRC protocol handling class
+* centerim IRC protocol handling class
 * $Id: irchook.cc,v 1.80 2004/12/20 00:54:02 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

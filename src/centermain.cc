@@ -1,6 +1,6 @@
 /*
 *
-* centericq main() function
+* centerim main() function
 * $Id: centermain.cc,v 1.16 2002/07/07 22:58:18 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
@@ -22,14 +22,14 @@
 *
 */
 
-#include "centericq.h"
+#include "centerim.h"
 #include "icqface.h"
 #include "icqconf.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
 #include "icqgroups.h"
 
-centericq cicq;
+centerim cicq;
 icqconf conf;
 icqcontacts clist;
 icqface face;

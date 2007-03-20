@@ -2,7 +2,7 @@
 
 #
 # Contact list, history and other stuff conversion script from
-# various flavours of icq client software to centericq format.
+# various flavours of icq client software to centerim format.
 #
 # by Konstantin Klyagin <konst@konst.org.ua>
 # trillian support by Vassilios Karakoidas <bkarak@aueb.gr>
@@ -23,7 +23,7 @@ my $ourUIN = 0;
 
 sub cicq_adduser {
     local ($uin) = @_;
-    system("mkdir -p $ENV{HOME}/.centericq/$uin");
+    system("mkdir -p $ENV{HOME}/.centerim/$uin");
 }
 
 #
@@ -48,7 +48,7 @@ sub cicq_addhistoryitem {
     if($ourUIN) {
 	$histuin = ($touin == $ourUIN) ? $fromuin : $touin;
 
-	if(open(UF, ">>$ENV{HOME}/.centericq/$histuin/history")) {
+	if(open(UF, ">>$ENV{HOME}/.centerim/$histuin/history")) {
 	    print UF "\f\n";
 	    print UF ($touin == $ourUIN) ? "IN" : "OUT", "\nMSG\n";
 	    print UF "$timestamp\n$timestamp\n";
@@ -56,7 +56,7 @@ sub cicq_addhistoryitem {
 	    close UF;
 	}
 
-	if(open(UF, ">$ENV{HOME}/.centericq/$histuin/lastread")) {
+	if(open(UF, ">$ENV{HOME}/.centerim/$histuin/lastread")) {
 	    print UF "$timestamp\n";
 	    close UF;
 	}
@@ -274,14 +274,14 @@ sub kxicq2 {
 # Trillian specific functions
 
 sub create_account_irc {
-    local $OUTPUT_DIR = "$ENV{HOME}/.centericq/";
+    local $OUTPUT_DIR = "$ENV{HOME}/.centerim/";
     local $buddy_dir = $OUTPUT_DIR."i".$_[0];
     
     mkdir($buddy_dir);
 }
 
 sub create_account_msn {
-    local $OUTPUT_DIR = "$ENV{HOME}/.centericq/";
+    local $OUTPUT_DIR = "$ENV{HOME}/.centerim/";
     local @buddy_mail = split("@",$_[0]);
     local $buddy_dir = $OUTPUT_DIR."m".$buddy_mail[0];
     
@@ -316,7 +316,7 @@ sub trillian {
 sub usage {
 
     print <<EOF
-Centericq contact list and history convertor usage:
+Centerim contact list and history convertor usage:
     $0 <client>
 
 Where <client> is the name of program you can to convert from.
