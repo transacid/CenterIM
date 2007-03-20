@@ -10,9 +10,9 @@ CVS
 %vcsroot
 :ext:konst@cvs.thekonst.net:/home/konst/cvs/root
 %vcsmodule
-centericq
+centerim
 %arguments
--b ~/.centericq_tst -o -d
+-b ~/.centerim_tst -o -d
 %cflags
 
 %lflags
@@ -21,7 +21,7 @@ centericq
 1
 %makemode
 automake
-%file fsource src/centericq.cc
+%file fsource src/centerim.cc
 1
 %file fsource src/hooks/rsshook.cc
 1
@@ -111,7 +111,7 @@ automake
 1
 %file fheader src/icqcontacts.h
 1
-%file fheader src/centericq.h
+%file fheader src/centerim.h
 1
 %file fheader src/icqgroup.h
 1
@@ -175,7 +175,7 @@ automake
 1
 %file fbuild config.h.in
 1
-%file fbuild centericq.spec
+%file fbuild centerim.spec
 1
 %file fmisc po/bg.po
 1
@@ -231,9 +231,9 @@ automake
 1
 %file fmisc POLICY
 1
-%file fmisc centericq.1
+%file fmisc centerim.1
 1
-%file fmisc centericq.motor
+%file fmisc centerim.motor
 1
 %file flib connwrap
 1
