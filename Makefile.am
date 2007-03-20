@@ -18,6 +18,6 @@ if BUILD_JABBER
 WANTED_PROTOCOLS += libjabber
 endif
 SUBDIRS = connwrap kkstrtext kksystr kkconsui libicq2000 $(WANTED_PROTOCOLS) intl po misc share src
-EXTRA_DIST = config.rpath POLICY centericq.1 centericq.motor FAQ NEWS TODO README THANKS AUTHORS INSTALL ABOUT-NLS ChangeLog COPYING centericq.spec
+EXTRA_DIST = config.rpath POLICY centerim.1 centerim.motor FAQ NEWS TODO README THANKS AUTHORS INSTALL ABOUT-NLS ChangeLog COPYING centerim.spec
 
 ACLOCAL_AMFLAGS = -I m4

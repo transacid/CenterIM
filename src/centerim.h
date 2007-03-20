@@ -1,5 +1,5 @@
-#ifndef __CENTERICQ_H__
-#define __CENTERICQ_H__
+#ifndef __CENTERIM_H__
+#define __CENTERIM_H__
 
 #include <signal.h>
 #include <sys/wait.h>
@@ -14,7 +14,7 @@
 
 #define HIDL_SOCKEXIT   2
 
-class centericq {
+class centerim {
     public:
 	enum msgmode {
 	    reply,
@@ -55,8 +55,8 @@ class centericq {
 	void massmove();
 
     public:
-	centericq();
-	~centericq();
+	centerim();
+	~centerim();
 
 	void commandline(int argc, char **argv);
 	void exec();
@@ -89,6 +89,6 @@ class centericq {
 	bool sendevent(const imevent &ev, icqface::eventviewresult r);
 };
 
-extern centericq cicq;
+extern centerim cicq;
 
 #endif

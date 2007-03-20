@@ -1,6 +1,6 @@
 /*
 *
-* centericq Jabber protocol handling class
+* centerim Jabber protocol handling class
 * $Id: jabberhook.cc,v 1.85 2005/08/26 11:01:49 konst Exp $
 *
 * Copyright (C) 2002-2005 by Konstantin Klyagin <konst@konst.org.ua>
@@ -1354,7 +1354,7 @@ string jabberhook::getourjid() {
 	jid.erase(pos);
 
     if(jid.find("/") == -1)
-	jid += "/centericq";
+	jid += "/centerim";
 
     return jid;
 }

@@ -1,6 +1,6 @@
 /*
 *
-* centericq HTTP protocol handling class
+* centerim HTTP protocol handling class
 * $Id: HTTPClient.cc,v 1.19 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>

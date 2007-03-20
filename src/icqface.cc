@@ -1,6 +1,6 @@
 /*
 *
-* centericq user interface class
+* centerim user interface class
 * $Id: icqface.cc,v 1.249 2005/08/28 01:33:21 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
@@ -24,7 +24,7 @@
 
 #include "icqface.h"
 #include "icqconf.h"
-#include "centericq.h"
+#include "centerim.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
@@ -142,7 +142,7 @@ void icqface::init() {
 
 	flog.open((conf.getdirname() + "debug").c_str(), ios::app);
 	if(flog.is_open())
-	    flog << endl << "-- centericq debug log started on " << ctime(&logtime);
+	    flog << endl << "-- centerim debug log started on " << ctime(&logtime);
     }
 
     /* Calculate various sizes and coordinates */
@@ -551,7 +551,7 @@ icqcontact *icqface::mainloop(int &action) {
 			    mcontacts->opennode(curid);
 			}
 
-			/* Handling of collapse events should happen in centericq::
+			/* Handling of collapse events should happen in centerim::
 			   mainloop, but as it stands this method doesn't handle
 			   icqgroups, only icqcontacts, so we'll deal with collapsing
 			   here. */

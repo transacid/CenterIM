@@ -29,7 +29,7 @@ enum interfaceAction {
     ACT_MASS_MOVE, ACT_PGPKEY, ACT_PGPSWITCH, ACT_DUMMY
 };
 
-extern class centericq cicq;
+extern class centerim cicq;
 
 class icqface {
     public:

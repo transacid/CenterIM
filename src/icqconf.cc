@@ -1,6 +1,6 @@
 /*
 *
-* centericq configuration handling routines
+* centerim configuration handling routines
 * $Id: icqconf.cc,v 1.143 2005/09/02 15:20:59 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
@@ -69,7 +69,7 @@ icqconf::icqconf() {
 	cpconvert[pname] = entersends[pname] = nonimonline[pname] = false;
     }
 
-    basedir = (string) getenv("HOME") + "/.centericq/";
+    basedir = (string) getenv("HOME") + "/.centerim/";
 }
 
 icqconf::~icqconf() {
@@ -220,7 +220,7 @@ void icqconf::loadkeys() {
 	ofstream of(fname.c_str());
 
 	if(of.is_open()) {
-	    of << "# This file contains keybinding configuration for centericq" << endl;
+	    of << "# This file contains keybinding configuration for centerim" << endl;
 	    of << "# Every line should look like: bind <section> <key> <command>" << endl << endl;
 	    of << "bind contact\t?\tinfo" << endl;
 	    of << "bind contact\tq\tquit" << endl;
@@ -710,7 +710,7 @@ void icqconf::loadsounds() {
 	ofstream fo(tname.c_str());
 
 	if(fo.is_open()) {
-	    fo << "# This file contains sound configuration for centericq" << endl;
+	    fo << "# This file contains sound configuration for centerim" << endl;
 	    fo << "# Every line should look like: <id> <event> <command>" << endl << "#" << endl;
 
 	    fo << "# <id>\tid of a contact; can be one of the following" << endl;
@@ -819,7 +819,7 @@ void icqconf::loadactions() {
 	ofstream of(fname.c_str());
 
 	if(of.is_open()) {
-	    of << "# This file contains external actions configuration for centericq" << endl;
+	    of << "# This file contains external actions configuration for centerim" << endl;
 	    of << "# Every line should look like: <action> <command>" << endl;
 	    of << "# Possible actions are: openurl, detectmusic" << endl << endl;
 

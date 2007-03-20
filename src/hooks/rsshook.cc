@@ -1,6 +1,6 @@
 /*
 *
-* centericq rss handling class
+* centerim rss handling class
 * $Id: rsshook.cc,v 1.23 2004/12/24 18:33:07 konst Exp $
 *
 * Copyright (C) 2003 by Konstantin Klyagin <konst@konst.org.ua>
