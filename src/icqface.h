@@ -129,6 +129,9 @@ class icqface {
 	static void transferidle(dialogbox &db);
 	static void editchatidle(texteditor &e);
 
+	static const unsigned int MinPanelWidth = 10;
+	static const unsigned int MinPanelHeight = 10;
+
 	static void termresize(void);
 
 	void infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc);
@@ -286,6 +289,9 @@ class icqface {
 	void userinfoexternal(const imcontact &ic);
 
 	bool selectpgpkey(string &keyid, bool secretonly = false);
+	void leftpanelwidth_inc(const int inc);
+	void logpanelheight_inc(const int inc);
+	void chatpanelheight_inc(const int inc);
 };
 
 extern icqface face;

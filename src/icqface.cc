@@ -153,16 +153,29 @@ void icqface::init() {
     sizeBigDlg.width = COLS-10;
     sizeBigDlg.height = LINES-7;
 
-    sizeWArea.x1 = (int) (COLS*0.32);
-    if(sizeWArea.x1 < 25)
-	sizeWArea.x1 = 25;
-
+    sizeWArea.x1 = conf.getleftpanelwidth();
+    if(sizeWArea.x1 < MinPanelWidth || sizeWArea.x1 > (COLS - MinPanelWidth)) {
+	sizeWArea.x1 = (int) (COLS*0.32); 
+	conf.setleftpanelwidth(sizeWArea.x1);
+    }
+    if(sizeWArea.x1 < MinPanelWidth || sizeWArea.x1 > (COLS - MinPanelWidth)) {
+	sizeWArea.x1 = MinPanelWidth;
+	conf.setleftpanelwidth(sizeWArea.x1);
+    }
+    
     sizeWArea.x2 = COLS-1;
     sizeWArea.y1 = 1;
 
-    sizeWArea.y2 = LINES - ((int) (LINES/4));
-    if(sizeWArea.y2 > LINES-6)
-	sizeWArea.y2 = LINES-6;
+    sizeWArea.y2 = conf.getlogpanelheight();
+    if(sizeWArea.y2 < MinPanelHeight || sizeWArea.y2 > (LINES - MinPanelHeight)) {
+	sizeWArea.y2 = (int) LINES / 4;
+	conf.setlogpanelheight(sizeWArea.y2);
+    }
+    if(sizeWArea.y2 < MinPanelHeight || sizeWArea.y2 > (LINES - MinPanelHeight)) {
+	sizeWArea.y2 = MinPanelHeight;
+	conf.setlogpanelheight(sizeWArea.y2);
+    }
+    sizeWArea.y2 = LINES - sizeWArea.y2;
 
     if(!mcontacts) {
 	mcontacts = new treeview(conf.getcolor(cp_main_menu),
@@ -2397,7 +2410,7 @@ bool icqface::eventedit(imevent &ev) {
     } else if(ev.gettype() == imevent::authorization) {
 	imauthorization *m = static_cast<imauthorization *>(&ev);
 
-	if(gethook(ev.getcontact().pname).getCapabs().count(hookcapab::authreqwithmessages)) {
+	if (gethook(ev.getcontact().pname).getCapabs().count(hookcapab::authreqwithmessages)) {
 	    editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2);
 	    editor.load(msg = m->getmessage(), "");
 	    editor.open();
@@ -2710,7 +2723,16 @@ void icqface::chat(const imcontact &ic) {
     muins.clear();
     muins.push_back(passinfo);
 
-    chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.75);
+    chatlines = conf.getchatpanelheight();
+    if (chatlines < MinPanelHeight || chatlines > (LINES - MinPanelHeight - MinPanelHeight)){
+        chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.70);
+	conf.setchatpanelheight(chatlines);
+    }
+    if (chatlines < MinPanelHeight || chatlines > (LINES - MinPanelHeight - MinPanelHeight)){
+        chatlines = MinPanelHeight;
+	conf.setchatpanelheight(chatlines);
+    }
+
 //    workarealine(sizeWArea.y1+chatlines+1);
 
     editor.addscheme(cp_main_text, cp_main_text, 0, 0);
@@ -3345,6 +3367,22 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    if(c) face.extk = ACT_IGNORE;
 	    break;
 
+	case key_left_panel_move_right:
+	    face.leftpanelwidth_inc(1);
+	    break;
+       
+	case key_left_panel_move_left:
+            face.leftpanelwidth_inc(-1);
+            break;
+
+	case key_log_panel_move_up:
+	    face.logpanelheight_inc(1);
+	    break;
+       
+	case key_log_panel_move_down:
+            face.logpanelheight_inc(-1);
+            break;
+
 	case key_quickfind: face.extk = ACT_QUICKFIND; break;
     }
 
@@ -3447,6 +3485,12 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	case key_fullscreen:
 	    if(face.passevent)
 		face.fullscreenize(face.passevent);
+	    break;
+	case key_chat_panel_move_up:
+	    face.chatpanelheight_inc(1);
+	    break;
+	case key_chat_panel_move_down:
+	    face.chatpanelheight_inc(-1);
 	    break;
 	case key_quit:
 	    return -1;
@@ -3615,3 +3659,31 @@ void icqface::icqprogress::show(const string &title ) {
 void icqface::icqprogress::hide() {
     w->close();
 }
+
+void icqface::leftpanelwidth_inc(const int inc) {
+    int i = conf.getleftpanelwidth();
+    if ( ((i+inc) >= MinPanelWidth) && ((i+inc) <= (COLS - MinPanelWidth))) {
+        conf.setleftpanelwidth(i+inc);
+        dotermresize = true ;
+    }
+}
+
+void icqface::logpanelheight_inc(const int inc) {
+    int i = conf.getlogpanelheight();
+    if (((i+inc) >= MinPanelHeight) && ((i+inc) <= (LINES - MinPanelHeight))) {
+        conf.setlogpanelheight(i+inc);
+        dotermresize = true ;
+    }
+}
+
+void icqface::chatpanelheight_inc(const int inc ) {
+    chatlines = conf.getchatpanelheight()+inc;
+    conf.setchatpanelheight(chatlines);
+    if(!(( chatlines > 0 ) && (chatlines < (sizeWArea.y2-sizeWArea.y1)*0.90) ) ){
+        chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.70);
+        conf.setchatpanelheight(chatlines);}
+
+    icqface::renderchathistory();
+    icqface::restoreworkarea();
+}
+

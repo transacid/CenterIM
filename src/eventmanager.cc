@@ -64,8 +64,11 @@ void imeventmanager::store(const imevent &cev) {
 	    c = clist.get(ev.getcontact());
 
 	    if(!c) {
-		proceed = !conf.getantispam();
-		proceed = (ev.gettype() == imevent::authorization) || proceed;
+		proceed = !conf.getantispam() || 
+			((ev.gettype() == imevent::authorization) && !conf.geticqdropauthreq());
+
+		if ((ev.gettype() == imevent::authorization) && !conf.geticqdropauthreq())
+		    face.log("Dropped another authorization request!");
 
 		if(proceed)
 		    c = clist.addnew(ev.getcontact());

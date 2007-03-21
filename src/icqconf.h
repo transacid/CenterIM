@@ -85,7 +85,13 @@ enum cicq_keybindings {
     key_show_urls,
     key_rss_check,
     key_multiple_recipients,
-    key_user_external_action
+    key_user_external_action,
+    key_left_panel_move_right,
+    key_left_panel_move_left,
+    key_log_panel_move_up,
+    key_log_panel_move_down,
+    key_chat_panel_move_up,
+    key_chat_panel_move_down
 };
 
 class icqconf {
@@ -138,7 +144,7 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam, screenna, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
-	    timestampstothesecond;
+	    timestampstothesecond, icqdropauthreq;
 
 	bool startoffline;
 
@@ -162,6 +168,9 @@ class icqconf {
 	regcolor rc;
 	groupmode fgroupmode;
 	colormode cm;
+	int leftpanelwidth;
+	int logpanelheight;
+	int chatpanelheight;
 
 	colorschemer<cicq_colorpairs> schemer;
 
@@ -214,6 +223,9 @@ class icqconf {
 
 	bool getantispam() const { return antispam; }
 	void setantispam(bool fas);
+
+	bool geticqdropauthreq() const { return icqdropauthreq; }
+	void seticqdropauthreq(bool fas);
 
 	bool getmailcheck() const { return mailcheck; }
 	void setmailcheck(bool fmc);
@@ -331,6 +343,13 @@ class icqconf {
 
 	bool getxtitles() const { return !notitles; }
 	bool getdebug() const { return debug; }
+	
+	int  getleftpanelwidth() const { return leftpanelwidth; }
+	void setleftpanelwidth(const int width)   { leftpanelwidth  = width; }
+	int  getlogpanelheight() const { return logpanelheight; }
+	void setlogpanelheight(const int height) { logpanelheight = height; }
+	int  getchatpanelheight() const { return chatpanelheight; }
+	void setchatpanelheight(const int height) { chatpanelheight = height; }
 };
 
 extern icqconf conf;
