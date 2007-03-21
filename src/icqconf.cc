@@ -69,7 +69,14 @@ icqconf::icqconf() {
 	cpconvert[pname] = entersends[pname] = nonimonline[pname] = false;
     }
 
-    basedir = (string) getenv("HOME") + "/.centerim/";
+    // quick and dirty fix to support .centerim as well as .centericq
+    string old_basedir = (string) getenv("HOME") + "/.centericq/";
+    if (DIR* dir_fd = opendir (old_basedir.c_str())) {
+	closedir(dir_fd);
+	basedir = old_basedir;
+    } else {
+	basedir = (string) getenv("HOME") + "/.centerim/";
+    }
 }
 
 icqconf::~icqconf() {
