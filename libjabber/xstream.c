@@ -210,9 +210,12 @@ char *xstream_header_char(xmlnode x)
     spooler(s,"<?xml version='1.0'?>",xmlnode2str(x),s);
     head = spool_print(s);
     fixr = strstr(head,"/>");
+    if (fixr != NULL)
+      {
     *fixr = '>';
     ++fixr;
     *fixr = '\0';
+      }
 
     return head;
 }
