@@ -129,7 +129,9 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 	fhist.open((c->getdirname() + "history").c_str());
 
 	if(fhist.is_open()) {
-	   fhist.seekg(c->gethistoffset(), ios::beg);
+	   if(lastread) {
+			  fhist.seekg(c->gethistoffset(), ios::beg);
+		}
 
 	    while(!fhist.eof()) {
 		rev = eventread(fhist);

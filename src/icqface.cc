@@ -2574,7 +2574,9 @@ void icqface::renderchathistory() {
 	if(count < 0) count = 0;
     }
     
+	 // Skip history items that won't be displayed
     c->sethistoffset(count);
+	 if (chatlastread == 0) chatlastread = 1;
 
     count = 0;
     events = em.getevents(passinfo, chatlastread);
@@ -2584,8 +2586,8 @@ void icqface::renderchathistory() {
     if(events.size()) {
 	c->setlastread(events.back()->gettimestamp());
     }
-
-    while(events.size() > chatlines) {
+    
+	 while(events.size() > chatlines) {
 	delete events.front();
 	events.erase(events.begin());
     }
