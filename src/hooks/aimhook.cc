@@ -1,6 +1,6 @@
 /*
 *
-* centericq AIM protocol handling class
+* centerim AIM protocol handling class
 * $Id: aimhook.cc,v 1.42 2004/11/11 13:42:05 konst Exp $
 *
 * Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
@@ -293,7 +293,7 @@ void aimhook::loadprofile() {
 
     if(access(fname.c_str(), R_OK)) {
 	char sbuf[512];
-	sprintf(sbuf, _("I do really enjoy the default AIM profile of centericq %s."), VERSION);
+	sprintf(sbuf, _("I do really enjoy the default AIM profile of centerim %s."), VERSION);
 	profile.info = sbuf;
 	saveprofile();
     }

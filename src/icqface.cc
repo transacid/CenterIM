@@ -1,6 +1,6 @@
 /*
 *
-* centericq user interface class
+* centerim user interface class
 * $Id: icqface.cc,v 1.249 2005/08/28 01:33:21 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
@@ -24,7 +24,7 @@
 
 #include "icqface.h"
 #include "icqconf.h"
-#include "centericq.h"
+#include "centerim.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
 #include "icqmlist.h"
@@ -142,7 +142,7 @@ void icqface::init() {
 
 	flog.open((conf.getdirname() + "debug").c_str(), ios::app);
 	if(flog.is_open())
-	    flog << endl << "-- centericq debug log started on " << ctime(&logtime);
+	    flog << endl << "-- centerim debug log started on " << ctime(&logtime);
     }
 
     /* Calculate various sizes and coordinates */
@@ -230,7 +230,7 @@ void icqface::showtopbar() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvprintw(0, 0, _(" CENTERICQ %s  UNSENT: %lu"), VERSION, em.getunsentcount());
+    mvprintw(0, 0, _(" CENTERIM %s  UNSENT: %lu"), VERSION, em.getunsentcount());
     mvprintw(0, COLS-buf.size()-1, "%s", buf.c_str());
 }
 
@@ -419,7 +419,7 @@ int icqface::generalmenu() {
     m.additem(0, ACT_STATUS,    getmenuitem(_("Change status"), 38, key_change_status, section_contact));
     m.additem(0, ACT_QUICKFIND, getmenuitem(_("Go to contact.."), 38, key_quickfind, section_contact));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
-    m.additem(0, ACT_CONF,      _(" CenterICQ config options"));
+    m.additem(0, ACT_CONF,      _(" CenterIM config options"));
     m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
     m.addline();
     m.additem(0, ACT_FIND,      _(" Find/add users"));
@@ -551,7 +551,7 @@ icqcontact *icqface::mainloop(int &action) {
 			    mcontacts->opennode(curid);
 			}
 
-			/* Handling of collapse events should happen in centericq::
+			/* Handling of collapse events should happen in centerim::
 			   mainloop, but as it stands this method doesn't handle
 			   icqgroups, only icqcontacts, so we'll deal with collapsing
 			   here. */
@@ -3549,7 +3549,7 @@ void icqface::xtermtitle(const string &text) {
 
 	if(term == "xterm" || term == "Eterm" || term == "aterm"
 	|| term == "rxvt" || term.substr(0, 6) == "screen")
-	    cout << "\x1b]1;\x07\x1b]2;" << "centericq" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
+	    cout << "\x1b]1;\x07\x1b]2;" << "centerim" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
     }
 }
 

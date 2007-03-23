@@ -1,6 +1,6 @@
 /*
 *
-* centericq gadu-gadu protocol handling class
+* centerim gadu-gadu protocol handling class
 * $Id: gaduhook.cc,v 1.14 2005/07/08 09:49:17 konst Exp $
 *
 * Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>

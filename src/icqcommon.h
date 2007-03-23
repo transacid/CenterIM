@@ -52,10 +52,10 @@
 #endif
 
 #ifdef __KTOOL_USE_NAMESPACES
-#define __CENTERICQ_USE_NAMESPACES
+#define __CENTERIM_USE_NAMESPACES
 #endif
 
-#ifdef __CENTERICQ_USE_NAMESPACES
+#ifdef __CENTERIM_USE_NAMESPACES
 
 using namespace std;
 

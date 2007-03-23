@@ -1,6 +1,6 @@
 /*
 *
-* centericq contact list class
+* centerim contact list class
 * $Id: icqcontacts.cc,v 1.54 2004/07/08 23:52:48 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

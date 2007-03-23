@@ -1,6 +1,6 @@
 /*
 *
-* centericq events serialization classes
+* centerim events serialization classes
 * $Id: imevents.cc,v 1.36 2005/01/18 23:20:17 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

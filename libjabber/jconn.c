@@ -169,8 +169,11 @@ void jab_start(jconn j)
     /* this is ugly, we can create the string here instead of jutil_header */
     /* what do you think about it? -madcat */
     t2 = strstr(t,"/>");
+    if (t2 != NULL)
+      {
     *t2++ = '>';
     *t2 = '\0';
+      }
     jab_send_raw(j,"<?xml version='1.0'?>");
     jab_send_raw(j,t);
     xmlnode_free(x);

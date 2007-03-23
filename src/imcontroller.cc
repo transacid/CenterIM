@@ -1,6 +1,6 @@
 /*
 *
-* centericq protocol specific user interface related routines
+* centerim protocol specific user interface related routines
 * $Id: imcontroller.cc,v 1.56 2004/07/20 22:16:40 konst Exp $
 *
 * Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>

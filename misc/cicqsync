@@ -11,7 +11,7 @@
 
 CROOT=":pserver:anonymous@cvs.thekonst.net:/home/konst/cvs/root"
 
-PROG="centericq"
+PROG="centerim"
 MODULES="libyahoo2 libicq2000 kktoolbox/kkconsui kktoolbox/kksystr kktoolbox/kkstrtext firetalk libjabber connwrap libgadu libmsn"
 MAKEUPDATE="s@/home/konst/devel/kktoolbox@\$(top_srcdir)@g;s@/home/konst/devel/libyahoo@\$(top_srcdir)/libyahoo@g;s@/home/konst/devel/libicq2000@\$(top_srcdir)/libicq2000@g;s@/home/konst/devel/firetalk@\$(top_srcdir)/firetalk@g;s@/home/konst/devel/libjabber@\$(top_srcdir)/libjabber@g;s@/home/konst/devel/connwrap@\$(top_srcdir)/connwrap@g;s@/home/konst/devel/libgadu@\$(top_srcdir)/libgadu@g;s@/home/konst/devel/libmsn@\$(top_srcdir)/libmsn@g"
 MONOLITE="0"

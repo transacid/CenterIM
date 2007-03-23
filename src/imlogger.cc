@@ -1,6 +1,6 @@
 /*
 *
-* centericq events logger class
+* centerim events logger class
 * $Id: imlogger.cc,v 1.11 2003/10/31 00:55:53 konst Exp $
 *
 * Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
