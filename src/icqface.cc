@@ -3369,18 +3369,22 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 
 	case key_left_panel_move_right:
 	    face.leftpanelwidth_inc(1);
+	    face.redraw();
 	    break;
        
 	case key_left_panel_move_left:
             face.leftpanelwidth_inc(-1);
+	    face.redraw();
             break;
 
 	case key_log_panel_move_up:
 	    face.logpanelheight_inc(1);
+	    face.redraw();
 	    break;
        
 	case key_log_panel_move_down:
             face.logpanelheight_inc(-1);
+	    face.redraw();
             break;
 
 	case key_quickfind: face.extk = ACT_QUICKFIND; break;
@@ -3488,9 +3492,11 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    break;
 	case key_chat_panel_move_up:
 	    face.chatpanelheight_inc(1);
+	    face.redraw();
 	    break;
 	case key_chat_panel_move_down:
 	    face.chatpanelheight_inc(-1);
+	    face.redraw();
 	    break;
 	case key_quit:
 	    return -1;

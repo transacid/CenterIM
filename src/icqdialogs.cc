@@ -1183,9 +1183,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" User interface "));
 	t.addleaff(i, 0, 1, _(" Change sound device to : %s "), strregsound(s));
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
-	t.addleaff(i, 0, 31, _(" Left panel width :  %d "), conf.getleftpanelwidth());
-	t.addleaff(i, 0, 32, _(" Log panel height :  %d "), conf.getlogpanelheight());
-	t.addleaff(i, 0, 33, _(" Chat panel height : %d "), conf.getchatpanelheight());
+	t.addleaff(i, 0, 32, _(" Left panel width :  %d "), conf.getleftpanelwidth());
+	t.addleaff(i, 0, 33, _(" Log panel height :  %d "), conf.getlogpanelheight());
+	t.addleaff(i, 0, 34, _(" Chat panel height : %d "), conf.getchatpanelheight());
 
     #ifdef USE_FRIBIDI
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
@@ -1426,7 +1426,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    	break;
 		    case 51:
 		    	icqdropauthreq = !icqdropauthreq;
-			break
+			break;
   		}
   		break;
 	    case 1:
@@ -1478,11 +1478,11 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     db.close();
 
-    if(needredraw)
-        icqface::redraw();
-
     unblockmainscreen();
 
+    if(needredraw) {
+        icqface::redraw();
+    }
 
     return success;
 }

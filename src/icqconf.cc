@@ -249,6 +249,10 @@ void icqconf::loadkeys() {
 	    of << "bind contact\t/\tquickfind" << endl << endl;
 	    of << "bind contact\t\\cn\tnext_chat" << endl;
 	    of << "bind contact\t\\cb\tprev_chat" << endl;
+	    of << "bind contact\t[\tleft_panel_move_left" << endl;
+	    of << "bind contact\t]\tleft_panel_move_right" << endl;
+	    of << "bind contact\t{\tlog_panel_move_up" << endl;
+	    of << "bind contact\t}\tlog_panel_move_down" << endl;
 	    of << "bind history\t/\tsearch" << endl;
 	    of << "bind history\ts\tsearch" << endl;
 	    of << "bind history\tn\tsearch_again" << endl;
@@ -263,6 +267,8 @@ void icqconf::loadkeys() {
 	    of << "bind editor\t\\a?\tinfo" << endl;
 	    of << "bind editor\t<F2>\tshow_urls" << endl;
 	    of << "bind editor\t<F9>\tfullscreen" << endl << endl;
+	    of << "bind editor\t<F4>\tchat_panel_move_up" << endl;
+	    of << "bind editor\t<F5>\tchat_panel_move_down" << endl;
 	    of << "bind info\t<F2>\tshow_urls" << endl;
 	    of << "bind info\t<F6>\tuser_external_action" << endl;
 
@@ -378,8 +384,14 @@ void icqconf::loadkeys() {
 	    if(param == "show_urls") k.action = key_show_urls; else
 	    if(param == "rss_check") k.action = key_rss_check; else
 	    if(param == "multiple_recipients") k.action = key_multiple_recipients; else
-	    if(param == "user_external_action") k.action = key_user_external_action;
-		else continue;
+	    if(param == "user_external_action") k.action = key_user_external_action; else
+	    if(param == "left_panel_move_left")  k.action = key_left_panel_move_left; else
+	    if(param == "left_panel_move_right") k.action = key_left_panel_move_right; else
+	    if(param == "log_panel_move_up")    k.action = key_log_panel_move_up; else
+	    if(param == "log_panel_move_down")  k.action = key_log_panel_move_down; else
+	    if(param == "chat_panel_move_up")  k.action = key_chat_panel_move_up; else
+	    if(param == "chat_panel_move_down")  k.action = key_chat_panel_move_down; else
+		continue;
 
 	    keys.push_back(k);
 	}
@@ -477,6 +489,9 @@ void icqconf::loadmainconfig() {
 	    if(param == "logonline") logonline = true; else
 	    if(param == "fromcharset") fromcharset = buf; else
 	    if(param == "tocharset") tocharset = buf; else
+	    if(param == "left_panel_width")  leftpanelwidth  = atol(buf.c_str()); else
+	    if(param == "log_panel_height") logpanelheight = atol(buf.c_str()); else
+	    if(param == "chat_panel_height") chatpanelheight = atol(buf.c_str()); else
 	    if(param == "timestampstothesecond") settimestampstothesecond(true); else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
@@ -596,6 +611,10 @@ void icqconf::save() {
 	    if(getmakelog()) f << "log" << endl;
 	    if(getproxyconnect()) f << "proxy_connect" << endl;
 	    if(getproxyssl()) f << "proxy_ssl" << endl;
+
+	    if(getleftpanelwidth())  f << "left_panel_width\t"  << getleftpanelwidth()  << endl;
+	    if(getlogpanelheight()) f << "log_panel_height\t" << getlogpanelheight() << endl;
+	    if(getchatpanelheight()) f << "chat_panel_height\t" << getchatpanelheight() << endl;
 
 	    vector<imaccount>::iterator ia;
 	    for(ia = accounts.begin(); ia != accounts.end(); ++ia)
@@ -985,6 +1004,10 @@ void icqconf::setemacs(bool fem) {
 
 void icqconf::setantispam(bool fas) {
     antispam = fas;
+}
+
+void icqconf::seticqdropauthreq(bool fas) {
+    icqdropauthreq = fas;
 }
 
 void icqconf::setmailcheck(bool fmc) {
