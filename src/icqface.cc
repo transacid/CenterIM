@@ -22,6 +22,8 @@
 *
 */
 
+#include <stdint.h> /* for intptr_t */
+
 #include "icqface.h"
 #include "icqconf.h"
 #include "centerim.h"
@@ -414,7 +416,7 @@ int icqface::contextmenu(icqcontact *c) {
 
     m.scale();
     m.idle = &menuidle;
-    i = (long) m.getref(m.open()-1);
+    i = (intptr_t) m.getref(m.open()-1);
     m.close();
 
     if(i) lastr = i;
@@ -463,7 +465,7 @@ int icqface::generalmenu() {
 
     if(i) {
 	lastitem = i-1;
-	r = (long) m.getref(lastitem);
+	r = (intptr_t) m.getref(lastitem);
     }
 
     return r;
@@ -526,7 +528,7 @@ icqcontact *icqface::mainloop(int &action) {
 	    g = 0;
 	}
 	
-	if((unsigned long) c < 100) c = 0;
+	if((intptr_t) c < 100) c = 0;
 
 	if(i) {
 	    switch(action = extk) {
@@ -1518,7 +1520,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	m.scale();
 
 	i = m.open();
-	choice = (long) m.getref(i-1);
+	choice = (intptr_t) m.getref(i-1);
 
 	m.close();
     }
@@ -1573,7 +1575,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	m.close();
 
 	if(r = i) {
-	    st = (imstatus) ((long) m.getref(i-1));
+	    st = (imstatus) ((intptr_t) m.getref(i-1));
 	}
     }
 
@@ -2166,7 +2168,7 @@ void icqface::quickfind(verticalmenu *multi) {
 			    c = (icqcontact *) cm->getref(i);
 			}
 
-			if((unsigned long) c > 100) {
+			if((intptr_t) c > 100) {
 			    string current = c->getdispnick();
 			    len = current.size();
 			    if(len > nick.size()) len = nick.size();

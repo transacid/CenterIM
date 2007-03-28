@@ -34,6 +34,7 @@
 #include "impgp.h"
 
 #include <libicq2000/constants.h>
+#include <stdint.h> /* for intptr_t */
 
 const char *stragerange(ICQ2000::AgeRange r) {
     switch(r) {
@@ -894,7 +895,7 @@ void icqface::selectcountry(unsigned short &f) {
     i = m.open();
     m.close();
 
-    if(i) f = (unsigned short) ((long) m.getref(i-1));
+    if(i) f = (unsigned short) ((intptr_t) m.getref(i-1));
 }
 
 void icqface::selectlanguage(unsigned short &f) {
@@ -946,7 +947,7 @@ void icqface::selectgender(imgender &f) {
     int i = m.open();
     m.close();
 
-    if(i) f = (imgender) ((long) m.getref(i-1));
+    if(i) f = (imgender) ((intptr_t) m.getref(i-1));
 }
 
 void icqface::selectagerange(ICQ2000::AgeRange &r) {
@@ -967,7 +968,7 @@ void icqface::selectagerange(ICQ2000::AgeRange &r) {
     int i = m.open();
     m.close();
 
-    if(i) r = (ICQ2000::AgeRange) ((long) m.getref(i-1));
+    if(i) r = (ICQ2000::AgeRange) ((intptr_t) m.getref(i-1));
 }
 
 bool icqface::edit(string &txt, const string &header) {
@@ -1270,7 +1271,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	
 	void *p;
 	finished = !db.open(n, b, &p);
-	i = (long) p;
+	i = (intptr_t) p;
 
 	if(!finished)
 	switch(b) {
@@ -1810,7 +1811,7 @@ void icqface::transfermonitor() {
 	    it = transfers.end();
 
 	    if(!db.gettree()->isnode(db.gettree()->getid(np-1)))
-		it = transfers.begin() + (long) db.getmenu()->getref(n-1);
+		it = transfers.begin() + (intptr_t) db.getmenu()->getref(n-1);
 
 	    switch(b) {
 		case 0:

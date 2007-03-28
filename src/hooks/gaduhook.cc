@@ -896,6 +896,7 @@ static char *token_ocr(const char *ocr, int width, int height, int length) {
 string gaduhook::handletoken(struct gg_http *h) {
     struct gg_token *t;
     string fname, r;
+    char *tmpfilep = NULL;
 
     if(!h)
 	return "";
@@ -910,8 +911,25 @@ string gaduhook::handletoken(struct gg_http *h) {
 	return "";
 
     do {
-	fname = (getenv("TMPDIR") ? getenv("TMPDIR") : "/tmp");
-	fname += "/gg.token." + i2str(getpid()) + i2str(time(0));
+	while (tmpfilep == NULL) {
+	    char tmpnam[100];
+	    int tmpfiledes;
+	    if (getenv("TMPDIR") && strlen(getenv("TMPDIR")) < 50) {
+		sprintf (tmpnam, "%s/gg.token.XXXXXX", getenv("TMPDIR"));
+	    } else {
+		sprintf (tmpnam, "/tmp/gg.token.XXXXXX");
+	    }
+	    
+	    if ((tmpfilep = mktemp (tmpnam)) != NULL) {
+		if ((tmpfiledes = open (tmpnam, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) == -1) {
+		    tmpfilep = NULL;
+		} else {
+		    close (tmpfiledes);
+		}
+	    }
+	    fname = tmpnam;
+	}
+
     } while(!access(fname.c_str(), F_OK));
 
     ofstream bf(fname.c_str());

@@ -43,6 +43,8 @@
 *
 */
 
+#include <stdint.h> /* for intptr_t */
+
 #include "texteditor.h"
 
 #define CURLINE       (curfile ? (curfile->sy+curfile->y) : 0)
@@ -2157,11 +2159,11 @@ void texteditor::undorecordfree(void *p) {
 }
 
 int texteditor::findint(void *p1, void *p2) {
-    return *(int *) p1 != (long) p2;
+    return (intptr_t) p1 != (intptr_t) p2;
 }
 
 int texteditor::findhighline(void *p1, void *p2) {
-    return *(int *) p1 != ((highline *) p2)->line;
+    return (intptr_t) p1 != ((highline *) p2)->line;
 }
 
 void texteditor::shiftmarkedblock(int delta) {
