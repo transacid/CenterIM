@@ -1,24 +1,18 @@
 /*
 *
-* The centericq FAQ (frequently asked questions)
-* by Konstantin Klyagin <konst@konst.org.ua>
+* The CenterIM FAQ (frequently asked questions)
+* originally by Konstantin Klyagin
+* currently maintained by the CenterIM community.
 *
-* $Id: FAQ,v 1.17 2004/11/11 13:42:05 konst Exp $
 *
 */
 
-Q: "Who are you?" - a question usually addressed to the user "konst"
-   on the default centericq contact list by everybody who doesn't
-   like to read documentation.
-
-A: I usually answer "Santa Claus".
-
 /* *** */
 
-Q: What about implementing such a neat <blah-blah> feature in centericq?
+Q: What about implementing such a neat <blah-blah> feature in centerim?
 
-A: Hey, centericq is GPL and opensource, so feel free to contribute.
-   Don't wait for the author/maintainer to implement it, just do it
+A: Hey, centerim is GPL and opensource, so feel free to contribute.
+   Don't wait for the maintainers to implement it, just do it
    yourself and send a patch.
 
 /* *** */
@@ -30,14 +24,14 @@ A: Use gmake instead of make
 /* *** */
 
 Q: (by Paonia Ezrine, paonia@home.welcomehome.org)
-   When I run centericq in a xterm or from the console it is fine but
+   When I run centerim in a xterm or from the console it is fine but
    when I run it in a gnome terminal windows the screen does not update
    correctly. Specificly the right side of the screen does not get
    cleared after I send a message or other similar events.
 
 A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
 
-   It happens only with the gnome-terminal. centericq works fine on
+   It happens only with the gnome-terminal. centerim works fine on
    linux-console and eterm (enlightenment) so it is problem with
    gnome-terminal. It does not support all xterm sequences.
    /usr/share/terminfo/g/gnome file could correct that (gnome users
@@ -45,17 +39,17 @@ A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
    sequences for gnome-terminal.
 
    Workaround: For me it worked setting TERM variable to gnome and then
-   running centericq without problems.
+   running centerim without problems.
    
    (gnome-terminal)
    $ export TERM=gnome
-   $ centericq
+   $ centerim
    
    and it is ok
 
 /* *** */
 
-Q: How do I authorize someone's request with centericq?
+Q: How do I authorize someone's request with centerim?
 
 A: You'll see as soon as someone requests it.
 
@@ -64,7 +58,7 @@ A: You'll see as soon as someone requests it.
 Q: I can't use Ctrl-O to view history and Ctrl-Y to delete a line under
    FreeBSD
 
-A: Execute the following before starting centericq:
+A: Execute the following before starting centerim:
     stty dsusp undef
     stty discard undef
 
@@ -81,11 +75,11 @@ A: Have you ever used mc (Midnight commander)? It requires users to
 
 Q: How do I enable logging the protocol info, etc?
 
-A: Run centericq with --debug flag.
+A: Run centerim with --debug flag.
 
 /* *** */
 
-Q: Centericq compiles way too slow on my box. What's wrong?
+Q: CenterIM compiles way too slow on my box. What's wrong?
 
 A: C++ compiler optimization being a rather slow thing is on by default.
    To turn it off, do the following.
@@ -95,7 +89,7 @@ A: C++ compiler optimization being a rather slow thing is on by default.
 
 Q: From: jeff covey <jeff.covey@pobox.com>
 
-  if i understand the faq correctly, centericq makes esc into escesc
+  if i understand the faq correctly, centerim makes esc into escesc
   because some terminals don't map esc properly. could the use of esc or
   escesc be made a configuration choice? for me, hitting escape twice is
   reallyreally annoyingannoying, especially if i'm two menus in, and to
@@ -120,7 +114,7 @@ A: From: lanzz@lanzz.org
 
   as 2. is annoying and sluggish (at least to me) and 3. is too much
   work for too little gain, i think the current situation with double
-  esc is the best choice. centericq was using timeout esc in the past (i
+  esc is the best choice. centerim was using timeout esc in the past (i
   think it's the default way ncurses handles esc) and at least i'm happy
   with the change :)
 
@@ -145,25 +139,25 @@ A: It means exactly "turboing". You're loggin in and out too fast, so
 
 /* *** */
 
-Q: WTF?! My centericq binary is more than 20Mb. SOS! HELP! Virus? Aliens?
+Q: WTF?! My centerim binary is more than 20Mb. SOS! HELP! Virus? Aliens?
 
 A: There are three steps you need to take.
 
     1. Look at other applications written in C++ compiled in your system.
     2. Read the install(1) and strip(1) man-pages.
-    3. Type "strip centericq; ls -l centericq"
+    3. Type "strip -s centerim; ls -l centerim"
 
 /* *** */
 
 Q: I need a program for sending messages on IM networks from the command
-   line. Is it possible to write a program that would use the centericq
+   line. Is it possible to write a program that would use the centerim
    libraries, or maybe there is a special batch mode in the program?
 
 A: Batch mode like you described is not possible to be implemented, because
    due to frequent logons followed by disconnections the servers will turn
    on their DoS attacks protection. So there is the only decent way which
    consists in sending messages in batch mode through an already running
-   centericq instance. If you want to run it like a "daemon", use
+   centerim instance. If you want to run it like a "daemon", use
    screen(1). More details on the batch mode usage can be found in the
    README, chapter 9.2.
 
@@ -191,11 +185,11 @@ A: It doesn't make much sense, because in many cases they're transferred
 
 /* *** */
 
-Q: When $HOME/.centericq/config gets created, you should set it mode 0600
+Q: When $HOME/.centerim/config gets created, you should set it mode 0600
    so only the user can read it. It contains passwords in clear text
    which other users on a system could read.
 
 A: Your filesystem permissions knowledge is very sound, but please just try
    to access the config file before making any affirmations. You'll see
-   that the .centericq directiory permissions do not allow others to read
+   that the .centerim directiory permissions do not allow others to read
    your configuration data.

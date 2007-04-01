@@ -1,6 +1,9 @@
-Centericq documentation by
-Konstantin Klyagin <konst@konst.org.ua>
+CenterIM documentation.
+
+This document was originally written by Konstantin Klyagin <konst@konst.org.ua>.
 2001-2005
+
+Currently modified by the CenterIM community. 2007, version 1.0
 
 Contents
 --------
@@ -87,25 +90,18 @@ Contents
     9.8. Latest CVS snapshots
 10. Lynx
     10.1. The program homepage
-	10.1.1. Centericq mailing list
+	10.1.1. CenterIM mailing list
 	10.1.2. German fan-club of the program :-)
-    10.2. thekonst.net
-    10.3. Other programs I write
-    10.4. IM protocols
+    10.2. IM protocols
 11. Help to the project I would appreciate
     11.1. Feedback
     11.2. Patches
-    11.3. Promoting the little program
-    11.4. Donations
-	11.4.1. Money
-	11.4.2. Hardware
-	11.4.3. Other stuff
 
 
 1. Introduction
 ---------------
 
-  Centericq is a text mode menu- and window-driven IM interface. ICQ,
+  CenterIM is a text mode menu- and window-driven IM interface. ICQ,
 Yahoo!, AIM TOC, IRC, MSN, Gadu-Gadu and Jabber protocols are currently
 supported. It allows you to send, receive, and forward messages, URLs,
 SMSes and, contacts, mass message send, search for users (including extended
@@ -119,7 +115,7 @@ has support for Hebrew and Arabic languages and allows to arrange
 contacts into groups. There is also an internal RSS reader and even a
 LiveJournal client!
 
-  Centericq is known to build and work well under Linux, FreeBSD,
+  CenterIM is known to build and work well under Linux, FreeBSD,
 OpenBSD, NetBSD, Sun Solaris, MacOS X/Darwin and Microsoft
 Windows (built with cygwin).
 
@@ -136,7 +132,7 @@ on ICQ, but there were several good programs only for X. For console
 they had only mICQ and zicq. The former was ok, but its interface made
 me cry. I know, it's of quite a UNIX style, and I don't have anything
 against command line, but typing nicks and uins all the time was
-terrible. The second thingie, zicq, was an attempt to implement menus
+terrible. The second thing, zicq, was an attempt to implement menus
 and windows for ICQ in text-mode, but its author couldn't go further
 than just splitting the screen into two windows, one with contact list
 and another with usual mICQ output :) Actually it was all based on mICQ
@@ -160,13 +156,13 @@ lot in it.
 1.2. Features overview
 ----------------------
 
-  Centericq's ICQ module has almost all the functionality including
+  CenterIM's ICQ module has almost all the functionality including
 extended issues that Mirabilis client has. Speaking of other protocols,
 it has quite full support for features of Yahoo!, AIM, IRC and
 Jabber.
 
   Beside simple things like sending and receiving messages, changing
-online status and basic user information, centericq advanced features
+online status and basic user information, CenterIM advanced features
 such as "White pages" and keyword search, an ability to update almost
 all the fields in user's details, send URLs and SMSes, etc. I hope you
 enjoy it a lot :)
@@ -184,7 +180,7 @@ ncurses (at least 4.2 version)
 openssl
     The secure communications library. Optional, but you will require
     if you want SSL support for Jabber. Previous versions of the library
-    called SSLeay will work with centericq too.
+    called SSLeay will work with CenterIM too.
 	http://www.openssl.org/
 
 gnutls
@@ -196,9 +192,12 @@ gpgme
     This is for PGP support in Jabber. Optional also.
 	http://www.gnupg.org/(en)/download/index.html#gpgme
 
-Please note that in order to compile centericq from source on Redhat
+Please note that in order to compile CenterIM from source on Redhat
 based systems you should have *-devel RPM packages of the above
 mentioned libraries installed.
+
+For more information on the software requirements, take a look at:
+- http://www.centerim.org/index.php/Requirements
 
 It's possible to disable support of various protocols during the build
 phase. Just take a look at the --disable-xxx parameters for configure.
@@ -213,14 +212,14 @@ $ ./configure --help
   Upon the first execution, the program shows its configuration screen
 and then gets to the next stage, the account manager dialog. All the
 configuration dialog items are self-descriptive, so there must be no
-problems to customize your centericq. As soon as you're finished with
+problems to customize your CenterIM. As soon as you're finished with
 it, using the right allow key, move cursor to the "Done" button and
 press Enter.
 
   Russian speaking users should pay attention to the "Russian
 translation" item of the registration dialog. It's vital to set its
 value to "yes" to be able to use cyrillic. In most cases. Unless you use
-win1251 as a default charset, about what I doubt a lot :) Unfortunatelly
+win1251 as a default charset, about what I doubt a lot :) Unfortunately
 we have two different encodings for our language, koi8-r is default for
 UNIX like systems and win1251 is used in Windows. Since ICQ comes from
 Windows we need to recode every sent and received message in order for
@@ -231,8 +230,8 @@ it to be readable.
 ---------------------------
 
   This section says a bit about registering new and entering existing
-accounts' details into configuration of your centericq. Everything that
-centericq can do about it is available through the "Accounts" dialog
+accounts' details into configuration of your CenterIM. Everything that
+CenterIM can do about it is available through the "Accounts" dialog
 displayed at the start and then residing under the f4->Accounts.. menu
 item.
 
@@ -253,7 +252,7 @@ only exception is if you have your own ICQ server on LAN.
 2.2. Yahoo! accounts
 --------------------
 
-  Centericq doesn't support registring new Yahoo! ID's, so if you don't
+  CenterIM doesn't support registering new Yahoo! IDs, so if you don't
 have one yet, just visit the homepage Yahoo! messenger at
 http://messenger.yahoo.com/ and select the "Acct info" link in the top
 right corner.
@@ -272,15 +271,15 @@ your details" item in the Account manager dialog.
 -----------------
 
   This service is completely different from others supported by
-centericq. You don't need to register to connect to irc. All you need is
+CenterIM. You don't need to register to connect to irc. All you need is
 just choose a nick which is not used by anyone else. Otherwise it'll be
-reported as soon as you try to login. So set any nick and a host name of
+reported as soon as you try to log in. So set any nick and a host name of
 the server you want to chat on, and go ahead!
 
   For the advanced IRC users there can be a need for so-called NickServ
-authentification using a password to identify himself. Sometimes it's
+authentication using a password to identify himself. Sometimes it's
 used to protect your nickname from overtaking on a specific IRC network.
-Centericq does support this too, providing a non-obligatory password
+CenterIM does support this too, providing a non-obligatory password
 field.
 
 
@@ -299,8 +298,8 @@ automatically.
 --------------------
 
   Jabber is the most advanced open source and free instant messaging
-solution. Since the version 4.8.8 it's been supported by centericq. Due
-to its being open and developed by the wide community, centericq can
+solution. Since the version 4.8.8 it's been supported by CenterIM. Due
+to its being open and developed by the wide community, CenterIM can
 register new nicknames in it very easily.
 
 
@@ -315,7 +314,7 @@ register new nicknames in it very easily.
 
   Though LiveJournal is not actually an IM service, but I hope you
 forgive me for that. LiveJournal is a weblogs community. Its URL is
-http://www.livejournal.com/. Centericq makes use of their open source
+http://www.livejournal.com/. CenterIM makes use of their open source
 and well-documented client-server protocol, and makes it possible to
 post items and read friends' RSS feeds directly from its interface. So
 if you want an account, go to http://www.livejournal.com/ and see how to
@@ -327,7 +326,7 @@ server software and install it on your own. Long live open source!
 --------------
 
   If you have libjpeg installed in your system and the configure script
-does find it, centericq can register a UIN on this network for you.
+does find it, CenterIM can register a UIN on this network for you.
 Otherwise you can only register one with the official client that can be
 downloaded from the official site at http://www.gadu-gadu.pl/
 
@@ -360,7 +359,7 @@ updated with respective web interfaces, I believe.
 3. User interface
 -----------------
 
-  The text UI centericq has, as well as UI of other programs for console
+  The text UI CenterIM has, as well as UI of other programs for console
 I have written, is very simple. There are menus, windows, menus and
 input lines. In the bottom line of the screen there is a status bar. It
 usually contains hints about what to press to invoke various menus,
@@ -393,11 +392,11 @@ of any F-key the ESC and then a number can be used.
 3.2. The main screen
 --------------------
 
-  The main screen of centericq consists of three parts. First is contact
+  The main screen of CenterIM consists of three parts. First is contact
 list which is situated to the left. Next is information window which is
 used to show received events, users' details, and also to edit events
 that are going to be sent. And the smallest one is a log window in which
-you can see messages about what centericq is doing right now.
+you can see messages about what CenterIM is doing right now.
 
 
 3.3. Menus
@@ -408,7 +407,7 @@ ability to select one (or several) items from a certain list. To make a
 difference between single and multiple choice menu you gotta just have a
 look at the items. If square brackets stand next to items text in every
 line, a multiple selection is requested. Otherwise you can only select
-one item. To do it, just press "Enter" on it. To make a mutiple
+one item. To do it, just press "Enter" on it. To make a multiple
 selection, press "Space" on items and use "Enter" to finish the
 selection. ESC does also work in all menus to cancel the selection.
 
@@ -422,7 +421,7 @@ the context menu you can do various current contact specific things.
 3.4. Dialogs
 ------------
 
-  Every dialog in centericq has a tree-like view. When I was about to
+  Every dialog in CenterIM has a tree-like view. When I was about to
 write classes for form-based input, I remembered that there was a
 "treeview" class written by me before. So, I decided to use it for
 dialogs and was right. There was no need to re-design the whole form in
@@ -434,7 +433,7 @@ always simple :)
 3.5. Hotkeys in dialogs
 -----------------------
 
-  Dialogs of centericq usually have a bar with buttons. To access a
+  Dialogs of CenterIM usually have a bar with buttons. To access a
 button without moving the highlighted bar over it with the arrow keys
 you can use shortcuts. It's enough to press the first capital letter of
 a button name to access the function behind it.
@@ -443,13 +442,13 @@ a button name to access the function behind it.
 3.6. Some UI tips
 -----------------
 
-  There at some quite standard key combinations supported by centericq I
+  There at some quite standard key combinations supported by CenterIM I
 wanna tell you about. Here they go.
 
     Ctrl-L
       Redraws the screen in any place of program execution. If output of    
     some kind of background programs or system messages spoil your screen
-    just press it so centericq display is refreshed.
+    just press it so CenterIM display is refreshed.
 
     Ctrl-Y
       In a message writing mode removes entire current line.
@@ -470,7 +469,7 @@ wanna tell you about. Here they go.
 4. Configuration
 ----------------
 
-  The majority of centericq settings can be found in the "Configuration"
+  The majority of CenterIM settings can be found in the "Configuration"
 dialog which can be invoked by selecting an appropriate items in the
 global menu (the one you see on pressing F4). There are only three
 things you should setup from outside the program with modifying the
@@ -487,12 +486,12 @@ won't cover all of the items here in the documentation.
 4.1. Migrating from other ICQ software
 --------------------------------------
 
-  If you decided to migrate to centericq from another ICQ software or
+  If you decided to migrate to CenterIM from another ICQ software or
 have a need to you something else in parallel, there is a way to convert
 the contact list. This means you can migrate without loosing your
 contacts and history.
 
-  How to do it? There is a perl script named cicqconv. It's usually
+  How to do it? There is a Perl script named cicqconv. It's usually
 installed on "make install" under @prefix@/bin (/usr/local/bin in the
 majority of cases). Its usage is very simple. You should only pass one
 parameter to it, telling from what kind of ICQ software it's to convert
@@ -503,18 +502,18 @@ parameters.
 4.2. Event sounds
 -----------------
 
-  As it was said before, centericq can play sounds on various events.
-It's done the following way. Upon, say, receiving a message, centericq
+  As it was said before, CenterIM can play sounds on various events.
+It's done the following way. Upon, say, receiving a message, CenterIM
 executes an external command. Actually it can be whatever you want, but
 original idea is to execute a command line WAV player.
 
-  There are three WAV sound files which centericq has by default. They
+  There are three WAV sound files which CenterIM has by default. They
 are sounds taken from Mirabilis ICQ. When you set "Change sound device
 to" item to "sound card", the program generates a file named sounds in
-the .centericq/ directory in your home folder. The default file has
+the .CenterIM/ directory in your home folder. The default file has
 commands to execute a "play" utility (from sox package) with a name of a
 file to play, one of the default ones. If you wanna change the player or
-a sound simply edit ~/.centericq/sounds.
+a sound simply edit ~/.CenterIM/sounds.
 
   If you use ESD (Enlightenment Sound Daemon) to have some extra sound
 facilities such as mixing streams, or playing on another computer, you
@@ -524,14 +523,14 @@ might wish to change the "play" command to "esdplay".
 4.3. Color schemes
 ------------------
 
-  It's possible to customise colors in the centericq's user interface.
-It's done with the ~/.centericq/colorscheme configuration file. Its
+  It's possible to customize colors in the CenterIM's user interface.
+It's done with the ~/.CenterIM/colorscheme configuration file. Its
 contents are self-descriptive, and parameter names mean exactly that
 they're named after. Please note, that among the standard color names
 it's possible to specify "transparent" which is useful when the program
 is used in terminals with background images set.
 
-  Started for the first time, centericq creates the default colorscheme
+  Started for the first time, CenterIM creates the default colorscheme
 file filled in with settings of one of default schemes that the
 Configuration dialog proposes. Also its contents are re-written every
 time you change color scheme from the dialog.
@@ -540,15 +539,15 @@ time you change color scheme from the dialog.
 colors configuration file or choose one of contributed ones that can be
 found under the contrib/ directory of the source tarball.
 
-  More "visual" explanation can be found here at the centericq.de:
+  More "visual" explanation can be found here at the CenterIM.de:
 http://centericq.de/misc/colorscheme_helper.png
 
 
 4.4. Key bindings
 -----------------
 
-  Key bindings are also configurable in centericq. On the first start it
-creates a file called keybindings in your ~/.centericq/ directory. You can
+  Key bindings are also configurable in CenterIM. On the first start it
+creates a file called keybindings in your ~/.CenterIM/ directory. You can
 use its initial contents for reference. If you want to change something,
 well, it's all there.
 
@@ -556,21 +555,21 @@ well, it's all there.
 4.5. URL open action (web browser support)
 ------------------------------------------
 
-  Centericq can extract URLs from messages and user information records
+  CenterIM can extract URLs from messages and user information records
 for you. And it also can launch your preferred web browser to view them.
 No need to have a big attention to notice "F2 to URLs" text in the
 status bar when you view either a message or user's details. The "open
 URL" action starts right after you make a selection in the menu invoked.
-The ~/.centericq/actions file is responsible for this. By default it has
+The ~/.CenterIM/actions file is responsible for this. By default it has
 a command to execute netscape, but you can change to whatever you want.
 Please only note that you cannot put lynx or any other text mode based
 browser starting in the same console there. The commands from "actions"
-run in parallel with centericq, so please only pass your URLs to scripts
+run in parallel with CenterIM, so please only pass your URLs to scripts
 or to X based browsers, but to nothing interactive.
 
-  Though, if you're using centericq under screen(1) there is a solution.
+  Though, if you're using CenterIM under screen(1) there is a solution.
 Jochen Sprickerhof <jochen.sprickerhof@web.de> advised it having read
-the statement in the previous paragraph. He proposes to define open url
+the statement in the previous paragraph. He proposes to define open URL
 action the following way: "openurl screen lynx $url$", in order to open
 lynx in a new screen window as soon as an URL to browse it chosen.
 
@@ -578,7 +577,7 @@ lynx in a new screen window as soon as an URL to browse it chosen.
 4.6. Hostnames and port numbers (for crazy firewall admins)
 -----------------------------------------------------------
 
-  I'm frequently asked what ports and hostnames centericq uses to
+  I'm frequently asked what ports and hostnames CenterIM uses to
 connect to various IM services. To avoid further buzz, I just include
 them here.
 
@@ -614,7 +613,7 @@ to 21 or whatever is not restricted by firewall and it will work :)
 
   For this network you gotta choose a server yourself, because the
 auditory of people you chat with and other things depend exactly on this
-choice. However, by default, centericq sets the following parameters:
+choice. However, by default, CenterIM sets the following parameters:
 
   Hostname: irc.freenode.net
   Port: 6667
@@ -662,7 +661,7 @@ their main server:
 4.7. Binding to various IP addresses
 ------------------------------------
 
-  If the box you're running centericq on has several IPs and you would
+  If the box you're running CenterIM on has several IPs and you would
 like to use a certain one of them for IM connections, there is a command
 line parameter made especially for you, --bind <IP address> or shortly,
 -B <IP address>.
@@ -671,11 +670,11 @@ line parameter made especially for you, --bind <IP address> or shortly,
 5. Online status
 ----------------
 
-  With centericq you can be either on or off the ICQ network. The status
+  With CenterIM you can be either on or off the ICQ network. The status
 can be changed with the "Status" menu invoked either with F3 or "S" key
 or from the global menu. It provides you with a choice to switch between
 online statuses along with an ability to go offline. If one of online
-statuses if selected when you're offline, centericq will connect and
+statuses if selected when you're offline, CenterIM will connect and
 switch the status to what was chosen.
 
   With an online status you can indicate to those who are in touch with
@@ -689,7 +688,7 @@ you your being away, occupied, free for chat, not available, etc.
 after a certain period of inactivity, to show your friends or colleagues
 you're somewhere away from computer.
 
-  The very useful thing about is that centericq detects inactivity for
+  The very useful thing about is that CenterIM detects inactivity for
 all the consoles if you use it locally. So it won't change your status
 if you're just working in another console and only don't tweak it.
 
@@ -700,7 +699,7 @@ value means the feature is off.
 6. Contact list
 ---------------
 
-  The list of your contacts is displayed to the left on the centericq
+  The list of your contacts is displayed to the left on the CenterIM
 main screen, and has a tree-like structure. There are "Online" and,
 unless the "Hide offline users" options is on, "Offline" nodes, groups
 (if switched on). If a user has a birthday today, a smiley face ":)" is
@@ -721,11 +720,11 @@ contact, the ">" character will appear between status and nickname.
 
   The most common way to add an IM contact to your list is to use the
 "find/add user(s)" dialog invoked from the global menu. First you have
-to find the contact you wanna add. Centericq allows you to search for
+to find the contact you wanna add. CenterIM allows you to search for
 users with various parameters in various networks.
 
   In ICQ, you can add a user knowing his UIN, or see a list of people
-matching your criterias. In fact, ICQ server sends only first 40 matching
+matching your criteria. In fact, ICQ server sends only first 40 matching
 UINs, but usually it's quite enough.
 
   Note that in ICQ search requests you can use simple wildcards in the
@@ -735,15 +734,15 @@ just type in a first name ("Konstantin") and fill in the "last name" field
 with "Klyag*". The same trick can be done with other fields: "city",
 "nickname", "company", etc..
 
-  The Yahoo!, AIM, IRC and Jabber networks support in centericq
+  The Yahoo!, AIM, IRC and Jabber networks support in CenterIM
 does only allow to add users by nicknames.
 
   With IRC it's possible to get users from channels. For more info on
 channels and other IRC related stuff, please refer to http://www.irc.org/.
-So, with centericq you can either fetch a list of users for a specified
+So, with CenterIM you can either fetch a list of users for a specified
 channel, or (sic!) find users that stay on several channels simultaneously.
 To perform the latter, just put several channel names separated with spaces.
-For example, the "#centericq #linux" query will show a list of users that
+For example, the "#CenterIM #linux" query will show a list of users that
 are currently talking on both channels.
 
 
@@ -753,32 +752,35 @@ are currently talking on both channels.
   You can skip the finding step by issuing one of the following shell
 commands to add a user (depends on an IM type):
 
-    $ mkdir ~/.centericq/<UIN of a user to add>
+    $ mkdir ~/.CenterIM/<UIN of a user to add>
 	This one is for ICQ
 
-    $ mkdir ~/.centericq/y<nickname>
+    $ mkdir ~/.CenterIM/y<nickname>
 	For Yahoo!
 
-    $ mkdir ~/.centericq/a<nickname>
+    $ mkdir ~/.CenterIM/a<nickname>
 	For AIM
 
-    $ mkdir ~/.centericq/i<nickname>
+    $ mkdir ~/.CenterIM/i<nickname>
 	For IRC
 
-    $ mkdir ~/.centericq/j<nickname>
+    $ mkdir ~/.CenterIM/j<nickname>
 	For Jabber
+	
+	$ mkdir ~/.CenterIM/i<msn-mailaddress>
+	For MSN
 
-Don't forget to restart centericq so that it re-reads the contact list.
+Don't forget to restart CenterIM so that it re-reads the contact list.
 Though, it's better anyway to follow the usual find/add procedure.
 
   Another intresting ICQ related trick I wanna share with you. Because of
-a natural couriousity, sometimes names of people get me intrested in finding
+a natural curiosity, sometimes names of people get me interested in finding
 out about their ethnical origin. Once I saw a last name, Aslam, which seemed
-like a muslim one, but I had no idea which country the guy originated
+like a Muslim one, but I had no idea which country the guy originated
 from. I decided to use ICQ to find out. Opened the "find/add" dialog and
 typed that in. After looking at several matched contacts I noticed the
 majority of people were from Pakistan, so I realized where the guy was
-from and my couriosity was satisfied.
+from and my curiosity was satisfied.
 
   I go the same way to find out in which country a certain city is
 located, and so on. This makes ICQ extremely useful for me. Just use
@@ -820,7 +822,7 @@ browsed and used in search queries by others. To browse details of a
 specific user on the contact list it's enough just to press '?' on a
 corresponding to a contact item.
 
-  Please don't hesistate to do it before asking people who they are. It
+  Please don't hesitate to do it before asking people who they are. It
 takes time to explain, though it can be looked up so easily.
 
 
@@ -829,7 +831,7 @@ takes time to explain, though it can be looked up so easily.
 
   In case you have a lot of people on contact list, you might wish to be
 able to visually arrange them into groups. Choose any criteria.
-Geography, companies, activities, interests.. Anything. Centericq
+Geography, companies, activities, interests.. Anything. CenterIM
 supports it.
 
   To turn the feature on invoke the configuration dialog and switch the
@@ -861,7 +863,7 @@ delivering messages of various kind immediately.
 second to deliver one. Messages can be sent either through server or
 directly through a TCP link. Size of a message sent through server
 cannot exceed 450 characters, while size of direct messages is
-unlimited. In case centericq cannot establish a direct link or you have
+unlimited. In case CenterIM cannot establish a direct link or you have
 the "sent all events through server" option enabled, a message is
 automatically split into several parts.
 
@@ -873,7 +875,7 @@ automatically split into several parts.
 ---------
 
   Though you can send URLs with regular messages the Mirabilis guys
-decided to make a separate event for it. No problem, centericq supports
+decided to make a separate event for it. No problem, CenterIM supports
 URL events. An URL message consists of two parts, they're an URL itself
 and a description. Well, nothing else to say about it. Except maybe a
 wish for future version of the protocol to support e-mail addresses and
@@ -886,11 +888,11 @@ host names as separate events :)
   ICQ has a server-side mechanism which allows its users to send and
 receive short text messages to cellular phones. There is an item visible
 in the context menu for ICQ contacts, named "Send an SMS" which is be
-choosen. Then if a user does not have any cellular number on his
-details, centericq will ask you to provide one. This number can be
+chosen. Then if a user does not have any cellular number on his
+details, CenterIM will ask you to provide one. This number can be
 changed any time with the "Edit details" item of the same menu.
 
-  Centericq allows sending SMS messages to contacts of any kind on your
+  CenterIM allows sending SMS messages to contacts of any kind on your
 list with the only restriction that they will only be sent as soon as
 you log in with your ICQ account. When you type in a phone number don't
 forget to include all the international and regional prefixes.
@@ -904,14 +906,14 @@ links:
     http://www.icq.com/sms/eg_networks.html
 
   Both ways of sending SMSes are supported by libicq2000, and this means
-centericq does so too.
+CenterIM does so too.
 
 
 7.4. Contacts
 -------------
 
   Sharing parts of your contact list with other users on the instant
-messaging network is a feature supported only by ICQ so far. Centericq
+messaging network is a feature supported only by ICQ so far. CenterIM
 does support it, thus you can easily send contacts from your contact
 list or receive contacts from someone else using the program's
 interface. Much easier than typing or cut'n'pasting UINs.
@@ -922,7 +924,7 @@ interface. Much easier than typing or cut'n'pasting UINs.
 
   It's only possible to send files to your remote buddies within the IRC
 network so far. In order to do it, it's enough to choose the "Send
-file(s)" item from the context menu (the one ivoked with F2), and point
+file(s)" item from the context menu (the one invoked with F2), and point
 out the files you want to send. In order to receive files you should
 press the "Accept" button in the dialog you'll see as soon as someone
 sends a file to you.
@@ -962,7 +964,7 @@ is not online he's supposed to received them as soon as he logs in.
 7.8. Away messages
 ------------------
 
-  Another feature of IM networks supported by centericq is away
+  Another feature of IM networks supported by CenterIM is away
 messages. It's quite a useful way to explain to everybody why you're
 away from your box right now. To read your reason for being away they
 just have to use the feature to fetch an away message in their ICQ
@@ -972,7 +974,7 @@ client application.
 invoked from the global menu. There is a "Set away message" item for IM
 engines that support such a feature.
 
-  With centericq you can also read away messages of others. To fetch
+  With CenterIM you can also read away messages of others. To fetch
 someone's away message (it's possible even when a person has the
 "available/online" status) just select the respective item in the
 "current user" context menu (invoked with F2 or "m"). It's impossible to
@@ -982,7 +984,7 @@ fetch away messages of users that are offline.
 7.9. Events history
 -------------------
 
-  All of events sent and received with centericq are held in its
+  All of events sent and received with CenterIM are held in its
 database. It's very simple to access history of events you exchanged
 with a particular user. You should only select the "Events history" item
 of the context menu. Then, if at least one event is there, you'll be
@@ -1014,7 +1016,7 @@ until the contact is removed from this list of yours.
 -----------------
 
   ICQ has the "invisible" option among its online status modes. When you
-switch to it, noone is able to see your online presence. But there can
+switch to it, no one is able to see your online presence. But there can
 be a handful of people you would like to keep in touch, and you also
 feel like remaining visible for them. That's what this feature is all
 about.
@@ -1032,7 +1034,7 @@ as "offline".
 9. Advanced features
 --------------------
 
-  Centericq has some advanced features that you may need, though they're
+  CenterIM has some advanced features that you may need, though they're
 not so easy to turn on for novice users. In this chapter I explain how
 to do it.
 
@@ -1040,7 +1042,7 @@ to do it.
 9.1. Arabic and Hebrew languages support
 ----------------------------------------
 
-  There is a basic support for bidirectional languages in centericq. It
+  There is a basic support for bidirectional languages in CenterIM. It
 allows not to type, but only read messages in Hebrew and Arabic. It's
 possible to enable only on the ./configure stage, because the program
 needs to be linked against FriBiDi library. This means first you need to
@@ -1048,7 +1050,7 @@ have the latter installed. The library homepage is located at
     http://fribidi.sourceforge.net/
 
   Once you have successfully installed FriBiDi, you need to execute
-centericq's ./configure script with "--with-fribidi" parameter. If it
+CenterIM's ./configure script with "--with-fribidi" parameter. If it
 fails to find the library (you'll be reported), try
 "--with-fribidi=<prefix the library was installed with>".
 
@@ -1060,16 +1062,16 @@ there, guys.
 9.2. Command line facilities
 ----------------------------
 
-  Centericq has a bunch of command line options that make it possible to
+  CenterIM has a bunch of command line options that make it possible to
 queue IM events and change your status in various IM networks.
 
 
 9.2.1. Sending events
 ---------------------
 
-  In fact, it's not really sending. Centericq just allows you to put an
+  In fact, it's not really sending. CenterIM just allows you to put an
 event to the outgoing queue from another process with command line
-options. To have the event sent immediately centericq must be running,
+options. To have the event sent immediately CenterIM must be running,
 otherwise all of your queued events will be sent as soon as the program
 is launched and connected to the corresponding IM network.
 
@@ -1103,17 +1105,17 @@ The message text is read from the standard input, so use pipes in shell
 to pass it. For example, you can say "hi" to me through the ICQ network
 with the following command:
 
-    $ echo "hi" | centericq -s msg -p icq -t 17502151
+    $ echo "hi" | centerim -s msg -p icq -t 17502151
 
 In case you want to send an URL, the URL itself and its description are
 separated with a newline character the following way:
 
     $ echo -e "http://thekonst.net/\nMy modest homepage." \
-    | centericq -s url -p icq -t 17502151
+    | CenterIM -s url -p icq -t 17502151
 
 Finally, a small example of sending SMSes:
 
-    $ echo "sms test" | centericq -s sms -n 1234567890
+    $ echo "sms test" | centerim -s sms -n 1234567890
 
 Please note, that all three parameters are required in order to queue an
 event.
@@ -1144,12 +1146,12 @@ engine is to be affected.
 
 Examples:
 
-    $ centericq -S _ -p icq
+    $ centerim -S _ -p icq
 
 This will set the icq status to offline. In other words, it'll be
 disconnected immediately.
 
-    $ centericq -S a -p yahoo
+    $ centerim -S a -p yahoo
 
 And this command will switch your yahoo status to away.
 
@@ -1157,15 +1159,15 @@ And this command will switch your yahoo status to away.
 9.3. External actions and auto-responses
 ----------------------------------------
 
-  It is possible to make centericq run external programs, scripts and
+  It is possible to make CenterIM run external programs, scripts and
 whatever to answer and/or process incoming events. Though, some extra
 setup is needed. Let me introduce you with another configuration file,
-named "external" which should reside under the .centericq/ directory in
+named "external" which should reside under the .CenterIM/ directory in
 your home. Here is an example which demonstrates its options. It's
 recommended just cut'n'paste the following text.
 
 
-[ - $HOME/.centericq/external ---------------------------------------------- ]
+[ - $HOME/.centerim/external ---------------------------------------------- ]
 
 #
 # External actions
@@ -1173,7 +1175,7 @@ recommended just cut'n'paste the following text.
 #
 # Every section starts with a line containing the "%action <name>",
 # "%pre-send <name>", "%pre-receive <name>" or "%manual <name>" text.
-# Please note that the <name> of any kind is necessary. It musn't be
+# Please note that the <name> of any kind is necessary. It mustn't be
 # empty. Inside it the following parameters can be used:
 #
 # event
@@ -1181,14 +1183,14 @@ recommended just cut'n'paste the following text.
 # Can be "msg", "sms", "url", "online", "offline", "auth",
 #	"contacts" or "notification".
 #
-# The latter means centericq's own notifications, such as birthday reminders,
+# The latter means CenterIM's own notifications, such as birthday reminders,
 # away messages, and other stuff. Specifying several event types is
 # also allowed. "all" stands for all the event types.
 #
 # proto
 # -----
 # Can be "icq", "yahoo", "aim", "irc", "msn", "lj", "rss" or "jab". Or
-# combination of these words. "all" can be used as a synonim for all of
+# combination of these words. "all" can be used as a synonym for all of
 # them.
 #
 # status
@@ -1238,7 +1240,7 @@ echo "hello. this is auto-responder. your message was: $msg"
 
 [ -------------------------------------------------------------------------- ]
 
-With this simple external actions configuration file centericq will
+With this simple external actions configuration file CenterIM will
 perform a simple auto-respond action. You can have as many sections as
 you need. You can call any kind of external scripts and programs. Please
 note that the message text (when "stdin" option is specified for an
@@ -1271,7 +1273,7 @@ one, you can always perform necessary checks in "%exec" so that only one
 sends a reply.
 
 Also, the script from the %exec section when executed has the following
-environment variables imported by centericq:
+environment variables imported by CenterIM:
 
 EVENT_TYPE
 
@@ -1299,7 +1301,7 @@ CONTACT_INFODIR
     The most intresting parameter. Using it, you can access further
     information about the user. Every time an external action is
     executed it is set to the user's information directory under your
-    ~/.centericq/ directory. It makes it easier to access "about" and
+    ~/.CenterIM/ directory. It makes it easier to access "about" and
     "info" files under it. Fetching lines from certain positions of the
     latter allows to get details. It's enough to take a look at an
     "info" file of any user to find out what lines mean. Here I'll
@@ -1334,7 +1336,7 @@ variables on an example of a simple answering machine :)
   This simple setup will answer on incoming messages automatically when
 you're away from your computer and your IM mode is set to Away or N/A.
 
-[ - cut (centericq external actions setup for an IM answering machine) ----- ]
+[ - cut (CenterIM external actions setup for an IM answering machine) ----- ]
 
 %action         Answering machine
 event           msg
@@ -1351,7 +1353,7 @@ lname=`head -n 3 $CONTACT_INFODIR/info | tail -n 1`
 cat <<EOF
 Hello, $fname $lname!
 
-Unfortunatelly, I'm not near my box now, but I'll certainly contact you
+Unfortunately, I'm not near my box now, but I'll certainly contact you
 as soon as I get here.
 
 --
@@ -1365,9 +1367,9 @@ EOF
 ----------------------------------------------
 
   One of the most intresting and funny uses for external actions in
-centericq is auto-responding chat robots. So far I know only one which
-is called Eliza. Unfortunatelly its doc covers only setup for licq, so
-it'll describe how to make it work with centericq here. Actually, it's
+CenterIM is auto-responding chat robots. So far I know only one which
+is called Eliza. Unfortunately its doc covers only setup for licq, so
+it'll describe how to make it work with CenterIM here. Actually, it's
 not difficult thing to do at all.
 
   First, you'll have to download the elizatalk plugin itself. It's
@@ -1379,7 +1381,7 @@ homepage can be found at the following URL:
 messages only, and it's to be activated as soon as we're switched to
 away mode. All we need is to add one more section.
 
-[ - cut (centericq external actions setup for elizatalk) ------------------- ]
+[ - cut (CenterIM external actions setup for elizatalk) ------------------- ]
 
 %action         Eliza
 event           msg
@@ -1404,17 +1406,17 @@ with my great explanations it's not necessary anymore :)
 control for your servers or workstations. You can write an action which
 will report you various diagnostic messages or perform administrative
 tasks reacting on special pre-defined commands that only you may know.
-So you just add a section to your ~/.centericq/external file, and leave
-centericq running. Of course, the commands can be requested through any
+So you just add a section to your ~/.centerim/external file, and leave
+CenterIM running. Of course, the commands can be requested through any
 of supported IM networks, though it's also configurable.
 
-  The following example can report free disk space, uptime and files
-listing under your ~/.centericq/ directory. The commands are "df",
-"uptime" and "ls" respectively. As soon as centericq receives them it
+  The following example can report free disk space, up time and files
+listing under your ~/.centerim/ directory. The commands are "df",
+"uptime" and "ls" respectively. As soon as CenterIM receives them it
 answers with external commands' answers. It won't reply any other
 messages.
 
-[ - cut (centericq external actions setup for simple remote control) ------- ]
+[ - cut (CenterIM external actions setup for simple remote control) ------- ]
 
 %action         Remote control
 event           msg
@@ -1426,7 +1428,7 @@ options         stdin stdout
 #!/bin/sh
 
 case `cat` in
-    ls) ls -l ~/.centericq/;;
+    ls) ls -l ~/.centerim/;;
     df) df -h;;
     uptime) uptime;;
 esac
@@ -1438,14 +1440,14 @@ esac
 ------------------------
 
   The same way it's possible to setup forwarding of events to other
-contacts, or with SMSes when you are away from centericq. The forwarding
-is to be performed with the centericq command line options described
+contacts, or with SMSes when you are away from CenterIM. The forwarding
+is to be performed with the CenterIM command line options described
 below, which allow to send events from out the program.
 
   The following example shows a simple setup for forwarding incoming icq
 messages when you're away to a cellular phone with SMS.
 
-[ - cut (centericq external actions setup for simple events forwarding) ---- ]
+[ - cut (CenterIM external actions setup for simple events forwarding) ---- ]
 
 %action         ICQ messages forwarding
 event           msg
@@ -1457,7 +1459,7 @@ options         stdin
 #!/bin/sh
 
 msg=`cat`
-echo $msg | centericq -s sms -p icq -t 0
+echo $msg | CenterIM -s sms -p icq -t 0
 
 [ -------------------------------------------------------------------------- ]
 
@@ -1473,7 +1475,7 @@ the command line is possible to be used here.
   This example will use the -S command line parameter which allows to
 control current status on IM networks from the command line.
 
-[ - cut (centericq external actions setup for hiding from scary ones) ------ ]
+[ - cut (CenterIM external actions setup for hiding from scary ones) ------ ]
 
 %action         Hide from freddy_krueger
 event           online
@@ -1485,12 +1487,12 @@ options         stdin
 #!/bin/sh
 
 if test "$CONTACT_NICK" = "freddy_krueger"; then
-    centericq -S _ -p $EVENT_NETWORK
+    centerim -S _ -p $EVENT_NETWORK
 fi
 
 [ -------------------------------------------------------------------------- ]
 
-Such a setup will make your centericq go offline as soon as the
+Such a setup will make your CenterIM go offline as soon as the
 freddy_krueger user appears online on any of the IM networks you're
 currently logged in.
 
@@ -1531,7 +1533,7 @@ number, while quite frequently there are two separated with a space,
 where the second one represents a local IP address which we don't need
 to resolve.
 
-Add this section to your ~/.centericq/external and enjoy the comfort of
+Add this section to your ~/.centerim/external and enjoy the comfort of
 not having to copy'n'paste the IP address in case you want to look up a
 domain name.
 
@@ -1540,13 +1542,13 @@ domain name.
 ------------------------
 
   There is another useful technology whose power can be utilized with
-centericq. It's called RSS or just "Really Simple Syndication". It's
+CenterIM. It's called RSS or just "Really Simple Syndication". It's
 about a uniform XML format which is used to describe recent changes at
 various web sites and not only web sites. Theoretically you can describe
 updates of any kind of information resources with it. See
 http://backend.userland.com/rss for more info about the format.
 
-  Now, what centericq can do about it. Since version 4.9.5 it allows you
+  Now, what CenterIM can do about it. Since version 4.9.5 it allows you
 to add RSS feeds to contact list just like they were usual contacts. You
 can also specify the check period. As soon as there are any updates, the
 contact pops up and you can read the news without a need to leave your
@@ -1555,13 +1557,13 @@ favourite sweet IM proggy.
   In order to find out if there is an RSS feed for a web site you're
 looking to receiving updates from, navigate to it and look for a button
 saying something like "RSS" or "XML". Then take a link and add it to
-centericq. If there are no such a button, ask web master to setup the
+CenterIM. If there are no such a button, ask web master to setup the
 feature.
 
   Also, there is a feed URL for you to try: http://thekonst.net/rss_en.xml
-Having added it to your centericq you can stay tuned about updates on
+Having added it to your CenterIM you can stay tuned about updates on
 the program author's site. You'll be announced about new releases of
-centericq and other cool pieces of free software, as well as on
+CenterIM and other cool pieces of free software, as well as on
 publication of various articles and photos which I take sometimes with
 my digital camera.
 
@@ -1582,18 +1584,18 @@ only thing I wanna warn you is that no questions about their meaning are
 answered. If you feel like seeing and understanding them, please refer
 to the unofficial ICQ protocol specification, icqlib sources, whatever..
 
-  To enable this feature, just run centericq with --debug parameter.
+  To enable this feature, just run CenterIM with --debug parameter.
 Protocol debug messages will be in the log window, and also they'll be
-written into the ~/.centericq/debug file.
+written into the ~/.centerim/debug file.
 
 
 9.6. "Friendly" logging
 -----------------------
 
-  Another (better) way to log what is going on in your centericq, is
+  Another (better) way to log what is going on in your CenterIM, is
 possible to be enabled with the "Detailed IM events log" item in the
-Configuration dialog. When enabled, centericq produces a log file named
-.centericq/log under your home directory. It contains messages about users'
+Configuration dialog. When enabled, CenterIM produces a log file named
+.CenterIM/log under your home directory. It contains messages about users'
 logging in and out, receiving and sending messages, changed your own IM
 status, and other blah. The file's format is quite clear, so any kind of
 automatic parsing tool can be written without a problem. Though in this
@@ -1603,7 +1605,7 @@ case you should keep in mind the messages are locale dependent.
 9.7. Custom base directories
 ----------------------------
 
-  By default, centericq uses the .centericq/ directory under your home
+  By default, CenterIM uses the .centerim/ directory under your home
 to hold all of its information, such as configuration and contact list.
 There can be situations, when you want to have several IM identities in
 the same networks under the same UNIX account. To make it possible, the
@@ -1611,27 +1613,21 @@ the same networks under the same UNIX account. To make it possible, the
 simple "-b <directory name>"
 
 
-9.8. Latest CVS snapshots
+9.8. Latest snapshots
 -------------------------
 
   If you wanna always have the recent version of the program, there is
-an annonymous CVS access and a script which allows you to download
-recent hot source with new features as soon as they appear.
+an anonymous GIT repository available to get the code.
 
-  Ok, now how to do it. There is a script in the centericq package under
-the misc/ directory. If you use an RPM package, it's installed to your
-$prefix/bin/. Its name is cicqsync. Using it you can checkout or update
-your source snapshot any time.
+You can find documentation at our website to get the latest (development) 
+source code, using the GIT at: http://repo.or.cz/w/centerim.git
 
-  Command line usage is simple. Cicqsync takes two parameters, the first
-one is an action to perform (checkout - fresh copy from scratch, or
-update - to update an already checked out source), and the second is a
-path name to put the result to. Note that the directory must exist and
-centericq/ will be created under it.
+At our website is a description how to get it.
+- http://www.centerim.org/index.php/Contribute_Code
 
-  Once you checked out or updated the fresh source, a usual build
-procedure must be followed. Change current dir to {whatever}/centericq/,
-execute configure, make and make install. Voila!
+You can also get complete packages from:
+- http://www.centerim.org/download/
+- ftp://ftp.centerim.org/
 
 
 10. Lynx
@@ -1644,22 +1640,23 @@ you.
 10.1. The program homepage
 --------------------------
 
-The centericq homepage can be found at
-    http://thekonst.net/centericq/
+The CenterIM homepage can be found at
+    http://www.centerim.org/
 
 
-10.1.1. Centericq mailing list
+10.1.1. CenterIM mailing list
 ------------------------------
 
-  There is a mailing list for centericq which is used by the program
-users to discuss their ideas, bug reports, fixes, and other stuff. You
-would rather want to use it instead of direct mailing to me.
+  There are two mailing lists for CenterIM, one is used by program
+users and the other is used by developers to discuss their ideas, bug 
+reports, fixes, and other stuff.
 
-  To subscribe go to the centericq home page (URL is above) or send a
-message to cicq-request@mailman.linuxpl.org with "subscribe" in the subject
-field. To post a message to the list, send it to cicq@mailman.linuxpl.org
-after you subscribe. The archive can be found at
-    http://news.gmane.org/gmane.network.centericq/
+  To subscribe go to the CenterIM home page and fill out the appropriate form.
+  For CenterIM users
+  - http://centerim.org/mailman/listinfo/centerim-users
+
+  For CenterIM developers
+  - http://centerim.org/mailman/listinfo/centerim-devel
 
 
 10.1.2. German fan-club of the program :-)
@@ -1671,33 +1668,15 @@ I find it very nice. The site itself can be found at
 http://www.centericq.de/
 
   Also they made an irc channel at the freenode network, irc.freenode.net.
-The channel name is #centericq. The majority of centericq fans can be met
+The channel name is #CenterIM. The majority of CenterIM fans can be met
 there.
 
 
-10.2. thekonst.net
+10.2. IM protocols
 ------------------
 
-  If you want to find out more about my recent activities, news,
-software developments and other things I'm involved in, visit my web
-site at http://thekonst.net/
-
-
-10.3. Other programs I write
-----------------------------
-
-To find out more about my software developments use the following URL:
-    http://thekonst.net/konstware/
-
-There is also an "writings" section with my publications at
-    http://thekonst.net/writings/
-
-
-10.4. IM protocols
-------------------
-
-  Here I want to say thanks to authors of libraries I used for various
-IM protocols support in centericq.
+  Here we want to say thanks to authors of libraries CenterIM uses to support various
+IM protocols.
 
   Barnaby Gray <barnaby@beedesign.co.uk>, who wrote a great library
   for icq2000 protocol and a GTK+ based ICQ client for UNIX.
@@ -1716,11 +1695,11 @@ IM protocols support in centericq.
   for the library implementing the Yahoo! protocol.
 
   Ian Gulliver <ian@penguinhosting.net> for the nice Firetalk library
-  used by centericq to provide the AIM and IRC services.
+  used by CenterIM to provide the AIM and IRC services.
 
   The Jabber Team http://jabber.org/ for their GNU Jabber library.
 
-  Since centericq contains support for the ICQ protocol taken from the
+  Since CenterIM contains support for the ICQ protocol taken from the
 original software made by Israeli company named "Mirabilis", you might
 wish to know more about it. So, visit the ICQ website at
 
@@ -1730,22 +1709,15 @@ wish to know more about it. So, visit the ICQ website at
 community services including SMS messaging, web directory, and so on.
 
 
-11. Help to the project I would appreciate
+11. Help to the project is appreciated
 ------------------------------------------
 
-  What if you think that centericq is the best text console based
-instant messaging program around? What if centericq is the application
+  What if you think that CenterIM is the best text console based
+instant messaging program around? What if CenterIM is the application
 you'd been waiting whole of your life, and want to express your
-appreciation somehow? Helping the author you help the project itself to
-keep rolling. It's not something vital I require to keep on writing and
-improving centericq, neither you have to do it. I quite enjoy making it
-in my spare time, and happy of the fact there are no deadlines and
-obligations from my side. It's just my hobby.
-
-  So how you can express appreciation to the way I waste my spare time,
-so that to make me a bit more happy and satisfied by my activities?
-There are several possibilites that bubbled out from my head while I was
-sitting here in the office sweating of July's heat.
+appreciation somehow? Helping the authors, you help the project itself to
+keep rolling. It's not something vital we require to keep on writing and
+improving CenterIM, neither you have to do it. 
 
 
 11.1. Feedback
@@ -1753,69 +1725,25 @@ sitting here in the office sweating of July's heat.
 
   You can write some feedback saying what you liked and what is missing
 in the program. Also, don't be silent if you notice bugs. Just check
-everything attentively and send a detailed bug-report to the mailing
-list. Please don't drop into my icq messages like "I found the icq
-related bug, please fix it". The first reason is that usually during the
-day I'm in the office working, and I'm not involved into centericq
-development here too much. Also, such reports don't make sense because
-of the lack of details. Please be more precise.
+everything attentively and put a detailed bug-report on the sourceforge 
+page of our project, or drop a detailed email on our developers mailing list
+if you think you've found a bug.
+
+If you have questions about how CenterIM works, you can also take a look at 
+our forum site, located at: http://forum.centerim.org/
 
 
 11.2. Patches
 -------------
 
-  Don't wait for me to implement a feature you'd like to have in
-centericq. Please have in mind that whole the source code is available
-and you can modify it yourself, then make a patch and send it to me.
-Though I'd like you to follow my style of formatting the code. Please
+  Don't wait for us to implement a feature you'd like to have in
+CenterIM. Please have in mind that whole the source code is available
+and you can modify it yourself, then make a patch and send it to us.
+
+At our website is written how to get the code and how you can contribute
+patches.
+
+We'd like you to follow our style of formatting the code. Please
 don't make any changes not related to the feature you implement, it
 makes your patch difficult to commit.
 
-
-11.3. Promoting the little program
-----------------------------------
-
-  I bet you read some computers related magazines and visit various
-Linux related sites. Please don't keep silence instead of screaming out
-your adoration for the little nice program. Submit it to a software site
-or catalogue or/and encourage the authors of your favourite magazine to
-take a look at it and possibly write about centericq. Interviews,
-speeches, presedential elections ;) and stuff are also possible, just
-contact me for more details.
-
-
-11.4. Donations
----------------
-
-  If you're a materialist guy like me, you might want to present me
-something what I can touch, put on a sandwich or into my pocket. Here it
-goes.
-
-
-11.4.1. Money
--------------
-
-  The most universal way. Depending on a sum I will be able to drink one
-more beer or tequila for the health of centericq users or buy a piece of
-hardware, electronic gagdet or the newest model of "Porsche" ;)
-
-  The on-line donations page is located at
-    http://centericq.de/donation/
-
-
-11.4.2. Hardware
-----------------
-
-  Since usually I write centericq at home, it's always nice to upgrade
-the computer it's being developed with. It can increase the speed and
-pleasure I get during the process.
-
-
-11.4.3. Other stuff
--------------------
-
-  Other stuff like t-shirts, souvenirs, albums or postcards with nice
-views of the nature in places where you live, baseball tickets ;) are
-also welcome.
-
-$Id: README,v 1.104 2005/01/31 15:21:16 konst Exp $
