@@ -204,6 +204,7 @@ void icqconf::load() {
     loadkeys();
     loadcolors();
     loadactions();
+    loadcaptcha();
     external.load();
 }
 
@@ -462,8 +463,9 @@ void icqconf::loadmainconfig() {
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
-			if(param == "screenna") screenna = true; else
-			if(param == "screensocketpath") screensocketpath = buf; else
+	    if(param == "dropauthreq") dropauthreq = true; else
+	    if(param == "screenna") screenna = true; else
+	    if(param == "screensocketpath") screensocketpath = buf; else
 	    if(param == "mailcheck") mailcheck = true; else
 	    if(param == "quotemsgs") quote = true; else
 	    if(param == "sockshost") setsockshost(buf); else
@@ -482,6 +484,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "chatmode") initmultiproto(chatmode, buf, true); else
 	    if(param == "entersends") initmultiproto(entersends, buf, true); else
 	    if(param == "nonimonline") initmultiproto(nonimonline, buf, false); else
+	    if(param == "captcha") usingcaptcha = true; else
 	    if(param == "russian" || param == "convert") initmultiproto(cpconvert, buf, false); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
@@ -546,6 +549,8 @@ void icqconf::save() {
 	    if(emacs) f << "emacs" << endl;
 	    if(getquote()) f << "quotemsgs" << endl;
 	    if(getantispam()) f << "antispam" << endl;
+	    if(getdropauthreq()) f << "dropauthreq" << endl;
+	    if(getusingcaptcha()) f << "captcha" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
 			if(getscreenna()) f << "screenna" << endl;
@@ -574,6 +579,8 @@ void icqconf::save() {
 		if(getcpconvert(pname)) param += (string) " " + conf.getprotocolname(pname);
 	    if(!param.empty())
 		f << "convert" << param << endl;
+
+	    param = "";
 
 	    f << "fromcharset\t" << fromcharset << endl;
 	    f << "tocharset\t" << tocharset << endl;
@@ -885,6 +892,63 @@ void icqconf::loadactions() {
     }
 }
 
+void icqconf::loadcaptcha() {
+    string fname = getconfigfname("captcha"), buf, entry;
+    ifstream f;
+	vector<string>::const_iterator ic;
+
+    if(access(fname.c_str(), F_OK)) {
+
+	ofstream of(fname.c_str());
+
+	if(of.is_open()) {
+	    of << "# This file contains sample configuration for captcha engine." << endl;
+	    of << "# Every line should look like: <param> <value>" << endl;
+	    of << "# Possible params are: greeting, quest, success, failure, timeout (min)" << endl;
+	    of << "# Quest fomat is: quest <question>//<answer>[::answer[...]]" << endl;
+	    of << endl;
+	    of << "greeting I'm using a test to determine if you are a computer or not. If you would please answer the question correctly, you will be added to my contact list automatically." << endl;
+	    of << endl;
+	    of << "quest How many legs does a dog have?//4::four" << endl;
+	    of << "quest What is the first word of this sentence?//what" << endl;
+	    of << "quest What is the sum of 1 and 1?//2::two" << endl;
+	    of << "quest What is not a fruit: lettuce, apple or banana?//lettuce" << endl;
+	    of << "quest How many fingers are there on one hand?//5::five" << endl;
+	    of << "quest How many wheels does a normal bicycle have?//2::two" << endl;
+	    of << "quest What colour does a banana have?//yellow::yelow" << endl;
+	    of << "quest What does a chicken lay?//eggs::egg" << endl;
+	    of << "quest What is the value of PI, accurate to 2 digits?//3.14::3,14" << endl;
+	    of << "quest Is a wheel round or not (yes or no)?//yes" << endl;
+	    of << endl;
+	    of << "success You answered the question correctly, you are now added to my contact list. Thank you for your patience." << endl;
+	    of << "failure You answered the question incorrectly, you can try again by answering the next question." << endl;
+	    of << "timeout 30" << endl;
+	    of.close();
+	}
+    }
+
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    entry = getword(buf);
+		
+		if(entry == "greeting")	captchagreet = buf; else
+		if(entry == "success") captchasuccess = buf; else
+		if(entry == "failure") captchafailure = buf; else
+		if(entry == "timeout") captchatimeout = atol(buf.c_str()); else
+		if(entry == "quest") thecaptcha.addquestion(buf);
+	}
+	if(thecaptcha.empty()) {
+		usingcaptcha = false;
+		face.log(_("+ ERROR: captcha disabled: no questions found!"));
+	}
+
+	f.close();
+    }
+}
+
 icqconf::regcolor icqconf::getregcolor() const {
     return rc;
 }
@@ -1006,8 +1070,12 @@ void icqconf::setantispam(bool fas) {
     antispam = fas;
 }
 
-void icqconf::seticqdropauthreq(bool fas) {
-    icqdropauthreq = fas;
+void icqconf::setdropauthreq(bool fas) {
+    dropauthreq = fas;
+}
+
+void icqconf::setusingcaptcha(bool fas) {
+    usingcaptcha = fas;
 }
 
 void icqconf::setmailcheck(bool fmc) {

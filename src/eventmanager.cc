@@ -30,6 +30,7 @@
 #include "abstracthook.h"
 #include "imlogger.h"
 #include "imexternal.h"
+#include "captcha.h"
 
 imeventmanager em;
 
@@ -65,23 +66,64 @@ void imeventmanager::store(const imevent &cev) {
 
 	    if(!c) {
 		proceed = !conf.getantispam() || 
-			((ev.gettype() == imevent::authorization) && !conf.geticqdropauthreq());
+			((ev.gettype() == imevent::authorization) && !conf.getdropauthreq()) ||
+			conf.getusingcaptcha();
 
-		if(proceed)
+		if(proceed) {
 		    c = clist.addnew(ev.getcontact());
-		else
+		    /* turing test */
+		    if (conf.getdebug()) face.log("captcha: enabled = %i", conf.getusingcaptcha());
+		    if (conf.getusingcaptcha()) {
+			if (conf.getdebug()) face.log("captcha: start");
+		        /* If the turing test was failed or not completed, remove
+			 * contact (WE DONT WANT YOU!)
+			 * Note tat below, we always remove the contact if it is not verified */
+			if (!conf.thecaptcha.docaptcha(ev.getcontact())) {
+			    if (conf.getdebug()) face.log("captcha: starting a new turing test with: %s", ev.getcontact().totext().c_str());
+			    /* have not started the turing test, so send our greeter and message */
+			    store(immessage(
+				c->getdesc(), imevent::outgoing, 
+				conf.getcaptchagreet() + "\n" +
+				conf.thecaptcha.getcaptchaquestion(ev.getcontact())));
+			    clist.remove(c->getdesc());
+			    c = 0;
+			} else {
+			    if(conf.getdebug()) face.log("captcha: got an answer: %s", ev.gettext().c_str());
+			    /* have started the test, now must verify the answer */
+			    if (conf.thecaptcha.checkcaptcha(ev.getcontact(), ev.gettext())) {
+			        if (conf.getdebug()) face.log("captcha: received correct answer");
+			        /* good, a human */
+				store(immessage(
+				    c->getdesc(), imevent::outgoing, 
+				    conf.getcaptchasuccess()));
+				conf.thecaptcha.donecaptcha(ev.getcontact());
+			    } else {
+			        if (conf.getdebug()) face.log("captcha: received intorrent answer");
+				/* bad, a computer (or very dumb human :) */
+				store(immessage(
+				    c->getdesc(), imevent::outgoing, 
+				    conf.getcaptchafailure() + "\n" +
+				    conf.thecaptcha.getcaptchaquestion(ev.getcontact())));
+			        clist.remove(c->getdesc());
+			        c = 0;
+			    }
+			}
+			if (conf.getdebug()) face.log("captcha: end");
+		    }
+		} else if (conf.getdebug()) {
 		    face.log("Dropped another authorization request!");
+		}
 	    }
+	    
+	    if (c) {
+	        eventwrite(ev, history);
+		
+	        c->sethasevents(true);
+	        c->playsound(ev.gettype());
 
-	    if(c) {
-		eventwrite(ev, history);
+	        external.exec(ev);
 
-		c->sethasevents(true);
-		c->playsound(ev.gettype());
-
-		external.exec(ev);
-
-		face.relaxedupdate();
+	        face.relaxedupdate();
 	    }
 	}
     } else if(ev.getdirection() == imevent::outgoing) {

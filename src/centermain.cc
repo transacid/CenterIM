@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
     getcwd(savedir, 1024);
 
     try {
+        srand((unsigned int) time(NULL));
 
 #ifdef ENABLE_NLS
 	setlocale(LC_ALL, "");
@@ -59,7 +60,8 @@ int main(int argc, char **argv) {
 	conf.commandline(argc, argv);
 	cicq.exec();
 
-    } catch(int errcode) {
+    } catch(exception e) {
+    	cerr << "Caught exception: " << e.what() << endl;
     }
 
     chdir(savedir);
