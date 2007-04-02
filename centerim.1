@@ -1,23 +1,23 @@
-.TH CENTERICQ 1 "August 21, 2003"
+.TH CENTERIM 1 "April 2, 2007"
 
 .SH NAME
-\fBcentericq\fP \- a text mode based IM client for Linux, *BSD, Sun
+\fBcenterim\fP \- a text mode based IM client for Linux, *BSD, Sun
 Solaris, MacOS X and possibly, other Unices. ICQ2000, Yahoo!, AIM TOC,
 IRC, MSN, Gadu-Gadu and Jabber protocols are now supported. Internal
 LiveJournal client and RSS reader are also provided.
 
 .SH SYNOPSIS
-.B "centericq "
+.B "centerim "
 [
 .B option
 ] ...
 
 .SH DESCRIPTION
 This manual page documents briefly the
-.B centericq
+.B centerim
 command.
 .PP
-\fBcentericq\fP is a text mode menu- and window-driven IM interface.
+\fBcenterim\fP is a text mode menu- and window-driven IM interface.
 Currently ICQ2000, Yahoo!, AIM, IRC, MSN, Gadu-Gadu and Jabber protocols
 are supported. It allows you to send, receive, and forward messages,
 URLs, SMSes and, contacts, mass message send, search for users
@@ -48,7 +48,7 @@ specify another base directory; useful for having several IM identities
 under the same UNIX account
 .TP
 \fB\-B\fR, \fB\-\-bind\fR <hostname/ip>
-tells centericq to use the specified IP address for outgoing connections
+tells centerim to use the specified IP address for outgoing connections
 .TP
 \fB\-B\fR, \fB\-\-no\-xtitles\fR
 disable title changing in xterm or screen
@@ -59,8 +59,8 @@ start with all protocols set offline
 .PP
 
 The following commands are used to put events to the outgoing queue from
-the command line. If centericq is already running they're to be sent
-immediately, otherwise they will be sent as soon as you go online.
+the command line. If centerim is already running they're to be sent
+immediately, otherwise they will be sent as soon as you go on-line.
 
 
 .TP
@@ -88,20 +88,20 @@ The message text is read from the standard input, so use pipes in shell
 to pass it. For example, you can say "hi" to me through the ICQ network
 with the following command:
 
-    \fB$ echo "hi" | centericq -s msg -p icq -t 17502151\fR
+    \fB$ echo "hi" | centerim -s msg -p icq -t 17502151\fR
 
 In case you want to send an URL, the URL itself and its description are
 separated with a newline character the following way:
 
     \fB$ echo -e "http://thekonst.net/\\nMy modest homepage." \
-    | centericq -s url -p icq -t 17502151\fR
+    | centerim -s url -p icq -t 17502151\fR
 
 Please note, that all three parameters are required in order to queue an
 event.
 
 Finally, a small example of sending SMSes:
 
-    \fB$ echo "sms test" | centericq -s sms -n 1234567890\fR
+    \fB$ echo "sms test" | centerim -s sms -n 1234567890\fR
 
 .PP
 
@@ -123,25 +123,25 @@ Exactly the same like it was described for the previous command.
 
 Examples:
 
-    \fB$ centericq -S _ -p icq\fR
+    \fB$ centerim -S _ -p icq\fR
 
 This will set the icq status to offline. In other words, it'll be
 disconnected immediately.
 
-    \fB$ centericq -S a -p yahoo\fR
+    \fB$ centerim -S a -p yahoo\fR
 
 And this command will switch your yahoo status to away.
 
 
 .SH VERSION
-centericq 4.20.0
+centerim 4.20.0
 
 .SH BUG REPORT
-Report any bugs to centericq-bugs@konst.org.ua
+Report any bugs at our SourceForge project at http://sourceforge.net/projects/centerim
 
 .SH AUTHOR
-This page and centericq itself are written by Konstantin Klyagin
-<konst@konst.org.ua>.
+This page and centerim was originally written by Konstantin Klyagin. 
+Currently, several people are maintaining this software project.
 
 .SH WEB
-http://thekonst.net/centericq/
+http://www.centerim.org/

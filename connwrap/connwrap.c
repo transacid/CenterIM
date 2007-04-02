@@ -50,7 +50,10 @@ static sslsock *getsock(int fd) {
 
 static sslsock *addsock(int fd) {
     sslsock *p;
+    if (socks)
     socks = (sslsock *) realloc(socks, sizeof(sslsock)*++sockcount);
+    else
+    socks = (sslsock *) malloc(sizeof(sslsock)*++sockcount);
 
     p = &socks[sockcount-1];
 
@@ -77,6 +80,8 @@ static void delsock(int fd) {
     int i, nsockcount;
     sslsock *nsocks;
 
+    if (sockcount > 1)
+    {
     nsockcount = 0;
     nsocks = (sslsock *) malloc(sizeof(sslsock)*(sockcount-1));
 
@@ -92,6 +97,14 @@ static void delsock(int fd) {
 
     socks = nsocks;
     sockcount = nsockcount;
+    }
+    else
+    {
+	if (socks)
+	    free(socks);
+	socks = 0;
+	sockcount = 0;
+    }
 }
 
 #endif
