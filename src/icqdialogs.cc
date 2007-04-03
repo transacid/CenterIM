@@ -1382,7 +1382,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			cm = (cm == icqconf::cmproto ? icqconf::cmstatus : icqconf::cmproto );
 		    case 31:
 		        tmp = inputstr(_("HTTP browser to use: "), browser);
-			if(!tmp.empty()) browser = browser;
+			if(!tmp.empty()) browser = tmp;
 		        break;
  		    case 48:
 		        timestampstothesecond = !timestampstothesecond; break;
