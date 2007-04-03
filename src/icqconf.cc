@@ -65,11 +65,18 @@ icqconf::icqconf() {
     savepwd = mailcheck = fenoughdiskspace = true;
 
     for(protocolname pname = icq; pname != protocolname_size; pname++) {
-	chatmode[pname] = true;
-	cpconvert[pname] = entersends[pname] = nonimonline[pname] = false;
+        chatmode[pname] = true;
+        cpconvert[pname] = entersends[pname] = nonimonline[pname] = false;
     }
 
+    // quick and dirty fix to support .centerim as well as .centericq
     basedir = (string) getenv("HOME") + "/.centerim/";
+    if ( access(basedir.c_str(), F_OK) != 0 ) {
+        basedir = (string) getenv("HOME") + "/.centericq/";
+        if ( access(basedir.c_str(), F_OK) != 0 ) {
+            basedir = (string) getenv("HOME") + "/.centerim/";
+        }
+    }
     screensocketpath = "/var/run/screen";
 }
 

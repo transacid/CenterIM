@@ -669,7 +669,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		if(!foempty) {
 		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
 
-		    sprintf(buf, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
+		    snprintf(buf, sizeof(buf), _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
 			in->first.c_str(), in->second.c_str(), bd.c_str());
 
 		    em.store(imnotification(self, buf));
@@ -679,7 +679,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    for(il = friendof.begin(); il != friendof.end(); ) {
 		if(nfriendof.find(*il) == nfriendof.end()) {
 		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
-		    sprintf(buf, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
+		    snprintf(buf, sizeof(buf), _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
 			il->c_str(), bd.c_str());
 		    em.store(imnotification(self, buf));
 		    friendof.erase(il);

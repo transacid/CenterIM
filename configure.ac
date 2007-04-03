@@ -308,7 +308,11 @@ LIBS="$LIBS $LIBICONV"
 
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
-AC_CHECK_LIB(ncurses, initscr,, [AC_CHECK_LIB(curses, initscr,, AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])
+AC_CHECK_LIB(ncursesw, get_wch,, [AC_CHECK_LIB(ncurses, initscr,,
+                                  [AC_CHECK_LIB(curses, initscr,,
+                                   AC_MSG_ERROR(The ncurses terminal library is
+                                                required in order to build the
+                                                program))])])
 
 AC_TRY_COMPILE([
     #include <sys/types.h>

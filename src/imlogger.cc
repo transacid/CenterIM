@@ -133,11 +133,11 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 
     if(st != oldst) {
 	if(oldst == offline) {
-	    fmt = _("%s went online, with status %s");
+	    fmt = _("%s [%s] comes online");
 	} else if(st == offline) {
 	    fmt = _("%s went offline");
 	} else {
-	    fmt = _("%s changed status to %s from %s");
+	    fmt = _("%s is now %s, was %s");
 	}
 
 	name = cont.totext();

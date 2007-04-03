@@ -1580,7 +1580,8 @@ void centerim::exectimers() {
 
 			const char *screen_socket_path;
 			char *screen_socket_name, *screen_user;
-			char screen_socket[256];
+			char screen_socket[256] = "";
+            int screen_socket_bytes = 0; // Bytes written in the screen_socket
 			int screen_attached = 0; /* Screen is attached by default */
 
 			/* Check if we're really running centerim in a screen session */
@@ -1591,11 +1592,13 @@ void centerim::exectimers() {
 				 */
 				screen_socket_path = conf.getscreensocketpath().c_str();
 				screen_user=getenv("USER");
-				sprintf(screen_socket, "%s/S-%s/%s", screen_socket_path, screen_user, screen_socket_name);
+				screen_socket_bytes = snprintf(screen_socket, 256, "%s/S-%s/%s", screen_socket_path, screen_user, screen_socket_name);
 
 				/* Check if the socket path really exists */
 				if(!conf.getscreensocketpath().empty()
-					&& !access(conf.getscreensocketpath().c_str(), X_OK)) {
+					&& !access(conf.getscreensocketpath().c_str(), X_OK)
+                    && screen_socket_bytes > 0
+                    && screen_socket_bytes < 256) {
 					screen_attached = access(screen_socket, X_OK);
 					
 					/* Screen is no longer attached, change status to N/A */
