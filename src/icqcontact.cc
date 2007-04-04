@@ -648,7 +648,7 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 	    pid = fork();
 	    if(!pid) {
 		string cline = sf + " >/dev/null 2>&1";
-		execlp("/bin/sh", "/bin/sh", "-c", cline.c_str(), 0);
+		execlp("/bin/sh", "/bin/sh", "-c", cline.c_str(), (char *)NULL );
 		exit(0);
 	    }
 	}

@@ -302,7 +302,7 @@ int imexternal::action::execscript() {
 	    close(outpipe[0]);
 	    close(outpipe[1]);
 
-	    execl(sname.c_str(), sname.c_str(), 0);
+	    execl(sname.c_str(), sname.c_str(), (char *)NULL );
 	    _exit(0);
 	} else {
 	    close(outpipe[0]);

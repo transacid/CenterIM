@@ -1386,7 +1386,8 @@ bool centerim::idle(int options ) {
 	FD_ZERO(&wfds);
 	FD_ZERO(&efds);
 
-	FD_SET(hsockfd = 0, &rfds);
+	hsockfd = 0;
+	FD_SET(hsockfd, &rfds);
 	online = false;
 
 	if(!regmode) {

@@ -1156,7 +1156,7 @@ string icqconf::execaction(const string &name, const string &param) {
 	    close(outpipe[0]);
 	    close(outpipe[1]);
 
-	    execl("/bin/sh", "/bin/sh", "-c", torun.c_str(), 0);
+	    execl("/bin/sh", "/bin/sh", "-c", torun.c_str(), (char *)NULL );
 	    _exit(0);
 	} else {
 	    close(outpipe[0]);

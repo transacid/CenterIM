@@ -226,7 +226,7 @@ void dialogbox::addautokeys() {
     if(bar) {
 	for(i = bar->items.begin(); i != bar->items.end(); i++) {
 	    for(c = i->begin(); (c != i->end()) && !isupper(*c); c++);
-	    key = c == i->end() ? key = *i->begin() : *c;
+	    key = (c == i->end()) ? *i->begin() : *c;
 	    addkey(tolower(key), i-bar->items.begin());
 	    addkey(toupper(key), i-bar->items.begin());
 	}
