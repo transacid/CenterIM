@@ -68,20 +68,12 @@ bool imcontact::operator != (const imcontact &ainfo) const {
     return !(*this == ainfo);
 }
 
-bool imcontact::operator < (const imcontact &ainfo) const {
-    return false; /*TODO: fix this to something meaningfull! */
-}
-
 bool imcontact::operator == (protocolname apname) const {
     return apname == pname;
 }
 
 bool imcontact::operator != (protocolname apname) const {
     return !(*this == apname);
-}
-
-bool imcontact::operator < (protocolname apname) const {
-    return (*this < apname);
 }
 
 bool imcontact::empty() const {

@@ -52,11 +52,9 @@ struct imcontact {
 
     bool operator == (const imcontact &ainfo) const;
     bool operator != (const imcontact &ainfo) const;
-    bool operator < (const imcontact &ainfo) const;
 
     bool operator == (protocolname pname) const;
     bool operator != (protocolname pname) const;
-    bool operator < (protocolname pname) const;
 
     bool empty() const;
     string totext() const;

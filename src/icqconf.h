@@ -17,8 +17,6 @@
 #include "icqgroup.h"
 #include "icqcontact.h"
 
-#include "captcha.h"
-
 enum cicq_colorpairs {
     cp_status = 1,
     cp_dialog_text,
@@ -146,9 +144,7 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam, screenna, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
-	    timestampstothesecond, dropauthreq, usingcaptcha;
-
-	unsigned int captchatimeout;
+	    timestampstothesecond, icqdropauthreq;
 
 	bool startoffline;
 
@@ -156,12 +152,10 @@ class icqconf {
 	bool cpconvert[protocolname_size];
 	bool entersends[protocolname_size];
 	bool nonimonline[protocolname_size];
-	bool docaptcha[protocolname_size];
 
 	string sockshost, socksuser, sockspass, basedir, argv0, smtphost,
 	    bindhost, httpproxyhost, httpproxyuser, httpproxypasswd,
-	    fromcharset, tocharset, browser, screensocketpath,
-	    captchagreet, captchasuccess, captchafailure;
+	    fromcharset, tocharset, browser, screensocketpath;
 
 	char *DEFAULT_TIMESTAMP_FORMAT, *DEFAULT_LOGTIMESTAMP_FORMAT,
 	  *SECONDS_TIMESTAMP_FORMAT, *SECONDS_LOGTIMESTAMP_FORMAT;
@@ -211,7 +205,6 @@ class icqconf {
 	void loadcolors();
 	void loadsounds();
 	void loadactions();
-	void loadcaptcha();
 
 	regcolor getregcolor() const;
 	void setregcolor(regcolor c);
@@ -231,11 +224,8 @@ class icqconf {
 	bool getantispam() const { return antispam; }
 	void setantispam(bool fas);
 
-	bool getdropauthreq() const { return dropauthreq; }
-	void setdropauthreq(bool fas);
-
-	bool getusingcaptcha() const { return usingcaptcha; }
-	void setusingcaptcha(bool fas);
+	bool geticqdropauthreq() const { return icqdropauthreq; }
+	void seticqdropauthreq(bool fas);
 
 	bool getmailcheck() const { return mailcheck; }
 	void setmailcheck(bool fmc);
@@ -360,14 +350,6 @@ class icqconf {
 	void setlogpanelheight(const int height) { logpanelheight = height; }
 	int  getchatpanelheight() const { return chatpanelheight; }
 	void setchatpanelheight(const int height) { chatpanelheight = height; }
-
-	string getcaptchagreet() const { return captchagreet; }
-	string getcaptchasuccess() const { return captchasuccess; }
-	string getcaptchafailure() const { return captchafailure; }
-	unsigned int getcaptchatimeout() const { return captchatimeout; }
-
-	captcha thecaptcha;
-
 };
 
 extern icqconf conf;

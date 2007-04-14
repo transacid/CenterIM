@@ -1101,8 +1101,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool savepwd = conf.getsavepwd();
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
-    bool dropauthreq = conf.getdropauthreq();
-    bool usingcaptcha = conf.getusingcaptcha();
+    bool icqdropauthreq = conf.geticqdropauthreq();
     bool mailcheck = conf.getmailcheck();
     bool makelog = conf.getmakelog();
     bool askaway = conf.getaskaway();
@@ -1213,8 +1212,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
 	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
-	t.addleaff(i, 0, 51, _(" Anti-spam: ignore authorization requests: %s "), stryesno(dropauthreq));
-	t.addleaff(i, 0, 52, _(" Anti-spam: use captcha to identify bots: %s "), stryesno(usingcaptcha));
+	t.addleaff(i, 0, 51, _(" Anti-spam: drop icq authorization requests: %s "), stryesno(icqdropauthreq));
 	t.addleaff(i, 0,  8, _(" Quote a message on reply : %s "), stryesno(quote));
 	t.addleaff(i, 0, 15, _(" Check the local mailbox : %s "), stryesno(mailcheck));
 	t.addleaff(i, 0, 13, _(" Remember passwords : %s "), stryesno(savepwd));
@@ -1428,15 +1426,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    	}
 		    	break;
 		    case 51:
-		    	dropauthreq = !dropauthreq;
-			if (dropauthreq && usingcaptcha)
-				usingcaptcha = false;
-			break;
-		    case 52:
-		    	usingcaptcha = !usingcaptcha;
-			/* captcha overrides  droping auth requests */
-			if (dropauthreq && usingcaptcha)
-				dropauthreq = false;
+		    	icqdropauthreq = !icqdropauthreq;
 			break;
   		}
   		break;
@@ -1450,8 +1440,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.sethideoffline(hideoffl);
 		conf.setemacs(emacs);
 		conf.setantispam(antispam);
-		conf.setdropauthreq(dropauthreq);
-		conf.setusingcaptcha(usingcaptcha);
+		conf.seticqdropauthreq(icqdropauthreq);
 		conf.setmailcheck(mailcheck);
 		conf.setmakelog(makelog);
 		conf.setaskaway(askaway);
