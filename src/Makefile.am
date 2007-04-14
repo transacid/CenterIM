@@ -25,6 +25,6 @@ centerim_LDADD += -llibyahoo2
 endif
 centerim_LDADD += @LTLIBINTL@
 SUBDIRS = hooks
-EXTRA_DIST = centerim.cc icqcontact.cc icqgroups.cc eventmanager.cc icqdialogs.cc icqhist.cc imexternal.cc imcontact.cc imlogger.cc accountmanager.cc icqcontacts.cc icqmlist.cc imcontroller.cc icqconf.cc imevents.cc impgp.cc icqface.cc centermain.cc icqgroup.cc icqmlist.h imcontroller.h icqcommon.h icqcontacts.h centericq.h icqgroup.h imcontact.h accountmanager.h eventmanager.h imevents.h icqcontact.h imlogger.h icqconf.h impgp.h icqface.h icqgroups.h icqhist.h imexternal.h
+EXTRA_DIST = centerim.cc icqcontact.cc icqgroups.cc eventmanager.cc icqdialogs.cc icqhist.cc imexternal.cc imcontact.cc imlogger.cc accountmanager.cc icqcontacts.cc icqmlist.cc imcontroller.cc icqconf.cc imevents.cc impgp.cc icqface.cc centermain.cc icqgroup.cc icqmlist.h imcontroller.h icqcommon.h icqcontacts.h centerim.h icqgroup.h imcontact.h accountmanager.h eventmanager.h imevents.h icqcontact.h imlogger.h icqconf.h impgp.h icqface.h icqgroups.h icqhist.h imexternal.h
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\"
