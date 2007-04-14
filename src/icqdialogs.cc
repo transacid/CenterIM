@@ -1397,7 +1397,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 31:
 		        tmp = inputstr(_("HTTP browser to use: "), browser);
-			if(!tmp.empty()) browser = browser;
+			if(!tmp.empty()) browser = tmp;
 		        break;
 		    case 32:    
 		        conf.setleftpanelwidth(atol(inputstr(_("Left panel width: "), 
