@@ -165,6 +165,7 @@ if test "$with_ssl" != "no"; then
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
 		AC_CHECK_LIB(crypto, main)
 		AC_CHECK_LIB(ssl, main)
+		AC_CHECK_LIB(lzo, lzo1x_1_compress)
 	else
 		AC_MSG_RESULT([not found or disabled])
 	        with_ssl="no"
@@ -229,7 +230,6 @@ if test x"$with_gpgme" = x"no"; then
 else
     GPGME_CONFIG= "$with_gpgme"
 fi
-
 
 ##################
 # Check for curl #
