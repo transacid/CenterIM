@@ -95,7 +95,7 @@ AC_ARG_WITH(openssl,
                             connections using the OpenSSL library in DIR
                             (optional)]),
             [with_openssl=$withval],
-            [with_openssl=no]
+            [with_openssl=yes]
             )
 AC_ARG_WITH(gpgme,
             AS_HELP_STRING([--with-gpgme=[PATH]], [path to gpgme-config (auto)]),
