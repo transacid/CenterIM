@@ -94,8 +94,7 @@ AC_ARG_WITH(openssl,
             AS_HELP_STRING([--with-openssl=[DIR]], [enable SSL secured
                             connections using the OpenSSL library in DIR
                             (optional)]),
-            [with_openssl=$withval],
-            [with_openssl=yes]
+            [with_openssl=$withval]
             )
 AC_ARG_WITH(gpgme,
             AS_HELP_STRING([--with-gpgme=[PATH]], [path to gpgme-config (auto)]),
@@ -147,7 +146,7 @@ AC_MSG_RESULT([])
 if test "$with_ssl" != "no"; then
 
 	AC_MSG_CHECKING(for OpenSSL)
-	if test -z "$with_openssl"; then
+	if test -z "$with_openssl" -o x"$with_openssl" = xyes; then
 		for ac_dir in $with_openssl /usr/local /usr; do
 			if test -f "$ac_dir/include/openssl/ssl.h"; then
 				with_openssl=$ac_dir
@@ -157,15 +156,15 @@ if test "$with_ssl" != "no"; then
 	fi
 
 	if test -n "$with_openssl" -a "$with_openssl" != "no"; then
-		if test "$with_openssl" = "yes"; then 
-			with_openssl="/usr"
-		fi
 		AC_MSG_RESULT([found in $with_openssl])
                 CFLAGS="$CFLAGS -I${with_openssl}"
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
 		AC_CHECK_LIB(crypto, main)
 		AC_CHECK_LIB(ssl, main)
-		AC_CHECK_LIB(lzo, lzo1x_1_compress)
+		AC_CHECK_LIB(lzo, lzo1x_1_compress, [], [
+                                             echo "lzo compression is required.";
+                                             exit -1
+                                             ] )
 	else
 		AC_MSG_RESULT([not found or disabled])
 	        with_ssl="no"
