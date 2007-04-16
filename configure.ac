@@ -87,8 +87,7 @@ AC_ARG_WITH(fribidi,
 AC_ARG_WITH(ssl,
             AS_HELP_STRING([--with-ssl], [enable SSL secured connections using
                             either OpenSSL or GnuTLS (auto)]),
-            [with_ssl=$withval],
-            [with_ssl=yes]
+            [with_ssl=$withval]
             )
 AC_ARG_WITH(openssl,
             AS_HELP_STRING([--with-openssl=[DIR]], [enable SSL secured
