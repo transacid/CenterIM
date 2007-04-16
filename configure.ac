@@ -86,9 +86,9 @@ AC_ARG_WITH(fribidi,
             )
 AC_ARG_WITH(ssl,
             AS_HELP_STRING([--with-ssl], [enable SSL secured connections using
-                            either OpenSSL or GnuTLS]),
+                            either OpenSSL or GnuTLS (auto)]),
             [with_ssl=$withval],
-            [with_ssl=no]
+            [with_ssl=yes]
             )
 AC_ARG_WITH(openssl,
             AS_HELP_STRING([--with-openssl=[DIR]], [enable SSL secured
@@ -310,9 +310,7 @@ AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 AC_CHECK_LIB(ncursesw, get_wch,, [AC_CHECK_LIB(ncurses, initscr,,
                                   [AC_CHECK_LIB(curses, initscr,,
-                                   AC_MSG_ERROR(The ncurses terminal library is
-                                                required in order to build the
-                                                program))])])
+                                   AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])])
 
 AC_TRY_COMPILE([
     #include <sys/types.h>
@@ -419,6 +417,10 @@ AC_SUBST(GPGME_LIBS)
 AC_SUBST(GPGME_CFLAGS) 
 AC_SUBST(GPGME_CXXFLAGS) 
 
+AC_SUBST(GNUTLS_LIBS)
+AC_SUBST(GNUTLS_CFLAGS) 
+AC_SUBST(GNUTLS_CXXFLAGS) 
+
 AC_SUBST(CURL_LIBS)
 AC_SUBST(CURL_CFLAGS) 
 AC_SUBST(CURL_CXXFLAGS) 
@@ -480,5 +482,15 @@ if test "x$build_msn" = xyes; then AC_MSG_RESULT([  MSN Messenger]); fi
 if test "x$build_rss" = xyes; then AC_MSG_RESULT([  RSS Reader]); fi
 if test "x$build_lj" = xyes; then AC_MSG_RESULT([  LiveJournal client]); fi
 if test "x$have_fribidi" = xyes; then AC_MSG_RESULT([  LiveJournal client]); fi
+if test "x$with_ssl" = xno; then 
+AC_MSG_RESULT([
+WARNING: SSL disabled (This means no Google Talk)
+]);
+else
+if test "x$have_gpgme" = xno; then
+AC_MSG_RESULT([
+WARNING: GPGME disabled (This means no Google Talk)
+]); fi
+fi
 AC_MSG_RESULT([
 Enjoy!])
