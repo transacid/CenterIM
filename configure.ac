@@ -146,7 +146,7 @@ if test "$with_ssl" != "no"; then
 
 	AC_MSG_CHECKING(for OpenSSL)
 	if test -z "$with_openssl" -o x"$with_openssl" = xyes; then
-		for ac_dir in $with_openssl /usr/local /usr; do
+		for ac_dir in /usr/local /usr; do
 			if test -f "$ac_dir/include/openssl/ssl.h"; then
 				with_openssl=$ac_dir
 				break;
@@ -158,14 +158,13 @@ if test "$with_ssl" != "no"; then
 		AC_MSG_RESULT([found in $with_openssl])
                 CFLAGS="$CFLAGS -I${with_openssl}"
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
-		AC_CHECK_LIB(crypto, main)
+        AC_CHECK_LIB(crypto, main, [
+            AC_CHECK_LIB(crypto, SSLeay_add_all_algorithms, [
+                AC_DEFINE(HAVE_SSLEAY, 1, [use SSLeay])
+            ])
+            ])
 		AC_CHECK_LIB(ssl, main)
-		AC_CHECK_LIB(lzo, lzo1x_1_compress, [], [
-                                             echo "lzo compression is required.";
-                                             exit -1
-                                             ] )
-		# if ssl is enabled, don't forget to let our libraries know
-		ac_configure_args="$ac_configure_args --with-ssl"
+        ac_configure_args="$ac_configure_args --with-ssl --with-openssl=$with_openssl"
 	else
 		AC_MSG_RESULT([not found or disabled])
 	        with_ssl="no"
@@ -173,7 +172,10 @@ if test "$with_ssl" != "no"; then
 		AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
 			CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 			LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
-			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls]) with_ssl="yes" ])
+			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
+            with_ssl="yes"
+            ac_configure_args="$ac_configure_args --with-ssl"
+            ])
 	fi
 else 
 	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
@@ -241,41 +243,39 @@ CURL_CXXFLAGS=""
 CURL_LIBS=""
 have_curl=no
 
-if true; then
-        if test -x "$with_curl"; then
-                CURL_CONFIG= "$with_curl"
-        else
-                AC_PATH_PROG(CURL_CONFIG, curl-config, no)
-        fi
-
-        if test x$CURL_CONFIG = xno; then
-                AC_MSG_ERROR([*** curl-config not found])
-        fi
-
-        save_CFLAGS="$CFLAGS"
-        save_CXXFLAGS="$CXXFLAGS"
-        save_LIBS="$LIBS"
-
-        CURL_CFLAGS="`$CURL_CONFIG --cflags`"
-        CURL_CXXFLAGS="`$CURL_CONFIG --cflags`"
-        CURL_LIBS="`$CURL_CONFIG --libs`"
-        CFLAGS="$CFLAGS $CURL_CFLAGS"
-        CXXFLAGS="$CXXFLAGS $CURL_CXXFLAGS"
-        LIBS="$LIBS $CURL_LIBS"
-
-        AC_MSG_CHECKING(for SSL support in libcurl)
-        curlssl=`$CURL_CONFIG --feature | grep SSL`
-        if test -z "$curlssl"; then
-		curlssl=no
-		AC_MSG_RESULT([no])
-        else
-		curlssl=yes
-		AC_MSG_RESULT([yes])
-        fi
-
-        AC_DEFINE(HAVE_CURL, 1, [has curl library])
-        have_curl=yes
+if test -x "$with_curl"; then
+        CURL_CONFIG= "$with_curl"
+else
+        AC_PATH_PROG(CURL_CONFIG, curl-config, no)
 fi
+
+if test x$CURL_CONFIG = xno; then
+        AC_MSG_ERROR([*** curl-config not found])
+fi
+
+save_CFLAGS="$CFLAGS"
+save_CXXFLAGS="$CXXFLAGS"
+save_LIBS="$LIBS"
+
+CURL_CFLAGS="`$CURL_CONFIG --cflags`"
+CURL_CXXFLAGS="`$CURL_CONFIG --cflags`"
+CURL_LIBS="`$CURL_CONFIG --libs`"
+CFLAGS="$CFLAGS $CURL_CFLAGS"
+CXXFLAGS="$CXXFLAGS $CURL_CXXFLAGS"
+LIBS="$LIBS $CURL_LIBS"
+
+AC_MSG_CHECKING(for SSL support in libcurl)
+curlssl=`$CURL_CONFIG --feature | grep SSL`
+if test -z "$curlssl"; then
+curlssl=no
+AC_MSG_RESULT([no])
+else
+curlssl=yes
+AC_MSG_RESULT([yes])
+fi
+
+AC_DEFINE(HAVE_CURL, 1, [has curl library])
+have_curl=yes
 
 #####################
 # Check for libjpeg #
@@ -488,7 +488,7 @@ WARNING: SSL disabled (This means no Google Talk)
 else
 if test "x$have_gpgme" = xno; then
 AC_MSG_RESULT([
-WARNING: GPGME disabled (This means no Google Talk)
+WARNING: GPGME disabled (This means no encrypted messages between users)
 ]); fi
 fi
 AC_MSG_RESULT([
