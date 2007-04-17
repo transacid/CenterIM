@@ -86,16 +86,14 @@ AC_ARG_WITH(fribidi,
             )
 AC_ARG_WITH(ssl,
             AS_HELP_STRING([--with-ssl], [enable SSL secured connections using
-                            either OpenSSL or GnuTLS]),
-            [with_ssl=$withval],
-            [with_ssl=no]
+                            either OpenSSL or GnuTLS (auto)]),
+            [with_ssl=$withval]
             )
 AC_ARG_WITH(openssl,
             AS_HELP_STRING([--with-openssl=[DIR]], [enable SSL secured
                             connections using the OpenSSL library in DIR
                             (optional)]),
-            [with_openssl=$withval],
-            [with_openssl=no]
+            [with_openssl=$withval]
             )
 AC_ARG_WITH(gpgme,
             AS_HELP_STRING([--with-gpgme=[PATH]], [path to gpgme-config (auto)]),
@@ -147,8 +145,8 @@ AC_MSG_RESULT([])
 if test "$with_ssl" != "no"; then
 
 	AC_MSG_CHECKING(for OpenSSL)
-	if test -z "$with_openssl"; then
-		for ac_dir in $with_openssl /usr/local /usr; do
+	if test -z "$with_openssl" -o x"$with_openssl" = xyes; then
+		for ac_dir in /usr/local /usr; do
 			if test -f "$ac_dir/include/openssl/ssl.h"; then
 				with_openssl=$ac_dir
 				break;
@@ -157,15 +155,16 @@ if test "$with_ssl" != "no"; then
 	fi
 
 	if test -n "$with_openssl" -a "$with_openssl" != "no"; then
-		if test "$with_openssl" = "yes"; then 
-			with_openssl="/usr"
-		fi
 		AC_MSG_RESULT([found in $with_openssl])
                 CFLAGS="$CFLAGS -I${with_openssl}"
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
-		AC_CHECK_LIB(crypto, main)
+        AC_CHECK_LIB(crypto, main, [
+            AC_CHECK_LIB(crypto, SSLeay_add_all_algorithms, [
+                AC_DEFINE(HAVE_SSLEAY, 1, [use SSLeay])
+            ])
+            ])
 		AC_CHECK_LIB(ssl, main)
-		AC_CHECK_LIB(lzo, lzo1x_1_compress)
+        ac_configure_args="$ac_configure_args --with-ssl --with-openssl=$with_openssl"
 	else
 		AC_MSG_RESULT([not found or disabled])
 	        with_ssl="no"
@@ -173,7 +172,10 @@ if test "$with_ssl" != "no"; then
 		AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
 			CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 			LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
-			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls]) with_ssl="yes" ])
+			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
+            with_ssl="yes"
+            ac_configure_args="$ac_configure_args --with-ssl"
+            ])
 	fi
 else 
 	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
@@ -241,41 +243,39 @@ CURL_CXXFLAGS=""
 CURL_LIBS=""
 have_curl=no
 
-if true; then
-        if test -x "$with_curl"; then
-                CURL_CONFIG= "$with_curl"
-        else
-                AC_PATH_PROG(CURL_CONFIG, curl-config, no)
-        fi
-
-        if test x$CURL_CONFIG = xno; then
-                AC_MSG_ERROR([*** curl-config not found])
-        fi
-
-        save_CFLAGS="$CFLAGS"
-        save_CXXFLAGS="$CXXFLAGS"
-        save_LIBS="$LIBS"
-
-        CURL_CFLAGS="`$CURL_CONFIG --cflags`"
-        CURL_CXXFLAGS="`$CURL_CONFIG --cflags`"
-        CURL_LIBS="`$CURL_CONFIG --libs`"
-        CFLAGS="$CFLAGS $CURL_CFLAGS"
-        CXXFLAGS="$CXXFLAGS $CURL_CXXFLAGS"
-        LIBS="$LIBS $CURL_LIBS"
-
-        AC_MSG_CHECKING(for SSL support in libcurl)
-        curlssl=`$CURL_CONFIG --feature | grep SSL`
-        if test -z "$curlssl"; then
-		curlssl=no
-		AC_MSG_RESULT([no])
-        else
-		curlssl=yes
-		AC_MSG_RESULT([yes])
-        fi
-
-        AC_DEFINE(HAVE_CURL, 1, [has curl library])
-        have_curl=yes
+if test -x "$with_curl"; then
+        CURL_CONFIG= "$with_curl"
+else
+        AC_PATH_PROG(CURL_CONFIG, curl-config, no)
 fi
+
+if test x$CURL_CONFIG = xno; then
+        AC_MSG_ERROR([*** curl-config not found])
+fi
+
+save_CFLAGS="$CFLAGS"
+save_CXXFLAGS="$CXXFLAGS"
+save_LIBS="$LIBS"
+
+CURL_CFLAGS="`$CURL_CONFIG --cflags`"
+CURL_CXXFLAGS="`$CURL_CONFIG --cflags`"
+CURL_LIBS="`$CURL_CONFIG --libs`"
+CFLAGS="$CFLAGS $CURL_CFLAGS"
+CXXFLAGS="$CXXFLAGS $CURL_CXXFLAGS"
+LIBS="$LIBS $CURL_LIBS"
+
+AC_MSG_CHECKING(for SSL support in libcurl)
+curlssl=`$CURL_CONFIG --feature | grep SSL`
+if test -z "$curlssl"; then
+curlssl=no
+AC_MSG_RESULT([no])
+else
+curlssl=yes
+AC_MSG_RESULT([yes])
+fi
+
+AC_DEFINE(HAVE_CURL, 1, [has curl library])
+have_curl=yes
 
 #####################
 # Check for libjpeg #
@@ -309,9 +309,7 @@ AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 AC_CHECK_LIB(ncursesw, get_wch,, [AC_CHECK_LIB(ncurses, initscr,,
                                   [AC_CHECK_LIB(curses, initscr,,
-                                   AC_MSG_ERROR(The ncurses terminal library is
-                                                required in order to build the
-                                                program))])])
+                                   AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])])
 
 AC_TRY_COMPILE([
     #include <sys/types.h>
@@ -418,6 +416,10 @@ AC_SUBST(GPGME_LIBS)
 AC_SUBST(GPGME_CFLAGS) 
 AC_SUBST(GPGME_CXXFLAGS) 
 
+AC_SUBST(GNUTLS_LIBS)
+AC_SUBST(GNUTLS_CFLAGS) 
+AC_SUBST(GNUTLS_CXXFLAGS) 
+
 AC_SUBST(CURL_LIBS)
 AC_SUBST(CURL_CFLAGS) 
 AC_SUBST(CURL_CXXFLAGS) 
@@ -479,5 +481,15 @@ if test "x$build_msn" = xyes; then AC_MSG_RESULT([  MSN Messenger]); fi
 if test "x$build_rss" = xyes; then AC_MSG_RESULT([  RSS Reader]); fi
 if test "x$build_lj" = xyes; then AC_MSG_RESULT([  LiveJournal client]); fi
 if test "x$have_fribidi" = xyes; then AC_MSG_RESULT([  LiveJournal client]); fi
+if test "x$with_ssl" = xno; then 
+AC_MSG_RESULT([
+WARNING: SSL disabled (This means no Google Talk)
+]);
+else
+if test "x$have_gpgme" = xno; then
+AC_MSG_RESULT([
+WARNING: GPGME disabled (This means no encrypted messages between users)
+]); fi
+fi
 AC_MSG_RESULT([
 Enjoy!])
