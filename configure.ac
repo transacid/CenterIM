@@ -164,6 +164,8 @@ if test "$with_ssl" != "no"; then
                                              echo "lzo compression is required.";
                                              exit -1
                                              ] )
+		# if ssl is enabled, don't forget to let our libraries know
+		ac_configure_args="$ac_configure_args --with-ssl"
 	else
 		AC_MSG_RESULT([not found or disabled])
 	        with_ssl="no"
