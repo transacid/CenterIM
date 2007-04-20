@@ -2,10 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([centerim], [4.22.0], [http://centericq.de/mailinglist.php])
+AC_INIT([centerim], [4.22.0], [http://www.centerim.org/])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall])
 
 AM_MAINTAINER_MODE
 AC_ISC_POSIX

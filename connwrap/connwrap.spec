@@ -4,7 +4,7 @@ Version: 0.1
 Release: 1
 Copyright: GPL
 Group: Development/Libraries
-URL: http://konst.org.ua/motor/
+URL: http://thekonst.net/en/motor/
 Packager: Konstantin Klyagin
 Source: %{name}-%{version}.tar.gz
 BuildRoot: /var/tmp/%{name}-buildroot/
