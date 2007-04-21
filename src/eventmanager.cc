@@ -110,8 +110,8 @@ void imeventmanager::store(const imevent &cev) {
 			}
 			if (conf.getdebug()) face.log("captcha: end");
 		    }
-		} else if (conf.getdebug()) {
-		    face.log("Dropped another authorization request!");
+		} else {
+		    face.log("Dropped an authorization request from %s", ev.getcontact().totext().c_str());
 		}
 	    }
 	    
