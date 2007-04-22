@@ -22,6 +22,10 @@
 *
 */
 
+#include "icqcommon.h"
+
+#ifdef BUILD_ICQ
+
 #include "icqhook.h"
 #include "icqconf.h"
 #include "icqface.h"
@@ -1532,3 +1536,5 @@ ContactRef icqhook::addContact(unsigned int uin, const string &groupname) {
 
     return cont;
 }
+
+#endif /*  BUILD_ICQ */

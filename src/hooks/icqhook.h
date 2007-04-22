@@ -2,6 +2,9 @@
 #define __ICQHOOK_H__
 
 #include "abstracthook.h"
+
+#ifdef BUILD_ICQ
+
 #include "icqmlist.h"
 #include "icqcontacts.h"
 
@@ -98,5 +101,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 };
 
 extern icqhook ihook;
+
+#endif
 
 #endif

@@ -243,6 +243,7 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
 }
 
 void imcontroller::icqupdatedetails() {
+#ifdef BUILD_ICQ
     icqcontact *c = clist.get(contactroot);
 
     if(ihook.logged()) {
@@ -255,6 +256,7 @@ void imcontroller::icqupdatedetails() {
     } else {
 	face.status(_("You must be logged to the ICQ network to update the details"));
     }
+#endif
 }
 
 void imcontroller::aimupdateprofile() {

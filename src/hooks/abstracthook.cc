@@ -851,7 +851,9 @@ abstracthook &gethook(protocolname pname) {
     static abstracthook abshook(infocard);
 
     switch(pname) {
+#ifdef BUILD_ICQ
 	case icq: return ihook;
+#endif
 #ifdef BUILD_YAHOO
 	case yahoo: return yhook;
 #endif

@@ -31,6 +31,11 @@ AC_PROG_GCC_TRADITIONAL
 #########################
 # Checks for libraries. #
 #########################
+AC_ARG_ENABLE(icq,
+              AS_HELP_STRING([--disable-icq], [Build without ICQ]),
+              build_icq="$enableval",
+              build_icq="yes"
+              )
 AC_ARG_ENABLE(yahoo,
               AS_HELP_STRING([--disable-yahoo], [Build without Yahoo!]),
               build_yahoo="$enableval",
@@ -161,9 +166,9 @@ if test "$with_ssl" != "no"; then
 		AC_CHECK_LIB(crypto, main)
 		AC_CHECK_LIB(ssl, main)
 		AC_CHECK_LIB(lzo, lzo1x_1_compress, [], [
-                                             echo "lzo compression is required.";
-                                             exit -1
-                                             ] )
+					      echo "lzo compression is required.";
+					      exit -1
+					      ] )
 		# if ssl is enabled, don't forget to let our libraries know
 		ac_configure_args="$ac_configure_args --with-ssl"
 	else
@@ -326,6 +331,7 @@ case "$host_os" in
 		;;
 esac
 
+AM_CONDITIONAL(BUILD_ICQ, test "x$build_icq" = xyes)
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
@@ -337,6 +343,9 @@ AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes -o "x$build_lj" = xyes)
 AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = xyes)
 AM_CONDITIONAL(HAVE_FRIBIDI, test "x$have_fribidi" = xyes)
 
+if test "$build_icq" = "yes"; then
+	AC_DEFINE(BUILD_ICQ, 1, [build with ICQ support])
+fi
 if test "$build_yahoo" = "yes"; then
 	AC_DEFINE(BUILD_YAHOO, 1, [build with yahoo support])
 fi
@@ -473,6 +482,7 @@ Build options:
   CPPFLAGS              $CPPFLAGS
 
 Protocols and Clients:])
+if test "x$build_icq" = xyes; then AC_MSG_RESULT([  ICQ]); fi
 if test "x$build_yahoo" = xyes; then AC_MSG_RESULT([  Yahoo]); fi
 if test "x$build_aim" = xyes; then AC_MSG_RESULT([  AIM]); fi
 if test "x$build_jabber" = xyes; then AC_MSG_RESULT([  jabber]); fi
