@@ -3,7 +3,7 @@
 * kkconsui treeview class
 * $Id: treeview.cc,v 1.10 2003/10/19 23:25:05 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

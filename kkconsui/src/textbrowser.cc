@@ -3,7 +3,7 @@
 * kkconsui textbrowser class
 * $Id: textbrowser.cc,v 1.13 2002/11/23 15:42:08 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

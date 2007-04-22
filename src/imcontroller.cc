@@ -3,7 +3,7 @@
 * centerim protocol specific user interface related routines
 * $Id: imcontroller.cc,v 1.56 2004/07/20 22:16:40 konst Exp $
 *
-* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

@@ -3,7 +3,7 @@
 * kkconsui abstract ui control class
 * $Id: abstractui.cc,v 1.7 2003/11/05 09:10:27 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

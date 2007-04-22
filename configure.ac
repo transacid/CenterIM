@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([centerim], [4.22.0], [http://www.centerim.org/])
+AC_INIT([centerim], [4.22.0], [http://sourceforge.net/projects/centerim])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([-Wall])

@@ -3,7 +3,7 @@
 * centerim yahoo! protocol handling class
 * $Id: yahoohook.cc,v 1.112 2004/12/20 00:54:02 konst Exp $
 *
-* Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

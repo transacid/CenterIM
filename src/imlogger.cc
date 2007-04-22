@@ -3,7 +3,7 @@
 * centerim events logger class
 * $Id: imlogger.cc,v 1.11 2003/10/31 00:55:53 konst Exp $
 *
-* Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2002 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

@@ -3,7 +3,7 @@
 * centerim configuration handling routines
 * $Id: icqconf.cc,v 1.143 2005/09/02 15:20:59 konst Exp $
 *
-* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1343,7 +1343,7 @@ void icqconf::commandline(int argc, char **argv) {
 
 	} else if((args == "-v") || (args == "--version")) {
 	    cout << PACKAGE << " " << VERSION << endl
-		<< "Written by Konstantin Klyagin." << endl
+		<< "Written by Konstantin Klyagin, 2005. Currently maintained by the CenterIM community." << endl
 		<< "Built-in protocols are:";
 
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
@@ -1514,8 +1514,10 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 }
 
 void icqconf::usage() const {
-    cout << _("Usage: ") << argv0 << " [OPTION].." << endl;
-
+	cout << PACKAGE << " " << VERSION << endl;
+	
+    cout << endl << _("Usage: ") << argv0 << " [OPTION].." << endl;
+	
     cout << endl << _("General options:") << endl;
     cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
     cout << _("  --basedir, -b <path>     set a custom base directory") << endl;
@@ -1528,13 +1530,13 @@ void icqconf::usage() const {
 
     cout << endl << _("Events sending options:") << endl;
     cout << _("  -s, --send <event type>  event type; can be msg, sms or url") << endl;
-    cout << _("  -S, --status <status>    change the current IM status") << endl;
+    cout << _("  -S, --status <status>    change the current IM status. Status; o, _, a, d, n, c, f, i") << endl;
     cout << _("  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc, jab, rss, lj, gg or infocard") << endl;
 
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
 
-    cout << endl << _("Report bugs to <centerim-devel@centerim.org>.") << endl;
+    cout << endl << _("Report bugs to http://sourceforge.net/projects/centerim.") << endl;
 }
 
 void icqconf::setproxy() {

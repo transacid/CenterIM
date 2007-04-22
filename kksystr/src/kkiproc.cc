@@ -3,7 +3,7 @@
 * kkiproc inter-process communications related routines
 * $Id: kkiproc.cc,v 1.11 2003/04/02 09:54:47 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

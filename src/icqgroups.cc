@@ -3,7 +3,7 @@
 * centerim IM contacts group listing class
 * $Id: icqgroups.cc,v 1.12 2003/11/05 14:54:27 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

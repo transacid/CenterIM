@@ -3,7 +3,7 @@
 * centerim gadu-gadu protocol handling class
 * $Id: gaduhook.cc,v 1.14 2005/07/08 09:49:17 konst Exp $
 *
-* Copyright (C) 2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

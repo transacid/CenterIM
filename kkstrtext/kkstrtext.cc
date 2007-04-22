@@ -3,7 +3,7 @@
 * kkstrtext string related and text processing routines
 * $Id: kkstrtext.cc,v 1.45 2005/02/01 00:13:24 konst Exp $
 *
-* Copyright (C) 1999-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

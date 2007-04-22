@@ -2,7 +2,7 @@
  * XML Parser/Generator
  *
  * Copyright (C) 2001 Barnaby Gray <barnaby@beedesign.co.uk>
- * improvements (C) 2003 Konstantin Klyagin <konst@konst.org.ua>
+ * improvements (C) 2003 Konstantin Klyagin <k@thekonst.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

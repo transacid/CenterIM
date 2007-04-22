@@ -3,7 +3,7 @@
 * centerim user interface class, dialogs related part
 * $Id: icqdialogs.cc,v 1.151 2005/05/23 14:16:52 konst Exp $
 *
-* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
