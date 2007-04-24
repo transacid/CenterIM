@@ -3,7 +3,7 @@
 * centerim single IM contact class
 * $Id: icqcontact.cc,v 1.105 2005/02/13 12:10:55 iulica Exp $
 *
-* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

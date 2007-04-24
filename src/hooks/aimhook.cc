@@ -3,7 +3,7 @@
 * centerim AIM protocol handling class
 * $Id: aimhook.cc,v 1.42 2004/11/11 13:42:05 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

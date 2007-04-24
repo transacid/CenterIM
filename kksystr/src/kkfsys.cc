@@ -3,7 +3,7 @@
 * kkfsys file system related routines
 * $Id: kkfsys.cc,v 1.7 2002/07/03 14:38:58 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

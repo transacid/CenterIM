@@ -3,7 +3,7 @@
 * centerim livejournal protocol handling class (sick)
 * $Id: ljhook.cc,v 1.28 2004/11/11 13:42:05 konst Exp $
 *
-* Copyright (C) 2003-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2003-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

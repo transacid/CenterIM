@@ -3,7 +3,7 @@
 * centerim protocol specific user interface related routines
 * $Id: imcontroller.cc,v 1.56 2004/07/20 22:16:40 konst Exp $
 *
-* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -243,6 +243,7 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
 }
 
 void imcontroller::icqupdatedetails() {
+#ifdef BUILD_ICQ
     icqcontact *c = clist.get(contactroot);
 
     if(ihook.logged()) {
@@ -255,6 +256,7 @@ void imcontroller::icqupdatedetails() {
     } else {
 	face.status(_("You must be logged to the ICQ network to update the details"));
     }
+#endif
 }
 
 void imcontroller::aimupdateprofile() {

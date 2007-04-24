@@ -3,7 +3,7 @@
 * centerim icq protocol handling class
 * $Id: icqhook.cc,v 1.159 2004/12/20 00:54:02 konst Exp $
 *
-* Copyright (C) 2001-2004 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2004 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,10 @@
 * USA
 *
 */
+
+#include "icqcommon.h"
+
+#ifdef BUILD_ICQ
 
 #include "icqhook.h"
 #include "icqconf.h"
@@ -1532,3 +1536,5 @@ ContactRef icqhook::addContact(unsigned int uin, const string &groupname) {
 
     return cont;
 }
+
+#endif /*  BUILD_ICQ */

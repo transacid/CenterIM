@@ -1,9 +1,9 @@
 /*
 *
 * centerim core routines
-* $Id: centericq.cc,v 1.197 2005/05/02 15:23:58 konst Exp $
+* $Id: centerim.cc,v 1.197 2005/05/02 15:23:58 konst Exp $
 *
-* Copyright (C) 2001-2003 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001-2003 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

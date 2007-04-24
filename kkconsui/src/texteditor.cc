@@ -3,7 +3,7 @@
 * A class for diplaying and operating an advanced text editor with
 * syntax highlighting, scrolling and other useful features.
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

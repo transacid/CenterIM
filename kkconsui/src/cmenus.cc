@@ -3,7 +3,7 @@
 * kkconsui various textmode menus classes
 * $Id: cmenus.cc,v 1.20 2004/03/28 11:38:35 konst Exp $
 *
-* Copyright (C) 1999-2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 1999-2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

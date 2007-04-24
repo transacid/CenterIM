@@ -3,7 +3,7 @@
 * centerim IM contact basic info class
 * $Id: imcontact.cc,v 1.21 2005/01/23 13:21:46 konst Exp $
 *
-* Copyright (C) 2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2002 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

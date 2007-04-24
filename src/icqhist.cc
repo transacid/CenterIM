@@ -3,7 +3,7 @@
 * centerim messages history handling class
 * $Id: icqhist.cc,v 1.15 2002/11/22 19:11:53 konst Exp $
 *
-* Copyright (C) 2001,2002 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001,2002 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

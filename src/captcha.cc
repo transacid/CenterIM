@@ -18,18 +18,12 @@ bool captcha::docaptcha(imcontact c)
         if (captchas.find(c) == captchas.end()) {
 		return false;
         } else {
-		face.log("captcha: found existing test with: %s", c.totext().c_str());
-
 		captchas_t::iterator i;
 		captchaasked_t *ca;
 		set<string> *a;
 		i = captchas.find(c);
 		ca = &(i->second);
 		a = ca->answers;
-		for (set<string>::iterator i = a->begin(); i != a->end(); i++) {
-			face.log("ans: %s", i->c_str());
-		}
-
 		return true;
 	}
 }

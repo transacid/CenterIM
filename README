@@ -1,6 +1,6 @@
 CenterIM documentation.
 
-This document was originally written by Konstantin Klyagin <konst@konst.org.ua>.
+This document was originally written by Konstantin Klyagin <k@thekonst.net>.
 2001-2005
 
 Currently modified by the CenterIM community. 2007, version 1.0
@@ -510,10 +510,10 @@ original idea is to execute a command line WAV player.
   There are three WAV sound files which CenterIM has by default. They
 are sounds taken from Mirabilis ICQ. When you set "Change sound device
 to" item to "sound card", the program generates a file named sounds in
-the .CenterIM/ directory in your home folder. The default file has
+the .centerim/ directory in your home folder. The default file has
 commands to execute a "play" utility (from sox package) with a name of a
 file to play, one of the default ones. If you wanna change the player or
-a sound simply edit ~/.CenterIM/sounds.
+a sound simply edit ~/.centerim/sounds.
 
   If you use ESD (Enlightenment Sound Daemon) to have some extra sound
 facilities such as mixing streams, or playing on another computer, you
@@ -524,7 +524,7 @@ might wish to change the "play" command to "esdplay".
 ------------------
 
   It's possible to customize colors in the CenterIM's user interface.
-It's done with the ~/.CenterIM/colorscheme configuration file. Its
+It's done with the ~/.centerim/colorscheme configuration file. Its
 contents are self-descriptive, and parameter names mean exactly that
 they're named after. Please note, that among the standard color names
 it's possible to specify "transparent" which is useful when the program
@@ -547,7 +547,7 @@ http://centericq.de/misc/colorscheme_helper.png
 -----------------
 
   Key bindings are also configurable in CenterIM. On the first start it
-creates a file called keybindings in your ~/.CenterIM/ directory. You can
+creates a file called keybindings in your ~/.centerim/ directory. You can
 use its initial contents for reference. If you want to change something,
 well, it's all there.
 
@@ -560,7 +560,7 @@ for you. And it also can launch your preferred web browser to view them.
 No need to have a big attention to notice "F2 to URLs" text in the
 status bar when you view either a message or user's details. The "open
 URL" action starts right after you make a selection in the menu invoked.
-The ~/.CenterIM/actions file is responsible for this. By default it has
+The ~/.centerim/actions file is responsible for this. By default it has
 a command to execute netscape, but you can change to whatever you want.
 Please only note that you cannot put lynx or any other text mode based
 browser starting in the same console there. The commands from "actions"
@@ -752,22 +752,22 @@ are currently talking on both channels.
   You can skip the finding step by issuing one of the following shell
 commands to add a user (depends on an IM type):
 
-    $ mkdir ~/.CenterIM/<UIN of a user to add>
+    $ mkdir ~/.centerim/<UIN of a user to add>
 	This one is for ICQ
 
-    $ mkdir ~/.CenterIM/y<nickname>
+    $ mkdir ~/.centerim/y<nickname>
 	For Yahoo!
 
-    $ mkdir ~/.CenterIM/a<nickname>
+    $ mkdir ~/.centerim/a<nickname>
 	For AIM
 
-    $ mkdir ~/.CenterIM/i<nickname>
+    $ mkdir ~/.centerim/i<nickname>
 	For IRC
 
-    $ mkdir ~/.CenterIM/j<nickname>
+    $ mkdir ~/.centerim/j<nickname>
 	For Jabber
 	
-	$ mkdir ~/.CenterIM/i<msn-mailaddress>
+	$ mkdir ~/.centerim/i<msn-mailaddress>
 	For MSN
 
 Don't forget to restart CenterIM so that it re-reads the contact list.
@@ -1162,7 +1162,7 @@ And this command will switch your yahoo status to away.
   It is possible to make CenterIM run external programs, scripts and
 whatever to answer and/or process incoming events. Though, some extra
 setup is needed. Let me introduce you with another configuration file,
-named "external" which should reside under the .CenterIM/ directory in
+named "external" which should reside under the .centerim/ directory in
 your home. Here is an example which demonstrates its options. It's
 recommended just cut'n'paste the following text.
 
@@ -1301,7 +1301,7 @@ CONTACT_INFODIR
     The most intresting parameter. Using it, you can access further
     information about the user. Every time an external action is
     executed it is set to the user's information directory under your
-    ~/.CenterIM/ directory. It makes it easier to access "about" and
+    ~/.centerim/ directory. It makes it easier to access "about" and
     "info" files under it. Fetching lines from certain positions of the
     latter allows to get details. It's enough to take a look at an
     "info" file of any user to find out what lines mean. Here I'll
@@ -1595,7 +1595,7 @@ written into the ~/.centerim/debug file.
   Another (better) way to log what is going on in your CenterIM, is
 possible to be enabled with the "Detailed IM events log" item in the
 Configuration dialog. When enabled, CenterIM produces a log file named
-.CenterIM/log under your home directory. It contains messages about users'
+.centerim/log under your home directory. It contains messages about users'
 logging in and out, receiving and sending messages, changed your own IM
 status, and other blah. The file's format is quite clear, so any kind of
 automatic parsing tool can be written without a problem. Though in this

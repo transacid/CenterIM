@@ -30,12 +30,12 @@ new libmsn
 
 --8<--
 have you ever used a jabber server with additional transports/agents?
-centericq behaves a bit "strange" when dealing with transport/agent contacts
+centerim behaves a bit "strange" when dealing with transport/agent contacts
 maybe you can just try using the jabber.ccc.de transports for AIM and ICQ with psi
-and then with centericq
-also, centericq doesn't even support service discovery and transport functions (like registration, logon/logoff etc.)
+and then with centerim
+also, centerim doesn't even support service discovery and transport functions (like registration, logon/logoff etc.)
 so at first you *have to* use psi to register for such a transport
-and then you can use the jabber account with centericq
+and then you can use the jabber account with centerim
 the gateways will appear as normal contacts
 but if you try to move them to a group for example, that doesn't "survive" a reconnect
 more, the contact appears duplicated
@@ -48,7 +48,7 @@ I guess it doesn't query for such transports.
 but only for user directories
 this is what happens in Psi when I run the service discovery:
 
-and this is what happens in centericq when I go to the "update user details" screen
+and this is what happens in centerim when I go to the "update user details" screen
 
 it only queries the vcard
 and btw, this is what happens when I leave the vcard-screen without changing anything:
@@ -63,12 +63,12 @@ so those are 2 completely different setups -- maybe good test scenarios
 
 so, just tell me and I will create an account for you. public registration is
 disabled on my server, that's the reason you cannot register one using
-centericq.
+centerim.
 
 something else I've noticed
-when using centericq and Psi simultaneously for one jabber account
-when I delete a contact in centericq, Psi notices on the fly and the contact disappears from psi's list
-when I do it the other way round centericq notices nothing :)
+when using centerim and Psi simultaneously for one jabber account
+when I delete a contact in centerim, Psi notices on the fly and the contact disappears from psi's list
+when I do it the other way round centerim notices nothing :)
 --8<--
 
 antispam to block auth events too
@@ -85,7 +85,7 @@ gaim gpg plugin for other IM networks
 icq invisibility scanner
 
 a nice feature would be to be able to add a custom away-message
-when using centericq -S a -p icq
+when using centerim -S a -p icq
 
 external status event (notification on changing status)
 

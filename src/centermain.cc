@@ -3,7 +3,7 @@
 * centerim main() function
 * $Id: centermain.cc,v 1.16 2002/07/07 22:58:18 konst Exp $
 *
-* Copyright (C) 2001 by Konstantin Klyagin <konst@konst.org.ua>
+* Copyright (C) 2001 by Konstantin Klyagin <k@thekonst.net>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
