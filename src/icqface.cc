@@ -160,10 +160,6 @@ void icqface::init() {
 	sizeWArea.x1 = (int) (COLS*0.32); 
 	conf.setleftpanelwidth(sizeWArea.x1);
     }
-    if(sizeWArea.x1 < MinPanelWidth || sizeWArea.x1 > (COLS - MinPanelWidth)) {
-	sizeWArea.x1 = MinPanelWidth;
-	conf.setleftpanelwidth(sizeWArea.x1);
-    }
     
     sizeWArea.x2 = COLS-1;
     sizeWArea.y1 = 1;
@@ -171,10 +167,6 @@ void icqface::init() {
     sizeWArea.y2 = conf.getlogpanelheight();
     if(sizeWArea.y2 < MinPanelHeight || sizeWArea.y2 > (LINES - MinPanelHeight)) {
 	sizeWArea.y2 = (int) LINES / 4;
-	conf.setlogpanelheight(sizeWArea.y2);
-    }
-    if(sizeWArea.y2 < MinPanelHeight || sizeWArea.y2 > (LINES - MinPanelHeight)) {
-	sizeWArea.y2 = MinPanelHeight;
 	conf.setlogpanelheight(sizeWArea.y2);
     }
     sizeWArea.y2 = LINES - sizeWArea.y2;

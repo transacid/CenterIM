@@ -129,8 +129,8 @@ class icqface {
 	static void transferidle(dialogbox &db);
 	static void editchatidle(texteditor &e);
 
-	static const unsigned int MinPanelWidth = 10;
-	static const unsigned int MinPanelHeight = 10;
+	static const unsigned int MinPanelWidth = 4;
+	static const unsigned int MinPanelHeight = 4;
 
 	static void termresize(void);
 
