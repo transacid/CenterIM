@@ -151,7 +151,7 @@ if test "$with_ssl" != "no"; then
 
 	AC_MSG_CHECKING(for OpenSSL)
 	if test -z "$with_openssl" -o x"$with_openssl" = xyes; then
-		for ac_dir in /usr/local /usr; do
+		for ac_dir in $with_openssl /usr/local /usr; do
 			if test -f "$ac_dir/include/openssl/ssl.h"; then
 				with_openssl=$ac_dir
 				break;
