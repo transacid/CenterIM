@@ -920,12 +920,11 @@ string gaduhook::handletoken(struct gg_http *h) {
 		sprintf (tmpnam, "/tmp/gg.token.XXXXXX");
 	    }
 	    
-	    if ((tmpfilep = mktemp (tmpnam)) != NULL) {
-		if ((tmpfiledes = open (tmpnam, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) == -1) {
-		    tmpfilep = NULL;
-		} else {
-		    close (tmpfiledes);
-		}
+	    if ((tmpfiledes = mkstemp (tmpnam)) == -1) {
+		tmpfilep = NULL;
+	    } else {
+		tmpfilep = tmpnam;
+		close (tmpfiledes);
 	    }
 	    fname = tmpnam;
 	}
