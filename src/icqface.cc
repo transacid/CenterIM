@@ -760,24 +760,26 @@ void icqface::fillcontactlist() {
 	} else {
 
 	    if(conf.getcolormode() == icqconf::cmstatus) {
-		char *fmt = "%s[%s]%s%s ";
+	    // When: 'Color contacts according to: status' is selected; protocol is not visible. Ordered by status
+		char *fmt = "%s[%c]%s%s ";
 
-		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%s>%s%s "; else
-		    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%s}%s%s ";
+		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
+		    if(lst.inlist(c->getdesc(), csinvisible)) fmt = "%s{%c}%s%s ";
 
-		std::string protoletter = getprotocolchar(c->getdesc().pname);
+		char shortstatus = c->getshortstatus();
 
 		if(c->getlasttyping()) {
 		    if(timer-c->getlasttyping() > PERIOD_TYPING) c->setlasttyping(0);
-		    else protoletter.append("T");
+		    else shortstatus = 'T';
 		}
 
 		mcontacts->addleaff(nnode,
 			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
-			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), protoletter.c_str(),
+			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
 			c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
 	    } else {
+	    // Color contact by protocol. Ordered by status
 		char *fmt = "%s[%c]%s%s ";
 
 		if(lst.inlist(c->getdesc(), csvisible)) fmt = "%s<%c>%s%s "; else
