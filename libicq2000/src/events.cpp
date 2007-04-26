@@ -95,21 +95,21 @@ namespace ICQ2000 {
    *
    * @return whether READ is set
    */
-  bool AddSocketHandleEvent::isRead() const { return m_mode & READ; };
+  bool AddSocketHandleEvent::isRead() const { return m_mode & READ; }
 
   /**
    *  Determine if WRITE selection is required.
    *
    * @return whether WRITE is set
    */
-  bool AddSocketHandleEvent::isWrite() const { return m_mode & WRITE; };
+  bool AddSocketHandleEvent::isWrite() const { return m_mode & WRITE; }
 
   /**
    *  Determine if EXCEPTION selection is required.
    *
    * @return whether EXCEPTION is set
    */
-  bool AddSocketHandleEvent::isException() const { return m_mode & EXCEPTION; };
+  bool AddSocketHandleEvent::isException() const { return m_mode & EXCEPTION; }
 
   /**
    *  Get the mode of the socket handle.

@@ -107,7 +107,6 @@ private:
         Message::Headers header;
 
 public:
-            ;
         /** Create a message with the specified @a body and @a mimeHeader.
          */
         Message(std::string body, std::string mimeHeader="MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n");
@@ -188,7 +187,6 @@ public:
         const bool isRightAligned() const;
 
 private:
-            ;
         std::map<std::string, std::string> getFormatInfo() const throw (std::runtime_error);
         void setFormatInfo(std::map<std::string, std::string> & info);
     };

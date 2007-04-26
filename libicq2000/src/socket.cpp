@@ -43,7 +43,6 @@ using std::istringstream;
 
 namespace ICQ2000
 {
-  
 
   // StringtoIP and IPtoString both work on host order ip address expressed as unsigned int's
   unsigned int StringtoIP(const string& s) {
@@ -61,7 +60,7 @@ namespace ICQ2000
     } else {
       return 0;
     }
-  };
+  }
 
   string IPtoString(unsigned int ip) {
     ostringstream ostr;

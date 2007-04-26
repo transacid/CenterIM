@@ -218,7 +218,7 @@ void icqconf::load() {
 vector<icqconf::keybinding> icqconf::keys;
 
 void icqconf::loadkeys() {
-    int x;
+    //int x; not used.
     string fname = getconfigfname("keybindings"), buf, param;
     struct keybinding k;
     ifstream f;
@@ -721,7 +721,7 @@ void icqconf::loadcolors() {
 
 void icqconf::loadsounds() {
     string tname = getconfigfname("sounds"), buf, suin, skey;
-    int n, ffuin, i;
+    int i;
     icqcontact *c;
     imevent::imeventtype it;
 

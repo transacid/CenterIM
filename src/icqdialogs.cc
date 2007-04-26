@@ -44,6 +44,7 @@ const char *stragerange(ICQ2000::AgeRange r) {
 	case ICQ2000::RANGE_40_49: return "40-49";
 	case ICQ2000::RANGE_50_59: return "50-59";
 	case ICQ2000::RANGE_60_ABOVE: return _("60-above");
+	case ICQ2000::RANGE_NORANGE: return _("unknown");
     }
 
     return "";
@@ -70,7 +71,7 @@ bool icqface::sprofmanager(string &name, string &act) {
     dialogbox db;
     string buf, tname;
     bool finished, r;
-    int n, b, i, dx, dy;
+    int n, b, dx, dy;
 
     map<string, imsearchparams> profiles;
     map<string, imsearchparams>::iterator ip;
@@ -162,7 +163,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 
 bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     int n, b, i;
-    int nuin, ninfo, nloc, nwork, nonl;
+    //Not used - int nuin, ninfo, nloc, nwork, nonl;
     bool finished, ret, proceed;
     dialogbox db;
 
@@ -1087,7 +1088,7 @@ void icqface::multichange(bool conv[], bool newstate) {
 
 bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool finished, success, hasany;
-    int nopt, n, i, b, nconf, ncomm, aaway, ana, noth, nfeat, ncl;
+    int nopt, n, i, b, aaway, ana;
     bool needredraw = false;
     protocolname pname;
     string tmp, phidden;
@@ -1502,7 +1503,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 void icqface::selectproto(bool prots[], spmode mode) {
     static int saveelem = 0;
     int i, protmax;
-    bool r, finished = false;
+    bool finished = false;
 
     protocolname pname;
     protocolname tempprots[protocolname_size];
@@ -1590,13 +1591,13 @@ void icqface::detailsidle(dialogbox &db) {
     icqcontact *c;
 
     if(!face.detailsfetched)
-    if(c = clist.get(contactroot))
-    if(c->updated()) {
-	face.gendetails(db.gettree());
-	db.gettree()->redraw();
-	face.status(_("Your details have been fetched"));
-	face.detailsfetched = true;
-    }
+    if(c == clist.get(contactroot))
+		if(c->updated()) {
+			face.gendetails(db.gettree());
+			db.gettree()->redraw();
+		face.status(_("Your details have been fetched"));
+		face.detailsfetched = true;
+    	}
 
     cicq.idle(HIDL_SOCKEXIT);
 }

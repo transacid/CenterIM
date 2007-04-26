@@ -104,6 +104,6 @@ namespace ICQ2000 {
     const char* what() const throw();
   };
 
-};
+}
 
 #endif

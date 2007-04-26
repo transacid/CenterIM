@@ -49,7 +49,7 @@ void abstractuicontrol::close() {
 }
 
 bool abstractuicontrol::isopen() const { return fisopen; }
-bool abstractuicontrol::getaborted() const { return aborted; };
+bool abstractuicontrol::getaborted() const { return aborted; }
 
 void abstractuicontrol::abort() {
     finished = aborted = true;

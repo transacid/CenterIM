@@ -151,9 +151,9 @@ void centerim::inithooks() {
 }
 
 void centerim::mainloop() {
-    bool finished = false, r;
+    bool finished = false;
     string text, url;
-    int action, old, gid;
+    int action, gid;
     icqcontact *c;
     char buf[512];
     vector<imcontact>::iterator i;
@@ -751,7 +751,7 @@ void centerim::checkconfigs() {
     struct stat st;
     const char *p;
 
-    for(int i = 0; p = configs[i]; i++) {
+    for(int i = 0; p == configs[i]; i++) {
 	if(stat(conf.getconfigfname(p).c_str(), &st))
 	    st.st_mtime = 0;
 
@@ -825,7 +825,7 @@ void centerim::handlesignal(int signum) {
 void centerim::checkparallel() {
     string pidfname = conf.getdirname() + "pid", fname;
     int pid = 0;
-    char exename[512];
+    //Not used - char exename[512];
 
     ifstream f(pidfname.c_str());
     if(f.is_open()) {

@@ -1364,6 +1364,7 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
      * logging an UNITIALIZED BUFFER seems pretty stupid to me
      */
     /* char buf[128]; */
+
     string ident;
     imcontact cont = imcontact(ev->getSenderUIN(), icq);
     icqcontact *c = clist.get(cont);

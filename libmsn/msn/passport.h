@@ -60,7 +60,6 @@ public:
         friend bool operator ==(const std::string & other, const Passport & p) { return p.email == other; };
         friend std::istream& operator >>(std::istream & is, Passport & p) { is >> p.email; p.validate(); return is; }
 private:
-            ;
         void validate();
         std::string email;
     };

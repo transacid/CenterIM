@@ -1188,7 +1188,7 @@ namespace sigslot {
 		signal2<arg1_type, arg2_type, mt_policy>& m_signal;
 	};
 
-}; // namespace sigslot
+} // namespace sigslot
 
 #endif // SIGSLOT_H__
 

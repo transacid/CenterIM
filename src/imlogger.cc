@@ -41,7 +41,7 @@ static const char* imstatus2name(imstatus st) {
     }
 
     return "";
-};
+}
 
 const char *streventname(imevent::imeventtype type) {
     switch(type) {
@@ -56,7 +56,7 @@ const char *streventname(imevent::imeventtype type) {
 	case imevent::xml: return _("event");
     }
     return "";
-};
+}
 
 imlogger logger;
 
