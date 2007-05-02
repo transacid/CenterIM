@@ -3104,33 +3104,11 @@ void icqface::menuidle(verticalmenu &m) {
     cicq.idle();
 
     if(face.dotermresize) {
-	if(&m == &face.mcontacts->menu) {
-	    face.done();
-	    face.init();
-	    face.draw();
+        if(&m == &face.mcontacts->menu) {
+            face.redraw();
+            face.dotermresize = false;
+         }
 
-	    /*
-	     * Terminal resize specific
-	     */
-
-	    vector<string> flog;
-	    vector<string>::iterator il;
-
-	    face.status("#");
-
-	    flog = face.lastlog;
-	    face.lastlog.clear();
-
-	    bool lts, lo;
-	    conf.getlogoptions(lts, lo);
-	    conf.setlogoptions(false, lo);
-
-	    for(il = flog.begin(); il != flog.end(); ++il)
-		face.log(*il);
-
-	    conf.setlogoptions(lts, lo);
-	    face.dotermresize = false;
-	}
     }
 }
 
@@ -3581,14 +3559,36 @@ bool icqface::updaterequested() {
 }
 
 void icqface::redraw() {
-    if(!mainscreenblock) {
-	done();
-	init();
-	draw();
-	doredraw = fneedupdate = false;
-    } else {
-	doredraw = fneedupdate = true;
-    }
+       if(!mainscreenblock) {
+               done();
+               init();
+               draw();
+
+               /*
+                * Terminal resize specific
+                */
+
+               vector<string> flog;
+               vector<string>::iterator il;
+
+               face.status("#");
+
+               flog = face.lastlog;
+               face.lastlog.clear();
+
+               bool lts, lo;
+               conf.getlogoptions(lts, lo);
+               conf.setlogoptions(false, lo);
+
+               for(il = flog.begin() ; il != flog.end(); ++il)
+                       face.log(*il);
+
+               conf.setlogoptions(lts, lo);
+
+               doredraw = fneedupdate = false;
+       } else {
+               doredraw = fneedupdate = true;
+       }
 }
 
 void icqface::xtermtitle(const string &text) {
