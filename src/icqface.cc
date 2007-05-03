@@ -2700,13 +2700,15 @@ void icqface::peerinfo(int line, const imcontact &ic) {
     }
 }
 
-void icqface::chat(const imcontact &ic) {
+bool icqface::chat(const imcontact &ic) {
     texteditor editor;
     imevent *sendev;
     vector<imcontact>::iterator i;
+    int chatlines_diff = 0; // could get rid of?
+    bool return_status = false ; 
 
     icqcontact *c = clist.get(ic);
-    if(!c) return;
+    if(!c) return false; // returns whatever exits
 
     saveworkarea();
     clearworkarea();
@@ -2719,14 +2721,21 @@ void icqface::chat(const imcontact &ic) {
     muins.clear();
     muins.push_back(passinfo);
 
+    // resizing doesn't change the effect, so we go from the bottom, not the top
+    chatlines_diff = sizeWArea.y2 - sizeWArea.y1 ;
     chatlines = conf.getchatpanelheight();
-    if (chatlines < MinPanelHeight || chatlines > (LINES - MinPanelHeight - MinPanelHeight)){
-        chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.70);
-	conf.setchatpanelheight(chatlines);
-    }
-    if (chatlines < MinPanelHeight || chatlines > (LINES - MinPanelHeight - MinPanelHeight)){
-        chatlines = MinPanelHeight;
-	conf.setchatpanelheight(chatlines);
+    if( chatlines == 0 ) { // allow this to be disabled by setting it equal to zero
+        chatlines = (int) (chatlines_diff*0.75);
+    } else {
+        chatlines = chatlines_diff - chatlines; // changes where the guide line is
+
+        if( chatlines < (chatlines_diff*.1) ) { // bottom
+            chatlines = (int) (chatlines_diff*.1);
+            conf.setchatpanelheight(chatlines_diff - chatlines);}
+
+        if( chatlines > (chatlines_diff*.9)) { // top
+            chatlines = (int) (chatlines_diff*.9) ;
+            conf.setchatpanelheight(chatlines_diff - chatlines);}
     }
 
 //    workarealine(sizeWArea.y1+chatlines+1);
@@ -2776,6 +2785,12 @@ void icqface::chat(const imcontact &ic) {
     status("@");
     inchat = false;
     update();
+
+    if ( ( chatlines_diff - chatlines) != conf.getchatpanelheight()) {
+    	return_status = true;
+    }
+
+    return return_status;
 }
 
 icqface::eventviewresult icqface::eventview(const imevent *ev,
@@ -3466,11 +3481,11 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    break;
 	case key_chat_panel_move_up:
 	    face.chatpanelheight_inc(1);
-	    face.redraw();
+	    return -1;
 	    break;
 	case key_chat_panel_move_down:
 	    face.chatpanelheight_inc(-1);
-	    face.redraw();
+	    return -1;
 	    break;
 	case key_quit:
 	    return -1;
@@ -3680,12 +3695,9 @@ void icqface::logpanelheight_inc(const int inc) {
 
 void icqface::chatpanelheight_inc(const int inc ) {
     chatlines = conf.getchatpanelheight()+inc;
-    conf.setchatpanelheight(chatlines);
-    if(!(( chatlines > 0 ) && (chatlines < (sizeWArea.y2-sizeWArea.y1)*0.90) ) ){
+    if(( chatlines < 0 ) || (chatlines > (sizeWArea.y2-sizeWArea.y1)*0.90) ){
         chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.70);
-        conf.setchatpanelheight(chatlines);}
-
-    icqface::renderchathistory();
-    icqface::restoreworkarea();
+    }
+    conf.setchatpanelheight(chatlines);
 }
 

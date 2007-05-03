@@ -280,7 +280,7 @@ class icqface {
 	void fullscreenize(const imevent *ev);
 
 	bool edit(string &txt, const string &header);
-	void chat(const imcontact &ic);
+	bool chat(const imcontact &ic);
 
 	void transferupdate(const string &fname, const imfile &fr,
 	    transferstatus st, int btotal, int bdone);

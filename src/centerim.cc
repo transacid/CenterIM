@@ -381,7 +381,7 @@ void centerim::mainloop() {
 	    case ACT_MSG:
 	    case 0:
 		if(conf.getchatmode(c->getdesc().pname)) {
-		    face.chat(c->getdesc());
+		    while(face.chat(c->getdesc()) == true);
 
 		} else {
 		    if(c->hasevents()) {
