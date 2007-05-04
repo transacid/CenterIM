@@ -2708,7 +2708,7 @@ bool icqface::chat(const imcontact &ic) {
     bool return_status = false ; 
 
     icqcontact *c = clist.get(ic);
-    if(!c) return false; // returns whatever exits
+    if(!c) return false;
 
     saveworkarea();
     clearworkarea();
@@ -2721,20 +2721,20 @@ bool icqface::chat(const imcontact &ic) {
     muins.clear();
     muins.push_back(passinfo);
 
-    // resizing doesn't change the effect, so we go from the bottom, not the top
+    // resizing doesn't change the effect, so we work from the bottom, not the top
     chatlines_diff = sizeWArea.y2 - sizeWArea.y1 ;
     chatlines = conf.getchatpanelheight();
-    if( chatlines == 0 ) { // allow this to be disabled by setting it equal to zero
+    if( chatlines == 0 ) { // allow disabling reszing by setting it to zero
         chatlines = (int) (chatlines_diff*0.75);
     } else {
         chatlines = chatlines_diff - chatlines; // changes where the guide line is
 
-        if( chatlines < (chatlines_diff*.1) ) { // bottom
-            chatlines = (int) (chatlines_diff*.1);
+        if( chatlines < MinPanelHeight ) { // bottom
+            chatlines = (int) (MinPanelHeight);
             conf.setchatpanelheight(chatlines_diff - chatlines);}
 
-        if( chatlines > (chatlines_diff*.9)) { // top
-            chatlines = (int) (chatlines_diff*.9) ;
+        if( chatlines > (chatlines_diff - MinPanelHeight)) { // top
+            chatlines = (int) (chatlines_diff - MinPanelHeight) ;
             conf.setchatpanelheight(chatlines_diff - chatlines);}
     }
 
