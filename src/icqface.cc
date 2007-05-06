@@ -2704,8 +2704,10 @@ bool icqface::chat(const imcontact &ic) {
     texteditor editor;
     imevent *sendev;
     vector<imcontact>::iterator i;
+
     int chatlines_diff = 0; // could get rid of?
     bool return_status = false ; 
+    face.stay_in_chat = false ;
 
     icqcontact *c = clist.get(ic);
     if(!c) return false;
@@ -2729,14 +2731,14 @@ bool icqface::chat(const imcontact &ic) {
     } else {
         chatlines = chatlines_diff - chatlines; // changes where the guide line is
 
-        if( chatlines < MinPanelHeight ) { // bottom
+        if( chatlines < MinPanelHeight ) // bottom
             chatlines = (int) (MinPanelHeight);
-            conf.setchatpanelheight(chatlines_diff - chatlines);}
 
-        if( chatlines > (chatlines_diff - MinPanelHeight)) { // top
+        if( chatlines > (chatlines_diff - MinPanelHeight)) // top
             chatlines = (int) (chatlines_diff - MinPanelHeight) ;
-            conf.setchatpanelheight(chatlines_diff - chatlines);}
     }
+
+    conf.setchatpanelheight(chatlines_diff - chatlines);
 
 //    workarealine(sizeWArea.y1+chatlines+1);
 
@@ -2786,8 +2788,9 @@ bool icqface::chat(const imcontact &ic) {
     inchat = false;
     update();
 
-    if ( ( chatlines_diff - chatlines) != conf.getchatpanelheight()) {
-    	return_status = true;
+    if ( face.stay_in_chat == true ) {
+    	return_status = true;	
+	face.stay_in_chat = false;
     }
 
     return return_status;
@@ -3481,10 +3484,12 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    break;
 	case key_chat_panel_move_up:
 	    face.chatpanelheight_inc(1);
+	    face.stay_in_chat = true;
 	    return -1;
 	    break;
 	case key_chat_panel_move_down:
 	    face.chatpanelheight_inc(-1);
+	    face.stay_in_chat = true;
 	    return -1;
 	    break;
 	case key_quit:
@@ -3695,9 +3700,6 @@ void icqface::logpanelheight_inc(const int inc) {
 
 void icqface::chatpanelheight_inc(const int inc ) {
     chatlines = conf.getchatpanelheight()+inc;
-    if(( chatlines < 0 ) || (chatlines > (sizeWArea.y2-sizeWArea.y1)*0.90) ){
-        chatlines = (int) ((sizeWArea.y2-sizeWArea.y1)*0.70);
-    }
     conf.setchatpanelheight(chatlines);
 }
 

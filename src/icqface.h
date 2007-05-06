@@ -292,6 +292,7 @@ class icqface {
 	void leftpanelwidth_inc(const int inc);
 	void logpanelheight_inc(const int inc);
 	void chatpanelheight_inc(const int inc);
+	bool stay_in_chat ;
 };
 
 extern icqface face;
