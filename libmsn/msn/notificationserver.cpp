@@ -728,6 +728,11 @@ public:
             int groupID = decimalFromString(args[1]);
             Group g(groupID, decodeURL(args[2]));
             info->groups[groupID] = g;
+			info->groupsRemaining--;
+            if (info->groupsRemaining == 0 && info->usersRemaining == 0)
+            {
+                info->progress |= ListSyncInfo::LST_FL | ListSyncInfo::LST_RL | ListSyncInfo::LST_AL | ListSyncInfo::LST_BL;
+            }
         }
         else if (args[0] == "BPR")
         {
