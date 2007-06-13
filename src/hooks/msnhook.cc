@@ -139,6 +139,8 @@ void msnhook::disconnect() {
     fonline = false;
     if(conn.connectionState() != MSN::NotificationServerConnection::NS_DISCONNECTED)
 	conn.disconnect();
+	clist.setoffline(mhook.proto);
+    log(logDisconnected);
 }
 
 void msnhook::exectimers() {

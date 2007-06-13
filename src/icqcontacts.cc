@@ -262,7 +262,7 @@ void icqcontacts::setoffline(protocolname pname) {
 	c = (icqcontact *) at(i);
 	if(c->getdesc().pname == pname)
 	    c->setstatus(offline);
-    }
+	}
 }
 
 icqcontact *icqcontacts::getmobile(const string &anumber) {
