@@ -60,7 +60,6 @@ void imeventmanager::store(const imevent &cev) {
     if(ev.getdirection() == imevent::incoming) {
 	if(!lst.inlist(ev.getcontact(), csignore)) {
 	    logger.putevent(ev);
-	    face.xtermtitle(_("event from %s"), cev.getcontact().totext().c_str());
 
 	    c = clist.get(ev.getcontact());
 
@@ -116,6 +115,7 @@ void imeventmanager::store(const imevent &cev) {
 	    }
 	    
 	    if (c) {
+	        face.xtermtitle(_("event from %s"), cev.getcontact().totext().c_str());
 	        eventwrite(ev, history);
 		
 	        c->sethasevents(true);
