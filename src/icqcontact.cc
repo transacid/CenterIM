@@ -640,7 +640,9 @@ void icqcontact::playsound(imevent::imeventtype event) const {
 		    fflush(stdout);
 		    usleep(90000-i*5000);
 		}
-	    }
+	    } else if(sf.substr(1) == "spk6") {
+			printf("\a");
+		}
 	} else {
 	    static int pid = 0;
 
