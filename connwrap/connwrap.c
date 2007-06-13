@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-
 #define PROXY_TIMEOUT   10
     // HTTP proxy timeout in seconds (for the CONNECT method)
 
@@ -22,8 +21,7 @@
 
 #elif HAVE_GNUTLS
 
-#include <gnutls/openssl.h>
-#define HAVE_OPENSSL
+#include <gnutls/gnutls.h>
 
 #endif
 
@@ -31,9 +29,16 @@ static int in_http_connect = 0;
 
 #ifdef HAVE_OPENSSL
 
-static SSL_CTX *ctx = 0;
-
+static SSL_CTX *ctx = NULL;
 typedef struct { int fd; SSL *ssl; } sslsock;
+
+#elif HAVE_GNUTLS
+
+typedef struct { int fd; gnutls_session_t session; } sslsock;
+
+#endif
+
+#ifdef HAVE_SSL
 
 static sslsock *socks = 0;
 static int sockcount = 0;
@@ -50,6 +55,10 @@ static sslsock *getsock(int fd) {
 
 static sslsock *addsock(int fd) {
     sslsock *p;
+#ifdef HAVE_GNUTLS
+    gnutls_certificate_credentials_t xcred;
+#endif
+
     if (socks)
     socks = (sslsock *) realloc(socks, sizeof(sslsock)*++sockcount);
     else
@@ -57,22 +66,30 @@ static sslsock *addsock(int fd) {
 
     p = &socks[sockcount-1];
 
+#ifdef HAVE_OPENSSL
     if(!ctx) {
 	SSL_library_init();
-	SSL_load_error_strings();
+
+    SSL_load_error_strings();
 
 #ifdef HAVE_SSLEAY
-	SSLeay_add_all_algorithms();
+    SSLeay_add_all_algorithms();
 #else
-	OpenSSL_add_all_algorithms();
+    OpenSSL_add_all_algorithms();
 #endif
-
-	ctx = SSL_CTX_new(SSLv23_method());
+    ctx = SSL_CTX_new(SSLv23_client_method());
     }
-
     p->ssl = SSL_new(ctx);
     SSL_set_fd(p->ssl, p->fd = fd);
-
+#elif HAVE_GNUTLS
+    gnutls_global_init ();
+    gnutls_certificate_allocate_credentials (&xcred);
+    gnutls_init (&(p->session), GNUTLS_CLIENT);
+    gnutls_set_default_priority (p->session);
+    gnutls_credentials_set (p->session, GNUTLS_CRD_CERTIFICATE, xcred);
+    p->fd = fd;
+    gnutls_transport_set_ptr(p->session,(gnutls_transport_ptr_t)fd);
+#endif
     return p;
 }
 
@@ -88,9 +105,17 @@ static void delsock(int fd) {
     for(i = 0; i < sockcount; i++) {
 	if(socks[i].fd != fd) {
 	    nsocks[nsockcount++] = socks[i];
-	} else {
+	} 
+#ifdef HAVE_OPENSSL
+	else {
 	    SSL_free(socks[i].ssl);
 	}
+#elif HAVE_GNUTLS
+	else {
+            gnutls_bye( socks[i].session, GNUTLS_SHUT_WR);
+            gnutls_deinit(socks[i].session);
+	}
+#endif
     }
 
     free(socks);
@@ -247,14 +272,22 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
 	if(rc) return rc;
     }
 
-    if(proxyhost && !in_http_connect) rc = cw_http_connect(sockfd, serv_addr, addrlen);
-	else rc = connect(sockfd, serv_addr, addrlen);
+    if(proxyhost && !in_http_connect) {
+        rc = cw_http_connect(sockfd, serv_addr, addrlen);
+     }
+     else{
+     	rc = connect(sockfd, serv_addr, addrlen);
+	if(!rc)
+	  printf("Can't open the connection socket\n");
+     }
 
 #ifdef HAVE_OPENSSL
     if(ssl && !rc) {
 	sslsock *p = addsock(sockfd);
-	if(SSL_connect(p->ssl) != 1)
+	if(SSL_connect(p->ssl) != 1){
+	    printf("Can't connect to SSL\n");
 	    return -1;
+	}
     }
 #endif
 
@@ -263,6 +296,7 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
 
 int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ssl, int *state) {
     int rc = 0;
+    int ret;
     struct sockaddr_in ba;
 
     if(bindaddr)
@@ -285,14 +319,17 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	if(rc) return rc;
     }
 
-#ifdef HAVE_OPENSSL
+#ifdef HAVE_SSL
     if(ssl) {
-	if ( !(*state & CW_CONNECT_WANT_SOMETHING))
+	if ( !(*state & CW_CONNECT_WANT_SOMETHING)){
 	    rc = cw_connect(sockfd, serv_addr, addrlen, 0);
+	}
 	else{ /* check if the socket is connected correctly */
 	    int optlen = sizeof(int), optval;
-	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)
-	    return -1;
+	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval){
+            	fprintf(stderr,"getsockopt error!!");
+	    	return -1;
+	    }
 	}
 
 	if(!rc) {
@@ -302,6 +339,21 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	    else
 		p = addsock(sockfd);
 	    
+#ifdef HAVE_GNUTLS
+	    do{
+	       ret = gnutls_handshake(p->session);
+	    }while ((ret == GNUTLS_E_AGAIN) || (ret == GNUTLS_E_INTERRUPTED));
+	    if (ret < 0) {
+	      gnutls_deinit(p->session);
+	      gnutls_perror (ret);
+	      return -1;
+	    }
+	    else{
+  	      *state = 1;
+	      return 0;
+	    }
+        }
+#elif HAVE_OPENSSL
 	    rc = SSL_connect(p->ssl);
 	    switch(rc){
 	    case 1:
@@ -322,22 +374,26 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 		}
 	    }
 	}
-	else{ /* catch EINPROGRESS error from the connect call */
+#endif
+	else{ // catch EINPROGRESS error from the connect call 
 	    if (errno == EINPROGRESS){
 		*state = CW_CONNECT_STARTED | CW_CONNECT_WANT_WRITE;
 		return 0;
 	    }
 	}
-
 	return rc;
     }
 #endif
-    if ( !(*state & CW_CONNECT_WANT_SOMETHING))
+
+    if ( !(*state & CW_CONNECT_WANT_SOMETHING)){
 	rc = connect(sockfd, serv_addr, addrlen);
+    }
     else{ /* check if the socket is connected correctly */
 	int optlen = sizeof(int), optval;
-	if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)
+	if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)	{
+            fprintf(stderr,"getsockopt error!!");
 	    return -1;
+        }
 	*state = 0;
 	return 0;
     }
@@ -370,29 +426,48 @@ int cw_accept(int s, struct sockaddr *addr, int *addrlen, int ssl) {
 }
 
 int cw_write(int fd, const void *buf, int count, int ssl) {
-#ifdef HAVE_OPENSSL
+#ifdef HAVE_SSL
     sslsock *p;
+    int ret;
 
     if(ssl)
-    if(p = getsock(fd))
+#endif
+#ifdef HAVE_GNUTLS
+     if(p = getsock(fd)){
+          if(ret = gnutls_record_send( p->session, buf, count) < 0)
+	    fprintf(stderr,"Can't write to server");
+           return ret;
+     }
+#elif HAVE_OPENSSL
+     if(p = getsock(fd))
 	return SSL_write(p->ssl, buf, count);
 #endif
     return write(fd, buf, count);
 }
 
 int cw_read(int fd, void *buf, int count, int ssl) {
-#ifdef HAVE_OPENSSL
+#ifdef HAVE_SSL
     sslsock *p;
+    int ret;
 
     if(ssl)
-    if(p = getsock(fd))
+#endif
+#ifdef HAVE_GNUTLS
+     if(p = getsock(fd)){
+       do {
+	           ret = gnutls_record_recv(p->session, buf, count);
+       } while ( ret < 0 && (ret == GNUTLS_E_INTERRUPTED || ret == GNUTLS_E_AGAIN) );
+       return ret;
+       }
+#elif HAVE_OPENSSL
+     if(p = getsock(fd))
 	return SSL_read(p->ssl, buf, count);
 #endif
     return read(fd, buf, count);
 }
 
 int cw_close(int fd) {
-#ifdef HAVE_OPENSSL
+#ifdef HAVE_SSL
     delsock(fd);
 #endif
     return close(fd);

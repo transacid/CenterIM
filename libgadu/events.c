@@ -38,9 +38,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 #  include <openssl/err.h>
 #  include <openssl/x509.h>
+#elif HAVE_GNUTLS
+#  include <gnutls/gnutls.h>
 #endif
 
 #include "compat.h"
@@ -902,8 +904,12 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 			else
 				host = "";
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 			if (sess->ssl)
+				appmsg = "appmsg3.asp";
+			else
+#elif HAVE_GNUTLS
+			if (sess->session)
 				appmsg = "appmsg3.asp";
 			else
 #endif
@@ -1123,7 +1129,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 					errno = ETIMEDOUT;
 #endif
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 				/* je¶li logujemy siê po TLS, nie próbujemy
 				 * siê ³±czyæ ju¿ z niczym innym w przypadku
 				 * b³êdu. nie do¶æ, ¿e nie ma sensu, to i
@@ -1131,6 +1137,11 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 				 * SSL i SSL_CTX. */
 
 				if (sess->ssl) {
+					gg_debug(GG_DEBUG_MISC, "// gg_watch_fd() connection failed (errno=%d, %s)\n", res, strerror(res));
+					goto fail_connecting;
+				}
+#elif HAVE_GNUTLS
+				if (sess->session) {
 					gg_debug(GG_DEBUG_MISC, "// gg_watch_fd() connection failed (errno=%d, %s)\n", res, strerror(res));
 					goto fail_connecting;
 				}
@@ -1184,9 +1195,19 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 				}
 			}
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 			if (sess->ssl) {
 				SSL_set_fd(sess->ssl, sess->fd);
+
+				sess->state = GG_STATE_TLS_NEGOTIATION;
+				sess->check = GG_CHECK_WRITE;
+				sess->timeout = GG_DEFAULT_TIMEOUT;
+
+				break;
+			}
+#elif HAVE_GNUTLS
+			if (sess->session) {
+			        gnutls_transport_set_ptr(sess->session,(gnutls_transport_ptr_t)sess->fd);
 
 				sess->state = GG_STATE_TLS_NEGOTIATION;
 				sess->check = GG_CHECK_WRITE;
@@ -1203,7 +1224,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 			break;
 		}
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 		case GG_STATE_TLS_NEGOTIATION:
 		{
 			int res;
@@ -1271,6 +1292,30 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 
 				X509_NAME_oneline(X509_get_issuer_name(peer), buf, sizeof(buf));
 				gg_debug(GG_DEBUG_MISC, "//   cert issuer: %s\n", buf);
+			}
+
+			sess->state = GG_STATE_READING_KEY;
+			sess->check = GG_CHECK_READ;
+			sess->timeout = GG_DEFAULT_TIMEOUT;
+
+			break;
+		}
+#elif HAVE_GNUTLS
+		case GG_STATE_TLS_NEGOTIATION:
+		{
+			int res;
+			do{
+			    res = gnutls_handshake(sess->session);
+                        }while ((res == GNUTLS_E_AGAIN) || (res == GNUTLS_E_INTERRUPTED));
+	               if (res < 0) {
+	                     gnutls_deinit(sess->session);
+  	                     gnutls_perror (res);
+                	     e->type = GG_EVENT_CONN_FAILED;
+			     e->event.failure = GG_FAILURE_TLS;
+			     sess->state = GG_STATE_IDLE;
+			     close(sess->fd);
+			     sess->fd = -1;
+			     break;
 			}
 
 			sess->state = GG_STATE_READING_KEY;

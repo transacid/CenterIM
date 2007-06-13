@@ -41,10 +41,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 #define OPENSSL_NO_KRB5 1
 #  include <openssl/err.h>
 #  include <openssl/rand.h>
+#elif HAVE_GNUTLS
+#include <gnutls/gnutls.h>
 #endif
 
 #include "compat.h"
@@ -343,7 +345,7 @@ int gg_read(struct gg_session *sess, char *buf, int length)
 {
 	int res;
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 	if (sess->ssl) {
 		int err;
 
@@ -357,6 +359,12 @@ int gg_read(struct gg_session *sess, char *buf, int length)
 
 			return -1;
 		}
+	} else
+#elif HAVE_GNUTLS
+	if (sess->session) {
+            do {
+               res = gnutls_record_recv(sess->session, buf, length);
+            } while ( res < 0 && (res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) );
 	} else
 #endif
 		res = read(sess->fd, buf, length);
@@ -380,7 +388,7 @@ int gg_write(struct gg_session *sess, const char *buf, int length)
 {
 	int res = 0;
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 	if (sess->ssl) {
 		int err;
 
@@ -394,6 +402,11 @@ int gg_write(struct gg_session *sess, const char *buf, int length)
 
 			return -1;
 		}
+	} else
+#elif HAVE_GNUTLS
+	if (sess->session) {
+           if(res = gnutls_record_send( sess->session, buf, length) < 0)
+	      fprintf(stderr,"Can't write to server");
 	} else
 #endif
 		res = write(sess->fd, buf, length);
@@ -730,7 +743,7 @@ struct gg_session *gg_login(const struct gg_login_params *p)
 	sess->pid = -1;
 
 	if (p->tls == 1) {
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 		char buf[1024];
 
 		OpenSSL_add_ssl_algorithms();
@@ -766,8 +779,13 @@ struct gg_session *gg_login(const struct gg_login_params *p)
 			gg_debug(GG_DEBUG_MISC, "// gg_login() SSL_new() failed: %s\n", buf);
 			goto fail;
 		}
-#else
-		gg_debug(GG_DEBUG_MISC, "// gg_login() client requested TLS but no support compiled in\n");
+#elif HAVE_GNUTLS
+		gnutls_global_init ();
+	    	gnutls_certificate_allocate_credentials (&sess->xcred);
+	        gnutls_init (&(sess->session), GNUTLS_CLIENT);
+	        gnutls_set_default_priority (sess->session);
+	        gnutls_credentials_set (sess->session, GNUTLS_CRD_CERTIFICATE, sess->xcred);
+
 #endif
 	}
 	
@@ -892,12 +910,17 @@ void gg_free_session(struct gg_session *sess)
 	if (sess->header_buf)
 		free(sess->header_buf);
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 	if (sess->ssl)
 		SSL_free(sess->ssl);
 
 	if (sess->ssl_ctx)
 		SSL_CTX_free(sess->ssl_ctx);
+#elif HAVE_GNUTLS
+	if (sess->session){
+          gnutls_bye(sess->session, GNUTLS_SHUT_WR);
+	  gnutls_deinit(sess->session);
+	}
 #endif
 
 #ifdef __GG_LIBGADU_HAVE_PTHREAD
@@ -1042,9 +1065,14 @@ void gg_logoff(struct gg_session *sess)
 	if (GG_S_NA(sess->status & ~GG_STATUS_FRIENDS_MASK))
 		gg_change_status(sess, GG_STATUS_NOT_AVAIL);
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 	if (sess->ssl)
 		SSL_shutdown(sess->ssl);
+#elif HAVE_GNUTLS
+	if (sess->session){
+          gnutls_bye(sess->session, GNUTLS_SHUT_WR);
+	  gnutls_deinit(sess->session);
+	}
 #endif
 
 #ifdef __GG_LIBGADU_HAVE_PTHREAD

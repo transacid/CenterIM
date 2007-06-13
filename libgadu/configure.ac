@@ -13,6 +13,21 @@ if test "$build_gg" = "yes"; then
         AC_DEFINE(HAVE_SSL)
         if test -n "$with_openssl" -a x"$with_openssl" != xno; then
             AC_DEFINE(HAVE_OPENSSL)
+	else
+	    AC_MSG_RESULT([not found or disabled])
+	    with_ssl="no"
+
+	    AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
+	    AC_CHECK_LIB(lzo, lzo1x_1_compress, [], [
+	                      echo "lzo compression is required.";
+	                      exit -1
+	                      ] )
+	                 CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
+	                 LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
+	                 AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
+	    with_ssl="yes"
+	    ac_configure_args="$ac_configure_args --with-ssl"
+	    ])
         fi
     fi
 

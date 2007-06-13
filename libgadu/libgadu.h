@@ -37,13 +37,16 @@ extern "C" {
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 
 #ifndef OPENSSL_NO_KRB5
 #define OPENSSL_NO_KRB5 1
 #endif
 
 #include <openssl/ssl.h>
+
+#elif HAVE_GNUTLS
+#include <gnutls/openssl.h>
 #endif
 
 /*
@@ -124,12 +127,12 @@ struct gg_session {
 	char *header_buf;       /* bufor na pocz±tek nag³ówka */
 	unsigned int header_done;/* ile ju¿ mamy */
 
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
+#ifdef HAVE_OPENSSL
 	SSL *ssl;               /* sesja TLS */
 	SSL_CTX *ssl_ctx;       /* kontekst sesji? */
-#else
-	void *ssl;              /* zachowujemy ABI */
-	void *ssl_ctx;
+#elif HAVE_GNUTLS
+        gnutls_session_t session; /* TLS session */
+	gnutls_certificate_credentials_t xcred; /*Credentials*/
 #endif
 
 	int image_size;         /* maksymalny rozmiar obrazków w KiB */
