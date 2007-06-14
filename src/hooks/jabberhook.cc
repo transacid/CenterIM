@@ -1552,6 +1552,11 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		p = xmlnode_get_tag_data(packet->x, "error"); if(p) desc = p;
 
 		switch(code) {
+		    case 501: /* Not Implemented */
+		        if(jhook.regmode) {
+		            jhook.regerr = desc;
+		        }
+		        break;
 		    case 401: /* Unauthorized */
 		    case 302: /* Redirect */
 		    case 400: /* Bad request */
@@ -1564,7 +1569,6 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    case 408: /* Request Timeout */
 		    case 409: /* Conflict */
 		    case 500: /* Internal Server Error */
-		    case 501: /* Not Implemented */
 		    case 502: /* Remote Server Error */
 		    case 503: /* Service Unavailable */
 		    case 504: /* Remote Server Timeout */
@@ -1575,7 +1579,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 				_("+ [jab] error %d: %s"),
 				code, desc.c_str());
 
-			    if(!jhook.flogged && code != 501) {
+			    if(!jhook.flogged) {
 				close(jhook.jc->fd);
 				jhook.jc->fd = -1;
 			    }
