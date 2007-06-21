@@ -85,6 +85,7 @@ static int imstatus2gg(imstatus st, const string &desc = "") {
 	case dontdisturb:
 	case occupied:
 	case notavail:
+	case outforlunch:
 	case away:
 	    gst = desc.empty() ?
 		GG_STATUS_BUSY : GG_STATUS_BUSY_DESCR;

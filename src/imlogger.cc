@@ -37,6 +37,7 @@ static const char* imstatus2name(imstatus st) {
 	case dontdisturb: return _("DND");
 	case occupied: return _("Occupied");
 	case notavail: return _("N/A");
+	case outforlunch: return _("Out for Lunch");
 	case away: return _("Away");
     }
 

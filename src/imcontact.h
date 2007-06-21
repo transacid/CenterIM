@@ -29,13 +29,14 @@ enum imstatus {
     occupied,
     notavail,
     away,
+    outforlunch,
     imstatus_size
 };
 
 ENUM_PLUSPLUS(imstatus)
 
 static char imstatus2char[imstatus_size] = {
-    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a'
+    '_', 'o', 'i', 'f', 'd', 'c', 'n', 'a', 'l'
 };
 
 class icqcontact;

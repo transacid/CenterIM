@@ -485,6 +485,7 @@ void jabberhook::setautostatus(imstatus st) {
 		case away:
 		case dontdisturb:
 		case occupied:
+		case outforlunch:
 		case notavail:
 		    msg = conf.getawaymsg(proto);
 	    }
@@ -618,6 +619,7 @@ void jabberhook::setjabberstatus(imstatus st, string msg) {
 	    xmlnode_insert_cdata(xmlnode_insert_tag(x, "show"), "chat", (unsigned) -1);
 	    break;
 
+	case outforlunch:
 	case notavail:
 	    xmlnode_insert_cdata(xmlnode_insert_tag(x, "show"), "xa", (unsigned) -1);
 	    break;

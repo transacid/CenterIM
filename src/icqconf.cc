@@ -1278,6 +1278,7 @@ int icqconf::getstatuscolor(imstatus status) const {
         case dontdisturb : return getcolor(cp_clist_dnd);
         case occupied : return getcolor(cp_clist_occupied);
         case notavail : return getcolor(cp_clist_na);
+        case outforlunch : return getcolor(cp_clist_na);
         case away : return getcolor(cp_clist_away);
 	default : return getcolor(cp_main_text);
     }

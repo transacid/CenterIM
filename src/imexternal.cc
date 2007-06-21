@@ -417,6 +417,7 @@ bool imexternal::action::load(ifstream &f) {
 		    if(param == "away") status.insert(away); else
 		    if(param == "dnd") status.insert(dontdisturb); else
 		    if(param == "na") status.insert(notavail); else
+		    if(param == "ofl") status.insert(outforlunch); else
 		    if(param == "occupied") status.insert(occupied); else
 		    if(param == "ffc") status.insert(freeforchat); else
 		    if(param == "invisible") status.insert(invisible); else
@@ -425,6 +426,7 @@ bool imexternal::action::load(ifstream &f) {
 			status.insert(away);
 			status.insert(dontdisturb);
 			status.insert(notavail);
+			status.insert(outforlunch);
 			status.insert(occupied);
 			status.insert(freeforchat);
 			status.insert(invisible);

@@ -438,6 +438,7 @@ void centerim::changestatus() {
 	    switch(st) {
 		case away:
 		case notavail:
+		case outforlunch:
 		case occupied:
 		case dontdisturb:
 		    if(pnames.size() == 1)

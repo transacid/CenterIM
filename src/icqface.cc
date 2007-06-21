@@ -680,7 +680,7 @@ void icqface::fillcontactlist() {
 	    ADDGROUP(0);
 
 	if(groupchange || (sc != '#')) {
-	    if(strchr("candifo", sc)) sc = 'O';
+	    if(strchr("candilfo", sc)) sc = 'O';
 
 	    if((sc != prevsc) || groupchange) {
 		switch(conf.getgroupmode()) {
@@ -1544,6 +1544,7 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	mst.push_back(away);
 	mst.push_back(dontdisturb);
 	mst.push_back(notavail);
+	mst.push_back(outforlunch);
 	mst.push_back(occupied);
 	mst.push_back(freeforchat);
 	mst.push_back(invisible);
@@ -3531,7 +3532,7 @@ int icqface::findreskeys(dialogbox &db, int k) {
 }
 
 int icqface::statuskeys(verticalmenu &m, int k) {
-    char *status_order = "o_adncfi";    // Shortcuts for status
+    char *status_order = "o_adnlcfi";    // Shortcuts for status
     char *p = strchr(status_order, k);
     if (p)
 	return (1 + p - status_order);

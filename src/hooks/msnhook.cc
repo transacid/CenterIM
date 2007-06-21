@@ -111,7 +111,7 @@ void msnhook::init() {
     convstat[MSN::STATUS_ONTHEPHONE] = occupied;
     convstat[MSN::STATUS_AWAY] = notavail;
     convstat[MSN::STATUS_BERIGHTBACK] = away;
-    convstat[MSN::STATUS_OUTTOLUNCH] = notavail;
+    convstat[MSN::STATUS_OUTTOLUNCH] = outforlunch;
     convstat[MSN::STATUS_IDLE] = away;
 }
 

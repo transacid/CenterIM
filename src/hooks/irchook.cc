@@ -338,6 +338,7 @@ void irchook::setautostatus(imstatus st) {
 		switch(st) {
 		    case away:
 		    case notavail:
+		    case outforlunch:
 		    case occupied:
 			firetalk_set_away(handle, conf.getawaymsg(irc).c_str());
 			break;

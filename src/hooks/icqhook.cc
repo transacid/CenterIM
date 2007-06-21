@@ -54,7 +54,8 @@ static const Status stat2int[imstatus_size] = {
     STATUS_DND,
     STATUS_OCCUPIED,
     STATUS_NA,
-    STATUS_AWAY
+    STATUS_AWAY,
+    STATUS_NA
 };
 
 icqhook::icqhook(): abstracthook(icq) {

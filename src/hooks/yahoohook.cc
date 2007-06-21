@@ -66,6 +66,7 @@ static int stat2int[imstatus_size] = {
     YAHOO_STATUS_NOTATDESK,
     YAHOO_STATUS_NOTATHOME,
     YAHOO_STATUS_IDLE,
+    YAHOO_STATUS_OUTTOLUNCH,
 };
 
 yahoohook::yahoohook() : abstracthook(yahoo), fonline(false), cid(0) {
@@ -423,10 +424,12 @@ imstatus yahoohook::yahoo2imstatus(int status) {
 	case YAHOO_STATUS_NOTATHOME:
 	case YAHOO_STATUS_NOTINOFFICE:
 	case YAHOO_STATUS_ONVACATION:
-	case YAHOO_STATUS_OUTTOLUNCH:
 	case YAHOO_STATUS_STEPPEDOUT:
 	    st = notavail;
 	    break;
+	case YAHOO_STATUS_OUTTOLUNCH:
+		st = outforlunch;
+		break;
 	case YAHOO_STATUS_INVISIBLE:
 	    st = invisible;
 	    break;

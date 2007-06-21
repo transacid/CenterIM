@@ -216,6 +216,7 @@ void aimhook::setautostatus(imstatus st) {
 		    case away:
 		    case notavail:
 		    case occupied:
+		    case outforlunch:
 			firetalk_set_away(handle, rusconv("kw", conf.getawaymsg(aim)).c_str());
 			break;
 

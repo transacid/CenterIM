@@ -110,6 +110,7 @@ string imstatus2str(imstatus st) {
 	mst[occupied] = _("Occupied");
 	mst[notavail] = _("Not available");
 	mst[away] = _("Away");
+	mst[outforlunch] = _("Out for Lunch");
 	mst[imstatus_size] = "";
     }
 
