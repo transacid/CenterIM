@@ -642,6 +642,14 @@ void jabberhook::setjabberstatus(imstatus st, string msg) {
 
     if(msg.empty())
 	msg = imstatus2str(st);
+	int pos = 0;
+	while( (pos = msg.find( '\r' )) != string::npos ) {
+		if( msg[pos+1] == '\n' ) {
+			msg.erase(pos, 1);
+		} else {
+			msg.replace(pos, 1, "\n");
+		}
+	}
 
     xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
 	rusconv("ku", msg).c_str(), (unsigned) -1);
