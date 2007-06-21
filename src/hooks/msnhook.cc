@@ -109,7 +109,7 @@ void msnhook::init() {
     convstat[MSN::STATUS_INVISIBLE] = invisible;
     convstat[MSN::STATUS_BUSY] = dontdisturb;
     convstat[MSN::STATUS_ONTHEPHONE] = occupied;
-    convstat[MSN::STATUS_AWAY] = away;
+    convstat[MSN::STATUS_AWAY] = notavail;
     convstat[MSN::STATUS_BERIGHTBACK] = away;
     convstat[MSN::STATUS_OUTTOLUNCH] = notavail;
     convstat[MSN::STATUS_IDLE] = away;
