@@ -19,5 +19,6 @@ WANTED_PROTOCOLS += libjabber
 endif
 SUBDIRS = connwrap kkstrtext kksystr kkconsui libicq2000 $(WANTED_PROTOCOLS) intl po misc share src
 EXTRA_DIST = config.rpath POLICY centerim.1 centerim.motor FAQ NEWS TODO README THANKS AUTHORS INSTALL ABOUT-NLS ChangeLog COPYING centerim.spec
+man_MANS=centerim.1
 
 ACLOCAL_AMFLAGS = -I m4
