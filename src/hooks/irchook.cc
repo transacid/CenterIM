@@ -1396,6 +1396,7 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
 
     if(conf.getourid(irc).nickname != who) {
 	string text;
+	string text2;
 	char buf[512];
 
 	sprintf(buf, _("%s has left"), who); text = buf;
@@ -1403,7 +1404,8 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
 	if(reason)
 	if(strlen(reason)) {
 	    if(strlen(reason) > 450) reason[450] = 0;
-	    sprintf(buf, _("reason: %s"), reason);
+    	    text2 = irhook.rushtmlconv( "wk", reason );
+	    sprintf(buf, _("reason: %s"), text2.c_str() );
 	    text += (string) "; " + buf + ".";
 	}
 
@@ -1453,7 +1455,8 @@ void irchook::chatgottopic(void *conn, void *cli, ...) {
 
     string text;
     char buf[1024];
-    sprintf(buf, _("Channel topic now is: %s"), topic);
+    text = irhook.rushtmlconv( "wk", topic );
+    sprintf(buf, _("Channel topic now is: %s"), text.c_str());
     text = buf;
 
     if(author)
