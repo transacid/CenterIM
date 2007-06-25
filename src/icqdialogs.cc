@@ -267,6 +267,9 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 		case fschannel:
 		    services = gethook(s.pname).getservices(servicetype::groupchat);
 
+		    if((iservice = find(services.begin(), services.end(), s.service)) == services.end())
+			s.service = "";
+
 		    if(s.service.empty())
 		    if((iservice = services.begin()) != services.end())
 			s.service = *iservice;
