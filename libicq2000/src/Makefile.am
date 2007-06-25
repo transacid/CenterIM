@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/libicq2000
+INCLUDES = -I$(top_srcdir)/libicq2000 -I$(top_srcdir)/
 AM_CPPFLAGS = 
 noinst_LIBRARIES = libsrc.a
 libsrc_a_SOURCES =  ContactTree.cpp ContactList.cpp SNAC-MSG.cpp Translator.cpp SNAC-UIN.cpp MessageHandler.cpp SocketClient.cpp UserInfoBlock.cpp TLV.cpp SNAC.cpp version.cpp SNAC-BOS.cpp Xml.cpp SNAC-BUD.cpp exceptions.cpp Client.cpp Contact.cpp socket.cpp ICQ.cpp SNAC-SBL.cpp ICBMCookie.cpp time_extra.cpp DirectClient.cpp SNAC-base.cpp SNAC-LOC.cpp FileTransferClient.cpp buffer.cpp SMTPClient.cpp SNAC-SRV.cpp events.cpp SNAC-GEN.cpp Capabilities.cpp

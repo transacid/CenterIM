@@ -49,14 +49,20 @@ static void jidsplit(const string &jid, string &user, string &host, string &rest
 	host = user.substr(pos+1);
 	user.erase(pos);
     }
+    else {
+        host = user;
+        user = (string)"";
+    }
 }
 
 static string jidtodisp(const string &jid) {
     string user, host, rest;
     jidsplit(jid, user, host, rest);
 
-    if(!host.empty())
+    if(!user.empty())
 	user += (string) "@" + host;
+    else
+	user = host;
 
     return user;
 }
@@ -75,7 +81,10 @@ string jabberhook::jidnormalize(const string &jid) const {
     if(host.empty())
 	host = conf.getourid(proto).server;
 
-    user += (string) "@" + host;
+    if (user.empty())
+	user = host;
+    else
+	user += (string) "@" + host;
     if(!rest.empty()) user += (string) "/" + rest;
     return user;
 }
@@ -380,7 +389,10 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 
 	    string u, h, r;
 	    jidsplit(icc.nickname, u, h, r);
-	    c->setdispnick(u);
+	    if (!u.empty())
+	    	c->setdispnick(u);
+	    else
+		c->setdispnick(icc.nickname);
 	}
 
 	requestinfo(c);
@@ -963,7 +975,10 @@ void jabberhook::gotroster(xmlnode x) {
 		if(name) c->setdispnick(rusconv("uk", name)); else {
 		    string u, h, r;
 		    jidsplit(alias, u, h, r);
-		    c->setdispnick(u);
+		    if (!u.empty())
+			c->setdispnick(u);
+		    else
+			c->setdispnick(jidtodisp(alias));
 		}
 	    }
 
@@ -1142,7 +1157,7 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
     string u, h, r, body(abody);
     jidsplit(from, u, h, r);
 
-    imcontact ic(jidtodisp(u + "@" + h), proto), chic;
+    imcontact ic(jidtodisp(from), proto), chic;
 
     if(clist.get(chic = imcontact((string) "#" + ic.nickname, proto))) {
 	ic = chic;
@@ -1622,7 +1637,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		ust = offline;
 
 	    jidsplit(from, u, h, s);
-	    id = u + "@" + h;
+	    id = jidtodisp(from);
 
 	    if(clist.get(imcontact((string) "#" + id, jhook.proto))) {
 		if(ust == offline) {

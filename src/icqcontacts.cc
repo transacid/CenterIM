@@ -128,7 +128,8 @@ void icqcontacts::load() {
 			if(get(imcontact(dname.substr(1), pname)))
 			    continue;
 
-			if(dname.substr(1).find("@") == -1) {
+			// Doesn't make sense, transport contacts (and JIDs generally) don't need to contain @
+			/*if(dname.substr(1).find("@") == -1) {
 			    string oldname = conf.getdirname() + dname;
 			    string ndname = oldname + "@jabber.com";
 
@@ -137,7 +138,7 @@ void icqcontacts::load() {
 
 			    rename(oldname.c_str(), ndname.c_str());
 			    dname = justfname(ndname);
-			}
+			}*/
 
 		    default:
 			c = new icqcontact(imcontact(dname.substr(1), pname));
@@ -262,7 +263,7 @@ void icqcontacts::setoffline(protocolname pname) {
 	c = (icqcontact *) at(i);
 	if(c->getdesc().pname == pname)
 	    c->setstatus(offline);
-	}
+    }
 }
 
 icqcontact *icqcontacts::getmobile(const string &anumber) {
