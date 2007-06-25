@@ -752,7 +752,7 @@ void centerim::checkconfigs() {
     struct stat st;
     const char *p;
 
-    for(int i = 0; p == configs[i]; i++) {
+    for(int i = 0; p = configs[i]; i++) {
 	if(stat(conf.getconfigfname(p).c_str(), &st))
 	    st.st_mtime = 0;
 
