@@ -220,7 +220,8 @@ typedef struct terror_struct
 #define NS_ADMIN     "jabber:iq:admin"
 #define NS_FILTER    "jabber:iq:filter"
 #define NS_AUTH_0K   "jabber:iq:auth:0k"
-
+#define NS_DISCOINFO "http://jabber.org/protocol/disco#info"
+#define NS_DISCOITEMS "http://jabber.org/protocol/disco#items"
 
 /* --------------------------------------------------------- */
 /*                                                           */

@@ -733,7 +733,8 @@ vector<string> jabberhook::getservices(servicetype::enumeration st) const {
     }
 
     while(ia != agents.end()) {
-	if(ia->params[pt].enabled) r.push_back(ia->name);
+	if(ia->params[pt].enabled)
+	    r.push_back(ia->name);
 	++ia;
     }
 
@@ -1619,6 +1620,21 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    break;
 
 	case JPACKET_PRESENCE:
+	    if (type == "error")
+	    {
+		if(!jhook.regmode) {
+		    string desc;
+		    int code;
+		    x = xmlnode_get_tag(packet->x, "error");
+		    p = xmlnode_get_attrib(x, "code"); if(p) code = atoi(p);
+		    p = xmlnode_get_tag_data(packet->x, "error"); if(p) desc = p;
+		    face.log(desc.empty() ?
+			_("+ [jab] error %d") :
+			_("+ [jab] error %d: %s"),
+			code, desc.c_str());
+		}
+		break;
+	    }
 	    x = xmlnode_get_tag(packet->x, "show");
 	    ust = available;
 

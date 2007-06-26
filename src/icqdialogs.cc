@@ -271,8 +271,10 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 			s.service = "";
 
 		    if(s.service.empty())
-		    if((iservice = services.begin()) != services.end())
+		    if((iservice = services.begin()) != services.end()) {
 			s.service = *iservice;
+			s.flexparams = gethook(s.pname).getsearchparameters(s.service);
+		    }
 		    break;
 	    }
 
@@ -510,6 +512,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 			    if(++iservice == services.end())
 				iservice = services.begin();
 			    s.service = *iservice;
+			    s.flexparams = gethook(s.pname).getsearchparameters(s.service);
 			}
 			break;
 		    case 32: s.password = inputstr(_("Password: "), s.password, '*'); break;
@@ -525,7 +528,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 		break;
 
 	    case 4:
-		if(s.pname == jabber && s.nick.find("@") == -1) {
+		if ((s.pname == jabber) && ((s.service.empty() && (s.nick.find("@") == -1)) || (s.nick.empty() && s.flexparams.empty()))) {
 		    status(_("Wrong Jabber ID!"));
 		} else {
 		    ret = finished = true;
