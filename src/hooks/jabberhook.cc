@@ -766,12 +766,67 @@ vector<pair<string, string> > jabberhook::getregparameters(const string &agentna
 void jabberhook::gotagentinfo(xmlnode x) {
     xmlnode y;
     string name, data, ns;
-    agent::param_type pt;
+    //agent::param_type pt;
     vector<agent>::iterator ia = jhook.agents.begin();
-    const char *from = xmlnode_get_attrib(x, "from"), *p;
+    const char *from = xmlnode_get_attrib(x, "from"), *p, *q;
 
     if(!from) return;
 
+    while(ia != jhook.agents.end()) {
+	if(ia->jid == from)
+	if(y = xmlnode_get_tag(x, "query")) {
+	    p = xmlnode_get_attrib(y, "xmlns"); if(p) ns = p;
+	    if (ns == NS_DISCOINFO) {
+	    for(y = xmlnode_get_firstchild(y); y; y = xmlnode_get_nextsibling(y)) {
+		p = xmlnode_get_name(y); name = p ? p : "";
+		if (name == "identity") {
+		    if (q = xmlnode_get_attrib(y, "name"))
+			ia->desc = q;
+		    if (q = (xmlnode_get_attrib(y, "category"))) {
+			data = q;
+			if (data == "conference") {
+			    ia->type = agent::atGroupchat;
+			} else if (data == "gateway") {
+			    ia->type = agent::atTransport;
+			}
+		    }
+		} else if (name == "feature") {
+		    if ((q = xmlnode_get_attrib(y, "var")) && (!strcmp(q, NS_SEARCH))) { // can do search, ask for parameters
+			ia->params[agent::ptSearch].enabled = true;
+	    		ia->params[agent::ptSearch].paramnames.clear();
+			xmlnode z = jutil_iqnew(JPACKET__GET, NS_SEARCH);
+			xmlnode_put_attrib(z, "to", from);
+			jab_send(jc, z);
+			xmlnode_free(z);
+		    }
+		}
+	    }
+	    break;
+	    } else if (ns == NS_SEARCH) { // probably agent info with jabber:iq:search
+		for(y = xmlnode_get_firstchild(y); y; y = xmlnode_get_nextsibling(y)) {
+		    p = xmlnode_get_name(y); name = p ? p : "";
+		    p = xmlnode_get_data(y); data = p ? p : "";
+		    if (name == "item") // it's probably not answer with parameters
+			break;
+		    if (name == "instructions") {
+			ia->params[agent::ptSearch].instruction = data;
+		    } else if ((name == "x") && (NSCHECK(y, "jabber:x:data"))) {
+			continue;
+		    } else if (name == "key") {
+		    	ia->params[agent::ptSearch].key = data;
+		    } else {
+			ia->params[agent::ptSearch].paramnames.push_back(make_pair(name, data));
+		    }
+	    	}
+		if ((name != "item") && ia->params[agent::ptSearch].paramnames.empty())
+		    agents.erase(ia);
+		break;
+	    }
+	}
+	++ia;
+    }
+
+/*
     while(ia != jhook.agents.end()) {
 	if(ia->jid == from)
 	if(y = xmlnode_get_tag(x, "query")) {
@@ -800,7 +855,7 @@ void jabberhook::gotagentinfo(xmlnode x) {
 	}
 	++ia;
     }
-
+*/
 }
 
 void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
@@ -939,7 +994,8 @@ void jabberhook::gotsearchresults(xmlnode x) {
 }
 
 void jabberhook::gotloggedin() {
-    xmlnode x;
+    xmlnode x, y;
+    char *cid;
 
     flogged = true;
 
@@ -947,6 +1003,26 @@ void jabberhook::gotloggedin() {
 //  xmlnode_put_attrib(x, "id", "Agent List");
 //  jab_send(jc, x);
 //  xmlnode_free(x);
+
+    char *server = strdup(jc->user->server);
+
+    jhook.agents.push_back(agent(server, server, "", agent::atUnknown));
+
+    x = jutil_iqnew(JPACKET__GET, NS_DISCOINFO);
+    cid = jab_getid(jc);
+    xmlnode_put_attrib(x, "id", cid);
+    xmlnode_put_attrib(x, "to", server);
+    jab_send(jc, x);
+    xmlnode_free(x);
+
+    server = strdup(jc->user->server);
+    x = jutil_iqnew(JPACKET__GET, NS_DISCOITEMS);
+    cid = jab_getid(jc);
+    xmlnode_put_attrib(x, "id", cid);
+    xmlnode_put_attrib(x, "to", server);
+    jab_send(jc, x);
+    xmlnode_free(x);
+
 
     x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
     xmlnode_put_attrib(x, "id", "Roster");
@@ -1562,8 +1638,22 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			    xmlnode_put_attrib(x, "id", "Agent info");
 			    jab_send(conn, x);
 			    xmlnode_free(x);
+			} else if (ns == NS_SEARCH) {
+			    jhook.gotagentinfo(packet->x);
 			}
-
+		    } else if(ns == NS_DISCOITEMS) {
+			for(y = xmlnode_get_tag(x, "item"); y; y = xmlnode_get_nextsibling(y)) {
+			    if (p = xmlnode_get_attrib(y, "jid")) {
+				jhook.agents.push_back(agent(p, p, _(""), agent::atUnknown));
+				x = jutil_iqnew(JPACKET__GET, NS_DISCOINFO);
+				xmlnode_put_attrib(x, "to", p);
+				jab_send(conn, x);
+				xmlnode_free(x);
+			    }
+			}
+		    }
+		    else if(ns == NS_DISCOINFO) {
+			jhook.gotagentinfo(packet->x);
 		    }
 		}
 
