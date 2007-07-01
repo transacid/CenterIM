@@ -371,7 +371,7 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
 	    if(ig != groups.end()) {
 		z = xmlnode_insert_tag(z, "group");
-		xmlnode_insert_cdata(z, ig->getname().c_str(), (unsigned) -1);
+		xmlnode_insert_cdata(z, rusconv("ku", ig->getname()).c_str(), (unsigned) -1);
 		roster[cjid] = ig->getname();
 	    }
 	}
@@ -1034,6 +1034,7 @@ void jabberhook::gotroster(xmlnode x) {
     xmlnode y, z;
     imcontact ic;
     icqcontact *c;
+    string grp;
 
     for(y = xmlnode_get_tag(x, "item"); y; y = xmlnode_get_nextsibling(y)) {
 	const char *alias = xmlnode_get_attrib(y, "jid");
@@ -1043,10 +1044,11 @@ void jabberhook::gotroster(xmlnode x) {
 
 	z = xmlnode_get_tag(y, "group");
 	if(z) group = xmlnode_get_data(z);
+	grp = group ? rusconv("uk", group) : "";
 
 	if(alias) {
 	    ic = imcontact(jidtodisp(alias), proto);
-	    clist.updateEntry(ic, group ? group : "");
+	    clist.updateEntry(ic, grp);
 
 	    if(c = clist.get(ic)) {
 		if(name) c->setdispnick(rusconv("uk", name)); else {
@@ -1059,7 +1061,7 @@ void jabberhook::gotroster(xmlnode x) {
 		}
 	    }
 
-	    roster[jidnormalize(alias)] = group ? group : "";
+	    roster[jidnormalize(alias)] = grp;
 	}
     }
 
@@ -1273,7 +1275,7 @@ void jabberhook::updatecontact(icqcontact *c) {
 	vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), c->getgroupid());
 	if(ig != groups.end()) {
 	    y = xmlnode_insert_tag(y, "group");
-	    xmlnode_insert_cdata(y, ig->getname().c_str(), (unsigned) -1);
+	    xmlnode_insert_cdata(y, rusconv("ku", ig->getname()).c_str(), (unsigned) -1);
 	}
 
 	jab_send(jc, x);
