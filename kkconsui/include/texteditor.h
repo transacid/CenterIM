@@ -142,6 +142,10 @@ class texteditor: public abstractuicontrol {
 	void inschar(int k);
 
 	void shiftmarkedblock(int delta);
+
+	void prepend(char *text, int ln); // prepend text before specified line
+	void wrapline(int ln, int &px, int &py);  // wrap specified line
+	void mergeline(int ln, bool force, int &px, int &py); // (try to) merge specified line with the next one
 	
     public:
 	bool active, wrap, insertmode, modified, smarttab;

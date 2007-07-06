@@ -1070,42 +1070,19 @@ void texteditor::eddel(bool usetabs) {
 
 	    modification(udelchar, deltext);
 	    strcut(p, CURCOL, todelete);
-
-	    UPDATECURRENTLINE;
+	    int px = CURCOL, py = CURLINE;
+	    mergeline(CURLINE-1, false, px, py); // nemuzeme tuhle priradit k predchozi, kdyz jsme ji zkratili?
+	    mergeline(CURLINE, false, px, py); // nemuzeme za tuhle pridat tu dalsi, kdyz jsme ji zkratili?
+	    setpos(px, py);
 	    updatecursor();
-//          showline(CURLINE, CURCOL, x2-x1-curfile->x, curfile->x);
+	    draw(py-1);
 	    
 	} else {
-	    char *next = (char *) curfile->lines->at(CURLINE+1);
-	    int able = x2-x1-strlen(p);
-
-	    if(next) {
-		if(wrap && (able < strlen(next))) {
-		    char *anext = strdup(next), *asub, *atsub;
-		    anext[able] = 0;
-
-		    if(asub = strpbrk(anext, WORD_DELIM)) {
-			for(; atsub = strpbrk(asub+1, WORD_DELIM); asub = atsub);
-			char *newline = new char[strlen(p)+asub-anext+2];
-			strcpy(newline, p);
-			strncat(newline, next, asub-anext+1);
-			strcut(next, 0, asub-anext+1);
-			curfile->lines->replace(CURLINE, newline);
-		    }
-
-		    free(anext);
-		} else {
-		    if(next) nextlen = strlen(next); else nextlen = 0;
-		    char *newline = new char[nextlen+strlen(p)+1];
-
-		    sprintf(newline, "%s%s", p, nextlen ? next : "");
-		    curfile->lines->replace(CURLINE, newline);
-		    curfile->lines->remove(CURLINE+1);
-		    shiftmarkedblock(-1);
-		}
-	    }
+	    int px = CURCOL, py = CURLINE;
+	    mergeline(py, true, px, py);
 
 	    modification(udelchar, "\n");
+	    setpos(px, py);
 	    draw(curfile->y);
 	}
 
@@ -1174,7 +1151,11 @@ void texteditor::eddelword() {
 	deltext.resize(count);
 	curfile->lines->replace(CURLINE, strdup(n.c_str()));
 	modification(udelchar, deltext);
-	draw(curfile->y);
+	int px = CURCOL, py = CURLINE;
+	mergeline(py-1, false, px, py);
+	mergeline(py, false, px, py);
+	setpos(px, py);
+	draw();
 	updatecursor();
     }
 }
@@ -1204,6 +1185,10 @@ void texteditor::eddelwordemacs() {
 	    count = strspn(p+CURCOL, " ");
 	    n.replace(CURCOL, count, "");
 	    curfile->lines->replace(CURLINE, strdup(n.c_str()));
+	    int px = CURCOL, py = CURLINE;
+	    mergeline(py-1, false, px, py);
+	    mergeline(py, false, px, py);
+	    setpos(px, py);	
 	}
 
 	n = p = CURSTRING;
@@ -1220,7 +1205,12 @@ void texteditor::eddelwordemacs() {
 	deltext.resize(count);
 	curfile->lines->replace(CURLINE, strdup(n.c_str()));
 	modification(udelchar, deltext);
-	draw(curfile->y);
+
+	int px = CURCOL, py = CURLINE;
+	mergeline(py-1, false, px, py);
+	mergeline(py, false, px, py);
+	setpos(px, py);
+	draw();
 	updatecursor();
     }
 }
@@ -1231,6 +1221,8 @@ void texteditor::eddelline() {
 
     if(CURLINE+1 < curfile->lines->count) {
 	curfile->lines->remove(CURLINE);
+	int px = 0, py = CURLINE;
+	mergeline(py-1, false, px, py);
 
 	if(!curfile->lines->count) {
 	    curfile->sy = curfile->sx = curfile->y = curfile->x = 0;
@@ -1248,7 +1240,7 @@ void texteditor::eddelline() {
     modification(udelchar, deltext, false, 0);
     edmove(KEY_HOME);
     abscol = 0;
-    draw(curfile->y);
+    draw();
     updatecursor();
 }
 
@@ -1273,7 +1265,10 @@ void texteditor::eddelbegofline() {
 
 	curfile->lines->replace(CURLINE, strdup(n.c_str()));
 	modification(udelchar, deltext);
-	draw(curfile->y);
+	int px = 0, py = CURLINE;
+	mergeline(py-1, false, px, py);
+	mergeline(CURLINE, false, px, py);
+	draw();
 	updatecursor();
     }
     
@@ -1690,31 +1685,12 @@ void texteditor::inschar(int k) {
 	strinsert(n, CURCOL, np);
 
 	if(wrap && strlen(n) > x2-x1-1) {
-	    char *sub = strpbrk(n, WORD_DELIM), *osub = 0, *sep;
-
-	    if(sub) {
-		while((osub = strpbrk(sub+1, WORD_DELIM)) &&
-		(strspn(osub, WORD_DELIM) < strlen(osub))) sub = osub;
-	    } else {
-		sub = n+strlen(n)-2;
-	    }
-
-	    char sins[2] = " ";
-	    sins[0] = *sub;
-	    strinsert(n, sub-n, sins);
-	    sub++;
-	    *sub = 0;
-	    sep = sub+1;
-
-	    curfile->lines->insert(CURLINE+2, strdup(sep));
+	    int cx = CURCOL+1;
+	    int cy = CURLINE;
 	    curfile->lines->replace(CURLINE, n);
-
 	    modification(uinschar, np);
-
-	    if(CURCOL == x2-x1-1) setpos(strlen(sep), CURLINE+1); else
-	    if(CURCOL > strlen(n)) setpos(CURCOL-strlen(n)+1, CURLINE+1);
-	    else edmove(KEY_RIGHT);
-    
+	    wrapline(CURLINE, cx, cy); // check for line wrap
+	    setpos(cx, cy);
 	    draw();
 
 	} else {
@@ -2173,6 +2149,106 @@ void texteditor::shiftmarkedblock(int delta) {
 	curfile->markblock->y2 += delta;
     } else if((CURLINE > curfile->markblock->y1) && (CURLINE < curfile->markblock->y2)) {
 	curfile->markblock->y2 += delta;
+    }
+}
+
+void texteditor::prepend(char *text, int ln)
+{
+    if (!text)
+	return;
+    char *p = (char *) curfile->lines->at(ln);
+    int number;
+    if (p) {
+	char *n = (char *) malloc(strlen(p)+2+strlen(text));
+	strcpy(n, text);
+	strcat(n, p);
+	curfile->lines->replace(ln, n);
+    } else {
+	curfile->lines->insert(ln+1, strdup(text));
+    }
+}
+
+void texteditor::wrapline(int ln, int &px, int &py)
+{
+    char *p = (char *) curfile->lines->at(ln);
+
+    if(wrap && p && strlen(p) > x2-x1-1) { // it's longer than window width and we want it wrapped
+	char *n = (char *) malloc(strlen(p)+5);
+	strcpy(n, p);
+	char *sub = strpbrk(n, WORD_DELIM), *osub = 0, *sep;
+
+	if(sub) { // there's some whitespace
+	    while((osub = strpbrk(sub+1, WORD_DELIM)) && // find last word on line
+	    (strspn(osub, WORD_DELIM) < strlen(osub))) sub = osub;
+	} else {
+	    sub = n+strlen(n)-2;
+	}
+
+	char sins[2] = " ";
+	sins[0] = *sub;
+	strinsert(n, sub-n, sins); // append space to the end of line
+	sub++; // go to previous space position
+	*sub = 0; // cut the line
+	sep = sub+1; // first character of line remainder
+
+	curfile->lines->replace(ln, n);
+	prepend(sep, ln+1); // prepend wrapped end of line to beginning of the next one
+	if (px>=strlen(n)) { // cursor moved to next line
+	    px -= strlen(n);
+	    py++;
+	    wrapline(ln+1, px, py); // wrap again and keep the cursor position updated
+	} else {
+	    int dx, dy; // dummy
+	    wrapline(ln+1, dx, dy); // just wrap the rest
+	}
+    }
+}
+
+void texteditor::mergeline(int ln, bool force, int &px, int &py)
+{
+    char *p = (char *) curfile->lines->at(ln);
+    if (!p || ((!*p || (p[strlen(p)-1]!=' ')) && !force)) // the line is not mergeable
+	return;
+    char *next = (char *) curfile->lines->at(ln+1);
+    int able = x2-x1-strlen(p)-1; // how much space do we have on this line
+
+    if(next && (*next || force)) {
+	if(wrap && (able < strlen(next))) { // not whole next line fits here
+	    char *anext = strdup(next), *asub, *atsub;
+	    anext[able] = 0;
+
+	    if(asub = strpbrk(anext, WORD_DELIM)) {
+		for(; atsub = strpbrk(asub+1, WORD_DELIM); asub = atsub);
+		char *newline = new char[strlen(p)+asub-anext+2];
+		strcpy(newline, p);
+		if ((ln==(py-1)) && (px<(asub-anext+1))) {
+		    px += strlen(newline);
+		    py--;
+		}
+		strncat(newline, next, asub-anext+1);
+		strcut(next, 0, asub-anext+1);
+		curfile->lines->replace(ln, newline);
+		mergeline(ln+1, false, px, py);  // we've merged something from the next line - try to merge it too
+	    }
+
+	    free(anext);
+	} else { // whole next line fits on this one
+	    int nextlen;
+	    if(next) nextlen = strlen(next); else nextlen = 0;
+	    char *newline = new char[nextlen+strlen(p)+1];
+
+	    if (ln == (py-1)) {
+		px += strlen(next);
+		py--;
+	    }
+	    sprintf(newline, "%s%s", p, nextlen ? next : "");
+	    curfile->lines->replace(ln, newline);
+	    curfile->lines->remove(ln+1);
+	    shiftmarkedblock(-1);
+		    
+	    if (wrap && *newline && newline[strlen(newline)-1]==' ') // if it wasn't last one in "paragraph", try to merge with another one
+		mergeline(ln, false, px, py);
+	}
     }
 }
 
