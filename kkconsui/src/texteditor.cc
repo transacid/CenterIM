@@ -1071,11 +1071,11 @@ void texteditor::eddel(bool usetabs) {
 	    modification(udelchar, deltext);
 	    strcut(p, CURCOL, todelete);
 	    int px = CURCOL, py = CURLINE;
-	    mergeline(CURLINE-1, false, px, py); // nemuzeme tuhle priradit k predchozi, kdyz jsme ji zkratili?
-	    mergeline(CURLINE, false, px, py); // nemuzeme za tuhle pridat tu dalsi, kdyz jsme ji zkratili?
+	    mergeline(CURLINE-1, false, px, py); // can't we append this one to previous, since we've shrotened it?
+	    mergeline(py, false, px, py); // can't we append next one to this?
 	    setpos(px, py);
 	    updatecursor();
-	    draw(py-1);
+	    draw();
 	    
 	} else {
 	    int px = CURCOL, py = CURLINE;
@@ -1083,7 +1083,7 @@ void texteditor::eddel(bool usetabs) {
 
 	    modification(udelchar, "\n");
 	    setpos(px, py);
-	    draw(curfile->y);
+	    draw();
 	}
 
 	updatecursor();
@@ -1220,8 +1220,8 @@ void texteditor::eddelline() {
     string deltext = (string) p + "\n";
 
     if(CURLINE+1 < curfile->lines->count) {
-	curfile->lines->remove(CURLINE);
 	int px = 0, py = CURLINE;
+	curfile->lines->remove(CURLINE);
 	mergeline(py-1, false, px, py);
 
 	if(!curfile->lines->count) {
@@ -2157,7 +2157,6 @@ void texteditor::prepend(char *text, int ln)
     if (!text)
 	return;
     char *p = (char *) curfile->lines->at(ln);
-    int number;
     if (p) {
 	char *n = (char *) malloc(strlen(p)+2+strlen(text));
 	strcpy(n, text);
@@ -2179,7 +2178,8 @@ void texteditor::wrapline(int ln, int &px, int &py)
 
 	if(sub) { // there's some whitespace
 	    while((osub = strpbrk(sub+1, WORD_DELIM)) && // find last word on line
-	    (strspn(osub, WORD_DELIM) < strlen(osub))) sub = osub;
+	    (strspn(osub, WORD_DELIM) < strlen(osub)) &&
+	    ((osub-n)<(x2-x1-1))) sub = osub;
 	} else {
 	    sub = n+strlen(n)-2;
 	}
@@ -2238,7 +2238,7 @@ void texteditor::mergeline(int ln, bool force, int &px, int &py)
 	    char *newline = new char[nextlen+strlen(p)+1];
 
 	    if (ln == (py-1)) {
-		px += strlen(next);
+		px += strlen(p);
 		py--;
 	    }
 	    sprintf(newline, "%s%s", p, nextlen ? next : "");
