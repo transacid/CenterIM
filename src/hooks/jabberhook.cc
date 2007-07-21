@@ -1014,7 +1014,7 @@ void jabberhook::gotloggedin() {
     xmlnode_put_attrib(x, "to", server);
     jab_send(jc, x);
     xmlnode_free(x);
-    free( server );
+    free(server);
 
     server = strdup(jc->user->server);
     x = jutil_iqnew(JPACKET__GET, NS_DISCOITEMS);
@@ -1023,7 +1023,7 @@ void jabberhook::gotloggedin() {
     xmlnode_put_attrib(x, "to", server);
     jab_send(jc, x);
     xmlnode_free(x);
-    free( server );
+    free(server);
 
 
     x = jutil_iqnew(JPACKET__GET, NS_ROSTER);
