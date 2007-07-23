@@ -43,8 +43,6 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-#define PERIOD_PING     60
-
 msnhook mhook;
 
 static string nicknormalize(const string &nick) {
@@ -145,7 +143,7 @@ void msnhook::disconnect() {
 
 void msnhook::exectimers() {
     if(logged()) {
-	if(timer_current-timer_ping > PERIOD_PING) {
+	if(timer_current-timer_ping > conn.nextPing()) {
 	    try {
 		conn.sendPing();
 		timer_ping = timer_current;

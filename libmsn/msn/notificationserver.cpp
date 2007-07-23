@@ -50,7 +50,7 @@ namespace MSN
     static size_t msn_handle_curl_header(void *ptr, size_t size, size_t nmemb, void *stream) ;    
             
     NotificationServerConnection::NotificationServerConnection(NotificationServerConnection::AuthData & auth_, Callbacks & cb_)
-        : Connection(), auth(auth_), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED)
+        : Connection(), auth(auth_), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED), _nextPing(50)
     {
         registerCommandHandlers();
     }
@@ -515,7 +515,7 @@ public:
             this->socketConnectionCompleted();
         
         std::ostringstream buf_;
-        buf_ << "VER " << this->trID << " MSNP8\r\n";
+        buf_ << "VER " << this->trID << " MSNP9\r\n";
         if (this->write(buf_) != buf_.str().size())
             return;
         
@@ -597,12 +597,12 @@ public:
                 return;
             }
             
-            if (args.size() >= 1 && args[0] == "QNG")
+            if (args.size() >= 2 && args[0] == "QNG")
             {
                 // QNG
                 //  0
                 
-                // ping response, ignore
+		this->_nextPing = decimalFromString(args[1]);
                 return;
             }
             
@@ -770,7 +770,7 @@ public:
         connectinfo * info = (connectinfo *) data;
         this->removeCallback(trid);
         
-        if (args.size() >= 3 && args[0] != "VER" || args[2] != "MSNP8") // if either *differs*...
+        if (args.size() >= 3 && args[0] != "VER" || args[2] != "MSNP9") // if either *differs*...
         {
             this->myNotificationServer()->externalCallbacks.showError(NULL, "Protocol negotiation failed");
             delete info;

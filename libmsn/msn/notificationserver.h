@@ -285,11 +285,13 @@ public:
         };
 
         NotificationServerState connectionState() const { return this->_connectionState; };
+	unsigned int nextPing() { return this->_nextPing; };
         Callbacks & externalCallbacks;
         virtual NotificationServerConnection *myNotificationServer() { return this; };        
 protected:
         virtual void handleIncomingData();
         NotificationServerState _connectionState;
+	unsigned int _nextPing;
         
         void setConnectionState(NotificationServerState s) { this->_connectionState = s; };
         void assertConnectionStateIs(NotificationServerState s) { assert(this->_connectionState == s); };
