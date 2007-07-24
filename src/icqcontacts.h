@@ -20,7 +20,7 @@
 *
 */
 
-#define SORT_CONTACTS   "#odcan_!N"
+#define SORT_CONTACTS   "#odcanl_!N"
 
 #define SORTCHAR(c) ( \
     c->hasevents() ? '#' : \
