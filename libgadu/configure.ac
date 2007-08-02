@@ -18,10 +18,15 @@ if test "$build_gg" = "yes"; then
 	    with_ssl="no"
 
 	    AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
-	    AC_CHECK_LIB(lzo, lzo1x_1_compress, [], [
-	                      echo "lzo compression is required.";
-	                      exit -1
-	                      ] )
+	    AC_CHECK_LIB(lzo, lzo1x_1_compress, LZO_LIBS=-llzo)
+	    if test "$LZO_LIBS" = ""; then
+	     AC_CHECK_LIB(lzo2, lzo1x_1_compress, LZO_LIBS=-llzo2, [
+	      AC_MSG_ERROR(
+***
+*** Could not find liblzo or liblzo2.
+)
+])
+            fi
 	                 CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
 	                 LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
 	                 AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
