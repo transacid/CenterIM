@@ -494,6 +494,8 @@ void jabberhook::setautostatus(imstatus st) {
 	    string msg;
 
 	    switch(st) {
+		case available:
+		case freeforchat:
 		case away:
 		case dontdisturb:
 		case occupied:
@@ -1763,11 +1765,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    } else {
 		icqcontact *c = clist.get(ic);
 
-		if(c)
-		if(c->getstatus() != ust) {
-		    if(c->getstatus() == offline)
-			jhook.awaymsgs[ic.nickname] = "";
-
+		if(c) {
 		    logger.putonline(c, c->getstatus(), ust);
 		    c->setstatus(ust);
 

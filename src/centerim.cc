@@ -436,6 +436,8 @@ void centerim::changestatus() {
 
 	    if(setaway)
 	    switch(st) {
+		case available:
+		case freeforchat:
 		case away:
 		case notavail:
 		case outforlunch:
