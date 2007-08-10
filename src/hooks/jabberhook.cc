@@ -494,8 +494,6 @@ void jabberhook::setautostatus(imstatus st) {
 	    string msg;
 
 	    switch(st) {
-		case available:
-		case freeforchat:
 		case away:
 		case dontdisturb:
 		case occupied:
@@ -1016,9 +1014,7 @@ void jabberhook::gotloggedin() {
     xmlnode_put_attrib(x, "to", server);
     jab_send(jc, x);
     xmlnode_free(x);
-    free(server);
 
-    server = strdup(jc->user->server);
     x = jutil_iqnew(JPACKET__GET, NS_DISCOITEMS);
     cid = jab_getid(jc);
     xmlnode_put_attrib(x, "id", cid);
@@ -1764,10 +1760,13 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 	    } else {
 		icqcontact *c = clist.get(ic);
-
+		
 		if(c) {
-		    logger.putonline(c, c->getstatus(), ust);
-		    c->setstatus(ust);
+		    if(c->getstatus() != ust) {
+			jhook.awaymsgs[ic.nickname] = "";
+			logger.putonline(c, c->getstatus(), ust);
+			c->setstatus(ust);
+		    }
 
 		    if(x = xmlnode_get_tag(packet->x, "status"))
 		    if(p = xmlnode_get_data(x))
@@ -1780,7 +1779,6 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    if(p = xmlnode_get_data(x))
 			c->setpgpkey(pgp.verify(p, jhook.awaymsgs[ic.nickname]));
 #endif
-
 		}
 	    }
 	    break;
