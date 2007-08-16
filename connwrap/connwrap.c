@@ -265,6 +265,8 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
 	if(rc) {
 	    ba.sin_port = 0;
 	    rc = bind(sockfd, (struct sockaddr *) &ba, sizeof(ba));
+	    if ((rc==-1) && (errno == EINVAL))
+		rc=0;
 	} else {
 	    rc = -1;
 	}
@@ -312,6 +314,8 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	if(rc) {
 	    ba.sin_port = 0;
 	    rc = bind(sockfd, (struct sockaddr *) &ba, sizeof(ba));
+	    if ((rc==-1) && (errno == EINVAL))
+		rc=0;
 	} else {
 	    rc = -1;
 	}
