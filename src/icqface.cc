@@ -36,6 +36,7 @@
 #include "irchook.h"
 #include "imexternal.h"
 #include "impgp.h"
+#include "imotr.h"
 
 const char *stryesno(bool b) {
     return b ? _("yes") : _("no");
@@ -427,6 +428,7 @@ int icqface::generalmenu() {
     m.additem(0, ACT_QUICKFIND, getmenuitem(_("Go to contact.."), 38, key_quickfind, section_contact));
     m.additem(0, ACT_DETAILS,   _(" Accounts.."));
     m.additem(0, ACT_CONF,      _(" CenterIM config options"));
+    m.additem(0, ACT_OTR,       _(" OTR options and fingerprints"));
     m.additem(0, ACT_TRANSFERS, _(" File transfers monitor"));
     m.addline();
     m.additem(0, ACT_FIND,      _(" Find/add users"));
@@ -2690,6 +2692,8 @@ void icqface::peerinfo(int line, const imcontact &ic) {
 	text += string(4, ' ');
 #endif
 
+    text += "  OTR: " + otr.is_verified(ic.pname, c->getnick()) + " " + otr.get_msg_state(ic.pname, c->getnick());
+
     text = (string) "[ " + text + " ]";
 
     kwriteatf(sizeWArea.x2-text.size()-1, sizeWArea.y1+line,
@@ -3490,6 +3494,16 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    break;
 	case key_chat_panel_move_down:
 	    face.chatpanelheight_inc(-1);
+	    face.stay_in_chat = true;
+	    return -1;
+	    break;
+	case key_otr_start_session:
+	    otr.start_session(face.last_selected);
+	    face.stay_in_chat = true;
+	    return -1;
+	    break;
+	case key_otr_end_session:
+	    otr.end_session(face.last_selected);
 	    face.stay_in_chat = true;
 	    return -1;
 	    break;

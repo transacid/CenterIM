@@ -277,6 +277,8 @@ void icqconf::loadkeys() {
 	    of << "bind editor\t<F9>\tfullscreen" << endl << endl;
 	    of << "bind editor\t<F4>\tchat_panel_move_up" << endl;
 	    of << "bind editor\t<F5>\tchat_panel_move_down" << endl;
+	    of << "bind editor\t<F7>\totr_start_session" << endl;
+	    of << "bind editor\t<F8>\totr_end_session" << endl;
 	    of << "bind info\t<F2>\tshow_urls" << endl;
 	    of << "bind info\t<F6>\tuser_external_action" << endl;
 
@@ -399,6 +401,8 @@ void icqconf::loadkeys() {
 	    if(param == "log_panel_move_down")  k.action = key_log_panel_move_down; else
 	    if(param == "chat_panel_move_up")  k.action = key_chat_panel_move_up; else
 	    if(param == "chat_panel_move_down")  k.action = key_chat_panel_move_down; else
+	    if(param == "otr_start_session")  k.action = key_otr_start_session; else
+	    if(param == "otr_end_session")  k.action = key_otr_end_session; else
 		continue;
 
 	    keys.push_back(k);

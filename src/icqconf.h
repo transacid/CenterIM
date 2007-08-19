@@ -93,7 +93,9 @@ enum cicq_keybindings {
     key_log_panel_move_up,
     key_log_panel_move_down,
     key_chat_panel_move_up,
-    key_chat_panel_move_down
+    key_chat_panel_move_down,
+    key_otr_start_session,
+    key_otr_end_session
 };
 
 class icqconf {

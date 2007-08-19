@@ -36,6 +36,7 @@
 #include "icqgroups.h"
 #include "accountmanager.h"
 #include "imexternal.h"
+#include "imotr.h"
 
 centerim::centerim()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
@@ -210,7 +211,9 @@ void centerim::mainloop() {
 	    case ACT_RSS:
 		linkfeed();
 		break;
-	    case ACT_CONF:
+	    case ACT_OTR:   otr.dialog();
+                        break;
+        case ACT_CONF:
 		updateconf();
 		break;
 	    case ACT_QUICKFIND:

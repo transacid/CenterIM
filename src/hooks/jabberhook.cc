@@ -32,6 +32,7 @@
 #include "eventmanager.h"
 #include "icqgroups.h"
 #include "impgp.h"
+#include "imotr.h"
 
 #define DEFAULT_CONFSERV "conference.jabber.org"
 #define PERIOD_KEEPALIVE 30
@@ -300,6 +301,11 @@ bool jabberhook::send(const imevent &ev) {
 	    text = "This message is encrypted.";
 	}
 #endif
+
+    if (!otr.send_message(proto, jidnormalize(ev.getcontact().nickname), text))
+    {
+        return true;
+    }
 
 	/* TODO: do these really needs to be copied? */
 	char *cjid = strdup(jidnormalize(c->getdesc().nickname).c_str());
@@ -1256,6 +1262,8 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
 	}
     }
 #endif
+    
+    if (!otr.receive_message(proto, from, body)) return;
 
     em.store(immessage(ic, imevent::incoming, rusconv("uk", body)));
 }
