@@ -23,6 +23,7 @@
 #include <msn/message.h>
 #include <msn/errorcodes.h>
 #include <msn/util.h>
+#include <cstdlib>
 #include <iomanip>
 #include <cassert>
 

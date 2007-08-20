@@ -37,6 +37,7 @@
 #include <io.h>
 #endif
 
+#include <cstdlib>
 #include <cerrno>
 #include <cassert>
 

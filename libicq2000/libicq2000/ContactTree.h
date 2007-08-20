@@ -26,6 +26,7 @@
 #include <list>
 #include <string>
 #include <map>
+#include <algorithm>
 
 #include <libicq2000/Contact.h>
 #include <libicq2000/sigslot.h>

@@ -22,6 +22,7 @@
 
 #include <msn/util.h>
 #include <errno.h>
+#include <cstdlib>
 #include <cctype>
 
 namespace MSN 
