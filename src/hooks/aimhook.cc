@@ -26,6 +26,7 @@
 
 #ifdef BUILD_AIM
 
+#include "icqgroups.h"
 #include "icqface.h"
 #include "accountmanager.h"
 #include "icqcontacts.h"
@@ -61,8 +62,7 @@ void aimhook::connect() {
 	firetalk_disconnect(handle);
 	firetalk_destroy_handle(handle);
     }
-
-    handle = firetalk_create_handle(FP_AIMTOC, 0);
+    handle = firetalk_create_handle(firetalk_find_protocol("TOC2"), 0);
 
     firetalk_register_callback(handle, FC_CONNECTED, &connected);
     firetalk_register_callback(handle, FC_CONNECTFAILED, &connectfailed);
@@ -101,9 +101,10 @@ void aimhook::main() {
 }
 
 void aimhook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
+    
     int *r, *w, *e, *sr, *sw, *se;
 
-    firetalk_getsockets(FP_AIMTOC, &sr, &sw, &se);
+    firetalk_getsockets(firetalk_find_protocol("TOC2"), &sr, &sw, &se);
 
     for(r = sr; *r; r++) {
 	if(*r > hsocket) hsocket = *r;
@@ -130,7 +131,8 @@ bool aimhook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
     int *r, *w, *e, *sr, *sw, *se;
 
     if(online()) {
-	firetalk_getsockets(FP_AIMTOC, &sr, &sw, &se);
+    
+    firetalk_getsockets(firetalk_find_protocol("TOC2"), &sr, &sw, &se);
 
 	for(r = sr; *r; r++) res = res || FD_ISSET(*r, &rfds);
 	for(w = sw; *w; w++) res = res || FD_ISSET(*w, &wfds);
@@ -186,8 +188,11 @@ void aimhook::sendnewuser(const imcontact &ic) {
     if(logged())
     if(find(buddies.begin(), buddies.end(), ic.nickname) == buddies.end()) {
 	log(logContactAdd, ic.nickname.c_str());
-	firetalk_im_add_buddy(handle, ic.nickname.c_str());
-	firetalk_save_config(handle);
+	vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(ic)->getgroupid());
+	if(ig != groups.end()) {
+	   firetalk_im_add_buddy(handle, ic.nickname.c_str(), ig->getname().c_str(), "");
+	 }
+	/*firetalk_save_config(handle);*/
 	requestinfo(ic);
     }
 }
@@ -200,7 +205,7 @@ void aimhook::removeuser(const imcontact &ic, bool report) {
     if(online()) {
 	if(report) log(logContactRemove, ic.nickname.c_str());
 	firetalk_im_remove_buddy(handle, ic.nickname.c_str());
-	firetalk_save_config(handle);
+	/*firetalk_save_config(handle);*/
     }
 }
 
@@ -217,11 +222,11 @@ void aimhook::setautostatus(imstatus st) {
 		    case notavail:
 		    case occupied:
 		    case outforlunch:
-			firetalk_set_away(handle, rusconv("kw", conf.getawaymsg(aim)).c_str());
+			firetalk_set_away(handle, rusconv("kw", conf.getawaymsg(aim)).c_str(), 0);
 			break;
 
 		    default:
-			firetalk_set_away(handle, 0);
+			firetalk_set_away(handle, 0, 0);
 			break;
 		}
 	    }
@@ -361,7 +366,7 @@ void aimhook::connectfailed(void *connection, void *cli, ...) {
 
     ahook.fonline = false;
 
-    if(err) msg = firetalk_strerror((firetalk_error) err);
+    if(err) msg = firetalk_strerror((const fte_t)err);
     if(msg.size() && reason) msg += (string) ", " + reason;
 
     logger.putmessage((string) _("aim connection failed") + ": " + msg);

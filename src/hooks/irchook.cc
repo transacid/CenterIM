@@ -26,6 +26,7 @@
 
 #ifdef BUILD_IRC
 
+#include "icqgroups.h"
 #include "icqface.h"
 #include "icqcontacts.h"
 #include "imlogger.h"
@@ -40,7 +41,7 @@
 irchook irhook;
 
 irchook::irchook()
-    : abstracthook(irc), handle(firetalk_create_handle(FP_IRC, 0)),
+    : abstracthook(irc), handle(firetalk_create_handle(firetalk_find_protocol("IRC"), 0)),
       fonline(false), flogged(false), ourstatus(offline)
 {
     fcapabs.insert(hookcapab::setaway);
@@ -157,7 +158,7 @@ void irchook::main() {
 void irchook::getsockets(fd_set &rfds, fd_set &wfds, fd_set &efds, int &hsocket) const {
     int *r, *w, *e, *sr, *sw, *se;
 
-    firetalk_getsockets(FP_IRC, &sr, &sw, &se);
+    firetalk_getsockets(firetalk_find_protocol("IRC"), &sr, &sw, &se);
 
     for(r = sr; *r; r++) {
 	if(*r > hsocket) hsocket = *r;
@@ -184,7 +185,7 @@ bool irchook::isoursocket(fd_set &rfds, fd_set &wfds, fd_set &efds) const {
     int *r, *w, *e, *sr, *sw, *se;
 
     if(online()) {
-	firetalk_getsockets(FP_IRC, &sr, &sw, &se);
+	firetalk_getsockets(firetalk_find_protocol("IRC"), &sr, &sw, &se);
 
 	for(r = sr; *r; r++) res = res || FD_ISSET(*r, &rfds);
 	for(w = sw; *w; w++) res = res || FD_ISSET(*w, &wfds);
@@ -296,7 +297,10 @@ void irchook::sendnewuser(const imcontact &ic) {
 
     if(online()) {
 	if(!ischannel(ic)) {
-	    firetalk_im_add_buddy(handle, ic.nickname.c_str());
+	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(ic)->getgroupid()); 
+	    if(ig != groups.end()) {
+	    	firetalk_im_add_buddy(handle, ic.nickname.c_str(), ig->getname().c_str(), "");
+	    }
 	    requestinfo(ic);
 	} else {
 	    vector<channelInfo> ch = getautochannels();
@@ -340,11 +344,11 @@ void irchook::setautostatus(imstatus st) {
 		    case notavail:
 		    case outforlunch:
 		    case occupied:
-			firetalk_set_away(handle, conf.getawaymsg(irc).c_str());
+			firetalk_set_away(handle, conf.getawaymsg(irc).c_str(), 0);
 			break;
 
 		    default:
-			firetalk_set_away(handle, 0);
+			firetalk_set_away(handle, 0, 0);
 			break;
 		}
 	    }
@@ -401,25 +405,25 @@ void irchook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	while(!(room = getword(rooms)).empty()) {
 	    if(room[0] != '#') room.insert(0, "#");
 	    searchchannels.push_back(room);
-	    ic = find(channels.begin(), channels.end(), room);
+            ic = find(irhook.channels.begin(), irhook.channels.end(), room);
 
-	    if(ic == channels.end()) {
-		channels.push_back(channelInfo(room));
-		ic = channels.end()-1;
+	    if(ic == irhook.channels.end()) {
+		irhook.channels.push_back(channelInfo(room));
+		ic = irhook.channels.end()-1;
 	    }
 
 	    if(!ic->joined) {
-		firetalk_chat_join(handle, room.c_str(), ic->passwd.c_str());
+		firetalk_chat_join(handle, room.c_str());
 		ready = false;
 	    }
 
 	    if(emailsub.empty() && namesub.empty()) {
-		if(ic->fetched) {
+	/*	if(ic->fetched) {*/
 		    ic->nicks.clear();
 		    firetalk_chat_listmembers(handle, room.c_str());
-		} else {
+/*		} else {
 		    ready = false;
-		}
+		}*/
 
 	    } else {
 		ready = false;
@@ -580,7 +584,7 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 	if(iac->joined) {
 	    r = ic == channels.end();
 	    if(!r) r = !ic->joined;
-	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str(), iac->passwd.c_str());
+	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str());
 	}
     }
 
@@ -595,7 +599,7 @@ void irchook::requestawaymsg(const imcontact &ic) {
 void irchook::rawcommand(const string &cmd) {
     int *r, *w, *e, sock;
     if(online()) {
-	firetalk_getsockets(FP_IRC, &r, &w, &e);
+	firetalk_getsockets(firetalk_find_protocol("IRC"), &r, &w, &e);
 
 	if(*r) {
 	    write(*r, cmd.c_str(), cmd.size());
@@ -726,13 +730,16 @@ void irchook::connected(void *conn, void *cli, ...) {
 
 	if(c->getdesc().pname == irc)
 	if(!ischannel(c)) {
-	    firetalk_im_add_buddy(irhook.handle, c->getdesc().nickname.c_str());
+	    vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(c)->getgroupid()); 
+	    if(ig != groups.end()) {
+	        firetalk_im_add_buddy(irhook.handle, c->getdesc().nickname.c_str() , ig->getname().c_str(), "");
+	    }
 	}
     }
 
     for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ++ic) {
 	if(ic->joined) {
-	    firetalk_chat_join(irhook.handle, ic->name.c_str(), ic->passwd.c_str());
+	    firetalk_chat_join(irhook.handle, ic->name.c_str());
 	}
     }
 
