@@ -36,7 +36,11 @@
 #include "icqgroups.h"
 #include "accountmanager.h"
 #include "imexternal.h"
-#include "imotr.h"
+
+#ifdef HAVE_LIBOTR
+  #include "imotr.h"
+#endif
+
 
 centerim::centerim()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
@@ -211,8 +215,10 @@ void centerim::mainloop() {
 	    case ACT_RSS:
 		linkfeed();
 		break;
+#ifdef HAVE_LIBOTR
 	    case ACT_OTR:   otr.dialog();
                         break;
+#endif                        
         case ACT_CONF:
 		updateconf();
 		break;

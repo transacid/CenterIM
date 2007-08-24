@@ -1,6 +1,10 @@
 #include "imotr.h"
 
 
+
+#ifdef HAVE_LIBOTR
+
+
 #include "icqconf.h"
 #include "icqface.h"
 #include "abstracthook.h"
@@ -97,7 +101,7 @@ static void inject_message_cb(void *opdata, const char *accountname, const char 
         jhook.send(immessage(c->getdesc(), imevent::outgoing, string(message)));
     } else
     {
-        face.log("[OTR] Error: inject_message_cb, recipient \"" + recipientname + "\" not found");
+        face.log(_("[OTR] Error: inject_message_cb, recipient \"") + recipientname + _("\" not found"));
     }
 }
 
@@ -112,20 +116,20 @@ static void notify_cb(void *opdata, OtrlNotifyLevel level,
     string notify_level = "";
     switch (level) 
     {
-    case OTRL_NOTIFY_ERROR:     notify_level = "Error";
+    case OTRL_NOTIFY_ERROR:     notify_level = _("Error");
                                 break;
-    case OTRL_NOTIFY_WARNING:   notify_level = "Warning";
+    case OTRL_NOTIFY_WARNING:   notify_level = _("Warning");
                                 break;
-    case OTRL_NOTIFY_INFO:      notify_level = "Info";
+    case OTRL_NOTIFY_INFO:      notify_level = _("Info");
                                 break;
     }
     face.log("[OTR] " + notify_level);
-    if (accountname)    face.log("      accountname: " + string(accountname));
-    if (protocol)       face.log("      protocol:    " + string(protocol));
-    if (username)       face.log("      username:    " + string(username));
-    if (title)          face.log("      title:       " + string(title));
-    if (primary)        face.log("      primary:     " + string(primary));
-    if (secondary)      face.log("      secondary:   " + string(secondary));
+    if (accountname)    face.log(_("      accountname: ") + string(accountname));
+    if (protocol)       face.log(_("      protocol:    ") + string(protocol));
+    if (username)       face.log(_("      username:    ") + string(username));
+    if (title)          face.log(_("      title:       ") + string(title));
+    if (primary)        face.log(_("      primary:     ") + string(primary));
+    if (secondary)      face.log(_("      secondary:   ") + string(secondary));
 }
 
 
@@ -179,8 +183,8 @@ static void confirm_fingerprint_cb(void *opdata, OtrlUserState us,
 #ifdef OTRDEBUG
     face.log("[OTR-DEBUG] confirm_fingerprint_cb");
 #endif
-    face.log("[OTR] Received unknown fingerprint from \""  + string(username) + "\".");
-    face.log("      You can verify it in the OTR options." + string(username) + "\".");
+    face.log(_("[OTR] Received unknown fingerprint from \"")  + string(username) + "\".");
+    face.log(_("      You can verify it in the OTR options."));
 }
 
 
@@ -203,7 +207,7 @@ static void gone_secure_cb(void *opdata, ConnContext *context)
 #ifdef OTRDEBUG
     face.log("[OTR-DEBUG] gone_secure_cb");
 #endif
-    face.log("[OTR] Connection is secure...");
+    face.log(_("[OTR] Connection is now secure..."));
 }
 
 
@@ -212,7 +216,7 @@ static void gone_insecure_cb(void *opdata, ConnContext *context)
 #ifdef OTRDEBUG
     face.log("[OTR-DEBUG] gone_insecure_cb");
 #endif
-    face.log("[OTR] Connection is insecure...");
+    face.log(_("[OTR] Connection is insecure..."));
 }
 
 
@@ -230,7 +234,7 @@ static void log_message_cb(void *opdata, const char *message)
 #ifdef OTRDEBUG
     face.log("[OTR-DEBUG] log_message_cb(..., " + string(message) + ")");
 #endif
-    face.log("[OTR] Log: " + string(message));
+    face.log(_("[OTR] Log: ") + string(message));
 }
 
 
@@ -307,9 +311,9 @@ bool imotr::send_message(const protocolname pname, const string &recipient, stri
     }
     if (err)
     {
-        face.log("[OTR] Error while encrypting message... no message sent!");
-        face.log("      accountname: " + accountname);
-        face.log("      recipient:   " + recipient);
+        face.log(_("[OTR] Error while encrypting message... no message sent!"));
+        face.log(_("      accountname: ") + accountname);
+        face.log(_("      recipient:   ") + recipient);
         if (newmessage) otrl_message_free(newmessage);
         return false;
     }
@@ -371,7 +375,7 @@ void imotr::start_session(icqcontact *contact)
 #endif
     if (contact->getdesc().pname != jabber)             // at the moment, otr is only with jabber supported...
     {
-        face.log("[OTR] Error: Only jabber is supported");
+        face.log(_("[OTR] Error: At the moment, only jabber is supported"));
         return;
     }
     ConnContext *context;
@@ -379,7 +383,7 @@ void imotr::start_session(icqcontact *contact)
     string protocolname  = "jabber";
     string username      =  contact->getdesc().nickname;
     
-    face.log("[OTR] Trying to start a secure session with " + username +"...");
+    face.log(_("[OTR] Trying to start a secure session with \"") + username +"\"...");
     inject_message_cb(NULL, accountname.c_str(), protocolname.c_str(), username.c_str(), "?OTRv2?");
 }
 
@@ -390,7 +394,7 @@ void imotr::end_session(icqcontact *contact)
 #endif
     if (contact->getdesc().pname != jabber)             // at the moment, otr is only with jabber supported...
     {
-        face.log("[OTR] Error: Only jabber is supported");
+        face.log(_("[OTR] Error: At the moment, only jabber is supported"));
         return;
     }
     ConnContext *context;
@@ -398,9 +402,24 @@ void imotr::end_session(icqcontact *contact)
     string protocolname  = "jabber";
     string username      =  contact->getdesc().nickname;
      
-    face.log("[OTR] Ending secure session with " + username +"...");
+    face.log(_("[OTR] Ending secure session with \"") + username +"\"...");
     otrl_message_disconnect(userstate, &ui_ops, NULL, accountname.c_str(), protocolname.c_str(), username.c_str());
 }
+
+
+int imotr::yesno(const char *question)
+{
+    string tmp;
+    tmp = face.inputstr(" " + string(question) + _("yes/no") + " ", _("no"));
+    while ((face.getlastinputkey() != KEY_ESC) && (tmp != _("yes")) && (tmp != _("no")))
+    {
+        tmp = face.inputstr(_(" Please type 'yes' or 'no': "), _("no"));
+    }
+    if (face.getlastinputkey() == KEY_ESC) return -1;
+    if (tmp == _("yes")) return 1;
+    if (tmp == _("no"))  return 0;
+}
+
 
 
 void imotr::dialog() 
@@ -440,7 +459,7 @@ void imotr::dialog()
     citem = 1;
     action.clear();
 
-    node  = t.addnode(0, 0, 0, " Private keys ");
+    node  = t.addnode(0, 0, 0, _(" Private keys "));
     for (OtrlPrivKey *privkey = userstate->privkey_root; privkey != NULL; privkey = privkey->next)
     {
         string accountname = privkey->accountname;
@@ -448,44 +467,44 @@ void imotr::dialog()
         char hash[45];
         if (!otrl_privkey_fingerprint(userstate, hash, accountname.c_str(), protocol.c_str()))
         {
-            strncpy(hash, "Error calculating Fingerprint", 45);
+            strncpy(hash, _("Error calculating Fingerprint"), 45);
         }
-        n = t.addnode(node, 0, 0,   (" Account: " + accountname + " ").c_str());
-        t.addleaff(n, 0, 0, (" Protocol:    " + protocol    + " ").c_str());
-        t.addleaff(n, 0, 0, (" Fingerprint: " + string(hash) + " ").c_str());
-        t.addleaff(n, 0, citem++, " Forget key ");
+        n = t.addnode(node, 0, 0,   (_(" Account: ") + accountname + " ").c_str());
+        t.addleaff(n, 0, 0, (_(" Protocol:    ") + protocol    + " ").c_str());
+        t.addleaff(n, 0, 0, (_(" Fingerprint: ") + string(hash) + " ").c_str());
+        t.addleaff(n, 0, citem++, _(" Forget key "));
         action.push_back(pair<int, void*>(0x100, privkey));
 //        t.addleaff(n, 0, citem++, " Generate new key ");
 //        action.push_back(pair<int, void*>(0x101, privkey));
     }   // for (all privkeys)   
 
-    node  = t.addnode(0, 0, 0, " Public keys ");
+    node  = t.addnode(0, 0, 0, _(" Public keys "));
     for (ConnContext *context = userstate->context_root; context != NULL; context = context->next)
     {
         char hash[45];
         string username    = context->username;
         string accountname = context->accountname;
         string protocol    = context->protocol;
-        n = t.addnode(node, 0, 0, (" User: " + username + " ").c_str());
-        t.addleaff(n, 0, 0,       (" Protocol: "   + protocol    + " ").c_str());
-        t.addleaff(n, 0, 0,       (" Account:  "   + accountname + " ").c_str());
+        n = t.addnode(node, 0, 0, (_(" User: ") + username + " ").c_str());
+        t.addleaff(n, 0, 0,       (_(" Protocol: ")   + protocol    + " ").c_str());
+        t.addleaff(n, 0, 0,       (_(" Account:  ")   + accountname + " ").c_str());
 
         for (Fingerprint *fingerprint = context->fingerprint_root.next; fingerprint != NULL; fingerprint = fingerprint->next)
         {
             int newnode;
-            string verified = (fingerprint->trust && (string(fingerprint->trust) == "yes")) ? "Yes" : "No";
+            string verified = (fingerprint->trust && (string(fingerprint->trust) == "yes")) ? _("Yes") : _("No");
            
             otrl_privkey_hash_to_human(hash, fingerprint->fingerprint);
-            newnode = t.addnode(n, 0, 0, (" Fingerprint: " + string(hash) + " ").c_str());
-            t.addleaff(newnode, 0, citem++, (" Verified: " + verified).c_str());
+            newnode = t.addnode(n, 0, 0, (_(" Fingerprint: ") + string(hash) + " ").c_str());
+            t.addleaff(newnode, 0, citem++, (_(" Verified: ") + verified).c_str());
             action.push_back(pair<int, void*>(0x200, fingerprint));
-            t.addleaff(newnode, 0, citem++, " Forget key ");
+            t.addleaff(newnode, 0, citem++, _(" Forget key "));
             action.push_back(pair<int, void*>(0x201, fingerprint));
         }
         if (context->active_fingerprint)
         {
             otrl_privkey_hash_to_human(hash, context->active_fingerprint->fingerprint);
-            t.addleaff(n, 0, 0, (" Active fingerprint: " + string(hash) + " ").c_str());
+            t.addleaff(n, 0, 0, (_(" Active fingerprint: ") + string(hash) + " ").c_str());
         }
 
     }
@@ -496,16 +515,13 @@ void imotr::dialog()
 
 	if(!fin && citem) 
     {
+        int answer;
         citem--;
         switch (action[citem].first)
         {
             case (0x100):   // forget privkey
-		                    tmp = face.inputstr(" Do you want to forget the selected key? (yes/no) ", "no");
-                            while ((face.getlastinputkey() != KEY_ESC) && (tmp != "yes") && (tmp != "no"))
-                            {
-                                tmp = face.inputstr(" Please type 'yes' or 'no': ", "no");
-                            }
-                		    if((tmp == "yes"))
+                            answer = yesno(_("Do you want to forget the selected key?"));
+                		    if (answer == 1)
                             {
                                 otrl_privkey_forget((OtrlPrivKey*)action[citem].second);
                                 write_fingerprints();
@@ -517,25 +533,15 @@ void imotr::dialog()
 
             
             case (0x200):   // verify fingerprint
-    		                tmp = face.inputstr(" Do you want verify the selected key (yes/no)? ", "no");
-                            while ((face.getlastinputkey() != KEY_ESC) && (tmp != "yes") && (tmp != "no"))
-                            {
-                                tmp = face.inputstr(" Please type 'yes' or 'no': ", "");
-                            }
-            		        if((tmp == "yes") || tmp == "no")
-                            {
-                                otrl_context_set_trust((Fingerprint*)action[citem].second, tmp.c_str());
-                                write_fingerprints();
-                            }
+                            answer = yesno(_("Do you want verify the selected key?"));
+                            if (answer == -1) break;
+                            otrl_context_set_trust((Fingerprint*)action[citem].second, ((answer) ? "yes" : "no"));
+                            write_fingerprints();
                             break;
             
             case (0x201):   // forget fingerprint
-		                    tmp = face.inputstr(" Do you want to forget the selected key? (yes/no) ", "no");
-                            while ((face.getlastinputkey() != KEY_ESC) && (tmp != "yes") && (tmp != "no"))
-                            {
-                                tmp = face.inputstr(" Please type 'yes' or 'no': ", "no");
-                            }
-            	    	    if((tmp == "yes"))
+                            answer = yesno(_("Do you want to forget the selected key?"));
+            	    	    if (answer == 1)
                             {
                                 otrl_context_forget_fingerprint((Fingerprint*)action[citem].second, 1);
                                 write_fingerprints();
@@ -561,7 +567,7 @@ string imotr::get_msg_state(const protocolname pname, const string user)
 {
     if (pname != jabber)                // at the moment, otr is only with jabber supported...
     {
-        return "No Jabber";
+        return _("No Jabber");
     }
     ConnContext *context;
     string accountname   = conf.getourid(pname).nickname + "@" + conf.getourid(pname).server;
@@ -571,15 +577,15 @@ string imotr::get_msg_state(const protocolname pname, const string user)
                                 0, NULL, NULL, NULL);
     if (!context)
     {
-        return "No OTR";
+        return _("No OTR");
     }
     
     switch (context->msgstate)
     {
-        case (OTRL_MSGSTATE_PLAINTEXT): return "Plaintext";
-        case (OTRL_MSGSTATE_ENCRYPTED): return "Encrypted";
-        case (OTRL_MSGSTATE_FINISHED):  return "Finished";
-        default:    return "Unknown";
+        case (OTRL_MSGSTATE_PLAINTEXT): return _("Plaintext");
+        case (OTRL_MSGSTATE_ENCRYPTED): return _("Encrypted");
+        case (OTRL_MSGSTATE_FINISHED):  return _("Finished");
+        default:    return _("Unknown");
     }
 }
 
@@ -588,7 +594,7 @@ string imotr::is_verified(const protocolname pname, const string user)
 {
     if (pname != jabber)                // at the moment, otr is only with jabber supported...
     {
-        return "No Jabber";
+        return _("No Jabber");
     }
     ConnContext *context;
     string accountname   = conf.getourid(pname).nickname + "@" + conf.getourid(pname).server;
@@ -598,19 +604,22 @@ string imotr::is_verified(const protocolname pname, const string user)
                                 0, NULL, NULL, NULL);
     if (context == NULL)
     {
-        return "No OTR";
+        return _("No OTR");
     }
     if (context->active_fingerprint == NULL)
     {
-        return "No Encryption";
+        return _("No Encryption");
     }
     if (string(context->active_fingerprint->trust) == "yes")
     {
-        return "Verified";
+        return _("Verified");
     }
-    return "Unverified";
+    return _("Unverified");
 }
 
+
+
+#endif  // HAVE_LIBOTR
 
 
 

@@ -114,6 +114,10 @@ AC_ARG_WITH(libjpeg,
             AS_HELP_STRING([--without-libjpeg], [Compile without JPEG token
                             support (for Gadu-Gadu registration)])
             )
+AC_ARG_WITH(libotr,
+            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr)]),
+            [with_libotr=$withval]
+            )
 
 #####################
 # Check for fribidi #
@@ -313,6 +317,29 @@ if test "x$with_libjpeg" != "xno"; then
 	])
 fi
 
+
+#####################
+# Check for libotr #
+#####################
+AC_MSG_CHECKING(for libotr)
+have_libotr=no
+
+if test "x$with_libotr" != "xno"; then
+	AC_MSG_RESULT([])
+
+	AC_CHECK_LIB(otr, otrl_init,
+	[
+		AC_CHECK_HEADERS(libotr/context.h, libotr/userstate.h
+		[
+			AC_DEFINE(HAVE_LIBOTR, 1, [define if you have libotr])
+            OTR_LIBS="-lotr $LIBS"
+			LIBS="$LIBS $OTR_LIBS"
+            have_libotr=yes
+		])
+	])
+fi
+
+
 ####################
 # Check for others #
 ####################
@@ -508,6 +535,10 @@ else
 if test "x$have_gpgme" = xno; then
 AC_MSG_RESULT([
 WARNING: GPGME disabled (This means no encrypted messages between users)
+]); fi
+if test "x$have_libotr" = xno; then
+AC_MSG_RESULT([
+WARNING: libotr disabled (This means no otr encryption)
 ]); fi
 fi
 AC_MSG_RESULT([

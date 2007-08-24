@@ -39,6 +39,7 @@ class imotr {
 
     string get_msg_state(const protocolname pname, const string user);
     string is_verified(const protocolname pname, const string user);
+    int  yesno(const char *question);
     void dialog();
 
     void start_session(icqcontact *contact);

@@ -2,7 +2,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I$(top_srcdir)/connwra
 bin_PROGRAMS = centerim
 centerim_SOURCES = centerim.cc icqcontact.cc icqgroups.cc eventmanager.cc icqdialogs.cc icqhist.cc imexternal.cc imcontact.cc imlogger.cc accountmanager.cc icqcontacts.cc icqmlist.cc imcontroller.cc icqconf.cc imevents.cc impgp.cc imotr.cc icqface.cc centermain.cc icqgroup.cc captcha.cc
 centerim_LDFLAGS = -L$(top_builddir)/connwrap -L$(top_builddir)/kkconsui -L$(top_builddir)/kkstrtext -L$(top_builddir)/kksystr -L$(top_builddir)/libicq2000
-centerim_LDADD = $(top_builddir)/src/hooks/libhooks.a  -lconnwrap -lkkconsui -lkkstrtext -lkksystr -llibicq2000 -lotr
+centerim_LDADD = $(top_builddir)/src/hooks/libhooks.a  -lconnwrap -lkkconsui -lkkstrtext -lkksystr -llibicq2000
 if BUILD_FIRETALK
 centerim_LDFLAGS += -L$(top_builddir)/firetalk
 centerim_LDADD += -lfiretalk
