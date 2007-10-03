@@ -1962,6 +1962,8 @@ bool icqface::setljparams(imxmlevent *ev) {
 	svalues.push_back("usemask");
     }
 
+    ev->setfield("taglist", "");
+
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
     w.set_title(conf.getcolor(cp_dialog_highlight), _(" LiveJournal posting: attributes "));
     db.setwindow(&w, false);
@@ -1999,6 +2001,7 @@ bool icqface::setljparams(imxmlevent *ev) {
 
 	t.addleaff(i, 0, 21, _(" Music : %s "), ev->getfield("music").c_str());
 	t.addleaff(i, 0, 22, _(" Picture : %s "), ev->getfield("picture").empty() ? _("(default)") : ev->getfield("picture").c_str());
+	t.addleaff(i, 0, 25, _(" Tags : %s "), ev->getfield("taglist").c_str());
 
 	i = t.addnode(_(" Options "));
 	t.addleaff(i, 0, 30, _(" Disable auto-formatting : %s "), stryesno(ev->getfield("preformatted") == "1"));
@@ -2024,6 +2027,7 @@ bool icqface::setljparams(imxmlevent *ev) {
 		    case 21: LJP_STR("music", _("Currently playing: ")); break;
 		    case 22: LJP_LIST("picture", pictures, _("(default)")); break;
 		    case 23: LJP_STR("mood", _("Current mood: ")); break;
+		    case 25: LJP_STR("taglist", _("Tags for the entry: ")); break;
 		    case 30: LJP_BOOL("preformatted"); break;
 		    case 31: LJP_BOOL("noemail"); break;
 		    case 32: LJP_BOOL("nocomments"); break;
