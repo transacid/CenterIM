@@ -41,6 +41,8 @@
 #define DEFAULT_CONFSERV "conference.jabber.org"
 #define PERIOD_KEEPALIVE 30
 
+#define NOTIFBUF 512
+
 static void jidsplit(const string &jid, string &user, string &host, string &rest) {
     int pos;
     user = jid;
@@ -1445,8 +1447,9 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
 	if(vinfo.size() > 128)
 	    vinfo.erase(128);
 
-	char buf[256];
-	sprintf(buf, _("The remote is using %s"), vinfo.c_str());
+	char buf[NOTIFBUF];
+	snprintf(buf, NOTIFBUF, _("The remote is using %s"), vinfo.c_str());
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(ic, buf));
     }
 }

@@ -37,6 +37,8 @@ ljhook lhook;
 
 #define PERIOD_FRIENDS  3600
 
+#define NOTIFBUF 512
+
 ljhook::ljhook(): abstracthook(livejournal), fonline(false), sdest(0) {
     fcapabs.insert(hookcapab::nochat);
 }
@@ -266,6 +268,7 @@ bool ljhook::send(const imevent &asev) {
 	    if(!m->field_empty("subject")) ev->addParam("subject", rusconv("ku", m->getfield("subject")));
 	    if(!m->field_empty("mood")) ev->addParam("prop_current_mood", rusconv("ku", m->getfield("mood")));
 	    if(!m->field_empty("music")) ev->addParam("prop_current_music", rusconv("ku", m->getfield("music")));
+	    if(!m->field_empty("taglist")) ev->addParam("prop_taglist", rusconv("ku", m->getfield("taglist")));
 	    if(!m->field_empty("picture")) ev->addParam("prop_picture_keyword", m->getfield("picture"));
 
 	    if(!m->field_empty("preformatted")) ev->addParam("prop_opt_preformatted", "1");
@@ -654,7 +657,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    map<string, string> nfriendof;
 	    map<string, string>::const_iterator in;
 	    vector<string>::iterator il;
-	    char buf[512];
+	    char buf[NOTIFBUF];
 
 	    for(i = 1; i <= count; i++) {
 		username = params[(string) "friendof_" + i2str(i) + "_user"];
@@ -669,8 +672,9 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		if(!foempty) {
 		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
 
-		    snprintf(buf, sizeof(buf), _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
+		    snprintf(buf, NOTIFBUF, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
 			in->first.c_str(), in->second.c_str(), bd.c_str());
+		    buf[NOTIFBUF-1] = '\0';
 
 		    em.store(imnotification(self, buf));
 		}
@@ -679,8 +683,9 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    for(il = friendof.begin(); il != friendof.end(); ) {
 		if(nfriendof.find(*il) == nfriendof.end()) {
 		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
-		    snprintf(buf, sizeof(buf), _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
+		    snprintf(buf, NOTIFBUF, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
 			il->c_str(), bd.c_str());
+		    buf[NOTIFBUF-1] = '\0';
 		    em.store(imnotification(self, buf));
 		    friendof.erase(il);
 		    il = friendof.begin();

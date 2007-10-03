@@ -40,6 +40,8 @@
 
 #include <time.h>
 
+#define NOTIFBUF 512
+
 time_t timer_current = time(0);
 
 abstracthook::abstracthook(protocolname aproto)
@@ -342,7 +344,7 @@ bool abstracthook::regattempt(unsigned int &auin, const string &apassword, const
 
 void abstracthook::log(logevent ev, ...) {
     va_list ap;
-    char buf[512];
+    char buf[NOTIFBUF];
     static map<logevent, string> lst;
 
     if(lst.empty()) {
@@ -357,7 +359,8 @@ void abstracthook::log(logevent ev, ...) {
     }
 
     va_start(ap, ev);
-    vsprintf(buf, lst[ev].c_str(), ap);
+    vsnprintf(buf, NOTIFBUF, lst[ev].c_str(), ap);
+    buf[NOTIFBUF-1] = '\0';
     va_end(ap);
 
     face.log((string) "+ [" + conf.getprotocolname(proto)  + "] " + buf);
@@ -754,7 +757,7 @@ string abstracthook::getTimezoneIDtoString(signed char id) {
     if(id > 24 || id < -24) {
 	return "Unspecified";
     } else {
-	char buf[32];
+	static char buf[32];
 	sprintf(buf, "GMT %s%d:%s", id > 0 ? "-" : "+", abs(id/2), id % 2 == 0 ? "00" : "30");
 	return buf;
     }

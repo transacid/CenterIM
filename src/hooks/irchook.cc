@@ -36,6 +36,8 @@
 
 #include <iterator>
 
+#define NOTIFBUF 512
+
 // ----------------------------------------------------------------------------
 
 irchook irhook;
@@ -614,11 +616,12 @@ void irchook::rawcommand(const string &cmd) {
 
 void irchook::channelfatal(string room, const char *fmt, ...) {
     va_list ap;
-    char buf[1024];
+    char buf[NOTIFBUF];
     vector<channelInfo>::iterator i;
 
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, NOTIFBUF, fmt, ap);
+    buf[NOTIFBUF-1] = '\0';
     va_end(ap);
 
     if(room.substr(0, 1) != "#")
@@ -1204,7 +1207,7 @@ void irchook::errorhandler(void *connection, void *cli, ...) {
 void irchook::nickchanged(void *connection, void *cli, ...) {
     va_list ap;
     icqcontact *c;
-    char buf[100];
+    char buf[NOTIFBUF];
 
     va_start(ap, cli);
     char *oldnick = va_arg(ap, char *);
@@ -1226,7 +1229,8 @@ void irchook::nickchanged(void *connection, void *cli, ...) {
 
 	    }
 
-	    sprintf(buf, _("The user has changed their nick from %s to %s"), oldnick, newnick);
+	    snprintf(buf, NOTIFBUF, _("The user has changed their nick from %s to %s"), oldnick, newnick);
+	    buf[NOTIFBUF-1] = '\0';
 	    em.store(imnotification(c, buf));
 	}
     }
@@ -1262,18 +1266,20 @@ const char * const command, const char * const args) {
 
 void irchook::subreply(void *conn, void *cli, const char * const nick,
 const char * const command, const char * const args) {
-    char buf[512];
+    char buf[NOTIFBUF];
 
     if(!strcmp(command, "PING")) {
 	map<string, time_t>::iterator i = irhook.pingtime.find(up(nick));
 
 	if(i != irhook.pingtime.end()) {
-	    sprintf(buf, _("PING reply from the user: %d second(s)"), time(0)-i->second);
+	    snprintf(buf, NOTIFBUF, _("PING reply from the user: %d second(s)"), time(0)-i->second);
+	    buf[NOTIFBUF-1] = '\0';
 	    em.store(imnotification(imcontact(nick, irc), buf));
 	}
 
     } else if(!strcmp(command, "VERSION")) {
-	sprintf(buf, _("The remote is using %s"), args);
+	snprintf(buf, NOTIFBUF, _("The remote is using %s"), args);
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(imcontact(nick, irc), buf));
 
     }
@@ -1386,8 +1392,9 @@ void irchook::chatuserjoined(void *conn, void *cli, ...) {
 	if(strlen(email))
 	    uname += (string) " (" + email + ")";
 
-	char buf[512];
-	sprintf(buf, _("%s has joined."), uname.c_str());
+	char buf[NOTIFBUF];
+	snprintf(buf, NOTIFBUF, _("%s has joined."), uname.c_str());
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(imcontact(room, irc), buf));
     }
 }
@@ -1404,15 +1411,17 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
     if(conf.getourid(irc).nickname != who) {
 	string text;
 	string text2;
-	char buf[512];
+	char buf[NOTIFBUF];
 
-	sprintf(buf, _("%s has left"), who); text = buf;
+	snprintf(buf, NOTIFBUF, _("%s has left"), who); text = buf;
+	buf[NOTIFBUF-1] = '\0';
 
 	if(reason)
 	if(strlen(reason)) {
 	    if(strlen(reason) > 450) reason[450] = 0;
     	    text2 = irhook.rushtmlconv( "wk", reason );
-	    sprintf(buf, _("reason: %s"), text2.c_str() );
+	    snprintf(buf, NOTIFBUF, _("reason: %s"), reason);
+	    buf[NOTIFBUF-1] = '\0';
 	    text += (string) "; " + buf + ".";
 	}
 
@@ -1432,13 +1441,15 @@ void irchook::chatuserkicked(void *conn, void *cli, ...) {
 
     if(conf.getourid(irc).nickname != who) {
 	string text;
-	char buf[512];
+	char buf[NOTIFBUF];
 
-	sprintf(buf, _("%s has been kicked by %s"), who, by); text = buf;
+	snprintf(buf, NOTIFBUF, _("%s has been kicked by %s"), who, by); text = buf;
+	buf[NOTIFBUF-1] = '\0';
 
 	if(reason)
 	if(strlen(reason)) {
-	    sprintf(buf, _("reason: %s"), reason);
+	    snprintf(buf, NOTIFBUF, _("reason: %s"), reason);
+	    buf[NOTIFBUF-1] = '\0';
 	    text += (string) "; " + buf + ".";
 	}
 
@@ -1461,14 +1472,16 @@ void irchook::chatgottopic(void *conn, void *cli, ...) {
 	return;
 
     string text;
-    char buf[1024];
+    char buf[NOTIFBUF];
     text = irhook.rushtmlconv( "wk", topic );
-    sprintf(buf, _("Channel topic now is: %s"), text.c_str());
+    snprintf(buf, NOTIFBUF, _("Channel topic now is: %s"), text.c_str());
+    buf[NOTIFBUF-1] = '\0';
     text = buf;
 
     if(author)
     if(strlen(author)) {
-	sprintf(buf, _("set by %s"), author);
+	snprintf(buf, NOTIFBUF, _("set by %s"), author);
+	buf[NOTIFBUF-1] = '\0';
 	text += (string) "; " + buf + ".";
     }
 
@@ -1485,8 +1498,9 @@ void irchook::chatuseropped(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(by) {
-	char buf[512];
-	sprintf(buf, _("%s has been opped by %s."), who, by);
+	char buf[NOTIFBUF];
+	snprintf(buf, NOTIFBUF, _("%s has been opped by %s."), who, by);
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(imcontact(room, irc), buf));
     }
 }
@@ -1501,8 +1515,9 @@ void irchook::chatuserdeopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(by) {
-	char buf[512];
-	sprintf(buf, _("%s has been deopped by %s."), who, by);
+	char buf[NOTIFBUF];
+	snprintf(buf, NOTIFBUF, _("%s has been deopped by %s."), who, by);
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(imcontact(room, irc), buf));
     }
 }
@@ -1515,10 +1530,10 @@ void irchook::chatopped(void *conn, void *cli, ...) {
     char *by = va_arg(ap, char *);
     va_end(ap);
 
-    char buf[512];
-    if(by) sprintf(buf, _("%s has opped us."), by);
-	else strcpy(buf, _("you are an op here"));
-
+    char buf[NOTIFBUF];
+    if(by) snprintf(buf, NOTIFBUF, _("%s has opped us."), by);
+	else strncpy(buf, _("you are an op here"), NOTIFBUF);
+    buf[NOTIFBUF-1] = '\0';
     em.store(imnotification(imcontact(room, irc), buf));
 }
 
@@ -1530,8 +1545,9 @@ void irchook::chatdeopped(void *conn, void *cli, ...) {
     char *by = va_arg(ap, char *);
     va_end(ap);
 
-    char buf[512];
-    sprintf(buf, _("%s has deopped us."), by);
+    char buf[NOTIFBUF];
+    snprintf(buf, NOTIFBUF, _("%s has deopped us."), by);
+    buf[NOTIFBUF-1] = '\0';
     em.store(imnotification(imcontact(room, irc), buf));
 }
 

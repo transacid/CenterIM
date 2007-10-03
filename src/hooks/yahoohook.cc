@@ -47,6 +47,8 @@
 #define PERIOD_REFRESH          60
 #define PERIOD_CLOSE            6
 
+#define NOTIFBUF 512
+
 int yahoohook::yfd::connection_tags = 0;
 
 char pager_host[255], pager_port[255], filetransfer_host[255],
@@ -852,7 +854,7 @@ void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList 
     icqconf::imaccount acc = conf.getourid(yahoo);
     string confname = (string) "#" + room, inviter, text;
     vector<string>::iterator ic;
-    char buf[1024];
+    char buf[NOTIFBUF];
     int i;
 
     imcontact cont(confname, yahoo);
@@ -864,10 +866,11 @@ void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList 
 	inviter.erase(i);
     }
 
-    sprintf(buf, _("The user %s has invited you to the %s conference, the topic there is: %s"),
+    snprintf(buf, NOTIFBUF, _("The user %s has invited you to the %s conference, the topic there is: %s"),
 	yhook.rusconv("wk", inviter).c_str(),
 	yhook.rusconv("wk", room).c_str(),
 	yhook.rusconv("wk", msg).c_str());
+    buf[NOTIFBUF-1] = '\0';
 
     text = (string) buf + "\n\n" + _("Current conference members are: ");
     yhook.confmembers[room].push_back(inviter);
@@ -896,20 +899,22 @@ void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList 
 
 void yahoohook::conf_userdecline(int id, char *who, char *room, char *msg) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
-    char buf[512];
+    char buf[NOTIFBUF];
 
     if(c) {
-	sprintf(buf, _("The user %s has declined your invitation to join the conference"), who);
+	snprintf(buf, NOTIFBUF, _("The user %s has declined your invitation to join the conference"), who);
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(c, buf));
     }
 }
 
 void yahoohook::conf_userjoin(int id, char *who, char *room) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
-    char buf[512];
+    char buf[NOTIFBUF];
 
     if(c) {
-	sprintf(buf, _("The user %s has joined the conference"), who);
+	snprintf(buf, NOTIFBUF, _("The user %s has joined the conference"), who);
+	buf[NOTIFBUF-1] = '\0';
 
 	if(find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), who) == yhook.confmembers[room].end())
 	    yhook.confmembers[room].push_back(who);
@@ -920,11 +925,12 @@ void yahoohook::conf_userjoin(int id, char *who, char *room) {
 
 void yahoohook::conf_userleave(int id, char *who, char *room) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
-    char buf[512];
+    char buf[NOTIFBUF];
     vector<string>::iterator im;
 
     if(c) {
-	sprintf(buf, _("The user %s has left the conference"), who);
+	snprintf(buf, NOTIFBUF, _("The user %s has left the conference"), who);
+	buf[NOTIFBUF-1] = '\0';
 	em.store(imnotification(c, buf));
 
 	im = find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), who);
@@ -989,10 +995,11 @@ void yahoohook::game_notify(int id, char *me, char *who, int stat) {
 }
 
 void yahoohook::mail_notify(int id, char *from, char *subj, int cnt) {
-    char buf[1024];
+    char buf[NOTIFBUF];
 
     if(from && subj) {
-	sprintf(buf, _("+ [yahoo] e-mail from %s, %s"), from, subj);
+	snprintf(buf, NOTIFBUF, _("+ [yahoo] e-mail from %s, %s"), from, subj);
+	buf[NOTIFBUF-1] = '\0';
 	face.log(buf);
 	clist.get(contactroot)->playsound(imevent::email);
     }
@@ -1146,11 +1153,12 @@ void yahoohook::webcam_data_request(int id, int send) {
 
 int yahoohook::ylog(char *fmt, ...) {
     if(conf.getdebug()) {
-	char buf[512];
+	char buf[NOTIFBUF];
 	va_list ap;
 
 	va_start(ap, fmt);
-	vsprintf(buf, fmt, ap);
+	vsnprintf(buf, NOTIFBUF, fmt, ap);
+	buf[NOTIFBUF-1] = '\0';
 	va_end(ap);
 
 	face.log(buf);
