@@ -116,7 +116,8 @@ AC_ARG_WITH(libjpeg,
             )
 AC_ARG_WITH(libotr,
             AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr)]),
-            [with_libotr=$withval]
+            [with_libotr=$withval],
+            [with_libotr=no]
             )
 
 #####################
