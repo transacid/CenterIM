@@ -241,7 +241,7 @@ void accountmanager::exec() {
 
 		case 11:
 		    a.additional["importfriends"] =
-			(a.additional["importfriends"] == "") ? "1" : "0";
+			(a.additional["importfriends"] == "1") ? "0" : "1";
 		    break;
 
 		case 12:
