@@ -3292,6 +3292,9 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    break;
 
 	case key_quit:
+	    if (conf.getaskquit())
+		if(face.ask("Really Quit?", ASK_YES | ASK_NO, ASK_NO) == ASK_NO)
+		    break;
 	    face.extk = ACT_QUIT;
 	    break;
 

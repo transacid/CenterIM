@@ -1114,6 +1114,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool makelog = conf.getmakelog();
     bool askaway = conf.getaskaway();
     bool bidi = conf.getbidi();
+    bool askquit = conf.getaskquit();
     bool emacs = conf.getemacs();
     bool proxyconnect = conf.getproxyconnect();
     bool timestampstothesecond = conf.gettimestampstothesecond();
@@ -1200,6 +1201,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
     #endif
 	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
+	t.addleaff(i, 0, 52, _(" Ask before quit : %s "), stryesno(askquit));
 
 	i = t.addnode(_(" Codepages conversion "));
 
@@ -1445,6 +1447,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			if (dropauthreq && usingcaptcha)
 				dropauthreq = false;
 			break;
+		    case 53:
+		    	askquit = !askquit;
+			break;
   		}
   		break;
 	    case 1:
@@ -1476,6 +1481,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		}
 
 		conf.setbidi(bidi);
+		conf.setaskquit(askquit);
 		conf.setlogoptions(logtimestamps, logonline);
 
 		if(ptp) conf.setpeertopeer(ptpmin, ptpmax);

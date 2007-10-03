@@ -503,6 +503,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "russian" || param == "convert") initmultiproto(cpconvert, buf, false); else
 	    if(param == "nobidi") setbidi(false); else
 	    if(param == "askaway") askaway = true; else
+	    if(param == "askquit") askquit = true; else
 	    if(param == "logtimestamps") logtimestamps = true; else
 	    if(param == "logonline") logonline = true; else
 	    if(param == "fromcharset") fromcharset = buf; else
@@ -601,6 +602,7 @@ void icqconf::save() {
 	    f << "tocharset\t" << tocharset << endl;
 
 	    if(!getbidi()) f << "nobidi" << endl;
+	    if(getaskquit()) f << "askquit" << endl;
 	    if(logtimestamps) f << "logtimestamps" << endl;
 	    if(timestampstothesecond) f << "timestampstothesecond" << endl;
 	    if(logonline) f << "logonline" << endl;
@@ -1023,6 +1025,9 @@ void icqconf::setscreensocketpath(string path) {
 void icqconf::setquote(bool use) {
     quote = use;
 }
+void icqconf::setaskquit(bool faskquit) { 
+    askquit = faskquit; 
+} 
 
 void icqconf::setsockshost(const string &nsockshost) {
     int pos;

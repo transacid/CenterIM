@@ -148,7 +148,7 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam, screenna, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
-	    timestampstothesecond, dropauthreq, usingcaptcha;
+	    timestampstothesecond, dropauthreq, usingcaptcha, askquit;
 
 	unsigned int captchatimeout;
 
@@ -277,6 +277,9 @@ class icqconf {
 
 	bool getchatmode(protocolname pname);
 	void setchatmode(protocolname pname, bool fchatmode);
+	
+        bool getaskquit() const { return askquit; } 
+        void setaskquit(bool faskquit); 
 
 	bool getentersends(protocolname pname);
 	void setentersends(protocolname pname, bool fentersends);
