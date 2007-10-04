@@ -1194,7 +1194,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 		    mi.gender == genderFemale ? "Female" : "");
 
 		if(mi.birth_year && mi.birth_month && mi.birth_day) {
-		    sprintf(cbuf, "%04d-%02d-%02d", mi.birth_year, mi.birth_month, mi.birth_day);
+		    snprintf(cbuf, sizeof(cbuf), "%04d-%02d-%02d", mi.birth_year, mi.birth_month, mi.birth_day);
 		    vcput(y, "BDAY", cbuf);
 		}
 
@@ -1444,12 +1444,8 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
 	    vinfo += rusconv("uk", p);
 	}
 
-	if(vinfo.size() > 128)
-	    vinfo.erase(128);
-
 	char buf[NOTIFBUF];
-	snprintf(buf, NOTIFBUF, _("The remote is using %s"), vinfo.c_str());
-	buf[NOTIFBUF-1] = '\0';
+	snprintf(buf, sizeof(buf), _("The remote is using %s"), vinfo.c_str());
 	em.store(imnotification(ic, buf));
     }
 }

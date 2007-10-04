@@ -37,6 +37,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <limits.h>
 
 #ifdef HAVE_JPEGLIB_H
 extern "C" {
@@ -913,14 +914,15 @@ string gaduhook::handletoken(struct gg_http *h) {
 
     do {
 	while (tmpfilep == NULL) {
-	    char tmpnam[100];
+	    char tmpnam[PATH_MAX];
 	    int tmpfiledes;
-	    if (getenv("TMPDIR") && strlen(getenv("TMPDIR")) < 50) {
-		sprintf (tmpnam, "%s/gg.token.XXXXXX", getenv("TMPDIR"));
-	    } else {
-		sprintf (tmpnam, "/tmp/gg.token.XXXXXX");
-	    }
-	    
+	    char * tmpdir = getenv("TMPDIR");
+
+	    if (!tmpdir)
+		tmpdir = "/tmp";
+
+	    snprintf(tmpnam, sizeof(tmpnam), "%s/gg.token.XXXXXX", tmpnam);
+
 	    if ((tmpfiledes = mkstemp (tmpnam)) == -1) {
 		tmpfilep = NULL;
 	    } else {

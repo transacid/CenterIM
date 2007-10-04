@@ -125,7 +125,7 @@ bool imexternal::action::exec(const imcontact &ic, string &outbuf) {
 	writescript();
 	int result = execscript();
 
-	sprintf(buf, _("executed external manual action %s, return code = %d"),
+	snprintf(buf, sizeof(buf), _("executed external manual action %s, return code = %d"),
 	    name.c_str(), result);
 
 	outbuf = output;
@@ -157,7 +157,7 @@ bool imexternal::action::exec(imevent *ev, int &result, int option) {
 	writescript();
 	result = execscript();
 
-	sprintf(buf, _("executed external action %s, return code = %d"),
+	snprintf(buf, sizeof(buf), _("executed external action %s, return code = %d"),
 	    name.c_str(), result);
 
 	logger.putmessage(buf);

@@ -71,8 +71,6 @@ class abstracthook {
 	string rushtmlconv(const string &tdir, const string &text, bool rus = true);
 	string ruscrlfconv(const string &tdir, const string &text);
 
-	string getmd5(const string &text);
-
 	void requestfromfound(const imcontact &ic);
 	void log(logevent ev, ...);
 

@@ -102,7 +102,7 @@ const char *strint(unsigned int i) {
     static char buf[64];
 
     if(i) {
-	sprintf(buf, "%lu", i);
+	snprintf(buf, sizeof(buf), "%lu", i);
     } else {
 	buf[0] = 0;
     }
@@ -315,7 +315,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actnames[ACT_PGPKEY] = c->getpgpkey().empty() ?
 	    _(" Assign PGP key..") : _(" Unassign PGP key");
 
-	sprintf(buf, _(" Turn PGP encryption %s"), c->getusepgpkey() ? "OFF" : "ON");
+	snprintf(buf, sizeof(buf), _(" Turn PGP encryption %s"), c->getusepgpkey() ? "OFF" : "ON");
 	actnames[ACT_PGPSWITCH] = buf;
 
 	if(c->getdesc().pname == rss)
@@ -1292,7 +1292,7 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     char buf[512];
 
     if(mi.checkfreq) {
-	sprintf(buf, _("%lu minutes"), mi.checkfreq);
+	snprintf(buf, sizeof(buf), _("%lu minutes"), mi.checkfreq);
 	freq = buf;
 	if(mi.checklast) next = strdateandtime(mi.checklast+mi.checkfreq*60);
 	    else next = _("Now");
@@ -1828,7 +1828,7 @@ void icqface::modelist(contactstatus cs) {
 
 		    if(cs == csignore) {
 			char buf[512];
-			sprintf(buf, _("Remove the %d contacts from the contact list as well?"), muins.size());
+			snprintf(buf, sizeof(buf), _("Remove the %d contacts from the contact list as well?"), muins.size());
 			removecl = face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES;
 		    }
 
@@ -1994,7 +1994,7 @@ void icqface::log(const char *fmt, ...) {
     char buf[1024];
 
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
     log((string) buf);
     va_end(ap);
 }
@@ -2075,7 +2075,7 @@ void icqface::status(const char *fmt, ...) {
     char buf[1024];
 
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
     status((string) buf);
     va_end(ap);
 }
@@ -2264,7 +2264,7 @@ void icqface::userinfoexternal(const imcontact &ic) {
 
 	if(i) {
 	    char cbuf[512];
-	    sprintf(cbuf, _("Result of the external action %s:"),
+	    snprintf(cbuf, sizeof(cbuf), _("Result of the external action %s:"),
 		(r.begin()+i-1)->second.c_str());
 
 	    string buf;
@@ -2976,7 +2976,7 @@ void icqface::fullscreenize(const imevent *ev) {
 	case imevent::outgoing: fmt = _("%s to %s, sent on %s"); break;
     }
 
-    sprintf(buf, fmt, streventname(ev->gettype()),
+    snprintf(buf, sizeof(buf), fmt, streventname(ev->gettype()),
 	ev->getcontact().totext().c_str(),
 	strdateandtime(ev->gettimestamp()).c_str());
 
@@ -3074,7 +3074,7 @@ bool icqface::histexec(imevent *&im) {
 
 	im = static_cast<imevent *> (mhist.getref(0));
 
-	sprintf(buf, _("History for %s, %d events total"),
+	snprintf(buf, sizeof(buf), _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(),
 	    mhist.getcount());
 
@@ -3655,7 +3655,7 @@ void icqface::xtermtitle(const char *fmt, ...) {
 	char buf[1024];
 
 	va_start(ap, fmt);
-	vsprintf(buf, fmt, ap);
+	vsnprintf(buf, sizeof(buf), fmt, ap);
 	xtermtitle((string) buf);
 	va_end(ap);
     }
@@ -3683,7 +3683,7 @@ void icqface::icqprogress::log(const char *fmt, ...) {
     char buf[1024];
 
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
     va_end(ap);
 
     if(curline >= face.sizeDlg.height-1) {

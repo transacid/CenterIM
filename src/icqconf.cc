@@ -173,7 +173,7 @@ string icqconf::getawaymsg(protocolname pname) const {
     if(r.empty()) {
 	char buf[512];
 
-	sprintf(buf, _("I do really enjoy the default %s away message of %s %s."),
+	snprintf(buf, sizeof(buf), _("I do really enjoy the default %s away message of %s %s."),
 	    getprotocolname(pname).c_str(), PACKAGE, VERSION);
 
 	return buf;
@@ -1460,7 +1460,7 @@ const string &dest, const string &number) const {
 	    em.store(*ev);
 
 	    char buf[512];
-	    sprintf(buf, _("%s to %s has been put to the queue"),
+	    snprintf(buf, sizeof(buf), _("%s to %s has been put to the queue"),
 		streventname(ev->gettype()),
 		number.empty() ? c->getdesc().totext().c_str() : number.c_str());
 

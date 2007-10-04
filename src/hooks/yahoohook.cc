@@ -866,11 +866,10 @@ void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList 
 	inviter.erase(i);
     }
 
-    snprintf(buf, NOTIFBUF, _("The user %s has invited you to the %s conference, the topic there is: %s"),
+    snprintf(buf, sizeof(buf), _("The user %s has invited you to the %s conference, the topic there is: %s"),
 	yhook.rusconv("wk", inviter).c_str(),
 	yhook.rusconv("wk", room).c_str(),
 	yhook.rusconv("wk", msg).c_str());
-    buf[NOTIFBUF-1] = '\0';
 
     text = (string) buf + "\n\n" + _("Current conference members are: ");
     yhook.confmembers[room].push_back(inviter);
@@ -902,8 +901,7 @@ void yahoohook::conf_userdecline(int id, char *who, char *room, char *msg) {
     char buf[NOTIFBUF];
 
     if(c) {
-	snprintf(buf, NOTIFBUF, _("The user %s has declined your invitation to join the conference"), who);
-	buf[NOTIFBUF-1] = '\0';
+	snprintf(buf, sizeof(buf), _("The user %s has declined your invitation to join the conference"), who);
 	em.store(imnotification(c, buf));
     }
 }
@@ -913,8 +911,7 @@ void yahoohook::conf_userjoin(int id, char *who, char *room) {
     char buf[NOTIFBUF];
 
     if(c) {
-	snprintf(buf, NOTIFBUF, _("The user %s has joined the conference"), who);
-	buf[NOTIFBUF-1] = '\0';
+	snprintf(buf, sizeof(buf), _("The user %s has joined the conference"), who);
 
 	if(find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), who) == yhook.confmembers[room].end())
 	    yhook.confmembers[room].push_back(who);
@@ -929,8 +926,7 @@ void yahoohook::conf_userleave(int id, char *who, char *room) {
     vector<string>::iterator im;
 
     if(c) {
-	snprintf(buf, NOTIFBUF, _("The user %s has left the conference"), who);
-	buf[NOTIFBUF-1] = '\0';
+	snprintf(buf, sizeof(buf), _("The user %s has left the conference"), who);
 	em.store(imnotification(c, buf));
 
 	im = find(yhook.confmembers[room].begin(), yhook.confmembers[room].end(), who);
@@ -998,8 +994,7 @@ void yahoohook::mail_notify(int id, char *from, char *subj, int cnt) {
     char buf[NOTIFBUF];
 
     if(from && subj) {
-	snprintf(buf, NOTIFBUF, _("+ [yahoo] e-mail from %s, %s"), from, subj);
-	buf[NOTIFBUF-1] = '\0';
+	snprintf(buf, sizeof(buf), _("+ [yahoo] e-mail from %s, %s"), from, subj);
 	face.log(buf);
 	clist.get(contactroot)->playsound(imevent::email);
     }
@@ -1157,8 +1152,7 @@ int yahoohook::ylog(char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);
-	vsnprintf(buf, NOTIFBUF, fmt, ap);
-	buf[NOTIFBUF-1] = '\0';
+	vsnprintf(buf, sizeof(buf), fmt, ap);
 	va_end(ap);
 
 	face.log(buf);

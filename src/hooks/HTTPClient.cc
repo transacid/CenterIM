@@ -24,7 +24,7 @@
 
 #include "HTTPClient.h"
 
-#include <md5.h>
+#include "hooks_md5.h"
 #include <connwrap.h>
 
 #ifdef BUILD_RSS
@@ -279,25 +279,6 @@ string HTTPClient::strMethod(HTTPRequestEvent::RequestMethod m) {
     return r;
 }
 
-static string getMD5(const string &s) {
-    md5_state_t state;
-    md5_byte_t digest[16];
-    char hexdigest[3];
-    string r;
-    int a;
-	
-    md5_init(&state);
-    md5_append(&state, (md5_byte_t *) s.c_str(), s.size());
-    md5_finish(&state, digest);
-
-    for(a = 0; a < 16; a++) {
-	sprintf(hexdigest, "%02x", digest[a]);
-	r += hexdigest;
-    }
-
-    return r;
-}
-
 void HTTPClient::SendRequest() {
     Buffer b;
     HTTPRequestEvent *ev = m_queue.front();
@@ -359,7 +340,7 @@ void HTTPClient::SendRequest() {
 			ev->authparams["nc"] + ":" + cnonce + ":" +
 			ev->authparams["qop"] + ":";
 
-		    ev->authparams["response"] = getMD5(getMD5(a1) + mid + getMD5(a2));
+		    ev->authparams["response"] = hooks_md5::getmd5(hooks_md5::getmd5(a1) + mid + hooks_md5::getmd5(a2));
 
 		    map<string, string>::const_iterator ia = ev->authparams.begin();
 		    while(ia != ev->authparams.end()) {

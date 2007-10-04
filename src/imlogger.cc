@@ -116,7 +116,7 @@ void imlogger::putevent(const imevent &ev) {
 	    name += " (" + c->getdispnick() + ")";
 	}
 
-	sprintf(buf, fmt, streventname(ev.gettype()), name.c_str());
+	snprintf(buf, sizeof(buf), fmt, streventname(ev.gettype()), name.c_str());
 	text = buf;
 
 	if(lst.inlist(ev.getcontact(), csignore)) {
@@ -146,7 +146,7 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 	    name += " (" + c->getdispnick() + ")";
 	}
 
-	sprintf(buf, fmt, name.c_str(), imstatus2name(st), imstatus2name(oldst));
+	snprintf(buf, sizeof(buf), fmt, name.c_str(), imstatus2name(st), imstatus2name(oldst));
 
 	if(checkopen()) {
 	    putmessage(buf);
@@ -174,7 +174,7 @@ const imstatus &st) {
 		fmt = _("changed our %s status to %s from %s");
 	    }
 
-	    sprintf(buf, fmt, conf.getprotocolname(pname).c_str(), imstatus2name(st), imstatus2name(oldst));
+	    snprintf(buf, sizeof(buf), fmt, conf.getprotocolname(pname).c_str(), imstatus2name(st), imstatus2name(oldst));
 	    putmessage(buf);
 	}
     }

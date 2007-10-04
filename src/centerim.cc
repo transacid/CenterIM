@@ -71,10 +71,10 @@ void centerim::exec() {
 
     if(regmode = !conf.getouridcount()) {
 	bool rus = false;
-	char *p = getenv("LANG");
+	char *p = setlocale(LC_MESSAGES, NULL);
 
 	if(p)
-	if(rus = (((string) p).substr(0, 2) == "ru")) {
+	if(rus = ((string(p)).substr(0, 2) == "ru")) {
 	    conf.setcharsets("cp1251", "koi8-r");
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
 		conf.setcpconvert(pname, true);
@@ -266,11 +266,11 @@ void centerim::mainloop() {
 		if(lst.inlist(c->getdesc(), csignore)) {
 		    lst.del(c->getdesc(), csignore);
 		} else {
-		    sprintf(buf, _("Ignore all events from %s?"), c->getdesc().totext().c_str());
+		    snprintf(buf, sizeof(buf), _("Ignore all events from %s?"), c->getdesc().totext().c_str());
 		    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 			lst.push_back(modelistitem(c->getdispnick(), c->getdesc(), csignore));
 			if(!ischannel(c)) {
-			    sprintf(buf, _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
+			    snprintf(buf, sizeof(buf), _("Remove %s from the contact list as well?"), c->getdesc().totext().c_str());
 			    if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 				clist.remove(c->getdesc());
 				face.update();
@@ -304,7 +304,7 @@ void centerim::mainloop() {
 		break;
 
 	    case ACT_REMOVE:
-		sprintf(buf, _("Are you sure want to remove %s?"), c->getdesc().totext().c_str());
+		snprintf(buf, sizeof(buf), _("Are you sure want to remove %s?"), c->getdesc().totext().c_str());
 		if(face.ask(buf, ASK_YES | ASK_NO, ASK_NO) == ASK_YES) {
 		    clist.remove(c->getdesc());
 		    face.update();
@@ -663,7 +663,7 @@ void centerim::checkmail() {
 		prevempty = header = true;
 
 		while(!feof(f)) {
-		    freads(f, buf, 512);
+		    freads(f, buf, sizeof(buf));
 
 		    if(prevempty && !strncmp(buf, "From ", 5)) {
 			lastfrom = strim(buf+5);
@@ -725,7 +725,7 @@ void centerim::checkmail() {
 	    if(f = fopen(fname.c_str(), "r")) {
 		header = true;
 		while(header && !feof(f)) {
-		    freads(f, buf, 512);
+		    freads(f, buf, sizeof(buf));
 		    if(!strncmp(buf, "From: ", 6)) {
 			lastfrom = strim(buf+6);
 			header = false; // we're done
@@ -1603,13 +1603,13 @@ void centerim::exectimers() {
 				 */
 				screen_socket_path = conf.getscreensocketpath().c_str();
 				screen_user=getenv("USER");
-				screen_socket_bytes = snprintf(screen_socket, 256, "%s/S-%s/%s", screen_socket_path, screen_user, screen_socket_name);
+				screen_socket_bytes = snprintf(screen_socket, sizeof(screen_socket), "%s/S-%s/%s", screen_socket_path, screen_user, screen_socket_name);
 
 				/* Check if the socket path really exists */
 				if(!conf.getscreensocketpath().empty()
 					&& !access(conf.getscreensocketpath().c_str(), X_OK)
                     && screen_socket_bytes > 0
-                    && screen_socket_bytes < 256) {
+                    && screen_socket_bytes < sizeof(screen_socket)) {
 					screen_attached = access(screen_socket, X_OK);
 					
 					/* Screen is no longer attached, change status to N/A */

@@ -293,23 +293,6 @@ string abstracthook::rusconv(const string &tdir, const string &text) {
     return r;
 }
 
-string abstracthook::getmd5(const string &text) {
-    md5_state_t state;
-    md5_byte_t digest[16];
-    string r;
-    char buf[3];
-
-    md5_init(&state);
-    md5_append(&state, (md5_byte_t *) text.c_str(), text.size());
-    md5_finish(&state, digest);
-
-    for(int i = 0; i < 16; i++) {
-	sprintf(buf, "%02x", digest[i]);
-	r += buf;
-    }
-
-    return r;
-}
 
 void abstracthook::requestfromfound(const imcontact &ic) {
     vector<icqcontact *>::const_iterator ig = foundguys.begin();
@@ -359,8 +342,7 @@ void abstracthook::log(logevent ev, ...) {
     }
 
     va_start(ap, ev);
-    vsnprintf(buf, NOTIFBUF, lst[ev].c_str(), ap);
-    buf[NOTIFBUF-1] = '\0';
+    vsnprintf(buf, sizeof(buf), lst[ev].c_str(), ap);
     va_end(ap);
 
     face.log((string) "+ [" + conf.getprotocolname(proto)  + "] " + buf);
@@ -757,8 +739,8 @@ string abstracthook::getTimezoneIDtoString(signed char id) {
     if(id > 24 || id < -24) {
 	return "Unspecified";
     } else {
-	static char buf[32];
-	sprintf(buf, "GMT %s%d:%s", id > 0 ? "-" : "+", abs(id/2), id % 2 == 0 ? "00" : "30");
+	char buf[32];
+	snprintf(buf, sizeof(buf), "GMT %s%d:%s", id > 0 ? "-" : "+", abs(id/2), id % 2 == 0 ? "00" : "30");
 	return buf;
     }
 }

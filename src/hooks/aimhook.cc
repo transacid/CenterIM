@@ -301,8 +301,7 @@ void aimhook::loadprofile() {
 
     if(access(fname.c_str(), R_OK)) {
 	char sbuf[512];
-	snprintf(sbuf, NOTIFBUF, _("I do really enjoy the default AIM profile of centerim %s."), VERSION);
-	sbuf[NOTIFBUF-1] = '\0';
+	snprintf(sbuf, sizeof(sbuf), _("I do really enjoy the default AIM profile of centerim %s."), VERSION);
 	profile.info = sbuf;
 	saveprofile();
     }
