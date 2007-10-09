@@ -1291,9 +1291,10 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
 
     } else {
 	char *p;
-	string lastip, sbuf;
+	string lastip, sbuf, oldip;
 	struct in_addr addr;
 
+	oldip = c->getlastip();
 	addr.s_addr = ntohl(ic->getExtIP());
 	if(p = inet_ntoa(addr)) lastip = p;
 
@@ -1310,6 +1311,15 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
 
 	    c->setlastip(lastip);
 	}
+	else
+        {
+            if ((c->getstatus() != offline) && (oldip.find_first_of("*")))
+            {
+		oldip.insert(0, "* ");
+                c->setlastip(oldip);
+            }
+        }
+
     }
 }
 
