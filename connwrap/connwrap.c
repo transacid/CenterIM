@@ -331,7 +331,11 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	else{ /* check if the socket is connected correctly */
 	    int optlen = sizeof(int), optval;
 	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval){
-            	fprintf(stderr,"getsockopt error!!");
+            	
+				/* Look for a better solution to print errors */
+				 
+				//fprintf(stderr,"getsockopt error!!");
+				
 	    	return -1;
 	    }
 	}
