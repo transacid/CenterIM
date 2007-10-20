@@ -300,8 +300,8 @@ void aimhook::loadprofile() {
     fname = conf.getconfigfname("aim-profile");
 
     if(access(fname.c_str(), R_OK)) {
-	char sbuf[512];
-	snprintf(sbuf, sizeof(sbuf), _("I do really enjoy the default AIM profile of centerim %s."), VERSION);
+	char sbuf[NOTIFBUF];
+	snprintf(sbuf, NOTIFBUF, _("I do really enjoy the default AIM profile of centerim %s."), VERSION);
 	profile.info = sbuf;
 	saveprofile();
     }

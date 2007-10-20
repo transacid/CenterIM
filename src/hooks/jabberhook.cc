@@ -1445,7 +1445,7 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
 	}
 
 	char buf[NOTIFBUF];
-	snprintf(buf, sizeof(buf), _("The remote is using %s"), vinfo.c_str());
+	snprintf(buf, NOTIFBUF, _("The remote is using %s"), vinfo.c_str());
 	em.store(imnotification(ic, buf));
     }
 }

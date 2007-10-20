@@ -620,7 +620,7 @@ void irchook::channelfatal(string room, const char *fmt, ...) {
     vector<channelInfo>::iterator i;
 
     va_start(ap, fmt);
-    vsnprintf(buf, sizeof(buf), fmt, ap);
+    vsnprintf(buf, NOTIFBUF, fmt, ap);
     va_end(ap);
 
     if(room.substr(0, 1) != "#")
@@ -1228,7 +1228,7 @@ void irchook::nickchanged(void *connection, void *cli, ...) {
 
 	    }
 
-	    snprintf(buf, sizeof(buf), _("The user has changed their nick from %s to %s"), oldnick, newnick);
+	    snprintf(buf, NOTIFBUF, _("The user has changed their nick from %s to %s"), oldnick, newnick);
 	    em.store(imnotification(c, buf));
 	}
     }
@@ -1270,12 +1270,12 @@ const char * const command, const char * const args) {
 	map<string, time_t>::iterator i = irhook.pingtime.find(up(nick));
 
 	if(i != irhook.pingtime.end()) {
-	    snprintf(buf, sizeof(buf), _("PING reply from the user: %d second(s)"), time(0)-i->second);
+	    snprintf(buf, NOTIFBUF, _("PING reply from the user: %d second(s)"), time(0)-i->second);
 	    em.store(imnotification(imcontact(nick, irc), buf));
 	}
 
     } else if(!strcmp(command, "VERSION")) {
-	snprintf(buf, sizeof(buf), _("The remote is using %s"), args);
+	snprintf(buf, NOTIFBUF, _("The remote is using %s"), args);
 	em.store(imnotification(imcontact(nick, irc), buf));
 
     }
@@ -1389,7 +1389,7 @@ void irchook::chatuserjoined(void *conn, void *cli, ...) {
 	    uname += (string) " (" + email + ")";
 
 	char buf[NOTIFBUF];
-	snprintf(buf, sizeof(buf), _("%s has joined."), uname.c_str());
+	snprintf(buf, NOTIFBUF, _("%s has joined."), uname.c_str());
 	em.store(imnotification(imcontact(room, irc), buf));
     }
 }
@@ -1408,13 +1408,13 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
 	string text2;
 	char buf[NOTIFBUF];
 
-	snprintf(buf, sizeof(buf), _("%s has left"), who); text = buf;
+	snprintf(buf, NOTIFBUF, _("%s has left"), who); text = buf;
 
 	if(reason)
 	if(strlen(reason)) {
 	    if(strlen(reason) > 450) reason[450] = 0;
     	    text2 = irhook.rushtmlconv( "wk", reason );
-	    snprintf(buf, sizeof(buf), _("reason: %s"), reason);
+	    snprintf(buf, NOTIFBUF, _("reason: %s"), reason);
 	    text += (string) "; " + buf + ".";
 	}
 
@@ -1436,11 +1436,11 @@ void irchook::chatuserkicked(void *conn, void *cli, ...) {
 	string text;
 	char buf[NOTIFBUF];
 
-	snprintf(buf, sizeof(buf), _("%s has been kicked by %s"), who, by); text = buf;
+	snprintf(buf, NOTIFBUF, _("%s has been kicked by %s"), who, by); text = buf;
 
 	if(reason)
 	if(strlen(reason)) {
-	    snprintf(buf, sizeof(buf), _("reason: %s"), reason);
+	    snprintf(buf, NOTIFBUF, _("reason: %s"), reason);
 	    text += (string) "; " + buf + ".";
 	}
 
@@ -1465,12 +1465,12 @@ void irchook::chatgottopic(void *conn, void *cli, ...) {
     string text;
     char buf[NOTIFBUF];
     text = irhook.rushtmlconv( "wk", topic );
-    snprintf(buf, sizeof(buf), _("Channel topic now is: %s"), text.c_str());
+    snprintf(buf, NOTIFBUF, _("Channel topic now is: %s"), text.c_str());
     text = buf;
 
     if(author)
     if(strlen(author)) {
-	snprintf(buf, sizeof(buf), _("set by %s"), author);
+	snprintf(buf, NOTIFBUF, _("set by %s"), author);
 	text += (string) "; " + buf + ".";
     }
 
@@ -1488,7 +1488,7 @@ void irchook::chatuseropped(void *conn, void *cli, ...) {
 
     if(by) {
 	char buf[NOTIFBUF];
-	snprintf(buf, sizeof(buf), _("%s has been opped by %s."), who, by);
+	snprintf(buf, NOTIFBUF, _("%s has been opped by %s."), who, by);
 	em.store(imnotification(imcontact(room, irc), buf));
     }
 }
@@ -1504,7 +1504,7 @@ void irchook::chatuserdeopped(void *conn, void *cli, ...) {
 
     if(by) {
 	char buf[NOTIFBUF];
-	snprintf(buf, sizeof(buf), _("%s has been deopped by %s."), who, by);
+	snprintf(buf, NOTIFBUF, _("%s has been deopped by %s."), who, by);
 	em.store(imnotification(imcontact(room, irc), buf));
     }
 }
@@ -1518,8 +1518,8 @@ void irchook::chatopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[NOTIFBUF];
-    if(by) snprintf(buf, sizeof(buf), _("%s has opped us."), by);
-	else snprintf(buf, sizeof(buf), _("you are an op here"));
+    if(by) snprintf(buf, NOTIFBUF, _("%s has opped us."), by);
+	else snprintf(buf, NOTIFBUF, _("you are an op here"));
     em.store(imnotification(imcontact(room, irc), buf));
 }
 
@@ -1532,7 +1532,7 @@ void irchook::chatdeopped(void *conn, void *cli, ...) {
     va_end(ap);
 
     char buf[NOTIFBUF];
-    snprintf(buf, sizeof(buf), _("%s has deopped us."), by);
+    snprintf(buf, NOTIFBUF, _("%s has deopped us."), by);
     em.store(imnotification(imcontact(room, irc), buf));
 }
 

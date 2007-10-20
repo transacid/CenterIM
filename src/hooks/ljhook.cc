@@ -23,7 +23,6 @@
 */
 
 #include "icqcommon.h"
-#include "hooks_md5.h"
 
 #ifdef BUILD_LJ
 
@@ -62,7 +61,7 @@ void ljhook::connect() {
     icqconf::imaccount acc = conf.getourid(proto);
 
     baseurl = acc.server + ":" + i2str(acc.port) + "/interface/flat";
-    md5pass = hooks_md5::getmd5(acc.password);
+    md5pass = getmd5(acc.password);
 
     log(logConnecting);
 
@@ -673,7 +672,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		if(!foempty) {
 		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
 
-		    snprintf(buf, sizeof(buf), _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
+		    snprintf(buf, NOTIFBUF, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
 			in->first.c_str(), in->second.c_str(), bd.c_str());
 
 		    em.store(imnotification(self, buf));
@@ -683,7 +682,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    for(il = friendof.begin(); il != friendof.end(); ) {
 		if(nfriendof.find(*il) == nfriendof.end()) {
 		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
-		    snprintf(buf, sizeof(buf), _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
+		    snprintf(buf, NOTIFBUF, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
 			il->c_str(), bd.c_str());
 		    em.store(imnotification(self, buf));
 		    friendof.erase(il);

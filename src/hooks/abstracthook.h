@@ -93,6 +93,7 @@ class abstracthook {
 	static string getTimezoneIDtoString(signed char id);
 	static string getTimezonetoLocaltime(signed char id);
 	static string getLanguageIDtoString(unsigned char id);
+	static string getmd5(const string &text);
 
     public:
 	abstracthook(protocolname aproto);
