@@ -789,7 +789,7 @@ public:
         }
         
         std::ostringstream buf_;
-        buf_ << "CVR " << this->trID << " 0x0409 winnt 5.2 i386 MSNMSGR 6.0.0250 MSMSGS " << info->username << "\r\n";
+        buf_ << "CVR " << this->trID << " 0x0409 winnt 5.2 i386 MSNMSGR 7.5.0324 MSMSGS " << info->username << "\r\n";
         if (this->write(buf_) != buf_.str().size())
             return;
         this->addCallback(&NotificationServerConnection::callback_RequestUSR, this->trID++, (void *) data);
