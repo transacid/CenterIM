@@ -285,13 +285,13 @@ public:
         };
 
         NotificationServerState connectionState() const { return this->_connectionState; };
-	unsigned int nextPing() { return this->_nextPing; };
+        unsigned int nextPing() { return this->_nextPing; };
         Callbacks & externalCallbacks;
         virtual NotificationServerConnection *myNotificationServer() { return this; };        
 protected:
         virtual void handleIncomingData();
         NotificationServerState _connectionState;
-	unsigned int _nextPing;
+        unsigned int _nextPing;
         
         void setConnectionState(NotificationServerState s) { this->_connectionState = s; };
         void assertConnectionStateIs(NotificationServerState s) { assert(this->_connectionState == s); };
@@ -315,6 +315,7 @@ private:
         void handle_CHL(std::vector<std::string> & args);
         void handle_ILN(std::vector<std::string> & args);
         void handle_NLN(std::vector<std::string> & args);
+        void handle_NOT(std::vector<std::string> & args);
         void handle_FLN(std::vector<std::string> & args);
         void handle_MSG(std::vector<std::string> & args);
         void handle_RNG(std::vector<std::string> & args);
