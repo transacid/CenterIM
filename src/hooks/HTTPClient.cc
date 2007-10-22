@@ -24,8 +24,8 @@
 
 #include "HTTPClient.h"
 
-#include "hooks_md5.h"
 #include <connwrap.h>
+#include "abstracthook.h"
 
 #ifdef BUILD_RSS
 
@@ -340,7 +340,7 @@ void HTTPClient::SendRequest() {
 			ev->authparams["nc"] + ":" + cnonce + ":" +
 			ev->authparams["qop"] + ":";
 
-		    ev->authparams["response"] = hooks_md5::getmd5(hooks_md5::getmd5(a1) + mid + hooks_md5::getmd5(a2));
+		    ev->authparams["response"] = abstracthook::getmd5(abstracthook::getmd5(a1) + mid + abstracthook::getmd5(a2));
 
 		    map<string, string>::const_iterator ia = ev->authparams.begin();
 		    while(ia != ev->authparams.end()) {

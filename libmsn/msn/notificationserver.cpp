@@ -152,6 +152,7 @@ namespace MSN
             commandHandlers["CHL"] = &NotificationServerConnection::handle_CHL;
             commandHandlers["ILN"] = &NotificationServerConnection::handle_ILN;
             commandHandlers["NLN"] = &NotificationServerConnection::handle_NLN;
+            commandHandlers["NOT"] = &NotificationServerConnection::handle_NOT;
             commandHandlers["FLN"] = &NotificationServerConnection::handle_FLN;
             commandHandlers["MSG"] = &NotificationServerConnection::handle_MSG;
             commandHandlers["ADG"] = &NotificationServerConnection::handle_ADG;
@@ -280,6 +281,13 @@ namespace MSN
     {
         this->assertConnectionStateIsAtLeast(NS_CONNECTED);
         this->myNotificationServer()->externalCallbacks.buddyChangedStatus(this, args[2], decodeURL(args[3]), buddyStatusFromString(args[1]));
+    }
+    
+    void NotificationServerConnection::handle_NOT(std::vector<std::string> & args)
+    {
+        this->assertConnectionStateIsAtLeast(NS_CONNECTED);
+        int notlen = decimalFromString(args[1]);
+        this->readBuffer = this->readBuffer.substr(notlen);
     }
     
     void NotificationServerConnection::handle_FLN(std::vector<std::string> & args)
@@ -570,10 +578,12 @@ public:
                 else
                     dataLength = decimalFromString(args[1]);
 
-                if (this->readBuffer.find("\r\n") + 2 + dataLength > this->readBuffer.size())
+                if (this->readBuffer.find("\r\n", 0) + 2 + dataLength > this->readBuffer.size()) {
+                    this->myNotificationServer()->externalCallbacks.showError(this, "Could not read buffer: too small");
                     return;
+                }
             }
-            this->readBuffer = this->readBuffer.substr(this->readBuffer.find("\r\n") + 2);
+            this->readBuffer = this->readBuffer.substr(this->readBuffer.find("\r\n", 0) + 2);
             int trid = 0;
             
             if (args.size() >= 6 && args[0] == "XFR" && args[2] == "NS")
@@ -602,7 +612,7 @@ public:
                 // QNG
                 //  0
                 
-		this->_nextPing = decimalFromString(args[1]);
+                this->_nextPing = decimalFromString(args[1]);
                 return;
             }
             
@@ -779,7 +789,7 @@ public:
         }
         
         std::ostringstream buf_;
-        buf_ << "CVR " << this->trID << " 0x0409 winnt 5.2 i386 MSNMSGR 6.0.0250 MSMSGS " << info->username << "\r\n";
+        buf_ << "CVR " << this->trID << " 0x0409 winnt 5.2 i386 MSNMSGR 7.5.0324 MSMSGS " << info->username << "\r\n";
         if (this->write(buf_) != buf_.str().size())
             return;
         this->addCallback(&NotificationServerConnection::callback_RequestUSR, this->trID++, (void *) data);
