@@ -5,13 +5,13 @@
 #: src/hooks/jabberhook.cc:1664
 msgid ""
 msgstr ""
-"Project-Id-Version: centerim 20071022\n"
+"Project-Id-Version: centerim 4.22.1\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-10-22 22:51+0100\n"
-"PO-Revision-Date: 2007-10-25 16:09+0200\n"
+"POT-Creation-Date: 2007-10-16 11:48+0200\n"
+"PO-Revision-Date: 2007-06-18 14:30+0200\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
-"Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
+"Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -612,39 +612,39 @@ msgstr "ty jsi tady operátor"
 msgid "%s has deopped us."
 msgstr "%s už není naším operátorem."
 
-#: src/hooks/ljhook.cc:414 src/hooks/ljhook.cc:739
+#: src/hooks/ljhook.cc:415 src/hooks/ljhook.cc:740
 msgid "+ [lj] user lookup finished"
 msgstr "+ [lj] hledání uživatele dokončeno"
 
-#: src/hooks/ljhook.cc:509
+#: src/hooks/ljhook.cc:510
 msgid "cannot connect"
 msgstr "nemohu se připojit"
 
-#: src/hooks/ljhook.cc:510
+#: src/hooks/ljhook.cc:511
 #, c-format
 msgid "+ [lj] HTTP failed: %s"
 msgstr "+ [lj] HTTP selhalo: %s"
 
-#: src/hooks/ljhook.cc:565
+#: src/hooks/ljhook.cc:566
 msgid "Message from the server: "
 msgstr "Zpráva ze serveru: "
 
-#: src/hooks/ljhook.cc:570
+#: src/hooks/ljhook.cc:571
 #, c-format
 msgid "+ [lj] login failed: %s"
 msgstr "+ [lj] selhalo přihlášení: %s"
 
-#: src/hooks/ljhook.cc:574
+#: src/hooks/ljhook.cc:575
 #, c-format
 msgid "+ [lj] posted successully, the id is %s"
 msgstr "+ [lj] úspěšně zasláno, id je %s"
 
-#: src/hooks/ljhook.cc:576
+#: src/hooks/ljhook.cc:577
 #, c-format
 msgid "+ [lj] post error: %s"
 msgstr "+ [lj] chyba při odesílání: %s"
 
-#: src/hooks/ljhook.cc:675
+#: src/hooks/ljhook.cc:676
 #, c-format
 msgid ""
 "The user %s (%s) has added you to his/her friend list\n"
@@ -655,7 +655,7 @@ msgstr ""
 "\n"
 "Adresa journalu: %s"
 
-#: src/hooks/ljhook.cc:685
+#: src/hooks/ljhook.cc:686
 #, c-format
 msgid ""
 "The user %s has removed you from his/her friend list\n"
@@ -666,19 +666,19 @@ msgstr ""
 "\n"
 "Adresa journalu: %s"
 
-#: src/hooks/ljhook.cc:711
+#: src/hooks/ljhook.cc:712
 msgid "+ [lj] error deleting friend"
 msgstr "+ [lj] chyba při mazání přítele"
 
-#: src/hooks/ljhook.cc:713
+#: src/hooks/ljhook.cc:714
 msgid "+ [lj] the user has been removed from your friend list"
 msgstr "+ [lj] uživatel byl odebrán z vašeho seznamu přátel"
 
-#: src/hooks/ljhook.cc:718
+#: src/hooks/ljhook.cc:719
 msgid "+ [lj] couldn't add friend"
 msgstr "+ [lj] nemohu přidat přítele"
 
-#: src/hooks/ljhook.cc:720
+#: src/hooks/ljhook.cc:721
 #, c-format
 msgid "+ [lj] %s was added to friends"
 msgstr "+ [lj] %s byl přidán do seznamu přátel"
@@ -706,38 +706,38 @@ msgstr "+ [msn] nemohu se připojit: "
 msgid "verify the hostname and port"
 msgstr "zkontrolujte jméno počítače a port"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:334
 msgid "connecting to the server"
 msgstr "připojuji se k serveru"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:335
 msgid "logged in"
 msgstr "přihlášen(a)"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:336
 #, c-format
 msgid "search finished, %d found"
 msgstr "hledání dokončeno, %d nalezen"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:337
 msgid "password was changed successfully"
 msgstr "heslo bylo úspěšně změněno"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:338
 msgid "disconnected"
 msgstr "Odpojeno"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:339
 #, c-format
 msgid "adding %s to the contacts"
 msgstr "přidávám %s do seznamu kontaktů"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:340
 #, c-format
 msgid "removing %s from the contacts"
 msgstr "odstraňuji %s ze seznamu kontaktů"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:341
 #, c-format
 msgid "members list fetching finished, %d found"
 msgstr "stahování seznamu členů dokončeno, %d nalezen(i)"
@@ -1448,7 +1448,7 @@ msgstr " Textový editor ve stylu emacs : %s "
 #: src/icqdialogs.cc:1204
 #, c-format
 msgid " Ask before quit : %s "
-msgstr " Zeptat se před ukončením : %s"
+msgstr ""
 
 #: src/icqdialogs.cc:1206
 msgid " Codepages conversion "
@@ -1857,9 +1857,9 @@ msgid "(default)"
 msgstr "(výchozí)"
 
 #: src/icqdialogs.cc:2010
-#, c-format
+#, fuzzy, c-format
 msgid " Tags : %s "
-msgstr " Štítky : %s "
+msgstr " Věk : %s "
 
 #: src/icqdialogs.cc:2013
 #, c-format
@@ -1883,7 +1883,7 @@ msgstr " Zpětně datovaná položka: %s "
 
 #: src/icqdialogs.cc:2024
 msgid "Posting subject: "
-msgstr "Zasílající předmět: "
+msgstr "Zasílajicí předmět: "
 
 #: src/icqdialogs.cc:2033
 msgid "Currently playing: "
@@ -1894,8 +1894,9 @@ msgid "Current mood: "
 msgstr "Současná nálada: "
 
 #: src/icqdialogs.cc:2036
+#, fuzzy
 msgid "Tags for the entry: "
-msgstr "Štítky pro položku: "
+msgstr "Zpráva ze serveru: "
 
 #: src/icqdialogs.cc:2070
 msgid "pgp key quick search"
@@ -1967,7 +1968,7 @@ msgstr "Pryč"
 
 #: src/imcontact.cc:113 src/imlogger.cc:40
 msgid "Out for Lunch"
-msgstr "Na obědě"
+msgstr ""
 
 #: src/imlogger.cc:37
 msgid "DND"
@@ -2472,19 +2473,20 @@ msgstr "Chyba při PGP šifrování: "
 
 #: src/imotr.cc:104
 msgid "[OTR] Error: inject_message_cb, recipient \""
-msgstr "[OTR] Chyba: inject_message_cb, příjemce „"
+msgstr ""
 
 #: src/imotr.cc:104
+#, fuzzy
 msgid "\" not found"
-msgstr "“ nenalezen"
+msgstr "nenašel"
 
 #: src/imotr.cc:119
 msgid "Error"
-msgstr "Chyba"
+msgstr ""
 
 #: src/imotr.cc:121
 msgid "Warning"
-msgstr "Varování"
+msgstr ""
 
 #: src/imotr.cc:123 src/icqface.cc:1350 src/icqface.cc:1354
 #: src/icqface.cc:1360 src/icqface.cc:1366
@@ -2492,72 +2494,76 @@ msgid "Info"
 msgstr "Info"
 
 #: src/imotr.cc:127 src/imotr.cc:315
+#, fuzzy
 msgid "      accountname: "
-msgstr "        názevúčtu: "
+msgstr " Manažer IM účtů "
 
 #: src/imotr.cc:128
+#, fuzzy
 msgid "      protocol:    "
-msgstr "      protokol:    "
+msgstr " Pro protokoly : %s "
 
 #: src/imotr.cc:129
+#, fuzzy
 msgid "      username:    "
-msgstr " uživatelskéjméno: "
+msgstr " uživatelské jméno: "
 
 #: src/imotr.cc:130
 msgid "      title:       "
-msgstr "      název:       "
+msgstr ""
 
 #: src/imotr.cc:131
 msgid "      primary:     "
-msgstr "      prvotní:     "
+msgstr ""
 
 #: src/imotr.cc:132
 msgid "      secondary:   "
-msgstr "      druhotný:    "
+msgstr ""
 
 #: src/imotr.cc:186
 msgid "[OTR] Received unknown fingerprint from \""
-msgstr "[OTR] Přijat neznámý otisk z „"
+msgstr ""
 
 #: src/imotr.cc:187
 msgid "      You can verify it in the OTR options."
-msgstr "         Ověřit jej můžete v nastavení OTR."
+msgstr ""
 
 #: src/imotr.cc:210
 msgid "[OTR] Connection is now secure..."
-msgstr "[OTR] Spojení je nyní zabezpečené…"
+msgstr ""
 
 #: src/imotr.cc:219
 msgid "[OTR] Connection is insecure..."
-msgstr "[OTR] Spojení není zabezpečené…"
+msgstr ""
 
 #: src/imotr.cc:237
 msgid "[OTR] Log: "
-msgstr "[OTR] Protokol: "
+msgstr ""
 
 #: src/imotr.cc:314
 msgid "[OTR] Error while encrypting message... no message sent!"
-msgstr "[OTR] Chyba při šifrování zprávy, zpráva neodeslána!"
+msgstr ""
 
 #: src/imotr.cc:316
 msgid "      recipient:   "
-msgstr "       příjemce:   "
+msgstr ""
 
 #: src/imotr.cc:378 src/imotr.cc:397
 msgid "[OTR] Error: At the moment, only jabber is supported"
-msgstr "[OTR] Chyba: V současnosti je podporován jen jabber"
+msgstr ""
 
 #: src/imotr.cc:386
 msgid "[OTR] Trying to start a secure session with \""
-msgstr "[OTR] Pokouším se ustanovit zabezpečenou relaci s „"
+msgstr ""
 
 #: src/imotr.cc:405
 msgid "[OTR] Ending secure session with \""
-msgstr "[OTR] Ukončuji zabezpečenou relaci s „"
+msgstr ""
 
 #: src/imotr.cc:413
+#, fuzzy
 msgid "yes/no"
-msgstr "ano/ne"
+msgstr "ano"
 
 #: src/imotr.cc:413 src/imotr.cc:414 src/imotr.cc:416 src/imotr.cc:420
 #: src/icqface.cc:44 src/icqface.cc:119
@@ -2570,107 +2576,117 @@ msgstr "ano"
 
 #: src/imotr.cc:416
 msgid " Please type 'yes' or 'no': "
-msgstr " Prosím, napište „ano“, nebo „ne“: "
+msgstr ""
 
 #: src/imotr.cc:462
 msgid " Private keys "
-msgstr " Soukromé klíče "
+msgstr ""
 
 #: src/imotr.cc:470
 msgid "Error calculating Fingerprint"
-msgstr "Chyba při výpočtu otisku"
+msgstr ""
 
 #: src/imotr.cc:472
+#, fuzzy
 msgid " Account: "
-msgstr " Účet:    "
+msgstr " Účty…"
 
 #: src/imotr.cc:473
+#, fuzzy
 msgid " Protocol:    "
-msgstr " Protokol:    "
+msgstr "protokolu"
 
 #: src/imotr.cc:474 src/imotr.cc:498
 msgid " Fingerprint: "
-msgstr " Otisk:       "
+msgstr ""
 
 #: src/imotr.cc:475 src/imotr.cc:501
 msgid " Forget key "
-msgstr " Zapomenout klíč "
+msgstr ""
 
 #: src/imotr.cc:481
 msgid " Public keys "
-msgstr " Soukromé klíče "
+msgstr ""
 
 #: src/imotr.cc:488
+#, fuzzy
 msgid " User: "
-msgstr " Uživatel: "
+msgstr "Užití: "
 
 #: src/imotr.cc:489
+#, fuzzy
 msgid " Protocol: "
-msgstr " Protokol: "
+msgstr "protokolu"
 
 #: src/imotr.cc:490
+#, fuzzy
 msgid " Account:  "
-msgstr " Účet:     "
+msgstr " Účty…"
 
 #: src/imotr.cc:495
+#, fuzzy
 msgid "Yes"
-msgstr "Ano"
+msgstr "ano"
 
 #: src/imotr.cc:495
+#, fuzzy
 msgid "No"
-msgstr "Ne"
+msgstr "Lis"
 
 #: src/imotr.cc:499
+#, fuzzy
 msgid " Verified: "
-msgstr " Ověřeno: "
+msgstr " Služba "
 
 #: src/imotr.cc:507
 msgid " Active fingerprint: "
-msgstr " Aktivní otisk: "
+msgstr ""
 
 #: src/imotr.cc:523 src/imotr.cc:543
 msgid "Do you want to forget the selected key?"
-msgstr "Chcete vybraný klíč zapomenout?"
+msgstr ""
 
 #: src/imotr.cc:536
 msgid "Do you want verify the selected key?"
-msgstr "Chcete vybraný klíč ověřit?"
+msgstr ""
 
 #: src/imotr.cc:570 src/imotr.cc:597
+#, fuzzy
 msgid "No Jabber"
-msgstr "Není Jabber"
+msgstr "Chybné Jabber ID!"
 
 #: src/imotr.cc:580 src/imotr.cc:607
 msgid "No OTR"
-msgstr "Chybí OTR"
+msgstr ""
 
 #: src/imotr.cc:585
 msgid "Plaintext"
-msgstr "Obyčejný text"
+msgstr ""
 
 #: src/imotr.cc:586
 msgid "Encrypted"
-msgstr "Zašifrováno"
+msgstr ""
 
 #: src/imotr.cc:587
 msgid "Finished"
-msgstr "Hotovo"
+msgstr ""
 
 #: src/imotr.cc:588
+#, fuzzy
 msgid "Unknown"
-msgstr "Neznámý"
+msgstr "neznámý"
 
 #: src/imotr.cc:611
 msgid "No Encryption"
-msgstr "Není zašifrováno"
+msgstr ""
 
 #: src/imotr.cc:615
 msgid "Verified"
-msgstr "Ověřeno"
+msgstr ""
 
 #: src/imotr.cc:617
 msgid "Unverified"
-msgstr "Neověřeno"
+msgstr ""
 
 #: src/icqface.cc:49
 msgid "Male"
@@ -2912,7 +2928,7 @@ msgstr " Konfigurace CenterIM"
 
 #: src/icqface.cc:434
 msgid " OTR options and fingerprints"
-msgstr " Nastavení OTR a otisků"
+msgstr ""
 
 #: src/icqface.cc:436
 msgid " File transfers monitor"
@@ -3425,5 +3441,5 @@ msgstr "hledat pro: "
 
 #~ msgid "Report bugs to <centericq-bugs@konst.org.ua>."
 #~ msgstr ""
-#~ "Chyby hlaste na <centericq-bugs@konst.org.ua>.\n"
+#~ "Chyby hlašte na <centericq-bugs@konst.org.ua>.\n"
 #~ "Chyby překladu na <petr.pisar@atlas.cz>."
