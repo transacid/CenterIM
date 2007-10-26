@@ -245,6 +245,7 @@ string abstracthook::rusconv(const string &tdir, const string &text) {
     if(tdir == "wk") r = siconv(text, conf.getconvertfrom(proto), conf.getconvertto(proto)); else
     if(tdir == "ku") r = siconv(text, conf.getconvertto(proto), "utf-8"); else
     if(tdir == "uk") r = siconv(text, "utf-8", conf.getconvertto(proto)); else
+    if(tdir == "ck") r = siconv(text, "UCS-2BE", conf.getconvertto(proto)); else
 #endif
 	r = text;
 

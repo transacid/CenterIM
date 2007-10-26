@@ -1110,11 +1110,20 @@ void icqhook::messaged_cb(MessageEvent *ev) {
     if(ev->getType() == MessageEvent::Normal) {
 	NormalMessageEvent *r = static_cast<NormalMessageEvent *>(ev);
 
-	text = r->getMessage();
-	if(text.substr(0, 6) == "{\\rtf1")
-	    text = fixicqrtf(striprtf(text, conf.getconvertfrom(proto)));
+	bool converted = false;
 
-	em.store(immessage(ic, imevent::incoming, rusconv("wk", text), r->getTime()));
+	// check for UCS-2BE encoding in message
+	if (r->getEncoding() == (unsigned int)0x0002) {
+	    string msg = r->getMessage();
+	    text = rusconv("ck", msg);
+	    converted = true;
+	}
+	else
+	    text = r->getMessage();
+	if(text.substr(0, 6) == "{\\rtf1")
+	    text = fixicqrtf(striprtf(text, converted?conf.getconvertto(proto):conf.getconvertfrom(proto)));
+
+	em.store(immessage(ic, imevent::incoming, converted?text:rusconv("wk", text), r->getTime()));
 
     } else if(ev->getType() == MessageEvent::URL) {
 	URLMessageEvent *r = static_cast<URLMessageEvent *>(ev);

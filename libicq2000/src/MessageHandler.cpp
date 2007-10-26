@@ -315,6 +315,7 @@ namespace ICQ2000
       e = new NormalMessageEvent(contact,
 				 m_translator->server_to_client( nst->getMessage(), ENCODING_CONTACT_LOCALE, contact ),
 				 nst->isMultiParty() );
+      (static_cast<NormalMessageEvent*>(e))->setEncoding( nst->getEncoding() );
       break;
     }
 

@@ -245,6 +245,10 @@ namespace ICQ2000 {
 
   void NormalICQSubType::setMessage(const string& msg) { m_message = msg; }
 
+  void NormalICQSubType::setEncoding(const unsigned short encoding) { m_encoding = encoding; }
+
+  unsigned short NormalICQSubType::getEncoding() const { return m_encoding; }
+
   void NormalICQSubType::ParseBodyUIN(Buffer& b) {
     b.UnpackUint16StringNull(m_message);
 

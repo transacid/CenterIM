@@ -706,6 +706,20 @@ namespace ICQ2000 {
   string NormalMessageEvent::getMessage() const { return m_message; }
 
   /**
+   *  get message encoding
+   *
+   * @return message encoding
+   */
+  unsigned short NormalMessageEvent::getEncoding() const { return m_encoding; }
+
+  /**
+   *  set message encoding
+   *
+   * @param encoding message encoding
+   */
+  void NormalMessageEvent::setEncoding(const unsigned short encoding) { m_encoding = encoding; }
+
+  /**
    *  get if the message is a multiparty message
    *
    * @return if the message is a multiparty message

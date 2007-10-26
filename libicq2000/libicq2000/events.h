@@ -527,6 +527,7 @@ namespace ICQ2000 {
     std::string m_message;
     bool m_multi;
     unsigned int m_foreground, m_background;
+    unsigned short m_encoding;
     
    public:
     NormalMessageEvent(ContactRef c, const std::string& msg, bool multi = false);
@@ -535,6 +536,8 @@ namespace ICQ2000 {
 
     std::string getMessage() const;
     MessageType getType() const;
+    unsigned short getEncoding() const;
+    void setEncoding(const unsigned short encoding);
     bool isMultiParty() const;
     unsigned int getForeground() const;
     unsigned int getBackground() const;
