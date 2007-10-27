@@ -147,7 +147,7 @@ void yahoohook::connect() {
 
     cid = yahoo_init_with_attributes(acc.nickname.c_str(), acc.password.c_str(),
 	"pager_host", acc.server.c_str(),
-	"pager_port", acc.port, 0);
+	"pager_port", acc.port, (char *) NULL);
 
     yahoo_login(cid, stat2int[manualstatus]);
 

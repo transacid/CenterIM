@@ -3413,7 +3413,7 @@ int yahoo_init_with_attributes(const char *username, const char *password, ...)
 
 int yahoo_init(const char *username, const char *password)
 {
-	return yahoo_init_with_attributes(username, password, NULL);
+	return yahoo_init_with_attributes(username, password, (char *)NULL);
 }
 
 struct connect_callback_data {
