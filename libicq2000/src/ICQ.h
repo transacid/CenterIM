@@ -153,6 +153,7 @@ namespace ICQ2000 {
     std::string m_message;
     bool m_multi;
     unsigned int m_foreground, m_background;
+    unsigned short m_encoding;
     
    public:
     NormalICQSubType(bool multi);
@@ -161,6 +162,8 @@ namespace ICQ2000 {
     std::string getMessage() const;
     bool isMultiParty() const;
     void setMessage(const std::string& message);
+    void setEncoding(const unsigned short encoding);
+    unsigned short getEncoding() const;
     
     void setForeground(unsigned int f);
     void setBackground(unsigned int f);

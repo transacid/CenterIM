@@ -285,6 +285,7 @@ namespace ICQ2000 {
       NormalICQSubType *nst = new NormalICQSubType(false);
       nst->setAdvanced(false);
       nst->setMessage( t->getMessage() );
+      nst->setEncoding( t->getFlag1() );
       m_icqsubtype = nst;
 
     } else if (channel == 0x0002) {

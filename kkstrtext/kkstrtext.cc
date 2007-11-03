@@ -853,8 +853,8 @@ bool getstring(istream &f, string &sbuf) {
 }
 
 string ruscase(const string &s, const string &mode) {
-    static const string lower = "ÁÂ×ÇÄÅÖÚÉÊËÌÍÎÏÐÒÓÔÕÆÈÃÞÛÝØßÙÜÀÑ";
-    static const string upper = "áâ÷çäåöúéêëìíîïðòóôõæèãþûýøÿùüàñ";
+    static const string lower = "ÃÃ‚Ã—Ã‡Ã„Ã…Ã–ÃšÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃÃ’Ã“Ã”Ã•Ã†ÃˆÃƒÃžÃ›ÃÃ˜ÃŸÃ™ÃœÃ€Ã‘";
+    static const string upper = "Ã¡Ã¢Ã·Ã§Ã¤Ã¥Ã¶ÃºÃ©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã²Ã³Ã´ÃµÃ¦Ã¨Ã£Ã¾Ã»Ã½Ã¸Ã¿Ã¹Ã¼Ã Ã±";
     string r, tfrom, tto;
     int pos, tpos;
 
@@ -897,10 +897,12 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
 	//from iconv.c (libiconv)
 	iconv(cd,NULL,NULL,NULL,NULL);
 
-	while(!text.empty()) {
-	    sinbuf = inbuf = strdup(text.c_str());
-	    inleft = strlen(inbuf);
+	size_t len = text.size();
+	sinbuf = inbuf = (char *)malloc(len+1);
+	memcpy(sinbuf, text.c_str(), len+1);
+	inleft = len;
 
+	while (inleft > 0) {
 	    soutleft = outleft = inleft*4;
 	    soutbuf = outbuf = new char[outleft];
 
@@ -909,19 +911,20 @@ string siconv(const string &atext, const string &fromcs, const string &tocs) {
 
 	    soutbuf[soutleft-outleft] = 0;
 	    r += soutbuf;
-	    text.erase(0, text.size()-inleft);
 
 	    delete[] soutbuf;
-	    free(sinbuf);
 
-	    if(res == -1 && errno != EILSEQ)
+	    if ((res == (size_t)(-1)) && (errno != EILSEQ)) {
 		break;
+	    }
 
-	    if(!text.empty()) {
-		text.erase(0, 1);
-		r += " ";
+	    if (inleft>0) {
+		inbuf++;
+		inleft--;
 	    }
 	}
+
+	free(sinbuf);
 
 	iconv_close(cd);
 	return r;
