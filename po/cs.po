@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 20071022\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-10-22 22:51+0100\n"
+"POT-Creation-Date: 2007-11-03 18:10+0100\n"
 "PO-Revision-Date: 2007-10-25 16:09+0200\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -882,7 +882,7 @@ msgstr "Vyčistit"
 
 #: src/icqdialogs.cc:215 src/icqdialogs.cc:220 src/icqdialogs.cc:225
 #: src/icqdialogs.cc:738 src/icqdialogs.cc:1182 src/icqdialogs.cc:1982
-#: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:445
+#: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:439
 msgid "Change"
 msgstr "Změnit"
 
@@ -1290,7 +1290,7 @@ msgid " %s: details "
 msgstr " detaily: %s "
 
 #: src/icqdialogs.cc:738 src/icqdialogs.cc:1182 src/icqdialogs.cc:1647
-#: src/accountmanager.cc:69 src/imotr.cc:445
+#: src/accountmanager.cc:69 src/imotr.cc:439
 msgid "Done"
 msgstr "Hotovo"
 
@@ -2061,7 +2061,7 @@ msgstr "%s: právě se odpojil"
 msgid "changed our %s status to %s from %s"
 msgstr "%s změnil status z %s na %s"
 
-#: src/accountmanager.cc:63 src/imotr.cc:439
+#: src/accountmanager.cc:63 src/imotr.cc:433
 msgid " IM account manager "
 msgstr " Manažer IM účtů "
 
@@ -2470,205 +2470,205 @@ msgstr "Chyba při PGP podepisování: "
 msgid "PGP encrypt error: "
 msgstr "Chyba při PGP šifrování: "
 
-#: src/imotr.cc:104
+#: src/imotr.cc:98
 msgid "[OTR] Error: inject_message_cb, recipient \""
 msgstr "[OTR] Chyba: inject_message_cb, příjemce „"
 
-#: src/imotr.cc:104
+#: src/imotr.cc:98
 msgid "\" not found"
 msgstr "“ nenalezen"
 
-#: src/imotr.cc:119
+#: src/imotr.cc:113
 msgid "Error"
 msgstr "Chyba"
 
-#: src/imotr.cc:121
+#: src/imotr.cc:115
 msgid "Warning"
 msgstr "Varování"
 
-#: src/imotr.cc:123 src/icqface.cc:1350 src/icqface.cc:1354
+#: src/imotr.cc:117 src/icqface.cc:1350 src/icqface.cc:1354
 #: src/icqface.cc:1360 src/icqface.cc:1366
 msgid "Info"
 msgstr "Info"
 
-#: src/imotr.cc:127 src/imotr.cc:315
+#: src/imotr.cc:121 src/imotr.cc:309
 msgid "      accountname: "
 msgstr "        názevúčtu: "
 
-#: src/imotr.cc:128
+#: src/imotr.cc:122
 msgid "      protocol:    "
 msgstr "      protokol:    "
 
-#: src/imotr.cc:129
+#: src/imotr.cc:123
 msgid "      username:    "
 msgstr " uživatelskéjméno: "
 
-#: src/imotr.cc:130
+#: src/imotr.cc:124
 msgid "      title:       "
 msgstr "      název:       "
 
-#: src/imotr.cc:131
+#: src/imotr.cc:125
 msgid "      primary:     "
 msgstr "      prvotní:     "
 
-#: src/imotr.cc:132
+#: src/imotr.cc:126
 msgid "      secondary:   "
 msgstr "      druhotný:    "
 
-#: src/imotr.cc:186
+#: src/imotr.cc:180
 msgid "[OTR] Received unknown fingerprint from \""
 msgstr "[OTR] Přijat neznámý otisk z „"
 
-#: src/imotr.cc:187
+#: src/imotr.cc:181
 msgid "      You can verify it in the OTR options."
 msgstr "         Ověřit jej můžete v nastavení OTR."
 
-#: src/imotr.cc:210
+#: src/imotr.cc:204
 msgid "[OTR] Connection is now secure..."
 msgstr "[OTR] Spojení je nyní zabezpečené…"
 
-#: src/imotr.cc:219
+#: src/imotr.cc:213
 msgid "[OTR] Connection is insecure..."
 msgstr "[OTR] Spojení není zabezpečené…"
 
-#: src/imotr.cc:237
+#: src/imotr.cc:231
 msgid "[OTR] Log: "
 msgstr "[OTR] Protokol: "
 
-#: src/imotr.cc:314
+#: src/imotr.cc:308
 msgid "[OTR] Error while encrypting message... no message sent!"
 msgstr "[OTR] Chyba při šifrování zprávy, zpráva neodeslána!"
 
-#: src/imotr.cc:316
+#: src/imotr.cc:310
 msgid "      recipient:   "
 msgstr "       příjemce:   "
 
-#: src/imotr.cc:378 src/imotr.cc:397
+#: src/imotr.cc:372 src/imotr.cc:391
 msgid "[OTR] Error: At the moment, only jabber is supported"
 msgstr "[OTR] Chyba: V současnosti je podporován jen jabber"
 
-#: src/imotr.cc:386
+#: src/imotr.cc:380
 msgid "[OTR] Trying to start a secure session with \""
 msgstr "[OTR] Pokouším se ustanovit zabezpečenou relaci s „"
 
-#: src/imotr.cc:405
+#: src/imotr.cc:399
 msgid "[OTR] Ending secure session with \""
 msgstr "[OTR] Ukončuji zabezpečenou relaci s „"
 
-#: src/imotr.cc:413
+#: src/imotr.cc:407
 msgid "yes/no"
 msgstr "ano/ne"
 
-#: src/imotr.cc:413 src/imotr.cc:414 src/imotr.cc:416 src/imotr.cc:420
+#: src/imotr.cc:407 src/imotr.cc:408 src/imotr.cc:410 src/imotr.cc:414
 #: src/icqface.cc:44 src/icqface.cc:119
 msgid "no"
 msgstr "ne"
 
-#: src/imotr.cc:414 src/imotr.cc:419 src/icqface.cc:44
+#: src/imotr.cc:408 src/imotr.cc:413 src/icqface.cc:44
 msgid "yes"
 msgstr "ano"
 
-#: src/imotr.cc:416
+#: src/imotr.cc:410
 msgid " Please type 'yes' or 'no': "
 msgstr " Prosím, napište „ano“, nebo „ne“: "
 
-#: src/imotr.cc:462
+#: src/imotr.cc:456
 msgid " Private keys "
 msgstr " Soukromé klíče "
 
-#: src/imotr.cc:470
+#: src/imotr.cc:464
 msgid "Error calculating Fingerprint"
 msgstr "Chyba při výpočtu otisku"
 
-#: src/imotr.cc:472
+#: src/imotr.cc:466
 msgid " Account: "
 msgstr " Účet:    "
 
-#: src/imotr.cc:473
+#: src/imotr.cc:467
 msgid " Protocol:    "
 msgstr " Protokol:    "
 
-#: src/imotr.cc:474 src/imotr.cc:498
+#: src/imotr.cc:468 src/imotr.cc:492
 msgid " Fingerprint: "
 msgstr " Otisk:       "
 
-#: src/imotr.cc:475 src/imotr.cc:501
+#: src/imotr.cc:469 src/imotr.cc:495
 msgid " Forget key "
 msgstr " Zapomenout klíč "
 
-#: src/imotr.cc:481
+#: src/imotr.cc:475
 msgid " Public keys "
 msgstr " Soukromé klíče "
 
-#: src/imotr.cc:488
+#: src/imotr.cc:482
 msgid " User: "
 msgstr " Uživatel: "
 
-#: src/imotr.cc:489
+#: src/imotr.cc:483
 msgid " Protocol: "
 msgstr " Protokol: "
 
-#: src/imotr.cc:490
+#: src/imotr.cc:484
 msgid " Account:  "
 msgstr " Účet:     "
 
-#: src/imotr.cc:495
+#: src/imotr.cc:489
 msgid "Yes"
 msgstr "Ano"
 
-#: src/imotr.cc:495
+#: src/imotr.cc:489
 msgid "No"
 msgstr "Ne"
 
-#: src/imotr.cc:499
+#: src/imotr.cc:493
 msgid " Verified: "
 msgstr " Ověřeno: "
 
-#: src/imotr.cc:507
+#: src/imotr.cc:501
 msgid " Active fingerprint: "
 msgstr " Aktivní otisk: "
 
-#: src/imotr.cc:523 src/imotr.cc:543
+#: src/imotr.cc:517 src/imotr.cc:537
 msgid "Do you want to forget the selected key?"
 msgstr "Chcete vybraný klíč zapomenout?"
 
-#: src/imotr.cc:536
+#: src/imotr.cc:530
 msgid "Do you want verify the selected key?"
 msgstr "Chcete vybraný klíč ověřit?"
 
-#: src/imotr.cc:570 src/imotr.cc:597
+#: src/imotr.cc:564 src/imotr.cc:591
 msgid "No Jabber"
 msgstr "Není Jabber"
 
-#: src/imotr.cc:580 src/imotr.cc:607
+#: src/imotr.cc:574 src/imotr.cc:601
 msgid "No OTR"
 msgstr "Chybí OTR"
 
-#: src/imotr.cc:585
+#: src/imotr.cc:579
 msgid "Plaintext"
 msgstr "Obyčejný text"
 
-#: src/imotr.cc:586
+#: src/imotr.cc:580
 msgid "Encrypted"
 msgstr "Zašifrováno"
 
-#: src/imotr.cc:587
+#: src/imotr.cc:581
 msgid "Finished"
 msgstr "Hotovo"
 
-#: src/imotr.cc:588
+#: src/imotr.cc:582
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: src/imotr.cc:611
+#: src/imotr.cc:605
 msgid "No Encryption"
 msgstr "Není zašifrováno"
 
-#: src/imotr.cc:615
+#: src/imotr.cc:609
 msgid "Verified"
 msgstr "Ověřeno"
 
-#: src/imotr.cc:617
+#: src/imotr.cc:611
 msgid "Unverified"
 msgstr "Neověřeno"
 

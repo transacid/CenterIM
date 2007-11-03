@@ -1,10 +1,4 @@
 #include "imotr.h"
-
-
-
-#ifdef HAVE_LIBOTR
-
-
 #include "icqconf.h"
 #include "icqface.h"
 #include "abstracthook.h"
@@ -616,10 +610,3 @@ string imotr::is_verified(const protocolname pname, const string user)
     }
     return _("Unverified");
 }
-
-
-
-#endif  // HAVE_LIBOTR
-
-
-

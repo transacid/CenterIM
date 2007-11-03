@@ -628,7 +628,7 @@ namespace ICQ2000 {
       t = InTLV::ParseTLV(b,pm);
       // duplicate TLVs of one type - this shouldn't happen!
       if (tlvmap.count(t->Type())) {
-	delete tlvmap[t->Type()];
+          delete tlvmap[t->Type()];
       }
 
       tlvmap[t->Type()] = t;

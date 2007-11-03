@@ -1,8 +1,6 @@
 #ifndef __IMOTR_H__
 #define __IMOTR_H__
 
-#ifdef HAVE_LIBOTR
-
 #include "icqcommon.h"
 
 
@@ -55,7 +53,4 @@ class imotr {
 extern imotr otr;
 
 
-#endif // HAVE_LIBOTR
-
 #endif
-

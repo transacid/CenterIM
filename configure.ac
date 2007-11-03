@@ -378,6 +378,7 @@ AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = xyes)
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
 AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes -o "x$build_lj" = xyes)
 AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = xyes)
+AM_CONDITIONAL(HAVE_LIBOTR, test "x$have_libotr" = xyes)
 AM_CONDITIONAL(HAVE_FRIBIDI, test "x$have_fribidi" = xyes)
 
 if test "$build_icq" = "yes"; then
