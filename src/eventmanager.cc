@@ -115,7 +115,7 @@ void imeventmanager::store(const imevent &cev) {
 	    }
 	    
 	    if (c) {
-	        face.xtermtitle(_("event from %s"), cev.getcontact().totext().c_str());
+	    	face.xtermtitle(_("event from %s (%s)"), cev.getcontact().totext().c_str(), c->getdispnick().c_str());
 	        eventwrite(ev, history);
 		
 	        c->sethasevents(true);
