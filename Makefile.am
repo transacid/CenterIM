@@ -22,3 +22,6 @@ EXTRA_DIST = config.rpath POLICY centerim.1 centerim.motor FAQ NEWS TODO README 
 man_MANS=centerim.1
 
 ACLOCAL_AMFLAGS = -I m4
+
+dist-hook:
+	echo $(VERSION) > $(distdir)/.version
