@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.20.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-11-03 18:10+0100\n"
+"POT-Creation-Date: 2007-11-11 23:11+0000\n"
 "PO-Revision-Date: 2004-02-08 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <k@thekonst.net>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -319,7 +319,7 @@ msgstr "Пользователь %s вошел в конференцию"
 msgid "The user %s has left the conference"
 msgstr "Пользователь %s покинул конференцию"
 
-#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1185
+#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1194
 #: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "Пользователь добавил вас в свой список контактов"
@@ -356,7 +356,7 @@ msgstr "+ [jab] невозможно соединиться с сервером"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] отказываемся от агента %s"
 
-#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1239
+#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1248
 #: src/hooks/gaduhook.cc:401 src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "Away сообщение:"
@@ -473,31 +473,31 @@ msgstr "+ [icq] рассоединение"
 msgid "icq disconnection reason"
 msgstr "причина рассоединения icq"
 
-#: src/hooks/icqhook.cc:1166
+#: src/hooks/icqhook.cc:1175
 msgid "The user has accepted your authorization request"
 msgstr "Пользователь подтвердил запрос на добавление в список контактов"
 
-#: src/hooks/icqhook.cc:1170
+#: src/hooks/icqhook.cc:1179
 msgid "The user has rejected your authorization request; the message was: "
 msgstr ""
 "Пользователь отклонил запрос на добавление в список контактов; объяснение: "
 
-#: src/hooks/icqhook.cc:1225
+#: src/hooks/icqhook.cc:1234
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] невозможно отослать SMS к %s, %s"
 
-#: src/hooks/icqhook.cc:1228
+#: src/hooks/icqhook.cc:1237
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] невозможно отослать SMS к %s"
 
-#: src/hooks/icqhook.cc:1243
+#: src/hooks/icqhook.cc:1252
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] невозможно запросить away-сообщение у %s, %s"
 
-#: src/hooks/icqhook.cc:1399
+#: src/hooks/icqhook.cc:1408
 msgid "Random Chat User"
 msgstr "Пользователь из random chat"
 
@@ -708,38 +708,38 @@ msgstr "+ [msn] невозможно соединиться: "
 msgid "verify the hostname and port"
 msgstr "проверьте имя хоста и порт"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:352
 msgid "connecting to the server"
 msgstr "соединение с сервером"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:353
 msgid "logged in"
 msgstr "вход в систему состоялся"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:354
 #, c-format
 msgid "search finished, %d found"
 msgstr "поиск завершен, %d найдено"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:355
 msgid "password was changed successfully"
 msgstr "пароль был изменен успешно"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:356
 msgid "disconnected"
 msgstr "рассоединение"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:357
 #, c-format
 msgid "adding %s to the contacts"
 msgstr "добавление %s в список"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:358
 #, c-format
 msgid "removing %s from the contacts"
 msgstr "удаление %s из списка"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:359
 #, c-format
 msgid "members list fetching finished, %d found"
 msgstr "вывод списка завершен, %d найдено"
@@ -801,8 +801,8 @@ msgid "General"
 msgstr "Свалка"
 
 #: src/eventmanager.cc:118
-#, c-format
-msgid "event from %s"
+#, fuzzy, c-format
+msgid "event from %s (%s)"
 msgstr "сообщение от %s"
 
 #: src/icqdialogs.cc:46

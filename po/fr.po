@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.9.4\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-11-03 18:10+0100\n"
+"POT-Creation-Date: 2007-11-11 23:11+0000\n"
 "PO-Revision-Date: 2002-01-01 01:01+0020\n"
 "Last-Translator: Thomas Nemeth <tnemeth@free.fr>\n"
 "Language-Team: fr <fr@li.org>\n"
@@ -336,7 +336,7 @@ msgstr "L'utilisateur %s a rejoint la conférence"
 msgid "The user %s has left the conference"
 msgstr "L'utilisateur %s a quitté la conférence"
 
-#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1185
+#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1194
 #: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "L'utilisateur vous a ajouté à sa liste de contacts"
@@ -373,7 +373,7 @@ msgstr "+ [jab] impossible de se connecter au serveur"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] désenregistrement de l'agent %s"
 
-#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1239
+#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1248
 #: src/hooks/gaduhook.cc:401 src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "Message d'absence : "
@@ -490,30 +490,30 @@ msgstr "+ [icq] déconnecté"
 msgid "icq disconnection reason"
 msgstr "raison de la déconnexion"
 
-#: src/hooks/icqhook.cc:1166
+#: src/hooks/icqhook.cc:1175
 msgid "The user has accepted your authorization request"
 msgstr "L'utilisateur a accepté votre demande d'autorisation"
 
-#: src/hooks/icqhook.cc:1170
+#: src/hooks/icqhook.cc:1179
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "L'utilisateur a refusé votre demande d'autorisation ; raison : "
 
-#: src/hooks/icqhook.cc:1225
+#: src/hooks/icqhook.cc:1234
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] échec SMS vers %s, %s"
 
-#: src/hooks/icqhook.cc:1228
+#: src/hooks/icqhook.cc:1237
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] échec SMS vers %s"
 
-#: src/hooks/icqhook.cc:1243
+#: src/hooks/icqhook.cc:1252
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] impossible de récupérer le msg d'absence depuis %s, %s"
 
-#: src/hooks/icqhook.cc:1399
+#: src/hooks/icqhook.cc:1408
 msgid "Random Chat User"
 msgstr "Interlocuteur aléatoire"
 
@@ -726,38 +726,38 @@ msgstr "+ [msn] impossible de se connecter : "
 msgid "verify the hostname and port"
 msgstr "vérifiez le nom d'hôte et le port"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:352
 msgid "connecting to the server"
 msgstr "connexion au serveur en cours"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:353
 msgid "logged in"
 msgstr "connecté"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:354
 #, c-format
 msgid "search finished, %d found"
 msgstr "recherche terminée, %d réponse(s)"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:355
 msgid "password was changed successfully"
 msgstr "le mot de passe a été changé avec succès"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:356
 msgid "disconnected"
 msgstr "Déconnecté"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:357
 #, c-format
 msgid "adding %s to the contacts"
 msgstr "ajout de %s aux contacts"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:358
 #, c-format
 msgid "removing %s from the contacts"
 msgstr "suppression de %s des contacts"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:359
 #, c-format
 msgid "members list fetching finished, %d found"
 msgstr "récupération de la liste des membres terminée, %d réponse(s)"
@@ -820,7 +820,7 @@ msgstr "Général"
 
 #: src/eventmanager.cc:118
 #, fuzzy, c-format
-msgid "event from %s"
+msgid "event from %s (%s)"
 msgstr "Envoyé le %s"
 
 #: src/icqdialogs.cc:46

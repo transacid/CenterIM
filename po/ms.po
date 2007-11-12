@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.6.9\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-11-03 18:10+0100\n"
+"POT-Creation-Date: 2007-11-11 23:11+0000\n"
 "PO-Revision-Date: 2003-07-01 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@enemy.org>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
@@ -332,7 +332,7 @@ msgstr "Pengguna %s telah menyertai perbincangan"
 msgid "The user %s has left the conference"
 msgstr "Pengguna %s meninggalkan perbincangan"
 
-#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1185
+#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1194
 #: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "Pengguna telah menambah anda ke dalam senarai rakan"
@@ -370,7 +370,7 @@ msgstr "+ [jab] gagal menghubungi pelayan"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] mengeluarkan %s dari senarai rakan"
 
-#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1239
+#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1248
 #: src/hooks/gaduhook.cc:401 src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "Mesej away:"
@@ -486,30 +486,30 @@ msgstr "+ [icq] diputuskan"
 msgid "icq disconnection reason"
 msgstr "sebab icq ditamatkan"
 
-#: src/hooks/icqhook.cc:1166
+#: src/hooks/icqhook.cc:1175
 msgid "The user has accepted your authorization request"
 msgstr "Pengguna telah menerima permintaan anda"
 
-#: src/hooks/icqhook.cc:1170
+#: src/hooks/icqhook.cc:1179
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "Pengguna menolak permintaan anda; mesejnya ialah: "
 
-#: src/hooks/icqhook.cc:1225
+#: src/hooks/icqhook.cc:1234
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] gagal SMS ke %s, %s"
 
-#: src/hooks/icqhook.cc:1228
+#: src/hooks/icqhook.cc:1237
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] gagal SMS ke %s"
 
-#: src/hooks/icqhook.cc:1243
+#: src/hooks/icqhook.cc:1252
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] gagal dapatkan mesej away dari %s, %s"
 
-#: src/hooks/icqhook.cc:1399
+#: src/hooks/icqhook.cc:1408
 msgid "Random Chat User"
 msgstr "Pengguna Chat Rawak"
 
@@ -720,42 +720,42 @@ msgstr "+ [yahoo] sambungan gagal: "
 msgid "verify the hostname and port"
 msgstr "sahkan nama hos dan port"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:352
 #, fuzzy
 msgid "connecting to the server"
 msgstr "+ [jab] menghubungi pelayan"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:353
 #, fuzzy
 msgid "logged in"
 msgstr "+ [jab] log in"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:354
 #, fuzzy, c-format
 msgid "search finished, %d found"
 msgstr "+ [icq] carian selesai, %d ditemui"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:355
 #, fuzzy
 msgid "password was changed successfully"
 msgstr "+ [icq] kata laluan berjaya ditukar"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:356
 #, fuzzy
 msgid "disconnected"
 msgstr "Diputuskan"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:357
 #, fuzzy, c-format
 msgid "adding %s to the contacts"
 msgstr "+ [aim] menambah %s ke senarai rakan"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:358
 #, fuzzy, c-format
 msgid "removing %s from the contacts"
 msgstr "+ [msn] membuang %s dari senarai"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:359
 #, fuzzy, c-format
 msgid "members list fetching finished, %d found"
 msgstr "+ [yahoo] selesai mendapatkan senarai rakan, %d ditemui"
@@ -818,7 +818,7 @@ msgstr "Am"
 
 #: src/eventmanager.cc:118
 #, fuzzy, c-format
-msgid "event from %s"
+msgid "event from %s (%s)"
 msgstr "Dihantar pada %s"
 
 #: src/icqdialogs.cc:46

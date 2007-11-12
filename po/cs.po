@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 20071022\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-11-03 18:10+0100\n"
+"POT-Creation-Date: 2007-11-11 23:11+0000\n"
 "PO-Revision-Date: 2007-10-25 16:09+0200\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -320,7 +320,7 @@ msgstr "Uživatel %s se připojil do konference"
 msgid "The user %s has left the conference"
 msgstr "Uživatel %s opustil konferenci"
 
-#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1185
+#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1194
 #: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "si Vás přidal(a) do seznamu kontaktů"
@@ -357,7 +357,7 @@ msgstr "+ [jab] k serveru se nelze připojit"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] odregistrovávám se od agenta %s"
 
-#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1239
+#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1248
 #: src/hooks/gaduhook.cc:401 src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "pryč-zpráva:"
@@ -472,30 +472,30 @@ msgstr "+ [icq] odpojeno"
 msgid "icq disconnection reason"
 msgstr "+ důvod odpojení od icq"
 
-#: src/hooks/icqhook.cc:1166
+#: src/hooks/icqhook.cc:1175
 msgid "The user has accepted your authorization request"
 msgstr "si Vás přidal(a) do seznamu kontaktů"
 
-#: src/hooks/icqhook.cc:1170
+#: src/hooks/icqhook.cc:1179
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "Žádost o autorizaci od %lu"
 
-#: src/hooks/icqhook.cc:1225
+#: src/hooks/icqhook.cc:1234
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] SMS pro %s, %s odmítnuta"
 
-#: src/hooks/icqhook.cc:1228
+#: src/hooks/icqhook.cc:1237
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] nelze poslat SMS pro %s "
 
-#: src/hooks/icqhook.cc:1243
+#: src/hooks/icqhook.cc:1252
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] nelze získat pryč-zprávu od %s, %s"
 
-#: src/hooks/icqhook.cc:1399
+#: src/hooks/icqhook.cc:1408
 msgid "Random Chat User"
 msgstr "Povídání si s náhodným uživatelem"
 
@@ -706,38 +706,38 @@ msgstr "+ [msn] nemohu se připojit: "
 msgid "verify the hostname and port"
 msgstr "zkontrolujte jméno počítače a port"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:352
 msgid "connecting to the server"
 msgstr "připojuji se k serveru"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:353
 msgid "logged in"
 msgstr "přihlášen(a)"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:354
 #, c-format
 msgid "search finished, %d found"
 msgstr "hledání dokončeno, %d nalezen"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:355
 msgid "password was changed successfully"
 msgstr "heslo bylo úspěšně změněno"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:356
 msgid "disconnected"
 msgstr "Odpojeno"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:357
 #, c-format
 msgid "adding %s to the contacts"
 msgstr "přidávám %s do seznamu kontaktů"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:358
 #, c-format
 msgid "removing %s from the contacts"
 msgstr "odstraňuji %s ze seznamu kontaktů"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:359
 #, c-format
 msgid "members list fetching finished, %d found"
 msgstr "stahování seznamu členů dokončeno, %d nalezen(i)"
@@ -799,8 +799,8 @@ msgid "General"
 msgstr "Obecné"
 
 #: src/eventmanager.cc:118
-#, c-format
-msgid "event from %s"
+#, fuzzy, c-format
+msgid "event from %s (%s)"
 msgstr "událost od %s"
 
 #: src/icqdialogs.cc:46

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-11-03 18:10+0100\n"
+"POT-Creation-Date: 2007-11-11 23:11+0000\n"
 "PO-Revision-Date: 13/06/04 10:54\n"
 "Last-Translator: Sander Devrieze <s.devrieze@pandora.be>\n"
 "Language-Team: Nederlands <i18n@kde.nl>\n"
@@ -328,7 +328,7 @@ msgstr "Gebruiker %s heeft de conferentiekamer betreden"
 msgid "The user %s has left the conference"
 msgstr "Gebruiker %s heeft de conferentiekamer verlaten"
 
-#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1185
+#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1194
 #: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "De gebruiker heeft je toegevoegd aan zijn/haar contactenlijst"
@@ -365,7 +365,7 @@ msgstr "+ [jab] kan niet verbinden met de server"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] bezig met het ongedaan maken van de registratie op %s"
 
-#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1239
+#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1248
 #: src/hooks/gaduhook.cc:401 src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "Afwezigheidsbericht:"
@@ -479,30 +479,30 @@ msgstr "+ [icq] verbinding verbroken"
 msgid "icq disconnection reason"
 msgstr "reden van verbroken icq-verbinding"
 
-#: src/hooks/icqhook.cc:1166
+#: src/hooks/icqhook.cc:1175
 msgid "The user has accepted your authorization request"
 msgstr "De gebruiker heeft uw autorisatieaanvraag aanvaard"
 
-#: src/hooks/icqhook.cc:1170
+#: src/hooks/icqhook.cc:1179
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "De gebruiker heeft uw autorisatieaanvraag geweigerd; het bericht was: "
 
-#: src/hooks/icqhook.cc:1225
+#: src/hooks/icqhook.cc:1234
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] gefaald SMS naar %s, %s"
 
-#: src/hooks/icqhook.cc:1228
+#: src/hooks/icqhook.cc:1237
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] gefaalde SMS naar %s"
 
-#: src/hooks/icqhook.cc:1243
+#: src/hooks/icqhook.cc:1252
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] kan 'ben weg' bericht van %s niet ophalen, %s"
 
-#: src/hooks/icqhook.cc:1399
+#: src/hooks/icqhook.cc:1408
 msgid "Random Chat User"
 msgstr "Willekeurige gesprekspartner"
 
@@ -714,38 +714,38 @@ msgstr "+ [msn] kan niet verbinden: "
 msgid "verify the hostname and port"
 msgstr "controleer de hostnaam en poort"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:352
 msgid "connecting to the server"
 msgstr "bezig met verbinden met de server"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:353
 msgid "logged in"
 msgstr "aangemeld"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:354
 #, c-format
 msgid "search finished, %d found"
 msgstr "zoekopdracht beëindigd, %d gevonden"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:355
 msgid "password was changed successfully"
 msgstr "wachtwoord is met succes gewijzigd"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:356
 msgid "disconnected"
 msgstr "verbinding verbroken"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:357
 #, c-format
 msgid "adding %s to the contacts"
 msgstr "%s aan de contacten toevoegen"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:358
 #, c-format
 msgid "removing %s from the contacts"
 msgstr "%s verwijderen van de contactlijst"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:359
 #, c-format
 msgid "members list fetching finished, %d found"
 msgstr "afhalen van ledenlijst beëindigd, %d gevonden"
@@ -808,7 +808,7 @@ msgstr "Algemeen"
 
 #: src/eventmanager.cc:118
 #, fuzzy, c-format
-msgid "event from %s"
+msgid "event from %s (%s)"
 msgstr "Verzonden op %s"
 
 #: src/icqdialogs.cc:46

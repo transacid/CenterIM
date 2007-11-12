@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.8.3\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-11-03 18:10+0100\n"
+"POT-Creation-Date: 2007-11-11 23:11+0000\n"
 "PO-Revision-Date: 2002-09-10 22:43+0200\n"
 "Last-Translator: Ovidiu Ghineþ <oghinet@umfiasi.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -332,7 +332,7 @@ msgstr "Utilizatorul %s s-a alãturat la conferinþã"
 msgid "The user %s has left the conference"
 msgstr "Utilizatorul %s a pãrãsit conferinþa"
 
-#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1185
+#: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1194
 #: src/hooks/msnhook.cc:714
 msgid "The user has added you to his/her contact list"
 msgstr "Utilizatorul v-a adãugat la contactele lui/ei"
@@ -371,7 +371,7 @@ msgstr "+ [aim] conectare la server imposibilã"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [aim] ºtergem pe %s din contacte"
 
-#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1239
+#: src/hooks/jabberhook.cc:559 src/hooks/icqhook.cc:1248
 #: src/hooks/gaduhook.cc:401 src/hooks/irchook.cc:598
 msgid "Away message:"
 msgstr "Mesaj robot:"
@@ -486,30 +486,30 @@ msgstr "+ [icq] deconectat"
 msgid "icq disconnection reason"
 msgstr "icq motive de deconectare"
 
-#: src/hooks/icqhook.cc:1166
+#: src/hooks/icqhook.cc:1175
 msgid "The user has accepted your authorization request"
 msgstr "Utilizatorul a acceptat cererea dvs. de autorizare"
 
-#: src/hooks/icqhook.cc:1170
+#: src/hooks/icqhook.cc:1179
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "Utilizatorul a respins cererea dvs. de autorizare; mesajul a fost: "
 
-#: src/hooks/icqhook.cc:1225
+#: src/hooks/icqhook.cc:1234
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] SMS eºuat pentru %s, %s"
 
-#: src/hooks/icqhook.cc:1228
+#: src/hooks/icqhook.cc:1237
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] SMS eºuat pentru %s"
 
-#: src/hooks/icqhook.cc:1243
+#: src/hooks/icqhook.cc:1252
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s"
 msgstr "+ [icq] nu pot prelua mesajul robot de la %s, %s"
 
-#: src/hooks/icqhook.cc:1399
+#: src/hooks/icqhook.cc:1408
 msgid "Random Chat User"
 msgstr "Random Chat User"
 
@@ -723,42 +723,42 @@ msgstr "+ [yahoo] conectare imposibilã: "
 msgid "verify the hostname and port"
 msgstr "verificaþi host-ul ºi portul introdus"
 
-#: src/hooks/abstracthook.cc:351
+#: src/hooks/abstracthook.cc:352
 #, fuzzy
 msgid "connecting to the server"
 msgstr "+ [aim] conectare la server"
 
-#: src/hooks/abstracthook.cc:352
+#: src/hooks/abstracthook.cc:353
 #, fuzzy
 msgid "logged in"
 msgstr "+ [aim] conectat"
 
-#: src/hooks/abstracthook.cc:353
+#: src/hooks/abstracthook.cc:354
 #, fuzzy, c-format
 msgid "search finished, %d found"
 msgstr "+ [icq] cãutarea în pagini albe s-a incheiat, %d rezultate"
 
-#: src/hooks/abstracthook.cc:354
+#: src/hooks/abstracthook.cc:355
 #, fuzzy
 msgid "password was changed successfully"
 msgstr "+ [aim] parolã schimbatã cu succes"
 
-#: src/hooks/abstracthook.cc:355
+#: src/hooks/abstracthook.cc:356
 #, fuzzy
 msgid "disconnected"
 msgstr "Deconectat"
 
-#: src/hooks/abstracthook.cc:356
+#: src/hooks/abstracthook.cc:357
 #, fuzzy, c-format
 msgid "adding %s to the contacts"
 msgstr "+ [aim] adãugãm pe %s la contacte"
 
-#: src/hooks/abstracthook.cc:357
+#: src/hooks/abstracthook.cc:358
 #, fuzzy, c-format
 msgid "removing %s from the contacts"
 msgstr "+ [msn] ºtergem pe %s din contacte"
 
-#: src/hooks/abstracthook.cc:358
+#: src/hooks/abstracthook.cc:359
 #, fuzzy, c-format
 msgid "members list fetching finished, %d found"
 msgstr ""
@@ -822,7 +822,7 @@ msgstr "General"
 
 #: src/eventmanager.cc:118
 #, fuzzy, c-format
-msgid "event from %s"
+msgid "event from %s (%s)"
 msgstr "Trimis pe %s"
 
 #: src/icqdialogs.cc:46
