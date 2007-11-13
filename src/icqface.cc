@@ -3645,7 +3645,7 @@ void icqface::xtermtitle(const string &text) {
 
 	if(term == "xterm" || term == "Eterm" || term == "aterm"
 	|| term == "rxvt" || term.substr(0, 6) == "screen")
-	    cout << "\x1b]1;\x07\x1b]2;" << "centerim" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
+	    cout << "\x1b]1;\x07\x1b]0;" << "centerim" << (text.empty() ? "" : (string) ": " + text) << "\x07" << flush;
     }
 }
 
