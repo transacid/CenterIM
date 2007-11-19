@@ -37,6 +37,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 #ifndef curl_free
 #define curl_free free

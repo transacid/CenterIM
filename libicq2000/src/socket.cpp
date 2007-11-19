@@ -21,6 +21,7 @@
 
 #include "sstream_fix.h"
 #include <algorithm>
+#include <string.h>
 
 #include "socket.h"
 

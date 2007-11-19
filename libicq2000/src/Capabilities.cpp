@@ -19,6 +19,7 @@
  *
  */
 
+#include <string.h>
 #include "Capabilities.h"
 
 using std::set;
