@@ -272,6 +272,7 @@ void icqconf::loadkeys() {
 	    of << "bind editor\t\\co\thistory" << endl;
 	    of << "bind editor\t\\cn\tnext_chat" << endl;
 	    of << "bind editor\t\\cb\tprev_chat" << endl;
+	    of << "bind editor\t\\cv\tout_chat" << endl;
 	    of << "bind editor\t\\a?\tinfo" << endl;
 	    of << "bind editor\t<F2>\tshow_urls" << endl;
 	    of << "bind editor\t<F9>\tfullscreen" << endl << endl;
@@ -374,6 +375,7 @@ void icqconf::loadkeys() {
 	    if(param == "history") k.action = key_history; else
 	    if(param == "next_chat") k.action = key_next_chat; else
 	    if(param == "prev_chat") k.action = key_prev_chat; else
+	    if(param == "out_chat") k.action = key_out_chat; else
 	    if(param == "fetch_away_message") k.action = key_fetch_away_message; else
 	    if(param == "user_menu") k.action = key_user_menu; else
 	    if(param == "general_menu") k.action = key_general_menu; else
@@ -447,6 +449,7 @@ void icqconf::loadkeys() {
     if(face.action2key(key_history, section_editor).empty()) 
     if(face.action2key(key_next_chat, section_editor).empty()) 
     if(face.action2key(key_prev_chat, section_editor).empty()) 
+    if(face.action2key(key_out_chat, section_editor).empty()) 
     if(face.action2key(key_info, section_editor).empty()) 
     if(face.action2key(key_show_urls, section_editor).empty()) 
     if(face.action2key(key_fullscreen, section_editor).empty()) 

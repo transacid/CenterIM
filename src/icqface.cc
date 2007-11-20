@@ -3487,6 +3487,11 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    face.editdone = false;
 	    face.next_chat(true);
 	    return -1;
+	case key_out_chat:
+	    face.editdone = false;
+	    face.next_chat(false);
+	    face.last_selected = (icqcontact* ) clist.at(0);
+	    return -1;
 	case key_info:
 	    cicq.userinfo(face.passinfo);
 	    break;
