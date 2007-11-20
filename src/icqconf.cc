@@ -50,6 +50,7 @@ icqconf::icqconf() {
     rc = rcdark;
     cm = cmproto;
     fgroupmode = nogroups;
+    fsortmode = sort_by_status_and_activity;
 
     autoaway = autona = 0;
 
@@ -493,6 +494,10 @@ void icqconf::loadmainconfig() {
 	    if(param == "group2") fgroupmode = group2; else
 	    if(param == "protocolormode") cm = icqconf::cmproto; else
 	    if(param == "statuscolormode") cm = icqconf::cmstatus; else
+	    if(param == "sort_by_status_and_activity") setsortmode(icqconf::sort_by_status_and_activity); else
+	    if(param == "sort_by_status_and_name") setsortmode(icqconf::sort_by_status_and_name); else
+	    if(param == "sort_by_activity") setsortmode(icqconf::sort_by_activity); else
+	    if(param == "sort_by_name") setsortmode(icqconf::sort_by_name); else
 	    if(param == "smtp") setsmtphost(buf); else
 	    if(param == "browser") setbrowser(browser); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
@@ -635,6 +640,13 @@ void icqconf::save() {
 		    break;
 	    }
 
+	    switch(getsortmode()) {
+		case sort_by_status_and_activity: f << "sort_by_status_and_activity" << endl; break;
+		case sort_by_status_and_name: f << "sort_by_status_and_name" << endl; break;
+		case sort_by_activity: f << "sort_by_activity" << endl; break;
+		case sort_by_name: f << "sort_by_name" << endl; break;
+	    }
+            
 	    if(getmakelog()) f << "log" << endl;
 	    if(getproxyconnect()) f << "proxy_connect" << endl;
 	    if(getproxyssl()) f << "proxy_ssl" << endl;
@@ -1583,6 +1595,11 @@ void icqconf::setproxyssl(bool sproxyssl) {
 
 void icqconf::setgroupmode(icqconf::groupmode amode) {
     fgroupmode = amode;
+}
+
+void icqconf::setsortmode(icqconf::sortmode smode) {
+    fsortmode = smode;
+    icqcontacts::setsortmode(smode);
 }
 
 void icqconf::initmultiproto(bool p[], string buf, bool excludenochat) {

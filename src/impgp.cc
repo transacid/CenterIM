@@ -4,6 +4,7 @@
 
 #include "icqconf.h"
 #include "icqface.h"
+#include "icqcontacts.h"
 #include "abstracthook.h"
 
 impgp pgp;

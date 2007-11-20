@@ -2,7 +2,6 @@
 #define __ICQGROUP_H__
 
 #include "icqcommon.h"
-#include "icqcontacts.h"
 #include "imcontact.h"
 
 class icqgroup {

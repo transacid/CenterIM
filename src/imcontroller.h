@@ -2,6 +2,7 @@
 #define __IMCONTROLLER_H__
 
 #include "icqconf.h"
+#include "icqcontact.h"
 
 #include <libicq2000/userinfoconstants.h>
 

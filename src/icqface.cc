@@ -673,7 +673,7 @@ void icqface::fillcontactlist() {
 	    continue;
 	}
 
-	sc = SORTCHAR(c);
+	sc = icqcontacts::sort_order->sortstatus(*c);
 
 	groupchange =
 	    (conf.getgroupmode() != icqconf::nogroups) &&

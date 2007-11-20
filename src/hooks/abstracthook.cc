@@ -33,6 +33,7 @@
 #include "ljhook.h"
 #include "gaduhook.h"
 #include "msnhook.h"
+#include "icqcontacts.h"
 
 #include "icqface.h"
 

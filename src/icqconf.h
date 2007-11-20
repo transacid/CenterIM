@@ -15,7 +15,6 @@
 #include "colorschemer.h"
 
 #include "icqgroup.h"
-#include "icqcontact.h"
 
 #include "captcha.h"
 
@@ -105,6 +104,13 @@ class icqconf {
 	enum regcolor { rcdark, rcblue, rcdontchange };
 	enum groupmode { group1, group2, nogroups };
 	enum colormode { cmproto, cmstatus };
+	// leave the sort_by_nb_of_sorts as the last value
+	// do not forget to add the new sort types to the icqcontacts.cc
+	enum sortmode { sort_by_status_and_activity,
+			sort_by_status_and_name,
+			sort_by_activity,
+			sort_by_name,
+			sort_by_nb_of_sorts};
 
 	struct imserver {
 	    string server;
@@ -177,6 +183,7 @@ class icqconf {
 	regcolor rc;
 	groupmode fgroupmode;
 	colormode cm;
+	sortmode fsortmode;
 	int leftpanelwidth;
 	int logpanelheight;
 	int chatpanelheight;
@@ -296,6 +303,9 @@ class icqconf {
 
 	groupmode getgroupmode() const { return fgroupmode; }
 	void setgroupmode(groupmode amode);
+
+	sortmode getsortmode() const { return fsortmode; }
+	void setsortmode(sortmode smode);
 
 	string getsockshost() const;
 	unsigned int getsocksport() const;

@@ -28,6 +28,52 @@
 #include "icqgroups.h"
 #include "abstracthook.h"
 
+/*
+*
+* SORT_CONTACTS
+*
+* o Online
+* f Free for chat
+* i Invisible
+* d Do not disturb
+* c Occupied
+* a Away
+* n N/A
+*
+* _ Offline
+* ! Not in list
+* N Non-ICQ
+* # Unread
+*
+*/
+
+#define SORT_CONTACTS   "#odcanl_!N"
+
+// this is the original status sort, where the contacts
+// get sorted by status
+static char getsortstatus1(const icqcontact& c){
+    return     c.hasevents() ? '#' : \
+    !c.inlist() ? '!' : \
+    c.getstatus() == invisible ? 'o' : \
+    c.getstatus() == freeforchat ? 'o' : \
+    c.getshortstatus() \
+;
+}
+
+// this is the modified status sort, where the contacts
+// don't get sorted by status (only by name or whatever)
+static char getsortstatus2(const icqcontact& c){
+    return c.hasevents() ? '#' : !c.inlist() ? '!' : 'o';
+}
+
+static icqcontacts_sort sortmodes[icqconf::sort_by_nb_of_sorts] = {
+    {getsortstatus1, icqcontact::compare1}, // sort_by_status_and_activity
+    {getsortstatus1, icqcontact::compare2}, // sort_by_status_and_name
+    {getsortstatus2, icqcontact::compare1}, // sort_by_activity
+    {getsortstatus2, icqcontact::compare2}  // sort_by_name
+};
+
+icqcontacts_sort *icqcontacts::sort_order = &sortmodes[icqconf::sort_by_status_and_activity];
 
 /* Function used to delete icqcontact when removed from the list */
 static void deletecontact(void *contact){
@@ -204,14 +250,18 @@ icqcontact *icqcontacts::get(const imcontact &cinfo) {
     return 0;
 }
 
+void icqcontacts::setsortmode(icqconf::sortmode smode){
+    sort_order = sortmodes+smode;
+}
+
 int icqcontacts::clistsort(void *p1, void *p2) {
     icqcontact *c1 = (icqcontact *) p1, *c2 = (icqcontact *) p2;
     static char *sorder = SORT_CONTACTS;
     char s1, s2;
     bool makegroup;
 
-    s1 = SORTCHAR(c1);
-    s2 = SORTCHAR(c2);
+    s1 = sort_order->sortstatus(*c1);
+    s2 = sort_order->sortstatus(*c2);
 
     switch(conf.getgroupmode()) {
 	case icqconf::group1:
@@ -231,9 +281,9 @@ int icqcontacts::clistsort(void *p1, void *p2) {
 	if(c1->getgroupid() > c2->getgroupid()) return -1; else
 	if(c1->getgroupid() < c2->getgroupid()) return 1;
     }
-
+    
     if(s1 == s2) {
-	if(*c1 > *c2) return -1; else return 1;
+	return -sort_order->compare(*c1,*c2);
     } else {
 	if(strchr(sorder, s1) > strchr(sorder, s2)) return -1; else return 1;
     }

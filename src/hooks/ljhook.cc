@@ -30,6 +30,7 @@
 #include "rsshook.h"
 #include "icqface.h"
 #include "eventmanager.h"
+#include "icqcontacts.h"
 
 #include <sys/utsname.h>
 
