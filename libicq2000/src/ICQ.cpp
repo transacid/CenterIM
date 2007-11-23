@@ -23,7 +23,7 @@
 
 #include "sstream_fix.h"
 #include <memory>
-#include <stdlib.h>
+#include <cstdlib>
 
 using std::string;
 using std::list;
