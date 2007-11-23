@@ -20,6 +20,7 @@
  */
 
 #include "Capabilities.h"
+#include <cstring>
 
 using std::set;
 

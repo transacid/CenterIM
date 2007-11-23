@@ -37,6 +37,7 @@
 #include <io.h>
 #endif
 
+#include <cstring>
 #include <stdlib.h>
 #include <stdio.h>
 #include <cerrno>
