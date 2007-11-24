@@ -673,7 +673,7 @@ void icqface::fillcontactlist() {
 	    continue;
 	}
 
-	sc = SORTCHAR(c);
+	sc = icqcontacts::sort_order->sortstatus(*c);
 
 	groupchange =
 	    (conf.getgroupmode() != icqconf::nogroups) &&
@@ -3486,6 +3486,11 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	case key_next_chat:
 	    face.editdone = false;
 	    face.next_chat(true);
+	    return -1;
+	case key_out_chat:
+	    face.editdone = false;
+	    face.next_chat(false);
+	    face.last_selected = (icqcontact* ) clist.at(0);
 	    return -1;
 	case key_info:
 	    cicq.userinfo(face.passinfo);

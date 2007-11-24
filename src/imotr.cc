@@ -1,6 +1,7 @@
 #include "imotr.h"
 #include "icqconf.h"
 #include "icqface.h"
+#include "icqcontacts.h"
 #include "abstracthook.h"
 #include "centerim.h"
 #include "hooks/jabberhook.h"

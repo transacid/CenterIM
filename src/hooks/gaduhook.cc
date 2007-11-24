@@ -30,6 +30,7 @@
 #include "gaduhook.h"
 #include "icqface.h"
 #include "imlogger.h"
+#include "icqcontacts.h"
 
 #include "libgadu-config.h"
 #include "libgadu.h"

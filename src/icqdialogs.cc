@@ -67,6 +67,17 @@ const char *strrandomgroup(short unsigned int gr) {
     return "";
 }
 
+const char *strsortmode(icqconf::sortmode smode) {
+    switch(smode) {
+	case icqconf::sort_by_status_and_activity: return _("Status and Activity");
+	case icqconf::sort_by_status_and_name: return _("Status and Name");
+	case icqconf::sort_by_activity: return _("Activity");
+	case icqconf::sort_by_name: return _("Name");
+    }
+
+    return "";
+}
+
 bool icqface::sprofmanager(string &name, string &act) {
     dialogbox db;
     string buf, tname;
@@ -1147,6 +1158,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     icqconf::groupmode gmode = conf.getgroupmode();
     icqconf::colormode cm = conf.getcolormode();
+    icqconf::sortmode smode = conf.getsortmode();
 
     bool chatmode[protocolname_size], conv[protocolname_size],
 	entersends[protocolname_size], nonimonline[protocolname_size];
@@ -1220,6 +1232,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
+	t.addleaff(i, 0, 54, _(" Sort contacts by : %s "), strsortmode(smode));
 	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
 	t.addleaff(i, 0, 51, _(" Anti-spam: ignore authorization requests: %s "), stryesno(dropauthreq));
@@ -1450,6 +1463,13 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 53:
 		    	askquit = !askquit;
 			break;
+		    case 54:
+			smode =
+			    smode == icqconf::sort_by_status_and_activity ? icqconf::sort_by_status_and_name :
+			    smode == icqconf::sort_by_status_and_name ? icqconf::sort_by_activity :
+			    smode == icqconf::sort_by_activity ? icqconf::sort_by_name :
+				icqconf::sort_by_status_and_activity;
+			break;
   		}
   		break;
 	    case 1:
@@ -1492,6 +1512,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    clist.rearrange();
 		}
 		conf.setcolormode(cm);
+		if (conf.getsortmode() != smode){
+		    conf.setsortmode(smode);
+		}
 
 		conf.setsmtphost(smtp);
 		conf.setbrowser(browser);

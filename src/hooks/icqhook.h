@@ -6,7 +6,6 @@
 #ifdef BUILD_ICQ
 
 #include "icqmlist.h"
-#include "icqcontacts.h"
 
 #include "libicq2000/Client.h"
 #include "libicq2000/events.h"

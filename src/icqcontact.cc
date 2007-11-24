@@ -733,13 +733,23 @@ char icqcontact::getshortstatus() const {
 }
 
 bool icqcontact::operator > (const icqcontact &acontact) const {
-    if(acontact.lastread != lastread) {
-	return acontact.lastread > lastread;
-    } else if(acontact.cdesc.uin != cdesc.uin) {
-	return acontact.cdesc.uin > cdesc.uin;
+    if(lastread != acontact.lastread) {
+	return lastread < acontact.lastread;
+    } else if(cdesc.uin != acontact.cdesc.uin) {
+	return cdesc.uin > acontact.cdesc.uin;
     } else {
-	return acontact.cdesc.nickname.compare(cdesc.nickname);
+	return cdesc.nickname.compare(acontact.cdesc.nickname);
     }
+}
+
+// this is the bizaare compare by last read, then uin, then nickname
+int icqcontact::compare1(const icqcontact& a, const icqcontact& b){
+    return a > b ? 1 : -1;
+}
+
+// this is the compare by nickname
+int icqcontact::compare2(const icqcontact& a, const icqcontact& b){
+    return a.getdispnick().compare(b.getdispnick());
 }
 
 void icqcontact::setpostponed(const string &apostponed) {

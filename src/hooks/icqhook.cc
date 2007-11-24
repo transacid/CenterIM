@@ -31,6 +31,7 @@
 #include "icqface.h"
 #include "imlogger.h"
 #include "icqgroups.h"
+#include "icqcontacts.h"
 
 #include "accountmanager.h"
 #include "eventmanager.h"

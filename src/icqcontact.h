@@ -164,6 +164,8 @@ class icqcontact {
 	void remindbirthday(bool r);
 
 	bool operator > (const icqcontact &acontact) const;
+	static int compare1(const icqcontact& a, const icqcontact& b);
+	static int compare2(const icqcontact& a, const icqcontact& b);
 
 	time_t getlasttyping() const { return lasttyping; }
 	void setlasttyping(time_t t) { lasttyping = t; }

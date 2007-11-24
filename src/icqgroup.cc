@@ -24,6 +24,7 @@
 
 #include "icqgroup.h"
 #include "icqgroups.h"
+#include "icqcontacts.h"
 #include "abstracthook.h"
 
 icqgroup::icqgroup(int aid, const string &aname) {

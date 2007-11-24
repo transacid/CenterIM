@@ -23,6 +23,7 @@
 */
 
 #include "imcontact.h"
+#include "icqcontact.h"
 #include "icqconf.h"
 
 imcontact contactroot(0, icq);

@@ -32,6 +32,7 @@
 #include "eventmanager.h"
 #include "icqgroups.h"
 #include "impgp.h"
+#include "icqcontacts.h"
 
 #ifdef HAVE_LIBOTR
   #include "imotr.h"
