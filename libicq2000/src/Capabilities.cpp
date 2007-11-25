@@ -19,7 +19,6 @@
  *
  */
 
-#include <string.h>
 #include "Capabilities.h"
 #include <cstring>
 
