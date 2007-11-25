@@ -1524,7 +1524,7 @@ namespace ICQ2000
 	SignalLog(LogEvent::INFO, "Received server-based list from server\n");
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
 	mergeSBL( sbs->getContactTree() );
-//        SendSBLReceivedACK();
+        SendSBLReceivedACK();
 	break;
       }
       
