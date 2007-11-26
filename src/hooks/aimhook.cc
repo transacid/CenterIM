@@ -32,6 +32,7 @@
 #include "icqcontacts.h"
 #include "imlogger.h"
 #include "eventmanager.h"
+#include "centerim.h"
 
 #define NOTIFBUF 512
 
@@ -301,7 +302,7 @@ void aimhook::loadprofile() {
 
     if(access(fname.c_str(), R_OK)) {
 	char sbuf[NOTIFBUF];
-	snprintf(sbuf, NOTIFBUF, _("I do really enjoy the default AIM profile of centerim %s."), VERSION);
+	snprintf(sbuf, NOTIFBUF, _("I do really enjoy the default AIM profile of centerim %s."), centerim::version);
 	profile.info = sbuf;
 	saveprofile();
     }

@@ -34,7 +34,10 @@
 #include "accountmanager.h"
 #include "eventmanager.h"
 
+#include "centerim.h"
+
 #include <iterator>
+#include <sstream>
 
 #define NOTIFBUF 512
 
@@ -1257,8 +1260,9 @@ void irchook::subrequest(void *conn, void *cli, const char * const nick,
 const char * const command, const char * const args) {
 
     if(!strcmp(command, "VERSION")) {
-	firetalk_subcode_send_reply(conn, nick, "VERSION", PACKAGE " " VERSION);
-
+	ostringstream args_stream;
+	args_stream << PACKAGE << " " << centerim::version;
+	firetalk_subcode_send_reply(conn, nick, "VERSION", args_stream.str().c_str());
     }
 }
 

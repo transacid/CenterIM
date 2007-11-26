@@ -22,6 +22,8 @@ class centerim {
 	    scratch
 	};
 
+	static char const * const version;
+
     protected:
 	struct reconnectInfo {
 	    time_t timer;

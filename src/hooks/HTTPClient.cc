@@ -26,6 +26,7 @@
 
 #include <connwrap.h>
 #include "abstracthook.h"
+#include "centerim.h"
 
 #ifdef BUILD_RSS
 
@@ -302,7 +303,7 @@ void HTTPClient::SendRequest() {
     }
 
 //    b.Pack((string) "Connection: keep-alive\r\n");
-    b.Pack((string) "User-Agent: " + PACKAGE + "/" + VERSION + "\r\n");
+    b.Pack((string) "User-Agent: " + PACKAGE + "/" + centerim::version + "\r\n");
 
     if(!ev->m_user.empty()) {
 	rq = "";
