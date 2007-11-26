@@ -28,6 +28,23 @@ centerim_LDADD += -llibyahoo2
 endif
 centerim_LDADD += -lconnwrap @LTLIBINTL@
 SUBDIRS = hooks
-EXTRA_DIST = centerim.cc icqcontact.cc icqgroups.cc eventmanager.cc icqdialogs.cc icqhist.cc imexternal.cc imcontact.cc imlogger.cc accountmanager.cc icqcontacts.cc icqmlist.cc imcontroller.cc icqconf.cc imevents.cc impgp.cc imotr.cc icqface.cc centermain.cc icqgroup.cc icqmlist.h imcontroller.h icqcommon.h icqcontacts.h centerim.h icqgroup.h imcontact.h accountmanager.h eventmanager.h imevents.h icqcontact.h imlogger.h icqconf.h impgp.h imotr.h icqface.h icqgroups.h icqhist.h imexternal.h captcha.h
+EXTRA_DIST = centerim.cc icqcontact.cc icqgroups.cc eventmanager.cc icqdialogs.cc icqhist.cc imexternal.cc imcontact.cc imlogger.cc accountmanager.cc icqcontacts.cc icqmlist.cc imcontroller.cc icqconf.cc imevents.cc impgp.cc imotr.cc icqface.cc centermain.cc icqgroup.cc icqmlist.h imcontroller.h icqcommon.h icqcontacts.h centerim.h icqgroup.h imcontact.h accountmanager.h eventmanager.h imevents.h icqcontact.h imlogger.h icqconf.h impgp.h imotr.h icqface.h icqgroups.h icqhist.h imexternal.h captcha.h git-version.h.in
 AUTOMAKE_OPTIONS = foreign
 centerim_CPPFLAGS += -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\"
+
+
+# regenerate git-version.h if its content differs from the output of
+# git-version-gen
+g_get_cur := sed -ne "s/^\#[ \x09]*define[ \x09]\+GIT_VERSION[ \x09]\+\"\([0-9]\+.*\)\"/\1/p" \
+             2>/dev/null < git-version.h | tr -d '\012'
+g_subst_f  := sed -e "s/@GIT_VERSION@/$$VER_GIT/" < git-version.h.in > git-version.h
+
+$(centerim_OBJECTS) git-version.h : | git_version
+.PHONY: git_version
+
+git_version: git-version.h.in
+	VER_FILE=`$(g_get_cur)` || true; \
+	VER_GIT=`cd $(top_srcdir); ./misc/git-version-gen .version`; \
+	if [ -z $$VER_FILE ] || [ $$VER_FILE != $$VER_GIT ]; then \
+		$(g_subst_f); \
+	fi
