@@ -104,10 +104,11 @@ AM_PATH_GPGME(
             [have_gpgme=yes],
             [have_gpgme=no]
             )
-AC_ARG_WITH(curl,
-            AS_HELP_STRING([--with-curl=[PATH]], [path to curl-config (auto)]),
-            [with_curl=$withval],
-            [with_curl=no]
+LIBCURL_CHECK_CONFIG(
+            [yes],
+            [4.12.0],
+            [have_libcurl=yes],
+            [have_libcurl=no]
             )
 AC_ARG_WITH(libjpeg,
             AS_HELP_STRING([--without-libjpeg], [Compile without JPEG token
@@ -209,49 +210,16 @@ if text xhave_gpgme = xyes; then
          CXXFLAGS="$CFLAGS $GPGME_CXXFLAGS"
 fi
 
-##################
-# Check for curl #
-##################
-AC_MSG_CHECKING(for cURL)
-AC_MSG_RESULT([])
-CURL_CFLAGS=""
-CURL_CXXFLAGS=""
-CURL_LIBS=""
-have_curl=no
+#####################
+# Check for libcurl #
+#####################
 
-if test -x "$with_curl"; then
-        CURL_CONFIG= "$with_curl"
-else
-        AC_PATH_PROG(CURL_CONFIG, curl-config, no)
-fi
-
-if test x$CURL_CONFIG = xno; then
-        AC_MSG_ERROR([*** curl-config not found])
-fi
-
-save_CFLAGS="$CFLAGS"
-save_CXXFLAGS="$CXXFLAGS"
-save_LIBS="$LIBS"
-
-CURL_CFLAGS="`$CURL_CONFIG --cflags`"
-CURL_CXXFLAGS="`$CURL_CONFIG --cflags`"
-CURL_LIBS="`$CURL_CONFIG --libs`"
+CURL_CFLAGS="$LIBCURL_CPPFLAGS"
+CURL_CXXFLAGS="$LIBCURL_CPPFLAGS"
+CURL_LIBS="$LIBCURL"
 CFLAGS="$CFLAGS $CURL_CFLAGS"
 CXXFLAGS="$CXXFLAGS $CURL_CXXFLAGS"
 LIBS="$LIBS $CURL_LIBS"
-
-AC_MSG_CHECKING(for SSL support in libcurl)
-curlssl=`$CURL_CONFIG --feature | grep SSL`
-if test -z "$curlssl"; then
-curlssl=no
-AC_MSG_RESULT([no])
-else
-curlssl=yes
-AC_MSG_RESULT([yes])
-fi
-
-AC_DEFINE(HAVE_CURL, 1, [has curl library])
-have_curl=yes
 
 #####################
 # Check for libjpeg #
@@ -366,7 +334,7 @@ if test "$build_msn" = "yes"; then
 	if test $have_curl = no; then
 		AC_MSG_ERROR([MSN cannot be built without the curl library.])
 	fi
-	if test $curlssl = no; then
+	if test -z $libcurl_feature_SSL -o $libcurl_feature_SSL = "no"; then
 		AC_MSG_ERROR([MSN requires libcurl built with SSL support.])
 	fi
 	AC_DEFINE(BUILD_MSN, 1, [build with MSN support])
