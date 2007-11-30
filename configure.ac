@@ -99,10 +99,10 @@ AC_ARG_WITH(openssl,
                             (optional)]),
             [with_openssl=$withval]
             )
-AC_ARG_WITH(gpgme,
-            AS_HELP_STRING([--with-gpgme=[PATH]], [path to gpgme-config (auto)]),
-            [with_gpgme=$withval],
-            [with_gpgme=no]
+AM_PATH_GPGME(
+            [0.4.2],
+            [have_gpgme=yes],
+            [have_gpgme=no]
             )
 AC_ARG_WITH(curl,
             AS_HELP_STRING([--with-curl=[PATH]], [path to curl-config (auto)]),
@@ -202,53 +202,11 @@ fi
 ###################
 # Check for gpgme #
 ###################
-GPGME_CFLAGS=""
-GPGME_CXXFLAGS=""
-GPGME_LIBS=""
-have_gpgme=no
-
-if test x"$with_gpgme" = x"no"; then
-    AC_MSG_CHECKING(for gpgme)
-
-    AC_PATH_PROG(GPGME_CONFIG, gpgme-config, no)
-
-	if test x$GPGME_CONFIG = xno; then
-        AC_MSG_RESULT([no])
-    else
-        AC_MSG_RESULT([yes])
-
-        save_CFLAGS="$CFLAGS"
-        save_CXXFLAGS="$CXXFLAGS"
-        save_LIBS="$LIBS"
-
-        GPGME_CFLAGS="`$GPGME_CONFIG --cflags`"
-        GPGME_CXXFLAGS="`$GPGME_CONFIG --cflags`"
-        GPGME_LIBS="`$GPGME_CONFIG --libs`"
-        CFLAGS="$CFLAGS $GPGME_CFLAGS"
-        CXXFLAGS="$CXXFLAGS $GPGME_CXXFLAGS"
-        LIBS="$LIBS $GPGME_LIBS"
-
-        AC_MSG_CHECKING(for the OpenPGP protocol in gpgme)
-        AC_TRY_RUN([
-            #include <gpgme.h>
-            int main( void ) {
-                gpgme_ctx_t ctx;
-                if(!gpgme_new(&ctx)) if(!gpgme_set_protocol(ctx, GPGME_PROTOCOL_OpenPGP)) return 0;
-                return 1;
-            }
-        ], opengpg_avail=yes, opengpg_avail=no, opengpg_avail=no)
-        AC_MSG_RESULT([$opengpg_avail])
-
-        if test "$opengpg_avail" != "yes"; then
-            CFLAGS="$save_CFLAGS"
-            CXXFLAGS="$save_CXXFLAGS"
-            LIBS="$save_LIBS"
-        fi
-        AC_DEFINE(HAVE_GPGME, 1, [has gpgme library])
-        have_gpgme=yes
-	fi
-else
-    GPGME_CONFIG= "$with_gpgme"
+if text xhave_gpgme = xyes; then
+         AC_DEFINE(HAVE_GPGME, 1, [has gpgme library])
+         GPGME_CXXFLAGS="$GPGME_CFLAGS"
+         CFLAGS="$CFLAGS $GPGME_CFLAGS"
+         CXXFLAGS="$CFLAGS $GPGME_CXXFLAGS"
 fi
 
 ##################
