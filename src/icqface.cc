@@ -240,7 +240,7 @@ void icqface::showtopbar() {
 
     attrset(conf.getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
-    mvprintw(0, 0, _(" CENTERIM %s  UNSENT: %lu"), VERSION, em.getunsentcount());
+    mvprintw(0, 0, _(" CENTERIM %s  UNSENT: %lu"), centerim::version, em.getunsentcount());
     mvprintw(0, COLS-buf.size()-1, "%s", buf.c_str());
 }
 

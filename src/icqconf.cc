@@ -31,6 +31,7 @@
 #include <sys/statvfs.h>
 #endif
 
+#include "centerim.h"
 #include "icqconf.h"
 #include "icqface.h"
 #include "icqcontacts.h"
@@ -175,7 +176,7 @@ string icqconf::getawaymsg(protocolname pname) const {
 	char buf[512];
 
 	snprintf(buf, sizeof(buf), _("I do really enjoy the default %s away message of %s %s."),
-	    getprotocolname(pname).c_str(), PACKAGE, VERSION);
+	    getprotocolname(pname).c_str(), PACKAGE, centerim::version);
 
 	return buf;
     }
@@ -1371,7 +1372,7 @@ void icqconf::commandline(int argc, char **argv) {
 	    debug = true;
 
 	} else if((args == "-v") || (args == "--version")) {
-	    cout << PACKAGE << " " << VERSION << endl
+	    cout << PACKAGE << " " << centerim::version << endl
 		<< "Written by Konstantin Klyagin, 2005. Currently maintained by the CenterIM community." << endl
 		<< "Built-in protocols are:";
 
@@ -1543,7 +1544,7 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 }
 
 void icqconf::usage() const {
-	cout << PACKAGE << " " << VERSION << endl;
+	cout << PACKAGE << " " << centerim::version << endl;
 	
     cout << endl << _("Usage: ") << argv0 << " [OPTION].." << endl;
 	

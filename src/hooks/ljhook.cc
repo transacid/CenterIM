@@ -26,6 +26,7 @@
 
 #ifdef BUILD_LJ
 
+#include <centerim.h>
 #include "ljhook.h"
 #include "rsshook.h"
 #include "icqface.h"
@@ -87,7 +88,7 @@ void ljhook::connect() {
     if(!uname(&un)) clientver = un.sysname;
 	else clientver = "GNU";
 
-    clientver += string("-") + PACKAGE + "/" + VERSION;
+    clientver += string("-") + PACKAGE + "/" + centerim::version;
 
     ev->addParam("clientversion", clientver);
 
