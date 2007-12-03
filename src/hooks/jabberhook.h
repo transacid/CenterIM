@@ -12,6 +12,7 @@ class jabberhook: public abstracthook {
 	imstatus ourstatus;
 	jconn jc;
 	int id;
+	string uuid;
 
 	bool flogged, fonline, regmode, regdone;
 	string regerr;

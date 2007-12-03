@@ -119,6 +119,9 @@ jabberhook::~jabberhook() {
 }
 
 void jabberhook::init() {
+    char rnd[9];
+    snprintf(rnd, 9, "%X%X", rand()%0xFFFF, rand()%0xFFFF);
+    uuid = rnd;
     manualstatus = conf.getstatus(proto);
 }
 
@@ -1474,7 +1477,7 @@ string jabberhook::getourjid() {
 	jid.erase(pos);
 
     if(jid.find("/") == -1)
-	jid += "/centerim";
+	jid += "/centerim" + jhook.uuid;
 
     return jid;
 }
