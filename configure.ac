@@ -442,7 +442,7 @@ Build options:
   Build shared libs     $enable_shared
   Build static libs     $enable_static
   CFLAGS                $CFLAGS
-  CPPFLAGS              $CPPFLAGS
+  CXXFLAGS              $CXXFLAGS
 
 Protocols and Clients:])
 if test "x$build_icq" = xyes; then AC_MSG_RESULT([  ICQ]); fi
