@@ -335,11 +335,10 @@ void msnhook::sendnewuser(const imcontact &ic) {
 	gid = findgroup(ic, gname);
 
 	try {
-	    if(gid != -1) {
-		conn.addToGroup(nicknormalize(ic.nickname), gid);
-	    } else {
-		conn.addGroup(gname);
+	    if(gid == -1) {
+            gid = 0;
 	    }
+        conn.addToGroup(nicknormalize(ic.nickname), gid);
 	} catch(...) {
 	}
     }
@@ -391,8 +390,8 @@ void msnhook::removeuser(const imcontact &ic, bool report) {
 		    && groups.getname(c->getgroupid()) == mgroups[ib->gid];
 	    }
 
-	    if(!found)
-		conn.removeGroup(ib->gid);
+	    if(!found && ib->gid > 0)
+            conn.removeGroup(ib->gid);
 	} catch(...) {
 	}
     }

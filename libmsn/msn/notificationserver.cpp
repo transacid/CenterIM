@@ -400,7 +400,11 @@ namespace MSN
     {
         this->assertConnectionStateIsAtLeast(NS_CONNECTED);
         std::ostringstream buf_;
-        buf_ << "REM " << this->trID++ << " " << "FL" << " " << buddyName << " " << groupID << "\r\n";
+        buf_ << "REM " << this->trID++ << " " << "FL" << " " << buddyName;
+        if( groupID > 0 ) {
+            buf_ << " " << groupID;
+        }
+        buf_ << "\r\n";
         write(buf_);
     }
     
