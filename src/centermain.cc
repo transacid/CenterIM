@@ -29,6 +29,10 @@
 #include "icqmlist.h"
 #include "icqgroups.h"
 
+#ifdef HAVE_LIBOTR
+#include "imotr.h"
+#endif
+
 centerim cicq;
 icqconf conf;
 icqcontacts clist;
@@ -58,6 +62,10 @@ int main(int argc, char **argv) {
 #endif
 
 	conf.commandline(argc, argv);
+#ifdef HAVE_LIBOTR
+	otr.init();
+#endif
+
 	cicq.exec();
 
     } catch(exception e) {

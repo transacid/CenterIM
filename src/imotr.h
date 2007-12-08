@@ -48,6 +48,8 @@ class imotr {
 
 	imotr();
 	~imotr();
+
+	void init();
 };
 
 extern imotr otr;

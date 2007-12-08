@@ -257,8 +257,7 @@ static OtrlMessageAppOps ui_ops =
 
 
 
-
-imotr::imotr() 
+void imotr::init()
 {
     OTRL_INIT;                                  // Initialize the OTR library 
 
@@ -270,9 +269,15 @@ imotr::imotr()
     
 }
 
+imotr::imotr() 
+	: userstate(0)
+{
+}
+
 imotr::~imotr()
 {
-    otrl_userstate_free(userstate);
+	if (0 != userstate)
+		otrl_userstate_free(userstate);
 }
 
 
