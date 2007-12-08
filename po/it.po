@@ -1,6 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# CenterIM Italian translation template
+# Copyright (C) 2007 StÃ©phane Bisinger
+# First translation by Leandro Noferini <lnoferin@cybervalley.org>
+# Updated by StÃ©phane Bisinger <stephane.bisinger@gmail.com> Dec, 2007
 # 
 #: src/hooks/jabberhook.cc:1668
 msgid ""
@@ -10,10 +11,10 @@ msgstr ""
 "projects/centerim\n"
 "POT-Creation-Date: 2007-12-07 18:53+0100\n"
 "PO-Revision-Date: 2001-07-08 05:03+02:00\n"
-"Last-Translator: Leandro Noferini <lnoferin@cybervalley.org>\n"
+"Last-Translator: StÃ©phane Bisinger <stephane.bisinger@gmail.com>\n"
 "Language-Team: Italiano <it@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 # src/centerim.cc:65 src/icqdialogs.cc:87
@@ -24,147 +25,144 @@ msgstr "Password: "
 
 # src/centerim.cc:201
 #: src/centerim.cc:169
-#, fuzzy, c-format
+#, c-format
 msgid "%s contact menu, %s status, %s general, %s/%s next/prev chat, %s quit"
 msgstr ""
-"F2/M menù contatto attuale, F3/S cambia lo stato icq, F4/G azioni generali, "
-"Q termina"
+"%s opzioni contatto, %s cambia lo stato, %s/%s finestra prec/succ, "
+"%s esci"
 
 # src/centerim.cc:241
 #: src/centerim.cc:269
-#, fuzzy, c-format
+#, c-format
 msgid "Ignore all events from %s?"
-msgstr "Ignoro tutti gli eventi provenienti da %s (%lu)?"
+msgstr "Ignorare tutti gli eventi provenienti da %s?"
 
 # src/icqhook.cc:73
 #: src/centerim.cc:273
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from the contact list as well?"
-msgstr "+ connessione al server icq"
+msgstr "Rimuovere %s anche dalla lista dei contatti?"
 
 # src/centerim.cc:285
 #: src/centerim.cc:307
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure want to remove %s?"
-msgstr "Sei sicuro di voler eliminare %s (%lu)?"
+msgstr "Sei sicuro di voler eliminare %s?"
 
 # src/centerim.cc:292
 #: src/centerim.cc:315
 msgid "New nickname to show: "
-msgstr "Nuovo soprannome da mostrare: "
+msgstr "Nuovo nick da mostrare: "
 
 #: src/centerim.cc:324
 msgid "Select a group to move the user to"
-msgstr ""
+msgstr "Seleziona un gruppo in cui spostare l'utente"
 
 #: src/centerim.cc:342
 msgid "+ cannot fetch away messages being offline"
-msgstr ""
+msgstr "+ impossibile recuperare il messaggio di away quando non si Ã¨ connessi"
 
 #: src/centerim.cc:422
 msgid "! cannot connect, free disk space is less than 10k"
-msgstr ""
+msgstr "! impossibile connettersi, lo spazio libero su disco Ã¨ inferiore a 10k"
 
 # src/icqface.cc:598 src/icqface.cc:655
 #: src/centerim.cc:455 src/accountmanager.cc:237
-#, fuzzy
 msgid "away message"
-msgstr "homepage"
+msgstr "messaggio di away"
 
 #: src/centerim.cc:466
 #, c-format
 msgid "! support for %s was disabled at build time"
-msgstr ""
+msgstr "! il supporto per %s Ã¨ stato disabilitato alla compilazione"
 
 # src/centerim.cc:549
 #: src/centerim.cc:687 src/centerim.cc:742
-#, fuzzy, c-format
+#, c-format
 msgid "+ new mail arrived, %d messages"
-msgstr "+ è arrivata nuova posta, %d messaggi"
+msgstr "+ Ã¨ arrivata nuova posta, %d messaggi"
 
 # src/centerim.cc:549
 #: src/centerim.cc:689 src/centerim.cc:744
-#, fuzzy, c-format
+#, c-format
 msgid "+ [%02d:%02d:%02d] new mail arrived, %d messages"
-msgstr "+ è arrivata nuova posta, %d messaggi"
+msgstr "+ [%02d:%02d:%02d] Ã¨ arrivata nuova posta, %d messaggi"
 
 # src/centerim.cc:550
 #: src/centerim.cc:692 src/centerim.cc:747
 #, c-format
 msgid "+ last msg from %s"
-msgstr "+ l'ultimo messaggio da %s"
+msgstr "+ ultimo messaggio da %s"
 
 #: src/centerim.cc:791
 #, c-format
 msgid "+ the %s configuration was changed, reloaded"
-msgstr ""
+msgstr "+ il file di configurazione %s Ã¨ stato modificato"
 
 #: src/centerim.cc:848
 msgid "! another running copy of centerim detected"
-msgstr ""
+msgstr "! rilevata un'altra copia di centerim in esecuzione"
 
 #: src/centerim.cc:849
 #, c-format
 msgid "! this may cause problems. pid %lu"
-msgstr ""
+msgstr "! questo potrebbe causare problemi. pid %lu"
 
 # src/icqdialogs.cc:561
 #: src/centerim.cc:1002
-#, fuzzy
 msgid "Mobile number: "
-msgstr "nome file: "
+msgstr "Numero di cellulare: "
 
 #: src/centerim.cc:1163
 msgid "directory to save the file(s) to: "
-msgstr ""
+msgstr "Cartella in cui salvare i files: "
 
 #: src/centerim.cc:1170
 msgid "The specified directory is not writable"
-msgstr ""
+msgstr "La cartella specificata non Ã¨ scrivibile"
 
 #: src/centerim.cc:1174
 msgid "The specified directory does not exist"
-msgstr ""
+msgstr "La cartella specificata non esiste"
 
 # src/icqface.cc:1613
 #: src/centerim.cc:1309
-#, fuzzy, c-format
+#, c-format
 msgid "+ no history items for %s"
-msgstr "+ nessun elemento di storia per %s, %lu"
+msgstr "+ nessuna conversazione salvata per %s"
 
 # src/icqface.cc:1151
 #: src/centerim.cc:1335
-#, fuzzy, c-format
+#, c-format
 msgid "+ user %s is already on the list"
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ l'utente %s Ã¨ giÃ  in lista"
 
 # src/icqface.cc:1682
 #: src/centerim.cc:1347
-#, fuzzy
 msgid "Select a group to add the user to"
-msgstr "Seleziona i contatti da aggiungere alla lista"
+msgstr "Seleziona il gruppo a cui aggiungere l'utente"
 
 # src/icqface.cc:1151
 #: src/centerim.cc:1379
-#, fuzzy, c-format
+#, c-format
 msgid "+ %s has been added to the list"
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %s Ã¨ stato aggiunto alla lista"
 
 # src/icqhook.cc:594
 #: src/centerim.cc:1451
 msgid "+ the user is back"
-msgstr "+ l'utente è tornato"
+msgstr "+ l'utente Ã¨ tornato"
 
 #: src/centerim.cc:1467
 #, c-format
 msgid "+ [%s] status restored"
-msgstr ""
+msgstr "+ [%s] stato ripristinato"
 
 # src/icqhook.cc:587
 #: src/centerim.cc:1482
-#, fuzzy, c-format
+#, c-format
 msgid "+ [%s] automatically set %s"
-msgstr "+ imposta automaticamente N/A"
+msgstr "+ [%s] impostato automaticamente in %s"
 
 # src/icqface.cc:874
 #: src/centerim.cc:1484
@@ -174,19 +172,19 @@ msgstr "Assente"
 
 #: src/centerim.cc:1484
 msgid "n/a"
-msgstr ""
+msgstr "Non disponibile"
 
 #: src/centerim.cc:1620
 msgid "+ Set N/A after screen detach"
-msgstr ""
+msgstr "+ Stato impostato su Non Disponibile dopo aver effettuato il detach di screen"
 
 #: src/centerim.cc:1628
 msgid "! Screen socket path doesn't exist!"
-msgstr ""
+msgstr "! Il percorso alla socket di screen non esiste!"
 
 #: src/centerim.cc:1629
 msgid "! Correct path or disable screen auto presence change"
-msgstr ""
+msgstr "! Correggere il percorso o disabilitare il cambio automatico di stato con screen"
 
 #: src/centerim.cc:1663
 msgid "! free disk space is less than 10k, going offline"
@@ -250,7 +248,7 @@ msgstr ""
 #: src/hooks/rsshook.cc:394
 #, fuzzy
 msgid "Category: "
-msgstr "Città: "
+msgstr "CittÃ : "
 
 # src/icqface.cc:1187
 #: src/hooks/rsshook.cc:395
@@ -679,7 +677,7 @@ msgstr "Inviato su %s"
 #: src/hooks/irchook.cc:1443
 #, fuzzy, c-format
 msgid "%s has been kicked by %s"
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %lu Ã¨ stato aggiunto alla lista"
 
 # src/icqdialogs.cc:36 src/icqdialogs.cc:178 src/icqdialogs.cc:312
 # src/icqdialogs.cc:609
@@ -698,13 +696,13 @@ msgstr "Inviato su %s"
 #: src/hooks/irchook.cc:1495
 #, fuzzy, c-format
 msgid "%s has been opped by %s."
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %lu Ã¨ stato aggiunto alla lista"
 
 # src/icqface.cc:1151
 #: src/hooks/irchook.cc:1511
 #, fuzzy, c-format
 msgid "%s has been deopped by %s."
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %lu Ã¨ stato aggiunto alla lista"
 
 #: src/hooks/irchook.cc:1525
 #, c-format
@@ -792,7 +790,7 @@ msgstr ""
 #: src/hooks/ljhook.cc:722
 #, fuzzy, c-format
 msgid "+ [lj] %s was added to friends"
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %lu Ã¨ stato aggiunto alla lista"
 
 # src/icqhook.cc:73
 #: src/hooks/msnhook.cc:431
@@ -1132,7 +1130,7 @@ msgstr " Cognome : %s "
 #: src/icqdialogs.cc:319 src/icqdialogs.cc:418
 #, fuzzy, c-format
 msgid " Age range : %s "
-msgstr " Età : %s "
+msgstr " EtÃ  : %s "
 
 # src/icqdialogs.cc:254
 #: src/icqdialogs.cc:322 src/icqdialogs.cc:417 src/icqdialogs.cc:632
@@ -1145,7 +1143,7 @@ msgstr " Sesso : %s "
 #: src/icqdialogs.cc:325
 #, fuzzy, c-format
 msgid " Language : %s "
-msgstr " 3° Lingua : %s "
+msgstr " 3Â° Lingua : %s "
 
 # src/icqface.cc:593 src/icqface.cc:645
 #: src/icqdialogs.cc:329
@@ -1158,7 +1156,7 @@ msgstr "Posizione"
 #: src/icqdialogs.cc:689
 #, c-format
 msgid " City : %s "
-msgstr " Città : %s "
+msgstr " CittÃ  : %s "
 
 # src/icqdialogs.cc:259 src/icqdialogs.cc:268
 #: src/icqdialogs.cc:333 src/icqdialogs.cc:638 src/icqdialogs.cc:650
@@ -1286,7 +1284,7 @@ msgstr "Connesso"
 #: src/icqdialogs.cc:425
 #, fuzzy
 msgid " Show users who have you on their list "
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %lu Ã¨ stato aggiunto alla lista"
 
 #: src/icqdialogs.cc:430
 msgid " Name/Title "
@@ -1348,7 +1346,7 @@ msgstr "Cognome: "
 # src/icqdialogs.cc:372 src/icqdialogs.cc:381
 #: src/icqdialogs.cc:509 src/icqdialogs.cc:814 src/icqdialogs.cc:823
 msgid "City: "
-msgstr "Città: "
+msgstr "CittÃ : "
 
 # src/icqdialogs.cc:373 src/icqdialogs.cc:382
 #: src/icqdialogs.cc:510 src/icqdialogs.cc:815 src/icqdialogs.cc:824
@@ -1447,7 +1445,7 @@ msgstr " Data di nascita : %s "
 #: src/icqdialogs.cc:634
 #, c-format
 msgid " Age : %s "
-msgstr " Età : %s "
+msgstr " EtÃ  : %s "
 
 # src/icqdialogs.cc:243
 #: src/icqdialogs.cc:636
@@ -1499,19 +1497,19 @@ msgstr " Altre "
 #: src/icqdialogs.cc:667
 #, c-format
 msgid " 1st language : %s "
-msgstr " 1° Lingua : %s "
+msgstr " 1Â° Lingua : %s "
 
 # src/icqdialogs.cc:281
 #: src/icqdialogs.cc:670
 #, c-format
 msgid " 2nd language : %s "
-msgstr " 2° Lingua : %s "
+msgstr " 2Â° Lingua : %s "
 
 # src/icqdialogs.cc:282
 #: src/icqdialogs.cc:673
 #, c-format
 msgid " 3rd language : %s "
-msgstr " 3° Lingua : %s "
+msgstr " 3Â° Lingua : %s "
 
 #: src/icqdialogs.cc:676
 msgid " Miscellaneous "
@@ -1526,7 +1524,7 @@ msgstr ""
 #: src/icqdialogs.cc:679
 #, fuzzy, c-format
 msgid " Random chat group : %s "
-msgstr " 2° Lingua : %s "
+msgstr " 2Â° Lingua : %s "
 
 # src/icqface.cc:1187
 #: src/icqdialogs.cc:681
@@ -1584,7 +1582,7 @@ msgstr "Immetti la data di nascita (GG-MM-AAAA): "
 # src/icqdialogs.cc:370
 #: src/icqdialogs.cc:812
 msgid "Age: "
-msgstr "Età: "
+msgstr "EtÃ : "
 
 # src/icqdialogs.cc:375 src/icqdialogs.cc:384
 #: src/icqdialogs.cc:817 src/icqdialogs.cc:826
@@ -1773,7 +1771,7 @@ msgstr ""
 #: src/icqdialogs.cc:1225
 #, fuzzy, c-format
 msgid " Switch to language preset : %s "
-msgstr " 1° Lingua : %s "
+msgstr " 1Â° Lingua : %s "
 
 # src/icqdialogs.cc:272
 #: src/icqdialogs.cc:1226
@@ -2257,7 +2255,7 @@ msgstr ""
 #: src/icqdialogs.cc:2033
 #, fuzzy, c-format
 msgid " Tags : %s "
-msgstr " Età : %s "
+msgstr " EtÃ  : %s "
 
 #: src/icqdialogs.cc:2036
 #, c-format
@@ -2536,7 +2534,7 @@ msgstr " Password : %s "
 #: src/accountmanager.cc:124
 #, fuzzy, c-format
 msgid " Priority : %s "
-msgstr " Città : %s "
+msgstr " CittÃ  : %s "
 
 # src/icqdialogs.cc:272
 #: src/accountmanager.cc:129
@@ -2710,7 +2708,7 @@ msgstr "Invio la richiesta"
 # src/centerim.cc:146
 #: src/imcontroller.cc:150
 msgid "Timed out waiting for a new uin. Retry?"
-msgstr "Il tempo per registrare l'uin è scaduto. Riprovo?"
+msgstr "Il tempo per registrare l'uin Ã¨ scaduto. Riprovo?"
 
 # src/centerim.cc:149
 #: src/imcontroller.cc:154
@@ -2809,7 +2807,7 @@ msgstr ""
 #: src/icqconf.cc:1479
 #, fuzzy, c-format
 msgid "%s to %s has been put to the queue"
-msgstr "+ %lu è stato aggiunto alla lista"
+msgstr "+ %lu Ã¨ stato aggiunto alla lista"
 
 #: src/icqconf.cc:1485
 msgid "event sending error: error creating directory for the contact"
@@ -2831,7 +2829,7 @@ msgstr ""
 #: src/icqconf.cc:1549
 #, fuzzy
 msgid "Usage: "
-msgstr "Età: "
+msgstr "EtÃ : "
 
 # src/icqdialogs.cc:242
 #: src/icqconf.cc:1551
@@ -3058,7 +3056,7 @@ msgstr ""
 #: src/imotr.cc:408
 #, fuzzy
 msgid "yes/no"
-msgstr "sì"
+msgstr "sÃ¬"
 
 # src/icqface.cc:15
 #: src/imotr.cc:408 src/imotr.cc:409 src/imotr.cc:411 src/imotr.cc:415
@@ -3069,7 +3067,7 @@ msgstr "no"
 # src/icqface.cc:15
 #: src/imotr.cc:409 src/imotr.cc:414 src/icqface.cc:44
 msgid "yes"
-msgstr "sì"
+msgstr "sÃ¬"
 
 #: src/imotr.cc:411
 msgid " Please type 'yes' or 'no': "
@@ -3111,7 +3109,7 @@ msgstr ""
 #: src/imotr.cc:483
 #, fuzzy
 msgid " User: "
-msgstr "Età: "
+msgstr "EtÃ : "
 
 # src/icqdialogs.cc:274
 #: src/imotr.cc:484
@@ -3129,7 +3127,7 @@ msgstr " Note "
 #: src/imotr.cc:490
 #, fuzzy
 msgid "Yes"
-msgstr "sì"
+msgstr "sÃ¬"
 
 # src/icqface.cc:58
 #: src/imotr.cc:490
@@ -3649,7 +3647,7 @@ msgstr "E-mail"
 # src/icqface.cc:534
 #: src/icqface.cc:1080
 msgid "2nd e-mail"
-msgstr "2° e-mail"
+msgstr "2Â° e-mail"
 
 # src/icqface.cc:535
 #: src/icqface.cc:1081
@@ -3669,7 +3667,7 @@ msgstr "Data nascita"
 # src/icqface.cc:538
 #: src/icqface.cc:1084
 msgid "Age"
-msgstr "Età"
+msgstr "EtÃ "
 
 # src/icqface.cc:539
 #: src/icqface.cc:1085
@@ -4263,12 +4261,12 @@ msgstr "cerca: "
 # src/icqdialogs.cc:51 src/icqdialogs.cc:626
 #, fuzzy
 #~ msgid " Russian win/koi translation for : %s"
-#~ msgstr " La mappatura russa win1251-koi8 è necessaria : %s "
+#~ msgstr " La mappatura russa win1251-koi8 Ã¨ necessaria : %s "
 
 # src/icqdialogs.cc:51 src/icqdialogs.cc:626
 #, fuzzy
 #~ msgid " Russian win/koi translation : %s "
-#~ msgstr " La mappatura russa win1251-koi8 è necessaria : %s "
+#~ msgstr " La mappatura russa win1251-koi8 Ã¨ necessaria : %s "
 
 # src/icqhook.cc:73
 #, fuzzy
