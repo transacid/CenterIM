@@ -279,8 +279,6 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
      }
      else{
      	rc = connect(sockfd, serv_addr, addrlen);
-	if(!rc)
-	  //printf("Can't open the connection socket\n");
      }
 
 #ifdef HAVE_OPENSSL
@@ -440,8 +438,6 @@ int cw_write(int fd, const void *buf, int count, int ssl) {
 #endif
 #ifdef HAVE_GNUTLS
      if(p = getsock(fd)){
-          if(ret = gnutls_record_send( p->session, buf, count) < 0)
-	    //fprintf(stderr,"Can't write to server");
            return ret;
      }
 #elif HAVE_OPENSSL
