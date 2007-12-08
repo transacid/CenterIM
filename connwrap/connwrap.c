@@ -280,14 +280,14 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
      else{
      	rc = connect(sockfd, serv_addr, addrlen);
 	if(!rc)
-	  printf("Can't open the connection socket\n");
+	  //printf("Can't open the connection socket\n");
      }
 
 #ifdef HAVE_OPENSSL
     if(ssl && !rc) {
 	sslsock *p = addsock(sockfd);
 	if(SSL_connect(p->ssl) != 1){
-	    printf("Can't connect to SSL\n");
+	    //printf("Can't connect to SSL\n");
 	    return -1;
 	}
     }
@@ -397,7 +397,7 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
     else{ /* check if the socket is connected correctly */
 	int optlen = sizeof(int), optval;
 	if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval)	{
-            fprintf(stderr,"getsockopt error!!");
+            //fprintf(stderr,"getsockopt error!!");
 	    return -1;
         }
 	*state = 0;
@@ -441,7 +441,7 @@ int cw_write(int fd, const void *buf, int count, int ssl) {
 #ifdef HAVE_GNUTLS
      if(p = getsock(fd)){
           if(ret = gnutls_record_send( p->session, buf, count) < 0)
-	    fprintf(stderr,"Can't write to server");
+	    //fprintf(stderr,"Can't write to server");
            return ret;
      }
 #elif HAVE_OPENSSL
