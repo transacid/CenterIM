@@ -203,7 +203,7 @@ fi
 ###################
 # Check for gpgme #
 ###################
-if text xhave_gpgme = xyes; then
+if test xhave_gpgme = xyes; then
          AC_DEFINE(HAVE_GPGME, 1, [has gpgme library])
          GPGME_CXXFLAGS="$GPGME_CFLAGS"
          CFLAGS="$CFLAGS $GPGME_CFLAGS"
