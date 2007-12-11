@@ -438,6 +438,7 @@ int cw_write(int fd, const void *buf, int count, int ssl) {
 #endif
 #ifdef HAVE_GNUTLS
      if(p = getsock(fd)){
+           ret = gnutls_record_send( p->session, buf, count);
            return ret;
      }
 #elif HAVE_OPENSSL
