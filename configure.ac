@@ -131,7 +131,7 @@ have_fribidi=no
 
 if test "x$with_fribidi" = "xyes"; then
 	AC_PATH_PROG(FRIBIDI_CONFIG, fribidi-config, no)
-	if test x$FRIBIDI_CONFIG = xno; then
+	if test "x$FRIBIDI_CONFIG" = "xno"; then
 		AC_MSG_ERROR([*** fribidi-config not found])
 	fi
 	
@@ -152,10 +152,10 @@ AC_MSG_RESULT([$have_fribidi])
 AC_MSG_CHECKING(for SSL)
 AC_MSG_RESULT([])
 
-if test "$with_ssl" != "no"; then
+if test "x$with_ssl" != "xno"; then
 
 	AC_MSG_CHECKING(for OpenSSL)
-	if test -z "$with_openssl" -o x"$with_openssl" = xyes; then
+	if test -z "$with_openssl" -o "x$with_openssl" = "xyes"; then
 		for ac_dir in $with_openssl /usr/local /usr; do
 			if test -f "$ac_dir/include/openssl/ssl.h"; then
 				with_openssl=$ac_dir
@@ -164,7 +164,7 @@ if test "$with_ssl" != "no"; then
 		done
 	fi
 
-	if test -n "$with_openssl" -a "$with_openssl" != "no"; then
+	if test -n "$with_openssl" -a "x$with_openssl" != "xno"; then
 		AC_MSG_RESULT([found in $with_openssl])
                 CFLAGS="$CFLAGS -I${with_openssl}"
 		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
@@ -181,7 +181,7 @@ if test "$with_ssl" != "no"; then
 
 		AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
                 AC_CHECK_LIB(lzo, lzo1x_1_compress, LZO_LIBS=-llzo)
-	        if test "$LZO_LIBS" = ""; then
+	        if test -z "$LZO_LIBS"; then
 	         AC_CHECK_LIB(lzo2, lzo1x_1_compress, LZO_LIBS=-llzo2, [
 		  AC_MSG_ERROR(
 ***
@@ -203,7 +203,7 @@ fi
 ###################
 # Check for gpgme #
 ###################
-if test xhave_gpgme = xyes; then
+if test "x$have_gpgme" = "xyes"; then
          AC_DEFINE(HAVE_GPGME, 1, [has gpgme library])
          GPGME_CXXFLAGS="$GPGME_CFLAGS"
          CFLAGS="$CFLAGS $GPGME_CFLAGS"
@@ -283,7 +283,7 @@ AC_TRY_COMPILE([
     #include <sys/socket.h>
 ],[ socklen_t foo; ], ac_cv_c_socklen_t=yes, ac_cv_c_socklen_t=no)
 
-if test "$ac_cv_c_socklen_t" = "no"; then
+if test "x$ac_cv_c_socklen_t" = "xno"; then
   AC_DEFINE(socklen_t, int, [Define type of socklen_t for systems missing it])
 fi
 
@@ -293,56 +293,56 @@ case "$host_os" in
 		;;
 esac
 
-AM_CONDITIONAL(BUILD_ICQ, test "x$build_icq" = xyes)
-AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = xyes)
-AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = xyes)
-AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = xyes)
-AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_irc" = xyes -o "x$build_aim" = xyes)
-AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = xyes)
-AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = xyes)
-AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = xyes)
-AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = xyes -o "x$build_lj" = xyes)
-AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = xyes)
-AM_CONDITIONAL(HAVE_LIBOTR, test "x$have_libotr" = xyes)
-AM_CONDITIONAL(HAVE_FRIBIDI, test "x$have_fribidi" = xyes)
+AM_CONDITIONAL(BUILD_ICQ, test "x$build_icq" = "xyes")
+AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = "xyes")
+AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = "xyes")
+AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = "xyes")
+AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_irc" = "xyes" -o "x$build_aim" = xyes)
+AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = "xyes")
+AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = "xyes")
+AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = "xyes")
+AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = "xyes" -o "x$build_lj" = "xyes")
+AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = "xyes")
+AM_CONDITIONAL(HAVE_LIBOTR, test "x$have_libotr" = "xyes")
+AM_CONDITIONAL(HAVE_FRIBIDI, test "x$have_fribidi" = "xyes")
 
-if test "$build_icq" = "yes"; then
+if test "x$build_icq" = "xyes"; then
 	AC_DEFINE(BUILD_ICQ, 1, [build with ICQ support])
 fi
-if test "$build_yahoo" = "yes"; then
+if test "x$build_yahoo" = "xyes"; then
 	AC_DEFINE(BUILD_YAHOO, 1, [build with yahoo support])
 fi
-if test "$build_aim" = "yes"; then
+if test "x$build_aim" = "xyes"; then
 	AC_DEFINE(BUILD_AIM, 1, [build with aim support])
 fi
-if test "$build_irc" = "yes";
+if test "x$build_irc" = "xyes";
 	then AC_DEFINE(BUILD_IRC, 1, [build with irc support])
 fi
-if test "$build_jabber" = "yes"; then
-	if test $have_gpgme = no; then
+if test "x$build_jabber" = "xyes"; then
+	if test "x$have_gpgme" = "xno"; then
         	AC_MSG_WARN([No GPG support in Jabber, since GPGME library not found or its setup not ok])
 	fi
 	AC_DEFINE(BUILD_JABBER, 1, [build with jabber support])
 fi
-if test "$build_gg" = "yes"; then
-	if test $have_libjpeg = no; then
+if test "x$build_gg" = "xyes"; then
+	if test "x$have_libjpeg" = "xno"; then
         	AC_MSG_WARN([No jpeg support in Gadu-Gadu, you will not be able to register??????????])
 	fi
 	AC_DEFINE(BUILD_GADU, 1, [build with gadu-gadu support])
 fi
-if test "$build_msn" = "yes"; then
-	if test $have_curl = no; then
+if test "x$build_msn" = "xyes"; then
+	if test "x$have_curl" = "xno"; then
 		AC_MSG_ERROR([MSN cannot be built without the curl library.])
 	fi
-	if test -z $libcurl_feature_SSL -o $libcurl_feature_SSL = "no"; then
+	if test -z "$libcurl_feature_SSL" -o "x$libcurl_feature_SSL" = "xno"; then
 		AC_MSG_ERROR([MSN requires libcurl built with SSL support.])
 	fi
 	AC_DEFINE(BUILD_MSN, 1, [build with MSN support])
 fi
-if test "$build_rss" = "yes" -o "$build_lj" = "yes"; then
+if test "x$build_rss" = "xyes" -o "x$build_lj" = "xyes"; then
 	AC_DEFINE(BUILD_RSS, 1, [build the integrated rss feeds reader])
 fi
-if test "$build_lj" = "yes"; then
+if test "x$build_lj" = "xyes"; then
 	AC_DEFINE(BUILD_LJ, 1, [build the integrated livejournal client])
 fi
 
@@ -445,25 +445,25 @@ Build options:
   CXXFLAGS              $CXXFLAGS
 
 Protocols and Clients:])
-if test "x$build_icq" = xyes; then AC_MSG_RESULT([  ICQ]); fi
-if test "x$build_yahoo" = xyes; then AC_MSG_RESULT([  Yahoo]); fi
-if test "x$build_aim" = xyes; then AC_MSG_RESULT([  AIM]); fi
-if test "x$build_jabber" = xyes; then AC_MSG_RESULT([  jabber]); fi
-if test "x$build_gg" = xyes; then AC_MSG_RESULT([  Gadu-Gadu]); fi
-if test "x$build_msn" = xyes; then AC_MSG_RESULT([  MSN Messenger]); fi
-if test "x$build_rss" = xyes; then AC_MSG_RESULT([  RSS Reader]); fi
-if test "x$build_lj" = xyes; then AC_MSG_RESULT([  LiveJournal client]); fi
-if test "x$have_fribidi" = xyes; then AC_MSG_RESULT([  LiveJournal client]); fi
-if test "x$with_ssl" = xno; then 
+if test "x$build_icq" = "xyes"; then AC_MSG_RESULT([  ICQ]); fi
+if test "x$build_yahoo" = "xyes"; then AC_MSG_RESULT([  Yahoo]); fi
+if test "x$build_aim" = "xyes"; then AC_MSG_RESULT([  AIM]); fi
+if test "x$build_jabber" = "xyes"; then AC_MSG_RESULT([  jabber]); fi
+if test "x$build_gg" = "xyes"; then AC_MSG_RESULT([  Gadu-Gadu]); fi
+if test "x$build_msn" = "xyes"; then AC_MSG_RESULT([  MSN Messenger]); fi
+if test "x$build_rss" = "xyes"; then AC_MSG_RESULT([  RSS Reader]); fi
+if test "x$build_lj" = "xyes"; then AC_MSG_RESULT([  LiveJournal client]); fi
+if test "x$have_fribidi" = "xyes"; then AC_MSG_RESULT([  LiveJournal client]); fi
+if test "x$with_ssl" = "xno"; then 
 AC_MSG_RESULT([
 WARNING: SSL disabled (This means no Google Talk)
 ]);
 else
-if test "x$have_gpgme" = xno; then
+if test "x$have_gpgme" = "xno"; then
 AC_MSG_RESULT([
 WARNING: GPGME disabled (This means no encrypted messages between users)
 ]); fi
-if test "x$have_libotr" = xno; then
+if test "x$have_libotr" = "xno"; then
 AC_MSG_RESULT([
 WARNING: libotr disabled (This means no otr encryption)
 ]); fi
