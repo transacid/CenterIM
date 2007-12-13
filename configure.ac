@@ -208,6 +208,7 @@ if test xhave_gpgme = xyes; then
          GPGME_CXXFLAGS="$GPGME_CFLAGS"
          CFLAGS="$CFLAGS $GPGME_CFLAGS"
          CXXFLAGS="$CFLAGS $GPGME_CXXFLAGS"
+         LIBS="$LIBS $GPGME_LIBS"
 fi
 
 #####################
