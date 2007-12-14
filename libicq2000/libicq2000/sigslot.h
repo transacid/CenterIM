@@ -478,6 +478,9 @@ namespace sigslot {
 
 			while(it != itEnd)
 			{
+				typename connections_list::iterator itNext = it;
+				++itNext;
+				
 				if((*it)->getdest() == pclass)
 				{
 					delete *it;
@@ -486,7 +489,7 @@ namespace sigslot {
 					return;
 				}
 
-				++it;
+				it = itNext;
 			}
 		}
 
@@ -503,8 +506,8 @@ namespace sigslot {
 
 				if((*it)->getdest() == pslot)
 				{
-					m_connected_slots.erase(it);
 					delete *it;
+					m_connected_slots.erase(it);
 				}
 
 				it = itNext;
@@ -590,6 +593,9 @@ namespace sigslot {
 
 			while(it != itEnd)
 			{
+				typename connections_list::iterator itNext = it;
+				++itNext;
+				
 				if((*it)->getdest() == pclass)
 				{
 					delete *it;
@@ -598,7 +604,7 @@ namespace sigslot {
 					return;
 				}
 
-				++it;
+				it = itNext;
 			}
 		}
 
@@ -615,8 +621,8 @@ namespace sigslot {
 
 				if((*it)->getdest() == pslot)
 				{
-					m_connected_slots.erase(it);
 					delete *it;
+					m_connected_slots.erase(it);
 				}
 
 				it = itNext;
@@ -702,6 +708,8 @@ namespace sigslot {
 
 			while(it != itEnd)
 			{
+				typename connections_list::iterator itNext = it;
+				++itNext;
 				if((*it)->getdest() == pclass)
 				{
 					delete *it;
@@ -710,7 +718,7 @@ namespace sigslot {
 					return;
 				}
 
-				++it;
+				it = itNext;
 			}
 		}
 
@@ -727,8 +735,8 @@ namespace sigslot {
 
 				if((*it)->getdest() == pslot)
 				{
-					m_connected_slots.erase(it);
 					delete *it;
+					m_connected_slots.erase(it);
 				}
 
 				it = itNext;
