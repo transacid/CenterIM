@@ -1151,6 +1151,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     convlanguages.push_back(_("None"));
     convlanguages.push_back(_("Russian"));
     convlanguages.push_back(_("Polish"));
+    convlanguages.push_back(_("Unicode"));
     vector<string>::const_iterator iconvlang = convlanguages.begin();
 
     string convertfrom = conf.getconvertfrom();
@@ -1399,6 +1400,12 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			    case 2:
 				convertfrom = "cp1250";
 				convertto = "iso-8859-2";
+				multichange(conv, true);
+				break;
+
+			    case 3:
+				convertfrom = "iso-8859-15";
+				convertto = "utf-8";
 				multichange(conv, true);
 				break;
 			}
