@@ -1077,7 +1077,7 @@ bool centerim::sendevent(const imevent &ev, icqface::eventviewresult r) {
 
 	if(proceed) {
 	    if(r == icqface::forward)
-		sendev->setcontact(imcontact());
+		sendev->setcontact(*(face.muins.begin()));
 
 	    if(proceed = face.eventedit(*sendev))
 	    if(proceed = !sendev->empty()) {

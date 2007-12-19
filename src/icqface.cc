@@ -3049,6 +3049,8 @@ bool icqface::histexec(imevent *&im) {
 
 	db.setmenu(&mhist, false);
 
+	im = static_cast<imevent *> (mhist.getref(0));
+
 	/*
 	*
 	* Now set the menu position
@@ -3072,7 +3074,6 @@ bool icqface::histexec(imevent *&im) {
 	db.redraw();
 	workarealine(sizeWArea.y1+2);
 
-	im = static_cast<imevent *> (mhist.getref(0));
 
 	snprintf(buf, sizeof(buf), _("History for %s, %d events total"),
 	    im->getcontact().totext().c_str(),
