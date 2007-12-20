@@ -5,15 +5,15 @@
 #: src/hooks/jabberhook.cc:1668
 msgid ""
 msgstr ""
-"Project-Id-Version: centerim 20071022\n"
+"Project-Id-Version: centerim 20071220\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
 "POT-Creation-Date: 2007-12-07 18:53+0100\n"
-"PO-Revision-Date: 2007-10-25 16:09+0200\n"
+"PO-Revision-Date: 2007-12-20 14:04+0100\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/centerim.cc:133
@@ -799,9 +799,9 @@ msgid "General"
 msgstr "Obecné"
 
 #: src/eventmanager.cc:118
-#, fuzzy, c-format
+#, c-format
 msgid "event from %s (%s)"
-msgstr "událost od %s"
+msgstr "událost od %s (%s)"
 
 #: src/icqdialogs.cc:46
 msgid "60-above"
@@ -853,16 +853,17 @@ msgstr "Hledám muže"
 
 #: src/icqdialogs.cc:72
 msgid "Status and Activity"
-msgstr ""
+msgstr "Stavu a aktivity"
 
 #: src/icqdialogs.cc:73
 msgid "Status and Name"
-msgstr ""
+msgstr "Stavu a jména"
 
 #: src/icqdialogs.cc:74
 msgid "Activity"
-msgstr ""
+msgstr "Aktivity"
 
+# FIXME: "Name" requires context (Field value: "Jméno", Sort by: "Jména")
 #: src/icqdialogs.cc:75 src/icqface.cc:1022 src/icqface.cc:1078
 msgid "Name"
 msgstr "Jméno"
@@ -1500,9 +1501,9 @@ msgid " Arrange contacts into groups : %s "
 msgstr " Uspořádat kontakty do skupin : %s "
 
 #: src/icqdialogs.cc:1235
-#, fuzzy, c-format
+#, c-format
 msgid " Sort contacts by : %s "
-msgstr " Obarvit kontakty podle: %s "
+msgstr " Řadit kontakty podle: %s "
 
 #: src/icqdialogs.cc:1236
 #, c-format
@@ -2800,7 +2801,7 @@ msgstr "Odeslat kontakty"
 
 #: src/icqface.cc:271
 msgid " Request authorization"
-msgstr " Vyžadovat autorizaci"
+msgstr " Vyžádat autorizaci"
 
 #: src/icqface.cc:272
 msgid "Edit details"
