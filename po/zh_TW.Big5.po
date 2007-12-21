@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.22.1\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-12-07 18:53+0100\n"
+"POT-Creation-Date: 2007-12-21 21:53+0000\n"
 "PO-Revision-Date: 2007-11-05 17:09+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -243,7 +243,7 @@ msgstr "附註: "
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:158 src/hooks/msnhook.cc:910
+#: src/hooks/yahoohook.cc:158 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "無法反解主機名稱"
 
@@ -324,7 +324,7 @@ msgid "The user %s has left the conference"
 msgstr "使用者 %s 離開會議了"
 
 #: src/hooks/yahoohook.cc:975 src/hooks/icqhook.cc:1195
-#: src/hooks/msnhook.cc:714
+#: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "該使用者己經將你加入他的好友名單中"
 
@@ -684,26 +684,26 @@ msgstr "+ [lj] 無法新增好友"
 msgid "+ [lj] %s was added to friends"
 msgstr "+ [lj] %s 已被加入名單中"
 
-#: src/hooks/msnhook.cc:431
+#: src/hooks/msnhook.cc:430
 #, c-format
 msgid "+ [msn] reverse users listing finished, %d found"
 msgstr "+ [msn] 反向使用者列表已取回, 找到 %d 筆資料"
 
-#: src/hooks/msnhook.cc:794
+#: src/hooks/msnhook.cc:793
 #, c-format
 msgid "+ [msn] unread e-mail: %d in inbox, %d in folders"
 msgstr "+ [msn] 未讀信件 : 收件匣中有 %d 封, 其他信匣中有 %d 封"
 
-#: src/hooks/msnhook.cc:800
+#: src/hooks/msnhook.cc:799
 #, c-format
 msgid "+ [msn] e-mail from %s, %s"
 msgstr "+ [msn] 從 %s, %s 寄來的 e-mail"
 
-#: src/hooks/msnhook.cc:906
+#: src/hooks/msnhook.cc:905
 msgid "+ [msn] cannot connect: "
 msgstr "+ [msn] 無法連線 : "
 
-#: src/hooks/msnhook.cc:930
+#: src/hooks/msnhook.cc:929
 msgid "verify the hostname and port"
 msgstr "驗證主機名及埠號"
 
@@ -899,7 +899,7 @@ msgstr "L清除"
 
 #: src/icqdialogs.cc:226 src/icqdialogs.cc:231 src/icqdialogs.cc:236
 #: src/icqdialogs.cc:749 src/icqdialogs.cc:1194 src/icqdialogs.cc:2005
-#: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:440
+#: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:445
 msgid "Change"
 msgstr "C修改"
 
@@ -1307,7 +1307,7 @@ msgid " %s: details "
 msgstr " %s 的詳細資料 "
 
 #: src/icqdialogs.cc:749 src/icqdialogs.cc:1194 src/icqdialogs.cc:1670
-#: src/accountmanager.cc:69 src/imotr.cc:440
+#: src/accountmanager.cc:69 src/imotr.cc:445
 msgid "Done"
 msgstr "完成"
 
@@ -2084,7 +2084,7 @@ msgstr "%s: 離線了"
 msgid "changed our %s status to %s from %s"
 msgstr "把您的 %1$s 狀態從 %3$s 切換成 %2$s"
 
-#: src/accountmanager.cc:63 src/imotr.cc:434
+#: src/accountmanager.cc:63 src/imotr.cc:439
 msgid " IM account manager "
 msgstr " IM 帳號管理員 "
 
@@ -2509,7 +2509,7 @@ msgstr "警告"
 msgid "Info"
 msgstr "資訊"
 
-#: src/imotr.cc:122 src/imotr.cc:310
+#: src/imotr.cc:122 src/imotr.cc:315
 msgid "      accountname: "
 msgstr "      帳號名稱 :   "
 
@@ -2553,140 +2553,140 @@ msgstr "[OTR] 連線現在未加密..."
 msgid "[OTR] Log: "
 msgstr "[OTR] Log: "
 
-#: src/imotr.cc:309
+#: src/imotr.cc:314
 msgid "[OTR] Error while encrypting message... no message sent!"
 msgstr "[OTR] 加密訊息時發生錯誤... 訊息未送出 !"
 
-#: src/imotr.cc:311
+#: src/imotr.cc:316
 msgid "      recipient:   "
 msgstr "      收件者:      "
 
-#: src/imotr.cc:373 src/imotr.cc:392
+#: src/imotr.cc:378 src/imotr.cc:397
 msgid "[OTR] Error: At the moment, only jabber is supported"
 msgstr "[OTR] 錯誤 : 目前只有 jabber 支援此功能"
 
-#: src/imotr.cc:381
+#: src/imotr.cc:386
 msgid "[OTR] Trying to start a secure session with \""
 msgstr "[OTR] 試著建立加密連線, 對象是 \""
 
-#: src/imotr.cc:400
+#: src/imotr.cc:405
 msgid "[OTR] Ending secure session with \""
 msgstr "[OTR] 結束加密連線, 對象是 \""
 
-#: src/imotr.cc:408
+#: src/imotr.cc:413
 msgid "yes/no"
 msgstr "是/否"
 
-#: src/imotr.cc:408 src/imotr.cc:409 src/imotr.cc:411 src/imotr.cc:415
+#: src/imotr.cc:413 src/imotr.cc:414 src/imotr.cc:416 src/imotr.cc:420
 #: src/icqface.cc:44 src/icqface.cc:119
 msgid "no"
 msgstr "否"
 
-#: src/imotr.cc:409 src/imotr.cc:414 src/icqface.cc:44
+#: src/imotr.cc:414 src/imotr.cc:419 src/icqface.cc:44
 msgid "yes"
 msgstr "是"
 
-#: src/imotr.cc:411
+#: src/imotr.cc:416
 msgid " Please type 'yes' or 'no': "
 msgstr " 請輸入 'yes' 或 'no' :"
 
-#: src/imotr.cc:457
+#: src/imotr.cc:462
 msgid " Private keys "
 msgstr " 私密金鑰 "
 
-#: src/imotr.cc:465
+#: src/imotr.cc:470
 msgid "Error calculating Fingerprint"
 msgstr "計算指紋時發生錯誤"
 
-#: src/imotr.cc:467
+#: src/imotr.cc:472
 msgid " Account: "
 msgstr " 帳號 : "
 
-#: src/imotr.cc:468
+#: src/imotr.cc:473
 msgid " Protocol:    "
 msgstr " 通訊協定 :   "
 
-#: src/imotr.cc:469 src/imotr.cc:493
+#: src/imotr.cc:474 src/imotr.cc:498
 msgid " Fingerprint: "
 msgstr " 指紋 : "
 
-#: src/imotr.cc:470 src/imotr.cc:496
+#: src/imotr.cc:475 src/imotr.cc:501
 msgid " Forget key "
 msgstr " 忘記金鑰 "
 
-#: src/imotr.cc:476
+#: src/imotr.cc:481
 msgid " Public keys "
 msgstr " 公開金鑰 "
 
-#: src/imotr.cc:483
+#: src/imotr.cc:488
 msgid " User: "
 msgstr " 使用者 : "
 
-#: src/imotr.cc:484
+#: src/imotr.cc:489
 msgid " Protocol: "
 msgstr " 通訊協定 : "
 
-#: src/imotr.cc:485
+#: src/imotr.cc:490
 msgid " Account:  "
 msgstr " 帳號 : "
 
-#: src/imotr.cc:490
+#: src/imotr.cc:495
 msgid "Yes"
 msgstr "是"
 
-#: src/imotr.cc:490
+#: src/imotr.cc:495
 msgid "No"
 msgstr "否"
 
-#: src/imotr.cc:494
+#: src/imotr.cc:499
 msgid " Verified: "
 msgstr " 已驗證 : "
 
-#: src/imotr.cc:502
+#: src/imotr.cc:507
 msgid " Active fingerprint: "
 msgstr " 啟動指紋 : "
 
-#: src/imotr.cc:518 src/imotr.cc:538
+#: src/imotr.cc:523 src/imotr.cc:543
 msgid "Do you want to forget the selected key?"
 msgstr "想要忘掉所選取之金鑰嗎 ?"
 
-#: src/imotr.cc:531
+#: src/imotr.cc:536
 msgid "Do you want verify the selected key?"
 msgstr "想要驗證所選取之金鑰嗎 ?"
 
-#: src/imotr.cc:565 src/imotr.cc:592
+#: src/imotr.cc:570 src/imotr.cc:597
 msgid "No Jabber"
 msgstr "沒有 Jabber"
 
-#: src/imotr.cc:575 src/imotr.cc:602
+#: src/imotr.cc:580 src/imotr.cc:607
 msgid "No OTR"
 msgstr "沒有 OTR"
 
-#: src/imotr.cc:580
+#: src/imotr.cc:585
 msgid "Plaintext"
 msgstr "明文"
 
-#: src/imotr.cc:581
+#: src/imotr.cc:586
 msgid "Encrypted"
 msgstr "密文"
 
-#: src/imotr.cc:582
+#: src/imotr.cc:587
 msgid "Finished"
 msgstr "完成"
 
-#: src/imotr.cc:583
+#: src/imotr.cc:588
 msgid "Unknown"
 msgstr "不明"
 
-#: src/imotr.cc:606
+#: src/imotr.cc:611
 msgid "No Encryption"
 msgstr "未加密"
 
-#: src/imotr.cc:610
+#: src/imotr.cc:615
 msgid "Verified"
 msgstr "已驗證"
 
-#: src/imotr.cc:612
+#: src/imotr.cc:617
 msgid "Unverified"
 msgstr "未驗證"
 
