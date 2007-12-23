@@ -303,7 +303,7 @@ private:
         
         virtual void disconnectForTransfer();        
             
-        static std::map<std::string, void (NotificationServerConnection::*)(std::vector<std::string> &)> commandHandlers;
+        std::map<std::string, void (NotificationServerConnection::*)(std::vector<std::string> &)> commandHandlers;
         void registerCommandHandlers();
         void handle_OUT(std::vector<std::string> & args);
         void handle_ADD(std::vector<std::string> & args);

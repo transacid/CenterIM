@@ -158,7 +158,7 @@ protected:
         virtual void handleIncomingData() = 0;
 private:
         std::string writeBuffer;
-        static std::map<std::string, void (Connection::*)(std::vector<std::string> &, std::string, std::string)> messageHandlers;
+        std::map<std::string, void (Connection::*)(std::vector<std::string> &, std::string, std::string)> messageHandlers;
         void message_plain(std::vector<std::string> & args, std::string mime, std::string body);
         void message_initial_email_notification(std::vector<std::string> & args, std::string mime, std::string body);
         void message_email_notification(std::vector<std::string> & args, std::string mime, std::string body);
