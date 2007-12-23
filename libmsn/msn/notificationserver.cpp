@@ -45,24 +45,23 @@
 
 namespace MSN
 {
-    std::map<std::string, void (NotificationServerConnection::*)(std::vector<std::string> &)> NotificationServerConnection::commandHandlers;
     
     static size_t msn_handle_curl_write(void *ptr, size_t size, size_t nmemb, void  *stream);
     static size_t msn_handle_curl_header(void *ptr, size_t size, size_t nmemb, void *stream) ;    
             
     NotificationServerConnection::NotificationServerConnection(NotificationServerConnection::AuthData & auth_, Callbacks & cb_)
-        : Connection(), auth(auth_), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED), _nextPing(50)
+        : Connection(), auth(auth_), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED), _nextPing(50), commandHandlers()
     {
         registerCommandHandlers();
     }
     
     NotificationServerConnection::NotificationServerConnection(Passport username_, std::string password_, Callbacks & cb_) 
-        : Connection(), auth(username_, password_), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED)
+        : Connection(), auth(username_, password_), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED), commandHandlers()
     {
         registerCommandHandlers();
     }
     
-    NotificationServerConnection::NotificationServerConnection(Callbacks & cb_) : Connection(), auth(Passport(), ""), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED)
+    NotificationServerConnection::NotificationServerConnection(Callbacks & cb_) : Connection(), auth(Passport(), ""), externalCallbacks(cb_), _connectionState(NS_DISCONNECTED), commandHandlers()
     {
         registerCommandHandlers();
     }

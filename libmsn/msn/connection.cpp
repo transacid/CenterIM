@@ -46,11 +46,10 @@
 
 namespace MSN
 {
-    std::map<std::string, void (Connection::*)(std::vector<std::string> &, std::string, std::string)> Connection::messageHandlers;
     static std::vector<std::string> errors;
 
     Connection::Connection() 
-        : sock(0), connected(false), trID(1), user_data(NULL)
+        : sock(0), connected(false), trID(1), user_data(NULL), messageHandlers()
     {
         srand((unsigned int) time(NULL));
 
@@ -103,14 +102,11 @@ namespace MSN
             errors[920] = "This server is not accepting new users";            
         }
 
-        if (messageHandlers.size() == 0)
-        {
-            messageHandlers["text/plain"]                            = &Connection::message_plain;
-            messageHandlers["text/x-msmsgsinitialemailnotification"] = &Connection::message_initial_email_notification;
-            messageHandlers["text/x-msmsgsemailnotification"]        = &Connection::message_email_notification;
-            messageHandlers["text/x-msmsgsinvite"]                   = &Connection::message_invitation;
-            messageHandlers["text/x-msmsgscontrol"]                  = &Connection::message_typing_user;            
-        }
+        messageHandlers["text/plain"]                            = &Connection::message_plain;
+        messageHandlers["text/x-msmsgsinitialemailnotification"] = &Connection::message_initial_email_notification;
+        messageHandlers["text/x-msmsgsemailnotification"]        = &Connection::message_email_notification;
+        messageHandlers["text/x-msmsgsinvite"]                   = &Connection::message_invitation;
+        messageHandlers["text/x-msmsgscontrol"]                  = &Connection::message_typing_user;            
     }
     
     Connection::~Connection() {}
