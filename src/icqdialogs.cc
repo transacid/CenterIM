@@ -1151,7 +1151,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     convlanguages.push_back(_("None"));
     convlanguages.push_back(_("Russian"));
     convlanguages.push_back(_("Polish"));
-    convlanguages.push_back(_("Unicode"));
+    convlanguages.push_back(_("German UTF-8"));
     vector<string>::const_iterator iconvlang = convlanguages.begin();
 
     string convertfrom = conf.getconvertfrom();
