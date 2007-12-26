@@ -1620,7 +1620,7 @@ void centerim::exectimers() {
 							face.log(_("+ Set N/A after screen detach"));
 					} else { /* Screen is attached */
 						/* The user attached the screen */
-						if (autostat[notavail] == true) {
+						if ((autostat[notavail] == true) && (toset != notavail)) {
 							toset = available;
 						}
 					}
