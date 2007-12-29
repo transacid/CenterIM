@@ -34,6 +34,7 @@
 namespace ICQ2000 {
 
   // Server-based list stuff (Family 0x0013)
+  const unsigned short SNAC_SBL_Error            = 0x0001; // In/Out
   const unsigned short SNAC_SBL_Req_Rights       = 0x0002; // Out
   const unsigned short SNAC_SBL_Rights_Reply     = 0x0003; // In
   const unsigned short SNAC_SBL_Request_List     = 0x0004; // Out 

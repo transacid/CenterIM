@@ -50,7 +50,8 @@ namespace ICQ2000 {
   
   void SBLRightsReplySNAC::ParseBody(Buffer& b) 
   {    // several unknown TLVs, skip
-    b.advance(68);
+    TLVList tlvlist;
+    tlvlist.Parse(b, TLV_ParseMode_SBL_Rights, b.remains());
   }
   
   // ============================================================================

@@ -1423,7 +1423,12 @@ namespace ICQ2000
 
     switch(snac->Family())
     {
-      
+    case SNAC_FAM_BOS:
+      switch(snac->Subtype()) {
+      	case SNAC_BOS_Error:
+      	SignalLog(LogEvent::ERROR, "Received BOS error message from server");
+	break;
+      }
     case SNAC_FAM_GEN:
       switch(snac->Subtype())
       {
@@ -1455,12 +1460,18 @@ namespace ICQ2000
 	SignalLog(LogEvent::INFO, "Received Rate Info Change from server");
 	SignalRateInfoChange(static_cast<RateInfoChangeSNAC*>(snac));
 	break;
+      case SNAC_GEN_Error:
+      	SignalLog(LogEvent::ERROR, "Received General error message from server");
+	break;
       }
       break;
 
     case SNAC_FAM_BUD:
       switch(snac->Subtype())
       {
+      case SNAC_BUD_Error:
+      	SignalLog(LogEvent::ERROR, "Received Buddy error from server");
+	break;
       case SNAC_BUD_Online:
 	SignalUserOnline(static_cast<BuddyOnlineSNAC*>(snac));
 	break;
@@ -1485,6 +1496,9 @@ namespace ICQ2000
 	SignalLog(LogEvent::INFO, "Received Message to Offline User from server");
 	SignalMessageOfflineUser(static_cast<MessageOfflineUserSNAC*>(snac));
 	break;
+      case SNAC_MSG_Error:
+      	SignalLog(LogEvent::ERROR, "Received Message error from server");
+	break;
       }
       break;
 
@@ -1494,6 +1508,9 @@ namespace ICQ2000
       case SNAC_SRV_Response:
 	SignalLog(LogEvent::INFO, "Received Server Response from server");
 	SignalSrvResponse(static_cast<SrvResponseSNAC*>(snac));
+	break;
+      case SNAC_SRV_Error:
+      	SignalLog(LogEvent::ERROR, "Received Server error from server");
 	break;
       }
       break;
@@ -1599,6 +1616,9 @@ namespace ICQ2000
 	  }
 	*/
 	}
+	break;
+      case SNAC_SBL_Error:
+      	SignalLog(LogEvent::ERROR, "Received Server-base List error from server");
 	break;
 
       } // switch(SBL Subtype)

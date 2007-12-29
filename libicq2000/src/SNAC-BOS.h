@@ -35,6 +35,7 @@
 namespace ICQ2000 {
 
   // List stuff (Family 0x0009)
+  const unsigned short SNAC_BOS_Error = 0x0001;
   const unsigned short SNAC_BOS_Add_Visible = 0x0005;
   const unsigned short SNAC_BOS_Remove_Visible = 0x0006;
   const unsigned short SNAC_BOS_Add_Invisible = 0x0007;
