@@ -1626,6 +1626,11 @@ namespace ICQ2000
 	
     } // switch(Family)
 
+    if (dynamic_cast<ErrorInSNAC*>(snac)) {
+      ostringstream ostr;
+      ostr << "Error received: 0x" << dynamic_cast<ErrorInSNAC*>(snac)->getCode() << " - " << dynamic_cast<ErrorInSNAC*>(snac)->getErrorDescription();
+      SignalLog(LogEvent::WARN, ostr.str());
+    }
     if (dynamic_cast<RawSNAC*>(snac))
     {
       ostringstream ostr;

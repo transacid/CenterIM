@@ -32,6 +32,12 @@ namespace ICQ2000 {
 
     switch(family) {
 
+    case SNAC_FAM_BOS:
+      switch(subtype) {
+	  case SNAC_BOS_Error:
+	  snac = new ErrorInSNAC(family, subtype);
+	  break;
+      }
     case SNAC_FAM_GEN:
       switch(subtype) {
       case SNAC_GEN_ServerReady:
@@ -52,6 +58,9 @@ namespace ICQ2000 {
       case SNAC_GEN_RateInfoChange:
 	snac = new RateInfoChangeSNAC();
 	break;
+      case SNAC_GEN_Error:
+	snac = new ErrorInSNAC(family, subtype);
+	break;
       }
       break;
 
@@ -62,6 +71,9 @@ namespace ICQ2000 {
 	break;
       case SNAC_BUD_Offline:
 	snac = new BuddyOfflineSNAC();
+	break;
+      case SNAC_BUD_Error:
+	snac = new ErrorInSNAC(family, subtype);
 	break;
       }
       break;
@@ -77,6 +89,9 @@ namespace ICQ2000 {
       case SNAC_MSG_OfflineUser:
 	snac = new MessageOfflineUserSNAC();
 	break;
+      case SNAC_MSG_Error:
+	snac = new ErrorInSNAC(family, subtype);
+	break;
       }
       break;
 
@@ -84,6 +99,9 @@ namespace ICQ2000 {
       switch(subtype) {
       case SNAC_SRV_Response:
 	snac = new SrvResponseSNAC();
+	break;
+      case SNAC_SRV_Error:
+	snac = new ErrorInSNAC(family, subtype);
 	break;
       }
       break;
@@ -116,6 +134,9 @@ namespace ICQ2000 {
       case SNAC_SBL_Auth_Granted:
       case SNAC_SBL_User_Added_You:
 	// todo
+	break;
+      case SNAC_SBL_Error:
+	snac = new ErrorInSNAC(family, subtype);
 	break;
       }
       break;

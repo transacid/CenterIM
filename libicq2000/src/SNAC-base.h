@@ -22,6 +22,9 @@
 #ifndef SNAC_BASE_H
 #define SNAC_BASE_H
 
+#include <string>
+#include <map>
+
 namespace ICQ2000 {
  
   /* predeclare classes */
@@ -103,6 +106,30 @@ namespace ICQ2000 {
     unsigned short Family() const { return m_family; }
     unsigned short Subtype() const { return m_subtype; }
   };
+  
+  // -- Error SNAC --
+
+  class ErrorSNAC : virtual public SNAC {
+      protected:
+	  unsigned short m_error_code;
+	  std::map<unsigned short, std::string> codeDescriptions;
+	  void initCodeDescriptions();
+
+      public:
+	  unsigned short getCode() const { return m_error_code; }
+	  std::string getErrorDescription();
+  };
+
+  class ErrorInSNAC : public ErrorSNAC, public InSNAC {
+      protected:
+	  unsigned short m_family, m_subtype;
+	  void ParseBody(Buffer& b);
+      public:
+	  ErrorInSNAC(unsigned short f, unsigned short t);
+	  unsigned short Family() const { return m_family; }
+	  unsigned short Subtype() const { return m_subtype; }
+  };
+
   
   Buffer& operator<<(Buffer& b, const ICQ2000::OutSNAC& t);
  
