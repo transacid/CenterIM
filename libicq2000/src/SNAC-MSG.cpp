@@ -274,7 +274,7 @@ namespace ICQ2000 {
      */
     if (channel == 0x0001) {
       TLVList tlvlist;
-      tlvlist.Parse(b, TLV_ParseMode_MessageBlock, 4000u);
+      tlvlist.Parse(b, TLV_ParseMode_MessageBlock, 40000u);
 
       // Normal message
       if (!tlvlist.exists(TLV_MessageData))
@@ -290,7 +290,7 @@ namespace ICQ2000 {
 
     } else if (channel == 0x0002) {
       TLVList tlvlist;
-      tlvlist.Parse(b, TLV_ParseMode_AdvMsgBlock, 4000u);
+      tlvlist.Parse(b, TLV_ParseMode_AdvMsgBlock, 40000u);
       
       if (!tlvlist.exists(TLV_AdvMsgData))
 	throw ParseException("No Advanced Message TLV in SNAC 0x0004 0x0007 on channel 2");
@@ -300,7 +300,7 @@ namespace ICQ2000 {
 
     } else if (channel == 0x0004) {
       TLVList tlvlist;
-      tlvlist.Parse(b, TLV_ParseMode_MessageBlock, 4000u);
+      tlvlist.Parse(b, TLV_ParseMode_MessageBlock, 40000u);
 
       /* ICQ hacked in messages
        * - SMS message

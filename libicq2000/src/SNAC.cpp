@@ -38,6 +38,7 @@ namespace ICQ2000 {
 	  snac = new ErrorInSNAC(family, subtype);
 	  break;
       }
+      break;
     case SNAC_FAM_GEN:
       switch(subtype) {
       case SNAC_GEN_ServerReady:

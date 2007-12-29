@@ -1427,8 +1427,9 @@ namespace ICQ2000
       switch(snac->Subtype()) {
       	case SNAC_BOS_Error:
       	SignalLog(LogEvent::ERROR, "Received BOS error message from server");
-	break;
+      	break;
       }
+    break;
     case SNAC_FAM_GEN:
       switch(snac->Subtype())
       {
@@ -1626,9 +1627,10 @@ namespace ICQ2000
 	
     } // switch(Family)
 
-    if (dynamic_cast<ErrorInSNAC*>(snac)) {
+	ErrorInSNAC *err = dynamic_cast<ErrorInSNAC*>(snac);
+    if (err) {
       ostringstream ostr;
-      ostr << "Error received: 0x" << dynamic_cast<ErrorInSNAC*>(snac)->getCode() << " - " << dynamic_cast<ErrorInSNAC*>(snac)->getErrorDescription();
+      ostr << "Error received: 0x" << std::hex << err->getCode() << " - " << err->getErrorDescription();
       SignalLog(LogEvent::WARN, ostr.str());
     }
     if (dynamic_cast<RawSNAC*>(snac))
