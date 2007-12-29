@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.22.1\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-12-21 21:53+0000\n"
+"POT-Creation-Date: 2007-12-29 18:57+0000\n"
 "PO-Revision-Date: 2007-11-05 17:09+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -872,7 +872,7 @@ msgstr "名字"
 msgid " Search profiles "
 msgstr " 搜尋設定檔"
 
-#: src/icqdialogs.cc:117 src/icqdialogs.cc:1048 src/icqdialogs.cc:1791
+#: src/icqdialogs.cc:117 src/icqdialogs.cc:1048 src/icqdialogs.cc:1798
 #: src/icqface.cc:1790 src/icqface.cc:2483
 msgid "Remove"
 msgstr "移除"
@@ -898,7 +898,7 @@ msgid "cLear"
 msgstr "L清除"
 
 #: src/icqdialogs.cc:226 src/icqdialogs.cc:231 src/icqdialogs.cc:236
-#: src/icqdialogs.cc:749 src/icqdialogs.cc:1194 src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:749 src/icqdialogs.cc:1195 src/icqdialogs.cc:2012
 #: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:445
 msgid "Change"
 msgstr "C修改"
@@ -1074,7 +1074,7 @@ msgstr ""
 msgid " Keywords : %s "
 msgstr " 關鍵字 : %s"
 
-#: src/icqdialogs.cc:415 src/icqdialogs.cc:2035
+#: src/icqdialogs.cc:415 src/icqdialogs.cc:2042
 msgid " Options "
 msgstr " 選項 "
 
@@ -1184,7 +1184,7 @@ msgstr "檢查頻率 :"
 msgid "Wrong Jabber ID!"
 msgstr "錯誤的 Jabber 代碼 !"
 
-#: src/icqdialogs.cc:557 src/icqdialogs.cc:2016
+#: src/icqdialogs.cc:557 src/icqdialogs.cc:2023
 msgid " General "
 msgstr " 一般 "
 
@@ -1306,7 +1306,7 @@ msgstr " 你的 %s 資料 "
 msgid " %s: details "
 msgstr " %s 的詳細資料 "
 
-#: src/icqdialogs.cc:749 src/icqdialogs.cc:1194 src/icqdialogs.cc:1670
+#: src/icqdialogs.cc:749 src/icqdialogs.cc:1195 src/icqdialogs.cc:1677
 #: src/accountmanager.cc:69 src/imotr.cc:445
 msgid "Done"
 msgstr "完成"
@@ -1377,7 +1377,7 @@ msgstr " [Ctrl-X 儲存, Esc 取消] "
 msgid " Send file(s) to %s, %lu "
 msgstr " 傳檔給 %s, %lu "
 
-#: src/icqdialogs.cc:1048 src/icqdialogs.cc:1669 src/icqface.cc:66
+#: src/icqdialogs.cc:1048 src/icqdialogs.cc:1676 src/icqface.cc:66
 #: src/icqface.cc:854 src/icqface.cc:857 src/icqface.cc:1790
 #: src/icqface.cc:2483
 msgid "Add"
@@ -1419,529 +1419,533 @@ msgstr "俄國的"
 msgid "Polish"
 msgstr "波蘭的"
 
-#: src/icqdialogs.cc:1185
+#: src/icqdialogs.cc:1154
+msgid "German UTF-8"
+msgstr ""
+
+#: src/icqdialogs.cc:1186
 msgid " CenterIM configuration "
 msgstr " CenterIM 設定選項  "
 
-#: src/icqdialogs.cc:1205
+#: src/icqdialogs.cc:1206
 msgid " User interface "
 msgstr " 使用者介面 "
 
-#: src/icqdialogs.cc:1206
+#: src/icqdialogs.cc:1207
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " 改變音效裝置為 : %s "
 
-#: src/icqdialogs.cc:1207
+#: src/icqdialogs.cc:1208
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " 改變色彩配置為 : %s "
 
-#: src/icqdialogs.cc:1208
+#: src/icqdialogs.cc:1209
 #, c-format
 msgid " Left panel width :  %d "
 msgstr " 左側欄寬 : %d "
 
-#: src/icqdialogs.cc:1209
+#: src/icqdialogs.cc:1210
 #, c-format
 msgid " Log panel height :  %d "
 msgstr " Log 欄高 : %d "
 
-#: src/icqdialogs.cc:1210
+#: src/icqdialogs.cc:1211
 #, c-format
 msgid " Chat panel height : %d "
 msgstr " 聊天窗欄高 : %d "
 
-#: src/icqdialogs.cc:1213
+#: src/icqdialogs.cc:1214
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " 啟動雙向語言功能 : %s "
 
-#: src/icqdialogs.cc:1215
+#: src/icqdialogs.cc:1216
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr " 在文字編輯器裡啟動 emacs 按鍵設定 : %s "
 
-#: src/icqdialogs.cc:1216
+#: src/icqdialogs.cc:1217
 #, c-format
 msgid " Ask before quit : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1218
+#: src/icqdialogs.cc:1219
 msgid " Codepages conversion "
 msgstr " 轉換語系頁碼"
 
-#: src/icqdialogs.cc:1225
+#: src/icqdialogs.cc:1226
 #, c-format
 msgid " Switch to language preset : %s "
 msgstr " 切換到預設語言 : %s "
 
-#: src/icqdialogs.cc:1226
+#: src/icqdialogs.cc:1227
 #, c-format
 msgid " Remote charset : %s "
 msgstr " 遠端字集 : %s "
 
-#: src/icqdialogs.cc:1227
+#: src/icqdialogs.cc:1228
 #, c-format
 msgid " Local charset : %s "
 msgstr " 本地字集 : %s "
 
-#: src/icqdialogs.cc:1230
+#: src/icqdialogs.cc:1231
 #, c-format
 msgid " For protocols : %s"
 msgstr " 對什麼協定 : %s "
 
-#: src/icqdialogs.cc:1233
+#: src/icqdialogs.cc:1234
 msgid " Contact list "
 msgstr " 好友名單 "
 
-#: src/icqdialogs.cc:1234
+#: src/icqdialogs.cc:1235
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " 群組分類顯示法 : %s "
 
-#: src/icqdialogs.cc:1235
+#: src/icqdialogs.cc:1236
 #, fuzzy, c-format
 msgid " Sort contacts by : %s "
 msgstr " 群組分類顯示法 : %s "
 
-#: src/icqdialogs.cc:1236
+#: src/icqdialogs.cc:1237
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " 隱藏離線使用者 : %s "
 
-#: src/icqdialogs.cc:1237
+#: src/icqdialogs.cc:1238
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " 防垃圾訊息: 刪除非好友的訊息 : %s "
 
-#: src/icqdialogs.cc:1238
+#: src/icqdialogs.cc:1239
 #, c-format
 msgid " Anti-spam: ignore authorization requests: %s "
 msgstr " 反垃圾 : 忽略認證請求 : %s "
 
-#: src/icqdialogs.cc:1239
+#: src/icqdialogs.cc:1240
 #, c-format
 msgid " Anti-spam: use captcha to identify bots: %s "
 msgstr " 防垃圾 : 用 CAPTCHA 來識別機器人 : %s "
 
-#: src/icqdialogs.cc:1240
+#: src/icqdialogs.cc:1241
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " 在回覆訊息時引言 : %s "
 
-#: src/icqdialogs.cc:1241
+#: src/icqdialogs.cc:1242
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " 檢查本地端郵件 : %s "
 
-#: src/icqdialogs.cc:1242
+#: src/icqdialogs.cc:1243
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " 儲存密碼 : %s "
 
-#: src/icqdialogs.cc:1243
+#: src/icqdialogs.cc:1244
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " 在變更狀態時修改暫離訊息 : %s "
 
-#: src/icqdialogs.cc:1250
+#: src/icqdialogs.cc:1251
 #, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " 聊天訊息模式  : %s"
 
-#: src/icqdialogs.cc:1256
+#: src/icqdialogs.cc:1257
 #, c-format
 msgid " Enter key sends message for : %s"
 msgstr " 按 Enter 就把訊息送出 : %s"
 
-#: src/icqdialogs.cc:1259
+#: src/icqdialogs.cc:1260
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " 聊天訊息模式 : %s "
 
-#: src/icqdialogs.cc:1260
+#: src/icqdialogs.cc:1261
 #, c-format
 msgid " Enter key sends message : %s "
 msgstr " 按 Enter 就把訊息送出 : %s"
 
-#: src/icqdialogs.cc:1267
+#: src/icqdialogs.cc:1268
 #, c-format
 msgid " Always online non-IM contacts for : %s"
 msgstr " 永遠保持上線狀態 : %s"
 
-#: src/icqdialogs.cc:1268
+#: src/icqdialogs.cc:1269
 #, c-format
 msgid " Color contacts according to: %s "
 msgstr " 群組分類顯示法 : %s "
 
-#: src/icqdialogs.cc:1270
+#: src/icqdialogs.cc:1271
 msgid " Communications "
 msgstr " 通訊 "
 
-#: src/icqdialogs.cc:1271
+#: src/icqdialogs.cc:1272
 #, c-format
 msgid " SMTP server : %s "
 msgstr " SMTP 伺服器 : %s "
 
-#: src/icqdialogs.cc:1272
+#: src/icqdialogs.cc:1273
 #, c-format
 msgid " HTTP browser : %s "
 msgstr " HTTP 瀏覽器 : %s "
 
-#: src/icqdialogs.cc:1273
+#: src/icqdialogs.cc:1274
 #, c-format
 msgid " HTTP proxy server : %s "
 msgstr " HTTP 代理伺服器 : %s "
 
-#: src/icqdialogs.cc:1276
+#: src/icqdialogs.cc:1277
 #, c-format
 msgid " Proxy only for HTTP (rss and lj) : %s "
 msgstr " HTTP Proxy (RSS 和 LJ 會用到) : %s"
 
-#: src/icqdialogs.cc:1278
+#: src/icqdialogs.cc:1279
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr " 啟動 P2P 通訊 : %s "
 
-#: src/icqdialogs.cc:1281
+#: src/icqdialogs.cc:1282
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr " P2P 可使用的 port 範圍 : %s "
 
-#: src/icqdialogs.cc:1283
+#: src/icqdialogs.cc:1284
 msgid " Logging "
 msgstr " 記錄中 "
 
-#: src/icqdialogs.cc:1284
+#: src/icqdialogs.cc:1285
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr " log 視窗中是否要顯示時間戳記 : %s "
 
-#: src/icqdialogs.cc:1285
+#: src/icqdialogs.cc:1286
 #, c-format
 msgid " Timestamps include seconds : %s "
 msgstr " 時間戳記記錄到秒 : %s "
 
-#: src/icqdialogs.cc:1286
+#: src/icqdialogs.cc:1287
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr " log 視窗中是否要顯示 上線/離線 資訊 : %s "
 
-#: src/icqdialogs.cc:1287
+#: src/icqdialogs.cc:1288
 #, c-format
 msgid " Detailed IM events log in ~/.centerim/log : %s "
 msgstr " 在 ~/.centerim/log 中詳註 IM 事件日誌細節 : %s"
 
-#: src/icqdialogs.cc:1289
+#: src/icqdialogs.cc:1290
 msgid " Auto Presence Status "
 msgstr " 自動上線狀態 "
 
-#: src/icqdialogs.cc:1290
+#: src/icqdialogs.cc:1291
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " 自動切換把狀態切換成暫離 (單位分) : %d "
 
-#: src/icqdialogs.cc:1291
+#: src/icqdialogs.cc:1292
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " 自動把狀態切換成 N/A (單位分) : %d "
 
-#: src/icqdialogs.cc:1292
+#: src/icqdialogs.cc:1293
 #, c-format
 msgid " Automatically set N/A when screen is detached : %s "
 msgstr " 當 screen 離線時自動把狀態切換成 : %s "
 
-#: src/icqdialogs.cc:1294
+#: src/icqdialogs.cc:1295
 #, c-format
 msgid " Screen socket path : %s "
 msgstr " Screen socket 路徑 : %s "
 
-#: src/icqdialogs.cc:1321
+#: src/icqdialogs.cc:1322
 msgid "Auto Away period (0 - disable): "
 msgstr "閒置自動暫離時間 (0 表不使用): "
 
-#: src/icqdialogs.cc:1325
+#: src/icqdialogs.cc:1326
 msgid "Auto N/A period (0 - disable): "
 msgstr "閒置自動N/A時間 (0 表不使用): "
 
-#: src/icqdialogs.cc:1351
+#: src/icqdialogs.cc:1352
 msgid "SMTP server hostname: "
 msgstr "SMTP 伺服器位址: "
 
-#: src/icqdialogs.cc:1361
+#: src/icqdialogs.cc:1362
 msgid "Peer-to-peer port range (min-max): "
 msgstr "P2P 可使用的 port 範圍 (最小-最大): "
 
-#: src/icqdialogs.cc:1375
+#: src/icqdialogs.cc:1376
 msgid "HTTP proxy server hostname: "
 msgstr "HTTP 代理伺服器位址: "
 
-#: src/icqdialogs.cc:1407
+#: src/icqdialogs.cc:1414
 msgid "Charset to convert messages from: "
 msgstr "訊息原始字集 : "
 
-#: src/icqdialogs.cc:1411
+#: src/icqdialogs.cc:1418
 msgid "Charset to convert messages to: "
 msgstr "訊息轉換字集 : "
 
-#: src/icqdialogs.cc:1421
+#: src/icqdialogs.cc:1428
 msgid "HTTP browser to use: "
 msgstr "HTTP 瀏覽器 : "
 
-#: src/icqdialogs.cc:1425
+#: src/icqdialogs.cc:1432
 msgid "Left panel width: "
 msgstr "左側欄寬 : "
 
-#: src/icqdialogs.cc:1430
+#: src/icqdialogs.cc:1437
 msgid "Log panel height: "
 msgstr "Log 欄高 : "
 
-#: src/icqdialogs.cc:1435
+#: src/icqdialogs.cc:1442
 msgid "Chat panel height: "
 msgstr "聊天窗欄高 : "
 
-#: src/icqdialogs.cc:1446
+#: src/icqdialogs.cc:1453
 msgid "Screen socket path: "
 msgstr "Screen socket 路徑 : "
 
-#: src/icqdialogs.cc:1448
+#: src/icqdialogs.cc:1455
 msgid "Choosen screen socket path doesn't exist!"
 msgstr "所指定的 screen socket 路徑不存在 !"
 
-#: src/icqdialogs.cc:1633
+#: src/icqdialogs.cc:1640
 msgid "Your details have been fetched"
 msgstr "您的詳細資料已傳回"
 
-#: src/icqdialogs.cc:1645
+#: src/icqdialogs.cc:1652
 msgid "Organize contact groups"
 msgstr "管理群組"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "Rename"
 msgstr "R更名"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "rEmove"
 msgstr "E移除"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "move Up"
 msgstr "U向上移"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "move Down"
 msgstr "D向下移"
 
-#: src/icqdialogs.cc:1670 src/icqdialogs.cc:2183
+#: src/icqdialogs.cc:1677 src/icqdialogs.cc:2190
 msgid "Select"
 msgstr "選擇"
 
-#: src/icqdialogs.cc:1685
+#: src/icqdialogs.cc:1692
 msgid " Groups "
 msgstr " 群組 "
 
-#: src/icqdialogs.cc:1700
+#: src/icqdialogs.cc:1707
 msgid "Name for a group to be created: "
 msgstr "新增群組名稱: "
 
-#: src/icqdialogs.cc:1710
+#: src/icqdialogs.cc:1717
 msgid "New name for the group: "
 msgstr "新群組名: "
 
-#: src/icqdialogs.cc:1725
+#: src/icqdialogs.cc:1732
 msgid "Are you sure want to remove the group?"
 msgstr "確定要刪除群組嗎 ?"
 
-#: src/icqdialogs.cc:1782
+#: src/icqdialogs.cc:1789
 msgid "File transfer status"
 msgstr "檔案傳輸狀態"
 
-#: src/icqdialogs.cc:1791
+#: src/icqdialogs.cc:1798
 msgid "Cancel"
 msgstr "取消"
 
-#: src/icqdialogs.cc:1820
+#: src/icqdialogs.cc:1827
 #, c-format
 msgid " Incoming from %s "
 msgstr " 從 %s 來的"
 
-#: src/icqdialogs.cc:1822
+#: src/icqdialogs.cc:1829
 #, c-format
 msgid " Outgoing to %s "
 msgstr " 送到 %s 去 "
 
-#: src/icqdialogs.cc:1830
+#: src/icqdialogs.cc:1837
 msgid "init"
 msgstr "啟始"
 
-#: src/icqdialogs.cc:1831
+#: src/icqdialogs.cc:1838
 msgid "start"
 msgstr "開始"
 
-#: src/icqdialogs.cc:1832
+#: src/icqdialogs.cc:1839
 msgid "work"
 msgstr "工作"
 
-#: src/icqdialogs.cc:1833
+#: src/icqdialogs.cc:1840
 msgid "done"
 msgstr "完成"
 
-#: src/icqdialogs.cc:1834
+#: src/icqdialogs.cc:1841
 msgid "err"
 msgstr "錯誤"
 
-#: src/icqdialogs.cc:1835
+#: src/icqdialogs.cc:1842
 msgid "abort"
 msgstr "失敗"
 
-#: src/icqdialogs.cc:1842
+#: src/icqdialogs.cc:1849
 msgid " of "
 msgstr " 的 "
 
-#: src/icqdialogs.cc:1875
+#: src/icqdialogs.cc:1882
 msgid "Cannot remove a transfer which is in progress now"
 msgstr "這個傳送過程已經在進行中, 不能移除"
 
-#: src/icqdialogs.cc:1986
+#: src/icqdialogs.cc:1993
 msgid "public (visible to all)"
 msgstr "公開的 (所有人都可以看得到)"
 
-#: src/icqdialogs.cc:1988
+#: src/icqdialogs.cc:1995
 msgid "private"
 msgstr "私有的"
 
-#: src/icqdialogs.cc:1990
+#: src/icqdialogs.cc:1997
 msgid "friends only"
 msgstr "只給好友"
 
-#: src/icqdialogs.cc:1997
+#: src/icqdialogs.cc:2004
 msgid " LiveJournal posting: attributes "
 msgstr " LiveJournal 張貼 : 屬性"
 
-#: src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:2012
 msgid "Detect music"
 msgstr "音樂偵測"
 
-#: src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:2012
 msgid "Post"
 msgstr "P張貼"
 
-#: src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:2012
 msgid "cAncel"
 msgstr "A取消"
 
-#: src/icqdialogs.cc:2017
+#: src/icqdialogs.cc:2024
 #, c-format
 msgid " Post to journal : %s "
 msgstr " 貼到 journal : %s "
 
-#: src/icqdialogs.cc:2018
+#: src/icqdialogs.cc:2025
 #, c-format
 msgid " Subject : %s "
 msgstr " 主題 : %s "
 
-#: src/icqdialogs.cc:2023
+#: src/icqdialogs.cc:2030
 #, c-format
 msgid " Security : %s "
 msgstr " 安全性 : %s "
 
-#: src/icqdialogs.cc:2025
+#: src/icqdialogs.cc:2032
 msgid " Fancy stuff "
 msgstr " 有趣的事物"
 
-#: src/icqdialogs.cc:2028
+#: src/icqdialogs.cc:2035
 #, c-format
 msgid " Mood : %s "
 msgstr " 心情 : %s "
 
-#: src/icqdialogs.cc:2028 src/icqdialogs.cc:2055
+#: src/icqdialogs.cc:2035 src/icqdialogs.cc:2062
 msgid "(none/custom)"
 msgstr "(無/自訂)"
 
-#: src/icqdialogs.cc:2029
+#: src/icqdialogs.cc:2036
 #, c-format
 msgid " Custom mood : %s "
 msgstr " 自訂心情 : %s "
 
-#: src/icqdialogs.cc:2031
+#: src/icqdialogs.cc:2038
 #, c-format
 msgid " Music : %s "
 msgstr " 音樂 : %s "
 
-#: src/icqdialogs.cc:2032
+#: src/icqdialogs.cc:2039
 #, c-format
 msgid " Picture : %s "
 msgstr " 照片 : %s "
 
-#: src/icqdialogs.cc:2032 src/icqdialogs.cc:2057
+#: src/icqdialogs.cc:2039 src/icqdialogs.cc:2064
 msgid "(default)"
 msgstr "(預設值)"
 
-#: src/icqdialogs.cc:2033
+#: src/icqdialogs.cc:2040
 #, fuzzy, c-format
 msgid " Tags : %s "
 msgstr " 年齡 : %s "
 
-#: src/icqdialogs.cc:2036
+#: src/icqdialogs.cc:2043
 #, c-format
 msgid " Disable auto-formatting : %s "
 msgstr " 關閉自動格式化 : %s"
 
-#: src/icqdialogs.cc:2037
+#: src/icqdialogs.cc:2044
 #, c-format
 msgid " Disable sending comments by e-mail : %s "
 msgstr " 關閉由 e-mail 傳遞評論 : %s"
 
-#: src/icqdialogs.cc:2038
+#: src/icqdialogs.cc:2045
 #, c-format
 msgid " Disallow comments : %s "
 msgstr " 不允許評論  : %s "
 
-#: src/icqdialogs.cc:2039
+#: src/icqdialogs.cc:2046
 #, c-format
 msgid " Backdated entry : %s "
 msgstr " 過時條目 : %s"
 
-#: src/icqdialogs.cc:2047
+#: src/icqdialogs.cc:2054
 msgid "Posting subject: "
 msgstr "張貼主題 :"
 
-#: src/icqdialogs.cc:2056
+#: src/icqdialogs.cc:2063
 msgid "Currently playing: "
 msgstr "現正播放 : "
 
-#: src/icqdialogs.cc:2058
+#: src/icqdialogs.cc:2065
 msgid "Current mood: "
 msgstr "目前心情 :"
 
-#: src/icqdialogs.cc:2059
+#: src/icqdialogs.cc:2066
 #, fuzzy
 msgid "Tags for the entry: "
 msgstr "伺服器訊息 :"
 
-#: src/icqdialogs.cc:2093
+#: src/icqdialogs.cc:2100
 msgid "pgp key quick search"
 msgstr "PGP 金鑰快速搜尋"
 
-#: src/icqdialogs.cc:2095
+#: src/icqdialogs.cc:2102
 #, c-format
 msgid "PGP key search: type to find, %s find again, Enter finish"
 msgstr "PGP 金鑰搜尋: 搜尋好友, %s 再找一次, Enter 結束搜尋"
 
-#: src/icqdialogs.cc:2176
+#: src/icqdialogs.cc:2183
 msgid " Select PGP key to use "
 msgstr "選擇一份 PGP 金鑰 "
 
-#: src/icqdialogs.cc:2197
+#: src/icqdialogs.cc:2204
 msgid " Use no key"
 msgstr "不使用金鑰"
 
-#: src/icqdialogs.cc:2211
+#: src/icqdialogs.cc:2218
 msgid "pgp key selection"
 msgstr "選擇 PGP 金鑰"
 
-#: src/icqdialogs.cc:2213
+#: src/icqdialogs.cc:2220
 #, c-format
 msgid "PGP key selection: %s for quick lookup"
 msgstr "選擇 PGP 金鑰: 快速檢視請用 %s"
@@ -3417,16 +3421,16 @@ msgstr "全螢幕檢視"
 msgid "%s or %s to close, Up/Down and PgUp/PgDn to scroll"
 msgstr "%s 或 %s 關閉, Up/Down 和 PgUp/PgDn 捲頁"
 
-#: src/icqface.cc:3077
+#: src/icqface.cc:3078
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "與 %s 的過往雲煙, 共有 %d 筆"
 
-#: src/icqface.cc:3083
+#: src/icqface.cc:3084
 #, c-format
 msgid "%s search, %s again, %s cancel"
 msgstr "%s 搜尋,   %s 再搜尋,%s 取消"
 
-#: src/icqface.cc:3092
+#: src/icqface.cc:3093
 msgid "search for: "
 msgstr "搜尋: "

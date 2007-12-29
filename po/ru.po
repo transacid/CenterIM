@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.20.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://sourceforge.net/"
 "projects/centerim\n"
-"POT-Creation-Date: 2007-12-21 21:53+0000\n"
+"POT-Creation-Date: 2007-12-29 18:57+0000\n"
 "PO-Revision-Date: 2004-02-08 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <k@thekonst.net>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -874,7 +874,7 @@ msgstr "Имя"
 msgid " Search profiles "
 msgstr " Профили поиска "
 
-#: src/icqdialogs.cc:117 src/icqdialogs.cc:1048 src/icqdialogs.cc:1791
+#: src/icqdialogs.cc:117 src/icqdialogs.cc:1048 src/icqdialogs.cc:1798
 #: src/icqface.cc:1790 src/icqface.cc:2483
 msgid "Remove"
 msgstr "Удалить"
@@ -900,7 +900,7 @@ msgid "cLear"
 msgstr "Очистить"
 
 #: src/icqdialogs.cc:226 src/icqdialogs.cc:231 src/icqdialogs.cc:236
-#: src/icqdialogs.cc:749 src/icqdialogs.cc:1194 src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:749 src/icqdialogs.cc:1195 src/icqdialogs.cc:2012
 #: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:445
 msgid "Change"
 msgstr "Изменить"
@@ -1076,7 +1076,7 @@ msgstr " Только вошедшие после последней прове�
 msgid " Keywords : %s "
 msgstr " Ключевые слова : %s "
 
-#: src/icqdialogs.cc:415 src/icqdialogs.cc:2035
+#: src/icqdialogs.cc:415 src/icqdialogs.cc:2042
 msgid " Options "
 msgstr " Опции "
 
@@ -1186,7 +1186,7 @@ msgstr "Частота проверки: "
 msgid "Wrong Jabber ID!"
 msgstr "Неправильный Jabber ID!"
 
-#: src/icqdialogs.cc:557 src/icqdialogs.cc:2016
+#: src/icqdialogs.cc:557 src/icqdialogs.cc:2023
 msgid " General "
 msgstr " Общие "
 
@@ -1308,7 +1308,7 @@ msgstr " Ваша %s информация "
 msgid " %s: details "
 msgstr " %s: детали "
 
-#: src/icqdialogs.cc:749 src/icqdialogs.cc:1194 src/icqdialogs.cc:1670
+#: src/icqdialogs.cc:749 src/icqdialogs.cc:1195 src/icqdialogs.cc:1677
 #: src/accountmanager.cc:69 src/imotr.cc:445
 msgid "Done"
 msgstr "Готово"
@@ -1379,7 +1379,7 @@ msgstr " [Ctrl-X сохранить, Esc отмена] "
 msgid " Send file(s) to %s, %lu "
 msgstr " Посылка файла(ов) %s, %lu"
 
-#: src/icqdialogs.cc:1048 src/icqdialogs.cc:1669 src/icqface.cc:66
+#: src/icqdialogs.cc:1048 src/icqdialogs.cc:1676 src/icqface.cc:66
 #: src/icqface.cc:854 src/icqface.cc:857 src/icqface.cc:1790
 #: src/icqface.cc:2483
 msgid "Add"
@@ -1421,532 +1421,536 @@ msgstr "Русский"
 msgid "Polish"
 msgstr "Польский"
 
-#: src/icqdialogs.cc:1185
+#: src/icqdialogs.cc:1154
+msgid "German UTF-8"
+msgstr ""
+
+#: src/icqdialogs.cc:1186
 #, fuzzy
 msgid " CenterIM configuration "
 msgstr " Настройки centerim "
 
-#: src/icqdialogs.cc:1205
+#: src/icqdialogs.cc:1206
 msgid " User interface "
 msgstr " Интерфейс пользователя "
 
-#: src/icqdialogs.cc:1206
+#: src/icqdialogs.cc:1207
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Звуковое устройство : %s "
 
-#: src/icqdialogs.cc:1207
+#: src/icqdialogs.cc:1208
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Цветовая схема : %s "
 
-#: src/icqdialogs.cc:1208
+#: src/icqdialogs.cc:1209
 #, c-format
 msgid " Left panel width :  %d "
 msgstr ""
 
-#: src/icqdialogs.cc:1209
+#: src/icqdialogs.cc:1210
 #, fuzzy, c-format
 msgid " Log panel height :  %d "
 msgstr " Локальная кодировка : %s "
 
-#: src/icqdialogs.cc:1210
+#: src/icqdialogs.cc:1211
 #, fuzzy, c-format
 msgid " Chat panel height : %d "
 msgstr " Канал : %s "
 
-#: src/icqdialogs.cc:1213
+#: src/icqdialogs.cc:1214
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " Поддержка двунаправленных языков : %s "
 
-#: src/icqdialogs.cc:1215
+#: src/icqdialogs.cc:1216
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr " Кнопки а-ля emacs в редакторе : %s "
 
-#: src/icqdialogs.cc:1216
+#: src/icqdialogs.cc:1217
 #, c-format
 msgid " Ask before quit : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1218
+#: src/icqdialogs.cc:1219
 msgid " Codepages conversion "
 msgstr " Перекодировка сообщений "
 
-#: src/icqdialogs.cc:1225
+#: src/icqdialogs.cc:1226
 #, c-format
 msgid " Switch to language preset : %s "
 msgstr " Установить автоматически для : %s "
 
-#: src/icqdialogs.cc:1226
+#: src/icqdialogs.cc:1227
 #, c-format
 msgid " Remote charset : %s "
 msgstr " Удаленная кодировка : %s "
 
-#: src/icqdialogs.cc:1227
+#: src/icqdialogs.cc:1228
 #, c-format
 msgid " Local charset : %s "
 msgstr " Локальная кодировка : %s "
 
-#: src/icqdialogs.cc:1230
+#: src/icqdialogs.cc:1231
 #, c-format
 msgid " For protocols : %s"
 msgstr " Для протоколов : %s "
 
-#: src/icqdialogs.cc:1233
+#: src/icqdialogs.cc:1234
 msgid " Contact list "
 msgstr "Список контактов "
 
-#: src/icqdialogs.cc:1234
+#: src/icqdialogs.cc:1235
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Поддержка групп контактов : %s "
 
-#: src/icqdialogs.cc:1235
+#: src/icqdialogs.cc:1236
 #, fuzzy, c-format
 msgid " Sort contacts by : %s "
 msgstr " Поддержка групп контактов : %s "
 
-#: src/icqdialogs.cc:1236
+#: src/icqdialogs.cc:1237
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Не показывать тех, кто не на линии (offline) : %s "
 
-#: src/icqdialogs.cc:1237
+#: src/icqdialogs.cc:1238
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Не принимать сообщения от юзеров, что не в списке : %s "
 
-#: src/icqdialogs.cc:1238
+#: src/icqdialogs.cc:1239
 #, fuzzy, c-format
 msgid " Anti-spam: ignore authorization requests: %s "
 msgstr " Необходима авторизация : %s "
 
-#: src/icqdialogs.cc:1239
+#: src/icqdialogs.cc:1240
 #, c-format
 msgid " Anti-spam: use captcha to identify bots: %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1240
+#: src/icqdialogs.cc:1241
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Цитировать сообщения при ответе : %s "
 
-#: src/icqdialogs.cc:1241
+#: src/icqdialogs.cc:1242
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Проверять локальный почтовый ящик : %s "
 
-#: src/icqdialogs.cc:1242
+#: src/icqdialogs.cc:1243
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Помнить пароли : %s "
 
-#: src/icqdialogs.cc:1243
+#: src/icqdialogs.cc:1244
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Редактировать away сообщения при переключении статуса : %s "
 
-#: src/icqdialogs.cc:1250
+#: src/icqdialogs.cc:1251
 #, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " Чат-режим при общении для : %s "
 
-#: src/icqdialogs.cc:1256
+#: src/icqdialogs.cc:1257
 #, c-format
 msgid " Enter key sends message for : %s"
 msgstr " Отсылка сообщения по нажатию Enter для : %s "
 
-#: src/icqdialogs.cc:1259
+#: src/icqdialogs.cc:1260
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Чат-режим при общении : %s "
 
-#: src/icqdialogs.cc:1260
+#: src/icqdialogs.cc:1261
 #, c-format
 msgid " Enter key sends message : %s "
 msgstr " Отсылка сообщений по нажатию Enter : %s "
 
-#: src/icqdialogs.cc:1267
+#: src/icqdialogs.cc:1268
 #, c-format
 msgid " Always online non-IM contacts for : %s"
 msgstr " Контакты всегда онлайн для не-IM сетей : %s"
 
-#: src/icqdialogs.cc:1268
+#: src/icqdialogs.cc:1269
 #, fuzzy, c-format
 msgid " Color contacts according to: %s "
 msgstr " Поддержка групп контактов : %s "
 
-#: src/icqdialogs.cc:1270
+#: src/icqdialogs.cc:1271
 msgid " Communications "
 msgstr " Связь "
 
-#: src/icqdialogs.cc:1271
+#: src/icqdialogs.cc:1272
 #, c-format
 msgid " SMTP server : %s "
 msgstr " SMTP сервер : %s "
 
-#: src/icqdialogs.cc:1272
+#: src/icqdialogs.cc:1273
 #, fuzzy, c-format
 msgid " HTTP browser : %s "
 msgstr " HTTP прокси-сервер : %s "
 
-#: src/icqdialogs.cc:1273
+#: src/icqdialogs.cc:1274
 #, c-format
 msgid " HTTP proxy server : %s "
 msgstr " HTTP прокси-сервер : %s "
 
-#: src/icqdialogs.cc:1276
+#: src/icqdialogs.cc:1277
 #, c-format
 msgid " Proxy only for HTTP (rss and lj) : %s "
 msgstr " Использовать прокси только для HTTP (rss и lj) : %s "
 
-#: src/icqdialogs.cc:1278
+#: src/icqdialogs.cc:1279
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr " Прямые соединения между клиентами : %s "
 
-#: src/icqdialogs.cc:1281
+#: src/icqdialogs.cc:1282
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr " Диапазон портов для прямых соединений : %s "
 
-#: src/icqdialogs.cc:1283
+#: src/icqdialogs.cc:1284
 msgid " Logging "
 msgstr " Журнал "
 
-#: src/icqdialogs.cc:1284
+#: src/icqdialogs.cc:1285
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr " Время событий в окошке лога : %s "
 
-#: src/icqdialogs.cc:1285
+#: src/icqdialogs.cc:1286
 #, fuzzy, c-format
 msgid " Timestamps include seconds : %s "
 msgstr " Время событий в окошке лога : %s "
 
-#: src/icqdialogs.cc:1286
+#: src/icqdialogs.cc:1287
 #, c-format
 msgid " Online/offile events in the log window : %s "
 msgstr " Входы-выходы пользователей в логе : %s "
 
-#: src/icqdialogs.cc:1287
+#: src/icqdialogs.cc:1288
 #, c-format
 msgid " Detailed IM events log in ~/.centerim/log : %s "
 msgstr " Подробный журнал в ~/.centerim/log : %s "
 
-#: src/icqdialogs.cc:1289
+#: src/icqdialogs.cc:1290
 msgid " Auto Presence Status "
 msgstr ""
 
-#: src/icqdialogs.cc:1290
+#: src/icqdialogs.cc:1291
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Автоматически Away после (мин) : %d "
 
-#: src/icqdialogs.cc:1291
+#: src/icqdialogs.cc:1292
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Автоматически N/A после (мин) : %d "
 
-#: src/icqdialogs.cc:1292
+#: src/icqdialogs.cc:1293
 #, fuzzy, c-format
 msgid " Automatically set N/A when screen is detached : %s "
 msgstr " Автоматически N/A после (мин) : %d "
 
-#: src/icqdialogs.cc:1294
+#: src/icqdialogs.cc:1295
 #, fuzzy, c-format
 msgid " Screen socket path : %s "
 msgstr " Адрес : %s "
 
-#: src/icqdialogs.cc:1321
+#: src/icqdialogs.cc:1322
 msgid "Auto Away period (0 - disable): "
 msgstr " Авто-away после (0 - выкл): "
 
-#: src/icqdialogs.cc:1325
+#: src/icqdialogs.cc:1326
 msgid "Auto N/A period (0 - disable): "
 msgstr " Авто-N/A после (0 - выкл): "
 
-#: src/icqdialogs.cc:1351
+#: src/icqdialogs.cc:1352
 msgid "SMTP server hostname: "
 msgstr "Имя SMTP сервера: "
 
-#: src/icqdialogs.cc:1361
+#: src/icqdialogs.cc:1362
 msgid "Peer-to-peer port range (min-max): "
 msgstr "Диапазон портов для прямых соединений (мин-макс): "
 
-#: src/icqdialogs.cc:1375
+#: src/icqdialogs.cc:1376
 msgid "HTTP proxy server hostname: "
 msgstr "Имя HTTP прокси-сервера: "
 
-#: src/icqdialogs.cc:1407
+#: src/icqdialogs.cc:1414
 msgid "Charset to convert messages from: "
 msgstr "Кодовая страница, из которой конвертировать: "
 
-#: src/icqdialogs.cc:1411
+#: src/icqdialogs.cc:1418
 msgid "Charset to convert messages to: "
 msgstr "Кодовая страница, в которую конвертировать: "
 
-#: src/icqdialogs.cc:1421
+#: src/icqdialogs.cc:1428
 #, fuzzy
 msgid "HTTP browser to use: "
 msgstr "Имя HTTP прокси-сервера: "
 
-#: src/icqdialogs.cc:1425
+#: src/icqdialogs.cc:1432
 msgid "Left panel width: "
 msgstr ""
 
-#: src/icqdialogs.cc:1430
+#: src/icqdialogs.cc:1437
 msgid "Log panel height: "
 msgstr ""
 
-#: src/icqdialogs.cc:1435
+#: src/icqdialogs.cc:1442
 msgid "Chat panel height: "
 msgstr ""
 
-#: src/icqdialogs.cc:1446
+#: src/icqdialogs.cc:1453
 msgid "Screen socket path: "
 msgstr ""
 
-#: src/icqdialogs.cc:1448
+#: src/icqdialogs.cc:1455
 msgid "Choosen screen socket path doesn't exist!"
 msgstr ""
 
-#: src/icqdialogs.cc:1633
+#: src/icqdialogs.cc:1640
 msgid "Your details have been fetched"
 msgstr "Ваша информация получена успешно"
 
-#: src/icqdialogs.cc:1645
+#: src/icqdialogs.cc:1652
 msgid "Organize contact groups"
 msgstr "Управление группами контактов"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "Rename"
 msgstr "Изменить"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "rEmove"
 msgstr "Удалить"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "move Up"
 msgstr "Вверх"
 
-#: src/icqdialogs.cc:1669
+#: src/icqdialogs.cc:1676
 msgid "move Down"
 msgstr "Вниз"
 
-#: src/icqdialogs.cc:1670 src/icqdialogs.cc:2183
+#: src/icqdialogs.cc:1677 src/icqdialogs.cc:2190
 msgid "Select"
 msgstr "Выбрать"
 
-#: src/icqdialogs.cc:1685
+#: src/icqdialogs.cc:1692
 msgid " Groups "
 msgstr " Группы "
 
-#: src/icqdialogs.cc:1700
+#: src/icqdialogs.cc:1707
 msgid "Name for a group to be created: "
 msgstr "Название для новой группы: "
 
-#: src/icqdialogs.cc:1710
+#: src/icqdialogs.cc:1717
 msgid "New name for the group: "
 msgstr "Новое имя группы: "
 
-#: src/icqdialogs.cc:1725
+#: src/icqdialogs.cc:1732
 msgid "Are you sure want to remove the group?"
 msgstr "Вы действительно хотите удалить группу?"
 
-#: src/icqdialogs.cc:1782
+#: src/icqdialogs.cc:1789
 msgid "File transfer status"
 msgstr "Монитор передачи файлов"
 
-#: src/icqdialogs.cc:1791
+#: src/icqdialogs.cc:1798
 msgid "Cancel"
 msgstr "Отменить"
 
-#: src/icqdialogs.cc:1820
+#: src/icqdialogs.cc:1827
 #, c-format
 msgid " Incoming from %s "
 msgstr " Прием от %s "
 
-#: src/icqdialogs.cc:1822
+#: src/icqdialogs.cc:1829
 #, c-format
 msgid " Outgoing to %s "
 msgstr " Посылка %s "
 
-#: src/icqdialogs.cc:1830
+#: src/icqdialogs.cc:1837
 msgid "init"
 msgstr "связь"
 
-#: src/icqdialogs.cc:1831
+#: src/icqdialogs.cc:1838
 msgid "start"
 msgstr "начало"
 
-#: src/icqdialogs.cc:1832
+#: src/icqdialogs.cc:1839
 msgid "work"
 msgstr "прогресс"
 
-#: src/icqdialogs.cc:1833
+#: src/icqdialogs.cc:1840
 msgid "done"
 msgstr "готов"
 
-#: src/icqdialogs.cc:1834
+#: src/icqdialogs.cc:1841
 msgid "err"
 msgstr "ошибка"
 
-#: src/icqdialogs.cc:1835
+#: src/icqdialogs.cc:1842
 msgid "abort"
 msgstr "отменен"
 
-#: src/icqdialogs.cc:1842
+#: src/icqdialogs.cc:1849
 msgid " of "
 msgstr " из "
 
-#: src/icqdialogs.cc:1875
+#: src/icqdialogs.cc:1882
 msgid "Cannot remove a transfer which is in progress now"
 msgstr "Невозможно удалить передачу, которая еще не закончилась"
 
-#: src/icqdialogs.cc:1986
+#: src/icqdialogs.cc:1993
 msgid "public (visible to all)"
 msgstr "для всех"
 
-#: src/icqdialogs.cc:1988
+#: src/icqdialogs.cc:1995
 msgid "private"
 msgstr "личное"
 
-#: src/icqdialogs.cc:1990
+#: src/icqdialogs.cc:1997
 msgid "friends only"
 msgstr "только для друзей"
 
-#: src/icqdialogs.cc:1997
+#: src/icqdialogs.cc:2004
 msgid " LiveJournal posting: attributes "
 msgstr " Помещение записи в журнал: аттрибуты "
 
-#: src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:2012
 msgid "Detect music"
 msgstr "Определить музыку"
 
-#: src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:2012
 msgid "Post"
 msgstr "Отправить"
 
-#: src/icqdialogs.cc:2005
+#: src/icqdialogs.cc:2012
 msgid "cAncel"
 msgstr "Отменить"
 
-#: src/icqdialogs.cc:2017
+#: src/icqdialogs.cc:2024
 #, c-format
 msgid " Post to journal : %s "
 msgstr " Поместить в журнал : %s "
 
-#: src/icqdialogs.cc:2018
+#: src/icqdialogs.cc:2025
 #, c-format
 msgid " Subject : %s "
 msgstr " Тема : %s "
 
-#: src/icqdialogs.cc:2023
+#: src/icqdialogs.cc:2030
 #, c-format
 msgid " Security : %s "
 msgstr " Права доступа : %s "
 
-#: src/icqdialogs.cc:2025
+#: src/icqdialogs.cc:2032
 msgid " Fancy stuff "
 msgstr " Всякая красота "
 
-#: src/icqdialogs.cc:2028
+#: src/icqdialogs.cc:2035
 #, c-format
 msgid " Mood : %s "
 msgstr " Настроение : %s "
 
-#: src/icqdialogs.cc:2028 src/icqdialogs.cc:2055
+#: src/icqdialogs.cc:2035 src/icqdialogs.cc:2062
 msgid "(none/custom)"
 msgstr "(нет/свой)"
 
-#: src/icqdialogs.cc:2029
+#: src/icqdialogs.cc:2036
 #, c-format
 msgid " Custom mood : %s "
 msgstr " Свой вариант настроения : %s "
 
-#: src/icqdialogs.cc:2031
+#: src/icqdialogs.cc:2038
 #, c-format
 msgid " Music : %s "
 msgstr " Музыка : %s "
 
-#: src/icqdialogs.cc:2032
+#: src/icqdialogs.cc:2039
 #, c-format
 msgid " Picture : %s "
 msgstr " Картинка : %s "
 
-#: src/icqdialogs.cc:2032 src/icqdialogs.cc:2057
+#: src/icqdialogs.cc:2039 src/icqdialogs.cc:2064
 msgid "(default)"
 msgstr "(по умолчанию)"
 
-#: src/icqdialogs.cc:2033
+#: src/icqdialogs.cc:2040
 #, fuzzy, c-format
 msgid " Tags : %s "
 msgstr " Возраст : %s "
 
-#: src/icqdialogs.cc:2036
+#: src/icqdialogs.cc:2043
 #, c-format
 msgid " Disable auto-formatting : %s "
 msgstr " Отключить автоформатирование : %s "
 
-#: src/icqdialogs.cc:2037
+#: src/icqdialogs.cc:2044
 #, c-format
 msgid " Disable sending comments by e-mail : %s "
 msgstr " Отключить прием комментарием по e-mail : %s "
 
-#: src/icqdialogs.cc:2038
+#: src/icqdialogs.cc:2045
 #, c-format
 msgid " Disallow comments : %s "
 msgstr " Отключить комментарии : %s "
 
-#: src/icqdialogs.cc:2039
+#: src/icqdialogs.cc:2046
 #, c-format
 msgid " Backdated entry : %s "
 msgstr " Поместить задним числом : %s "
 
-#: src/icqdialogs.cc:2047
+#: src/icqdialogs.cc:2054
 msgid "Posting subject: "
 msgstr "Тема записи: "
 
-#: src/icqdialogs.cc:2056
+#: src/icqdialogs.cc:2063
 msgid "Currently playing: "
 msgstr "Играет в данный момент: "
 
-#: src/icqdialogs.cc:2058
+#: src/icqdialogs.cc:2065
 msgid "Current mood: "
 msgstr "Текущее настроение: "
 
-#: src/icqdialogs.cc:2059
+#: src/icqdialogs.cc:2066
 #, fuzzy
 msgid "Tags for the entry: "
 msgstr "Сообщение от сервера: "
 
-#: src/icqdialogs.cc:2093
+#: src/icqdialogs.cc:2100
 msgid "pgp key quick search"
 msgstr "быстрый поиск pgp-ключа"
 
-#: src/icqdialogs.cc:2095
+#: src/icqdialogs.cc:2102
 #, c-format
 msgid "PGP key search: type to find, %s find again, Enter finish"
 msgstr ""
 "Быстрый поиск PGP ключа: набирайте для поиска, %s повторить, Enter завершить"
 
-#: src/icqdialogs.cc:2176
+#: src/icqdialogs.cc:2183
 msgid " Select PGP key to use "
 msgstr " Выберите PGP ключ "
 
-#: src/icqdialogs.cc:2197
+#: src/icqdialogs.cc:2204
 msgid " Use no key"
 msgstr " Не использовать ключ"
 
-#: src/icqdialogs.cc:2211
+#: src/icqdialogs.cc:2218
 msgid "pgp key selection"
 msgstr "выбор pgp ключа"
 
-#: src/icqdialogs.cc:2213
+#: src/icqdialogs.cc:2220
 #, c-format
 msgid "PGP key selection: %s for quick lookup"
 msgstr "Выбор PGP ключа: %s для быстрого поиска"
@@ -3448,17 +3452,17 @@ msgstr "полный экран"
 msgid "%s or %s to close, Up/Down and PgUp/PgDn to scroll"
 msgstr "%s or %s закрыть, Вверх/Вниз и PgUp/PgDn для прокрутки"
 
-#: src/icqface.cc:3077
+#: src/icqface.cc:3078
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "История для %s, всего %d сообщений"
 
-#: src/icqface.cc:3083
+#: src/icqface.cc:3084
 #, c-format
 msgid "%s search, %s again, %s cancel"
 msgstr "%s поиск, %s опять, %s отмена"
 
-#: src/icqface.cc:3092
+#: src/icqface.cc:3093
 msgid "search for: "
 msgstr "искать: "
 
