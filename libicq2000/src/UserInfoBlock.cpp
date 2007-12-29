@@ -54,15 +54,22 @@ namespace ICQ2000 {
   Capabilities UserInfoBlock::get_capabilities() const { return m_capabilities; }
   
   void UserInfoBlock::Parse(Buffer& b) {
-    // (byte)length, string screenname
-    b.UnpackByteString(m_screenname);
-
-    b >> m_warninglevel;
-    unsigned short no_tlvs;
-    b >> no_tlvs;
-    
+    /*
+     * For some reason, the server send two times the body of the reply.
+     * This is a workaround to parse all of the packet. The information is
+     * different in the two parts, but the second part seems more appropriate.
+     * */
     TLVList tlvlist;
-    tlvlist.Parse(b, TLV_ParseMode_Channel02, no_tlvs);
+    unsigned short no_tlvs;
+    while( b.beforeEnd() ) {
+	// (byte)length, string screenname
+	b.UnpackByteString(m_screenname);
+
+	b >> m_warninglevel;
+	b >> no_tlvs;
+	
+	tlvlist.Parse(b, TLV_ParseMode_Channel02, no_tlvs);
+    }
 
     m_userClass = 0;
     if (tlvlist.exists(TLV_UserClass)) {
