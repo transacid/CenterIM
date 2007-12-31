@@ -48,20 +48,23 @@ namespace ICQ2000 {
     // empty
   }
 
+  RateInfoSNAC::RateInfoSNAC() : rates() {}
   void RateInfoSNAC::ParseBody(Buffer& b) {
 
-    // shamelessly not parsing any of this :-(
-    b.advance(179);
     unsigned short n;
     b >> n;
     for (unsigned short a = 0; a < n; a++) {
-      unsigned short major, minor;
-      b >> major
-	>> minor;
-    }
+      unsigned short cl_id;
+      unsigned int win, clr, alert, limit, disc, current, max, last;
+      unsigned char cur_st;
+      b >> cl_id;
 
-    b.advance(68);
-    
+      rates[cl_id] = RateClass();
+      rates[cl_id] << b;
+    }
+    for (unsigned short a = 0; a < n; a++) {
+	unsigned short rg_id, pairs, family, subtype;
+    }
   }
 
   void RateInfoAckSNAC::OutputBody(Buffer& b) const {
@@ -89,11 +92,12 @@ namespace ICQ2000 {
     /* doesn't seem any need currently to do more
      * than copy the official client
      */
-    unsigned short v1 = 0x0001, v3 = 0x0003;
+    unsigned short v1 = 0x0001, v2 = 0x0002, v3 = 0x0003, v4 = 0x0004, v5 = 0x0005;
     b << SNAC_FAM_GEN << v3
+      << SNAC_FAM_SBL << v5
       << SNAC_FAM_LOC << v1
       << SNAC_FAM_BUD << v1
-      << SNAC_FAM_SRV << v1
+      << SNAC_FAM_SRV << v2
       << SNAC_FAM_MSG << v1
       << SNAC_FAM_INV << v1
       << SNAC_FAM_BOS << v1
@@ -103,7 +107,7 @@ namespace ICQ2000 {
   void CapAckSNAC::ParseBody(Buffer& b) {
     /* server sends back the list from ServerReady again
      * but with versions of families included
-     * - again ignore for the moment
+     * - ignore for the moment
      */
     unsigned short cap, ver;
     while(b.beforeEnd()) {

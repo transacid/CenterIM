@@ -24,9 +24,11 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "SNAC-base.h"
 #include "UserInfoBlock.h"
+#include "RateLimits.h"
 
 namespace ICQ2000 {
 
@@ -88,12 +90,15 @@ namespace ICQ2000 {
   };
 
   class RateInfoSNAC : public GenericSNAC, public InSNAC {
+   private:
+    std::map<unsigned short, RateClass> rates;
    protected:
     void ParseBody(Buffer& b);
 
    public:
-    RateInfoSNAC() { }
+    RateInfoSNAC();
     unsigned short Subtype() const { return SNAC_GEN_RateInfo; }
+    std::map<unsigned short, RateClass> getRates() const { return rates; }
   };
 
   class RateInfoAckSNAC : public GenericSNAC, public OutSNAC {

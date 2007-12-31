@@ -39,6 +39,7 @@
 #include "sstream_fix.h"
 
 #include <vector>
+#include <map>
 #include <iostream>
 
 using std::string;
@@ -1446,8 +1447,8 @@ namespace ICQ2000
 	    SignalLog(LogEvent::INFO, "Errors parsing server capabilities");
 	    break;
 	  }
-	  vector<unsigned short> caps = sn->getCapabilities();
-	  for( vector<unsigned short>::iterator i = caps.begin(); i != caps.end(); i++ ) {
+	  std::vector<unsigned short> caps = sn->getCapabilities();
+	  for( std::vector<unsigned short>::iterator i = caps.begin(); i != caps.end(); i++ ) {
 	   ostringstream ostr;
 	   ostr << "Family: 0x" << std::hex << *i;
 	   SignalLog(LogEvent::INFO, ostr.str());
@@ -1457,6 +1458,26 @@ namespace ICQ2000
 	break;
       case SNAC_GEN_RateInfo:
 	SignalLog(LogEvent::INFO, "Received Rate Information from server");
+	{
+	  RateInfoSNAC *sn = dynamic_cast<RateInfoSNAC*>(snac);
+	  if(!sn) {
+	    SignalLog(LogEvent::INFO, "Errors parsing server rates");
+	    break;
+	  }
+	  std::map<unsigned short, RateClass> r = sn->getRates();
+	  ostringstream ostr;
+	  for( std::map<unsigned short, RateClass>::iterator it = r.begin(); it != r.end(); it++ ) {
+	    RateClass rc = it->second;
+	    ostr << "Class ID: " << it->first
+	         << " Window: 0x" << std::hex << rc.getWindow() << " Clear: 0x"
+		 << rc.getClearLevel() << " Alert: 0x" << rc.getAlertLevel()
+		 << " Limited: 0x" << rc.getLimitedLevel() << " Disconnected: 0x"
+		 << rc.getDisconnectedLevel() << " Current: 0x" << rc.getCurrentLevel()
+		 << " Max Level: 0x" << rc.getMaxLevel() << " Last: 0x" << rc.getLastTime()
+		 << " Current state: 0x" << rc.getCurrentState() << "\n";
+	  }
+	  SignalLog(LogEvent::INFO, ostr.str());
+	}
 	SendRateInfoAck();
 	SendPersonalInfoRequest();
 	SendAddICBMParameter();
