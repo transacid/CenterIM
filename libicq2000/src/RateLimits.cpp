@@ -22,13 +22,23 @@
 #include "RateLimits.h"
 
 namespace ICQ2000 {
+    RateClass::RateClass() : members() {}
     RateClass::RateClass(unsigned int win, unsigned int clr,
             unsigned int alrt, unsigned int lim,
             unsigned int disc, unsigned int cur,
             unsigned int max, unsigned int last,
             unsigned char cur_st) : window(win), clear_l(clr),
     alert_l(alrt), limited_l(lim), disconnected_l(disc), current_l(cur),
-    max_l(max), last_time(last), current_state(cur_st) {}
+    max_l(max), last_time(last), current_state(cur_st), members() {}
+
+    void RateClass::setMembers( unsigned short n, Buffer& b ) {
+        for( int i = 0; i < n; i++ ) {
+            unsigned short f, s;
+            b >> f;
+            b >> s;
+            members.insert( std::pair<unsigned short, unsigned short>(f, s) );
+        }
+    }
 
     RateClass& RateClass::operator<<(Buffer& b) {
         b >> window;

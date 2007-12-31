@@ -1475,6 +1475,11 @@ namespace ICQ2000
 		 << rc.getDisconnectedLevel() << " Current: 0x" << rc.getCurrentLevel()
 		 << " Max Level: 0x" << rc.getMaxLevel() << " Last: 0x" << rc.getLastTime()
 		 << " Current state: 0x" << rc.getCurrentState() << "\n";
+	    ostr << "Members: ";
+	    std::multimap<unsigned short, unsigned short> m = rc.getMembers();
+	    for( std::multimap<unsigned short, unsigned short>::iterator i = m.begin(); i != m.end(); i++ ) {
+	      ostr << "Family 0x" << i->first << ", Subtype 0x" << i->second << "\n";
+	    }
 	  }
 	  SignalLog(LogEvent::INFO, ostr.str());
 	}

@@ -23,11 +23,12 @@
 #define __LIBICQ2000_RATE_LIMITS_H
 
 #include "buffer.h"
+#include <map>
 
 namespace ICQ2000 {
     class RateClass {
         public:
-            RateClass() {};
+            RateClass();
             RateClass(unsigned int win, unsigned int clr,
                     unsigned int alrt, unsigned int lim,
                     unsigned int disc, unsigned int cur,
@@ -43,6 +44,8 @@ namespace ICQ2000 {
             unsigned int getMaxLevel() const { return max_l; }
             unsigned int getLastTime() const { return last_time; }
             unsigned int getCurrentState() const { return current_state; }
+            void setMembers( unsigned short n, Buffer& b );
+            std::multimap<unsigned short, unsigned short> getMembers() const { return members; }
             RateClass& operator<<(Buffer& b);
         private:
             unsigned int window;
@@ -54,6 +57,7 @@ namespace ICQ2000 {
             unsigned int max_l;
             unsigned int last_time;
             unsigned char current_state;
+            std::multimap<unsigned short, unsigned short> members;
     };
 }
 #endif

@@ -63,7 +63,9 @@ namespace ICQ2000 {
       rates[cl_id] << b;
     }
     for (unsigned short a = 0; a < n; a++) {
-	unsigned short rg_id, pairs, family, subtype;
+	unsigned short rg_id, pairs;
+	b >> rg_id >> pairs;
+	rates[rg_id].setMembers( pairs, b );
     }
   }
 
