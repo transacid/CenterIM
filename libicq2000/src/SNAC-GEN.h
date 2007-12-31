@@ -23,6 +23,7 @@
 #define SNAC_GEN_H
 
 #include <string>
+#include <vector>
 
 #include "SNAC-base.h"
 #include "UserInfoBlock.h"
@@ -65,13 +66,16 @@ namespace ICQ2000 {
   };
 
   class ServerReadySNAC : public GenericSNAC, public InSNAC {
+   private:
+    std::vector<unsigned short> capabilities;
    protected:
     void ParseBody(Buffer& b);
     
    public:
-    ServerReadySNAC() { }
+    ServerReadySNAC();
 
     unsigned short Subtype() const { return SNAC_GEN_ServerReady; }
+    std::vector<unsigned short> getCapabilities() const { return capabilities; }
   };
 
   class RequestRateInfoSNAC : public GenericSNAC, public OutSNAC {

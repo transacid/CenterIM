@@ -1194,8 +1194,13 @@ namespace ICQ2000
       SignalLog(LogEvent::INFO, "Not starting listening server, incoming Direct connections disabled");
     }
 
-    if (!m_contact_tree.empty())
+	/*
+    if (!m_contact_tree.empty()) {
       FLAPwrapSNAC(b, AddBuddySNAC(m_contact_tree) );
+      Send(b);
+      b.clear();
+    }
+	*/
     /* hack - for the moment still send older style buddy list */
 
     if (m_invisible_wanted)
@@ -1435,6 +1440,19 @@ namespace ICQ2000
       {
       case SNAC_GEN_ServerReady:
 	SignalLog(LogEvent::INFO, "Received Server Ready from server");
+	{
+	  ServerReadySNAC *sn = dynamic_cast<ServerReadySNAC*>(snac);
+	  if (!sn) {
+	    SignalLog(LogEvent::INFO, "Errors parsing server capabilities");
+	    break;
+	  }
+	  vector<unsigned short> caps = sn->getCapabilities();
+	  for( vector<unsigned short>::iterator i = caps.begin(); i != caps.end(); i++ ) {
+	   ostringstream ostr;
+	   ostr << "Family: 0x" << std::hex << *i;
+	   SignalLog(LogEvent::INFO, ostr.str());
+	  }
+	}
 	SendCapabilities();
 	break;
       case SNAC_GEN_RateInfo:

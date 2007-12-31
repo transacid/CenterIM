@@ -28,16 +28,19 @@ namespace ICQ2000 {
 
   // --------------- Generic (Family 0x0001) ------------
 
+  ServerReadySNAC::ServerReadySNAC(): capabilities() {}
   void ServerReadySNAC::ParseBody(Buffer& b) {
     /* The body of the server ready SNAC seems
      * to be a list of the SNAC families the server
      * will accept - the client is then expected
      * to send back a list of those it wants
-     * - basically ignore this for the moment :-)
+     * - save the list
      */
     unsigned short cap;
-    while(b.beforeEnd())
+    while(b.beforeEnd()) {
       b >> cap;
+      capabilities.push_back(cap);
+    }
 
   }
 
