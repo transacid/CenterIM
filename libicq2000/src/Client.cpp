@@ -2337,7 +2337,9 @@ namespace ICQ2000
     FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
     FLAPwrapSNAC( b, SBLBeginEditSNAC() );
     ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(c);
-    FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
+    if( !g.get_label().empty() ) {
+      FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
+    }
     FLAPwrapSNAC( b, SBLAddEntrySNAC(c) );
     FLAPwrapSNAC( b, SBLCommitEditSNAC() );
 
@@ -2589,7 +2591,8 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
       if (c->isICQContact() && m_state == BOS_LOGGED_IN)
       {
-	FLAPwrapSNACandSend( AddBuddySNAC(c) );
+      	uploadServerBasedContact(c);
+	//FLAPwrapSNACandSend( AddBuddySNAC(c) );
 
 	// fetch detailed userinfo from server
 	fetchDetailContactInfo(c);
@@ -2602,7 +2605,8 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
       if (c->isICQContact() && m_state == BOS_LOGGED_IN)
       {
-	FLAPwrapSNACandSend( RemoveBuddySNAC(c) );
+        removeServerBasedContact(c);
+	//FLAPwrapSNACandSend( RemoveBuddySNAC(c) );
       }
 
       // remove all direct connections for that contact
