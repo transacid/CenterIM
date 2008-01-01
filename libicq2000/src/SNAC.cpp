@@ -132,9 +132,13 @@ namespace ICQ2000 {
 	snac = new SBLEditACKSNAC();
 	break;
       case SNAC_SBL_Auth_Request:
-      case SNAC_SBL_Auth_Granted:
+        snac = new SBLAuthRequestSNAC();
+	break;
+      case SNAC_SBL_Auth_Received:
+        snac = new SBLAuthReceivedSNAC();
+	break;
       case SNAC_SBL_User_Added_You:
-	// todo
+	snac = new SBLUserAddedYouSNAC();
 	break;
       case SNAC_SBL_Error:
 	snac = new ErrorInSNAC(family, subtype);

@@ -237,6 +237,33 @@ namespace ICQ2000 {
 
   MessageSNAC::MessageSNAC() : m_icqsubtype(NULL) { }
 
+  MessageSNAC::MessageSNAC(const std::string &uin)
+  {
+    m_icqsubtype = new UserAddICQSubType(uin, "", "", "", false);
+    UINICQSubType *st = dynamic_cast<UINICQSubType*>(m_icqsubtype);
+    if (st != NULL)
+      st->setSource(Contact::StringtoUIN(uin));
+  }
+  
+  MessageSNAC::MessageSNAC(const std::string &uin, const std::string &reason)
+  {
+    m_icqsubtype = new AuthReqICQSubType(uin, "", "", "", false, reason);
+    UINICQSubType *st = dynamic_cast<UINICQSubType*>(m_icqsubtype);
+    if (st != NULL)
+      st->setSource(Contact::StringtoUIN(uin));
+  }
+
+  MessageSNAC::MessageSNAC(const std::string &uin, const std::string &reason, bool granted)
+  {
+    if (granted)
+      m_icqsubtype = new AuthAccICQSubType();
+    else
+      m_icqsubtype = new AuthRejICQSubType(reason);
+    UINICQSubType *st = dynamic_cast<UINICQSubType*>(m_icqsubtype);
+    if (st != NULL)
+      st->setSource(Contact::StringtoUIN(uin));
+  }
+
   MessageSNAC::~MessageSNAC() {
     if (m_icqsubtype != NULL) delete m_icqsubtype;
   }

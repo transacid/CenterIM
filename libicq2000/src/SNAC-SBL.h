@@ -51,7 +51,7 @@ namespace ICQ2000 {
   const unsigned short SNAC_SBL_Request_Auth     = 0x0018; // Out
   const unsigned short SNAC_SBL_Auth_Request     = 0x0019; // In
   const unsigned short SNAC_SBL_Authorise        = 0x001a; // Out 
-  const unsigned short SNAC_SBL_Auth_Granted     = 0x001b; // In
+  const unsigned short SNAC_SBL_Auth_Received    = 0x001b; // In
   const unsigned short SNAC_SBL_User_Added_You   = 0x001c; // In
   
   // ----------------- Server-based Lists (Family 0x0013) SNACs -----------
@@ -191,9 +191,9 @@ namespace ICQ2000 {
   class SBLUpdateEntrySNAC : public SBLFamilySNAC, public OutSNAC
   {
    private:
-     std::string m_group_name;
-     unsigned short m_group_id;
-     std::vector<unsigned short> m_ids;
+    std::string m_group_name;
+    unsigned short m_group_id;
+    std::vector<unsigned short> m_ids;
      const ContactRef &m_cont;
 
    protected:
@@ -204,7 +204,7 @@ namespace ICQ2000 {
 		       unsigned short group_id, const std::vector<unsigned short> &ids);
 
     SBLUpdateEntrySNAC(const ContactRef &c);
-
+    
     unsigned short Subtype() const { return SNAC_SBL_Update_Entry; }
   };
   
@@ -284,7 +284,111 @@ namespace ICQ2000 {
     SBLListUnchangedSNAC();
     unsigned short Subtype() const { return SNAC_SBL_List_Unchanged; }
   };
+
+  // ============================================================================
+  //  SBL Request authorisation
+  // ============================================================================
+
+  class SBLRequestAuthSNAC : public SBLFamilySNAC, public OutSNAC
+  {
+   private:
+     const ContactRef m_cont;
+     std::string m_msg;
+
+   protected:
+    void OutputBody(Buffer& b) const;
+
+   public:
+    SBLRequestAuthSNAC(const ContactRef &c, const std::string &message);
+
+    unsigned short Subtype() const { return SNAC_SBL_Request_Auth; }
+  };
+
+  // ============================================================================
+  //  SBL Incoming request authorisation
+  // ============================================================================
+
+  class SBLAuthRequestSNAC : public SBLFamilySNAC, public InSNAC 
+  {
+   private:
+    std::string m_msg;
+    std::string m_uin;
+   
+   protected:
+    void ParseBody(Buffer& b);
+
+   public:
+    SBLAuthRequestSNAC();
+	
+	std::string getMessage() const { return m_msg; }
+	
+	std::string getUIN() const { return m_uin; }
+	
+	unsigned short Subtype() const { return SNAC_SBL_Auth_Request; }
+
+  };
+
+  // ============================================================================
+  //  SBL Authorisation request reply (outgoing)
+  // ============================================================================
   
+  class SBLAuthoriseSNAC : public SBLFamilySNAC, public OutSNAC
+  {
+   private:
+    const std::string m_reason;
+    const ContactRef m_cont;
+    const bool m_grant;
+   
+   protected:
+    void OutputBody(Buffer& b) const;
+    
+   public:
+    SBLAuthoriseSNAC(const ContactRef &c, const std::string reason, bool grant);
+    unsigned short Subtype() const { return SNAC_SBL_Authorise; }
+  };
+  
+  // ============================================================================
+  //  SBL Authorisation request reply (incoming)
+  // ============================================================================
+  class SBLAuthReceivedSNAC : public SBLFamilySNAC, public InSNAC
+  {
+   private:
+    std::string m_msg;
+    std::string m_uin;
+    bool m_grant;
+   
+   protected:
+    void ParseBody(Buffer& b);
+
+   public:
+    SBLAuthReceivedSNAC();
+	
+	std::string getMessage() const { return m_msg; }
+	
+	std::string getUIN() const { return m_uin; }
+	
+	bool granted() const { return m_grant; }
+	
+	unsigned short Subtype() const { return SNAC_SBL_Auth_Received; }
+  };
+
+  class SBLUserAddedYouSNAC : public SBLFamilySNAC, public InSNAC
+  {
+   private:
+    std::string m_uin;
+    bool m_grant;
+   
+   protected:
+    void ParseBody(Buffer& b);
+
+   public:
+    SBLUserAddedYouSNAC();
+		
+	std::string getUIN() const { return m_uin; }
+	
+	unsigned short Subtype() const { return SNAC_SBL_User_Added_You; }
+  };
+
 }
 
 #endif

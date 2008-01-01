@@ -1621,7 +1621,33 @@ namespace ICQ2000
       case SNAC_SBL_Error:
       	SignalLog(LogEvent::ERROR, "Received Server-base List error from server");
 	break;
-
+	
+	  case SNAC_SBL_Auth_Request:
+	    {
+		SBLAuthRequestSNAC *sn = static_cast<SBLAuthRequestSNAC*>(snac);
+		MessageSNAC *msg = new MessageSNAC(sn->getUIN(), sn->getMessage());
+		SignalMessage(msg);
+		delete msg;
+		}
+	  break;
+	  
+	  case SNAC_SBL_Auth_Received:
+	    {
+	    SBLAuthReceivedSNAC *snr = static_cast<SBLAuthReceivedSNAC*>(snac);
+	    MessageSNAC *msgr = new MessageSNAC(snr->getUIN(), snr->getMessage(), snr->granted());
+	    SignalMessage(msgr);
+	    delete msgr;
+	    }
+	  break;
+	  
+	  case SNAC_SBL_User_Added_You:
+	    {
+	    SBLUserAddedYouSNAC *snr = static_cast<SBLUserAddedYouSNAC*>(snac);
+	    MessageSNAC *msgr = new MessageSNAC(snr->getUIN());
+	    SignalMessage(msgr);
+	    delete msgr;
+	    }
+	  break;
       } // switch(SBL Subtype)
       break;
 	
