@@ -204,7 +204,7 @@ namespace ICQ2000 {
       ++curr;
     }
   }
-
+  
   SBLAddEntrySNAC::SBLAddEntrySNAC(const ContactRef& c)
     : m_buddy_list(1, c), m_group_id(0)
   { }
@@ -216,7 +216,7 @@ namespace ICQ2000 {
   void SBLAddEntrySNAC::addBuddy(const ContactRef& c)
   {
     m_buddy_list.push_back(c);
-    }
+  }
 
   void SBLAddEntrySNAC::OutputBody(Buffer& b) const
   {
@@ -272,7 +272,7 @@ namespace ICQ2000 {
   SBLUpdateEntrySNAC::SBLUpdateEntrySNAC(const ContactRef &c)
     : m_cont(c), m_group_id(0)
   { }
-
+  
   void SBLUpdateEntrySNAC::OutputBody(Buffer& b) const {
     if(!m_cont.get()) {
       b << (unsigned short) m_group_name.size();
@@ -415,4 +415,74 @@ namespace ICQ2000 {
     // anything?
   }
   
+  // ============================================================================
+  //  SBL Request authorisation
+  // ============================================================================
+  
+  SBLRequestAuthSNAC::SBLRequestAuthSNAC(const ContactRef &c, const std::string &message)
+    : m_cont(c), m_msg(message)
+  { }
+  
+  void SBLRequestAuthSNAC::OutputBody(Buffer& b) const
+  {
+    b.PackByteString(m_cont->getStringUIN());
+    b << m_msg;
+    b << (unsigned short) 0x0000;
+  }
+  
+  // ============================================================================
+  //  SBL Incoming request authorisation
+  // ============================================================================
+
+  SBLAuthRequestSNAC::SBLAuthRequestSNAC()
+  { }
+
+  void SBLAuthRequestSNAC::ParseBody(Buffer& b) 
+  {
+	unsigned short unk;
+	b.UnpackByteString(m_uin);
+	b >> m_msg;
+	b >> unk;
+  }
+
+  // ============================================================================
+  //  SBL Authorisation request reply (outgoing)
+  // ============================================================================
+
+  SBLAuthoriseSNAC::SBLAuthoriseSNAC(const ContactRef &c, const std::string reason, const bool grant)
+   : m_cont(c), m_reason(reason), m_grant(grant)
+  { }
+  
+  void SBLAuthoriseSNAC::OutputBody(Buffer &b) const
+  {
+    b.PackByteString(m_cont->getStringUIN());
+    b << (unsigned char)(m_grant ? 1 : 0);
+    b << m_reason;
+  }
+
+  // ============================================================================
+  //  SBL Authorisation request reply (incoming)
+  // ============================================================================
+  SBLAuthReceivedSNAC::SBLAuthReceivedSNAC()
+  { }
+  
+  void SBLAuthReceivedSNAC::ParseBody(Buffer& b) 
+  {
+	unsigned char res;
+	b.UnpackByteString(m_uin);
+	b >> res;
+	m_grant = res;
+	b >> m_msg;
+  }
+  
+  // ============================================================================
+  //  SBL "User added you" incoming message
+  // ============================================================================
+  SBLUserAddedYouSNAC::SBLUserAddedYouSNAC()
+  { }
+  
+  void SBLUserAddedYouSNAC::ParseBody(Buffer& b) 
+  {
+	b.UnpackByteString(m_uin);
+  }
 }

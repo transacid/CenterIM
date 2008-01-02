@@ -92,6 +92,10 @@ namespace ICQ2000 {
 
    public:
     MessageSNAC();
+    MessageSNAC(const std::string &uin);
+    MessageSNAC(const std::string &uin, const std::string &reason);
+    MessageSNAC(const std::string &uin, const std::string &reason, bool granted);
+
     ~MessageSNAC();
 
     ICQSubType* getICQSubType() const { return m_icqsubtype; }
