@@ -222,7 +222,7 @@ namespace ICQ2000
 
     ContactRef getUserInfoCacheContact(unsigned int reqid);
 
-    void mergeSBL(ContactTree& tree);
+    void mergeSBL(ContactTree& tree, std::list<ContactRef>& unass);
 
     void ICBMCookieCache_expired_cb(MessageEvent *ev);
     void dccache_expired_cb(DirectClient *dc);

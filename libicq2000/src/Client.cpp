@@ -870,8 +870,24 @@ namespace ICQ2000
     }
   }
   
-  void Client::mergeSBL(ContactTree& tree)
+  void Client::mergeSBL(ContactTree& tree, std::list<ContactRef>& unass)
   {
+    if (!unass.empty()) {
+    	std::list<ContactRef>::iterator it;
+    	for (it = unass.begin(); it != unass.end(); it++) {
+    	 	if (!tree.exists_group( (*it)->getServerSideGroupID() )) {
+    	 		if (!m_contact_tree.exists_group( (*it)->getServerSideGroupID() )) {
+    	 			SignalLog(LogEvent::WARN, "Server group doesn't exist anywhere!");
+    	 			continue;
+    	 		}
+    	 		ContactTree::Group& grp = m_contact_tree.lookup_group( (*it)->getServerSideGroupID() );
+    	 		//SignalLog(LogEvent::WARN, "Importing existing group");
+    	 		tree.add_group( grp.get_label(), grp.get_id() );
+    	 	}
+    	 	//SignalLog(LogEvent::WARN, "Setting previous group");
+    	 	tree.lookup_group( (*it)->getServerSideGroupID() ).add(*it);
+    	}
+  	}
     SBLReceivedEvent ev(tree);
     sbl_received.emit(&ev);
     /*
@@ -1541,7 +1557,7 @@ namespace ICQ2000
       {
 	SignalLog(LogEvent::INFO, "Received server-based list from server\n");
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
-	mergeSBL( sbs->getContactTree() );
+	mergeSBL( sbs->getContactTree(), sbs->getUnassigned() );
         SendSBLReceivedACK();
 	break;
       }
@@ -1638,7 +1654,7 @@ namespace ICQ2000
 	    SignalMessage(msgr);
 	    delete msgr;
 	    }
-	  break;
+	break;
 	  
 	  case SNAC_SBL_User_Added_You:
 	    {

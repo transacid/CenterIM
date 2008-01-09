@@ -124,9 +124,14 @@ namespace ICQ2000 {
 	}
 	
 	// add to contact tree under group
-	if (!m_tree.exists_group( group_id )) throw ParseException("Contact group_id doesn't match any group");
+	if (!m_tree.exists_group( group_id )) {
+	  //throw ParseException("Contact group_id doesn't match any group");
+	  m_unassigned.push_back( ct );
+	}
+	else {
 	ContactTree::Group& gp = m_tree.lookup_group( group_id );
 	gp.add(ct);
+	}
 
 	break;
       }
