@@ -868,10 +868,13 @@ string ruscase(const string &s, const string &mode) {
 	return s;
     }
 
-    for(r = s; (pos = r.find_first_of(tfrom)) != -1; ) {
+    pos = 0;
+    
+    for(r = s; (pos = r.find_first_of(tfrom, pos)) != -1; ) {
 	char c = r[pos];
 	tpos = tfrom.find(c);
 	r[pos] = tto[tpos];
+	pos++;
     }
 
     pos = 0;
