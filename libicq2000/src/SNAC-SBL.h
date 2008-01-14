@@ -162,26 +162,49 @@ namespace ICQ2000 {
   };
 
   // ============================================================================
-  //  SBL Add Entry
+  //  SBL Add Buddy
   // ============================================================================
 
-  class SBLAddEntrySNAC : public SBLFamilySNAC, public OutSNAC
+  class SBLAddBuddySNAC : public SBLFamilySNAC, public OutSNAC
+  {
+   private:
+    Sbl_item m_buddy;
+    unsigned short m_buddy_group;
+    
+   protected:
+    void OutputBody(Buffer& b) const;
+
+   public:
+    SBLAddBuddySNAC();
+    SBLAddBuddySNAC(const Sbl_item &buddy, unsigned short group_id);
+    
+    Sbl_item getBuddy() const { return m_buddy; }
+    
+    unsigned short group_id() const { return m_buddy_group; }
+
+    unsigned short Subtype() const { return SNAC_SBL_Add_Entry; }
+  };
+
+  // ============================================================================
+  //  SBL Add Group
+  // ============================================================================
+  
+  class SBLAddGroupSNAC : public SBLFamilySNAC, public OutSNAC
   {
    private:
     std::string m_group_name;
-    std::list<ContactRef> m_buddy_list;
     unsigned short m_group_id;
     
    protected:
     void OutputBody(Buffer& b) const;
 
    public:
-    SBLAddEntrySNAC();
-    SBLAddEntrySNAC(const ContactList& l);
-    SBLAddEntrySNAC(const ContactRef& c);
-    SBLAddEntrySNAC(const std::string &group_name, unsigned short group_id);
+    SBLAddGroupSNAC();
+    SBLAddGroupSNAC(const std::string &group_name, unsigned short group_id);
 
-    void addBuddy(const ContactRef& c);
+	std::string get_label() const { return m_group_name; }
+	
+    unsigned short group_id() const { return m_group_id; }
 
     unsigned short Subtype() const { return SNAC_SBL_Add_Entry; }
   };
@@ -190,7 +213,7 @@ namespace ICQ2000 {
   //  SBL Update Entry
   // ============================================================================
 
-  class SBLUpdateEntrySNAC : public SBLFamilySNAC, public OutSNAC
+  /*class SBLUpdateEntrySNAC : public SBLFamilySNAC, public OutSNAC
   {
    private:
     std::string m_group_name;
@@ -209,6 +232,32 @@ namespace ICQ2000 {
     
     unsigned short Subtype() const { return SNAC_SBL_Update_Entry; }
   };
+  */
+  
+  class SBLUpdateGroupSNAC : public SBLFamilySNAC, public OutSNAC
+  {
+   private:
+    std::string m_group_name;
+    unsigned short m_group_id;
+    std::set<unsigned short> m_ids;
+
+   protected:
+    void OutputBody(Buffer& b) const;
+
+   public:
+    SBLUpdateGroupSNAC(const std::string &group_name,
+		       unsigned short group_id, const std::set<unsigned short> &ids);
+	
+	SBLUpdateGroupSNAC(const Sbl_group& group);
+	
+	std::set<unsigned short> getBuddies() const { return m_ids; }
+	std::string get_label() const { return m_group_name; }
+	unsigned short group_id() const { return m_group_id; }
+
+    unsigned short Subtype() const { return SNAC_SBL_Update_Entry; }
+    
+  };
+
   
   // ============================================================================
   //  SBL Remove Entry
@@ -374,6 +423,9 @@ namespace ICQ2000 {
 	unsigned short Subtype() const { return SNAC_SBL_Auth_Received; }
   };
 
+  // ============================================================================
+  //  SBL Another user added you (incoming)
+  // ============================================================================
   class SBLUserAddedYouSNAC : public SBLFamilySNAC, public InSNAC
   {
    private:

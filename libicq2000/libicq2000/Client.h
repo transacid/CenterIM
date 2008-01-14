@@ -26,6 +26,7 @@
 #include <string>
 
 #include <map>
+#include <queue>
 
 #include <libicq2000/sigslot.h>
 
@@ -66,6 +67,7 @@ namespace ICQ2000
   class Translator;
   class FileTransferClient;
   class FTCache;
+  class SBLListSNAC;
 
   /**
    *  The main library object.  This is the object the user interface
@@ -84,7 +86,27 @@ namespace ICQ2000
 		 UIN_AWAITING_CONN_ACK,
 		 UIN_AWAITING_UIN_REPLY
     } m_state;
-
+    
+    enum Sbl_op { USER_ADD,
+    	USER_REMOVE,
+    	GROUP_ADD,
+    	GROUP_REMOVE
+    };
+    
+    struct Sbl_edit {
+    	Sbl_op operation;
+    	Sbl_item item;
+    };
+    
+    unsigned short get_random_buddy_id();
+    void processSblEdits();
+    
+    std::deque<Sbl_edit> m_sbl_edits; // edits on m_sbl_*
+    std::map<unsigned int, Sbl_item> m_sbl_map;  // uin:info
+    std::map<std::string, Sbl_group> m_sbl_groups; // name:info
+    std::map<unsigned short, std::string> m_sbl_groupnames; // group_id::group_name
+    std::set<unsigned short> m_sbl_tags; // used tag ids
+    
     ContactRef m_self;
     std::string m_password;
     Status m_status_wanted;
@@ -114,6 +136,9 @@ namespace ICQ2000
     ContactList m_invisible_list;
 
     bool m_fetch_sbl;
+    
+    bool m_sbl_inedit;
+    std::deque<OutSNAC*> sblSNACs;
 
     MessageHandler * m_message_handler;
 
@@ -222,7 +247,10 @@ namespace ICQ2000
 
     ContactRef getUserInfoCacheContact(unsigned int reqid);
 
+	void fillSBLMap(SBLListSNAC *sbl);
     void mergeSBL(ContactTree& tree, std::list<ContactRef>& unass);
+    
+    void SendSBLAuthReq(AuthReqEvent *ev);
 
     void ICBMCookieCache_expired_cb(MessageEvent *ev);
     void dccache_expired_cb(DirectClient *dc);
@@ -452,6 +480,9 @@ namespace ICQ2000
     void fetchSelfSimpleContactInfo();
     void fetchSelfDetailContactInfo();
 
+    void SendSBLSNAC(OutSNAC *sn);  // send SBL SNAC
+    void upgradeToSBL();  // save local contact to SBL
+    
     // -- Whitepage searches --
     SearchResultEvent* searchForContacts(const std::string& nickname, const std::string& firstname,
 					 const std::string& lastname);

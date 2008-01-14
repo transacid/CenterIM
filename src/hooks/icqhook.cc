@@ -135,7 +135,7 @@ void icqhook::connect() {
     if(conf.getsmtpport()) cli.setSMTPServerPort(conf.getsmtpport());
 
     if(!conf.getbindhost().empty()) cli.setClientBindHost(conf.getbindhost());
-
+    
     conf.getpeertopeer(ptpmin, ptpmax);
     if(ptpmax) {
 	cli.setAcceptInDC(true);
@@ -512,7 +512,7 @@ void icqhook::sendnewuser(const imcontact &ic) {
 		cont->setServerBased(true);
 		cont->setAuthAwait(cc->getbasicinfo().authawait);
 
-		cli.uploadServerBasedContact(cont);
+		//cli.uploadServerBasedContact(cont);
 	    }
 
 	    lastadd = timer_current;
@@ -535,7 +535,7 @@ void icqhook::removeuser(const imcontact &c) {
 	    if(ic->getServerBased()) {
 		ic->setAlias(cc->getnick());
 		ic->setAuthAwait(cc->getbasicinfo().authawait);
-		cli.removeServerBasedContact(ic);
+		//cli.removeServerBasedContact(ic);
 	    }
 	}
 
@@ -960,7 +960,7 @@ void icqhook::updatecontact(icqcontact *c) {
 		    ++curr;
 		}
 
-		cli.removeServerBasedContact(ic);
+		//cli.removeServerBasedContact(ic);
 
 		if(!newg) newg = &(tree.add_group(gname));
 		tree.relocate_contact(ic, oldg, *newg);
@@ -968,7 +968,7 @@ void icqhook::updatecontact(icqcontact *c) {
 		ic->setServerSideInfo(newg->get_id(), ic->getServerSideID());
 		ic->setAuthAwait(c->getbasicinfo().authawait);
 
-		cli.uploadServerBasedContact(ic);
+		//cli.uploadServerBasedContact(ic);
 	    }
 	}
     }
@@ -1167,8 +1167,8 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	    ContactRef cr = cli.getContactTree()[ic.uin];
 	    if(cr.get()) {
 		cr->setAuthAwait(false);
-		cli.removeServerBasedContact(cr);
-		cli.uploadServerBasedContact(cr);
+		//cli.removeServerBasedContact(cr);
+		//cli.uploadServerBasedContact(cr);
 	    }
 	}
 
@@ -1555,7 +1555,7 @@ ContactRef icqhook::addContact(unsigned int uin, const string &groupname) {
 
     ContactRef cont(new Contact(uin));
     gp->add(cont);
-
+    
     return cont;
 }
 

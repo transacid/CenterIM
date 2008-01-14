@@ -890,19 +890,6 @@ namespace ICQ2000
   	}
     SBLReceivedEvent ev(tree);
     sbl_received.emit(&ev);
-    /*
-    ContactTree::iterator curr = tree.begin();
-    while (curr != tree.end())
-    {
-      ContactTree::Group::iterator gcurr = (*curr).begin();
-
-      while (gcurr != (*curr).end())
-      {
-	++gcurr;
-      }
-      ++curr;
-    }
-    */
   }
 
   ContactRef Client::getUserInfoCacheContact(unsigned int reqid)
@@ -1557,6 +1544,7 @@ namespace ICQ2000
       {
 	SignalLog(LogEvent::INFO, "Received server-based list from server\n");
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
+	fillSBLMap(sbs);
 	mergeSBL( sbs->getContactTree(), sbs->getUnassigned() );
         SendSBLReceivedACK();
 	break;
@@ -1566,11 +1554,14 @@ namespace ICQ2000
       {
 	vector<SBLEditACKSNAC::Result> r = static_cast<SBLEditACKSNAC*>(snac)->getResults();
 	vector<SBLEditACKSNAC::Result>::iterator ir;
+	bool reauth = false;
+	bool succ = false;
 	
 	for(ir = r.begin(); ir != r.end(); ++ir)
 	switch( *ir ) {
 	case SBLEditACKSNAC::Success:
 	  SignalLog(LogEvent::INFO, "Server-based contact list modification succeeded\n");
+	  succ = true;
 	  //updresults.push_back(ServerBasedContactEvent::Success);
 	  break;
 	case SBLEditACKSNAC::Failed:
@@ -1579,12 +1570,78 @@ namespace ICQ2000
 	  break;
 	case SBLEditACKSNAC::AuthRequired:
 	  SignalLog(LogEvent::INFO, "Failed, authentification is required to add a user\n");
+	  reauth = true;
 	  //updresults.push_back(ServerBasedContactEvent::AuthRequired);
 	  break;
 	case SBLEditACKSNAC::AlreadyExists:
 	  SignalLog(LogEvent::INFO, "Already exists on the server-based contact list\n");
 	  break;
 	}
+
+	// ROGER: send next SBL SNAC if available, otherwise end SBL edit
+	if (!sblSNACs.empty())
+	{
+	  OutSNAC *sn = sblSNACs.front();
+	  if (sn->RequestID() == snac->RequestID()) // it's the last sent SNAC
+	  {
+  	    sblSNACs.pop_front();
+  	    if (succ) // apply change on local data
+  	    switch (sn->Subtype())
+  	    {
+  	    	case SNAC_SBL_Add_Entry: {
+  	    		SBLAddBuddySNAC *addBuddy = dynamic_cast<SBLAddBuddySNAC*>(sn);
+  	    		if (addBuddy == NULL)
+  	    		{
+  	    			SBLAddGroupSNAC *addGroup = dynamic_cast<SBLAddGroupSNAC*>(sn);
+  	    			if (addGroup == NULL)
+  	    				break;
+					m_sbl_groups[addGroup->get_label()] = Sbl_group(addGroup->get_label(), addGroup->group_id());
+					m_sbl_groupnames[m_sbl_groups[addGroup->get_label()].group_id] = addGroup->get_label();
+  	    		}
+  	    		else // SBLAddBuddySNAC
+  	    		{
+  	    			m_sbl_map[addBuddy->getBuddy().uin] = addBuddy->getBuddy();
+  	    		}
+  	    	}
+  	    	break;
+  	    	case SNAC_SBL_Update_Entry: {
+  	    		SBLUpdateGroupSNAC *updGroup = dynamic_cast<SBLUpdateGroupSNAC*>(sn);
+  	    		if (updGroup == NULL)
+  	    		{
+  	    			// TODO: buddy update
+  	    			/*SBLUpdateBuddySNAC updBuddy = dynamic_cast<SBLUpdateBuddySNAC*>(sn);
+  	    			if (updBuddy == NULL)
+  	    				break;*/
+  	    		}
+  	    		else
+  	    		{
+  	    			string old_name = m_sbl_groupnames[updGroup->group_id()];
+  	    			m_sbl_groupnames[updGroup->group_id()] = updGroup->get_label();
+  	    			
+  	    			m_sbl_groups.erase(old_name);
+  	    			m_sbl_groups[updGroup->get_label()] = Sbl_group(updGroup->get_label(), updGroup->group_id());
+  	    			m_sbl_groups[updGroup->get_label()].buddies = updGroup->getBuddies();
+  	    		}
+  	    	}
+  	    	break;
+  	    }
+  	    
+  	    
+		delete sn;
+	    if (sblSNACs.empty())
+	    {
+	      FLAPwrapSNACandSend(SBLCommitEditSNAC() );
+	      m_sbl_inedit = false;
+	      processSblEdits();
+	    }
+	    else
+	    {
+	      sn = sblSNACs.front();
+		  FLAPwrapSNACandSend(*sn);
+	    }
+	  }
+	}
+	
 
 	/*
 	** haven't yet decided the best way to recode this for groups and contacts **
@@ -2064,6 +2121,10 @@ namespace ICQ2000
 	m_smtp->SendEvent(ev);
 	break;
 
+      case MessageEvent::AuthReq:
+        SendSBLAuthReq(static_cast<AuthReqEvent*>(ev));
+	break;
+
       default:
       SendViaServer(ev);
 	break;
@@ -2317,118 +2378,45 @@ namespace ICQ2000
     Send(b);
   }
     
+  
+  void Client::fillSBLMap(SBLListSNAC *sbl)
+  {
+  	ContactTree& sbl_tree = sbl->getContactTree();
+    ContactTree::iterator curr = sbl_tree.begin();
+    while (curr != sbl_tree.end())
+    {
+	// add groups to lists
+	  string curr_name = (*curr).get_label();
+	  m_sbl_tags.insert((*curr).get_id());
+	  if (m_sbl_groupnames.find((*curr).get_id()) == m_sbl_groupnames.end())
+  	  {
+	    SignalLog(LogEvent::INFO, "Importing new SBL group");
+	    //fprintf(stderr, "New imported SBL group %d (%s)\n", (*curr).get_id(), curr_name.c_str());
+	  	m_sbl_groupnames[(*curr).get_id()] = curr_name;
+	  	m_sbl_groups[curr_name] = Sbl_group(curr_name, (*curr).get_id());
+	  }
+	  ContactTree::Group::iterator gcurr = (*curr).begin();
+	  while (gcurr != (*curr).end())
+	  {
+	    m_sbl_tags.insert((*gcurr)->getServerSideID());
+		m_sbl_map.insert(std::pair<unsigned int, Sbl_item>((*gcurr)->getUIN(), Sbl_item((*gcurr), (*gcurr)->getServerSideID(), curr_name)));
+		m_sbl_groups[curr_name].buddies.insert((*gcurr)->getServerSideID());
+		//fprintf(stderr, "New imported SBL contact %d (%ul)\n", (*gcurr)->getServerSideID(), (*gcurr)->getUIN());
+		++gcurr;
+      }
+      ++curr;
+    }
+  }
+
   void Client::fetchServerBasedContactList()
   {
     m_fetch_sbl = true;
     if (m_state == BOS_LOGGED_IN) SendRequestSBL();
   }
-  
+
   void Client::fetchServerBasedContactList(int)
   {
     // TODO!
-  }
-
-  void Client::uploadServerBasedContact(const ContactRef& c)
-  {
-    Buffer b;
-
-    FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
-    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-    ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(c);
-    FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
-    FLAPwrapSNAC( b, SBLAddEntrySNAC(c) );
-    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
-
-    // TODO ContactTree!
-    //    SBLAddEntrySNAC ssnac(l);
-    //    ssnac.setRequestID( reqid );
-    Send(b);
-  }
-
-  void Client::updateServerBasedContact(const ContactRef& c)
-  {
-    Buffer b;
-
-    FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
-    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-    ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(c);
-    FLAPwrapSNAC( b, SBLAddEntrySNAC(g.get_label(), g.get_id()) );
-    FLAPwrapSNAC( b, SBLUpdateEntrySNAC(c) );
-    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
-
-    Send(b);
-  }
-
-  void Client::uploadServerBasedGroup(const ContactTree::Group& gp)
-  {
-    Buffer b;
-
-    FLAPwrapSNAC( b, SBLRequestRightsSNAC() );
-    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-
-    std::vector<unsigned short> ids;
-    for(ContactTree::Group::const_iterator ic = gp.begin(); ic != gp.end(); ++ic)
-	ids.push_back((*ic)->getServerSideID());
-
-    FLAPwrapSNAC( b, SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), ids) );
-    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
-
-    Send(b);
-  }
-
-  void Client::uploadServerBasedContactList()
-  {
-    Buffer b;
-
-    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-
-    /*
-    ** needs recoding for groups **
-    ServerBasedContactEvent *ev = new ServerBasedContactEvent(ServerBasedContactEvent::Upload, m_contact_tree );
-    unsigned int reqid = NextRequestID();
-    m_reqidcache->insert( reqid, new ServerBasedContactCacheValue( ev ) );
-    */
-
-    // TODO ContactTree!
-    //SBLAddEntrySNAC ssnac( m_contact_tree );
-    //    ssnac.setRequestID( reqid );
-    //    FLAPwrapSNAC( b, ssnac );
-
-    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
-
-    Send(b);
-  }
-
-  void Client::removeServerBasedContactList()
-  {
-    Buffer b;
-
-    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-
-    /*
-    ** needs recoding for groups **
-    ServerBasedContactEvent *ev = new ServerBasedContactEvent(ServerBasedContactEvent::Remove, l);
-    unsigned int reqid = NextRequestID();
-    m_reqidcache->insert( reqid, new ServerBasedContactCacheValue( ev ) );
-
-    SBLRemoveEntrySNAC ssnac(l);
-    ssnac.setRequestID( reqid );
-    FLAPwrapSNAC( b, ssnac );
-    */
-    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
-
-    Send(b);
-  }
-
-  void Client::removeServerBasedContact(const ContactRef& c)
-  {
-    Buffer b;
-
-    FLAPwrapSNAC( b, SBLBeginEditSNAC() );
-    FLAPwrapSNAC( b, SBLRemoveEntrySNAC(c) );
-    FLAPwrapSNAC( b, SBLCommitEditSNAC() );
-
-    Send(b);
   }
 
   /**
@@ -2579,15 +2567,35 @@ namespace ICQ2000
     return m_web_aware;
   }
 
+  unsigned short Client::get_random_buddy_id()
+  {
+  	if (m_sbl_tags.empty())
+  	{
+  		m_sbl_tags.insert(0);
+  		m_sbl_tags.insert(1);
+  		return 1;
+  	}
+  	unsigned short result = 0;
+	result = (*m_sbl_tags.rbegin() + 1) % 0x7FFF;
+	while (m_sbl_tags.find(result) != m_sbl_tags.end())
+		result = (result + 1) % 0x7FFF;
+	m_sbl_tags.insert(result);
+	return result;
+  }
+
   void Client::contactlist_cb(ContactListEvent *ev)
   {
     if (ev->getType() == ContactListEvent::UserAdded)
     {
       UserAddedEvent *cev = static_cast<UserAddedEvent*>(ev);
       ContactRef c = cev->getContact();
+      ContactTree::Group &grp = cev->get_group();
       if (c->isICQContact() && m_state == BOS_LOGGED_IN)
       {
-	FLAPwrapSNACandSend( AddBuddySNAC(c) );
+      	Sbl_edit edit;
+      	edit.operation = USER_ADD;
+      	edit.item = Sbl_item(c, 0, grp.get_label());
+      	m_sbl_edits.push_back(edit);
 
 	// fetch detailed userinfo from server
 	fetchDetailContactInfo(c);
@@ -2600,7 +2608,10 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
       if (c->isICQContact() && m_state == BOS_LOGGED_IN)
       {
-	FLAPwrapSNACandSend( RemoveBuddySNAC(c) );
+      	Sbl_edit edit;
+      	edit.operation = USER_REMOVE;
+      	edit.item = Sbl_item(c, 0, "");
+      	m_sbl_edits.push_back(edit);
       }
 
       // remove all direct connections for that contact
@@ -2609,16 +2620,129 @@ namespace ICQ2000
     }
     else if (ev->getType() == ContactListEvent::GroupAdded)
     {
+      GroupAddedEvent *gev = static_cast<GroupAddedEvent*>(ev);
+      const ContactTree::Group &grp = gev->get_group();
+      if (grp.get_label().size() == 0)
+      {
+      	char buff[200];
+      	snprintf(buff, sizeof(buff), "Dropping empty-named group addition\n");
+      	SignalLog(LogEvent::INFO, buff);
+      }
+      else
+      {
+      	Sbl_edit edit;
+      	edit.operation = GROUP_ADD;
+      	edit.item = Sbl_item(0, grp.get_label());
+      	m_sbl_edits.push_back(edit);
+	  }
     }
     else if (ev->getType() == ContactListEvent::GroupRemoved)
     {
+      GroupRemovedEvent *gev = static_cast<GroupRemovedEvent*>(ev);
+	  const ContactTree::Group &grp = gev->get_group();
+      Sbl_edit edit;
+      edit.operation = GROUP_REMOVE;
+      edit.item = Sbl_item(0, grp.get_label());
+      m_sbl_edits.push_back(edit);
     }
     else if (ev->getType() == ContactListEvent::CompleteUpdate)
     {
     }
 
+	processSblEdits(); // process any pending SBL edits
     // re-emit on the Client signal
     contactlist.emit(ev);
+  }
+
+  void Client::processSblEdits()
+  {
+  	if (m_sbl_inedit || m_sbl_edits.empty())
+  	{  	
+  		//fprintf(stderr, "Already processing or no queued edits\n");
+  		return;
+  	}
+  	while (!(m_sbl_inedit || m_sbl_edits.empty()))
+  	{
+  	Sbl_edit edit = m_sbl_edits.front();
+  	m_sbl_edits.pop_front();
+  	switch (edit.operation)
+  	{
+  		case USER_ADD: {
+		  string grp_name = edit.item.group_name;
+    	  if (grp_name.size() == 0) { // adding to unspecified group
+    	  	if (!m_sbl_groups.empty())
+		  		grp_name = (m_sbl_groups.begin())->first; // select first available
+		  	else
+		  	{
+		  		SignalLog(LogEvent::WARN, "No group exists!");
+		  		break;
+		  	}
+		  }
+		  if (m_sbl_groups.find(grp_name) == m_sbl_groups.end()) {
+			SignalLog(LogEvent::WARN, "Group being added to doesn't exist!");
+			break;
+      	  }
+      	  if (m_sbl_map.find(edit.item.uin) == m_sbl_map.end()) { // new contact
+        	Sbl_item new_item(edit.item, get_random_buddy_id(), grp_name);
+        	char buff[200];
+      	    snprintf(buff, sizeof(buff), "Creating new SBL contact %u/%s (%d, %s)\n", new_item.uin, new_item.nickname.c_str(), new_item.tag_id, new_item.group_name.c_str());
+      	    SignalLog(LogEvent::INFO, buff);
+
+			SendSBLSNAC( new SBLAddBuddySNAC(new_item, m_sbl_groups[grp_name].group_id) );
+			
+			snprintf(buff, sizeof(buff), "Adding new contact %d to SBL group %d/%s\n", new_item.tag_id, m_sbl_groups[grp_name].group_id, grp_name.c_str());
+			SignalLog(LogEvent::INFO, buff);
+			
+			m_sbl_groups[grp_name].buddies.insert(new_item.tag_id); // temporarily add to new group to generate packet
+			SendSBLSNAC( new SBLUpdateGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id, m_sbl_groups[grp_name].buddies) );
+			m_sbl_groups[grp_name].buddies.erase(new_item.tag_id); // remove again, until it's really added
+		  } else { // moving existing contact
+			char buff[200];
+			if (grp_name == m_sbl_map[edit.item.uin].group_name) // same group, do nothing
+			{
+				snprintf(buff, sizeof(buff), "Dropped addition of existing SBL contact %u/%d/%s\n", edit.item.uin, m_sbl_map.find(edit.item.uin)->second.tag_id, edit.item.nickname.c_str());
+				SignalLog(LogEvent::INFO, buff);
+				break;
+			}
+			
+ 			string old_group = m_sbl_map[edit.item.uin].group_name;
+ 			
+ 			snprintf(buff, sizeof(buff), "Moving SBL contact %u/%s from group %s/%d to %s/%d\n", edit.item.uin, edit.item.nickname.c_str(),
+ 				old_group.c_str(), m_sbl_groups[old_group].group_id,
+ 				grp_name.c_str(), m_sbl_groups[grp_name].group_id);
+ 			SignalLog(LogEvent::INFO, buff);
+ 			
+ 			m_sbl_groups[old_group].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
+ 			SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[old_group]) ); // upload old group
+ 			m_sbl_groups[old_group].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
+ 			
+ 			m_sbl_groups[grp_name].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
+ 			SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[grp_name]) ); // upload new group
+ 			m_sbl_groups[grp_name].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
+		  }
+		}
+  		break;
+  		case USER_REMOVE:
+  			SignalLog(LogEvent::WARN, "USER_REMOVE not implemented!");
+  		break;
+  		case GROUP_ADD:
+		  if (m_sbl_groups.find(edit.item.group_name) == m_sbl_groups.end()) { // new group
+		    edit.item.tag_id = get_random_buddy_id();
+/*		  m_sbl_groups[edit.group_name] = Sbl_group(edit.group_name, get_random_buddy_id());
+      	  m_sbl_groupnames[m_sbl_groups[edit.group_name].group_id] = edit.group_name;*/
+			
+			char buff[200];
+      	  	snprintf(buff, sizeof(buff), "Creating new SBL group %d (%s)\n", edit.item.tag_id, edit.item.group_name.c_str());
+      	  	SignalLog(LogEvent::INFO, buff);
+      	  	
+      	  	SendSBLSNAC( new SBLAddGroupSNAC( edit.item.group_name, edit.item.tag_id ) );
+      	  }
+  		break;
+  		case GROUP_REMOVE:
+  			SignalLog(LogEvent::WARN, "GROUP_REMOVE not implemented!");
+  		break;
+  	}// switch
+  	}// while
   }
 
   void Client::visiblelist_cb(ContactListEvent *ev)
@@ -2793,6 +2917,108 @@ namespace ICQ2000
   void Client::fetchSelfDetailContactInfo()
   {
     fetchDetailContactInfo(m_self);
+  }
+
+  void Client::SendSBLSNAC(OutSNAC *sn)
+  {
+    if (sn == NULL)
+      return;
+    sn->setRequestID(NextRequestID());
+    sblSNACs.push_back(sn);
+    if (!m_sbl_inedit)
+    {
+      m_sbl_inedit = true;
+      FLAPwrapSNACandSend(SBLBeginEditSNAC() );
+      FLAPwrapSNACandSend(*sn);
+    }
+  }
+
+  void Client::upgradeToSBL()
+  {
+    {
+      SignalLog(LogEvent::INFO, "Upgrading Server-based list");
+#if 0
+/*      Buffer b;
+        FLAPwrapSNAC(b, SBLBeginEditSNAC() );*/
+//      FLAPwrapSNAC(b, SBLAddEntrySNAC(m_contact_tree) );
+
+	    ContactTree::const_iterator curr = m_contact_tree.begin();
+	    std::set<unsigned short> mod_groups;
+	    while (curr != m_contact_tree.end()) {
+	      ContactTree::Group::const_iterator gcurr = curr->begin();
+/*	      if (m_group_map.find(curr->get_label()) == m_group_map.end()) { // ROGER: add new group
+	        m_group_map.insert(std::pair<string, unsigned short>(curr->get_label(), curr->get_id()));
+	      }*/
+	      if (!curr->getServerBased())
+	        SendSBLSNAC(new SBLAddEntrySNAC(curr->get_label(), curr->get_id()) );
+//	        FLAPwrapSNAC(b, SBLAddEntrySNAC(curr->get_label(), curr->get_id()) );
+	      while (gcurr != curr->end()) {
+	        if ((*gcurr)->isICQContact())
+	        if (!(*gcurr)->getServerBased())
+		{
+		  if ((*curr).get_id())
+		  {
+		    ContactRef cr = *gcurr;
+		    cr->setServerSideInfo((*curr).get_id(), cr->getServerSideID());
+//		    cr->setAuthAwait(true);
+//		    if (mod_groups.find((*curr).get_id()) == mod_groups.end()) // newly modified group
+		    {
+		      mod_groups.insert((*curr).get_id());
+		    }
+		
+		  }
+//		  m_buddy_list.push_back(*gcurr);
+		  SendSBLSNAC(new SBLAddEntrySNAC(*gcurr) );
+//		  FLAPwrapSNAC(b, SBLAddEntrySNAC(*gcurr) );
+		}
+		++gcurr;
+	      }
+	      ++curr;
+	    }
+	    fprintf(stderr, "Updating %d groups\n", mod_groups.size());
+	    std::set<unsigned short>::const_iterator git = mod_groups.begin();
+	    while (git != mod_groups.end())
+	    {
+	      std::vector<unsigned short> entries;
+	      ContactTree::Group& gp = m_contact_tree.lookup_group(*git);
+	      ContactTree::Group::iterator gcurr = gp.begin();
+	      while (gcurr != gp.end())
+	      {
+	        entries.push_back((*gcurr)->getServerSideID());
+		gcurr++;
+	      }
+//	      FLAPwrapSNAC(b, SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), entries) );
+	      SBLUpdateEntrySNAC *upd = new SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), entries);
+	      SendSBLSNAC( upd );
+	      git++;
+	    }
+
+    /*  FLAPwrapSNAC(b, SBLCommitEditSNAC() );
+      Send(b);*/
+#endif
+    }
+  }
+  
+  /**
+   * Sends authorisation request to given contact
+   */
+  void Client::SendSBLAuthReq(AuthReqEvent *ev)
+  {
+    Buffer b;
+    FLAPwrapSNAC(b, SBLRequestAuthSNAC(ev->getContact(), ev->getMessage()) );
+    Send(b);
+	Sbl_edit edit;
+	edit.operation = USER_ADD;
+	ContactRef cont = ev->getContact();
+	if (m_sbl_map.find(cont->getUIN()) == m_sbl_map.end()) // contact not added, try again
+	{
+	  cont->setAuthAwait(true);
+	  ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(cont);
+	  edit.item = Sbl_item(cont, 0, g.get_label());
+	  m_sbl_edits.push_back(edit);
+	  //fprintf(stderr, "Pushing req. user add\n");
+	  processSblEdits();
+	}
   }
 
   SearchResultEvent* Client::searchForContacts

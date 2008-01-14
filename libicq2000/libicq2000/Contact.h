@@ -296,6 +296,47 @@ namespace ICQ2000
   };
 
   typedef ref_ptr<Contact> ContactRef;
-}
 
+    class Sbl_item {
+     public:
+     	Sbl_item() { uin = 0; tag_id = 0; }
+     	Sbl_item(ContactRef& cont, unsigned short tag_id, std::string group_name) {
+     	  this->uin = cont->getUIN(); this->tag_id = tag_id; this->group_name = group_name; 
+     	  this->nickname = cont->getAlias(); this->awaitAuth = cont->getAuthAwait();
+     	  if (this->nickname.size() == 0)
+     	  	this->nickname = Contact::UINtoString(this->uin);
+     	}
+     	
+     	Sbl_item(Sbl_item &item, unsigned short tag_id, std::string group_name) {
+     	  this->uin = item.uin; this->tag_id = tag_id; this->group_name = group_name; 
+     	  this->nickname = item.nickname; this->awaitAuth = item.awaitAuth;
+     	}
+     	
+     	Sbl_item(unsigned short group_id, std::string group_name) {
+     		this->tag_id = group_id;
+     		this->group_name = group_name;
+     	}
+     	
+     	unsigned int uin;
+    	unsigned short tag_id;
+    	std::string group_name;
+    	unsigned char type;
+    	std::string nickname;
+    	bool awaitAuth;
+    };
+    
+    class Sbl_group {
+    public:
+    	Sbl_group() { group_id = 0; }
+    	Sbl_group(std::string name, unsigned short group_id) {
+    	  this->name = name;
+    	  this->group_id = group_id;
+    	}
+    	
+    	std::string name;
+    	unsigned short group_id;
+    	std::set<unsigned short> buddies;
+    };
+
+}
 #endif

@@ -123,6 +123,12 @@ namespace ICQ2000 {
 	  ct->setMobileNo(tlv->Value());
 	}
 	
+	if (tlvlist.exists(TLV_SBL_Await_Auth)) {
+	  ct->setAuthAwait(true);
+	} else {
+	  ct->setAuthAwait(false);
+	}
+	
 	// add to contact tree under group
 	if (!m_tree.exists_group( group_id )) {
 	  //throw ParseException("Contact group_id doesn't match any group");
@@ -194,80 +200,63 @@ namespace ICQ2000 {
   }
 
   // ============================================================================
-  //  SBL Add Entry
+  //  SBL Add Buddy
   // ============================================================================
 
-  SBLAddEntrySNAC::SBLAddEntrySNAC() { }
+  SBLAddBuddySNAC::SBLAddBuddySNAC() { }
 
-  SBLAddEntrySNAC::SBLAddEntrySNAC(const ContactList& l)
-    : m_buddy_list(), m_group_id(0)
-  { 
-    ContactList::const_iterator curr = l.begin();
-    while (curr != l.end()) {
-      if ((*curr)->isICQContact())
-      if (!(*curr)->getServerBased()) m_buddy_list.push_back(*curr);
-      ++curr;
-    }
-  }
-  
-  SBLAddEntrySNAC::SBLAddEntrySNAC(const ContactRef& c)
-    : m_buddy_list(1, c), m_group_id(0)
+  SBLAddBuddySNAC::SBLAddBuddySNAC(const Sbl_item &buddy, unsigned short group_id)
+  	: m_buddy(buddy), m_buddy_group(group_id)
   { }
 
-  SBLAddEntrySNAC::SBLAddEntrySNAC(const string& group_name, unsigned short group_id)
-    : m_group_name(group_name), m_group_id(group_id)
-  { }
-
-  void SBLAddEntrySNAC::addBuddy(const ContactRef& c)
+  void SBLAddBuddySNAC::OutputBody(Buffer& b) const
   {
-    m_buddy_list.push_back(c);
-  }
-
-  void SBLAddEntrySNAC::OutputBody(Buffer& b) const
-  {
-    if (m_group_id) {
-      // a Group
-      b << m_group_name;
-      b << m_group_id;
-      b << (unsigned short) 0x0000;
-      b << (unsigned short) 0x0001;
-      b << (unsigned short) 0x0000;
-
-    } else {
-      std::list<ContactRef>::const_iterator curr = m_buddy_list.begin();
-      while (curr != m_buddy_list.end()) {
-	string suin = (*curr)->getStringUIN();
-	string alias = (*curr)->getAlias();
-
-	b << suin;
-	b << (unsigned short) (*curr)->getServerSideGroupID();
-	b << (unsigned short) (*curr)->getServerSideID();
+	b << Contact::UINtoString(m_buddy.uin);
+	b << (unsigned short) m_buddy_group;
+	b << (unsigned short) m_buddy.tag_id;
 	b << (unsigned short) 0x0000;
 
 	Buffer::marker m = b.getAutoSizeShortMarker();
 
 	// Contact Nickname TLV
 	b << TLV_ContactNickname;
-	b << alias;
+	b << m_buddy.nickname;
 
 	// Auth awaiting TLV
-	if((*curr)->getAuthAwait()) {
+	if(m_buddy.awaitAuth) {
 	    b << TLV_AuthAwaited;
 	    b << (unsigned short) 0x0000;
 	}
 
 	b.setAutoSizeMarker(m);
-
-	++curr;
-      }
-
-    }
   }
+
+  // ============================================================================
+  //  SBL Add Group
+  // ============================================================================
+
+  SBLAddGroupSNAC::SBLAddGroupSNAC() { }
+
+  SBLAddGroupSNAC::SBLAddGroupSNAC(const string& group_name, unsigned short group_id)
+    : m_group_name(group_name), m_group_id(group_id)
+  { }
+
+  void SBLAddGroupSNAC::OutputBody(Buffer& b) const
+  {
+      // a Group
+      b << m_group_name;
+      b << m_group_id;
+      b << (unsigned short) 0x0000;
+      b << (unsigned short) 0x0001;
+      b << (unsigned short) 0x0000;
+    }
+
 
   // ============================================================================
   //  SBL Update Entry
   // ============================================================================
 
+#if 0
   SBLUpdateEntrySNAC::SBLUpdateEntrySNAC(const string &group_name,
 					 unsigned short group_id,
 					 const std::vector<unsigned short> &ids)
@@ -321,6 +310,46 @@ namespace ICQ2000 {
 
       b.setAutoSizeMarker(m);
     }
+  }
+#endif
+
+  // ============================================================================
+  //  SBL Update Group
+  // ============================================================================
+
+  SBLUpdateGroupSNAC::SBLUpdateGroupSNAC(const string &group_name,
+					 unsigned short group_id,
+					 const std::set<unsigned short> &ids)
+    : m_group_name(group_name), m_group_id(group_id), m_ids(ids)
+  { }
+  
+  SBLUpdateGroupSNAC::SBLUpdateGroupSNAC(const Sbl_group& group)
+  	: m_group_name(group.name), m_group_id(group.group_id), m_ids(group.buddies)
+  { }
+  
+
+  void SBLUpdateGroupSNAC::OutputBody(Buffer& b) const {
+      b << (unsigned short) m_group_name.size();
+      b.Pack(m_group_name);
+      b << m_group_id;
+      b << (unsigned short) 0x0000;
+      b << (unsigned short) 0x0001;
+
+      if(m_ids.empty()) {
+		b << (unsigned short) 0x0000;
+
+      } else {
+		b << (unsigned short) (4 + m_ids.size()*2);
+		b << (unsigned short) 0x00c8;
+		b << (unsigned short) (m_ids.size()*2);
+	// raw-coded TLV, found no suitable data structures in TLV.h
+
+		std::set<unsigned short>::const_iterator curr = m_ids.begin();
+		while (curr != m_ids.end()) {
+	  	b << (unsigned short) *curr;
+	  	++curr;
+		}
+	  }
   }
 
   // ============================================================================
