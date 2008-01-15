@@ -1633,10 +1633,10 @@ void icqface::detailsidle(dialogbox &db) {
     icqcontact *c;
 
     if(!face.detailsfetched)
-    if(c == clist.get(contactroot))
-		if(c->updated()) {
-			face.gendetails(db.gettree());
-			db.gettree()->redraw();
+    if(c = clist.get(contactroot))
+	if(c->updated()) {
+		face.gendetails(db.gettree());
+		db.gettree()->redraw();
 		face.status(_("Your details have been fetched"));
 		face.detailsfetched = true;
     	}
