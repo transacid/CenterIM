@@ -146,6 +146,7 @@ namespace ICQ2000
     m_use_typing_notif = false;
 
     m_fetch_sbl = false;
+    m_sbl_canedit = false;
 
     m_cookiecache->setDefaultTimeout(30);
     // 30 seconds is hopefully enough for even the slowest connections
@@ -1546,7 +1547,12 @@ namespace ICQ2000
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
 	fillSBLMap(sbs);
 	mergeSBL( sbs->getContactTree(), sbs->getUnassigned() );
-        SendSBLReceivedACK();
+		if ((snac->Flags() & 0x01)  == 0) // last/only List packet
+		{
+        	SendSBLReceivedACK();
+        	m_sbl_canedit = true;
+        	processSblEdits();
+        }
 	break;
       }
       
@@ -2656,7 +2662,7 @@ namespace ICQ2000
 
   void Client::processSblEdits()
   {
-  	if (m_sbl_inedit || m_sbl_edits.empty())
+  	if (m_sbl_inedit || m_sbl_edits.empty() || (!m_sbl_canedit))
   	{  	
   		//fprintf(stderr, "Already processing or no queued edits\n");
   		return;

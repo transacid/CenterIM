@@ -106,6 +106,7 @@ namespace ICQ2000
     std::map<std::string, Sbl_group> m_sbl_groups; // name:info
     std::map<unsigned short, std::string> m_sbl_groupnames; // group_id::group_name
     std::set<unsigned short> m_sbl_tags; // used tag ids
+    bool m_sbl_canedit; // local SBL is ready, I can do edits on it
     
     ContactRef m_self;
     std::string m_password;
