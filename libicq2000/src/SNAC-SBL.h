@@ -263,7 +263,7 @@ namespace ICQ2000 {
   //  SBL Remove Entry
   // ============================================================================
 
-  class SBLRemoveEntrySNAC : public SBLFamilySNAC, public OutSNAC
+  /*class SBLRemoveEntrySNAC : public SBLFamilySNAC, public OutSNAC
   {
    private:
     std::string m_group_name;
@@ -278,6 +278,54 @@ namespace ICQ2000 {
     SBLRemoveEntrySNAC(const ContactList& l);
     SBLRemoveEntrySNAC(const ContactRef& c);
     SBLRemoveEntrySNAC(const std::string &group_name, unsigned short group_id);
+
+    unsigned short Subtype() const { return SNAC_SBL_Remove_Entry; }
+  };*/
+
+  // ============================================================================
+  //  SBL Remove Buddy
+  // ============================================================================
+
+  class SBLRemoveBuddySNAC : public SBLFamilySNAC, public OutSNAC
+  {
+   private:
+    Sbl_item m_buddy;
+    unsigned short m_buddy_group;
+    
+   protected:
+    void OutputBody(Buffer& b) const;
+
+   public:
+	SBLRemoveBuddySNAC();
+	SBLRemoveBuddySNAC(const Sbl_item &buddy, unsigned short group_id);
+
+    Sbl_item getBuddy() const { return m_buddy; }
+    
+    unsigned short group_id() const { return m_buddy_group; }
+
+    unsigned short Subtype() const { return SNAC_SBL_Remove_Entry; }
+  };
+
+  // ============================================================================
+  //  SBL Remove Group
+  // ============================================================================
+
+  class SBLRemoveGroupSNAC : public SBLFamilySNAC, public OutSNAC
+  {
+   private:
+    std::string m_group_name;
+    unsigned short m_group_id;
+    
+   protected:
+    void OutputBody(Buffer& b) const;
+
+   public:
+    SBLRemoveGroupSNAC();
+    SBLRemoveGroupSNAC(const std::string &group_name, unsigned short group_id);
+
+	std::string get_label() const { return m_group_name; }
+	
+    unsigned short group_id() const { return m_group_id; }
 
     unsigned short Subtype() const { return SNAC_SBL_Remove_Entry; }
   };

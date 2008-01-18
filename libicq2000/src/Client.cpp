@@ -1613,6 +1613,51 @@ namespace ICQ2000
   	    			m_sbl_groups[updGroup->get_label()].buddies = updGroup->getBuddies();
   	    		}
   	    	}
+  	    	case SNAC_SBL_Remove_Entry: {
+  	    		SBLRemoveBuddySNAC *remBuddy = dynamic_cast<SBLRemoveBuddySNAC*>(sn);
+  	    		if (remBuddy == NULL)
+  	    		{
+  	    			SBLRemoveGroupSNAC *remGroup = dynamic_cast<SBLRemoveGroupSNAC*>(sn);
+  	    			if (remGroup == NULL)
+  	    				break;
+  	    			if (m_sbl_groupnames.find(remGroup->group_id()) == m_sbl_groupnames.end())
+  	    			{
+  	    				SignalLog(LogEvent::WARN, "Removing unknown group!\n");
+  	    				break;
+  	    			}
+					m_sbl_groupnames.erase(remGroup->group_id());
+					/*for (std::set<unsigned short>::iterator git = m_sbl_groups[remGroup->get_label()].buddies.begin(); git != m_sbl_groups[remGroup->get_label()].buddies.end(); git++)
+					{
+						m_sbl_map.erase(*git)
+					}*/
+					std::map<unsigned int, Sbl_item>::iterator mit, next;
+					mit = m_sbl_map.begin();
+					while (mit != m_sbl_map.end())
+					{
+						if (m_sbl_groups[remGroup->get_label()].buddies.find(mit->second.uin) != m_sbl_groups[remGroup->get_label()].buddies.end())
+						{
+							next = mit;
+							next++;
+							m_sbl_map.erase(mit);
+							mit = next;
+						}
+						else
+							mit++;
+					}
+					m_sbl_groups.erase(remGroup->get_label());
+  	    		}
+  	    		else
+  	    		{
+  	    			if (m_sbl_map.find(remBuddy->getBuddy().uin) == m_sbl_map.end())
+  	    			{
+  	    				SignalLog(LogEvent::WARN, "Removing non-existent buddy!\n");
+  	    				break;
+  	    			}
+  	    			SignalLog(LogEvent::INFO, "Removing buddy from SBL list\n");
+  	    			m_sbl_groups[m_sbl_map[remBuddy->getBuddy().uin].group_name].buddies.erase(remBuddy->getBuddy().uin);
+  	    			m_sbl_map.erase(remBuddy->getBuddy().uin);
+  	    		}
+  	    	}
   	    	break;
   	    }
   	    
@@ -2731,8 +2776,27 @@ namespace ICQ2000
 		  }
 		}
   		break;
-  		case USER_REMOVE:
-  			SignalLog(LogEvent::WARN, "USER_REMOVE not implemented!");
+  		case USER_REMOVE: {
+  			if (m_sbl_map.find(edit.item.uin) == m_sbl_map.end())
+  			{
+  				char buff[100];
+  				snprintf(buff, sizeof(buff), "Removing unknown user (%d)!\n", edit.item.uin);
+  				SignalLog(LogEvent::WARN, buff);
+  				break;
+  			}
+  			char buff[100];
+  			string grp_name = m_sbl_map[edit.item.uin].group_name;
+  			
+  			snprintf(buff, sizeof(buff), "Removing user %d from group %d\n", edit.item.uin, m_sbl_groups[grp_name].group_id);
+  			SignalLog(LogEvent::INFO, buff);
+  			SendSBLSNAC( new SBLRemoveBuddySNAC(edit.item, m_sbl_groups[grp_name].group_id) );
+  			
+  			snprintf(buff, sizeof(buff), "Updating group %d\n", m_sbl_groups[grp_name].group_id);
+  			SignalLog(LogEvent::INFO, buff);
+  			m_sbl_groups[grp_name].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
+  			SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[grp_name]) );
+  			m_sbl_groups[grp_name].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
+  		}
   		break;
   		case GROUP_ADD:
 		  if (m_sbl_groups.find(edit.item.group_name) == m_sbl_groups.end()) { // new group
@@ -2747,8 +2811,20 @@ namespace ICQ2000
       	  	SendSBLSNAC( new SBLAddGroupSNAC( edit.item.group_name, edit.item.tag_id ) );
       	  }
   		break;
-  		case GROUP_REMOVE:
-  			SignalLog(LogEvent::WARN, "GROUP_REMOVE not implemented!");
+  		case GROUP_REMOVE: {
+  			string grp_name = edit.item.group_name;
+  			if (m_sbl_groups.find(grp_name) == m_sbl_groups.end())
+  			{
+  				char buff[100];
+  				snprintf(buff, sizeof(buff), "Removing unknown group %s\n", grp_name.c_str());
+  				SignalLog(LogEvent::WARN, buff);
+  				break;
+  			}
+  			char buff[100];
+  			snprintf(buff, sizeof(buff), "Removing group %s (%d)\n", grp_name.c_str(), m_sbl_groups[grp_name].group_id);
+  			SignalLog(LogEvent::INFO, buff);
+  			SendSBLSNAC( new SBLRemoveGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id) );
+  		}
   		break;
   	}// switch
   	}// while

@@ -355,7 +355,7 @@ namespace ICQ2000 {
   // ============================================================================
   //  SBL Remove Entry
   // ============================================================================
-
+#if 0
   SBLRemoveEntrySNAC::SBLRemoveEntrySNAC() { }
 
   SBLRemoveEntrySNAC::SBLRemoveEntrySNAC(const ContactList& l)
@@ -414,6 +414,59 @@ namespace ICQ2000 {
       }
 
     }
+  }
+#endif
+
+  // ============================================================================
+  //  SBL Remove Buddy
+  // ============================================================================
+
+  SBLRemoveBuddySNAC::SBLRemoveBuddySNAC() { }
+
+  SBLRemoveBuddySNAC::SBLRemoveBuddySNAC(const Sbl_item &buddy, unsigned short group_id)
+  	: m_buddy(buddy), m_buddy_group(group_id)
+  { }
+
+  void SBLRemoveBuddySNAC::OutputBody(Buffer& b) const
+  {
+	b << Contact::UINtoString(m_buddy.uin);
+	b << (unsigned short) m_buddy_group;
+	b << (unsigned short) m_buddy.tag_id;
+	b << (unsigned short) 0x0000;
+
+	Buffer::marker m = b.getAutoSizeShortMarker();
+
+	// Contact Nickname TLV
+	b << TLV_ContactNickname;
+	b << m_buddy.nickname;
+
+	// Auth awaiting TLV
+	if(m_buddy.awaitAuth) {
+	    b << TLV_AuthAwaited;
+	    b << (unsigned short) 0x0000;
+	}
+
+	b.setAutoSizeMarker(m);
+  }
+
+  // ============================================================================
+  //  SBL Remove Group
+  // ============================================================================
+
+  SBLRemoveGroupSNAC::SBLRemoveGroupSNAC() { }
+
+  SBLRemoveGroupSNAC::SBLRemoveGroupSNAC(const string& group_name, unsigned short group_id)
+    : m_group_name(group_name), m_group_id(group_id)
+  { }
+
+  void SBLRemoveGroupSNAC::OutputBody(Buffer& b) const
+  {
+      // a Group
+      b << m_group_name;
+      b << m_group_id;
+      b << (unsigned short) 0x0000;
+      b << (unsigned short) 0x0001;
+      b << (unsigned short) 0x0000;
   }
 
   // ============================================================================
