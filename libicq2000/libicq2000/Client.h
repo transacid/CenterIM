@@ -249,7 +249,7 @@ namespace ICQ2000
     ContactRef getUserInfoCacheContact(unsigned int reqid);
 
 	void fillSBLMap(SBLListSNAC *sbl);
-    void mergeSBL(ContactTree& tree, std::list<ContactRef>& unass);
+    void mergeSBL(ContactTree& tree);
     
     void SendSBLAuthReq(AuthReqEvent *ev);
 

@@ -871,24 +871,8 @@ namespace ICQ2000
     }
   }
   
-  void Client::mergeSBL(ContactTree& tree, std::list<ContactRef>& unass)
+  void Client::mergeSBL(ContactTree& tree)
   {
-    if (!unass.empty()) {
-    	std::list<ContactRef>::iterator it;
-    	for (it = unass.begin(); it != unass.end(); it++) {
-    	 	if (!tree.exists_group( (*it)->getServerSideGroupID() )) {
-    	 		if (!m_contact_tree.exists_group( (*it)->getServerSideGroupID() )) {
-    	 			SignalLog(LogEvent::WARN, "Server group doesn't exist anywhere!");
-    	 			continue;
-    	 		}
-    	 		ContactTree::Group& grp = m_contact_tree.lookup_group( (*it)->getServerSideGroupID() );
-    	 		//SignalLog(LogEvent::WARN, "Importing existing group");
-    	 		tree.add_group( grp.get_label(), grp.get_id() );
-    	 	}
-    	 	//SignalLog(LogEvent::WARN, "Setting previous group");
-    	 	tree.lookup_group( (*it)->getServerSideGroupID() ).add(*it);
-    	}
-  	}
     SBLReceivedEvent ev(tree);
     sbl_received.emit(&ev);
   }
@@ -1546,7 +1530,7 @@ namespace ICQ2000
 	SignalLog(LogEvent::INFO, "Received server-based list from server\n");
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
 	fillSBLMap(sbs);
-	mergeSBL( sbs->getContactTree(), sbs->getUnassigned() );
+	mergeSBL( sbs->getContactTree());
 		if ((snac->Flags() & 0x01)  == 0) // last/only List packet
 		{
         	SendSBLReceivedACK();
@@ -2387,7 +2371,26 @@ namespace ICQ2000
   
   void Client::fillSBLMap(SBLListSNAC *sbl)
   {
-  	ContactTree& sbl_tree = sbl->getContactTree();
+	ContactTree& sbl_tree = sbl->getContactTree();
+	std::list<ContactRef>& unass = sbl->getUnassigned();
+  	
+    if (!unass.empty()) {
+    	std::list<ContactRef>::iterator it;
+    	for (it = unass.begin(); it != unass.end(); it++) {
+    	 	if (!sbl_tree.exists_group( (*it)->getServerSideGroupID() )) {
+    	 		if (m_sbl_groupnames.find((*it)->getServerSideGroupID()) == m_sbl_groupnames.end()) {
+    	 			SignalLog(LogEvent::WARN, "Server group doesn't exist anywhere!");
+    	 			continue;
+    	 		}
+    	 		//ContactTree::Group& grp = m_contact_tree.lookup_group( (*it)->getServerSideGroupID() );
+    	 		SignalLog(LogEvent::WARN, "Importing existing group");
+    	 		sbl_tree.add_group( m_sbl_groupnames[(*it)->getServerSideGroupID()], (*it)->getServerSideGroupID() );
+    	 	}
+    	 	SignalLog(LogEvent::WARN, "Setting previous group");
+    	 	sbl_tree.lookup_group( (*it)->getServerSideGroupID() ).add(*it);
+    	}
+  	}
+  	
     ContactTree::iterator curr = sbl_tree.begin();
     while (curr != sbl_tree.end())
     {
