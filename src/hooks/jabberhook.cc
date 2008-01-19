@@ -75,6 +75,24 @@ static string jidtodisp(const string &jid) {
     return user;
 }
 
+static imstatus get_presence(std::map<string, pair<char, imstatus> > res) // <resource, <prio, status> >
+{
+	if (res.empty())
+		return offline;
+	imstatus result = offline;
+	char prio = -127;
+	for (map<string, pair<char, imstatus> >::iterator it = res.begin(); it!= res.end(); it++)
+	{
+		if (it->second.first>prio)
+		{
+			result = it->second.second;
+			prio = it->second.first;
+		}
+	}
+	return result;
+}
+
+
 // ----------------------------------------------------------------------------
 
 jabberhook jhook;
@@ -1482,6 +1500,26 @@ string jabberhook::getourjid() {
     return jid;
 }
 
+imstatus jabberhook::process_presence(string id, string s, char prio, imstatus ust)
+{
+	if (statuses.find(id) == statuses.end()) { // new and only presence
+		(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+	} else {	
+		if (statuses[id].find(s) == statuses[id].end()) { // unknown resource
+			if (ust != offline)
+				(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+		} else {
+			if (ust == offline) // remove resource
+				(statuses[id]).erase(s);
+			else { // known contact
+				(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+			}
+			ust = get_presence(statuses[id]);
+		}
+	}
+	return ust;
+}
+
 // ----------------------------------------------------------------------------
 
 void jabberhook::statehandler(jconn conn, int state) {
@@ -1781,6 +1819,8 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		icqcontact *c = clist.get(ic);
 		
 		if(c) {
+			char prio = (char) jutil_priority(packet->x); // priority
+			ust = jhook.process_presence(id, s, prio, ust);
 		    if(c->getstatus() != ust) {
 			jhook.awaymsgs[ic.nickname] = "";
 			logger.putonline(c, c->getstatus(), ust);

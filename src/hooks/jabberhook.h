@@ -22,6 +22,7 @@ class jabberhook: public abstracthook {
 	map<string, string> roster;
 	map<string, string> awaymsgs;
 	map<string, vector<string> > chatmembers;
+	map<string, map<string, pair<char, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
 
 	struct agent {
 	    string jid, name, desc;
@@ -53,6 +54,8 @@ class jabberhook: public abstracthook {
 	} jstate;
 
 	vector<agent> agents;
+
+	imstatus process_presence(string id, string s, char prio, imstatus ust);
 
 	static void statehandler(jconn conn, int state);
 	static void packethandler(jconn conn, jpacket packet);
