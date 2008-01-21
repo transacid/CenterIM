@@ -325,11 +325,18 @@ namespace ICQ2000
   // ------------------ Signal Dispatchers -----------------
   void Client::SignalConnect() {
     m_state = BOS_LOGGED_IN;
+    m_sbl_edits.clear();
+    m_sbl_map.clear();
+    m_sbl_groups.clear();
+    m_sbl_groupnames.clear();
+    m_sbl_tags.clear();
+    m_sbl_canedit = false;
     ConnectedEvent ev;
     connected.emit(&ev);
   }
 
   void Client::SignalDisconnect(DisconnectedEvent::Reason r) {
+  	m_sbl_canedit = false;
     DisconnectedEvent ev(r);
     disconnected.emit(&ev);
 
@@ -1431,7 +1438,7 @@ namespace ICQ2000
 	SendPersonalInfoRequest();
 	SendAddICBMParameter();
 	SendSetUserInfo();
-	if (m_fetch_sbl) SendRequestSBL();
+	//if (m_fetch_sbl) SendRequestSBL();
 	SendLogin();
 	break;
       case SNAC_GEN_CapAck:
@@ -2444,8 +2451,10 @@ namespace ICQ2000
 	  m_sbl_tags.insert((*curr).get_id());
 	  if (m_sbl_groupnames.find((*curr).get_id()) == m_sbl_groupnames.end())
   	  {
-	    SignalLog(LogEvent::INFO, "Importing new SBL group");
-	    //fprintf(stderr, "New imported SBL group %d (%s)\n", (*curr).get_id(), curr_name.c_str());
+		char buff[100];
+		snprintf(buff, sizeof(buff), "New imported SBL group %d (%s)\n", (*curr).get_id(), curr_name.c_str());
+	    SignalLog(LogEvent::INFO, buff);
+
 	  	m_sbl_groupnames[(*curr).get_id()] = curr_name;
 	  	m_sbl_groups[curr_name] = Sbl_group(curr_name, (*curr).get_id());
 	  }
@@ -2725,7 +2734,12 @@ namespace ICQ2000
 		  string grp_name = edit.item.group_name;
     	  if (grp_name.size() == 0) { // adding to unspecified group
     	  	if (!m_sbl_groups.empty())
+    	  	{
 		  		grp_name = (m_sbl_groups.begin())->first; // select first available
+		  		char buff[100];
+		  		snprintf(buff, sizeof(buff), "Adding to %s as first available group\n", grp_name.c_str());
+		  		SignalLog(LogEvent::INFO, buff);
+		  	}
 		  	else
 		  	{
 		  		SignalLog(LogEvent::WARN, "No group exists!");
@@ -2786,8 +2800,9 @@ namespace ICQ2000
   			}
   			char buff[100];
   			string grp_name = m_sbl_map[edit.item.uin].group_name;
+  			edit.item.tag_id = m_sbl_map[edit.item.uin].tag_id;
   			
-  			snprintf(buff, sizeof(buff), "Removing user %d from group %d\n", edit.item.uin, m_sbl_groups[grp_name].group_id);
+  			snprintf(buff, sizeof(buff), "Removing user %d/%d from group %d\n", edit.item.uin, m_sbl_map[edit.item.uin].tag_id, m_sbl_groups[grp_name].group_id);
   			SignalLog(LogEvent::INFO, buff);
   			SendSBLSNAC( new SBLRemoveBuddySNAC(edit.item, m_sbl_groups[grp_name].group_id) );
   			
