@@ -1133,9 +1133,18 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Online"));
 	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text), buf);
     }
-    if (bi.serverbased) {
-	mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf.getcolor(cp_main_highlight), _("Server-based contact"));
+    buf = "";
+    if (bi.serverbased)
+	buf += _("Server-based contact");
+
+    if (bi.authawait) {
+	if (!buf.empty())
+	    buf += ", ";
+	buf += _("Awaiting authorization");
     }
+    
+    if (!buf.empty())
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf.getcolor(cp_main_highlight), buf);
 }
 
 void icqface::infohome(dialogbox &db, icqcontact *c) {
