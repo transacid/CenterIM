@@ -117,6 +117,7 @@ namespace ICQ2000 {
     ContactTree m_tree;
     unsigned short m_size;
     std::list<ContactRef> m_unassigned;
+    std::set<unsigned short> m_other_ids;
      
    protected:
     void ParseBody(Buffer& b);
@@ -126,6 +127,8 @@ namespace ICQ2000 {
     
     ContactTree& getContactTree() { return m_tree; }
     std::list<ContactRef>& getUnassigned() { return m_unassigned; }
+    std::set<unsigned short>& other_ids() { return m_other_ids; }
+    
     unsigned short get_size() const { return m_size; }
 
     unsigned short Subtype() const { return SNAC_SBL_List_From_Server; }

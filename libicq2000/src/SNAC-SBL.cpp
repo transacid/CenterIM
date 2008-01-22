@@ -144,7 +144,7 @@ namespace ICQ2000 {
       case Entry_Group:
 	if (group_id > 0) m_tree.add_group( name, group_id );
 	break;
-      case Entry_VisSetting:
+/*      case Entry_VisSetting:
 	// TODO
 	break;
       case Entry_ICQTIC:
@@ -155,9 +155,9 @@ namespace ICQ2000 {
 	break;
       case Entry_ImportTime:
 	// ignore
-	break;
+	break;*/
       default:
-	// ignore
+        m_other_ids.insert(tag_id); // save tag_id
 	break;
       }
 

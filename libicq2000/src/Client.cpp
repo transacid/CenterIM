@@ -1538,8 +1538,8 @@ namespace ICQ2000
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
 	fillSBLMap(sbs);
 	mergeSBL( sbs->getContactTree());
-		if ((snac->Flags() & 0x01)  == 0) // last/only List packet
-		{
+	if ((snac->Flags() & 0x01)  == 0) // last/only List packet
+	{
         	SendSBLReceivedACK();
         	m_sbl_canedit = true;
         	processSblEdits();
@@ -2425,6 +2425,7 @@ namespace ICQ2000
   {
 	ContactTree& sbl_tree = sbl->getContactTree();
 	std::list<ContactRef>& unass = sbl->getUnassigned();
+	std::set<unsigned short>& others = sbl->other_ids();
   	
     if (!unass.empty()) {
     	std::list<ContactRef>::iterator it;
@@ -2442,7 +2443,16 @@ namespace ICQ2000
     	 	sbl_tree.lookup_group( (*it)->getServerSideGroupID() ).add(*it);
     	}
   	}
-  	
+    if (!others.empty()) {
+	std::set<unsigned short>::iterator oit;
+	char buff[100];
+	for (oit = others.begin(); oit != others.end(); oit++)
+	{
+	    m_sbl_tags.insert(*oit);
+	    snprintf(buff, sizeof(buff), "Importing unknown tag #%d", *oit);
+	    SignalLog(LogEvent::INFO, buff);
+	}
+    }
     ContactTree::iterator curr = sbl_tree.begin();
     while (curr != sbl_tree.end())
     {
@@ -2452,7 +2462,7 @@ namespace ICQ2000
 	  if (m_sbl_groupnames.find((*curr).get_id()) == m_sbl_groupnames.end())
   	  {
 		char buff[100];
-		snprintf(buff, sizeof(buff), "New imported SBL group %d (%s)\n", (*curr).get_id(), curr_name.c_str());
+		snprintf(buff, sizeof(buff), "New imported SBL group %d (%s)", (*curr).get_id(), curr_name.c_str());
 	    SignalLog(LogEvent::INFO, buff);
 
 	  	m_sbl_groupnames[(*curr).get_id()] = curr_name;
