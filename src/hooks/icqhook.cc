@@ -1518,12 +1518,13 @@ void icqhook::sbl_received_cb(SBLReceivedEvent *ev) {
 		tree.relocate_contact(nc, cg, *lg);
 	    } else {
 		nc = lg->add(new Contact(ic.uin));
-		nc->setAuthAwait((*ig)->getAuthAwait());
 	    }
+	    nc->setAuthAwait((*ig)->getAuthAwait());
 
 	    if(cc = clist.get(ic)) {
 		icqcontact::basicinfo bi = cc->getbasicinfo();
 		bi.authawait = nc->getAuthAwait();
+		bi.serverbased = true;
 		cc->setbasicinfo(bi);
 	    }
 
