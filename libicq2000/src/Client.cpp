@@ -1538,8 +1538,8 @@ namespace ICQ2000
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
 	fillSBLMap(sbs);
 	mergeSBL( sbs->getContactTree());
-	if ((snac->Flags() & 0x01)  == 0) // last/only List packet
-	{
+		if ((snac->Flags() & 0x01)  == 0) // last/only List packet
+		{
         	SendSBLReceivedACK();
         	m_sbl_canedit = true;
         	processSblEdits();
@@ -1612,6 +1612,9 @@ namespace ICQ2000
   	    		}
   	    		else
   	    		{
+  	    			if (updGroup->group_id() == 0) // ignore updates of master group
+  	    				break;
+  	    			
   	    			string old_name = m_sbl_groupnames[updGroup->group_id()];
   	    			m_sbl_groupnames[updGroup->group_id()] = updGroup->get_label();
   	    			
@@ -2834,6 +2837,16 @@ namespace ICQ2000
       	  	SignalLog(LogEvent::INFO, buff);
       	  	
       	  	SendSBLSNAC( new SBLAddGroupSNAC( edit.item.group_name, edit.item.tag_id ) );
+      	  	
+      	  	snprintf(buff, sizeof(buff), "Rebuilding master group");
+      	  	SignalLog(LogEvent::INFO, buff);
+      	  	
+      	  	std::set<unsigned short> groups;
+      	  	for (std::map<std::string, Sbl_group>::iterator git = m_sbl_groups.begin(); git != m_sbl_groups.end(); git++) {
+				groups.insert(git->second.group_id);
+      	  	}
+      	  	groups.insert(edit.item.tag_id);
+      	  	SendSBLSNAC( new SBLUpdateGroupSNAC("", 0, groups) );
       	  }
   		break;
   		case GROUP_REMOVE: {
@@ -2849,6 +2862,16 @@ namespace ICQ2000
   			snprintf(buff, sizeof(buff), "Removing group %s (%d)\n", grp_name.c_str(), m_sbl_groups[grp_name].group_id);
   			SignalLog(LogEvent::INFO, buff);
   			SendSBLSNAC( new SBLRemoveGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id) );
+      	  	
+      	  	snprintf(buff, sizeof(buff), "Rebuilding master group");
+      	  	SignalLog(LogEvent::INFO, buff);
+      	  	
+      	  	std::set<unsigned short> groups;
+      	  	for (std::map<std::string, Sbl_group>::iterator git = m_sbl_groups.begin(); git != m_sbl_groups.end(); git++) {
+				groups.insert(git->second.group_id);
+      	  	}
+      	  	groups.erase(m_sbl_groups[grp_name].group_id);
+      	  	SendSBLSNAC( new SBLUpdateGroupSNAC("", 0, groups) );
   		}
   		break;
   	}// switch
