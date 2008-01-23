@@ -1189,9 +1189,8 @@ namespace ICQ2000
       SignalLog(LogEvent::INFO, "Not starting listening server, incoming Direct connections disabled");
     }
 
-    if (!m_contact_tree.empty())
-      FLAPwrapSNAC(b, AddBuddySNAC(m_contact_tree) );
-    /* hack - for the moment still send older style buddy list */
+    /* if (!m_contact_tree.empty())
+      FLAPwrapSNAC(b, AddBuddySNAC(m_contact_tree) );*/
 
     if (m_invisible_wanted)
       FLAPwrapSNAC(b, AddVisibleSNAC(m_visible_list) );
@@ -1207,6 +1206,8 @@ namespace ICQ2000
       FLAPwrapSNAC(b, AddInvisibleSNAC(m_invisible_list) );
 
     FLAPwrapSNAC( b, ClientReadySNAC() );
+    
+    FLAPwrapSNAC( b, SetIdleSNAC() );
 
     FLAPwrapSNAC( b, SrvRequestOfflineSNAC(m_self->getUIN()) );
 
