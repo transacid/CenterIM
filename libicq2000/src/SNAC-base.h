@@ -76,9 +76,11 @@ namespace ICQ2000 {
   // -- Inbound SNAC --
   class InSNAC : virtual public SNAC {
    protected:
+    unsigned short m_version;
     virtual void ParseBody(Buffer& b) = 0;
 
    public:
+    virtual unsigned short Version() const;
     virtual void Parse(Buffer& b);
   };
 
