@@ -2171,6 +2171,10 @@ namespace ICQ2000
         SendSBLAuthReq(static_cast<AuthReqEvent*>(ev));
 	break;
 
+      case MessageEvent::AuthAck:
+        SendSBLAuthReply(static_cast<AuthAckEvent*>(ev));
+      break;
+
       default:
       SendViaServer(ev);
 	break;
@@ -3153,6 +3157,15 @@ namespace ICQ2000
 	  //fprintf(stderr, "Pushing req. user add\n");
 	  processSblEdits();
 	}
+  }
+  
+  void Client::SendSBLAuthReply(AuthAckEvent *ev)
+  {
+    if (ev == NULL)
+	return;
+    Buffer b;
+    FLAPwrapSNAC(b, SBLAuthoriseSNAC(ev->getContact(), ev->getMessage(), ev->isGranted()) );
+    Send(b);    
   }
 
   SearchResultEvent* Client::searchForContacts

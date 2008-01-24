@@ -252,6 +252,7 @@ namespace ICQ2000
     void mergeSBL(ContactTree& tree);
     
     void SendSBLAuthReq(AuthReqEvent *ev);
+    void SendSBLAuthReply(AuthAckEvent *ev);
 
     void ICBMCookieCache_expired_cb(MessageEvent *ev);
     void dccache_expired_cb(DirectClient *dc);
