@@ -6,6 +6,10 @@ centerim_LDADD = $(top_builddir)/src/hooks/libhooks.a  -lkkconsui -lkkstrtext -l
 if HAVE_LIBOTR
 centerim_SOURCES += imotr.cc
 endif
+if HAVE_FRIBIDI
+centerim_LDADD +=$(FRIBIDI_LIBS)
+#centerim_CFLAGS += $(FRIBIDI_LIBS)
+endif
 if BUILD_FIRETALK
 centerim_LDFLAGS += -L$(top_builddir)/firetalk
 centerim_LDADD += -lfiretalk
