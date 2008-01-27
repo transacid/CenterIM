@@ -1,2107 +1,1759 @@
-2006-12-22  gettextize  <bug-gnu-gettext@gnu.org>
+Commit: c41d93c894c9578e1ecd42a11b1f08bac26700c4 
+Author: Boris Petersen <transacid@gmail.com> So, 27 Jan 2008 23:03:40 +0100 
 
-	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
-	* configure.ac (AC_CONFIG_FILES): Add po/Makefile.in.
-	(AM_GNU_GETTEXT_VERSION): Bump to 0.16.1.
+    Fix for Fribidi from gentoo see
+    http://bugs.gentoo.org/show_bug.cgi?id=200900
 
-0.0.1
------
+Commit: ed81dcdb5c469a8ca6277fd41363f0c5730e15f5 
+Author: Roger <roger@jikos.cz> Do, 24 Jan 2008 14:43:41 +0100 
 
-Just a first public release of the program.
+    ICQ: Send authorization replies via SSI.
 
-1.0.0
------
+Commit: a116828ac5569a0382539306e133ac7f0843a7c4 
+Author: Roger <roger@jikos.cz> Do, 24 Jan 2008 14:14:14 +0100 
 
-In this version I made a lot of fixes according to new users' comments. That's
-great that so much people deceided to try my program. Here is the list of most
-important things that were changed:
+    ICQ: Update sent capabilities (SSI).
 
-- Conflict of the symbol ustat in unistd.h (libc5) and the variable in
-  centerICQ.cpp. Fixed. I renamed the variable to usrstat. Noticed by
-  Bernhard Sadlowski <sadlowsk@mathematik.uni-bielefeld.de>
+Commit: c09e0baf2ece2a808c338c2dbe3c7be7efa96f9e 
+Author: Roger <roger@jikos.cz> Do, 24 Jan 2008 13:55:19 +0100 
 
-- Makefiles in ktools/src and center/ directories didn't work with GNU
-  make 3.76 because it appeared to not understand rules like '.cpp.o:'.
-  Fixed. All of such rules were changed to '%.o : %.cpp'
+    ICQ: Parse additional SNAC TLVs (version)
 
-- Now centerICQ detects the socket physical disconnection. For example, in
-  previous version if you were using Linux system at home and connecting it
-  to internet with dial-up ppp account, centerICQ thought it's online even
-  after you disconnect from the Internet
+Commit: 08041bc410bd683f3ce78bac9b376a5b051e47bf 
+Author: Roger <roger@jikos.cz> Mi, 23 Jan 2008 21:18:52 +0100 
+
+    ICQ: Update login packet sequence.
+
+Commit: 79c9587c04e77d7b292f29a7f09ee127b1d73bb8 
+Author: Roger <roger@jikos.cz> Di, 22 Jan 2008 20:58:05 +0100 
+
+    ICQ: Rebuild master group when adding/removing group.
+
+Commit: 1c301c5741030fdaac4b3553e84c4c498313e5a6 
+Author: Roger <roger@jikos.cz> Di, 22 Jan 2008 16:50:48 +0100 
+
+    ICQ: Show authorization awaiting info about contacts.
+
+Commit: db338656a2cbfba29b62f3817183b6fa640ef68f 
+Author: Roger <roger@jikos.cz> Di, 22 Jan 2008 16:44:31 +0100 
+
+    Preliminary support for ICQ contacts state reporting.
+
+Commit: bd7a4349ed486cd16d12251954c74a5f5748710b 
+Author: Roger <roger@jikos.cz> Di, 22 Jan 2008 12:45:08 +0100 
+
+    Respect tag IDs of non-contact SBL entries.
+
+Commit: d6ca07415e0cf04d79eac592af312b90e782afdf 
+Author: Roger <roger@jikos.cz> Mo, 21 Jan 2008 22:27:30 +0100 
+
+    Improve ICQ SBL/SSI handling (user removal, disconnection etc.).
+
+Commit: e3bbf5b6efc67b24a21c60d83c5ee21e84920441 
+Author: Roger <roger@jikos.cz> Sa, 19 Jan 2008 23:23:58 +0100 
+
+    Bug #70 - Improve Jabber presence handling for multiple resources with and one contact.
+
+Commit: 7bf9c8827aaa7354fca212ac66c4f89c072767bc 
+Author: Roger <roger@jikos.cz> Sa, 19 Jan 2008 00:32:47 +0100 
+
+    Implement contacts and groups removal for ICQ SSI.
+
+Commit: 0b33d4bf47c1e59ec181bc097f23bb4fb79dd1c5 
+Author: Roger <roger@jikos.cz> Fr, 18 Jan 2008 18:44:17 +0100 
+
+    Port fix for bug #51 to new SSI infrastructure.
+
+Commit: 169df73f47457eb70bcfd9a1453b708301520233 
+Author: Roger <roger@jikos.cz> Do, 17 Jan 2008 14:45:27 +0100 
+
+    Fix disconnecting with ICQ caused by my previous patch.
+
+Commit: 426fdf7291a6aed40400ce369d8fa9e594fc8ea7 
+Author: Jayjay <jayjay@twek.nl> Di, 15 Jan 2008 18:47:22 +0100 
+
+    Corrected bugzilla.org typo in configure. Reverted part of patch of Apr2007.
+    - in configure.ac, I made a typo of bugzilla.centerim.org, corrected that
+    - I was mistaken by thinking this is incorrect: 'if (c = ....)' But C allows this and the code needed it. Now user details are fetched correctly again.
+
+Commit: a7b9ff56f759a579cdc21e188663b627223f0aee 
+Author: Roger <roger@jikos.cz> Mo, 14 Jan 2008 23:02:29 +0100 
+
+    First part of SSI/SBL support for libicq2000. Implements adding of users and groups.
+
+Commit: a53bf58e6f008cd3a18efde7cf00a6e8e3cf5117 
+Author: Roger <roger@jikos.cz> Fr, 11 Jan 2008 18:07:28 +0100 
+
+    Bug #67 - don't loop in ruscase() infinitely.
+
+Commit: 3ace2f049fe4ac67ae20f32df98e20738e13bbc4 
+Author: Roger <roger@jikos.cz> Mi, 09 Jan 2008 22:05:49 +0100 
+
+    Bug #51 - Use groups from previous packets when importing contacts from server.
+
+Commit: 9d6fc91da7bdde4ab134aecad3e865517b6b5005 
+Author: Jayjay <jayjay@twek.nl> Fr, 04 Jan 2008 23:09:52 +0100 
+
+    Rolled back wrong renames to lists.sourceforge.net.
+
+Commit: dfad3459ae6485e9413e676b17a29154ed2c5bed 
+Author: Jayjay <jayjay@twek.nl> Fr, 04 Jan 2008 23:02:20 +0100 
+
+    Changed sourceforge bug-reporting project to our new bugzilla site.
+
+Commit: eba7844f4ab2a6ad261f72e5c7974a40acf412b8 
+Author: Roger <roger@jikos.cz> Di, 01 Jan 2008 23:33:06 +0100 
+
+    Parse incoming auth. messages sent via SBL/SSI.
+
+Commit: 426f9e04633abf92631fe1f6241818557f0b146b 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 29 Dez 2007 21:38:22 +0000 
+
+    Update translation files
+
+Commit: 5ea6bbe1639961d24f69ea4b654a9ee0d1d88160 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 29 Dez 2007 21:38:04 +0000 
+
+    Resolved a couple of bugs introduced by the latest commits
+
+Commit: 69c84ce263760b4e724ee9cec51e3dc51e76ffca 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 29 Dez 2007 18:57:47 +0000 
+
+    Updated translation line references
+
+Commit: 000d1888b8646eb3c6dbbdfd0f90b6fc13b4b8aa 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 29 Dez 2007 18:28:33 +0000 
+
+    Added error handling and logging of error codes and messages
+
+Commit: 940923127447d46fe9a702561152b1c4690709e6 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 29 Dez 2007 15:16:10 +0000 
+
+    Fixed incomplete parsing of incoming packet
+
+Commit: c163bf8dad6f57021f517370bcd313258bc1036b 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 29 Dez 2007 14:14:48 +0000 
+
+    Added an error log when receiving error messages from server
+    Corrected the parsing of SSI Rights Reply
+
+Commit: 7e4749e63806eddac16428f99eb8f6db6077c67f 
+Author: Roger <roger@jikos.cz> Mi, 26 Dez 2007 22:54:03 +0100 
+
+    Rename "Unicode" to "German UTF-8", as it is source encoding specific.
+
+Commit: 9b234746691bd7199234b8790fc8d1ad69ceac9a 
+Author: Roger <roger@jikos.cz> Mi, 26 Dez 2007 22:52:03 +0100 
+
+    Don't un-idle-auto-away when screen is reattached (revert to auto-idle status via previous online).
+
+Commit: b913191d3f5330959ef35b0441018ca8c75072a2 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> So, 23 Dez 2007 21:32:46 +0000 
+
+    Fix for bug #24
+
+Commit: 69c232b61024028fd9bc3120379a981d748cb2c8 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Fr, 21 Dez 2007 21:56:35 +0000 
+
+    Updated translation lines
+
+Commit: 3bd2a4a7d033598b77b19afbbba4d8013b4d097f 
+Author: Petr Písař <petr.pisar@atlas.cz> Do, 20 Dez 2007 14:20:28 +0100 
+
+    "Request an authorization" fix and other updates
+
+Commit: 39cd07e1b85a9a017cee47f228e088e1661a5d0f 
+Author: Martin Nepivoda <nepim9am@u-pl11.ms.mff.cuni.cz> Mi, 19 Dez 2007 14:48:06 +0100 
+
+    Bug #56 - better initialisation of editor.
+
+Commit: 78842dd2d2bab1dd1b06777766a8da8e1c63771d 
+Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de> So, 16 Dez 2007 12:53:58 +0100 
+
+    added new conversion rule iso-8859-15 to utf-8 named Unicode
+
+Commit: 968ded8df2b50f270079064054cc61ad4753253a 
+Author: Roger <roger@jikos.cz> Fr, 14 Dez 2007 16:49:50 +0100 
+
+    Make valgrind happy.
+
+Commit: e37b9b4cc60fc8054ebca4b68ac71870512c2fd9 
+Author: David Riebenbauer <davrieb@liegesta.at> Do, 13 Dez 2007 10:55:34 +0100 
+
+    add GPGME_LIBS to LIBS. (fixes Bug54)
+
+Commit: 24ea83fcd1630b0baacb74eb08f9f1714c3b144e 
+Author: Pavol Rusnak <stick@gk2.sk> Do, 13 Dez 2007 10:17:38 +0100 
+
+    Setting all test checks to form "x$string" = "xvalue"
     
-- Since this version all the outgoing messages are put into the
-  center.<uin>.out files in the $(HOME)/.center directory
-  
-- Some user interface improvements
- 
-- A very funny bug was fixed. The point is that my ICQ UIN that was added to
-  contact list when one started centerICQ for the first time, was a little
-  bit incorrect (typing error), my real ICQ UIN is 17502151 :)
-
-- New user registration feature was added
-
-- Now centerICQ send the authorization acceptation immediately after
-  receiving of the request from a Mirabilis client
-
-- Now you can make centerICQ not check your mailbox adding 'dontcheckmail'
-  parameter into the $(HOME)/.center/config file. Idea of Bernhard
-  Sadlowski <sadlowsk@mathematik.uni-bielefeld.de> whose mailbox appeared
-  to be too large for scanning every minute :)
-
-- Since this day (1 aug 1999) you always can download the hottest and the
-  _latest_ snapshot of the program from its homepage at
-  http://konst-linux.i.am/
-
-- CenterICQ now can update your details in the ICQ database
-
-- Now users that are online, offline and users messages from whose have been
-  received are highlighted with different colors. It looks much better :)
-
-- Added a nice "History" feature
-
-- Another nice feature. If you don't press any key on one of local consoles
-  of your system, centerICQ can automatically set your status to Away and
-  then to N/A. Set the time periods with new parameters 'autoAway' and 'autoNA'
-  in the ~/.center/config file
-  
-- 'About' menu item added to global menu invoked by pressing F4
-  
-- Now centerICQ can handle "ack" packets server reports us about the result of
-  sending messages and URLs with. This means that now your messages won't be
-  lost on unexpected disconnection from server. Also with this feature you're
-  able to write your messages being offline in order for them to be sent when
-  you connect to server
-
----
-    Here the detailed changelog begins. A little version number explanation.
-    First number means the version number itself, second is how many features
-    have been added to it and the third one shows an amount of bugs fixed.
----
-
-1.0.1 - Fixed a segfault that appeared when the user tried to add the same
-	uin to the contactlist when it's already exists there
-	
-1.0.2 - New UIN registration procedure looked bad due to an extra screen
-	output (about new mail and status). Fixed
-
-	Now centerICQ will inform me when someone setups it on his computer.
-	It just sends a small information message so I could have a little
-	program using statistics
-
-1.0.3 - Great! After a day of a perversed sex with debugging tools, setting
-	hooks and other things, the wierd segfault has been catched and killed
-
-1.1.3 - Now if you've got any problems with F-keys in the terminal mode, there
-	is a possibility to use alternate keys for invoking user, status and
-	global menus, they are 'u', 's' and 'g'
-
-1.2.3 - The "Reply" item has been added to the message window that appears
-	when reading incoming messages. "Close" item was removed because the
-	window is closed with the Esc key
-
-1.3.3 - Now the program handles SIGINT and SIGTERM correctly
-
-	First patch applied :) Its author was Piotr Waskiewicz
-	<wasp@linuxfreak.com>. Now centerICQ will inform user about an event
-	with a PC speaker beep if the sound device isn't available (busy with
-	playing something or something like this). Thank you, Piotr.
-
-1.3.4 - A minor bug fixed. centerICQ played sound on receiving a message from
-	a user from ignore list
-
-1.7.6 - Four features added and two bugs fixed.
-
-	Feature 1.
-	
-	A major interface improvement has been implemented. I wrote new
-	ksmalledit class that allows to edit messages using more advanced
-	text editor
-		
-	Feature 2.
-	
-	Another nice interface improvement. centerICQ doesn't strip \r\n's
-	from the received messages anymore, because now it can display such
-	messages more correctly. Up and Down arrows scrolls up and down
-	the message     you're reading
-
-	Feature 3.
-	
-	I proceeded with my idea to wrote a general purpose personal
-	communications program which will contain not only ICQ client inside.
-	So, an internal phonebook had been added. You can find it in the global
-	menu invoked with F4 key. Hope, you will find it useful. Maybe, it
-	worth integrating with the ICQ contactlist .. don't know. Any
-	suggestions are welcome, as usual :)
-		
-	Feature 4.
-		
-	Added support for non-80x25 text modes
-		
-	Bugs.
+    http://bugzilla.centerim.org/show_bug.cgi?id=54#c9
 
-	A couple of bugs have been fixed. First was related to adding users
-	with empty 'nickname' field into the contact list: after restarting
-	centerICQ they had been displayed incorrectly. And the second one
-	was that the program played 'received msg/url/etc ..' sound on
-	receiving messages from users in ignore list
+Commit: 4b2da4d46f65aae1a3492daee373b48faea7067e 
+Author: David Riebenbauer <davrieb@liegesta.at> Di, 11 Dez 2007 18:17:23 +0100 
 
-	Some corrections.
-		
-	Since this version contactlist is updated on the screen even if you're
-	working with menus such as phonebook, change status, history, etc.
+    Re-add gnutls_record_send in connwrap.c
+    
+    The fix to bug 40 removed one if-clause to much, which caused SSL
+    connections to time out. Re-adding the statement fixes that
 
-	Misc.
+Commit: b6bba25d3e53088a57ebd7098895df4d8bccc8b1 
+Author: Boris Petersen <transacid@gmail.com> Mo, 10 Dez 2007 14:15:42 +0100 
 
-	Also, file HOWTO-thank-me was added into the program package. Maybe
-	someone will really help me with a thing I wrote there ... Will see
+    Typo in GPGME check, Patch by Michael Tatarinov
 
-1.10.7 -
-	Bugs fixed:
+Commit: d34101f33c1f163c90b6a0ef3d198ebbb6172821 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 08 Dez 2007 21:24:03 +0100 
 
-	There was a bug with receiving contacts from users, centerICQ thought
-	that all the received contacts had uins the same as uin of sender.
+    Added a missing format specifier
 
-	And some minor changes made.
+Commit: ef07ed283cc6b94f37c793fdb074239a03a869e1 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 08 Dez 2007 13:10:58 +0100 
 
-	Features added:
+    Started update of Italian translation
 
-	It was impossible to abort updating user's details procedure until
-	it isn't finished. Now you're able to do that, so let's think it's a
-	a feature :)
+Commit: e7b96d18fe069565f4a5d68112fffb021ba22241 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 08 Dez 2007 12:41:42 +0100 
 
-	Now all the files created by centerICQ in the .center directory have
-	-rw------- permissions to be more secure :) So now all of your
-	conversations are hidden from courious eyes of another users :)
+    Corrected bugs introduced by previous commit
 
-	"-a" command line parameter added. It forces centerICQ to draw its
-	windows using ascii characters '+', '|' and '-'
+Commit: 0d9742b3f832fedba1b4b958522f09bffd97aae6 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 08 Dez 2007 12:39:13 +0100 
 
-2.0.0
------
+    Fixed bug #40
+    
+    Removed printf and fprintf from connwrap which messed the output of centerim
 
-First major feature that's implemented in this version is support for icq
-protocol version 5. It will allow me to implement such useful thing as file
-transfer and chat, I'm going to make it soon.
+Commit: 700b8de4aa8ad62c595d3092c1c1f2088df52bdb 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 08 Dez 2007 12:28:29 +0100 
 
-Next, a lot of user interface improvements. Parameters for users searching
-and updating user's info now are entered with a menu. Also, 'user information'
-window was improved, now it allows to view more info and has quite useful menu
-in bottom line of the window.
+    Fixed bug #52
+    
+    Fixed a bug that prevented to insert a user in your contact list if you had no groups in your list, MSN protocol. Also fixed a bug when removing users that where in no group which incurred in error 224
 
-Another thing that's improved in user information displaying, was saving
-all the retreived info in separate disk file. So now there is no need to
-retreive it every time you choose 'user info' in menu.
+Commit: 1f962bd0894d0bd58cf312757c9ad5721158a79d 
+Author: Mehturt <mehturt@gmail.com> Sa, 08 Dez 2007 02:03:53 +0100 
 
-Sure, some bugs were fixed. Due to the fixes connection became more stable and
-it doesn't break because of protocol implementation mistakes.
+    Fixed bug #47
+    
+    Fixed bug which made centerim crash when built with libotr support. This is a quick workaround until we refactor some code
 
+Commit: ed8b119d34ff59f208c952673b48aed923c3c07a 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 08 Dez 2007 01:31:08 +0100 
 
-PS: As usual I'd like you to take a look at HOWTO-thank-me file. Who knows,
-    maybe you're the one who's able to make it.
+    Updated translation references
 
+Commit: 268b62b136df60ea10517765e6b638632e7750b9 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Fr, 07 Dez 2007 19:08:55 +0100 
 
-2.2.1
------
+    Displayed CXXFLAGS instead of CPPFLAGS at the end of the configure
 
-First... Grhm. Happy New Year! Cheers :)
+Commit: 6a27025e1dd6ef1b3e5ec6dec4c8c18199257a5d 
+Author: Pavol Rusnak <stick@gk2.sk> Mo, 03 Dez 2007 03:40:30 +0100 
 
-AutoAWAY and AutoNA options now work ok. There were some problems detecting
-the time of local user's inactivity, but after implementing that another way
-it became great :)
+    Allow connecting with more instances of centerim to jabber server
+    by adding random hex number after "/centerim" resource identifier.
+    (At least that is the way libpurple does ...)
 
-Rewritten some code related to contact list management, now it looks much
-better.
+Commit: 64f7f8bfd08525109828c00e376de92991179ba4 
+Author: David Riebenbauer <davrieb@liegesta.at> Fr, 30 Nov 2007 23:26:49 +0100 
 
-Now centericq package is proudly distributed with its own autoconf script ;)
+    replace the libcurl tests with libcurl.m4
 
-'Edit ignore list' fascility added to the program interface (see global menu).
+Commit: 884fba7421c8ae56e192f5ff2f9925145ec0e086 
+Author: David Riebenbauer <davrieb@liegesta.at> Fr, 30 Nov 2007 19:13:34 +0100 
 
-2.3.3
------
+    Add m4 macros to check for libgnutls to the repository
+    
+    libssl users who check out git shouldn't need libgnutls
 
-Fixed a minor bug in the source code that caused problems compiling
-the program.
+Commit: 9362bdbb4b7eb548ac696f3132bf83328cc06f34 
+Author: David Riebenbauer <davrieb@liegesta.at> Fr, 30 Nov 2007 18:51:31 +0100 
 
-Fixed a bug that caused centericq to switch status to n/a when running
-on a remote console (/dev/ttypXX for example).
+    Change pgpme.m4 to use the old commandline option and help string
 
-Previous version seems to be the most buggy one. One more bug has
-been fixed, it caused centericq not to auto-accept authorization requests
-and not to inform a user that someone has added him to a contact list.
+Commit: ac225f9d3497b8249c2d942b4d26014f25ad0654 
+Author: David Riebenbauer <davrieb@liegesta.at> Fr, 30 Nov 2007 18:15:19 +0100 
 
-Now the centericq windows use all the screen height and width (if more
-than 80).
+    replace configure check for gpgme with the m4 provided by gpgme
+    
+    This also has the advantage that we now check for the correct minimum
+    gpgme version.
 
-Now available in RPM format :)
+Commit: ff9a87e329d3c1f93ed8bb7ca7e147475a546b6a 
+Author: David Riebenbauer <davrieb@liegesta.at> Mo, 26 Nov 2007 22:02:00 +0100 
 
-2.7.4
------
+    replace occurences of VERSION with centerim::version
+    
+    This patch adds a new file git-version.cc, which intializes static variable
+    centerim::version.
+    
+    This helps in cutting down the compile time penalty of generating the
+    version string on every make run. Instead of every file that uses config.h
+    only one file has to be recompiled. The rest of the work is done by the
+    linker.
+
+Commit: 08aaa47c9d172c9d50ab08c5368f618bb7519d66 
+Author: David Riebenbauer <davrieb@liegesta.at> Mo, 26 Nov 2007 19:57:22 +0100 
+
+    Add an autogenerated header git_version.h
+    
+    This information is partly redundant, as config.h contains the version
+    information too.  But git_version.h gets updated on every make run in src. Care
+    is taken to only touch the file when it's version number differs from the one
+    generated by git-version-gen.
+    
+    Signed-off-by: David Riebenbauer <davrieb@liegesta.at>
 
-As the ktools library was rewritten and optimized, centerICQ became faster.
-For example, messages history now pops up a little bit quicker, etc. A lot
-of code improvements, in general :)
+Commit: 4390c1136d5a82e69f65921eb15d03c8a7d61466 
+Author: David Riebenbauer <davrieb@liegesta.at> So, 25 Nov 2007 20:16:43 +0100 
 
-Text message editor was totally rewritten. It now allows to enter more than
-one space between words and has some useful facilities.
+    remove superfluous include of string.h
+    
+    seems this was produced by a mis-merge
+
+Commit: 43ea42e1c8c34e9694a342121ad82c3d9119b2dc 
+Author: Roger <roger@jikos.cz> So, 25 Nov 2007 19:18:07 +0100 
+
+    Bug #39: Ack SBL to get status notifications
+
+Commit: 152235ac92c0c1c9a26ccb05e43c423b4ed64783 
+Author: Roger <roger@jikos.cz> So, 25 Nov 2007 19:18:07 +0100 
+
+    Bug #39: Ack SBL to get status notifications
+
+Commit: 2d3a23eba8cfc8e0f1b9262ba407305290613403 
+Author: Iulian Ciorascu <iulica@box.co.uk> Di, 20 Nov 2007 19:29:35 +0100 
+
+    custom contact sorting patch
+    
+    You'll find attached a patch for custom contact sorting.
+    Currently (and the default value in the patch) they are sorted by status
+    and activity.
+    Other possibilities are:
+    by status and nickname
+    by activity
+    by nickname
 
-History reading and sorting operation was speed up.
+Commit: 166b7b3809387287d06fe16e1639bceb1c4f9bc2 
+Author: Iulian Ciorascu <iulica@box.co.uk> Di, 20 Nov 2007 10:57:12 +0100 
 
-ESC is not an exit key anymore. To quit the program you should now use 'q'.
+    chat out keybinding patch
+    
+    Here's a small patch to a direct keybinding from a chat to the contact
+    list. I put it to Ctrl-v keybinding by default.
 
-Phonebook was obsoleted.
+Commit: 472a2160fa09dc4b814e2f625599b9f30846e3d7 
+Author: David Riebenbauer <davrieb@liegesta.at> Fr, 23 Nov 2007 13:22:18 +0100 
 
-Ignore list didn't work at all. Fixed.
+    add vims swp files to gitignore
 
-2.11.5
-------
+Commit: c4ef4f8b882acca1a52b0e215779acbfc5a409e5 
+Author: David Riebenbauer <davrieb@liegesta.at> Fr, 23 Nov 2007 13:20:59 +0100 
 
-Now it's possible to view messages history when writing a message.
+    add various includes of cstring to fix compilation with gcc-4.3
 
-Makefile.in has changed in order to make the installation more flexible. Now
-the program can be ./configured and installed with any ${prefix}. Proposed by
-Alexandr D. Kanevskiy <kad@dc.ukrtel.net>, the author of BlackCat Linux
-distribution.
+Commit: 8a7590bc831461d7fbe87ade2e3a21443248808e 
+Author: Pavol Rusnak <stick@gk2.sk> Fr, 23 Nov 2007 10:25:29 +0100 
 
-If you're such a emacs fan like Felix Natter <f.natter@ndh.net> ;), now you
-can enjoy emacs key bindings support in centericq. All needed to turn the
-feature on is to add 'emacs' string to your ~/.center/config file.
+    comparison with string literal
 
-Sometimes centerICQ sent messages twice. Fixed.
+Commit: f0877147c82dce1c38e685c04b897fdcbde89e8c 
+Author: Boris Petersen <transacid@gmail.com> Mo, 19 Nov 2007 22:12:13 +0100 
 
-Now it's possible to send a message to several users on your list.
-"^P multiple" option was added to the "send message" dialog.
+    adding missing includes; trivial fix - comparison with string literal. by
+    Pavol Rusnak
 
-Messages forwarding feature added.
+Commit: f41630a3732bb3ba468d82833411b39cc5c1abe5 
+Author: David Riebenbauer <davrieb@liegesta.at> So, 18 Nov 2007 09:54:15 +0100 
 
-2.12.6
-------
+    little TODO update
 
-Ctrl-L now refreshes the screen contents.
+Commit: dc2c532a9173b9f8365dacf1beefb3f93a5fb713 
+Author: Stephan Schulz <ss.c@gmx.net> Di, 13 Nov 2007 18:25:22 +0000 
 
-To cancel an action or close a window now you gotta press ESC
-twice (like in Midnigh Commander).
+    Not only change the terminals window title but also the icon name
+    
+    I found it annoying that (at least on my system), centerims title changes
+    were only visible in the title of the xterm window itself but not in the
+    taskbar. It has nothing todo with the xterm settings as midnight
+    commanders title changes appeared in the taskbar (I'm speaking of a gnome
+    desktop right now). I traced the source for title changing function und
+    changed the following line:
+    icqface.cc:3648 in tarball centerim-20071022.tar.gz
+    from: cout << "\x1b]1;\x07\x1b]2;" << [cutted]
+    to: cout << "\x1b]1;\x07\x1b]0;" << [cutted]
+    
+    The change from 2 to 0 has the effect of not only changing the window
+    title but also the icon name.
+    
+    Signed-off-by: David Riebenbauer <davrieb@liegesta.at>
 
-Splitting messages longer than 450 characters now works ok. There were some
-problems in previous versions.
+Commit: 6e4c5249feeadc6cf7d36860d5926b472698075a 
+Author: David Riebenbauer <davrieb@liegesta.at> Mo, 12 Nov 2007 10:45:24 +0000 
 
-3.0.0
------
+    add .deps to .gitignore
+    
+    also fix the entry for /src/centerim to only be used from the git tree's root
 
-Completely rewritten from scratch. Its advantages are:
+Commit: 7a89bf805c80a6f230028f9114ab9f5f3ce78524 
+Author: David Riebenbauer <davrieb@liegesta.at> Mo, 12 Nov 2007 10:42:10 +0000 
 
-  + nice C++ design
-  + written with motor, http://thekonst.net/en/motor
-  + use of icqlib that extends icq related features with file
-    transfers, handling wider sets of users' details, etc
+    commit newly generated po files
 
-Note for those who upgrade from previous versions. Binary file now called
-centericq, not center like it was before. Shared files (wav's) are now held
-in /usr/local/share/centericq/, not in /usr/local/share/center/ Also,
-~/.center directory is no longer used, ~/.centericq is created instead.
+Commit: 9de30ffca21bc2fbe3ab7a6f91c41a7fe42d7052 
+Author: David Riebenbauer <davrieb@liegesta.at> Mo, 12 Nov 2007 08:40:18 +0000 
 
-3.2.3
------
+    remove AM_MAINTAINER_MODE
+    
+    Maintainer mode has annoyed me more and more over time. I forget to pass
+    --enable-maintainer-mode to configure far too often. So I am disabling it now.
+    
+    I think any problems this might cause, an be solved by either unpacking the
+    damn tarball again or installing autotools.
 
-Some code clean-ups made. There were some problems with compiling the program
-on some systems.
+Commit: 17d69ab9809dc5da57691ce2dd4f0b1d1cffa25c 
+Author: David Riebenbauer <davrieb@liegesta.at> So, 11 Nov 2007 20:59:33 +0000 
 
-User interface improved. Now quick keyboard help is displayed in the status
-line.
+    Generate the version info from git
+    
+    Until now the version info was set from configure.ac. From this commit on it is
+    generated by info from git and a script I shamelessly lend from the GNU
+    coreutils source.
+    
+    Changes in the version number should be done by adding a signed tag in git.
 
-Now centericq can hide offline users when contact list is displayed.
+Commit: 04e6e199e368dd88e5828b4950f6940bfbf6a5c2 
+Author: Roger <roger@jikos.cz> Fr, 09 Nov 2007 14:09:18 +0100 
 
-Ctrl-C (sigint) is now blocked since it's dangerously close to Ctrl-X
-used to send an event.
+    SF request #1811713: Add nickname to event term title notification
 
-"Quick config options" improved.
+Commit: 4b37fb4e207ef8770be39d825752968cab5c66bc 
+Author: Boris Petersen <transacid@gmail.com> Mo, 05 Nov 2007 19:34:22 +0100 
 
-Fixed segfault on sending long messages.
+    adding Chinese translation and updated Taiwanese translation by
+    Ying-Chieh Liao
 
-3.7.3
------
+Commit: f6471908265c0103bb00d5bf419b9c3ed2820174 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 03 Nov 2007 18:44:38 +0100 
 
-A little patch to the icqlib has been made. Now centericq can receive messages
-and URLs from people with mirabilis clients sent to several recipients.
+    Changed the optional build of libotr
 
-Ported to FreeBSD at last! Thanks to
-Gregory Edigaroff <greg@Thing-Fish.Kharkov.NET> for a FreeBSD 4.0 CD :)
+Commit: c84415b79566ca3ca27c7686d60cd62cbc996405 
+Author: Boris Petersen <transacid@gmail.com> So, 28 Okt 2007 15:01:12 +0100 
 
-German .po translation by Florian M�ller" <flo@flo.s-s-f.de> included into
-the distribution.
+    minor changes in the german translation again.
 
-Now centericq doesn't automatically switch your status to Away or N/A when you
-are invisible.
+Commit: b5db9b998399d628f1842f2014eaa4df79b20f18 
+Author: Chris Donoghue <cdonoghu@gmail.com> Fr, 26 Okt 2007 21:56:28 -0500 
 
-Visible list feature added.
+    Segfaults instead of connecting to Yahoo! on AMD64 arch
 
-History reading has been speed-up.
+Commit: 1553a8628eb6f4c02c5f2063839b6f4af4bccfd7 
+Author: Roger <roger@jikos.cz> Fr, 26 Okt 2007 23:49:10 +0200 
 
-Now it's possible to view users' details with alt-? when writing a message.
+    ICQ: Handle incoming UCS-2BE messages.
 
-3.13.3
-------
+Commit: 1bae54b97eb8d1f3ab1a17bf6943c061f4875d9b 
+Author: Roger <roger@jikos.cz> Do, 25 Okt 2007 16:37:41 +0200 
 
-At last contacts receiving feature was implemented in this re-write. It was
-supported in 2.x.x series, but had been lost. Now it's ok.
+    Fix config dialogue mismatch for captcha/ask quit items
 
-ICQ server address is now configurable.
+Commit: 30a7e982a36ce1ec36f58402fe3450ed178b937a 
+Author: Petr Písař <petr.pisar@atlas.cz> Do, 25 Okt 2007 16:17:33 +0200 
 
-Update user info feature now works great. It's possible to update gender
-and languages fields in the ICQ database.
+    Czech translation update (mainly about OTR)
 
-Now ":)" is printed next to nickname of a user having a birthday.
+Commit: 7f94de18e8c92aad25b43164533c104230895a4c 
+Author: Petr Písař <petr.pisar@atlas.cz> Do, 25 Okt 2007 16:15:42 +0200 
 
-Countries are sorted alphabetically in the selection box invoked from
-the "update details" dialog.
+    Revert "Czech translation update (mainly about OTR)"
+    
+    This reverts commit b0664c09c4400361ed5b077896b5bd97b4640caa.
 
-It's now possible to view affiliations and background in users' details.
+Commit: b0664c09c4400361ed5b077896b5bd97b4640caa 
+Author: Petr Písař <petr.pisar@atlas.cz> Do, 25 Okt 2007 16:14:52 +0200 
 
-Quoting a message on reply is now possible.
+    Czech translation update (mainly about OTR)
 
-SOCKS proxy support added. Thanks to Sir Kot <cyrilm@maris.ru> for the patch.
+Commit: f04b782a887e2b8f52accb061b38256ae6875eb9 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 22 Okt 2007 12:42:33 +0200 
 
-Quick contact search feature added. Now you can type nickname to search
-for a user in contact list. This new feature is activated with Alt-S (or
-ESC-S) key.
+    Changed client version reported to server
 
-Some minor interface bugs have been fixed.
+Commit: d39011362c9acd044bcecebc237452448cb6af6e 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 22 Okt 2007 12:13:27 +0200 
 
-3.20.5
-------
+    Ignored NOT messages by notification Server in libmsn
 
-"Add to the list" button added to the authorization request dialog.
+Commit: aeeba81b64fb3a72a100aacf18873ffae881dc9e 
+Author: Stéphane Bisinger <sb@tatooine.(none)> Sa, 20 Okt 2007 14:39:11 +0200 
 
-Now it's possible to specify sounds for two additional kinds of events:
-someone's appearing online and receiving a contact.
+    Move getmd5 back in abstracthook, made it static and public so that it may be used by HTTPClient
+    Substituted sizeof() with a more readable macro
 
-Added a command line parameter "--ascii" or "-a" to make centericq
-draw all the dialog frames, boxes and other interface stuff with
-non-pseudographical characters.
+Commit: 287d42a332d7b4d3a8714988b7fda684fa1586fa 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Di, 16 Okt 2007 20:49:23 +0100 
 
-Centericq doesn't allow to send empty messages anymore.
+    Fixed indentation
 
-Now, when sending a long (more than 450 characters) message, centericq
-checks whether if it's possible to send it with a direct TCP/IP link.
-If so, it doesn't split the message as it did before.
+Commit: 45e55663918ca27def5c28cd76e349df56c03f11 
+Author: Boris Petersen <transacid@gmail.com> Sa, 13 Okt 2007 11:24:36 +0200 
 
-Fixed a bug that caused impossiblity to receive messages longer than
-512 bytes.
+    minor changes in the german translation.
 
-The "telnet <centericq tcp port number>" bug fixed. If you telneted to a
-port listened by centericq and typed random characters it caused centericq
-segfault.
+Commit: 30150491cce624e70e1e6c8278c55e13f9917a48 
+Author: Ranyus <ranyus@gmail.com> Mi, 10 Okt 2007 00:10:48 +0200 
 
-"Remember ICQ password" item has been added to the configuration dialog.
-Set to "no" it causes centericq not to hold it in the config file,
-thus the password is asked every time you launch the program.
+    BUG # 1760159: Commented fprintf of message "getsockopt error"
 
-Online users are now sorted by status.
+Commit: 43b532096727489b16c4c31330e14aebb5708cec 
+Author: Roger <roger@jikos.cz> Di, 09 Okt 2007 23:30:56 +0200 
 
-Now it's possible to reply on a message from history.
+    Notify if stored IP isn't current
 
-Anti-spam feature added. If you set this option to "yes" in the
-configuration dialog, no messages will be accepted from people not
-on your contact list.
+Commit: abfa390272c001fce061268f7319eec8f363a5d7 
+Author: Iulian Ciorascu <iulica@box.co.uk> Sa, 06 Okt 2007 22:43:36 +0200 
 
-Applied the file transfer segfaults fixing patch for icqlib by Jindrich
-Makovicka <makovick@kmlinux.fjfi.cvut.cz>. He appeared to be a great
-contributor having many intresting ideas, so I hope we'll work together
-a lot. Keep it up, Jindrich!
+    fixed library inclusion order
 
-Ported to OpenBSD. Thanks to Peter Valchev <pvalchev@toxiclinux.org> for
-the patch.
+Commit: cd8666eb8509ecce22575130d001645334777099 
+Author: Sascha <FunkyFish@gmx.net> Sa, 06 Okt 2007 02:58:37 +0200 
 
-3.22.8
-------
+    updated the ChangeLog
 
-Centericq didn't remember the "anti-spam" setting after restart. Fixed.
+Commit: 073c86d7a2b4743fb223f9e00f6a258f6611c0e8 
+Author: Andreas Krennmair <ak@synflood.at> Do, 04 Okt 2007 15:16:25 +0200 
 
-A segfault caused sometimes by receiving and viewing histories
-containing empty msgs was fixed.
+    numberous snprintf cleanups; removed code duplication
 
-Now it's possible to enter the quickfind mode with "/" key.
+Commit: 817aab4dfee03bd08215708dd3709975daef9f8a 
+Author: aavelar <aavelar@cofradia.org> Mi, 03 Okt 2007 18:37:59 -0500 
 
-Contact list is now sorted by "who-last-send-an-event" criteria :)
+    Feature enhancement, adds configurable dialog window that asks before quit
 
-Czech translation by Jindrich Makovicka has been added.
+Commit: 85193898aaa18ef33d8fcb7222de85d7603b1cd2 
+Author: aavelar <aavelar@cofradia.org> Mi, 03 Okt 2007 18:32:16 -0500 
 
-Unsent messages counter in the top of the screen has been added.
+    Another lj functionality enhancement
 
-Developed and packaged with the new version of motor 2.15.7 which is
-available at http://thekonst.net/en/motor/ ;)
+Commit: b1eb3f980f9e91bd392ae64842b19013b254bc2f 
+Author: aavelar <aavelar@cofradia.org> Mi, 03 Okt 2007 18:29:40 -0500 
 
-3.29.12
--------
+    Adds support for lj tags, functionality
 
-Fixed a bug with the sound files path being incorrectly auto-written
-into the ~/.centericq/sounds file.
+Commit: 4cb6fd72c7f8e17495fe63b229704c92e8ac0198 
+Author: aavelar <aavelar@cofradia.org> Mi, 03 Okt 2007 18:27:04 -0500 
 
-The keypress handling routine was impoved. It caused centericq not to
-handle the ICQ protocol events if a single ESC was pressed.
+    Security patch to fix the CVE-2007-3713 report
 
-Fixed a segfault on contacts receiving.
+Commit: 336a69caa7813de29089963629655a37f9c33166 
+Author: aavelar <aavelar@cofradia.org> Mi, 03 Okt 2007 18:21:41 -0500 
 
-Now it's possible to open a received URL with a browser (netscape by
-default). The command line for URL opening can be changed in the
-~/.centericq/actions file.
+    Just removes some unnecessary code on libyahoo2
 
-Also centericq can now open URLs found in messages and user info. Just
-press F2 to see the list of URLs.
+Commit: 725c4fcdb5db5d358717a12e82cb7461d4e3801f 
+Author: Boris Petersen <transacid@gmail.com> Mi, 03 Okt 2007 12:53:38 +0200 
 
-Some cosmetic changes were made.
+    made libotr support optional, because it's still buggy
 
-Hungarian translation by P�sztor Gy�rgy <pasztor@linux.gyakg.u-szeged.hu>
-was added.
+Commit: 56ea490e4f3b19fb99c49d9565c6ea020be3e26e 
+Author: Andreas Krennmair <ak@synflood.at> Di, 02 Okt 2007 16:51:29 +0200 
 
-Now centericq displays both local and real IP addresses of a user.
+    add missing ifdef's for libotr patch.
 
-Visible list was fixed.
+Commit: 7ffa985fac95de8e772a3bc1ed5871abf8ca1241 
+Author: J�rg B�hnel <micirio@gmx.net> Fr, 24 Aug 2007 04:30:08 +0200 
 
-Cancelled messages are now got postponed. You can continue editing them
-next time you open a send message box for the user.
+    Adding --with-libotr to configure; using _(...) for translateable strings
 
-Substring search in history was implemented.
+Commit: 18327c552af42479eed34f4277356912bf169a31 
+Author: Anibal Avelar <aavelar@cofradia.org> Mo, 20 Aug 2007 16:44:33 -0500 
 
-Date and time representation format is now taken from current locale
-settings.
+    Delete to clean the source. Unused file
 
-QuickFind feature invoked with Alt-S now works in multiple contact
-selection mode as well as in the contact list.
+Commit: 2d0ab7c5c16eef12b8dc3238953b636c65eba598 
+Author: Anibal Avelar <aavelar@cofradia.org> Mo, 20 Aug 2007 16:31:04 -0500 
 
-QuickFind is now case insensitive.
+    Updating with firetalk library coming from naim project. This fixed many
+    bugs relates with AIM and IRC protocols
 
-3.34.15
--------
+Commit: 8c6c1a905f1e7bf6f6745a40f73174bf5f681f59 
+Author: Anibal Avelar <aavelar@cofradia.org> Mo, 20 Aug 2007 16:21:38 -0500 
 
-Fixed a minor bug in the icq communications module that caused some
-problems sending files.
+    Patch to fix a FTBFS with GCC 4.3, reported by the Debian BTS
 
-The default "openurl" action in ~/.centericq/actions was improved.
+Commit: 6048a93dbefe8fe654eebc73f6211f4669126c0d 
+Author: J�rg B�hnel <micirio@gmx.net> So, 19 Aug 2007 22:59:35 +0200 
 
-The GNU copyright notice was added to every source file as the Vice
-President of FSF requested me with e-mail message (no shit :)
+    Added OTR support for jabber - you need to have libotr installed.
 
-Now centericq displays a warning on running the second copy of centericq
-with the same UIN in parallel.
+Commit: e8a244c45532d50ce3fc42149604d7643894ede1 
+Author: Boris Petersen <transacid@gmail.com> Fr, 17 Aug 2007 18:44:27 +0200 
 
-Fixed a wierd bug caused some messages' not appearing on history.
+    moved cicqconv to cimconv. Wasn't aware that you had to do it with cg mv
 
-Manual page centericq.1 was included to the package.
+Commit: bb807105189461e42da71dca648a1c6cc6367a74 
+Author: Boris Petersen <transacid@gmail.com> Fr, 17 Aug 2007 18:39:08 +0200 
 
-All the control keys are now blocked with the standard ncurses raw()
-call. So now you can easily mix up Ctrl-X and Ctrl-Z without any problem
-:)
+    Changed cicqconv to cimconv globaly update, sorry for the inconvenience
 
-An ability to turn off local mailbox checking was added.
+Commit: 8a906904d2a03a6899eea39b08e51bcc646f5666 
+Author: Boris Petersen <transacid@gmail.com> Fr, 17 Aug 2007 18:36:41 +0200 
 
-3.35.22
--------
+    Changed cicqconv to cimconv globaly
 
-Sclerosis again. Centericq didn't remember the "local mailbox checking"
-setting after restart. Fixed.
+Commit: 8a8d5ef04d9a62a9086234ffb5257520a841c9ae 
+Author: Roger <roger@jikos.cz> Do, 16 Aug 2007 18:37:57 +0200 
 
-Italian translation by Leandro Noferini <lnoferin@cybervalley.org> has
-been added.
+    Fix --bind: unrecognized re-bind() on reconnect.
 
-New "green" and "schlich" color schemes can now be found under the
-contrib/ subdir.
+Commit: f51356ab8990e6d0671b5e84ba92073406984d4f 
+Author: Roger <roger@jikos.cz> Fr, 10 Aug 2007 22:22:42 +0200 
 
-icqlib forgot to make a koi8-win1251 translation in user info fields. Fixed.
+    Change status description handling for jabber and undo asking for message
+    for Online/FFC
 
-If centericq didn't find its ~/.centericq/config file it removed whole
-contact list by mistake. Fixed.
+Commit: 7e9e016c2ed8892170e09dc913a0db610260d0af 
+Author: Michał (Kazik) Kazior <kazikcz@gmail.com> Do, 09 Aug 2007 16:07:17 +0200 
 
-After setting the "sound device" setting to "off" the sound remained until
-a user restarted the program.
+    Away messages fix (jabber)
+    I think, that most of today's im protocols support setting a description/away message for available/freeforchat statuses.
+    
+    Also, jabber may be not supporting saving a description/away message for a contanct whose offline, but some of it's transports (Gadu-Gadu for example) do.
 
-The "Details" and "Add" buttons in the "Find/add users" dialog caused
-segfaults and hangs on empty lists.
+Commit: b3cd8977f693f8d8e903c559aa48546bdccf7c25 
+Author: Anibal Avelar <aavelar@cofradia.org> Mi, 01 Aug 2007 23:12:12 -0500 
 
-All the received messages in history had an hour forward time in the
-"sent" field.
+    Support for lzo2 for gnutls (check for lzo1 and lzo2)
 
-Good news for Russian speaking centericq users. I've patched icqlib so
-that now it does translate comments for received URLs from win1251
-into koi8.
+Commit: c3fe41edc905ae2052a502cea2552edc863864df 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 24 Jul 2007 17:02:44 +0100 
 
-Basic Hebrew and Arabic languages support was added. To enable it,
-first, install fribidi library, and then run ./configure --with-fribidi
-before running make. You can download the library from
-http://imagic.weizmann.ac.il/~dov/freesw/FriBidi
+    Recoded russian messages to UTF-8
 
-4.0.0
-------
+Commit: 9eba405fe201e99ab05d76b0a914070f952e1068 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 24 Jul 2007 15:27:46 +0100 
 
-Ok. I'm glad this release is finally ready. I tried hard to add some
-features I needed myself and was asked to make a zillon times. Though
-now I need to arrange my life in another country I recently moved to, I
-couldn't help keeping on coding one of my favourite developments :)
-Thus, read on.
+    Corrected ordering of contacts by status by placing out for lunch contacts at
+    the bottom
 
-Fixed some problems centericq source had with C++ compilers that have no
-support for namespaces.
+Commit: 5785daf5c2f50b425c1f718f1154d2b985bc0f67 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Mo, 23 Jul 2007 21:06:23 +0100 
 
-Applied patch by Pavel Gubin <pg@cedar.ie.tusur.ru> which fixes the bug
-causing centericq not to return from autoAway/autoNA mode when only one
-of the timeouts is set.
+    Updated MSNP to version 9
 
-Message editor was fixed a little bit. Ctrl-right/left to walk through
-words hadn't worked.
+Commit: e0e9ca2bc8b359724f0878350080e5900d30a262 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 21 Jul 2007 18:29:37 +0100 
 
---enable-locales-fix parameter was added to ./configure scipt. It's very
-useful when you have an old version of libc with twisted iscntrl(), but
-still need to be able to see Chinese characters :)
+    Changed Content encoding to utf8
 
-The previous version didn't respect "prefix" autoconf setting. Share and
-locale directories always pointed into /usr/local/share/. Fixed.
+Commit: 2d505b3f1206c040317cb71e4511aa6d7b65f6d1 
+Author: Stephane Bisinger <stephane.bisinger@gmail.com> Sa, 21 Jul 2007 10:56:22 +0100 
 
-The centericq man page hadn't been installed along with other stuff.
-Fixed.
+    Added a couple of frees
 
-Now centericq is able to react on xterm window resize event.
+Commit: 7a6010ad008509e7dc7ce912b61afce346b3b527 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Fr, 13 Jul 2007 10:54:45 +0100 
 
-The program is not compatible with GCC >= 3.0.0. You can easily use the
-new compiler to build it.
+    Added a couple of frees to prevent memory leaking
 
-An ability to send all events through server added. You can turn it on
-with corresponding item of the "Config options" dialog.
+Commit: 1d9c9a6d5a93731f4ba877593f8401afba3e37e6 
+Author: Roger <roger@jikos.cz> Di, 10 Jul 2007 22:58:01 +0200 
 
-Contact groups support was added at last. I enjoy it a lot now :) It's
-off by default. To enable it go to the "Config options" dialog.
+    Fixes for patch 4187752098e87ce0e8bfeffa9e6e1f6030549ffa (cursor position
+    after merge, wrapping whitespace...).
 
-Spanish PO along with docs in this language was added.
+Commit: 72bed04ac908855a894a62ecf4a54659ec2bba52 
+Author: Boris Petersen <transacid@gmail.com> Mo, 09 Jul 2007 15:28:03 +0200 
 
-"Next" button in incoming contacts window didn't work properly
-sometimes. Fixed.
+    Minor changes to german translation. Spaces basically
 
-It's now possible to update information in the "Work" section. Had to
-patch icqlib.
+Commit: 4187752098e87ce0e8bfeffa9e6e1f6030549ffa 
+Author: Roger <roger@jikos.cz> Sa, 07 Jul 2007 00:39:34 +0200 
 
-Since I was dealing with icqlib, I couldn't help making other useful
-modifications. For example, I implemented White page search support. You
-can see it as a bunch of additional parameters in the "Find/add users"
-dialog.
+    Fix for sf.net bug #1710218. Adds "paragraphs", wrapping and merging
+    neighbour lines on deletes and inserts.
 
-"Clear" button was added to the "Find/add" dialog.
+Commit: e1506846723b7cf5054c9bd6acc4cf52c77911be 
+Author: Roger <roger@jikos.cz> So, 01 Jul 2007 13:39:26 +0200 
 
-"Wrong password" situation is now tracked in icqlib, and thus reported
-by centericq.
+    Fix missing jabber group conversions - bug #1740881
 
-Invisible list was implemented.
+Commit: ccd4835400200b711c00dd2313b2779539644ce7 
+Author: Boris Petersen <transacid@gmail.com> Sa, 30 Jun 2007 19:45:05 +0200 
 
-Contacts sending feature was implemented.
+    wrong coded blanks in German translation updated
 
-Offline contacts show/hide command now has a hotkey - F5.
+Commit: ff909001c80ad8c9d5ed7cd5ef46580c409b2ed8 
+Author: Roger <roger@jikos.cz> Di, 26 Jun 2007 22:01:24 +0200 
 
-Now centericq (my own branch of icqlib to be exact) sets user's timezone
-properly. And also it's now possible to view user's local time in the
-"user info" dialog.
+    Discover services on connect. Find conference and user-search ones.
 
-A first version of contact list and history converting perl script was
-included into distribution. Now only licq is supported.
+Commit: 5e997a88753fec837c3b9a35d9864d5867c88f2e 
+Author: Roger <roger@jikos.cz> Di, 26 Jun 2007 21:41:30 +0200 
 
-4.1.0
------
+    Find dialogue fixes, presence error handling.
 
-cicqconv script now has support for kxicq2 and gnomeicu.
+Commit: d51396283dc6bdaceeae091da183b697f2e1f1d7 
+Author: Roger <roger@jikos.cz> Mo, 25 Jun 2007 23:47:22 +0200 
 
-"Send contacts" wasn't displayed in the context menu. Fixed.
+    Initialize services iterator when reopening the Join dialogue. (fixes
+    crash)
 
-"Add to contact list" for "Not in list" contacts now asks a group.
+Commit: f4a0f430547094e684063ef5099ea13fec707959 
+Author: Roger <roger@jikos.cz> Mo, 25 Jun 2007 23:07:04 +0200 
 
-Shortcuts were added to dialogs.
+    Fix use of unitialized pointer, usually just skipping config reloads.
 
-All the input lines how have history which is possible to invoke with
-Alt-H.
+Commit: 34827947ea801295c32a1f12a15896134458b555 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 25 Jun 2007 14:44:38 +0200 
 
-Finally, a great piece of news. As Mirabilis servers have problems with
-v7 protocol, all the Linux ICQ clients work very unstable nowdays. Some
-messages never arrive, or delivered an incredible amount of times,
-search eventually appears not to work, etc. Until we have a good open
-source library for icq2000, I decided to pay some attention to other IM
-protocols. It resulted in implementing a support for Yahoo in this
-version of the program. A lot of interface related code has been
-changed, so bugs are quite possible. Registering new UIN, updating
-details, etc, now look a bit different, but still intuitive, so that
-you'll have no major problems with it. Enjoy. In the next version
-support for MSN is expected.
+    Corrected some errors related to the format specifiers
 
-4.2.0
------
+Commit: f98fe4118e928d5fa657ecaee23cb1d673a25604 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 25 Jun 2007 12:54:17 +0200 
 
-This version as promised adds MSN protocol support. It's expected to be
-buggy, but releasing it in this shape will help me to fix them faster.
-Just don't forget to report if you saw something wierd (not including
-knocking under your bed :)
+    Corrected other format specifier errors
 
-Some information for Yahoo and MSN contacts is filled in now to make it
-easy to launch a browser in order to see details.
+Commit: ab3383952254942158fecdcde10631097b4341f4 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 25 Jun 2007 12:43:57 +0200 
 
-Screen updating routines work more efficiently now.
+    Added missing placeholders in translated string
 
-Multiple contact selection box now has color highlight for different IM
-flavours.
+Commit: 7c5e42fbd13a72abc334410f4232ebec95800cab 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 25 Jun 2007 11:04:52 +0200 
 
-Now it's possible to associate sounds with particular contacts from any
-IM network.
+    Recoded German translation to UTF-8, otherwise it would prevent centerim
+    from compiling
 
-Non-icq contacts were renamed to "info cards", and now to add one the
-"Find/add" dialog should be used. Also, an info card can be placed to
-any group (if you have such a mode on).
+Commit: f4e71d5cd85b9ea0f1b1167bc8abc438b9da7ea9 
+Author: Boris Petersen <transacid@gmail.com> Sa, 23 Jun 2007 16:52:57 +0200 
 
-Cicqsync script should work better now. Specially under FreeBSD where it
-didn't work at all.
+    German translation update
 
-4.2.1
------
+Commit: b097f8f612eb9ce3f215becd00c8aaa30d05768b 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 23 Jun 2007 15:20:51 +0200 
 
-Ok, it was late yesterday, I tried to fix something in the night, but it
-resulted to program's bailing out with segfault on every attempt to browse
-events history. So this is a bugfix.
+    Added the man page for centerim to the Makefile so that it is installed.
+    Updated version number
 
-Passwords remembering worked horribly. Fixed.
+Commit: 26fbcbab176eed3b1ef926e43dd179f953aac2c4 
+Author: Dmitry E. Oboukhov <dimka@avanto.org> Sa, 23 Jun 2007 12:06:13 +0200 
 
-4.5.0
------
+    In case when user's coding and irc's coding do not match each other
+    messages on user's logout and channels' subjets are converted
+    incorrectly.
+    
+    This patch will cure that defect.
 
-This release adds a very important improvement. ICQ communications were
-moved to the library of ickle client, written by Barnaby Gray
-<barnaby@beedesign.co.uk>. Since the library supports the icq2000
-protocol, this version centericq doesn't loose messages unlike previous
-ones. Also it's now possible to send SMSes. Though, the library is not
-complete yet, so features such as finding users, updating details,
-sending contacts and files are now gone. Temporary.
+Commit: 6599a806210e531904445fccab0792866d3bcb31 
+Author: Roger <roger@jikos.cz> Fr, 22 Jun 2007 23:20:01 +0200 
 
-Another major rewrite the event processing system suffered. Now events
-are processed in a nicer way, and the code is what I can now be proud
-about, again, unlike previous versions.
+    Changes to JID handling, avoid adding random hostnames and duplicating
+    contacts and display at least hostname for transports.
 
-Because of the mentioned above changes some parts of centericq's user
-interface things were changed. I don't feel like remembering all of them
-now, so just take a look yourself. What's for sure, they made the whole
-thing only better.
+Commit: e302fc10f261882726ad6e30709def7e63a110f0 
+Author: Andrey J. Melnikoff <temnota@kmv.ru> Do, 21 Jun 2007 20:07:16 +0100 
 
-4.5.1
------
+    fixed building when using separate build directories.
 
-Centericq now can display more users' ICQ details than it ever could.
-Now it can show gender, IP address, spoken languages, time zone and
-local time, interest names and categories, background info, etc. This
-part is finally ready.
+Commit: 7537d94a9194938ee7b47e17871467a890c3ccf3 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Do, 21 Jun 2007 17:37:27 +0200 
 
-Another improvement of the ICQ module affected finding users, an
-extremely useful feature which was disabled for a while because of
-moving centericq to the new protocol and the nice engine named
-libicq2000. The latter now supports white pages, and so does centericq
-:)
+    Fix for bug #1724170: removed carriage returns from the string to be signed
+    in the jabber status
 
-And finally, it's possible to update your own ICQ info with the "Update
-user details" item in the account manager dialog.
+Commit: 557bd0c9f4f9b0e6272ad1e6d53aca059f79f1bb 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Do, 21 Jun 2007 15:41:32 +0200 
 
-Sound actions associated with e-mail arrival events didn't work. Fixed.
+    Added an Out for Lunch status
 
-Account manager now re-reads IM logins information after changing
-something in the appropriate dialog.
+Commit: 09d8336a543936b732033bee616284c237502469 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Do, 21 Jun 2007 10:49:03 +0200 
 
-Another small bug was fixed. After editing details of any user on the
-list mannualy set nicknames which were to be shown on the contact list
-were reset to initial values.
+    Changed the mapping of the not available state on MSN
+    
+    In the MSN protocol the "Not Available" state of centerim was mapped to
+    "Out for Lunch". Now it is mapped to Away.
 
-Now it's possible to specify another ICQ server in the registration and
-account manager dialogs.
+Commit: 7d56ab5c5cece86711ab0cc5a070703fc7461083 
+Author: Petr Písař <petr.pisar@atlas.cz> Mo, 18 Jun 2007 14:49:30 +0200 
 
-Invisible mode works well now.
+    Czech translation update
 
-The FAQ was updated from the centericq.de fan club site :-)
+Commit: dfc61fa58a15b200c102b6ae2803dbc14f7eeb6d 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Do, 14 Jun 2007 22:17:54 +0200 
 
-AutoAway/AutoNA modes should work well now.
+    Fixed bug #1707708 which showed error 501 in the log console when adding
+    contact in Jabber connected to GTalk.
+    
+    Error 501 is a Feature Not Implemented error code and it should not be
+    reported to the user. It informs the client that the operation it attempted
+    is not supported by the server.
 
-A useful and very wanted feature was added. Now centericq can make a log
-file in which events such as users' going offline and online, as well as
-events receiption and sending are logged. It's possible to turn on with
-the "Configuration" dialog.
+Commit: fd43b51dcb5bcb68db374c651771f291ce896def 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Do, 14 Jun 2007 00:39:42 +0200 
 
-User group modes 1 and 2 were implemented. First one means users are
-arranged into groups on the first level nodes in the tree, and second is
-visa versa, e.g. online/offline has upper position.
+    Fixed bug #1734670: when logging off of MSN it did not hide the contacts
+    that were online
+    
+    Some calls to the functions to hide the contacts were missing during the
+    logout process. I added them to the hook so that the contacts are now
+    hidden on signout.
 
-Fixed a bug in libicq2000 which caused receiving only empty messages in
-authoriation requests.
+Commit: 0dc352bb153a59b57ea23de236d13a4dd8d7886d 
+Author: Anibal Avelar <debianmx@gmail.com> Mi, 13 Jun 2007 21:45:44 +0200 
 
-Now centericq (and libicq2000 too) can receive e-mail express and "you
-were added" messages from other users.
+    Fixed support for GnuTLS for Jabber and GaduGadu protocols
 
-The only known problem of this release, actually of the ICQ part, is
-that the version of libicq2000 included is not release one, and it has a
-bug related to accept status. I mean, if you send a message to a buddy
-who's using the Windows client and his status is occupied or N/A, the
-event won't reach him. And also it still segfaults on xterm resize event
-sometimes. Wierd.
+Commit: a1fa4eb3c56e91324ce3ab95ed7419b55c1b4935 
+Author: Andrey J. Melnikoff <temnota@kmv.ru> Mi, 13 Jun 2007 21:37:37 +0200 
 
-4.6.0
------
+    This patch simple move setting xterm title, avoid changing title when auth
+    request dropped due to antispam settings.
 
-Fixed a segfault used to occur every time on selecting "Find/add
-user(s)" item in the global menu under RedHat 6.2.
+Commit: 0a752e1f8b33b8baee25bc73bc437845e74fd74e 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 13 Jun 2007 21:35:41 +0200 
 
-Log messages reporting status change had old and new statuses swapped.
-Fixed.
+    Revert "This patch simple move setting xterm title, avoid changing title when auth"
+    
+    This reverts commit 1a55b206ef400415708ddb5696e7e141581236ba.
 
-Fixed incorrect update of zip code when changes were made manually in
-"Edit users" or update self details dialogs.
+Commit: 1a55b206ef400415708ddb5696e7e141581236ba 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 13 Jun 2007 21:34:51 +0200 
 
-Sounds for user online event type didn't work.
+    This patch simple move setting xterm title, avoid changing title when auth
+    request dropped due to antispam settings.
 
-Whitepages search was fixed a little bit, for the majority of age ranges
-were not respected.
+Commit: a6051d93a895970ea63a64ce204c9918a4a204fa 
+Author: Andrey J. Melnikoff <temnota@kmv.ru> Mi, 13 Jun 2007 21:27:43 +0200 
 
-Away messages support was added. It's now possible both set your own or
-fetch someone's else away message with centericq. Consult the README
-file for more details.
+    This patch add spk6 sound - simple bell. There is at least two stuppid
+    xterm
+    terminal emulator (xfce-terminal and gnome-terminal) which don't filter
+    timer tunine escape sequences.
 
-Socks proxy support related options were removed from the configuration
-dialog until this feature is really supported.
+Commit: b02b0d7c69f2e46c6b945f8eb2f7a00b827a5a3c 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 13 Jun 2007 20:55:29 +0200 
 
-URLs starting with "https://" are now fetched along with others from
-messages, users' details, and in other places where URL extraction is
-supported.
+    Incremented version number
 
-The README file was extended with e-mail express and away messages
-descriptions.
+Commit: 6fee29623e6f9c706de60793f7bd48f7ac1f68c8 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 12 Jun 2007 23:52:35 +0200 
 
-Fixed a bug caused inability to fetch self details when our own UIN was
-on the contact list.
+    Fixed bug #1719847 which prevented a user from logging in msn if the
+    contact list is empty.
+    
+    The libmsn library made the wrong assumption that after the group list
+    there is always a user list, which is not true if there are no users. This
+    prevented from setting the correct variable used to check if list
+    synchronization is complete
 
-4.6.5
------
+Commit: 2f4f23bc4019c686b2c84ae567b18cca671cbf2d 
+Author: z35 [Stephen Stegall] <z35_11@yahoo.com> So, 06 Mai 2007 16:34:01 -0400 
 
-Another really nice feature was added. Now it's possible to define
-external actions to be performed when centericq receives an event. Quite
-a flexible configuration file allows to execute actions depending on IM
-protocol, event type and your current status. This feature makes it
-possible to setup auto-answering, Elizatalk (a bot to make fun with your
-friends), remote control, events forwarding and whatever else your
-fantasy can say. More information you'll find in the README.
+    Fixed a couple bugs in chat resizing
 
-Added a bunch of command line options for putting events to the outgoing
-queue from the command line. Consult the man page and README for more
-information.
+Commit: 4ee1939db6db15a1862f52d42fe784cad5533f67 
+Author: z35 [Stephen Stegall] <z35_11@yahoo.com> Fr, 04 Mai 2007 09:21:39 -0400 
 
-Now it's possible to specify server address for MSN protocol.
+    Chat size is now limited by the MinPanelHeight Value, though there is
+    now a bug for when you are at the limits and one resizes the panel,
+    it exits instead of staying in the chat
 
-Fixed a bug that resulted in interests and background information
-doubling after every "edit details" attempt with users on your contact
-list.
+Commit: 24f26090d951b19b3ff703e67771a7680a6f8e29 
+Author: z35 [Stephen Stegall] <z35_11@yahoo.com> Mi, 02 Mai 2007 20:24:59 -0400 
 
-It was impossible to update own ICQ nickname. Fixed.
+    Chat panel fixes:
+       redraws chat panel when the history panel is resized
+       keeps the editor the same size on resize events
+    Todo:
+       redraw when the window is resized
+       change the .1 and .9 to MinPanelHeight based values
 
-Now timestamps are attached to "new mail arrived" messages in the log
-window.
+Commit: f881e8a72b40a1665ebdc33a8d19ad5627760d94 
+Author: z35 [Stephen Stegall] <z35_11@yahoo.com> Mi, 02 Mai 2007 17:38:00 -0400 
 
-Applied a patch for correct processing of Cyrillic letters for MSN by
-Walery Studennikov <despair@sama.ru>
+    Fixed the history updating when resizing various panels
 
-Applied a patch for transparent background support in some X terminals
-and switching status simultaneously for all the IM protocols together,
-by W.J. van der Laan <gnufnork@hetdigitalegat.nl>
+Commit: 4e6626d96d76de7a169ada8140458cd766952e3f 
+Author: J. Koster <koster@server.nocturnus> Do, 26 Apr 2007 21:07:17 +0200 
 
-Yes, the previous item means exactly that "sexy" transparent backgrounds
-in various terminals are supported now. It's implemented in the
-following way. Along with the standard color names there is the one
-named "transparent" which you can use in the colorscheme files.
+    Color contact by status bug solved
+    In the config options, when Color contacts according to: status
+    was selected, every contact displayed a short protocol name
+    between the brackets [i] instead of the status [o].
+    This patch makes it more consistent, but the disadvantage
+    is that in the color-by-status mode, you can't see the
+    protocol used by the contact.
+    
+    Solves bug: [1707935] wrong status of buddies in contact list
+    http://sourceforge.net/tracker/index.php?func=detail&aid=1707935&group_id=190480&atid=933528
 
-Size of contact list and log window are now proportional to the terminal
-size. Also they're re-calculated on every window resize event, which
-make a good use in various X terms.
+Commit: bf60468ac5a5fc57e9678bb0d9f2d3a5ad4bd429 
+Author: Jayjay <jayjay@twek.nl> Do, 26 Apr 2007 14:45:27 +0200 
 
-The log window and status bar contents are now saved during the terminal
-resize re-draws.
+    Clean up code, remove some warnings
+    I walked through the code using "CXXFLAGS="-pedantic -Wall ./configure"
+    and removed some warnings. Mostly, just code corrections.CG: -----------------------------------------------------------------------
 
-Fixed the segfault on terminal window resize. Proud to say now it's
-almost uncrashable. Anyway, if you saw it segfaulting in such a
-situation, drop me a line.
+Commit: d00624ed1e68173de13912bb3ec5e514c2a8215c 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 24 Apr 2007 11:31:40 +0200 
 
-Sometimes during UIN registration centericq consumed up to 100% of CPU
-time. Fixed.
+    Reinserted the check for openssl on the value specified by the user
 
-Trying to specify server for icq resulted in segfault. Fixed.
+Commit: 755b6aa74ac03d0a6c927f453dc43d59ac44f33b 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 24 Apr 2007 11:28:04 +0200 
 
-Finally sending SMSes through E-mail gateways supported by ICQ was
-implemented. I made a contribution to the libicq2000 source code in
-order to get it done, and another parameter called "SMTP server" was
-added to the centericq configuration dialog.
+    Resolved a conflict
 
-Fixed memory leaks that were occuring every time history view was
-invoked.
+Commit: 6e50670c3b6e5ae2053703234a7eb0d3bd0e9a03 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 24 Apr 2007 10:13:37 +0200 
 
-Fixed the libicq2000 bug resulted in inability to accept authorization
-requests.
+    Partly fixed the issue about closing panels. Now the minimum size for a
+    panel is 4.
+    
+    Also fixed automatic detection of the size if the lines on screen are too
+    small. Don't know if ti works as it should, though
 
-4.6.9
------
+Commit: 0a1e9de9843ee22bdca676d3db75b3097c3e599c 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 24 Apr 2007 10:11:06 +0200 
 
-Now when free disk space becomes less than 10k centericq goes offline,
-refuses to connect and doesn't touch configuration files to not to lose
-any data.
+    Changed the function mktemp to the safer mkstemp
 
-A compilation error with "twisted" versions of iconv was fixed by adding
-another check to configure.
+Commit: c4f04b99a6bea7951f18354aa0918e833babb40b 
+Author: Mark Pustjens <mark@unkie.org> So, 22 Apr 2007 17:07:19 +0200 
 
-The "Next" button was added to the history. It actually goes back, so it's
-called so to conform the UI look.
+    Alows you to disable the ICQ plugin.
+    Yes, that means it is now possible to build centerim withouth any plugin
+    enabled.
 
-Weird behaviour of the group mode 2 when there is only one contact list
-group defined was fixed.
+Commit: d0c0e285ce2a5200c7907edd695a0822d1c73179 
+Author: Jayjay <jayjay@twek.nl> So, 22 Apr 2007 15:35:31 +0200 
 
-When available, iconv is used for translation between koi8 and cp1251
-codepages instead of the internal routine.
+    Renamed old information to reflect current project status. More little stuff.
+    I searched for several old information, such as web addresses and mail addresses and replaced it. I also made some minor changes to several files. Here is a summary:
+    - Renamed every occurrence of Konst's old email address to the current one: konst@konst.org.ua to k@thekonst.net
+    - bug report location renamed in icqconf.cc to http://sourceforge.net/projects/centerim
+    - /po files: CenterICQ List <cicq@mailman.linuxpl.org> renamed to CenterIM SourceForge project; http://sourceforge.net/projects/centerim
+    - /po files: renamed every centericq-bugs@konst.org.ua to http://sourceforge.net/projects/centerim
+    - Updated .gitignore: added mkinstalldirs, changed /src/centericq to /src/centerim
+    - Updated po/.gitignore: centericq.pot to centerim.pot
+    - Changed the --help: added program name and version. Added status options at --statusCG: -----------------------------------------------------------------------
 
-Support for AIM TOC protocol was added. This means now centericq supports
-four IM flavours, which makes it even more useful tool. Now, looking at
-the centericq main screen I find myself a real schizophrenic with four
-IM "avatars". So there is another slogan for the program "centericq - the
-power of your shizo" :)
+Commit: e94ee85a93e0cb6a0de65567c9ceb60af2de8aaa 
+Author: Mark Pustjens <mark@unkie.org> Sa, 21 Apr 2007 11:23:42 +0200 
 
-HDD access was reduced by not reading away messages every second, how it
-was before. So now owners of laptops should have no worries about batteries,
-for centericq will allow their boxes to go to power saving mode.
+    Cleaned up some debug messages which got into the main branch.
 
-Fixed a bug with user's details fetching, resulted into weird behaviour
-caused by new-line character in any fields on the information.
+Commit: 7d2a4c313c33b76249a2e5625d6dc93db3530a13 
+Author: Jayjay <jayjay@twek.nl> Fr, 20 Apr 2007 18:13:03 +0200 
 
-This version also introduces the "relaxed" re-connect strategy. Every time
-it cannot automatically re-connect to an IM service, the try period is
-icreased by half of its previous value. This is made so that "turboing"
-situations are recovered without any user's intervention.
+    Renamed CICQ to CenterIM at various locations etc
+    - Renamed konst.org.ua to thekonst.net
+    - Fixed some typos: .CenterIM to .centerim
+    - Changed the configure.ac script to show warnings (-Wall)
+    - removed the cicqsync script, since we don't use CVS
+    - mentioned our current developers mailing list (do I break the PO files now?)
 
-Invalid username or/and password situation is now tracked and reported
-in the Yahoo! engine.
+Commit: 1ebaa156562353602b43331e5f5ce2c899fb4311 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 18 Apr 2007 00:01:08 +0200 
 
-Finally, a bug caused centericq to freeze (for protocols' activities)
-after "Ctrl-L" was fixed with a patch sent by Sergey A.
-Kogan <kogan@omskelecom.ru>
+    Cleaned the checks for OpenSSL
+    
+    The configure scripts in the subdirectories (connwrap and libgadu) tested
+    again to find OpenSSL. The code has been cleaned as to leave the checks
+    only in the main configure script.
 
-4.7.1
------
+Commit: f4169d4b389c95c0893deb1ff4f56c3cd6fc94a9 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 18 Apr 2007 00:01:08 +0200 
 
-Seems like I just cannot stop adding support for protocols. Thus,
-support for IRC was implemented in this version. It doesn't (yet?)
-support talking on channels and intended only for private messaging.
-Though, you can enter channels to be visible for other users staying on
-them. Channels are controlled with the "Channel manager" dialog which
-can be ivoked from the account manager. It's also possible to fetch a
-list of users on channels with the find/add dialog.
+    Cleaned the checks for OpenSSL
+    
+    The configure scripts in the subdirectories (connwrap and libgadu) tested
+    again to find OpenSSL. The code has been cleaned as to leave the checks
+    only in the main configure script.
 
-Since libicq2000 now does support visible and invisible lists, so does
-centericq.
+Commit: 42c21ce329a390829282ba6fafbf90ffa42278ca 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 17 Apr 2007 22:24:00 +0200 
 
-Now centericq can ask away messages when you change your IM status. This
-behaviour is controlled with the respective option of the configuration
-dialog.
+    Remove useless dummy file: m4 directory is created by the autogen.sh script
 
-Feature to change current IM status from the command line was added.
+Commit: 757738f9dec4d687f2b04c706a8228431e15c573 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 17 Apr 2007 22:22:52 +0200 
 
-The auto-away/auto-N/A behaved weird on remotely connected sessions.
-Fixed.
+    Corrected some entries
 
-All the lists of contacts such as contact list, search results, multiple
-recipients selection now highlight users from various networks with
-appropriate colors and have the quick-find feature which is possible to
-be activate with "/" or alt-s.
+Commit: 02cb03c74c09780eb4d79c88f7aa2d407aff0a52 
+Author: Mark Pustjens <mark@unkie.org> Di, 17 Apr 2007 19:32:34 +0200 
 
-ICQ invisible status of contacts wasn't shown. Fixed.
+    Modified configure.ac to make sure that if ssl is enabled automatically
+    libjabber and others are configured with the flag enabled.
 
-The bug which made it impossible to send SMS-es to oneself from the
-command line was fixed.
+Commit: 0ec32b6dfcd3af19245f58e2451eddd5c1384639 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 16 Apr 2007 23:49:51 +0200 
 
-Applied the collapsable groups patch from Bertram Bourdrez
-<bourdrez@casema.net>. So now a contact list group can be collapsed or
-expanded by pressing Enter on its header.
+    Improved SSL checking. Enabled SSL by default
 
-Now it's possible to move groups up and down the contact list with the
-group manager dialog.
+Commit: 193ad90d197b8c62cfe5eb46064701d69c5fdbfa 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 16 Apr 2007 22:48:24 +0200 
 
-It's also now possible to send messages to found users from the find
-results list without adding them to the contact list.
+    Inserted a couple of fixes from the master branch.
+    
+    Corrected a centericq.h in centerim.h
+    Fixed a bug that prevented from changing the browser.
 
-The crash with the "Broken pipe" message which happened after network
-interface's going down was fixed.
+Commit: eda4b79af41e687712405836f4b45895544d5064 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> So, 15 Apr 2007 21:31:09 +0200 
 
-The existing but not documented before -b parameter was finally
-documented both in README and in the man page. It allows to specify
-another base directory for the IM details and makes it possible to use
-different identities under the same UNIX account.
+    Added a check for lzo
+    
+    The configure script was not checking for lzo when ssl support is enabled.
+    I added a check for the library
 
-4.7.2
------
+Commit: a94f850688abddb09f9b56febfc75d16b3f92525 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> So, 15 Apr 2007 20:22:23 +0200 
 
-Chat messaging mode was implemented. Along with the text being typed you
-can see history of previous messages without invoking the history
-facility. It's possible to turn it on with the configuration dialog.
+    Fixed the checking for gpgme
+    
+    Detecting gpgme was broken because it always defined HAVE_GPGME, thus
+    making it mandatory. Now HAVE_GPGME will only be defined if gpgme is
+    available
 
-Fixed a bug resulted in eating up disk space when it's not possible to
-re-send events for quite a long time (several days, let's say). It kept
-on adding newline characters after each attempt.
+Commit: edebe193e3c69962cd718bd91b9b431f96e1bcfc 
+Author: Mark Pustjens <mark@unkie.org> Mo, 16 Apr 2007 19:10:38 +0200 
 
-E-mail and name substring search options were added to the irc find
-mode.
+    This adds automatic testing for openssl
+    Needed for the ssl patch to function properly in more situations
 
-The "Move to group.." item was removed from the context menu of a user
-which is not in list. Only "Add to list" can be used there.
+Commit: de30789fb20fec33c673249c60c1487ce94ec558 
+Author: Mark Pustjens <mark@unkie.org> Mo, 16 Apr 2007 18:53:51 +0200 
 
-Away messages didn't get recoded from koi8 to win1251, fixed.
+    Changed the default for --with-ssl to auto detect.
+    
+    Without ssl enabled no GPG support will be compiled into libjabber, which
+    breaks Google Talk support.
+    
+    When ssl is disabled the configure script will warn the user about this
+    fact.
+    
+    This patch needs testing to verify that it works for everyone.
 
-Switching IM status to offline (_) from the command line was broken.
-Fixed.
+Commit: c58fd8e0bf06312ffa3d45bc1c5b1c1a7733c018 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> So, 15 Apr 2007 21:31:09 +0200 
 
-4.7.5
------
+    Added a check for lzo
+    
+    The configure script was not checking for lzo when ssl support is enabled.
+    I added a check for the library
 
-Birthday reminders are now sent to the contact list as system messages
-from users.
+Commit: c81c4829be8e5474242f141ad086e994a0af10d0 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> So, 15 Apr 2007 20:22:23 +0200 
 
-An ability to store and load sets of search information under profiles
-was added to the "Find/add" dialog.
+    Fixed the checking for gpgme
+    
+    Detecting gpgme was broken because it always defined HAVE_GPGME, thus
+    making it mandatory. Now HAVE_GPGME will only be defined if gpgme is
+    available
 
-IRC search only by e-mail without channel specification was added.
+Commit: 5bf8635485a4d2e6f4ebf8f7b06a27836509cc73 
+Author: Stephane Bisinger <sb@storm.(none)> Sa, 14 Apr 2007 15:33:39 +0200 
 
-A segfault was fixed in the MSN part. It happened when a hotmail box was
-cleared entirely through their web interface.
+    Corrected a centericq.h in a centerim.h
 
-4.7.7
------
+Commit: 8eb2742141db8b1775b25381887a8438f54369a6 
+Author: Stephane Bisinger <sb@storm.(none)> Sa, 14 Apr 2007 15:20:10 +0200 
 
-Centericq now compiles well with the new 3.1 version of GCC compiler.
+    Revert "Port/rewrite of the captcha patch for centericq [1]"
+    
+    This reverts commit c14521f605ba4c854a989a3f31c045262783da10.
 
-Fixed a bug resulted into incorrect recipient choosing after performing
-mass history message forward from the chat mode.
+Commit: 97a14dccffebf4a7ab30b090b780200bf76be407 
+Author: Stephane Bisinger <sb@storm.(none)> Sa, 14 Apr 2007 15:18:33 +0200 
 
-The "Channel manager" dialog was extended so that it allowed to chat on
-IRC channels. To add a channel to the list you have to set "Show on the
-contact list" for it.
+    Revert "Fix to src/Makefile.am for the captcha patch"
+    
+    This reverts commit 16a5ccc2d6a0a97cbd3b9c2c96a2b8269bc06573.
 
-ICQ events sent to users with status "Occupied" or "DND" were lost.
-Fixed. Missed the workaround in the libicq2000.
+Commit: 15675f879de50b85770ec843317cb7f854b8b1fb 
+Author: Pavol Rusnak <prusnak@suse.cz> Mi, 04 Apr 2007 11:15:21 +0200 
 
-The cicqsync script now refuses to work with CVS version <= 1.10
+    Fixed GCC warnings/errors
 
-Bugs in the Yahoo! engine were fixed. They resulted into adding contacts
-with strange names to the list. Eventually the Yahoo! support in
-centericq became unusable because of some minor changes in the contact
-list transmission protocol part. It was a really stupid bug of the Yahoo
-library the program uses, and I immediately fixed it.
+Commit: 299e95cd2e7241c43a0b9493f8378e69093a66dd 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 03 Apr 2007 23:10:47 +0100 
 
-In the IRC module there was a problem with not detecting the case of
-inability to join a channel, and it also was silent when a user was
-kicked. Fixed, so that now it's detected and reported to the contact
-list.
+    Fixed issue #1693244
 
-4.7.8
------
+Commit: fa783ade0aae8d311b542c090af07f9d0123f2bb 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 03 Apr 2007 22:56:52 +0100 
 
-Now the source should compile well on Solaris OS. Thanks to Jochen
-Kmietsch <jochen.kmietsch@tu-clausthal.de> for initial portings efforts
-and to Lion Templin <lion@leonine.com> for providing an account on a
-Solaris box.
+    Corrected a bug that prevented the changing of the browser from the options
 
-Fixed a possible buffer overflow in the MSN e-mail notification
-processing code of the respective module. Thanks to KF
-<dotslash@snosoft.com> for finding and reporting it.
+Commit: 16a5ccc2d6a0a97cbd3b9c2c96a2b8269bc06573 
+Author: Mark Pustjens <mark@unkie.org> Mo, 02 Apr 2007 13:23:40 +0200 
 
-The cicqconv migration script now does also support micq. Thanks to
-Artur Komarov <artur@emd.ru>
+    Fix to src/Makefile.am for the captcha patch
 
-The centericq's own notification messages class used for such events as
-birthday reminders, away messages and other stuff, was separated from
-usual messages. That was done to avoid external handler's reacting on
-such messages like they were received from one of your contacts.
+Commit: c14521f605ba4c854a989a3f31c045262783da10 
+Author: Mark Pustjens <mark@unkie.org> Mo, 02 Apr 2007 12:08:00 +0200 
 
-The yahoo library used by the program was changed to the one of new
-generation. It would not happen unless the yahoo guys would leave their
-old protocol working. So one day centericq's yahoo support just became
-outdated and unusable. Anyway, now it's back, up and running, with
-several new features such as settable server address and port, and
-conferencing support.
+    Port/rewrite of the captcha patch for centericq [1]
+    
+    [1] http://forum.centericq.de/viewtopic.php?t=793
 
-As usual, several cosmetic bugs were fixed.
+Commit: f507e4909113aa4962b67a90dc68429c42635187 
+Author: Jayjay <jayjay@twek.nl> So, 01 Apr 2007 15:58:31 +0200 
 
-4.8.0
------
+    Updated several documentation files to reflect current status.
 
-Finally people started sending patches. This version includes a patch
-from Julien LEMOINE <julien@3rd.dyndns.org> that fixed several fribidi
-and gcc 3.1 specific problems. Also Josh McIver <jmmc@flaglink.com> has
-sent a patch that made centericq report when one of your Yahoo! contacts
-starts or stops typing on his side.
+Commit: c9c05a106d9917048f4192dea8a93fcd21c186fc 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 28 Mär 2007 21:01:45 +0100 
 
-Fixed a bug that led to segfalut when you pressed "r" on a group header.
+    Reverted status log messages to something a little more verbose.
 
-Fixed a bug in Yahoo! that resulted into inability to remove contacts in
-some situations. Just after they were deleted they rised from the dead
-again. It doesn't happen anymore.
+Commit: 9ae69e4087fa4336674a97baef0372da13d80d83 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mi, 28 Mär 2007 20:51:38 +0100 
 
-There was a problem with the chat mode, when a lot of people asked me
-how to accept an authorizaiton request. Now it's easy, upon receiving it
-will pop-up in a usual windowed mode.
+    Made the package compile against ncursesw when available
 
-The find/add dialog in the IRC mode was extended with a new option,
-called "Joined since the last check only". It will show only users
-joined since your last find/add request. It helps to view only those who
-entered a channel recently.
+Commit: e7146a7d4bc38883e4bdb57cf84feec5a9b60140 
+Author: Pavol Rusnak <prusnak@suse.cz> Mi, 28 Mär 2007 12:45:09 +0200 
 
-The authorization request displaying dialog was extended with a new
-"User info" button. It allows to view user's details before you accept a
-request.
+Commit: 614feebb1f936f14b090e06b107a46667c1fba0b 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 27 Mär 2007 21:19:24 +0100 
 
-4.8.2
------
+    reduced the text when changing status, according to Feature Request [ 1688383 ].
+    This text should be made configurable.
 
-Fixed the "r" key bug again. Shouldn't segfault anymore on pressing it
-on a group header.
+Commit: 1d34e6c1d8287888ebcee4a23a0314ca7e1bf08c 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> So, 25 Mär 2007 13:07:56 +0100 
 
-The ICQ part suffered a lot of changes that brought several major
-improvements. This happened after yours sincerelly decided to contribute
-a bunch of code to the libicq2000 project which can be found at
-http://libicq2000.sf.net/. So, here we go with the new features of the
-ICQ module.
+    Modified Makefile to use centerim as filename
 
-Random chat feature support. Now it's possible to search for a random
-chat partner in a specific group with the "Find/add dialog" as well as
-to announce your own availability with the "Update user info" item under
-the "irc" tab in the account manager dialog.
+Commit: 80fe945d0a51c416f5ede12269c2afd2d1057bc4 
+Author: Mark Pustjens <mark@unkie.org> Sa, 24 Mär 2007 20:00:18 +0100 
 
-Finally, a long-awaited feature got implemented. Server-based contact
-lists are now supported by centericq. By default, all the add and remove
-operations on your contact list are reflected server-side. Also, as soon
-as you login the contacts stored on the ICQ server get auto-added to
-your local list. Though it's possible to disable this, by setting the
-value of the "Store contact list server-side" in the "Update user info"
-dialog for ICQ to "no". To synchronize your local contact list with the
-remote one, i.e. to add the server-side missing items, use the
-"Syncronize contact list" item in the account manager dialog.
+    Fixed the drop icq requests issues, and fixed the panel resizing.
 
-Also, having a look at the newly implemented features of libicq2000, I
-found something missed in centericq. So, since this version centericq is
-able to perform keywords-based search, receive webpager events and
-control the visibility of your current ICQ status on the web.
+Commit: 9b3323e5806bb1bc39331935cb2a5399babb4b4e 
+Author: Oliver Hohlfeld <centerim@ohohlfeld.com> Di, 20 Mär 2007 00:21:07 +0100 
 
-There were user interface related changes as well. Visible and invisible
-contacts are highlighted in a special way on the contact list now. Read
-the README file for more details.
+    I started changing some names from CENTERICQ to CENTERIM yesterday. So
+    far I only pushed icqface.cc into the repository. This change will modify
+    the most visible name to CENTERIM ;-)
 
-When compiled with fribidi, it's now possible to disable displaying of
-right-to-left text by switching off the appropriate item in the
-configuration dialog.
+Commit: fac7ddfaf3cc998da765ca538250aeb64b7f22ed 
+Author: David Riebenbauer <davrieb@htu.tugraz.at> Mi, 21 Mär 2007 08:15:40 +0100 
 
-The event sending general-purpose routine was improved so that remote
-DoS/flood protection on the remove IM servers doesn't turn on because of
-hudge mass-sendings. Now messages that overflow the limit get postponed
-and sent in another 5 seconds.
+    quick and dirty hack to still support ~/.centericq/ as basedir besides
+    ~/.centerim/
 
-The configuration changes, as well as users' details, group settings and
-some other stuff is now saved immediately once it gets modified, and not
-only on exit, like it was before. Thanks to Wolfram
-Schlich <wolfram@schlich.org> for pointing this out.
+Commit: a3621a6e20a65e704165496fa4f4a1c95b7af0b7 
+Author: Mark Pustjens <mark@unkie.org> Mi, 21 Mär 2007 21:40:32 +0100 
 
-Fixed a bug that caused Yahoo! users raise from the dead (re-appear on
-the list) when a user attempted to delete a contact which had been added
-in the same session, i.e. without logging off.
+    Added a dummy file to make sure the m4 directory exists. If it is not
+    there, it can cause problems running autogen.sh (it does for me)
 
-4.8.3
------
+Commit: 875d46fa48d8806a921c99cc9ff26bdc67fee4ac 
+Author: Mark Pustjens <mark@unkie.org> Mi, 21 Mär 2007 15:29:01 +0100 
 
-Bug-fixes in the AIM part. These include the repaired feature to remove
-contacts from the contact list as well as the connect procedure that got
-broken on some boxes. Now the both things must work fine. So AIM support
-works even on the Jeff Covey's box right now.
+    Changed modified:
+    + Option to drop all icq authorisation requests, configurable using the
+      configuration dialog under anti-spam options
+    * You can now change the width/height of the dialog windows using { } [ and
+    * ]. This is not yet pefect as no redraw is done when a size is changed
 
-The command line parameter "--version" has been added.
+Commit: 13610a75a1b600f0f0a097e054eb91d6e84a06bb 
+Author: Oliver Hohlfeld <oliver@oliver.localdomain> Mi, 21 Mär 2007 10:12:00 +0100 
 
-The modifications in the previous version broke the command-line sending
-SMS to oneself feature. During fixing this one, I thought about another
-useful feature.. See below.
+    Partial history loading refinement
+    Author: Oliver Hohlfeld
+    Email: centerim@ohohlfeld.com
 
-Now it's possible to send SMSes to any phone number from the command
-line with the -n (--number) parameter. Also, if the ICQ login
-information is specified, it's possible to send SMSes to contact of any
-kind on your list through the ICQ network. This means that if a phone
-number is entered for a Yahoo, MSN or infocard contact, you're now able
-to send them an SMS with centericq.
+Commit: 0473e5b27121a122f41c69078b6ebeb8cc07667a 
+Author: Thomas Graf <post@thomas-graf.de> Di, 20 Mär 2007 18:52:18 +0000 
 
-The contact list synchronization feature was modified, so that now it
-doesn't send authorization requests automatically. It appeared that the
-ICQ server allows to store contacts server-side without it ;) Though
-instead of requesting it automatically, it's now possible to request one
-manually with the corresponding menu item that was added recently.
+    Some missing renames... I hope it compiles now...
 
-Several interface related issues noticed were fixed.
+Commit: 1e4c8089ca25021443b435a2002d6b344035cc8e 
+Author: Thomas Graf <post@thomas-graf.de> Di, 20 Mär 2007 16:40:13 +0000 
 
-4.8.4
------
+    Some renaming
 
-Sending and receiving contacts feature was implemented.
+Commit: 2fc251a126add9ec3e08c8b5cd6024f5cb18d669 
+Author: Julien LEMOINE <speedblue@debian.org> Mi, 21 Mär 2007 03:38:53 +0100 
 
-The contacts selection box in visible/invisible list adding mode now
-contains only items from the networks that support the feature. So far
-it's only ICQ, though.
+    Fix potential segfault (output of strstr is not checked)
 
-IRC NickServ authentification was implemented. The optional password
-field was added which can be filled up if necessary.
+Commit: fd694bd64896f95c89192d0987326c6e6bbd458a 
+Author: Julien Lemoine <speedblue@debian.org> Mi, 21 Mär 2007 03:33:16 +0100 
 
-Now, if the "Edit away message on status change" is enabled and all the
-away messages are the same for all the protocols that support the
-feature, it is displayed in the message edit box.
+    Fix buffer overflow in livejournal support
+    For details :
+    http://lists.grok.org.uk/pipermail/full-disclosure/2007-January/051663.html
 
-In the MSN the whole contact list is now read as soon as login is
-performed. Friendly nicks are substituted.
+Commit: 9f82b6f214ff41479b3b832ba6da88a1ed574dc2 
+Author: Oliver Hohlfeld <oliver@oliver.localdomain> Mi, 21 Mär 2007 00:29:47 +0100 
 
-Added two types of external actions that are executed before sending and
-receiving events. It gives users a possibility to process messages
-before they get to contactlist or history. Can be useful for on-fly
-ecryption/decryption as well as for other aims.
+    Partial history loading in chat mode - cleanup II
 
-The "Find/add users" dialog in the MSN mode was extended with one more
-parameter that allows to browse users who have us on their contact
-lists.
+Commit: 10cc0b53fc78a63d78ada90b1ba08c571cce726e 
+Author: Oliver Hohlfeld <oliver@oliver.localdomain> Mi, 21 Mär 2007 00:24:42 +0100 
 
-MSN contact-lists synchronization feature was added.
+    Partial history loading in chat mode - cleanup
 
-The "Prev" button was added to the event view dialog in the history
-browsing mode, so that it's possible to navigate the history in both
-directions.
+Commit: 1560dc2ea1c762ff1625052e573c637abdb5dfa3 
+Author: Oliver Hohlfeld <oliver@oliver.localdomain> Mi, 21 Mär 2007 00:20:13 +0100 
 
-4.8.5
------
+    Partial history loading in chat mode
 
-Fixed a bug that made all the yahoo, msn and irc contacts have female
-gender.
+Commit: c3e1f8eb5565a1af56566d80118e182cad95e24f 
+Author: Thomas Graf <post@thomas-graf.de> Di, 20 Mär 2007 18:52:18 +0000 
 
-A cosmetic bug was fixed. It used to appear on attempts to send SMSes.
-Nickname shown on the list changed to UIN and then quickly back to the
-nick.
+    Some missing renames... I hope it compiles now...
 
-IRC "version" requests now answers with the correct value of the version
-of centericq being used.
+Commit: 7c47881b66b5ba17725c81d53b4d7e2050ea400f 
+Author: Thomas Graf <thomas@xengeneral.(none)> Di, 20 Mär 2007 16:40:13 +0000 
 
-IRC ping command was added. Possible to be invoked from the context (f2)
-menu for any IRC contact who is online.
+    Some renaming
 
-It's now possible to change MSN friendly nick from the "Account manager"
-dialog.
+Commit: 7b8b2218011536dc13f6e0ae3cf637ec61252d6c 
+Author: Oliver Hohlfeld <oliver@oliver.localdomain> Di, 20 Mär 2007 00:21:07 +0100 
 
-For IRC channels there is now a possibility to join or leave them from
-the f2 menu without a need to go to the "Channel manager" dialog.
-Pressing "?" on a channel item shows the list of channel users.
+Commit: e07f36a8e76ed4d7b2f7c8fcad277bdbdfd47bf6 
+Author: Oliver Hohlfeld <oliver@oliver.localdomain> Mo, 19 Mär 2007 23:44:26 +0100 
 
-File transfers in IRC were implemented.
+Commit: 70728791dcc86f51c46d301b0d90b4cff00c3aeb 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Fr, 16 Mär 2007 08:44:26 +0000 
 
-A small change in the local mailbox check mechanism. New messages
-announced now only if the mailbox grown, to avoid announcements when
-some messages get deleted.
+    Applied Hakan's patch
 
-A patch to get rid of recently appeared problems with AIM was applied.
+Commit: 69e99491af8c3ae8e467341351d8a12fcbd802ff 
+Author: David Riebenbauer <davrieb@htu.tugraz.at> Fr, 16 Mär 2007 07:02:59 +0100 
 
-4.8.6
------
+    Merge with /home/davrieb/git-wc/centerim
+    
+    commit 70742bd896fdf89a5866b61bf85893d794b4244b
+    Author: Håkan Kvist <hagar@df.lth.se>
+    Date:   Fri Mar 9 22:02:29 2007 +0100
+    
+        patch, getting rid of some compiler errors
+    
+        This patch is just for decreasing the number of gcc warnings.
+    
+            Changed initialization order for some classes,
+            variables should be initializated in the same order
+            as they are defined.
+    
+            Changed some destructors to be virtual, since the classes
+            contained some functions that are defined as virtual.
+    
+            Some unused variables removed.
+    
+            Some functions that was declared as having a return value
+            did not return a value.
+    
+            Dumping the output (stdin and stdout) of make before my changes
+            generated a file with 4433 lines.
+    
+            After these changes the log file with 2329 lines.
+    
+            Flags used when compiling was:
+            CXXFLAGS="-O0 -pedantic -Wall"
+            CFLAGS="-O0 -pedantic -Wall"
+    
+    commit 893475d4cb775a38771354686ff5630af3725c3e
+    Merge: 08a16b1ac65408bfc658ab18ba03c34005b70cd6 32c5d537b7a6d999782a31027d1c6753c9264a7b
+    Author: David Riebenbauer <davrieb@htu.tugraz.at>
+    Date:   Thu Mar 15 20:11:34 2007 +0100
+    
+        Merge with git://repo.or.cz/centerim.git
+    
+    commit 32c5d537b7a6d999782a31027d1c6753c9264a7b
+    Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+    Date:   Tue Mar 13 19:10:06 2007 +0000
+    
+        Made link flags variable depending on selected protocols, eliminated some
+        warnings
+    
+    commit 08a16b1ac65408bfc658ab18ba03c34005b70cd6
+    Author: David Riebenbauer <davrieb@sbox.tugraz.at>
+    Date:   Tue Mar 13 16:59:54 2007 +0100
+    
+        configure.ac: compare with test rather than without
+    
+    commit 827ea51d89fa903afc4f394803bfd35ae03bf872
+    Author: David Riebenbauer <davrieb@sbox.tugraz.at>
+    Date:   Tue Mar 13 16:42:55 2007 +0100
+    
+        only display message about checking for gpgme if we really do
+        don't fail if no gpgme-config is found
+    
+    commit 56d56722693aba24c966b08b02edacfe193c4b06
+    Author: David Riebenbauer <davrieb@sbox.tugraz.at>
+    Date:   Tue Mar 13 15:32:27 2007 +0100
+    
+        make it possible to disable gpgme
+    
+    commit d3cf844d0a883aecb9ac6cefc0ba75e31e3c6a9f
+    Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+    Date:   Mon Mar 12 23:45:32 2007 +0000
+    
+        Corrected order of subdirs which prevented a correct build
+    
+    commit f762c548b817eff7b53c1b6a6071b17b14c8586f
+    Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+    Date:   Mon Mar 12 23:12:53 2007 +0000
+    
+        Reverted some changes
+    
+    commit ffe847a9ebb5dfe981680fe7a8d9e5cc7f127059
+    Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+    Date:   Mon Mar 12 22:35:39 2007 +0000
+    
+        Made build of subdirectories conditional
 
-Now all the "Not in list" buddies in Yahoo, AIM and MSN networks are
-removed from the remote list where they get temporarely added in order
-to not to appear next time on the persistent list.
+Commit: 70742bd896fdf89a5866b61bf85893d794b4244b 
+Author: Håkan Kvist <hagar@df.lth.se> Fr, 09 Mär 2007 22:02:29 +0100 
 
-Fixed the segfault problem in the Yahoo module. The crashes were caused
-by the latest version of the official client on remote.
+    patch, getting rid of some compiler errors
+    
+    This patch is just for decreasing the number of gcc warnings.
+    
+        Changed initialization order for some classes,
+        variables should be initializated in the same order
+        as they are defined.
+    
+        Changed some destructors to be virtual, since the classes
+        contained some functions that are defined as virtual.
+    
+        Some unused variables removed.
+    
+        Some functions that was declared as having a return value
+        did not return a value.
+    
+        Dumping the output (stdin and stdout) of make before my changes
+        generated a file with 4433 lines.
+    
+        After these changes the log file with 2329 lines.
+    
+        Flags used when compiling was:
+        CXXFLAGS="-O0 -pedantic -Wall"
+        CFLAGS="-O0 -pedantic -Wall"
 
-Fixed several nicknames-related bugs in the MSN module. Now friendly
-nicknames with spaces are shown correctly, as well as it's possible to
-set a nickname for yourself that contains spaces. Also the nicknames on
-the list get updated as soon as a remote changes their nick.
+Commit: 3de06b8d3552fb960301ccb7c62bf24efc6ed1a1 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 13 Mär 2007 20:16:38 +0000 
 
-The program now compiles and hopefully works well on the MacOS X/Darwin
-platform.
+    Added header files
 
-4.8.7
------
+Commit: 9f6cf60cd55e1bd9d41c8ec0c2b42b7a4ca310bb 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 13 Mär 2007 20:12:20 +0000 
 
-Several problems with Cyrillic characters were eliminated. It was
-impossible to perform ICQ White Pages searches using Cyrillic letters.
-Also when receiving messages with the letters used along with characters
-unknown for the koi8-r codepage, it resulted into showing it in bare
-cp1251. Also a guessing routine was written in order to be able to
-receive Yahoo! messages written both in cp1251 and utf-8 (the recent
-"improvement" by Yahoo).
+    First attempt to correct visualization of UTF-8 characters
 
-A patch written by Andreas Winge <d98winge@dtek.chalmers.se> was
-applied. The changes from it make it possible to join password-protected
-channels on the IRC network.
+Commit: 32c5d537b7a6d999782a31027d1c6753c9264a7b 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Di, 13 Mär 2007 19:10:06 +0000 
 
-"On fly" auto-reloading of configuration files was implemented, to
-eliminate the need to restart the program every time the files are
-changed. Centericq periodically checks them whether any modifications
-took place. If so, they get re-read. The ones that get re-read now are:
-sounds, colorscheme, actions and external. 
+    Made link flags variable depending on selected protocols, eliminated some
+    warnings
 
-The Yahoo! module was extended with the the feature to send and receive
-files, view conference members and creating own conferences. Before it
-was only possible to join to conferences being created by others. Also
-it's now possible to fetch custom status messages in the network.
+Commit: 08a16b1ac65408bfc658ab18ba03c34005b70cd6 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Di, 13 Mär 2007 16:59:54 +0100 
 
-4.8.8
------
+    configure.ac: compare with test rather than without
 
-Fixed a bug resulted into inability to read events received through the
-e-mail gateway and the ICQ web pager.
+Commit: 827ea51d89fa903afc4f394803bfd35ae03bf872 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Di, 13 Mär 2007 16:42:55 +0100 
 
-The MSN contact list items' duplication problem was fixed.
+    only display message about checking for gpgme if we really do
+    don't fail if no gpgme-config is found
 
-Support for the 6th protocol - Jabber, was added. It's already possible
-to send and receive messages, read away messages, maintain contact list
-and register new nicks. I heard a lot about the standard, but then after
-studying it a little, I didn't get disappointed, for it's really nicely
-designed. So, centericq is now delivering the power of the free
-communication standards to all the console freaks (like myself).
+Commit: 56d56722693aba24c966b08b02edacfe193c4b06 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Di, 13 Mär 2007 15:32:27 +0100 
 
-The build problem under the Redhat 8.0 distribution was fixed.
+    make it possible to disable gpgme
 
-The "Not in list" contact list node is handled in a nicer way now. When
-centericq is unable to read the status of a contact which is not
-included into the permanent contact list, it just doesn't show it
-eliminating cases when an offline contact is shown online just because
-it's not on the list.
+Commit: d3cf844d0a883aecb9ac6cefc0ba75e31e3c6a9f 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 12 Mär 2007 23:45:32 +0000 
 
-A long-awaited interface feature to open an event in the full-screen
-mode was added. Check out the F9 key in the message view mode.
+    Corrected order of subdirs which prevented a correct build
 
-4.8.9
------
+Commit: f762c548b817eff7b53c1b6a6071b17b14c8586f 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 12 Mär 2007 23:12:53 +0000 
 
-Due to the effort of Barnaby Gray, our fellow libicq2000 author, who
-eliminated the need for the libsigc++ in order to compile his library,
-centericq now does neither. I.e. we can count minus one additional
-requirement. Cheers.
+    Reverted some changes
 
-The F9 and F2 keys that execute full-screenizing of an event and showing
-its URLs respectively, now work in the chat mode too, acting with the
-latest incoming event from the remote user.
+Commit: ffe847a9ebb5dfe981680fe7a8d9e5cc7f127059 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 12 Mär 2007 22:35:39 +0000 
 
-Wrong Jabber IDs specification used to lead to segfaults. Fixed.
+    Made build of subdirectories conditional
 
-The "Find/add users" dialog was improved. In the searach by nick/UIN mode
-now it's possible to send messages to users without adding them to the
-permanent contact list.
+Commit: e7b5704870561f977d2ba7f48e81ec5ce27ced2e 
+Author: centerim-dev <centerim@jonatan.localdomain> Fr, 09 Mär 2007 21:36:40 +0100 
 
-A segfault was fixed which appeared on pressing F9 in user's details
-view mode.
+    Changed initialization order for some classes,
+    variables should be initializated in the same order
+    as they are defined.
+    
+    Changed some destructors to be virtual, since the classes
+    contained some functions that are defined as virtual.
+    
+    Some unused variables removed.
+    
+    Some functions that was declared as having a return value
+    did not return a value.
+    
+    Dumping the output (stdin and stdout) of make before my changes
+    generated a file with 4433 lines.
+    
+    After these changes the log file with 2329 lines.
+    
+    Flags used when compiling was:
+    CXXFLAGS="-O0 -pedantic -Wall"
+    CFLAGS="-O0 -pedantic -Wall"
 
-Jabber users directory search was implemented as well as the
-invisibility along with the visible and invisible lists support.
+Commit: 4688ed03d82fde4e2d9ea5256afa3147c7f8e036 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Fr, 02 Mär 2007 00:49:53 +0100 
 
-The Jabber does now have support for the SSL connections with the
-server.
+    change the project and executable name to centerim
 
-Several interface related fixes were also made.
+Commit: e7f7d0d0ced07bfb819620f2de59b7e82802fed9 
+Author: Håkan Kvist <hagar@df.lth.se> So, 25 Feb 2007 21:20:05 +0100 
 
-4.9.0
------
+    Compiler warnings when compiling centericq
+    
+    Hello
+    
+    I think that centericq would benefit of getting the number of compiler
+    warnings minimized when compiling with the options -Wall -pedantic
+    (with gcc/g++).
+    
+    This would hopefully improve the quality of the code, and hopefully
+    get rid of some memory leaks.
+    
+    Enabling these today will print out ALOT of thingies that gcc could be
+    improved.
+    
+    I have created a small patch wich makes it possible to compile with
+    the -pedantic flag (attatched).
+    
+    regards
+    Håkan
 
-The FAQ document was extended with some more entries.
+Commit: 68fccfadafb204fb091f145252512f78b02f5c24 
+Author: Håkan Kvist <hagar@df.lth.se> So, 25 Feb 2007 22:45:00 +0100 
 
-The Jabber module was improved. Now it also supports registration on
-various agents that have the feature, as well as fetching others' and
-modifying your own vcard information. Groupchat was added, and nicknames
-in roster get updated as soon as you change them on the centericq
-contact list.
+    Patch attempting to take care of some memory errors
+    
+    David found an error in my patch (you shouldn't do delete on a
+    void*), and have allready reverted that particular change in the repositry.
+    
+    Attatched patch registers a callback for objects of type icqcontact,
+    so that elemnts of this type gets properly deallocated (wtih delete).
 
-The UI approach to channels and conferences was changed dramatically.
-There is no "IRC Channel manager" anymore. It was replaced with the
-"Join channel/conference" dialog which is invoked from the F4/g-menu.
-All other operations with channels are done from the contact list
-directly, with the help of commands mentioned in the F2-menu when the
-hostkey is pressed on the corresponding entry.
+Commit: 744aaae51e509ff84dd0051a68d811b477aa458c 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> So, 25 Feb 2007 07:38:55 +0100 
 
-The MSN module migrated to the MSN library written by Meredydd Luff
-<m_luff@wincoll.ac.uk>. It's way better than the previous one, it's more
-stable and doesn't hang waiting for data to be received, supports typing
-notifications and extended new mail notifications.
+    Revert the change to delete in this one place.
+    It triggers a compiler warning and doesn't seem to make a difference
+    anyway.
 
-4.9.1
------
+Commit: 574d5c377de72236b700d229cb9893d15ab1b367 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> So, 25 Feb 2007 04:38:32 +0100 
 
-Now the "Reject" button in the Jabber authorization request view window
-works. It appeared that it wasn't enough just to ignore such a request,
-because in this case it keeps on coming next time you log in.
+    add dummy.c to sources to avoid failure when attempting to build without
+    libmsn
 
-In the "Configuration" dialog it's now possible to specify a port range
-for peer-to-peer connections. Since only the ICQ module in the program
-supports such kind of communications, obviously only its port listening
-mechanism will be affected.
+Commit: f835137635c8a18058c65f009c4fd5e43d5ffa8b 
+Author: Håkan Kvist <hagar@df.lth.se> Sa, 24 Feb 2007 21:50:53 +0000 
 
-Jabber contact list synchronization was implemented. Let me remind you
-here that in centericq synchronization means a process of reflecting the
-local contact list remotely, e.g. if there are contacts that are on your
-local list in centericq, but they're not stored server-side, they get
-uploaded remotely as soon as you run the respective procedure.
+    Checked couplig of malloc with free, new with delete and new[] with delete[]
 
-MSN phone information fetching was implemented.
+Commit: b6873e05a53faa1a2f745888851cfb666a6ededf 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Fr, 23 Feb 2007 21:27:01 +0000 
 
-Another discovered feature of the ICQ network was that if a remote user
-is not online currently, then a message for him which gets stored
-server-side is cut to 450 bytes. Centericq now has a workaround for such
-a situation: it splits offline messages into pieces 450 bytes each.
+    Fixed failure when build with aim and irc disabled.
+    Updated the md5 library
 
-The password change option was implemented in ICQ and AIM modules. Look
-at the "Update details" dialogs.
+Commit: d9569bf047a846cbf44d99f88c3988a1efb20693 
+Author: Andreas Niederl <rico32@gmx.net> Fr, 23 Feb 2007 19:26:27 +0000 
 
-MSN kept on repeating "you were added" messages. Fixed.
+    Patched make dist, not it works
 
-Users on the ignore list should have been ignored even if they sent add
-notifications or authorization requests, but they were not. Now they are.
+Commit: cdcb394d039f35fc3d69f3b1f85c47a186243b4e 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Mi, 21 Feb 2007 21:01:06 +0100 
 
-Jabber registration caused segfault if there was a space in the "Login"
-field. Now, the "wrong jabber id" problem is reported in such a
-situation.
+    remove EXTRA_DIST from kkconsui/Makefile.am
+    this should stop make dist from failing
 
-When you had your own Jabber contact on centericq contact list, it
-wasn't possible to update details. Fixed.
+Commit: c5a7d66b6c2c5022c0f57801e1e0dc8594c2e216 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Mi, 21 Feb 2007 19:19:16 +0100 
 
-Adding and reading information about server-side contacts when they're
-read as a bunch of the first connect with centericq is now done slower,
-with necessary timeouts and stuff. Because of this workaround the server
-is supposed not to kick us out because of flood anymore.
+    make git ignore "some" generated files
 
-4.9.2
------
+Commit: 60c4e8f78c4f8f7bc564c0405f36c67cbac271bf 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Mi, 21 Feb 2007 18:25:04 +0100 
 
-A problem resulted into ignoring bold attributes on the colorscheme file
-auto-re-reading was fixed.
+    rename all configure.in to configure.ac
+    This avoids some odditties on Debian which chooses the autoconf version by
+    looking at each filename
 
-The SENDER_NICK environment variable for scripts executed on events
-related to MSN contacts had been set incorrectly. Fixed.
+Commit: f7986c7ab77aa7a1f57a8b1d7935fe2908307f41 
+Author: Andreas Niederl <rico32@gmx.net> Mi, 21 Feb 2007 03:07:25 +0100 
 
-Several small patches from Julien LEMOINE <speedblue@debian.org>, a
-Debian developer, were applied.
+    Fix build problems with openssl.
+    I found the source of my ssl-related problems: --with-openssl had 'no'
+    as default value in the top configure.ac, so --with-ssl chose gnutls but
+    the other configure scripts in connwrap and libgadu wanted to build with
+    openssl.
+    
+    I've attached a patch which fixes this by removing the default 'no' to
+    with-openssl.
+    
+    Additional changes:
+     * --with-gpgme typo
+     * reordered ssl output
+     * with_ssl=no as default for connwrap and libgadu, so consistent
+       behaviour is guaranteed
+     * unconditional AC_PROG_CXX in libgadu, libjabber and libyahoo2 for
+       fixing the conditional errors when built without one of those libs
 
-Now the centericq build procedure can automatically find and use the
-alternative SSL library, called GnuTLS. Old versions of OpenSSL called
-SSLeay will work with centericq now too.
+Commit: 2d672d78e8bc31d04b9dd6e36b6c8f56d7a2f73a 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Mo, 19 Feb 2007 08:18:02 +0000 
 
-User info "manual" external actions were implemented, so that now it's
-possible to define various operations to be performed with users on your
-contact list. You can bind the host(1) command for ICQ contacts to
-comfortably lookup their domain names, for instance. More info in the
-README chapter 9.3.6.
+    Updated help strings, corrected a spelling error
 
-The external actions definitions file format was extended with the
-new "nowait" option which makes centericq not to wait the action
-code to finish.
+Commit: f975de0d1de22ea425910aa2bfb5636b97205f6a 
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com> Sa, 17 Feb 2007 00:21:00 +0000 
 
-Since external actions can also process outgoing messages (%pre-send),
-the environment variables for scripts were renamed from SENDER_* to
-CONTACT_*.
+    Updated kkstrtext/configure.in to newer syntax. Moved it to
+    kkstrtext/configure.ac . Added a line that copies config.rpath from the
+    main directory in kkstrtext, needed for the AM_ICONV_LINK macro
 
-The Jabber module was modified so that now it treats correctly all the
-data encoded in UTF-8, including nicknames in roster, user information,
-and so on.
+Commit: a6315341b966d060c2f458d0c7465b5a193c03af 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 15 Feb 2007 20:20:16 +0100 
 
-The centericq configuration now gets saved on receiving the SIGTERM
-signal. Useful if you don't wanna lose your recent settings on reboot.
+    update the changelog with my changes
 
-Shells others than /bin/sh didn't work in external actions. Fixed.
+Commit: 01768d0ecb48f4523cce0a55cd2fe4a7ee21cccb 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 15 Feb 2007 14:08:29 +0100 
 
-In the adding to visible/invisible list selection box contacts that are
-already on the list are not shown anymore.
+    commit po files with updated line numbers
 
-4.9.3
------
+Commit: 871bd65ea9fc48639027e56ed56a953eeff61fa8 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 15 Feb 2007 14:05:44 +0100 
 
-Glib is not needed to build the program anymore.
+    add md5.h to the distributed files
 
-The old nickname didn't appear in the change nickname input line which
-was invoked from the Account manager dialog.
+Commit: 94338eeb74c2ff9de34416961b55402a3fa68cce 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 15 Feb 2007 13:59:24 +0100 
 
-Logging became more configurable. Now from the configuration dialog it's
-possible to enable/disable such facilities like log messages timestamping,
-showing of users going online and offline and "user is typing"
-notifications.
+    use cd and cd - instead of pushd and popd
+    pushd and popd don't seem to be available in all shells
 
-The --bind command parameter was added. Using it it's possible to specify
-a custom IP centericq should use for outgoing connections.
+Commit: 1f450c4f0a35daf1624159cb1b027b6abee761d0 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Mi, 14 Feb 2007 00:14:44 +0100 
 
-Several patches from Julien LEMOINE <speedblue@debian.org> were applied.
-Among them there was emacs key bindings config option.
+    don't distribute mkinstalldirs any more b ecause a current automake doesn't
+    need it any more
 
-The join/part IRC messages are now visible, as well as channel topics.
+Commit: ba394b4eb9cc093f8f002f2c23878605abd6bd00 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Di, 13 Feb 2007 22:01:41 +0100 
 
-MSN status related problems were fixed. Like when user set "one the phone"
-or "lunch" status centericq used to show them as being offline.
+    bump version to 4.22.0
 
-Minor problems in the Jabber module were fixed. Also, now the program shows
-a list of users on a channel.
+Commit: 6f1a3e69ca5516ce2da998baa498f2cbb6abd1f5 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Di, 13 Feb 2007 20:36:37 +0100 
 
-A patch from Mark Verboom <mark@verboom.net> was applied. It allows to
-enable chat mode only for specified protocols.
+    seconds_in_timestamps by Sebastien Delafond <seb@debian.org>
+    
+    Add user setting to display timestamps up to the second.
 
-It's possible to enable Russian translation only for selected protocols
-now as well.
+Commit: c86207b4afda3cb5c755f19f989976d421965f1b 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Mo, 12 Feb 2007 15:59:25 +0100 
 
-Eliminated a bunch of warnings in the kkconsui and libicq2000 code.
-Speeded up the compilation a little bit.
-
-Ported to Cygwin. Now it's possible to build centericq as a native Win32
-application.
-
-4.9.4
------
-
-The Russian win1251/koi8 translation configuration parameter got enabled
-every time centericq started, even if it was turned off before.
-
-The find/add users dialog didn't allow entering nicknames, which made it
-impossible to add yahoo and aim contacts.
-
-Timestamps in the log window got duplicated on every terminal resize
-event.
-
-Several other minor problems were fixed.
-
-4.9.5
------
-
-If you're against M$, don't wanna use Yahoo! or find Jabber too
-complicated, since this version all of your religious reasons should be
-satisfied. You can also save compile time, money you'd spend on new HDD
-(since the current one is not enough for the centericq binary), etc :)
-What's it all about? Well, it's about build-time disabling of not
-desired protocols. For example, if you use the --disable-yahoo parameter
-with the centericq's configure script the Yahoo! module won't be
-compiled in. The same is valid for all the other modules except for ICQ.
-
-Internal RSS reader module was implemented. You can now easily add a
-feed to your list from the menu, and stay tuned on news at your
-favourite sites. See the README for details.
-
-Users who set their status to "away" on the MSN network appeared offline
-in centericq. Fixed.
-
-Jabber online/offline events were not shown in the log window. Fixed
-this one too.
-
-Fixed a bug because of which centericq couldn't connect to networks
-other than ICQ when the --bind parameter was used.
-
-ICQ away messages requests are now shown in the log window.
-
-SMSes in Russian now work (with operators which support Cyrillic of
-course).
-
-Auto-wrap was disabled in the internal editor, so now it's possible to
-paste text and it will not get screwed up.
-
-Jabber conferences were fixed. Actually, a small workaround was added
-for a weirdness of jabber.com server.
-
-Jabber passwords hash authentification was enabled.
-
-4.9.6
------
-
-The internal RSS parser suffered some changes that enabled it to undestand
-the RDF dialect as well as CDATA values. Some problems related to fetching
-all the records on every check were fixed.
-
-RSS checking delays are now specified in minutes, not in hours.
-
-The "Reply" button was removed that used to appear in the message box
-when reading RSS records.
-
-Correct redirect processing was implemented in the HTTP module used to fetch
-RSS documents.
-
-HTTP proxy support was added. So far it's used only for RSS fetching.
-
-History lastreads checking was improved. Now centericq shouldn't show the
-unread messages mark for contacts you communicated with during some clock
-skews.
-
-Auto-reconnect appeared not to work for the ICQ protocol. Fixed.
-
-It's now possible to join a Jabber conference by its JID, without a need
-for a service to be registered on the server. Example:
-"jdev@conference.jabber.org" in the "Name/Title" field.
-
-Since Jabber IDs are not case sensitive, centericq treats JIDs written with
-capital and small letters the same way.
-
-The status change window was improved. Now it has the "All protocol" item on
-the top along with newly added "Already logged in only".
-
-The cicqconv contact list conversion utility was extended with ICQ list
-support for Trillian written by Vassilios Karakoidas <bkarak@aueb.gr>.
-
-Jabber authentification became smarter. If server doesn't support digest
-authentification, it's not tried anymore. The point was that the new
-digest practice made it impossible to login into server which didn't
-support md5 digest auth. Fixed.
-
-HTTP proxy support for fetching RSS feeds was fixed. It used to segfault
-the application in some situation.
-
-4.9.7
------
-
-The "away message was requested" log message for the ICQ protocol was
-removed. The point is that receiving such a packet doesn't always mean
-someone requested it manually, but it happens very often that client
-programs fetch away messages on their own. Like when your status is
-away.
-
-The problem with the Yahoo! protocol which appeared recently was fixed
-with updating libyahoo2 to a newer version and hacking into it the fix
-code borrowed from GAIM.
-
-Applied a patch from Daniel Lublin <daniel@lublin.se> which makes it
-possible to define colors for incoming and outgoing history items
-separately.
-
-Sending messages by simply pressing the Enter key was implemented.
-Protocols list is configurable. So if you'd like to have such a feature,
-let's say, for irc, but leave icq as it's now, you can easily do it from
-the configuration dialog.
-
-Fixed several problems that used to appear when only one IM protocol was
-configured. For instance, it was unable to change the status. Thanks to
-Justin Scott for bug-report.
-
-Vassilios Karakoidas sent a patch for cicqconv which added converting
-some more Trillian contact items into centericq.
-
-Several grouping related problems were fixed. Sometimes groups got
-messed up. Now it shouldn't happen anymore.
-
-"User is typing" messages were removed from the log window. So now you
-can see a "T" letter in the brackets sometimes appearing there instead
-of online status.
-
-The "Default charset" parameter was added to the configuration dialog.
-It's a replacement for the hard-coded #define used to specify the
-explicitely used charset before.
-
-Several build problems on RH9 were fixed. The fix also eliminated
-problems ones had using the cicqsync script to fetch daily CVS updates.
-So if you had problems with it, just give it another try. And in case
-there are some other problems, consider reading this:
-http://centericq.de/docs/faq.php
-
-And now there is the most sick piece of centericq news ever. Since this
-very version, it supports LiveJournal. LiveJournal is an amazing blogs
-community which uses its own fully open source technology. It also has a
-client-server protocol, so I though we could make use of it in the small
-proggy. Connecting is simple: if you have an LJ account, just go to the
-account manager and introduce your login and password there. As soon as
-you login, you'll have a brightly colorized online item named
-<your_username>@lj, which you can use to send LJ posts. Also there will
-be your friends' journals automatically imported as RSS feeds. More
-details about LiveJournal at http://www.livejournal.com/
-
-Donating via webmoney is now supported. For those of you who for some
-reasons don't have a possibility to register a paypal account, but still
-want to reward me for my hard work, can make a donation via webmoney. A
-sum proportional to happiness and satisfaction you have of using
-centericq, can be sent to the webmoney purse Z846530103960. I also want
-to remind you that the old good paypal is still functional, and you can
-find a direct link to donations at the centericq homepage at
-http://thekonst.net/en/centericq/. Thank you for your support, guys!
-
-4.9.8
------
-
-MSN support was removed because of possible legal problems with the new
-protocol.
-
-LiveJournal posting parameters were added. Now it's possible to specify
-subject, mood, music and flags such as whether to allow comments or not,
-etc. It will be possible to detect music being played by the next
-version of orpheus (http://thekonst.net/en/orpheus) automatically ;)
-
-A set of LJ friends management features was added. Now you can add
-friends to your account directly from the "find/add" dialog. Also,
-deleting friends from the centericq contact list automatically sends
-respetives requests to the main server. Another neat feature is that
-centericq will now inform you when someone adds or removes you from
-their friend lists. Centericq does also keep track of birthdays of your
-LJ friends.
-
-Line breaks in LJ friend feed now look better.
-
-AIM buddy list is now automatically imported on every login.
-
-The Jabber module now works better with transports to other networks.
-
-On some systems codepages didn't work properly unless it was specified
-exactly like "utf-8". So I replaced all the occurences of "utf8" with
-"utf-8".
-
-Yahoo! weird disconnects were fixed by applying a patch made by Chris
-Drake.
-
-A patch by Andreas Winge to enable the "/me" command for IRC was
-applied.
-
-Applied a patch from BenV which enables qmail Maildirs checking.
-
-Some weird memory leak problems seem to be gone now.
-
-A segfault on some of wrong RSS feeds was fixed.
-
-When everything but icq was disabled on build it, the linker couldn't
-find some symbols. Fixed that.
-
-4.9.9
------
-
-Yahoo! search was implemented. Now it's possible to find users by
-keywords and names from centericq.
-
-Yahoo! and Jabber server-side groups are now reflected on the contact
-list. Also, any change made on the list being online is immediately
-reflected on the server. This is something I'm planning to do with all
-the supported protocols soon.
-
-LJ support was improved. Now messages that were written offline are
-stored and the get posted ok. Also, it's now possible to post comments
-on LJ postings of your friends without a need to launch a web browser.
-Also, the find/add dialog for LJ was extended with the "Show users who
-have you on their list" option.
-
-A small bug in the LJ posting dialog was fixed. Now there are three
-values of the "security" field, just like it should be.
-
-The RDF support got broken somehow in the previous release. Fixed.
-
-Crash on removing of Yahoo! users was fixed.
-
-IRC didn't remove nicks of users who were kicked from the channel
-members lists.
-
-Jabber registration attempts gave a connection error message. Fixed.
-
-Talking about Jabber, now it's possible to specify the value of the
-priority parameter for a session. Thanks to Mikael Berthe for the patch.
-
-Applied a small patch from Mikael Berthe to enable hotkeys in the status
-selection menu. The hot keys are status codes, like 'o', 'a', 'n', etc.
-
-Passwords are not stored anymore in the input lines history (invoked
-with Alt-H).
-
-Since now, the annoying Yahoo! color codes are removed from messages.
-
-Fixed a rare bug which led to auto-adding of people who drop-in into
-your contact list on Yahoo! after the program got crashed.
-
-4.9.10
-------
-
-Survived another Yahoo! protocol change. Thanks to Lucas Nussbaum and his patch
-for gaim that I used to update centericq's branch of libyahoo2.
-
-Moving of contacts between groups made easy due to the brand new "Mass group
-move" feature which you can find in the general actions menu.
-
-E-mail addresses used to disappear from ICQ details. Fixed.
-
-Applied patch by Ivan Daniluk to enable HTTP connecting through proxies. For
-RSS only. Now, if you specify proxy address in the form of
-user:passwd@host:port, necessary authentification will be performed.
-
-During the build process on BSD-like systems (including MacOS X) configure
-couldn't find iconv. Fixed that.
-
-Importing of LJ friends can now be disabled in the Account manager dialog.
-
-Contact list synchronization feature was removed, because due to some specific
-things of IM severs sometimes it didn't go smoothly and provoked too much
-weird questions from users.
-
-Some Yahoo! improvements related to Cyrillic and big-endian machines support
-were made.
-
-IRC /raw command was implemented.
-
-RSS displaying was improved. Now URLs of links and images are shown in
-text of feed items.
-
-LJ comments posting was removed, because it didn't work due to some recent
-protocol changes.
-
-The "Force check" item for RSS feeds got its own shortcut. The magic key is
-"c".
-
-4.9.11
-------
-
-MSN protocol is back.
-
-LiveJournal can now use the http proxy setting from configuration. Patch by
-Ivan Daniluk.
-
-Welcome another IM in the centericq family. Support for the Polish Gadu-Gadu
-was added. Can be disabled like any other using --disable-gg command line
-parameter for configure. Though better just try it out.
-
-Server-side groups were implemented for the ICQ protocol. Now, I know it can
-be kinda flustrating to move your contacts into different groups again, but
-this way you'll have them arranged nicely on the server, not only locally
-in your centericq contact list. It must make you a little happier about it,
-as well as the fact that we have the "mass move" function.
-
-libiconv linking problems were fixed.
-
-A problem with Jabber conferences was fixed. In the "Join Channel" dialog
-the service textual description was used instead of chat service name.
-
-Codepages conversion was extended. Now it's possible to specify charsets
-from and to which you'd like your messages to be (de-/en-)coded. Must be of
-great use for those languages that use different charsets on different
-platforms, just like koi8 and cp1251 for Russian.
-
-The -v command line parameter now lists protocols that were enabled on
-the build time.
-
-ICQ password change was removed, for it's broken.
-
-A bug was fixed that caused centericq not to work properly with eJabberd
-servers.
-
-The cicqsync script was improved, so that it works on *BSD and Solaris
-systems now.
-
-Search load bug was fixed. It caused some searches to load incorrectly.
-
-The configure script now checks if SSL support is on before enabling the
-MSN module. SSL is really necessary for MSN to function, so there is no
-joke about it.
-
-Now it's possible to use wildcards for protocols in the sounds configuration
-file. Patch by Marc Thoben.
-
-"Sent on" timestamps are now displayed for protocols that support it. Patch
-by by Heitham Omar.
-
-Now it's possible to scroll a message in the full-screen mode invoked with F9.
-
-Another useful option was added to the configuration dialog. Now you can
-make your non-IM contacts such as rss feeds and infocards show up as being
-online all the time. The option is called "Always online non-IM contacts"
-and it's possible to chose protocols to be shown always online.
-
-Configurable key bindings patch by Daniel Kraus was applied.
-
-4.9.12
-------
-
-On MacOS and Sun systems there was a problem using --disable-proto
-parameters of the configure script. Been there, fixed that.
-
-It was impossible to turn on character set conversion for the LJ
-protocol. Fixed.
-
-Another nasty bug was related to the new configurable keybindings
-feature. Default configuration files were not created on a fresh run and
-also in case the program couldn't find them, so it was a real trouble.
-
-Now, invoking the multi-contacts selection dialog, you'll see groups and
-be able to select/deselect whole groups as well.
-
-The support for Gadu-gadu did also suffer some important changes. Now
-one can change their info on the network and search for other users. A
-new yet important feature was added: now, if there is libjpeg installed
-in the system, it's possible to register new UINs.
-
-The "Enter key sends" feature lost its functionality in the previous
-version. Fixed.
-
-MSN used to crash on long messages. Fixed as well.
-
-Jabber module now sends keepalive packets from time to time.
-
-4.10.0
-------
-
-Problems with displaying national characters that used to happen on some
-systems were fixed.
-
-Centericq was moved over the new C++ library for MSN written by Mark
-Rowe, a 18 years old guy from the New Zealand. His libmsn is really
-cool.
-
-Applied patch by Iulian Ciorascu that made Jabber not to block when
-establishing an SSL connection.
-
-A small patch by Daniel Lublin was applied. It makes centericq save
-postponed messages. Also if a contact has an unfinished message, a ">"
-characters appears next to the nickname on the contact list.
-
-Centericq now announces the "can receive RTF messages" flag to the ICQ
-server. This fixes the old Cyrillic+Latin characters problem, when the
-former become question-marks. Thanks to Sergei Dolmatov for helping me
-implement and test this one.
-
-When trying to send an event from command-line and there is no
-destination contact on the contact list, it is automatically added now.
-This behavious was chosen instead of the old one when centericq refused
-to send events to contacts that were not on the contact list.
-
-The LiveJournal part now brings the friends-only items too. They are
-fetched using the HTTP digest authentification mechanism. I added that
-to my HTTPClient class, which you can use in your GNU programs also,
-since it's quite a nice and quite advanced implementation of the
-protocol.
-
-On Yahoo! and MSN, when another simultaneous login is detected centericq
-doesn't ever try to reconnect.
-
-The Yahoo! protocol suffered another auth scheme change, after which all
-open-source clients became non-functional again. Applied a patch to
-libyahoo2, looks good so far.
-
-Several minor interface-related bugs were fixed.
-
-4.11.0
-------
-
-HTTP CONNECT method is now supported. This means that if this feature is
-enabled on your HTTP proxy server, you can use it to connect to your
-favourite IM servers. You can also specify a user/pass pair if your
-proxy requires authentification.
-
-Applied a patch by Alexander Kanevskiy that fixed a weird behaviour of
-the LJ import friend option in the accounts dialog.
-
-In the multi-contact selection window not all contacts were shown unless
-arranging users into groups was on in the configuration dialog.
-
-GG used to disconnect when setting its status to N/A. Fixed that.
-
-When LJ import friends feature was off deleting LJ friends from the list
-was reflected server-side. Not it happens only if LJ friend
-synchronization is on.
-
-Now centericq only saves postponed messages if they contain at least one
-character other than space, tab or a line-feed.
-
-Centericq used to hang right at the start on some machines. Fixed that.
-
-Sending Cyrillic letters over Yahoo! seems to be fixed now.
-
-Centericq now sets its own title text in xterm and screen. The aim of
-the messages in the title is to inform the user upon events receiving
-and such.
-
-Applied a patch by shaky that introduced status modes with descriptions
-into GG.
-
-RSS feed contact-list items now support specifying of login and password
-for basic HTTP authorization.
-
-The AOL TOC firetalk library was updated. Some major bugs were fixed by
-this update. Cheers.
-
-Jabber registration got broken in the previous version because of the
-Jabber non-blocking connection patch. It has been fixed by the patch
-author in this version :)
-
-4.12.0
-------
-
-Fixed an MSN group management problem. Libmsn din't send a space character,
-so group operations had no effect or led to disconnects.
-
-With no SSL library found during the build the source failed to compile.
-Fixed that.
-
-Jabber server messages used to come from a nick that was similar to
-the server name with an "@" sign at the end. That was unnecesary, so it's
-not added anymore.
-
-Added the --no-xtitles (-T) commmand line parameter, which disables
-changing window titles in xterm and screen.
-
-In LJ, if the whole friends name list grew more than 512, the LJ contact
-got garbled. Fixed that. Now there musn't be any lenght limitation for the
-records of info files.
-
-The configure script now checks if libcurl has SSL support enabled in
-order to avoid MSN malfunctions. It requires libcurl with SSL, so just
-provide the MSN module with it if you want to use it.
-
-4.13.0
-------
-
-Centericq now builds fine with gcc 3.4.
-
-A new command-line parameter, --debug, was added. This way, there is no need
-anymore to re-build the program in order to enable debug output. However,
-when using this mode, make sure you understand what it says in the log window
-and in ~/.centericq/debug.
-
-There are two passwords for an IRC account now. One is for Nickserv and
-the other one is for regular IRC authentification, which wasn't
-supported before.
-
-Online and free-for-chat mode have the same priority now. So your [f]
-contacts won't stay all the time in the top of the list anymore.
-
-Unicode characters in rtf-encoded icq messages aren't lost anymore.
-Instead, they are recoded into the primary charset. So now, for example,
-Cyrillic sent with gnomeicu, won't disappear.
-
-Segfault when accepting Yahoo! file transfers was fixed.
-
-For online users, centericq now shown the time during which it sees
-those contacts online. Check out the first page of user info for an
-online contact.
-
-Among the other stuff that didn't let me release .13 earlier was my
-moving to Germany. Now I am in Berlin on permanent basis, so if you're
-at the CCC congress that is to take place in a week, Konst can be met
-there :)
-
-4.14.0
-------
-
-Because of the mistake I made in the previous version, the 'u' letter was
-eaten by the RTF parser when processing messages from windows icq clients.
-It looked for unicode chars, but ate all 'u' characters it used to found.
-Fixed that.
-
-A memory leak problem when checking RSS was fixed.
-
-Gadu-Gadu module used to produce a segfault when it was unable to obtain
-a registration token from the server. Now it doesn't crash, though the
-impossibility to register a new UIN is still there. The serve simply
-doesn't find an appropriate document by the registration URL. Too bad.
-
-Applied a small patch by Paul Chitescu so that it's now possible to start
-centericq with all protocols set to offline.
-
-Another type of external event was added. Now you can execute your actions
-when someone goes offline. Hope someone finds that useful.
-
-4.20.0
-------
-
-PGP encryption support was implemented for the Jabber module. In a nutshell
-this means that with a proper setup your communications get a way more secure.
-GPGME library is needed to build the PGP support.
-
-Fixed the RTF parser that takes charge when a message from a Windows ICQ
-client is received. One problem was that it used to treat backspace characters
-wrong sometimes. Another problem with utf-16 was fixed with a patch submitted
-by Vadim Nosovsky.
-
-After ICQ dual login detection centericq used to try re-connecting, though it
-wasn't supposed to. Fixed.
-
-During a long time noone reported me the bug related to libicq2000's header
-files getting installed each time "make install" was run for centericq. Finally
-Wolfram Schlich noted this one, so I fixed it.
-
-Logging on Yahoo! didn't work on Sun Sparc machines. Fixed that. That might
-also revive Gadu-Gadu on bigendian architectures.
-
-A couple of interface related bugs were fixed, such as a mistake in the group
-organization dialog as well as not clearing pending messages for contacts in
-non-chat communication mode.
-
-4.21.0
-------
-
-AIM changed its protocol again, so all TOC clients did not work. This release
-fixes the inability to connect to the AIM network.
-
-Some Jabber bugs were fixed. PGP works better, and it's also possible to
-connect to Google Talk. Ian Johannesen sent the patch for the latter.
-
-Chat window cycling patch from Iulian Ciorascu was applied. Don't forget
-to update your keybindings file if you want to use it. Simply add the
-following two lines to it:
-----
-bind editor     \cn     next_chat
-bind editor     \cb     prev_chat
-----
-
-Applied two patches from David Riebenbauer. One makes centericq change
-Jabber status to unavailable before disconnecting, and adds coloring of
-contacts according to the procotol (configurable from the configuration
-dialog).
-
-Since autoconf/automake authors finally started to maintain backward
-compatibility, I've updated the cicqsync so that it uses the current
-versions of the tools. The reason is that running specific versions for
-better compatibility doesn't work anymore :)
-
-Changes since 4.21.0
---------------------
-
-  * Update and cleanup of autotools related stuff, based on a patch by Mark
-    Pustjens <mark@unkie.org>
-  * add an autogen.sh so other repositories than Konst's CVS can be used
-  * apply patch by Mark Pustjens <mark@unkie.org> to update libmsn
-  * if the contact list is colored by contact status the letter between the
-    [] brackets now show a letter which tells about the protocol of the
-    contact
-    For example a jabber contact:
-       [j] nickname
-  * Apply a patch by Magnus Henoch <mange@freemail.hu>, which makes centericq
-    not close the connection when it receives a failure unrelated to
-    authentication.
-  * Apply patch by Romain FRANCOISE <romain@orebokech.com> to add
-    more emacs bindings :
-      o M-< : go to the beginning of the buffer
-      o M-> : go to the end of the buffer
-      o M-b : move one word backwards
-      o M-f : move one word forwards
-      o M-d : delete one word
-      o C-t : transpose two characters
-  * Apply patch by Julien Lemoine <speedblue@debian.org> which allows the user
-    to select a HTTP browser in the configuration dialog
-  * Apply a patch by Julien Lemoine <speedblue@debian.org> to fix the list of
-    protocols in the help command
-  * Apply a patch by Julien Lemoine <speedblue@debian.org> to display esc-esc
-    instead of esc
-  * apply patch from Andreas Jochens <aj@andaco.de> to fix an amd64 buid problem
-  * apply a patch from Julien Lemoine <speedblue@debian.org> that ports
-    several security fixes from libadu:
-    * Fix endianess errors (may allow remote attackers to cause a denial of 
-      service), CAN-2005-2448
-    * Fix memory alignment errors (may allows remote attackers to cause a 
-      denial of service (bus error) on
-      certain architectures such as SPARC via an incoming message, CAN-2005-2370
-    * Fix Multiple integer signedness errors (may allow remote attackers to 
-      cause a denial of service or execute arbitrary code.), CAN-2005-2369
-  * apply patch from Steve Langasek <vorlon@debian.org> to fix memory
-    handling clean-ups
-  * apply patch from "Steve Langasek" <vorlon@debian.org> to fix remotely
-    segfaultable DOS
-  * apply a batch by Julien Lemoine <speedblue@debian.org> that fixes a
-    buffer overflow in ktools by replacing vsprintf with vsnprintf
-  * apply patch by Julien Lemoine <speedblue@debian.org> that fixes a
-    compile error
-  * applied patch from <temnota@kmv.ru> to fix segv in libjabber when
-    registering new account
-  * apply a patch by Julien Lemoine<speedblue@debian.org> to fix a segv in MSN
-  * patch by Charles Plessy <charles-debian-nospam@plessy.org>
-    copied from
-    http://forum.centericq.de/viewtopic.php?p=2295&sid=74c3dc27a23192ccc07a8af8b0a4a758
+    jabber_503.dpatch.dpatch by Charles Plessy <charles-debian-nospam@plessy.org>
+    
+    copied from http://forum.centericq.de/viewtopic.php?p=2295&sid=74c3dc27a23192ccc07a8af8b0a4a758
     which says "While connecting to server, centericq requests agents list,
     but due to this feature is deprected, recieves 503 error, thus breaking
     connection. "
-  * patch by  Sebastien Delafond <seb@debian.org> which sdd user setting to
-    display timestamps up to the second.
-  * german translation update
-  * fixes for Jabber, see Bugs #1740881 and #1710218
-  * updated MSN to MSNP9
-  * support for lzo2 (gnutls)
-  * updated firetalk library (this includes many fixes for AIM and IRC)
-  * added experimental libotr support
+
+Commit: 737d8e3ad5997133bcb5273b92e6006d87becd39 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> So, 31 Dez 2006 07:27:51 +0100 
+
+    apply patch to fix segv in "MSG" recv in msn
+
+Commit: 28795860c43dee4dcd202cc1ffff29242827abea 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 20:10:20 +0100 
+
+    applied patch from <temnota@kmv.ru> to fix segv in libjabber when
+    registering new account
+
+Commit: 135ad36dd2f47b5cb557a1dafb0b412db0653256 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:02 +0100 
+
+    fix buffer overflow in VGETSTRING macro by replacing vsprintf by vsnprintf
+
+Commit: 802879620abd1b5a0bb4b04e2ba0fdcdda9bc385 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:02 +0100 
+
+    apply patch from "Steve Langasek" <vorlon@debian.org> to fix remotely
+    segfaultable DOS
+
+Commit: df733733d225abd363930a08c6c5cf37e399d7f9 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:02 +0100 
+
+    apply patch from "Steve Langasek" <vorlon@debian.org> to fix memory
+    handling clean-ups
+
+Commit: 9375ff5e344670fc9ab6bdd30519409db8755ee1 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:01 +0100 
+
+    Use sys/statfs.h instead of sys/mount.h on Hurd
+
+Commit: d38fc1161566649ee39b99dcdf41149e0f2801e3 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:01 +0100 
+
+    Fix endianess errors (may allow remote attackers to cause a denial of
+    service), CAN-2005-2448
+    
+    Fix memory alignment errors (may allows remote attackers to cause a denial
+    of service (bus error) on certain architectures such as SPARC via an
+    incoming message, CAN-2005-2370
+    
+    Fix Multiple integer signedness errors (may allow remote attackers to cause
+    a denial of service or execute arbitrary code.), CAN-2005-2369
+
+Commit: f7d80b54f2392092ce775a8d46736f7846245fdb 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:01 +0100 
+
+    apply patch to fix search/add segfault on amd64
+
+Commit: 1c7ab111950e0e0d9cd8ba6a1c5c46cbe66e7e40 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:01 +0100 
+
+    apply patch from Andreas Jochens <aj@andaco.de> to fix amd64 buid problem
+
+Commit: 559cd2abb3e2d78794b3c4a39efdf8b964724a30 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:01 +0100 
+
+    replace 'esc' msg by 'esc-esc'
+
+Commit: e5888a9ddffc10e92901299e4d7ed0b91f79e86d 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:01 +0100 
+
+    Fix typo in --help command
+
+Commit: 40fc63832c31cbc862116da9c50e8f9c5d2cab65 
+Author: Julien LEMOINE <speedblue@debian.org> Do, 28 Dez 2006 19:09:01 +0100 
+
+    Allow user to select HTTP browser
+
+Commit: 67dfe133ea4cc77d1ccf0837ffdca766e396b268 
+Author: Romain FRANCOIS <romain@orebokech.com> Do, 28 Dez 2006 19:09:01 +0100 
+
+    add more emacs bindings (c-u, c-k, ...)
+
+Commit: 3fc6f167fb9c600c7613ad0330ad1d12763ebeef 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:00 +0100 
+
+    This patch makes centericq not close the connection when it receives a
+    failure unrelated to authentication.
+
+Commit: af412b4eef9e8111604a3f68369b5af966aef247 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:09:00 +0100 
+
+    show info about the protocol in the contact list.
+    
+    show the protocol as in
+      [p] nickname
+    instead of the status
+      [s] nickname
+
+Commit: 44505e6d90c889fd59f266816aaa2a664bb8743c 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Do, 28 Dez 2006 19:08:37 +0100 
+
+    apply centericq-libmsn.patch which updates the included version of libmsn
+
+Commit: 3e87864a473428cbbbe0a0bad9a25fd17612f92e 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> So, 24 Dez 2006 00:11:58 +0100 
+
+    Merge with external-patches
+
+Commit: 1c1272a8dcd69beb39a40beff398ef2b2086c5b0 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> So, 24 Dez 2006 00:11:58 +0100 
+
+    Merge with external-patches
+
+Commit: a7821fd0bc464d8b8f37cc358ec0b5aef3a36cb3 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Sa, 23 Dez 2006 23:13:56 +0100 
+
+Commit: 5484c292084fc799a76c7f1bbe9e6e78b4084d8d 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Sa, 23 Dez 2006 20:14:31 +0100 
+
+    some fixes to make autotools work
+
+Commit: 1bbe250c718be4658e6387d2845888b99f221504 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Sa, 16 Dez 2006 11:49:10 +0100 
+
+    fixes some automake related files
+    
+    new configure.ac
+    rm configure.in
+    add an autogen.sh
+    
+    Patch © 2006 Mark Pustjens <mark@unkie.org>
+
+Commit: 5f4381ef439dcd65992aae9fccc82d943e69add3 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Sa, 16 Dez 2006 11:48:30 +0100 
+
+    remove another round of autogenerated files
+
+Commit: dc4289bf7129f7eaa35590b123c6c5559218ab87 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Sa, 16 Dez 2006 06:49:02 +0100 
+
+    remoce superfluous Makefile.in
+
+Commit: 568e345ef95987648d065fa0b4ad15a3b1332e59 
+Author: David Riebenbauer <davrieb@sbox.tugraz.at> Sa, 16 Dez 2006 02:43:06 +0100 
+
+    remove some autogenerated files from libmsn
+
+Commit: 624b29ed2c787c907dbf17e284224b8b18dcda6f 
+Author: konst <konst> Do, 25 Aug 2005 17:15:19 +0000 
+
+    logs in after the protocol change
+
+Commit: ae927d22e974102077050c03388b871432e98f4a 
+Author: iulica <iulica> Fr, 20 Mai 2005 13:21:36 +0000 
+
+    fix double free bug
+
+Commit: 4a6c33ae10a9ed5c74f9fc0c9cc38075a59708d2 
+Author: iulica <iulica> Mo, 14 Feb 2005 21:40:04 +0000 
+
+    removed the chat cycle hotkeys
+
+Commit: 2fb213e4db572b6c48a411d88aa08c4d6de54cf0 
+Author: iulica <iulica> Mo, 14 Feb 2005 21:09:35 +0000 
+
+    fix for chat cycle
+
+Commit: 32f577993c82c7e987b9408e86e0abb5ca24d3bb 
+Author: iulica <iulica> So, 13 Feb 2005 12:10:55 +0000 
+
+    Chat cycling
+
+Commit: 84a7ec16f4fb0011bbf40f1b4ade5c99ab8dc156 
+Author: iulica <iulica> So, 13 Feb 2005 11:06:53 +0000 
+
+    fixed inconsistency about close fullscreen event view hotkey
+
+Commit: a07f098a79345e39fa83adf3d8607cc782f772ca 
+Author: iulica <iulica> So, 13 Feb 2005 10:38:14 +0000 
+
+    undo changes
 
