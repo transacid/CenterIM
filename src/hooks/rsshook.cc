@@ -281,6 +281,8 @@ const string &name, const string &title, const string &postfix) {
 	val = rushtmlconv("wk", cuthtml(d->getValue(), chCutBR | chLeaveLinks), false);
 	if(!enc.empty()) val = siconv(val, enc, conf.getconvertto(rss));
 
+	pos = 0;
+
 	while((pos = val.find("<br", pos)) != -1 || (pos = val.find("<BR", pos)) != -1) {
 	    if((n = val.substr(pos).find(">")) != -1) {
 		val.replace(pos, n+1, "\n");
