@@ -290,8 +290,11 @@ const string &name, const string &title, const string &postfix) {
 	    pos++;
 	}
 
-	while((pos = val.find("<p>")) != -1 || (pos = val.find("<P>")) != -1) {
+	pos = 0;
+
+	while((pos = val.find("<p>", pos)) != -1 || (pos = val.find("<P>", pos)) != -1) {
 	    val.replace(pos, 3, "\n\n");
+	    pos++;
 	}
 
 	base += title + val + postfix;
