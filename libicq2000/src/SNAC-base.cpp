@@ -47,9 +47,32 @@ namespace ICQ2000 {
     m_flags = fl;
   }
 
+  unsigned short InSNAC::Version() const {
+    return m_version;
+  }
+  
   void InSNAC::Parse(Buffer& b) {
     b >> m_flags
       >> m_requestID;
+    m_version = 0;
+    if (m_flags & 0x8000) { // contains version TLV
+	unsigned short dataLen = 0;	
+	b >> dataLen;
+	unsigned int pos = b.pos();
+	
+	if (dataLen >= 2) {
+	    unsigned short tlvType = 0;
+	    b >> tlvType;
+	    if (tlvType == 1) {
+		unsigned short tlvLen = 0;
+    		b >> tlvLen;
+		if (tlvLen >= 2) {
+		    b >> m_version;
+		}
+	    }
+	}
+	b.setPos(pos + dataLen);
+    }
     ParseBody(b);
   }
 

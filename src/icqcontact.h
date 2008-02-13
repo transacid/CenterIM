@@ -25,12 +25,12 @@ class icqcontact {
 	struct basicinfo {
 	    basicinfo()
               : country(0), randomgroup(0), requiresauth(false), 
-		  webaware(false), authawait(false)  { };
+		  webaware(false), authawait(false), serverbased(false)  { };
 
 	    string fname, lname, email, city, state, phone, fax;
 	    string street, cellular, zip;
 	    unsigned short country, randomgroup;
-	    bool requiresauth, webaware, authawait;
+	    bool requiresauth, webaware, authawait, serverbased;
 	};
 
 	struct moreinfo {

@@ -94,7 +94,7 @@ namespace ICQ2000 {
     /* doesn't seem any need currently to do more
      * than copy the official client
      */
-    unsigned short v1 = 0x0001, v2 = 0x0002, v3 = 0x0003, v4 = 0x0004, v5 = 0x0005;
+    unsigned short v1 = 0x0001, v3 = 0x0003, v4 = 0x0004;
     b << SNAC_FAM_GEN << v3
       << SNAC_FAM_SBL << v5
       << SNAC_FAM_LOC << v1
@@ -103,7 +103,8 @@ namespace ICQ2000 {
       << SNAC_FAM_MSG << v1
       << SNAC_FAM_INV << v1
       << SNAC_FAM_BOS << v1
-      << SNAC_FAM_LUP << v1;
+      << SNAC_FAM_LUP << v1
+      << SNAC_FAM_SBL << v4;
   }
 
   void CapAckSNAC::ParseBody(Buffer& b) {
@@ -163,7 +164,9 @@ namespace ICQ2000 {
       << 0x00090001
       << 0x0110028a
       << 0x000a0001
-      << 0x0110028a;
+      << 0x0110028a
+      << 0x00130004
+      << 0x01100629;
   }
 
   void PersonalInfoRequestSNAC::OutputBody(Buffer& b) const {

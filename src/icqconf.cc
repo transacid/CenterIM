@@ -1566,7 +1566,7 @@ void icqconf::usage() const {
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
 
-    cout << endl << _("Report bugs to http://sourceforge.net/projects/centerim.") << endl;
+    cout << endl << _("Report bugs to http://bugzilla.centerim.org.") << endl;
 }
 
 void icqconf::setproxy() {

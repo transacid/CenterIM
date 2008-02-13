@@ -115,10 +115,7 @@ int jutil_priority(xmlnode x)
 	return 0;
 
     p = atoi(str);
-    if(p >= 0)
-	return p;
-    else
-	return 0;
+    return ((char)p);
 }
 
 void jutil_tofrom(xmlnode x)
