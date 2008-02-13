@@ -94,7 +94,7 @@ namespace ICQ2000 {
     /* doesn't seem any need currently to do more
      * than copy the official client
      */
-    unsigned short v1 = 0x0001, v3 = 0x0003, v4 = 0x0004;
+    unsigned short v1 = 0x0001, v3 = 0x0003, v4 = 0x0004, v5 = 0x0005;
     b << SNAC_FAM_GEN << v3
       << SNAC_FAM_SBL << v5
       << SNAC_FAM_LOC << v1
