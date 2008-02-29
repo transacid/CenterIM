@@ -2221,9 +2221,12 @@ void texteditor::mergeline(int ln, bool force, int &px, int &py)
 		for(; atsub = strpbrk(asub+1, WORD_DELIM); asub = atsub);
 		char *newline = new char[strlen(p)+asub-anext+2];
 		strcpy(newline, p);
-		if ((ln==(py-1)) && (px<(asub-anext+1))) {
+		if ((ln==(py-1)) && (px<(asub-anext+1))) { // move to previous line
 		    px += strlen(newline);
 		    py--;
+		}
+		else {
+		    px -= (asub-anext+1);  // move back
 		}
 		strncat(newline, next, asub-anext+1);
 		strcut(next, 0, asub-anext+1);
