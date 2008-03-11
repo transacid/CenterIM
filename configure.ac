@@ -425,7 +425,7 @@ AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify alarm atexit bzero dup
 # also configure other packages
 AC_CONFIG_SUBDIRS(connwrap firetalk kkconsui kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
 
-ALL_LINGUAS="zh_TW.Big5 uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
+ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
                  misc/Makefile
                  share/Makefile
