@@ -82,7 +82,7 @@ char *strchr (), *strrchr ();
 #include "yahoo2.h"
 #include "yahoo_httplib.h"
 #include "yahoo_util.h"
-#include "yahoo_fn.h"
+#include "yahoo_auth.h"
 
 #include "yahoo2_callbacks.h"
 #include "yahoo_debug.h"
@@ -1838,30 +1838,32 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	unsigned char *password_hash = malloc(25);
 	unsigned char *crypt_hash = malloc(25);
 	char *crypt_result = NULL;
+	
 	unsigned char pass_hash_xor1[64];
 	unsigned char pass_hash_xor2[64];
 	unsigned char crypt_hash_xor1[64];
 	unsigned char crypt_hash_xor2[64];
-	unsigned char chal[7];
 	char resp_6[100];
 	char resp_96[100];
 
 	unsigned char digest1[20];
 	unsigned char digest2[20];
+	unsigned char comparison_src[20];
 	unsigned char magic_key_char[4];
-	const unsigned char *magic_ptr;
+	const char *magic_ptr;
 
 	unsigned int  magic[64];
 	unsigned int  magic_work=0;
+	unsigned int  magic_4 = 0;
 
-	char comparison_src[20];
 
-	int x, j, i;
+	int x, y;
 	int cnt = 0;
 	int magic_cnt = 0;
 	int magic_len;
-	int depth =0, table =0;
 
+	memset(password_hash, 0, 25);
+	memset(crypt_hash, 0, 25);
 	memset(&pass_hash_xor1, 0, 64);
 	memset(&pass_hash_xor2, 0, 64);
 	memset(&crypt_hash_xor1, 0, 64);
@@ -1872,6 +1874,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	memset(&resp_6, 0, 100);
 	memset(&resp_96, 0, 100);
 	memset(&magic_key_char, 0, 4);
+	memset(&comparison_src, 0, 20);
 
 	/* 
 	 * Magic: Phase 1.  Generate what seems to be a 30 
@@ -1880,7 +1883,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	 * tired, so use a 64 byte buffer.
 	 */
 
-	magic_ptr = (unsigned char *)seed;
+	magic_ptr = seed;
 
 	while (*magic_ptr != (int)NULL) {
 		char *loc;
@@ -1900,7 +1903,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 			loc = strchr(challenge_lookup, *magic_ptr);
 			if (!loc) {
 				/* This isn't good */
-				continue;
+				//continue;
 			}
 
 			/* Get offset into lookup table and lsh 3. */
@@ -1916,7 +1919,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 			loc = strchr(operand_lookup, *magic_ptr);
 			if (!loc) {
 				/* Also not good. */
-				continue;
+				//continue;
 			}
 
 			local_store = loc - operand_lookup;
@@ -1941,9 +1944,8 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 		unsigned char byte1;
 		unsigned char byte2;
 
-		/* Bad.  Abort.
-		 */
-		if (magic_cnt >= magic_len) {
+		/* Bad.  Abort. */
+		if ((magic_cnt >= magic_len)) {
 			WARNING(("magic_cnt(%d)  magic_len(%d)", magic_cnt, magic_len))
 			break;
 		}
@@ -1957,7 +1959,8 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 		magic[magic_cnt+1] = byte1;
 	}
 
-	/* Magic: Phase 3.  This computes 20 bytes.  The first 4 bytes are used as our magic 
+	/* 
+	 * Magic: Phase 3.  This computes 20 bytes.  The first 4 bytes are used as our magic 
 	 * key (and may be changed later); the next 16 bytes are an MD5 sum of the magic key 
 	 * plus 3 bytes.  The 3 bytes are found by looping, and they represent the offsets 
 	 * into particular functions we'll later call to potentially alter the magic key. 
@@ -1965,7 +1968,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	 * %-) 
 	 */ 
 	
-	magic_cnt = 1; 
+	magic_cnt = 1;
 	x = 0; 
 	
 	do { 
@@ -1980,8 +1983,8 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 				bl = cl = (cl & 0x1f) << 6;  
 			else { 
 				bl = magic[magic_cnt++];  
-                              cl = (cl & 0x0f) << 6;  
-                              bl = ((bl & 0x3f) + cl) << 6;  
+				cl = (cl & 0x0f) << 6;  
+				bl = ((bl & 0x3f) + cl) << 6;  
 			}  
 			
 			cl = magic[magic_cnt++];  
@@ -1993,52 +1996,68 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 		comparison_src[x++] = bl & 0xff;  
 	} while (x < 20); 
 
-	/* Dump magic key into a char for SHA1 action. */
-	
-		
-	for(x = 0; x < 4; x++) 
-		magic_key_char[x] = comparison_src[x];
+	/* First four bytes are magic key. */
+	memcpy(&magic_key_char[0], comparison_src, 4);
+	magic_4 = magic_key_char[0] | (magic_key_char[1] << 8) |
+			(magic_key_char[2] << 16) | (magic_key_char[3] << 24);
 
-	/* Compute values for recursive function table! */
-	memcpy( chal, magic_key_char, 4 );
-        x = 1;
-	for( i = 0; i < 0xFFFF && x; i++ )
-	{
-		for( j = 0; j < 5 && x; j++ )
-		{
-			chal[4] = i;
-			chal[5] = i >> 8;
-			chal[6] = j;
+	/*
+	 * Magic: Phase 4.  Determine what function to use later by getting outside/inside
+	 * loop values until we match our previous buffer.
+	 */
+	for (x = 0; x < 65535; x++) {
+		int leave = 0;
+
+		for (y = 0; y < 5; y++) {
+			unsigned char test[3];
+
+			/* Calculate buffer. */
+			test[0] = x;
+			test[1] = x >> 8;
+			test[2] = y;
+
 			md5_init( &ctx );
-			md5_append( &ctx, chal, 7 );
+			md5_append( &ctx, magic_key_char, 4 );
+			md5_append( &ctx, test, 3 );
 			md5_finish( &ctx, result );
-			if( memcmp( comparison_src + 4, result, 16 ) == 0 )
-			{
-				depth = i;
-				table = j;
-				x = 0;
+			
+			
+			if( memcmp( comparison_src + 4, result, 16 ) == 0 ) {
+				leave = 1;
+				break;
 			}
 		}
+		
+		if (leave == 1)
+			break;
 	}
+	
+	/* If y != 0, we need some help. */
+	if (y != 0) {
+		unsigned int	updated_key;
 
-	/* Transform magic_key_char using transform table */
-	x = magic_key_char[3] << 24  | magic_key_char[2] << 16 
-		| magic_key_char[1] << 8 | magic_key_char[0];
-	x = yahoo_xfrm( table, depth, x );
-	x = yahoo_xfrm( table, depth, x );
-	magic_key_char[0] = x & 0xFF;
-	magic_key_char[1] = x >> 8 & 0xFF;
-	magic_key_char[2] = x >> 16 & 0xFF;
-	magic_key_char[3] = x >> 24 & 0xFF;
+		/* Update magic stuff.
+		 * Call it twice because Yahoo's encryption is super bad ass.
+		 */
+		updated_key = yahoo_auth_finalCountdown(magic_4, 0x60, y, x);
+		updated_key = yahoo_auth_finalCountdown(updated_key, 0x60, y, x);
+
+		magic_key_char[0] = updated_key & 0xff;
+		magic_key_char[1] = (updated_key >> 8) & 0xff;
+		magic_key_char[2] = (updated_key >> 16) & 0xff;
+		magic_key_char[3] = (updated_key >> 24) & 0xff;
+	}
 
 	/* Get password and crypt hashes as per usual. */
 	md5_init(&ctx);
 	md5_append(&ctx, (md5_byte_t *)yd->password,  strlen(yd->password));
 	md5_finish(&ctx, result);
+	
 	to_y64(password_hash, result, 16);
+	
+	crypt_result = yahoo_crypt(yd->password, "$1$_2S43d5f$");  
 
 	md5_init(&ctx);
-	crypt_result = yahoo_crypt(yd->password, "$1$_2S43d5f$");  
 	md5_append(&ctx, (md5_byte_t *)crypt_result, strlen(crypt_result));
 	md5_finish(&ctx, result);
 	to_y64(crypt_hash, result, 16);
@@ -2070,7 +2089,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	 * challenge. */
 
 	SHA1Update(&ctx1, pass_hash_xor1, 64);
-	if (j >= 3)
+	if (y >= 3)
 		ctx1.totalLength = 0x1ff;
 	SHA1Update(&ctx1, magic_key_char, 4);
 	SHA1Final(&ctx1, digest1);
@@ -2090,6 +2109,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	for (x = 0; x < 20; x += 2) {
 		unsigned int    val = 0;
 		unsigned int    lookup = 0;
+		
 		char            byte[6];
 
 		memset(&byte, 0, 6);
@@ -2161,7 +2181,7 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	 * challenge. */
 
 	SHA1Update(&ctx1, crypt_hash_xor1, 64);
-	if (j >= 3)
+	if (y >= 3)
 		ctx1.totalLength = 0x1ff;
 	SHA1Update(&ctx1, magic_key_char, 4);
 	SHA1Final(&ctx1, digest1);
@@ -2227,6 +2247,9 @@ static void yahoo_process_auth_0x0b(struct yahoo_input_data *yid, const char *se
 	yahoo_packet_hash(pack, 6, resp_6);
 	yahoo_packet_hash(pack, 96, resp_96);
 	yahoo_packet_hash(pack, 1, sn);
+	yahoo_packet_hash(pack, 244, YAHOO_CLIENT_VERSION_ID);
+	yahoo_packet_hash(pack, 135, YAHOO_CLIENT_VERSION);
+
 	yahoo_send_packet(yid, pack, 0);
 	yahoo_packet_free(pack);
 
@@ -2260,6 +2283,7 @@ static void yahoo_process_auth(struct yahoo_input_data *yid, struct yahoo_packet
 			yahoo_process_auth_pre_0x0b(yid, seed, sn);
 			break;
 		case 1:
+		case 2:
 			yahoo_process_auth_0x0b(yid, seed, sn);
 			break;
 		default:

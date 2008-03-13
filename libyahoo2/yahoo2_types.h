@@ -85,6 +85,8 @@ enum yahoo_log_level {
 };
 
 #define YAHOO_PROTO_VER 0x000b
+#define YAHOO_CLIENT_VERSION_ID "2097087"
+#define YAHOO_CLIENT_VERSION "8.1.0.421"
 
 /* Yahoo style/color directives */
 #define YAHOO_COLOR_BLACK "\033[30m"
