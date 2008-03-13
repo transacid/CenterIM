@@ -1546,7 +1546,7 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 void icqconf::usage() const {
 	cout << PACKAGE << " " << centerim::version << endl;
 	
-    cout << endl << _("Usage: ") << argv0 << " [OPTION].." << endl;
+    cout << endl << _("Usage: ") << argv0 << _(" [OPTION]...") << endl;
 	
     cout << endl << _("General options:") << endl;
     cout << _("  --ascii, -a              use ASCII characters for windows and UI controls") << endl;
@@ -1566,7 +1566,7 @@ void icqconf::usage() const {
     cout << _("  -t, --to <destination>   destination UIN or nick (depends on protocol)") << endl;
     cout << _("  -n, --number <phone#>    mobile number to send an event to (sms only)") << endl;
 
-    cout << endl << _("Report bugs to http://bugzilla.centerim.org.") << endl;
+    cout << endl << _("Report bugs to http://bugzilla.centerim.org/.") << endl;
 }
 
 void icqconf::setproxy() {
