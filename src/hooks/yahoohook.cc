@@ -325,7 +325,7 @@ bool yahoohook::send(const imevent &ev) {
 	}
 
 	if(!ischannel(c)) {
-	    yahoo_send_im(cid, 0, ev.getcontact().nickname.c_str(), text.c_str(), 0);
+	    yahoo_send_im(cid, 0, ev.getcontact().nickname.c_str(), text.c_str(), 0, 0);
 	} else {
 	    yahoo_conference_message(cid, 0, getmembers(ev.getcontact().nickname.substr(1)),
 		ev.getcontact().nickname.c_str()+1, text.c_str(), 0);
@@ -764,7 +764,7 @@ void yahoohook::got_buddies(int id, YList *buds) {
 void yahoohook::got_identities(int id, YList *buds) {
 }
 
-void yahoohook::status_changed(int id, char *who, int stat, char *msg, int away) {
+void yahoohook::status_changed(int id, char *who, int stat, char *msg, int away, int idle, int mobile) {
     yhook.userstatus(who, stat, msg ? msg : "", (bool) away);
 }
 

@@ -55,7 +55,7 @@ class yahoohook: public abstracthook {
 	static void login_response(int id, int succ, char *url);
 	static void got_buddies(int id, YList *buds);
 	static void got_identities(int id, YList *ids);
-	static void status_changed(int id, char *who, int stat, char *msg, int away);
+	static void status_changed(int id, char *who, int stat, char *msg, int away, int idle, int mobile);
 	static void got_im(int id, char *me, char *who, char *msg, long tm, int stat, int utf8);
 	static void got_conf_invite(int id, char *who, char *room, char *msg, YList *members);
 	static void conf_userdecline(int id, char *who, char *room, char *msg);
