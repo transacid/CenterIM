@@ -2573,7 +2573,7 @@ static void yahoo_process_ping(struct yahoo_input_data *yid, struct yahoo_packet
 	}
 	
 	NOTICE(("got ping packet"));
-	YAHOO_CALLBACK(ext_yahoo_got_ping)(yid->yd->client_id, errormsg);
+	//YAHOO_CALLBACK(ext_yahoo_got_ping)(yid->yd->client_id, errormsg);
 }
 
 static void _yahoo_webcam_get_server_connected(int fd, int error, void *d)
