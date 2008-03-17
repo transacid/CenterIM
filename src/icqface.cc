@@ -760,7 +760,7 @@ void icqface::fillcontactlist() {
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		    c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+		    c->hasevents() ? conf.getcolor(cp_clist_unread) : ccolor,
 		    c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {

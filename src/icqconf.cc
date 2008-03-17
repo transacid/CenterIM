@@ -701,6 +701,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_free_for_chat, "clist_free_for_chat   green/transparent   bold");
 	    schemer.push(cp_clist_invisible, "clist_invisible   grey/transparent   bold");
 	    schemer.push(cp_clist_not_in_list, "clist_not_in_list   white/transparent   bold");
+	    schemer.push(cp_clist_unread, "clist_unread red/transparent	bold");
 	    break;
 
 	case rcblue:
@@ -735,6 +736,7 @@ void icqconf::loadcolors() {
 	    schemer.push(cp_clist_free_for_chat, "clist_free_for_chat   green/transparent   bold");
 	    schemer.push(cp_clist_invisible, "clist_invisible   grey/transparent   bold");
 	    schemer.push(cp_clist_not_in_list, "clist_not_in_list   white/transparent   bold");
+	    schemer.push(cp_clist_unread, "clist_unread black/blue	bold");
 	    break;
     }
 

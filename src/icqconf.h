@@ -50,7 +50,8 @@ enum cicq_colorpairs {
     cp_clist_occupied,
     cp_clist_free_for_chat,
     cp_clist_invisible,
-    cp_clist_not_in_list
+    cp_clist_not_in_list,
+    cp_clist_unread,
 };
 
 enum cicq_keybindings {
