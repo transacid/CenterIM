@@ -27,7 +27,7 @@
 #include <dirent.h>
 #include <fstream>
 
-#ifdef __sun__
+#if defined(__sun__) || defined(__NetBSD__)
 #include <sys/statvfs.h>
 #endif
 
@@ -1716,7 +1716,7 @@ string icqconf::gethttpproxypasswd() const {
 void icqconf::checkdiskspace() {
     fenoughdiskspace = true;
 
-#ifndef __sun__
+#if !(defined(__sun__) || defined(__NetBSD__))
     struct statfs st;
     if(!statfs(conf.getdirname().c_str(), &st)) {
 #else
