@@ -892,7 +892,7 @@ void icqconf::loadactions() {
 	    of << "openurl \\" << endl;
 	    of << "    (if test ! -z \"`ps x | grep /" << browser << " | grep -v grep`\"; \\" << endl;
 	    of << "\tthen DISPLAY=0:0 " << browser << " -remote 'openURL($url$, new-window)'; \\" << endl;
-	    of << "\telse DISPLAY=0:0 " << browser << " \"$url$\"; \\" << endl;
+	    of << "\telse DISPLAY=0:0 " << browser << " '$url$'; \\" << endl;
 	    of << "    fi) >/dev/null 2>&1 &" << endl;
 
 	    of << "detectmusic \\" << endl;
@@ -1172,14 +1172,16 @@ string icqconf::execaction(const string &name, const string &param) {
     if(name == "openurl")
     {
 	string url = param;
-	int pos = 0;
-
-	while((pos = url.find("'", pos)) != -1) {
-	    url.replace(pos, 1, "%27");
-    	    pos+=3;
+	int pos = 0, fnd = -1;
+	
+	char enc[4];
+	
+	while( ((fnd = url.find("'", pos)) != -1) || ((fnd = url.find("\"", pos)) != -1) ) {
+		snprintf(enc, 4, "%%%02X", url[fnd]);
+	    url.replace(fnd, 1, enc);
+    	pos = fnd+3;
 	}
-	url.insert(url.begin(), '\'');
-	url.push_back('\'');
+	
 	while((npos = torun.find("$url$")) != -1)
 	    torun.replace(npos, 5, url);
     }
@@ -1224,7 +1226,6 @@ string icqconf::execaction(const string &name, const string &param) {
 
 	sigaction(SIGCHLD, &osact, 0);
     }
-
     face.log(_("+ launched the %s action command"), name.c_str());
     return out;
 }
