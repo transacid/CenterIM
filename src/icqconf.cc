@@ -1170,8 +1170,19 @@ string icqconf::execaction(const string &name, const string &param) {
     char ch;
 
     if(name == "openurl")
-    while((npos = torun.find("$url$")) != -1)
-	torun.replace(npos, 5, param);
+    {
+	string url = param;
+	int pos = 0;
+
+	while((pos = url.find("'", pos)) != -1) {
+	    url.replace(pos, 1, "%27");
+    	    pos+=3;
+	}
+	url.insert(url.begin(), '\'');
+	url.push_back('\'');
+	while((npos = torun.find("$url$")) != -1)
+	    torun.replace(npos, 5, url);
+    }
 
     if(!pipe(inpipe) && !pipe(outpipe)) {
 	memset(&sact, 0, sizeof(sact));
