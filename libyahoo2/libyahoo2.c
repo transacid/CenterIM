@@ -210,7 +210,9 @@ enum yahoo_service { /* these are easier to see in hex */
 	YAHOO_SERVICE_PICTURE_CHECKSUM = 0xbd,
 	YAHOO_SERVICE_PICTURE = 0xbe,
 	YAHOO_SERVICE_PICTURE_UPDATE = 0xc1,
-	YAHOO_SERVICE_PICTURE_UPLOAD = 0xc2
+	YAHOO_SERVICE_PICTURE_UPLOAD = 0xc2,
+	YAHOO_SERVICE_Y6_STATUS_UPDATE = 0xc6,
+	YAHOO_SERVICE_STATUS_15 = 0xf0
 };
 
 struct yahoo_pair {
@@ -1498,6 +1500,17 @@ static void yahoo_process_list(struct yahoo_input_data *yid, struct yahoo_packet
 		if(yd->current_status < 0)
 			yd->current_status = yd->initial_status;
 		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_OK, NULL);
+		
+		pkt = yahoo_packet_new(YAHOO_SERVICE_Y6_STATUS_UPDATE, YAHOO_STATUS_AVAILABLE, 0);
+		
+		char buff[20];
+		
+		snprintf(buff, sizeof(buff)-1, "%d", yd->current_status);
+		yahoo_packet_hash(pkt, 10, buff);
+		yahoo_packet_hash(pkt, 19, "");
+		yahoo_send_packet(yid, pkt, 0);
+
+		yahoo_packet_free(pkt);
 	}
 
 	for (l = pkt->hash; l; l = l->next) {
@@ -2686,6 +2699,7 @@ static void yahoo_packet_process(struct yahoo_input_data *yid, struct yahoo_pack
 	case YAHOO_SERVICE_GAMELOGOFF:
 	case YAHOO_SERVICE_IDACT:
 	case YAHOO_SERVICE_IDDEACT:
+	case YAHOO_SERVICE_STATUS_15:
 		yahoo_process_status(yid, pkt);
 		break;
 	case YAHOO_SERVICE_NOTIFY:
