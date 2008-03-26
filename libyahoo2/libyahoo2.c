@@ -212,7 +212,8 @@ enum yahoo_service { /* these are easier to see in hex */
 	YAHOO_SERVICE_PICTURE_UPDATE = 0xc1,
 	YAHOO_SERVICE_PICTURE_UPLOAD = 0xc2,
 	YAHOO_SERVICE_Y6_STATUS_UPDATE = 0xc6,
-	YAHOO_SERVICE_STATUS_15 = 0xf0
+	YAHOO_SERVICE_STATUS_15 = 0xf0,
+	YAHOO_SERVICE_LIST_15 = 0xf1
 };
 
 struct yahoo_pair {
@@ -1511,6 +1512,7 @@ static void yahoo_process_list(struct yahoo_input_data *yid, struct yahoo_packet
 		yahoo_send_packet(yid, pkt, 0);
 
 		yahoo_packet_free(pkt);
+
 	}
 
 	for (l = pkt->hash; l; l = l->next) {
@@ -1585,6 +1587,60 @@ static void yahoo_process_list(struct yahoo_input_data *yid, struct yahoo_packet
 	}
 }
 
+
+static void yahoo_process_list_15(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
+{
+	YList *l;
+	struct yahoo_data *yd = yid->yd;
+	
+	char *grp = 0, *bud = 0;
+	
+	for (l = pkt->hash; l; l = l->next) {
+		struct yahoo_pair *pair = l->data;
+
+		switch (pair->key) {
+		case 302:
+			/* This is always 318 before a group, 319 before the first s/n in a group, 320 before any ignored s/n.
+			 * It is not sent for s/n's in a group after the first.
+			 * All ignored s/n's are listed last, so when we see a 320 we clear the group and begin marking the
+			 * s/n's as ignored.  It is always followed by an identical 300 key.
+			 */
+			if (pair->value && !strcmp(pair->value, "320")) {
+				/* No longer in any group; this indicates the start of the ignore list. */
+				l = NULL;
+			}
+			break;
+		
+		case 65: /* This is the group */
+			FREE(grp);
+			grp = strdup(pair->value);
+			break;
+		
+		case 7: /* buddy's s/n */
+			bud = strdup(pair->value);
+
+			if (grp) {
+				
+				/* This buddy is in a group */
+				struct yahoo_buddy *buddy = y_new0(struct yahoo_buddy, 1);
+				buddy->id = strdup(bud);
+				buddy->group = strdup(grp);
+				buddy->real_name = 0;
+				buddy->yab_entry = 0;
+				yd->buddies = y_list_append(yd->buddies, buddy);
+			} else {
+				/* This buddy is on the ignore list (and therefore in no group) */
+				//purple_privacy_deny_add(account, norm_bud, 1);
+			}
+			FREE(bud);
+			break;
+		}
+	}
+	FREE(grp);
+	YAHOO_CALLBACK(ext_yahoo_got_buddies)(yd->client_id, yd->buddies);
+}
+
+
 static void yahoo_process_verify(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
 {
 	struct yahoo_data *yd = yid->yd;
@@ -1632,7 +1688,7 @@ static void yahoo_process_picture_checksum( struct yahoo_input_data *yid, struct
 		}
 	}
 
-	//YAHOO_CALLBACK(ext_yahoo_got_buddyicon_checksum)(yd->client_id,to,from,checksum);
+//	YAHOO_CALLBACK(ext_yahoo_got_buddyicon_checksum)(yd->client_id,to,from,checksum);
 }
 
 static void yahoo_process_picture(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
@@ -2794,7 +2850,10 @@ static void yahoo_packet_process(struct yahoo_input_data *yid, struct yahoo_pack
 		break;
 	case YAHOO_SERVICE_PICTURE_UPLOAD:
 		yahoo_process_picture_upload(yid, pkt);
-		break;	
+		break;
+	case YAHOO_SERVICE_LIST_15:
+		yahoo_process_list_15(yid, pkt);
+		break;
 	default:
 		WARNING(("unknown service 0x%02x", pkt->service));
 		yahoo_dump_unhandled(pkt);
@@ -4104,11 +4163,17 @@ void yahoo_add_buddy(int id, const char *who, const char *group, const char *msg
 		return;
 
 	pkt = yahoo_packet_new(YAHOO_SERVICE_ADDBUDDY, YAHOO_STATUS_AVAILABLE, yd->session_id);
-	yahoo_packet_hash(pkt, 1, yd->user);
-	yahoo_packet_hash(pkt, 7, who);
-	yahoo_packet_hash(pkt, 65, group);
 	if(msg)
 		yahoo_packet_hash(pkt, 14, msg);
+	yahoo_packet_hash(pkt, 65, group);
+	yahoo_packet_hash(pkt, 97, "1");
+	yahoo_packet_hash(pkt, 1, yd->user);
+	yahoo_packet_hash(pkt, 302, "319");
+	yahoo_packet_hash(pkt, 300, "319");
+	yahoo_packet_hash(pkt, 7, who);
+	yahoo_packet_hash(pkt, 334, "0");
+	yahoo_packet_hash(pkt, 301, "319");
+	yahoo_packet_hash(pkt, 303, "319");
 
 	yahoo_send_packet(yid, pkt, 0);
 	yahoo_packet_free(pkt);

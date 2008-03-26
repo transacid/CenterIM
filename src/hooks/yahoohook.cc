@@ -365,9 +365,12 @@ void yahoohook::sendnewuser(const imcontact &ic, bool report) {
 
 	    if(!found) {
 		if(report) log(logContactAdd, ic.nickname.c_str());
+		if (groups.size()>0)
+		{
 		vector<icqgroup>::const_iterator ig = find(groups.begin(), groups.end(), clist.get(ic)->getgroupid());
-		if(ig != groups.end()) {
-		    yahoo_add_buddy(cid, ic.nickname.c_str(), ig->getname().c_str(), "");
+		if (ig == groups.end())
+			ig = groups.begin();
+	    yahoo_add_buddy(cid, ic.nickname.c_str(), ig->getname().c_str(), "");
 		}
 	    }
 	}
