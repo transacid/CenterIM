@@ -1632,7 +1632,7 @@ static void yahoo_process_picture_checksum( struct yahoo_input_data *yid, struct
 		}
 	}
 
-	YAHOO_CALLBACK(ext_yahoo_got_buddyicon_checksum)(yd->client_id,to,from,checksum);
+	//YAHOO_CALLBACK(ext_yahoo_got_buddyicon_checksum)(yd->client_id,to,from,checksum);
 }
 
 static void yahoo_process_picture(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
