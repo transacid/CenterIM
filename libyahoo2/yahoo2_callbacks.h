@@ -625,6 +625,24 @@ void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_viewer)(int id, char *who, int connect
  */
 void YAHOO_CALLBACK_TYPE(ext_yahoo_webcam_data_request)(int id, int send);
 
+/*
+ *  Called when you get authorization request
+ * Params:
+ *	id   - the id that identifies the server connection
+ *  who  - who sent you the request
+ *  msg  - message of request
+ */
+void YAHOO_CALLBACK_TYPE(ext_yahoo_got_auth_request)(int id, char *who, char *msg);
+
+/*
+ *  Called when you get authorization response
+ * Params:
+ *	id   - the id that identifies the server connection
+ *  who  - who sent you the request
+ *  granted - was your request granted? (0=denied, 1=granted)
+ *  msg  - message of request
+ */ 
+void YAHOO_CALLBACK_TYPE(ext_yahoo_got_auth_response)(int id, const char *who, char granted, const char *msg);
 
 /*
  * Name: ext_yahoo_log

@@ -150,6 +150,9 @@ void yahoo_webcam_accept_viewer(int id, const char* who, int accept);
 /* send an invitation to a user to view your webcam */
 void yahoo_webcam_invite(int id, const char *who);
 
+void yahoo_auth_deny(int id, const char *who);
+void yahoo_auth_grant(int id, const char *who);
+
 /* will set up a connection and initiate file transfer.
  * callback will be called with the fd that you should write
  * the file data to

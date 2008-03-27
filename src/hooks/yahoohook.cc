@@ -129,6 +129,8 @@ void yahoohook::init() {
     c.ext_yahoo_webcam_viewer = &webcam_viewer;
     c.ext_yahoo_webcam_data_request = &webcam_data_request;
     c.ext_yahoo_got_search_result = &got_search_result;
+    c.ext_yahoo_got_auth_request = &auth_request;
+    c.ext_yahoo_got_auth_response = &auth_response;
     c.ext_yahoo_log = &ylog;
 
     yahoo_register_callbacks(&c);
@@ -322,6 +324,20 @@ bool yahoohook::send(const imevent &ev) {
 	    }
 
 	    return true;
+	} else if (ev.gettype() == imevent::authorization) {
+		const imauthorization *m = static_cast<const imauthorization *> (&ev);
+		
+		switch(m->getauthtype()) {
+			case imauthorization::Granted:
+				yahoo_auth_grant(cid, ev.getcontact().nickname.c_str());
+				break;
+
+			case imauthorization::Rejected:
+				yahoo_auth_deny(cid, ev.getcontact().nickname.c_str());
+				break;
+		}
+		
+		return true;
 	}
 
 	if(!ischannel(c)) {
@@ -1147,6 +1163,39 @@ void yahoohook::webcam_viewer(int id, char *who, int connect) {
 }
 
 void yahoohook::webcam_data_request(int id, int send) {
+}
+
+void yahoohook::auth_request(int id, char *who, char *msg) {
+    imcontact ic(who, yahoo);
+    string text = cuthtml(msg?msg: "", chCutBR | chLeaveLinks);
+
+    yhook.checkinlist(ic);
+    text = yhook.decode(text, true);
+
+	em.store(imauthorization(ic, imevent::incoming, imauthorization::Request, text));
+}
+
+void yahoohook::auth_response(int id, const char *who, char granted, const char *msg) {
+    imcontact ic(who, yahoo);
+    string text = cuthtml(msg?msg:"", chCutBR | chLeaveLinks);
+
+    //yhook.checkinlist(ic);
+    text = yhook.decode(text, true);
+	string message;
+	if (granted)
+		message = "The user has accepted your authorization request";
+	else
+	{
+		message = "The user has rejected your authorization request";
+		if (!text.empty())
+		{
+			message += " (";
+			message += text;
+			message += ")";
+		}
+	}
+
+	em.store(imnotification(ic, message));
 }
 
 int yahoohook::ylog(char *fmt, ...) {

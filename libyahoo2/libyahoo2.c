@@ -212,6 +212,7 @@ enum yahoo_service { /* these are easier to see in hex */
 	YAHOO_SERVICE_PICTURE_UPDATE = 0xc1,
 	YAHOO_SERVICE_PICTURE_UPLOAD = 0xc2,
 	YAHOO_SERVICE_Y6_STATUS_UPDATE = 0xc6,
+	YAHOO_SERVICE_AUTH_REQ_15 = 0xd6,
 	YAHOO_SERVICE_STATUS_15 = 0xf0,
 	YAHOO_SERVICE_LIST_15 = 0xf1
 };
@@ -272,6 +273,12 @@ struct yahoo_server_settings {
 	char *webcam_description;
 	char *local_host;
 	int   conn_type;
+};
+
+struct yahoo_add_request {
+        char *id;
+        char *who;
+        int protocol;
 };
 
 static void * _yahoo_default_server_settings()
@@ -1640,6 +1647,111 @@ static void yahoo_process_list_15(struct yahoo_input_data *yid, struct yahoo_pac
 	YAHOO_CALLBACK(ext_yahoo_got_buddies)(yd->client_id, yd->buddies);
 }
 
+static void yahoo_process_auth_15(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
+{
+	YList *l;
+	struct yahoo_data *yd = yid->yd;
+	const char *msg = NULL;
+	
+	if (pkt->status == 1) {
+		const char *who = NULL;
+		int response = 0;
+		l = pkt->hash;
+		
+		while (l) {
+			struct yahoo_pair *pair = l->data;
+
+			switch (pair->key) {
+			case 4:
+				who = pair->value;
+				break;
+			case 13:
+				response = strtol(pair->value, NULL, 10);
+				break;
+			case 14:
+				msg = pair->value;
+				break;
+			}
+			l = l->next;
+		}
+
+		if (response == 1) {/* Authorized */
+			NOTICE(("Received authorization from buddy '%s'.\n", who ? who : "(Unknown Buddy)"));
+			YAHOO_CALLBACK(ext_yahoo_got_auth_response)(yd->client_id, who ? who : "(Unknown Buddy)", 1, NULL);
+		}
+		else if (response == 2) { /* Declined */
+			WARNING(("Received authorization decline from buddy '%s'.\n", who ? who : "(Unknown Buddy)"));
+			YAHOO_CALLBACK(ext_yahoo_got_auth_response)(yd->client_id, who ? who : "(Unknown Buddy)", 0, msg);
+		} else {
+			WARNING(("Received unknown authorization response of %d from buddy '%s'.\n", response, who ? who : "(Unknown Buddy)"));
+		}
+	}
+	/* Buddy requested authorization to add us. */
+	else if (pkt->status == 3) {
+		struct yahoo_add_request *add_req;
+		const char *firstname = NULL, *lastname = NULL;
+
+		l = pkt->hash;
+		
+		add_req = y_new0(struct yahoo_add_request, 1);
+
+		while (l) {
+			struct yahoo_pair *pair = l->data;
+
+			switch (pair->key) {
+			case 4:
+				add_req->who = strdup(pair->value);
+				break;
+			case 5:
+				add_req->id = strdup(pair->value);
+				break;
+			case 14:
+				msg = pair->value;
+				break;
+			case 216:
+				firstname = pair->value;
+				break;
+			case 241:
+				add_req->protocol = strtol(pair->value, NULL, 10);
+				break;
+			case 254:
+				lastname = pair->value;
+				break;
+
+			}
+			l = l->next;
+		}
+
+		if (add_req->id && add_req->who) {
+			char *alias = NULL, *dec_msg = NULL;
+
+			/*if (msg)
+				dec_msg = yahoo_string_decode(msg, FALSE);*/
+			if (msg)
+				dec_msg = strdup(msg);
+
+			/*if (firstname && lastname)
+				alias = g_strdup_printf("%s %s", firstname, lastname);
+			else if (firstname)
+				alias = g_strdup(firstname);
+			else if (lastname)
+				alias = g_strdup(lastname);*/
+
+			YAHOO_CALLBACK(ext_yahoo_got_auth_request)(yd->client_id, add_req->who, dec_msg);
+			FREE(alias);
+			FREE(dec_msg);
+			FREE(add_req->id);
+			FREE(add_req->who);
+			FREE(add_req);
+		} else {
+			FREE(add_req->id);
+			FREE(add_req->who);
+			FREE(add_req);
+		}
+	} else {
+		WARNING(("Received authorization of unknown status (%d).\n", pkt->status));
+	}
+}
 
 static void yahoo_process_verify(struct yahoo_input_data *yid, struct yahoo_packet *pkt)
 {
@@ -2853,6 +2965,9 @@ static void yahoo_packet_process(struct yahoo_input_data *yid, struct yahoo_pack
 		break;
 	case YAHOO_SERVICE_LIST_15:
 		yahoo_process_list_15(yid, pkt);
+		break;
+	case YAHOO_SERVICE_AUTH_REQ_15:
+		yahoo_process_auth_15(yid, pkt);
 		break;
 	default:
 		WARNING(("unknown service 0x%02x", pkt->service));
@@ -4217,6 +4332,55 @@ void yahoo_reject_buddy(int id, const char *who, const char *msg)
 	yahoo_packet_hash(pkt, 14, msg);
 	yahoo_send_packet(yid, pkt, 0);
 	yahoo_packet_free(pkt);
+}
+
+void yahoo_auth_deny(int id, const char *who)
+{
+	struct yahoo_input_data *yid = find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER);
+	struct yahoo_data *yd;
+	struct yahoo_packet *pkt;
+
+	if(!yid)
+		return;
+	yd = yid->yd;
+
+	if (!yd->logged_in)
+		return;
+
+	pkt = yahoo_packet_new(YAHOO_SERVICE_AUTH_REQ_15, YAHOO_STATUS_AVAILABLE, yd->session_id);
+	yahoo_packet_hash(pkt, 1, yd->user);
+	yahoo_packet_hash(pkt, 5, who);
+	yahoo_packet_hash(pkt, 13, "2");
+	yahoo_packet_hash(pkt, 334, "0");
+	yahoo_packet_hash(pkt, 97, "1");
+	yahoo_packet_hash(pkt, 14, "");
+	yahoo_send_packet(yid, pkt, 0);
+	yahoo_packet_free(pkt);
+
+}
+
+void yahoo_auth_grant(int id, const char *who)
+{
+	struct yahoo_input_data *yid = find_input_by_id_and_type(id, YAHOO_CONNECTION_PAGER);
+	struct yahoo_data *yd;
+	struct yahoo_packet *pkt;
+
+	if(!yid)
+		return;
+	yd = yid->yd;
+
+	if (!yd->logged_in)
+		return;
+
+	pkt = yahoo_packet_new(YAHOO_SERVICE_AUTH_REQ_15, YAHOO_STATUS_AVAILABLE, yd->session_id);
+	yahoo_packet_hash(pkt, 1, yd->user);
+	yahoo_packet_hash(pkt, 5, who);
+//	yahoo_packet_hash(pkt, 241, 0);
+	yahoo_packet_hash(pkt, 13, "1");
+	yahoo_packet_hash(pkt, 334, "0");
+	yahoo_send_packet(yid, pkt, 0);
+	yahoo_packet_free(pkt);
+
 }
 
 void yahoo_ignore_buddy(int id, const char *who, int unignore)
