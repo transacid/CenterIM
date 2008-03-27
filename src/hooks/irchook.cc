@@ -223,6 +223,7 @@ bool irchook::isconnecting() const {
 bool irchook::send(const imevent &ev) {
     icqcontact *c = clist.get(ev.getcontact());
     string text, cmd;
+    bool result = true;
 
     if(c) {
 	if(ev.gettype() == imevent::message) {
@@ -253,6 +254,29 @@ bool irchook::send(const imevent &ev) {
 	    return true;
 	}
 
+	string original = text;
+	int pos = -1;
+	
+	while (original.length()>0)
+	{
+	if ((pos = original.find("\n")) != -1)  // split by newlines into separate commands, drop empty ones
+	{
+		if (pos>1)
+		{
+			text = original.substr(0, pos-1);
+			original.erase(0, pos+1);
+		}
+		else
+		{
+			original.erase(0, pos+1);
+			continue;
+		}
+	}
+	else
+	{
+		text = original;
+		original.clear();
+	}
 	if(text.substr(0, 1) == "/") {
 	    text.erase(0, 1);
 	    cmd = up(getword(text));
@@ -284,15 +308,19 @@ bool irchook::send(const imevent &ev) {
 	}
 
 	if(ischannel(c)) {
-	    return firetalk_chat_send_message(handle,
-		c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+	    if (firetalk_chat_send_message(handle,
+		c->getdesc().nickname.c_str(), text.c_str(), 0) != FE_SUCCESS)
+			result = false;
 
 	} else {
-	    return firetalk_im_send_message(handle,
-		c->getdesc().nickname.c_str(), text.c_str(), 0) == FE_SUCCESS;
+	    if (firetalk_im_send_message(handle,
+		c->getdesc().nickname.c_str(), text.c_str(), 0) != FE_SUCCESS)
+			result = false;
 
 	}
-    }
+    	}
+    	return result;
+	}
 
     return false;
 }
