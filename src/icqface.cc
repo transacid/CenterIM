@@ -604,6 +604,7 @@ void icqface::fillcontactlist() {
     int i, id, nnode, ngroup, prevgid, n, nonline;
     string dnick;
     icqcontact *c;
+    icqcontact::basicinfo bi;
     void *savec;
     char prevsc = 'x', sc;
     icqgroup *g = NULL;
@@ -746,7 +747,11 @@ void icqface::fillcontactlist() {
 
 	dnick = c->getdispnick();
 
-	if(birthday) dnick += " :)";
+    if(birthday) dnick += " :)";
+
+    bi = c->getbasicinfo();
+
+    if(bi.authawait) dnick += " *Auth*";
 
 	if(conf.getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
 	    !c->hasevents() && sc != '!')
