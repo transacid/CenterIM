@@ -500,7 +500,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "sort_by_activity") setsortmode(icqconf::sort_by_activity); else
 	    if(param == "sort_by_name") setsortmode(icqconf::sort_by_name); else
 	    if(param == "smtp") setsmtphost(buf); else
-	    if(param == "browser") setbrowser(browser); else
+	    if(param == "browser") setbrowser(buf); else
 	    if(param == "http_proxy") sethttpproxyhost(buf); else
 	    if(param == "log") makelog = true; else
 	    if(param == "proxy_connect") proxyconnect = true; else
