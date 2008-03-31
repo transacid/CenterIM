@@ -84,7 +84,7 @@ class icqface {
 	linkedlist workareas;
 
 	bool editdone, mainscreenblock, inited, onlinefolder,
-	    dotermresize, fneedupdate, detailsfetched, inchat, doredraw;
+	    dotermresize, fneedupdate, detailsfetched, inchat, doredraw, ineditor;
 
 	int chatlines;
 
@@ -174,6 +174,7 @@ class icqface {
 
 	string extracttime(const imevent &ev);
 	void peerinfo(int line, const imcontact &ic);
+	void drawopenedchats(int line, int width);
 	void findpgpkey(dialogbox &db, const vector<string> &items);
 
   string getprotocolchar(protocolname pname) const;

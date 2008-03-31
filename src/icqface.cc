@@ -760,7 +760,7 @@ void icqface::fillcontactlist() {
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		    c->hasevents() ? conf.getcolor(cp_clist_unread) : ccolor,
+		    c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
 		    c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {
@@ -807,7 +807,17 @@ void icqface::fillcontactlist() {
 	}
     }
 
-    if(!mainscreenblock) mcontacts->redraw();
+    if(!mainscreenblock) {
+	mcontacts->redraw();
+	
+	if (inchat && ineditor) {
+	    workarealine(sizeWArea.y2);
+	    drawopenedchats(chatlines + sizeWArea.y1 + 1, sizeWArea.x2 - 32);
+	} else {
+	    drawopenedchats(sizeWArea.y2, sizeWArea.x2 - 1);
+	}
+	
+    }
 
     if(!savec || ontop || (!onlinefolder && online_added && conf.gethideoffline())) {
 	mcontacts->menu.setpos(0);
@@ -825,9 +835,7 @@ void icqface::fillcontactlist() {
 
     onlinefolder = online_added;
 
-    if(!mainscreenblock) {
-	mcontacts->menu.redraw();
-    }
+    if(!mainscreenblock) mcontacts->menu.redraw();
 }
 
 bool icqface::findresults(const imsearchparams &sp, bool fauto) {
@@ -2689,16 +2697,17 @@ void icqface::renderchathistory() {
 }
 
 void icqface::peerinfo(int line, const imcontact &ic) {
-    workarealine(sizeWArea.y1+line);
+    //workarealine(sizeWArea.y1+line);
 
     icqcontact *c = clist.get(ic);
     if(!c) return;
 
-    string text = conf.getprotocolname(passinfo.pname) + " " + c->getdispnick();
-    int maxsize = sizeWArea.x2-sizeWArea.x1-10;
+    char cstatus = c->getshortstatus();
+    string text = "[" + string(&cstatus, 1) + "] " + conf.getprotocolname(passinfo.pname) + " " + c->getdispnick();
+    int maxsize = 20;
     bool pgpon = false;
 
-    if(text.size() > maxsize) {
+    if(text.size() > maxsize + 2) {
 	text.erase(maxsize);
 	text += "..";
     }
@@ -2714,14 +2723,79 @@ void icqface::peerinfo(int line, const imcontact &ic) {
 
     text = (string) "[ " + text + " ]";
 
+    workarealine(sizeWArea.y2);
+    drawopenedchats(sizeWArea.y1+line, sizeWArea.x2 - 32);
+
+    attrset(conf.getcolor(cp_main_frame));
+    mvhline(sizeWArea.y1+line, sizeWArea.x2 - 31, HLINE, 32 - text.size() - 1);
+																					    
     kwriteatf(sizeWArea.x2-text.size()-1, sizeWArea.y1+line,
 	conf.getcolor(cp_main_text), "%s", text.c_str());
+	
+    attrset(conf.getcolor(cp_main_frame));
+    mvhline(sizeWArea.y1+line, sizeWArea.x2 - 1, HLINE, 1);
 
     if(pgpon) {
 	kwriteatf(sizeWArea.x2-6, sizeWArea.y1+line,
 	    conf.getcolor(cp_main_highlight), "PGP");
     }
 }
+
+void icqface::drawopenedchats(int line, int width) {
+    // writing info about opened chats
+
+    string dispnick;
+    icqcontact *ct, *c;
+    
+    if (inchat) {
+	c = clist.get(face.passinfo);
+    } else {
+	c = NULL;
+    }
+    
+    int i, curx = sizeWArea.x1 + 3;    
+
+    attrset(conf.getcolor(cp_main_frame));
+    mvhline(line, sizeWArea.x1 + 1, HLINE, 2);
+		    
+    for(i = 0; i < clist.count; i++) {
+        ct =(icqcontact *) clist.at(i);
+		
+        if (ct->isopenedforchat()) {
+    	    dispnick = ct->getdispnick();
+						    
+    	    if (dispnick.length() > 18) {
+		dispnick.erase(16);
+		dispnick += "..";
+    	    }
+
+	    if (curx + dispnick.size() + 5 >= width - 1) {
+		dispnick = "[...]";
+		kwriteatf(curx, line, conf.getcolor(cp_main_text), "%s", dispnick.c_str());
+		curx += dispnick.size();
+		break;
+	    }
+
+	    dispnick = "[ " + dispnick + " ]";	    
+	    dispnick[1] = ct->hasevents() ? '*' : ' ';
+	    
+	    int col = (ct == c) ? conf.getcolor(cp_main_highlight) : conf.getcolor(cp_main_text);
+	    	    											    
+	    kwriteatf(curx, line, col, "%s", dispnick.c_str());	    
+	    
+	    attrset(conf.getcolor(cp_main_frame));
+	    mvhline(line, curx + dispnick.size(), HLINE, 1);
+	    
+	    curx += dispnick.size() + 1;
+	}
+    }
+    
+    if (curx <= width) {
+	attrset(conf.getcolor(cp_main_frame));
+	mvhline(line, curx, HLINE, width - curx + 1);
+    }
+}
+
 
 bool icqface::chat(const imcontact &ic) {
     texteditor editor;
@@ -2776,6 +2850,8 @@ bool icqface::chat(const imcontact &ic) {
 
     showeventbottom(ic);
 
+    ineditor = true;
+
     for(bool finished = false; !finished && clist.get(ic); ) {
 	renderchathistory();
 
@@ -2802,7 +2878,9 @@ bool icqface::chat(const imcontact &ic) {
 	}
 
 	c->setpostponed(editdone ? "" : p.get());
-    }
+    }    
+
+    ineditor = false;
 
     c->toggleopenedforchat();
     c->save();
@@ -3487,29 +3565,41 @@ int icqface::editmsgkeys(texteditor &e, int k) {
 	    free(p);
 	    if(face.editdone) return -1; else break;
 	case key_multiple_recipients:
+	    face.ineditor = false;
 	    face.multicontacts("");
+	    face.ineditor = true;
 	    break;
 	case key_history:
+	    face.ineditor = false;
 	    cicq.history(face.passinfo);
+	    face.ineditor = true;
 	    break;
 	case key_prev_chat:
 	    face.editdone = false;
+	    face.ineditor = false;
 	    face.next_chat(false);
 	    return -1;
 	case key_next_chat:
 	    face.editdone = false;
+	    face.ineditor = false;
 	    face.next_chat(true);
 	    return -1;
 	case key_out_chat:
+	    face.ineditor = false;
 	    face.editdone = false;
 	    face.next_chat(false);
 	    face.last_selected = (icqcontact* ) clist.at(0);
 	    return -1;
 	case key_info:
+	    face.ineditor = false;
 	    cicq.userinfo(face.passinfo);
+	    face.ineditor = true;
 	    break;
 	case key_show_urls:
-	    face.showextractedurls(); break;
+	    face.ineditor = false;
+	    face.showextractedurls(); 
+	    face.ineditor = true;
+	    break;
 	case key_fullscreen:
 	    if(face.passevent)
 		face.fullscreenize(face.passevent);
