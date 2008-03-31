@@ -1120,7 +1120,7 @@ void yahoohook::connect_complete(void *data, int source) {
 	ccd->callback(source, so_error, ccd->callback_data);
     }
 
-    free(ccd);
+    delete ccd;
 }
 
 void yahoohook::got_ignore(int id, YList * igns) {

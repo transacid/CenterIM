@@ -619,7 +619,7 @@ static void yahoo_packet_read(struct yahoo_packet *pkt, unsigned char *data, int
 		accept = x; 
 		/* if x is 0 there was no key, so don't accept it */
 		if (accept)
-			value = malloc(len - pos + 1);
+			value = malloc(len - pos + 2);
 		x = 0;
 		while (pos + 1 < len) {
 			if (data[pos] == 0xc0 && data[pos + 1] == 0x80)
@@ -1509,17 +1509,16 @@ static void yahoo_process_list(struct yahoo_input_data *yid, struct yahoo_packet
 			yd->current_status = yd->initial_status;
 		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_OK, NULL);
 		
-		pkt = yahoo_packet_new(YAHOO_SERVICE_Y6_STATUS_UPDATE, YAHOO_STATUS_AVAILABLE, 0);
+		struct yahoo_packet *pkt2 = yahoo_packet_new(YAHOO_SERVICE_Y6_STATUS_UPDATE, YAHOO_STATUS_AVAILABLE, 0);
 		
 		char buff[20];
 		
 		snprintf(buff, sizeof(buff)-1, "%d", yd->current_status);
-		yahoo_packet_hash(pkt, 10, buff);
-		yahoo_packet_hash(pkt, 19, "");
-		yahoo_send_packet(yid, pkt, 0);
+		yahoo_packet_hash(pkt2, 10, buff);
+		yahoo_packet_hash(pkt2, 19, "");
+		yahoo_send_packet(yid, pkt2, 0);
 
-		yahoo_packet_free(pkt);
-
+		yahoo_packet_free(pkt2);
 	}
 
 	for (l = pkt->hash; l; l = l->next) {
