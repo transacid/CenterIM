@@ -1210,6 +1210,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 32, _(" Left panel width :  %d "), conf.getleftpanelwidth());
 	t.addleaff(i, 0, 33, _(" Log panel height :  %d "), conf.getlogpanelheight());
 	t.addleaff(i, 0, 34, _(" Chat panel height : %d "), conf.getchatpanelheight());
+    t.addleaff(i, 0, 55, _(" Show opened chats : %s "), stryesno(showopenedchats));
 
     #ifdef USE_FRIBIDI
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
@@ -1236,7 +1237,6 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
 	t.addleaff(i, 0, 54, _(" Sort contacts by : %s "), strsortmode(smode));
     t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
-    t.addleaff(i, 0, 55, _(" Show opened chats : %s "), stryesno(showopenedchats));
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
 	t.addleaff(i, 0, 51, _(" Anti-spam: ignore authorization requests: %s "), stryesno(dropauthreq));
 	t.addleaff(i, 0, 52, _(" Anti-spam: use captcha to identify bots: %s "), stryesno(usingcaptcha));
