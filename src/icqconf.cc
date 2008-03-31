@@ -483,6 +483,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
+	    if(param == "showopenedchats") setshowopenedchats(true); else
 	    if(param == "dropauthreq") dropauthreq = true; else
 	    if(param == "screenna") screenna = true; else
 	    if(param == "screensocketpath") screensocketpath = buf; else
@@ -573,7 +574,8 @@ void icqconf::save() {
 	    if(hideoffline) f << "hideoffline" << endl;
 	    if(emacs) f << "emacs" << endl;
 	    if(getquote()) f << "quotemsgs" << endl;
-	    if(getantispam()) f << "antispam" << endl;
+        if(getantispam()) f << "antispam" << endl;
+        if(getshowopenedchats()) f << "showopenedchats" << endl;
 	    if(getdropauthreq()) f << "dropauthreq" << endl;
 	    if(getusingcaptcha()) f << "captcha" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
@@ -1106,6 +1108,11 @@ void icqconf::setemacs(bool fem) {
 
 void icqconf::setantispam(bool fas) {
     antispam = fas;
+}
+
+void icqconf::setshowopenedchats(bool fsoc)
+{
+    showopenedchats = fsoc;
 }
 
 void icqconf::setdropauthreq(bool fas) {

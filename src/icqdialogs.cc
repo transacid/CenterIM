@@ -1119,6 +1119,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool savepwd = conf.getsavepwd();
     bool hideoffl = conf.gethideoffline();
     bool antispam = conf.getantispam();
+    bool showopenedchats = conf.getshowopenedchats();
     bool dropauthreq = conf.getdropauthreq();
     bool usingcaptcha = conf.getusingcaptcha();
     bool mailcheck = conf.getmailcheck();
@@ -1234,7 +1235,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Contact list "));
 	t.addleaff(i, 0, 17, _(" Arrange contacts into groups : %s "), strgroupmode(gmode));
 	t.addleaff(i, 0, 54, _(" Sort contacts by : %s "), strsortmode(smode));
-	t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
+    t.addleaff(i, 0,  6, _(" Hide offline users : %s "), stryesno(hideoffl));
+    t.addleaff(i, 0, 55, _(" Show opened chats : %s "), stryesno(showopenedchats));
 	t.addleaff(i, 0, 14, _(" Anti-spam: kill msgs from users not on the list : %s "), stryesno(antispam));
 	t.addleaff(i, 0, 51, _(" Anti-spam: ignore authorization requests: %s "), stryesno(dropauthreq));
 	t.addleaff(i, 0, 52, _(" Anti-spam: use captcha to identify bots: %s "), stryesno(usingcaptcha));
@@ -1476,7 +1478,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			    smode == icqconf::sort_by_status_and_name ? icqconf::sort_by_activity :
 			    smode == icqconf::sort_by_activity ? icqconf::sort_by_name :
 				icqconf::sort_by_status_and_activity;
-			break;
+            break;
+            case 55: showopenedchats = !showopenedchats; break;
+                
   		}
   		break;
 	    case 1:
@@ -1489,6 +1493,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.sethideoffline(hideoffl);
 		conf.setemacs(emacs);
 		conf.setantispam(antispam);
+		conf.setshowopenedchats(showopenedchats);
 		conf.setdropauthreq(dropauthreq);
 		conf.setusingcaptcha(usingcaptcha);
 		conf.setmailcheck(mailcheck);

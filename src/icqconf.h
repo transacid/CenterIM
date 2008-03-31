@@ -156,7 +156,8 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam, screenna, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
-	    timestampstothesecond, dropauthreq, usingcaptcha, askquit;
+        timestampstothesecond, dropauthreq, usingcaptcha, askquit,
+        showopenedchats;
 
 	unsigned int captchatimeout;
 
@@ -330,6 +331,9 @@ class icqconf {
 
 	void getpeertopeer(int &min, int &max) const { min = ptpmin; max = ptpmax; }
 	void setpeertopeer(int min, int max) { ptpmin = min; ptpmax = max; }
+
+	bool getshowopenedchats() const { return showopenedchats; }
+	void setshowopenedchats(bool fsoc);
 
 	string execaction(const string &action, const string &param = "");
 

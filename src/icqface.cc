@@ -751,7 +751,7 @@ void icqface::fillcontactlist() {
 
     bi = c->getbasicinfo();
 
-    if(bi.authawait) dnick += " *Auth*";
+    if(bi.authawait) dnick += " !A";
 
 	if(conf.getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
 	    !c->hasevents() && sc != '!')
@@ -2762,37 +2762,44 @@ void icqface::drawopenedchats(int line, int width) {
 
     attrset(conf.getcolor(cp_main_frame));
     mvhline(line, sizeWArea.x1 + 1, HLINE, 2);
-		    
-    for(i = 0; i < clist.count; i++) {
-        ct =(icqcontact *) clist.at(i);
-		
-        if (ct->isopenedforchat()) {
-    	    dispnick = ct->getdispnick();
-						    
-    	    if (dispnick.length() > 18) {
-		dispnick.erase(16);
-		dispnick += "..";
-    	    }
 
-	    if (curx + dispnick.size() + 5 >= width - 1) {
-		dispnick = "[...]";
-		kwriteatf(curx, line, conf.getcolor(cp_main_text), "%s", dispnick.c_str());
-		curx += dispnick.size();
-		break;
-	    }
+    if (conf.getshowopenedchats())
+    {
+        for(i = 0; i < clist.count; i++) 
+        {
+            ct =(icqcontact *) clist.at(i);
+            
+            if (ct->isopenedforchat()) 
+            {
+                dispnick = ct->getdispnick();
+                                
+                if (dispnick.length() > 18) 
+                {
+                    dispnick.erase(16);
+                    dispnick += "..";
+                }
 
-	    dispnick = "[ " + dispnick + " ]";	    
-	    dispnick[1] = ct->hasevents() ? '*' : ' ';
-	    
-	    int col = (ct == c) ? conf.getcolor(cp_main_highlight) : conf.getcolor(cp_main_text);
-	    	    											    
-	    kwriteatf(curx, line, col, "%s", dispnick.c_str());	    
-	    
-	    attrset(conf.getcolor(cp_main_frame));
-	    mvhline(line, curx + dispnick.size(), HLINE, 1);
-	    
-	    curx += dispnick.size() + 1;
-	}
+                if (curx + dispnick.size() + 5 >= width - 1) 
+                {
+                    dispnick = "[...]";
+                    kwriteatf(curx, line, conf.getcolor(cp_main_text), "%s", dispnick.c_str());
+                    curx += dispnick.size();
+                    break;
+                }
+
+                dispnick = "[ " + dispnick + " ]";	    
+                dispnick[1] = ct->hasevents() ? '*' : ' ';
+            
+                int col = (ct == c) ? conf.getcolor(cp_main_highlight) : conf.getcolor(cp_main_text);
+                                                                    
+                kwriteatf(curx, line, col, "%s", dispnick.c_str());	    
+            
+                attrset(conf.getcolor(cp_main_frame));
+                mvhline(line, curx + dispnick.size(), HLINE, 1);
+            
+                curx += dispnick.size() + 1;
+            }
+        }
     }
     
     if (curx <= width) {
