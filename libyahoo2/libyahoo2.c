@@ -1420,56 +1420,73 @@ static void yahoo_process_status(struct yahoo_input_data *yid, struct yahoo_pack
 			users = y_list_prepend(users, u);
 			break;
 		case 10: /* state */
-			((struct user*)users->data)->state = strtol(pair->value, NULL, 10);
+			if (users)
+				((struct user*)users->data)->state = strtol(pair->value, NULL, 10);
 			break;
 		case 19: /* custom status message */
-			((struct user*)users->data)->msg = pair->value;
+			if (users)
+				((struct user*)users->data)->msg = pair->value;
 			break;
 		case 47: /* is it an away message or not */
-			((struct user*)users->data)->away = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->away = atoi(pair->value);
 			break;
 		case 137: /* seconds idle */
-			((struct user*)users->data)->idle = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->idle = atoi(pair->value);
 			break;
 		case 11: /* this is the buddy's session id */
-			((struct user*)users->data)->buddy_session = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->buddy_session = atoi(pair->value);
 			break;
 		case 17: /* in chat? */
-			((struct user*)users->data)->f17 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f17 = atoi(pair->value);
 			break;
 		case 13: /* bitmask, bit 0 = pager, bit 1 = chat, bit 2 = game */
-			((struct user*)users->data)->flags = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->flags = atoi(pair->value);
 			break;
 		case 60: /* SMS -> 1 MOBILE USER */
 			/* sometimes going offline makes this 2, but invisible never sends it */
-			((struct user*)users->data)->mobile = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->mobile = atoi(pair->value);
 			break;
 		case 138:
-			((struct user*)users->data)->f138 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f138 = atoi(pair->value);
 			break;
 		case 184:
-			((struct user*)users->data)->f184 = pair->value;
+			if (users)
+				((struct user*)users->data)->f184 = pair->value;
 			break;
 		case 192:
-			((struct user*)users->data)->f192 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f192 = atoi(pair->value);
 			break;
 		case 10001:
-			((struct user*)users->data)->f10001 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f10001 = atoi(pair->value);
 			break;
 		case 10002:
-			((struct user*)users->data)->f10002 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f10002 = atoi(pair->value);
 			break;
 		case 198:
-			((struct user*)users->data)->f198 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f198 = atoi(pair->value);
 			break;
 		case 197:
-			((struct user*)users->data)->f197 = pair->value;
+			if (users)
+				((struct user*)users->data)->f197 = pair->value;
 			break;
 		case 205:
-			((struct user*)users->data)->f205 = pair->value;
+			if (users)
+				((struct user*)users->data)->f205 = pair->value;
 			break;
 		case 213:
-			((struct user*)users->data)->f213 = atoi(pair->value);
+			if (users)
+				((struct user*)users->data)->f213 = atoi(pair->value);
 			break;
 		case 16: /* Custom error message */
 			YAHOO_CALLBACK(ext_yahoo_error)(yd->client_id, pair->value, 0, E_CUSTOM);
