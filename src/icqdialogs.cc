@@ -1128,6 +1128,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool bidi = conf.getbidi();
     bool askquit = conf.getaskquit();
     bool emacs = conf.getemacs();
+	bool vi = conf.getvi();
     bool proxyconnect = conf.getproxyconnect();
     bool timestampstothesecond = conf.gettimestampstothesecond();
     bool logtimestamps, logonline;
@@ -1216,6 +1217,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
     #endif
 	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
+	t.addleaff(i, 0, 55, _(" Enable vi bindings: %s "), stryesno(vi));
 	t.addleaff(i, 0, 53, _(" Ask before quit : %s "), stryesno(askquit));
 
 	i = t.addnode(_(" Codepages conversion "));
@@ -1478,8 +1480,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			    smode == icqconf::sort_by_status_and_name ? icqconf::sort_by_activity :
 			    smode == icqconf::sort_by_activity ? icqconf::sort_by_name :
 				icqconf::sort_by_status_and_activity;
-            break;
-            case 55: showopenedchats = !showopenedchats; break;
+			break;
+		    case 55: showopenedchats = !showopenedchats; break;
+		    case 56: vi = !vi; break;
                 
   		}
   		break;
@@ -1492,6 +1495,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf.setscreensocketpath(screensocketpath);
 		conf.sethideoffline(hideoffl);
 		conf.setemacs(emacs);
+		conf.setvi(vi);
 		conf.setantispam(antispam);
 		conf.setshowopenedchats(showopenedchats);
 		conf.setdropauthreq(dropauthreq);

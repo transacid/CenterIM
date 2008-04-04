@@ -510,6 +510,13 @@ icqcontact *icqface::mainloop(int &action) {
     for(fin = false; !fin; ) {
 	extk = ACT_MSG;
 
+	// Set vi keybindings if configured
+	// 
+	if (conf.getvi()) {
+		define_key("j", KEY_DOWN);
+		define_key("k", KEY_UP);
+	}
+
 	/* Obtain the (icqcontact *) from the treeview. If a node is
 	   selected, throw out the contact and obtain the correct (icqgroup *). */
 	
@@ -525,7 +532,7 @@ icqcontact *icqface::mainloop(int &action) {
 	} else {
 	    g = 0;
 	}
-	
+
 	if((intptr_t) c < 100) c = 0;
 
 	if(i) {
@@ -589,6 +596,34 @@ icqcontact *icqface::mainloop(int &action) {
 	}
     }
     if (c) last_selected = c;
+
+	// If vi bindings configured,
+	// do not restore bindings for these
+	// 
+	if (conf.getvi()) {
+		if (action == ACT_STATUS
+				|| action == ACT_GROUPMOVE
+				|| action == ACT_REMOVE
+				|| action == ACT_IGNORE
+				|| action == ACT_INFO
+				|| action == ACT_FETCHAWAY
+				|| action == ACT_VERSION
+				|| action == ACT_HISTORY
+				|| action == ACT_EXTERN
+				|| action == ACT_TRANSFERS
+				|| action == ACT_IGNORELIST
+				|| action == ACT_INVISLIST
+				|| action == ACT_VISIBLELIST
+				|| action == ACT_HIDEOFFLINE
+				|| action == ACT_ORG_GROUPS
+				|| action == ACT_MASS_MOVE
+				) {
+		}
+		else {
+			define_key("j", 'j');
+			define_key("k", 'k');
+		}
+	}
     return c;
 }
 
