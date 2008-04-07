@@ -1832,6 +1832,8 @@ static void yahoo_process_picture(struct yahoo_input_data *yid, struct yahoo_pac
 	int checksum = 0;
 	YList *l;
 	
+	return;
+	
 	for(l = pkt->hash; l; l = l->next)
 	{
 		struct yahoo_pair *pair = l->data;
@@ -1873,7 +1875,9 @@ static void yahoo_process_picture_upload(struct yahoo_input_data *yid, struct ya
 	struct yahoo_data *yd = yid->yd;
 	YList *l;
 	char *url;
-
+	
+	return;
+	
 	if ( pkt->status != 1 )
 		return;		/* something went wrong */
 	
