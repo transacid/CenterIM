@@ -1618,7 +1618,8 @@ static void yahoo_process_list_15(struct yahoo_input_data *yid, struct yahoo_pac
 	
 	char *grp = 0, *bud = 0;
 	
-	for (l = pkt->hash; l; l = l->next) {
+	l = pkt->hash;
+	while (l) {
 		struct yahoo_pair *pair = l->data;
 
 		switch (pair->key) {
@@ -1658,6 +1659,8 @@ static void yahoo_process_list_15(struct yahoo_input_data *yid, struct yahoo_pac
 			FREE(bud);
 			break;
 		}
+		if (l)
+			l = l->next;
 	}
 	FREE(grp);
 	YAHOO_CALLBACK(ext_yahoo_got_buddies)(yd->client_id, yd->buddies);
@@ -1829,6 +1832,8 @@ static void yahoo_process_picture(struct yahoo_input_data *yid, struct yahoo_pac
 	int checksum = 0;
 	YList *l;
 	
+	return;
+	
 	for(l = pkt->hash; l; l = l->next)
 	{
 		struct yahoo_pair *pair = l->data;
@@ -1870,7 +1875,9 @@ static void yahoo_process_picture_upload(struct yahoo_input_data *yid, struct ya
 	struct yahoo_data *yd = yid->yd;
 	YList *l;
 	char *url;
-
+	
+	return;
+	
 	if ( pkt->status != 1 )
 		return;		/* something went wrong */
 	
