@@ -1286,7 +1286,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Logging "));
 	t.addleaff(i, 0, 9, _(" Timestamps in the log window : %s "), stryesno(logtimestamps));
 	t.addleaff(i, 0, 48, _(" Timestamps include seconds : %s "), stryesno(timestampstothesecond));
-	t.addleaff(i, 0, 10, _(" Online/offile events in the log window : %s "), stryesno(logonline));
+	t.addleaff(i, 0, 10, _(" Online/offline events in the log window : %s "), stryesno(logonline));
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centerim/log : %s "), stryesno(makelog));
 
 	i = t.addnode(_(" Auto Presence Status "));
