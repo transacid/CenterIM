@@ -115,7 +115,7 @@ AC_ARG_WITH(libjpeg,
                             support (for Gadu-Gadu registration)])
             )
 AC_ARG_WITH(libotr,
-            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr)]),
+            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr) WARNING: use at your own risk, not suppoerted yet]),
             [with_libotr=$withval],
             [with_libotr=no]
             )
@@ -491,9 +491,9 @@ if test "x$have_gpgme" = "xno"; then
 AC_MSG_RESULT([
 WARNING: GPGME disabled (This means no encrypted messages between users)
 ]); fi
-if test "x$have_libotr" = "xno"; then
+if test "x$have_libotr" = "xyes"; then
 AC_MSG_RESULT([
-WARNING: libotr disabled (This means no otr encryption)
+WARNING: libotr enabled (OTR is not supported yet, use at your own risk)
 ]); fi
 fi
 AC_MSG_RESULT([
