@@ -1217,7 +1217,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 20, _( " Enable bidirectional languages support : %s "), stryesno(bidi));
     #endif
 	t.addleaff(i, 0, 23, _(" Enable emacs bindings in text editor : %s "), stryesno(emacs));
-	t.addleaff(i, 0, 55, _(" Enable vi bindings: %s "), stryesno(vi));
+	t.addleaff(i, 0, 56, _(" Enable vi bindings: %s "), stryesno(vi));
 	t.addleaff(i, 0, 53, _(" Ask before quit : %s "), stryesno(askquit));
 
 	i = t.addnode(_(" Codepages conversion "));
