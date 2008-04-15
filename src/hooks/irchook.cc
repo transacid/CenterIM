@@ -275,7 +275,7 @@ bool irchook::send(const imevent &ev) {
 	else
 	{
 		text = original;
-		original.clear();
+		original.erase();
 	}
 	if(text.substr(0, 1) == "/") {
 	    text.erase(0, 1);
