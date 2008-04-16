@@ -196,8 +196,40 @@ if test "x$with_ssl" != "xno"; then
             ac_configure_args="$ac_configure_args --with-ssl"
             ])
 	fi
+
+    if test x"$with_ssl" = x"yes"; then
+      AC_DEFINE(HAVE_SSL, 1, [ssl is available])
+    fi
+
 else 
 	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
+fi
+
+#########################
+# Check for inet_aton() #
+#########################
+
+AC_MSG_CHECKING(for inet_aton() presence)
+
+AC_TRY_LINK([
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+], [
+
+struct in_addr inp;
+inet_aton("address", &inp);
+
+], have_aton=yes, have_aton=no)
+
+if test "$have_aton" = "yes"; then
+    AC_DEFINE(HAVE_INET_ATON, 1 ,[inet_aton() presence])
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
 fi
 
 ###################
@@ -442,17 +474,60 @@ AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_STAT
 AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
-AC_FUNC_WAIT3                                  
-AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify alarm atexit bzero dup2 floor getcwd gethostbyname gethostname gettimeofday inet_ntoa isascii memmove mempcpy memset mkdir modf munmap nl_langinfo putenv regcomp rmdir select setenv setlocale socket stpcpy strcasecmp strchr strcspn strdup strerror strncasecmp strpbrk strrchr strspn strstr strtol strtoul uname])
+AC_FUNC_WAIT3
+AC_CHECK_FUNCS([__argz_count])
+AC_CHECK_FUNCS([__argz_next])
+AC_CHECK_FUNCS([__argz_stringify])
+AC_CHECK_FUNCS([alarm])
+AC_CHECK_FUNCS([atexit])
+AC_CHECK_FUNCS([bzero])
+AC_CHECK_FUNCS([dup2])
+AC_CHECK_FUNCS([floor])
+AC_CHECK_FUNCS([getcwd])
+AC_CHECK_FUNCS([gethostbyname])
+AC_CHECK_FUNCS([gethostname])
+AC_CHECK_FUNCS([gettimeofday])
+AC_CHECK_FUNCS([inet_ntoa])
+AC_CHECK_FUNCS([inet_aton])
+AC_CHECK_FUNCS([isascii])
+AC_CHECK_FUNCS([memmove])
+AC_CHECK_FUNCS([mempcpy])
+AC_CHECK_FUNCS([memset])
+AC_CHECK_FUNCS([mkdir])
+AC_CHECK_FUNCS([modf])
+AC_CHECK_FUNCS([munmap])
+AC_CHECK_FUNCS([nl_langinfo])
+AC_CHECK_FUNCS([putenv])
+AC_CHECK_FUNCS([regcomp])
+AC_CHECK_FUNCS([rmdir])
+AC_CHECK_FUNCS([select])
+AC_CHECK_FUNCS([setenv])
+AC_CHECK_FUNCS([setlocale])
+AC_CHECK_FUNCS([socket])
+AC_CHECK_FUNCS([stpcpy])
+AC_CHECK_FUNCS([strcasecmp])
+AC_CHECK_FUNCS([strchr])
+AC_CHECK_FUNCS([strcspn])
+AC_CHECK_FUNCS([strdup])
+AC_CHECK_FUNCS([strerror])
+AC_CHECK_FUNCS([strncasecmp])
+AC_CHECK_FUNCS([strpbrk])
+AC_CHECK_FUNCS([strrchr])
+AC_CHECK_FUNCS([strspn])
+AC_CHECK_FUNCS([strstr])
+AC_CHECK_FUNCS([strtol])
+AC_CHECK_FUNCS([strtoul])
+AC_CHECK_FUNCS([uname])
 
 ########################
 # Create output files. #
 ########################
 # also configure other packages
-AC_CONFIG_SUBDIRS(connwrap firetalk kkconsui kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
+AC_CONFIG_SUBDIRS(firetalk kkconsui kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
 
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
+                 connwrap/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile
