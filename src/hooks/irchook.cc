@@ -914,13 +914,13 @@ void irchook::getmessage(void *conn, void *cli, ...) {
 
     if(sender && message)
     if(strlen(sender) && strlen(message)) {
-	if(!irhook.sentpass)
+	/*if(!irhook.sentpass)  // NickServ identify should be handled by firetalk and needpass callback
 	if(up(sender) == "NICKSERV") {
 	    firetalk_im_send_message(irhook.handle, "NickServ",
 		((string) "identify " + conf.getourid(irc).additional["nickpass"]).c_str(), 0);
 
 	    irhook.sentpass = true;
-	}
+	}*/
 
 	em.store(immessage(imcontact(sender, irc),
 	    imevent::incoming, irhook.rushtmlconv("wk", cuthtml(message, chCutBR | chLeaveLinks))));
@@ -1282,10 +1282,22 @@ void irchook::needpass(void *conn, void *cli, ...) {
     if(pass) {
 	icqconf::imaccount acc = conf.getourid(irc);
 
-	if(!acc.password.empty()) {
-	    strncpy(pass, acc.password.c_str(), size-1);
-	    pass[size-1] = 0;
-	    face.log(_("+ [irc] password sent"));
+	if (size == 129)  // signon password
+	{
+		if(!acc.password.empty()) {
+	    	strncpy(pass, acc.password.c_str(), size-1);
+	    	pass[size-1] = 0;
+	    	face.log(_("+ [irc] password sent"));
+		}
+	}
+	else // NickServ password
+	{
+		irhook.sentpass = true;
+		if(!acc.additional["nickpass"].empty()) {
+	    	strncpy(pass, acc.additional["nickpass"].c_str(), size-1);
+	    	pass[size-1] = 0;
+	    	face.log(_("+ [irc] nick password sent"));
+		}
 	}
     }
 }

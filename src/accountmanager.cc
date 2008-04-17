@@ -176,6 +176,7 @@ void accountmanager::exec() {
 	    a = conf.getourid(pname);
 	    spname = conf.getprotocolname(pname);
 	    abstracthook &hook = gethook(pname);
+		capab = hook.getCapabs();
 
 	    switch(action) {
 		case 1:
