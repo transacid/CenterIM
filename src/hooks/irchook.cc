@@ -617,7 +617,10 @@ void irchook::setautochannels(vector<channelInfo> &achannels) {
 	if(iac->joined) {
 	    r = ic == channels.end();
 	    if(!r) r = !ic->joined;
-	    if(r) firetalk_chat_join(irhook.handle, iac->name.c_str());
+	    string passname = iac->name;
+	    if (!iac->passwd.empty())
+	    	passname += " " + iac->passwd;
+	    if(r) firetalk_chat_join(irhook.handle, passname.c_str());
 	}
     }
 
@@ -772,7 +775,10 @@ void irchook::connected(void *conn, void *cli, ...) {
 
     for(ic = irhook.channels.begin(); ic != irhook.channels.end(); ++ic) {
 	if(ic->joined) {
-	    firetalk_chat_join(irhook.handle, ic->name.c_str());
+	    string passname = ic->name;
+	    if (!ic->passwd.empty())
+	    	passname += " " + ic->passwd;
+	    firetalk_chat_join(irhook.handle, passname.c_str());
 	}
     }
 
