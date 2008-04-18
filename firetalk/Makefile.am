@@ -4,5 +4,4 @@ AUTOMAKE_OPTIONS = foreign
 libfiretalk_a_SOURCES =  aim.c irc.c toc.c firetalk.c safestring.c oscar.c
 
 SUBDIRS = 
-INCLUDES = -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap
-CPPFLAGS = 
+AM_CPPFLAGS = -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap

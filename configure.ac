@@ -205,33 +205,6 @@ else
 	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
 fi
 
-#########################
-# Check for inet_aton() #
-#########################
-
-AC_MSG_CHECKING(for inet_aton() presence)
-
-AC_TRY_LINK([
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-
-], [
-
-struct in_addr inp;
-inet_aton("address", &inp);
-
-], have_aton=yes, have_aton=no)
-
-if test "$have_aton" = "yes"; then
-    AC_DEFINE(HAVE_INET_ATON, 1 ,[inet_aton() presence])
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
-fi
-
 ###################
 # Check for gpgme #
 ###################
@@ -329,7 +302,7 @@ AM_CONDITIONAL(BUILD_ICQ, test "x$build_icq" = "xyes")
 AM_CONDITIONAL(BUILD_YAHOO, test "x$build_yahoo" = "xyes")
 AM_CONDITIONAL(BUILD_AIM, test "x$build_aim" = "xyes")
 AM_CONDITIONAL(BUILD_IRC, test "x$build_irc" = "xyes")
-AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_irc" = "xyes" -o "x$build_aim" = xyes)
+AM_CONDITIONAL(BUILD_FIRETALK, test "x$build_irc" = "xyes" -o "x$build_aim" = "xyes")
 AM_CONDITIONAL(BUILD_JABBER, test "x$build_jabber" = "xyes")
 AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = "xyes")
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = "xyes")
@@ -386,7 +359,7 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([argz.h arpa/inet.h fcntl.h float.h inttypes.h langinfo.h libintl.h limits.h locale.h malloc.h netdb.h netinet/in.h stddef.h stdint.h stdio_ext.h stdlib.h string.h strings.h sys/ioctl.h sys/mount.h sys/param.h sys/socket.h sys/statvfs.h sys/time.h sys/vfs.h syslog.h unistd.h utmp.h wchar.h])
-AC_CHECK_HEADERS([stdint.h sys/types.h],,)
+AC_CHECK_HEADERS([sys/types.h])
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -523,11 +496,12 @@ AC_CHECK_FUNCS([uname])
 # Create output files. #
 ########################
 # also configure other packages
-AC_CONFIG_SUBDIRS(firetalk kkconsui kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
+AC_CONFIG_SUBDIRS(kkconsui kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
 
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
                  connwrap/Makefile
+                 firetalk/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile
