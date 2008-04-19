@@ -1,2 +1,1 @@
-EXTRA_DIST = conf.h kkfsys.h kkiproc.h
-SUBDIRS = 
+noinst_HEADERS = conf.h kkfsys.h kkiproc.h
