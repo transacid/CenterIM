@@ -20,12 +20,14 @@ AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_LIBTOOL
 AC_PROG_INSTALL
+AC_PROG_RANLIB
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.16.1])
 AC_PROG_YACC
 AC_PROG_GCC_TRADITIONAL
+
 
 #########################
 # Checks for libraries. #
@@ -278,7 +280,9 @@ fi
 ####################
 # Check for others #
 ####################
+AM_ICONV_LINK
 AM_ICONV
+LIBS="$LIBS $LIBICONV"
 
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
@@ -365,7 +369,35 @@ AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([argz.h arpa/inet.h fcntl.h float.h inttypes.h langinfo.h libintl.h limits.h locale.h malloc.h netdb.h netinet/in.h stddef.h stdint.h stdio_ext.h stdlib.h string.h strings.h sys/ioctl.h sys/mount.h sys/param.h sys/socket.h sys/statvfs.h sys/time.h sys/vfs.h syslog.h unistd.h utmp.h wchar.h])
+AC_CHECK_HEADERS([argz.h])
+AC_CHECK_HEADERS([arpa/inet.h])
+AC_CHECK_HEADERS([fcntl.h])
+AC_CHECK_HEADERS([float.h])
+AC_CHECK_HEADERS([inttypes.h])
+AC_CHECK_HEADERS([langinfo.h])
+AC_CHECK_HEADERS([libintl.h])
+AC_CHECK_HEADERS([limits.h])
+AC_CHECK_HEADERS([locale.h])
+AC_CHECK_HEADERS([malloc.h])
+AC_CHECK_HEADERS([netdb.h])
+AC_CHECK_HEADERS([netinet/in.h])
+AC_CHECK_HEADERS([stddef.h])
+AC_CHECK_HEADERS([stdint.h])
+AC_CHECK_HEADERS([stdio_ext.h])
+AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([string.h])
+AC_CHECK_HEADERS([strings.h])
+AC_CHECK_HEADERS([sys/ioctl.h])
+AC_CHECK_HEADERS([sys/mount.h])
+AC_CHECK_HEADERS([sys/param.h])
+AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([sys/statvfs.h])
+AC_CHECK_HEADERS([sys/time.h])
+AC_CHECK_HEADERS([sys/vfs.h])
+AC_CHECK_HEADERS([syslog.h])
+AC_CHECK_HEADERS([unistd.h])
+AC_CHECK_HEADERS([utmp.h])
+AC_CHECK_HEADERS([wchar.h])
 AC_CHECK_HEADERS([sys/types.h])
 AC_CHECK_HEADERS([_G_config.h])
 
@@ -504,7 +536,7 @@ AC_CHECK_FUNCS([uname])
 # Create output files. #
 ########################
 # also configure other packages
-AC_CONFIG_SUBDIRS(kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
+AC_CONFIG_SUBDIRS(kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
 
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
@@ -513,6 +545,7 @@ AC_CONFIG_FILES([Makefile
                  kkconsui/Makefile
                  kkconsui/include/Makefile
                  kkconsui/src/Makefile
+                 kkstrtext/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile
