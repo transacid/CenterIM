@@ -79,7 +79,9 @@ AC_ARG_ENABLE(locales-fix,
               AS_HELP_STRING([--enable-locales-fix], [enables workaround for
                               broken locales. use this option if some of
                               characters in your texts in Chinese or Japanese
-                              diappear])
+                              diappear]),
+              locales_fix="$enableval",
+              locales_fix="yes"
               )
 
 AC_ARG_WITH(fribidi,
@@ -142,6 +144,7 @@ if test "x$with_fribidi" = "xyes"; then
 
 	AC_CHECK_LIB(fribidi, fribidi_get_mirror_char, :, AC_MSG_ERROR([*** libfribidi not found.]), $FRIBIDI_LIBS)
 	AC_DEFINE(HAVE_FRIBIDI, 1, [has fribidi library])
+    AC_DEFINE(KTOOL_USE_FRIBIDI, 1, [use fribidi in ktools])
 	have_fribidi=yes
 fi
 AC_MSG_RESULT([$have_fribidi])
@@ -293,9 +296,10 @@ if test "x$ac_cv_c_socklen_t" = "xno"; then
 fi
 
 case "$host_os" in
-	darwin*)
-		LIBS="$LIBS -flat_namespace"
-		;;
+  darwin*)
+        LIBS="$LIBS -flat_namespace"
+        CXXFLAGS="$CXXFLAGS -I/sw/include"
+        ;;
 esac
 
 AM_CONDITIONAL(BUILD_ICQ, test "x$build_icq" = "xyes")
@@ -350,6 +354,9 @@ fi
 if test "x$build_lj" = "xyes"; then
 	AC_DEFINE(BUILD_LJ, 1, [build the integrated livejournal client])
 fi
+if test "x$locales_fx" != "xno"; then
+  AC_DEFINE([LOCALES_HACK], 1, [enables workaround for broken locales])
+fi
 
 ############################
 # Checks for header files. #
@@ -360,6 +367,7 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([argz.h arpa/inet.h fcntl.h float.h inttypes.h langinfo.h libintl.h limits.h locale.h malloc.h netdb.h netinet/in.h stddef.h stdint.h stdio_ext.h stdlib.h string.h strings.h sys/ioctl.h sys/mount.h sys/param.h sys/socket.h sys/statvfs.h sys/time.h sys/vfs.h syslog.h unistd.h utmp.h wchar.h])
 AC_CHECK_HEADERS([sys/types.h])
+AC_CHECK_HEADERS([_G_config.h])
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -496,12 +504,15 @@ AC_CHECK_FUNCS([uname])
 # Create output files. #
 ########################
 # also configure other packages
-AC_CONFIG_SUBDIRS(kkconsui kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
+AC_CONFIG_SUBDIRS(kkstrtext kksystr libgadu libicq2000 libjabber libmsn libyahoo2)
 
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
                  connwrap/Makefile
                  firetalk/Makefile
+                 kkconsui/Makefile
+                 kkconsui/include/Makefile
+                 kkconsui/src/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile
