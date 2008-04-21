@@ -38,7 +38,7 @@
 #include <time.h>
 
 #include "libxode.h"
-#include "connwrap.h"
+#include <connwrap.h>
 
 #ifndef INCL_JABBER_H
 #define INCL_JABBER_H

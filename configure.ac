@@ -286,6 +286,9 @@ AM_ICONV_LINK
 AM_ICONV
 LIBS="$LIBS $LIBICONV"
 
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([short])
+
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 AC_CHECK_LIB(ncursesw, get_wch,, [AC_CHECK_LIB(ncurses, initscr,,
@@ -539,7 +542,7 @@ AC_CHECK_FUNCS([uname])
 # Create output files. #
 ########################
 # also configure other packages
-AC_CONFIG_SUBDIRS(libjabber libmsn libyahoo2)
+AC_CONFIG_SUBDIRS(libmsn libyahoo2)
 
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
@@ -556,6 +559,7 @@ AC_CONFIG_FILES([Makefile
                  libicq2000/Makefile
                  libicq2000/libicq2000/Makefile
                  libicq2000/src/Makefile
+                 libjabber/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile
