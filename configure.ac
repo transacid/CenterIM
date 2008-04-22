@@ -207,7 +207,7 @@ if test "x$have_gpgme" = "xyes"; then
          AC_DEFINE(HAVE_GPGME, 1, [has gpgme library])
          GPGME_CXXFLAGS="$GPGME_CFLAGS"
          CFLAGS="$CFLAGS $GPGME_CFLAGS"
-         CXXFLAGS="$CFLAGS $GPGME_CXXFLAGS"
+         CXXFLAGS="$CXXFLAGS $GPGME_CXXFLAGS"
          LIBS="$LIBS $GPGME_LIBS"
 fi
 
