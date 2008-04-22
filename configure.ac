@@ -541,9 +541,6 @@ AC_CHECK_FUNCS([uname])
 ########################
 # Create output files. #
 ########################
-# also configure other packages
-AC_CONFIG_SUBDIRS(libyahoo2)
-
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
                  connwrap/Makefile
@@ -562,6 +559,7 @@ AC_CONFIG_FILES([Makefile
                  libjabber/Makefile
                  libmsn/Makefile
                  libmsn/msn/Makefile
+                 libyahoo2/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile
