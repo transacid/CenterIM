@@ -1,8 +1,6 @@
 EXTRA_DIST = ChangeLog AUTHORS COPYING INSTALL NEWS README
 SUBDIRS = msn
-INCLUDES = -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
-AM_CPPFLAGS = 
+AM_CPPFLAGS = -I$(top_srcdir)/connwrap
 noinst_LIBRARIES = liblibmsn.a
-AUTOMAKE_OPTIONS = foreign
-liblibmsn_a_SOURCES = 
-liblibmsn_a_LIBADD =  msn/authdata.o msn/buddy.o msn/connection.o msn/filetransfer.o msn/invitation.o msn/message.o msn/notificationserver.o msn/passport.o msn/switchboardserver.o msn/util.o
+liblibmsn_a_SOURCES =
+liblibmsn_a_LIBADD = msn/authdata.o msn/buddy.o msn/connection.o msn/filetransfer.o msn/invitation.o msn/message.o msn/notificationserver.o msn/passport.o msn/switchboardserver.o msn/util.o
