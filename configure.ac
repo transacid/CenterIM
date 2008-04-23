@@ -280,6 +280,8 @@ fi
 ####################
 # Check for others #
 ####################
+AC_C_BIGENDIAN
+
 AM_ICONV_LINK
 AM_ICONV
 LIBS="$LIBS $LIBICONV"
@@ -537,7 +539,7 @@ AC_CHECK_FUNCS([uname])
 # Create output files. #
 ########################
 # also configure other packages
-AC_CONFIG_SUBDIRS(libgadu libicq2000 libjabber libmsn libyahoo2)
+AC_CONFIG_SUBDIRS(libicq2000 libjabber libmsn libyahoo2)
 
 ALL_LINGUAS="zh_TW zh_CN uk sv ru ro pt_BR pl nl ms it hu fr es de cs bg"
 AC_CONFIG_FILES([Makefile
@@ -550,6 +552,7 @@ AC_CONFIG_FILES([Makefile
                  kksystr/Makefile
                  kksystr/include/Makefile
                  kksystr/src/Makefile
+                 libgadu/Makefile
                  misc/Makefile
                  share/Makefile
                  src/Makefile

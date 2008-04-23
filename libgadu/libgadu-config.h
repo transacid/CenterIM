@@ -1,6 +1,8 @@
 #ifndef __GG_LIBGADU_CONFIG_H
 #define __GG_LIBGADU_CONFIG_H
 
+#include <config.h>
+
 #ifdef WORDS_BIGENDIAN
 #define __GG_LIBGADU_BIGENDIAN
 #endif
