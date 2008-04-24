@@ -57,7 +57,7 @@ icqconf::icqconf() {
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = proxyssl = proxyconnect = notitles =
-	debug = timestampstothesecond = false;
+	debug = timestampstothesecond = vi = false;
 
     timestampformat = DEFAULT_TIMESTAMP_FORMAT;
     logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
@@ -480,6 +480,7 @@ void icqconf::loadmainconfig() {
 
 	    if(param == "hideoffline") hideoffline = true; else
 	    if(param == "emacs") emacs = true; else
+	    if(param == "vi") vi = true; else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
 	    if(param == "antispam") antispam = true; else
@@ -574,14 +575,15 @@ void icqconf::save() {
 	    if(hideoffline) f << "hideoffline" << endl;
 	    if(emacs) f << "emacs" << endl;
 	    if(getquote()) f << "quotemsgs" << endl;
-        if(getantispam()) f << "antispam" << endl;
-        if(getshowopenedchats()) f << "showopenedchats" << endl;
+	    if(vi) f << "vi" << endl;
+            if(getantispam()) f << "antispam" << endl;
+            if(getshowopenedchats()) f << "showopenedchats" << endl;
 	    if(getdropauthreq()) f << "dropauthreq" << endl;
 	    if(getusingcaptcha()) f << "captcha" << endl;
 	    if(getmailcheck()) f << "mailcheck" << endl;
 	    if(getaskaway()) f << "askaway" << endl;
-			if(getscreenna()) f << "screenna" << endl;
-			if(!screensocketpath.empty()) f << "screensocketpath\t" << screensocketpath << endl;
+            if(getscreenna()) f << "screenna" << endl;
+            if(!screensocketpath.empty()) f << "screensocketpath\t" << screensocketpath << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
@@ -1104,6 +1106,10 @@ void icqconf::settimestampstothesecond(bool ttts) {
 
 void icqconf::setemacs(bool fem) {
     emacs = fem;
+}
+
+void icqconf::setvi(bool b) {
+    vi = b;
 }
 
 void icqconf::setantispam(bool fas) {

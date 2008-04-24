@@ -1521,14 +1521,14 @@ static void yahoo_process_list(struct yahoo_input_data *yid, struct yahoo_packet
 	YList *l;
 
 	if (!yd->logged_in) {
+		struct yahoo_packet *pkt2;
+		char buff[20];
 		yd->logged_in = TRUE;
 		if(yd->current_status < 0)
 			yd->current_status = yd->initial_status;
 		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_OK, NULL);
 		
-		struct yahoo_packet *pkt2 = yahoo_packet_new(YAHOO_SERVICE_Y6_STATUS_UPDATE, YAHOO_STATUS_AVAILABLE, 0);
-		
-		char buff[20];
+		pkt2 = yahoo_packet_new(YAHOO_SERVICE_Y6_STATUS_UPDATE, YAHOO_STATUS_AVAILABLE, 0);
 		
 		snprintf(buff, sizeof(buff)-1, "%d", yd->current_status);
 		yahoo_packet_hash(pkt2, 10, buff);
@@ -1618,7 +1618,8 @@ static void yahoo_process_list_15(struct yahoo_input_data *yid, struct yahoo_pac
 	
 	char *grp = 0, *bud = 0;
 	
-	for (l = pkt->hash; l; l = l->next) {
+	l = pkt->hash;
+	while (l) {
 		struct yahoo_pair *pair = l->data;
 
 		switch (pair->key) {
@@ -1658,6 +1659,8 @@ static void yahoo_process_list_15(struct yahoo_input_data *yid, struct yahoo_pac
 			FREE(bud);
 			break;
 		}
+		if (l)
+			l = l->next;
 	}
 	FREE(grp);
 	YAHOO_CALLBACK(ext_yahoo_got_buddies)(yd->client_id, yd->buddies);
@@ -1829,6 +1832,8 @@ static void yahoo_process_picture(struct yahoo_input_data *yid, struct yahoo_pac
 	int checksum = 0;
 	YList *l;
 	
+	return;
+	
 	for(l = pkt->hash; l; l = l->next)
 	{
 		struct yahoo_pair *pair = l->data;
@@ -1870,7 +1875,9 @@ static void yahoo_process_picture_upload(struct yahoo_input_data *yid, struct ya
 	struct yahoo_data *yd = yid->yd;
 	YList *l;
 	char *url;
-
+	
+	return;
+	
 	if ( pkt->status != 1 )
 		return;		/* something went wrong */
 	

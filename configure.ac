@@ -115,7 +115,7 @@ AC_ARG_WITH(libjpeg,
                             support (for Gadu-Gadu registration)])
             )
 AC_ARG_WITH(libotr,
-            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr)]),
+            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr) WARNING: use at your own risk, not suppoerted yet]),
             [with_libotr=$withval],
             [with_libotr=no]
             )
@@ -362,6 +362,31 @@ AC_CHECK_HEADERS([vector iostream fstream string algorithm list memory iterator 
 AC_CHECK_HEADERS([hash_map strstream ext/hash_map sstream],,)
 AC_LANG_RESTORE
 
+##################################################
+# check whether make supports order-only targets #
+##################################################
+
+AC_CACHE_CHECK([whether ${MAKE-make} supports order-only targets],
+[centerim_cv_make_order_only],
+[cat >conftest.make <<\_ACEOF
+SHELL = /bin/sh
+all: | say
+
+say:
+	echo say
+
+.PHONY: all say
+_ACEOF
+centerim_cv_make_order_only=no
+
+${MAKE-make} -f conftest.make >/dev/null 2>&1 && centerim_cv_make_order_only=yes
+rm -f conftest.make
+])
+if test x$centerim_cv_make_order_only = xyes; then
+  ORDER_ONLY="|"
+fi
+
+
 ##################################################################
 # Checks for typedefs, structures, and compiler characteristics. #
 ##################################################################
@@ -397,6 +422,8 @@ AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_CXXFLAGS) 
 
 AC_SUBST(JPEG_LIBS)
+
+AC_SUBST(ORDER_ONLY)
 
 #################################
 # Checks for library functions. #
@@ -463,9 +490,9 @@ if test "x$have_gpgme" = "xno"; then
 AC_MSG_RESULT([
 WARNING: GPGME disabled (This means no encrypted messages between users)
 ]); fi
-if test "x$have_libotr" = "xno"; then
+if test "x$have_libotr" = "xyes"; then
 AC_MSG_RESULT([
-WARNING: libotr disabled (This means no otr encryption)
+WARNING: libotr enabled (OTR is not supported yet, use at your own risk)
 ]); fi
 fi
 AC_MSG_RESULT([

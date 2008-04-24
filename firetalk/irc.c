@@ -738,6 +738,16 @@ static irc_conn_t
 
 static fte_t
 	irc_signon(irc_conn_t *c, const char *const nickname) {
+	
+	char pass[129];
+	*pass=0;
+	
+	firetalk_callback_needpass(c, pass, sizeof(pass));
+
+	if(strlen(pass))
+	if(irc_send_printf(c, "PASS %s", pass) != FE_SUCCESS)
+		return FE_PACKET;
+	 
 #if defined(HAVE_GETPWUID) && defined(HAVE_GETUID)
 	struct passwd	*pw = getpwuid(getuid());
 	char	buf[1024];

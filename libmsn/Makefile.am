@@ -1,4 +1,4 @@
-EXTRA_DIST = libmsn.motor ChangeLog AUTHORS COPYING INSTALL NEWS README
+EXTRA_DIST = ChangeLog AUTHORS COPYING INSTALL NEWS README
 SUBDIRS = msn
 INCLUDES = -I$(top_srcdir)/../connwrap -I$(top_srcdir)/../connwrap-0.1
 AM_CPPFLAGS = 

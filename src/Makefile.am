@@ -36,14 +36,18 @@ EXTRA_DIST = centerim.cc icqcontact.cc icqgroups.cc eventmanager.cc icqdialogs.c
 AUTOMAKE_OPTIONS = foreign
 centerim_CPPFLAGS += -DSHARE_DIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\"
 
-
 # regenerate git-version.h if its content differs from the output of
 # git-version-gen
 g_get_cur := sed -ne "s/^\#[ \x09]*define[ \x09]\+GIT_VERSION[ \x09]\+\"\([0-9]\+.*\)\"/\1/p" \
              2>/dev/null < git-version.h | tr -d '\012'
 g_subst_f  := sed -e "s/@GIT_VERSION@/$$VER_GIT/" < git-version.h.in > git-version.h
 
-$(centerim_OBJECTS) git-version.h : | git_version
+
+# If the make we are using supports order-only targets we make git_version is
+# made an order-only prerequisite.  Order-only prerequisites are build before
+# the target(s) but do not lead to a rebuild of the target(s).
+ORDER_ONLY = @ORDER_ONLY@
+$(centerim_OBJECTS) git-version.h : $(ORDER_ONLY) git_version
 .PHONY: git_version
 
 git_version: git-version.h.in

@@ -156,8 +156,8 @@ class icqconf {
 	bool hideoffline, quote, savepwd, antispam, screenna, mailcheck,
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
-        timestampstothesecond, dropauthreq, usingcaptcha, askquit,
-        showopenedchats;
+	    timestampstothesecond, dropauthreq, usingcaptcha, askquit,
+	    showopenedchats, vi;
 
 	unsigned int captchatimeout;
 
@@ -236,6 +236,9 @@ class icqconf {
 
 	bool getemacs() const { return emacs; }
 	void setemacs(bool fem);
+
+	bool getvi() const { return vi; }
+	void setvi(bool b);
 
 	bool gethideoffline() const { return hideoffline; }
 	void sethideoffline(bool fho);

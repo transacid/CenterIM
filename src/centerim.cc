@@ -1247,7 +1247,7 @@ void centerim::readevents(const imcontact cont) {
 
 void centerim::history(const imcontact &cont) {
     icqface::eventviewresult r;
-    imevent *im;
+    imevent *im = 0;
     bool enough;
     vector<imevent *> events;
     vector<imevent *>::iterator i;

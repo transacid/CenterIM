@@ -1,3 +1,86 @@
+commit 934d211fad66e2cc2d835fd96d4e5f1408669920
+Author: Roger <roger@jikos.cz>
+Date:   Mon Apr 7 21:23:34 2008 +0200
+
+    Bug #93 - Don't call unimplemented buddyicon callbacks (thanks Derek)
+
+commit 3daa4286a4ac2aab18c8f22b2dac1d0daee7c063
+Author: Roger <roger@jikos.cz>
+Date:   Mon Apr 7 21:22:01 2008 +0200
+
+    Bug #88 - Correctly end loop (thx Anibal and Lenny)
+
+commit 30aa1f9de386b45fd78b2bbb0a9160a800636e5e
+Author: Roger <roger@jikos.cz>
+Date:   Thu Apr 3 01:42:41 2008 +0200
+
+    Bug #88 - Check if user is created before setting attributes
+
+commit e3ce5a37d6ab81b90b48bba327d66af298a7c4a9
+Author: Roger <roger@jikos.cz>
+Date:   Mon Mar 31 21:13:14 2008 +0200
+
+    Yahoo (val)grinding
+
+commit 4120488dc9269d10b3bc73e3ef5127a86c0c13ba
+Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de>
+Date:   Mon Mar 31 17:18:17 2008 +0200
+
+    German translation for new config option
+
+commit 910b43a7c0da886eeac9312c2664e3f73a2c4f95
+Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de>
+Date:   Mon Mar 31 16:41:19 2008 +0200
+
+    moved new option to the right topic User Interface
+
+commit d1ccdf9446acae970ec51dbded036c21544b6b71
+Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de>
+Date:   Mon Mar 31 16:36:08 2008 +0200
+
+    Added config-option for the enhancement Charlie did this day: showing opened chats.
+    Shortened *Auth*-Tag to "!A"
+
+commit fa6dad96f6bc08a9b9276e7b43904328907d680c
+Merge: 9977a39... 10fae87...
+Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de>
+Date:   Mon Mar 31 15:05:46 2008 +0200
+
+    Merge branch 'mob' of git+ssh://mob@repo.or.cz/srv/git/centerim into mob
+
+commit 10fae876be449a065ce4a779372db29bc8af4ef9
+Author: Charlie <root@localhost.(none)>
+Date:   Mon Mar 31 15:10:11 2008 +0300
+
+    Added feature to display all opened chats.
+
+commit 9977a3997d2c07445ccb2d15689a17cb6fc6bc6b
+Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de>
+Date:   Mon Mar 31 00:31:20 2008 +0200
+
+    Added a tag *Auth* to the usernames at contact-list which are on status
+    Awaiting Authorization.
+    
+    Issues: Showing flag for all users, while connecting to server until list
+    is syncronized with server (2-4 seconds)
+
+commit 5c70bd0b94500e1b13bb187918904e8f42d97d06
+Author: Sven Wegener <sven.wegener@stealer.net>
+Date:   Sun Mar 30 22:00:44 2008 +0200
+
+    Use browser from config file
+    
+    When loading the config file use the value from the file instead of setting our
+    current value again.
+    
+    Signed-off-by: Sven Wegener <sven.wegener@stealer.net>
+
+commit d3078035f9b75911bf2cc6be64113cc8d434e997
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sat Mar 29 20:01:01 2008 +0100
+
+    Updated Changelog
+
 commit 35d0f07a496d6db2d3745b98a4b36ee269c72681
 Author: Roger <roger@jikos.cz>
 Date:   Thu Mar 27 19:34:46 2008 +0100
