@@ -198,6 +198,8 @@ static fte_t
 }
 
 static char *irc_html_to_irc(const char *const string) {
+	return string;
+/*
 	static char *output = NULL;
 	int o = 0;
 	size_t l,i=0;
@@ -278,6 +280,7 @@ static char *irc_html_to_irc(const char *const string) {
 	assert(o <= ((l * 4) + 1));
 	output[o] = '\0';
 	return(output);
+	*/
 }
 
 static const char *mIRCar[] = {
@@ -329,6 +332,8 @@ static const char *irc_mIRC_to_html(const char *const string, size_t *pos) {
 }
 
 static char *irc_irc_to_html(const char *const string) {
+	return string;
+/*
 	static char *output = NULL;
 	int	o = 0;
 	size_t	l, i = 0, s;
@@ -539,7 +544,7 @@ static char *irc_irc_to_html(const char *const string) {
 
 	output[o] = '\0';
 
-	return(output);
+	return(output);*/
 }
 
 static int irc_internal_disconnect(irc_conn_t *c, const int error) {

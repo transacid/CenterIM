@@ -228,7 +228,7 @@ bool irchook::send(const imevent &ev) {
     if(c) {
 	if(ev.gettype() == imevent::message) {
 	    const immessage *m = static_cast<const immessage *>(&ev);
-	    text = rushtmlconv("kw", m->gettext());
+	    text = rusconv("kw", m->gettext());
 
 	} else if(ev.gettype() == imevent::url) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
