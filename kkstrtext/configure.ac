@@ -18,7 +18,6 @@ AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.16.1])
 
 # Checks for libraries.
-AM_ICONV_LINK
 AM_ICONV
 
 # Checks for header files.
@@ -37,11 +36,6 @@ AC_FUNC_MKTIME
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([strchr strdup strncasecmp strpbrk strspn strstr strtol])
 
-#Set C flags
-CFLAGS="$CFLAGS $INCICONV"
-CXXFLAGS="$CXXFLAGS $INCICONV"
-
-LIBS="$LIBS $LIBICONV"
-
+#Output Makefile
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
