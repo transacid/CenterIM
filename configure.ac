@@ -270,8 +270,7 @@ fi
 ####################
 # Check for others #
 ####################
-AM_ICONV_LINK
-LIBS="$LIBS $LIBICONV"
+AM_ICONV
 
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
