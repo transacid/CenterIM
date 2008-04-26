@@ -202,7 +202,7 @@ if test "x$with_ssl" != "xno"; then
             ])
 	fi
 
-    if test x"$with_ssl" = x"yes"; then
+    if test x"$with_ssl" != x"no"; then
       AC_DEFINE(HAVE_SSL, 1, [ssl is available])
     fi
 
