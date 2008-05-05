@@ -34,7 +34,10 @@
 #include "impgp.h"
 
 #include <libicq2000/constants.h>
+
+#ifdef HAVE_STDINT_H
 #include <stdint.h> /* for intptr_t */
+#endif
 
 const char *stragerange(ICQ2000::AgeRange r) {
     switch(r) {

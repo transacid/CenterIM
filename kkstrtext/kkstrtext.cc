@@ -24,7 +24,10 @@
 
 #include "kkstrtext.h"
 #include <errno.h>
+
+#ifdef HAVE_STDINT_H
 #include <stdint.h> /* for intptr_t */
+#endif
 
 char *strcut(char *strin, int frompos, int count) {
     if(count > 0) {

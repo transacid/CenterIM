@@ -22,10 +22,13 @@
 *
 */
 
+#include "icqconf.h"
+
+#ifdef HAVE_STDINT_H
 #include <stdint.h> /* for intptr_t */
+#endif
 
 #include "icqface.h"
-#include "icqconf.h"
 #include "centerim.h"
 #include "icqcontact.h"
 #include "icqcontacts.h"
