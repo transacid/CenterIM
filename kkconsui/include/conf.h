@@ -1,6 +1,10 @@
 #ifndef __KONST_CONF_H__
 #define __KONST_CONF_H__
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #if defined(__sgi) && !defined(__GNUC__) && (_COMPILER_VERSION >= 721) && defined(_NAMESPACES)
 #define __KTOOL_USE_NAMESPACES
 #endif
