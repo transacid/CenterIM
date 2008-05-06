@@ -7,11 +7,9 @@ AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([-Wall])
 
-AC_ISC_POSIX
-
 AC_CANONICAL_HOST
 
-AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 
 ########################
 # Checks for programs. #
