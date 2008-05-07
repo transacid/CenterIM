@@ -24,6 +24,7 @@
 
 #include "imexternal.h"
 #include "icqconf.h"
+#include "icqcommon.h"
 #include "abstracthook.h"
 #include "eventmanager.h"
 #include "imlogger.h"

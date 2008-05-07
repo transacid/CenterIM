@@ -88,4 +88,9 @@ string lo(string s);
 	return p = static_cast<tp>(++t); \
     }
 
+/* if the system doesn't provide setenv we need to define our own */
+#ifndef HAVE_SETENV
+int setenv(const char* name, const char* value, const int overwrite);
+#endif
+
 #endif
