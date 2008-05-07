@@ -1,3 +1,5 @@
+AM_CXXFLAGS = -Wno-write-strings
+
 libhooks_a_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/hooks -I$(top_srcdir)/connwrap -I$(top_srcdir)/firetalk -I$(top_srcdir)/firetalk/../connwrap -I$(top_srcdir)/firetalk/../connwrap-0.1 -I$(top_srcdir)/kkconsui -I$(top_srcdir)/kkconsui/include -I$(top_srcdir)/kkconsui/../kkstrtext -I$(top_srcdir)/kkconsui/../kkstrtext-0.1 -I$(top_srcdir)/kkstrtext -I$(top_srcdir)/kksystr -I$(top_srcdir)/kksystr/include -I$(top_srcdir)/kksystr/../kkstrtext -I$(top_srcdir)/kksystr/../kkstrtext-0.1 -I$(top_srcdir)/libgadu -I$(top_srcdir)/libicq2000 -I$(top_srcdir)/libicq2000/libicq2000 -I$(top_srcdir)/libjabber -I$(top_srcdir)/libjabber/../connwrap -I$(top_srcdir)/libjabber/../connwrap-0.1 -I$(top_srcdir)/libmsn -I$(top_srcdir)/libmsn/../connwrap -I$(top_srcdir)/libmsn/../connwrap-0.1 -I$(top_srcdir)/libyahoo2 -I$(top_srcdir)/libyahoo2/../connwrap -I$(top_srcdir)/libyahoo2/../connwrap-0.1 -I$(top_srcdir)/intl
 noinst_LIBRARIES = libhooks.a
 libhooks_a_SOURCES = rsshook.cc HTTPClient.cc yahoohook.cc jabberhook.cc aimhook.cc icqhook.cc gaduhook.cc irchook.cc ljhook.cc msnhook.cc abstracthook.cc
