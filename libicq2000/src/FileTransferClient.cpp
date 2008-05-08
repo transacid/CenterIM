@@ -201,7 +201,7 @@ namespace ICQ2000
   {
     if (m_recv.empty()) return;
 
-    unsigned int length;
+    unsigned short length;
 
     while (!m_recv.empty())
     {
