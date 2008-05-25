@@ -599,8 +599,6 @@ AC_MSG_RESULT([
 Build options:
   Version               $VERSION
   Install prefix        $prefix
-  Build shared libs     $enable_shared
-  Build static libs     $enable_static
   CFLAGS                $CFLAGS
   CXXFLAGS              $CXXFLAGS
 
