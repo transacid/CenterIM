@@ -114,7 +114,7 @@ AC_ARG_WITH(libjpeg,
                             support (for Gadu-Gadu registration)])
             )
 AC_ARG_WITH(libotr,
-            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr) WARNING: use at your own risk, not suppoerted yet]),
+            AS_HELP_STRING([--with-libotr], [enable Off-the-Record Messaging (libotr) WARNING: use at your own risk, not supported yet]),
             [with_libotr=$withval],
             [with_libotr=no]
             )
