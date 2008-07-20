@@ -35,6 +35,30 @@ xmlnode jutil_presnew(int type, char *to, char *status)
     return pres;
 }
 
+xmlnode jutil_iqnew2(int type) //create iq packet w/o query tag, required for later patches, such as file transfer, send version and etc. 
+{
+    xmlnode iq;
+
+    iq = xmlnode_new_tag("iq");
+    switch(type)
+    {
+    case JPACKET__GET:
+	xmlnode_put_attrib(iq,"type","get");
+	break;
+    case JPACKET__SET:
+	xmlnode_put_attrib(iq,"type","set");
+	break;
+    case JPACKET__RESULT:
+	xmlnode_put_attrib(iq,"type","result");
+	break;
+    case JPACKET__ERROR:
+	xmlnode_put_attrib(iq,"type","error");
+	break;
+    }
+
+    return iq;
+}
+
 /* util for making IQ packets */
 xmlnode jutil_iqnew(int type, char *ns)
 {

@@ -21,6 +21,7 @@ class jabberhook: public abstracthook {
 
 	map<string, string> roster;
 	map<string, string> awaymsgs;
+	map<string, string> full_jids;//little trick to store users full JID's, it required in some xmpp packets
 	map<string, vector<string> > chatmembers;
 	map<string, map<string, pair<char, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
 
@@ -77,6 +78,7 @@ class jabberhook: public abstracthook {
 	void gotvcard(const imcontact &ic, xmlnode v);
 	void gotmessage(const string &type, const string &from, const string &body, const string &enc);
 	void gotversion(const imcontact &ic, xmlnode x);
+	void sendversion(const imcontact &ic, xmlnode x);
 
 	bool isourid(const string &jid);
 	static string getourjid();

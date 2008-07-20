@@ -38,7 +38,7 @@
 #include <time.h>
 
 #include "libxode.h"
-#include <connwrap.h>
+#include "connwrap.h"
 
 #ifndef INCL_JABBER_H
 #define INCL_JABBER_H
@@ -242,6 +242,7 @@ typedef struct terror_struct
 /* --------------------------------------------------------- */
 xmlnode jutil_presnew(int type, char *to, char *status); /* Create a skeleton presence packet */
 xmlnode jutil_iqnew(int type, char *ns);                 /* Create a skeleton iq packet */
+xmlnode jutil_iqnew2(int type);                 /* Create a skeleton iq packet w/o query tag*/
 xmlnode jutil_msgnew(char *type, char *to, char *subj, char *body);
 							 /* Create a skeleton message packet */
 xmlnode jutil_header(char* xmlns, char* server);         /* Create a skeleton stream packet */

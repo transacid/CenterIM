@@ -33,6 +33,9 @@
 #include "icqgroups.h"
 #include "impgp.h"
 #include "icqcontacts.h"
+#include "centerim.h"
+
+#include <sys/utsname.h> //used for uname function
 
 #ifdef HAVE_LIBOTR
   #include "imotr.h"
@@ -560,9 +563,11 @@ void jabberhook::requestinfo(const imcontact &ic) {
 
 	} else {
 	    char *cjid = strdup(jidnormalize(ic.nickname).c_str());
-	    xmlnode x = jutil_iqnew(JPACKET__GET, NS_VCARD);
+	    xmlnode x = jutil_iqnew2(JPACKET__GET), y;//gtalk vCard request fix
 	    xmlnode_put_attrib(x, "to", cjid);
 	    xmlnode_put_attrib(x, "id", "VCARDreq");
+	    y = xmlnode_insert_tag(x, "vCard");
+	    xmlnode_put_attrib(y, "xmlns", NS_VCARD);
 	    jab_send(jc, x);
 	    xmlnode_free(x);
 	    free (cjid);
@@ -1434,34 +1439,62 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
     }
 }
 
-void jabberhook::requestversion(const imcontact &ic) {
-    char *cjid = strdup(jidnormalize(ic.nickname).c_str());
-    xmlnode x = jutil_iqnew(JPACKET__GET, NS_VERSION);
-    xmlnode_put_attrib(x, "to", cjid);
-    xmlnode_put_attrib(x, "id", "versionreq");
-    jab_send(jc, x);
-    xmlnode_free(x);
-    free (cjid);
+void jabberhook::requestversion(const imcontact &ic)
+{
+	const char *cjid = jhook.full_jids[ic.nickname].c_str();
+	xmlnode x = jutil_iqnew(JPACKET__GET, NS_VERSION);
+	xmlnode_put_attrib(x, "to", cjid);
+	xmlnode_put_attrib(x, "id", "versionreq");
+	xmlnode_put_attrib(x, "from", getourjid().c_str());
+	jab_send(jc, x);
+	xmlnode_free(x);
+}
+ 
+void jabberhook::sendversion(const imcontact &ic, xmlnode i) {
+	string id;
+	char *p = xmlnode_get_attrib(i, "id"); if(p) id = p; else id = "versionreq";
+	const char *cjid = jhook.full_jids[jidnormalize(ic.nickname).c_str()].c_str();
+	xmlnode x = jutil_iqnew(JPACKET__RESULT, NS_VERSION), y;
+	xmlnode_put_attrib(x, "to", cjid);
+
+	xmlnode_put_attrib(x, "from", getourjid().c_str());
+	xmlnode_put_attrib(x, "id", id.c_str() );
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "name");
+	xmlnode_insert_cdata(y, PACKAGE, (unsigned) -1 );
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "version"); 
+	xmlnode_insert_cdata(y, centerim::version, (unsigned) -1 );
+	struct utsname buf;
+	if( !uname( &buf ) )
+	{
+		string os = buf.sysname;
+		os += " ";
+		os += buf.release;
+		y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "os");
+		xmlnode_insert_cdata(y, os.c_str(), (unsigned) -1 );
+	}
+	jab_send(jc, x);
+	xmlnode_free(x);
 }
 
-void jabberhook::gotversion(const imcontact &ic, xmlnode x) {
+void jabberhook::gotversion(const imcontact &ic, xmlnode x) { //fix version parsing
     xmlnode y = xmlnode_get_tag(x, "query"), z;
     char *p;
     string vinfo;
-
     if(y) {
 	if(z = xmlnode_get_tag(y, "name"))
-	if(p = xmlnode_get_data(y))
+	if(p = xmlnode_get_data(z))
+	{
 	    if(p) vinfo = rusconv("uk", p);
+	}
 
 	if(z = xmlnode_get_tag(y, "version"))
-	if(p = xmlnode_get_data(y)) {
+	if(p = xmlnode_get_data(z)) {
 	    if(!vinfo.empty()) vinfo += ", ";
 	    vinfo += rusconv("uk", p);
 	}
 
 	if(z = xmlnode_get_tag(y, "os"))
-	if(p = xmlnode_get_data(y)) {
+	if(p = xmlnode_get_data(z)) {
 	    if(!vinfo.empty()) vinfo += " / ";
 	    vinfo += rusconv("uk", p);
 	}
@@ -1716,8 +1749,18 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    }
 		}
 
+	    } else if(type == "get") {
+		    if( x = xmlnode_get_tag(packet->x, "query") )
+			    if( p = xmlnode_get_attrib( x, "xmlns" ) )
+			    {		    
+				    if(!strcmp(p, NS_VERSION)) { //user request our version
+					    jhook.full_jids[ic.nickname] = from;
+					    jhook.sendversion(ic, packet->x);
+					    return;
+				    }
+			    }
 	    } else if(type == "set") {
-	    } else if(type == "error") {
+	    } else if(type == "error"	) {
 		string name, desc;
 		int code;
 
@@ -1803,6 +1846,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 	    jidsplit(from, u, h, s);
 	    id = jidtodisp(from);
+	    jhook.full_jids[ic.nickname] = from; //writing full JID
 
 	    if(clist.get(imcontact((string) "#" + id, jhook.proto))) {
 		if(ust == offline) {
@@ -1810,6 +1854,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    if(im != jhook.chatmembers[id].end())
 			jhook.chatmembers[id].erase(im);
 
+		    jhook.full_jids.erase(ic.nickname); //erase full JID if user change status to offline
 		} else {
 		    jhook.chatmembers[id].push_back(s);
 
