@@ -213,6 +213,7 @@ typedef struct terror_struct
 #define NS_VERSION   "jabber:iq:version"
 #define NS_TIME      "jabber:iq:time"
 #define NS_VCARD     "vcard-temp"
+#define NS_VCARDUP   "vcard-temp:x:update"
 #define NS_PRIVATE   "jabber:iq:private"
 #define NS_SEARCH    "jabber:iq:search"
 #define NS_OOB       "jabber:iq:oob"

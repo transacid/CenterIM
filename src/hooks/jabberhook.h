@@ -79,6 +79,8 @@ class jabberhook: public abstracthook {
 	void gotmessage(const string &type, const string &from, const string &body, const string &enc);
 	void gotversion(const imcontact &ic, xmlnode x);
 	void sendversion(const imcontact &ic, xmlnode x);
+	bool get_img_ext(const string &type, string &ext);
+	bool get_base64_avatar(string &type, string &ava);
 
 	bool isourid(const string &jid);
 	static string getourjid();
@@ -86,9 +88,11 @@ class jabberhook: public abstracthook {
 
 	void vcput(xmlnode x, const string &name, const string &val);
 	void vcputphone(xmlnode x, const string &type, const string &place, const string &number);
+	bool get_my_avatar_hash(string &my_hash);	
 	void vcputaddr(xmlnode x, const string &place, const string &street,
 	    const string &locality, const string &region, const string &pcode,
 	    unsigned short country);
+	void vcputavatar(xmlnode x, const string &type, const string &val);
 
     public:
 	jabberhook();

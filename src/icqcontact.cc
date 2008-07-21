@@ -216,7 +216,8 @@ void icqcontact::save() {
 		    endl <<
 		    endl <<
 		    endl <<
-		    groupid << endl;
+		    groupid << endl <<
+		    tosane(binfo.avatar) << endl;
 
 		f.close();
 		f.clear();
@@ -322,6 +323,7 @@ void icqcontact::load() {
 		case 49: break;
 		case 50: break;
 		case 51: groupid = atoi(buf.c_str()); break;
+		case 52: binfo.avatar = buf; break;
 	    }
 	}
 	f.close();

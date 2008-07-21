@@ -47,6 +47,117 @@
 
 #define NOTIFBUF 512
 
+//base64 enc/dec functions to work with binary data in xmpp	 
+static char b64table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+static char *base64_encode( char *buffer, int bufferLen )
+{
+	if ( buffer==NULL || bufferLen<=0 )
+		return NULL;
+
+	char* res = (char*)malloc(((( bufferLen+2 )*4 )/3 ) + 1);
+	if ( res == NULL )
+		return NULL;
+
+	unsigned char igroup[3];
+	int nGroups = 0;
+	char *r = res;
+	char *peob = buffer + bufferLen;
+	char *p;
+	for ( p = buffer; p < peob; ) {
+		igroup[ 0 ] = igroup[ 1 ] = igroup[ 2 ] = 0;
+		int n;
+		for ( n=0; n<3; n++ ) {
+			if ( p >= peob ) break;
+			igroup[n] = ( unsigned char ) *p;
+			p++;
+		}
+
+		if ( n > 0 ) {
+			r[0] = b64table[ igroup[0]>>2 ];
+			r[1] = b64table[ (( igroup[0]&3 )<<4 ) | ( igroup[1]>>4 ) ];
+			r[2] = b64table[ (( igroup[1]&0xf )<<2 ) | ( igroup[2]>>6 ) ];
+			r[3] = b64table[ igroup[2]&0x3f ];
+
+			if ( n < 3 ) {
+				r[3] = '=';
+				if ( n < 2 )
+					r[2] = '=';
+			}
+			r += 4;
+	}	}
+
+	*r = '\0';
+
+	return res;
+}
+	 
+static char *base64_decode(const char *str, int *ret_len)
+{
+	if( !str )
+		return NULL;
+	char *out = NULL;
+	char tmp = 0;
+	const char *c;
+	int tmp2 = 0;
+	int len = 0, n = 0;
+
+
+	c = str;
+
+	while (*c) {
+		if (*c >= 'A' && *c <= 'Z') {
+			tmp = *c - 'A';
+		} else if (*c >= 'a' && *c <= 'z') {
+			tmp = 26 + (*c - 'a');
+		} else if (*c >= '0' && *c <= 57) {
+			tmp = 52 + (*c - '0');
+		} else if (*c == '+') {
+			tmp = 62;
+		} else if (*c == '/') {
+			tmp = 63;
+		} else if (*c == '\r' || *c == '\n') {
+			c++;
+			continue;
+		} else if (*c == '=') {
+			if (n == 3) {
+				out = (char*)realloc(out, len + 2);
+				out[len] = (char)(tmp2 >> 10) & 0xff;
+				len++;
+				out[len] = (char)(tmp2 >> 2) & 0xff;
+				len++;
+			} else if (n == 2) {
+				out = (char*)realloc(out, len + 1);
+				out[len] = (char)(tmp2 >> 4) & 0xff;
+				len++;
+			}
+			break;
+		}
+		tmp2 = ((tmp2 << 6) | (tmp & 0xff));
+		n++;
+		if (n == 4) {
+			out = (char*)realloc(out, len + 3);
+			out[len] = (char)((tmp2 >> 16) & 0xff);
+			len++;
+			out[len] = (char)((tmp2 >> 8) & 0xff);
+			len++;
+			out[len] = (char)(tmp2 & 0xff);
+			len++;
+			tmp2 = 0;
+			n = 0;
+		}
+		c++;
+	}
+
+	out = (char*)realloc(out, len + 1);
+	out[len] = 0;
+
+	if (ret_len != NULL)
+		*ret_len = len;
+
+	return out;
+}
+
 static void jidsplit(const string &jid, string &user, string &host, string &rest) {
     int pos;
     user = jid;
@@ -707,6 +818,22 @@ void jabberhook::setjabberstatus(imstatus st, string msg) {
     xmlnode_insert_cdata(xmlnode_insert_tag(x, "status"),
 	rusconv("ku", msg).c_str(), (unsigned) -1);
 
+//check if our avatar changed and send update request
+    icqcontact *ic = clist.get(contactroot);
+    icqcontact::basicinfo bi = ic->getbasicinfo();
+
+    if(!bi.avatar.empty())
+    {
+	    string my_avatar_hash;
+	    if( get_my_avatar_hash(my_avatar_hash) )
+	    {
+		    xmlnode y = xmlnode_insert_tag(x, "x");
+		    xmlnode_put_attrib(y, "xmlns", NS_VCARDUP);
+		    xmlnode z = xmlnode_insert_tag(y, "photo");
+		    xmlnode_insert_cdata(z, my_avatar_hash.c_str(), (unsigned) -1);
+	    }
+    }
+
 #ifdef HAVE_GPGME
 
     if(!add["pgpkey"].empty()) {
@@ -1189,6 +1316,12 @@ unsigned short country) {
     vcput(z, "CTRY", getCountryIDtoString(country));
 }
 
+void jabberhook::vcputavatar(xmlnode x, const string &type, const string &val) {
+    xmlnode z = xmlnode_insert_tag(x, "PHOTO");
+    vcput(z, "TYPE", type);
+    xmlnode_insert_cdata(xmlnode_insert_tag(z, "BINVAL"), val.c_str(), (unsigned int) -1);
+}
+
 void jabberhook::sendupdateuserinfo(const icqcontact &c) {
     xmlnode x, y, z;
     icqcontact::reginfo ri = c.getreginfo();
@@ -1200,7 +1333,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
     while(ia != agents.end()) {
 	if(ia->name == ri.service) {
 	    if(ia->type == agent::atStandard) {
-		x = jutil_iqnew(JPACKET__SET, 0);
+		x = jutil_iqnew2(JPACKET__SET);//vCard w/o trash query tag in vcard
 		y = xmlnode_insert_tag(x, "vCard");
 		xmlnode_put_attrib(y, "xmlns", NS_VCARD);
 		xmlnode_put_attrib(y, "version", "3.0");
@@ -1208,6 +1341,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 		icqcontact::basicinfo bi = c.getbasicinfo();
 		icqcontact::moreinfo mi = c.getmoreinfo();
 		icqcontact::workinfo wi = c.getworkinfo();
+		conf.setavatar(proto, bi.avatar); //saving avatar path to file
 
 		vcput(y, "DESC", c.getabout());
 		vcput(y, "EMAIL", bi.email);
@@ -1246,6 +1380,10 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 
 		vcput(y, "HOMECELL", bi.cellular);
 		vcput(y, "WORKURL", wi.homepage);
+
+		string avatar, image_type;
+		if( get_base64_avatar(image_type, avatar) )
+			vcputavatar(y, image_type, avatar);
 
 	    } else {
 		x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
@@ -1420,8 +1558,48 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 		    }
 		}
 	    }
+	 else if( name == "PHOTO" )//get and write user avatar
+	    {
+		    if(!isourid(ic.nickname)) {
+			    string contact_dir = c->getdirname() + "avatar";
+			    if(p = xmlnode_get_tag_data(ad, "TYPE"))
+			    {
+
+				    string ext;
+				    if( get_img_ext(p, ext) )
+				    {
+					    contact_dir += (string)"." + ext;
+					    if(p = xmlnode_get_tag_data(ad, "BINVAL")) {
+						    int len;
+						    char *ptr = base64_decode( p, &len );
+						    if( ptr )
+						    {
+							    int ggg = open(contact_dir.c_str(), O_CREAT | O_WRONLY | O_TRUNC,  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
+							    if( ggg >= 0 )
+							    {
+								    write(ggg, ptr, len);
+								    close(ggg);
+								    if( justpathname( bi.avatar ).empty()  )
+									    bi.avatar = c->getdirname() + bi.avatar;
+								    if( (contact_dir != bi.avatar) && !bi.avatar.empty() ) //clear old avatar
+									    unlink(bi.avatar.c_str());
+								    bi.avatar = "avatar." + ext;
+							    }
+							    free(ptr);
+						    }
+					    }
+				    }
+			    }
+		    }
+	    }
 	}
 
+	if(isourid(ic.nickname)) {//fill configuration window 
+		map<string, string> add = conf.getourid(proto).additional;
+		if(!add["avatar"].empty()) {
+			bi.avatar = add["avatar"];
+		}
+	}
 	c->setbasicinfo(bi);
 	c->setmoreinfo(mi);
 	c->setworkinfo(wi);
@@ -1437,6 +1615,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 	    }
 	}
     }
+    xmlnode_free(v); //without it very HUGE memory leaks on some accounts
 }
 
 void jabberhook::requestversion(const imcontact &ic)
@@ -1760,7 +1939,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 				    }
 			    }
 	    } else if(type == "set") {
-	    } else if(type == "error"	) {
+	    } else if(type == "error") {
 		string name, desc;
 		int code;
 
@@ -1876,6 +2055,52 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    if(p = xmlnode_get_data(x))
 			jhook.awaymsgs[ic.nickname] = p;
 
+		     
+/*This code checking if user in your contacl list send update avatar request(presence message with another hash)*/
+		    xmlnode y; 
+		    if(x = xmlnode_get_tag(packet->x, "x"))
+			    if(p = xmlnode_get_attrib(x, "xmlns"))
+				    if(!strcmp(p,  NS_VCARDUP))
+					    if( y = xmlnode_get_tag(x, "photo")) //quering avatar hash
+							    if(p = xmlnode_get_data(y))
+							    {
+								    icqcontact::basicinfo bi = c->getbasicinfo();
+								    string temp_av = bi.avatar;
+								    if( justpathname( temp_av ).empty()  )
+									    temp_av = c->getdirname() + bi.avatar;
+								    string contact_dir = temp_av;
+								    if( !contact_dir.empty() )
+								    {
+									    int ava_file = open( contact_dir.c_str(), O_RDONLY );
+									    if( ava_file >= 0 )
+									    {
+										    struct stat buf;
+										    fstat( ava_file, &buf );
+										    long int file_size = buf.st_size;
+										    char *hash = (char*)calloc( 1, file_size+1 );
+										    read( ava_file, hash, file_size );
+										    close( ava_file );
+										    unsigned char hashval[20];
+										    char *pos;
+										    char final[41];
+										    shaBlock((unsigned char *)hash, file_size, hashval);
+										    pos = final;
+										    int k;
+										    for(k=0;k<20;k++)
+										    {
+											    snprintf(pos, 3, "%02x", hashval[k]);
+											    pos += 2;
+										    }
+										    if( strcmp( p, final ) != 0 )
+											    jhook.requestinfo(c);
+										    free(hash);
+									    }
+									    else
+										    jhook.requestinfo(c);
+								    }
+							    }
+		     
+
 #ifdef HAVE_GPGME
 		    if(x = xmlnode_get_tag(packet->x, "x"))
 		    if(p = xmlnode_get_attrib(x, "xmlns"))
@@ -1924,6 +2149,99 @@ void jabberhook::jlogger(jconn conn, int inout, const char *p) {
     string tolog = (string) (inout ? "[IN]" : "[OUT]") + "\n";
     tolog += p;
     face.log(tolog);
+}
+
+bool jabberhook::get_img_ext(const string &type, string &ext) {
+	int pos;
+
+	if(type.find("image/") != -1)  {
+		if((pos = type.find("/")) != -1) {
+			ext = type.substr(pos+1);
+			return true;
+		}
+	}
+	ext = (string)"";
+	return false;
+
+}
+
+bool jabberhook::get_base64_avatar(string &type, string &ava) {
+	 
+	icqcontact *ic = clist.get(contactroot);
+	icqcontact::basicinfo bi = ic->getbasicinfo();
+	string contact_dir = conf.getdirname();
+	 
+	if(!bi.avatar.empty())
+	{
+		if( justpathname( bi.avatar ).empty()  )
+			contact_dir += bi.avatar;
+		else
+			contact_dir = bi.avatar;
+		string image_type = contact_dir;
+		int pos;
+		if( (pos = image_type.rfind( ".")) != -1 )
+		{
+			type += (string)"image/" + image_type.substr(pos+1);
+			int avatar_file = open( contact_dir.c_str(), O_RDONLY );
+			if( avatar_file >= 0 )
+			{
+				struct stat buf;
+				fstat( avatar_file, &buf );
+				long int file_size = buf.st_size;
+				char *avatar_stream = (char*)calloc( 1, file_size+1 );
+				read( avatar_file, avatar_stream, file_size );
+				close( avatar_file );
+				char *temp = base64_encode(avatar_stream, file_size);
+				ava = temp;
+				free(temp);
+				free(avatar_stream);
+				return true;
+
+			}
+		}
+	}
+	return false;
+}
+
+bool jabberhook::get_my_avatar_hash(string &my_hash)
+{
+	icqcontact *ic = clist.get(contactroot);
+	icqcontact::basicinfo bi = ic->getbasicinfo();
+	string contact_dir = conf.getdirname();
+
+	if(!bi.avatar.empty())
+	{
+		if( justpathname( bi.avatar ).empty()  )
+			contact_dir += bi.avatar;
+		else
+			contact_dir = bi.avatar;
+		int ava_file = open( contact_dir.c_str(), O_RDONLY );
+
+		if( ava_file >= 0 )
+		{
+			struct stat buf;
+			fstat( ava_file, &buf );
+			long int file_size = buf.st_size;
+			char *hash = (char*)calloc( 1, file_size+1 );
+			read( ava_file, hash, file_size );
+			close( ava_file );
+			unsigned char hashval[20];
+			char *pos;
+			char final[41];
+			shaBlock((unsigned char *)hash, file_size, hashval);
+			pos = final;
+			int k;
+			for(k=0;k<20;k++)
+			{
+				snprintf(pos, 3, "%02x", hashval[k]);
+				pos += 2;
+			}
+			my_hash = final;
+			free(hash);
+			return true;
+		}
+	}
+	return false;
 }
 
 #endif

@@ -1196,6 +1196,12 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     
     if (!buf.empty())
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf.getcolor(cp_main_highlight), buf);
+    if (buf.empty())
+	if(!bi.avatar.empty())
+	{
+	    mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf.getcolor(cp_main_highlight), _("Avatar file"));
+	    mainw.write(sizeWArea.x1+14, sizeWArea.y1+15, conf.getcolor(cp_main_text), bi.avatar);
+	}
 }
 
 void icqface::infohome(dialogbox &db, icqcontact *c) {

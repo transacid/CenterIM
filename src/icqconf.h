@@ -342,6 +342,7 @@ class icqconf {
 
 	imstatus getstatus(protocolname pname);
 	void savestatus(protocolname pname, imstatus st);
+	void setavatar(protocolname pname, const string &ava);
 
 	string getprotocolname(protocolname pname) const;
 	protocolname getprotocolbyletter(char letter) const;

@@ -692,6 +692,11 @@ void icqface::gendetails(treeview *tree, icqcontact *c) {
 	tree->addleaff(i, 0, 17, _(" City : %s "), bi.city.c_str());
 	tree->addleaff(i, 0, 14, _(" Gender : %s "), strgender(mi.gender));
     }
+    if(passinfo.pname == jabber)
+    {
+	i = tree->addnode(_(" Miscellaneous "));
+	tree->addleaff(i, 0, 50, _(" Avatar file : %s "), bi.avatar.c_str());
+    }
 
     if(passinfo.pname == rss) {
 	i = tree->addnode(_(" Feed Parameters "));
@@ -869,6 +874,7 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 		    break;
 		case 48: wi.homepage = inputstr(_("URL: "), wi.homepage); break;
 		case 49: mi.checkfreq = atol(inputstr(_("Check frequency: "), strint(mi.checkfreq)).c_str()); break;
+		case 50: bi.avatar = inputstr(_("Avatar file: "), bi.avatar); break;
 		default:
 		    if(citem >= 100) {
 			vector<pair<string, string> >::iterator ifp = ri.params.begin()+citem-100;

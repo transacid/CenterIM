@@ -1309,6 +1309,12 @@ void icqconf::savestatus(protocolname pname, imstatus st) {
     setourid(im);
 }
 
+void icqconf::setavatar(protocolname pname, const string &ava) {
+    imaccount im = getourid(pname);
+    im.additional["avatar"] = ava;
+    setourid(im);
+}
+
 int icqconf::getprotcolor(protocolname pname) const {
     switch(pname) {
 	case icq : return getcolor(cp_clist_icq);

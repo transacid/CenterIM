@@ -28,7 +28,7 @@ class icqcontact {
 		  webaware(false), authawait(false), serverbased(false)  { };
 
 	    string fname, lname, email, city, state, phone, fax;
-	    string street, cellular, zip;
+	    string street, cellular, zip, avatar;
 	    unsigned short country, randomgroup;
 	    bool requiresauth, webaware, authawait, serverbased;
 	};
