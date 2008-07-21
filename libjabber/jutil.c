@@ -104,6 +104,21 @@ xmlnode jutil_msgnew(char *type, char *to, char *subj, char *body)
     return msg;
 }
 
+/* util for making message receipt packets */
+xmlnode jutil_receiptnew(const char *to, const char *id)
+{
+    xmlnode msg;
+
+    msg = xmlnode_new_tag("message");
+    xmlnode_put_attrib (msg, "to", to);
+	if(id != NULL)
+		xmlnode_put_attrib (msg, "id", id);
+
+    xmlnode_put_attrib(xmlnode_insert_tag (msg, "received"), "xmlns", "urn:xmpp:receipts");
+
+    return msg;
+}
+
 /* util for making stream packets */
 xmlnode jutil_header(char* xmlns, char* server)
 {

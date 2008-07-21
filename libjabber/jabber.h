@@ -221,6 +221,7 @@ typedef struct terror_struct
 #define NS_ADMIN     "jabber:iq:admin"
 #define NS_FILTER    "jabber:iq:filter"
 #define NS_AUTH_0K   "jabber:iq:auth:0k"
+#define NS_RECEIPTS  "urn:xmpp:receipts"
 #define NS_DISCOINFO "http://jabber.org/protocol/disco#info"
 #define NS_DISCOITEMS "http://jabber.org/protocol/disco#items"
 
@@ -246,6 +247,7 @@ xmlnode jutil_iqnew(int type, char *ns);                 /* Create a skeleton iq
 xmlnode jutil_iqnew2(int type);                 /* Create a skeleton iq packet w/o query tag*/
 xmlnode jutil_msgnew(char *type, char *to, char *subj, char *body);
 							 /* Create a skeleton message packet */
+xmlnode jutil_receiptnew(const char *to, const char *id);/* Create a skeleton message receipt packet */
 xmlnode jutil_header(char* xmlns, char* server);         /* Create a skeleton stream packet */
 int     jutil_priority(xmlnode x);                       /* Determine priority of this packet */
 void    jutil_tofrom(xmlnode x);                         /* Swaps to/from fields on a packet */

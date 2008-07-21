@@ -32,6 +32,7 @@ struct hookcapab {
 	channelpasswords,
 	groupchatservices,
 	nochat,
+	acknowledgements,
 	pgp
     };
 };

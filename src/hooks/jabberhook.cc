@@ -245,6 +245,7 @@ jabberhook::jabberhook(): abstracthook(jabber), jc(0), flogged(false), fonline(f
     fcapabs.insert(hookcapab::changeabout);
     fcapabs.insert(hookcapab::version);
     fcapabs.insert(hookcapab::pgp);
+	fcapabs.insert(hookcapab::acknowledgements);
 }
 
 jabberhook::~jabberhook() {
@@ -1684,6 +1685,41 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) { //fix version pars
     }
 }
 
+void jabberhook::senddiscoinfo(const imcontact &ic, xmlnode i) {
+	string id;
+	char *p = xmlnode_get_attrib(i, "id"); if(p) id = p; else id = "discoinfo";
+	const char *cjid = jhook.full_jids[jidnormalize(ic.nickname).c_str()].c_str();
+	xmlnode x = jutil_iqnew(JPACKET__RESULT, NS_DISCOINFO), y;
+	xmlnode_put_attrib(x, "to", cjid);
+	xmlnode_put_attrib(x, "from", getourjid().c_str());
+	xmlnode_put_attrib(x, "id", id.c_str() );
+
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "identity");
+	xmlnode_put_attrib(y, "category", "client");
+	xmlnode_put_attrib(y, "type", "pc");
+	xmlnode_put_attrib(y, "name", "centerim");
+
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
+	xmlnode_put_attrib(y, "var", NS_DISCOINFO);
+
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
+	xmlnode_put_attrib(y, "var", NS_VERSION);
+
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
+	xmlnode_put_attrib(y, "var", NS_VCARD);
+	
+	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
+	xmlnode_put_attrib(y, "var", NS_VCARDUP);
+
+	if(conf.getourid(jhook.proto).additional["acknowledgements"] == "1") {
+		y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
+		xmlnode_put_attrib(y, "var", NS_RECEIPTS);
+	}
+
+	jab_send(jc, x);
+	xmlnode_free(x);
+}
+
 bool jabberhook::isourid(const string &jid) {
     icqconf::imaccount acc = conf.getourid(jhook.proto);
     int pos;
@@ -1805,6 +1841,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 
 	    if(!body.empty())
 		jhook.gotmessage(type, from, body, enc);
+
+		if(jhook.getstatus() != invisible && conf.getourid(jhook.proto).additional["acknowledgements"] == "1") {
+	    	if(x = xmlnode_get_tag(packet->x, "request"))
+			if(NSCHECK(x, NS_RECEIPTS)) {
+				const char *id = xmlnode_get_attrib(packet->x, "id");
+				xmlnode receipt = jutil_receiptnew(from.c_str(), id);
+				jab_send(conn, receipt);
+				xmlnode_free(receipt);
+			}
+		}
 
 	    break;
 
@@ -1937,6 +1983,13 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 					    jhook.sendversion(ic, packet->x);
 					    return;
 				    }
+
+					// send the supported features (and don't leak our presence)
+					if(!strcmp(p, NS_DISCOINFO) && jhook.getstatus() != invisible) {
+						jhook.full_jids[ic.nickname] = from;
+						jhook.senddiscoinfo(ic, packet->x);
+						return;
+					}
 			    }
 	    } else if(type == "set") {
 	    } else if(type == "error") {

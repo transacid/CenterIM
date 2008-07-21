@@ -79,6 +79,7 @@ class jabberhook: public abstracthook {
 	void gotmessage(const string &type, const string &from, const string &body, const string &enc);
 	void gotversion(const imcontact &ic, xmlnode x);
 	void sendversion(const imcontact &ic, xmlnode x);
+	void senddiscoinfo(const imcontact &ic, xmlnode x);
 	bool get_img_ext(const string &type, string &ext);
 	bool get_base64_avatar(string &type, string &ava);
 

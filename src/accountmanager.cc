@@ -136,6 +136,10 @@ void accountmanager::exec() {
 			break;
 		}
 
+		if(!a.empty())
+		    if(capab.count(hookcapab::acknowledgements))
+			t.addleaff(n, 0, citem+17, _(" Send receipts: %s "),
+			    stryesno(a.additional["acknowledgements"] == "1"));
 		if(a.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 
@@ -282,6 +286,11 @@ void accountmanager::exec() {
 		    tmp = face.inputstr(_("PGP key passphrase: "), a.additional["pgppass"], '*');
 		    if(face.getlastinputkey() != KEY_ESC)
 			a.additional["pgppass"] = tmp;
+		    break;
+
+		case 17:
+		    a.additional["acknowledgements"] =
+			(a.additional["acknowledgements"] == "") ? "1" : "";
 		    break;
 	    }
 
