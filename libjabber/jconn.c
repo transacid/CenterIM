@@ -23,10 +23,22 @@
 /* local macros for launching event handlers */
 #define STATE_EVT(arg) if(j->on_state) { (j->on_state)(j, (arg) ); }
 
+#define SEND_BUF 2048
+
 /* prototypes of the local functions */
 static void startElement(void *userdata, const char *name, const char **attribs);
 static void endElement(void *userdata, const char *name);
 static void charData(void *userdata, const char *s, int slen);
+
+struct pargs_r {
+	int sock;
+	int fd_file;
+	char *hash;
+	long int size;
+	void *rfile;
+	char *url;
+	void (*callback)(void *, long int, long int, int);
+};
 
 /*
  *  jab_new -- initialize a new jabber connection
@@ -537,4 +549,274 @@ static void charData(void *userdata, const char *s, int slen)
 
     if (j->current)
 	xmlnode_insert_cdata(j->current, s, slen);
+}
+
+void jabber_get_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status) ) //returning ip address and port after binding
+{
+#ifdef HAVE_THREAD
+	int sock;
+	struct sockaddr_in addr;
+	int optval = 1;
+	char *ip_addr = file->host;
+	char *sid_from_to = file->sid_from_to;
+	int port = file->port;
+	 
+	int fd_file = open(filename, O_CREAT | O_WRONLY | O_TRUNC,  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
+	if( fd_file < 0 )
+		return;
+
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if(sock < 0)
+	{
+		close( fd_file );
+		return;
+	}
+	 
+	struct hostent *host = gethostbyname(ip_addr);
+	bcopy(host->h_addr, &addr.sin_addr, host->h_length);
+	 
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons( port ); 
+
+
+	if ( connect(sock, (struct sockaddr *) &addr, sizeof(addr) ) < 0 )
+	{
+		close( sock );
+		close( fd_file );
+		return;
+	}
+	 
+
+	 
+	char *hash = NULL;
+	if(sid_from_to)
+		hash = shahash(sid_from_to);
+	 
+	struct pargs_r *arg;
+	arg = (struct pargs_r *)calloc(1, sizeof(struct pargs_r));
+	if( arg )
+
+	{
+		arg->sock = sock;
+		arg->fd_file = fd_file;
+		arg->size = size;
+		if( hash )
+			arg->hash = strdup( hash );
+		arg->rfile = rfile;
+		arg->url = file->url;
+		arg->callback = function;
+		if(file->transfer_type == 0)
+		{
+			if (pthread_create(&file->thread, NULL, jabber_recieve_file_fd, (void *)arg ))
+			{
+
+				free( arg );
+				close( fd_file );
+				close( sock );
+			}
+		}
+		else
+		{
+			if (pthread_create(&file->thread, NULL, jabber_recieve_file_fd_http, (void *)arg ))
+			{
+
+				free( arg );
+				close( fd_file );
+				close( sock );
+			}
+		}
+	}
+	else
+	{
+		close( fd_file );
+		close( sock );
+	}
+#endif
+}
+ 
+void cleanup_thread(void *arg)
+{
+#ifdef HAVE_THREAD
+	struct pargs_r *argument = (struct pargs_r*)arg;
+	if(argument)
+	{
+		close(argument->fd_file);
+		close(argument->sock);
+		if(argument->hash)
+			free(argument->hash);
+		if(argument->rfile)
+			free(argument->rfile);
+		free(argument);
+	}
+#endif
+}
+ 
+void *jabber_recieve_file_fd(void *arg)
+{
+#ifdef HAVE_THREAD
+	struct pargs_r *argument;
+	int sock;
+	int fd_file;
+	long int size;
+	char *hash;
+	argument = (struct pargs_r*)arg;
+	 
+	sock = argument->sock;
+	fd_file = argument->fd_file;
+	size = argument->size;
+	hash = argument->hash;
+	pthread_cleanup_push(cleanup_thread, argument);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+	 
+	char buff[SEND_BUF];
+	 
+
+
+	buff[0] = 0x05;
+	buff[1] = 0x01;
+	buff[2] = 0x00;
+	 
+	if( send( sock, buff, 3, 0 ) != 3 )
+	{
+		free(hash);
+		close(sock);
+		close(fd_file);
+		return;
+	}
+	 
+	recv( sock, buff, SEND_BUF, 0 );
+	if( buff[0] != 0x05 || buff[1] != 0x00 ) 
+	{
+		free(hash);
+		close(sock);
+		close(fd_file);
+		return;
+	}
+	 
+//socks5 bytestream packet	 
+	buff[0] = 0x05;
+	buff[1] = 0x01;
+	buff[2] = 0x00;
+	buff[3] = 0x03;
+	buff[4] = 0x28;
+	strncpy( (char*)(buff + 5), hash, 40 );
+	buff[45] = 0x00;
+	buff[46] = 0x00;
+		 
+	if( send( sock, buff, 47, 0 ) != 47 )
+	{
+		free(hash);
+		close(sock);
+		close(fd_file);
+		return;
+	}
+	recv( sock, buff, 47, 0 );
+	if( buff[0] != 0x05 || buff[3] != 0x03 )
+	{
+		free(hash);
+		close(sock);
+		close(fd_file);
+		return;
+	}
+
+
+	int bytes = 0;
+	int counter = 0;
+	while(1)
+	{
+		bytes = recv( sock, buff, SEND_BUF, 0 );
+		if( bytes < 1 )
+			break;
+		else
+		{
+			write(fd_file, buff, bytes);
+			counter += bytes;
+			argument->callback(argument->rfile, counter, size, 0);
+		}
+				
+	}
+	if( counter == size )
+		argument->callback(argument->rfile, counter, size, 1);
+	else
+		argument->callback(argument->rfile, counter, size, 2);
+	 
+	pthread_cleanup_pop(1);
+ 
+	pthread_exit(0);
+
+	 
+#endif
+}
+ 
+
+void *jabber_recieve_file_fd_http(void *arg)
+{
+#ifdef HAVE_THREAD
+	struct pargs_r *argument;
+	int sock;
+	int fd_file;
+	long int size;
+	char *url;
+	argument = (struct pargs_r*)arg;
+	 
+	sock = argument->sock;
+	fd_file = argument->fd_file;
+	size = argument->size;
+	url = argument->url;
+	pthread_cleanup_push(cleanup_thread, argument);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+	
+	char buff[SEND_BUF];
+	 
+	snprintf( buff, SEND_BUF, "GET %s HTTP/1.0\r\n\r\n", url );
+	send( sock, buff, strlen(buff), 0 );
+	 
+
+	int but = recv( sock, buff, SEND_BUF, 0 );
+	if( strstr(buff, "200 OK" ) )
+	{
+		char *length = strstr( buff, "Content-Length:" );
+		sscanf( length, "Content-Length: %d", &size );
+
+		int i = 0;
+		while(i < but-4)
+		{
+			if(buff[i] == '\r' && buff[i+1] == '\n' && buff[i+2] == '\r' && buff[i+3] == '\n' )
+			{
+				break;
+			}
+			i++;
+		}
+		i = i + 4;
+		int bytes = 0;
+		int counter = 0;
+
+		bytes = but-i;
+		write(fd_file, (buff+i), bytes);
+		counter += bytes;
+
+		while(1)
+		{
+			bytes = recv( sock, buff, SEND_BUF, 0 );
+			if( bytes < 1 )
+				break;
+			else
+			{
+				write(fd_file, buff, bytes);
+				counter += bytes;
+				argument->callback(argument->rfile, counter, size, 0);
+			}
+
+		}
+		if( counter == size )
+			argument->callback(argument->rfile, counter, size, 1);
+		else
+			argument->callback(argument->rfile, counter, size, 2);
+	}
+	 
+	pthread_cleanup_pop(1);
+ 
+	pthread_exit(0);
+#endif
+	 
 }

@@ -36,6 +36,7 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <time.h>
+#include <pthread.h>
 
 #include "libxode.h"
 #include "connwrap.h"
@@ -65,6 +66,18 @@ typedef struct jid_struct
     char*              full;
     struct jid_struct *next; /* for lists of jids */
 } *jid;
+
+struct send_file
+{               
+	char *full_jid_name;
+        char *id;
+        pthread_t thread;
+        int transfer_type;
+        char *host;
+	char *url;
+	char *sid_from_to;
+	int port;
+};
   
 jid     jid_new(pool p, char *idstr);          /* Creates a jabber id from the idstr */
 
@@ -210,6 +223,7 @@ typedef struct terror_struct
 #define NS_AGENT     "jabber:iq:agent"
 #define NS_AGENTS    "jabber:iq:agents"
 #define NS_DELAY     "jabber:x:delay"
+#define NS_DATA      "jabber:x:data"
 #define NS_VERSION   "jabber:iq:version"
 #define NS_TIME      "jabber:iq:time"
 #define NS_VCARD     "vcard-temp"
@@ -224,6 +238,10 @@ typedef struct terror_struct
 #define NS_RECEIPTS  "urn:xmpp:receipts"
 #define NS_DISCOINFO "http://jabber.org/protocol/disco#info"
 #define NS_DISCOITEMS "http://jabber.org/protocol/disco#items"
+#define NS_BYTESTREAMS "http://jabber.org/protocol/bytestreams"
+#define NS_SI "http://jabber.org/protocol/si"
+#define NS_SIFILE "http://jabber.org/protocol/si/profile/file-transfer"
+#define NS_NEG "http://jabber.org/protocol/feature-neg" 
 
 /* --------------------------------------------------------- */
 /*                                                           */
@@ -320,6 +338,10 @@ void jab_poll(jconn j, int timeout);
 
 char *jab_auth(jconn j);
 char *jab_reg(jconn j);
+
+void *jabber_recieve_file_fd(void *arg);
+void *jabber_recieve_file_fd_http(void *arg);
+void jabber_get_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status) );
 
 #ifdef __cplusplus
 }

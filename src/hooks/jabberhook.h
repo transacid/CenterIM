@@ -22,6 +22,7 @@ class jabberhook: public abstracthook {
 	map<string, string> roster;
 	map<string, string> awaymsgs;
 	map<string, string> full_jids;//little trick to store users full JID's, it required in some xmpp packets
+	map<imfile, pair<struct send_file *, string> > transferinfo;
 	map<string, vector<string> > chatmembers;
 	map<string, map<string, pair<char, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
 
@@ -81,10 +82,21 @@ class jabberhook: public abstracthook {
 	void sendversion(const imcontact &ic, xmlnode x);
 	void senddiscoinfo(const imcontact &ic, xmlnode x);
 	bool get_img_ext(const string &type, string &ext);
+	bool url_port_get(const string &full_url, string &url, int &port, string &tail, string &filename);
 	bool get_base64_avatar(string &type, string &ava);
+	void getfile(const imfile &fr);
+	void getfile_http(const imcontact &ic, xmlnode i);
+	void getfile_byte(const imcontact &ic, xmlnode i);
+	void getfile_result(const imfile &fr);
+	void file_transfer_request(const imcontact &ic, xmlnode i);
+	void bytenegotiat(const imfile &fr);
+	void reject_file(const imfile &fr);
+	void recieve_file( const imcontact &ic, xmlnode x, string id, string from, string to );
+
 
 	bool isourid(const string &jid);
 	static string getourjid();
+	static void progressbar(void *file, long int bytes, long int size, int status);
 	string jidnormalize(const string &jid) const;
 
 	void vcput(xmlnode x, const string &name, const string &val);
@@ -94,6 +106,7 @@ class jabberhook: public abstracthook {
 	    const string &locality, const string &region, const string &pcode,
 	    unsigned short country);
 	void vcputavatar(xmlnode x, const string &type, const string &val);
+	void clean_up_file(const imfile &fr);
 
     public:
 	jabberhook();
@@ -132,6 +145,8 @@ class jabberhook: public abstracthook {
 	vector<pair<string, string> > getsearchparameters(const string &agentname) const;
 	vector<pair<string, string> > getregparameters(const string &agentname) const;
 
+	map<string,imfile> transferusers; //some hack to quick find transfer file by full JID
+
 	void lookup(const imsearchparams &params, verticalmenu &dest);
 
 	void conferencecreate(const imcontact &confid,
@@ -144,6 +159,9 @@ class jabberhook: public abstracthook {
 	void renamegroup(const string &oldname, const string &newname);
 
 	void ouridchanged(const icqconf::imaccount &ia);
+	bool knowntransfer(const imfile &fr) const;
+	void replytransfer(const imfile &fr, bool accept, const string &localpath = string() );
+	void aborttransfer(const imfile &fr);
 };
 
 extern jabberhook jhook;

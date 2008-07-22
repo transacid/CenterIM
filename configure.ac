@@ -216,6 +216,24 @@ if test "x$have_gpgme" = "xyes"; then
          LIBS="$LIBS $GPGME_LIBS"
 fi
 
+#############################
+# Check for pthread library #
+#############################
+original_LIBS="$LIBS"
+LIBS="-lpthread $original_LIBS"
+
+AC_TRY_LINK([#include<pthread.h>],
+	    [pthread_create((void *)0, (void *)0, (void *)0, (void *)0)],
+	    [pthread=yes], [pthread=no])
+
+if test x${pthread} = xyes; then
+	AC_MSG_RESULT([yes])
+	AC_DEFINE(HAVE_THREAD, 1, [pthread library is available])
+else
+	LIBS="$original_LIBS"
+	AC_MSG_RESULT([no])
+fi
+
 #####################
 # Check for libcurl #
 #####################
@@ -261,12 +279,12 @@ if test "x$with_libotr" != "xno"; then
 
 	AC_CHECK_LIB(otr, otrl_init,
 	[
-		AC_CHECK_HEADERS(libotr/context.h libotr/userstate.h,
+		AC_CHECK_HEADERS(libotr/context.h, libotr/userstate.h
 		[
 			AC_DEFINE(HAVE_LIBOTR, 1, [define if you have libotr])
-			OTR_LIBS="-lotr $LIBS"
+            OTR_LIBS="-lotr $LIBS"
 			LIBS="$LIBS $OTR_LIBS"
-			have_libotr=yes
+            have_libotr=yes
 		])
 	])
 fi
@@ -316,6 +334,7 @@ AM_CONDITIONAL(BUILD_GADU, test "x$build_gg" = "xyes")
 AM_CONDITIONAL(BUILD_MSN, test "x$build_msn" = "xyes")
 AM_CONDITIONAL(BUILD_RSS, test "x$build_rss" = "xyes" -o "x$build_lj" = "xyes")
 AM_CONDITIONAL(BUILD_LJ, test "x$build_lj" = "xyes")
+AM_CONDITIONAL(HAVE_THREAD, test "x$pthread" = "xyes")
 AM_CONDITIONAL(HAVE_LIBOTR, test "x$have_libotr" = "xyes")
 AM_CONDITIONAL(HAVE_FRIBIDI, test "x$have_fribidi" = "xyes")
 
