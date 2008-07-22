@@ -264,9 +264,9 @@ if test "x$with_libotr" != "xno"; then
 		AC_CHECK_HEADERS(libotr/context.h libotr/userstate.h,
 		[
 			AC_DEFINE(HAVE_LIBOTR, 1, [define if you have libotr])
-            OTR_LIBS="-lotr $LIBS"
+			OTR_LIBS="-lotr $LIBS"
 			LIBS="$LIBS $OTR_LIBS"
-            have_libotr=yes
+			have_libotr=yes
 		])
 	])
 fi
