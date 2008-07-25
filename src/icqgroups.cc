@@ -32,7 +32,7 @@ icqgroups::~icqgroups() {
 }
 
 string icqgroups::getfname() const {
-    return conf.getdirname() + "groups";
+    return conf->getdirname() + "groups";
 }
 
 void icqgroups::load() {
@@ -71,7 +71,7 @@ void icqgroups::save() {
     ofstream f;
     iterator i;
 
-    if(conf.enoughdiskspace()) {
+    if(conf->enoughdiskspace()) {
 	f.open(getfname().c_str());
 
 	if(f.is_open()) {

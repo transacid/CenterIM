@@ -30,7 +30,7 @@
 #include "icqcontacts.h"
 #include "impgp.h"
 
-#define getcolor(c)     conf.getcolor(c)
+#define getcolor(c)     conf->getcolor(c)
 
 accountmanager manager;
 
@@ -82,9 +82,9 @@ void accountmanager::exec() {
 
 	for(pname = icq; pname != protocolname_size; pname++) {
 	    if(pname != rss && gethook(pname).enabled()) {
-		a = conf.getourid(pname);
+		a = conf->getourid(pname);
 
-		n = t.addnode(0, 0, 0, " " + conf.getprotocolname(a.pname) + " ");
+		n = t.addnode(0, 0, 0, " " + conf->getprotocolname(a.pname) + " ");
 		citem = ((int) (a.pname)+1) * 100;
 		capab = gethook(a.pname).getCapabs();
 
@@ -177,8 +177,8 @@ void accountmanager::exec() {
 	    action = citem-(citem/100)*100;
 	    pname = (protocolname) (citem/100-1);
 
-	    a = conf.getourid(pname);
-	    spname = conf.getprotocolname(pname);
+	    a = conf->getourid(pname);
+	    spname = conf->getprotocolname(pname);
 	    abstracthook &hook = gethook(pname);
 		capab = hook.getCapabs();
 
@@ -239,8 +239,8 @@ void accountmanager::exec() {
 		    break;
 
 		case 10:
-		    if(face.edit(tmp = conf.getawaymsg(a.pname), spname + ": " + _("away message"))) {
-			conf.setawaymsg(a.pname, tmp);
+		    if(face.edit(tmp = conf->getawaymsg(a.pname), spname + ": " + _("away message"))) {
+			conf->setawaymsg(a.pname, tmp);
 		    }
 		    break;
 
@@ -295,7 +295,7 @@ void accountmanager::exec() {
 	    }
 
 	    if(action != 7) {
-		conf.setourid(a);
+		conf->setourid(a);
 		mod[a.pname] = true;
 	    }
 	}
@@ -306,9 +306,9 @@ void accountmanager::exec() {
 
     for(pname = icq; pname != protocolname_size; pname++)
 	if(mod[pname])
-	    gethook(pname).ouridchanged(conf.getourid(pname));
+	    gethook(pname).ouridchanged(conf->getourid(pname));
 
-    conf.save();
+    conf->save();
     face.relaxedupdate();
     fopen = false;
 }

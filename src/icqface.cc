@@ -138,17 +138,17 @@ icqface::~icqface() {
 	for(int i = 0; i < LINES; i++) printf("\n");
     }
 
-    if(conf.getdebug())
+    if(conf->getdebug())
     if(flog.is_open())
 	flog.close();
 }
 
 void icqface::init() {
-    if(conf.getdebug())
+    if(conf->getdebug())
     if(!flog.is_open()) {
 	time_t logtime = time(0);
 
-	flog.open((conf.getdirname() + "debug").c_str(), ios::app);
+	flog.open((conf->getdirname() + "debug").c_str(), ios::app);
 	if(flog.is_open())
 	    flog << endl << "-- centerim debug log started on " << ctime(&logtime);
     }
@@ -161,47 +161,47 @@ void icqface::init() {
     sizeBigDlg.width = COLS-10;
     sizeBigDlg.height = LINES-7;
 
-    sizeWArea.x1 = conf.getleftpanelwidth();
+    sizeWArea.x1 = conf->getleftpanelwidth();
     if(sizeWArea.x1 < MinPanelWidth || sizeWArea.x1 > (COLS - MinPanelWidth)) {
 	sizeWArea.x1 = (int) (COLS*0.32); 
-	conf.setleftpanelwidth(sizeWArea.x1);
+	conf->setleftpanelwidth(sizeWArea.x1);
     }
     
     sizeWArea.x2 = COLS-1;
     sizeWArea.y1 = 1;
 
-    sizeWArea.y2 = conf.getlogpanelheight();
+    sizeWArea.y2 = conf->getlogpanelheight();
     if(sizeWArea.y2 < MinPanelHeight || sizeWArea.y2 > (LINES - MinPanelHeight)) {
 	sizeWArea.y2 = (int) LINES / 4;
-	conf.setlogpanelheight(sizeWArea.y2);
+	conf->setlogpanelheight(sizeWArea.y2);
     }
     sizeWArea.y2 = LINES - sizeWArea.y2;
 
     if(!mcontacts) {
-	mcontacts = new treeview(conf.getcolor(cp_main_menu),
-	    conf.getcolor(cp_main_selected),
-	    conf.getcolor(cp_main_menu),
-	    conf.getcolor(cp_main_menu));
+	mcontacts = new treeview(conf->getcolor(cp_main_menu),
+	    conf->getcolor(cp_main_selected),
+	    conf->getcolor(cp_main_menu),
+	    conf->getcolor(cp_main_menu));
     }
 
     mcontacts->setcoords(1, 2, sizeWArea.x1, LINES-2);
     mcontacts->menu.idle = &menuidle;
     mcontacts->menu.otherkeys = &contactskeys;
 
-    input.setcolor(conf.getcolor(cp_status));
+    input.setcolor(conf->getcolor(cp_status));
     input.idle = &textinputidle;
 
-    mainw = textwindow(0, 1, COLS-1, LINES-2, conf.getcolor(cp_main_frame));
+    mainw = textwindow(0, 1, COLS-1, LINES-2, conf->getcolor(cp_main_frame));
 
-    selector.setcolor(conf.getcolor(cp_dialog_menu),
-	conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_selected),
-	conf.getcolor(cp_dialog_frame));
+    selector.setcolor(conf->getcolor(cp_dialog_menu),
+	conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_selected),
+	conf->getcolor(cp_dialog_frame));
 
-    mhist = verticalmenu(conf.getcolor(cp_main_text),
-	conf.getcolor(cp_main_selected));
+    mhist = verticalmenu(conf->getcolor(cp_main_text),
+	conf->getcolor(cp_main_selected));
 
-    attrset(conf.getcolor(cp_status));
+    attrset(conf->getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
     mvhline(LINES, 0, ' ', COLS);
 
@@ -231,17 +231,17 @@ void icqface::showtopbar() {
     icqconf::imaccount ia;
 
     for(pname = icq; pname != protocolname_size; pname++) {
-	ia = conf.getourid(pname);
+	ia = conf->getourid(pname);
 
 	if(!ia.empty()) {
 	    buf += " ";
-	    buf += conf.getprotocolname(pname) + ":";
+	    buf += conf->getprotocolname(pname) + ":";
 	    buf += imstatus2char[gethook(pname).getstatus()];
 //            buf += ">";
 	}
     }
 
-    attrset(conf.getcolor(cp_status));
+    attrset(conf->getcolor(cp_status));
     mvhline(0, 0, ' ', COLS);
     mvprintw(0, 0, _(" CENTERIM %s  UNSENT: %lu"), centerim::version, em.getunsentcount());
     mvprintw(0, COLS-buf.size()-1, "%s", buf.c_str());
@@ -262,8 +262,8 @@ int icqface::contextmenu(icqcontact *c) {
 
     if(!c) return 0;
 
-    verticalmenu m(conf.getcolor(cp_main_text),
-	conf.getcolor(cp_main_selected));
+    verticalmenu m(conf->getcolor(cp_main_text),
+	conf->getcolor(cp_main_selected));
 
     static map<int, string> actnames;
 
@@ -285,7 +285,7 @@ int icqface::contextmenu(icqcontact *c) {
 
     if(ischannel(c)) {
 	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+33,
-	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
+	    sizeWArea.y1+6, conf->getcolor(cp_main_text)));
 
 	actnames[ACT_MSG]       = _(" Send a channel message   enter");
 	actnames[ACT_HISTORY]   = getmenuitem(_("Channel chat history"), 25, key_history, section_contact);
@@ -301,7 +301,7 @@ int icqface::contextmenu(icqcontact *c) {
 
     } else {
 	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
-	    sizeWArea.y1+6, conf.getcolor(cp_main_text)));
+	    sizeWArea.y1+6, conf->getcolor(cp_main_text)));
 
 	if(c->getdesc().pname != rss)
 	    actnames[ACT_MSG] = getmenuitem(_("Send a message"), 25, key_compose, section_contact);
@@ -345,13 +345,13 @@ int icqface::contextmenu(icqcontact *c) {
 	    actions.push_back((c->getstatus() != offline) ? ACT_LEAVE : ACT_JOIN);
 	}
 
-	if(conf.getgroupmode() != icqconf::nogroups)
+	if(conf->getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
 
     } else if(c->getdesc().pname != rss) {
 	if(cont.pname != infocard) actions.push_back(ACT_MSG);
 	if(capab.count(hookcapab::urls)) actions.push_back(ACT_URL);
-	if(!conf.getourid(icq).empty()) actions.push_back(ACT_SMS);
+	if(!conf->getourid(icq).empty()) actions.push_back(ACT_SMS);
 	if(capab.count(hookcapab::contacts)) actions.push_back(ACT_CONTACT);
 	if(capab.count(hookcapab::authrequests)) actions.push_back(ACT_AUTH);
 	if(capab.count(hookcapab::files)) actions.push_back(ACT_FILE);
@@ -387,7 +387,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actions.push_back(ACT_REMOVE);
 	actions.push_back(ACT_RENAME);
 
-	if(conf.getgroupmode() != icqconf::nogroups && c->inlist())
+	if(conf->getgroupmode() != icqconf::nogroups && c->inlist())
 	    actions.push_back(ACT_GROUPMOVE);
 
     } else {
@@ -398,7 +398,7 @@ int icqface::contextmenu(icqcontact *c) {
 	actions.push_back(ACT_EDITUSER);
 	actions.push_back(ACT_PING);
 
-	if(conf.getgroupmode() != icqconf::nogroups)
+	if(conf->getgroupmode() != icqconf::nogroups)
 	    actions.push_back(ACT_GROUPMOVE);
 
     }
@@ -425,8 +425,8 @@ int icqface::generalmenu() {
     int i, r = 0;
     static int lastitem = 0;
 
-    verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
-    m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+40, sizeWArea.y1+11, conf.getcolor(cp_main_text)));
+    verticalmenu m(conf->getcolor(cp_main_text), conf->getcolor(cp_main_selected));
+    m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+40, sizeWArea.y1+11, conf->getcolor(cp_main_text)));
 
     m.idle = &menuidle;
     m.additem(0, ACT_STATUS,    getmenuitem(_("Change status"), 38, key_change_status, section_contact));
@@ -448,12 +448,12 @@ int icqface::generalmenu() {
     m.additem(0, ACT_INVISLIST,     _(" View/edit invisible list"));
     m.additem(0, ACT_VISIBLELIST,   _(" View/edit visible list"));
     m.addline();
-    if(conf.gethideoffline())
+    if(conf->gethideoffline())
 	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Show offline users"), 38, key_hide_offline, section_contact));
     else
 	m.additem(0, ACT_HIDEOFFLINE, getmenuitem(_("Hide offline users"), 38, key_hide_offline, section_contact));
 
-    if(conf.getgroupmode() != icqconf::nogroups) {
+    if(conf->getgroupmode() != icqconf::nogroups) {
 	m.additem(0, ACT_ORG_GROUPS, _(" Organize contact groups"));
 	m.additem(0, ACT_MASS_MOVE, _(" Mass group move.."));
     }
@@ -515,7 +515,7 @@ icqcontact *icqface::mainloop(int &action) {
 
 	// Set vi keybindings if configured
 	// 
-	if (conf.getvi()) {
+	if (conf->getvi()) {
 		define_key("j", KEY_DOWN);
 		define_key("k", KEY_UP);
 	}
@@ -603,7 +603,7 @@ icqcontact *icqface::mainloop(int &action) {
 	// If vi bindings configured,
 	// do not restore bindings for these
 	// 
-	if (conf.getvi()) {
+	if (conf->getvi()) {
 		if (action == ACT_STATUS
 				|| action == ACT_GROUPMOVE
 				|| action == ACT_REMOVE
@@ -633,9 +633,9 @@ icqcontact *icqface::mainloop(int &action) {
 
 #define ADDGROUP(nn) { \
     if(groupchange && !strchr("!", sc)) \
-	ngroup = mcontacts->addnode(nn, conf.getcolor(cp_main_highlight), \
+	ngroup = mcontacts->addnode(nn, conf->getcolor(cp_main_highlight), \
 	g, " " + g->getname()  + " " \
-	+ (g->iscollapsed() ? "(" + string(i2str(g->getcount(c->getstatus() != offline, !conf.gethideoffline() && !(c->getstatus() != offline && conf.getgroupmode() == icqconf::group2)))) +  ") " : "")); \
+	+ (g->iscollapsed() ? "(" + string(i2str(g->getcount(c->getstatus() != offline, !conf->gethideoffline() && !(c->getstatus() != offline && conf->getgroupmode() == icqconf::group2)))) +  ") " : "")); \
 }
 
 void icqface::fillcontactlist() {
@@ -662,7 +662,7 @@ void icqface::fillcontactlist() {
 
     savec = mcontacts->getref(mcontacts->getid(mcontacts->menu.getpos()));
 
-    int ccolor = conf.getcolor(cp_main_text);
+    int ccolor = conf->getcolor(cp_main_text);
 
     if(!iscurrentnode && savec) {
 	ig = find(groups.begin(), groups.end(), ((icqcontact *) savec)->getgroupid());
@@ -677,7 +677,7 @@ void icqface::fillcontactlist() {
     /* if savec is a group, we need to figure out of it's the top or bottom
        one when we're in groupmode mode 2. */
 
-    if(savec && iscurrentnode && conf.getgroupmode() == icqconf::group2) {
+    if(savec && iscurrentnode && conf->getgroupmode() == icqconf::group2) {
 	for(i = 0; i < mcontacts->getcount(); i++) {
 	    if(mcontacts->getref(mcontacts->getid(i)) == savec) {
 		if(mcontacts->getid(i) != mcontacts->getid(mcontacts->menu.getpos()))
@@ -706,7 +706,7 @@ void icqface::fillcontactlist() {
 	abstracthook &h = gethook(c->getdesc().pname);
 
 	if(c->getstatus() == offline)
-	if(conf.gethideoffline())
+	if(conf->gethideoffline())
 	if(!c->hasevents())
 	if(c->inlist() || !h.logged() || h.getCapabs().count(hookcapab::cltemporary)) {
 	    continue;
@@ -715,20 +715,20 @@ void icqface::fillcontactlist() {
 	sc = icqcontacts::sort_order->sortstatus(*c);
 
 	groupchange =
-	    (conf.getgroupmode() != icqconf::nogroups) &&
+	    (conf->getgroupmode() != icqconf::nogroups) &&
 	    ((c->getgroupid() != prevgid) ||
-	    ((conf.getgroupmode() == icqconf::group2) && 
+	    ((conf->getgroupmode() == icqconf::group2) && 
 		(prevoffline == false) && (c->getstatus() == offline))) &&
 	    (sc != '#');
 
-	if(conf.getgroupmode() == icqconf::group1)
+	if(conf->getgroupmode() == icqconf::group1)
 	    ADDGROUP(0);
 
 	if(groupchange || (sc != '#')) {
 	    if(strchr("candilfo", sc)) sc = 'O';
 
 	    if((sc != prevsc) || groupchange) {
-		switch(conf.getgroupmode()) {
+		switch(conf->getgroupmode()) {
 		    case icqconf::group1:
 			n = ngroup;
 			break;
@@ -750,28 +750,28 @@ void icqface::fillcontactlist() {
 		if(n != -1) {
 		    switch(sc) {
 			case 'O':
-			    nnode = (conf.getgroupmode() == icqconf::group1 && g->iscollapsed()) ||
-			     (conf.gethideoffline() && (conf.getgroupmode() != icqconf::nogroups)) ?
+			    nnode = (conf->getgroupmode() == icqconf::group1 && g->iscollapsed()) ||
+			     (conf->gethideoffline() && (conf->getgroupmode() != icqconf::nogroups)) ?
 				n : mcontacts->addnode(n,
-				    conf.getcolor(cp_main_highlight), 0, " Online ");
+				    conf->getcolor(cp_main_highlight), 0, " Online ");
 
 			    online_added = true;
 			    break;
 			case '_':
-			    nnode = (conf.getgroupmode() == icqconf::group1 && g->iscollapsed())  ? 
-				n : mcontacts->addnode(n, conf.getcolor(cp_main_highlight), 0, " Offline ");
+			    nnode = (conf->getgroupmode() == icqconf::group1 && g->iscollapsed())  ? 
+				n : mcontacts->addnode(n, conf->getcolor(cp_main_highlight), 0, " Offline ");
 			    break;
 			case '!':
 			    ngroup = 0;
 			    nnode = mcontacts->addnode(ngroup,
-				conf.getcolor(cp_main_highlight), 0, " Not in list ");
+				conf->getcolor(cp_main_highlight), 0, " Not in list ");
 			    break;
 		    }
 
 		    nonline = nnode;
 		}
 
-		if(conf.getgroupmode() == icqconf::group2)
+		if(conf->getgroupmode() == icqconf::group2)
 		if(groupchange && (sc != '!')) {
 		    ADDGROUP(nonline);
 		    nnode = ngroup;
@@ -791,24 +791,24 @@ void icqface::fillcontactlist() {
 
     if(bi.authawait) dnick += " !A";
 
-	if(conf.getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
+	if(conf->getgroupmode() != icqconf::nogroups && g->iscollapsed() &&
 	    !c->hasevents() && sc != '!')
 		continue;
 
-	if(conf.getcolormode() == icqconf::cmstatus) {
-	    ccolor = conf.getstatuscolor(c->getstatus());
+	if(conf->getcolormode() == icqconf::cmstatus) {
+	    ccolor = conf->getstatuscolor(c->getstatus());
 	} else {
-	    ccolor = conf.getprotcolor(c->getdesc().pname);
+	    ccolor = conf->getprotcolor(c->getdesc().pname);
 	}
 
 	if(c->getstatus() == offline) {
 	    mcontacts->addleaff(nnode,
-		    c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+		    c->hasevents() ? conf->getcolor(cp_main_highlight) : ccolor,
 		    c, "%s%s ", c->hasevents() ? "#" : c->getpostponed().empty() ? (c->isopenedforchat() ? "*" : " ") : ">", dnick.c_str());
 
 	} else {
 
-	    if(conf.getcolormode() == icqconf::cmstatus) {
+	    if(conf->getcolormode() == icqconf::cmstatus) {
 	    // When: 'Color contacts according to: status' is selected; protocol is not visible. Ordered by status
 		char *fmt = "%s[%c]%s%s ";
 
@@ -823,7 +823,7 @@ void icqface::fillcontactlist() {
 		}
 
 		mcontacts->addleaff(nnode,
-			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+			c->hasevents() ? conf->getcolor(cp_main_highlight) : ccolor,
 			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
 			c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
@@ -842,7 +842,7 @@ void icqface::fillcontactlist() {
 		}
 
 		mcontacts->addleaff(nnode,
-			c->hasevents() ? conf.getcolor(cp_main_highlight) : ccolor,
+			c->hasevents() ? conf->getcolor(cp_main_highlight) : ccolor,
 			c, fmt, c->hasevents() ? "#" : (c->isopenedforchat() ? "*" : " "), shortstatus,
 			c->getpostponed().empty() ? " " : ">", dnick.c_str());
 
@@ -862,7 +862,7 @@ void icqface::fillcontactlist() {
 	
     }
 
-    if(!savec || ontop || (!onlinefolder && online_added && conf.gethideoffline())) {
+    if(!savec || ontop || (!onlinefolder && online_added && conf->gethideoffline())) {
 	mcontacts->menu.setpos(0);
 
     } else if(savec) {
@@ -895,17 +895,17 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     abstracthook &h = gethook(sp.pname);
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
-	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
-    db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
-	conf.getcolor(cp_main_selected)));
+	sizeWArea.y2, conf->getcolor(cp_main_text), TW_NOBORDER));
+    db.setmenu(new verticalmenu(conf->getcolor(cp_main_menu),
+	conf->getcolor(cp_main_selected)));
 
     if(!h.getCapabs().count(hookcapab::nochat)) {
-	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	    conf.getcolor(cp_main_selected), _("Details"), _("Message"),
+	db.setbar(new horizontalbar(conf->getcolor(cp_main_highlight),
+	    conf->getcolor(cp_main_selected), _("Details"), _("Message"),
 	    _("Add"), fauto ? 0 : _("New search"), (char*)0));
     } else {
-	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	    conf.getcolor(cp_main_selected), _("Details"), _("Add"),
+	db.setbar(new horizontalbar(conf->getcolor(cp_main_highlight),
+	    conf->getcolor(cp_main_selected), _("Details"), _("Add"),
 	    fauto ? 0 : _("New search"), (char*)0));
     }
 
@@ -920,17 +920,17 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
 	singlec = 0;
 
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1,
-	    conf.getcolor(cp_main_highlight), _("Contact to add"));
+	    conf->getcolor(cp_main_highlight), _("Contact to add"));
 
 	c = clist.get(ic);
 	if(!c) c = singlec = new icqcontact(ic);
 
-	db.getmenu()->additem(conf.getprotcolor(sp.pname),
+	db.getmenu()->additem(conf->getprotcolor(sp.pname),
 	    c, (string) " " + sp.nick);
 
     } else {
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1,
-	    conf.getcolor(cp_main_highlight), _("Searching contacts.."));
+	    conf->getcolor(cp_main_highlight), _("Searching contacts.."));
 
 	h.lookup(sp, *db.getmenu());
 
@@ -1001,7 +1001,7 @@ bool icqface::findresults(const imsearchparams &sp, bool fauto) {
 void icqface::findready() {
     mvhline(sizeWArea.x1+2, sizeWArea.y1, ' ', sizeWArea.x2-sizeWArea.x1-2);
     mainw.write(sizeWArea.x1+2, sizeWArea.y1,
-	conf.getcolor(cp_main_highlight), _("Search results [done]"));
+	conf->getcolor(cp_main_highlight), _("Search results [done]"));
 }
 
 void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) {
@@ -1011,7 +1011,7 @@ void icqface::infoclear(dialogbox &db, icqcontact *c, const imcontact realdesc) 
 
     db.redraw();
 
-    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf->getcolor(cp_main_highlight),
 	_("Information about %s"), realdesc.totext().c_str());
 
     workarealine(sizeWArea.y1+2);
@@ -1069,16 +1069,16 @@ void icqface::infolivejournal(dialogbox &db, icqcontact *c) {
     workarealine(sizeWArea.y1+5);
     workarealine(sizeWArea.y1+7);
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Name"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("URL"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf->getcolor(cp_main_highlight), _("Nickname"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf->getcolor(cp_main_highlight), _("Name"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf->getcolor(cp_main_highlight), _("URL"));
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), mi.homepage);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf->getcolor(cp_main_text), c->getnick());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf->getcolor(cp_main_text), bi.fname + " " + bi.lname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf->getcolor(cp_main_text), mi.homepage);
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("This is your LiveJournal account. Use it to"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("post new entries to your journal."));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf->getcolor(cp_main_highlight), _("This is your LiveJournal account. Use it to"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf->getcolor(cp_main_highlight), _("post new entries to your journal."));
 }
 
 void icqface::infofriends(dialogbox &db, icqcontact *c) {
@@ -1118,45 +1118,45 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	buf += " ]";
 
 	mainw.write(sizeWArea.x2-buf.size()-1, sizeWArea.y1+11,
-	    conf.getcolor(cp_main_text), buf);
+	    conf->getcolor(cp_main_text), buf);
 
 	mainw.write(sizeWArea.x2-buf.size()+1, sizeWArea.y1+11,
-	    conf.getcolor(cp_main_highlight), "PGP");
+	    conf->getcolor(cp_main_highlight), "PGP");
     }
 #endif
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Nickname"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Name"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("E-mail"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("2nd e-mail"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Old e-mail"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Gender"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+9, conf.getcolor(cp_main_highlight), _("Birthdate"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Age"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Languages"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Last IP"));
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.fname + " " + bi.lname);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.email);
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf->getcolor(cp_main_highlight), _("Nickname"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf->getcolor(cp_main_highlight), _("Name"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf->getcolor(cp_main_highlight), _("E-mail"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf->getcolor(cp_main_highlight), _("2nd e-mail"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf->getcolor(cp_main_highlight), _("Old e-mail"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf->getcolor(cp_main_highlight), _("Gender"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+9, conf->getcolor(cp_main_highlight), _("Birthdate"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf->getcolor(cp_main_highlight), _("Age"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf->getcolor(cp_main_highlight), _("Languages"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf->getcolor(cp_main_highlight), _("Last IP"));
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf->getcolor(cp_main_text), c->getnick());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf->getcolor(cp_main_text), bi.fname + " " + bi.lname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf->getcolor(cp_main_text), bi.email);
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), strgender(mi.gender));
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf.getcolor(cp_main_text), mi.strbirthdate());
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf->getcolor(cp_main_text), strgender(mi.gender));
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+9, conf->getcolor(cp_main_text), mi.strbirthdate());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf->getcolor(cp_main_text), mi.age ? i2str(mi.age) : "");
 
     if(mi.lang1) commacat(langs, abstracthook::getLanguageIDtoString(mi.lang1), langs.empty());
     if(mi.lang2) commacat(langs, abstracthook::getLanguageIDtoString(mi.lang2), langs.empty());
     if(mi.lang3) commacat(langs, abstracthook::getLanguageIDtoString(mi.lang3), langs.empty());
     commaform(langs);
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), langs);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), c->getlastip());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf->getcolor(cp_main_text), langs);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf->getcolor(cp_main_text), c->getlastip());
 
     time_t ls = c->getlastseen();
     buf = "";
 
     if(c->getstatus() == offline) {
-	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Last seen"));
-	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text),
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf->getcolor(cp_main_highlight), _("Last seen"));
+	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf->getcolor(cp_main_text),
 	    ls ? strdateandtime(ls) : _("Never"));
 
     } else if(c->getdesc() != contactroot) {
@@ -1181,8 +1181,8 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	if(buf.empty())
 	    buf = i2str(tdiff) + " " + _("seconds");
 
-	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf.getcolor(cp_main_highlight), _("Online"));
-	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf.getcolor(cp_main_text), buf);
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf->getcolor(cp_main_highlight), _("Online"));
+	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf->getcolor(cp_main_text), buf);
     }
     buf = "";
     if (bi.serverbased)
@@ -1195,12 +1195,12 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     }
     
     if (!buf.empty())
-	mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf.getcolor(cp_main_highlight), buf);
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf->getcolor(cp_main_highlight), buf);
     if (buf.empty())
 	if(!bi.avatar.empty())
 	{
-	    mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf.getcolor(cp_main_highlight), _("Avatar file"));
-	    mainw.write(sizeWArea.x1+14, sizeWArea.y1+15, conf.getcolor(cp_main_text), bi.avatar);
+	    mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf->getcolor(cp_main_highlight), _("Avatar file"));
+	    mainw.write(sizeWArea.x1+14, sizeWArea.y1+15, conf->getcolor(cp_main_text), bi.avatar);
 	}
 }
 
@@ -1213,15 +1213,15 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     workarealine(sizeWArea.y1+10);
     x = sizeWArea.x1+2;
 
-    mainw.write(x, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Address"));
-    mainw.write(x, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Location"));
-    mainw.write(x, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("Zip code"));
-    mainw.write(x, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("Phone"));
-    mainw.write(x, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Fax"));
-    mainw.write(x, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("Cellular"));
-    mainw.write(x, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Timezone"));
+    mainw.write(x, sizeWArea.y1+2, conf->getcolor(cp_main_highlight), _("Address"));
+    mainw.write(x, sizeWArea.y1+3, conf->getcolor(cp_main_highlight), _("Location"));
+    mainw.write(x, sizeWArea.y1+4, conf->getcolor(cp_main_highlight), _("Zip code"));
+    mainw.write(x, sizeWArea.y1+5, conf->getcolor(cp_main_highlight), _("Phone"));
+    mainw.write(x, sizeWArea.y1+6, conf->getcolor(cp_main_highlight), _("Fax"));
+    mainw.write(x, sizeWArea.y1+7, conf->getcolor(cp_main_highlight), _("Cellular"));
+    mainw.write(x, sizeWArea.y1+8, conf->getcolor(cp_main_highlight), _("Timezone"));
 
-    mainw.write(x, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Homepage"));
+    mainw.write(x, sizeWArea.y1+10, conf->getcolor(cp_main_highlight), _("Homepage"));
 
     if(!bi.state.empty()) {
 	if(bi.city.size()) bi.city += ", ";
@@ -1234,16 +1234,16 @@ void icqface::infohome(dialogbox &db, icqcontact *c) {
     }
 
     x += 10;
-    mainw.write(x, sizeWArea.y1+2, conf.getcolor(cp_main_text), bi.street);
-    mainw.write(x, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.city);
-    mainw.write(x, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.zip);
-    mainw.write(x, sizeWArea.y1+5, conf.getcolor(cp_main_text), bi.phone);
-    mainw.write(x, sizeWArea.y1+6, conf.getcolor(cp_main_text), bi.fax);
-    mainw.write(x, sizeWArea.y1+7, conf.getcolor(cp_main_text), bi.cellular);
-    mainw.write(x, sizeWArea.y1+8, conf.getcolor(cp_main_text), mi.strtimezone());
+    mainw.write(x, sizeWArea.y1+2, conf->getcolor(cp_main_text), bi.street);
+    mainw.write(x, sizeWArea.y1+3, conf->getcolor(cp_main_text), bi.city);
+    mainw.write(x, sizeWArea.y1+4, conf->getcolor(cp_main_text), bi.zip);
+    mainw.write(x, sizeWArea.y1+5, conf->getcolor(cp_main_text), bi.phone);
+    mainw.write(x, sizeWArea.y1+6, conf->getcolor(cp_main_text), bi.fax);
+    mainw.write(x, sizeWArea.y1+7, conf->getcolor(cp_main_text), bi.cellular);
+    mainw.write(x, sizeWArea.y1+8, conf->getcolor(cp_main_text), mi.strtimezone());
 
     for(i = 0; !mi.homepage.empty(); i++) {
-	mainw.write(x, sizeWArea.y1+10+i, conf.getcolor(cp_main_text),
+	mainw.write(x, sizeWArea.y1+10+i, conf->getcolor(cp_main_text),
 	    mi.homepage.substr(0, sizeWArea.x2-sizeWArea.x1-12));
 	mi.homepage.erase(0, sizeWArea.x2-sizeWArea.x1-12);
     }
@@ -1256,17 +1256,17 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
     workarealine(sizeWArea.y1+6);
     workarealine(sizeWArea.y1+11);
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Address"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Location"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("Zip code"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf->getcolor(cp_main_highlight), _("Address"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf->getcolor(cp_main_highlight), _("Location"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf->getcolor(cp_main_highlight), _("Zip code"));
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf.getcolor(cp_main_highlight), _("Company"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("Department"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Title"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+6, conf->getcolor(cp_main_highlight), _("Company"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf->getcolor(cp_main_highlight), _("Department"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf->getcolor(cp_main_highlight), _("Title"));
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+11, conf.getcolor(cp_main_highlight), _("Phone"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Fax"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Homepage"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+11, conf->getcolor(cp_main_highlight), _("Phone"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf->getcolor(cp_main_highlight), _("Fax"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf->getcolor(cp_main_highlight), _("Homepage"));
 
     if(!wi.state.empty()) {
 	if(wi.city.size()) wi.city += ", ";
@@ -1278,17 +1278,17 @@ void icqface::infowork(dialogbox &db, icqcontact *c) {
 	wi.city += abstracthook::getCountryIDtoString(wi.country);
     }
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), wi.street);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), wi.city);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), wi.zip);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+6, conf.getcolor(cp_main_text), wi.company);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+7, conf.getcolor(cp_main_text), wi.dept);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), wi.position);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf.getcolor(cp_main_text), wi.phone);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), wi.fax);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf->getcolor(cp_main_text), wi.street);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf->getcolor(cp_main_text), wi.city);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf->getcolor(cp_main_text), wi.zip);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+6, conf->getcolor(cp_main_text), wi.company);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+7, conf->getcolor(cp_main_text), wi.dept);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf->getcolor(cp_main_text), wi.position);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf->getcolor(cp_main_text), wi.phone);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf->getcolor(cp_main_text), wi.fax);
 
     for(i = 0; !wi.homepage.empty(); i++) {
-	mainw.write(sizeWArea.x1+14, sizeWArea.y1+13+i, conf.getcolor(cp_main_text),
+	mainw.write(sizeWArea.x1+14, sizeWArea.y1+13+i, conf->getcolor(cp_main_text),
 	    wi.homepage.substr(0, sizeWArea.x2-sizeWArea.x1-14));
 	wi.homepage.erase(0, sizeWArea.x2-sizeWArea.x1-14);
     }
@@ -1336,26 +1336,26 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     workarealine(sizeWArea.y1+7);
     workarealine(sizeWArea.y1+10);
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Handle"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("RSS doc"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf.getcolor(cp_main_highlight), _("Version"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf.getcolor(cp_main_highlight), _("Encoding"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf->getcolor(cp_main_highlight), _("Handle"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf->getcolor(cp_main_highlight), _("RSS doc"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+4, conf->getcolor(cp_main_highlight), _("Version"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+5, conf->getcolor(cp_main_highlight), _("Encoding"));
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf.getcolor(cp_main_highlight), _("Title"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf.getcolor(cp_main_highlight), _("Link"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+7, conf->getcolor(cp_main_highlight), _("Title"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+8, conf->getcolor(cp_main_highlight), _("Link"));
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf.getcolor(cp_main_highlight), _("Frequency"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+11, conf.getcolor(cp_main_highlight), _("Last check"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf.getcolor(cp_main_highlight), _("Next check"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf.getcolor(cp_main_highlight), _("Last result"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+10, conf->getcolor(cp_main_highlight), _("Frequency"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+11, conf->getcolor(cp_main_highlight), _("Last check"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+12, conf->getcolor(cp_main_highlight), _("Next check"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+13, conf->getcolor(cp_main_highlight), _("Last result"));
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), c->getnick());
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), wi.homepage);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf.getcolor(cp_main_text), bi.city);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf.getcolor(cp_main_text), bi.state);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf->getcolor(cp_main_text), c->getnick());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf->getcolor(cp_main_text), wi.homepage);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+4, conf->getcolor(cp_main_text), bi.city);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+5, conf->getcolor(cp_main_text), bi.state);
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+7, conf.getcolor(cp_main_text), bi.fname);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf.getcolor(cp_main_text), mi.homepage);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+7, conf->getcolor(cp_main_text), bi.fname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+8, conf->getcolor(cp_main_text), mi.homepage);
 
     string freq, last, next;
     char buf[512];
@@ -1372,26 +1372,26 @@ void icqface::inforss(dialogbox &db, icqcontact *c) {
     if(mi.checklast) last = strdateandtime(mi.checklast);
 	else last = _("Never");
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf.getcolor(cp_main_text), freq);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf.getcolor(cp_main_text), last);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf.getcolor(cp_main_text), next);
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf.getcolor(cp_main_text), bi.lname);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+10, conf->getcolor(cp_main_text), freq);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+11, conf->getcolor(cp_main_text), last);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf->getcolor(cp_main_text), next);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf->getcolor(cp_main_text), bi.lname);
 }
 
 void icqface::infoljrss(dialogbox &db, icqcontact *c) {
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf.getcolor(cp_main_highlight), _("Birthdate"));
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf.getcolor(cp_main_highlight), _("Full name"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+2, conf->getcolor(cp_main_highlight), _("Birthdate"));
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1+3, conf->getcolor(cp_main_highlight), _("Full name"));
 
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf.getcolor(cp_main_text), mi.strbirthdate());
-    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf.getcolor(cp_main_text), bi.email);
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+2, conf->getcolor(cp_main_text), mi.strbirthdate());
+    mainw.write(sizeWArea.x1+14, sizeWArea.y1+3, conf->getcolor(cp_main_text), bi.email);
 }
 
 void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     bool finished = false, showinfo;
-    textbrowser tb(conf.getcolor(cp_main_text));
+    textbrowser tb(conf->getcolor(cp_main_text));
     dialogbox db;
     int k, lastb, b;
 
@@ -1410,28 +1410,28 @@ void icqface::userinfo(const imcontact &cinfo, const imcontact &realinfo) {
     xtermtitle(_("user info for %s"), realinfo.totext().c_str());
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
-	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+	sizeWArea.y2, conf->getcolor(cp_main_text), TW_NOBORDER));
 
     if(cinfo.pname == rss) {
 	if(c->inlist() && realinfo != contactroot) {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+		conf->getcolor(cp_main_highlight), conf->getcolor(cp_main_selected),
 		_("Info"), _("About"), _("Check"), _("Edit"), islivejournal(c) ? _("LJ") : 0, (char*)0));
 	} else {
 	    db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-		conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+		conf->getcolor(cp_main_highlight), conf->getcolor(cp_main_selected),
 		_("Info"), _("About"), _("Retreive"), (char*)0));
 	}
 
     } else if(cinfo.pname == livejournal) {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+	    conf->getcolor(cp_main_highlight), conf->getcolor(cp_main_selected),
 	    _("Info"), _("Friend of"), (char*)0));
 
 
     } else {
 	db.setbar(new horizontalbar(sizeWArea.x1+2, sizeWArea.y2-1,
-	    conf.getcolor(cp_main_highlight), conf.getcolor(cp_main_selected),
+	    conf->getcolor(cp_main_highlight), conf->getcolor(cp_main_selected),
 	    _("Info"), _("Home"), _("Work"), _("More"), _("About"),
 	    cinfo.pname != infocard ? _("Retrieve") : _("Edit"), (char*)0));
 
@@ -1546,7 +1546,7 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
     };
 
     for(ipname = icq; ipname != protocolname_size; ipname++) {
-	ia = conf.getourid(ipname);
+	ia = conf->getourid(ipname);
 
 	if(!ia.empty()) {
 	    m.additem(0, ipname, pitems[ipname]);
@@ -1557,19 +1557,19 @@ void icqface::makeprotocolmenu(verticalmenu &m) {
 bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
     int i, choice, protcount;
     bool r, alrlogged = false;
-    verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
+    verticalmenu m(conf->getcolor(cp_main_text), conf->getcolor(cp_main_selected));
 
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
     protocolname pname, onechoice;
 
     m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27,
-	sizeWArea.y1+9, conf.getcolor(cp_main_text)));
+	sizeWArea.y1+9, conf->getcolor(cp_main_text)));
 
     m.idle = &menuidle;
 
     for(protcount = 0, pname = icq; pname != protocolname_size; pname++) {
-	if(!conf.getourid(pname).empty()) {
+	if(!conf->getourid(pname).empty()) {
 	    protcount++;
 	    onechoice = pname;
 	}
@@ -1598,12 +1598,12 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 	switch(choice) {
 	    case -1:
 		for(pname = icq; pname != protocolname_size; pname++)
-		    if(!conf.getourid(pname).empty())
+		    if(!conf->getourid(pname).empty())
 			pnames.push_back(pname);
 		break;
 	    case -2:
 		for(pname = icq; pname != protocolname_size; pname++)
-		    if(!conf.getourid(pname).empty())
+		    if(!conf->getourid(pname).empty())
 		    if(gethook(pname).getstatus() != offline)
 			pnames.push_back(pname);
 		break;
@@ -1657,9 +1657,9 @@ bool icqface::changestatus(vector<protocolname> &pnames, imstatus &st) {
 string icqface::inputstr(const string &q, const string &defl, char passwdchar) {
     screenarea sa(0, INPUT_POS, COLS, INPUT_POS);
 
-    attrset(conf.getcolor(cp_status));
+    attrset(conf->getcolor(cp_status));
     mvhline(INPUT_POS, 0, ' ', COLS);
-    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
+    kwriteatf(0, INPUT_POS, conf->getcolor(cp_status), "%s", q.c_str());
 
     input.setpasswordchar(passwdchar);
     input.removeselector();
@@ -1676,13 +1676,13 @@ string icqface::inputfile(const string &q, const string &defl) {
     string r;
 
     mvhline(INPUT_POS, 0, ' ', COLS);
-    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
-    kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
+    kwriteatf(0, INPUT_POS, conf->getcolor(cp_status), "%s", q.c_str());
+    kwriteatf(COLS-8, INPUT_POS, conf->getcolor(cp_status), "[Ctrl-T]");
 
     selector.setoptions(0);
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED,
-	conf.getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_frame), TW_CENTERED,
+	conf->getcolor(cp_dialog_highlight),
 	_(" <Space> or <Enter> confirm, <Esc> cancel ")));
 
     input.connectselector(selector);
@@ -1705,13 +1705,13 @@ string icqface::inputdir(const string &q, const string &defl) {
     string r;
 
     mvhline(INPUT_POS, 0, ' ', COLS);
-    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
-    kwriteatf(COLS-8, INPUT_POS, conf.getcolor(cp_status), "[Ctrl-T]");
+    kwriteatf(0, INPUT_POS, conf->getcolor(cp_status), "%s", q.c_str());
+    kwriteatf(COLS-8, INPUT_POS, conf->getcolor(cp_status), "[Ctrl-T]");
 
     selector.setoptions(FSEL_DIRSELECT);
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED,
-	conf.getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_frame), TW_CENTERED,
+	conf->getcolor(cp_dialog_highlight),
 	_(" <Space> confirm, <Esc> cancel ")));
 
     input.connectselector(selector);
@@ -1756,9 +1756,9 @@ int icqface::ask(string q, int options, int deflt ) {
     if(options & ASK_CANCEL) catqstr(q, ASK_CANCEL, deflt);
     q += ") ";
 
-    attrset(conf.getcolor(cp_status));
+    attrset(conf->getcolor(cp_status));
     mvhline(INPUT_POS, 0, ' ', COLS);
-    kwriteatf(0, INPUT_POS, conf.getcolor(cp_status), "%s", q.c_str());
+    kwriteatf(0, INPUT_POS, conf->getcolor(cp_status), "%s", q.c_str());
 
     for(ret = -1; ret == -1; ) {
 	switch(getkey()) {
@@ -1815,7 +1815,7 @@ void icqface::restoreworkarea() {
 void icqface::clearworkarea() {
     int i;
 
-    attrset(conf.getcolor(cp_main_text));
+    attrset(conf->getcolor(cp_main_text));
     for(i = sizeWArea.y1+1; i < sizeWArea.y2; i++) {
 	mvhline(i, sizeWArea.x1+1, ' ', sizeWArea.x2-sizeWArea.x1-1);
 	refresh();
@@ -1834,7 +1834,7 @@ void icqface::freeworkareabuf(void *p) {
 }
 
 void icqface::workarealine(int l, chtype c ) {
-    attrset(conf.getcolor(cp_main_frame));
+    attrset(conf->getcolor(cp_main_frame));
     mvhline(l, sizeWArea.x1+1, c, sizeWArea.x2-sizeWArea.x1-1);
 }
 
@@ -1849,13 +1849,13 @@ void icqface::modelist(contactstatus cs) {
     clearworkarea();
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
-	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+	sizeWArea.y2, conf->getcolor(cp_main_text), TW_NOBORDER));
 
-    db.setmenu(new verticalmenu(conf.getcolor(cp_main_text),
-	conf.getcolor(cp_main_selected)));
+    db.setmenu(new verticalmenu(conf->getcolor(cp_main_text),
+	conf->getcolor(cp_main_selected)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected),
+    db.setbar(new horizontalbar(conf->getcolor(cp_main_highlight),
+	conf->getcolor(cp_main_selected),
 	_("Details"), _("Add"), _("Remove"), _("Move to contacts"), (char*)0));
 
     db.addautokeys();
@@ -1867,7 +1867,7 @@ void icqface::modelist(contactstatus cs) {
     workarealine(sizeWArea.y1+2);
     workarealine(sizeWArea.y2-2);
 
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf->getcolor(cp_main_highlight),
 	cs == csignore      ? _("Ignore list") :
 	cs == csvisible     ? _("Visible list") :
 	cs == csinvisible   ? _("Invisible list") : "");
@@ -1949,7 +1949,7 @@ const set<protocolname> &protos, contactstatus cs) {
     icqcontact *cont;
 
     verticalmenu m(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2,
-	conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
+	conf->getcolor(cp_main_text), conf->getcolor(cp_main_selected));
 
     saveworkarea();
     clearworkarea();
@@ -1957,7 +1957,7 @@ const set<protocolname> &protos, contactstatus cs) {
     workarealine(sizeWArea.y1+2);
 
     if(!head.size()) head = _("Event recipients");
-    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), head);
+    mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf->getcolor(cp_main_highlight), head);
 
     vector<icqgroup>::iterator ig = groups.begin();
 
@@ -1967,7 +1967,7 @@ const set<protocolname> &protos, contactstatus cs) {
 	    imcontact desc = c->getdesc();
 
 	    if(!desc.empty())
-	    if(c->getgroupid() == ig->getid() || conf.getgroupmode() == icqconf::nogroups)
+	    if(c->getgroupid() == ig->getid() || conf->getgroupmode() == icqconf::nogroups)
 	    if(protos.empty() || protos.count(desc.pname))
 	    if(!lst.inlist(desc, cs))
 		mlst.push_back(desc);
@@ -1988,19 +1988,19 @@ const set<protocolname> &protos, contactstatus cs) {
 	for(c = mlst.begin(); c != mlst.end(); ++c) {
 	    cont = (icqcontact *) clist.get(*c);
 
-	    if(conf.getgroupmode() != icqconf::nogroups)
+	    if(conf->getgroupmode() != icqconf::nogroups)
 	    if(cont->getgroupid() != prevgid) {
 		prevgid = cont->getgroupid();
 
 		if(groupcheck.find(prevgid) == groupcheck.end())
 		    groupcheck[prevgid] = false;
 
-		m.additemf(conf.getcolor(cp_main_highlight), 0, "\002[%c]\002\002 %s",
+		m.additemf(conf->getcolor(cp_main_highlight), 0, "\002[%c]\002\002 %s",
 		    groupcheck[prevgid] ? 'x' : ' ',
 		    groups.getname(prevgid).c_str());
 	    }
 
-	    m.additemf(conf.getprotcolor(c->pname), cont, " [%c] %s",
+	    m.additemf(conf->getprotcolor(c->pname), cont, " [%c] %s",
 		find(muins.begin(), muins.end(), *c) != muins.end() ? 'x' : ' ',
 		cont->getdispnick().c_str());
 	}
@@ -2072,7 +2072,7 @@ void icqface::log(const string &atext) {
     int i;
     string text = atext;
 
-    if(conf.getdebug())
+    if(conf->getdebug())
     if(flog.is_open())
 	flog << text << endl;
 
@@ -2080,7 +2080,7 @@ void icqface::log(const string &atext) {
      */
 
     bool lts, lo;
-    conf.getlogoptions(lts, lo);
+    conf->getlogoptions(lts, lo);
 
     if(lts)
     if(text.size() > 3)
@@ -2088,7 +2088,7 @@ void icqface::log(const string &atext) {
 	time_t t;
 	char stime[64];
 	time(&t);
-	strftime(stime, 64, conf.getlogtimestampformat(), localtime(&t));
+	strftime(stime, 64, conf->getlogtimestampformat(), localtime(&t));
 	text.insert(2, stime);
     }
 
@@ -2102,7 +2102,7 @@ void icqface::log(const string &atext) {
 
     if(!mainscreenblock && (sizeWArea.x2-sizeWArea.x1 > 0)) {
 	chtype *logline = new chtype[sizeWArea.x2-sizeWArea.x1+2];
-	attrset(conf.getcolor(cp_main_text));
+	attrset(conf->getcolor(cp_main_text));
 
 	for(i = sizeWArea.y2+2; i < LINES-2; i++) {
 	    mvinchnstr(i, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
@@ -2113,7 +2113,7 @@ void icqface::log(const string &atext) {
 
 	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
 	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);
-	kwriteatf(sizeWArea.x1+2, LINES-3, conf.getcolor(cp_main_text), "%s", text.c_str());
+	kwriteatf(sizeWArea.x1+2, LINES-3, conf->getcolor(cp_main_text), "%s", text.c_str());
     }
 }
 
@@ -2134,9 +2134,9 @@ void icqface::status(const string &text) {
 
     }
 
-    attrset(conf.getcolor(cp_status));
+    attrset(conf->getcolor(cp_status));
     mvhline(LINES-1, 0, ' ', COLS);
-    kwriteatf(0, LINES-1, conf.getcolor(cp_status), "%s", t.c_str());
+    kwriteatf(0, LINES-1, conf->getcolor(cp_status), "%s", t.c_str());
 }
 
 void icqface::status(const char *fmt, ...) {
@@ -2181,11 +2181,11 @@ void icqface::quickfind(verticalmenu *multi) {
     }
 
     for(fin = false; !fin; ) {
-	attrset(conf.getcolor(cp_main_frame));
+	attrset(conf->getcolor(cp_main_frame));
 	mvhline(ly, lx, HLINE, 23);
 	disp = nick;
 	if(disp.size() > 18) disp.replace(0, disp.size()-18, "");
-	kwriteatf(lx, ly, conf.getcolor(cp_main_highlight), "[ %s ]", disp.c_str());
+	kwriteatf(lx, ly, conf->getcolor(cp_main_highlight), "[ %s ]", disp.c_str());
 	kgotoxy(lx+2+disp.size(), ly);
 	refresh();
 
@@ -2262,7 +2262,7 @@ void icqface::quickfind(verticalmenu *multi) {
 	}
     }
 
-    attrset(conf.getcolor(cp_main_frame));
+    attrset(conf->getcolor(cp_main_frame));
     mvhline(ly, lx, HLINE, 23);
 }
 
@@ -2289,21 +2289,21 @@ void icqface::showextractedurls() {
 	int n;
 	vector<string>::iterator i;
 	verticalmenu m(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2, sizeWArea.y2,
-	    conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
+	    conf->getcolor(cp_main_text), conf->getcolor(cp_main_selected));
 
 	saveworkarea();
 	clearworkarea();
 	workarealine(sizeWArea.y1+2);
 
 	mainw.writef(sizeWArea.x1+2, sizeWArea.y1,
-	    conf.getcolor(cp_main_highlight),
+	    conf->getcolor(cp_main_highlight),
 	    _("URLs within the current context"));
 
 	for(i = extractedurls.begin(); i != extractedurls.end(); ++i)
 	    m.additem(" " + *i);
 
 	if(n = m.open())
-	    conf.execaction("openurl", extractedurls[n-1]);
+	    conf->execaction("openurl", extractedurls[n-1]);
 
 	restoreworkarea();
     }
@@ -2313,12 +2313,12 @@ void icqface::userinfoexternal(const imcontact &ic) {
     vector<pair<int, string> > r = external.getlist(imexternal::aomanual, ic.pname);
 
     if(r.empty()) {
-	log(_("+ no external actions defined for %s"), conf.getprotocolname(ic.pname).c_str());
+	log(_("+ no external actions defined for %s"), conf->getprotocolname(ic.pname).c_str());
 
     } else {
-	verticalmenu m(conf.getcolor(cp_main_text), conf.getcolor(cp_main_selected));
+	verticalmenu m(conf->getcolor(cp_main_text), conf->getcolor(cp_main_selected));
 
-	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27, sizeWArea.y1+9, conf.getcolor(cp_main_text)));
+	m.setwindow(textwindow(sizeWArea.x1, sizeWArea.y1, sizeWArea.x1+27, sizeWArea.y1+9, conf->getcolor(cp_main_text)));
 	m.idle = &menuidle;
 
 	vector<pair<int, string> >::const_iterator ir = r.begin();
@@ -2379,14 +2379,14 @@ bool icqface::eventedit(imevent &ev) {
     editor.idle = &editidle;
     editor.wrap = true;
     editor.smarttab = false;
-    editor.emacs = conf.getemacs();
+    editor.emacs = conf->getemacs();
 
     saveworkarea();
     clearworkarea();
 
     peerinfo(2, ev.getcontact());
 
-    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf->getcolor(cp_main_highlight),
 	_("Outgoing %s"), streventname(ev.gettype()));
 
     showeventbottom(ev.getcontact());
@@ -2443,7 +2443,7 @@ bool icqface::eventedit(imevent &ev) {
 
 	urlinp.setvalue(m->geturl());
 	urlinp.setcoords(sizeWArea.x1+2, sizeWArea.y1+3, sizeWArea.x2-sizeWArea.x1-2);
-	urlinp.setcolor(conf.getcolor(cp_main_highlight));
+	urlinp.setcolor(conf->getcolor(cp_main_highlight));
 	urlinp.idle = &textinputidle;
 
 	workarealine(sizeWArea.y1+4);
@@ -2544,11 +2544,11 @@ bool icqface::eventedit(imevent &ev) {
 	imfile *m = static_cast<imfile *>(&ev);
 
 	db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
-	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
-	db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
-	    conf.getcolor(cp_main_selected)));
-	db.setbar(new horizontalbar(conf.getcolor(cp_main_highlight),
-	    conf.getcolor(cp_main_selected),
+	    sizeWArea.y2, conf->getcolor(cp_main_text), TW_NOBORDER));
+	db.setmenu(new verticalmenu(conf->getcolor(cp_main_menu),
+	    conf->getcolor(cp_main_selected)));
+	db.setbar(new horizontalbar(conf->getcolor(cp_main_highlight),
+	    conf->getcolor(cp_main_selected),
 	    _("Add"), _("Remove"), _("Send"), (char*)0));
 
 	db.addkey(KEY_IC, 0);
@@ -2617,8 +2617,8 @@ string icqface::extracttime(const imevent &ev) {
     time_t t, ts;
     char buf[64];
 
-    ds1 = time2str(&(t = ev.gettimestamp()), conf.gettimestampformat(), buf);
-    ds2 = time2str(&(ts = ev.getsenttimestamp()), conf.gettimestampformat(), buf);
+    ds1 = time2str(&(t = ev.gettimestamp()), conf->gettimestampformat(), buf);
+    ds2 = time2str(&(ts = ev.getsenttimestamp()), conf->gettimestampformat(), buf);
 
     r = ds1 + " ";
     tdiff = ts-t;
@@ -2721,17 +2721,17 @@ void icqface::renderchathistory() {
     chatmargin = sizeWArea.y1+chatlines;
     text = string(sizeWArea.x2-sizeWArea.x1-2, ' ');
 
-    attrset(conf.getcolor(cp_main_text));
+    attrset(conf->getcolor(cp_main_text));
     for(count = 0; count < chatlines; count++)
 	mvprintw(chatmargin-count, sizeWArea.x1+2, "%s", text.c_str());
 
     for(count = 0, ir = toshow.begin(); ir != toshow.end() && count < chatlines; ++ir) {
 	switch(ir->first) {
 	    case imevent::incoming:
-		attrset(conf.getcolor(cp_main_history_incoming));
+		attrset(conf->getcolor(cp_main_history_incoming));
 		break;
 	    case imevent::outgoing:
-		attrset(conf.getcolor(cp_main_history_outgoing));
+		attrset(conf->getcolor(cp_main_history_outgoing));
 		break;
 	}
 
@@ -2752,7 +2752,7 @@ void icqface::peerinfo(int line, const imcontact &ic) {
     if(!c) return;
 
     char cstatus = c->getshortstatus();
-    string text = "[" + string(&cstatus, 1) + "] " + conf.getprotocolname(passinfo.pname) + " " + c->getdispnick();
+    string text = "[" + string(&cstatus, 1) + "] " + conf->getprotocolname(passinfo.pname) + " " + c->getdispnick();
     int maxsize = 20;
     bool pgpon = false;
 
@@ -2775,18 +2775,18 @@ void icqface::peerinfo(int line, const imcontact &ic) {
     workarealine(sizeWArea.y2);
     drawopenedchats(sizeWArea.y1+line, sizeWArea.x2 - 32);
 
-    attrset(conf.getcolor(cp_main_frame));
+    attrset(conf->getcolor(cp_main_frame));
     mvhline(sizeWArea.y1+line, sizeWArea.x2 - 31, HLINE, 32 - text.size() - 1);
 																					    
     kwriteatf(sizeWArea.x2-text.size()-1, sizeWArea.y1+line,
-	conf.getcolor(cp_main_text), "%s", text.c_str());
+	conf->getcolor(cp_main_text), "%s", text.c_str());
 
-    attrset(conf.getcolor(cp_main_frame));
+    attrset(conf->getcolor(cp_main_frame));
     mvhline(sizeWArea.y1+line, sizeWArea.x2 - 1, HLINE, 1);
 
     if(pgpon) {
 	kwriteatf(sizeWArea.x2-6, sizeWArea.y1+line,
-	    conf.getcolor(cp_main_highlight), "PGP");
+	    conf->getcolor(cp_main_highlight), "PGP");
     }
 }
 
@@ -2804,10 +2804,10 @@ void icqface::drawopenedchats(int line, int width) {
     
     int i, curx = sizeWArea.x1 + 3;    
 
-    attrset(conf.getcolor(cp_main_frame));
+    attrset(conf->getcolor(cp_main_frame));
     mvhline(line, sizeWArea.x1 + 1, HLINE, 2);
 
-    if (conf.getshowopenedchats())
+    if (conf->getshowopenedchats())
     {
         for(i = 0; i < clist.count; i++) 
         {
@@ -2826,7 +2826,7 @@ void icqface::drawopenedchats(int line, int width) {
                 if (curx + dispnick.size() + 5 >= width - 1) 
                 {
                     dispnick = "[...]";
-                    kwriteatf(curx, line, conf.getcolor(cp_main_text), "%s", dispnick.c_str());
+                    kwriteatf(curx, line, conf->getcolor(cp_main_text), "%s", dispnick.c_str());
                     curx += dispnick.size();
                     break;
                 }
@@ -2834,11 +2834,11 @@ void icqface::drawopenedchats(int line, int width) {
                 dispnick = "[ " + dispnick + " ]";	    
                 dispnick[1] = ct->hasevents() ? '*' : ' ';
             
-                int col = (ct == c) ? conf.getcolor(cp_main_highlight) : conf.getcolor(cp_main_text);
+                int col = (ct == c) ? conf->getcolor(cp_main_highlight) : conf->getcolor(cp_main_text);
                                                                     
                 kwriteatf(curx, line, col, "%s", dispnick.c_str());	    
             
-                attrset(conf.getcolor(cp_main_frame));
+                attrset(conf->getcolor(cp_main_frame));
                 mvhline(line, curx + dispnick.size(), HLINE, 1);
             
                 curx += dispnick.size() + 1;
@@ -2847,7 +2847,7 @@ void icqface::drawopenedchats(int line, int width) {
     }
     
     if (curx <= width) {
-	attrset(conf.getcolor(cp_main_frame));
+	attrset(conf->getcolor(cp_main_frame));
 	mvhline(line, curx, HLINE, width - curx + 1);
     }
 }
@@ -2878,7 +2878,7 @@ bool icqface::chat(const imcontact &ic) {
 
     // resizing doesn't change the effect, so we work from the bottom, not the top
     chatlines_diff = sizeWArea.y2 - sizeWArea.y1 ;
-    chatlines = conf.getchatpanelheight();
+    chatlines = conf->getchatpanelheight();
     if( chatlines == 0 ) { // allow disabling reszing by setting it to zero
         chatlines = (int) (chatlines_diff*0.75);
     } else {
@@ -2891,7 +2891,7 @@ bool icqface::chat(const imcontact &ic) {
             chatlines = (int) (chatlines_diff - MinPanelHeight) ;
     }
 
-    conf.setchatpanelheight(chatlines_diff - chatlines);
+    conf->setchatpanelheight(chatlines_diff - chatlines);
 
 //    workarealine(sizeWArea.y1+chatlines+1);
 
@@ -2900,7 +2900,7 @@ bool icqface::chat(const imcontact &ic) {
     editor.idle = &editchatidle;
     editor.wrap = true;
     editor.smarttab = false;
-    editor.emacs = conf.getemacs();
+    editor.emacs = conf->getemacs();
     editor.setcoords(sizeWArea.x1+2, sizeWArea.y1+chatlines+2, sizeWArea.x2, sizeWArea.y2);
     editor.load(c->getpostponed(), "");
 
@@ -3031,20 +3031,20 @@ vector<eventviewresult> abuttons, bool nobuttons) {
     clearworkarea();
 
     db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+3, sizeWArea.x2,
-	sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+	sizeWArea.y2, conf->getcolor(cp_main_text), TW_NOBORDER));
 
-    db.setbar(bar = new horizontalbar(conf.getcolor(cp_main_highlight),
-	conf.getcolor(cp_main_selected), 0));
+    db.setbar(bar = new horizontalbar(conf->getcolor(cp_main_highlight),
+	conf->getcolor(cp_main_selected), 0));
 
     bar->item = actions.size()-1;
 
     for(ia = actions.begin(); ia != actions.end(); ++ia)
 	bar->items.push_back(geteventviewresult(*ia));
 
-    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1, conf->getcolor(cp_main_highlight),
 	title_event.c_str(), streventname(ev->gettype()), ev->getcontact().totext().c_str());
 
-    mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf.getcolor(cp_main_highlight),
+    mainw.writef(sizeWArea.x1+2, sizeWArea.y1+1, conf->getcolor(cp_main_highlight),
 	title_timestamp.c_str(), extracttime(*ev).c_str());
 
     db.addautokeys();
@@ -3052,8 +3052,8 @@ vector<eventviewresult> abuttons, bool nobuttons) {
     if(ev->gettype() == imevent::contacts) {
 	const imcontacts *m = static_cast<const imcontacts *>(ev);
 
-	db.setmenu(new verticalmenu(conf.getcolor(cp_main_menu),
-	    conf.getcolor(cp_main_selected)));
+	db.setmenu(new verticalmenu(conf->getcolor(cp_main_menu),
+	    conf->getcolor(cp_main_selected)));
 
 	vector< pair<unsigned int, string> > lst = m->getcontacts();
 	vector< pair<unsigned int, string> >::const_iterator il;
@@ -3066,7 +3066,7 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 
     } else {
 	text = ev->gettext();
-	db.setbrowser(new textbrowser(conf.getcolor(cp_main_text)));
+	db.setbrowser(new textbrowser(conf->getcolor(cp_main_text)));
 	db.getbrowser()->setbuf(text);
 	extracturls(text);
 
@@ -3107,8 +3107,8 @@ vector<eventviewresult> abuttons, bool nobuttons) {
 }
 
 void icqface::fullscreenize(const imevent *ev) {
-    textwindow w(0, 1, COLS, LINES-1, conf.getcolor(cp_main_text), TW_NOBORDER);
-    textbrowser tb(0, 4, COLS, LINES-1, conf.getcolor(cp_main_text));
+    textwindow w(0, 1, COLS, LINES-1, conf->getcolor(cp_main_text), TW_NOBORDER);
+    textbrowser tb(0, 4, COLS, LINES-1, conf->getcolor(cp_main_text));
 
     int k;
     char buf[512], *fmt = 0;
@@ -3126,7 +3126,7 @@ void icqface::fullscreenize(const imevent *ev) {
 	ev->getcontact().totext().c_str(),
 	strdateandtime(ev->gettimestamp()).c_str());
 
-    w.write(0, 1, conf.getcolor(cp_main_highlight), buf);
+    w.write(0, 1, conf->getcolor(cp_main_highlight), buf);
 
     xtermtitle((string) _("full-screen view") + " " + buf);
 
@@ -3165,15 +3165,15 @@ void icqface::histmake(const vector<imevent *> &hist) {
 
 	t = ev.gettimestamp();
 	ts = ev.getsenttimestamp();
-	text = (string) + " " + time2str(&t, conf.gettimestampformat(), buf) + " ";
+	text = (string) + " " + time2str(&t, conf->gettimestampformat(), buf) + " ";
 	if ((t - ts) > 0) 
-	    text += (string) + "[" + time2str(&ts, conf.gettimestampformat(), buf) + "] ";
+	    text += (string) + "[" + time2str(&ts, conf->gettimestampformat(), buf) + "] ";
 	text += ev.gettext();
 
 	if(ev.getdirection() == imevent::incoming) {
-	    color = conf.getcolor(cp_main_history_incoming);
+	    color = conf->getcolor(cp_main_history_incoming);
 	} else if(ev.getdirection() == imevent::outgoing) {
-	    color = conf.getcolor(cp_main_history_outgoing);
+	    color = conf->getcolor(cp_main_history_outgoing);
 	}
 
 	mhist.additem(color, (void *) *i, text);
@@ -3191,7 +3191,7 @@ bool icqface::histexec(imevent *&im) {
 
     if(!mhist.empty()) {
 	db.setwindow(new textwindow(sizeWArea.x1+1, sizeWArea.y1+2, sizeWArea.x2,
-	    sizeWArea.y2, conf.getcolor(cp_main_text), TW_NOBORDER));
+	    sizeWArea.y2, conf->getcolor(cp_main_text), TW_NOBORDER));
 
 	db.setmenu(&mhist, false);
 
@@ -3226,7 +3226,7 @@ bool icqface::histexec(imevent *&im) {
 	    im->getcontact().totext().c_str(),
 	    mhist.getcount());
 
-	mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf.getcolor(cp_main_highlight), buf);
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1, conf->getcolor(cp_main_highlight), buf);
 
 	status(_("%s search, %s again, %s cancel"),
 	    getstatkey(key_search, section_history).c_str(),
@@ -3440,7 +3440,7 @@ int icqface::contactskeys(verticalmenu &m, int k) {
 	    break;
 
 	case key_quit:
-	    if (conf.getaskquit())
+	    if (conf->getaskquit())
 		if(face.ask("Really Quit?", ASK_YES | ASK_NO, ASK_NO) == ASK_NO)
 		    break;
 	    face.extk = ACT_QUIT;
@@ -3608,7 +3608,7 @@ int icqface::historykeys(dialogbox &db, int k) {
 int icqface::editmsgkeys(texteditor &e, int k) {
     char *p;
 
-    if(k == '\r' && conf.getentersends(face.passinfo.pname)) {
+    if(k == '\r' && conf->getentersends(face.passinfo.pname)) {
 	p = e.save("");
 	face.editdone = strlen(p);
 	free(p);
@@ -3790,13 +3790,13 @@ void icqface::redraw() {
                face.lastlog.clear();
 
                bool lts, lo;
-               conf.getlogoptions(lts, lo);
-               conf.setlogoptions(false, lo);
+               conf->getlogoptions(lts, lo);
+               conf->setlogoptions(false, lo);
 
                for(il = flog.begin() ; il != flog.end(); ++il)
                        face.log(*il);
 
-               conf.setlogoptions(lts, lo);
+               conf->setlogoptions(lts, lo);
 
                doredraw = fneedupdate = false;
        } else {
@@ -3805,7 +3805,7 @@ void icqface::redraw() {
 }
 
 void icqface::xtermtitle(const string &text) {
-    if(conf.getxtitles()) {
+    if(conf->getxtitles()) {
 	string term = getenv("TERM") ? getenv("TERM") : "";
 
 	if(term == "xterm" || term == "Eterm" || term == "aterm"
@@ -3815,7 +3815,7 @@ void icqface::xtermtitle(const string &text) {
 }
 
 void icqface::xtermtitle(const char *fmt, ...) {
-    if(conf.getxtitles()) {
+    if(conf->getxtitles()) {
 	va_list ap;
 	char buf[1024];
 
@@ -3827,7 +3827,7 @@ void icqface::xtermtitle(const char *fmt, ...) {
 }
 
 void icqface::xtermtitlereset() {
-    if(conf.getxtitles()) {
+    if(conf->getxtitles()) {
 	const char *p = getenv("TERM");
 	if(p) xtermtitle((string) p);
     }
@@ -3862,10 +3862,10 @@ void icqface::icqprogress::log(const char *fmt, ...) {
 void icqface::icqprogress::show(const string &title ) {
     if(!w) {
 	w = new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+	conf->getcolor(cp_dialog_frame), TW_CENTERED);
     }
 
-    w->set_title(conf.getcolor(cp_dialog_highlight), title);
+    w->set_title(conf->getcolor(cp_dialog_highlight), title);
     w->open();
 
     curline = 0;
@@ -3876,23 +3876,23 @@ void icqface::icqprogress::hide() {
 }
 
 void icqface::leftpanelwidth_inc(const int inc) {
-    int i = conf.getleftpanelwidth();
+    int i = conf->getleftpanelwidth();
     if ( ((i+inc) >= MinPanelWidth) && ((i+inc) <= (COLS - MinPanelWidth))) {
-        conf.setleftpanelwidth(i+inc);
+        conf->setleftpanelwidth(i+inc);
         dotermresize = true ;
     }
 }
 
 void icqface::logpanelheight_inc(const int inc) {
-    int i = conf.getlogpanelheight();
+    int i = conf->getlogpanelheight();
     if (((i+inc) >= MinPanelHeight) && ((i+inc) <= (LINES - MinPanelHeight))) {
-        conf.setlogpanelheight(i+inc);
+        conf->setlogpanelheight(i+inc);
         dotermresize = true ;
     }
 }
 
 void icqface::chatpanelheight_inc(const int inc ) {
-    chatlines = conf.getchatpanelheight()+inc;
-    conf.setchatpanelheight(chatlines);
+    chatlines = conf->getchatpanelheight()+inc;
+    conf->setchatpanelheight(chatlines);
 }
 

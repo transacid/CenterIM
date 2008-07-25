@@ -146,6 +146,10 @@ class icqconf {
 	static vector<keybinding> keys;
 
     protected:
+	icqconf();
+	icqconf(const icqconf&);
+	icqconf& operator=(const icqconf&);
+
 	vector<icqgroup> groups;
 	vector<imaccount> accounts;
 
@@ -205,7 +209,7 @@ class icqconf {
 	void setproxy();
 
     public:
-	icqconf();
+	static icqconf* instance();
 	~icqconf();
 
 	void checkdir();
@@ -393,8 +397,11 @@ class icqconf {
 
 	captcha thecaptcha;
 
+    private:
+	static icqconf* self;
+
 };
 
-extern icqconf conf;
+extern icqconf* conf;
 
 #endif

@@ -71,9 +71,9 @@ imlogger::~imlogger() {
 }
 
 bool imlogger::checkopen() {
-    if(conf.getmakelog()) {
+    if(conf->getmakelog()) {
 	if(!f.is_open()) {
-	    f.open((conf.getdirname() + "log").c_str(), ios::app);
+	    f.open((conf->getdirname() + "log").c_str(), ios::app);
 
 	    if(f.is_open())
 		putmessage(_("events log started"));
@@ -153,7 +153,7 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 	}
 
 	bool lts, lo, lt;
-	conf.getlogoptions(lts, lo);
+	conf->getlogoptions(lts, lo);
 	if(lo) {
 	    face.log((string) "+ " + buf);
 	}
@@ -174,7 +174,7 @@ const imstatus &st) {
 		fmt = _("changed our %s status to %s from %s");
 	    }
 
-	    snprintf(buf, sizeof(buf), fmt, conf.getprotocolname(pname).c_str(), imstatus2name(st), imstatus2name(oldst));
+	    snprintf(buf, sizeof(buf), fmt, conf->getprotocolname(pname).c_str(), imstatus2name(st), imstatus2name(oldst));
 	    putmessage(buf);
 	}
     }

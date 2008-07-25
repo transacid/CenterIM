@@ -58,7 +58,7 @@ icqcontact::icqcontact(const imcontact adesc) {
 	case infocard:
 	case rss:
 	    if(!cdesc.uin) {
-		fname = conf.getdirname() + conf.getprotocolprefix(cdesc.pname);
+		fname = conf->getdirname() + conf->getprotocolprefix(cdesc.pname);
 
 		for(i = 1; ; i++) {
 		    tname = fname + i2str(i);
@@ -92,17 +92,17 @@ string icqcontact::tosane(const string &p) const {
 string icqcontact::getdirname() const {
     string ret;
 
-    ret = conf.getdirname();
+    ret = conf->getdirname();
 
     switch(cdesc.pname) {
 	case icq:
 	case infocard:
 	case rss:
 	case gadu:
-	    ret += conf.getprotocolprefix(cdesc.pname) + i2str(cdesc.uin);
+	    ret += conf->getprotocolprefix(cdesc.pname) + i2str(cdesc.uin);
 	    break;
 	default:
-	    ret += conf.getprotocolprefix(cdesc.pname) + cdesc.nickname;
+	    ret += conf->getprotocolprefix(cdesc.pname) + cdesc.nickname;
 	    break;
     }
 
@@ -147,7 +147,7 @@ void icqcontact::save() {
 	|| access(infoname.c_str(), F_OK)
 	|| access(aboutname.c_str(), F_OK);
 
-    if(modified && conf.enoughdiskspace()) {
+    if(modified && conf->enoughdiskspace()) {
 	mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
 
 	if(!access(getdirname().c_str(), W_OK)) {
@@ -376,7 +376,7 @@ void icqcontact::load() {
     if(dispnick.empty())
 	dispnick = nick;
 
-    if(conf.getgroupmode() != icqconf::nogroups)
+    if(conf->getgroupmode() != icqconf::nogroups)
     if(find(groups.begin(), groups.end(), groupid) == groups.end()) {
 	groupid = 1;
     }
@@ -700,7 +700,7 @@ time_t icqcontact::getlastread() const {
 }
 
 imstatus icqcontact::getstatus() const {
-    if(conf.getnonimonline(cdesc.pname)) return available;
+    if(conf->getnonimonline(cdesc.pname)) return available;
     return status;
 }
 

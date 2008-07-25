@@ -66,13 +66,13 @@ const char *info, int prevbad, int fd) {
 
     if(!prevbad) {
 	if(passphrase[opname].empty())
-	    passphrase[opname] = conf.getourid(opname).additional["pgppass"];
+	    passphrase[opname] = conf->getourid(opname).additional["pgppass"];
 
 	if(passphrase[opname].empty())
 	    passphrase[opname] = face.inputstr(_("PGP passphrase required: "), "", '*');
 
     } else {
-	face.log((string) "+ [" + conf.getprotocolname(opname) + "] " + _("incorrect PGP passphrase"));
+	face.log((string) "+ [" + conf->getprotocolname(opname) + "] " + _("incorrect PGP passphrase"));
 	gethook(opname).disconnect();
 	return GPG_ERR_CANCELED;
     }
@@ -122,7 +122,7 @@ string impgp::sign(const string &text, const string &keyid, protocolname pname) 
 	}
 
 	if(err && err != GPG_ERR_CANCELED) {
-	    face.log((string) "+ [" + conf.getprotocolname(pname) + "] " +
+	    face.log((string) "+ [" + conf->getprotocolname(pname) + "] " +
 		_("PGP sign error: ") + gpgme_strerror(err));
 	    gethook(pname).disconnect();
 	}
@@ -229,7 +229,7 @@ string impgp::encrypt(const string &text, const string &keyid, protocolname pnam
     }
 
     if(err && err != GPG_ERR_CANCELED) {
-	face.log((string) "+ [" + conf.getprotocolname(pname) + "] " +
+	face.log((string) "+ [" + conf->getprotocolname(pname) + "] " +
 	    _("PGP encrypt error: ") + gpgme_strerror(err));
 	gethook(pname).disconnect();
     }
@@ -246,7 +246,7 @@ bool impgp::havekey(const string &keyid) const {
 
 bool impgp::enabled(protocolname pname) const {
     return gethook(pname).getCapabs().count(hookcapab::pgp)
-	&& !conf.getourid(pname).additional["pgpkey"].empty();
+	&& !conf->getourid(pname).additional["pgpkey"].empty();
 }
 
 bool impgp::enabled(const imcontact &ic) const {

@@ -49,30 +49,30 @@ ljhook::~ljhook() {
 }
 
 void ljhook::init() {
-    manualstatus = conf.getstatus(proto);
+    manualstatus = conf->getstatus(proto);
     httpcli.messageack.connect(this, &ljhook::messageack_cb);
     httpcli.socket.connect(this, &ljhook::socket_cb);
 
-    if(conf.getdebug())
+    if(conf->getdebug())
 	httpcli.logger.connect(this, &ljhook::logger_cb);
 
-    journals = vector<string>(1, conf.getourid(proto).nickname);
+    journals = vector<string>(1, conf->getourid(proto).nickname);
 }
 
 void ljhook::connect() {
-    icqconf::imaccount acc = conf.getourid(proto);
+    icqconf::imaccount acc = conf->getourid(proto);
 
     baseurl = acc.server + ":" + i2str(acc.port) + "/interface/flat";
     md5pass = getmd5(acc.password);
 
     log(logConnecting);
 
-    httpcli.setProxyServerHost(conf.gethttpproxyhost());
-    httpcli.setProxyServerPort(conf.gethttpproxyport());
+    httpcli.setProxyServerHost(conf->gethttpproxyhost());
+    httpcli.setProxyServerPort(conf->gethttpproxyport());
 
-    if(!conf.gethttpproxyuser().empty()) {
-	httpcli.setProxyServerUser(conf.gethttpproxyuser());
-	httpcli.setProxyServerPasswd(conf.gethttpproxypasswd());
+    if(!conf->gethttpproxyuser().empty()) {
+	httpcli.setProxyServerUser(conf->gethttpproxyuser());
+	httpcli.setProxyServerPasswd(conf->gethttpproxypasswd());
     }
 
     HTTPRequestEvent *ev = new HTTPRequestEvent(baseurl, HTTPRequestEvent::POST);
@@ -281,7 +281,7 @@ bool ljhook::send(const imevent &asev) {
 	    sent[ev] = reqPost;
 
 	} else if(m->getfield("_eventkind") == "comment") {
-	    icqconf::imaccount acc = conf.getourid(proto);
+	    icqconf::imaccount acc = conf->getourid(proto);
 
 	    string journal = clist.get(sev->getcontact())->getnick();
 	    journal.erase(journal.find("@"));
@@ -341,7 +341,7 @@ void ljhook::removeuser(const imcontact &ic) {
     icqcontact *c;
 
     if(logged())
-    if(conf.getourid(proto).additional["importfriends"] == "1")
+    if(conf->getourid(proto).additional["importfriends"] == "1")
     if(c = clist.get(ic))
     if((npos = c->getnick().find("@lj")) != -1) {
 	string nick = c->getnick().substr(0, npos);
@@ -408,7 +408,7 @@ void ljhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 		c->setdispnick(c->getnick());
 		c->excludefromlist();
 
-		dest.additem(conf.getcolor(cp_clist_rss), c, (string) " " + c->getnick());
+		dest.additem(conf->getcolor(cp_clist_rss), c, (string) " " + c->getnick());
 		foundguys.push_back(c);
 	    }
 
@@ -584,7 +584,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	if(params["success"] == "OK") {
 	    journals = vector<string>(1, username);
 
-	    if(conf.getourid(proto).additional["importfriends"] == "1") {
+	    if(conf->getourid(proto).additional["importfriends"] == "1") {
 		count = atoi(params["friend_count"].c_str());
 	    } else {
 		count = 0;
@@ -672,7 +672,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 		friendof.push_back(in->first);
 
 		if(!foempty) {
-		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + in->first;
+		    bd = (string) "http://" + conf->getourid(proto).server + "/users/" + in->first;
 
 		    snprintf(buf, NOTIFBUF, _("The user %s (%s) has added you to his/her friend list\n\nJournal address: %s"),
 			in->first.c_str(), in->second.c_str(), bd.c_str());
@@ -683,7 +683,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 
 	    for(il = friendof.begin(); il != friendof.end(); ) {
 		if(nfriendof.find(*il) == nfriendof.end()) {
-		    bd = (string) "http://" + conf.getourid(proto).server + "/users/" + *il;
+		    bd = (string) "http://" + conf->getourid(proto).server + "/users/" + *il;
 		    snprintf(buf, NOTIFBUF, _("The user %s has removed you from his/her friend list\n\nJournal address: %s"),
 			il->c_str(), bd.c_str());
 		    em.store(imnotification(self, buf));
@@ -733,7 +733,7 @@ void ljhook::messageack_cb(MessageEvent *ev) {
 	    c->excludefromlist();
 	    rsshook::parsedocument(rev, c);
 
-	    sdest->additem(conf.getcolor(cp_clist_rss), c, (string) " " + c->getnick());
+	    sdest->additem(conf->getcolor(cp_clist_rss), c, (string) " " + c->getnick());
 	    foundguys.push_back(c);
 	}
 
@@ -761,11 +761,11 @@ void ljhook::logger_cb(LogEvent *ev) {
 }
 
 string ljhook::getfeedurl(const string &nick) const {
-    return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/data/rss?auth=digest";
+    return (string) "http://" + conf->getourid(proto).server + "/users/" + nick + "/data/rss?auth=digest";
 }
 
 string ljhook::getoldfeedurl(const string &nick) const {
-    return (string) "http://" + conf.getourid(proto).server + "/users/" + nick + "/rss/";
+    return (string) "http://" + conf->getourid(proto).server + "/users/" + nick + "/rss/";
 }
 
 #endif

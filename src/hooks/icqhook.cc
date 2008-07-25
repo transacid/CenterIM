@@ -114,29 +114,29 @@ icqhook::~icqhook() {
 }
 
 void icqhook::init() {
-    manualstatus = conf.getstatus(proto);
+    manualstatus = conf->getstatus(proto);
 
-    if(conf.getdebug())
+    if(conf->getdebug())
 	cli.logger.connect(this, &icqhook::logger_cb);
 }
 
 void icqhook::connect() {
-    icqconf::imaccount acc = conf.getourid(proto);
+    icqconf::imaccount acc = conf->getourid(proto);
     int i, ptpmin, ptpmax;
     icqcontact *c;
 
     if(acc.additional["webaware"].empty()) acc.additional["webaware"] = "1";
-    conf.setourid(acc);
+    conf->setourid(acc);
 
     if(!acc.server.empty()) cli.setLoginServerHost(acc.server);
     if(acc.port) cli.setLoginServerPort(acc.port);
 
-    if(!conf.getsmtphost().empty()) cli.setSMTPServerHost(conf.getsmtphost());
-    if(conf.getsmtpport()) cli.setSMTPServerPort(conf.getsmtpport());
+    if(!conf->getsmtphost().empty()) cli.setSMTPServerHost(conf->getsmtphost());
+    if(conf->getsmtpport()) cli.setSMTPServerPort(conf->getsmtpport());
 
-    if(!conf.getbindhost().empty()) cli.setClientBindHost(conf.getbindhost());
+    if(!conf->getbindhost().empty()) cli.setClientBindHost(conf->getbindhost());
     
-    conf.getpeertopeer(ptpmin, ptpmax);
+    conf->getpeertopeer(ptpmin, ptpmax);
     if(ptpmax) {
 	cli.setAcceptInDC(true);
 	cli.setPortRangeLowerBound(ptpmin);
@@ -638,7 +638,7 @@ imstatus icqhook::icq2imstatus(const Status st) const {
 
 void icqhook::requestinfo(const imcontact &c) {
     if(logged() && c.uin) {
-	if(c == imcontact(conf.getourid(icq).uin, icq)) {
+	if(c == imcontact(conf->getourid(icq).uin, icq)) {
 	    // Our info is requested
 	    cli.fetchSelfDetailContactInfo();
 	} else {
@@ -768,10 +768,10 @@ void icqhook::sendupdateuserinfo(const icqcontact &c) {
     ic->setWorkInfo(work);
     ic->setAuthReq(cbinfo.requiresauth);
 
-    icqconf::imaccount acc = conf.getourid(icq);
+    icqconf::imaccount acc = conf->getourid(icq);
     acc.additional["webaware"] = cbinfo.webaware ? "1" : "0";
     acc.additional["randomgroup"] = i2str(cbinfo.randomgroup);
-    conf.setourid(acc);
+    conf->setourid(acc);
 
     cli.setWebAware(cbinfo.webaware);
     cli.setRandomChatGroup(cbinfo.randomgroup);
@@ -1007,13 +1007,13 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 
     logger.putourstatus(icq, offline, manualstatus);
 
-    cli.setRandomChatGroup(strtoul(conf.getourid(icq).additional["randomgroup"].c_str(), 0, 0));
+    cli.setRandomChatGroup(strtoul(conf->getourid(icq).additional["randomgroup"].c_str(), 0, 0));
 
     log(logLogged);
     face.update();
 
     string buf;
-    ifstream f(conf.getconfigfname("icq-infoset").c_str());
+    ifstream f(conf->getconfigfname("icq-infoset").c_str());
 
     if(f.is_open()) {
 	getstring(f, buf); cli.getSelfContact()->setAlias(buf);
@@ -1025,7 +1025,7 @@ void icqhook::connected_cb(ConnectedEvent *ev) {
 	cli.getSelfContact()->getMainHomeInfo().timezone = (Timezone) getSystemTimezone();
 	cli.uploadSelfDetails();
 
-	unlink(conf.getconfigfname("icq-infoset").c_str());
+	unlink(conf->getconfigfname("icq-infoset").c_str());
     }
 
     cli.fetchServerBasedContactList();
@@ -1122,7 +1122,7 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	else
 	    text = r->getMessage();
 	if(text.substr(0, 6) == "{\\rtf1")
-	    text = fixicqrtf(striprtf(text, converted?conf.getconvertto(proto):conf.getconvertfrom(proto)));
+	    text = fixicqrtf(striprtf(text, converted?conf->getconvertto(proto):conf->getconvertfrom(proto)));
 
 	em.store(immessage(ic, imevent::incoming, converted?text:rusconv("wk", text), r->getTime()));
 
@@ -1394,7 +1394,7 @@ void icqhook::want_auto_resp_cb(ICQMessageEvent *ev) {
     if(c) ident += " (" + c->getdispnick() + ")";
 
     /* logger.putmessage(buf); */
-    ev->setAwayMessage(rusconv("kw", conf.getawaymsg(icq)));
+    ev->setAwayMessage(rusconv("kw", conf->getawaymsg(icq)));
 }
 
 void icqhook::search_result_cb(SearchResultEvent *ev) {
@@ -1432,7 +1432,7 @@ void icqhook::search_result_cb(SearchResultEvent *ev) {
 	    c->setbasicinfo(binfo);
 
 	    foundguys.push_back(c);
-	    searchdest->additem(conf.getcolor(cp_clist_icq), c, line);
+	    searchdest->additem(conf->getcolor(cp_clist_icq), c, line);
 	    searchdest->redraw();
 	}
 
@@ -1457,7 +1457,7 @@ void icqhook::self_contact_userinfo_change_cb(UserInfoChangeEvent *ev) {
 	*
 	*/
 
-	icqconf::imaccount im = conf.getourid(icq);
+	icqconf::imaccount im = conf->getourid(icq);
 	icqcontact::basicinfo cbinfo = c->getbasicinfo();
 	cbinfo.webaware = im.additional["webaware"] == "1";
 	cbinfo.randomgroup = strtoul(im.additional["randomgroup"].c_str(), 0, 0);
@@ -1473,9 +1473,9 @@ void icqhook::self_contact_status_change_cb(StatusChangeEvent *ev) {
 
 void icqhook::password_changed_cb(PasswordChangeEvent *ev) {
     if(ev->isSuccess()) {
-	icqconf::imaccount acc = conf.getourid(icq);
+	icqconf::imaccount acc = conf->getourid(icq);
 	acc.password = ev->getPassword();
-	conf.setourid(acc);
+	conf->setourid(acc);
 	log(logPasswordChanged);
     }
 }

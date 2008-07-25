@@ -90,7 +90,7 @@ bool icqface::sprofmanager(string &name, string &act) {
     map<string, imsearchparams> profiles;
     map<string, imsearchparams>::iterator ip;
 
-    string pfname = conf.getconfigfname("search-profiles");
+    string pfname = conf->getconfigfname("search-profiles");
 
     ifstream f(pfname.c_str());
 
@@ -110,14 +110,14 @@ bool icqface::sprofmanager(string &name, string &act) {
     dy = (LINES-sizeDlg.height)/2+sizeDlg.height;
 
     db.setwindow(new textwindow(dx-(int) (sizeDlg.width*0.6), dy-(int) (sizeDlg.height*0.6),
-	dx, dy, conf.getcolor(cp_dialog_frame), 0, conf.getcolor(cp_dialog_highlight),
+	dx, dy, conf->getcolor(cp_dialog_frame), 0, conf->getcolor(cp_dialog_highlight),
 	_(" Search profiles ")));
 
-    db.setmenu(new verticalmenu(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected)));
+    db.setmenu(new verticalmenu(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Remove"), _("Load"), (char*)0));
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), _("Remove"), _("Load"), (char*)0));
 
     db.addkey(KEY_DC, 0);
 
@@ -133,7 +133,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 
 	for(ip = profiles.begin(); ip != profiles.end(); ++ip) {
 	    m.additemf(0, (void *) ip->first.c_str(), " %s: %s",
-		conf.getprotocolname(ip->second.pname).c_str(),
+		conf->getprotocolname(ip->second.pname).c_str(),
 		ip->first.c_str());
 	}
 
@@ -166,7 +166,7 @@ bool icqface::sprofmanager(string &name, string &act) {
 
     db.close();
 
-    unlink(conf.getconfigfname("search-profiles").c_str());
+    unlink(conf->getconfigfname("search-profiles").c_str());
 
     for(ip = profiles.begin(); ip != profiles.end(); ++ip) {
 	ip->second.save(ip->first);
@@ -216,26 +216,26 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
     finished = ret = false;
 
     db.setwindow(new textwindow(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED));
+	conf->getcolor(cp_dialog_frame), TW_CENTERED));
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
-	conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected),
+	conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
     switch(subj) {
 	case fsuser:
-	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+	    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text), conf->getcolor(cp_dialog_selected),
 		_("lOad"), _("sAve"), _("cLear"), _("Change"), _("Search/Add"), (char*)0));
 	    break;
 
 	case fschannel:
-	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+	    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text), conf->getcolor(cp_dialog_selected),
 		_("cLear"), _("Change"), _("Join/Create"), (char*)0));
 	    break;
 
 	case fsrss:
-	    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+	    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text), conf->getcolor(cp_dialog_selected),
 		_("cLear"), _("Change"), _("lInk"), (char*)0));
 	    break;
     }
@@ -251,7 +251,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 
     };
 
-    db.getwindow()->set_title(conf.getcolor(cp_dialog_highlight), dlgparam[subj].title);
+    db.getwindow()->set_title(conf->getcolor(cp_dialog_highlight), dlgparam[subj].title);
     db.getbar()->item = dlgparam[subj].item;
 
     db.addautokeys();
@@ -297,7 +297,7 @@ bool icqface::finddialog(imsearchparams &s, findsubject subj) {
 
 	if(subj != fsrss) {
 	    i = tree.addnode(_(" Network "));
-	    tree.addleaf(i, 0, 1, " " + conf.getprotocolname(s.pname) + " ");
+	    tree.addleaf(i, 0, 1, " " + conf->getprotocolname(s.pname) + " ");
 	}
 
 	if(subj != fschannel)
@@ -735,13 +735,13 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
     passinfo.pname = upname;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+	conf->getcolor(cp_dialog_frame), TW_CENTERED);
 
     if(c->getdesc() == contactroot) {
-	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" Your %s details "),
-	    conf.getprotocolname(upname).c_str());
+	w.set_titlef(conf->getcolor(cp_dialog_highlight), _(" Your %s details "),
+	    conf->getprotocolname(upname).c_str());
     } else {
-	w.set_titlef(conf.getcolor(cp_dialog_highlight), _(" %s: details "),
+	w.set_titlef(conf->getcolor(cp_dialog_highlight), _(" %s: details "),
 	    c->getdesc().totext().c_str());
     }
 
@@ -749,12 +749,12 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 
     db.setwindow(&w, false);
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
 
     db.idle = &detailsidle;
     db.addautokeys();
@@ -906,8 +906,8 @@ bool icqface::updatedetails(icqcontact *c, protocolname upname) {
 void icqface::selectcountry(unsigned short &f) {
     int i;
 
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-16, 30, LINES-3, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-16, 30, LINES-3, conf->getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
     for(i = 0; i < abstracthook::Country_table_size; i++) {
@@ -927,8 +927,8 @@ void icqface::selectcountry(unsigned short &f) {
 
 void icqface::selectlanguage(unsigned short &f) {
     int i;
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-13, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-13, 20, LINES-4, conf->getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
     for(i = 0; i < abstracthook::Language_table_size; i++) {
@@ -944,8 +944,8 @@ void icqface::selectlanguage(unsigned short &f) {
 
 void icqface::selectrandomgroup(unsigned short &f) {
     int i;
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-15, 20, LINES-3, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-15, 20, LINES-3, conf->getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
     m.additemf(" %s", _("none"));
@@ -962,8 +962,8 @@ void icqface::selectrandomgroup(unsigned short &f) {
 }
 
 void icqface::selectgender(imgender &f) {
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-8, 20, LINES-4, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-8, 20, LINES-4, conf->getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
     for(imgender i = genderUnspec; i != imgender_size; i++) {
@@ -978,8 +978,8 @@ void icqface::selectgender(imgender &f) {
 }
 
 void icqface::selectagerange(ICQ2000::AgeRange &r) {
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-8, 18, LINES-3, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-8, 18, LINES-3, conf->getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
     for(ICQ2000::AgeRange i = ICQ2000::RANGE_NORANGE; i <= ICQ2000::RANGE_60_ABOVE; i = ICQ2000::AgeRange(i+1)) {
@@ -1003,8 +1003,8 @@ bool icqface::edit(string &txt, const string &header) {
     if(!msb) blockmainscreen();
 
     texteditor se;
-    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf->getcolor(cp_dialog_frame), TW_CENTERED);
+    w.set_title(conf->getcolor(cp_dialog_highlight), (string) " " + header + _(" [Ctrl-X save, Esc cancel] "));
     w.open();
 
     editdone = false;
@@ -1041,19 +1041,19 @@ bool icqface::sendfiles(const imcontact &cinfo, string &msg, linkedlist &flist) 
 
     blockmainscreen();
 
-    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf->getcolor(cp_dialog_frame), TW_CENTERED);
 
-    w.set_titlef(conf.getcolor(cp_dialog_highlight),
+    w.set_titlef(conf->getcolor(cp_dialog_highlight),
 	_(" Send file(s) to %s, %lu "),
 	    clist.get(cinfo)->getdispnick().c_str(), cinfo.uin);
 
     db.setwindow(&w, false);
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected),
 	_("Add"), _("Remove"), _("Comment"), _("Send"), (char*)0));
 
     db.addkey(KEY_IC, 0);
@@ -1103,11 +1103,11 @@ void icqface::multichange(bool conv[], bool newstate) {
     protocolname pname;
 
     for(pname = icq; pname != protocolname_size; pname++)
-	if((!conf.getourid(pname).empty() || pname == rss) && conv[pname]) break;
+	if((!conf->getourid(pname).empty() || pname == rss) && conv[pname]) break;
 
     if(pname == protocolname_size || !newstate) {
 	for(pname = icq; pname != protocolname_size; pname++)
-	    if(!conf.getourid(pname).empty() || pname == rss)
+	    if(!conf->getourid(pname).empty() || pname == rss)
 		conv[pname] = newstate;
     }
 }
@@ -1119,43 +1119,43 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     protocolname pname;
     string tmp, phidden;
 
-    string smtp = conf.getsmtphost() + ":" + i2str(conf.getsmtpport());
-    string browser = conf.getbrowser();
-		string screensocketpath = conf.getscreensocketpath();
+    string smtp = conf->getsmtphost() + ":" + i2str(conf->getsmtpport());
+    string browser = conf->getbrowser();
+		string screensocketpath = conf->getscreensocketpath();
 		
-		bool screenna = conf.getscreenna();
-    bool quote = conf.getquote();
-    bool savepwd = conf.getsavepwd();
-    bool hideoffl = conf.gethideoffline();
-    bool antispam = conf.getantispam();
-    bool showopenedchats = conf.getshowopenedchats();
-    bool dropauthreq = conf.getdropauthreq();
-    bool usingcaptcha = conf.getusingcaptcha();
-    bool mailcheck = conf.getmailcheck();
-    bool makelog = conf.getmakelog();
-    bool askaway = conf.getaskaway();
-    bool bidi = conf.getbidi();
-    bool askquit = conf.getaskquit();
-    bool emacs = conf.getemacs();
-	bool vi = conf.getvi();
-    bool proxyconnect = conf.getproxyconnect();
-    bool timestampstothesecond = conf.gettimestampstothesecond();
+		bool screenna = conf->getscreenna();
+    bool quote = conf->getquote();
+    bool savepwd = conf->getsavepwd();
+    bool hideoffl = conf->gethideoffline();
+    bool antispam = conf->getantispam();
+    bool showopenedchats = conf->getshowopenedchats();
+    bool dropauthreq = conf->getdropauthreq();
+    bool usingcaptcha = conf->getusingcaptcha();
+    bool mailcheck = conf->getmailcheck();
+    bool makelog = conf->getmakelog();
+    bool askaway = conf->getaskaway();
+    bool bidi = conf->getbidi();
+    bool askquit = conf->getaskquit();
+    bool emacs = conf->getemacs();
+	bool vi = conf->getvi();
+    bool proxyconnect = conf->getproxyconnect();
+    bool timestampstothesecond = conf->gettimestampstothesecond();
     bool logtimestamps, logonline;
-    conf.getlogoptions(logtimestamps, logonline);
+    conf->getlogoptions(logtimestamps, logonline);
 
     int ptpmin, ptpmax;
-    conf.getpeertopeer(ptpmin, ptpmax);
+    conf->getpeertopeer(ptpmin, ptpmax);
     bool ptp = ptpmax;
 
     string httpproxy;
-    if (!conf.gethttpproxyuser().empty()) {
-	httpproxy = conf.gethttpproxyuser();
+    if (!conf->gethttpproxyuser().empty()) {
+	httpproxy = conf->gethttpproxyuser();
 	if(!httpproxy.empty())
-	    httpproxy += ":" + conf.gethttpproxypasswd() + "@" + conf.gethttpproxyhost() + ":" + i2str(conf.gethttpproxyport());
+	    httpproxy += ":" + conf->gethttpproxypasswd() + "@" + conf->gethttpproxyhost() + ":" + i2str(conf->gethttpproxyport());
     } else {
-	httpproxy = conf.gethttpproxyhost();
+	httpproxy = conf->gethttpproxyhost();
 	if(!httpproxy.empty())
-	    httpproxy += ":" + i2str(conf.gethttpproxyport());
+	    httpproxy += ":" + i2str(conf->gethttpproxyport());
     }
 
     vector<string> convlanguages;
@@ -1165,45 +1165,45 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     convlanguages.push_back(_("German UTF-8"));
     vector<string>::const_iterator iconvlang = convlanguages.begin();
 
-    string convertfrom = conf.getconvertfrom();
-    string convertto = conf.getconvertto();
+    string convertfrom = conf->getconvertfrom();
+    string convertto = conf->getconvertto();
 
-    icqconf::groupmode gmode = conf.getgroupmode();
-    icqconf::colormode cm = conf.getcolormode();
-    icqconf::sortmode smode = conf.getsortmode();
+    icqconf::groupmode gmode = conf->getgroupmode();
+    icqconf::colormode cm = conf->getcolormode();
+    icqconf::sortmode smode = conf->getsortmode();
 
     bool chatmode[protocolname_size], conv[protocolname_size],
 	entersends[protocolname_size], nonimonline[protocolname_size];
 
     for(pname = icq; pname != protocolname_size; pname++) {
-	chatmode[pname] = conf.getchatmode(pname);
-	entersends[pname] = conf.getentersends(pname);
-	conv[pname] = conf.getcpconvert(pname);
-	nonimonline[pname] = conf.getnonimonline(pname);
+	chatmode[pname] = conf->getchatmode(pname);
+	entersends[pname] = conf->getentersends(pname);
+	conv[pname] = conf->getcpconvert(pname);
+	nonimonline[pname] = conf->getnonimonline(pname);
     }
 
     for(hasany = false, pname = icq; pname != protocolname_size && !hasany; pname++)
-	hasany = !conf.getourid(pname).empty();
+	hasany = !conf->getourid(pname).empty();
 
     dialogbox db;
 
     finished = success = false;
 
-    conf.getauto(aaway, ana);
+    conf->getauto(aaway, ana);
 
     textwindow w(0, 0, sizeBigDlg.width, sizeBigDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+	conf->getcolor(cp_dialog_frame), TW_CENTERED);
 
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" CenterIM configuration "));
+    w.set_title(conf->getcolor(cp_dialog_highlight), _(" CenterIM configuration "));
 
     db.setwindow(&w, false);
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), _("Change"), _("Done"), (char*)0));
 
     db.idle = &dialogidle;
     db.addautokeys();
@@ -1217,9 +1217,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" User interface "));
 	t.addleaff(i, 0, 1, _(" Change sound device to : %s "), strregsound(s));
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
-	t.addleaff(i, 0, 32, _(" Left panel width :  %d "), conf.getleftpanelwidth());
-	t.addleaff(i, 0, 33, _(" Log panel height :  %d "), conf.getlogpanelheight());
-	t.addleaff(i, 0, 34, _(" Chat panel height : %d "), conf.getchatpanelheight());
+	t.addleaff(i, 0, 32, _(" Left panel width :  %d "), conf->getleftpanelwidth());
+	t.addleaff(i, 0, 33, _(" Log panel height :  %d "), conf->getlogpanelheight());
+	t.addleaff(i, 0, 34, _(" Chat panel height : %d "), conf->getchatpanelheight());
     t.addleaff(i, 0, 55, _(" Show opened chats : %s "), stryesno(showopenedchats));
 
     #ifdef USE_FRIBIDI
@@ -1233,8 +1233,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	for(tmp = "", pname = icq; pname != protocolname_size; pname++)
 	if(conv[pname])
-	if(!conf.getourid(pname).empty() || pname == rss)
-	    tmp += conf.getprotocolname(pname) + " ";
+	if(!conf->getourid(pname).empty() || pname == rss)
+	    tmp += conf->getprotocolname(pname) + " ";
 
 	t.addleaff(i, 0, 26, _(" Switch to language preset : %s "), iconvlang->c_str());
 	t.addleaff(i, 0, 27, _(" Remote charset : %s "), convertfrom.c_str());
@@ -1258,14 +1258,14 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
 	if(hasany) {
 	    for(tmp = "", pname = icq; pname != protocolname_size; pname++)
-		if(chatmode[pname] && !conf.getourid(pname).empty())
-		    tmp += conf.getprotocolname(pname) + " ";
+		if(chatmode[pname] && !conf->getourid(pname).empty())
+		    tmp += conf->getprotocolname(pname) + " ";
 
 	    t.addleaff(i, 0, 16, _(" Chat messaging mode for : %s"), tmp.c_str());
 
 	    for(tmp = "", pname = icq; pname != protocolname_size; pname++)
-		if(entersends[pname] && !conf.getourid(pname).empty())
-		    tmp += conf.getprotocolname(pname) + " ";
+		if(entersends[pname] && !conf->getourid(pname).empty())
+		    tmp += conf->getprotocolname(pname) + " ";
 
 	    t.addleaff(i, 0, 25, _(" Enter key sends message for : %s"), tmp.c_str());
 
@@ -1276,7 +1276,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	}
 
 	for(tmp = "", pname = icq; pname != protocolname_size; pname++)
-	    if(nonimonline[pname]) tmp += conf.getprotocolname(pname) + " ";
+	    if(nonimonline[pname]) tmp += conf->getprotocolname(pname) + " ";
 
 	t.addleaff(i, 0, 29, _(" Always online non-IM contacts for : %s"), tmp.c_str());
 	t.addleaff(i, 0, 30, _(" Color contacts according to: %s "), strcolormode(cm));
@@ -1442,18 +1442,18 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			if(!tmp.empty()) browser = tmp;
 		        break;
 		    case 32:    
-		        conf.setleftpanelwidth(atol(inputstr(_("Left panel width: "), 
-		            strint(conf.getleftpanelwidth())).c_str()));
+		        conf->setleftpanelwidth(atol(inputstr(_("Left panel width: "), 
+		            strint(conf->getleftpanelwidth())).c_str()));
 		        needredraw = true;
 		        break;
 		    case 33:
-		        conf.setlogpanelheight(atol(inputstr(_("Log panel height: "), 
-		            strint(conf.getlogpanelheight())).c_str()));
+		        conf->setlogpanelheight(atol(inputstr(_("Log panel height: "), 
+		            strint(conf->getlogpanelheight())).c_str()));
 		        needredraw = true;
 		        break;  
 		    case 34:
-		        conf.setchatpanelheight(atol(inputstr(_("Chat panel height: "), 
-		            strint(conf.getchatpanelheight())).c_str()));
+		        conf->setchatpanelheight(atol(inputstr(_("Chat panel height: "), 
+		            strint(conf->getchatpanelheight())).c_str()));
 		        needredraw = true;
 		        break;
  
@@ -1497,54 +1497,54 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
   		break;
 	    case 1:
 		finished = success = true;
-		conf.setquote(quote);
-		conf.setsavepwd(savepwd);
-		conf.setauto(aaway, ana);
-		conf.setscreenna(screenna);
-		conf.setscreensocketpath(screensocketpath);
-		conf.sethideoffline(hideoffl);
-		conf.setemacs(emacs);
-		conf.setvi(vi);
-		conf.setantispam(antispam);
-		conf.setshowopenedchats(showopenedchats);
-		conf.setdropauthreq(dropauthreq);
-		conf.setusingcaptcha(usingcaptcha);
-		conf.setmailcheck(mailcheck);
-		conf.setmakelog(makelog);
-		conf.setaskaway(askaway);
-		conf.setproxyconnect(proxyconnect);
-		conf.settimestampstothesecond(timestampstothesecond);
-		conf.setcharsets(convertfrom, convertto);
+		conf->setquote(quote);
+		conf->setsavepwd(savepwd);
+		conf->setauto(aaway, ana);
+		conf->setscreenna(screenna);
+		conf->setscreensocketpath(screensocketpath);
+		conf->sethideoffline(hideoffl);
+		conf->setemacs(emacs);
+		conf->setvi(vi);
+		conf->setantispam(antispam);
+		conf->setshowopenedchats(showopenedchats);
+		conf->setdropauthreq(dropauthreq);
+		conf->setusingcaptcha(usingcaptcha);
+		conf->setmailcheck(mailcheck);
+		conf->setmakelog(makelog);
+		conf->setaskaway(askaway);
+		conf->setproxyconnect(proxyconnect);
+		conf->settimestampstothesecond(timestampstothesecond);
+		conf->setcharsets(convertfrom, convertto);
 
 		for(pname = icq; pname != protocolname_size; pname++) {
-		    conf.setchatmode(pname, chatmode[pname]);
-		    conf.setentersends(pname, entersends[pname]);
-		    conf.setnonimonline(pname, nonimonline[pname]);
+		    conf->setchatmode(pname, chatmode[pname]);
+		    conf->setentersends(pname, entersends[pname]);
+		    conf->setnonimonline(pname, nonimonline[pname]);
 
 		    bool bconv = conv[pname] && (!convertfrom.empty() || !convertto.empty());
-		    conf.setcpconvert(pname, bconv || !hasany);
+		    conf->setcpconvert(pname, bconv || !hasany);
 		}
 
-		conf.setbidi(bidi);
-		conf.setaskquit(askquit);
-		conf.setlogoptions(logtimestamps, logonline);
+		conf->setbidi(bidi);
+		conf->setaskquit(askquit);
+		conf->setlogoptions(logtimestamps, logonline);
 
-		if(ptp) conf.setpeertopeer(ptpmin, ptpmax);
-		    else conf.setpeertopeer(0, 0);
+		if(ptp) conf->setpeertopeer(ptpmin, ptpmax);
+		    else conf->setpeertopeer(0, 0);
 
-		if(conf.getgroupmode() != gmode) {
-		    conf.setgroupmode(gmode);
+		if(conf->getgroupmode() != gmode) {
+		    conf->setgroupmode(gmode);
 		    clist.rearrange();
 		}
-		conf.setcolormode(cm);
-		if (conf.getsortmode() != smode){
-		    conf.setsortmode(smode);
+		conf->setcolormode(cm);
+		if (conf->getsortmode() != smode){
+		    conf->setsortmode(smode);
 		}
 
-		conf.setsmtphost(smtp);
-		conf.setbrowser(browser);
-		conf.sethttpproxyhost(httpproxy);
-		conf.save();
+		conf->setsmtphost(smtp);
+		conf->setbrowser(browser);
+		conf->sethttpproxyhost(httpproxy);
+		conf->save();
 		break;
 	}
     }
@@ -1587,7 +1587,7 @@ void icqface::selectproto(bool prots[], spmode mode) {
 		if(gethook(pname).getCapabs().count(hookcapab::nochat))
 		    continue;
 
-		if(conf.getourid(pname).empty())
+		if(conf->getourid(pname).empty())
 		    continue;
 
 	    }
@@ -1604,8 +1604,8 @@ void icqface::selectproto(bool prots[], spmode mode) {
     vector<imstatus> mst;
     vector<imstatus>::iterator im;
 
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(4, LINES-5-protmax, 18, LINES-4, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(4, LINES-5-protmax, 18, LINES-4, conf->getcolor(cp_dialog_menu)));
 
     m.idle = &menuidle;
     m.otherkeys = &multiplekeys;
@@ -1617,7 +1617,7 @@ void icqface::selectproto(bool prots[], spmode mode) {
 
 	for(i = 0; i < protmax; i++)
 	    m.additemf(0, i, "[%c] %s", aprots[tempprots[i]] ? 'x' : ' ',
-		conf.getprotocolname(tempprots[i]).c_str());
+		conf->getprotocolname(tempprots[i]).c_str());
 
 	m.setpos(saveelem);
 
@@ -1679,18 +1679,18 @@ int icqface::groupmanager(const string &text, bool sel) {
     bool touched = false;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+	conf->getcolor(cp_dialog_frame), TW_CENTERED);
 
-    w.set_title(conf.getcolor(cp_dialog_highlight), " " + text + " ");
+    w.set_title(conf->getcolor(cp_dialog_highlight), " " + text + " ");
 
     db.setwindow(&w, false);
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected),
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected),
 	_("Add"), _("Rename"), _("rEmove"), _("move Up"), _("move Down"),
 	sel ? _("Select") : _("Done"), (char*)0));
 
@@ -1802,18 +1802,18 @@ void icqface::transfermonitor() {
     vector< pair< pair<imcontact, imevent::imdirection>, int> >::iterator in;
 
     textwindow w(0, 0, sizeDlg.width, sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED);
+	conf->getcolor(cp_dialog_frame), TW_CENTERED);
 
-    w.set_titlef(conf.getcolor(cp_dialog_highlight), " %s ", _("File transfer status"));
+    w.set_titlef(conf->getcolor(cp_dialog_highlight), " %s ", _("File transfer status"));
 
     db.setwindow(&w, false);
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), (char*)0));
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), _("Cancel"), _("Remove"), (char*)0));
 
     db.getbar()->item = 1;
     db.addautokeys();
@@ -1944,8 +1944,8 @@ void icqface::invokelist(string &s, vector<string> &v, const string &def, textwi
     if(vmax < 2) return;
     vmax++;
 
-    verticalmenu m(conf.getcolor(cp_dialog_menu), conf.getcolor(cp_dialog_selected));
-    m.setwindow(textwindow(w->x1, w->y2-vmax, w->x1+30, w->y2, conf.getcolor(cp_dialog_menu)));
+    verticalmenu m(conf->getcolor(cp_dialog_menu), conf->getcolor(cp_dialog_selected));
+    m.setwindow(textwindow(w->x1, w->y2-vmax, w->x1+30, w->y2, conf->getcolor(cp_dialog_menu)));
     m.idle = &menuidle;
 
     vector<string>::const_iterator iv = v.begin();
@@ -2018,15 +2018,15 @@ bool icqface::setljparams(imxmlevent *ev) {
 
     ev->setfield("taglist", "");
 
-    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" LiveJournal posting: attributes "));
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf->getcolor(cp_dialog_frame), TW_CENTERED);
+    w.set_title(conf->getcolor(cp_dialog_highlight), _(" LiveJournal posting: attributes "));
     db.setwindow(&w, false);
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), conf.getcolor(cp_dialog_highlight),
-	conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), conf->getcolor(cp_dialog_highlight),
+	conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text), conf->getcolor(cp_dialog_selected),
 	_("Change"), _("Detect music"), _("Post"), _("cAncel"), (char*)0));
 
     db.addautokeys();
@@ -2089,7 +2089,7 @@ bool icqface::setljparams(imxmlevent *ev) {
 		}
 
 	    } else if(b == 1) {
-		ev->setfield("music", conf.execaction("detectmusic"));
+		ev->setfield("music", conf->execaction("detectmusic"));
 
 	    } else if(b == 2) {
 		r = true;
@@ -2124,9 +2124,9 @@ void icqface::findpgpkey(dialogbox &db, const vector<string> &items) {
     verticalmenu *cm = db.getmenu();
 
     for(fin = false; !fin; ) {
-	attrset(conf.getcolor(cp_dialog_frame));
+	attrset(conf->getcolor(cp_dialog_frame));
 	mvhline(w->y2-2, w->x1+1, HLINE, w->x2-w->x1-2);
-	kwriteatf(w->x1+2, w->y2-2, conf.getcolor(cp_dialog_highlight), "[ %s ]", sub.c_str());
+	kwriteatf(w->x1+2, w->y2-2, conf->getcolor(cp_dialog_highlight), "[ %s ]", sub.c_str());
 	kgotoxy(w->x1+4+sub.size(), w->y2-2);
 	refresh();
 
@@ -2182,7 +2182,7 @@ void icqface::findpgpkey(dialogbox &db, const vector<string> &items) {
 	}
     }
 
-    attrset(conf.getcolor(cp_dialog_frame));
+    attrset(conf->getcolor(cp_dialog_frame));
     mvhline(w->y2-2, w->x1+1, HLINE, w->x2-w->x1-2);
     refresh();
 }
@@ -2197,15 +2197,15 @@ bool icqface::selectpgpkey(string &keyid, bool secretonly) {
     string buf;
     vector<string> items;
 
-    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf.getcolor(cp_dialog_frame), TW_CENTERED);
-    w.set_title(conf.getcolor(cp_dialog_highlight), _(" Select PGP key to use "));
+    textwindow w(0, 0, sizeDlg.width, sizeDlg.height, conf->getcolor(cp_dialog_frame), TW_CENTERED);
+    w.set_title(conf->getcolor(cp_dialog_highlight), _(" Select PGP key to use "));
     db.setwindow(&w, false);
 
-    db.setmenu(new verticalmenu(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected)));
+    db.setmenu(new verticalmenu(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Select"), 0));
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), _("Select"), 0));
 
     db.addautokeys();
 

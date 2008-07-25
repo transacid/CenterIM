@@ -40,7 +40,7 @@ imexternal::~imexternal() {
 }
 
 void imexternal::load() {
-    ifstream f(conf.getconfigfname("external").c_str());
+    ifstream f(conf->getconfigfname("external").c_str());
     action a;
 
     actions.clear();
@@ -232,7 +232,7 @@ void imexternal::action::writescript() {
 
     do {
 	tfname.clear();
-	tfname << conf.getdirname() << "centerim-external-tmp." << dec << time(0)+i++;
+	tfname << conf->getdirname() << "centerim-external-tmp." << dec << time(0)+i++;
 #ifdef HAVE_SSTREAM
 	sname = tfname.str();
 #else
@@ -271,7 +271,7 @@ int imexternal::action::execscript() {
 	if(!pid) {
 	    if(c = clist.get(currentev->getcontact())) {
 		setenv("EVENT_TYPE", geteventname(currentev->gettype()).c_str(), 1);
-		setenv("EVENT_NETWORK", conf.getprotocolname(c->getdesc().pname).c_str(), 1);
+		setenv("EVENT_NETWORK", conf->getprotocolname(c->getdesc().pname).c_str(), 1);
 
 		setenv("CONTACT_INFODIR", c->getdirname().c_str(), 1);
 		setenv("CONTACT_UIN", i2str(c->getdesc().uin).c_str(), 1);
@@ -287,7 +287,7 @@ int imexternal::action::execscript() {
 	    }
 
 	    if(options & aonowait) {
-		string nsname = conf.getdirname() + "centerim-external-tmp." + i2str(getpid());
+		string nsname = conf->getdirname() + "centerim-external-tmp." + i2str(getpid());
 		rename(sname.c_str(), nsname.c_str());
 		sname = nsname;
 
@@ -405,7 +405,7 @@ bool imexternal::action::load(ifstream &f) {
 	    } else if(param == "proto") {
 		while(!(param = getword(buf)).empty()) {
 		    for(protocolname pname = icq; pname != protocolname_size; pname++) {
-			if((param == conf.getprotocolname(pname))
+			if((param == conf->getprotocolname(pname))
 			|| (param == "all")) {
 			    proto.insert(pname);
 			}

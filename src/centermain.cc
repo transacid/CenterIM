@@ -34,7 +34,7 @@
 #endif
 
 centerim cicq;
-icqconf conf;
+icqconf* conf=icqconf::instance();
 icqcontacts clist;
 icqface face;
 icqlist lst;
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 	textdomain(PACKAGE);
 #endif
 
-	conf.commandline(argc, argv);
+	conf->commandline(argc, argv);
 #ifdef HAVE_LIBOTR
 	otr.init();
 #endif

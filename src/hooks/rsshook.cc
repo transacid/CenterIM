@@ -51,7 +51,7 @@ void rsshook::init() {
     httpcli.messageack.connect(this, &rsshook::messageack_cb);
     httpcli.socket.connect(this, &rsshook::socket_cb);
 
-    if(conf.getdebug())
+    if(conf->getdebug())
 	httpcli.logger.connect(this, &rsshook::logger_cb);
 }
 
@@ -214,17 +214,17 @@ void rsshook::ping(const imcontact &ic) {
 	else url = ic.nickname;
 
     if(!url.empty()) {
-	httpcli.setProxyServerHost(conf.gethttpproxyhost());
-	httpcli.setProxyServerPort(conf.gethttpproxyport());
+	httpcli.setProxyServerHost(conf->gethttpproxyhost());
+	httpcli.setProxyServerPort(conf->gethttpproxyport());
 
-	if(!conf.gethttpproxyuser().empty()) {
-	    httpcli.setProxyServerUser(conf.gethttpproxyuser());
-	    httpcli.setProxyServerPasswd(conf.gethttpproxypasswd());
+	if(!conf->gethttpproxyuser().empty()) {
+	    httpcli.setProxyServerUser(conf->gethttpproxyuser());
+	    httpcli.setProxyServerPasswd(conf->gethttpproxypasswd());
 	}
 
 	HTTPRequestEvent *ev = new HTTPRequestEvent(url);
 	if(islivejournal(ic)) {
-	    icqconf::imaccount acc = conf.getourid(livejournal);
+	    icqconf::imaccount acc = conf->getourid(livejournal);
 	    ev->setAuth(HTTPRequestEvent::Digest, acc.nickname, acc.password);
 	}
 
@@ -279,7 +279,7 @@ const string &name, const string &title, const string &postfix) {
     if(d)
     if(!d->getValue().empty()) {
 	val = rushtmlconv("wk", cuthtml(d->getValue(), chCutBR | chLeaveLinks), false);
-	if(!enc.empty()) val = siconv(val, enc, conf.getconvertto(rss));
+	if(!enc.empty()) val = siconv(val, enc, conf->getconvertto(rss));
 
 	pos = 0;
 
@@ -477,7 +477,7 @@ void rsshook::logger_cb(LogEvent *ev) {
     switch(ev->getType()) {
 	case LogEvent::PACKET:
 	case LogEvent::DIRECTPACKET:
-	    if(conf.getdebug())
+	    if(conf->getdebug())
 		face.log(ev->getMessage());
 	    break;
 

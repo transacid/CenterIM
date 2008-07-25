@@ -41,6 +41,17 @@
 #include "imlogger.h"
 #include "connwrap.h"
 
+icqconf* icqconf::self=NULL;
+
+icqconf* icqconf::instance()
+{
+	if(!self){
+		self=new icqconf();
+	}
+
+	return self;
+}
+
 icqconf::icqconf() {
     DEFAULT_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm";
     DEFAULT_LOGTIMESTAMP_FORMAT = "%R ";
@@ -83,6 +94,8 @@ icqconf::icqconf() {
 }
 
 icqconf::~icqconf() {
+	if(self)
+		delete self;
 }
 
 icqconf::imaccount icqconf::getourid(protocolname pname) const {
@@ -159,7 +172,7 @@ string icqconf::getawaymsg(protocolname pname) const {
     if(!gethook(pname).getCapabs().count(hookcapab::setaway))
 	return "";
 
-    fname = conf.getconfigfname("awaymsg-" + getprotocolname(pname));
+    fname = conf->getconfigfname("awaymsg-" + getprotocolname(pname));
     f.open(fname.c_str());
 
     if(f.is_open()) {
@@ -191,7 +204,7 @@ void icqconf::setawaymsg(protocolname pname, const string &amsg) {
     if(!gethook(pname).getCapabs().count(hookcapab::setaway))
 	return;
 
-    fname = conf.getconfigfname("awaymsg-" + getprotocolname(pname));
+    fname = conf->getconfigfname("awaymsg-" + getprotocolname(pname));
     f.open(fname.c_str());
 
     if(f.is_open()) {
@@ -587,25 +600,25 @@ void icqconf::save() {
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
-		if(getchatmode(pname)) param += (string) " " + conf.getprotocolname(pname);
+		if(getchatmode(pname)) param += (string) " " + conf->getprotocolname(pname);
 	    if(!param.empty())
 		f << "chatmode" << param << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
-		if(getentersends(pname)) param += (string) " " + conf.getprotocolname(pname);
+		if(getentersends(pname)) param += (string) " " + conf->getprotocolname(pname);
 	    if(!param.empty())
 		f << "entersends" << param << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
-		if(getnonimonline(pname)) param += (string) " " + conf.getprotocolname(pname);
+		if(getnonimonline(pname)) param += (string) " " + conf->getprotocolname(pname);
 	    if(!param.empty())
 		f << "nonimonline" << param << endl;
 
 	    param = "";
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
-		if(getcpconvert(pname)) param += (string) " " + conf.getprotocolname(pname);
+		if(getcpconvert(pname)) param += (string) " " + conf->getprotocolname(pname);
 	    if(!param.empty())
 		f << "convert" << param << endl;
 
@@ -672,7 +685,7 @@ void icqconf::save() {
 void icqconf::loadcolors() {
     string tname = getconfigfname("colorscheme");
 
-    switch(conf.getregcolor()) {
+    switch(conf->getregcolor()) {
 	case rcdark:
 	    schemer.push(cp_status, "status black/white");
 	    schemer.push(cp_dialog_text, "dialog_text   black/white");
@@ -1410,7 +1423,7 @@ void icqconf::commandline(int argc, char **argv) {
 		<< "Built-in protocols are:";
 
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
-		if(gethook(pname).enabled()) cout << " " << conf.getprotocolname(pname);
+		if(gethook(pname).enabled()) cout << " " << conf->getprotocolname(pname);
 
 	    cout << endl << endl
 		<< "This is free software; see the source for copying conditions.  There is NO" << endl
@@ -1528,7 +1541,7 @@ const string &dest, const string &number) const {
 
 void icqconf::selfsignal(int signum) const {
     int rpid;
-    ifstream f(conf.getconfigfname("pid").c_str());
+    ifstream f(conf->getconfigfname("pid").c_str());
 
     if(f.is_open()) {
 	f >> rpid;
@@ -1556,7 +1569,7 @@ void icqconf::externalstatuschange(char st, const string &proto) const {
 	try {
 	    if(pname != protocolname_size) {
 		if(imst != imstatus_size) {
-		    string sfname = conf.getconfigfname((string) "status-" + proto);
+		    string sfname = conf->getconfigfname((string) "status-" + proto);
 		    ofstream sf(sfname.c_str());
 		    if(sf.is_open()) sf << imstatus2char[imst], sf.close();
 
@@ -1749,10 +1762,10 @@ void icqconf::checkdiskspace() {
 
 #if !(defined(__sun__) || defined(__NetBSD__) || defined(__sgi__))
     struct statfs st;
-    if(!statfs(conf.getdirname().c_str(), &st)) {
+    if(!statfs(conf->getdirname().c_str(), &st)) {
 #else
     struct statvfs st;
-    if(!statvfs(conf.getdirname().c_str(), &st)) {
+    if(!statvfs(conf->getdirname().c_str(), &st)) {
 #endif
 	fenoughdiskspace = ((double) st.f_bavail) * st.f_bsize >= 10240;
     }
@@ -1790,13 +1803,13 @@ bool icqconf::imaccount::empty() const {
 }
 
 void icqconf::imaccount::write(ofstream &f) {
-    string prefix = conf.getprotocolname(pname) + "_";
+    string prefix = conf->getprotocolname(pname) + "_";
     map<string, string>::iterator ia;
 
     f << endl;
     if(!nickname.empty()) f << prefix << "nick\t" << nickname << endl;
     if(uin) f << prefix << "uin\t" << uin << endl;
-    if(conf.getsavepwd()) f << prefix << "pass\t" << password << endl;
+    if(conf->getsavepwd()) f << prefix << "pass\t" << password << endl;
     if(!server.empty()) {
 	f << prefix << "server\t" << server;
 	if(port) f << ":" << port;

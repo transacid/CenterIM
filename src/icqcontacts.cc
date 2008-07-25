@@ -144,15 +144,15 @@ void icqcontacts::load() {
 
 //    empty();
 
-    if(d = opendir(conf.getdirname().c_str())) {
+    if(d = opendir(conf->getdirname().c_str())) {
 	while(ent = readdir(d)) {
 	    dname = ent->d_name;
-	    tuname = conf.getdirname() + dname;
+	    tuname = conf->getdirname() + dname;
 
 	    if(!stat(tuname.c_str(), &st))
 	    if(S_ISDIR(st.st_mode)) {
 		c = 0;
-		pname = conf.getprotocolbyletter(dname[0]);
+		pname = conf->getprotocolbyletter(dname[0]);
 
 		switch(pname) {
 		    case icq:
@@ -176,11 +176,11 @@ void icqcontacts::load() {
 
 			// Doesn't make sense, transport contacts (and JIDs generally) don't need to contain @
 			/*if(dname.substr(1).find("@") == -1) {
-			    string oldname = conf.getdirname() + dname;
+			    string oldname = conf->getdirname() + dname;
 			    string ndname = oldname + "@jabber.com";
 
 			    if(!access(ndname.c_str(), F_OK))
-				rename(ndname.c_str(), (conf.getdirname() + "_" + dname).c_str());
+				rename(ndname.c_str(), (conf->getdirname() + "_" + dname).c_str());
 
 			    rename(oldname.c_str(), ndname.c_str());
 			    dname = justfname(ndname);
@@ -263,7 +263,7 @@ int icqcontacts::clistsort(void *p1, void *p2) {
     s1 = sort_order->sortstatus(*c1);
     s2 = sort_order->sortstatus(*c2);
 
-    switch(conf.getgroupmode()) {
+    switch(conf->getgroupmode()) {
 	case icqconf::group1:
 	    makegroup = true;
 	    break;
@@ -363,7 +363,7 @@ void icqcontacts::updateEntry(const imcontact &ic, const string &groupname) {
     icqcontact *c = get(ic);
     if(!c) c = addnew(ic, false);
 
-    if(conf.getgroupmode() != icqconf::nogroups && !groupname.empty()) {
+    if(conf->getgroupmode() != icqconf::nogroups && !groupname.empty()) {
 	vector<icqgroup>::iterator ig = ::find(groups.begin(), groups.end(), groupname);
 
 	if(ig != groups.end()) gid = ig->getid();

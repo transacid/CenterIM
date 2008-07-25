@@ -123,11 +123,11 @@ gaduhook::~gaduhook() {
 }
 
 void gaduhook::init() {
-    manualstatus = conf.getstatus(proto);
+    manualstatus = conf->getstatus(proto);
 }
 
 void gaduhook::connect() {
-    icqconf::imaccount acc = conf.getourid(proto);
+    icqconf::imaccount acc = conf->getourid(proto);
     static struct gg_login_params lp;
     /* TODO investigate this, auto_ptr will free with delete, but allocated by malloc */
     static auto_ptr<char> pass(strdup(acc.password.c_str()));
@@ -147,7 +147,7 @@ void gaduhook::connect() {
 	lp.async = 1;
 
 	/* TODO investigate this, auto_ptr will free with delete, but allocated by malloc */
-	static auto_ptr<char> descr(strdup(rusconv("kw", conf.getawaymsg(proto)).c_str()));
+	static auto_ptr<char> descr(strdup(rusconv("kw", conf->getawaymsg(proto)).c_str()));
 
 	lp.status_descr = descr.get();
 	lp.status = imstatus2gg(manualstatus, descr.get());
@@ -366,7 +366,7 @@ void gaduhook::setautostatus(imstatus st) {
 
     } else {
 	if(getstatus() != offline) {
-	    gg_change_status_descr(sess, imstatus2gg(st, conf.getawaymsg(proto)), conf.getawaymsg(proto).c_str());
+	    gg_change_status_descr(sess, imstatus2gg(st, conf->getawaymsg(proto)), conf->getawaymsg(proto).c_str());
 	    logger.putourstatus(proto, getstatus(), st);
 	} else {
 	    connect();
@@ -522,7 +522,7 @@ void gaduhook::searchdone(void *p) {
 	    c->setbasicinfo(binfo);
 
 	    foundguys.push_back(c);
-	    searchdest->additem(conf.getcolor(cp_clist_gadu), c, line);
+	    searchdest->additem(conf->getcolor(cp_clist_gadu), c, line);
 	}
 
 	searchdest->redraw();

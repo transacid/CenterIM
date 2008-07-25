@@ -34,7 +34,7 @@
 #include "icqcontacts.h"
 #include "eventmanager.h"
 
-#define clr(c)     conf.getcolor(c)
+#define clr(c)     conf->getcolor(c)
 
 imcontroller imcontrol;
 
@@ -48,7 +48,7 @@ bool imcontroller::regdialog(protocolname pname) {
     bool finished, success;
     int n, i, b;
     string pcheck;
-    string prserv = conf.getsockshost() + ":" + i2str(conf.getsocksport());
+    string prserv = conf->getsockshost() + ":" + i2str(conf->getsocksport());
     dialogbox db;
 
     ruin = 0;
@@ -63,7 +63,7 @@ bool imcontroller::regdialog(protocolname pname) {
 
     db.getwindow()->set_titlef(clr(cp_dialog_highlight),
 	_(" Register on the %s network "),
-	conf.getprotocolname(pname).c_str());
+	conf->getprotocolname(pname).c_str());
 
     db.settree(new treeview(clr(cp_dialog_text), clr(cp_dialog_selected),
 	clr(cp_dialog_highlight), clr(cp_dialog_text)));
@@ -133,7 +133,7 @@ bool imcontroller::uinreg(icqconf::imaccount &account) {
     abstracthook &hook = gethook(account.pname);
 
     if(success = regdialog(account.pname)) {
-	unlink((conf.getdirname() + conf.getprotocolname(account.pname) + "-infoset").c_str());
+	unlink((conf->getdirname() + conf->getprotocolname(account.pname) + "-infoset").c_str());
 	face.progress.show(_(" Registration progress "));
 
 	for(fin = false; !fin; ) {
@@ -161,8 +161,8 @@ bool imcontroller::uinreg(icqconf::imaccount &account) {
 			account.uin = ruin;
 			account.password = rpasswd;
 
-			conf.checkdir();
-			ofstream f((conf.getdirname() + conf.getprotocolname(account.pname) + "-infoset").c_str());
+			conf->checkdir();
+			ofstream f((conf->getdirname() + conf->getprotocolname(account.pname) + "-infoset").c_str());
 			if(f.is_open()) {
 			    f << rnick << endl <<
 				remail << endl <<
@@ -194,7 +194,7 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
     int pos;
 
     if(success = regdialog(account.pname)) {
-	unlink((conf.getdirname() + "jabber-infoset").c_str());
+	unlink((conf->getdirname() + "jabber-infoset").c_str());
 	face.progress.show(_(" Registration progress "));
 
 	face.progress.log(_("Trying to register %s at %s ..."),
@@ -214,8 +214,8 @@ bool imcontroller::jabberregistration(icqconf::imaccount &account) {
 
 	    face.progress.log(_("The Jabber ID was successfully registered"));
 
-	    conf.checkdir();
-	    ofstream f((conf.getdirname() + "jabber-infoset").c_str());
+	    conf->checkdir();
+	    ofstream f((conf->getdirname() + "jabber-infoset").c_str());
 	    if(f.is_open()) {
 		f << rnick << endl <<
 		    remail << endl <<
@@ -248,7 +248,7 @@ void imcontroller::icqupdatedetails() {
 
     if(ihook.logged()) {
 	c->clear();
-	ihook.requestinfo(imcontact(conf.getourid(icq).uin, icq));
+	ihook.requestinfo(imcontact(conf->getourid(icq).uin, icq));
 
 	if(face.updatedetails()) {
 	    ihook.sendupdateuserinfo(*c);
@@ -264,7 +264,7 @@ void imcontroller::aimupdateprofile() {
     icqcontact *c = clist.get(contactroot);
 
     c->clear();
-    ahook.requestinfo(imcontact(conf.getourid(aim).nickname, aim));
+    ahook.requestinfo(imcontact(conf->getourid(aim).nickname, aim));
     if(face.updatedetails(0, aim)) ahook.sendupdateuserinfo(*c);
 #endif
 }
@@ -272,7 +272,7 @@ void imcontroller::aimupdateprofile() {
 void imcontroller::msnupdateprofile() {
 #ifdef BUILD_MSN
     if(mhook.logged()) {
-	mhook.requestinfo(imcontact(conf.getourid(msn).nickname, msn));
+	mhook.requestinfo(imcontact(conf->getourid(msn).nickname, msn));
 	string tmp = face.inputstr(_("new MSN friendly nick: "), clist.get(contactroot)->getnick());
 
 	if(face.getlastinputkey() != KEY_ESC && !tmp.empty()) {
@@ -292,7 +292,7 @@ void imcontroller::jabberupdateprofile() {
 	icqcontact *c;
 
 	(c = clist.get(contactroot))->clear();
-	jhook.requestinfo(imcontact(conf.getourid(jabber).nickname, jabber));
+	jhook.requestinfo(imcontact(conf->getourid(jabber).nickname, jabber));
 
 	if(face.updatedetails(0, jabber))
 	    jhook.sendupdateuserinfo(*c);
@@ -309,7 +309,7 @@ void imcontroller::gaduupdateprofile() {
 	icqcontact *c;
 
 	(c = clist.get(contactroot))->clear();
-	ghook.requestinfo(imcontact(conf.getourid(gadu).uin, jabber));
+	ghook.requestinfo(imcontact(conf->getourid(gadu).uin, jabber));
 
 	if(face.updatedetails(0, gadu))
 	    ghook.sendupdateuserinfo(*c);
@@ -332,7 +332,7 @@ void imcontroller::registration(icqconf::imaccount &account) {
 	    jabberregistration(account);
 	    break;
 	default:
-	    face.status("[" + conf.getprotocolname(account.pname) + "] " +
+	    face.status("[" + conf->getprotocolname(account.pname) + "] " +
 		_("registration is not supported"));
 	    break;
     }
@@ -351,7 +351,7 @@ void imcontroller::updateinfo(icqconf::imaccount &account) {
 // ----------------------------------------------------------------------------
 
 void imsearchparams::save(const string &prname) const {
-    string fname = conf.getconfigfname("search-profiles"), buf, orig;
+    string fname = conf->getconfigfname("search-profiles"), buf, orig;
 
     ifstream rf;
     ofstream of;
@@ -434,7 +434,7 @@ static string getfield(string &buf) {
 }
 
 bool imsearchparams::load(const string &prname) {
-    ifstream f(conf.getconfigfname("search-profiles").c_str());
+    ifstream f(conf->getconfigfname("search-profiles").c_str());
     string buf, flexparam;
     bool r = false;
 

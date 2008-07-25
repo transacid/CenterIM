@@ -53,11 +53,11 @@ aimhook::~aimhook() {
 }
 
 void aimhook::init() {
-    manualstatus = conf.getstatus(aim);
+    manualstatus = conf->getstatus(aim);
 }
 
 void aimhook::connect() {
-    icqconf::imaccount acc = conf.getourid(aim);
+    icqconf::imaccount acc = conf->getourid(aim);
     log(logConnecting);
 
     if(handle) {
@@ -225,7 +225,7 @@ void aimhook::setautostatus(imstatus st) {
 		    case notavail:
 		    case occupied:
 		    case outforlunch:
-			firetalk_set_away(handle, rusconv("kw", conf.getawaymsg(aim)).c_str(), 0);
+			firetalk_set_away(handle, rusconv("kw", conf->getawaymsg(aim)).c_str(), 0);
 			break;
 
 		    default:
@@ -248,7 +248,7 @@ imstatus aimhook::getstatus() const {
 }
 
 void aimhook::requestinfo(const imcontact &c) {
-    if(c != imcontact(conf.getourid(aim).nickname, aim)) {
+    if(c != imcontact(conf->getourid(aim).nickname, aim)) {
 	icqcontact *cc = clist.get(c);
 
 	if(cc)
@@ -263,7 +263,7 @@ void aimhook::requestinfo(const imcontact &c) {
 	*/
 
 	icqcontact *cc = clist.get(contactroot);
-	icqconf::imaccount acc = conf.getourid(aim);
+	icqconf::imaccount acc = conf->getourid(aim);
 
 	loadprofile();
 
@@ -274,7 +274,7 @@ void aimhook::requestinfo(const imcontact &c) {
 }
 
 void aimhook::sendupdateuserinfo(icqcontact &c) {
-    icqconf::imaccount acc = conf.getourid(aim);
+    icqconf::imaccount acc = conf->getourid(aim);
 
     if(!c.getreginfo().password.empty())
     if(c.getreginfo().password != acc.password)
@@ -287,7 +287,7 @@ void aimhook::sendupdateuserinfo(icqcontact &c) {
 }
 
 void aimhook::saveprofile() {
-    ofstream f((conf.getconfigfname("aim-profile")).c_str());
+    ofstream f((conf->getconfigfname("aim-profile")).c_str());
     if(f.is_open()) {
 	f << profile.info;
 	f.close();
@@ -298,7 +298,7 @@ void aimhook::loadprofile() {
     string buf, fname;
 
     profile = ourprofile();
-    fname = conf.getconfigfname("aim-profile");
+    fname = conf->getconfigfname("aim-profile");
 
     if(access(fname.c_str(), R_OK)) {
 	char sbuf[NOTIFBUF];
@@ -387,9 +387,9 @@ void aimhook::newpass(void *connection, void *cli, ...) {
 
     if(pass)
     if(strlen(pass)) {
-	icqconf::imaccount acc = conf.getourid(aim);
+	icqconf::imaccount acc = conf->getourid(aim);
 	acc.password = pass;
-	conf.setourid(acc);
+	conf->setourid(acc);
 	ahook.log(logPasswordChanged);
     }
 }
@@ -497,7 +497,7 @@ void aimhook::needpass(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(pass) {
-	icqconf::imaccount acc = conf.getourid(aim);
+	icqconf::imaccount acc = conf->getourid(aim);
 	strncpy(pass, acc.password.c_str(), size-1);
 	pass[size-1] = 0;
 	face.log(_("+ [aim] password sent"));

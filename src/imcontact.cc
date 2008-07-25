@@ -93,8 +93,8 @@ string imcontact::totext() const {
     string r;
 
     if(!uin && nickname.empty()) r = "...";
-    else if(uin) r = "[" + conf.getprotocolname(pname) + "] " + i2str(uin);
-    else r = "[" + conf.getprotocolname(pname) + "] " + nickname;
+    else if(uin) r = "[" + conf->getprotocolname(pname) + "] " + i2str(uin);
+    else r = "[" + conf->getprotocolname(pname) + "] " + nickname;
 
     return r;
 }

@@ -219,7 +219,7 @@ string jabberhook::jidnormalize(const string &jid) const {
     jidsplit(jid, user, host, rest);
 
     if(host.empty())
-	host = conf.getourid(proto).server;
+	host = conf->getourid(proto).server;
 
     if (user.empty())
 	user = host;
@@ -255,11 +255,11 @@ void jabberhook::init() {
     char rnd[9];
     snprintf(rnd, 9, "%X%X", rand()%0xFFFF, rand()%0xFFFF);
     uuid = rnd;
-    manualstatus = conf.getstatus(proto);
+    manualstatus = conf->getstatus(proto);
 }
 
 void jabberhook::connect() {
-    icqconf::imaccount acc = conf.getourid(proto);
+    icqconf::imaccount acc = conf->getourid(proto);
     string jid = getourjid();
 
 
@@ -285,7 +285,7 @@ void jabberhook::connect() {
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);
 
-    if(conf.getdebug())
+    if(conf->getdebug())
 	jab_logger(jc, &jlogger);
 
     if(jc->user) {
@@ -554,7 +554,7 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	    cname = ic.nickname.substr(1);
 
 	    if(!cname.empty()) {
-		cname += "/" + conf.getourid(proto).nickname;
+		cname += "/" + conf->getourid(proto).nickname;
 
 		char *ccname = strdup(cname.c_str());
 		char *ourjid = strdup(getourjid().c_str());
@@ -621,7 +621,7 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 	    cname = ic.nickname.substr(1);
 
 	    if(!cname.empty()) {
-		cname += "/" + conf.getourid(proto).nickname;
+		cname += "/" + conf->getourid(proto).nickname;
 		char *ccname = strdup(cname.c_str());
 		x = jutil_presnew(JPACKET__UNKNOWN, ccname, 0);
 		xmlnode_put_attrib(x, "type", "unavailable");
@@ -650,7 +650,7 @@ void jabberhook::setautostatus(imstatus st) {
 		case occupied:
 		case outforlunch:
 		case notavail:
-		    msg = conf.getawaymsg(proto);
+		    msg = conf->getawaymsg(proto);
 	    }
 
 	    setjabberstatus(ourstatus = st, msg);
@@ -741,7 +741,7 @@ const string &serv, string &err) {
     jab_packet_handler(jc, &packethandler);
     jab_state_handler(jc, &statehandler);
 
-    if(conf.getdebug())
+    if(conf->getdebug())
 	jab_logger(jc, &jlogger);
 
     jc->cw_state = CW_CONNECT_BLOCKING;
@@ -799,7 +799,7 @@ void jabberhook::setjabberstatus(imstatus st, string msg) {
 
     }
 
-    map<string, string> add = conf.getourid(proto).additional;
+    map<string, string> add = conf->getourid(proto).additional;
 
     if(!add["prio"].empty())
 	xmlnode_insert_cdata(xmlnode_insert_tag(x, "priority"),
@@ -1072,7 +1072,7 @@ void jabberhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	    vector<string>::const_iterator im = chatmembers[room].begin();
 	    while(im != chatmembers[room].end()) {
 		foundguys.push_back(c = new icqcontact(imcontact(*im, proto)));
-		searchdest->additem(conf.getcolor(cp_clist_jabber), c, (string) " " + *im);
+		searchdest->additem(conf->getcolor(cp_clist_jabber), c, (string) " " + *im);
 		++im;
 	    }
 	}
@@ -1150,7 +1150,7 @@ void jabberhook::gotsearchresults(xmlnode x) {
 	    line += " " + cb.fname + " " + cb.lname;
 	    if(!cb.email.empty()) line += " <" + cb.email + ">";
 
-	    searchdest->additem(conf.getcolor(cp_clist_jabber), c, line);
+	    searchdest->additem(conf->getcolor(cp_clist_jabber), c, line);
 	}
     }
 
@@ -1261,7 +1261,7 @@ void jabberhook::postlogin() {
     agents.begin()->params[agent::ptRegister].enabled = true;
 
     string buf;
-    ifstream f(conf.getconfigfname("jabber-infoset").c_str());
+    ifstream f(conf->getconfigfname("jabber-infoset").c_str());
 
     if(f.is_open()) {
 	icqcontact *c = clist.get(contactroot);
@@ -1281,7 +1281,7 @@ void jabberhook::postlogin() {
 	c->setreginfo(ri);
 
 	sendupdateuserinfo(*c);
-	unlink(conf.getconfigfname("jabber-infoset").c_str());
+	unlink(conf->getconfigfname("jabber-infoset").c_str());
     }
 }
 
@@ -1342,7 +1342,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 		icqcontact::basicinfo bi = c.getbasicinfo();
 		icqcontact::moreinfo mi = c.getmoreinfo();
 		icqcontact::workinfo wi = c.getworkinfo();
-		conf.setavatar(proto, bi.avatar); //saving avatar path to file
+		conf->setavatar(proto, bi.avatar); //saving avatar path to file
 
 		vcput(y, "DESC", c.getabout());
 		vcput(y, "EMAIL", bi.email);
@@ -1596,7 +1596,7 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 	}
 
 	if(isourid(ic.nickname)) {//fill configuration window 
-		map<string, string> add = conf.getourid(proto).additional;
+		map<string, string> add = conf->getourid(proto).additional;
 		if(!add["avatar"].empty()) {
 			bi.avatar = add["avatar"];
 		}
@@ -1723,7 +1723,7 @@ void jabberhook::senddiscoinfo(const imcontact &ic, xmlnode i) {
 	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
 	xmlnode_put_attrib(y, "var", NS_SIFILE );
 
-	if(conf.getourid(jhook.proto).additional["acknowledgements"] == "1") {
+	if(conf->getourid(jhook.proto).additional["acknowledgements"] == "1") {
 		y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "feature"); 
 		xmlnode_put_attrib(y, "var", NS_RECEIPTS);
 	}
@@ -1733,7 +1733,7 @@ void jabberhook::senddiscoinfo(const imcontact &ic, xmlnode i) {
 }
 
 bool jabberhook::isourid(const string &jid) {
-    icqconf::imaccount acc = conf.getourid(jhook.proto);
+    icqconf::imaccount acc = conf->getourid(jhook.proto);
     int pos;
 
     string ourjid = acc.nickname;
@@ -1744,7 +1744,7 @@ bool jabberhook::isourid(const string &jid) {
 }
 
 string jabberhook::getourjid() {
-    icqconf::imaccount acc = conf.getourid(jhook.proto);
+    icqconf::imaccount acc = conf->getourid(jhook.proto);
     string jid = acc.nickname;
     int pos;
 
@@ -1854,7 +1854,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    if(!body.empty())
 		jhook.gotmessage(type, from, body, enc);
 
-		if(jhook.getstatus() != invisible && conf.getourid(jhook.proto).additional["acknowledgements"] == "1") {
+		if(jhook.getstatus() != invisible && conf->getourid(jhook.proto).additional["acknowledgements"] == "1") {
 	    	if(x = xmlnode_get_tag(packet->x, "request"))
 			if(NSCHECK(x, NS_RECEIPTS)) {
 				const char *id = xmlnode_get_attrib(packet->x, "id");
@@ -2267,7 +2267,7 @@ bool jabberhook::get_base64_avatar(string &type, string &ava) {
 	 
 	icqcontact *ic = clist.get(contactroot);
 	icqcontact::basicinfo bi = ic->getbasicinfo();
-	string contact_dir = conf.getdirname();
+	string contact_dir = conf->getdirname();
 	 
 	if(!bi.avatar.empty())
 	{
@@ -2305,7 +2305,7 @@ bool jabberhook::get_my_avatar_hash(string &my_hash)
 {
 	icqcontact *ic = clist.get(contactroot);
 	icqcontact::basicinfo bi = ic->getbasicinfo();
-	string contact_dir = conf.getdirname();
+	string contact_dir = conf->getdirname();
 
 	if(!bi.avatar.empty())
 	{

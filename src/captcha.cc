@@ -58,7 +58,7 @@ string captcha::getcaptchaquestion(imcontact c) {
 
 	t = questions[(int)(questions.size() * (rand() / (RAND_MAX + 1.0)))];
 	ca.answers = &t->answers;
-	ca.expiry = conf.getcaptchatimeout() * 60 + time(NULL);
+	ca.expiry = conf->getcaptchatimeout() * 60 + time(NULL);
 	captchas[c] = ca;
 
 	return t->question;

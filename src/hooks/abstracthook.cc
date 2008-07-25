@@ -79,7 +79,7 @@ void abstracthook::setstatus(imstatus st) {
 
     for(protocolname pname = icq; pname != protocolname_size; pname++) {
 	if(&gethook(pname) == this) {
-	    conf.savestatus(pname, manualstatus);
+	    conf->savestatus(pname, manualstatus);
 	    break;
 	}
     }
@@ -238,15 +238,15 @@ string abstracthook::ruscrlfconv(const string &tdir, const string &text) {
 string abstracthook::rusconv(const string &tdir, const string &text) {
     string r;
 
-    if(!conf.getcpconvert(proto) && tdir.find("u") == -1)
+    if(!conf->getcpconvert(proto) && tdir.find("u") == -1)
 	return text;
 
 #ifdef HAVE_ICONV
-    if(tdir == "kw") r = siconv(text, conf.getconvertto(proto), conf.getconvertfrom(proto)); else
-    if(tdir == "wk") r = siconv(text, conf.getconvertfrom(proto), conf.getconvertto(proto)); else
-    if(tdir == "ku") r = siconv(text, conf.getconvertto(proto), "utf-8"); else
-    if(tdir == "uk") r = siconv(text, "utf-8", conf.getconvertto(proto)); else
-    if(tdir == "ck") r = siconv(text, "UCS-2BE", conf.getconvertto(proto)); else
+    if(tdir == "kw") r = siconv(text, conf->getconvertto(proto), conf->getconvertfrom(proto)); else
+    if(tdir == "wk") r = siconv(text, conf->getconvertfrom(proto), conf->getconvertto(proto)); else
+    if(tdir == "ku") r = siconv(text, conf->getconvertto(proto), "utf-8"); else
+    if(tdir == "uk") r = siconv(text, "utf-8", conf->getconvertto(proto)); else
+    if(tdir == "ck") r = siconv(text, "UCS-2BE", conf->getconvertto(proto)); else
 #endif
 	r = text;
 
@@ -364,8 +364,8 @@ void abstracthook::log(logevent ev, ...) {
     vsnprintf(buf, NOTIFBUF, lst[ev].c_str(), ap);
     va_end(ap);
 
-    face.log((string) "+ [" + conf.getprotocolname(proto)  + "] " + buf);
-    face.xtermtitle((string) "[" + conf.getprotocolname(proto)  + "] " + buf);
+    face.log((string) "+ [" + conf->getprotocolname(proto)  + "] " + buf);
+    face.xtermtitle((string) "[" + conf->getprotocolname(proto)  + "] " + buf);
 }
 
 const unsigned short abstracthook::Country_table_size = 243;

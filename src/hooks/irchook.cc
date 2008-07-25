@@ -68,7 +68,7 @@ irchook::~irchook() {
 void irchook::init() {
     int i;
 
-    manualstatus = conf.getstatus(irc);
+    manualstatus = conf->getstatus(irc);
 
     for(i = 0; i < clist.count; i++) {
 	icqcontact *c = (icqcontact *) clist.at(i);
@@ -125,12 +125,12 @@ void irchook::init() {
     firetalk_subcode_register_reply_callback(handle, "PING", &subreply);
     firetalk_subcode_register_reply_callback(handle, "VERSION", &subreply);
 
-    if(conf.getdebug())
+    if(conf->getdebug())
 	firetalk_register_callback(handle, FC_LOG, &fclog);
 }
 
 void irchook::connect() {
-    icqconf::imaccount acc = conf.getourid(irc);
+    icqconf::imaccount acc = conf->getourid(irc);
     log(logConnecting);
 
     firetalk_register_callback(handle, FC_DISCONNECT, 0);
@@ -377,7 +377,7 @@ void irchook::setautostatus(imstatus st) {
 		    case notavail:
 		    case outforlunch:
 		    case occupied:
-			firetalk_set_away(handle, conf.getawaymsg(irc).c_str(), 0);
+			firetalk_set_away(handle, conf->getawaymsg(irc).c_str(), 0);
 			break;
 
 		    default:
@@ -557,7 +557,7 @@ void irchook::processnicks() {
 	c = new icqcontact(imcontact(dnick, irc));
 	c->setdispnick(dnick);
 
-	searchdest->additem(conf.getcolor(cp_clist_irc), c, (string) " " + *in);
+	searchdest->additem(conf->getcolor(cp_clist_irc), c, (string) " " + *in);
 	foundguys.push_back(c);
     }
 
@@ -825,9 +825,9 @@ void irchook::newnick(void *conn, void *cli, ...) {
 
     if(nick)
     if(strlen(nick)) {
-	icqconf::imaccount acc = conf.getourid(irc);
+	icqconf::imaccount acc = conf->getourid(irc);
 	acc.nickname = nick;
-	conf.setourid(acc);
+	conf->setourid(acc);
 
 	face.log(_("+ [irc] nickname was changed successfully"));
     }
@@ -917,7 +917,7 @@ void irchook::getmessage(void *conn, void *cli, ...) {
 	/*if(!irhook.sentpass)  // NickServ identify should be handled by firetalk and needpass callback
 	if(up(sender) == "NICKSERV") {
 	    firetalk_im_send_message(irhook.handle, "NickServ",
-		((string) "identify " + conf.getourid(irc).additional["nickpass"]).c_str(), 0);
+		((string) "identify " + conf->getourid(irc).additional["nickpass"]).c_str(), 0);
 
 	    irhook.sentpass = true;
 	}*/
@@ -1280,7 +1280,7 @@ void irchook::needpass(void *conn, void *cli, ...) {
     va_end(ap);
 
     if(pass) {
-	icqconf::imaccount acc = conf.getourid(irc);
+	icqconf::imaccount acc = conf->getourid(irc);
 
 	if (size == 129)  // signon password
 	{
@@ -1431,7 +1431,7 @@ void irchook::chatuserjoined(void *conn, void *cli, ...) {
     char *email = va_arg(ap, char *);
     va_end(ap);
 
-    if(conf.getourid(irc).nickname != who) {
+    if(conf->getourid(irc).nickname != who) {
 	string uname = who;
 
 	if(email)
@@ -1453,7 +1453,7 @@ void irchook::chatuserleft(void *conn, void *cli, ...) {
     char *reason = va_arg(ap, char *);
     va_end(ap);
 
-    if(conf.getourid(irc).nickname != who) {
+    if(conf->getourid(irc).nickname != who) {
 	string text;
 	string text2;
 	char buf[NOTIFBUF];
@@ -1482,7 +1482,7 @@ void irchook::chatuserkicked(void *conn, void *cli, ...) {
     char *reason = va_arg(ap, char *);
     va_end(ap);
 
-    if(conf.getourid(irc).nickname != who) {
+    if(conf->getourid(irc).nickname != who) {
 	string text;
 	char buf[NOTIFBUF];
 

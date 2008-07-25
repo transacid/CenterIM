@@ -101,7 +101,7 @@ msnhook::~msnhook() {
 }
 
 void msnhook::init() {
-    manualstatus = conf.getstatus(msn);
+    manualstatus = conf->getstatus(msn);
 
     convstat[MSN::STATUS_AVAILABLE] = available;
     convstat[MSN::STATUS_INVISIBLE] = invisible;
@@ -114,7 +114,7 @@ void msnhook::init() {
 }
 
 void msnhook::connect() {
-    icqconf::imaccount account = conf.getourid(msn);
+    icqconf::imaccount account = conf->getourid(msn);
 
     log(logConnecting);
 
@@ -407,7 +407,7 @@ void msnhook::requestinfo(const imcontact &ic) {
     b.email = nicknormalize(ic.nickname);
     m.homepage = "http://members.msn.com/" + b.email;
 
-    if(ic.nickname == conf.getourid(msn).nickname)
+    if(ic.nickname == conf->getourid(msn).nickname)
 	c->setnick(friendlynicks[ic.nickname]);
 
     c->setmoreinfo(m);
@@ -422,7 +422,7 @@ void msnhook::lookup(const imsearchparams &params, verticalmenu &dest) {
 	    icqcontact *c = new icqcontact(imcontact(nicktodisp(i->nick), msn));
 	    c->setnick(i->friendly);
 
-	    dest.additem(conf.getcolor(cp_clist_msn), c, (string) " " + i->nick);
+	    dest.additem(conf->getcolor(cp_clist_msn), c, (string) " " + i->nick);
 	    ++i;
 	}
 	face.findready();
@@ -533,7 +533,7 @@ void msnhook::updatecontact(icqcontact *c) {
     string gname, nick = nicknormalize(c->getdesc().nickname);
     vector<msnbuddy>::const_iterator ib = find(slst["FL"].begin(), slst["FL"].end(), nick);
 
-    if(ib != slst["FL"].end() && logged() && conf.getgroupmode() != icqconf::nogroups)
+    if(ib != slst["FL"].end() && logged() && conf->getgroupmode() != icqconf::nogroups)
     if(mhook.findgroup(c->getdesc(), gname) != ib->gid) {
 	try {
 	    conn.removeFromList("FL", nick.c_str());
@@ -600,7 +600,7 @@ void msnhook::sendmsn(MSN::SwitchboardServerConnection *conn, const qevent *ctx)
 // ----------------------------------------------------------------------------
 
 static void log(const string &s) {
-    if(conf.getdebug())
+    if(conf->getdebug())
 	face.log(s);
 }
 
@@ -629,7 +629,7 @@ void msncallbacks::unregisterSocket(int s) {
 void msncallbacks::gotFriendlyName(MSN::Connection * conn, string friendlyname) {
     ::log("msncallbacks::gotFriendlyName");
     if(!friendlyname.empty())
-	mhook.friendlynicks[conf.getourid(msn).nickname] = friendlyname;
+	mhook.friendlynicks[conf->getourid(msn).nickname] = friendlyname;
 }
 
 void msncallbacks::gotBuddyListInfo(MSN::NotificationServerConnection * conn, MSN::ListSyncInfo * data) {

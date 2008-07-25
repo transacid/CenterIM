@@ -33,7 +33,7 @@ icqlist::~icqlist() {
 }
 
 string icqlist::getfname() const {
-    return conf.getconfigfname("modelist");
+    return conf->getconfigfname("modelist");
 }
 	
 void icqlist::load() {
@@ -54,7 +54,7 @@ void icqlist::load() {
 		nick = unmime(getword(buf));
 
 		if(!nick.empty() && !buf.empty()) {
-		    pname = conf.getprotocolbyletter(buf[0]);
+		    pname = conf->getprotocolbyletter(buf[0]);
 
 		    switch(pname) {
 			case icq:
@@ -77,14 +77,14 @@ void icqlist::save() {
     vector<modelistitem>::iterator i;
     ofstream f;
 
-    if(conf.enoughdiskspace()) {
+    if(conf->enoughdiskspace()) {
 	f.open(getfname().c_str());
 
 	if(f.is_open()) {
 	    for(i = begin(); i != end(); ++i) {
 		f << (int) i->getstatus() << "\t";
 		f << mime(i->getnick()) << "\t";
-		f << conf.getprotocolprefix(i->getdesc().pname);
+		f << conf->getprotocolprefix(i->getdesc().pname);
 
 		if(i->getdesc().uin)
 		    f << i->getdesc().uin;
@@ -106,7 +106,7 @@ void icqlist::fillmenu(verticalmenu *m, contactstatus ncs) {
 
     for(i = begin(); i != end(); ++i) {
 	if(i->getstatus() == ncs) {
-	    m->additem(conf.getprotcolor(i->getdesc().pname), 0, " " + i->getnick());
+	    m->additem(conf->getprotcolor(i->getdesc().pname), 0, " " + i->getnick());
 	    menucontents.push_back(*i);
 	}
     }

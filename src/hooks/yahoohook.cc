@@ -88,7 +88,7 @@ yahoohook::~yahoohook() {
 }
 
 void yahoohook::init() {
-    manualstatus = conf.getstatus(proto);
+    manualstatus = conf->getstatus(proto);
 
     static struct yahoo_callbacks c;
 
@@ -137,7 +137,7 @@ void yahoohook::init() {
 }
 
 void yahoohook::connect() {
-    icqconf::imaccount acc = conf.getourid(proto);
+    icqconf::imaccount acc = conf->getourid(proto);
     int r;
 
     log(logConnecting);
@@ -488,7 +488,7 @@ void yahoohook::setautostatus(imstatus st) {
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], 0, 0);
 
 	    } else {
-		char *msg = strdup(rusconv("ku", conf.getawaymsg(proto)).c_str());
+		char *msg = strdup(rusconv("ku", conf->getawaymsg(proto)).c_str());
 		yahoo_set_away(cid, (yahoo_status) stat2int[st], msg, 1);
 		free (msg);
 
@@ -626,7 +626,7 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 
 	while(i != confmembers[room].end()) {
 	    if(c = clist.get(imcontact(*i, proto)))
-		searchdest->additem(conf.getcolor(cp_clist_yahoo),
+		searchdest->additem(conf->getcolor(cp_clist_yahoo),
 		    c, (string) " " + *i);
 
 	    ++i;
@@ -696,7 +696,7 @@ void yahoohook::checkinlist(imcontact ic) {
 }
 
 void yahoohook::updatecontact(icqcontact *c) {
-    if(logged() && conf.getgroupmode() != icqconf::nogroups) {
+    if(logged() && conf->getgroupmode() != icqconf::nogroups) {
 	bool found = false;
 	const YList *buddies = yahoo_get_buddylist(cid);
 	string newgroupname = groups.getname(c->getgroupid());
@@ -855,7 +855,7 @@ void yahoohook::got_search_result(int id, int found, int start, int total, YList
 	c->setmoreinfo(minfo);
 
 	yhook.foundguys.push_back(c);
-	yhook.searchdest->additem(conf.getcolor(cp_clist_yahoo), c, line);
+	yhook.searchdest->additem(conf->getcolor(cp_clist_yahoo), c, line);
     }
 
     yhook.searchdest->redraw();
@@ -870,7 +870,7 @@ void yahoohook::got_search_result(int id, int found, int start, int total, YList
 }
 
 void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList *members) {
-    icqconf::imaccount acc = conf.getourid(yahoo);
+    icqconf::imaccount acc = conf->getourid(yahoo);
     string confname = (string) "#" + room, inviter, text;
     vector<string>::iterator ic;
     char buf[NOTIFBUF];
@@ -1199,7 +1199,7 @@ void yahoohook::auth_response(int id, const char *who, char granted, const char 
 }
 
 int yahoohook::ylog(char *fmt, ...) {
-    if(conf.getdebug()) {
+    if(conf->getdebug()) {
 	char buf[NOTIFBUF];
 	va_list ap;
 

@@ -66,18 +66,18 @@ void centerim::exec() {
     kinterface();
     raw();
 
-    conf.load();
+    conf->load();
     face.init();
 
-    if(regmode = !conf.getouridcount()) {
+    if(regmode = !conf->getouridcount()) {
 	bool rus = false;
 	char *p = setlocale(LC_MESSAGES, NULL);
 
 	if(p)
 	if(rus = ((string(p)).substr(0, 2) == "ru")) {
-	    conf.setcharsets("cp1251", "koi8-r");
+	    conf->setcharsets("cp1251", "koi8-r");
 	    for(protocolname pname = icq; pname != protocolname_size; pname++)
-		conf.setcpconvert(pname, true);
+		conf->setcpconvert(pname, true);
 	}
 
 	if(updateconf()) {
@@ -87,13 +87,13 @@ void centerim::exec() {
 	regmode = false;
     }
 
-    if(conf.getouridcount()) {
-	conf.checkdir();
-	conf.load();
+    if(conf->getouridcount()) {
+	conf->checkdir();
+	conf->load();
 	groups.load();
 	clist.load();
 	lst.load();
-	conf.loadsounds();
+	conf->loadsounds();
 
 	face.done();
 	face.init();
@@ -112,7 +112,7 @@ void centerim::exec() {
     }
 
     face.done();
-    conf.save();
+    conf->save();
 }
 
 bool centerim::checkpasswords() {
@@ -124,19 +124,19 @@ bool centerim::checkpasswords() {
 
     for(pname = icq; pname != protocolname_size; pname++) {
 	if(gethook(pname).enabled() && !gethook(pname).getCapabs().count(hookcapab::optionalpassword)) {
-	    if(!(ia = conf.getourid(pname)).empty()) {
+	    if(!(ia = conf->getourid(pname)).empty()) {
 		if(ia.password.empty()) {
-		    conf.setsavepwd(false);
+		    conf->setsavepwd(false);
 
 		    ia.password = face.inputstr("[" +
-			conf.getprotocolname(pname) + "] " +
+			conf->getprotocolname(pname) + "] " +
 			_("password: "), "", '*');
 
 		    if(ia.password.empty()) {
 			r = false;
 			break;
 		    } else if(face.getlastinputkey() != KEY_ESC) {
-			conf.setourid(ia);
+			conf->setourid(ia);
 		    }
 		}
 	    }
@@ -200,7 +200,7 @@ void centerim::mainloop() {
 		face.transfermonitor();
 		break;
 	    case ACT_HIDEOFFLINE:
-		conf.sethideoffline(!conf.gethideoffline());
+		conf->sethideoffline(!conf->gethideoffline());
 		face.update();
 		break;
 	    case ACT_DETAILS:
@@ -389,7 +389,7 @@ void centerim::mainloop() {
 
 	    case ACT_MSG:
 	    case 0:
-		if(conf.getchatmode(c->getdesc().pname)) {
+		if(conf->getchatmode(c->getdesc().pname)) {
 		    while(face.chat(c->getdesc()) == true);
 
 		} else {
@@ -418,7 +418,7 @@ void centerim::changestatus() {
     vector<protocolname>::const_iterator ipname;
 
     if(face.changestatus(pnames, st)) {
-	if(!conf.enoughdiskspace()) {
+	if(!conf->enoughdiskspace()) {
 	    face.log(_("! cannot connect, free disk space is less than 10k"));
 
 	} else {
@@ -428,11 +428,11 @@ void centerim::changestatus() {
 	    bool same = true;
 
 	    for(ipname = pnames.begin(); ipname != pnames.end(); ++ipname) {
-		if(conf.getaskaway())
+		if(conf->getaskaway())
 		    setaway = setaway || gethook(*ipname).getCapabs().count(hookcapab::setaway);
 
-		if(!conf.getourid(*ipname).empty()) {
-		    tmp = conf.getawaymsg(*ipname);
+		if(!conf->getourid(*ipname).empty()) {
+		    tmp = conf->getawaymsg(*ipname);
 		    if(!tmp.empty()) {
 			if(awaymsg.empty()) awaymsg = tmp; else
 			    same = same && tmp == awaymsg;
@@ -451,9 +451,9 @@ void centerim::changestatus() {
 		case occupied:
 		case dontdisturb:
 		    if(pnames.size() == 1)
-			prompt = conf.getprotocolname(pnames.front()) + ": ";
+			prompt = conf->getprotocolname(pnames.front()) + ": ";
 		    prompt += _("away message");
-		    proceed = setaway = face.edit(tmp = conf.getawaymsg(pnames.front()), prompt);
+		    proceed = setaway = face.edit(tmp = conf->getawaymsg(pnames.front()), prompt);
 		    break;
 		default:
 		    setaway = false;
@@ -464,14 +464,14 @@ void centerim::changestatus() {
 	    for(ipname = pnames.begin(); ipname != pnames.end(); ++ipname) {
 		if(!gethook(*ipname).enabled()) {
 		    face.log(_("! support for %s was disabled at build time"),
-			conf.getprotocolname(*ipname).c_str());
+			conf->getprotocolname(*ipname).c_str());
 
 		} else {
 		    abstracthook &hook = gethook(*ipname);
 
 		    if(setaway && !tmp.empty())
 			if(hook.getCapabs().count(hookcapab::setaway))
-			    conf.setawaymsg(*ipname, tmp);
+			    conf->setawaymsg(*ipname, tmp);
 
 		    hook.setstatus(st);
 		    reconnect[*ipname].timer = timer_current;
@@ -609,16 +609,16 @@ bool centerim::updateconf() {
 
     if(r = face.updateconf(snd, clr)) {
 	if(snd != icqconf::rsdontchange) {
-	    conf.setregsound(snd);
-	    unlink(conf.getconfigfname("sounds").c_str());
-	    conf.loadsounds();
+	    conf->setregsound(snd);
+	    unlink(conf->getconfigfname("sounds").c_str());
+	    conf->loadsounds();
 	    configstats.erase("sound");
 	}
 
 	if(clr != icqconf::rcdontchange) {
-	    conf.setregcolor(clr);
-	    unlink(conf.getconfigfname("colorscheme").c_str());
-	    conf.loadcolors();
+	    conf->setregcolor(clr);
+	    unlink(conf->getconfigfname("colorscheme").c_str());
+	    conf->loadcolors();
 	    face.done();
 	    face.init();
 	    face.draw();
@@ -646,9 +646,9 @@ void centerim::checkmail() {
     static int oldcount = -1;
 
     bool lts, lo;
-    conf.getlogoptions(lts, lo);
+    conf->getlogoptions(lts, lo);
 
-    if(conf.getmailcheck())
+    if(conf->getmailcheck())
     if(!stat(fname.c_str(), &st)) 
     if(st.st_size != fsize && (st.st_mode & S_IFREG)) {
 
@@ -762,29 +762,29 @@ void centerim::checkconfigs() {
     const char *p;
 
     for(int i = 0; p = configs[i]; i++) {
-	if(stat(conf.getconfigfname(p).c_str(), &st))
+	if(stat(conf->getconfigfname(p).c_str(), &st))
 	    st.st_mtime = 0;
 
 	if(configstats.find(p) != configstats.end()) {
 	    if(st.st_mtime != configstats[p]) {
 		switch(i) {
 		    case 0:
-			conf.loadsounds();
+			conf->loadsounds();
 			break;
 		    case 1:
 			endwin();
 			initscr();
-			conf.loadcolors();
+			conf->loadcolors();
 			face.redraw();
 			break;
 		    case 2:
-			conf.loadactions();
+			conf->loadactions();
 			break;
 		    case 3:
 			external.load();
 			break;
 		    case 4:
-			conf.loadkeys();
+			conf->loadkeys();
 			break;
 		}
 
@@ -803,7 +803,7 @@ void centerim::handlesignal(int signum) {
 	case SIGCHLD:
 	    while((pid = wait3(&status, WNOHANG, 0)) > 0) {
 		// In case the child was a nowait external action
-		string sname = conf.getdirname() + "centerim-external-tmp." + i2str(pid);
+		string sname = conf->getdirname() + "centerim-external-tmp." + i2str(pid);
 		unlink(sname.c_str());
 	    }
 	    break;
@@ -823,7 +823,7 @@ void centerim::handlesignal(int signum) {
 	    lst.save();
 	    clist.save();
 	    groups.save();
-	    conf.save();
+	    conf->save();
 	    face.done();
 
 	    signal(SIGTERM, 0);
@@ -833,7 +833,7 @@ void centerim::handlesignal(int signum) {
 }
 
 void centerim::checkparallel() {
-    string pidfname = conf.getdirname() + "pid", fname;
+    string pidfname = conf->getdirname() + "pid", fname;
     int pid = 0;
     //Not used - char exename[512];
 
@@ -866,12 +866,12 @@ void centerim::rereadstatus() {
     icqconf::imaccount ia;
 
     for(pname = icq; pname != protocolname_size; pname++) {
-	ia = conf.getourid(pname);
+	ia = conf->getourid(pname);
 
 	if(!ia.empty()) {
 	    char cst;
 	    imstatus st;
-	    string fname = conf.getconfigfname((string) "status-" + conf.getprotocolname(pname));
+	    string fname = conf->getconfigfname((string) "status-" + conf->getprotocolname(pname));
 	    ifstream f(fname.c_str());
 
 	    if(f.is_open()) {
@@ -925,7 +925,7 @@ bool centerim::sendevent(const imevent &ev, icqface::eventviewresult r) {
 		sendev = x;
 	    }
 
-	    if(conf.getquote()) text = quotemsg(text);
+	    if(conf->getquote()) text = quotemsg(text);
 		else text = "";
 
 	} else if(r == icqface::forward) {
@@ -941,7 +941,7 @@ bool centerim::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	text = m->gettext();
 
 	if(r == icqface::reply) {
-	    if(conf.getquote()) text = quotemsg(text);
+	    if(conf->getquote()) text = quotemsg(text);
 		else text = "";
 
 	} else if(r == icqface::forward) {
@@ -1015,7 +1015,7 @@ bool centerim::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	text = m->getmessage();
 
 	if(r == icqface::reply) {
-	    if(conf.getquote()) {
+	    if(conf->getquote()) {
 		text = quotemsg(text);
 	    } else {
 		text = "";
@@ -1050,7 +1050,7 @@ bool centerim::sendevent(const imevent &ev, icqface::eventviewresult r) {
 	text = m->gettext();
 
 	if(r == icqface::reply) {
-	    if(conf.getquote()) text = quotemsg(text);
+	    if(conf->getquote()) text = quotemsg(text);
 		else text = "";
 
 	} else if(r == icqface::forward) {
@@ -1148,7 +1148,7 @@ icqface::eventviewresult centerim::readevent(const imevent &ev, bool &enough, bo
 
 	case icqface::open:
 	    if(const imurl *m = static_cast<const imurl *>(&ev))
-		conf.execaction("openurl", m->geturl());
+		conf->execaction("openurl", m->geturl());
 	    break;
 
 	case icqface::accept:
@@ -1343,7 +1343,7 @@ icqcontact *centerim::addcontact(const imcontact &ic, bool reqauth) {
     if(!face.eventedit(auth))
 	return 0;
 
-    if(conf.getgroupmode() != icqconf::nogroups) {
+    if(conf->getgroupmode() != icqconf::nogroups) {
 	groupid = face.selectgroup(_("Select a group to add the user to"));
 	if(!groupid) return 0;
     }
@@ -1465,7 +1465,7 @@ void centerim::setauto(imstatus astatus) {
 	    default:
 		if(autoset && (astatus == available)) {
 		    face.log(_("+ [%s] status restored"),
-			conf.getprotocolname(pname).c_str());
+			conf->getprotocolname(pname).c_str());
 
 		    hook.restorestatus();
 		    nautoset = false;
@@ -1480,7 +1480,7 @@ void centerim::setauto(imstatus astatus) {
 			nautoset = changed = true;
 
 			face.log(_("+ [%s] automatically set %s"),
-			    conf.getprotocolname(pname).c_str(),
+			    conf->getprotocolname(pname).c_str(),
 			    astatus == away ? _("away") : _("n/a"));
 		    }
 		}
@@ -1510,7 +1510,7 @@ void centerim::exectimers() {
     */
 
     for(pname = icq; pname != protocolname_size; pname++) {
-	if(!conf.getourid(pname).empty() || (pname == rss)) {
+	if(!conf->getourid(pname).empty() || (pname == rss)) {
 	    abstracthook &hook = gethook(pname);
 
 	    /*
@@ -1538,7 +1538,7 @@ void centerim::exectimers() {
 			hook.disconnect();
 
 		    } else if(hook.getmanualstatus() != offline) {
-			if(conf.enoughdiskspace() && !manager.isopen()) {
+			if(conf->enoughdiskspace() && !manager.isopen()) {
 			    hook.connect();
 			}
 
@@ -1556,9 +1556,9 @@ void centerim::exectimers() {
     * How let's find out how are the auto-away mode is doing.
     *
     */
-	conf.getauto(paway, pna);
+	conf->getauto(paway, pna);
 	
-	if(fonline && (paway || pna || conf.getscreenna())) {
+	if(fonline && (paway || pna || conf->getscreenna())) {
 		imstatus toset = offline;
 		static map<imstatus, bool> autostat;
 
@@ -1585,7 +1585,7 @@ void centerim::exectimers() {
 		/*
 		 * Check if we are still attached to our screen session
 		 */
-		if (conf.getscreenna()) {
+		if (conf->getscreenna()) {
 			// this section is based on the patch of danne@wiberg.nu
 			// See: http://www.wiberg.nu/software/cicq-patches/centericq-4.20.0-screenaway.patch
 
@@ -1601,13 +1601,13 @@ void centerim::exectimers() {
 				 * Construct socket path, e.g.:
 				 * /var/run/screen/S-oliver/1234.centerim
 				 */
-				screen_socket_path = conf.getscreensocketpath().c_str();
+				screen_socket_path = conf->getscreensocketpath().c_str();
 				screen_user=getenv("USER");
 				screen_socket_bytes = snprintf(screen_socket, sizeof(screen_socket), "%s/S-%s/%s", screen_socket_path, screen_user, screen_socket_name);
 
 				/* Check if the socket path really exists */
-				if(!conf.getscreensocketpath().empty()
-					&& !access(conf.getscreensocketpath().c_str(), X_OK)
+				if(!conf->getscreensocketpath().empty()
+					&& !access(conf->getscreensocketpath().c_str(), X_OK)
                     && screen_socket_bytes > 0
                     && screen_socket_bytes < sizeof(screen_socket)) {
 					screen_attached = access(screen_socket, X_OK);
@@ -1653,9 +1653,9 @@ void centerim::exectimers() {
 	*/
 
 	checkconfigs();
-	conf.checkdiskspace();
+	conf->checkdiskspace();
 
-	if(!conf.enoughdiskspace()) {
+	if(!conf->enoughdiskspace()) {
 	    if(fonline) {
 		for(pname = icq; pname != protocolname_size; pname++)
 		    gethook(pname).disconnect();
@@ -1708,7 +1708,7 @@ void centerim::createconference(const imcontact &ic) {
     if(face.multicontacts(_("Invite to conference.."), ps))
     if(!face.muins.empty()) {
 	do {
-	    confid.nickname = (string) "#" + conf.getourid(ic.pname).nickname + "-" + i2str(getpid() + ++apid);
+	    confid.nickname = (string) "#" + conf->getourid(ic.pname).nickname + "-" + i2str(getpid() + ++apid);
 	} while(clist.get(confid));
 
 	icqcontact *nc = clist.addnew(confid);

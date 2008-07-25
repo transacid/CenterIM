@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the centerim package.
 # Piotr KUCHARSKI <chopin@sgh.waw.pl>, 2003-2004.
 #
-#: src/hooks/jabberhook.cc:1706
+#: src/hooks/jabberhook.cc:1976
 msgid ""
 msgstr ""
 "Project-Id-Version: centerim 4.13.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2008-04-24 11:47+0100\n"
+"POT-Creation-Date: 2008-07-25 10:01-0400\n"
 "PO-Revision-Date: 2004-12-29 20:48+0100\n"
 "Last-Translator: Piotr KUCHARSKI <chopin@sgh.waw.pl>\n"
 "Language-Team: Polish\n"
@@ -58,7 +58,7 @@ msgstr "+ nie można pobrać powodów nieobecności, jeśli nie jesteś podłąc
 msgid "! cannot connect, free disk space is less than 10k"
 msgstr "! nie można się połączyć, mniej niż 10kB wolnego na dysku"
 
-#: src/centerim.cc:455 src/accountmanager.cc:237
+#: src/centerim.cc:455 src/accountmanager.cc:242
 msgid "away message"
 msgstr "powód nieobecności"
 
@@ -349,58 +349,58 @@ msgstr "+ [yahoo] błąd: %s"
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] bezpośrednie połączenie nie powiodło się"
 
-#: src/hooks/jabberhook.cc:237
+#: src/hooks/jabberhook.cc:352
 msgid "+ [jab] unable to connect to the server"
 msgstr "+ [jab] nie można podłączyć się do serwera"
 
-#: src/hooks/jabberhook.cc:477
+#: src/hooks/jabberhook.cc:592
 #, c-format
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] wyrejestrowywanie z agenta %s"
 
-#: src/hooks/jabberhook.cc:581 src/hooks/icqhook.cc:1249
-#: src/hooks/gaduhook.cc:402 src/hooks/irchook.cc:629
+#: src/hooks/jabberhook.cc:698 src/hooks/icqhook.cc:1249
+#: src/hooks/gaduhook.cc:402 src/hooks/irchook.cc:632
 msgid "Away message:"
 msgstr "Powód nieobecności:"
 
-#: src/hooks/jabberhook.cc:583
+#: src/hooks/jabberhook.cc:700
 #, c-format
 msgid "+ [jab] no away message from %s, %s"
 msgstr "+ [jab] brak powodu nieobecności od %s, %s"
 
-#: src/hooks/jabberhook.cc:619
+#: src/hooks/jabberhook.cc:736
 msgid "Wrong nickname given, cannot register"
 msgstr "Zła ksywka, nie można zarejestrować"
 
-#: src/hooks/jabberhook.cc:636
+#: src/hooks/jabberhook.cc:753
 msgid "Unable to connect"
 msgstr "Nie można się połączyć"
 
-#: src/hooks/jabberhook.cc:1470 src/hooks/irchook.cc:1310
+#: src/hooks/jabberhook.cc:1683 src/hooks/irchook.cc:1328
 #, c-format
 msgid "The remote is using %s"
 msgstr "Druga strona używa %s"
 
-#: src/hooks/jabberhook.cc:1685
+#: src/hooks/jabberhook.cc:1955
 msgid "Default Jabber conference server"
 msgstr "Domyślny serwer konferencyjny Jabbera"
 
-#: src/hooks/jabberhook.cc:1753 src/hooks/jabberhook.cc:1781
+#: src/hooks/jabberhook.cc:2073 src/hooks/jabberhook.cc:2101
 #, c-format
 msgid "+ [jab] error %d"
 msgstr "+ [jab] błąd %d"
 
-#: src/hooks/jabberhook.cc:1754 src/hooks/jabberhook.cc:1782
+#: src/hooks/jabberhook.cc:2074 src/hooks/jabberhook.cc:2102
 #, c-format
 msgid "+ [jab] error %d: %s"
 msgstr "+ [jab] błąd %d: %s"
 
-#: src/hooks/jabberhook.cc:1851
+#: src/hooks/jabberhook.cc:2219
 msgid "The user wants to subscribe to your network presence updates"
 msgstr ""
 "Użytkownik chce się zapisać do otrzymywania Twojej widoczności sieciowej"
 
-#: src/hooks/jabberhook.cc:1866
+#: src/hooks/jabberhook.cc:2234
 msgid ""
 "The user has removed you from his contact list (unsubscribed you, using the "
 "Jabber language)"
@@ -527,89 +527,94 @@ msgstr "+ [gg] brak powodu nieobecności od %s, %s"
 msgid "+ [irc] unable to connect to the server"
 msgstr "+ [irc] brak połączenia z serwerem"
 
-#: src/hooks/irchook.cc:809
+#: src/hooks/irchook.cc:815
 #, c-format
 msgid "+ [irc] connect failed: %s"
 msgstr "+ [irc] połączenie się nie udało: %s"
 
-#: src/hooks/irchook.cc:826
+#: src/hooks/irchook.cc:832
 msgid "+ [irc] nickname was changed successfully"
 msgstr "+ [irc] zmieniono ksywkę"
 
-#: src/hooks/irchook.cc:893
+#: src/hooks/irchook.cc:899
 msgid "On channels: "
 msgstr "Na kanałach: "
 
-#: src/hooks/irchook.cc:1206
+#: src/hooks/irchook.cc:1212
 #, c-format
 msgid "Kicked by %s; reason: %s"
 msgstr "Wykopany przez %s z powodu: %s"
 
-#: src/hooks/irchook.cc:1262
+#: src/hooks/irchook.cc:1268
 #, c-format
 msgid "The user has changed their nick from %s to %s"
 msgstr "Użytkownik zmienił ksywkę z %s na %s"
 
-#: src/hooks/irchook.cc:1282
+#: src/hooks/irchook.cc:1290
 msgid "+ [irc] password sent"
 msgstr "+ [irc] wysłano hasło"
 
-#: src/hooks/irchook.cc:1305
+#: src/hooks/irchook.cc:1299
+#, fuzzy
+msgid "+ [irc] nick password sent"
+msgstr "+ [irc] wysłano hasło"
+
+#: src/hooks/irchook.cc:1323
 #, c-format
 msgid "PING reply from the user: %d second(s)"
 msgstr "Odpowiedź PING od użytkownika: %d sek"
 
-#: src/hooks/irchook.cc:1424
+#: src/hooks/irchook.cc:1442
 #, c-format
 msgid "%s has joined."
 msgstr "%s wszedł."
 
-#: src/hooks/irchook.cc:1443
+#: src/hooks/irchook.cc:1461
 #, c-format
 msgid "%s has left"
 msgstr "%s wyszedł"
 
-#: src/hooks/irchook.cc:1449 src/hooks/irchook.cc:1475
+#: src/hooks/irchook.cc:1467 src/hooks/irchook.cc:1493
 #, c-format
 msgid "reason: %s"
 msgstr "powód: %s"
 
-#: src/hooks/irchook.cc:1471
+#: src/hooks/irchook.cc:1489
 #, c-format
 msgid "%s has been kicked by %s"
 msgstr "%s został wykopany przez %s"
 
-#: src/hooks/irchook.cc:1500
+#: src/hooks/irchook.cc:1518
 #, c-format
 msgid "Channel topic now is: %s"
 msgstr "Temat kanału teraz to: %s"
 
-#: src/hooks/irchook.cc:1505
+#: src/hooks/irchook.cc:1523
 #, c-format
 msgid "set by %s"
 msgstr "ustawiony przez %s"
 
-#: src/hooks/irchook.cc:1523
+#: src/hooks/irchook.cc:1541
 #, c-format
 msgid "%s has been opped by %s."
 msgstr "%s dostał opa od %s."
 
-#: src/hooks/irchook.cc:1539
+#: src/hooks/irchook.cc:1557
 #, c-format
 msgid "%s has been deopped by %s."
 msgstr "%s został zdeopowany przez %s."
 
-#: src/hooks/irchook.cc:1553
+#: src/hooks/irchook.cc:1571
 #, c-format
 msgid "%s has opped us."
 msgstr "%s dał nam opa."
 
-#: src/hooks/irchook.cc:1554
+#: src/hooks/irchook.cc:1572
 #, c-format
 msgid "you are an op here"
 msgstr "jesteś tu opem"
 
-#: src/hooks/irchook.cc:1567
+#: src/hooks/irchook.cc:1585
 #, c-format
 msgid "%s has deopped us."
 msgstr "%s zabrał nam opa."
@@ -746,55 +751,55 @@ msgstr "usuwanie %s z listy kontaktów"
 msgid "members list fetching finished, %d found"
 msgstr "zakończono ściąganie listy członków, znaleziono %d"
 
-#: src/icqcontact.cc:800
+#: src/icqcontact.cc:802
 msgid "The user has a birthday today"
 msgstr "Użytkownik ma dziś urodziny"
 
-#: src/icqcontact.cc:828
+#: src/icqcontact.cc:830
 msgid "Jan"
 msgstr "Sty"
 
-#: src/icqcontact.cc:828
+#: src/icqcontact.cc:830
 msgid "Feb"
 msgstr "Lut"
 
-#: src/icqcontact.cc:828
+#: src/icqcontact.cc:830
 msgid "Mar"
 msgstr "Mar"
 
-#: src/icqcontact.cc:828
+#: src/icqcontact.cc:830
 msgid "Apr"
 msgstr "Kwi"
 
-#: src/icqcontact.cc:829
+#: src/icqcontact.cc:831
 msgid "May"
 msgstr "Maj"
 
-#: src/icqcontact.cc:829
+#: src/icqcontact.cc:831
 msgid "Jun"
 msgstr "Cze"
 
-#: src/icqcontact.cc:829
+#: src/icqcontact.cc:831
 msgid "Jul"
 msgstr "Lip"
 
-#: src/icqcontact.cc:829
+#: src/icqcontact.cc:831
 msgid "Aug"
 msgstr "Sie"
 
-#: src/icqcontact.cc:830
+#: src/icqcontact.cc:832
 msgid "Sep"
 msgstr "Wrz"
 
-#: src/icqcontact.cc:830
+#: src/icqcontact.cc:832
 msgid "Oct"
 msgstr "Paź"
 
-#: src/icqcontact.cc:830
+#: src/icqcontact.cc:832
 msgid "Nov"
 msgstr "Lis"
 
-#: src/icqcontact.cc:830
+#: src/icqcontact.cc:832
 msgid "Dec"
 msgstr "Gru"
 
@@ -807,1170 +812,1184 @@ msgstr "Ogólny "
 msgid "event from %s (%s)"
 msgstr "zdarzenie od %s"
 
-#: src/icqdialogs.cc:46
+#: src/icqdialogs.cc:49
 msgid "60-above"
 msgstr "60 i więcej"
 
-#: src/icqdialogs.cc:47
+#: src/icqdialogs.cc:50
 #, fuzzy
 msgid "unknown"
 msgstr "nieznany typ IM"
 
-#: src/icqdialogs.cc:55
+#: src/icqdialogs.cc:58
 msgid "General Chat"
 msgstr "Chat ogólny"
 
-#: src/icqdialogs.cc:56
+#: src/icqdialogs.cc:59
 msgid "Romance"
 msgstr "Romanse"
 
-#: src/icqdialogs.cc:57
+#: src/icqdialogs.cc:60
 msgid "Games"
 msgstr "Gry"
 
-#: src/icqdialogs.cc:58
+#: src/icqdialogs.cc:61
 msgid "Students"
 msgstr "Studenci"
 
-#: src/icqdialogs.cc:59
+#: src/icqdialogs.cc:62
 msgid "20 Something"
 msgstr "20 coś"
 
-#: src/icqdialogs.cc:60
+#: src/icqdialogs.cc:63
 msgid "30 Something"
 msgstr "30 coś"
 
-#: src/icqdialogs.cc:61
+#: src/icqdialogs.cc:64
 msgid "40 Something"
 msgstr "40 coś"
 
-#: src/icqdialogs.cc:62
+#: src/icqdialogs.cc:65
 msgid "50 Plus"
 msgstr "50 plus"
 
-#: src/icqdialogs.cc:63
+#: src/icqdialogs.cc:66
 msgid "Seeking Women"
 msgstr "Szukam kobiet"
 
-#: src/icqdialogs.cc:64
+#: src/icqdialogs.cc:67
 msgid "Seeking Men"
 msgstr "Szukam mężczyzn"
 
-#: src/icqdialogs.cc:72
+#: src/icqdialogs.cc:75
 msgid "Status and Activity"
 msgstr ""
 
-#: src/icqdialogs.cc:73
+#: src/icqdialogs.cc:76
 msgid "Status and Name"
 msgstr ""
 
-#: src/icqdialogs.cc:74
+#: src/icqdialogs.cc:77
 msgid "Activity"
 msgstr ""
 
-#: src/icqdialogs.cc:75 src/icqface.cc:1035 src/icqface.cc:1091
+#: src/icqdialogs.cc:78 src/icqface.cc:1073 src/icqface.cc:1129
 msgid "Name"
 msgstr "Nazwisko"
 
-#: src/icqdialogs.cc:111
+#: src/icqdialogs.cc:114
 msgid " Search profiles "
 msgstr " Wyszukaj profile"
 
-#: src/icqdialogs.cc:117 src/icqdialogs.cc:1048 src/icqdialogs.cc:1803
-#: src/icqface.cc:1815 src/icqface.cc:2508
+#: src/icqdialogs.cc:120 src/icqdialogs.cc:1057 src/icqdialogs.cc:1816
+#: src/icqface.cc:1859 src/icqface.cc:2552
 msgid "Remove"
 msgstr "Usuń"
 
-#: src/icqdialogs.cc:117
+#: src/icqdialogs.cc:120
 msgid "Load"
 msgstr "Załaduj"
 
-#: src/icqdialogs.cc:202
+#: src/icqdialogs.cc:205
 msgid "+ you must be logged in first"
 msgstr "+ musisz być zalogowany"
 
-#: src/icqdialogs.cc:226
+#: src/icqdialogs.cc:229
 msgid "lOad"
 msgstr "Załaduj"
 
-#: src/icqdialogs.cc:226
+#: src/icqdialogs.cc:229
 msgid "sAve"
 msgstr "Zapisz"
 
-#: src/icqdialogs.cc:226 src/icqdialogs.cc:231 src/icqdialogs.cc:236
+#: src/icqdialogs.cc:229 src/icqdialogs.cc:234 src/icqdialogs.cc:239
 msgid "cLear"
 msgstr "Wyczyść"
 
-#: src/icqdialogs.cc:226 src/icqdialogs.cc:231 src/icqdialogs.cc:236
-#: src/icqdialogs.cc:749 src/icqdialogs.cc:1196 src/icqdialogs.cc:2017
+#: src/icqdialogs.cc:229 src/icqdialogs.cc:234 src/icqdialogs.cc:239
+#: src/icqdialogs.cc:757 src/icqdialogs.cc:1206 src/icqdialogs.cc:2030
 #: src/accountmanager.cc:69 src/imcontroller.cc:72 src/imotr.cc:445
 msgid "Change"
 msgstr "Zmień"
 
-#: src/icqdialogs.cc:226
+#: src/icqdialogs.cc:229
 msgid "Search/Add"
 msgstr "Szukaj"
 
-#: src/icqdialogs.cc:231
+#: src/icqdialogs.cc:234
 msgid "Join/Create"
 msgstr "Wejdź/Utwórz"
 
-#: src/icqdialogs.cc:236
+#: src/icqdialogs.cc:239
 msgid "lInk"
 msgstr "Przyłącz"
 
-#: src/icqdialogs.cc:245
+#: src/icqdialogs.cc:248
 msgid " Find/add user(s) "
 msgstr " Znajdź/dodaj użytkownika"
 
-#: src/icqdialogs.cc:246
+#: src/icqdialogs.cc:249
 msgid " Join/create a channel/conference "
 msgstr " Wejdź/utwórz kanał/konferencję "
 
-#: src/icqdialogs.cc:247
+#: src/icqdialogs.cc:250
 msgid " Link an RSS feed "
 msgstr " Przyłącz strumień RSS "
 
-#: src/icqdialogs.cc:296
+#: src/icqdialogs.cc:299
 msgid " Network "
 msgstr " Sieć "
 
-#: src/icqdialogs.cc:304
+#: src/icqdialogs.cc:307
 msgid " UIN "
 msgstr " UIN "
 
-#: src/icqdialogs.cc:308 src/icqdialogs.cc:394 src/icqdialogs.cc:410
+#: src/icqdialogs.cc:311 src/icqdialogs.cc:397 src/icqdialogs.cc:413
 #: src/imcontroller.cc:80 src/imcontroller.cc:92
 msgid " Details "
 msgstr " Szczegóły "
 
-#: src/icqdialogs.cc:309 src/icqdialogs.cc:614 src/imcontroller.cc:81
+#: src/icqdialogs.cc:312 src/icqdialogs.cc:617 src/imcontroller.cc:81
 #, c-format
 msgid " Nickname : %s "
 msgstr " Ksywka: %s "
 
-#: src/icqdialogs.cc:312 src/icqdialogs.cc:401 src/imcontroller.cc:83
+#: src/icqdialogs.cc:315 src/icqdialogs.cc:404 src/imcontroller.cc:83
 #, c-format
 msgid " E-Mail : %s "
 msgstr " Email: %s "
 
-#: src/icqdialogs.cc:315 src/icqdialogs.cc:628 src/icqdialogs.cc:687
+#: src/icqdialogs.cc:318 src/icqdialogs.cc:631 src/icqdialogs.cc:690
 #: src/imcontroller.cc:84
 #, c-format
 msgid " First name : %s "
 msgstr " Imię: %s "
 
-#: src/icqdialogs.cc:316 src/icqdialogs.cc:629 src/icqdialogs.cc:688
+#: src/icqdialogs.cc:319 src/icqdialogs.cc:632 src/icqdialogs.cc:691
 #: src/imcontroller.cc:85
 #, c-format
 msgid " Last name : %s "
 msgstr " Nazwisko: %s "
 
-#: src/icqdialogs.cc:319 src/icqdialogs.cc:418
+#: src/icqdialogs.cc:322 src/icqdialogs.cc:421
 #, c-format
 msgid " Age range : %s "
 msgstr " Wiek: %s "
 
-#: src/icqdialogs.cc:322 src/icqdialogs.cc:417 src/icqdialogs.cc:632
-#: src/icqdialogs.cc:690
+#: src/icqdialogs.cc:325 src/icqdialogs.cc:420 src/icqdialogs.cc:635
+#: src/icqdialogs.cc:693
 #, c-format
 msgid " Gender : %s "
 msgstr " Płeć: %s "
 
-#: src/icqdialogs.cc:325
+#: src/icqdialogs.cc:328
 #, c-format
 msgid " Language : %s "
 msgstr " Język: %s "
 
-#: src/icqdialogs.cc:329
+#: src/icqdialogs.cc:332
 msgid " Location "
 msgstr " Lokalizacja"
 
-#: src/icqdialogs.cc:330 src/icqdialogs.cc:637 src/icqdialogs.cc:649
-#: src/icqdialogs.cc:689
+#: src/icqdialogs.cc:333 src/icqdialogs.cc:640 src/icqdialogs.cc:652
+#: src/icqdialogs.cc:692
 #, c-format
 msgid " City : %s "
 msgstr " Miasto: %s "
 
-#: src/icqdialogs.cc:333 src/icqdialogs.cc:638 src/icqdialogs.cc:650
+#: src/icqdialogs.cc:336 src/icqdialogs.cc:641 src/icqdialogs.cc:653
 #, c-format
 msgid " State : %s "
 msgstr " Stan: %s "
 
-#: src/icqdialogs.cc:334 src/icqdialogs.cc:639 src/icqdialogs.cc:651
+#: src/icqdialogs.cc:337 src/icqdialogs.cc:642 src/icqdialogs.cc:654
 #, c-format
 msgid " Country : %s "
 msgstr " Państwo: %s "
 
-#: src/icqdialogs.cc:337 src/icqdialogs.cc:648
+#: src/icqdialogs.cc:340 src/icqdialogs.cc:651
 msgid " Work "
 msgstr " Praca "
 
-#: src/icqdialogs.cc:338 src/icqdialogs.cc:656
+#: src/icqdialogs.cc:341 src/icqdialogs.cc:659
 #, c-format
 msgid " Company : %s "
 msgstr " Firma : %s "
 
-#: src/icqdialogs.cc:339 src/icqdialogs.cc:657
+#: src/icqdialogs.cc:342 src/icqdialogs.cc:660
 #, c-format
 msgid " Department : %s "
 msgstr " Dział : %s "
 
-#: src/icqdialogs.cc:340 src/icqdialogs.cc:658
+#: src/icqdialogs.cc:343 src/icqdialogs.cc:661
 #, c-format
 msgid " Position : %s "
 msgstr " Posada : %s "
 
-#: src/icqdialogs.cc:343
+#: src/icqdialogs.cc:346
 msgid " Online only "
 msgstr " Tylko obecni "
 
-#: src/icqdialogs.cc:349
+#: src/icqdialogs.cc:352
 msgid " Random chat group "
 msgstr " Losowa grupa chat "
 
-#: src/icqdialogs.cc:354
+#: src/icqdialogs.cc:357
 msgid " Keywords "
 msgstr " Słowa kluczowe "
 
-#: src/icqdialogs.cc:363
+#: src/icqdialogs.cc:366
 msgid " Nickname "
 msgstr " Ksywka "
 
-#: src/icqdialogs.cc:369
+#: src/icqdialogs.cc:372
 msgid " Search service "
 msgstr " Szukanie "
 
-#: src/icqdialogs.cc:372
+#: src/icqdialogs.cc:375
 msgid " Search parameters "
 msgstr " Parametry szukania "
 
-#: src/icqdialogs.cc:388 src/icqdialogs.cc:694
+#: src/icqdialogs.cc:391 src/icqdialogs.cc:702
 msgid " Feed Parameters "
 msgstr " Parametry strumienia "
 
-#: src/icqdialogs.cc:389 src/icqdialogs.cc:695
+#: src/icqdialogs.cc:392 src/icqdialogs.cc:703
 #, c-format
 msgid " XML export URL : %s "
 msgstr " URL do eksportu XML: %s "
 
-#: src/icqdialogs.cc:390 src/icqdialogs.cc:696
+#: src/icqdialogs.cc:393 src/icqdialogs.cc:704
 #, c-format
 msgid " Check frequency (minutes) : %lu "
 msgstr " Częstotliwość sprawdzania (w minutach): %lu "
 
-#: src/icqdialogs.cc:395
+#: src/icqdialogs.cc:398
 #, c-format
 msgid " Channel : %s "
 msgstr " Kanał: %s "
 
-#: src/icqdialogs.cc:398 src/icqdialogs.cc:412
+#: src/icqdialogs.cc:401 src/icqdialogs.cc:415
 #, c-format
 msgid " Name : %s "
 msgstr " Nazwa: %s "
 
-#: src/icqdialogs.cc:404
+#: src/icqdialogs.cc:407
 msgid " Joined since the last check only "
 msgstr " Dołączyli od ostatniego sprawdzenia "
 
-#: src/icqdialogs.cc:413
+#: src/icqdialogs.cc:416
 #, c-format
 msgid " Keywords : %s "
 msgstr " Słowa kluczowe: %s "
 
-#: src/icqdialogs.cc:415 src/icqdialogs.cc:2047
+#: src/icqdialogs.cc:418 src/icqdialogs.cc:2060
 msgid " Options "
 msgstr " Opcje "
 
-#: src/icqdialogs.cc:419
+#: src/icqdialogs.cc:422
 #, c-format
 msgid " Users with photos only : %s "
 msgstr " Użytkownicy tylko ze zdjęciami: %s "
 
-#: src/icqdialogs.cc:420
+#: src/icqdialogs.cc:423
 #, c-format
 msgid " Look for online only : %s "
 msgstr " Sprawdzaj tylko obecnych użytkowników: %s "
 
-#: src/icqdialogs.cc:425
+#: src/icqdialogs.cc:428
 msgid " Show users who have you on their list "
 msgstr " Pokazuj użytkowników, którzy mają Cię na ich liście "
 
-#: src/icqdialogs.cc:430
+#: src/icqdialogs.cc:433
 msgid " Name/Title "
 msgstr " Nazwa/Tytuł "
 
-#: src/icqdialogs.cc:435 src/imcontroller.cc:87
+#: src/icqdialogs.cc:438 src/imcontroller.cc:87
 msgid " Password "
 msgstr " Hasło "
 
-#: src/icqdialogs.cc:440
+#: src/icqdialogs.cc:443
 msgid " Service "
 msgstr " Serwis "
 
-#: src/icqdialogs.cc:469
+#: src/icqdialogs.cc:472
 msgid "New profile name: "
 msgstr "Nowa nazwa profilu: "
 
-#: src/icqdialogs.cc:473
+#: src/icqdialogs.cc:476
 msgid "The profile with this name already exists. Do you want to overwrite it?"
 msgstr "Profil o takiej nazwie już istnieje. Czy chcesz go zastąpić?"
 
-#: src/icqdialogs.cc:500
+#: src/icqdialogs.cc:503
 msgid "UIN: "
 msgstr "UIN: "
 
-#: src/icqdialogs.cc:501 src/icqdialogs.cc:772
+#: src/icqdialogs.cc:504 src/icqdialogs.cc:780
 msgid "Nickname: "
 msgstr "Ksywka: "
 
-#: src/icqdialogs.cc:501
+#: src/icqdialogs.cc:504
 msgid "Name/Title: "
 msgstr "Nazwa/Tytuł: "
 
-#: src/icqdialogs.cc:502 src/imcontroller.cc:105
+#: src/icqdialogs.cc:505 src/imcontroller.cc:105
 msgid "E-Mail: "
 msgstr "Email: "
 
-#: src/icqdialogs.cc:503 src/icqdialogs.cc:781 src/imcontroller.cc:106
+#: src/icqdialogs.cc:506 src/icqdialogs.cc:789 src/imcontroller.cc:106
 msgid "First name: "
 msgstr "Imię: "
 
-#: src/icqdialogs.cc:504 src/icqdialogs.cc:782 src/imcontroller.cc:107
+#: src/icqdialogs.cc:507 src/icqdialogs.cc:790 src/imcontroller.cc:107
 msgid "Last name: "
 msgstr "Nazwisko: "
 
-#: src/icqdialogs.cc:509 src/icqdialogs.cc:814 src/icqdialogs.cc:823
+#: src/icqdialogs.cc:512 src/icqdialogs.cc:822 src/icqdialogs.cc:831
 msgid "City: "
 msgstr "Miasto: "
 
-#: src/icqdialogs.cc:510 src/icqdialogs.cc:815 src/icqdialogs.cc:824
+#: src/icqdialogs.cc:513 src/icqdialogs.cc:823 src/icqdialogs.cc:832
 msgid "State: "
 msgstr "Stan: "
 
-#: src/icqdialogs.cc:512 src/icqdialogs.cc:827
+#: src/icqdialogs.cc:515 src/icqdialogs.cc:835
 msgid "Company: "
 msgstr "Firma: "
 
-#: src/icqdialogs.cc:513 src/icqdialogs.cc:828
+#: src/icqdialogs.cc:516 src/icqdialogs.cc:836
 msgid "Department: "
 msgstr "Dział: "
 
-#: src/icqdialogs.cc:514 src/icqdialogs.cc:829
+#: src/icqdialogs.cc:517 src/icqdialogs.cc:837
 msgid "Position: "
 msgstr "Posada: "
 
-#: src/icqdialogs.cc:516
+#: src/icqdialogs.cc:519
 msgid "Channel: "
 msgstr "Kanał: "
 
-#: src/icqdialogs.cc:517
+#: src/icqdialogs.cc:520
 msgid "Name: "
 msgstr "Nazwa: "
 
-#: src/icqdialogs.cc:519
+#: src/icqdialogs.cc:522
 msgid "Keywords: "
 msgstr "Słowa kluczowe: "
 
-#: src/icqdialogs.cc:529 src/imcontroller.cc:102
+#: src/icqdialogs.cc:532 src/imcontroller.cc:102
 msgid "Password: "
 msgstr "Hasło: "
 
-#: src/icqdialogs.cc:530 src/icqdialogs.cc:867
+#: src/icqdialogs.cc:533 src/icqdialogs.cc:875
 msgid "URL: "
 msgstr "URL: "
 
-#: src/icqdialogs.cc:531 src/icqdialogs.cc:868
+#: src/icqdialogs.cc:534 src/icqdialogs.cc:876
 msgid "Check frequency: "
 msgstr "Częstotliwość sprawdzania: "
 
-#: src/icqdialogs.cc:543
+#: src/icqdialogs.cc:546
 msgid "Wrong Jabber ID!"
 msgstr "Nieprawidłowy Jabber ID"
 
-#: src/icqdialogs.cc:557 src/icqdialogs.cc:2028
+#: src/icqdialogs.cc:560 src/icqdialogs.cc:2041
 msgid " General "
 msgstr " Ogólne "
 
-#: src/icqdialogs.cc:592
+#: src/icqdialogs.cc:595
 msgid " Registration service "
 msgstr " Serwis rejestracji "
 
-#: src/icqdialogs.cc:596
+#: src/icqdialogs.cc:599
 msgid " Registration parameters "
 msgstr " Parametry rejestracji "
 
-#: src/icqdialogs.cc:619
+#: src/icqdialogs.cc:622
 #, c-format
 msgid " Change password : %s "
 msgstr " Zmień hasło: %s "
 
-#: src/icqdialogs.cc:630
+#: src/icqdialogs.cc:633
 #, c-format
 msgid " E-mail : %s "
 msgstr " Email: %s "
 
-#: src/icqdialogs.cc:633
+#: src/icqdialogs.cc:636
 #, c-format
 msgid " Birthdate : %s "
 msgstr "Data ur.: %s "
 
-#: src/icqdialogs.cc:634
+#: src/icqdialogs.cc:637
 #, c-format
 msgid " Age : %s "
 msgstr " Wiek: %s "
 
-#: src/icqdialogs.cc:636
+#: src/icqdialogs.cc:639
 msgid " Home "
 msgstr " Dom "
 
-#: src/icqdialogs.cc:642 src/icqdialogs.cc:654
+#: src/icqdialogs.cc:645 src/icqdialogs.cc:657
 #, c-format
 msgid " Street address : %s "
 msgstr " Ulica: %s "
 
-#: src/icqdialogs.cc:643 src/icqdialogs.cc:655
+#: src/icqdialogs.cc:646 src/icqdialogs.cc:658
 #, c-format
 msgid " Zip code : %s "
 msgstr " Kod: %s "
 
-#: src/icqdialogs.cc:644 src/icqdialogs.cc:660
+#: src/icqdialogs.cc:647 src/icqdialogs.cc:663
 #, c-format
 msgid " Phone : %s "
 msgstr " Telefon: %s "
 
-#: src/icqdialogs.cc:645 src/icqdialogs.cc:661
+#: src/icqdialogs.cc:648 src/icqdialogs.cc:664
 #, c-format
 msgid " Fax : %s "
 msgstr " Fax: %s "
 
-#: src/icqdialogs.cc:646
+#: src/icqdialogs.cc:649
 #, c-format
 msgid " Cellular phone : %s "
 msgstr " Komórka: %s "
 
-#: src/icqdialogs.cc:659 src/icqdialogs.cc:664
+#: src/icqdialogs.cc:662 src/icqdialogs.cc:667
 #, c-format
 msgid " Homepage : %s "
 msgstr " Strona domowa: %s "
 
-#: src/icqdialogs.cc:663
+#: src/icqdialogs.cc:666
 msgid " More "
 msgstr " Więcej "
 
-#: src/icqdialogs.cc:667
+#: src/icqdialogs.cc:670
 #, c-format
 msgid " 1st language : %s "
 msgstr " Pierwszy język: %s "
 
-#: src/icqdialogs.cc:670
+#: src/icqdialogs.cc:673
 #, c-format
 msgid " 2nd language : %s "
 msgstr " Drugi język: %s "
 
-#: src/icqdialogs.cc:673
+#: src/icqdialogs.cc:676
 #, c-format
 msgid " 3rd language : %s "
 msgstr " Trzeci język: %s "
 
-#: src/icqdialogs.cc:676
+#: src/icqdialogs.cc:679 src/icqdialogs.cc:697
 msgid " Miscellaneous "
 msgstr " Różne "
 
-#: src/icqdialogs.cc:678
+#: src/icqdialogs.cc:681
 #, c-format
 msgid " Enable web status indicator : %s "
 msgstr " Włącz znacznik stanu na WWW: %s "
 
-#: src/icqdialogs.cc:679
+#: src/icqdialogs.cc:682
 #, c-format
 msgid " Random chat group : %s "
 msgstr " Losowa grupa chat: %s "
 
-#: src/icqdialogs.cc:681
+#: src/icqdialogs.cc:684
 #, c-format
 msgid " Authorization required : %s "
 msgstr " Wymagana autoryzacja: %s "
 
-#: src/icqdialogs.cc:701
+#: src/icqdialogs.cc:698
+#, fuzzy, c-format
+msgid " Avatar file : %s "
+msgstr " Stan: %s "
+
+#: src/icqdialogs.cc:709
 msgid " About "
 msgstr " O... "
 
-#: src/icqdialogs.cc:719
+#: src/icqdialogs.cc:727
 msgid "Fetching your details"
 msgstr "Pobieranie szczegółów "
 
-#: src/icqdialogs.cc:733
+#: src/icqdialogs.cc:741
 #, c-format
 msgid " Your %s details "
 msgstr " Twoje szczegóły %s "
 
-#: src/icqdialogs.cc:736
+#: src/icqdialogs.cc:744
 #, c-format
 msgid " %s: details "
 msgstr " %s: szczegóły "
 
-#: src/icqdialogs.cc:749 src/icqdialogs.cc:1196 src/icqdialogs.cc:1682
+#: src/icqdialogs.cc:757 src/icqdialogs.cc:1206 src/icqdialogs.cc:1695
 #: src/accountmanager.cc:69 src/imotr.cc:445
 msgid "Done"
 msgstr "Zakończono"
 
-#: src/icqdialogs.cc:767
+#: src/icqdialogs.cc:775
 msgid "Wait a moment. Your details haven't been fetched yet"
 msgstr "Proszę poczekać. Ustawienia osobiste nie zostały jeszcze pobrane"
 
-#: src/icqdialogs.cc:783
+#: src/icqdialogs.cc:791
 msgid "E-mail: "
 msgstr "Email: "
 
-#: src/icqdialogs.cc:794
+#: src/icqdialogs.cc:802
 msgid "Enter birthdate (DD-MM-YYYY): "
 msgstr "Data urodzenia (DD-MM-YYYY): "
 
-#: src/icqdialogs.cc:812
+#: src/icqdialogs.cc:820
 msgid "Age: "
 msgstr "Wiek: "
 
-#: src/icqdialogs.cc:817 src/icqdialogs.cc:826
+#: src/icqdialogs.cc:825 src/icqdialogs.cc:834
 msgid "Street address: "
 msgstr "Ulica: "
 
-#: src/icqdialogs.cc:818 src/icqdialogs.cc:842
+#: src/icqdialogs.cc:826 src/icqdialogs.cc:850
 msgid "Zip code: "
 msgstr "Kod: "
 
-#: src/icqdialogs.cc:819 src/icqdialogs.cc:831
+#: src/icqdialogs.cc:827 src/icqdialogs.cc:839
 msgid "Phone: "
 msgstr "Telefon: "
 
-#: src/icqdialogs.cc:820 src/icqdialogs.cc:832
+#: src/icqdialogs.cc:828 src/icqdialogs.cc:840
 msgid "Fax: "
 msgstr "Fax: "
 
-#: src/icqdialogs.cc:821
+#: src/icqdialogs.cc:829
 msgid "Cellular phone: "
 msgstr "Komórka: "
 
-#: src/icqdialogs.cc:830 src/icqdialogs.cc:834
+#: src/icqdialogs.cc:838 src/icqdialogs.cc:842
 msgid "Homepage: "
 msgstr "Strona domowa: "
 
-#: src/icqdialogs.cc:840 src/icqface.cc:1375 src/icqface.cc:1379
-#: src/icqface.cc:1391
+#: src/icqdialogs.cc:848 src/icqface.cc:1419 src/icqface.cc:1423
+#: src/icqface.cc:1435
 msgid "About"
 msgstr "O..."
 
-#: src/icqdialogs.cc:861
+#: src/icqdialogs.cc:869
 msgid "New password: "
 msgstr "Nowe hasło: "
 
-#: src/icqdialogs.cc:864
+#: src/icqdialogs.cc:872
 msgid "Check the new password: "
 msgstr "Powtórz nowe hasło: "
 
-#: src/icqdialogs.cc:942 src/icqdialogs.cc:980
+#: src/icqdialogs.cc:877
+msgid "Avatar file: "
+msgstr ""
+
+#: src/icqdialogs.cc:951 src/icqdialogs.cc:989
 msgid "none"
 msgstr "brak"
 
-#: src/icqdialogs.cc:998
+#: src/icqdialogs.cc:1007
 msgid " [Ctrl-X save, Esc cancel] "
 msgstr " [Ctrl-X zapisz, Esc anuluj] "
 
-#: src/icqdialogs.cc:1038
+#: src/icqdialogs.cc:1047
 #, c-format
 msgid " Send file(s) to %s, %lu "
 msgstr " Wyślij plik(i) do %s, %lu"
 
-#: src/icqdialogs.cc:1048 src/icqdialogs.cc:1681 src/icqface.cc:66
-#: src/icqface.cc:867 src/icqface.cc:870 src/icqface.cc:1815
-#: src/icqface.cc:2508
+#: src/icqdialogs.cc:1057 src/icqdialogs.cc:1694 src/icqface.cc:69
+#: src/icqface.cc:905 src/icqface.cc:908 src/icqface.cc:1859
+#: src/icqface.cc:2552
 msgid "Add"
 msgstr "Dodaj"
 
-#: src/icqdialogs.cc:1048
+#: src/icqdialogs.cc:1057
 msgid "Comment"
 msgstr "Komentarz"
 
-#: src/icqdialogs.cc:1048 src/icqface.cc:2508
+#: src/icqdialogs.cc:1057 src/icqface.cc:2552
 msgid "Send"
 msgstr "Wyślij"
 
-#: src/icqdialogs.cc:1058
+#: src/icqdialogs.cc:1067
 msgid " Files "
 msgstr " Pliki "
 
-#: src/icqdialogs.cc:1059
+#: src/icqdialogs.cc:1068
 msgid " Comment "
 msgstr " Komentarz "
 
-#: src/icqdialogs.cc:1071
+#: src/icqdialogs.cc:1080
 msgid "filename: "
 msgstr "nazwa pliku: "
 
-#: src/icqdialogs.cc:1078
+#: src/icqdialogs.cc:1087
 msgid "comment: "
 msgstr "komentarz: "
 
-#: src/icqdialogs.cc:1152
+#: src/icqdialogs.cc:1162
 #, fuzzy
 msgid "None"
 msgstr "Brak"
 
-#: src/icqdialogs.cc:1153
+#: src/icqdialogs.cc:1163
 msgid "Russian"
 msgstr "rosyjski"
 
-#: src/icqdialogs.cc:1154
+#: src/icqdialogs.cc:1164
 #, fuzzy
 msgid "Polish"
 msgstr "polski"
 
-#: src/icqdialogs.cc:1155
+#: src/icqdialogs.cc:1165
 msgid "German UTF-8"
 msgstr ""
 
-#: src/icqdialogs.cc:1187
+#: src/icqdialogs.cc:1197
 #, fuzzy
 msgid " CenterIM configuration "
 msgstr " Konfiguracja centerim "
 
-#: src/icqdialogs.cc:1207
+#: src/icqdialogs.cc:1217
 msgid " User interface "
 msgstr " Interfejs użytkownika "
 
-#: src/icqdialogs.cc:1208
+#: src/icqdialogs.cc:1218
 #, c-format
 msgid " Change sound device to : %s "
 msgstr " Urządzenie dźwiękowe: %s "
 
-#: src/icqdialogs.cc:1209
+#: src/icqdialogs.cc:1219
 #, c-format
 msgid " Change color scheme to : %s "
 msgstr " Schemat kolorów: %s "
 
-#: src/icqdialogs.cc:1210
+#: src/icqdialogs.cc:1220
 #, c-format
 msgid " Left panel width :  %d "
 msgstr ""
 
-#: src/icqdialogs.cc:1211
+#: src/icqdialogs.cc:1221
 #, fuzzy, c-format
 msgid " Log panel height :  %d "
 msgstr " Lokalne kodowanie : %s "
 
-#: src/icqdialogs.cc:1212
+#: src/icqdialogs.cc:1222
 #, fuzzy, c-format
 msgid " Chat panel height : %d "
 msgstr " Kanał: %s "
 
-#: src/icqdialogs.cc:1213
+#: src/icqdialogs.cc:1223
 #, fuzzy, c-format
 msgid " Show opened chats : %s "
 msgstr " Uporządkuj kontakty w grupy: %s"
 
-#: src/icqdialogs.cc:1216
+#: src/icqdialogs.cc:1226
 #, c-format
 msgid " Enable bidirectional languages support : %s "
 msgstr " Włącz wsparcie dla języków dwukierunkowych: %s"
 
-#: src/icqdialogs.cc:1218
+#: src/icqdialogs.cc:1228
 #, c-format
 msgid " Enable emacs bindings in text editor : %s "
 msgstr " Włącz emacsowe skróty klawiszy w edytorze: %s "
 
-#: src/icqdialogs.cc:1219
+#: src/icqdialogs.cc:1229
+#, fuzzy, c-format
+msgid " Enable vi bindings: %s "
+msgstr " Włącz emacsowe skróty klawiszy w edytorze: %s "
+
+#: src/icqdialogs.cc:1230
 #, c-format
 msgid " Ask before quit : %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1221
+#: src/icqdialogs.cc:1232
 msgid " Codepages conversion "
 msgstr " Konwersja stron kodowych "
 
-#: src/icqdialogs.cc:1228
+#: src/icqdialogs.cc:1239
 #, c-format
 msgid " Switch to language preset : %s "
 msgstr " Przełącz na język: %s "
 
-#: src/icqdialogs.cc:1229
+#: src/icqdialogs.cc:1240
 #, c-format
 msgid " Remote charset : %s "
 msgstr " Zdalne kodowanie : %s "
 
-#: src/icqdialogs.cc:1230
+#: src/icqdialogs.cc:1241
 #, c-format
 msgid " Local charset : %s "
 msgstr " Lokalne kodowanie : %s "
 
-#: src/icqdialogs.cc:1233
+#: src/icqdialogs.cc:1244
 #, c-format
 msgid " For protocols : %s"
 msgstr " Dla protokołów: %s"
 
-#: src/icqdialogs.cc:1236
+#: src/icqdialogs.cc:1247
 msgid " Contact list "
 msgstr " Lista kontaktów "
 
-#: src/icqdialogs.cc:1237
+#: src/icqdialogs.cc:1248
 #, c-format
 msgid " Arrange contacts into groups : %s "
 msgstr " Uporządkuj kontakty w grupy: %s"
 
-#: src/icqdialogs.cc:1238
+#: src/icqdialogs.cc:1249
 #, fuzzy, c-format
 msgid " Sort contacts by : %s "
 msgstr " Uporządkuj kontakty w grupy: %s"
 
-#: src/icqdialogs.cc:1239
+#: src/icqdialogs.cc:1250
 #, c-format
 msgid " Hide offline users : %s "
 msgstr " Ukrywanie nieobecnych użytkowników: %s "
 
-#: src/icqdialogs.cc:1240
+#: src/icqdialogs.cc:1251
 #, c-format
 msgid " Anti-spam: kill msgs from users not on the list : %s "
 msgstr " Anty-spam: odrzucaj wiadomości od użytkowników spoza listy: %s "
 
-#: src/icqdialogs.cc:1241
+#: src/icqdialogs.cc:1252
 #, fuzzy, c-format
 msgid " Anti-spam: ignore authorization requests: %s "
 msgstr " Wymagana autoryzacja: %s "
 
-#: src/icqdialogs.cc:1242
+#: src/icqdialogs.cc:1253
 #, c-format
 msgid " Anti-spam: use captcha to identify bots: %s "
 msgstr ""
 
-#: src/icqdialogs.cc:1243
+#: src/icqdialogs.cc:1254
 #, c-format
 msgid " Quote a message on reply : %s "
 msgstr " Cytuj wiadomość w odpowiedzi: %s "
 
-#: src/icqdialogs.cc:1244
+#: src/icqdialogs.cc:1255
 #, c-format
 msgid " Check the local mailbox : %s "
 msgstr " Sprawdzaj lokalną pocztę: %s"
 
-#: src/icqdialogs.cc:1245
+#: src/icqdialogs.cc:1256
 #, c-format
 msgid " Remember passwords : %s "
 msgstr " Pamiętaj hasła: %s "
 
-#: src/icqdialogs.cc:1246
+#: src/icqdialogs.cc:1257
 #, c-format
 msgid " Edit away message on status change : %s "
 msgstr " Zmieniaj powód nieobecności przy zmianie statusu: %s "
 
-#: src/icqdialogs.cc:1253
+#: src/icqdialogs.cc:1264
 #, c-format
 msgid " Chat messaging mode for : %s"
 msgstr " Tryb chat dla: %s "
 
-#: src/icqdialogs.cc:1259
+#: src/icqdialogs.cc:1270
 #, c-format
 msgid " Enter key sends message for : %s"
 msgstr " Enter wysyła wiadomość w: %s"
 
-#: src/icqdialogs.cc:1262
+#: src/icqdialogs.cc:1273
 #, c-format
 msgid " Chat messaging mode : %s "
 msgstr " Tryb chat dla: %s "
 
-#: src/icqdialogs.cc:1263
+#: src/icqdialogs.cc:1274
 #, c-format
 msgid " Enter key sends message : %s "
 msgstr " Enter wysyła wiadomość w: %s "
 
-#: src/icqdialogs.cc:1270
+#: src/icqdialogs.cc:1281
 #, c-format
 msgid " Always online non-IM contacts for : %s"
 msgstr " Kontakty inne niż IM zawsze online dla : %s"
 
-#: src/icqdialogs.cc:1271
+#: src/icqdialogs.cc:1282
 #, fuzzy, c-format
 msgid " Color contacts according to: %s "
 msgstr " Uporządkuj kontakty w grupy: %s"
 
-#: src/icqdialogs.cc:1273
+#: src/icqdialogs.cc:1284
 msgid " Communications "
 msgstr " Komunikacja "
 
-#: src/icqdialogs.cc:1274
+#: src/icqdialogs.cc:1285
 #, c-format
 msgid " SMTP server : %s "
 msgstr " Serwer poczty SMTP: %s "
 
-#: src/icqdialogs.cc:1275
+#: src/icqdialogs.cc:1286
 #, fuzzy, c-format
 msgid " HTTP browser : %s "
 msgstr " Serwer proxy HTTP: %s "
 
-#: src/icqdialogs.cc:1276
+#: src/icqdialogs.cc:1287
 #, c-format
 msgid " HTTP proxy server : %s "
 msgstr " Serwer proxy HTTP: %s "
 
-#: src/icqdialogs.cc:1279
+#: src/icqdialogs.cc:1290
 #, c-format
 msgid " Proxy only for HTTP (rss and lj) : %s "
 msgstr " Proxy dla HTTP (rss i lj): %s "
 
-#: src/icqdialogs.cc:1281
+#: src/icqdialogs.cc:1292
 #, c-format
 msgid " Enable peer-to-peer communications : %s "
 msgstr " Włącz komunikację jeden-do-jednego: %s "
 
-#: src/icqdialogs.cc:1284
+#: src/icqdialogs.cc:1295
 #, c-format
 msgid " Port range to use for peer-to-peer : %s "
 msgstr " Zakres portów do używania w komunikacji jeden-do-jednego: %s "
 
-#: src/icqdialogs.cc:1286
+#: src/icqdialogs.cc:1297
 msgid " Logging "
 msgstr " Logowanie "
 
-#: src/icqdialogs.cc:1287
+#: src/icqdialogs.cc:1298
 #, c-format
 msgid " Timestamps in the log window : %s "
 msgstr " Data/czas w oknie logowania: %s "
 
-#: src/icqdialogs.cc:1288
+#: src/icqdialogs.cc:1299
 #, fuzzy, c-format
 msgid " Timestamps include seconds : %s "
 msgstr " Data/czas w oknie logowania: %s "
 
-#: src/icqdialogs.cc:1289
+#: src/icqdialogs.cc:1300
 #, c-format
 msgid " Online/offline events in the log window : %s "
 msgstr " Pokazywanie zmiany statusu w oknie logowania: %s "
 
-#: src/icqdialogs.cc:1290
+#: src/icqdialogs.cc:1301
 #, c-format
 msgid " Detailed IM events log in ~/.centerim/log : %s "
 msgstr " Szczegółowe logi zdarzeń IM w ~/.centerim/log: %s "
 
-#: src/icqdialogs.cc:1292
+#: src/icqdialogs.cc:1303
 msgid " Auto Presence Status "
 msgstr ""
 
-#: src/icqdialogs.cc:1293
+#: src/icqdialogs.cc:1304
 #, c-format
 msgid " Automatically set Away period (min) : %d "
 msgstr " Automatyczne oznaczanie 'Nieobecny' po (min): %d "
 
-#: src/icqdialogs.cc:1294
+#: src/icqdialogs.cc:1305
 #, c-format
 msgid " Automatically set N/A period (min) : %d "
 msgstr " Automatyczne oznaczanie 'Niedostępny' po (min): %d "
 
-#: src/icqdialogs.cc:1295
+#: src/icqdialogs.cc:1306
 #, fuzzy, c-format
 msgid " Automatically set N/A when screen is detached : %s "
 msgstr " Automatyczne oznaczanie 'Niedostępny' po (min): %d "
 
-#: src/icqdialogs.cc:1297
+#: src/icqdialogs.cc:1308
 #, fuzzy, c-format
 msgid " Screen socket path : %s "
 msgstr " Ulica: %s "
 
-#: src/icqdialogs.cc:1324
+#: src/icqdialogs.cc:1335
 msgid "Auto Away period (0 - disable): "
 msgstr "Automatyczne oznaczanie 'Nieobecny' (0 - wyłącz) po (min): "
 
-#: src/icqdialogs.cc:1328
+#: src/icqdialogs.cc:1339
 msgid "Auto N/A period (0 - disable): "
 msgstr "Automatyczne oznaczanie 'Niedostępny' (0 - wyłącz) po (min): "
 
-#: src/icqdialogs.cc:1354
+#: src/icqdialogs.cc:1365
 msgid "SMTP server hostname: "
 msgstr " Serwer poczty SMTP: "
 
-#: src/icqdialogs.cc:1364
+#: src/icqdialogs.cc:1375
 msgid "Peer-to-peer port range (min-max): "
 msgstr "Zakres portów do używania w komunikacji jeden-do-jednego (min-max): "
 
-#: src/icqdialogs.cc:1378
+#: src/icqdialogs.cc:1389
 msgid "HTTP proxy server hostname: "
 msgstr " Serwer proxy HTTP: "
 
-#: src/icqdialogs.cc:1416
+#: src/icqdialogs.cc:1427
 msgid "Charset to convert messages from: "
 msgstr "Kodowanie z którego zmieniać: "
 
-#: src/icqdialogs.cc:1420
+#: src/icqdialogs.cc:1431
 msgid "Charset to convert messages to: "
 msgstr "Kodowanie na które zmieniać: "
 
-#: src/icqdialogs.cc:1430
+#: src/icqdialogs.cc:1441
 #, fuzzy
 msgid "HTTP browser to use: "
 msgstr " Serwer proxy HTTP: "
 
-#: src/icqdialogs.cc:1434
+#: src/icqdialogs.cc:1445
 msgid "Left panel width: "
 msgstr ""
 
-#: src/icqdialogs.cc:1439
+#: src/icqdialogs.cc:1450
 msgid "Log panel height: "
 msgstr ""
 
-#: src/icqdialogs.cc:1444
+#: src/icqdialogs.cc:1455
 msgid "Chat panel height: "
 msgstr ""
 
-#: src/icqdialogs.cc:1455
+#: src/icqdialogs.cc:1466
 msgid "Screen socket path: "
 msgstr ""
 
-#: src/icqdialogs.cc:1457
+#: src/icqdialogs.cc:1468
 msgid "Choosen screen socket path doesn't exist!"
 msgstr ""
 
-#: src/icqdialogs.cc:1645
+#: src/icqdialogs.cc:1658
 msgid "Your details have been fetched"
 msgstr "Pobrano Twoje szczegóły"
 
-#: src/icqdialogs.cc:1657
+#: src/icqdialogs.cc:1670
 msgid "Organize contact groups"
 msgstr "Uporządkuj grupy kontaktów"
 
-#: src/icqdialogs.cc:1681
+#: src/icqdialogs.cc:1694
 msgid "Rename"
 msgstr "Zmień"
 
-#: src/icqdialogs.cc:1681
+#: src/icqdialogs.cc:1694
 msgid "rEmove"
 msgstr "Usuń"
 
-#: src/icqdialogs.cc:1681
+#: src/icqdialogs.cc:1694
 msgid "move Up"
 msgstr "W górę"
 
-#: src/icqdialogs.cc:1681
+#: src/icqdialogs.cc:1694
 msgid "move Down"
 msgstr "W dół"
 
-#: src/icqdialogs.cc:1682 src/icqdialogs.cc:2195
+#: src/icqdialogs.cc:1695 src/icqdialogs.cc:2208
 msgid "Select"
 msgstr "Wybierz"
 
-#: src/icqdialogs.cc:1697
+#: src/icqdialogs.cc:1710
 msgid " Groups "
 msgstr " Grupy "
 
-#: src/icqdialogs.cc:1712
+#: src/icqdialogs.cc:1725
 msgid "Name for a group to be created: "
 msgstr " Nazwa grupy do utworzenia: "
 
-#: src/icqdialogs.cc:1722
+#: src/icqdialogs.cc:1735
 msgid "New name for the group: "
 msgstr "Nowa nazwa dla grupy: "
 
-#: src/icqdialogs.cc:1737
+#: src/icqdialogs.cc:1750
 msgid "Are you sure want to remove the group?"
 msgstr "Czy na pewno chcesz usunąć tę grupę?"
 
-#: src/icqdialogs.cc:1794
+#: src/icqdialogs.cc:1807
 msgid "File transfer status"
 msgstr "Status transferu pliku"
 
-#: src/icqdialogs.cc:1803
+#: src/icqdialogs.cc:1816
 msgid "Cancel"
 msgstr "Przerwij"
 
-#: src/icqdialogs.cc:1832
+#: src/icqdialogs.cc:1845
 #, c-format
 msgid " Incoming from %s "
 msgstr "Wiadomość od %s "
 
-#: src/icqdialogs.cc:1834
+#: src/icqdialogs.cc:1847
 #, c-format
 msgid " Outgoing to %s "
 msgstr "Wiadomość do %s "
 
-#: src/icqdialogs.cc:1842
+#: src/icqdialogs.cc:1855
 msgid "init"
 msgstr "inicjalizacja"
 
-#: src/icqdialogs.cc:1843
+#: src/icqdialogs.cc:1856
 msgid "start"
 msgstr "start"
 
-#: src/icqdialogs.cc:1844
+#: src/icqdialogs.cc:1857
 msgid "work"
 msgstr "praca"
 
-#: src/icqdialogs.cc:1845
+#: src/icqdialogs.cc:1858
 msgid "done"
 msgstr "zakończono"
 
-#: src/icqdialogs.cc:1846
+#: src/icqdialogs.cc:1859
 msgid "err"
 msgstr "błąd"
 
-#: src/icqdialogs.cc:1847
+#: src/icqdialogs.cc:1860
 msgid "abort"
 msgstr "przerwij"
 
-#: src/icqdialogs.cc:1854
+#: src/icqdialogs.cc:1867
 msgid " of "
 msgstr " z "
 
-#: src/icqdialogs.cc:1887
+#: src/icqdialogs.cc:1900
 msgid "Cannot remove a transfer which is in progress now"
 msgstr "Nie można usunąć aktywnego transferu"
 
-#: src/icqdialogs.cc:1998
+#: src/icqdialogs.cc:2011
 msgid "public (visible to all)"
 msgstr "publiczny (widoczny dla wszystkich)"
 
-#: src/icqdialogs.cc:2000
+#: src/icqdialogs.cc:2013
 msgid "private"
 msgstr "prywatny"
 
-#: src/icqdialogs.cc:2002
+#: src/icqdialogs.cc:2015
 msgid "friends only"
 msgstr "tylko dla przyjaciół"
 
-#: src/icqdialogs.cc:2009
+#: src/icqdialogs.cc:2022
 msgid " LiveJournal posting: attributes "
 msgstr " Artykuł LiveJournal: atrybuty"
 
-#: src/icqdialogs.cc:2017
+#: src/icqdialogs.cc:2030
 msgid "Detect music"
 msgstr "Wykryj dźwięk"
 
-#: src/icqdialogs.cc:2017
+#: src/icqdialogs.cc:2030
 msgid "Post"
 msgstr "Wyślij"
 
-#: src/icqdialogs.cc:2017
+#: src/icqdialogs.cc:2030
 msgid "cAncel"
 msgstr "Przerwij"
 
-#: src/icqdialogs.cc:2029
+#: src/icqdialogs.cc:2042
 #, c-format
 msgid " Post to journal : %s "
 msgstr " Wyślij do dziennika: %s "
 
-#: src/icqdialogs.cc:2030
+#: src/icqdialogs.cc:2043
 #, c-format
 msgid " Subject : %s "
 msgstr " Temat: %s "
 
-#: src/icqdialogs.cc:2035
+#: src/icqdialogs.cc:2048
 #, c-format
 msgid " Security : %s "
 msgstr " Zabezpieczenia: %s "
 
-#: src/icqdialogs.cc:2037
+#: src/icqdialogs.cc:2050
 msgid " Fancy stuff "
 msgstr " Dziwne rzeczy "
 
-#: src/icqdialogs.cc:2040
+#: src/icqdialogs.cc:2053
 #, c-format
 msgid " Mood : %s "
 msgstr " Nastrój: %s "
 
-#: src/icqdialogs.cc:2040 src/icqdialogs.cc:2067
+#: src/icqdialogs.cc:2053 src/icqdialogs.cc:2080
 msgid "(none/custom)"
 msgstr "(brak/własny)"
 
-#: src/icqdialogs.cc:2041
+#: src/icqdialogs.cc:2054
 #, c-format
 msgid " Custom mood : %s "
 msgstr " Własny nastrój: %s "
 
-#: src/icqdialogs.cc:2043
+#: src/icqdialogs.cc:2056
 #, c-format
 msgid " Music : %s "
 msgstr " Muzyka: %s "
 
-#: src/icqdialogs.cc:2044
+#: src/icqdialogs.cc:2057
 #, c-format
 msgid " Picture : %s "
 msgstr " Zdjęcie: %s "
 
-#: src/icqdialogs.cc:2044 src/icqdialogs.cc:2069
+#: src/icqdialogs.cc:2057 src/icqdialogs.cc:2082
 msgid "(default)"
 msgstr "(domyślny)"
 
-#: src/icqdialogs.cc:2045
+#: src/icqdialogs.cc:2058
 #, fuzzy, c-format
 msgid " Tags : %s "
 msgstr " Wiek: %s "
 
-#: src/icqdialogs.cc:2048
+#: src/icqdialogs.cc:2061
 #, c-format
 msgid " Disable auto-formatting : %s "
 msgstr " Wyłącz autoformatowanie: %s "
 
-#: src/icqdialogs.cc:2049
+#: src/icqdialogs.cc:2062
 #, c-format
 msgid " Disable sending comments by e-mail : %s "
 msgstr " Wyłącz wysyłanie komentarzy emailem: %s "
 
-#: src/icqdialogs.cc:2050
+#: src/icqdialogs.cc:2063
 #, c-format
 msgid " Disallow comments : %s "
 msgstr " Zabroń komentarzy: %s "
 
-#: src/icqdialogs.cc:2051
+#: src/icqdialogs.cc:2064
 #, c-format
 msgid " Backdated entry : %s "
 msgstr " Wpis z datą wsteczną: %s "
 
-#: src/icqdialogs.cc:2059
+#: src/icqdialogs.cc:2072
 msgid "Posting subject: "
 msgstr "Temat wpisu: "
 
-#: src/icqdialogs.cc:2068
+#: src/icqdialogs.cc:2081
 msgid "Currently playing: "
 msgstr "Teraz gra: "
 
-#: src/icqdialogs.cc:2070
+#: src/icqdialogs.cc:2083
 msgid "Current mood: "
 msgstr "Aktualny nastrój: "
 
-#: src/icqdialogs.cc:2071
+#: src/icqdialogs.cc:2084
 #, fuzzy
 msgid "Tags for the entry: "
 msgstr "Wiadomość z serwera: "
 
-#: src/icqdialogs.cc:2105
+#: src/icqdialogs.cc:2118
 #, fuzzy
 msgid "pgp key quick search"
 msgstr "szybkie szukanie w liście kontaktów"
 
-#: src/icqdialogs.cc:2107
+#: src/icqdialogs.cc:2120
 #, fuzzy, c-format
 msgid "PGP key search: type to find, %s find again, Enter finish"
 msgstr "Szybkie szukanie: wpisz by znaleźć, %s szukaj ponownie, Enter kończy"
 
-#: src/icqdialogs.cc:2188
+#: src/icqdialogs.cc:2201
 msgid " Select PGP key to use "
 msgstr ""
 
-#: src/icqdialogs.cc:2209
+#: src/icqdialogs.cc:2222
 #, fuzzy
 msgid " Use no key"
 msgstr "Info o użytkowniku"
 
-#: src/icqdialogs.cc:2223
+#: src/icqdialogs.cc:2236
 msgid "pgp key selection"
 msgstr ""
 
-#: src/icqdialogs.cc:2225
+#: src/icqdialogs.cc:2238
 #, c-format
 msgid "PGP key selection: %s for quick lookup"
 msgstr ""
 
-#: src/imexternal.cc:128
+#: src/imexternal.cc:129
 #, c-format
 msgid "executed external manual action %s, return code = %d"
 msgstr "wykonano zewnętrzną ręczną komendę %s, zwrócony kod = %d"
 
-#: src/imexternal.cc:160
+#: src/imexternal.cc:161
 #, c-format
 msgid "executed external action %s, return code = %d"
 msgstr "wykonano zewnętrzną komendę %s, zwrócony kod = %d"
@@ -1979,7 +1998,7 @@ msgstr "wykonano zewnętrzną komendę %s, zwrócony kod = %d"
 msgid "Offline"
 msgstr "Rozłączony"
 
-#: src/imcontact.cc:107 src/imlogger.cc:34 src/icqface.cc:1146
+#: src/imcontact.cc:107 src/imlogger.cc:34 src/icqface.cc:1184
 msgid "Online"
 msgstr "Przyłączony"
 
@@ -2025,7 +2044,7 @@ msgstr "Niedostępny"
 msgid "message"
 msgstr "wiadomość"
 
-#: src/imlogger.cc:50 src/icqface.cc:1036
+#: src/imlogger.cc:50 src/icqface.cc:1074
 msgid "URL"
 msgstr "URL"
 
@@ -2154,65 +2173,70 @@ msgstr " Importuj listę przyjaciół : %s "
 msgid " NickServ password (optional) : %s "
 msgstr " Hasło do NickServ (opcjonalne): %s "
 
-#: src/accountmanager.cc:140
+#: src/accountmanager.cc:141
+#, fuzzy, c-format
+msgid " Send receipts: %s "
+msgstr " Uporządkuj kontakty w grupy: %s"
+
+#: src/accountmanager.cc:144
 msgid " Register "
 msgstr " Zarejestruj "
 
-#: src/accountmanager.cc:145
+#: src/accountmanager.cc:149
 #, fuzzy, c-format
 msgid " OpenPGP key: %s "
 msgstr " Płeć: %s "
 
-#: src/accountmanager.cc:150
+#: src/accountmanager.cc:154
 #, fuzzy, c-format
 msgid " Key passphrase: %s "
 msgstr " Słowa kluczowe: %s "
 
-#: src/accountmanager.cc:158
+#: src/accountmanager.cc:162
 msgid " Change nickname "
 msgstr "Zmień ksywkę "
 
-#: src/accountmanager.cc:159
+#: src/accountmanager.cc:163
 msgid " Update user details "
 msgstr " Aktualizuj szczegóły "
 
-#: src/accountmanager.cc:162
+#: src/accountmanager.cc:166
 msgid " Set away message "
 msgstr " Ustaw powód nieobecności "
 
-#: src/accountmanager.cc:164
+#: src/accountmanager.cc:168
 msgid " Drop "
 msgstr " Usuń "
 
-#: src/accountmanager.cc:182
+#: src/accountmanager.cc:187
 msgid " user name: "
 msgstr " nazwa użytkownika: "
 
-#: src/accountmanager.cc:187
+#: src/accountmanager.cc:192
 msgid " uin: "
 msgstr " uin: "
 
-#: src/accountmanager.cc:192 src/accountmanager.cc:248
+#: src/accountmanager.cc:197 src/accountmanager.cc:253
 msgid " password: "
 msgstr " hasło: "
 
-#: src/accountmanager.cc:200
+#: src/accountmanager.cc:205
 msgid "Drop the account information first!"
 msgstr "Usuń najpierw informacje o koncie!"
 
-#: src/accountmanager.cc:214
+#: src/accountmanager.cc:219
 msgid "You have to disconnect the service first!"
 msgstr "Musisz się najpierw rozłączyć z serwisem!"
 
-#: src/accountmanager.cc:223
+#: src/accountmanager.cc:228
 msgid " server address: "
 msgstr " adres serwera: "
 
-#: src/accountmanager.cc:267
+#: src/accountmanager.cc:272
 msgid " priority: "
 msgstr " priorytet: "
 
-#: src/accountmanager.cc:281
+#: src/accountmanager.cc:286
 msgid "PGP key passphrase: "
 msgstr ""
 
@@ -2337,119 +2361,119 @@ msgstr ""
 msgid "registration is not supported"
 msgstr "rejestracja nie jest wspierana"
 
-#: src/icqconf.cc:178
+#: src/icqconf.cc:191
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "Naprawdę podoba mi się domyślny w %s powód nieobecności %s %s "
 
-#: src/icqconf.cc:982
+#: src/icqconf.cc:997
 msgid "+ ERROR: captcha disabled: no questions found!"
 msgstr ""
 
-#: src/icqconf.cc:1236
+#: src/icqconf.cc:1255
 #, c-format
 msgid "+ launched the %s action command"
 msgstr "+ uruchomiono komendę %s"
 
-#: src/icqconf.cc:1435
+#: src/icqconf.cc:1460
 msgid "event sending error: not enough parameters"
 msgstr "błąd wysyłania zdarzenia: za mało parametrów"
 
-#: src/icqconf.cc:1446
+#: src/icqconf.cc:1471
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "błąd wysyłania zdarzenia: tylko UIN-y są pozwolone w protokole icq"
 
-#: src/icqconf.cc:1461
+#: src/icqconf.cc:1486
 msgid "event sending error: unknown IM type"
 msgstr "błąd wysyłania zdarzenia: nieznany typ IM"
 
-#: src/icqconf.cc:1483
+#: src/icqconf.cc:1508
 msgid "event sending error: unknown event type"
 msgstr "błąd wysyłania zdarzenia: nieznany typ zdarzenia"
 
-#: src/icqconf.cc:1500
+#: src/icqconf.cc:1525
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s do %s zostało zostawione w kolejce"
 
-#: src/icqconf.cc:1506
+#: src/icqconf.cc:1531
 msgid "event sending error: error creating directory for the contact"
 msgstr "błąd wysyłania zdarzenia: nie można utworzyć katalogu dla kontaktu"
 
-#: src/icqconf.cc:1553
+#: src/icqconf.cc:1578
 msgid "unknown status character was given"
 msgstr "podano nieznany znak statusu"
 
-#: src/icqconf.cc:1556
+#: src/icqconf.cc:1581
 msgid "unknown IM type"
 msgstr "nieznany typ IM"
 
-#: src/icqconf.cc:1559
+#: src/icqconf.cc:1584
 msgid "status change error: "
 msgstr "błąd zmiany statusu: "
 
-#: src/icqconf.cc:1570
+#: src/icqconf.cc:1595
 msgid "Usage: "
 msgstr "Użycie: "
 
-#: src/icqconf.cc:1570
+#: src/icqconf.cc:1595
 msgid " [OPTION]..."
 msgstr ""
 
-#: src/icqconf.cc:1572
+#: src/icqconf.cc:1597
 msgid "General options:"
 msgstr "Opcje ogólne:"
 
-#: src/icqconf.cc:1573
+#: src/icqconf.cc:1598
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr "  --ascii, -a              używaj znaków ASCII do rysowania okienek"
 
-#: src/icqconf.cc:1574
+#: src/icqconf.cc:1599
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <ścieżka>  ustaw bazową ścieżkę"
 
-#: src/icqconf.cc:1575
+#: src/icqconf.cc:1600
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <host/ip>     korzystaj z danego IP"
 
-#: src/icqconf.cc:1576
+#: src/icqconf.cc:1601
 msgid "  --no-xtitles, -T         disable xterm titles"
 msgstr "  --no-xtitles, -T         wyłącz tytuły xterm"
 
-#: src/icqconf.cc:1577
+#: src/icqconf.cc:1602
 msgid ""
 "  --offline, -o            set all protocols status to offline upon start"
 msgstr ""
 
-#: src/icqconf.cc:1578
+#: src/icqconf.cc:1603
 msgid "  --debug, -d              enables debug info logging"
 msgstr "  --debug, -d              włącza logowanie debug"
 
-#: src/icqconf.cc:1579
+#: src/icqconf.cc:1604
 msgid "  --help                   display this stuff"
 msgstr "  --help                   pokaż pomoc"
 
-#: src/icqconf.cc:1580
+#: src/icqconf.cc:1605
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            pokaż wersję programu"
 
-#: src/icqconf.cc:1582
+#: src/icqconf.cc:1607
 msgid "Events sending options:"
 msgstr "Opcje wysyłania zdarzeń:"
 
-#: src/icqconf.cc:1583
+#: src/icqconf.cc:1608
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr "  -s, --send <typ>         typ zdarzenia; może być msg, sms lub url"
 
-#: src/icqconf.cc:1584
+#: src/icqconf.cc:1609
 #, fuzzy
 msgid ""
 "  -S, --status <status>    change the current IM status. Status; o, _, a, d, "
 "n, c, f, i"
 msgstr "  -S, --status <status>    zmień status IM"
 
-#: src/icqconf.cc:1585
+#: src/icqconf.cc:1610
 #, fuzzy
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc, "
@@ -2458,18 +2482,18 @@ msgstr ""
 "  -p, --proto <protokół>   typ protokołu; może być icq, yahoo, aim, irc, "
 "jabber lub lj"
 
-#: src/icqconf.cc:1587
+#: src/icqconf.cc:1612
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr "  -t, --to <cel>           docelowy UIN lub nick (zależy od protokołu)"
 
-#: src/icqconf.cc:1588
+#: src/icqconf.cc:1613
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr ""
 "  -n, --number <nr tel>    numer telefonu komórkowego do wysłania zdarzenia "
 "(tylko sms)"
 
-#: src/icqconf.cc:1590
+#: src/icqconf.cc:1615
 #, fuzzy
 msgid "Report bugs to http://bugzilla.centerim.org/."
 msgstr "Zgłaszanie problemów do http://bugzilla.centerim.org."
@@ -2535,8 +2559,8 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: src/imotr.cc:118 src/icqface.cc:1375 src/icqface.cc:1379
-#: src/icqface.cc:1385 src/icqface.cc:1391
+#: src/imotr.cc:118 src/icqface.cc:1419 src/icqface.cc:1423
+#: src/icqface.cc:1429 src/icqface.cc:1435
 msgid "Info"
 msgstr "Informacja"
 
@@ -2613,11 +2637,11 @@ msgid "yes/no"
 msgstr "tak"
 
 #: src/imotr.cc:413 src/imotr.cc:414 src/imotr.cc:416 src/imotr.cc:420
-#: src/icqface.cc:44 src/icqface.cc:119
+#: src/icqface.cc:47 src/icqface.cc:122
 msgid "no"
 msgstr "nie"
 
-#: src/imotr.cc:414 src/imotr.cc:419 src/icqface.cc:44
+#: src/imotr.cc:414 src/imotr.cc:419 src/icqface.cc:47
 msgid "yes"
 msgstr "tak"
 
@@ -2735,678 +2759,682 @@ msgstr ""
 msgid "Unverified"
 msgstr ""
 
-#: src/icqface.cc:49
+#: src/icqface.cc:52
 msgid "Male"
 msgstr "Mężczyzna"
 
-#: src/icqface.cc:50
+#: src/icqface.cc:53
 msgid "Female"
 msgstr "Kobieta"
 
-#: src/icqface.cc:53
+#: src/icqface.cc:56
 msgid "Not specified"
 msgstr "Niepodane"
 
-#: src/icqface.cc:58
+#: src/icqface.cc:61
 msgid "Ok"
 msgstr "OK"
 
-#: src/icqface.cc:59
+#: src/icqface.cc:62
 msgid "Next"
 msgstr "Następne"
 
-#: src/icqface.cc:60
+#: src/icqface.cc:63
 msgid "Fwd"
 msgstr "Przekazanie dalej"
 
-#: src/icqface.cc:61
+#: src/icqface.cc:64
 msgid "Reply"
 msgstr "Odpowiedź"
 
-#: src/icqface.cc:62
+#: src/icqface.cc:65
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/icqface.cc:63
+#: src/icqface.cc:66
 msgid "Accept"
 msgstr "Akceptuj"
 
-#: src/icqface.cc:64
+#: src/icqface.cc:67
 msgid "Reject"
 msgstr "Odrzuć"
 
-#: src/icqface.cc:65
+#: src/icqface.cc:68
 msgid "User info"
 msgstr "Info o użytkowniku"
 
-#: src/icqface.cc:67
+#: src/icqface.cc:70
 msgid "Prev"
 msgstr "Poprzednie"
 
-#: src/icqface.cc:75
+#: src/icqface.cc:78
 msgid "sound card"
 msgstr "karta dźwiękowa"
 
-#: src/icqface.cc:76
+#: src/icqface.cc:79
 msgid "speaker"
 msgstr "głośnik"
 
-#: src/icqface.cc:77
+#: src/icqface.cc:80
 msgid "disable"
 msgstr "wyłączone"
 
-#: src/icqface.cc:80 src/icqface.cc:89 src/icqface.cc:98
+#: src/icqface.cc:83 src/icqface.cc:92 src/icqface.cc:101
 msgid "don't change"
 msgstr "nie zmieniaj"
 
-#: src/icqface.cc:85
+#: src/icqface.cc:88
 msgid "dark"
 msgstr "ciemny"
 
-#: src/icqface.cc:86
+#: src/icqface.cc:89
 msgid "blue"
 msgstr "niebieski"
 
-#: src/icqface.cc:94
+#: src/icqface.cc:97
 #, fuzzy
 msgid "protocol"
 msgstr " Wszystkie protokoły"
 
-#: src/icqface.cc:95
+#: src/icqface.cc:98
 #, fuzzy
 msgid "status"
 msgstr "start"
 
-#: src/icqface.cc:115
+#: src/icqface.cc:118
 msgid "mode 1"
 msgstr "Tryb 1"
 
-#: src/icqface.cc:116
+#: src/icqface.cc:119
 msgid "mode 2"
 msgstr "Tryb 2"
 
-#: src/icqface.cc:243
+#: src/icqface.cc:246
 #, fuzzy, c-format
 msgid " CENTERIM %s  UNSENT: %lu"
 msgstr " centerim %s  NIEWYSŁANYCH: %lu"
 
-#: src/icqface.cc:268
+#: src/icqface.cc:271
 msgid "Send an URL"
 msgstr " Wyślij URL"
 
-#: src/icqface.cc:269
+#: src/icqface.cc:272
 msgid " Send an SMS"
 msgstr " Wyślij SMS"
 
-#: src/icqface.cc:270
+#: src/icqface.cc:273
 msgid "Send contacts"
 msgstr "Wyślij kontakty"
 
-#: src/icqface.cc:271
+#: src/icqface.cc:274
 msgid " Request authorization"
 msgstr "Prośba o autoryzację od %lu"
 
-#: src/icqface.cc:272
+#: src/icqface.cc:275
 msgid "Edit details"
 msgstr "Szczegóły "
 
-#: src/icqface.cc:273
+#: src/icqface.cc:276
 msgid "Fetch away message"
 msgstr " Info o nieobecności"
 
-#: src/icqface.cc:274
+#: src/icqface.cc:277
 msgid "Add to list"
 msgstr " Dodaj do listy"
 
-#: src/icqface.cc:275
+#: src/icqface.cc:278
 msgid "Rename contact"
 msgstr " Zmień nazwę"
 
-#: src/icqface.cc:276
+#: src/icqface.cc:279
 msgid " Move to group.."
 msgstr " Przenieś do grupy.."
 
-#: src/icqface.cc:277
+#: src/icqface.cc:280
 msgid " Ping"
 msgstr " Ping"
 
-#: src/icqface.cc:278
+#: src/icqface.cc:281
 msgid "Fetch version info"
 msgstr " Pobierz wersję "
 
-#: src/icqface.cc:279
+#: src/icqface.cc:282
 msgid " Send file(s)"
 msgstr " Wyślij plik(i)"
 
-#: src/icqface.cc:280
+#: src/icqface.cc:283
 msgid " Invite to conference.."
 msgstr " Zaproś do konferencji.."
 
-#: src/icqface.cc:287
+#: src/icqface.cc:290
 msgid " Send a channel message   enter"
 msgstr " Wyślij wiadomość         enter"
 
-#: src/icqface.cc:288
+#: src/icqface.cc:291
 msgid "Channel chat history"
 msgstr " Historia rozmowy"
 
-#: src/icqface.cc:289
+#: src/icqface.cc:292
 msgid " Remove channel             del"
 msgstr " Usuń kanał                 del"
 
-#: src/icqface.cc:290
+#: src/icqface.cc:293
 msgid " Join channel"
 msgstr " Wejdź na kanał"
 
-#: src/icqface.cc:291
+#: src/icqface.cc:294
 msgid " Leave channel"
 msgstr " Opuść kanał"
 
-#: src/icqface.cc:292
+#: src/icqface.cc:295
 msgid "List nicknames"
 msgstr "Wypisz ksywki"
 
-#: src/icqface.cc:295
+#: src/icqface.cc:298
 msgid "UnBlock channel messages"
 msgstr " Odblokuj wiadomości z kanału"
 
-#: src/icqface.cc:297
+#: src/icqface.cc:300
 msgid "Block channel messages"
 msgstr "Zablokuj wiadomości z kanału"
 
-#: src/icqface.cc:304
+#: src/icqface.cc:307
 msgid "Send a message"
 msgstr "Wyślij wiadomość"
 
-#: src/icqface.cc:306
+#: src/icqface.cc:309
 msgid "Event history"
 msgstr "Historia zdarzeń"
 
-#: src/icqface.cc:307
+#: src/icqface.cc:310
 msgid "Remove user"
 msgstr "Usuń"
 
-#: src/icqface.cc:308
+#: src/icqface.cc:311
 msgid "User's details"
 msgstr "Szczegóły"
 
-#: src/icqface.cc:309
+#: src/icqface.cc:312
 msgid "External actions.."
 msgstr " Zewnętrzne akcje.."
 
-#: src/icqface.cc:312
+#: src/icqface.cc:315
 msgid "Unset ignore user"
 msgstr " Nie ignoruj"
 
-#: src/icqface.cc:312
+#: src/icqface.cc:315
 msgid "Ignore user"
 msgstr "Ignoruj użytkownika"
 
-#: src/icqface.cc:316
+#: src/icqface.cc:319
 msgid " Assign PGP key.."
 msgstr ""
 
-#: src/icqface.cc:316
+#: src/icqface.cc:319
 msgid " Unassign PGP key"
 msgstr ""
 
-#: src/icqface.cc:318
+#: src/icqface.cc:321
 #, c-format
 msgid " Turn PGP encryption %s"
 msgstr ""
 
-#: src/icqface.cc:322
+#: src/icqface.cc:325
 msgid "Force check"
 msgstr "Wymuś sprawdzenie"
 
-#: src/icqface.cc:429
+#: src/icqface.cc:432
 msgid "Change status"
 msgstr "Zmień status"
 
-#: src/icqface.cc:430
+#: src/icqface.cc:433
 msgid "Go to contact.."
 msgstr "Idź do kontaktu.."
 
-#: src/icqface.cc:431
+#: src/icqface.cc:434
 msgid " Accounts.."
 msgstr " Konta.."
 
-#: src/icqface.cc:432
+#: src/icqface.cc:435
 #, fuzzy
 msgid " CenterIM config options"
 msgstr " Opcje konfiguracji centerim"
 
-#: src/icqface.cc:434
+#: src/icqface.cc:437
 msgid " OTR options and fingerprints"
 msgstr ""
 
-#: src/icqface.cc:436
+#: src/icqface.cc:439
 msgid " File transfers monitor"
 msgstr " Monitorowanie transferów plików"
 
-#: src/icqface.cc:438
+#: src/icqface.cc:441
 msgid " Find/add users"
 msgstr " Znajdź/dodaj użytkownika"
 
-#: src/icqface.cc:439
+#: src/icqface.cc:442
 msgid " Join channel/conference"
 msgstr " Wejdź na kanał/konferencję"
 
-#: src/icqface.cc:441
+#: src/icqface.cc:444
 msgid " Link an RSS feed"
 msgstr " Podłącz strumień RSS"
 
-#: src/icqface.cc:444
+#: src/icqface.cc:447
 msgid " View/edit ignore list"
 msgstr " Edycja listy ignorowanych"
 
-#: src/icqface.cc:445
+#: src/icqface.cc:448
 msgid " View/edit invisible list"
 msgstr " Edycja listy niewidzialności"
 
-#: src/icqface.cc:446
+#: src/icqface.cc:449
 msgid " View/edit visible list"
 msgstr " Edycja listy widzialności"
 
-#: src/icqface.cc:449
+#: src/icqface.cc:452
 msgid "Show offline users"
 msgstr "Pokaż nieobecnych użytkowników"
 
-#: src/icqface.cc:451
+#: src/icqface.cc:454
 msgid "Hide offline users"
 msgstr " Ukryj nieobecnych użytkowników"
 
-#: src/icqface.cc:454
+#: src/icqface.cc:457
 msgid " Organize contact groups"
 msgstr " Uporządkuj grupy kontaktów"
 
-#: src/icqface.cc:455
+#: src/icqface.cc:458
 msgid " Mass group move.."
 msgstr " Masowe przenoszenie grupy.."
 
-#: src/icqface.cc:866 src/icqface.cc:870 src/icqface.cc:1815
+#: src/icqface.cc:904 src/icqface.cc:908 src/icqface.cc:1859
 msgid "Details"
 msgstr "Szczegóły"
 
-#: src/icqface.cc:866
+#: src/icqface.cc:904
 msgid "Message"
 msgstr "Wiadomość"
 
-#: src/icqface.cc:867 src/icqface.cc:871
+#: src/icqface.cc:905 src/icqface.cc:909
 msgid "New search"
 msgstr "Nowe szukanie"
 
-#: src/icqface.cc:885
+#: src/icqface.cc:923
 msgid "Contact to add"
 msgstr "Kontakt do dodania"
 
-#: src/icqface.cc:895
+#: src/icqface.cc:933
 msgid "Searching contacts.."
 msgstr "Szukanie kontaktów.."
 
-#: src/icqface.cc:966
+#: src/icqface.cc:1004
 msgid "Search results [done]"
 msgstr "Wyniki szukania [zakończono]"
 
-#: src/icqface.cc:977
+#: src/icqface.cc:1015
 #, c-format
 msgid "Information about %s"
 msgstr "Informacje o %s"
 
-#: src/icqface.cc:1034 src/icqface.cc:1090
+#: src/icqface.cc:1072 src/icqface.cc:1128
 msgid "Nickname"
 msgstr "Ksywka"
 
-#: src/icqface.cc:1042
+#: src/icqface.cc:1080
 msgid "This is your LiveJournal account. Use it to"
 msgstr "To jest Twoje konto LiveJournal. Użyj go do"
 
-#: src/icqface.cc:1043
+#: src/icqface.cc:1081
 msgid "post new entries to your journal."
 msgstr "wysyłania nowych wpisów w Twoim dzienniku."
 
-#: src/icqface.cc:1050
+#: src/icqface.cc:1088
 msgid "The following users have you listed as their friend:"
 msgstr "Lista użytkowników, którzy mają Cię zapisanego jako ich przyjaciela:"
 
-#: src/icqface.cc:1073
+#: src/icqface.cc:1111
 msgid "found"
 msgstr ""
 
-#: src/icqface.cc:1075
+#: src/icqface.cc:1113
 msgid "used"
 msgstr ""
 
-#: src/icqface.cc:1075
+#: src/icqface.cc:1113
 #, fuzzy
 msgid "not used"
 msgstr "Ignoruj użytkownika"
 
-#: src/icqface.cc:1077
+#: src/icqface.cc:1115
 #, fuzzy
 msgid "not found"
 msgstr "brak znacznika <rss>"
 
-#: src/icqface.cc:1092
+#: src/icqface.cc:1130
 msgid "E-mail"
 msgstr "Email"
 
-#: src/icqface.cc:1093
+#: src/icqface.cc:1131
 msgid "2nd e-mail"
 msgstr "Drugi email"
 
-#: src/icqface.cc:1094
+#: src/icqface.cc:1132
 msgid "Old e-mail"
 msgstr "Stary email"
 
-#: src/icqface.cc:1095
+#: src/icqface.cc:1133
 msgid "Gender"
 msgstr "Płeć"
 
-#: src/icqface.cc:1096 src/icqface.cc:1341
+#: src/icqface.cc:1134 src/icqface.cc:1385
 msgid "Birthdate"
 msgstr "Data ur."
 
-#: src/icqface.cc:1097
+#: src/icqface.cc:1135
 msgid "Age"
 msgstr "Wiek"
 
-#: src/icqface.cc:1098
+#: src/icqface.cc:1136
 msgid "Languages"
 msgstr "Języki"
 
-#: src/icqface.cc:1099
+#: src/icqface.cc:1137
 msgid "Last IP"
 msgstr "Ostatni IP"
 
-#: src/icqface.cc:1120
+#: src/icqface.cc:1158
 msgid "Last seen"
 msgstr "Ostatnio widziano"
 
-#: src/icqface.cc:1122 src/icqface.cc:1325 src/icqface.cc:1329
+#: src/icqface.cc:1160 src/icqface.cc:1369 src/icqface.cc:1373
 msgid "Never"
 msgstr "Nigdy"
 
-#: src/icqface.cc:1131
+#: src/icqface.cc:1169
 msgid "days"
 msgstr "dni"
 
-#: src/icqface.cc:1135
+#: src/icqface.cc:1173
 msgid "hours"
 msgstr "godziny"
 
-#: src/icqface.cc:1140
+#: src/icqface.cc:1178
 msgid "min"
 msgstr "minuty"
 
-#: src/icqface.cc:1144
+#: src/icqface.cc:1182
 #, fuzzy
 msgid "seconds"
 msgstr "sekundy"
 
-#: src/icqface.cc:1151
+#: src/icqface.cc:1189
 #, fuzzy
 msgid "Server-based contact"
 msgstr "Wyślij kontakty"
 
-#: src/icqface.cc:1156
+#: src/icqface.cc:1194
 #, fuzzy
 msgid "Awaiting authorization"
 msgstr "autoryzacja"
 
-#: src/icqface.cc:1172 src/icqface.cc:1215
+#: src/icqface.cc:1202
+msgid "Avatar file"
+msgstr ""
+
+#: src/icqface.cc:1216 src/icqface.cc:1259
 msgid "Address"
 msgstr "Adres"
 
-#: src/icqface.cc:1173 src/icqface.cc:1216
+#: src/icqface.cc:1217 src/icqface.cc:1260
 msgid "Location"
 msgstr "Lokalizacja"
 
-#: src/icqface.cc:1174 src/icqface.cc:1217
+#: src/icqface.cc:1218 src/icqface.cc:1261
 msgid "Zip code"
 msgstr "Kod"
 
-#: src/icqface.cc:1175 src/icqface.cc:1223
+#: src/icqface.cc:1219 src/icqface.cc:1267
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/icqface.cc:1176 src/icqface.cc:1224
+#: src/icqface.cc:1220 src/icqface.cc:1268
 msgid "Fax"
 msgstr "Fax"
 
-#: src/icqface.cc:1177
+#: src/icqface.cc:1221
 msgid "Cellular"
 msgstr "Komórka"
 
-#: src/icqface.cc:1178
+#: src/icqface.cc:1222
 msgid "Timezone"
 msgstr "Strefa czasowa"
 
-#: src/icqface.cc:1180 src/icqface.cc:1225
+#: src/icqface.cc:1224 src/icqface.cc:1269
 msgid "Homepage"
 msgstr "Strona domowa"
 
-#: src/icqface.cc:1219
+#: src/icqface.cc:1263
 msgid "Company"
 msgstr "Firma"
 
-#: src/icqface.cc:1220
+#: src/icqface.cc:1264
 msgid "Department"
 msgstr "Dział"
 
-#: src/icqface.cc:1221 src/icqface.cc:1300
+#: src/icqface.cc:1265 src/icqface.cc:1344
 msgid "Title"
 msgstr "Tytuł"
 
-#: src/icqface.cc:1265
+#: src/icqface.cc:1309
 msgid "Interests"
 msgstr "Zainteresowania"
 
-#: src/icqface.cc:1277
+#: src/icqface.cc:1321
 msgid "Background"
 msgstr "Tło/Przeszłość"
 
-#: src/icqface.cc:1295
+#: src/icqface.cc:1339
 msgid "Handle"
 msgstr "Uchwyt"
 
-#: src/icqface.cc:1296
+#: src/icqface.cc:1340
 msgid "RSS doc"
 msgstr "Dokumentacja RSS"
 
-#: src/icqface.cc:1297
+#: src/icqface.cc:1341
 msgid "Version"
 msgstr "Wersja"
 
-#: src/icqface.cc:1298
+#: src/icqface.cc:1342
 msgid "Encoding"
 msgstr "Kodowanie"
 
-#: src/icqface.cc:1301
+#: src/icqface.cc:1345
 msgid "Link"
 msgstr "Łącze"
 
-#: src/icqface.cc:1303
+#: src/icqface.cc:1347
 msgid "Frequency"
 msgstr "Częstość"
 
-#: src/icqface.cc:1304
+#: src/icqface.cc:1348
 msgid "Last check"
 msgstr "Ostatnio sprawdzono"
 
-#: src/icqface.cc:1305
+#: src/icqface.cc:1349
 msgid "Next check"
 msgstr "Następne sprawdzenie"
 
-#: src/icqface.cc:1306
+#: src/icqface.cc:1350
 msgid "Last result"
 msgstr "Ostatni wynik"
 
-#: src/icqface.cc:1320
+#: src/icqface.cc:1364
 #, c-format
 msgid "%lu minutes"
 msgstr "%lu min"
 
-#: src/icqface.cc:1323
+#: src/icqface.cc:1367
 msgid "Now"
 msgstr "Teraz"
 
-#: src/icqface.cc:1342
+#: src/icqface.cc:1386
 msgid "Full name"
 msgstr "Imię i nazwisko"
 
-#: src/icqface.cc:1361
+#: src/icqface.cc:1405
 #, c-format
 msgid "%s to URLs, %s external actions, %s close"
 msgstr "%s do URL-i, %s zewnętrzne programy, %s zamknij"
 
-#: src/icqface.cc:1366
+#: src/icqface.cc:1410
 #, c-format
 msgid "user info for %s"
 msgstr "Info o użytkowniku %s"
 
-#: src/icqface.cc:1375
+#: src/icqface.cc:1419
 msgid "Check"
 msgstr "Sprawdź"
 
-#: src/icqface.cc:1375 src/icqface.cc:1392
+#: src/icqface.cc:1419 src/icqface.cc:1436
 msgid "Edit"
 msgstr "Edycja"
 
-#: src/icqface.cc:1375
+#: src/icqface.cc:1419
 msgid "LJ"
 msgstr "LJ"
 
-#: src/icqface.cc:1379
+#: src/icqface.cc:1423
 msgid "Retreive"
 msgstr "Ściągnij"
 
-#: src/icqface.cc:1385
+#: src/icqface.cc:1429
 msgid "Friend of"
 msgstr "Przyjaciel (czyj)"
 
-#: src/icqface.cc:1391
+#: src/icqface.cc:1435
 msgid "Home"
 msgstr "Dom"
 
-#: src/icqface.cc:1391
+#: src/icqface.cc:1435
 msgid "Work"
 msgstr "Praca"
 
-#: src/icqface.cc:1391
+#: src/icqface.cc:1435
 msgid "More"
 msgstr "Więcej"
 
-#: src/icqface.cc:1392
+#: src/icqface.cc:1436
 msgid "Retrieve"
 msgstr "Ściągnij"
 
-#: src/icqface.cc:1492
+#: src/icqface.cc:1536
 msgid " [icq] ICQ network"
 msgstr " [icq] sieć ICQ"
 
-#: src/icqface.cc:1493
+#: src/icqface.cc:1537
 msgid " [yahoo] YAIM"
 msgstr " [yahoo] YAIM"
 
-#: src/icqface.cc:1494
+#: src/icqface.cc:1538
 msgid " [msn] M$ Messenger"
 msgstr " [msn] MS Messenger"
 
-#: src/icqface.cc:1495
+#: src/icqface.cc:1539
 msgid " [aim] AOL TOC"
 msgstr " [aim] AOL TOC"
 
-#: src/icqface.cc:1496
+#: src/icqface.cc:1540
 msgid " [irc] IRC"
 msgstr " [irc] IRC"
 
-#: src/icqface.cc:1497
+#: src/icqface.cc:1541
 msgid " [jab] Jabber"
 msgstr " [jab] Jabber"
 
-#: src/icqface.cc:1499
+#: src/icqface.cc:1543
 msgid " [lj] LiveJournal"
 msgstr " [lj] LiveJournal"
 
-#: src/icqface.cc:1500
+#: src/icqface.cc:1544
 msgid " [gg] Gadu-Gadu"
 msgstr " [gg] Gadu-Gadu"
 
-#: src/icqface.cc:1541
+#: src/icqface.cc:1585
 msgid " All protocols"
 msgstr " Wszystkie protokoły"
 
-#: src/icqface.cc:1542
+#: src/icqface.cc:1586
 msgid " Already logged in only"
 msgstr "Już zarejestrowany"
 
-#: src/icqface.cc:1642
+#: src/icqface.cc:1686
 msgid " <Space> or <Enter> confirm, <Esc> cancel "
 msgstr " <Space> lub <Enter> potwierdza, <Esc> anuluje "
 
-#: src/icqface.cc:1671
+#: src/icqface.cc:1715
 msgid " <Space> confirm, <Esc> cancel "
 msgstr " <Space> potwierdza, <Esc> anuluje "
 
-#: src/icqface.cc:1815
+#: src/icqface.cc:1859
 msgid "Move to contacts"
 msgstr "Przenieś do kontaktów"
 
-#: src/icqface.cc:1827
+#: src/icqface.cc:1871
 msgid "Ignore list"
 msgstr "Lista ignorowanych"
 
-#: src/icqface.cc:1828
+#: src/icqface.cc:1872
 msgid "Visible list"
 msgstr "Lista widoczności"
 
-#: src/icqface.cc:1829
+#: src/icqface.cc:1873
 msgid "Invisible list"
 msgstr "Lista niewidoczności"
 
-#: src/icqface.cc:1851
+#: src/icqface.cc:1895
 msgid "Select contacts to add to the list"
 msgstr "Wybierz kontakty, które chcesz dodać do listy"
 
-#: src/icqface.cc:1856
+#: src/icqface.cc:1900
 #, c-format
 msgid "Remove the %d contacts from the contact list as well?"
 msgstr "Usuń %d kontaktów z listy kontaktów?"
 
-#: src/icqface.cc:1915
+#: src/icqface.cc:1959
 msgid "Event recipients"
 msgstr "Odbiorcy"
 
-#: src/icqface.cc:2126
+#: src/icqface.cc:2170
 #, fuzzy, c-format
 msgid "QuickSearch: type to find, %s find again, Enter finish"
 msgstr "Szybkie szukanie: wpisz by znaleźć, %s szukaj ponownie, Enter kończy"
 
-#: src/icqface.cc:2129
+#: src/icqface.cc:2173
 #, fuzzy
 msgid "contact list quick search"
 msgstr "szybkie szukanie w liście kontaktów"
 
-#: src/icqface.cc:2243
+#: src/icqface.cc:2287
 msgid "+ no URLs within the current context"
 msgstr "+ bieżący kontekst nie zawiera URL-i"
 
-#: src/icqface.cc:2256
+#: src/icqface.cc:2300
 msgid "URLs within the current context"
 msgstr "URL-e w bieżącym kontekście"
 
-#: src/icqface.cc:2272
+#: src/icqface.cc:2316
 #, c-format
 msgid "+ no external actions defined for %s"
 msgstr " + brak zdefiniowanych akcji zewnętrznych dla %s"
 
-#: src/icqface.cc:2292
+#: src/icqface.cc:2336
 #, c-format
 msgid "Result of the external action %s:"
 msgstr "Rezultat zewnętrznej akcji %s:"
 
-#: src/icqface.cc:2310
+#: src/icqface.cc:2354
 #, fuzzy, c-format
 msgid ""
 "%s send, %s multi, %s/%s pr/nxt chat, %s hist, %s URLs, %s expand, %s memb"
@@ -3414,7 +3442,7 @@ msgstr ""
 "%s wyślij, %s do wielu, %s historia, %s URL-e, %s powiększ, %s członkowie, %"
 "s zamknij "
 
-#: src/icqface.cc:2311
+#: src/icqface.cc:2355
 #, fuzzy, c-format
 msgid ""
 "%s send, %s multi, %s/%s pr/nxt chat, %s hist, %s URLs, %s expand, %s info"
@@ -3422,74 +3450,74 @@ msgstr ""
 "%s wyślij, %s do wielu, %s historia, %s URL-e, %s powiększ, %s szczegóły, %s "
 "zamknij"
 
-#: src/icqface.cc:2346
+#: src/icqface.cc:2390
 #, fuzzy, c-format
 msgid "Outgoing %s"
 msgstr "Wiadomość do %s "
 
-#: src/icqface.cc:2479
+#: src/icqface.cc:2523
 msgid "Send contacts.."
 msgstr "Wyślij kontakty.."
 
-#: src/icqface.cc:2539
+#: src/icqface.cc:2583
 msgid "file name: "
 msgstr "nazwa pliku: "
 
-#: src/icqface.cc:2978
+#: src/icqface.cc:3022
 #, c-format
 msgid "Outgoing %s to %s"
 msgstr "%s wychodzące do %s"
 
-#: src/icqface.cc:2979
+#: src/icqface.cc:3023
 #, c-format
 msgid "Sent on %s"
 msgstr "Wysłane %s"
 
-#: src/icqface.cc:2982
+#: src/icqface.cc:3026
 #, c-format
 msgid "Incoming %s from %s"
 msgstr "%s przychodzące od %s"
 
-#: src/icqface.cc:2983
+#: src/icqface.cc:3027
 #, c-format
 msgid "Received on %s"
 msgstr "Otrzymane %s"
 
-#: src/icqface.cc:3029
+#: src/icqface.cc:3073
 #, c-format
 msgid "%s to URLs, %s to full-screenize, %s close"
 msgstr "%s do URL-i, %s pełny ekran, %s zamknij"
 
-#: src/icqface.cc:3077
+#: src/icqface.cc:3121
 #, c-format
 msgid "%s from %s, received on %s"
 msgstr "%s od %s, otrzymano %s"
 
-#: src/icqface.cc:3078
+#: src/icqface.cc:3122
 #, c-format
 msgid "%s to %s, sent on %s"
 msgstr "%s do %s, wysłano %s"
 
-#: src/icqface.cc:3087
+#: src/icqface.cc:3131
 msgid "full-screen view"
 msgstr "widok na cały ekran"
 
-#: src/icqface.cc:3093
+#: src/icqface.cc:3137
 #, c-format
 msgid "%s or %s to close, Up/Down and PgUp/PgDn to scroll"
 msgstr "%s lub %s zamykaj, Góra/Dół i PgUp/PgDn przewijaj"
 
-#: src/icqface.cc:3180
+#: src/icqface.cc:3225
 #, c-format
 msgid "History for %s, %d events total"
 msgstr "Historia dla %s, %d zdarzeń"
 
-#: src/icqface.cc:3186
+#: src/icqface.cc:3231
 #, fuzzy, c-format
 msgid "%s search, %s again, %s cancel"
 msgstr "%s szukaj, %s ponownie, %s anuluj"
 
-#: src/icqface.cc:3195
+#: src/icqface.cc:3240
 msgid "search for: "
 msgstr "wyszukiwanie dla:"
 
