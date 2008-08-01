@@ -37,6 +37,12 @@
 
 #include <sys/utsname.h> //used for uname function
 
+#ifdef HAVE_SSTREAM
+    #include <sstream>
+#else
+    #include <strstream>
+#endif
+
 #ifdef HAVE_LIBOTR
   #include "imotr.h"
 #endif 
@@ -469,6 +475,20 @@ bool jabberhook::send(const imevent &ev) {
 	    xmlnode_put_attrib(xenc, "xmlns", "jabber:x:encrypted");
 	    xmlnode_insert_cdata(xenc, enc.c_str(), (unsigned) -1);
 	}
+
+	if(conf->getourid(jhook.proto).additional["acknowledgements"] == "1") {
+	    xmlnode request = xmlnode_insert_tag(x, "request");
+	    xmlnode_put_attrib(request, "xmlns", NS_RECEIPTS);
+	}
+#ifdef HAVE_SSTREAM
+	stringstream idstream;
+	idstream << ev.gettimestamp();
+	xmlnode_put_attrib(x, "id", idstream.str().c_str());
+#else
+	strstream idstream;
+	idstream << ev.gettimestamp();
+	xmlnode_put_attrib(x, "id", idstream.str());
+#endif
 
 	jab_send(jc, x);
 	xmlnode_free(x);
@@ -1854,13 +1874,25 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	    if(!body.empty())
 		jhook.gotmessage(type, from, body, enc);
 
-		if(jhook.getstatus() != invisible && conf->getourid(jhook.proto).additional["acknowledgements"] == "1") {
+		if(jhook.getstatus() != invisible) {
 	    	if(x = xmlnode_get_tag(packet->x, "request"))
 			if(NSCHECK(x, NS_RECEIPTS)) {
 				const char *id = xmlnode_get_attrib(packet->x, "id");
 				xmlnode receipt = jutil_receiptnew(from.c_str(), id);
 				jab_send(conn, receipt);
 				xmlnode_free(receipt);
+			}
+		}
+
+		if(x = xmlnode_get_tag(packet->x, "received"))
+		{
+			if(p = xmlnode_get_attrib(packet->x, "id"))
+			{
+				icqcontact *c = clist.get(ic);
+				c->receivedAcks.insert(strtoul(p, 0, 0));
+				face.relaxedupdate();
+				if(c->isopenedforchat())
+					c->sethasevents(true);
 			}
 		}
 

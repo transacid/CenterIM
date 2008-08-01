@@ -138,7 +138,7 @@ void accountmanager::exec() {
 
 		if(!a.empty())
 		    if(capab.count(hookcapab::acknowledgements))
-			t.addleaff(n, 0, citem+17, _(" Send receipts: %s "),
+			t.addleaff(n, 0, citem+17, _(" Request receipts: %s "),
 			    stryesno(a.additional["acknowledgements"] == "1"));
 		if(a.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));

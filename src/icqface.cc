@@ -2696,7 +2696,11 @@ void icqface::renderchathistory() {
 	}
 
 	if(count < chatlines) {
-	    text = extracttime(*events.back());
+	    if(c->receivedAcks.size() > 0)
+	        text = (events.back()->getack())?"+":" ";
+	    else
+	        text = "";
+	    text += extracttime(*events.back());
 	    text += events.back()->gettext();
 	    chatlastread = events.back()->gettimestamp()-1;
 

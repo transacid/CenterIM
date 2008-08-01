@@ -46,12 +46,12 @@ static const string seventtype[imevent::imeventtype_size] = {
 
 // -- basic imevent class -----------------------------------------------------
 
-imevent::imevent() {
+imevent::imevent() : acknowledged(false){
 }
 
 imevent::imevent(const imcontact &acont, imdirection adir, imeventtype atype, time_t asenttimestamp)
 : contact(acont), direction(adir), type(atype), timestamp(timer_current),
-  senttimestamp(asenttimestamp ? asenttimestamp : timer_current) {
+  senttimestamp(asenttimestamp ? asenttimestamp : timer_current), acknowledged(false) {
 }
 
 imevent::imevent(ifstream &f) {
@@ -202,6 +202,7 @@ immessage::immessage(const imevent &ev) {
     direction = ev.direction;
     timestamp = ev.timestamp;
     senttimestamp = ev.senttimestamp;
+    acknowledged = ev.acknowledged;
 
     const immessage *m = dynamic_cast<const immessage *>(&ev);
 

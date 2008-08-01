@@ -34,6 +34,7 @@ class imevent {
 	imdirection direction;
 	time_t senttimestamp;
 	time_t timestamp;
+	bool acknowledged;
 
 	string readblock(ifstream &f);
 
@@ -55,6 +56,9 @@ class imevent {
 	imevent *getevent() const;
 
 	virtual string gettext() const;
+
+	virtual bool getack() const { return acknowledged;};
+	virtual bool setack(bool acknowledged) { this->acknowledged = acknowledged;}
 
 	virtual bool empty() const;
 	virtual bool contains(const string &atext) const;

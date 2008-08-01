@@ -175,6 +175,8 @@ class icqcontact {
 
 	bool getusepgpkey() const;
 	void setusepgpkey(bool usekey);
+
+	set<time_t> receivedAcks;
 };
 
 #endif
