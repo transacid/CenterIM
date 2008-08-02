@@ -19,9 +19,11 @@ class jabberhook: public abstracthook {
 
 	time_t timer_keepalive;
 
+	map<string, pair<imfile, pair<struct send_file *, int > > > srfiles; //transfer queue of files
+	map<imfile, string> back_srfiles; //backward compatibility to clean up sending files from overloaded abort function
 	map<string, string> roster;
 	map<string, string> awaymsgs;
-	map<string, string> full_jids;//little trick to store users full JID's, it required in some xmpp packets
+	map<string, string> full_jids; //little trick to store users full JID's, it required in some xmpp packets
 	map<imfile, pair<struct send_file *, string> > transferinfo;
 	map<string, vector<string> > chatmembers;
 	map<string, map<string, pair<char, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
@@ -92,11 +94,11 @@ class jabberhook: public abstracthook {
 	void bytenegotiat(const imfile &fr);
 	void reject_file(const imfile &fr);
 	void recieve_file( const imcontact &ic, xmlnode x, string id, string from, string to );
-
+	void send_file(const string &cjid);
 
 	bool isourid(const string &jid);
 	static string getourjid();
-	static void progressbar(void *file, long int bytes, long int size, int status);
+	static void progressbar(void *file, long int bytes, long int size, int status, int conn_type );
 	string jidnormalize(const string &jid) const;
 
 	void vcput(xmlnode x, const string &name, const string &val);
@@ -106,7 +108,7 @@ class jabberhook: public abstracthook {
 	    const string &locality, const string &region, const string &pcode,
 	    unsigned short country);
 	void vcputavatar(xmlnode x, const string &type, const string &val);
-	void clean_up_file(const imfile &fr);
+	void clean_up_file(const imfile &, int trans_type, char *cjid = NULL );
 
     public:
 	jabberhook();

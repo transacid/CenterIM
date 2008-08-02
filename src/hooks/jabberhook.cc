@@ -250,6 +250,9 @@ jabberhook::jabberhook(): abstracthook(jabber), jc(0), flogged(false), fonline(f
     fcapabs.insert(hookcapab::changenick);
     fcapabs.insert(hookcapab::changeabout);
     fcapabs.insert(hookcapab::version);
+#ifdef HAVE_THREAD
+    fcapabs.insert(hookcapab::files);
+#endif
     fcapabs.insert(hookcapab::pgp);
 	fcapabs.insert(hookcapab::acknowledgements);
 }
@@ -415,7 +418,33 @@ bool jabberhook::send(const imevent &ev) {
 	    const imurl *m = static_cast<const imurl *>(&ev);
 	    text = m->geturl() + "\n\n" + m->getdescription();
 
-	} else if(ev.gettype() == imevent::authorization) {
+	} else if(ev.gettype() == imevent::file) {
+		const imfile *m = static_cast<const imfile *>(&ev);
+		vector<imfile::record> files = m->getfiles();
+		vector<imfile::record>::const_iterator ir = files.begin();
+
+		char *cjid = strdup(jidtodisp(ev.getcontact().nickname).c_str());
+	 
+		struct send_file *trans_file = (struct send_file *)malloc( sizeof( struct send_file ) );
+		srfiles[cjid].first = (*m);
+		back_srfiles[*m] = cjid; //backward comp. , little hack :(
+		 
+		trans_file->full_jid_name = strdup(jhook.full_jids[cjid].c_str());
+		trans_file->id = NULL;
+		trans_file->transfer_type = 5;
+		trans_file->host = NULL;
+		trans_file->url = NULL;
+		trans_file->sid_from_to = NULL;
+		 
+		srfiles[cjid].second.first = trans_file;
+		srfiles[cjid].second.second = 0;
+			
+
+		face.transferupdate(files[0].fname, *m, icqface::tsInit, files[0].size, 0);
+
+		send_file(cjid);
+
+		} else if(ev.gettype() == imevent::authorization) {
 	    const imauthorization *m = static_cast<const imauthorization *> (&ev);
 	    char *cjid = strdup(jidnormalize(ev.getcontact().nickname).c_str());
 	    xmlnode x = 0;
@@ -2042,12 +2071,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			    {		    
 				    if(!strcmp(p, NS_BYTESTREAMS)) {
 					    jhook.full_jids[ic.nickname] = from;
+#ifdef HAVE_THREAD
 					    jhook.getfile_byte(ic, packet->x);
+#endif
 					    return;
 				    }
 				    else if(!strcmp(p, NS_OOB)) {
 					    jhook.full_jids[ic.nickname] = from;
+#ifdef HAVE_THREAD
 					    jhook.getfile_http(ic, packet->x);
+#endif
 					    return;
 				    }
 			    }
@@ -2061,7 +2094,9 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 						    if(!strcmp(p, NS_SIFILE)) {
 							    {
 								    jhook.full_jids[ic.nickname] = from;
+#ifdef HAVE_THREAD
 								    jhook.file_transfer_request(ic, packet->x);
+#endif
 								    return;
 							    }
 						    }
@@ -2402,6 +2437,47 @@ bool jabberhook::url_port_get(const string &full_url, string &url, int &port, st
 	return false;
 }
 
+
+void jabberhook::send_file(const string &cjid) //http sendfile
+{
+	int ptpmin, ptpmax;
+	vector<imfile::record> files = srfiles[cjid].first.getfiles();
+	int ir = srfiles[cjid].second.second;
+	string full_jid = jhook.full_jids[cjid];
+
+	if( ir < files.size() )
+	{
+		struct send_file *file = (struct send_file *)srfiles[cjid].second.first;
+
+		xmlnode x, y;
+
+		x = jutil_iqnew(JPACKET__SET, NS_OOB);
+		xmlnode_put_attrib(x, "from", getourjid().c_str());
+		xmlnode_put_attrib(x, "to", full_jid.c_str());
+
+		string new_id = (string)"centerim" + i2str(rand());
+
+		xmlnode_put_attrib(x, "id", new_id.c_str());
+		y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "url"); 
+
+		conf->getpeertopeer(ptpmin, ptpmax); //getting max and min port range 
+
+		jabber_send_file(jhook.jc, files[ir].fname.c_str(), files[ir].size, file, strdup(cjid.c_str()), &progressbar, ptpmin, ptpmax ); //real send fuction, starting server
+		string send_url = (string)"http://" + file->host + (string)":" + i2str(file->port) + (string)"/" + justfname(files[ir].fname);
+		xmlnode_insert_cdata(y, send_url.c_str(), (unsigned) -1 );
+		 
+		xmlnode k;
+		k = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "desc");
+		string desc = "File size: " + i2str(files[ir].size);
+		xmlnode_insert_cdata(k, desc.c_str(), (unsigned) -1 );
+		 
+		if(x) {
+			jab_send(jc, x);
+			xmlnode_free(x);
+		}
+	}
+}
+
 bool jabberhook::knowntransfer(const imfile &fr) const {
 	return transferinfo.find(fr) != transferinfo.end();
 }
@@ -2423,37 +2499,86 @@ void jabberhook::replytransfer(const imfile &fr, bool accept, const string &loca
 		}
 
 
-	} else {                                                                               clean_up_file(fr);
+	} else {                                                                               clean_up_file(fr, 0);
 
 	}                                                                                      
 }
 
 void jabberhook::aborttransfer(const imfile &fr) {//overloaded function to aborting filetransfers
-	if( transferinfo.find(fr) != transferinfo.end() )
+	 
+	if( fr.getdirection() == imevent::incoming )
 	{
-		face.transferupdate(fr.getfiles().begin()->fname, fr,icqface::tsCancel, 0, 0);
-		clean_up_file(fr); //do some cleanups
+		if( transferinfo.find(fr) != transferinfo.end() )
+		{
+			face.transferupdate(fr.getfiles().begin()->fname, fr,icqface::tsCancel, 0, 0);
+			clean_up_file(fr, 0); //do some cleanups
+		}
+	}
+	else
+	{
+		string sr = back_srfiles[fr];
+		if( back_srfiles.find(fr) != back_srfiles.end() )
+		{
+			vector<imfile::record> files = fr.getfiles();
+			face.transferupdate(files[srfiles[sr].second.second].fname, fr,icqface::tsCancel, 0, 0);
+			clean_up_file(fr, 1, (char*)sr.c_str()); //do some cleanups
+		}
 	}
 }
  
-void jabberhook::progressbar(void *file, long int bytes, long int size, int status) {
+void jabberhook::progressbar(void *file, long int bytes, long int size, int status, int conn_type ) { //conn_type - litle trick to easy determine send or recieve conn. type
 	char *jid = (char*)file;
-	if( jhook.transferusers.find(jid) != jhook.transferusers.end() )
+	if( conn_type == 0 )
 	{
-		imfile fr = jhook.transferusers[jid]; 
-		switch(status)
+		if( jhook.transferusers.find(jid) != jhook.transferusers.end() )
 		{
-			case 0:
-				face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsProgress, size, bytes);
-				break;
-			case 1:
-				face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsFinish, size, 0);
-				jhook.clean_up_file(fr);
-				break;
-			default:
-				face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsError, 0, 0);
-				jhook.clean_up_file(fr);
-				break;
+			imfile fr = jhook.transferusers[jid]; 
+			switch(status)
+			{
+				case 0:
+					face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsProgress, size, bytes);
+					break;
+				case 1:
+					face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsFinish, size, 0);
+					jhook.clean_up_file(fr, 0);
+					break;
+				default:
+					face.transferupdate(fr.getfiles().begin()->fname, fr, icqface::tsError, 0, 0);
+					jhook.clean_up_file(fr, 0);
+					break;
+			}
+		}
+	}
+	else if( conn_type == 1 )
+	{
+		if( jhook.srfiles.find(jid) != jhook.srfiles.end() )
+		{
+			imfile fr = jhook.srfiles[jid].first; 
+			vector<imfile::record> files = fr.getfiles();
+			int ir = jhook.srfiles[jid].second.second;
+
+			if( files.size() > ir )
+			{
+				switch(status)
+				{
+					case 0:
+						face.transferupdate(files[ir].fname, fr, icqface::tsProgress, size, bytes);
+						break;
+					case 1:
+						face.transferupdate(files[ir].fname, fr, icqface::tsFinish, size, 0);
+//						ir++;
+						jhook.srfiles[jid].second.second++;
+						if( files.size() > ir )
+							jhook.send_file(jid);
+						else
+							jhook.clean_up_file(fr, 1, jid);
+						break;
+					default:
+						face.transferupdate(files[ir].fname, fr, icqface::tsError, 0, 0);
+						jhook.clean_up_file(fr, 1, jid);
+						break;
+				}
+			}
 		}
 	}
 }
@@ -2706,35 +2831,63 @@ void jabberhook::getfile_byte(const imcontact &ic, xmlnode i) {
 	    getfile(fr);
     }
 }
-void jabberhook::clean_up_file(const imfile &fr)
+
+void jabberhook::clean_up_file(const imfile &fr, int trans_type, char *cjid )
 {
-    if( transferinfo.find(fr) != transferinfo.end() )
-    {
-	    struct send_file *file = (struct send_file *)transferinfo[fr].first;
-	    if(file)
-	    {
+	
+	struct send_file *file;
+	if(trans_type == 0)
+	{
+		if(transferinfo.find(fr) != transferinfo.end())
+			file = (struct send_file *)transferinfo[fr].first;
+		else
+			return;
+	}
+	else if(trans_type == 1)
+	{
+		if(!cjid)
+			return;
+		if(srfiles.find(cjid) != srfiles.end())
+			file = (struct send_file *)srfiles[cjid].second.first;
+		else
+			return;
+	}
+	else
+		return;
+
+	if(file)
+	{
 #ifdef HAVE_THREAD
-		    pthread_cancel(file->thread);
+		pthread_cancel(file->thread);
 #endif
-		    if(file->full_jid_name)
-		    {
-			    transferusers.erase(file->full_jid_name);
-			    free(file->full_jid_name);
-		    }
-		    if(file->id)
-			    free(file->id);
-		    if(file->host)
-			    free(file->host);
-		    if(file->url)
-			    free(file->url);
-		    if(file->sid_from_to)
-			    free(file->sid_from_to);
-		    free(file);
-		    transferinfo[fr].first = NULL;
-	    }
-	    transferinfo.erase(fr);                                                            
-    }
+		if(file->full_jid_name)
+		{
+			if(trans_type == 0)
+				transferusers.erase(jidtodisp(file->full_jid_name));
+			else if(trans_type == 1)
+				back_srfiles.erase(srfiles[cjid].first);
+			free(file->full_jid_name);
+		}
+		if(file->id)
+			free(file->id);
+		if(file->host)
+			free(file->host);
+		if(file->url)
+			free(file->url);
+		if(file->sid_from_to)
+			free(file->sid_from_to);
+		free(file);
+		if(trans_type == 0)
+			transferinfo[fr].first = NULL;
+		else if (trans_type == 1)
+			srfiles[cjid].second.first = NULL;
+	}
+	if(trans_type == 0)
+		transferinfo.erase(fr);
+	if(trans_type == 1)
+		srfiles.erase(cjid);
 }
+
 
 
 #endif

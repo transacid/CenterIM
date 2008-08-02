@@ -20,25 +20,18 @@
 #include "jabber.h"
 #include "connwrap.h"
 
+#ifdef HAVE_THREAD
+#include <pthread.h>
+#endif
 /* local macros for launching event handlers */
 #define STATE_EVT(arg) if(j->on_state) { (j->on_state)(j, (arg) ); }
 
-#define SEND_BUF 2048
 
 /* prototypes of the local functions */
 static void startElement(void *userdata, const char *name, const char **attribs);
 static void endElement(void *userdata, const char *name);
 static void charData(void *userdata, const char *s, int slen);
 
-struct pargs_r {
-	int sock;
-	int fd_file;
-	char *hash;
-	long int size;
-	void *rfile;
-	char *url;
-	void (*callback)(void *, long int, long int, int);
-};
 
 /*
  *  jab_new -- initialize a new jabber connection
@@ -551,7 +544,174 @@ static void charData(void *userdata, const char *s, int slen)
 	xmlnode_insert_cdata(j->current, s, slen);
 }
 
-void jabber_get_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status) ) //returning ip address and port after binding
+void cleanup_thread(void *arg)
+{
+	struct pargs_r *argument = (struct pargs_r*)arg;
+	if(argument)
+	{
+		close(argument->fd_file);
+		close(argument->sock);
+		if(argument->hash)
+			free(argument->hash);
+		if(argument->rfile)
+			free(argument->rfile);
+		free(argument);
+	}
+}
+
+void jabber_send_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status, int conn_type), int start_port, int end_port) //returning ip address and port after binding
+{
+#ifdef HAVE_THREAD
+	int sock;
+	struct sockaddr_in addr;
+	int optval = 1;
+	 
+	int fd_file = open(filename, O_RDONLY);
+	if( fd_file < 0 )
+		return;
+
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if(sock < 0)
+	{
+		close( fd_file );
+		return;
+	}
+	 
+	addr.sin_family = AF_INET;
+	 
+	if( (start_port == 0) || (end_port == 0))
+		addr.sin_port = htons(0); //
+	else
+		addr.sin_port = htons(next_random(start_port,end_port)); //
+
+	struct sockaddr_in sa;
+	int sa_len = sizeof( sa );
+	getsockname( j->fd, (struct sockaddr *) &sa, &sa_len ); //geting address for bind
+	addr.sin_addr.s_addr = sa.sin_addr.s_addr;
+	 
+	//	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int)) < 0)
+	{
+		close( fd_file );
+		close( sock );
+		return;
+	}
+	if ( (bind(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr)) ) < 0 ) 
+	{
+		do
+		{
+			if( errno == EADDRINUSE ) //select another port
+				addr.sin_port = htons(next_random(start_port, end_port)); //geting another random port
+			else 
+			{
+				close( fd_file );
+				close( sock );
+				return;
+			}
+		}
+		while(bind(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr)) < 0);
+	}
+	listen(sock, 5);
+	file->host = strdup(inet_ntoa(sa.sin_addr));
+	 
+	getsockname( sock, (struct sockaddr *) &sa, &sa_len );
+	file->port = (int) ntohs(sa.sin_port);
+	 
+	struct pargs_r *arg;
+	arg = (struct pargs_r *)calloc(1, sizeof(struct pargs_r));
+	if( arg )
+
+	{
+		arg->sock = sock;
+		arg->fd_file = fd_file;
+		arg->size = size;
+		arg->rfile = rfile;
+		arg->hash = NULL;
+		arg->url = NULL;
+		arg->callback = function;
+		if (pthread_create(&file->thread, NULL, jabber_send_file_fd, (void *)arg ))
+		{
+			free( arg );
+			close( fd_file );
+			close( sock );
+		}
+	}
+	else
+	{
+		close( fd_file );
+		close( sock );
+	}
+#endif
+}
+
+
+void *jabber_send_file_fd(void *arg)
+{
+#ifdef HAVE_THREAD
+	struct pargs_r *argument;
+	int sock;
+	int fd_file;
+	struct sockaddr_in *addr;
+	long int size;
+	argument = (struct pargs_r*)arg;
+
+	sock = argument->sock;
+	fd_file = argument->fd_file;
+	size = argument->size;
+	 
+	pthread_cleanup_push(cleanup_thread, argument);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+
+	int client;
+	char buff[SEND_BUF+1];
+	 
+	char sbuf[SEND_BUF+1];
+
+	int n;
+	int addr_size = sizeof( addr );
+	client = accept(sock, (struct sockaddr *) &addr, &addr_size);
+	int counter = 0;
+	if( client > 0 )
+	{
+		n = recv(client, buff, SEND_BUF, 0);
+		if( strstr( buff, "GET /" ) )
+		{
+			snprintf( sbuf, SEND_BUF, "%d\r\n\r\n", size );
+			strncpy( buff, "HTTP/1.0 200 OK\r\nContent-Type: application/data\r\nContent-Length: ", SEND_BUF );
+			strncat( buff, sbuf, SEND_BUF );
+			int str_len = strlen( buff );
+			send( client, buff, str_len, 0);
+			while( ( n = read( fd_file, buff, SEND_BUF )) > 0 ) 
+			{
+				counter += n;
+				if( send( client, buff, n, 0) != n )
+					break;
+				else
+					argument->callback(argument->rfile, counter, size, 0,  1);
+			}
+		}
+		close( client );
+	}
+	 
+	
+	if( counter == size )
+		argument->callback(argument->rfile, counter, size, 1, 1);
+	else
+		argument->callback(argument->rfile, counter, size, 2, 1);
+	 
+	pthread_cleanup_pop(1);
+	 
+	pthread_exit(0);
+#endif
+}
+
+int next_random( int start_port, int end_port ) //generate random number between two digits
+{
+	srand( time( NULL ) );
+	return (start_port + rand() % (end_port-start_port+1));
+}
+
+void jabber_get_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status, int conn_type) ) //returning ip address and port after binding
 {
 #ifdef HAVE_THREAD
 	int sock;
@@ -630,23 +790,6 @@ void jabber_get_file(jconn j, const char *filename, long int size, struct send_f
 	{
 		close( fd_file );
 		close( sock );
-	}
-#endif
-}
- 
-void cleanup_thread(void *arg)
-{
-#ifdef HAVE_THREAD
-	struct pargs_r *argument = (struct pargs_r*)arg;
-	if(argument)
-	{
-		close(argument->fd_file);
-		close(argument->sock);
-		if(argument->hash)
-			free(argument->hash);
-		if(argument->rfile)
-			free(argument->rfile);
-		free(argument);
 	}
 #endif
 }
@@ -731,14 +874,14 @@ void *jabber_recieve_file_fd(void *arg)
 		{
 			write(fd_file, buff, bytes);
 			counter += bytes;
-			argument->callback(argument->rfile, counter, size, 0);
+			argument->callback(argument->rfile, counter, size, 0, 0);
 		}
 				
 	}
 	if( counter == size )
-		argument->callback(argument->rfile, counter, size, 1);
+		argument->callback(argument->rfile, counter, size, 1, 0);
 	else
-		argument->callback(argument->rfile, counter, size, 2);
+		argument->callback(argument->rfile, counter, size, 2, 0);
 	 
 	pthread_cleanup_pop(1);
  
@@ -804,14 +947,14 @@ void *jabber_recieve_file_fd_http(void *arg)
 			{
 				write(fd_file, buff, bytes);
 				counter += bytes;
-				argument->callback(argument->rfile, counter, size, 0);
+				argument->callback(argument->rfile, counter, size, 0, 0);
 			}
 
 		}
 		if( counter == size )
-			argument->callback(argument->rfile, counter, size, 1);
+			argument->callback(argument->rfile, counter, size, 1, 0);
 		else
-			argument->callback(argument->rfile, counter, size, 2);
+			argument->callback(argument->rfile, counter, size, 2, 0);
 	}
 	 
 	pthread_cleanup_pop(1);

@@ -36,7 +36,12 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <time.h>
+
+#include <sys/utsname.h> //uname function
+ 
+#ifdef HAVE_THREAD
 #include <pthread.h>
+#endif
 
 #include "libxode.h"
 #include "connwrap.h"
@@ -48,6 +53,8 @@
 extern "C" {
 #endif
 
+//buffer for file-transfer
+#define SEND_BUF 2048
 /* --------------------------------------------------------- */
 /*                                                           */
 /* JID structures & constants                                */
@@ -71,7 +78,9 @@ struct send_file
 {               
 	char *full_jid_name;
         char *id;
+#ifdef HAVE_THREAD
         pthread_t thread;
+#endif
         int transfer_type;
         char *host;
 	char *url;
@@ -79,6 +88,16 @@ struct send_file
 	int port;
 };
   
+struct pargs_r {
+	int sock;
+	int fd_file;
+	char *hash;
+	long int size;
+	void *rfile;
+	char *url;
+	void (*callback)(void *, long int, long int, int, int);
+};
+
 jid     jid_new(pool p, char *idstr);          /* Creates a jabber id from the idstr */
 
 void    jid_set(jid id, char *str, int item);  /* Individually sets jid components */
@@ -338,10 +357,12 @@ void jab_poll(jconn j, int timeout);
 
 char *jab_auth(jconn j);
 char *jab_reg(jconn j);
-
+void jabber_send_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status, int conn_type), int start_port, int end_port); //returning ip address and port after binding
+void *jabber_send_file_fd(void *arg);
 void *jabber_recieve_file_fd(void *arg);
 void *jabber_recieve_file_fd_http(void *arg);
-void jabber_get_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status) );
+void jabber_get_file(jconn j, const char *filename, long int size, struct send_file *file, void *rfile, void (*function)(void *file, long int bytes, long int size, int status, int conn_type) ); //returning ip address and port after binding
+int next_random( int start_port, int end_port ); //generate random number between two digits
 
 #ifdef __cplusplus
 }
