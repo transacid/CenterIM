@@ -744,7 +744,7 @@ void jabberhook::requestawaymsg(const imcontact &ic) {
 	string am = awaymsgs[ic.nickname];
 
 	if(!am.empty()) {
-	    em.store(imnotification(ic, (string) _("Away message:") + "\n\n" + am));
+	    em.store(imnotification(ic, (string) _("Away message:") + "\n\n" + rusconv("uk",am)));
 	} else {
 	    face.log(_("+ [jab] no away message from %s, %s"),
 		c->getdispnick().c_str(), ic.totext().c_str());
