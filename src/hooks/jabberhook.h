@@ -38,7 +38,7 @@ class jabberhook: public abstracthook {
 		agent_params(): enabled(false) {}
 	    };
 
-	    enum param_type { ptSearch, ptRegister, param_type_size };
+	    enum param_type { ptSearch, ptRegister, ptReceipts, param_type_size };
 	    enum agent_type { atSearch, atTransport, atGroupchat, atStandard, atUnknown } type;
 
 	    agent_params params[param_type_size];

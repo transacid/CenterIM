@@ -504,8 +504,12 @@ bool jabberhook::send(const imevent &ev) {
 	}
 
 	if(conf->getourid(jhook.proto).additional["acknowledgements"] == "1") {
+	vector<agent>::iterator ia = find(jhook.agents.begin(),jhook.agents.end(), jhook.full_jids[cjid]);
+	if(ia != jhook.agents.end() && ia->params[agent::ptReceipts].enabled)
+	{
 	    xmlnode request = xmlnode_insert_tag(x, "request");
 	    xmlnode_put_attrib(request, "xmlns", NS_RECEIPTS);
+	}
 	}
 #ifdef HAVE_SSTREAM
 	stringstream idstream;
@@ -1014,7 +1018,9 @@ void jabberhook::gotagentinfo(xmlnode x) {
 			xmlnode_put_attrib(z, "to", from);
 			jab_send(jc, z);
 			xmlnode_free(z);
-		    }
+		    } else if ((q = xmlnode_get_attrib(y, "var")) && (!strcmp(q, NS_RECEIPTS))) {
+			ia->params[agent::ptReceipts].enabled = true;
+			}
 		}
 	    }
 	    break;
@@ -2202,6 +2208,10 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			jhook.chatmembers[id].erase(im);
 
 		    jhook.full_jids.erase(ic.nickname); //erase full JID if user change status to offline
+
+			vector<agent>::iterator ia = find(jhook.agents.begin(), jhook.agents.end(), from);
+			if(ia != jhook.agents.end())
+			jhook.agents.erase(ia);
 		} else {
 		    jhook.chatmembers[id].push_back(s);
 
@@ -2216,6 +2226,15 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    if(c->getstatus() != ust) {
 			jhook.awaymsgs[ic.nickname] = "";
 			logger.putonline(c, c->getstatus(), ust);
+			if(c->getstatus() == offline)
+			{
+				x = jutil_iqnew(JPACKET__GET, NS_DISCOINFO);
+				xmlnode_put_attrib(x, "id", jab_getid(conn));
+				xmlnode_put_attrib(x, "to", from.c_str());
+				jab_send(conn, x);
+				xmlnode_free(x);
+				jhook.agents.push_back(agent(from, "", "", agent::atUnknown));
+			}
 			c->setstatus(ust);
 		    }
 
