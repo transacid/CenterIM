@@ -140,6 +140,12 @@ void accountmanager::exec() {
 		    if(capab.count(hookcapab::acknowledgements))
 			t.addleaff(n, 0, citem+17, _(" Request receipts: %s "),
 			    stryesno(a.additional["acknowledgements"] == "1"));
+#ifdef HAVE_UNAME
+		if(!a.empty())
+                    if(pname == jabber)
+			t.addleaff(n, 0, citem+18, _(" Send OS info: %s "),
+			    stryesno(a.additional["osinfo"] == "1"));
+#endif
 		if(a.empty()) {
 		    t.addnode(n, 0, citem+6, _(" Register "));
 
@@ -292,6 +298,13 @@ void accountmanager::exec() {
 		    a.additional["acknowledgements"] =
 			(a.additional["acknowledgements"] == "") ? "1" : "";
 		    break;
+		     
+#ifdef HAVE_UNAME
+		case 18:
+		    a.additional["osinfo"] =
+			(a.additional["osinfo"] == "") ? "1" : "";
+		    break;
+#endif
 	    }
 
 	    if(action != 7) {

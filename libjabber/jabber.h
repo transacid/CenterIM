@@ -37,7 +37,9 @@
 #include <ctype.h>
 #include <time.h>
 
+#ifdef HAVE_UNAME
 #include <sys/utsname.h> //uname function
+#endif
  
 #ifdef HAVE_THREAD
 #include <pthread.h>

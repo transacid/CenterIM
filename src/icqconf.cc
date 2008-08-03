@@ -150,6 +150,10 @@ void icqconf::setourid(const imaccount &im) {
 	    case jabber:
 		if(i->additional.find("prio") == i->additional.end())
 		    i->additional["prio"] = "4";
+#ifdef HAVE_UNAME
+		if(i->additional.find("osinfo") == i->additional.end())
+		    i->additional["osinfo"] = "1";
+#endif
 		break;
 
 	    case livejournal:

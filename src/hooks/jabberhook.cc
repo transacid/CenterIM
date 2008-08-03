@@ -35,8 +35,6 @@
 #include "icqcontacts.h"
 #include "centerim.h"
 
-#include <sys/utsname.h> //used for uname function
-
 #ifdef HAVE_SSTREAM
     #include <sstream>
 #else
@@ -1692,15 +1690,20 @@ void jabberhook::sendversion(const imcontact &ic, xmlnode i) {
 	xmlnode_insert_cdata(y, PACKAGE, (unsigned) -1 );
 	y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "version"); 
 	xmlnode_insert_cdata(y, centerim::version, (unsigned) -1 );
-	struct utsname buf;
-	if( !uname( &buf ) )
+#ifdef HAVE_UNAME
+	if(conf->getourid(jhook.proto).additional["osinfo"] == "1")
 	{
-		string os = buf.sysname;
-		os += " ";
-		os += buf.release;
-		y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "os");
-		xmlnode_insert_cdata(y, os.c_str(), (unsigned) -1 );
+		struct utsname buf;
+		if( !uname( &buf ) )
+		{
+			string os = buf.sysname;
+			os += " ";
+			os += buf.release;
+			y = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "os");
+			xmlnode_insert_cdata(y, os.c_str(), (unsigned) -1 );
+		}
 	}
+#endif
 	jab_send(jc, x);
 	xmlnode_free(x);
 }

@@ -234,6 +234,11 @@ else
 	AC_MSG_RESULT([no])
 fi
 
+AC_CHECK_HEADERS(sys/utsname.h, 
+		 [
+		  AC_CHECK_FUNC(uname, AC_DEFINE(HAVE_UNAME, 1, [check uname function]),)
+		 ])
+ 
 #####################
 # Check for libcurl #
 #####################
@@ -570,6 +575,10 @@ WARNING: GPGME disabled (This means no encrypted messages between users)
 if test "x$have_libotr" = "xyes"; then
 AC_MSG_RESULT([
 WARNING: libotr enabled (OTR is not supported yet, use at your own risk)
+]); fi
+if test "x$pthread" = "xno"; then
+AC_MSG_RESULT([
+WARNING: pthreads disabled (No file-transfers in jabber)
 ]); fi
 fi
 AC_MSG_RESULT([
