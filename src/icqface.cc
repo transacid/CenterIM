@@ -2699,7 +2699,7 @@ void icqface::renderchathistory() {
 
 	if(count < chatlines) {
 	    if(c->receivedAcks.size() > 0)
-	        text = (events.back()->getack())?"+":" ";
+	        text = (events.back()->getack() && events.back()->getdirection() == imevent::outgoing)?"+":" ";
 	    else
 	        text = "";
 	    text += extracttime(*events.back());
