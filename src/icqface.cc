@@ -1678,6 +1678,7 @@ string icqface::inputfile(const string &q, const string &defl) {
     mvhline(INPUT_POS, 0, ' ', COLS);
     kwriteatf(0, INPUT_POS, conf->getcolor(cp_status), "%s", q.c_str());
     kwriteatf(COLS-8, INPUT_POS, conf->getcolor(cp_status), "[Ctrl-T]");
+    input.setpasswordchar(0);
 
     selector.setoptions(0);
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
@@ -1707,6 +1708,7 @@ string icqface::inputdir(const string &q, const string &defl) {
     mvhline(INPUT_POS, 0, ' ', COLS);
     kwriteatf(0, INPUT_POS, conf->getcolor(cp_status), "%s", q.c_str());
     kwriteatf(COLS-8, INPUT_POS, conf->getcolor(cp_status), "[Ctrl-T]");
+    input.setpasswordchar(0);
 
     selector.setoptions(FSEL_DIRSELECT);
     selector.setwindow(textwindow(0, 0, sizeDlg.width, sizeDlg.height,
