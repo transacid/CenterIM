@@ -2699,7 +2699,7 @@ void icqface::renderchathistory() {
 
 	if(count < chatlines) {
 	    if(c->receivedAcks.size() > 0)
-	        text = (events.back()->getack() && events.back()->getdirection() == imevent::outgoing)?"+":" ";
+	        text = (events.back()->getack())?"+":" ";
 	    else
 	        text = "";
 	    text += extracttime(*events.back());
@@ -3171,7 +3171,7 @@ void icqface::histmake(const vector<imevent *> &hist) {
 
 	t = ev.gettimestamp();
 	ts = ev.getsenttimestamp();
-	text = (string) + " " + time2str(&t, conf->gettimestampformat(), buf) + " ";
+	text = (string) + ((ev.getack())?"+":" ") + time2str(&t, conf->gettimestampformat(), buf) + " ";
 	if ((t - ts) > 0) 
 	    text += (string) + "[" + time2str(&ts, conf->gettimestampformat(), buf) + "] ";
 	text += ev.gettext();
