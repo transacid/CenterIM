@@ -124,6 +124,7 @@ const char *strgroupmode(icqconf::groupmode gmode) {
 
 icqface::icqface() {
     workareas.freeitem = &freeworkareabuf;
+    workareas2.freeitem = &freeworkareabuf;
 
     mainscreenblock = inited = onlinefolder = dotermresize =
 	inchat = doredraw = false;
@@ -1787,31 +1788,44 @@ int icqface::ask(string q, int options, int deflt ) {
 }
 
 void icqface::saveworkarea() {
-    int i;
-    chtype **workareabuf = (chtype **) malloc(sizeof(chtype *) * (sizeWArea.y2-sizeWArea.y1+1));
-
+    int i, j;
+    //don't try switch workareabuf to struct, it's broke program design
+    wchar_t **workareabuf = (wchar_t **) malloc(sizeof(wchar_t *) * (sizeWArea.y2-sizeWArea.y1+1)); 
+    chtype **workareabuf2 = (chtype **) malloc(sizeof(chtype *) * (sizeWArea.y2-sizeWArea.y1+1)); //we need this because shit type cchar_t can't store attributes(they are store but doesn't applied by mvadd_wchstr )
+     
+    //There is no another way to render text with attributes (because chtype stored multibyte broken and wchar_t doesn't have atrributes)
     for(i = 0; i <= sizeWArea.y2-sizeWArea.y1; i++) {
-	workareabuf[i] = (chtype *) malloc(sizeof(chtype) * (sizeWArea.x2-sizeWArea.x1+2));
-	mvinchnstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
+	workareabuf[i] = (wchar_t *) malloc(sizeof(wchar_t) * (sizeWArea.x2-sizeWArea.x1+2));
+	workareabuf2[i] = (chtype *) malloc(sizeof(chtype) * (sizeWArea.x2-sizeWArea.x1+2)); 
+	mvinnwstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
+	mvinchnstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf2[i], sizeWArea.x2-sizeWArea.x1+1); //reading lines twice to read attributes and data  in wide char
     }
-
     workareas.add(workareabuf);
+    workareas2.add(workareabuf2);
 }
 
 void icqface::restoreworkarea() {
-    int i;
-    chtype **workareabuf = (chtype **) workareas.at(workareas.count-1);
-
-    if(workareabuf && !dotermresize) {
+    int i, j;
+    wchar_t **workareabuf = (wchar_t **) workareas.at(workareas.count-1);
+    chtype **workareabuf2 = (chtype **) workareas2.at(workareas2.count-1);
+     
+    if(workareabuf && workareabuf2 && !dotermresize) {
 	for(i = 0; i <= sizeWArea.y2-sizeWArea.y1; i++) {
-	    mvaddchnstr(sizeWArea.y1+i, sizeWArea.x1,
-		workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
+		const wchar_t *temp_workarea = workareabuf[i];
+		const chtype *temp_workarea2 = workareabuf2[i];
+		for( j = 0; j < sizeWArea.x2-sizeWArea.x1+1; j++, temp_workarea++, temp_workarea2++)
+		{
+			//apply attributes step by step to each symbol(not so fast )
+			attrset( (*temp_workarea2 & A_ATTRIBUTES) | (*temp_workarea2 & A_COLOR));
+			mvaddnwstr(sizeWArea.y1+i, sizeWArea.x1+j, temp_workarea, 1);
+		}
 	}
 
 	refresh();
     }
 
     workareas.remove(workareas.count-1);
+    workareas2.remove(workareas2.count-1);
 }
 
 void icqface::clearworkarea() {
@@ -1825,10 +1839,10 @@ void icqface::clearworkarea() {
 }
 
 void icqface::freeworkareabuf(void *p) {
-    chtype **workareabuf = (chtype **) p;
-    if(workareabuf) {
+    wchar_t **workareabuf = (wchar_t **) p; //we hope chtype and wchar_t have same size ;)
+   if(workareabuf) {
 	for(int i = 0; i <= face.sizeWArea.y2-face.sizeWArea.y1; i++) {
-	    free((chtype *) workareabuf[i]);
+	    free((wchar_t *) workareabuf[i]);
 	}
 
 	free(workareabuf);
@@ -2102,16 +2116,27 @@ void icqface::log(const string &atext) {
 
     lastlog.push_back(text);
 
+    wchar_t *logline = new wchar_t[sizeWArea.x2-sizeWArea.x1+2];
+    chtype *logline2 = new chtype[sizeWArea.x2-sizeWArea.x1+2];
+    attrset(conf->getcolor(cp_main_text));
+     
+    int j;
     if(!mainscreenblock && (sizeWArea.x2-sizeWArea.x1 > 0)) {
-	chtype *logline = new chtype[sizeWArea.x2-sizeWArea.x1+2];
-	attrset(conf->getcolor(cp_main_text));
+	    for(i = sizeWArea.y2+2; i < LINES-2; i++) {
 
-	for(i = sizeWArea.y2+2; i < LINES-2; i++) {
-	    mvinchnstr(i, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
-	    mvaddchnstr(i-1, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
-	}
+		    mvinnwstr(i, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
+		    mvinchnstr(i, sizeWArea.x1+1, logline2, sizeWArea.x2-sizeWArea.x1);
+		    const wchar_t *log_ptr = logline;
+		    const chtype *log_ptr2 = logline2;
+		    for(j = 0; j < sizeWArea.x2-sizeWArea.x1; j++, log_ptr++, log_ptr2++ )
+		    {
+			    attrset( (*log_ptr2 & A_COLOR) | (*log_ptr2 & A_ATTRIBUTES) );
+			    mvaddnwstr(i-1, sizeWArea.x1+1+j, log_ptr, 1);
+		    }
+	    }
 
 	delete[] logline;
+	delete[] logline2;
 
 	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
 	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);

@@ -82,6 +82,7 @@ class icqface {
 	vector<string> extractedurls, lastlog, fstatus;
 
 	linkedlist workareas;
+	linkedlist workareas2;
 
 	bool editdone, mainscreenblock, inited, onlinefolder,
 	    dotermresize, fneedupdate, detailsfetched, inchat, doredraw, ineditor;
