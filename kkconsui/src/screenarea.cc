@@ -42,13 +42,17 @@ void screenarea::save() {
 void screenarea::save(int fx1, int fy1, int fx2, int fy2) {
     int i;
     chtype *line;
+    wchar_t *line2;
 
     freebuffer();
 
     for(i = 0; i <= fy2-fy1; i++) {
 	line = new chtype[fx2-fx1+2];
+	line2 = new wchar_t[fx2-fx1+2];
 	mvinchnstr(fy1+i, fx1, line, fx2-fx1+1);
+	mvinnwstr(fy1+i, fx1, line2, fx2-fx1+1);
 	buffer.push_back(line);
+	buffer2.push_back(line2);
     }
 
     x1 = fx1;
@@ -63,13 +67,24 @@ void screenarea::restore() {
 
 void screenarea::restore(int fx1, int fy1, int fx2, int fy2) {
     vector<chtype *>::iterator i;
+    vector<wchar_t *>::iterator j;
     int k = fy1;
     chtype *line;
-
+    wchar_t *line2;
+    int l;
     if(!buffer.empty()) {
-	for(i = buffer.begin(); i != buffer.end(); i++) {
+	for(i = buffer.begin(), j = buffer2.begin(); i != buffer.end(); i++, j++) {
 	    line = *i;
-	    mvaddchnstr(k++, fx1, line, fx2-fx1+1);
+	    line2 = *j;
+	    const chtype *line_ptr = line;
+	    const wchar_t *line2_ptr = line2;
+	    for(l = 0; l < fx2-fx1+1; l++, line_ptr++, line2_ptr++ )
+	    {
+		    attrset( (*line_ptr & A_COLOR) | (*line_ptr & A_ATTRIBUTES) );
+		    mvaddnwstr(k, fx1+l, line2_ptr, 1); 
+	    }
+	    k++;
+	    
 	}
 
 	refresh();
@@ -82,6 +97,10 @@ void screenarea::freebuffer() {
     while(!buffer.empty()) {
 	delete[] buffer.front();
 	buffer.erase(buffer.begin());
+    }
+    while(!buffer2.empty()) {
+	delete[] buffer2.front();
+	buffer2.erase(buffer2.begin());
     }
 }
 
