@@ -76,7 +76,7 @@ AC_ARG_ENABLE(locales-fix,
               AS_HELP_STRING([--enable-locales-fix], [enables workaround for
                               broken locales. use this option if some of
                               characters in your texts in Chinese or Japanese
-                              diappear]),
+                              disappear]),
               locales_fix="$enableval",
               locales_fix="yes"
               )
