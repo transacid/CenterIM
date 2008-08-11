@@ -82,7 +82,9 @@ class icqface {
 	vector<string> extractedurls, lastlog, fstatus;
 
 	linkedlist workareas;
+#ifdef HAVE_NCURSESW
 	linkedlist workareas2;
+#endif
 
 	bool editdone, mainscreenblock, inited, onlinefolder,
 	    dotermresize, fneedupdate, detailsfetched, inchat, doredraw, ineditor;

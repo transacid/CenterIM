@@ -42,17 +42,25 @@ void screenarea::save() {
 void screenarea::save(int fx1, int fy1, int fx2, int fy2) {
     int i;
     chtype *line;
+#ifdef HAVE_NCURSESW
     wchar_t *line2;
+#endif
 
     freebuffer();
 
     for(i = 0; i <= fy2-fy1; i++) {
 	line = new chtype[fx2-fx1+2];
+#ifdef HAVE_NCURSESW
 	line2 = new wchar_t[fx2-fx1+2];
+#endif
 	mvinchnstr(fy1+i, fx1, line, fx2-fx1+1);
+#ifdef HAVE_NCURSESW
 	mvinnwstr(fy1+i, fx1, line2, fx2-fx1+1);
+#endif
 	buffer.push_back(line);
+#ifdef HAVE_NCURSESW
 	buffer2.push_back(line2);
+#endif
     }
 
     x1 = fx1;
@@ -67,14 +75,23 @@ void screenarea::restore() {
 
 void screenarea::restore(int fx1, int fy1, int fx2, int fy2) {
     vector<chtype *>::iterator i;
+#ifdef HAVE_NCURSESW
     vector<wchar_t *>::iterator j;
+#endif
     int k = fy1;
     chtype *line;
+#ifdef HAVE_NCURSESW
     wchar_t *line2;
+#endif
     int l;
     if(!buffer.empty()) {
+#ifdef HAVE_NCURSESW
 	for(i = buffer.begin(), j = buffer2.begin(); i != buffer.end(); i++, j++) {
+#else
+	for(i = buffer.begin(); i != buffer.end(); i++) {
+#endif
 	    line = *i;
+#ifdef HAVE_NCURSESW
 	    line2 = *j;
 	    const chtype *line_ptr = line;
 	    const wchar_t *line2_ptr = line2;
@@ -84,6 +101,9 @@ void screenarea::restore(int fx1, int fy1, int fx2, int fy2) {
 		    mvaddnwstr(k, fx1+l, line2_ptr, 1); 
 	    }
 	    k++;
+#else
+	    mvaddchnstr(k++, fx1, line, fx2-fx1+1);
+#endif
 	    
 	}
 
@@ -98,10 +118,12 @@ void screenarea::freebuffer() {
 	delete[] buffer.front();
 	buffer.erase(buffer.begin());
     }
+#ifdef HAVE_NCURSESW
     while(!buffer2.empty()) {
 	delete[] buffer2.front();
 	buffer2.erase(buffer2.begin());
     }
+#endif
 }
 
 bool screenarea::empty() {

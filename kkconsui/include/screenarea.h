@@ -7,7 +7,9 @@
 class screenarea {
     protected:
 	vector<chtype *> buffer;
+#ifdef HAVE_NCURSESW
 	vector<wchar_t *> buffer2;
+#endif
 	int x1, y1, x2, y2;
 
 	void freebuffer();

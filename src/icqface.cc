@@ -124,7 +124,9 @@ const char *strgroupmode(icqconf::groupmode gmode) {
 
 icqface::icqface() {
     workareas.freeitem = &freeworkareabuf;
+#ifdef HAVE_NCURSESW
     workareas2.freeitem = &freeworkareabuf;
+#endif
 
     mainscreenblock = inited = onlinefolder = dotermresize =
 	inchat = doredraw = false;
@@ -1790,42 +1792,71 @@ int icqface::ask(string q, int options, int deflt ) {
 void icqface::saveworkarea() {
     int i, j;
     //don't try switch workareabuf to struct, it's broke program design
+#ifdef HAVE_NCURSESW
     wchar_t **workareabuf = (wchar_t **) malloc(sizeof(wchar_t *) * (sizeWArea.y2-sizeWArea.y1+1)); 
     chtype **workareabuf2 = (chtype **) malloc(sizeof(chtype *) * (sizeWArea.y2-sizeWArea.y1+1)); //we need this because shit type cchar_t can't store attributes(they are store but doesn't applied by mvadd_wchstr )
+#else
+    chtype **workareabuf = (chtype **) malloc(sizeof(chtype *) * (sizeWArea.y2-sizeWArea.y1+1)); 
+#endif
      
     //There is no another way to render text with attributes (because chtype stored multibyte broken and wchar_t doesn't have atrributes)
     for(i = 0; i <= sizeWArea.y2-sizeWArea.y1; i++) {
+#ifdef HAVE_NCURSESW
 	workareabuf[i] = (wchar_t *) malloc(sizeof(wchar_t) * (sizeWArea.x2-sizeWArea.x1+2));
 	workareabuf2[i] = (chtype *) malloc(sizeof(chtype) * (sizeWArea.x2-sizeWArea.x1+2)); 
 	mvinnwstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
 	mvinchnstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf2[i], sizeWArea.x2-sizeWArea.x1+1); //reading lines twice to read attributes and data  in wide char
+#else
+	workareabuf[i] = (chtype *) malloc(sizeof(chtype) * (sizeWArea.x2-sizeWArea.x1+2));
+	mvinchnstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
+#endif
     }
     workareas.add(workareabuf);
+#ifdef HAVE_NCURSESW
     workareas2.add(workareabuf2);
+#endif
 }
 
 void icqface::restoreworkarea() {
     int i, j;
+#ifdef HAVE_NCURSESW
     wchar_t **workareabuf = (wchar_t **) workareas.at(workareas.count-1);
     chtype **workareabuf2 = (chtype **) workareas2.at(workareas2.count-1);
+#else
+    chtype **workareabuf = (chtype **) workareas.at(workareas.count-1);
+#endif
      
+#ifdef HAVE_NCURSESW
     if(workareabuf && workareabuf2 && !dotermresize) {
+#else
+    if(workareabuf && !dotermresize) {
+#endif
 	for(i = 0; i <= sizeWArea.y2-sizeWArea.y1; i++) {
+#ifdef HAVE_NCURSESW
 		const wchar_t *temp_workarea = workareabuf[i];
 		const chtype *temp_workarea2 = workareabuf2[i];
+#endif
+
+#ifdef HAVE_NCURSESW
 		for( j = 0; j < sizeWArea.x2-sizeWArea.x1+1; j++, temp_workarea++, temp_workarea2++)
 		{
 			//apply attributes step by step to each symbol(not so fast )
 			attrset( (*temp_workarea2 & A_ATTRIBUTES) | (*temp_workarea2 & A_COLOR));
 			mvaddnwstr(sizeWArea.y1+i, sizeWArea.x1+j, temp_workarea, 1);
 		}
+#else
+			mvaddchnstr(sizeWArea.y1+i, sizeWArea.x1, workareabuf[i], sizeWArea.x2-sizeWArea.x1+1);
+#endif
 	}
+
 
 	refresh();
     }
 
     workareas.remove(workareas.count-1);
+#ifdef HAVE_NCURSESW
     workareas2.remove(workareas2.count-1);
+#endif
 }
 
 void icqface::clearworkarea() {
@@ -2116,14 +2147,19 @@ void icqface::log(const string &atext) {
 
     lastlog.push_back(text);
 
+#ifdef HAVE_NCURSESW
     wchar_t *logline = new wchar_t[sizeWArea.x2-sizeWArea.x1+2];
     chtype *logline2 = new chtype[sizeWArea.x2-sizeWArea.x1+2];
+#else
+    chtype *logline = new chtype[sizeWArea.x2-sizeWArea.x1+2];
+#endif
     attrset(conf->getcolor(cp_main_text));
      
     int j;
     if(!mainscreenblock && (sizeWArea.x2-sizeWArea.x1 > 0)) {
 	    for(i = sizeWArea.y2+2; i < LINES-2; i++) {
 
+#ifdef HAVE_NCURSESW
 		    mvinnwstr(i, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
 		    mvinchnstr(i, sizeWArea.x1+1, logline2, sizeWArea.x2-sizeWArea.x1);
 		    const wchar_t *log_ptr = logline;
@@ -2133,10 +2169,16 @@ void icqface::log(const string &atext) {
 			    attrset( (*log_ptr2 & A_COLOR) | (*log_ptr2 & A_ATTRIBUTES) );
 			    mvaddnwstr(i-1, sizeWArea.x1+1+j, log_ptr, 1);
 		    }
+#else
+		    mvinchnstr(i, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
+		    mvaddchnstr(i-1, sizeWArea.x1+1, logline, sizeWArea.x2-sizeWArea.x1);
+#endif
 	    }
 
 	delete[] logline;
+#ifdef HAVE_NCURSESW
 	delete[] logline2;
+#endif
 
 	if(text.size() > sizeWArea.x2-sizeWArea.x1-2) text.resize(sizeWArea.x2-sizeWArea.x1-2);
 	mvhline(LINES-3, sizeWArea.x1+2, ' ', sizeWArea.x2-sizeWArea.x1-2);
