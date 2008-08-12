@@ -15,8 +15,10 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <ctype.h>
-#ifdef HAVE_NCURSESW_HEADER
+#if defined(HAVE_NCURSESW_HEADER1)
 #include <ncursesw/cursesw.h>
+#elif defined(HAVE_NCURSESW_HEADER2)
+#include <ncursesw/curses.h>
 #else
 #include <ncurses.h>
 #endif
