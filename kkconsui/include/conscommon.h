@@ -16,6 +16,9 @@
 #include <sys/ioctl.h>
 #include <ncurses.h>
 #include <ctype.h>
+#ifdef HAVE_NCURSESW_HEADER
+#include <ncursesw/cursesw.h>
+#endif
 
 #ifdef __sun__
 #include <sys/termio.h>

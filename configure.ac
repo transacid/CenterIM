@@ -309,7 +309,13 @@ AC_CHECK_SIZEOF([short])
 
 AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
-AC_CHECK_LIB(ncursesw, get_wch, AC_DEFINE(HAVE_NCURSESW, 1, [check widechar ncurses]), [AC_CHECK_LIB(ncurses, initscr,,
+AC_CHECK_LIB(ncursesw, get_wch, [AC_DEFINE(HAVE_NCURSESW, 1, [check widechar ncurses])
+LIBS="$LIBS -lncursesw"
+AC_CHECK_HEADERS(ncursesw/curses.h, 
+		 [
+		  AC_DEFINE(HAVE_NCURSESW_HEADER, 1, [checking ncursesw/curses.h])
+		 ])]
+, [AC_CHECK_LIB(ncurses, initscr,,
                                   [AC_CHECK_LIB(curses, initscr,,
                                    AC_MSG_ERROR(The ncurses terminal library is required in order to build the program))])])
 
