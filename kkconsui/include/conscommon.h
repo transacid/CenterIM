@@ -14,10 +14,11 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
-#include <ncurses.h>
 #include <ctype.h>
 #ifdef HAVE_NCURSESW_HEADER
 #include <ncursesw/cursesw.h>
+#else
+#include <ncurses.h>
 #endif
 
 #ifdef __sun__
