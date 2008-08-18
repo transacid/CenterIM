@@ -670,7 +670,7 @@ void yahoohook::requestawaymsg(const imcontact &ic) {
 		awaymessages[ic.nickname]));
 
 	} else {
-	    face.log(_("+ [yahoo] cannot fetch away msg from %s, %s"),
+	    face.log(_("+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"),
 		c->getdispnick().c_str(), ic.totext().c_str());
 
 	}

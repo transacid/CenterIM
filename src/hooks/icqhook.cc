@@ -1250,7 +1250,7 @@ void icqhook::messageack_cb(MessageEvent *ev) {
 			    rusconv("wk", r->getAwayMessage())));
 		    }
 		} else {
-		    face.log(_("+ [icq] cannot fetch away msg from %s, %s"),
+		    face.log(_("+ [icq] cannot fetch away msg from %s, %s (maybe no away msg set)"),
 			c->getdispnick().c_str(), ic.totext().c_str());
 		}
 		break;
