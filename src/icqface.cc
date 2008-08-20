@@ -2771,12 +2771,16 @@ void icqface::renderchathistory() {
 
 	    h = histentry();
 	    h.first = events.back()->getdirection();
-	    breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-2);
 	    if(c->receivedAcks.size() > 0 || c->sentAcks.size() > 0)
 		{
+	    	breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-3);
 	        h.second[0] = ((events.back()->getack())?"+":" ") + h.second[0];
 			for(unsigned int i = 1; i < h.second.size(); ++i)
 				h.second[i] = " " + h.second[i];
+		}
+		else
+		{
+	    	breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-2);
 		}
 	    toshow.push_back(h);
 
