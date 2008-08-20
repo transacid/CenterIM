@@ -1919,6 +1919,11 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 				xmlnode receipt = jutil_receiptnew(from.c_str(), id);
 				jab_send(conn, receipt);
 				xmlnode_free(receipt);
+				icqcontact *c = clist.get(ic);
+				c->sentAcks.insert(em.getevents(ic, 1).back()->getsenttimestamp());
+				face.relaxedupdate();
+				if(c->isopenedforchat())
+					c->sethasevents(true);
 			}
 		}
 

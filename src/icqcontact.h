@@ -177,6 +177,7 @@ class icqcontact {
 	void setusepgpkey(bool usekey);
 
 	set<time_t> receivedAcks;
+	set<time_t> sentAcks;
 };
 
 #endif

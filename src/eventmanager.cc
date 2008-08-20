@@ -185,6 +185,8 @@ vector<imevent *> imeventmanager::getevents(const imcontact &cont, time_t lastre
 			rev->setcontact(cont);
 			if(rev->getdirection() == imevent::outgoing && c->receivedAcks.count(rev->gettimestamp()))
 				rev->setack(true);
+			else if(rev->getdirection() == imevent::incoming && c->sentAcks.count(rev->gettimestamp()))
+				rev->setack(true);
 			else
 				rev->setack(false);
 			r.push_back(rev);

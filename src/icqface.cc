@@ -2765,17 +2765,19 @@ void icqface::renderchathistory() {
 	}
 
 	if(count < chatlines) {
-	    if(c->receivedAcks.size() > 0)
-	        text = (events.back()->getack())?"+":" ";
-	    else
-	        text = "";
-	    text += extracttime(*events.back());
+	    text = extracttime(*events.back());
 	    text += events.back()->gettext();
 	    chatlastread = events.back()->gettimestamp()-1;
 
 	    h = histentry();
 	    h.first = events.back()->getdirection();
 	    breakintolines(text, h.second, sizeWArea.x2-sizeWArea.x1-2);
+	    if(c->receivedAcks.size() > 0 || c->sentAcks.size() > 0)
+		{
+	        h.second[0] = ((events.back()->getack())?"+":" ") + h.second[0];
+			for(unsigned int i = 1; i < h.second.size(); ++i)
+				h.second[i] = " " + h.second[i];
+		}
 	    toshow.push_back(h);
 
 	    if(!lastev)
