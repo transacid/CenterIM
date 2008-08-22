@@ -1217,6 +1217,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" User interface "));
 	t.addleaff(i, 0, 1, _(" Change sound device to : %s "), strregsound(s));
 	t.addleaff(i, 0, 2, _(" Change color scheme to : %s "), strregcolor(c));
+	t.addleaff(i, 0, 35, _(" Change default request authorization message "));
 	t.addleaff(i, 0, 32, _(" Left panel width :  %d "), conf->getleftpanelwidth());
 	t.addleaff(i, 0, 33, _(" Log panel height :  %d "), conf->getlogpanelheight());
 	t.addleaff(i, 0, 34, _(" Chat panel height : %d "), conf->getchatpanelheight());
@@ -1455,6 +1456,10 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		        conf->setchatpanelheight(atol(inputstr(_("Chat panel height: "), 
 		            strint(conf->getchatpanelheight())).c_str()));
 		        needredraw = true;
+		        break;
+		    case 35:
+		        conf->setchatpanelheight(inputstr(_("Default authorization request message: "),
+		            conf.getDefaultAuthMessage()));
 		        break;
  
  		    case 48:

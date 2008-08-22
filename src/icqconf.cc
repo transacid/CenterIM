@@ -91,6 +91,8 @@ icqconf::icqconf() {
         }
     }
     screensocketpath = "/var/run/screen";
+
+    defaultAuthMessage = "Please accept my authorization to add you to my contact list.";
 }
 
 icqconf::~icqconf() {
@@ -540,6 +542,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "log_panel_height") logpanelheight = atol(buf.c_str()); else
 	    if(param == "chat_panel_height") chatpanelheight = atol(buf.c_str()); else
 	    if(param == "timestampstothesecond") settimestampstothesecond(true); else
+	    if(param == "defaultauthmessage") defaultAuthMessage = buf; else
 	    if(param == "ptp") {
 		ptpmin = atoi(getword(buf, "-").c_str());
 		ptpmax = atoi(buf.c_str());
@@ -676,6 +679,8 @@ void icqconf::save() {
 	    if(getleftpanelwidth())  f << "left_panel_width\t"  << getleftpanelwidth()  << endl;
 	    if(getlogpanelheight()) f << "log_panel_height\t" << getlogpanelheight() << endl;
 	    if(getchatpanelheight()) f << "chat_panel_height\t" << getchatpanelheight() << endl;
+
+	    f << "defaultauthmessage\t" << getDefaultAuthMessage() << endl;
 
 	    vector<imaccount>::iterator ia;
 	    for(ia = accounts.begin(); ia != accounts.end(); ++ia)

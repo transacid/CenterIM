@@ -194,6 +194,8 @@ class icqconf {
 	int logpanelheight;
 	int chatpanelheight;
 
+	string defaultAuthMessage;
+
 	colorschemer<cicq_colorpairs> schemer;
 
 	void loadmainconfig();
@@ -389,6 +391,9 @@ class icqconf {
 	void setlogpanelheight(const int height) { logpanelheight = height; }
 	int  getchatpanelheight() const { return chatpanelheight; }
 	void setchatpanelheight(const int height) { chatpanelheight = height; }
+
+	string getDefaultAuthMessage() const { return defaultAuthMessage; }
+	void setDefaultAuthMessage(const string m) { defaultAuthMessage = m; }
 
 	string getcaptchagreet() const { return captchagreet; }
 	string getcaptchasuccess() const { return captchasuccess; }

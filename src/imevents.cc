@@ -293,7 +293,7 @@ imauthorization::imauthorization(const imcontact &acont, imdirection adirection,
     text = atext;
     if(text.empty() && authtype == Request)
     switch(adirection) {
-	case outgoing: text = "Please accept my authorization to add you to my contact list."; break;
+	case outgoing: text = conf.getDefaultAuthMessage(); break;
 	case incoming: text = _("Empty authorization request message"); break;
     }
 
