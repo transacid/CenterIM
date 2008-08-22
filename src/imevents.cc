@@ -293,7 +293,7 @@ imauthorization::imauthorization(const imcontact &acont, imdirection adirection,
     text = atext;
     if(text.empty() && authtype == Request)
     switch(adirection) {
-	case outgoing: text = conf.getDefaultAuthMessage(); break;
+	case outgoing: text = conf->getDefaultAuthMessage(); break;
 	case incoming: text = _("Empty authorization request message"); break;
     }
 

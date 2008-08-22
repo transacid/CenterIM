@@ -1458,8 +1458,8 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		        needredraw = true;
 		        break;
 		    case 35:
-		        conf->setchatpanelheight(inputstr(_("Default authorization request message: "),
-		            conf.getDefaultAuthMessage()));
+		        conf->setDefaultAuthMessage(inputstr(_("Default authorization request message: "),
+		            conf->getDefaultAuthMessage()));
 		        break;
  
  		    case 48:
