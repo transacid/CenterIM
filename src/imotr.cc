@@ -44,7 +44,7 @@ static void create_privkey_cb(void *opdata, const char *accountname,
     face.log("[OTR-DEBUG] create_privkey_cb(..., " + string(accountname) + ")");
 #endif
     // Generate the key
-    otrl_privkey_generate(otr.get_userstate(), (string(conf.getdirname()) + PRIVKEYFNAME).c_str(), accountname, protocol);
+    otrl_privkey_generate(otr.get_userstate(), (string(conf->getdirname()) + PRIVKEYFNAME).c_str(), accountname, protocol);
     
     // gaim-otr: otrg_ui_update_fingerprint();
 }
@@ -185,7 +185,7 @@ static void confirm_fingerprint_cb(void *opdata, OtrlUserState us,
 
 static void write_fingerprints()
 {
-    otrl_privkey_write_fingerprints(otr.get_userstate(), (string(conf.getdirname()) + STOREFNAME).c_str());
+    otrl_privkey_write_fingerprints(otr.get_userstate(), (string(conf->getdirname()) + STOREFNAME).c_str());
 }
 
 static void write_fingerprints_cb(void *opdata)
@@ -264,8 +264,8 @@ void imotr::init()
     userstate = otrl_userstate_create();        // Make our OtrlUserState; we'll only use the one.
 
     
-    otrl_privkey_read(userstate, (string(conf.getdirname()) + PRIVKEYFNAME).c_str());
-    otrl_privkey_read_fingerprints(userstate, (string(conf.getdirname()) + STOREFNAME).c_str(), NULL, NULL);
+    otrl_privkey_read(userstate, (string(conf->getdirname()) + PRIVKEYFNAME).c_str());
+    otrl_privkey_read_fingerprints(userstate, (string(conf->getdirname()) + STOREFNAME).c_str(), NULL, NULL);
     
 }
 
@@ -298,7 +298,7 @@ bool imotr::send_message(const protocolname pname, const string &recipient, stri
     gcry_error_t err = 0;
     char *newmessage = NULL;
    
-    string accountname   = conf.getourid(pname).nickname + "@" + conf.getourid(pname).server;
+    string accountname   = conf->getourid(pname).nickname + "@" + conf->getourid(pname).server;
     string protocolname  = "jabber";
 
 #ifdef OTRDEBUG
@@ -342,7 +342,7 @@ bool imotr::receive_message(const protocolname pname, const string &from, string
     int ignore_message;
     char *newmessage = NULL;
     
-    string accountname   = conf.getourid(pname).nickname + "@" + conf.getourid(pname).server;
+    string accountname   = conf->getourid(pname).nickname + "@" + conf->getourid(pname).server;
     string protocolname = "jabber";
     string sendername   = from.substr(0, from.find_last_of('/'));   // remove "/<im-name>"
 
@@ -379,7 +379,7 @@ void imotr::start_session(icqcontact *contact)
         return;
     }
     ConnContext *context;
-    string accountname   = conf.getourid(contact->getdesc().pname).nickname + "@" + conf.getourid(contact->getdesc().pname).server;
+    string accountname   = conf->getourid(contact->getdesc().pname).nickname + "@" + conf->getourid(contact->getdesc().pname).server;
     string protocolname  = "jabber";
     string username      =  contact->getdesc().nickname;
     
@@ -398,7 +398,7 @@ void imotr::end_session(icqcontact *contact)
         return;
     }
     ConnContext *context;
-    string accountname   = conf.getourid(contact->getdesc().pname).nickname + "@" + conf.getourid(contact->getdesc().pname).server;
+    string accountname   = conf->getourid(contact->getdesc().pname).nickname + "@" + conf->getourid(contact->getdesc().pname).server;
     string protocolname  = "jabber";
     string username      =  contact->getdesc().nickname;
      
@@ -435,14 +435,14 @@ void imotr::dialog()
     face.blockmainscreen();
 
     db.setwindow(new textwindow(0, 0, face.sizeDlg.width, face.sizeDlg.height,
-	conf.getcolor(cp_dialog_frame), TW_CENTERED,
-	conf.getcolor(cp_dialog_highlight), _(" IM account manager ")));
+	conf->getcolor(cp_dialog_frame), TW_CENTERED,
+	conf->getcolor(cp_dialog_highlight), _(" IM account manager ")));
 
-    db.settree(new treeview(conf.getcolor(cp_dialog_text), conf.getcolor(cp_dialog_selected),
-	conf.getcolor(cp_dialog_highlight), conf.getcolor(cp_dialog_text)));
+    db.settree(new treeview(conf->getcolor(cp_dialog_text), conf->getcolor(cp_dialog_selected),
+	conf->getcolor(cp_dialog_highlight), conf->getcolor(cp_dialog_text)));
 
-    db.setbar(new horizontalbar(conf.getcolor(cp_dialog_text),
-	conf.getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
+    db.setbar(new horizontalbar(conf->getcolor(cp_dialog_text),
+	conf->getcolor(cp_dialog_selected), _("Change"), _("Done"), 0));
 
     db.addautokeys();
     db.idle = &face.dialogidle;
@@ -570,7 +570,7 @@ string imotr::get_msg_state(const protocolname pname, const string user)
         return _("No Jabber");
     }
     ConnContext *context;
-    string accountname   = conf.getourid(pname).nickname + "@" + conf.getourid(pname).server;
+    string accountname   = conf->getourid(pname).nickname + "@" + conf->getourid(pname).server;
     string protocolname  = "jabber";
      
     context = otrl_context_find(userstate, user.c_str(), accountname.c_str(), protocolname.c_str(), 
@@ -597,7 +597,7 @@ string imotr::is_verified(const protocolname pname, const string user)
         return _("No Jabber");
     }
     ConnContext *context;
-    string accountname   = conf.getourid(pname).nickname + "@" + conf.getourid(pname).server;
+    string accountname   = conf->getourid(pname).nickname + "@" + conf->getourid(pname).server;
     string protocolname  = "jabber";
     
     context = otrl_context_find(userstate, user.c_str(), accountname.c_str(), protocolname.c_str(), 
