@@ -421,7 +421,9 @@ bool jabberhook::send(const imevent &ev) {
 		vector<imfile::record> files = m->getfiles();
 		vector<imfile::record>::const_iterator ir = files.begin();
 
-		char *cjid = strdup(jidtodisp(ev.getcontact().nickname).c_str());
+		string cjid_str = jidtodisp(ev.getcontact().nickname);
+		transform(cjid_str.begin(), cjid_str.end(), cjid_str.begin(), ::tolower); 
+		char *cjid = strdup(cjid_str.c_str());
 	 
 		struct send_file *trans_file = (struct send_file *)malloc( sizeof( struct send_file ) );
 		srfiles[cjid].first = (*m);
@@ -1674,9 +1676,12 @@ void jabberhook::gotvcard(const imcontact &ic, xmlnode v) {
 
 void jabberhook::requestversion(const imcontact &ic)
 {
-	const char *cjid = jhook.full_jids[ic.nickname].c_str();
+	string cjid_str = ic.nickname;
+	transform(cjid_str.begin(), cjid_str.end(), cjid_str.begin(), ::tolower); 
+	 
 	xmlnode x = jutil_iqnew(JPACKET__GET, NS_VERSION);
-	xmlnode_put_attrib(x, "to", cjid);
+	 
+	xmlnode_put_attrib(x, "to", jhook.full_jids[cjid_str].c_str());
 	xmlnode_put_attrib(x, "id", "versionreq");
 	xmlnode_put_attrib(x, "from", getourjid().c_str());
 	jab_send(jc, x);
@@ -1686,7 +1691,9 @@ void jabberhook::requestversion(const imcontact &ic)
 void jabberhook::sendversion(const imcontact &ic, xmlnode i) {
 	string id;
 	char *p = xmlnode_get_attrib(i, "id"); if(p) id = p; else id = "versionreq";
-	const char *cjid = jhook.full_jids[jidnormalize(ic.nickname).c_str()].c_str();
+	string cjid_str = ic.nickname;
+	transform(cjid_str.begin(), cjid_str.end(), cjid_str.begin(), ::tolower); 
+	const char *cjid = jhook.full_jids[cjid_str].c_str();
 	xmlnode x = jutil_iqnew(JPACKET__RESULT, NS_VERSION), y;
 	xmlnode_put_attrib(x, "to", cjid);
 
@@ -1746,7 +1753,9 @@ void jabberhook::gotversion(const imcontact &ic, xmlnode x) { //fix version pars
 void jabberhook::senddiscoinfo(const imcontact &ic, xmlnode i) {
 	string id;
 	char *p = xmlnode_get_attrib(i, "id"); if(p) id = p; else id = "discoinfo";
-	const char *cjid = jhook.full_jids[jidnormalize(ic.nickname).c_str()].c_str();
+	string cjid_str = ic.nickname;
+	transform(cjid_str.begin(), cjid_str.end(), cjid_str.begin(), ::tolower); 
+	const char *cjid = jhook.full_jids[cjid_str].c_str();
 	xmlnode x = jutil_iqnew(JPACKET__RESULT, NS_DISCOINFO), y;
 	xmlnode_put_attrib(x, "to", cjid);
 	xmlnode_put_attrib(x, "from", getourjid().c_str());
