@@ -15,9 +15,9 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <ctype.h>
-#if defined(HAVE_NCURSESW_HEADER1)
+#if defined(HAVE_NCURSESW_CURSESW_H)
 #include <ncursesw/cursesw.h>
-#elif defined(HAVE_NCURSESW_HEADER2)
+#elif defined(HAVE_NCURSESW_CURSES_H)
 #include <ncursesw/curses.h>
 #else
 #include <ncurses.h>
@@ -32,6 +32,13 @@
 #include <sys/termios.h>
 #include <sys/socket.h>
 #endif
+
+/* Prototypes to compile on some systems */
+extern "C"
+{
+extern int mvinnwstr (int, int, wchar_t *, int);
+extern int mvaddnwstr (int, int, const wchar_t *, int);
+}
 
 #undef box
 #undef clear
