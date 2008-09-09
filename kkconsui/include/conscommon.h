@@ -34,11 +34,13 @@
 #endif
 
 /* Prototypes to compile on some systems */
+#ifdef __FreeBSD__
 extern "C"
 {
 extern int mvinnwstr (int, int, wchar_t *, int);
 extern int mvaddnwstr (int, int, const wchar_t *, int);
 }
+#endif
 
 #undef box
 #undef clear
