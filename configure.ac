@@ -216,6 +216,13 @@ if test "x$have_gpgme" = "xyes"; then
          LIBS="$LIBS $GPGME_LIBS"
 fi
 
+###############################
+# Check for Largefile support #
+###############################
+AC_SYS_LARGEFILE
+AC_FUNC_FSEEKO
+AC_TYPE_OFF_T
+
 #############################
 # Check for pthread library #
 #############################
