@@ -171,6 +171,13 @@ void accountmanager::exec() {
 		    if(capab.count(hookcapab::setaway))
 			t.addnode(n, 0, citem+10, _(" Set away message "));
 
+		    if(capab.count(hookcapab::setextstatus))
+		    {
+			if( ( conf->getstatus(pname) != offline ) 
+			&& ( conf->getstatus(pname) != invisible ))
+			t.addnode(n, 0, citem+19, _(" Set external status "));
+		    }
+
 		    t.addnode(n, 0, citem+8, _(" Drop "));
 
 		}
@@ -305,6 +312,11 @@ void accountmanager::exec() {
 			(a.additional["osinfo"] == "") ? "1" : "";
 		    break;
 #endif
+		case 19:
+		    if(face.edit(tmp = conf->getextstatus(a.pname, conf->getstatus(pname)), spname + (string)": " + imstatus2str(conf->getstatus(pname)) + (string)" external status" )) {
+			conf->setextstatus(a.pname, tmp, conf->getstatus(pname));
+		    }
+		    break;
 	    }
 
 	    if(action != 7) {

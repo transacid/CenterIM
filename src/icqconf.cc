@@ -219,6 +219,49 @@ void icqconf::setawaymsg(protocolname pname, const string &amsg) {
     }
 }
 
+string icqconf::getextstatus(protocolname pname, imstatus status) const {
+    string r, buf, fname;
+    ifstream f;
+
+    if(!gethook(pname).getCapabs().count(hookcapab::setextstatus))
+	return "";
+
+    fname = conf->getconfigfname("extmsg-" + getprotocolname(pname) + "-" + imstatus2char[status]);
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	while(!f.eof()) {
+	    getstring(f, buf);
+	    if(!r.empty()) r += "\n";
+	    r += buf;
+	}
+
+	f.close();
+    }
+
+    if(r.empty()) {
+	return "";
+    }
+
+    return r;
+}
+
+void icqconf::setextstatus(protocolname pname, const string &amsg, imstatus status) {
+    string fname;
+    ofstream f;
+
+    if(!gethook(pname).getCapabs().count(hookcapab::setextstatus))
+	return;
+
+    fname = conf->getconfigfname("extmsg-" + getprotocolname(pname) + "-" + imstatus2char[status]);
+    f.open(fname.c_str());
+
+    if(f.is_open()) {
+	f << amsg;
+	f.close();
+    }
+}
+
 void icqconf::checkdir() {
     string dname = getdirname();
     dname.erase(dname.size()-1);

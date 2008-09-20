@@ -359,7 +359,9 @@ class icqconf {
 	void setourid(const imaccount &im);
 
 	string getawaymsg(protocolname pname) const;
+	string getextstatus(protocolname pname, imstatus status) const;
 	void setawaymsg(protocolname pname, const string &amsg);
+	void setextstatus(protocolname pname, const string &amsg, imstatus status);
 
 	string getdirname() const { return basedir; }
 	string getconfigfname(const string &fname) const { return getdirname() + fname; }

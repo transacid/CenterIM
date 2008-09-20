@@ -14,6 +14,7 @@ struct hookcapab {
 	authreqwithmessages,
 	fetchaway,
 	setaway,
+	setextstatus,
 	changenick,
 	changepassword,
 	changedetails,

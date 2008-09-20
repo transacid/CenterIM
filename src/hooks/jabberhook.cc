@@ -235,6 +235,7 @@ string jabberhook::jidnormalize(const string &jid) const {
 
 jabberhook::jabberhook(): abstracthook(jabber), jc(0), flogged(false), fonline(false) {
     fcapabs.insert(hookcapab::setaway);
+    fcapabs.insert(hookcapab::setextstatus);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::authrequests);
     fcapabs.insert(hookcapab::directadd);
@@ -698,12 +699,19 @@ void jabberhook::setautostatus(imstatus st) {
 	    string msg;
 
 	    switch(st) {
-		case away:
 		case dontdisturb:
 		case occupied:
 		case outforlunch:
 		case notavail:
+		    msg = conf->getextstatus(proto, st); //external online status
+		    if( msg.empty() ) msg = conf->getawaymsg(proto);
+		    break;
+		case away:
 		    msg = conf->getawaymsg(proto);
+		    break;
+		case available:
+		case freeforchat:
+		    msg = conf->getextstatus(proto, st); //external online status
 	    }
 
 	    setjabberstatus(ourstatus = st, msg);
