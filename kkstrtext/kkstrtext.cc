@@ -1149,7 +1149,7 @@ string striprtf(const string &s, const string &charset) {
 			    #ifdef HAVE_ICONV
 				memcpy(ubuf, "\xff\xfe", 2);
 				memcpy(ubuf+2, &l, sizeof(long));
-				memcpy(ubuf+sizeof(long)*2, "\x0a\x00", 2);
+				memcpy(ubuf+sizeof(long)+2, "\x0a\x00", 2);
 			    #else
 				strcpy(ubuf, unichar.substr(4).c_str());
 			    #endif
