@@ -1,3 +1,699 @@
+commit 5bb628bf04fbbb5f30096bb326e3a407e010fd2d
+Author: Pavol Rusnak <stick@gk2.sk>
+Date:   Mon Sep 22 14:34:00 2008 +0200
+
+    fix buffer overflow in kkstrtext.cc
+
+commit 745e59c5d20c93a08c1ae593951eacc3356d5b9e
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sun Sep 21 12:58:29 2008 +0200
+
+    Revert "Fixed version-gen bug with old git version which don't support update-index option"
+    
+    This reverts commit 283697d5a77225ae49546dd9c176652d2d062076.
+
+commit 283697d5a77225ae49546dd9c176652d2d062076
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Sat Sep 20 21:20:11 2008 +0400
+
+    Fixed version-gen bug with old git version which don't support update-index option
+
+commit 9bce693ca8d3a3ed856cf595623170dfff78185a
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Sat Sep 20 20:37:31 2008 +0400
+
+    Adding some code to set external status in jabber protocol, now easy to add external statuses in other protocol, such as icq(?). To set jabber external status, select primary status an go to jabber accounts options and set external status
+
+commit f375b78fd9cbc2a7f4308b7f97528bc115ed405d
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Wed Sep 17 18:23:27 2008 +0100
+
+    Included some checks for LargeFile support
+    
+    Added those checks according to the GPGME info page
+
+commit 071a254e7a34bea9ab4b6333b4e45e5940d05393
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Wed Sep 10 03:09:49 2008 +0400
+
+    first fix broke linux compilation, now will be ok
+
+commit 71a4a85551e0060387ac081b03aa9f4aa96aa46a
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Wed Sep 10 02:59:33 2008 +0400
+
+    Fixes to compile on FreeBSD 7 and others
+
+commit c9bee3c44961da6f9b0bfe6f847e2f621f82174c
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Sep 8 19:41:46 2008 +0200
+
+    include web addres to FAQ
+
+commit f8bbe425fb883759117002f72100fad9698af785
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Sep 8 19:40:16 2008 +0200
+
+    Updated TODO to give a hint for CIM5
+
+commit 2665ddd37c559f4cdb864719801dc4bb498bf894
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Sep 8 19:34:13 2008 +0200
+
+    Some changes to the README
+
+commit 6ca7dfb02867ae9cc9769cd81886600f63ee1647
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Thu Sep 4 23:58:12 2008 +0200
+
+    This shold fix an issue with -dirty builds with git 1.6.0
+
+commit 4e49413ad4fcfa9be3e6b7544733dbe6269d37ef
+Author: me <me@imp-y-celyn.home.domain>
+Date:   Wed Sep 3 11:18:03 2008 +0200
+
+    Fixed otr. Didn't compile.
+
+commit 199b966c94a066722385f71b998c8c440d5c3d5c
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Wed Sep 3 12:27:29 2008 +0400
+
+    Fixed small bug with jabber nick names in higher register
+
+commit 72257538e8abb5f803a5f05c5de3144cc898cea0
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Fri Aug 22 18:58:31 2008 +0200
+
+    fixed some compile errors (conf is a pointer and setDefaultAuthMessage
+    should be used instead of setchatpanelgeight)
+
+commit 219acbdf5b8ba0cae6cd34623d71e5bc8a42a23a
+Author: Matthias Richter <matthias.richter@stud.uni-karlsruhe.de>
+Date:   Fri Aug 22 17:30:53 2008 +0200
+
+    Lets you set the default authorization request message
+
+commit f7d5769e1dea1056e61e49b9dfb03242fd337086
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Wed Aug 20 21:25:32 2008 +0200
+
+    another small code style correction
+
+commit 7fa55ae15e05df72bdfbf7aefad39628929f1839
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Wed Aug 20 21:22:12 2008 +0200
+
+    corrected code style
+
+commit eca6f0563f53355709df1be1e8b07e4e6d11a1f0
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Wed Aug 20 21:17:59 2008 +0200
+
+    fixed a small indentation bug introduced by the former commit
+
+commit 16059423d1cd6992d4ec3f229c9bbf56739a67c7
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Wed Aug 20 19:48:00 2008 +0200
+
+    mark messages for which receipts were sent and corrected indentation of
+    marked messages in chat window
+
+commit 7239ed5c75693f21218a2aa3825e3c6d533a14ea
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Aug 18 12:23:16 2008 +0200
+
+    More clear eplanation when away msg can't be fetched
+
+commit 18049a02a56f5ad4c2a11ec03f231037bb78e9fa
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Wed Aug 13 00:08:55 2008 +0400
+
+    This must help on system which have ncursesw/curses.h instead of ncursesw/cursesw.h
+
+commit 9ce47d7015ae1d746245681cbd3fd126251ca239
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Tue Aug 12 21:39:44 2008 +0200
+
+    including both, curses.h and cursesw.h doesn't work, because of same ifdefs. Hope this doesn't break anything on other systems
+
+commit e1d3fbf2b7d820a8118278fe2e259dba54ab403c
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Tue Aug 12 22:45:09 2008 +0400
+
+    Fixes to  ncursesw
+
+commit 03279f9484d8410dfdad0c606b1ee08d3989b5ec
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Aug 11 22:27:54 2008 +0200
+
+    Fixed small typo in configure.ac
+
+commit 524f7b4676a8504eb24dece128458272031e2eca
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Mon Aug 11 14:08:49 2008 +0400
+
+    Added some ifdefs to compile without widechar support(on systems which don't have ncursesw)
+
+commit e2b1c2b3737bf3458a0cf92f43982e4528622b32
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Mon Aug 11 02:36:53 2008 +0400
+
+    Addings to previous commit
+
+commit 50dc648dee734c9a36bb36d57e97c9cf1670b58b
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Mon Aug 11 01:03:31 2008 +0400
+
+    Fixed bug #20 and #72 - Broken russian(and other multibyte?) languages when linking with ncursesw. Really fucking problem, please check if I don't broke other locales
+
+commit 8e8991e7e5012117a1fb8697f848d85e1d445c56
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Tue Aug 5 17:33:18 2008 +0200
+
+    Added marker for acknowledged messages to the history window
+
+commit 056cca4c3ada8f608adcfb08b2f4746c9d98a540
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Tue Aug 5 01:41:12 2008 +0200
+
+    Don't mark incoming messages as acknowledged, if the id is the same as an acknowldedged outgoing message
+
+commit cfabde0ebba6cd536ebe5d7fb1203a8c28c4e488
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Mon Aug 4 23:10:09 2008 +0400
+
+    Fixed funny bug with asterisks in input filename field, shown only on first start after editing password field, thnx to Boris
+
+commit 8fbce112125f6d7051ed5ea13f38fb56e98dc05a
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Mon Aug 4 17:03:53 2008 +0200
+
+    Added some translations for DE and added NL translation for message receipts config option
+
+commit 5f125d446ba5c77e93bf14a657949e1b4c5115b5
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Sun Aug 3 18:32:14 2008 +0200
+
+    Do a service discovery if a contact comes online and request only for message receipts, if the contacts client supports XEP-0184.
+
+commit 39d85a338a4b0e2f7f1134b1d53608f49f77c9fe
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Sun Aug 3 18:23:47 2008 +0400
+
+    Added minor configure checks to jabber protocol. Added option to show/hide information about OS
+
+commit d11a9100db6efcc98efee3bbf203c6f1778eaac4
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Sun Aug 3 14:22:53 2008 +0400
+
+    Fixed read away message with non-latin characters
+
+commit 6a9a5d67e3c3487447e2cc18cb8d266b91308adb
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Sun Aug 3 03:24:01 2008 +0400
+
+    Jabber file-sending support(xep-0066).Port range for outgoing connection got from Communications options or auto
+
+commit 0297bdd4e5922844e54b45b8b629fb8338913680
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Fri Aug 1 23:13:35 2008 +0200
+
+    Added the ability to request receipts, a + char is shown, if a message is acknowledged.
+
+commit 8fc17a6f7b50f418b81b227fe2f24fc06888364f
+Merge: a38311e... f1378d9...
+Author: J.R. Mauro <jrm8005@gmail.com>
+Date:   Mon Jul 28 22:19:04 2008 -0400
+
+    Merge branch 'mob' of git+ssh://mob@repo.or.cz/srv/git/centerim into mob
+
+commit f1378d93b53bed40e699d601c8f0ab6053be74bc
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sat Jul 26 13:03:26 2008 +0200
+
+    Reapplied patches by Sven Wegener. Please pull before commiting, thanks.
+
+commit a38311e32d77a751134cc81199f1be41b3492741
+Author: J.R. Mauro <jrm8005@gmail.com>
+Date:   Fri Jul 25 11:29:22 2008 -0400
+
+    icqconf is now a Singleton; 'conf' is now a pointer and members must
+    now be accessed with ->
+
+commit 35fd227414f3f91d2a2ce3e5b1850ea9680273ee
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Wed Jul 23 01:11:57 2008 +0400
+
+    Basic jabber file-transfer implementation(only recieving files, file sending will be in next commit). Partially xep-0066, xep-0065 (socks5 bytestreams and http), now no proxy support.
+
+commit 0d9ff2835b4fe2e33bbcc1cc9c42764f22157270
+Author: Sven Wegener <sven.wegener@stealer.net>
+Date:   Tue Jul 22 02:22:24 2008 +0200
+
+    Fix indentation in configure.ac libotr check
+    
+    Signed-off-by: Sven Wegener <sven.wegener@stealer.net>
+
+commit 42add0132dad8c32ec356d59d0f7daceb9d42ed8
+Author: Sven Wegener <sven.wegener@stealer.net>
+Date:   Tue Jul 22 02:18:03 2008 +0200
+
+    Fix configure.ac libotr error
+    
+    This fixes the following error:
+    
+    checking for otrl_init in -lotr... yes
+    checking libotr/context.h usability... yes
+    checking libotr/context.h presence... yes
+    checking for libotr/context.h... yes
+    ./configure: line 15006: libotr/userstate.h: No such file or directory
+    
+    Signed-off-by: Sven Wegener <sven.wegener@stealer.net>
+
+commit e3ffaa3016c5524a1dda1b708517d94f13ad03fc
+Author: Matthias Nieuwenhuisen <git@nieuwenhuisen.de>
+Date:   Mon Jul 21 22:01:18 2008 +0200
+
+    Added basic support for sending Jabber message receipts (XEP-0184) and service discovery (XEP-0030).
+
+commit e46ec47e3142ec3e574b456f513143a95fef3a56
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Mon Jul 21 06:33:25 2008 +0400
+
+    Jabber avatar get/set patch
+
+commit f77e3c71c1ecb9082882fa8c31d0a673b252f7fd
+Author: Glazunov Vadim <neweagle@gmail.com>
+Date:   Sun Jul 20 17:27:52 2008 +0400
+
+    Gtalk got vcard fix. Get jabber version fix. Added send centerim version in jabber. Some addings for latest patches
+
+commit 8fffbda6295d6205630bbefa0500928deb7dfba6
+Author: Lubomir Rintel <lkundrak@v3.sk>
+Date:   Sat Jul 5 23:32:31 2008 +0200
+
+    Allow using el5 gettext. Successfully tested.
+
+commit 126d9748a109120e29e4ef9e5457cfae47abca4a
+Author: Lubomir Rintel <lkundrak@v3.sk>
+Date:   Sat Jul 5 22:43:10 2008 +0200
+
+    Actually replace the sound files
+
+commit a754859515241ce68c27e20c446051e9efdb0300
+Author: Lubomir Rintel <lkundrak@v3.sk>
+Date:   Sat Jul 5 21:53:12 2008 +0200
+
+    Replaced the sound files of unknown origin with ones that are certainly free.
+
+commit 5ff9cedb1d1412b9678bb18d98792447f57bd186
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Thu Jul 3 12:47:58 2008 +0200
+
+    Fixed small typo in configure.ac
+
+commit 93ddf4e067308b47376afe219da0ef93d161a08f
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Jun 30 19:24:34 2008 +0200
+
+    Forgot to add CenterIMLog2HTML.py to bin_SCRIPTS in Makefile.am now it gets installed
+
+commit aa2e4f2b4e6e480e8947bf5fe039d664c38589e1
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Wed Jun 18 19:29:24 2008 +0200
+
+    Added script by Luar Roji <cyberplant@roji.net> to the misc folder.
+    This script converts CenterIM history files to html
+
+commit 9b2d0510a92b82fa67869da98b661454e661d33e
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Tue Jun 10 12:02:15 2008 +0100
+
+    Removed binary which should not be included
+
+commit 109a70cad29594c927e652e570b6736754606e93
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Wed May 28 14:57:09 2008 +0100
+
+    Added a test directory to make some tests
+
+commit c8ace2741f59b8cb85c382ab8a7b84ad07b89eb4
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Thu May 8 18:58:19 2008 +0200
+
+    Revert "fix a small compiler warning in libicq200"
+    
+    This reverts commit 9b3cd99b2083e1af6312868d9983681230c7e0d5.
+
+commit 742e25f808d634bc3bc963366201b128a9e03334
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Thu May 8 12:21:23 2008 +0200
+
+    Revert "replace obsolte macros in configure.ac"
+    
+    This reverts commit 1a596632e5b3cf54eef1b607f880d785c6930513.
+    
+    I thought that AC_USE_SYSTEM_EXTENSIONS would be a
+    cleaner approach here, but it broke the build with
+    some versions of autotools. So I'm reverting that.
+
+commit 1735f9620a54cb6133f1a63720578d5ee9c489fd
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Wed May 7 21:18:43 2008 +0200
+
+    add a replacement setenv to icqcommon.cc
+    
+    That should only have to be used on systems that
+    don't provide a setenv implementation themselves.
+    irix for example.
+
+commit bf6afc9531510ea45f96ebe192c139c7a45fc7ce
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Wed May 7 17:45:05 2008 +0200
+
+    use statvfs on IRIX too
+
+commit b81d0eafe54b2578bc1bad8946f38988f70a20bb
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Mon May 5 21:42:27 2008 +0200
+
+    guard the inclusion of stdint.h
+
+commit 019a20de5db09c8a6802f92d6780b224e07e59af
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Mon May 5 20:34:32 2008 +0200
+
+    reduce checks for functions to strictly needed
+    
+    most of the checks actually came in shortly after
+    taking over from centericq. I think by doing
+    something like autoupdate or such.
+    
+    Problem is that AC_FUNC_NALLOC and AC_FUNC_REALLOC
+    cause problems on IRIX if we don't actually act on
+    the test results.
+
+commit 9b3cd99b2083e1af6312868d9983681230c7e0d5
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Wed May 7 19:44:04 2008 +0200
+
+    fix a small compiler warning in libicq200
+    
+    basically it complained 'cause we were comparing
+    between unsigned shor and unsigned int, which was
+    quite easy to fix
+
+commit c23ace0214cd2ebaf8e005a010bf5fb456d612a4
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Wed May 7 19:41:38 2008 +0200
+
+    add -Wno-write-string to AM_CXXFLAGS
+    
+    this does away with the various
+      depreceated conversion from string constant to char*
+    warnings in various places. See gcc(1) if you want details.
+
+commit 1a596632e5b3cf54eef1b607f880d785c6930513
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Tue May 6 23:55:06 2008 +0200
+
+    replace obsolte macros in configure.ac
+    
+    replace the obsolete AC_ISC_POSIX and
+    AC_GNU_SOURCE with AC_USE_SYSTEM_EXTENSIONS
+
+commit 224fedda23563361bdfd4ebbb6fb533907de439c
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Tue May 6 23:34:07 2008 +0200
+
+    don't check for more programs then we actually use
+
+commit b0d7307ebf223d8a9df19978254c367cb0ec6aa0
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Tue May 6 00:20:07 2008 +0200
+
+    Checking for iconv once is enough
+
+commit a3f3262ed2f13ee24382ae76587e96599f321011
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Tue May 6 17:11:27 2008 +0100
+
+    Moved sha.h from SOURCES to HEADERS
+
+commit c1c05de5d1bbaca4b2721937c8f503bc20ed85ef
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Mon May 5 23:27:30 2008 +0200
+
+    small fixes in Makefile.am
+    
+    Replace ':=' assignments with '='. This also fixes a warning by
+    automake/autoconf..
+    
+    Quote variables in the git-version comparison.
+
+commit 89161b4c0e27029f2a153618f0ac36b0ff38dc4f
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Mon May 5 21:40:23 2008 +0200
+
+    use config.h a bit more
+    
+    Include config.h in kkstrtext/conf.h and
+    kkconsui/include/conf.h. These two subdirectories
+    previously had the configure results passed as
+    compiler arguments in previous versions.
+    
+    But now taht all configure.ac's and configure.in's
+    are merged into one we explicitely have to include
+    config.h in some places.
+
+commit 61aaf18a35d1b8ac38b7df9b7712cafef147c5ce
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Tue Apr 29 10:39:39 2008 +0200
+
+    added sha.h to libyahoo2/Makefile.am otherwise it won't get included in the tarball.
+
+commit a22467c94376f01a1c4f112f6968d0da0109dbe4
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Sat Apr 26 14:41:58 2008 +0200
+
+    fix build failure in connwrap.c, when building with openssl
+    
+    with_ssl is only set if ssl gets explcitely disabled or when there is no
+    openssl, so we check for "not no", instead of checking for "yes"
+
+commit a2a0a5fdfc82b325474396a280c6a5fde1745bbf
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Tue Apr 22 20:55:10 2008 +0200
+
+    eliminate libyahoo2/configure.ac
+
+commit 7b9924af1b43588ec0efbba94c7c703cec345bd7
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Tue Apr 22 17:30:04 2008 +0200
+
+    eliminate libmsn/configure.ac
+
+commit 6e9f6d4768f418e808eb0a0967826f193bceeead
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Mon Apr 21 20:37:52 2008 +0200
+
+    eliminate libjabber/configure.ac
+
+commit d287e294841a430c1d340d5e10bd920b71c8edbf
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Mon Apr 21 11:18:50 2008 +0200
+
+    eliminate libicq2000/configure.ac
+
+commit 011c8b97d1924b05eeeab6c7d74ad8ac24a0a1db
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Wed Apr 23 16:16:37 2008 +0200
+
+    eliminate libgadu/configure.ac
+
+commit 44850dc7a55ed836f9580a37f550bf9315ba39ad
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Sat Apr 19 17:16:49 2008 +0200
+
+    eliminate kksystr/configure.ac
+
+commit edc338cdbc8b70316f189c0317446ed3b0665370
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Sat Apr 19 17:06:01 2008 +0200
+
+    eliminate kkstrtext/configure.ac
+
+commit 5d3e1cbdfc46aeb0fd0b591a6b15b1ae602bdebd
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Sat Apr 19 15:23:15 2008 +0200
+
+    eliminate kkconsui/configure.ac
+
+commit efb15ce3655a02e8bdd5f4d4b6ccdbcfe0553613
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Fri Apr 18 20:35:25 2008 +0200
+
+    eliminate firetalk/configure.ac
+
+commit bdd378fe821c12167627b62556ffe36c6d18b800
+Author: David Riebenbauer <davrieb@htu.tugraz.at>
+Date:   Wed Apr 16 13:47:37 2008 +0200
+
+    integrate connwrap magic into $top_srcdir
+    
+    move connwrap's configure into main configure.ac and Makefile.am
+
+commit 9d92b1003e3f055f86dfa4e8d4120191e1f59630
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Tue Apr 22 10:40:39 2008 +0200
+
+    don't overwrite $CXXFLAGS with $CFLAGS in configure.ac
+    
+    Signed-off-by: David Riebenbauer <davrieb@liegesta.at>
+
+commit 6380a769c86b7f8beb3da050494bf921b02bb166
+Merge: 76a840f... 8be23dd...
+Author: Roger <roger@jikos.cz>
+Date:   Thu Apr 24 13:43:51 2008 +0200
+
+    Merge branch 'mob' of git+ssh://mob@repo.or.cz/srv/git/centerim into mob
+
+commit 76a840ff0c7555c0f354d7a2c0ef046be3fc6bd4
+Author: Roger <roger@jikos.cz>
+Date:   Thu Apr 24 13:42:47 2008 +0200
+
+    Bug #98 - Disable message conversion from/to HTML
+
+commit 8be23dd2e676ccf86c41d4003aa3e9645c843597
+Merge: 8792dd8... a92dd45...
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Thu Apr 24 12:36:22 2008 +0100
+
+    Merge branch 'mob' of git+ssh://repo.or.cz/srv/git/centerim into mob
+
+commit 8792dd84f2804a97626ab770f86189e39f25c515
+Author: Stephane Bisinger <stephane.bisinger@gmail.com>
+Date:   Thu Apr 24 12:34:28 2008 +0100
+
+    Fixed ICONV detection; see bug #81
+
+commit 67ee1e57b198ade702e84c71b71c9ae455b60c2a
+Author: Stephane Bisinger <stephane.bisinger@gmail.com>
+Date:   Thu Apr 24 12:33:20 2008 +0100
+
+    Updated line numbers in po files
+
+commit a92dd452326193872f3509fdf7ce2a3bebd6dde1
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sun Apr 20 15:19:43 2008 +0200
+
+    Removing spec and motor files properly
+
+commit 079dd5bb73f464ea5d2055163f5a3165e6999bde
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Thu Apr 17 19:13:57 2008 +0200
+
+    Revert "got rid of *.spec and *.motor files, which dun relly belong to the actual source"
+    
+    This reverts commit ceec34a496196954b68e878cc051c83460284c11.
+    
+    Signed-off-by: Boris Petersen <transacid@gmail.com>
+
+commit 3c1e4899a1261f4c092127776ed9e8f94e26624d
+Author: Roger <roger@jikos.cz>
+Date:   Thu Apr 17 14:38:30 2008 +0200
+
+    Bug #91 - Restore history position on return to event-list
+
+commit 427db92c50e827f3e810fcd49cf44a92d20d51c3
+Author: Roger <roger@jikos.cz>
+Date:   Thu Apr 17 13:54:35 2008 +0200
+
+    Bug #89 - Fix IRC/NickServ password handling
+
+commit 74c3112f9adcd8b4397219973b4ef2e5cc2bcd3e
+Author: Roger <roger@jikos.cz>
+Date:   Thu Apr 17 12:32:14 2008 +0200
+
+    Bug #66 - Fix regression from newer firetalk lib
+
+commit 33a54f1c0be86b772fdb04e297a939c4d9a44917
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Tue Apr 15 15:11:29 2008 +0200
+
+    Changed warning display condition for libotr. Now only a warning is given if you build --with-libotr, sine it's not supported yet
+
+commit 16443ac2b0bf8e440bf33eec1d652077960ac456
+Merge: 2229dd1... e09d5b8...
+Author: David Riebenbauer <davrieb@htu.tugraz.at>
+Date:   Tue Apr 15 14:40:52 2008 +0200
+
+    Merge branch 'mob' of git+ssh://mob@repo.or.cz/srv/git/centerim into mob
+
+commit e09d5b816ec75161ae8c2df17c7ee406acce69b9
+Merge: ceec34a... 2ab8e20...
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Tue Apr 15 14:36:50 2008 +0200
+
+    Merge branch 'mob' of git+ssh://transacid@repo.or.cz/srv/git/centerim into mob
+
+commit 2229dd13c876b3d1a412be24b3968b1a69750915
+Author: David Riebenbauer <davrieb@htu.tugraz.at>
+Date:   Tue Apr 15 14:34:50 2008 +0200
+
+    correct the node number for the vi keys setting
+
+commit ceec34a496196954b68e878cc051c83460284c11
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Tue Apr 15 14:34:08 2008 +0200
+
+    got rid of *.spec and *.motor files, which dun relly belong to the actual source
+
+commit 2ab8e2075cd885ab6f279278e0f3ef81a97d3342
+Author: Roger <roger@jikos.cz>
+Date:   Mon Apr 14 23:22:15 2008 +0200
+
+    More support for old GCC, now in irchook
+
+commit f8224c41191817c2d68ab9b5572c86064ebe0492
+Author: Roger <roger@jikos.cz>
+Date:   Mon Apr 14 22:40:08 2008 +0200
+
+    Improve GCC 2.95 support in libyahoo2
+
+commit 516e81b460c788e79defc70ca501170aa3adb64f
+Author: David Riebenbauer <davrieb@htu.tugraz.at>
+Date:   Tue Apr 8 13:13:30 2008 +0200
+
+    only use order-only targets if we have a GNU make that supports it
+    
+    Adds a test to configure.ac that checks if make supports order-only targets.
+    Change the "|" in src/Makefile.am to $(ORDER_ONLY which is empty if they're not
+    supported.
+    
+    This should fix the problem that centerim would only compile with GNU make 3.80
+    and higher.
+
+commit 0bf40402f931b342df5963921809970c67d776b5
+Merge: 6111241... ac66092...
+Author: David Riebenbauer <davrieb@htu.tugraz.at>
+Date:   Sat Apr 12 18:20:14 2008 +0200
+
+    Merge branch 'mob' of git://repo.or.cz/centerim into mob
+
+commit ac66092918164bfa2b9b51f5262bf2fb2789a954
+Author: Jayjay <jayjay@twek.nl>
+Date:   Sat Apr 12 12:07:41 2008 +0200
+
+    Corrected typo in menu: offile to offline.
+    Also corrected this typo in the language files.
+
+commit 88f6b6211bb5f22e34a9bf304f4cd39019ecc2a7
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Tue Apr 8 19:46:42 2008 +0200
+
+    Updated Changelog
+
 commit 934d211fad66e2cc2d835fd96d4e5f1408669920
 Author: Roger <roger@jikos.cz>
 Date:   Mon Apr 7 21:23:34 2008 +0200
@@ -9,6 +705,15 @@ Author: Roger <roger@jikos.cz>
 Date:   Mon Apr 7 21:22:01 2008 +0200
 
     Bug #88 - Correctly end loop (thx Anibal and Lenny)
+
+commit 61112411ddcaef7b0cf808359cb6fc070e9a9592
+Author: Mehturt <mehturt@gmail.com>
+Date:   Fri Apr 4 13:31:58 2008 +0200
+
+    I've implemented (sort of) vi keybindings for moving up/down in
+    contact list and some other windows using 'j' and 'k' keys.
+    The patch also contains configuration.
+    Tested on Ubuntu 7.10 with ncurses 5.6.
 
 commit 30aa1f9de386b45fd78b2bbb0a9160a800636e5e
 Author: Roger <roger@jikos.cz>
