@@ -58,7 +58,7 @@ class imevent {
 	virtual string gettext() const;
 
 	virtual bool getack() const { return acknowledged;};
-	virtual bool setack(bool acknowledged) { this->acknowledged = acknowledged;}
+	virtual void setack(bool acknowledged) { this->acknowledged = acknowledged;}
 
 	virtual bool empty() const;
 	virtual bool contains(const string &atext) const;
