@@ -40,6 +40,7 @@
 * 10.07.2000    undo() implemented
 * 25.07.2000    tab support improved
 * 06.09.2000    blocks handling improved, shiftmarkedblock method added
+* 31.10.2008    mergeline() minor bug fixed
 *
 */
 
@@ -2224,20 +2225,24 @@ void texteditor::mergeline(int ln, bool force, int &px, int &py)
 	    anext[able] = 0;
 
 	    if(asub = strpbrk(anext, WORD_DELIM)) {
+		int pxdeltamerge;
 		for(; atsub = strpbrk(asub+1, WORD_DELIM); asub = atsub);
 		char *newline = new char[strlen(p)+asub-anext+2];
 		strcpy(newline, p);
 		if ((ln==(py-1)) && (px<(asub-anext+1))) { // move to previous line
 		    px += strlen(newline);
+		    pxdeltamerge = px; //accepting that change px even if the line is merged
 		    py--;
 		}
 		else {
-		    px -= (asub-anext+1);  // move back
+		    //px -= (asub-anext+1);  // move back
+		    pxdeltamerge = px - (asub-anext+1); //px can't be changed even if the line is merged
 		}
 		strncat(newline, next, asub-anext+1);
 		strcut(next, 0, asub-anext+1);
 		curfile->lines->replace(ln, newline);
-		mergeline(ln+1, false, px, py);  // we've merged something from the next line - try to merge it too
+		//mergeline(ln+1, false, px, py);  // we've merged something from the next line - try to merge it too
+		mergeline(ln+1, false, pxdeltamerge, py);  // we've merged something from the next line - try to merge it too
 	    }
 
 	    free(anext);
