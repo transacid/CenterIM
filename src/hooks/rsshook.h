@@ -19,8 +19,8 @@ class rsshook: public abstracthook, public sigslot::has_slots<> {
 	void logger_cb(LogEvent *ev);
 
 	void fetchRSSParam(string &base, XmlBranch *i, const string &enc,
-	    const string &name, const string &title,
-	    const string &postfix = "\n");
+			   const string &name, const string &attr, const string &title,
+			   const string &postfix = "\n");
 
     public:
 	static void parsedocument(const HTTPRequestEvent *rev, icqcontact *c);

@@ -270,15 +270,16 @@ void rsshook::socket_cb(SocketEvent *ev) {
 }
 
 void rsshook::fetchRSSParam(string &base, XmlBranch *i, const string &enc,
-const string &name, const string &title, const string &postfix) {
+			    const string &name, const string &attr, const string &title, const string &postfix) {
 
     XmlLeaf *d = i->getLeaf(name);
     string val;
     int pos, n;
 
-    if(d)
-    if(!d->getValue().empty()) {
-	val = rushtmlconv("wk", cuthtml(d->getValue(), chCutBR | chLeaveLinks), false);
+    if(d) {
+	val = attr.empty() ? d->getValue() : d->getAttrib(attr);
+	if (val.empty()) return;
+	val = rushtmlconv("wk", cuthtml(val, chCutBR | chLeaveLinks), false);
 	if(!enc.empty()) val = siconv(val, enc, conf->getconvertto(rss));
 
 	pos = 0;
@@ -341,29 +342,30 @@ void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
 
     string::iterator is = content.begin();
     auto_ptr<XmlNode> top(XmlNode::parse(is, content.end()));
+    bool atom = false;
 
     if(bi.lname.empty()) {
 	if(!top.get()) {
 	    if(!content.empty()) bi.lname = _("wrong XML");
-
-	} else if(up(top->getTag().substr(0, 3)) != "RSS" && up(top->getTag().substr(0, 3)) != "RDF") {
-	    if(!content.empty()) bi.lname = _("no <rss> tag found");
-
+	} else {
+	    atom = up(top->getTag().substr(0, 4)) == "FEED";
+	    if(up(top->getTag().substr(0, 3)) != "RSS" && up(top->getTag().substr(0, 3)) != "RDF" && !atom) {
+		if(!content.empty()) bi.lname = _("no <rss> or <feed> tag found");
+	    }
 	}
     }
 
-    if(bi.lname.empty())
-    if(top.get()) {
+    if(bi.lname.empty() && top.get()) {
 	rss = dynamic_cast<XmlBranch*>(top.get());
 
-	if(rss == NULL || !rss->exists("channel")) {
-	    if(!content.empty()) bi.lname = _("no <channel> tag found");
+	if(rss == NULL || !rss->exists(atom ? "entry" : "channel")) {
+	    if(!content.empty()) bi.lname = _("no <channel> or <entry> tag found");
 
 	} else {
-	    bi.city = top.get()->getAttrib("version");
-	    channel = rss->getBranch("channel");
+	    bi.city = atom ? "Atom" : top.get()->getAttrib("version");
+	    channel = atom ? rss : rss->getBranch("channel");
 	    if(!channel) {
-		if(!content.empty()) bi.lname = _("wrong <channel> tag");
+		if(!content.empty()) bi.lname = _("wrong <channel> or <feed> tag");
 	    }
 
 	}
@@ -377,32 +379,33 @@ void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
     if(channel) {
 	bi.lname = _("success");
 
-	text = ""; rhook.fetchRSSParam(text, channel, enc, "title", "");
+	text = ""; rhook.fetchRSSParam(text, channel, enc, "title", "", "");
 	if(!text.empty()) bi.fname = text;
 
-	text = ""; rhook.fetchRSSParam(text, channel, enc, "link", "");
+	text = ""; rhook.fetchRSSParam(text, channel, enc, "link", atom ? "href" : "", "");
 	while((k = text.find_first_of(" \t\r\n")) != -1) text.erase(k, 1);
 	if(!text.empty()) mi.homepage = text;
 
-	text = ""; rhook.fetchRSSParam(text, channel, enc, "description", "");
+	text = ""; rhook.fetchRSSParam(text, channel, enc, atom ? "subtitle" : "description", "", "");
 	if(!text.empty()) c->setabout(text);
 
-	if(!channel->getBranch("item")) {
+	if(!channel->getBranch(atom ? "entry" : "item")) {
 	    channel = rss;
 	    if(bi.city.empty()) bi.city = "rdf";
 	}
 
-	for(k = 0; item = channel->getBranch("item", k); k++) {
+	for(k = 0; item = channel->getBranch(atom ? "entry" : "item", k); k++) {
 	    text = "";
 
-	    rhook.fetchRSSParam(text, item, enc, "title", _("Title: "));
-	    rhook.fetchRSSParam(text, item, enc, "pubDate", _("Published on: "));
-	    rhook.fetchRSSParam(text, item, enc, "category", _("Category: "));
-	    rhook.fetchRSSParam(text, item, enc, "author", _("Author: "));
+	    rhook.fetchRSSParam(text, item, enc, "title", "", _("Title: "));
+	    rhook.fetchRSSParam(text, item, enc, atom ? "updated" : "pubDate", "", _("Published on: "));
+	    rhook.fetchRSSParam(text, item, enc, "category", "", _("Category: "));
+	    rhook.fetchRSSParam(text, item, enc, "author", "", _("Author: "));
 	    text += "\n";
-	    rhook.fetchRSSParam(text, item, enc, "description", _("Description: "), "\n\n");
-	    rhook.fetchRSSParam(text, item, enc, "link", _("Link: "));
-	    rhook.fetchRSSParam(text, item, enc, "comments", _("Comments: "));
+	    rhook.fetchRSSParam(text, item, enc, atom ? "summary" : "description", "", _("Description: "), "\n\n");
+	    if (atom) rhook.fetchRSSParam(text, item, enc, "content", "", "", "\n\n");
+	    rhook.fetchRSSParam(text, item, enc, "link", atom ? "href" : "", _("Link: "));
+	    rhook.fetchRSSParam(text, item, enc, "comments", "", _("Comments: "));
 
 	    items.push_back(text);
 	}
@@ -488,3 +491,10 @@ void rsshook::logger_cb(LogEvent *ev) {
 }
 
 #endif
+
+/*
+ * Local variables:
+ * eval: (c-set-style "cc-mode")
+ * eval: (setq-default indent-tabs-mode t)
+ * End:
+ */
