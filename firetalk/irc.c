@@ -1297,12 +1297,15 @@ static fte_t irc_got_data_parse(irc_conn_t *c, char **args) {
 				irc_addwhois(c, args[3], "%s@%s (<HTML>%s</HTML>)", args[4], args[5], gecos);
 			return(FE_SUCCESS);
 		} else if (numeric == 352) { /* WHO output */
-			char	buf[1024];
+			char	buf[1024], buf2[1024];
 			int	i;
 
 			snprintf(buf, sizeof(buf), "%s %s %s %s", args[7], args[4], args[5], args[6]);
 			for (i = 8; args[i] != NULL; i++)
-				snprintf(buf, sizeof(buf), "%s, %s", buf, args[i]);
+			{
+				snprintf(buf2, sizeof(buf2), ", %s", args[i]);
+				strncat(buf, buf2, sizeof(buf)-strlen(buf)-1);
+			}
 			firetalk_callback_chat_getmessage(c, ":RAW", args[3], 0, buf);
 			return(FE_SUCCESS);
 		}
@@ -1321,13 +1324,16 @@ static fte_t irc_got_data_parse(irc_conn_t *c, char **args) {
 			snprintf(buf+strlen(buf), sizeof(buf)-strlen(buf), " (%s)", args[1]);
 			irc_addwhois(c, args[3], "%s", buf);
 		} else {
-			char	buf[1024];
+			char	buf[1024], buf2[1024];
 			int	i;
 
 			*buf = 0;
 			for (i = 1; args[i+1] != NULL; i++)
-				snprintf(buf, sizeof(buf), "%s<B>%s</B>, ", buf, args[i]);
-			snprintf(buf, sizeof(buf), "%s%s", buf, args[i]);
+			{
+				snprintf(buf2, sizeof(buf2), "<B>%s</B>, ", args[i]);
+				strncat(buf, buf2, sizeof(buf)-strlen(buf)-1);
+			}
+			strncat(buf, args[i], sizeof(buf)-strlen(buf)-1);
 			firetalk_callback_chat_getmessage(c, ":RAW", irc_get_nickname(args[0]), 0, buf);
 		}
 	}

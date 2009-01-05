@@ -922,7 +922,7 @@ string gaduhook::handletoken(struct gg_http *h) {
 	    if (!tmpdir)
 		tmpdir = "/tmp";
 
-	    snprintf(tmpnam, sizeof(tmpnam), "%s/gg.token.XXXXXX", tmpnam);
+		strncat(tmpnam, "/gg.token.XXXXXX", sizeof(tmpnam)-strlen(tmpnam)-1);
 
 	    if ((tmpfiledes = mkstemp (tmpnam)) == -1) {
 		tmpfilep = NULL;
