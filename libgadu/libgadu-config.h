@@ -7,7 +7,7 @@
 #define __GG_LIBGADU_BIGENDIAN
 #endif
 
-#if defined(HAVE_OPENSSL) || defined(HAVE_GNUTLS)
+#if defined(HAVE_OPENSSL) || defined(HAVE_GNUTLS) || defined(HAVE_NSS_COMPAT)
 #define __GG_LIBGADU_HAVE_OPENSSL
 #endif
 

@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 #define OPENSSL_NO_KRB5 1
 #  include <openssl/err.h>
 #  include <openssl/rand.h>
@@ -345,7 +345,7 @@ int gg_read(struct gg_session *sess, char *buf, int length)
 {
 	int res;
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	if (sess->ssl) {
 		int err;
 
@@ -388,7 +388,7 @@ int gg_write(struct gg_session *sess, const char *buf, int length)
 {
 	int res = 0;
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	if (sess->ssl) {
 		int err;
 
@@ -743,7 +743,7 @@ struct gg_session *gg_login(const struct gg_login_params *p)
 	sess->pid = -1;
 
 	if (p->tls == 1) {
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 		char buf[1024];
 
 		OpenSSL_add_ssl_algorithms();
@@ -910,7 +910,7 @@ void gg_free_session(struct gg_session *sess)
 	if (sess->header_buf)
 		free(sess->header_buf);
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	if (sess->ssl)
 		SSL_free(sess->ssl);
 
@@ -1065,7 +1065,7 @@ void gg_logoff(struct gg_session *sess)
 	if (GG_S_NA(sess->status & ~GG_STATUS_FRIENDS_MASK))
 		gg_change_status(sess, GG_STATUS_NOT_AVAIL);
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	if (sess->ssl)
 		SSL_shutdown(sess->ssl);
 #elif HAVE_GNUTLS

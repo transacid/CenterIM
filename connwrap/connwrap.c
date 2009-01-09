@@ -25,11 +25,15 @@
 
 #include <gnutls/gnutls.h>
 
+#elif HAVE_NSS_COMPAT
+
+#include <nss_compat_ossl/nss_compat_ossl.h>
+
 #endif
 
 static int in_http_connect = 0;
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 
 static SSL_CTX *ctx = NULL;
 typedef struct { int fd; SSL *ssl; } sslsock;
@@ -68,7 +72,7 @@ static sslsock *addsock(int fd) {
 
     p = &socks[sockcount-1];
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
     if(!ctx) {
 	SSL_library_init();
 
@@ -76,7 +80,7 @@ static sslsock *addsock(int fd) {
 
 #ifdef HAVE_SSLEAY
     SSLeay_add_all_algorithms();
-#else
+#elif HAVE_OPENSSL
     OpenSSL_add_all_algorithms();
 #endif
     ctx = SSL_CTX_new(SSLv23_client_method());
@@ -108,7 +112,7 @@ static void delsock(int fd) {
 	if(socks[i].fd != fd) {
 	    nsocks[nsockcount++] = socks[i];
 	} 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	else {
 	    SSL_free(socks[i].ssl);
 	}
@@ -283,7 +287,7 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
      	rc = connect(sockfd, serv_addr, addrlen);
      }
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
     if(ssl && !rc) {
 	sslsock *p = addsock(sockfd);
 	if(SSL_connect(p->ssl) != 1){
@@ -359,7 +363,7 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	      return 0;
 	    }
         }
-#elif HAVE_OPENSSL
+#elif defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	    rc = SSL_connect(p->ssl);
 	    switch(rc){
 	    case 1:
@@ -412,7 +416,7 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 }
 
 int cw_accept(int s, struct sockaddr *addr, int *addrlen, int ssl) {
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
     int rc;
 
     if(ssl) {
@@ -443,7 +447,7 @@ int cw_write(int fd, const void *buf, int count, int ssl) {
            ret = gnutls_record_send( p->session, buf, count);
            return ret;
      }
-#elif HAVE_OPENSSL
+#elif defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
      if(p = getsock(fd))
 	return SSL_write(p->ssl, buf, count);
 #endif
@@ -464,7 +468,7 @@ int cw_read(int fd, void *buf, int count, int ssl) {
        } while ( ret < 0 && (ret == GNUTLS_E_INTERRUPTED || ret == GNUTLS_E_AGAIN) );
        return ret;
        }
-#elif HAVE_OPENSSL
+#elif defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
      if(p = getsock(fd))
 	return SSL_read(p->ssl, buf, count);
 #endif

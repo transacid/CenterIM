@@ -98,6 +98,12 @@ AC_ARG_WITH(openssl,
                             (optional)]),
             [with_openssl=$withval]
             )
+AC_ARG_WITH(nss_compat,
+            AS_HELP_STRING([--with-nss_compat=[DIR]], [enable SSL secured
+                            connections using the NSS compat library in DIR
+                            (optional)]),
+            [with_nss_compat=$withval]
+            )
 AM_PATH_GPGME(
             [0.4.2],
             [have_gpgme=yes],
@@ -149,60 +155,90 @@ AC_MSG_RESULT([$have_fribidi])
 #################
 # Check for SSL #
 #################
-AC_MSG_CHECKING(for SSL)
-AC_MSG_RESULT([])
 
 if test "x$with_ssl" != "xno"; then
 
-	AC_MSG_CHECKING(for OpenSSL)
-	if test -z "$with_openssl" -o "x$with_openssl" = "xyes"; then
-		for ac_dir in $with_openssl /usr/local /usr; do
-			if test -f "$ac_dir/include/openssl/ssl.h"; then
-				with_openssl=$ac_dir
-				break;
-			fi
-		done
-	fi
+        with_ssl="no"
 
-	if test -n "$with_openssl" -a "x$with_openssl" != "xno"; then
-		AC_MSG_RESULT([found in $with_openssl])
+        AC_MSG_CHECKING(for OpenSSL)
+        if test -z "$with_openssl" -o "x$with_openssl" = "xyes"; then
+                for ac_dir in $with_openssl /usr/local /usr; do
+                        if test -f "$ac_dir/include/openssl/ssl.h"; then
+                                with_openssl=$ac_dir
+                                break;
+                        fi
+                done
+        fi
+
+        if test -n "$with_openssl" -a "x$with_openssl" != "xno" -a -z "$with_nss_compat"; then
                 CFLAGS="$CFLAGS -I${with_openssl}"
-		AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
-        AC_CHECK_LIB(crypto, main, [
-            AC_CHECK_LIB(crypto, SSLeay_add_all_algorithms, [
-                AC_DEFINE(HAVE_SSLEAY, 1, [use SSLeay])
-            ])
-            ])
-		AC_CHECK_LIB(ssl, main)
-        ac_configure_args="$ac_configure_args --with-ssl --with-openssl=$with_openssl"
-	else
-		AC_MSG_RESULT([not found or disabled])
-	        with_ssl="no"
 
-		AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
-                AC_CHECK_LIB(lzo, lzo1x_1_compress, LZO_LIBS=-llzo)
-	        if test -z "$LZO_LIBS"; then
-	         AC_CHECK_LIB(lzo2, lzo1x_1_compress, LZO_LIBS=-llzo2, [
-		  AC_MSG_ERROR(
+                AC_MSG_RESULT([found in $with_openssl])
+                AC_DEFINE(HAVE_OPENSSL, 1, [use openssl])
+                with_ssl="yes"
+
+                AC_CHECK_LIB(crypto, main)
+                AC_CHECK_LIB(ssl, main)
+
+                AC_CHECK_LIB(crypto, SSLeay_add_all_algorithms,
+                        AC_DEFINE(HAVE_SSLEAY, 1, [use SSLeay]))
+        else
+                AC_MSG_RESULT([not found or disabled])
+        fi
+
+        if test "x$with_ssl" = "xno" -a -z "$with_nss_compat"; then
+                AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
+                        AC_CHECK_LIB(lzo, lzo1x_1_compress, LZO_LIBS=-llzo)
+
+                        if test -z "$LZO_LIBS"; then
+                                 AC_CHECK_LIB(lzo2, lzo1x_1_compress, LZO_LIBS=-llzo2, [
+                                         AC_MSG_ERROR(
 ***
 *** Could not find liblzo or liblzo2.
 )
-		  ])
-	        fi
-			CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
-			LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
-			AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
-            with_ssl="yes"
-            ac_configure_args="$ac_configure_args --with-ssl"
-            ])
-	fi
+                                 ])
+                        fi
 
-    if test x"$with_ssl" != x"no"; then
-      AC_DEFINE(HAVE_SSL, 1, [ssl is available])
-    fi
+                        CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
+                        LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
+                        AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
+                        with_ssl="yes"
+                ])
+        fi
+
+        if test "x$with_ssl" = "xno"; then
+                PKG_PROG_PKG_CONFIG
+
+		# NSS is essential for OpenSSL compatibility layer
+		# drags in NSPR as well
+                PKG_CHECK_MODULES(NSS, nss >= 3)
+		CFLAGS="$CFLAGS $NSS_CFLAGS"
+		LIBS="$LIBS $NSS_LIBS"
+
+		# The compatibility layer
+                AC_MSG_CHECKING(for NSS compat)
+                if test -n "$with_nss_compat" -a "x$with_nss_compat" != "xno"; then
+                        if test -f "${with_nss_compat}"; then
+                                CFLAGS="$CFLAGS -I${with_nss_compat} -I/usr/include/nspr4"
+                        fi
+                        AC_CHECK_LIB(nss_compat_ossl, SSL_CTX_new, [
+                                AC_DEFINE(HAVE_NSS_COMPAT, 1, [use nss_compat])
+                                LIBS="$LIBS -lnss_compat_ossl"
+                                with_ssl="yes"
+                        ])
+                else
+                        AC_MSG_RESULT([Not enabled, sadly])
+                fi
+        fi
+
+        if test x"$with_ssl" != x"no"; then
+                 AC_DEFINE(HAVE_SSL, 1, [ssl is available])
+        else
+                 AC_MSG_ERROR([Karamba! SSL library not found.])
+        fi
 
 else 
-	AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
+        AC_MSG_RESULT([disabled (use --with-ssl=[DIR] to enable)])
 fi
 
 ###################

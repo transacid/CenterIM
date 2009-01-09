@@ -37,7 +37,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 
 #ifndef OPENSSL_NO_KRB5
 #define OPENSSL_NO_KRB5 1
@@ -127,7 +127,7 @@ struct gg_session {
 	char *header_buf;       /* bufor na pocz±tek nag³ówka */
 	unsigned int header_done;/* ile ju¿ mamy */
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	SSL *ssl;               /* sesja TLS */
 	SSL_CTX *ssl_ctx;       /* kontekst sesji? */
 #elif HAVE_GNUTLS

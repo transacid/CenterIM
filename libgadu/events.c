@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 #  include <openssl/err.h>
 #  include <openssl/x509.h>
 #elif HAVE_GNUTLS
@@ -904,7 +904,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 			else
 				host = "";
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 			if (sess->ssl)
 				appmsg = "appmsg3.asp";
 			else
@@ -1129,7 +1129,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 					errno = ETIMEDOUT;
 #endif
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 				/* je¶li logujemy siê po TLS, nie próbujemy
 				 * siê ³±czyæ ju¿ z niczym innym w przypadku
 				 * b³êdu. nie do¶æ, ¿e nie ma sensu, to i
@@ -1195,7 +1195,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 				}
 			}
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 			if (sess->ssl) {
 				SSL_set_fd(sess->ssl, sess->fd);
 
@@ -1224,7 +1224,7 @@ struct gg_event *gg_watch_fd(struct gg_session *sess)
 			break;
 		}
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 		case GG_STATE_TLS_NEGOTIATION:
 		{
 			int res;
