@@ -115,7 +115,7 @@ void imeventmanager::store(const imevent &cev) {
 	    }
 	    
 	    if (c) {
-	    	face.xtermtitle(_("event from %s (%s)"), cev.getcontact().totext().c_str(), c->getdispnick().c_str());
+	    	face.xtermtitle(_("event from %s (%s)"), ev.getcontact().totext().c_str(), c->getdispnick().c_str());
 	        eventwrite(ev, history);
 		
 	        c->sethasevents(true);
@@ -149,16 +149,16 @@ void imeventmanager::store(const imevent &cev) {
 
 	if(proceed) {
 	    if(hook->send(ev)) {
-		eventwrite(cev, history);
-		logger.putevent(cev);
+		eventwrite(ev, history);
+		logger.putevent(ev);
 		face.xtermtitle();
 		time(&lastevent);
 		recentlysent++;
 	    } else {
-		eventwrite(cev, offline);
+		eventwrite(ev, offline);
 	    }
 	} else {
-	    eventwrite(cev, offline);
+	    eventwrite(ev, offline);
 	}
     }
 }
