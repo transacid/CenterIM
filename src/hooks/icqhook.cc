@@ -32,6 +32,7 @@
 #include "imlogger.h"
 #include "icqgroups.h"
 #include "icqcontacts.h"
+#include "impgp.h"
 
 #include "accountmanager.h"
 #include "eventmanager.h"
@@ -75,6 +76,10 @@ icqhook::icqhook(): abstracthook(icq) {
     fcapabs.insert(hookcapab::visibility);
     fcapabs.insert(hookcapab::cltemporary);
     fcapabs.insert(hookcapab::changeabout);
+    
+#ifdef HAVE_GPGME
+    fcapabs.insert(hookcapab::pgp);
+#endif
 
     cli.connected.connect(this, &icqhook::connected_cb);
     cli.disconnected.connect(this, &icqhook::disconnected_cb);
@@ -381,7 +386,7 @@ bool icqhook::send(const imevent &ev) {
     ContactRef ic = cli.getContact(uin);
     MessageEvent *sev = 0;
     ICQMessageEvent *iev;
-    icqcontact *c;
+    icqcontact *c=clist.get(ev.getcontact());
 
     if(ev.getcontact().pname != proto)
 	uin = 0;
@@ -395,6 +400,13 @@ bool icqhook::send(const imevent &ev) {
     if(ev.gettype() == imevent::message) {
 	const immessage *m = static_cast<const immessage *> (&ev);
 	string text = m->gettext(), sub;
+
+#ifdef HAVE_GPGME
+    if ( (c!=NULL) && (pgp.enabled(ev.getcontact())) ) {
+        text = pgp.encrypt(text, c->getpgpkey(), proto);
+        text = "-----BEGIN PGP MESSAGE-----\n\n" + text + "\n-----END PGP MESSAGE-----\n"; 
+    }
+#endif
 
 	if(ic->getStatus() == STATUS_OFFLINE)
 	if(text.size() > 450) {
@@ -459,7 +471,7 @@ bool icqhook::send(const imevent &ev) {
 
 	    case imauthorization::Request:
 		sev = new AuthReqEvent(ic, ruscrlfconv("kw", m->getmessage()));
-		if(c = clist.get(ev.getcontact())) {
+		if(c != NULL) {
 		    icqcontact::basicinfo bi = c->getbasicinfo();
 		    bi.authawait = true;
 		    c->setbasicinfo(bi);
@@ -1123,8 +1135,73 @@ void icqhook::messaged_cb(MessageEvent *ev) {
 	    text = r->getMessage();
 	if(text.substr(0, 6) == "{\\rtf1")
 	    text = fixicqrtf(striprtf(text, converted?conf->getconvertto(proto):conf->getconvertfrom(proto)));
+    
+        text = converted ? text : rusconv("wk", text);
 
-	em.store(immessage(ic, imevent::incoming, converted?text:rusconv("wk", text), r->getTime()));
+#ifdef HAVE_GPGME
+        const string pgpBlockBegin = "-----BEGIN PGP MESSAGE-----";
+        const string pgpBlockEnd = "-----END PGP MESSAGE-----";
+        string enc;
+        int pgpDataBegin = text.find(pgpBlockBegin);
+        int pgpDataEnd = text.find(pgpBlockEnd);
+
+        // find where actual PGP data starts
+        if (pgpDataBegin != string::npos) {
+            int a = text.find("\n\n", pgpDataBegin+1);
+            int b = text.find("\r\n\r\n", pgpDataBegin+1);
+
+            if(a != string::npos) {
+                if(b != string::npos) {
+                    // if we found both, take the smaller value
+                    if (a<b) {
+                        pgpDataBegin = a;
+                    } else {
+                        pgpDataBegin = b;
+                    }
+                } else {
+                    // we didn't find second match, so just take first
+                    pgpDataBegin = a;
+                }
+            } else {
+                // we didn't find first, so take whatever is in second
+                pgpDataBegin = b;
+            }
+        }
+
+        if((pgpDataBegin != string::npos) && (pgpDataEnd != string::npos)) {
+            pgpDataBegin++;
+            enc=text.substr(pgpDataBegin, pgpDataEnd-pgpDataBegin);
+
+            icqcontact *c = clist.get(ic);
+
+            if(c) {
+                if(!enc.empty()) {
+                    c->setusepgpkey(true);
+                    if(pgp.enabled(proto)) {
+                        string dec = pgp.decrypt(enc, proto);
+                        string logMsg;
+
+                       if(dec.length() != 0) {
+                            logMsg="+ "+ic.totext()+" ("+c->getdispnick()+") PGP message decoded";
+                            text = dec;
+                        } else {
+                            // if we fail to decode message,
+                            // just display it as it is
+                            logMsg="+ "+ic.totext()+" ("+c->getdispnick()+") FAILED to decode PGP message";
+                        }
+                        logger.putmessage(logMsg);
+                        face.log(logMsg);
+                    } else {
+                        c->setusepgpkey(false);
+                    }
+                } else {
+                    c->setusepgpkey(false);
+                }
+            }
+        } 
+#endif
+
+	em.store(immessage(ic, imevent::incoming, text, r->getTime()));
 
     } else if(ev->getType() == MessageEvent::URL) {
 	URLMessageEvent *r = static_cast<URLMessageEvent *>(ev);
