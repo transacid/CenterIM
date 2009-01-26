@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.22.6\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2008-10-26 16:54+0100\n"
+"POT-Creation-Date: 2009-01-26 19:24+0100\n"
 "PO-Revision-Date: 2009-01-12 22:35+0100\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -186,55 +186,58 @@ msgstr "Vyberte kontakty, které chcete přesunout"
 msgid "Mass move selected users to.."
 msgstr "Hromadně přesunout vybrané uživatele do…"
 
-#: src/hooks/rsshook.cc:316
+#: src/hooks/rsshook.cc:317
 msgid "couldn't fetch"
 msgstr "nemohu stáhnout"
 
-#: src/hooks/rsshook.cc:347
+#: src/hooks/rsshook.cc:349
 msgid "wrong XML"
 msgstr "chybné XML"
 
-#: src/hooks/rsshook.cc:350
-msgid "no <rss> tag found"
+#: src/hooks/rsshook.cc:353
+#, fuzzy
+msgid "no <rss> or <feed> tag found"
 msgstr "žádný tag <rss> nebyl nalezen"
 
-#: src/hooks/rsshook.cc:360
-msgid "no <channel> tag found"
+#: src/hooks/rsshook.cc:362
+#, fuzzy
+msgid "no <channel> or <entry> tag found"
 msgstr "žádný tag <channel> nebyl nalezen"
 
-#: src/hooks/rsshook.cc:366
-msgid "wrong <channel> tag"
+#: src/hooks/rsshook.cc:368
+#, fuzzy
+msgid "wrong <channel> or <feed> tag"
 msgstr "chybí tag <channel>"
 
-#: src/hooks/rsshook.cc:378
+#: src/hooks/rsshook.cc:380
 msgid "success"
 msgstr "v pořádku"
 
-#: src/hooks/rsshook.cc:398
+#: src/hooks/rsshook.cc:400
 msgid "Title: "
 msgstr "Titul: "
 
-#: src/hooks/rsshook.cc:399
+#: src/hooks/rsshook.cc:401
 msgid "Published on: "
 msgstr "Zveřejněno: "
 
-#: src/hooks/rsshook.cc:400
+#: src/hooks/rsshook.cc:402
 msgid "Category: "
 msgstr "Kategorie: "
 
-#: src/hooks/rsshook.cc:401
+#: src/hooks/rsshook.cc:403
 msgid "Author: "
 msgstr "Autor: "
 
-#: src/hooks/rsshook.cc:403
+#: src/hooks/rsshook.cc:405
 msgid "Description: "
 msgstr "Popis: "
 
-#: src/hooks/rsshook.cc:404
+#: src/hooks/rsshook.cc:407
 msgid "Link: "
 msgstr "Odkaz: "
 
-#: src/hooks/rsshook.cc:405
+#: src/hooks/rsshook.cc:408
 msgid "Comments: "
 msgstr "Komentář: "
 
@@ -270,7 +273,8 @@ msgstr "Zpráva při změně stavu:"
 #: src/hooks/yahoohook.cc:673
 #, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
-msgstr "+ [yahoo] nelze získat pryč-zprávu z %s, %s (možná není pryč-zpráva vyplněna)"
+msgstr ""
+"+ [yahoo] nelze získat pryč-zprávu z %s, %s (možná není pryč-zpráva vyplněna)"
 
 #: src/hooks/yahoohook.cc:749
 msgid "+ [yahoo] cannot login: username and password mismatch"
@@ -322,7 +326,7 @@ msgstr "Uživatel %s se připojil do konference"
 msgid "The user %s has left the conference"
 msgstr "Uživatel %s opustil konferenci"
 
-#: src/hooks/yahoohook.cc:994 src/hooks/icqhook.cc:1195
+#: src/hooks/yahoohook.cc:994 src/hooks/icqhook.cc:1272
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "si Vás přidal(a) do seznamu kontaktů"
@@ -359,7 +363,7 @@ msgstr "+ [jab] k serveru se nelze připojit"
 msgid "+ [jab] unregistering from the %s agent"
 msgstr "+ [jab] odregistrovávám se od agenta %s"
 
-#: src/hooks/jabberhook.cc:759 src/hooks/icqhook.cc:1249
+#: src/hooks/jabberhook.cc:759 src/hooks/icqhook.cc:1326
 #: src/hooks/gaduhook.cc:402 src/hooks/irchook.cc:632
 msgid "Away message:"
 msgstr "pryč-zpráva:"
@@ -434,70 +438,71 @@ msgstr "Uživatel nemá žádné informace v profilu."
 msgid "+ [aim] password sent"
 msgstr "+ [aim] heslo odesláno "
 
-#: src/hooks/icqhook.cc:1038
+#: src/hooks/icqhook.cc:1050
 msgid "as requested"
 msgstr "podle požadavků"
 
-#: src/hooks/icqhook.cc:1039
+#: src/hooks/icqhook.cc:1051
 msgid "socket problems"
 msgstr "problémy se socketem"
 
-#: src/hooks/icqhook.cc:1040
+#: src/hooks/icqhook.cc:1052
 msgid "bad username"
 msgstr "chybné jméno uživatele"
 
-#: src/hooks/icqhook.cc:1041
+#: src/hooks/icqhook.cc:1053
 msgid "turboing"
 msgstr "mnoho opakovaných přihlášení"
 
-#: src/hooks/icqhook.cc:1042
+#: src/hooks/icqhook.cc:1054
 msgid "bad password"
 msgstr "chybné heslo"
 
-#: src/hooks/icqhook.cc:1043
+#: src/hooks/icqhook.cc:1055
 msgid "username and password mismatch"
 msgstr "jméno a heslo nesouhlasí"
 
-#: src/hooks/icqhook.cc:1044
+#: src/hooks/icqhook.cc:1056
 msgid "dual login detected"
 msgstr "zjištěno dvojí přihlášení"
 
-#: src/hooks/icqhook.cc:1052
+#: src/hooks/icqhook.cc:1064
 msgid "+ [icq] cannot connect"
 msgstr "+ [icq] nelze se připojit"
 
-#: src/hooks/icqhook.cc:1052
+#: src/hooks/icqhook.cc:1064
 msgid "+ [icq] disconnected"
 msgstr "+ [icq] odpojeno"
 
-#: src/hooks/icqhook.cc:1063
+#: src/hooks/icqhook.cc:1075
 msgid "icq disconnection reason"
 msgstr "+ důvod odpojení od icq"
 
-#: src/hooks/icqhook.cc:1176
+#: src/hooks/icqhook.cc:1253
 msgid "The user has accepted your authorization request"
 msgstr "si Vás přidal(a) do seznamu kontaktů"
 
-#: src/hooks/icqhook.cc:1180
+#: src/hooks/icqhook.cc:1257
 msgid "The user has rejected your authorization request; the message was: "
 msgstr "Žádost o autorizaci od %lu"
 
-#: src/hooks/icqhook.cc:1235
+#: src/hooks/icqhook.cc:1312
 #, c-format
 msgid "+ [icq] failed SMS to %s, %s"
 msgstr "+ [icq] SMS pro %s, %s odmítnuta"
 
-#: src/hooks/icqhook.cc:1238
+#: src/hooks/icqhook.cc:1315
 #, c-format
 msgid "+ [icq] failed SMS to %s"
 msgstr "+ [icq] nelze poslat SMS pro %s "
 
-#: src/hooks/icqhook.cc:1253
+#: src/hooks/icqhook.cc:1330
 #, c-format
 msgid "+ [icq] cannot fetch away msg from %s, %s (maybe no away msg set)"
-msgstr "+ [icq] nelze získat pryč-zprávu od %s, %s (možná není pryč-zpráva vyplněna)"
+msgstr ""
+"+ [icq] nelze získat pryč-zprávu od %s, %s (možná není pryč-zpráva vyplněna)"
 
-#: src/hooks/icqhook.cc:1409
+#: src/hooks/icqhook.cc:1486
 msgid "Random Chat User"
 msgstr "Povídání si s náhodným uživatelem"
 
