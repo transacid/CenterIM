@@ -242,6 +242,10 @@ namespace ICQ2000
     m_client_seq_num = (unsigned short)(0x7fff*(rand()/(RAND_MAX+1.0)));
     m_requestid = (unsigned int)(0x7fffffff*(rand()/(RAND_MAX+1.0)));
 
+    unsigned int n = rand(), s = 0;
+    for (unsigned int i = n; i >>= 3; s += i);
+    m_client_seq_num = (((0 - s) ^ (unsigned char)n) & 7 ^ n) + 2;
+
     m_state = state;
   }
 
@@ -1098,15 +1102,16 @@ namespace ICQ2000
 
     b << ScreenNameTLV(m_self->getStringUIN())
       << PasswordTLV(m_password)
-      << ClientProfileTLV("ICQ Inc. - Product of ICQ (TM).2000b.4.63.1.3279.85")
+      << ClientProfileTLV("ICQ Client")
       << ClientTypeTLV(266)
-      << ClientVersionMajorTLV(4)
-      << ClientVersionMinorTLV(63)
-      << ClientICQNumberTLV(1)
-      << ClientBuildMajorTLV(3279)
-      << ClientBuildMinorTLV(85)
+      << ClientVersionMajorTLV(6)
+      << ClientVersionMinorTLV(5)
+      << ClientICQNumberTLV(0)
+      << ClientBuildMajorTLV(0x001a)
+      << ClientBuildMinorTLV(0x00007537)
       << LanguageTLV("en")
-      << CountryCodeTLV("us");
+      << CountryCodeTLV("us")
+      << Type94TLV(0);
 
     FLAPFooter(b,mk);
     SignalLog(LogEvent::INFO, "Sending Authorisation Request");

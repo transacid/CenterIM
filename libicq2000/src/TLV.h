@@ -74,6 +74,7 @@ namespace ICQ2000 {
   const unsigned short TLV_ClientVersionMinor = 0x0018;
   const unsigned short TLV_ClientICQNumber = 0x0019;
   const unsigned short TLV_ClientBuildMajor = 0x001a;
+  const unsigned short TLV_Type94 = 0x0094;
 
   // Channel 0x0002
   const unsigned short TLV_UserClass = 0x0001;
@@ -365,6 +366,13 @@ namespace ICQ2000 {
     unsigned short Type() const { return TLV_Language; }
   };
 
+  class Type94TLV : public CharTLV 
+  {
+   public:
+    Type94TLV(unsigned char n) : CharTLV(n) { }
+    unsigned short Type() const { return TLV_Type94; }
+  };
+  
   // --
 
   class WebAddressTLV : public StringTLV {
