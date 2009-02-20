@@ -2209,7 +2209,7 @@ got_data_connecting_start:
 				" %i",			// magic number based on username and password
 					c->nickname,
 					toc_hash_password(password),
-					PACKAGE_NAME ":" PACKAGE_VERSION ":contact " PACKAGE_BUGREPORT,
+					/*PACKAGE_NAME*/ ":" /*PACKAGE_VERSION*/ ":contact " /*PACKAGE_BUGREPORT*/,
 					"US",
 					"",
 					"",
