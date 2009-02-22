@@ -1,3 +1,119 @@
+commit b32165550306d659fb3fe60a9f1f06e0f5e32142
+Author: Roger <roger@skrin.(none)>
+Date:   Fri Feb 20 09:11:44 2009 +0100
+
+    Fix AIM logon.
+
+commit c52226741e1c7001b34d59a16721de6b2d9302f1
+Author: Roger <roger@lv.(none)>
+Date:   Mon Feb 16 12:40:50 2009 +0100
+
+    Fix ICQ protocol change, patch by Alexandr Zeinalov
+
+commit acf3311025462504d7b908ccf554c4989c4fb358
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Jan 26 19:40:05 2009 +0100
+
+    Updated po files
+
+commit 1e11edd226a1cc2ba4d203429c246ebb6d87e063
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Mon Jan 26 19:14:55 2009 +0100
+
+    Updated german translation
+
+commit 87164a6156be0d4b379d67b97e99bade25149e20
+Author: Frank Altpeter <frank@altpeter.de>
+Date:   Mon Jan 19 10:52:21 2009 +0100
+
+    Same thing - change run path from /usr/bin/perl to /usr/bin/env perl to comply to operating systems
+    which don't have perl in /usr/bin (like FreeBSD)
+
+commit 8d6b2f97e7feefa223593b4afd796372fdbe7832
+Author: Frank Altpeter <frank@altpeter.de>
+Date:   Mon Jan 19 10:37:01 2009 +0100
+
+    Changed #! path to comply to common rules of having no hardcoded path to python
+    Required for example for being run on FreeBSD (which has python in /usr/local/bin instead of /usr/bin)
+
+commit 90c5d0d7607a136cafcbba5dc841b198a1c6d69b
+Author: Jan Stancek <jan@stancek.eu>
+Date:   Sun Jan 18 19:32:15 2009 +0100
+
+    Added possibility to turn on PGP for ICQ
+    If turned on, it encrypts all outgoing messages with gpgme by
+    adding PGP BEGIN/END headers around all encrypted data.
+    Received messages are then scanned PGP BEGIN/END and
+    message is extracted if possible. Messages, which can not be decrypted,
+    e.g. messsages, which don't fit the format or for which decrypt fails
+    are dispalyed as they are.
+
+commit 81f96ca55b288aa19b7126c461e6c7f8cc51e65a
+Author: Jan Stancek <jan@stancek.eu>
+Date:   Sat Jan 17 00:09:03 2009 +0100
+
+    fix for: output modified by imexternal not saved to history
+    imeventmanager::store() creates a copy of imevent, which is later processed
+    by imexternal, where it can be modified. But when it comes to saving
+    this event to history original version is saved.
+    It is assumed, that user wants to see and log the actual text he sent,
+    even if text is modified by external script.
+
+commit f67d0794bd64aa6685e821026a4f14c90cae0c3f
+Author: Petr Písař <petr.pisar@atlas.cz>
+Date:   Mon Jan 12 22:39:20 2009 +0100
+
+    Czech translation update for 4.22.6.
+
+commit 777e3233df1a1be8f1b6c0af91ad39ad33d993cb
+Author: David Riebenbauer <davrieb@liegesta.at>
+Date:   Sun May 25 09:51:28 2008 +0200
+
+    can't say if we're building shared libs
+    
+    we don't use libtool anymore so we can't say if we're building shared
+    and/or static libs
+
+commit 25c98348b7b227162b95e1c36efbc0183b743d6d
+Author: Roger <roger@lv.(none)>
+Date:   Fri Jan 9 10:26:42 2009 +0100
+
+    Deal with OpenSSL redistribution problem. Lubomir Rintel <lkundrak@v3.sk>
+
+commit 1293f9d780b5cc6c6eb67421ccc769a3508602ef
+Author: Roger <roger@jikos.cz>
+Date:   Mon Jan 5 21:07:48 2009 +0100
+
+    Fix incorrect snprintf() use
+    
+    See http://lists.debian.org/debian-devel/2008/12/msg01079.html
+
+commit 20ea527ef0f5569aea973725c63e88ae70847d60
+Author: Libor Capak <capak@inputwish.com>
+Date:   Wed Dec 3 19:23:19 2008 +0100
+
+    rss Atom support
+
+commit f30ce46dfcfb67d5e2c1522a213e145e1ece18e0
+Author: Max Soares <mxsoares@gmail.com>
+Date:   Fri Oct 31 13:57:16 2008 -0200
+
+    This commit fix the bug reported in Bugzilla as "Bug 105  cursor jumps when typing multiline messages".
+    The problem happen when the texteditor try to merge 2 lines 'cause some caracter are excluded in first line.
+    The merge is: move the first word from second line to end of first line.
+
+commit 186141700cd7b7225b561d5ec4f6801506926ff2
+Author: Pavol Rusnak <stick@gk2.sk>
+Date:   Fri Oct 31 14:12:49 2008 +0100
+
+    fix method return value (caused error - function returns random data)
+
+commit 24932da60ad359e5363d306345cff01de86f76f3
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sun Oct 26 16:43:36 2008 +0100
+
+    Updated Changelog
+
 commit 5bb628bf04fbbb5f30096bb326e3a407e010fd2d
 Author: Pavol Rusnak <stick@gk2.sk>
 Date:   Mon Sep 22 14:34:00 2008 +0200
