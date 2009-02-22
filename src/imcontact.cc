@@ -54,6 +54,7 @@ bool imcontact::operator == (const imcontact &ainfo) const {
 	case irc:
 	case yahoo:
 	case jabber:
+	case aim:
 	    r = r & (up(ainfo.nickname) == up(nickname));
 	    break;
 
