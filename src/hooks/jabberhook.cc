@@ -566,6 +566,7 @@ void jabberhook::sendnewuser(const imcontact &ic, bool report) {
 	xmlnode_free(x);
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	xmlnode_put_attrib(x, "id", jab_getid(jc));
 	y = xmlnode_get_tag(x, "query");
 	z = xmlnode_insert_tag(y, "item");
 	xmlnode_put_attrib(z, "jid", cjid);
@@ -646,6 +647,7 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 	    if(report) face.log(_("+ [jab] unregistering from the %s agent"), cjid);
 
 	    x = jutil_iqnew(JPACKET__SET, NS_REGISTER);
+	    xmlnode_put_attrib(x, "id", jab_getid(jc));
 	    xmlnode_put_attrib(x, "to", cjid);
 	    y = xmlnode_get_tag(x, "query");
 	    xmlnode_insert_tag(y, "remove");
@@ -661,6 +663,7 @@ void jabberhook::removeuser(const imcontact &ic, bool report) {
 	xmlnode_free(x);
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	xmlnode_put_attrib(x, "id", jab_getid(jc));
 	y = xmlnode_get_tag(x, "query");
 	z = xmlnode_insert_tag(y, "item");
 	xmlnode_put_attrib(z, "jid", cjid);
@@ -1025,6 +1028,7 @@ void jabberhook::gotagentinfo(xmlnode x) {
 			ia->params[agent::ptSearch].enabled = true;
 	    		ia->params[agent::ptSearch].paramnames.clear();
 			xmlnode z = jutil_iqnew(JPACKET__GET, NS_SEARCH);
+			xmlnode_put_attrib(z, "id", jab_getid(jc));
 			xmlnode_put_attrib(z, "to", from);
 			jab_send(jc, z);
 			xmlnode_free(z);
@@ -1227,7 +1231,6 @@ void jabberhook::gotsearchresults(xmlnode x) {
 
 void jabberhook::gotloggedin() {
     xmlnode x, y;
-    char *cid;
 
     flogged = true;
 
@@ -1241,15 +1244,13 @@ void jabberhook::gotloggedin() {
     jhook.agents.push_back(agent(server, server, "", agent::atUnknown));
 
     x = jutil_iqnew(JPACKET__GET, NS_DISCOINFO);
-    cid = jab_getid(jc);
-    xmlnode_put_attrib(x, "id", cid);
+    xmlnode_put_attrib(x, "id", jab_getid(jc));
     xmlnode_put_attrib(x, "to", server);
     jab_send(jc, x);
     xmlnode_free(x);
 
     x = jutil_iqnew(JPACKET__GET, NS_DISCOITEMS);
-    cid = jab_getid(jc);
-    xmlnode_put_attrib(x, "id", cid);
+    xmlnode_put_attrib(x, "id", jab_getid(jc));
     xmlnode_put_attrib(x, "to", server);
     jab_send(jc, x);
     xmlnode_free(x);
@@ -1398,6 +1399,7 @@ void jabberhook::sendupdateuserinfo(const icqcontact &c) {
 	if(ia->name == ri.service) {
 	    if(ia->type == agent::atStandard) {
 		x = jutil_iqnew2(JPACKET__SET);//vCard w/o trash query tag in vcard
+		xmlnode_put_attrib(x, "id", jab_getid(jc));
 		y = xmlnode_insert_tag(x, "vCard");
 		xmlnode_put_attrib(y, "xmlns", NS_VCARD);
 		xmlnode_put_attrib(y, "version", "3.0");
@@ -1515,6 +1517,7 @@ void jabberhook::updatecontact(icqcontact *c) {
         char *cname = strdup(rusconv("ku", c->getdispnick()).c_str());
 
 	x = jutil_iqnew(JPACKET__SET, NS_ROSTER);
+	xmlnode_put_attrib(x, "id", jab_getid(jc));
 	y = xmlnode_insert_tag(xmlnode_get_tag(x, "query"), "item");
 	xmlnode_put_attrib(y, "jid", cjid);
 	xmlnode_put_attrib(y, "name", cname);
@@ -2067,6 +2070,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			    if (p = xmlnode_get_attrib(y, "jid")) {
 				jhook.agents.push_back(agent(p, p, _(""), agent::atUnknown));
 				x = jutil_iqnew(JPACKET__GET, NS_DISCOINFO);
+				xmlnode_put_attrib(x, "id", jab_getid(conn));
 				xmlnode_put_attrib(x, "to", p);
 				jab_send(conn, x);
 				xmlnode_free(x);
@@ -2509,7 +2513,7 @@ void jabberhook::send_file(const string &cjid) //http sendfile
 		jabber_send_file(jhook.jc, files[ir].fname.c_str(), files[ir].size, file, strdup(cjid.c_str()), &progressbar, ptpmin, ptpmax ); //real send fuction, starting server
 		string send_url = (string)"http://" + file->host + (string)":" + i2str(file->port) + (string)"/" + justfname(files[ir].fname);
 		xmlnode_insert_cdata(y, send_url.c_str(), (unsigned) -1 );
-		 
+		
 		xmlnode k;
 		k = xmlnode_insert_tag(xmlnode_get_tag(x,"query"), "desc");
 		string desc = "File size: " + i2str(files[ir].size);
