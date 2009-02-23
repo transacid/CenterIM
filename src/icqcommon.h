@@ -78,6 +78,7 @@ using namespace std;
 
 string up(string s);
 string lo(string s);
+string stripspaces(string s);
 
 /*! .. and defines.
  */

@@ -1783,3 +1783,15 @@ string lo(string s) {
 
     return s;
 }
+
+string stripspaces(string s) {
+    string::iterator is = s.begin();
+    string result;
+    while (is != s.end()) {
+	if (*is != ' ')
+	    result.push_back(*is);
+	is++;
+    };
+    
+    return result;
+}
