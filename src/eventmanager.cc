@@ -72,7 +72,7 @@ void imeventmanager::store(const imevent &cev) {
 		    c = clist.addnew(ev.getcontact());
 		    /* turing test */
 		    if (conf->getdebug()) face.log("captcha: enabled = %i", conf->getusingcaptcha());
-		    if (conf->getusingcaptcha()) {
+		    if (conf->getusingcaptcha() && (ev.getcontact().pname != irc)) {
 			if (conf->getdebug()) face.log("captcha: start");
 		        /* If the turing test was failed or not completed, remove
 			 * contact (WE DONT WANT YOU!)
