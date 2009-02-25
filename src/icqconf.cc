@@ -85,11 +85,11 @@ icqconf::icqconf() {
     // quick and dirty fix to support .centerim as well as .centericq
     char *home = getenv("HOME");
     if( home != NULL ) {
-    basedir = home  + "/.centerim/";
+    basedir = string(home)  + "/.centerim/";
     if ( access(basedir.c_str(), F_OK) != 0 ) {
-        basedir = home + "/.centericq/";
+        basedir = string(home) + "/.centericq/";
         if ( access(basedir.c_str(), F_OK) != 0 ) {
-            basedir = home + "/.centerim/";
+            basedir = string(home) + "/.centerim/";
         }
     }
     }
