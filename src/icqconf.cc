@@ -83,12 +83,15 @@ icqconf::icqconf() {
     }
 
     // quick and dirty fix to support .centerim as well as .centericq
-    basedir = (string) getenv("HOME") + "/.centerim/";
+    char *home = getenv("HOME");
+    if( home != NULL ) {
+    basedir = home  + "/.centerim/";
     if ( access(basedir.c_str(), F_OK) != 0 ) {
-        basedir = (string) getenv("HOME") + "/.centericq/";
+        basedir = home + "/.centericq/";
         if ( access(basedir.c_str(), F_OK) != 0 ) {
-            basedir = (string) getenv("HOME") + "/.centerim/";
+            basedir = home + "/.centerim/";
         }
+    }
     }
     screensocketpath = "/var/run/screen";
 
