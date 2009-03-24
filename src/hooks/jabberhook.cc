@@ -2257,8 +2257,11 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 			if(ia != jhook.agents.end())
 			jhook.agents.erase(ia);
 		} else {
-		    jhook.chatmembers[id].push_back(s);
-
+		    vector<string>::iterator im = find(jhook.chatmembers[id].begin(), jhook.chatmembers[id].end(), s);
+		    if(im == jhook.chatmembers[id].end()) {
+			jhook.chatmembers[id].push_back(s);
+			sort(jhook.chatmembers[id].begin(),jhook.chatmembers[id].end());
+		    }
 		}
 
 	    } else {
