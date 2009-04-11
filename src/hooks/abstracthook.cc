@@ -216,7 +216,9 @@ string abstracthook::rushtmlconv(const string &tdir, const string &text, bool ru
 	    if(r.substr(pos+1, 6) == "raquo;") r.replace(pos, 7, ">>"); else
 	    if(r.substr(pos+1, 6) == "bdquo;") r.replace(pos, 7, "\""); else
 	    if(r.substr(pos+1, 6) == "ldquo;") r.replace(pos, 7, "\""); else
-	    if(r.substr(pos+1, 5) == "copy;") r.replace(pos, 8, "(c)");
+	    if(r.substr(pos+1, 5) == "copy;") r.replace(pos, 8, "(c)"); else
+	    if(r.substr(pos+1, 4) == "#13;") r.replace(pos, 5, "\r"); else
+	    if(r.substr(pos+1, 4) == "#10;") r.replace(pos, 5, "\n");
 	    pos++;
 	}
     }
