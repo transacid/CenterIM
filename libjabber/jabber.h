@@ -17,6 +17,7 @@
  *  Copyright (C) 1998-1999 The Jabber Team http://jabber.org/
  */
 
+#include "libxode.h"
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -45,7 +46,6 @@
 #include <pthread.h>
 #endif
 
-#include "libxode.h"
 #include "connwrap.h"
 
 #ifndef INCL_JABBER_H
