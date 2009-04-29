@@ -41,10 +41,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
+#if defined(HAVE_OPENSSL)
 #define OPENSSL_NO_KRB5 1
 #  include <openssl/err.h>
 #  include <openssl/rand.h>
+#elif defined(HAVE_NSS_COMPAT)
+#  include <nss_compat_ossl/nss_compat_ossl.h>
 #elif HAVE_GNUTLS
 #include <gnutls/gnutls.h>
 #endif

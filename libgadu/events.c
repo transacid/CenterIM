@@ -38,9 +38,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
+#if defined(HAVE_OPENSSL)
 #  include <openssl/err.h>
 #  include <openssl/x509.h>
+#elif defined(HAVE_NSS_COMPAT)
+#  include <nss_compat_ossl/nss_compat_ossl.h>
 #elif HAVE_GNUTLS
 #  include <gnutls/gnutls.h>
 #endif

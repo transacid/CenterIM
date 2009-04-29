@@ -37,13 +37,17 @@ extern "C" {
 #include <stdio.h>
 #include <stdarg.h>
 
-#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
+#if defined(HAVE_OPENSSL)
 
 #ifndef OPENSSL_NO_KRB5
 #define OPENSSL_NO_KRB5 1
 #endif
 
 #include <openssl/ssl.h>
+
+#elif defined(HAVE_NSS_COMPAT)
+
+#include <nss_compat_ossl/nss_compat_ossl.h>
 
 #elif HAVE_GNUTLS
 #include <gnutls/openssl.h>
