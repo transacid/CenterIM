@@ -867,12 +867,12 @@ void icqconf::loadsounds() {
 
 	    switch(rs) {
 		case rscard:
-		    fo << "*\tmsg\tplay " << SHARE_DIR << "/msg.wav" << endl;
-		    fo << "*\turl\tplay " << SHARE_DIR << "/url.wav" << endl;
-		    fo << "*\temail\tplay " << SHARE_DIR << "/email.wav" << endl;
-		    fo << "*\tonline\tplay " << SHARE_DIR << "/online.wav" << endl;
-		    fo << "*\toffline\tplay " << SHARE_DIR << "/offline.wav" << endl;
-		    fo << "*\tsms\tplay " << SHARE_DIR << "/sms.wav" << endl;
+		    fo << "*\tmsg\taplay " << SHARE_DIR << "/msg.wav" << endl;
+		    fo << "*\turl\taplay " << SHARE_DIR << "/url.wav" << endl;
+		    fo << "*\temail\taplay " << SHARE_DIR << "/email.wav" << endl;
+		    fo << "*\tonline\taplay " << SHARE_DIR << "/online.wav" << endl;
+		    fo << "*\toffline\taplay " << SHARE_DIR << "/offline.wav" << endl;
+		    fo << "*\tsms\taplay " << SHARE_DIR << "/sms.wav" << endl;
 		    break;
 
 		case rsspeaker:
