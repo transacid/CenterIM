@@ -213,6 +213,7 @@ if test "x$with_ssl" != "xno"; then
 		# drags in NSPR as well
                 PKG_CHECK_MODULES(NSS, nss >= 3)
 		CFLAGS="$CFLAGS $NSS_CFLAGS"
+		CXXFLAGS="$CXXFLAGS $NSS_CFLAGS"
 		LIBS="$LIBS $NSS_LIBS"
 
 		# The compatibility layer
@@ -220,6 +221,7 @@ if test "x$with_ssl" != "xno"; then
                 if test -n "$with_nss_compat" -a "x$with_nss_compat" != "xno"; then
                         if test -f "${with_nss_compat}"; then
                                 CFLAGS="$CFLAGS -I${with_nss_compat} -I/usr/include/nspr4"
+                                CXXFLAGS="$CXXFLAGS -I${with_nss_compat} -I/usr/include/nspr4"
                         fi
                         AC_CHECK_LIB(nss_compat_ossl, SSL_CTX_new, [
                                 AC_DEFINE(HAVE_NSS_COMPAT, 1, [use nss_compat])
