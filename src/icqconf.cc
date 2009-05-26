@@ -68,7 +68,7 @@ icqconf::icqconf() {
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = proxyssl = proxyconnect = notitles =
-	debug = timestampstothesecond = vi = false;
+	debug = timestampstothesecond = vi = autoawayx = false;
 
     timestampformat = DEFAULT_TIMESTAMP_FORMAT;
     logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
@@ -548,6 +548,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "vi") vi = true; else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
+	    if(param == "auto_away_na_x") autoawayx = true; else
 	    if(param == "antispam") antispam = true; else
 	    if(param == "showopenedchats") setshowopenedchats(true); else
 	    if(param == "dropauthreq") dropauthreq = true; else
@@ -621,6 +622,7 @@ void icqconf::loadmainconfig() {
 void icqconf::save() {
     string fname = getconfigfname("config"), param;
     int away, na;
+    bool usex = false;
 
     if(enoughdiskspace()) {
 	ofstream f(fname.c_str());
@@ -634,10 +636,11 @@ void icqconf::save() {
 		f << "sockspass\t" << pass << endl;
 	    }
 
-	    getauto(away, na);
+	    getauto(away, na, usex);
 
 	    if(away) f << "autoaway\t" << i2str(away) << endl;
 	    if(na) f << "autona\t" << i2str(na) << endl;
+	    if(autoawayx) f << "auto_away_na_x" << endl;
 	    if(hideoffline) f << "hideoffline" << endl;
 	    if(emacs) f << "emacs" << endl;
 	    if(getquote()) f << "quotemsgs" << endl;
@@ -1080,17 +1083,19 @@ void icqconf::setcolormode(colormode c) {
     cm = c;
 }
 
-void icqconf::setauto(int away, int na) {
+void icqconf::setauto(int away, int na, bool usex) {
     autoaway = away;
     autona = na;
+    autoawayx = usex;
 
     if(away == na)
 	autoaway = 0;
 }
 
-void icqconf::getauto(int &away, int &na) const {
+void icqconf::getauto(int &away, int &na, bool& usex) const {
     away = autoaway;
     na = autona;
+    usex = autoawayx;
 
     if(away == na)
 	away = 0;

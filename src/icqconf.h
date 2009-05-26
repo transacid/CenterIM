@@ -161,7 +161,7 @@ class icqconf {
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
 	    timestampstothesecond, dropauthreq, usingcaptcha, askquit,
-	    showopenedchats, vi;
+	    showopenedchats, vi, autoawayx;
 
 	unsigned int captchatimeout;
 
@@ -261,8 +261,8 @@ class icqconf {
 	bool getmailcheck() const { return mailcheck; }
 	void setmailcheck(bool fmc);
 
-	void getauto(int &away, int &na) const;
-	void setauto(int away, int na);
+	void getauto(int &away, int &na, bool& usex) const;
+	void setauto(int away, int na, bool usex);
 
 	bool getscreenna() const;
 	void setscreenna(bool screenna);

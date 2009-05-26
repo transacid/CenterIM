@@ -1142,6 +1142,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool timestampstothesecond = conf->gettimestampstothesecond();
     bool logtimestamps, logonline;
     conf->getlogoptions(logtimestamps, logonline);
+    bool usex = false;
 
     int ptpmin, ptpmax;
     conf->getpeertopeer(ptpmin, ptpmax);
@@ -1189,7 +1190,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 
     finished = success = false;
 
-    conf->getauto(aaway, ana);
+    conf->getauto(aaway, ana, usex);
 
     textwindow w(0, 0, sizeBigDlg.width, sizeBigDlg.height,
 	conf->getcolor(cp_dialog_frame), TW_CENTERED);
@@ -1304,6 +1305,9 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	i = t.addnode(_(" Auto Presence Status "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
 	t.addleaff(i, 0, 5, _(" Automatically set N/A period (min) : %d "), ana);
+#ifdef HAVE_LIBXSS
+	t.addleaff(i, 0, 57, _(" Use X to report idle time : %s "), stryesno(usex));
+#endif
 	t.addleaff(i, 0, 49, _(" Automatically set N/A when screen is detached : %s "), stryesno(screenna));
 	if (screenna)
 		t.addleaff(i, 0, 50, _(" Screen socket path : %s "), screensocketpath.c_str());
@@ -1497,6 +1501,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 			break;
 		    case 55: showopenedchats = !showopenedchats; break;
 		    case 56: vi = !vi; break;
+		    case 57: usex = !usex; break;
                 
   		}
   		break;
@@ -1504,7 +1509,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		finished = success = true;
 		conf->setquote(quote);
 		conf->setsavepwd(savepwd);
-		conf->setauto(aaway, ana);
+		conf->setauto(aaway, ana, usex);
 		conf->setscreenna(screenna);
 		conf->setscreensocketpath(screensocketpath);
 		conf->sethideoffline(hideoffl);

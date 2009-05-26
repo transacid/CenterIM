@@ -41,6 +41,9 @@
   #include "imotr.h"
 #endif
 
+#ifdef HAVE_LIBXSS
+  #include <X11/extensions/scrnsaver.h>
+#endif
 
 centerim::centerim()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
@@ -1500,6 +1503,7 @@ void centerim::exectimers() {
     protocolname pname;
     int paway, pna;
     bool fonline = false;
+    bool pusex = false;
 
     time(&timer_current);
 
@@ -1556,7 +1560,7 @@ void centerim::exectimers() {
     * How let's find out how are the auto-away mode is doing.
     *
     */
-	conf->getauto(paway, pna);
+	conf->getauto(paway, pna, pusex);
 	
 	if(fonline && (paway || pna || conf->getscreenna())) {
 		imstatus toset = offline;
@@ -1572,6 +1576,7 @@ void centerim::exectimers() {
 		 * Use auto-away or auto-na?
 		 */
 		if(paway || pna) {
+#ifndef HAVE_LIBXSS
 			if(paway && timer_current-timer_keypress > paway*60)
 				toset = away;
 
@@ -1580,6 +1585,32 @@ void centerim::exectimers() {
 
 			if(timer_current-timer_keypress < MINCK0(paway, pna)*60)
 				toset = available;
+#else
+			time_t idle_time = timer_current - timer_keypress;
+			if (pusex) {
+				Display* dpy = XOpenDisplay(0);
+				if (dpy) {
+					XScreenSaverInfo i;
+					Status s = XScreenSaverQueryInfo(dpy,
+							DefaultRootWindow(dpy),
+							&i);
+					if (s != 0) {
+						// XScreenSaver extension supported
+						idle_time = i.idle / 1000;
+					}
+					XCloseDisplay(dpy);
+				}
+			}
+
+			if(paway && idle_time > paway*60)
+				toset = away;
+
+			if(pna && idle_time > pna*60)
+				toset = notavail;
+
+			if(idle_time < MINCK0(paway, pna)*60)
+				toset = available;
+#endif
 		}
 
 		/*

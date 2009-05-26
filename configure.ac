@@ -124,6 +124,11 @@ AC_ARG_WITH(libotr,
             [with_libotr=$withval],
             [with_libotr=no]
             )
+AC_ARG_WITH(libXss,
+            AS_HELP_STRING([--with-libXss], [enable Xss]),
+            [with_libXss=$withval],
+            [with_libXss=no],
+            )
 
 #####################
 # Check for fribidi #
@@ -339,6 +344,29 @@ if test "x$with_libotr" != "xno"; then
 	])
 fi
 
+#####################
+# Check for Xss     #
+#####################
+AC_MSG_CHECKING(whether to use Xss)
+have_libXss=no 
+
+if test "x$with_libXss" = "xyes"; then
+	AC_MSG_RESULT([])
+
+	AC_CHECK_LIB(Xss, XScreenSaverQueryInfo,
+	[
+		AC_CHECK_HEADER(X11/extensions/scrnsaver.h,
+		[
+			AC_DEFINE(HAVE_LIBXSS, 1, [define if you have Xss])
+			XSS_LIBS="-lX11 -lXss"
+			LIBS="$LIBS $XSS_LIBS"
+			have_libXss=yes
+			AC_MSG_RESULT([yes])
+		])
+	])
+fi
+
+ 
 
 ####################
 # Check for others #
