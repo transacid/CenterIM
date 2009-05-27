@@ -1,3 +1,137 @@
+commit 1ac2067ced9e84e5891153664718e9caed8b28fb
+Author: Mehturt <mehturt@gmail.com>
+Date:   Wed May 27 10:09:48 2009 +0200
+
+    Quicksearching withing the contact list searches starting anywhere in the name.
+
+commit 4d1bcaeff7eba80f6f3a47110b45e3e17eb62c33
+Author: Mehturt <mehturt@gmail.com>
+Date:   Tue May 26 09:36:21 2009 +0200
+
+    Added functionality to report idle time by X, based on libXss.  Fixes bug http://bugzilla.centerim.org/show_bug.cgi?id=7.
+
+commit b9636070199e0b7db467c8944bfdda71d0d43304
+Merge: d42187b cf415ea
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sat May 2 21:33:56 2009 +0200
+
+    Merge branch 'mob' of git+ssh://transacid@repo.or.cz/srv/git/centerim into mob
+
+commit d42187bd8aad6333ed903efd7ab96986c5ef3388
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sat May 2 21:31:52 2009 +0200
+
+    Exchanged play with aplay.
+    
+    This should fix some problems with play not being installed. aplay comes with alsa
+    so it should be on every system.
+
+commit cf415ea0a45fc77153dd1969d486aa9a1bf95e6f
+Author: Lubomir Rintel <lkundrak@v3.sk>
+Date:   Wed Apr 29 19:10:59 2009 +0200
+
+    Fix libgadu and libicq NSS cryptography support
+    
+    Fixes needed to get it compile with Fedora's nss_ossl_compat
+    library.
+
+commit 18abf940cc67be86fd2377246b55700c2af8f042
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Sun Apr 26 04:10:49 2009 +0100
+
+    Fixed bug #137: Compilation fails under OpenBSD
+    
+    Moved the #include "libxode.h" to the top of jabber.h since in that
+    header there is and include to "config.h" which defines all the macros
+    detected by the configure script
+
+commit 4d4c3f0bf87c7c5d5ce1c6b46cb31678830e2a82
+Author: Roger <roger@jikos.cz>
+Date:   Tue Apr 21 22:23:52 2009 +0200
+
+    Fix bug #118 - move cursor when it should
+
+commit 860b7a9ca2b5c82d6f5b11856593c4abcddbaeaf
+Merge: 7468d4f 01ff167
+Author: friedmag <friedmagb@gmail.com>
+Date:   Sat Apr 11 11:37:55 2009 -0400
+
+    Merge branch 'newlines' into mob
+
+commit 01ff167fe118056e03f8153c69a3910b3a4ec7cd
+Author: friedmag <friedmagb@gmail.com>
+Date:   Sat Apr 11 11:37:03 2009 -0400
+
+    Fixes #110
+    
+    Added conversion for &#13; &#10; to appropriate ASCII
+
+commit 7468d4f1ec404d766853462e6c62e672c8ab44ee
+Author: Roger <roger@lv.(none)>
+Date:   Tue Mar 24 10:56:17 2009 +0100
+
+    Don't duplicate nicks in jabber conferencies and sort them. Patch by Andrei Vereha
+
+commit 8454d72084cc4d6078a2105d9d20ddb9b7b155ca
+Author: Roger <roger@jikos.cz>
+Date:   Sat Mar 7 09:38:12 2009 +0100
+
+    Don't log unnecessary jabber errors
+
+commit a7c88a60b632675816d03c18b8aa67520c2d50be
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Wed Feb 25 13:56:57 2009 +0000
+
+    Fix for nagios issue (corrected)
+
+commit 94b770ac7ca1408e4f282697e3cfa4dd52dfdf4f
+Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
+Date:   Wed Feb 25 13:30:21 2009 +0000
+
+    Fixed nagios issue
+
+commit 521767c8befe00547104a73add1a7581c13c550b
+Author: Roger <roger@jikos.cz>
+Date:   Mon Feb 23 20:16:22 2009 +0100
+
+    AIM contact names are space-insensitive
+
+commit 691433fa8970edecdc5d6c25b29bd81868c563e6
+Author: Roger <roger@jikos.cz>
+Date:   Mon Feb 23 19:48:24 2009 +0100
+
+    Disable captcha on IRC
+
+commit 66e06036a07e20e22604a43d38ab607b703116d0
+Author: Petr Písař <petr.pisar@atlas.cz>
+Date:   Mon Feb 23 13:29:04 2009 +0100
+
+    Fix typo in Czech translation
+
+commit bc7f840890e09dfcae0762ebcf17cc6971df2e47
+Author: Petr Písař <petr.pisar@atlas.cz>
+Date:   Sun Feb 22 23:54:09 2009 +0100
+
+    Czech translation for 4.22.7
+
+commit a4b6bd32d06b58a8afc3b99d9de0e97b0d4d8932
+Author: Roger <roger@jikos.cz>
+Date:   Sun Feb 22 18:21:17 2009 +0100
+
+    AIM contact names are case-insensitive
+
+commit b22484fd3fb74419a976da2ffe4fb364ecdbdc0f
+Author: Roger <roger@jikos.cz>
+Date:   Sun Feb 22 18:05:55 2009 +0100
+
+    Add missing ids for IQ stanzas (bug #119)
+
+commit bbc8e713f3345dd7f49c521236abc736ab414bea
+Author: Boris Petersen <transacid@gmail.com>
+Date:   Sun Feb 22 16:26:28 2009 +0100
+
+    Updated Changelog for 4.22.7
+
 commit b32165550306d659fb3fe60a9f1f06e0f5e32142
 Author: Roger <roger@skrin.(none)>
 Date:   Fri Feb 20 09:11:44 2009 +0100
@@ -337,7 +471,7 @@ Date:   Fri Aug 1 23:13:35 2008 +0200
     Added the ability to request receipts, a + char is shown, if a message is acknowledged.
 
 commit 8fc17a6f7b50f418b81b227fe2f24fc06888364f
-Merge: a38311e... f1378d9...
+Merge: a38311e f1378d9
 Author: J.R. Mauro <jrm8005@gmail.com>
 Date:   Mon Jul 28 22:19:04 2008 -0400
 
@@ -668,7 +802,7 @@ Date:   Tue Apr 22 10:40:39 2008 +0200
     Signed-off-by: David Riebenbauer <davrieb@liegesta.at>
 
 commit 6380a769c86b7f8beb3da050494bf921b02bb166
-Merge: 76a840f... 8be23dd...
+Merge: 76a840f 8be23dd
 Author: Roger <roger@jikos.cz>
 Date:   Thu Apr 24 13:43:51 2008 +0200
 
@@ -681,7 +815,7 @@ Date:   Thu Apr 24 13:42:47 2008 +0200
     Bug #98 - Disable message conversion from/to HTML
 
 commit 8be23dd2e676ccf86c41d4003aa3e9645c843597
-Merge: 8792dd8... a92dd45...
+Merge: 8792dd8 a92dd45
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Thu Apr 24 12:36:22 2008 +0100
 
@@ -740,14 +874,14 @@ Date:   Tue Apr 15 15:11:29 2008 +0200
     Changed warning display condition for libotr. Now only a warning is given if you build --with-libotr, sine it's not supported yet
 
 commit 16443ac2b0bf8e440bf33eec1d652077960ac456
-Merge: 2229dd1... e09d5b8...
+Merge: 2229dd1 e09d5b8
 Author: David Riebenbauer <davrieb@htu.tugraz.at>
 Date:   Tue Apr 15 14:40:52 2008 +0200
 
     Merge branch 'mob' of git+ssh://mob@repo.or.cz/srv/git/centerim into mob
 
 commit e09d5b816ec75161ae8c2df17c7ee406acce69b9
-Merge: ceec34a... 2ab8e20...
+Merge: ceec34a 2ab8e20
 Author: Boris Petersen <transacid@gmail.com>
 Date:   Tue Apr 15 14:36:50 2008 +0200
 
@@ -791,7 +925,7 @@ Date:   Tue Apr 8 13:13:30 2008 +0200
     and higher.
 
 commit 0bf40402f931b342df5963921809970c67d776b5
-Merge: 6111241... ac66092...
+Merge: 6111241 ac66092
 Author: David Riebenbauer <davrieb@htu.tugraz.at>
 Date:   Sat Apr 12 18:20:14 2008 +0200
 
@@ -863,7 +997,7 @@ Date:   Mon Mar 31 16:36:08 2008 +0200
     Shortened *Auth*-Tag to "!A"
 
 commit fa6dad96f6bc08a9b9276e7b43904328907d680c
-Merge: 9977a39... 10fae87...
+Merge: 9977a39 10fae87
 Author: Johannes Ott aka Oetzi <centerim@informatiker2k3.de>
 Date:   Mon Mar 31 15:05:46 2008 +0200
 
@@ -1072,7 +1206,7 @@ Date:   Wed Feb 13 14:49:10 2008 +0000
     Re-added v5 constant
 
 commit 606ecdb74cc6f272b5b2e7371fd2624937934d26
-Merge: 869fd80... d590531...
+Merge: 869fd80 d590531
 Author: Stephane Bisinger <stephane.bisinger@gmail.com>
 Date:   Wed Feb 13 14:39:25 2008 +0000
 
@@ -1232,7 +1366,7 @@ Date:   Fri Jan 4 23:02:20 2008 +0100
     Changed sourceforge bug-reporting project to our new bugzilla site.
 
 commit 869fd80ba2edfeb4971283184bf460c7a394e4ea
-Merge: b384767... eba7844...
+Merge: b384767 eba7844
 Author: Stephane Bisinger <stephane.bisinger@gmail.com>
 Date:   Wed Jan 2 19:18:37 2008 +0000
 
@@ -1328,7 +1462,7 @@ Date:   Wed Dec 26 22:52:03 2007 +0100
     Don't un-idle-auto-away when screen is reattached (revert to auto-idle status via previous online).
 
 commit 3288eef477a0790158fadec65e533f1be61b1ea1
-Merge: 3bd2a4a... b913191...
+Merge: 3bd2a4a b913191
 Author: Stephane Bisinger <stephane.bisinger@gmail.com>
 Date:   Sun Dec 23 21:36:31 2007 +0000
 
@@ -1375,7 +1509,7 @@ Date:   Fri Dec 14 16:49:50 2007 +0100
     Make valgrind happy.
 
 commit 11cd78e8bd4c85eeb4be25c818ed24ec6fcb37c6
-Merge: e37b9b4... 24ea83f...
+Merge: e37b9b4 24ea83f
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Thu Dec 13 10:55:38 2007 +0100
 
@@ -1473,7 +1607,7 @@ Date:   Mon Dec 3 03:40:30 2007 +0100
     (At least that is the way libpurple does ...)
 
 commit c77668b69f123d6b575e1357c5c5f2b4d08e412e
-Merge: 4390c11... 64f7f8b...
+Merge: 4390c11 64f7f8b
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Fri Nov 30 23:36:38 2007 +0100
 
@@ -1544,7 +1678,7 @@ Date:   Sun Nov 25 20:16:43 2007 +0100
     seems this was produced by a mis-merge
 
 commit c3e4e0472e1fa40f6a564950a443c60a327bd1f7
-Merge: 152235a... 43ea42e...
+Merge: 152235a 43ea42e
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Sun Nov 25 19:55:17 2007 +0100
 
@@ -1563,7 +1697,7 @@ Date:   Sun Nov 25 19:18:07 2007 +0100
     Bug #39: Ack SBL to get status notifications
 
 commit d2df42449c7bcb51cb985cd0fbe8e80a906b4e0d
-Merge: 4aaceda... 2d3a23e...
+Merge: 4aaceda 2d3a23e
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Sat Nov 24 10:54:06 2007 +0100
 
@@ -1593,7 +1727,7 @@ Date:   Tue Nov 20 10:57:12 2007 +0100
     list. I put it to Ctrl-v keybinding by default.
 
 commit 4aacedac0bb0f0085c77e848422666ee7d5dc303
-Merge: 3186e21... 472a216...
+Merge: 3186e21 472a216
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Fri Nov 23 14:32:05 2007 +0100
 
@@ -1609,7 +1743,7 @@ Date:   Fri Nov 23 14:32:05 2007 +0100
     	libmsn/msn/util.cpp
 
 commit 3186e210629a714746b06693eed446ed70eaa19e
-Merge: f087714... 8a7590b...
+Merge: f087714 8a7590b
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Fri Nov 23 14:26:43 2007 +0100
 
@@ -1628,7 +1762,7 @@ Date:   Fri Nov 23 13:20:59 2007 +0100
     add various includes of cstring to fix compilation with gcc-4.3
 
 commit 076153501c8cf3a464deef2ffa03e368bb31095f
-Merge: f41630a... 8a7590b...
+Merge: f41630a 8a7590b
 Author: David Riebenbauer <davrieb@liegesta.at>
 Date:   Fri Nov 23 10:27:35 2007 +0100
 
@@ -1726,7 +1860,7 @@ Date:   Mon Nov 5 19:34:22 2007 +0100
     Ying-Chieh Liao
 
 commit 6bbb72151604a9ac10fb1f678a7ab976b2e1b3fe
-Merge: f647190... c84415b...
+Merge: f647190 c84415b
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Sat Nov 3 18:45:03 2007 +0100
 
@@ -1783,7 +1917,7 @@ Date:   Thu Oct 25 16:14:52 2007 +0200
     Czech translation update (mainly about OTR)
 
 commit d39fc856c640234e3a956e18a466df307973c1a8
-Merge: 287d42a... f04b782...
+Merge: 287d42a f04b782
 Author: Stephane Bisinger <stephane.bisinger@gmail.com>
 Date:   Mon Oct 22 20:46:37 2007 +0100
 
@@ -1989,7 +2123,7 @@ Date:   Mon Jul 23 21:06:23 2007 +0100
     Updated MSNP to version 9
 
 commit c1a868a84d8ea22010039a8dd225b97b7ff2c7da
-Merge: e0e9ca2... 7a6010a...
+Merge: e0e9ca2 7a6010a
 Author: Stephane Bisinger <stephane.bisinger@gmail.com>
 Date:   Sat Jul 21 18:48:12 2007 +0100
 
@@ -2096,7 +2230,7 @@ Date:   Mon Jun 25 11:04:52 2007 +0200
     from compiling
 
 commit a032901ef688250ead63f5b1d7776df5e31028f9
-Merge: b097f8f... f4e71d5...
+Merge: b097f8f f4e71d5
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Mon Jun 25 10:34:52 2007 +0200
 
@@ -2133,7 +2267,7 @@ Date:   Fri Jun 22 23:20:01 2007 +0200
     contacts and display at least hostname for transports.
 
 commit 3298e3a0c007a7d756e86201624067fb9b2bcb8a
-Merge: e302fc1... 7537d94...
+Merge: e302fc1 7537d94
 Author: Stephane Bisinger <stephane.bisinger@gmail.com>
 Date:   Thu Jun 21 20:07:35 2007 +0100
 
@@ -2282,7 +2416,7 @@ Date:   Wed May 2 17:38:00 2007 -0400
     Fixed the history updating when resizing various panels
 
 commit 387cb986bdb2234bb75f62276aa09e2235912d20
-Merge: 4e6626d... 1ebaa15...
+Merge: 4e6626d 1ebaa15
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Thu Apr 26 23:04:54 2007 +0200
 
@@ -2324,7 +2458,7 @@ Date:   Tue Apr 24 11:28:04 2007 +0200
     Resolved a conflict
 
 commit 2b201cf609a04d4ec083f3bfe1b7149fa5f9a88d
-Merge: 6e50670... c4f04b9...
+Merge: 6e50670 c4f04b9
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Tue Apr 24 10:16:27 2007 +0200
 
@@ -2431,7 +2565,7 @@ Date:   Mon Apr 16 23:49:51 2007 +0200
     Improved SSL checking. Enabled SSL by default
 
 commit d93ab7c22d1f64dac8e21bd0deb447e1a66d5c4d
-Merge: 193ad90... c58fd8e...
+Merge: 193ad90 c58fd8e
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Mon Apr 16 23:43:15 2007 +0200
 
@@ -2528,7 +2662,7 @@ Date:   Sat Apr 14 15:18:33 2007 +0200
     This reverts commit 16a5ccc2d6a0a97cbd3b9c2c96a2b8269bc06573.
 
 commit 5a2dacdca02d5dee565f76df725d2aa512ad2942
-Merge: 15675f8... 299e95c...
+Merge: 15675f8 299e95c
 Author: Stephane Bisinger <sb@storm.(none)>
 Date:   Sat Apr 14 15:02:02 2007 +0200
 
@@ -2553,7 +2687,7 @@ Date:   Tue Apr 3 22:56:52 2007 +0100
     Corrected a bug that prevented the changing of the browser from the options
 
 commit df59b25dfd7bdb5a4fa5a8aa29cc950419fb5427
-Merge: 16a5ccc... c9c05a1...
+Merge: 16a5ccc c9c05a1
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Tue Apr 3 22:07:15 2007 +0100
 
@@ -2568,7 +2702,7 @@ Date:   Mon Apr 2 13:23:40 2007 +0200
     Fix to src/Makefile.am for the captcha patch
 
 commit 8b098aae7166bf13c307130367629c379a07ee73
-Merge: c14521f... f507e49...
+Merge: c14521f f507e49
 Author: Mark Pustjens <mark@unkie.org>
 Date:   Mon Apr 2 12:10:48 2007 +0200
 
@@ -2624,7 +2758,7 @@ Date:   Sat Mar 24 20:00:18 2007 +0100
     Fixed the drop icq requests issues, and fixed the panel resizing.
 
 commit 37016e3d08d401caa494c3b79b53fb1bdc0fa614
-Merge: 1abb56c... 9b3323e...
+Merge: 1abb56c 9b3323e
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Fri Mar 23 08:38:30 2007 +0000
 
@@ -2735,7 +2869,7 @@ Author: Oliver Hohlfeld <oliver@oliver.localdomain>
 Date:   Mon Mar 19 23:44:26 2007 +0100
 
 commit 1abb56c4aa3229139f11833b46d66af854094b2a
-Merge: 7072879... 70742bd...
+Merge: 7072879 70742bd
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Fri Mar 16 08:44:37 2007 +0000
 
@@ -2748,7 +2882,7 @@ Date:   Fri Mar 16 08:44:26 2007 +0000
     Applied Hakan's patch
 
 commit 81c0ed36729e01a44ed8cccde0662f634d276355
-Merge: 69e9949... 70742bd...
+Merge: 69e9949 70742bd
 Author: David Riebenbauer <davrieb@htu.tugraz.at>
 Date:   Fri Mar 16 08:54:19 2007 +0100
 
@@ -2870,7 +3004,7 @@ Date:   Fri Mar 9 22:02:29 2007 +0100
         CFLAGS="-O0 -pedantic -Wall"
 
 commit 893475d4cb775a38771354686ff5630af3725c3e
-Merge: 08a16b1... 32c5d53...
+Merge: 08a16b1 32c5d53
 Author: David Riebenbauer <davrieb@htu.tugraz.at>
 Date:   Thu Mar 15 20:11:34 2007 +0100
 
@@ -3028,7 +3162,7 @@ Date:   Fri Feb 23 21:27:01 2007 +0000
     Updated the md5 library
 
 commit 992ccf629e8798997e61c884eee45b6512168ed9
-Merge: d9569bf... cdcb394...
+Merge: d9569bf cdcb394
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Fri Feb 23 19:27:05 2007 +0000
 
@@ -3048,7 +3182,7 @@ Date:   Wed Feb 21 21:01:06 2007 +0100
     this should stop make dist from failing
 
 commit 189e3a8070591377a47815e75cc3929313715ede
-Merge: 2d672d7... f7986c7...
+Merge: 2d672d7 f7986c7
 Author: Stéphane Bisinger <stephane.bisinger@gmail.com>
 Date:   Wed Feb 21 18:58:37 2007 +0000
 
@@ -3142,14 +3276,14 @@ Date:   Tue Feb 13 22:01:41 2007 +0100
     bump version to 4.22.0
 
 commit 457a613c0507cfac55ed369dcc09f7bcbfb0fdf5
-Merge: d29a4cd... 1c1272a...
+Merge: d29a4cd 1c1272a
 Author: David Riebenbauer <davrieb@sbox.tugraz.at>
 Date:   Tue Feb 13 21:15:13 2007 +0100
 
     Merge branch 'master' of /home/davrieb/src/centericq/git/centericq
 
 commit d29a4cd835e654bce4c1883a989050c41d83587d
-Merge: 3e87864... 6f1a3e6...
+Merge: 3e87864 6f1a3e6
 Author: David Riebenbauer <davrieb@sbox.tugraz.at>
 Date:   Tue Feb 13 21:12:51 2007 +0100
 
@@ -3340,7 +3474,7 @@ Date:   Sat Dec 16 02:43:06 2006 +0100
     remove some autogenerated files from libmsn
 
 commit e038e1b39fbf48934c9add885028e5bb9813e996
-Merge: 3f6ebfb... 5f18d86...
+Merge: 3f6ebfb 5f18d86
 Author: David Riebenbauer <davrieb@sbox.tugraz.at>
 Date:   Fri Dec 15 04:05:00 2006 +0100
 
@@ -3353,7 +3487,7 @@ Date:   Fri Dec 15 04:02:41 2006 +0100
     prepare merge with centericq
 
 commit 3f6ebfb9782b04115eef8969ecb5bbb630b0932d
-Merge: d8fad94... fb41b31...
+Merge: d8fad94 fb41b31
 Author: David Riebenbauer <davrieb@sbox.tugraz.at>
 Date:   Fri Dec 15 03:55:06 2006 +0100
 
@@ -3366,7 +3500,7 @@ Date:   Fri Dec 15 03:54:25 2006 +0100
     Prepare merge with centericq
 
 commit d8fad94647932e30c85e46f3ebdad634695a9357
-Merge: 3e34d9d... b833a28...
+Merge: 3e34d9d b833a28
 Author: David Riebenbauer <davrieb@sbox.tugraz.at>
 Date:   Fri Dec 15 03:23:53 2006 +0100
 
@@ -3379,7 +3513,7 @@ Date:   Fri Dec 15 03:22:25 2006 +0100
     prepare to merge with centericq
 
 commit 3e34d9d64363a1281f9594060de5372fa38dbc65
-Merge: c843efd... ecce022...
+Merge: c843efd ecce022
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Fri Dec 15 02:35:48 2006 +0100
 
@@ -3392,7 +3526,7 @@ Date:   Fri Dec 15 02:19:59 2006 +0100
     prepare merge with centericq
 
 commit c843efd6f48b46a0870995ff58c04297a2c12e56
-Merge: e6537db... 931d5cf...
+Merge: e6537db 931d5cf
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Fri Dec 15 01:32:37 2006 +0100
 
@@ -3405,7 +3539,7 @@ Date:   Fri Dec 15 01:31:36 2006 +0100
     prepare merge with centericq
 
 commit e6537db2fd4f705b843baf9e36e915f39d8ae16c
-Merge: c6172bc... e9d59eb...
+Merge: c6172bc e9d59eb
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Fri Dec 15 01:03:38 2006 +0100
 
@@ -3418,7 +3552,7 @@ Date:   Fri Dec 15 00:37:03 2006 +0100
     prepare to merge with centericq
 
 commit c6172bcea0e50b8b93791cf5f9e0af3c4081d362
-Merge: c384b88... 6088ea1...
+Merge: c384b88 6088ea1
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Thu Dec 14 23:10:37 2006 +0100
 
@@ -3431,7 +3565,7 @@ Date:   Thu Dec 14 23:09:28 2006 +0100
     prepare merge to centericq
 
 commit c384b8802323735b90b62c9b3e95b16b59f07087
-Merge: f84e6d1... 1c898ce...
+Merge: f84e6d1 1c898ce
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Thu Dec 14 22:49:56 2006 +0100
 
@@ -3444,7 +3578,7 @@ Date:   Thu Dec 14 22:48:21 2006 +0100
     prepare merge with centericq
 
 commit f84e6d17ddc83ae164e94c9023fd2ec1a8678a86
-Merge: f4cd536... d59f910...
+Merge: f4cd536 d59f910
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Thu Dec 14 22:35:41 2006 +0100
 
@@ -3457,7 +3591,7 @@ Date:   Thu Dec 14 22:33:14 2006 +0100
     prepare merge with centericq
 
 commit f4cd53624e3385c630a14d1d267c3360e1fce561
-Merge: d4f750a... c5ae67f...
+Merge: d4f750a c5ae67f
 Author: David Riebenbauer <davrieb@androgyn.(none)>
 Date:   Thu Dec 14 22:17:45 2006 +0100
 
