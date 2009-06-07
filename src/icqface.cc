@@ -1167,7 +1167,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 
 	days = (int) (tdiff/86400);
 	hours = (int) ((tdiff-days*86400)/3600);
-	minutes = (int) ((tdiff-days*8600-hours*3600)/60);
+	minutes = (int) ((tdiff-days*86400-hours*3600)/60);
 
 	if(days) buf = i2str(days) + " " + _("days");
 
