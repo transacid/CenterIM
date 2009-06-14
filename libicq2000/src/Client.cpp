@@ -2585,7 +2585,7 @@ namespace ICQ2000
       if (!m_self->isInvisible() && inv) {
 	// visible -> invisible
 	FLAPwrapSNAC( b, AddVisibleSNAC(m_visible_list) );
-	privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 3);
+	//privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 3);
       }
 	
       FLAPwrapSNAC( b, SetStatusSNAC(Contact::MapStatusToICQStatus(st, inv), m_web_aware) );
@@ -2593,7 +2593,7 @@ namespace ICQ2000
       if (m_self->isInvisible() && !inv) {
 	// invisible -> visible
 	FLAPwrapSNAC( b, AddInvisibleSNAC(m_invisible_list) );
-	privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 4);
+	//privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 4);
       }
       
       Send(b);
