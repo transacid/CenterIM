@@ -144,10 +144,10 @@ namespace ICQ2000 {
       case Entry_Group:
 	if (group_id > 0) m_tree.add_group( name, group_id );
 	break;
-/*      case Entry_VisSetting:
-	// TODO
+      case Entry_VisSetting:
+	m_privacy_id = tag_id;
 	break;
-      case Entry_ICQTIC:
+/*      case Entry_ICQTIC:
 	// ignore
 	break;
       case Entry_Invisible:
@@ -352,6 +352,38 @@ namespace ICQ2000 {
 	  }
   }
 
+  
+  // ============================================================================
+  //  SBL Update Privacy Settings
+  // ============================================================================
+  
+  SBLUpdatePrivacySNAC::SBLUpdatePrivacySNAC(unsigned short buddy_id, unsigned char privacy)
+  {
+	m_buddy_id = buddy_id;
+	m_privacy = privacy;
+  }
+  
+  void SBLUpdatePrivacySNAC::OutputBody(Buffer& b) const
+  {
+	b << (unsigned short) 0x0000; // no buddy name
+	b << (unsigned short) 0x0000; // master group
+	b << m_buddy_id; // buddy ID
+	b << (unsigned short) 0x0004; // Permit/Deny record
+	
+	Buffer::marker m = b.getAutoSizeShortMarker();
+	
+	b << (unsigned short) 0x00ca; // Privacy TLV
+	b << (unsigned short) 0x0001;
+	b << m_privacy;
+	
+	b << (unsigned short) 0x00cb; // Class visibility TLV
+	b << (unsigned short) 0x0004;
+	b << (unsigned short) 0xFFFF; // All classes
+	b << (unsigned short) 0xFFFF;
+	
+	b.setAutoSizeMarker(m);
+  }
+  
   // ============================================================================
   //  SBL Remove Entry
   // ============================================================================

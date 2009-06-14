@@ -118,6 +118,7 @@ namespace ICQ2000 {
     unsigned short m_size;
     std::list<ContactRef> m_unassigned;
     std::set<unsigned short> m_other_ids;
+    unsigned short m_privacy_id;
      
    protected:
     void ParseBody(Buffer& b);
@@ -128,6 +129,7 @@ namespace ICQ2000 {
     ContactTree& getContactTree() { return m_tree; }
     std::list<ContactRef>& getUnassigned() { return m_unassigned; }
     std::set<unsigned short>& other_ids() { return m_other_ids; }
+    unsigned short getPrivacyID() { return m_privacy_id; }
     
     unsigned short get_size() const { return m_size; }
 
@@ -261,6 +263,24 @@ namespace ICQ2000 {
     
   };
 
+  // ============================================================================
+  //  SBL Update Privacy Settings
+  // ============================================================================
+
+  class SBLUpdatePrivacySNAC : public SBLFamilySNAC, public OutSNAC
+  {
+    private:
+	unsigned short m_buddy_id;
+	unsigned char m_privacy;
+    
+    protected:
+	void OutputBody(Buffer& b) const;
+    
+    public:
+	SBLUpdatePrivacySNAC(unsigned short buddy_id, unsigned char privacy);
+	
+	unsigned short Subtype() const { return SNAC_SBL_Update_Entry; }
+  };
   
   // ============================================================================
   //  SBL Remove Entry
