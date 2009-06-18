@@ -27,6 +27,7 @@ class jabberhook: public abstracthook {
 	map<imfile, pair<struct send_file *, string> > transferinfo;
 	map<string, vector<string> > chatmembers;
 	map<string, map<string, pair<char, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
+	set<string> ignore_ids; // set of packet IDs to ignore errors from
 
 	struct agent {
 	    string jid, name, desc;

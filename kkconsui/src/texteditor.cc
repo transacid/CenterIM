@@ -2235,8 +2235,12 @@ void texteditor::mergeline(int ln, bool force, int &px, int &py)
 		    py--;
 		}
 		else {
-		    //px -= (asub-anext+1);  // move back
-		    pxdeltamerge = px - (asub-anext+1); //px can't be changed even if the line is merged
+		    if (ln==(py-1)) {
+			px -= (asub-anext+1);  // move back
+			pxdeltamerge = px;
+		    }
+		    else
+			pxdeltamerge = px - (asub-anext+1); //px can't be changed even if the line is merged
 		}
 		strncat(newline, next, asub-anext+1);
 		strcut(next, 0, asub-anext+1);

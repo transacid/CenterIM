@@ -51,6 +51,10 @@ bool imcontact::operator == (const imcontact &ainfo) const {
 
     if(r)
     switch(pname) {
+	case aim:
+	    r = r & (up(stripspaces(ainfo.nickname)) == up(stripspaces(nickname)));
+	    break;
+	
 	case irc:
 	case yahoo:
 	case jabber:

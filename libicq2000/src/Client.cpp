@@ -1582,6 +1582,7 @@ namespace ICQ2000
 	SignalLog(LogEvent::INFO, "Received server-based list from server\n");
 	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
 	fillSBLMap(sbs);
+	m_sbl_privacy_id = sbs->getPrivacyID();
 	mergeSBL( sbs->getContactTree());
 		if ((snac->Flags() & 0x01)  == 0) // last/only List packet
 		{
@@ -2579,10 +2580,12 @@ namespace ICQ2000
        */
 
       Buffer b;
+      OutSNAC *privacySNAC = NULL;
 
       if (!m_self->isInvisible() && inv) {
 	// visible -> invisible
 	FLAPwrapSNAC( b, AddVisibleSNAC(m_visible_list) );
+	//privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 3);
       }
 	
       FLAPwrapSNAC( b, SetStatusSNAC(Contact::MapStatusToICQStatus(st, inv), m_web_aware) );
@@ -2590,10 +2593,13 @@ namespace ICQ2000
       if (m_self->isInvisible() && !inv) {
 	// invisible -> visible
 	FLAPwrapSNAC( b, AddInvisibleSNAC(m_invisible_list) );
+	//privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 4);
       }
       
       Send(b);
-
+      if (privacySNAC != NULL)
+		SendSBLSNAC(privacySNAC);
+      
     } else {
       // We'll set this as the initial status upon connecting
       m_status_wanted = st;

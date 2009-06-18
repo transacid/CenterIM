@@ -69,7 +69,7 @@ icqconf::icqconf() {
 
     hideoffline = antispam = makelog = askaway = logtimestamps =
 	logonline = emacs = proxyssl = proxyconnect = notitles =
-	debug = timestampstothesecond = vi = false;
+	debug = timestampstothesecond = vi = autoawayx = false;
 
     timestampformat = DEFAULT_TIMESTAMP_FORMAT;
     logtimestampformat = DEFAULT_LOGTIMESTAMP_FORMAT;
@@ -84,12 +84,15 @@ icqconf::icqconf() {
     }
 
     // quick and dirty fix to support .centerim as well as .centericq
-    basedir = (string) getenv("HOME") + "/.centerim/";
+    char *home = getenv("HOME");
+    if( home != NULL ) {
+    basedir = string(home)  + "/.centerim/";
     if ( access(basedir.c_str(), F_OK) != 0 ) {
-        basedir = (string) getenv("HOME") + "/.centericq/";
+        basedir = string(home) + "/.centericq/";
         if ( access(basedir.c_str(), F_OK) != 0 ) {
-            basedir = (string) getenv("HOME") + "/.centerim/";
+            basedir = string(home) + "/.centerim/";
         }
+    }
     }
     screensocketpath = "/var/run/screen";
 
@@ -590,6 +593,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "vi") vi = true; else
 	    if(param == "autoaway") autoaway = atol(buf.c_str()); else
 	    if(param == "autona") autona = atol(buf.c_str()); else
+	    if(param == "auto_away_na_x") autoawayx = true; else
 	    if(param == "antispam") antispam = true; else
 	    if(param == "showopenedchats") setshowopenedchats(true); else
 	    if(param == "dropauthreq") dropauthreq = true; else
@@ -663,6 +667,7 @@ void icqconf::loadmainconfig() {
 void icqconf::save() {
     string fname = getconfigfname("config"), param;
     int away, na;
+    bool usex = false;
 
     if(enoughdiskspace()) {
 	ofstream f(fname.c_str());
@@ -676,10 +681,11 @@ void icqconf::save() {
 		f << "sockspass\t" << pass << endl;
 	    }
 
-	    getauto(away, na);
+	    getauto(away, na, usex);
 
 	    if(away) f << "autoaway\t" << i2str(away) << endl;
 	    if(na) f << "autona\t" << i2str(na) << endl;
+	    if(autoawayx) f << "auto_away_na_x" << endl;
 	    if(hideoffline) f << "hideoffline" << endl;
 	    if(emacs) f << "emacs" << endl;
 	    if(getquote()) f << "quotemsgs" << endl;
@@ -909,12 +915,12 @@ void icqconf::loadsounds() {
 
 	    switch(rs) {
 		case rscard:
-		    fo << "*\tmsg\tplay " << SHARE_DIR << "/msg.wav" << endl;
-		    fo << "*\turl\tplay " << SHARE_DIR << "/url.wav" << endl;
-		    fo << "*\temail\tplay " << SHARE_DIR << "/email.wav" << endl;
-		    fo << "*\tonline\tplay " << SHARE_DIR << "/online.wav" << endl;
-		    fo << "*\toffline\tplay " << SHARE_DIR << "/offline.wav" << endl;
-		    fo << "*\tsms\tplay " << SHARE_DIR << "/sms.wav" << endl;
+		    fo << "*\tmsg\taplay " << SHARE_DIR << "/msg.wav" << endl;
+		    fo << "*\turl\taplay " << SHARE_DIR << "/url.wav" << endl;
+		    fo << "*\temail\taplay " << SHARE_DIR << "/email.wav" << endl;
+		    fo << "*\tonline\taplay " << SHARE_DIR << "/online.wav" << endl;
+		    fo << "*\toffline\taplay " << SHARE_DIR << "/offline.wav" << endl;
+		    fo << "*\tsms\taplay " << SHARE_DIR << "/sms.wav" << endl;
 		    break;
 
 		case rsspeaker:
@@ -1122,17 +1128,19 @@ void icqconf::setcolormode(colormode c) {
     cm = c;
 }
 
-void icqconf::setauto(int away, int na) {
+void icqconf::setauto(int away, int na, bool usex) {
     autoaway = away;
     autona = na;
+    autoawayx = usex;
 
     if(away == na)
 	autoaway = 0;
 }
 
-void icqconf::getauto(int &away, int &na) const {
+void icqconf::getauto(int &away, int &na, bool& usex) const {
     away = autoaway;
     na = autona;
+    usex = autoawayx;
 
     if(away == na)
 	away = 0;

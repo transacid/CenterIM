@@ -1167,7 +1167,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 
 	days = (int) (tdiff/86400);
 	hours = (int) ((tdiff-days*86400)/3600);
-	minutes = (int) ((tdiff-days*8600-hours*3600)/60);
+	minutes = (int) ((tdiff-days*86400-hours*3600)/60);
 
 	if(days) buf = i2str(days) + " " + _("days");
 
@@ -2229,9 +2229,8 @@ void icqface::unblockmainscreen() {
 
 void icqface::quickfind(verticalmenu *multi) {
     bool fin;
-    string nick, disp, upnick, upcurrent;
-    string::iterator is;
-    int k, i, len, lx, ly;
+    string nick, disp;
+    int k, i, lx, ly;
     bool found;
     icqcontact *c;
     verticalmenu *cm = (multi ? multi : &mcontacts->menu);
@@ -2280,9 +2279,6 @@ void icqface::quickfind(verticalmenu *multi) {
 			nick += k;
 		    }
 
-		    for(is = nick.begin(), upnick = ""; is != nick.end(); ++is)
-			upnick += toupper(*is);
-
 		    bool fin = false;
 		    bool fpass = true;
 
@@ -2309,15 +2305,7 @@ void icqface::quickfind(verticalmenu *multi) {
 
 			if((intptr_t) c > 100) {
 			    string current = c->getdispnick();
-			    len = current.size();
-			    if(len > nick.size()) len = nick.size();
-			    current.erase(len);
-
-			    for(is = current.begin(), upcurrent = "";
-			    is != current.end(); ++is)
-				    upcurrent += toupper(*is);
-
-			    if(upnick == upcurrent) {
+			    if (0 != strcasestr(current.c_str(), nick.c_str())) {
 				cm->setpos(i - (multi ? 0 : 1));
 				break;
 			    }
