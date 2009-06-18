@@ -22,6 +22,9 @@
 *
 */
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include "centerim.h"
 #include "icqface.h"
 #include "icqconf.h"
@@ -52,6 +55,11 @@ int main(int argc, char **argv) {
 
     getcwd(savedir, 1024);
 
+    // This will set the default umask to ~0x077, see umask(2) for details
+    // This makes sure that all newly created files in ~/.centerim gets the
+    // proper protection.
+   umask (S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH);
+
     try {
         srand((unsigned int) time(NULL));
 
@@ -69,7 +77,7 @@ int main(int argc, char **argv) {
 	cicq.exec();
 
     } catch(exception e) {
-    	cerr << "Caught exception: " << e.what() << endl;
+		cerr << "Caught exception: " << e.what() << endl;
     }
 
     chdir(savedir);

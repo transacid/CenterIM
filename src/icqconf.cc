@@ -27,6 +27,7 @@
 #include <dirent.h>
 #include <fstream>
 
+
 #if defined(__sun__) || defined(__NetBSD__) || defined(__sgi__)
 #include <sys/statvfs.h>
 #endif
@@ -265,9 +266,53 @@ void icqconf::setextstatus(protocolname pname, const string &amsg, imstatus stat
 void icqconf::checkdir() {
     string dname = getdirname();
     dname.erase(dname.size()-1);
+	const char * dirstr = dname.c_str();
+	const mode_t mask = S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
 
-    if(access(dname.c_str(), F_OK))
-	mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+    if(access(dirstr, F_OK) == 0) {
+		// Directory allready exists check the permissions of the directory.
+		struct stat dir_stat;
+		if (  stat(dirstr, &dir_stat) == 0 &&
+			(dir_stat.st_mode & mask) != 0 ) {
+			DIR *pDir = NULL;
+			// group / other have some kind of permissions for this directory
+			// as mr Picard would have said: compensate!
+			chmod (dirstr, dir_stat.st_mode & ~mask);
+
+			// TODO: make sure that all subfiles got the right permissions, that is not done now.
+
+			// Make sure that atleast the configuration files are not readable for others
+			// Umask is set in centermain.cc, so all newly created files will be protected
+			// However if the ~/.centerim / ~/.centericq directory was created by an old
+			// version of centerim, then the rights will not be properly set up.
+			
+			pDir = opendir(dirstr);
+
+			if (pDir != NULL) {
+				string tempString = string("");
+
+				struct dirent *pDirent = NULL;
+				while ( (pDirent = readdir(pDir)) != NULL ) {
+					// only pDir->dname standaridized in POSIX?
+					tempString = dirstr;
+					tempString.append("/");
+					tempString.append(pDirent->d_name);
+					const char * pFilePath = tempString.c_str();
+
+					if (stat(pFilePath, &dir_stat) == 0 &&
+						(dir_stat.st_mode & mask) != 0 ) {
+						chmod (pFilePath, dir_stat.st_mode & ~mask);
+					}
+				}
+				closedir(pDir);
+			}
+		}
+	}
+	else{
+		// create the ~/.centerim directory since
+		// ~/.centerim / ~/.centericq does not exist.
+		mkdir(dname.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+	}
 }
 
 void icqconf::load() {
