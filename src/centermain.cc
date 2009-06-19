@@ -55,29 +55,29 @@ int main(int argc, char **argv) {
 
     getcwd(savedir, 1024);
 
-    // This will set the default umask to ~0x077, see umask(2) for details
+    // This will set the default umask to 0x077, see umask(2) for details
     // This makes sure that all newly created files in ~/.centerim gets the
-    // proper protection.
-   umask (S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH);
+    // proper protection (the group and other bits are zeroed).
+    umask (S_IRWXG | S_IRWXO);
 
     try {
         srand((unsigned int) time(NULL));
 
 #ifdef ENABLE_NLS
-	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
+    setlocale(LC_ALL, "");
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    textdomain(PACKAGE);
 #endif
 
-	conf->commandline(argc, argv);
+    conf->commandline(argc, argv);
 #ifdef HAVE_LIBOTR
-	otr.init();
+    otr.init();
 #endif
 
-	cicq.exec();
+    cicq.exec();
 
     } catch(exception e) {
-		cerr << "Caught exception: " << e.what() << endl;
+        cerr << "Caught exception: " << e.what() << endl;
     }
 
     chdir(savedir);
