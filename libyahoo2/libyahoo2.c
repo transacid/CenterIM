@@ -51,6 +51,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <curl/curl.h>
 
 #if STDC_HEADERS
 # include <string.h>
@@ -105,6 +106,25 @@ void yahoo_register_callbacks(struct yahoo_callbacks * tyc)
 #else
 #define YAHOO_CALLBACK(x)	x
 #endif
+
+char *curl_buffer = NULL;
+size_t curl_buffer_size = 0;
+
+size_t yahoo_handle_curl_write(void *ptr, size_t size, size_t nmemb, void  *stream)
+{
+	if (curl_buffer == NULL)
+	{
+		curl_buffer = malloc(size*nmemb);
+		curl_buffer_size = 0;
+	}
+	else
+	{
+		curl_buffer = realloc(curl_buffer, curl_buffer_size + size*nmemb);
+	}
+	memcpy(curl_buffer + curl_buffer_size, ptr, size*nmemb);
+	curl_buffer_size += size*nmemb;
+	return size*nmemb;
+}
 
 int yahoo_log_message(char * fmt, ...)
 {
@@ -2018,6 +2038,163 @@ static void yahoo_process_auth_pre_0x0b(struct yahoo_input_data *yid,
 
 }
 
+int split_lines(char *s, char *lines[], int max)
+{
+	int pos = 0;
+	char *b = strdup(s);
+	char *p = b;
+	char *tok;
+		
+	while (p && (pos<max))
+	{
+		tok = strsep(&p, "\r\n");
+		if (strlen(tok) == 0)
+			continue;
+		lines[pos] = strdup(tok);
+		pos++;
+	}
+	
+	free(b);
+	return pos;
+}
+
+/*
+ * New new auth protocol
+ */
+static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *seed, const char *sn)
+{
+        CURL *curl;
+        CURLcode ret;
+	char url[150];
+	struct yahoo_data *yd = yid->yd;
+	
+	curl = curl_easy_init();
+	
+	if (!curl)  // CURL init failed
+	{
+		fprintf(stderr, "Y: 1\n");
+		return;
+	}
+	
+	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_get?src=ymsgr&ts=&login=%s&passwd=%s&chal=%s",yd->user, yd->password, seed);
+	curl_easy_setopt(curl, CURLOPT_URL, url);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
+	free(curl_buffer);
+	curl_buffer = NULL;
+	
+	ret = curl_easy_perform(curl);
+	
+	if (ret) // there was error
+	{
+		LOG(("Yahoo: curl init error"));
+		return; // deallocate curl data buffer?
+	}
+	
+	if (!curl_buffer) // no data was read
+	{
+		LOG(("Yahoo: no data read"));
+		return;
+	}
+	char *lines[6];
+	char *token = NULL;
+	
+	char *buff = malloc(curl_buffer_size + 1);
+	memcpy(buff, curl_buffer, curl_buffer_size);
+	buff[curl_buffer_size] = '\0';
+
+	free(curl_buffer);
+	curl_buffer = NULL;
+	
+	int n = split_lines(buff, lines, 6);
+	int i;
+	int ret_code = -1;
+	
+	if (n >= 2) // there's some error
+	{
+		ret_code = strtol(lines[0], NULL, 10);
+		token = lines[1]+6;
+	}
+	
+	if (ret_code) // error
+	{
+		for (i=0;i<n;i++)
+			free(lines[i]);
+		return;
+	}
+	
+	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_login?src=ymsgr&ts=&token=%s", token);
+	curl_easy_setopt(curl, CURLOPT_URL, url);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
+	free(buff);
+	for (i=0;i<n;i++)
+		free(lines[i]);
+	
+	ret = curl_easy_perform(curl);
+	
+	if (ret) // error with curl
+	{
+		LOG(("Yahoo: curl error"));
+		return;
+	}
+	
+	buff = malloc(curl_buffer_size+1);
+	memcpy(buff, curl_buffer, curl_buffer_size);
+	buff[curl_buffer_size] = '\0';
+	free(curl_buffer);
+	curl_buffer = NULL;
+		
+	n = split_lines(buff, lines, 6);
+	ret_code = -1;
+	free(buff);
+	
+	char *crumb;
+	
+	if (n >= 5)
+	{
+		ret_code = strtol(lines[0], NULL, 10);
+		crumb = lines[1] + 6;
+		yd->cookie_y = strdup(lines[2] + 2);
+		yd->cookie_t = strdup(lines[3] + 2);
+	}
+	
+	if (ret_code)
+	{	// free yd?
+		for (i=0;i<n;i++)
+			free(lines[i]);
+		return;
+	}
+	char crypt[strlen(crumb) + strlen(seed) + 1];
+	strcpy(crypt, crumb);
+	strcat(crypt, seed);
+	
+	for (i=0;i<n;i++)
+		free(lines[i]);
+	
+	// MD5 happens here
+	md5_byte_t         result[16];
+	md5_state_t        ctx;
+	char crypt_hash[30];
+	
+	md5_init(&ctx);
+	md5_append(&ctx, (md5_byte_t *)crypt, strlen(crypt));
+	md5_finish(&ctx, result);
+	to_y64(crypt_hash, result, 16);
+		
+	struct yahoo_packet *pack = yahoo_packet_new(YAHOO_SERVICE_AUTHRESP, yd->initial_status, yd->session_id);
+	yahoo_packet_hash(pack, 1, yd->user);
+	yahoo_packet_hash(pack, 0, yd->user);
+	yahoo_packet_hash(pack, 277, yd->cookie_y);
+	yahoo_packet_hash(pack, 278, yd->cookie_t);
+	yahoo_packet_hash(pack, 307, crypt_hash);
+	yahoo_packet_hash(pack, 244, YAHOO_CLIENT_VERSION_ID);
+	yahoo_packet_hash(pack, 2, yd->user);
+	yahoo_packet_hash(pack, 2, "1");
+	yahoo_packet_hash(pack, 135, YAHOO_CLIENT_VERSION);
+
+	yahoo_send_packet(yid, pack, 0);
+	yahoo_packet_free(pack);
+}
+
 /*
  * New auth protocol cracked by Cerulean Studios and sent in to Gaim
  */
@@ -2484,16 +2661,18 @@ static void yahoo_process_auth(struct yahoo_input_data *yid, struct yahoo_packet
 
 	switch (m) {
 		case 0:
-			yahoo_process_auth_pre_0x0b(yid, seed, sn);
-			break;
+			/*yahoo_process_auth_pre_0x0b(yid, seed, sn);
+			break;*/
 		case 1:
 		case 2:
-			yahoo_process_auth_0x0b(yid, seed, sn);
+			//yahoo_process_auth_0x0b(yid, seed, sn);
+			yahoo_process_auth_0x10(yid, seed, sn);
 			break;
 		default:
 			/* call error */
 			WARNING(("unknown auth type %d", m));
-			yahoo_process_auth_0x0b(yid, seed, sn);
+			//yahoo_process_auth_0x0b(yid, seed, sn);
+			yahoo_process_auth_0x10(yid, seed, sn);
 			break;
 	}
 }

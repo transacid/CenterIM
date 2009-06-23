@@ -428,6 +428,12 @@ if test "x$build_icq" = "xyes"; then
 	AC_DEFINE(BUILD_ICQ, 1, [build with ICQ support])
 fi
 if test "x$build_yahoo" = "xyes"; then
+	if test "x$have_curl" = "xno"; then
+		AC_MSG_ERROR([Yahoo cannot be built without the curl library.])
+	fi
+	if test -z "$libcurl_feature_SSL" -o "x$libcurl_feature_SSL" = "xno"; then
+		AC_MSG_ERROR([Yahoo requires libcurl built with SSL support.])
+	fi
 	AC_DEFINE(BUILD_YAHOO, 1, [build with yahoo support])
 fi
 if test "x$build_aim" = "xyes"; then
