@@ -34,7 +34,7 @@
 #endif
 
 /* Prototypes to compile on some systems */
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__APPLE__)
 extern "C"
 {
 extern int mvinnwstr (int, int, wchar_t *, int);
