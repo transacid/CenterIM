@@ -2072,7 +2072,7 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	
 	if (!curl)  // CURL init failed
 	{
-		fprintf(stderr, "Y: 1\n");
+		WARNING(("Yahoo: curl init error"));
 		return;
 	}
 	
@@ -2086,13 +2086,15 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	
 	if (ret) // there was error
 	{
-		LOG(("Yahoo: curl init error"));
+		WARNING(("Yahoo: curl error"));
+		curl_easy_cleanup(curl);
 		return; // deallocate curl data buffer?
 	}
 	
 	if (!curl_buffer) // no data was read
 	{
-		LOG(("Yahoo: no data read"));
+		WARNING(("Yahoo: no data read"));
+		curl_easy_cleanup(curl);
 		return;
 	}
 	char *lines[6];
@@ -2109,31 +2111,37 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	int i;
 	int ret_code = -1;
 	
+	free(buff);
 	if (n >= 2) // there's some error
 	{
 		ret_code = strtol(lines[0], NULL, 10);
-		token = lines[1]+6;
+		token = strdup(lines[1]+6);
 	}
+	
+	for (i=0;i<n;i++)
+		free(lines[i]);
 	
 	if (ret_code) // error
 	{
-		for (i=0;i<n;i++)
-			free(lines[i]);
+		WARNING(("Yahoo: wrong token response"));
+		free(token);
+		curl_easy_cleanup(curl);
 		return;
 	}
 	
 	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_login?src=ymsgr&ts=&token=%s", token);
+	free(token);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
-	free(buff);
-	for (i=0;i<n;i++)
-		free(lines[i]);
 	
 	ret = curl_easy_perform(curl);
 	
 	if (ret) // error with curl
 	{
-		LOG(("Yahoo: curl error"));
+		WARNING(("Yahoo: curl error"));
+		free(curl_buffer);
+		curl_buffer = NULL;
+		curl_easy_cleanup(curl);
 		return;
 	}
 	
@@ -2147,28 +2155,35 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	ret_code = -1;
 	free(buff);
 	
-	char *crumb;
+	char *crumb = NULL;
+	
+	yd->cookie_y = yd->cookie_t = NULL;
 	
 	if (n >= 5)
 	{
 		ret_code = strtol(lines[0], NULL, 10);
-		crumb = lines[1] + 6;
+		crumb = strdup(lines[1] + 6);
 		yd->cookie_y = strdup(lines[2] + 2);
 		yd->cookie_t = strdup(lines[3] + 2);
 	}
 	
+	for (i=0;i<n;i++)
+		free(lines[i]);
+	
 	if (ret_code)
 	{	// free yd?
-		for (i=0;i<n;i++)
-			free(lines[i]);
+		WARNING(("Yahoo: wrong token response"));
+		free(crumb);
+		free(yd->cookie_y);
+		free(yd->cookie_t);
+		yd->cookie_y = yd->cookie_t = NULL;
+		curl_easy_cleanup(curl);
 		return;
 	}
 	char crypt[strlen(crumb) + strlen(seed) + 1];
 	strcpy(crypt, crumb);
 	strcat(crypt, seed);
-	
-	for (i=0;i<n;i++)
-		free(lines[i]);
+	free(crumb);
 	
 	// MD5 happens here
 	md5_byte_t         result[16];
