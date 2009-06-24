@@ -34,6 +34,7 @@ class centerim {
 
 	time_t timer_checkmail, timer_keypress, timer_update, timer_resend, timer_autosave;
 	bool regmode;
+	static volatile bool signaled;
 
 	map<string, time_t> configstats;
 	map<protocolname, reconnectInfo> reconnect;

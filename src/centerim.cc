@@ -45,6 +45,8 @@
   #include <X11/extensions/scrnsaver.h>
 #endif
 
+volatile bool centerim::signaled = false;
+
 centerim::centerim()
     : timer_checkmail(0), timer_update(0), timer_resend(0),
       timer_autosave(0), regmode(false)
@@ -804,11 +806,12 @@ void centerim::handlesignal(int signum) {
 
     switch(signum) {
 	case SIGCHLD:
-	    while((pid = wait3(&status, WNOHANG, 0)) > 0) {
+	    /*while((pid = wait3(&status, WNOHANG, 0)) > 0) {
 		// In case the child was a nowait external action
 		string sname = conf->getdirname() + "centerim-external-tmp." + i2str(pid);
 		unlink(sname.c_str());
-	    }
+	    }*/
+	    signaled = true;
 	    break;
 
 	case SIGUSR1:
@@ -1695,6 +1698,15 @@ void centerim::exectimers() {
 		face.log(_("! otherwise we can lose events and configuration"));
 	    }
 	} else {
+	
+	    if (signaled) { /* Check for finished external actions */
+		signaled = false;
+		pid_t child;
+		while ((child = waitpid(-1, NULL, WNOHANG)) > 0) {
+		    string sname = conf->getdirname() + "centerim-external-tmp." + i2str(child);
+		    unlink(sname.c_str());
+		}
+	    }
 	    /*
 	    *
 	    * Re-send the idle IM events.
