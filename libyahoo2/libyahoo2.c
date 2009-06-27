@@ -2115,7 +2115,7 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
 	if (!yss->verify_ca)
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, (long)0);
 	free(curl_buffer);
 	curl_buffer = NULL;
 	
@@ -2200,7 +2200,7 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
 	if (!yss->verify_ca)
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, (long)0);
 	
 	ret = curl_easy_perform(curl);
 	
