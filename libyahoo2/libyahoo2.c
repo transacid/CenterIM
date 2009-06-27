@@ -2058,6 +2058,27 @@ int split_lines(char *s, char *lines[], int max)
 	return pos;
 }
 
+char *urlencode(const char *url)
+{
+	char *buff = malloc(strlen(url) * 3 + 1);
+	int pos = 0;
+	int i;
+	for (i=0;i<strlen(url);i++)
+	{
+		if ((url[i] < 128) && isalnum(url[i]))
+		{
+			buff[pos++] = url[i];
+		}
+		else
+		{
+			snprintf(buff+pos, sizeof(buff)-pos, "%%%02x", url[i]);
+			pos += 3;
+		}
+	}
+	buff[pos] = '\0';
+	return buff;
+}
+
 /*
  * New new auth protocol
  */
@@ -2077,7 +2098,13 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	}
 	LOG(("CURL inited"));
 	
-	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_get?src=ymsgr&ts=&login=%s&passwd=%s&chal=%s",yd->user, yd->password, seed);
+	char *user = urlencode(yd->user);
+	char *pass = urlencode(yd->password);
+	char *encseed = urlencode(seed);
+	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_get?src=ymsgr&ts=&login=%s&passwd=%s&chal=%s", user, pass, encseed);
+	free(user);
+	free(pass);
+	free(encseed);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
 	free(curl_buffer);
