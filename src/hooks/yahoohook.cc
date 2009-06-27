@@ -150,8 +150,9 @@ void yahoohook::connect() {
 
     cid = yahoo_init_with_attributes(acc.nickname.c_str(), acc.password.c_str(),
 	"pager_host", acc.server.c_str(),
-	"pager_port", acc.port, (char *) NULL,
-	"verify_ca", (acc.additional["ssl"] == "1")? 1 : 0);
+	"pager_port", acc.port,
+	"verify_ca", (acc.additional["ssl"] == "1")? 1 : 0,
+	(char *) NULL);
 
     yahoo_login(cid, stat2int[manualstatus]);
 
