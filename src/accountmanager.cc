@@ -270,7 +270,7 @@ void accountmanager::exec() {
 
 		case 13:
 		    a.additional["ssl"] =
-			(a.additional["ssl"] == "") ? "1" : "";
+			(a.additional["ssl"] == "0") ? "1" : "0";
 
 		    if(a.additional["ssl"] == "1") {
 			if(a.port == icqconf::defservers[a.pname].port)

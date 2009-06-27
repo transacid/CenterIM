@@ -78,6 +78,7 @@ yahoohook::yahoohook() : abstracthook(yahoo), fonline(false), cid(0) {
     fcapabs.insert(hookcapab::files);
     fcapabs.insert(hookcapab::conferencing);
     fcapabs.insert(hookcapab::conferencesaretemporary);
+    fcapabs.insert(hookcapab::ssl);
 
     pager_host[0] = pager_port[0] = filetransfer_host[0] =
 	filetransfer_port[0] = webcam_host[0] = webcam_port[0] =
@@ -149,7 +150,8 @@ void yahoohook::connect() {
 
     cid = yahoo_init_with_attributes(acc.nickname.c_str(), acc.password.c_str(),
 	"pager_host", acc.server.c_str(),
-	"pager_port", acc.port, (char *) NULL);
+	"pager_port", acc.port, (char *) NULL,
+	"verify_ca", (acc.additional["ssl"] == "1")? 1 : 0);
 
     yahoo_login(cid, stat2int[manualstatus]);
 

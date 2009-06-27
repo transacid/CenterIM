@@ -166,6 +166,7 @@ static int webcam_port=5100;
 static char webcam_description[]="";
 static char local_host[]="";
 static int conn_type=Y_WCM_DSL;
+static int verify_ca = 1;
 
 static char profile_url[] = "http://profiles.yahoo.com/";
 
@@ -293,6 +294,7 @@ struct yahoo_server_settings {
 	char *webcam_description;
 	char *local_host;
 	int   conn_type;
+	int   verify_ca;
 };
 
 struct yahoo_add_request {
@@ -314,6 +316,7 @@ static void * _yahoo_default_server_settings()
 	yss->webcam_description = strdup(webcam_description);
 	yss->local_host = strdup(local_host);
 	yss->conn_type = conn_type;
+	yss->verify_ca = verify_ca;
 
 	return yss;
 }
@@ -362,6 +365,9 @@ static void * _yahoo_assign_server_settings(va_list ap)
 		} else if(!strcmp(key, "conn_type")) {
 			nvalue = va_arg(ap, int);
 			yss->conn_type = nvalue;
+		} else if(!strcmp(key, "verify_ca")) {
+			nvalue = va_arg(ap, int);
+			yss->verify_ca = nvalue;
 		} else {
 			WARNING(("Unknown key passed to yahoo_init, "
 				"perhaps you didn't terminate the list "
@@ -2088,6 +2094,7 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
         CURLcode ret;
 	char url[150];
 	struct yahoo_data *yd = yid->yd;
+	struct yahoo_server_settings *yss = yd->server_settings;
 	LOG(("CURL init..."));
 	curl = curl_easy_init();
 	
@@ -2107,6 +2114,8 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	free(encseed);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
+	if (!yss->verify_ca)
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 	free(curl_buffer);
 	curl_buffer = NULL;
 	
@@ -2190,6 +2199,8 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	free(token);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &yahoo_handle_curl_write);
+	if (!yss->verify_ca)
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 	
 	ret = curl_easy_perform(curl);
 	

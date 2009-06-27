@@ -162,6 +162,11 @@ void icqconf::setourid(const imaccount &im) {
 #endif
 		break;
 
+	    case yahoo:
+		if (i->additional.find("ssl") == i->additional.end())
+		    i->additional["ssl"] = "1";
+		break;
+	
 	    case livejournal:
 		if(i->additional.find("importfriends") == i->additional.end())
 		    i->additional["importfriends"] = "1";
