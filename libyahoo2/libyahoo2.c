@@ -141,7 +141,7 @@ int yahoo_connect(char * host, int port)
 	return YAHOO_CALLBACK(ext_yahoo_connect)(host, port);
 }
 
-static enum yahoo_log_level log_level = YAHOO_LOG_NONE;
+static enum yahoo_log_level log_level = YAHOO_LOG_WARNING;
 
 enum yahoo_log_level yahoo_get_log_level()
 {
@@ -2067,7 +2067,7 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
         CURLcode ret;
 	char url[150];
 	struct yahoo_data *yd = yid->yd;
-	
+	LOG(("CURL init..."));
 	curl = curl_easy_init();
 	
 	if (!curl)  // CURL init failed
@@ -2075,6 +2075,7 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 		WARNING(("Yahoo: curl init error"));
 		return;
 	}
+	LOG(("CURL inited"));
 	
 	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_get?src=ymsgr&ts=&login=%s&passwd=%s&chal=%s",yd->user, yd->password, seed);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
@@ -2082,21 +2083,26 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	free(curl_buffer);
 	curl_buffer = NULL;
 	
+	LOG(("Downloading token"));
 	ret = curl_easy_perform(curl);
 	
 	if (ret) // there was error
 	{
-		WARNING(("Yahoo: curl error"));
+		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOGOFF, NULL);
+		WARNING(("Yahoo: curl error %d", ret));
 		curl_easy_cleanup(curl);
 		return; // deallocate curl data buffer?
 	}
 	
 	if (!curl_buffer) // no data was read
 	{
+		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOGOFF, NULL);
 		WARNING(("Yahoo: no data read"));
 		curl_easy_cleanup(curl);
 		return;
 	}
+	
+	LOG(("Token downloaded"));
 	char *lines[6];
 	char *token = NULL;
 	
@@ -2111,11 +2117,14 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	int i;
 	int ret_code = -1;
 	
-	free(buff);
 	if (n >= 2) // there's some error
 	{
 		ret_code = strtol(lines[0], NULL, 10);
 		token = strdup(lines[1]+6);
+	}
+	else if (n == 1)
+	{
+		ret_code = strtol(lines[0], NULL, 10);
 	}
 	
 	for (i=0;i<n;i++)
@@ -2123,12 +2132,33 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	
 	if (ret_code) // error
 	{
-		WARNING(("Yahoo: wrong token response"));
+		switch (ret_code)
+		{
+			case 1212:
+				YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_PASSWD, NULL);
+			break;
+			case 1213:
+				YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOCK, "Yahoo! website. Too many failed logins.");
+			break;
+			case 1235:
+				YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_UNAME, NULL);
+			break;
+			case 1214:
+			case 1236:
+				YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOCK, "Yahoo! website.");
+			break;
+			default:
+				YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOGOFF, NULL);
+		}
+		WARNING(("Yahoo: wrong token response - %d (%d lines: '%s')", ret_code, n, buff));
 		free(token);
+		free(buff);
 		curl_easy_cleanup(curl);
 		return;
 	}
-	
+	free(buff);
+
+	LOG(("Token parsed, downloading cookies"));
 	snprintf(url, sizeof(url), "https://login.yahoo.com/config/pwtoken_login?src=ymsgr&ts=&token=%s", token);
 	free(token);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
@@ -2138,13 +2168,14 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	
 	if (ret) // error with curl
 	{
-		WARNING(("Yahoo: curl error"));
+		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOGOFF, NULL);
+		WARNING(("Yahoo: curl error %d", ret));
 		free(curl_buffer);
 		curl_buffer = NULL;
 		curl_easy_cleanup(curl);
 		return;
 	}
-	
+	LOG(("Cookies downloaded"));
 	buff = malloc(curl_buffer_size+1);
 	memcpy(buff, curl_buffer, curl_buffer_size);
 	buff[curl_buffer_size] = '\0';
@@ -2166,13 +2197,18 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 		yd->cookie_y = strdup(lines[2] + 2);
 		yd->cookie_t = strdup(lines[3] + 2);
 	}
+	else if (n == 1)
+	{
+		ret_code = strtol(lines[0], NULL, 10);
+	}
 	
 	for (i=0;i<n;i++)
 		free(lines[i]);
 	
 	if (ret_code)
 	{	// free yd?
-		WARNING(("Yahoo: wrong token response"));
+		YAHOO_CALLBACK(ext_yahoo_login_response)(yd->client_id, YAHOO_LOGIN_LOGOFF, NULL);
+		WARNING(("Yahoo: wrong crumb response - %d", ret_code));
 		free(crumb);
 		free(yd->cookie_y);
 		free(yd->cookie_t);
@@ -2189,12 +2225,13 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	md5_byte_t         result[16];
 	md5_state_t        ctx;
 	char crypt_hash[30];
-	
+	LOG(("Computing MD5"));
 	md5_init(&ctx);
 	md5_append(&ctx, (md5_byte_t *)crypt, strlen(crypt));
 	md5_finish(&ctx, result);
 	to_y64(crypt_hash, result, 16);
 		
+	LOG(("Constructing packet"));
 	struct yahoo_packet *pack = yahoo_packet_new(YAHOO_SERVICE_AUTHRESP, yd->initial_status, yd->session_id);
 	yahoo_packet_hash(pack, 1, yd->user);
 	yahoo_packet_hash(pack, 0, yd->user);
@@ -2206,8 +2243,10 @@ static void yahoo_process_auth_0x10(struct yahoo_input_data *yid, const char *se
 	yahoo_packet_hash(pack, 2, "1");
 	yahoo_packet_hash(pack, 135, YAHOO_CLIENT_VERSION);
 
+	LOG(("Sending login packet"));
 	yahoo_send_packet(yid, pack, 0);
 	yahoo_packet_free(pack);
+	LOG(("Auth 0x10 finished"));
 }
 
 /*

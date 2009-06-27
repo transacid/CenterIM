@@ -742,11 +742,23 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    yhook.setautostatus(yhook.manualstatus);
 	    yhook.timer_close = 0;
 	    break;
+	
+	case YAHOO_LOGIN_LOGOFF:
+	    yhook.fonline = yhook.fonline = false;
+	    yahoo_close(yhook.cid);
+	    face.log(_("+ [yahoo] cannot login"));
+	    break;
 
 	case YAHOO_LOGIN_PASSWD:
 	    yhook.fonline = yhook.fonline = false;
 	    yahoo_close(yhook.cid);
 	    face.log(_("+ [yahoo] cannot login: username and password mismatch"));
+	    break;
+
+	case YAHOO_LOGIN_UNAME:
+	    yhook.fonline = yhook.fonline = false;
+	    yahoo_close(yhook.cid);
+	    face.log(_("+ [yahoo] cannot login: username doesn't exist"));
 	    break;
 
 	case YAHOO_LOGIN_LOCK:
