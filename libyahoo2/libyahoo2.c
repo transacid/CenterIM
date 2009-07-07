@@ -2066,10 +2066,12 @@ int split_lines(char *s, char *lines[], int max)
 
 char *urlencode(const char *url)
 {
-	char *buff = malloc(strlen(url) * 3 + 1);
+	int l = strlen(url);
+	int bs = l * 3 + 1;
+	char *buff = malloc(bs);
 	int pos = 0;
 	int i;
-	for (i=0;i<strlen(url);i++)
+	for (i=0;i<l;i++)
 	{
 		if ((url[i] < 128) && isalnum(url[i]))
 		{
@@ -2077,7 +2079,7 @@ char *urlencode(const char *url)
 		}
 		else
 		{
-			snprintf(buff+pos, sizeof(buff)-pos, "%%%02x", url[i]);
+			snprintf(buff+pos, bs-pos, "%%%02x", url[i]);
 			pos += 3;
 		}
 	}
