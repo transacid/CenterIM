@@ -49,11 +49,10 @@ namespace ICQ2000
    * Constructor when receiving an incoming connection
    */
   FileTransferClient::FileTransferClient(ContactRef self, MessageHandler *mh,
-					 ContactTree *cl, unsigned int ext_ip, FileTransferEvent* ev)
-    : m_state(WAITING_FOR_INIT), m_recv(),
+            ContactTree *cl, unsigned int ext_ip, FileTransferEvent* ev)
+    : m_ev(ev), m_state(WAITING_FOR_INIT), m_recv(),
       m_self_contact(self), m_contact(NULL), m_contact_list(cl), 
-      m_message_handler(mh), m_incoming(true), m_local_ext_ip(ext_ip),
-      m_ev(ev)
+      m_message_handler(mh), m_incoming(true), m_local_ext_ip(ext_ip)
   {
     Init();
     m_listenserver.StartServer();
@@ -63,9 +62,8 @@ namespace ICQ2000
    * Constructor for making an outgoing connection
    */
   FileTransferClient::FileTransferClient(ContactRef self, ContactRef c, MessageHandler *mh, unsigned int ext_ip, FileTransferEvent* ev)
-    : m_state(NOT_CONNECTED), m_recv(), m_self_contact(self), 
-      m_contact(c), m_message_handler(mh), m_incoming(false), m_local_ext_ip(ext_ip),
-      m_ev(ev)
+    : m_ev(ev), m_state(NOT_CONNECTED), m_recv(), m_self_contact(self), 
+      m_contact(c), m_message_handler(mh), m_incoming(false), m_local_ext_ip(ext_ip)
       
   {
     Init();
@@ -130,7 +128,7 @@ namespace ICQ2000
   void FileTransferClient::clearoutMessagesPoll() 
   {
     if ((m_state != CONNECTED) &&
-	(time(NULL) > (m_timestamp + m_timeout)))
+        (time(NULL) > (m_timestamp + m_timeout)))
       expired();
   }
  
@@ -144,21 +142,21 @@ namespace ICQ2000
     {
       if (m_more)
       {
-	SendPacket0x06();
+        SendPacket0x06();
       }
       else if (m_ev->getCurrFile() < m_ev->getTotalFiles())
       {
-	SendPacket0x02();
-	m_continue = false;
-	m_more = false;
+        SendPacket0x02();
+        m_continue = false;
+        m_more = false;
       }
       else
       {
-	m_ev->setState(FileTransferEvent::COMPLETE);
-	SignalLog(LogEvent::INFO, "FileTransfer is Complete");
-	throw DisconnectedException("FileTransfer is Complete");
+        m_ev->setState(FileTransferEvent::COMPLETE);
+        SignalLog(LogEvent::INFO, "FileTransfer is Complete");
+        throw DisconnectedException("FileTransfer is Complete");
 
-	m_continue = false;
+        m_continue = false;
       }
     }
     m_message_handler->handleUpdateFT(m_ev);
@@ -179,8 +177,8 @@ namespace ICQ2000
     {
       while ( m_socket->connected() )
       {
-	if ( !m_socket->Recv(m_recv) ) break;
-	Parse();
+        if ( !m_socket->Recv(m_recv) ) break;
+        Parse();
       }
     }
     catch(SocketException e)
@@ -216,76 +214,76 @@ namespace ICQ2000
       // Optimize??? not create new buffer and copy and erase in old.
       Buffer sb;
       m_recv.chopOffBuffer( sb, length+2 );
-	 
+         
       if (m_state != CONNECTED)
       {
-	ostringstream ostr;
-	ostr << "Received filepacket from " << IPtoString( m_socket->getRemoteIP() ) << ":" << m_socket->getRemotePort() << endl << sb;
-	SignalLog(LogEvent::DIRECTPACKET, ostr.str());
+        ostringstream ostr;
+        ostr << "Received filepacket from " << IPtoString( m_socket->getRemoteIP() ) << ":" << m_socket->getRemotePort() << endl << sb;
+        SignalLog(LogEvent::DIRECTPACKET, ostr.str());
       }
       
       if (m_state == WAITING_FOR_INIT)
       {
-	ParseInitPacket(sb);
+        ParseInitPacket(sb);
 
-	if (m_incoming) {
-	  SendInitAck();
-	  SendInitPacket();
-	  m_state = WAITING_FOR_INIT_ACK;
-	} else {
-	  SendInitAck();
-	  m_state = CONNECTED;
-	  flush_queue();
-	  connected.emit(this);
-	}
+        if (m_incoming) {
+          SendInitAck();
+          SendInitPacket();
+          m_state = WAITING_FOR_INIT_ACK;
+        } else {
+          SendInitAck();
+          m_state = CONNECTED;
+          flush_queue();
+          connected.emit(this);
+        }
 
       }
       else if (m_state == WAITING_FOR_INIT_ACK)
       {
-	ParseInitAck(sb);
+        ParseInitAck(sb);
 
-	if (m_incoming) {
-	  // Incoming
-	  ConfirmUIN();
-	  m_state = CONNECTED;          // v5 is done handshaking now
-	  flush_queue();
-	  connected.emit(this);
+        if (m_incoming) {
+          // Incoming
+          ConfirmUIN();
+          m_state = CONNECTED;          // v5 is done handshaking now
+          flush_queue();
+          connected.emit(this);
 
-	}
-	else
-	{
-	  // Outgoing - next packet should be their INIT
-	  m_state = WAITING_FOR_INIT;
-	}
+        }
+        else
+        {
+          // Outgoing - next packet should be their INIT
+          m_state = WAITING_FOR_INIT;
+        }
 
       }
       else if (m_state == WAITING_FOR_INIT2)
       {
-	ParseInit2(sb);
-	// This is a V7 only packet
+        ParseInit2(sb);
+        // This is a V7 only packet
 
-	if (m_incoming)
-	{
-	  SendInit2();
-	  ConfirmUIN();
-	}
+        if (m_incoming)
+        {
+          SendInit2();
+          ConfirmUIN();
+        }
 
-	m_state = CONNECTED;
-	flush_queue();
-	connected.emit(this);
+        m_state = CONNECTED;
+        flush_queue();
+        connected.emit(this);
 
       }
       else if (m_state == CONNECTED)
       {
-	ParsePacket(sb);
+        ParsePacket(sb);
       }
 
       if (sb.beforeEnd())
       {
-	ostringstream ostr;
-	ostr  << "Buffer pointer not at end after parsing packet was: 0x" << std::hex << sb.pos()
-	      << " should be: 0x" << sb.size();
-	SignalLog(LogEvent::WARN, ostr.str());
+        ostringstream ostr;
+        ostr  << "Buffer pointer not at end after parsing packet was: 0x" << std::hex << sb.pos()
+              << " should be: 0x" << sb.size();
+        SignalLog(LogEvent::WARN, ostr.str());
       }
       
     }
@@ -298,20 +296,20 @@ namespace ICQ2000
     {
       ContactRef c = (*m_contact_list)[ m_remote_uin ];
       if ( (c->getExtIP() == m_local_ext_ip && c->getLanIP() == getIP() )
-	   /* They are behind the same masquerading box,
-	    * and the Lan IP matches
-	    */
-	   || c->getExtIP() == getIP())
+           /* They are behind the same masquerading box,
+            * and the Lan IP matches
+            */
+           || c->getExtIP() == getIP())
       {
-	m_contact = c;
+        m_contact = c;
       }
       else
       {
-	// spoofing attempt most likely
-	ostringstream ostr;
-	ostr << "Refusing direct connection from someone that claims to be UIN "
-	     << m_remote_uin << " since their IP " << IPtoString( getIP() ) << " != " << IPtoString( c->getExtIP() );
-	throw DisconnectedException( ostr.str() );
+        // spoofing attempt most likely
+        ostringstream ostr;
+        ostr << "Refusing direct connection from someone that claims to be UIN "
+             << m_remote_uin << " since their IP " << IPtoString( getIP() ) << " != " << IPtoString( c->getExtIP() );
+        throw DisconnectedException( ostr.str() );
       }
       
     }
@@ -380,7 +378,7 @@ namespace ICQ2000
     else
     {
       if (tcp_version != m_remote_tcp_version)
-	throw ParseException("Client claiming different TCP versions");
+        throw ParseException("Client claiming different TCP versions");
     }
     
     unsigned int our_uin;
@@ -402,7 +400,7 @@ namespace ICQ2000
     else
     {
       if (m_remote_uin != remote_uin)
-	throw ParseException("Remote UIN in Init Packet for Remote Client not what was expected");
+        throw ParseException("Remote UIN in Init Packet for Remote Client not what was expected");
     }
 
     // xx xx xx xx  senders external IP
@@ -483,14 +481,14 @@ namespace ICQ2000
     if (m_incoming)
     {
       b << (unsigned int) 0x00040001 // unknown
-	<< (unsigned int) 0x00000000 // unknown
-	<< (unsigned int) 0x00000000; // unknown
+        << (unsigned int) 0x00000000 // unknown
+        << (unsigned int) 0x00000000; // unknown
     }
     else
     {
       b << (unsigned int) 0x00000000 // unknown
-	<< (unsigned int) 0x00000000 // unknown
-	<< (unsigned int) 0x00040001; // unknown
+        << (unsigned int) 0x00000000 // unknown
+        << (unsigned int) 0x00040001; // unknown
     }
     b.setAutoSizeMarker(m1);
     Send(b);
@@ -560,7 +558,7 @@ namespace ICQ2000
 
     m_ev->setSpeed(speed);
   }
-	
+        
   void FileTransferClient::ParsePacket0x02(Buffer& b)
   {
     unsigned int size, speed;
@@ -608,33 +606,33 @@ namespace ICQ2000
       m_path += filename;
       m_path += "/";
       mkdir(m_path.c_str(), S_IXUSR | 
-	    S_IWUSR | 
-	    S_IRUSR |
-	    S_IXGRP |
-	    S_IRGRP |
-	    S_IXOTH | 
-	    S_IROTH);
+            S_IWUSR | 
+            S_IRUSR |
+            S_IXGRP |
+            S_IRGRP |
+            S_IXOTH | 
+            S_IROTH);
     }
     else
     {
       if (m_ev->getCurrFile() > 1)
       {
-	if (m_fout.is_open())
-	{
-	  m_fout.close();
-	}
+        if (m_fout.is_open())
+        {
+          m_fout.close();
+        }
       }
 
       m_fout.open(std::string(m_path+filename).c_str(), std::ios::out | std::ios::binary);
       if (!m_fout.good())
       {
-	ostringstream ostr;
-	ostr << "Opening "
-	     << m_path << filename
-	     << " for writing.";
-	m_ev->setState(FileTransferEvent::ERROR);
-	m_ev->setError(ostr.str());
-	throw DisconnectedException("I/O error");
+        ostringstream ostr;
+        ostr << "Opening "
+             << m_path << filename
+             << " for writing.";
+        m_ev->setState(FileTransferEvent::ERROR);
+        m_ev->setError(ostr.str());
+        throw DisconnectedException("I/O error");
       }
     }
 
@@ -660,7 +658,7 @@ namespace ICQ2000
     {
       ostringstream ostr;
       ostr << "FileTransfer resume request got wrong offset: "
-	   << npos << " when file only is " << m_ev->getSize();
+           << npos << " when file only is " << m_ev->getSize();
       m_ev->setState(FileTransferEvent::ERROR);
       m_ev->setError(ostr.str());
       throw DisconnectedException("I/O error");
@@ -679,7 +677,7 @@ namespace ICQ2000
       m_more = true;
     }
   }
-	
+        
   void FileTransferClient::ParsePacket0x05(Buffer& b)
   {
     unsigned int speed;
@@ -687,7 +685,7 @@ namespace ICQ2000
     b >> speed;
     m_ev->setSpeed(speed);
   }
-	
+        
   void FileTransferClient::ParsePacket0x06(Buffer& b)
   {
     unsigned short length;
@@ -698,9 +696,9 @@ namespace ICQ2000
 
     while ( length>0 )
     {
-	b.Unpack( m_const_buf, min(length, (unsigned short)MAX_FileChunk) );
-	m_fout.write((const char*)m_const_buf, std::min(length, (unsigned short)MAX_FileChunk) );
-	length = max(0, length-(unsigned short)MAX_FileChunk);
+        b.Unpack( m_const_buf, min(length, (unsigned short)MAX_FileChunk) );
+        m_fout.write((const char*)m_const_buf, std::min(length, (unsigned short)MAX_FileChunk) );
+        length = max(0, length-(unsigned short)MAX_FileChunk);
     }
     m_fout.flush();  //prob. isn't needed.. but I feel safer ;)
 
@@ -761,44 +759,44 @@ namespace ICQ2000
       file_or_dir = 1;
       tmp_size = 0;
       m_senddir = true;
-	 
+         
       //setting base_dir
       if (m_base_dir == NULL)
       {
-	m_base_dir = new std::string(tmp_name.substr(0, tmp_name.find_last_of('/', tmp_name.find_last_not_of('/'))+1)); 
+        m_base_dir = new std::string(tmp_name.substr(0, tmp_name.find_last_of('/', tmp_name.find_last_not_of('/'))+1)); 
       }
-	 
+         
     }
     else if (S_ISREG(tmp_stat.st_mode))
     {
       file_or_dir = 0;
       tmp_size = tmp_stat.st_size;
-	 
+         
       //setting base_dir
       if (m_base_dir == NULL)
       {
-	m_base_dir = new std::string("");
+        m_base_dir = new std::string("");
       }
 
       m_senddir = false;
-		 
+                 
       if (m_fin.is_open())
       {
-	m_fin.clear();
-	m_fin.close();
+        m_fin.clear();
+        m_fin.close();
       }
-	 
+         
       m_fin.open(tmp_name.c_str(), std::ios::in | std::ios::binary);
       if (!m_fin.good())
       {
-	ostringstream ostr;
-	ostr << "Opening "
-	     << tmp_name
-	     << " for Reading.";
-	    
-	m_ev->setState(FileTransferEvent::ERROR);
-	m_ev->setError(ostr.str());
-	throw DisconnectedException("I/O error");
+        ostringstream ostr;
+        ostr << "Opening "
+             << tmp_name
+             << " for Reading.";
+            
+        m_ev->setState(FileTransferEvent::ERROR);
+        m_ev->setError(ostr.str());
+        throw DisconnectedException("I/O error");
       }
       
     }
@@ -815,7 +813,7 @@ namespace ICQ2000
     if (m_base_dir->length() != 0)
       subdir =
       tmp_name.substr(m_base_dir->length(),
-		      tmp_name.find_last_of('/', tmp_name.find_last_not_of('/'))); 
+                      tmp_name.find_last_of('/', tmp_name.find_last_not_of('/'))); 
 
     int pos = 0;
     while ((pos = subdir.find('/')) != std::string::npos)
@@ -837,7 +835,7 @@ namespace ICQ2000
     
     // Remove last backslash from subdir
     if ((file_or_dir == 1) &&
-	(subdir.find_last_of('\\') == (subdir.length()-1)))
+        (subdir.find_last_of('\\') == (subdir.length()-1)))
       subdir = subdir.substr(0, subdir.length() -1);
 
     m_ev->setCurrFile(m_ev->getCurrFile()+1);
@@ -933,9 +931,9 @@ namespace ICQ2000
       m_more = false;
       if (m_ev->getFilesInQueue() == 0)
       {
-	m_ev->setState(FileTransferEvent::COMPLETE);
-	SignalLog(LogEvent::INFO, "FileTransfer is Complete");
-	throw DisconnectedException("FileTransfer is Complete");
+        m_ev->setState(FileTransferEvent::COMPLETE);
+        SignalLog(LogEvent::INFO, "FileTransfer is Complete");
+        throw DisconnectedException("FileTransfer is Complete");
       }
     }
   }
@@ -1016,7 +1014,7 @@ namespace ICQ2000
   int FileTransferClient::getfd() const { return m_socket->getSocketHandle(); }
   
   int FileTransferClient::getlistenfd() { return m_listenserver.getSocketHandle(); }
-	
+        
   TCPSocket* FileTransferClient::getSocket() const { return m_socket; }
   
   void FileTransferClient::setSocket()
@@ -1041,7 +1039,7 @@ namespace ICQ2000
       int files = 0;
       int dirs = 0;
       listDirectory(str, size, files, dirs, ev);
-		
+                
       ev->setTotalSize(size);
       ostringstream ostr;
       ostr << files << " files in " << dirs << " directories";
@@ -1056,8 +1054,8 @@ namespace ICQ2000
       int pos = str.find_last_of('/');
       if (pos == str.length()-1)
       {
-	str = str.substr(0,pos);
-	pos = str.find_last_of('/');
+        str = str.substr(0,pos);
+        pos = str.find_last_of('/');
       }
       str = str.substr(pos+1, str.length()-pos);
       ev->setDescription(str);
@@ -1078,8 +1076,8 @@ namespace ICQ2000
   {
     struct stat tmp_stat;
     if (str.length() > 1
-	&& (str.substr(str.length()-1, str.length()) == "."
-	    || str.substr(str.length()-2, str.length()) == ".."))
+        && (str.substr(str.length()-1, str.length()) == "."
+            || str.substr(str.length()-2, str.length()) == ".."))
       return;
 
     // Add backslash if missing in path
@@ -1091,7 +1089,7 @@ namespace ICQ2000
     if (dir == NULL)
       return;
     struct dirent *dent = readdir(dir);
-	  
+          
     std::string tmp_str;
 
     while (dent != NULL)
@@ -1101,13 +1099,13 @@ namespace ICQ2000
       stat(tmp_str.c_str(), &tmp_stat);
       if (S_ISREG(tmp_stat.st_mode))
       {
-	ev->addFile(tmp_str);
-	size += tmp_stat.st_size;
-	files++;
+        ev->addFile(tmp_str);
+        size += tmp_stat.st_size;
+        files++;
       }
       else if (S_ISDIR(tmp_stat.st_mode))
       {
-	listDirectory(tmp_str, size, files, dirs, ev);
+        listDirectory(tmp_str, size, files, dirs, ev);
       }
 
       dent = readdir(dir); //delete on old dent?

@@ -519,8 +519,9 @@ namespace ICQ2000 {
   }
   
   Contact::HomepageInfo::HomepageInfo()
-    : age(0), sex(SEX_UNKNOWN), birth_year(0), birth_month(0), birth_day(0),
-      lang1(LANGUAGE_UNKNOWN), lang2(LANGUAGE_UNKNOWN), lang3(LANGUAGE_UNKNOWN)
+    : age(0), sex(SEX_UNKNOWN),
+      lang1(LANGUAGE_UNKNOWN), lang2(LANGUAGE_UNKNOWN), lang3(LANGUAGE_UNKNOWN),
+      birth_year(0), birth_month(0), birth_day(0)
   { }
 
   /**

@@ -69,9 +69,9 @@ namespace ICQ2000
       m_message_handler( new MessageHandler(m_self, &m_contact_tree, m_translator) ),
       m_serverSocket( new TCPSocket() ), m_listenServer( new TCPServer() ),
       m_smtp( new SMTPClient( m_self, "localhost", 25 ) ),
-      m_dccache( new DCCache() ), m_reqidcache( new RequestIDCache() ),
-      m_cookiecache( new ICBMCookieCache() ),
-      m_recv( new Buffer() ), m_ftcache( new FTCache() )
+      m_dccache( new DCCache() ), m_ftcache( new FTCache() ),
+      m_reqidcache( new RequestIDCache() ), m_cookiecache( new ICBMCookieCache() ), 
+      m_recv( new Buffer() )
   {
     Init();
   }
@@ -89,9 +89,9 @@ namespace ICQ2000
       m_message_handler( new MessageHandler( m_self, &m_contact_tree, m_translator ) ),
       m_serverSocket( new TCPSocket() ), m_listenServer( new TCPServer() ),
       m_smtp( new SMTPClient( m_self, "localhost", 25 ) ),
-      m_dccache( new DCCache() ), m_reqidcache( new RequestIDCache() ),
-      m_cookiecache( new ICBMCookieCache() ),
-      m_recv( new Buffer() ), m_ftcache( new FTCache() )
+      m_dccache( new DCCache() ), m_ftcache( new FTCache() ),
+      m_reqidcache( new RequestIDCache() ), m_cookiecache( new ICBMCookieCache() ), 
+      m_recv( new Buffer() )
   {
     Init();
   }
@@ -214,9 +214,9 @@ namespace ICQ2000
        */
 
       {
-	ostringstream ostr;
-	ostr << "Looking up host name of authorizer: " << m_authorizerHostname.c_str();
-	SignalLog(LogEvent::INFO, ostr.str());
+          ostringstream ostr;
+          ostr << "Looking up host name of authorizer: " << m_authorizerHostname.c_str();
+          SignalLog(LogEvent::INFO, ostr.str());
       }
       m_serverSocket->setRemoteHost(m_authorizerHostname.c_str());
       m_serverSocket->setRemotePort(m_authorizerPort);
@@ -244,7 +244,7 @@ namespace ICQ2000
 
     unsigned int n = rand(), s = 0;
     for (unsigned int i = n; i >>= 3; s += i);
-    m_client_seq_num = (((0 - s) ^ (unsigned char)n) & 7 ^ n) + 2;
+    m_client_seq_num = (((0 - s) ^ (unsigned char)n) & (7 ^ n)) + 2;
 
     m_state = state;
   }
@@ -309,10 +309,10 @@ namespace ICQ2000
       SignalLog(LogEvent::WARN, "Disconnecting filetransfer");
       
       if ((fev->getState() != FileTransferEvent::COMPLETE) &&
-	  (fev->getState() != FileTransferEvent::CLOSE) &&
-	  (fev->getState() != FileTransferEvent::ERROR))
+          (fev->getState() != FileTransferEvent::CLOSE) &&
+          (fev->getState() != FileTransferEvent::ERROR))
       {
-	fev->setState(FileTransferEvent::CANCELLED);
+        fev->setState(FileTransferEvent::CANCELLED);
       }
       
       filetransfer_update_signal.emit(fev);
@@ -341,7 +341,7 @@ namespace ICQ2000
   }
 
   void Client::SignalDisconnect(DisconnectedEvent::Reason r) {
-  	m_sbl_canedit = false;
+          m_sbl_canedit = false;
     DisconnectedEvent ev(r);
     disconnected.emit(&ev);
 
@@ -357,12 +357,12 @@ namespace ICQ2000
 
       while (gcurr != (*curr).end())
       {
-	Status old_st = (*gcurr)->getStatus();
+        Status old_st = (*gcurr)->getStatus();
 
-	if ( old_st != STATUS_OFFLINE )
-	  (*gcurr)->setStatus(STATUS_OFFLINE, false);
+        if ( old_st != STATUS_OFFLINE )
+          (*gcurr)->setStatus(STATUS_OFFLINE, false);
 
-	++gcurr;
+        ++gcurr;
       }
 
       ++curr;
@@ -396,16 +396,16 @@ namespace ICQ2000
       ICBMCookie c = snac->getICBMCookie();
       if ( m_cookiecache->exists( c ) )
       {  
-	MessageEvent *ev = (*m_cookiecache)[c];
-	ev->setDirect(false);
-	m_message_handler->handleIncomingACK( static_cast<FileTransferEvent*>(ev), static_cast<FTICQSubType*>(st) );
-	m_cookiecache->remove(c);
+        MessageEvent *ev = (*m_cookiecache)[c];
+        ev->setDirect(false);
+        m_message_handler->handleIncomingACK( static_cast<FileTransferEvent*>(ev), static_cast<FTICQSubType*>(st) );
+        m_cookiecache->remove(c);
       }
       else
       {
-	//FIX ME!!! old ACK could arrive 
-	m_cookiecache->insert(snac->getICBMCookie(),
-			      m_message_handler->handleIncomingFT(static_cast<FTICQSubType*>(st), false));
+        //FIX ME!!! old ACK could arrive 
+        m_cookiecache->insert(snac->getICBMCookie(),
+                              m_message_handler->handleIncomingFT(static_cast<FTICQSubType*>(st), false));
       }
     }
     else
@@ -436,12 +436,12 @@ namespace ICQ2000
     {
       ICBMCookie c = snac->getICBMCookie();
       if ( m_cookiecache->exists( c ) ) {
-	MessageEvent *ev = (*m_cookiecache)[c];
-	ev->setDirect(false);
-	m_message_handler->handleIncomingACK( ev, st );
-	m_cookiecache->remove(c);
+        MessageEvent *ev = (*m_cookiecache)[c];
+        ev->setDirect(false);
+        m_message_handler->handleIncomingACK( ev, st );
+        m_cookiecache->remove(c);
       } else {
-	SignalLog(LogEvent::WARN, "Received ACK for unknown message");
+        SignalLog(LogEvent::WARN, "Received ACK for unknown message");
       }
     }
     
@@ -469,7 +469,7 @@ namespace ICQ2000
       /* indicate sending through server */
       MessageEvent *ev = (*m_cookiecache)[c];
       if (ev->getType() == MessageEvent::FileTransfer)
-	SignalLog( LogEvent::INFO, "FileTransfer request received by server ACK");
+        SignalLog( LogEvent::INFO, "FileTransfer request received by server ACK");
       
       ev->setFinished(false);
       ev->setDelivered(false);
@@ -499,9 +499,9 @@ namespace ICQ2000
     
       if (!ev->isFinished())
       {
-	ev->getContact()->setDirect(false);
-	// attempt to deliver via server instead
-	SendViaServer(ev);
+        ev->getContact()->setDirect(false);
+        // attempt to deliver via server instead
+        SendViaServer(ev);
       }
     }
   }
@@ -514,7 +514,7 @@ namespace ICQ2000
       filetransfer_update_signal.emit(fev);
     }
   }
-	
+        
   void Client::SignalSrvResponse(SrvResponseSNAC *snac)
   {
     if (snac->getType() == SrvResponseSNAC::OfflineMessagesComplete)
@@ -543,56 +543,56 @@ namespace ICQ2000
 
       if ( m_reqidcache->exists( reqid ) )
       {
-	RequestIDCacheValue *v = (*m_reqidcache)[ reqid ];
-	
-	if ( v->getType() == RequestIDCacheValue::SMSMessage )
-	{
-	  SMSEventCacheValue *uv = static_cast<SMSEventCacheValue*>(v);
-	  SMSMessageEvent *ev = uv->getEvent();
+        RequestIDCacheValue *v = (*m_reqidcache)[ reqid ];
+        
+        if ( v->getType() == RequestIDCacheValue::SMSMessage )
+        {
+          SMSEventCacheValue *uv = static_cast<SMSEventCacheValue*>(v);
+          SMSMessageEvent *ev = uv->getEvent();
 
-	  if (snac->deliverable())
-	  {
-	    ev->setFinished(true);
-	    ev->setDelivered(true);
-	    ev->setDirect(false);
-	    messageack.emit(ev);
-	    m_reqidcache->remove( reqid );
-	  }
-	  else if (snac->smtp_deliverable())
-	  {
-	    // todo - konst have volunteered :-)
-	    //                  yeah I did.. <konst> ;)
+          if (snac->deliverable())
+          {
+            ev->setFinished(true);
+            ev->setDelivered(true);
+            ev->setDirect(false);
+            messageack.emit(ev);
+            m_reqidcache->remove( reqid );
+          }
+          else if (snac->smtp_deliverable())
+          {
+            // todo - konst have volunteered :-)
+            //                  yeah I did.. <konst> ;)
 
-	    ev->setSMTPFrom(snac->getSMTPFrom());
-	    ev->setSMTPTo(snac->getSMTPTo());
-	    ev->setSMTPSubject(snac->getSMTPSubject());
+            ev->setSMTPFrom(snac->getSMTPFrom());
+            ev->setSMTPTo(snac->getSMTPTo());
+            ev->setSMTPSubject(snac->getSMTPSubject());
 
-	    m_smtp->SendEvent(ev);
-	    
-	  }
-	  else
-	  {
-	    if (snac->getErrorParam() != "DUPLEX RESPONSE")
-	    {
-	      // ignore DUPLEX RESPONSE since I always get that
-	      ev->setFinished(true);
-	      ev->setDelivered(false);
-	      ev->setDirect(false);
-	      ev->setDeliveryFailureReason(MessageEvent::Failed);
-	      messageack.emit(ev);
-	      m_reqidcache->remove( reqid );
-	    }
-	  }
-	
-	}
-	else
-	{
-	  throw ParseException("Request ID cached value is not for an SMS Message");
-	}
+            m_smtp->SendEvent(ev);
+            
+          }
+          else
+          {
+            if (snac->getErrorParam() != "DUPLEX RESPONSE")
+            {
+              // ignore DUPLEX RESPONSE since I always get that
+              ev->setFinished(true);
+              ev->setDelivered(false);
+              ev->setDirect(false);
+              ev->setDeliveryFailureReason(MessageEvent::Failed);
+              messageack.emit(ev);
+              m_reqidcache->remove( reqid );
+            }
+          }
+        
+        }
+        else
+        {
+          throw ParseException("Request ID cached value is not for an SMS Message");
+        }
       }
       else
       {
-	throw ParseException("Received an SMS response for unknown request id");
+        throw ParseException("Received an SMS response for unknown request id");
       }
       
     }
@@ -600,63 +600,63 @@ namespace ICQ2000
     {
       if ( m_reqidcache->exists( snac->RequestID() ) )
       {
-	RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
+        RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
 
-	if ( v->getType() == RequestIDCacheValue::Search )
-	{
-	  SearchCacheValue *sv = static_cast<SearchCacheValue*>(v);
+        if ( v->getType() == RequestIDCacheValue::Search )
+        {
+          SearchCacheValue *sv = static_cast<SearchCacheValue*>(v);
 
-	  SearchResultEvent *ev = sv->getEvent();
-	  if (snac->isEmptyContact())
-	  {
-	    ev->setLastContactAdded( NULL );
-	  }
-	  else
-	  {
-	    ContactRef c = new Contact( snac->getUIN() );
-	    c->setAlias(snac->getAlias());
-	    c->setFirstName(snac->getFirstName());
-	    c->setLastName(snac->getLastName());
-	    c->setEmail(snac->getEmail());
-	    c->setStatus(snac->getStatus(), false);
-	    c->setAuthReq(snac->getAuthReq());
-	    ContactList& cl = ev->getContactList();
-	    ev->setLastContactAdded( cl.add(c) );
+          SearchResultEvent *ev = sv->getEvent();
+          if (snac->isEmptyContact())
+          {
+            ev->setLastContactAdded( NULL );
+          }
+          else
+          {
+            ContactRef c = new Contact( snac->getUIN() );
+            c->setAlias(snac->getAlias());
+            c->setFirstName(snac->getFirstName());
+            c->setLastName(snac->getLastName());
+            c->setEmail(snac->getEmail());
+            c->setStatus(snac->getStatus(), false);
+            c->setAuthReq(snac->getAuthReq());
+            ContactList& cl = ev->getContactList();
+            ev->setLastContactAdded( cl.add(c) );
 
-	    if (snac->isLastInSearch())
-	      ev->setNumberMoreResults( snac->getNumberMoreResults() );
-	      
-	  }
+            if (snac->isLastInSearch())
+              ev->setNumberMoreResults( snac->getNumberMoreResults() );
+              
+          }
 
-	  if (snac->isLastInSearch()) ev->setFinished(true);
+          if (snac->isLastInSearch()) ev->setFinished(true);
 
-	  search_result.emit(ev);
+          search_result.emit(ev);
 
-	  if (ev->isFinished())
-	  {
-	    delete ev;
-	    m_reqidcache->remove( snac->RequestID() );
-	  }
-	  
-	}
-	else
-	{
-	  SignalLog(LogEvent::WARN, "Request ID cached value is not for a Search request");
-	}
-	
+          if (ev->isFinished())
+          {
+            delete ev;
+            m_reqidcache->remove( snac->RequestID() );
+          }
+          
+        }
+        else
+        {
+          SignalLog(LogEvent::WARN, "Request ID cached value is not for a Search request");
+        }
+        
       }
       else
       {
-	if ( m_contact_tree.exists( snac->getUIN() ) )
-	{
-	  // update Contact
-	  ContactRef c = m_contact_tree[ snac->getUIN() ];
-	  c->setAlias( snac->getAlias() );
-	  c->setEmail( snac->getEmail() );
-	  c->setFirstName( snac->getFirstName() );
-	  c->setLastName( snac->getLastName() );
-	  c->setAuthReq(snac->getAuthReq());
-	}
+        if ( m_contact_tree.exists( snac->getUIN() ) )
+        {
+          // update Contact
+          ContactRef c = m_contact_tree[ snac->getUIN() ];
+          c->setAlias( snac->getAlias() );
+          c->setEmail( snac->getEmail() );
+          c->setFirstName( snac->getFirstName() );
+          c->setLastName( snac->getLastName() );
+          c->setAuthReq(snac->getAuthReq());
+        }
       }
       
     }
@@ -664,54 +664,54 @@ namespace ICQ2000
     {
       if ( m_reqidcache->exists( snac->RequestID() ) )
       {
-	RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
+        RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
 
-	if ( v->getType() == RequestIDCacheValue::Search )
-	{
-	  SearchCacheValue *sv = static_cast<SearchCacheValue*>(v);
+        if ( v->getType() == RequestIDCacheValue::Search )
+        {
+          SearchCacheValue *sv = static_cast<SearchCacheValue*>(v);
 
-	  SearchResultEvent *ev = sv->getEvent();
-	  if (snac->isEmptyContact())
-	  {
-	    ev->setLastContactAdded( NULL );
-	  }
-	  else
-	  {
-	    ContactRef c = new Contact( snac->getUIN() );
-	    c->setAlias(snac->getAlias());
-	    c->setFirstName(snac->getFirstName());
-	    c->setLastName(snac->getLastName());
-	    c->setEmail(snac->getEmail());
-	    c->setStatus(snac->getStatus(), false);
-	    c->setAuthReq(snac->getAuthReq());
-	    ContactList& cl = ev->getContactList();
-	    ev->setLastContactAdded( cl.add(c) );
+          SearchResultEvent *ev = sv->getEvent();
+          if (snac->isEmptyContact())
+          {
+            ev->setLastContactAdded( NULL );
+          }
+          else
+          {
+            ContactRef c = new Contact( snac->getUIN() );
+            c->setAlias(snac->getAlias());
+            c->setFirstName(snac->getFirstName());
+            c->setLastName(snac->getLastName());
+            c->setEmail(snac->getEmail());
+            c->setStatus(snac->getStatus(), false);
+            c->setAuthReq(snac->getAuthReq());
+            ContactList& cl = ev->getContactList();
+            ev->setLastContactAdded( cl.add(c) );
 
-	    if (snac->isLastInSearch())
-	      ev->setNumberMoreResults( snac->getNumberMoreResults() );
-	      
-	  }
+            if (snac->isLastInSearch())
+              ev->setNumberMoreResults( snac->getNumberMoreResults() );
+              
+          }
 
-	  if (snac->isLastInSearch()) ev->setFinished(true);
+          if (snac->isLastInSearch()) ev->setFinished(true);
 
-	  search_result.emit(ev);
+          search_result.emit(ev);
 
-	  if (ev->isFinished())
-	  {
-	    delete ev;
-	    m_reqidcache->remove( snac->RequestID() );
-	  }
-	  
-	}
-	else
-	{
-	  SignalLog(LogEvent::WARN, "Request ID cached value is not for a Search request");
-	}
-	
+          if (ev->isFinished())
+          {
+            delete ev;
+            m_reqidcache->remove( snac->RequestID() );
+          }
+          
+        }
+        else
+        {
+          SignalLog(LogEvent::WARN, "Request ID cached value is not for a Search request");
+        }
+        
       }
       else
       {
-	SignalLog(LogEvent::WARN, "Received a Search Result for unknown request id");
+        SignalLog(LogEvent::WARN, "Received a Search Result for unknown request id");
       }
 
     }
@@ -719,41 +719,41 @@ namespace ICQ2000
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
-	ICQ2000::Contact::MainHomeInfo& imh = snac->getMainHomeInfo();
-	ICQ2000::Contact::MainHomeInfo  omh;
-	omh.alias     = m_translator->server_to_client( imh.alias,     ENCODING_CONTACT_LOCALE, c );
-	omh.firstname = m_translator->server_to_client( imh.firstname, ENCODING_CONTACT_LOCALE, c );
-	omh.lastname  = m_translator->server_to_client( imh.lastname,  ENCODING_CONTACT_LOCALE, c );
-	omh.email     = m_translator->server_to_client( imh.email,     ENCODING_CONTACT_LOCALE, c );
-	omh.city      = m_translator->server_to_client( imh.city,      ENCODING_CONTACT_LOCALE, c );
-	omh.state     = m_translator->server_to_client( imh.state,     ENCODING_CONTACT_LOCALE, c );
-	omh.phone     = m_translator->server_to_client( imh.phone,     ENCODING_CONTACT_LOCALE, c );
-	omh.fax       = m_translator->server_to_client( imh.fax,       ENCODING_CONTACT_LOCALE, c );
-	omh.street    = m_translator->server_to_client( imh.street,    ENCODING_CONTACT_LOCALE, c );
-	omh.zip       = m_translator->server_to_client( imh.zip,       ENCODING_CONTACT_LOCALE, c );
-	omh.setMobileNo( imh.getMobileNo() );
-	omh.country   = imh.country;
-	omh.timezone  = imh.timezone;
-	c->setMainHomeInfo( omh );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        ICQ2000::Contact::MainHomeInfo& imh = snac->getMainHomeInfo();
+        ICQ2000::Contact::MainHomeInfo  omh;
+        omh.alias     = m_translator->server_to_client( imh.alias,     ENCODING_CONTACT_LOCALE, c );
+        omh.firstname = m_translator->server_to_client( imh.firstname, ENCODING_CONTACT_LOCALE, c );
+        omh.lastname  = m_translator->server_to_client( imh.lastname,  ENCODING_CONTACT_LOCALE, c );
+        omh.email     = m_translator->server_to_client( imh.email,     ENCODING_CONTACT_LOCALE, c );
+        omh.city      = m_translator->server_to_client( imh.city,      ENCODING_CONTACT_LOCALE, c );
+        omh.state     = m_translator->server_to_client( imh.state,     ENCODING_CONTACT_LOCALE, c );
+        omh.phone     = m_translator->server_to_client( imh.phone,     ENCODING_CONTACT_LOCALE, c );
+        omh.fax       = m_translator->server_to_client( imh.fax,       ENCODING_CONTACT_LOCALE, c );
+        omh.street    = m_translator->server_to_client( imh.street,    ENCODING_CONTACT_LOCALE, c );
+        omh.zip       = m_translator->server_to_client( imh.zip,       ENCODING_CONTACT_LOCALE, c );
+        omh.setMobileNo( imh.getMobileNo() );
+        omh.country   = imh.country;
+        omh.timezone  = imh.timezone;
+        c->setMainHomeInfo( omh );
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
-	
+        
     }
     else if (snac->getType() == SrvResponseSNAC::RHomepageInfo)
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
-	m_translator->server_to_client_inplace( snac->getHomepageInfo().homepage, ENCODING_CONTACT_LOCALE, c );
-	c->setHomepageInfo( snac->getHomepageInfo() );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        m_translator->server_to_client_inplace( snac->getHomepageInfo().homepage, ENCODING_CONTACT_LOCALE, c );
+        c->setHomepageInfo( snac->getHomepageInfo() );
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
 
     }
@@ -761,24 +761,24 @@ namespace ICQ2000
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
 
-	ICQ2000::Contact::WorkInfo& imh = snac->getWorkInfo();
-	ICQ2000::Contact::WorkInfo  omh;
-	omh.city             = m_translator->server_to_client( imh.city,             ENCODING_CONTACT_LOCALE, c );
-	omh.state            = m_translator->server_to_client( imh.state,            ENCODING_CONTACT_LOCALE, c );
-	omh.street           = m_translator->server_to_client( imh.street,           ENCODING_CONTACT_LOCALE, c );
-	omh.zip              = m_translator->server_to_client( imh.zip,              ENCODING_CONTACT_LOCALE, c );
-	omh.company_name     = m_translator->server_to_client( imh.company_name,     ENCODING_CONTACT_LOCALE, c );
-	omh.company_dept     = m_translator->server_to_client( imh.company_dept,     ENCODING_CONTACT_LOCALE, c );
-	omh.company_position = m_translator->server_to_client( imh.company_position, ENCODING_CONTACT_LOCALE, c );
-	omh.company_web      = m_translator->server_to_client( imh.company_web,      ENCODING_CONTACT_LOCALE, c );
+        ICQ2000::Contact::WorkInfo& imh = snac->getWorkInfo();
+        ICQ2000::Contact::WorkInfo  omh;
+        omh.city             = m_translator->server_to_client( imh.city,             ENCODING_CONTACT_LOCALE, c );
+        omh.state            = m_translator->server_to_client( imh.state,            ENCODING_CONTACT_LOCALE, c );
+        omh.street           = m_translator->server_to_client( imh.street,           ENCODING_CONTACT_LOCALE, c );
+        omh.zip              = m_translator->server_to_client( imh.zip,              ENCODING_CONTACT_LOCALE, c );
+        omh.company_name     = m_translator->server_to_client( imh.company_name,     ENCODING_CONTACT_LOCALE, c );
+        omh.company_dept     = m_translator->server_to_client( imh.company_dept,     ENCODING_CONTACT_LOCALE, c );
+        omh.company_position = m_translator->server_to_client( imh.company_position, ENCODING_CONTACT_LOCALE, c );
+        omh.company_web      = m_translator->server_to_client( imh.company_web,      ENCODING_CONTACT_LOCALE, c );
 
-	c->setWorkInfo( omh );
+        c->setWorkInfo( omh );
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
 
     }
@@ -786,18 +786,18 @@ namespace ICQ2000
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
 
-	for (Contact::BackgroundInfo::SchoolList::iterator iter = snac->getBackgroundInfo().schools.begin();
-	     iter != snac->getBackgroundInfo().schools.end();
-	     ++iter )
-	  m_translator->server_to_client_inplace( iter->second, ENCODING_CONTACT_LOCALE, c );
+        for (Contact::BackgroundInfo::SchoolList::iterator iter = snac->getBackgroundInfo().schools.begin();
+             iter != snac->getBackgroundInfo().schools.end();
+             ++iter )
+          m_translator->server_to_client_inplace( iter->second, ENCODING_CONTACT_LOCALE, c );
 
-	c->setBackgroundInfo( snac->getBackgroundInfo() );
+        c->setBackgroundInfo( snac->getBackgroundInfo() );
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
 
     }
@@ -805,18 +805,18 @@ namespace ICQ2000
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
 
-	for (Contact::PersonalInterestInfo::InterestList::iterator iter = snac->getPersonalInterestInfo().interests.begin();
-	     iter != snac->getPersonalInterestInfo().interests.end();
-	     ++iter )
-	  m_translator->server_to_client_inplace( iter->second, ENCODING_CONTACT_LOCALE, c );
+        for (Contact::PersonalInterestInfo::InterestList::iterator iter = snac->getPersonalInterestInfo().interests.begin();
+             iter != snac->getPersonalInterestInfo().interests.end();
+             ++iter )
+          m_translator->server_to_client_inplace( iter->second, ENCODING_CONTACT_LOCALE, c );
 
-	c->setInterestInfo( snac->getPersonalInterestInfo() );
+        c->setInterestInfo( snac->getPersonalInterestInfo() );
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
 
     }
@@ -824,19 +824,19 @@ namespace ICQ2000
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
-	
-	for (Contact::EmailInfo::EmailList::iterator iter = snac->getEmailInfo().emails.begin();
-	     iter != snac->getEmailInfo().emails.end();
-	     ++iter )
-	  m_translator->server_to_client_inplace( *iter, ENCODING_CONTACT_LOCALE, c );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        
+        for (Contact::EmailInfo::EmailList::iterator iter = snac->getEmailInfo().emails.begin();
+             iter != snac->getEmailInfo().emails.end();
+             ++iter )
+          m_translator->server_to_client_inplace( *iter, ENCODING_CONTACT_LOCALE, c );
 
-	c->setEmailInfo( snac->getEmailInfo() );
-	c->userinfo_change_emit();
+        c->setEmailInfo( snac->getEmailInfo() );
+        c->userinfo_change_emit();
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
 
     }
@@ -844,12 +844,12 @@ namespace ICQ2000
     {
       try
       {
-	ContactRef c = getUserInfoCacheContact( snac->RequestID() );
-	c->setAboutInfo( m_translator->server_to_client( snac->getAboutInfo(), ENCODING_CONTACT_LOCALE, c ) );
+        ContactRef c = getUserInfoCacheContact( snac->RequestID() );
+        c->setAboutInfo( m_translator->server_to_client( snac->getAboutInfo(), ENCODING_CONTACT_LOCALE, c ) );
       }
       catch(ParseException e)
       {
-	SignalLog(LogEvent::WARN, e.what());
+        SignalLog(LogEvent::WARN, e.what());
       }
 
     }
@@ -857,27 +857,27 @@ namespace ICQ2000
     {
       if ( m_reqidcache->exists( snac->RequestID() ) )
       {
-	RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
+        RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
 
-	if ( v->getType() == RequestIDCacheValue::Search )
-	{
-	  SearchCacheValue *sv = static_cast<SearchCacheValue*>(v);
+        if ( v->getType() == RequestIDCacheValue::Search )
+        {
+          SearchCacheValue *sv = static_cast<SearchCacheValue*>(v);
 
-	  SearchResultEvent *ev = sv->getEvent();
+          SearchResultEvent *ev = sv->getEvent();
 
-	  ContactRef c = new Contact( snac->getUIN() );
-	  ContactList& cl = ev->getContactList();
-	  ev->setLastContactAdded( cl.add(c) );
-	  ev->setFinished(true);
+          ContactRef c = new Contact( snac->getUIN() );
+          ContactList& cl = ev->getContactList();
+          ev->setLastContactAdded( cl.add(c) );
+          ev->setFinished(true);
 
-	  search_result.emit(ev);
+          search_result.emit(ev);
 
-	  delete ev;
-	  m_reqidcache->remove( snac->RequestID() );
-	  
-	} else {
-	  SignalLog(LogEvent::WARN, "Request ID cached value is not for a Search request");
-	}
+          delete ev;
+          m_reqidcache->remove( snac->RequestID() );
+          
+        } else {
+          SignalLog(LogEvent::WARN, "Request ID cached value is not for a Search request");
+        }
 
       }
     }
@@ -897,12 +897,12 @@ namespace ICQ2000
 
       if ( v->getType() == RequestIDCacheValue::UserInfo )
       {
-	UserInfoCacheValue *uv = static_cast<UserInfoCacheValue*>(v);
-	return uv->getContact();
+        UserInfoCacheValue *uv = static_cast<UserInfoCacheValue*>(v);
+        return uv->getContact();
       }
       else
       {
-	throw ParseException("Request ID cached value is not for a User Info request");
+        throw ParseException("Request ID cached value is not for a User Info request");
       }
 
     }
@@ -929,10 +929,10 @@ namespace ICQ2000
   void Client::SignalRateInfoChange(RateInfoChangeSNAC *snac)
   {
     RateInfoChangeEvent e(snac->getCode(), snac->getRateClass(),
-			  snac->getWindowSize(), snac->getClear(),
-			  snac->getAlert(), snac->getLimit(),
-			  snac->getDisconnect(), snac->getCurrentAvg(),
-			  snac->getMaxAvg());
+                          snac->getWindowSize(), snac->getClear(),
+                          snac->getAlert(), snac->getLimit(),
+                          snac->getDisconnect(), snac->getCurrentAvg(),
+                          snac->getMaxAvg());
     rate.emit(&e);
   }
 
@@ -972,7 +972,7 @@ namespace ICQ2000
       ev->setFinished(true);
       search_result.emit(ev);
       delete ev;
-	  
+          
     }
   }
   
@@ -1015,10 +1015,10 @@ namespace ICQ2000
 
       // Birthday Flag set?
       if (userinfo.getBirthday()) c->setBirthday(true);
-		 
+                 
       c->setDirect(true); // reset flags when a user goes online
       c->setStatus( Contact::MapICQStatusToStatus(userinfo.getStatus()),
-		    Contact::MapICQStatusToInvisible(userinfo.getStatus()) );
+                    Contact::MapICQStatusToInvisible(userinfo.getStatus()) );
 
       if ( userinfo.getExtIP() != 0 ) c->setExtIP( userinfo.getExtIP() );
       if ( userinfo.getLanIP() != 0 ) c->setLanIP( userinfo.getLanIP() );
@@ -1028,13 +1028,13 @@ namespace ICQ2000
 
       c->set_signon_time( userinfo.getSignonDate() );
       if (userinfo.contains_capabilities())
-	c->set_capabilities( userinfo.get_capabilities() );
+        c->set_capabilities( userinfo.get_capabilities() );
       
       ostringstream ostr;
       ostr << "Received Buddy Online for "
-	   << c->getAlias()
-	   << " (" << c->getUIN() << ") " << Status_text[old_st]
-	   << "->" << Status_text[ c->getStatus() ] << " from server";
+           << c->getAlias()
+           << " (" << c->getUIN() << ") " << Status_text[old_st]
+           << "->" << Status_text[ c->getStatus() ] << " from server";
       SignalLog(LogEvent::INFO, ostr.str() );
 
     } else {
@@ -1052,8 +1052,8 @@ namespace ICQ2000
 
       ostringstream ostr;
       ostr << "Received Buddy Offline for "
-	   << c->getAlias()
-	   << " (" << c->getUIN() << ") from server";
+           << c->getAlias()
+           << " (" << c->getUIN() << ") from server";
       SignalLog(LogEvent::INFO, ostr.str() );
     } else {
       ostringstream ostr;
@@ -1183,9 +1183,9 @@ namespace ICQ2000
     if (m_in_dc) {
       m_listenServer->setBindHost(m_client_bind_host.c_str());
       if (m_use_portrange) {
-	m_listenServer->StartServer(m_lower_port, m_upper_port);
+        m_listenServer->StartServer(m_lower_port, m_upper_port);
       } else {
-	m_listenServer->StartServer();
+        m_listenServer->StartServer();
       }
       SignalAddSocket( m_listenServer->getSocketHandle(), SocketEvent::READ );
       ostringstream ostr;
@@ -1276,8 +1276,8 @@ namespace ICQ2000
 
     try {
       while (m_serverSocket->connected()) {
-	if (!m_serverSocket->Recv(*m_recv)) break;
-	Parse();
+        if (!m_serverSocket->Recv(*m_recv)) break;
+        Parse();
       }
     } catch(SocketException e) {
       ostringstream ostr;
@@ -1303,9 +1303,9 @@ namespace ICQ2000
 
       *m_recv >> start_byte;
       if (start_byte != 42) {
-	m_recv->clear();
-	SignalLog(LogEvent::WARN, "Invalid Start Byte on FLAP");
-	return;
+        m_recv->clear();
+        SignalLog(LogEvent::WARN, "Invalid Start Byte on FLAP");
+        return;
       }
 
       /* if we don't have at least six bytes we don't have enough
@@ -1327,9 +1327,9 @@ namespace ICQ2000
       m_recv->chopOffBuffer( sb, data_len+6 );
 
       {
-	ostringstream ostr;
-	ostr << "Received packet from Server" << endl << sb;
-	SignalLog(LogEvent::PACKET, ostr.str());
+        ostringstream ostr;
+        ostr << "Received packet from Server" << endl << sb;
+        SignalLog(LogEvent::PACKET, ostr.str());
       }
 
       sb.advance(6);
@@ -1340,32 +1340,32 @@ namespace ICQ2000
       
       switch(channel) {
       case 1:
-	ParseCh1(sb,seq_num);
-	break;
+        ParseCh1(sb,seq_num);
+        break;
       case 2:
-	ParseCh2(sb,seq_num);
-	break;
+        ParseCh2(sb,seq_num);
+        break;
       case 3:
-	ParseCh3(sb,seq_num);
-	break;
+        ParseCh3(sb,seq_num);
+        break;
       case 4:
-	ParseCh4(sb,seq_num);
-	break;
+        ParseCh4(sb,seq_num);
+        break;
       default:
-	ostr << "FLAP on unrecognised channel 0x" << std::hex << (int)channel;
-	SignalLog(LogEvent::WARN, ostr.str());
-	break;
+        ostr << "FLAP on unrecognised channel 0x" << std::hex << (int)channel;
+        SignalLog(LogEvent::WARN, ostr.str());
+        break;
       }
 
       if (sb.beforeEnd()) {
-	/* we assert that parsing code eats uses all data
-	 * in the FLAP - seems useful to know when they aren't
-	 * as it probably means they are faulty
-	 */
-	ostringstream ostr;
-	ostr  << "Buffer pointer not at end after parsing FLAP was: 0x" << std::hex << sb.pos()
-	      << " should be: 0x" << sb.size();
-	SignalLog(LogEvent::WARN, ostr.str());
+        /* we assert that parsing code eats uses all data
+         * in the FLAP - seems useful to know when they aren't
+         * as it probably means they are faulty
+         */
+        ostringstream ostr;
+        ostr  << "Buffer pointer not at end after parsing FLAP was: 0x" << std::hex << sb.pos()
+              << " should be: 0x" << sb.size();
+        SignalLog(LogEvent::WARN, ostr.str());
       }
       
     }
@@ -1375,20 +1375,20 @@ namespace ICQ2000
   void Client::ParseCh1(Buffer& b, unsigned short seq_num) {
 
     if (b.remains() == 4 && (m_state == AUTH_AWAITING_CONN_ACK || 
-			     m_state == UIN_AWAITING_CONN_ACK)) {
+                             m_state == UIN_AWAITING_CONN_ACK)) {
 
       // Connection Acknowledge - first packet from server on connection
       unsigned int unknown;
       b >> unknown; // always 0x0001
 
       if (m_state == AUTH_AWAITING_CONN_ACK) {
-	SendAuthReq();
-	SignalLog(LogEvent::INFO, "Connection Acknowledge from server");
-	m_state = AUTH_AWAITING_AUTH_REPLY;
+        SendAuthReq();
+        SignalLog(LogEvent::INFO, "Connection Acknowledge from server");
+        m_state = AUTH_AWAITING_AUTH_REPLY;
       } else if (m_state == UIN_AWAITING_CONN_ACK) {
-	SendNewUINReq();
-	SignalLog(LogEvent::INFO, "Connection Acknowledge from server");
-	m_state = UIN_AWAITING_UIN_REPLY;
+        SendNewUINReq();
+        SignalLog(LogEvent::INFO, "Connection Acknowledge from server");
+        m_state = UIN_AWAITING_UIN_REPLY;
       }
 
     } else if (b.remains() == 4 && m_state == BOS_AWAITING_CONN_ACK) {
@@ -1427,83 +1427,83 @@ namespace ICQ2000
     {
     case SNAC_FAM_BOS:
       switch(snac->Subtype()) {
-      	case SNAC_BOS_Error:
-      	SignalLog(LogEvent::ERROR, "Received BOS error message from server");
-      	break;
+              case SNAC_BOS_Error:
+              SignalLog(LogEvent::ERROR, "Received BOS error message from server");
+              break;
       }
     break;
     case SNAC_FAM_GEN:
       switch(snac->Subtype())
       {
       case SNAC_GEN_ServerReady:
-	SignalLog(LogEvent::INFO, "Received Server Ready from server");
-	{
-	  ServerReadySNAC *sn = dynamic_cast<ServerReadySNAC*>(snac);
-	  if (!sn) {
-	    SignalLog(LogEvent::INFO, "Errors parsing server capabilities");
-	    break;
-	  }
-	  std::vector<unsigned short> caps = sn->getCapabilities();
-	  for( std::vector<unsigned short>::iterator i = caps.begin(); i != caps.end(); i++ ) {
-	   ostringstream ostr;
-	   ostr << "Family: 0x" << std::hex << *i;
-	   SignalLog(LogEvent::INFO, ostr.str());
-	  }
-	}
-	SendCapabilities();
-	break;
+        SignalLog(LogEvent::INFO, "Received Server Ready from server");
+        {
+          ServerReadySNAC *sn = dynamic_cast<ServerReadySNAC*>(snac);
+          if (!sn) {
+            SignalLog(LogEvent::INFO, "Errors parsing server capabilities");
+            break;
+          }
+          std::vector<unsigned short> caps = sn->getCapabilities();
+          for( std::vector<unsigned short>::iterator i = caps.begin(); i != caps.end(); i++ ) {
+           ostringstream ostr;
+           ostr << "Family: 0x" << std::hex << *i;
+           SignalLog(LogEvent::INFO, ostr.str());
+          }
+        }
+        SendCapabilities();
+        break;
       case SNAC_GEN_RateInfo:
-	SignalLog(LogEvent::INFO, "Received Rate Information from server");
-	{
-	  RateInfoSNAC *sn = dynamic_cast<RateInfoSNAC*>(snac);
-	  if(!sn) {
-	    SignalLog(LogEvent::INFO, "Errors parsing server rates");
-	    break;
-	  }
-	  std::map<unsigned short, RateClass> r = sn->getRates();
-	  ostringstream ostr;
-	  for( std::map<unsigned short, RateClass>::iterator it = r.begin(); it != r.end(); it++ ) {
-	    RateClass rc = it->second;
-	    ostr << "Class ID: " << it->first
-	         << " Window: 0x" << std::hex << rc.getWindow() << " Clear: 0x"
-		 << rc.getClearLevel() << " Alert: 0x" << rc.getAlertLevel()
-		 << " Limited: 0x" << rc.getLimitedLevel() << " Disconnected: 0x"
-		 << rc.getDisconnectedLevel() << " Current: 0x" << rc.getCurrentLevel()
-		 << " Max Level: 0x" << rc.getMaxLevel() << " Last: 0x" << rc.getLastTime()
-		 << " Current state: 0x" << rc.getCurrentState() << "\n";
-	    ostr << "Members: ";
-	    std::multimap<unsigned short, unsigned short> m = rc.getMembers();
-	    for( std::multimap<unsigned short, unsigned short>::iterator i = m.begin(); i != m.end(); i++ ) {
-	      ostr << "Family 0x" << i->first << ", Subtype 0x" << i->second << "\n";
-	    }
-	  }
-	  SignalLog(LogEvent::INFO, ostr.str());
-	}
-	SendRateInfoAck();
-	SendPersonalInfoRequest();
-	SendAddICBMParameter();
-	SendSetUserInfo();
-	//if (m_fetch_sbl) SendRequestSBL();
-	SendLogin();
-	break;
+        SignalLog(LogEvent::INFO, "Received Rate Information from server");
+        {
+          RateInfoSNAC *sn = dynamic_cast<RateInfoSNAC*>(snac);
+          if(!sn) {
+            SignalLog(LogEvent::INFO, "Errors parsing server rates");
+            break;
+          }
+          std::map<unsigned short, RateClass> r = sn->getRates();
+          ostringstream ostr;
+          for( std::map<unsigned short, RateClass>::iterator it = r.begin(); it != r.end(); it++ ) {
+            RateClass rc = it->second;
+            ostr << "Class ID: " << it->first
+                 << " Window: 0x" << std::hex << rc.getWindow() << " Clear: 0x"
+                 << rc.getClearLevel() << " Alert: 0x" << rc.getAlertLevel()
+                 << " Limited: 0x" << rc.getLimitedLevel() << " Disconnected: 0x"
+                 << rc.getDisconnectedLevel() << " Current: 0x" << rc.getCurrentLevel()
+                 << " Max Level: 0x" << rc.getMaxLevel() << " Last: 0x" << rc.getLastTime()
+                 << " Current state: 0x" << rc.getCurrentState() << "\n";
+            ostr << "Members: ";
+            std::multimap<unsigned short, unsigned short> m = rc.getMembers();
+            for( std::multimap<unsigned short, unsigned short>::iterator i = m.begin(); i != m.end(); i++ ) {
+              ostr << "Family 0x" << i->first << ", Subtype 0x" << i->second << "\n";
+            }
+          }
+          SignalLog(LogEvent::INFO, ostr.str());
+        }
+        SendRateInfoAck();
+        SendPersonalInfoRequest();
+        SendAddICBMParameter();
+        SendSetUserInfo();
+        //if (m_fetch_sbl) SendRequestSBL();
+        SendLogin();
+        break;
       case SNAC_GEN_CapAck:
-	SignalLog(LogEvent::INFO, "Received Capabilities Ack from server");
-	SendRateInfoRequest();
-	break;
+        SignalLog(LogEvent::INFO, "Received Capabilities Ack from server");
+        SendRateInfoRequest();
+        break;
       case SNAC_GEN_UserInfo:
-	SignalLog(LogEvent::INFO, "Received User Info from server");
-	HandleUserInfoSNAC(static_cast<UserInfoSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received User Info from server");
+        HandleUserInfoSNAC(static_cast<UserInfoSNAC*>(snac));
+        break;
       case SNAC_GEN_MOTD:
-	SignalLog(LogEvent::INFO, "Received MOTD from server");
-	break;
+        SignalLog(LogEvent::INFO, "Received MOTD from server");
+        break;
       case SNAC_GEN_RateInfoChange:
-	SignalLog(LogEvent::INFO, "Received Rate Info Change from server");
-	SignalRateInfoChange(static_cast<RateInfoChangeSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received Rate Info Change from server");
+        SignalRateInfoChange(static_cast<RateInfoChangeSNAC*>(snac));
+        break;
       case SNAC_GEN_Error:
-      	SignalLog(LogEvent::ERROR, "Received General error message from server");
-	break;
+              SignalLog(LogEvent::ERROR, "Received General error message from server");
+        break;
       }
       break;
 
@@ -1511,14 +1511,14 @@ namespace ICQ2000
       switch(snac->Subtype())
       {
       case SNAC_BUD_Error:
-      	SignalLog(LogEvent::ERROR, "Received Buddy error from server");
-	break;
+              SignalLog(LogEvent::ERROR, "Received Buddy error from server");
+        break;
       case SNAC_BUD_Online:
-	SignalUserOnline(static_cast<BuddyOnlineSNAC*>(snac));
-	break;
+        SignalUserOnline(static_cast<BuddyOnlineSNAC*>(snac));
+        break;
       case SNAC_BUD_Offline:
-	SignalUserOffline(static_cast<BuddyOfflineSNAC*>(snac));
-	break;
+        SignalUserOffline(static_cast<BuddyOfflineSNAC*>(snac));
+        break;
       }
       break;
 
@@ -1526,20 +1526,20 @@ namespace ICQ2000
       switch(snac->Subtype())
       {
       case SNAC_MSG_Message:
-	SignalLog(LogEvent::INFO, "Received Message from server");
-	SignalMessage(static_cast<MessageSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received Message from server");
+        SignalMessage(static_cast<MessageSNAC*>(snac));
+        break;
       case SNAC_MSG_MessageACK:
-	SignalLog(LogEvent::INFO, "Received Message ACK from server");
-	SignalMessageACK(static_cast<MessageACKSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received Message ACK from server");
+        SignalMessageACK(static_cast<MessageACKSNAC*>(snac));
+        break;
       case SNAC_MSG_OfflineUser:
-	SignalLog(LogEvent::INFO, "Received Message to Offline User from server");
-	SignalMessageOfflineUser(static_cast<MessageOfflineUserSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received Message to Offline User from server");
+        SignalMessageOfflineUser(static_cast<MessageOfflineUserSNAC*>(snac));
+        break;
       case SNAC_MSG_Error:
-      	SignalLog(LogEvent::ERROR, "Received Message error from server");
-	break;
+              SignalLog(LogEvent::ERROR, "Received Message error from server");
+        break;
       }
       break;
 
@@ -1547,12 +1547,12 @@ namespace ICQ2000
       switch(snac->Subtype())
       {
       case SNAC_SRV_Response:
-	SignalLog(LogEvent::INFO, "Received Server Response from server");
-	SignalSrvResponse(static_cast<SrvResponseSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received Server Response from server");
+        SignalSrvResponse(static_cast<SrvResponseSNAC*>(snac));
+        break;
       case SNAC_SRV_Error:
-      	SignalLog(LogEvent::ERROR, "Received Server error from server");
-	break;
+              SignalLog(LogEvent::ERROR, "Received Server error from server");
+        break;
       }
       break;
 
@@ -1560,13 +1560,13 @@ namespace ICQ2000
       switch(snac->Subtype())
       {
       case SNAC_UIN_Response:
-	SignalLog(LogEvent::INFO, "Received UIN Response from server");
-	SignalUINResponse(static_cast<UINResponseSNAC*>(snac));
-	break;
+        SignalLog(LogEvent::INFO, "Received UIN Response from server");
+        SignalUINResponse(static_cast<UINResponseSNAC*>(snac));
+        break;
       case SNAC_UIN_RequestError:
-	SignalLog(LogEvent::ERROR, "Received UIN Request Error from server");
-	SignalUINRequestError();
-	break;
+        SignalLog(LogEvent::ERROR, "Received UIN Request Error from server");
+        SignalUINRequestError();
+        break;
       }
       break;
 
@@ -1574,250 +1574,250 @@ namespace ICQ2000
       switch(snac->Subtype())
       {
       case SNAC_SBL_Rights_Reply:
-	SignalLog(LogEvent::INFO, "Server-based contact list rights granted\n");
-	break;
+        SignalLog(LogEvent::INFO, "Server-based contact list rights granted\n");
+        break;
 
       case SNAC_SBL_List_From_Server: 
       {
-	SignalLog(LogEvent::INFO, "Received server-based list from server\n");
-	SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
-	fillSBLMap(sbs);
-	m_sbl_privacy_id = sbs->getPrivacyID();
-	mergeSBL( sbs->getContactTree());
-		if ((snac->Flags() & 0x01)  == 0) // last/only List packet
-		{
-        	SendSBLReceivedACK();
-        	m_sbl_canedit = true;
-        	processSblEdits();
+        SignalLog(LogEvent::INFO, "Received server-based list from server\n");
+        SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
+        fillSBLMap(sbs);
+        m_sbl_privacy_id = sbs->getPrivacyID();
+        mergeSBL( sbs->getContactTree());
+                if ((snac->Flags() & 0x01)  == 0) // last/only List packet
+                {
+                SendSBLReceivedACK();
+                m_sbl_canedit = true;
+                processSblEdits();
         }
-	break;
+        break;
       }
       
       case SNAC_SBL_Edit_ACK:
       {
-	vector<SBLEditACKSNAC::Result> r = static_cast<SBLEditACKSNAC*>(snac)->getResults();
-	vector<SBLEditACKSNAC::Result>::iterator ir;
-	bool reauth = false;
-	bool succ = false;
-	
-	for(ir = r.begin(); ir != r.end(); ++ir)
-	switch( *ir ) {
-	case SBLEditACKSNAC::Success:
-	  SignalLog(LogEvent::INFO, "Server-based contact list modification succeeded\n");
-	  succ = true;
-	  //updresults.push_back(ServerBasedContactEvent::Success);
-	  break;
-	case SBLEditACKSNAC::Failed:
-	  SignalLog(LogEvent::INFO, "Server-based contact list modification failed\n");
-	  //updresults.push_back(ServerBasedContactEvent::Failed);
-	  break;
-	case SBLEditACKSNAC::AuthRequired:
-	  SignalLog(LogEvent::INFO, "Failed, authentification is required to add a user\n");
-	  reauth = true;
-	  //updresults.push_back(ServerBasedContactEvent::AuthRequired);
-	  break;
-	case SBLEditACKSNAC::AlreadyExists:
-	  SignalLog(LogEvent::INFO, "Already exists on the server-based contact list\n");
-	  break;
-	}
+        vector<SBLEditACKSNAC::Result> r = static_cast<SBLEditACKSNAC*>(snac)->getResults();
+        vector<SBLEditACKSNAC::Result>::iterator ir;
+        bool reauth = false;
+        bool succ = false;
+        
+        for(ir = r.begin(); ir != r.end(); ++ir)
+        switch( *ir ) {
+        case SBLEditACKSNAC::Success:
+          SignalLog(LogEvent::INFO, "Server-based contact list modification succeeded\n");
+          succ = true;
+          //updresults.push_back(ServerBasedContactEvent::Success);
+          break;
+        case SBLEditACKSNAC::Failed:
+          SignalLog(LogEvent::INFO, "Server-based contact list modification failed\n");
+          //updresults.push_back(ServerBasedContactEvent::Failed);
+          break;
+        case SBLEditACKSNAC::AuthRequired:
+          SignalLog(LogEvent::INFO, "Failed, authentification is required to add a user\n");
+          reauth = true;
+          //updresults.push_back(ServerBasedContactEvent::AuthRequired);
+          break;
+        case SBLEditACKSNAC::AlreadyExists:
+          SignalLog(LogEvent::INFO, "Already exists on the server-based contact list\n");
+          break;
+        }
 
-	// ROGER: send next SBL SNAC if available, otherwise end SBL edit
-	if (!sblSNACs.empty())
-	{
-	  OutSNAC *sn = sblSNACs.front();
-	  if (sn->RequestID() == snac->RequestID()) // it's the last sent SNAC
-	  {
-  	    sblSNACs.pop_front();
-  	    if (succ) // apply change on local data
-  	    switch (sn->Subtype())
-  	    {
-  	    	case SNAC_SBL_Add_Entry: {
-  	    		SBLAddBuddySNAC *addBuddy = dynamic_cast<SBLAddBuddySNAC*>(sn);
-  	    		if (addBuddy == NULL)
-  	    		{
-  	    			SBLAddGroupSNAC *addGroup = dynamic_cast<SBLAddGroupSNAC*>(sn);
-  	    			if (addGroup == NULL)
-  	    				break;
-					m_sbl_groups[addGroup->get_label()] = Sbl_group(addGroup->get_label(), addGroup->group_id());
-					m_sbl_groupnames[m_sbl_groups[addGroup->get_label()].group_id] = addGroup->get_label();
-  	    		}
-  	    		else // SBLAddBuddySNAC
-  	    		{
-  	    			m_sbl_map[addBuddy->getBuddy().uin] = addBuddy->getBuddy();
-  	    		}
-  	    	}
-  	    	break;
-  	    	case SNAC_SBL_Update_Entry: {
-  	    		SBLUpdateGroupSNAC *updGroup = dynamic_cast<SBLUpdateGroupSNAC*>(sn);
-  	    		if (updGroup == NULL)
-  	    		{
-  	    			// TODO: buddy update
-  	    			/*SBLUpdateBuddySNAC updBuddy = dynamic_cast<SBLUpdateBuddySNAC*>(sn);
-  	    			if (updBuddy == NULL)
-  	    				break;*/
-  	    		}
-  	    		else
-  	    		{
-  	    			if (updGroup->group_id() == 0) // ignore updates of master group
-  	    				break;
-  	    			
-  	    			string old_name = m_sbl_groupnames[updGroup->group_id()];
-  	    			m_sbl_groupnames[updGroup->group_id()] = updGroup->get_label();
-  	    			
-  	    			m_sbl_groups.erase(old_name);
-  	    			m_sbl_groups[updGroup->get_label()] = Sbl_group(updGroup->get_label(), updGroup->group_id());
-  	    			m_sbl_groups[updGroup->get_label()].buddies = updGroup->getBuddies();
-  	    		}
-  	    	}
-  	    	case SNAC_SBL_Remove_Entry: {
-  	    		SBLRemoveBuddySNAC *remBuddy = dynamic_cast<SBLRemoveBuddySNAC*>(sn);
-  	    		if (remBuddy == NULL)
-  	    		{
-  	    			SBLRemoveGroupSNAC *remGroup = dynamic_cast<SBLRemoveGroupSNAC*>(sn);
-  	    			if (remGroup == NULL)
-  	    				break;
-  	    			if (m_sbl_groupnames.find(remGroup->group_id()) == m_sbl_groupnames.end())
-  	    			{
-  	    				SignalLog(LogEvent::WARN, "Removing unknown group!\n");
-  	    				break;
-  	    			}
-					m_sbl_groupnames.erase(remGroup->group_id());
-					/*for (std::set<unsigned short>::iterator git = m_sbl_groups[remGroup->get_label()].buddies.begin(); git != m_sbl_groups[remGroup->get_label()].buddies.end(); git++)
-					{
-						m_sbl_map.erase(*git)
-					}*/
-					std::map<unsigned int, Sbl_item>::iterator mit, next;
-					mit = m_sbl_map.begin();
-					while (mit != m_sbl_map.end())
-					{
-						if (m_sbl_groups[remGroup->get_label()].buddies.find(mit->second.uin) != m_sbl_groups[remGroup->get_label()].buddies.end())
-						{
-							next = mit;
-							next++;
-							m_sbl_map.erase(mit);
-							mit = next;
-						}
-						else
-							mit++;
-					}
-					m_sbl_groups.erase(remGroup->get_label());
-  	    		}
-  	    		else
-  	    		{
-  	    			if (m_sbl_map.find(remBuddy->getBuddy().uin) == m_sbl_map.end())
-  	    			{
-  	    				SignalLog(LogEvent::WARN, "Removing non-existent buddy!\n");
-  	    				break;
-  	    			}
-  	    			SignalLog(LogEvent::INFO, "Removing buddy from SBL list\n");
-  	    			m_sbl_groups[m_sbl_map[remBuddy->getBuddy().uin].group_name].buddies.erase(remBuddy->getBuddy().uin);
-  	    			m_sbl_map.erase(remBuddy->getBuddy().uin);
-  	    		}
-  	    	}
-  	    	break;
-  	    }
-  	    
-  	    
-		delete sn;
-	    if (sblSNACs.empty())
-	    {
-	      FLAPwrapSNACandSend(SBLCommitEditSNAC() );
-	      m_sbl_inedit = false;
-	      processSblEdits();
-	    }
-	    else
-	    {
-	      sn = sblSNACs.front();
-		  FLAPwrapSNACandSend(*sn);
-	    }
-	  }
-	}
-	
+        // ROGER: send next SBL SNAC if available, otherwise end SBL edit
+        if (!sblSNACs.empty())
+        {
+          OutSNAC *sn = sblSNACs.front();
+          if (sn->RequestID() == snac->RequestID()) // it's the last sent SNAC
+          {
+              sblSNACs.pop_front();
+              if (succ) // apply change on local data
+              switch (sn->Subtype())
+              {
+                      case SNAC_SBL_Add_Entry: {
+                              SBLAddBuddySNAC *addBuddy = dynamic_cast<SBLAddBuddySNAC*>(sn);
+                              if (addBuddy == NULL)
+                              {
+                                      SBLAddGroupSNAC *addGroup = dynamic_cast<SBLAddGroupSNAC*>(sn);
+                                      if (addGroup == NULL)
+                                              break;
+                                        m_sbl_groups[addGroup->get_label()] = Sbl_group(addGroup->get_label(), addGroup->group_id());
+                                        m_sbl_groupnames[m_sbl_groups[addGroup->get_label()].group_id] = addGroup->get_label();
+                              }
+                              else // SBLAddBuddySNAC
+                              {
+                                      m_sbl_map[addBuddy->getBuddy().uin] = addBuddy->getBuddy();
+                              }
+                      }
+                      break;
+                      case SNAC_SBL_Update_Entry: {
+                              SBLUpdateGroupSNAC *updGroup = dynamic_cast<SBLUpdateGroupSNAC*>(sn);
+                              if (updGroup == NULL)
+                              {
+                                      // TODO: buddy update
+                                      /*SBLUpdateBuddySNAC updBuddy = dynamic_cast<SBLUpdateBuddySNAC*>(sn);
+                                      if (updBuddy == NULL)
+                                              break;*/
+                              }
+                              else
+                              {
+                                      if (updGroup->group_id() == 0) // ignore updates of master group
+                                              break;
+                                      
+                                      string old_name = m_sbl_groupnames[updGroup->group_id()];
+                                      m_sbl_groupnames[updGroup->group_id()] = updGroup->get_label();
+                                      
+                                      m_sbl_groups.erase(old_name);
+                                      m_sbl_groups[updGroup->get_label()] = Sbl_group(updGroup->get_label(), updGroup->group_id());
+                                      m_sbl_groups[updGroup->get_label()].buddies = updGroup->getBuddies();
+                              }
+                      }
+                      case SNAC_SBL_Remove_Entry: {
+                              SBLRemoveBuddySNAC *remBuddy = dynamic_cast<SBLRemoveBuddySNAC*>(sn);
+                              if (remBuddy == NULL)
+                              {
+                                      SBLRemoveGroupSNAC *remGroup = dynamic_cast<SBLRemoveGroupSNAC*>(sn);
+                                      if (remGroup == NULL)
+                                              break;
+                                      if (m_sbl_groupnames.find(remGroup->group_id()) == m_sbl_groupnames.end())
+                                      {
+                                              SignalLog(LogEvent::WARN, "Removing unknown group!\n");
+                                              break;
+                                      }
+                                        m_sbl_groupnames.erase(remGroup->group_id());
+                                        /*for (std::set<unsigned short>::iterator git = m_sbl_groups[remGroup->get_label()].buddies.begin(); git != m_sbl_groups[remGroup->get_label()].buddies.end(); git++)
+                                        {
+                                                m_sbl_map.erase(*git)
+                                        }*/
+                                        std::map<unsigned int, Sbl_item>::iterator mit, next;
+                                        mit = m_sbl_map.begin();
+                                        while (mit != m_sbl_map.end())
+                                        {
+                                                if (m_sbl_groups[remGroup->get_label()].buddies.find(mit->second.uin) != m_sbl_groups[remGroup->get_label()].buddies.end())
+                                                {
+                                                        next = mit;
+                                                        next++;
+                                                        m_sbl_map.erase(mit);
+                                                        mit = next;
+                                                }
+                                                else
+                                                        mit++;
+                                        }
+                                        m_sbl_groups.erase(remGroup->get_label());
+                              }
+                              else
+                              {
+                                      if (m_sbl_map.find(remBuddy->getBuddy().uin) == m_sbl_map.end())
+                                      {
+                                              SignalLog(LogEvent::WARN, "Removing non-existent buddy!\n");
+                                              break;
+                                      }
+                                      SignalLog(LogEvent::INFO, "Removing buddy from SBL list\n");
+                                      m_sbl_groups[m_sbl_map[remBuddy->getBuddy().uin].group_name].buddies.erase(remBuddy->getBuddy().uin);
+                                      m_sbl_map.erase(remBuddy->getBuddy().uin);
+                              }
+                      }
+                      break;
+              }
+              
+              
+                delete sn;
+            if (sblSNACs.empty())
+            {
+              FLAPwrapSNACandSend(SBLCommitEditSNAC() );
+              m_sbl_inedit = false;
+              processSblEdits();
+            }
+            else
+            {
+              sn = sblSNACs.front();
+                  FLAPwrapSNACandSend(*sn);
+            }
+          }
+        }
+        
 
-	/*
-	** haven't yet decided the best way to recode this for groups and contacts **
+        /*
+        ** haven't yet decided the best way to recode this for groups and contacts **
 
-	vector<ServerBasedContactEvent::UploadResult> updresults;
-	vector<ServerBasedContactEvent::UploadResult>::iterator iur;
+        vector<ServerBasedContactEvent::UploadResult> updresults;
+        vector<ServerBasedContactEvent::UploadResult>::iterator iur;
 
-	if(!updresults.empty()) {
-	  if( m_reqidcache->exists( snac->RequestID() ) ) {
-	    RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
-	    
-	    if ( v->getType() == RequestIDCacheValue::ServerBasedContact ) {
-	      ServerBasedContactCacheValue *sv = static_cast<ServerBasedContactCacheValue*>(v);
-	      ServerBasedContactEvent *ev = sv->getEvent();
+        if(!updresults.empty()) {
+          if( m_reqidcache->exists( snac->RequestID() ) ) {
+            RequestIDCacheValue *v = (*m_reqidcache)[ snac->RequestID() ];
+            
+            if ( v->getType() == RequestIDCacheValue::ServerBasedContact ) {
+              ServerBasedContactCacheValue *sv = static_cast<ServerBasedContactCacheValue*>(v);
+              ServerBasedContactEvent *ev = sv->getEvent();
 
-	      ContactList &cl = ev->getContactList();
-	      ContactList::iterator ic = cl.begin();
+              ContactList &cl = ev->getContactList();
+              ContactList::iterator ic = cl.begin();
 
-	      iur = updresults.begin();
+              iur = updresults.begin();
 
-	      while(iur != updresults.end() && ic != cl.end()) {
-		if(*iur == ServerBasedContactEvent::Success
-		|| *iur == ServerBasedContactEvent::AuthRequired) {
-		    (*ic)->setServerBased(ev->getType() == ServerBasedContactEvent::Upload);
+              while(iur != updresults.end() && ic != cl.end()) {
+                if(*iur == ServerBasedContactEvent::Success
+                || *iur == ServerBasedContactEvent::AuthRequired) {
+                    (*ic)->setServerBased(ev->getType() == ServerBasedContactEvent::Upload);
 
-		    ContactRef ct = getContact((*ic)->getUIN());
-		    if(ct.get()) {
-		      ct->setServerBased(ev->getType() == ServerBasedContactEvent::Upload);
-		    }
-		}
+                    ContactRef ct = getContact((*ic)->getUIN());
+                    if(ct.get()) {
+                      ct->setServerBased(ev->getType() == ServerBasedContactEvent::Upload);
+                    }
+                }
 
-		++iur;
-		++ic;
-	      }
+                ++iur;
+                ++ic;
+              }
 
-	      ev->setUploadResults(updresults);
-	      server_based_contact_list.emit(ev);
+              ev->setUploadResults(updresults);
+              server_based_contact_list.emit(ev);
 
-	      delete ev;
-	      m_reqidcache->remove( snac->RequestID() );
-	    } else {
-	      SignalLog(LogEvent::WARN, "Request ID cached value is not for a server-based contacts upload request");
-	    }
-	  } else {
-	    SignalLog(LogEvent::WARN, "SBL Edit acknowledge from server for a non-existent upload");
-	  }
-	*/
-	}
-	break;
+              delete ev;
+              m_reqidcache->remove( snac->RequestID() );
+            } else {
+              SignalLog(LogEvent::WARN, "Request ID cached value is not for a server-based contacts upload request");
+            }
+          } else {
+            SignalLog(LogEvent::WARN, "SBL Edit acknowledge from server for a non-existent upload");
+          }
+        */
+        }
+        break;
       case SNAC_SBL_Error:
-      	SignalLog(LogEvent::ERROR, "Received Server-base List error from server");
-	break;
-	
-	  case SNAC_SBL_Auth_Request:
-	    {
-		SBLAuthRequestSNAC *sn = static_cast<SBLAuthRequestSNAC*>(snac);
-		MessageSNAC *msg = new MessageSNAC(sn->getUIN(), sn->getMessage());
-		SignalMessage(msg);
-		delete msg;
-		}
-	  break;
-	  
-	  case SNAC_SBL_Auth_Received:
-	    {
-	    SBLAuthReceivedSNAC *snr = static_cast<SBLAuthReceivedSNAC*>(snac);
-	    MessageSNAC *msgr = new MessageSNAC(snr->getUIN(), snr->getMessage(), snr->granted());
-	    SignalMessage(msgr);
-	    delete msgr;
-	    }
-	break;
-	  
-	  case SNAC_SBL_User_Added_You:
-	    {
-	    SBLUserAddedYouSNAC *snr = static_cast<SBLUserAddedYouSNAC*>(snac);
-	    MessageSNAC *msgr = new MessageSNAC(snr->getUIN());
-	    SignalMessage(msgr);
-	    delete msgr;
-	    }
-	  break;
+              SignalLog(LogEvent::ERROR, "Received Server-base List error from server");
+        break;
+        
+          case SNAC_SBL_Auth_Request:
+            {
+                SBLAuthRequestSNAC *sn = static_cast<SBLAuthRequestSNAC*>(snac);
+                MessageSNAC *msg = new MessageSNAC(sn->getUIN(), sn->getMessage());
+                SignalMessage(msg);
+                delete msg;
+                }
+          break;
+          
+          case SNAC_SBL_Auth_Received:
+            {
+            SBLAuthReceivedSNAC *snr = static_cast<SBLAuthReceivedSNAC*>(snac);
+            MessageSNAC *msgr = new MessageSNAC(snr->getUIN(), snr->getMessage(), snr->granted());
+            SignalMessage(msgr);
+            delete msgr;
+            }
+        break;
+          
+          case SNAC_SBL_User_Added_You:
+            {
+            SBLUserAddedYouSNAC *snr = static_cast<SBLUserAddedYouSNAC*>(snac);
+            MessageSNAC *msgr = new MessageSNAC(snr->getUIN());
+            SignalMessage(msgr);
+            delete msgr;
+            }
+          break;
       } // switch(SBL Subtype)
       break;
-	
+        
     } // switch(Family)
 
-	ErrorInSNAC *err = dynamic_cast<ErrorInSNAC*>(snac);
+        ErrorInSNAC *err = dynamic_cast<ErrorInSNAC*>(snac);
     if (err) {
       ostringstream ostr;
       ostr << "Error received: 0x" << std::hex << err->getCode() << " - " << err->getErrorDescription();
@@ -1827,7 +1827,7 @@ namespace ICQ2000
     {
       ostringstream ostr;
       ostr << "Unknown SNAC packet received - Family: 0x" << std::hex << snac->Family()
-	   << " Subtype: 0x" << snac->Subtype();
+           << " Subtype: 0x" << snac->Subtype();
       SignalLog(LogEvent::WARN, ostr.str());
     }
 
@@ -1850,68 +1850,68 @@ namespace ICQ2000
 
       if (tlvlist.exists(TLV_Cookie) && tlvlist.exists(TLV_Redirect)) {
 
-	RedirectTLV *r = static_cast<RedirectTLV*>(tlvlist[TLV_Redirect]);
-	ostringstream ostr;
-	ostr << "Redirected to: " << r->getHost();
-	if (r->getPort() != 0) ostr << " port: " << std::dec << r->getPort();
-	SignalLog(LogEvent::INFO, ostr.str());
+        RedirectTLV *r = static_cast<RedirectTLV*>(tlvlist[TLV_Redirect]);
+        ostringstream ostr;
+        ostr << "Redirected to: " << r->getHost();
+        if (r->getPort() != 0) ostr << " port: " << std::dec << r->getPort();
+        SignalLog(LogEvent::INFO, ostr.str());
 
-	m_bosHostname = r->getHost();
-	if (!m_bosOverridePort) {
-	  if (r->getPort() != 0) m_bosPort = r->getPort();
-	  else m_bosPort = m_authorizerPort;
-	}
+        m_bosHostname = r->getHost();
+        if (!m_bosOverridePort) {
+          if (r->getPort() != 0) m_bosPort = r->getPort();
+          else m_bosPort = m_authorizerPort;
+        }
 
-	// Got our cookie - yum yum :-)
-	CookieTLV *t = static_cast<CookieTLV*>(tlvlist[TLV_Cookie]);
-	m_cookie_length = t->Length();
+        // Got our cookie - yum yum :-)
+        CookieTLV *t = static_cast<CookieTLV*>(tlvlist[TLV_Cookie]);
+        m_cookie_length = t->Length();
 
-	if (m_cookie_data) delete [] m_cookie_data;
-	m_cookie_data = new unsigned char[m_cookie_length];
+        if (m_cookie_data) delete [] m_cookie_data;
+        m_cookie_data = new unsigned char[m_cookie_length];
 
-	memcpy(m_cookie_data, t->Value(), m_cookie_length);
+        memcpy(m_cookie_data, t->Value(), m_cookie_length);
 
-	SignalLog(LogEvent::INFO, "Authorisation accepted");
-	
-	DisconnectAuthorizer();
-	ConnectBOS();
+        SignalLog(LogEvent::INFO, "Authorisation accepted");
+        
+        DisconnectAuthorizer();
+        ConnectBOS();
 
       } else {
-	// Problemo
-	DisconnectedEvent::Reason st;
+        // Problemo
+        DisconnectedEvent::Reason st;
 
-	if (tlvlist.exists(TLV_ErrorCode)) {
-	  ErrorCodeTLV *t = static_cast<ErrorCodeTLV*>(tlvlist[TLV_ErrorCode]);
-	  ostringstream ostr;
-	  ostr << "Error logging in Error Code: " << t->Value();
-	  SignalLog(LogEvent::ERROR, ostr.str());
-	  switch(t->Value()) {
-	  case 0x01:
-	    st = DisconnectedEvent::FAILED_BADUSERNAME;
-	    break;
-	  case 0x02:
-	    st = DisconnectedEvent::FAILED_TURBOING;
-	    break;
-	  case 0x03:
-	    st = DisconnectedEvent::FAILED_BADPASSWORD;
-	    break;
-	  case 0x05:
-	    st = DisconnectedEvent::FAILED_MISMATCH_PASSWD;
-	    break;
-	  case 0x18:
-	    st = DisconnectedEvent::FAILED_TURBOING;
-	    break;
-	  default:
-	    st = DisconnectedEvent::FAILED_UNKNOWN;
-	  }
-	} else if (m_state == AUTH_AWAITING_AUTH_REPLY) {
-	    SignalLog(LogEvent::ERROR, "Error logging in, no error code given(?!)");
-	    st = DisconnectedEvent::FAILED_UNKNOWN;
-	} else {
-	  st = DisconnectedEvent::REQUESTED;
-	}
-	DisconnectAuthorizer();
-	SignalDisconnect(st); // signal client (error)
+        if (tlvlist.exists(TLV_ErrorCode)) {
+          ErrorCodeTLV *t = static_cast<ErrorCodeTLV*>(tlvlist[TLV_ErrorCode]);
+          ostringstream ostr;
+          ostr << "Error logging in Error Code: " << t->Value();
+          SignalLog(LogEvent::ERROR, ostr.str());
+          switch(t->Value()) {
+          case 0x01:
+            st = DisconnectedEvent::FAILED_BADUSERNAME;
+            break;
+          case 0x02:
+            st = DisconnectedEvent::FAILED_TURBOING;
+            break;
+          case 0x03:
+            st = DisconnectedEvent::FAILED_BADPASSWORD;
+            break;
+          case 0x05:
+            st = DisconnectedEvent::FAILED_MISMATCH_PASSWD;
+            break;
+          case 0x18:
+            st = DisconnectedEvent::FAILED_TURBOING;
+            break;
+          default:
+            st = DisconnectedEvent::FAILED_UNKNOWN;
+          }
+        } else if (m_state == AUTH_AWAITING_AUTH_REPLY) {
+            SignalLog(LogEvent::ERROR, "Error logging in, no error code given(?!)");
+            st = DisconnectedEvent::FAILED_UNKNOWN;
+        } else {
+          st = DisconnectedEvent::REQUESTED;
+        }
+        DisconnectAuthorizer();
+        SignalDisconnect(st); // signal client (error)
       }
 
     } else {
@@ -1922,21 +1922,21 @@ namespace ICQ2000
       DisconnectedEvent::Reason st;
       
       if (tlvlist.exists(TLV_DisconnectReason)) {
-	DisconnectReasonTLV *t = static_cast<DisconnectReasonTLV*>(tlvlist[TLV_DisconnectReason]);
-	  switch(t->Value()) {
-	  case 0x0001:
-	    st = DisconnectedEvent::FAILED_DUALLOGIN;
-	    break;
-	  default:
-	    st = DisconnectedEvent::FAILED_UNKNOWN;
-	  }
+        DisconnectReasonTLV *t = static_cast<DisconnectReasonTLV*>(tlvlist[TLV_DisconnectReason]);
+          switch(t->Value()) {
+          case 0x0001:
+            st = DisconnectedEvent::FAILED_DUALLOGIN;
+            break;
+          default:
+            st = DisconnectedEvent::FAILED_UNKNOWN;
+          }
 
-	} else {
-	  SignalLog(LogEvent::WARN, "Unknown packet received on channel 4, disconnecting");
-	  st = DisconnectedEvent::FAILED_UNKNOWN;
-	}
-	DisconnectBOS();
-	SignalDisconnect(st); // signal client (error)
+        } else {
+          SignalLog(LogEvent::WARN, "Unknown packet received on channel 4, disconnecting");
+          st = DisconnectedEvent::FAILED_UNKNOWN;
+        }
+        DisconnectBOS();
+        SignalDisconnect(st); // signal client (error)
     }
 
   }
@@ -1991,43 +1991,43 @@ namespace ICQ2000
        */
 
       /*
-	if (m & SocketEvent::WRITE) SignalLog(LogEvent::INFO, "socket_cb for write");
-	if (m & SocketEvent::READ) SignalLog(LogEvent::INFO, "socket_cb for read");
-	if (m & SocketEvent::EXCEPTION) SignalLog(LogEvent::INFO, "socket_cb for exception");
+        if (m & SocketEvent::WRITE) SignalLog(LogEvent::INFO, "socket_cb for write");
+        if (m & SocketEvent::READ) SignalLog(LogEvent::INFO, "socket_cb for read");
+        if (m & SocketEvent::EXCEPTION) SignalLog(LogEvent::INFO, "socket_cb for exception");
 
-	if (m_serverSocket->getState() == TCPSocket::NOT_CONNECTED) SignalLog(LogEvent::INFO, "server socket in state NOT_CONNECTED");
-	if (m_serverSocket->getState() == TCPSocket::NONBLOCKING_CONNECT) SignalLog(LogEvent::INFO, "server socket in state NONBLOCKING_CONNECT");
-	if (m_serverSocket->getState() == TCPSocket::CONNECTED) SignalLog(LogEvent::INFO, "server socket in state CONNECTED");
+        if (m_serverSocket->getState() == TCPSocket::NOT_CONNECTED) SignalLog(LogEvent::INFO, "server socket in state NOT_CONNECTED");
+        if (m_serverSocket->getState() == TCPSocket::NONBLOCKING_CONNECT) SignalLog(LogEvent::INFO, "server socket in state NONBLOCKING_CONNECT");
+        if (m_serverSocket->getState() == TCPSocket::CONNECTED) SignalLog(LogEvent::INFO, "server socket in state CONNECTED");
       */
 
       if (m_serverSocket->getState() == TCPSocket::NONBLOCKING_CONNECT
-	  && (m & SocketEvent::WRITE)) {
-	// the non-blocking connect has completed (good/bad)
+          && (m & SocketEvent::WRITE)) {
+        // the non-blocking connect has completed (good/bad)
 
-	try {
-	  m_serverSocket->FinishNonBlockingConnect();
-	} catch(SocketException e) {
-	  // signal connection failure
-	  ostringstream ostr;
-	  ostr << "Failed on non-blocking connect: " << e.what();
-	  SignalLog(LogEvent::ERROR, ostr.str());
-	  Disconnect(DisconnectedEvent::FAILED_LOWLEVEL);
-	  return;
-	}
+        try {
+          m_serverSocket->FinishNonBlockingConnect();
+        } catch(SocketException e) {
+          // signal connection failure
+          ostringstream ostr;
+          ostr << "Failed on non-blocking connect: " << e.what();
+          SignalLog(LogEvent::ERROR, ostr.str());
+          Disconnect(DisconnectedEvent::FAILED_LOWLEVEL);
+          return;
+        }
 
-	SignalLog(LogEvent::INFO, "Connection established");
+        SignalLog(LogEvent::INFO, "Connection established");
 
-	SignalRemoveSocket(fd);
-	// no longer select on write
+        SignalRemoveSocket(fd);
+        // no longer select on write
 
-	SignalAddSocket(fd, SocketEvent::READ);
-	// select on read now
-	
+        SignalAddSocket(fd, SocketEvent::READ);
+        // select on read now
+        
       } else if (m_serverSocket->getState() == TCPSocket::CONNECTED && (m & SocketEvent::READ)) { 
-	RecvFromServer();
+        RecvFromServer();
       } else {
-	SignalLog(LogEvent::ERROR, "Server socket in inconsistent state!");
-	Disconnect(DisconnectedEvent::FAILED_LOWLEVEL);
+        SignalLog(LogEvent::ERROR, "Server socket in inconsistent state!");
+        Disconnect(DisconnectedEvent::FAILED_LOWLEVEL);
       }
       
     } else if ( m_in_dc && fd == m_listenServer->getSocketHandle() ) {
@@ -2037,7 +2037,7 @@ namespace ICQ2000
 
       TCPSocket *sock = m_listenServer->Accept();
       DirectClient *dc = new DirectClient(m_self, sock, m_message_handler, &m_contact_tree,
-					  m_ext_ip, m_listenServer->getPort() );
+                                          m_ext_ip, m_listenServer->getPort() );
       (*m_dccache)[ sock->getSocketHandle() ] = dc;
       dc->logger.connect( this, &Client::dc_log_cb );
       dc->messageack.connect( this, &Client::dc_messageack_cb );
@@ -2050,16 +2050,16 @@ namespace ICQ2000
       FileTransferClient *ftc = (*m_ftcache)[fd];
       if ( (ftc->getSocket()==0) )
       {
-	ftc->setSocket();
-	ftc->logger.connect( this, &Client::dc_log_cb );
-	ftc->messageack.connect( this, &Client::ftc_messageack_cb );
-	ftc->socket.connect( this, &Client::dc_socket_cb );
-	m_ftcache->remove_and_not_delete(fd);
-	(*m_ftcache)[ftc->getfd()] = ftc;
-	SignalAddSocket( ftc->getfd(), SocketEvent::READ );
-	SignalLog(LogEvent::INFO, "Incoming filetransfer connection");
+        ftc->setSocket();
+        ftc->logger.connect( this, &Client::dc_log_cb );
+        ftc->messageack.connect( this, &Client::ftc_messageack_cb );
+        ftc->socket.connect( this, &Client::dc_socket_cb );
+        m_ftcache->remove_and_not_delete(fd);
+        (*m_ftcache)[ftc->getfd()] = ftc;
+        SignalAddSocket( ftc->getfd(), SocketEvent::READ );
+        SignalLog(LogEvent::INFO, "Incoming filetransfer connection");
       } else {
-	SignalLog(LogEvent::INFO, "Incoming filetransfer connection on already open connection.");
+        SignalLog(LogEvent::INFO, "Incoming filetransfer connection on already open connection.");
       }
     } else {
       /*
@@ -2070,86 +2070,86 @@ namespace ICQ2000
       SocketClient *dc;
       if (m_dccache->exists(fd))
       {
-	dc = (*m_dccache)[fd];
+        dc = (*m_dccache)[fd];
       }
       else if(m_smtp->getfd() == fd)
       {
-	dc = m_smtp;
+        dc = m_smtp;
       }
       else if (m_ftcache->exists(fd))
       {
-	dc = (*m_ftcache)[fd];
+        dc = (*m_ftcache)[fd];
       }
       else
       {
-	SignalLog(LogEvent::ERROR, "Problem: Unassociated socket");
-	return;
+        SignalLog(LogEvent::ERROR, "Problem: Unassociated socket");
+        return;
       }
 
       TCPSocket *sock = dc->getSocket();
       if (sock->getState() == TCPSocket::NONBLOCKING_CONNECT
-	  && (m & SocketEvent::WRITE)) {
-	// the non-blocking connect has completed (good/bad)
+          && (m & SocketEvent::WRITE)) {
+        // the non-blocking connect has completed (good/bad)
 
-	try {
-	  sock->FinishNonBlockingConnect();
-	} catch(SocketException e) {
-	  // signal connection failure
-	  ostringstream ostr;
-	  ostr << "Failed on non-blocking connect for direct connection: " << e.what();
-	  SignalLog(LogEvent::ERROR, ostr.str());
-	  DisconnectDirectConn( fd );
-	  return;
-	}
+        try {
+          sock->FinishNonBlockingConnect();
+        } catch(SocketException e) {
+          // signal connection failure
+          ostringstream ostr;
+          ostr << "Failed on non-blocking connect for direct connection: " << e.what();
+          SignalLog(LogEvent::ERROR, ostr.str());
+          DisconnectDirectConn( fd );
+          return;
+        }
 
-	SignalRemoveSocket(fd);
-	// no longer select on write
+        SignalRemoveSocket(fd);
+        // no longer select on write
 
-	SignalAddSocket(fd, SocketEvent::READ);
-	// select on read now
-	
-	try {
-	  dc->FinishNonBlockingConnect();
-	} catch(DisconnectedException e) {
-	  // first Send on socket could have failed
-	  SignalLog(LogEvent::WARN, e.what());
-	  DisconnectDirectConn( fd );
-	}
+        SignalAddSocket(fd, SocketEvent::READ);
+        // select on read now
+        
+        try {
+          dc->FinishNonBlockingConnect();
+        } catch(DisconnectedException e) {
+          // first Send on socket could have failed
+          SignalLog(LogEvent::WARN, e.what());
+          DisconnectDirectConn( fd );
+        }
 
-	if (dynamic_cast<FileTransferClient*>(dc) != NULL)
-	{
-	  SignalRemoveSocket(fd);
-	  // no longer select on read
-	  
-	  SignalAddSocket(fd, SocketEvent::WRITE);
-	  // select on write now
-	}
+        if (dynamic_cast<FileTransferClient*>(dc) != NULL)
+        {
+          SignalRemoveSocket(fd);
+          // no longer select on read
+          
+          SignalAddSocket(fd, SocketEvent::WRITE);
+          // select on write now
+        }
 
       } else if (sock->getState() == TCPSocket::CONNECTED && (m & SocketEvent::READ)) { 
-	try {
-	  dc->Recv();
-	} catch(DisconnectedException e) {
-	  // tear down connection
-	  SignalLog(LogEvent::WARN, e.what());
-	  DisconnectDirectConn( fd );
-	}
+        try {
+          dc->Recv();
+        } catch(DisconnectedException e) {
+          // tear down connection
+          SignalLog(LogEvent::WARN, e.what());
+          DisconnectDirectConn( fd );
+        }
       }
       else if (sock->getState() == TCPSocket::CONNECTED && (m & SocketEvent::WRITE))
       {
-	// Should maybe make sure only FileTransferClients enter here..
-	// Rate could be controlled here or in FileTransferClient
-	try {
-	  dc->Recv();
-	  dc->SendEvent(NULL); 
-	} catch(DisconnectedException e) {
-	  // tear down connection
-	  SignalLog(LogEvent::WARN, e.what());
-	  DisconnectDirectConn( fd );
-	}       
-	
+        // Should maybe make sure only FileTransferClients enter here..
+        // Rate could be controlled here or in FileTransferClient
+        try {
+          dc->Recv();
+          dc->SendEvent(NULL); 
+        } catch(DisconnectedException e) {
+          // tear down connection
+          SignalLog(LogEvent::WARN, e.what());
+          DisconnectDirectConn( fd );
+        }       
+        
       } else {
-	SignalLog(LogEvent::ERROR, "Direct Connection socket in inconsistent state!");
-	DisconnectDirectConn( fd );
+        SignalLog(LogEvent::ERROR, "Direct Connection socket in inconsistent state!");
+        DisconnectDirectConn( fd );
       }
       
     }
@@ -2206,15 +2206,15 @@ namespace ICQ2000
       case MessageEvent::FileTransfer:
       case MessageEvent::Contacts:
       if (!SendDirect(ev)) SendViaServer(ev);
-	break;
+        break;
 
       case MessageEvent::Email:
-	m_smtp->SendEvent(ev);
-	break;
+        m_smtp->SendEvent(ev);
+        break;
 
       case MessageEvent::AuthReq:
         SendSBLAuthReq(static_cast<AuthReqEvent*>(ev));
-	break;
+        break;
 
       case MessageEvent::AuthAck:
         SendSBLAuthReply(static_cast<AuthAckEvent*>(ev));
@@ -2222,7 +2222,7 @@ namespace ICQ2000
 
       default:
       SendViaServer(ev);
-	break;
+        break;
     }
   }
   
@@ -2249,25 +2249,25 @@ namespace ICQ2000
       if ( c->getLanIP() == 0 ) return NULL;
       SignalLog(LogEvent::INFO, "Establishing direct connection");
       dc = new DirectClient(m_self, c, m_message_handler,
-			    m_ext_ip, (m_in_dc ? m_listenServer->getPort() : 0) );
+                            m_ext_ip, (m_in_dc ? m_listenServer->getPort() : 0) );
       dc->logger.connect( this, &Client::dc_log_cb) ;
       dc->messageack.connect( this, &Client::dc_messageack_cb) ;
       dc->connected.connect( this, &Client::dc_connected_cb ) ;
       dc->socket.connect( this, &Client::dc_socket_cb) ;
 
       try {
-	dc->Connect();
+        dc->Connect();
       } catch(DisconnectedException e) {
-	SignalLog(LogEvent::WARN, e.what());
-	delete dc;
-	return NULL;
+        SignalLog(LogEvent::WARN, e.what());
+        delete dc;
+        return NULL;
       } catch(SocketException e) {
-	SignalLog(LogEvent::WARN, e.what());
-	delete dc;
-	return NULL;
+        SignalLog(LogEvent::WARN, e.what());
+        delete dc;
+        return NULL;
       } catch(...) {
-	SignalLog(LogEvent::WARN, "Uncaught exception");
-	return NULL;
+        SignalLog(LogEvent::WARN, "Uncaught exception");
+        return NULL;
       }
 
       (*m_dccache)[ dc->getfd() ] = dc;
@@ -2281,8 +2281,8 @@ namespace ICQ2000
     ContactRef c = ev->getContact();
 
     if (ev->getType() == MessageEvent::Normal
-	|| ev->getType() == MessageEvent::URL
-	|| ev->getType() == MessageEvent::Contacts)
+        || ev->getType() == MessageEvent::URL
+        || ev->getType() == MessageEvent::Contacts)
     {
       /*
        * Normal messages and URL messages sent via the server
@@ -2292,10 +2292,10 @@ namespace ICQ2000
        */
       
       if (c->get_accept_adv_msgs())
-	SendViaServerAdvanced(ev);
+        SendViaServerAdvanced(ev);
       else {
-	SendViaServerNormal(ev);
-	delete ev;
+        SendViaServerNormal(ev);
+        delete ev;
       }
       
     } else if (ev->getType() == MessageEvent::AwayMessage) {
@@ -2308,19 +2308,19 @@ namespace ICQ2000
        */
 
       if (c->get_accept_adv_msgs())
-	SendViaServerAdvanced(ev);
+        SendViaServerAdvanced(ev);
       else {
-	ev->setFinished(true);
-	ev->setDelivered(false);
-	ev->setDirect(false);
-	ev->setDeliveryFailureReason(MessageEvent::Failed_ClientNotCapable);
-	messageack.emit(ev);
-	delete ev;
+        ev->setFinished(true);
+        ev->setDelivered(false);
+        ev->setDirect(false);
+        ev->setDeliveryFailureReason(MessageEvent::Failed_ClientNotCapable);
+        messageack.emit(ev);
+        delete ev;
       }
       
     } else if (ev->getType() == MessageEvent::AuthReq
-	       || ev->getType() == MessageEvent::AuthAck
-	       || ev->getType() == MessageEvent::UserAdd)
+               || ev->getType() == MessageEvent::AuthAck
+               || ev->getType() == MessageEvent::UserAdd)
     {
       
       /*
@@ -2468,7 +2468,7 @@ namespace ICQ2000
     FLAPwrapSNAC( b, SrvUpdateWorkInfo(m_self->getUIN(), ow) );
     FLAPwrapSNAC( b, SrvUpdateHomepageInfo(m_self->getUIN(), ohp) );
     FLAPwrapSNAC( b, SrvUpdateAboutInfo(m_self->getUIN(),
-					m_translator->client_to_server( m_self->getAboutInfo(), ENCODING_CONTACT_LOCALE, m_self ) ) );
+                                        m_translator->client_to_server( m_self->getAboutInfo(), ENCODING_CONTACT_LOCALE, m_self ) ) );
     
     Send(b);
   }
@@ -2476,59 +2476,59 @@ namespace ICQ2000
   
   void Client::fillSBLMap(SBLListSNAC *sbl)
   {
-	ContactTree& sbl_tree = sbl->getContactTree();
-	std::list<ContactRef>& unass = sbl->getUnassigned();
-	std::set<unsigned short>& others = sbl->other_ids();
-  	
+        ContactTree& sbl_tree = sbl->getContactTree();
+        std::list<ContactRef>& unass = sbl->getUnassigned();
+        std::set<unsigned short>& others = sbl->other_ids();
+          
     if (!unass.empty()) {
-    	std::list<ContactRef>::iterator it;
-    	for (it = unass.begin(); it != unass.end(); it++) {
-    	 	if (!sbl_tree.exists_group( (*it)->getServerSideGroupID() )) {
-    	 		if (m_sbl_groupnames.find((*it)->getServerSideGroupID()) == m_sbl_groupnames.end()) {
-    	 			SignalLog(LogEvent::WARN, "Server group doesn't exist anywhere!");
-    	 			continue;
-    	 		}
-    	 		//ContactTree::Group& grp = m_contact_tree.lookup_group( (*it)->getServerSideGroupID() );
-    	 		SignalLog(LogEvent::WARN, "Importing existing group");
-    	 		sbl_tree.add_group( m_sbl_groupnames[(*it)->getServerSideGroupID()], (*it)->getServerSideGroupID() );
-    	 	}
-    	 	SignalLog(LogEvent::WARN, "Setting previous group");
-    	 	sbl_tree.lookup_group( (*it)->getServerSideGroupID() ).add(*it);
-    	}
-  	}
+            std::list<ContactRef>::iterator it;
+            for (it = unass.begin(); it != unass.end(); it++) {
+                     if (!sbl_tree.exists_group( (*it)->getServerSideGroupID() )) {
+                             if (m_sbl_groupnames.find((*it)->getServerSideGroupID()) == m_sbl_groupnames.end()) {
+                                     SignalLog(LogEvent::WARN, "Server group doesn't exist anywhere!");
+                                     continue;
+                             }
+                             //ContactTree::Group& grp = m_contact_tree.lookup_group( (*it)->getServerSideGroupID() );
+                             SignalLog(LogEvent::WARN, "Importing existing group");
+                             sbl_tree.add_group( m_sbl_groupnames[(*it)->getServerSideGroupID()], (*it)->getServerSideGroupID() );
+                     }
+                     SignalLog(LogEvent::WARN, "Setting previous group");
+                     sbl_tree.lookup_group( (*it)->getServerSideGroupID() ).add(*it);
+            }
+          }
     if (!others.empty()) {
-	std::set<unsigned short>::iterator oit;
-	char buff[100];
-	for (oit = others.begin(); oit != others.end(); oit++)
-	{
-	    m_sbl_tags.insert(*oit);
-	    snprintf(buff, sizeof(buff), "Importing unknown tag #%d", *oit);
-	    SignalLog(LogEvent::INFO, buff);
-	}
+        std::set<unsigned short>::iterator oit;
+        char buff[100];
+        for (oit = others.begin(); oit != others.end(); oit++)
+        {
+            m_sbl_tags.insert(*oit);
+            snprintf(buff, sizeof(buff), "Importing unknown tag #%d", *oit);
+            SignalLog(LogEvent::INFO, buff);
+        }
     }
     ContactTree::iterator curr = sbl_tree.begin();
     while (curr != sbl_tree.end())
     {
-	// add groups to lists
-	  string curr_name = (*curr).get_label();
-	  m_sbl_tags.insert((*curr).get_id());
-	  if (m_sbl_groupnames.find((*curr).get_id()) == m_sbl_groupnames.end())
-  	  {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "New imported SBL group %d (%s)", (*curr).get_id(), curr_name.c_str());
-	    SignalLog(LogEvent::INFO, buff);
+        // add groups to lists
+          string curr_name = (*curr).get_label();
+          m_sbl_tags.insert((*curr).get_id());
+          if (m_sbl_groupnames.find((*curr).get_id()) == m_sbl_groupnames.end())
+            {
+                char buff[100];
+                snprintf(buff, sizeof(buff), "New imported SBL group %d (%s)", (*curr).get_id(), curr_name.c_str());
+            SignalLog(LogEvent::INFO, buff);
 
-	  	m_sbl_groupnames[(*curr).get_id()] = curr_name;
-	  	m_sbl_groups[curr_name] = Sbl_group(curr_name, (*curr).get_id());
-	  }
-	  ContactTree::Group::iterator gcurr = (*curr).begin();
-	  while (gcurr != (*curr).end())
-	  {
-	    m_sbl_tags.insert((*gcurr)->getServerSideID());
-		m_sbl_map.insert(std::pair<unsigned int, Sbl_item>((*gcurr)->getUIN(), Sbl_item((*gcurr), (*gcurr)->getServerSideID(), curr_name)));
-		m_sbl_groups[curr_name].buddies.insert((*gcurr)->getServerSideID());
-		//fprintf(stderr, "New imported SBL contact %d (%ul)\n", (*gcurr)->getServerSideID(), (*gcurr)->getUIN());
-		++gcurr;
+                  m_sbl_groupnames[(*curr).get_id()] = curr_name;
+                  m_sbl_groups[curr_name] = Sbl_group(curr_name, (*curr).get_id());
+          }
+          ContactTree::Group::iterator gcurr = (*curr).begin();
+          while (gcurr != (*curr).end())
+          {
+            m_sbl_tags.insert((*gcurr)->getServerSideID());
+                m_sbl_map.insert(std::pair<unsigned int, Sbl_item>((*gcurr)->getUIN(), Sbl_item((*gcurr), (*gcurr)->getServerSideID(), curr_name)));
+                m_sbl_groups[curr_name].buddies.insert((*gcurr)->getServerSideID());
+                //fprintf(stderr, "New imported SBL contact %d (%ul)\n", (*gcurr)->getServerSideID(), (*gcurr)->getUIN());
+                ++gcurr;
       }
       ++curr;
     }
@@ -2563,7 +2563,7 @@ namespace ICQ2000
 
     if (st == STATUS_OFFLINE) {
       if (m_state != NOT_CONNECTED)
-	Disconnect(DisconnectedEvent::REQUESTED);
+        Disconnect(DisconnectedEvent::REQUESTED);
 
       return;
     }
@@ -2583,22 +2583,22 @@ namespace ICQ2000
       OutSNAC *privacySNAC = NULL;
 
       if (!m_self->isInvisible() && inv) {
-	// visible -> invisible
-	FLAPwrapSNAC( b, AddVisibleSNAC(m_visible_list) );
-	//privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 3);
+        // visible -> invisible
+        FLAPwrapSNAC( b, AddVisibleSNAC(m_visible_list) );
+        //privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 3);
       }
-	
+        
       FLAPwrapSNAC( b, SetStatusSNAC(Contact::MapStatusToICQStatus(st, inv), m_web_aware) );
       
       if (m_self->isInvisible() && !inv) {
-	// invisible -> visible
-	FLAPwrapSNAC( b, AddInvisibleSNAC(m_invisible_list) );
-	//privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 4);
+        // invisible -> visible
+        FLAPwrapSNAC( b, AddInvisibleSNAC(m_invisible_list) );
+        //privacySNAC = new SBLUpdatePrivacySNAC(m_sbl_privacy_id, 4);
       }
       
       Send(b);
       if (privacySNAC != NULL)
-		SendSBLSNAC(privacySNAC);
+                SendSBLSNAC(privacySNAC);
       
     } else {
       // We'll set this as the initial status upon connecting
@@ -2607,9 +2607,9 @@ namespace ICQ2000
       
       // start connecting if not already
       if (m_state == NOT_CONNECTED) {
-	ConnectingEvent ev;
-	connecting.emit(&ev);
-	ConnectAuthorizer(AUTH_AWAITING_CONN_ACK);
+        ConnectingEvent ev;
+        connecting.emit(&ev);
+        ConnectAuthorizer(AUTH_AWAITING_CONN_ACK);
       }
     }
   }
@@ -2700,18 +2700,18 @@ namespace ICQ2000
 
   unsigned short Client::get_random_buddy_id()
   {
-  	if (m_sbl_tags.empty())
-  	{
-  		m_sbl_tags.insert(0);
-  		m_sbl_tags.insert(1);
-  		return 1;
-  	}
-  	unsigned short result = 0;
-	result = (*m_sbl_tags.rbegin() + 1) % 0x7FFF;
-	while (m_sbl_tags.find(result) != m_sbl_tags.end())
-		result = (result + 1) % 0x7FFF;
-	m_sbl_tags.insert(result);
-	return result;
+          if (m_sbl_tags.empty())
+          {
+                  m_sbl_tags.insert(0);
+                  m_sbl_tags.insert(1);
+                  return 1;
+          }
+          unsigned short result = 0;
+        result = (*m_sbl_tags.rbegin() + 1) % 0x7FFF;
+        while (m_sbl_tags.find(result) != m_sbl_tags.end())
+                result = (result + 1) % 0x7FFF;
+        m_sbl_tags.insert(result);
+        return result;
   }
 
   void Client::contactlist_cb(ContactListEvent *ev)
@@ -2723,13 +2723,13 @@ namespace ICQ2000
       ContactTree::Group &grp = cev->get_group();
       if (c->isICQContact() && m_state == BOS_LOGGED_IN)
       {
-      	Sbl_edit edit;
-      	edit.operation = USER_ADD;
-      	edit.item = Sbl_item(c, 0, grp.get_label());
-      	m_sbl_edits.push_back(edit);
+              Sbl_edit edit;
+              edit.operation = USER_ADD;
+              edit.item = Sbl_item(c, 0, grp.get_label());
+              m_sbl_edits.push_back(edit);
 
-	// fetch detailed userinfo from server
-	fetchDetailContactInfo(c);
+        // fetch detailed userinfo from server
+        fetchDetailContactInfo(c);
       }
 
     }
@@ -2739,10 +2739,10 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
       if (c->isICQContact() && m_state == BOS_LOGGED_IN)
       {
-      	Sbl_edit edit;
-      	edit.operation = USER_REMOVE;
-      	edit.item = Sbl_item(c, 0, "");
-      	m_sbl_edits.push_back(edit);
+              Sbl_edit edit;
+              edit.operation = USER_REMOVE;
+              edit.item = Sbl_item(c, 0, "");
+              m_sbl_edits.push_back(edit);
       }
 
       // remove all direct connections for that contact
@@ -2755,22 +2755,22 @@ namespace ICQ2000
       const ContactTree::Group &grp = gev->get_group();
       if (grp.get_label().size() == 0)
       {
-      	char buff[200];
-      	snprintf(buff, sizeof(buff), "Dropping empty-named group addition\n");
-      	SignalLog(LogEvent::INFO, buff);
+              char buff[200];
+              snprintf(buff, sizeof(buff), "Dropping empty-named group addition\n");
+              SignalLog(LogEvent::INFO, buff);
       }
       else
       {
-      	Sbl_edit edit;
-      	edit.operation = GROUP_ADD;
-      	edit.item = Sbl_item(0, grp.get_label());
-      	m_sbl_edits.push_back(edit);
-	  }
+              Sbl_edit edit;
+              edit.operation = GROUP_ADD;
+              edit.item = Sbl_item(0, grp.get_label());
+              m_sbl_edits.push_back(edit);
+          }
     }
     else if (ev->getType() == ContactListEvent::GroupRemoved)
     {
       GroupRemovedEvent *gev = static_cast<GroupRemovedEvent*>(ev);
-	  const ContactTree::Group &grp = gev->get_group();
+          const ContactTree::Group &grp = gev->get_group();
       Sbl_edit edit;
       edit.operation = GROUP_REMOVE;
       edit.item = Sbl_item(0, grp.get_label());
@@ -2780,157 +2780,157 @@ namespace ICQ2000
     {
     }
 
-	processSblEdits(); // process any pending SBL edits
+        processSblEdits(); // process any pending SBL edits
     // re-emit on the Client signal
     contactlist.emit(ev);
   }
 
   void Client::processSblEdits()
   {
-  	if (m_sbl_inedit || m_sbl_edits.empty() || (!m_sbl_canedit))
-  	{  	
-  		//fprintf(stderr, "Already processing or no queued edits\n");
-  		return;
-  	}
-  	while (!(m_sbl_inedit || m_sbl_edits.empty()))
-  	{
-  	Sbl_edit edit = m_sbl_edits.front();
-  	m_sbl_edits.pop_front();
-  	switch (edit.operation)
-  	{
-  		case USER_ADD: {
-		  string grp_name = edit.item.group_name;
-    	  if (grp_name.size() == 0) { // adding to unspecified group
-    	  	if (!m_sbl_groups.empty())
-    	  	{
-		  		grp_name = (m_sbl_groups.begin())->first; // select first available
-		  		char buff[100];
-		  		snprintf(buff, sizeof(buff), "Adding to %s as first available group\n", grp_name.c_str());
-		  		SignalLog(LogEvent::INFO, buff);
-		  	}
-		  	else
-		  	{
-		  		SignalLog(LogEvent::WARN, "No group exists!");
-		  		break;
-		  	}
-		  }
-		  if (m_sbl_groups.find(grp_name) == m_sbl_groups.end()) {
-			SignalLog(LogEvent::WARN, "Group being added to doesn't exist!");
-			break;
-      	  }
-      	  if (m_sbl_map.find(edit.item.uin) == m_sbl_map.end()) { // new contact
-        	Sbl_item new_item(edit.item, get_random_buddy_id(), grp_name);
-        	char buff[200];
-      	    snprintf(buff, sizeof(buff), "Creating new SBL contact %u/%s (%d, %s)\n", new_item.uin, new_item.nickname.c_str(), new_item.tag_id, new_item.group_name.c_str());
-      	    SignalLog(LogEvent::INFO, buff);
+          if (m_sbl_inedit || m_sbl_edits.empty() || (!m_sbl_canedit))
+          {          
+                  //fprintf(stderr, "Already processing or no queued edits\n");
+                  return;
+          }
+          while (!(m_sbl_inedit || m_sbl_edits.empty()))
+          {
+          Sbl_edit edit = m_sbl_edits.front();
+          m_sbl_edits.pop_front();
+          switch (edit.operation)
+          {
+                  case USER_ADD: {
+                  string grp_name = edit.item.group_name;
+              if (grp_name.size() == 0) { // adding to unspecified group
+                      if (!m_sbl_groups.empty())
+                      {
+                                  grp_name = (m_sbl_groups.begin())->first; // select first available
+                                  char buff[100];
+                                  snprintf(buff, sizeof(buff), "Adding to %s as first available group\n", grp_name.c_str());
+                                  SignalLog(LogEvent::INFO, buff);
+                          }
+                          else
+                          {
+                                  SignalLog(LogEvent::WARN, "No group exists!");
+                                  break;
+                          }
+                  }
+                  if (m_sbl_groups.find(grp_name) == m_sbl_groups.end()) {
+                        SignalLog(LogEvent::WARN, "Group being added to doesn't exist!");
+                        break;
+                }
+                if (m_sbl_map.find(edit.item.uin) == m_sbl_map.end()) { // new contact
+                Sbl_item new_item(edit.item, get_random_buddy_id(), grp_name);
+                char buff[200];
+                  snprintf(buff, sizeof(buff), "Creating new SBL contact %u/%s (%d, %s)\n", new_item.uin, new_item.nickname.c_str(), new_item.tag_id, new_item.group_name.c_str());
+                  SignalLog(LogEvent::INFO, buff);
 
-			SendSBLSNAC( new SBLAddBuddySNAC(new_item, m_sbl_groups[grp_name].group_id) );
-			
-			snprintf(buff, sizeof(buff), "Adding new contact %d to SBL group %d/%s\n", new_item.tag_id, m_sbl_groups[grp_name].group_id, grp_name.c_str());
-			SignalLog(LogEvent::INFO, buff);
-			
-			m_sbl_groups[grp_name].buddies.insert(new_item.tag_id); // temporarily add to new group to generate packet
-			SendSBLSNAC( new SBLUpdateGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id, m_sbl_groups[grp_name].buddies) );
-			m_sbl_groups[grp_name].buddies.erase(new_item.tag_id); // remove again, until it's really added
-		  } else { // moving existing contact
-			char buff[200];
-			if (grp_name == m_sbl_map[edit.item.uin].group_name) // same group, do nothing
-			{
-				snprintf(buff, sizeof(buff), "Dropped addition of existing SBL contact %u/%d/%s\n", edit.item.uin, m_sbl_map.find(edit.item.uin)->second.tag_id, edit.item.nickname.c_str());
-				SignalLog(LogEvent::INFO, buff);
-				break;
-			}
-			
- 			string old_group = m_sbl_map[edit.item.uin].group_name;
- 			
- 			snprintf(buff, sizeof(buff), "Moving SBL contact %u/%s from group %s/%d to %s/%d\n", edit.item.uin, edit.item.nickname.c_str(),
- 				old_group.c_str(), m_sbl_groups[old_group].group_id,
- 				grp_name.c_str(), m_sbl_groups[grp_name].group_id);
- 			SignalLog(LogEvent::INFO, buff);
- 			
- 			m_sbl_groups[old_group].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
- 			SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[old_group]) ); // upload old group
- 			m_sbl_groups[old_group].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
- 			
- 			m_sbl_groups[grp_name].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
- 			SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[grp_name]) ); // upload new group
- 			m_sbl_groups[grp_name].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
-		  }
-		}
-  		break;
-  		case USER_REMOVE: {
-  			if (m_sbl_map.find(edit.item.uin) == m_sbl_map.end())
-  			{
-  				char buff[100];
-  				snprintf(buff, sizeof(buff), "Removing unknown user (%d)!\n", edit.item.uin);
-  				SignalLog(LogEvent::WARN, buff);
-  				break;
-  			}
-  			char buff[100];
-  			string grp_name = m_sbl_map[edit.item.uin].group_name;
-  			edit.item.tag_id = m_sbl_map[edit.item.uin].tag_id;
-  			
-  			snprintf(buff, sizeof(buff), "Removing user %d/%d from group %d\n", edit.item.uin, m_sbl_map[edit.item.uin].tag_id, m_sbl_groups[grp_name].group_id);
-  			SignalLog(LogEvent::INFO, buff);
-  			SendSBLSNAC( new SBLRemoveBuddySNAC(edit.item, m_sbl_groups[grp_name].group_id) );
-  			
-  			snprintf(buff, sizeof(buff), "Updating group %d\n", m_sbl_groups[grp_name].group_id);
-  			SignalLog(LogEvent::INFO, buff);
-  			m_sbl_groups[grp_name].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
-  			SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[grp_name]) );
-  			m_sbl_groups[grp_name].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
-  		}
-  		break;
-  		case GROUP_ADD:
-		  if (m_sbl_groups.find(edit.item.group_name) == m_sbl_groups.end()) { // new group
-		    edit.item.tag_id = get_random_buddy_id();
-/*		  m_sbl_groups[edit.group_name] = Sbl_group(edit.group_name, get_random_buddy_id());
-      	  m_sbl_groupnames[m_sbl_groups[edit.group_name].group_id] = edit.group_name;*/
-			
-			char buff[200];
-      	  	snprintf(buff, sizeof(buff), "Creating new SBL group %d (%s)\n", edit.item.tag_id, edit.item.group_name.c_str());
-      	  	SignalLog(LogEvent::INFO, buff);
-      	  	
-      	  	SendSBLSNAC( new SBLAddGroupSNAC( edit.item.group_name, edit.item.tag_id ) );
-      	  	
-      	  	snprintf(buff, sizeof(buff), "Rebuilding master group");
-      	  	SignalLog(LogEvent::INFO, buff);
-      	  	
-      	  	std::set<unsigned short> groups;
-      	  	for (std::map<std::string, Sbl_group>::iterator git = m_sbl_groups.begin(); git != m_sbl_groups.end(); git++) {
-				groups.insert(git->second.group_id);
-      	  	}
-      	  	groups.insert(edit.item.tag_id);
-      	  	SendSBLSNAC( new SBLUpdateGroupSNAC("", 0, groups) );
-      	  }
-  		break;
-  		case GROUP_REMOVE: {
-  			string grp_name = edit.item.group_name;
-  			if (m_sbl_groups.find(grp_name) == m_sbl_groups.end())
-  			{
-  				char buff[100];
-  				snprintf(buff, sizeof(buff), "Removing unknown group %s\n", grp_name.c_str());
-  				SignalLog(LogEvent::WARN, buff);
-  				break;
-  			}
-  			char buff[100];
-  			snprintf(buff, sizeof(buff), "Removing group %s (%d)\n", grp_name.c_str(), m_sbl_groups[grp_name].group_id);
-  			SignalLog(LogEvent::INFO, buff);
-  			SendSBLSNAC( new SBLRemoveGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id) );
-      	  	
-      	  	snprintf(buff, sizeof(buff), "Rebuilding master group");
-      	  	SignalLog(LogEvent::INFO, buff);
-      	  	
-      	  	std::set<unsigned short> groups;
-      	  	for (std::map<std::string, Sbl_group>::iterator git = m_sbl_groups.begin(); git != m_sbl_groups.end(); git++) {
-				groups.insert(git->second.group_id);
-      	  	}
-      	  	groups.erase(m_sbl_groups[grp_name].group_id);
-      	  	SendSBLSNAC( new SBLUpdateGroupSNAC("", 0, groups) );
-  		}
-  		break;
-  	}// switch
-  	}// while
+                        SendSBLSNAC( new SBLAddBuddySNAC(new_item, m_sbl_groups[grp_name].group_id) );
+                        
+                        snprintf(buff, sizeof(buff), "Adding new contact %d to SBL group %d/%s\n", new_item.tag_id, m_sbl_groups[grp_name].group_id, grp_name.c_str());
+                        SignalLog(LogEvent::INFO, buff);
+                        
+                        m_sbl_groups[grp_name].buddies.insert(new_item.tag_id); // temporarily add to new group to generate packet
+                        SendSBLSNAC( new SBLUpdateGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id, m_sbl_groups[grp_name].buddies) );
+                        m_sbl_groups[grp_name].buddies.erase(new_item.tag_id); // remove again, until it's really added
+                  } else { // moving existing contact
+                        char buff[200];
+                        if (grp_name == m_sbl_map[edit.item.uin].group_name) // same group, do nothing
+                        {
+                                snprintf(buff, sizeof(buff), "Dropped addition of existing SBL contact %u/%d/%s\n", edit.item.uin, m_sbl_map.find(edit.item.uin)->second.tag_id, edit.item.nickname.c_str());
+                                SignalLog(LogEvent::INFO, buff);
+                                break;
+                        }
+                        
+                         string old_group = m_sbl_map[edit.item.uin].group_name;
+                         
+                         snprintf(buff, sizeof(buff), "Moving SBL contact %u/%s from group %s/%d to %s/%d\n", edit.item.uin, edit.item.nickname.c_str(),
+                                 old_group.c_str(), m_sbl_groups[old_group].group_id,
+                                 grp_name.c_str(), m_sbl_groups[grp_name].group_id);
+                         SignalLog(LogEvent::INFO, buff);
+                         
+                         m_sbl_groups[old_group].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
+                         SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[old_group]) ); // upload old group
+                         m_sbl_groups[old_group].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
+                         
+                         m_sbl_groups[grp_name].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
+                         SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[grp_name]) ); // upload new group
+                         m_sbl_groups[grp_name].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
+                  }
+                }
+                  break;
+                  case USER_REMOVE: {
+                          if (m_sbl_map.find(edit.item.uin) == m_sbl_map.end())
+                          {
+                                  char buff[100];
+                                  snprintf(buff, sizeof(buff), "Removing unknown user (%d)!\n", edit.item.uin);
+                                  SignalLog(LogEvent::WARN, buff);
+                                  break;
+                          }
+                          char buff[100];
+                          string grp_name = m_sbl_map[edit.item.uin].group_name;
+                          edit.item.tag_id = m_sbl_map[edit.item.uin].tag_id;
+                          
+                          snprintf(buff, sizeof(buff), "Removing user %d/%d from group %d\n", edit.item.uin, m_sbl_map[edit.item.uin].tag_id, m_sbl_groups[grp_name].group_id);
+                          SignalLog(LogEvent::INFO, buff);
+                          SendSBLSNAC( new SBLRemoveBuddySNAC(edit.item, m_sbl_groups[grp_name].group_id) );
+                          
+                          snprintf(buff, sizeof(buff), "Updating group %d\n", m_sbl_groups[grp_name].group_id);
+                          SignalLog(LogEvent::INFO, buff);
+                          m_sbl_groups[grp_name].buddies.erase(m_sbl_map[edit.item.uin].tag_id);
+                          SendSBLSNAC( new SBLUpdateGroupSNAC(m_sbl_groups[grp_name]) );
+                          m_sbl_groups[grp_name].buddies.insert(m_sbl_map[edit.item.uin].tag_id);
+                  }
+                  break;
+                  case GROUP_ADD:
+                  if (m_sbl_groups.find(edit.item.group_name) == m_sbl_groups.end()) { // new group
+                    edit.item.tag_id = get_random_buddy_id();
+/*                  m_sbl_groups[edit.group_name] = Sbl_group(edit.group_name, get_random_buddy_id());
+                m_sbl_groupnames[m_sbl_groups[edit.group_name].group_id] = edit.group_name;*/
+                        
+                        char buff[200];
+                        snprintf(buff, sizeof(buff), "Creating new SBL group %d (%s)\n", edit.item.tag_id, edit.item.group_name.c_str());
+                        SignalLog(LogEvent::INFO, buff);
+                        
+                        SendSBLSNAC( new SBLAddGroupSNAC( edit.item.group_name, edit.item.tag_id ) );
+                        
+                        snprintf(buff, sizeof(buff), "Rebuilding master group");
+                        SignalLog(LogEvent::INFO, buff);
+                        
+                        std::set<unsigned short> groups;
+                        for (std::map<std::string, Sbl_group>::iterator git = m_sbl_groups.begin(); git != m_sbl_groups.end(); git++) {
+                                groups.insert(git->second.group_id);
+                        }
+                        groups.insert(edit.item.tag_id);
+                        SendSBLSNAC( new SBLUpdateGroupSNAC("", 0, groups) );
+                }
+                  break;
+                  case GROUP_REMOVE: {
+                          string grp_name = edit.item.group_name;
+                          if (m_sbl_groups.find(grp_name) == m_sbl_groups.end())
+                          {
+                                  char buff[100];
+                                  snprintf(buff, sizeof(buff), "Removing unknown group %s\n", grp_name.c_str());
+                                  SignalLog(LogEvent::WARN, buff);
+                                  break;
+                          }
+                          char buff[100];
+                          snprintf(buff, sizeof(buff), "Removing group %s (%d)\n", grp_name.c_str(), m_sbl_groups[grp_name].group_id);
+                          SignalLog(LogEvent::INFO, buff);
+                          SendSBLSNAC( new SBLRemoveGroupSNAC(grp_name, m_sbl_groups[grp_name].group_id) );
+                        
+                        snprintf(buff, sizeof(buff), "Rebuilding master group");
+                        SignalLog(LogEvent::INFO, buff);
+                        
+                        std::set<unsigned short> groups;
+                        for (std::map<std::string, Sbl_group>::iterator git = m_sbl_groups.begin(); git != m_sbl_groups.end(); git++) {
+                                groups.insert(git->second.group_id);
+                        }
+                        groups.erase(m_sbl_groups[grp_name].group_id);
+                        SendSBLSNAC( new SBLUpdateGroupSNAC("", 0, groups) );
+                  }
+                  break;
+          }// switch
+          }// while
   }
 
   void Client::visiblelist_cb(ContactListEvent *ev)
@@ -2940,7 +2940,7 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
       
       if (c->isICQContact() && m_state == BOS_LOGGED_IN && m_self->isInvisible()) {
-	FLAPwrapSNACandSend( AddVisibleSNAC(c) );
+        FLAPwrapSNACandSend( AddVisibleSNAC(c) );
 
       }
 
@@ -2949,7 +2949,7 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
 
       if (c->isICQContact() && m_state == BOS_LOGGED_IN && m_self->isInvisible()) {
-	FLAPwrapSNACandSend( RemoveVisibleSNAC(c) );
+        FLAPwrapSNACandSend( RemoveVisibleSNAC(c) );
       }
 
     }
@@ -2964,7 +2964,7 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
       
       if (c->isICQContact() && m_state == BOS_LOGGED_IN && !m_self->isInvisible()) {
-	FLAPwrapSNACandSend( AddInvisibleSNAC(c) );
+        FLAPwrapSNACandSend( AddInvisibleSNAC(c) );
 
       }
 
@@ -2973,7 +2973,7 @@ namespace ICQ2000
       ContactRef c = cev->getContact();
 
       if (c->isICQContact() && m_state == BOS_LOGGED_IN && !m_self->isInvisible()) {
-	FLAPwrapSNACandSend( RemoveInvisibleSNAC(c) );
+        FLAPwrapSNACandSend( RemoveInvisibleSNAC(c) );
       }
 
     }
@@ -3130,56 +3130,56 @@ namespace ICQ2000
         FLAPwrapSNAC(b, SBLBeginEditSNAC() );*/
 //      FLAPwrapSNAC(b, SBLAddEntrySNAC(m_contact_tree) );
 
-	    ContactTree::const_iterator curr = m_contact_tree.begin();
-	    std::set<unsigned short> mod_groups;
-	    while (curr != m_contact_tree.end()) {
-	      ContactTree::Group::const_iterator gcurr = curr->begin();
-/*	      if (m_group_map.find(curr->get_label()) == m_group_map.end()) { // ROGER: add new group
-	        m_group_map.insert(std::pair<string, unsigned short>(curr->get_label(), curr->get_id()));
-	      }*/
-	      if (!curr->getServerBased())
-	        SendSBLSNAC(new SBLAddEntrySNAC(curr->get_label(), curr->get_id()) );
-//	        FLAPwrapSNAC(b, SBLAddEntrySNAC(curr->get_label(), curr->get_id()) );
-	      while (gcurr != curr->end()) {
-	        if ((*gcurr)->isICQContact())
-	        if (!(*gcurr)->getServerBased())
-		{
-		  if ((*curr).get_id())
-		  {
-		    ContactRef cr = *gcurr;
-		    cr->setServerSideInfo((*curr).get_id(), cr->getServerSideID());
-//		    cr->setAuthAwait(true);
-//		    if (mod_groups.find((*curr).get_id()) == mod_groups.end()) // newly modified group
-		    {
-		      mod_groups.insert((*curr).get_id());
-		    }
-		
-		  }
-//		  m_buddy_list.push_back(*gcurr);
-		  SendSBLSNAC(new SBLAddEntrySNAC(*gcurr) );
-//		  FLAPwrapSNAC(b, SBLAddEntrySNAC(*gcurr) );
-		}
-		++gcurr;
-	      }
-	      ++curr;
-	    }
-	    fprintf(stderr, "Updating %d groups\n", mod_groups.size());
-	    std::set<unsigned short>::const_iterator git = mod_groups.begin();
-	    while (git != mod_groups.end())
-	    {
-	      std::vector<unsigned short> entries;
-	      ContactTree::Group& gp = m_contact_tree.lookup_group(*git);
-	      ContactTree::Group::iterator gcurr = gp.begin();
-	      while (gcurr != gp.end())
-	      {
-	        entries.push_back((*gcurr)->getServerSideID());
-		gcurr++;
-	      }
-//	      FLAPwrapSNAC(b, SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), entries) );
-	      SBLUpdateEntrySNAC *upd = new SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), entries);
-	      SendSBLSNAC( upd );
-	      git++;
-	    }
+            ContactTree::const_iterator curr = m_contact_tree.begin();
+            std::set<unsigned short> mod_groups;
+            while (curr != m_contact_tree.end()) {
+              ContactTree::Group::const_iterator gcurr = curr->begin();
+/*              if (m_group_map.find(curr->get_label()) == m_group_map.end()) { // ROGER: add new group
+                m_group_map.insert(std::pair<string, unsigned short>(curr->get_label(), curr->get_id()));
+              }*/
+              if (!curr->getServerBased())
+                SendSBLSNAC(new SBLAddEntrySNAC(curr->get_label(), curr->get_id()) );
+//                FLAPwrapSNAC(b, SBLAddEntrySNAC(curr->get_label(), curr->get_id()) );
+              while (gcurr != curr->end()) {
+                if ((*gcurr)->isICQContact())
+                if (!(*gcurr)->getServerBased())
+                {
+                  if ((*curr).get_id())
+                  {
+                    ContactRef cr = *gcurr;
+                    cr->setServerSideInfo((*curr).get_id(), cr->getServerSideID());
+//                    cr->setAuthAwait(true);
+//                    if (mod_groups.find((*curr).get_id()) == mod_groups.end()) // newly modified group
+                    {
+                      mod_groups.insert((*curr).get_id());
+                    }
+                
+                  }
+//                  m_buddy_list.push_back(*gcurr);
+                  SendSBLSNAC(new SBLAddEntrySNAC(*gcurr) );
+//                  FLAPwrapSNAC(b, SBLAddEntrySNAC(*gcurr) );
+                }
+                ++gcurr;
+              }
+              ++curr;
+            }
+            fprintf(stderr, "Updating %d groups\n", mod_groups.size());
+            std::set<unsigned short>::const_iterator git = mod_groups.begin();
+            while (git != mod_groups.end())
+            {
+              std::vector<unsigned short> entries;
+              ContactTree::Group& gp = m_contact_tree.lookup_group(*git);
+              ContactTree::Group::iterator gcurr = gp.begin();
+              while (gcurr != gp.end())
+              {
+                entries.push_back((*gcurr)->getServerSideID());
+                gcurr++;
+              }
+//              FLAPwrapSNAC(b, SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), entries) );
+              SBLUpdateEntrySNAC *upd = new SBLUpdateEntrySNAC(gp.get_label(), gp.get_id(), entries);
+              SendSBLSNAC( upd );
+              git++;
+            }
 
     /*  FLAPwrapSNAC(b, SBLCommitEditSNAC() );
       Send(b);*/
@@ -3195,24 +3195,24 @@ namespace ICQ2000
     Buffer b;
     FLAPwrapSNAC(b, SBLRequestAuthSNAC(ev->getContact(), ev->getMessage()) );
     Send(b);
-	Sbl_edit edit;
-	edit.operation = USER_ADD;
-	ContactRef cont = ev->getContact();
-	if (m_sbl_map.find(cont->getUIN()) == m_sbl_map.end()) // contact not added, try again
-	{
-	  cont->setAuthAwait(true);
-	  ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(cont);
-	  edit.item = Sbl_item(cont, 0, g.get_label());
-	  m_sbl_edits.push_back(edit);
-	  //fprintf(stderr, "Pushing req. user add\n");
-	  processSblEdits();
-	}
+        Sbl_edit edit;
+        edit.operation = USER_ADD;
+        ContactRef cont = ev->getContact();
+        if (m_sbl_map.find(cont->getUIN()) == m_sbl_map.end()) // contact not added, try again
+        {
+          cont->setAuthAwait(true);
+          ContactTree::Group &g = m_contact_tree.lookup_group_containing_contact(cont);
+          edit.item = Sbl_item(cont, 0, g.get_label());
+          m_sbl_edits.push_back(edit);
+          //fprintf(stderr, "Pushing req. user add\n");
+          processSblEdits();
+        }
   }
   
   void Client::SendSBLAuthReply(AuthAckEvent *ev)
   {
     if (ev == NULL)
-	return;
+        return;
     Buffer b;
     FLAPwrapSNAC(b, SBLAuthoriseSNAC(ev->getContact(), ev->getMessage(), ev->isGranted()) );
     Send(b);    
@@ -3252,39 +3252,39 @@ namespace ICQ2000
     unsigned short min_age, max_age;
 
     switch(age) {
-	case RANGE_18_22:
-	    min_age = 18;
-	    max_age = 22;
-	    break;
-	case RANGE_23_29:
-	    min_age = 23;
-	    max_age = 29;
-	    break;
-	case RANGE_30_39:
-	    min_age = 30;
-	    max_age = 39;
-	    break;
-	case RANGE_40_49:
-	    min_age = 40;
-	    max_age = 49;
-	    break;
-	case RANGE_50_59:
-	    min_age = 50;
-	    max_age = 59;
-	    break;
-	case RANGE_60_ABOVE:
-	    min_age = 60;
-	    max_age = 0x2710;
-	    break;
-	default:
-	    min_age = max_age = 0;
-	    break;
+        case RANGE_18_22:
+            min_age = 18;
+            max_age = 22;
+            break;
+        case RANGE_23_29:
+            min_age = 23;
+            max_age = 29;
+            break;
+        case RANGE_30_39:
+            min_age = 30;
+            max_age = 39;
+            break;
+        case RANGE_40_49:
+            min_age = 40;
+            max_age = 49;
+            break;
+        case RANGE_50_59:
+            min_age = 50;
+            max_age = 59;
+            break;
+        case RANGE_60_ABOVE:
+            min_age = 60;
+            max_age = 0x2710;
+            break;
+        default:
+            min_age = max_age = 0;
+            break;
     }
 
     SrvRequestFullWP ssnac( m_self->getUIN(), nickname, firstname, lastname, email,
-			    min_age, max_age, (unsigned char)sex, language, city, state,
-			    country, company_name, department, position,
-			    only_online);
+                            min_age, max_age, (unsigned char)sex, language, city, state,
+                            country, company_name, department, position,
+                            only_online);
     ssnac.setRequestID( reqid );
 
     SignalLog(LogEvent::INFO, "Sending full whitepage search");
@@ -3345,7 +3345,7 @@ namespace ICQ2000
     SignalLog(LogEvent::INFO, "Client disconnecting");
 
     if (m_state == AUTH_AWAITING_CONN_ACK || m_state == AUTH_AWAITING_AUTH_REPLY
-	|| m_state == UIN_AWAITING_CONN_ACK || m_state == UIN_AWAITING_UIN_REPLY) {
+        || m_state == UIN_AWAITING_CONN_ACK || m_state == UIN_AWAITING_UIN_REPLY) {
       DisconnectAuthorizer();
     } else {
       DisconnectBOS();
@@ -3368,25 +3368,25 @@ namespace ICQ2000
     {
       if (!FileTransferClient::SetupFileTransfer(ev))
       {
-	// TODO - enum!
-	ev->setError("I/O error trying to resolve given filename.");
-	ev->setState(FileTransferEvent::ERROR);
-	filetransfer_update_signal.emit(ev);
-	return;
+        // TODO - enum!
+        ev->setError("I/O error trying to resolve given filename.");
+        ev->setState(FileTransferEvent::ERROR);
+        filetransfer_update_signal.emit(ev);
+        return;
       } else {
-	ev->setState(FileTransferEvent::WAIT_RESPONS);
-	filetransfer_update_signal.emit(ev);
-	ev->setDirect(ev->getContact()->getDirect());
-	SendEvent(ev);
-	return;
+        ev->setState(FileTransferEvent::WAIT_RESPONS);
+        filetransfer_update_signal.emit(ev);
+        ev->setDirect(ev->getContact()->getDirect());
+        SendEvent(ev);
+        return;
       }
     }
     
     FileTransferClient *ftc = new FileTransferClient(m_self,
-						     ev->getContact(),
-						     m_message_handler,
-						     m_ext_ip,
-						     ev);
+                                                     ev->getContact(),
+                                                     m_message_handler,
+                                                     m_ext_ip,
+                                                     ev);
 
     ftc->logger.connect( this, &Client::dc_log_cb) ;
     ftc->socket.connect( this, &Client::dc_socket_cb) ;
@@ -3444,130 +3444,133 @@ namespace ICQ2000
   void Client::SendFileTransferACK(FileTransferEvent *ev)
   {
     if (ev->isDirect()) {
-	 DirectClient *dc = m_dccache->getByContact(ev->getContact());
-	 if (dc == NULL)
-	   dc = ConnectDirect(ev->getContact());
+         DirectClient *dc = m_dccache->getByContact(ev->getContact());
+         if (dc == NULL)
+           dc = ConnectDirect(ev->getContact());
 
-	 if (dc == NULL) {
-	   ev->setState(FileTransferEvent::ERROR);
-	   ev->setError("Couldn't open an Direct connection to target");
-	   filetransfer_update_signal.emit(ev);
-	   return;
-	 }
-	 
-	 if (ev->getState() == FileTransferEvent::ACCEPTED) {
-	   FileTransferClient *ftc = new FileTransferClient(m_self,
-							    m_message_handler,
-							    &m_contact_tree,
-							    m_ext_ip, ev);
-	   SignalAddSocket(ftc->getlistenfd(), SocketEvent::READ );
-	   ev->setPort(ftc->getlistenPort());
-		 
-	   (*m_ftcache)[ftc->getlistenfd()] = ftc;
-	 }
-	 
-	 try {
-	   SignalLog(LogEvent::INFO, "Sending FileTransfer ACK direct");
-	   dc->SendFTACK(ev);
-	 } catch(DisconnectedException e) {
-	   // tear down connection
-	   SignalLog(LogEvent::WARN, e.what());
-	   DisconnectDirectConn( dc->getfd() );
-	 }
-	 
-	 if (ev->getState() == FileTransferEvent::ACCEPTED)
-	    ev->setState(FileTransferEvent::RECEIVE);
-	 else
-	    ev->setState(FileTransferEvent::NOT_CONNECTED);
-		 
+         if (dc == NULL) {
+           ev->setState(FileTransferEvent::ERROR);
+           ev->setError("Couldn't open an Direct connection to target");
+           filetransfer_update_signal.emit(ev);
+           return;
+         }
+         
+         if (ev->getState() == FileTransferEvent::ACCEPTED) {
+           FileTransferClient *ftc = new FileTransferClient(m_self,
+                                                            m_message_handler,
+                                                            &m_contact_tree,
+                                                            m_ext_ip, ev);
+           SignalAddSocket(ftc->getlistenfd(), SocketEvent::READ );
+           ev->setPort(ftc->getlistenPort());
+                 
+           (*m_ftcache)[ftc->getlistenfd()] = ftc;
+         }
+         
+         try {
+           SignalLog(LogEvent::INFO, "Sending FileTransfer ACK direct");
+           dc->SendFTACK(ev);
+         } catch(DisconnectedException e) {
+           // tear down connection
+           SignalLog(LogEvent::WARN, e.what());
+           DisconnectDirectConn( dc->getfd() );
+         }
+         
+         if (ev->getState() == FileTransferEvent::ACCEPTED)
+            ev->setState(FileTransferEvent::RECEIVE);
+         else
+            ev->setState(FileTransferEvent::NOT_CONNECTED);
+                 
     } else {
       // ughh.
-	 MessageSNAC *snac = new MessageSNAC();
-	 ICBMCookie cookie;
-	 cookie.generate();
-	 snac->setICBMCookie(cookie);
-	 FTICQSubType *fst = new FTICQSubType(ev->getMessage(),
-								   ev->getDescription(),
-								   ev->getTotalSize());
-	 if (ev->getState() == FileTransferEvent::ACCEPTED) {
-	    FileTransferClient *ftc =
-		    new FileTransferClient(m_self,
-							  m_message_handler,
-							  &m_contact_tree,
-							  m_ext_ip, ev);
-	    SignalAddSocket(ftc->getlistenfd(), SocketEvent::READ );
-	    ev->setPort(ftc->getlistenPort());
+         MessageSNAC *snac = new MessageSNAC();
+         ICBMCookie cookie;
+         cookie.generate();
+         snac->setICBMCookie(cookie);
+         FTICQSubType *fst = new FTICQSubType(ev->getMessage(),
+                                                                   ev->getDescription(),
+                                                                   ev->getTotalSize());
+         if (ev->getState() == FileTransferEvent::ACCEPTED) {
+            FileTransferClient *ftc =
+                    new FileTransferClient(m_self,
+                                                          m_message_handler,
+                                                          &m_contact_tree,
+                                                          m_ext_ip, ev);
+            SignalAddSocket(ftc->getlistenfd(), SocketEvent::READ );
+            ev->setPort(ftc->getlistenPort());
 
-	    fst->setPort(ev->getPort());
-	    fst->setRevPort(ev->getPort());
+            fst->setPort(ev->getPort());
+            fst->setRevPort(ev->getPort());
 
-	    (*m_ftcache)[ftc->getlistenfd()] = ftc;
-	    ev->setState(FileTransferEvent::RECEIVE);
-	 } else {
-	    ev->setState(FileTransferEvent::NOT_CONNECTED);
-	 }
-	 
-	 snac->setICQSubType(fst);
+            (*m_ftcache)[ftc->getlistenfd()] = ftc;
+            ev->setState(FileTransferEvent::RECEIVE);
+         } else {
+            ev->setState(FileTransferEvent::NOT_CONNECTED);
+         }
+         
+         snac->setICQSubType(fst);
 
-	 SignalLog(LogEvent::INFO, "Sending FileTransfer ACK through server");
-	 //Don't know if it should be advanced???
-	 SendAdvancedACK(snac);
+         SignalLog(LogEvent::INFO, "Sending FileTransfer ACK through server");
+         //Don't know if it should be advanced???
+         SendAdvancedACK(snac);
     }
     filetransfer_update_signal.emit(ev);
   }
     
   void Client::CancelFileTransfer(FileTransferEvent *ev)
   {
-	  if (ev != NULL) {
-	    switch (ev->getState()) {
-	    case FileTransferEvent::NOT_CONNECTED: // Do nothing.
-	    case FileTransferEvent::ERROR:         // FileTransferClient is 
-	    case FileTransferEvent::CANCELLED:     // already deleted.
-	    case FileTransferEvent::COMPLETE:
-		    break; 
-	    case FileTransferEvent::WAIT_RESPONS:
-		    if (ev->isDirect()) {
-			  // Through Direct Connection
-			  DirectClient *dc = m_dccache->getByContact(ev->getContact());
-			  if (dc == NULL)
-				dc = ConnectDirect(ev->getContact());
+          if (ev != NULL) {
+            switch (ev->getState()) {
+            case FileTransferEvent::NOT_CONNECTED: // Do nothing.
+            case FileTransferEvent::ERROR:         // FileTransferClient is 
+            case FileTransferEvent::CANCELLED:     // already deleted.
+            case FileTransferEvent::COMPLETE:
+                    break; 
+            case FileTransferEvent::WAIT_RESPONS:
+                    if (ev->isDirect()) {
+                          // Through Direct Connection
+                          DirectClient *dc = m_dccache->getByContact(ev->getContact());
+                          if (dc == NULL)
+                                dc = ConnectDirect(ev->getContact());
 
-			  if (dc == NULL) {
-				ev->setState(FileTransferEvent::ERROR);
-				ev->setError("Couldn't send filetransfer cancel to target direct");
-				filetransfer_update_signal.emit(ev);
-				return;
-			  }
-			  try {
-			    dc->SendFTCancel(ev);
-			  } catch(DisconnectedException e) {
-				// tear down connection
-				SignalLog(LogEvent::WARN, e.what());
-				DisconnectDirectConn( dc->getfd() );
-			  }
-			  SignalLog(LogEvent::INFO, "Sending FT Cancel through direct connection");
-		    } else {
-			  // Through Server
-			  SignalLog(LogEvent::INFO, "Sending FT Cancel through server not implemented yet.");
-			  //Don't know how to do this
-		    }
-		    break;
-	    case FileTransferEvent::CLOSE:
-	    case FileTransferEvent::ACCEPTED:
-	    case FileTransferEvent::TIMEOUT:
-		    FileTransferClient *ftc = m_ftcache->getByEvent(ev);
-		    if (ftc != NULL)
-			 DisconnectDirectConn(ftc->getfd());
-		    break;      
-	    }
-	  }
+                          if (dc == NULL) {
+                                ev->setState(FileTransferEvent::ERROR);
+                                ev->setError("Couldn't send filetransfer cancel to target direct");
+                                filetransfer_update_signal.emit(ev);
+                                return;
+                          }
+                          try {
+                            dc->SendFTCancel(ev);
+                          } catch(DisconnectedException e) {
+                                // tear down connection
+                                SignalLog(LogEvent::WARN, e.what());
+                                DisconnectDirectConn( dc->getfd() );
+                          }
+                          SignalLog(LogEvent::INFO, "Sending FT Cancel through direct connection");
+                    } else {
+                          // Through Server
+                          SignalLog(LogEvent::INFO, "Sending FT Cancel through server not implemented yet.");
+                          //Don't know how to do this
+                    }
+                    break;
+            case FileTransferEvent::CLOSE:
+            case FileTransferEvent::ACCEPTED:
+            case FileTransferEvent::TIMEOUT:
+                {
+                    FileTransferClient *ftc = m_ftcache->getByEvent(ev);
+                    if (ftc != NULL)
+                         DisconnectDirectConn(ftc->getfd());
+                    break;
+                }
+            default: break; // really?
+            }
+          }
 
-	  ev->setState(FileTransferEvent::NOT_CONNECTED);
-	  filetransfer_update_signal.emit(ev);
+          ev->setState(FileTransferEvent::NOT_CONNECTED);
+          filetransfer_update_signal.emit(ev);
   }
 
 
-	
+        
   /**
    *  Get your uin.
    * @return your UIN

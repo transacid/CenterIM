@@ -188,6 +188,9 @@ namespace ICQ2000 {
 	break;
       }
       break;
+    
+    default: // do what?
+      break;
     }
 
     if (tlv == NULL) {
