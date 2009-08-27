@@ -2111,6 +2111,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 						return;
 					}
 			    }
+			// unknown IQ get without specific response
+			x = jutil_iqnew2(JPACKET__ERROR);
+			xmlnode_put_attrib(x, "to", from.c_str());
+			xmlnode_put_attrib(x, "id", packet_id.c_str());
+			y = xmlnode_insert_tag(x, "error");
+			xmlnode_put_attrib(y, "type", "cancel");
+			xmlnode z = xmlnode_insert_tag(y, "feature-not-implemented");
+			xmlnode_put_attrib(z, "xmlns", "urn:ietf:params:xml:ns:xmpp-stanzas");
+			jab_send(conn, x);
+			xmlnode_free(x);
 	    } else if(type == "set") {
 		    if( x = xmlnode_get_tag(packet->x, "query") )
 		    {
@@ -2150,6 +2160,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 					    }
 				    }
 			    }
+		// unknown IQ set without specific response
+		x = jutil_iqnew2(JPACKET__ERROR);
+		xmlnode_put_attrib(x, "to", from.c_str());
+		xmlnode_put_attrib(x, "id", packet_id.c_str());
+		y = xmlnode_insert_tag(x, "error");
+		xmlnode_put_attrib(y, "type", "cancel");
+		xmlnode z = xmlnode_insert_tag(y, "feature-not-implemented");
+		xmlnode_put_attrib(z, "xmlns", "urn:ietf:params:xml:ns:xmpp-stanzas");
+		jab_send(conn, x);
+		xmlnode_free(x);
 
 	    } else if(type == "error") {
 		string name, desc;
