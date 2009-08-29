@@ -192,7 +192,7 @@ if test "x$with_ssl" != "xno"; then
         fi
 
         if test "x$with_ssl" = "xno" -a -z "$with_nss_compat"; then
-                AM_PATH_LIBGNUTLS_EXTRA(0.0.1, [
+                AC_CHECK_LIB(gnutls-extra, gnutls_global_init_extra, [
                         AC_CHECK_LIB(lzo, lzo1x_1_compress, LZO_LIBS=-llzo)
 
                         if test -z "$LZO_LIBS"; then
@@ -208,7 +208,9 @@ if test "x$with_ssl" != "xno"; then
                         LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
                         AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
                         with_ssl="yes"
-                ])
+                ], AC_MSG_ERROR(
+Could not find gnutls-extra. Stopping.
+      ))
         fi
 
         if test "x$with_ssl" = "xno"; then
