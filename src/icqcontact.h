@@ -71,7 +71,7 @@ class icqcontact {
 
 	int fupdated, groupid, fhistoffset;
 	bool finlist, congratulated, modified, fhasevents, usepgpkey, openedforchat;
-	time_t lastread, lastseen, lasttyping;
+	time_t lastread, lastseen, lasttyping, idlefor;
 
 	string sound[imevent::imeventtype_size];
 	string nick, about, dispnick, postponed, lastip, pgpkey;
@@ -92,6 +92,7 @@ class icqcontact {
 	void setstatus(imstatus fstatus, bool reflect = true);
 	void setlastread(time_t flastread);
 	void setlastseen();
+	void setidlefor(unsigned int minutes);
 
 	void setnick(const string &fnick);
 	void setdispnick(const string &fnick);
@@ -117,6 +118,7 @@ class icqcontact {
 
 	time_t getlastread() const;
 	time_t getlastseen() const;
+	time_t getidlefor() const;
 	
 	imstatus getstatus() const;
 

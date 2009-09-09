@@ -1027,6 +1027,7 @@ namespace ICQ2000
       if ( userinfo.getDCCookie() != 0 ) c->setDCCookie( userinfo.getDCCookie() );
 
       c->set_signon_time( userinfo.getSignonDate() );
+      c->setExtPort( userinfo.getExtPort() );
       if (userinfo.contains_capabilities())
         c->set_capabilities( userinfo.get_capabilities() );
       

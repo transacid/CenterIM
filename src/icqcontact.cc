@@ -48,6 +48,7 @@ icqcontact::icqcontact(const imcontact adesc) {
     finlist = true;
     congratulated = false;
     openedforchat = false;
+    idlefor = 0;
 
     for(ie = imevent::message; ie != imevent::imeventtype_size; ie++)
 	sound[ie] = "";
@@ -724,6 +725,21 @@ void icqcontact::setlastseen() {
 
 time_t icqcontact::getlastseen() const {
     return lastseen;
+}
+
+void icqcontact::setidlefor(unsigned int idle) {
+    if (idle > 0)
+    {
+	time(&idlefor);
+	idlefor -= (idle * 60);
+    }
+    else
+	idlefor = 0;
+    modified = true;
+}
+
+time_t icqcontact::getidlefor() const {
+    return idlefor;
 }
 
 char icqcontact::getshortstatus() const {

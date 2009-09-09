@@ -1156,6 +1156,7 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 
     time_t ls = c->getlastseen();
     buf = "";
+    int offs = 15;
 
     if(c->getstatus() == offline) {
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf->getcolor(cp_main_highlight), _("Last seen"));
@@ -1184,9 +1185,34 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	if(buf.empty())
 	    buf = i2str(tdiff) + " " + _("seconds");
 
+	if (c->getidlefor() > 0)
+	{
+	    string buf2;
+	    tdiff = timer_current-c->getidlefor();
+	    
+	    days = (int) (tdiff/86400);
+	    hours = (int) ((tdiff-days*86400)/3600);
+	    minutes = (int) ((tdiff-days*86400-hours*3600)/60);
+	    
+	    if(days) buf2 = i2str(days) + " " + _("days");
+
+	    if(hours) {
+		if(!buf2.empty()) buf2 += ", ";
+		buf2 += i2str(hours) + " " + _("hours");
+	    }
+
+	    if(minutes) {
+		if(!buf2.empty()) buf2 += ", ";
+		buf2 += i2str(minutes) + " " + _("min");
+	    }
+	    
+	    buf += " (" + buf2 + " " + _("idle") + ")";
+	}
+	
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf->getcolor(cp_main_highlight), _("Online"));
 	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf->getcolor(cp_main_text), buf);
     }
+    
     buf = "";
     if (bi.serverbased)
 	buf += _("Server-based contact");
@@ -1197,13 +1223,18 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
 	buf += _("Awaiting authorization");
     }
     
+    
     if (!buf.empty())
-	mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf->getcolor(cp_main_highlight), buf);
-    if (buf.empty())
+    {
+	mainw.write(sizeWArea.x1+2, sizeWArea.y1+offs, conf->getcolor(cp_main_highlight), buf);
+	offs++;
+    }
+//    if (buf.empty())
 	if(!bi.avatar.empty())
 	{
-	    mainw.write(sizeWArea.x1+2, sizeWArea.y1+15, conf->getcolor(cp_main_highlight), _("Avatar file"));
-	    mainw.write(sizeWArea.x1+14, sizeWArea.y1+15, conf->getcolor(cp_main_text), bi.avatar);
+	    mainw.write(sizeWArea.x1+2, sizeWArea.y1+offs, conf->getcolor(cp_main_highlight), _("Avatar file"));
+	    mainw.write(sizeWArea.x1+14, sizeWArea.y1+offs, conf->getcolor(cp_main_text), bi.avatar);
+	    offs++;
 	}
 }
 
