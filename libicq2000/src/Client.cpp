@@ -144,7 +144,7 @@ namespace ICQ2000
     m_lower_port = 0;
     m_upper_port = 0;
 
-    m_use_typing_notif = false;
+    m_use_typing_notif = true;
 
     m_fetch_sbl = false;
     m_sbl_canedit = false;
@@ -480,6 +480,18 @@ namespace ICQ2000
     else
     {
       SignalLog(LogEvent::WARN, "Received Offline ACK for unknown message");
+    }
+  }
+  
+  void Client:: SignalTypingNotification(MessageTypingNotificationSNAC *snac)
+  {
+    /* Typing notification from user */
+    if (m_contact_tree.exists(snac->getUIN()))
+    {
+	ContactRef c = m_contact_tree[snac->getUIN()];
+	bool isTyping = (snac->getType() > 1);
+	UserTypingNotificationEvent ev(c, isTyping);
+	contact_typing_signal.emit(&ev);
     }
   }
 
@@ -1537,6 +1549,10 @@ namespace ICQ2000
       case SNAC_MSG_OfflineUser:
         SignalLog(LogEvent::INFO, "Received Message to Offline User from server");
         SignalMessageOfflineUser(static_cast<MessageOfflineUserSNAC*>(snac));
+        break;
+      case SNAC_MSG_TypingNotification:
+        SignalLog(LogEvent::INFO, "Received Typing notification from server");
+        SignalTypingNotification(static_cast<MessageTypingNotificationSNAC*>(snac));
         break;
       case SNAC_MSG_Error:
               SignalLog(LogEvent::ERROR, "Received Message error from server");

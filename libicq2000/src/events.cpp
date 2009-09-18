@@ -425,6 +425,16 @@ namespace ICQ2000 {
    */
   Status StatusChangeEvent::getOldStatus() const { return m_old_status; }
 
+
+  // ============================================================================
+  //  Typing Notification Event
+  // ============================================================================
+
+  UserTypingNotificationEvent::UserTypingNotificationEvent(ContactRef contact, bool isTyping) : ContactEvent(contact), m_typing(isTyping) { }
+  
+  ContactEvent::EventType UserTypingNotificationEvent::getType() const { return TypingNotification; }
+  bool UserTypingNotificationEvent::isTyping() const { return m_typing; }
+
   // ============================================================================
   //  User Info Change Event
   // ============================================================================

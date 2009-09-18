@@ -37,6 +37,7 @@ namespace ICQ2000 {
   const unsigned short SNAC_MSG_Message = 0x0007;
   const unsigned short SNAC_MSG_MessageACK = 0x000b;
   const unsigned short SNAC_MSG_OfflineUser = 0x000c;
+  const unsigned short SNAC_MSG_TypingNotification = 0x0014;
 
   // ----------------- Message (Family 0x0004) SNACs --------------
   
@@ -140,6 +141,25 @@ namespace ICQ2000 {
     unsigned short getChannel() const { return m_channel; }
 
     unsigned short Subtype() const { return SNAC_MSG_OfflineUser; }
+    unsigned int getUIN() const { return m_uin; }  
+  };
+
+  class MessageTypingNotificationSNAC : public MsgFamilySNAC, public InSNAC {
+   protected:
+    ICBMCookie m_cookie;
+    unsigned short m_channel;
+    unsigned int m_uin;
+    unsigned short m_type;
+
+    void ParseBody(Buffer& b);
+
+   public:
+
+    ICBMCookie getICBMCookie() const { return m_cookie; }
+    unsigned short getChannel() const { return m_channel; }
+    unsigned short getType() const { return m_type; }
+
+    unsigned short Subtype() const { return SNAC_MSG_TypingNotification; }
     unsigned int getUIN() const { return m_uin; }  
   };
 

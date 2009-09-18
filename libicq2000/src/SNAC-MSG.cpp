@@ -478,4 +478,16 @@ namespace ICQ2000 {
     m_uin = Contact::StringtoUIN(sn);
   }
 
+  void MessageTypingNotificationSNAC::ParseBody(Buffer& b) {
+    b >> m_cookie
+      >> m_channel;
+
+    unsigned char len;
+    string sn;
+    b >> len;
+    b.Unpack(sn, len);
+    m_uin = Contact::StringtoUIN(sn);
+    b >> m_type;
+  }
+
 }

@@ -38,6 +38,7 @@ class icqhook: public abstracthook, public sigslot::has_slots<> {
 	void contactlist_cb(ContactListEvent *ev);
 	void contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev);
 	void contact_status_change_signal_cb(StatusChangeEvent *ev);
+	void contact_typing_signal_cb(UserTypingNotificationEvent *ev);
 	void newuin_cb(NewUINEvent *ev);
 	void rate_cb(RateInfoChangeEvent *ev);
 	void logger_cb(LogEvent *ev);

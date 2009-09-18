@@ -283,6 +283,7 @@ namespace ICQ2000 {
   UserInfoCapabilitiesTLV::UserInfoCapabilitiesTLV()
   {
     m_capabilities.default_icq2002_capabilities();
+    m_capabilities.set_capability_flag(Capabilities::Typing);
   }
   
   unsigned short UserInfoCapabilitiesTLV::Length() const

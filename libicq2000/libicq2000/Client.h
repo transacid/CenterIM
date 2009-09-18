@@ -46,6 +46,7 @@ namespace ICQ2000
   class MessageSNAC;
   class MessageACKSNAC;
   class MessageOfflineUserSNAC;
+  class MessageTypingNotificationSNAC;
   class SrvResponseSNAC;
   class UINResponseSNAC;
   class RateInfoChangeSNAC;
@@ -188,6 +189,7 @@ namespace ICQ2000
     void SignalMessage(MessageSNAC *snac);
     void SignalMessageACK(MessageACKSNAC *snac);
     void SignalMessageOfflineUser(MessageOfflineUserSNAC *snac);
+    void SignalTypingNotification(MessageTypingNotificationSNAC *snac);
     void SignalSrvResponse(SrvResponseSNAC *snac);
     void SignalUINResponse(UINResponseSNAC *snac);
     void SignalUINRequestError();
@@ -356,6 +358,12 @@ namespace ICQ2000
      * @see StatusChangeEvent
      */
     sigslot::signal1<StatusChangeEvent*> contact_status_change_signal;
+
+    /**
+     *  The signal to connect to for listening for Contact Typing Notification events.
+     * @see UserTypingNotificationEvent
+     */
+    sigslot::signal1<UserTypingNotificationEvent*> contact_typing_signal;
 
     /**
      *  The signal for when registering a new UIN has succeeded or

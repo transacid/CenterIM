@@ -90,6 +90,9 @@ namespace ICQ2000 {
       case SNAC_MSG_OfflineUser:
 	snac = new MessageOfflineUserSNAC();
 	break;
+      case SNAC_MSG_TypingNotification:
+        snac = new MessageTypingNotificationSNAC();
+        break;
       case SNAC_MSG_Error:
 	snac = new ErrorInSNAC(family, subtype);
 	break;

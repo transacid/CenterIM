@@ -55,7 +55,8 @@ namespace ICQ2000 {
       Empty           = 14,
       TrillianCrypt   = 15,
       APInfo          = 16,
-      ICQUnknown2     = 17
+      ICQUnknown2     = 17,
+      Typing	      = 18
     };
 
    private:

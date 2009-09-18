@@ -367,7 +367,8 @@ namespace ICQ2000 {
      */
     enum EventType {
       StatusChange,
-      UserInfoChange
+      UserInfoChange,
+      TypingNotification
     };
 
    protected:
@@ -418,6 +419,19 @@ namespace ICQ2000 {
     Status getStatus() const;
     Status getOldStatus() const;
   };
+
+  /**
+   *  The event signalled when user information changes.
+   */
+  class UserTypingNotificationEvent : public ContactEvent {
+   private:
+    bool m_typing;
+   public:
+    UserTypingNotificationEvent(ContactRef contact, bool isTyping);
+    EventType getType() const;
+    bool isTyping() const;
+  };
+
 
   // ============================================================================
   //  MessageEvents

@@ -89,6 +89,7 @@ icqhook::icqhook(): abstracthook(icq) {
     cli.contactlist.connect(this, &icqhook::contactlist_cb);
     cli.contact_userinfo_change_signal.connect(this, &icqhook::contact_userinfo_change_signal_cb);
     cli.contact_status_change_signal.connect(this, &icqhook::contact_status_change_signal_cb);
+    cli.contact_typing_signal.connect(this, &icqhook::contact_typing_signal_cb);
     cli.newuin.connect(this, &icqhook::newuin_cb);
     cli.rate.connect(this, &icqhook::rate_cb);
 //    cli.password_changed.connect(this, &icqhook::password_changed_cb);
@@ -1407,6 +1408,13 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
             }
         }
 
+void icqhook::contact_typing_signal_cb(UserTypingNotificationEvent *ev) {
+    icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
+    if(c)
+    {
+	time_t when = ev->isTyping() ? (time(NULL) + 300) : 0;  // nobody should type for more than five minutes without a break...
+	c->setlasttyping(when);
+	face.relaxedupdate();
     }
 }
 
