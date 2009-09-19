@@ -1355,6 +1355,7 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
 
 	if(ic->isInvisible()) nst = invisible;
 
+        c->setidlefor(ic->getExtPort());
 	logger.putonline(c, c->getstatus(), nst);
 	c->setstatus(nst);
     }
@@ -1407,6 +1408,8 @@ void icqhook::contact_userinfo_change_signal_cb(UserInfoChangeEvent *ev) {
                 c->setlastip(oldip);
             }
         }
+    }
+}
 
 void icqhook::contact_typing_signal_cb(UserTypingNotificationEvent *ev) {
     icqcontact *c = clist.get(imcontact(ev->getUIN(), icq));
