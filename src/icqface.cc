@@ -1154,16 +1154,21 @@ void icqface::infogeneral(dialogbox &db, icqcontact *c) {
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+12, conf->getcolor(cp_main_text), langs);
     mainw.write(sizeWArea.x1+14, sizeWArea.y1+13, conf->getcolor(cp_main_text), c->getlastip());
 
-    time_t ls = c->getlastseen();
+    time_t ls;
     buf = "";
     int offs = 15;
 
     if(c->getstatus() == offline) {
+	ls = c->getlastseen();
 	mainw.write(sizeWArea.x1+2, sizeWArea.y1+14, conf->getcolor(cp_main_highlight), _("Last seen"));
 	mainw.write(sizeWArea.x1+14, sizeWArea.y1+14, conf->getcolor(cp_main_text),
 	    ls ? strdateandtime(ls) : _("Never"));
 
     } else if(c->getdesc() != contactroot) {
+	ls = c->getonlinesince();
+	if (!ls)
+	    ls = c->getlastseen();
+	
 	int days, hours, minutes, tdiff = timer_current-ls;
 
 	days = (int) (tdiff/86400);

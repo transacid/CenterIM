@@ -71,7 +71,7 @@ class icqcontact {
 
 	int fupdated, groupid, fhistoffset;
 	bool finlist, congratulated, modified, fhasevents, usepgpkey, openedforchat;
-	time_t lastread, lastseen, lasttyping, idlefor;
+	time_t lastread, lastseen, lasttyping, idlefor, onlinesince;
 
 	string sound[imevent::imeventtype_size];
 	string nick, about, dispnick, postponed, lastip, pgpkey;
@@ -171,6 +171,9 @@ class icqcontact {
 
 	time_t getlasttyping() const { return lasttyping; }
 	void setlasttyping(time_t t) { lasttyping = t; }
+	
+	time_t getonlinesince() const { return onlinesince; }
+	void setonlinesince(time_t t) { onlinesince = t; }
 
 	string getpgpkey() const;
 	void setpgpkey(const string &key);

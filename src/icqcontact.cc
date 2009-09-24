@@ -126,7 +126,7 @@ void icqcontact::clear() {
     background.clear();
 
     nick = about = dispnick = postponed = lastip = "";
-    lastseen = 0;
+    lastseen = onlinesince = 0;
 }
 
 void icqcontact::save() {
@@ -518,6 +518,13 @@ void icqcontact::setstatus(imstatus fstatus, bool reflect) {
 	    if(fstatus == offline) h.removeuser(cdesc);
 	    else h.sendnewuser(cdesc);
 
+	}
+
+	if (fstatus == offline && status != offline) {
+	    setonlinesince(time(NULL));
+	}
+	else if (fstatus != offline && status == offline) {
+	    setonlinesince(0);
 	}
 
 	setlastseen();
