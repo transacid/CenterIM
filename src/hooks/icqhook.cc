@@ -1358,6 +1358,10 @@ void icqhook::contact_status_change_signal_cb(StatusChangeEvent *ev) {
         c->setidlefor(ic->getExtPort());
 	logger.putonline(c, c->getstatus(), nst);
 	c->setstatus(nst);
+
+        if (ic->get_signon_time())
+	    c->setonlinesince(ic->get_signon_time());
+
 	if (nst == offline)
 	    c->setlasttyping(0);
     }

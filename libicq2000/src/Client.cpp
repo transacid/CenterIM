@@ -1027,7 +1027,10 @@ namespace ICQ2000
 
       // Birthday Flag set?
       if (userinfo.getBirthday()) c->setBirthday(true);
-                 
+
+      c->set_signon_time( userinfo.getSignonDate() );
+      c->setExtPort( userinfo.getExtPort() );
+
       c->setDirect(true); // reset flags when a user goes online
       c->setStatus( Contact::MapICQStatusToStatus(userinfo.getStatus()),
                     Contact::MapICQStatusToInvisible(userinfo.getStatus()) );
@@ -1038,8 +1041,6 @@ namespace ICQ2000
       if ( userinfo.getTCPVersion() != 0 ) c->setTCPVersion( userinfo.getTCPVersion() );
       if ( userinfo.getDCCookie() != 0 ) c->setDCCookie( userinfo.getDCCookie() );
 
-      c->set_signon_time( userinfo.getSignonDate() );
-      c->setExtPort( userinfo.getExtPort() );
       if (userinfo.contains_capabilities())
         c->set_capabilities( userinfo.get_capabilities() );
       

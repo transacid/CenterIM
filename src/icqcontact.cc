@@ -521,10 +521,10 @@ void icqcontact::setstatus(imstatus fstatus, bool reflect) {
 	}
 
 	if (fstatus == offline && status != offline) {
-	    setonlinesince(time(NULL));
+	    setonlinesince(0);
 	}
 	else if (fstatus != offline && status == offline) {
-	    setonlinesince(0);
+	    setonlinesince(time(NULL));
 	}
 
 	setlastseen();
