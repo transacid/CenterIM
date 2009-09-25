@@ -98,6 +98,9 @@ void imeventmanager::store(const imevent &cev) {
 				conf->thecaptcha.donecaptcha(ev.getcontact());
 			    } else {
 			        if (conf->getdebug()) face.log("captcha: received intorrent answer");
+			        string logmsg = "Captcha dropped an authorization request from ";
+			        logmsg += ev.getcontact().totext();
+			        logger.putmessage(logmsg);
 				/* bad, a computer (or very dumb human :) */
 				store(immessage(
 				    c->getdesc(), imevent::outgoing, 
@@ -110,7 +113,10 @@ void imeventmanager::store(const imevent &cev) {
 			if (conf->getdebug()) face.log("captcha: end");
 		    }
 		} else {
-		    face.log("Dropped an authorization request from %s", ev.getcontact().totext().c_str());
+		    string logmsg = "Dropped an authorization request from ";
+		    logmsg += ev.getcontact().totext();
+		    face.log(logmsg);
+		    logger.putmessage(logmsg);
 		}
 	    }
 	    
