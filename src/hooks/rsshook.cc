@@ -413,17 +413,29 @@ void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
 	imevent *ev;
 	vector<imevent *> events = em.getevents(c->getdesc(), 0);
 
-	if(!events.empty())
-	if(ev = dynamic_cast<immessage*>(events.back())) {
-	    for(ii = items.begin(); ii != items.end(); ++ii) {
-		string evtext = ev->gettext();
+	if(!events.empty()) {
+	    vector<imevent *>::reverse_iterator ei;
+	    /* with frequent updates (and not many elements in the feed), the factor 3 might not suffice 
+	     * Anyway, for most cases, it should be enough. */
+	    int is = min(3*items.size(), events.size());
 
-		while((k = evtext.find("\r")) != -1) evtext.erase(k, 1);
+	    for(ii = items.begin(); ii != items.end(); ++ii) {
+		int cnt;
+
 		while((k = ii->find("\r")) != -1) ii->erase(k, 1);
 
-		if(*ii == evtext) {
-		    items.erase(ii, items.end());
-		    break;
+		for (ei=events.rbegin(), cnt=is; cnt != 0 && ei < events.rend(); --cnt, ++ei ) {
+		    if (ev = dynamic_cast<immessage*>(*ei)) {
+			string evtext = ev->gettext();
+
+			while((k = evtext.find("\r")) != -1) evtext.erase(k, 1);
+
+			if(*ii == evtext) {
+			    --ii;
+			    items.erase(ii+1, ii+2);
+			    break;
+			}
+		    }
 		}
 	    }
 	}
