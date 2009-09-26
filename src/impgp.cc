@@ -13,6 +13,7 @@ protocolname impgp::opname;
 string impgp::passphrase[];
 
 impgp::impgp() {
+    gpgme_check_version(NULL);
     if(gpgme_new(&ctx))
 	ctx = 0;
 }
