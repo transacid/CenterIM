@@ -74,7 +74,7 @@ const char *info, int prevbad, int fd) {
 
     } else {
 	face.log((string) "+ [" + conf->getprotocolname(opname) + "] " + _("incorrect PGP passphrase"));
-	gethook(opname).disconnect();
+//	gethook(opname).disconnect();  // sudden disconnect isn't good for Jabber
 	return GPG_ERR_CANCELED;
     }
 
@@ -125,7 +125,7 @@ string impgp::sign(const string &text, const string &keyid, protocolname pname) 
 	if(err && err != GPG_ERR_CANCELED) {
 	    face.log((string) "+ [" + conf->getprotocolname(pname) + "] " +
 		_("PGP sign error: ") + gpgme_strerror(err));
-	    gethook(pname).disconnect();
+	    // gethook(pname).disconnect(); // sudden disconnect isn't good for Jabber
 	}
     }
 

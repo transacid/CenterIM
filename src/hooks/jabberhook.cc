@@ -477,6 +477,8 @@ bool jabberhook::send(const imevent &ev) {
 #ifdef HAVE_GPGME
 	if(pgp.enabled(ev.getcontact())) {
 	    enc = pgp.encrypt(text, c->getpgpkey(), proto);
+	    if (enc.empty() && !text.empty()) // probably encryption error
+		return false;
 	    text = "This message is encrypted.";
 	}
 #endif
@@ -1501,8 +1503,12 @@ void jabberhook::gotmessage(const string &type, const string &from, const string
     if(c) {
 	if(!enc.empty()) {
 	    c->setusepgpkey(true);
-	    if(pgp.enabled(proto)) body = pgp.decrypt(enc, proto);
-		else c->setusepgpkey(false);
+	    if(pgp.enabled(proto)) {
+		body = pgp.decrypt(enc, proto);
+		if (body.empty()) // probably decryption error, store at least encrypted message
+		    body = enc;
+	    }
+	    else c->setusepgpkey(false);
 	} else {
 	    c->setusepgpkey(false);
 	}
