@@ -2912,6 +2912,9 @@ void icqface::drawopenedchats(int line, int width) {
 
     if (conf->getshowopenedchats())
     {
+
+        time_t timer = time(0);
+
         for(i = 0; i < clist.count; i++) 
         {
             ct =(icqcontact *) clist.at(i);
@@ -2934,9 +2937,19 @@ void icqface::drawopenedchats(int line, int width) {
                     break;
                 }
 
-                dispnick = "[ " + dispnick + " ]";	    
+                dispnick = "[ " + dispnick + " ";	    
                 dispnick[1] = ct->hasevents() ? '*' : ' ';
-            
+
+                if(ct->getlasttyping()) 
+                {
+                    if(timer-ct->getlasttyping() > PERIOD_TYPING) 
+                        ct->setlasttyping(0);
+                    else 
+                        dispnick += "(T)";
+                }
+
+                dispnick += "]";
+
                 int col = (ct == c) ? conf->getcolor(cp_main_highlight) : conf->getcolor(cp_main_text);
                                                                     
                 kwriteatf(curx, line, col, "%s", dispnick.c_str());	    
