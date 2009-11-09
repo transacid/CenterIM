@@ -205,7 +205,7 @@ if test "x$with_ssl" != "xno"; then
                         fi
 
                         CXXFLAGS="$CXXFLAGS $LIBGNUTLS_CFLAGS"
-                        LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra"
+                        LIBS="$LIBS $LIBGNUTLS_LIBS -lgnutls-extra -lgnutls"
                         AC_DEFINE(HAVE_GNUTLS, 1, [use gnutls])
                         with_ssl="yes"
                 ], AC_MSG_ERROR(
