@@ -274,13 +274,13 @@ namespace MSN
     void NotificationServerConnection::handle_ILN(std::vector<std::string> & args)
     {
         this->assertConnectionStateIs(NS_CONNECTED);
-        this->myNotificationServer()->externalCallbacks.buddyChangedStatus(this, args[3], decodeURL(args[4]), buddyStatusFromString(args[2]));
+        this->myNotificationServer()->externalCallbacks.buddyChangedStatus(this, args[3], "", buddyStatusFromString(args[2]));
     }
     
     void NotificationServerConnection::handle_NLN(std::vector<std::string> & args)
     {
         this->assertConnectionStateIsAtLeast(NS_CONNECTED);
-        this->myNotificationServer()->externalCallbacks.buddyChangedStatus(this, args[2], decodeURL(args[3]), buddyStatusFromString(args[1]));
+        this->myNotificationServer()->externalCallbacks.buddyChangedStatus(this, args[2], "", buddyStatusFromString(args[1]));
     }
     
     void NotificationServerConnection::handle_NOT(std::vector<std::string> & args)
@@ -527,7 +527,7 @@ public:
             this->socketConnectionCompleted();
         
         std::ostringstream buf_;
-        buf_ << "VER " << this->trID << " MSNP9\r\n";
+        buf_ << "VER " << this->trID << " MSNP8\r\n";
         if (this->write(buf_) != buf_.str().size())
             return;
         
@@ -616,7 +616,7 @@ public:
                 // QNG
                 //  0
                 
-                this->_nextPing = decimalFromString(args[1]);
+                this->_nextPing = 50;
                 return;
             }
             
@@ -784,7 +784,7 @@ public:
         connectinfo * info = (connectinfo *) data;
         this->removeCallback(trid);
         
-        if (args.size() >= 3 && args[0] != "VER" || args[2] != "MSNP9") // if either *differs*...
+        if (args.size() >= 3 && args[0] != "VER" || args[2] != "MSNP8") // if either *differs*...
         {
             this->myNotificationServer()->externalCallbacks.showError(NULL, "Protocol negotiation failed");
             delete info;
