@@ -1,3 +1,116 @@
+2009-12-13  Boris Petersen  <transacid@gmail.com>
+
+	New taging model.
+	To be up to date with gnulib's git-version-gen.
+	WARNING: This breaks compatibility with non v* tags.
+	For us that means everything before 4.22.9 won't work
+	anymore.
+
+2009-12-12  Remko van der Vossen  <wich@yuugen.jp>
+
+	quick patch to use MSNP8 instead of MSNP9
+
+2009-12-10  Stéphane Bisinger  <stephane.bisinger@gmail.com>
+
+	Merge branch 'mob' of git+ssh://repo.or.cz/srv/git/centerim into mob
+
+2009-12-06  Boris Petersen  <transacid@gmail.com>
+
+	adjustment to german translation
+
+2009-11-19  Boris Petersen  <transacid@gmail.com>
+
+	Updated German translation
+
+2009-11-10  Stéphane Bisinger  <stephane.bisinger@gmail.com>
+
+	Added -lgnutls when linking with GNUTLS
+	When linking with the --no-add-needed option, the linker complains of
+	undefined references because no -lgnutls is directly specified to the
+	linker itself. This commit adds -lgnutls to the libraries when using
+	GNUTLS
+
+2009-10-26  Petr Písař  <petr.pisar@atlas.cz>
+
+	Fix typo in Czech translation (4.22.8)
+	Oops, I used bad old source and thus I omitted changes in commit
+	66e06036a07e20e22604a43d38ab607b703116d0.
+
+	Czech translation updated for 4.22.8
+
+2009-09-28  Johannes Ott aka Oetzi  <centerim@informatiker2k3.de>
+
+	icqface.cc: Added Typing noticed to opened chat titles
+
+2009-09-26  Roger  <roger@jikos.cz>
+
+	Fix #94: don't disconnect() in impgp, check for errors in jabberhook
+
+	GPGME: add missing initialization
+
+2009-09-25  Roger  <roger@lv.(none)>
+
+	Bug #8: Log dropped auth to log file
+
+	Fix #31: better checks for rss items repetition (based on patch by Spiro)
+
+2009-09-24  Roger  <roger@lv.(none)>
+
+	ICQ: use protocol Online time Fix Online time
+
+	Don't reset Online time on status change
+
+2009-09-22  Roger  <roger@lv.(none)>
+
+	ICQ: offline people don't type
+
+2009-09-19  Roger  <roger@lv.(none)>
+
+	Fix build (bad diff)
+
+2009-09-18  Roger  <roger@lv.(none)>
+
+	ICQ: display typing notifications
+
+2009-09-09  Roger  <roger@lv.(none)>
+
+	ICQ display idle times
+
+2009-09-03  Frank Altpeter  <frank@altpeter.de>
+
+	Fix fribidi to build on freebsd
+
+2009-08-30  Kumar Appaiah  <a.kumar@alumni.iitm.ac.in>
+
+	Detect gnutls using AC_CHECK_LIB for gnutls >= 2.7.x
+	Since gnutls 2.7.x, gnutls does not ship the libgnutls-config and
+	libgnutls-extra-config scripts. Since the current autoconf method
+	AM_PATH_LIBGNUTLS_EXTRA uses these scripts to detect the presence of
+	gnutls, the centerim build fails with gnutls >= 2.7.x. This patch,
+	instead, uses AM_CHECK_LIB to check for the presence of the
+	gnutls_global_init_extra function, thereby ensuring that the gnutls
+	detection works for 2.7.x, and across all earlier supported versions.
+
+2009-08-27  Roger  <roger@jikos.cz>
+
+	Better handling of unknown IQ stanzas (more XMPP compliant). Fixes <ping/>s
+
+2009-08-18  Boris Petersen  <transacid@gmail.com>
+
+	Revert "Patch to detect gnutls properly."
+	This reverts commit 519c100e53acfa78271932f090c58d9d990cc037.
+	Sorry for blindly commiting without testing. It doesn't work.
+	Maybe it work's for Debian.
+
+2009-08-18  Kumar Appaiah  <akumar@debian.org>
+
+	Patch to detect gnutls properly.
+	Patch from Debian by Kumar Appaiah <akumar@debian.org>
+
+2009-08-09  Boris Petersen  <transacid@gmail.com>
+
+	Updated ChangeLog for 4.22.8 release
+
 2009-08-08  Boris Petersen  <transacid@gmail.com>
 
 	update po-files for release
