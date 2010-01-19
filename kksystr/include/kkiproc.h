@@ -9,7 +9,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <utmp.h>
 #include <string.h>
 #include <ctype.h>
 

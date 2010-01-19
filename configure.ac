@@ -389,6 +389,8 @@ AX_WITH_CURSES
 if test -z "$CURSES_LIB"
 then
                 AC_MSG_ERROR([You need ncurses/ncursesw library and header files.])
+else
+                LIBS="$LIBS $CURSES_LIB"
 fi
 
 

@@ -37,6 +37,13 @@
 #include <sys/socket.h>
 #endif
 
+#ifdef __linux__
+/* utmp functionallity is only used for gnu/linux.
+ * Anyone know why ?
+ */
+#include <utmp.h>
+#endif
+
 void detach(char *logfile) {
     if(logfile) freopen(logfile, "w", stdout);
 
