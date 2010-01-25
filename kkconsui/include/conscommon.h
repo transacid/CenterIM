@@ -18,13 +18,9 @@
 #include <sys/ioctl.h>
 #include <ctype.h>
 
-/* just having HAVE_NCURSESW_CURSESW_H DOES not work
- * that define does not seem to be set by the configure script
- * check m4/ax_with_curses.m4 for details
- */
-#if (defined(HAVE_NCURSESW_CURSESW_H)||defined(HAVE_NCURSESW_H))
+#if defined(HAVE_NCURSESW_H)
 #include <ncursesw/cursesw.h>
-#elif defined(HAVE_NCURSESW_CURSES_H)
+#elif defined(HAVE_NCURSES_H)
 #include <ncursesw/curses.h>
 #else
 #include <ncurses.h>
