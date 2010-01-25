@@ -386,11 +386,11 @@ AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(nsl, gethostbyname)
 
 AX_WITH_CURSES
-if test -z "$CURSES_LIB"
+if test "x$ax_cv_ncurses" = "xyes"
 then
-                AC_MSG_ERROR([You need ncurses/ncursesw library and header files.])
-else
                 LIBS="$LIBS $CURSES_LIB"
+else
+                AC_MSG_ERROR([You need ncurses/ncursesw library and header files.])
 fi
 
 
