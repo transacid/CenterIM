@@ -18,12 +18,14 @@
 #include <sys/ioctl.h>
 #include <ctype.h>
 
-#if defined(HAVE_NCURSESW_H)
-#include <ncursesw/cursesw.h>
-#elif defined(HAVE_NCURSES_H)
-#include <ncursesw/curses.h>
+#if defined(HAVE_NCURSESW)
+  #if defined(HAVE_NCURSESW_H)
+    #include <ncursesw/cursesw.h>
+  #elif defined(HAVE_NCURSES_H)
+    #include <ncursesw/curses.h>
+  #endif /* HAVE_NCURSESW_H  */
 #else
-#include <ncurses.h>
+  #include <ncurses.h>
 #endif
 
 #ifdef __sun__
