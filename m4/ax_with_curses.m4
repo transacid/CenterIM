@@ -75,9 +75,10 @@ AC_DEFUN([AX_WITH_CURSES],
             ax_cv_ncursesw=yes, ax_cv_ncursesw=no)])
        if test "$ax_cv_ncursesw" = yes
        then
-         AC_CHECK_HEADER([ncursesw/curses.h], AC_DEFINE(HAVE_NCURSESW_H, 1,
-            [Define if you have ncursesw.h]))
-         AC_DEFINE(HAVE_NCURSES_H, 1, [Define if you have ncursesw/curses.h])
+         AC_CHECK_HEADER([ncursesw/cursesw.h], AC_DEFINE(HAVE_NCURSESW_H, 1,
+            [Define if you have ncursesw/cursesw.h]))
+         AC_CHECK_HEADER([ncursesw/curses.h], AC_DEFINE(HAVE_NCURSES_H, 1,
+            [Define if you have ncursesw/curses.h]))
          AC_DEFINE(HAVE_NCURSESW, 1, [Define if you have libncursesw])
          CURSES_LIB="-lncursesw"
          ax_cv_ncurses=yes

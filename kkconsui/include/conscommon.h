@@ -18,9 +18,9 @@
 #include <sys/ioctl.h>
 #include <ctype.h>
 
-#if defined(HAVE_NCURSESW_H)
+#if defined(HAVE_NCURSESW) && defined(HAVE_NCURSESW_H)
 #include <ncursesw/cursesw.h>
-#elif defined(HAVE_NCURSES_H)
+#elif defined(HAVE_NCURSESW) && defined(HAVE_NCURSES_H)
 #include <ncursesw/curses.h>
 #else
 #include <ncurses.h>
