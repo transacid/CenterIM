@@ -22,7 +22,13 @@
 #include <ncursesw/cursesw.h>
 #elif defined(HAVE_NCURSESW) && defined(HAVE_NCURSES_H)
 #include <ncursesw/curses.h>
+#elif defined(HAVE_NCURSESW)
+/* In order to get wide characters support we must define _XOPEN_SOURCE_EXTENDED
+ * when using ncurses.h */
+#define _XOPEN_SOURCE_EXTENDED
+#include <ncurses.h>
 #else
+/* No wide characters support */
 #include <ncurses.h>
 #endif
 
@@ -34,15 +40,6 @@
 #ifdef __CYGWIN__
 #include <sys/termios.h>
 #include <sys/socket.h>
-#endif
-
-/* Prototypes to compile on some systems */
-#if defined(__FreeBSD__) || defined(__APPLE__)
-extern "C"
-{
-extern int mvinnwstr (int, int, wchar_t *, int);
-extern int mvaddnwstr (int, int, const wchar_t *, int);
-}
 #endif
 
 #undef box
