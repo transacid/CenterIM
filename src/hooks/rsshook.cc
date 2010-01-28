@@ -303,7 +303,7 @@ void rsshook::fetchRSSParam(string &base, XmlBranch *i, const string &enc,
 }
 
 void rsshook::parsedocument(const HTTPRequestEvent *rev, icqcontact *c) {
-    int k, n;
+    int k;
     icqcontact::basicinfo bi = c->getbasicinfo();
     icqcontact::moreinfo mi = c->getmoreinfo();
     icqcontact::workinfo wi = c->getworkinfo();

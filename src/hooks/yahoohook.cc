@@ -139,7 +139,6 @@ void yahoohook::init() {
 
 void yahoohook::connect() {
     icqconf::imaccount acc = conf->getourid(proto);
-    int r;
 
     log(logConnecting);
 
@@ -537,7 +536,6 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
 }
 
 YList *yahoohook::getmembers(const string &room) {
-    int i;
     static YList *smemb = 0;
     vector<string>::iterator ic;
     map<string, vector<string> >::iterator im;
@@ -645,7 +643,6 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 }
 
 void yahoohook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
-    int i;
     string room = confid.nickname.substr(1);
 
     YList *who = 0;

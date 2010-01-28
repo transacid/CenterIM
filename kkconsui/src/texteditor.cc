@@ -1254,7 +1254,6 @@ void texteditor::eddelline() {
 void texteditor::eddelbegofline() {
     char *p = CURSTRING;
     string deltext, n;
-    int count = 0;
 
     if(CURCOL == 0 && CURLINE) { // We're at the beginning of the line
 	edmove(KEY_UP);
@@ -1385,7 +1384,7 @@ void texteditor::edenter(bool countspaces) {
 
 void texteditor::edmove(int k, int options) {
     int i, lm;
-    bool fdraw = false, acted;
+    bool fdraw = false;
     bool ctrlpressed = (options & EM_CTRL) && (getctrlkeys() & CONTROL_PRESSED);
     bool shiftpressed = (getctrlkeys() & SHIFT_PRESSED);
     char *p = CURSTRING;

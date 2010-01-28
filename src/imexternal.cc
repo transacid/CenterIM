@@ -83,7 +83,6 @@ int imexternal::exec(imevent *ev, bool &eaccept, int option) {
 }
 
 bool imexternal::execmanual(const imcontact &ic, int id, string &outbuf) {
-    int res;
     bool r;
 
     if(r = (id < actions.size() && id >= 0)) {

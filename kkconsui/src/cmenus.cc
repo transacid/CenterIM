@@ -175,7 +175,7 @@ bool verticalmenu::shownelem(int n, int selected) {
 }
 
 void verticalmenu::showall() {
-    unsigned int p, k;
+    unsigned int p;
 
     if(curelem < 0) {
 	 curelem = 0;

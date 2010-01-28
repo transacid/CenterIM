@@ -267,7 +267,7 @@ void icqhistory::closecontact() {
 }
 
 void icqhistory::fillmenu(const imcontact cinfo, verticalmenu *m) {
-    int event, dir, color, i, n = 0;
+    int event, dir, color, n = 0;
     struct tm tm;
     string text, url;
     time_t lastread = 0;

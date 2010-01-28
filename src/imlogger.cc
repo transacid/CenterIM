@@ -152,7 +152,7 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 	    putmessage(buf);
 	}
 
-	bool lts, lo, lt;
+	bool lts, lo;
 	conf->getlogoptions(lts, lo);
 	if(lo) {
 	    face.log((string) "+ " + buf);

@@ -75,7 +75,7 @@ void fileselector::generatemenu() {
 }
 
 void fileselector::exec() {
-    int n, mode;
+    int n;
     item *i;
     char buf[512];
     dhistitem di;

@@ -64,7 +64,6 @@ static char *base64_encode( char *buffer, int bufferLen )
 		return NULL;
 
 	unsigned char igroup[3];
-	int nGroups = 0;
 	char *r = res;
 	char *peob = buffer + bufferLen;
 	char *p;
@@ -1234,7 +1233,7 @@ void jabberhook::gotsearchresults(xmlnode x) {
 }
 
 void jabberhook::gotloggedin() {
-    xmlnode x, y;
+    xmlnode x;
 
     flogged = true;
 

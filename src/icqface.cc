@@ -258,7 +258,7 @@ void icqface::update() {
 }
 
 int icqface::contextmenu(icqcontact *c) {
-    int ret = 0, i;
+    int i;
     static int lastr = 0;
     imcontact cont;
     char buf[64];
@@ -642,7 +642,7 @@ icqcontact *icqface::mainloop(int &action) {
 }
 
 void icqface::fillcontactlist() {
-    int i, id, nnode, ngroup, prevgid, n, nonline;
+    int i, nnode, ngroup, prevgid, n, nonline;
     string dnick;
     icqcontact *c;
     icqcontact::basicinfo bi;
@@ -886,11 +886,9 @@ void icqface::fillcontactlist() {
 
 bool icqface::findresults(const imsearchparams &sp, bool fauto) {
     bool finished = false, ret = false;
-    unsigned int ffuin;
     icqcontact *c;
     dialogbox db;
     int r, b;
-    char *nick;
 
     saveworkarea();
     clearworkarea();
@@ -1826,7 +1824,7 @@ int icqface::ask(string q, int options, int deflt ) {
 }
 
 void icqface::saveworkarea() {
-    int i, j;
+    int i;
     //don't try switch workareabuf to struct, it's broke program design
 #ifdef HAVE_NCURSESW
     wchar_t **workareabuf = (wchar_t **) malloc(sizeof(wchar_t *) * (sizeWArea.y2-sizeWArea.y1+1)); 
@@ -2020,7 +2018,7 @@ void icqface::modelist(contactstatus cs) {
 bool icqface::multicontacts(const string &ahead,
 const set<protocolname> &protos, contactstatus cs) {
 
-    int i, savefirst, saveelem, prevgid;
+    int i, savefirst, saveelem, prevgid = -1;
     bool ret = true, finished = false;
     string head = ahead;
 
@@ -2065,8 +2063,6 @@ const set<protocolname> &protos, contactstatus cs) {
     while(!finished) {
 	m.getpos(saveelem, savefirst);
 	m.clear();
-
-	int prevgid = -1;
 
 	for(c = mlst.begin(); c != mlst.end(); ++c) {
 	    cont = (icqcontact *) clist.get(*c);
@@ -2267,7 +2263,6 @@ void icqface::quickfind(verticalmenu *multi) {
     bool fin;
     string nick, disp;
     int k, i, lx, ly;
-    bool found;
     icqcontact *c;
     verticalmenu *cm = (multi ? multi : &mcontacts->menu);
 
@@ -2363,7 +2358,6 @@ void icqface::extracturls(const string &buf) {
     int pos = 0;
     regex_t r;
     regmatch_t rm[1];
-    const char *pp = buf.c_str();
 
     extractedurls.clear();
     if(!regcomp(&r, "(http://[^ \t\n]+|https://[^ \t\n]+|ftp://[^ \t\n]+|www\\.[^ \t\n]+)", REG_EXTENDED)) {
@@ -2971,7 +2965,6 @@ void icqface::drawopenedchats(int line, int width) {
 
 bool icqface::chat(const imcontact &ic) {
     texteditor editor;
-    imevent *sendev;
     vector<imcontact>::iterator i;
 
     int chatlines_diff = 0; // could get rid of?
@@ -3226,7 +3219,6 @@ void icqface::fullscreenize(const imevent *ev) {
     textwindow w(0, 1, COLS, LINES-1, conf->getcolor(cp_main_text), TW_NOBORDER);
     textbrowser tb(0, 4, COLS, LINES-1, conf->getcolor(cp_main_text));
 
-    int k;
     char buf[512], *fmt = 0;
     vector<string> lines;
     vector<string>::const_iterator il;

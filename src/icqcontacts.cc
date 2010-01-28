@@ -137,7 +137,6 @@ void icqcontacts::load() {
     struct dirent *ent;
     struct stat st;
     DIR *d;
-    FILE *f;
     icqcontact *c;
     imcontact cinfo;
     protocolname pname;
