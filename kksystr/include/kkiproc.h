@@ -24,7 +24,6 @@ time_t lastkeypress();
 void detach(char *logfile);
 
 char *getprocentry(char *fname);
-const char *getcurtty();
 
 __KTOOL_END_C
 

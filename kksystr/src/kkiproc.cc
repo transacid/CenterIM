@@ -27,6 +27,7 @@
 #include <sys/ioctl.h>
 #include <signal.h>
 #include <memory>
+#include <sstream>
 
 #ifdef __sun__
 #include <sys/termio.h>
@@ -43,6 +44,8 @@
  */
 #include <utmp.h>
 #endif
+
+using namespace std;
 
 void detach(char *logfile) {
     if(logfile) freopen(logfile, "w", stdout);
@@ -66,41 +69,43 @@ time_t lastkeypress() {
     int tlen;
 
     if((tlen = readlink("/proc/self/fd/0", tname, 12)) != -1) {
-	tname[tlen] = 0;
+        tname[tlen] = 0;
 
-	if(!strncmp(tname, "/dev/tty", 8) && isdigit(tname[8])) {
-	    setutent();
+        if(!strncmp(tname, "/dev/tty", 8) && isdigit(tname[8])) {
+            setutent();
 
-	    while((u = getutent())) {
-		switch(u->ut_type) {
-		    case USER_PROCESS:
-		    case LOGIN_PROCESS:
-			if(strlen(u->ut_line) > 3)
-			if(!strncmp(u->ut_line, "tty", 3))
-			if(isdigit(u->ut_line[3])) {
-			    sprintf(tname, "/proc/%lu", u->ut_pid);
+            while((u = getutent())) {
+                switch(u->ut_type) {
+                    case USER_PROCESS:
+                    case LOGIN_PROCESS:
+                        if(strlen(u->ut_line) > 3)
+                            if(!strncmp(u->ut_line, "tty", 3))
+                                if(isdigit(u->ut_line[3])) {
+                                    stringstream ss;
+                                    ss << "/proc/" << u->ut_pid;
 
-			    if(*u->ut_user && !access(tname, F_OK)) {
-				sprintf(tname, "/dev/%s", u->ut_line);
-				if(!stat(tname, &s))
-				if(s.st_atime > t)
-				    t = s.st_atime;
-			    }
-			}
-			break;
-		}
-	    }
+                                    if(*u->ut_user && !access(ss.str().c_str(), F_OK)) {
+                                        stringstream ss;
+                                        ss << "/dev/" << u->ut_line;
+                                        if(!stat(ss.str().c_str(), &s))
+                                            if(s.st_atime > t)
+                                                t = s.st_atime;
+                                    }
+                                }
+                        break;
+                }
+            }
 
-	    endutent();
-	} else {
-	    if(!stat(tname, &s)) {
-		t = s.st_atime;
-	    } else {
-		time(&t);
-	    }
-	}
+            endutent();
+        } else {
+            if(!stat(tname, &s)) {
+                t = s.st_atime;
+            } else {
+                time(&t);
+            }
+        }
     } else {
-	time(&t);
+        time(&t);
     }
 
 #else
@@ -108,11 +113,11 @@ time_t lastkeypress() {
     char *p;
 
     if((p = ttyname(0)) != NULL) {
-	if(!stat(p, &s) && s.st_atime > t) t = s.st_atime; else time(&t);
+        if(!stat(p, &s) && s.st_atime > t) t = s.st_atime; else time(&t);
     } else {
-	time(&t);
+        time(&t);
     }
-     
+
 #endif
 
     return t;
@@ -161,19 +166,6 @@ char *gethostname() {
 
 char *getdomainname() {
     return getprocentry("/proc/kernel/domainname");
-}
-
-const char *getcurtty() {
-    static char buf[64];
-    int n;
-
-    sprintf(buf, "/proc/%lu/fd/0", getpid());
-    if((n = readlink(buf, buf, 64)) != -1) {
-	buf[n] = 0;
-	return buf;
-    }
-
-    return 0;
 }
 
 #ifdef __sun__
