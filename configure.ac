@@ -140,14 +140,13 @@ FRIBIDI_PC=""
 have_fribidi=no 
 
 if test "x$with_fribidi" = "xyes"; then
-	AC_PATH_PROG(FRIBIDI_CONFIG, fribidi-config, no)
-	if test "x$FRIBIDI_CONFIG" = "xno"; then
-		AC_MSG_ERROR([*** fribidi-config not found])
+	if ! pkg-config fribidi; then
+		AC_MSG_ERROR([*** fribidi.pc not found])
 	fi
 	
-	FRIBIDI_CFLAGS="`$FRIBIDI_CONFIG --cflags`"
+	FRIBIDI_CFLAGS=`pkg-config --cflags fribidi`
 	CFLAGS="$CFLAGS $FRIBIDI_CFLAGS"
-	FRIBIDI_LIBS="`$FRIBIDI_CONFIG --libs`"
+	FRIBIDI_LIBS=`pkg-config --libs fribidi`
 	FRIBIDI_PC="fribidi,"
 
 	AC_CHECK_LIB(fribidi, fribidi_get_mirror_char, :, AC_MSG_ERROR([*** libfribidi not found.]), $FRIBIDI_LIBS)
