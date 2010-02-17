@@ -64,6 +64,7 @@ static char *base64_encode( char *buffer, int bufferLen )
 		return NULL;
 
 	unsigned char igroup[3];
+	int nGroups = 0;
 	char *r = res;
 	char *peob = buffer + bufferLen;
 	char *p;
@@ -1233,7 +1234,7 @@ void jabberhook::gotsearchresults(xmlnode x) {
 }
 
 void jabberhook::gotloggedin() {
-    xmlnode x;
+    xmlnode x, y;
 
     flogged = true;
 
@@ -1853,8 +1854,9 @@ string jabberhook::getourjid() {
 imstatus jabberhook::process_presence(string id, string s, char prio, imstatus ust)
 {
 	if (statuses.find(id) == statuses.end()) { // new and only presence
-		(statuses[id])[s] = pair<char, imstatus>(prio, ust);
-	} else {	
+		if (ust != offline)
+			(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+	} else {
 		if (statuses[id].find(s) == statuses[id].end()) { // unknown resource
 			if (ust != offline)
 				(statuses[id])[s] = pair<char, imstatus>(prio, ust);
@@ -1864,8 +1866,8 @@ imstatus jabberhook::process_presence(string id, string s, char prio, imstatus u
 			else { // known contact
 				(statuses[id])[s] = pair<char, imstatus>(prio, ust);
 			}
-			ust = get_presence(statuses[id]);
 		}
+		ust = get_presence(statuses[id]);
 	}
 	return ust;
 }
