@@ -760,8 +760,15 @@ struct gg_session *gg_login(const struct gg_login_params *p)
 			time(&rstruct.time);
 			rstruct.ptr = (void *) &rstruct;                        
 
+#ifdef HAVE_NSS_COMPAT
+			/* nss compat ossl doesn't implement that, despite
+			 * having a definition in header */
+			RAND_add((void *) rdata, sizeof(rdata), sizeof(rdata));
+			RAND_add((void *) &rstruct, sizeof(rstruct), sizeof(rstruct));
+#else
 			RAND_seed((void *) rdata, sizeof(rdata));
 			RAND_seed((void *) &rstruct, sizeof(rstruct));
+#endif
 		}
 
 		sess->ssl_ctx = SSL_CTX_new(TLSv1_client_method());
