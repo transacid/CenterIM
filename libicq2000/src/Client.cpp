@@ -1600,7 +1600,8 @@ namespace ICQ2000
         SignalLog(LogEvent::INFO, "Received server-based list from server\n");
         SBLListSNAC *sbs = static_cast<SBLListSNAC*>(snac);
         fillSBLMap(sbs);
-        m_sbl_privacy_id = sbs->getPrivacyID();
+        if (sbs->getPrivacyID())
+    	    m_sbl_privacy_id = sbs->getPrivacyID();
         mergeSBL( sbs->getContactTree());
                 if ((snac->Flags() & 0x01)  == 0) // last/only List packet
                 {

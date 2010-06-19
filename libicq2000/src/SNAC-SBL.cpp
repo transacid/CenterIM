@@ -69,7 +69,7 @@ namespace ICQ2000 {
   //  SBL list reply
   // ============================================================================
 
-  SBLListSNAC::SBLListSNAC() { }
+  SBLListSNAC::SBLListSNAC() : m_privacy_id(0) { }
   
   const unsigned short Entry_UIN        = 0x0000;
   const unsigned short Entry_Group      = 0x0001;
