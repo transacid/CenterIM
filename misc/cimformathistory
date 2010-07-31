@@ -1,0 +1,33 @@
+#!/bin/gawk -f
+
+# 2008-06-04
+# initial script by Ilya Sukhanov <ilya@sukhanov.net>
+# http://dotcommie.net/?id=155
+#
+# 2010-07-31
+# Documentation and formating by Boris Petersen <transacid@centerim.org>
+#
+# Usage: cimformathistory history
+# where <history> is the history file in ~/.centerim/<id>/history
+
+
+BEGIN \
+{
+	FS="\n";
+	RS="\f\n";
+	# change this to the nick of the buddy
+	from="foo";
+	# change this to your nick
+	to="bar";
+}
+{
+	if (match ($2,"MSG")) { if (match($1,"IN")) a=from;
+		else a=to;
+			# you can modify the format of the timestamp
+			# here. please refer to `man 3 strftime`
+			# this example will look like:
+			# 2010/07/27 [16:31:36]
+			printf("%s %s: %s", strftime("%Y/%m/%d [%H:%M:%S]", $4), a, $5);
+		for (i=6; i<=NF;i++) printf("\t\t%s\n", $i);
+	}
+}
