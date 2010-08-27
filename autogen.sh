@@ -5,8 +5,16 @@ sh() {
   /bin/sh -c "set -x; $*"
 }
 
-sh autopoint --force # for GNU gettext
-sh libtoolize --copy --force --automake
+# test if gettext-devel is installed.
+
+	sh autopoint --force 
+	if [ "$?" -ne "0" ]; then
+	        echo "You need to install the gettext-devel package"
+		exit 1
+	else
+		sh libtoolize --copy --force --automake
+	fi
+
 
 # ok, this is wierd, but apparantly every subdir
 # in the centericq sources has its own configure
