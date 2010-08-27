@@ -84,7 +84,7 @@ sub extract_history {
 	{
 		local $/ = "\f\n";
 		while (my $msg_struct = <$HISTORY>) {
-			my ($msg_dir, $ts_sent, $ts_arr, $msg_text) =
+			my ($msg_dir, $ts_sent, $ts_rcvd, $msg_text) =
 				$msg_struct =~ m{ ^(IN|OUT)$ \n # direction of message
 						  ^MSG$ \n      # message marker
 						  ^(\d+)$ \n    # timestamp of sending
@@ -100,7 +100,7 @@ sub extract_history {
 			$msg_text =~ s/\r\n/\n/go;
 			$msg_text =~ s/(?:\f|\n)+$//go;
 
-			push @$histarray, { direction => $msg_dir, ts_sent => $ts_sent, ts_arrived => $ts_arr, message => $msg_text };
+			push @$histarray, { direction => $msg_dir, ts_sent => $ts_sent, ts_arrived => $ts_rcvd, message => $msg_text };
 		}
 	}
 
@@ -112,6 +112,8 @@ sub prettyprint_history {
 
 	for my $hist_item (@$history) {
 		my $timestamp = strftime $options{format}, localtime $hist_item->{ts_sent};
+		$timestamp .= " {rcv @ " . stftime($options{format}, localtime $hist_item->{ts_arrived}) . " }" if ($hist_item->{ts_sent} != $hist_item->{ts_arrived});
+
 		my $direction = ($hist_item->{direction} eq 'IN') ? '<<<' : '>>>';
 		my $message = $hist_item->{message};
 
