@@ -34,5 +34,3 @@ extern int yahoo_log_message(char *fmt, ...);
 #define DEBUG_MSG(x) if(yahoo_get_log_level() >= YAHOO_LOG_DEBUG) { yahoo_log_message("%s:%d: debug: ", __FILE__, __LINE__); \
 	yahoo_log_message x; \
 	yahoo_log_message("\n"); }
-
-

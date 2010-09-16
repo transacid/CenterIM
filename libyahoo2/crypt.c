@@ -44,13 +44,13 @@ static const char md5_salt_prefix[] = "$1$";
 
 /* Table with characters for base64 transformation.  */
 static const char b64t[64] =
-"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 char *yahoo_crypt(char *key, char *salt)
 {
 	char *buffer = NULL;
 	int buflen = 0;
-	int needed = 3 + strlen (salt) + 1 + 26 + 1;
+	int needed = 3 + strlen(salt) + 1 + 26 + 1;
 
 	md5_byte_t alt_result[16];
 	md5_state_t ctx;
@@ -68,12 +68,12 @@ char *yahoo_crypt(char *key, char *salt)
 
 	/* Find beginning of salt string.  The prefix should normally always
 	   be present.  Just in case it is not.  */
-	if (strncmp (md5_salt_prefix, salt, sizeof (md5_salt_prefix) - 1) == 0)
+	if (strncmp(md5_salt_prefix, salt, sizeof(md5_salt_prefix) - 1) == 0)
 		/* Skip salt prefix.  */
-		salt += sizeof (md5_salt_prefix) - 1;
+		salt += sizeof(md5_salt_prefix) - 1;
 
-	salt_len = MIN (strcspn (salt, "$"), 8);
-	key_len = strlen (key);
+	salt_len = MIN(strcspn(salt, "$"), 8);
+	key_len = strlen(key);
 
 	/* Prepare for the real work.  */
 	md5_init(&ctx);
@@ -83,7 +83,8 @@ char *yahoo_crypt(char *key, char *salt)
 
 	/* Because the SALT argument need not always have the salt prefix we
 	   add it separately.  */
-	md5_append(&ctx, (md5_byte_t *)md5_salt_prefix, sizeof (md5_salt_prefix) - 1);
+	md5_append(&ctx, (md5_byte_t *)md5_salt_prefix,
+		sizeof(md5_salt_prefix) - 1);
 
 	/* The last part is the salt string.  This must be at most 8
 	   characters and it ends at the first `$' character (for
@@ -120,7 +121,8 @@ char *yahoo_crypt(char *key, char *salt)
 	   bit the first character of the key.  This does not seem to be
 	   what was intended but we have to follow this to be compatible.  */
 	for (cnt = key_len; cnt > 0; cnt >>= 1)
-		md5_append(&ctx, (cnt & 1) != 0 ? alt_result : (md5_byte_t *)key, 1);
+		md5_append(&ctx,
+			(cnt & 1) != 0 ? alt_result : (md5_byte_t *)key, 1);
 
 	/* Create intermediate result.  */
 	md5_finish(&ctx, alt_result);
@@ -159,19 +161,18 @@ char *yahoo_crypt(char *key, char *salt)
 	/* Now we can construct the result string.  It consists of three
 	   parts.  */
 
-	strncpy(buffer, md5_salt_prefix, MAX (0, buflen));
+	strncpy(buffer, md5_salt_prefix, MAX(0, buflen));
 	cp = buffer + strlen(buffer);
-	buflen -= sizeof (md5_salt_prefix);
+	buflen -= sizeof(md5_salt_prefix);
 
-	strncpy(cp, salt, MIN ((size_t) buflen, salt_len));
+	strncpy(cp, salt, MIN((size_t) buflen, salt_len));
 	cp = cp + strlen(cp);
-	buflen -= MIN ((size_t) buflen, salt_len);
+	buflen -= MIN((size_t) buflen, salt_len);
 
 	if (buflen > 0) {
 		*cp++ = '$';
 		--buflen;
 	}
-
 #define b64_from_24bit(B2, B1, B0, N) \
 	do { \
 		unsigned int w = ((B2) << 16) | ((B1) << 8) | (B0); \
@@ -183,12 +184,12 @@ char *yahoo_crypt(char *key, char *salt)
 		}\
 	} while (0)
 
-	b64_from_24bit (alt_result[0], alt_result[6], alt_result[12], 4);
-	b64_from_24bit (alt_result[1], alt_result[7], alt_result[13], 4);
-	b64_from_24bit (alt_result[2], alt_result[8], alt_result[14], 4);
-	b64_from_24bit (alt_result[3], alt_result[9], alt_result[15], 4);
-	b64_from_24bit (alt_result[4], alt_result[10], alt_result[5], 4);
-	b64_from_24bit (0, 0, alt_result[11], 2);
+	b64_from_24bit(alt_result[0], alt_result[6], alt_result[12], 4);
+	b64_from_24bit(alt_result[1], alt_result[7], alt_result[13], 4);
+	b64_from_24bit(alt_result[2], alt_result[8], alt_result[14], 4);
+	b64_from_24bit(alt_result[3], alt_result[9], alt_result[15], 4);
+	b64_from_24bit(alt_result[4], alt_result[10], alt_result[5], 4);
+	b64_from_24bit(0, 0, alt_result[11], 2);
 	if (buflen <= 0) {
 		FREE(buffer);
 	} else
@@ -200,8 +201,8 @@ char *yahoo_crypt(char *key, char *salt)
 	   inside the MD5 implementation as well.  */
 	md5_init(&ctx);
 	md5_finish(&ctx, alt_result);
-	memset (&ctx, '\0', sizeof (ctx));
-	memset (&alt_ctx, '\0', sizeof (alt_ctx));
+	memset(&ctx, '\0', sizeof(ctx));
+	memset(&alt_ctx, '\0', sizeof(alt_ctx));
 
 	return buffer;
 }

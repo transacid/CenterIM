@@ -113,6 +113,9 @@ void yahoohook::init() {
     c.ext_yahoo_add_handler = &add_handler;
     c.ext_yahoo_remove_handler = &remove_handler;
     c.ext_yahoo_connect_async = &connect_async;
+    c.ext_yahoo_read = &y_read;
+    c.ext_yahoo_write = &y_write;
+    c.ext_yahoo_close = &y_close;
     c.ext_yahoo_got_identities = &got_identities;
     c.ext_yahoo_got_ignore = &got_ignore;
     c.ext_yahoo_got_cookies = &got_cookies;
@@ -130,8 +133,7 @@ void yahoohook::init() {
     c.ext_yahoo_webcam_viewer = &webcam_viewer;
     c.ext_yahoo_webcam_data_request = &webcam_data_request;
     c.ext_yahoo_got_search_result = &got_search_result;
-    c.ext_yahoo_got_auth_request = &auth_request;
-    c.ext_yahoo_got_auth_response = &auth_response;
+    c.ext_yahoo_got_ping = &got_ping;
     c.ext_yahoo_log = &ylog;
 
     yahoo_register_callbacks(&c);
@@ -139,6 +141,7 @@ void yahoohook::init() {
 
 void yahoohook::connect() {
     icqconf::imaccount acc = conf->getourid(proto);
+    int r;
 
     log(logConnecting);
 
@@ -150,7 +153,6 @@ void yahoohook::connect() {
     cid = yahoo_init_with_attributes(acc.nickname.c_str(), acc.password.c_str(),
 	"pager_host", acc.server.c_str(),
 	"pager_port", acc.port,
-	"verify_ca", (acc.additional["ssl"] == "1")? 1 : 0,
 	(char *) NULL);
 
     yahoo_login(cid, stat2int[manualstatus]);
@@ -184,31 +186,39 @@ void yahoohook::main() {
     tv.tv_sec = tv.tv_usec = 0;
     hsock = 0;
 
-    for(i = rfds.begin(); i != rfds.end(); ++i) {
-	FD_SET(i->fd, &rs);
-	hsock = max(hsock, i->fd);
-    }
-
-    for(i = wfds.begin(); i != wfds.end(); ++i) {
-	FD_SET(i->fd, &ws);
-	hsock = max(hsock, i->fd);
+    for(i = fds.begin(); i != fds.end(); ++i) {
+        struct y_c ic = i->con;
+	if (i->cond & YAHOO_INPUT_READ)
+	    FD_SET(ic.fd, &rs);
+	if (i->cond & YAHOO_INPUT_WRITE)
+	    FD_SET(ic.fd, &ws);
+	hsock = max(hsock, ic.fd);
     }
 
     if(select(hsock+1, &rs, &ws, 0, &tv) > 0) {
-	for(i = rfds.begin(); i != rfds.end(); ++i) {
-	    if(FD_ISSET(i->fd, &rs)) {
-		yahoo_read_ready(cid, i->fd, i->data);
+	for(i = fds.begin(); i != fds.end(); ++i) {
+		if(i->isconnect) {
+		    if (!cw_nb_connect(i->con.fd, NULL, 0, i->con.ssl, &i->con.state))
+		    {
+			if (i->con.state & CW_CONNECT_WANT_SOMETHING)
+			    continue;
+		    }
+		    else
+		    {
+			cw_close(i->con.fd);
+			break;
+		    }
+		    struct y_c tc = i->con;
+		    connect_complete(i->data, &tc);
+		    break;
+		}
+
+	    if(FD_ISSET(i->con.fd, &rs)) {
+		yahoo_read_ready(cid, &i->con, i->data);
 		break;
 	    }
-	}
-
-	for(i = wfds.begin(); i != wfds.end(); ++i) {
-	    if(FD_ISSET(i->fd, &ws)) {
-		if(i->isconnect) {
-		    connect_complete(i->data, i->fd);
-		} else {
-		    yahoo_write_ready(cid, i->fd, i->data);
-		}
+	    if(FD_ISSET(i->con.fd, &ws)) {
+		yahoo_write_ready(cid, &i->con, i->data);
 		break;
 	    }
 	}
@@ -219,14 +229,12 @@ void yahoohook::getsockets(fd_set &rs, fd_set &ws, fd_set &es, int &hsocket) con
     if(online()) {
 	vector<yfd>::const_iterator i;
 
-	for(i = rfds.begin(); i != rfds.end(); ++i) {
-	    hsocket = max(hsocket, i->fd);
-	    FD_SET(i->fd, &rs);
-	}
-
-	for(i = wfds.begin(); i != wfds.end(); ++i) {
-	    hsocket = max(hsocket, i->fd);
-	    FD_SET(i->fd, &ws);
+	for(i = fds.begin(); i != fds.end(); ++i) {
+	    if (i->cond & YAHOO_INPUT_READ)
+		FD_SET(i->con.fd, &rs);
+	    if (i->cond & YAHOO_INPUT_WRITE)
+		FD_SET(i->con.fd, &ws);
+	    hsocket = max(hsocket, i->con.fd);
 	}
     }
 }
@@ -234,14 +242,14 @@ void yahoohook::getsockets(fd_set &rs, fd_set &ws, fd_set &es, int &hsocket) con
 bool yahoohook::isoursocket(fd_set &rs, fd_set &ws, fd_set &es) const {
     vector<yfd>::const_iterator i;
 
-    for(i = rfds.begin(); i != rfds.end(); ++i)
-	if(FD_ISSET(i->fd, &rs))
+    for(i = fds.begin(); i != fds.end(); ++i)
+    {
+	if(i->cond & YAHOO_INPUT_READ && FD_ISSET(i->con.fd, &rs))
 	    return true;
 
-    for(i = wfds.begin(); i != wfds.end(); ++i)
-	if(FD_ISSET(i->fd, &ws))
+	if(i->cond & YAHOO_INPUT_WRITE && FD_ISSET(i->con.fd, &ws))
 	    return true;
-
+    }
     return false;
 }
 
@@ -254,8 +262,13 @@ void yahoohook::disconnect() {
 
 void yahoohook::disconnected() {
     if(logged()) {
-	rfds.clear();
-	wfds.clear();
+        vector<yfd>::const_iterator i;
+        for(i = fds.begin(); i != fds.end(); ++i)
+	{
+	    cw_close(i->con.fd);
+	}
+        
+	fds.clear();
 
 	logger.putourstatus(proto, getstatus(), ourstatus = offline);
 	clist.setoffline(proto);
@@ -284,6 +297,7 @@ void yahoohook::exectimers() {
     if(logged()) {
 	if(timer_current-timer_refresh > PERIOD_REFRESH) {
 	    yahoo_refresh(cid);
+	    yahoo_keepalive(cid);
 	    timer_refresh = timer_current;
 
 	} else if(timer_close && timer_current-timer_close > PERIOD_CLOSE) {
@@ -331,11 +345,11 @@ bool yahoohook::send(const imevent &ev) {
 		
 		switch(m->getauthtype()) {
 			case imauthorization::Granted:
-				yahoo_auth_grant(cid, ev.getcontact().nickname.c_str());
+				yahoo_confirm_buddy(cid, ev.getcontact().nickname.c_str(), 0, 0);
 				break;
 
 			case imauthorization::Rejected:
-				yahoo_auth_deny(cid, ev.getcontact().nickname.c_str());
+				yahoo_confirm_buddy(cid, ev.getcontact().nickname.c_str(), 1, 0);
 				break;
 		}
 		
@@ -536,6 +550,7 @@ void yahoohook::userstatus(const string &nick, int st, const string &message, bo
 }
 
 YList *yahoohook::getmembers(const string &room) {
+    int i;
     static YList *smemb = 0;
     vector<string>::iterator ic;
     map<string, vector<string> >::iterator im;
@@ -575,7 +590,7 @@ bool yahoohook::knowntransfer(const imfile &fr) const {
 }
 
 void yahoohook::replytransfer(const imfile &fr, bool accept, const string &localpath) {
-    if(accept) {
+/*    if(accept) {
 	string localname = localpath + "/";
 	localname += fr.getfiles()[0].fname;
 	sfiles.push_back(strdup(localname.c_str()));
@@ -585,7 +600,7 @@ void yahoohook::replytransfer(const imfile &fr, bool accept, const string &local
     } else {
 	fvalid.erase(fr);
 
-    }
+    }*/
 }
 
 void yahoohook::aborttransfer(const imfile &fr) {
@@ -643,6 +658,7 @@ void yahoohook::lookup(const imsearchparams &params, verticalmenu &dest) {
 }
 
 void yahoohook::conferencecreate(const imcontact &confid, const vector<imcontact> &lst) {
+    int i;
     string room = confid.nickname.substr(1);
 
     YList *who = 0;
@@ -730,7 +746,7 @@ void yahoohook::renamegroup(const string &oldname, const string &newname) {
 
 // ----------------------------------------------------------------------------
 
-void yahoohook::login_response(int id, int succ, char *url) {
+void yahoohook::login_response(int id, int succ, const char *url) {
     vector<string>::iterator in;
 
     switch(succ) {
@@ -774,6 +790,7 @@ void yahoohook::login_response(int id, int succ, char *url) {
 	    yhook.manualstatus = offline;
 	    break;
 
+	case YAHOO_LOGIN_UNKNOWN:
 	case YAHOO_LOGIN_SOCK:
 	    face.log(_("+ [yahoo] server closed socket"));
 	    yhook.disconnected();
@@ -788,6 +805,7 @@ void yahoohook::got_buddies(int id, YList *buds) {
 
     for(buddy = buds; buddy; buddy = y_list_next(buddy)) {
 	yahoo_buddy *bud = static_cast<yahoo_buddy *>(buddy->data);
+
 	clist.updateEntry(imcontact(bud->id, yahoo), bud->group ? bud->group : "");
     }
 }
@@ -795,11 +813,11 @@ void yahoohook::got_buddies(int id, YList *buds) {
 void yahoohook::got_identities(int id, YList *buds) {
 }
 
-void yahoohook::status_changed(int id, char *who, int stat, char *msg, int away, int idle, int mobile) {
+void yahoohook::status_changed(int id, const char *who, int stat, const char *msg, int away, int idle, int mobile) {
     yhook.userstatus(who, stat, msg ? msg : "", (bool) away);
 }
 
-void yahoohook::got_im(int id, char *me, char *who, char *msg, long tm, int stat, int utf8) {
+void yahoohook::got_im(int id, const char *me, const char *who, const char *msg, long tm, int stat, int utf8) {
     imcontact ic(who, yahoo);
     string text = cuthtml(msg, chCutBR | chLeaveLinks);
 
@@ -881,7 +899,7 @@ void yahoohook::got_search_result(int id, int found, int start, int total, YList
     }
 }
 
-void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList *members) {
+void yahoohook::got_conf_invite(int id, const char *me, const char *who, const char *room, const char *msg, YList *members) {
     icqconf::imaccount acc = conf->getourid(yahoo);
     string confname = (string) "#" + room, inviter, text;
     vector<string>::iterator ic;
@@ -927,7 +945,7 @@ void yahoohook::got_conf_invite(int id, char *who, char *room, char *msg, YList 
     yhook.tobedone.push_back(make_pair(tbdConfLogon, room));
 }
 
-void yahoohook::conf_userdecline(int id, char *who, char *room, char *msg) {
+void yahoohook::conf_userdecline(int id, const char *me, const char *who, const char *room, const char *msg) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
     char buf[NOTIFBUF];
 
@@ -937,7 +955,7 @@ void yahoohook::conf_userdecline(int id, char *who, char *room, char *msg) {
     }
 }
 
-void yahoohook::conf_userjoin(int id, char *who, char *room) {
+void yahoohook::conf_userjoin(int id, const char *me, const char *who, const char *room) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
     char buf[NOTIFBUF];
 
@@ -951,7 +969,7 @@ void yahoohook::conf_userjoin(int id, char *who, char *room) {
     }
 }
 
-void yahoohook::conf_userleave(int id, char *who, char *room) {
+void yahoohook::conf_userleave(int id, const char *me, const char *who, const char *room) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
     char buf[NOTIFBUF];
     vector<string>::iterator im;
@@ -965,7 +983,7 @@ void yahoohook::conf_userleave(int id, char *who, char *room) {
     }
 }
 
-void yahoohook::conf_message(int id, char *who, char *room, char *msg, int utf8) {
+void yahoohook::conf_message(int id, const char *me, const char *who, const char *room, const char *msg, int utf8) {
     icqcontact *c = clist.get(imcontact((string) "#" + room, yahoo));
 
     string text = (string) who + ": " + cuthtml(msg, chCutBR | chLeaveLinks);
@@ -974,15 +992,9 @@ void yahoohook::conf_message(int id, char *who, char *room, char *msg, int utf8)
     if(c) em.store(immessage(c, imevent::incoming, text));
 }
 
-void yahoohook::got_file(int id, char *me, char *who, char *url, long expires, char *msg, char *fname, unsigned long fesize) {
-    if(!who || !url)
+void yahoohook::got_file(int id, const char *me, const char *who, const char *msg, const char *fname, unsigned long fesize, char *trid) {
+    if(!who || !fname || !trid)
 	return;
-
-    if(!fname) {
-	fname = strrchr(url, '/');
-	if(fname) fname++;
-	    else return;
-    }
 
     int pos;
     imfile::record r;
@@ -996,13 +1008,13 @@ void yahoohook::got_file(int id, char *me, char *who, char *url, long expires, c
     imfile fr(imcontact(who, yahoo), imevent::incoming, "",
 	vector<imfile::record>(1, r));
 
-    yhook.fvalid[fr] = url;
+    yhook.fvalid[fr] = trid;
     em.store(fr);
 
     face.transferupdate(fname, fr, icqface::tsInit, fesize, 0);
 }
 
-void yahoohook::contact_added(int id, char *myid, char *who, char *msg) {
+void yahoohook::contact_added(int id, const char *myid, const char *who, const char *msg) {
     string text = _("The user has added you to his/her contact list");
 
     if(msg)
@@ -1013,15 +1025,15 @@ void yahoohook::contact_added(int id, char *myid, char *who, char *msg) {
     em.store(imnotification(imcontact(who, yahoo), text));
 }
 
-void yahoohook::typing_notify(int id, char *me, char *who, int stat) {
+void yahoohook::typing_notify(int id, const char *me, const char *who, int stat) {
     icqcontact *c = clist.get(imcontact(who, yahoo));
     if(c) c->setlasttyping(stat ? timer_current : 0);
 }
 
-void yahoohook::game_notify(int id, char *me, char *who, int stat) {
+void yahoohook::game_notify(int id, const char *me, const char *who, int stat, const char *msg) {
 }
 
-void yahoohook::mail_notify(int id, char *from, char *subj, int cnt) {
+void yahoohook::mail_notify(int id, const char *from, const char *subj, int cnt) {
     char buf[NOTIFBUF];
 
     if(from && subj) {
@@ -1031,47 +1043,43 @@ void yahoohook::mail_notify(int id, char *from, char *subj, int cnt) {
     }
 }
 
-void yahoohook::system_message(int id, char *msg) {
-    face.log(_("+ [yahoo] system: %s"), msg);
+void yahoohook::system_message(int id, const char *me, const char *who, const char *msg) {
+    face.log(_("+ [yahoo] system (%s): %s"), who, msg);
 }
 
-void yahoohook::error(int id, char *err, int fatal, int num) {
+void yahoohook::got_ping(int id, const char *msg) {
+//    face.log(_("+ [yahoo] ping: %s"), msg);
+}
+
+void yahoohook::error(int id, const char *err, int fatal, int num) {
     if(fatal) {
-	face.log(_("+ [yahoo] error: %s"), err);
+	face.log(_("+ [yahoo] fatal error: %s"), err);
 	yhook.disconnected();
     }
+    else {
+	face.log(_("[yahoo] error %s"), err);
+    }
 }
 
-int yahoohook::add_handler(int id, int fd, yahoo_input_condition cond, void *data) {
+int yahoohook::add_handler(int id, void *fd, yahoo_input_condition cond, void *data) {
     int tag = -1;
-
-    switch(cond) {
-	case YAHOO_INPUT_READ:
-	    yhook.rfds.push_back(yfd(fd, data));
-	    tag = yhook.rfds.back().tag;
-	    break;
-	case YAHOO_INPUT_WRITE:
-	    yhook.wfds.push_back(yfd(fd, data));
-	    tag = yhook.wfds.back().tag;
-	    break;
-    }
-
+    struct y_c *con = (struct y_c *)fd;
+    
+    yhook.fds.push_back(yfd(con->fd, data, con->ssl, cond));
+    tag = yhook.fds.back().tag;
+    
     return tag;
 }
 
 void yahoohook::remove_handler(int id, int tag) {
     vector<yfd>::iterator i;
 
-    i = find(yhook.rfds.begin(), yhook.rfds.end(), tag);
-    if(i != yhook.rfds.end())
-	yhook.rfds.erase(i);
-
-    i = find(yhook.wfds.begin(), yhook.wfds.end(), tag);
-    if(i != yhook.wfds.end())
-	yhook.wfds.erase(i);
+    i = find(yhook.fds.begin(), yhook.fds.end(), tag);
+    if(i != yhook.fds.end())
+	yhook.fds.erase(i);
 }
 
-int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callback callback, void *data) {
+int yahoohook::connect_async(int id, const char *host, int port, yahoo_connect_callback callback, void *data, int use_ssl) {
     struct sockaddr_in serv_addr;
     static struct hostent *server;
     int servfd;
@@ -1092,47 +1100,75 @@ int yahoohook::connect_async(int id, char *host, int port, yahoo_connect_callbac
     memcpy(&serv_addr.sin_addr.s_addr, *server->h_addr_list, server->h_length);
     serv_addr.sin_port = htons(port);
 
-    int f = fcntl(servfd, F_GETFL);
-    fcntl(servfd, F_SETFL, f | O_NONBLOCK);
+    
+    int state = 0;
+    struct y_c *con = new struct y_c(servfd, use_ssl, state);
+    error = cw_nb_connect(servfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr), use_ssl, &state);
+    con->state = state;
 
-    error = cw_connect(servfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr), 0);
-
-    if(!error) {
-	callback(servfd, 0, data);
+    if(!error && !state) {
+	int f = fcntl(servfd, F_GETFL);
+	fcntl(servfd, F_SETFL, f | O_NONBLOCK);
+	callback(con, 0, data);
 	return 0;
-    } else if(error == -1 && errno == EINPROGRESS) {
+    } else if((error == -1 && errno == EINPROGRESS) || (state & CW_CONNECT_STARTED)){
 	ccd = new connect_callback_data;
 	ccd->callback = callback;
 	ccd->callback_data = data;
 	ccd->id = id;
 
-	yhook.wfds.push_back(yfd(servfd, ccd, true));
-	ccd->tag = yhook.wfds.back().tag;
-	return 1;
+	ccd->tag = add_handler(id, con, YAHOO_INPUT_WRITE, ccd);
+	delete con;
+	return ccd->tag;
     } else {
+	y_close(con);
+	callback(NULL, 0, data);
+	
 	close(servfd);
 	return -1;
     }
 }
 
-void yahoohook::connect_complete(void *data, int source) {
+void yahoohook::connect_complete(void *data, struct y_c *con) {
     connect_callback_data *ccd = (connect_callback_data *) data;
     int so_error;
     socklen_t err_size = sizeof(so_error);
 
     remove_handler(0, ccd->tag);
-
-    if(getsockopt(source, SOL_SOCKET, SO_ERROR, (char *) &so_error, &err_size) == -1 || so_error != 0) {
+    if(getsockopt(con->fd, SOL_SOCKET, SO_ERROR, (char *) &so_error, &err_size) == -1 || so_error != 0) {
 	if(yhook.logged())
 	    face.log(_("+ [yahoo] direct connection failed"));
 
-	close(source);
-	source = -1;
+	cw_close(con->fd);
     } else {
-	ccd->callback(source, so_error, ccd->callback_data);
+	ccd->callback(con, so_error, ccd->callback_data);
     }
 
     delete ccd;
+}
+
+int yahoohook::y_write(void *fd, char *buf, int len)
+{
+    if (!fd)
+	return -1;
+    struct y_c *con = (struct y_c *)fd;
+    return cw_write(con->fd, buf, len, con->ssl);
+}
+
+int yahoohook::y_read(void *fd, char *buf, int len)
+{
+    if (!fd)
+	return -1;
+    struct y_c *con = (struct y_c *)fd;
+    return cw_read(con->fd, buf, len, con->ssl);
+
+}
+
+void yahoohook::y_close(void *fd)
+{
+    struct y_c *con = (struct y_c *)fd;
+    cw_close(con->fd);
+    delete con;
 }
 
 void yahoohook::got_ignore(int id, YList * igns) {
@@ -1141,37 +1177,37 @@ void yahoohook::got_ignore(int id, YList * igns) {
 void yahoohook::got_cookies(int id) {
 }
 
-void yahoohook::chat_cat_xml(int id, char *xml) {
+void yahoohook::chat_cat_xml(int id, const char *xml) {
 }
 
-void yahoohook::chat_join(int id, char *room, char *topic, YList *members, int fd) {
+void yahoohook::chat_join(int id, const char *me, const char *room, const char *topic, YList *members, void *fd) {
 }
 
-void yahoohook::chat_userjoin(int id, char *room, struct yahoo_chat_member *who) {
+void yahoohook::chat_userjoin(int id, const char *me, const char *room, struct yahoo_chat_member *who) {
 }
 
-void yahoohook::chat_userleave(int id, char *room, char *who) {
+void yahoohook::chat_userleave(int id, const char *me, const char *room, const char *who) {
 }
 
-void yahoohook::chat_message(int id, char *who, char *room, char *msg, int msgtype, int utf8) {
+void yahoohook::chat_message(int id, const char *me, const char *who, const char *room, const char *msg, int msgtype, int utf8) {
 }
 
-void yahoohook::rejected(int id, char *who, char *msg) {
+void yahoohook::rejected(int id, const char *who, const char *msg) {
 }
 
 void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
 }
 
-void yahoohook::webcam_invite(int id, char *me, char *from) {
+void yahoohook::webcam_invite(int id, const char *me, const char *from) {
 }
 
-void yahoohook::webcam_invite_reply(int id, char *me, char *from, int accept) {
+void yahoohook::webcam_invite_reply(int id, const char *me, const char *from, int accept) {
 }
 
-void yahoohook::webcam_closed(int id, char *who, int reason) {
+void yahoohook::webcam_closed(int id, const char *who, int reason) {
 }
 
-void yahoohook::webcam_viewer(int id, char *who, int connect) {
+void yahoohook::webcam_viewer(int id, const char *who, int connect) {
 }
 
 void yahoohook::webcam_data_request(int id, int send) {
@@ -1210,7 +1246,7 @@ void yahoohook::auth_response(int id, const char *who, char granted, const char 
 	em.store(imnotification(ic, message));
 }
 
-int yahoohook::ylog(char *fmt, ...) {
+int yahoohook::ylog(const char *fmt, ...) {
     if(conf->getdebug()) {
 	char buf[NOTIFBUF];
 	va_list ap;
@@ -1225,8 +1261,9 @@ int yahoohook::ylog(char *fmt, ...) {
     return 0;
 }
 
-void yahoohook::get_fd(int id, int fd, int error, void *data) {
+void yahoohook::get_fd(int id, void *fd, int error, void *data) {
     const char *fname = (const char *) data;
+    struct y_c *con = (struct y_c *)fd;
     char buf[1024];
     int size = 0;
 
@@ -1236,7 +1273,7 @@ void yahoohook::get_fd(int id, int fd, int error, void *data) {
 	if(f.is_open()) {
 	    while(!f.eof()) {
 		f.read(buf, 1024);
-		write(fd, buf, f.tellg());
+		cw_write(con->fd, buf, f.tellg(), con->ssl);
 		size += f.tellg();
 	    }
 	    f.close();

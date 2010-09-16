@@ -33,38 +33,40 @@
 extern "C" {
 #endif
 
-typedef struct _YList {
-	struct _YList *next;
-	struct _YList *prev;
-	void *data;
-} YList;
+	typedef struct _YList {
+		struct _YList *next;
+		struct _YList *prev;
+		void *data;
+	} YList;
 
-typedef int (*YListCompFunc) (const void *, const void *);
-typedef void (*YListFunc) (void *, void *);
+	typedef int (*YListCompFunc) (const void *, const void *);
+	typedef void (*YListFunc) (void *, void *);
 
-YList *y_list_append(YList * list, void *data);
-YList *y_list_prepend(YList * list, void *data);
-YList *y_list_remove_link(YList * list, const YList * link);
-YList *y_list_remove(YList * list, void *data);
+	YList *y_list_append(YList *list, void *data);
+	YList *y_list_prepend(YList *list, void *data);
+	YList *y_list_remove_link(YList *list, const YList *link);
+	YList *y_list_remove(YList *list, void *data);
 
-YList *y_list_insert_sorted(YList * list, void * data, YListCompFunc comp);
+	YList *y_list_insert_sorted(YList *list, void *data,
+		YListCompFunc comp);
 
-YList *y_list_copy(YList * list);
+	YList *y_list_copy(YList *list);
 
-YList *y_list_concat(YList * list, YList * add);
+	YList *y_list_concat(YList *list, YList *add);
 
-YList *y_list_find(YList * list, const void *data);
-YList *y_list_find_custom(YList * list, const void *data, YListCompFunc comp);
+	YList *y_list_find(YList *list, const void *data);
+	YList *y_list_find_custom(YList *list, const void *data,
+		YListCompFunc comp);
 
-YList *y_list_nth(YList * list, int n);
+	YList *y_list_nth(YList *list, int n);
 
-void y_list_foreach(YList * list, YListFunc fn, void *user_data);
+	void y_list_foreach(YList *list, YListFunc fn, void *user_data);
 
-void y_list_free_1(YList * list);
-void y_list_free(YList * list);
-int  y_list_length(const YList * list);
-int  y_list_empty(const YList * list);
-int  y_list_singleton(const YList * list);
+	void y_list_free_1(YList *list);
+	void y_list_free(YList *list);
+	int y_list_length(const YList *list);
+	int y_list_empty(const YList *list);
+	int y_list_singleton(const YList *list);
 
 #define y_list_next(list)	list->next
 

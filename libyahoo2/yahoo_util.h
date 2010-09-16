@@ -29,45 +29,51 @@
 #if HAVE_GLIB
 # include <glib.h>
 
-# define FREE(x)        if(x) {g_free(x); x=NULL;}
+# define FREE(x)	if(x) {g_free(x); x=NULL;}
 
-# define y_new          g_new
-# define y_new0         g_new0
-# define y_renew        g_renew
+# define y_new		g_new
+# define y_new0		g_new0
+# define y_renew	g_renew
 
-# define y_memdup       g_memdup
-# define y_strsplit     g_strsplit
-# define y_strfreev     g_strfreev
+# define y_memdup	g_memdup
+# define y_strsplit	g_strsplit
+# define y_strfreev	g_strfreev
 # ifndef strdup
-#  define strdup        g_strdup
+#  define strdup	g_strdup
 # endif
 # ifndef strncasecmp
-#  define strncasecmp   g_strncasecmp
-#  define strcasecmp    g_strcasecmp
+#  define strncasecmp	g_strncasecmp
+#  define strcasecmp	g_strcasecmp
 # endif
 
-# define snprintf       g_snprintf
-# define vsnprintf      g_vsnprintf
+# define snprintf	g_snprintf
+# define vsnprintf	g_vsnprintf
 
 #else
 
 # include <stdlib.h>
 # include <stdarg.h>
 
-# define FREE(x)                if(x) {free(x); x=NULL;}
+# define FREE(x)		if(x) {free(x); x=NULL;}
 
-# define y_new(type, n)         (type *)malloc(sizeof(type) * (n))
-# define y_new0(type, n)        (type *)calloc((n), sizeof(type))
-# define y_renew(type, mem, n)  (type *)realloc(mem, n)
+# define y_new(type, n)		(type *)malloc(sizeof(type) * (n))
+# define y_new0(type, n)	(type *)calloc((n), sizeof(type))
+# define y_renew(type, mem, n)	(type *)realloc(mem, n)
 
-void * y_memdup(const void * addr, int n);
-char ** y_strsplit(char * str, char * sep, int nelem);
-void y_strfreev(char ** vector);
+void *y_memdup(const void *addr, int n);
+char **y_strsplit(char *str, char *sep, int nelem);
+void y_strfreev(char **vector);
 
-int strncasecmp(const char * s1, const char * s2, size_t n);
-int strcasecmp(const char * s1, const char * s2);
+#ifndef _WIN32
+int strncasecmp(const char *s1, const char *s2, size_t n);
+int strcasecmp(const char *s1, const char *s2);
 
-//char * strdup(const char *s);
+//char *strdup(const char *s);
+
+int snprintf(char *str, size_t size, const char *format, ...);
+int vsnprintf(char *str, size_t size, const char *format, va_list ap);
+#endif
+
 #endif
 
 #ifndef TRUE
@@ -90,9 +96,8 @@ int strcasecmp(const char * s1, const char * s2);
  * The following three functions return newly allocated memory.
  * You must free it yourself
  */
-char * y_string_append(char * str, char * append);
-char * y_str_to_utf8(const char * in);
-char * y_utf8_to_str(const char * in);
+char *y_string_append(char *str, char *append);
+char *y_str_to_utf8(const char *in);
+char *y_utf8_to_str(const char *in);
 
 #endif
-

@@ -26,7 +26,7 @@
 
 #include "yahoo_list.h"
 
-YList *y_list_append(YList * list, void *data)
+YList *y_list_append(YList *list, void *data)
 {
 	YList *n;
 	YList *new_list = malloc(sizeof(YList));
@@ -49,7 +49,7 @@ YList *y_list_append(YList * list, void *data)
 	}
 }
 
-YList *y_list_prepend(YList * list, void *data)
+YList *y_list_prepend(YList *list, void *data)
 {
 	YList *n = malloc(sizeof(YList));
 
@@ -62,18 +62,17 @@ YList *y_list_prepend(YList * list, void *data)
 	return n;
 }
 
-YList *y_list_concat(YList * list, YList * add)
+YList *y_list_concat(YList *list, YList *add)
 {
 	YList *l;
 
-	if(!list)
+	if (!list)
 		return add;
 
-	if(!add)
+	if (!add)
 		return list;
 
-	for (l = list; l->next; l = l->next)
-		;
+	for (l = list; l->next; l = l->next) ;
 
 	l->next = add;
 	add->prev = l;
@@ -81,13 +80,13 @@ YList *y_list_concat(YList * list, YList * add)
 	return list;
 }
 
-YList *y_list_remove(YList * list, void *data)
+YList *y_list_remove(YList *list, void *data)
 {
 	YList *n;
 
 	for (n = list; n != NULL; n = n->next) {
 		if (n->data == data) {
-			list=y_list_remove_link(list, n);
+			list = y_list_remove_link(list, n);
 			y_list_free_1(n);
 			break;
 		}
@@ -99,7 +98,7 @@ YList *y_list_remove(YList * list, void *data)
 /* Warning */
 /* link MUST be part of list */
 /* caller must free link using y_list_free_1 */
-YList *y_list_remove_link(YList * list, const YList * link)
+YList *y_list_remove_link(YList *list, const YList *link)
 {
 	if (!link)
 		return list;
@@ -111,11 +110,11 @@ YList *y_list_remove_link(YList * list, const YList * link)
 
 	if (link == list)
 		list = link->next;
-	
+
 	return list;
 }
 
-int y_list_length(const YList * list)
+int y_list_length(const YList *list)
 {
 	int retval = 0;
 	const YList *n = list;
@@ -130,22 +129,22 @@ int y_list_length(const YList * list)
 /* well, you could just check for list == NULL, but that would be
  * implementation dependent
  */
-int y_list_empty(const YList * list)
+int y_list_empty(const YList *list)
 {
-	if(!list)
+	if (!list)
 		return 1;
 	else
 		return 0;
 }
 
-int y_list_singleton(const YList * list)
+int y_list_singleton(const YList *list)
 {
-	if(!list || list->next)
+	if (!list || list->next)
 		return 0;
 	return 1;
 }
 
-YList *y_list_copy(YList * list)
+YList *y_list_copy(YList *list)
 {
 	YList *n;
 	YList *copy = NULL;
@@ -157,12 +156,12 @@ YList *y_list_copy(YList * list)
 	return copy;
 }
 
-void y_list_free_1(YList * list)
+void y_list_free_1(YList *list)
 {
 	free(list);
 }
 
-void y_list_free(YList * list)
+void y_list_free(YList *list)
 {
 	YList *n = list;
 
@@ -173,22 +172,21 @@ void y_list_free(YList * list)
 	}
 }
 
-YList *y_list_find(YList * list, const void *data)
+YList *y_list_find(YList *list, const void *data)
 {
 	YList *l;
-	for (l = list; l && l->data != data; l = l->next)
-		;
+	for (l = list; l && l->data != data; l = l->next) ;
 
 	return l;
 }
 
-void y_list_foreach(YList * list, YListFunc fn, void * user_data)
+void y_list_foreach(YList *list, YListFunc fn, void *user_data)
 {
 	for (; list; list = list->next)
 		fn(list->data, user_data);
 }
 
-YList *y_list_find_custom(YList * list, const void *data, YListCompFunc comp)
+YList *y_list_find_custom(YList *list, const void *data, YListCompFunc comp)
 {
 	YList *l;
 	for (l = list; l; l = l->next)
@@ -198,22 +196,21 @@ YList *y_list_find_custom(YList * list, const void *data, YListCompFunc comp)
 	return NULL;
 }
 
-YList *y_list_nth(YList * list, int n)
+YList *y_list_nth(YList *list, int n)
 {
-	int i=n;
-	for ( ; list && i; list = list->next, i--)
-		;
+	int i = n;
+	for (; list && i; list = list->next, i--) ;
 
 	return list;
 }
 
-YList *y_list_insert_sorted(YList * list, void *data, YListCompFunc comp)
+YList *y_list_insert_sorted(YList *list, void *data, YListCompFunc comp)
 {
 	YList *l, *n, *prev = NULL;
 	if (!list)
 		return y_list_append(list, data);
 
-       	n = malloc(sizeof(YList));
+	n = malloc(sizeof(YList));
 	n->data = data;
 	for (l = list; l && comp(l->data, n->data) <= 0; l = l->next)
 		prev = l;
@@ -226,11 +223,11 @@ YList *y_list_insert_sorted(YList * list, void *data, YListCompFunc comp)
 
 	n->next = l;
 
-	if(n->prev) {
+	if (n->prev) {
 		n->prev->next = n;
 		return list;
 	} else {
 		return n;
 	}
-		
+
 }
