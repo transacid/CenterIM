@@ -9,10 +9,11 @@ msgstr ""
 "Project-Id-Version: centerim 4.13.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-02-25 10:24+0100\n"
+"POT-Creation-Date: 2010-09-16 12:04+0200\n"
 "PO-Revision-Date: 2004-12-29 20:48+0100\n"
 "Last-Translator: Piotr KUCHARSKI <chopin@sgh.waw.pl>\n"
 "Language-Team: Polish\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -240,125 +241,130 @@ msgstr "Łącze: "
 msgid "Comments: "
 msgstr "Komentarze: "
 
-#: src/hooks/yahoohook.cc:159
+#: src/hooks/yahoohook.cc:161
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] nie można się połączyć: "
 
-#: src/hooks/yahoohook.cc:162 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "nie można znaleźć nazwy serwera"
 
-#: src/hooks/yahoohook.cc:163
+#: src/hooks/yahoohook.cc:165
 msgid "could not create socket"
 msgstr "nie można utworzyć gniazda TCP/IP"
 
-#: src/hooks/yahoohook.cc:164
+#: src/hooks/yahoohook.cc:166
 msgid "verify the pager host and port entered"
 msgstr "sprawdź wprowadzoną nazwę serwera i port"
 
-#: src/hooks/yahoohook.cc:420
+#: src/hooks/yahoohook.cc:434
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] wychodzenie z konferencji %s"
 
-#: src/hooks/yahoohook.cc:656
+#: src/hooks/yahoohook.cc:672
 msgid "Please join my conference."
 msgstr "Proszę dołącz do mojej konferencji"
 
-#: src/hooks/yahoohook.cc:669
+#: src/hooks/yahoohook.cc:685
 msgid "Custom status message:"
 msgstr "Twój status"
 
-#: src/hooks/yahoohook.cc:673
+#: src/hooks/yahoohook.cc:689
 #, fuzzy, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
 msgstr "+ [yahoo] nie można pobrać powodu nieobecności z %s, %s"
 
-#: src/hooks/yahoohook.cc:749
+#: src/hooks/yahoohook.cc:765
 #, fuzzy
 msgid "+ [yahoo] cannot login"
 msgstr "+ [yahoo] nie można się połączyć: "
 
-#: src/hooks/yahoohook.cc:755
+#: src/hooks/yahoohook.cc:771
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] nie można zalogować: błędna nazwa użytkownika lub hasło"
 
-#: src/hooks/yahoohook.cc:761
+#: src/hooks/yahoohook.cc:777
 #, fuzzy
 msgid "+ [yahoo] cannot login: username doesn't exist"
 msgstr "+ [yahoo] nie można zalogować: błędna nazwa użytkownika lub hasło"
 
-#: src/hooks/yahoohook.cc:767
+#: src/hooks/yahoohook.cc:783
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] nie można zalogować: konto zostało zablokowane"
 
-#: src/hooks/yahoohook.cc:768
+#: src/hooks/yahoohook.cc:784
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ w celu ponownej aktywacji odwiedź %s"
 
-#: src/hooks/yahoohook.cc:772
+#: src/hooks/yahoohook.cc:788
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] wykryto inne zalogowanie"
 
-#: src/hooks/yahoohook.cc:778
+#: src/hooks/yahoohook.cc:795
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] serwer zamknął połączenie"
 
-#: src/hooks/yahoohook.cc:900
+#: src/hooks/yahoohook.cc:918
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Użytkownik %s zaprasza Cię do konferencji %s o temacie: %s"
 
-#: src/hooks/yahoohook.cc:905
+#: src/hooks/yahoohook.cc:923
 msgid "Current conference members are: "
 msgstr "Bieżący członkowie konferencji: "
 
-#: src/hooks/yahoohook.cc:925
+#: src/hooks/yahoohook.cc:943
 msgid "Auto-joined the conference"
 msgstr "Automatycznie dołączono do konferencji"
 
-#: src/hooks/yahoohook.cc:935
+#: src/hooks/yahoohook.cc:953
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Użytkownik %s odrzucił Twoje zaproszenie do konferencji"
 
-#: src/hooks/yahoohook.cc:945
+#: src/hooks/yahoohook.cc:963
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Użytkownik %s dołączył do konferencji"
 
-#: src/hooks/yahoohook.cc:960
+#: src/hooks/yahoohook.cc:978
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Użytkownik %s opuścił konferencję"
 
-#: src/hooks/yahoohook.cc:1006 src/hooks/icqhook.cc:1273
+#: src/hooks/yahoohook.cc:1018 src/hooks/icqhook.cc:1273
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "Użytkownik dodał Cię do swojej listy kontaktowej"
 
-#: src/hooks/yahoohook.cc:1010
+#: src/hooks/yahoohook.cc:1022
 msgid "the message was: "
 msgstr "wiadomość była: "
 
-#: src/hooks/yahoohook.cc:1028
+#: src/hooks/yahoohook.cc:1040
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail od %s, %s"
 
-#: src/hooks/yahoohook.cc:1035
-#, c-format
-msgid "+ [yahoo] system: %s"
+#: src/hooks/yahoohook.cc:1047
+#, fuzzy, c-format
+msgid "+ [yahoo] system (%s): %s"
 msgstr "+ [yahoo] system: %s"
 
-#: src/hooks/yahoohook.cc:1040
-#, c-format
-msgid "+ [yahoo] error: %s"
+#: src/hooks/yahoohook.cc:1056
+#, fuzzy, c-format
+msgid "+ [yahoo] fatal error: %s"
 msgstr "+ [yahoo] błąd: %s"
 
-#: src/hooks/yahoohook.cc:1127
+#: src/hooks/yahoohook.cc:1060
+#, fuzzy, c-format
+msgid "[yahoo] error %s"
+msgstr "+ [yahoo] błąd: %s"
+
+#: src/hooks/yahoohook.cc:1140
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] bezpośrednie połączenie nie powiodło się"
 
@@ -3481,8 +3487,8 @@ msgstr "Rezultat zewnętrznej akcji %s:"
 msgid ""
 "%s send, %s multi, %s/%s pr/nxt chat, %s hist, %s URLs, %s expand, %s memb"
 msgstr ""
-"%s wyślij, %s do wielu, %s historia, %s URL-e, %s powiększ, %s członkowie, %"
-"s zamknij "
+"%s wyślij, %s do wielu, %s historia, %s URL-e, %s powiększ, %s członkowie, "
+"%s zamknij "
 
 #: src/icqface.cc:2442
 #, fuzzy, c-format

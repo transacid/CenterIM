@@ -10,10 +10,11 @@ msgstr ""
 "Project-Id-Version: centerim 4.6.9\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-02-25 10:24+0100\n"
+"POT-Creation-Date: 2010-09-16 12:04+0200\n"
 "PO-Revision-Date: 2003-07-01 14:44+0800\n"
 "Last-Translator: Khairulanuar Abd Majid <khairul@enemy.org>\n"
 "Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -246,127 +247,132 @@ msgstr " uin: "
 msgid "Comments: "
 msgstr "komen: "
 
-#: src/hooks/yahoohook.cc:159
+#: src/hooks/yahoohook.cc:161
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] sambungan gagal: "
 
-#: src/hooks/yahoohook.cc:162 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "gagal dapatkan nama hos"
 
-#: src/hooks/yahoohook.cc:163
+#: src/hooks/yahoohook.cc:165
 msgid "could not create socket"
 msgstr "gagal membina soket"
 
-#: src/hooks/yahoohook.cc:164
+#: src/hooks/yahoohook.cc:166
 msgid "verify the pager host and port entered"
 msgstr "sahkan hos pager dan port yang dimasukkan"
 
-#: src/hooks/yahoohook.cc:420
+#: src/hooks/yahoohook.cc:434
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] meninggalkan perbincangan %s"
 
-#: src/hooks/yahoohook.cc:656
+#: src/hooks/yahoohook.cc:672
 msgid "Please join my conference."
 msgstr "Sila sertai perbincangan saya."
 
-#: src/hooks/yahoohook.cc:669
+#: src/hooks/yahoohook.cc:685
 msgid "Custom status message:"
 msgstr "Mesej status kostum:"
 
-#: src/hooks/yahoohook.cc:673
+#: src/hooks/yahoohook.cc:689
 #, fuzzy, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
 msgstr "+ [yahoo] gagal dapatkan mesej away dari %s, %s"
 
-#: src/hooks/yahoohook.cc:749
+#: src/hooks/yahoohook.cc:765
 #, fuzzy
 msgid "+ [yahoo] cannot login"
 msgstr "+ [yahoo] sambungan gagal: "
 
-#: src/hooks/yahoohook.cc:755
+#: src/hooks/yahoohook.cc:771
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] gagal login: nama dan kata laluan tidak seragam"
 
-#: src/hooks/yahoohook.cc:761
+#: src/hooks/yahoohook.cc:777
 #, fuzzy
 msgid "+ [yahoo] cannot login: username doesn't exist"
 msgstr "+ [yahoo] gagal login: nama dan kata laluan tidak seragam"
 
-#: src/hooks/yahoohook.cc:767
+#: src/hooks/yahoohook.cc:783
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] gagal login: akaun anda dihalang"
 
-#: src/hooks/yahoohook.cc:768
+#: src/hooks/yahoohook.cc:784
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ untuk aktifkan semula, lawat %s"
 
-#: src/hooks/yahoohook.cc:772
+#: src/hooks/yahoohook.cc:788
 #, fuzzy
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] sambungan gagal: "
 
-#: src/hooks/yahoohook.cc:778
+#: src/hooks/yahoohook.cc:795
 #, fuzzy
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] ralat: %s"
 
-#: src/hooks/yahoohook.cc:900
+#: src/hooks/yahoohook.cc:918
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Pengguna %s telah mengajak anda ke perbincangan %s, tajuknya: %s"
 
-#: src/hooks/yahoohook.cc:905
+#: src/hooks/yahoohook.cc:923
 msgid "Current conference members are: "
 msgstr "Rakan perbincangan sekarang ialah: "
 
-#: src/hooks/yahoohook.cc:925
+#: src/hooks/yahoohook.cc:943
 msgid "Auto-joined the conference"
 msgstr "Auto-join perbincangan"
 
-#: src/hooks/yahoohook.cc:935
+#: src/hooks/yahoohook.cc:953
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Pengguna %s menolak jemputan anda untuk menyertai perbincangan"
 
-#: src/hooks/yahoohook.cc:945
+#: src/hooks/yahoohook.cc:963
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Pengguna %s telah menyertai perbincangan"
 
-#: src/hooks/yahoohook.cc:960
+#: src/hooks/yahoohook.cc:978
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Pengguna %s meninggalkan perbincangan"
 
-#: src/hooks/yahoohook.cc:1006 src/hooks/icqhook.cc:1273
+#: src/hooks/yahoohook.cc:1018 src/hooks/icqhook.cc:1273
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "Pengguna telah menambah anda ke dalam senarai rakan"
 
-#: src/hooks/yahoohook.cc:1010
+#: src/hooks/yahoohook.cc:1022
 msgid "the message was: "
 msgstr "mesejnya ialah:"
 
-#: src/hooks/yahoohook.cc:1028
+#: src/hooks/yahoohook.cc:1040
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] emel dari %s, %s"
 
-#: src/hooks/yahoohook.cc:1035
-#, c-format
-msgid "+ [yahoo] system: %s"
+#: src/hooks/yahoohook.cc:1047
+#, fuzzy, c-format
+msgid "+ [yahoo] system (%s): %s"
 msgstr "+ [yahoo] sistem: %s"
 
-#: src/hooks/yahoohook.cc:1040
-#, c-format
-msgid "+ [yahoo] error: %s"
+#: src/hooks/yahoohook.cc:1056
+#, fuzzy, c-format
+msgid "+ [yahoo] fatal error: %s"
 msgstr "+ [yahoo] ralat: %s"
 
-#: src/hooks/yahoohook.cc:1127
+#: src/hooks/yahoohook.cc:1060
+#, fuzzy, c-format
+msgid "[yahoo] error %s"
+msgstr "+ [yahoo] ralat: %s"
+
+#: src/hooks/yahoohook.cc:1140
 #, fuzzy
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] diputuskan"
