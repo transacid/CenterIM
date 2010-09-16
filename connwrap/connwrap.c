@@ -61,6 +61,7 @@ static sslsock *getsock(int fd) {
 
 static sslsock *addsock(int fd) {
     sslsock *p;
+    
 #ifdef HAVE_GNUTLS
     gnutls_certificate_credentials_t xcred;
 #endif
@@ -96,21 +97,21 @@ static sslsock *addsock(int fd) {
     p->fd = fd;
     gnutls_transport_set_ptr(p->session,(gnutls_transport_ptr_t)fd);
 #endif
+
     return p;
 }
 
 static void delsock(int fd) {
     int i, nsockcount;
     sslsock *nsocks;
-
-    if (sockcount > 1)
+    
+    if (sockcount > 0)
     {
     nsockcount = 0;
-    nsocks = (sslsock *) malloc(sizeof(sslsock)*(sockcount-1));
 
     for(i = 0; i < sockcount; i++) {
 	if(socks[i].fd != fd) {
-	    nsocks[nsockcount++] = socks[i];
+	    socks[nsockcount++] = socks[i];
 	} 
 #if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	else {
@@ -124,17 +125,8 @@ static void delsock(int fd) {
 #endif
     }
 
-    free(socks);
-
-    socks = nsocks;
+    socks = realloc(socks, sizeof(sslsock)*(nsockcount));
     sockcount = nsockcount;
-    }
-    else
-    {
-	if (socks)
-	    free(socks);
-	socks = 0;
-	sockcount = 0;
     }
 }
 
@@ -291,12 +283,11 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
     if(ssl && !rc) {
 	sslsock *p = addsock(sockfd);
 	if(SSL_connect(p->ssl) != 1){
-	    //printf("Can't connect to SSL\n");
+	    //fprintf(stderr, "cw_connect(%d) - cannot connect to SSL\n", sockfd);
 	    return -1;
 	}
     }
 #endif
-
     return rc;
 }
 
@@ -337,7 +328,7 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval){
             	
 	        /* Look for a better solution to print errors */
-	        //fprintf(stderr,"getsockopt error!!");
+	        //fprintf(stderr,"cw_nb_connect(%d): getsockopt error!!\n", sockfd);
 	        return -1;
 	    }
 	}
