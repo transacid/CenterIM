@@ -279,13 +279,24 @@ int cw_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int ss
      	rc = connect(sockfd, serv_addr, addrlen);
      }
 
-#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
+#ifdef HAVE_SSL
     if(ssl && !rc) {
 	sslsock *p = addsock(sockfd);
+#if defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	if(SSL_connect(p->ssl) != 1){
 	    //fprintf(stderr, "cw_connect(%d) - cannot connect to SSL\n", sockfd);
 	    return -1;
 	}
+#elif defined(HAVE_GNUTLS)
+	int ret;
+	do {
+	    ret = gnutls_handshake(p->session);
+	} while ((ret == GNUTLS_E_AGAIN) || (ret == GNUTLS_E_INTERRUPTED));
+	if (ret < 0) {
+	      gnutls_perror (ret);
+	      return -1;
+        }
+#endif
     }
 #endif
     return rc;
