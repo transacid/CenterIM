@@ -345,7 +345,9 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	       ret = gnutls_handshake(p->session);
 	    }while ((ret == GNUTLS_E_AGAIN) || (ret == GNUTLS_E_INTERRUPTED));
 	    if (ret < 0) {
-	      gnutls_deinit(p->session);
+/*	      gnutls_deinit(p->session);
+		will be dealt with in delsock()
+*/
 	      gnutls_perror (ret);
 	      return -1;
 	    }
