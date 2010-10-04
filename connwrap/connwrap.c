@@ -88,7 +88,7 @@ static sslsock *addsock(int fd) {
     }
     p->ssl = SSL_new(ctx);
     SSL_set_fd(p->ssl, p->fd = fd);
-#elif HAVE_GNUTLS
+#elif defined(HAVE_GNUTLS)
     gnutls_global_init ();
     gnutls_certificate_allocate_credentials (&xcred);
     gnutls_init (&(p->session), GNUTLS_CLIENT);
@@ -337,7 +337,6 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 	else{ /* check if the socket is connected correctly */
 	    int optlen = sizeof(int), optval;
 	    if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen) || optval){
-            	
 	        /* Look for a better solution to print errors */
 	        //fprintf(stderr,"cw_nb_connect(%d): getsockopt error!!\n", sockfd);
 	        return -1;
@@ -352,21 +351,26 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 		p = addsock(sockfd);
 	    
 #ifdef HAVE_GNUTLS
-	    do{
-	       ret = gnutls_handshake(p->session);
-	    }while ((ret == GNUTLS_E_AGAIN) || (ret == GNUTLS_E_INTERRUPTED));
-	    if (ret < 0) {
+           ret = gnutls_handshake(p->session);
+	    switch (ret) {
+	    case GNUTLS_E_SUCCESS:
+		*state = 0;
+		return 0;
+	    case GNUTLS_E_INTERRUPTED:
+	    case GNUTLS_E_AGAIN:
+		if (gnutls_record_get_direction(p->session)) {
+		    *state = CW_CONNECT_SSL | CW_CONNECT_WANT_READ;
+		} else {
+		    *state = CW_CONNECT_SSL | CW_CONNECT_WANT_WRITE;
+		}
+		return 0;
+	    default:
 /*	      gnutls_deinit(p->session);
 		will be dealt with in delsock()
 */
 	      gnutls_perror (ret);
 	      return -1;
 	    }
-	    else{
-  	      *state = 1;
-	      return 0;
-	    }
-        }
 #elif defined(HAVE_OPENSSL) || defined(HAVE_NSS_COMPAT)
 	    rc = SSL_connect(p->ssl);
 	    switch(rc){
@@ -387,9 +391,8 @@ int cw_nb_connect(int sockfd, const struct sockaddr *serv_addr, int addrlen, int
 		    return -1;
 		}
 	    }
-	}
 #endif
-	else{ // catch EINPROGRESS error from the connect call 
+	} else { // catch EINPROGRESS error from the connect call 
 	    if (errno == EINPROGRESS){
 		*state = CW_CONNECT_STARTED | CW_CONNECT_WANT_WRITE;
 		return 0;
