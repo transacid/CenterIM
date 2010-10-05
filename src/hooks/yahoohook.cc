@@ -135,6 +135,8 @@ void yahoohook::init() {
     c.ext_yahoo_got_search_result = &got_search_result;
     c.ext_yahoo_got_ping = &got_ping;
     c.ext_yahoo_log = &ylog;
+    c.ext_yahoo_got_buddyicon_request = &got_buddyicon_request;
+    c.ext_yahoo_got_buddyicon = &got_buddyicon;
 
     yahoo_register_callbacks(&c);
 }
@@ -1211,6 +1213,12 @@ void yahoohook::webcam_viewer(int id, const char *who, int connect) {
 }
 
 void yahoohook::webcam_data_request(int id, int send) {
+}
+
+void yahoohook::got_buddyicon_request(int id, const char *me, const char *who) {
+}
+
+void yahoohook::got_buddyicon(int id, const char *me, const char *who, const char *url, int checksum) {
 }
 
 void yahoohook::auth_request(int id, char *who, char *msg) {
