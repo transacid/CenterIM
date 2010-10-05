@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.20.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-09-16 12:04+0200\n"
+"POT-Creation-Date: 2010-10-05 11:55+0200\n"
 "PO-Revision-Date: 2004-02-08 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <k@thekonst.net>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -239,130 +239,130 @@ msgstr "Ссылка: "
 msgid "Comments: "
 msgstr "Комментарии: "
 
-#: src/hooks/yahoohook.cc:161
+#: src/hooks/yahoohook.cc:163
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] невозможно соединиться: "
 
-#: src/hooks/yahoohook.cc:164 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:166 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "невозможно определить IP хоста"
 
-#: src/hooks/yahoohook.cc:165
+#: src/hooks/yahoohook.cc:167
 msgid "could not create socket"
 msgstr "невозможно создать сокет"
 
-#: src/hooks/yahoohook.cc:166
+#: src/hooks/yahoohook.cc:168
 msgid "verify the pager host and port entered"
 msgstr "проверьте имя хоста и порт"
 
-#: src/hooks/yahoohook.cc:434
+#: src/hooks/yahoohook.cc:436
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] выход с конференции %s"
 
-#: src/hooks/yahoohook.cc:672
+#: src/hooks/yahoohook.cc:674
 msgid "Please join my conference."
 msgstr ""
 
-#: src/hooks/yahoohook.cc:685
+#: src/hooks/yahoohook.cc:687
 msgid "Custom status message:"
 msgstr "Пользовательское статус-сообщение:"
 
-#: src/hooks/yahoohook.cc:689
+#: src/hooks/yahoohook.cc:691
 #, fuzzy, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
 msgstr "+ [yahoo] невозможно запросить away-сообщение у %s, %s"
 
-#: src/hooks/yahoohook.cc:765
+#: src/hooks/yahoohook.cc:767
 #, fuzzy
 msgid "+ [yahoo] cannot login"
 msgstr "+ [yahoo] невозможно соединиться: "
 
-#: src/hooks/yahoohook.cc:771
+#: src/hooks/yahoohook.cc:773
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] невозможно соединиться: неправильный логин/пароль"
 
-#: src/hooks/yahoohook.cc:777
+#: src/hooks/yahoohook.cc:779
 #, fuzzy
 msgid "+ [yahoo] cannot login: username doesn't exist"
 msgstr "+ [yahoo] невозможно соединиться: неправильный логин/пароль"
 
-#: src/hooks/yahoohook.cc:783
+#: src/hooks/yahoohook.cc:785
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] невозможно соединиться: аккаунт заблокирован"
 
-#: src/hooks/yahoohook.cc:784
+#: src/hooks/yahoohook.cc:786
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ чтобы реактивировать его, посетите %s"
 
-#: src/hooks/yahoohook.cc:788
+#: src/hooks/yahoohook.cc:790
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] кто-то еще вошел под этим ником"
 
-#: src/hooks/yahoohook.cc:795
+#: src/hooks/yahoohook.cc:797
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] сервер закрыл соединение"
 
-#: src/hooks/yahoohook.cc:918
+#: src/hooks/yahoohook.cc:920
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Пользователь %s пригласил вас в конференцию %s, тема: %s"
 
-#: src/hooks/yahoohook.cc:923
+#: src/hooks/yahoohook.cc:925
 msgid "Current conference members are: "
 msgstr "Участники конференции: "
 
-#: src/hooks/yahoohook.cc:943
+#: src/hooks/yahoohook.cc:945
 msgid "Auto-joined the conference"
 msgstr "Авто-вход в конференцию состоялся"
 
-#: src/hooks/yahoohook.cc:953
+#: src/hooks/yahoohook.cc:955
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Пользователь %s ответил отказом на приглашение к конференции"
 
-#: src/hooks/yahoohook.cc:963
+#: src/hooks/yahoohook.cc:965
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Пользователь %s вошел в конференцию"
 
-#: src/hooks/yahoohook.cc:978
+#: src/hooks/yahoohook.cc:980
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Пользователь %s покинул конференцию"
 
-#: src/hooks/yahoohook.cc:1018 src/hooks/icqhook.cc:1273
+#: src/hooks/yahoohook.cc:1020 src/hooks/icqhook.cc:1273
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "Пользователь добавил вас в свой список контактов"
 
-#: src/hooks/yahoohook.cc:1022
+#: src/hooks/yahoohook.cc:1024
 msgid "the message was: "
 msgstr "сообщение:"
 
-#: src/hooks/yahoohook.cc:1040
+#: src/hooks/yahoohook.cc:1042
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail от %s, %s"
 
-#: src/hooks/yahoohook.cc:1047
+#: src/hooks/yahoohook.cc:1049
 #, fuzzy, c-format
 msgid "+ [yahoo] system (%s): %s"
 msgstr "+ [yahoo] система: %s"
 
-#: src/hooks/yahoohook.cc:1056
+#: src/hooks/yahoohook.cc:1058
 #, fuzzy, c-format
 msgid "+ [yahoo] fatal error: %s"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1060
+#: src/hooks/yahoohook.cc:1062
 #, fuzzy, c-format
 msgid "[yahoo] error %s"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1140
+#: src/hooks/yahoohook.cc:1142
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] прямое соединение не удалось"
 
