@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 2.0.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-05 11:55+0200\n"
+"POT-Creation-Date: 2010-10-07 16:53+0200\n"
 "PO-Revision-Date: 2004-01-12 20:47+0100\n"
 "Last-Translator: Mihály Gyulai <gyulai@fbi.hu>\n"
 "Language-Team: hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -240,133 +240,193 @@ msgstr "Link: "
 msgid "Comments: "
 msgstr "megjegyzés: "
 
-#: src/hooks/yahoohook.cc:163
+#: src/hooks/yahoohook.cc:173
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] a kapcsolódás sikertelen: "
 
-#: src/hooks/yahoohook.cc:166 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:176 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "a gépnév visszafejtése nem sikerült"
 
-#: src/hooks/yahoohook.cc:167
+#: src/hooks/yahoohook.cc:177
 msgid "could not create socket"
 msgstr "hálózati foglalat létrehozása nem sikerült"
 
-#: src/hooks/yahoohook.cc:168
+#: src/hooks/yahoohook.cc:178
 msgid "verify the pager host and port entered"
 msgstr "a gépnév és kapu ellenőrzése"
 
-#: src/hooks/yahoohook.cc:436
+#: src/hooks/yahoohook.cc:446
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] kilépés a %s konferenciából"
 
-#: src/hooks/yahoohook.cc:674
+#: src/hooks/yahoohook.cc:684
 msgid "Please join my conference."
 msgstr "Csatlakozzon a konferenciámhoz."
 
-#: src/hooks/yahoohook.cc:687
+#: src/hooks/yahoohook.cc:697
 msgid "Custom status message:"
 msgstr "Egyéni állapotszöveg:"
 
-#: src/hooks/yahoohook.cc:691
+#: src/hooks/yahoohook.cc:701
 #, fuzzy, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
 msgstr "+ [yahoo] a távolléti ok lekérdezése sikertelen: %s, %s"
 
-#: src/hooks/yahoohook.cc:767
+#: src/hooks/yahoohook.cc:777
 #, fuzzy
 msgid "+ [yahoo] cannot login"
 msgstr "+ [yahoo] a kapcsolódás sikertelen: "
 
-#: src/hooks/yahoohook.cc:773
+#: src/hooks/yahoohook.cc:783
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] sikertelen bejelentkezés: hibás azonosító vagy jelszó"
 
-#: src/hooks/yahoohook.cc:779
+#: src/hooks/yahoohook.cc:789
 #, fuzzy
 msgid "+ [yahoo] cannot login: username doesn't exist"
 msgstr "+ [yahoo] sikertelen bejelentkezés: hibás azonosító vagy jelszó"
 
-#: src/hooks/yahoohook.cc:785
+#: src/hooks/yahoohook.cc:795
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] sikertelen bejelentkezés: a bejelentkezést letiltották"
 
-#: src/hooks/yahoohook.cc:786
+#: src/hooks/yahoohook.cc:796
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ engedélyezés itt: %s"
 
-#: src/hooks/yahoohook.cc:790
+#: src/hooks/yahoohook.cc:800
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] már van egy kapcsolódás a szerverhez"
 
-#: src/hooks/yahoohook.cc:797
+#: src/hooks/yahoohook.cc:807
 #, fuzzy
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] hiba: %s"
 
-#: src/hooks/yahoohook.cc:920
+#: src/hooks/yahoohook.cc:930
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "%s meghívja a(z) %s konferenciára, téma: %s"
 
-#: src/hooks/yahoohook.cc:925
+#: src/hooks/yahoohook.cc:935
 msgid "Current conference members are: "
 msgstr "A konferencián résztvevők:"
 
-#: src/hooks/yahoohook.cc:945
+#: src/hooks/yahoohook.cc:955
 msgid "Auto-joined the conference"
 msgstr "Automatikusan belépve a konferenciára"
 
-#: src/hooks/yahoohook.cc:955
+#: src/hooks/yahoohook.cc:965
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "%s nem akar csatlakozni a konferenciához"
 
-#: src/hooks/yahoohook.cc:965
+#: src/hooks/yahoohook.cc:975
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "%s csatlakozott a konferenciához"
 
-#: src/hooks/yahoohook.cc:980
+#: src/hooks/yahoohook.cc:990
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "%s elhagyta a konferenciát"
 
-#: src/hooks/yahoohook.cc:1020 src/hooks/icqhook.cc:1273
+#: src/hooks/yahoohook.cc:1030 src/hooks/icqhook.cc:1273
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "A felhasználó felvette az azonosítónkat a kapcsolataihoz"
 
-#: src/hooks/yahoohook.cc:1024
+#: src/hooks/yahoohook.cc:1034
 msgid "the message was: "
 msgstr "az üzenet:"
 
-#: src/hooks/yahoohook.cc:1042
+#: src/hooks/yahoohook.cc:1052
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail innen: %s, %s"
 
-#: src/hooks/yahoohook.cc:1049
+#: src/hooks/yahoohook.cc:1059
 #, fuzzy, c-format
 msgid "+ [yahoo] system (%s): %s"
 msgstr "+ [yahoo] rendszer: %s"
 
-#: src/hooks/yahoohook.cc:1058
+#: src/hooks/yahoohook.cc:1068
 #, fuzzy, c-format
 msgid "+ [yahoo] fatal error: %s"
 msgstr "+ [yahoo] hiba: %s"
 
-#: src/hooks/yahoohook.cc:1062
+#: src/hooks/yahoohook.cc:1072
 #, fuzzy, c-format
 msgid "[yahoo] error %s"
 msgstr "+ [yahoo] hiba: %s"
 
-#: src/hooks/yahoohook.cc:1142
+#: src/hooks/yahoohook.cc:1152
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] közvetlen kapcsolat nem sikerült"
+
+#: src/hooks/yahoohook.cc:1193
+#, fuzzy
+msgid "+ [yahoo] chat_cat_xml"
+msgstr "+ [yahoo] a kapcsolódás sikertelen: "
+
+#: src/hooks/yahoohook.cc:1197
+#, fuzzy
+msgid "+ [yahoo] chat_join"
+msgstr "+ [yahoo] a kapcsolódás sikertelen: "
+
+#: src/hooks/yahoohook.cc:1201
+#, fuzzy
+msgid "+ [yahoo] chat_userjoin"
+msgstr "+ [yahoo] a kapcsolódás sikertelen: "
+
+#: src/hooks/yahoohook.cc:1205
+#, fuzzy
+msgid "+ [yahoo] chat_userleave"
+msgstr "+ [yahoo] a kapcsolódás sikertelen: "
+
+#: src/hooks/yahoohook.cc:1209
+#, fuzzy, c-format
+msgid "+ [yahoo] chat_message from %s"
+msgstr "+ [yahoo] hiba: %s"
+
+#: src/hooks/yahoohook.cc:1213
+#, fuzzy, c-format
+msgid "+ [yahoo] rejected by %s: %s"
+msgstr "+ [yahoo] rendszer: %s"
+
+#: src/hooks/yahoohook.cc:1244
+#, fuzzy
+msgid "+ [yahoo] chat_yahooerror"
+msgstr "+ [yahoo] hiba: %s"
+
+#: src/hooks/yahoohook.cc:1248
+#, fuzzy
+msgid "+ [yahoo] chat_yahoologout"
+msgstr "+ [yahoo] a kapcsolódás sikertelen: "
+
+#: src/hooks/yahoohook.cc:1252
+#, fuzzy
+msgid "+ [yahoo] yahoo connect"
+msgstr "+ [yahoo] a kapcsolódás sikertelen: "
+
+#: src/hooks/yahoohook.cc:1260
+#, fuzzy, c-format
+msgid "+ [yahoo] get_ip_addr %s"
+msgstr "+ [yahoo] hiba: %s"
+
+#: src/hooks/yahoohook.cc:1265
+#, c-format
+msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:1272
+#, fuzzy, c-format
+msgid "+ [yahoo] got buzz from %s"
+msgstr "+ [yahoo] e-mail innen: %s, %s"
 
 #: src/hooks/jabberhook.cc:360
 msgid "+ [jab] unable to connect to the server"

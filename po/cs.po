@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.22.8\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-05 11:55+0200\n"
+"POT-Creation-Date: 2010-10-07 16:53+0200\n"
 "PO-Revision-Date: 2009-10-26 14:48+0100\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -239,131 +239,191 @@ msgstr "Odkaz: "
 msgid "Comments: "
 msgstr "Komentář: "
 
-#: src/hooks/yahoohook.cc:163
+#: src/hooks/yahoohook.cc:173
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] nelze se připojit: "
 
-#: src/hooks/yahoohook.cc:166 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:176 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "nelze přeložit jméno počítače"
 
-#: src/hooks/yahoohook.cc:167
+#: src/hooks/yahoohook.cc:177
 msgid "could not create socket"
 msgstr "nelze vytvořit socket"
 
-#: src/hooks/yahoohook.cc:168
+#: src/hooks/yahoohook.cc:178
 msgid "verify the pager host and port entered"
 msgstr "zkontroluj zadané doménové jméno a port pageru"
 
-#: src/hooks/yahoohook.cc:436
+#: src/hooks/yahoohook.cc:446
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] opouštím konferenci: %s"
 
-#: src/hooks/yahoohook.cc:674
+#: src/hooks/yahoohook.cc:684
 msgid "Please join my conference."
 msgstr "Prosím, připoj se do mé konference"
 
-#: src/hooks/yahoohook.cc:687
+#: src/hooks/yahoohook.cc:697
 msgid "Custom status message:"
 msgstr "Zpráva při změně stavu:"
 
-#: src/hooks/yahoohook.cc:691
+#: src/hooks/yahoohook.cc:701
 #, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
 msgstr ""
 "+ [yahoo] nelze získat pryč-zprávu z %s, %s (možná není pryč-zpráva vyplněna)"
 
-#: src/hooks/yahoohook.cc:767
+#: src/hooks/yahoohook.cc:777
 msgid "+ [yahoo] cannot login"
 msgstr "+ [yahoo] nelze se přihlásit"
 
-#: src/hooks/yahoohook.cc:773
+#: src/hooks/yahoohook.cc:783
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] nelze se přihlásit: jméno a heslo nesouhlasí "
 
-#: src/hooks/yahoohook.cc:779
+#: src/hooks/yahoohook.cc:789
 msgid "+ [yahoo] cannot login: username doesn't exist"
 msgstr "+ [yahoo] nelze se přihlásit: jméno uživatele neexistuje"
 
-#: src/hooks/yahoohook.cc:785
+#: src/hooks/yahoohook.cc:795
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr " + [yahoo] nelze se přihlásit: účet byl zablokován"
 
-#: src/hooks/yahoohook.cc:786
+#: src/hooks/yahoohook.cc:796
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ pro odblokování navštiv %s"
 
-#: src/hooks/yahoohook.cc:790
+#: src/hooks/yahoohook.cc:800
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] zjištěno duplicitní přihlášení"
 
-#: src/hooks/yahoohook.cc:797
+#: src/hooks/yahoohook.cc:807
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] server uzavřel socket"
 
-#: src/hooks/yahoohook.cc:920
+#: src/hooks/yahoohook.cc:930
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "Uživatel %s vás pozval do konference %s, jejíž téma je: %s"
 
-#: src/hooks/yahoohook.cc:925
+#: src/hooks/yahoohook.cc:935
 msgid "Current conference members are: "
 msgstr "Členy současné konference jsou: "
 
-#: src/hooks/yahoohook.cc:945
+#: src/hooks/yahoohook.cc:955
 msgid "Auto-joined the conference"
 msgstr "Automatické připojení do konference"
 
-#: src/hooks/yahoohook.cc:955
+#: src/hooks/yahoohook.cc:965
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "Uživatel %s odmítl pozvání k připojení se do konference"
 
-#: src/hooks/yahoohook.cc:965
+#: src/hooks/yahoohook.cc:975
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "Uživatel %s se připojil do konference"
 
-#: src/hooks/yahoohook.cc:980
+#: src/hooks/yahoohook.cc:990
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "Uživatel %s opustil konferenci"
 
-#: src/hooks/yahoohook.cc:1020 src/hooks/icqhook.cc:1273
+#: src/hooks/yahoohook.cc:1030 src/hooks/icqhook.cc:1273
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "si Vás přidal(a) do seznamu kontaktů"
 
-#: src/hooks/yahoohook.cc:1024
+#: src/hooks/yahoohook.cc:1034
 msgid "the message was: "
 msgstr "zpráva byla: "
 
-#: src/hooks/yahoohook.cc:1042
+#: src/hooks/yahoohook.cc:1052
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] e-mail od %s, %s"
 
-#: src/hooks/yahoohook.cc:1049
+#: src/hooks/yahoohook.cc:1059
 #, fuzzy, c-format
 msgid "+ [yahoo] system (%s): %s"
 msgstr "+ [yahoo] systém: %s"
 
-#: src/hooks/yahoohook.cc:1058
+#: src/hooks/yahoohook.cc:1068
 #, fuzzy, c-format
 msgid "+ [yahoo] fatal error: %s"
 msgstr "+ [yahoo] chyba: %s"
 
-#: src/hooks/yahoohook.cc:1062
+#: src/hooks/yahoohook.cc:1072
 #, fuzzy, c-format
 msgid "[yahoo] error %s"
 msgstr "+ [yahoo] chyba: %s"
 
-#: src/hooks/yahoohook.cc:1142
+#: src/hooks/yahoohook.cc:1152
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] přímé spojení selhalo"
+
+#: src/hooks/yahoohook.cc:1193
+#, fuzzy
+msgid "+ [yahoo] chat_cat_xml"
+msgstr "+ [yahoo] nelze se přihlásit"
+
+#: src/hooks/yahoohook.cc:1197
+#, fuzzy
+msgid "+ [yahoo] chat_join"
+msgstr "+ [yahoo] nelze se přihlásit"
+
+#: src/hooks/yahoohook.cc:1201
+#, fuzzy
+msgid "+ [yahoo] chat_userjoin"
+msgstr "+ [yahoo] nelze se přihlásit"
+
+#: src/hooks/yahoohook.cc:1205
+#, fuzzy
+msgid "+ [yahoo] chat_userleave"
+msgstr "+ [yahoo] nelze se přihlásit"
+
+#: src/hooks/yahoohook.cc:1209
+#, fuzzy, c-format
+msgid "+ [yahoo] chat_message from %s"
+msgstr "+ [yahoo] chyba: %s"
+
+#: src/hooks/yahoohook.cc:1213
+#, fuzzy, c-format
+msgid "+ [yahoo] rejected by %s: %s"
+msgstr "+ [yahoo] systém: %s"
+
+#: src/hooks/yahoohook.cc:1244
+#, fuzzy
+msgid "+ [yahoo] chat_yahooerror"
+msgstr "+ [yahoo] chyba: %s"
+
+#: src/hooks/yahoohook.cc:1248
+#, fuzzy
+msgid "+ [yahoo] chat_yahoologout"
+msgstr "+ [yahoo] nelze se přihlásit"
+
+#: src/hooks/yahoohook.cc:1252
+#, fuzzy
+msgid "+ [yahoo] yahoo connect"
+msgstr "+ [yahoo] nelze se připojit: "
+
+#: src/hooks/yahoohook.cc:1260
+#, fuzzy, c-format
+msgid "+ [yahoo] get_ip_addr %s"
+msgstr "+ [yahoo] chyba: %s"
+
+#: src/hooks/yahoohook.cc:1265
+#, c-format
+msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
+msgstr ""
+
+#: src/hooks/yahoohook.cc:1272
+#, fuzzy, c-format
+msgid "+ [yahoo] got buzz from %s"
+msgstr "+ [yahoo] e-mail od %s, %s"
 
 #: src/hooks/jabberhook.cc:360
 msgid "+ [jab] unable to connect to the server"
