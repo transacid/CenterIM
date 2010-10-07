@@ -98,6 +98,17 @@ class yahoohook: public abstracthook {
 	static void got_buddyicon(int id, const char *me, const char *who, const char *url, int checksum);
 	static void auth_request(int id, char *who, char *msg);
 	static void auth_response(int id, const char *who, char granted, const char *msg);
+	static void buddyicon_uploaded(int id, const char *url);
+	static void chat_yahooerror(int id, const char *me);
+	static void chat_yahoologout(int id, const char *me);
+	static int yahoo_connect(const char *host, int port);
+	static void file_transfer_done(int id, int result, void *data);
+	static char *get_ip_addr(const char *domain);
+	static void got_buddy_change_group(int id, const char *me, const char *who, const char *old_group, const char *new_group);
+	static void got_buddyicon_checksum(int id, char const *me, const char *who, int checksum);
+	static void got_buzz(int id, const char *me, const char *who, long tm);
+	static void got_ft_data(int id, const unsigned char *in, int len, void *data);
+	
 	static int ylog(const char *fmt, ...);
 
 	static int add_handler(int id, void *fd, yahoo_input_condition cond, void *data);

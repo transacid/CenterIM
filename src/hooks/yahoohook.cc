@@ -137,6 +137,16 @@ void yahoohook::init() {
     c.ext_yahoo_log = &ylog;
     c.ext_yahoo_got_buddyicon_request = &got_buddyicon_request;
     c.ext_yahoo_got_buddyicon = &got_buddyicon;
+    c.ext_yahoo_buddyicon_uploaded = &buddyicon_uploaded;
+    c.ext_yahoo_chat_yahooerror = &chat_yahooerror;
+    c.ext_yahoo_chat_yahoologout = &chat_yahoologout;
+    c.ext_yahoo_connect = &yahoo_connect;
+    c.ext_yahoo_file_transfer_done = &file_transfer_done;
+    c.ext_yahoo_get_ip_addr = &get_ip_addr;
+    c.ext_yahoo_got_buddy_change_group = &got_buddy_change_group;
+    c.ext_yahoo_got_buddyicon_checksum = &got_buddyicon_checksum;
+    c.ext_yahoo_got_buzz = &got_buzz;
+    c.ext_yahoo_got_ft_data = &got_ft_data;
 
     yahoo_register_callbacks(&c);
 }
@@ -1180,21 +1190,27 @@ void yahoohook::got_cookies(int id) {
 }
 
 void yahoohook::chat_cat_xml(int id, const char *xml) {
+    face.log(_("+ [yahoo] chat_cat_xml"));
 }
 
 void yahoohook::chat_join(int id, const char *me, const char *room, const char *topic, YList *members, void *fd) {
+    face.log(_("+ [yahoo] chat_join"));
 }
 
 void yahoohook::chat_userjoin(int id, const char *me, const char *room, struct yahoo_chat_member *who) {
+    face.log(_("+ [yahoo] chat_userjoin"));
 }
 
 void yahoohook::chat_userleave(int id, const char *me, const char *room, const char *who) {
+    face.log(_("+ [yahoo] chat_userleave"));
 }
 
 void yahoohook::chat_message(int id, const char *me, const char *who, const char *room, const char *msg, int msgtype, int utf8) {
+    face.log(_("+ [yahoo] chat_message from %s"), who);
 }
 
 void yahoohook::rejected(int id, const char *who, const char *msg) {
+    face.log(_("+ [yahoo] rejected by %s: %s"), who, msg);
 }
 
 void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
@@ -1219,6 +1235,44 @@ void yahoohook::got_buddyicon_request(int id, const char *me, const char *who) {
 }
 
 void yahoohook::got_buddyicon(int id, const char *me, const char *who, const char *url, int checksum) {
+}
+
+void yahoohook::buddyicon_uploaded(int id, const char *url) {
+}
+
+void yahoohook::chat_yahooerror(int id, const char *me) {
+    face.log(_("+ [yahoo] chat_yahooerror"));
+}
+
+void yahoohook::chat_yahoologout(int id, const char *me) {
+    face.log(_("+ [yahoo] chat_yahoologout"));
+}
+
+int yahoohook::yahoo_connect(const char *host, int port) {
+    face.log(_("+ [yahoo] yahoo connect"));
+    return -1;
+}
+
+void yahoohook::file_transfer_done(int id, int result, void *data) {
+}
+
+char *yahoohook::get_ip_addr(const char *domain) {
+    face.log(_("+ [yahoo] get_ip_addr %s"), domain);
+    return NULL;
+}
+
+void yahoohook::got_buddy_change_group(int id, const char *me, const char *who, const char *old_group, const char *new_group) {
+    face.log(_("+ [yahoo] yahoo buddy_change_group %s from %s to %s"), who, old_group, new_group);
+}
+
+void yahoohook::got_buddyicon_checksum(int id, char const *me, const char *who, int checksum) {
+}
+
+void yahoohook::got_buzz(int id, const char *me, const char *who, long tm) {
+    face.log(_("+ [yahoo] got buzz from %s"), who);
+}
+
+void yahoohook::got_ft_data(int id, const unsigned char *in, int len, void *data) {
 }
 
 void yahoohook::auth_request(int id, char *who, char *msg) {
