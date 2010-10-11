@@ -53,7 +53,9 @@ icqconf* icqconf::instance()
 	return self;
 }
 
-icqconf::icqconf() {
+icqconf::icqconf() : showopenedchats(false), quote(false), dropauthreq(false),
+    usingcaptcha(false), screenna(false), askquit(false), bidi(false)
+{
     DEFAULT_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm";
     DEFAULT_LOGTIMESTAMP_FORMAT = "%R ";
     SECONDS_TIMESTAMP_FORMAT = "DD.MM.YY hh:mm:ss";
