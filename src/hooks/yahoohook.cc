@@ -1212,7 +1212,18 @@ void yahoohook::chat_message(int id, const char *me, const char *who, const char
 }
 
 void yahoohook::rejected(int id, const char *who, const char *msg) {
-    face.log(_("+ [yahoo] rejected by %s: %s"), who, msg);
+    imcontact ic(who, yahoo);
+    string text = cuthtml(msg?msg: "", chCutBR | chLeaveLinks);
+    string message = "The user has rejected your authorization request";
+
+    if (!text.empty())
+    {
+    	message += " (";
+	message += text;
+	message += ")";
+    }
+
+    em.store(imnotification(ic, message));
 }
 
 void yahoohook::got_webcam_image(int id, const char * who, const unsigned char *image, unsigned int image_size, unsigned int real_size, unsigned int timestamp) {
@@ -1271,7 +1282,10 @@ void yahoohook::got_buddyicon_checksum(int id, char const *me, const char *who, 
 }
 
 void yahoohook::got_buzz(int id, const char *me, const char *who, long tm) {
-    face.log(_("+ [yahoo] got buzz from %s"), who);
+    imcontact ic(who, yahoo);
+
+    em.store(imnotification(ic, (string)
+         _("The user has buzzed you")));
 }
 
 void yahoohook::got_ft_data(int id, const unsigned char *in, int len, void *data) {
@@ -1285,29 +1299,6 @@ void yahoohook::auth_request(int id, const char *who, const char *msg) {
     text = yhook.decode(text, true);
 
 	em.store(imauthorization(ic, imevent::incoming, imauthorization::Request, text));
-}
-
-void yahoohook::auth_response(int id, const char *who, char granted, const char *msg) {
-    imcontact ic(who, yahoo);
-    string text = cuthtml(msg?msg:"", chCutBR | chLeaveLinks);
-
-    //yhook.checkinlist(ic);
-    text = yhook.decode(text, true);
-	string message;
-	if (granted)
-		message = "The user has accepted your authorization request";
-	else
-	{
-		message = "The user has rejected your authorization request";
-		if (!text.empty())
-		{
-			message += " (";
-			message += text;
-			message += ")";
-		}
-	}
-
-	em.store(imnotification(ic, message));
 }
 
 int yahoohook::ylog(const char *fmt, ...) {
