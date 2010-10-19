@@ -79,6 +79,7 @@ yahoohook::yahoohook() : abstracthook(yahoo), fonline(false), cid(0) {
     fcapabs.insert(hookcapab::conferencing);
     fcapabs.insert(hookcapab::conferencesaretemporary);
     fcapabs.insert(hookcapab::ssl);
+    fcapabs.insert(hookcapab::authrequests);
 
     pager_host[0] = pager_port[0] = filetransfer_host[0] =
 	filetransfer_port[0] = webcam_host[0] = webcam_port[0] =
@@ -147,6 +148,7 @@ void yahoohook::init() {
     c.ext_yahoo_got_buddyicon_checksum = &got_buddyicon_checksum;
     c.ext_yahoo_got_buzz = &got_buzz;
     c.ext_yahoo_got_ft_data = &got_ft_data;
+    c.ext_yahoo_auth_request = &auth_request;
 
     yahoo_register_callbacks(&c);
 }
@@ -1275,7 +1277,7 @@ void yahoohook::got_buzz(int id, const char *me, const char *who, long tm) {
 void yahoohook::got_ft_data(int id, const unsigned char *in, int len, void *data) {
 }
 
-void yahoohook::auth_request(int id, char *who, char *msg) {
+void yahoohook::auth_request(int id, const char *who, const char *msg) {
     imcontact ic(who, yahoo);
     string text = cuthtml(msg?msg: "", chCutBR | chLeaveLinks);
 

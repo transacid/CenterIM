@@ -1931,7 +1931,6 @@ static void yahoo_process_new_contact(struct yahoo_input_data *yid,
 	int online = -1;
 
 	YList *l;
-
 	for (l = pkt->hash; l; l = l->next) {
 		struct yahoo_pair *pair = l->data;
 		if (pair->key == 4)
@@ -1944,11 +1943,16 @@ static void yahoo_process_new_contact(struct yahoo_input_data *yid,
 			online = strtol(pair->value, NULL, 10);
 	}
 
-	if (who && online < 0)
+	if (pkt->status == 3) { // auth request
+		YAHOO_CALLBACK(ext_yahoo_auth_request) (yd->client_id, who, msg);
+	}
+	else if (pkt->status == 1) {
+/*	if (who && online == 1)
 		YAHOO_CALLBACK(ext_yahoo_contact_added) (yd->client_id, me, who,
 			msg);
-	else if (online == 2)
+	else */if (online == 2)
 		YAHOO_CALLBACK(ext_yahoo_rejected) (yd->client_id, who, msg);
+	}
 }
 
 /* UNUSED? */

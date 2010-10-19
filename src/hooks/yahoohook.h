@@ -96,7 +96,7 @@ class yahoohook: public abstracthook {
 	static void webcam_data_request(int id, int send);
 	static void got_buddyicon_request(int id, const char *me, const char *who);
 	static void got_buddyicon(int id, const char *me, const char *who, const char *url, int checksum);
-	static void auth_request(int id, char *who, char *msg);
+	static void auth_request(int id, const char *who, const char *msg);
 	static void auth_response(int id, const char *who, char granted, const char *msg);
 	static void buddyicon_uploaded(int id, const char *url);
 	static void chat_yahooerror(int id, const char *me);

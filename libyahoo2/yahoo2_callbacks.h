@@ -410,6 +410,18 @@ extern "C" {
 		const char *myid, const char *who, const char *msg);
 
 /*
+ * Name: ext_yahoo_auth_request
+ * 	Called when a contact tries to add us to their list
+ * Params:
+ * 	id   - the id that identifies the server connection
+ * 	who  - who tried to add us
+ * 	msg  - any message sent
+ */
+	void YAHOO_CALLBACK_TYPE(ext_yahoo_auth_request) (int id,
+		const char *who, const char *msg);
+
+
+/*
  * Name: ext_yahoo_rejected
  * 	Called when a contact rejects your add
  * Params:
