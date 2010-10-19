@@ -75,9 +75,9 @@ yahoohook::yahoohook() : abstracthook(yahoo), fonline(false), cid(0) {
     fcapabs.insert(hookcapab::setaway);
     fcapabs.insert(hookcapab::fetchaway);
     fcapabs.insert(hookcapab::directadd);
-    fcapabs.insert(hookcapab::files);
-    fcapabs.insert(hookcapab::conferencing);
-    fcapabs.insert(hookcapab::conferencesaretemporary);
+//    fcapabs.insert(hookcapab::files);
+//    fcapabs.insert(hookcapab::conferencing);
+//    fcapabs.insert(hookcapab::conferencesaretemporary);
     fcapabs.insert(hookcapab::ssl);
     fcapabs.insert(hookcapab::authrequests);
 
