@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.7.2\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-19 13:13+0200\n"
+"POT-Creation-Date: 2010-10-19 14:01+0200\n"
 "PO-Revision-Date: 2002-06-12 12:15+0300\n"
 "Last-Translator: Cawko Xakep <xakep@snark.ukma.kiev.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -406,40 +406,34 @@ msgstr "+ [yahoo] додаємо %s в контакти"
 msgid "+ [yahoo] chat_message from %s"
 msgstr "+ [yahoo] повідомлення не принято"
 
-#: src/hooks/yahoohook.cc:1215
-#, fuzzy, c-format
-msgid "+ [yahoo] rejected by %s: %s"
-msgstr "+ [yahoo] повідомлення не принято"
-
-#: src/hooks/yahoohook.cc:1246
+#: src/hooks/yahoohook.cc:1257
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ [yahoo] повідомлення не принято"
 
-#: src/hooks/yahoohook.cc:1250
+#: src/hooks/yahoohook.cc:1261
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ [yahoo] додаємо %s в контакти"
 
-#: src/hooks/yahoohook.cc:1254
+#: src/hooks/yahoohook.cc:1265
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ [yahoo] додаємо %s в контакти"
 
-#: src/hooks/yahoohook.cc:1262
+#: src/hooks/yahoohook.cc:1273
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ [yahoo] повідомлення не принято"
 
-#: src/hooks/yahoohook.cc:1267
+#: src/hooks/yahoohook.cc:1278
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:1274
-#, fuzzy, c-format
-msgid "+ [yahoo] got buzz from %s"
-msgstr "+ [msn] електронна пошта від %s <%s>, %s"
+#: src/hooks/yahoohook.cc:1288
+msgid "The user has buzzed you"
+msgstr ""
 
 #: src/hooks/jabberhook.cc:360
 #, fuzzy
@@ -3716,6 +3710,14 @@ msgstr "S Пошук, L знову, ESC - скасувати"
 #: src/icqface.cc:3348
 msgid "search for: "
 msgstr "шукати:"
+
+#, fuzzy
+#~ msgid "+ [yahoo] rejected by %s: %s"
+#~ msgstr "+ [yahoo] повідомлення не принято"
+
+#, fuzzy
+#~ msgid "+ [yahoo] got buzz from %s"
+#~ msgstr "+ [msn] електронна пошта від %s <%s>, %s"
 
 #~ msgid "%s went online, with status %s"
 #~ msgstr "%s під'єднався, статус %s"

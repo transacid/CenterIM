@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.20.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-19 13:13+0200\n"
+"POT-Creation-Date: 2010-10-19 14:01+0200\n"
 "PO-Revision-Date: 2004-02-08 01:22+0300\n"
 "Last-Translator: Konstantin Klyagin <k@thekonst.net>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -391,40 +391,35 @@ msgstr "+ [yahoo] невозможно соединиться: "
 msgid "+ [yahoo] chat_message from %s"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1215
-#, fuzzy, c-format
-msgid "+ [yahoo] rejected by %s: %s"
-msgstr "+ [yahoo] система: %s"
-
-#: src/hooks/yahoohook.cc:1246
+#: src/hooks/yahoohook.cc:1257
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1250
+#: src/hooks/yahoohook.cc:1261
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ [yahoo] невозможно соединиться: "
 
-#: src/hooks/yahoohook.cc:1254
+#: src/hooks/yahoohook.cc:1265
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ [yahoo] невозможно соединиться: "
 
-#: src/hooks/yahoohook.cc:1262
+#: src/hooks/yahoohook.cc:1273
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ [yahoo] ошибка: %s"
 
-#: src/hooks/yahoohook.cc:1267
+#: src/hooks/yahoohook.cc:1278
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:1274
-#, fuzzy, c-format
-msgid "+ [yahoo] got buzz from %s"
-msgstr "+ [yahoo] e-mail от %s, %s"
+#: src/hooks/yahoohook.cc:1288
+#, fuzzy
+msgid "The user has buzzed you"
+msgstr "Сегодня день рождения"
 
 #: src/hooks/jabberhook.cc:360
 msgid "+ [jab] unable to connect to the server"
@@ -3619,6 +3614,14 @@ msgstr "%s поиск, %s опять, %s отмена"
 #: src/icqface.cc:3348
 msgid "search for: "
 msgstr "искать: "
+
+#, fuzzy
+#~ msgid "+ [yahoo] rejected by %s: %s"
+#~ msgstr "+ [yahoo] система: %s"
+
+#, fuzzy
+#~ msgid "+ [yahoo] got buzz from %s"
+#~ msgstr "+ [yahoo] e-mail от %s, %s"
 
 #~ msgid "%s went online, with status %s"
 #~ msgstr "%s появился на линии, статус %s"

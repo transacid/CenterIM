@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: centerim 2.0.0\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-19 13:13+0200\n"
+"POT-Creation-Date: 2010-10-19 14:01+0200\n"
 "PO-Revision-Date: 2002-09-10 01:22+0300\n"
 "Last-Translator: Paulo Oliveira Filho <paulo.oliveira.filho@mail.com>\n"
 "Language-Team: Brazilian <???>\n"
@@ -409,40 +409,34 @@ msgstr "+ conectando para o servidor ICQ"
 msgid "+ [yahoo] chat_message from %s"
 msgstr "+ conectando para o servidor ICQ"
 
-#: src/hooks/yahoohook.cc:1215
-#, fuzzy, c-format
-msgid "+ [yahoo] rejected by %s: %s"
-msgstr "+ conectando para o servidor ICQ"
-
-#: src/hooks/yahoohook.cc:1246
+#: src/hooks/yahoohook.cc:1257
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ conectando para o servidor ICQ"
 
-#: src/hooks/yahoohook.cc:1250
+#: src/hooks/yahoohook.cc:1261
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ conectando para o servidor ICQ"
 
-#: src/hooks/yahoohook.cc:1254
+#: src/hooks/yahoohook.cc:1265
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ conectando para o servidor ICQ"
 
-#: src/hooks/yahoohook.cc:1262
+#: src/hooks/yahoohook.cc:1273
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ conectando para o servidor ICQ"
 
-#: src/hooks/yahoohook.cc:1267
+#: src/hooks/yahoohook.cc:1278
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:1274
-#, fuzzy, c-format
-msgid "+ [yahoo] got buzz from %s"
-msgstr "+ conectando para o servidor ICQ"
+#: src/hooks/yahoohook.cc:1288
+msgid "The user has buzzed you"
+msgstr ""
 
 #: src/hooks/jabberhook.cc:360
 #, fuzzy
@@ -3773,6 +3767,14 @@ msgstr ""
 #, fuzzy
 msgid "search for: "
 msgstr "+ pesquisa realizada"
+
+#, fuzzy
+#~ msgid "+ [yahoo] rejected by %s: %s"
+#~ msgstr "+ conectando para o servidor ICQ"
+
+#, fuzzy
+#~ msgid "+ [yahoo] got buzz from %s"
+#~ msgstr "+ conectando para o servidor ICQ"
 
 #~ msgid " [o] Online"
 #~ msgstr " [o] Online"

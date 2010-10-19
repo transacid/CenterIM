@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: centerim 3.13.3\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-19 13:13+0200\n"
+"POT-Creation-Date: 2010-10-19 14:01+0200\n"
 "PO-Revision-Date: 2001-07-08 05:03+02:00\n"
 "Last-Translator: Stéphane Bisinger <stephane.bisinger@gmail.com>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -456,45 +456,37 @@ msgid "+ [yahoo] chat_message from %s"
 msgstr "+ connessione al server icq"
 
 # src/icqhook.cc:73
-#: src/hooks/yahoohook.cc:1215
-#, fuzzy, c-format
-msgid "+ [yahoo] rejected by %s: %s"
-msgstr "+ connessione al server icq"
-
-# src/icqhook.cc:73
-#: src/hooks/yahoohook.cc:1246
+#: src/hooks/yahoohook.cc:1257
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ connessione al server icq"
 
 # src/icqhook.cc:73
-#: src/hooks/yahoohook.cc:1250
+#: src/hooks/yahoohook.cc:1261
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ connessione al server icq"
 
 # src/icqhook.cc:73
-#: src/hooks/yahoohook.cc:1254
+#: src/hooks/yahoohook.cc:1265
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ connessione al server icq"
 
 # src/icqhook.cc:73
-#: src/hooks/yahoohook.cc:1262
+#: src/hooks/yahoohook.cc:1273
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ connessione al server icq"
 
-#: src/hooks/yahoohook.cc:1267
+#: src/hooks/yahoohook.cc:1278
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-# src/icqhook.cc:73
-#: src/hooks/yahoohook.cc:1274
-#, fuzzy, c-format
-msgid "+ [yahoo] got buzz from %s"
-msgstr "+ connessione al server icq"
+#: src/hooks/yahoohook.cc:1288
+msgid "The user has buzzed you"
+msgstr ""
 
 # src/icqhook.cc:79
 #: src/hooks/jabberhook.cc:360
@@ -4293,6 +4285,16 @@ msgstr "S Cerca, L Ancora, ESC annulla"
 #: src/icqface.cc:3348
 msgid "search for: "
 msgstr "cerca: "
+
+# src/icqhook.cc:73
+#, fuzzy
+#~ msgid "+ [yahoo] rejected by %s: %s"
+#~ msgstr "+ connessione al server icq"
+
+# src/icqhook.cc:73
+#, fuzzy
+#~ msgid "+ [yahoo] got buzz from %s"
+#~ msgstr "+ connessione al server icq"
 
 # src/icqface.cc:828
 #~ msgid " [o] Online"

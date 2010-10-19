@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.9.4\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-19 13:13+0200\n"
+"POT-Creation-Date: 2010-10-19 14:01+0200\n"
 "PO-Revision-Date: 2002-01-01 01:01+0020\n"
 "Last-Translator: Thomas Nemeth <tnemeth@free.fr>\n"
 "Language-Team: fr <fr@li.org>\n"
@@ -409,40 +409,35 @@ msgstr "+ [yahoo] impossible de se connecter : "
 msgid "+ [yahoo] chat_message from %s"
 msgstr "+ [yahoo] erreur : %s"
 
-#: src/hooks/yahoohook.cc:1215
-#, fuzzy, c-format
-msgid "+ [yahoo] rejected by %s: %s"
-msgstr "+ [yahoo] système : %s"
-
-#: src/hooks/yahoohook.cc:1246
+#: src/hooks/yahoohook.cc:1257
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ [yahoo] erreur : %s"
 
-#: src/hooks/yahoohook.cc:1250
+#: src/hooks/yahoohook.cc:1261
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ [yahoo] impossible de se connecter : "
 
-#: src/hooks/yahoohook.cc:1254
+#: src/hooks/yahoohook.cc:1265
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ [yahoo] impossible de se connecter : "
 
-#: src/hooks/yahoohook.cc:1262
+#: src/hooks/yahoohook.cc:1273
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ [yahoo] erreur : %s"
 
-#: src/hooks/yahoohook.cc:1267
+#: src/hooks/yahoohook.cc:1278
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:1274
-#, fuzzy, c-format
-msgid "+ [yahoo] got buzz from %s"
-msgstr "+ [yahoo] e-mail de %s, %s"
+#: src/hooks/yahoohook.cc:1288
+#, fuzzy
+msgid "The user has buzzed you"
+msgstr "C'est l'anniversaire de l'utilisateur aujourd'hui"
 
 #: src/hooks/jabberhook.cc:360
 msgid "+ [jab] unable to connect to the server"
@@ -3674,6 +3669,14 @@ msgstr "/ chercher, N encore, ESC annuler"
 #: src/icqface.cc:3348
 msgid "search for: "
 msgstr "Chercher : "
+
+#, fuzzy
+#~ msgid "+ [yahoo] rejected by %s: %s"
+#~ msgstr "+ [yahoo] système : %s"
+
+#, fuzzy
+#~ msgid "+ [yahoo] got buzz from %s"
+#~ msgstr "+ [yahoo] e-mail de %s, %s"
 
 #~ msgid "%s went online, with status %s"
 #~ msgstr "%s s'est connecté, état : %s"

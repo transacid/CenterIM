@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: bg\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-19 13:13+0200\n"
+"POT-Creation-Date: 2010-10-19 14:01+0200\n"
 "PO-Revision-Date: 2010-02-22 12:59+0100\n"
 "Last-Translator: Damyan Yordanov <damyan@web.de>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -391,40 +391,35 @@ msgstr "+ [yahoo] невъзможно влизане"
 msgid "+ [yahoo] chat_message from %s"
 msgstr "+ [yahoo] грешка: %s"
 
-#: src/hooks/yahoohook.cc:1215
-#, fuzzy, c-format
-msgid "+ [yahoo] rejected by %s: %s"
-msgstr "+ [yahoo] система: %s"
-
-#: src/hooks/yahoohook.cc:1246
+#: src/hooks/yahoohook.cc:1257
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ [yahoo] грешка: %s"
 
-#: src/hooks/yahoohook.cc:1250
+#: src/hooks/yahoohook.cc:1261
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ [yahoo] невъзможно влизане"
 
-#: src/hooks/yahoohook.cc:1254
+#: src/hooks/yahoohook.cc:1265
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ [yahoo] невъзможна връзка: "
 
-#: src/hooks/yahoohook.cc:1262
+#: src/hooks/yahoohook.cc:1273
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ [yahoo] грешка: %s"
 
-#: src/hooks/yahoohook.cc:1267
+#: src/hooks/yahoohook.cc:1278
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:1274
-#, fuzzy, c-format
-msgid "+ [yahoo] got buzz from %s"
-msgstr "+ [yahoo] поща от %s, %s"
+#: src/hooks/yahoohook.cc:1288
+#, fuzzy
+msgid "The user has buzzed you"
+msgstr "Потребителя има рожден ден днес"
 
 #: src/hooks/jabberhook.cc:360
 msgid "+ [jab] unable to connect to the server"
@@ -3591,6 +3586,14 @@ msgstr "%s търсене, %s отново, %s откажи"
 #: src/icqface.cc:3348
 msgid "search for: "
 msgstr "търсене: "
+
+#, fuzzy
+#~ msgid "+ [yahoo] rejected by %s: %s"
+#~ msgstr "+ [yahoo] система: %s"
+
+#, fuzzy
+#~ msgid "+ [yahoo] got buzz from %s"
+#~ msgstr "+ [yahoo] поща от %s, %s"
 
 #~ msgid "%s went online, with status %s"
 #~ msgstr "%s когато е на линия, статус %s"
