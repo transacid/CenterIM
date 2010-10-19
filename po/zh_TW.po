@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: centerim 4.22.1\n"
 "Report-Msgid-Bugs-To: CenterIM developers List http://centerim.org/mailman/"
 "listinfo/centerim-devel/projects/centerim\n"
-"POT-Creation-Date: 2010-10-07 16:53+0200\n"
+"POT-Creation-Date: 2010-10-19 13:13+0200\n"
 "PO-Revision-Date: 2007-11-05 17:09+0800\n"
 "Last-Translator: Ying-Chieh Liao <ijliao@csie.nctu.edu.tw>\n"
 "Language-Team: Chinese <freebsd-taiwan-chinese@freebsd.sinica.edu.tw>\n"
@@ -243,189 +243,189 @@ msgstr "連結 : "
 msgid "Comments: "
 msgstr "附註: "
 
-#: src/hooks/yahoohook.cc:173
+#: src/hooks/yahoohook.cc:175
 msgid "+ [yahoo] cannot connect: "
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:176 src/hooks/msnhook.cc:909
+#: src/hooks/yahoohook.cc:178 src/hooks/msnhook.cc:909
 msgid "could not resolve hostname"
 msgstr "無法反解主機名稱"
 
-#: src/hooks/yahoohook.cc:177
+#: src/hooks/yahoohook.cc:179
 msgid "could not create socket"
 msgstr "無法建立連線"
 
-#: src/hooks/yahoohook.cc:178
+#: src/hooks/yahoohook.cc:180
 msgid "verify the pager host and port entered"
 msgstr "驗證所輸入的主機名及埠號"
 
-#: src/hooks/yahoohook.cc:446
+#: src/hooks/yahoohook.cc:448
 #, c-format
 msgid "+ [yahoo] leaving the %s conference"
 msgstr "+ [yahoo] 離開 %s 會議"
 
-#: src/hooks/yahoohook.cc:684
+#: src/hooks/yahoohook.cc:686
 msgid "Please join my conference."
 msgstr "請加入我的會議."
 
-#: src/hooks/yahoohook.cc:697
+#: src/hooks/yahoohook.cc:699
 msgid "Custom status message:"
 msgstr "自訂狀態訊息 :"
 
-#: src/hooks/yahoohook.cc:701
+#: src/hooks/yahoohook.cc:703
 #, fuzzy, c-format
 msgid "+ [yahoo] cannot fetch away msg from %s, %s (maybe no away msg set)"
 msgstr "+ [yahoo] 無法取得 %s, %s 的暫離訊息"
 
-#: src/hooks/yahoohook.cc:777
+#: src/hooks/yahoohook.cc:779
 #, fuzzy
 msgid "+ [yahoo] cannot login"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:783
+#: src/hooks/yahoohook.cc:785
 msgid "+ [yahoo] cannot login: username and password mismatch"
 msgstr "+ [yahoo] 無法登入 : 使用者名稱和密碼不符"
 
-#: src/hooks/yahoohook.cc:789
+#: src/hooks/yahoohook.cc:791
 #, fuzzy
 msgid "+ [yahoo] cannot login: username doesn't exist"
 msgstr "+ [yahoo] 無法登入 : 使用者名稱和密碼不符"
 
-#: src/hooks/yahoohook.cc:795
+#: src/hooks/yahoohook.cc:797
 msgid "+ [yahoo] cannot login: the account has been blocked"
 msgstr "+ [yahoo] 無法登入 : 該帳號被停用"
 
-#: src/hooks/yahoohook.cc:796
+#: src/hooks/yahoohook.cc:798
 #, c-format
 msgid "+ to reactivate visit %s"
 msgstr "+ 重新檢視 %s"
 
-#: src/hooks/yahoohook.cc:800
+#: src/hooks/yahoohook.cc:802
 msgid "+ [yahoo] another logon detected"
 msgstr "+ [yahoo] 偵測到從其他地方上線"
 
-#: src/hooks/yahoohook.cc:807
+#: src/hooks/yahoohook.cc:809
 msgid "+ [yahoo] server closed socket"
 msgstr "+ [yahoo] 伺服器關閉連結"
 
-#: src/hooks/yahoohook.cc:930
+#: src/hooks/yahoohook.cc:932
 #, c-format
 msgid ""
 "The user %s has invited you to the %s conference, the topic there is: %s"
 msgstr "使用者 %s 邀請你加入 %s 會議, 主題是 : %s"
 
-#: src/hooks/yahoohook.cc:935
+#: src/hooks/yahoohook.cc:937
 msgid "Current conference members are: "
 msgstr "目前參加會議的成員有 : "
 
-#: src/hooks/yahoohook.cc:955
+#: src/hooks/yahoohook.cc:957
 msgid "Auto-joined the conference"
 msgstr "自動加入會議"
 
-#: src/hooks/yahoohook.cc:965
+#: src/hooks/yahoohook.cc:967
 #, c-format
 msgid "The user %s has declined your invitation to join the conference"
 msgstr "使用者 %s 婉拒了你的會議邀請"
 
-#: src/hooks/yahoohook.cc:975
+#: src/hooks/yahoohook.cc:977
 #, c-format
 msgid "The user %s has joined the conference"
 msgstr "使用者 %s 加入會議中"
 
-#: src/hooks/yahoohook.cc:990
+#: src/hooks/yahoohook.cc:992
 #, c-format
 msgid "The user %s has left the conference"
 msgstr "使用者 %s 離開會議了"
 
-#: src/hooks/yahoohook.cc:1030 src/hooks/icqhook.cc:1273
+#: src/hooks/yahoohook.cc:1032 src/hooks/icqhook.cc:1273
 #: src/hooks/msnhook.cc:713
 msgid "The user has added you to his/her contact list"
 msgstr "該使用者己經將你加入他的好友名單中"
 
-#: src/hooks/yahoohook.cc:1034
+#: src/hooks/yahoohook.cc:1036
 msgid "the message was: "
 msgstr "訊息是 : "
 
-#: src/hooks/yahoohook.cc:1052
+#: src/hooks/yahoohook.cc:1054
 #, c-format
 msgid "+ [yahoo] e-mail from %s, %s"
 msgstr "+ [yahoo] 從 %s, %s 寄來的 e-mail"
 
-#: src/hooks/yahoohook.cc:1059
+#: src/hooks/yahoohook.cc:1061
 #, fuzzy, c-format
 msgid "+ [yahoo] system (%s): %s"
 msgstr "+ [yahoo] 系統訊息 : %s"
 
-#: src/hooks/yahoohook.cc:1068
+#: src/hooks/yahoohook.cc:1070
 #, fuzzy, c-format
 msgid "+ [yahoo] fatal error: %s"
 msgstr "+ [yahoo] 錯誤 : %s"
 
-#: src/hooks/yahoohook.cc:1072
+#: src/hooks/yahoohook.cc:1074
 #, fuzzy, c-format
 msgid "[yahoo] error %s"
 msgstr "+ [yahoo] 錯誤 : %s"
 
-#: src/hooks/yahoohook.cc:1152
+#: src/hooks/yahoohook.cc:1154
 msgid "+ [yahoo] direct connection failed"
 msgstr "+ [yahoo] 無法直接連線"
 
-#: src/hooks/yahoohook.cc:1193
+#: src/hooks/yahoohook.cc:1195
 #, fuzzy
 msgid "+ [yahoo] chat_cat_xml"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:1197
+#: src/hooks/yahoohook.cc:1199
 #, fuzzy
 msgid "+ [yahoo] chat_join"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:1201
+#: src/hooks/yahoohook.cc:1203
 #, fuzzy
 msgid "+ [yahoo] chat_userjoin"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:1205
+#: src/hooks/yahoohook.cc:1207
 #, fuzzy
 msgid "+ [yahoo] chat_userleave"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:1209
+#: src/hooks/yahoohook.cc:1211
 #, fuzzy, c-format
 msgid "+ [yahoo] chat_message from %s"
 msgstr "+ [yahoo] 錯誤 : %s"
 
-#: src/hooks/yahoohook.cc:1213
+#: src/hooks/yahoohook.cc:1215
 #, fuzzy, c-format
 msgid "+ [yahoo] rejected by %s: %s"
 msgstr "+ [yahoo] 系統訊息 : %s"
 
-#: src/hooks/yahoohook.cc:1244
+#: src/hooks/yahoohook.cc:1246
 #, fuzzy
 msgid "+ [yahoo] chat_yahooerror"
 msgstr "+ [yahoo] 錯誤 : %s"
 
-#: src/hooks/yahoohook.cc:1248
+#: src/hooks/yahoohook.cc:1250
 #, fuzzy
 msgid "+ [yahoo] chat_yahoologout"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:1252
+#: src/hooks/yahoohook.cc:1254
 #, fuzzy
 msgid "+ [yahoo] yahoo connect"
 msgstr "+ [yahoo] 無法連線: "
 
-#: src/hooks/yahoohook.cc:1260
+#: src/hooks/yahoohook.cc:1262
 #, fuzzy, c-format
 msgid "+ [yahoo] get_ip_addr %s"
 msgstr "+ [yahoo] 錯誤 : %s"
 
-#: src/hooks/yahoohook.cc:1265
+#: src/hooks/yahoohook.cc:1267
 #, c-format
 msgid "+ [yahoo] yahoo buddy_change_group %s from %s to %s"
 msgstr ""
 
-#: src/hooks/yahoohook.cc:1272
+#: src/hooks/yahoohook.cc:1274
 #, fuzzy, c-format
 msgid "+ [yahoo] got buzz from %s"
 msgstr "+ [yahoo] 從 %s, %s 寄來的 e-mail"
@@ -2451,112 +2451,112 @@ msgstr "在更新資料前必需先登入 Gadu-Gadu 網路"
 msgid "registration is not supported"
 msgstr "註冊目前尚未支援"
 
-#: src/icqconf.cc:206
+#: src/icqconf.cc:208
 #, c-format
 msgid "I do really enjoy the default %s away message of %s %s."
 msgstr "我很喜歡預設的 %s 暫離訊息 %s %s."
 
-#: src/icqconf.cc:1078
+#: src/icqconf.cc:1080
 msgid "+ ERROR: captcha disabled: no questions found!"
 msgstr "+ ERROR: CAPTCHA 取消 : 問題不存在 !"
 
-#: src/icqconf.cc:1338
+#: src/icqconf.cc:1340
 #, c-format
 msgid "+ launched the %s action command"
 msgstr "+ 執行 %s 指令"
 
-#: src/icqconf.cc:1543
+#: src/icqconf.cc:1545
 msgid "event sending error: not enough parameters"
 msgstr "事件傳送錯誤 : 參數不足"
 
-#: src/icqconf.cc:1554
+#: src/icqconf.cc:1556
 msgid "event sending error: only UINs are allowed with icq protocol"
 msgstr "事件傳送錯誤 : 只有在 ICQ 協定才能傳 UINs"
 
-#: src/icqconf.cc:1569
+#: src/icqconf.cc:1571
 msgid "event sending error: unknown IM type"
 msgstr "事件傳送錯誤 : 不明的 IM 型態"
 
-#: src/icqconf.cc:1591
+#: src/icqconf.cc:1593
 msgid "event sending error: unknown event type"
 msgstr "事件傳送錯誤 : 不明的事件型態"
 
-#: src/icqconf.cc:1608
+#: src/icqconf.cc:1610
 #, c-format
 msgid "%s to %s has been put to the queue"
 msgstr "%s 到 %s 已被放入佇列中"
 
-#: src/icqconf.cc:1614
+#: src/icqconf.cc:1616
 msgid "event sending error: error creating directory for the contact"
 msgstr "事件傳送錯誤 : 無法新增該使用者的目錄"
 
-#: src/icqconf.cc:1661
+#: src/icqconf.cc:1663
 msgid "unknown status character was given"
 msgstr "不明的狀態字元"
 
-#: src/icqconf.cc:1664
+#: src/icqconf.cc:1666
 msgid "unknown IM type"
 msgstr "不明的 IM 型態"
 
-#: src/icqconf.cc:1667
+#: src/icqconf.cc:1669
 msgid "status change error: "
 msgstr "狀態字元有誤 : "
 
-#: src/icqconf.cc:1678
+#: src/icqconf.cc:1680
 msgid "Usage: "
 msgstr "使用方法: "
 
-#: src/icqconf.cc:1678
+#: src/icqconf.cc:1680
 msgid " [OPTION]..."
 msgstr ""
 
-#: src/icqconf.cc:1680
+#: src/icqconf.cc:1682
 msgid "General options:"
 msgstr "一般選項:"
 
-#: src/icqconf.cc:1681
+#: src/icqconf.cc:1683
 msgid ""
 "  --ascii, -a              use ASCII characters for windows and UI controls"
 msgstr "  --ascii, -a              使用 ASCII 字元來繪出視窗以及使用者介面"
 
-#: src/icqconf.cc:1682
+#: src/icqconf.cc:1684
 msgid "  --basedir, -b <path>     set a custom base directory"
 msgstr "  --basedir, -b <path>     設定一個自訂目錄"
 
-#: src/icqconf.cc:1683
+#: src/icqconf.cc:1685
 msgid "  --bind, -B <host/ip>     bind a custom local IP"
 msgstr "  --bind, -B <host/ip>     使用自訂的 IP"
 
-#: src/icqconf.cc:1684
+#: src/icqconf.cc:1686
 msgid "  --no-xtitles, -T         disable xterm titles"
 msgstr "  --no-xtitles, -T         不去修改 xterm 的視窗標題"
 
-#: src/icqconf.cc:1685
+#: src/icqconf.cc:1687
 msgid ""
 "  --offline, -o            set all protocols status to offline upon start"
 msgstr "  --offline, -o            啟動時將所有協定的狀態都設為離線"
 
-#: src/icqconf.cc:1686
+#: src/icqconf.cc:1688
 msgid "  --debug, -d              enables debug info logging"
 msgstr "  --debug, -d              啟動除錯資訊"
 
-#: src/icqconf.cc:1687
+#: src/icqconf.cc:1689
 msgid "  --help                   display this stuff"
 msgstr "  --help                   顯示這份訊息"
 
-#: src/icqconf.cc:1688
+#: src/icqconf.cc:1690
 msgid "  --version, -v            show the program version info"
 msgstr "  --version, -v            顯示程式版本資訊"
 
-#: src/icqconf.cc:1690
+#: src/icqconf.cc:1692
 msgid "Events sending options:"
 msgstr "事件傳送選項:"
 
-#: src/icqconf.cc:1691
+#: src/icqconf.cc:1693
 msgid "  -s, --send <event type>  event type; can be msg, sms or url"
 msgstr "  -s, --send <event type>  事件類型; 可以是 msg, sms 或是 url"
 
-#: src/icqconf.cc:1692
+#: src/icqconf.cc:1694
 msgid ""
 "  -S, --status <status>    change the current IM status. Status; o, _, a, d, "
 "n, c, f, i"
@@ -2564,7 +2564,7 @@ msgstr ""
 "  -S, --status <status>    設定目前的 IM 狀態. 狀態可以是 : o, _, a, d, n, "
 "c, f, i"
 
-#: src/icqconf.cc:1693
+#: src/icqconf.cc:1695
 msgid ""
 "  -p, --proto <protocol>   protocol type; can be icq, yahoo, msn, aim, irc, "
 "jab, rss, lj, gg or infocard"
@@ -2572,16 +2572,16 @@ msgstr ""
 "  -p, --proto <protocol>   協定類型; 可以是 icq, yahoo, msn, aim, irc, jab, "
 "rss, lj, gg 或是 infocard"
 
-#: src/icqconf.cc:1695
+#: src/icqconf.cc:1697
 msgid ""
 "  -t, --to <destination>   destination UIN or nick (depends on protocol)"
 msgstr "  -t, --to <destination>   對象 UIN 或是暱稱 (依協定類型而異)"
 
-#: src/icqconf.cc:1696
+#: src/icqconf.cc:1698
 msgid "  -n, --number <phone#>    mobile number to send an event to (sms only)"
 msgstr "  -n, --number <phone#>    手機號碼 (只限用在短訊)"
 
-#: src/icqconf.cc:1698
+#: src/icqconf.cc:1700
 #, fuzzy
 msgid "Report bugs to http://bugzilla.centerim.org/."
 msgstr "錯誤請通報 http://bugzilla.centerim.org"
