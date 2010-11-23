@@ -1,3 +1,232 @@
+2010-10-26  Roger  <roger@jikos.cz>
+
+	Disable standard printf() redefinition in yahoo_util.h Should fix #165
+
+2010-10-23  Boris Petersen  <transacid@gmail.com>
+
+	Fix for CVE-2009-3720 in libjabber's xml parser
+
+2010-10-19  Roger  <roger@jikos.cz>
+
+	Updated po files
+
+	Merge branch 'mob' of git+ssh://repo.or.cz:22/srv/git/centerim into mob
+
+	Yahoo - disable conference and file transfer support (it doesn't work anyway)
+
+	Propper authorization and buzz events
+
+2010-10-19  Boris Petersen  <transacid@gmail.com>
+
+	updated po files
+
+2010-10-19  Roger  <roger@jikos.cz>
+
+	Yahoo - add buddy authentication
+
+2010-10-11  Roger  <roger@jikos.cz>
+
+	Add missing initialization to get rid of some valgrind warnings
+
+2010-10-07  Boris Petersen  <transacid@gmail.com>
+
+	updated po files
+
+2010-10-07  Roger  <roger@jikos.cz>
+
+	Yahoo - implement missing callback stubs
+
+2010-10-05  Boris Petersen  <transacid@gmail.com>
+
+	updated po files
+
+2010-10-05  Roger  <roger@jikos.cz>
+
+	Yahoo - implement missing callbacks
+
+2010-10-04  Roger  <roger@jikos.cz>
+
+	fix GNUTLS connection
+
+2010-10-02  Roger  <roger@jikos.cz>
+
+	connwrap - initialize gnutls session in cw_connect
+
+	connwrap - don't deinit gnutls session in cw_nb_connect on error, it's done in delsock
+
+2010-09-16  Roger  <roger@jikos.cz>
+
+	Add missing sources to libyahoo2 makefile
+
+2010-09-16  Boris Petersen  <transacid@gmail.com>
+
+	updated po files
+
+	ignore .version file
+
+2010-09-16  Roger  <roger@jikos.cz>
+
+	Port Yahoo to new libyahoo2-1.0.1
+	Disables file transfer (at least for now)
+
+	Fix SSL context leak in connwrap
+
+2010-08-27  Boris Petersen  <transacid@gmail.com>
+
+	Added gettext-devel test to autogen.sh
+
+2010-08-27  Sven Putteneers  <sven@tuxera.be>
+
+	display received time if different from sent time
+
+	Added script to extract a part of a chatlog history and pretty-print it.
+	Run without parameters for usage info.
+
+2010-07-31  Boris Petersen  <transacid@gmail.com>
+
+	adding new script for history formating.
+	initial script by Ilya Sukhanov <ilya@sukhanov.net>
+
+2010-06-19  Roger  <roger@lv.(none)>
+
+	Add missing initialization to perm/deny SNAC and don't overwrite its id in SBL parsing
+
+2010-04-24  Boris Petersen  <transacid@gmail.com>
+
+	Merge git-version-gen with gnulib
+
+2010-02-25  Damyan Yordanov  <damyan@web.de>
+
+	bulgarian translation updated
+
+2010-02-25  Boris Petersen  <transacid@gmail.com>
+
+	updated po files
+
+2010-02-21  Boris Petersen  <transacid@gmail.com>
+
+	refresh index before checking for dirty versions
+
+2010-02-21  Damyan Yordanov  <damyan@web.de>
+
+	bulgarian translation updated
+
+2010-02-18  Lubomir Rintel  <lkundrak@v3.sk>
+
+	Use RAND_add() with nss_compat_openssl
+	It does not provide RAND_seed().
+
+2010-02-18  Boris Petersen  <transacid@gmail.com>
+
+	updated po files
+
+2010-02-17  Roger  <roger@lv.(none)>
+
+	Better jabber presence handling
+
+2010-02-05  Boris Petersen  <transacid@gmail.com>
+
+	Merge branch 'versioning' into mob
+
+2010-02-05  أحمد المحمودي (Ahmed El-Mahmoudy)  <aelmahmoudy@sabily.org>
+
+	Check for FriBidi using pkg-config
+	New upstream releases of FriBidi don't provide fribidi-config anymore, so
+	using pkg-config instead to check for FriBidi.
+
+2010-01-31  Boris Petersen  <transacid@gmail.com>
+
+	new packaging friendlier versioning
+	This basically omits the 4 hash digits at the end of the version string.
+	so e.g.:
+	centerim-4.22.9.12-3be3.tar.gz
+	will end up
+	centerim-4.22.9.12.tar.gz
+	This makes it easier to package mobshot in gentoo for example.
+
+	Updated po files
+
+2010-01-29  Hakan Kvist  <hagar@df.lth.se>
+
+	Fixed compiler warnings in kkiproc.cc
+	Removed unused function in kkiproc.cc and fixed
+	compilewarnings regarding xprintf.
+
+	stringstream << should be used instead of sprintf,
+	and cout << instead of printf.
+
+	Beacause:
+	int64_t foo = 0xffffffffffffffff;
+	printf (%lx, foo);
+
+	printf will behave as expected on a 64 bit platform,
+	but not on a 32 bit platform (only ffffffff will be printed).
+
+2010-01-28  Hakan Kvist  <hagar@df.lth.se>
+
+	Cleanup of "extra protection" for ~/.centerim directory.
+	Reverted some parts of the commits:
+	e0ab4eeb52cdba438aa2834c4223881ab006b854
+	deb0cbaa7c385d2656229ac366071c090c55f597
+
+	See the discussion here:
+	http://centerim.org/pipermail/centerim-devel/2009-June/000678.html
+
+	If the ~/.centerim directory got the proper protection, then there
+	is no need for bloating the code with a lot of extra verifications.
+	No one else than the owner can access the files in ~/centerim
+	anyway.
+
+	Removal of unused variables
+	Removed a couple of unused variables.
+	There is still a lot to do if we want to be able to use -Wall for detecting
+	real errors (currently there are too many warnings in the output, so -Wall isn't
+	really useful).
+
+	Ncurses RTFM. remove ugly prototypes for FreeBSD and OSX
+	When reading the ncurses man page you find that
+	_XOPEN_SOURCE_EXTENDED must be defined when using
+	wide character functions when including ncurses.h.
+
+2010-01-26  Hakan Kvist  <hagar@df.lth.se>
+
+	Try to fix FreeBSD ncurses compile errors.
+	Tested on Ubuntu 9.04 and FreeBSD 7.2.
+
+	Try to fix FreeBSD ncurses compile errors.
+	Tested on Ubuntu 9.04 and FreeBSD 7.2.
+
+	Try to fix FreeBSD ncurses compile errors.
+
+2010-01-25  Hakan Kvist  <hagar@df.lth.se>
+
+	configure: check for ncurses/ncursesw. Only curses is not enough.
+	Some platforms (i.e Solaris 11), still ships ancient curses.
+	However centerim requires ncurses in order to compile.
+	Adapted configure.ac to only check for ncurses(w) instead of (n)curses(w).
+
+	Cleaned up #ifdefs in conscommon.h
+
+2010-01-19  Hakan Kvist  <hagar@df.lth.se>
+
+	Fixed compiler error with FreeBSD. Also fixed link error against curseslib.
+	FreeBSD do not want <utmp.h> to be included. However utmp is only used in linux,
+	so we do not need to include utmp.h for non linux systems.
+
+	Also bug in configure script was fixed.
+	The curses-lib was not properly included in the $LIBS-variable in the
+	configure.ac file.
+
+2010-01-19  Boris Petersen  <transacid@gmail.com>
+
+	Better check for ncurses/ncursesw
+	With many thanks to the autoconf archive for the macro
+	and Stéphane "kjir" Bisinger for the pointers and hints ;)
+
+2009-12-14  Boris Petersen  <transacid@gmail.com>
+
+	Updating Changelog for 4.22.9
+
 2009-12-13  Boris Petersen  <transacid@gmail.com>
 
 	New taging model.
