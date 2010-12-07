@@ -15,6 +15,7 @@ class jabberhook: public abstracthook {
 	string uuid;
 
 	bool flogged, fonline, regmode, regdone;
+	string updatinguser;
 	string regerr;
 
 	time_t timer_keepalive;
@@ -78,7 +79,7 @@ class jabberhook: public abstracthook {
 	void gotsearchresults(xmlnode x);
 	void gotloggedin();
 	void postlogin();
-	void gotroster(xmlnode x);
+	void gotroster(xmlnode x, bool login);
 	void gotvcard(const imcontact &ic, xmlnode v);
 	void gotmessage(const string &type, const string &from, const string &body, const string &enc);
 	void gotversion(const imcontact &ic, xmlnode x);

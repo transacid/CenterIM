@@ -1272,7 +1272,7 @@ void jabberhook::gotloggedin() {
     xmlnode_free(x);
 }
 
-void jabberhook::gotroster(xmlnode x) {
+void jabberhook::gotroster(xmlnode x, bool login) {
     xmlnode y, z;
     imcontact ic;
     icqcontact *c;
@@ -1289,8 +1289,10 @@ void jabberhook::gotroster(xmlnode x) {
 	grp = group ? rusconv("uk", group) : "";
 
 	if(alias) {
+	    updatinguser = jidnormalize(alias);
 	    ic = imcontact(jidtodisp(alias), proto);
 	    clist.updateEntry(ic, grp);
+	    updatinguser = "";
 
 	    if(c = clist.get(ic)) {
 		if(name) c->setdispnick(rusconv("uk", name)); else {
@@ -1307,7 +1309,8 @@ void jabberhook::gotroster(xmlnode x) {
 	}
     }
 
-    postlogin();
+    if (login)
+	postlogin();
 }
 
 void jabberhook::postlogin() {
@@ -1526,6 +1529,8 @@ void jabberhook::updatecontact(icqcontact *c) {
     xmlnode x, y;
 
     if(logged()) {
+	if (jidnormalize(c->getdesc().nickname) == updatinguser)
+	    return;
 	char *cjid = strdup(jidnormalize(c->getdesc().nickname).c_str());
         char *cname = strdup(rusconv("ku", c->getdispnick()).c_str());
 
@@ -2024,7 +2029,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		    p = xmlnode_get_attrib(x, "xmlns"); if(p) ns = p;
 
 		    if(ns == NS_ROSTER) {
-			jhook.gotroster(x);
+			jhook.gotroster(x, true);
 
 		    } else if(ns == NS_AGENTS) {
 			for(y = xmlnode_get_tag(x, "agent"); y; y = xmlnode_get_nextsibling(y)) {
@@ -2146,6 +2151,16 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 					    jhook.getfile_http(ic, packet->x);
 #endif
 					    return;
+				    }
+				    else if (!strcmp(p, NS_ROSTER)) {
+					jhook.gotroster(x, false);
+					x = jutil_iqnew2(JPACKET__ERROR);
+					xmlnode_put_attrib(x, "to", from.c_str());
+					xmlnode_put_attrib(x, "id", packet_id.c_str());
+					xmlnode_put_attrib(x, "type", "result");
+					jab_send(conn, x);
+					xmlnode_free(x);
+					break;
 				    }
 			    }
 		    }
