@@ -64,7 +64,7 @@ icqconf::icqconf() : showopenedchats(false), quote(false), dropauthreq(false),
     rs = rscard;
     rc = rcdark;
     cm = cmproto;
-    fgroupmode = nogroups;
+    fgroupmode = group1;
     fsortmode = sort_by_status_and_activity;
 
     autoaway = autona = 0;
@@ -586,6 +586,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "sockspass") sockspass = buf; else
 	    if((param == "usegroups") || (param == "group1")) fgroupmode = group1; else
 	    if(param == "group2") fgroupmode = group2; else
+	    if(param == "nogroups") fgroupmode = nogroups; else
 	    if(param == "protocolormode") cm = icqconf::cmproto; else
 	    if(param == "statuscolormode") cm = icqconf::cmstatus; else
 	    if(param == "sort_by_status_and_activity") setsortmode(icqconf::sort_by_status_and_activity); else
@@ -728,6 +729,7 @@ void icqconf::save() {
 	    switch(getgroupmode()) {
 		case group1: f << "group1" << endl; break;
 		case group2: f << "group2" << endl; break;
+		default: f << "nogroups" << endl; break;
 	    }
 
 	    switch(getcolormode()) {
