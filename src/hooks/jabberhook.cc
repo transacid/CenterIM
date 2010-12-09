@@ -193,13 +193,13 @@ static string jidtodisp(const string &jid) {
     return user;
 }
 
-static imstatus get_presence(std::map<string, pair<char, imstatus> > res) // <resource, <prio, status> >
+static imstatus get_presence(std::map<string, pair<int, imstatus> > res) // <resource, <prio, status> >
 {
 	if (res.empty())
 		return offline;
 	imstatus result = offline;
-	char prio = -127;
-	for (map<string, pair<char, imstatus> >::iterator it = res.begin(); it!= res.end(); it++)
+	int prio = -127;
+	for (map<string, pair<int, imstatus> >::iterator it = res.begin(); it!= res.end(); it++)
 	{
 		if (it->second.first>prio)
 		{
@@ -286,7 +286,9 @@ void jabberhook::connect() {
     if(jc){
       jab_delete(jc);
     }
-
+    
+    statuses.clear();
+    
     jc = jab_new(cjid, cpass, cserver, acc.port,
 	acc.additional["ssl"] == "1" ? 1 : 0);
 
@@ -319,6 +321,7 @@ void jabberhook::disconnect() {
     jab_stop(jc);
     jab_delete(jc);
     jc = 0;
+    statuses.clear();
 }
 
 void jabberhook::exectimers() {
@@ -1856,20 +1859,20 @@ string jabberhook::getourjid() {
     return jid;
 }
 
-imstatus jabberhook::process_presence(string id, string s, char prio, imstatus ust)
+imstatus jabberhook::process_presence(string id, string s, int prio, imstatus ust)
 {
 	if (statuses.find(id) == statuses.end()) { // new and only presence
 		if (ust != offline)
-			(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+			(statuses[id])[s] = pair<int, imstatus>(prio, ust);
 	} else {
 		if (statuses[id].find(s) == statuses[id].end()) { // unknown resource
 			if (ust != offline)
-				(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+				(statuses[id])[s] = pair<int, imstatus>(prio, ust);
 		} else {
 			if (ust == offline) // remove resource
 				(statuses[id]).erase(s);
 			else { // known contact
-				(statuses[id])[s] = pair<char, imstatus>(prio, ust);
+				(statuses[id])[s] = pair<int, imstatus>(prio, ust);
 			}
 		}
 		ust = get_presence(statuses[id]);
@@ -2310,7 +2313,7 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 		icqcontact *c = clist.get(ic);
 		
 		if(c) {
-			char prio = (char) jutil_priority(packet->x); // priority
+			int prio = jutil_priority(packet->x); // priority
 			ust = jhook.process_presence(id, s, prio, ust);
 		    if(c->getstatus() != ust) {
 			jhook.awaymsgs[ic.nickname] = "";

@@ -27,7 +27,7 @@ class jabberhook: public abstracthook {
 	map<string, string> full_jids; //little trick to store users full JID's, it required in some xmpp packets
 	map<imfile, pair<struct send_file *, string> > transferinfo;
 	map<string, vector<string> > chatmembers;
-	map<string, map<string, pair<char, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
+	map<string, map<string, pair<int, imstatus> > > statuses;  // <JID, <resource, <prio, status> > >
 	set<string> ignore_ids; // set of packet IDs to ignore errors from
 
 	struct agent {
@@ -61,7 +61,7 @@ class jabberhook: public abstracthook {
 
 	vector<agent> agents;
 
-	imstatus process_presence(string id, string s, char prio, imstatus ust);
+	imstatus process_presence(string id, string s, int prio, imstatus ust);
 
 	static void statehandler(jconn conn, int state);
 	static void packethandler(jconn conn, jpacket packet);
