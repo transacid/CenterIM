@@ -1293,6 +1293,7 @@ void jabberhook::gotroster(xmlnode x, bool login) {
 
 	if(alias) {
 	    updatinguser = jidnormalize(alias);
+	    roster[jidnormalize(alias)] = grp;
 	    ic = imcontact(jidtodisp(alias), proto);
 	    clist.updateEntry(ic, grp);
 	    updatinguser = "";
@@ -1308,7 +1309,6 @@ void jabberhook::gotroster(xmlnode x, bool login) {
 		}
 	    }
 
-	    roster[jidnormalize(alias)] = grp;
 	}
     }
 
