@@ -1946,11 +1946,27 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 	       xmlns = jabber:x:encrypted */
 
 	    for(x = xmlnode_get_firstchild(packet->x); x; x = xmlnode_get_nextsibling(x)) {
-		if((p = xmlnode_get_name(x)) && !strcmp(p, "x"))
-		if((p = xmlnode_get_attrib(x, "xmlns")) && !strcasecmp(p, "jabber:x:encrypted"))
-		if(p = xmlnode_get_data(x)) {
-		    enc = p;
-		    break;
+		if((p = xmlnode_get_name(x))) {
+		    if(!strcmp(p, "x")) {
+			if((p = xmlnode_get_attrib(x, "xmlns")) && !strcasecmp(p, "jabber:x:encrypted"))
+			if(p = xmlnode_get_data(x)) {
+			enc = p;
+			break;
+			}
+		    } else {
+			char *ns;
+			if ((ns = xmlnode_get_attrib(x, "xmlns")) && !strcmp(ns, "http://jabber.org/protocol/chatstates")) {
+			    icqcontact *c = clist.get(ic);
+			    time_t when = 0;
+			    if (!strcmp(p, "composing") /* || !strcmp(p, "active")*/ ) {
+				when = time(NULL) + 300; // nobody should type for more than five minutes without a break...
+			    }
+			    if (c) {
+				c->setlasttyping(when);
+				face.relaxedupdate();
+			    }
+			}
+		    }
 		}
 	    }
 
@@ -2327,6 +2343,8 @@ void jabberhook::packethandler(jconn conn, jpacket packet) {
 				xmlnode_free(x);
 				jhook.agents.push_back(agent(from, "", "", agent::atUnknown));
 			}
+			if (ust == offline)
+			    c->setlasttyping(0);
 			c->setstatus(ust);
 		    }
 
