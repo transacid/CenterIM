@@ -609,6 +609,7 @@ void icqconf::loadmainconfig() {
 	    if(param == "askquit") askquit = true; else
 	    if(param == "logtimestamps") logtimestamps = true; else
 	    if(param == "logonline") logonline = true; else
+        if(param == "nicknameonly") nicknameonly = true; else
 	    if(param == "fromcharset") fromcharset = buf; else
 	    if(param == "tocharset") tocharset = buf; else
 	    if(param == "left_panel_width")  leftpanelwidth  = atol(buf.c_str()); else
@@ -714,6 +715,7 @@ void icqconf::save() {
 	    if(logtimestamps) f << "logtimestamps" << endl;
 	    if(timestampstothesecond) f << "timestampstothesecond" << endl;
 	    if(logonline) f << "logonline" << endl;
+        if(nicknameonly) f << "nicknameonly" << endl;
 
 	    f << "smtp\t" << getsmtphost() << ":" << getsmtpport() << endl;
 	    f << "browser\t" << getbrowser() << endl;

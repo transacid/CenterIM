@@ -161,7 +161,7 @@ class icqconf {
 	    makelog, fenoughdiskspace, askaway, bidi, logtimestamps,
 	    logonline, emacs, proxyconnect, proxyssl, notitles, debug,
 	    timestampstothesecond, dropauthreq, usingcaptcha, askquit,
-	    showopenedchats, vi, autoawayx;
+	    showopenedchats, vi, autoawayx, nicknameonly;
 
 	unsigned int captchatimeout;
 
@@ -401,6 +401,9 @@ class icqconf {
 	string getcaptchasuccess() const { return captchasuccess; }
 	string getcaptchafailure() const { return captchafailure; }
 	unsigned int getcaptchatimeout() const { return captchatimeout; }
+
+    bool getnicknameonly() const { return nicknameonly; }
+    void setnicknameonly(const int fnicknameonly) { nicknameonly = fnicknameonly; }
 
 	captcha thecaptcha;
 

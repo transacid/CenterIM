@@ -141,10 +141,18 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 	    fmt = _("%s is now %s, was %s");
 	}
 
-	name = cont.totext();
-	if(c = clist.get(cont)) {
-	    name += " (" + c->getdispnick() + ")";
-	}
+    if (conf->getnicknameonly()) {
+        if (c = clist.get(cont)) {
+            name += c->getdispnick();
+        } else {
+            name = cont.totext();
+        }
+    } else {
+        name = cont.totext();
+        if (c = clist.get(cont)) {
+            name += " (" + c->getdispnick() + ")";
+        }
+    }
 
 	snprintf(buf, sizeof(buf), fmt, name.c_str(), imstatus2name(st), imstatus2name(oldst));
 

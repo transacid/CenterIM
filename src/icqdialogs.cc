@@ -1143,6 +1143,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
     bool logtimestamps, logonline;
     conf->getlogoptions(logtimestamps, logonline);
     bool usex = false;
+    bool nicknameonly = conf->getnicknameonly();
 
     int ptpmin, ptpmax;
     conf->getpeertopeer(ptpmin, ptpmax);
@@ -1301,6 +1302,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 	t.addleaff(i, 0, 48, _(" Timestamps include seconds : %s "), stryesno(timestampstothesecond));
 	t.addleaff(i, 0, 10, _(" Online/offline events in the log window : %s "), stryesno(logonline));
 	t.addleaff(i, 0, 18, _(" Detailed IM events log in ~/.centerim/log : %s "), stryesno(makelog));
+    t.addleaff(i, 0, 58, _(" Nicknames only : %s "), stryesno(nicknameonly));
 
 	i = t.addnode(_(" Auto Presence Status "));
 	t.addleaff(i, 0, 4, _(" Automatically set Away period (min) : %d "), aaway);
@@ -1502,6 +1504,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		    case 55: showopenedchats = !showopenedchats; break;
 		    case 56: vi = !vi; break;
 		    case 57: usex = !usex; break;
+            case 58: nicknameonly = !nicknameonly; break;
                 
   		}
   		break;
@@ -1525,6 +1528,7 @@ bool icqface::updateconf(icqconf::regsound &s, icqconf::regcolor &c) {
 		conf->setproxyconnect(proxyconnect);
 		conf->settimestampstothesecond(timestampstothesecond);
 		conf->setcharsets(convertfrom, convertto);
+        conf->setnicknameonly(nicknameonly);
 
 		for(pname = icq; pname != protocolname_size; pname++) {
 		    conf->setchatmode(pname, chatmode[pname]);
