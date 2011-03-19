@@ -403,7 +403,7 @@ class icqconf {
 	unsigned int getcaptchatimeout() const { return captchatimeout; }
 
     bool getnicknameonly() const { return nicknameonly; }
-    void setnicknameonly(const int fnicknameonly) { nicknameonly = fnicknameonly; }
+    void setnicknameonly(const bool fnicknameonly) { nicknameonly = fnicknameonly; }
 
 	captcha thecaptcha;
 

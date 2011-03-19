@@ -143,7 +143,7 @@ void imlogger::putonline(const imcontact &cont, const imstatus &oldst, const ims
 
     if (conf->getnicknameonly()) {
         if (c = clist.get(cont)) {
-            name += c->getdispnick();
+            name = c->getdispnick();
         } else {
             name = cont.totext();
         }
