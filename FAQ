@@ -26,7 +26,7 @@ A: Use gmake instead of make
 Q: (by Paonia Ezrine, paonia@home.welcomehome.org)
    When I run centerim in a xterm or from the console it is fine but
    when I run it in a gnome terminal windows the screen does not update
-   correctly. Specificly the right side of the screen does not get
+   correctly. Specifically the right side of the screen does not get
    cleared after I send a message or other similar events.
 
 A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
@@ -49,7 +49,7 @@ A: (by Jakub Travnik, j.travnik@sh.cvut.cz)
 
 /* *** */
 
-Q: How do I authorize someone's request with centerim?
+Q: How do I authorize someones request with centerim?
 
 A: You'll see as soon as someone requests it.
 
@@ -67,7 +67,7 @@ A: Execute the following before starting centerim:
 Q: I can't get out from a dialog or a menu. When I press ESC, nothing
    happens.
 
-A: Have you ever used mc (Midnight commander)? It requires users to
+A: Have you ever used MC (Midnight commander)? It requires users to
    press ESC twice to close a dialog, menu, etc. It's not a problem, but
    just a terminal specific issue.
 
@@ -89,8 +89,8 @@ A: C++ compiler optimization being a rather slow thing is on by default.
 
 Q: From: jeff covey <jeff.covey@pobox.com>
 
-  if i understand the faq correctly, centerim makes esc into escesc
-  because some terminals don't map esc properly. could the use of esc or
+  if i understand the FAQ correctly, centerim makes ESC into escesc
+  because some terminals don't map ESC properly. could the use of ESC or
   escesc be made a configuration choice? for me, hitting escape twice is
   reallyreally annoyingannoying, especially if i'm two menus in, and to
   get out, i have to hit escape four times in a rowrowrowrow.
@@ -98,27 +98,27 @@ Q: From: jeff covey <jeff.covey@pobox.com>
 A: From: lanzz@lanzz.org
 
   it's a limitation of the console. keys like f1..f12, the arrows, etc,
-  generate sequences of characters starting with esc. if the application
-  was to handle esc as cancel unconditionally, you'll have arrows
+  generate sequences of characters starting with ESC. if the application
+  was to handle ESC as cancel unconditionally, you'll have arrows
   cancelling your dialogs. so the app must do one of these things to
   avoid that:
 
-  1. require esc-esc instead of single esc, as that disambiguates it
+  1. require esc-esc instead of single ESC, as that disambiguates it
      from the function keys
 
-  2. have a certain timeout and accepting the esc as a cancel only if
-     there wasn't a function sequence after the esc during the timeout
+  2. have a certain timeout and accepting the ESC as a cancel only if
+     there wasn't a function sequence after the ESC during the timeout
 
   3. switch keyboard to raw or medium-raw mode and do keycode mapping
      internally
 
   as 2. is annoying and sluggish (at least to me) and 3. is too much
   work for too little gain, i think the current situation with double
-  esc is the best choice. centerim was using timeout esc in the past (i
-  think it's the default way ncurses handles esc) and at least i'm happy
+  ESC is the best choice. centerim was using timeout ESC in the past (i
+  think it's the default way ncurses handles ESC) and at least I'm happy
   with the change :)
 
-  perhaps there could be a configurable choice between double-esc and
+  perhaps there could be a configurable choice between double-ESC and
   timeout, if that doesn't complicate the input routines too much.
 
 /* *** */
@@ -133,7 +133,7 @@ Q: From: staale@lorentzen.org
    > I've tried different icq-servers, with no luck. Anyone with a
    > clue to what this can be?
 
-A: It means exactly "turboing". You're loggin in and out too fast, so
+A: It means exactly "turboing". You're logging in and out too fast, so
    that the server turns on DoS attack protection. All you can do is
    to try again in half an hour.
 
@@ -167,7 +167,7 @@ Q: ICQ new UINs registration doesn't work! It just sends a request and
    then after 30 seconds reports a timeout.
 
 A: It does work. Though, the ICQ server doesn't report the "password is
-   too simple" situaion. Try to enter another one, more complicated. Also,
+   too simple" situation. Try to enter another one, more complicated. Also,
    as far as I know, "xxx123" is complicated enough to be accepted by
    the server software.
 
@@ -189,7 +189,7 @@ Q: When $HOME/.centerim/config gets created, you should set it mode 0600
    so only the user can read it. It contains passwords in clear text
    which other users on a system could read.
 
-A: Your filesystem permissions knowledge is very sound, but please just try
+A: Your file system permissions knowledge is very sound, but please just try
    to access the config file before making any affirmations. You'll see
-   that the .centerim directiory permissions do not allow others to read
+   that the .centerim directory permissions do not allow others to read
    your configuration data.
