@@ -468,7 +468,7 @@ fi
 if test "x$build_lj" = "xyes"; then
 	AC_DEFINE(BUILD_LJ, 1, [build the integrated livejournal client])
 fi
-if test "x$locales_fx" != "xno"; then
+if test "x$locales_fix" != "xno"; then
   AC_DEFINE([LOCALES_HACK], 1, [enables workaround for broken locales])
 fi
 
